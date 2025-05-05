@@ -38,11 +38,12 @@ export const Inserter = ({
 						return;
 					}
 
-					setOpenPicker(true);
+					setOpenPicker(!isOpenPicker);
 				}}
 				disabled={
 					Object.keys(insertArgs?.repeaterItems).length >= maxItems
 				}
+				isFocus={isOpenPicker}
 			/>
 
 			{isOpenPicker && (

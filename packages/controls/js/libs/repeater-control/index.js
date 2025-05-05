@@ -294,8 +294,10 @@ export default function RepeaterControl(
 
 	const LargeNativeInserter = ({
 		onClick,
+		...props
 	}: {
 		onClick?: (callback: () => void) => void,
+		props?: Object,
 	}) => (
 		<Button
 			data-test={
@@ -313,6 +315,7 @@ export default function RepeaterControl(
 					? onClick(addNewButtonOnClick)
 					: addNewButtonOnClick()
 			}
+			{...props}
 		>
 			<Icon icon="plus" iconSize="20" />
 			{addNewButtonLabel || __('Add New', 'blockera')}
@@ -321,32 +324,37 @@ export default function RepeaterControl(
 
 	const SmallNativeInserter = ({
 		onClick,
+		...props
 	}: {
 		onClick?: (callback: () => void) => void,
-	}) => (
-		<Button
-			data-test={
-				addNewButtonDataTest ||
-				addNewButtonLabel ||
-				__('Add New', 'blockera')
-			}
-			size="extra-small"
-			className={controlInnerClassNames('btn-add', {
-				'is-deactivate': disableProHints && disableAddNewItem,
-			})}
-			disabled={disabledAddNewItem}
-			showTooltip={true}
-			tooltipPosition="top"
-			label={addNewButtonLabel || __('Add New', 'blockera')}
-			onClick={() =>
-				'function' === typeof onClick
-					? onClick(addNewButtonOnClick)
-					: addNewButtonOnClick()
-			}
-		>
-			<Icon icon="plus" iconSize="20" />
-		</Button>
-	);
+		props?: Object,
+	}) => {
+		return (
+			<Button
+				data-test={
+					addNewButtonDataTest ||
+					addNewButtonLabel ||
+					__('Add New', 'blockera')
+				}
+				size="extra-small"
+				className={controlInnerClassNames('btn-add', {
+					'is-deactivate': disableProHints && disableAddNewItem,
+				})}
+				disabled={disabledAddNewItem}
+				showTooltip={true}
+				tooltipPosition="top"
+				label={addNewButtonLabel || __('Add New', 'blockera')}
+				onClick={() =>
+					'function' === typeof onClick
+						? onClick(addNewButtonOnClick)
+						: addNewButtonOnClick()
+				}
+				{...props}
+			>
+				<Icon icon="plus" iconSize="20" />
+			</Button>
+		);
+	};
 
 	return (
 		<RepeaterContextProvider {...defaultRepeaterState}>
