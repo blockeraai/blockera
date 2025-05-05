@@ -131,7 +131,8 @@
 				background-color: var(--blockera-controls-primary-color);
 				color: #ffffff;
 				border-radius: 2px;
-				padding: 2px 5px;
+				padding: 2px 3px;
+				font-weight: 500;
 				font-size: 12px;
 
 				&:not(:last-child) {
@@ -141,10 +142,9 @@
 
 			.blockera-extension-block-card__title__item.item-state:not(.item-state-normal) {
 				--blockera-controls-primary-color: var(--blockera-controls-states-color);
-				background: #ffffff;
-				color: var(--blockera-controls-states-color);
-				border: 1px solid var(--blockera-controls-primary-color);
-				border-color: var(--blockera-controls-primary-color);
+				background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+				color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 4%);
+				box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
 			}
 
 			.blockera-extension-block-card__close {

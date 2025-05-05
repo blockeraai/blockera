@@ -143,7 +143,7 @@
 
 .blockera-control-label.changed-in-secondary-state {
 	background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
-    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
     color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 4%);
     --blockera-controls-primary-color: var(--blockera-controls-states-color);
 }
