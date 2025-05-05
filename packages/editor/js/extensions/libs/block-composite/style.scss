@@ -65,6 +65,7 @@
 				fill: currentColor;
 			}
 
+			&:focus,
 			&:hover {
 				color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 				border-color: var(--blockera-controls-primary-color);

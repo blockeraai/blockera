@@ -105,6 +105,14 @@ export const CategorizedItems = ({
 		}
 	};
 
+	const handleKeyDown = (e: KeyboardEvent, item: Object, id: string) => {
+		// Handle Enter or Space key press
+		if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+			e.preventDefault();
+			onClick(item, id);
+		}
+	};
+
 	return (
 		<Flex
 			direction={'column'}
@@ -163,6 +171,11 @@ export const CategorizedItems = ({
 								>
 									<div
 										onClick={() => onClick(item, id)}
+										onKeyDown={(e) =>
+											handleKeyDown(e, item, id)
+										}
+										tabIndex="0"
+										role="button"
 										className={classNames(
 											'blockera-custom-css-selector-wrapper',
 											{
@@ -224,6 +237,11 @@ export const CategorizedItems = ({
 								<div
 									aria-label={id}
 									onClick={() => onClick(item, id)}
+									onKeyDown={(e) =>
+										handleKeyDown(e, item, id)
+									}
+									tabIndex="0"
+									role="button"
 									data-test={'blockera-feature-type'}
 									className={classNames(
 										'blockera-feature-type',
