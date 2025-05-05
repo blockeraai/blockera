@@ -19,7 +19,7 @@
 	overflow: var(--popover-overflow) !important;
 	background: transparent;
 	color: var(--popover-color);
-	border-radius: var(--popover-radius);
+	border-radius: none;
 
 	.components-popover__content {
 		padding: 0;
@@ -32,6 +32,7 @@
 		height: auto;
 		overflow: auto !important;
 		background-color: var(--popover-bg-color);
+		border-radius: var(--popover-radius);
 	}
 
 	&.with-header {
