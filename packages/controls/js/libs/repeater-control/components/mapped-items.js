@@ -3,7 +3,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useContext, useCallback, useMemo } from '@wordpress/element';
+import { useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -32,28 +32,23 @@ const MappedItems = (): MixedElement => {
 
 	delete defaultRepeaterItemValue?.isOpen;
 
-	const render = useCallback(() => {
-		const getUniqueId = (itemId: string | number) =>
-			!isUndefined(repeaterId)
-				? `${repeaterId}-repeater-item-${itemId}`
-				: `repeater-item-${itemId}`;
+	const getUniqueId = (itemId: string | number) =>
+		!isUndefined(repeaterId)
+			? `${repeaterId}-repeater-item-${itemId}`
+			: `repeater-item-${itemId}`;
 
-		// Convert the sorted array back to an object
-		return sortedRepeaterItems.map(([itemId, item]) => (
-			<RepeaterItem
-				{...{
-					item: {
-						...defaultRepeaterItemValue,
-						...item,
-					},
-					itemId,
-				}}
-				key={getUniqueId(itemId)}
-			/>
-		));
-	}, [sortedRepeaterItems, repeaterId, defaultRepeaterItemValue]);
-
-	return render();
+	return sortedRepeaterItems.map(([itemId, item]) => (
+		<RepeaterItem
+			{...{
+				item: {
+					...defaultRepeaterItemValue,
+					...item,
+				},
+				itemId,
+			}}
+			key={getUniqueId(itemId)}
+		/>
+	));
 };
 
 export default MappedItems;
