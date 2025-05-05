@@ -251,6 +251,8 @@ const RepeaterItem = ({
 					});
 				}}
 				onClick={(): void | boolean => {
+					setOpen(!isOpen);
+
 					if (item?.selectable) {
 						const newItems: { [key: string]: any } = {};
 
