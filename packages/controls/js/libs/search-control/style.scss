@@ -6,6 +6,10 @@
     overflow: hidden;
     margin-bottom: 0 !important;
 
+	.components-input-control__backdrop {
+		display: none !important;
+	}
+
 	.components-base-control__field {
 		margin: 0;
 	}
@@ -38,10 +42,10 @@
 	&.is-hovered:hover,
 	&.is-focused,
 	&:focus-within {
-		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
+		box-shadow: 0 0 0 2px var(--blockera-controls-primary-color) !important;
 	}
 
 	&:not(:focus-within) {
-	    --wp-components-color-background: var(--blockera-controls-fill-color);
+	    --wp-components-color-background: var(--blockera-controls-fill-color) !important;
 	}
 }
