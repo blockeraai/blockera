@@ -18,11 +18,7 @@ import { RepeaterContext } from '../context';
 import { getSortedRepeater } from '../utils';
 
 const MappedItems = (): MixedElement => {
-	const {
-		repeaterItems: items,
-		repeaterId,
-		defaultRepeaterItemValue,
-	} = useContext(RepeaterContext);
+	const { repeaterItems: items, repeaterId } = useContext(RepeaterContext);
 
 	// Sorting repeater items based on "order" property value of each item.
 	const sortedRepeaterItems = useMemo(
@@ -38,19 +34,9 @@ const MappedItems = (): MixedElement => {
 
 		// Convert the sorted array back to an object
 		return sortedRepeaterItems.map(([itemId, item]) => (
-			<RepeaterItem
-				{...{
-					item: {
-						...defaultRepeaterItemValue,
-						...item,
-						isOpen: false,
-					},
-					itemId,
-				}}
-				key={getUniqueId(itemId)}
-			/>
+			<RepeaterItem {...{ item, itemId }} key={getUniqueId(itemId)} />
 		));
-	}, [sortedRepeaterItems, repeaterId, defaultRepeaterItemValue]);
+	}, [sortedRepeaterItems, repeaterId]);
 
 	return render();
 };
