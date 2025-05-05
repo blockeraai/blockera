@@ -97,7 +97,10 @@ export const CategorizedItems = ({
 	return (
 		<Flex
 			direction={'column'}
-			className={classNames('blockera-block-inserter')}
+			className={classNames(
+				'blockera-block-inserter',
+				`blockera-block-inserter-types-${itemType}`
+			)}
 			gap="10px"
 		>
 			<h2 className={classNames('blockera-block-features-category')}>
@@ -185,10 +188,7 @@ export const CategorizedItems = ({
 								data-test={'blockera-feature-type'}
 								className={classNames(
 									'blockera-feature-type',
-									'item-type-' + itemType,
-									{
-										'is-item': true,
-									}
+									'is-item'
 								)}
 							>
 								{icon && (
