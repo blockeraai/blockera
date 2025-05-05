@@ -165,7 +165,11 @@ export const Categories = ({
 
 							<Tooltip
 								width="220px"
-								style={{ padding: '12px' }}
+								style={{
+									'--tooltip-padding': '15px',
+									'--tooltip-bg':
+										'var(--blockera-controls-states-color)',
+								}}
 								text={__(
 									'Pseudo states are used to describe the state of a block.',
 									'blockera'
@@ -194,7 +198,11 @@ export const Categories = ({
 
 							<Tooltip
 								width="220px"
-								style={{ padding: '12px' }}
+								style={{
+									'--tooltip-padding': '15px',
+									'--tooltip-bg':
+										'var(--blockera-controls-inner-blocks-color)',
+								}}
 								text={getVirtualInnerBlockDescription()}
 							>
 								<Icon

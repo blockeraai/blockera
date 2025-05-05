@@ -38,16 +38,17 @@ export const Inserter = ({
 						return;
 					}
 
-					setOpenPicker(true);
+					setOpenPicker(!isOpenPicker);
 				}}
 				disabled={
 					Object.keys(insertArgs?.repeaterItems).length >= maxItems
 				}
+				isFocus={isOpenPicker}
 			/>
 
 			{isOpenPicker && (
 				<Popover
-					offset={8}
+					offset={12}
 					placement="bottom-end"
 					onClose={() => setOpenPicker(false)}
 					title=""

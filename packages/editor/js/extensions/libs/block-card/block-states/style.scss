@@ -18,6 +18,20 @@
 		display: flex;
 		align-content: center;
 		padding-bottom: var(--repeater-gap);
+
+		.blockera-control-btn-add {
+
+			svg {
+				transition: var(--blockera-controls-transition);
+			}
+
+			&.is-focus {
+
+				svg {
+					transform: rotate(-45deg);
+				}
+			}
+		}
 	}
 
 	.blockera-control-header + .blockera-control-repeater-item {

@@ -1,9 +1,11 @@
 .components-popover.blockera-component-popover.blockera-states-picker-popover {
-	--popover-width: 250px;
-    --blockera-controls-primary-color: var(--blockera-controls-primary-color-bk);
+	--popover-width: 248px;
     --popover-border-color: #bdbdbd;
     --popover-border-width: 1px;
     --popover-height: auto;
+    --popover-radius: 3px;
+    box-shadow: 0 0 0 6px #ffffff;
+    border-radius: var(--popover-radius);
 }
 
 .blockera-block-inserter {
@@ -19,14 +21,14 @@
 	}
 
 	.blockera-block-features-category {
-		color: #757575;
-		font-size: 11px;
+		color: var(--blockera-controls-primary-color);
+		font-size: 12px;
 		font-weight: 500;
 		margin: 0;
-		text-transform: uppercase;
+		text-transform: capitalize;
 		display: flex;
 		align-items: center;
-		gap: 8px;
+		gap: 4px;
 
 		svg {
 			fill: currentColor;
@@ -113,13 +115,26 @@
 				overflow: hidden;
 			}
 
-			&.item-type-state {
-				--blockera-controls-primary-color: var(--blockera-controls-states-color);
-			}
-
 			&.item-type-element,
 			&.item-type-inner-block {
-				--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
+				justify-content: flex-start;
+				gap: 3px;
+				padding: 0 0 0 4px;
+			}
+		}
+	}
+
+	&.blockera-block-inserter-types-state {
+		--blockera-controls-primary-color: var(--blockera-controls-states-color);
+	}
+
+	&.blockera-block-inserter-types-element,
+	&.blockera-block-inserter-types-inner-block {
+		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
+
+		.blockera-features-types {
+
+			.blockera-feature-type {
 				justify-content: flex-start;
 				gap: 3px;
 				padding: 0 0 0 4px;
