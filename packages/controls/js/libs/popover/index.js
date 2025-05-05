@@ -26,7 +26,9 @@ export default function Popover({
 		getActiveMasterState = () => 'normal',
 		getExtensionCurrentBlock = () => 'master',
 	} = select('blockera/extensions') || {};
-	const { getState } = select('blockera/editor');
+	const { getState } = select('blockera/editor') || {
+		getState: () => ({ settings: { color: '#cc0000' } }),
+	};
 
 	let activeColor = getState(getActiveMasterState(clientId, name))?.settings
 		?.color;
