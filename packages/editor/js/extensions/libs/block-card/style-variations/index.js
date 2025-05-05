@@ -60,12 +60,16 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			!isBaseBreakpoint(currentBreakpoint) ||
 			currentState !== 'normal';
 
+		const activeStyleId = activeStyle?.isDefault
+			? 'default'
+			: activeStyle?.name || 'default';
+
 		return (
 			<>
 				<Button
 					className={controlInnerClassNames(
 						'style-variations-button',
-						'is-variation-' + (activeStyle?.name || 'default'),
+						'is-variation-' + activeStyleId,
 						{
 							'blockera-control-is-not-active': isNotActive,
 							'is-variation-picker-open': isOpen,
