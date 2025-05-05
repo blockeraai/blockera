@@ -304,6 +304,7 @@ export const Categories = ({
 							setStates(newStates);
 							setElements(newElements);
 						} catch (error) {
+							/* @debug-ignore */
 							console.error('Search error:', error);
 							// Fallback to empty results on error
 							setBlocks([]);
