@@ -54,6 +54,11 @@ export const CategorizedItems = ({
 		return <></>;
 	}
 
+	// Filter out any null or undefined items
+	const validItems = Array.isArray(items)
+		? items.filter((item) => item !== null && item !== undefined)
+		: items;
+
 	const onClick = (item: Object, id: string) => {
 		const { name, type } = item;
 
@@ -117,18 +122,23 @@ export const CategorizedItems = ({
 				gap={'5px'}
 				className={`blockera-features-types blockera-feature-${category}-wrapper`}
 			>
-				{items.map(
+				{validItems.map(
 					(
 						item: StateTypes | InnerBlockModel,
 						index: number
 					): MixedElement => {
+						// Check if item is null or undefined
+						if (!item) {
+							return <></>;
+						}
+
 						const { name, type, icon, label, settings } = item;
 
 						let id = name || type;
 
 						if (
 							'custom-class' === item?.type &&
-							1 === items.length
+							1 === validItems.length
 						) {
 							const style = {
 								color: '#147EB8',

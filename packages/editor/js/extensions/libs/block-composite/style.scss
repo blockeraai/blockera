@@ -47,7 +47,8 @@
 			--item-height: 26px;
 			--icon-size: 16px;
 			width: 100%;
-			justify-content: center;
+			justify-content: flex-start;
+			padding: 0 0 0 8px;
 			align-items: center;
 			border-radius: 2px;
 			color: #1e1e1e;
@@ -109,15 +110,18 @@
 			.blockera-feature-label {
 				font-size: 12px;
 				letter-spacing: -0.2px;
-				max-width: 75px;
+				max-width: 94px;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				overflow: hidden;
 			}
 
+			.blockera-feature-icon + .blockera-feature-label {
+				max-width: 75px;
+			}
+
 			&.item-type-element,
 			&.item-type-inner-block {
-				justify-content: flex-start;
 				gap: 3px;
 				padding: 0 0 0 4px;
 			}
