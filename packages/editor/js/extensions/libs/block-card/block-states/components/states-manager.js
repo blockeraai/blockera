@@ -59,6 +59,7 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 						{...{
 							onDelete,
 							maxItems,
+							mode: 'nothing',
 							id: 'block-states',
 							isSupportInserter: true,
 							valueCleanup: (value) => value,

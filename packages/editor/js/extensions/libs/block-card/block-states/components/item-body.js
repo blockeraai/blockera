@@ -119,12 +119,4 @@ const ItemBody = ({
 	);
 };
 
-ItemBody.getMode = ({ force }: { force: boolean }): ?string => {
-	if (!force) {
-		return 'popover';
-	}
-
-	return 'nothing';
-};
-
 export default ItemBody;

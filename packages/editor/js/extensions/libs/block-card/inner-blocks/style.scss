@@ -46,7 +46,7 @@
 		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
 	}
 
-	.blockera-control-group.mode-popover.is-selected-item {
+	.blockera-control-group.mode-nothing.is-selected-item {
 		background-color: var(--blockera-controls-primary-color);
 		border-color: var(--blockera-controls-primary-color);
 		color: #ffffff;
@@ -56,7 +56,7 @@
 		}
 	}
 
-	.blockera-control-group.mode-popover:hover:not(.is-selected-item) {
+	.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
 		background-color: #ffffff;
 		border-color: var(--blockera-controls-primary-color);
 		color: var(--blockera-controls-primary-color);

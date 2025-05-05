@@ -42,6 +42,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 				<RepeaterControl
 					{...{
 						maxItems,
+						mode: 'nothing',
 						selectable: true,
 						id: 'inner-blocks',
 						actionButtonAdd: false,
