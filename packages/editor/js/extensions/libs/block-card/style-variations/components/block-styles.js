@@ -113,7 +113,12 @@ function BlockStyles({
 							)}
 							key={style.name}
 							variant="secondary"
-							label={buttonText}
+							label={
+								style?.isDefault && style?.name !== 'default'
+									? buttonText +
+									  ` (${__('Default', 'blockera')})`
+									: buttonText
+							}
 							onMouseEnter={() =>
 								styleItemHandler(style, 'mouseEnter')
 							}
