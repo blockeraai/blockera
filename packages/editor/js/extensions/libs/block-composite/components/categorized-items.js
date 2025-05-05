@@ -217,6 +217,8 @@ export const CategorizedItems = ({
 							}
 						}
 
+						const nameSplitted = name ? name.split('/') : [];
+
 						return (
 							<Tooltip
 								key={index}
@@ -228,6 +230,42 @@ export const CategorizedItems = ({
 											</h5>
 
 											<p>{description}</p>
+
+											{itemType === 'element' && (
+												<code
+													style={{ margin: '5px 0' }}
+												>
+													{__(
+														'Virtual Block',
+														'blockera'
+													)}
+												</code>
+											)}
+
+											<code style={{ margin: '5px 0' }}>
+												{nameSplitted.length === 2 ? (
+													<>
+														<span
+															style={{
+																opacity: '0.7',
+															}}
+														>
+															{nameSplitted[0]}
+														</span>
+														<span
+															style={{
+																opacity: '0.7',
+																margin: '0 3px',
+															}}
+														>
+															/
+														</span>
+														{nameSplitted[1]}
+													</>
+												) : (
+													<>{name}</>
+												)}
+											</code>
 										</>
 									)
 								}

@@ -38,7 +38,10 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>:hover
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
+						:hover
 					</code>
 				</>
 			),
@@ -63,7 +66,10 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>:focus
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
+						:focus
 					</code>
 				</>
 			),
@@ -89,7 +95,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:focus-within
 					</code>
 				</>
@@ -116,7 +124,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:before
 					</code>
 				</>
@@ -143,7 +153,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:after
 					</code>
 				</>
@@ -170,7 +182,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:first-child
 					</code>
 				</>
@@ -197,7 +211,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:last-child
 					</code>
 				</>
@@ -224,7 +240,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:only-child
 					</code>
 				</>
@@ -251,7 +269,9 @@ export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:empty
 					</code>
 				</>
@@ -284,7 +304,9 @@ export const sharedBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:active
 					</code>
 				</>
@@ -310,7 +332,9 @@ export const sharedBlockStates: { [key: TStates]: StateTypes } = applyFilters(
 						)}
 					</p>
 					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
 						:visited
 					</code>
 				</>
