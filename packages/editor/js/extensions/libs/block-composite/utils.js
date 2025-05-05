@@ -13,7 +13,8 @@ export const getTooltipStyle = (itemType: string): Object => {
 		default:
 			return {
 				'--tooltip-padding': '15px',
-				'--tooltip-bg': 'var(--blockera-controls-states-color)',
+				'--tooltip-bg':
+					'color-mix(in srgb, var(--blockera-controls-states-color) 100%, #000000 10%)',
 			};
 	}
 };
