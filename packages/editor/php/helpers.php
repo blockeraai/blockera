@@ -364,25 +364,29 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 			if (blockera_is_inner_block( $args['block-type'] )) {
 
-				if (isset($args['inner-pseudo-class']) && blockera_is_normal_on_base_breakpoint( $args['inner-pseudo-class'], $args['breakpoint'] )) {
-					
-					$selector_id = blockera_append_selector_prefix($args['block-type']);
-
-					// Rewrite block type selectors because we provide suitable selectors array of original array based on inner block state.
-					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
-
-				} elseif (isset($args['inner-pseudo-class'])) {
+				if (! empty($args['inner-pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['inner-pseudo-class'], $args['breakpoint'])) {
 
 					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] );
 
-					// Rewrite block type selectors because we provide suitable selectors array of original array based on inner block state.
+					if(isset($selectors[$selector_id])) {
+
+						$cloned_block_type->selectors = $selectors[ $selector_id ];
+					} else {
+
+						$selector_id = blockera_append_selector_prefix($args['block-type']);
+
+						$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+					}
+				} else {
+
+					$selector_id = blockera_append_selector_prefix($args['block-type']);
+
 					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
-				}			
+				}
 			} elseif (isset($args['pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['pseudo-class'], $args['breakpoint'])) {
 
 				$selector_id = blockera_append_selector_prefix( 'state/' . $args['pseudo-class'] );
 
-				// Rewrite block type selectors because we provide suitable selectors array of original array for pseudo class.
 				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
 			}
 		}
