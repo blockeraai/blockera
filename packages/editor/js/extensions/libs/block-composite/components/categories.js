@@ -29,6 +29,7 @@ import {
 import { CategorizedItems } from './categorized-items';
 import type { TCategoriesProps } from '../types/categories';
 import { search, getNormalizedCssSelector } from '../search-items';
+import { getTooltipStyle } from '../utils';
 
 // Define the order of categories
 const CATEGORY_ORDER = [
@@ -385,11 +386,7 @@ export const Categories = ({
 
 									<Tooltip
 										width="250px"
-										style={{
-											'--tooltip-padding': '15px',
-											'--tooltip-bg':
-												'var(--blockera-controls-states-color)',
-										}}
+										style={getTooltipStyle('state')}
 										text={getCategoryTooltipText(category)}
 									>
 										<Icon
@@ -416,11 +413,7 @@ export const Categories = ({
 
 							<Tooltip
 								width="220px"
-								style={{
-									'--tooltip-padding': '15px',
-									'--tooltip-bg':
-										'var(--blockera-controls-inner-blocks-color)',
-								}}
+								style={getTooltipStyle('element')}
 								text={getVirtualInnerBlockDescription()}
 							>
 								<Icon

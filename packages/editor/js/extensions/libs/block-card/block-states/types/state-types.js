@@ -1,5 +1,13 @@
 // @flow
 
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import type { BreakpointTypes, TBreakpoint } from './breakpoint-types';
 
 export type TStates =
@@ -43,6 +51,7 @@ export type StateTypes = {
 	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 	categoryLabel?: string,
 	category?: string,
+	tooltip?: string | MixedElement,
 };
 
 export type BlockStates = {

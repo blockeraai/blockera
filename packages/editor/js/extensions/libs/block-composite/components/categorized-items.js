@@ -3,13 +3,13 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
-import { Flex, Grid } from '@blockera/controls';
+import { Flex, Grid, Tooltip } from '@blockera/controls';
 import { classNames } from '@blockera/classnames';
 import { getSortedObject } from '@blockera/utils';
 
@@ -19,6 +19,7 @@ import { getSortedObject } from '@blockera/utils';
 import type { TCategorizedItemsProps } from '../types';
 import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
+import { getTooltipStyle } from '../utils';
 
 export const CategorizedItems = ({
 	itemType = 'state',
@@ -132,7 +133,15 @@ export const CategorizedItems = ({
 							return <></>;
 						}
 
-						const { name, type, icon, label, settings } = item;
+						const {
+							name,
+							type,
+							icon,
+							label,
+							settings,
+							description = '',
+							tooltip,
+						} = item;
 
 						let id = name || type;
 
@@ -196,34 +205,50 @@ export const CategorizedItems = ({
 						}
 
 						return (
-							<div
+							<Tooltip
 								key={index}
-								aria-label={id}
-								onClick={() => onClick(item, id)}
-								data-test={'blockera-feature-type'}
-								className={classNames(
-									'blockera-feature-type',
-									'is-item'
-								)}
-							>
-								{icon && (
-									<div
-										className={classNames(
-											'blockera-feature-icon'
-										)}
-									>
-										{icon}
-									</div>
-								)}
+								text={
+									tooltip || (
+										<>
+											<h5>
+												{sprintf('%s Block', label)}
+											</h5>
 
+											<p>{description}</p>
+										</>
+									)
+								}
+								width="220px"
+								style={getTooltipStyle(itemType)}
+							>
 								<div
+									aria-label={id}
+									onClick={() => onClick(item, id)}
+									data-test={'blockera-feature-type'}
 									className={classNames(
-										'blockera-feature-label'
+										'blockera-feature-type',
+										'is-item'
 									)}
 								>
-									{label}
+									{icon && (
+										<div
+											className={classNames(
+												'blockera-feature-icon'
+											)}
+										>
+											{icon}
+										</div>
+									)}
+
+									<div
+										className={classNames(
+											'blockera-feature-label'
+										)}
+									>
+										{label}
+									</div>
 								</div>
-							</div>
+							</Tooltip>
 						);
 					}
 				)}

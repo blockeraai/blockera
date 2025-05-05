@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension, generalBlockStates } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -20,14 +24,32 @@ export const NavigationLink: BlockType = {
 	name: 'blockeraNavigationLink',
 	targetBlock: 'core/navigation-link',
 	blockeraInnerBlocks: {
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/link': {
+			...sharedInnerBlocks['elements/link'],
+			force: false,
+		},
 	},
 	availableBlockStates: {
 		...generalBlockStates,
-		'current-page': {
-			type: 'current-page',
-			label: __('Is Current Page', 'blockera'),
+		'current-menu-item': {
+			type: 'current-menu-item',
+			label: __('Current Page', 'blockera'),
 			category: 'special',
+			tooltip: (
+				<>
+					<h5>{__('Is Current Page?', 'blockera')}</h5>
+					<p>
+						{__(
+							'Activates if the block URL is the same as the current page URL.',
+							'blockera'
+						)}
+					</p>
+					<code style={{ margin: '5px 0' }}>
+						<span style={{ opacity: '0.7' }}>.block</span>
+						.current-menu-item
+					</code>
+				</>
+			),
 			breakpoints: {},
 			priority: 10,
 			force: true,
@@ -35,28 +57,8 @@ export const NavigationLink: BlockType = {
 				color: 'var(--blockera-controls-states-color)',
 			},
 		},
-		active: {
-			type: 'active',
-			label: __('Active', 'blockera'),
-			category: 'interactive-states',
-			breakpoints: {},
-			priority: 25,
-			force: false,
-			settings: {
-				color: 'var(--blockera-controls-states-color)',
-			},
-		},
-		visited: {
-			type: 'visited',
-			label: __('Visited', 'blockera'),
-			category: 'interactive-states',
-			breakpoints: {},
-			priority: 25,
-			force: false,
-			settings: {
-				color: 'var(--blockera-controls-states-color)',
-			},
-		},
+		active: sharedBlockStates.active,
+		visited: sharedBlockStates.visited,
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

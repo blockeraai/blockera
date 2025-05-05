@@ -62,7 +62,8 @@
 			display: flex;
 			align-items: center;
 			min-height: 24px;
-			gap: 2px;
+			row-gap: 8px;
+    		column-gap: 2px;
 			padding-right: 45px;
 			flex-wrap: wrap;
 

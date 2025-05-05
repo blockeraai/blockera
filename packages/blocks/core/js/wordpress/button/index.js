@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension, generalBlockStates } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 
 /**
  * Internal dependencies
@@ -28,26 +32,9 @@ export const Button: BlockType = {
 			force: true,
 		},
 		active: {
-			type: 'active',
-			label: __('Active', 'blockera'),
-			category: 'interactive-states',
-			breakpoints: {},
-			priority: 25,
+			...sharedBlockStates.active,
 			force: true,
-			settings: {
-				color: 'var(--blockera-controls-states-color)',
-			},
 		},
-		visited: {
-			type: 'visited',
-			label: __('Visited', 'blockera'),
-			category: 'interactive-states',
-			breakpoints: {},
-			priority: 25,
-			force: false,
-			settings: {
-				color: 'var(--blockera-controls-states-color)',
-			},
-		},
+		visited: sharedBlockStates.visited,
 	},
 };

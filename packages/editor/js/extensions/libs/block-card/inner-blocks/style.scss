@@ -57,12 +57,12 @@
 	}
 
 	.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
-		background-color: #ffffff;
+		background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
 		border-color: var(--blockera-controls-primary-color);
-		color: var(--blockera-controls-primary-color);
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 
 		.blockera-control-header-label {
-			color: var(--blockera-controls-primary-color);
+			color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 		}
 	}
 }
