@@ -19,6 +19,7 @@
 - `Gallery` block: inner blocks improved.
 - `Heading` block: inner blocks improved.
 - `Home Link` block: inner blocks improved.
+- `Image` block: inner blocks improved.
 
 
 ### Automated Tests
