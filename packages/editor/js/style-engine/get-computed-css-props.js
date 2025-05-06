@@ -108,14 +108,19 @@ export const getComputedCssProps = ({
 						continue;
 					}
 
+					let currentStateHasSelectors = false;
 					let calculatedSelectors =
 						selectors[appendBlockeraPrefix(blockType)] || {};
 
-					if (!isNormalState(stateType)) {
+					if (
+						!isNormalState(stateType) &&
+						selectors[appendBlockeraPrefix(`states/${stateType}`)]
+					) {
 						calculatedSelectors =
 							selectors[
 								appendBlockeraPrefix(`states/${stateType}`)
-							] || calculatedSelectors;
+							];
+						currentStateHasSelectors = true;
 					}
 
 					stylesStack.push(
@@ -124,6 +129,7 @@ export const getComputedCssProps = ({
 								...calculatedProps,
 								state: stateType,
 								masterState,
+								currentStateHasSelectors,
 								selectors: calculatedSelectors,
 								attributes: {
 									...defaultAttributes,
@@ -209,12 +215,17 @@ export const getComputedCssProps = ({
 		const states = params?.attributes?.blockeraBlockStates;
 		const stateItem = states[state];
 		let calculatedSelectors = calculatedProps.selectors;
+		let currentStateHasSelectors = false;
 
-		if (!isNormalState(state)) {
+		if (
+			!isNormalState(state) &&
+			calculatedProps.selectors[appendBlockeraPrefix(`states/${state}`)]
+		) {
 			calculatedSelectors =
 				calculatedProps.selectors[
-					appendBlockeraPrefix(`state/${state}`)
-				] || calculatedSelectors;
+					appendBlockeraPrefix(`states/${state}`)
+				];
+			currentStateHasSelectors = true;
 		}
 
 		if (validateBlockStates(stateItem)) {
@@ -233,6 +244,7 @@ export const getComputedCssProps = ({
 					appendStyles({
 						settings: {
 							...calculatedProps,
+							currentStateHasSelectors,
 							selectors: calculatedSelectors,
 							attributes: {
 								...defaultAttributes,

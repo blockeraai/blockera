@@ -24,6 +24,7 @@ export type NormalizedSelectorProps = {
 	fallbackSupportId?: string | Array<string>,
 	styleEngineConfig?: Object,
 	activeDeviceType?: TBreakpoint,
+	currentStateHasSelectors?: boolean,
 	currentBlock: 'master' | InnerBlockType | string,
 };
 
