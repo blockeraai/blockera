@@ -16,7 +16,7 @@ describe('Post Navigation Link Block', () => {
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(
-			'<!-- wp:post-navigation-link {"type":"previous","label":"Prev"} /--> '
+			'<!-- wp:post-navigation-link {"type":"previous","label":"Prev","arrow":"chevron"} /--> '
 		);
 
 		// Select target block
@@ -25,9 +25,10 @@ describe('Post Navigation Link Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.getByDataTest('elements/link').should('exist');
+		cy.getByDataTest('elements/arrow').should('exist');
 
 		// no other item
+		cy.getByDataTest('elements/link').should('not.exist');
 		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
@@ -73,6 +74,24 @@ describe('Post Navigation Link Block', () => {
 		});
 
 		//
+		// 1.2. elements/arrow inner block
+		//
+		setInnerBlock('elements/arrow');
+
+		//
+		// 1.2.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff1010');
+
+		cy.getBlock('core/post-navigation-link').within(() => {
+			cy.get('.wp-block-post-navigation-link__arrow-previous').should(
+				'have.css',
+				'background-color',
+				'rgb(255, 16, 16)'
+			);
+		});
+
+		//
 		// 2. Assert inner blocks selectors in front end
 		//
 		savePage();
@@ -89,6 +108,12 @@ describe('Post Navigation Link Block', () => {
 				'have.css',
 				'background-color',
 				'rgb(255, 0, 0)'
+			);
+
+			cy.get('.wp-block-post-navigation-link__arrow-previous').should(
+				'have.css',
+				'background-color',
+				'rgb(255, 16, 16)'
 			);
 		});
 	});

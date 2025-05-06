@@ -17,6 +17,8 @@
 - `Submenu` block: Special `Current Page` state added.
 - `Submenu` block: Special `Current Page Parent` state added.
 - `Submenu` block: Special `Current Page Ancestor` state added.
+- `Previous Post` block: `Arrow` inner block added.
+- `Next Post` block: `Arrow` inner block added.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -44,6 +46,8 @@
 ### Automated Tests
 - Added E2E tests to check the inner blocks functionality of `Calendar` block.
 - Updated E2E tests to check the inner blocks functionality of `Categories List` block.
+- Updated E2E tests to check the inner blocks functionality of `Previous Post` block.
+- Updated E2E tests to check the inner blocks functionality of `Next Post` block.
 
 
 ## 1.3.0 (2025-04-27)
