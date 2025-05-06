@@ -23,6 +23,7 @@
 - `Previous Page` block: more related states for block.
 - `Page Numbers` block: more related states for block.
 - `Read More` block: more related states for block.
+- `Social Link` block: more related states for block.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -54,6 +55,7 @@
 - `Page Numbers` block: inner blocks improved.
 - `Quote` block: inner blocks improved.
 - `Site Title` block: inner blocks improved.
+- `Social Link` block: inner blocks improved.
 
 
 ### Automated Tests
