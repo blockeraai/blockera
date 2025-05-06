@@ -309,6 +309,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		clientId,
 		supports,
 		selectors,
+		additional,
 		inlineStyles,
 		attributes: sanitizedAttributes,
 		blockName: name,

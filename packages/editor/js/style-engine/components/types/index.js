@@ -21,6 +21,7 @@ export type BlockStyleProps = {
 	blockName: string,
 	selectors: Object,
 	attributes: Object,
+	additional: Object,
 	inlineStyles: Object,
 	defaultAttributes: Object,
 	currentAttributes: Object,
@@ -30,6 +31,7 @@ export type BlockStyleProps = {
 export type StateStyleProps = {
 	...BlockStyleProps,
 	config: Object,
+	additional: Object,
 	selectors?: Object,
 	currentState: TStates,
 	styleEngineConfig?: Object,
