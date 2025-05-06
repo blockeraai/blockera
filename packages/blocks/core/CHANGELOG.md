@@ -33,6 +33,7 @@
 - `Navigation Link` block: inner blocks improved.
 - `Submenu` block: inner blocks improved.
 - `Paragraph` block: inner blocks improved.
+- `Post Author` block: inner blocks improved.
 
 
 ### Automated Tests
