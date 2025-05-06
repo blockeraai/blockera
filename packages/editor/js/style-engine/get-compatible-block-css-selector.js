@@ -104,6 +104,14 @@ export const getNormalizedSelector = (
 			return selector.replace(/^{{BLOCK_ID}}&/, '{{BLOCK_ID}}');
 		}
 
+		// Handle selectors starting with &&
+		if (selector.trim().startsWith('&&')) {
+			isProcessedSelector = true;
+			// Extract the first part of the root selector (everything before the first space)
+			const rootFirstPart = rootSelector.split(' ')[0];
+			return `${rootFirstPart}${selector.trim().substring(2)}`;
+		}
+
 		if (selector.trim().startsWith('&')) {
 			isProcessedSelector = true;
 

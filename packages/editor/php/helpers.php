@@ -279,7 +279,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 	 */
 	function blockera_get_css_selector_format( string $root_selector, string $picked_selector, array $args ): string {
 
-		if ( str_starts_with( $picked_selector, '&' ) && ! preg_match( '/^\.|:/', substr( $picked_selector, 1 ) ) ) {
+		if ( str_starts_with( $picked_selector, '&' ) && ! str_starts_with( $picked_selector, '&&' ) && ! preg_match( '/^\.|:/', substr( $picked_selector, 1 ) ) ) {
 
 			throw new BaseException( "Invalid {$picked_selector} selector!", 500 );
 		}
@@ -291,17 +291,31 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 		$has_parent_pseudo = ! empty( $parent_pseudo_class );
 		$has_pseudo        = ! empty( $pseudo_class );
 		$root              = trim( $root_selector );
+		$root_first_part   = '';
+		
+		// Get the first part of root selector for && pattern.
+		if ( ! empty( $root ) ) {
+			$root_parts      = explode( ' ', $root );
+			$root_first_part = $root_parts[0];
+		}
 		
 		$formatted_selectors = [];
 		foreach (explode( ', ', $picked_selector ) as $selector) {
 			$selector    = trim($selector);
 			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
 			
-			$formatted_selectors[] = $root . 
-				( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
-				( $needs_space ? ' ' : '' ) .
-				blockera_process_ampersand_selector_char($selector) .
-				( $has_pseudo ? ':' . $pseudo_class : '' );
+			// Handle && pattern.
+			if ( str_starts_with( $selector, '&&' ) ) {
+				$selector              = $root_first_part . substr( $selector, 2 );
+				$formatted_selectors[] = $selector . 
+					( $has_pseudo ? ':' . $pseudo_class : '' );
+			} else {
+				$formatted_selectors[] = $root . 
+					( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
+					( $needs_space ? ' ' : '' ) .
+					blockera_process_ampersand_selector_char($selector) .
+					( $has_pseudo ? ':' . $pseudo_class : '' );
+			}
 		}
 
 		return implode(', ', $formatted_selectors);
