@@ -23,13 +23,13 @@ export const PostTerms: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/link': {
 			...sharedInnerBlocks['elements/link'],
-			label: __('Term', 'blockera'),
+			label: __('Terms', 'blockera'),
 			description: __('All term elements.', 'blockera'),
 		},
 		'elements/separator': {
 			name: 'elements/separator',
-			label: __('Separator', 'blockera'),
-			description: __('The terms separator element.', 'blockera'),
+			label: __('Separators', 'blockera'),
+			description: __('The terms separator elements.', 'blockera'),
 			icon: <Icon icon="block-post-terms-separator" iconSize="20" />,
 			settings: {
 				force: true,
