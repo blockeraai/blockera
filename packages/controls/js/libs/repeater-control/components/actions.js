@@ -2,9 +2,9 @@
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -17,10 +17,10 @@ import { Icon } from '@blockera/icons';
  */
 import { Button, Tooltip } from '../../';
 import { RepeaterContext } from '../context';
-import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
+import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 
 export default function RepeaterItemActions({
 	item,
@@ -76,6 +76,26 @@ export default function RepeaterItemActions({
 					tooltipPosition="top"
 					onClick={(event) => {
 						event.stopPropagation();
+
+						if (!item?.isVisible) {
+							const visibleItems = [];
+
+							for (const repeaterItemId in repeaterItems) {
+								const repeaterItem =
+									repeaterItems[repeaterItemId];
+								if (repeaterItem?.isVisible) {
+									visibleItems.push(repeaterItemId);
+								}
+							}
+
+							if (
+								visibleItems.length >= 1 &&
+								isEnabledPromote(PromoComponent, repeaterItems)
+							) {
+								return setCount(count + 1);
+							}
+						}
+
 						setVisibility(!isVisible);
 						const value = item?.selectable
 							? {
