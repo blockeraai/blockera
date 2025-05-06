@@ -19,6 +19,7 @@
 - `Submenu` block: Special `Current Page Ancestor` state added.
 - `Previous Post` block: `Arrow` inner block added.
 - `Next Post` block: `Arrow` inner block added.
+- `Next Page` block: more related states for block.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -45,6 +46,7 @@
 - `Post Title` block: inner blocks improved.
 - `Pullquote` block: inner blocks improved.
 - `Query Pagination` block: inner blocks improved.
+- `Next Page` block: inner blocks improved.
 
 
 ### Automated Tests
