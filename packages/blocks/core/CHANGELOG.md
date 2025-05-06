@@ -21,6 +21,7 @@
 - `Next Post` block: `Arrow` inner block added.
 - `Next Page` block: more related states for block.
 - `Previous Page` block: more related states for block.
+- `Page Numbers` block: more related states for block.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -49,6 +50,7 @@
 - `Query Pagination` block: inner blocks improved.
 - `Next Page` block: inner blocks improved.
 - `Previous Page` block: inner blocks improved.
+- `Page Numbers` block: inner blocks improved.
 
 
 ### Automated Tests
