@@ -25,7 +25,10 @@ export const Gallery: BlockType = {
 		'elements/image-caption': {
 			name: 'elements/image-caption',
 			label: __('Images Captions', 'blockera'),
-			description: __('The gallery images caption elements.', 'blockera'),
+			description: __(
+				'The caption of the images inside the gallery.',
+				'blockera'
+			),
 			icon: <Icon icon="block-image-caption" iconSize="20" />,
 			settings: {
 				force: true,
@@ -34,7 +37,7 @@ export const Gallery: BlockType = {
 		'elements/gallery-caption': {
 			name: 'elements/gallery-caption',
 			label: __('Gallery Caption', 'blockera'),
-			description: __('The gallery caption element.', 'blockera'),
+			description: __('The caption of the gallery.', 'blockera'),
 			icon: <Icon icon="block-gallery-caption" iconSize="20" />,
 			settings: {
 				force: true,
