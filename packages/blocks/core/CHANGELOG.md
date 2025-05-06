@@ -42,6 +42,7 @@
 - `Post Date` block: inner blocks improved.
 - `Post Excerpt` block: inner blocks improved.
 - `Post Terms` block: inner blocks improved.
+- `Post Title` block: inner blocks improved.
 
 
 ### Automated Tests
