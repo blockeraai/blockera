@@ -38,6 +38,7 @@
 - `Post Author Name` block: inner blocks improved.
 - `Post Content` block: inner blocks improved.
 - `Post Date` block: inner blocks improved.
+- `Post Excerpt` block: inner blocks improved.
 
 
 ### Automated Tests
