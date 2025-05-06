@@ -63,6 +63,7 @@
 - `Social Links` block: inner blocks improved.
 - `Tag Cloud` block: inner blocks improved.
 - `Term Description` block: inner blocks improved.
+- `Verse` block: inner blocks improved.
 
 
 ### Automated Tests
