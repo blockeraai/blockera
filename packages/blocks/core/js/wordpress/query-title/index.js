@@ -14,9 +14,6 @@ import type { BlockType } from '../../type';
 export const QueryTitle: BlockType = {
 	name: 'blockeraQueryTitle',
 	targetBlock: 'core/query-title',
-	blockeraInnerBlocks: {
-		'elements/link': sharedInnerBlocks['elements/link'],
-	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},

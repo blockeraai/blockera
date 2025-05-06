@@ -1,13 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	createPost,
-	appendBlocks,
-	setInnerBlock,
-	// savePage,
-	// redirectToFrontPage,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 describe('Query Title Block', () => {
 	beforeEach(() => {
@@ -22,11 +16,6 @@ describe('Query Title Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
-
-		cy.getByDataTest('elements/link').should('exist');
-
-		// no other item
-		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
@@ -51,29 +40,6 @@ describe('Query Title Block', () => {
 			'background-clip',
 			'padding-box'
 		);
-
-		//
-		// 1.1. Link inner block
-		//
-		setInnerBlock('elements/link');
-
-		//
-		// 1.1.1. BG color
-		//
-		cy.setColorControlValue('BG Color', 'cccccc');
-
-		// Append a tag at the end of the element
-		cy.getBlock('core/query-title').then(($el) => {
-			$el.append('<a href="https://blockera.ai">Test Link</a>');
-		});
-
-		cy.getBlock('core/query-title').within(() => {
-			cy.get('a').should(
-				'have.css',
-				'background-color',
-				'rgb(204, 204, 204)'
-			);
-		});
 
 		//
 		// 2. Assert inner blocks selectors in front end
