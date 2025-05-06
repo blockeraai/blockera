@@ -51,6 +51,7 @@
 - `Next Page` block: inner blocks improved.
 - `Previous Page` block: inner blocks improved.
 - `Page Numbers` block: inner blocks improved.
+- `Quote` block: inner blocks improved.
 
 
 ### Automated Tests
