@@ -32,7 +32,7 @@ export const List: BlockType = {
 		},
 		'elements/item-marker': {
 			name: 'elements/item-marker',
-			label: __('List Items Marker', 'blockera'),
+			label: __('Markers', 'blockera'),
 			description: __('Marker of list items.', 'blockera'),
 			icon: (
 				<Icon
