@@ -35,6 +35,7 @@
 - `Paragraph` block: inner blocks improved.
 - `Post Author` block: inner blocks improved.
 - `Post Author Biography` block: inner blocks improved.
+- `Post Author Name` block: inner blocks improved.
 
 
 ### Automated Tests
