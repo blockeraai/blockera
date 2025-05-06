@@ -1,5 +1,18 @@
 ## Unreleased
 
+### New Features
+- `Calendar` block: `Caption` inner block added.
+- `Calendar` block: `Header` inner block added.
+- `Calendar` block: `Header → Cells` inner block added.
+- `Calendar` block: `Body` inner block added.
+- `Calendar` block: `Body → Cells` inner block added.
+- `Calendar` block: `Body → Empty Cells` inner block added.
+- `Calendar` block: `Next/Prev Links` inner block added.
+
+### Automated Tests
+- Added E2E tests to check the inner blocks functionality of `Calendar` block.
+
+
 ## 1.3.0 (2025-04-27)
 
 ### New Features

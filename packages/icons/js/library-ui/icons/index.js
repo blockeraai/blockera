@@ -294,6 +294,7 @@ export { default as Sku } from './sku.svg';
 export { default as Success } from './success.svg';
 export { default as Support } from './support.svg';
 export { default as TargetBlank } from './target-blank.svg';
+export { default as Target } from './target.svg';
 export { default as TextAlignCenter } from './text-align-center.svg';
 export { default as TextAlignJustify } from './text-align-justify.svg';
 export { default as TextAlignLeft } from './text-align-left.svg';
