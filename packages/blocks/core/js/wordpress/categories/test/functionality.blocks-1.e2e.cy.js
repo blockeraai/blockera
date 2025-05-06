@@ -92,6 +92,35 @@ describe('Categories Block', () => {
 			});
 
 		//
+		// 1.3. Term item marker inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/term-item-marker');
+
+		//
+		// 1.3.1. Text color
+		//
+		cy.setColorControlValue('Text Color', '00ffdf');
+
+		cy.getBlock('core/categories')
+			.first()
+			.within(() => {
+				cy.get('li')
+					.first()
+					.within(($el) => {
+						cy.window().then((win) => {
+							const marker = win.getComputedStyle(
+								$el[0],
+								'::marker'
+							);
+							const markerColor =
+								marker.getPropertyValue('color');
+							expect(markerColor).to.equal('rgb(0, 255, 223)');
+						});
+					});
+			});
+
+		//
 		// 2. Assert inner blocks selectors in front end
 		//
 		savePage();
@@ -113,6 +142,17 @@ describe('Categories Block', () => {
 			cy.get('li.cat-item')
 				.first()
 				.should('have.css', 'background-color', 'rgb(238, 238, 238)');
+
+			// term item marker inner block
+			cy.get('li')
+				.first()
+				.within(($el) => {
+					cy.window().then((win) => {
+						const marker = win.getComputedStyle($el[0], '::marker');
+						const markerColor = marker.getPropertyValue('color');
+						expect(markerColor).to.equal('rgb(0, 255, 223)');
+					});
+				});
 		});
 	});
 });

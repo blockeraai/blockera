@@ -29,6 +29,21 @@ export const Categories: BlockType = {
 				force: true,
 			},
 		},
+		'elements/term-item-marker': {
+			name: 'elements/term-item-marker',
+			label: __('Terms Marker', 'blockera'),
+			description: __('Marker of term list items.', 'blockera'),
+			icon: (
+				<Icon
+					icon="block-list-item-marker"
+					library="ui"
+					iconSize="20"
+				/>
+			),
+			settings: {
+				force: true,
+			},
+		},
 		'elements/list-item': {
 			name: 'elements/list-item',
 			label: __('Terms Container', 'blockera'),
