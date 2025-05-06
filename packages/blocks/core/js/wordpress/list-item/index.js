@@ -23,7 +23,7 @@ export const ListItem: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/item-marker': {
 			name: 'elements/item-marker',
-			label: __('List Item Marker', 'blockera'),
+			label: __('Marker', 'blockera'),
 			description: __('Marker of list item.', 'blockera'),
 			icon: (
 				<Icon
@@ -36,7 +36,13 @@ export const ListItem: BlockType = {
 				force: true,
 			},
 		},
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/link': {
+			...sharedInnerBlocks['elements/link'],
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: false,
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

@@ -23,6 +23,7 @@
 - `Latest Comments` block: inner blocks improved.
 - `Latest Posts` block: inner blocks improved.
 - `List` block: inner blocks improved.
+- `List Item` block: inner blocks improved.
 
 
 ### Automated Tests
