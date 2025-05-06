@@ -22,6 +22,7 @@
 - `Next Page` block: more related states for block.
 - `Previous Page` block: more related states for block.
 - `Page Numbers` block: more related states for block.
+- `Read More` block: more related states for block.
 
 ### Improvements
 - `Details` block: inner blocks improved.
