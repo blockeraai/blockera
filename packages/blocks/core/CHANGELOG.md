@@ -14,6 +14,9 @@
 - `Navigation Link` block: Special `Current Page` state added.
 - `Navigation Link` block: Special `Current Page Parent` state added.
 - `Navigation Link` block: Special `Current Page Ancestor` state added.
+- `Submenu` block: Special `Current Page` state added.
+- `Submenu` block: Special `Current Page Parent` state added.
+- `Submenu` block: Special `Current Page Ancestor` state added.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -21,13 +24,14 @@
 - `Footnote` block: inner blocks improved.
 - `Gallery` block: inner blocks improved.
 - `Heading` block: inner blocks improved.
-- `Home Link` block: inner blocks improved.
 - `Image` block: inner blocks improved.
 - `Latest Comments` block: inner blocks improved.
 - `Latest Posts` block: inner blocks improved.
 - `List` block: inner blocks improved.
 - `List Item` block: inner blocks improved.
+- `Home Link` block: inner blocks improved.
 - `Navigation Link` block: inner blocks improved.
+- `Submenu` block: inner blocks improved.
 
 
 ### Automated Tests
