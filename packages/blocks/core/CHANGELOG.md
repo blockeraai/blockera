@@ -11,6 +11,7 @@
 - `Categories List` block: `Terms Marker` inner block added.
 - `Details` block: Special `Open` state added.
 - `Home Link` block: Special `Current Page` state added.
+- `Navigation Link` block: Special `Current Page` state added.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -24,6 +25,7 @@
 - `Latest Posts` block: inner blocks improved.
 - `List` block: inner blocks improved.
 - `List Item` block: inner blocks improved.
+- `Navigation Link` block: inner blocks improved.
 
 
 ### Automated Tests
