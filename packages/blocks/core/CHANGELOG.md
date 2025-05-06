@@ -14,6 +14,7 @@
 ### Improvements
 - `Details` block: inner blocks improved.
 - `File` block: inner blocks improved.
+- `Footnote` block: inner blocks improved.
 
 
 ### Automated Tests

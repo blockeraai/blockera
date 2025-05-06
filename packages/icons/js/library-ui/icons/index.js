@@ -41,6 +41,7 @@ export { default as BlockCommentsFormTextarea } from './block-comments-form-text
 export { default as BlockDetailsArrow } from './block-details-arrow.svg';
 export { default as BlockDetailsTitle } from './block-details-title.svg';
 export { default as BlockDetailsParagraph } from './block-details-paragraph.svg';
+export { default as BlockFootnoteReturn } from './block-footnote-return.svg';
 export { default as BlockGalleryCaption } from './block-gallery-caption.svg';
 export { default as BlockImageCaption } from './block-image-caption.svg';
 export { default as BlockInput } from './block-input.svg';
