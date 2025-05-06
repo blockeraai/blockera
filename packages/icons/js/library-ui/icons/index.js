@@ -38,6 +38,9 @@ export { default as BlockCommentsFormLabels } from './block-comments-form-labels
 export { default as BlockCommentsFormNotes } from './block-comments-form-notes.svg';
 export { default as BlockCommentsFormReplyTitle } from './block-comments-form-reply-title.svg';
 export { default as BlockCommentsFormTextarea } from './block-comments-form-textarea.svg';
+export { default as BlockDetailsArrow } from './block-details-arrow.svg';
+export { default as BlockDetailsTitle } from './block-details-title.svg';
+export { default as BlockDetailsParagraph } from './block-details-paragraph.svg';
 export { default as BlockGalleryCaption } from './block-gallery-caption.svg';
 export { default as BlockImageCaption } from './block-image-caption.svg';
 export { default as BlockInput } from './block-input.svg';

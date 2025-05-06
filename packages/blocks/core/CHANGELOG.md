@@ -9,6 +9,11 @@
 - `Calendar` block: `Body → Empty Cells` inner block added.
 - `Calendar` block: `Next/Prev Links` inner block added.
 - `Categories List` block: `Terms Marker` inner block added.
+- `Details` block: Special `Open` state added.
+
+### Improvements
+- `Details` block: inner blocks improved.
+
 
 ### Automated Tests
 - Added E2E tests to check the inner blocks functionality of `Calendar` block.

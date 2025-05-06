@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import { generalBlockStates, SharedBlockExtension } from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -26,23 +26,65 @@ export const Details: BlockType = {
 			type: 'title',
 			label: __('Title', 'blockera'),
 			description: __('The title of details block.', 'blockera'),
-			icon: <Icon icon="heading" library="wp" iconSize="20" />,
+			icon: <Icon icon="block-details-title" iconSize="20" />,
 			settings: {
 				force: true,
+				priority: 0,
 			},
 		},
 		'elements/title-icon': {
 			name: 'elements/title-icon',
 			type: 'title',
-			label: __('Title Icon', 'blockera'),
+			label: __('Arrow Icon', 'blockera'),
 			description: __('Chevron down icon of title.', 'blockera'),
-			icon: <Icon icon="chevron-down" library="wp" iconSize="20" />,
+			icon: <Icon icon="block-details-arrow" iconSize="20" />,
 			settings: {
 				force: true,
+				priority: 0,
 			},
 		},
-		'core/paragraph': sharedInnerBlocks['core/paragraph'],
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/paragraph': {
+			...sharedInnerBlocks['core/paragraph'],
+			icon: <Icon icon="block-details-paragraph" iconSize="20" />,
+		},
+		'elements/link': {
+			...sharedInnerBlocks['elements/link'],
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: false,
+			},
+		},
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		open: {
+			type: 'open',
+			label: __('Open', 'blockera'),
+			category: 'special',
+			tooltip: (
+				<>
+					<h5>{__('Open State', 'blockera')}</h5>
+					<p>
+						{__(
+							'Styles that apply when the details block is open and expanded.',
+							'blockera'
+						)}
+					</p>
+					<code style={{ margin: '5px 0' }}>
+						<span style={{ opacity: '0.7', marginRight: '1px' }}>
+							.block
+						</span>
+						[open]
+					</code>
+				</>
+			),
+			breakpoints: {},
+			priority: 0,
+			force: true,
+			settings: {
+				color: 'var(--blockera-controls-states-color)',
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
