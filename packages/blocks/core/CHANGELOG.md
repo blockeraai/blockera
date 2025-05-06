@@ -24,6 +24,10 @@
 - `Page Numbers` block: more related states for block.
 - `Read More` block: more related states for block.
 - `Social Link` block: more related states for block.
+- `Table` block: `Caption` inner block added.
+- `Table` block: `Header → Cells` inner block added.
+- `Table` block: `Body → Cells` inner block added.
+- `Table` block: `Footer → Cells` inner block added.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -64,6 +68,7 @@
 - Updated E2E tests to check the inner blocks functionality of `Categories List` block.
 - Updated E2E tests to check the inner blocks functionality of `Previous Post` block.
 - Updated E2E tests to check the inner blocks functionality of `Next Post` block.
+- Updated E2E tests to check the inner blocks functionality of `Table` block.
 
 
 ## 1.3.0 (2025-04-27)
