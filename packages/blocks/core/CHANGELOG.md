@@ -44,6 +44,7 @@
 - `Post Terms` block: inner blocks improved.
 - `Post Title` block: inner blocks improved.
 - `Pullquote` block: inner blocks improved.
+- `Query Pagination` block: inner blocks improved.
 
 
 ### Automated Tests

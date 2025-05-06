@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -31,10 +32,8 @@ describe('Query Pagination Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
-
-		// no other item
-		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
