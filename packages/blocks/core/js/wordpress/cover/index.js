@@ -14,6 +14,7 @@ import type { BlockType } from '../../type';
 export const Cover: BlockType = {
 	name: 'blockeraCover',
 	targetBlock: 'core/cover',
+	maxInnerBlocks: 3,
 	blockeraInnerBlocks: {
 		'core/heading': sharedInnerBlocks['core/heading'],
 		'core/paragraph': sharedInnerBlocks['core/paragraph'],
