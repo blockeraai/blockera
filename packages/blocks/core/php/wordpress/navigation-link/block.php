@@ -15,7 +15,13 @@ return array_merge(
 			[
 				'blockera/states/current-menu-item' => [
 					'root' => '&.current-menu-item',
-				], 
+				],
+				'blockera/states/current-menu-parent' => [
+					'root' => '&.current-menu-parent',
+				],
+				'blockera/states/current-menu-ancestor' => [
+					'root' => '&.current-menu-ancestor',
+				],
 				'blockera/elements/link' => [
 					'root' => '.wp-block-navigation-item__content',
 				],

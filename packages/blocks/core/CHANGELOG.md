@@ -12,6 +12,8 @@
 - `Details` block: Special `Open` state added.
 - `Home Link` block: Special `Current Page` state added.
 - `Navigation Link` block: Special `Current Page` state added.
+- `Navigation Link` block: Special `Current Page Parent` state added.
+- `Navigation Link` block: Special `Current Page Ancestor` state added.
 
 ### Improvements
 - `Details` block: inner blocks improved.
