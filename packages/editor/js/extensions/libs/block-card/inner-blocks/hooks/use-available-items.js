@@ -88,11 +88,12 @@ export const useAvailableItems = ({
 		// Appending allowed block types of WordPress selected block ...
 		appendBlocks(allowedBlockTypes);
 
-		const { forcesItems, customizedInnerBlocks } = modifyItemsPriority(
-			innerBlocks,
-			forces,
-			attributes
-		);
+		const { forcesItems, customizedInnerBlocks } = maxItems
+			? modifyItemsPriority(innerBlocks, forces, attributes)
+			: {
+					forcesItems: forces,
+					customizedInnerBlocks: innerBlocks,
+			  };
 
 		// Appending forces into repeater state.
 		if (forces.length) {
@@ -295,15 +296,6 @@ const calculateInners = ({
 		}
 
 		return mergeObject(normalizedInners(customizedInnerBlocks), inners);
-	}
-
-	if (customizedInnerBlocks.length) {
-		const mergedItems = mergeObject(
-			normalizedInners(customizedInnerBlocks),
-			normalizedInners(forcesItems)
-		);
-
-		return mergeObject(mergedItems, inners);
 	}
 
 	return mergeObject(normalizedInners(forcesItems), inners);
