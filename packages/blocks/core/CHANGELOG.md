@@ -56,6 +56,7 @@
 - `Quote` block: inner blocks improved.
 - `Site Title` block: inner blocks improved.
 - `Social Link` block: inner blocks improved.
+- `Social Links` block: inner blocks improved.
 
 
 ### Automated Tests
