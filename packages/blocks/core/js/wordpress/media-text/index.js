@@ -14,6 +14,7 @@ import type { BlockType } from '../../type';
 export const MediaText: BlockType = {
 	name: 'blockeraMediaText',
 	targetBlock: 'core/media-text',
+	maxInnerBlocks: 3,
 	blockeraInnerBlocks: {
 		'core/heading': sharedInnerBlocks['core/heading'],
 		'core/paragraph': sharedInnerBlocks['core/paragraph'],
