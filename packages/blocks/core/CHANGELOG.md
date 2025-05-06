@@ -20,6 +20,8 @@
 - `Heading` block: inner blocks improved.
 - `Home Link` block: inner blocks improved.
 - `Image` block: inner blocks improved.
+- `Latest Comments` block: inner blocks improved.
+- `Latest Posts` block: inner blocks improved.
 
 
 ### Automated Tests
