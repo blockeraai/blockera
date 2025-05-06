@@ -10,6 +10,7 @@
 - `Calendar` block: `Next/Prev Links` inner block added.
 - `Categories List` block: `Terms Marker` inner block added.
 - `Details` block: Special `Open` state added.
+- `Home Link` block: Special `Current Page` state added.
 
 ### Improvements
 - `Details` block: inner blocks improved.
@@ -17,6 +18,7 @@
 - `Footnote` block: inner blocks improved.
 - `Gallery` block: inner blocks improved.
 - `Heading` block: inner blocks improved.
+- `Home Link` block: inner blocks improved.
 
 
 ### Automated Tests
