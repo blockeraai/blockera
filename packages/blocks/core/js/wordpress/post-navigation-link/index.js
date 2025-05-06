@@ -26,7 +26,7 @@ export const PostNavigationLink: BlockType = {
 			type: 'title',
 			label: __('Arrow', 'blockera'),
 			description: __('Arrow icon element.', 'blockera'),
-			icon: <Icon icon="previous" library="wp" iconSize="20" />,
+			icon: <Icon icon="target" iconSize="20" />,
 			settings: {
 				force: true,
 			},
