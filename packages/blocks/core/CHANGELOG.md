@@ -16,6 +16,7 @@
 - `File` block: inner blocks improved.
 - `Footnote` block: inner blocks improved.
 - `Gallery` block: inner blocks improved.
+- `Heading` block: inner blocks improved.
 
 
 ### Automated Tests
