@@ -35,7 +35,7 @@ export const Details: BlockType = {
 		'elements/title-icon': {
 			name: 'elements/title-icon',
 			type: 'title',
-			label: __('Arrow Icon', 'blockera'),
+			label: __('Arrow', 'blockera'),
 			description: __('Chevron down icon of title.', 'blockera'),
 			icon: <Icon icon="block-details-arrow" iconSize="20" />,
 			settings: {
