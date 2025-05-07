@@ -236,7 +236,7 @@
 		"icons:indexing": "node packages/components/bin/icons/index.js search.json",
 		"env": "wp-env",
 		"env:stop": "npm run env stop",
-		"env:start": "npm run env start --xdebug",
+		"env:start": "node .github/scripts/setup-wp-env.js && wp-env start",
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:tests-cli:bash": "npm run env run tests-cli bash",
 		"packages:update": "wp-scripts packages-update",
