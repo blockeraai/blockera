@@ -16,7 +16,9 @@ import {
 	InnerBlocksExtension,
 	useInnerBlocks,
 } from '../../block-card/inner-blocks';
+import { useExtensionsStore } from '../../../../hooks';
 import { isInnerBlock } from '../../../components/utils';
+import { isVirtualBlock } from '../../block-card/inner-blocks/helpers';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
@@ -37,6 +39,12 @@ export const Preview = ({
 	// Inner Blocks props.
 	innerBlocksProps,
 }: TPreviewProps): MixedElement => {
+	const { getBlockExtensionBy } = useExtensionsStore();
+
+	if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
+		blockConfig = getBlockExtensionBy('targetBlock', currentBlock);
+	}
+
 	const {
 		blocks,
 		elements,
@@ -73,10 +81,11 @@ export const Preview = ({
 		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
-		availableStates: isInnerBlock(currentBlock)
-			? (blockConfig?.blockeraInnerBlocks[currentBlock] || {})
-					?.availableBlockStates || blockConfig?.availableBlockStates
-			: blockConfig?.availableBlockStates,
+		availableStates:
+			isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
+				? (blockConfig?.blockeraInnerBlocks[currentBlock] || {})
+						?.availableBlockStates
+				: blockConfig?.availableBlockStates,
 	});
 
 	return (
