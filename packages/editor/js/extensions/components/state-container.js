@@ -17,13 +17,13 @@ export default function StateContainer({
 }: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
-	const { getState } = useEditorStore();
+	const { getState, getInnerState } = useEditorStore();
 
 	const selectedState = isInnerBlock(currentBlock)
 		? currentInnerBlockState
 		: currentState;
 
-	const state = getState(selectedState);
+	const state = getState(selectedState) || getInnerState(selectedState);
 	const fallbackState =
 		availableStates && availableStates.hasOwnProperty(selectedState)
 			? availableStates[selectedState]
