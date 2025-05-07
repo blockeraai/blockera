@@ -16,6 +16,7 @@ import {
 	InnerBlocksExtension,
 	useInnerBlocks,
 } from '../../block-card/inner-blocks';
+import { isInnerBlock } from '../../../components/utils';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
@@ -72,7 +73,10 @@ export const Preview = ({
 		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
-		availableStates: blockConfig?.availableBlockStates,
+		availableStates: isInnerBlock(currentBlock)
+			? (blockConfig?.blockeraInnerBlocks[currentBlock] || {})
+					?.availableBlockStates || blockConfig?.availableBlockStates
+			: blockConfig?.availableBlockStates,
 	});
 
 	return (
