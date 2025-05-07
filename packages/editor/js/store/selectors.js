@@ -133,11 +133,11 @@ export const getAvailableStates = ({
  * @return {Object} the states stored in redux.
  */
 export const getInnerStates = ({
-	blockStates,
+	innerBlockStates,
 }: {
-	blockStates: { [key: TStates]: StateTypes },
+	innerBlockStates: { [key: TStates]: StateTypes },
 }): { [key: TStates]: StateTypes } => {
-	return blockStates;
+	return innerBlockStates;
 };
 
 /**
@@ -149,31 +149,31 @@ export const getInnerStates = ({
  */
 export const getInnerState = (
 	{
-		blockStates,
+		innerBlockStates,
 	}: {
-		blockStates: { [key: TStates]: StateTypes },
+		innerBlockStates: { [key: TStates]: StateTypes },
 	},
 	name: TStates
 ): StateTypes => {
-	return blockStates[name];
+	return innerBlockStates[name];
 };
 
 /**
  * Get available states.
  *
- * @param {{blockStates: Object}} state the block states.
+ * @param {{innerBlockStates: Object}} state the block states.
  *
  * @return {Array<TStates>} the available states.
  */
 export const getAvailableInnerStates = ({
-	blockStates,
+	innerBlockStates,
 }: {
-	blockStates: { [key: TStates]: StateTypes },
+	innerBlockStates: { [key: TStates]: StateTypes },
 }): Array<TStates> => {
 	const availableStates = [];
 
-	for (const key in blockStates) {
-		const state = blockStates[key];
+	for (const key in innerBlockStates) {
+		const state = innerBlockStates[key];
 
 		if (state?.native) {
 			continue;
