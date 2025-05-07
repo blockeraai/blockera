@@ -51,12 +51,18 @@ jobs:
                   mkdir packages
                   mkdir packages/blockera
                   mkdir packages/blockera/tests
+                  mkdir -p .github/scripts
+                  mkdir -p .github/wp-env-configs
+
+                  # Copy the setup script and configs
+                  cp ../../.github/scripts/setup-wp-env.js .github/scripts/
+                  cp ../../.github/wp-env-configs/base.json .github/wp-env-configs/
 
                   # Copy the base configuration and add PHP version
-                  cp ../../.github/wp-env-configs/base.json .wp-env.json
+                  cp .github/wp-env-configs/base.json .wp-env.json
                   jq --arg php "${{ matrix.php }}" '. + {"phpVersion": $php}' .wp-env.json > .wp-env.json.tmp && mv .wp-env.json.tmp .wp-env.json
-                  cat .wp-env.json
 
+                  cat .wp-env.json
                   touch cypress.env.json
                   echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": [],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
                   cat cypress.env.json
