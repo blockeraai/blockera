@@ -10,9 +10,9 @@ import { isRTL } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { ucFirstWord } from '@blockera/utils';
-import { extensionInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { ucFirstWord, mergeObject } from '@blockera/utils';
+import { extensionInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -39,9 +39,8 @@ export function Breadcrumb({
 	availableStates: { [key: TStates]: StateTypes },
 	activeBlock?: 'master' | InnerBlockType,
 }): MixedElement {
-	const { getActiveInnerState, getActiveMasterState } = select(
-		'blockera/extensions'
-	);
+	const { getActiveInnerState, getActiveMasterState, getBlockExtensionBy } =
+		select('blockera/extensions');
 
 	const masterActiveState = getActiveMasterState(clientId, blockName);
 
@@ -57,8 +56,21 @@ export function Breadcrumb({
 		return <>{children}</>;
 	}
 
-	const { getStates } = select('blockera/editor');
-	const statesDefinition = getStates();
+	const { getStates, getInnerStates } = select('blockera/editor');
+	let statesDefinition = getStates();
+
+	if (activeBlock) {
+		const targetBlockStates = getBlockExtensionBy(
+			'targetBlock',
+			activeBlock
+		)?.availableBlockStates;
+
+		if (targetBlockStates) {
+			statesDefinition = mergeObject(getInnerStates(), targetBlockStates);
+		} else {
+			statesDefinition = getInnerStates();
+		}
+	}
 
 	const CurrentState = ({
 		current,
