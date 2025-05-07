@@ -212,3 +212,9 @@
 .blockera-block-inspector-controls-wrapper ~ .block-editor-block-variation-transforms {
 	display: none !important;
 }
+
+// Hide core position field in the block inspector.
+
+.blockera-block-inspector-controls-wrapper.blockera-active-block ~ .block-editor-block-inspector__tabs .block-editor-block-inspector__position {
+    display: none;
+}
