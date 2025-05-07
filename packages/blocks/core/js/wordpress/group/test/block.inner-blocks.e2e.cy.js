@@ -1,7 +1,12 @@
 /**
  * Blockera dependencies
  */
-import { appendBlocks, createPost } from '@blockera/dev-cypress/js/helpers';
+import {
+	appendBlocks,
+	createPost,
+	openInserter,
+	setInnerBlock,
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Group Block → Inner Blocks', () => {
 	beforeEach(() => {
@@ -23,8 +28,11 @@ describe('Group Block → Inner Blocks', () => {
 
 		cy.getByDataTest('core/heading').should('exist');
 		cy.getByDataTest('core/paragraph').should('exist');
-		cy.getByDataTest('elements/link').should('exist');
 		cy.getByDataTest('core/button').should('exist');
+
+		cy.getByDataTest('elements/link').should('not.exist');
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		// no other item
 		cy.getByDataTest('core/heading-1').should('not.exist');
