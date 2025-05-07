@@ -29,8 +29,16 @@
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
+					},
+					"innerBlocks": {
+						"description": "The list of inner blocks for block support.",
+						"type": "object",
+						"additionalProperties": {
+							"type": ["string", "boolean"]
+						}
 					}
 				},
+				"required": ["status", "fallback", "css-property"],
 				"description": "The shared list of block supports, including fallback identifiers for backwards compatibility and style engine config."
 			}
 		}
