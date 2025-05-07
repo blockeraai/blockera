@@ -14,25 +14,25 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/caption' => [
-					'root' => 'caption',
+					'root' => '&& caption',
 				],
-				'blockera/elements/header' => [
-					'root' => 'thead',
+				'blockera/elements/thead' => [
+					'root' => '&& table thead',
 				],
 				'blockera/elements/thead-cells' => [
-					'root' => 'thead th',
+					'root' => '&& table thead th',
 				],
 				'blockera/elements/tbody' => [
-					'root' => 'tbody',
+					'root' => '&& table tbody',
 				],
 				'blockera/elements/tbody-cells' => [
-					'root' => 'tbody td',
+					'root' => '&& table tbody td',
 				],
 				'blockera/elements/tbody-empty-cells' => [
-					'root' => 'tbody td.pad, tbody td[colspan]',
+					'root' => '&& table tbody td:is(.pad,[colspan])',
 				],
 				'blockera/elements/navigation-item' => [
-					'root' => '.wp-calendar-nav a',
+					'root' => '&& .wp-calendar-nav a',
 				],
 			],
 		),
