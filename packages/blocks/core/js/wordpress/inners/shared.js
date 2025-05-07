@@ -10,6 +10,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
+import { generalInnerBlockStates, sharedBlockStates } from '@blockera/editor';
 
 const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -35,6 +36,18 @@ const sharedInnerBlocks: InnerBlocks = {
 			dataCompatibilityElement: 'link',
 			dataCompatibility: ['font-color', 'font-color-hover'],
 			priority: 10,
+		},
+		availableBlockStates: {
+			...generalInnerBlockStates,
+			focus: {
+				...generalInnerBlockStates.focus,
+				force: true,
+			},
+			active: {
+				...sharedBlockStates.active,
+				force: true,
+			},
+			visited: sharedBlockStates.visited,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
