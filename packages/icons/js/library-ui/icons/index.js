@@ -293,6 +293,7 @@ export { default as SideLockNone } from './side-lock-none.svg';
 export { default as SideLockVerticalHorizontal } from './side-lock-vertical-horizontal.svg';
 export { default as SideLockVertical } from './side-lock-vertical.svg';
 export { default as StyleVariations } from './style-variations.svg';
+export { default as StyleVariationsAnimated } from './style-variations-animated';
 export { default as SlashCircle } from './slash-circle.svg';
 export { default as Sku } from './sku.svg';
 export { default as Success } from './success.svg';
