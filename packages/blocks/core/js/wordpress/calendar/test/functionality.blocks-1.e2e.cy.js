@@ -12,6 +12,11 @@ import {
 
 describe('Calendar Block', () => {
 	beforeEach(() => {
+		// Create a post with a past date to make sure the calendar is showing navigation buttons
+		cy.wpCli(
+			"wp post create --post_type=post --post_title='An old sample post' --post_status=publish --post_date='2024-12-01 12:00:00'"
+		);
+
 		createPost();
 	});
 
