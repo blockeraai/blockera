@@ -1,0 +1,6 @@
+{
+	"plugins": ["."],
+	"config": {
+		"BLOCKERA_TELEMETRY_NOT_STORE_DATA": true
+	}
+}
