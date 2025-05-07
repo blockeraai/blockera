@@ -10,7 +10,10 @@
 				"background",
 				"color.background"
 			],
-			"description": "Support for \"background-image\" value."
+			"description": "Support for \"background-image\" value.",
+			"innerBlocks": {
+				"all": true
+			}
 		},
 		"blockeraBackgroundClip": {
 			"status": true,
