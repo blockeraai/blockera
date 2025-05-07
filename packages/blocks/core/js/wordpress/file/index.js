@@ -23,11 +23,19 @@ export const File: BlockType = {
 			...sharedInnerBlocks['elements/link'],
 			label: __('File Name', 'blockera'),
 			description: __('The name of the file.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: true,
+			},
 		},
 		'core/button': {
 			...sharedInnerBlocks['core/button'],
 			label: __('Download Button', 'blockera'),
 			description: __('A button to download the file.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['core/button'].settings,
+				force: true,
+			},
 		},
 	},
 	edit: (props) => {

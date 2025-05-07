@@ -46,14 +46,12 @@ export const Details: BlockType = {
 		'elements/paragraph': {
 			...sharedInnerBlocks['core/paragraph'],
 			icon: <Icon icon="block-details-paragraph" iconSize="20" />,
-		},
-		'elements/link': {
-			...sharedInnerBlocks['elements/link'],
 			settings: {
-				...sharedInnerBlocks['elements/link'].settings,
-				force: false,
+				...sharedInnerBlocks['core/paragraph'].settings,
+				force: true,
 			},
 		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	availableBlockStates: {
 		...generalBlockStates,

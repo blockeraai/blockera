@@ -20,7 +20,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All paragraph elements.', 'blockera'),
 		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
 			priority: 10,
 		},
 	},
@@ -32,7 +32,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All hyperlinks elements.', 'blockera'),
 		icon: <Icon icon="link" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
 			dataCompatibilityElement: 'link',
 			dataCompatibility: ['font-color', 'font-color-hover'],
 			priority: 10,
@@ -60,7 +60,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			// because "core/heading" block default value for "level" attribute is "2".
 			level: 2,
-			force: true,
+			force: false,
 			dataCompatibilityElement: 'heading',
 			dataCompatibility: [
 				'font-color',
@@ -193,7 +193,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All button-style link elements.', 'blockera'),
 		icon: <Icon icon="button" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
 			dataCompatibilityElement: 'button',
 			dataCompatibility: [
 				'font-color',
@@ -210,7 +210,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All images elements.', 'blockera'),
 		icon: <Icon icon="image" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
 			priority: 10,
 		},
 	},

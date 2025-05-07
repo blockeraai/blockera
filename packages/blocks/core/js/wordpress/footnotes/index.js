@@ -27,6 +27,10 @@ export const Footnotes: BlockType = {
 			icon: <Icon icon="block-footnote-return" iconSize="20" />,
 			label: __('Jump to Footnote Links', 'blockera'),
 			description: __('The links to the footnote reference.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: true,
+			},
 		},
 	},
 	edit: (props) => {

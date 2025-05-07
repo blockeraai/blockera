@@ -45,13 +45,7 @@ export const List: BlockType = {
 				force: true,
 			},
 		},
-		'elements/link': {
-			...sharedInnerBlocks['elements/link'],
-			settings: {
-				...sharedInnerBlocks['elements/link'].settings,
-				force: false,
-			},
-		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

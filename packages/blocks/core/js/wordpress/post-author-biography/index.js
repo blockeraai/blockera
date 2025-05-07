@@ -15,13 +15,7 @@ export const PostAuthorBiography: BlockType = {
 	name: 'blockeraPostAuthorBiography',
 	targetBlock: 'core/post-author-biography',
 	blockeraInnerBlocks: {
-		'elements/link': {
-			...sharedInnerBlocks['elements/link'],
-			settings: {
-				...sharedInnerBlocks['elements/link'].settings,
-				force: false,
-			},
-		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

@@ -15,13 +15,7 @@ export const TermDescription: BlockType = {
 	name: 'blockeraTermDescription',
 	targetBlock: 'core/term-description',
 	blockeraInnerBlocks: {
-		'elements/link': {
-			...sharedInnerBlocks['elements/link'],
-			settings: {
-				...sharedInnerBlocks['elements/link'].settings,
-				force: false,
-			},
-		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

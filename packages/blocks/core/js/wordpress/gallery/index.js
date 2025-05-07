@@ -21,7 +21,13 @@ export const Gallery: BlockType = {
 	name: 'blockeraGallery',
 	targetBlock: 'core/gallery',
 	blockeraInnerBlocks: {
-		'core/image': sharedInnerBlocks['core/image'],
+		'core/image': {
+			...sharedInnerBlocks['core/image'],
+			settings: {
+				...sharedInnerBlocks['core/image'].settings,
+				force: true,
+			},
+		},
 		'elements/image-caption': {
 			name: 'elements/image-caption',
 			label: __('Images Captions', 'blockera'),

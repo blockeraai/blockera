@@ -23,6 +23,10 @@ export const Buttons: BlockType = {
 		'core/button': {
 			...sharedInnerBlocks['core/button'],
 			label: __('Single Button', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['core/button'].settings,
+				force: true,
+			},
 		},
 	},
 	edit: (props) => {

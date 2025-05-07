@@ -15,13 +15,7 @@ export const PostDate: BlockType = {
 	name: 'blockeraPostDate',
 	targetBlock: 'core/post-date',
 	blockeraInnerBlocks: {
-		'elements/link': {
-			...sharedInnerBlocks['elements/link'],
-			settings: {
-				...sharedInnerBlocks['elements/link'].settings,
-				force: false,
-			},
-		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

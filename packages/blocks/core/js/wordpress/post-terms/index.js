@@ -25,6 +25,10 @@ export const PostTerms: BlockType = {
 			...sharedInnerBlocks['elements/link'],
 			label: __('Terms', 'blockera'),
 			description: __('All term elements.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: true,
+			},
 		},
 		'elements/separator': {
 			name: 'elements/separator',

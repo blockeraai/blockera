@@ -28,10 +28,6 @@ export const NavigationLink: BlockType = {
 			...sharedInnerBlocks['elements/link'],
 			label: __('Link', 'blockera'),
 			description: __('Hyperlink element.', 'blockera'),
-			settings: {
-				...sharedInnerBlocks['elements/link'].settings,
-				force: false,
-			},
 		},
 	},
 	availableBlockStates: {
