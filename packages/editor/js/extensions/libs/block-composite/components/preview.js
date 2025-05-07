@@ -4,6 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -41,9 +42,27 @@ export const Preview = ({
 }: TPreviewProps): MixedElement => {
 	const { getBlockExtensionBy } = useExtensionsStore();
 
-	if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
-		blockConfig = getBlockExtensionBy('targetBlock', currentBlock);
-	}
+	const availableStates = useMemo(() => {
+		let blockStates =
+			isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
+				? (blockConfig?.blockeraInnerBlocks[currentBlock] || {})
+						?.availableBlockStates
+				: blockConfig?.availableBlockStates;
+
+		if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
+			const { availableBlockStates } = getBlockExtensionBy(
+				'targetBlock',
+				currentBlock
+			);
+
+			if (availableBlockStates) {
+				blockStates = availableBlockStates;
+			}
+		}
+
+		return blockStates;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlock, blockConfig]);
 
 	const {
 		blocks,
@@ -78,14 +97,10 @@ export const Preview = ({
 		onChange,
 		currentBlock,
 		currentState,
+		availableStates,
 		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
-		availableStates:
-			isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
-				? (blockConfig?.blockeraInnerBlocks[currentBlock] || {})
-						?.availableBlockStates
-				: blockConfig?.availableBlockStates,
 	});
 
 	return (
