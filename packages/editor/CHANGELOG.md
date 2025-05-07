@@ -9,6 +9,7 @@
 - Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
 - Block style variation redesigned and moved to block card (Block Card v3).
 - Added support for flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
+- Added smart calculation for block states in inner blocks.
 
 
 ### Automated Tests
