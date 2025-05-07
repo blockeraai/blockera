@@ -43,6 +43,7 @@ export function InnerBlockCard({
 	currentState,
 	setAttributes,
 	currentBreakpoint,
+	availableStates,
 	additional,
 	currentStateAttributes,
 	currentInnerBlockState,
@@ -53,6 +54,7 @@ export function InnerBlockCard({
 	supports: Object,
 	currentStateAttributes: Object,
 	additional: Object,
+	availableStates: Object,
 	children?: MixedElement,
 	activeBlock: 'master' | InnerBlockType,
 	currentBlock: 'master' | InnerBlockType | string,
@@ -124,7 +126,7 @@ export function InnerBlockCard({
 							clientId={clientId}
 							blockName={blockName}
 							activeBlock={activeBlock}
-							availableStates={additional.availableBlockStates}
+							availableStates={availableStates}
 							blockeraUnsavedData={
 								currentStateAttributes?.blockeraUnsavedData
 							}
@@ -160,7 +162,7 @@ export function InnerBlockCard({
 			</div>
 
 			<StateContainer
-				availableStates={additional?.availableBlockStates}
+				availableStates={availableStates}
 				blockeraUnsavedData={
 					currentStateAttributes?.blockeraUnsavedData
 				}
@@ -181,6 +183,7 @@ export function InnerBlockCard({
 					blockName,
 					setAttributes,
 				}}
+				availableStates={availableStates}
 				onChange={handleOnChangeAttributes}
 				currentBlock={currentBlock}
 				currentState={currentState}

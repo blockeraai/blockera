@@ -4,7 +4,6 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -17,9 +16,6 @@ import {
 	InnerBlocksExtension,
 	useInnerBlocks,
 } from '../../block-card/inner-blocks';
-import { useExtensionsStore } from '../../../../hooks';
-import { isInnerBlock } from '../../../components/utils';
-import { isVirtualBlock } from '../../block-card/inner-blocks/helpers';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
@@ -31,6 +27,7 @@ export const Preview = ({
 	blockConfig,
 	currentBlock,
 	currentState,
+	availableStates,
 	currentBreakpoint,
 	currentInnerBlockState,
 
@@ -40,30 +37,6 @@ export const Preview = ({
 	// Inner Blocks props.
 	innerBlocksProps,
 }: TPreviewProps): MixedElement => {
-	const { getBlockExtensionBy } = useExtensionsStore();
-
-	const availableStates = useMemo(() => {
-		let blockStates =
-			isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
-				? (blockConfig?.blockeraInnerBlocks[currentBlock] || {})
-						?.availableBlockStates
-				: blockConfig?.availableBlockStates;
-
-		if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
-			const { availableBlockStates } = getBlockExtensionBy(
-				'targetBlock',
-				currentBlock
-			);
-
-			if (availableBlockStates) {
-				blockStates = availableBlockStates;
-			}
-		}
-
-		return blockStates;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentBlock, blockConfig]);
-
 	const {
 		blocks,
 		elements,

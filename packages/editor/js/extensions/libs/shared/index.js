@@ -90,7 +90,7 @@ type Props = {
 	currentStateAttributes: Object,
 	blockeraInnerBlocks: InnerBlocks,
 	setAttributes: (attributes: Object) => void,
-	availableBlockStates: { [key: TStates | string]: StateTypes },
+	availableStates: { [key: TStates | string]: StateTypes },
 };
 
 export const SharedBlockExtension: ComponentType<Props> = memo(
@@ -100,7 +100,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		attributes: blockAttributes,
 		defaultAttributes: attributes,
 		setAttributes,
-		availableBlockStates,
+		availableStates,
 		currentStateAttributes,
 		currentAttributes: currentBlockAttributes,
 		controllerProps: {
@@ -1323,7 +1323,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		return (
 			<StateContainer
-				availableStates={additional?.availableBlockStates}
+				availableStates={availableStates}
 				blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
 			>
 				{useDisplayBlockControls() && (

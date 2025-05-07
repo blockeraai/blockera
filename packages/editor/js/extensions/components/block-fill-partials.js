@@ -7,7 +7,7 @@ import memoize from 'fast-memoize';
 import { select, useDispatch } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
-import { useEffect, memo } from '@wordpress/element';
+import { useEffect, memo, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -18,7 +18,9 @@ import { unregisterControl } from '@blockera/controls';
  * Internal dependencies
  */
 import { isInnerBlock } from './utils';
+import { useExtensionsStore } from '../../hooks';
 import { BlockCard, InnerBlockCard } from '../libs/block-card';
+import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
 
 const excludedControls = ['canvas-editor'];
 
@@ -31,13 +33,35 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentBlock,
 		currentState,
 		currentBreakpoint,
-		currentInnerBlockState,
 		currentInnerBlock,
 		BlockEditComponent,
 		blockeraInnerBlocks,
+		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
 		const { updateBlockAttributes } = useDispatch('core/block-editor');
+		const { getBlockExtensionBy } = useExtensionsStore();
+		const availableStates = useMemo(() => {
+			let blockStates =
+				isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
+					? (blockProps?.blockeraInnerBlocks[currentBlock] || {})
+							?.availableBlockStates
+					: blockProps?.availableBlockStates;
+
+			if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
+				const { availableBlockStates } = getBlockExtensionBy(
+					'targetBlock',
+					currentBlock
+				);
+
+				if (availableBlockStates) {
+					blockStates = availableBlockStates;
+				}
+			}
+
+			return blockStates;
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [currentBlock, blockProps]);
 
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
@@ -91,6 +115,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
 						currentStateAttributes={blockProps.attributes}
+						availableStates={availableStates}
 						additional={blockProps.additional}
 						blockeraInnerBlocks={blockeraInnerBlocks}
 						supports={blockProps.supports}
@@ -107,6 +132,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 							handleOnClick={updateBlockEditorSettings}
 							currentBlock={currentBlock}
 							currentState={currentState}
+							availableStates={availableStates}
 							currentBreakpoint={currentBreakpoint}
 							currentInnerBlockState={currentInnerBlockState}
 							currentStateAttributes={
@@ -121,7 +147,10 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				</Fill>
 				{isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
-						<BlockEditComponent {...blockProps} />
+						<BlockEditComponent
+							{...blockProps}
+							availableStates={availableStates}
+						/>
 					</Fill>
 				)}
 			</>
