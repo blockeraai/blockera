@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -23,6 +24,7 @@ describe('Post Author Name Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
 		// no other item
