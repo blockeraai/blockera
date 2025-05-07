@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { Element } from 'react';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -19,22 +20,36 @@ export default function StateContainer({
 		useExtensionsStore();
 	const { getState, getInnerState } = useEditorStore();
 
-	const selectedState = isInnerBlock(currentBlock)
-		? currentInnerBlockState
-		: currentState;
+	const activeColor = useMemo(() => {
+		const selectedState = isInnerBlock(currentBlock)
+			? currentInnerBlockState
+			: currentState;
 
-	const state = getState(selectedState) || getInnerState(selectedState);
-	const fallbackState =
-		availableStates && availableStates.hasOwnProperty(selectedState)
-			? availableStates[selectedState]
-			: blockeraUnsavedData?.states[selectedState];
-	let activeColor = state
-		? state?.settings?.color
-		: fallbackState?.settings?.color;
+		const state = getState(selectedState) || getInnerState(selectedState);
+		const fallbackState =
+			availableStates && availableStates.hasOwnProperty(selectedState)
+				? availableStates[selectedState]
+				: blockeraUnsavedData?.states[selectedState];
+		let color = state
+			? state?.settings?.color
+			: fallbackState?.settings?.color;
 
-	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
-		activeColor = '#cc0000';
-	}
+		if (
+			isInnerBlock(currentBlock) &&
+			isNormalState(currentInnerBlockState)
+		) {
+			color = '#cc0000';
+		}
+
+		return color;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		currentBlock,
+		currentState,
+		availableStates,
+		blockeraUnsavedData,
+		currentInnerBlockState,
+	]);
 
 	return (
 		<div

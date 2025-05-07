@@ -45,6 +45,7 @@ export function BlockCard({
 	currentBlock,
 	currentState,
 	setAttributes,
+	availableStates,
 	currentInnerBlock,
 	currentBreakpoint,
 	blockeraInnerBlocks,
@@ -55,6 +56,7 @@ export function BlockCard({
 	clientId: string,
 	blockName: string,
 	supports: Object,
+	availableStates: Object,
 	blockeraInnerBlocks: Object,
 	currentStateAttributes: Object,
 	additional: Object,
@@ -192,9 +194,7 @@ export function BlockCard({
 								blockeraUnsavedData={
 									currentStateAttributes?.blockeraUnsavedData
 								}
-								availableStates={
-									additional.availableBlockStates
-								}
+								availableStates={availableStates}
 							/>
 						</h2>
 
@@ -246,6 +246,7 @@ export function BlockCard({
 						blockStatesProps={{
 							attributes: currentStateAttributes,
 						}}
+						availableStates={availableStates}
 						innerBlocksProps={{
 							values: currentStateAttributes.blockeraInnerBlocks,
 							innerBlocks: blockeraInnerBlocks,
