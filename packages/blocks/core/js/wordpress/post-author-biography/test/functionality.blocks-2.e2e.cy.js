@@ -4,10 +4,8 @@
 import {
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
+	openInserter,
 	setInnerBlock,
-	savePage,
-	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Author Biography Block', () => {
@@ -24,6 +22,7 @@ describe('Post Author Biography Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
 		// no other item
