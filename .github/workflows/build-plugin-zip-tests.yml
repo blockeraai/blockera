@@ -51,9 +51,12 @@ jobs:
                   mkdir packages
                   mkdir packages/blockera
                   mkdir packages/blockera/tests
-                  touch .wp-env.json
-                  echo '{"plugins": ["."], "config": {"BLOCKERA_TELEMETRY_OPT_IN_OFF": true}, "phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+
+                  # Copy the base configuration and add PHP version
+                  cp ../../.github/wp-env-configs/base.json .wp-env.json
+                  jq --arg php "${{ matrix.php }}" '. + {"phpVersion": $php}' .wp-env.json > .wp-env.json.tmp && mv .wp-env.json.tmp .wp-env.json
                   cat .wp-env.json
+
                   touch cypress.env.json
                   echo '{"isLogin": false,"wpUsername": "admin","wpPassword": "password","testURL": "http://localhost:8888","e2e": {"excludeSpecPattern": [],"specPattern": ["packages/**/*.build.e2e.cy.js"]}}' >> cypress.env.json
                   cat cypress.env.json
