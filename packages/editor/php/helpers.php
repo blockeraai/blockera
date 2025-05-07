@@ -113,9 +113,9 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 	 */
 	function blockera_get_inner_block_state_selector( string $selector, array $args = [] ): string {
 
-		$master_block_state = $args['pseudo-class'] ?? 'normal';
-		$pseudo_class       = $args['inner-pseudo-class'] ?? 'normal';
-
+		$master_block_state          = $args['pseudo-class'] ?? 'normal';
+		$pseudo_class                = $args['inner-pseudo-class'] ?? 'normal';
+		$current_state_has_selectors = $args['current_state_has_selectors'] ?? false;
 		// Filters standard css pseudo classes.
 		$parent_pseudo_class = in_array(
 			$master_block_state,
@@ -140,12 +140,12 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 				return implode(
 					', ',
 					array_map(
-						static function ( string $item ) use ( $args, $parent_pseudo_class, $pseudo_class ): string {
+						static function ( string $item ) use ( $args, $parent_pseudo_class, $pseudo_class, $current_state_has_selectors ): string {
 
 							return blockera_get_css_selector_format(
 								$args['root'] ?? $args['blockera-unique-selector'] ?? '',
 								trim( $item ),
-								compact( 'pseudo_class', 'parent_pseudo_class' )
+								compact( 'pseudo_class', 'parent_pseudo_class', 'current_state_has_selectors' )
 							);
 						},
 						$parsedValue
@@ -158,7 +158,7 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 				return blockera_get_css_selector_format(
 					$args['root'] ?? $args['blockera-unique-selector'] ?? '',
 					$selector,
-					compact( 'pseudo_class', 'parent_pseudo_class' )
+					compact( 'pseudo_class', 'parent_pseudo_class', 'current_state_has_selectors' )
 				);
 			}
 		}
@@ -170,7 +170,7 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 			return blockera_get_css_selector_format(
 				$args['root'] ?? $args['blockera-unique-selector'] ?? '',
 				$selector,
-				compact( 'parent_pseudo_class' )
+				compact( 'parent_pseudo_class', 'current_state_has_selectors' )
 			);
 		}
 
@@ -230,9 +230,9 @@ if ( ! function_exists( 'blockera_get_master_block_state_selector' ) ) {
 				$selector = implode(
 					', ',
 					array_map(
-						static function ( string $item ) use ( $pseudo_class ): string {
+						static function ( string $item ) use ( $pseudo_class, $args ): string {
 
-							return blockera_set_selector_pseudo_class( $item, $pseudo_class );
+							return ! empty($args['current_state_has_selectors']) ? $item : blockera_set_selector_pseudo_class( $item, $pseudo_class );
 						},
 						$parsed
 					)
@@ -241,7 +241,7 @@ if ( ! function_exists( 'blockera_get_master_block_state_selector' ) ) {
 			} else {
 
 				// Add pseudo custom css class as suffix into selectors value for current key.
-				$selector = blockera_set_selector_pseudo_class( $selector, $pseudo_class );
+				$selector = ! empty($args['current_state_has_selectors']) ? $selector : blockera_set_selector_pseudo_class( $selector, $pseudo_class );
 			}
 		}
 
@@ -284,9 +284,9 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			throw new BaseException( "Invalid {$picked_selector} selector!", 500 );
 		}
 
-		$pseudo_class        = $args['pseudo_class'] ?? '';
-		$parent_pseudo_class = $args['parent_pseudo_class'] ?? '';
-
+		$pseudo_class                = $args['pseudo_class'] ?? '';
+		$parent_pseudo_class         = $args['parent_pseudo_class'] ?? '';
+		$current_state_has_selectors = $args['current_state_has_selectors'] ?? false;
 		// Pre-calculate reused values.
 		$has_parent_pseudo = ! empty( $parent_pseudo_class );
 		$has_pseudo        = ! empty( $pseudo_class );
@@ -308,13 +308,13 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			if ( str_starts_with( $selector, '&&' ) ) {
 				$selector              = $root_first_part . substr( $selector, 2 );
 				$formatted_selectors[] = $selector . 
-					( $has_pseudo ? ':' . $pseudo_class : '' );
+					( $has_pseudo && ! $current_state_has_selectors ? ':' . $pseudo_class : '' );
 			} else {
 				$formatted_selectors[] = $root . 
 					( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
 					( $needs_space ? ' ' : '' ) .
 					blockera_process_ampersand_selector_char($selector) .
-					( $has_pseudo ? ':' . $pseudo_class : '' );
+					( $has_pseudo && ! $current_state_has_selectors ? ':' . $pseudo_class : '' );
 			}
 		}
 
@@ -374,17 +374,20 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$cloned_block_type = clone $block_type;
 		}
 
+		$current_state_has_selectors = false;
+
 		if ( ! empty( $args['block-type'] ) && isset($cloned_block_type) ) {
 
 			if (blockera_is_inner_block( $args['block-type'] )) {
 
 				if (! empty($args['inner-pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['inner-pseudo-class'], $args['breakpoint'])) {
 
-					$selector_id = blockera_append_selector_prefix( 'state/' . $args['inner-pseudo-class'] );
+					$selector_id = blockera_append_selector_prefix( 'states/' . $args['inner-pseudo-class'] );
 
 					if (isset($selectors[ $selector_id ])) {
 
 						$cloned_block_type->selectors = $selectors[ $selector_id ];
+						$current_state_has_selectors  = true;
 					} else {
 
 						$selector_id = blockera_append_selector_prefix($args['block-type']);
@@ -399,13 +402,15 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 				}
 			} elseif (isset($args['pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['pseudo-class'], $args['breakpoint'])) {
 
-				$selector_id = blockera_append_selector_prefix( 'state/' . $args['pseudo-class'] );
+				$selector_id = blockera_append_selector_prefix( 'states/' . $args['pseudo-class'] );
 
 				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+				$current_state_has_selectors  = true;
 			}
 		}
 
-		$has_fallback = ! empty( $args['fallback'] );
+		$args['current_state_has_selectors'] = $current_state_has_selectors;
+		$has_fallback                        = ! empty( $args['fallback'] );
 
 		// Ensure the block type is not null and the block type name starts with 'core/'.
 		if (isset($cloned_block_type) && ( str_starts_with($block_type->name, 'core/') || isset($cloned_block_type->selectors['root']) )) {
@@ -500,6 +505,7 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			return $root;
 		}
 
+		$selector          = blockera_process_ampersand_selector_char($selector);
 		$is_child_selector = false;
 
 		// Check if selector is a child of root.
