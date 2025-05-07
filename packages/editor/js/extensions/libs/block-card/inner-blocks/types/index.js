@@ -32,6 +32,7 @@ export type InnerBlockModel = {
 		force?: boolean,
 		priority?: number,
 	},
+	availableBlockStates?: { [key: TStates]: StateTypes },
 	...Object,
 };
 
