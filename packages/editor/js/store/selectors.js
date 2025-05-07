@@ -127,6 +127,65 @@ export const getAvailableStates = ({
 };
 
 /**
+ * Get states.
+ *
+ * @param {{states: Object}} state the states.
+ * @return {Object} the states stored in redux.
+ */
+export const getInnerStates = ({
+	blockStates,
+}: {
+	blockStates: { [key: TStates]: StateTypes },
+}): { [key: TStates]: StateTypes } => {
+	return blockStates;
+};
+
+/**
+ * Get blockStates.
+ *
+ * @param {{blockStates: Object}} state the blockStates.
+ * @param {StateTypes} name the state name.
+ * @return {StateTypes} the state stored in redux.
+ */
+export const getInnerState = (
+	{
+		blockStates,
+	}: {
+		blockStates: { [key: TStates]: StateTypes },
+	},
+	name: TStates
+): StateTypes => {
+	return blockStates[name];
+};
+
+/**
+ * Get available states.
+ *
+ * @param {{blockStates: Object}} state the block states.
+ *
+ * @return {Array<TStates>} the available states.
+ */
+export const getAvailableInnerStates = ({
+	blockStates,
+}: {
+	blockStates: { [key: TStates]: StateTypes },
+}): Array<TStates> => {
+	const availableStates = [];
+
+	for (const key in blockStates) {
+		const state = blockStates[key];
+
+		if (state?.native) {
+			continue;
+		}
+
+		availableStates.push(state?.type);
+	}
+
+	return availableStates;
+};
+
+/**
  * Get canvas editor settings.
  *
  * @param {{canvasEditorSettings: Object}} state the canvas settings.
