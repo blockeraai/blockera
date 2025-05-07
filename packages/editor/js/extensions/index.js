@@ -26,7 +26,9 @@ import {
 import blockeraEditorPackageInfo from '../../../editor/package.json';
 import {
 	generalBlockStates,
+	generalInnerBlockStates,
 	unstableBootstrapServerSideBlockStatesDefinitions,
+	unstableBootstrapServerSideInnerBlockStatesDefinitions,
 } from './libs';
 
 // Exports
@@ -48,6 +50,9 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		blockeraEditorPackageInfo.version.replace(/\./g, '_');
 
 	unstableBootstrapServerSideBlockStatesDefinitions(generalBlockStates);
+	unstableBootstrapServerSideInnerBlockStatesDefinitions(
+		generalInnerBlockStates
+	);
 
 	window[packageName].coreData = {
 		select: select(store?.name),
