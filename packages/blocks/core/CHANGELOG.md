@@ -66,6 +66,7 @@
 - `Verse` block: inner blocks improved.
 - `Comments Pagination Next` block: inner blocks & states improved.
 - `Comments Pagination Numbers` block: inner blocks & states improved.
+- `Comments Pagination Prev` block: inner blocks & states improved.
 
 
 ### Automated Tests
@@ -75,6 +76,8 @@
 - Updated E2E tests to check the inner blocks functionality of `Next Post` block.
 - Updated E2E tests to check the inner blocks functionality of `Table` block.
 - Updated E2E tests to check functionality of `Comments Pagination Next` block.
+- Updated E2E tests to check functionality of `Comments Pagination Numbers` block.
+- Updated E2E tests to check functionality of `Comments Pagination Prev` block.
 
 
 ## 1.3.0 (2025-04-27)
