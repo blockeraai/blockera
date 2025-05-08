@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -72,8 +73,12 @@ describe(
 			//
 			// 1. Inner blocks existence
 			//
+			openInserter();
 
 			cy.getByDataTest('elements/link').should('exist');
+			cy.getByDataTest('states/current-menu-item').should('exist');
+			cy.getByDataTest('states/current-menu-parent').should('exist');
+			cy.getByDataTest('states/current-menu-ancestor').should('exist');
 
 			// no other item
 			cy.getByDataTest('core/paragraph').should('not.exist');
