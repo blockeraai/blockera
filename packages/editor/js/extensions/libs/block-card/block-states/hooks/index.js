@@ -361,7 +361,7 @@ export const useBlockStates = ({
 					currentInnerBlockState,
 					isMasterBlockStates: isMasterBlockStates(id),
 				},
-				defaultStates
+				preparedStates
 			),
 		// eslint-disable-next-line
 		[currentBlock, currentInnerBlockState, currentState, id, states]
