@@ -405,7 +405,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 				$selector_id = blockera_append_selector_prefix( 'states/' . $args['pseudo-class'] );
 
 				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
-				$current_state_has_selectors  = true;
+				$current_state_has_selectors  = isset($selectors[ $selector_id ]);
 			}
 		}
 
