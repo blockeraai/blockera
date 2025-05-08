@@ -32,30 +32,8 @@ export const HomeLink: BlockType = {
 	availableBlockStates: {
 		...generalBlockStates,
 		'current-menu-item': {
-			type: 'current-menu-item',
-			label: __('Current Page', 'blockera'),
-			category: 'special',
-			tooltip: (
-				<>
-					<h5>{__('Is Current Page?', 'blockera')}</h5>
-					<p>
-						{__(
-							'Activates if the block URL is the same as the current page URL.',
-							'blockera'
-						)}
-					</p>
-					<code style={{ margin: '5px 0' }}>
-						<span style={{ opacity: '0.7' }}>.block</span>
-						.current-menu-item
-					</code>
-				</>
-			),
-			breakpoints: {},
-			priority: 10,
+			...sharedBlockStates['current-menu-item'],
 			force: true,
-			settings: {
-				color: 'var(--blockera-controls-states-color)',
-			},
 		},
 		active: sharedBlockStates.active,
 		visited: sharedBlockStates.visited,
