@@ -68,7 +68,7 @@
 - `Comments Pagination Numbers` block: inner blocks & states improved.
 - `Comments Pagination Prev` block: inner blocks & states improved.
 - `Post Comments Form` block: inner blocks & states improved.
-
+- `Query Pagination Numbers` block: inner blocks & states improved.
 
 ### Automated Tests
 - Added E2E tests to check the inner blocks functionality of `Calendar` block.
