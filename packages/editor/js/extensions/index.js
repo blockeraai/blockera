@@ -9,12 +9,6 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import {
-	store,
-	unstableBootstrapServerSideEntities,
-	unstableBootstrapServerSideVariableDefinitions,
-	unstableBootstrapServerSideDynamicValueDefinitions,
-} from '@blockera/data';
-import {
 	store as editorStore,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
@@ -51,14 +45,6 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 
 	unstableBootstrapBlockStatesDefinitions(generalBlockStates);
 	unstableBootstrapInnerBlockStatesDefinitions(generalInnerBlockStates);
-
-	window[packageName].coreData = {
-		select: select(store?.name),
-		unstableBootstrapServerSideEntities,
-		unstableBootstrapServerSideVariableDefinitions,
-		unstableBootstrapBlockStatesDefinitions,
-		unstableBootstrapServerSideDynamicValueDefinitions,
-	};
 
 	window[packageName].editor = {
 		...(window[packageName]?.editor || {}),
