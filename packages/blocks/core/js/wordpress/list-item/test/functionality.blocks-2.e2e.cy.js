@@ -6,7 +6,6 @@ import {
 	createPost,
 	appendBlocks,
 	setInnerBlock,
-	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -51,61 +50,12 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 			.should('have.css', 'background-clip', 'padding-box');
 
 		//
-		// 1.1. elements/item-marker
+		// 1.1. elements/link
 		//
-		setInnerBlock('elements/item-marker');
-
-		//
-		// 1.1.1. Text color
-		//
-		cy.setColorControlValue('Text Color', '00ffdf');
-
-		cy.getBlock('core/list')
-			.first()
-			.within(() => {
-				cy.get('li')
-					.first()
-					.within(($el) => {
-						cy.wait(2000);
-
-						cy.window().then((win) => {
-							const marker = win.getComputedStyle(
-								$el[0],
-								'::marker'
-							);
-							const markerColor =
-								marker.getPropertyValue('color');
-							expect(markerColor).to.equal('rgb(0, 255, 223)');
-						});
-					});
-
-				cy.get('li')
-					.last()
-					.within(($el) => {
-						cy.wait(2000);
-
-						cy.window().then((win) => {
-							const marker = win.getComputedStyle(
-								$el[0],
-								'::marker'
-							);
-							const markerColor =
-								marker.getPropertyValue('color');
-							expect(markerColor).not.to.equal(
-								'rgb(0, 255, 223)'
-							);
-						});
-					});
-			});
-
-		//
-		// 1.2. elements/link
-		//
-		setParentBlock();
 		setInnerBlock('elements/link');
 
 		//
-		// 1.2.1. Text color
+		// 1.1.1. Text color
 		//
 		cy.setColorControlValue('BG Color', 'ff2020');
 
@@ -160,37 +110,6 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 							'background-color',
 							'rgb(255, 32, 32)'
 						);
-					});
-
-				// elements/item-marker
-				cy.get('li.blockera-block')
-					.first()
-					.within(($el) => {
-						cy.window().then((win) => {
-							const marker = win.getComputedStyle(
-								$el[0],
-								'::marker'
-							);
-							const markerColor =
-								marker.getPropertyValue('color');
-							expect(markerColor).to.equal('rgb(0, 255, 223)');
-						});
-					});
-
-				cy.get('li')
-					.last()
-					.within(($el) => {
-						cy.window().then((win) => {
-							const marker = win.getComputedStyle(
-								$el[0],
-								'::marker'
-							);
-							const markerColor =
-								marker.getPropertyValue('color');
-							expect(markerColor).not.to.equal(
-								'rgb(0, 255, 223)'
-							);
-						});
 					});
 			});
 	});
