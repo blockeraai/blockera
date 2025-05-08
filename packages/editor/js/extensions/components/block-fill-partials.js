@@ -44,8 +44,11 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		const availableStates = useMemo(() => {
 			let blockStates =
 				isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
-					? (blockProps?.blockeraInnerBlocks[currentBlock] || {})
-							?.availableBlockStates
+					? (
+							(blockProps?.blockeraInnerBlocks || {})[
+								currentBlock
+							] || {}
+					  )?.availableBlockStates
 					: blockProps?.availableBlockStates;
 
 			if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
