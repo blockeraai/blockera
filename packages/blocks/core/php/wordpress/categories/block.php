@@ -16,9 +16,6 @@ return array_merge(
 				'blockera/elements/term-item' => [
 					'root' => 'li.cat-item > a',
 				],
-				'blockera/elements/term-item-marker' => [
-					'root' => 'li.cat-item::marker',
-				],
 				'blockera/elements/list-item' => [
 					'root' => 'li.cat-item',
 				],

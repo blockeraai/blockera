@@ -8,7 +8,7 @@
 - `Calendar` block: `Body → Cells` inner block added.
 - `Calendar` block: `Body → Empty Cells` inner block added.
 - `Calendar` block: `Next/Prev Links` inner block added.
-- `Categories List` block: `Terms Marker` inner block added.
+- `Categories List` block: `Marker` state added to `Terms` inner block added.
 - `Details` block: Special `Open` state added.
 - `Home Link` block: Special `Current Page` state added.
 - `Navigation Link` block: Special `Current Page` state added.
