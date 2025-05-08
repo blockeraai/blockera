@@ -54,12 +54,7 @@ export const freshItem = (cacheKey: string, startsWith: string): void => {
 		if (key.startsWith(startsWith)) {
 			// Don't remove current version's cache.
 			if (key !== cacheKey) {
-				try {
-					localStorage.removeItem(key);
-				} catch (error) {
-					/* @debug-ignore */
-					console.error('Failed to delete from localStorage', error);
-				}
+				deleteItem(key);
 			}
 		}
 	});

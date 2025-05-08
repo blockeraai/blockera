@@ -30,7 +30,7 @@ import type {
 	BlockBaseProps,
 	BlockAppContextType,
 } from './types';
-
+import { getNormalizedCacheVersion } from '../helpers';
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SETTINGS';
 
 const defaultValue = {
@@ -70,18 +70,16 @@ export const BlockAppContextProvider = ({
 	const currentBlock = useSelect((select) =>
 		select('blockera/extensions').getExtensionCurrentBlock()
 	);
-	const { selectedBlockClientId } = useSelect(
+	const { version, selectedBlockClientId } = useSelect(
 		(select) => ({
 			selectedBlockClientId:
 				select('core/block-editor').getSelectedBlock()?.clientId,
+			version: select('blockera/data').getEntity('blockera')?.version,
 		}),
 		[]
 	); // Empty dependency array since we only need this once on mount
 
-	const cacheKey =
-		cacheKeyPrefix +
-		'_' +
-		window.blockeraTelemetryDebugData?.product_version.replace('.', '_');
+	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 
 	useEffect(() => {
 		const isEditMode = selectedBlockClientId === props?.clientId;

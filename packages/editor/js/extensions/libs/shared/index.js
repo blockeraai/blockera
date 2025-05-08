@@ -68,6 +68,7 @@ import type {
 } from '../block-card/block-states/types';
 import { useBlockContext } from '../../hooks';
 import bootstrapScripts from '../../scripts';
+import { getNormalizedCacheVersion } from '../../helpers';
 
 type Props = {
 	name: string,
@@ -133,6 +134,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		};
 
+		const { version } = select('blockera/data').getEntity('blockera');
 		const parentClientIds = select('core/block-editor').getBlockParents(
 			props.clientId
 		);
@@ -148,12 +150,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		} = useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
 		const cacheKey =
-			cacheKeyPrefix +
-			'_' +
-			window.blockeraTelemetryDebugData?.product_version.replace(
-				'.',
-				'_'
-			);
+			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
+		const extensions = getExtensions(props.name);
 		const cacheData = useMemo(() => {
 			let cache = getItem(cacheKey);
 
@@ -162,11 +160,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			return cache;
-		}, []);
+		}, [cacheKey]);
 		const supports = useMemo(() => {
-			const extensions = getExtensions(props.name);
-
-			if (!cacheData) {
+			if (!cacheData || !isEquals(cacheData, extensions)) {
 				setItem(cacheKey, extensions);
 				return extensions;
 			}
@@ -214,7 +210,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
-		}, [props.name, cacheData]);
+		}, [props.name, cacheData, extensions]);
 
 		const [settings, setSettings] = useState(supports);
 
