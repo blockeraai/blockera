@@ -10,6 +10,7 @@ import { useRef } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
+	classNames,
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
@@ -1058,7 +1059,13 @@ export default function LayoutMatrixControl({
 								}
 								type="custom"
 								defaultValue={defaultValue.alignItems}
-								className="input-hide-label input-hide-caret layout-matrix__align-items"
+								className={classNames(
+									'input-hide-label',
+									'input-hide-caret',
+									'layout-matrix__align-items',
+									'selected-item-' +
+										(value.alignItems || 'empty')
+								)}
 							/>
 
 							<SelectControl
@@ -1142,7 +1149,13 @@ export default function LayoutMatrixControl({
 								}
 								type="custom"
 								defaultValue={defaultValue.justifyContent}
-								className="input-hide-label input-hide-caret layout-matrix__justify-content"
+								className={classNames(
+									'input-hide-label',
+									'input-hide-caret',
+									'layout-matrix__justify-content',
+									'selected-item-' +
+										(value.justifyContent || 'empty')
+								)}
 							/>
 						</Flex>
 					</Flex>

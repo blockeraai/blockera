@@ -117,6 +117,13 @@
 			width: var(--blockera-controls-input-height);
 			justify-content: center;
 		}
+
+		&:not(.selected-item-empty) {
+
+			button {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
 	}
 
 	&.layout-matrix__align-items-:not(.layout-matrix__justify-content-) {
