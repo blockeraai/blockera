@@ -39,26 +39,28 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { updateBlockAttributes } = useDispatch('core/block-editor');
 		const { getBlockExtensionBy } = useExtensionsStore();
-		const availableStates = useMemo(() => {
+		const { getStates, getInnerStates } = select('blockera/editor');
+		const { updateBlockAttributes } = useDispatch('core/block-editor');
+		const availableStates =
+			blockProps?.additional?.availableBlockStates || getStates();
+		const availableInnerStates = useMemo(() => {
 			let blockStates =
-				isInnerBlock(currentBlock) && isVirtualBlock(currentBlock)
-					? (
-							(blockProps?.blockeraInnerBlocks || {})[
-								currentBlock
-							] || {}
-					  )?.availableBlockStates
-					: blockProps?.availableBlockStates;
+				(
+					blockProps?.additional?.blockeraInnerBlocks[currentBlock] ||
+					{}
+				)?.availableBlockStates || getInnerStates();
 
-			if (isInnerBlock(currentBlock) && !isVirtualBlock(currentBlock)) {
-				const { availableBlockStates } = getBlockExtensionBy(
-					'targetBlock',
-					currentBlock
-				);
+			if (isInnerBlock(currentBlock)) {
+				if (!isVirtualBlock(currentBlock)) {
+					const { availableBlockStates } = getBlockExtensionBy(
+						'targetBlock',
+						currentBlock
+					);
 
-				if (availableBlockStates) {
-					blockStates = availableBlockStates;
+					if (Object.keys(availableBlockStates || {}).length) {
+						blockStates = availableBlockStates;
+					}
 				}
 			}
 
@@ -135,7 +137,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 							handleOnClick={updateBlockEditorSettings}
 							currentBlock={currentBlock}
 							currentState={currentState}
-							availableStates={availableStates}
+							availableStates={availableInnerStates}
 							currentBreakpoint={currentBreakpoint}
 							currentInnerBlockState={currentInnerBlockState}
 							currentStateAttributes={
@@ -152,7 +154,11 @@ export const BlockFillPartials: ComponentType<any> = memo(
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<BlockEditComponent
 							{...blockProps}
-							availableStates={availableStates}
+							availableStates={
+								isInnerBlock(currentBlock)
+									? availableInnerStates
+									: availableStates
+							}
 						/>
 					</Fill>
 				)}
