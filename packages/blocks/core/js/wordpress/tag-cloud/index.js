@@ -22,8 +22,7 @@ export const TagCloud: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/tag-link': {
 			name: 'elements/tag-link',
-			type: 'title',
-			label: __('Tag Link', 'blockera'),
+			label: __('Tag Items', 'blockera'),
 			description: __('All tag items inside tag cloud.', 'blockera'),
 			icon: <Icon icon="tag" library="wp" iconSize="20" />,
 			settings: {

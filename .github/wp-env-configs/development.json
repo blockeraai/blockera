@@ -1,0 +1,9 @@
+{
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"
+	],
+	"config": {
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+	}
+}

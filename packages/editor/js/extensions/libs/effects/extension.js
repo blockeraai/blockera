@@ -163,49 +163,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 							columns="columns-1"
 							controlName="transform"
 						>
-							<TransformControl
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraTransform',
-										isInteger(newValue)
-											? `${newValue}%`
-											: newValue,
-										{ ref }
-									)
-								}
-								injectHeaderButtonsStart={
-									<>
-										<Button
-											showTooltip={true}
-											tooltipPosition="top"
-											label={__(
-												'Transformation Settings',
-												'blockera'
-											)}
-											size="extra-small"
-											className={controlInnerClassNames(
-												'btn-add'
-											)}
-											isFocus={isTransformSettingsVisible}
-											onClick={() =>
-												setIsTransformSettingsVisible(
-													!isTransformSettingsVisible
-												)
-											}
-										>
-											<Icon
-												icon="gear-small"
-												iconSize="20"
-											/>
-										</Button>
-									</>
-								}
-								defaultValue={
-									attributes.blockeraTransform.default
-								}
-								{...extensionProps.blockeraTransform}
-							/>
-
 							{isTransformSettingsVisible && (
 								<TransformSettings
 									setIsTransformSettingsVisible={
@@ -220,6 +177,44 @@ export const EffectsExtension: ComponentType<TEffectsProps> = memo(
 									extensionConfig={extensionConfig}
 								/>
 							)}
+
+							<TransformControl
+								onChange={(newValue, ref) =>
+									handleOnChangeAttributes(
+										'blockeraTransform',
+										isInteger(newValue)
+											? `${newValue}%`
+											: newValue,
+										{ ref }
+									)
+								}
+								injectHeaderButtonsStart={
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__(
+											'Transformation Settings',
+											'blockera'
+										)}
+										size="extra-small"
+										className={controlInnerClassNames(
+											'btn-add'
+										)}
+										isFocus={isTransformSettingsVisible}
+										onClick={() =>
+											setIsTransformSettingsVisible(
+												!isTransformSettingsVisible
+											)
+										}
+									>
+										<Icon icon="three-d" iconSize="20" />
+									</Button>
+								}
+								defaultValue={
+									attributes.blockeraTransform.default
+								}
+								{...extensionProps.blockeraTransform}
+							/>
 						</BaseControl>
 					</ControlContextProvider>
 				</EditorFeatureWrapper>

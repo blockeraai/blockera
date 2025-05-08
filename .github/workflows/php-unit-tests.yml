@@ -96,8 +96,13 @@ jobs:
 
             - name: Create requires environment files
               run: |
-                  touch .wp-env.json
-                  echo '{"plugins": ["."],"phpVersion": "${{ matrix.php }}"}' >> .wp-env.json
+                  # Set the base configuration file
+                  WP_ENV_CONFIG=".github/wp-env-configs/base.json"
+
+                  # Copy the base configuration and add PHP version
+                  cp "$WP_ENV_CONFIG" .wp-env.json
+                  jq --arg php "${{ matrix.php }}" '. + {"phpVersion": $php}' .wp-env.json > .wp-env.json.tmp && mv .wp-env.json.tmp .wp-env.json
+
                   cat .wp-env.json
                   touch .env
                   echo APP_MODE=production >> .env

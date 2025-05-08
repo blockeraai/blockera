@@ -1,7 +1,7 @@
 .blockera-component-feature-wrapper {
 	--locked-color: #e86400;
     --locked-bg-color: color-mix(in srgb, var(--locked-color) 15%, #ffffff);
-	--locked-radius: 3px;
+	--locked-radius: 2px;
 	--locked-size: 24px;
 	--locked-transition: 0.1s ease-in-out;
 	position: relative;
@@ -198,7 +198,7 @@
 		}
 	}
 
-	&.type-free {
+	&.type-native {
 		--locked-color: #e20000;
 		--locked-bg-color: #ffdcdc;
 

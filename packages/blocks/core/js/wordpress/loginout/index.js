@@ -63,6 +63,10 @@ export const Loginout: BlockType = {
 		'core/button': {
 			...sharedInnerBlocks['core/button'],
 			description: __('The login form submit button.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['core/button'].settings,
+				force: true,
+			},
 		},
 	},
 	edit: (props) => {

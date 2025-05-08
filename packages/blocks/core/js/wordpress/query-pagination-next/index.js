@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -29,6 +33,18 @@ export const QueryPaginationNext: BlockType = {
 				force: true,
 			},
 		},
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		focus: {
+			...generalBlockStates.focus,
+			force: true,
+		},
+		active: {
+			...sharedBlockStates.active,
+			force: true,
+		},
+		visited: sharedBlockStates.visited,
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

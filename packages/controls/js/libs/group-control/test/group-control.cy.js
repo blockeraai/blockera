@@ -1,8 +1,30 @@
 /// <reference types="Cypress" />
 
+import { useState } from 'react';
 import GroupControl from '..';
 import { default as AccordionCustomOpenIcon } from '../stories/icons/accordion-custom-open-icon';
 import { default as AccordionCustomCloseIcon } from '../stories/icons/accordion-custom-close-icon';
+
+const Component = (props) => {
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const [isOpen, setIsOpen] = useState(false);
+
+	return (
+		<>
+			<GroupControl
+				{...props}
+				onOpen={() => setIsOpen(!isOpen)}
+				isOpen={isOpen}
+			/>
+		</>
+	);
+};
+
+Cypress.Commands.add('withGroupControl', (props) => {
+	cy.withDataProvider({
+		component: <Component {...props} />,
+	});
+});
 
 describe('group control component testing', () => {
 	beforeEach(() => {
@@ -54,15 +76,11 @@ describe('group control component testing', () => {
 			cy.getByDataCy('control-group').should('have.class', 'is-close');
 		});
 		it('should open body section after click on header, when pass onClick', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="accordion"
-						header="Header Text"
-						children="Body Text"
-						onClick={() => true}
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'accordion',
+				header: 'Header Text',
+				children: 'Body Text',
+				onClick: () => true,
 			});
 
 			cy.getByDataCy('group-control-header').click({ force: true });
@@ -91,14 +109,10 @@ describe('group control component testing', () => {
 			cy.getByDataCy('group-control-content').should('not.exist');
 		});
 		it('should open body section after click on open button', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="accordion"
-						header="Header Text"
-						children="Body Text"
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'accordion',
+				header: 'Header Text',
+				children: 'Body Text',
 			});
 
 			cy.getByDataCy('group-control-header').within(() => {
@@ -148,16 +162,12 @@ describe('group control component testing', () => {
 			);
 		});
 		it('should display custom icon', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="accordion"
-						header="Header Text"
-						children="Body Text"
-						headerOpenIcon={<AccordionCustomOpenIcon />}
-						headerCloseIcon={<AccordionCustomCloseIcon />}
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'accordion',
+				header: 'Header Text',
+				children: 'Body Text',
+				headerOpenIcon: <AccordionCustomOpenIcon />,
+				headerCloseIcon: <AccordionCustomCloseIcon />,
 			});
 			cy.get('[data-cy="plus-svg"]').should('be.visible');
 			cy.get('[aria-label="Open Settings"]').click();
@@ -196,16 +206,12 @@ describe('group control component testing', () => {
 	});
 	describe('popover', () => {
 		it('should display popover modal by clicking group-control-header, when pass onClick', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="popover"
-						header="Header Text"
-						children="Body Text"
-						toggleOpenBorder
-						onClick={() => true}
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'accordion',
+				header: 'Header Text',
+				children: 'Body Text',
+				toggleOpenBorder: true,
+				onClick: () => true,
 			});
 			cy.getByDataCy('control-group').and('have.class', 'is-close');
 			cy.getByDataCy('group-control-header').click();
@@ -229,15 +235,11 @@ describe('group control component testing', () => {
 			cy.getByDataCy('control-group').should('not.have.class', 'is-open');
 		});
 		it('should display popover modal by clicking setting button', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="popover"
-						header="Header Text"
-						children="Body Text"
-						toggleOpenBorder
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'popover',
+				header: 'Header Text',
+				children: 'Body Text',
+				toggleOpenBorder: true,
 			});
 			cy.getByDataCy('control-group').and('have.class', 'is-close');
 			cy.getByAriaLabel('Open Settings').click();
@@ -266,18 +268,14 @@ describe('group control component testing', () => {
 				.should('contain', 'Body Text');
 		});
 		it('should display popover with custom icons', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="popover"
-						popoverTitle="Label Text"
-						header="Header Text"
-						children="Body Text"
-						toggleOpenBorder
-						headerOpenIcon={<AccordionCustomOpenIcon />}
-						headerCloseIcon={<AccordionCustomCloseIcon />}
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'popover',
+				header: 'Header Text',
+				children: 'Body Text',
+				popoverTitle: 'Label Text',
+				toggleOpenBorder: true,
+				headerOpenIcon: <AccordionCustomOpenIcon />,
+				headerCloseIcon: <AccordionCustomCloseIcon />,
 			});
 			cy.getByDataCy('control-group').should(
 				'have.class',
@@ -330,19 +328,15 @@ describe('group control component testing', () => {
 			cy.get('[data-cy="minus-svg"]').should('be.visible');
 		});
 		it('should render close popover', () => {
-			cy.withDataProvider({
-				component: (
-					<GroupControl
-						mode="popover"
-						popoverTitle="Label Text"
-						header="Header Text"
-						children="Body Text"
-						toggleOpenBorder
-						injectHeaderButtonsStart={<AccordionCustomOpenIcon />}
-						injectHeaderButtonsEnd={<AccordionCustomCloseIcon />}
-						className="custom-classname"
-					/>
-				),
+			cy.withGroupControl({
+				mode: 'popover',
+				header: 'Header Text',
+				children: 'Body Text',
+				popoverTitle: 'Label Text',
+				toggleOpenBorder: true,
+				className: 'custom-classname',
+				injectHeaderButtonsStart: <AccordionCustomOpenIcon />,
+				injectHeaderButtonsEnd: <AccordionCustomCloseIcon />,
 			});
 			cy.getByDataCy('control-group')
 				.should('have.class', 'toggle-open-border')

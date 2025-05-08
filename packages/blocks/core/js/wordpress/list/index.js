@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	sharedBlockStates,
+	generalBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -29,20 +33,12 @@ export const List: BlockType = {
 			settings: {
 				force: true,
 			},
-		},
-		'elements/item-marker': {
-			name: 'elements/item-marker',
-			label: __('List Items Marker', 'blockera'),
-			description: __('Marker of list items.', 'blockera'),
-			icon: (
-				<Icon
-					icon="block-list-item-marker"
-					library="ui"
-					iconSize="20"
-				/>
-			),
-			settings: {
-				force: true,
+			availableBlockStates: {
+				...generalBlockStates,
+				marker: {
+					...sharedBlockStates.marker,
+					force: true,
+				},
 			},
 		},
 		'elements/link': sharedInnerBlocks['elements/link'],

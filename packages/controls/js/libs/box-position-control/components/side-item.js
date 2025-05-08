@@ -260,6 +260,11 @@ export function SideItem({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={sprintf(
+					// Translators: %s is the position name (top, right, bottom, left)
+					__('%s Position', 'blockera'),
+					getSideLabel(side)
+				)}
 			/>
 		),
 		label: (

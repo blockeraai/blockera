@@ -17,11 +17,17 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		// Set display
 		cy.getByAriaLabel('Add New Background').click();
 
-		// Alias
-		cy.getByAriaLabel('Alignment Matrix Control').as('matrix-box');
-		cy.getByDataTest('popover-body').within(() => {
-			cy.getByAriaLabel('Position').as('position-label');
+		cy.get('.blockera-component-popover').within(() => {
+			cy.getByDataTest('position-button').click();
 		});
+
+		cy.get('.blockera-component-popover')
+			.last()
+			.within(() => {
+				cy.get('.blockera-control-alignment-matrix').as('matrix-box');
+
+				cy.getByAriaLabel('Position').as('position-label');
+			});
 	});
 
 	const setMatrixItem = (item) => {
@@ -39,6 +45,10 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 	const openImageItem = () => {
 		cy.getParentContainer('Image & Gradient').within(() => {
 			cy.getByDataCy('group-control-header').click();
+		});
+
+		cy.get('.blockera-component-popover').within(() => {
+			cy.getByDataTest('position-button').click();
 		});
 	};
 
@@ -84,7 +94,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		openImageItem();
 
 		// Assert label before set value
@@ -156,7 +166,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		openImageItem();
 
 		// Assert label before set value
@@ -247,7 +257,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		openImageItem();
 		// Assert label before set value
 		cy.get('@position-label').should(
@@ -320,7 +330,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 
 		// Navigate between states and devices
 		// Hover/Desktop
-		addBlockState('hover');
+		setBlockState('Hover');
 		openImageItem();
 
 		// Assert label
@@ -386,7 +396,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 	});
 
 	it('set value in hover/desktop and navigate between states', () => {
-		addBlockState('hover');
+		setBlockState('Hover');
 		openImageItem();
 
 		setMatrixItem('bottom right');
@@ -484,7 +494,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			setMatrixItem('top left');
 
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			openImageItem();
 			setMatrixItem('top center');
 
@@ -649,7 +659,7 @@ describe('Alignment Matrix Control label testing (Background/Image/Position)', (
 			setMatrixItem('top left');
 
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			openImageItem();
 			setMatrixItem('top center');
 

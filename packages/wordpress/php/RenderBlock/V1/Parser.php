@@ -7,6 +7,7 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\WordPress\RenderBlock\V1\HTML\Icon;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Blockera\SiteBuilder\StyleEngine as SiteBuilderStyleEngine;
 
 /**
  * Class Parser after parsing block details manipulating html and css on WordPress core blocks.
@@ -71,7 +72,7 @@ class Parser {
          *
          * @var StyleEngine $styleEngine The style-engine object.
          */
-        $styleEngine = $this->app->make(StyleEngine::class, compact('block', 'fallbackSelector'));
+        $styleEngine = $this->app->make(class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class, compact('block', 'fallbackSelector'));
 		$styleEngine->setSupports($this->supports);
 
         return $styleEngine->getStylesheet();

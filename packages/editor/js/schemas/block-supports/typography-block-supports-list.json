@@ -24,7 +24,10 @@
 			"status": true,
 			"css-property": "color",
 			"fallback": ["color.text", "color", "typography"],
-			"description": "Support for \"blockeraFontColor\" value, this is mirror for WordPress block core \"color\" support."
+			"description": "Support for \"blockeraFontColor\" value, this is mirror for WordPress block core \"color\" support.",
+			"innerBlocks": {
+				"all": true
+			}
 		},
 		"blockeraFontSize": {
 			"status": true,

@@ -6,7 +6,7 @@
 import type {
 	BreakpointTypes,
 	TBreakpoint,
-} from '../../../../extensions/libs/block-states/types';
+} from '../../../../extensions/libs/block-card/block-states/types';
 
 export type BreakpointsComponentProps = {
 	className: string,

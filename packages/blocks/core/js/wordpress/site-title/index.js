@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -20,7 +20,15 @@ export const SiteTitle: BlockType = {
 	name: 'blockeraSiteTitle',
 	targetBlock: 'core/site-title',
 	blockeraInnerBlocks: {
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/link': {
+			...sharedInnerBlocks['elements/link'],
+			label: __('Link', 'blockera'),
+			description: __('The hyperlink element.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: true,
+			},
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

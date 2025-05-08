@@ -2,7 +2,8 @@
 /**
  * External dependencies
  */
-import { dispatch } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
+import domReady from '@wordpress/dom-ready';
 
 /**
  * Internal dependencies
@@ -40,3 +41,14 @@ export function unstableBootstrapServerSideVariableDefinitions(
 export * from './store';
 export * from './types';
 export * from './selectors';
+
+domReady(() => {
+	window.blockeraData = {
+		core: {
+			select: select(STORE_NAME),
+			unstableBootstrapServerSideEntities,
+			unstableBootstrapServerSideVariableDefinitions,
+			unstableBootstrapServerSideDynamicValueDefinitions,
+		},
+	};
+});

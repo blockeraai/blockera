@@ -18,16 +18,16 @@ return array_merge(
                 'type' => 'object',
                 'default' => [
 						'states' => [
-							'normal' => [
-								'type' => 'normal',
-								'label' => 'Normal',
+							'new-customized-normal' => [
+								'type' => 'customized-normal',
+								'label' => __( 'Customized Normal', 'blockera' ),
+								'category' => 'essential',
+								'category-label' => __( 'Essential', 'blockera' ),
 								'breakpoints' => [],
-							],
-							'hover' => [
-								'type' => 'hover',
-								'label' => 'Hover',
-								'breakpoints' => [],
-							],
+								'priority' => 0,
+								'force' => true,
+								'color' => 'var(--blockera-controls-primary-color-bk)',
+							]
 						],
                 	],
             	],

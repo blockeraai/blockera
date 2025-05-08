@@ -1,4 +1,10 @@
-import { setItem, getItem, updateItem, deleteItem } from '../local-storage';
+import {
+	setItem,
+	getItem,
+	freshItem,
+	deleteItem,
+	updateItem,
+} from '../local-storage';
 
 describe('localStorageService', () => {
 	beforeEach(() => {
@@ -94,6 +100,30 @@ describe('localStorageService', () => {
 			});
 			expect(() => deleteItem('testKey')).not.toThrow();
 			expect(localStorage.removeItem).toHaveBeenCalled();
+		});
+	});
+
+	describe('freshItem', () => {
+		it('should remove old cache keys that start with the specified prefix', () => {
+			setItem('cache_v1_data', { name: 'John' });
+			setItem('cache_v2_data', { name: 'John' });
+			setItem('cache_v3_data', { name: 'John' });
+
+			freshItem('cache_v2_data', 'cache_');
+
+			// Should remove cache_v1_data and cache_v3_data but keep cache_v2_data.
+			expect(localStorage.getItem('cache_v1_data')).toBeUndefined();
+			expect(localStorage.getItem('cache_v3_data')).toBeUndefined();
+			expect(localStorage.getItem('cache_v2_data')).not.toBeNull();
+		});
+
+		it('should not remove any keys if no matches found', () => {
+			setItem('other_key1', { name: 'John' });
+			setItem('other_key2', { name: 'John' });
+
+			freshItem('cache_v2_data', 'cache_');
+
+			expect(localStorage.removeItem).not.toHaveBeenCalled();
 		});
 	});
 });

@@ -15,8 +15,20 @@ export const Comments: BlockType = {
 	name: 'blockeraComments',
 	targetBlock: 'core/comments',
 	blockeraInnerBlocks: {
-		'core/heading': sharedInnerBlocks['core/heading'],
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'core/heading': {
+			...sharedInnerBlocks['core/heading'],
+			settings: {
+				...sharedInnerBlocks['core/heading'].settings,
+				force: true,
+			},
+		},
+		'elements/link': {
+			...sharedInnerBlocks['elements/link'],
+			settings: {
+				...sharedInnerBlocks['elements/link'].settings,
+				force: true,
+			},
+		},
 		'core/heading-1': sharedInnerBlocks['core/heading-1'],
 		'core/heading-2': sharedInnerBlocks['core/heading-2'],
 		'core/heading-3': sharedInnerBlocks['core/heading-3'],

@@ -25,22 +25,22 @@ export const Spacer: BlockType = {
 		const config = mergeObjects(extensionConfig, {
 			sizeConfig: {
 				blockeraWidth: {
-					isActiveOnBreakpoints: ['base'],
+					onBreakpoints: ['base'],
 				},
 				blockeraMinWidth: {
-					isActiveOnBreakpoints: ['base'],
+					onBreakpoints: ['base'],
 				},
 				blockeraMaxWidth: {
-					isActiveOnBreakpoints: ['base'],
+					onBreakpoints: ['base'],
 				},
 				blockeraHeight: {
-					isActiveOnBreakpoints: ['base'],
+					onBreakpoints: ['base'],
 				},
 				blockeraMinHeight: {
-					isActiveOnBreakpoints: ['base'],
+					onBreakpoints: ['base'],
 				},
 				blockeraMaxHeight: {
-					isActiveOnBreakpoints: ['base'],
+					onBreakpoints: ['base'],
 				},
 			},
 		});

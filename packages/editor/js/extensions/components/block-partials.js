@@ -81,6 +81,9 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 				</div>
 			</Fill>
 		</>,
-		document.querySelector('.block-editor-block-inspector')
+		document.querySelector('.block-editor-block-inspector'),
+		{
+			className: isActive ? 'blockera-active-block' : '',
+		}
 	);
 });

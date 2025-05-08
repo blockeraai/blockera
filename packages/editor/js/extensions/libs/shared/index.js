@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
@@ -20,12 +19,12 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
+import { isEquals, isObject } from '@blockera/utils';
 import { Tabs, type TTabProps } from '@blockera/controls';
-import { isEquals, kebabCase, isObject } from '@blockera/utils';
-import { getItem, setItem, updateItem } from '@blockera/storage';
+import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
-const cacheKey = 'BLOCKERA_EDITOR_SUPPORTS';
+const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 /**
  * Internal dependencies
@@ -43,7 +42,6 @@ import { LayoutExtension } from '../layout';
 import { FlexChildExtension } from '../flex-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
-import { StyleVariationsExtension } from '../style-variations';
 // import { EntranceAnimationExtension } from '../entrance-animation';
 // import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
@@ -55,21 +53,28 @@ import {
 	// propsAreEqual
 } from '../../components/utils';
 import StateContainer from '../../components/state-container';
-import { InnerBlocksExtension } from '../inner-blocks';
 import { STORE_NAME } from '../base/store/constants';
-import StatesManager from '../block-states/components/states-manager';
-import type { InnerBlocks, InnerBlockType } from '../inner-blocks/types';
+import type {
+	InnerBlocks,
+	InnerBlockType,
+} from '../block-card/inner-blocks/types';
 import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
 import { useDisplayBlockControls } from '../../../hooks';
-import type { StateTypes, TBreakpoint, TStates } from '../block-states/types';
+import type {
+	StateTypes,
+	TBreakpoint,
+	TStates,
+} from '../block-card/block-states/types';
 import { useBlockContext } from '../../hooks';
 import bootstrapScripts from '../../scripts';
+import { getNormalizedCacheVersion } from '../../helpers';
 
 type Props = {
 	name: string,
 	clientId: string,
 	supports: Object,
+	additional: Object,
 	attributes: Object,
 	currentAttributes: Object,
 	defaultAttributes: Object,
@@ -86,16 +91,17 @@ type Props = {
 	currentStateAttributes: Object,
 	blockeraInnerBlocks: InnerBlocks,
 	setAttributes: (attributes: Object) => void,
-	availableBlockStates: { [key: TStates | string]: StateTypes },
+	availableStates: { [key: TStates | string]: StateTypes },
 };
 
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
+		additional,
 		attributes: blockAttributes,
 		defaultAttributes: attributes,
 		setAttributes,
-		availableBlockStates,
+		availableStates,
 		currentStateAttributes,
 		currentAttributes: currentBlockAttributes,
 		controllerProps: {
@@ -103,7 +109,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			currentBlock,
 			currentState,
 			currentBreakpoint,
-			blockeraInnerBlocks,
 			currentInnerBlockState,
 			handleOnChangeAttributes,
 		},
@@ -129,6 +134,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			handleOnChangeAttributes,
 		};
 
+		const { version } = select('blockera/data').getEntity('blockera');
 		const parentClientIds = select('core/block-editor').getBlockParents(
 			props.clientId
 		);
@@ -143,12 +149,20 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			updateDefinitionExtensionSupport,
 		} = useDispatch(STORE_NAME);
 		const { getExtensions, getDefinition } = select(STORE_NAME);
+		const cacheKey =
+			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
+		const extensions = getExtensions(props.name);
+		const cacheData = useMemo(() => {
+			let cache = getItem(cacheKey);
 
-		const cacheData = useMemo(() => getItem(cacheKey), []);
+			if (!cache) {
+				cache = freshItem(cacheKey, cacheKeyPrefix);
+			}
+
+			return cache;
+		}, [cacheKey]);
 		const supports = useMemo(() => {
-			const extensions = getExtensions(props.name);
-
-			if (!cacheData) {
+			if (!cacheData || !isEquals(cacheData, extensions)) {
 				setItem(cacheKey, extensions);
 				return extensions;
 			}
@@ -196,7 +210,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
-		}, [props.name, cacheData]);
+		}, [props.name, cacheData, extensions]);
 
 		const [settings, setSettings] = useState(supports);
 
@@ -295,7 +309,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			clickAnimationConfig,
 			// conditionsConfig,
 			advancedSettingsConfig,
-			styleVariationsConfig,
 		} = settings;
 
 		const block = {
@@ -309,57 +322,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
-			const activePanel = [
-				<Fill
-					key={`${props.clientId}-states-manager`}
-					name={'blockera-block-card-children'}
-				>
-					<StatesManager
-						attributes={blockAttributes}
-						onChange={handleOnChangeAttributes}
-						availableStates={availableBlockStates}
-						block={{
-							clientId: props.clientId,
-							supports,
-							setAttributes,
-							blockName: props.name,
-						}}
-						{...{
-							currentBlock,
-							currentState,
-							currentBreakpoint,
-							currentInnerBlockState,
-						}}
-					/>
-				</Fill>,
-				<Fill
-					key={`${props.clientId}${currentBlock}-states-manager`}
-					name={`blockera-${kebabCase(
-						currentBlock
-					)}-inner-block-card-children`}
-				>
-					{isInnerBlock(currentBlock) && (
-						<StatesManager
-							id={`block-states-${kebabCase(currentBlock)}`}
-							onChange={handleOnChangeAttributes}
-							attributes={currentStateAttributes}
-							availableStates={availableBlockStates}
-							block={{
-								clientId: props.clientId,
-								supports,
-								setAttributes,
-								blockName: props.name,
-							}}
-							{...{
-								currentBlock,
-								currentState,
-								currentBreakpoint,
-								currentInnerBlockState,
-							}}
-						/>
-					)}
-				</Fill>,
-			];
+			const activePanel = [];
 
 			switch (tab.name) {
 				case 'settings':
@@ -479,68 +442,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'style':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-style-panel`}>
-							<ErrorBoundary
-								fallbackRender={({ error }) => (
-									<ErrorBoundaryFallback
-										isReportingErrorCompleted={
-											isReportingErrorCompleted
-										}
-										clientId={props.clientId}
-										setIsReportingErrorCompleted={
-											setIsReportingErrorCompleted
-										}
-										from={'extension'}
-										error={error}
-										configId={'styleVariationsConfig'}
-										title={__(
-											'Style Variations',
-											'blockera'
-										)}
-										icon={
-											<Icon icon="extension-style-variations" />
-										}
-									/>
-								)}
-							>
-								<StyleVariationsExtension
-									block={block}
-									extensionConfig={styleVariationsConfig}
-								/>
-							</ErrorBoundary>
-
-							<ErrorBoundary
-								fallbackRender={({ error }) => (
-									<ErrorBoundaryFallback
-										isReportingErrorCompleted={
-											isReportingErrorCompleted
-										}
-										clientId={props.clientId}
-										setIsReportingErrorCompleted={
-											setIsReportingErrorCompleted
-										}
-										from={'extension'}
-										error={error}
-										configId={'innerBlocksConfig'}
-										title={__('Inner Blocks', 'blockera')}
-										icon={
-											<Icon icon="extension-inner-blocks" />
-										}
-									/>
-								)}
-							>
-								<InnerBlocksExtension
-									values={blockAttributes.blockeraInnerBlocks}
-									innerBlocks={blockeraInnerBlocks}
-									block={{
-										clientId: props.clientId,
-										supports,
-										setAttributes,
-										blockName: props.name,
-									}}
-									onChange={handleOnChangeAttributes}
-								/>
-							</ErrorBoundary>
-
 							<ErrorBoundary
 								fallbackRender={({ error }) => (
 									<ErrorBoundaryFallback
@@ -1417,7 +1318,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		];
 
 		return (
-			<StateContainer>
+			<StateContainer
+				availableStates={availableStates}
+				blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+			>
 				{useDisplayBlockControls() && (
 					<Tabs
 						design="modern"
