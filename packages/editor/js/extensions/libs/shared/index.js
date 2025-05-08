@@ -151,7 +151,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			cacheKeyPrefix +
 			'_' +
 			window.blockeraTelemetryDebugData?.product_version.replace(
-				'.',
+				/\./g,
 				'_'
 			);
 		const extensions = getExtensions(props.name);
