@@ -73,6 +73,7 @@
 - Updated E2E tests to check the inner blocks functionality of `Previous Post` block.
 - Updated E2E tests to check the inner blocks functionality of `Next Post` block.
 - Updated E2E tests to check the inner blocks functionality of `Table` block.
+- Updated E2E tests to check functionality of `Comments Pagination Next` block.
 
 
 ## 1.3.0 (2025-04-27)
