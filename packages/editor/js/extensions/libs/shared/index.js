@@ -154,6 +154,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				'.',
 				'_'
 			);
+		const extensions = getExtensions(props.name);
 		const cacheData = useMemo(() => {
 			let cache = getItem(cacheKey);
 
@@ -162,11 +163,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			return cache;
-		}, []);
+		}, [cacheKey]);
 		const supports = useMemo(() => {
-			const extensions = getExtensions(props.name);
-
-			if (!cacheData) {
+			if (!cacheData || !isEquals(cacheData, extensions)) {
 				setItem(cacheKey, extensions);
 				return extensions;
 			}
@@ -214,7 +213,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
-		}, [props.name, cacheData]);
+		}, [props.name, cacheData, extensions]);
 
 		const [settings, setSettings] = useState(supports);
 
