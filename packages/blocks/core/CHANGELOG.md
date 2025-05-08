@@ -70,6 +70,7 @@
 - `Post Comments Form` block: inner blocks & states improved.
 - `Query Pagination Numbers` block: inner blocks & states improved.
 
+
 ### Automated Tests
 - Added E2E tests to check the inner blocks functionality of `Calendar` block.
 - Updated E2E tests to check the inner blocks functionality of `Categories List` block.
@@ -79,6 +80,9 @@
 - Updated E2E tests to check functionality of `Comments Pagination Next` block.
 - Updated E2E tests to check functionality of `Comments Pagination Numbers` block.
 - Updated E2E tests to check functionality of `Comments Pagination Prev` block.
+- Updated E2E tests to check functionality of `Query Pagination Next` block.
+- Updated E2E tests to check functionality of `Query Pagination Numbers` block.
+- Updated E2E tests to check functionality of `Query Pagination Prev` block.
 
 
 ## 1.3.0 (2025-04-27)
