@@ -65,6 +65,7 @@
 - `Term Description` block: inner blocks improved.
 - `Verse` block: inner blocks improved.
 - `Comments Pagination Next` block: inner blocks & states improved.
+- `Comments Pagination Numbers` block: inner blocks & states improved.
 
 
 ### Automated Tests
