@@ -53,10 +53,8 @@ export const BlockFillPartials: ComponentType<any> = memo(
 
 			if (isInnerBlock(currentBlock)) {
 				if (!isVirtualBlock(currentBlock)) {
-					const { availableBlockStates } = getBlockExtensionBy(
-						'targetBlock',
-						currentBlock
-					);
+					const { availableBlockStates } =
+						getBlockExtensionBy('targetBlock', currentBlock) || {};
 
 					if (Object.keys(availableBlockStates || {}).length) {
 						blockStates = availableBlockStates;
