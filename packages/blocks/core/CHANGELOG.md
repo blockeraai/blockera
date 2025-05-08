@@ -67,6 +67,7 @@
 - `Comments Pagination Next` block: inner blocks & states improved.
 - `Comments Pagination Numbers` block: inner blocks & states improved.
 - `Comments Pagination Prev` block: inner blocks & states improved.
+- `Post Comments Form` block: inner blocks & states improved.
 
 
 ### Automated Tests
