@@ -283,7 +283,11 @@ export const CategorizedItems = ({
 									}
 									tabIndex="0"
 									role="button"
-									data-test={name}
+									data-test={
+										itemType === 'state'
+											? 'states/' + id
+											: name
+									}
 									className={classNames(
 										'blockera-feature-type',
 										'is-item'
