@@ -27,8 +27,8 @@ import blockeraEditorPackageInfo from '../../../editor/package.json';
 import {
 	generalBlockStates,
 	generalInnerBlockStates,
-	unstableBootstrapServerSideBlockStatesDefinitions,
-	unstableBootstrapServerSideInnerBlockStatesDefinitions,
+	unstableBootstrapBlockStatesDefinitions,
+	unstableBootstrapInnerBlockStatesDefinitions,
 } from './libs';
 
 // Exports
@@ -49,16 +49,14 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		'blockeraEditor_' +
 		blockeraEditorPackageInfo.version.replace(/\./g, '_');
 
-	unstableBootstrapServerSideBlockStatesDefinitions(generalBlockStates);
-	unstableBootstrapServerSideInnerBlockStatesDefinitions(
-		generalInnerBlockStates
-	);
+	unstableBootstrapBlockStatesDefinitions(generalBlockStates);
+	unstableBootstrapInnerBlockStatesDefinitions(generalInnerBlockStates);
 
 	window[packageName].coreData = {
 		select: select(store?.name),
 		unstableBootstrapServerSideEntities,
 		unstableBootstrapServerSideVariableDefinitions,
-		unstableBootstrapServerSideBlockStatesDefinitions,
+		unstableBootstrapBlockStatesDefinitions,
 		unstableBootstrapServerSideDynamicValueDefinitions,
 	};
 
@@ -67,7 +65,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		init: outsideDefinitions,
 		select: select(editorStore?.name),
 		unstableBootstrapServerSideBreakpointDefinitions,
-		unstableBootstrapServerSideBlockStatesDefinitions,
+		unstableBootstrapBlockStatesDefinitions,
 	};
 
 	registerCanvasEditorSettings({
