@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalInnerBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -46,6 +50,17 @@ export const Loginout: BlockType = {
 			icon: <Icon icon="block-login-form-inputs" iconSize="20" />,
 			settings: {
 				force: true,
+			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				placeholder: {
+					...sharedBlockStates.placeholder,
+					force: true,
+				},
 			},
 		},
 		'elements/remember': {
