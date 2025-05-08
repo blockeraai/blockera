@@ -42,8 +42,6 @@ const blockeraFontColor: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNativeOnStates: false,
-	onNativeOnBreakpoints: false,
 	onNativeOnInnerBlocks: false,
 	label: __('Text Color', 'blockera'),
 };
