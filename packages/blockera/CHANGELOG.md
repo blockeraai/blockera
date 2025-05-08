@@ -3,6 +3,8 @@
 ### Automated Tests
 - Refactor workflows to reuse the configurations of wp-env
 
+### Improvements
+- Improved plugin loading performance by optimizing when Blockera initializes on the page.
 
 ## 1.3.0 (2025-04-27)
 
