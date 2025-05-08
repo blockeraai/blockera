@@ -16,7 +16,7 @@ import { getSortedObject } from '@blockera/utils';
 import { STORE_NAME } from '../../../../store';
 import type { StateTypes, TStates } from './types';
 
-export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
+export function unstableBootstrapBlockStatesDefinitions(definitions: {
 	[key: TStates]: StateTypes,
 }) {
 	const { setBlockStates } = dispatch(STORE_NAME);
@@ -40,10 +40,10 @@ export function unstableBootstrapServerSideBlockStatesDefinitions(definitions: {
 	setBlockStates(getSortedObject(overrideDefinitions));
 }
 
-export function unstableBootstrapServerSideInnerBlockStatesDefinitions(definitions: {
+export function unstableBootstrapInnerBlockStatesDefinitions(definitions: {
 	[key: TStates]: StateTypes,
 }) {
-	const { setBlockStates } = dispatch(STORE_NAME);
+	const { setInnerBlockStates } = dispatch(STORE_NAME);
 	const overrideDefinitions: { [key: string]: Object } = {};
 
 	for (const [key, definition] of Object.entries(definitions)) {
@@ -61,5 +61,5 @@ export function unstableBootstrapServerSideInnerBlockStatesDefinitions(definitio
 		overrideDefinitions[key] = definition;
 	}
 
-	setBlockStates(getSortedObject(overrideDefinitions));
+	setInnerBlockStates(getSortedObject(overrideDefinitions));
 }
