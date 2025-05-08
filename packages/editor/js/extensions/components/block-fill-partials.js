@@ -47,16 +47,15 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		const availableInnerStates = useMemo(() => {
 			let blockStates =
 				(
-					blockProps?.additional?.blockeraInnerBlocks[currentBlock] ||
-					{}
+					(blockProps?.additional?.blockeraInnerBlocks || {})[
+						currentBlock
+					] || {}
 				)?.availableBlockStates || getInnerStates();
 
 			if (isInnerBlock(currentBlock)) {
 				if (!isVirtualBlock(currentBlock)) {
-					const { availableBlockStates } = getBlockExtensionBy(
-						'targetBlock',
-						currentBlock
-					);
+					const { availableBlockStates } =
+						getBlockExtensionBy('targetBlock', currentBlock) || {};
 
 					if (Object.keys(availableBlockStates || {}).length) {
 						blockStates = availableBlockStates;
