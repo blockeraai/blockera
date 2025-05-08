@@ -369,6 +369,34 @@ const baseSharedBlockStates = {
 			color: 'var(--blockera-controls-states-color)',
 		},
 	},
+	placeholder: {
+		type: 'placeholder',
+		label: __('Placeholder', 'blockera'),
+		category: 'interactive-states',
+		tooltip: (
+			<>
+				<h5>{__('Placeholder State', 'blockera')}</h5>
+				<p>
+					{__(
+						'Applies to the ghost text visible until content is entered.',
+						'blockera'
+					)}
+				</p>
+				<code style={{ margin: '5px 0' }}>
+					<span style={{ opacity: '0.7', marginRight: '1px' }}>
+						.block
+					</span>
+					:placeholder
+				</code>
+			</>
+		),
+		breakpoints: {},
+		priority: 25,
+		force: false,
+		settings: {
+			color: 'var(--blockera-controls-states-color)',
+		},
+	},
 };
 
 export const generalBlockStates: { [key: TStates]: StateTypes } = applyFilters(
