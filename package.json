@@ -237,6 +237,7 @@
 		"env": "wp-env",
 		"env:stop": "npm run env stop",
 		"env:start": "node .github/scripts/setup-wp-env.js && wp-env start",
+		"env:clean": "npm run env clean all",
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:tests-cli:bash": "npm run env run tests-cli bash",
 		"packages:update": "wp-scripts packages-update",
