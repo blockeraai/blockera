@@ -4,7 +4,7 @@
     --popover-border-width: 1px;
     --popover-height: auto;
     --popover-radius: 3px;
-    box-shadow: 0 0 0 6px #ffffff;
+    box-shadow: 0 0 5px 7px #ffffff;
     border-radius: var(--popover-radius);
 }
 
@@ -44,7 +44,7 @@
 	.blockera-features-types {
 
 		.blockera-feature-type {
-			--item-height: 26px;
+			--item-height: 30px;
 			--icon-size: 16px;
 			width: 100%;
 			justify-content: flex-start;
