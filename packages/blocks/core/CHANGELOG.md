@@ -71,6 +71,7 @@
 - `Query Pagination Numbers` block: inner blocks & states improved.
 - `Add To Cart Button` block: states improved.
 - `Mini Cart → Cart Button` block: states improved.
+- `Mini Cart → Checkout Button` block: states improved.
 
 
 ### Automated Tests
