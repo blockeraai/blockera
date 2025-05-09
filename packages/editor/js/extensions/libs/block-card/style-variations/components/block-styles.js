@@ -99,9 +99,8 @@ function BlockStyles({
 		<div className={componentClassNames('block-styles')}>
 			<div className={componentInnerClassNames('block-styles__variants')}>
 				{stylesToRender.map((style) => {
-					const buttonText = style.isDefault
-						? __('Default', 'blockera')
-						: style.label || style.name;
+					const buttonText =
+						style.label || style.name || __('Default', 'blockera');
 
 					return (
 						<Button
@@ -114,7 +113,12 @@ function BlockStyles({
 							)}
 							key={style.name}
 							variant="secondary"
-							label={buttonText}
+							label={
+								style?.isDefault && style?.name !== 'default'
+									? buttonText +
+									  ` (${__('Default', 'blockera')})`
+									: buttonText
+							}
 							onMouseEnter={() =>
 								styleItemHandler(style, 'mouseEnter')
 							}

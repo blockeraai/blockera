@@ -28,11 +28,10 @@ describe('Media Text Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
 		//
 		// 1. Inner blocks existence
 		//
-
-		cy.getByDataTest('elements/link').should('exist');
 		cy.getByDataTest('core/paragraph').should('exist');
 		cy.getByDataTest('core/heading').should('exist');
 		cy.getByDataTest('core/image').should('exist');

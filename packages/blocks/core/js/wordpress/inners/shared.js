@@ -10,6 +10,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
+import { generalInnerBlockStates, sharedBlockStates } from '@blockera/editor';
 
 const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -19,7 +20,8 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All paragraph elements.', 'blockera'),
 		icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/link.cy.e2e.inner-blocks-compatibility.js
@@ -30,9 +32,22 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All hyperlinks elements.', 'blockera'),
 		icon: <Icon icon="link" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
 			dataCompatibilityElement: 'link',
 			dataCompatibility: ['font-color', 'font-color-hover'],
+			priority: 10,
+		},
+		availableBlockStates: {
+			...generalInnerBlockStates,
+			focus: {
+				...generalInnerBlockStates.focus,
+				force: true,
+			},
+			active: {
+				...sharedBlockStates.active,
+				force: true,
+			},
+			visited: sharedBlockStates.visited,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -45,13 +60,14 @@ const sharedInnerBlocks: InnerBlocks = {
 		settings: {
 			// because "core/heading" block default value for "level" attribute is "2".
 			level: 2,
-			force: true,
+			force: false,
 			dataCompatibilityElement: 'heading',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -70,6 +86,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -88,6 +105,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -106,6 +124,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -124,6 +143,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -142,6 +162,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
@@ -160,6 +181,7 @@ const sharedInnerBlocks: InnerBlocks = {
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Compatibility tests: ../group/test/button.cy.e2e.inner-blocks-compatibility.js
@@ -171,13 +193,14 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All button-style link elements.', 'blockera'),
 		icon: <Icon icon="button" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
 			dataCompatibilityElement: 'button',
 			dataCompatibility: [
 				'font-color',
 				'background-color',
 				'background-image',
 			],
+			priority: 10,
 		},
 	},
 	// Functionality tests: ../packages/gallery/test/block.inner-blocks.e2e.cy.js
@@ -187,7 +210,8 @@ const sharedInnerBlocks: InnerBlocks = {
 		description: __('All images elements.', 'blockera'),
 		icon: <Icon icon="image" library="wp" iconSize="20" />,
 		settings: {
-			force: true,
+			force: false,
+			priority: 10,
 		},
 	},
 };

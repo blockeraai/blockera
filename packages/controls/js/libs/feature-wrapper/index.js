@@ -24,7 +24,7 @@ export function FeatureWrapper({
 	showText = 'on-hover',
 	...props
 }: {
-	type: 'free' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
+	type: 'native' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
 	upgradeLink?: string,
 	typeName?: string,
 	text?: string | MixedElement,
@@ -46,7 +46,7 @@ export function FeatureWrapper({
 
 	if (!text) {
 		switch (type) {
-			case 'free':
+			case 'native':
 				text = __('Upgrade to PRO', 'blockera');
 				icon = (
 					<Icon
@@ -72,8 +72,9 @@ export function FeatureWrapper({
 				text = typeName
 					? sprintf(
 							/* translators: %s is a state name. */
-							__('Only available in %s state!', 'blockera'),
-							typeName
+							__('Only available in %1$s state%2$s!', 'blockera'),
+							typeName.replace(/,(?=[^,]*$)/, ', and '),
+							typeName.includes(', ') ? 's' : ''
 					  )
 					: __('Not available in current state!', 'blockera');
 				break;
@@ -81,8 +82,12 @@ export function FeatureWrapper({
 				text = typeName
 					? sprintf(
 							/* translators: %s is a breakpoint name. */
-							__('Only available in %s breakpoint!', 'blockera'),
-							typeName
+							__(
+								'Only available in %1$s breakpoint%2$s!',
+								'blockera'
+							),
+							typeName.replace(/,(?=[^,]*$)/, ', and '),
+							typeName.includes(', ') ? 's' : ''
 					  )
 					: __('Not available in current breakpoint!', 'blockera');
 				break;

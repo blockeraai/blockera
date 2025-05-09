@@ -27,4 +27,8 @@ export type BreakpointTypes = {
 		max: string,
 	},
 	attributes?: Object,
+	/**
+	 * Define if this breakpoint on native blockera.
+	 */
+	native: boolean,
 };

@@ -122,9 +122,13 @@ export const search = (
 		getCategory: (item: Object) =>
 			categories.find(({ slug }) => slug === item.category)?.title,
 		getCollection: (item: Object) => {
-			const foundedItem =
-				collections[(item?.name || item?.type).split('/')[0]];
+			// Safely handle undefined values
+			const itemIdentifier = item?.name || item?.type;
+			if (!itemIdentifier) {
+				return null;
+			}
 
+			const foundedItem = collections[itemIdentifier.split('/')[0]];
 			return foundedItem?.title || foundedItem?.label;
 		},
 	};
@@ -242,5 +246,5 @@ export function getItemSearchRank(
 }
 
 export const getNormalizedCssSelector = (search: string): string => {
-	return `&${search}`;
+	return '&' === search[0] ? search : `&${search}`;
 };

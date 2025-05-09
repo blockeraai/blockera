@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalInnerBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -38,6 +42,17 @@ export const Search: BlockType = {
 			settings: {
 				force: true,
 			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				placeholder: {
+					...sharedBlockStates.placeholder,
+					force: true,
+				},
+			},
 		},
 		'elements/button': {
 			name: 'elements/button',
@@ -46,6 +61,18 @@ export const Search: BlockType = {
 			icon: <Icon icon="block-search-button" iconSize="20" />,
 			settings: {
 				force: true,
+			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				active: {
+					...sharedBlockStates.active,
+					force: true,
+				},
+				visited: sharedBlockStates.visited,
 			},
 		},
 	},

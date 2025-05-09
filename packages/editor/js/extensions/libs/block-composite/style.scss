@@ -4,7 +4,7 @@
     --popover-border-width: 1px;
     --popover-height: auto;
     --popover-radius: 3px;
-    box-shadow: 0 0 0 6px #ffffff;
+    box-shadow: 0 0 5px 7px #ffffff;
     border-radius: var(--popover-radius);
 }
 
@@ -21,7 +21,7 @@
 	}
 
 	.blockera-block-features-category {
-		color: var(--blockera-controls-primary-color);
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 10%);
 		font-size: 12px;
 		font-weight: 500;
 		margin: 0;
@@ -44,10 +44,11 @@
 	.blockera-features-types {
 
 		.blockera-feature-type {
-			--item-height: 26px;
+			--item-height: 30px;
 			--icon-size: 16px;
 			width: 100%;
-			justify-content: center;
+			justify-content: flex-start;
+			padding: 0 0 0 8px;
 			align-items: center;
 			border-radius: 2px;
 			color: #1e1e1e;
@@ -64,22 +65,11 @@
 				fill: currentColor;
 			}
 
+			&:focus,
 			&:hover {
-				color: var(--blockera-controls-primary-color);
+				color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
 				border-color: var(--blockera-controls-primary-color);
-			}
-
-			&:hover::after {
-				background: var(--blockera-controls-border-color);
-				border-radius: 2px;
-				bottom: 0;
-				content: "";
-				left: 0;
-				opacity: 0.04;
-				pointer-events: none;
-				position: absolute;
-				right: 0;
-				top: 0;
+				background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
 			}
 
 			.blockera-feature-icon {
@@ -109,15 +99,18 @@
 			.blockera-feature-label {
 				font-size: 12px;
 				letter-spacing: -0.2px;
-				max-width: 75px;
+				max-width: 94px;
 				text-overflow: ellipsis;
 				white-space: nowrap;
 				overflow: hidden;
 			}
 
+			.blockera-feature-icon + .blockera-feature-label {
+				max-width: 75px;
+			}
+
 			&.item-type-element,
 			&.item-type-inner-block {
-				justify-content: flex-start;
 				gap: 3px;
 				padding: 0 0 0 4px;
 			}

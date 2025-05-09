@@ -564,7 +564,7 @@ export function UnitInput({
 				setTypedValue(normalizedValue);
 				if (
 					typeof onChange === 'function' &&
-					inputValue !== Number(normalizedValue)
+					inputValue !== typedValue
 				) {
 					onChange({
 						unitValue,

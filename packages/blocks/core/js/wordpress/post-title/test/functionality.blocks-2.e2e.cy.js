@@ -4,6 +4,7 @@
 import {
 	savePage,
 	createPost,
+	openInserter,
 	appendBlocks,
 	setInnerBlock,
 	redirectToFrontPage,
@@ -22,6 +23,8 @@ describe('Post Title Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		openInserter();
 
 		cy.getByDataTest('elements/link').should('exist');
 

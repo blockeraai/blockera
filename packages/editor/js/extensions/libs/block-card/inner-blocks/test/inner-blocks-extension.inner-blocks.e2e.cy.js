@@ -54,25 +54,26 @@ describe('Inner Blocks Functionality Tests ...', () => {
 				'Checking forces items, and inserter items count with searching "buttons" block type to select that',
 				() => {
 					cy.getByDataTest('core/paragraph').should('exist');
-					cy.getByDataTest('elements/link').should('exist');
 					cy.getByDataTest('core/button').should('exist');
 					cy.getByDataTest('core/heading').should('exist');
 
+					cy.getByDataTest('elements/link').should('not.exist');
 					openInserter();
+					cy.getByDataTest('elements/link').should('exist');
 
 					// Checking opened inserter block types.
 					cy.getByDataTest('popover-body')
 						.should('exist')
 						.within(() => {
-							cy.getByDataTest('blockera-feature-type').should(
+							cy.get('.blockera-feature-type').should(
 								'have.length',
-								72
+								76
 							);
 
 							// Searching verse block type.
 							search('verse');
 
-							cy.getByDataTest('blockera-feature-type').should(
+							cy.get('.blockera-feature-type').should(
 								'have.length',
 								1
 							);
@@ -91,21 +92,21 @@ describe('Inner Blocks Functionality Tests ...', () => {
 					reSelectBlock('core/group');
 
 					cy.getByDataTest('core/paragraph').should('exist');
-					cy.getByDataTest('elements/link').should('exist');
 					cy.getByDataTest('core/button').should('exist');
 					cy.getByDataTest('core/heading').should('exist');
 					cy.getByDataTest('core/verse').should('exist');
 
-					// Add Inner Block click.
+					cy.getByDataTest('elements/link').should('not.exist');
 					openInserter();
+					cy.getByDataTest('elements/link').should('exist');
 
 					// Checking opened inserter block types.
 					cy.getByDataTest('popover-body')
 						.should('exist')
 						.within(() => {
-							cy.getByDataTest('blockera-feature-type').should(
+							cy.get('.blockera-feature-type').should(
 								'have.length',
-								71
+								75
 							);
 
 							// Searching verse block type.
@@ -127,7 +128,6 @@ describe('Inner Blocks Functionality Tests ...', () => {
 				expect([
 					'core/heading',
 					'core/paragraph',
-					'elements/link',
 					'core/button',
 					'core/verse',
 				]).to.be.deep.equal(

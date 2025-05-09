@@ -33,6 +33,10 @@ body {
 		svg {
 			fill: currentColor;
 		}
+
+		.style-variations-icon {
+			transition: transform 0.3s ease;
+		}
 	}
 
 	.blockera-control-style-variations-button__label {
@@ -55,6 +59,16 @@ body {
 
 		&:not(.is-variation-picker-open):hover {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
+
+			svg {
+				opacity: 1;
+			}
+		}
+
+		&:focus {
+			--primary-color: var(--blockera-controls-variations-color-darker-20);
+			--border-color: var(--primary-color);
+			box-shadow: inset 0 0 0 1px var(--border-color) !important;
 
 			svg {
 				opacity: 1;
@@ -87,6 +101,7 @@ body {
 			color: var(--secondary-color);
 		}
 
+		&:focus,
 		&:hover:not(:disabled, .is-variation-picker-open) {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
 			--primary-color: var(--blockera-controls-variations-color-darker-20);
@@ -114,5 +129,40 @@ body {
 
 	.blockera-component-popover-body {
 		padding: 15px 15px 0 15px;
+	}
+}
+
+.blockera-style-variations-animated {
+
+	&,
+	.the-layer-3,
+	.the-layer-2-bg,
+	.the-layer-2,
+	.the-layer-1-bg,
+	.the-layer-1 {
+		transition: var(--blockera-controls-transition);
+		transform-origin: 50% 70%;
+	}
+
+	.the-layer-1 {
+		transform: rotate(25deg) translate(1px, 1px);
+	}
+
+	.the-layer-2-bg,
+	.the-layer-2 {
+		transform: rotate(15deg) translate(0, 1px);
+	}
+
+	&.is-animated,
+	&:hover {
+
+		.the-layer-1 {
+			transform: none;
+		}
+
+		.the-layer-2-bg,
+		.the-layer-2 {
+			transform: none;
+		}
 	}
 }

@@ -35,31 +35,31 @@ export type FeatureConfig = {
 	 */
 	cssGenerators?: Object | {},
 	/**
-	 * Is active on free settings.
+	 * on native blockera settings?
 	 */
-	isActiveOnFree?: boolean,
+	onNative?: boolean,
 	/**
-	 * Is active on block states? by default undefined.
+	 * on blockera block states?
 	 */
-	isActiveOnStates?: boolean | Array<string>,
+	onStates?: boolean | Array<string>,
 	/**
-	 * Is active on free plugin states? by default undefined.
+	 * on native blockera on states?
 	 */
-	isActiveOnStatesOnFree?: boolean,
+	onNativeOnStates?: boolean | Array<string>,
 	/**
-	 * Is active on breakpoints? by default undefined.
+	 * on blockera breakpoints?
 	 */
-	isActiveOnBreakpoints?: boolean | Array<string>,
+	onBreakpoints?: boolean | Array<string>,
 	/**
-	 * Is active on free plugin breakpoints? by default undefined.
+	 * on native blockera breakpoints?
 	 */
-	isActiveOnBreakpointsOnFree?: boolean,
+	onNativeOnBreakpoints?: boolean | Array<string>,
 	/**
-	 * Is active on inner blocks?
+	 * on blockera inner blocks?
 	 */
-	isActiveOnInnerBlocks?: boolean | 'all' | Array<InnerBlockType>,
+	onInnerBlocks?: boolean | 'all' | Array<InnerBlockType>,
 	/**
-	 * Is active on free plugin inner blocks? by default undefined.
+	 * on native blockera inner blocks?
 	 */
-	isActiveOnInnerBlocksOnFree?: boolean,
+	onNativeOnInnerBlocks?: boolean | Array<string>,
 };

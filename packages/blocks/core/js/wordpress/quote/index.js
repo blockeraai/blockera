@@ -30,7 +30,13 @@ export const Quote: BlockType = {
 				force: true,
 			},
 		},
-		'core/paragraph': sharedInnerBlocks['core/paragraph'],
+		'core/paragraph': {
+			...sharedInnerBlocks['core/paragraph'],
+			settings: {
+				...sharedInnerBlocks['core/paragraph'].settings,
+				force: true,
+			},
+		},
 		'elements/link': sharedInnerBlocks['elements/link'],
 		'core/heading': sharedInnerBlocks['core/heading'],
 		'core/heading-1': sharedInnerBlocks['core/heading-1'],

@@ -17,8 +17,8 @@ import { isEmpty, getSortedObject, mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import { generateExtensionId } from '../../../utils';
-import { isNormalState } from '../../../../components';
 import { getBaseBreakpoint } from '../../../../../canvas-editor';
+import { isNormalState, isInnerBlock } from '../../../../components';
 import type {
 	TStates,
 	StateTypes,
@@ -51,12 +51,15 @@ export const useBlockStates = ({
 	} = dispatch('blockera/extensions') || {};
 	const { getBlockStates, getActiveMasterState, getActiveInnerState } =
 		select('blockera/extensions');
-	const { getStates, getBreakpoints } = select('blockera/editor');
+	const { getStates, getBreakpoints, getInnerStates } =
+		select('blockera/editor');
 	const savedBlockStates = getBlockStates(
 		block?.clientId,
 		!isMasterBlockStates(id) ? currentBlock : block?.blockName
 	);
-	const defaultStates = getStates();
+	const defaultStates = isInnerBlock(currentBlock)
+		? getInnerStates()
+		: getStates();
 	const clonedSavedStates = { ...states };
 
 	if (isEmpty(states)) {
@@ -168,7 +171,9 @@ export const useBlockStates = ({
 
 			Object.entries(states).forEach(memoizedInitialValue);
 
+			// $FlowFixMe
 			return {
+				// $FlowFixMe
 				...forcedStates,
 				...initialValue,
 			};
@@ -356,7 +361,7 @@ export const useBlockStates = ({
 					currentInnerBlockState,
 					isMasterBlockStates: isMasterBlockStates(id),
 				},
-				defaultStates
+				preparedStates
 			),
 		// eslint-disable-next-line
 		[currentBlock, currentInnerBlockState, currentState, id, states]

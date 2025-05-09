@@ -3,6 +3,7 @@
 	--tooltip-color: #ffffff;
 	--tooltip-padding: 6px;
 	--tooltip-font-size: 12px;
+	--tooltip-gap: 8px;
 	font-size: var(--tooltip-font-size);
 	text-align: left;
 	color: var(--tooltip-color);
@@ -26,7 +27,7 @@
 
 	* {
 		font-size: var(--tooltip-font-size);
-		margin: 8px 0;
+		margin: var(--tooltip-gap) 0;
 
 		&:first-child {
 			margin-top: 0;
@@ -67,5 +68,17 @@
 
 	h6 {
 		font-size: var(--tooltip-font-size);
+	}
+
+	code {
+		font-family: Consolas, Monaco, monospace;
+		direction: ltr;
+		unicode-bidi: embed;
+		font-size: 11px;
+		padding: 3px 4px;
+		margin: var(--tooltip-gap) 0;
+		border-radius: 2px;
+		background: color-mix(in srgb, var(--tooltip-bg) 100%, #000000 20%);
+		display: inline-block;
 	}
 }

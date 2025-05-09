@@ -204,6 +204,7 @@ abstract class BaseStyleDefinition {
 				'inner-pseudo-class'       => $this->inner_pseudo_state,
 				'root'                     => $selectors['root'] ?? null,
 				'blockera-unique-selector' => $this->blockera_unique_selector,
+				'breakpoint'               => $this->breakpoint,
 			]
 		);
 	}

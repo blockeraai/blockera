@@ -77,6 +77,40 @@ export const updateBlockStates = (states: StateTypes): Object => {
 	};
 };
 
+export const setInnerBlockStates = (states: {
+	[key: StateTypes]: Object,
+}): Object => {
+	return {
+		states,
+		type: 'SET_INNER_BLOCK_STATES',
+	};
+};
+
+export const editInnerBlockState = (
+	editedState: Object,
+	stateName: StateTypes
+): Object => {
+	return {
+		stateName,
+		editedState,
+		type: 'EDIT_INNER_BLOCK_STATE',
+	};
+};
+
+export const deleteInnerBlockState = (stateName: StateTypes): Object => {
+	return {
+		stateName,
+		type: 'DELETE_INNER_BLOCK_STATE',
+	};
+};
+
+export const updateInnerBlockStates = (states: StateTypes): Object => {
+	return {
+		states,
+		type: 'UPDATE_INNER_BLOCK_STATES',
+	};
+};
+
 export const setCanvasSettings = (settings: Object): Object => {
 	return {
 		settings,

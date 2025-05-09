@@ -24,8 +24,10 @@ export const Preview = ({
 	// General Props.
 	block,
 	onChange,
+	blockConfig,
 	currentBlock,
 	currentState,
+	availableStates,
 	currentBreakpoint,
 	currentInnerBlockState,
 
@@ -47,6 +49,7 @@ export const Preview = ({
 		block,
 		onChange,
 		currentBlock,
+		maxItems: blockConfig?.maxInnerBlocks,
 		values: innerBlocksProps?.values || {},
 		innerBlocks: innerBlocksProps?.innerBlocks || {},
 	});
@@ -65,9 +68,10 @@ export const Preview = ({
 		...blockStatesProps,
 		block,
 		onChange,
-		deleteCacheData,
 		currentBlock,
 		currentState,
+		availableStates,
+		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
 	});
@@ -83,6 +87,7 @@ export const Preview = ({
 			deleteCacheData={deleteCacheData}
 			contextValue={blockStatesContextValue}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
+			maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
 			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
 			{...{
 				InserterComponent: (props: Object) => (

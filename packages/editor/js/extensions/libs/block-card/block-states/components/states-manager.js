@@ -33,10 +33,10 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 		states,
 		children,
 		onDelete,
+		maxItems,
 		contextValue,
 		overrideItem,
 		defaultStates,
-		preparedStates,
 		handleOnChange,
 		InserterComponent,
 		defaultRepeaterItemValue,
@@ -58,9 +58,10 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 					<RepeaterControl
 						{...{
 							onDelete,
+							maxItems,
+							mode: 'nothing',
 							id: 'block-states',
 							isSupportInserter: true,
-							maxItems: Object.keys(preparedStates).length,
 							valueCleanup: (value) => value,
 							selectable: true,
 							getDynamicDefaultRepeaterItem,

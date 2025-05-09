@@ -16,13 +16,14 @@ describe('Quote Block', () => {
 	});
 
 	it('Functionality + inner blocks', () => {
-		appendBlocks(
-			'<!-- wp:quote -->\n' +
-				'<blockquote class="wp-block-quote"><!-- wp:paragraph -->\n' +
-				'<p>text here with a <a href="https://blockera.ai">link</a></p>\n' +
-				'<!-- /wp:paragraph --><cite>my name</cite></blockquote>\n' +
-				'<!-- /wp:quote -->'
-		);
+		appendBlocks(`<!-- wp:quote -->
+<blockquote class="wp-block-quote">
+<!-- wp:paragraph -->
+<p>text here with a <a href="https://blockera.ai">link</a></p>
+<!-- /wp:paragraph -->
+<cite>my name</cite>
+</blockquote>
+<!-- /wp:quote -->`);
 
 		// Select target block
 		cy.getBlock('core/paragraph').click();

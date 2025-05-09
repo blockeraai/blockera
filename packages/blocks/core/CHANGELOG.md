@@ -1,5 +1,98 @@
 ## Unreleased
 
+### New Features
+- `Calendar` block: `Caption` inner block added.
+- `Calendar` block: `Header` inner block added.
+- `Calendar` block: `Header → Cells` inner block added.
+- `Calendar` block: `Body` inner block added.
+- `Calendar` block: `Body → Cells` inner block added.
+- `Calendar` block: `Body → Empty Cells` inner block added.
+- `Calendar` block: `Next/Prev Links` inner block added.
+- `Categories List` block: `Marker` state added to `Terms` inner block added.
+- `Details` block: Special `Open` state added.
+- `Home Link` block: Special `Current Page` state added.
+- `Navigation Link` block: Special `Current Page` state added.
+- `Navigation Link` block: Special `Current Page Parent` state added.
+- `Navigation Link` block: Special `Current Page Ancestor` state added.
+- `Submenu` block: Special `Current Page` state added.
+- `Submenu` block: Special `Current Page Parent` state added.
+- `Submenu` block: Special `Current Page Ancestor` state added.
+- `Previous Post` block: `Arrow` inner block added.
+- `Next Post` block: `Arrow` inner block added.
+- `Next Page` block: more related states for block.
+- `Previous Page` block: more related states for block.
+- `Page Numbers` block: more related states for block.
+- `Read More` block: more related states for block.
+- `Social Link` block: more related states for block.
+- `Table` block: `Caption` inner block added.
+- `Table` block: `Header → Cells` inner block added.
+- `Table` block: `Body → Cells` inner block added.
+- `Table` block: `Footer → Cells` inner block added.
+
+### Improvements
+- `Details` block: inner blocks improved.
+- `File` block: inner blocks improved.
+- `Footnote` block: inner blocks improved.
+- `Gallery` block: inner blocks improved.
+- `Heading` block: inner blocks improved.
+- `Image` block: inner blocks improved.
+- `Latest Comments` block: inner blocks improved.
+- `Latest Posts` block: inner blocks improved.
+- `List` block: inner blocks improved.
+- `List Item` block: inner blocks improved.
+- `Home Link` block: inner blocks improved.
+- `Navigation Link` block: inner blocks improved.
+- `Submenu` block: inner blocks improved.
+- `Paragraph` block: inner blocks improved.
+- `Post Author` block: inner blocks improved.
+- `Post Author Biography` block: inner blocks improved.
+- `Post Author Name` block: inner blocks improved.
+- `Post Content` block: inner blocks improved.
+- `Post Date` block: inner blocks improved.
+- `Post Excerpt` block: inner blocks improved.
+- `Post Terms` block: inner blocks improved.
+- `Post Title` block: inner blocks improved.
+- `Pullquote` block: inner blocks improved.
+- `Query Pagination` block: inner blocks improved.
+- `Next Page` block: inner blocks improved.
+- `Previous Page` block: inner blocks improved.
+- `Page Numbers` block: inner blocks improved.
+- `Quote` block: inner blocks improved.
+- `Site Title` block: inner blocks improved.
+- `Social Link` block: inner blocks improved.
+- `Social Links` block: inner blocks improved.
+- `Tag Cloud` block: inner blocks improved.
+- `Term Description` block: inner blocks improved.
+- `Verse` block: inner blocks improved.
+- `Comments Pagination Next` block: inner blocks & states improved.
+- `Comments Pagination Numbers` block: inner blocks & states improved.
+- `Comments Pagination Prev` block: inner blocks & states improved.
+- `Post Comments Form` block: inner blocks & states improved.
+- `Query Pagination Numbers` block: inner blocks & states improved.
+- `Add To Cart Button` block: states improved.
+- `Mini Cart → Cart Button` block: states improved.
+- `Mini Cart → Checkout Button` block: states improved.
+- `Blocksy → About Me` block: inner blocks improved.
+- `Blocksy → Breadcrumb` block: inner blocks improved.
+- `Blocksy → Contact Info` block: inner blocks improved.
+- `Blocksy → Dynamic Data` block: inner blocks improved.
+- `Blocksy → Search` block: inner blocks improved.
+
+
+### Automated Tests
+- Added E2E tests to check the inner blocks functionality of `Calendar` block.
+- Updated E2E tests to check the inner blocks functionality of `Categories List` block.
+- Updated E2E tests to check the inner blocks functionality of `Previous Post` block.
+- Updated E2E tests to check the inner blocks functionality of `Next Post` block.
+- Updated E2E tests to check the inner blocks functionality of `Table` block.
+- Updated E2E tests to check functionality of `Comments Pagination Next` block.
+- Updated E2E tests to check functionality of `Comments Pagination Numbers` block.
+- Updated E2E tests to check functionality of `Comments Pagination Prev` block.
+- Updated E2E tests to check functionality of `Query Pagination Next` block.
+- Updated E2E tests to check functionality of `Query Pagination Numbers` block.
+- Updated E2E tests to check functionality of `Query Pagination Prev` block.
+
+
 ## 1.3.0 (2025-04-27)
 
 ### New Features

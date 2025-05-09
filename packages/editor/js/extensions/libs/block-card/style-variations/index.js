@@ -39,6 +39,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		currentBreakpoint,
 	}: TBlockStyleVariations): MixedElement => {
 		const [isOpen, setIsOpen] = useState(false);
+		const [isHovered, setIsHovered] = useState(false);
 
 		const {
 			onSelect,
@@ -60,12 +61,16 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			!isBaseBreakpoint(currentBreakpoint) ||
 			currentState !== 'normal';
 
+		const activeStyleId = activeStyle?.isDefault
+			? 'default'
+			: activeStyle?.name || 'default';
+
 		return (
 			<>
 				<Button
 					className={controlInnerClassNames(
 						'style-variations-button',
-						'is-variation-' + (activeStyle?.name || 'default'),
+						'is-variation-' + activeStyleId,
 						{
 							'blockera-control-is-not-active': isNotActive,
 							'is-variation-picker-open': isOpen,
@@ -75,6 +80,10 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 					disabled={isNotActive}
 					isFocus={isOpen}
 					data-test="style-variations-button"
+					onMouseEnter={() => setIsHovered(true)}
+					onMouseLeave={() => setIsHovered(false)}
+					onFocus={() => setIsHovered(true)}
+					onBlur={() => setIsHovered(false)}
 				>
 					<Flex
 						className={controlInnerClassNames(
@@ -85,7 +94,11 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 						justifyContent="center"
 						data-test="style-variations-button-icon"
 					>
-						<Icon icon="style-variations" iconSize={20} />
+						<Icon
+							icon="style-variations-animated"
+							iconSize={24}
+							isAnimated={isOpen || isHovered}
+						/>
 					</Flex>
 
 					<Flex

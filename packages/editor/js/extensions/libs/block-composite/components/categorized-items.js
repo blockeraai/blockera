@@ -3,21 +3,23 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
  */
-import { Flex, Grid } from '@blockera/controls';
+import { experimental } from '@blockera/env';
+import { getSortedObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
-
+import { Flex, Grid, Tooltip } from '@blockera/controls';
 /**
  * Internal dependencies
  */
 import type { TCategorizedItemsProps } from '../types';
 import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
+import { getTooltipStyle } from '../utils';
 
 export const CategorizedItems = ({
 	itemType = 'state',
@@ -53,6 +55,11 @@ export const CategorizedItems = ({
 		return <></>;
 	}
 
+	// Filter out any null or undefined items
+	const validItems = Array.isArray(items)
+		? items.filter((item) => item !== null && item !== undefined)
+		: items;
+
 	const onClick = (item: Object, id: string) => {
 		const { name, type } = item;
 
@@ -61,11 +68,15 @@ export const CategorizedItems = ({
 
 			setBlockClientInners({
 				clientId,
-				inners: {
-					...inners,
-					// $FlowFixMe
-					[id]: item,
-				},
+				inners: getSortedObject(
+					{
+						...inners,
+						// $FlowFixMe
+						[id]: item,
+					},
+					'settings',
+					10
+				),
 			});
 
 			setCurrentBlock(id);
@@ -94,6 +105,14 @@ export const CategorizedItems = ({
 		}
 	};
 
+	const handleKeyDown = (e: KeyboardEvent, item: Object, id: string) => {
+		// Handle Enter or Space key press
+		if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+			e.preventDefault();
+			onClick(item, id);
+		}
+	};
+
 	return (
 		<Flex
 			direction={'column'}
@@ -112,18 +131,34 @@ export const CategorizedItems = ({
 				gap={'5px'}
 				className={`blockera-features-types blockera-feature-${category}-wrapper`}
 			>
-				{items.map(
+				{validItems.map(
 					(
 						item: StateTypes | InnerBlockModel,
 						index: number
 					): MixedElement => {
-						const { name, type, icon, label, settings } = item;
+						// Check if item is null or undefined
+						if (!item) {
+							return <></>;
+						}
+
+						const {
+							name,
+							type,
+							icon,
+							label,
+							settings,
+							description = '',
+							tooltip,
+						} = item;
 
 						let id = name || type;
 
 						if (
+							experimental().get(
+								'styleEngine.enabledCustomClassBlockState'
+							) &&
 							'custom-class' === item?.type &&
-							1 === items.length
+							1 === validItems.length
 						) {
 							const style = {
 								color: '#147EB8',
@@ -139,6 +174,11 @@ export const CategorizedItems = ({
 								>
 									<div
 										onClick={() => onClick(item, id)}
+										onKeyDown={(e) =>
+											handleKeyDown(e, item, id)
+										}
+										tabIndex="0"
+										role="button"
 										className={classNames(
 											'blockera-custom-css-selector-wrapper',
 											{
@@ -180,35 +220,98 @@ export const CategorizedItems = ({
 							}
 						}
 
-						return (
-							<div
-								key={index}
-								aria-label={id}
-								onClick={() => onClick(item, id)}
-								data-test={'blockera-feature-type'}
-								className={classNames(
-									'blockera-feature-type',
-									'is-item'
-								)}
-							>
-								{icon && (
-									<div
-										className={classNames(
-											'blockera-feature-icon'
-										)}
-									>
-										{icon}
-									</div>
-								)}
+						const nameSplitted = name ? name.split('/') : [];
 
+						return (
+							<Tooltip
+								key={index}
+								text={
+									tooltip || (
+										<>
+											<h5>
+												{sprintf('%s Block', label)}
+											</h5>
+
+											<p>{description}</p>
+
+											{itemType === 'element' && (
+												<code
+													style={{ margin: '5px 0' }}
+												>
+													{__(
+														'Virtual Block',
+														'blockera'
+													)}
+												</code>
+											)}
+
+											<code style={{ margin: '5px 0' }}>
+												{nameSplitted.length === 2 ? (
+													<>
+														<span
+															style={{
+																opacity: '0.7',
+															}}
+														>
+															{nameSplitted[0]}
+														</span>
+														<span
+															style={{
+																opacity: '0.7',
+																margin: '0 3px',
+															}}
+														>
+															/
+														</span>
+														{nameSplitted[1]}
+													</>
+												) : (
+													<>{name}</>
+												)}
+											</code>
+										</>
+									)
+								}
+								width="220px"
+								style={getTooltipStyle(itemType)}
+							>
 								<div
+									aria-label={id}
+									onClick={() => onClick(item, id)}
+									onKeyDown={(e) =>
+										handleKeyDown(e, item, id)
+									}
+									tabIndex="0"
+									role="button"
+									data-test={
+										itemType === 'state'
+											? 'states/' + id
+											: name
+									}
 									className={classNames(
-										'blockera-feature-label'
+										'blockera-feature-type',
+										'is-item'
 									)}
 								>
-									{label}
+									{icon && (
+										<div
+											className={classNames(
+												'blockera-feature-icon'
+											)}
+										>
+											{icon}
+										</div>
+									)}
+
+									<div
+										className={classNames(
+											'blockera-feature-label'
+										)}
+									>
+										{label}
+									</div>
 								</div>
-							</div>
+							</Tooltip>
 						);
 					}
 				)}

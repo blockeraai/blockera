@@ -41,13 +41,14 @@ export function BlockCard({
 	supports,
 	children,
 	blockName,
+	additional,
 	currentBlock,
 	currentState,
 	setAttributes,
+	availableStates,
 	currentInnerBlock,
 	currentBreakpoint,
 	blockeraInnerBlocks,
-	availableBlockStates,
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
@@ -55,9 +56,10 @@ export function BlockCard({
 	clientId: string,
 	blockName: string,
 	supports: Object,
+	availableStates: Object,
 	blockeraInnerBlocks: Object,
 	currentStateAttributes: Object,
-	availableBlockStates: Object,
+	additional: Object,
 	notice: MixedElement,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
@@ -189,6 +191,10 @@ export function BlockCard({
 							<Breadcrumb
 								clientId={clientId}
 								blockName={blockName}
+								blockeraUnsavedData={
+									currentStateAttributes?.blockeraUnsavedData
+								}
+								availableStates={availableStates}
 							/>
 						</h2>
 
@@ -231,6 +237,7 @@ export function BlockCard({
 							blockName,
 							setAttributes,
 						}}
+						blockConfig={additional}
 						onChange={handleOnChangeAttributes}
 						currentBlock={'master'}
 						currentState={currentState}
@@ -238,8 +245,8 @@ export function BlockCard({
 						currentInnerBlockState={currentInnerBlockState}
 						blockStatesProps={{
 							attributes: currentStateAttributes,
-							availableStates: availableBlockStates,
 						}}
+						availableStates={availableStates}
 						innerBlocksProps={{
 							values: currentStateAttributes.blockeraInnerBlocks,
 							innerBlocks: blockeraInnerBlocks,

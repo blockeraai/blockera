@@ -30,7 +30,9 @@ export type InnerBlockModel = {
 	attributes: Object,
 	settings: {
 		force?: boolean,
+		priority?: number,
 	},
+	availableBlockStates?: { [key: TStates]: StateTypes },
 	...Object,
 };
 
@@ -66,6 +68,7 @@ export type MemoizedInnerBlocks = {
 
 export type AvailableItems = {
 	clientId: string,
+	maxItems?: number | void,
 	setBlockClientInners: ({
 		clientId: string,
 		inners: InnerBlocks,

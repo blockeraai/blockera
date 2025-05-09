@@ -1,5 +1,13 @@
 // @flow
 
+/**
+ * External dependencies
+ */
+import type { MixedElement } from 'react';
+
+/**
+ * Internal dependencies
+ */
 import type { BreakpointTypes, TBreakpoint } from './breakpoint-types';
 
 export type TStates =
@@ -10,9 +18,11 @@ export type TStates =
 	| 'visited'
 	| 'before'
 	| 'after'
+	| 'empty'
 	| 'custom-class'
 	| 'parent-class'
-	| 'parent-hover';
+	| 'parent-hover'
+	| string;
 
 export type TStatesLabel =
 	| 'Normal'
@@ -31,14 +41,17 @@ export type StateTypes = {
 	force: boolean,
 	label: TStatesLabel,
 	settings: {
-		max: number,
-		min: number,
+		max?: number,
+		min?: number,
 		color: string,
 		cssSelector?: string,
 	},
 	priority: number,
 	native?: boolean,
 	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
+	categoryLabel?: string,
+	category?: string,
+	tooltip?: string | MixedElement,
 };
 
 export type BlockStates = {

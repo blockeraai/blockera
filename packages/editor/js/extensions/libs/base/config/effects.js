@@ -35,7 +35,7 @@ const blockeraTransformSelfPerspective: FeatureConfig = {
 	status: true,
 	label: __('Self Perspective', 'blockera'),
 	showInSettings: false,
-	isActiveOnFree: false,
+	onNative: true,
 };
 
 const blockeraBackfaceVisibility: FeatureConfig = {
@@ -44,7 +44,7 @@ const blockeraBackfaceVisibility: FeatureConfig = {
 	status: true,
 	label: __('Backface Visibility', 'blockera'),
 	showInSettings: false,
-	isActiveOnFree: false,
+	onNative: true,
 };
 
 const blockeraTransformChildPerspective: FeatureConfig = {
@@ -53,7 +53,7 @@ const blockeraTransformChildPerspective: FeatureConfig = {
 	status: true,
 	label: __('Child Visibility', 'blockera'),
 	showInSettings: false,
-	isActiveOnFree: false,
+	onNative: true,
 };
 
 const blockeraTransition: FeatureConfig = {
@@ -92,7 +92,7 @@ if (experimental().get('editor.extensions.effectsExtension.divider'))
 		force: false,
 		status: true,
 		label: __('Shape Dividers', 'blockera'),
-		isActiveOnStates: false,
+		onStates: false,
 	};
 
 let blockeraMask: FeatureConfig | false = false;
@@ -103,7 +103,7 @@ if (experimental().get('editor.extensions.effectsExtension.mask'))
 		force: false,
 		status: true,
 		label: __('Image Mask', 'blockera'),
-		isActiveOnStates: false,
+		onStates: false,
 	};
 
 export const effectsConfig = {

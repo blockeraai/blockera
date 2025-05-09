@@ -67,6 +67,7 @@ export type StatesManagerHookProps = {
 export type StatesManagerProps = {
 	// id: string,
 	children: any,
+	maxItems: number,
 	contextValue: Object,
 	deleteCacheData: Object,
 	defaultRepeaterItemValue: Object,

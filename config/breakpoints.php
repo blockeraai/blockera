@@ -27,6 +27,7 @@ return [
 				'max' => '',
 			],
 			'attributes' => [],
+			'native' => true,
 		],
 		'xl-desktop'       => [
 			'type'       => 'xl-desktop',
@@ -38,6 +39,7 @@ return [
 				'max' => '',
 			],
 			'attributes' => [],
+			'native' => true,
 		],
 		'l-desktop'        => [
 			'type'       => 'l-desktop',
@@ -49,6 +51,7 @@ return [
 				'max' => '',
 			],
 			'attributes' => [],
+			'native' => true,
 		],
 		'desktop'          => [
 			'type'       => 'desktop',
@@ -82,6 +85,7 @@ return [
 				'max' => '767px',
 			],
 			'attributes' => [],
+			'native' => true,
 		],
 		'mobile'           => [
 			'type'       => 'mobile',

@@ -23,6 +23,7 @@ describe('Tag Cloud Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
 		//
 		// 1. Edit Block
 		//

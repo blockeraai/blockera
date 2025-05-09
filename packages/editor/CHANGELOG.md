@@ -2,10 +2,14 @@
 
 ### Improvements
 - Improved the block card design to make it more consistent and easier to use.
+- Improved block card inner blocks priority system for better user experience and performance.
+- Improved the style engine to support flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
 
 ### New Features
 - Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
 - Block style variation redesigned and moved to block card (Block Card v3).
+- Added support for flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
+- Added smart calculation for block states in inner blocks.
 
 
 ### Automated Tests

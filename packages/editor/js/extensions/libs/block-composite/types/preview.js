@@ -10,9 +10,11 @@ export type TPreviewProps = {
 		...TBlockProps,
 		attributes?: Object,
 	},
+	blockConfig: Object,
 	onChange: THandleOnChangeAttributes,
 	currentBlock: string,
 	currentState: Object,
+	availableStates: Object,
 	currentBreakpoint: string,
 	currentInnerBlockState: Object,
 

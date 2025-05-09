@@ -7,11 +7,6 @@ import { useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
- * Blockera dependencies
- */
-import { settings } from '@blockera/editor/js/extensions/libs/block-card/block-states/config';
-
-/**
  * Internal dependencies
  */
 import { PopoverCore } from './core';
@@ -31,8 +26,12 @@ export default function Popover({
 		getActiveMasterState = () => 'normal',
 		getExtensionCurrentBlock = () => 'master',
 	} = select('blockera/extensions') || {};
+	const { getState } = select('blockera/editor') || {
+		getState: () => ({ settings: { color: '#cc0000' } }),
+	};
 
-	let activeColor = settings[getActiveMasterState(clientId, name)].color;
+	let activeColor = getState(getActiveMasterState(clientId, name))?.settings
+		?.color;
 
 	if (
 		'master' !== getExtensionCurrentBlock() &&
@@ -40,9 +39,9 @@ export default function Popover({
 	) {
 		activeColor = '#cc0000';
 	} else if ('master' !== getExtensionCurrentBlock()) {
-		activeColor =
-			settings[getActiveInnerState(clientId, getExtensionCurrentBlock())]
-				.color;
+		activeColor = getState(
+			getActiveInnerState(clientId, getExtensionCurrentBlock())
+		)?.settings?.color;
 	}
 
 	useEffect(() => {

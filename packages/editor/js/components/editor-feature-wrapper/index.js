@@ -14,10 +14,10 @@ import { isBoolean, isArray } from '@blockera/utils';
  * Internal dependencies
  */
 import type { EditorFeatureWrapperProps } from './types';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
-import type { TStates } from '../../extensions/libs/block-card/block-states/types';
+import { useExtensionsStore, useEditorStore } from '../../hooks';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
+import type { TStates } from '../../extensions/libs/block-card/block-states/types';
 
 export default function EditorFeatureWrapper({
 	config,
@@ -31,6 +31,7 @@ export default function EditorFeatureWrapper({
 		currentBreakpoint,
 		currentInnerBlockState,
 	} = useExtensionsStore();
+	const { availableStates, availableBreakpoints } = useEditorStore();
 
 	if (window?.blockeraFeatureManager_1_0_0?.EditorFeatureWrapper) {
 		const WrapperComponent =
@@ -52,13 +53,13 @@ export default function EditorFeatureWrapper({
 		isInnerBlock(currentBlock) ? currentInnerBlockState : currentState;
 
 	const feature = {
-		isActiveOnFree: true,
-		isActiveOnStates: true,
-		isActiveOnStatesOnFree: true,
-		isActiveOnBreakpoints: true,
-		isActiveOnBreakpointsOnFree: true,
-		isActiveOnInnerBlocks: true,
-		isActiveOnInnerBlocksOnFree: false,
+		onStates: true,
+		onNative: false,
+		onBreakpoints: true,
+		onInnerBlocks: true,
+		onNativeOnInnerBlocks: true,
+		onNativeOnStates: availableStates,
+		onNativeOnBreakpoints: availableBreakpoints,
 		...config,
 	};
 
@@ -66,28 +67,25 @@ export default function EditorFeatureWrapper({
 		return <></>;
 	}
 
-	if (!feature.isActiveOnFree) {
+	if (feature.onNative) {
 		return (
-			<FeatureWrapper type="free" {...props}>
+			<FeatureWrapper type="native" {...props}>
 				{children}
 			</FeatureWrapper>
 		);
 	}
 
 	if (isInnerBlock(currentBlock)) {
-		if (
-			isBoolean(feature.isActiveOnInnerBlocks) &&
-			!feature.isActiveOnInnerBlocks
-		) {
+		if (isBoolean(feature.onInnerBlocks) && !feature.onInnerBlocks) {
 			return (
 				<FeatureWrapper type="inner-block" {...props}>
 					{children}
 				</FeatureWrapper>
 			);
 		} else if (
-			isArray(feature.isActiveOnInnerBlocks) &&
+			isArray(feature.onInnerBlocks) &&
 			//$FlowFixMe
-			!feature.isActiveOnInnerBlocks.includes(currentBlock)
+			!feature.onInnerBlocks.includes(currentBlock)
 		) {
 			return (
 				<FeatureWrapper type="inner-block" {...props}>
@@ -96,9 +94,22 @@ export default function EditorFeatureWrapper({
 			);
 		}
 
-		if (!feature.isActiveOnInnerBlocksOnFree) {
+		if (
+			isBoolean(feature.onNativeOnInnerBlocks) &&
+			feature.onNativeOnInnerBlocks
+		) {
 			return (
-				<FeatureWrapper type="free" {...props}>
+				<FeatureWrapper type="native" {...props}>
+					{children}
+				</FeatureWrapper>
+			);
+		} else if (
+			isArray(feature.onNativeOnInnerBlocks) &&
+			//$FlowFixMe
+			!feature.onNativeOnInnerBlocks.includes(currentBlock)
+		) {
+			return (
+				<FeatureWrapper type="native" {...props}>
 					{children}
 				</FeatureWrapper>
 			);
@@ -106,27 +117,41 @@ export default function EditorFeatureWrapper({
 	}
 
 	if (!isNormalState(getCurrentState())) {
-		if (isBoolean(feature.isActiveOnStates) && !feature.isActiveOnStates) {
+		if (isBoolean(feature.onStates) && !feature.onStates) {
 			return (
 				<FeatureWrapper type="state" typeName={'normal'} {...props}>
 					{children}
 				</FeatureWrapper>
 			);
 		} else if (
-			isArray(feature.isActiveOnStates) &&
+			isArray(feature.onStates) &&
 			//$FlowFixMe
-			!feature.isActiveOnStates.includes(getCurrentState())
+			!feature.onStates.includes(getCurrentState())
 		) {
 			return (
-				<FeatureWrapper type="state" typeName={'normal'} {...props}>
+				<FeatureWrapper
+					type="state"
+					typeName={availableStates.join(', ')}
+					{...props}
+				>
 					{children}
 				</FeatureWrapper>
 			);
 		}
 
-		if (!feature.isActiveOnStatesOnFree) {
+		if (isBoolean(feature.onNativeOnStates) && feature.onNativeOnStates) {
 			return (
-				<FeatureWrapper type="free" {...props}>
+				<FeatureWrapper type="native" {...props}>
+					{children}
+				</FeatureWrapper>
+			);
+		} else if (
+			isArray(feature.onNativeOnStates) &&
+			//$FlowFixMe
+			!feature.onNativeOnStates.includes(getCurrentState())
+		) {
+			return (
+				<FeatureWrapper type="native" {...props}>
 					{children}
 				</FeatureWrapper>
 			);
@@ -134,10 +159,7 @@ export default function EditorFeatureWrapper({
 	}
 
 	if (!isBaseBreakpoint(currentBreakpoint)) {
-		if (
-			isBoolean(feature.isActiveOnBreakpoints) &&
-			!feature.isActiveOnBreakpoints
-		) {
+		if (isBoolean(feature.onBreakpoints) && !feature.onBreakpoints) {
 			return (
 				<FeatureWrapper
 					type="breakpoint"
@@ -148,9 +170,9 @@ export default function EditorFeatureWrapper({
 				</FeatureWrapper>
 			);
 		} else if (
-			isArray(feature.isActiveOnBreakpoints) &&
+			isArray(feature.onBreakpoints) &&
 			//$FlowFixMe
-			!feature.isActiveOnBreakpoints.includes(currentBreakpoint)
+			!feature.onBreakpoints.includes(currentBreakpoint)
 		) {
 			return (
 				<FeatureWrapper
@@ -163,9 +185,22 @@ export default function EditorFeatureWrapper({
 			);
 		}
 
-		if (!feature.isActiveOnBreakpointsOnFree) {
+		if (
+			isBoolean(feature.onNativeOnBreakpoints) &&
+			feature.onNativeOnBreakpoints
+		) {
 			return (
-				<FeatureWrapper type="free" {...props}>
+				<FeatureWrapper type="native" {...props}>
+					{children}
+				</FeatureWrapper>
+			);
+		} else if (
+			isArray(feature.onNativeOnBreakpoints) &&
+			//$FlowFixMe
+			!feature.onNativeOnBreakpoints.includes(currentBreakpoint)
+		) {
+			return (
+				<FeatureWrapper type="native" {...props}>
 					{children}
 				</FeatureWrapper>
 			);

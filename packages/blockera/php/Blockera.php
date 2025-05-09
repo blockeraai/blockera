@@ -52,7 +52,6 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 			array_merge(
 				blockera_core_config( 'entities' ),
 				[
-					'states' => blockera_core_config( 'states.list' ),
 					'breakpoints' => blockera_core_config( 'breakpoints.list' ),
 				]
 			)

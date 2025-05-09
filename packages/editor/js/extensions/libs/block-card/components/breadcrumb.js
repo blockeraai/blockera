@@ -10,14 +10,18 @@ import { isRTL } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { ucFirstWord } from '@blockera/utils';
-import { extensionInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { ucFirstWord, mergeObject } from '@blockera/utils';
+import { extensionInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import { type BlockStateType } from '../block-states/types';
+import type {
+	TStates,
+	StateTypes,
+	BlockStateType,
+} from '../block-states/types';
 import type { InnerBlockType } from '../inner-blocks/types';
 
 export function Breadcrumb({
@@ -25,15 +29,18 @@ export function Breadcrumb({
 	clientId,
 	blockName,
 	activeBlock,
+	availableStates,
+	blockeraUnsavedData,
 }: {
 	clientId: string,
 	blockName: string,
 	children?: MixedElement,
+	blockeraUnsavedData: Object,
+	availableStates: { [key: TStates]: StateTypes },
 	activeBlock?: 'master' | InnerBlockType,
 }): MixedElement {
-	const { getActiveInnerState, getActiveMasterState } = select(
-		'blockera/extensions'
-	);
+	const { getActiveInnerState, getActiveMasterState, getBlockExtensionBy } =
+		select('blockera/extensions');
 
 	const masterActiveState = getActiveMasterState(clientId, blockName);
 
@@ -49,8 +56,21 @@ export function Breadcrumb({
 		return <>{children}</>;
 	}
 
-	const { getStates } = select('blockera/editor');
-	const statesDefinition = getStates();
+	const { getStates, getInnerStates } = select('blockera/editor');
+	let statesDefinition = getStates();
+
+	if (activeBlock) {
+		const targetBlockStates = getBlockExtensionBy(
+			'targetBlock',
+			activeBlock
+		)?.availableBlockStates;
+
+		if (targetBlockStates) {
+			statesDefinition = mergeObject(getInnerStates(), targetBlockStates);
+		} else {
+			statesDefinition = getInnerStates();
+		}
+	}
 
 	const CurrentState = ({
 		current,
@@ -109,8 +129,20 @@ export function Breadcrumb({
 				}
 				definition={
 					activeBlock
-						? statesDefinition[activeInnerBlockState]
-						: statesDefinition[masterActiveState]
+						? statesDefinition[activeInnerBlockState] ||
+						  (availableStates &&
+						  availableStates.hasOwnProperty(activeInnerBlockState)
+								? availableStates[activeInnerBlockState]
+								: blockeraUnsavedData?.states[
+										activeInnerBlockState
+								  ])
+						: statesDefinition[masterActiveState] ||
+						  (availableStates &&
+						  availableStates.hasOwnProperty(masterActiveState)
+								? availableStates[masterActiveState]
+								: blockeraUnsavedData?.states[
+										masterActiveState
+								  ])
 				}
 			/>
 

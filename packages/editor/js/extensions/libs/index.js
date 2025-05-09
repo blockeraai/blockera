@@ -28,3 +28,4 @@ export {
 export { registerInnerBlockExtensionsSupports } from './block-card/inner-blocks';
 
 export { blockeraExtensionsBootstrap } from './bootstrap';
+export * from './block-card/block-states';

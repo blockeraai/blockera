@@ -108,3 +108,13 @@ export const getVirtualInnerBlockDescription = (): MixedElement => {
 		</>
 	);
 };
+
+/**
+ * Is virtual block.
+ *
+ * @param {string} blockType The block type.
+ * @return {boolean} true on success, false on failure.
+ */
+export const isVirtualBlock = (blockType: string): boolean => {
+	return blockType.startsWith('elements/');
+};

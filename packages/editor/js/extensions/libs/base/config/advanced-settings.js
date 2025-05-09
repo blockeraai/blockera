@@ -16,10 +16,10 @@ const blockeraAttributes: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Custom HTML Attributes', 'blockera'),
-	isActiveOnFree: false,
-	isActiveOnStates: ['normal'],
-	isActiveOnBreakpoints: [getBaseBreakpoint()],
-	isActiveOnInnerBlocks: false,
+	onNative: true,
+	onStates: ['normal'],
+	onBreakpoints: [getBaseBreakpoint()],
+	onInnerBlocks: false,
 };
 
 export const advancedSettingsConfig = {
