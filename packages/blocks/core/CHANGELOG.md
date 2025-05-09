@@ -72,6 +72,7 @@
 - `Add To Cart Button` block: states improved.
 - `Mini Cart → Cart Button` block: states improved.
 - `Mini Cart → Checkout Button` block: states improved.
+- `Blocksy → About Me` block: inner blocks improved.
 
 
 ### Automated Tests
