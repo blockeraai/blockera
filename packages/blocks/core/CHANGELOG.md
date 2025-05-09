@@ -69,6 +69,7 @@
 - `Comments Pagination Prev` block: inner blocks & states improved.
 - `Post Comments Form` block: inner blocks & states improved.
 - `Query Pagination Numbers` block: inner blocks & states improved.
+- `Add To Cart Button` block: states improved.
 
 
 ### Automated Tests
