@@ -76,6 +76,7 @@
 - `Blocksy → Breadcrumb` block: inner blocks improved.
 - `Blocksy → Contact Info` block: inner blocks improved.
 - `Blocksy → Dynamic Data` block: inner blocks improved.
+- `Blocksy → Search` block: inner blocks improved.
 
 
 ### Automated Tests
