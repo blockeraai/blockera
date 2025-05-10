@@ -222,7 +222,7 @@ export const Categories = ({
 	};
 
 	return (
-		<Flex direction={'column'} gap={'15px'}>
+		<Flex direction={'column'} gap={'20px'}>
 			<ControlContextProvider
 				value={{
 					name: 'search-block-' + clientId,
