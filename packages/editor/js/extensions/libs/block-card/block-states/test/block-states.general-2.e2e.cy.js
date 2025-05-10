@@ -724,7 +724,7 @@ describe('Block State E2E Test', () => {
 							'true'
 						);
 
-						cy.getParentContainer('Angel').within(() => {
+						cy.getParentContainer('Angle').within(() => {
 							cy.get('input[inputmode="numeric"]').should(
 								'have.value',
 								'90'
@@ -768,7 +768,7 @@ describe('Block State E2E Test', () => {
 							'true'
 						);
 
-						cy.getParentContainer('Angel').within(() => {
+						cy.getParentContainer('Angle').within(() => {
 							cy.get('input[inputmode="numeric"]').should(
 								'have.value',
 								'0'

@@ -607,9 +607,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									'linear-gradient-angel'
 								]
 							}
-							label={__('Angel', 'blockera')}
+							label={__('Angle', 'blockera')}
 							labelPopoverTitle={__(
-								'Linear Gradient Angel',
+								'Linear Gradient Angle',
 								'blockera'
 							)}
 							labelDescription={

@@ -48,16 +48,16 @@ export function elementNormalBackgroundFromWPCompatibility({
 
 	if (gradient !== false && gradientType !== '') {
 		if (gradientType === 'linear-gradient') {
-			let angel = '';
+			let angle = '';
 
 			if (isString(gradient)) {
 				//$FlowFixMe
-				const _angel = gradient.match(
+				const _angle = gradient.match(
 					/linear-gradient\(\s*(.*?)deg,/im
 				);
 
-				if (_angel && _angel[1] !== undefined) {
-					angel = _angel[1];
+				if (_angle && _angle[1] !== undefined) {
+					angle = _angle[1];
 				}
 			}
 
@@ -71,7 +71,7 @@ export function elementNormalBackgroundFromWPCompatibility({
 										isVisible: true,
 										type: gradientType,
 										'linear-gradient': gradient,
-										'linear-gradient-angel': angel,
+										'linear-gradient-angel': angle,
 										'linear-gradient-repeat': 'no-repeat',
 										'linear-gradient-attachment': 'scroll',
 										order: 1,

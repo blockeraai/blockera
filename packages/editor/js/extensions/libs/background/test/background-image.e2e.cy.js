@@ -234,7 +234,7 @@ describe('Background Image → Functionality', () => {
 		it('simple value linear gradient', () => {
 			cy.get('.blockera-component-popover').within(() => {
 				// set angle
-				cy.getParentContainer('Angel').within(() => {
+				cy.getParentContainer('Angle').within(() => {
 					cy.get('input').clear();
 					cy.get('input').type('7');
 				});
