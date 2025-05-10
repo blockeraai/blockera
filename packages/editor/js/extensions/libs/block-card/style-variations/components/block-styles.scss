@@ -1,21 +1,49 @@
 .blockera-component-block-styles {
 
+	.blockera-block-styles-category {
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 10%);
+		font-size: 12px;
+		font-weight: 500;
+		margin: 0;
+		text-transform: capitalize;
+		display: flex;
+		align-items: center;
+		gap: 4px;
+
+		svg {
+			fill: currentColor;
+			color: var(--blockera-controls-placeholder-color);
+			cursor: pointer;
+
+			&:hover {
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+	}
+
+
 	.blockera-component-block-styles__variants {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 12px;
+		gap: 8px;
 		justify-content: space-between;
 
+		& > span:empty {
+			display: none;
+		}
+
 		.blockera-component-button {
+			--blockera-controls-input-height: 30px;
 			box-shadow: inset 0 0 0 1px #e0e0e0;
 			color: var(--blockera-controls-color, #1e1e1e);
-			width: calc(50% - 6px);
-			padding: 0 5px;
-			height: 32px;
-			line-height: 32px;
+			width: calc(50% - 4px);
+			height: var(--blockera-controls-input-height);
+			line-height: var(--blockera-controls-input-height);
 			display: inline-flex;
-			justify-content: center;
+    		justify-content: flex-start !important;
 			align-content: center;
+			padding: 0 0 0 8px !important;
+			font-size: 12px;
 
 			.block-editor-block-styles__item-text {
 				text-align: start;
