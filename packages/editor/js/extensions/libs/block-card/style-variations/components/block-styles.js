@@ -24,6 +24,7 @@ import {
 	classNames,
 	componentClassNames,
 	componentInnerClassNames,
+	controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 import { isBlockTheme } from '@blockera/utils';
@@ -121,36 +122,40 @@ function BlockStyles({
 	};
 
 	return (
-		<div className={componentClassNames('block-styles')}>
-			<Flex direction="column" gap="15px">
-				<ControlContextProvider
-					value={{
-						name: 'search-styles-' + clientId,
-						value: searchTerm,
-					}}
-				>
-					<SearchControl
-						onChange={handleSearch}
-						placeholder={__('Search styles…', 'blockera')}
-					/>
-				</ControlContextProvider>
+		<Flex
+			className={componentClassNames('block-styles')}
+			direction="column"
+			gap="20px"
+		>
+			<ControlContextProvider
+				value={{
+					name: 'search-styles-' + clientId,
+					value: searchTerm,
+				}}
+			>
+				<SearchControl
+					onChange={handleSearch}
+					placeholder={__('Search styles…', 'blockera')}
+				/>
+			</ControlContextProvider>
 
-				{filteredStyles.length === 0 ? (
-					<Flex
-						alignItems="center"
-						direction="column"
-						justifyContent="space-between"
-						gap="0"
-						style={{ padding: '40px 0' }}
-					>
-						<Icon
-							icon="block-default"
-							library="wp"
-							style={{ fill: '#949494' }}
-						/>
-						<p>{__('No styles found.', 'blockera')}</p>
-					</Flex>
-				) : (
+			{filteredStyles.length === 0 ? (
+				<Flex
+					alignItems="center"
+					direction="column"
+					justifyContent="space-between"
+					gap="0"
+					style={{ padding: '40px 0' }}
+				>
+					<Icon
+						icon="block-default"
+						library="wp"
+						style={{ fill: '#949494' }}
+					/>
+					<p>{__('No styles found.', 'blockera')}</p>
+				</Flex>
+			) : (
+				<>
 					<Flex direction="column" gap="10px">
 						<h2
 							className={classNames(
@@ -253,9 +258,45 @@ function BlockStyles({
 							)}
 						</div>
 					</Flex>
-				)}
-			</Flex>
-		</div>
+
+					<Flex direction="column" gap="8px">
+						<h2
+							className={classNames(
+								'blockera-block-styles-category'
+							)}
+						>
+							{__('Custom Styles', 'blockera')}
+
+							<Button
+								size="extra-small"
+								className={controlInnerClassNames('btn-add')}
+								disabled={true}
+								onClick={() => {}}
+								style={{
+									width: '24px',
+									height: '24px',
+									padding: 0,
+									marginLeft: 'auto',
+								}}
+							>
+								<Icon icon="plus" iconSize="20" />
+							</Button>
+						</h2>
+
+						<p
+							style={{
+								color: '#949494',
+								margin: 0,
+								fontSize: '12px',
+								fontWeight: '400',
+							}}
+						>
+							{__('Coming soon…', 'blockera')}
+						</p>
+					</Flex>
+				</>
+			)}
+		</Flex>
 	);
 }
 
