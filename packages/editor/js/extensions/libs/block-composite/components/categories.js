@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
@@ -436,7 +436,11 @@ export const Categories = ({
 					<CategorizedItems
 						{...categorizedItemsProps}
 						itemType={'inner-block'}
-						title={title}
+						title={sprintf(
+							// translators: %s is the category title
+							__('%s Blocks', 'blockera'),
+							title
+						)}
 						limited={true}
 						items={blocks}
 						category={slug}

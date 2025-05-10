@@ -128,7 +128,7 @@ export const CategorizedItems = ({
 
 			<Grid
 				gridTemplateColumns={'repeat(2, 1fr)'}
-				gap={'5px'}
+				gap={'8px'}
 				className={`blockera-features-types blockera-feature-${category}-wrapper`}
 			>
 				{validItems.map(

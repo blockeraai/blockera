@@ -1,11 +1,23 @@
 .components-popover.blockera-component-popover.blockera-states-picker-popover {
-	--popover-width: 248px;
+	--popover-width: 258px;
     --popover-border-color: #bdbdbd;
     --popover-border-width: 1px;
     --popover-height: auto;
     --popover-radius: 3px;
-    box-shadow: 0 0 5px 7px #ffffff;
-    border-radius: var(--popover-radius);
+
+	.components-popover__content {
+		border-radius: var(--popover-radius);
+		box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25), 0 0 5px 7px #ffffff;
+		margin-right: -5px;
+
+		.blockera-component-popover-body {
+			padding: calc(var(--popover-padding) * 1.15) var(--popover-padding) 0 var(--popover-padding);
+
+			& > :last-child {
+				padding-bottom: calc(var(--popover-padding) * 1.2);
+			}
+		}
+	}
 }
 
 .blockera-block-inserter {
