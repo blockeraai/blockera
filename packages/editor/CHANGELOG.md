@@ -4,6 +4,7 @@
 - Improved the block card design to make it more consistent and easier to use.
 - Improved block card inner blocks priority system for better user experience and performance.
 - Improved the style engine to support flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
+- `Flex Child` block section: Smartly showing icons of setting based on parent block flex direction setting.
 
 ### New Features
 - Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.

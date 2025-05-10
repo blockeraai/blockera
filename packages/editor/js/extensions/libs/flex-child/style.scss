@@ -1,23 +1,14 @@
 .blockera-field-toggle-select {
 
-	&.items-flex-direction-row,
-	&.items-flex-direction-column {
-
-		svg {
-			transition: all 0.45s cubic-bezier(0, 0, 0.2, 1);
-		}
-
-	}
-
 	&.items-flex-direction-column-reverse,
 	&.items-flex-direction-column {
 
-		svg {
+		.blockera-control-toggle-select svg:not(.more-horizontal) {
 			transform: rotate(-90deg);
 		}
 
-		svg.blockera-custom-order,
-		svg.blockera-align-baseline {
+		.blockera-control-toggle-select svg.blockera-custom-order,
+		.blockera-control-toggle-select svg.blockera-align-baseline {
 			transform: rotate(0deg);
 		}
 	}
@@ -26,7 +17,7 @@
 
 		.blockera-control-toggle-select {
 
-			svg {
+			svg:not(.more-horizontal) {
 				transform: rotate(90deg);
 			}
 		}

@@ -135,7 +135,8 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									icon: (
 										<Icon
 											icon="more-horizontal"
-											iconSize="20"
+											iconSize="24"
+											className="more-horizontal"
 										/>
 									),
 								},
@@ -408,7 +409,8 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = memo(
 									icon: (
 										<Icon
 											icon="more-horizontal"
-											iconSize="20"
+											iconSize="24"
+											className="more-horizontal"
 										/>
 									),
 								},
