@@ -127,8 +127,7 @@
 		},
 		{
 			"name": "core/table",
-			"title": "Table",
-			"note": "@todo there is a lot of room for inner blocks."
+			"title": "Table"
 		},
 		{
 			"name": "core/verse",

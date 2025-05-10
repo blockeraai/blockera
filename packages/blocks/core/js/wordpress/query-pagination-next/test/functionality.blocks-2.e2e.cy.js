@@ -17,6 +17,9 @@ import { testContent } from './test-content';
 
 describe('Query Pagination Next Block', () => {
 	beforeEach(() => {
+		// Generate 20 posts to make sure the pagination is visible
+		cy.wpCli('wp post generate --count=20 --post_type=post');
+
 		createPost();
 	});
 
@@ -28,12 +31,6 @@ describe('Query Pagination Next Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
-
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
 		//
 		// 1. Edit Block
 		//

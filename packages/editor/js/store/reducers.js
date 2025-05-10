@@ -57,6 +57,30 @@ export const blockStates = (state: Object = {}, action: Object): Object => {
 	return state;
 };
 
+export const innerBlockStates = (
+	state: Object = {},
+	action: Object
+): Object => {
+	switch (action.type) {
+		case 'SET_INNER_BLOCK_STATES':
+			return action.states;
+		case 'EDIT_INNER_BLOCK_STATE':
+			return {
+				...state,
+				[action.stateName]: {
+					...state[action.stateName],
+					...action.editedState,
+				},
+			};
+		case 'DELETE_INNER_BLOCK_STATE':
+			delete state[action.stateName];
+
+			return state;
+	}
+
+	return state;
+};
+
 export const canvasEditorSettings = (
 	state: Object = {},
 	action: Object
@@ -102,6 +126,7 @@ export const blockAppSettings = (
 export default (combineReducers({
 	breakpoints,
 	blockStates,
+	innerBlockStates,
 	blockAppSettings,
 	canvasEditorSettings,
 }): Object);

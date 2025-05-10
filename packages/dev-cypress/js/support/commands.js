@@ -345,9 +345,11 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click({ force: true });
-				});
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel(label).click({ force: true });
+					});
 			} else
 				cy.get('h2')
 					.contains(content)
@@ -569,9 +571,11 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body').within(() => {
-					cy.getByAriaLabel(label).click({ force: true });
-				});
+				cy.getByDataTest('popover-body')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel(label).click({ force: true });
+					});
 			} else
 				cy.get('h2')
 					.contains(content)
@@ -730,6 +734,10 @@ export const registerCommands = () => {
 		});
 	});
 
+	Cypress.Commands.add('closeSpotlightPopover', () => {
+		cy.get('.blockera-spotlighter-svg').click({ force: true });
+	});
+
 	/**
 	 * Normalize CSS content by removing comments, extra whitespace, and standardizing formatting
 	 * @param {string} cssContent - The CSS content to normalize
@@ -745,5 +753,34 @@ export const registerCommands = () => {
 			.replace(/\s*:\s*/g, ':') // Remove spaces around colons
 			.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
 			.trim(); // Remove leading/trailing whitespace
+	});
+
+	/**
+	 * Perform a WP CLI command
+	 *
+	 * @param command - WP CLI command. The 'wp ' prefix is required.
+	 * @param ignoreFailures - Prevent command to fail if CLI command exits with error
+	 *
+	 * @example
+	 * ```
+	 * cy.wpCli('wp core version').then(response=>{
+	 *   const version = res.stdout;
+	 *   // Do whatever with version
+	 * });
+	 * ```
+	 */
+	Cypress.Commands.add('wpCli', (command, ignoreFailures = false) => {
+		const escapedCommand = command
+			.replace(/\\/g, '\\\\')
+			.replace(/"/g, '\\"');
+		const options = {
+			failOnNonZeroExit: !ignoreFailures,
+		};
+		cy.exec(
+			`npm --silent run env run cli -- ${escapedCommand}`,
+			options
+		).then((result) => {
+			cy.wrap(result);
+		});
 	});
 };

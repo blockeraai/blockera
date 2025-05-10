@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalInnerBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -47,6 +51,17 @@ export const Loginout: BlockType = {
 			settings: {
 				force: true,
 			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				placeholder: {
+					...sharedBlockStates.placeholder,
+					force: true,
+				},
+			},
 		},
 		'elements/remember': {
 			name: 'elements/remember',
@@ -63,6 +78,10 @@ export const Loginout: BlockType = {
 		'core/button': {
 			...sharedInnerBlocks['core/button'],
 			description: __('The login form submit button.', 'blockera'),
+			settings: {
+				...sharedInnerBlocks['core/button'].settings,
+				force: true,
+			},
 		},
 	},
 	edit: (props) => {

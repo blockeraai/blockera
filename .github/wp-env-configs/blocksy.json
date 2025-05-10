@@ -1,0 +1,15 @@
+{
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/blocksy-companion.latest-stable.zip"
+	],
+	"themes": [
+		"https://downloads.wordpress.org/theme/blocksy.latest-stable.zip"
+	],
+	"config": {
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+	},
+	"lifecycleScripts": {
+		"afterStart": "wp-env run cli wp theme activate blocksy"
+	}
+}

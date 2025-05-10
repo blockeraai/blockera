@@ -12,7 +12,14 @@ return array_merge(
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			blockera_load( 'inners.link', dirname( __DIR__ ) ),
+			[
+				'blockera/elements/link' => [
+					'root' => 'a:not(.wp-element-button)',
+				],
+				'blockera/elements/arrow' => [
+					'root' => '.wp-block-post-navigation-link__arrow-previous',
+				],
+			]
 		),
 	]
 );

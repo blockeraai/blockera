@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalInnerBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -89,6 +93,18 @@ export const BlocksyContactInfo: BlockType = {
 			icon: <Icon icon="block-blocksy-contact-info-link" iconSize="20" />,
 			settings: {
 				force: true,
+			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				active: {
+					...sharedBlockStates.active,
+					force: true,
+				},
+				visited: sharedBlockStates.visited,
 			},
 		},
 	},

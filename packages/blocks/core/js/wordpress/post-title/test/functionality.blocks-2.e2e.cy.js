@@ -4,10 +4,10 @@
 import {
 	savePage,
 	createPost,
+	openInserter,
 	appendBlocks,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Title Block', () => {
@@ -24,22 +24,12 @@ describe('Post Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		openInserter();
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		cy.getByDataTest('elements/link').should('exist');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block

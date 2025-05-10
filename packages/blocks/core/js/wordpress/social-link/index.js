@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -22,7 +26,7 @@ export const SocialLink: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/item-icon': {
 			name: 'elements/item-icon',
-			label: __('Social Link Icon', 'blockera'),
+			label: __('Icon', 'blockera'),
 			description: __(
 				'The social link button icon elements.',
 				'blockera'
@@ -34,7 +38,7 @@ export const SocialLink: BlockType = {
 		},
 		'elements/item-name': {
 			name: 'elements/item-name',
-			label: __('Social Link Name', 'blockera'),
+			label: __('Name', 'blockera'),
 			description: __(
 				'The social link button name elements.',
 				'blockera'
@@ -44,6 +48,18 @@ export const SocialLink: BlockType = {
 				force: true,
 			},
 		},
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		focus: {
+			...generalBlockStates.focus,
+			force: true,
+		},
+		active: {
+			...sharedBlockStates.active,
+			force: true,
+		},
+		visited: sharedBlockStates.visited,
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

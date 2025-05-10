@@ -1,1 +1,0 @@
-export { StyleVariationsExtension } from './extension';

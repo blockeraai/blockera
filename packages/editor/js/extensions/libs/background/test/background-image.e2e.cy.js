@@ -148,13 +148,21 @@ describe('Background Image → Functionality', () => {
 
 		it('should be able to set background position, Repeat, Effect', () => {
 			cy.get('.blockera-component-popover').within(() => {
-				cy.getParentContainer('Position').within(() => {
+				cy.getByDataTest('position-button').click();
+			});
+
+			cy.get('.blockera-component-popover')
+				.last()
+				.within(() => {
 					cy.get('input').each(($input) => {
-						cy.wrap($input).clear();
+						cy.wrap($input).clear({ force: true });
 						cy.wrap($input).type('20');
 					});
+
+					cy.getByAriaLabel('Close').click();
 				});
 
+			cy.get('.blockera-component-popover').within(() => {
 				cy.getParentContainer('Repeat').within(() => {
 					cy.get('button[data-value="no-repeat"]').click();
 				});
@@ -226,7 +234,7 @@ describe('Background Image → Functionality', () => {
 		it('simple value linear gradient', () => {
 			cy.get('.blockera-component-popover').within(() => {
 				// set angle
-				cy.getParentContainer('Angel').within(() => {
+				cy.getParentContainer('Angle').within(() => {
 					cy.get('input').clear();
 					cy.get('input').type('7');
 				});
@@ -373,14 +381,21 @@ describe('Background Image → Functionality', () => {
 
 		it('simple value radial gradient', () => {
 			cy.get('.blockera-component-popover').within(() => {
-				// set position
-				cy.getParentContainer('Position').within(() => {
+				cy.getByDataTest('position-button').click();
+			});
+
+			cy.get('.blockera-component-popover')
+				.last()
+				.within(() => {
 					cy.get('input').each(($input) => {
-						cy.wrap($input).clear();
+						cy.wrap($input).clear({ force: true });
 						cy.wrap($input).type('20');
 					});
+
+					cy.getByAriaLabel('Close').click();
 				});
 
+			cy.get('.blockera-component-popover').within(() => {
 				//  set size
 				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="closest-side"]').click();

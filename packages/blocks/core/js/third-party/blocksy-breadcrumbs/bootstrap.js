@@ -11,7 +11,7 @@ import { addFilter } from '@wordpress/hooks';
 import { mergeObject } from '@blockera/utils';
 import { getBaseBreakpoint } from '@blockera/editor';
 import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
-import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-states/types';
+import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 import type { ControlContextRef } from '@blockera/controls';
 
 /**

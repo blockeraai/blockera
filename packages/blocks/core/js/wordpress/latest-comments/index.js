@@ -25,7 +25,7 @@ export const LatestComments: BlockType = {
 			name: 'elements/container',
 			label: __('Item Container', 'blockera'),
 			description: __("Each comment's container element.", 'blockera'),
-			icon: <Icon icon="stack" library="wp" iconSize="20" />,
+			icon: <Icon icon="target" iconSize="20" />,
 			settings: {
 				force: true,
 			},

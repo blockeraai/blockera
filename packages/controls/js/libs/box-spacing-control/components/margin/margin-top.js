@@ -127,6 +127,7 @@ export function MarginTop({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -134,6 +135,7 @@ export function MarginTop({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -210,45 +212,47 @@ export function MarginTop({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Top Margin', 'blockera')}
 			/>
 		),
 		label: (
+			<div
+				className={controlInnerClassNames(
+					'label-side',
+					'side-vertical',
+					'side-margin-top',
+					labelClassName
+				)}
+				data-cy="box-spacing-margin-top"
+			>
+				<LabelControl
+					ariaLabel={__('Top Margin', 'blockera')}
+					label={
+						_isSetValueAddon
+							? fixLabelText(value.margin.top)
+							: fixLabelText(sideSpace)
+					}
+					onClick={() => {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
+					}}
+					{...{
+						attribute,
+						blockName,
+						resetToDefault,
+						mode: 'advanced',
+						singularId: 'margin.top',
+						value: value?.margin.top,
+						defaultValue: defaultValue?.margin.top,
+						path: getControlPath(attribute, 'margin.top'),
+					}}
+				/>
+
+				<ValueAddonPointer />
+			</div>
+		),
+		popover: (
 			<>
-				<div
-					className={controlInnerClassNames(
-						'label-side',
-						'side-vertical',
-						'side-margin-top',
-						labelClassName
-					)}
-					data-cy="box-spacing-margin-top"
-				>
-					<LabelControl
-						ariaLabel={__('Top Margin', 'blockera')}
-						label={
-							_isSetValueAddon
-								? fixLabelText(value.margin.top)
-								: fixLabelText(sideSpace)
-						}
-						onClick={() => {
-							setFocusSide(sideId);
-							setOpenPopover(sideId);
-						}}
-						{...{
-							attribute,
-							blockName,
-							resetToDefault,
-							mode: 'advanced',
-							singularId: 'margin.top',
-							value: value?.margin.top,
-							defaultValue: defaultValue?.margin.top,
-							path: getControlPath(attribute, 'margin.top'),
-						}}
-					/>
-
-					<ValueAddonPointer />
-				</div>
-
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.top}
@@ -264,25 +268,23 @@ export function MarginTop({
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						icon={<Icon icon="margin-top" iconSize="18" />}
+						title={__('Top Margin Space', 'blockera')}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Top Margin Space', 'blockera')}
 						inputLabel={__('Top Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Top Margin Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a margin space that applies only to the top edge of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies only to the top edge of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace?.unit}

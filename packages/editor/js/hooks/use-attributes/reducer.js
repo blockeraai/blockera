@@ -21,7 +21,7 @@ import {
 } from './helpers';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock } from '../../extensions/components';
-import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
+import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 
 const reducer = (state: Object = {}, action: Object): Object => {
 	const {

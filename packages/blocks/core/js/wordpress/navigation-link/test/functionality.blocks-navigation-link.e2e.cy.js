@@ -5,9 +5,9 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe(
@@ -73,18 +73,15 @@ describe(
 			//
 			// 1. Inner blocks existence
 			//
+			openInserter();
 
-			// open inner block settings
-			openInnerBlocksExtension();
+			cy.getByDataTest('elements/link').should('exist');
+			cy.getByDataTest('states/current-menu-item').should('exist');
+			cy.getByDataTest('states/current-menu-parent').should('exist');
+			cy.getByDataTest('states/current-menu-ancestor').should('exist');
 
-			cy.get(
-				'.blockera-extension.blockera-extension-inner-blocks'
-			).within(() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/paragraph').should('not.exist');
-			});
+			// no other item
+			cy.getByDataTest('core/paragraph').should('not.exist');
 
 			//
 			// 2. Edit Block

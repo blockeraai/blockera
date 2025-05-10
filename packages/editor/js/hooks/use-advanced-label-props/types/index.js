@@ -7,7 +7,7 @@ import type {
 	StateTypes,
 	TBreakpoint,
 	TStates,
-} from '../../../extensions/libs/block-states/types';
+} from '../../../extensions/libs/block-card/block-states/types';
 import type { AdvancedLabelControlProps } from '../../../components/editor-advanced-label/types';
 
 export type CalculatedAdvancedLabelProps = {
