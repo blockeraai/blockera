@@ -75,7 +75,7 @@ class Background extends BaseStyleDefinition implements Repeater {
 
 		$this->setActiveBackgroundType( $filteredSettings[0] );
 
-		$this->setCss( $declaration );
+		$this->setCss( $this->declarations );
 
 		return $this->css;
 	}
