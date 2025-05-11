@@ -82,7 +82,7 @@
 					font-weight: 500;
 					color: #1e1e1e;
 					padding: 2px 3px;
-					border-radius: 2px;
+					border-radius: var(--blockera-controls-border-radius);
 					min-width: 1px;
 					display: inline-block;
 				}
@@ -130,7 +130,7 @@
 			.blockera-extension-block-card__title__item {
 				background-color: var(--blockera-controls-primary-color);
 				color: #ffffff;
-				border-radius: 2px;
+				border-radius: var(--blockera-controls-border-radius);
 				padding: 2px 3px;
 				font-weight: 500;
 				font-size: 12px;

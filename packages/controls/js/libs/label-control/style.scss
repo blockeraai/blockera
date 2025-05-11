@@ -14,7 +14,7 @@
 	align-items: center;
 	height: 20px;
 	min-height: 20px;
-	border-radius: 2px;
+	border-radius: var(--blockera-controls-border-radius);
 	letter-spacing: -0.2px;
 	transition: all 100ms linear;
 	white-space: nowrap;
@@ -329,7 +329,7 @@
 			border: 1px solid var(--blockera-controls-border-color);
 			background-color: #272c31;
 			color: #ffffff;
-			border-radius: 2px;
+			border-radius: var(--blockera-controls-border-radius);
 			font-size: 12px;
 			position: relative;
 

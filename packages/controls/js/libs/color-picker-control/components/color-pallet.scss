@@ -62,7 +62,7 @@
 
 				select:not(:focus) {
 					border: 1px solid var(--blockera-controls-border-color);
-					border-radius: 2px;
+					border-radius: var(--blockera-controls-border-radius);
 				}
 
 				&:focus-within:hover,

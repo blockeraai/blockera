@@ -1,7 +1,7 @@
 .blockera-control-group {
 	z-index: 999999;
 	border: 1px solid var(--blockera-controls-border-color);
-	border-radius: 2px;
+	border-radius: var(--blockera-controls-border-radius);
 	transition: box-shadow 0.1s linear;
 	background: var(--blockera-controls-background-color);
 

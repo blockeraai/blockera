@@ -5,7 +5,7 @@
 	gap: 8px;
 	padding: 0 12px;
 	border: 1px solid var(--blockera-controls-border-color-soft);
-	border-radius: 2px;
+	border-radius: var(--blockera-controls-border-radius);
 	align-items: center;
 	cursor: pointer;
 	transition: var(--blockera-controls-transition);

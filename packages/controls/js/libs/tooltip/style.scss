@@ -77,7 +77,7 @@
 		font-size: 11px;
 		padding: 3px 4px;
 		margin: var(--tooltip-gap) 0;
-		border-radius: 2px;
+		border-radius: var(--blockera-controls-border-radius);
 		background: color-mix(in srgb, var(--tooltip-bg) 100%, #000000 20%);
 		display: inline-block;
 	}

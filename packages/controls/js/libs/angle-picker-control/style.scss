@@ -23,7 +23,7 @@
 
 		.components-input-control__backdrop {
 			border: 1px solid var(--blockera-controls-border-color);
-			border-radius: 2px;
+			border-radius: var(--blockera-controls-border-radius);
 		}
 
 		.components-input-control__input:focus + .components-input-control__suffix + .components-input-control__backdrop {

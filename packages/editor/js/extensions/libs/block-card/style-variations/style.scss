@@ -7,7 +7,7 @@ body {
 }
 
 .components-button.blockera-component-button.is-tertiary.blockera-control-style-variations-button {
-	--border-radius: 2px;
+	--border-radius: var(--blockera-controls-border-radius);
 	--primary-color: var(--blockera-controls-variations-color);
 	--secondary-color: #ffffff;
 	--border-color: var(--blockera-controls-border-color);

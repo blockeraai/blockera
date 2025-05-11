@@ -13,7 +13,7 @@
 	}
 
 	.blockera-control-repeater-item {
-		border-radius: 2px;
+		border-radius: var(--blockera-controls-border-radius);
 		transition: transform 0.2s linear;
 
 		.blockera-control-group-header {

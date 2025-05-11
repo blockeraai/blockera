@@ -3,7 +3,7 @@
 	grid-template-columns: repeat(3, minmax(28px, 1fr));
 	align-items: center;
 	min-width: 100px;
-	border-radius: 2px;
+	border-radius: var(--blockera-controls-border-radius);
 	gap: 0;
 	width: 100%;
 

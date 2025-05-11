@@ -24,7 +24,7 @@
 
 	.is-item {
 		border: 1px solid var(--blockera-controls-border-color);
-		border-radius: 2px;
+		border-radius: var(--blockera-controls-border-radius);
 
 		&.blockera-custom-css-selector-wrapper {
 			padding: 3px;
@@ -62,7 +62,7 @@
 			justify-content: flex-start;
 			padding: 0 0 0 8px;
 			align-items: center;
-			border-radius: 2px;
+			border-radius: var(--blockera-controls-border-radius);
 			color: #1e1e1e;
 			cursor: pointer;
 			display: flex;
