@@ -45,6 +45,7 @@ const SelectControl = ({
 	field = 'select',
 	//
 	className,
+	...props
 }: TSelectControlProps): MixedElement => {
 	const {
 		value,
@@ -96,6 +97,7 @@ const SelectControl = ({
 					multiple={multiple}
 					__nextHasNoMarginBottom={true}
 					__next40pxDefaultSize={true}
+					{...props}
 				>
 					{options?.map(renderSelectNativeOption)}
 				</WPSelectControl>
@@ -121,6 +123,7 @@ const SelectControl = ({
 					}}
 					options={options}
 					__next40pxDefaultSize={true}
+					{...props}
 				/>
 			)}
 		</BaseControl>
