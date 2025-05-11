@@ -222,6 +222,7 @@ function BlockStyles({
 											activeStyle.name === style.name
 										}
 										size="input"
+										data-test={`style-${style.name}`}
 									>
 										<Truncate
 											numberOfLines={1}

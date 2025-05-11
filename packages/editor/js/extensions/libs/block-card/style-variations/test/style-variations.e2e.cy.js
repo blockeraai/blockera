@@ -62,7 +62,7 @@ describe('Block Style Variations', () => {
 		cy.get('.blockera-component-popover.variations-picker-popover')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Style 1').click();
+				cy.getByDataTest('style-section-1').click();
 			});
 
 		cy.getByDataTest('style-variations-button-label').should(
@@ -91,7 +91,7 @@ describe('Block Style Variations', () => {
 		cy.get('.blockera-component-popover.variations-picker-popover')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Default').click();
+				cy.getByDataTest('style-default').click();
 			});
 
 		cy.getByDataTest('style-variations-button-label').should(

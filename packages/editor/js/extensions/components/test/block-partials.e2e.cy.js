@@ -52,11 +52,9 @@ describe('Block Partials Testing ...', () => {
 	});
 
 	it('should be able to hide WordPress original block variations and display blockera block variations', () => {
-		appendBlocks(
-			'<!-- wp:social-links {"className":"is-style-default"} -->\n' +
-				'<ul class="wp-block-social-links is-style-default"><!-- wp:social-link {"service":"wordpress"} /--></ul>\n' +
-				'<!-- /wp:social-links -->'
-		);
+		appendBlocks(`<!-- wp:social-links {"className":"is-style-default"} -->
+<ul class="wp-block-social-links is-style-default"><!-- wp:social-link {"service":"wordpress"} /--></ul>
+<!-- /wp:social-links -->`);
 
 		cy.getBlock('core/social-links').click();
 
@@ -65,7 +63,7 @@ describe('Block Partials Testing ...', () => {
 		cy.get('.blockera-component-popover.variations-picker-popover')
 			.last()
 			.within(() => {
-				cy.getByAriaLabel('Pill Shape').contains('Pill Shape');
+				cy.getByDataTest('style-pill-shape').contains('Pill Shape');
 			});
 
 		cy.getByAriaLabel('Block Settings').click();
