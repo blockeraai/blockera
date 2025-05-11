@@ -1,8 +1,9 @@
 .blockera-control-toggle-select {
+	--padding: 2px;
 	display: flex;
 	border: 1px solid var(--blockera-controls-border-color);
-	min-height: var(--blockera-controls-input-height);
-	padding: 2px;
+	min-height: calc(var(--blockera-controls-input-height) - var(--padding) * 2);
+	padding: var(--padding);
 	width: 100%;
 	border-radius: var(--blockera-controls-border-radius);
 
@@ -11,7 +12,8 @@
 		background: transparent;
 		border: none;
 		font-size: 12px;
-		height: 24px;
+		height: calc(var(--blockera-controls-input-height) - var(--padding) * 2 - 2px); // 2px is the border
+		min-width: calc(var(--blockera-controls-input-height) - var(--padding) * 2 - 2px);
 		cursor: pointer;
 		transition: var(--blockera-controls-transition);
 		box-shadow: none;
