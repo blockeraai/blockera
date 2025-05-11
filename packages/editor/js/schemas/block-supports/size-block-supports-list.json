@@ -79,7 +79,7 @@
 		"blockeraRatio": {
 			"status": true,
 			"id": "blockeraRatio",
-			"definition": "Ratio",
+			"definition": "AspectRatio",
 			"css-property": "aspect-ratio",
 			"fallback": ["dimensions.aspectRatio", "dimensions"],
 			"description": "Support for \"blockeraRatio\" value, this is mirror for WordPress block core \"dimensions.aspectRatio\" support."
