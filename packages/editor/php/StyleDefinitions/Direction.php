@@ -2,9 +2,10 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Editor\StyleDefinitions\Contracts\StandardDefinition;
 use Blockera\Editor\StyleDefinitions\Traits\SimpleDefinitionTrait;
 
-class Direction extends BaseStyleDefinition {
+class Direction extends BaseStyleDefinition implements StandardDefinition {
 
     use SimpleDefinitionTrait;
 

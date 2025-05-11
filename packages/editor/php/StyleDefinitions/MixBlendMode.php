@@ -9,7 +9,7 @@ use Blockera\Editor\StyleDefinitions\Traits\SimpleDefinitionTrait;
  *
  * @package MixBlendMode
  */
-class MixBlendMode extends BaseStyleDefinition {
+class MixBlendMode extends BaseStyleDefinition implements StandardDefinition {
 
     use SimpleDefinitionTrait;
 

@@ -2,9 +2,10 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Editor\StyleDefinitions\Contracts\StandardDefinition;
 use Blockera\Editor\StyleDefinitions\Traits\SimpleDefinitionTrait;
 
-class TextAlign extends BaseStyleDefinition {
+class TextAlign extends BaseStyleDefinition implements StandardDefinition {
 
     use SimpleDefinitionTrait;
 
