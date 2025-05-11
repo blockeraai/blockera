@@ -16,14 +16,25 @@ class TextOrientation extends BaseStyleDefinition {
 		
 		switch ($setting[ $cssProperty ]) {
 			case 'style-1':
-			case 'initial':
-			case 'style-2':
+				$this->setDeclaration('writing-mode', 'vertical-lr');
 				$this->setDeclaration('text-orientation', 'mixed');
 			    break;
-
+				
+			case 'style-2':
+				$this->setDeclaration('writing-mode', 'vertical-rl');
+				$this->setDeclaration('text-orientation', 'mixed');
+			    break;
 			case 'style-3':
-			case 'style-4':
+				$this->setDeclaration('writing-mode', 'vertical-lr');
 				$this->setDeclaration('text-orientation', 'upright');
+			    break;
+			case 'style-4':
+				$this->setDeclaration('writing-mode', 'vertical-rl');
+				$this->setDeclaration('text-orientation', 'upright');
+			    break;
+			case 'initial':
+				$this->setDeclaration('writing-mode', 'horizontal-tb');
+				$this->setDeclaration('text-orientation', 'mixed');
 			    break;
 		}
 
