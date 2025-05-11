@@ -34,6 +34,7 @@ export default function ToggleSelectControl({
 	//
 	className,
 	children,
+	...props
 }: ToggleSelectControlProps): MixedElement {
 	const {
 		value,
@@ -106,6 +107,7 @@ export default function ToggleSelectControl({
 				aria-label={label}
 				onKeyDown={handleKeyDown}
 				tabIndex={0}
+				{...props}
 			>
 				{options?.map((item) => (
 					<Tooltip
