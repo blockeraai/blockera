@@ -22,6 +22,7 @@
 			padding: 0 !important;
 			transition: all ease 100ms;
 			height: 24px;
+			font-size: 12px;
 
 			// remove inner item style for focus
 
@@ -33,6 +34,10 @@
 
 			&:hover:not([aria-pressed="true"]):not([aria-checked="true"]) {
 				color: var(--blockera-controls-primary-color);
+			}
+
+			> * {
+				font-size: 12px;
 			}
 		}
 

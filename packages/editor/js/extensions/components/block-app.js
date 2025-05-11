@@ -134,18 +134,16 @@ export const useBlockAppContext = (): BlockAppContextType =>
 
 export const useBlockSection = (sectionId: string): BlockSection => {
 	const { settings } = useBlockAppContext();
-	const currentBlock = useSelect((select) =>
-		select('blockera/extensions').getExtensionCurrentBlock()
-	);
+	const { currentBlock, version } = useSelect((select) => ({
+		currentBlock: select('blockera/extensions').getExtensionCurrentBlock(),
+		version: select('blockera/data').getEntity('blockera')?.version,
+	}));
 	const { blockSections, sections, focusedSection } = settings;
 	const { collapseAll, focusMode } = blockSections;
 	const section = (sections[currentBlock] || sections.master)[sectionId];
 	let { initialOpen = true } = section || {};
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
-	const cacheKey =
-		cacheKeyPrefix +
-		'_' +
-		window.blockeraTelemetryDebugData?.product_version.replace('.', '_');
+	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 
 	if (collapseAll) {
 		initialOpen = false;
@@ -235,13 +233,11 @@ export const useBlockSections = (): BlockSections => {
 	const { settings } = useBlockAppContext();
 	const { blockSections, sections, focusedSection } = settings;
 	const { setBlockAppSettings } = useDispatch('blockera/editor');
-	const currentBlock = useSelect((select) =>
-		select('blockera/extensions').getExtensionCurrentBlock()
-	);
-	const cacheKey =
-		cacheKeyPrefix +
-		'_' +
-		window.blockeraTelemetryDebugData?.product_version.replace('.', '_');
+	const { currentBlock, version } = useSelect((select) => ({
+		currentBlock: select('blockera/extensions').getExtensionCurrentBlock(),
+		version: select('blockera/data').getEntity('blockera')?.version,
+	}));
+	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 
 	const updateBlockSections = useCallback(
 		(newBlockSections: Object) => {

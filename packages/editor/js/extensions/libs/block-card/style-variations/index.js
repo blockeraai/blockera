@@ -119,8 +119,8 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 				{isOpen && (
 					<Popover
 						title={''}
-						offset={15}
-						placement="bottom-middle"
+						offset={10}
+						placement="bottom-start"
 						className="variations-picker-popover"
 						onClose={() => setIsOpen(false)}
 					>

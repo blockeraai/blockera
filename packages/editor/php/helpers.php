@@ -506,9 +506,9 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		}
 
 		// We should remove the ampersand character from beginning of the selector if it exists, because it's a indicate root selector and we provided it in next process.
-		if (str_starts_with( trim( $selector ), '&' )) {
+		if (preg_match( '/^&[^\s|^&]/', $selector )) {
 			
-			$selector = substr( trim( $selector ), 1 );
+			$selector = substr( $selector, 1 );
 		}
 
 		$is_child_selector = false;

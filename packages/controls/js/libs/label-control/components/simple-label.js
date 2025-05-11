@@ -56,26 +56,26 @@ export const SimpleLabelControl = ({
 		>
 			{label}
 
-			{labelDescription && (
-				<>
-					{resetToDefault ? (
-						<Tooltip
-							text={__('Reset to default', 'blockera')}
-							style={{
-								'--tooltip-bg': '#e20000',
-							}}
-							delay={300}
-						>
-							<ResetIcon
-								className={controlInnerClassNames('reset-icon')}
-								onClick={(event) => {
-									event.stopPropagation();
+			{resetToDefault ? (
+				<Tooltip
+					text={__('Reset to default', 'blockera')}
+					style={{
+						'--tooltip-bg': '#e20000',
+					}}
+					delay={300}
+				>
+					<ResetIcon
+						className={controlInnerClassNames('reset-icon')}
+						onClick={(event) => {
+							event.stopPropagation();
 
-									resetToDefault();
-								}}
-							/>
-						</Tooltip>
-					) : (
+							resetToDefault();
+						}}
+					/>
+				</Tooltip>
+			) : (
+				<>
+					{labelDescription && (
 						<HelpSmallIcon
 							className={controlInnerClassNames('help-icon')}
 						/>

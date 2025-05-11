@@ -768,7 +768,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 													directParentBlock
 														?.attributes
 														?.blockeraFlexLayout
-														?.direction,
+														?.value?.direction,
 											}}
 											attributes={{
 												blockeraFlexChildSizing:

@@ -67,6 +67,16 @@
 - `Comments Pagination Next` block: inner blocks & states improved.
 - `Comments Pagination Numbers` block: inner blocks & states improved.
 - `Comments Pagination Prev` block: inner blocks & states improved.
+- `Post Comments Form` block: inner blocks & states improved.
+- `Query Pagination Numbers` block: inner blocks & states improved.
+- `Add To Cart Button` block: states improved.
+- `Mini Cart → Cart Button` block: states improved.
+- `Mini Cart → Checkout Button` block: states improved.
+- `Blocksy → About Me` block: inner blocks improved.
+- `Blocksy → Breadcrumb` block: inner blocks improved.
+- `Blocksy → Contact Info` block: inner blocks improved.
+- `Blocksy → Dynamic Data` block: inner blocks improved.
+- `Blocksy → Search` block: inner blocks improved.
 
 
 ### Automated Tests
@@ -78,6 +88,9 @@
 - Updated E2E tests to check functionality of `Comments Pagination Next` block.
 - Updated E2E tests to check functionality of `Comments Pagination Numbers` block.
 - Updated E2E tests to check functionality of `Comments Pagination Prev` block.
+- Updated E2E tests to check functionality of `Query Pagination Next` block.
+- Updated E2E tests to check functionality of `Query Pagination Numbers` block.
+- Updated E2E tests to check functionality of `Query Pagination Prev` block.
 
 
 ## 1.3.0 (2025-04-27)

@@ -10,6 +10,8 @@
 
 ### Bug Fixes
 - Fixed input control to avoid unnecessary updates, better handle incomplete calculations and unit conversions, and properly handle decimal values and constraints when leaving the field with the same value.
+- Features Label: the reset button is not showing for some features.
+- Fix typo in background control. Thanks to Isla Rowan.
 
 ### New Features
 - Added `children` support to `RepeaterControl` component to allow developers to add custom content to the repeater control.
