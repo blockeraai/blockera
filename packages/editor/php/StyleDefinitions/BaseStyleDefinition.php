@@ -26,7 +26,7 @@ abstract class BaseStyleDefinition {
      *
      * @var mixed $settings The specific state and breakpoint settings.
      */
-    protected mixed $settings = [];
+    protected mixed $settings;
 
     /**
      * Store configuration for style definitions.
