@@ -185,7 +185,7 @@ final class StyleEngine {
 			$this->pseudo_classes = array_filter(
                 $states,
                 function( string $state):bool {
-					return in_array($state, $this->pseudo_classes, true);
+					return 'normal' === $state || in_array($state, $this->pseudo_classes, true);
 				},
 				ARRAY_FILTER_USE_KEY
             );
@@ -208,7 +208,7 @@ final class StyleEngine {
             );
 
 			// Add normal pseudo class if not exists.
-			if (! in_array('normal', $this->pseudo_classes, true)) {
+			if (! array_key_exists('normal', $this->pseudo_classes)) {
 
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => [
@@ -219,7 +219,7 @@ final class StyleEngine {
 					'isVisible' => true,
 				];
 
-			} else {
+			} elseif (! empty($settings)) {
 
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => array_merge(
@@ -375,7 +375,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		return $this->generateBlockCss(is_string($settings) ? [ 'value' => $settings ] : $settings, $id);
+		return $this->generateBlockCss(is_string($settings) || ! isset($settings['value']) ? [ 'value' => $settings ] : $settings, $id);
 	}
 
 	/**
