@@ -11,6 +11,9 @@ class Gap extends BaseStyleDefinition {
     protected function css( array $setting): array {
 
         $declaration = [];
+		
+		$selectorSuffix = '';
+
         $cssProperty = $setting['type'];
 
         if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'gap' !== $cssProperty) {
