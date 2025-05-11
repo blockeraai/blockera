@@ -8,7 +8,6 @@ import { __, isRTL } from '@wordpress/i18n';
 import {
 	store as blockEditorStore,
 	useBlockDisplayInformation,
-	__experimentalBlockVariationTransforms as BlockVariationTransforms,
 } from '@wordpress/block-editor';
 import { Slot } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
@@ -34,6 +33,7 @@ import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
 import { BlockStyleVariations } from '../style-variations';
+import { default as BlockVariationTransforms } from '../transform-block-variation';
 
 export function BlockCard({
 	notice,

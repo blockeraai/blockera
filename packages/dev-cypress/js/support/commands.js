@@ -714,7 +714,7 @@ export const registerCommands = () => {
 
 	Cypress.Commands.add('setBlockVariation', (variation) => {
 		cy.get('.blockera-block-card-wrapper').within(() => {
-			cy.getByAriaLabel('Transform to variation').within(() => {
+			cy.get('.blockera-block-variation-transforms').within(() => {
 				cy.get(`button[value="${variation}"]`).click();
 			});
 		});
@@ -722,7 +722,7 @@ export const registerCommands = () => {
 
 	Cypress.Commands.add('checkActiveBlockVariation', (variation) => {
 		cy.get('.blockera-block-card-wrapper').within(() => {
-			cy.getByAriaLabel('Transform to variation').within(() => {
+			cy.get('.blockera-block-variation-transforms').within(() => {
 				cy.get(`button[value="${variation}"][aria-checked="true"]`);
 			});
 		});

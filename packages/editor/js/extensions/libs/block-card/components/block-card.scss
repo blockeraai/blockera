@@ -27,23 +27,23 @@
 		align-items: flex-start;
 		display: flex;
 		flex-grow: 1;
-	}
 
-	.blockera-component-block-icon {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex: 0 0 24px;
-		height: 24px;
-		margin-left: 0;
-		margin-right: 12px;
-		width: 24px;
+		.blockera-component-block-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			flex: 0 0 24px;
+			height: 24px;
+			margin-left: 0;
+			margin-right: 12px;
+			width: 24px;
 
-		svg {
-			fill: currentColor;
-			width: 100%;
-			height: auto;
-			max-width: 24px;
+			svg {
+				fill: currentColor;
+				width: 100%;
+				height: auto;
+				max-width: 24px;
+			}
 		}
 	}
 
@@ -210,52 +210,7 @@
 		flex-wrap: wrap;
 	}
 
-	.block-editor-block-variation-transforms {
-		padding: 0;
-		margin: 0;
-		display: flex;
-		flex-direction: row;
-		gap: 8px;
-		width: max-content;
-		margin-left: auto;
-
-		> .components-base-control {
-			margin: 0 !important;
-			display: flex;
-
-			.components-base-control__field {
-				display: flex;
-			}
-		}
-
-		.components-toggle-group-control {
-			min-height: 28px;
-			height: 28px;
-			background-color: transparent;
-			border-color: var(--blockera-controls-border-color);
-			gap: 4px;
-			padding: 2px !important;
-
-			&:focus-within {
-				border-color: var(--blockera-controls-primary-color);
-				box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-			}
-		}
-
-		.components-toggle-group-control-option-base {
-			min-width: 22px;
-			min-height: 22px;
-			height: 22px;
-
-			.block-editor-block-icon {
-				width: 14px;
-				height: 14px;
-				margin: 0;
-			}
-		}
-	}
-
-	.blockera-control-style-variations-button + .block-editor-block-variation-transforms {
+	.blockera-control-style-variations-button + .blockera-block-variation-transforms {
 		margin-left: initial;
 	}
 }
