@@ -15,7 +15,6 @@ type Option = {
 	label: string,
 	value: string,
 	disabled?: boolean,
-	showTooltip?: boolean,
 };
 
 type IconOption = {

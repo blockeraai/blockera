@@ -188,7 +188,7 @@ describe('toggle-select-control', () => {
 			cy.get('button').each(($btn) => {
 				cy.wrap($btn).click();
 				// visual and data assertion : select
-				cy.get('[aria-pressed="true"]').then(() => {
+				cy.get('[aria-checked="true"]').then(() => {
 					expect(getControlValue(name)).to.be.equal(
 						$btn.text().toLowerCase()
 					);
@@ -196,7 +196,7 @@ describe('toggle-select-control', () => {
 
 				cy.wrap($btn).click();
 				// visual and data assertion : de-select
-				cy.get('[aria-pressed="true"]')
+				cy.get('[aria-checked="true"]')
 					.should('not.exist')
 					.then(() => {
 						expect(getControlValue(name)).to.be.equal(undefined);
