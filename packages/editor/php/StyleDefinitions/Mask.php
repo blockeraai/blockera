@@ -16,6 +16,11 @@ class Mask extends BaseStyleDefinition implements Repeater {
             return $declaration;
         }
 
+		if (! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', 'mask' ])) {
+
+			return $declaration;
+		}
+
         $filteredMasks = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
 
         if (empty($filteredMasks)) {
