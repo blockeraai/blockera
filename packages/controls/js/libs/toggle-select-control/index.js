@@ -104,7 +104,6 @@ export default function ToggleSelectControl({
 			<div
 				className={controlClassNames('toggle-select', className)}
 				role="radiogroup"
-				aria-label={label}
 				onKeyDown={handleKeyDown}
 				tabIndex={0}
 				{...props}
@@ -122,11 +121,17 @@ export default function ToggleSelectControl({
 								}
 							)}
 							role="radio"
-							aria-checked={value === item.value}
 							aria-label={item['aria-label'] || item.label}
 							disabled={item.disabled}
 							onClick={() => handleOptionClick(item.value)}
-							data-value={item.value}
+							value={item.value}
+							{...(isDeselectable
+								? {
+										'aria-pressed': value === item.value,
+								  }
+								: {
+										'aria-checked': value === item.value,
+								  })}
 						>
 							{!isUndefined(item.icon) ? (
 								<span className="toggle-select-option-icon">
