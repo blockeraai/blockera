@@ -7,6 +7,7 @@
 - Tooltips design.
 - Image upload control design.
 - Layout control: design improved.
+- Rewrite the `Toggle Select Control` from scratch to improve performance and usability.
 
 ### Bug Fixes
 - Fixed input control to avoid unnecessary updates, better handle incomplete calculations and unit conversions, and properly handle decimal values and constraints when leaving the field with the same value.
