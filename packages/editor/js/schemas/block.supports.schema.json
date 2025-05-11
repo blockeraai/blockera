@@ -10,6 +10,14 @@
 			"additionalProperties": {
 				"type": "object",
 				"properties": {
+					"id": {
+						"description": "The block support id.",
+						"type": "string"
+					},
+					"definition": {
+						"description": "The block support style definition.",
+						"type": "string"
+					},
 					"status": {
 						"description": "The block support status.",
 						"type": "boolean"
@@ -30,7 +38,7 @@
 						"description": "Extra notes for developers.",
 						"type": "string"
 					},
-					"innerBlocks": {
+					"inner-blocks": {
 						"description": "The list of inner blocks for block support.",
 						"type": "object",
 						"additionalProperties": {

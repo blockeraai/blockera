@@ -4,6 +4,8 @@
 	"supports": {
 		"blockeraBackground": {
 			"status": true,
+			"id": "blockeraBackground",
+			"definition": "Background",
 			"css-property": "background-image",
 			"fallback": [
 				"background.backgroundImage",
@@ -11,12 +13,14 @@
 				"color.background"
 			],
 			"description": "Support for \"background-image\" value.",
-			"innerBlocks": {
+			"inner-blocks": {
 				"all": true
 			}
 		},
 		"blockeraBackgroundClip": {
 			"status": true,
+			"id": "blockeraBackgroundClip",
+			"definition": "BackgroundClip",
 			"css-property": "background-clip",
 			"fallback": [
 				"background.backgroundImage",
@@ -27,13 +31,18 @@
 		},
 		"blockeraBackgroundColor": {
 			"status": true,
+			"id": "blockeraBackgroundColor",
+			"definition": "BackgroundColor",
 			"css-property": "background-color",
 			"fallback": [
 				"color.background",
 				"background.backgroundImage",
 				"background"
 			],
-			"description": "Support for \"blockeraBackgroundColor\" value, this is mirror for WordPress block core \"color.background\" support"
+			"description": "Support for \"blockeraBackgroundColor\" value, this is mirror for WordPress block core \"color.background\" support",
+			"inner-blocks": {
+				"all": true
+			}
 		}
 	}
 }
