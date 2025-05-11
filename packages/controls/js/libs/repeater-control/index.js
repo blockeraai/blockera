@@ -344,11 +344,14 @@ export default function RepeaterControl(
 				showTooltip={true}
 				tooltipPosition="top"
 				label={addNewButtonLabel || __('Add New', 'blockera')}
-				onClick={() =>
-					'function' === typeof onClick
-						? onClick(addNewButtonOnClick)
-						: addNewButtonOnClick()
-				}
+				onClick={(event: MouseEvent) => {
+					if ('function' === typeof onClick) {
+						// $FlowFixMe
+						onClick(addNewButtonOnClick, event);
+					} else {
+						addNewButtonOnClick();
+					}
+				}}
 				{...props}
 			>
 				<Icon icon="plus" iconSize="20" />

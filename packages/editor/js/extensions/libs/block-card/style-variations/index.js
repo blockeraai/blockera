@@ -38,6 +38,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		currentState,
 		currentBreakpoint,
 	}: TBlockStyleVariations): MixedElement => {
+		const [popoverAnchor, setPopoverAnchor] = useState(null);
 		const [isOpen, setIsOpen] = useState(false);
 		const [isHovered, setIsHovered] = useState(false);
 
@@ -76,7 +77,15 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 							'is-variation-picker-open': isOpen,
 						}
 					)}
-					onClick={() => setIsOpen(!isOpen)}
+					onClick={(event: MouseEvent) => {
+						if (isOpen) {
+							setIsOpen(false);
+							setIsHovered(false);
+						} else {
+							setPopoverAnchor(event.currentTarget); // the <button> element itself
+							setIsOpen(true);
+						}
+					}}
 					disabled={isNotActive}
 					isFocus={isOpen}
 					data-test="style-variations-button"
@@ -116,13 +125,14 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 					</Flex>
 				</Button>
 
-				{isOpen && (
+				{isOpen && popoverAnchor && (
 					<Popover
 						title={''}
 						offset={10}
 						placement="bottom-start"
 						className="variations-picker-popover"
 						onClose={() => setIsOpen(false)}
+						anchor={popoverAnchor}
 					>
 						<BlockStyles
 							styles={{

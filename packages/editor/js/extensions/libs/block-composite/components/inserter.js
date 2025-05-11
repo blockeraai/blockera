@@ -25,12 +25,13 @@ export const Inserter = ({
 	PlusButton: ComponentType<any>,
 	AvailableBlocks: ComponentType<any>,
 }): MixedElement => {
+	const [popoverAnchor, setPopoverAnchor] = useState(null);
 	const [isOpenPicker, setOpenPicker] = useState(false);
 
 	return (
 		<div>
 			<PlusButton
-				onClick={() => {
+				onClick={(props, event: MouseEvent) => {
 					if (
 						Object.keys(insertArgs?.repeaterItems).length >=
 						maxItems
@@ -38,7 +39,12 @@ export const Inserter = ({
 						return;
 					}
 
-					setOpenPicker(!isOpenPicker);
+					if (isOpenPicker) {
+						setOpenPicker(false);
+					} else {
+						setPopoverAnchor(event.currentTarget); // the <button> element itself
+						setOpenPicker(true);
+					}
 				}}
 				disabled={
 					Object.keys(insertArgs?.repeaterItems).length >= maxItems
@@ -46,13 +52,14 @@ export const Inserter = ({
 				isFocus={isOpenPicker}
 			/>
 
-			{isOpenPicker && (
+			{isOpenPicker && popoverAnchor && (
 				<Popover
 					offset={12}
 					placement="bottom-end"
 					onClose={() => setOpenPicker(false)}
 					title=""
 					className={classNames('blockera-states-picker-popover')}
+					anchor={popoverAnchor}
 				>
 					<AvailableBlocks onClick={callback} />
 				</Popover>

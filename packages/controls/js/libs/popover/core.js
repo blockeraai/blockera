@@ -5,13 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { Popover as WPPopover } from '@wordpress/components';
-import {
-	useContext,
-	useState,
-	useRef,
-	useEffect,
-	forwardRef,
-} from '@wordpress/element';
+import { useContext, useRef, useEffect, forwardRef } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -54,143 +48,131 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				titleButtonsRight = '',
 				titleButtonsLeft = '',
 				headerRef,
+				anchor,
 				...props
 			}: TPopoverCoreProps,
 			ref
 		): MixedElement => {
-			const [isVisible, setIsVisible] = useState(true);
-
 			const { onFocusOutside, shift, resize, flip } =
 				useContext(PopoverContextData);
-
-			const handleOnClose = () => {
-				onClose();
-				setIsVisible(false);
-			};
 
 			const internalRef = useRef();
 			const popoverRef = ref || internalRef;
 
 			useEffect(() => popoverRef.current?.focus(), []);
 
-			return (
-				<>
-					{isVisible && (
-						<WPPopover
-							className={componentClassNames(
-								'popover',
-								'popover-' + design,
-								title && 'with-header',
-								className
-							)}
-							onClose={handleOnClose}
-							onFocusOutside={
-								isFunction(onFocusOutside)
-									? onFocusOutside
-									: (e) => {
-											const excludeClasses = [
-												'btn-choose-image',
-												'btn-media-library',
-												'btn-upload',
-												'btn-pick-color',
-											];
+			function popoverOnFocusOutside() {
+				const excludeClasses = [
+					'btn-choose-image',
+					'btn-media-library',
+					'btn-upload',
+					'btn-pick-color',
+				];
 
-											return excludeClasses.filter(
-												(className) =>
-													e.target.classList.contains(
-														className
-													)
-											).length !== 0
-												? false
-												: handleOnClose();
-									  }
-							}
-							shift={!isUndefined(shift) ? shift : _shift}
-							resize={!isUndefined(resize) ? resize : _resize}
-							flip={!isUndefined(flip) ? flip : _flip}
-							animate={animate}
-							placement={placement}
-							focusOnMount={focusOnMount}
-							{...props}
-							ref={popoverRef}
+				// Check if the target is the anchor element
+				if (
+					anchor &&
+					anchor.contains(
+						popoverRef.current?.ownerDocument?.activeElement
+					)
+				) {
+					return false;
+				}
+
+				// eslint-disable-next-line no-restricted-globals
+				return excludeClasses.filter((className) =>
+					popoverRef.current?.ownerDocument?.activeElement?.classList?.contains(
+						className
+					)
+				).length !== 0
+					? false
+					: onClose();
+			}
+
+			return (
+				<WPPopover
+					className={componentClassNames(
+						'popover',
+						'popover-' + design,
+						title && 'with-header',
+						className
+					)}
+					onClose={onClose}
+					onFocusOutside={
+						isFunction(onFocusOutside)
+							? onFocusOutside
+							: popoverOnFocusOutside
+					}
+					shift={!isUndefined(shift) ? shift : _shift}
+					resize={!isUndefined(resize) ? resize : _resize}
+					flip={!isUndefined(flip) ? flip : _flip}
+					animate={animate}
+					placement={placement}
+					focusOnMount={focusOnMount}
+					ref={popoverRef}
+					{...props}
+				>
+					{title && (
+						<div
+							className={componentInnerClassNames(
+								'popover-header'
+							)}
+							data-test="popover-header"
+							ref={headerRef}
 						>
-							{title && (
+							{titleButtonsLeft && (
 								<div
 									className={componentInnerClassNames(
-										'popover-header'
+										'popover-title-buttons',
+										'title-left-buttons'
 									)}
-									data-test="popover-header"
-									ref={headerRef}
 								>
-									{titleButtonsLeft && (
-										<div
-											className={componentInnerClassNames(
-												'popover-title-buttons',
-												'title-left-buttons'
-											)}
-										>
-											{titleButtonsLeft}
-										</div>
-									)}
-
-									{title}
-
-									{(closeButton || titleButtonsRight) && (
-										<div
-											className={componentInnerClassNames(
-												'popover-title-buttons',
-												'title-right-buttons'
-											)}
-										>
-											{titleButtonsRight && (
-												<>{titleButtonsRight}</>
-											)}
-
-											{closeButton && (
-												<Button
-													className={componentInnerClassNames(
-														'popover-close'
-													)}
-													size="extra-small"
-													align="center"
-													onClick={() => {
-														setIsVisible(false);
-														onClose();
-													}}
-													tabIndex="-1"
-													label={__(
-														'Close',
-														'blockera'
-													)}
-													aria-label={__(
-														'Close',
-														'blockera'
-													)}
-													tooltipPosition="top"
-													showTooltip={true}
-												>
-													<Icon
-														icon="close"
-														iconSize="16"
-													/>
-												</Button>
-											)}
-										</div>
-									)}
+									{titleButtonsLeft}
 								</div>
 							)}
 
-							<div
-								className={componentInnerClassNames(
-									'popover-body'
-								)}
-								data-test="popover-body"
-							>
-								{children}
-							</div>
-						</WPPopover>
+							{title}
+
+							{(closeButton || titleButtonsRight) && (
+								<div
+									className={componentInnerClassNames(
+										'popover-title-buttons',
+										'title-right-buttons'
+									)}
+								>
+									{titleButtonsRight && (
+										<>{titleButtonsRight}</>
+									)}
+
+									{closeButton && (
+										<Button
+											className={componentInnerClassNames(
+												'popover-close'
+											)}
+											size="extra-small"
+											align="center"
+											onClick={onClose}
+											tabIndex="-1"
+											label={__('Close', 'blockera')}
+											aria-label={__('Close', 'blockera')}
+											tooltipPosition="top"
+											showTooltip={true}
+										>
+											<Icon icon="close" iconSize="16" />
+										</Button>
+									)}
+								</div>
+							)}
+						</div>
 					)}
-				</>
+
+					<div
+						className={componentInnerClassNames('popover-body')}
+						data-test="popover-body"
+					>
+						{children}
+					</div>
+				</WPPopover>
 			);
 		}
 	);

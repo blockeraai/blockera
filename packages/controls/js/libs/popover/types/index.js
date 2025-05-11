@@ -79,4 +79,8 @@ export type TPopoverProps = {
 	'data-test'?: string,
 	draggable?: boolean,
 	headerRef?: { current: ?HTMLElement },
+	/**
+	 * The element that the popover should be anchored to.
+	 */
+	anchor?: HTMLElement,
 };
