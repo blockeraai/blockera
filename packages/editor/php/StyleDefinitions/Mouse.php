@@ -20,13 +20,10 @@ class Mouse extends BaseStyleDefinition {
 			return [];
 		}
 
-		$this->setCss(
-			[
-				$cssProperty => $setting[ $cssProperty ],
-			]
-		);
+		$this->setDeclaration( $cssProperty, $setting[ $cssProperty ] );
+
+		$this->setCss( $this->declarations );
 
 		return $this->css;
 	}
-
 }

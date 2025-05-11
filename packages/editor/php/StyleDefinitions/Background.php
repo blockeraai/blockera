@@ -2,12 +2,14 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
+use Blockera\Editor\StyleDefinitions\Contracts\Repeater;
+
 /**
  * Class Background definition to generate css rules.
  *
  * @package Background
  */
-class Background extends BaseStyleDefinition {
+class Background extends BaseStyleDefinition implements Repeater {
 
 	/**
 	 * Hold default props for background stack properties
@@ -30,16 +32,21 @@ class Background extends BaseStyleDefinition {
 	 *
 	 * @return bool true on success, false on otherwise.
 	 */
-	protected function isValidSetting( array $setting ): bool {
+	public function isValidSetting( array $setting ): bool {
+
+		if ( empty( $setting['type'] ) ) {
+
+			return false;
+		}
 
 		$repeaterItemType = [ 'image', 'linear-gradient', 'radial-gradient', 'mesh-gradient' ];
 
-		if ( in_array( $setting['type'], $repeaterItemType, true ) ) {
+		if ( ! in_array( $setting['type'], $repeaterItemType, true ) ) {
 
-			return ! empty( $setting[ $setting['type'] ] ) && ! empty( $setting['isVisible'] );
+			return false;
 		}
 
-		return ! empty( $setting[ $setting['type'] ] );
+		return ! empty( $setting['isVisible'] );
 	}
 
 	/**
@@ -59,47 +66,16 @@ class Background extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		if ( ! $this->isValidSetting( $setting ) ) {
+		$filteredSettings = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
 
-			return $this->declarations;
+		if (empty($filteredSettings)) {
+			
+			return $declaration;
 		}
 
-		switch ( $cssProperty ) {
+		$this->setActiveBackgroundType( $filteredSettings[0] );
 
-			case 'background-clip':
-				$declaration = array_merge(
-					[
-						$cssProperty              => $setting[ $cssProperty ],
-						'-webkit-background-clip' => $setting[ $cssProperty ],
-					],
-					'text' === $setting[ $cssProperty ] ? [ '-webkit-text-fill-color' => 'transparent' ] : []
-				);
-				break;
-
-			case 'background-color':
-				$declaration = [
-					$cssProperty => blockera_get_value_addon_real_value( $setting[ $cssProperty ] ),
-				];
-				break;
-
-			case 'background-image':
-			case 'linear-gradient':
-			case 'radial-gradient':
-			case 'mesh-gradient':
-				array_map(
-					[ $this, 'setActiveBackgroundType' ],
-					array_filter(
-						blockera_get_sorted_repeater( $setting[ $cssProperty ] ),
-						[
-							$this,
-							'isValidSetting',
-						]
-					)
-				);
-				break;
-		}
-
-		$this->setCss( array_merge( $declaration, $this->declarations ) );
+		$this->setCss( $declaration );
 
 		return $this->css;
 	}

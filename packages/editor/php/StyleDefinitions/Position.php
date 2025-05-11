@@ -21,46 +21,40 @@ class Position extends BaseStyleDefinition {
 		$declaration = [];
 		$cssProperty = $setting['type'];
 
-		if ( empty( $cssProperty ) ) {
+		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'position' !== $cssProperty ) {
 
 			return $declaration;
 		}
+		
+		[
+			'type'     => $position,
+			'position' => $value,
+		] = $setting[ $cssProperty ];
 
-		switch ( $cssProperty ) {
+		$this->setDeclaration( $cssProperty, $position );
 
-			case 'position':
-				[
-					'type'     => $position,
-					'position' => $value,
-				] = $setting[ $cssProperty ];
+		$filteredValues = array_filter($value);
 
-				$declaration[ $cssProperty ] = $position;
+		if (! empty($filteredValues)) {
+			$this->setDeclaration(
+                $cssProperty,
+                array_merge(
+                    $this->declarations,
+                    array_merge(
+                        ...array_map(
+                            static function ( string $item, string $property): array {
 
-				$filteredValues = array_filter( $value );
-				
-				if (! empty($filteredValues)) {		
-					$declaration = array_merge(
-						$declaration,
-						array_merge(
-							...array_map(
-								static function ( string $item, string $property): array {
-
-									return [ $property => blockera_get_value_addon_real_value($item) ];
-								},
-								$filteredValues,
-								array_keys($filteredValues)
-							)
-						)
-					);
-				}
-
-				break;
-			case 'z-index':
-				$declaration[ $cssProperty ] = blockera_get_value_addon_real_value( $setting['z-index'] );
-				break;
+								return [ $property => blockera_get_value_addon_real_value($item) ];
+                            },
+                            $filteredValues,
+                            array_keys($filteredValues)
+                        )
+                    )
+                )
+            );
 		}
 
-		$this->setCss( $declaration );
+		$this->setCss( $this->declarations );
 
 		return $this->css;
 	}
