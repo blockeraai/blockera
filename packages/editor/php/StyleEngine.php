@@ -55,9 +55,9 @@ final class StyleEngine {
 	/**
 	 * Store instance of current style definition class.
 	 *
-	 * @var BaseStyleDefinition $definition
+	 * @var BaseStyleDefinition|null $definition
 	 */
-	protected BaseStyleDefinition $definition;
+	protected $definition;
 
 	/**
 	 * Store current pseudo state name.
@@ -183,10 +183,11 @@ final class StyleEngine {
 
 			// Filter pseudo classes to only include states that exist in the block.
 			$this->pseudo_classes = array_filter(
-                array_keys($states),
-                function( string $state):bool{
+                $states,
+                function( string $state):bool {
 					return in_array($state, $this->pseudo_classes, true);
-				}
+				},
+				ARRAY_FILTER_USE_KEY
             );
 
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
@@ -197,32 +198,81 @@ final class StyleEngine {
 			} elseif ($this->breakpoint === $breakpoints[ array_key_last($breakpoints) ]) {
 				array_unshift($breakpoints, array_pop($breakpoints));
 			}
+
+			$settings = array_filter(
+                $this->settings,
+                function ( string $id): bool {
+					return str_starts_with($id, 'blockera') && ! in_array($id, [ 'blockeraBlockStates', 'blockeraPropsId', 'blockeraCompatId' ], true);
+				},
+                ARRAY_FILTER_USE_KEY
+            );
+
 			// Add normal pseudo class if not exists.
 			if (! in_array('normal', $this->pseudo_classes, true)) {
-				array_unshift($this->pseudo_classes, 'normal');
-			} elseif ('normal' !== $this->pseudo_classes[ array_key_last($this->pseudo_classes) ]) {
-				array_unshift($this->pseudo_classes, array_pop($this->pseudo_classes));
+
+				$this->pseudo_classes['normal'] = [
+					'breakpoints' => [
+						'desktop' => [
+							'attributes' => $settings,
+						],
+					],
+					'isVisible' => true,
+				];
+
+			} else {
+
+				$this->pseudo_classes['normal'] = [
+					'breakpoints' => array_merge(
+						$this->settings['blockeraBlockStates']['value']['normal']['breakpoints'],
+						[
+							'desktop' => [
+								'attributes' => $settings,
+							],
+						]
+					),
+					'isVisible' => true,
+				];
 			}
 
-			$breakpointsCssRules = array_filter(
-				array_map([ $this, 'prepareBreakpointStyles' ], $breakpoints),
-				'blockera_get_filter_empty_array_item'
+			$breakpointsCssRules = blockera_array_flat(
+				array_filter(
+					array_map(
+                        function( array $stateSettings, string $state): array {
+							return array_map(
+                                function ( $breakpointSettings, string $breakpoint) use ( $state): string {
+                                    return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes'], $state);
+                                },
+                                $stateSettings['breakpoints'],
+                                array_keys($stateSettings['breakpoints'])
+							);
+						},
+                        $this->pseudo_classes,
+                        array_keys($this->pseudo_classes)
+                    ),
+					'blockera_get_filter_empty_array_item'
+				)
 			);
 
 			return implode(PHP_EOL, $breakpointsCssRules);
 		}
 
-		return $this->prepareBreakpointStyles($this->breakpoint);
+		$settings = $this->settings;
+
+		unset($settings['blockeraBlockStates'], $settings['blockeraPropsId'], $settings['blockeraCompatId']);
+
+		return $this->prepareBreakpointStyles($this->breakpoint, $settings);
 	}
 
 	/**
 	 * Preparing css of breakpoint settings.
 	 *
 	 * @param string $breakpoint The breakpoint type.
+	 * @param array  $settings The current breakpoint settings.
+	 * @param string $state The block state. Default is 'normal'.
 	 *
 	 * @return string The generated css rule for current breakpoint.
 	 */
-	protected function prepareBreakpointStyles( string $breakpoint ): string {
+	protected function prepareBreakpointStyles( string $breakpoint, array $settings, string $state = 'normal' ): string {
 
 		// Get css media queries.
 		$mediaQueries = blockera_get_css_media_queries($this->breakpoints['list']);
@@ -236,8 +286,8 @@ final class StyleEngine {
 		// Set current breakpoint for generating styles process.
 		$this->breakpoint = $breakpoint;
 
-		// Get state css rules with breakpoint type.
-		$state_css_rules = $this->getStateCssRules();
+		// We should just prepare normal state styles because not exists any other states.
+		$state_css_rules = $this->prepareStateStyles($state, $settings);
 
 		// Exclude empty css rules.
 		if ( empty( $state_css_rules ) ) {
@@ -249,7 +299,7 @@ final class StyleEngine {
 			PHP_EOL,
 			array_unique(
 				array_filter(
-					blockera_array_flat( $state_css_rules ),
+					is_array(current($state_css_rules)) ? blockera_array_flat($state_css_rules) : $state_css_rules,
 					'blockera_get_filter_empty_array_item'
 				)
 			)
@@ -270,115 +320,135 @@ final class StyleEngine {
 	}
 
 	/**
-	 * Get state css rules with pseudo class name.
+	 * Get css rules generated by current definition instance.
 	 *
-	 * @return array The css rules for current pseudo class.
+	 * @param array $supports The related supports with current definition instance.
+	 *
+	 * @return void
 	 */
-	protected function getStateCssRules(): array {
+	protected function setDefinition( array $supports, string $id): void {
+		
+		try {
 
-		// Imagine blockera block states stack is empty.
-		if ( empty( $this->settings['blockeraBlockStates']['value'] ) ) {
-
-			// We should just prepare normal state styles because not exists any other states.
-			$css_rules = $this->prepareStateStyles( 'normal', $this->breakpoint );
-
-			// Exclude empty $css_rules.
-			if ( empty( $css_rules ) ) {
-
-				return [];
+			if (! isset($supports[ $id ]['definition'])) {
+				
+				return;
 			}
 
-			return compact('css_rules');
+			$abstract = '\Blockera\Editor\StyleDefinitions\\' . $supports[ $id ]['definition'];
+
+			$this->definition = $this->app->make($abstract, compact('supports'));
+
+		} catch (BaseException $e) {
+
+			// Debug.
+			return;
+		}
+	}
+
+	/**
+	 * Generating css based on block settings.
+	 *
+	 * @param array  $settings The settings item.
+	 * @param string $id The settings identifier.
+	 * 
+	 * @return array generated css rules for current block settings.
+	 */
+	protected function generateCss( $settings, string $id ):array {
+
+		if ('blockeraInnerBlocks' === $id) {
+
+			return [];
 		}
 
-		// We should process any supported pseudo classes by blockera to prepare each state styles.
-		return array_filter(
-			array_map(
-				function ( string $state ): array {
+		$flattenSupports = blockera_array_flat(array_column($this->supports, 'supports'));
 
-					return $this->prepareStateStyles( $state );
-				},
-				$this->pseudo_classes
-			),
-			'blockera_get_filter_empty_array_item'
-		);
+		if (empty($flattenSupports) || ! isset($flattenSupports[ $id ])) {
+			
+			return [];
+		}
+
+		$this->setDefinition($flattenSupports, $id);
+
+		if (! $this->definition) {
+			
+			return [];
+		}
+
+		return $this->generateBlockCss(is_string($settings) ? [ 'value' => $settings ] : $settings, $id);
 	}
 
 	/**
 	 * Preparing css of current state settings.
 	 *
-	 * @param string $pseudoClass The state name (as pseudo class in css).
+	 * @param string $state The state name (as pseudo class in css).
+	 * @param array  $settings the breakpoint current state settings.
 	 *
 	 * @return array The state css rules.
 	 */
-	protected function prepareStateStyles( string $pseudoClass ): array {
+	protected function prepareStateStyles( string $state, array $settings ): array {
 
-		$this->pseudo_state = $pseudoClass;
+		$this->pseudo_state = $state;
 
-		// Prepare generated block css by supported each of style definitions.
-		$block_css = array_map( [ $this, 'generateBlockCss' ], $this->definitions );
-
-		$inner_blocks_css = array_map(
-            function( string $definition): array {
-			
-				$this->definition = $this->app->make($definition, [ 'supports' => $this->supports ]);
-
-				// the "blockeraInnerBlocks.value" accessible on normal state in base breakpoint and un normal states accessible without value index!
-				$settings = $this->getSettings(true);
-
-				if (empty($settings)) {
-
-					return [];
-				}
-
-				// Validation: Check if sets blockera inner blocks?
-				if ( ! empty( $settings ) ) {
-
-					// Preparing inner blocks css ...
-					return blockera_array_flat(
-                        array_map(
-                            [
-								$this,
-								'generateInnerBlockCss',
-                            ],
-                            $settings,
-                            array_keys( $settings )
-                        )
-					);
-				}
+		$block_css = array_map(
+            function ( $settings, string $id): array {
+				return $this->generateCss($settings, $id);
 			},
-            $this->definitions
+            $settings,
+            array_keys($settings)
         );
 
-		$block_css = array_merge( array_filter($block_css), array_filter($inner_blocks_css) );
-		
+		$inner_blocks_css = isset($settings['blockeraInnerBlocks']) ? array_map(
+            function( array $settings, string $blockType): array {
+				return array_map(
+                    function ( $settings, $id) use ( $blockType): array{
+
+						$flattenSupports = blockera_array_flat(array_column($this->supports, 'supports'));
+
+						if (empty($flattenSupports) || ! isset($flattenSupports[ $id ])) {
+
+							return [];
+						}
+
+						$this->setDefinition($flattenSupports, $id);
+
+						if (! $this->definition) {
+
+							return [];
+						}
+
+						return $this->generateInnerBlockCss(is_string($settings) ? [ 'value' => $settings ] : $settings, $blockType, compact('id'));
+
+					},
+                    $settings['attributes'] ?? [],
+                    array_keys($settings['attributes'] ?? [])
+                );
+			},
+            $settings['blockeraInnerBlocks']['value'] ?? [],
+			array_keys($settings['blockeraInnerBlocks']['value'] ?? [])
+        ) : [];
+
+		$block_css = array_merge( array_filter($block_css), array_filter(blockera_array_flat($inner_blocks_css)) );
+
 		return $this->normalizeCssRules(blockera_convert_css_declarations_to_css_valid_rules(blockera_combine_css($block_css)));
 	}
 
 	/**
 	 * Generating current block css styles.
-	 *
-	 * @param string $definition The style definition class namespace.
+	 * 
+	 * @param array  $settings the settings to generate css.
+	 * @param string $id the settings id.
 	 *
 	 * @return array The array of collection of selector and declaration.
 	 */
-	protected function generateBlockCss( string $definition ): array {
+	protected function generateBlockCss( array $settings, string $id): array {
 
-		$this->definition = $this->app->make(
-            $definition,
-            [
-				'supports' => $this->supports,
-			]
-        );
-
-		// get current block settings.
-		$settings = $this->getSettings();
-
-		if ( empty( $settings ) ) {
+		if ( empty( $settings['value'] ) || empty($id) ) {
 
 			return [];
 		}
 
+		$this->definition->setStyleId($id);
 		$this->definition->resetProperties();
 		$this->configureDefinition( $this->definition );
 		$this->definition->setSettings( $settings );
@@ -393,6 +463,9 @@ final class StyleEngine {
 		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
 			$css_rules = $this->mergeInlineStyles($css_rules);
 		}
+
+		// Reset definition property.
+		$this->definition = null;
 
 		return $css_rules;
 	}
@@ -512,56 +585,57 @@ final class StyleEngine {
 	/**
 	 * Preparing css styles of inner blocks for current received state.
 	 *
-	 * @param array  $settings    the inner block settings of current received state.
-	 * @param string $blockType   the block type of available inner block.
-	 * @param string $pseudoState the pseudo state of inner block type.
+	 * @param array  $settings the inner block settings of current received state.
+	 * @param string $blockType the block type of available inner block.
+	 * @param array  $args includes the pseudo state of inner block type, and settings id.
 	 *
 	 * @throws BaseException Exception for invalid selector.
 	 *
 	 * @return array the generated css rules for inner blocks in current state.
 	 */
-	protected function generateInnerBlockCss( array $settings, string $blockType, string $pseudoState = '' ): array {
+	protected function generateInnerBlockCss( array $settings, string $blockType, array $args = [] ): array {
 
-		if ( empty( $settings['attributes'] ) ) {
+		if ( empty( $settings['value'] ) ) {
 
 			return [];
 		}
 
 		$this->definition->resetProperties();
 		$this->configureDefinition( $this->definition );
+		$this->definition->setStyleId($args['id']);
 		$this->definition->setBlockType( $blockType );
 		$this->definition->setBreakpoint( $this->breakpoint );
-		$this->definition->setInnerPseudoState( $pseudoState );
+		$this->definition->setInnerPseudoState( $args['state'] ?? '' );
 		$this->definition->setPseudoState( $this->pseudo_state );
-		$this->definition->setSettings( $settings['attributes'] );
+		$this->definition->setSettings( $settings );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		$css_rules = $this->definition->getCssRules();
 
-		if ( ! empty( $settings['attributes']['blockeraBlockStates'] ) ) {
+		if ( ! empty( $settings['blockeraBlockStates'] ) ) {
 
 			$engine           = $this;
-			$innerBlockStates = $settings['attributes']['blockeraBlockStates'];
+			$innerBlockStates = $settings['blockeraBlockStates'];
 
 			$css_rules = array_merge(
 				$css_rules,
 				blockera_array_flat(
 					array_map(
-						static function ( array $state, string $_pseudoState ) use ( $engine, $blockType ): array {
+						static function ( array $settings, string $state ) use ( $engine, $blockType ): array {
 
-							if ( empty( $state['breakpoints'] ) || ( blockera_is_normal_on_base_breakpoint( $_pseudoState, $engine->breakpoint ) ) ) {
+							if ( empty( $settings['breakpoints'] ) || ( blockera_is_normal_on_base_breakpoint( $state, $engine->breakpoint ) ) ) {
 
 								return [];
 							}
 
 							return blockera_array_flat(
 								array_map(
-									static function ( array $breakpointSettings ) use ( $engine, $blockType, $_pseudoState ): array {
+									static function ( array $breakpointSettings, string $id ) use ( $engine, $blockType, $state ): array {
 
-										return $engine->generateInnerBlockCss( $breakpointSettings, $blockType, $_pseudoState );
+										return $engine->generateInnerBlockCss( $breakpointSettings, $blockType, compact('id', 'state') );
 									},
-									$state['breakpoints'],
-									array_keys( $state['breakpoints'] )
+									$settings['breakpoints'],
+									array_keys( $settings['breakpoints'] )
 								)
 							);
 						},
