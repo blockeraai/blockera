@@ -9,54 +9,51 @@ namespace Blockera\Editor\StyleDefinitions;
  */
 class Position extends BaseStyleDefinition {
 
-	/**
-	 * Collect all css selectors and declarations.
-	 *
-	 * @param array $setting the block setting.
-	 *
-	 * @return array
-	 */
-	protected function css( array $setting ): array {
+    /**
+     * Collect all css selectors and declarations.
+     *
+     * @param array $setting the block setting.
+     *
+     * @return array
+     */
+    protected function css( array $setting): array {
 
-		$declaration = [];
-		$cssProperty = $setting['type'];
+        $declaration = [];
+        $cssProperty = $setting['type'];
 
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'position' !== $cssProperty ) {
+        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'position' !== $cssProperty) {
 
-			return $declaration;
-		}
-		
-		[
-			'type'     => $position,
-			'position' => $value,
-		] = $setting[ $cssProperty ];
+            return $declaration;
+        }
 
-		$this->setDeclaration( $cssProperty, $position );
+        [
+            'type'     => $position,
+            'position' => $value,
+        ] = $setting[ $cssProperty ];
 
-		$filteredValues = array_filter($value);
+        $this->setDeclaration($cssProperty, $position);
 
-		if (! empty($filteredValues)) {
-			$this->setDeclaration(
-                $cssProperty,
+        $filteredValues = array_filter($value);
+
+        if (! empty($filteredValues)) {
+            $this->declarations = array_merge(
+                $this->declarations,
                 array_merge(
-                    $this->declarations,
-                    array_merge(
-                        ...array_map(
-                            static function ( string $item, string $property): array {
+                    ...array_map(
+                        static function ( string $item, string $property): array {
 
-								return [ $property => blockera_get_value_addon_real_value($item) ];
-                            },
-                            $filteredValues,
-                            array_keys($filteredValues)
-                        )
+                            return [ $property => blockera_get_value_addon_real_value($item) ];
+                        },
+                        $filteredValues,
+                        array_keys($filteredValues)
                     )
                 )
             );
-		}
+        }
 
-		$this->setCss( $this->declarations );
+        $this->setCss($this->declarations);
 
-		return $this->css;
-	}
+        return $this->css;
+    }
 
 }
