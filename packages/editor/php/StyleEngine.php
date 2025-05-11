@@ -339,7 +339,7 @@ final class StyleEngine {
 
 			$this->definition = $this->app->make($abstract, compact('supports'));
 
-		} catch (BaseException $e) {
+		} catch (\Exception $e) {
 
 			// Debug.
 			return;
