@@ -39,7 +39,6 @@ import { useBlockContext } from '../../../../hooks';
 function BlockStyles({
 	styles,
 	onHoverClassName = () => {},
-	clientId,
 }: {
 	styles: {
 		onSelect: (style: string) => void,
@@ -49,7 +48,6 @@ function BlockStyles({
 		previewClassName: string,
 	},
 	onHoverClassName?: (style?: string | null) => void,
-	clientId: string,
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
@@ -129,7 +127,7 @@ function BlockStyles({
 		>
 			<ControlContextProvider
 				value={{
-					name: 'search-styles-' + clientId,
+					name: 'search-styles',
 					value: searchTerm,
 				}}
 			>
