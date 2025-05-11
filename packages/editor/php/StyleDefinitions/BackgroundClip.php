@@ -15,16 +15,16 @@ class BackgroundClip extends BaseStyleDefinition {
 
 			return $declaration;
 		}
-        
-        $declaration = array_merge(
-			[
-				$cssProperty              => $setting[ $cssProperty ],
-				'-webkit-background-clip' => $setting[ $cssProperty ],
-			],
-			'text' === $setting[ $cssProperty ] ? [ '-webkit-text-fill-color' => 'transparent' ] : []
-		);
 
-		$this->setCss($declaration);
+		$this->setDeclaration($cssProperty, $setting[ $cssProperty ]);
+		$this->setDeclaration('-webkit-background-clip', $setting[ $cssProperty ]);
+
+		if ('text' === $setting[ $cssProperty ]) {
+
+			$this->setDeclaration('-webkit-text-fill-color', 'transparent');
+		}
+
+		$this->setCss($this->declarations);
 
 		return $this->css;
     }
