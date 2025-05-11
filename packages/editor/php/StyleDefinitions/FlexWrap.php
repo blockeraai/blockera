@@ -15,7 +15,8 @@ class FlexWrap extends BaseStyleDefinition {
 		}		
 		
 		// Backward compatibility for flex-wrap value, because flex-wrap changed from value to val in the new version.
-		$flexWrap = $setting['flex-wrap'];
+		$flexWrap                = $setting['flex-wrap'];
+		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
 		if (! empty($flexWrap['value']) || ! empty($flexWrap['val'])) {
 
