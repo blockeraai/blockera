@@ -407,7 +407,6 @@ abstract class BaseStyleDefinition {
             return;
         }
 
-        // FIXME: it should remove.
         if ($this instanceof CustomStyle) {
 
             $settings = $this->getCustomSettings($this->settings, $this->style_id, $cssProperty);
@@ -605,59 +604,6 @@ abstract class BaseStyleDefinition {
         }
 
         return  array_merge($default_style_engine_config, $block_type->supports['blockeraStyleEngineConfig'][ $support ] ?? []);
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @param array  $settings
-     * @param string $settingName
-     * @param string $cssProperty
-     *
-     * @return array
-     */
-    public function getCustomSettings( array $settings, string $settingName, string $cssProperty): array {
-
-        $settings = blockera_get_sanitize_block_attributes($settings);
-
-        if ('custom' === $settings[ $settingName ] && 'flex' === $cssProperty) {
-
-            $setting = [
-                [
-                    'isVisible'  => true,
-                    'type'       => $cssProperty,
-                    $cssProperty => $settings['blockeraFlexChildSizing'] ?? 'custom',
-                    'custom'     => [
-                        'blockeraFlexChildGrow'   => $settings['blockeraFlexChildGrow'] ?? 0,
-                        'blockeraFlexChildShrink' => $settings['blockeraFlexChildShrink'] ?? 0,
-                        'blockeraFlexChildBasis'  => $settings['blockeraFlexChildBasis'] ?? 'auto',
-                    ],
-                ],
-            ];
-
-        } elseif ('custom' === $settings[ $settingName ] && 'order' === $cssProperty) {
-
-            $setting = [
-                [
-                    'isVisible'  => true,
-                    'type'       => $cssProperty,
-                    $cssProperty => $settings['blockeraFlexChildOrder'] ?? 'custom',
-                    'custom'     => $settings['blockeraFlexChildOrderCustom'] ?? '',
-                ],
-            ];
-
-        } else {
-
-            $setting = [
-                [
-                    'isVisible'  => true,
-                    'type'       => $cssProperty,
-                    $cssProperty => $settings[ $settingName ],
-                ],
-            ];
-        }
-
-        return $setting;
     }
 
     /**

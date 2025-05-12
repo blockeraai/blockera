@@ -2,7 +2,9 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-class Flex extends BaseStyleDefinition {
+use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
+
+class Flex extends BaseStyleDefinition implements CustomStyle {
 
 	protected function css( array $setting): array {
 
@@ -45,5 +47,47 @@ class Flex extends BaseStyleDefinition {
 		$this->setCss($this->declarations);
 
         return $this->css;
+    }
+
+	/**
+     * @inheritDoc
+     *
+     * @param array  $settings
+     * @param string $settingName
+     * @param string $cssProperty
+     *
+     * @return array
+     */
+    public function getCustomSettings( array $settings, string $settingName, string $cssProperty): array {
+
+        $settings = blockera_get_sanitize_block_attributes($settings);
+
+        if ('custom' === $settings[ $settingName ] && 'flex' === $cssProperty) {
+
+            $setting = [
+                [
+                    'isVisible'  => true,
+                    'type'       => $cssProperty,
+                    $cssProperty => $settings['blockeraFlexChildSizing'] ?? 'custom',
+                    'custom'     => [
+                        'blockeraFlexChildGrow'   => $settings['blockeraFlexChildGrow'] ?? 0,
+                        'blockeraFlexChildShrink' => $settings['blockeraFlexChildShrink'] ?? 0,
+                        'blockeraFlexChildBasis'  => $settings['blockeraFlexChildBasis'] ?? 'auto',
+                    ],
+                ],
+            ];
+
+        } else {
+
+            $setting = [
+                [
+                    'isVisible'  => true,
+                    'type'       => $cssProperty,
+                    $cssProperty => $settings[ $settingName ],
+                ],
+            ];
+        }
+
+        return $setting;
     }
 }
