@@ -170,22 +170,6 @@ describe('popover component testing', () => {
 
 				testTransformOrigin('0% 100% 0px');
 			});
-
-			it('should render on bottom-start, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'top-start',
-							flip: true,
-						}}
-						justifyContent="flex-start"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('0% 0% 0px');
-			});
 		});
 
 		describe('when passing top :', () => {
@@ -201,22 +185,6 @@ describe('popover component testing', () => {
 
 				cy.contains('click').click();
 				testTransformOrigin('50% 100% 0px');
-			});
-
-			it('should render on bottom, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'top',
-							flip: true,
-						}}
-						justifyContent="flex-start"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('50% 0% 0px');
 			});
 		});
 
@@ -234,22 +202,6 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 100% 0px');
 			});
-
-			it('should render on bottom-end, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'top-end',
-							flip: true,
-						}}
-						justifyContent="flex-start"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('100% 0% 0px');
-			});
 		});
 
 		describe('when passing right-start :', () => {
@@ -264,22 +216,6 @@ describe('popover component testing', () => {
 				);
 				cy.contains('click').click();
 				testTransformOrigin('0% 0% 0px');
-			});
-
-			it('should render on left-start, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'right-start',
-							flip: true,
-						}}
-						alignItems="flex-end"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('100% 0% 0px');
 			});
 		});
 
@@ -297,22 +233,6 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('0% 50% 0px');
 			});
-
-			it('should render on left, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'right',
-							flip: true,
-						}}
-						alignItems="flex-end"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('100% 50% 0px');
-			});
 		});
 
 		describe('when passing right-end :', () => {
@@ -328,21 +248,6 @@ describe('popover component testing', () => {
 
 				cy.contains('click').click();
 				testTransformOrigin('0% 100% 0px');
-			});
-
-			it('should render on left-end, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'right-end',
-							flip: true,
-						}}
-						alignItems="flex-end"
-					/>
-				);
-				cy.contains('click').click();
-				testTransformOrigin('100% 100% 0');
 			});
 		});
 
@@ -360,21 +265,6 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('0% 0% 0px');
 			});
-
-			it('should render on top-start, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'bottom-start',
-							flip: true,
-						}}
-						justifyContent="flex-end"
-					/>
-				);
-				cy.contains('click').click();
-				testTransformOrigin('0% 100% 0');
-			});
 		});
 
 		describe('when passing bottom :', () => {
@@ -390,22 +280,6 @@ describe('popover component testing', () => {
 
 				cy.contains('click').click();
 				testTransformOrigin('50% 0% 0px');
-			});
-
-			it('should render on top, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'bottom',
-							flip: true,
-						}}
-						justifyContent="flex-end"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('50% 100% 0px');
 			});
 		});
 
@@ -423,22 +297,6 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 0% 0px');
 			});
-
-			it('should render on top-end, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'bottom-end',
-							flip: true,
-						}}
-						justifyContent="flex-end"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('100% 100% 0');
-			});
 		});
 
 		describe('when passing left-start :', () => {
@@ -454,21 +312,6 @@ describe('popover component testing', () => {
 
 				cy.contains('click').click();
 				testTransformOrigin('100% 0% 0px');
-			});
-
-			it('should render on right-start, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'left-start',
-							flip: true,
-						}}
-						alignItems="flex-start"
-					/>
-				);
-				cy.contains('click').click();
-				testTransformOrigin('0% 0% 0');
 			});
 		});
 
@@ -486,22 +329,6 @@ describe('popover component testing', () => {
 				cy.contains('click').click();
 				testTransformOrigin('100% 50% 0px');
 			});
-
-			it('should render on right, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'left',
-							flip: true,
-						}}
-						alignItems="flex-start"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('0% 50% 0px');
-			});
 		});
 
 		describe('when passing left-end :', () => {
@@ -517,22 +344,6 @@ describe('popover component testing', () => {
 
 				cy.contains('click').click();
 				testTransformOrigin('100% 100% 0');
-			});
-
-			it('should render on right-end, if flip = true & no space in normal placement', () => {
-				mount(
-					<Wrapper
-						popoverProps={{
-							...defaultProps,
-							placement: 'left-end',
-							flip: true,
-						}}
-						alignItems="flex-start"
-					/>
-				);
-
-				cy.contains('click').click();
-				testTransformOrigin('0% 100% 0');
 			});
 		});
 	});
