@@ -62,7 +62,7 @@ class Flex extends BaseStyleDefinition implements CustomStyle {
 
         $settings = blockera_get_sanitize_block_attributes($settings);
 
-        if ('custom' === $settings[ $settingName ] && 'flex' === $cssProperty) {
+        if (isset($settings[ $settingName ]) && 'custom' === $settings[ $settingName ] && 'flex' === $cssProperty) {
 
             $setting = [
                 [
@@ -83,7 +83,7 @@ class Flex extends BaseStyleDefinition implements CustomStyle {
                 [
                     'isVisible'  => true,
                     'type'       => $cssProperty,
-                    $cssProperty => $settings[ $settingName ],
+                    $cssProperty => $settings[ $settingName ] ?? [],
                 ],
             ];
         }
