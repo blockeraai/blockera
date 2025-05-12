@@ -17,7 +17,7 @@ import {
 } from '@blockera/classnames';
 import { kebabCase } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
-import { Tooltip } from '@blockera/controls';
+import { Tooltip, Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -161,40 +161,48 @@ export function InnerBlockCard({
 				</div>
 			</div>
 
-			<StateContainer
-				availableStates={availableStates}
-				blockeraUnsavedData={
-					currentStateAttributes?.blockeraUnsavedData
-				}
+			<Flex
+				gap={10}
+				direction="column"
+				style={{
+					margin: '0 -2px',
+				}}
 			>
-				<Slot
-					name={`blockera-${kebabCase(
-						activeBlock
-					)}-inner-block-card-children`}
+				<StateContainer
+					availableStates={availableStates}
+					blockeraUnsavedData={
+						currentStateAttributes?.blockeraUnsavedData
+					}
+				>
+					<Slot
+						name={`blockera-${kebabCase(
+							activeBlock
+						)}-inner-block-card-children`}
+					/>
+				</StateContainer>
+
+				{children}
+
+				<BlockCompositePreview
+					block={{
+						clientId,
+						supports,
+						blockName,
+						setAttributes,
+					}}
+					availableStates={availableStates}
+					onChange={handleOnChangeAttributes}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					currentBreakpoint={currentBreakpoint}
+					currentInnerBlockState={currentInnerBlockState}
+					blockConfig={additional}
+					blockStatesProps={{
+						attributes: currentStateAttributes,
+						id: `block-states-${kebabCase(currentBlock)}`,
+					}}
 				/>
-			</StateContainer>
-
-			{children}
-
-			<BlockCompositePreview
-				block={{
-					clientId,
-					supports,
-					blockName,
-					setAttributes,
-				}}
-				availableStates={availableStates}
-				onChange={handleOnChangeAttributes}
-				currentBlock={currentBlock}
-				currentState={currentState}
-				currentBreakpoint={currentBreakpoint}
-				currentInnerBlockState={currentInnerBlockState}
-				blockConfig={additional}
-				blockStatesProps={{
-					attributes: currentStateAttributes,
-					id: `block-states-${kebabCase(currentBlock)}`,
-				}}
-			/>
+			</Flex>
 		</div>
 	);
 }

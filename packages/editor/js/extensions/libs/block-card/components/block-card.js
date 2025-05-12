@@ -210,7 +210,13 @@ export function BlockCard({
 					</div>
 				</div>
 
-				<Flex gap={10} direction="column">
+				<Flex
+					gap={10}
+					direction="column"
+					style={{
+						margin: '0 -2px',
+					}}
+				>
 					<div
 						className={extensionInnerClassNames(
 							'block-card__actions'
