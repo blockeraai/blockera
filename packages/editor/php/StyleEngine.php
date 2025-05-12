@@ -223,12 +223,12 @@ final class StyleEngine {
 
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => array_merge(
-						$this->settings['blockeraBlockStates']['value']['normal']['breakpoints'],
 						[
 							'desktop' => [
 								'attributes' => $settings,
 							],
-						]
+						],
+						$this->settings['blockeraBlockStates']['value']['normal']['breakpoints'],
 					),
 					'isVisible' => true,
 				];
