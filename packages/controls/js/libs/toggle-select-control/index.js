@@ -124,7 +124,7 @@ export default function ToggleSelectControl({
 							aria-label={item['aria-label'] || item.label}
 							disabled={item.disabled}
 							onClick={() => handleOptionClick(item.value)}
-							value={item.value}
+							data-value={item.value}
 							{...(isDeselectable
 								? {
 										'aria-pressed': value === item.value,
