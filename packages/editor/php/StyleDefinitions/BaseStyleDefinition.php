@@ -4,6 +4,7 @@ namespace Blockera\Editor\StyleDefinitions;
 
 use Blockera\Utils\Utils;
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
+use Blockera\Editor\StyleDefinitions\Contracts\HasIgnoreChecks;
 
 abstract class BaseStyleDefinition {
 
@@ -316,6 +317,11 @@ abstract class BaseStyleDefinition {
      */
     protected function availableInInnerBlock( string $style_id): bool {
 
+		if ($this instanceof HasIgnoreChecks) {
+
+			return $this->isIgnoreChecks();
+		}
+
         $is_inner_block = blockera_is_inner_block($this->block_type);
 
         if (! isset($this->getSupports(false)[ $style_id ]['inner-blocks'])) {
@@ -409,26 +415,6 @@ abstract class BaseStyleDefinition {
             },
             $settings
         );
-    }
-
-    /**
-     * Check if the style definition is external.
-     *
-     * @return bool true if the style definition is external, false otherwise.
-     */
-    protected function isExternal(): bool {
-
-        return str_contains(get_class($this), 'Blockera\SiteBuilder');
-    }
-
-    /**
-     * Get the abstraction id.
-     *
-     * @return string the abstract instance id.
-     */
-    public function getId(): string {
-
-        return str_replace([ $this->isExternal() ? str_replace('\\Editor\\', '\\SiteBuilder\\', __NAMESPACE__) : __NAMESPACE__, '\\' ], '', get_class($this));
     }
 
     /**
