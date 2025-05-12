@@ -33,7 +33,7 @@ import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
 import { BlockStyleVariations } from '../style-variations';
-import { default as BlockVariationTransforms } from '../transform-block-variation';
+import { default as BlockVariationTransforms } from '../block-variation-transforms';
 
 export function BlockCard({
 	notice,

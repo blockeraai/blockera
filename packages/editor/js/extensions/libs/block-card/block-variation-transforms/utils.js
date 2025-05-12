@@ -3,7 +3,7 @@
 /**
  * WordPress dependencies
  */
-import { deprecated, getBlockType } from '@wordpress/blocks';
+import { getBlockType } from '@wordpress/blocks';
 
 /**
  * Determines if any of the block type's attributes have
@@ -29,12 +29,6 @@ export const hasContentRoleAttribute = (
 			}
 
 			if (__experimentalRole === 'content') {
-				deprecated('__experimentalRole attribute', {
-					since: '6.7',
-					version: '6.8',
-					alternative: 'role attribute',
-					hint: `Check the block.json of the ${blockTypeName} block.`,
-				});
 				return true;
 			}
 			return false;
