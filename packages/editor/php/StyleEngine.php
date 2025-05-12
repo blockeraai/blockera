@@ -46,13 +46,6 @@ final class StyleEngine {
 	protected string $selector = '';
 
 	/**
-	 * Store the definitions instances stack.
-	 *
-	 * @var array $definitions
-	 */
-	protected array $definitions = [];
-
-	/**
 	 * Store instance of current style definition class.
 	 *
 	 * @var BaseStyleDefinition|null $definition
@@ -106,18 +99,16 @@ final class StyleEngine {
 	 *
 	 * @param array  $block            The current block.
 	 * @param string $fallbackSelector The css selector for target element.
-	 * @param array  $styleDefinitions The style definitions array to generating css properties from requested settings array.
 	 */
-	public function __construct( array $block, string $fallbackSelector, array $styleDefinitions ) {
+	public function __construct( array $block, string $fallbackSelector ) {
 
 		[
 			'attrs' => $settings,
 		] = $block;
 
-		$this->block       = $block;
-		$this->settings    = $settings;
-		$this->definitions = $styleDefinitions;
-		$this->selector    = $fallbackSelector;
+		$this->block    = $block;
+		$this->settings = $settings;
+		$this->selector = $fallbackSelector;
 	}
 
 	/**
