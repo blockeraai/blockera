@@ -2,7 +2,6 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Utils\Utils;
 use Blockera\Editor\StyleDefinitions\Contracts\CustomStyle;
 use Blockera\Editor\StyleDefinitions\Contracts\HasIgnoreChecks;
 
@@ -123,6 +122,13 @@ abstract class BaseStyleDefinition {
      */
     protected array $support = [];
 
+	/**
+	 * Store the no checks flag.
+	 *
+	 * @var bool $no_checks the no checks flag.
+	 */
+	protected bool $no_checks = false;
+
     /**
      * The constructor.
      *
@@ -135,6 +141,18 @@ abstract class BaseStyleDefinition {
     public function __construct( array $supports) { 
         $this->support = $supports;
     }
+
+	/**
+	 * Set the no checks flag.
+	 *
+	 * @param bool $no_checks the no checks flag.
+	 *
+	 * @return void
+	 */
+	public function setNoChecks( bool $no_checks): void {
+
+		$this->no_checks = $no_checks;
+	}
 
     /**
      * Sets the style identifier property.
@@ -320,6 +338,11 @@ abstract class BaseStyleDefinition {
 		if ($this instanceof HasIgnoreChecks) {
 
 			return $this->isIgnoreChecks();
+		}
+
+		if ($this->no_checks) {
+
+			return true;
 		}
 
         $is_inner_block = blockera_is_inner_block($this->block_type);
