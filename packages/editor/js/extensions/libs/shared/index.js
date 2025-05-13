@@ -42,6 +42,7 @@ import { LayoutExtension } from '../layout';
 import { FlexChildExtension } from '../flex-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
+import { StateOptionsExtension } from '../block-card/block-states/extension';
 // import { EntranceAnimationExtension } from '../entrance-animation';
 // import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
@@ -296,13 +297,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			mouseConfig,
 			sizeConfig,
 			layoutConfig,
+			statesConfig,
 			spacingConfig,
 			effectsConfig,
 			positionConfig,
-			customStyleConfig,
 			flexChildConfig,
 			backgroundConfig,
 			typographyConfig,
+			customStyleConfig,
 			borderAndShadowConfig,
 			// entranceAnimationConfig,
 			// scrollAnimationConfig,
@@ -442,6 +444,48 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'style':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-style-panel`}>
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'statesConfig'}
+										title={__(
+											'Block State Options',
+											'blockera'
+										)}
+										// icon={<Icon icon="extension-states" />}
+									/>
+								)}
+							>
+								<StateOptionsExtension
+									block={block}
+									extensionConfig={statesConfig}
+									values={
+										currentStateAttributes.blockeraBlockStates
+									}
+									attributes={attributes.blockeraBlockStates}
+									extensionProps={{}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+									currentBlock={currentBlock}
+									currentState={
+										isInnerBlock(currentBlock)
+											? currentInnerBlockState
+											: currentState
+									}
+								/>
+							</ErrorBoundary>
+
 							<ErrorBoundary
 								fallbackRender={({ error }) => (
 									<ErrorBoundaryFallback

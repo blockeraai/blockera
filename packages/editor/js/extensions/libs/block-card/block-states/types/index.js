@@ -11,11 +11,25 @@ import type { MixedElement, ComponentType } from 'react';
 import type { TBreakpoint } from './breakpoint-types';
 import type { StateTypes, TStates } from './state-types';
 import type { InnerBlockType } from '../../inner-blocks/types';
-import type { TBlockProps, THandleOnChangeAttributes } from '../../../types';
+import type {
+	TBlockProps,
+	THandleOnChangeAttributes,
+	BaseExtensionProps,
+} from '../../../types';
+import type { FeatureConfig } from '../../../base';
 
 export * from './prop-types';
 export * from './state-types';
 export * from './breakpoint-types';
+
+export type TStatesProps = {
+	...BaseExtensionProps,
+	extensionConfig: { [key: string]: FeatureConfig },
+	values: { [key: TStates]: StateTypes },
+	extensionProps: Object,
+	currentState: TStates,
+	currentBlock: 'master' | InnerBlockType,
+};
 
 export type BlockDetail = {
 	blockId: string,
