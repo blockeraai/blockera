@@ -100,6 +100,7 @@
 - `Latest Posts` block: support improved.
 - `Login/out` block: support improved.
 - `Media Text` block: support improved.
+- `Navigation Link` block: support improved.
 
 
 ### Automated Tests
@@ -137,6 +138,7 @@
 - Updated E2E tests to check support of `Latest Posts` block.
 - Updated E2E tests to check support of `Login/out` block.
 - Updated E2E tests to check support of `Media Text` block.
+- Updated E2E tests to check support of `Navigation Link` block.
 
 
 ## 1.3.0 (2025-04-27)
