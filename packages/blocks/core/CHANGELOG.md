@@ -121,6 +121,7 @@
 - `Site Title` block: support improved.
 - `Social Link` block: support improved.
 - `Social Links` block: support improved.
+- `Spacer` block: support improved.
 
 
 ### Automated Tests
@@ -179,6 +180,7 @@
 - Updated E2E tests to check support of `Site Title` block.
 - Updated E2E tests to check support of `Social Link` block.
 - Updated E2E tests to check support of `Social Links` block.
+- Updated E2E tests to check support of `Spacer` block.
 
 
 ## 1.3.0 (2025-04-27)
