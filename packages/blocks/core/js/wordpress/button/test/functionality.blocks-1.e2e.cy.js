@@ -99,7 +99,19 @@ describe('Button Block', () => {
 			});
 
 		//
-		// 2. Assert front end
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			// block settings panel body should be hidden
+			cy.get('.components-tools-panel:not(.block-editor-bindings__panel)')
+				.should('exist')
+				.should('not.be.visible');
+		});
+
+		//
+		// 3. Assert front end
 		//
 		savePage();
 		redirectToFrontPage();
