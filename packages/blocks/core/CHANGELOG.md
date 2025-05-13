@@ -116,6 +116,7 @@
 - `Query Title` block: support improved.
 - `Read More` block: support improved.
 - `RSS` block: support improved.
+- `Search` block: support improved.
 
 
 ### Automated Tests
@@ -169,6 +170,7 @@
 - Updated E2E tests to check support of `Query Title` block.
 - Updated E2E tests to check support of `Read More` block.
 - Updated E2E tests to check support of `RSS` block.
+- Updated E2E tests to check support of `Search` block.
 
 
 ## 1.3.0 (2025-04-27)
