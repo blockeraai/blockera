@@ -75,7 +75,26 @@ describe('Site Logo Block', () => {
 			'padding-box'
 		);
 
-		// 2. Assert CSS selectors in front-end
+		//
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Media')
+				.scrollIntoView()
+				.should('be.visible');
+
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert CSS selectors in front-end
 		//
 		savePage();
 		redirectToFrontPage();
