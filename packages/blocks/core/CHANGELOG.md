@@ -83,6 +83,7 @@
 - `Button` block: support improved.
 - `Buttons` block: support improved.
 - `Categories` block: support improved.
+- `Column` block: support improved.
 
 
 ### Automated Tests
@@ -103,6 +104,7 @@
 - Updated E2E tests to check support of `Button` block.
 - Updated E2E tests to check support of `Buttons` block.
 - Updated E2E tests to check support of `Categories` block.
+- Updated E2E tests to check support of `Column` block.
 
 
 ## 1.3.0 (2025-04-27)
