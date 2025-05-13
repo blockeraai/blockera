@@ -24,6 +24,7 @@ describe('Archives Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
 		//
 		// 1. Edit Block
 		//
@@ -114,7 +115,21 @@ describe('Archives Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			// block settings panel body should be visible
+			cy.get('.components-tools-panel:not(.block-editor-bindings__panel)')
+				.should('exist')
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();
