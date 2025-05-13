@@ -114,6 +114,7 @@
 - `Query Pagination` block: support improved.
 - `Query Pagination Numbers` block: support improved.
 - `Query Title` block: support improved.
+- `Read More` block: support improved.
 
 
 ### Automated Tests
@@ -165,6 +166,7 @@
 - Updated E2E tests to check support of `Query Pagination` block.
 - Updated E2E tests to check support of `Query Pagination Numbers` block.
 - Updated E2E tests to check support of `Query Title` block.
+- Updated E2E tests to check support of `Read More` block.
 
 
 ## 1.3.0 (2025-04-27)
