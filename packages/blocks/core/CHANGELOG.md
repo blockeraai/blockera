@@ -78,6 +78,7 @@
 - `Blocksy → Dynamic Data` block: inner blocks improved.
 - `Blocksy → Search` block: inner blocks improved.
 - `Archive` block: support improved.
+- `Audio` block: support improved.
 
 
 ### Automated Tests
@@ -93,6 +94,7 @@
 - Updated E2E tests to check functionality of `Query Pagination Numbers` block.
 - Updated E2E tests to check functionality of `Query Pagination Prev` block.
 - Updated E2E tests to check support of `Archive` block.
+- Updated E2E tests to check support of `Audio` block.
 
 
 ## 1.3.0 (2025-04-27)
