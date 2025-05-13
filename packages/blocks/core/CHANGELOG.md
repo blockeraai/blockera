@@ -102,6 +102,7 @@
 - `Media Text` block: support improved.
 - `Navigation Link` block: support improved.
 - `Navigation Submenu` block: support improved.
+- `Page List` block: support improved.
 
 
 ### Automated Tests
@@ -141,6 +142,7 @@
 - Updated E2E tests to check support of `Media Text` block.
 - Updated E2E tests to check support of `Navigation Link` block.
 - Updated E2E tests to check support of `Navigation Submenu` block.
+- Updated E2E tests to check support of `Page List` block.
 
 
 ## 1.3.0 (2025-04-27)
