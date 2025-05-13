@@ -8,6 +8,7 @@ import {
 	appendBlocks,
 	openInserter,
 	setInnerBlock,
+	setParentBlock,
 	closeWelcomeGuide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -114,7 +115,19 @@ describe('Post Content Block', () => {
 		);
 
 		//
-		// 1.2. Save template
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Save template
 		//
 		savePage();
 
