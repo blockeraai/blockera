@@ -91,6 +91,7 @@
 - `Comments Pagination` block: support improved.
 - `Comments Title` block: support improved.
 - `Cover` block: support improved.
+- `Details` block: support improved.
 
 
 ### Automated Tests
@@ -119,6 +120,7 @@
 - Updated E2E tests to check support of `Comments Pagination` block.
 - Updated E2E tests to check support of `Comments Title` block.
 - Updated E2E tests to check support of `Cover` block.
+- Updated E2E tests to check support of `Details` block.
 
 
 ## 1.3.0 (2025-04-27)
