@@ -124,6 +124,7 @@
 - `Spacer` block: support improved.
 - `Table` block: support improved.
 - `Tag Cloud` block: support improved.
+- `Video` block: support improved.
 
 
 ### Automated Tests
@@ -185,6 +186,7 @@
 - Updated E2E tests to check support of `Spacer` block.
 - Updated E2E tests to check support of `Table` block.
 - Updated E2E tests to check support of `Tag Cloud` block.
+- Updated E2E tests to check support of `Video` block.
 
 
 ## 1.3.0 (2025-04-27)
