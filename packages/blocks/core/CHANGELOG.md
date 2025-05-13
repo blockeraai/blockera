@@ -106,6 +106,7 @@
 - `Post Author` block: support improved.
 - `Post Author Name` block: support improved.
 - `Post Content` block: support improved.
+- `Post Date` block: support improved.
 
 
 ### Automated Tests
@@ -149,6 +150,7 @@
 - Updated E2E tests to check support of `Post Author` block.
 - Updated E2E tests to check support of `Post Author Name` block.
 - Updated E2E tests to check support of `Post Content` block.
+- Updated E2E tests to check support of `Post Date` block.
 
 
 ## 1.3.0 (2025-04-27)
