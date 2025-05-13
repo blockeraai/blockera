@@ -118,6 +118,7 @@
 - `RSS` block: support improved.
 - `Search` block: support improved.
 - `Site Logo` block: support improved.
+- `Site Title` block: support improved.
 
 
 ### Automated Tests
@@ -173,6 +174,7 @@
 - Updated E2E tests to check support of `RSS` block.
 - Updated E2E tests to check support of `Search` block.
 - Updated E2E tests to check support of `Site Logo` block.
+- Updated E2E tests to check support of `Site Title` block.
 
 
 ## 1.3.0 (2025-04-27)
