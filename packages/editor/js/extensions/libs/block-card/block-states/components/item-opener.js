@@ -28,6 +28,6 @@ const ItemOpener = ({
 	return <Icon library={'ui'} icon={'gear'} iconSize={18} />;
 };
 
-ItemOpener.hasButton = (item: StateTypes): boolean => !item?.force;
+// ItemOpener.hasButton = (item: StateTypes): boolean => !item?.force;
 
 export default ItemOpener;

@@ -134,11 +134,6 @@ const GroupControl: ComponentType<any> = memo(
 						{headerOpenButton && (
 							<Button
 								className={controlInnerClassNames('btn-toggle')}
-								icon={
-									isOpen
-										? getHeaderOpenIcon()
-										: getHeaderCloseIcon()
-								}
 								label={
 									isOpen
 										? __('Close Settings', 'blockera')
@@ -146,7 +141,11 @@ const GroupControl: ComponentType<any> = memo(
 								}
 								onClick={onClickCallback}
 								noBorder={true}
-							/>
+							>
+								{isOpen
+									? getHeaderOpenIcon()
+									: getHeaderCloseIcon()}
+							</Button>
 						)}
 
 						{injectHeaderButtonsEnd}
