@@ -122,6 +122,7 @@
 - `Social Link` block: support improved.
 - `Social Links` block: support improved.
 - `Spacer` block: support improved.
+- `Table` block: support improved.
 
 
 ### Automated Tests
@@ -181,6 +182,7 @@
 - Updated E2E tests to check support of `Social Link` block.
 - Updated E2E tests to check support of `Social Links` block.
 - Updated E2E tests to check support of `Spacer` block.
+- Updated E2E tests to check support of `Table` block.
 
 
 ## 1.3.0 (2025-04-27)
