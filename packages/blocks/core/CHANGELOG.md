@@ -104,6 +104,7 @@
 - `Navigation Submenu` block: support improved.
 - `Page List` block: support improved.
 - `Post Author` block: support improved.
+- `Post Author Name` block: support improved.
 
 
 ### Automated Tests
@@ -145,6 +146,7 @@
 - Updated E2E tests to check support of `Navigation Submenu` block.
 - Updated E2E tests to check support of `Page List` block.
 - Updated E2E tests to check support of `Post Author` block.
+- Updated E2E tests to check support of `Post Author Name` block.
 
 
 ## 1.3.0 (2025-04-27)
