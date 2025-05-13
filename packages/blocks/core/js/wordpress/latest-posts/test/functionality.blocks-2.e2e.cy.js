@@ -2,10 +2,11 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
 	setInnerBlock,
-	savePage,
+	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -22,6 +23,7 @@ describe('Latest Posts Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
 		//
 		// 1. Edit Blocks
 		//
@@ -61,7 +63,29 @@ describe('Latest Posts Block', () => {
 		});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			['Post content', 'Post meta'].forEach((item) => {
+				cy.get('.components-tools-panel-header')
+					.contains(item)
+					.scrollIntoView()
+					.should('be.visible');
+			});
+
+			['Featured image', 'Sorting and filtering'].forEach((item) => {
+				cy.get('.components-panel__body-title button')
+					.contains(item)
+					.scrollIntoView()
+					.should('be.visible');
+			});
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

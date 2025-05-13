@@ -97,6 +97,7 @@
 - `Group` block: support improved.
 - `Image` block: support improved.
 - `Latest Comments` block: support improved.
+- `Latest Posts` block: support improved.
 
 
 ### Automated Tests
@@ -131,6 +132,7 @@
 - Updated E2E tests to check support of `Group` block.
 - Updated E2E tests to check support of `Image` block.
 - Updated E2E tests to check support of `Latest Comments` block.
+- Updated E2E tests to check support of `Latest Posts` block.
 
 
 ## 1.3.0 (2025-04-27)
