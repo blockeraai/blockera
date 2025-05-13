@@ -95,6 +95,7 @@
 - `File` block: support improved.
 - `Gallery` block: support improved.
 - `Group` block: support improved.
+- `Image` block: support improved.
 
 
 ### Automated Tests
@@ -127,6 +128,7 @@
 - Updated E2E tests to check support of `File` block.
 - Updated E2E tests to check support of `Gallery` block.
 - Updated E2E tests to check support of `Group` block.
+- Updated E2E tests to check support of `Image` block.
 
 
 ## 1.3.0 (2025-04-27)
