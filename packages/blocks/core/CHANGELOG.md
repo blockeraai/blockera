@@ -79,6 +79,7 @@
 - `Blocksy → Search` block: inner blocks improved.
 - `Archive` block: support improved.
 - `Audio` block: support improved.
+- `Avatar` block: support improved.
 
 
 ### Automated Tests
@@ -95,6 +96,7 @@
 - Updated E2E tests to check functionality of `Query Pagination Prev` block.
 - Updated E2E tests to check support of `Archive` block.
 - Updated E2E tests to check support of `Audio` block.
+- Updated E2E tests to check support of `Avatar` block.
 
 
 ## 1.3.0 (2025-04-27)
