@@ -85,6 +85,7 @@
 - `Categories` block: support improved.
 - `Column` block: support improved.
 - `Columns` block: support improved.
+- `Comment Author Name` block: support improved.
 
 
 ### Automated Tests
@@ -107,6 +108,7 @@
 - Updated E2E tests to check support of `Categories` block.
 - Updated E2E tests to check support of `Column` block.
 - Updated E2E tests to check support of `Columns` block.
+- Updated E2E tests to check support of `Comment Author Name` block.
 
 
 ## 1.3.0 (2025-04-27)
