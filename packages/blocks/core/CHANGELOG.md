@@ -109,6 +109,7 @@
 - `Post Date` block: support improved.
 - `Post Excerpt` block: support improved.
 - `Post Featured Image` block: support improved.
+- `Post Template` block: support improved.
 
 
 ### Automated Tests
@@ -155,6 +156,7 @@
 - Updated E2E tests to check support of `Post Date` block.
 - Updated E2E tests to check support of `Post Excerpt` block.
 - Updated E2E tests to check support of `Post Featured Image` block.
+- Updated E2E tests to check support of `Post Template` block.
 
 
 ## 1.3.0 (2025-04-27)
