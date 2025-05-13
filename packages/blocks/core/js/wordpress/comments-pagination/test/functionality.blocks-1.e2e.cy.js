@@ -2,9 +2,10 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
 	createPost,
+	appendBlocks,
 	setInnerBlock,
+	setParentBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -64,6 +65,23 @@ describe('Comments Pagination Block', () => {
 						'rgb(238, 238, 238)'
 					);
 			});
+
+		//
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('not.be.visible');
+
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.should('be.visible');
+		});
 
 		// todo we can not assert front end here, because we do not have enough comments on CI and needs to be fixed to test this
 	});
