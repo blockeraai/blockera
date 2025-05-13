@@ -86,6 +86,19 @@ describe('File Block', () => {
 		});
 
 		//
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.should('be.visible');
+		});
+
+		//
 		// 2. Assert front end
 		savePage();
 		redirectToFrontPage();

@@ -92,6 +92,7 @@
 - `Comments Title` block: support improved.
 - `Cover` block: support improved.
 - `Details` block: support improved.
+- `File` block: support improved.
 
 
 ### Automated Tests
@@ -121,6 +122,7 @@
 - Updated E2E tests to check support of `Comments Title` block.
 - Updated E2E tests to check support of `Cover` block.
 - Updated E2E tests to check support of `Details` block.
+- Updated E2E tests to check support of `File` block.
 
 
 ## 1.3.0 (2025-04-27)
