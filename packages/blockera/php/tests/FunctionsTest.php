@@ -101,7 +101,6 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 					\Blockera\Admin\Providers\AdminProvider::class,
 					\Blockera\Setup\Providers\EditorAssetsProvider::class,
 					\Blockera\Setup\Providers\RestAPIProvider::class,
-					\Blockera\Editor\Providers\StyleProviders::class,
 					\Blockera\Setup\Providers\AppServiceProvider::class,
 					\Blockera\Admin\Providers\AdminAssetsProvider::class,
 				],

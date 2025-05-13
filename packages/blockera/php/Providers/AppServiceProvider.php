@@ -19,21 +19,7 @@ use Blockera\WordPress\RenderBlock\V2\{
     SavePost as V2SavePost,
 };
 
-use Blockera\Editor\{
-    StyleDefinitions\Background,
-    StyleDefinitions\Border,
-    StyleDefinitions\BoxShadow,
-    StyleDefinitions\Effects,
-    StyleDefinitions\Layout,
-    StyleDefinitions\Mouse,
-    StyleDefinitions\Outline,
-    StyleDefinitions\Position,
-    StyleDefinitions\Size,
-    StyleDefinitions\Spacing,
-    StyleDefinitions\TextShadow,
-    StyleDefinitions\Typography,
-    StyleEngine,
-};
+use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
@@ -141,22 +127,7 @@ class AppServiceProvider extends ServiceProvider {
             $this->app->bind(
                 StyleEngine::class,
                 static function ( Application $app, array $params) {
-                    $styleDefinitions = [
-                        Size::class,
-                        Mouse::class,
-                        Layout::class,
-                        Border::class,
-                        Effects::class,
-                        Outline::class,
-                        Spacing::class,
-                        Position::class,
-                        BoxShadow::class,
-                        TextShadow::class,
-                        Background::class,
-                        Typography::class,
-                    ];
-
-					$style_engine = new StyleEngine( $params['block'], $params['fallbackSelector'], $styleDefinitions );
+					$style_engine = new StyleEngine( $params['block'], $params['fallbackSelector'] );
 
 					$style_engine->setApp($app);
 					$style_engine->setBreakpoints(blockera_core_config('breakpoints'));

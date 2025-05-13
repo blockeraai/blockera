@@ -183,6 +183,12 @@ export default function RepeaterControl(
 			return;
 		}
 
+		defaultRepeaterItemValue = {
+			...defaultItemValue,
+			...defaultRepeaterItemValue,
+			selectable,
+		};
+
 		const itemsCount = Object.keys(repeaterItems || {}).length;
 
 		const callback = (value?: Object): void => {
