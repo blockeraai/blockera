@@ -213,8 +213,8 @@
 	display: none !important;
 }
 
-// Hide core position field in the block inspector.
+// hide justification control inside layout constrained (Group Block)
 
-.blockera-block-inspector-controls-wrapper.blockera-active-block ~ .block-editor-block-inspector__tabs .block-editor-block-inspector__position {
-    display: none;
+.block-editor-block-inspector .block-editor-hooks__layout-constrained .block-editor-hooks__layout-constrained-helptext + .components-base-control {
+	display: none;
 }

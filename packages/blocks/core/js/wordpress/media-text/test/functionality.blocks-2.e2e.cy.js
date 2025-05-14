@@ -6,6 +6,7 @@ import {
 	createPost,
 	appendBlocks,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -85,7 +86,20 @@ describe('Media Text Block', () => {
 		//
 
 		//
-		// 3. Assert inner blocks selectors in front end
+		// 3. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 4. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

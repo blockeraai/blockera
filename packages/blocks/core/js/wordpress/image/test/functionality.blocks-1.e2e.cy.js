@@ -16,9 +16,9 @@ describe('Image Block', () => {
 	});
 
 	it('Functionality + Inner blocks', () => {
-		appendBlocks(`<!-- wp:image {"id":7139,"width":"706px","height":"auto","aspectRatio":"1","sizeSlug":"full","linkDestination":"custom"} -->
+		appendBlocks(`<!-- wp:image {"id":7139,"width":"406px","height":"auto","aspectRatio":"1","sizeSlug":"full","linkDestination":"custom"} -->
 <figure class="wp-block-image size-full is-resized"><a href="https://placehold.co/600x400"><img src="https://placehold.co/600x400" alt="this is the test
-" class="wp-image-7139" style="aspect-ratio:1;width:706px;height:auto"/></a><figcaption class="wp-element-caption">Image caption is here...</figcaption></figure>
+" class="wp-image-7139" style="aspect-ratio:1;width:406px;height:auto"/></a><figcaption class="wp-element-caption">Image caption is here...</figcaption></figure>
 <!-- /wp:image -->
 		`);
 
@@ -92,7 +92,39 @@ describe('Image Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+
+			cy.get(
+				'.components-tools-panel:not(.block-editor-bindings__panel)'
+			).within(() => {
+				cy.get('.components-input-control__label')
+					.contains('Aspect ratio')
+					.should('exist')
+					.should('not.be.visible');
+
+				cy.get('.components-input-control__label')
+					.contains('Width')
+					.should('exist')
+					.should('not.be.visible');
+
+				cy.get('.components-input-control__label')
+					.contains('Height')
+					.should('exist')
+					.should('not.be.visible');
+			});
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

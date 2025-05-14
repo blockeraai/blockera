@@ -54,7 +54,20 @@ describe('Read More Block', () => {
 		);
 
 		//
-		// 4. Assert inner blocks selectors in front end
+		// 4. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 5. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

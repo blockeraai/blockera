@@ -42,13 +42,15 @@ describe('Block Partials Testing ...', () => {
 
 		cy.getBlock('core/group').click();
 
-		cy.get('.block-editor-block-variation-transforms')
-			.eq(1)
-			.should('have.css', 'display', 'none');
+		cy.get('.block-editor-block-variation-transforms').should(
+			'have.css',
+			'display',
+			'none'
+		);
 
-		cy.get('.block-editor-block-variation-transforms')
-			.eq(0)
-			.should('have.css', 'display', 'flex');
+		cy.get('.blockera-block-variation-transforms')
+			.should('exist')
+			.should('be.visible');
 	});
 
 	it('should be able to hide WordPress original block variations and display blockera block variations', () => {

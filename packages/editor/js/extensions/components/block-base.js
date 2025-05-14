@@ -368,6 +368,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				/>
 				<SideEffect
 					{...{
+						blockName: name,
 						currentBlock,
 						currentTab,
 						currentState: isInnerBlock(currentBlock)

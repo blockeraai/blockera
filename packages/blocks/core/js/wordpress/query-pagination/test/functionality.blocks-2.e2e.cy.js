@@ -7,6 +7,7 @@ import {
 	appendBlocks,
 	openInserter,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -71,9 +72,27 @@ describe('Query Pagination Block', () => {
 			cy.get('a').first().should('have.css', 'color', 'rgb(0, 0, 255)');
 		});
 
-		// 1.2. elements/link
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.scrollIntoView()
+				.should('not.be.visible');
+
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 
 		savePage();

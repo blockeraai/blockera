@@ -168,7 +168,7 @@ describe('Calendar Block', () => {
 			});
 
 		//
-		// Assert front end
+		// 2. Assert front end
 		//
 		savePage();
 		redirectToFrontPage();

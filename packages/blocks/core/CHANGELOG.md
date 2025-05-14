@@ -77,6 +77,55 @@
 - `Blocksy → Contact Info` block: inner blocks improved.
 - `Blocksy → Dynamic Data` block: inner blocks improved.
 - `Blocksy → Search` block: inner blocks improved.
+- `Archive` block: support improved.
+- `Audio` block: support improved.
+- `Avatar` block: support improved.
+- `Button` block: support improved.
+- `Buttons` block: support improved.
+- `Categories` block: support improved.
+- `Column` block: support improved.
+- `Columns` block: support improved.
+- `Comment Author Name` block: support improved.
+- `Comment Date` block: support improved.
+- `Comment Edit Link` block: support improved.
+- `Comments Pagination` block: support improved.
+- `Comments Title` block: support improved.
+- `Cover` block: support improved.
+- `Details` block: support improved.
+- `File` block: support improved.
+- `Gallery` block: support improved.
+- `Group` block: support improved.
+- `Image` block: support improved.
+- `Latest Comments` block: support improved.
+- `Latest Posts` block: support improved.
+- `Login/out` block: support improved.
+- `Media Text` block: support improved.
+- `Navigation Link` block: support improved.
+- `Navigation Submenu` block: support improved.
+- `Page List` block: support improved.
+- `Post Author` block: support improved.
+- `Post Author Name` block: support improved.
+- `Post Content` block: support improved.
+- `Post Date` block: support improved.
+- `Post Excerpt` block: support improved.
+- `Post Featured Image` block: support improved.
+- `Post Template` block: support improved.
+- `Post Title` block: support improved.
+- `Query Pagination` block: support improved.
+- `Query Pagination Numbers` block: support improved.
+- `Query Title` block: support improved.
+- `Read More` block: support improved.
+- `RSS` block: support improved.
+- `Search` block: support improved.
+- `Site Logo` block: support improved.
+- `Site Title` block: support improved.
+- `Social Link` block: support improved.
+- `Social Links` block: support improved.
+- `Spacer` block: support improved.
+- `Table` block: support improved.
+- `Tag Cloud` block: support improved.
+- `Video` block: support improved.
+- `The Icon` block by Nick Diego: support improved.
 
 
 ### Automated Tests
@@ -91,6 +140,55 @@
 - Updated E2E tests to check functionality of `Query Pagination Next` block.
 - Updated E2E tests to check functionality of `Query Pagination Numbers` block.
 - Updated E2E tests to check functionality of `Query Pagination Prev` block.
+- Updated E2E tests to check support of `Archive` block.
+- Updated E2E tests to check support of `Audio` block.
+- Updated E2E tests to check support of `Avatar` block.
+- Updated E2E tests to check support of `Button` block.
+- Updated E2E tests to check support of `Buttons` block.
+- Updated E2E tests to check support of `Categories` block.
+- Updated E2E tests to check support of `Column` block.
+- Updated E2E tests to check support of `Columns` block.
+- Updated E2E tests to check support of `Comment Author Name` block.
+- Updated E2E tests to check support of `Comment Date` block.
+- Updated E2E tests to check support of `Comment Edit Link` block.
+- Updated E2E tests to check support of `Comments Pagination` block.
+- Updated E2E tests to check support of `Comments Title` block.
+- Updated E2E tests to check support of `Cover` block.
+- Updated E2E tests to check support of `Details` block.
+- Updated E2E tests to check support of `File` block.
+- Updated E2E tests to check support of `Gallery` block.
+- Updated E2E tests to check support of `Group` block.
+- Updated E2E tests to check support of `Image` block.
+- Updated E2E tests to check support of `Latest Comments` block.
+- Updated E2E tests to check support of `Latest Posts` block.
+- Updated E2E tests to check support of `Login/out` block.
+- Updated E2E tests to check support of `Media Text` block.
+- Updated E2E tests to check support of `Navigation Link` block.
+- Updated E2E tests to check support of `Navigation Submenu` block.
+- Updated E2E tests to check support of `Page List` block.
+- Updated E2E tests to check support of `Post Author` block.
+- Updated E2E tests to check support of `Post Author Name` block.
+- Updated E2E tests to check support of `Post Content` block.
+- Updated E2E tests to check support of `Post Date` block.
+- Updated E2E tests to check support of `Post Excerpt` block.
+- Updated E2E tests to check support of `Post Featured Image` block.
+- Updated E2E tests to check support of `Post Template` block.
+- Updated E2E tests to check support of `Post Title` block.
+- Updated E2E tests to check support of `Query Pagination` block.
+- Updated E2E tests to check support of `Query Pagination Numbers` block.
+- Updated E2E tests to check support of `Query Title` block.
+- Updated E2E tests to check support of `Read More` block.
+- Updated E2E tests to check support of `RSS` block.
+- Updated E2E tests to check support of `Search` block.
+- Updated E2E tests to check support of `Site Logo` block.
+- Updated E2E tests to check support of `Site Title` block.
+- Updated E2E tests to check support of `Social Link` block.
+- Updated E2E tests to check support of `Social Links` block.
+- Updated E2E tests to check support of `Spacer` block.
+- Updated E2E tests to check support of `Table` block.
+- Updated E2E tests to check support of `Tag Cloud` block.
+- Updated E2E tests to check support of `Video` block.
+- Updated E2E tests to check support of `Icon` block by Nick Diego.
 
 
 ## 1.3.0 (2025-04-27)
