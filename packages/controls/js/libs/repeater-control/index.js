@@ -419,7 +419,9 @@ export default function RepeaterControl(
 							</div>
 						)}
 
-						{actionButtonAdd && (
+						{(actionButtonAdd ||
+							injectHeaderButtonsStart ||
+							injectHeaderButtonsEnd) && (
 							<div className={controlInnerClassNames('header')}>
 								<div
 									className={controlInnerClassNames(
