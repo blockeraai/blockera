@@ -4,12 +4,6 @@
 import { useEffect } from '@wordpress/element';
 
 const handleSpecificClassCombinations = (container, blockName) => {
-	const isActive = true;
-
-	if (!isActive) {
-		return;
-	}
-
 	const classCombinations = [
 		// Position block section
 		{
@@ -58,6 +52,7 @@ const handleSpecificClassCombinations = (container, blockName) => {
 				'core/video',
 				'core/image',
 				'core/file',
+				'outermost/icon-block',
 			],
 		},
 		// "core/avatar" - image size

@@ -125,6 +125,7 @@
 - `Table` block: support improved.
 - `Tag Cloud` block: support improved.
 - `Video` block: support improved.
+- `The Icon` block by Nick Diego: support improved.
 
 
 ### Automated Tests
@@ -187,6 +188,7 @@
 - Updated E2E tests to check support of `Table` block.
 - Updated E2E tests to check support of `Tag Cloud` block.
 - Updated E2E tests to check support of `Video` block.
+- Updated E2E tests to check support of `Icon` block by Nick Diego.
 
 
 ## 1.3.0 (2025-04-27)
