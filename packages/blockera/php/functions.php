@@ -216,8 +216,21 @@ if (! function_exists('blockera_array_flat')) {
         if (empty($nestedArray)) {
             return [];
         }
+
+        $result = array_merge(...array_values($nestedArray));
         
-        return array_merge(...array_values($nestedArray));
+        // Handle nested arrays with same keys.
+        foreach ($result as $key => $value) {
+            if (is_array($value)) {
+                foreach ($nestedArray as $array) {
+                    if (isset($array[ $key ]) && is_array($array[ $key ])) {
+                        $result[ $key ] = blockera_get_array_deep_merge($result[ $key ], $array[ $key ]);
+                    }
+                }
+            }
+        }
+        
+        return $result;
     }
 }
 
