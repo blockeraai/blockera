@@ -24,11 +24,11 @@ export * from './breakpoint-types';
 
 export type TStatesProps = {
 	...BaseExtensionProps,
+	block: TBlockProps,
 	extensionConfig: { [key: string]: FeatureConfig },
-	values: { [key: TStates]: StateTypes },
+	values: { [key: TStates]: { ...StateTypes, content?: string } },
 	extensionProps: Object,
 	currentState: TStates,
-	currentInnerBlockState: TStates,
 	currentBlock: 'master' | InnerBlockType,
 };
 

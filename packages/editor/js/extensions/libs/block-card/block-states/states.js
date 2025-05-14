@@ -163,6 +163,7 @@ const baseBlockStates = {
 		force: false,
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
+			hasContent: true,
 		},
 	},
 	after: {
@@ -192,6 +193,7 @@ const baseBlockStates = {
 		force: false,
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
+			hasContent: true,
 		},
 	},
 	'first-child': {

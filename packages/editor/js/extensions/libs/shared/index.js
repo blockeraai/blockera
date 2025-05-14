@@ -471,7 +471,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									values={
 										currentStateAttributes.blockeraBlockStates
 									}
-									attributes={attributes.blockeraBlockStates}
+									attributes={{
+										blockeraBlockStates:
+											attributes.blockeraBlockStates,
+									}}
 									extensionProps={{}}
 									handleOnChangeAttributes={
 										handleOnChangeAttributes

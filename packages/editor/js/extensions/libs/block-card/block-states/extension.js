@@ -15,7 +15,7 @@ import {
 	InputControl,
 	BaseControl,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
+import { hasSameProps, mergeObject } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -27,8 +27,8 @@ import { isShowField } from '../../../api/utils';
 import { generateExtensionId } from '../../utils';
 import { EditorFeatureWrapper } from '../../../..';
 import { ExtensionSettings } from '../../settings';
+import { useEditorStore } from '../../../../hooks';
 import { useBlockSection } from '../../../components';
-import { isInnerBlock } from '../../../components/utils';
 
 export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 	({
@@ -41,31 +41,24 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 		setSettings,
 		currentState,
 		currentBlock,
-		currentInnerBlockState,
 	}: TStatesProps): MixedElement => {
 		const { initialOpen, onToggle } = useBlockSection('statesConfig');
+		const { getState, getInnerState } = useEditorStore();
 		const isShowContent = isShowField(
 			extensionConfig.contentField,
 			(values[currentState] || {})?.content || '',
-			(attributes.default[currentState] || {})?.content || ''
+			(attributes.blockeraBlockStates.default[currentState] || {})
+				?.content || ''
 		);
+		const {
+			settings: { hasContent },
+		} = getState(currentState) ||
+			getInnerState(currentState) || {
+				settings: { hasContent: false },
+			};
 
-		// Extension is not active
-		if (!isShowContent) {
-			return <></>;
-		}
-
-		if (
-			isInnerBlock(currentBlock) &&
-			!['after', 'before'].includes(currentInnerBlockState)
-		) {
-			return <></>;
-		}
-
-		if (
-			!isInnerBlock(currentBlock) &&
-			!['after', 'before'].includes(currentState)
-		) {
+		// Extension is not active or has not content.
+		if (!isShowContent || !hasContent) {
 			return <></>;
 		}
 
@@ -94,7 +87,7 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 							value={{
 								name: generateExtensionId(
 									block,
-									'state-content'
+									'state-content' + currentBlock
 								),
 								value:
 									(values[currentState] || {})?.content || '',
@@ -118,18 +111,28 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 								columns="columns-2"
 								placeholder="Auto"
 								defaultValue={
-									attributes.default[currentState]?.content ||
-									''
+									attributes.blockeraBlockStates.default[
+										currentState
+									]?.content || ''
 								}
 								onChange={(newValue, ref) => {
-									values[currentState] = {
-										...values[currentState],
-										content: newValue,
-									};
-
 									handleOnChangeAttributes(
 										'blockeraBlockStates',
-										values,
+										mergeObject(values, {
+											// $FlowFixMe
+											[currentState]: {
+												...values[currentState],
+												content: newValue,
+												// $FlowFixMe
+												...(!values[currentState]
+													?.breakpoints
+													? {
+															breakpoints: {},
+															isVisible: true,
+													  }
+													: {}),
+											},
+										}),
 										{ ref }
 									);
 								}}
