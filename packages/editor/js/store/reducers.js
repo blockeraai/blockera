@@ -8,7 +8,7 @@ import { combineReducers } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
+import { isEquals, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -44,6 +44,12 @@ export const breakpoints = (state: Object = [], action: Object): Object => {
 export const blockStates = (state: Object = {}, action: Object): Object => {
 	switch (action.type) {
 		case 'SET_BLOCK_STATES':
+			const newState = mergeObject(state, action.states);
+
+			if (isEquals(newState, state)) {
+				return state;
+			}
+
 			return mergeObject(state, action.states);
 		case 'EDIT_BLOCK_STATE':
 			return {
@@ -68,6 +74,12 @@ export const innerBlockStates = (
 ): Object => {
 	switch (action.type) {
 		case 'SET_INNER_BLOCK_STATES':
+			const newState = mergeObject(state, action.states);
+
+			if (isEquals(newState, state)) {
+				return state;
+			}
+
 			return mergeObject(state, action.states);
 		case 'EDIT_INNER_BLOCK_STATE':
 			return {
