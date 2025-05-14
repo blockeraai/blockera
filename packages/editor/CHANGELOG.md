@@ -12,11 +12,13 @@
 - Block style variation redesigned and moved to block card (Block Card v3).
 - Added support for flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
 - Added smart calculation for block states in inner blocks.
-
+- Added `content` css property support for `:before` and `:after` pseudo-elements in block states.
 
 ### Automated Tests
 - Added E2E tests to check block style variation functionality.
 
+### Bug Fixes
+- Fixed an issue where the merge of styles for block states was not working properly.
 
 ## 1.4.0 (2025-04-27)
 
