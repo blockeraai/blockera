@@ -12,10 +12,14 @@
 		--icon-size: 16px;
 
 		.blockera-control-group-header {
-			padding: 0 6px 0 3px;
+			padding: 0 5px 0 3px;
 
 			.blockera-control-repeater-group-header {
 				gap: 1px;
+
+				.blockera-control-header-icon {
+					min-width: 16px;
+				}
 			}
 		}
 

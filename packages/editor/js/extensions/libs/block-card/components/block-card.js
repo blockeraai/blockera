@@ -214,7 +214,7 @@ export function BlockCard({
 					gap={10}
 					direction="column"
 					style={{
-						margin: '0 -2px',
+						margin: '0 -3px',
 					}}
 				>
 					<div
