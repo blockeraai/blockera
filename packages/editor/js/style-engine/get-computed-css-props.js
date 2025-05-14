@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
+/**
  * Internal dependencies
  */
 import {
@@ -66,7 +71,7 @@ export const getComputedCssProps = ({
 	...params
 }: Object): Array<CssRule> => {
 	const stylesStack = [];
-
+	const { getState, getInnerState } = select('blockera/editor');
 	const defaultAttributes = prepareBlockeraDefaultAttributesValues(
 		params.defaultAttributes
 	);
@@ -123,6 +128,13 @@ export const getComputedCssProps = ({
 						currentStateHasSelectors = true;
 					}
 
+					const {
+						settings: { hasContent },
+					} = getState(stateType) ||
+						getInnerState(stateType) || {
+							settings: { hasContent: false },
+						};
+
 					stylesStack.push(
 						appendStyles({
 							settings: {
@@ -134,6 +146,18 @@ export const getComputedCssProps = ({
 								attributes: {
 									...defaultAttributes,
 									...breakpointItem?.attributes,
+									...(hasContent &&
+									stateItem.hasOwnProperty('content')
+										? {
+												blockeraBlockStates: {
+													[stateType]: {
+														content:
+															stateItem?.content ||
+															'',
+													},
+												},
+										  }
+										: {}),
 								},
 								currentBlock: blockType,
 								device: breakpointType,
