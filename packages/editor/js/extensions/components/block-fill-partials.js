@@ -7,7 +7,7 @@ import memoize from 'fast-memoize';
 import { select, useDispatch } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
-import { useEffect, memo, useMemo } from '@wordpress/element';
+import { useEffect, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -18,13 +18,7 @@ import { unregisterControl } from '@blockera/controls';
  * Internal dependencies
  */
 import { isInnerBlock } from './utils';
-import { useExtensionsStore } from '../../hooks';
 import { BlockCard, InnerBlockCard } from '../libs/block-card';
-import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
-import {
-	unstableBootstrapBlockStatesDefinitions,
-	unstableBootstrapInnerBlockStatesDefinitions,
-} from '../libs/block-card/block-states/bootstrap';
 
 const excludedControls = ['canvas-editor'];
 
@@ -36,50 +30,16 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		blockProps,
 		currentBlock,
 		currentState,
+		availableStates,
 		currentBreakpoint,
 		currentInnerBlock,
 		BlockEditComponent,
 		blockeraInnerBlocks,
+		availableInnerStates,
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { getBlockExtensionBy } = useExtensionsStore();
-		const { getStates, getInnerStates } = select('blockera/editor');
 		const { updateBlockAttributes } = useDispatch('core/block-editor');
-		const availableStates =
-			blockProps?.additional?.availableBlockStates || getStates();
-		const availableInnerStates = useMemo(() => {
-			let blockStates =
-				(
-					(blockProps?.additional?.blockeraInnerBlocks || {})[
-						currentBlock
-					] || {}
-				)?.availableBlockStates || getInnerStates();
-
-			if (isInnerBlock(currentBlock)) {
-				if (!isVirtualBlock(currentBlock)) {
-					const { availableBlockStates } =
-						getBlockExtensionBy('targetBlock', currentBlock) || {};
-
-					if (Object.keys(availableBlockStates || {}).length) {
-						blockStates = availableBlockStates;
-					}
-				}
-			}
-
-			return blockStates;
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [currentBlock, blockProps]);
-
-		useEffect(() => {
-			if (isInnerBlock(currentBlock)) {
-				unstableBootstrapInnerBlockStatesDefinitions(
-					availableInnerStates
-				);
-			} else {
-				unstableBootstrapBlockStatesDefinitions(availableStates);
-			}
-		}, [currentBlock, availableStates, availableInnerStates]);
 
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {

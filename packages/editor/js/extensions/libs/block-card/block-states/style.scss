@@ -74,7 +74,14 @@
 	}
 
 	.blockera-control-group .blockera-control-action-buttons {
-		right: 0;
+		right: -12px;
+		top: -1px;
+		bottom: -1px;
+		border-radius: 0 2px 2px 0;
+		transition: all 0.1s ease;
+		background: linear-gradient(-90deg, var(--blockera-controls-primary-color) 60%, transparent);
+		opacity: 0;
+		visibility: hidden;
 
 		.blockera-component-button {
 			color: #ffffff;
@@ -88,7 +95,9 @@
 
 	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
 	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
-		background: linear-gradient(-90deg, var(--blockera-controls-primary-color) 60%, transparent);
+		right: -17px;
+		opacity: 1;
+		visibility: visible;
 	}
 }
 
