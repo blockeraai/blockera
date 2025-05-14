@@ -31,10 +31,6 @@ import {
 	isMasterBlockStates,
 	blockStatesValueCleanup,
 } from '../helpers';
-import {
-	unstableBootstrapBlockStatesDefinitions,
-	unstableBootstrapInnerBlockStatesDefinitions,
-} from '../bootstrap';
 
 export const useBlockStates = ({
 	id = 'master-block-states',
@@ -81,11 +77,6 @@ export const useBlockStates = ({
 		) {
 			return getSortedObject(attributes?.blockeraUnsavedData?.states);
 		} else if (availableStates) {
-			if (isInnerBlock(currentBlock)) {
-				unstableBootstrapInnerBlockStatesDefinitions(availableStates);
-			} else {
-				unstableBootstrapBlockStatesDefinitions(availableStates);
-			}
 			return getSortedObject(availableStates);
 		}
 

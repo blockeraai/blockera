@@ -21,6 +21,10 @@ import { isInnerBlock } from './utils';
 import { useExtensionsStore } from '../../hooks';
 import { BlockCard, InnerBlockCard } from '../libs/block-card';
 import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
+import {
+	unstableBootstrapBlockStatesDefinitions,
+	unstableBootstrapInnerBlockStatesDefinitions,
+} from '../libs/block-card/block-states/bootstrap';
 
 const excludedControls = ['canvas-editor'];
 
@@ -66,6 +70,16 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			return blockStates;
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [currentBlock, blockProps]);
+
+		useEffect(() => {
+			if (isInnerBlock(currentBlock)) {
+				unstableBootstrapInnerBlockStatesDefinitions(
+					availableInnerStates
+				);
+			} else {
+				unstableBootstrapBlockStatesDefinitions(availableStates);
+			}
+		}, [currentBlock, availableStates, availableInnerStates]);
 
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
