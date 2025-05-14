@@ -92,7 +92,7 @@ describe('Style Engine Testing ...', () => {
 				redirectToFrontPage();
 
 				context('base breakpoint', () => {
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
@@ -106,8 +106,8 @@ describe('Style Engine Testing ...', () => {
 								: 'transition: all 500ms ease 0ms'
 						);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block')
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block')
 						.should(
 							'have.css',
 							'background-color',
@@ -128,7 +128,7 @@ describe('Style Engine Testing ...', () => {
 					// Set xl-desktop viewport
 					cy.viewport(1441, 1920);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
@@ -142,8 +142,8 @@ describe('Style Engine Testing ...', () => {
 								: 'transition: all 500ms ease 0ms'
 						);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block')
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block')
 						.should(
 							'have.css',
 							'background-color',
@@ -156,14 +156,14 @@ describe('Style Engine Testing ...', () => {
 					// Set tablet viewport
 					cy.viewport(991, 1368);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(227, 23, 139)'
@@ -261,7 +261,7 @@ describe('Style Engine Testing ...', () => {
 					// Set xl-desktop viewport
 					cy.viewport(1441, 1920);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'not.have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
@@ -280,7 +280,7 @@ describe('Style Engine Testing ...', () => {
 					// Set xl-desktop viewport
 					cy.viewport(1441, 1920);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'not.have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
@@ -291,14 +291,14 @@ describe('Style Engine Testing ...', () => {
 					// Set tablet viewport
 					cy.viewport(991, 1368);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(227, 23, 139)'
@@ -396,7 +396,7 @@ describe('Style Engine Testing ...', () => {
 				redirectToFrontPage();
 
 				context('base breakpoint', () => {
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
@@ -410,8 +410,8 @@ describe('Style Engine Testing ...', () => {
 								: 'transition: all 500ms ease 0ms;'
 						);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block')
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block')
 						.should(
 							'have.css',
 							'background-color',
@@ -424,14 +424,14 @@ describe('Style Engine Testing ...', () => {
 					// Set xl-desktop viewport
 					cy.viewport(1441, 1920);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
 					);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(227, 23, 139)'
@@ -442,14 +442,14 @@ describe('Style Engine Testing ...', () => {
 					// Set tablet viewport
 					cy.viewport(991, 1368);
 
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(227, 23, 139)'
 					);
 
-					cy.get('.blockera-block').realHover();
-					cy.get('.blockera-block').should(
+					cy.get('p.blockera-block').realHover();
+					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
 						'rgb(22, 226, 193)'
