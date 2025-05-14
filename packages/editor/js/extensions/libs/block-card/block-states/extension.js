@@ -25,7 +25,6 @@ import { Icon } from '@blockera/icons';
 import type { TStatesProps } from './types';
 import { isShowField } from '../../../api/utils';
 import { generateExtensionId } from '../../utils';
-import { useEditorStore } from '../../../../hooks';
 import { EditorFeatureWrapper } from '../../../..';
 import { ExtensionSettings } from '../../settings';
 import { useBlockSection } from '../../../components';
@@ -42,6 +41,7 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 		setSettings,
 		currentState,
 		currentBlock,
+		currentInnerBlockState,
 	}: TStatesProps): MixedElement => {
 		const { initialOpen, onToggle } = useBlockSection('statesConfig');
 		const isShowContent = isShowField(
@@ -49,7 +49,6 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 			(values[currentState] || {})?.content || '',
 			(attributes.default[currentState] || {})?.content || ''
 		);
-		const { availableStates, availableInnerState } = useEditorStore();
 
 		// Extension is not active
 		if (!isShowContent) {
@@ -58,12 +57,15 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 
 		if (
 			isInnerBlock(currentBlock) &&
-			availableInnerState.includes(currentState)
+			!['after', 'before'].includes(currentInnerBlockState)
 		) {
 			return <></>;
 		}
 
-		if (availableStates.includes(currentState)) {
+		if (
+			!isInnerBlock(currentBlock) &&
+			!['after', 'before'].includes(currentState)
+		) {
 			return <></>;
 		}
 

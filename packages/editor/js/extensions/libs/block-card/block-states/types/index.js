@@ -28,6 +28,7 @@ export type TStatesProps = {
 	values: { [key: TStates]: StateTypes },
 	extensionProps: Object,
 	currentState: TStates,
+	currentInnerBlockState: TStates,
 	currentBlock: 'master' | InnerBlockType,
 };
 
