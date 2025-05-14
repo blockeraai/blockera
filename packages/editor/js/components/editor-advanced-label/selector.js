@@ -59,10 +59,12 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 	}
 
 	const { getExtensionCurrentBlock } = select('blockera/extensions');
-	const { getStates, getBreakpoints } = select('blockera/editor');
-	const defaultStates = getStates();
-
+	const { getStates, getBreakpoints, getInnerStates } =
+		select('blockera/editor');
 	const currentBlock = getExtensionCurrentBlock();
+	const defaultStates = isInnerBlock(currentBlock)
+		? getInnerStates()
+		: getStates();
 
 	const breakpoints = getBreakpoints();
 	const normals = [];
