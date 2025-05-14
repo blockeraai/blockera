@@ -370,7 +370,7 @@ abstract class BaseStyleDefinition {
 	 *
      * @return array
      */
-    public function getCssRules( $content): array {
+    public function getCssRules( $content = null): array {
 
         $this->generateCssRules($content);
 
