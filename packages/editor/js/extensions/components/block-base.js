@@ -404,6 +404,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				/>
 				<SideEffect
 					{...{
+						activeBlockVariation: activeBlockVariation?.name || '',
 						blockName: name,
 						currentBlock,
 						currentTab,

@@ -154,6 +154,7 @@ const handleSpecificClassCombinations = (container, blockName) => {
 };
 
 export const useBlockSideEffects = ({
+	activeBlockVariation,
 	blockName,
 	currentBlock,
 	currentTab,
@@ -161,6 +162,27 @@ export const useBlockSideEffects = ({
 	isActive,
 }) => {
 	useEffect(() => {
+		const inspector = document.querySelector(
+			'.block-editor-block-inspector'
+		);
+
+		if (inspector) {
+			const classList = inspector.classList;
+			Array.from(classList).forEach((className) => {
+				if (className.startsWith('blockera-active-block-')) {
+					classList.remove(className);
+				}
+			});
+
+			inspector.classList.add(
+				'blockera-active-block-' +
+					blockName.replaceAll('/', '-') +
+					(activeBlockVariation
+						? '-' + activeBlockVariation.replaceAll('/', '-')
+						: '')
+			);
+		}
+
 		// The original WordPress Block Tabs wrapper element.
 		const inspectorTabs = document.querySelector(
 			'.block-editor-block-inspector__tabs'
@@ -266,5 +288,12 @@ export const useBlockSideEffects = ({
 
 		inspectorTabs.style.display = 'none';
 		inspectorTabs.classList.add('blockera-hide');
-	}, [blockName, currentBlock, currentTab, currentState, isActive]);
+	}, [
+		blockName,
+		currentBlock,
+		currentTab,
+		currentState,
+		isActive,
+		activeBlockVariation,
+	]);
 };
