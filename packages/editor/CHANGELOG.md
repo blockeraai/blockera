@@ -16,6 +16,7 @@
 
 ### Automated Tests
 - Added E2E tests to check block style variation functionality.
+- Added Unit tests for computation css declarations to ensure the robustness of the style engine.
 
 ### Bug Fixes
 - Fixed an issue where the merge of styles for block states was not working properly.
