@@ -139,6 +139,7 @@ describe('Table Block', () => {
 		//
 		// 2. Check settings tab
 		//
+		setParentBlock();
 		cy.getByDataTest('settings-tab').click();
 
 		// layout settings should be hidden
