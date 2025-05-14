@@ -38,6 +38,7 @@ export const PositionStyles = ({
 		state,
 		clientId,
 		blockName,
+		currentBlock,
 		attributes: currentBlockAttributes,
 	};
 	const { attributes: _attributes } = blockProps;
