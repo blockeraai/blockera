@@ -61,13 +61,23 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 
 			useEffect(() => popoverRef.current?.focus(), []);
 
-			function popoverOnFocusOutside() {
+			function popoverOnFocusOutside(e: MouseEvent) {
 				const excludeClasses = [
 					'btn-choose-image',
 					'btn-media-library',
 					'btn-upload',
 					'btn-pick-color',
 				];
+
+				if (
+					excludeClasses.filter((className) =>
+						((e.target: any): HTMLElement).classList.contains(
+							className
+						)
+					).length !== 0
+				) {
+					return false;
+				}
 
 				// Check if the target is the anchor element
 				if (
@@ -79,14 +89,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 					return false;
 				}
 
-				// eslint-disable-next-line no-restricted-globals
-				return excludeClasses.filter((className) =>
-					popoverRef.current?.ownerDocument?.activeElement?.classList?.contains(
-						className
-					)
-				).length !== 0
-					? false
-					: onClose();
+				onClose();
 			}
 
 			return (
