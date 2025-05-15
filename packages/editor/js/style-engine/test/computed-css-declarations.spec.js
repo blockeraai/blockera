@@ -70,9 +70,7 @@ describe('computedCssDeclarations', () => {
 			baseSelector
 		);
 
-		expect(result).toEqual([
-			'color: #f50505 !important;\n\ncontent: "Master Before";',
-		]);
+		expect(result).toEqual(['color: #f50505 !important;\n\n']);
 	});
 
 	test('should handle style definition with important flag', () => {
@@ -96,9 +94,7 @@ describe('computedCssDeclarations', () => {
 			baseSelector
 		);
 
-		expect(result).toEqual([
-			'margin: 10px !important;\n\ncontent: "Master Before";',
-		]);
+		expect(result).toEqual(['margin: 10px !important;\n\n']);
 	});
 
 	test('should handle multiple style definitions', () => {
@@ -128,8 +124,8 @@ describe('computedCssDeclarations', () => {
 		);
 
 		expect(result).toEqual([
-			'color: #f50505 !important;\n\ncontent: "Master Before";',
-			'margin: 10px !important;\n\ncontent: "Master Before";',
+			'color: #f50505 !important;\n\n',
+			'margin: 10px !important;\n\n',
 		]);
 	});
 
