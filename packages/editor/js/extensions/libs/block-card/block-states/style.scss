@@ -79,7 +79,7 @@
 		bottom: -1px;
 		border-radius: 0 2px 2px 0;
 		transition: all 0.1s ease;
-		background: linear-gradient(-90deg, var(--blockera-controls-primary-color) 60%, transparent);
+		background: linear-gradient(-90deg, var(--blockera-controls-primary-color) 70%, transparent);
 		opacity: 0;
 		visibility: hidden;
 
@@ -95,7 +95,7 @@
 
 	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
 	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
-		right: -17px;
+		right: -21px;
 		opacity: 1;
 		visibility: visible;
 	}
