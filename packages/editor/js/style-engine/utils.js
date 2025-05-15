@@ -1,11 +1,6 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { select } from '@wordpress/data';
-
-/**
  * Blockera dependencies
  */
 import { isString } from '@blockera/utils';
@@ -69,7 +64,6 @@ export const computedCssDeclarations = (
 	pickedSelector: string
 ): Array<string> => {
 	const output = [];
-	const { getState, getInnerState } = select('blockera/editor');
 
 	for (const styleKey in styleDefinitions) {
 		const generatorDetails: Array<StaticStyle | DynamicStyle> =
@@ -94,27 +88,10 @@ export const computedCssDeclarations = (
 					pickedSelector
 				);
 
-				let rules = cssGenerator.rules();
+				const rules = cssGenerator.rules();
 
 				if (!rules) {
 					return;
-				}
-
-				const {
-					settings: { hasContent },
-				} = getState(blockProps.state) ||
-					getInnerState(blockProps.state) || {
-						settings: { hasContent: false },
-					};
-				const content =
-					(
-						blockProps?.attributes?.blockeraBlockStates[
-							blockProps?.state
-						] || {}
-					)?.content || '';
-
-				if (content && hasContent) {
-					rules += `content: "${content}";`;
 				}
 
 				output.push(rules);

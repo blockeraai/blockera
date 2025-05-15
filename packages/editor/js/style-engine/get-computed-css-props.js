@@ -18,6 +18,7 @@ import {
 	FlexChildStyles,
 	BackgroundStyles,
 	TypographyStyles,
+	BlockStatesStyles,
 	BorderAndShadowStyles,
 } from '../extensions';
 import {
@@ -50,6 +51,7 @@ const appendStyles = ({
 		FlexChildStyles,
 		TypographyStyles,
 		BackgroundStyles,
+		BlockStatesStyles,
 		BorderAndShadowStyles,
 	};
 
@@ -102,6 +104,54 @@ export const getComputedCssProps = ({
 
 				const breakpoints = stateItem.breakpoints;
 
+				const {
+					settings: { hasContent },
+				} = getState(stateType) ||
+					getInnerState(stateType) || {
+						settings: { hasContent: false },
+					};
+
+				let currentStateHasSelectors = false;
+				let calculatedSelectors =
+					selectors[appendBlockeraPrefix(blockType)] || {};
+
+				if (
+					!isNormalState(stateType) &&
+					selectors[appendBlockeraPrefix(`states/${stateType}`)]
+				) {
+					calculatedSelectors =
+						selectors[appendBlockeraPrefix(`states/${stateType}`)];
+					currentStateHasSelectors = true;
+				}
+
+				if (
+					hasContent &&
+					!Object.keys(breakpoints || {})?.length &&
+					isBaseBreakpoint(currentBreakpoint)
+				) {
+					stylesStack.push(
+						appendStyles({
+							settings: {
+								...calculatedProps,
+								state: stateType,
+								currentBlock: blockType,
+								masterState,
+								currentStateHasSelectors,
+								selectors: calculatedSelectors,
+								attributes: {
+									...defaultAttributes,
+									blockeraBlockStates: {
+										[stateType]: {
+											content: stateItem?.content || '',
+										},
+									},
+								},
+							},
+							disabledStyles,
+						})
+					);
+				}
+
 				for (const breakpointType in breakpoints) {
 					if (breakpointType !== currentBreakpoint) {
 						continue;
@@ -112,28 +162,6 @@ export const getComputedCssProps = ({
 					if (!Object.keys(breakpointItem?.attributes || {}).length) {
 						continue;
 					}
-
-					let currentStateHasSelectors = false;
-					let calculatedSelectors =
-						selectors[appendBlockeraPrefix(blockType)] || {};
-
-					if (
-						!isNormalState(stateType) &&
-						selectors[appendBlockeraPrefix(`states/${stateType}`)]
-					) {
-						calculatedSelectors =
-							selectors[
-								appendBlockeraPrefix(`states/${stateType}`)
-							];
-						currentStateHasSelectors = true;
-					}
-
-					const {
-						settings: { hasContent },
-					} = getState(stateType) ||
-						getInnerState(stateType) || {
-							settings: { hasContent: false },
-						};
 
 					stylesStack.push(
 						appendStyles({
@@ -146,8 +174,7 @@ export const getComputedCssProps = ({
 								attributes: {
 									...defaultAttributes,
 									...breakpointItem?.attributes,
-									...(hasContent &&
-									stateItem.hasOwnProperty('content')
+									...(hasContent
 										? {
 												blockeraBlockStates: {
 													[stateType]: {
@@ -253,6 +280,41 @@ export const getComputedCssProps = ({
 		}
 
 		if (validateBlockStates(stateItem)) {
+			const {
+				settings: { hasContent },
+			} = getState(state) ||
+				getInnerState(state) || {
+					settings: { hasContent: false },
+				};
+
+			if (
+				hasContent &&
+				!Object.keys(stateItem?.breakpoints || {})?.length &&
+				isBaseBreakpoint(currentBreakpoint)
+			) {
+				stylesStack.push(
+					appendStyles({
+						settings: {
+							...calculatedProps,
+							state,
+							currentBlock: 'master',
+							device: getBaseBreakpoint(),
+							currentStateHasSelectors,
+							attributes: {
+								...defaultAttributes,
+								blockeraBlockStates: {
+									// $FlowFixMe
+									[state]: {
+										content: stateItem?.content || '',
+									},
+								},
+							},
+						},
+						disabledStyles,
+					})
+				);
+			}
+
 			for (const breakpointType in stateItem?.breakpoints || {}) {
 				if (breakpointType !== currentBreakpoint) {
 					continue;
@@ -260,7 +322,10 @@ export const getComputedCssProps = ({
 
 				const breakpoint = stateItem?.breakpoints[breakpointType];
 
-				if (!Object.keys(breakpoint?.attributes || {}).length) {
+				if (
+					!Object.keys(breakpoint?.attributes || {}).length &&
+					!stateItem?.content
+				) {
 					continue;
 				}
 
@@ -274,6 +339,18 @@ export const getComputedCssProps = ({
 								...defaultAttributes,
 								...params.attributes,
 								...breakpoint?.attributes,
+								...(hasContent
+									? {
+											blockeraBlockStates: {
+												// $FlowFixMe
+												[state]: {
+													content:
+														stateItem?.content ||
+														'',
+												},
+											},
+									  }
+									: {}),
 							},
 							currentBlock: 'master',
 							device: breakpointType,
