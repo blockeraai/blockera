@@ -116,6 +116,37 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = memo(
 									]?.content || ''
 								}
 								onChange={(newValue, ref) => {
+									if (
+										newValue ===
+											(attributes.blockeraBlockStates
+												.default[currentState]
+												?.content || '') &&
+										!Object.keys(
+											values[currentState]?.breakpoints ||
+												{}
+										).length
+									) {
+										return handleOnChangeAttributes(
+											'blockeraBlockStates',
+											mergeObject(
+												values,
+												{
+													// $FlowFixMe
+													[currentState]: undefined,
+												},
+												{
+													forceUpdated: [
+														currentState,
+													],
+													deletedProps: [
+														currentState,
+													],
+												}
+											),
+											{ ref }
+										);
+									}
+
 									handleOnChangeAttributes(
 										'blockeraBlockStates',
 										mergeObject(values, {
