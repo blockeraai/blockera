@@ -265,7 +265,13 @@ export const useBlockSideEffects = ({
 
 		// Handle specific class combinations in both inspectorTabs and settingsOutsideAnyTabs
 		if (inspectorTabs) {
-			handleSpecificClassCombinations(inspectorTabs, blockName);
+			if ('settings' === currentTab) {
+				setTimeout(() => {
+					handleSpecificClassCombinations(inspectorTabs, blockName);
+				}, 30);
+			} else {
+				handleSpecificClassCombinations(inspectorTabs, blockName);
+			}
 		}
 
 		if ('settings' === currentTab && currentBlock === 'master') {
