@@ -35,6 +35,7 @@ export const MouseStyles = ({
 		attributes: currentBlockAttributes,
 		clientId,
 		blockName,
+		currentBlock,
 	};
 	const { attributes: currBlockAttributes } = blockProps;
 	const sharedParams = {

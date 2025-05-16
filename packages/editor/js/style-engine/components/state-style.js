@@ -31,8 +31,13 @@ export const StateStyle = (
 	props: StateStyleProps
 ): Array<MixedElement> | MixedElement => {
 	const [breakpoints, setBreakpoints] = useState({});
-	const { getStates, getBreakpoints } = select('blockera/editor');
-	const blockStates = getStates();
+	const { getStates, getInnerStates, getBreakpoints } =
+		select('blockera/editor');
+	const blockStates = useMemo(
+		() => mergeObject(getStates(), getInnerStates()),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
 
 	useEffect(() => {
 		const loadBreakpoints = () => {
@@ -50,15 +55,24 @@ export const StateStyle = (
 	}, []);
 
 	const statesForProcessing = useMemo(() => {
-		if (
-			props?.additional?.availableBlockStates &&
-			Object.keys(props?.additional?.availableBlockStates).length > 0
-		) {
-			return props?.additional?.availableBlockStates;
+		const availableStates = props?.additional?.availableBlockStates || {};
+		let availableInnerBlockStates = {};
+
+		for (const key in props?.additional?.blockeraInnerBlocks) {
+			const value = props?.additional?.blockeraInnerBlocks[key];
+			if (value?.availableBlockStates) {
+				availableInnerBlockStates = {
+					...availableInnerBlockStates,
+					...value?.availableBlockStates,
+				};
+			}
 		}
 
-		return blockStates;
-	}, [props?.additional?.availableBlockStates, blockStates]);
+		return mergeObject(
+			blockStates,
+			mergeObject(availableStates, availableInnerBlockStates)
+		);
+	}, [props?.additional, blockStates]);
 
 	// Filtered allowed states to generate stylesheet.
 	// in free version allowed just "normal" and "hover".

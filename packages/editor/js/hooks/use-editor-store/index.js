@@ -15,22 +15,22 @@ export const useEditorStore = (): Object => {
 		getState,
 		getInnerState,
 		availableStates,
+		availableInnerState,
 		availableBreakpoints,
-		getAvailableInnerState,
 	} = useSelect((select) => {
 		const {
 			getState,
 			getInnerState,
 			getAvailableStates,
-			getAvailableInnerState,
+			getAvailableInnerStates,
 			getAvailableBreakpoints,
 		} = select(STORE_NAME);
 
 		return {
 			getState,
 			getInnerState,
-			getAvailableInnerState,
 			availableStates: getAvailableStates(),
+			availableInnerState: getAvailableInnerStates(),
 			availableBreakpoints: getAvailableBreakpoints(),
 		};
 	});
@@ -39,7 +39,7 @@ export const useEditorStore = (): Object => {
 		getState,
 		getInnerState,
 		availableStates,
+		availableInnerState,
 		availableBreakpoints,
-		getAvailableInnerState,
 	};
 };

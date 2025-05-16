@@ -364,6 +364,8 @@ abstract class BaseStyleDefinition {
     }
 
     /**
+	 * Get the css rules.
+	 *
      * @return array
      */
     public function getCssRules(): array {
@@ -432,7 +434,7 @@ abstract class BaseStyleDefinition {
 
                 if ($this->availableInInnerBlock($this->style_id)) {
 
-                    $this->css($setting);
+					$this->css($setting);
                 }
             },
             $settings

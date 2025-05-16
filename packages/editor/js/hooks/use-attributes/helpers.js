@@ -75,6 +75,7 @@ export const memoizedRootBreakpoints: (
 				className: mergedCssClasses,
 			};
 		}
+		const { getState, getInnerState } = select('blockera/editor');
 
 		if (isInnerBlock(currentBlock) && insideInnerBlock) {
 			if (!isNormalState(currentInnerBlockState)) {
@@ -104,6 +105,24 @@ export const memoizedRootBreakpoints: (
 					newValue
 				);
 
+				const {
+					settings: { hasContent },
+				} = getState(currentInnerBlockState) ||
+					getInnerState(currentInnerBlockState) || {
+						settings: { hasContent: false },
+					};
+
+				let content = '';
+
+				if (hasContent) {
+					content =
+						(breakpoint?.attributes?.blockeraInnerBlocks[
+							currentBlock
+						]?.attributes?.blockeraBlockStates || {})[
+							currentInnerBlockState
+						]?.content || '';
+				}
+
 				return mergeObject(
 					breakpoint,
 					{
@@ -128,6 +147,9 @@ export const memoizedRootBreakpoints: (
 												// We need to address the isVisible property in the block-states repeater item,
 												// as there is currently no UI for this property in the block-states repeater item.
 												isVisible: true,
+												...(hasContent
+													? { content }
+													: {}),
 											},
 										},
 									},
@@ -185,7 +207,9 @@ export const memoizedBlockStates: (
 	currentBlockAttributes: Object,
 	action: Object,
 	args: Object
-) => Array<StateTypes> = memoize(
+) => {
+	value: { [key: TStates]: { ...StateTypes, content?: string } },
+} = memoize(
 	(
 		currentBlockAttributes: Object,
 		action: Object,
@@ -216,7 +240,7 @@ export const memoizedBlockStates: (
 		const breakpoints =
 			blockStates[receivedState || currentState]?.breakpoints;
 
-		const moreProps =
+		const moreProps: Object =
 			(receivedState || currentState) === 'custom-class'
 				? {
 						'css-class': blockStates['custom-class']['css-class'],

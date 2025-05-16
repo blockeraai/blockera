@@ -16,3 +16,4 @@ export { conditionsConfig } from './conditions';
 export { advancedSettingsConfig } from './advanced-settings';
 export { iconConfig } from './icon';
 export { innerBlocksConfig } from './inner-blocks';
+export { statesConfig } from './block-states';

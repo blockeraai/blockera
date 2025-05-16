@@ -553,8 +553,12 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		// If selector is a child of root or starts with a tag name and should not start with a space because it's a child selector and we should not add it before the root.
 		if (! str_starts_with($selector, ' ') && ( $is_child_selector || preg_match( '/^[a-z]/', $selector ) )) {
 
-			// If selector contains combinators (space, >, +, ~), append root after the selector.
-			return "{$selector}{$root}";
+			// If selector contains pseudo-classes or combinators, keep them intact and append root.
+			$parts  = explode(':', $selector);
+			$base   = $parts[0];
+			$pseudo = isset($parts[1]) ? ':' . $parts[1] : '';
+
+			return "{$base}{$root}{$pseudo}";
 		}
 
 		// If selector started with dot or any other classname of child elements, we imagine it's other classname of root or child of root.
