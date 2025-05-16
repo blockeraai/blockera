@@ -366,25 +366,21 @@ abstract class BaseStyleDefinition {
     /**
 	 * Get the css rules.
 	 *
-	 * @param null|string $content the content of inner block state.
-	 *
      * @return array
      */
-    public function getCssRules( $content = null): array {
+    public function getCssRules(): array {
 
-        $this->generateCssRules($content);
+        $this->generateCssRules();
 
         return array_filter($this->css, 'blockera_get_filter_empty_array_item');
     }
 
     /**
      * Generating css rules.
-	 *
-	 * @param null|string $content the content of inner block state.
      *
      * @return void
      */
-    protected function generateCssRules( $content): void {
+    protected function generateCssRules(): void {
 
         $value = $this->settings;
 
@@ -429,7 +425,7 @@ abstract class BaseStyleDefinition {
         }
 
         array_map(
-            function ( array $setting) use ( $content): void {
+            function ( array $setting): void {
 
                 if (! $this->getSupports(false)[ $this->style_id ]) {
 
@@ -439,9 +435,6 @@ abstract class BaseStyleDefinition {
                 if ($this->availableInInnerBlock($this->style_id)) {
 
 					$this->css($setting);
-					if ($content) {
-						$this->css[ $this->selector ]['content'] = '"' . $content . '"';
-					}
                 }
             },
             $settings
