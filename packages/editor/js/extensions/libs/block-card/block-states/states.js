@@ -397,6 +397,7 @@ const baseSharedBlockStates = {
 		force: false,
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
+			hasContent: true,
 		},
 	},
 	placeholder: {
