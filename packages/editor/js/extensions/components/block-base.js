@@ -54,6 +54,10 @@ import {
 	unstableBootstrapBlockStatesDefinitions,
 	unstableBootstrapInnerBlockStatesDefinitions,
 } from '../libs/block-card/block-states/bootstrap';
+import {
+	generalBlockStates,
+	generalInnerBlockStates,
+} from '../libs/block-card/block-states/states';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
@@ -311,12 +315,12 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	}, [_attributes]);
 
 	const { getBlockExtensionBy } = useExtensionsStore();
-	const { getStates, getInnerStates } = select('blockera/editor');
-	const availableStates = additional?.availableBlockStates || getStates();
+	const availableStates =
+		additional?.availableBlockStates || generalBlockStates;
 	const availableInnerStates = useMemo(() => {
 		let blockStates =
 			((additional?.blockeraInnerBlocks || {})[currentBlock] || {})
-				?.availableBlockStates || getInnerStates();
+				?.availableBlockStates || generalInnerBlockStates;
 
 		if (isInnerBlock(currentBlock)) {
 			if (!isVirtualBlock(currentBlock)) {
