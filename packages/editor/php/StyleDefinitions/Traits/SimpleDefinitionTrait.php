@@ -16,7 +16,8 @@ trait SimpleDefinitionTrait {
 			return $declaration;
 		}
 
-		if (method_exists($this, 'validate') && ! $this->validate()) {
+		// Validate the setting before generating css if the method validate exists.
+		if (method_exists($this, 'validate') && ! $this->validate($setting)) {
 			
 			return $declaration;
 		}
