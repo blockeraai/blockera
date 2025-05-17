@@ -16,6 +16,11 @@ trait SimpleDefinitionTrait {
 			return $declaration;
 		}
 
+		if (method_exists($this, 'validate') && ! $this->validate()) {
+			
+			return $declaration;
+		}
+
         if (empty($cssProperty) || empty($setting[ $cssProperty ]) || $this->getCssProperty() !== $cssProperty) {
 
             return $declaration;
