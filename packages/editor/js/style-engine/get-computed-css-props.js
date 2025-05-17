@@ -300,6 +300,7 @@ export const getComputedCssProps = ({
 							currentBlock: 'master',
 							device: getBaseBreakpoint(),
 							currentStateHasSelectors,
+							selectors: calculatedSelectors,
 							attributes: {
 								...defaultAttributes,
 								blockeraBlockStates: {
