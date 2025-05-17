@@ -27,6 +27,27 @@ describe('Details Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		// Block card states and inner blocks active items
+		[
+			'normal',
+			'hover',
+			'open',
+			'elements/title',
+			'elements/title-icon',
+			'core/paragraph',
+		].forEach((state) => {
+			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+				'be.visible'
+			);
+		});
+
+		['elements/link'].forEach((state) => {
+			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+				'not.exist'
+			);
+		});
+
 		//
 		// 1. Edit Block
 		//
