@@ -15,7 +15,7 @@ import {
 	getBlockSupportFallback,
 } from '../../../utils';
 
-const supports = getBlockSupportCategory('background');
+const supports = getBlockSupportCategory('state');
 
 export const BlockStatesStyles = ({
 	state,
@@ -58,6 +58,15 @@ export const BlockStatesStyles = ({
 		null !== blockProps.attributes.blockeraBlockStates[state]?.content &&
 		undefined !== blockProps.attributes.blockeraBlockStates[state]?.content
 	) {
+		if (
+			!supports?.blockeraContentPseudoElement?.hasDefaultValueInStates.includes(
+				state
+			) &&
+			'' === blockProps.attributes.blockeraBlockStates[state].content
+		) {
+			return styleGroup;
+		}
+
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
 			query: 'blockera/states/before',
