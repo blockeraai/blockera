@@ -8,7 +8,8 @@
 			"definition": "Content",
 			"css-property": "content",
 			"fallback": [],
-			"description": "Support for \"content\" value."
+			"description": "Support for \"content\" value.",
+			"hasDefaultValueInStates": ["before", "after"]
 		}
 	}
 }

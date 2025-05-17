@@ -44,6 +44,10 @@
 						"additionalProperties": {
 							"type": ["string", "boolean"]
 						}
+					},
+					"hasDefaultValueInStates": {
+						"description": "The list of states that have a default value.",
+						"type": ["array"]
 					}
 				},
 				"required": ["status", "fallback", "css-property"],
