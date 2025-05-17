@@ -38,6 +38,19 @@ describe('Buttons Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		// Block card states active items
+		['normal', 'hover', 'core/button'].forEach((state) => {
+			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+				'be.visible'
+			);
+		});
+
+		['visited', 'link'].forEach((state) => {
+			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+				'not.exist'
+			);
+		});
+
 		//
 		// 1. Edit Block
 		//
@@ -65,6 +78,15 @@ describe('Buttons Block', () => {
 		// 1.1. Button inner block
 		//
 		setInnerBlock('core/button');
+
+		// Block card states active items
+		cy.get('.block-card--inner-block').within(() => {
+			['normal', 'hover', 'focus', 'active'].forEach((state) => {
+				cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+					'be.visible'
+				);
+			});
+		});
 
 		//
 		// 1.1.1. BG color
