@@ -29,10 +29,18 @@ describe('Button Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// No inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		// Block card states active items
+		['normal', 'hover', 'focus', 'active'].forEach((state) => {
+			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+				'be.visible'
+			);
+		});
+
+		['visited'].forEach((state) => {
+			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+				'not.exist'
+			);
+		});
 
 		//
 		// 1. Block Styles
