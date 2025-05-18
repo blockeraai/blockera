@@ -22,6 +22,18 @@ import { isNormalState } from '../extensions/components';
 import { getBlockCSSSelector } from './get-block-css-selector';
 
 /**
+ * Returns the appropriate state symbol for the given state.
+ *
+ * @param {TStates} state - The state to get the symbol for.
+ * @return {string} The appropriate state symbol for the given state.
+ */
+export const getStateSymbol = (state: TStates): string => {
+	return ['marker', 'placeholder', 'before', 'after'].includes(state)
+		? '::'
+		: ':';
+};
+
+/**
  * Generates a CSS selector based on the provided state, suffix, and whether the block is an inner block or outer block.
  * It also accounts for customized pseudo-classes and normal/non-normal states.
  * Additionally, supports selectors starting with '&', which are replaced with the root selector.
@@ -141,21 +153,35 @@ export const getNormalizedSelector = (
 					) {
 						// If current state has selectors, we should return the selector as is with master state.
 						if (currentStateHasSelectors) {
-							return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}, ${rootSelector}${spacer}${selector}${suffixClass}`;
+							return `${rootSelector}${getStateSymbol(
+								masterState
+							)}${masterState}${spacer}${selector}${suffixClass}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 						}
 
-						return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}:${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
+						return `${rootSelector}${getStateSymbol(
+							masterState
+						)}${masterState}${spacer}${selector}${suffixClass}${getStateSymbol(
+							state
+						)}${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 					}
 
 					// If current state has selectors, we should return the selector as is with master state.
 					if (currentStateHasSelectors) {
-						return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}`;
+						return `${rootSelector}${getStateSymbol(
+							masterState
+						)}${masterState}${spacer}${selector}${suffixClass}`;
 					}
 
-					return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}:${state}`;
+					return `${rootSelector}${getStateSymbol(
+						masterState
+					)}${masterState}${spacer}${selector}${suffixClass}${getStateSymbol(
+						state
+					)}${state}`;
 				}
 
-				return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}`;
+				return `${rootSelector}${getStateSymbol(
+					masterState
+				)}${masterState}${spacer}${selector}${suffixClass}`;
 			}
 
 			if (!isNormalState(state) && masterState) {
@@ -169,7 +195,9 @@ export const getNormalizedSelector = (
 						return `${rootSelector}${spacer}${selector}${suffixClass}`;
 					}
 
-					return `${rootSelector}${spacer}${selector}${suffixClass}:${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
+					return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
+						state
+					)}${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 				}
 
 				// If current state has selectors, return selector as is.
@@ -177,7 +205,9 @@ export const getNormalizedSelector = (
 					return `${rootSelector}${spacer}${selector}${suffixClass}`;
 				}
 
-				return `${rootSelector}${spacer}${selector}${suffixClass}:${state}`;
+				return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
+					state
+				)}${state}`;
 			}
 
 			return `${rootSelector}${spacer}${selector}${suffixClass}`;
@@ -192,10 +222,12 @@ export const getNormalizedSelector = (
 		if (!isNormalState(state)) {
 			// Assume active master block state is not normal.
 			if (!isNormalState(masterStateType) && state === masterStateType) {
-				return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
+				return `${selector}${suffixClass}${getStateSymbol(
+					state
+				)}${state}, ${selector}${suffixClass}`;
 			}
 
-			return `${selector}${suffixClass}:${state}`;
+			return `${selector}${suffixClass}${getStateSymbol(state)}${state}`;
 		}
 
 		return `${selector}${suffixClass}`;

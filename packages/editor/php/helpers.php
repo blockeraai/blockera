@@ -261,7 +261,22 @@ if ( ! function_exists( 'blockera_set_selector_pseudo_class' ) ) {
 	 */
 	function blockera_set_selector_pseudo_class( string $selector, string $pseudo_class ): string {
 
-		return sprintf( '%s:%s', trim( $selector ), $pseudo_class );
+		return trim( $selector ) . blockera_get_state_symbol( $pseudo_class ) . $pseudo_class;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_state_symbol' ) ) {
+
+	/**
+	 * Get state symbol.
+	 *
+	 * @param string $state The state.
+	 *
+	 * @return string
+	 */
+	function blockera_get_state_symbol( string $state ): string {
+
+		return in_array( $state, [ 'marker', 'placeholder', 'before', 'after' ] ) ? '::' : ':';
 	}
 }
 
@@ -308,13 +323,13 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			if ( str_starts_with( $selector, '&&' ) ) {
 				$selector              = $root_first_part . substr( $selector, 2 );
 				$formatted_selectors[] = $selector . 
-					( $has_pseudo && ! $current_state_has_selectors ? ':' . $pseudo_class : '' );
+					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
 			} else {
 				$formatted_selectors[] = $root . 
-					( $has_parent_pseudo ? ':' . $parent_pseudo_class : '' ) .
+					( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
 					( $needs_space ? ' ' : '' ) .
 					blockera_process_ampersand_selector_char($selector) .
-					( $has_pseudo && ! $current_state_has_selectors ? ':' . $pseudo_class : '' );
+					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
 			}
 		}
 
