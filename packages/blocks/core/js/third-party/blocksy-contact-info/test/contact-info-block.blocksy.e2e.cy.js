@@ -1227,4 +1227,54 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 			});
 		});
 	});
+
+	it('Block card items', () => {
+		appendBlocks(`<!-- wp:blocksy/widgets-wrapper {"heading":"Contact Info","block":"blocksy/contact-info","hasDescription":true} -->
+<!-- wp:heading {"level":3,"className":"","fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">Contact Info</h3>
+<!-- /wp:heading -->
+
+<!-- wp:blocksy/contact-info {"blockeraPropsId":"1328e472-bfca-4af4-82db-19f2dcc1ba06","blockeraCompatId":"16183445239","blockeraBackgroundColor":{"value":"#ffc1c1"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraBorder":{"value":{"type":"all","all":{"width":"","color":"rgba(218, 222, 228, 0.5)","style":"solid"}}},"blockeraInnerBlocks":{"value":{"elements/icons":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.5)"}},"blockeraBlockStates":{"hover":{"isVisible":true,"breakpoints":{"desktop":{"attributes":{"blockeraBorder":{"type":"all","all":{"width":"1px","style":"solid","color":"rgba(218, 222, 228, 0.7)"}}}}}}},"blockeraBackgroundColor":"#ff7878"}},"elements/titles":{"attributes":{"blockeraFontColor":"#38ffb3"}},"elements/contents":{"attributes":{"blockeraFontColor":"#1500ff"}}}},"lock":{"remove":true},"className":"blockera-block blockera-block\u002d\u002dt97zuv","style":{"color":{"background":"#ffc1c1"}}} -->
+<div>Blocksy: Contact Info</div>
+<!-- /wp:blocksy/contact-info -->
+<!-- /wp:blocksy/widgets-wrapper -->`);
+
+		cy.getBlock('blocksy/contact-info').first().click();
+
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/icons',
+			'elements/titles',
+			'elements/contents',
+			'elements/text',
+			'elements/link',
+		]);
+
+		// 1. elements/icons
+		setInnerBlock('elements/icons');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 2. elements/titles
+		setParentBlock();
+		setInnerBlock('elements/titles');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 3. elements/contents
+		setParentBlock();
+		setInnerBlock('elements/contents');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 4. elements/text
+		setParentBlock();
+		setInnerBlock('elements/text');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 5. elements/link
+		setParentBlock();
+		setInnerBlock('elements/link');
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+	});
 });
