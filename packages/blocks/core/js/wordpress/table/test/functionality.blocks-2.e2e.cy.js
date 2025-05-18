@@ -26,6 +26,15 @@ describe('Table Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/caption',
+			'elements/header-cells',
+			'elements/body-cells',
+			'elements/footer-cells',
+		]);
+
 		//
 		// 1. Edit Blocks
 		//
@@ -78,6 +87,8 @@ describe('Table Block', () => {
 		//
 		setInnerBlock('elements/caption');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', '#606060');
 
 		cy.getBlock('core/table').within(() => {
@@ -93,6 +104,8 @@ describe('Table Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/header-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', '#808080');
 
@@ -110,6 +123,8 @@ describe('Table Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/body-cells');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', '#909090');
 
 		cy.getBlock('core/table').within(() => {
@@ -125,6 +140,8 @@ describe('Table Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/footer-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', '#A0A0A0');
 
