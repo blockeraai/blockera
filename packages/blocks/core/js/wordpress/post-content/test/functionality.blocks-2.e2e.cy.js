@@ -6,10 +6,11 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
+	setParentBlock,
 	closeWelcomeGuide,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 import { experimental } from '@blockera/env';
 
@@ -51,22 +52,13 @@ describe('Post Content Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1.1. Edit Post Block
@@ -95,6 +87,9 @@ describe('Post Content Block', () => {
 		// 1.2. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		//
@@ -125,7 +120,19 @@ describe('Post Content Block', () => {
 		);
 
 		//
-		// 1.2. Save template
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Save template
 		//
 		savePage();
 

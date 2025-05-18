@@ -217,3 +217,82 @@ describe("getNormalizedSelector - supports selectors starting with '&'", () => {
 		expect(result).toBe('.my-element--modified, .root.test--modified');
 	});
 });
+
+describe("getNormalizedSelector - supports selectors starting with '&&'", () => {
+	const mockGetInnerState = jest.fn((): TStates => 'normal');
+	const mockGetMasterState = jest.fn((): TStates => 'normal');
+
+	const defaultOptions = {
+		state: 'normal',
+		suffixClass: '--modified',
+		rootSelector: '.complex-root .with-child',
+		getInnerState: mockGetInnerState,
+		getMasterState: mockGetMasterState,
+		fromInnerBlock: false,
+		customizedPseudoClasses: [
+			'parent-class',
+			'custom-class',
+			'parent-hover',
+		],
+	};
+
+	beforeEach(() => {
+		mockGetInnerState.mockClear();
+		mockGetMasterState.mockClear();
+	});
+
+	test('should replace "&&" with first part of rootSelector', () => {
+		const result = getNormalizedSelector('&& .item', defaultOptions);
+		expect(result).toBe('.complex-root .item--modified');
+	});
+
+	test('should replace "&&" with first part of rootSelector for &&.test', () => {
+		const result = getNormalizedSelector('&&.test', defaultOptions);
+		expect(result).toBe('.complex-root.test--modified');
+	});
+
+	test('should handle pseudo-elements with && prefix', () => {
+		const result = getNormalizedSelector('&&::marker', defaultOptions);
+		expect(result).toBe('.complex-root::marker--modified');
+	});
+
+	test('should handle multiple selectors with && prefix', () => {
+		const result = getNormalizedSelector(
+			'&&.test, &&::before',
+			defaultOptions
+		);
+		expect(result).toBe(
+			'.complex-root.test--modified, .complex-root::before--modified'
+		);
+	});
+
+	test('should apply pseudo-classes correctly with && selector', () => {
+		const options = {
+			...defaultOptions,
+			state: 'hover',
+		};
+
+		const result = getNormalizedSelector('&& .item', options);
+		expect(result).toBe('.complex-root .item--modified:hover');
+	});
+
+	test('should handle mixed selectors with & and && prefixes', () => {
+		const result = getNormalizedSelector(
+			'&.item, && .child',
+			defaultOptions
+		);
+		expect(result).toBe(
+			'.complex-root .with-child.item--modified, .complex-root .child--modified'
+		);
+	});
+
+	test('should handle multi-part complex selectors with && prefix', () => {
+		const result = getNormalizedSelector(
+			'&& > .direct-child, && + .sibling',
+			defaultOptions
+		);
+		expect(result).toBe(
+			'.complex-root > .direct-child--modified, .complex-root + .sibling--modified'
+		);
+	});
+});

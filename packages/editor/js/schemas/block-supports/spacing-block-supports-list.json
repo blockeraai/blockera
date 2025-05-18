@@ -4,6 +4,8 @@
 	"supports": {
 		"blockeraSpacing": {
 			"status": true,
+			"id": "blockeraSpacing",
+			"definition": "Spacing",
 			"css-property": "spacing",
 			"fallback": ["spacing.margin", "spacing.padding", "spacing"],
 			"description": "Support for \"blockeraSpacing\" value, this is mirror for WordPress block core \"spacing\" support."

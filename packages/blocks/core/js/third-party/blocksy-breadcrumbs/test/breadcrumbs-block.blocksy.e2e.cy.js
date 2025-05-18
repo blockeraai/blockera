@@ -611,10 +611,18 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		});
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Block card + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:blocksy/breadcrumbs /-->`);
 
 		cy.getBlock('blocksy/breadcrumbs').first().click();
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/links',
+			'elements/separator',
+			'elements/text',
+		]);
 
 		//
 		// 1. Edit Inner Blocks
@@ -641,6 +649,8 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		// 1.1. Text inner block
 		//
 		setInnerBlock('elements/text');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.1.1. Text color
@@ -675,6 +685,8 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		setParentBlock();
 		setInnerBlock('elements/links');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.2.1. Text color
 		//
@@ -707,6 +719,8 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/separator');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.3.1. Text color

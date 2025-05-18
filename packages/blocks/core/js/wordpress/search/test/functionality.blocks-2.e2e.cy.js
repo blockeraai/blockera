@@ -26,10 +26,13 @@ describe('Search Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/label',
+			'elements/input',
+			'elements/button',
+		]);
 
 		//
 		// 1. Edit Inner Blocks
@@ -59,6 +62,8 @@ describe('Search Block', () => {
 		//
 		setInnerBlock('elements/label');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -77,6 +82,11 @@ describe('Search Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/input');
+
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'placeholder'],
+			true
+		);
 
 		//
 		// 1.2.1. BG color
@@ -97,6 +107,8 @@ describe('Search Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/button');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.3.1. BG color
 		//
@@ -111,7 +123,21 @@ describe('Search Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('not.be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

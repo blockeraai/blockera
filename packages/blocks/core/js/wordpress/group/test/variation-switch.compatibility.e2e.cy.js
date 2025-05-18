@@ -65,6 +65,18 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.checkActiveBlockVariation('group');
 
 		//
+		// 2.1. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('be.visible');
+		});
+
+		//
 		// Test 2: Change Variation to `group-row`
 		//
 
@@ -90,6 +102,8 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
+		cy.getByDataTest('style-tab').click();
+
 		cy.getParentContainer('Display')
 			.first()
 			.within(() => {
@@ -105,6 +119,18 @@ describe('Group Block → Variation Switch Compatibility', () => {
 					.invoke('attr', 'aria-checked')
 					.should('eq', 'true');
 			});
+
+		//
+		// 2.1. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('not.be.visible');
+		});
 
 		//
 		// Test 3: Change Variation to `group-stack`
@@ -132,6 +158,8 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
+		cy.getByDataTest('style-tab').click();
+
 		cy.getParentContainer('Display')
 			.first()
 			.within(() => {
@@ -147,6 +175,18 @@ describe('Group Block → Variation Switch Compatibility', () => {
 					.invoke('attr', 'aria-checked')
 					.should('eq', 'true');
 			});
+
+		//
+		// 3.1. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('not.be.visible');
+		});
 
 		//
 		// Test 4: Change Variation to `group-grid`
@@ -175,6 +215,8 @@ describe('Group Block → Variation Switch Compatibility', () => {
 			);
 		});
 
+		cy.getByDataTest('style-tab').click();
+
 		cy.getParentContainer('Display')
 			.first()
 			.within(() => {
@@ -182,6 +224,18 @@ describe('Group Block → Variation Switch Compatibility', () => {
 					.invoke('attr', 'aria-pressed')
 					.should('eq', 'true');
 			});
+
+		//
+		// 4.1. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('be.visible');
+		});
 
 		//
 		// Test 5: Change Variation to `group`
@@ -209,6 +263,8 @@ describe('Group Block → Variation Switch Compatibility', () => {
 				getSelectedBlock(data, 'blockeraFlexLayout')?.alignItems
 			);
 		});
+
+		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Display')
 			.first()

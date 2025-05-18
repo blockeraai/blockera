@@ -1,6 +1,11 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+
+/**
  * Internal dependencies
  */
 import {
@@ -13,6 +18,7 @@ import {
 	FlexChildStyles,
 	BackgroundStyles,
 	TypographyStyles,
+	BlockStatesStyles,
 	BorderAndShadowStyles,
 } from '../extensions';
 import {
@@ -23,9 +29,9 @@ import type { CssRule } from './types';
 import type {
 	TBreakpoint,
 	TStates,
-} from '../extensions/libs/block-states/types';
+} from '../extensions/libs/block-card/block-states/types';
 import { appendBlockeraPrefix } from './utils';
-import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
+import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
 
 const appendStyles = ({
@@ -45,6 +51,7 @@ const appendStyles = ({
 		FlexChildStyles,
 		TypographyStyles,
 		BackgroundStyles,
+		BlockStatesStyles,
 		BorderAndShadowStyles,
 	};
 
@@ -66,7 +73,7 @@ export const getComputedCssProps = ({
 	...params
 }: Object): Array<CssRule> => {
 	const stylesStack = [];
-
+	const { getState, getInnerState } = select('blockera/editor');
 	const defaultAttributes = prepareBlockeraDefaultAttributesValues(
 		params.defaultAttributes
 	);
@@ -97,6 +104,54 @@ export const getComputedCssProps = ({
 
 				const breakpoints = stateItem.breakpoints;
 
+				const {
+					settings: { hasContent },
+				} = getState(stateType) ||
+					getInnerState(stateType) || {
+						settings: { hasContent: false },
+					};
+
+				let currentStateHasSelectors = false;
+				let calculatedSelectors =
+					selectors[appendBlockeraPrefix(blockType)] || {};
+
+				if (
+					!isNormalState(stateType) &&
+					selectors[appendBlockeraPrefix(`states/${stateType}`)]
+				) {
+					calculatedSelectors =
+						selectors[appendBlockeraPrefix(`states/${stateType}`)];
+					currentStateHasSelectors = true;
+				}
+
+				if (
+					hasContent &&
+					!Object.keys(breakpoints || {})?.length &&
+					isBaseBreakpoint(currentBreakpoint)
+				) {
+					stylesStack.push(
+						appendStyles({
+							settings: {
+								...calculatedProps,
+								state: stateType,
+								currentBlock: blockType,
+								masterState,
+								currentStateHasSelectors,
+								selectors: calculatedSelectors,
+								attributes: {
+									...defaultAttributes,
+									blockeraBlockStates: {
+										[stateType]: {
+											content: stateItem?.content || '',
+										},
+									},
+								},
+							},
+							disabledStyles,
+						})
+					);
+				}
+
 				for (const breakpointType in breakpoints) {
 					if (breakpointType !== currentBreakpoint) {
 						continue;
@@ -114,13 +169,22 @@ export const getComputedCssProps = ({
 								...calculatedProps,
 								state: stateType,
 								masterState,
-								selectors:
-									selectors[
-										appendBlockeraPrefix(blockType)
-									] || {},
+								currentStateHasSelectors,
+								selectors: calculatedSelectors,
 								attributes: {
 									...defaultAttributes,
 									...breakpointItem?.attributes,
+									...(hasContent
+										? {
+												blockeraBlockStates: {
+													[stateType]: {
+														content:
+															stateItem?.content ||
+															'',
+													},
+												},
+										  }
+										: {}),
 								},
 								currentBlock: blockType,
 								device: breakpointType,
@@ -201,8 +265,57 @@ export const getComputedCssProps = ({
 		// 3- validate saved block-states to creating css styles for all states of blocks.
 		const states = params?.attributes?.blockeraBlockStates;
 		const stateItem = states[state];
+		let calculatedSelectors = calculatedProps.selectors;
+		let currentStateHasSelectors = false;
+
+		if (
+			!isNormalState(state) &&
+			calculatedProps.selectors[appendBlockeraPrefix(`states/${state}`)]
+		) {
+			calculatedSelectors =
+				calculatedProps.selectors[
+					appendBlockeraPrefix(`states/${state}`)
+				];
+			currentStateHasSelectors = true;
+		}
 
 		if (validateBlockStates(stateItem)) {
+			const {
+				settings: { hasContent },
+			} = getState(state) ||
+				getInnerState(state) || {
+					settings: { hasContent: false },
+				};
+
+			if (
+				hasContent &&
+				!Object.keys(stateItem?.breakpoints || {})?.length &&
+				isBaseBreakpoint(currentBreakpoint)
+			) {
+				stylesStack.push(
+					appendStyles({
+						settings: {
+							...calculatedProps,
+							state,
+							currentBlock: 'master',
+							device: getBaseBreakpoint(),
+							currentStateHasSelectors,
+							selectors: calculatedSelectors,
+							attributes: {
+								...defaultAttributes,
+								blockeraBlockStates: {
+									// $FlowFixMe
+									[state]: {
+										content: stateItem?.content || '',
+									},
+								},
+							},
+						},
+						disabledStyles,
+					})
+				);
+			}
+
 			for (const breakpointType in stateItem?.breakpoints || {}) {
 				if (breakpointType !== currentBreakpoint) {
 					continue;
@@ -210,7 +323,10 @@ export const getComputedCssProps = ({
 
 				const breakpoint = stateItem?.breakpoints[breakpointType];
 
-				if (!Object.keys(breakpoint?.attributes || {}).length) {
+				if (
+					!Object.keys(breakpoint?.attributes || {}).length &&
+					!stateItem?.content
+				) {
 					continue;
 				}
 
@@ -218,10 +334,24 @@ export const getComputedCssProps = ({
 					appendStyles({
 						settings: {
 							...calculatedProps,
+							currentStateHasSelectors,
+							selectors: calculatedSelectors,
 							attributes: {
 								...defaultAttributes,
 								...params.attributes,
 								...breakpoint?.attributes,
+								...(hasContent
+									? {
+											blockeraBlockStates: {
+												// $FlowFixMe
+												[state]: {
+													content:
+														stateItem?.content ||
+														'',
+												},
+											},
+									  }
+									: {}),
 							},
 							currentBlock: 'master',
 							device: breakpointType,

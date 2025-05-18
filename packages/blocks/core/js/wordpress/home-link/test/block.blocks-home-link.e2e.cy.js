@@ -2,11 +2,11 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
+	openInserter,
 	setInnerBlock,
-	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -54,11 +54,6 @@ describe(
 			// Block supported is active
 			cy.get('.blockera-extension-block-card').should('be.visible');
 
-			// Has inner blocks
-			cy.get(
-				'.blockera-extension.blockera-extension-inner-blocks'
-			).should('exist');
-
 			// switch to parent navigation button should be visible
 			cy.get('.blockera-extension-block-card.master-block-card').within(
 				() => {
@@ -72,17 +67,13 @@ describe(
 			// 1. Inner blocks existence
 			//
 
-			// open inner block settings
-			openInnerBlocksExtension();
+			cy.checkBlockCardItems(['normal', 'hover', 'current-menu-item']);
 
-			cy.get(
-				'.blockera-extension.blockera-extension-inner-blocks'
-			).within(() => {
-				cy.getByDataTest('elements/link').should('exist');
+			openInserter();
+			cy.getByDataTest('elements/link').should('exist');
 
-				// no other item
-				cy.getByDataTest('core/paragraph').should('not.exist');
-			});
+			// no other item
+			cy.getByDataTest('core/paragraph').should('not.exist');
 
 			//
 			// 1. Edit Block

@@ -5,7 +5,9 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -135,6 +137,28 @@ describe(
 			cy.getByAriaLabel('Select Submenu').click();
 
 			//
+			// 0. Inner blocks existence
+			//
+			cy.checkBlockCardItems([
+				'normal',
+				'hover',
+				'current-menu-item',
+				'elements/link',
+				'elements/submenu-icon',
+				'elements/submenu-container',
+				'elements/submenu-items',
+			]);
+
+			openInserter();
+			cy.getByDataTest('elements/link').should('exist');
+			cy.getByDataTest('states/current-menu-item').should('exist');
+			cy.getByDataTest('states/current-menu-parent').should('exist');
+			cy.getByDataTest('states/current-menu-ancestor').should('exist');
+
+			// no other item
+			cy.getByDataTest('core/paragraph').should('not.exist');
+
+			//
 			// 1. Edit Block
 			//
 			cy.getSelectedBlock()
@@ -150,12 +174,31 @@ describe(
 				.should('have.css', 'background-clip', 'padding-box');
 
 			//
-			// 1.1. Submenu inner block
+			// 1.1. elements/link
+			//
+			setInnerBlock('elements/link');
+
+			cy.checkBlockCardItems(
+				['normal', 'hover', 'focus', 'active'],
+				true
+			);
+
+			//
+			// 1.2. elements/submenu-icon
+			//
+			setInnerBlock('elements/submenu-icon');
+
+			cy.checkBlockCardItems(['normal', 'hover'], true);
+
+			//
+			// 1.3. elements/submenu-container
 			//
 			setInnerBlock('elements/submenu-container');
 
+			cy.checkBlockCardItems(['normal', 'hover'], true);
+
 			//
-			// 1.1.1. BG color
+			// 1.3.1. BG color
 			//
 			cy.setColorControlValue('BG Color', 'cccccc');
 
@@ -168,7 +211,30 @@ describe(
 			});
 
 			//
-			// 2. Assert front end
+			// 1.4. elements/submenu-items
+			//
+			setInnerBlock('elements/submenu-items');
+
+			cy.checkBlockCardItems(
+				['normal', 'hover', 'current-menu-item'],
+				true
+			);
+
+			//
+			// 2. Check settings tab
+			//
+			setParentBlock();
+			cy.getByDataTest('settings-tab').click();
+
+			cy.get('.block-editor-block-inspector').within(() => {
+				cy.get('.components-tools-panel-header')
+					.contains('Settings')
+					.scrollIntoView()
+					.should('be.visible');
+			});
+
+			//
+			// 3. Assert front end
 			//
 			savePage();
 			redirectToFrontPage();

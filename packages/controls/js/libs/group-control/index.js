@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { ComponentType, MixedElement } from 'react';
-import { memo, useState } from '@wordpress/element';
+import { memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -14,7 +14,7 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import { useOutsideClick, isFunction } from '@blockera/utils';
+import { isFunction } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -27,7 +27,7 @@ const GroupControl: ComponentType<any> = memo(
 	({
 		design = 'minimal',
 		toggleOpenBorder = false,
-		isOpen: _isOpen = false,
+		isOpen = false,
 		//
 		mode = 'popover',
 		popoverProps,
@@ -50,12 +50,6 @@ const GroupControl: ComponentType<any> = memo(
 		onOpen: fnOnOpen = () => {},
 		onClick = () => {},
 	}: GroupControlProps): MixedElement => {
-		const [isOpen, setOpen] = useState(_isOpen);
-		const [isOpenPopover, setOpenPopover] = useState(_isOpen);
-		const { ref } = useOutsideClick({
-			onOutsideClick: () => setOpen(false),
-		});
-
 		const getHeaderOpenIcon = (): MixedElement | string => {
 			if (headerOpenIcon) {
 				return headerOpenIcon;
@@ -100,9 +94,6 @@ const GroupControl: ComponentType<any> = memo(
 			} else {
 				onOpen();
 			}
-
-			setOpen(!isOpen);
-			setOpenPopover(!isOpenPopover);
 		};
 
 		const isCallbackEligible = (event: MouseEvent) => {
@@ -125,10 +116,7 @@ const GroupControl: ComponentType<any> = memo(
 					'group',
 					'design-' + design,
 					'mode-' + mode,
-
-					isOpen || (isOpenPopover && !isOpen)
-						? 'is-open'
-						: 'is-close',
+					isOpen ? 'is-open' : 'is-close',
 					toggleOpenBorder ? 'toggle-open-border' : '',
 					className
 				)}
@@ -136,7 +124,6 @@ const GroupControl: ComponentType<any> = memo(
 				aria-label={'group-control'}
 			>
 				<div
-					ref={ref}
 					className={controlInnerClassNames('group-header')}
 					data-cy="group-control-header"
 					onClick={handleOnClick}
@@ -147,11 +134,6 @@ const GroupControl: ComponentType<any> = memo(
 						{headerOpenButton && (
 							<Button
 								className={controlInnerClassNames('btn-toggle')}
-								icon={
-									isOpen
-										? getHeaderOpenIcon()
-										: getHeaderCloseIcon()
-								}
 								label={
 									isOpen
 										? __('Close Settings', 'blockera')
@@ -159,7 +141,11 @@ const GroupControl: ComponentType<any> = memo(
 								}
 								onClick={onClickCallback}
 								noBorder={true}
-							/>
+							>
+								{isOpen
+									? getHeaderOpenIcon()
+									: getHeaderCloseIcon()}
+							</Button>
 						)}
 
 						{injectHeaderButtonsEnd}
@@ -168,9 +154,8 @@ const GroupControl: ComponentType<any> = memo(
 					{header}
 				</div>
 
-				{mode === 'popover' && isOpenPopover && (
+				{mode === 'popover' && isOpen && (
 					<Popover
-						{...popoverProps}
 						offset={popoverOffset}
 						placement="left-start"
 						className={controlInnerClassNames(
@@ -181,9 +166,8 @@ const GroupControl: ComponentType<any> = memo(
 						titleButtonsRight={popoverTitleButtonsRight}
 						onClose={() => {
 							onClose();
-
-							setOpenPopover(false);
 						}}
+						{...popoverProps}
 					>
 						{children}
 					</Popover>

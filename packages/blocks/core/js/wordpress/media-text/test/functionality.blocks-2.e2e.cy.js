@@ -6,8 +6,8 @@ import {
 	createPost,
 	appendBlocks,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Media Text Block', () => {
@@ -30,29 +30,15 @@ describe('Media Text Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
 		//
 		// 1. Inner blocks existence
 		//
+		cy.getByDataTest('core/paragraph').should('exist');
+		cy.getByDataTest('core/heading').should('exist');
+		cy.getByDataTest('core/image').should('exist');
 
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-				cy.getByDataTest('core/paragraph').should('exist');
-				cy.getByDataTest('core/heading').should('exist');
-				cy.getByDataTest('core/image').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading-1').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading-1').should('not.exist');
 
 		//
 		// 2. Edit Block
@@ -100,7 +86,20 @@ describe('Media Text Block', () => {
 		//
 
 		//
-		// 3. Assert inner blocks selectors in front end
+		// 3. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 4. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

@@ -6,15 +6,16 @@
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { applyFilters } from '@wordpress/hooks';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import type {
 	TStates,
+	StateTypes,
 	TBreakpoint,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { mergeObject } from '@blockera/utils';
 import { getComputedCssProps } from '../get-computed-css-props';
 
@@ -30,8 +31,13 @@ export const StateStyle = (
 	props: StateStyleProps
 ): Array<MixedElement> | MixedElement => {
 	const [breakpoints, setBreakpoints] = useState({});
-	const { getStates, getBreakpoints } = select('blockera/editor');
-	const blockStates = getStates();
+	const { getStates, getInnerStates, getBreakpoints } =
+		select('blockera/editor');
+	const blockStates = useMemo(
+		() => mergeObject(getStates(), getInnerStates()),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
+	);
 
 	useEffect(() => {
 		const loadBreakpoints = () => {
@@ -47,15 +53,39 @@ export const StateStyle = (
 		loadBreakpoints();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	const statesForProcessing = useMemo(() => {
+		const availableStates = props?.additional?.availableBlockStates || {};
+		let availableInnerBlockStates = {};
+
+		for (const key in props?.additional?.blockeraInnerBlocks) {
+			const value = props?.additional?.blockeraInnerBlocks[key];
+			if (value?.availableBlockStates) {
+				availableInnerBlockStates = {
+					...availableInnerBlockStates,
+					...value?.availableBlockStates,
+				};
+			}
+		}
+
+		return mergeObject(
+			blockStates,
+			mergeObject(availableStates, availableInnerBlockStates)
+		);
+	}, [props?.additional, blockStates]);
+
 	// Filtered allowed states to generate stylesheet.
 	// in free version allowed just "normal" and "hover".
-	const allowedStates = ['normal', 'hover'];
-	const states: Array<TStates | string> = Object.keys(blockStates).filter(
-		(state) =>
-			applyFilters(
-				'blockera.editor.styleEngine.allowedStates',
-				allowedStates
-			).includes(state)
+	const allowedStates = Object.values(statesForProcessing)
+		.filter((state: StateTypes): boolean => !state?.native)
+		.map((state: StateTypes): string => state.type);
+	const states: Array<TStates | string> = Object.keys(
+		statesForProcessing
+	).filter((state) =>
+		applyFilters(
+			'blockera.editor.styleEngine.allowedStates',
+			allowedStates
+		).includes(state)
 	);
 
 	// Move "normal" state to last position to ensure other states like "hover" or "active"

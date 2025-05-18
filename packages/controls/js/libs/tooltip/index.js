@@ -30,7 +30,10 @@ export function Tooltip({
 			position={position}
 			text={
 				<div
-					className={componentClassNames('tooltip', className)}
+					className={componentClassNames(
+						'tooltip-content',
+						className
+					)}
 					style={{ '--tooltip-width': width }}
 				>
 					{text}

@@ -4,10 +4,8 @@
 import {
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
+	openInserter,
 	setInnerBlock,
-	savePage,
-	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Author Biography Block', () => {
@@ -24,22 +22,13 @@ describe('Post Author Biography Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
@@ -68,6 +57,8 @@ describe('Post Author Biography Block', () => {
 		// 1.1. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color

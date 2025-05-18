@@ -92,7 +92,7 @@
 		margin: 0 1px;
 		background: #def0fb;
 		color: var(--blockera-controls-color);
-		border-radius: 2px;
+		border-radius: var(--blockera-controls-border-radius);
 		font-size: 90%;
 	}
 }

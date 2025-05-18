@@ -2,11 +2,12 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	editPost,
 	appendBlocks,
-	savePage,
-	redirectToFrontPage,
 	setInnerBlock,
+	setParentBlock,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -28,10 +29,7 @@ describe('Comment Author Name Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1.0. Block Styles
@@ -57,6 +55,8 @@ describe('Comment Author Name Block', () => {
 		//
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		cy.setColorControlValue('BG Color', 'ffdbdb');
 
 		cy.getBlock('core/comment-author-name')
@@ -72,7 +72,20 @@ describe('Comment Author Name Block', () => {
 			});
 
 		//
-		// 2. Assert front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert front end
 		//
 		savePage();
 		redirectToFrontPage();

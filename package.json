@@ -47,7 +47,8 @@
 		"fastest-json-copy": "^1.0.1",
 		"fuse.js": "^6.6.2",
 		"react-error-boundary": "^5.0.0",
-		"rememo": "^4.0.2"
+		"rememo": "^4.0.2",
+		"use-draggable": "^2.0.0"
 	},
 	"devDependencies": {
 		"@10up/cypress-wp-utils": "^0.4.0",
@@ -235,7 +236,8 @@
 		"icons:indexing": "node packages/components/bin/icons/index.js search.json",
 		"env": "wp-env",
 		"env:stop": "npm run env stop",
-		"env:start": "npm run env start --xdebug",
+		"env:start": "node .github/scripts/setup-wp-env.js && wp-env start",
+		"env:clean": "npm run env clean all",
 		"env:reset": "npm run env:start --update --xdebug",
 		"env:tests-cli:bash": "npm run env run tests-cli bash",
 		"packages:update": "wp-scripts packages-update",

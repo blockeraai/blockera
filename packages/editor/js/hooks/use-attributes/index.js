@@ -25,8 +25,8 @@ import {
 import type {
 	TBreakpoint,
 	TStates,
-} from '../../extensions/libs/block-states/types';
-import type { InnerBlockType } from '../../extensions/libs/inner-blocks/types';
+} from '../../extensions/libs/block-card/block-states/types';
+import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,

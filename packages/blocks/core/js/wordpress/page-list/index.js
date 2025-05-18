@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -28,20 +32,17 @@ export const PageList: BlockType = {
 			settings: {
 				force: true,
 			},
-		},
-		'elements/item-marker': {
-			name: 'elements/item-marker',
-			label: __('Items Marker', 'blockera'),
-			description: __('Marker of list items.', 'blockera'),
-			icon: (
-				<Icon
-					icon="block-list-item-marker"
-					library="ui"
-					iconSize="20"
-				/>
-			),
-			settings: {
-				force: true,
+			availableBlockStates: {
+				...generalBlockStates,
+				focus: {
+					...generalBlockStates.focus,
+					force: true,
+				},
+				active: {
+					...sharedBlockStates.active,
+					force: true,
+				},
+				visited: sharedBlockStates.visited,
 			},
 		},
 		'elements/item-container': {
@@ -58,6 +59,14 @@ export const PageList: BlockType = {
 			settings: {
 				force: true,
 			},
+		},
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		marker: {
+			...sharedBlockStates.marker,
+			label: __('Markers', 'blockera'),
+			force: true,
 		},
 	},
 	edit: (props) => {

@@ -26,10 +26,15 @@ describe('RSS Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/container',
+			'elements/title',
+			'elements/date',
+			'elements/author',
+			'elements/excerpt',
+		]);
 
 		//
 		// 1. Edit Inner Blocks
@@ -60,6 +65,8 @@ describe('RSS Block', () => {
 		//
 		setInnerBlock('elements/container');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -78,6 +85,8 @@ describe('RSS Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/title');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
@@ -98,6 +107,8 @@ describe('RSS Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/date');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -116,6 +127,8 @@ describe('RSS Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/author');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.3.1. BG color
@@ -136,6 +149,8 @@ describe('RSS Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/excerpt');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.4.1. BG color
 		//
@@ -154,7 +169,21 @@ describe('RSS Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

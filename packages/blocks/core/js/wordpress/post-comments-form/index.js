@@ -8,7 +8,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	sharedBlockStates,
+	generalInnerBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -71,6 +75,22 @@ export const PostCommentsFrom: BlockType = {
 			settings: {
 				force: true,
 			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				active: {
+					...sharedBlockStates.active,
+					force: true,
+				},
+				visited: sharedBlockStates.visited,
+				placeholder: {
+					...sharedBlockStates.placeholder,
+					force: true,
+				},
+			},
 		},
 		'elements/textarea': {
 			name: 'elements/textarea',
@@ -79,6 +99,22 @@ export const PostCommentsFrom: BlockType = {
 			icon: <Icon icon="block-comments-form-textarea" iconSize="20" />,
 			settings: {
 				force: true,
+			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				focus: {
+					...generalInnerBlockStates.focus,
+					force: true,
+				},
+				active: {
+					...sharedBlockStates.active,
+					force: true,
+				},
+				visited: sharedBlockStates.visited,
+				placeholder: {
+					...sharedBlockStates.placeholder,
+					force: true,
+				},
 			},
 		},
 		'elements/cookie-consent': {
@@ -97,7 +133,7 @@ export const PostCommentsFrom: BlockType = {
 		},
 		'core/button': {
 			name: 'core/button',
-			label: __('Form Button', 'blockera'),
+			label: __('Submit Button', 'blockera'),
 			description: __('The comment form submit button.', 'blockera'),
 			icon: <Icon icon="button" library="wp" iconSize="20" />,
 			settings: {

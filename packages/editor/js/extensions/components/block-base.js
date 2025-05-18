@@ -49,6 +49,15 @@ import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
+import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
+import {
+	unstableBootstrapBlockStatesDefinitions,
+	unstableBootstrapInnerBlockStatesDefinitions,
+} from '../libs/block-card/block-states/bootstrap';
+import {
+	generalBlockStates,
+	generalInnerBlockStates,
+} from '../libs/block-card/block-states/states';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
@@ -305,10 +314,42 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		);
 	}, [_attributes]);
 
+	const { getBlockExtensionBy } = useExtensionsStore();
+	const availableStates =
+		additional?.availableBlockStates || generalBlockStates;
+	const availableInnerStates = useMemo(() => {
+		let blockStates =
+			((additional?.blockeraInnerBlocks || {})[currentBlock] || {})
+				?.availableBlockStates || generalInnerBlockStates;
+
+		if (isInnerBlock(currentBlock)) {
+			if (!isVirtualBlock(currentBlock)) {
+				const { availableBlockStates } =
+					getBlockExtensionBy('targetBlock', currentBlock) || {};
+
+				if (Object.keys(availableBlockStates || {}).length) {
+					blockStates = availableBlockStates;
+				}
+			}
+		}
+
+		return blockStates;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlock, additional]);
+
+	useEffect(() => {
+		if (isInnerBlock(currentBlock)) {
+			unstableBootstrapInnerBlockStatesDefinitions(availableInnerStates);
+		} else {
+			unstableBootstrapBlockStatesDefinitions(availableStates);
+		}
+	}, [currentBlock, availableStates, availableInnerStates]);
+
 	const blockStyleProps = {
 		clientId,
 		supports,
 		selectors,
+		additional,
 		inlineStyles,
 		attributes: sanitizedAttributes,
 		blockName: name,
@@ -367,6 +408,8 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				/>
 				<SideEffect
 					{...{
+						activeBlockVariation: activeBlockVariation?.name || '',
+						blockName: name,
 						currentBlock,
 						currentTab,
 						currentState: isInnerBlock(currentBlock)
@@ -388,10 +431,12 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 							isActive,
 							currentState,
 							currentBlock,
+							availableStates,
 							currentInnerBlock,
-							BlockEditComponent,
 							currentBreakpoint,
+							BlockEditComponent,
 							blockeraInnerBlocks,
+							availableInnerStates,
 							currentInnerBlockState,
 							updateBlockEditorSettings,
 							blockProps: {
@@ -414,8 +459,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 									currentInnerBlockState,
 									handleOnChangeAttributes,
 								},
-								availableBlockStates:
-									additional.availableBlockStates,
+								additional,
 								currentStateAttributes: currentAttributes,
 								...props,
 							},

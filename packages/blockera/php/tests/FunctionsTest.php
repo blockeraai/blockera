@@ -24,7 +24,7 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 	}
 
 	public function testItShouldRetrieveFlatArray(): void {
-
+		// Test case 1: Basic two-level array.
 		$this->assertSame(
 			[
 				'a'  => 1,
@@ -38,24 +38,79 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 				'dd' => 4,
 				'ee' => 5,
 			],
-			blockera_array_flat(
+			blockera_array_flat([
 				[
-					[
-						'a' => 1,
-						'b' => 2,
-						'c' => 3,
-						'd' => 4,
-						'e' => 5,
-					],
-					[
-						'aa' => 1,
-						'bb' => 2,
-						'cc' => 3,
-						'dd' => 4,
-						'ee' => 5,
+					'a' => 1,
+					'b' => 2,
+					'c' => 3,
+					'd' => 4,
+					'e' => 5,
+				],
+				[
+					'aa' => 1,
+					'bb' => 2,
+					'cc' => 3,
+					'dd' => 4,
+					'ee' => 5,
+				]
+			])
+		);
+
+		// Test case 2: Empty array.
+		$this->assertSame(
+			[],
+			blockera_array_flat([])
+		);
+
+		// Test case 3: Single array.
+		$this->assertSame(
+			['a' => 1, 'b' => 2],
+			blockera_array_flat([['a' => 1, 'b' => 2]])
+		);
+
+		// Test case 4: Array with numeric keys.
+		$this->assertSame(
+			[1, 2, 3, 4, 5, 6],
+			blockera_array_flat([[1, 2, 3], [4, 5, 6]])
+		);
+
+		// Test case 5: Mixed keys.
+		$this->assertSame(
+			[
+				0 => 'value1',
+				'key1' => 'value2',
+				1 => 'value3',
+				'key2' => 'value4'
+			],
+			blockera_array_flat([
+				['value1', 'key1' => 'value2'],
+				['value3', 'key2' => 'value4']
+			])
+		);
+
+		// Test case 6: Nested arrays.
+		$this->assertSame(
+			[
+				'.wp-block-list > li.blockera-block.blockera-block-bzarxt a:not(.wp-element-button):before' => [
+					'margin-right' => '22px !important',
+					'content' => '"Before "',
+					'color' => '#0feb0b !important',
+				]
+			],
+			blockera_array_flat([
+				[
+					'.wp-block-list > li.blockera-block.blockera-block-bzarxt a:not(.wp-element-button):before' => [
+						'color' => '#0feb0b !important',
+						'content' => '"Before "'
+					]
+				],
+				[
+					'.wp-block-list > li.blockera-block.blockera-block-bzarxt a:not(.wp-element-button):before' => [
+						'margin-right' => '22px !important',
+						'content' => '"Before "'
 					]
 				]
-			),
+			])
 		);
 	}
 
@@ -101,7 +156,6 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 					\Blockera\Admin\Providers\AdminProvider::class,
 					\Blockera\Setup\Providers\EditorAssetsProvider::class,
 					\Blockera\Setup\Providers\RestAPIProvider::class,
-					\Blockera\Editor\Providers\StyleProviders::class,
 					\Blockera\Setup\Providers\AppServiceProvider::class,
 					\Blockera\Admin\Providers\AdminAssetsProvider::class,
 				],

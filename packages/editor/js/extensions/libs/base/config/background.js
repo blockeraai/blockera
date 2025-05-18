@@ -26,7 +26,7 @@ const blockeraBackgroundColor: FeatureConfig = {
 	show: true,
 	force: true,
 	status: true,
-	isActiveOnInnerBlocksOnFree: true,
+	onNativeOnInnerBlocks: false,
 	label: __('Background Color', 'blockera'),
 };
 

@@ -125,6 +125,7 @@ export function MarginLeft({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -132,6 +133,7 @@ export function MarginLeft({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -208,45 +210,47 @@ export function MarginLeft({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Left Margin', 'blockera')}
 			/>
 		),
 		label: (
+			<div
+				className={controlInnerClassNames(
+					'label-side',
+					'side-horizontal',
+					'side-margin-left',
+					labelClassName
+				)}
+				data-cy="box-spacing-margin-left"
+			>
+				<LabelControl
+					ariaLabel={__('Left Margin', 'blockera')}
+					label={
+						_isSetValueAddon
+							? fixLabelText(value.margin.left)
+							: fixLabelText(sideSpace)
+					}
+					onClick={() => {
+						setFocusSide(sideId);
+						setOpenPopover(sideId);
+					}}
+					{...{
+						attribute,
+						blockName,
+						resetToDefault,
+						mode: 'advanced',
+						singularId: 'margin.left',
+						value: value?.margin?.left,
+						defaultValue: defaultValue?.margin?.left,
+						path: getControlPath(attribute, 'margin.left'),
+					}}
+				/>
+
+				<ValueAddonPointer />
+			</div>
+		),
+		popover: (
 			<>
-				<div
-					className={controlInnerClassNames(
-						'label-side',
-						'side-horizontal',
-						'side-margin-left',
-						labelClassName
-					)}
-					data-cy="box-spacing-margin-left"
-				>
-					<LabelControl
-						ariaLabel={__('Left Margin', 'blockera')}
-						label={
-							_isSetValueAddon
-								? fixLabelText(value.margin.left)
-								: fixLabelText(sideSpace)
-						}
-						onClick={() => {
-							setFocusSide(sideId);
-							setOpenPopover(sideId);
-						}}
-						{...{
-							attribute,
-							blockName,
-							resetToDefault,
-							mode: 'advanced',
-							singularId: 'margin.left',
-							value: value?.margin?.left,
-							defaultValue: defaultValue?.margin?.left,
-							path: getControlPath(attribute, 'margin.left'),
-						}}
-					/>
-
-					<ValueAddonPointer />
-				</div>
-
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.left}
@@ -262,25 +266,23 @@ export function MarginLeft({
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
 						icon={<Icon icon="margin-left" iconSize="18" />}
+						title={__('Left Margin Space', 'blockera')}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left Margin Space', 'blockera')}
 						inputLabel={__('Left Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Left Margin Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a margin space that applies only to the left edge of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies only to the left edge of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

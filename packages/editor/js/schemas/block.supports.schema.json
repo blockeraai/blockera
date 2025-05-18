@@ -10,6 +10,14 @@
 			"additionalProperties": {
 				"type": "object",
 				"properties": {
+					"id": {
+						"description": "The block support id.",
+						"type": "string"
+					},
+					"definition": {
+						"description": "The block support style definition.",
+						"type": "string"
+					},
 					"status": {
 						"description": "The block support status.",
 						"type": "boolean"
@@ -29,8 +37,20 @@
 					"note": {
 						"description": "Extra notes for developers.",
 						"type": "string"
+					},
+					"inner-blocks": {
+						"description": "The list of inner blocks for block support.",
+						"type": "object",
+						"additionalProperties": {
+							"type": ["string", "boolean"]
+						}
+					},
+					"hasDefaultValueInStates": {
+						"description": "The list of states that have a default value.",
+						"type": ["array"]
 					}
 				},
+				"required": ["status", "fallback", "css-property"],
 				"description": "The shared list of block supports, including fallback identifiers for backwards compatibility and style engine config."
 			}
 		}

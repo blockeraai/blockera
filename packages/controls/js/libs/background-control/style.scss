@@ -14,7 +14,7 @@
 
 .blockera-control-mesh-generator-preview {
 	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
-	border-radius: 2px;
+	border-radius: var(--blockera-controls-border-radius);
 	height: 100px;
 	cursor: pointer;
 	position: relative;
@@ -53,4 +53,22 @@
 			visibility: visible;
 		}
 	}
+}
+
+.blockera-controls-background-image-size {
+	position: relative;
+
+	.blockera-control-toggle-select {
+		width: calc(100% - 30px - 8px);
+	}
+
+	.blockera-component-button[data-test="position-button"] {
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+}
+
+.blockera-component-popover.popover-spotlight.blockera-control-background-popover {
+	--popover-min-height: 410px;
 }

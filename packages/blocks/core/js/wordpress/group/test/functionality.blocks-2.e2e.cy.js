@@ -2,10 +2,11 @@
  * Blockera dependencies
  */
 import {
+	savePage,
+	createPost,
 	appendBlocks,
 	setInnerBlock,
-	createPost,
-	savePage,
+	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -29,12 +30,6 @@ describe('Group Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
-
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
 		//
 		// 1. Edit Block
 		//
@@ -74,7 +69,29 @@ describe('Group Block', () => {
 		});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.block-editor-block-inspector__position').should(
+				'not.be.visible'
+			);
+
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('be.visible');
+
+			cy.get('.components-base-control__label')
+				.contains('Justification')
+				.should('exist')
+				.scrollIntoView()
+				.should('not.be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

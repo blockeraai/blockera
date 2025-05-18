@@ -18,7 +18,7 @@ import {
 	spacingFromWPCompatibility,
 	spacingToWPCompatibility,
 } from './compatibility/spacing';
-import type { BlockDetail } from '../block-states/types';
+import type { BlockDetail } from '../block-card/block-states/types';
 import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {

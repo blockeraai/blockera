@@ -5,9 +5,9 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Verse Block', () => {
@@ -26,22 +26,9 @@ describe('Verse Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		//
 		// 1. Edit Block
@@ -70,6 +57,8 @@ describe('Verse Block', () => {
 		// 1.2. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color

@@ -2,12 +2,12 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
-	savePage,
-	redirectToFrontPage,
 	setInnerBlock,
+	setParentBlock,
+	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Cover Block', () => {
@@ -30,12 +30,6 @@ describe('Cover Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
-
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
 		//
 		// 1. Edit Block
 		//
@@ -76,7 +70,20 @@ describe('Cover Block', () => {
 		);
 
 		//
-		// 2. Assert front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert front end
 		//
 		savePage();
 		redirectToFrontPage();

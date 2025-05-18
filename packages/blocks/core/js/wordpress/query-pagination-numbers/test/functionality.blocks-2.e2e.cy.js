@@ -17,6 +17,9 @@ import { testContent } from './test-content';
 
 describe('Query Pagination Numbers Block', () => {
 	beforeEach(() => {
+		// Generate 100 posts to make sure the pagination is visible
+		cy.wpCli('wp post generate --count=100 --post_type=post');
+
 		createPost();
 	});
 
@@ -29,10 +32,15 @@ describe('Query Pagination Numbers Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'focus',
+			'active',
+			'elements/numbers',
+			'elements/current',
+			'elements/dots',
+		]);
 
 		//
 		// 1. Edit Inner Blocks
@@ -62,6 +70,9 @@ describe('Query Pagination Numbers Block', () => {
 		// 1.1. elements/numbers inner block
 		//
 		setInnerBlock('elements/numbers');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -82,6 +93,8 @@ describe('Query Pagination Numbers Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/current');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
@@ -104,6 +117,8 @@ describe('Query Pagination Numbers Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/dots');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.4.1. BG color
 		//
@@ -120,7 +135,21 @@ describe('Query Pagination Numbers Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 
 		savePage();

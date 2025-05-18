@@ -23,10 +23,15 @@ describe('Loginout Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/form',
+			'elements/input-label',
+			'elements/input',
+			'elements/remember',
+			'core/button',
+		]);
 
 		//
 		// 1. Edit Block
@@ -56,6 +61,8 @@ describe('Loginout Block', () => {
 		//
 		setInnerBlock('elements/form');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		// while WP not shows form here, we can not assert functionality and not needed
@@ -65,6 +72,8 @@ describe('Loginout Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/input-label');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff2020');
 
@@ -76,6 +85,11 @@ describe('Loginout Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/input');
 
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'placeholder'],
+			true
+		);
+
 		cy.setColorControlValue('BG Color', 'ff4040');
 
 		// while WP not shows form here, we can not assert functionality and not needed
@@ -85,6 +99,8 @@ describe('Loginout Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/remember');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff6060');
 
@@ -96,12 +112,27 @@ describe('Loginout Block', () => {
 		setParentBlock();
 		setInnerBlock('core/button');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		cy.setColorControlValue('BG Color', 'ff8080');
 
 		// while WP not shows form here, we can not assert functionality and not needed
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

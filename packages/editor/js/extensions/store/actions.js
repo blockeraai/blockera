@@ -3,8 +3,11 @@
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import('../api/registration').blockeraBlockExtensionType} blockeraBlockExtensionType */
 
-import type { InnerBlockType } from '../libs/inner-blocks/types';
-import type { TBreakpoint, TStates } from '../libs/block-states/types';
+import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
+import type {
+	TBreakpoint,
+	TStates,
+} from '../libs/block-card/block-states/types';
 
 /**
  * Returns an action object used in signalling that block types have been added.

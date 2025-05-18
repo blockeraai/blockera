@@ -97,6 +97,7 @@ export const SpacingStyles = ({
 		state,
 		clientId,
 		blockName,
+		currentBlock,
 		attributes: currentBlockAttributes,
 	};
 	const { attributes: _attributes } = blockProps;

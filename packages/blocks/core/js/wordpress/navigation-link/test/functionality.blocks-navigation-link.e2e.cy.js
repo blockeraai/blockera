@@ -5,9 +5,10 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe(
@@ -73,18 +74,15 @@ describe(
 			//
 			// 1. Inner blocks existence
 			//
+			openInserter();
 
-			// open inner block settings
-			openInnerBlocksExtension();
+			cy.getByDataTest('elements/link').should('exist');
+			cy.getByDataTest('states/current-menu-item').should('exist');
+			cy.getByDataTest('states/current-menu-parent').should('exist');
+			cy.getByDataTest('states/current-menu-ancestor').should('exist');
 
-			cy.get(
-				'.blockera-extension.blockera-extension-inner-blocks'
-			).within(() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/paragraph').should('not.exist');
-			});
+			// no other item
+			cy.getByDataTest('core/paragraph').should('not.exist');
 
 			//
 			// 2. Edit Block
@@ -125,7 +123,20 @@ describe(
 				});
 
 			//
-			// 2. Assert inner blocks selectors in front end
+			// 3. Check settings tab
+			//
+			setParentBlock();
+			cy.getByDataTest('settings-tab').click();
+
+			cy.get('.block-editor-block-inspector').within(() => {
+				cy.get('.components-tools-panel-header')
+					.contains('Settings')
+					.scrollIntoView()
+					.should('be.visible');
+			});
+
+			//
+			// 4. Assert inner blocks selectors in front end
 			//
 			savePage();
 			redirectToFrontPage();

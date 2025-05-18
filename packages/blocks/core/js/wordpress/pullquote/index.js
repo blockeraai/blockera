@@ -30,7 +30,13 @@ export const Pullquote: BlockType = {
 				force: true,
 			},
 		},
-		'core/paragraph': sharedInnerBlocks['core/paragraph'],
+		'core/paragraph': {
+			...sharedInnerBlocks['core/paragraph'],
+			settings: {
+				...sharedInnerBlocks['core/paragraph'].settings,
+				force: true,
+			},
+		},
 		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {

@@ -21,6 +21,9 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'blockera/states/open'      => [
+					'root' => '&.wp-block-details[open]',
+				], 
 				'blockera/elements/title'      => [
 					'root' => 'summary',
 				],

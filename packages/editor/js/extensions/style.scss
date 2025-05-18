@@ -1,3 +1,12 @@
 @import "./libs/style.scss";
 @import "./scripts/style.scss";
 @import "./components/style.scss";
+@import "./libs/block-composite/style.scss";
+
+.blockera-active-block-core-group-group-grid,
+.blockera-active-block-core-group-group {
+
+	.components-panel__body.blockera-hidden.blockera-hidden {
+		display: block !important;
+	}
+}

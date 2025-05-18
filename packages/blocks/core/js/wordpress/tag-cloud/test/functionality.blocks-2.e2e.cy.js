@@ -24,10 +24,7 @@ describe('Tag Cloud Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/tag-link']);
 
 		//
 		// 1. Edit Block
@@ -57,6 +54,8 @@ describe('Tag Cloud Block', () => {
 		//
 		setInnerBlock('elements/tag-link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -71,7 +70,21 @@ describe('Tag Cloud Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

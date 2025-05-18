@@ -5,9 +5,9 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -30,22 +30,10 @@ describe('Query No Results Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		//
 		// 1. Edit Block
@@ -75,6 +63,8 @@ describe('Query No Results Block', () => {
 		// 1.1. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. Link color

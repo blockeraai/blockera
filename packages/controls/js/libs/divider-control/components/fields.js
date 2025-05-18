@@ -92,7 +92,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 							label: __('Top', 'blockera'),
 							value: 'top',
 							disabled: isPositionDisabled(itemId, items, 'top'),
-							showTooltip: true,
 							'aria-label': isPositionDisabled(
 								itemId,
 								items,
@@ -112,7 +111,6 @@ const Fields: TFieldItem = memo<TFieldItem>(
 								items,
 								'bottom'
 							),
-							showTooltip: true,
 							'aria-label': isPositionDisabled(
 								itemId,
 								items,

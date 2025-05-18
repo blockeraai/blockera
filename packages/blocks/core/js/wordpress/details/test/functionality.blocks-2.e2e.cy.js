@@ -28,10 +28,14 @@ describe('Details Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'open',
+			'elements/title',
+			'elements/title-icon',
+			'core/paragraph',
+		]);
 
 		//
 		// 1. Edit Block
@@ -61,6 +65,8 @@ describe('Details Block', () => {
 		//
 		setInnerBlock('elements/title');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -79,6 +85,8 @@ describe('Details Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/title-icon');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. Text color
@@ -104,7 +112,20 @@ describe('Details Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

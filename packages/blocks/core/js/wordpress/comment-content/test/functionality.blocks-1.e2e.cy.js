@@ -28,10 +28,7 @@ describe('Comment Content Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1.0. Block Styles
@@ -56,6 +53,8 @@ describe('Comment Content Block', () => {
 		// 1.1. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ffdbdb');
 

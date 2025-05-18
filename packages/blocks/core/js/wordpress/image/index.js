@@ -33,7 +33,11 @@ export const Image: BlockType = {
 				force: true,
 			},
 		},
-		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/link': {
+			...sharedInnerBlocks['elements/link'],
+			label: __('Link', 'blockera'),
+			description: __('Hyperlink element.', 'blockera'),
+		},
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

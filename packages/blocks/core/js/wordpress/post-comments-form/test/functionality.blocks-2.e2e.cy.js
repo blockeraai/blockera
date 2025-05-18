@@ -26,10 +26,18 @@ describe('Post Comments Form Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/form',
+			'elements/title',
+			'elements/notes',
+			'elements/input-label',
+			'elements/input',
+			'elements/textarea',
+			'elements/cookie-consent',
+			'core/button',
+		]);
 
 		//
 		// 1. Edit Block
@@ -59,6 +67,8 @@ describe('Post Comments Form Block', () => {
 		//
 		setInnerBlock('elements/form');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		//
@@ -66,6 +76,8 @@ describe('Post Comments Form Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/title');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff2020');
 
@@ -75,6 +87,8 @@ describe('Post Comments Form Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/notes');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff4040');
 
 		//
@@ -82,6 +96,23 @@ describe('Post Comments Form Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/input-label');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// Block card states active items
+		cy.get('.block-card--inner-block').within(() => {
+			['normal', 'hover'].forEach((state) => {
+				cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+					'be.visible'
+				);
+			});
+
+			['elements/form'].forEach((state) => {
+				cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+					'not.exist'
+				);
+			});
+		});
 
 		cy.setColorControlValue('BG Color', 'ff6060');
 
@@ -91,6 +122,11 @@ describe('Post Comments Form Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/input');
 
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'active', 'placeholder'],
+			true
+		);
+
 		cy.setColorControlValue('BG Color', 'ff8080');
 
 		//
@@ -98,6 +134,11 @@ describe('Post Comments Form Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/textarea');
+
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'active', 'placeholder'],
+			true
+		);
 
 		cy.setColorControlValue('BG Color', 'ffaaaa');
 
@@ -107,6 +148,8 @@ describe('Post Comments Form Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/cookie-consent');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ffbbbb');
 
 		//
@@ -114,6 +157,8 @@ describe('Post Comments Form Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('core/button');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ffcccc');
 

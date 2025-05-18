@@ -4,78 +4,104 @@
 	"supports": {
 		"blockeraTransform": {
 			"status": true,
+			"id": "blockeraTransform",
+			"definition": "Transform",
 			"css-property": "transform",
 			"fallback": "transform",
 			"description": "Support for \"blockeraTransform\" value."
 		},
 		"blockeraTransition": {
 			"status": true,
+			"id": "blockeraTransition",
+			"definition": "Transition",
 			"css-property": "transition",
 			"fallback": "transition",
 			"description": "Support for \"blockeraTransition\" value."
 		},
 		"blockeraBlendMode": {
 			"status": true,
+			"id": "blockeraBlendMode",
+			"definition": "MixBlendMode",
 			"css-property": "mix-blend-mode",
 			"fallback": "mix-blend-mode",
 			"description": "Support for \"blockeraBlendMode\" value."
 		},
 		"blockeraBackdropFilter": {
 			"status": true,
+			"id": "blockeraBackdropFilter",
+			"definition": "BackdropFilter",
 			"css-property": "backdrop-filter",
 			"fallback": "backdrop-filter",
 			"description": "Support for \"blockeraBackdropFilter\" value."
 		},
 		"blockeraTransformSelfOrigin": {
 			"status": true,
+			"id": "blockeraTransformSelfOrigin",
+			"definition": "SelfOrigin",
 			"css-property": "self-origin",
 			"fallback": "self-origin",
 			"description": "Support for \"blockeraTransformSelfOrigin\" value."
 		},
 		"blockeraMask": {
 			"status": true,
+			"id": "blockeraMask",
+			"definition": "Mask",
 			"css-property": "mask",
 			"fallback": "mask",
 			"description": "Support for \"blockeraMask\" value."
 		},
 		"blockeraDivider": {
 			"status": true,
+			"id": "blockeraDivider",
+			"definition": "Divider",
 			"css-property": "divider",
 			"fallback": "divider",
 			"description": "Support for \"blockeraDivider\" value."
 		},
 		"blockeraTransformChildOrigin": {
 			"status": true,
+			"id": "blockeraTransformChildOrigin",
+			"definition": "ChildOrigin",
 			"css-property": "child-origin",
 			"fallback": "child-origin",
 			"description": "Support for \"blockeraTransformChildOrigin\" value."
 		},
 		"blockeraBackfaceVisibility": {
 			"status": true,
+			"id": "blockeraBackfaceVisibility",
+			"definition": "BackfaceVisibility",
 			"css-property": "backface-visibility",
 			"fallback": "backface-visibility",
 			"description": "Support for \"blockeraBackfaceVisibility\" value."
 		},
 		"blockeraTransformSelfPerspective": {
 			"status": true,
-			"css-property": "self-perspective",
+			"id": "blockeraTransformSelfPerspective",
+			"definition": "Transform",
+			"css-property": "Transform",
 			"fallback": "self-perspective",
 			"description": "Support for \"blockeraTransformSelfPerspective\" value."
 		},
 		"blockeraTransformChildPerspective": {
 			"status": true,
+			"id": "blockeraTransformChildPerspective",
+			"definition": "ChildPerspective",
 			"css-property": "child-perspective",
 			"fallback": "child-perspective",
 			"description": "Support for \"blockeraTransformChildPerspective\" value."
 		},
 		"blockeraFilter": {
 			"status": true,
+			"id": "blockeraFilter",
+			"definition": "Filter",
 			"css-property": "filter",
 			"fallback": ["filter.duotone", "filter"],
 			"description": "Support for \"blockeraFilter\" value."
 		},
 		"blockeraOpacity": {
 			"status": true,
+			"id": "blockeraOpacity",
+			"definition": "Opacity",
 			"css-property": "opacity",
 			"fallback": "opacity",
 			"description": "Support for \"blockeraOpacity\" value."

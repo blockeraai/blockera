@@ -2,11 +2,10 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
 	setInnerBlock,
-	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -17,7 +16,7 @@ describe('Post Navigation Link Block', () => {
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(
-			'<!-- wp:post-navigation-link {"type":"previous","label":"Prev"} /--> '
+			'<!-- wp:post-navigation-link {"type":"previous","label":"Prev","arrow":"chevron"} /--> '
 		);
 
 		// Select target block
@@ -26,22 +25,7 @@ describe('Post Navigation Link Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/arrow']);
 
 		//
 		// 1. Edit Block
@@ -72,6 +56,8 @@ describe('Post Navigation Link Block', () => {
 		//
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -82,6 +68,26 @@ describe('Post Navigation Link Block', () => {
 				'have.css',
 				'background-color',
 				'rgb(255, 0, 0)'
+			);
+		});
+
+		//
+		// 1.2. elements/arrow inner block
+		//
+		setInnerBlock('elements/arrow');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		//
+		// 1.2.1. BG color
+		//
+		cy.setColorControlValue('BG Color', 'ff1010');
+
+		cy.getBlock('core/post-navigation-link').within(() => {
+			cy.get('.wp-block-post-navigation-link__arrow-previous').should(
+				'have.css',
+				'background-color',
+				'rgb(255, 16, 16)'
 			);
 		});
 
@@ -102,6 +108,12 @@ describe('Post Navigation Link Block', () => {
 				'have.css',
 				'background-color',
 				'rgb(255, 0, 0)'
+			);
+
+			cy.get('.wp-block-post-navigation-link__arrow-previous').should(
+				'have.css',
+				'background-color',
+				'rgb(255, 16, 16)'
 			);
 		});
 	});

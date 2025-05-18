@@ -4,10 +4,11 @@
 import {
 	savePage,
 	createPost,
+	openInserter,
 	appendBlocks,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Post Title Block', () => {
@@ -24,22 +25,11 @@ describe('Post Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
@@ -71,6 +61,8 @@ describe('Post Title Block', () => {
 
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		cy.getBlock('core/post-title').within(() => {
@@ -82,7 +74,20 @@ describe('Post Title Block', () => {
 		});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

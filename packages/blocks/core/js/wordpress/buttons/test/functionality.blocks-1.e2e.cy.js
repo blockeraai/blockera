@@ -38,10 +38,7 @@ describe('Buttons Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'core/button']);
 
 		//
 		// 1. Edit Block
@@ -70,6 +67,17 @@ describe('Buttons Block', () => {
 		// 1.1. Button inner block
 		//
 		setInnerBlock('core/button');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
+		// Block card states active items
+		cy.get('.block-card--inner-block').within(() => {
+			['normal', 'hover', 'focus', 'active'].forEach((state) => {
+				cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
+					'be.visible'
+				);
+			});
+		});
 
 		//
 		// 1.1.1. BG color
@@ -102,7 +110,19 @@ describe('Buttons Block', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title')
+				.contains('Layout')
+				.should('not.be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

@@ -5,9 +5,10 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	openInserter,
 	setInnerBlock,
+	setParentBlock,
 	redirectToFrontPage,
-	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -32,22 +33,10 @@ describe('Query Pagination Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		//
 		// 1. Edit Block
@@ -79,15 +68,35 @@ describe('Query Pagination Block', () => {
 
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		cy.setColorControlValue('Text Color', '0000ff');
 
 		cy.getBlock('core/query-pagination').within(() => {
 			cy.get('a').first().should('have.css', 'color', 'rgb(0, 0, 255)');
 		});
 
-		// 1.2. elements/link
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Layout')
+				.scrollIntoView()
+				.should('not.be.visible');
+
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 
 		savePage();

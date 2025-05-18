@@ -2,11 +2,12 @@
  * Blockera dependencies
  */
 import {
+	savePage,
 	createPost,
 	appendBlocks,
-	openInnerBlocksExtension,
+	openInserter,
 	setInnerBlock,
-	savePage,
+	setParentBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -24,22 +25,13 @@ describe('Post Author Name Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		// no other item
+		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
 		// 1. Edit Block
@@ -69,6 +61,8 @@ describe('Post Author Name Block', () => {
 		//
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -83,7 +77,20 @@ describe('Post Author Name Block', () => {
 		});
 
 		//
-		// 1.2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

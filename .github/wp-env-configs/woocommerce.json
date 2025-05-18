@@ -1,0 +1,12 @@
+{
+	"plugins": [
+		".",
+		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
+	],
+	"config": {
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+	},
+	"lifecycleScripts": {
+		"afterStart": "wp-env run cli wp theme activate twentytwentyfive"
+	}
+}

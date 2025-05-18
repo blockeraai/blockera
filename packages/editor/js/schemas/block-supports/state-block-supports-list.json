@@ -1,0 +1,15 @@
+{
+	"$schema": "../block.supports.schema.json",
+	"title": "state",
+	"supports": {
+		"blockeraContentPseudoElement": {
+			"status": true,
+			"id": "blockeraContentPseudoElement",
+			"definition": "Content",
+			"css-property": "content",
+			"fallback": [],
+			"description": "Support for \"content\" value.",
+			"hasDefaultValueInStates": ["before", "after"]
+		}
+	}
+}

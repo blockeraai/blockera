@@ -2,12 +2,12 @@
  * Blockera dependencies
  */
 import {
-	savePage,
+	// savePage,
 	createPost,
 	appendBlocks,
 	setInnerBlock,
-	redirectToFrontPage,
-	openInnerBlocksExtension,
+	openInserter,
+	// redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Term Description Block', () => {
@@ -24,22 +24,10 @@ describe('Term Description Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		openInserter();
+		cy.getByDataTest('elements/link').should('exist');
 
 		//
 		// 1. Edit Block
@@ -68,6 +56,8 @@ describe('Term Description Block', () => {
 		// 1.2. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color

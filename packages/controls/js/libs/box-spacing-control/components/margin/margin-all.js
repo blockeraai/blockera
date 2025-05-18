@@ -116,6 +116,7 @@ export function MarginAll({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -192,6 +193,7 @@ export function MarginAll({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('All Sides Margin', 'blockera')}
 			/>
 		),
 		label: (
@@ -329,7 +331,10 @@ export function MarginAll({
 						}}
 					/>
 				</div>
-
+			</>
+		),
+		popover: (
+			<>
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={
@@ -357,7 +362,6 @@ export function MarginAll({
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('All Sides Margin', 'blockera')}
 						isOpen={true}
 						unit={sideSpace?.unit}
 						onChange={(newValue) => {
@@ -372,19 +376,18 @@ export function MarginAll({
 							});
 						}}
 						inputLabel={__('Margin', 'blockera')}
+						title={__('All Sides Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'All Sides Margin',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a single margin space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 					/>
 				)}

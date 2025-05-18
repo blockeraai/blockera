@@ -6,6 +6,11 @@
 import { combineReducers } from '@wordpress/data';
 
 /**
+ * Blockera dependencies
+ */
+import { isEquals, mergeObject } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import { getBaseBreakpoint } from '../canvas-editor';
@@ -39,7 +44,13 @@ export const breakpoints = (state: Object = [], action: Object): Object => {
 export const blockStates = (state: Object = {}, action: Object): Object => {
 	switch (action.type) {
 		case 'SET_BLOCK_STATES':
-			return action.states;
+			const newState = mergeObject(state, action.states);
+
+			if (isEquals(newState, state)) {
+				return state;
+			}
+
+			return mergeObject(state, action.states);
 		case 'EDIT_BLOCK_STATE':
 			return {
 				...state,
@@ -49,6 +60,36 @@ export const blockStates = (state: Object = {}, action: Object): Object => {
 				},
 			};
 		case 'DELETE_BLOCK_STATE':
+			delete state[action.stateName];
+
+			return state;
+	}
+
+	return state;
+};
+
+export const innerBlockStates = (
+	state: Object = {},
+	action: Object
+): Object => {
+	switch (action.type) {
+		case 'SET_INNER_BLOCK_STATES':
+			const newState = mergeObject(state, action.states);
+
+			if (isEquals(newState, state)) {
+				return state;
+			}
+
+			return mergeObject(state, action.states);
+		case 'EDIT_INNER_BLOCK_STATE':
+			return {
+				...state,
+				[action.stateName]: {
+					...state[action.stateName],
+					...action.editedState,
+				},
+			};
+		case 'DELETE_INNER_BLOCK_STATE':
 			delete state[action.stateName];
 
 			return state;
@@ -102,6 +143,7 @@ export const blockAppSettings = (
 export default (combineReducers({
 	breakpoints,
 	blockStates,
+	innerBlockStates,
 	blockAppSettings,
 	canvasEditorSettings,
 }): Object);

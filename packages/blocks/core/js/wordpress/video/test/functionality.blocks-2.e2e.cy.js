@@ -14,8 +14,9 @@ describe('Video Block', () => {
 	});
 
 	it('Functionality + inner blocks', () => {
-		appendBlocks(`<!-- wp:video -->
-<figure class="wp-block-video"></figure>
+		appendBlocks(`
+<!-- wp:video {"id":364} -->
+<figure class="wp-block-video"><video controls src="https://blockera.ai/video.mp4"></video></figure>
 <!-- /wp:video -->`);
 
 		cy.getBlock('core/video').click();
@@ -23,10 +24,7 @@ describe('Video Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// No inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1. Edit Block
@@ -52,7 +50,20 @@ describe('Video Block', () => {
 		);
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

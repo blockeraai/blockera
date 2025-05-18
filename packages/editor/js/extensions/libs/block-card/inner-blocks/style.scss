@@ -1,0 +1,72 @@
+.blockera-control.blockera-control-inner-blocks-repeater {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: relative;
+	margin-bottom: 6px;
+	--repeater-gap: 6px;
+	--repeater-item-height: 26px;
+
+	.blockera-control-repeater-item {
+		width: max-content;
+		--icon-size: 16px;
+
+		.blockera-control-group-header {
+			padding: 0 5px 0 3px;
+
+			.blockera-control-repeater-group-header {
+				gap: 1px;
+
+				.blockera-control-header-icon {
+					min-width: 16px;
+				}
+			}
+		}
+
+		.blockera-control-header-icon {
+
+			.block-editor-block-icon {
+				display: inline-block;
+			}
+
+			.dashicons,
+			svg,
+			.block-editor-block-icon,
+			.block-editor-block-icon svg {
+				max-height: var(--icon-size);
+				max-width: var(--icon-size);
+				min-height: var(--icon-size);
+				min-width: var(--icon-size);
+			}
+
+			.dashicons {
+				font-size: 16px !important;
+			}
+		}
+	}
+
+
+	& > .blockera-control-repeater-item {
+		--blockera-controls-primary-color: var(--blockera-controls-inner-blocks-color);
+	}
+
+	.blockera-control-group.mode-nothing.is-selected-item {
+		background-color: var(--blockera-controls-primary-color);
+		border-color: var(--blockera-controls-primary-color);
+		color: #ffffff;
+
+		.blockera-control-header-label {
+			color: #ffffff;
+		}
+	}
+
+	.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
+		background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+		border-color: var(--blockera-controls-primary-color);
+		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
+
+		.blockera-control-header-label {
+			color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
+		}
+	}
+}

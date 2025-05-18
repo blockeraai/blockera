@@ -5,6 +5,8 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	setInnerBlock,
+	setParentBlock,
 	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -15,8 +17,8 @@ describe('Table Block', () => {
 	});
 
 	it('Functionality + Should not have inner blocks', () => {
-		appendBlocks(`<!-- wp:table -->
-<figure class="wp-block-table"><table><tbody><tr><td>cell 1</td><td>cell 2</td></tr><tr><td>cell 3</td><td>cell 4</td></tr></tbody></table><figcaption class="wp-element-caption">caption text...</figcaption></figure>
+		appendBlocks(`<!-- wp:table {"hasFixedLayout":false} -->
+<figure class="wp-block-table"><table><thead><tr><th>Header Cell</th><th></th></tr></thead><tbody><tr><td>cell 1</td><td>cell 2</td></tr><tr><td>cell 3</td><td>cell 4</td></tr></tbody><tfoot><tr><td>Footer Cell</td><td></td></tr></tfoot></table><figcaption class="wp-element-caption">caption text...</figcaption></figure>
 <!-- /wp:table -->`);
 
 		cy.getBlock('core/table').click();
@@ -24,13 +26,17 @@ describe('Table Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// No inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/caption',
+			'elements/header-cells',
+			'elements/body-cells',
+			'elements/footer-cells',
+		]);
 
 		//
-		// 1. Edit Inner Blocks
+		// 1. Edit Blocks
 		//
 
 		//
@@ -77,7 +83,92 @@ describe('Table Block', () => {
 		});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 1.2. Caption
+		//
+		setInnerBlock('elements/caption');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		cy.setColorControlValue('BG Color', '#606060');
+
+		cy.getBlock('core/table').within(() => {
+			cy.get('.wp-element-caption').should(
+				'have.css',
+				'background-color',
+				'rgb(96, 96, 96)'
+			);
+		});
+
+		//
+		// 1.3. Header cells
+		//
+		setParentBlock();
+		setInnerBlock('elements/header-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		cy.setColorControlValue('BG Color', '#808080');
+
+		cy.getBlock('core/table').within(() => {
+			cy.get('thead th').should(
+				'have.css',
+				'background-color',
+				'rgb(128, 128, 128)'
+			);
+		});
+
+		//
+		// 1.4. Body cells
+		//
+		setParentBlock();
+		setInnerBlock('elements/body-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		cy.setColorControlValue('BG Color', '#909090');
+
+		cy.getBlock('core/table').within(() => {
+			cy.get('tbody td').should(
+				'have.css',
+				'background-color',
+				'rgb(144, 144, 144)'
+			);
+		});
+
+		//
+		// 1.5. Footer cells
+		//
+		setParentBlock();
+		setInnerBlock('elements/footer-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		cy.setColorControlValue('BG Color', '#A0A0A0');
+
+		cy.getBlock('core/table').within(() => {
+			cy.get('tfoot td').should(
+				'have.css',
+				'background-color',
+				'rgb(160, 160, 160)'
+			);
+		});
+
+		//
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();
@@ -99,5 +190,31 @@ describe('Table Block', () => {
 			'padding-top',
 			'50px'
 		);
+
+		cy.get('.blockera-block.wp-block-table').within(() => {
+			cy.get('.wp-element-caption').should(
+				'have.css',
+				'background-color',
+				'rgb(96, 96, 96)'
+			);
+
+			cy.get('thead th').should(
+				'have.css',
+				'background-color',
+				'rgb(128, 128, 128)'
+			);
+
+			cy.get('tbody td').should(
+				'have.css',
+				'background-color',
+				'rgb(144, 144, 144)'
+			);
+
+			cy.get('tfoot td').should(
+				'have.css',
+				'background-color',
+				'rgb(160, 160, 160)'
+			);
+		});
 	});
 });

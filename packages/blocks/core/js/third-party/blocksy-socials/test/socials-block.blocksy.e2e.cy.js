@@ -878,7 +878,7 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 		});
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Block card + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:blocksy/widgets-wrapper -->
 <!-- wp:heading {"level":3,"blockeraCompatId":"17145539258","blockeraFontSize":{"value":{"settings":{"name":"Medium","id":"medium","value":"20px","fluid":null,"reference":{"type":"preset"},"type":"font-size","var":"\u002d\u002dwp\u002d\u002dpreset\u002d\u002dfont-size\u002d\u002dmedium"},"name":"Medium","isValueAddon":true,"valueType":"variable"}},"className":"","fontSize":"medium"} -->
 <h3 class="wp-block-heading has-medium-font-size">Socials</h3>
@@ -892,6 +892,8 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 		cy.getBlock('blocksy/socials').first().click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/icons']);
 
 		//
 		// 1. Assert inner blocks selectors in editor
@@ -913,7 +915,13 @@ describe('Blocksy → Socials Block → WP Compatibility', () => {
 			});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. block card items
+		//
+		setInnerBlock('elements/icons');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

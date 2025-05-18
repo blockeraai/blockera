@@ -5,7 +5,7 @@ textarea.blockera-control-textarea {
 	padding: 5px 8px;
 	width: 100%;
 	border: 1px solid var(--blockera-controls-border-color);
-	border-radius: 2px;
+	border-radius: var(--blockera-controls-border-radius);
 	color: var(--blockera-controls-color);
 	box-shadow: 0 0 0 transparent;
 	background-color: #ffffff;

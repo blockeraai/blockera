@@ -1,0 +1,80 @@
+// @flow
+
+/**
+ * Blockera dependencies
+ */
+import { select } from '@wordpress/data';
+import { useMemo } from '@wordpress/element';
+import { isEquals, mergeObject } from '@blockera/utils';
+
+/**
+ * Internal dependencies
+ */
+import type {
+	InnerBlocks,
+	InnerBlockType,
+	InnerBlockModel,
+	MemoizedInnerBlocks,
+} from '../types';
+import { getSortedObject } from '@blockera/utils/js/object';
+
+export const useMemoizedInnerBlocks = ({
+	clientId,
+	controlValue,
+	getBlockInners,
+	reservedInnerBlocks,
+	setBlockClientInners,
+}: MemoizedInnerBlocks): InnerBlocks => {
+	// External selectors. to access registered block types on WordPress blocks store api.
+	const { getBlockType } = select('core/blocks');
+
+	return useMemo(() => {
+		const stack: { [key: InnerBlockType]: InnerBlockModel } = {};
+
+		// $FlowFixMe
+		for (const name: InnerBlockType in controlValue) {
+			const registeredBlockType = getBlockType(name);
+
+			if (registeredBlockType) {
+				stack[name] = mergeObject(
+					{
+						...registeredBlockType,
+						label:
+							registeredBlockType?.title ||
+							reservedInnerBlocks[name]?.label ||
+							'',
+						icon: registeredBlockType?.icon?.src ||
+							reservedInnerBlocks[name]?.icon || <></>,
+					},
+					controlValue[name]
+				);
+
+				continue;
+			}
+
+			stack[name] = mergeObject(
+				reservedInnerBlocks[name],
+				controlValue[name]
+			);
+		}
+
+		// Previous inner blocks stack.
+		const inners = getBlockInners(clientId);
+
+		const mergedStackWithStoreInners = mergeObject(inners, stack);
+
+		if (!isEquals(inners, mergedStackWithStoreInners)) {
+			setBlockClientInners({
+				clientId,
+				inners: getSortedObject(
+					mergedStackWithStoreInners,
+					'settings',
+					10
+				),
+			});
+		}
+
+		return mergedStackWithStoreInners;
+		// eslint-disable-next-line
+	}, [controlValue, reservedInnerBlocks]);
+};

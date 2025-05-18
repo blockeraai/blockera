@@ -8,6 +8,7 @@ convention:
         - refactor
         - style
         - test
+        - tests
         - build
         - ops
         - docs

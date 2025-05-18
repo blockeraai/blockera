@@ -29,10 +29,14 @@ describe('Social Link Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'focus',
+			'active',
+			'elements/item-icon',
+			'elements/item-name',
+		]);
 
 		//
 		// 1. Edit Block
@@ -62,6 +66,8 @@ describe('Social Link Block', () => {
 		//
 		setInnerBlock('elements/item-icon');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -81,6 +87,8 @@ describe('Social Link Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/item-name');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -93,6 +101,20 @@ describe('Social Link Block', () => {
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
 			});
+
+		//
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
 
 		//
 		// 2. Assert inner blocks selectors in front end

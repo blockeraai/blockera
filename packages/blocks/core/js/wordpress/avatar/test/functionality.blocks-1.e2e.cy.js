@@ -23,10 +23,7 @@ describe('Avatar Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// No inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1.0. Block Styles
@@ -181,7 +178,25 @@ describe('Avatar Block', () => {
 			});
 
 		//
-		// Assert front end
+		// 2.0. Settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			// the range slide for image size should be hidden
+			cy.get(
+				'.components-panel__body .components-range-control .components-base-control__label'
+			).should('not.visible');
+			cy.get('.components-panel__body .components-range-control').should(
+				'not.visible'
+			);
+			cy.get('.components-panel__body .components-toggle-control').should(
+				'be.visible'
+			);
+		});
+
+		//
+		// 3.0 Assert front end
 		//
 		savePage();
 		redirectToFrontPage();

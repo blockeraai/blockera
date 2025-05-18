@@ -1,21 +1,23 @@
 .blockera-control-repeater {
+	--repeater-gap: 8px;
+	--repeater-item-height: 30px;
 	display: flex;
-	row-gap: 8px;
+	gap: var(--repeater-gap);
 	flex-direction: column;
 
 	& > .blockera-control-header {
 		display: flex;
 		align-items: center;
-		min-height: var(--blockera-controls-input-height);
+		min-height: var(--repeater-item-height);
 		justify-content: center;
 	}
 
 	.blockera-control-repeater-item {
-		border-radius: 2px;
+		border-radius: var(--blockera-controls-border-radius);
 		transition: transform 0.2s linear;
 
 		.blockera-control-group-header {
-			padding: 0 12px;
+			padding: 0 calc(var(--repeater-item-height) * 0.4);
 		}
 
 		&.is-inactive {
@@ -35,7 +37,7 @@
 	}
 
 	.blockera-control-header + .blockera-control-repeater-item {
-		margin-top: -5px;
+		margin-top: calc(var(--repeater-gap) * -0.5);
 	}
 
 	.blockera-control-group-header {
@@ -46,7 +48,7 @@
 			align-items: center;
 			flex-wrap: nowrap;
 			padding: 0 0;
-			height: 28px;
+			height: calc(var(--repeater-item-height) - 2px);
 			width: 100%;
 			position: relative;
 			letter-spacing: -0.2px;
@@ -216,13 +218,4 @@
 
 .components-panel__body-title + .blockera-control-repeater.design-large:last-child {
 	margin-bottom: -5px;
-}
-
-.blockera-control-group.mode-popover.is-selected-item,
-.blockera-control-group.mode-nothing.is-selected-item {
-	border-color: var(--blockera-controls-primary-color);
-
-	.blockera-control-header-label {
-		color: var(--blockera-controls-primary-color);
-	}
 }

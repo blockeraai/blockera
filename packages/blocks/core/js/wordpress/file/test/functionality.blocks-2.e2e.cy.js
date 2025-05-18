@@ -26,10 +26,12 @@ describe('File Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/link',
+			'core/button',
+		]);
 
 		//
 		// 1. Edit Block
@@ -59,6 +61,8 @@ describe('File Block', () => {
 		//
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -78,6 +82,8 @@ describe('File Block', () => {
 		setParentBlock();
 		setInnerBlock('core/button');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -89,6 +95,19 @@ describe('File Block', () => {
 				'background-color',
 				'rgb(238, 238, 238)'
 			);
+		});
+
+		//
+		// 2. Check settings tab
+		//
+		setParentBlock();
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-panel__body-title button')
+				.contains('Settings')
+				.should('be.visible');
 		});
 
 		//

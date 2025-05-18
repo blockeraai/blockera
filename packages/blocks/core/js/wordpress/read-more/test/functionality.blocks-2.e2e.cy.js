@@ -24,11 +24,9 @@ describe('Read More Block', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		//
-		// 2. No inner blocks
+		// 2. block active items
 		//
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
 
 		//
 		// 3. Edit Block
@@ -54,7 +52,20 @@ describe('Read More Block', () => {
 		);
 
 		//
-		// 4. Assert inner blocks selectors in front end
+		// 4. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 5. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

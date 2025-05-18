@@ -26,10 +26,12 @@ describe('Pullquote Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/citation',
+			'core/paragraph',
+		]);
 
 		//
 		// 1. Edit Block
@@ -60,6 +62,8 @@ describe('Pullquote Block', () => {
 		//
 		setInnerBlock('elements/citation');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -78,6 +82,8 @@ describe('Pullquote Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. Link color

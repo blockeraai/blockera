@@ -126,6 +126,7 @@ export function PaddingHorizontal({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -141,6 +142,7 @@ export function PaddingHorizontal({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -217,6 +219,7 @@ export function PaddingHorizontal({
 						setOpenPopover(sideId);
 					}
 				}}
+				tooltipText={__('Horizontal Padding', 'blockera')}
 			/>
 		),
 		label: (
@@ -288,7 +291,10 @@ export function PaddingHorizontal({
 						}}
 					/>
 				</div>
-
+			</>
+		),
+		popover: (
+			<>
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.left || value?.padding?.right}
@@ -304,27 +310,25 @@ export function PaddingHorizontal({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
-						type="padding"
 						icon={<Icon icon="padding-horizontal" iconSize="18" />}
+						title={__('Left & Right Padding', 'blockera')}
+						type="padding"
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left & Right Padding', 'blockera')}
 						inputLabel={__('Horizontal Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Horizontal Padding',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a padding space that applies to both the left and right edges of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a padding space that applies to both the left and right edges of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

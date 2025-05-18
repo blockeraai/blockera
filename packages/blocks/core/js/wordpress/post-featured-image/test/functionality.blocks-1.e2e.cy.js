@@ -38,10 +38,7 @@ describe('Post Featured Image Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// No inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1. Edit Block
@@ -68,7 +65,19 @@ describe('Post Featured Image Block', () => {
 		);
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 2. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+		});
+
+		//
+		// 3. Assert inner blocks selectors in front end
 		//
 		savePage();
 		redirectToFrontPage();

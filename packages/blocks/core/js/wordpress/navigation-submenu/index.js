@@ -8,7 +8,12 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	generalInnerBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -26,6 +31,28 @@ export const NavigationSubmenu: BlockType = {
 			label: __('Parent Menu Link', 'blockera'),
 			description: __('Parent menu link element.', 'blockera'),
 			icon: <Icon icon="link" library="wp" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+			availableBlockStates: {
+				...generalBlockStates,
+				focus: {
+					...generalBlockStates.focus,
+					force: true,
+				},
+				active: {
+					...sharedBlockStates.active,
+					force: true,
+				},
+				visited: sharedBlockStates.visited,
+			},
+		},
+		'elements/submenu-icon': {
+			name: 'elements/submenu-icon',
+			type: 'title',
+			label: __('Submenu Icon', 'blockera'),
+			description: __('Chevron down icon of submenu.', 'blockera'),
+			icon: <Icon icon="chevron-down" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
 			},
@@ -61,17 +88,30 @@ export const NavigationSubmenu: BlockType = {
 			settings: {
 				force: true,
 			},
-		},
-		'elements/submenu-icon': {
-			name: 'elements/submenu-icon',
-			type: 'title',
-			label: __('Submenu Icon', 'blockera'),
-			description: __('Chevron down icon of submenu.', 'blockera'),
-			icon: <Icon icon="chevron-down" library="wp" iconSize="20" />,
-			settings: {
-				force: true,
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				'current-menu-item': {
+					...sharedBlockStates['current-menu-item'],
+					force: true,
+				},
+				'current-menu-parent': sharedBlockStates['current-menu-parent'],
+				'current-menu-ancestor':
+					sharedBlockStates['current-menu-ancestor'],
+				active: sharedBlockStates.active,
+				visited: sharedBlockStates.visited,
 			},
 		},
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		'current-menu-item': {
+			...sharedBlockStates['current-menu-item'],
+			force: true,
+		},
+		'current-menu-parent': sharedBlockStates['current-menu-parent'],
+		'current-menu-ancestor': sharedBlockStates['current-menu-ancestor'],
+		active: sharedBlockStates.active,
+		visited: sharedBlockStates.visited,
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

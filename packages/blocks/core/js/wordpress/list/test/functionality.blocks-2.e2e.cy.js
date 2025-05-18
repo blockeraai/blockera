@@ -39,10 +39,7 @@ describe('List Block → Functionality + Inner blocks', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/item']);
 
 		//
 		// 1. Edit Block
@@ -72,6 +69,8 @@ describe('List Block → Functionality + Inner blocks', () => {
 		//
 		setInnerBlock('elements/item');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'marker'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -86,39 +85,12 @@ describe('List Block → Functionality + Inner blocks', () => {
 			});
 
 		//
-		// 1.2. elements/item-marker
-		//
-		setParentBlock();
-		setInnerBlock('elements/item-marker');
-
-		//
-		// 1.2.1. Text color
-		//
-		cy.setColorControlValue('Text Color', '00ffdf');
-
-		cy.getBlock('core/list')
-			.first()
-			.within(() => {
-				cy.get('li')
-					.first()
-					.within(($el) => {
-						cy.window().then((win) => {
-							const marker = win.getComputedStyle(
-								$el[0],
-								'::marker'
-							);
-							const markerColor =
-								marker.getPropertyValue('color');
-							expect(markerColor).to.equal('rgb(0, 255, 223)');
-						});
-					});
-			});
-
-		//
-		// 1.3. elements/link
+		// 1.2. elements/link
 		//
 		setParentBlock();
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. Text color
@@ -155,17 +127,6 @@ describe('List Block → Functionality + Inner blocks', () => {
 			cy.get('a')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 32, 32)');
-
-			// elements/item-marker
-			cy.get('li')
-				.first()
-				.within(($el) => {
-					cy.window().then((win) => {
-						const marker = win.getComputedStyle($el[0], '::marker');
-						const markerColor = marker.getPropertyValue('color');
-						expect(markerColor).to.equal('rgb(0, 255, 223)');
-					});
-				});
 		});
 	});
 });

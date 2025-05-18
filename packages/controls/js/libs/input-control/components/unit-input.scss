@@ -72,7 +72,7 @@
 			height: var(--blockera-controls-input-height);
 			min-height: var(--blockera-controls-input-height);
 			border: 1px solid var(--blockera-controls-border-color);
-			border-radius: 2px;
+			border-radius: var(--blockera-controls-border-radius);
 			font-size: 12px;
 			font-weight: 400;
 			color: var(--blockera-controls-color);

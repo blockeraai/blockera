@@ -2,7 +2,7 @@
 
 	.blockera-control-layout-matrix__grid {
 		border: 1px solid var(--blockera-controls-border-color);
-		border-radius: 2px;
+		border-radius: var(--blockera-controls-border-radius);
 		margin: 0;
 		height: 74px;
 		width: 74px;
@@ -116,6 +116,13 @@
 			height: var(--blockera-controls-input-height);
 			width: var(--blockera-controls-input-height);
 			justify-content: center;
+		}
+
+		&:not(.selected-item-empty) {
+
+			button {
+				color: var(--blockera-controls-primary-color);
+			}
 		}
 	}
 

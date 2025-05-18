@@ -64,7 +64,7 @@ describe('Range Control label testing (Opacity)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Effects',
@@ -125,7 +125,7 @@ describe('Range Control label testing (Opacity)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName('Effects', 'Opacity', 'changed-in-normal-state');
@@ -199,7 +199,7 @@ describe('Range Control label testing (Opacity)', () => {
 		/**
 		 * Hover
 		 */
-		addBlockState('hover');
+		setBlockState('Hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Effects',
@@ -263,7 +263,7 @@ describe('Range Control label testing (Opacity)', () => {
 			// Set value in normal/desktop
 			setOpacityValue(50);
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			setOpacityValue(40);
 			// Set value in hover/tablet
 			setDeviceType('Tablet');
@@ -601,7 +601,7 @@ describe('Range Control label testing (Opacity)', () => {
 			// Set value in normal/desktop
 			setOpacityValue(50);
 			// Set value in hover/desktop
-			addBlockState('hover');
+			setBlockState('Hover');
 			setOpacityValue(40);
 			// Set value in hover/tablet
 			setDeviceType('Tablet');

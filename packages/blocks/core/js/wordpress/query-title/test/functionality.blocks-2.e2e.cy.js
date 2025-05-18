@@ -1,14 +1,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	createPost,
-	appendBlocks,
-	openInnerBlocksExtension,
-	setInnerBlock,
-	savePage,
-	redirectToFrontPage,
-} from '@blockera/dev-cypress/js/helpers';
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 describe('Query Title Block', () => {
 	beforeEach(() => {
@@ -24,22 +17,7 @@ describe('Query Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Has inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'exist'
-		);
-
-		// open inner block settings
-		openInnerBlocksExtension();
-
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').within(
-			() => {
-				cy.getByDataTest('elements/link').should('exist');
-
-				// no other item
-				cy.getByDataTest('core/heading').should('not.exist');
-			}
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1. Edit Block
@@ -66,30 +44,20 @@ describe('Query Title Block', () => {
 		);
 
 		//
-		// 1.1. Link inner block
+		// 2. Check settings tab
 		//
-		setInnerBlock('elements/link');
+		cy.getByDataTest('settings-tab').click();
 
-		//
-		// 1.1.1. BG color
-		//
-		cy.setColorControlValue('BG Color', 'cccccc');
-
-		// Append a tag at the end of the element
-		cy.getBlock('core/query-title').then(($el) => {
-			$el.append('<a href="https://blockera.ai">Test Link</a>');
-		});
-
-		cy.getBlock('core/query-title').within(() => {
-			cy.get('a').should(
-				'have.css',
-				'background-color',
-				'rgb(204, 204, 204)'
-			);
+		// layout settings should be hidden
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
 		});
 
 		//
-		// 2. Assert inner blocks selectors in front end
+		// 3. Assert inner blocks selectors in front end
 		//
 
 		// it's very complicated to test this, because the block is not rendered in the front end

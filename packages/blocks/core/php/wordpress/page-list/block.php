@@ -19,8 +19,8 @@ return array_merge(
 				'blockera/elements/item-container' => [
 					'root' => 'li',
 				],
-				'blockera/elements/item-marker'    => [
-					'root' => 'li::marker',
+				'blockera/states/marker'        => [
+					'root' => ' li::marker',
 				],
 			],
 		),

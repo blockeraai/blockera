@@ -20,7 +20,7 @@ import type {
 	TBreakpointLabel,
 	TStates,
 	TStatesLabel,
-} from '../../extensions/libs/block-states/types';
+} from '../../extensions/libs/block-card/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
@@ -59,10 +59,12 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 	}
 
 	const { getExtensionCurrentBlock } = select('blockera/extensions');
-	const { getStates, getBreakpoints } = select('blockera/editor');
-	const defaultStates = getStates();
-
+	const { getStates, getBreakpoints, getInnerStates } =
+		select('blockera/editor');
 	const currentBlock = getExtensionCurrentBlock();
+	const defaultStates = isInnerBlock(currentBlock)
+		? getInnerStates()
+		: getStates();
 
 	const breakpoints = getBreakpoints();
 	const normals = [];

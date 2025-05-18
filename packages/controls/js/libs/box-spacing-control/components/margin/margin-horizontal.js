@@ -125,6 +125,7 @@ export function MarginHorizontal({
 		return {
 			shape: <></>,
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -140,6 +141,7 @@ export function MarginHorizontal({
 				/>
 			),
 			label: <></>,
+			popover: <></>,
 		};
 	}
 
@@ -221,6 +223,7 @@ export function MarginHorizontal({
 								setOpenPopover(sideId);
 							}
 						}}
+						tooltipText={__('Horizontal Margin', 'blockera')}
 					/>
 				}
 			</>
@@ -294,7 +297,10 @@ export function MarginHorizontal({
 						}}
 					/>
 				</div>
-
+			</>
+		),
+		popover: (
+			<>
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.left || value?.margin?.right}
@@ -310,27 +316,25 @@ export function MarginHorizontal({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
-						type="margin"
 						icon={<Icon icon="margin-horizontal" iconSize="18" />}
+						title={__('Left & Right Margin', 'blockera')}
+						type="margin"
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
-						title={__('Left & Right Margin', 'blockera')}
 						inputLabel={__('Horizontal Margin', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Horizontal Margin',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<>
-								<p>
-									{__(
-										'It enables you to set a margin space that applies to both the left and right edges of the block.',
-										'blockera'
-									)}
-								</p>
-							</>
+							<p>
+								{__(
+									'It enables you to set a margin space that applies to both the left and right edges of the block.',
+									'blockera'
+								)}
+							</p>
 						}
 						isOpen={true}
 						unit={sideSpace?.unit}
