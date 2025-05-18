@@ -17,6 +17,8 @@ describe('Query Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		//
 		// 1. Edit Block
 		//
