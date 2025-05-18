@@ -108,34 +108,6 @@ const baseBlockStates = {
 			color: 'var(--blockera-controls-states-color)',
 		},
 	},
-	target: {
-		type: 'target',
-		label: __('Target', 'blockera'),
-		category: 'interactive-states',
-		tooltip: (
-			<>
-				<h5>{__('Target State', 'blockera')}</h5>
-				<p>
-					{__(
-						'Applies when the block’s ID matches the URL fragment (e.g. #about).',
-						'blockera'
-					)}
-				</p>
-				<code style={{ margin: '5px 0' }}>
-					<span style={{ opacity: '0.7', marginRight: '1px' }}>
-						.block
-					</span>
-					:target
-				</code>
-			</>
-		),
-		breakpoints: {},
-		priority: 20,
-		force: false,
-		settings: {
-			color: 'var(--blockera-controls-states-color)',
-		},
-	},
 	before: {
 		type: 'before',
 		label: __('Before', 'blockera'),
