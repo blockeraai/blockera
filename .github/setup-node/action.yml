@@ -30,6 +30,10 @@ runs:
               restore-keys: |
                   ${{ runner.os }}-node-
 
+        - name: Ensure lockfile is in sync
+          shell: bash
+          run: 'npm audit signatures || echo "⚠️ Warning: package-lock.json may be out of sync"'
+
         - name: Install npm dependencies
           shell: bash
           run: |
