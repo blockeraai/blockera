@@ -28,6 +28,9 @@ describe('Comment Author Name Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		//
 		// 1.0. Block Styles
 		//
@@ -51,6 +54,8 @@ describe('Comment Author Name Block', () => {
 		// 1.1. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ffdbdb');
 
