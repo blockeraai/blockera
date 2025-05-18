@@ -33,6 +33,14 @@ describe('Quote Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/citation',
+			'core/paragraph',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -62,6 +70,8 @@ describe('Quote Block', () => {
 		//
 		setInnerBlock('elements/citation');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -80,6 +90,8 @@ describe('Quote Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color
