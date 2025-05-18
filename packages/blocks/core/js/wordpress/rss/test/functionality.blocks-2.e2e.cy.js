@@ -25,6 +25,17 @@ describe('RSS Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/container',
+			'elements/title',
+			'elements/date',
+			'elements/author',
+			'elements/excerpt',
+		]);
+
 		//
 		// 1. Edit Inner Blocks
 		//
@@ -54,6 +65,8 @@ describe('RSS Block', () => {
 		//
 		setInnerBlock('elements/container');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -72,6 +85,8 @@ describe('RSS Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/title');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
@@ -92,6 +107,8 @@ describe('RSS Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/date');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -111,6 +128,8 @@ describe('RSS Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/author');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.3.1. BG color
 		//
@@ -129,6 +148,8 @@ describe('RSS Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/excerpt');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.4.1. BG color
