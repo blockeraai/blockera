@@ -25,10 +25,6 @@ runs:
               echo "✅ npm version: $(npm -v)"
           shell: bash
 
-        - name: Set faster npm registry
-          run: npm config set registry https://registry.npmmirror.com
-          shell: bash
-
         - name: Install npm dependencies (skip Chromium during install)
-          run: timeout 300 npm ci --legacy-peer-deps
+          run: timeout 300 npm install --legacy-peer-deps
           shell: bash
