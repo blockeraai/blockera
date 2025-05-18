@@ -139,6 +139,16 @@ describe(
 			//
 			// 0. Inner blocks existence
 			//
+			cy.checkBlockCardItems([
+				'normal',
+				'hover',
+				'current-menu-item',
+				'elements/link',
+				'elements/submenu-icon',
+				'elements/submenu-container',
+				'elements/submenu-items',
+			]);
+
 			openInserter();
 			cy.getByDataTest('elements/link').should('exist');
 			cy.getByDataTest('states/current-menu-item').should('exist');
@@ -164,12 +174,31 @@ describe(
 				.should('have.css', 'background-clip', 'padding-box');
 
 			//
-			// 1.1. Submenu inner block
+			// 1.1. elements/link
+			//
+			setInnerBlock('elements/link');
+
+			cy.checkBlockCardItems(
+				['normal', 'hover', 'focus', 'active'],
+				true
+			);
+
+			//
+			// 1.2. elements/submenu-icon
+			//
+			setInnerBlock('elements/submenu-icon');
+
+			cy.checkBlockCardItems(['normal', 'hover'], true);
+
+			//
+			// 1.3. elements/submenu-container
 			//
 			setInnerBlock('elements/submenu-container');
 
+			cy.checkBlockCardItems(['normal', 'hover'], true);
+
 			//
-			// 1.1.1. BG color
+			// 1.3.1. BG color
 			//
 			cy.setColorControlValue('BG Color', 'cccccc');
 
@@ -180,6 +209,16 @@ describe(
 					'rgb(204, 204, 204)'
 				);
 			});
+
+			//
+			// 1.4. elements/submenu-items
+			//
+			setInnerBlock('elements/submenu-items');
+
+			cy.checkBlockCardItems(
+				['normal', 'hover', 'current-menu-item'],
+				true
+			);
 
 			//
 			// 2. Check settings tab
