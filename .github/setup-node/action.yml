@@ -1,8 +1,8 @@
 name: 'Setup Node.js and install npm dependencies'
-description: 'Configure Node.js and install all npm dependencies with cache and flexible engine handling.'
+description: 'Configure Node.js and install npm dependencies while managing all aspects of caching.'
 inputs:
     node-version:
-        description: 'Optional. The Node.js version to use. When not specified, uses version from .nvmrc'
+        description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
         required: false
 
 runs:
@@ -15,14 +15,20 @@ runs:
               node-version: ${{ inputs.node-version }}
               cache: 'npm'
 
-        - name: Set faster registry
+        - name: Downgrade npm to v8.19.3
+          run: npm install -g npm@8.19.3
+          shell: bash
+
+        - name: Confirm Node and npm versions
+          run: |
+              echo "Node: $(node -v)"
+              echo "npm: $(npm -v)"
+          shell: bash
+
+        - name: Set faster npm registry
           run: npm config set registry https://registry.npmmirror.com
           shell: bash
 
-        - name: Output Node.js version
-          run: echo "Using Node $(node -v) and npm $(npm -v)"
-          shell: bash
-
-        - name: Install npm dependencies (with legacy peer deps)
+        - name: Install npm dependencies
           run: npm install --legacy-peer-deps
           shell: bash
