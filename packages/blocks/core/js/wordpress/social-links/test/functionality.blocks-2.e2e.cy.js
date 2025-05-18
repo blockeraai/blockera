@@ -32,6 +32,15 @@ describe('Social Links Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/item-containers',
+			'elements/item-icons',
+			'elements/item-names',
+		]);
+
 		//
 		// 1. Edit Inner Blocks
 		//
@@ -60,6 +69,8 @@ describe('Social Links Block', () => {
 		//
 		setInnerBlock('elements/item-containers');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -79,6 +90,8 @@ describe('Social Links Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/item-icons');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.3.1. BG color
 		//
@@ -97,6 +110,8 @@ describe('Social Links Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/item-names');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.4.1. BG color
