@@ -23,6 +23,14 @@ describe('Categories Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/term-item',
+			'elements/list-item',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -51,6 +59,11 @@ describe('Categories Block', () => {
 		//
 		setInnerBlock('elements/term-item');
 
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'active', 'marker'],
+			true
+		);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -73,6 +86,8 @@ describe('Categories Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/list-item');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
