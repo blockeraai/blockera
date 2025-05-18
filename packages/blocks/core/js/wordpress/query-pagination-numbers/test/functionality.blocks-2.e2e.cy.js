@@ -18,7 +18,7 @@ import { testContent } from './test-content';
 describe('Query Pagination Numbers Block', () => {
 	beforeEach(() => {
 		// Generate 100 posts to make sure the pagination is visible
-		// cy.wpCli('wp post generate --count=100 --post_type=post');
+		cy.wpCli('wp post generate --count=100 --post_type=post');
 
 		createPost();
 	});

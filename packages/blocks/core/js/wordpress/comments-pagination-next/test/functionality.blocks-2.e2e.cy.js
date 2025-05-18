@@ -17,13 +17,13 @@ import { testContent } from './test-content';
 describe('Comments Pagination Next Block', () => {
 	beforeEach(() => {
 		// Generate 100 comments to post to make sure the pagination is visible
-		// cy.wpCli('wp comment generate --count=100 --post_id=1');
+		cy.wpCli('wp comment generate --count=100 --post_id=1');
 
 		// // Enable comments pagination
-		// cy.wpCli('wp option update page_comments 1');
+		cy.wpCli('wp option update page_comments 1');
 
 		// // Set comments per page to 10
-		// cy.wpCli('wp option update comments_per_page 10');
+		cy.wpCli('wp option update comments_per_page 10');
 
 		editPost({ postID: 1 });
 	});
