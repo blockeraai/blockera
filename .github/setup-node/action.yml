@@ -36,5 +36,5 @@ runs:
               PUPPETEER_SKIP_DOWNLOAD: 'true'
 
         - name: Manually install Chromium for Puppeteer
-          run: node --input-type=module .github/scripts/install-puppeteer.mjs
+          run: node .github/scripts/install-puppeteer.mjs
           shell: bash
