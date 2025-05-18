@@ -26,6 +26,14 @@ describe('Search Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/label',
+			'elements/input',
+			'elements/button',
+		]);
+
 		//
 		// 1. Edit Inner Blocks
 		//
@@ -54,6 +62,8 @@ describe('Search Block', () => {
 		//
 		setInnerBlock('elements/label');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -73,6 +83,11 @@ describe('Search Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/input');
 
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'placeholder'],
+			true
+		);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -91,6 +106,8 @@ describe('Search Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/button');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.3.1. BG color
