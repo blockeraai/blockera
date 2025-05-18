@@ -52,6 +52,8 @@ describe('Post Content Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
@@ -85,6 +87,9 @@ describe('Post Content Block', () => {
 		// 1.2. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		//
