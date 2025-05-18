@@ -25,11 +25,7 @@ describe('Post Navigation Link Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.getByDataTest('elements/arrow').should('exist');
-
-		// no other item
-		cy.getByDataTest('elements/link').should('not.exist');
-		cy.getByDataTest('core/heading').should('not.exist');
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/arrow']);
 
 		//
 		// 1. Edit Block
@@ -60,6 +56,8 @@ describe('Post Navigation Link Block', () => {
 		//
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -77,6 +75,8 @@ describe('Post Navigation Link Block', () => {
 		// 1.2. elements/arrow inner block
 		//
 		setInnerBlock('elements/arrow');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
