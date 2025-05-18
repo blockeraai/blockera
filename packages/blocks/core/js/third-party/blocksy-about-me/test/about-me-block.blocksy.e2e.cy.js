@@ -876,7 +876,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 		});
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Block card + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:blocksy/widgets-wrapper {"heading":"About Me","block":"blocksy/about-me"} -->
 <!-- wp:heading {"level":3,"className":"","fontSize":"medium"} -->
 <h3 class="wp-block-heading has-medium-font-size">About Me</h3>
@@ -941,6 +941,44 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					'rgb(255, 154, 154)'
 				);
 			});
+
+		//
+		// 2. check block cards
+		//
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/avatar',
+			'elements/name',
+			'elements/profile-link',
+			'elements/icons',
+			'elements/text',
+		]);
+
+		// 2.1 - elements/avatar
+		setInnerBlock('elements/avatar');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 2.2 - elements/name
+		setParentBlock();
+		setInnerBlock('elements/name');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 2.3 - elements/profile-link
+		setParentBlock();
+		setInnerBlock('elements/profile-link');
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
+		// 2.4 - elements/icons
+		setParentBlock();
+		setInnerBlock('elements/icons');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		// 2.5 - elements/text
+		setParentBlock();
+		setInnerBlock('elements/text');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 2. Assert inner blocks selectors in front end
