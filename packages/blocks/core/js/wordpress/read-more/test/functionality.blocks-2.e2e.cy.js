@@ -24,11 +24,9 @@ describe('Read More Block', () => {
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		//
-		// 2. No inner blocks
+		// 2. block active items
 		//
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
 
 		//
 		// 3. Edit Block
