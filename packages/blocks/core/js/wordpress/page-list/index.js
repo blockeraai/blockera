@@ -43,10 +43,6 @@ export const PageList: BlockType = {
 					force: true,
 				},
 				visited: sharedBlockStates.visited,
-				marker: {
-					...sharedBlockStates.marker,
-					force: true,
-				},
 			},
 		},
 		'elements/item-container': {
@@ -63,6 +59,14 @@ export const PageList: BlockType = {
 			settings: {
 				force: true,
 			},
+		},
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		marker: {
+			...sharedBlockStates.marker,
+			label: __('Markers', 'blockera'),
+			force: true,
 		},
 	},
 	edit: (props) => {

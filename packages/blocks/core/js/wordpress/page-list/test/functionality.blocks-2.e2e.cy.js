@@ -28,6 +28,7 @@ describe('Page List Block', () => {
 		cy.checkBlockCardItems([
 			'normal',
 			'hover',
+			'marker',
 			'elements/item',
 			'elements/item-container',
 		]);
@@ -60,10 +61,7 @@ describe('Page List Block', () => {
 		//
 		setInnerBlock('elements/item');
 
-		cy.checkBlockCardItems(
-			['normal', 'hover', 'focus', 'active', 'marker'],
-			true
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color
