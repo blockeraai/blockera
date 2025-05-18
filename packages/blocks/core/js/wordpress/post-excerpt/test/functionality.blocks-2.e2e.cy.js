@@ -25,6 +25,8 @@ describe('Post Excerpt Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
@@ -59,6 +61,8 @@ describe('Post Excerpt Block', () => {
 		// 1.1. elements/link inner block
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color
