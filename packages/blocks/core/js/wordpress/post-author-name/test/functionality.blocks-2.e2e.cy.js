@@ -25,6 +25,8 @@ describe('Post Author Name Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
@@ -58,6 +60,8 @@ describe('Post Author Name Block', () => {
 		// 1.1. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color
