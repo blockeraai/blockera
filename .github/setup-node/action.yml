@@ -15,10 +15,6 @@ runs:
               node-version: ${{ inputs.node-version }}
               cache: 'npm'
 
-        - name: Downgrade npm to v8.19.3
-          run: npm install -g npm@8.19.3
-          shell: bash
-
         - name: Confirm Node and npm versions
           run: |
               echo "✅ Node version: $(node -v)"
