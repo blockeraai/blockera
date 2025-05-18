@@ -18,7 +18,7 @@ describe('Blocksy → Dynamic Data Block → WP Compatibility', () => {
 		createPost();
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Block card + CSS selectors in editor and front-end', () => {
 		appendBlocks(
 			`<!-- wp:blocksy/dynamic-data {"blockeraPropsId":"c7920348-5ad7-4e2d-9699-fff8e781e06a","blockeraCompatId":"1912856297","blockeraBackgroundColor":{"value":"#ffa6a6"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraInnerBlocks":{"value":{"elements/link":{"attributes":{"blockeraBackgroundColor":"#ff0000"}}}},"blockeraFontColor":{"value":"#0044ff"},"field":"wp:author","style":{"elements":{"overlay":{"color":{"background":"#000000"}},"link":{"color":{"text":"#0044ff"}}},"color":{"text":"#0044ff","background":"#ffa6a6"}},"has_field_link":"yes","className":"blockera-block blockera-block\u002d\u002d63bmhe"} /-->`
 		);
@@ -26,6 +26,13 @@ describe('Blocksy → Dynamic Data Block → WP Compatibility', () => {
 		cy.getBlock('blocksy/dynamic-data').first().click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/link',
+			'elements/image',
+		]);
 
 		//
 		//  1. Assert inner blocks selectors in editor
@@ -45,6 +52,16 @@ describe('Blocksy → Dynamic Data Block → WP Compatibility', () => {
 					'rgb(255, 0, 0)'
 				);
 			});
+
+		//
+		// 2. check block card items
+		//
+		setInnerBlock('elements/link');
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
+		setParentBlock();
+		setInnerBlock('elements/image');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 2. Assert inner blocks selectors in front end
