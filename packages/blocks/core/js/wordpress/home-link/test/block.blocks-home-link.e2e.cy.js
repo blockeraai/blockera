@@ -66,6 +66,9 @@ describe(
 			//
 			// 1. Inner blocks existence
 			//
+
+			cy.checkBlockCardItems(['normal', 'hover', 'current-menu-item']);
+
 			openInserter();
 			cy.getByDataTest('elements/link').should('exist');
 
