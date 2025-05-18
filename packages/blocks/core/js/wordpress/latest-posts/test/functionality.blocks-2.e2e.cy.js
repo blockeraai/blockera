@@ -24,6 +24,8 @@ describe('Latest Posts Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/link']);
+
 		//
 		// 1. Edit Blocks
 		//
@@ -51,6 +53,8 @@ describe('Latest Posts Block', () => {
 		// 1.1. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ff0000');
 
