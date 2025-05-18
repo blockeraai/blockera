@@ -1,10 +1,16 @@
-const { install } = require('puppeteer/lib/cjs/puppeteer/install.js');
+const puppeteer = require('puppeteer');
 
-install()
-	.then(() => {
-		console.log('✅ Puppeteer Chromium installed successfully');
-	})
-	.catch((err) => {
-		console.error('❌ Puppeteer install failed:', err);
+(async () => {
+	try {
+		const browserFetcher = puppeteer.createBrowserFetcher();
+		const revisionInfo = await browserFetcher.download(
+			puppeteer.browserRevision
+		);
+		console.log(
+			`✅ Chromium ${revisionInfo.revision} downloaded to ${revisionInfo.folderPath}`
+		);
+	} catch (err) {
+		console.error('❌ Failed to download Chromium:', err);
 		process.exit(1);
-	});
+	}
+})();
