@@ -1,1 +1,1 @@
-export { Playground } from './playground/index';
+export { Playground } from './playground/index.js';
