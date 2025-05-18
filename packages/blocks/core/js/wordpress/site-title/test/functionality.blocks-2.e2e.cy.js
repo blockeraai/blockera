@@ -24,10 +24,7 @@ describe('Site Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.getByDataTest('elements/link').should('exist');
-
-		// no other item
-		cy.getByDataTest('core/heading').should('not.exist');
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/link']);
 
 		//
 		// 1. Edit block
@@ -56,6 +53,8 @@ describe('Site Title Block', () => {
 		// 1.2. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color
