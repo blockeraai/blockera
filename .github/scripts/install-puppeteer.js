@@ -2,15 +2,28 @@ const puppeteer = require('puppeteer');
 
 (async () => {
 	try {
-		const browserFetcher = puppeteer.createBrowserFetcher();
-		const revisionInfo = await browserFetcher.download(
-			puppeteer.browserRevision
-		);
+		// Force Puppeteer to trigger the install script
+		const browserFetcher =
+			puppeteer._preferredRevision &&
+			puppeteer.util &&
+			puppeteer.util.getBrowserFetcher
+				? puppeteer.util.getBrowserFetcher()
+				: null;
+
+		if (!browserFetcher) {
+			console.error(
+				'❌ Unable to access Puppeteer browser fetcher in this version.'
+			);
+			process.exit(1);
+		}
+
+		const revision = puppeteer._preferredRevision;
+		const revisionInfo = await browserFetcher.download(revision);
 		console.log(
-			`✅ Chromium ${revisionInfo.revision} downloaded to ${revisionInfo.folderPath}`
+			`✅ Chromium ${revision} downloaded to ${revisionInfo.executablePath}`
 		);
-	} catch (err) {
-		console.error('❌ Failed to download Chromium:', err);
+	} catch (error) {
+		console.error('❌ Failed to install Puppeteer Chromium:', error);
 		process.exit(1);
 	}
 })();
