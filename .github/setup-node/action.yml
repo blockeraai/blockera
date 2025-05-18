@@ -25,6 +25,12 @@ runs:
               echo "npm: $(npm -v)"
           shell: bash
 
-        - name: Install npm dependencies
+        - name: Install dependencies (no Chromium auto-download)
           run: npm install --legacy-peer-deps --verbose
+          shell: bash
+          env:
+              PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+        - name: Manually install Chromium for Puppeteer
+          run: npx puppeteer install --browser chromium
           shell: bash
