@@ -1,15 +1,12 @@
-const puppeteer = require('puppeteer');
-
 (async () => {
 	try {
-		const browser = await puppeteer.launch({ headless: 'new' });
-		await browser.close();
-		console.log('✅ Chromium was downloaded and verified');
-	} catch (error) {
-		console.error(
-			'❌ Failed to download Chromium via puppeteer.launch():',
-			error
+		const install = (await import('puppeteer/install.mjs')).default;
+		await install();
+		console.log(
+			'✅ Chromium downloaded manually via puppeteer/install.mjs'
 		);
+	} catch (err) {
+		console.error('❌ Failed to install Chromium:', err);
 		process.exit(1);
 	}
 })();
