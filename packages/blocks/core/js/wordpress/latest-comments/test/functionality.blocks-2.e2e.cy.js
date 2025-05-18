@@ -23,6 +23,18 @@ describe('Latest Comments Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/container',
+			'elements/avatar',
+			'elements/author',
+			'elements/post-title',
+			'elements/date',
+			'elements/comment-text',
+		]);
+
 		//
 		// 1. Edit Blocks
 		//
@@ -51,6 +63,8 @@ describe('Latest Comments Block', () => {
 		//
 		setInnerBlock('elements/container');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -69,6 +83,8 @@ describe('Latest Comments Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/avatar');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
@@ -89,6 +105,8 @@ describe('Latest Comments Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/author');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -108,6 +126,8 @@ describe('Latest Comments Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/post-title');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.3.1. BG color
 		//
@@ -126,6 +146,8 @@ describe('Latest Comments Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/date');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.4.1. BG color
@@ -149,6 +171,8 @@ describe('Latest Comments Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/comment-text');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.4.1. BG color
