@@ -23,6 +23,15 @@ describe('Post Author Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'core/avatar',
+			'elements/byline',
+			'elements/author',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -51,6 +60,8 @@ describe('Post Author Block', () => {
 		//
 		setInnerBlock('core/avatar');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -70,6 +81,8 @@ describe('Post Author Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/byline');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		cy.getBlock('core/post-author')
@@ -85,6 +98,8 @@ describe('Post Author Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/author');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff0000');
 
