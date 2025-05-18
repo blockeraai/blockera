@@ -17,13 +17,13 @@ import { testContent } from './test-content';
 describe('Comments Pagination Previous Block', () => {
 	beforeEach(() => {
 		// Generate 100 comments to post to make sure the pagination is visible
-		cy.wpCli('wp comment generate --count=100 --post_id=1');
+		// cy.wpCli('wp comment generate --count=100 --post_id=1');
 
-		// Enable comments pagination
-		cy.wpCli('wp option update page_comments 1');
+		// // Enable comments pagination
+		// cy.wpCli('wp option update page_comments 1');
 
-		// Set comments per page to 10
-		cy.wpCli('wp option update comments_per_page 10');
+		// // Set comments per page to 10
+		// cy.wpCli('wp option update comments_per_page 10');
 
 		editPost({ postID: 1 });
 	});
@@ -36,6 +36,15 @@ describe('Comments Pagination Previous Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'focus',
+			'active',
+			'elements/arrow',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -63,6 +72,8 @@ describe('Comments Pagination Previous Block', () => {
 		// 1.1. Arrow inner block
 		//
 		setInnerBlock('elements/arrow');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.1.1. BG color
