@@ -47,6 +47,16 @@ describe('Post Terms Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/link',
+			'elements/separator',
+			'elements/prefix',
+			'elements/suffix',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -76,6 +86,8 @@ describe('Post Terms Block', () => {
 		//
 		setInnerBlock('elements/separator');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -89,6 +101,8 @@ describe('Post Terms Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/prefix');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. BG color
@@ -109,6 +123,8 @@ describe('Post Terms Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/suffix');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.3.1. BG color
 		//
@@ -121,6 +137,16 @@ describe('Post Terms Block', () => {
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 			});
+
+		//
+		// 1.4. elements/link
+		//
+		setParentBlock();
+		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
+		cy.setColorControlValue('BG Color', 'ff0000');
 
 		//
 		// 2. Assert inner blocks selectors in front end
@@ -147,6 +173,11 @@ describe('Post Terms Block', () => {
 
 			// elements/suffix
 			cy.get('.wp-block-post-terms__suffix')
+				.first()
+				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+
+			// elements/link
+			cy.get('a')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 		});
