@@ -24,6 +24,9 @@ describe('Heading Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		//
 		// 1. Edit Block
 		//
@@ -51,6 +54,8 @@ describe('Heading Block', () => {
 		// 1.1. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ff0000');
 
