@@ -25,24 +25,13 @@ describe('Archives Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Block card states and inner blocks active items
-		[
+		cy.checkBlockCardItems([
 			'normal',
 			'hover',
 			'elements/item',
 			'elements/item-marker',
 			'elements/item-container',
-		].forEach((state) => {
-			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
-				'be.visible'
-			);
-		});
-
-		['elements/link'].forEach((state) => {
-			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
-				'not.exist'
-			);
-		});
+		]);
 
 		//
 		// 1. Edit Block
@@ -72,6 +61,8 @@ describe('Archives Block', () => {
 		//
 		setInnerBlock('elements/item');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -90,6 +81,8 @@ describe('Archives Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/item-marker');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. Text color
@@ -119,6 +112,8 @@ describe('Archives Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/item-container');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. Text color
