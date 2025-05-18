@@ -39,9 +39,7 @@ describe('Blocksy → Post Template Block → Block support', () => {
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1. Edit Blocks
