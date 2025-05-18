@@ -1,12 +1,15 @@
-// Puppeteer v20+ only works with ESM for install scripts
-import install from 'puppeteer/install.mjs';
+const puppeteer = require('puppeteer');
 
 (async () => {
 	try {
-		await install();
-		console.log('✅ Chromium downloaded manually');
-	} catch (err) {
-		console.error('❌ Puppeteer install failed:', err);
+		const browser = await puppeteer.launch({ headless: 'new' });
+		await browser.close();
+		console.log('✅ Chromium was downloaded and verified');
+	} catch (error) {
+		console.error(
+			'❌ Failed to download Chromium via puppeteer.launch():',
+			error
+		);
 		process.exit(1);
 	}
 })();
