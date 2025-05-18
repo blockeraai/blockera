@@ -31,18 +31,7 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// Block card states and inner blocks active items
-		['normal', 'hover', 'marker'].forEach((state) => {
-			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
-				'be.visible'
-			);
-		});
-
-		['elements/link'].forEach((state) => {
-			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
-				'not.exist'
-			);
-		});
+		cy.checkBlockCardItems(['normal', 'hover', 'marker']);
 
 		//
 		// 1. Edit Block
@@ -68,12 +57,7 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 		//
 		setInnerBlock('elements/link');
 
-		// Block card state active items
-		['normal', 'hover', 'focus', 'active'].forEach((state) => {
-			cy.get(`[data-cy="repeater-item"][data-id="${state}"]`).should(
-				'be.visible'
-			);
-		});
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. Text color
