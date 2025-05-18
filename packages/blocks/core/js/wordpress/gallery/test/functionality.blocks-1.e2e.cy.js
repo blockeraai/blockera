@@ -40,6 +40,15 @@ describe('Gallery Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'core/image',
+			'elements/image-caption',
+			'elements/gallery-caption',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -68,6 +77,8 @@ describe('Gallery Block', () => {
 		//
 		setInnerBlock('core/image');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -87,6 +98,8 @@ describe('Gallery Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/image-caption');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.2.1. BG color
 		//
@@ -105,6 +118,8 @@ describe('Gallery Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/gallery-caption');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.3.1. BG color
