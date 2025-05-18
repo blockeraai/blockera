@@ -25,6 +25,14 @@ describe('File Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/link',
+			'core/button',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -53,6 +61,8 @@ describe('File Block', () => {
 		//
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -71,6 +81,8 @@ describe('File Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('core/button');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color
