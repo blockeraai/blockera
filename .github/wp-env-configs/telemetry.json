@@ -3,5 +3,8 @@
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": false,
 		"BLOCKERA_TELEMETRY_NOT_STORE_DATA": true
+	},
+	"lifecycleScripts": {
+		"afterStart": "wp-env run cli wp theme activate twentytwentyfive"
 	}
 }
