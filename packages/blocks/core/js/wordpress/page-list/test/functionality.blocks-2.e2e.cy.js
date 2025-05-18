@@ -24,6 +24,14 @@ describe('Page List Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/item',
+			'elements/item-container',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -52,6 +60,11 @@ describe('Page List Block', () => {
 		//
 		setInnerBlock('elements/item');
 
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'active', 'marker'],
+			true
+		);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -70,6 +83,8 @@ describe('Page List Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/item-container');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		//
 		// 1.2.1. Text color
