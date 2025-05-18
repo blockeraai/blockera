@@ -276,7 +276,7 @@ if ( ! function_exists( 'blockera_get_state_symbol' ) ) {
 	 */
 	function blockera_get_state_symbol( string $state ): string {
 
-		return in_array( $state, [ 'marker', 'placeholder', 'before', 'after' ] ) ? '::' : ':';
+		return in_array( $state, [ 'marker', 'placeholder', 'before', 'after' ], true ) ? '::' : ':';
 	}
 }
 
@@ -569,9 +569,9 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 		if (! str_starts_with($selector, ' ') && ( $is_child_selector || preg_match( '/^[a-z]/', $selector ) )) {
 
 			// If selector contains pseudo-classes or combinators, keep them intact and append root.
-			$parts = preg_split('/(?:::|:)/', $selector, 2);
-			$base = $parts[0];
-			$pseudo = isset($parts[1]) ? (strpos($selector, '::') !== false ? '::' : ':') . $parts[1] : '';
+			$parts  = preg_split('/(?:::|:)/', $selector, 2);
+			$base   = $parts[0];
+			$pseudo = isset($parts[1]) ? ( strpos($selector, '::') !== false ? '::' : ':' ) . $parts[1] : '';
 
 			return "{$base}{$root}{$pseudo}";
 		}
