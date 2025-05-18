@@ -5,7 +5,6 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	openInserter,
 	setInnerBlock,
 	setParentBlock,
 	redirectToFrontPage,
@@ -32,9 +31,7 @@ describe('Post Template Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		openInserter();
-		cy.getByDataTest('elements/link').should('exist');
-		cy.getByDataTest('core/heading').should('exist');
+		cy.checkBlockCardItems(['normal', 'hover']);
 
 		//
 		// 1. Edit Block
@@ -64,6 +61,8 @@ describe('Post Template Block', () => {
 		// 1.1. elements/link inner block
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color
