@@ -785,4 +785,35 @@ export const registerCommands = () => {
 			cy.wrap(result);
 		});
 	});
+
+	Cypress.Commands.add(
+		'checkBlockCardItems',
+		(expectedStates, isInnerBlock = false) => {
+			const container = isInnerBlock
+				? '.block-card--inner-block'
+				: '.blockera-extension-block-card';
+
+			cy.get(container).within(() => {
+				// Check that all expected items exist and are visible
+				expectedStates.forEach((state) => {
+					cy.get(`[data-cy="repeater-item"][data-id="${state}"]`)
+						.should('exist')
+						.and('be.visible');
+				});
+
+				// Check that no unexpected items exist
+				cy.get('[data-cy="repeater-item"]').then(($items) => {
+					const actualStates = Array.from($items).map((item) =>
+						item.getAttribute('data-id')
+					);
+					const unexpectedStates = actualStates.filter(
+						(state) => !expectedStates.includes(state)
+					);
+
+					expect(unexpectedStates, 'Unexpected repeater items found')
+						.to.be.empty;
+				});
+			});
+		}
+	);
 };
