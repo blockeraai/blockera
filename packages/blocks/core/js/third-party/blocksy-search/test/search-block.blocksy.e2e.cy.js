@@ -1851,7 +1851,7 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		});
 	});
 
-	it('Inner blocks existence + CSS selectors in editor and front-end', () => {
+	it('Block card + CSS selectors in editor and front-end', () => {
 		appendBlocks(`<!-- wp:blocksy/search {"blockeraPropsId":"dfee254f-5b83-4635-a1cb-24d74b99f8eb","blockeraCompatId":"1819181054","blockeraBackgroundColor":{"value":"#c4ceff"},"blockeraBackgroundClip":{"value":"padding-box"},"blockeraInnerBlocks":{"value":{"elements/input":{"attributes":{"blockeraBackgroundColor":"#ffc6c6"}},"elements/button":{"attributes":{"blockeraBackgroundColor":"#ff5757"}}}},"blockeraSpacing":{"value":{"padding":{"top":"27px","bottom":"27px"}}},"className":"blockera-block blockera-block\u002d\u002domykq2","style":{"color":{"background":"#c4ceff"},"spacing":{"padding":{"top":"27px","right":"","bottom":"27px","left":""}}}} -->
 <div>Blocksy: Search Block</div>
 <!-- /wp:blocksy/search -->`);
@@ -1859,6 +1859,16 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		cy.getBlock('blocksy/search').first().click();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/input',
+			'elements/button',
+			'elements/filter',
+			'elements/result-dropdown',
+			'elements/result-link',
+		]);
 
 		//
 		//  1. Assert inner blocks selectors in editor
@@ -1880,6 +1890,31 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 					'rgb(255, 198, 198)'
 				);
 			});
+
+		//
+		// 2. block card items
+		//
+		setInnerBlock('elements/input');
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'placeholder'],
+			true
+		);
+
+		setParentBlock();
+		setInnerBlock('elements/button');
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
+		setParentBlock();
+		setInnerBlock('elements/filter');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		setParentBlock();
+		setInnerBlock('elements/result-dropdown');
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		setParentBlock();
+		setInnerBlock('elements/result-link');
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 2. Assert inner blocks selectors in front end
