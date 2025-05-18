@@ -2,25 +2,36 @@ name: 'Setup Node.js and install npm dependencies'
 description: 'Configure Node.js, install dependencies, and handle Puppeteer installation safely for CI.'
 inputs:
     node-version:
-        description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
+        description: 'Optional. Node.js version to use. If not specified, uses .nvmrc.'
         required: false
 
 runs:
     using: 'composite'
     steps:
-        - name: Use desired version of Node.js
+        - name: Use desired version of Node.js and enable caching
           uses: actions/setup-node@v3
           with:
               node-version-file: '.nvmrc'
               node-version: ${{ inputs.node-version }}
               cache: 'npm'
 
-        - name: Confirm Node and npm versions
+        - name: Output Node and npm versions
+          shell: bash
           run: |
               echo "✅ Node version: $(node -v)"
               echo "✅ npm version: $(npm -v)"
-          shell: bash
 
-        - name: Install npm dependencies (skip Chromium during install)
-          run: timeout 300 npm ci --legacy-peer-deps
+        - name: Cache node_modules manually (fallback strategy)
+          uses: actions/cache@v3
+          with:
+              path: |
+                  **/node_modules
+              key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+              restore-keys: |
+                  ${{ runner.os }}-node-
+
+        - name: Install npm dependencies
           shell: bash
+          run: |
+              echo "⚡ Installing dependencies using npm ci"
+              npm ci --legacy-peer-deps --prefer-offline --no-audit
