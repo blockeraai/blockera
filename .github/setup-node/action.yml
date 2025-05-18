@@ -1,5 +1,5 @@
 name: 'Setup Node.js and install npm dependencies'
-description: 'Configure Node.js and install npm dependencies with cache and flexible engine handling.'
+description: 'Configure Node.js and install all npm dependencies with cache and flexible engine handling.'
 inputs:
     node-version:
         description: 'Optional. The Node.js version to use. When not specified, uses version from .nvmrc'
