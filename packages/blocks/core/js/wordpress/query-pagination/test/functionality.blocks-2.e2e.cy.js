@@ -33,6 +33,8 @@ describe('Query Pagination Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
@@ -65,6 +67,8 @@ describe('Query Pagination Block', () => {
 		//
 
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('Text Color', '0000ff');
 
