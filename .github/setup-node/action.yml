@@ -30,5 +30,5 @@ runs:
           shell: bash
 
         - name: Install npm dependencies
-          run: npm install --legacy-peer-deps
+          run: npm install --legacy-peer-deps --verbose
           shell: bash
