@@ -59,10 +59,7 @@ describe('Categories Block', () => {
 		//
 		setInnerBlock('elements/term-item');
 
-		cy.checkBlockCardItems(
-			['normal', 'hover', 'focus', 'active', 'marker'],
-			true
-		);
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color
@@ -87,7 +84,7 @@ describe('Categories Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/list-item');
 
-		cy.checkBlockCardItems(['normal', 'hover'], true);
+		cy.checkBlockCardItems(['normal', 'hover', 'marker'], true);
 
 		//
 		// 1.2.1. BG color

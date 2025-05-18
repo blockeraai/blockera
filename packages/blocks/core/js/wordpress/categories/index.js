@@ -26,8 +26,8 @@ export const Categories: BlockType = {
 	blockeraInnerBlocks: {
 		'elements/term-item': {
 			name: 'elements/term-item',
-			label: __('Terms', 'blockera'),
-			description: __('All term elements.', 'blockera'),
+			label: __('Links', 'blockera'),
+			description: __('All term links.', 'blockera'),
 			icon: <Icon icon="block-list-item" iconSize="20" />,
 			settings: {
 				force: true,
@@ -43,19 +43,22 @@ export const Categories: BlockType = {
 					force: true,
 				},
 				visited: sharedBlockStates.visited,
-				marker: {
-					...sharedBlockStates.marker,
-					force: true,
-				},
 			},
 		},
 		'elements/list-item': {
 			name: 'elements/list-item',
-			label: __('Terms Container', 'blockera'),
-			description: __('All terms container elements.', 'blockera'),
+			label: __('Links Container', 'blockera'),
+			description: __('All term links container elements.', 'blockera'),
 			icon: <Icon icon="block-list-item-container" iconSize="20" />,
 			settings: {
 				force: true,
+			},
+			availableBlockStates: {
+				...generalInnerBlockStates,
+				marker: {
+					...sharedBlockStates.marker,
+					force: true,
+				},
 			},
 		},
 	},
