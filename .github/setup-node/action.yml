@@ -1,5 +1,5 @@
 name: 'Setup Node.js and install npm dependencies'
-description: 'Configure Node.js and install npm dependencies while managing all aspects of caching.'
+description: 'Configure Node.js, install dependencies, and handle Puppeteer installation safely for CI.'
 inputs:
     node-version:
         description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
@@ -21,16 +21,20 @@ runs:
 
         - name: Confirm Node and npm versions
           run: |
-              echo "Node: $(node -v)"
-              echo "npm: $(npm -v)"
+              echo "✅ Node version: $(node -v)"
+              echo "✅ npm version: $(npm -v)"
           shell: bash
 
-        - name: Install dependencies (no Chromium auto-download)
+        - name: Set faster npm registry
+          run: npm config set registry https://registry.npmmirror.com
+          shell: bash
+
+        - name: Install npm dependencies (skip Chromium during install)
           run: npm install --legacy-peer-deps --verbose
           shell: bash
           env:
               PUPPETEER_SKIP_DOWNLOAD: 'true'
 
         - name: Manually install Chromium for Puppeteer
-          run: npx puppeteer install --browser chromium
+          run: node -e "require('puppeteer/install.js')"
           shell: bash
