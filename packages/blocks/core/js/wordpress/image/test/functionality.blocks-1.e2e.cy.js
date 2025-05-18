@@ -27,6 +27,9 @@ describe('Image Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/caption']);
+
 		//
 		// 1. Edit Block
 		//
@@ -55,6 +58,8 @@ describe('Image Block', () => {
 		//
 		setInnerBlock('elements/caption');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -76,8 +81,10 @@ describe('Image Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/link');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
+
 		//
-		// 1.1.1. BG color
+		// 1.2.1. BG color
 		//
 		cy.setColorControlValue('BG Color', 'ff0000');
 
