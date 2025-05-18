@@ -24,6 +24,8 @@ describe('Tag Cloud Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/tag-link']);
+
 		//
 		// 1. Edit Block
 		//
@@ -51,6 +53,8 @@ describe('Tag Cloud Block', () => {
 		// 1.2. elements/tag-link
 		//
 		setInnerBlock('elements/tag-link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color
