@@ -25,11 +25,10 @@ describe('Post Title Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		openInserter();
-
 		cy.getByDataTest('elements/link').should('exist');
-
-		// no other item
 		cy.getByDataTest('core/heading').should('not.exist');
 
 		//
@@ -61,6 +60,8 @@ describe('Post Title Block', () => {
 		//
 
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ff0000');
 
