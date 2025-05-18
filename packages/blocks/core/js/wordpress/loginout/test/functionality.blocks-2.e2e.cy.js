@@ -22,6 +22,17 @@ describe('Loginout Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/form',
+			'elements/input-label',
+			'elements/input',
+			'elements/remember',
+			'core/button',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -50,6 +61,8 @@ describe('Loginout Block', () => {
 		//
 		setInnerBlock('elements/form');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff0000');
 
 		// while WP not shows form here, we can not assert functionality and not needed
@@ -59,6 +72,8 @@ describe('Loginout Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/input-label');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff2020');
 
@@ -70,6 +85,11 @@ describe('Loginout Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/input');
 
+		cy.checkBlockCardItems(
+			['normal', 'hover', 'focus', 'placeholder'],
+			true
+		);
+
 		cy.setColorControlValue('BG Color', 'ff4040');
 
 		// while WP not shows form here, we can not assert functionality and not needed
@@ -80,6 +100,8 @@ describe('Loginout Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/remember');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff6060');
 
 		// while WP not shows form here, we can not assert functionality and not needed
@@ -89,6 +111,8 @@ describe('Loginout Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('core/button');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ff8080');
 
