@@ -12,20 +12,20 @@ return array_merge(
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			(array) array_merge(
-				[
-					'blockera/elements/separator' => [
-						'root' => '.wp-block-post-terms__separator',
-					],
-					'blockera/elements/prefix'    => [
-						'root' => '.wp-block-post-terms__prefix',
-					],
-					'blockera/elements/suffix'    => [
-						'root' => '.wp-block-post-terms__suffix',
-					],
+			[
+				'blockera/elements/separator' => [
+					'root' => '.wp-block-post-terms__separator',
 				],
-				blockera_load( 'inners.link', dirname( __DIR__ ) ),
-			)
+				'blockera/elements/prefix'    => [
+					'root' => '.wp-block-post-terms__prefix',
+				],
+				'blockera/elements/suffix'    => [
+					'root' => '.wp-block-post-terms__suffix',
+				],
+				'blockera/elements/link'      => [
+					'root' => 'a:not(.wp-element-button)',
+				],
+			]
 		),
 	]
 );
