@@ -30,11 +30,5 @@ runs:
           shell: bash
 
         - name: Install npm dependencies (skip Chromium during install)
-          run: npm install --legacy-peer-deps --verbose
-          shell: bash
-          env:
-              PUPPETEER_SKIP_DOWNLOAD: 'true'
-
-        - name: Manually install Chromium for Puppeteer
-          run: node .github/scripts/install-puppeteer.cjs
+          run: timeout 300 npm install --legacy-peer-deps --verbose
           shell: bash
