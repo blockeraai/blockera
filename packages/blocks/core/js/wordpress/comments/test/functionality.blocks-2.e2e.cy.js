@@ -30,6 +30,14 @@ describe('Comments Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'core/heading',
+			'elements/link',
+		]);
+
 		//
 		// 1.0. Block Styles
 		//
@@ -53,6 +61,8 @@ describe('Comments Block', () => {
 		// 1.1. Inner blocks
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color
