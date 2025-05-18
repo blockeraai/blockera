@@ -13,9 +13,9 @@ import {
 describe('Calendar Block', () => {
 	beforeEach(() => {
 		// Create a post with a past date to make sure the calendar is showing navigation buttons
-		cy.wpCli(
-			"wp post create --post_type=post --post_title='An old sample post' --post_status=publish --post_date='2024-12-01 12:00:00'"
-		);
+		// cy.wpCli(
+		// 	"wp post create --post_type=post --post_title='An old sample post' --post_status=publish --post_date='2024-12-01 12:00:00'"
+		// );
 
 		createPost();
 	});
@@ -29,10 +29,14 @@ describe('Calendar Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		// No inner blocks
-		cy.get('.blockera-extension.blockera-extension-inner-blocks').should(
-			'not.exist'
-		);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/caption',
+			'elements/thead-cells',
+			'elements/tbody-cells',
+			'elements/navigation-item',
+		]);
 
 		//
 		// 1.0. Block Styles
@@ -58,6 +62,8 @@ describe('Calendar Block', () => {
 		//
 		setInnerBlock('elements/caption');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		//
 		// 1.1.1. BG color
 		//
@@ -77,6 +83,8 @@ describe('Calendar Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/thead');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff1010');
 
 		cy.getBlock('core/calendar')
@@ -92,6 +100,8 @@ describe('Calendar Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/thead-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff2020');
 
@@ -109,6 +119,8 @@ describe('Calendar Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/tbody');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('BG Color', 'ff3030');
 
 		cy.getBlock('core/calendar')
@@ -124,6 +136,8 @@ describe('Calendar Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/tbody-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
 
 		cy.setColorControlValue('BG Color', 'ff4040');
 
@@ -141,6 +155,8 @@ describe('Calendar Block', () => {
 		setParentBlock();
 		setInnerBlock('elements/tbody-empty-cells');
 
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
 		cy.setColorControlValue('Text Color', 'ff5050');
 
 		cy.getBlock('core/calendar')
@@ -156,6 +172,8 @@ describe('Calendar Block', () => {
 		//
 		setParentBlock();
 		setInnerBlock('elements/navigation-item');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		cy.setColorControlValue('BG Color', 'ff6060');
 
