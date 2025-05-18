@@ -34,6 +34,9 @@ describe('Footnotes Block', () => {
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'elements/link']);
+
 		//
 		// 1. Edit Block
 		//
@@ -61,6 +64,8 @@ describe('Footnotes Block', () => {
 		// 1.1. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.1.1. BG color
