@@ -1,8 +1,8 @@
 name: 'Setup Node.js and install npm dependencies'
-description: 'Configure Node.js and install npm dependencies while managing all aspects of caching.'
+description: 'Configure Node.js and install npm dependencies with cache and flexible engine handling.'
 inputs:
     node-version:
-        description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
+        description: 'Optional. The Node.js version to use. When not specified, uses version from .nvmrc'
         required: false
 
 runs:
@@ -13,22 +13,16 @@ runs:
           with:
               node-version-file: '.nvmrc'
               node-version: ${{ inputs.node-version }}
-              cache: npm
+              cache: 'npm'
 
-        - name: Get Node.js and npm version
-          id: node-version
-          run: |
-              echo "NODE_VERSION=$(node -v)" >> $GITHUB_OUTPUT
+        - name: Set faster registry
+          run: npm config set registry https://registry.npmmirror.com
           shell: bash
 
-        - name: Cache node_modules
-          id: cache-node_modules
-          uses: actions/cache@v3
-          with:
-              path: '**/node_modules'
-              key: node_modules-${{ runner.os }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+        - name: Output Node.js version
+          run: echo "Using Node $(node -v) and npm $(npm -v)"
+          shell: bash
 
-        - name: Install npm dependencies
-          if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
-          run: npm ci
+        - name: Install npm dependencies (with legacy peer deps)
+          run: npm install --legacy-peer-deps
           shell: bash
