@@ -24,6 +24,8 @@ describe('Term Description Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockCardItems(['normal', 'hover']);
+
 		openInserter();
 		cy.getByDataTest('elements/link').should('exist');
 
@@ -54,6 +56,8 @@ describe('Term Description Block', () => {
 		// 1.2. elements/link
 		//
 		setInnerBlock('elements/link');
+
+		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
 		// 1.2.1. BG color
