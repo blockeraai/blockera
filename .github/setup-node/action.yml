@@ -23,6 +23,7 @@ runs:
 
         - name: Install npm dependencies
           shell: bash
+          if: ${{ cancelled() }}
           run: |
               echo "⚡ Installing dependencies using npm ci"
               npm ci --legacy-peer-deps --prefer-offline --no-audit
