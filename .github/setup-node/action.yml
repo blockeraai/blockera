@@ -26,7 +26,7 @@ runs:
           shell: bash
           run: |
               cp package-lock.json package-lock.json.bak
-              npm install --package-lock-only --legacy-peer-deps --no-audit --prefer-offline
+              npm install --package-lock-only --legacy-peer-deps --no-audit --prefer-offline --ignore-scripts
               if ! cmp -s package-lock.json package-lock.json.bak; then
                 echo "❌ ERROR: package-lock.json is out of sync with package.json"
                 exit 1
