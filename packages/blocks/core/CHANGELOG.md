@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.4.0 (2025-05-19)
+
 ### New Features
 - `Calendar` block: `Caption` inner block added.
 - `Calendar` block: `Header` inner block added.

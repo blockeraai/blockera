@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.0 (2025-05-19)
+
 ### Improvements
 - Background image feature: UI/UX design to do more with less!
 - Multiple minor design improvement on controls.

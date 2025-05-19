@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.5.0 (2025-05-19)
+
 ### Improvements
 - Improved the block card design to make it more consistent and easier to use.
 - Improved block card inner blocks priority system for better user experience and performance.
