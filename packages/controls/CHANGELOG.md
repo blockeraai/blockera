@@ -1,5 +1,10 @@
 ## Unreleased
 
+
+### Bug Fixes
+- Color picker design issue on Windows. Thanks Hoang.
+
+
 ## 1.3.0 (2025-05-19)
 
 ### Improvements

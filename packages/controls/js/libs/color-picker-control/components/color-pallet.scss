@@ -50,10 +50,14 @@
 			& > .components-flex:nth-child(2) {
 
 				& > .components-base-control:first-child:last-child {
-					width: 130px;
+					width: 110px;
 					position: absolute;
 					top: 15px;
-					left: 85px;
+					left: 75px;
+
+					.components-input-control__container {
+						width: 110px;
+					}
 				}
 			}
 
@@ -76,8 +80,8 @@
 			}
 
 			.components-button {
-				width: var(--blockera-controls-input-height) !important;
-				height: var(--blockera-controls-input-height) !important;
+				width: calc(var(--blockera-controls-input-height) + 2px) !important;
+				height: calc(var(--blockera-controls-input-height) + 2px) !important;
 				border: 1px solid var(--blockera-controls-border-color);
 				padding: 5px !important;
 
@@ -93,8 +97,8 @@
 			.components-input-control__container {
 
 				input {
-					height: var(--blockera-controls-input-height);
-					min-height: var(--blockera-controls-input-height);
+					height: calc(var(--blockera-controls-input-height) + 2px);
+					min-height: calc(var(--blockera-controls-input-height) + 2px);
 				}
 
 				input:not(:focus) + .components-input-control__backdrop {
