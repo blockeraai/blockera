@@ -309,6 +309,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 25,
 		force: false,
 		settings: {
@@ -337,6 +338,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 25,
 		force: false,
 		settings: {
@@ -365,6 +367,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 35,
 		force: false,
 		settings: {
@@ -394,6 +397,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 35,
 		force: false,
 		settings: {
@@ -420,6 +424,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 10,
 		force: false,
 		settings: {
@@ -446,6 +451,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 10,
 		force: false,
 		settings: {
@@ -472,6 +478,7 @@ const baseSharedBlockStates = {
 			</>
 		),
 		breakpoints: {},
+		native: true,
 		priority: 10,
 		force: false,
 		settings: {
