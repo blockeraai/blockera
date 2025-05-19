@@ -608,6 +608,33 @@ abstract class BaseStyleDefinition {
         return  array_merge($default_style_engine_config, $block_type->supports['blockeraStyleEngineConfig'][ $support ] ?? []);
     }
 
+	/**
+	 * Get current breakpoint settings.
+	 *
+	 * @return array
+	 */
+	protected function getCurrentBreakpointSettings(): array {
+
+		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
+
+			return [];
+		}
+
+		$block_states = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];
+
+		if (empty($block_states[ $this->pseudo_state ])) {
+
+			return [];
+		}
+
+		if (empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
+
+			return [];
+		}
+
+		return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+	}
+
     /**
      * Resettings some properties to fresh before generate new styles.
      *
