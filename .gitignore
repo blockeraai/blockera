@@ -88,3 +88,6 @@ cypress-image-diff-html-report
 html-report
 cypress/downloads
 Scratch
+
+# .github some subdirectories
+.github/wp-env-configs/development.json
