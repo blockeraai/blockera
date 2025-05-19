@@ -5,12 +5,13 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { Icon as WordPressIconComponent } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
 import { experimental } from '@blockera/env';
-import { getSortedObject } from '@blockera/utils';
+import { getSortedObject, isString } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 import { Flex, Grid, Tooltip } from '@blockera/controls';
 /**
@@ -299,7 +300,13 @@ export const CategorizedItems = ({
 												'blockera-feature-icon'
 											)}
 										>
-											{icon}
+											{isString(icon) ? (
+												<WordPressIconComponent
+													icon={icon}
+												/>
+											) : (
+												icon
+											)}
 										</div>
 									)}
 
