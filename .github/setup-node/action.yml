@@ -1,19 +1,19 @@
 name: 'Setup Node.js and install npm dependencies'
-description: 'Configure Node.js, install dependencies, and handle Puppeteer installation safely for CI.'
+description: 'Configures Node.js, uses optimal caching, and installs deps efficiently.'
 inputs:
     node-version:
-        description: 'Optional. Node.js version to use. If not specified, uses .nvmrc.'
+        description: 'Node.js version to use (optional, fallback to .nvmrc)'
         required: false
 
 runs:
     using: 'composite'
     steps:
-        - name: Use desired version of Node.js and enable caching
+        - name: Setup Node.js with built-in npm cache
           uses: actions/setup-node@v3
           with:
               node-version-file: '.nvmrc'
               node-version: ${{ inputs.node-version }}
-              cache: 'npm'
+              cache: 'npm' # Caches ~/.npm
 
         - name: Output Node and npm versions
           shell: bash
@@ -21,18 +21,17 @@ runs:
               echo "✅ Node version: $(node -v)"
               echo "✅ npm version: $(npm -v)"
 
-        - name: Cache node_modules manually (fallback strategy)
-          uses: actions/cache@v3
-          with:
-              path: |
-                  **/node_modules
-              key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-              restore-keys: |
-                  ${{ runner.os }}-node-
-
-        - name: Ensure lockfile is in sync
+        # ✅ Lockfile sync check (fast and accurate)
+        - name: Validate lockfile is in sync
           shell: bash
-          run: 'npm audit signatures || echo "⚠️ Warning: package-lock.json may be out of sync"'
+          run: |
+              cp package-lock.json package-lock.json.bak
+              npm install --package-lock-only --legacy-peer-deps --no-audit --prefer-offline
+              if ! cmp -s package-lock.json package-lock.json.bak; then
+                echo "❌ ERROR: package-lock.json is out of sync with package.json"
+                exit 1
+              fi
+              echo "✅ Lockfile is in sync"
 
         - name: Install npm dependencies
           shell: bash
