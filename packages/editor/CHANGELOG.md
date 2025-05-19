@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue where the some block states were not being correctly configured.
+
 ## 1.5.0 (2025-05-19)
 
 ### Improvements
