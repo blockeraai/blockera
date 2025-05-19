@@ -6,6 +6,7 @@
 
 ### Improvements
 - Block card design improved.
+- Improved support of third-party plugin blocks as inner block. Thanks to Hoang.
 
 
 ## 1.5.0 (2025-05-19)
