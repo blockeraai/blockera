@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.1 (2025-05-19)
+
 ### Automated Tests
 - Refactor workflows to reuse the configurations of wp-env
 
