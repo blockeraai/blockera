@@ -2,6 +2,7 @@
 
 ### Bug Fixes
 - Fixed an issue where the some block states were not being correctly configured.
+- Fixed an issue where the display value was not being correctly retrieved from the current breakpoint settings.
 
 ## 1.5.0 (2025-05-19)
 
