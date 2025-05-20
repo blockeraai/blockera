@@ -74,7 +74,6 @@ export default function SearchControl({
 				onChange={setValue}
 				placeholder={placeholder}
 				className={controlClassNames('search', className)}
-				__nextHasNoMarginBottom={true}
 				{...props}
 			/>
 		</BaseControl>

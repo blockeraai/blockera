@@ -2,9 +2,9 @@
 /**
  * External dependencies
  */
-import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { useContext } from '@wordpress/element';
+import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -15,12 +15,12 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, Tooltip } from '../../';
+import { Button } from '../../';
 import { RepeaterContext } from '../context';
+import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 import { useControlContext } from '../../../context';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
-import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 
 export default function RepeaterItemActions({
 	item,
@@ -76,26 +76,6 @@ export default function RepeaterItemActions({
 					tooltipPosition="top"
 					onClick={(event) => {
 						event.stopPropagation();
-
-						if (!item?.isVisible) {
-							const visibleItems = [];
-
-							for (const repeaterItemId in repeaterItems) {
-								const repeaterItem =
-									repeaterItems[repeaterItemId];
-								if (repeaterItem?.isVisible) {
-									visibleItems.push(repeaterItemId);
-								}
-							}
-
-							if (
-								visibleItems.length >= 1 &&
-								isEnabledPromote(PromoComponent, repeaterItems)
-							) {
-								return setCount(count + 1);
-							}
-						}
-
 						setVisibility(!isVisible);
 						const value = item?.selectable
 							? {
@@ -182,58 +162,50 @@ export default function RepeaterItemActions({
 			{actionButtonDelete &&
 				item?.deletable &&
 				(minItems === 0 || itemsCount > minItems) && (
-					<Tooltip
-						text={__('Delete', 'blockera')}
-						style={{
-							'--tooltip-bg': '#e20000',
-						}}
-						delay={300}
-					>
-						<Button
-							className={controlInnerClassNames('btn-delete')}
-							noBorder={true}
-							icon={<Icon icon="trash" size="20" />}
-							onClick={(event) => {
-								event.stopPropagation();
+					<Button
+						className={controlInnerClassNames('btn-delete')}
+						noBorder={true}
+						icon={<Icon icon="trash" size="20" />}
+						showTooltip={true}
+						tooltipPosition="top"
+						onClick={(event) => {
+							event.stopPropagation();
 
-								if (
-									!item.selectable ||
-									'function' !== typeof onDelete
-								) {
-									removeRepeaterItem({
-										itemId,
-										onChange,
-										controlId,
-										repeaterId,
-										valueCleanup,
-										itemIdGenerator,
-									});
-
-									return;
-								}
-
-								const value = onDelete(itemId, repeaterItems);
-
-								modifyControlValue({
-									controlId,
-									value,
-								});
-
-								repeaterOnChange(value, {
+							if (
+								!item.selectable ||
+								'function' !== typeof onDelete
+							) {
+								removeRepeaterItem({
+									itemId,
 									onChange,
+									controlId,
+									repeaterId,
 									valueCleanup,
+									itemIdGenerator,
 								});
-							}}
-							aria-label={sprintf(
-								// translators: %s is the repeater item id. It's aria label for deleting repeater item
-								__('Delete %s', 'blockera'),
-								getArialLabelSuffix(itemId)
-							)}
-							style={{
-								'--blockera-controls-primary-color': '#e20000',
-							}}
-						/>
-					</Tooltip>
+
+								return;
+							}
+
+							const value = onDelete(itemId, repeaterItems);
+
+							modifyControlValue({
+								controlId,
+								value,
+							});
+
+							repeaterOnChange(value, {
+								onChange,
+								valueCleanup,
+							});
+						}}
+						label={__('Delete', 'blockera')}
+						aria-label={sprintf(
+							// translators: %s is the repeater item id. It's aria label for deleting repeater item
+							__('Delete %s', 'blockera'),
+							getArialLabelSuffix(itemId)
+						)}
+					/>
 				)}
 		</>
 	);

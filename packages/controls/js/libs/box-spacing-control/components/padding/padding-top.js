@@ -126,7 +126,6 @@ export function PaddingTop({
 				/>
 			),
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -134,7 +133,6 @@ export function PaddingTop({
 		return {
 			shape: <></>,
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -211,47 +209,45 @@ export function PaddingTop({
 						setOpenPopover(sideId);
 					}
 				}}
-				tooltipText={__('Top Padding', 'blockera')}
 			/>
 		),
 		label: (
-			<div
-				className={controlInnerClassNames(
-					'label-side',
-					'side-vertical',
-					'side-padding-top',
-					labelClassName
-				)}
-				data-cy="box-spacing-padding-top"
-			>
-				<LabelControl
-					ariaLabel={__('Top Padding', 'blockera')}
-					label={
-						_isSetValueAddon
-							? fixLabelText(value.padding.top)
-							: fixLabelText(sideSpace)
-					}
-					onClick={() => {
-						setFocusSide(sideId);
-						setOpenPopover(sideId);
-					}}
-					{...{
-						attribute,
-						blockName,
-						resetToDefault,
-						mode: 'advanced',
-						singularId: 'padding.top',
-						value: value?.padding?.top,
-						defaultValue: defaultValue?.padding?.top,
-						path: getControlPath(attribute, 'padding.top'),
-					}}
-				/>
-
-				<ValueAddonPointer />
-			</div>
-		),
-		popover: (
 			<>
+				<div
+					className={controlInnerClassNames(
+						'label-side',
+						'side-vertical',
+						'side-padding-top',
+						labelClassName
+					)}
+					data-cy="box-spacing-padding-top"
+				>
+					<LabelControl
+						ariaLabel={__('Top Padding', 'blockera')}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.top)
+								: fixLabelText(sideSpace)
+						}
+						onClick={() => {
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
+						}}
+						{...{
+							attribute,
+							blockName,
+							resetToDefault,
+							mode: 'advanced',
+							singularId: 'padding.top',
+							value: value?.padding?.top,
+							defaultValue: defaultValue?.padding?.top,
+							path: getControlPath(attribute, 'padding.top'),
+						}}
+					/>
+
+					<ValueAddonPointer />
+				</div>
+
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.top}
@@ -266,25 +262,27 @@ export function PaddingTop({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
-						icon={<Icon icon="padding-top" iconSize="18" />}
-						title={__('Top Padding Space', 'blockera')}
 						type="padding"
+						icon={<Icon icon="padding-top" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
+						title={__('Top Padding Space', 'blockera')}
 						inputLabel={__('Top Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Top Padding Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<p>
-								{__(
-									'It enables you to set a padding space that applies only to the top edge of the block.',
-									'blockera'
-								)}
-							</p>
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies only to the top edge of the block.',
+										'blockera'
+									)}
+								</p>
+							</>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

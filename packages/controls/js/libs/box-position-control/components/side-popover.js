@@ -29,11 +29,11 @@ export function SidePopover({
 	sideLabel,
 	hasValue,
 	removeValue,
-	unit,
 	title = '',
 	icon = '',
-	offset = 35,
+	unit,
 	isOpen,
+	offset = 35,
 	onClose = () => {},
 	defaultValue,
 	setValue,
@@ -58,7 +58,7 @@ export function SidePopover({
 					}
 					offset={offset}
 					placement="left-start"
-					className="position-edit-popover"
+					className="spacing-edit-popover"
 					onClose={onClose}
 					titleButtonsRight={
 						<>
@@ -135,11 +135,8 @@ export function SidePopover({
 						className={controlInnerClassNames(
 							'side-popover-action-buttons'
 						)}
-						style={{
-							marginTop: '20px',
-						}}
 					>
-						<Grid gap="8px" gridTemplateColumns="repeat(4, 1fr)">
+						<Grid gap="10px" gridTemplateColumns="repeat(4, 1fr)">
 							<Button
 								aria-label={__('Set 0px', 'blockera')}
 								size="small"

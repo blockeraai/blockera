@@ -1,12 +1,8 @@
-.blockera-control-box-spacing-container {
-	height: 178px;
-}
-
 .blockera-control-box-spacing {
 	position: relative;
 	height: 158px;
 	width: 250px;
-	margin: 0 0 0 -1px;
+	margin: 0 auto 15px;
 	z-index: 99; // for advanced select control
 	user-select: none;
 
@@ -15,6 +11,7 @@
 	}
 
 	&.disable-pointer-events {
+
 		pointer-events: none;
 
 		.blockera-control-spacing-shape-side {
@@ -28,7 +25,6 @@
 		stroke: var(--blockera-controls-border-color-soft);
 		user-select: none;
 		stroke-linejoin: round;
-		outline: none;
 
 		&.selected-side,
 		&:hover {
@@ -410,13 +406,12 @@
 }
 
 .blockera-control-side-popover-action-buttons {
-	--blockera-controls-input-height: 26px;
 
 	.blockera-component-button {
 		width: 100%;
 	}
 
 	.blockera-component-button.auto-btn {
-		height: calc(var(--blockera-controls-input-height) * 2 + 8px) !important;
+		height: 68px !important;
 	}
 }

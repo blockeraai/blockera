@@ -60,7 +60,7 @@
 		transform: translate(-50%, 0);
 		left: 50%;
 		background: #ffffff;
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 		z-index: 11;
 	}
 
@@ -70,7 +70,7 @@
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 		z-index: 10;
 	}
 
@@ -80,7 +80,7 @@
 		left: 50%;
 		transform: translate(-50%, 0);
 		background: #ffffff;
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 		z-index: 10;
 	}
 
@@ -90,7 +90,7 @@
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 		z-index: 10;
 	}
 }

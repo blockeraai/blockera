@@ -8,8 +8,8 @@ import { isEquals, omit } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import type { TStates } from '../libs/block-card/block-states/types';
-import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
+import type { TStates } from '../libs/block-states/types';
+import type { InnerBlockType } from '../libs/inner-blocks/types';
 import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
 
 export const propsAreEqual = (perv: Object, next: Object): boolean => {

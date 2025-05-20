@@ -17,16 +17,8 @@ import { convertDegToCharacter } from '@blockera/utils';
 import type { CleanupRepeaterArgs } from './types';
 import { extractNumberAndUnit } from '../input-control/utils';
 
-export const isOpenPopoverEvent = (
-	event: Object,
-	excludedTargetWrapper?: string
-): boolean => {
-	if (excludedTargetWrapper && event.target.closest(excludedTargetWrapper)) {
-		return true;
-	}
-
-	return !['svg', 'button', 'path'].includes(event?.target?.tagName);
-};
+export const isOpenPopoverEvent = (event: Object): boolean =>
+	!['svg', 'button', 'path'].includes(event?.target?.tagName);
 
 export function prepValueForHeader(value: any): MixedElement | string {
 	if (value === '') {

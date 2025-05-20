@@ -9,21 +9,22 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import {
+	store,
+	unstableBootstrapServerSideEntities,
+	unstableBootstrapServerSideVariableDefinitions,
+	unstableBootstrapServerSideDynamicValueDefinitions,
+} from '@blockera/data';
+import {
 	store as editorStore,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
+	unstableBootstrapServerSideBlockStatesDefinitions,
 } from '../';
 
 /**
  * Internal dependencies
  */
 import blockeraEditorPackageInfo from '../../../editor/package.json';
-import {
-	generalBlockStates,
-	generalInnerBlockStates,
-	unstableBootstrapBlockStatesDefinitions,
-	unstableBootstrapInnerBlockStatesDefinitions,
-} from './libs';
 
 // Exports
 export * from './api';
@@ -43,15 +44,20 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		'blockeraEditor_' +
 		blockeraEditorPackageInfo.version.replace(/\./g, '_');
 
-	unstableBootstrapBlockStatesDefinitions(generalBlockStates);
-	unstableBootstrapInnerBlockStatesDefinitions(generalInnerBlockStates);
+	window[packageName].coreData = {
+		select: select(store?.name),
+		unstableBootstrapServerSideEntities,
+		unstableBootstrapServerSideVariableDefinitions,
+		unstableBootstrapServerSideBlockStatesDefinitions,
+		unstableBootstrapServerSideDynamicValueDefinitions,
+	};
 
 	window[packageName].editor = {
 		...(window[packageName]?.editor || {}),
 		init: outsideDefinitions,
 		select: select(editorStore?.name),
 		unstableBootstrapServerSideBreakpointDefinitions,
-		unstableBootstrapBlockStatesDefinitions,
+		unstableBootstrapServerSideBlockStatesDefinitions,
 	};
 
 	registerCanvasEditorSettings({

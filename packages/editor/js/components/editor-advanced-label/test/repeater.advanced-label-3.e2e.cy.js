@@ -67,7 +67,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Pseudo State (Hover/Tablet)
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -90,7 +90,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -167,7 +167,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -257,7 +257,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -341,35 +341,35 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 
 			// Alias
 			cy.getByAriaLabel('Type').as('type');
-			cy.getByAriaLabel('Angle').as('angle');
+			cy.getByAriaLabel('Angel').as('angel');
 			cy.getByAriaLabel('Effect').as('effect');
 
 			// Assert label in normal state
 			cy.get('@type').should('have.class', 'changed-in-normal-state');
 		});
 
-		setBlockState('Hover');
+		addBlockState('hover');
 		openBackgroundItem();
 
 		// Assert Type label
 		cy.get('@type').should('have.class', 'changed-in-normal-state');
 
-		// Assert angle label before set value
-		cy.get('@angle').should('not.have.class', 'changed-in-normal-state');
+		// Assert angel label before set value
+		cy.get('@angel').should('not.have.class', 'changed-in-normal-state');
 
 		// Set value
 		cy.getByAriaLabel('Rotate Anti-clockwise').click();
 
-		// Assert Angle label
-		cy.get('@angle').should('have.class', 'changed-in-secondary-state');
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-secondary-state');
 
-		// Assert effect label before set value
+		// Assert angel label before set value
 		cy.get('@effect').should('not.have.class', 'changed-in-normal-state');
 
 		// Set value
 		cy.getByAriaLabel('Parallax').click();
 
-		// Assert effect label
+		// Assert Angel label
 		cy.get('@effect').should('have.class', 'changed-in-secondary-state');
 
 		setBlockState('Normal');
@@ -378,8 +378,8 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		// Assert Type label
 		cy.get('@type').should('have.class', 'changed-in-normal-state');
 
-		// Assert angle label
-		cy.get('@angle').should('have.class', 'changed-in-other-state');
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-other-state');
 
 		// Assert Effect label
 		cy.get('@effect').should('have.class', 'changed-in-other-state');
@@ -399,8 +399,8 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 		// Assert Type label
 		cy.get('@type').should('have.class', 'changed-in-normal-state');
 
-		// Assert angle label
-		cy.get('@angle').should('have.class', 'changed-in-other-state');
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-other-state');
 
 		// Assert Effect label
 		cy.getByAriaLabel('Effect').should(
@@ -420,8 +420,8 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			'changed-in-normal-state'
 		);
 
-		// Assert angle label
-		cy.get('@angle').should('have.class', 'changed-in-other-state');
+		// Assert Angel label
+		cy.get('@angel').should('have.class', 'changed-in-other-state');
 	});
 
 	describe('reset action testing...', () => {
@@ -430,7 +430,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			cy.getByAriaLabel('Add New Background').click();
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
 
@@ -562,7 +562,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				cy.getByAriaLabel('Horizontally').click();
 
 				// Set value in hover/desktop
-				setBlockState('Hover');
+				addBlockState('hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Cover').click();
 				cy.getByAriaLabel('Vertically').click();
@@ -1048,7 +1048,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 			cy.getByAriaLabel('Add New Background').click();
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			openBackgroundItem();
 			cy.getByAriaLabel('Cover').click();
 
@@ -1171,7 +1171,7 @@ describe('Repeater Control label testing (Image & Gradient)', () => {
 				cy.getByAriaLabel('Horizontally').click();
 
 				// Set value in hover/desktop
-				setBlockState('Hover');
+				addBlockState('hover');
 				openBackgroundItem();
 				cy.getByAriaLabel('Cover').click();
 				cy.getByAriaLabel('Vertically').click();

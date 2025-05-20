@@ -195,7 +195,6 @@ describe('toggle-select-control', () => {
 				});
 
 				cy.wrap($btn).click();
-
 				// visual and data assertion : de-select
 				cy.get('[aria-pressed="true"]')
 					.should('not.exist')

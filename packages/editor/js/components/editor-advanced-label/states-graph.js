@@ -20,7 +20,7 @@ import { getStatesGraph } from './helpers';
 import type {
 	TBreakpoint,
 	TStates,
-} from '../../extensions/libs/block-card/block-states/types';
+} from '../../extensions/libs/block-states/types';
 import { BreakpointIcon } from '../../canvas-editor/components/breakpoints/breakpoint-icon';
 
 export const StatesGraph = ({

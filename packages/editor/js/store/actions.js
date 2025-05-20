@@ -7,7 +7,7 @@ import type {
 	StateTypes,
 	TBreakpoint,
 	BreakpointTypes,
-} from '../extensions/libs/block-card/block-states/types';
+} from '../extensions/libs/block-states/types';
 
 export const setBreakpoints = (breakpoints: {
 	[key: number]: BreakpointTypes,
@@ -74,40 +74,6 @@ export const updateBlockStates = (states: StateTypes): Object => {
 	return {
 		states,
 		type: 'UPDATE_BLOCK_STATES',
-	};
-};
-
-export const setInnerBlockStates = (states: {
-	[key: StateTypes]: Object,
-}): Object => {
-	return {
-		states,
-		type: 'SET_INNER_BLOCK_STATES',
-	};
-};
-
-export const editInnerBlockState = (
-	editedState: Object,
-	stateName: StateTypes
-): Object => {
-	return {
-		stateName,
-		editedState,
-		type: 'EDIT_INNER_BLOCK_STATE',
-	};
-};
-
-export const deleteInnerBlockState = (stateName: StateTypes): Object => {
-	return {
-		stateName,
-		type: 'DELETE_INNER_BLOCK_STATE',
-	};
-};
-
-export const updateInnerBlockStates = (states: StateTypes): Object => {
-	return {
-		states,
-		type: 'UPDATE_INNER_BLOCK_STATES',
 	};
 };
 

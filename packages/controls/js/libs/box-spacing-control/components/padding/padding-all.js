@@ -117,7 +117,6 @@ export function PaddingAll({
 		return {
 			shape: <></>,
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -194,7 +193,6 @@ export function PaddingAll({
 						setOpenPopover(sideId);
 					}
 				}}
-				tooltipText={__('All Sides Padding', 'blockera')}
 			/>
 		),
 		label: (
@@ -332,10 +330,7 @@ export function PaddingAll({
 						}}
 					/>
 				</div>
-			</>
-		),
-		popover: (
-			<>
+
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={
@@ -357,25 +352,27 @@ export function PaddingAll({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
-						icon={<Icon icon="padding-all" iconSize="18" />}
-						title={__('All Sides Padding', 'blockera')}
 						type="padding"
+						icon={<Icon icon="padding-all" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
+						title={__('All Sides Padding', 'blockera')}
 						inputLabel={__('Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'All Sides Padding',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<p>
-								{__(
-									'It enables you to set a single padding space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
-									'blockera'
-								)}
-							</p>
+							<>
+								<p>
+									{__(
+										'It enables you to set a single padding space that is uniformly applied to all four edges (top, right, bottom, and left) of the block.',
+										'blockera'
+									)}
+								</p>
+							</>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

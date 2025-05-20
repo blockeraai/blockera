@@ -151,7 +151,7 @@ export function SelfPerspective({
 				{!visibleTransformLength && (
 					<NoticeControl type="warning">
 						{__(
-							`For using Self Perspective, the block should have at least one transformation.`,
+							`For using Self Perspective the block should have at least one transformation.`,
 							'blockera'
 						)}
 					</NoticeControl>

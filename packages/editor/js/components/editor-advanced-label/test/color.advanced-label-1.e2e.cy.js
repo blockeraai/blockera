@@ -60,7 +60,7 @@ describe('Color Control label testing (BG Color)', () => {
 		/**
 		 * Pseudo State (Hover/Tablet)
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -82,7 +82,7 @@ describe('Color Control label testing (BG Color)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -154,7 +154,7 @@ describe('Color Control label testing (BG Color)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -246,7 +246,7 @@ describe('Color Control label testing (BG Color)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Background',
@@ -322,7 +322,7 @@ describe('Color Control label testing (BG Color)', () => {
 			cy.setColorControlValue('BG Color', 'ccc');
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.setColorControlValue('BG Color', 'bbb');
 
 			// Set value in hover/tablet
@@ -670,7 +670,7 @@ describe('Color Control label testing (BG Color)', () => {
 			cy.setColorControlValue('BG Color', 'ccc');
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.setColorControlValue('BG Color', 'bbb');
 
 			// Set value in hover/tablet

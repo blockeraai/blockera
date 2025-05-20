@@ -14,7 +14,7 @@ import {
 	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components/utils';
 import { useExtensionsStore } from '../use-extensions-store';
-import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
+import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-states/helpers';
 
 export const useCalculateCurrentAttributes = ({
 	attributes,

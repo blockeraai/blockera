@@ -15,7 +15,7 @@ const blockeraCursor: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Cursor', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 const blockeraUserSelect: FeatureConfig = {
@@ -23,7 +23,7 @@ const blockeraUserSelect: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('User Select', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 const blockeraPointerEvents: FeatureConfig = {
@@ -31,7 +31,7 @@ const blockeraPointerEvents: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Pointer Events', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 export const mouseConfig = {

@@ -5,6 +5,7 @@ import {
 	setInnerBlock,
 	setBoxSpacingSide,
 	openSettingsPanel,
+	openInserterInnerBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Sections Manager Testing', () => {
@@ -18,6 +19,37 @@ describe('Block Sections Manager Testing', () => {
 		);
 
 		cy.getBlock('core/paragraph').click();
+	});
+
+	it('should load with default settings', () => {
+		// Check default block sections state
+		cy.get('button[aria-label="Block Settings"]').click();
+
+		// Other modes should be inactive
+		cy.getByDataTest('Focus Mode').should(
+			'not.have.class',
+			'blockera-block-menu-item-selected'
+		);
+		cy.getByDataTest('Expand All').should(
+			'not.have.class',
+			'blockera-block-menu-item-selected'
+		);
+		cy.getByDataTest('Collapse All').should(
+			'not.have.class',
+			'blockera-block-menu-item-selected'
+		);
+
+		// Close Block settings.
+		cy.get('button[aria-label="Block Settings"]').click();
+
+		// Check for opened inner blocks section.
+		cy.getByDataTest('elements/link').should('not.exist');
+
+		// Close the Spacing section.
+		cy.get('.components-panel__body').contains('Spacing').click();
+
+		// Check again for opened inner blocks section.
+		cy.getByDataTest('elements/link').should('not.exist');
 	});
 
 	it('should persist settings in local storage', () => {
@@ -119,7 +151,8 @@ describe('Block Sections Manager Testing', () => {
 		cy.getByDataTest('border-control-width').should('exist');
 		// Check for opened Effects section
 		cy.getByAriaLabel('Add New Backdrop Filter').should('exist');
-
+		// Check for opened InnerBlocks section
+		openInserterInnerBlock('disabled');
 		// Check for opened Layout section
 		cy.getParentContainer('Display').should('exist');
 		// Check for opened Position section
@@ -184,8 +217,9 @@ describe('Block Sections Manager Testing', () => {
 		// Check for opened Effects section
 		cy.get('.components-panel__body').contains('Effects').click();
 		cy.getByDataTest('border-control-width').should('not.exist');
-
-		cy.getByAriaLabel('Add New Backdrop Filter').should('exist');
+		// Check for opened InnerBlocks section
+		cy.get('.components-panel__body').contains('Inner Blocks').click();
+		cy.getByAriaLabel('Add New Backdrop Filter').should('not.exist');
 		// Check for opened Layout section
 		cy.get('.components-panel__body').contains('Layout').click();
 		cy.get('button').contains('Add Inner Block').should('not.exist');
@@ -215,6 +249,9 @@ describe('Block Sections Manager Testing', () => {
 
 		cy.getByDataTest('Close Inner Block').click();
 
+		// Should open the inner blocks section on master block.
+		cy.get('button').contains('Add Inner Block').should('exist');
+
 		cy.get('button[aria-label="Block Settings"]').click();
 		cy.getByDataTest('Focus Mode').click();
 		cy.get('button[aria-label="Block Settings"]').click();
@@ -226,5 +263,8 @@ describe('Block Sections Manager Testing', () => {
 		openSettingsPanel('Background');
 
 		cy.getByDataTest('Close Inner Block').click();
+
+		// Should open the inner blocks section on master block.
+		cy.get('button').contains('Add Inner Block').should('exist');
 	});
 });

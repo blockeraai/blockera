@@ -24,7 +24,7 @@ import type { PickedBreakpointsComponentProps } from './types';
 import type {
 	TBreakpoint,
 	BreakpointTypes,
-} from '../../../extensions/libs/block-card/block-states/types';
+} from '../../../extensions/libs/block-states/types';
 import { useExtensionsStore } from '../../../hooks/use-extensions-store';
 
 export default function ({

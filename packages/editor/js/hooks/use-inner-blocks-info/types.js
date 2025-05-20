@@ -7,11 +7,11 @@ import type {
 	InnerBlocks,
 	InnerBlockType,
 	InnerBlockModel,
-} from '../../extensions/libs/block-card/inner-blocks/types';
+} from '../../extensions/libs/inner-blocks/types';
 import type {
 	TBreakpoint,
 	TStates,
-} from '../../extensions/libs/block-card/block-states/types';
+} from '../../extensions/libs/block-states/types';
 
 export type InnerBlocksInfoProps = {
 	attributes: Object,

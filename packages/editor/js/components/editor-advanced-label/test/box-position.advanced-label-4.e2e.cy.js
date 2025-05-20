@@ -208,7 +208,7 @@ describe('Position Control label testing', () => {
 			/**
 			 * Hover
 			 */
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			// Assert side labels before set value
 			['top', 'right', 'bottom', 'left'].forEach((side) => {
@@ -429,7 +429,7 @@ describe('Position Control label testing', () => {
 			 * Hover State
 			 */
 
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			/**
 			 * Set value and assert labels
@@ -749,7 +749,7 @@ describe('Position Control label testing', () => {
 			/**
 			 * Hover
 			 */
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			// Assert side labels before set value
 			['top', 'right', 'bottom', 'left'].forEach((side) => {

@@ -9,7 +9,6 @@ import { dispatch } from '@wordpress/data';
  * Internal dependencies
  */
 import size from '../../schemas/block-supports/size-block-supports-list.json';
-import state from '../../schemas/block-supports/state-block-supports-list.json';
 import mouse from '../../schemas/block-supports/mouse-block-supports-list.json';
 import border from '../../schemas/block-supports/border-block-supports-list.json';
 import layout from '../../schemas/block-supports/layout-block-supports-list.json';
@@ -46,7 +45,6 @@ export const resetExtensionSettings = () => {
 export const getBlockSupportCategory = (name: string): Object => {
 	const supports = {
 		size,
-		state,
 		mouse,
 		border,
 		layout,

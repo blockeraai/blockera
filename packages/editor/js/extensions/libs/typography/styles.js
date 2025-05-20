@@ -61,7 +61,6 @@ export function TypographyStyles({
 		state,
 		clientId,
 		blockName,
-		currentBlock,
 		attributes: currentBlockAttributes,
 	};
 

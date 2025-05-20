@@ -4,17 +4,10 @@ import { createPortal } from 'react-dom';
 
 export function prependPortal(
 	component: MixedElement,
-	container: Element,
-	props: Object = {}
+	container: Element
 ): MixedElement {
-	const { className = '' } = props;
-
 	const portalContainer = document.createElement('div');
 	portalContainer.classList.add('blockera-block-inspector-controls-wrapper');
-
-	if (className) {
-		portalContainer.classList.add(className);
-	}
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {

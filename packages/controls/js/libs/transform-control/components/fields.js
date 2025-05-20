@@ -91,12 +91,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-x')}
 						singularId={'move-x'}
-						label={
-							<Icon
-								icon="coordinate-x"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-x" />}
 						labelPopoverTitle={__('Move Horizontally', 'blockera')}
 						labelDescription={
 							<>
@@ -132,12 +127,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-y')}
 						singularId={'move-y'}
-						label={
-							<Icon
-								icon="coordinate-y"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-y" />}
 						labelPopoverTitle={__('Move Vertically', 'blockera')}
 						labelDescription={
 							<>
@@ -173,12 +163,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'move-z')}
 						singularId={'move-z'}
-						label={
-							<Icon
-								icon="coordinate-z"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-z" />}
 						labelPopoverTitle={__('Move Depth Axis', 'blockera')}
 						labelDescription={
 							<>
@@ -274,12 +259,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'rotate-x')}
 						singularId={'rotate-x'}
-						label={
-							<Icon
-								icon="coordinate-rotate-x"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-rotate-x" />}
 						labelPopoverTitle={__(
 							'Rotate Horizontally',
 							'blockera'
@@ -318,12 +298,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'rotate-y')}
 						singularId={'rotate-y'}
-						label={
-							<Icon
-								icon="coordinate-rotate-y"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-rotate-y" />}
 						labelPopoverTitle={__('Rotate Vertically', 'blockera')}
 						labelDescription={
 							<>
@@ -359,12 +334,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'rotate-z')}
 						singularId={'rotate-z'}
-						label={
-							<Icon
-								icon="coordinate-rotate-z"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-rotate-z" />}
 						labelPopoverTitle={__('Rotate Depth Axis', 'blockera')}
 						labelDescription={
 							<>
@@ -416,12 +386,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'skew-x')}
 						singularId={'skew-x'}
-						label={
-							<Icon
-								icon="coordinate-x"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-x" />}
 						labelPopoverTitle={__('Skew Horizontally', 'blockera')}
 						labelDescription={
 							<>
@@ -463,12 +428,7 @@ const Fields = ({
 						repeaterItem={itemId}
 						id={getControlId(itemId, 'skew-y')}
 						singularId={'skew-y'}
-						label={
-							<Icon
-								icon="coordinate-y"
-								style={{ fill: 'currentColor' }}
-							/>
-						}
+						label={<Icon icon="coordinate-y" />}
 						labelPopoverTitle={__('Skew Vertically', 'blockera')}
 						labelDescription={
 							<>

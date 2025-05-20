@@ -15,7 +15,7 @@ const blockeraFlexChildSizing: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Sizing', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 const blockeraFlexChildAlign: FeatureConfig = {
@@ -23,7 +23,7 @@ const blockeraFlexChildAlign: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Align', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 const blockeraFlexChildOrder: FeatureConfig = {
@@ -31,7 +31,7 @@ const blockeraFlexChildOrder: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Order', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 export const flexChildConfig = {

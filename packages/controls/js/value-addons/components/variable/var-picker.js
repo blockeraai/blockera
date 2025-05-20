@@ -121,7 +121,7 @@ export default function ({
 					<ConditionalWrapper
 						condition={showTwoColumns}
 						wrapper={(children) => (
-							<Grid gridTemplateColumns="1fr 1fr" gap="10px">
+							<Grid gridTemplateColumns="120px 120px" gap="10px">
 								{children}
 							</Grid>
 						)}

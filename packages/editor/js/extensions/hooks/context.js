@@ -16,7 +16,7 @@ import type {
 	TStates,
 	TBreakpoint,
 	BreakpointTypes,
-} from '../libs/block-card/block-states/types';
+} from '../libs/block-states/types';
 
 const BlockEditContext: Object = createContext({});
 

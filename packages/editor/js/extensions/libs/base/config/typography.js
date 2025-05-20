@@ -42,7 +42,9 @@ const blockeraFontColor: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNativeOnInnerBlocks: false,
+	isActiveOnStatesOnFree: true,
+	isActiveOnBreakpointsOnFree: true,
+	isActiveOnInnerBlocksOnFree: true,
 	label: __('Text Color', 'blockera'),
 };
 
@@ -92,7 +94,7 @@ const blockeraWordSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Word Spacing', 'blockera'),
 };
 
@@ -100,7 +102,7 @@ const blockeraTextIndent: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Text Indent', 'blockera'),
 };
 
@@ -115,7 +117,7 @@ const blockeraTextColumns: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Text Columns', 'blockera'),
 };
 
@@ -123,7 +125,7 @@ const blockeraTextStroke: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Text Stroke', 'blockera'),
 };
 
@@ -131,7 +133,7 @@ const blockeraWordBreak: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Word Break', 'blockera'),
 };
 
@@ -139,7 +141,7 @@ const blockeraTextWrap: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Text Wrap', 'blockera'),
 };
 

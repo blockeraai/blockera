@@ -67,7 +67,7 @@
 	&.is-extra-large-preview,
 	&.is-mobile-landscape-preview {
 		overflow-y: auto;
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 		background: #ffffff;
 		transition: min-width 0.5s ease;
 	}

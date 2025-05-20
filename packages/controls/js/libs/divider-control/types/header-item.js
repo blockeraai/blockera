@@ -11,5 +11,5 @@ export type THeaderItem = {
 	isOpen: boolean,
 	setOpen: (isOpen: boolean) => void,
 	children?: any,
-	isOpenPopoverEvent: (event: Object, excludedTargetWrapper: string) => void,
+	isOpenPopoverEvent: (event: Object) => void,
 };

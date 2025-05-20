@@ -38,7 +38,7 @@ export default function PositionButtonControl({
 		left: '',
 	},
 	columns,
-	field = 'position-button',
+	field,
 	className,
 	...props
 }: TPositionButtonProps): MixedElement {
@@ -104,10 +104,8 @@ export default function PositionButtonControl({
 			>
 				{renderPositionIcon({ ...value, defaultValue })}
 			</Button>
-
 			{isPopoverActive && (
 				<Popover
-					design="highlight"
 					title={popoverTitle}
 					offset={121}
 					placement="left"
@@ -117,8 +115,6 @@ export default function PositionButtonControl({
 					}}
 				>
 					<AlignmentMatrixControl
-						singularId={singularId}
-						repeaterItem={repeaterItem}
 						id={id}
 						label={alignmentMatrixLabel}
 						columns={

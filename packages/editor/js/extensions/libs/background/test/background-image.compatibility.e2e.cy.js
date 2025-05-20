@@ -63,10 +63,10 @@ describe('Background → WP Compatibility', () => {
 				cy.get('.components-popover')
 					.last()
 					.within(() => {
-						cy.getParentContainer('Angle').within(() => {
-							cy.get('input[type="number"]').as('angleInput');
-							cy.get('@angleInput').clear();
-							cy.get('@angleInput').type('45');
+						cy.getParentContainer('Angel').within(() => {
+							cy.get('input[type="number"]').as('angelInput');
+							cy.get('@angelInput').clear();
+							cy.get('@angelInput').type('45');
 						});
 					});
 

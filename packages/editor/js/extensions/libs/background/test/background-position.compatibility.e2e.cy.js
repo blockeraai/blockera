@@ -78,23 +78,19 @@ describe('Background → WP Compatibility', () => {
 					cy.get('@repeaterBtn').click();
 				});
 
-				cy.get('.blockera-component-popover').within(() => {
-					cy.getByDataTest('position-button').click();
-				});
-
 				//
 				// change: background position
 				//
-				cy.get('.blockera-component-popover')
+				cy.get('.components-popover')
 					.last()
 					.within(() => {
 						cy.getParentContainer('Top').within(() => {
-							cy.get('input').clear({ force: true });
+							cy.get('input').clear();
 							cy.get('input').type('20');
 						});
 
 						cy.getParentContainer('Left').within(() => {
-							cy.get('input').clear({ force: true });
+							cy.get('input').clear();
 							cy.get('input').type('30');
 						});
 					});
@@ -209,23 +205,19 @@ describe('Background → WP Compatibility', () => {
 					cy.get('@repeaterBtn').click();
 				});
 
-				cy.get('.blockera-component-popover').within(() => {
-					cy.getByDataTest('position-button').click();
-				});
-
 				//
 				// change: background position
 				//
-				cy.get('.blockera-component-popover')
+				cy.get('.components-popover')
 					.last()
 					.within(() => {
 						cy.getParentContainer('Top').within(() => {
-							cy.get('input').clear({ force: true });
+							cy.get('input').clear();
 							cy.get('input').type('100');
 						});
 
 						cy.getParentContainer('Left').within(() => {
-							cy.get('input').clear({ force: true });
+							cy.get('input').clear();
 							cy.get('input').type('100');
 						});
 					});

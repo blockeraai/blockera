@@ -288,7 +288,7 @@ describe(
 					});
 				});
 
-				it('should change linear-gradient-angel in data when entering new value in angle input', () => {
+				it('should change linear-gradient-angel in data when entering new value in angel input', () => {
 					const name = nanoid();
 					cy.withDataProvider({
 						component: <BackgroundControl />,
@@ -308,7 +308,7 @@ describe(
 					}).should('be.visible');
 
 					cy.get('.blockera-component-popover').within(() => {
-						cy.getParentContainer('Angle').within(() => {
+						cy.getParentContainer('Angel').within(() => {
 							cy.get('input[type="number"]').clear();
 							cy.get('input[type="number"]').type('135', {
 								delay: 0,

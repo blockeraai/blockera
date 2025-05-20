@@ -18,8 +18,8 @@ import { isUndefined } from '@blockera/utils';
 import type {
 	TBreakpoint,
 	BreakpointTypes,
-} from '../../../extensions/libs/block-card/block-states/types';
-import { default as defaultBreakpoints } from '../../../extensions/libs/block-card/block-states/default-breakpoints';
+} from '../../../extensions/libs/block-states/types';
+import { default as defaultBreakpoints } from '../../../extensions/libs/block-states/default-breakpoints';
 
 /**
  * Check if given breakpoint is base breakpoint

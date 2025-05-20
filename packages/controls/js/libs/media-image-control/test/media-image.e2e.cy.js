@@ -59,11 +59,11 @@ describe('media-image', () => {
 
 			//----------------------- delete ---------------------------------
 			cy.get('.blockera-component-popover').within(() => {
-				cy.get('.blockera-control.blockera-control-media-image').within(
-					() => {
+				cy.getParentContainer('Image')
+					.last()
+					.within(() => {
 						cy.getByDataCy('delete-bg-img').click({ force: true });
-					}
-				);
+					});
 			});
 
 			// data assertion

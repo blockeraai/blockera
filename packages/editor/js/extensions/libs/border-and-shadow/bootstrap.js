@@ -22,7 +22,7 @@ import {
 	borderRadiusFromWPCompatibility,
 	borderRadiusToWPCompatibility,
 } from './compatibilities/border-radius';
-import type { BlockDetail } from '../block-card/block-states/types';
+import type { BlockDetail } from '../block-states/types';
 import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {

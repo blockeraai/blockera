@@ -126,7 +126,6 @@ export function PaddingVertical({
 		return {
 			shape: <></>,
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -142,7 +141,6 @@ export function PaddingVertical({
 				/>
 			),
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -219,7 +217,6 @@ export function PaddingVertical({
 						setOpenPopover(sideId);
 					}
 				}}
-				tooltipText={__('Vertical Padding', 'blockera')}
 			/>
 		),
 		label: (
@@ -291,10 +288,7 @@ export function PaddingVertical({
 						}}
 					/>
 				</div>
-			</>
-		),
-		popover: (
-			<>
+
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.top || value?.padding?.bottom}
@@ -310,25 +304,27 @@ export function PaddingVertical({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
-						icon={<Icon icon="padding-vertical" iconSize="18" />}
-						title={__('Top & Bottom Padding', 'blockera')}
 						type="padding"
+						icon={<Icon icon="padding-vertical" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
+						title={__('Top & Bottom Padding', 'blockera')}
 						inputLabel={__('Vertical Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Vertical Padding',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<p>
-								{__(
-									'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
-									'blockera'
-								)}
-							</p>
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies to both the top and bottom edges of the block.',
+										'blockera'
+									)}
+								</p>
+							</>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

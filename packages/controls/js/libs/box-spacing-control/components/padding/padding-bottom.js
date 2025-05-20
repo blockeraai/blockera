@@ -126,7 +126,6 @@ export function PaddingBottom({
 				/>
 			),
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -134,7 +133,6 @@ export function PaddingBottom({
 		return {
 			shape: <></>,
 			label: <></>,
-			popover: <></>,
 		};
 	}
 
@@ -211,47 +209,45 @@ export function PaddingBottom({
 						setOpenPopover(sideId);
 					}
 				}}
-				tooltipText={__('Bottom Padding', 'blockera')}
 			/>
 		),
 		label: (
-			<div
-				className={controlInnerClassNames(
-					'label-side',
-					'side-vertical',
-					'side-padding-bottom',
-					labelClassName
-				)}
-				data-cy="box-spacing-padding-bottom"
-			>
-				<LabelControl
-					ariaLabel={__('Bottom Padding', 'blockera')}
-					label={
-						_isSetValueAddon
-							? fixLabelText(value.padding.bottom)
-							: fixLabelText(sideSpace)
-					}
-					onClick={() => {
-						setFocusSide(sideId);
-						setOpenPopover(sideId);
-					}}
-					{...{
-						attribute,
-						blockName,
-						resetToDefault,
-						mode: 'advanced',
-						singularId: 'padding.bottom',
-						value: value?.padding?.bottom,
-						defaultValue: defaultValue?.padding?.bottom,
-						path: getControlPath(attribute, 'padding.bottom'),
-					}}
-				/>
-
-				<ValueAddonPointer />
-			</div>
-		),
-		popover: (
 			<>
+				<div
+					className={controlInnerClassNames(
+						'label-side',
+						'side-vertical',
+						'side-padding-bottom',
+						labelClassName
+					)}
+					data-cy="box-spacing-padding-bottom"
+				>
+					<LabelControl
+						ariaLabel={__('Bottom Padding', 'blockera')}
+						label={
+							_isSetValueAddon
+								? fixLabelText(value.padding.bottom)
+								: fixLabelText(sideSpace)
+						}
+						onClick={() => {
+							setFocusSide(sideId);
+							setOpenPopover(sideId);
+						}}
+						{...{
+							attribute,
+							blockName,
+							resetToDefault,
+							mode: 'advanced',
+							singularId: 'padding.bottom',
+							value: value?.padding?.bottom,
+							defaultValue: defaultValue?.padding?.bottom,
+							path: getControlPath(attribute, 'padding.bottom'),
+						}}
+					/>
+
+					<ValueAddonPointer />
+				</div>
+
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.bottom}
@@ -266,25 +262,27 @@ export function PaddingBottom({
 						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.bottom')}
-						icon={<Icon icon="padding-bottom" iconSize="18" />}
-						title={__('Bottom Padding Space', 'blockera')}
 						type="padding"
+						icon={<Icon icon="padding-bottom" iconSize="18" />}
 						onClose={() => {
 							setFocusSide('');
 							setOpenPopover('');
 						}}
+						title={__('Bottom Padding Space', 'blockera')}
 						inputLabel={__('Bottom Padding', 'blockera')}
 						inputLabelPopoverTitle={__(
 							'Bottom Padding Space',
 							'blockera'
 						)}
 						inputLabelDescription={
-							<p>
-								{__(
-									'It enables you to set a padding space that applies only to the bottom edge of the block.',
-									'blockera'
-								)}
-							</p>
+							<>
+								<p>
+									{__(
+										'It enables you to set a padding space that applies only to the bottom edge of the block.',
+										'blockera'
+									)}
+								</p>
+							</>
 						}
 						isOpen={true}
 						unit={sideSpace.unit}

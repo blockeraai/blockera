@@ -4,64 +4,48 @@
 	"supports": {
 		"blockeraGap": {
 			"status": true,
-			"id": "blockeraGap",
-			"definition": "Gap",
 			"css-property": "gap",
 			"fallback": ["gap"],
 			"description": "Support for \"blockeraGap\" value, this is mirror for WordPress block core \"gap\" support"
 		},
 		"blockeraFlexChildSizing": {
 			"status": true,
-			"id": "blockeraFlexChildSizing",
-			"definition": "Flex",
 			"css-property": "flex",
 			"fallback": ["flex"],
 			"description": "Support for \"blockeraFlexChildSizing\" value, this is mirror for WordPress block core \"flex\" support"
 		},
 		"blockeraFlexChildOrder": {
 			"status": true,
-			"id": "blockeraFlexChildOrder",
-			"definition": "Order",
 			"css-property": "order",
 			"fallback": ["order"],
 			"description": "Support for \"blockeraFlexChildOrder\" value, this is mirror for WordPress block core \"order\" support"
 		},
 		"blockeraDisplay": {
 			"status": true,
-			"id": "blockeraDisplay",
-			"definition": "Display",
 			"css-property": "display",
 			"fallback": ["display"],
 			"description": "Support for \"blockeraDisplay\" value, this is mirror for WordPress block core \"display\" support"
 		},
 		"blockeraFlexWrap": {
 			"status": true,
-			"id": "blockeraFlexWrap",
-			"definition": "FlexWrap",
 			"css-property": "flex-wrap",
 			"fallback": ["flex-wrap"],
 			"description": "Support for \"blockeraFlexWrap\" value."
 		},
 		"blockeraFlexChildAlign": {
 			"status": true,
-			"id": "blockeraFlexChildAlign",
-			"definition": "AlignSelf",
 			"css-property": "align-self",
 			"fallback": ["align-self"],
 			"description": "Support for \"blockeraFlexChildAlign\" value."
 		},
 		"blockeraAlignContent": {
 			"status": true,
-			"id": "blockeraAlignContent",
-			"definition": "AlignContent",
 			"css-property": "align-content",
 			"fallback": ["align-content"],
 			"description": "Support for \"blockeraAlignContent\" value."
 		},
 		"blockeraFlexLayout": {
 			"status": true,
-			"id": "blockeraFlexLayout",
-			"definition": "FlexDirection",
 			"css-property": "flex-direction",
 			"fallback": ["flex-direction"],
 			"description": "Support for \"blockeraFlexLayout\" value."

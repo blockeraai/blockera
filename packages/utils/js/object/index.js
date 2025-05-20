@@ -210,31 +210,12 @@ export function cloneObject(obj: Object): Object {
  * Sort an object by priority.
  *
  * @param {Object} obj the object to sort.
- * @param {string} priorityPath the priority property path of object to use for sorting process.
- * @param {number} fallbackPriority the fallback value for each items has not priority property.
- *
  * @return {Object} the sorted object.
  */
-export const getSortedObject = (
-	obj: Object,
-	priorityPath: string,
-	fallbackPriority: number = 0
-): Object => {
-	const paths = priorityPath?.split('.');
-
+export const getSortedObject = (obj: Object): Object => {
 	return Object.fromEntries(
 		Object.entries(obj).sort(([, a], [, b]) => {
-			for (let index = 0; index < (paths?.length || 0); index++) {
-				const key = paths[index];
-
-				a = a[key];
-				b = b[key];
-			}
-
-			return (
-				(a?.priority || fallbackPriority) -
-				(b?.priority || fallbackPriority)
-			);
+			return (a?.priority || 0) - (b?.priority || 0);
 		})
 	);
 };

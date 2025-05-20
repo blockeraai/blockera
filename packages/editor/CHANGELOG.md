@@ -1,39 +1,5 @@
 ## Unreleased
 
-## 1.5.1 (2025-05-19)
-
-### Bug Fixes
-- Fixed an issue where the some block states were not being correctly configured.
-- Fixed an issue where the display value was not being correctly retrieved from the current breakpoint settings.
-
-### Improvements
-- Block card design improved.
-- Improved support of third-party plugin blocks as inner block. Thanks to Hoang.
-
-
-## 1.5.0 (2025-05-19)
-
-### Improvements
-- Improved the block card design to make it more consistent and easier to use.
-- Improved block card inner blocks priority system for better user experience and performance.
-- Improved the style engine to support flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
-- `Flex Child` block section: Smartly showing icons of setting based on parent block flex direction setting.
-- `Flex Child` block section: Help for all features added.
-
-### New Features
-- Added BlockComposite module to simplify creation of composite blocks by providing a reusable framework and components for developers.
-- Block style variation redesigned and moved to block card (Block Card v3).
-- Added support for flexible CSS selectors in block and inner block states, providing more powerful styling capabilities.
-- Added smart calculation for block states in inner blocks.
-- Added `content` css property support for `:before` and `:after` pseudo-elements in block states.
-
-### Automated Tests
-- Added E2E tests to check block style variation functionality.
-- Added Unit tests for computation css declarations to ensure the robustness of the style engine.
-
-### Bug Fixes
-- Fixed an issue where the merge of styles for block states was not working properly.
-
 ## 1.4.0 (2025-04-27)
 
 ### New Features

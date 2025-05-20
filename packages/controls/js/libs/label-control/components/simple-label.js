@@ -3,10 +3,9 @@
  * External Dependencies
  */
 import type { MixedElement } from 'react';
-import { __ } from '@wordpress/i18n';
 
 /**
- * Blockera Dependencies
+ *  Dependencies
  */
 import {
 	controlClassNames,
@@ -19,7 +18,6 @@ import {
 import HelpSmallIcon from '../icons/help-small';
 import ResetIcon from '../icons/reset';
 import type { SimpleLabelControlProps } from '../types';
-import { Tooltip } from '../../';
 
 export const SimpleLabelControl = ({
 	label,
@@ -56,26 +54,18 @@ export const SimpleLabelControl = ({
 		>
 			{label}
 
-			{resetToDefault ? (
-				<Tooltip
-					text={__('Reset to default', 'blockera')}
-					style={{
-						'--tooltip-bg': '#e20000',
-					}}
-					delay={300}
-				>
-					<ResetIcon
-						className={controlInnerClassNames('reset-icon')}
-						onClick={(event) => {
-							event.stopPropagation();
-
-							resetToDefault();
-						}}
-					/>
-				</Tooltip>
-			) : (
+			{labelDescription && (
 				<>
-					{labelDescription && (
+					{resetToDefault ? (
+						<ResetIcon
+							className={controlInnerClassNames('reset-icon')}
+							onClick={(event) => {
+								event.stopPropagation();
+
+								resetToDefault();
+							}}
+						/>
+					) : (
 						<HelpSmallIcon
 							className={controlInnerClassNames('help-icon')}
 						/>

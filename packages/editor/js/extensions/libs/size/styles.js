@@ -52,8 +52,8 @@ export const SizeStyles = ({
 		supports,
 		clientId,
 		blockName,
-		currentBlock,
 		attributes: currentBlockAttributes,
+		currentBlock,
 	};
 
 	const sharedParams = {

@@ -4,8 +4,6 @@
 	"supports": {
 		"blockeraBoxShadow": {
 			"status": true,
-			"id": "blockeraBoxShadow",
-			"definition": "BoxShadow",
 			"css-property": "box-shadow",
 			"fallback": "shadow",
 			"description": "Support for \"blockeraBoxShadow\" value."
