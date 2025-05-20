@@ -123,14 +123,11 @@ function BlockStyles({
 			setCurrentPreviewStyle(item);
 			onSelect(item);
 			// Add timeout to show preview with dynamic delay
-			setTimeout(
-				() => {
-					if (hoveredStyleRef.current?.name === item?.name) {
-						setShowPreview(true);
-					}
-				},
-				hasShownPreviewRef.current ? 0 : 1500
-			);
+			setTimeout(() => {
+				if (hoveredStyleRef.current?.name === item?.name) {
+					setShowPreview(true);
+				}
+			}, 1200);
 		} else {
 			// Clear preview style when mouse leaves or blur
 			setCurrentPreviewStyle(null);
