@@ -18,7 +18,9 @@ export default function BlockStylesPreviewPanel({
 	activeStyle,
 }) {
 	const example = getBlockType(genericPreviewBlock.name)?.example;
+
 	const styleClassName = replaceActiveStyle(className, activeStyle, style);
+
 	const previewBlocks = useMemo(() => {
 		return {
 			...genericPreviewBlock,
