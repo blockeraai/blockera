@@ -213,7 +213,7 @@ final class StyleEngine {
 			} elseif (! empty($settings)) {
 
 				$this->pseudo_classes['normal'] = [
-					'breakpoints' => array_merge(
+					'breakpoints' => blockera_get_array_deep_merge(
 						[
 							'desktop' => [
 								'attributes' => $settings,
