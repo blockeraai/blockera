@@ -11,8 +11,8 @@ import { __ } from '@wordpress/i18n';
  */
 import { controlInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
-import { hasSameProps } from '@blockera/utils';
-import { Popover, Button, Flex } from '@blockera/controls';
+import { hasSameProps, useLateEffect } from '@blockera/utils';
+import { Button, Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -53,6 +53,21 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			onSwitch: () => {},
 		});
 
+		const [currentActiveStyle, setCurrentActiveStyle] =
+			useState(activeStyle);
+		const [currentPreviewStyle, setCurrentPreviewStyle] = useState(null);
+
+		// Update cached style when active style changes
+		useLateEffect(() => {
+			// change back to old style
+			if (
+				currentPreviewStyle === null &&
+				activeStyle?.name !== currentActiveStyle?.name
+			) {
+				onSelect(currentActiveStyle);
+			}
+		}, [currentPreviewStyle]);
+
 		if (!stylesToRender || stylesToRender.length === 0) {
 			return <></>;
 		}
@@ -62,9 +77,9 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			!isBaseBreakpoint(currentBreakpoint) ||
 			currentState !== 'normal';
 
-		const activeStyleId = activeStyle?.isDefault
+		const activeStyleId = currentActiveStyle?.isDefault
 			? 'default'
-			: activeStyle?.name || 'default';
+			: currentActiveStyle?.name || 'default';
 
 		return (
 			<>
@@ -119,31 +134,26 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 						data-test="style-variations-button-label"
 						gap={0}
 					>
-						{activeStyle?.label || __('Default', 'blockera')}
+						{currentActiveStyle?.label || __('Default', 'blockera')}
 
 						<Icon icon="more-vertical-small" iconSize={24} />
 					</Flex>
 				</Button>
 
 				{isOpen && popoverAnchor && (
-					<Popover
-						title={''}
-						offset={10}
-						placement="bottom-start"
-						className="variations-picker-popover"
-						onClose={() => setIsOpen(false)}
-						anchor={popoverAnchor}
-					>
-						<BlockStyles
-							styles={{
-								onSelect,
-								stylesToRender,
-								activeStyle,
-								genericPreviewBlock,
-								previewClassName,
-							}}
-						/>
-					</Popover>
+					<BlockStyles
+						styles={{
+							onSelect,
+							stylesToRender,
+							genericPreviewBlock,
+							activeStyle: currentActiveStyle,
+							setCurrentActiveStyle,
+							setCurrentPreviewStyle,
+							previewClassName,
+							popoverAnchor,
+							setIsOpen,
+						}}
+					/>
 				)}
 			</>
 		);

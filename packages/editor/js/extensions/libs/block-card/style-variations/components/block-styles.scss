@@ -78,4 +78,13 @@
 			}
 		}
 	}
+
+	.blockera-component-block-styles__coming-soon {
+		color: var(--blockera-controls-placeholder-color);
+		text-decoration: underline;
+
+		&:hover {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
 }

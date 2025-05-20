@@ -1,5 +1,11 @@
 ## Unreleased
 
+### New Features
+- **Block style variation live preview**: 
+  - The live preview of style variation for block will be shown while mouse over on them inside style variation picker 🔥
+  - If mouse wait over 1 second on the button, the example preview will be shown too.
+
+
 ## 1.5.1 (2025-05-19)
 
 ### Bug Fixes

@@ -3,11 +3,11 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
-import { debounce, useViewportMatch } from '@wordpress/compose';
+import { useState, useRef, useEffect } from '@wordpress/element';
+import { useViewportMatch } from '@wordpress/compose';
 import {
 	__experimentalTruncate as Truncate,
-	Popover,
+	Popover as WPPopover,
 } from '@wordpress/components';
 import type { MixedElement } from 'react';
 
@@ -19,6 +19,7 @@ import {
 	SearchControl,
 	Flex,
 	ControlContextProvider,
+	Popover,
 } from '@blockera/controls';
 import {
 	classNames,
@@ -45,30 +46,50 @@ function BlockStyles({
 		stylesToRender: Array<Object>,
 		activeStyle: Object,
 		genericPreviewBlock: Object,
+		setCurrentActiveStyle: (style: Object) => void,
+		setCurrentPreviewStyle: (style: Object) => void,
 		previewClassName: string,
+		popoverAnchor: Object,
+		setIsOpen: (isOpen: boolean) => void,
 	},
 	onHoverClassName?: (style?: string | null) => void,
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
 	const [filteredStyles, setFilteredStyles] = useState(styles.stylesToRender);
+	const [hoveredStyle, setHoveredStyle] = useState(null);
+	const [showPreview, setShowPreview] = useState(false);
+	const hoveredStyleRef = useRef(null);
+	const hasShownPreviewRef = useRef(false);
+	const isMobileViewport = useViewportMatch('medium', '<');
 
 	const {
 		onSelect,
 		stylesToRender,
 		activeStyle,
 		genericPreviewBlock,
+		setCurrentActiveStyle,
+		setCurrentPreviewStyle,
 		previewClassName,
+		popoverAnchor,
+		setIsOpen,
 	} = styles;
 
-	const [hoveredStyle, setHoveredStyle] = useState(null);
-	const isMobileViewport = useViewportMatch('medium', '<');
+	// Update ref whenever hoveredStyle changes
+	useEffect(() => {
+		hoveredStyleRef.current = hoveredStyle;
+	}, [hoveredStyle]);
+
+	// Update hasShownPreviewRef when showPreview changes
+	useEffect(() => {
+		if (showPreview) {
+			hasShownPreviewRef.current = true;
+		}
+	}, [showPreview]);
 
 	if (!stylesToRender || stylesToRender.length === 0) {
 		return null;
 	}
-
-	const debouncedSetHoveredStyle = debounce(setHoveredStyle, 250);
 
 	const onSelectStylePreview = (style: string) => {
 		// It should not work for other states
@@ -76,28 +97,44 @@ function BlockStyles({
 			return;
 		}
 
+		setCurrentActiveStyle(style);
 		onSelect(style);
+		setIsOpen(false);
 		onHoverClassName(null);
 		setHoveredStyle(null);
-		debouncedSetHoveredStyle.cancel();
+		setHoveredStyle(null);
 	};
 
-	const styleItemHandler = (item: Object, type: string = '') => {
+	const styleItemHandler = (item: Object) => {
 		// It should not work for other states
 		if (!isNormalState()) {
 			return;
 		}
 
-		// do not show on focus if item is default
-		if (type === 'focus' && item.name === 'default') {
+		if (hoveredStyle === item || activeStyle?.name === item?.name) {
+			setHoveredStyle(null);
+			setCurrentPreviewStyle(item);
 			return;
 		}
 
-		if (hoveredStyle === item) {
-			debouncedSetHoveredStyle.cancel();
-			return;
+		// Set preview style when hovering/focusing
+		if (item) {
+			setHoveredStyle(item);
+			setCurrentPreviewStyle(item);
+			onSelect(item);
+			// Add timeout to show preview with dynamic delay
+			setTimeout(() => {
+				if (hoveredStyleRef.current?.name === item?.name) {
+					setShowPreview(true);
+				}
+			}, 1200);
+		} else {
+			// Clear preview style when mouse leaves or blur
+			setCurrentPreviewStyle(null);
+			setShowPreview(false);
+			setHoveredStyle(null);
 		}
-		debouncedSetHoveredStyle(item);
+
 		onHoverClassName(item?.name ?? null);
 	};
 
@@ -120,182 +157,204 @@ function BlockStyles({
 	};
 
 	return (
-		<Flex
-			className={componentClassNames('block-styles')}
-			direction="column"
-			gap="20px"
+		<Popover
+			title={''}
+			offset={10}
+			placement="bottom-start"
+			className="variations-picker-popover"
+			onClose={() => {
+				setIsOpen(false);
+				setCurrentPreviewStyle(null);
+			}}
+			anchor={popoverAnchor}
 		>
-			<ControlContextProvider
-				value={{
-					name: 'search-styles',
-					value: searchTerm,
-				}}
+			<Flex
+				className={componentClassNames('block-styles')}
+				direction="column"
+				gap="20px"
 			>
-				<SearchControl
-					onChange={handleSearch}
-					placeholder={__('Search styles…', 'blockera')}
-				/>
-			</ControlContextProvider>
-
-			{filteredStyles.length === 0 ? (
-				<Flex
-					alignItems="center"
-					direction="column"
-					justifyContent="space-between"
-					gap="0"
-					style={{ padding: '40px 0' }}
+				<ControlContextProvider
+					value={{
+						name: 'search-styles',
+						value: searchTerm,
+					}}
 				>
-					<Icon
-						icon="block-default"
-						library="wp"
-						style={{ fill: '#949494' }}
+					<SearchControl
+						onChange={handleSearch}
+						placeholder={__('Search styles…', 'blockera')}
 					/>
-					<p>{__('No styles found.', 'blockera')}</p>
-				</Flex>
-			) : (
-				<>
-					<Flex direction="column" gap="10px">
-						<h2
-							className={classNames(
-								'blockera-block-styles-category'
-							)}
-						>
-							{isBlockTheme()
-								? __('Theme Block Styles', 'blockera')
-								: __('Block Styles', 'blockera')}
-						</h2>
+				</ControlContextProvider>
 
-						<div
-							className={componentInnerClassNames(
-								'block-styles__variants'
-							)}
-						>
-							{filteredStyles.map((style) => {
-								const buttonText =
-									style.label ||
-									style.name ||
-									__('Default', 'blockera');
-
-								return (
-									<Button
-										className={classNames(
-											'block-editor-block-styles__item',
-											{
-												'is-active':
-													activeStyle.name ===
-													style.name,
-											}
-										)}
-										key={style.name}
-										variant="secondary"
-										label={
-											style?.isDefault &&
-											style?.name !== 'default'
-												? buttonText +
-												  ` (${__(
-														'Default',
-														'blockera'
-												  )})`
-												: ''
-										}
-										onMouseEnter={() =>
-											styleItemHandler(
-												style,
-												'mouseEnter'
-											)
-										}
-										onFocus={() =>
-											styleItemHandler(style, 'focus')
-										}
-										onMouseLeave={() =>
-											styleItemHandler(null, 'mouseLeave')
-										}
-										onBlur={() =>
-											styleItemHandler(null, 'blur')
-										}
-										onClick={() =>
-											onSelectStylePreview(style)
-										}
-										aria-current={
-											activeStyle.name === style.name
-										}
-										size="input"
-										data-test={`style-${style.name}`}
-									>
-										<Truncate
-											numberOfLines={1}
-											className="block-editor-block-styles__item-text"
-										>
-											{buttonText}
-										</Truncate>
-									</Button>
-								);
-							})}
-
-							{hoveredStyle && !isMobileViewport && (
-								<Popover
-									placement="left-start"
-									offset={40}
-									focusOnMount={false}
-								>
-									<div
-										className="block-editor-block-styles__preview-panel"
-										onMouseLeave={() =>
-											styleItemHandler(null)
-										}
-									>
-										<BlockStylesPreviewPanel
-											activeStyle={activeStyle}
-											className={previewClassName}
-											genericPreviewBlock={
-												genericPreviewBlock
-											}
-											style={hoveredStyle}
-										/>
-									</div>
-								</Popover>
-							)}
-						</div>
+				{filteredStyles.length === 0 ? (
+					<Flex
+						alignItems="center"
+						direction="column"
+						justifyContent="space-between"
+						gap="0"
+						style={{ padding: '40px 0' }}
+					>
+						<Icon
+							icon="block-default"
+							library="wp"
+							style={{ fill: '#949494' }}
+						/>
+						<p>{__('No styles found.', 'blockera')}</p>
 					</Flex>
+				) : (
+					<>
+						<Flex direction="column" gap="10px">
+							<h2
+								className={classNames(
+									'blockera-block-styles-category'
+								)}
+							>
+								{isBlockTheme()
+									? __('Theme Block Styles', 'blockera')
+									: __('Block Styles', 'blockera')}
+							</h2>
 
-					<Flex direction="column" gap="8px">
-						<h2
-							className={classNames(
-								'blockera-block-styles-category'
-							)}
-						>
-							{__('Custom Styles', 'blockera')}
+							<div
+								className={componentInnerClassNames(
+									'block-styles__variants'
+								)}
+							>
+								{filteredStyles.map((style) => {
+									const buttonText =
+										style.label ||
+										style.name ||
+										__('Default', 'blockera');
 
-							<Button
-								size="extra-small"
-								className={controlInnerClassNames('btn-add')}
-								disabled={true}
-								onClick={() => {}}
+									return (
+										<Button
+											className={classNames(
+												'block-editor-block-styles__item',
+												{
+													'is-active':
+														activeStyle.name ===
+														style.name,
+												}
+											)}
+											key={style.name}
+											variant="secondary"
+											label={
+												style?.isDefault &&
+												style?.name !== 'default'
+													? buttonText +
+													  ` (${__(
+															'Default',
+															'blockera'
+													  )})`
+													: ''
+											}
+											onMouseEnter={() =>
+												styleItemHandler(style)
+											}
+											onFocus={() =>
+												styleItemHandler(style)
+											}
+											onMouseLeave={() =>
+												styleItemHandler(null)
+											}
+											onBlur={() => {
+												setCurrentPreviewStyle(null);
+												styleItemHandler(null);
+											}}
+											onClick={() =>
+												onSelectStylePreview(style)
+											}
+											aria-current={
+												activeStyle.name === style.name
+											}
+											size="input"
+											data-test={`style-${style.name}`}
+										>
+											<Truncate
+												numberOfLines={1}
+												className="block-editor-block-styles__item-text"
+											>
+												{buttonText}
+											</Truncate>
+										</Button>
+									);
+								})}
+
+								{hoveredStyle &&
+									!isMobileViewport &&
+									showPreview && (
+										<WPPopover
+											placement="left-start"
+											offset={40}
+											focusOnMount={false}
+											animate={false}
+										>
+											<div
+												className="block-editor-block-styles__preview-panel"
+												onMouseLeave={() =>
+													styleItemHandler(null)
+												}
+											>
+												<BlockStylesPreviewPanel
+													activeStyle={activeStyle}
+													className={previewClassName}
+													genericPreviewBlock={
+														genericPreviewBlock
+													}
+													style={hoveredStyle}
+												/>
+											</div>
+										</WPPopover>
+									)}
+							</div>
+						</Flex>
+
+						<Flex direction="column" gap="8px">
+							<h2
+								className={classNames(
+									'blockera-block-styles-category'
+								)}
+							>
+								{__('Custom Styles', 'blockera')}
+
+								<Button
+									size="extra-small"
+									className={controlInnerClassNames(
+										'btn-add',
+										'blockera-control-is-not-active'
+									)}
+									onClick={() => {}}
+									style={{
+										width: '24px',
+										height: '24px',
+										padding: 0,
+										marginLeft: 'auto',
+									}}
+								>
+									<Icon icon="plus" iconSize="20" />
+								</Button>
+							</h2>
+
+							<p
 								style={{
-									width: '24px',
-									height: '24px',
-									padding: 0,
-									marginLeft: 'auto',
+									color: '#949494',
+									margin: 0,
+									fontSize: '12px',
+									fontWeight: '400',
 								}}
 							>
-								<Icon icon="plus" iconSize="20" />
-							</Button>
-						</h2>
-
-						<p
-							style={{
-								color: '#949494',
-								margin: 0,
-								fontSize: '12px',
-								fontWeight: '400',
-							}}
-						>
-							{__('Coming soon…', 'blockera')}
-						</p>
-					</Flex>
-				</>
-			)}
-		</Flex>
+								<a
+									className="blockera-component-block-styles__coming-soon"
+									href="https://community.blockera.ai/feature-request-1rsjg2ck/post/style-variations-manager---create-and-update-style-variation-from-blocks-GmNoPXkNdoWkSl4?utm_source=blockera-editor&utm_medium=block-card&utm_campaign=style-variations-manager"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{__('Coming soon…', 'blockera')}
+								</a>
+							</p>
+						</Flex>
+					</>
+				)}
+			</Flex>
+		</Popover>
 	);
 }
 
