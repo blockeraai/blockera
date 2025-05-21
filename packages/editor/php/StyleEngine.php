@@ -352,14 +352,7 @@ final class StyleEngine {
 			return [];
 		}
 
-		$flattenSupports = blockera_array_flat(array_column($this->supports, 'supports'));
-
-		if (empty($flattenSupports) || ! isset($flattenSupports[ $id ])) {
-			
-			return [];
-		}
-
-		$this->setDefinition($flattenSupports, $id);
+		$this->setDefinition($id);
 
 		if (! $this->definition) {
 			
