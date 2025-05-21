@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 - Fixed an issue where the some styles were not being correctly generated for block on frontend.
-- Fixed an issue where the features are not persistent across page reload. Thanks to  🙏🏼 Davor
+- Fixed an issue where the features are not persistent across page reload. Thanks to Davor 🙏🏼
 - Fixed an issue where block settings were incorrectly applied to pseudo-elements of block states.
 
 ### Improvements
@@ -14,6 +14,8 @@
   - The live preview of style variation for block will be shown while mouse over on them inside style variation picker 🔥
   - If mouse wait over 1 second on the button, the example preview will be shown too.
 
+### Bug Fixes
+- Paddings CSS code is persist on page after after resetting value. Thanks to Davor 🙏🏼 
 
 ## 1.5.1 (2025-05-19)
 
