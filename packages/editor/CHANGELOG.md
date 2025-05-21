@@ -4,6 +4,9 @@
 ### Bug Fixes
 - Fixed an issue where the some styles were not being correctly generated for block on frontend.
 
+### Improvements
+- Optimized the style engine speedup the process of generating css styles.
+
 ### New Features
 - **Block style variation live preview**: 
   - The live preview of style variation for block will be shown while mouse over on them inside style variation picker 🔥
