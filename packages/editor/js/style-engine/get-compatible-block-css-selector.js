@@ -107,7 +107,14 @@ export const getNormalizedSelector = (
 		currentStateHasSelectors,
 	} = options;
 	const parsedSelectors = selector.split(',');
-
+	const { getState, getInnerState: _getInnerState } =
+		select('blockera/editor') || {};
+	const {
+		settings: { hasContent },
+	} = getState(state) ||
+		_getInnerState(state) || {
+			settings: { hasContent: false },
+		};
 	let isProcessedSelector = false;
 
 	// Replace '&' with the rootSelector and trim unnecessary spaces
@@ -153,9 +160,25 @@ export const getNormalizedSelector = (
 					) {
 						// If current state has selectors, we should return the selector as is with master state.
 						if (currentStateHasSelectors) {
+							// If current state has content, we should return the selector as is with master state.
+							if (hasContent) {
+								return `${rootSelector}${getStateSymbol(
+									masterState
+								)}${masterState}${spacer}${selector}${suffixClass}`;
+							}
+
 							return `${rootSelector}${getStateSymbol(
 								masterState
 							)}${masterState}${spacer}${selector}${suffixClass}, ${rootSelector}${spacer}${selector}${suffixClass}`;
+						}
+
+						// If current state has content, we should return the selector as is with master state and state.
+						if (hasContent) {
+							return `${rootSelector}${getStateSymbol(
+								masterState
+							)}${masterState}${spacer}${selector}${suffixClass}${getStateSymbol(
+								state
+							)}${state}`;
 						}
 
 						return `${rootSelector}${getStateSymbol(
@@ -195,6 +218,12 @@ export const getNormalizedSelector = (
 						return `${rootSelector}${spacer}${selector}${suffixClass}`;
 					}
 
+					if (hasContent) {
+						return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
+							state
+						)}${state}`;
+					}
+
 					return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
 						state
 					)}${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
@@ -222,6 +251,12 @@ export const getNormalizedSelector = (
 		if (!isNormalState(state)) {
 			// Assume active master block state is not normal.
 			if (!isNormalState(masterStateType) && state === masterStateType) {
+				if (hasContent) {
+					return `${selector}${suffixClass}${getStateSymbol(
+						state
+					)}${state}`;
+				}
+
 				return `${selector}${suffixClass}${getStateSymbol(
 					state
 				)}${state}, ${selector}${suffixClass}`;

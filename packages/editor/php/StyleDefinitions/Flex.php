@@ -60,19 +60,17 @@ class Flex extends BaseStyleDefinition implements CustomStyle {
      */
     public function getCustomSettings( array $settings, string $settingName, string $cssProperty): array {
 
-        $settings = blockera_get_sanitize_block_attributes($settings);
-
-        if (isset($settings[ $settingName ]) && 'custom' === $settings[ $settingName ] && 'flex' === $cssProperty) {
+        if (isset($settings['value']) && 'custom' === $settings['value'] && 'flex' === $cssProperty) {
 
             $setting = [
                 [
                     'isVisible'  => true,
                     'type'       => $cssProperty,
-                    $cssProperty => $settings['blockeraFlexChildSizing'] ?? 'custom',
+                    $cssProperty => $settings['value'] ?? 'custom',
                     'custom'     => [
-                        'blockeraFlexChildGrow'   => $settings['blockeraFlexChildGrow'] ?? 0,
-                        'blockeraFlexChildShrink' => $settings['blockeraFlexChildShrink'] ?? 0,
-                        'blockeraFlexChildBasis'  => $settings['blockeraFlexChildBasis'] ?? 'auto',
+                        'blockeraFlexChildGrow'   => $settings['value']['blockeraFlexChildGrow'] ?? 0,
+                        'blockeraFlexChildShrink' => $settings['value']['blockeraFlexChildShrink'] ?? 0,
+                        'blockeraFlexChildBasis'  => $settings['value']['blockeraFlexChildBasis'] ?? 'auto',
                     ],
                 ],
             ];
@@ -83,7 +81,7 @@ class Flex extends BaseStyleDefinition implements CustomStyle {
                 [
                     'isVisible'  => true,
                     'type'       => $cssProperty,
-                    $cssProperty => $settings[ $settingName ] ?? [],
+                    $cssProperty => $settings['value'] ?? [],
                 ],
             ];
         }

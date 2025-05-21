@@ -187,7 +187,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					settings: { hasContent: false },
 				};
 
-			if (hasContent) {
+			if (
+				hasContent &&
+				!blockeraBlockStates.value[currentState].hasOwnProperty(
+					'content'
+				)
+			) {
 				blockeraBlockStates.value[currentState].content =
 					blockeraBlockStates.value[currentState].content || '';
 			}
@@ -234,7 +239,18 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					settings: { hasContent: false },
 				};
 
-			if (_hasContent) {
+			if (
+				(
+					(_hasContent &&
+						!((
+							(state.blockeraInnerBlocks[currentBlock] || {})
+								?.attributes || {}
+						)?.blockeraBlockStates || {})[
+							currentInnerBlockState
+						]) ||
+					{}
+				)?.hasOwnProperty('content')
+			) {
 				_blockeraBlockStates[currentInnerBlockState].content =
 					_blockeraBlockStates[currentInnerBlockState].content || '';
 			}

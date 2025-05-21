@@ -186,7 +186,7 @@ export function spacingToWPCompatibility({
 			left: '',
 		})
 	) {
-		delete newSpacing.margin;
+		newSpacing.margin = undefined;
 	}
 
 	//
@@ -215,7 +215,7 @@ export function spacingToWPCompatibility({
 			left: '',
 		})
 	) {
-		delete newSpacing.padding;
+		newSpacing.padding = undefined;
 	}
 
 	return {

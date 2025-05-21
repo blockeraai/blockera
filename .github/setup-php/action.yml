@@ -26,6 +26,7 @@ runs:
               php-version: '${{ inputs.php-version }}'
               ini-file: development
               coverage: none
+              ini-values: memory_limit=128M, max_execution_time=30, max_input_time=60, max_input_vars=1000
 
         # Ensure that Composer installs the correct versions of packages.
         - name: Override PHP version in composer.json
