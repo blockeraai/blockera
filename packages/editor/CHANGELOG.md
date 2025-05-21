@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.6.0 (2025-05-21)
+
 
 ### Bug Fixes
 - Fixed an issue where the some styles were not being correctly generated for block on frontend.
