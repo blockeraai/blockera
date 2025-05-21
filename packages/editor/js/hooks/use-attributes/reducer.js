@@ -240,10 +240,16 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				};
 
 			if (
-				_hasContent &&
-				!_blockeraBlockStates.value[
-					currentInnerBlockState
-				].hasOwnProperty('content')
+				(
+					(_hasContent &&
+						!((
+							(state.blockeraInnerBlocks[currentBlock] || {})
+								?.attributes || {}
+						)?.blockeraBlockStates || {})[
+							currentInnerBlockState
+						]) ||
+					{}
+				)?.hasOwnProperty('content')
 			) {
 				_blockeraBlockStates[currentInnerBlockState].content =
 					_blockeraBlockStates[currentInnerBlockState].content || '';
