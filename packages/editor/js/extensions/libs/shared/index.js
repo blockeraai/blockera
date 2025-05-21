@@ -163,7 +163,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			return cache;
 		}, [cacheKey]);
 		const supports = useMemo(() => {
-			if (!cacheData || !isEquals(cacheData, extensions)) {
+			if (!cacheData) {
 				setItem(cacheKey, extensions);
 				return extensions;
 			}
