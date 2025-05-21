@@ -113,14 +113,14 @@ export const memoizedRootBreakpoints: (
 					};
 
 				let content = '';
+				const stateItem = (breakpoint?.attributes?.blockeraInnerBlocks[
+					currentBlock
+				]?.attributes?.blockeraBlockStates || {})[
+					currentInnerBlockState
+				];
 
-				if (hasContent) {
-					content =
-						(breakpoint?.attributes?.blockeraInnerBlocks[
-							currentBlock
-						]?.attributes?.blockeraBlockStates || {})[
-							currentInnerBlockState
-						]?.content || '';
+				if (hasContent && !stateItem?.hasOwnProperty('content')) {
+					content = stateItem?.content || '';
 				}
 
 				return mergeObject(

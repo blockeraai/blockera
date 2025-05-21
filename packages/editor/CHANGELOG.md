@@ -3,7 +3,8 @@
 
 ### Bug Fixes
 - Fixed an issue where the some styles were not being correctly generated for block on frontend.
-- Fixed an issue where the features are not persistent across page reload. Thanks to  🙏🏼
+- Fixed an issue where the features are not persistent across page reload. Thanks to  🙏🏼 Davor
+- Fixed an issue where block settings were incorrectly applied to pseudo-elements of block states.
 
 ### Improvements
 - Optimized the style engine speedup the process of generating css styles.
