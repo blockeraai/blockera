@@ -3,6 +3,8 @@
 ### Improvements
 - Improve ".block" support in the custom css feature.
 
+### Bug Fixes
+- Font weight feature not working properly on breakpoints.
 
 ## 1.6.0 (2025-05-21)
 
