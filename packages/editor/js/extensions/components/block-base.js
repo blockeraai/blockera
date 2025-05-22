@@ -356,7 +356,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		currentAttributes,
 		defaultAttributes,
 		customCss: attributes?.blockeraCustomCSS?.value?.replace(
-			/(.|#)block/gi,
+			/(\.|#)block/gi,
 			`#block-${clientId}`
 		),
 		activeDeviceType: getDeviceType(),
