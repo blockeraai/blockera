@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Improve ".block" support in the custom css feature.
+
+
 ## 1.6.0 (2025-05-21)
 
 
