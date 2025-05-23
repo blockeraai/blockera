@@ -32,7 +32,6 @@ export function PaddingBottom({
 	attribute,
 	blockName,
 	defaultValue,
-	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -136,6 +135,16 @@ export function PaddingBottom({
 			label: <></>,
 			popover: <></>,
 		};
+	}
+
+	function resetToDefault() {
+		setValue({
+			...value,
+			padding: {
+				...value.padding,
+				bottom: '',
+			},
+		});
 	}
 
 	return {
@@ -255,15 +264,7 @@ export function PaddingBottom({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.bottom}
-						resetToDefault={() => {
-							setValue({
-								...value,
-								padding: {
-									...value.padding,
-									bottom: '',
-								},
-							});
-						}}
+						resetToDefault={resetToDefault}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.bottom')}
 						icon={<Icon icon="padding-bottom" iconSize="18" />}

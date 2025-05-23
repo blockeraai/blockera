@@ -32,7 +32,6 @@ export function MarginTop({
 	attribute,
 	blockName,
 	defaultValue,
-	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -137,6 +136,16 @@ export function MarginTop({
 			label: <></>,
 			popover: <></>,
 		};
+	}
+
+	function resetToDefault() {
+		setValue({
+			...value,
+			margin: {
+				...value.margin,
+				top: '',
+			},
+		});
 	}
 
 	return {
@@ -256,15 +265,7 @@ export function MarginTop({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.top}
-						resetToDefault={() => {
-							setValue({
-								...value,
-								margin: {
-									...value.margin,
-									top: '',
-								},
-							});
-						}}
+						resetToDefault={resetToDefault}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						icon={<Icon icon="margin-top" iconSize="18" />}

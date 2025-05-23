@@ -32,7 +32,6 @@ export function PaddingHorizontal({
 	attribute,
 	blockName,
 	defaultValue,
-	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -144,6 +143,17 @@ export function PaddingHorizontal({
 			label: <></>,
 			popover: <></>,
 		};
+	}
+
+	function resetToDefault() {
+		setValue({
+			...value,
+			padding: {
+				...value.padding,
+				left: '',
+				right: '',
+			},
+		});
 	}
 
 	return {
@@ -298,16 +308,7 @@ export function PaddingHorizontal({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.left || value?.padding?.right}
-						resetToDefault={() => {
-							setValue({
-								...value,
-								padding: {
-									...value.padding,
-									left: '',
-									right: '',
-								},
-							});
-						}}
+						resetToDefault={resetToDefault}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
 						icon={<Icon icon="padding-horizontal" iconSize="18" />}

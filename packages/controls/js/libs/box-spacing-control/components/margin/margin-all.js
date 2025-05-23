@@ -32,7 +32,6 @@ export function MarginAll({
 	attribute,
 	blockName,
 	defaultValue,
-	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -118,6 +117,18 @@ export function MarginAll({
 			label: <></>,
 			popover: <></>,
 		};
+	}
+
+	function resetToDefault() {
+		setValue({
+			...value,
+			margin: {
+				top: '',
+				right: '',
+				bottom: '',
+				left: '',
+			},
+		});
 	}
 
 	return {
@@ -343,17 +354,7 @@ export function MarginAll({
 							value?.margin?.bottom ||
 							value?.margin?.left
 						}
-						resetToDefault={() => {
-							setValue({
-								...value,
-								margin: {
-									top: '',
-									right: '',
-									bottom: '',
-									left: '',
-								},
-							});
-						}}
+						resetToDefault={resetToDefault}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						type="margin"

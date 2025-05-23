@@ -32,7 +32,6 @@ export function MarginVertical({
 	attribute,
 	blockName,
 	defaultValue,
-	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -143,6 +142,17 @@ export function MarginVertical({
 			label: <></>,
 			popover: <></>,
 		};
+	}
+
+	function resetToDefault() {
+		setValue({
+			...value,
+			margin: {
+				...value.margin,
+				top: '',
+				bottom: '',
+			},
+		});
 	}
 
 	return {
@@ -297,16 +307,7 @@ export function MarginVertical({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.top || value?.margin?.bottom}
-						resetToDefault={() => {
-							setValue({
-								...value,
-								margin: {
-									...value.margin,
-									top: '',
-									bottom: '',
-								},
-							});
-						}}
+						resetToDefault={resetToDefault}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.top')}
 						icon={<Icon icon="margin-vertical" iconSize="18" />}

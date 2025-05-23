@@ -24,8 +24,8 @@ export function Padding({
 	value,
 	attribute,
 	blockName,
+	setValue,
 	defaultValue,
-	resetToDefault,
 	getControlPath,
 	//
 	setFocusSide,
@@ -35,6 +35,18 @@ export function Padding({
 	paddingLock,
 	setPaddingLock,
 }: SideProps): MixedElement {
+	function resetToDefault() {
+		setValue({
+			...value,
+			padding: {
+				top: '',
+				right: '',
+				bottom: '',
+				left: '',
+			},
+		});
+	}
+
 	return (
 		<>
 			{paddingDisable === 'all' ? (
