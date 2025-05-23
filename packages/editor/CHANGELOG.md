@@ -1,11 +1,18 @@
 ## Unreleased
 
+### New Features
+- Reset icon for spacing sides (top, right, bottom and left).
+
 ### Improvements
 - Improve ".block" support in the custom css feature.
 
 ### Bug Fixes
 - Font weight feature not working properly on breakpoints.
 - Text orientation feature not working properly on breakpoints.
+
+### Automated Tests
+- Added E2E tests to check spacing sides reset button.
+
 
 ## 1.6.0 (2025-05-21)
 
