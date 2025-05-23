@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 - Font weight feature not working properly on breakpoints.
+- Text orientation feature not working properly on breakpoints.
 
 ## 1.6.0 (2025-05-21)
 
