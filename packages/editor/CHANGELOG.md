@@ -1,7 +1,8 @@
 ## Unreleased
 
 ### New Features
-- Reset icon for spacing sides (top, right, bottom and left).
+- Reset icon for spacing feature sides (top, right, bottom and left).
+- Reset icon for position feature sides (top, right, bottom and left).
 
 ### Improvements
 - Improve ".block" support in the custom css feature.
@@ -12,6 +13,7 @@
 
 ### Automated Tests
 - Added E2E tests to check spacing sides reset button.
+- Added E2E tests to check position sides reset button.
 
 
 ## 1.6.0 (2025-05-21)
