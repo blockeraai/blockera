@@ -13,7 +13,7 @@ class TextOrientation extends BaseStyleDefinition {
 
             return $declaration;
 		}
-		
+
 		switch ($setting[ $cssProperty ]) {
 			case 'style-1':
 				$this->setDeclaration('writing-mode', 'vertical-lr');
@@ -37,8 +37,6 @@ class TextOrientation extends BaseStyleDefinition {
 				$this->setDeclaration('text-orientation', 'mixed');
 			    break;
 		}
-
-		$this->setDeclaration( $cssProperty, blockera_get_value_addon_real_value($setting[ $cssProperty ]) );
 
 		$this->setCss($this->declarations);
 
