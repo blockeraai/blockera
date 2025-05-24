@@ -38,6 +38,7 @@ export function SideItem({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -182,16 +183,6 @@ export function SideItem({
 		return '';
 	}
 
-	function resetToDefault() {
-		setValue({
-			...value,
-			position: {
-				...value.position,
-				[side]: '',
-			},
-		});
-	}
-
 	return {
 		shape: (
 			<SideShape
@@ -322,7 +313,15 @@ export function SideItem({
 
 				<SidePopover
 					hasValue={value.position[side]}
-					removeValue={resetToDefault}
+					removeValue={() => {
+						setValue({
+							...value,
+							position: {
+								...value.position,
+								[(side: string)]: '',
+							},
+						});
+					}}
 					id={id}
 					getId={getId}
 					sideId={side}
