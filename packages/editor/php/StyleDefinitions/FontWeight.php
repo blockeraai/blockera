@@ -14,11 +14,11 @@ class FontWeight extends BaseStyleDefinition {
             return $declaration;
 		}
 
-		if (! empty($propertyValue['weight'])) {
+		if (! empty($setting[ $cssProperty ]['weight'])) {
 			$this->setDeclaration($cssProperty, $setting[ $cssProperty ]['weight']);
 		}
 
-		if (! empty($propertyValue['style'])) {
+		if (! empty($setting[ $cssProperty ]['style'])) {
 			$this->setDeclaration('font-style', $setting[ $cssProperty ]['style']);
 		}
 
