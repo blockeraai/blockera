@@ -13,4 +13,15 @@ class Display extends BaseStyleDefinition implements StandardDefinition {
 
         return 'display';
     }
+
+	/**
+	 * Validate the Display style generation process.
+	 *
+	 * @param array $setting
+	 * @return boolean true on success, false on otherwise!
+	 */
+	protected function validate( array $setting): bool {
+		
+		return  isset($setting['display']) && 'default' !== $setting['display'];
+	}
 }
