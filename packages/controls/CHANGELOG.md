@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.2 (2025-05-24)
+
 ### Bug Fixes
 - Fixed an issue where the reset value button was not working for some controls.
 

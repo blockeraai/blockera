@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.3 (2025-05-24)
+
 ### Bug Fixes
 - Fixed a bug where the style engine failed to generate when block content was created through shortcodes in the front end.
 
