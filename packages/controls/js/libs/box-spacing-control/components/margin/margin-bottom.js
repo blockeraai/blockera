@@ -32,6 +32,7 @@ export function MarginBottom({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -134,16 +135,6 @@ export function MarginBottom({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			margin: {
-				...value.margin,
-				bottom: '',
-			},
-		});
 	}
 
 	return {
@@ -263,7 +254,15 @@ export function MarginBottom({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.bottom}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									bottom: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.bottom')}
 						icon={<Icon icon="margin-bottom" iconSize="18" />}

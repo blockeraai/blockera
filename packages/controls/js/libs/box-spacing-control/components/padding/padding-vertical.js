@@ -32,6 +32,7 @@ export function PaddingVertical({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -143,17 +144,6 @@ export function PaddingVertical({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			padding: {
-				...value.padding,
-				top: '',
-				bottom: '',
-			},
-		});
 	}
 
 	return {
@@ -308,7 +298,16 @@ export function PaddingVertical({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.top || value?.padding?.bottom}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									top: '',
+									bottom: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						icon={<Icon icon="padding-vertical" iconSize="18" />}

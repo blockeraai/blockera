@@ -32,6 +32,7 @@ export function MarginHorizontal({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -142,17 +143,6 @@ export function MarginHorizontal({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			margin: {
-				...value.margin,
-				left: '',
-				right: '',
-			},
-		});
 	}
 
 	return {
@@ -314,7 +304,16 @@ export function MarginHorizontal({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.left || value?.margin?.right}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									left: '',
+									right: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
 						icon={<Icon icon="margin-horizontal" iconSize="18" />}

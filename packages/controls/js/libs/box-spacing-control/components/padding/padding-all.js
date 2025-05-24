@@ -32,6 +32,7 @@ export function PaddingAll({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -118,18 +119,6 @@ export function PaddingAll({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			padding: {
-				top: '',
-				right: '',
-				bottom: '',
-				left: '',
-			},
-		});
 	}
 
 	return {
@@ -355,7 +344,17 @@ export function PaddingAll({
 							value?.padding?.bottom ||
 							value?.padding?.left
 						}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									top: '',
+									right: '',
+									bottom: '',
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						icon={<Icon icon="padding-all" iconSize="18" />}

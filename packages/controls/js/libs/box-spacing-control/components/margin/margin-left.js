@@ -32,6 +32,7 @@ export function MarginLeft({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -134,16 +135,6 @@ export function MarginLeft({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			margin: {
-				...value.margin,
-				left: '',
-			},
-		});
 	}
 
 	return {
@@ -263,7 +254,15 @@ export function MarginLeft({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.margin?.left}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								margin: {
+									...value.margin,
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'margin.left')}
 						icon={<Icon icon="margin-left" iconSize="18" />}

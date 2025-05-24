@@ -32,6 +32,7 @@ export function PaddingTop({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -135,16 +136,6 @@ export function PaddingTop({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			padding: {
-				...value.padding,
-				top: '',
-			},
-		});
 	}
 
 	return {
@@ -264,7 +255,15 @@ export function PaddingTop({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.top}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									top: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.top')}
 						icon={<Icon icon="padding-top" iconSize="18" />}

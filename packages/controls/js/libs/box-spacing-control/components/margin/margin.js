@@ -23,9 +23,9 @@ export function Margin({
 	//
 	value,
 	attribute,
-	setValue,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	setFocusSide,
@@ -35,17 +35,6 @@ export function Margin({
 	marginLock,
 	setMarginLock,
 }: SideProps): MixedElement {
-	function resetToDefault() {
-		setValue({
-			...value,
-			margin: {
-				top: '',
-				right: '',
-				bottom: '',
-				left: '',
-			},
-		});
-	}
 	return (
 		<>
 			{marginDisable === 'all' ? (

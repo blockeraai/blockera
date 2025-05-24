@@ -32,6 +32,7 @@ export function PaddingLeft({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -135,16 +136,6 @@ export function PaddingLeft({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			padding: {
-				...value.padding,
-				left: '',
-			},
-		});
 	}
 
 	return {
@@ -264,7 +255,15 @@ export function PaddingLeft({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.left}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									left: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.left')}
 						icon={<Icon icon="padding-left" iconSize="18" />}

@@ -32,6 +32,7 @@ export function PaddingRight({
 	attribute,
 	blockName,
 	defaultValue,
+	resetToDefault,
 	getControlPath,
 	//
 	focusSide,
@@ -135,16 +136,6 @@ export function PaddingRight({
 			label: <></>,
 			popover: <></>,
 		};
-	}
-
-	function resetToDefault() {
-		setValue({
-			...value,
-			padding: {
-				...value.padding,
-				right: '',
-			},
-		});
 	}
 
 	return {
@@ -264,7 +255,15 @@ export function PaddingRight({
 				{openPopover === sideId && (
 					<SidePopover
 						hasValue={value?.padding?.right}
-						resetToDefault={resetToDefault}
+						resetToDefault={() => {
+							setValue({
+								...value,
+								padding: {
+									...value.padding,
+									right: '',
+								},
+							});
+						}}
 						defaultValue={defaultValue}
 						id={getId(id, 'padding.right')}
 						icon={<Icon icon="padding-right" iconSize="18" />}
