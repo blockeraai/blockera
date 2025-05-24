@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.7.0 (2025-05-24)
+
 ### New Features
 - Reset icon for spacing feature sides (top, right, bottom and left).
 - Reset icon for position feature sides (top, right, bottom and left).

@@ -1,22 +1,24 @@
 == Changelog ==
 
-### Version 1.11.0 - 2025-05-21
+### Version 1.11.1 - 2025-05-24
 
 ### New Features
-- **Block style variation live preview**: 
-  - The live preview of style variation for block will be shown while mouse over on them inside style variation picker 🔥
-  - If mouse wait over 1 second on the button, the example preview will be shown too.
+- Reset icon for spacing feature sides (top, right, bottom and left).
+- Reset icon for position feature sides (top, right, bottom and left).
 
 ### Improvements
-- Optimized the style engine speedup the process of generating css styles.
+- Improve ".block" support in the custom css feature.
 
 ### Bug Fixes
-- Fixed an issue where the some styles were not being correctly generated for block on frontend.
-- Fixed an issue where the features are not persistent across page reload. Thanks to Davor 🙏🏼
-- Fixed an issue where block settings were incorrectly applied to pseudo-elements of block states.
-- Fixed an issue where CSS selectors were incorrectly generated for pseudo-elements with content property in block states.
-- Fixed an issue where pseudo-elements in inner blocks could not be edited through block settings.
-- Paddings CSS code is persist on page after after resetting value. Thanks to Davor 🙏🏼
+- Fixed an issue where the reset value button was not working for some controls.
+- Font weight feature not working properly on breakpoints.
+- Text orientation feature not working properly on breakpoints.
+- Fixed an issue where the inline styles were not being correctly merged with the generated CSS rules.
+- Fixed a bug where the style engine failed to generate when block content was created through shortcodes in the front end.
+
+### Automated Tests
+- Added E2E tests to check spacing sides reset button.
+- Added E2E tests to check position sides reset button.
 
 ### More
 
