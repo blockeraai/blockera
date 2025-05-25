@@ -13,12 +13,12 @@ export const config: Object = {
 				'Restrict block visibility controls to selected user roles.',
 				'blockera'
 			),
-			isActiveOnFree: false,
+			onNative: true,
 			config: {
 				userRole: {
 					label: '',
 					status: true,
-					isActiveOnFree: false,
+					onNative: true,
 					isParentActive: false,
 					parent: 'Restrict Block Visibility',
 				},
@@ -30,12 +30,12 @@ export const config: Object = {
 				'Restrict block visibility controls to selected post types.',
 				'blockera'
 			),
-			isActiveOnFree: false,
+			onNative: true,
 			config: {
 				postType: {
 					label: '',
 					status: true,
-					isActiveOnFree: false,
+					onNative: true,
 					isParentActive: false,
 					parent: 'Restrict Block Visibility By Post Type',
 				},
