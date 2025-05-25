@@ -24,5 +24,22 @@ export const config: Object = {
 				},
 			},
 		},
+		restrictBlockVisibilityByPostType: {
+			status: true,
+			label: __(
+				'Restrict block visibility controls to selected post types.',
+				'blockera'
+			),
+			isActiveOnFree: false,
+			config: {
+				postType: {
+					label: '',
+					status: true,
+					isActiveOnFree: false,
+					isParentActive: false,
+					parent: 'Restrict Block Visibility By Post Type',
+				},
+			},
+		},
 	},
 };

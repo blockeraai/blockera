@@ -20,6 +20,8 @@ $std = [
         'disableProHints'                => false,
         'disableRestrictBlockVisibility' => false,
         'allowedUserRoles'               => blockera_normalized_user_roles(),
+		'allowedPostTypes' => blockera_get_post_types(),
+		'disableRestrictBlockVisibilityByPostType' => false,
     ],
 	'earlyAccessLab' => json_decode($json, true)['earlyAccessLab'] ?? [],
 ];
