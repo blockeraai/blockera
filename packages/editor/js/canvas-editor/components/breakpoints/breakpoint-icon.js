@@ -20,7 +20,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import type { TBreakpoint } from '../../../extensions/libs/block-card/block-states/types';
+import type { TBreakpoint } from '../../../extensions/libs/block-states/types';
 import {
 	isBaseBreakpoint,
 	getBreakpointLongDescription,
@@ -46,8 +46,8 @@ export function BreakpointIcon({
 
 	return (
 		<Tooltip
-			width="250px"
-			style={{ '--tooltip-padding': '16px' }}
+			width="220px"
+			style={{ padding: '12px' }}
 			text={
 				<>
 					<h5>{breakpoints[name].label}</h5>

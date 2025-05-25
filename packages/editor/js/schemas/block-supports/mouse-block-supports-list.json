@@ -4,24 +4,18 @@
 	"supports": {
 		"blockeraCursor": {
 			"status": true,
-			"id": "blockeraCursor",
-			"definition": "Mouse",
 			"css-property": "cursor",
 			"fallback": ["cursor"],
 			"description": "Support for \"blockeraCursor\" value."
 		},
 		"blockeraUserSelect": {
 			"status": true,
-			"id": "blockeraUserSelect",
-			"definition": "Mouse",
 			"css-property": "user-select",
 			"fallback": ["user-select"],
 			"description": "Support for \"blockeraUserSelect\" value."
 		},
 		"blockeraPointerEvents": {
 			"status": true,
-			"id": "blockeraPointerEvents",
-			"definition": "Mouse",
 			"css-property": "pointer-events",
 			"fallback": ["pointer-events"],
 			"description": "Support for \"blockeraPointerEvents\" value."

@@ -14,7 +14,6 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -68,12 +67,7 @@ export const TransformSettings = ({
 }): MixedElement => {
 	return (
 		<Popover
-			title={
-				<>
-					<Icon icon="three-d" iconSize="20" />
-					{__('Transform Settings', 'blockera')}
-				</>
-			}
+			title={__('Transform Settings', 'blockera')}
 			offset={35}
 			placement="left-start"
 			className={controlInnerClassNames('transform-settings-popover')}
@@ -146,12 +140,10 @@ export const TransformSettings = ({
 							{
 								label: __('Visible', 'blockera'),
 								value: 'visible',
-								icon: <Icon icon="eye-show" iconSize="20" />,
 							},
 							{
 								label: __('Hidden', 'blockera'),
 								value: 'hidden',
-								icon: <Icon icon="eye-hide" iconSize="20" />,
 							},
 						]}
 						defaultValue={

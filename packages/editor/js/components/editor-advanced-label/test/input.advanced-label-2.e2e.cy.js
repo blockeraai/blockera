@@ -48,7 +48,7 @@ describe('Input Control label testing (Width)', () => {
 			/**
 			 * Pseudo State (Hover/Tablet)
 			 */
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -64,7 +64,7 @@ describe('Input Control label testing (Width)', () => {
 			/**
 			 * Hover
 			 */
-			setBlockState('Hover');
+			addBlockState('hover');
 			// Assert label before set value
 			cy.checkLabelClassName(
 				'Size',
@@ -124,7 +124,7 @@ describe('Input Control label testing (Width)', () => {
 			/**
 			 * Hover
 			 */
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			// Assert label before set value
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -198,7 +198,7 @@ describe('Input Control label testing (Width)', () => {
 			/**
 			 * Hover
 			 */
-			setBlockState('Hover');
+			addBlockState('hover');
 			// Assert label before set value
 			cy.checkLabelClassName(
 				'Size',
@@ -273,7 +273,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Navigate between states and devices:
 			// Hover/Desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			// Assert label
 			cy.checkLabelClassName('Size', 'Width', 'changed-in-normal-state');
@@ -336,7 +336,7 @@ describe('Input Control label testing (Width)', () => {
 		});
 
 		it('set value in hover/desktop and navigate between states', () => {
-			setBlockState('Hover');
+			addBlockState('hover');
 
 			// Set value
 			cy.setInputFieldValue('Width', 'Size', 20);
@@ -427,7 +427,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.setInputFieldValue('Width', 'Size', 50);
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.setInputFieldValue('Width', 'Size', 40);
 
 			setBlockState('Hover');
@@ -474,7 +474,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.setInputFieldValue('Width', 'Size', 50);
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.setInputFieldValue('Width', 'Size', 40);
 
 			setBlockState('Hover');
@@ -518,7 +518,7 @@ describe('Input Control label testing (Width)', () => {
 				cy.setInputFieldValue('Width', 'Size', 50);
 
 				// Set value in hover/desktop
-				setBlockState('Hover');
+				addBlockState('hover');
 				cy.setInputFieldValue('Width', 'Size', 40);
 
 				// Set value in hover/tablet
@@ -660,7 +660,7 @@ describe('Input Control label testing (Width)', () => {
 			cy.setInputFieldValue('Width', 'Size', 50);
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.setInputFieldValue('Width', 'Size', 40);
 
 			// Set value in hover/tablet
@@ -775,7 +775,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Navigate between states and devices :
 			// Hover/Desktop
-			setBlockState('Hover');
+			addBlockState('Hover');
 
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '25');
@@ -851,7 +851,7 @@ describe('Input Control label testing (Width)', () => {
 
 			// Navigate between states and devices :
 			// Hover/Tablet
-			setBlockState('Hover');
+			addBlockState('Hover');
 
 			// Assert control
 			cy.checkInputFieldValue('Width', 'Size', '');

@@ -4,7 +4,6 @@ export { useAttributes } from './use-attributes';
 export { useIconEffect } from './use-icon-effect';
 export { useTraceUpdate } from './use-trace-update';
 export { useBlocksStore } from './use-blocks-store';
-export { useEditorStore } from './use-editor-store';
 export { useStoreSelectors } from './use-store-selectors';
 export { useExtensionsStore } from './use-extensions-store';
 export { useBlockExtensions } from './use-block-extensions';

@@ -4,8 +4,6 @@
 	"supports": {
 		"blockeraWidth": {
 			"status": true,
-			"id": "blockeraWidth",
-			"definition": "Width",
 			"fallback": ["dimensions.width", "dimensions", "width"],
 			"style-engine-config": {
 				"width": "width",
@@ -16,16 +14,12 @@
 		},
 		"blockeraHeight": {
 			"status": true,
-			"id": "blockeraHeight",
-			"definition": "Height",
 			"fallback": ["dimensions.height", "dimensions", "height", "width"],
 			"css-property": "height",
 			"description": "Support for \"blockeraHeight\" size, this is mirror for WordPress block core \"height\" support."
 		},
 		"blockeraMinWidth": {
 			"status": true,
-			"id": "blockeraMinWidth",
-			"definition": "MinWidth",
 			"css-property": "min-width",
 			"fallback": [
 				"dimensions.minWidth",
@@ -37,8 +31,6 @@
 		},
 		"blockeraMaxWidth": {
 			"status": true,
-			"id": "blockeraMaxWidth",
-			"definition": "MaxWidth",
 			"css-property": "max-width",
 			"fallback": [
 				"dimensions.maxWidth",
@@ -50,8 +42,6 @@
 		},
 		"blockeraMinHeight": {
 			"status": true,
-			"id": "blockeraMinHeight",
-			"definition": "MinHeight",
 			"css-property": "min-height",
 			"fallback": [
 				"dimensions.minHeight",
@@ -64,8 +54,6 @@
 		},
 		"blockeraMaxHeight": {
 			"status": true,
-			"id": "blockeraMaxHeight",
-			"definition": "MaxHeight",
 			"css-property": "max-height",
 			"fallback": [
 				"dimensions.maxHeight",
@@ -78,40 +66,30 @@
 		},
 		"blockeraRatio": {
 			"status": true,
-			"id": "blockeraRatio",
-			"definition": "AspectRatio",
 			"css-property": "aspect-ratio",
 			"fallback": ["dimensions.aspectRatio", "dimensions"],
 			"description": "Support for \"blockeraRatio\" value, this is mirror for WordPress block core \"dimensions.aspectRatio\" support."
 		},
 		"blockeraOverflow": {
 			"status": true,
-			"id": "blockeraOverflow",
-			"definition": "Overflow",
 			"css-property": "overflow",
 			"fallback": ["overflow", "dimensions"],
 			"description": "Support for \"blockeraOverflow\" value, this is mirror for WordPress block core \"overflow\" support."
 		},
 		"blockeraFit": {
 			"status": true,
-			"id": "blockeraFit",
-			"definition": "ObjectFit",
 			"css-property": "object-fit",
 			"fallback": ["object-fit", "dimensions"],
 			"description": "Support for \"blockeraFit\" value, this is mirror for WordPress block core \"object-fit\" support."
 		},
 		"blockeraFitPosition": {
 			"status": true,
-			"id": "blockeraFitPosition",
-			"definition": "ObjectPosition",
 			"css-property": "object-position",
 			"fallback": ["object-position", "dimensions"],
 			"description": "Support for \"blockeraFitPosition\" value, this is mirror for WordPress block core \"object-position\" support."
 		},
 		"blockeraBoxSizing": {
 			"status": true,
-			"id": "blockeraBoxSizing",
-			"definition": "BoxSizing",
 			"css-property": "box-sizing",
 			"fallback": ["box-sizing", "dimensions"],
 			"description": "Support for \"blockeraBoxSizing\" value."

@@ -52,7 +52,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// Set value.
 			cy.setColorControlValue('Text Color', 'aaa');
 			// set "Hover" state on paragraph.
-			setBlockState('Hover');
+			addBlockState('hover');
 			// Set value.
 			cy.setColorControlValue('Text Color', 'bbbbbb');
 
@@ -62,7 +62,7 @@ describe('useInnerBlocksInfo custom hook testing ...', () => {
 			// ========== //
 
 			// set "Hover" state on paragraph.
-			setBlockState('Hover');
+			addBlockState('hover');
 			// Set "Link" Inner Block as current block.
 			setInnerBlock('elements/link');
 			// Set value.

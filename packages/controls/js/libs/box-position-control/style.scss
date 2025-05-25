@@ -40,7 +40,6 @@
 		stroke: var(--blockera-controls-border-color-soft);
 		user-select: none;
 		stroke-linejoin: round;
-		outline: none;
 
 		&.selected-side,
 		&:hover {
@@ -272,14 +271,13 @@
 }
 
 .blockera-control-side-popover-action-buttons {
-	--blockera-controls-input-height: 26px;
 
 	.blockera-component-button {
 		width: 100%;
 	}
 
 	.blockera-component-button.auto-btn {
-		height: calc(var(--blockera-controls-input-height) * 2 + 8px);
+		height: 68px;
 	}
 }
 

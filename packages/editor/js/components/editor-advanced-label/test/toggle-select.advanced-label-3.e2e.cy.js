@@ -55,7 +55,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		/**
 		 * Pseudo State (Hover/Tablet)
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label
 		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-normal-state');
@@ -75,7 +75,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Size',
@@ -146,7 +146,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName('Size', 'Overflow', 'changed-in-normal-state');
@@ -235,7 +235,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Size',
@@ -315,7 +315,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			cy.getByAriaLabel('Visible Overflow').click();
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.getByAriaLabel('Hidden Overflow').click();
 
 			// Set value in hover/tablet
@@ -664,7 +664,7 @@ describe('Toggle Select Control label testing (Overflow)', () => {
 			cy.getByAriaLabel('Visible Overflow').click();
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			cy.getByAriaLabel('Hidden Overflow').click();
 
 			// Set value in hover/tablet

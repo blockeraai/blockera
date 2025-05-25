@@ -1,7 +1,7 @@
 .blockera-control-group {
 	z-index: 999999;
 	border: 1px solid var(--blockera-controls-border-color);
-	border-radius: var(--blockera-controls-border-radius);
+	border-radius: 2px;
 	transition: box-shadow 0.1s linear;
 	background: var(--blockera-controls-background-color);
 
@@ -69,16 +69,5 @@
 	&.is-open {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-	}
-}
-
-.blockera-control-group.mode-nothing {
-
-	&.is-selected-item {
-		border-color: var(--blockera-controls-primary-color);
-
-		.blockera-control-header-label {
-			color: var(--blockera-controls-primary-color);
-		}
 	}
 }

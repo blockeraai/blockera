@@ -43,7 +43,6 @@ export const BackgroundStyles = ({
 		state,
 		clientId,
 		blockName,
-		currentBlock,
 		attributes: currentBlockAttributes,
 	};
 	const sharedParams = {

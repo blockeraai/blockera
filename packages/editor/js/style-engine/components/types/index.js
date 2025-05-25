@@ -6,8 +6,8 @@
 import type {
 	TBreakpoint,
 	TStates,
-} from '../../../extensions/libs/block-card/block-states/types';
-import type { InnerBlockType } from '../../../extensions/libs/block-card/inner-blocks/types';
+} from '../../../extensions/libs/block-states/types';
+import type { InnerBlockType } from '../../../extensions/libs/inner-blocks/types';
 
 export type MediaQueryProps = {
 	breakpoint: TBreakpoint,
@@ -21,7 +21,6 @@ export type BlockStyleProps = {
 	blockName: string,
 	selectors: Object,
 	attributes: Object,
-	additional: Object,
 	inlineStyles: Object,
 	defaultAttributes: Object,
 	currentAttributes: Object,
@@ -31,7 +30,6 @@ export type BlockStyleProps = {
 export type StateStyleProps = {
 	...BlockStyleProps,
 	config: Object,
-	additional: Object,
 	selectors?: Object,
 	currentState: TStates,
 	styleEngineConfig?: Object,

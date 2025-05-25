@@ -508,24 +508,12 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 				path = args?.path.replace(args?.attribute + '.', '');
 			}
 
-			let preparedValue = prepare(path, dataset);
-			const preparedDefaultValue = prepare(path, defaultValue);
-
-			if (
-				[null, undefined].includes(preparedValue) ||
-				'undefined' === typeof preparedValue
-			) {
-				preparedValue =
-					[null, undefined].includes(preparedDefaultValue) ||
-					'undefined' === typeof preparedDefaultValue
-						? defaultValue
-						: preparedDefaultValue;
-			}
+			const preparedValue = prepare(path, dataset);
 
 			return reset(
 				calculatedValueBasedOnSavedValue(
 					['RESET_TO_DEFAULT', 'RESET_ALL'].includes(args?.action)
-						? preparedValue
+						? preparedValue || defaultValue
 						: preparedValue,
 					args
 				)

@@ -1,9 +1,6 @@
 import { appendBlocks } from '@blockera/dev-cypress/js/helpers/editor';
 import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
-import {
-	addBlockState,
-	setBlockState,
-} from '@blockera/dev-cypress/js/helpers/block-states';
+import { addBlockState } from '@blockera/dev-cypress/js/helpers/block-states';
 
 describe('useBlockSideEffects Testing ...', () => {
 	beforeEach(() => {
@@ -46,7 +43,7 @@ describe('useBlockSideEffects Testing ...', () => {
 
 		cy.getBlock('core/social-links').click();
 
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		cy.getByDataTest('settings-tab').click({ force: true });
 
@@ -66,7 +63,7 @@ describe('useBlockSideEffects Testing ...', () => {
 
 		cy.getBlock('core/social-link').click();
 
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		cy.getByDataTest('settings-tab').click({ force: true });
 

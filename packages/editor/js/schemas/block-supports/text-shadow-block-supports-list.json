@@ -4,8 +4,6 @@
 	"supports": {
 		"blockeraTextShadow": {
 			"status": true,
-			"id": "blockeraTextShadow",
-			"definition": "TextShadow",
 			"css-property": "text-shadow",
 			"fallback": ["text-shadow"],
 			"description": "Support for \"blockeraTextShadow\" value."

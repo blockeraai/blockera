@@ -29,8 +29,8 @@ import {
 	GradientBarControl,
 	AnglePickerControl,
 	ToggleSelectControl,
+	AlignmentMatrixControl,
 	NoticeControl,
-	PositionButtonControl,
 } from '../../index';
 import RepeaterControl from '../../repeater-control';
 import { useControlContext } from '../../../context';
@@ -140,7 +140,21 @@ const Fields: FieldItem = memo<FieldItem>(
 							singularId={'image'}
 							id={getControlId(itemId, 'image')}
 							defaultValue={defaultRepeaterItemValue.image}
-							label={false}
+							label={__('Image', 'blockera')}
+							labelPopoverTitle={__(
+								'Background Image',
+								'blockera'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'It sets an image as the background of block, offering a significant enhancement in visual design and allowing for creative expression in web layouts.',
+											'blockera'
+										)}
+									</p>
+								</>
+							}
 							field="empty"
 							columns="columns-1"
 							onChange={(image, ref) => {
@@ -194,7 +208,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
-							className="blockera-controls-background-image-size"
 							options={[
 								{
 									label: __('Custom', 'blockera'),
@@ -236,64 +249,6 @@ const Fields: FieldItem = memo<FieldItem>(
 								})
 							}
 						>
-							<PositionButtonControl
-								repeaterItem={itemId}
-								singularId={'image-position'}
-								id={getControlId(itemId, '[image-position]')}
-								defaultValue={
-									defaultRepeaterItemValue['image-position']
-								}
-								buttonLabel={__(
-									'Background Image Position',
-									'blockera'
-								)}
-								popoverTitle={__(
-									'Background Image Position',
-									'blockera'
-								)}
-								alignmentMatrixLabel={__(
-									'Position',
-									'blockera'
-								)}
-								size="small"
-								onChange={(newValue, ref) => {
-									changeRepeaterItem({
-										ref,
-										onChange,
-										valueCleanup,
-										controlId,
-										repeaterId,
-										itemId,
-										value: {
-											...item,
-											'image-position': newValue,
-										},
-									});
-								}}
-								label=""
-								columns=""
-								labelPopoverTitle={__(
-									'Background Position',
-									'blockera'
-								)}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Adjusts the positioning of a background image within a block.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'Useful for aligning images to specific areas.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-							/>
-
 							{item['image-size'] === 'custom' && (
 								<Flex
 									direction="row"
@@ -400,6 +355,52 @@ const Fields: FieldItem = memo<FieldItem>(
 								</Flex>
 							)}
 						</ToggleSelectControl>
+
+						<AlignmentMatrixControl
+							repeaterItem={itemId}
+							singularId={'image-position'}
+							id={getControlId(itemId, '[image-position]')}
+							defaultValue={
+								defaultRepeaterItemValue['image-position']
+							}
+							inputFields={true}
+							label={__('Position', 'blockera')}
+							labelPopoverTitle={__(
+								'Background Position',
+								'blockera'
+							)}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Adjusts the positioning of a background image within a block.',
+											'blockera'
+										)}
+									</p>
+									<p>
+										{__(
+											'Useful for aligning images to specific areas.',
+											'blockera'
+										)}
+									</p>
+								</>
+							}
+							columns="columns-2"
+							onChange={(newValue, ref) => {
+								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
+									controlId,
+									repeaterId,
+									itemId,
+									value: {
+										...item,
+										'image-position': newValue,
+									},
+								});
+							}}
+						/>
 
 						<ToggleSelectControl
 							repeaterItem={itemId}
@@ -607,9 +608,9 @@ const Fields: FieldItem = memo<FieldItem>(
 									'linear-gradient-angel'
 								]
 							}
-							label={__('Angle', 'blockera')}
+							label={__('Angel', 'blockera')}
 							labelPopoverTitle={__(
-								'Linear Gradient Angle',
+								'Linear Gradient Angel',
 								'blockera'
 							)}
 							labelDescription={
@@ -855,7 +856,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							variableTypes={['radial-gradient']}
 						/>
 
-						<PositionButtonControl
+						<AlignmentMatrixControl
 							repeaterItem={itemId}
 							singularId={'radial-gradient-position'}
 							id={getControlId(
@@ -867,24 +868,7 @@ const Fields: FieldItem = memo<FieldItem>(
 									'radial-gradient-position'
 								]
 							}
-							buttonLabel={__('Gradient Position', 'blockera')}
-							popoverTitle={__('Gradient Position', 'blockera')}
-							alignmentMatrixLabel={__('Position', 'blockera')}
-							size="small"
-							onChange={(newValue, ref) => {
-								changeRepeaterItem({
-									ref,
-									onChange,
-									valueCleanup,
-									controlId,
-									repeaterId,
-									itemId,
-									value: {
-										...item,
-										'radial-gradient-position': newValue,
-									},
-								});
-							}}
+							inputFields={true}
 							label={__('Position', 'blockera')}
 							labelPopoverTitle={__(
 								'Background Position',
@@ -907,6 +891,25 @@ const Fields: FieldItem = memo<FieldItem>(
 								</>
 							}
 							columns="columns-2"
+							onChange={(newValue, ref) => {
+								changeRepeaterItem({
+									ref,
+									onChange,
+									valueCleanup,
+									controlId,
+									repeaterId,
+									itemId,
+									value: {
+										...item,
+										'radial-gradient-position': newValue,
+									},
+								});
+							}}
+							className={
+								isValidVariable(item['radial-gradient'])
+									? 'blockera-control-is-not-active'
+									: ''
+							}
 						/>
 
 						<ToggleSelectControl

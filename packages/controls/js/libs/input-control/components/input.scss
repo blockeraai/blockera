@@ -36,7 +36,7 @@
 	.blockera-control-input-tag {
 		width: 100%;
 		border: 1px solid var(--blockera-controls-border-color);
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 
 		&:hover:not(:disabled):not(.no-border):not(.invalid):not(:focus) {
 			border-color: var(--blockera-controls-border-color-hover);
@@ -82,12 +82,12 @@
 
 	.blockera-control-input-tag.no-border {
 		border: 1px solid transparent;
-		border-radius: var(--blockera-controls-border-radius);
+		border-radius: 2px;
 		box-shadow: none;
 		background: none;
 
 		&:focus {
-			border-radius: var(--blockera-controls-border-radius);
+			border-radius: 2px;
 			border: 1px solid var(--blockera-controls-primary-color);
 			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 		}
@@ -115,7 +115,7 @@
 		}
 
 		.blockera-control-input-arrow {
-			border-radius: var(--blockera-controls-border-radius);
+			border-radius: 2px;
 			height: 11px;
 			display: flex;
 			justify-content: center;

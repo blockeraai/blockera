@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 import type { MixedElement } from 'react';
 import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
@@ -11,7 +11,7 @@ import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { Flex, Tooltip, DynamicHtmlFormatter } from '@blockera/controls';
+import { Flex, Tooltip } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
 
@@ -36,63 +36,18 @@ export const BlockDropdownAllMenu = ({
 		updateBlockSections,
 	} = useBlockSections();
 
-	let text = '';
-
-	if (isActive) {
-		if (blockId.startsWith('blockera/')) {
-			text = sprintf(
-				// translators: %s is the brand name (Required)
-				__('Powered by %s', 'blockera'),
-				'{brand-name}'
-			);
-
-			// For backward brand name to prevent removing it
-			if (!text.includes('{brand-name}')) {
-				text = 'Powered by {brand-name}';
-			}
-		} else {
-			text = sprintf(
-				// translators: %s is the brand name (Required)
-				__('Empowered by %s', 'blockera'),
-				'{brand-name}'
-			);
-
-			// For backward brand name to prevent removing it
-			if (!text.includes('{brand-name}')) {
-				text = 'Empowered by {brand-name}';
-			}
-		}
-
-		text = DynamicHtmlFormatter({
-			text,
-			replacements: {
-				'brand-name': (
-					<Flex direction="row" alignItems="center" gap="8px">
-						<Icon
-							icon="blockera"
-							library="blockera"
-							iconSize="18"
-						/>
-						Blockera Site Builder
-					</Flex>
-				),
-			},
-		});
-	}
-
 	return (
 		<>
 			{isActive && (
 				<Tooltip
 					text={
-						<Flex direction="row" alignItems="center" gap="8px">
-							{text}
-						</Flex>
+						blockId.startsWith('blockera/')
+							? __('Powered by Blockera Site Builder', 'blockera')
+							: __(
+									'Empowered by Blockera Site Builder',
+									'blockera'
+							  )
 					}
-					style={{
-						'--tooltip-bg': '#0051e7',
-					}}
-					delay={200}
 				>
 					<a
 						href="https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link"
@@ -111,7 +66,7 @@ export const BlockDropdownAllMenu = ({
 
 			<DropdownMenu
 				icon={<Icon icon="more-vertical" iconSize="24" />}
-				label={__('Block Settings', 'blockera')}
+				label="Block Settings"
 				popoverProps={{
 					offset: 20,
 					focusOnMount: true,

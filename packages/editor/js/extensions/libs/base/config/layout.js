@@ -43,7 +43,7 @@ const blockeraAlignContent: FeatureConfig = {
 	force: false,
 	status: true,
 	showInSettings: false,
-	onNative: true,
+	isActiveOnFree: false,
 	label: __('Children Align Content', 'blockera'),
 };
 

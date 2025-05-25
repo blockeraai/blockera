@@ -173,8 +173,9 @@ class Render {
 			$css = $cache_data['css'];
 
 			// If custom css is set, add it to the block css.
-			if (! empty($attributes['blockeraCustomCSS']['value'])) {
-				$css .= preg_replace('/(\.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+			if (! empty($attributes['blockeraCustomCSS'])) {
+
+				$css .= preg_replace('/(.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']);
 			}
 
             // Print css into inline style on "wp_head" action occur.
@@ -202,7 +203,8 @@ class Render {
 
 		// If custom css is set, add it to the block css.
 		if (! empty($attributes['blockeraCustomCSS']['value'])) {
-			$computed_css_rules .= preg_replace('/(\.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+
+			$computed_css_rules .= preg_replace('/(.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
 		}
 
         // Print css into inline style on "wp_head" action occur.

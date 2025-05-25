@@ -15,11 +15,8 @@ import { isString } from '@blockera/utils';
  * Internal dependencies
  */
 import { getBaseBreakpoint } from '../../canvas-editor';
-import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
-import type {
-	TBreakpoint,
-	TStates,
-} from '../libs/block-card/block-states/types';
+import type { InnerBlockType } from '../libs/inner-blocks/types';
+import type { TBreakpoint, TStates } from '../libs/block-states/types';
 
 /**
  * Returns a block extension by name.

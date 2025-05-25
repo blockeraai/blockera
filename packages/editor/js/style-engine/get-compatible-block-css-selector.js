@@ -9,9 +9,9 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import { isInnerBlock } from '../extensions/components/utils';
-import type { TStates } from '../extensions/libs/block-card/block-states/types';
+import type { TStates } from '../extensions/libs/block-states/types';
 import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
-import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
+import type { InnerBlockType } from '../extensions/libs/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -20,18 +20,6 @@ import { replaceVariablesValue } from './utils';
 import type { NormalizedSelectorProps } from './types';
 import { isNormalState } from '../extensions/components';
 import { getBlockCSSSelector } from './get-block-css-selector';
-
-/**
- * Returns the appropriate state symbol for the given state.
- *
- * @param {TStates} state - The state to get the symbol for.
- * @return {string} The appropriate state symbol for the given state.
- */
-export const getStateSymbol = (state: TStates): string => {
-	return ['marker', 'placeholder', 'before', 'after'].includes(state)
-		? '::'
-		: ':';
-};
 
 /**
  * Generates a CSS selector based on the provided state, suffix, and whether the block is an inner block or outer block.
@@ -87,7 +75,6 @@ export const getNormalizedSelector = (
 		fromInnerBlock?: boolean,
 		getInnerState: () => TStates,
 		getMasterState: () => TStates,
-		currentStateHasSelectors: boolean,
 		customizedPseudoClasses: Array<string>,
 	}
 ): string => {
@@ -104,35 +91,15 @@ export const getNormalizedSelector = (
 		getMasterState,
 		fromInnerBlock = false,
 		customizedPseudoClasses,
-		currentStateHasSelectors,
 	} = options;
 	const parsedSelectors = selector.split(',');
-	const { getState, getInnerState: _getInnerState } =
-		select('blockera/editor') || {};
-	const {
-		settings: { hasContent },
-	} = getState(state) ||
-		_getInnerState(state) || {
-			settings: { hasContent: false },
-		};
-	let isProcessedSelector = false;
+
+	let isProccedSelector = false;
 
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
-		if (/^{{BLOCK_ID}}&/.test(selector)) {
-			return selector.replace(/^{{BLOCK_ID}}&/, '{{BLOCK_ID}}');
-		}
-
-		// Handle selectors starting with &&
-		if (selector.trim().startsWith('&&')) {
-			isProcessedSelector = true;
-			// Extract the first part of the root selector (everything before the first space)
-			const rootFirstPart = rootSelector.split(' ')[0];
-			return `${rootFirstPart}${selector.trim().substring(2)}`;
-		}
-
 		if (selector.trim().startsWith('&')) {
-			isProcessedSelector = true;
+			isProccedSelector = true;
 
 			return `${rootSelector}${selector.trim().substring(1)}`;
 		}
@@ -147,7 +114,7 @@ export const getNormalizedSelector = (
 
 		// Current Block is inner block.
 		if (fromInnerBlock) {
-			const spacer = isProcessedSelector ? '' : ' ';
+			const spacer = isProccedSelector ? '' : ' ';
 
 			// Assume inner block inside pseudo-state of master.
 			if (masterState && !isNormalState(masterState)) {
@@ -158,53 +125,13 @@ export const getNormalizedSelector = (
 						!isNormalState(innerStateType) &&
 						state === innerStateType
 					) {
-						// If current state has selectors, we should return the selector as is with master state.
-						if (currentStateHasSelectors) {
-							// If current state has content, we should return the selector as is with master state.
-							if (hasContent) {
-								return `${rootSelector}${getStateSymbol(
-									masterState
-								)}${masterState}${spacer}${selector}${suffixClass}`;
-							}
-
-							return `${rootSelector}${getStateSymbol(
-								masterState
-							)}${masterState}${spacer}${selector}${suffixClass}, ${rootSelector}${spacer}${selector}${suffixClass}`;
-						}
-
-						// If current state has content, we should return the selector as is with master state and state.
-						if (hasContent) {
-							return `${rootSelector}${getStateSymbol(
-								masterState
-							)}${masterState}${spacer}${selector}${suffixClass}${getStateSymbol(
-								state
-							)}${state}`;
-						}
-
-						return `${rootSelector}${getStateSymbol(
-							masterState
-						)}${masterState}${spacer}${selector}${suffixClass}${getStateSymbol(
-							state
-						)}${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
+						return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}:${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 					}
 
-					// If current state has selectors, we should return the selector as is with master state.
-					if (currentStateHasSelectors) {
-						return `${rootSelector}${getStateSymbol(
-							masterState
-						)}${masterState}${spacer}${selector}${suffixClass}`;
-					}
-
-					return `${rootSelector}${getStateSymbol(
-						masterState
-					)}${masterState}${spacer}${selector}${suffixClass}${getStateSymbol(
-						state
-					)}${state}`;
+					return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}:${state}`;
 				}
 
-				return `${rootSelector}${getStateSymbol(
-					masterState
-				)}${masterState}${spacer}${selector}${suffixClass}`;
+				return `${rootSelector}:${masterState}${spacer}${selector}${suffixClass}`;
 			}
 
 			if (!isNormalState(state) && masterState) {
@@ -212,57 +139,23 @@ export const getNormalizedSelector = (
 					!isNormalState(innerStateType) &&
 					state === innerStateType
 				) {
-					// If current state has selectors, return selector as is,
-					// Otherwise append state to selector and also include base selector.
-					if (currentStateHasSelectors) {
-						return `${rootSelector}${spacer}${selector}${suffixClass}`;
-					}
-
-					if (hasContent) {
-						return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
-							state
-						)}${state}`;
-					}
-
-					return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
-						state
-					)}${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
+					return `${rootSelector}${spacer}${selector}${suffixClass}:${state}, ${rootSelector}${spacer}${selector}${suffixClass}`;
 				}
 
-				// If current state has selectors, return selector as is.
-				if (currentStateHasSelectors) {
-					return `${rootSelector}${spacer}${selector}${suffixClass}`;
-				}
-
-				return `${rootSelector}${spacer}${selector}${suffixClass}${getStateSymbol(
-					state
-				)}${state}`;
+				return `${rootSelector}${spacer}${selector}${suffixClass}:${state}`;
 			}
 
 			return `${rootSelector}${spacer}${selector}${suffixClass}`;
 		}
 
-		// If current state has selectors, we should return the selector as is.
-		if (currentStateHasSelectors) {
-			return `${selector}${suffixClass}`;
-		}
-
-		// Received state is not normal.
+		// Recieved state is not normal.
 		if (!isNormalState(state)) {
 			// Assume active master block state is not normal.
 			if (!isNormalState(masterStateType) && state === masterStateType) {
-				if (hasContent) {
-					return `${selector}${suffixClass}${getStateSymbol(
-						state
-					)}${state}`;
-				}
-
-				return `${selector}${suffixClass}${getStateSymbol(
-					state
-				)}${state}, ${selector}${suffixClass}`;
+				return `${selector}${suffixClass}:${state}, ${selector}${suffixClass}`;
 			}
 
-			return `${selector}${suffixClass}${getStateSymbol(state)}${state}`;
+			return `${selector}${suffixClass}:${state}`;
 		}
 
 		return `${selector}${suffixClass}`;
@@ -301,7 +194,6 @@ export const getCompatibleBlockCssSelector = ({
 	className = '',
 	suffixClass = '',
 	fallbackSupportId,
-	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
 	const rootSelector = '{{BLOCK_ID}}';
 
@@ -416,7 +308,6 @@ export const getCompatibleBlockCssSelector = ({
 							getMasterState,
 							fromInnerBlock: true,
 							customizedPseudoClasses,
-							currentStateHasSelectors,
 						})
 					);
 					break;
@@ -442,7 +333,6 @@ export const getCompatibleBlockCssSelector = ({
 							getInnerState,
 							getMasterState,
 							customizedPseudoClasses,
-							currentStateHasSelectors,
 						})
 					);
 					break;

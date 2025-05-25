@@ -1,64 +1,55 @@
 .blockera-control-toggle-select {
-	--padding: 2px;
-	display: flex;
-	border: 1px solid var(--blockera-controls-border-color);
-	min-height: calc(var(--blockera-controls-input-height) - var(--padding) * 2);
-	padding: var(--padding);
-	width: 100%;
-	border-radius: var(--blockera-controls-border-radius);
 
-	.blockera-control-toggle-select-option {
-		padding: 0 3px;
-		background: transparent;
-		border: none;
-		font-size: 12px;
-		height: calc(var(--blockera-controls-input-height) - var(--padding) * 2 - 2px); // 2px is the border
-		min-width: calc(var(--blockera-controls-input-height) - var(--padding) * 2 - 2px);
-		cursor: pointer;
-		transition: var(--blockera-controls-transition);
-		box-shadow: none;
-		outline: none;
-		flex-grow: 1;
-		display: inline-flex;
-		justify-content: center;
-		align-items: center;
-		border-radius: var(--blockera-controls-border-radius);
+	.blockera-control-toggle-select-inner {
+		border-color: var(--blockera-controls-border-color) !important;
+		width: 100%;
+		min-height: var(--blockera-controls-input-height) !important;
 
-		.toggle-select-option-icon {
-			display: inline-flex;
-			justify-content: center;
-			align-items: center;
+		&.is-hovered,
+		&:hover {
+			border-color: var(--blockera-controls-border-color-hover) !important;
+		}
 
-			svg {
-				fill: currentColor;
+		&.is-focused,
+		&:focus-within {
+			border-color: var(--blockera-controls-primary-color) !important;
+			box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+		}
+
+		.components-toggle-group-control-option-base {
+			width: 100% !important;
+			padding: 0 !important;
+			transition: all ease 100ms;
+			height: 24px;
+
+			// remove inner item style for focus
+
+			&:focus {
+				border: none !important;
+				box-shadow: none !important;
+				outline: none !important;
+			}
+
+			&:hover:not([aria-pressed="true"]):not([aria-checked="true"]) {
+				color: var(--blockera-controls-primary-color);
 			}
 		}
 
-		&:focus {
-			color: var(--blockera-controls-primary-color);
+		// remove inner item style for focus
+
+		&.is-focused .components-toggle-group-control-option-base {
 			border: none !important;
 			box-shadow: none !important;
 			outline: none !important;
 		}
 
-		&:hover:not([aria-checked="true"], .is-selected) {
-			color: var(--blockera-controls-primary-color);
+		&::before,
+		div[role="presentation"] {
+			background: var(--blockera-controls-primary-color);
 		}
 
-		&.is-selected {
-			color: #ffffff;
-			background-color: var(--blockera-controls-primary-color);
+		&::before {
+			left: 0;
 		}
-	}
-
-	&.is-hovered,
-	&:hover {
-		border-color: var(--blockera-controls-border-color-hover) !important;
-	}
-
-	&.is-focused,
-	&:focus-within {
-		border-color: var(--blockera-controls-primary-color) !important;
-		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
 	}
 }

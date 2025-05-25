@@ -24,7 +24,7 @@ const blockeraOutline: FeatureConfig = {
 	status: true,
 	cssGenerators: {},
 	label: __('Outline', 'blockera'),
-	onNative: true,
+	isActiveOnFree: false,
 };
 
 const blockeraBorder: FeatureConfig = {

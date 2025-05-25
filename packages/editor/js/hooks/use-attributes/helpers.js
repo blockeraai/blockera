@@ -20,10 +20,10 @@ import type {
 	BreakpointTypes,
 	TStates,
 	TBreakpoint,
-} from '../../extensions/libs/block-card/block-states/types';
+} from '../../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
-import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
+import { blockStatesValueCleanup } from '../../extensions/libs/block-states/helpers';
 
 // Check required to update.
 export const isChanged = (
@@ -75,7 +75,6 @@ export const memoizedRootBreakpoints: (
 				className: mergedCssClasses,
 			};
 		}
-		const { getState, getInnerState } = select('blockera/editor');
 
 		if (isInnerBlock(currentBlock) && insideInnerBlock) {
 			if (!isNormalState(currentInnerBlockState)) {
@@ -105,26 +104,6 @@ export const memoizedRootBreakpoints: (
 					newValue
 				);
 
-				const {
-					settings: { hasContent },
-				} = getState(currentInnerBlockState) ||
-					getInnerState(currentInnerBlockState) || {
-						settings: { hasContent: false },
-					};
-
-				let content = '';
-				const stateItem = ((
-					(
-						(breakpoint?.attributes?.blockeraInnerBlocks || {})[
-							currentBlock
-						] || {}
-					)?.attributes || {}
-				)?.blockeraBlockStates || {})[currentInnerBlockState];
-
-				if (hasContent && !stateItem?.hasOwnProperty('content')) {
-					content = stateItem?.content || '';
-				}
-
 				return mergeObject(
 					breakpoint,
 					{
@@ -149,9 +128,6 @@ export const memoizedRootBreakpoints: (
 												// We need to address the isVisible property in the block-states repeater item,
 												// as there is currently no UI for this property in the block-states repeater item.
 												isVisible: true,
-												...(hasContent
-													? { content }
-													: {}),
 											},
 										},
 									},
@@ -209,9 +185,7 @@ export const memoizedBlockStates: (
 	currentBlockAttributes: Object,
 	action: Object,
 	args: Object
-) => {
-	value: { [key: TStates]: { ...StateTypes, content?: string } },
-} = memoize(
+) => Array<StateTypes> = memoize(
 	(
 		currentBlockAttributes: Object,
 		action: Object,
@@ -222,7 +196,7 @@ export const memoizedBlockStates: (
 		}
 	): Object => {
 		const {
-			currentState: receivedState,
+			currentState: recievedState,
 			insideInnerBlock,
 			currentBlock,
 		} = args;
@@ -240,20 +214,13 @@ export const memoizedBlockStates: (
 		);
 
 		const breakpoints =
-			blockStates[receivedState || currentState]?.breakpoints;
-
-		const moreProps: Object =
-			(receivedState || currentState) === 'custom-class'
-				? {
-						'css-class': blockStates['custom-class']['css-class'],
-				  }
-				: {};
+			blockStates[recievedState || currentState]?.breakpoints;
 
 		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
 			return mergeObject(
 				currentBlockAttributes?.blockeraBlockStates || {},
 				{
-					[receivedState || currentState]: {
+					[recievedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
@@ -265,7 +232,6 @@ export const memoizedBlockStates: (
 						// We need to address the isVisible property in the block-states repeater item,
 						// as there is currently no UI for this property in the block-states repeater item.
 						isVisible: true,
-						...moreProps,
 					},
 				},
 				{
@@ -280,7 +246,7 @@ export const memoizedBlockStates: (
 			currentBlockAttributes?.blockeraBlockStates || {},
 			{
 				value: {
-					[receivedState || currentState]: {
+					[recievedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
@@ -292,7 +258,6 @@ export const memoizedBlockStates: (
 						// We need to address the isVisible property in the block-states repeater item,
 						// as there is currently no UI for this property in the block-states repeater item.
 						isVisible: true,
-						...moreProps,
 					},
 				},
 			},

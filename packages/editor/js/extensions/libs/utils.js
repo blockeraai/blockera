@@ -9,15 +9,15 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import { hasSameProps } from '@blockera/utils';
-import type { ControlContextRefCurrent } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
 import { isInnerBlock, isNormalState } from '../components/utils';
-import type { BlockDetail } from './block-card/block-states/types';
 import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
+import type { ControlContextRefCurrent } from '@blockera/controls';
+import type { BlockDetail } from './block-states/types';
 
 // import { detailedDiff } from 'deep-object-diff';
 

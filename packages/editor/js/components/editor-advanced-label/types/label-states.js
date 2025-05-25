@@ -3,7 +3,10 @@
 /**
  * Internal dependencies
  */
-import type { StateGraph, StateGraphItem } from '../selector';
+import type {
+	StateGraph,
+	StateGraphItem,
+} from '../../../extensions/libs/block-states';
 
 export type LabelChangedStates = Array<{
 	id: number,

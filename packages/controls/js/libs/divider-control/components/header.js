@@ -35,7 +35,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 			<div
 				className={controlInnerClassNames('repeater-group-header')}
 				onClick={(event) =>
-					isOpenPopoverEvent(event, '.shape-icon') && setOpen(!isOpen)
+					isOpenPopoverEvent(event) && setOpen(!isOpen)
 				}
 				aria-label={sprintf(
 					// translators: it's the aria label for repeater item

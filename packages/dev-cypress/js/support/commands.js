@@ -345,11 +345,9 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel(label).click({ force: true });
-					});
+				cy.getByDataTest('popover-body').within(() => {
+					cy.getByAriaLabel(label).click({ force: true });
+				});
 			} else
 				cy.get('h2')
 					.contains(content)
@@ -571,11 +569,9 @@ export const registerCommands = () => {
 			// Open label state graph
 			if (repeaterItem) {
 				// for repeater inner labels
-				cy.getByDataTest('popover-body')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel(label).click({ force: true });
-					});
+				cy.getByDataTest('popover-body').within(() => {
+					cy.getByAriaLabel(label).click({ force: true });
+				});
 			} else
 				cy.get('h2')
 					.contains(content)
@@ -714,18 +710,16 @@ export const registerCommands = () => {
 
 	Cypress.Commands.add('setBlockVariation', (variation) => {
 		cy.get('.blockera-block-card-wrapper').within(() => {
-			cy.get('.blockera-block-variation-transforms').within(() => {
-				cy.get(`button[data-value="${variation}"]`).click();
+			cy.getByAriaLabel('Transform to variation').within(() => {
+				cy.get(`button[value="${variation}"]`).click();
 			});
 		});
 	});
 
 	Cypress.Commands.add('checkActiveBlockVariation', (variation) => {
 		cy.get('.blockera-block-card-wrapper').within(() => {
-			cy.get('.blockera-block-variation-transforms').within(() => {
-				cy.get(
-					`button[data-value="${variation}"][aria-checked="true"]`
-				);
+			cy.getByAriaLabel('Transform to variation').within(() => {
+				cy.get(`button[value="${variation}"][aria-checked="true"]`);
 			});
 		});
 	});
@@ -734,10 +728,6 @@ export const registerCommands = () => {
 		cy.getParentContainer(parentContainer).within(() => {
 			cy.getByDataCy('group-control-header').contains(contains).click();
 		});
-	});
-
-	Cypress.Commands.add('closeSpotlightPopover', () => {
-		cy.get('.blockera-spotlighter-svg').click({ force: true });
 	});
 
 	/**
@@ -756,64 +746,4 @@ export const registerCommands = () => {
 			.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
 			.trim(); // Remove leading/trailing whitespace
 	});
-
-	/**
-	 * Perform a WP CLI command
-	 *
-	 * @param command - WP CLI command. The 'wp ' prefix is required.
-	 * @param ignoreFailures - Prevent command to fail if CLI command exits with error
-	 *
-	 * @example
-	 * ```
-	 * cy.wpCli('wp core version').then(response=>{
-	 *   const version = res.stdout;
-	 *   // Do whatever with version
-	 * });
-	 * ```
-	 */
-	Cypress.Commands.add('wpCli', (command, ignoreFailures = false) => {
-		const escapedCommand = command
-			.replace(/\\/g, '\\\\')
-			.replace(/"/g, '\\"');
-		const options = {
-			failOnNonZeroExit: !ignoreFailures,
-		};
-		cy.exec(
-			`npm --silent run env run cli -- ${escapedCommand}`,
-			options
-		).then((result) => {
-			cy.wrap(result);
-		});
-	});
-
-	Cypress.Commands.add(
-		'checkBlockCardItems',
-		(expectedStates, isInnerBlock = false) => {
-			const container = isInnerBlock
-				? '.block-card--inner-block'
-				: '.blockera-extension-block-card';
-
-			cy.get(container).within(() => {
-				// Check that all expected items exist and are visible
-				expectedStates.forEach((state) => {
-					cy.get(`[data-cy="repeater-item"][data-id="${state}"]`)
-						.should('exist')
-						.and('be.visible');
-				});
-
-				// Check that no unexpected items exist
-				cy.get('[data-cy="repeater-item"]').then(($items) => {
-					const actualStates = Array.from($items).map((item) =>
-						item.getAttribute('data-id')
-					);
-					const unexpectedStates = actualStates.filter(
-						(state) => !expectedStates.includes(state)
-					);
-
-					expect(unexpectedStates, 'Unexpected repeater items found')
-						.to.be.empty;
-				});
-			});
-		}
-	);
 };

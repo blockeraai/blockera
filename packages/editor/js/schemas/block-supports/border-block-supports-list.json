@@ -4,16 +4,12 @@
 	"supports": {
 		"blockeraBorder": {
 			"status": true,
-			"id": "blockeraBorder",
-			"definition": "Border",
 			"css-property": "border",
 			"fallback": ["border.color", "border"],
 			"description": "Support for \"blockeraBorder\" value, this is mirror for WordPress block core \"border\" support"
 		},
 		"blockeraBorderRadius": {
 			"status": true,
-			"id": "blockeraBorderRadius",
-			"definition": "BorderRadius",
 			"css-property": "border-radius",
 			"style-engine-config": {
 				"all": "border-radius",

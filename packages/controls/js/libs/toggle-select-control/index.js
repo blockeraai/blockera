@@ -2,7 +2,12 @@
 /**
  * External dependencies
  */
-import { useCallback, type MixedElement } from 'react';
+import {
+	__experimentalToggleGroupControl as WPToggleGroupControl,
+	__experimentalToggleGroupControlOption as WPToggleGroupControlOption,
+	__experimentalToggleGroupControlOptionIcon as WPToggleGroupControlOptionIcon,
+} from '@wordpress/components';
+import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -13,7 +18,7 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { BaseControl, Tooltip } from '../index';
+import { BaseControl } from '../index';
 import { useControlContext } from '../../context';
 import type { ToggleSelectControlProps } from './types';
 
@@ -51,35 +56,9 @@ export default function ToggleSelectControl({
 	});
 
 	function valueCleanup(value: any) {
+		// WPToggleGroupControl returns undefined while deselecting
 		return isUndefined(value) ? '' : value;
 	}
-
-	const handleKeyDown = useCallback(
-		(e: KeyboardEvent) => {
-			if (e.key === 'Tab') {
-				e.preventDefault();
-				const currentIndex = options.findIndex(
-					(option) => option.value === value
-				);
-				const nextIndex = e.shiftKey
-					? (currentIndex - 1 + options.length) % options.length
-					: (currentIndex + 1) % options.length;
-				setValue(options[nextIndex].value);
-			}
-		},
-		[options, value, setValue]
-	);
-
-	const handleOptionClick = useCallback(
-		(optionValue: string) => {
-			if (isDeselectable && value === optionValue) {
-				setValue(undefined);
-			} else {
-				setValue(optionValue);
-			}
-		},
-		[value, isDeselectable, setValue]
-	);
 
 	return (
 		<BaseControl
@@ -101,50 +80,40 @@ export default function ToggleSelectControl({
 				path: getControlPath(attribute, id),
 			}}
 		>
-			<div
-				className={controlClassNames('toggle-select', className)}
-				role="radiogroup"
-				onKeyDown={handleKeyDown}
-				tabIndex={0}
-				{...props}
-			>
-				{options?.map((item) => (
-					<Tooltip
-						key={item.value}
-						text={item['aria-label'] || item.label}
-					>
-						<button
-							className={controlClassNames(
-								'toggle-select-option',
-								{
-									'is-selected': value === item.value,
-								}
-							)}
-							role="radio"
-							aria-label={item['aria-label'] || item.label}
-							disabled={item.disabled}
-							onClick={() => handleOptionClick(item.value)}
-							data-value={item.value}
-							{...(isDeselectable
-								? {
-										'aria-pressed': value === item.value,
-								  }
-								: {
-										'aria-checked': value === item.value,
-								  })}
-						>
-							{!isUndefined(item.icon) ? (
-								<span className="toggle-select-option-icon">
-									{item.icon}
-								</span>
-							) : (
-								<span className="toggle-select-option-label">
-									{item.label}
-								</span>
-							)}
-						</button>
-					</Tooltip>
-				))}
+			<div className={controlClassNames('toggle-select', className)}>
+				<WPToggleGroupControl
+					className={controlClassNames(
+						'toggle-select-inner',
+						className
+					)}
+					value={value}
+					onChange={setValue}
+					label={undefined}
+					hideLabelFromVision={true}
+					isBlock={true}
+					isDeselectable={isDeselectable}
+					__nextHasNoMarginBottom={true}
+					__next40pxDefaultSize={true}
+					{...props}
+				>
+					{options?.map((item) => {
+						if (!isUndefined(item.icon)) {
+							return (
+								<WPToggleGroupControlOptionIcon
+									{...item}
+									key={item.value}
+								/>
+							);
+						}
+
+						return (
+							<WPToggleGroupControlOption
+								{...item}
+								key={item.value}
+							/>
+						);
+					})}
+				</WPToggleGroupControl>
 			</div>
 			{children}
 		</BaseControl>

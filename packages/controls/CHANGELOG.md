@@ -1,37 +1,5 @@
 ## Unreleased
 
-## 1.3.2 (2025-05-24)
-
-### Bug Fixes
-- Fixed an issue where the reset value button was not working for some controls.
-
-## 1.3.1 (2025-05-19)
-
-
-### Bug Fixes
-- Color picker design issue on Windows. Thanks Hoang.
-
-
-## 1.3.0 (2025-05-19)
-
-### Improvements
-- Background image feature: UI/UX design to do more with less!
-- Multiple minor design improvement on controls.
-- Features label design and usability for reset value icon.
-- Tooltips design.
-- Image upload control design.
-- Layout control: design improved.
-- Rewrite the `Toggle Select Control` from scratch to improve performance and usability.
-
-### Bug Fixes
-- Fixed input control to avoid unnecessary updates, better handle incomplete calculations and unit conversions, and properly handle decimal values and constraints when leaving the field with the same value.
-- Features Label: the reset button is not showing for some features.
-- Fix typo in background control. Thanks to Isla Rowan.
-
-### New Features
-- Added `children` support to `RepeaterControl` component to allow developers to add custom content to the repeater control.
-- Blockera interface uses current user WP color for interface fore more unified design in block editor.
-
 ## 1.2.2 (2025-04-27)
 
 ### Improvements

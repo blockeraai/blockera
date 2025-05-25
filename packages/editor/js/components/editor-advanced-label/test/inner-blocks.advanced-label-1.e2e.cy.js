@@ -55,7 +55,7 @@ describe('Inner Blocks label testing', () => {
 		/**
 		 * Pseudo State (Hover)
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label
 		cy.checkLabelClassName(
@@ -76,7 +76,7 @@ describe('Inner Blocks label testing', () => {
 		 * should not display changed on label when master block is in pseudo state
 		 */
 		reSelectBlock();
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Set inner
 		setInnerBlock('elements/link');
 
@@ -119,7 +119,7 @@ describe('Inner Blocks label testing', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Typography',
@@ -185,7 +185,7 @@ describe('Inner Blocks label testing', () => {
 		context(
 			'should display changed value on Text Color -> Hover -> inner -> Normal',
 			() => {
-				setBlockState('Hover');
+				addBlockState('hover');
 				// Set Inner Block
 				setInnerBlock('elements/link');
 
@@ -215,7 +215,7 @@ describe('Inner Blocks label testing', () => {
 				/**
 				 * Inner -> Hover(desktop)
 				 */
-				setBlockState('Hover');
+				addBlockState('Hover');
 				// Assert label before set value
 				cy.checkLabelClassName(
 					'Typography',
@@ -378,7 +378,7 @@ describe('Inner Blocks label testing', () => {
 					// Set value in elements/link/normal/desktop
 					cy.setColorControlValue('Text Color', 'cccccc');
 
-					setBlockState('Hover');
+					addBlockState('hover');
 
 					// Set value in elements/link/hover/desktop
 					cy.setColorControlValue('Text Color', 'bbbbbb');
@@ -399,7 +399,7 @@ describe('Inner Blocks label testing', () => {
 				() => {
 					reSelectBlock();
 
-					setBlockState('Hover');
+					addBlockState('hover');
 				}
 			);
 
@@ -786,7 +786,7 @@ describe('Inner Blocks label testing', () => {
 					// Set value in elements/link/normal/desktop
 					cy.setColorControlValue('Text Color', 'cccccc');
 
-					setBlockState('Hover');
+					addBlockState('hover');
 
 					// Set value in elements/link/hover/desktop
 					cy.setColorControlValue('Text Color', 'bbbbbb');
@@ -807,7 +807,7 @@ describe('Inner Blocks label testing', () => {
 				() => {
 					reSelectBlock();
 
-					setBlockState('Hover');
+					addBlockState('hover');
 				}
 			);
 

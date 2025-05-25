@@ -3,53 +3,30 @@
  * External dependencies
  */
 import type { Element } from 'react';
-import { useMemo } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { adjustHexColor } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { isInnerBlock, isNormalState } from './utils';
-import { useEditorStore, useExtensionsStore } from '../../hooks';
+import { settings } from '../libs/block-states/config';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
-export default function StateContainer({
-	children,
-	availableStates,
-	blockeraUnsavedData,
-}: Object): Element<any> {
+export default function StateContainer({ children }: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
-	const { getState, getInnerState } = useEditorStore();
 
-	const activeColor = useMemo(() => {
-		const selectedState = isInnerBlock(currentBlock)
-			? currentInnerBlockState
-			: currentState;
+	let activeColor = settings[currentState].color;
 
-		const state = getState(selectedState) || getInnerState(selectedState);
-		const fallbackState =
-			availableStates && availableStates.hasOwnProperty(selectedState)
-				? availableStates[selectedState]
-				: blockeraUnsavedData?.states[selectedState];
-		let color = state
-			? state?.settings?.color
-			: fallbackState?.settings?.color;
-
-		if (
-			isInnerBlock(currentBlock) &&
-			isNormalState(currentInnerBlockState)
-		) {
-			color = '#cc0000';
-		}
-
-		return color;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		currentBlock,
-		currentState,
-		availableStates,
-		blockeraUnsavedData,
-		currentInnerBlockState,
-	]);
+	if (isInnerBlock(currentBlock) && isNormalState(currentInnerBlockState)) {
+		activeColor = '#cc0000';
+	} else if (isInnerBlock(currentBlock)) {
+		activeColor = settings[currentInnerBlockState].color;
+	}
 
 	return (
 		<div
@@ -58,6 +35,10 @@ export default function StateContainer({
 				color: 'inherit',
 				'--blockera-controls-primary-color': activeColor,
 				'--blockera-tab-panel-active-color': activeColor,
+				'--blockera-controls-primary-color-darker-20': adjustHexColor(
+					activeColor,
+					-20
+				),
 			}}
 		>
 			{children}

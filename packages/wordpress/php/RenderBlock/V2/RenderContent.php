@@ -156,9 +156,6 @@ class RenderContent {
             return $block_content;
 		}
 		
-		// Check for do_shortcode context.
-		$is_doing_shortcode = in_array('do_shortcode_tag', array_column(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS), 'function'), true);
-
 		// Check block to is support by Blockera.
         if (blockera_is_supported_block($block)) {
             $this->printBlockGlobalStyles($block);
@@ -180,7 +177,7 @@ class RenderContent {
 
 			return $this->cleanup($post, 'block_content');
 
-		} elseif (( ! empty($is_doing_shortcode) || blockera_block_is_dynamic($block) ) && ! str_contains($block_content, 'blockera-is-transpiled')) {
+		} elseif (blockera_block_is_dynamic($block) && ! str_contains($block_content, 'blockera-is-transpiled')) {
 
 			$this->render_instance->setIsDoingTranspile(true);
 			// Disable cache for dynamic blocks.

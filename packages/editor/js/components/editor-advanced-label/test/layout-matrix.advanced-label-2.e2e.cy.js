@@ -77,7 +77,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -152,7 +152,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 
 		// Assert label before set value
 		cy.checkLabelClassName(
@@ -243,7 +243,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 		/**
 		 * Hover
 		 */
-		setBlockState('Hover');
+		addBlockState('hover');
 		// Assert label before set value
 		cy.checkLabelClassName(
 			'Layout',
@@ -322,7 +322,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			setMatrixItem('matrix-top-left-normal');
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			setMatrixItem('matrix-top-center-normal');
 
 			// Set value in hover/tablet
@@ -692,7 +692,7 @@ describe('Layout Matrix Control label testing (Flex Layout)', () => {
 			setMatrixItem('matrix-top-left-normal');
 
 			// Set value in hover/desktop
-			setBlockState('Hover');
+			addBlockState('hover');
 			setMatrixItem('matrix-top-center-normal');
 
 			// Set value in hover/tablet

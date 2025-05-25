@@ -4,8 +4,8 @@
  * Internal dependencies
  */
 // import type { TBlockProps } from './block-props';
-import type { InnerBlockType } from '../block-card/inner-blocks/types';
-import type { TStates, TBreakpoint } from '../block-card/block-states/types';
+import type { InnerBlockType } from '../inner-blocks/types';
+import type { TStates, TBreakpoint } from '../block-states/types';
 
 export type StylesProps = {
 	state: TStates,

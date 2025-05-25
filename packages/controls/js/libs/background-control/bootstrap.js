@@ -46,7 +46,7 @@ export const backgroundComponentConfig: Object = {
 				show: true,
 				force: true,
 				status: true,
-				onNative: true,
+				isActiveOnFree: false,
 				label: __('Colors', 'blockera'),
 			},
 		},

@@ -19,8 +19,8 @@
 
 		.blockera-powered-by-icon {
 			position: absolute;
-			top: 16px;
-			right: 38px;
+			top: 17px;
+			right: 34px;
 			z-index: 2;
 			color: #1e1e1e;
 			fill: currentColor;
@@ -30,9 +30,8 @@
 			align-items: center;
 			justify-content: center;
 			transition: var(--blockera-controls-transition);
-			border-radius: var(--blockera-controls-border-radius);
+			border-radius: 2px;
 			opacity: 0.2;
-			--blockera-controls-primary-color: #0051e7;
 
 			&:hover {
 				opacity: 1;
@@ -42,16 +41,16 @@
 
 		.components-dropdown-menu {
 			position: absolute;
-			right: 12px;
+			right: 8px;
 			padding: 0;
 			margin: 0;
-			top: 16px;
+			top: 13px;
 			z-index: 1;
 
 			.components-button.has-icon {
 			    justify-content: center;
-				min-width: 24px;
-				height: 24px;
+				min-width: 32px;
+				height: 32px;
 				padding: 0;
 			}
 		}
@@ -211,10 +210,4 @@
 .blockera-block-inspector-controls-wrapper + .block-editor-block-card,
 .blockera-block-inspector-controls-wrapper ~ .block-editor-block-variation-transforms {
 	display: none !important;
-}
-
-// hide justification control inside layout constrained (Group Block)
-
-.block-editor-block-inspector .block-editor-hooks__layout-constrained .block-editor-hooks__layout-constrained-helptext + .components-base-control {
-	display: none;
 }

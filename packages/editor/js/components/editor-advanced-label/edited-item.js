@@ -17,7 +17,7 @@ import { Icon } from '@blockera/icons';
  */
 import { isInnerBlock } from '../../extensions';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
-import type { TStates } from '../../extensions/libs/block-card/block-states/types';
+import type { TStates } from '../../extensions/libs/block-states/types';
 
 export default function EditedItem({
 	state,

@@ -54,7 +54,7 @@ import {
 	fontColorFromWPCompatibility,
 	fontColorToWPCompatibility,
 } from './compatibility/font-color';
-import type { BlockDetail } from '../block-card/block-states/types';
+import type { BlockDetail } from '../block-states/types';
 import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {

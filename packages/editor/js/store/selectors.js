@@ -1,11 +1,10 @@
 // @flow
 
 import type {
-	TStates,
 	StateTypes,
 	TBreakpoint,
 	BreakpointTypes,
-} from '../extensions/libs/block-card/block-states/types';
+} from '../extensions/libs/block-states/types';
 import { getBaseBreakpoint } from '../canvas-editor';
 
 /**
@@ -41,33 +40,6 @@ export const getBreakpoint = (
 };
 
 /**
- * Get available breakpoints.
- *
- * @param {{breakpoints: Object}} state the breakpoints.
- * @return {Array<TBreakpoint>} the available breakpoints.
- */
-export const getAvailableBreakpoints = ({
-	breakpoints,
-}: {
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
-}): Array<TBreakpoint> => {
-	const availableBreakpoints = [];
-
-	for (const key in breakpoints) {
-		// $FlowFixMe
-		const breakpoint = breakpoints[key];
-
-		if (breakpoint?.native) {
-			continue;
-		}
-
-		availableBreakpoints.push(breakpoint?.type);
-	}
-
-	return availableBreakpoints;
-};
-
-/**
  * Get states.
  *
  * @param {{states: Object}} state the states.
@@ -76,8 +48,8 @@ export const getAvailableBreakpoints = ({
 export const getStates = ({
 	blockStates,
 }: {
-	blockStates: { [key: TStates]: StateTypes },
-}): { [key: TStates]: StateTypes } => {
+	blockStates: { [key: StateTypes]: Object },
+}): { [key: StateTypes]: Object } => {
 	return blockStates;
 };
 
@@ -86,103 +58,17 @@ export const getStates = ({
  *
  * @param {{blockStates: Object}} state the blockStates.
  * @param {StateTypes} name the state name.
- * @return {StateTypes} the state stored in redux.
+ * @return {Object} the state stored in redux.
  */
 export const getState = (
 	{
 		blockStates,
 	}: {
-		blockStates: { [key: TStates]: StateTypes },
+		blockStates: { [key: StateTypes]: Object },
 	},
-	name: TStates
-): StateTypes => {
+	name: StateTypes
+): Object => {
 	return blockStates[name];
-};
-
-/**
- * Get available states.
- *
- * @param {{blockStates: Object}} state the block states.
- *
- * @return {Array<TStates>} the available states.
- */
-export const getAvailableStates = ({
-	blockStates,
-}: {
-	blockStates: { [key: TStates]: StateTypes },
-}): Array<TStates> => {
-	const availableStates = [];
-
-	for (const key in blockStates) {
-		const state = blockStates[key];
-
-		if (state?.native) {
-			continue;
-		}
-
-		availableStates.push(state?.type);
-	}
-
-	return availableStates;
-};
-
-/**
- * Get states.
- *
- * @param {{states: Object}} state the states.
- * @return {Object} the states stored in redux.
- */
-export const getInnerStates = ({
-	innerBlockStates,
-}: {
-	innerBlockStates: { [key: TStates]: StateTypes },
-}): { [key: TStates]: StateTypes } => {
-	return innerBlockStates;
-};
-
-/**
- * Get blockStates.
- *
- * @param {{blockStates: Object}} state the blockStates.
- * @param {StateTypes} name the state name.
- * @return {StateTypes} the state stored in redux.
- */
-export const getInnerState = (
-	{
-		innerBlockStates,
-	}: {
-		innerBlockStates: { [key: TStates]: StateTypes },
-	},
-	name: TStates
-): StateTypes => {
-	return innerBlockStates[name];
-};
-
-/**
- * Get available states.
- *
- * @param {{innerBlockStates: Object}} state the block states.
- *
- * @return {Array<TStates>} the available states.
- */
-export const getAvailableInnerStates = ({
-	innerBlockStates,
-}: {
-	innerBlockStates: { [key: TStates]: StateTypes },
-}): Array<TStates> => {
-	const availableStates = [];
-
-	for (const key in innerBlockStates) {
-		const state = innerBlockStates[key];
-
-		if (state?.native) {
-			continue;
-		}
-
-		availableStates.push(state?.type);
-	}
-
-	return availableStates;
 };
 
 /**

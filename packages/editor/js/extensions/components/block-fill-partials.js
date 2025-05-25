@@ -29,14 +29,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		isActive,
 		blockProps,
 		currentBlock,
-		currentState,
-		availableStates,
-		currentBreakpoint,
 		currentInnerBlock,
 		BlockEditComponent,
 		blockeraInnerBlocks,
-		availableInnerStates,
-		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
 		const { updateBlockAttributes } = useDispatch('core/block-editor');
@@ -88,16 +83,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						blockName={blockProps.name}
 						innerBlocks={blockeraInnerBlocks}
 						currentInnerBlock={currentInnerBlock}
-						currentBlock={currentBlock}
-						currentState={currentState}
-						currentBreakpoint={currentBreakpoint}
-						currentInnerBlockState={currentInnerBlockState}
-						currentStateAttributes={blockProps.attributes}
-						availableStates={availableStates}
-						additional={blockProps.additional}
-						blockeraInnerBlocks={blockeraInnerBlocks}
-						supports={blockProps.supports}
-						setAttributes={blockProps.setAttributes}
 						handleOnChangeAttributes={handleOnChangeAttributes}
 					/>
 
@@ -108,31 +93,12 @@ export const BlockFillPartials: ComponentType<any> = memo(
 							blockName={blockProps.name}
 							innerBlocks={blockeraInnerBlocks}
 							handleOnClick={updateBlockEditorSettings}
-							currentBlock={currentBlock}
-							currentState={currentState}
-							availableStates={availableInnerStates}
-							currentBreakpoint={currentBreakpoint}
-							currentInnerBlockState={currentInnerBlockState}
-							currentStateAttributes={
-								blockProps.currentStateAttributes
-							}
-							additional={blockProps.additional}
-							supports={blockProps.supports}
-							setAttributes={blockProps.setAttributes}
-							handleOnChangeAttributes={handleOnChangeAttributes}
 						/>
 					)}
 				</Fill>
 				{isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
-						<BlockEditComponent
-							{...blockProps}
-							availableStates={
-								isInnerBlock(currentBlock)
-									? availableInnerStates
-									: availableStates
-							}
-						/>
+						<BlockEditComponent {...blockProps} />
 					</Fill>
 				)}
 			</>

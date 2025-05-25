@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import type { InnerBlockType } from '../../block-card/inner-blocks/types';
+import type { InnerBlockType } from '../../inner-blocks/types';
 
 export type FeatureConfig = {
 	/**
@@ -35,31 +35,31 @@ export type FeatureConfig = {
 	 */
 	cssGenerators?: Object | {},
 	/**
-	 * on native blockera settings?
+	 * Is active on free settings.
 	 */
-	onNative?: boolean,
+	isActiveOnFree?: boolean,
 	/**
-	 * on blockera block states?
+	 * Is active on block states? by default undefined.
 	 */
-	onStates?: boolean | Array<string>,
+	isActiveOnStates?: boolean | Array<string>,
 	/**
-	 * on native blockera on states?
+	 * Is active on free plugin states? by default undefined.
 	 */
-	onNativeOnStates?: boolean | Array<string>,
+	isActiveOnStatesOnFree?: boolean,
 	/**
-	 * on blockera breakpoints?
+	 * Is active on breakpoints? by default undefined.
 	 */
-	onBreakpoints?: boolean | Array<string>,
+	isActiveOnBreakpoints?: boolean | Array<string>,
 	/**
-	 * on native blockera breakpoints?
+	 * Is active on free plugin breakpoints? by default undefined.
 	 */
-	onNativeOnBreakpoints?: boolean | Array<string>,
+	isActiveOnBreakpointsOnFree?: boolean,
 	/**
-	 * on blockera inner blocks?
+	 * Is active on inner blocks?
 	 */
-	onInnerBlocks?: boolean | 'all' | Array<InnerBlockType>,
+	isActiveOnInnerBlocks?: boolean | 'all' | Array<InnerBlockType>,
 	/**
-	 * on native blockera inner blocks?
+	 * Is active on free plugin inner blocks? by default undefined.
 	 */
-	onNativeOnInnerBlocks?: boolean | Array<string>,
+	isActiveOnInnerBlocksOnFree?: boolean,
 };

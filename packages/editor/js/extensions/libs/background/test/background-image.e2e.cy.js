@@ -148,21 +148,13 @@ describe('Background Image → Functionality', () => {
 
 		it('should be able to set background position, Repeat, Effect', () => {
 			cy.get('.blockera-component-popover').within(() => {
-				cy.getByDataTest('position-button').click();
-			});
-
-			cy.get('.blockera-component-popover')
-				.last()
-				.within(() => {
+				cy.getParentContainer('Position').within(() => {
 					cy.get('input').each(($input) => {
-						cy.wrap($input).clear({ force: true });
+						cy.wrap($input).clear();
 						cy.wrap($input).type('20');
 					});
-
-					cy.getByAriaLabel('Close').click();
 				});
 
-			cy.get('.blockera-component-popover').within(() => {
 				cy.getParentContainer('Repeat').within(() => {
 					cy.get('button[data-value="no-repeat"]').click();
 				});
@@ -214,34 +206,6 @@ describe('Background Image → Functionality', () => {
 				.and('have.css', 'background-repeat', 'no-repeat')
 				.and('have.css', 'background-attachment', 'fixed');
 		});
-
-		it('should be able to toggle visibility of repeater items and add new items to promotion component appear', () => {
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Disable"]').click({
-							force: true,
-						});
-					});
-
-				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
-				cy.get('@bgRepeaterAddBtn').click();
-			});
-
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Enable"]').click({
-							force: true,
-						});
-					});
-			});
-
-			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
-		});
 	});
 
 	describe('Linear Gradient', () => {
@@ -262,7 +226,7 @@ describe('Background Image → Functionality', () => {
 		it('simple value linear gradient', () => {
 			cy.get('.blockera-component-popover').within(() => {
 				// set angle
-				cy.getParentContainer('Angle').within(() => {
+				cy.getParentContainer('Angel').within(() => {
 					cy.get('input').clear();
 					cy.get('input').type('7');
 				});
@@ -391,37 +355,6 @@ describe('Background Image → Functionality', () => {
 				);
 			});
 		});
-
-		it('should be able to toggle visibility of repeater items and add new items to promotion component appear', () => {
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Disable"]').click({
-							force: true,
-						});
-					});
-
-				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
-				cy.get('@bgRepeaterAddBtn').click();
-			});
-
-			// switch to radial gradient type
-			cy.getByAriaLabel('Linear Gradient').click();
-
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Enable"]').click({
-							force: true,
-						});
-					});
-			});
-
-			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
-		});
 	});
 
 	describe('Radial Gradient', () => {
@@ -440,21 +373,14 @@ describe('Background Image → Functionality', () => {
 
 		it('simple value radial gradient', () => {
 			cy.get('.blockera-component-popover').within(() => {
-				cy.getByDataTest('position-button').click();
-			});
-
-			cy.get('.blockera-component-popover')
-				.last()
-				.within(() => {
+				// set position
+				cy.getParentContainer('Position').within(() => {
 					cy.get('input').each(($input) => {
-						cy.wrap($input).clear({ force: true });
+						cy.wrap($input).clear();
 						cy.wrap($input).type('20');
 					});
-
-					cy.getByAriaLabel('Close').click();
 				});
 
-			cy.get('.blockera-component-popover').within(() => {
 				//  set size
 				cy.getParentContainer('Size').within(() => {
 					cy.get('button[data-value="closest-side"]').click();
@@ -543,37 +469,6 @@ describe('Background Image → Functionality', () => {
 					'fixed'
 				);
 			});
-		});
-
-		it('should be able to toggle visibility of repeater items and add new items to promotion component appear', () => {
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Disable"]').click({
-							force: true,
-						});
-					});
-
-				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
-				cy.get('@bgRepeaterAddBtn').click();
-			});
-
-			// switch to radial gradient type
-			cy.get('button[aria-label="Radial Gradient"]').click();
-
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Enable"]').click({
-							force: true,
-						});
-					});
-			});
-
-			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
 		});
 	});
 
@@ -668,37 +563,6 @@ describe('Background Image → Functionality', () => {
 					'fixed, '.repeat(colorsInUi.length - 1) + 'fixed'
 				);
 			});
-		});
-
-		it('should be able to toggle visibility of repeater items and add new items to promotion component appear', () => {
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Disable"]').click({
-							force: true,
-						});
-					});
-
-				cy.getByAriaLabel('Add New Background').as('bgRepeaterAddBtn');
-				cy.get('@bgRepeaterAddBtn').click();
-			});
-
-			// switch to mesh gradient type
-			cy.get('button[aria-label="Mesh Gradient"]').click();
-
-			cy.get('@image-and-gradient').within(() => {
-				cy.getByDataCy('repeater-item')
-					.eq(0)
-					.within(() => {
-						cy.get('[aria-label~="Enable"]').click({
-							force: true,
-						});
-					});
-			});
-
-			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
 		});
 	});
 });

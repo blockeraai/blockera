@@ -28,10 +28,6 @@ export type RepeaterControlProps = {
 	 */
 	id: string,
 	/**
-	 * Repeater children.
-	 */
-	children: MixedElement,
-	/**
 	 * Repeater value exists on root?
 	 */
 	onRoot: boolean,
@@ -81,10 +77,6 @@ export type RepeaterControlProps = {
 	 * Specifies the button label for adding new repeater item.
 	 */
 	addNewButtonLabel?: string,
-	/**
-	 * Specifies the button label for adding new repeater item.
-	 */
-	addNewButtonDataTest?: string,
 	/**
 	 * Specifies custom css classes that should be added to popover
 	 *

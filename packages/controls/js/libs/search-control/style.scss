@@ -1,14 +1,5 @@
 .blockera-control-search {
-	--search-control-height: 34px;
-    --search-control-padding: 12px;
-    border-radius: 2px !important;
-    box-shadow: 0 0 0 1px var(--blockera-controls-border-color) !important;
-    overflow: hidden;
-    margin-bottom: 0 !important;
-
-	.components-input-control__backdrop {
-		display: none !important;
-	}
+	margin-bottom: 0 !important;
 
 	.components-base-control__field {
 		margin: 0;
@@ -21,31 +12,25 @@
 		}
 	}
 
-	.components-input-control__input {
-		height: var(--search-control-height) !important;
-		min-height: var(--search-control-height) !important;
-		padding: var(--search-control-padding) calc(var(--search-control-padding) * 2) var(--search-control-padding) var(--search-control-padding) !important;
-		background: transparent !important;
-		box-shadow: none !important;
-		margin: 0 !important;
-		transition: box-shadow 0.1s linear !important;
+	input[type="search"].components-search-control__input {
+		height: 40px;
+		padding: 12px 48px 12px 12px;
+		background: #ffffff;
+		box-shadow: 0 0 0 1px var(--blockera-controls-border-color);
+		margin: 0;
+		transition: box-shadow 0.1s linear;
 
 		&:focus {
-			box-shadow: initial !important;
+			box-shadow: 0 0 0 2px var(--blockera-controls-primary-color);
 		}
 	}
 
-	&:hover:not(:focus-within) {
-		box-shadow: 0 0 0 1px var(--blockera-controls-border-color-hover) !important;
+	&:hover input[type="search"].components-search-control__input {
+		box-shadow: 0 0 0 1px var(--blockera-controls-border-color-hover);
 	}
 
-	&.is-hovered:hover,
-	&.is-focused,
-	&:focus-within {
+	&.is-hovered:hover input[type="search"].components-search-control__input,
+	&.is-focused input[type="search"].components-search-control__input {
 		box-shadow: 0 0 0 2px var(--blockera-controls-primary-color) !important;
-	}
-
-	&:not(:focus-within) {
-	    --wp-components-color-background: var(--blockera-controls-fill-color) !important;
 	}
 }

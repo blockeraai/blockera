@@ -155,78 +155,60 @@ export default function BoxSpacingControl({
 			className={className}
 			{...(label ? labelProps : {})}
 		>
-			<div className={controlClassNames('box-spacing-container')}>
-				<div
-					{...props}
-					className={controlClassNames(
-						'box-spacing',
-						'padding-lock-' + paddingLock,
-						'margin-lock-' + marginLock,
-						className,
-						controlClassName
-					)}
-					data-cy="box-spacing-control"
+			<div
+				{...props}
+				className={controlClassNames(
+					'box-spacing',
+					'padding-lock-' + paddingLock,
+					'margin-lock-' + marginLock,
+					className,
+					controlClassName
+				)}
+				data-cy="box-spacing-control"
+			>
+				<svg
+					width="250"
+					height="159"
+					viewBox="0 0 250 159"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
 				>
-					<svg
-						width="250"
-						height="159"
-						viewBox="0 0 250 159"
-						fill="none"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						{marginAll.shape}
-						{marginHorizontal.shape}
-						{marginVertical.shape}
-						{marginTop.shape}
-						{marginRight.shape}
-						{marginBottom.shape}
-						{marginLeft.shape}
+					{marginAll.shape}
+					{marginHorizontal.shape}
+					{marginVertical.shape}
+					{marginTop.shape}
+					{marginRight.shape}
+					{marginBottom.shape}
+					{marginLeft.shape}
 
-						{paddingAll.shape}
-						{paddingHorizontal.shape}
-						{paddingVertical.shape}
-						{paddingTop.shape}
-						{paddingRight.shape}
-						{paddingBottom.shape}
-						{paddingLeft.shape}
-					</svg>
+					{paddingAll.shape}
+					{paddingHorizontal.shape}
+					{paddingVertical.shape}
+					{paddingTop.shape}
+					{paddingRight.shape}
+					{paddingBottom.shape}
+					{paddingLeft.shape}
+				</svg>
 
-					{marginAll.label}
-					{marginHorizontal.label}
-					{marginVertical.label}
-					{marginTop.label}
-					{marginRight.label}
-					{marginBottom.label}
-					{marginLeft.label}
+				{marginAll.label}
+				{marginHorizontal.label}
+				{marginVertical.label}
+				{marginTop.label}
+				{marginRight.label}
+				{marginBottom.label}
+				{marginLeft.label}
 
-					{paddingAll.label}
-					{paddingHorizontal.label}
-					{paddingVertical.label}
-					{paddingTop.label}
-					{paddingRight.label}
-					{paddingBottom.label}
-					{paddingLeft.label}
+				{paddingAll.label}
+				{paddingHorizontal.label}
+				{paddingVertical.label}
+				{paddingTop.label}
+				{paddingRight.label}
+				{paddingBottom.label}
+				{paddingLeft.label}
 
-					<Margin {...sideProps} />
+				<Margin {...sideProps} />
 
-					<Padding {...sideProps} />
-				</div>
-
-				{marginAll.popover}
-				{marginHorizontal.popover}
-				{marginVertical.popover}
-				{marginTop.popover}
-				{marginRight.popover}
-				{marginBottom.popover}
-				{marginLeft.popover}
-
-				{paddingAll.popover}
-				{paddingHorizontal.popover}
-				{paddingVertical.popover}
-				{paddingTop.popover}
-				{paddingRight.popover}
-				{paddingBottom.popover}
-				{paddingLeft.popover}
+				<Padding {...sideProps} />
 			</div>
 		</BaseControl>
 	);
