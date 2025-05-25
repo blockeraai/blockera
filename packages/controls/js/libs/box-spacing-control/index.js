@@ -168,8 +168,8 @@ export default function BoxSpacingControl({
 					data-cy="box-spacing-control"
 				>
 					<svg
-						width="250"
-						height="159"
+						width="235"
+						height="150"
 						viewBox="0 0 250 159"
 						fill="none"
 						xmlns="http://www.w3.org/2000/svg"

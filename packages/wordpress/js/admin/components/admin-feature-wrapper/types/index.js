@@ -14,9 +14,9 @@ export type FeatureConfig = {
 	 */
 	parent?: string,
 	/**
-	 * Is active on free settings.
+	 * Is active on native settings.
 	 */
-	isActiveOnFree?: boolean,
+	onNative?: boolean,
 	/**
 	 * Is active on parent dependency settings.
 	 */

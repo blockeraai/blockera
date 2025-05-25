@@ -5,27 +5,25 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { applyFilters } from '@wordpress/hooks';
 import { useContext, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 
 /**
  * Blockera dependencies
  */
-import {
-	TabsContext,
-	SettingsContext,
-	AdminFeatureWrapper,
-} from '@blockera/wordpress';
-import { noop } from '@blockera/utils';
+import { TabsContext, SettingsContext } from '@blockera/wordpress';
 import {
 	Button,
 	Flex,
 	ToggleControl,
-	CheckboxControl,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+
+/**
+ * Internal dependencies
+ */
+import { BlockVisibility } from './block-visibility';
 
 // here store fallback default values for tab general settings.
 const fallbackDefaultValue = {
@@ -91,151 +89,6 @@ export const GeneralPanel = (): MixedElement => {
 			});
 	};
 
-	const BlockVisibility = ({ isChecked }: Object): MixedElement => (
-		<Flex direction={'column'} className={'blockera-settings-section'}>
-			<h3 className={'blockera-settings-general section-title'}>
-				<Icon
-					icon={'slash-circle'}
-					iconSize={24}
-					style={{
-						color: '#ff0c0c',
-					}}
-				/>
-				{__('Restricts Blocks by User Roles', 'blockera')}
-			</h3>
-
-			<p className={'blockera-settings-general section-desc'}>
-				{__(
-					'By default, all users with block editing capabilities can utilize the  features of Blockera blocks. You can specify which user roles should  have access to Blockera block settings within the Editor. Administrators  will always retain permission for these settings.',
-					'blockera'
-				)}
-			</p>
-
-			<div
-				className={'blockera-settings-general control-wrapper'}
-				aria-label={'Restrict block visibility'}
-			>
-				<AdminFeatureWrapper
-					config={config.general.restrictBlockVisibility}
-				>
-					<Flex direction={'column'}>
-						<ControlContextProvider
-							value={{
-								name: 'toggleRestrictBlockVisibility',
-								value: isChecked,
-							}}
-						>
-							<ToggleControl
-								// TODO: Convert to advanced labelType. to display for user is changed value or not!
-								labelType={'self'}
-								id={'toggleRestrictBlockVisibility'}
-								className={'blockera-settings-general control'}
-								defaultValue={
-									generalSettings.disableRestrictBlockVisibility
-								}
-								onChange={(checked: boolean) => {
-									applyFilters(
-										'blockera.admin.general.panel.disableRestrictBlockVisibility.onChange',
-										noop,
-										{
-											settings,
-											setSettings,
-											setHasUpdates,
-											generalSettings,
-											savedGeneralSettings,
-										}
-									)(checked);
-								}}
-								label={
-									<strong
-										className={
-											'blockera-settings-general control-label'
-										}
-									>
-										{__(
-											'Restrict Blockera blocks to selected user roles.',
-											'blockera'
-										)}
-									</strong>
-								}
-							/>
-						</ControlContextProvider>
-						<div
-							className={
-								'blockera-settings-block-visibility user-roles ' +
-								(!isChecked
-									? 'blockera-control-is-not-active'
-									: '')
-							}
-						>
-							<ControlContextProvider
-								value={{
-									type: 'nested',
-									name: 'userRoles',
-									value: Object.fromEntries(
-										Object.entries(
-											generalSettings.allowedUserRoles
-										).map(
-											([id, userRole]: [
-												string,
-												{
-													name: string,
-													checked: boolean,
-												}
-											]): [string, boolean] => {
-												return [id, userRole.checked];
-											}
-										)
-									),
-								}}
-							>
-								{Object.entries(
-									generalSettings.allowedUserRoles
-								).map(
-									(
-										[id, userRole]: [
-											string,
-											{
-												name: string,
-												checked: boolean,
-											}
-										],
-										index: number
-									): MixedElement => {
-										return (
-											<CheckboxControl
-												id={id}
-												key={userRole.name + index}
-												checkboxLabel={userRole.name}
-												defaultValue={userRole.checked}
-												onChange={(
-													checked: boolean
-												): void =>
-													applyFilters(
-														'blockera.admin.general.panel.restrictBlockVisibility.userRole.onChange',
-														noop,
-														{
-															id,
-															settings,
-															setSettings,
-															setHasUpdates,
-															generalSettings,
-															savedGeneralSettings,
-														}
-													)(checked)
-												}
-											/>
-										);
-									}
-								)}
-							</ControlContextProvider>
-						</div>
-					</Flex>
-				</AdminFeatureWrapper>
-			</div>
-		</Flex>
-	);
-
 	return (
 		<Flex
 			direction={'column'}
@@ -243,7 +96,12 @@ export const GeneralPanel = (): MixedElement => {
 			gap={40}
 		>
 			<BlockVisibility
-				isChecked={generalSettings.disableRestrictBlockVisibility}
+				config={config}
+				settings={settings}
+				setSettings={setSettings}
+				setHasUpdates={setHasUpdates}
+				generalSettings={generalSettings}
+				savedGeneralSettings={savedGeneralSettings}
 			/>
 
 			<Flex direction={'column'} className={'blockera-settings-section'}>

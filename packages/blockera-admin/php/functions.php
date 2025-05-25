@@ -33,13 +33,42 @@ if ( ! function_exists( 'blockera_normalized_user_roles' ) ) {
 				continue;
 			}
 
-			$user_roles[ $id ] = [
-				'name'    => $name,
-				'checked' => false,
-			];
+			$user_roles[ $id ] = true;
 		}
 
 		return $user_roles;
+	}
+}
+
+if ( ! function_exists( 'blockera_get_post_types' ) ) {
+
+	/**
+	 * Get the post types.
+	 *
+	 * @return array the post types.
+	 */
+	function blockera_get_post_types(): array {
+
+		$normalized_post_types = [];
+		$post_types            = get_post_types(
+            [
+				'public' => true,
+				'show_in_rest' => true,
+			],
+            'object' 
+        );
+
+		foreach ( $post_types as $post_type ) {
+
+			if ( 'attachment' === $post_type->name ) {
+
+				continue;
+			}
+
+			$normalized_post_types[ $post_type->name ] = true;
+		}
+
+		return $normalized_post_types;
 	}
 }
 

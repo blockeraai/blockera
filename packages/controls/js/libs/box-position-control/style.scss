@@ -11,8 +11,8 @@
 
 	.blockera-control-position-body {
 		position: relative;
-		height: 84px;
-		width: 250px;
+		height: 79px;
+		width: 235px;
 		margin: 0 auto;
 
 		&.type-absolute {
@@ -116,7 +116,7 @@
 				color: #b9b9b9;
 				position: absolute;
 				left: calc(100% + 4px);
-				top: -8px;
+				top: -2px;
 			}
 
 			b {
@@ -165,7 +165,7 @@
 			top: 0;
 			right: 0;
 			left: 0;
-			height: 30px;
+			height: 28px;
 
 			.blockera-control-value-addon-pointers {
 				top: -13.5px;
@@ -183,13 +183,18 @@
 				right: -13.5px;
 				top: 15px;
 			}
+
+			.blockera-control-reset-icon {
+				left: -19px;
+				right: initial;
+			}
 		}
 
 		&.side-bottom {
 			bottom: 0;
 			right: 0;
 			left: 0;
-			height: 30px;
+			height: 28px;
 
 			.blockera-control-value-addon-pointers {
 				right: initial;
@@ -204,7 +209,7 @@
 			top: 0;
 			bottom: 0;
 			left: 0;
-			width: 30px;
+			width: 28px;
 
 			.blockera-control-value-addon-pointers {
 				text-align: left;
@@ -222,8 +227,8 @@
 			}
 
 			i {
-				top: 18px;
-				width: 30px;
+				top: 22px;
+				width: 28px;
 				left: 0;
 				right: 0;
 				padding: 0 0 0 4px;
@@ -238,8 +243,8 @@
 			}
 
 			i {
-				top: 18px;
-				width: 30px;
+				top: 22px;
+				width: 28px;
 				left: 0;
 				right: 0;
 				padding: 0 4px 0 0;

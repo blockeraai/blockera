@@ -17,7 +17,7 @@ import { FeatureWrapper } from '@blockera/controls';
 import type { FeatureConfig } from './types';
 
 export const AdminFeatureWrapper = ({
-	config: { status, parent, isActiveOnFree, isParentActive = true },
+	config: { status, parent, onNative, isParentActive = true },
 	children,
 	...props
 }: {
@@ -37,9 +37,9 @@ export const AdminFeatureWrapper = ({
 
 	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');
 
-	if (!Array.isArray(isLocked) && !isActiveOnFree) {
+	if (!Array.isArray(isLocked) && onNative) {
 		return (
-			<FeatureWrapper type="free" showText="always" {...props}>
+			<FeatureWrapper type="native" showText="always" {...props}>
 				{children}
 			</FeatureWrapper>
 		);
