@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.7.1 (2025-05-25)
+
 ### Improvements
 - Improved the checkup for restricted block visibility by user roles, post types and block manager in panel options.
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.4 (2025-05-25)
+
 ### Improvements
 - Improved the APIs of the `blockera/wordpress` package to be more flexible and easier to use.
 

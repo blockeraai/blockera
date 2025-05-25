@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.2.0 (2025-05-25)
+
 ### New Features
 - Added a new "Restrict Block Visibility By Post Type" feature to the Blockera admin panel, allowing users to restrict block visibility to selected post types.
 

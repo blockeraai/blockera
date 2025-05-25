@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.3 (2025-05-25)
+
 ### Bug Fixes
 - Fix the block edit panel horizontal scrollbar.
 - Fix box spacing design issues.
