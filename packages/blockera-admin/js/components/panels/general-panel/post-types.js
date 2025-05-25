@@ -29,7 +29,6 @@ export const PostTypes = ({
 	generalSettings,
 	savedGeneralSettings,
 }: BlockVisibilityProps): MixedElement => {
-	console.log(generalSettings.allowedPostTypes);
 	return (
 		<Flex direction={'column'} className={'blockera-settings-section'}>
 			<h3 className={'blockera-settings-general section-title'}>
