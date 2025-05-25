@@ -28,15 +28,19 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 				currentUser: applyFilters(
 					'blockera.editor.extensions.currentUser',
 					{
-						roles: [],
+						roles: ['administrator'],
 					}
 				),
-				notAllowedUsers: applyFilters(
-					'blockera.editor.extensions.hooks.withBlockSettings.notAllowedUsers',
+				allowedUsers: applyFilters(
+					'blockera.editor.extensions.hooks.withBlockSettings.allowedUsers',
 					[]
 				),
 				unsupportedBlocks: applyFilters(
 					'blockera.editor.extensions.hooks.withBlockSettings.disabledBlocks',
+					[]
+				),
+				allowedPostTypes: applyFilters(
+					'blockera.editor.extensions.hooks.withBlockSettings.allowedPostTypes',
 					[]
 				),
 			}),

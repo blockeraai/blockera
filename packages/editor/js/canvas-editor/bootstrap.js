@@ -4,6 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
 import { getPlugin, registerPlugin } from '@wordpress/plugins';
 import { useEffect } from '@wordpress/element';
@@ -21,6 +22,54 @@ import type { BreakpointTypes } from '../extensions/libs/block-card/block-states
 const cache: Map<string, boolean> = new Map();
 
 export const bootstrapCanvasEditor = (): void | Object => {
+	const allowedUsers = applyFilters(
+		'blockera.editor.extensions.hooks.withBlockSettings.allowedUsers',
+		[]
+	);
+	const allowedPostTypes = applyFilters(
+		'blockera.editor.extensions.hooks.withBlockSettings.allowedPostTypes',
+		[]
+	);
+	const currentUser = applyFilters('blockera.editor.extensions.currentUser', {
+		roles: ['administrator'],
+	});
+	const { blockeraCurrentPostType } = window;
+
+	const needToShowCanvasEditor = () => {
+		// While the not changed, the block is available.
+		if (!allowedUsers.length && !allowedPostTypes.length) {
+			return true;
+		}
+
+		// If the block is not supported with restricted visibility by post type, it is not available.
+		if (
+			!allowedUsers.length &&
+			allowedPostTypes.length &&
+			blockeraCurrentPostType
+		) {
+			return allowedPostTypes.includes(blockeraCurrentPostType);
+		}
+
+		// If the block is not supported with restricted visibility by user roles, it is not available.
+		if (!allowedPostTypes.length && allowedUsers.length) {
+			return allowedUsers.filter((role) =>
+				currentUser.roles.includes(role)
+			).length;
+		}
+
+		// If the block is not supported with restricted visibility by user roles, and post type, it is not available.
+		return !blockeraCurrentPostType
+			? allowedUsers.filter((role) => currentUser.roles.includes(role))
+					.length
+			: allowedUsers.filter((role) => currentUser.roles.includes(role))
+					.length &&
+					allowedPostTypes.includes(blockeraCurrentPostType);
+	};
+
+	if (!needToShowCanvasEditor()) {
+		return;
+	}
+
 	const { getEntity } = select('blockera/data') || {};
 
 	const observerPlugin = 'blockera-canvas-editor-observer';
