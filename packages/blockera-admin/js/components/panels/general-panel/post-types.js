@@ -29,6 +29,7 @@ export const PostTypes = ({
 	generalSettings,
 	savedGeneralSettings,
 }: BlockVisibilityProps): MixedElement => {
+	console.log(generalSettings.allowedPostTypes);
 	return (
 		<Flex direction={'column'} className={'blockera-settings-section'}>
 			<h3 className={'blockera-settings-general section-title'}>
@@ -44,7 +45,7 @@ export const PostTypes = ({
 
 			<p className={'blockera-settings-general section-desc'}>
 				{__(
-					'By default, all post types with block editing capabilities can utilize the features of Blockera blocks. You can specify which post types should have access to Blockera block settings within the Editor. If not changed, the all supported post types of block editor will be used.',
+					'By default, all post types with block editing capabilities can utilize the features of Blockera blocks (Advanced Mode). You can specify which post types should have access to Blockera block settings within the Editor. If not changed, the all supported post types of block editor will be used.',
 					'blockera'
 				)}
 			</p>
@@ -91,7 +92,7 @@ export const PostTypes = ({
 										}
 									>
 										{__(
-											'Restrict Blockera blocks to selected post types.',
+											'Enable Blockera blocks for selected post types:',
 											'blockera'
 										)}
 									</strong>

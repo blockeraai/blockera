@@ -44,7 +44,7 @@ export const UserRoles = ({
 
 			<p className={'blockera-settings-general section-desc'}>
 				{__(
-					'By default, all users with block editing capabilities can utilize the  features of Blockera blocks. You can specify which user roles should  have access to Blockera block settings within the Editor. Administrators  will always retain permission for these settings.',
+					'By default, all users with block editing capabilities can utilize the features of Blockera blocks (Advanced Mode). You can specify which user roles should  have access to Blockera block settings within the Editor. Administrators  will always retain permission for these settings.',
 					'blockera'
 				)}
 			</p>
@@ -89,7 +89,7 @@ export const UserRoles = ({
 										}
 									>
 										{__(
-											'Restrict Blockera blocks to selected user roles.',
+											'Enable Blockera blocks for selected user roles:',
 											'blockera'
 										)}
 									</strong>
