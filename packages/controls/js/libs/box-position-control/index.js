@@ -261,8 +261,8 @@ const BoxPositionControl = ({
 					)}
 				>
 					<svg
-						width="250"
-						height="84"
+						width="235"
+						height="79"
 						viewBox="0 0 250 84"
 						xmlns="http://www.w3.org/2000/svg"
 					>
