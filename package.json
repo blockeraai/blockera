@@ -1,6 +1,6 @@
 {
 	"name": "@blockera/plugin",
-	"version": "1.11.1",
+	"version": "1.11.2",
 	"private": true,
 	"description": "Make Gutenberg a Real Page Builder!",
 	"author": "The  Contributors",
