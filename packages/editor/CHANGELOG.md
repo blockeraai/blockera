@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue where block settings did not properly show when selecting an unsupported block.
+
 ## 1.7.1 (2025-05-25)
 
 ### Improvements
