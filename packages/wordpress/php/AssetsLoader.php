@@ -384,7 +384,7 @@ class AssetsLoader {
 		}
 
 		$package_json = sprintf(
-			'%1$spackages/%2$s/package.json',
+			'%1$svendor/blockera/%2$s/package.json',
 			$this->root_info['path'],
 			$name,
 		);
@@ -392,7 +392,7 @@ class AssetsLoader {
 		if ( ! file_exists( $package_json ) ) {
 			
 			$package_json = sprintf(
-				'%1$spackages/%2$s/package.json',
+				'%1$svendor/blockera/%2$s/package.json',
 				$this->fallback_args['path'] ?? '',
 				$name,
 			);
