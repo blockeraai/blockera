@@ -424,7 +424,7 @@ describe('Column Block', () => {
 			'.blockera-block.wp-block-column[style*=flex-basis]{flex-grow:0';
 
 		//Check block
-		cy.get('link#\\@blockera\\/blocks-styles-css')
+		cy.get('link[id^="@blockera/blocks-styles-"]')
 			.should('exist')
 			.then(($link) => {
 				// Fetch the CSS file content
