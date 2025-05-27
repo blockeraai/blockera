@@ -42,6 +42,18 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/controls"
+		},
+		{
+			"type": "path",
+			"url": "packages/classnames"
+		},
+		{
+			"type": "path",
+			"url": "packages/icons"
+		},
+		{
+			"type": "path",
 			"url": "packages/http"
 		},
 		{
@@ -74,6 +86,9 @@
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
+		"blockera/classnames": "*",
+		"blockera/controls": "*",
+		"blockera/icons": "*",
 		"blockera/editor": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",

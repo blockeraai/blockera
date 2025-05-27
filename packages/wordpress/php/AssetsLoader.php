@@ -159,7 +159,7 @@ class AssetsLoader {
 
 					$this->packages_deps[$asset['name']][$index] .= '-' . $version;
 				}
-				
+
 				wp_enqueue_script(
 					$asset['name'] . '-' . $package_version,
 					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),

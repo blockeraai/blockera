@@ -1,0 +1,15 @@
+{
+	"name": "blockera/icons",
+	"version": "1.0.0",
+	"description": "The blockera icons package.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Icons\\": "php/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Icons\\Tests\\": "php/tests/"
+		}
+	}
+}
