@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Improved loading of the admin page assets suitable version and dependencies.
+
 ## 1.2.0 (2025-05-25)
 
 ### New Features

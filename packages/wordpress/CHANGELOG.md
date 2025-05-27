@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Improved the assets loader to be more flexible and easier to use of packages versions and dependencies.
+
 ## 1.1.4 (2025-05-25)
 
 ### Improvements

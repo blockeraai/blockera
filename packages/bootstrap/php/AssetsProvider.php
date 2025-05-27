@@ -72,4 +72,19 @@ abstract class AssetsProvider extends ServiceProvider {
 	 * @return bool the blockera plugin debug mode.
 	 */
 	abstract protected function getDebugMode(): bool;
+
+	/**
+	 * Get package version.
+	 *
+	 * @param string $path The package path.
+	 *
+	 * @return string The package version.
+	 */
+	protected function getPackageVersion(string $path): string {
+
+		$package_json = blockera_get_filesystem()->get_contents($path);
+		$package_version = json_decode($package_json, true);
+
+		return str_replace('.', '-', $package_version['version']);
+	}
 }

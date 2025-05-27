@@ -31,7 +31,9 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 	 */
 	public function getHandler(): string {
 
-		return '@blockera/blockera';
+		$path = blockera_core_config('app.vendor_path') . 'blockera/blockera/package.json';
+
+		return '@blockera/blockera-' . $this->getPackageVersion($path);
 	}
 
 	/**

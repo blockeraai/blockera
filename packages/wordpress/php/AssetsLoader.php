@@ -123,13 +123,18 @@ class AssetsLoader {
 			return;
 		}
 
+		$assets = $this->prepareAssets();
+
 		array_map(
-			function ( array $asset ): void {
+			function ( array $asset ) use ($assets) : void {
+
+				$package_version = $this->getPackageVersion(str_replace(['@blockera/', '-styles'], '', $asset['name']));
+				$package_version = str_replace('.', '-', $package_version);
 
 				if ( $asset['style'] ) {
 
 					wp_enqueue_style(
-						$asset['name'],
+						$asset['name'] . '-' . $package_version,
 						str_replace( '\\', DIRECTORY_SEPARATOR, $asset['style'] ),
 						[],
 						$asset['version']
@@ -147,8 +152,16 @@ class AssetsLoader {
 
 				array_map( 'wp_enqueue_script', $this->packages_deps[ $asset['name'] ] ?? [] );
 
+				foreach($this->packages_deps[ $asset['name'] ] ?? [] as $index => $dep){
+					
+					$version = $this->getPackageVersion(str_replace('@blockera/', '', $dep));
+					$version = str_replace('.', '-', $version);
+
+					$this->packages_deps[$asset['name']][$index] .= '-' . $version;
+				}
+				
 				wp_enqueue_script(
-					$asset['name'],
+					$asset['name'] . '-' . $package_version,
 					str_replace( '\\', DIRECTORY_SEPARATOR, $asset['script'] ),
 					array_merge(
 						$deps,
@@ -161,7 +174,7 @@ class AssetsLoader {
 				);
 
 			},
-			$this->prepareAssets()
+			$assets
 		);
 
 		/**
@@ -357,4 +370,47 @@ class AssetsLoader {
 		return compact( 'name', 'deps', 'script', 'style', 'version' );
 	}
 
+	/**
+	 * Get package version.
+	 *
+	 * @param string $name the name of current asset.
+	 *
+	 * @return string the package version.
+	 */
+	private function getPackageVersion(string $name): string {
+
+		if (str_contains($name, 'blocks-')) {
+			$name = str_replace('blocks-', 'blocks/', $name);
+		}
+
+		$package_json = sprintf(
+			'%1$spackages/%2$s/package.json',
+			$this->root_info['path'],
+			$name,
+		);
+
+		if ( ! file_exists( $package_json ) ) {
+			
+			$package_json = sprintf(
+				'%1$spackages/%2$s/package.json',
+				$this->fallback_args['path'] ?? '',
+				$name,
+			);
+
+			if ( ! file_exists( $package_json ) ) {
+
+				return '';
+			}
+		}
+
+		global $wp_filesystem;
+
+		if (! $wp_filesystem) {
+			require_once(ABSPATH . '/wp-admin/includes/file.php');
+
+			WP_Filesystem();
+		}
+
+		return json_decode( $wp_filesystem->get_contents( $package_json ), true )['version'];
+	}
 }
