@@ -1,9 +1,9 @@
 import {
 	savePage,
+	createPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Children Wrap → Functionality', () => {
@@ -18,12 +18,6 @@ describe('Children Wrap → Functionality', () => {
 	});
 
 	it('functionality of flex-wrap', () => {
-		// activate flex wrap feature
-		cy.activateMoreSettingsItem(
-			'More Layout Settings',
-			'Flex Children Wrap'
-		);
-
 		cy.getParentContainer('Children Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});
@@ -58,7 +52,7 @@ describe('Children Wrap → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'flex-wrap',
 			'wrap-reverse'
