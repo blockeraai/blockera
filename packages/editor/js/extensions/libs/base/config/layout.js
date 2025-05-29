@@ -32,7 +32,7 @@ const blockeraGap: FeatureConfig = {
 };
 
 const blockeraFlexWrap: FeatureConfig = {
-	show: false,
+	show: true,
 	force: false,
 	status: true,
 	label: __('Flex Children Wrap', 'blockera'),
