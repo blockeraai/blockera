@@ -13,6 +13,7 @@ import {
 	Fragment,
 	useEffect,
 } from '@wordpress/element';
+import { doAction } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -223,6 +224,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		// Get next settings after switch between blocks.
 		useEffect(() => {
+			doAction(
+				'blockera.editor.extensions.sharedExtension.blockSupports.cacheData',
+				cacheKey,
+				props
+			);
+
 			if (isInnerBlock(currentBlock)) {
 				const innerBlockDefinition = getDefinition(
 					currentBlock,
