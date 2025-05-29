@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed a bug in the panel admin React components to improve user experience.
+
 ### Improvements
 - Improved the assets loader to be more flexible and easier to use of packages versions and dependencies.
 
