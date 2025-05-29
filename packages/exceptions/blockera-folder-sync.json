@@ -2,6 +2,9 @@
 	"name": "blockera/exceptions",
 	"path": "packages/exceptions",
 	"dependent": {
-		"repositories": ["https://github.com/blockeraai/blockera.git"]
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
 	}
 }

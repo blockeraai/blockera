@@ -1,0 +1,15 @@
+{
+	"name": "blockera/controls",
+	"version": "1.3.3",
+	"description": "UI react.js components as controls for Blockera Core.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Controls\\": "php/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Controls\\Tests\\": "php/tests/"
+		}
+	}
+}

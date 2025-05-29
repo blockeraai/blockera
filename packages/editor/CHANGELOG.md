@@ -1,5 +1,9 @@
 ## Unreleased
 
+### New Features
+
+-   Added the new hook to extend block functionality while switching to other block or inner block to extend block functionality.
+
 ### Improvements
 
 -   `Flex → Children Wrap` option change to be shown by default.

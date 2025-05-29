@@ -13,12 +13,12 @@ return [
 	'editor' => [
 		'list'      => [
 			'utils',
+			'storage',
 			'classnames',
 			'icons',
 			'data-editor',
 			'env',
 			'data',
-			'storage',
 			'controls',
 			'telemetry',
 			'editor',

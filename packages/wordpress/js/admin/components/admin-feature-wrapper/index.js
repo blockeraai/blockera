@@ -17,7 +17,7 @@ import { FeatureWrapper } from '@blockera/controls';
 import type { FeatureConfig } from './types';
 
 export const AdminFeatureWrapper = ({
-	config: { status, parent, onNative, isParentActive = true },
+	config,
 	children,
 	...props
 }: {
@@ -28,16 +28,16 @@ export const AdminFeatureWrapper = ({
 	 */
 	showText?: 'on-hover' | 'always',
 }): MixedElement => {
-	if (!status) {
+	const feature = {
+		onNative: false,
+		...config,
+	};
+
+	if (!feature?.status) {
 		return <></>;
 	}
 
-	const { getEntity } = select('blockera/data');
-	const blockera = getEntity('blockera');
-
-	const isLocked = /\w+-[orp]+/i.exec(blockera?.locked || '');
-
-	if (!Array.isArray(isLocked) && onNative) {
+	if (!feature?.onNative) {
 		return (
 			<FeatureWrapper type="native" showText="always" {...props}>
 				{children}
@@ -45,10 +45,10 @@ export const AdminFeatureWrapper = ({
 		);
 	}
 
-	if (!isParentActive) {
+	if (!feature?.isParentActive) {
 		return (
 			<FeatureWrapper
-				typeName={parent}
+				typeName={feature?.parent}
 				type="parent-inactive"
 				showText="always"
 				{...props}

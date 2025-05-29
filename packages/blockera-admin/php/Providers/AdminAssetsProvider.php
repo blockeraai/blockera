@@ -29,7 +29,9 @@ class AdminAssetsProvider extends AssetsProvider {
 	 */
 	public function getHandler(): string {
 
-		return '@blockera/blockera-admin';
+		$path = blockera_core_config('app.vendor_path') . 'blockera/blockera-admin/package.json';
+
+		return '@blockera/blockera-admin-' . $this->getPackageVersion($path);
 	}
 
 	/**
