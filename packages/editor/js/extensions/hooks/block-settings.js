@@ -39,7 +39,7 @@ import {
 	EditorAdvancedLabelControl,
 } from '../../components';
 import { STORE_NAME } from '../store/constants';
-import { useStoreSelectors, useBlockSideEffectsRestore } from '../../hooks';
+import { useStoreSelectors } from '../../hooks';
 import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 import { BlockApp, BlockBase, BlockIcon, BlockPortals } from '../components';
@@ -73,8 +73,6 @@ const useSharedBlockSideEffect = (): void => {
 			tabs.style.display = 'block';
 		}
 	}, [selectedBlock]);
-
-	useBlockSideEffectsRestore(selectedBlock);
 };
 
 const EdiBlockWithoutExtensions = ({

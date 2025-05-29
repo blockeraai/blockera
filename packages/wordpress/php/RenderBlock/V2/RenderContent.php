@@ -232,7 +232,7 @@ class RenderContent {
 				// Mark this style as loaded.
 				$loaded_styles[ $handle ] = true;
 			}
-		}		
+		}       
 	}
 
 	/**

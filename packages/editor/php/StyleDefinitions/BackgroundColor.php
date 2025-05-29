@@ -16,7 +16,7 @@ class BackgroundColor extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$this->setDeclaration($cssProperty, blockera_get_value_addon_real_value($setting[ $cssProperty ]));	
+		$this->setDeclaration($cssProperty, blockera_get_value_addon_real_value($setting[ $cssProperty ])); 
 
 		$this->setCss($this->declarations);
 
