@@ -1,18 +1,20 @@
 == Changelog ==
 
-### Version 1.11.2 - 2025-05-25
+### Version 1.11.3 - 2025-05-29
 
 ### New Features
-- Added a new "Restrict Block Visibility By Post Type" feature to the Blockera admin panel, allowing users to restrict block visibility to selected post types.
+-   Added the new hook to extend block functionality while switching to other block or inner block to extend block functionality.
 
 ### Improvements
-- Improved the checkup for restricted block visibility by user roles, post types and block manager in panel options.
-- Improved the APIs of the `blockera/wordpress` package to be more flexible and easier to use.
+- Improved the editor loading assets based on suitable version and dependencies.
+- Improved loading of the admin page assets suitable version and dependencies.
+- Improved the assets provider to be more flexible and easier to use and extend.
+-   `Flex → Children Wrap` option change to be shown by default.
+- Improved the assets loader to be more flexible and easier to use of packages versions and dependencies.
 
 ### Bug Fixes
-- Fix the block edit panel horizontal scrollbar.
-- Fix box spacing design issues.
-- Fix box position control design issues.
+-   Fixed an issue where block settings did not properly show when selecting an unsupported block.
+- Fixed a bug in the panel admin React components to improve user experience.
 
 ### More
 

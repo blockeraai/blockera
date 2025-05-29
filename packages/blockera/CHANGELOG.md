@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.2 (2025-05-29)
+
 ### Improvements
 - Improved the editor loading assets based on suitable version and dependencies.
 

@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.0.2 (2025-05-29)
+
 ### Improvements
 - Improved the assets provider to be more flexible and easier to use and extend.
 
