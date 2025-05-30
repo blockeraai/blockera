@@ -1,0 +1,410 @@
+{
+	"$schema": "./schemas/blocks.schema.json",
+	"data": {
+		"total": 94,
+		"supported": 79,
+		"soft-supported": 93,
+		"not-supported": 1,
+		"no-need-to-support": 14
+	},
+	"supported": [
+		{
+			"name": "core/paragraph",
+			"title": "Paragraph"
+		},
+		{
+			"name": "core/image",
+			"title": "Image"
+		},
+		{
+			"name": "core/heading",
+			"title": "Heading"
+		},
+		{
+			"name": "core/home-link",
+			"title": "Home Link"
+		},
+		{
+			"name": "core/gallery",
+			"title": "Gallery"
+		},
+		{
+			"name": "core/list",
+			"title": "List"
+		},
+		{
+			"name": "core/list-item",
+			"title": "List item"
+		},
+		{
+			"name": "core/quote",
+			"title": "Quote"
+		},
+		{
+			"name": "core/audio",
+			"title": "Audio"
+		},
+		{
+			"name": "core/button",
+			"title": "Button"
+		},
+		{
+			"name": "core/buttons",
+			"title": "Buttons"
+		},
+		{
+			"name": "core/categories",
+			"title": "Categories List"
+		},
+		{
+			"name": "core/code",
+			"title": "Code"
+		},
+		{
+			"name": "core/column",
+			"title": "Column"
+		},
+		{
+			"name": "core/columns",
+			"title": "Columns"
+		},
+		{
+			"name": "core/cover",
+			"title": "Cover"
+		},
+		{
+			"name": "core/details",
+			"title": "Details"
+		},
+		{
+			"name": "core/embed",
+			"title": "Embed"
+		},
+		{
+			"name": "core/file",
+			"title": "File"
+		},
+		{
+			"name": "core/group",
+			"title": "Group"
+		},
+		{
+			"name": "core/latest-posts",
+			"title": "Latest Posts",
+			"note": "@todo there is a lot of room for inner blocks improvements."
+		},
+		{
+			"name": "core/media-text",
+			"title": "Media & Text"
+		},
+		{
+			"name": "core/page-list",
+			"title": "Page List"
+		},
+		{
+			"name": "core/pullquote",
+			"title": "Pullquote"
+		},
+		{
+			"name": "core/preformatted",
+			"title": "Preformatted"
+		},
+		{
+			"name": "core/search",
+			"title": "Search"
+		},
+		{
+			"name": "core/separator",
+			"title": "Separator"
+		},
+		{
+			"name": "core/social-link",
+			"title": "Social Icon"
+		},
+		{
+			"name": "core/social-links",
+			"title": "Social Icons"
+		},
+		{
+			"name": "core/table",
+			"title": "Table"
+		},
+		{
+			"name": "core/verse",
+			"title": "Verse"
+		},
+		{
+			"name": "core/footnotes",
+			"title": "Footnotes"
+		},
+		{
+			"name": "core/video",
+			"title": "Video"
+		},
+		{
+			"name": "core/site-logo",
+			"title": "Site Logo"
+		},
+		{
+			"name": "core/site-title",
+			"title": "Site Title"
+		},
+		{
+			"name": "core/site-tagline",
+			"title": "Site Tagline"
+		},
+		{
+			"name": "core/avatar",
+			"title": "Avatar"
+		},
+		{
+			"name": "core/post-title",
+			"title": "Title"
+		},
+		{
+			"name": "core/post-excerpt",
+			"title": "Excerpt"
+		},
+		{
+			"name": "core/post-featured-image",
+			"title": "Featured Image"
+		},
+		{
+			"name": "core/post-content",
+			"title": "Content"
+		},
+		{
+			"name": "core/post-author",
+			"title": "Author"
+		},
+		{
+			"name": "core/post-author-name",
+			"title": "Author Name"
+		},
+		{
+			"name": "core/post-date",
+			"title": "Date"
+		},
+		{
+			"name": "core/post-navigation-link",
+			"title": "Post Navigation Link"
+		},
+		{
+			"name": "core/navigation-submenu",
+			"title": "Submenu"
+		},
+		{
+			"name": "core/post-terms",
+			"title": "Post Terms"
+		},
+		{
+			"name": "core/post-template",
+			"title": "Post Template",
+			"note": "supported with blockera but it needs to be improved inners core and virtual blocks."
+		},
+		{
+			"name": "core/query-pagination",
+			"title": "Pagination"
+		},
+		{
+			"name": "core/query-pagination-next",
+			"title": "Next Page"
+		},
+		{
+			"name": "core/query-pagination-numbers",
+			"title": "Page Numbers"
+		},
+		{
+			"name": "core/query-pagination-previous",
+			"title": "Previous Page"
+		},
+		{
+			"name": "core/query-total",
+			"title": "Query Total"
+		},
+		{
+			"name": "core/read-more",
+			"title": "Read More"
+		},
+		{
+			"name": "core/comments",
+			"title": "Comments"
+		},
+		{
+			"name": "core/comment-author-name",
+			"title": "Comment Author Name"
+		},
+		{
+			"name": "core/comment-content",
+			"title": "Comment Content"
+		},
+		{
+			"name": "core/comment-date",
+			"title": "Comment Date"
+		},
+		{
+			"name": "core/comment-edit-link",
+			"title": "Comment Edit Link"
+		},
+		{
+			"name": "core/comment-reply-link",
+			"title": "Comment Reply Link"
+		},
+		{
+			"name": "core/comment-template",
+			"title": "Comment Template"
+		},
+		{
+			"name": "core/comments-title",
+			"title": "Comments Title"
+		},
+		{
+			"name": "core/comments-pagination",
+			"title": "Comments Pagination"
+		},
+		{
+			"name": "core/comments-pagination-next",
+			"title": "Comments Next Page"
+		},
+		{
+			"name": "core/comments-pagination-numbers",
+			"title": "Comments Page Numbers"
+		},
+		{
+			"name": "core/comments-pagination-previous",
+			"title": "Comments Previous Page"
+		},
+		{
+			"name": "core/post-comments-form",
+			"title": "Comments Form"
+		},
+		{
+			"name": "core/query-no-results",
+			"title": "No results"
+		},
+		{
+			"name": "core/term-description",
+			"title": "Term Description"
+		},
+		{
+			"name": "core/query-title",
+			"title": "Query Title"
+		},
+		{
+			"name": "core/post-author-biography",
+			"title": "Author Biography"
+		},
+		{
+			"name": "core/loginout",
+			"title": "Login/out"
+		},
+		{
+			"name": "core/rss",
+			"title": "RSS"
+		},
+		{
+			"name": "core/latest-comments",
+			"title": "Latest Comments"
+		},
+		{
+			"name": "core/spacer",
+			"title": "Spacer",
+			"note": "@todo Advanced compatibility for responsive height needed."
+		},
+		{
+			"name": "core/navigation-link",
+			"title": "Navigation Link"
+		},
+		{
+			"name": "core/archives",
+			"title": "Archives"
+		},
+		{
+			"name": "core/calendar",
+			"title": "Calendar"
+		},
+		{
+			"name": "core/tag-cloud",
+			"title": "Tag Cloud"
+		}
+	],
+	"no-need-to-support": [
+		{
+			"name": "core/html",
+			"title": "Custom HTML",
+			"note": "Semantically no need to support ans also there is no wrapper tag for this block and can not be supported."
+		},
+		{
+			"name": "core/missing",
+			"title": "Unsupported",
+			"note": "This block has not front end support."
+		},
+		{
+			"name": "core/nextpage",
+			"title": "Page Break",
+			"note": "There is no wrapper tag for this block and can not be supported."
+		},
+		{
+			"name": "core/pattern",
+			"title": "Pattern placeholder",
+			"note": "This block has not front end support."
+		},
+		{
+			"name": "core/shortcode",
+			"title": "Shortcode",
+			"note": "There is no wrapper tag for this block and can not be supported."
+		},
+		{
+			"name": "core/text-columns",
+			"title": "Text Columns (deprecated)",
+			"note": "This block is deprecated and no need to be supported."
+		},
+		{
+			"name": "core/freeform",
+			"title": "Classic",
+			"note": "There is no wrapper tag for this block and can not be supported."
+		},
+		{
+			"name": "core/block",
+			"title": "Pattern",
+			"note": "No supported for front end needed but we can add some custom functionality like conditions."
+		},
+		{
+			"name": "core/query",
+			"title": "Query Loop",
+			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
+		},
+		{
+			"name": "core/template-part",
+			"title": "Template Part",
+			"note": "No supported for front end needed but we can add some custom functionality like conditions."
+		},
+		{
+			"name": "core/more",
+			"title": "More",
+			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/legacy-widget",
+			"title": "Legacy Widget",
+			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/widget-group",
+			"title": "Widget Group",
+			"note": "Investigate if this block can be supported."
+		},
+		{
+			"name": "core/page-list-item",
+			"title": "Page List Item",
+			"note": "This block is not selectable and there is no ui for it for user and we do not need to support it."
+		}
+	],
+	"not-supported": [
+		{
+			"name": "core/navigation",
+			"title": "Navigation",
+			"note": "Advanced editor setting panel compatibility needed."
+		}
+	]
+}
