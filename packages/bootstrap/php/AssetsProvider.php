@@ -80,7 +80,7 @@ abstract class AssetsProvider extends ServiceProvider {
 	 *
 	 * @return string The package version.
 	 */
-	protected function getPackageVersion(string $path): string {
+	protected function getPackageVersion( string $path): string {
 
 		$package_json = blockera_get_filesystem()->get_contents($path);
 		$package_version = json_decode($package_json, true);

@@ -265,7 +265,7 @@ class Transpiler {
         while ($processor->next_tag()) {
             $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
-            $class        = $processor->get_attribute('class');			
+            $class        = $processor->get_attribute('class');         
 
 			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
 			if ($class && str_contains($class, 'blockera-is-transpiled')) {

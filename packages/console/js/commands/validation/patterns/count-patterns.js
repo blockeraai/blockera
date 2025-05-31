@@ -1,0 +1,25 @@
+const patterns = [
+	`if ({{COUNT}} !== {{NAME}}.length) { return false; }`,
+	`if ({{NAME}}.length !== {{COUNT}}) { return false; }`,
+	`if ({{NAME}}.length !== {{COUNT}}) { return false; }`,
+	`if ({{COUNT}} !== {{NAME}}.length) return false;`,
+	`if ({{NAME}}.length !== {{COUNT}}) return false;`,
+	`if ({{NAME}}.length !== {{COUNT}}) return false;`,
+	`if ({{NAME}}.length === {{COUNT}}) { return false; }`,
+	`if ({{COUNT}} !== {{NAME}}.length) { return false; }`,
+	`if ({{COUNT}} !== {{NAME}}.length) { return false; }`,
+	`if ({{COUNT}} === {{NAME}}.length) return false;`,
+	`if ({{COUNT}} !== {{NAME}}.length) { return false; }`,
+	`if ({{COUNT}} === {{NAME}}.length) { return false; }`,
+	`if ({{NAME}}.length === {{COUNT}}) return false;`,
+	`if ({{NAME}}.length === {{COUNT}}) { return false; }`,
+	`if ({{COUNT}} !== {{NAME}}.length) return false;`,
+	`if ({{NAME}}.length !== {{COUNT}}) { return false; }`,
+	`if ({{NAME}}.length === {{COUNT}}) { return false; }`,
+	`if ({{NAME}}.length === {{COUNT}}) { return false; }`,
+	`if ({{NAME}}.length !== {{COUNT}}) return false;`,
+	`if ({{COUNT}} !== {{NAME}}.length) { return false; }`,
+	`if ({{NAME}}.length === {{COUNT}}) return false;`,
+];
+
+module.exports = patterns;

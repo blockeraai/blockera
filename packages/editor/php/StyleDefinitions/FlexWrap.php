@@ -12,7 +12,7 @@ class FlexWrap extends BaseStyleDefinition {
         if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'flex-wrap' !== $cssProperty) {
 
             return $declaration;
-		}		
+		}       
 		
 		// Backward compatibility for flex-wrap value, because flex-wrap changed from value to val in the new version.
 		$flexWrap                = $setting['flex-wrap'];
