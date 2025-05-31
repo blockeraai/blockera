@@ -11,7 +11,7 @@
 ### Bug Fixes
 
 - Fixed an issue where block settings did not properly show when selecting an unsupported block.
-- Fixed an issue where `link` inner block color not reset.
+- Fixed an issue where `link` inner block color not reset. Thanks to Davor 🙏🏼
 
 ## 1.7.1 (2025-05-25)
 
