@@ -263,6 +263,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							getAttributes,
+							blockDetail,
 						})
 					);
 			}
