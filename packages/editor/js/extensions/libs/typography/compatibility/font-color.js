@@ -3,9 +3,14 @@
 /**
  * Blockera dependencies
  */
-import { isUndefined } from '@blockera/utils';
+import { isUndefined, mergeObject } from '@blockera/utils';
 import { isValid } from '@blockera/controls';
 import { getColorVAFromIdString } from '@blockera/data';
+
+/**
+ * Internal dependencies
+ */
+import type { BlockDetail } from '../../block-card/block-states/types';
 
 function isColorsEqual(
 	fontColor: void | string,
@@ -60,26 +65,14 @@ export function fontColorToWPCompatibility({
 	newValue,
 	ref,
 	getAttributes,
+	blockDetail,
 }: {
 	newValue: Object,
 	ref?: Object,
 	getAttributes: () => Object,
+	blockDetail: BlockDetail,
 }): Object {
-	const attributes: {
-		textColor: void | string,
-		style: {
-			color: {
-				text: void | string,
-			},
-			elements: {
-				link: {
-					color: {
-						text: void | string,
-					},
-				},
-			},
-		},
-	} = getAttributes();
+	const attributes = getAttributes();
 
 	if ('reset' === ref?.current?.action || newValue === '') {
 		// link and font color are equal
@@ -93,7 +86,38 @@ export function fontColorToWPCompatibility({
 				attributes?.style?.elements?.link?.color?.text
 			)
 		) {
+			let advancedAttrCleanup = {};
+
+			// find inner blocks with font-color data compatibility and clear blockeraFontColor attribute
+			Object.keys(blockDetail.innerBlocks).forEach((innerBlock) => {
+				if (
+					!attributes?.blockeraInnerBlocks[innerBlock]?.attributes
+						?.blockeraFontColor
+				) {
+					return;
+				}
+
+				if (
+					blockDetail.innerBlocks[
+						innerBlock
+					]?.settings?.dataCompatibility?.includes('font-color')
+				) {
+					advancedAttrCleanup = mergeObject(advancedAttrCleanup, {
+						blockeraInnerBlocks: {
+							value: {
+								[innerBlock]: {
+									attributes: {
+										blockeraFontColor: undefined,
+									},
+								},
+							},
+						},
+					});
+				}
+			});
+
 			return {
+				...advancedAttrCleanup,
 				textColor: undefined,
 				style: {
 					color: {
