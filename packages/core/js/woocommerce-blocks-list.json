@@ -1,0 +1,644 @@
+{
+	"$schema": "./schemas/blocks.schema.json",
+	"data": {
+		"total": 137,
+		"supported": 91,
+		"soft-supported": 103,
+		"not-supported": 34,
+		"no-need-to-support": 12
+	},
+	"supported": [
+		{
+			"name": "woocommerce/product-price",
+			"title": "Product Price"
+		},
+		{
+			"name": "woocommerce/product-title",
+			"title": "Product Title",
+			"note": "This is a variation of `core/heading` block."
+		},
+		{
+			"name": "woocommerce/product-image",
+			"title": "Product Image"
+		},
+		{
+			"name": "woocommerce/product-button",
+			"title": "Add to Cart Button"
+		},
+		{
+			"name": "woocommerce/store-notices",
+			"title": "Store Notices",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-results-count",
+			"title": "Product Results Count"
+		},
+		{
+			"name": "woocommerce/catalog-sorting",
+			"title": "Catalog Sorting"
+		},
+		{
+			"name": "woocommerce/order-confirmation-totals-wrapper",
+			"title": "Order Totals Section"
+		},
+		{
+			"name": "woocommerce/order-confirmation-status",
+			"title": "Order Status"
+		},
+		{
+			"name": "woocommerce/order-confirmation-summary",
+			"title": "Order Summary"
+		},
+		{
+			"name": "woocommerce/order-confirmation-totals",
+			"title": "Order Totals",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/order-confirmation-downloads",
+			"title": "Order Downloads",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/order-confirmation-downloads-wrapper",
+			"title": "Downloads Section"
+		},
+		{
+			"name": "woocommerce/order-confirmation-shipping-wrapper",
+			"title": "Shipping Address Section"
+		},
+		{
+			"name": "woocommerce/order-confirmation-shipping-address",
+			"title": "Shipping Address"
+		},
+		{
+			"name": "woocommerce/order-confirmation-billing-wrapper",
+			"title": "Billing Address Section"
+		},
+		{
+			"name": "woocommerce/order-confirmation-billing-address",
+			"title": "Billing Address"
+		},
+		{
+			"name": "woocommerce/order-confirmation-additional-fields-wrapper",
+			"title": "Additional Fields",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/order-confirmation-additional-fields",
+			"title": "Additional Field List",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/order-confirmation-additional-information",
+			"title": "Additional Information"
+		},
+		{
+			"name": "woocommerce/page-content-wrapper",
+			"title": "WooCommerce Page"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-block",
+			"title": "Cart Totals",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-heading-block",
+			"title": "Heading"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-coupon-form-block",
+			"title": "Coupon Form",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-totals-block",
+			"title": "Totals",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-subtotal-block",
+			"title": "Subtotal",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-fee-block",
+			"title": "Fees",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-taxes-block",
+			"title": "Taxes",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/proceed-to-checkout-block",
+			"title": "Proceed to Checkout"
+		},
+		{
+			"name": "woocommerce/cart-accepted-payment-methods-block",
+			"title": "Accepted Payment Methods",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filled-cart-block",
+			"title": "Filled Cart"
+		},
+		{
+			"name": "woocommerce/empty-cart-block",
+			"title": "Empty Cart"
+		},
+		{
+			"name": "woocommerce/customer-account",
+			"title": "Customer Account"
+		},
+		{
+			"name": "woocommerce/cart-order-summary-discount-block",
+			"title": "Discount",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/cart-order-summary-shipping-block",
+			"title": "Shipping",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout",
+			"title": "Checkout"
+		},
+		{
+			"name": "woocommerce/checkout-contact-information-block",
+			"title": "Contact Information"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-address-block",
+			"title": "Shipping Address"
+		},
+		{
+			"name": "woocommerce/checkout-billing-address-block",
+			"title": "Billing Address"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-methods-block",
+			"title": "Shipping Options"
+		},
+		{
+			"name": "woocommerce/checkout-payment-block",
+			"title": "Payment Options"
+		},
+		{
+			"name": "woocommerce/checkout-order-note-block",
+			"title": "Order Note"
+		},
+		{
+			"name": "woocommerce/checkout-terms-block",
+			"title": "Terms and Conditions"
+		},
+		{
+			"name": "woocommerce/checkout-actions-block",
+			"title": "Actions",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-block",
+			"title": "Order Summary",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-cart-items-block",
+			"title": "Cart Items",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-coupon-form-block",
+			"title": "Coupon Form",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-totals-block",
+			"title": "Totals",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-subtotal-block",
+			"title": "Subtotal",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-fee-block",
+			"title": "Fees",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-discount-block",
+			"title": "Discount",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-shipping-block",
+			"title": "Shipping",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/checkout-order-summary-taxes-block",
+			"title": "Taxes",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-template",
+			"title": "Product Template"
+		},
+		{
+			"name": "woocommerce/product-image-gallery",
+			"title": "Product Image Gallery",
+			"note": "Important Block: @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-rating",
+			"title": "Product Rating",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/add-to-cart-form",
+			"title": "Add to Cart with Options",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-meta",
+			"title": "Product Meta"
+		},
+		{
+			"name": "woocommerce/product-sku",
+			"title": "Product SKU"
+		},
+		{
+			"name": "woocommerce/product-details",
+			"title": "Product Details",
+			"note": "Important Block: @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/related-products",
+			"title": "Related Products"
+		},
+		{
+			"name": "woocommerce/product-reviews",
+			"title": "Product Reviews",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/reviews-by-category",
+			"title": "Reviews by Category",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/reviews-by-product",
+			"title": "Reviews by Product",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/all-reviews",
+			"title": "All Reviews",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/featured-category",
+			"title": "Featured Category",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/featured-product",
+			"title": "Featured Product",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter Block"
+		},
+		{
+			"name": "woocommerce/active-filters",
+			"title": "Active Filters Controls",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-categories",
+			"title": "Product Categories List",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-rating-stars",
+			"title": "Product Rating Stars",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-rating-counter",
+			"title": "Product Rating Counter",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-average-rating",
+			"title": "Product Average Rating (Beta)",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-sale-badge",
+			"title": "On-Sale Badge"
+		},
+		{
+			"name": "woocommerce/product-stock-indicator",
+			"title": "Product Stock Indicator"
+		},
+		{
+			"name": "woocommerce/attribute-filter",
+			"title": "Filter by Attribute Controls",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/price-filter",
+			"title": "Filter by Price Controls",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/rating-filter",
+			"title": "Filter by Rating Controls",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-collection-no-results",
+			"title": "No results"
+		},
+		{
+			"name": "woocommerce/stock-filter",
+			"title": "Filter by Stock Controls"
+		},
+		{
+			"name": "woocommerce/filled-mini-cart-contents-block",
+			"title": "Filled Mini-Cart view"
+		},
+		{
+			"name": "woocommerce/empty-mini-cart-contents-block",
+			"title": "Empty Mini-Cart view"
+		},
+		{
+			"name": "woocommerce/mini-cart-title-block",
+			"title": "Mini-Cart Title"
+		},
+		{
+			"name": "woocommerce/mini-cart-title-label-block",
+			"title": "Mini-Cart Title Label"
+		},
+		{
+			"name": "woocommerce/mini-cart-title-items-counter-block",
+			"title": "Mini-Cart Title Items Counter"
+		},
+		{
+			"name": "woocommerce/mini-cart-items-block",
+			"title": "Mini-Cart Items"
+		},
+		{
+			"name": "woocommerce/mini-cart-products-table-block",
+			"title": "Mini-Cart Products Table"
+		},
+		{
+			"name": "woocommerce/mini-cart-footer-block",
+			"title": "Mini-Cart Footer",
+			"note": "@todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/mini-cart-cart-button-block",
+			"title": "Mini-Cart View Cart Button"
+		},
+		{
+			"name": "woocommerce/mini-cart-checkout-button-block",
+			"title": "Mini-Cart Proceed to Checkout Button"
+		},
+		{
+			"name": "woocommerce/mini-cart-shopping-button-block",
+			"title": "Mini-Cart Shopping Button"
+		}
+	],
+	"no-need-to-support": [
+		{
+			"name": "woocommerce/coming-soon",
+			"title": "Coming Soon"
+		},
+		{
+			"name": "core/post-terms",
+			"title": "Product categories",
+			"note": "It's a block variation of `core/post-terms` that Blockera supports it."
+		},
+		{
+			"name": "core/post-terms",
+			"title": "Product tags",
+			"note": "It's a block variation of `core/post-terms` that Blockera supports it."
+		},
+		{
+			"name": "core/query",
+			"title": "Related Products Controls",
+			"note": "It's a block variation of `core/query` that Blockera supports it."
+		},
+		{
+			"name": "woocommerce/product-search",
+			"title": "Product Search",
+			"note": "It's a block variation of `core/search` that Blockera supports it."
+		},
+		{
+			"name": "woocommerce/classic-shortcode",
+			"title": "Classic Shortcode"
+		},
+		{
+			"name": "woocommerce/legacy-template",
+			"title": "Product (Classic)"
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter By Price",
+			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter By Stock",
+			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter By Attribute",
+			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/filter-wrapper",
+			"title": "Filter By Rating",
+			"note": "It's a block variation of `woocommerce/filter-wrapper` that Blockera supports it. @todo we can add advanced inner blocks support."
+		},
+		{
+			"name": "woocommerce/product-summary",
+			"title": "Product Summary",
+			"note": "It's a block variation of `core/paragraph` that Blockera supports it."
+		}
+	],
+	"not-supported": [
+		{
+			"name": "woocommerce/breadcrumbs",
+			"title": "Store Breadcrumbs",
+			"note": "Important Block: Needs advanced inner blocks support + data compatibility support."
+		},
+		{
+			"name": "woocommerce/mini-cart",
+			"title": "Mini-Cart",
+			"note": "Important Block: Needs advanced inner blocks support + data compatibility support."
+		},
+		{
+			"name": "woocommerce/all-products",
+			"title": "All Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-collection",
+			"title": "Product Collection",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-new",
+			"title": "Newest Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/handpicked-products",
+			"title": "Hand-picked Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-best-sellers",
+			"title": "Best Selling Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-category",
+			"title": "Products by Category",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-on-sale",
+			"title": "On Sale Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-tag",
+			"title": "Products by Tag",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/product-top-rated",
+			"title": "Top Rated Products",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/products-by-attribute",
+			"title": "Products by Attribute",
+			"note": "This block needs more investigation because it has columns and rows that needs advanced compatibility for responsive breakpoints."
+		},
+		{
+			"name": "woocommerce/single-product",
+			"title": "Single Product",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart-items-block",
+			"title": "Cart Items",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart-line-items-block",
+			"title": "Cart Line Items",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart-cross-sells-block",
+			"title": "Cart Cross-Sells",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart-cross-sells-products-block",
+			"title": "Cart Cross-Sells Products",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart-totals-block",
+			"title": "Cart Totals",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart-express-payment-block",
+			"title": "Express Checkout",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/cart",
+			"title": "Cart",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-fields-block",
+			"title": "Checkout Fields",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-totals-block",
+			"title": "Checkout Totals",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-express-payment-block",
+			"title": "Express Checkout",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-shipping-method-block",
+			"title": "Delivery",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-pickup-options-block",
+			"title": "Pickup Method",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/checkout-additional-information-block",
+			"title": "Additional information",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/mini-cart-contents",
+			"title": "Mini-Cart Contents",
+			"note": "@todo there is an issue for supporting this block that needs to be fixed"
+		},
+		{
+			"name": "woocommerce/product-gallery-large-image",
+			"title": "Large Image"
+		},
+		{
+			"name": "woocommerce/cart-link",
+			"title": "Cart Link"
+		},
+		{
+			"name": "woocommerce/product-gallery-large-image-next-previous",
+			"title": "Next/Previous Buttons"
+		},
+		{
+			"name": "woocommerce/product-gallery-pager",
+			"title": "Pager"
+		},
+		{
+			"name": "woocommerce/product-gallery-thumbnails",
+			"title": "Thumbnails"
+		},
+		{
+			"name": "woocommerce/product-gallery",
+			"title": "Product Gallery"
+		},
+		{
+			"name": "woocommerce/order-confirmation-create-account",
+			"title": "Account Creation"
+		}
+	]
+}

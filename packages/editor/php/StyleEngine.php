@@ -572,7 +572,7 @@ final class StyleEngine {
 			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
 
 			// Merge with existing rules, avoiding duplicates.
-			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {				
+			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {                
 				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 			}
 
