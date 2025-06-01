@@ -140,8 +140,8 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	public function __serialize(): array {
 		return [
 			'registered_value_addons' => $this->registered_value_addons,
-			'is_validated' => $this->is_validated,
-			'service_providers' => $this->service_providers
+			'is_validated'            => $this->is_validated,
+			'service_providers'       => $this->service_providers,
 		];
 	}
 
@@ -151,9 +151,9 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	 * @param array $data
 	 * @return void
 	 */
-	public function __unserialize(array $data): void {
+	public function __unserialize( array $data ): void {
 		$this->registered_value_addons = $data['registered_value_addons'];
-		$this->is_validated = $data['is_validated'];
-		$this->service_providers = $data['service_providers'];
+		$this->is_validated            = $data['is_validated'];
+		$this->service_providers       = $data['service_providers'];
 	}
 }
