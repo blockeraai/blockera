@@ -211,19 +211,36 @@ class Utils {
 
 		if (empty($parsed_url['query'])) {
 
-			return $with_scheme && ! empty($parsed_url['scheme']) && ! empty($parsed_url['host']) ? "{$parsed_url['scheme']}://{$parsed_url['host']}" : $parsed_url['host'] ?? '';
+			$host = $parsed_url['host'] ?? '';
+
+			if (! empty($parsed_url['port'])) {
+				$host .= ':' . $parsed_url['port'];
+			}
+
+			return $with_scheme && ! empty($parsed_url['scheme']) && ! empty($host) ? "{$parsed_url['scheme']}://{$host}" : $host;
 		}
 
 		parse_str($parsed_url['query'], $params);
 
-		$parsed_redirect_uri = parse_url($url);
+		$parsed_redirect_url = parse_url($url);
+
+		if (empty($parsed_redirect_url)) {
+
+			return '';
+		}
+
+		$host = $parsed_redirect_url['host'];
+
+		if (! empty($parsed_redirect_url['port'])) {
+			$host .= ':' . $parsed_redirect_url['port'];
+		}
 
 		if ($with_scheme) {
 
-			return "{$parsed_redirect_uri['scheme']}://{$parsed_redirect_uri['host']}";
+			return "{$parsed_redirect_url['scheme']}://{$host}";
 		}
 
-		return $parsed_redirect_uri['host'];
+		return $host;
 	}
 
 	/**
