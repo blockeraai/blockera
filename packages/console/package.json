@@ -1,0 +1,24 @@
+{
+	"name": "@blockera/console",
+	"version": "1.0.0",
+	"description": "The Blockera Console, provides a console for the Blockera Pro plugins.",
+	"author": "The Blockera Core Contributors",
+	"license": "ISC",
+	"keywords": [
+		"blockera",
+		"processor"
+	],
+	"homepage": "https://github.com/blockeraai/blockera-pro/blob/master/packages/console/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blockeraai/blockera-pro/blob/master/packages/console/README.md",
+		"directory": "packages/console"
+	},
+	"bugs": {
+		"url": "https://github.com/blockeraai/blockera-pro/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "js/index.js"
+}

@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Enhanced URL utilities with more robust domain extraction and parameter parsing capabilities.
+
 ## 1.2.0 (2025-04-27)
 
 ### New Features
