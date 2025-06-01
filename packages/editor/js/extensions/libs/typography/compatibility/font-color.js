@@ -89,32 +89,34 @@ export function fontColorToWPCompatibility({
 			let advancedAttrCleanup = {};
 
 			// find inner blocks with font-color data compatibility and clear blockeraFontColor attribute
-			Object.keys(blockDetail.innerBlocks).forEach((innerBlock) => {
-				if (
-					!attributes?.blockeraInnerBlocks[innerBlock]?.attributes
-						?.blockeraFontColor
-				) {
-					return;
-				}
+			if (blockDetail?.innerBlocks) {
+				Object.keys(blockDetail.innerBlocks).forEach((innerBlock) => {
+					if (
+						!attributes?.blockeraInnerBlocks[innerBlock]?.attributes
+							?.blockeraFontColor
+					) {
+						return;
+					}
 
-				if (
-					blockDetail.innerBlocks[
-						innerBlock
-					]?.settings?.dataCompatibility?.includes('font-color')
-				) {
-					advancedAttrCleanup = mergeObject(advancedAttrCleanup, {
-						blockeraInnerBlocks: {
-							value: {
-								[innerBlock]: {
-									attributes: {
-										blockeraFontColor: undefined,
+					if (
+						blockDetail.innerBlocks[
+							innerBlock
+						]?.settings?.dataCompatibility?.includes('font-color')
+					) {
+						advancedAttrCleanup = mergeObject(advancedAttrCleanup, {
+							blockeraInnerBlocks: {
+								value: {
+									[innerBlock]: {
+										attributes: {
+											blockeraFontColor: undefined,
+										},
 									},
 								},
 							},
-						},
-					});
-				}
-			});
+						});
+					}
+				});
+			}
 
 			return {
 				...advancedAttrCleanup,
