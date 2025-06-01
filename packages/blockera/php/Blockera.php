@@ -131,4 +131,29 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 
 		return $this->is_validated;
 	}
+
+	/**
+	 * Serialize the object.
+	 *
+	 * @return array
+	 */
+	public function __serialize(): array {
+		return [
+			'registered_value_addons' => $this->registered_value_addons,
+			'is_validated' => $this->is_validated,
+			'service_providers' => $this->service_providers
+		];
+	}
+
+	/**
+	 * Unserialize the object.
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	public function __unserialize(array $data): void {
+		$this->registered_value_addons = $data['registered_value_addons'];
+		$this->is_validated = $data['is_validated'];
+		$this->service_providers = $data['service_providers'];
+	}
 }
