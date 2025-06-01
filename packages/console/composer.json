@@ -1,0 +1,9 @@
+{
+	"name": "blockera/console",
+	"description": "The Blockera Console, provides a console for the Blockera Pro plugins.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Console\\": "js/"
+		}
+	}
+}
