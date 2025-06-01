@@ -213,7 +213,7 @@ class Utils {
 
 			$host = $parsed_url['host'] ?? '';
 
-			if (!empty($parsed_url['port'])) {
+			if (! empty($parsed_url['port'])) {
 				$host .= ':' . $parsed_url['port'];
 			}
 
@@ -224,14 +224,14 @@ class Utils {
 
 		$parsed_redirect_url = parse_url($url);
 
-		if(empty($parsed_redirect_url)) {
+		if (empty($parsed_redirect_url)) {
 
 			return '';
 		}
 
 		$host = $parsed_redirect_url['host'];
 
-		if (!empty($parsed_redirect_url['port'])) {
+		if (! empty($parsed_redirect_url['port'])) {
 			$host .= ':' . $parsed_redirect_url['port'];
 		}
 
