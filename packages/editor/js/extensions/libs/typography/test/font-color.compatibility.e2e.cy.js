@@ -27,9 +27,6 @@ describe('Font Color → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
 
-				// add alias to the feature container
-				cy.getParentContainer('Text Color').as('container');
-
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -58,7 +55,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 
 				// open color popover
-				cy.get('@container').within(() => {
+				cy.getParentContainer('Text Color').within(() => {
 					cy.get('button').as('colorBtn');
 					cy.get('@colorBtn').click();
 				});
@@ -95,6 +92,8 @@ describe('Font Color → WP Compatibility', () => {
 				// Test 3: Change inner block color
 				//
 				setInnerBlock('elements/link');
+
+				cy.wait(100);
 
 				cy.setColorControlValue('Text Color', '555555');
 
