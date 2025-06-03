@@ -71,6 +71,9 @@ export const LayoutStyles = ({
 	};
 	const styleGroup: Array<CssRule> = [];
 
+	// Flag for removing `margin-block-start` for `gap` property and the `columns` block
+	let removeMarginBlockStart = false;
+
 	if (isActiveField(blockeraDisplay) && _attributes.blockeraDisplay !== '') {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
@@ -134,6 +137,12 @@ export const LayoutStyles = ({
 					pickedSelector
 				),
 			});
+
+			// remove the `margin-block-start` for `columns` block children items
+			// block editor adds it and we need to remove it
+			if (blockName === 'core/columns') {
+				removeMarginBlockStart = true;
+			}
 		}
 
 		let changeFlexInside = false;
@@ -314,9 +323,6 @@ export const LayoutStyles = ({
 	) {
 		let gapSuffixClass = '';
 
-		// Flag for removing `margin-block-start` if needed
-		let removeMarginBlockStart = false;
-
 		// Detect gap type for block
 		const gapType = prepare('gap-type', styleEngineConfig);
 
@@ -470,43 +476,42 @@ export const LayoutStyles = ({
 				});
 			}
 		}
+	}
 
-		/**
-		 * If gap type is both and the current display is flex or grid
-		 * then we use gap property to but still WP is creating gap with `margin-block-start` and we have to remove it.
-		 *
-		 * This variable is false by default but it will be enabled if the style clearing is needed.
-		 */
-		if (removeMarginBlockStart) {
-			const pickedSelector = getCompatibleBlockCssSelector({
-				...sharedParams,
-				query: 'blockeraGap',
-				support: 'blockeraGap',
-				fallbackSupportId: getBlockSupportFallback(
-					supports,
-					'blockeraGap'
-				),
-				suffixClass: '> * + *',
-			});
+	/**
+	 * If gap type is both and the current display is flex or grid
+	 * then we use `gap` property to but still WP is creating gap with `margin-block-start` and we have to remove it.
+	 *
+	 * Or if the current block is `columns` and the `blockeraDisplay` is `flex`.
+	 *
+	 * This variable is false by default but it will be enabled if the style clearing is needed.
+	 */
+	if (removeMarginBlockStart) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraGap',
+			support: 'blockeraGap',
+			fallbackSupportId: getBlockSupportFallback(supports, 'blockeraGap'),
+			suffixClass: blockName === 'core/columns' ? ' > *' : ' > * + *',
+		});
 
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraGap: [
-							{
-								...staticDefinitionParams,
-								properties: {
-									'margin-block-start': '0',
-								},
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraGap: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'margin-block-start': '0',
 							},
-						],
-					},
-					blockProps,
-					pickedSelector
-				),
-			});
-		}
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
 	}
 
 	return styleGroup;
