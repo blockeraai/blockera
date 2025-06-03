@@ -108,7 +108,7 @@ return [
 	'blockeraOpacity'                   => [
 		'type'    => 'object',
 		'default' => [
-			'value' => '100%',
+			'value' => '',
 		],
 	],
 	'blockeraTransform'                 => [
