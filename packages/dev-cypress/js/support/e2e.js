@@ -45,9 +45,7 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.Commands.add('addNewUser', (user, pass, role) => {
 	goTo('/wp-admin/users.php', true).then(() => {
-		cy.get('a')
-			.contains(/Add( New)? User/)
-			.as('addUser');
+		cy.get('a').contains('Add New User').as('addUser');
 		cy.get('@addUser').then(() => {
 			cy.get('@addUser').click();
 			cy.wait(1000);
@@ -64,9 +62,7 @@ Cypress.Commands.add('addNewUser', (user, pass, role) => {
 				.click();
 			cy.get('select[name="role"]').select(role);
 
-			cy.get(
-				'input[value="Add New User"], input[value="Add User"]'
-			).click();
+			cy.get('input[value="Add New User"]').click();
 		});
 	});
 });

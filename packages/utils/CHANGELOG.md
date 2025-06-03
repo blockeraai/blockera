@@ -1,15 +1,5 @@
 ## Unreleased
 
-## 1.2.1 (2025-06-03)
-
-### Improvements
-- Enhanced URL utilities with more robust domain extraction and parameter parsing capabilities.
-
-## 1.2.0 (2025-04-27)
-
-### New Features
-- Added `getSortedObject` helper to sort objects by `priority` property.
-
 ## 1.1.0 (2025-03-15)
 
 ### New Features
