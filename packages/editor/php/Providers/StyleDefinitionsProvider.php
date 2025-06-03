@@ -33,7 +33,6 @@ class StyleDefinitionsProvider extends ServiceProvider {
             'Display' => \Blockera\Editor\StyleDefinitions\Display::class,
             'Divider' => \Blockera\Editor\StyleDefinitions\Divider::class,
             'Filter' => \Blockera\Editor\StyleDefinitions\Filter::class,
-            'Flex' => \Blockera\Editor\StyleDefinitions\Flex::class,
             'FlexDirection' => \Blockera\Editor\StyleDefinitions\FlexDirection::class,
             'FlexWrap' => \Blockera\Editor\StyleDefinitions\FlexWrap::class,
             'FontFamily' => \Blockera\Editor\StyleDefinitions\FontFamily::class,
