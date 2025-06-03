@@ -135,9 +135,6 @@ export function isBlockNotOriginalState(blockInfo: BlockDetail): boolean {
  *
  * @return {boolean} true on success, false on otherwise!
  */
-export function isInvalidCompatibilityRun(
-	blockInfo: BlockDetail,
-	ref: ControlContextRefCurrent
-): boolean {
-	return isBlockNotOriginalState(blockInfo) && !isResetRef(ref);
+export function isInvalidCompatibilityRun(blockInfo: BlockDetail): boolean {
+	return isBlockNotOriginalState(blockInfo);
 }

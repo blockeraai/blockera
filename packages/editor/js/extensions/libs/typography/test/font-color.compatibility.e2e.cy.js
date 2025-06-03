@@ -2,10 +2,12 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
 	createPost,
+	appendBlocks,
+	setInnerBlock,
+	setParentBlock,
+	getWPDataObject,
+	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Font Color → WP Compatibility', () => {
@@ -15,6 +17,141 @@ describe('Font Color → WP Compatibility', () => {
 
 	describe('Paragraph Block', () => {
 		describe('Simple Value', () => {
+			it('Reset font color to check inner blocks color while not the same', () => {
+				appendBlocks(
+					'<!-- wp:paragraph {"style":{"elements":{"link":{"color":{"text":"#98cc08"}}},"color":{"text":"#98cc08"}}} -->\n' +
+						'<p class="has-text-color has-link-color" style="color:#98cc08">Test paragraph</p>' +
+						'<!-- /wp:paragraph -->'
+				);
+
+				// Select target block
+				cy.getBlock('core/paragraph').click();
+
+				//
+				// Test 1: WP data to Blockera
+				//
+
+				// WP data should come to Blockera
+				getWPDataObject().then((data) => {
+					expect('#98cc08').to.be.equal(
+						getSelectedBlock(data, 'blockeraFontColor')
+					);
+					expect('#98cc08').to.be.equal(
+						getSelectedBlock(data, 'style')?.color?.text
+					);
+					expect('#98cc08').to.be.equal(
+						getSelectedBlock(data, 'style')?.elements?.link?.color
+							?.text
+					);
+					expect('#98cc08').to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
+					);
+				});
+
+				//
+				// Test 2: Blockera value to WP data
+				//
+
+				// open color popover
+				cy.getParentContainer('Text Color').within(() => {
+					cy.get('button').as('colorBtn');
+					cy.get('@colorBtn').click();
+				});
+
+				// change color to #666 (#666666)
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.get('input').as('hexColorInput');
+						cy.get('@hexColorInput').clear();
+						cy.get('@hexColorInput').type('666');
+					});
+
+				// Blockera value should be moved to WP data
+				getWPDataObject().then((data) => {
+					expect('#666666').to.be.equal(
+						getSelectedBlock(data, 'style')?.color?.text
+					);
+
+					// link element color should be same
+					expect('#666666').to.be.equal(
+						getSelectedBlock(data, 'style')?.elements?.link?.color
+							?.text
+					);
+
+					expect('#666666').to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
+					);
+				});
+
+				//
+				// Test 3: Change inner block color
+				//
+				setInnerBlock('elements/link');
+
+				cy.wait(100);
+
+				cy.setColorControlValue('Text Color', '555555');
+
+				getWPDataObject().then((data) => {
+					expect('#666666').to.be.equal(
+						getSelectedBlock(data, 'style')?.color?.text
+					);
+
+					// link element color should be same
+					expect('#555555').to.be.equal(
+						getSelectedBlock(data, 'style')?.elements?.link?.color
+							?.text
+					);
+
+					expect('#555555').to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
+					);
+				});
+
+				//
+				// Test 3: Clear Blockera value and check WP data
+				//
+				setParentBlock();
+
+				// open color popover
+				cy.getParentContainer('Text Color').within(() => {
+					cy.get('button').as('colorBtn');
+					cy.get('@colorBtn').click();
+				});
+
+				// clear value
+				cy.get('.components-popover')
+					.last()
+					.within(() => {
+						cy.getByAriaLabel('Reset Color (Clear)').click();
+					});
+
+				// Blockera value should be moved to WP data
+				getWPDataObject().then((data) => {
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'style')?.color?.text
+					);
+
+					expect('#555555').to.be.equal(
+						getSelectedBlock(data, 'style')?.elements?.link?.color
+							?.text
+					);
+
+					expect('#555555').to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
+					);
+				});
+			});
+
 			it('Same font color and link color', () => {
 				appendBlocks(
 					'<!-- wp:paragraph {"style":{"elements":{"link":{"color":{"text":"#98cc08"}}},"color":{"text":"#98cc08"}}} -->\n' +
@@ -43,6 +180,11 @@ describe('Font Color → WP Compatibility', () => {
 					expect('#98cc08').to.be.equal(
 						getSelectedBlock(data, 'style')?.elements?.link?.color
 							?.text
+					);
+					expect('#98cc08').to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
 					);
 				});
 
@@ -76,6 +218,12 @@ describe('Font Color → WP Compatibility', () => {
 						getSelectedBlock(data, 'style')?.elements?.link?.color
 							?.text
 					);
+
+					expect('#666666').to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
+					);
 				});
 
 				//
@@ -99,6 +247,12 @@ describe('Font Color → WP Compatibility', () => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'style')?.elements?.link?.color
 							?.text
+					);
+
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'blockeraInnerBlocks')?.[
+							'elements/link'
+						]?.attributes?.blockeraFontColor
 					);
 				});
 			});
