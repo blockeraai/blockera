@@ -69,6 +69,7 @@ export const Opacity = ({
 					min={0}
 					max={100}
 					defaultValue={defaultValue}
+					placeholder="100"
 					onChange={(newValue, ref) =>
 						handleOnChangeAttributes('blockeraOpacity', newValue, {
 							ref,
