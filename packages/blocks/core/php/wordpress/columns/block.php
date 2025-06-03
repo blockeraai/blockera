@@ -10,14 +10,11 @@
 return array_merge(
 	$args,
 	[
-		'attributes' => array_merge(
-			$args['attributes'] ?? [],
+		'supports'  => array_merge(
+			$args['supports'] ?? [],
 			[
-				'blockeraDisplay' => [
-					'type'    => 'string',
-					'default' => [
-						'value' => 'flex',
-					],
+				'blockeraStyleEngine' => [
+					'gap-type' => 'flex-or-empty',
 				],
 			]
 		),

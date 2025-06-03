@@ -2,26 +2,34 @@
 
 namespace Blockera\Editor\StyleDefinitions;
 
-use Blockera\Editor\StyleDefinitions\Contracts\StandardDefinition;
-use Blockera\Editor\StyleDefinitions\Traits\SimpleDefinitionTrait;
+class Display extends BaseStyleDefinition {
 
-class Display extends BaseStyleDefinition implements StandardDefinition {
+    protected function css( array $setting): array {
 
-    use SimpleDefinitionTrait;
+		$declaration = [];
+        $cssProperty = $setting['type'];
 
-    public function getCssProperty(): string {
+        if (empty($cssProperty) || empty($setting[ $cssProperty ])) {
 
-        return 'display';
+            return $declaration;
+        }
+
+		$this->setDeclaration($cssProperty, $setting[ $cssProperty ]);
+
+		$this->setCss($this->declarations);
+
+		// Extra deep compatibility for columns block.
+		// Removes margin-block-start from inner items.
+		if ( 'core/columns' === $this->block['blockName'] ) {
+			$this->setCss(
+				[
+					'margin-block-start' => '0',
+				],
+				'margin-block-start',
+				' > *'
+			);
+		}
+
+        return $this->css;
     }
-
-	/**
-	 * Validate the Display style generation process.
-	 *
-	 * @param array $setting
-	 * @return boolean true on success, false on otherwise!
-	 */
-	protected function validate( array $setting): bool {
-		
-		return  isset($setting['display']) && 'default' !== $setting['display'];
-	}
 }

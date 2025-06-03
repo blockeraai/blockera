@@ -387,4 +387,136 @@ describe('Columns Block', () => {
 				.should('have.css', 'background-color', 'rgb(238, 238, 238)');
 		});
 	});
+
+	it('Check Flex layout extra compatibility', () => {
+		appendBlocks(`<!-- wp:columns -->
+<div class="wp-block-columns"><!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph 1 with <a href="#test">link</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading">H1</h1>
+<!-- /wp:heading -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">H2</h2>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">H3</h3>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading">H4</h4>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">H5</h5>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":6} -->
+<h6 class="wp-block-heading">H6</h6>
+<!-- /wp:heading -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button...</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons --></div>
+<!-- /wp:column -->
+
+<!-- wp:column -->
+<div class="wp-block-column"><!-- wp:paragraph -->
+<p>Paragraph 2 with <a href="#test">link</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":1} -->
+<h1 class="wp-block-heading">H1</h1>
+<!-- /wp:heading -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading">H2</h2>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">H3</h3>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading">H4</h4>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":5} -->
+<h5 class="wp-block-heading">H5</h5>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":6} -->
+<h6 class="wp-block-heading">H6</h6>
+<!-- /wp:heading -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button...</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons --></div>
+<!-- /wp:column --></div>
+<!-- /wp:columns -->`);
+
+		// Select target block
+		cy.getBlock('core/paragraph').first().click();
+
+		// Switch to parent block
+		cy.getByAriaLabel('Select Column').click();
+		cy.getByAriaLabel('Select Columns').click();
+
+		//
+		// 1. Edit Block
+		//
+
+		//
+		// 1.0. Block Styles
+		//
+		cy.getParentContainer('Display').within(() => {
+			cy.getByAriaLabel('Flex').click();
+		});
+
+		cy.getParentContainer('Flex Layout')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Column').click();
+			});
+
+		cy.getBlock('core/columns').should(
+			'have.css',
+			'flex-direction',
+			'column'
+		);
+
+		cy.getBlock('core/columns').within(() => {
+			cy.get('.wp-block-column').should(
+				'have.css',
+				'margin-block-start',
+				'0px'
+			);
+		});
+
+		//
+		// 2. Assert inner blocks selectors in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block.wp-block-columns').should(
+			'have.css',
+			'flex-direction',
+			'column'
+		);
+
+		cy.get('.blockera-block.wp-block-columns').within(() => {
+			cy.get('.wp-block-column')
+				.first()
+				.should('have.css', 'margin-block-start', '0px');
+		});
+	});
 });

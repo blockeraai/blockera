@@ -7,11 +7,18 @@
 ### Improvements
 
 - `Flex → Children Wrap` option change to be shown by default.
+- The `Purge Cache` button for style regeneration will remain active after purging the cache.
 
 ### Bug Fixes
 
 - Fixed an issue where block settings did not properly show when selecting an unsupported block.
 - Fixed an issue where `link` inner block color not reset. Thanks to Davor 🙏🏼
+- Fixed an issue where setting `flex` display on `Columns` block has styling issue. Thanks to Napat and Davor 🙏🏼
+- Fixed an issue where setting `Opacity` to `100%` not works on block states. Thanks to Davor 🙏🏼
+
+### Automated Tests
+- Added E2E tests to check `Flex` display on `Columns` block.
+
 
 ## 1.7.1 (2025-05-25)
 

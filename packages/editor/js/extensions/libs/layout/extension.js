@@ -104,6 +104,12 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 							values.blockeraDisplay
 						);
 						break;
+
+					case 'flex-or-empty':
+						showGapFeature =
+							!values.blockeraDisplay ||
+							values.blockeraDisplay === 'flex';
+						break;
 				}
 			} else {
 				showGapFeature = ['flex', 'grid'].includes(
