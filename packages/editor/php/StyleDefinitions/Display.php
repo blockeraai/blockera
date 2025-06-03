@@ -20,7 +20,7 @@ class Display extends BaseStyleDefinition {
 
 		// Extra deep compatibility for columns block.
 		// Removes margin-block-start from inner items.
-		if($this->block['blockName'] === 'core/columns') {
+		if ( 'core/columns' === $this->block['blockName'] ) {
 			$this->setCss(
 				[
 					'margin-block-start' => '0',
