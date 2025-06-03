@@ -15,6 +15,7 @@
 - Fixed an issue where `link` inner block color not reset. Thanks to Davor 🙏🏼
 - Fixed an issue where setting `flex` display on `Columns` block has styling issue. Thanks to Napat and Davor 🙏🏼
 - Fixed an issue where setting `Opacity` to `100%` not works on block states. Thanks to Davor 🙏🏼
+- Fixed an issue where the extensions cache data not correctly updated.
 
 ### Automated Tests
 - Added E2E tests to check `Flex` display on `Columns` block.
