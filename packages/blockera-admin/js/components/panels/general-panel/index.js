@@ -40,7 +40,6 @@ export const GeneralPanel = (): MixedElement => {
 	} = window;
 
 	const { blockeraAdminNonce } = window;
-	const [regenerated, setRegenerated] = useState(false);
 	const [loading, setLoading] = useState({
 		regenerated: false,
 		regenerating: false,
@@ -66,8 +65,6 @@ export const GeneralPanel = (): MixedElement => {
 		})
 			.then((response) => {
 				if (response.success) {
-					setRegenerated(response.data);
-
 					setLoading({
 						regenerated: true,
 						regenerating: false,
@@ -126,11 +123,7 @@ export const GeneralPanel = (): MixedElement => {
 				<div className={'blockera-settings-general control-wrapper'}>
 					<Flex direction={'row'} gap={20} alignItems="center">
 						<Button
-							disabled={
-								regenerated ||
-								loading.regenerating ||
-								loading.error
-							}
+							disabled={loading.regenerating || loading.error}
 							onClick={regenerateAssets}
 							className={'blockera-settings-general control'}
 							variant={'primary'}

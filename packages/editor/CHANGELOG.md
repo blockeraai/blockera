@@ -7,6 +7,7 @@
 ### Improvements
 
 - `Flex → Children Wrap` option change to be shown by default.
+- The `Purge Cache` button for style regeneration will remain active after purging the cache.
 
 ### Bug Fixes
 
