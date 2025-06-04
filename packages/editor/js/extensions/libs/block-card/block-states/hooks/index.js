@@ -202,6 +202,22 @@ export const useBlockStates = ({
 		block,
 		value: calculatedValue,
 		blockName: block.blockName,
+		needUpdate: (next: Object): boolean => {
+			const deletedItems = deleteCacheData.get('deleted-items');
+
+			if (!deletedItems) {
+				return true;
+			}
+
+			for (const key in next) {
+				if (deletedItems.includes(key)) {
+					deleteCacheData.set('deleted-items', []);
+					return false;
+				}
+			}
+
+			return true;
+		},
 		attribute: 'blockeraBlockStates',
 		name: generateExtensionId(block, id, false),
 	};
@@ -234,38 +250,30 @@ export const useBlockStates = ({
 					TStates,
 					{ ...StateTypes, isSelected: boolean }
 				]): void => {
+					// Skip the deleted item.
 					if (_itemId === itemId) {
 						return;
 					}
 
+					// Skip the normal and hover states.
 					if (itemsCount < 3) {
+						return;
+					}
+
+					if ('normal' !== _item.type) {
 						filteredStates[_itemId] = {
 							..._item,
-							display: false,
+							isSelected: false,
 						};
 
 						return;
 					}
 
-					if (_item?.force) {
-						if (items[itemId].isSelected) {
-							// Assume deleted item was selected item
-							filteredStates[_itemId] = {
-								..._item,
-								isSelected: true,
-							};
-
-							return;
-						}
-
-						filteredStates[_itemId] = {
-							..._item,
-						};
-
-						return;
-					}
-
-					filteredStates[_itemId] = _item;
+					// Set the selected normal state.
+					filteredStates[_itemId] = {
+						..._item,
+						isSelected: true,
+					};
 				}
 			);
 

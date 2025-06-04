@@ -17,6 +17,7 @@
 - Fixed an issue where setting `Opacity` to `100%` not works on block states. Thanks to Davor 🙏🏼
 - Fixed an issue where the extensions cache data not correctly updated.
 - Fixed an issue where the `Flex Child` block section `Order`, `Grow`, `Shrink`, and `Basis` features not working properly. Thanks to Davor 🙏🏼
+- Fixed an issue where the pseudo elements not deleted. Thanks to Davor 🙏🏻
 
 ### Automated Tests
 - Added E2E tests to check `Flex` display on `Columns` block.
