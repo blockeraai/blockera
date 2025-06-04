@@ -213,7 +213,32 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			// If cache data doesn't equal extensions, update cache
-			if (!isEquals(cache, _extensionsWithoutLabel)) {
+			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
+			const omitProps = ['status', 'label', 'show', 'force', 'config'];
+
+			const omitDeep = (obj: Object, props: Array<string>): Object => {
+				if (Array.isArray(obj)) {
+					return obj.map((item) => omitDeep(item, props));
+				}
+				if (obj && typeof obj === 'object') {
+					const newObj: Object = {};
+					for (const key in obj) {
+						if (!props.includes(key)) {
+							newObj[key] = omitDeep(obj[key], props);
+						}
+					}
+					return newObj;
+				}
+				return obj;
+			};
+
+			const cacheOmitted = omitDeep(cache, omitProps);
+			const extensionsOmitted = omitDeep(
+				_extensionsWithoutLabel,
+				omitProps
+			);
+
+			if (!isEquals(cacheOmitted, extensionsOmitted)) {
 				cache = _extensionsWithoutLabel;
 				setItem(cacheKey, _extensionsWithoutLabel);
 			}
