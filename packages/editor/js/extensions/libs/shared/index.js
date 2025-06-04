@@ -20,8 +20,8 @@ import { doAction } from '@wordpress/hooks';
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
-import { isEquals, isObject } from '@blockera/utils';
 import { Tabs, type TTabProps } from '@blockera/controls';
+import { isEquals, isObject, cloneObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
@@ -96,6 +96,58 @@ type Props = {
 	availableStates: { [key: TStates | string]: StateTypes },
 };
 
+// Function to remove 'label' property from each extension's config item
+// Memoized cache for extensionsWithoutLabel results
+const _extensionsWithoutLabelCache = new WeakMap<Object, Object>();
+
+/**
+ * Removes 'label' property from each extension's config item.
+ * Uses memoization to improve performance and cache results.
+ */
+const extensionsWithoutLabel = (extensionsObj: Object): Object => {
+	if (!extensionsObj || typeof extensionsObj !== 'object') {
+		return extensionsObj;
+	}
+	// Use cache if available.
+	if (_extensionsWithoutLabelCache.has(extensionsObj)) {
+		return _extensionsWithoutLabelCache.get(extensionsObj);
+	}
+
+	const newExtensions: { [key: string]: Object } = {};
+
+	for (const key in extensionsObj) {
+		if (
+			typeof extensionsObj[key] !== 'object' ||
+			null === extensionsObj[key]
+		) {
+			newExtensions[key] = extensionsObj[key];
+			continue;
+		}
+
+		const extension = extensionsObj[key];
+
+		// Copy extension to newExtensions.
+		newExtensions[key] = extension;
+
+		for (const _key in extension) {
+			if (extension[_key] && typeof extension[_key] === 'object') {
+				const { label, ...rest } = extension[_key];
+
+				newExtensions[key][_key] = rest;
+
+				continue;
+			}
+
+			newExtensions[key][_key] = extension[_key];
+		}
+	}
+
+	// Store in cache.
+	_extensionsWithoutLabelCache.set(extensionsObj, newExtensions);
+
+	return newExtensions;
+};
+
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
@@ -150,6 +202,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const cacheKey =
 			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 		const extensions = getExtensions(props.name);
+		const _extensionsWithoutLabel = extensionsWithoutLabel(
+			cloneObject(extensions)
+		);
 		const cacheData = useMemo(() => {
 			let cache = getItem(cacheKey);
 
@@ -158,16 +213,17 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			// If cache data doesn't equal extensions, update cache
-			if (!isEquals(cache, extensions)) {
-				cache = extensions;
-				setItem(cacheKey, extensions);
+			if (!isEquals(cache, _extensionsWithoutLabel)) {
+				cache = _extensionsWithoutLabel;
+				setItem(cacheKey, _extensionsWithoutLabel);
 			}
 
 			return cache;
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [cacheKey, extensions]);
 		const supports = useMemo(() => {
 			if (!cacheData) {
-				setItem(cacheKey, extensions);
+				setItem(cacheKey, _extensionsWithoutLabel);
 				return extensions;
 			}
 
@@ -209,12 +265,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							[key]: value,
 						});
 					}
+					if (
+						'object' === typeof mergedEntries.get(support)?.[key] &&
+						!mergedEntries.get(support)?.[key]?.label
+					) {
+						mergedEntries.set(support, {
+							...mergedEntries.get(support),
+							[key]: {
+								...mergedEntries.get(support)?.[key],
+								label: extensions[support][key].label,
+							},
+						});
+					}
 				});
 			});
 
 			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
-		}, [props.name, cacheData, extensions]);
+		}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
 
 		const [settings, setSettings] = useState(supports);
 
@@ -237,7 +305,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			setSettings(supports);
-			updateItem(cacheKey, supports);
+			updateItem(cacheKey, extensionsWithoutLabel(cloneObject(supports)));
 			// eslint-disable-next-line
 		}, [currentBlock]);
 
