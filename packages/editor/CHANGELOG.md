@@ -8,6 +8,7 @@
 
 - `Flex → Children Wrap` option change to be shown by default.
 - The `Purge Cache` button for style regeneration will remain active after purging the cache.
+- Improved cache validation and configuration updates for blockera extensions when options are modified.
 
 ### Bug Fixes
 

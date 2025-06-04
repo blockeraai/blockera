@@ -145,12 +145,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			parentClientIds[parentClientIds.length - 1]
 		);
 
-		const {
-			addDefinition,
-			updateExtension,
-			updateDefinitionExtensionSupport,
-		} = useDispatch(STORE_NAME);
-		const { getExtensions, getDefinition } = select(STORE_NAME);
+		const { updateExtension } = useDispatch(STORE_NAME);
+		const { getExtensions } = select(STORE_NAME);
 		const cacheKey =
 			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 		const extensions = getExtensions(props.name);
@@ -177,7 +173,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			const mergedEntries = new Map<string, Object>();
 
-			// First add all entries from cacheData
+			// First add all entries from cacheData.
 			Object.entries(cacheData).forEach(([support, settings]) => {
 				mergedEntries.set(
 					support,
@@ -197,7 +193,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				);
 			});
 
-			// Add entries from extensions that don't exist in cacheData
+			// Add entries from extensions that don't exist in cacheData.
 			Object.entries(extensions).forEach(([support, settings]) => {
 				if (!mergedEntries.has(support)) {
 					mergedEntries.set(support, settings);
@@ -236,22 +232,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				props
 			);
 
-			if (isInnerBlock(currentBlock)) {
-				const innerBlockDefinition = getDefinition(
-					currentBlock,
-					props.name
-				);
-
-				if (
-					innerBlockDefinition &&
-					!isEquals(innerBlockDefinition, settings)
-				) {
-					setSettings(innerBlockDefinition);
-					updateItem(cacheKey, innerBlockDefinition);
-					return;
-				}
-			}
-
 			if (isEquals(supports, settings)) {
 				return;
 			}
@@ -275,29 +255,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			setSettings(newSettings);
 			updateItem(cacheKey, newSettings);
-
-			if (isInnerBlock(currentBlock)) {
-				if (!getDefinition(name, props.name)) {
-					addDefinition({
-						extensions: {
-							...settings,
-							...newSupports,
-						},
-						blockName: props.name,
-						definition: currentBlock,
-					});
-				} else {
-					updateDefinitionExtensionSupport({
-						name,
-						newSupports,
-						blockName: props.name,
-						definitionName: currentBlock,
-					});
-				}
-
-				return;
-			}
-
 			updateExtension({
 				name,
 				newSupports,
