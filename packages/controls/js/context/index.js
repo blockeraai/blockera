@@ -40,7 +40,10 @@ export const ControlContextProvider = ({
 }: ControlContextProviderProps): MixedElement | null => {
 	// $FlowFixMe
 	registerControl({
-		...controlInfo,
+		...{
+			...controlInfo,
+			needUpdate: controlInfo?.needUpdate || (() => true),
+		},
 		type: storeName,
 	});
 
@@ -59,6 +62,13 @@ export const ControlContextProvider = ({
 
 	// Assume control has side effect from parent components ...
 	useEffect(() => {
+		if (
+			controlInfo?.needUpdate &&
+			!controlInfo.needUpdate(controlInfo.value)
+		) {
+			return;
+		}
+
 		if (!isEquals(controlInfo.value, value)) {
 			dispatch.modifyControlValue({
 				controlId: controlInfo.name,
