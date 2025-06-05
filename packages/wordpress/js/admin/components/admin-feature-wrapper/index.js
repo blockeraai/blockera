@@ -37,7 +37,7 @@ export const AdminFeatureWrapper = ({
 		return <></>;
 	}
 
-	if (!feature?.onNative) {
+	if (feature?.onNative) {
 		return (
 			<FeatureWrapper type="native" showText="always" {...props}>
 				{children}

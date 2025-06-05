@@ -20,8 +20,8 @@ import { doAction } from '@wordpress/hooks';
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
-import { isEquals, isObject } from '@blockera/utils';
 import { Tabs, type TTabProps } from '@blockera/controls';
+import { isEquals, isObject, cloneObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
@@ -96,6 +96,58 @@ type Props = {
 	availableStates: { [key: TStates | string]: StateTypes },
 };
 
+// Function to remove 'label' property from each extension's config item
+// Memoized cache for extensionsWithoutLabel results
+const _extensionsWithoutLabelCache = new WeakMap<Object, Object>();
+
+/**
+ * Removes 'label' property from each extension's config item.
+ * Uses memoization to improve performance and cache results.
+ */
+const extensionsWithoutLabel = (extensionsObj: Object): Object => {
+	if (!extensionsObj || typeof extensionsObj !== 'object') {
+		return extensionsObj;
+	}
+	// Use cache if available.
+	if (_extensionsWithoutLabelCache.has(extensionsObj)) {
+		return _extensionsWithoutLabelCache.get(extensionsObj);
+	}
+
+	const newExtensions: { [key: string]: Object } = {};
+
+	for (const key in extensionsObj) {
+		if (
+			typeof extensionsObj[key] !== 'object' ||
+			null === extensionsObj[key]
+		) {
+			newExtensions[key] = extensionsObj[key];
+			continue;
+		}
+
+		const extension = extensionsObj[key];
+
+		// Copy extension to newExtensions.
+		newExtensions[key] = extension;
+
+		for (const _key in extension) {
+			if (extension[_key] && typeof extension[_key] === 'object') {
+				const { label, ...rest } = extension[_key];
+
+				newExtensions[key][_key] = rest;
+
+				continue;
+			}
+
+			newExtensions[key][_key] = extension[_key];
+		}
+	}
+
+	// Store in cache.
+	_extensionsWithoutLabelCache.set(extensionsObj, newExtensions);
+
+	return newExtensions;
+};
+
 export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
@@ -145,15 +197,14 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			parentClientIds[parentClientIds.length - 1]
 		);
 
-		const {
-			addDefinition,
-			updateExtension,
-			updateDefinitionExtensionSupport,
-		} = useDispatch(STORE_NAME);
-		const { getExtensions, getDefinition } = select(STORE_NAME);
+		const { updateExtension } = useDispatch(STORE_NAME);
+		const { getExtensions } = select(STORE_NAME);
 		const cacheKey =
 			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 		const extensions = getExtensions(props.name);
+		const _extensionsWithoutLabel = extensionsWithoutLabel(
+			cloneObject(extensions)
+		);
 		const cacheData = useMemo(() => {
 			let cache = getItem(cacheKey);
 
@@ -161,17 +212,49 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				cache = freshItem(cacheKey, cacheKeyPrefix);
 			}
 
+			// If cache data doesn't equal extensions, update cache
+			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
+			const omitProps = ['status', 'label', 'show', 'force', 'config'];
+
+			const omitDeep = (obj: Object, props: Array<string>): Object => {
+				if (Array.isArray(obj)) {
+					return obj.map((item) => omitDeep(item, props));
+				}
+				if (obj && typeof obj === 'object') {
+					const newObj: Object = {};
+					for (const key in obj) {
+						if (!props.includes(key)) {
+							newObj[key] = omitDeep(obj[key], props);
+						}
+					}
+					return newObj;
+				}
+				return obj;
+			};
+
+			const cacheOmitted = omitDeep(cache, omitProps);
+			const extensionsOmitted = omitDeep(
+				_extensionsWithoutLabel,
+				omitProps
+			);
+
+			if (!isEquals(cacheOmitted, extensionsOmitted)) {
+				cache = _extensionsWithoutLabel;
+				setItem(cacheKey, _extensionsWithoutLabel);
+			}
+
 			return cache;
-		}, [cacheKey]);
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [cacheKey, extensions]);
 		const supports = useMemo(() => {
 			if (!cacheData) {
-				setItem(cacheKey, extensions);
+				setItem(cacheKey, _extensionsWithoutLabel);
 				return extensions;
 			}
 
 			const mergedEntries = new Map<string, Object>();
 
-			// First add all entries from cacheData
+			// First add all entries from cacheData.
 			Object.entries(cacheData).forEach(([support, settings]) => {
 				mergedEntries.set(
 					support,
@@ -191,7 +274,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				);
 			});
 
-			// Add entries from extensions that don't exist in cacheData
+			// Add entries from extensions that don't exist in cacheData.
 			Object.entries(extensions).forEach(([support, settings]) => {
 				if (!mergedEntries.has(support)) {
 					mergedEntries.set(support, settings);
@@ -207,12 +290,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 							[key]: value,
 						});
 					}
+					if (
+						'object' === typeof mergedEntries.get(support)?.[key] &&
+						!mergedEntries.get(support)?.[key]?.label
+					) {
+						mergedEntries.set(support, {
+							...mergedEntries.get(support),
+							[key]: {
+								...mergedEntries.get(support)?.[key],
+								label: extensions[support][key].label,
+							},
+						});
+					}
 				});
 			});
 
 			return Object.fromEntries(mergedEntries);
 			// eslint-disable-next-line
-		}, [props.name, cacheData, extensions]);
+		}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
 
 		const [settings, setSettings] = useState(supports);
 
@@ -230,28 +325,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				props
 			);
 
-			if (isInnerBlock(currentBlock)) {
-				const innerBlockDefinition = getDefinition(
-					currentBlock,
-					props.name
-				);
-
-				if (
-					innerBlockDefinition &&
-					!isEquals(innerBlockDefinition, settings)
-				) {
-					setSettings(innerBlockDefinition);
-					updateItem(cacheKey, innerBlockDefinition);
-					return;
-				}
-			}
-
 			if (isEquals(supports, settings)) {
 				return;
 			}
 
 			setSettings(supports);
-			updateItem(cacheKey, supports);
+			updateItem(cacheKey, extensionsWithoutLabel(cloneObject(supports)));
 			// eslint-disable-next-line
 		}, [currentBlock]);
 
@@ -269,29 +348,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			setSettings(newSettings);
 			updateItem(cacheKey, newSettings);
-
-			if (isInnerBlock(currentBlock)) {
-				if (!getDefinition(name, props.name)) {
-					addDefinition({
-						extensions: {
-							...settings,
-							...newSupports,
-						},
-						blockName: props.name,
-						definition: currentBlock,
-					});
-				} else {
-					updateDefinitionExtensionSupport({
-						name,
-						newSupports,
-						blockName: props.name,
-						definitionName: currentBlock,
-					});
-				}
-
-				return;
-			}
-
 			updateExtension({
 				name,
 				newSupports,

@@ -617,7 +617,7 @@ abstract class BaseStyleDefinition {
 
 		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
 
-			return [];
+			return $this->block['attrs'];
 		}
 
 		$block_states = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];

@@ -21,6 +21,7 @@ export type ControlInfo = {
 	block?: Object,
 	attribute?: string,
 	blockName?: string,
+	needUpdate?: (prev: any, next: any) => boolean,
 	type?: 'simple' | 'nested',
 	description?: string | MixedElement | any,
 };
