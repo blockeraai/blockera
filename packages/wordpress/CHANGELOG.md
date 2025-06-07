@@ -2,6 +2,7 @@
 
 ### Bug Fixes
 - Fixed a bug in the panel admin React components to improve user experience.
+- Fixed design overflow issue on the Blockera admin pages.
 
 ### Improvements
 - Improved the assets loader to be more flexible and easier to use of packages versions and dependencies.
