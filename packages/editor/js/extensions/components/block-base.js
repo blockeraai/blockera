@@ -122,8 +122,17 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		if (!isEquals(attributes, blockAttributes) && !isCompatibleWithWP) {
 			_setAttributes(attributes);
 		}
-		// eslint-disable-next-line
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [attributes]);
+	/**
+	 * Updating block native attributes state while changed block original attributes state.
+	 */
+	useEffect(() => {
+		if (!isEquals(attributes, blockAttributes)) {
+			setAttributes(blockAttributes);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [blockAttributes]);
 
 	const {
 		currentBlock,
