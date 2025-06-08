@@ -20,7 +20,7 @@ return array_merge(
 					'root' => 'svg',
 				],
 				'blockera/elements/text'   => [
-					'root' => '> span:last-child, > span > span[itemprop="name"]',
+					'root' => '> span:last-child, > span > span[itemprop="name"], > span span[itemprop="name"]',
 				],
 			]
 		),
