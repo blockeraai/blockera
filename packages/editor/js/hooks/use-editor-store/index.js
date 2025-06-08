@@ -10,12 +10,12 @@ import { useSelect } from '@wordpress/data';
  */
 import { STORE_NAME } from '../../store/constants';
 
-export const useEditorStore = (): Object => {
+export const useEditorStore = (options: { list: boolean } = {}): Object => {
 	const {
 		getState,
 		getInnerState,
 		availableStates,
-		availableInnerState,
+		availableInnerStates,
 		availableBreakpoints,
 	} = useSelect((select) => {
 		const {
@@ -29,9 +29,9 @@ export const useEditorStore = (): Object => {
 		return {
 			getState,
 			getInnerState,
-			availableStates: getAvailableStates(),
-			availableInnerState: getAvailableInnerStates(),
-			availableBreakpoints: getAvailableBreakpoints(),
+			availableStates: getAvailableStates(options.list),
+			availableInnerStates: getAvailableInnerStates(options.list),
+			availableBreakpoints: getAvailableBreakpoints(options.list),
 		};
 	});
 
@@ -39,7 +39,7 @@ export const useEditorStore = (): Object => {
 		getState,
 		getInnerState,
 		availableStates,
-		availableInnerState,
+		availableInnerStates,
 		availableBreakpoints,
 	};
 };

@@ -106,17 +106,20 @@ export const getState = (
  *
  * @return {Array<TStates>} the available states.
  */
-export const getAvailableStates = ({
-	blockStates,
-}: {
-	blockStates: { [key: TStates]: StateTypes },
-}): Array<TStates> => {
+export const getAvailableStates = (
+	{
+		blockStates,
+	}: {
+		blockStates: { [key: TStates]: StateTypes },
+	},
+	list: boolean = false
+): Array<TStates> => {
 	const availableStates = [];
 
 	for (const key in blockStates) {
 		const state = blockStates[key];
 
-		if (state?.native) {
+		if (state?.native && !list) {
 			continue;
 		}
 
@@ -165,17 +168,20 @@ export const getInnerState = (
  *
  * @return {Array<TStates>} the available states.
  */
-export const getAvailableInnerStates = ({
-	innerBlockStates,
-}: {
-	innerBlockStates: { [key: TStates]: StateTypes },
-}): Array<TStates> => {
+export const getAvailableInnerStates = (
+	{
+		innerBlockStates,
+	}: {
+		innerBlockStates: { [key: TStates]: StateTypes },
+	},
+	list: boolean = false
+): Array<TStates> => {
 	const availableStates = [];
 
 	for (const key in innerBlockStates) {
 		const state = innerBlockStates[key];
 
-		if (state?.native) {
+		if (state?.native && !list) {
 			continue;
 		}
 
