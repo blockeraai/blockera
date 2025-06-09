@@ -1,7 +1,5 @@
 ## Unreleased
 
-## 1.3.4 (2025-06-09)
-
 ### Bug Fixes
 - Fixed unnecessary re-rendering of components when updates were not needed.
 
