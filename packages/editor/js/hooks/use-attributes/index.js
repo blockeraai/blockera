@@ -106,6 +106,18 @@ export const useAttributes = (
 		// _attributes => mutable - mean readable and writable constant!
 		let _attributes = { ...attributes };
 
+		// Handle name attribute separately to avoid issues with block title.
+		if ('name' === attributeId) {
+			if (newValue === '' || newValue === null) {
+				newValue = undefined;
+			}
+
+			return setAttributes({
+				..._attributes,
+				metadata: { name: newValue },
+			});
+		}
+
 		// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component, if we supported them.
 		if (
 			'undefined' === typeof _attributes?.blockeraPropsId &&
