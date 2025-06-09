@@ -306,7 +306,16 @@ export const useBlockStates = ({
 					!Object.keys(clonedSavedStates).length
 						? {}
 						: clonedSavedStates,
-					{}
+					{
+						ref: {
+							path: isInnerBlock(currentBlock)
+								? `blockeraInnerBlocks.value[${currentBlock}].attributes.blockeraBlockStates`
+								: `blockeraBlockStates`,
+							reset: false,
+							action: 'normal',
+							defaultValue: {},
+						},
+					}
 				);
 			}
 
