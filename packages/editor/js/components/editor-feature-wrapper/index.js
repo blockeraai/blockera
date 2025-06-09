@@ -31,7 +31,8 @@ export default function EditorFeatureWrapper({
 		currentBreakpoint,
 		currentInnerBlockState,
 	} = useExtensionsStore();
-	const { availableStates, availableBreakpoints } = useEditorStore();
+	const { availableStates, availableBreakpoints, availableInnerStates } =
+		useEditorStore({ list: true });
 
 	if (window?.blockeraFeatureManager_1_0_0?.EditorFeatureWrapper) {
 		const WrapperComponent =
@@ -58,8 +59,8 @@ export default function EditorFeatureWrapper({
 		onBreakpoints: true,
 		onInnerBlocks: true,
 		onNativeOnInnerBlocks: true,
-		onNativeOnStates: availableStates,
 		onNativeOnBreakpoints: availableBreakpoints,
+		onNativeOnStates: availableStates.concat(availableInnerStates),
 		...config,
 	};
 

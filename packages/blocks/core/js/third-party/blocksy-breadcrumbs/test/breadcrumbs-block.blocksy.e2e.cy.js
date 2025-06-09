@@ -672,7 +672,7 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 					.should('have.css', 'color', 'rgb(255, 165, 0)');
 
 				// this is link element
-				cy.get('> span:first-child > span').should(
+				cy.get('> span > nav > span:first-child > a').should(
 					'not.have.css',
 					'color',
 					'rgb(255, 165, 0)'
@@ -707,7 +707,7 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 					.should('have.css', 'color', 'rgb(255, 165, 0)');
 
 				// this is link element
-				cy.get('> span:first-child > span').should(
+				cy.get('> span > nav > span:first-child > a').should(
 					'have.css',
 					'color',
 					'rgb(241, 26, 26)'
@@ -742,7 +742,7 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 					.should('have.css', 'color', 'rgb(0, 128, 0)');
 
 				// this is link element
-				cy.get('> span:first-child > span').should(
+				cy.get('> span > nav > span:first-child > a').should(
 					'have.css',
 					'color',
 					'rgb(241, 26, 26)'

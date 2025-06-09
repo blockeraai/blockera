@@ -128,6 +128,7 @@
 - `Tag Cloud` block: support improved.
 - `Video` block: support improved.
 - `The Icon` block by Nick Diego: support improved.
+- `Blocksy → Breadcrumb` block: css selectors improved.
 
 
 ### Automated Tests

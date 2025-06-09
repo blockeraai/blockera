@@ -17,10 +17,10 @@ return array_merge(
 					'root' => 'span > span, a > span',
 				],
 				'blockera/elements/separator' => [
-					'root' => 'svg',
+					'root' => 'svg.ct-separator',
 				],
 				'blockera/elements/text'   => [
-					'root' => '> span:last-child, > span > span[itemprop="name"]',
+					'root' => '> span:last-child, > span > span[itemprop="name"], svg',
 				],
 			]
 		),
