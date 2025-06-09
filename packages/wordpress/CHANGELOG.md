@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.1.5 (2025-06-09)
+
 ### Bug Fixes
 - Fixed a bug in the panel admin React components to improve user experience.
 - Fixed design overflow issue on the Blockera admin pages.
