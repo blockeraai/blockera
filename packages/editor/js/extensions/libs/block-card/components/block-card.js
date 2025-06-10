@@ -37,7 +37,6 @@ import { default as BlockVariationTransforms } from '../block-variation-transfor
 
 export function BlockCard({
 	notice,
-	isActive,
 	clientId,
 	supports,
 	children,
@@ -54,7 +53,6 @@ export function BlockCard({
 	currentInnerBlockState,
 	handleOnChangeAttributes,
 }: {
-	isActive: boolean,
 	clientId: string,
 	blockName: string,
 	supports: Object,
@@ -238,30 +236,28 @@ export function BlockCard({
 
 					{children}
 
-					{isActive && (
-						<BlockCompositePreview
-							block={{
-								clientId,
-								supports,
-								blockName,
-								setAttributes,
-							}}
-							blockConfig={additional}
-							onChange={handleOnChangeAttributes}
-							currentBlock={'master'}
-							currentState={currentState}
-							currentBreakpoint={currentBreakpoint}
-							currentInnerBlockState={currentInnerBlockState}
-							blockStatesProps={{
-								attributes: currentStateAttributes,
-							}}
-							availableStates={availableStates}
-							innerBlocksProps={{
-								values: currentStateAttributes.blockeraInnerBlocks,
-								innerBlocks: blockeraInnerBlocks,
-							}}
-						/>
-					)}
+					<BlockCompositePreview
+						block={{
+							clientId,
+							supports,
+							blockName,
+							setAttributes,
+						}}
+						blockConfig={additional}
+						onChange={handleOnChangeAttributes}
+						currentBlock={'master'}
+						currentState={currentState}
+						currentBreakpoint={currentBreakpoint}
+						currentInnerBlockState={currentInnerBlockState}
+						blockStatesProps={{
+							attributes: currentStateAttributes,
+						}}
+						availableStates={availableStates}
+						innerBlocksProps={{
+							values: currentStateAttributes.blockeraInnerBlocks,
+							innerBlocks: blockeraInnerBlocks,
+						}}
+					/>
 				</Flex>
 			</div>
 		</>

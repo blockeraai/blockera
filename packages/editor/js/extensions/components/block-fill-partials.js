@@ -66,7 +66,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			<>
 				<Fill name={`blockera-block-card-content-${clientId}`}>
 					<BlockCard
-						isActive={isActive}
 						notice={notice}
 						clientId={clientId}
 						blockName={blockProps.name}
@@ -89,7 +88,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 
 					{isInnerBlock(currentBlock) && (
 						<InnerBlockCard
-							isActive={isActive}
 							clientId={clientId}
 							activeBlock={currentBlock}
 							blockName={blockProps.name}

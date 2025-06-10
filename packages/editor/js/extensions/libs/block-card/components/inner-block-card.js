@@ -33,7 +33,6 @@ import { Preview as BlockCompositePreview } from '../../block-composite';
 
 export function InnerBlockCard({
 	clientId,
-	isActive,
 	children,
 	supports,
 	blockName,
@@ -51,7 +50,6 @@ export function InnerBlockCard({
 	handleOnChangeAttributes,
 }: {
 	clientId: string,
-	isActive: boolean,
 	blockName: string,
 	supports: Object,
 	currentStateAttributes: Object,
@@ -185,27 +183,25 @@ export function InnerBlockCard({
 
 				{children}
 
-				{isActive && (
-					<BlockCompositePreview
-						block={{
-							clientId,
-							supports,
-							blockName,
-							setAttributes,
-						}}
-						availableStates={availableStates}
-						onChange={handleOnChangeAttributes}
-						currentBlock={currentBlock}
-						currentState={currentState}
-						currentBreakpoint={currentBreakpoint}
-						currentInnerBlockState={currentInnerBlockState}
-						blockConfig={additional}
-						blockStatesProps={{
-							attributes: currentStateAttributes,
-							id: `block-states-${kebabCase(currentBlock)}`,
-						}}
-					/>
-				)}
+				<BlockCompositePreview
+					block={{
+						clientId,
+						supports,
+						blockName,
+						setAttributes,
+					}}
+					availableStates={availableStates}
+					onChange={handleOnChangeAttributes}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					currentBreakpoint={currentBreakpoint}
+					currentInnerBlockState={currentInnerBlockState}
+					blockConfig={additional}
+					blockStatesProps={{
+						attributes: currentStateAttributes,
+						id: `block-states-${kebabCase(currentBlock)}`,
+					}}
+				/>
 			</Flex>
 		</div>
 	);
