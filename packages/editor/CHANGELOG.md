@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.8.0 (2025-06-10)
+
 ### New Features
 
 - Added the new hook to extend block functionality while switching to other block or inner block to extend block functionality.
