@@ -242,17 +242,29 @@ function mergeBlockSettings(
 			);
 		}
 
+		// If the block is not supported with restricted visibility by post type, it is not available.
+		if (
+			!unsupportedBlocks.length &&
+			!allowedUsers.length &&
+			allowedPostTypes.length &&
+			blockeraCurrentPostType
+		) {
+			return allowedPostTypes.includes(blockeraCurrentPostType);
+		}
+
 		// If the block is not supported with restricted visibility by user roles, block type name, and post type, it is not available.
-		return !blockeraCurrentPostType
-			? !unsupportedBlocks.includes(settings.name) &&
-					allowedUsers.filter((role) =>
-						currentUser.roles.includes(role)
-					).length
-			: !unsupportedBlocks.includes(settings.name) &&
-					allowedUsers.filter((role) =>
-						currentUser.roles.includes(role)
-					).length &&
-					allowedPostTypes.includes(blockeraCurrentPostType);
+		if (
+			!unsupportedBlocks.length &&
+			!allowedPostTypes.length &&
+			allowedUsers.length
+		) {
+			return allowedUsers.filter((role) =>
+				currentUser.roles.includes(role)
+			).length;
+		}
+
+		// If the block is not supported, it is not available.
+		return !unsupportedBlocks.includes(settings.name);
 	};
 
 	const getVariations = (): Array<Object> => {

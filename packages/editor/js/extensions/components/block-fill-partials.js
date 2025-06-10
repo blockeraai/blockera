@@ -4,7 +4,7 @@
  * External dependencies
  */
 import memoize from 'fast-memoize';
-import { select, useDispatch } from '@wordpress/data';
+import { select } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
 import { useEffect, memo } from '@wordpress/element';
@@ -39,8 +39,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { updateBlockAttributes } = useDispatch('core/block-editor');
-
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
 			const others = select('blockera/controls').getControls();
@@ -64,21 +62,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			);
 		}, [isActive]);
 
-		const handleOnChangeAttributes = (
-			attribute: string,
-			value: any
-		): void => {
-			if (attribute === 'name') {
-				if (value === '' || value === null) {
-					value = undefined;
-				}
-
-				updateBlockAttributes(clientId, { metadata: { name: value } });
-			} else {
-				updateBlockAttributes(clientId, { [attribute]: value });
-			}
-		};
-
 		return (
 			<>
 				<Fill name={`blockera-block-card-content-${clientId}`}>
@@ -98,7 +81,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 						blockeraInnerBlocks={blockeraInnerBlocks}
 						supports={blockProps.supports}
 						setAttributes={blockProps.setAttributes}
-						handleOnChangeAttributes={handleOnChangeAttributes}
+						handleOnChangeAttributes={
+							blockProps.controllerProps.handleOnChangeAttributes
+						}
 					/>
 
 					{isInnerBlock(currentBlock) && (
@@ -119,7 +104,10 @@ export const BlockFillPartials: ComponentType<any> = memo(
 							additional={blockProps.additional}
 							supports={blockProps.supports}
 							setAttributes={blockProps.setAttributes}
-							handleOnChangeAttributes={handleOnChangeAttributes}
+							handleOnChangeAttributes={
+								blockProps.controllerProps
+									.handleOnChangeAttributes
+							}
 						/>
 					)}
 				</Fill>

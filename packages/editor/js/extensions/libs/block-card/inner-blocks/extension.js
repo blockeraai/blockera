@@ -29,7 +29,9 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 			onChange,
 			maxItems,
 			contextValue,
+			currentState,
 			setCurrentBlock,
+			currentBreakpoint,
 			setBlockClientInners,
 		} = props;
 		const { onToggle } = useBlockSection('innerBlocksConfig');
@@ -50,7 +52,18 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = memo(
 							delete values[itemId];
 							delete items[itemId];
 
-							onChange('values', values, {});
+							onChange('blockeraInnerBlocks', values, {
+								ref: {
+									path:
+										'normal' === currentState &&
+										'desktop' === currentBreakpoint
+											? `blockeraBlockStates.value[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks`
+											: 'blockeraInnerBlocks.value',
+									reset: false,
+									action: 'normal',
+									defaultValue: {},
+								},
+							});
 
 							const newValue = mergeObject(values, items);
 

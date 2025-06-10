@@ -21,6 +21,7 @@
 - Fixed an issue where the `Flex Child` block section `Order`, `Grow`, `Shrink`, and `Basis` features not working properly. Thanks to Davor 🙏🏼
 - Fixed an issue where the pseudo elements not deleted. Thanks to Davor 🙏🏻
 - Fixed an issue where the `Active` block pseudo element was not working properly.
+- Fixed an issue where the `Restricts Blocks by Post Types` option was not working properly. Thanks Hoang 🙏🏻
 
 ### Automated Tests
 - Added E2E tests to check `Flex` display on `Columns` block.
