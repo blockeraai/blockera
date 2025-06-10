@@ -122,6 +122,8 @@ export const Preview = ({
 						maxItems,
 						setCurrentBlock,
 						setBlockClientInners,
+						currentState,
+						currentBreakpoint,
 						contextValue: innerBlocksContextValue,
 					}}
 					block={block}

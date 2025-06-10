@@ -4,6 +4,11 @@
  */
 import type { MixedElement } from 'react';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../../types';
+import type {
+	TStates,
+	TBreakpoint,
+	StateTypes,
+} from '../../block-states/types';
 
 export type InnerBlockType =
 	| 'heading'
@@ -40,6 +45,8 @@ export type InnerBlocks = { [key: InnerBlockType | string]: InnerBlockModel };
 
 export type InnerBlocksProps = {
 	values: InnerBlocks,
+	currentState: TStates,
+	currentBreakpoint: TBreakpoint,
 	innerBlocks: InnerBlocks,
 	block: {
 		...TBlockProps,
