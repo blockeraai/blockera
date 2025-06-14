@@ -10,7 +10,9 @@ import { useSelect } from '@wordpress/data';
  */
 import { STORE_NAME } from '../../store/constants';
 
-export const useEditorStore = (options: { list: boolean } = {}): Object => {
+export const useEditorStore = (
+	options: { list: boolean } = { list: false }
+): Object => {
 	const {
 		getState,
 		getInnerState,
