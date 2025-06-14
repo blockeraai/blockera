@@ -3,6 +3,9 @@
 ### Bug Fixed
 - Fixed an issue where advanced mode block card was shown when `Basic Mode` was enabled.
 
+### Improvements
+- Improved UX by showing all available states in editor store, making it easier to manage block states.
+
 ## 1.8.0 (2025-06-10)
 
 ### New Features

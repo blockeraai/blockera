@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { Node } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -32,7 +33,12 @@ export default function EditorFeatureWrapper({
 		currentInnerBlockState,
 	} = useExtensionsStore();
 	const { availableStates, availableBreakpoints, availableInnerStates } =
-		useEditorStore({ list: true });
+		useEditorStore(
+			applyFilters(
+				'blockera.editor.components.editorFeatureWrapper.editorStoreParams',
+				{}
+			)
+		);
 
 	if (window?.blockeraFeatureManager_1_0_0?.EditorFeatureWrapper) {
 		const WrapperComponent =
