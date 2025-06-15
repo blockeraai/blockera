@@ -1,38 +1,12 @@
 == Changelog ==
 
-### Version 1.11.3 - 2025-06-10
-
-### New Features
-- Added the new hook to extend block functionality while switching to other block or inner block to extend block functionality.
+### Version 1.11.4 - 2025-06-15
 
 ### Improvements
-- Improved the editor loading assets based on suitable version and dependencies.
-- Improved loading of the admin page assets suitable version and dependencies.
-- Improved the assets provider to be more flexible and easier to use and extend.
-- `Flex → Children Wrap` option change to be shown by default.
-- The `Purge Cache` button for style regeneration will remain active after purging the cache.
-- Improved cache validation and configuration updates for blockera extensions when options are modified.
-- Cleaned up cache data and improved cache functionality in block extensions for a better and easier user experience.
-- Enhanced URL utilities with more robust domain extraction and parameter parsing capabilities.
-- Improved the assets loader to be more flexible and easier to use of packages versions and dependencies.
+- Improved UX by showing all available states in editor store, making it easier to manage block states.
 
-### Bug Fixes
-- Fix `Redis Object Cache` plugin conflict error reported by Robert 🙏🏼
-- Fixed unnecessary re-rendering of components when updates were not needed.
-- Fixed an issue where block settings did not properly show when selecting an unsupported block.
-- Fixed an issue where `link` inner block color not reset. Thanks to Davor 🙏🏼
-- Fixed an issue where setting `flex` display on `Columns` block has styling issue. Thanks to Napat and Davor 🙏🏼
-- Fixed an issue where setting `Opacity` to `100%` not works on block states. Thanks to Davor 🙏🏼
-- Fixed an issue where the extensions cache data not correctly updated.
-- Fixed an issue where the `Flex Child` block section `Order`, `Grow`, `Shrink`, and `Basis` features not working properly. Thanks to Davor 🙏🏼
-- Fixed an issue where the pseudo elements not deleted. Thanks to Davor 🙏🏻
-- Fixed an issue where the `Active` block pseudo element was not working properly.
-- Fixed an issue where the `Restricts Blocks by Post Types` option was not working properly. Thanks Hoang 🙏🏻
-- Fixed a bug in the panel admin React components to improve user experience.
-- Fixed design overflow issue on the Blockera admin pages.
-
-### Automated Tests
-- Added E2E tests to check `Flex` display on `Columns` block.
+### Bug Fixed
+- Fixed an issue where advanced mode block card was shown when `Basic Mode` was enabled.
 
 ### More
 
