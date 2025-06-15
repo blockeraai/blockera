@@ -1,7 +1,5 @@
 ## Unreleased
 
-## 1.8.1 (2025-06-15)
-
 ### Bug Fixed
 - Fixed an issue where advanced mode block card was shown when `Basic Mode` was enabled.
 
