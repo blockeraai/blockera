@@ -31,10 +31,20 @@ export const StateStyle = (
 	props: StateStyleProps
 ): Array<MixedElement> | MixedElement => {
 	const [breakpoints, setBreakpoints] = useState({});
-	const { getStates, getInnerStates, getBreakpoints } =
+	const { getAvailableStates, getAvailableInnerStates, getBreakpoints } =
 		select('blockera/editor');
 	const blockStates = useMemo(
-		() => mergeObject(getStates(), getInnerStates()),
+		() => {
+			const params = applyFilters(
+				'blockera.editor.components.editorFeatureWrapper.editorStoreParams',
+				{}
+			);
+
+			return mergeObject(
+				getAvailableStates(params),
+				getAvailableInnerStates(params)
+			);
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
@@ -76,9 +86,9 @@ export const StateStyle = (
 
 	// Filtered allowed states to generate stylesheet.
 	// in free version allowed just "normal" and "hover".
-	const allowedStates = Object.values(statesForProcessing)
-		.filter((state: StateTypes): boolean => !state?.native)
-		.map((state: StateTypes): string => state.type);
+	const allowedStates = Object.values(statesForProcessing).map(
+		(state: StateTypes): string => state.type
+	);
 	const states: Array<TStates | string> = Object.keys(
 		statesForProcessing
 	).filter((state) =>
