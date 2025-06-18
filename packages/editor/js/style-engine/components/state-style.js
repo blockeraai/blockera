@@ -5,6 +5,7 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 
 /**
@@ -12,6 +13,7 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
  */
 import type {
 	TStates,
+	StateTypes,
 	TBreakpoint,
 } from '../../extensions/libs/block-card/block-states/types';
 import { mergeObject } from '@blockera/utils';
@@ -29,19 +31,10 @@ export const StateStyle = (
 	props: StateStyleProps
 ): Array<MixedElement> | MixedElement => {
 	const [breakpoints, setBreakpoints] = useState({});
-	const { getAvailableStates, getAvailableInnerStates, getBreakpoints } =
+	const { getStates, getInnerStates, getBreakpoints } =
 		select('blockera/editor');
 	const blockStates = useMemo(
-		() => {
-			const params = { list: true };
-
-			return [
-				...new Set([
-					...getAvailableStates(params),
-					...getAvailableInnerStates(params),
-				]),
-			];
-		},
+		() => mergeObject(getStates(), getInnerStates()),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[]
 	);
@@ -61,31 +54,39 @@ export const StateStyle = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const states: Array<TStates | string> = useMemo(() => {
-		const availableStates = props?.additional?.availableBlockStates
-			? Object.keys(props?.additional?.availableBlockStates)
-			: [];
-
-		let availableInnerBlockStates: Array<string> = [];
+	const statesForProcessing = useMemo(() => {
+		const availableStates = props?.additional?.availableBlockStates || {};
+		let availableInnerBlockStates = {};
 
 		for (const key in props?.additional?.blockeraInnerBlocks) {
 			const value = props?.additional?.blockeraInnerBlocks[key];
 			if (value?.availableBlockStates) {
-				availableInnerBlockStates = [
+				availableInnerBlockStates = {
 					...availableInnerBlockStates,
-					...Object.keys(value?.availableBlockStates),
-				];
+					...value?.availableBlockStates,
+				};
 			}
 		}
 
-		return [
-			...new Set([
-				...blockStates,
-				...availableStates,
-				...availableInnerBlockStates,
-			]),
-		];
+		return mergeObject(
+			blockStates,
+			mergeObject(availableStates, availableInnerBlockStates)
+		);
 	}, [props?.additional, blockStates]);
+
+	// Filtered allowed states to generate stylesheet.
+	// in free version allowed just "normal" and "hover".
+	const allowedStates = Object.values(statesForProcessing)
+		.filter((state: StateTypes): boolean => !state?.native)
+		.map((state: StateTypes): string => state.type);
+	const states: Array<TStates | string> = Object.keys(
+		statesForProcessing
+	).filter((state) =>
+		applyFilters(
+			'blockera.editor.styleEngine.allowedStates',
+			allowedStates
+		).includes(state)
+	);
 
 	// Move "normal" state to last position to ensure other states like "hover" or "active"
 	// can properly override the base styles when those states are activated.
