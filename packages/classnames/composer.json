@@ -1,6 +1,6 @@
 {
 	"name": "blockera/classnames",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Css classnames generator for Blockera Core.",
 	"autoload": {
 		"psr-4": {

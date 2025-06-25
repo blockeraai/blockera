@@ -1,12 +1,12 @@
 == Changelog ==
 
-### Version 1.11.4 - 2025-06-15
+### Version 1.11.5 - 2025-06-25
 
 ### Improvements
-- Improved UX by showing all available states in editor store, making it easier to manage block states.
+- Added security files including index.php to prevent direct access and ensure proper WordPress integration.
 
-### Bug Fixed
-- Fixed an issue where advanced mode block card was shown when `Basic Mode` was enabled.
+### Bug Fixes
+- Fixed an issue where the marker pseudo element's content field was not working properly as a blockera block state.
 
 ### More
 
