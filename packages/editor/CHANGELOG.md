@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.8.2 (2025-06-25)
+
 ### Bug Fixes
 - Fixed an issue where the marker pseudo element's content field was not working properly as a blockera block state.
 
