@@ -10,11 +10,13 @@ module.exports = {
 	],
 	modulePathIgnorePatterns: [],
 	testMatch: ['**/test/**/*.spec.js', '**/tests/**/*.spec.js'],
+	transformIgnorePatterns: ['/node_modules/(?!parsel-js).+\\.js$'],
 	transform: {
 		'\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
 			'<rootDir>/packages/dev-jest/js/assets-transformer.js',
 		'\\.svg$': '<rootDir>/packages/dev-jest/js/svg-transformer.js',
 		'^.+\\.(js|jsx)$': 'babel-jest',
+		'^.+\\.[jt]sx?$': 'babel-jest',
 	},
 	globals: {
 		'ts-jest': {
