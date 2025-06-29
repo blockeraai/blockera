@@ -12,19 +12,16 @@ import featuresStack from './libs';
 import { STORE_NAME } from './store';
 import type { TFeature } from './types';
 
-export const unstableBootstrapServerSideFeatures = (features: {
-	[key: string]: TFeature,
-}): void => {
-	for (const featureId in features) {
-		if (!features.hasOwnProperty(featureId)) {
-			continue;
-		}
+export const unstableBootstrapServerSideFeatures = (
+	features: Array<string>
+): void => {
+	for (const featureId of features) {
 		// While we are in the server side, we need to check if the feature is supported.
 		if (!featuresStack.hasOwnProperty(featureId)) {
 			continue;
 		}
 
-		const standardFeature = {
+		const standardFeature: TFeature = {
 			name: featureId,
 			isEnabled: featuresStack[featureId].isEnabled,
 			boot: featuresStack[featureId].boot,
