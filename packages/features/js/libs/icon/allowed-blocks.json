@@ -1,0 +1,11 @@
+{
+	"list": ["core/button", "core/site-title"],
+	"config": {
+		"core/button": {
+			"selector": "{{ BLOCK_SELECTOR }} a"
+		},
+		"core/site-title": {
+			"selector": "{{ BLOCK_SELECTOR }} a"
+		}
+	}
+}
