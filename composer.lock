@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "902ff472ee55bceb7f14dbcbe8c33400",
+    "content-hash": "69e024d3d2a320c16a2c9cf98c0f57d5",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -246,6 +246,33 @@
                 }
             },
             "description": "The blockera exceptions package.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/features",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/features",
+                "reference": "5c9ff5ca3c72c6a73c0df39bdc0ab3693f0bc6eb"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Features\\": "src/"
+                },
+                "files": [
+                    "src/helper.php"
+                ]
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Blockera\\Features\\Tests\\": "src/tests/"
+                }
+            },
+            "description": "The Blockera Features package.",
             "transport-options": {
                 "relative": true
             }
