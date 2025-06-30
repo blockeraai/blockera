@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added support for icons in blocks, allowing users to easily add and customize icons in their content.
+
 ## 1.1.5 (2025-06-10)
 
 ### Bug Fixes

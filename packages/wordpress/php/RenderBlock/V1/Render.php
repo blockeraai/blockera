@@ -4,6 +4,7 @@ namespace Blockera\WordPress\RenderBlock\V1;
 
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
+use Blockera\Features\FeaturesManager;
 use Blockera\Utils\Adapters\DomParser;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -82,39 +83,33 @@ class Render {
      * Render block icon element.
      *
      * @param string $html   The block html output.
-     * @param Parser $parser The block parser instance.
      * @param array  $args   The extra arguments to render block icon element.
      *
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string The block html include icon element if icon is existing.
      */
-    protected function renderIcon( string $html, Parser $parser, array $args): string {
+    protected function renderIcon( string $html, array $args): string {
 
         // blockera active experimental icon extension?
         $is_enable_icon_extension = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
 
-        // phpcs:disable
-        // create dom adapter.
-        /**
-         * @var DomParser $dom
-         */
-        if ($is_enable_icon_extension) {
-
-            $dom = $this->app->make(DomParser::class)::str_get_html($html);
-        }
-        // phpcs:enable
-
-        // phpcs:disable
         // TODO: add into cache mechanism.
-        //manipulation HTML of block content
+        // manipulation HTML of block content.
         if ($is_enable_icon_extension) {
 
-            $parser->htmlManipulate(array_merge($args, [ $dom ]));
-            //retrieve final html of block content
-            $html = preg_replace([ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html());
-        }
+			$dom          = $this->app->make(DomParser::class)::str_get_html($html);
+			$args['dom']  = $dom;
+			$args['html'] = $html;
 
-        // phpcs:enable
+			if ($this->is_doing_transpile) {
+				// retrieve final html of block content.
+				$html = preg_replace([ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html());
+			}
+
+			$html = $this->app->make(FeaturesManager::class)
+				->getFeature('icon')
+				->htmlManipulate($args);
+        }
 
         return $html;
     }
@@ -208,14 +203,14 @@ class Render {
         // Print css into inline style on "wp_head" action occur.
         blockera_add_inline_css($computed_css_rules);
 
-        // Render icon element.
-        $html = $this->renderIcon($html, $parser, compact('block', 'unique_class_name'));
-
         if ($need_to_update_html) {
 
             // Represent html string.
             $html = $this->getUpdatedHTML($html, $blockera_class_name);
         }
+
+        // Render icon element.
+        $html = $this->renderIcon($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
         // Create new block cache data.
         $data = [
