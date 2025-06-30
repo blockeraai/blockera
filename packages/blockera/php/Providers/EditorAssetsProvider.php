@@ -4,6 +4,7 @@ namespace Blockera\Setup\Providers;
 
 use Blockera\Setup\Blockera;
 use Blockera\Telemetry\Config;
+use Blockera\Features\FeaturesManager;
 use Blockera\WordPress\RenderBlock\Setup;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -217,8 +218,11 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			apply_filters( 'blockera/assets/provider/inline-script/register/3rd-party-blocks/attributes', [] )
 		);
 
+		$requested_features = array_keys($this->app->make(FeaturesManager::class)->getRegisteredFeatures());
+
 		$script = implode( ";\n", $blocks_attributes_scripts ) . '
-				' . $editor_object . '.editor.unstableRegistrationSharedBlockAttributes(' . wp_json_encode( $shared_block_attributes ) . ');';
+				' . $editor_object . '.editor.unstableRegistrationSharedBlockAttributes(' . wp_json_encode( $shared_block_attributes ) . ');
+				window.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');';
 
 		if ( false !== strpos( $inline_script, $script ) ) {
 

@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added a new system to manage plugin features that works seamlessly between your website (server) and browser (client), making the plugin more flexible and easier to customize.
+
 ## 1.3.2 (2025-06-10)
 
 ### Improvements

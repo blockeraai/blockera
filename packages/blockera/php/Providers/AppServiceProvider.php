@@ -19,7 +19,9 @@ use Blockera\WordPress\RenderBlock\V2\{
     SavePost as V2SavePost,
 };
 
+use Blockera\Icons\IconManager;
 use Blockera\Editor\StyleEngine;
+use Blockera\Features\FeaturesManager;
 use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
@@ -49,6 +51,8 @@ class AppServiceProvider extends ServiceProvider {
         parent::register();
 
         try {
+			$this->app->singleton(FeaturesManager::class);
+			$this->app->singleton(IconManager::class);
 
 			$this->app->singleton(
                 Cache::class,
@@ -216,6 +220,15 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
 
         parent::boot();
+
+		$this->app->make(IconManager::class);
+		$this->app->make(FeaturesManager::class)
+			->registerFeatures(
+				blockera_features_list(
+					blockera_core_config('app.root_path')
+                )
+            )
+			->bootFeatures();
 
 		$this->initCache();
 
