@@ -9,7 +9,7 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../store';
+import { STORE_NAME } from '../store/constants';
 
 export const useBlockFeatures = (props: {
 	name: string,

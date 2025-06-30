@@ -4,15 +4,15 @@
 	"description": "The Blockera Features package.",
 	"autoload": {
 		"psr-4": {
-			"Blockera\\Features\\": "php/"
+			"Blockera\\Features\\": "src/"
 		},
 		"files": [
-			"php/helper.php"
+			"src/helper.php"
 		]
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Blockera\\Features\\Tests\\": "php/tests/"
+			"Blockera\\Features\\Tests\\": "src/tests/"
 		}
 	}
 }

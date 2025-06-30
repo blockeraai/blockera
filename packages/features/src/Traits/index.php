@@ -4,5 +4,5 @@
  *
  * Security file.
  *
- * @package bootstrap/index.php
+ * @package src/Traits/index.php
  */

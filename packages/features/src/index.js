@@ -8,9 +8,9 @@ import { dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import featuresStack from './libs';
-import { STORE_NAME } from './store';
-import type { TFeature } from './types';
+import featuresStack from './Modules';
+import { STORE_NAME } from './Js/store';
+import type { TFeature } from './Js/types';
 
 export const unstableBootstrapServerSideFeatures = (
 	features: Array<string>
@@ -31,4 +31,4 @@ export const unstableBootstrapServerSideFeatures = (
 	}
 };
 
-export * from './use-block-features';
+export * from './Js/use-block-features';

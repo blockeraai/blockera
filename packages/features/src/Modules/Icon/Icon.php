@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\Features\Icon;
+namespace Blockera\Features\Modules\Icon;
 
 use Blockera\Icons\IconManager;
 use Blockera\Features\Traits\Singleton;

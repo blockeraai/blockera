@@ -3,7 +3,7 @@
 /**
  * Internal dependencies
  */
-import icon from './icon';
+import icon from './Icon';
 
 export default {
 	icon,

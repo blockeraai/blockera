@@ -1,5 +1,5 @@
 {
-	"list": ["core/button", "core/site-title"],
+	"supportedBlocks": ["core/button", "core/site-title"],
 	"config": {
 		"core/button": {
 			"selector": "{{ BLOCK_SELECTOR }} a"

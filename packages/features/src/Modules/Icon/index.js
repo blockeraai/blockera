@@ -15,7 +15,7 @@ import { isEmpty, isUndefined } from '@blockera/utils';
  */
 import blocks from './allowed-blocks.json';
 
-const allowedBlocks = blocks.list;
+const allowedBlocks = blocks.supportedBlocks;
 
 const renderIcon = ({ name, clientId, blockRefId, attributes }) => {
 	if (
