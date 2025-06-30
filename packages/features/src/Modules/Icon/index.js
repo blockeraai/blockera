@@ -1,3 +1,5 @@
+// @flow
+
 /**
  * External dependencies
  */
@@ -13,11 +15,17 @@ import { isEmpty, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import blocks from './allowed-blocks.json';
+import iconConfig from './icon.schema.json';
+import type { TBootFunctionProps } from '../../Js/types';
 
-const allowedBlocks = blocks.supportedBlocks;
+const allowedBlocks = Object.keys(iconConfig.blocks);
 
-const renderIcon = ({ name, clientId, blockRefId, attributes }) => {
+const renderIcon = ({
+	name,
+	clientId,
+	blockRefId,
+	attributes,
+}: TBootFunctionProps): void => {
 	if (
 		!experimental().get('editor.extensions.iconExtension') ||
 		!allowedBlocks.includes(name)
@@ -34,7 +42,7 @@ const renderIcon = ({ name, clientId, blockRefId, attributes }) => {
 	} = attributes;
 
 	const blockElement = blockRefId.current;
-	const el = blockElement.parentElement.querySelector(`#block-${clientId}`);
+	const el = blockElement.parentElement?.querySelector(`#block-${clientId}`);
 
 	if (isUndefined(blockeraIcon) || isEmpty(blockeraIcon) || !el) {
 		return;
@@ -60,7 +68,7 @@ const renderIcon = ({ name, clientId, blockRefId, attributes }) => {
 	);
 
 	if (el.querySelector('.blockera-icon')) {
-		el.querySelector('.blockera-icon').remove();
+		el.querySelector('.blockera-icon')?.remove();
 	}
 
 	if ('left' === blockeraIconPosition) {
@@ -73,5 +81,5 @@ const renderIcon = ({ name, clientId, blockRefId, attributes }) => {
 export default {
 	name: 'icon',
 	boot: renderIcon,
-	isEnabled: () => true,
+	isEnabled: (): boolean => true,
 };

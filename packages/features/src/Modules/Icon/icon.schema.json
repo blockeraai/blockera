@@ -1,0 +1,23 @@
+{
+	"$id": "https://blockera.ai/icon.schema.json",
+	"name": "icon",
+	"description": "Add icon to supported contexts across WordPress websites.",
+	"context": ["blockEditor", "renderBlock"],
+	"blocks": {
+		"core/button": {
+			"selector": "{{ BLOCK_SELECTOR }} a"
+		},
+		"core/site-title": {
+			"selector": "{{ BLOCK_SELECTOR }} a"
+		}
+	},
+	"config": {
+		"blockEditor": {
+			"edit": {
+				"customizeBlockContent": true
+			},
+			"save": {}
+		},
+		"renderBlock": {}
+	}
+}
