@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Improved block features organization for better code structure and easier maintenance.
+
 ## 1.8.2 (2025-06-25)
 
 ### Bug Fixes

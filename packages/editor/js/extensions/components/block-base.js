@@ -21,8 +21,9 @@ import {
 /**
  * Blockera dependencies
  */
-import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
 import { experimental } from '@blockera/env';
+import { useBlockFeatures } from '@blockera/features';
+import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -30,7 +31,7 @@ import { experimental } from '@blockera/env';
 import { BlockStyle, StylesWrapper } from '../../style-engine';
 import { BlockEditContextProvider } from '../hooks';
 import {
-	useIconEffect,
+	// useIconEffect,
 	useAttributes,
 	useInnerBlocksInfo,
 	useCalculateCurrentAttributes,
@@ -297,19 +298,13 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		blockAttributes: defaultAttributes,
 	});
 
-	useIconEffect(
-		{
-			name,
-			clientId,
-			blockRefId: blockEditRef,
-			blockeraIcon: currentAttributes?.blockeraIcon,
-			blockeraIconGap: currentAttributes?.blockeraIconGap,
-			blockeraIconSize: currentAttributes?.blockeraIconSize,
-			blockeraIconColor: currentAttributes?.blockeraIconColor,
-			blockeraIconPosition: currentAttributes?.blockeraIconPosition,
-		},
-		[currentAttributes]
-	);
+	// Boot loading the block features.
+	useBlockFeatures({
+		name,
+		clientId,
+		blockRefId: blockEditRef,
+		attributes: currentAttributes,
+	});
 
 	const inlineStyles = useCleanupStyles({ clientId }, [
 		selectedBlock,
