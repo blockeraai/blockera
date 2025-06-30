@@ -19,7 +19,7 @@ use Blockera\WordPress\RenderBlock\V2\{
     SavePost as V2SavePost,
 };
 
-use Blockera\Icons\IconManager;
+use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
 use Blockera\Features\FeaturesManager;
 use Blockera\Bootstrap\EntityRegistry;
@@ -52,7 +52,7 @@ class AppServiceProvider extends ServiceProvider {
 
         try {
 			$this->app->singleton(FeaturesManager::class);
-			$this->app->singleton(IconManager::class);
+			$this->app->singleton(IconsManager::class);
 
 			$this->app->singleton(
                 Cache::class,
@@ -221,7 +221,7 @@ class AppServiceProvider extends ServiceProvider {
 
         parent::boot();
 
-		$this->app->make(IconManager::class);
+		$this->app->make(IconsManager::class);
 		$this->app->make(FeaturesManager::class)
 			->registerFeatures(
 				blockera_features_list(

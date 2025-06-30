@@ -2,7 +2,7 @@
 
 namespace Blockera\Features\Modules\Icon;
 
-use Blockera\Icons\IconManager;
+use Blockera\Icons\IconsManager;
 use Blockera\Features\Traits\Singleton;
 use Blockera\Features\Contracts\FeatureInterface;
 
@@ -89,7 +89,7 @@ class Icon implements FeatureInterface {
 			if (! empty($renderedIcon)) {
 				$iconHTML = $renderedIcon;
 			} else {
-				$iconHTML = IconManager::getIcon($icon, $library)['icon'];
+				$iconHTML = IconsManager::getIcon($icon, $library)['icon'];
 			}
 
 			$gap = $block['attrs']['blockeraIconGap']['value'] ?? '0';
