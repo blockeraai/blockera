@@ -17,10 +17,10 @@ class IconsManager {
 
     /** @var array Mapping of library names to relative icon paths. */
     protected static $icon_paths = [
-		'wp' => 'js/library-wp/icons/',
-        'ui' => 'js/library-ui/icons/',
-        'blockera' => 'js/library-blockera/icons/',
-        'cursor' => 'js/library-cursor/icons/',
+		'wp' => '/js/library-wp/icons/',
+        'ui' => '/js/library-ui/icons/',
+        'blockera' => '/js/library-blockera/icons/',
+        'cursor' => '/js/library-cursor/icons/',
     ];
 
 	public function __construct() {
@@ -160,13 +160,22 @@ class IconsManager {
             return null;
         }
 
-        $icons = self::$libraries[ $library ];
+        $icons    = self::$libraries[ $library ];
+		$iconName = self::pascalCase($iconName);
 
         if (! isset($icons[ $iconName ])) {
             return null;
         }
 
-        $icon = $icons[ $iconName ];
+        $iconPath = dirname(__DIR__) . $icons[ $iconName ];
+
+		if (! file_exists($iconPath)) {
+			return null;
+		}
+
+		ob_start();
+		include $iconPath;
+		$icon = ob_get_clean();
 
         return $standardize
             ? self::createStandardIconObject($iconName, $library, $icon)
