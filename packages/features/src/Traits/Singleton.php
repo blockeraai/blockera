@@ -17,9 +17,9 @@ trait Singleton {
 	/**
 	 * Get the instance of the singleton.
 	 *
-	 * @return static The instance of the singleton.
+	 * @return self The instance of the singleton.
 	 */
-	public static function getInstance(): static {
+	public static function getInstance(): self {
 		if (null === self::$instance) {
 			self::$instance = new self();
 		}
