@@ -38,7 +38,7 @@ const editBlockHTML = ({
 		blockeraIconSize = 25,
 		blockeraIconColor = '',
 		blockeraIconGap = '5px',
-		blockeraIconPosition = 'left',
+		blockeraIconPosition = 'right',
 	} = attributes;
 
 	const blockElement = blockRefId.current;
@@ -73,7 +73,7 @@ const editBlockHTML = ({
 
 	if ('left' === blockeraIconPosition) {
 		el.querySelector('div[role="textbox"]')?.prepend(iconNode);
-	} else if ('right' === blockeraIconPosition) {
+	} else if (['right', ''].includes(blockeraIconPosition)) {
 		el.querySelector('div[role="textbox"]')?.append(iconNode);
 	}
 };
