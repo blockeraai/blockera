@@ -51,10 +51,9 @@ class EditBlockHTML implements EditableBlockHTML {
 	 * @param array $data The data to find the block element.
 	 * @return SimpleHtmlDom|null The block element or null if not found.
 	 */
-	protected function findBlockElement( array $data): SimpleHtmlDom {
+	protected function findBlockElement( array $data): ?SimpleHtmlDom {
 		[
 			'dom'          => $dom,
-			'html'         => $html,
             'block'        => $block,
 			'unique_class_name' => $unique_class_name,
 		] = $data;
@@ -65,7 +64,7 @@ class EditBlockHTML implements EditableBlockHTML {
 		$blockElement = $dom->findOne($selector);
 
 		if (empty($blockElement) || empty($blockElement->innerhtml)) {
-			return $html;
+			return null;
 		}
 
 		return $blockElement;

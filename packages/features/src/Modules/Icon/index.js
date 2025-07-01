@@ -72,9 +72,9 @@ const editBlockHTML = ({
 	}
 
 	if ('left' === blockeraIconPosition) {
-		el.querySelector('div[role="textbox"]')?.prepend(iconNode);
+		el.querySelector('*[role="textbox"]')?.prepend(iconNode);
 	} else if (['right', ''].includes(blockeraIconPosition)) {
-		el.querySelector('div[role="textbox"]')?.append(iconNode);
+		el.querySelector('*[role="textbox"]')?.append(iconNode);
 	}
 };
 
