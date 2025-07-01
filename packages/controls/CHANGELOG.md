@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue where icons weren't updating properly when changed.
+
 ## 1.3.4 (2025-06-10)
 
 ### Bug Fixes

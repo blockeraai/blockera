@@ -4,8 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { memo, useState, useReducer, createRoot } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,8 +16,6 @@ import {
 } from '@blockera/classnames';
 import {
 	isEmpty,
-	isObject,
-	isEquals,
 	isUndefined,
 	hasSameProps,
 	useLateEffect,
@@ -57,29 +55,47 @@ function IconControl({
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
 
 	useLateEffect(() => {
-		setValue(currentIcon);
-	}, [currentIcon]);
+		// Prepare rendered icon before setting state
+		if (currentIcon?.icon || currentIcon?.uploadSVG) {
+			const iconWrapper = document.createElement('div');
+			iconWrapper.style.display = 'none';
+			iconWrapper.classList.add('blockera-temp-icon-wrapper');
 
-	useEffect(() => {
-		if (isObject(value) && !isEquals(value, currentIcon)) {
-			currentIconDispatch({
-				type: 'UPDATE_ICON',
-				icon: value.icon,
-				library: value.library,
-			});
+			const foundedWrapper = document.querySelector(
+				'.blockera-temp-icon-wrapper'
+			);
 
-			// return undefined;
+			if (!foundedWrapper) {
+				document.body?.append(iconWrapper);
+			} else {
+				foundedWrapper.innerHTML = '';
+			}
+
+			const iconNode = document.createElement('span');
+			document
+				.querySelector('.blockera-temp-icon-wrapper')
+				?.append(iconNode);
+			const iconRoot = createRoot(iconNode);
+
+			iconRoot.render(
+				<Icon
+					icon={currentIcon.icon}
+					library={currentIcon.library}
+					uploadSVG={currentIcon.uploadSVG}
+				/>
+			);
+
+			setTimeout(() => {
+				const iconHTML = document.querySelector(
+					'.blockera-temp-icon-wrapper span'
+				)?.innerHTML;
+
+				currentIcon.renderedIcon = iconHTML;
+			}, 1000);
 		}
 
-		// if (!value) {
-		// 	currentIconDispatch({
-		// 		type: 'DELETE_ICON',
-		// 	});
-		// }
-
-		// return undefined;
-		// eslint-disable-next-line
-	}, [value]);
+		setValue(currentIcon);
+	}, [currentIcon]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
 
