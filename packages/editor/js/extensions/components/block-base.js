@@ -299,7 +299,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	});
 
 	// Boot loading the block features.
-	useBlockFeatures({
+	const { ContextualToolbarComponents } = useBlockFeatures({
 		name,
 		clientId,
 		blockRefId: blockEditRef,
@@ -499,6 +499,8 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				</StylesWrapper>
 			</ErrorBoundary>
 			{/*</StrictMode>*/}
+
+			<ContextualToolbarComponents isDropDownMenu={true} />
 
 			{children}
 		</BlockEditContextProvider>
