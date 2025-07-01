@@ -21,6 +21,7 @@ return [
 			'data',
 			'controls',
 			'telemetry',
+			'features',
 			'editor',
 			'blocks-core',
 			'bootstrap',
