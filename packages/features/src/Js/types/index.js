@@ -1,6 +1,8 @@
 // @flow
 
-export type TBootFunctionProps = {
+import type { ComponentType } from 'react';
+
+export type TEditBlockHTMLArgs = {
 	name: string,
 	clientId: string,
 	blockRefId: { current: HTMLElement },
@@ -9,6 +11,26 @@ export type TBootFunctionProps = {
 
 export type TFeature = {
 	name: string,
-	boot: (props: TBootFunctionProps) => void,
 	isEnabled: () => boolean,
+	toolbarControls?: TToolbarControls,
+	ToolbarButtonComponent?: ComponentType<any>,
+	editBlockHTML?: (args: TEditBlockHTMLArgs) => void,
+};
+
+export type TToolbarControls = Array<{
+	title: string,
+	onClick: () => void,
+}>;
+
+export type TBlockFeatures = {
+	ContextualToolbarComponents: TContextualToolbarComponents,
+};
+
+export type TContextualToolbarComponents = ComponentType<{
+	isDropDownMenu?: boolean,
+}>;
+
+export type TCalculatedFeatures = {
+	blockSideEffectFeatures: Array<TFeature>,
+	contextualToolbarFeatures: Array<TFeature>,
 };

@@ -23,8 +23,7 @@ export const unstableBootstrapServerSideFeatures = (
 
 		const standardFeature: TFeature = {
 			name: featureId,
-			isEnabled: featuresStack[featureId].isEnabled,
-			boot: featuresStack[featureId].boot,
+			...featuresStack[featureId],
 		};
 
 		dispatch(STORE_NAME).registerFeature(standardFeature);

@@ -16,16 +16,16 @@ import { isEmpty, isUndefined } from '@blockera/utils';
  * Internal dependencies
  */
 import iconConfig from './icon.schema.json';
-import type { TBootFunctionProps } from '../../Js/types';
+import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
 
 const allowedBlocks = Object.keys(iconConfig.blocks);
 
-const renderIcon = ({
+const editBlockHTML = ({
 	name,
 	clientId,
 	blockRefId,
 	attributes,
-}: TBootFunctionProps): void => {
+}: TEditBlockHTMLArgs): void => {
 	if (
 		!experimental().get('editor.extensions.iconExtension') ||
 		!allowedBlocks.includes(name)
@@ -78,8 +78,10 @@ const renderIcon = ({
 	}
 };
 
-export default {
+const IconFeature: TFeature = {
 	name: 'icon',
-	boot: renderIcon,
+	editBlockHTML,
 	isEnabled: (): boolean => true,
 };
+
+export default IconFeature;
