@@ -4,8 +4,9 @@ namespace Blockera\Features\Modules\Icon;
 
 use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
+use Blockera\Features\Contracts\EditableBlockHTML;
 
-class EditBlockHTML {
+class EditBlockHTML implements EditableBlockHTML {
 
 	/**
 	 * Store the blocks configuration.
