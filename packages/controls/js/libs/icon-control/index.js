@@ -90,7 +90,9 @@ function IconControl({
 					'.blockera-temp-icon-wrapper span'
 				)?.innerHTML;
 
-				currentIcon.renderedIcon = iconHTML;
+				currentIcon.renderedIcon = btoa(
+					unescape(encodeURIComponent(iconHTML || ''))
+				);
 			}, 1000);
 		}
 
