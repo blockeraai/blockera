@@ -18,23 +18,20 @@ import type {
 	TBlockFeatures,
 	TToolbarControls,
 	TCalculatedFeatures,
+	TUseBlockFeaturesProps,
 	TContextualToolbarComponents,
 } from '../types';
 
-export const useBlockFeatures = (props: {
-	name: string,
-	clientId: string,
-	attributes: Object,
-	blockRefId: { current: HTMLElement },
-	config?: {
-		hasSideEffect: boolean,
-		hasContextualToolbar: boolean,
-	},
-}): TBlockFeatures => {
-	if (!props?.config) {
-		props.config = {
-			hasSideEffect: true,
-			hasContextualToolbar: true,
+export const useBlockFeatures = (
+	props: TUseBlockFeaturesProps
+): TBlockFeatures => {
+	if ('undefined' === typeof props?.blockFeatures) {
+		props.blockFeatures = {
+			hasSideEffect: false,
+			hasContextualToolbar: {
+				enabled: false,
+				type: 'none',
+			},
 		};
 	}
 	const { getFeatures } = select(STORE_NAME);
@@ -60,23 +57,15 @@ export const useBlockFeatures = (props: {
 				continue;
 			}
 
-			// Push to blockSideEffectFeatures if the feature has editBlockHTML,
-			// and the blockSideEffect is enabled.
-			if (
-				'function' === typeof feature.editBlockHTML &&
-				props.config?.hasSideEffect
-			) {
+			// Push to blockSideEffectFeatures if the feature has editBlockHTML.
+			if ('function' === typeof feature.editBlockHTML) {
 				if (feature.isEnabled()) {
 					blockSideEffectFeatures.push(feature);
 				}
 			}
 
-			// Push to contextualToolbarFeatures if the feature has toolbarControls or ToolbarButtonComponent,
-			// and the contextualToolbar is enabled.
-			if (
-				(feature.toolbarControls || feature.ToolbarButtonComponent) &&
-				props.config?.hasContextualToolbar
-			) {
+			// Push to contextualToolbarFeatures if the feature has toolbarControls or ToolbarButtonComponent.
+			if (feature.toolbarControls || feature.ToolbarButtonComponent) {
 				if (feature.isEnabled()) {
 					contextualToolbarFeatures.push(feature);
 				}
@@ -86,10 +75,18 @@ export const useBlockFeatures = (props: {
 		return { blockSideEffectFeatures, contextualToolbarFeatures };
 	}, [registeredFeatures, props]);
 
-	const ContextualToolbarComponents: TContextualToolbarComponents = ({
-		isDropDownMenu = false,
-	}) => {
-		if (isDropDownMenu) {
+	const ContextualToolbarComponents: TContextualToolbarComponents = () => {
+		const { enabled, type } = props?.blockFeatures
+			?.hasContextualToolbar || {
+			enabled: false,
+			type: 'none',
+		};
+
+		if (!enabled) {
+			return null;
+		}
+
+		if ('dropdown' === type) {
 			const controls: TToolbarControls = contextualToolbarFeatures
 				.filter(
 					(feature: TFeature): boolean => !!feature?.toolbarControls
@@ -121,6 +118,10 @@ export const useBlockFeatures = (props: {
 			);
 		}
 
+		if ('button' !== type) {
+			return null;
+		}
+
 		const components = contextualToolbarFeatures.map(
 			(feature: TFeature) => {
 				if (feature?.ToolbarButtonComponent) {
@@ -140,19 +141,22 @@ export const useBlockFeatures = (props: {
 		);
 	};
 
-	useEffect(
-		(): void =>
-			blockSideEffectFeatures.forEach((feature: TFeature) => {
-				if ('function' !== typeof feature.editBlockHTML) {
-					return;
-				}
+	useEffect((): void => {
+		if (!props?.blockFeatures?.hasSideEffect) {
+			return;
+		}
 
-				const { config, ...rest } = props;
+		blockSideEffectFeatures.forEach((feature: TFeature) => {
+			if ('function' !== typeof feature.editBlockHTML) {
+				return;
+			}
 
-				feature.editBlockHTML({ ...rest });
-			}),
-		[blockSideEffectFeatures, props]
-	);
+			// Remove redundant params.
+			const { blockFeatures, ...rest } = props;
+
+			feature.editBlockHTML({ ...rest });
+		});
+	}, [blockSideEffectFeatures, props]);
 
 	return {
 		ContextualToolbarComponents,

@@ -9,6 +9,22 @@ export type TEditBlockHTMLArgs = {
 	attributes: Object,
 };
 
+export type TBlockFeaturesParams = {
+	hasSideEffect: boolean,
+	hasContextualToolbar: {
+		enabled: boolean,
+		type: 'button' | 'dropdown' | 'none',
+	},
+};
+
+export type TUseBlockFeaturesProps = {
+	name: string,
+	clientId: string,
+	attributes: Object,
+	blockRefId: { current: HTMLElement },
+	blockFeatures?: TBlockFeaturesParams,
+};
+
 export type TFeature = {
 	name: string,
 	isEnabled: () => boolean,
