@@ -304,6 +304,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		clientId,
 		blockRefId: blockEditRef,
 		attributes: currentAttributes,
+		blockFeatures: additional?.blockFeatures,
 	});
 
 	const inlineStyles = useCleanupStyles({ clientId }, [
@@ -500,7 +501,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			</ErrorBoundary>
 			{/*</StrictMode>*/}
 
-			<ContextualToolbarComponents isDropDownMenu={true} />
+			<ContextualToolbarComponents />
 
 			{children}
 		</BlockEditContextProvider>
