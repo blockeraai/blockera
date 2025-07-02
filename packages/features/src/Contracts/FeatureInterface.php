@@ -2,6 +2,8 @@
 
 namespace Blockera\Features\Contracts;
 
+use Blockera\Bootstrap\Application;
+
 interface FeatureInterface {
 
     /**
@@ -24,4 +26,12 @@ interface FeatureInterface {
 	 * @return bool true on success, false otherwise.
 	 */
 	public function isEnabled(): bool;
+
+	/**
+	 * Set
+	 *
+	 * @param Application $app
+	 * @return void
+	 */
+	public function setApp( Application $app): void;
 }

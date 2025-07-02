@@ -7,9 +7,10 @@ interface EditableBlockHTML {
 	/**
 	 * The html manipulate method.
 	 *
-	 * @param array $data The data to manipulate.
+	 * @param string $html The html to manipulate.
+	 * @param array  $data The data to manipulate.
 	 * 
 	 * @return string The manipulated html.
 	 */
-    public function htmlManipulate( array $data): string;
+    public function htmlManipulate( string $html, array $data): string;
 }
