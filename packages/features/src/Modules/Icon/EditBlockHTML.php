@@ -52,6 +52,11 @@ class EditBlockHTML implements EditableBlockHTML {
 	 * @return SimpleHtmlDom|null The block element or null if not found.
 	 */
 	protected function findBlockElement( array $data): ?SimpleHtmlDom {
+
+		if (empty($data['dom'])) {
+			return null;
+		}
+
 		[
 			'dom'          => $dom,
             'block'        => $block,
