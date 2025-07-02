@@ -6,6 +6,7 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Features\FeaturesManager;
 use Blockera\Utils\Adapters\DomParser;
+use Blockera\Features\Contracts\EditableBlockHTML;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -88,31 +89,57 @@ class Render {
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string The block html include icon element if icon is existing.
      */
-    protected function renderIcon( string $html, array $args): string {
+    protected function renderBlockWithFeatures( string $html, array $args): string {
 
         // blockera active experimental icon extension?
-        $is_enable_icon_extension = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
+        $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);		
 
-        // TODO: add into cache mechanism.
-        // manipulation HTML of block content.
-        if ($is_enable_icon_extension) {
+		// Prepare dom parser instance.
+		$dom          = $this->app->make(DomParser::class)::str_get_html($html);
+		$args['dom']  = $dom;
+		$args['html'] = $html;
 
-			$dom          = $this->app->make(DomParser::class)::str_get_html($html);
-			$args['dom']  = $dom;
-			$args['html'] = $html;
+		// Cleanup process for block content.
+		$html = $this->cleanupProcess($dom);
 
-			if ($this->is_doing_transpile) {
-				// retrieve final html of block content.
-				$html = preg_replace([ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html());
-			}
+		// Get all registered features.
+		$features = $this->app->make(FeaturesManager::class)->getRegisteredFeatures();
 
-			$html = $this->app->make(FeaturesManager::class)
-				->getFeature('icon')
-				->htmlManipulate($args);
-        }
+		// Reduce the features to manipulate the html of the block.
+		return array_reduce(
+			$features,
+			function ( string $html, EditableBlockHTML $feature) use ( $args): string {
 
-        return $html;
+				// Override the html by accumulated html.
+				$args['html'] = $html;
+
+				// Manipulate the html of the block by current feature.
+				return $feature->htmlManipulate($args);
+			},
+			$html
+		);
     }
+
+	/**
+	 * Cleanup process for block content.
+	 * This method is used to cleanup the block content.
+	 * It removes the style attribute and the wp-block-<block-name>__<block-attribute>-<block-attribute-value> class.
+	 *
+	 * @param DomParser $dom the dom parser instance.
+	 *
+	 * @return string the cleaned html.
+	 */
+	protected function cleanupProcess( DomParser $dom): string {
+		
+		$html = null;
+
+		if ($this->is_doing_transpile) {
+			// retrieve final html of block content.
+			$html = preg_replace([ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html());
+		}
+
+		return $html ?? $dom->html();
+	}
 
     /**
      * Block parser to customize HTML template!
@@ -209,8 +236,8 @@ class Render {
             $html = $this->getUpdatedHTML($html, $blockera_class_name);
         }
 
-        // Render icon element.
-        $html = $this->renderIcon($html, compact('block', 'unique_class_name', 'computed_css_rules'));
+        // Render block with features.
+        $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
         // Create new block cache data.
         $data = [
