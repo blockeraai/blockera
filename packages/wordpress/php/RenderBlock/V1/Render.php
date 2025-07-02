@@ -94,8 +94,11 @@ class Render {
         // blockera active experimental icon extension?
         $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);		
 
+		// Clone the html to avoid mutating the original html.
+		$cloned_html = $html;
+
 		// Prepare dom parser instance.
-		$dom          = $this->app->make(DomParser::class)::str_get_html($html);
+		$dom          = $this->app->make(DomParser::class)::str_get_html($cloned_html);
 		$args['dom']  = $dom;
 		$args['html'] = $html;
 
@@ -108,10 +111,12 @@ class Render {
 		// Reduce the features to manipulate the html of the block.
 		return array_reduce(
 			$features,
-			function ( string $html, EditableBlockHTML $feature) use ( $args): string {
+			function ( string $accumulated_html, EditableBlockHTML $feature) use ( $args): string {
 
 				// Override the html by accumulated html.
-				$args['html'] = $html;
+				if ($args['html'] !== $accumulated_html) {
+					$args['html'] = $accumulated_html;
+				}
 
 				// Manipulate the html of the block by current feature.
 				return $feature->htmlManipulate($args);
