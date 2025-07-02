@@ -37,4 +37,11 @@ export const Button: BlockType = {
 		},
 		visited: sharedBlockStates.visited,
 	},
+	blockFeatures: {
+		hasSideEffect: true,
+		hasContextualToolbar: {
+			enabled: true,
+			type: 'dropdown',
+		},
+	},
 };
