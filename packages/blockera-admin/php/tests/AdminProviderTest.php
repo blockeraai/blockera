@@ -23,7 +23,7 @@ class AdminProviderTest extends \Blockera\Dev\PHPUnit\AppTestCase
 		// Mock WordPress functions.
 		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 
-		self::$provider = new AdminProvider(new Blockera());
+		self::$provider = new AdminProvider(Blockera::getInstance());
 	}
 
 	/**
