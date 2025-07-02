@@ -19,6 +19,13 @@ use Blockera\Data\Cache\Contracts\ApplicationCacheStatus;
 class Blockera extends Application implements ContainerInterface, ApplicationCacheStatus {
 
 	/**
+	 * Store the instance of the class.
+	 *
+	 * @var Blockera|null $instance the instance of the class.
+	 */
+	protected static $instance = null;
+
+	/**
 	 * Holds the registered values.
 	 *
 	 * @var array $registered_value_addons the registered values.
@@ -35,7 +42,7 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	/**
 	 * Blockera constructor.
 	 */
-	public function __construct() {
+	protected function __construct() {
 
 		/**
 		 * This hook for extendable service providers list from internal or third-party developers.
@@ -58,6 +65,20 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 		);
 
 		$this->setRegisteredValueAddons();
+	}
+
+	/**
+	 * Get the instance of the class.
+	 *
+	 * @return Blockera the instance of the class.
+	 */
+	public static function getInstance(): self {
+		
+		if (null === self::$instance) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 	/**
