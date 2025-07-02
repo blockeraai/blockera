@@ -102,9 +102,6 @@ class Render {
 		$args['dom']  = $dom;
 		$args['html'] = $html;
 
-		// Cleanup process for block content.
-		$html = $this->cleanupProcess($html, $dom);
-
 		// Get all registered features.
 		$features = $this->app->make(FeaturesManager::class)->getRegisteredFeatures();
 
@@ -124,26 +121,6 @@ class Render {
 			$html
 		);
     }
-
-	/**
-	 * Cleanup process for block content.
-	 * This method is used to cleanup the block content.
-	 * It removes the style attribute and the wp-block-<block-name>__<block-attribute>-<block-attribute-value> class.
-	 *
-	 * @param string    $html thr block html output.
-	 * @param DomParser $dom the dom parser instance.
-	 *
-	 * @return string the cleaned html.
-	 */
-	protected function cleanupProcess( string $html, DomParser $dom): string {
-
-		if ($this->is_doing_transpile) {
-			// retrieve final html of block content.
-			$html = preg_replace([ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html());
-		}
-
-		return $html;
-	}
 
     /**
      * Block parser to customize HTML template!
