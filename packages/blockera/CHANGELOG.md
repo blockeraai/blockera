@@ -2,6 +2,7 @@
 
 ### New Features
 - Added a new system to manage plugin features that works seamlessly between your website (server) and browser (client), making the plugin more flexible and easier to customize.
+- Improved plugin stability and performance by ensuring only one instance of core functionality runs at a time, preventing potential conflicts and reducing memory usage.
 
 ## 1.3.2 (2025-06-10)
 
