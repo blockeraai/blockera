@@ -92,34 +92,24 @@ class Render {
     protected function renderBlockWithFeatures( string $html, array $args): string {
 
         // blockera active experimental icon extension?
-        $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);		
-
-		// Clone the html to avoid mutating the original html.
-		$cloned_html = $html;
-
-		// Prepare dom parser instance.
-		$dom          = $this->app->make(DomParser::class)::str_get_html($cloned_html);
-		$args['dom']  = $dom;
-		$args['html'] = $html;
+        $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
 
 		// Get all registered features.
 		$features = $this->app->make(FeaturesManager::class)->getRegisteredFeatures();
 
-		// Reduce the features to manipulate the html of the block.
-		return array_reduce(
-			$features,
-			function ( string $accumulated_html, EditableBlockHTML $feature) use ( $args): string {
+		foreach ($features as $feature) {
 
-				// Override the html by accumulated html.
-				if ($args['html'] !== $accumulated_html) {
-					$args['html'] = $accumulated_html;
-				}
+			// Skip if feature is not enabled.
+			if (! $feature->isEnabled()) {
+				continue;
+			}
 
-				// Manipulate the html of the block by current feature.
-				return $feature->htmlManipulate($args);
-			},
-			$html
-		);
+			$feature->setApp($this->app);
+
+			$html = $feature->htmlManipulate($html, $args);
+		}
+
+		return $html;
     }
 
     /**
