@@ -59,8 +59,12 @@ const editBlockHTML = ({
 			style={{
 				fill: blockeraIconColor,
 				color: blockeraIconColor,
-				marginLeft: blockeraIconGap,
-				marginRight: blockeraIconGap,
+				marginLeft:
+					'right' === blockeraIconPosition || !blockeraIconPosition
+						? blockeraIconGap
+						: 0,
+				marginRight:
+					'left' === blockeraIconPosition ? blockeraIconGap : 0,
 			}}
 			{...(blockeraIcon ?? {})}
 			size={iconSize}
