@@ -64,25 +64,32 @@ export default function ({
 					{item.label}
 				</span>
 
-				<span className={controlInnerClassNames('header-values')}>
-					{!item.settings.max && (
-						<>
-							{item.settings.min.replace(/[a-z]+/i, '')} {'<'}
-						</>
-					)}
-					{item.settings.max && item.settings.min && (
-						<>
-							{item.settings.min.replace(/[a-z]+/i, '')} to{' '}
-							{item.settings.max.replace(/[a-z]+/i, '')}
-						</>
-					)}
-					{!item.settings.min && (
-						<>
-							{'< '}
-							{item.settings.max.replace(/[a-z]+/i, '')}
-						</>
-					)}
-				</span>
+				{itemId !== getBaseBreakpoint() && (
+					<span className={controlInnerClassNames('header-values')}>
+						{!item.settings.max && (
+							<>
+								{item.settings.min.replace(/[a-z]+/i, '')} {'<'}
+							</>
+						)}
+						{item.settings.max && item.settings.min && (
+							<>
+								{item.settings.min.replace(/[a-z]+/i, '')} to{' '}
+								{item.settings.max.replace(/[a-z]+/i, '')}
+							</>
+						)}
+						{!item.settings.min && (
+							<>
+								{'< '}
+								{item.settings.max.replace(/[a-z]+/i, '')}
+							</>
+						)}
+					</span>
+				)}
+				{itemId === getBaseBreakpoint() && (
+					<span className={controlInnerClassNames('header-values')}>
+						{__('Base', 'blockera')}
+					</span>
+				)}
 			</div>
 			{itemId !== getBaseBreakpoint() && (
 				<ControlContextProvider

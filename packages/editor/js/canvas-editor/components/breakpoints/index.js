@@ -201,8 +201,9 @@ export const Breakpoints = ({
 
 				{canvasSettings.isOpenOtherBreakpoints && (
 					<Popover
+						design={'highlight'}
 						offset={10}
-						placement={'left-end'}
+						placement={'bottom-end'}
 						title={__('Breakpoint Settings', 'blockera')}
 						onClose={() =>
 							updateCanvasSettings({
