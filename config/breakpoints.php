@@ -61,6 +61,7 @@ return [
 			'settings'   => [
 				'min' => '',
 				'max' => '',
+				'picked' => true,
 			],
 			'attributes' => [],
 		],
@@ -72,6 +73,7 @@ return [
 			'settings'   => [
 				'min' => '',
 				'max' => '991px',
+				'picked' => true,
 			],
 			'attributes' => [],
 		],
@@ -95,6 +97,7 @@ return [
 			'settings'   => [
 				'min' => '',
 				'max' => '478px',
+				'picked' => true,
 			],
 			'attributes' => [],
 		],
