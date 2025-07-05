@@ -12,7 +12,6 @@ import { useEffect, useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { experimental } from '@blockera/env';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 import { Flex, Popover, ControlContextProvider } from '@blockera/controls';
@@ -30,11 +29,6 @@ import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
 export const Breakpoints = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
-	// todo remove this after finishing development
-	const enableCanvasSettings = experimental().get(
-		'editor.canvasEditor.settings'
-	);
-
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera/editor');
 	const {
@@ -172,9 +166,7 @@ export const Breakpoints = ({
 				<Flex
 					data-test={'blockera-canvas-editor'}
 					className={className}
-					justifyContent={
-						enableCanvasSettings ? 'space-between' : 'center'
-					}
+					justifyContent={'space-between'}
 				>
 					<div
 						className={controlInnerClassNames(
