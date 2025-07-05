@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { select, dispatch } from '@wordpress/data';
+import { dispatch } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 
 /**
@@ -28,15 +28,14 @@ import type {
 import { useExtensionsStore } from '../../../hooks/use-extensions-store';
 
 export default function ({
+	items,
 	onClick,
 	updateBlock,
 	updaterDeviceIndicator,
 }: PickedBreakpointsComponentProps): MixedElement {
 	const { setDeviceType } = dispatch('core/editor');
-	const { getBreakpoints } = select('blockera/editor');
 	const { setCurrentBreakpoint } = useExtensionsStore();
-	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } =
-		getBreakpoints();
+	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } = items;
 	const baseBreakpoint = getBaseBreakpoint();
 	const [currentActiveBreakpoint, setActiveBreakpoint] =
 		useState(baseBreakpoint);

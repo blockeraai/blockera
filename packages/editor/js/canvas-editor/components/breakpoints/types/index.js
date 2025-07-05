@@ -24,5 +24,6 @@ export type BreakpointSettingsComponentProps = {
 export type PickedBreakpointsComponentProps = {
 	onClick: HandleOnPickBreakpoints,
 	updateBlock: (device: string) => void,
+	items: { [key: TBreakpoint]: BreakpointTypes },
 	updaterDeviceIndicator: ((device: TBreakpoint) => void) => void,
 };

@@ -5,14 +5,17 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
 	Flex,
+	IconControl,
 	BaseControl,
 	InputControl,
+	RepeaterContext,
 	useControlContext,
 } from '@blockera/controls';
 import { controlClassNames } from '@blockera/classnames';
@@ -28,6 +31,7 @@ export default function ({
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
+	const { onChange, repeaterId, valueCleanup } = useContext(RepeaterContext);
 
 	return (
 		<>
@@ -36,10 +40,14 @@ export default function ({
 				type={'text'}
 				columns={'columns-2'}
 				defaultValue={item.label}
-				onChange={(newValue) =>
+				onChange={(newValue, ref) =>
 					changeRepeaterItem({
+						ref,
 						itemId,
+						onChange,
 						controlId,
+						repeaterId,
+						valueCleanup,
 						value: {
 							...item,
 							label: newValue,
@@ -61,10 +69,14 @@ export default function ({
 						unitType={'width'}
 						columns={'columns-2'}
 						defaultValue={item.settings.min}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								itemId,
+								onChange,
 								controlId,
+								repeaterId,
+								valueCleanup,
 								value: {
 									...item,
 									settings: {
@@ -88,10 +100,14 @@ export default function ({
 						unitType={'width'}
 						columns={'columns-2'}
 						defaultValue={item.settings.max}
-						onChange={(newValue) =>
+						onChange={(newValue, ref) =>
 							changeRepeaterItem({
+								ref,
 								itemId,
+								onChange,
 								controlId,
+								repeaterId,
+								valueCleanup,
 								value: {
 									...item,
 									settings: {
@@ -110,6 +126,31 @@ export default function ({
 						aria-label={__('Max Width', 'blockera')}
 					/>
 				</Flex>
+			</BaseControl>
+
+			<BaseControl columns="columns-1" label={__('Icon', 'blockera')}>
+				<IconControl
+					id={'settings.icon'}
+					columns={'columns-1'}
+					defaultValue={item.settings.icon}
+					onChange={(newValue, ref) =>
+						changeRepeaterItem({
+							ref,
+							itemId,
+							onChange,
+							controlId,
+							repeaterId,
+							valueCleanup,
+							value: {
+								...item,
+								settings: {
+									...item.settings,
+									icon: newValue,
+								},
+							},
+						})
+					}
+				/>
 			</BaseControl>
 		</>
 	);

@@ -11,25 +11,20 @@ import { useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import {
-	Flex,
-	Popover,
-	InputControl,
-	ControlContextProvider,
-} from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
+import { Flex, Popover, ControlContextProvider } from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import { Preview } from '../preview';
-import { getBaseBreakpoint, isBaseBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
 import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
+import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
 import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
 
 export const Breakpoints = ({
@@ -45,16 +40,17 @@ export const Breakpoints = ({
 	const {
 		setDeviceType,
 		setCanvasSettings,
-		updateBreakpoints,
+		// updateBreakpoints,
 		updaterDeviceType,
 		updaterDeviceIndicator,
 	} = useDispatch('blockera/editor');
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
 	);
-	const [canvasSettings, updateCanvasSettings] = useState(
-		getCanvasSettings()
-	);
+	const [canvasSettings, updateCanvasSettings] = useState({
+		...getCanvasSettings(),
+		breakpoints: getBreakpoints(),
+	});
 	const [deviceType, updateDeviceType] = useState(getDeviceType());
 	const {
 		blockEditor: { getSelectedBlock },
@@ -62,8 +58,6 @@ export const Breakpoints = ({
 	const {
 		blockEditor: { updateBlockAttributes },
 	} = useStoreDispatchers();
-
-	const breakpoints = getBreakpoints();
 
 	useEffect(() => {
 		let editorWrapper: Object = document.querySelector(
@@ -137,48 +131,34 @@ export const Breakpoints = ({
 	const selectedBlock = getSelectedBlock();
 
 	const updateSelectedBlock = (device: string) => {
-		// Check if a block is selected
+		// Check if a block is selected.
 		if (selectedBlock) {
-			// Update the block attributes
+			// Update the block attributes.
 			const updatedAttributes = {
 				blockeraCurrentDevice: device,
 			};
 
-			// Dispatch an action to update the selected block
+			// Dispatch an action to update the selected block.
 			updateBlockAttributes(selectedBlock.clientId, updatedAttributes);
 		}
 	};
 
 	const handleOnClick = (device: string): void => {
-		if (device === getDeviceType()) {
-			const baseBreakpoint = getBaseBreakpoint();
-
-			updateDeviceType(baseBreakpoint);
-			changeExtensionCurrentBlockStateBreakpoint(baseBreakpoint);
-
-			updateSelectedBlock(device);
-
-			return;
-		}
-
+		// Updating the device type by WordPress Core api.
 		updateDeviceType(device);
+
+		// Updating the extension current block state breakpoint global state.
 		changeExtensionCurrentBlockStateBreakpoint(device);
 
+		// Updating the selected block blockeraCurrentDevice attribute.
 		updateSelectedBlock(device);
 	};
 
-	const handleOnChange = (key: string, value: any): void => {
-		if ('breakpoints' === key) {
-			updateBreakpoints(value);
-
-			return;
-		}
-
+	const handleOnChange = (key: string, value: any): void =>
 		updateCanvasSettings({
 			...canvasSettings,
 			[key]: value,
 		});
-	};
 
 	return (
 		<>
@@ -196,104 +176,54 @@ export const Breakpoints = ({
 						enableCanvasSettings ? 'space-between' : 'center'
 					}
 				>
-					{enableCanvasSettings && (
-						<div
-							className={controlInnerClassNames(
-								'blockera-breakpoints'
-							)}
-						>
-							<Icon
-								icon="more-horizontal"
-								iconSize="24"
-								onClick={() =>
-									handleOnChange(
-										'isOpenOtherBreakpoints',
-										!canvasSettings.isOpenOtherBreakpoints
-									)
-								}
-							/>
-						</div>
-					)}
+					<div
+						className={controlInnerClassNames(
+							'blockera-breakpoints'
+						)}
+					>
+						<Icon
+							icon="more-horizontal"
+							iconSize="24"
+							onClick={() =>
+								handleOnChange(
+									'isOpenOtherBreakpoints',
+									!canvasSettings.isOpenOtherBreakpoints
+								)
+							}
+						/>
+					</div>
 
 					<PickedBreakpoints
+						items={Object.fromEntries(
+							Object.entries(canvasSettings.breakpoints).filter(
+								([key]) =>
+									canvasSettings.breakpoints[key].settings
+										.picked || key === getBaseBreakpoint()
+							)
+						)}
 						onClick={handleOnClick}
 						updateBlock={updateSelectedBlock}
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
-
-					{enableCanvasSettings && (
-						<div
-							style={{
-								cursor: 'pointer',
-								lineHeight: '36px',
-							}}
-							aria-label={__('Canvas Zoom', 'blockera')}
-							onClick={() =>
-								handleOnChange(
-									'isOpenSettings',
-									!canvasSettings.isOpenSettings
-								)
-							}
-						>
-							{canvasSettings.zoom}
-						</div>
-					)}
 				</Flex>
 
 				{canvasSettings.isOpenOtherBreakpoints && (
 					<Popover
-						offset={20}
+						offset={10}
 						placement={'left-end'}
 						title={__('Breakpoint Settings', 'blockera')}
-						onClose={() => handleOnChange('isOpenSettings', false)}
+						onClose={() =>
+							updateCanvasSettings({
+								...canvasSettings,
+								isOpenSettings: false,
+								isOpenOtherBreakpoints: false,
+							})
+						}
 					>
 						<BreakpointSettings
 							onClick={handleOnClick}
 							onChange={handleOnChange}
-							breakpoints={breakpoints}
-						/>
-					</Popover>
-				)}
-
-				{canvasSettings.isOpenSettings && (
-					<Popover
-						offset={20}
-						placement={'bottom-end'}
-						title={__('Canvas Settings', 'blockera')}
-						onClose={() => handleOnChange('isOpenSettings', false)}
-					>
-						<InputControl
-							id={'width'}
-							type={'number'}
-							placeholder="100"
-							unitType={'width'}
-							columns={'columns-2'}
-							onChange={(newValue) =>
-								handleOnChange('width', newValue)
-							}
-							label={__('Width', 'blockera')}
-						/>
-						<InputControl
-							id={'height'}
-							type={'number'}
-							placeholder="100"
-							unitType={'height'}
-							columns={'columns-2'}
-							onChange={(newValue) =>
-								handleOnChange('height', newValue)
-							}
-							label={__('Height', 'blockera')}
-						/>
-						<InputControl
-							id={'zoom'}
-							type={'number'}
-							placeholder="100"
-							unitType={'width'}
-							columns={'columns-2'}
-							onChange={(newValue) =>
-								handleOnChange('zoom', newValue)
-							}
-							label={__('Zoom', 'blockera')}
+							breakpoints={canvasSettings.breakpoints}
 						/>
 					</Popover>
 				)}
