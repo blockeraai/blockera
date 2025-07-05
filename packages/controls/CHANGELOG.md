@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Enhanced the user interface and experience for feature options and settings.
+- Enhanced the repeater feature to allow better organization and customization of repeated elements.
+
 ## 1.3.4 (2025-06-10)
 
 ### Bug Fixes
