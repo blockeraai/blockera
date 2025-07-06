@@ -77,9 +77,7 @@ export default function ({
 				repeaterItemHeader={(props) => (
 					<Header {...{ ...props, onClick }} />
 				)}
-				repeaterItemChildren={(props) => (
-					<Fields {...props} onClick={onClick} />
-				)}
+				repeaterItemChildren={Fields}
 				onChange={(value) => onChange('breakpoints', value)}
 				defaultValue={getBreakpoints()}
 			/>

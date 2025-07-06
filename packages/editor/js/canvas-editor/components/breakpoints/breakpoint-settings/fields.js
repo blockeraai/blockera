@@ -18,7 +18,6 @@ import {
 	ToggleControl,
 	RepeaterContext,
 	useControlContext,
-	ControlContextProvider,
 } from '@blockera/controls';
 import { controlClassNames } from '@blockera/classnames';
 
@@ -30,11 +29,9 @@ import { getBaseBreakpoint } from '../helpers';
 export default function ({
 	item,
 	itemId,
-	onClick,
 }: {
 	item: Object,
 	itemId: number,
-	onClick: (device: string) => void,
 }): MixedElement {
 	const {
 		controlInfo: { name: controlId },
@@ -167,38 +164,29 @@ export default function ({
 					columns="columns-2"
 					label={__('Status', 'blockera')}
 				>
-					<ControlContextProvider
-						value={{
-							name: `toggle${itemId}`,
-							value: item.settings.picked,
-						}}
-					>
-						<ToggleControl
-							labelType={'self'}
-							id={`toggle${itemId}`}
-							defaultValue={item.settings.picked}
-							onChange={(picked: boolean): void => {
-								changeRepeaterItem({
-									controlId,
-									itemId,
-									onChange,
-									repeaterId,
-									valueCleanup,
-									value: {
-										...item,
-										status: picked,
-										settings: {
-											...item.settings,
-											picked,
-										},
+					<ToggleControl
+						labelType={'self'}
+						id={'status'}
+						defaultValue={item.settings.picked}
+						onChange={(picked: boolean, ref: any): void => {
+							changeRepeaterItem({
+								ref,
+								itemId,
+								onChange,
+								controlId,
+								repeaterId,
+								valueCleanup,
+								value: {
+									...item,
+									status: picked,
+									settings: {
+										...item.settings,
+										picked,
 									},
-								});
-								onClick(
-									picked ? item.type : getBaseBreakpoint()
-								);
-							}}
-						/>
-					</ControlContextProvider>
+								},
+							});
+						}}
+					/>
 				</BaseControl>
 			)}
 		</>
