@@ -88,6 +88,7 @@ export default function ({
 			storeName={REPEATER_STORE_NAME}
 		>
 			<RepeaterControl
+				label={__('Breakpoints', 'blockera')}
 				isNativeSupport={true}
 				popoverTitle={__('Breakpoint Settings', 'blockera')}
 				className={controlInnerClassNames('breakpoints-repeater')}
