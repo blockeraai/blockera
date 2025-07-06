@@ -1,5 +1,13 @@
 // @flow
 
+/**
+ * External dependencies
+ */
+import { applyFilters } from '@wordpress/hooks';
+
+/**
+ * Internal dependencies
+ */
 import type {
 	TStates,
 	StateTypes,
@@ -19,7 +27,7 @@ export const getBreakpoints = ({
 }: {
 	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 }): { [key: TBreakpoint]: BreakpointTypes } => {
-	return breakpoints;
+	return applyFilters('blockera.breakpoints', breakpoints);
 };
 
 /**
