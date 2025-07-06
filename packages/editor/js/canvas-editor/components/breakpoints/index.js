@@ -174,6 +174,7 @@ export const Breakpoints = ({
 						)}
 					>
 						<Icon
+							data-test={'blockera-breakpoints-settings-opener'}
 							icon="more-horizontal"
 							iconSize="24"
 							onClick={() =>
