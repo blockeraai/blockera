@@ -70,6 +70,7 @@ export default function ({
 			storeName={REPEATER_STORE_NAME}
 		>
 			<RepeaterControl
+				isNativeSupport={true}
 				popoverTitle={__('Breakpoint Settings', 'blockera')}
 				className={controlInnerClassNames('breakpoints-repeater')}
 				defaultRepeaterItemValue={defaultRepeaterItemValue}
