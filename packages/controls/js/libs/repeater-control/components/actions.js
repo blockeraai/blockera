@@ -199,6 +199,18 @@ export default function RepeaterItemActions({
 								event.stopPropagation();
 
 								if (
+									isEnabledPromote(
+										PromoComponent,
+										repeaterItems
+									)
+								) {
+									setCount(count + 1);
+									setDisableAddNewItem(true);
+
+									return;
+								}
+
+								if (
 									!item.selectable ||
 									'function' !== typeof onDelete
 								) {

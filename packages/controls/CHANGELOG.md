@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added ability to extend and customize repeatable sections with additional features through developer options.
+
 ### Bug Fixes
 - Fixed an issue where items were not being properly removed when using the delete function in repeatable sections.
 
