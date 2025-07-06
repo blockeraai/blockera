@@ -8,6 +8,7 @@ import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useMemo } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -29,6 +30,29 @@ import Header from './header';
 import Fields from './fields';
 import type { BreakpointSettingsComponentProps } from '../types';
 
+const defaultRepeaterItemValue = {
+	...defaultItemValue,
+	cloneable: false,
+	deletable: false,
+	visibilitySupport: false,
+	isOpen: false,
+	settings: {
+		min: '',
+		max: '',
+		icon: {
+			icon: '',
+			library: '',
+			uploadSVG: '',
+		},
+		picked: false,
+	},
+	native: true,
+	type: '',
+	force: false,
+	label: '',
+	attributes: {},
+};
+
 export default function ({
 	onClick,
 	onChange,
@@ -37,27 +61,6 @@ export default function ({
 	const { getBreakpoints } = select('blockera/editor');
 	const { getCurrentUser } = select('core');
 	const { id: userId } = getCurrentUser();
-	const defaultRepeaterItemValue = {
-		...defaultItemValue,
-		cloneable: false,
-		deletable: false,
-		visibilitySupport: false,
-		isOpen: false,
-		settings: {
-			min: '',
-			max: '',
-			icon: {
-				icon: '',
-				library: '',
-				uploadSVG: '',
-			},
-			picked: false,
-		},
-		type: '',
-		force: false,
-		label: '',
-		attributes: {},
-	};
 
 	breakpoints = useMemo(() => {
 		return Object.fromEntries(
@@ -80,7 +83,10 @@ export default function ({
 				isNativeSupport={true}
 				popoverTitle={__('Breakpoint Settings', 'blockera')}
 				className={controlInnerClassNames('breakpoints-repeater')}
-				defaultRepeaterItemValue={defaultRepeaterItemValue}
+				defaultRepeaterItemValue={applyFilters(
+					'blockera.breakpoints.defaultRepeaterItemValue',
+					defaultRepeaterItemValue
+				)}
 				repeaterItemHeader={(props) => (
 					<Header {...{ ...props, onClick }} />
 				)}
