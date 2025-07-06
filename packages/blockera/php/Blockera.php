@@ -49,7 +49,7 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 		parent::__construct();
 
 		$breakpoints = get_user_meta(get_current_user_id(), 'blockera_editor_settings', true);
-		$breakpoints = $breakpoints['breakpoints'] ?? blockera_core_config('breakpoints');
+		$breakpoints = $breakpoints['breakpoints'] ?? blockera_core_config('breakpoints.list');
 
 		$this->setEntities(
 			array_merge(
