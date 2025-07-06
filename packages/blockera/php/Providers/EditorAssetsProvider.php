@@ -137,6 +137,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '
 		});
 			window.onload = () => {
+				window.blockeraEditorNonce = "' . wp_create_nonce( 'blockera-editor' ) . '";
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
 				' . $editor_object . '.editor.init();
 			};';

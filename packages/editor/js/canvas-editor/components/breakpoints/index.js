@@ -230,3 +230,4 @@ export const Breakpoints = ({
 };
 
 export * from './helpers';
+export * from './bootstrap';

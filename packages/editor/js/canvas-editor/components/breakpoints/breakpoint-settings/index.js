@@ -7,13 +7,18 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useMemo } from '@wordpress/element';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
-import { RepeaterControl, ControlContextProvider } from '@blockera/controls';
+import {
+	RepeaterControl,
+	PromotionPopover,
+	ControlContextProvider,
+} from '@blockera/controls';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control/default-item-value';
 import { STORE_NAME as REPEATER_STORE_NAME } from '@blockera/controls/js/libs/repeater-control/store/constants';
 
@@ -30,6 +35,8 @@ export default function ({
 	breakpoints,
 }: BreakpointSettingsComponentProps): MixedElement {
 	const { getBreakpoints } = select('blockera/editor');
+	const { getCurrentUser } = select('core');
+	const { id: userId } = getCurrentUser();
 	const defaultRepeaterItemValue = {
 		...defaultItemValue,
 		cloneable: false,
@@ -78,7 +85,42 @@ export default function ({
 					<Header {...{ ...props, onClick }} />
 				)}
 				repeaterItemChildren={Fields}
-				onChange={(value) => onChange('breakpoints', value)}
+				onChange={(value) => {
+					onChange('breakpoints', value);
+
+					apiFetch({
+						path: '/blockera/v1/users',
+						method: 'POST',
+						headers: {
+							'X-Blockera-Nonce': blockeraEditorNonce,
+						},
+						data: {
+							user_id: userId,
+							settings: {
+								breakpoints: value,
+							},
+						},
+					});
+				}}
+				addNewButtonDataTest={'add-new-breakpoint'}
+				PromoComponent={({
+					onClose = () => {},
+					isOpen = false,
+				}): MixedElement | null => {
+					return (
+						<PromotionPopover
+							heading={__('Advanced Breakpoints', 'blockera')}
+							featuresList={[
+								__('Custom breakpoints', 'blockera'),
+								__('Unlimited breakpoints', 'blockera'),
+								__('Advanced responsive features', 'blockera'),
+								__('Breakpoint inheritance', 'blockera'),
+							]}
+							isOpen={isOpen}
+							onClose={onClose}
+						/>
+					);
+				}}
 				defaultValue={getBreakpoints()}
 			/>
 		</ControlContextProvider>
