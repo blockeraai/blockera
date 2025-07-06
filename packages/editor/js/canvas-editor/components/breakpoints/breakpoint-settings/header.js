@@ -43,7 +43,11 @@ export default function ({
 	const { onChange, repeaterId, valueCleanup } = useContext(RepeaterContext);
 
 	return (
-		<Flex direction={'row'}>
+		<Flex
+			justifyContent={'space-between'}
+			direction={'row'}
+			className={controlInnerClassNames('breakpoint-header')}
+		>
 			<div
 				className={controlInnerClassNames('repeater-group-header')}
 				aria-label={sprintf(
