@@ -64,6 +64,15 @@ export default function ({
 	breakpoints = useMemo(() => {
 		return Object.fromEntries(
 			Object.entries(breakpoints).map(([key, value]) => {
+				if (value?.base) {
+					defaultRepeaterItemValue.deletable = false;
+				} else if (
+					!value?.base &&
+					!defaultRepeaterItemValue.deletable
+				) {
+					defaultRepeaterItemValue.deletable = true;
+				}
+
 				return [key, mergeObject(defaultRepeaterItemValue, value)];
 			})
 		);
