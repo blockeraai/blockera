@@ -53,12 +53,13 @@ const RepeaterItem = ({
 		mode,
 		design,
 		onChange,
-		valueCleanup,
 		repeaterId,
+		popoverProps,
+		valueCleanup,
 		popoverTitle,
 		popoverOffset,
 		PromoComponent,
-		popoverProps,
+		isNativeSupport,
 		popoverClassName,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
@@ -135,7 +136,9 @@ const RepeaterItem = ({
 	}
 
 	return (
-		<FeatureWrapper type={item?.native ? 'native' : 'none'}>
+		<FeatureWrapper
+			type={item?.native && isNativeSupport ? 'native' : 'none'}
+		>
 			<div
 				className={controlInnerClassNames(
 					'repeater-item',
