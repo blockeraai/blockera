@@ -32,7 +32,7 @@
 .blockera-control-breakpoints-popover {
 
 	.components-popover__content {
-		min-width: 320px !important;
+		min-width: 340px !important;
 	}
 }
 
@@ -45,6 +45,10 @@
 	.blockera-control-breakpoint-header {
 		align-items: center;
 		width: 100%;
+
+		&:hover {
+			width: 91%;
+		}
 
 		.components-toggle-control {
 
