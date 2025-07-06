@@ -175,6 +175,7 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 					'settings'   => [
 						'min' => '',
 						'max' => '',
+						'picked' => true,
 					],
 					'attributes' => [],
 				],
