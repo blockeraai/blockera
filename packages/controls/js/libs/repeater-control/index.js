@@ -63,6 +63,7 @@ export default function RepeaterControl(
 		injectHeaderButtonsEnd = '',
 		withoutAdvancedLabel = false,
 		isSupportInserter = false,
+		disableRegenerateId = true,
 		//
 		label,
 		children,
@@ -156,6 +157,7 @@ export default function RepeaterControl(
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
+		disableRegenerateId,
 		//
 		onChange,
 		onDelete,

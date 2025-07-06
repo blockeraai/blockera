@@ -70,6 +70,10 @@ export type RepeaterControlProps = {
 	 */
 	isSupportInserter?: boolean,
 	/**
+	 * Flag for support regenerate id or not.
+	 */
+	disableRegenerateId?: boolean,
+	/**
 	 * Flag for support advanced label or not.
 	 */
 	withoutAdvancedLabel?: boolean,

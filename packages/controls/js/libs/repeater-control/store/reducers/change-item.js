@@ -24,9 +24,15 @@ function handleActionIncludeRepeaterId(controlValue, action) {
 		return controlValue;
 	}
 
-	return update(controlValue, action.repeaterId, {
+	let newValue = {
 		[action.itemId]: action.value,
-	});
+	};
+
+	if (action.disableRegenerateId) {
+		newValue = regeneratedIds(newValue, action);
+	}
+
+	return update(controlValue, action.repeaterId, newValue);
 }
 
 export function changeItem(state = {}, action) {
@@ -74,28 +80,22 @@ export function changeItem(state = {}, action) {
 			return state;
 		}
 
-		repeaterOnChange(
-			regeneratedIds(
-				{
-					...clonedPrevValue,
-					[uniqueId]: { ...action.value, isOpen: true },
-				},
-				action
-			),
-			action
-		);
+		let newValue = {
+			...clonedPrevValue,
+			[uniqueId]: { ...action.value, isOpen: true },
+		};
+
+		if (action.disableRegenerateId) {
+			newValue = regeneratedIds(newValue, action);
+		}
+
+		repeaterOnChange(newValue, action);
 
 		return {
 			...state,
 			[action.controlId]: {
 				...controlInfo,
-				value: regeneratedIds(
-					{
-						...clonedPrevValue,
-						[uniqueId]: { ...action.value, isOpen: true },
-					},
-					action
-				),
+				value: newValue,
 			},
 		};
 	}

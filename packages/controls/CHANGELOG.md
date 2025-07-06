@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Bug Fixes
+- Fixed an issue where items were not being properly removed when using the delete function in repeatable sections.
+
 ### Improvements
 - Enhanced the user interface and experience for feature options and settings.
 - Enhanced the repeater feature to allow better organization and customization of repeated elements.
