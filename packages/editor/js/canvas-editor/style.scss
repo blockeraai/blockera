@@ -38,6 +38,16 @@
 
 .blockera-control-breakpoints-repeater {
 
+	.blockera-control-group-header {
+
+		&:hover {
+
+			.blockera-control-breakpoint-header {
+				width: 91.5%;
+			}
+		}
+	}
+
 	.blockera-component-feature-wrapper + .blockera-component-feature-wrapper {
 		margin-top: 0 !important;
 	}
@@ -45,10 +55,6 @@
 	.blockera-control-breakpoint-header {
 		align-items: center;
 		width: 100%;
-
-		&:hover {
-			width: 91%;
-		}
 
 		.components-toggle-control {
 
