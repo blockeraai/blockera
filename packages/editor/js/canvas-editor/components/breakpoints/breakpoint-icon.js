@@ -30,9 +30,20 @@ import {
 export function BreakpointIcon({
 	name,
 	onClick,
+	settings,
 	className,
 	...props
 }: {
+	settings?: {
+		min: string,
+		max: string,
+		icon: {
+			icon: string,
+			library: string,
+			uploadSVG: string,
+		},
+		picked: boolean,
+	},
 	name: TBreakpoint,
 	className?: string,
 	onClick?: (event: MouseEvent) => void,
@@ -114,7 +125,12 @@ export function BreakpointIcon({
 					/>
 				)}
 
-				<Icon icon={'device-' + name} />
+				<Icon
+					{...{
+						icon: settings ? settings.icon.icon : `device-${name}`,
+						...(settings ? { library: settings.icon.library } : {}),
+					}}
+				/>
 
 				{/* <ChangeIndicator isChanged={true} /> */}
 			</div>

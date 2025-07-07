@@ -61,7 +61,7 @@ export default function ({
 				}}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<BreakpointIcon name={item.type} />
+					<BreakpointIcon name={item.type} settings={item.settings} />
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>

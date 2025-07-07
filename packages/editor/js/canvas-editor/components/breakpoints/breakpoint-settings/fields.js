@@ -19,17 +19,13 @@ import {
 	RepeaterContext,
 	useControlContext,
 } from '@blockera/controls';
-import { Icon } from '@blockera/icons';
-import {
-	controlClassNames,
-	componentClassNames,
-	componentInnerClassNames,
-} from '@blockera/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import { getBaseBreakpoint } from '../helpers';
+import { BreakpointIcon } from '../breakpoint-icon';
 
 export default function ({
 	item,
@@ -50,23 +46,10 @@ export default function ({
 				<div className="base-breakpoint-content">
 					<h3>
 						<Flex gap="10" alignItems="center">
-							<div
-								className={componentClassNames(
-									'breakpoint-icon',
-									`breakpoint-${item.type}`
-								)}
-								aria-label={item.label}
-							>
-								<Icon
-									icon="asterisk"
-									iconSize="13"
-									className={componentInnerClassNames(
-										'base-breakpoint-icon'
-									)}
-								/>
-
-								<Icon icon={`device-${item.type}`} />
-							</div>
+							<BreakpointIcon
+								name={item.type}
+								settings={item.settings}
+							/>
 							{__('Base Breakpoint', 'blockera')}
 						</Flex>
 					</h3>
