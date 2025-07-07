@@ -33,11 +33,11 @@ describe('Breakpoints Functionalities', () => {
 				cy.getByAriaLabel('Close').should('be.visible').click();
 			});
 
-		cy.getByDataTest('xl-desktop').should('be.visible');
-		cy.getByDataTest('xl-desktop').realHover();
+		cy.getByDataTest('tablet').should('be.visible');
+		cy.getByDataTest('tablet').realHover();
 
-		cy.getByAriaLabel('Delete xl desktop').should('be.visible');
-		cy.getByAriaLabel('Delete xl desktop').click();
+		cy.getByAriaLabel('Delete tablet').should('be.visible');
+		cy.getByAriaLabel('Delete tablet').click();
 
 		cy.get('.components-popover').eq(1).should('be.visible');
 		cy.get('.components-popover')
