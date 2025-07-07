@@ -128,4 +128,28 @@ describe('Breakpoints Functionalities', () => {
 				});
 			});
 	});
+
+	it.only('should allow changing breakpoint icon', () => {
+		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
+
+		cy.getByDataTest('tablet').should('be.visible');
+		cy.getByDataTest('tablet').click();
+
+		cy.get('.components-popover').eq(1).should('be.visible');
+		cy.get('.components-popover')
+			.eq(1)
+			.within(() => {
+				cy.getParentContainer('Icon').within(() => {
+					cy.getByAriaLabel('Icon Library').click({ force: true });
+				});
+			});
+
+		cy.get('.components-popover').eq(2).should('be.visible');
+		cy.get('.components-popover')
+			.eq(2)
+			.within(() => {
+				cy.getByAriaLabel('add-card Icon').should('be.visible');
+				cy.getByAriaLabel('add-card Icon').click();
+			});
+	});
 });
