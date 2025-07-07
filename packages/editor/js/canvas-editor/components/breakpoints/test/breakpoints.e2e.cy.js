@@ -129,7 +129,7 @@ describe('Breakpoints Functionalities', () => {
 			});
 	});
 
-	it.only('should allow changing breakpoint icon', () => {
+	it('should allow changing breakpoint icon', () => {
 		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
 
 		cy.getByDataTest('tablet').should('be.visible');
