@@ -25,6 +25,11 @@ return [
 			'settings'   => [
 				'min' => '1920px',
 				'max' => '',
+				'icon' => [
+					'icon' => 'device-2xl-desktop',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 			'native' => true,
@@ -37,6 +42,11 @@ return [
 			'settings'   => [
 				'min' => '1440px',
 				'max' => '',
+				'icon' => [
+					'icon' => 'device-xl-desktop',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 			'native' => true,
@@ -49,6 +59,11 @@ return [
 			'settings'   => [
 				'min' => '1280px',
 				'max' => '',
+				'icon' => [
+					'icon' => 'device-l-desktop',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 			'native' => true,
@@ -62,6 +77,11 @@ return [
 				'min' => '',
 				'max' => '',
 				'picked' => true,
+				'icon' => [
+					'icon' => 'device-desktop',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 		],
@@ -74,6 +94,11 @@ return [
 				'min' => '',
 				'max' => '991px',
 				'picked' => true,
+				'icon' => [
+					'icon' => 'device-tablet',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 		],
@@ -85,6 +110,11 @@ return [
 			'settings'   => [
 				'min' => '',
 				'max' => '767px',
+				'icon' => [
+					'icon' => 'device-mobile-landscape',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 			'native' => true,
@@ -98,6 +128,11 @@ return [
 				'min' => '',
 				'max' => '478px',
 				'picked' => true,
+				'icon' => [
+					'icon' => 'device-mobile',
+					'library' => 'ui',
+					'uploadSVG' => '',
+				],
 			],
 			'attributes' => [],
 		],
