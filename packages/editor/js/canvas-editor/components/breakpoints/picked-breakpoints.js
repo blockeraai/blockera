@@ -78,6 +78,7 @@ export default function ({
 									itemId === currentActiveBreakpoint,
 							})}
 							name={itemId}
+							settings={item.settings}
 							onClick={(event) => {
 								event.stopPropagation();
 
