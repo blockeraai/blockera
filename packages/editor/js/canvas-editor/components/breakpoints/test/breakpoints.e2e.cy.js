@@ -46,4 +46,59 @@ describe('Breakpoints Functionalities', () => {
 				cy.get('a').contains('Upgrade to PRO').should('be.visible');
 			});
 	});
+
+	it('should disable tablet breakpoint of top header navigation menu', () => {
+		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
+
+		cy.getByDataTest('tablet').should('be.visible');
+		cy.getByDataTest('tablet').within(() => {
+			cy.get('input').click();
+		});
+
+		cy.getByAriaLabel('Breakpoints').eq(0).should('be.visible');
+		cy.getByAriaLabel('Breakpoints')
+			.eq(0)
+			.within(() => {
+				cy.getByAriaLabel('Tablet').should('not.exist');
+			});
+
+		cy.getByDataTest('tablet').should('be.visible');
+		cy.getByDataTest('tablet').within(() => {
+			cy.get('input').click();
+		});
+
+		cy.getByAriaLabel('Breakpoints').eq(0).should('be.visible');
+		cy.getByAriaLabel('Breakpoints')
+			.eq(0)
+			.within(() => {
+				cy.getByAriaLabel('Tablet').should('exist');
+			});
+	});
+
+	it('should allow changing breakpoint min and max width', () => {
+		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
+
+		cy.getByDataTest('tablet').should('be.visible');
+		cy.getByDataTest('tablet').click();
+
+		cy.get('.components-popover').eq(1).should('be.visible');
+		cy.get('.components-popover')
+			.eq(1)
+			.within(() => {
+				// Assert control value.
+				cy.getParentContainer('Size').within(() => {
+					cy.getParentContainer('Min').within(() => {
+						cy.get('input').clear();
+						cy.get('input').type('768', { delay: 0 });
+						cy.get('input').should('have.value', '768');
+					});
+
+					cy.getParentContainer('Max').within(() => {
+						cy.get('input').clear();
+						cy.get('input').type('1024', { delay: 0 });
+						cy.get('input').should('have.value', '1024');
+					});
+				});
+			});
+	});
 });
