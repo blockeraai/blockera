@@ -28,6 +28,7 @@ import { STORE_NAME as REPEATER_STORE_NAME } from '@blockera/controls/js/libs/re
  */
 import Header from './header';
 import Fields from './fields';
+import { getBaseBreakpoint } from '../helpers';
 import type { BreakpointSettingsComponentProps } from '../types';
 
 const defaultRepeaterItemValue = {
@@ -91,7 +92,13 @@ export default function ({
 				label={__('Breakpoints', 'blockera')}
 				disableRegenerateId={false}
 				isNativeSupport={true}
-				popoverTitle={__('Breakpoint Settings', 'blockera')}
+				popoverTitle={(itemId, item) => {
+					if (getBaseBreakpoint() === itemId) {
+						return item.label;
+					}
+
+					return __('Breakpoint Settings', 'blockera');
+				}}
 				className={controlInnerClassNames('breakpoints-repeater')}
 				defaultRepeaterItemValue={applyFilters(
 					'blockera.breakpoints.defaultRepeaterItemValue',
