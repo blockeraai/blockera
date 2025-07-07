@@ -199,6 +199,7 @@ export default function RepeaterItemActions({
 								event.stopPropagation();
 
 								if (
+									!disableRegenerateId &&
 									isEnabledPromote(
 										PromoComponent,
 										repeaterItems
