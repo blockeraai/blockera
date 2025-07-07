@@ -116,11 +116,8 @@ describe('Breakpoints Functionalities', () => {
 				cy.getParentContainer('Size').within(() => {
 					cy.getParentContainer('Min').within(() => {
 						cy.get('input').should('have.value', '768');
-					});
-
-					cy.getParentContainer('Min').within(() => {
 						cy.get('input').clear();
-						cy.get('input').type('768', { delay: 0 });
+						cy.get('input').should('have.value', '');
 					});
 
 					cy.getParentContainer('Max').within(() => {
