@@ -115,12 +115,15 @@ describe('Breakpoints Functionalities', () => {
 				// Assert control value.
 				cy.getParentContainer('Size').within(() => {
 					cy.getParentContainer('Min').within(() => {
-						cy.get('input').type('768', { delay: 0 });
+						cy.get('input').should('have.value', '768');
+					});
+
+					cy.getParentContainer('Min').within(() => {
 						cy.get('input').clear();
+						cy.get('input').type('768', { delay: 0 });
 					});
 
 					cy.getParentContainer('Max').within(() => {
-						cy.get('input').should('have.value', '1024');
 						cy.get('input').clear();
 						cy.get('input').type('991', { delay: 0 });
 						cy.get('input').should('have.value', '991');
