@@ -165,7 +165,11 @@ const RepeaterItem = ({
 					toggleOpenBorder={true}
 					design={design}
 					popoverProps={popoverProps}
-					popoverTitle={popoverTitle}
+					popoverTitle={
+						'function' === typeof popoverTitle
+							? popoverTitle(itemId, item)
+							: popoverTitle
+					}
 					popoverOffset={popoverOffset}
 					popoverTitleButtonsRight={
 						PopoverTitleButtonsRight && (
