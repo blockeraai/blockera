@@ -12,7 +12,7 @@ import { useEffect, useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { controlInnerClassNames, classNames } from '@blockera/classnames';
 import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 import { Flex, Popover, ControlContextProvider } from '@blockera/controls';
 
@@ -184,7 +184,10 @@ export const Breakpoints = ({
 			>
 				<Flex
 					data-test={'blockera-canvas-editor'}
-					className={className}
+					className={classNames(className, {
+						'breakpoints-open':
+							canvasSettings.isOpenOtherBreakpoints,
+					})}
 					justifyContent={'space-between'}
 				>
 					<div

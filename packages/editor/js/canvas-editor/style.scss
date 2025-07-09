@@ -29,10 +29,17 @@
 	}
 }
 
+@media (min-width: 782px) {
+
+	.editor-header:has(>.editor-header__center) {
+		grid-template: auto / 60px minmax(min-content, 2fr) 3fr minmax(min-content, 2fr) 60px;
+	}
+}
+
 .blockera-control-breakpoints-popover {
 
 	.components-popover__content {
-		min-width: 340px !important;
+		min-width: 320px !important;
 	}
 }
 
@@ -93,6 +100,7 @@
 		cursor: pointer;
 	}
 
+	&.breakpoints-open,
 	&:hover {
 		background: #e0e0e0;
 
