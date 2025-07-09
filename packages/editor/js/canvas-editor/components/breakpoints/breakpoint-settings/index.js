@@ -118,6 +118,9 @@ export default function ({
 						})
 					);
 				}}
+				itemIdGenerator={(itemsCount) => {
+					return `custom-${itemsCount}`;
+				}}
 				className={controlInnerClassNames('breakpoints-repeater')}
 				defaultRepeaterItemValue={applyFilters(
 					'blockera.breakpoints.defaultRepeaterItemValue',
