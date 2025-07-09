@@ -3,6 +3,7 @@
 ### New Features
 - Added ability to configure responsive breakpoints through a new visual interface.
 - Introduced a streamlined blockera canvas editor that remembers each user's preferences and settings.
+- Added support for automatically generating styles for all screen sizes and devices that you've set up in your responsive settings.
 
 ## 1.8.2 (2025-06-25)
 
