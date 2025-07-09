@@ -65,7 +65,13 @@ export const Breakpoints = ({
 		if (editorWrapper) {
 			const {
 				settings: { min, max },
-			} = getBreakpoint(deviceType);
+			} = {
+				settings: {
+					min: '',
+					max: '',
+				},
+				...getBreakpoint(deviceType),
+			};
 			const iframe = getIframe();
 
 			if (!editorWrapper.classList.contains('blockera-canvas')) {
