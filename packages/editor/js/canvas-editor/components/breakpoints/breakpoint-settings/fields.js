@@ -220,14 +220,14 @@ export default function ({
 				{null === iconType && (
 					<SelectControl
 						id={`settings.icon`}
-						defaultValue={item.settings.icon}
+						defaultValue={item.settings.icon.icon}
 						options={iconsOptions}
 						type="custom"
 						aria-label={__('Choose Breakpoint', 'blockera')}
 						onChange={(newValue, ref) => {
 							if ('custom' === newValue) {
-								setIconType('custom');
-							} else {
+								return setIconType('custom');
+							} else if ('custom' !== iconType) {
 								setIconType(null);
 							}
 
@@ -242,7 +242,11 @@ export default function ({
 									...item,
 									settings: {
 										...item.settings,
-										icon: newValue,
+										icon: {
+											icon: newValue,
+											library: 'ui',
+											uploadSVG: '',
+										},
 									},
 								},
 							});
