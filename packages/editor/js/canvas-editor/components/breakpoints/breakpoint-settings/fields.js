@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useContext } from '@wordpress/element';
+import { useContext, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,6 +16,7 @@ import {
 	IconControl,
 	BaseControl,
 	InputControl,
+	SelectControl,
 	ToggleControl,
 	RepeaterContext,
 	useControlContext,
@@ -26,6 +27,7 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { iconsOptions } from './icons';
 import { getBaseBreakpoint } from '../helpers';
 import { BreakpointIcon } from '../breakpoint-icon';
 
@@ -41,6 +43,7 @@ export default function ({
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 	const { onChange, repeaterId, valueCleanup } = useContext(RepeaterContext);
+	const [iconType, setIconType] = useState(null);
 
 	return (
 		<>
@@ -214,28 +217,62 @@ export default function ({
 			)}
 
 			<BaseControl columns="columns-2" label={__('Icon', 'blockera')}>
-				<IconControl
-					id={'settings.icon'}
-					columns={'columns-1'}
-					defaultValue={item.settings.icon}
-					onChange={(newValue, ref) =>
-						changeRepeaterItem({
-							ref,
-							itemId,
-							onChange,
-							controlId,
-							repeaterId,
-							valueCleanup,
-							value: {
-								...item,
-								settings: {
-									...item.settings,
-									icon: newValue,
+				{null === iconType && (
+					<SelectControl
+						id={`settings.icon`}
+						defaultValue={item.settings.icon}
+						options={iconsOptions}
+						type="custom"
+						aria-label={__('Choose Breakpoint', 'blockera')}
+						onChange={(newValue, ref) => {
+							if ('custom' === newValue) {
+								setIconType('custom');
+							} else {
+								setIconType(null);
+							}
+
+							changeRepeaterItem({
+								ref,
+								itemId,
+								onChange,
+								controlId,
+								repeaterId,
+								valueCleanup,
+								value: {
+									...item,
+									settings: {
+										...item.settings,
+										icon: newValue,
+									},
 								},
-							},
-						})
-					}
-				/>
+							});
+						}}
+					/>
+				)}
+				{'custom' === iconType && (
+					<IconControl
+						id={'settings.icon'}
+						columns={'columns-1'}
+						defaultValue={item.settings.icon}
+						onChange={(newValue, ref) =>
+							changeRepeaterItem({
+								ref,
+								itemId,
+								onChange,
+								controlId,
+								repeaterId,
+								valueCleanup,
+								value: {
+									...item,
+									settings: {
+										...item.settings,
+										icon: newValue,
+									},
+								},
+							})
+						}
+					/>
+				)}
 			</BaseControl>
 
 			{itemId !== getBaseBreakpoint() && (
