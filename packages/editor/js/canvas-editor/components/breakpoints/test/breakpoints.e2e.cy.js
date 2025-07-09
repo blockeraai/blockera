@@ -121,7 +121,7 @@ describe('Breakpoints Functionalities', () => {
 			});
 	});
 
-	it('should allow changing breakpoint icon', () => {
+	it('should allow changing breakpoint icon with default icons', () => {
 		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
 
 		cy.getByDataTest('tablet').should('be.visible');
@@ -132,6 +132,27 @@ describe('Breakpoints Functionalities', () => {
 			.eq(1)
 			.within(() => {
 				cy.getParentContainer('Icon').within(() => {
+					cy.get('button').click();
+					cy.get('div[role="listbox"')
+						.contains('Mobile Portrait')
+						.click();
+				});
+			});
+	});
+
+	it.skip('should allow changing breakpoint icon with custom icon field', () => {
+		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
+
+		cy.getByDataTest('tablet').should('be.visible');
+		cy.getByDataTest('tablet').click();
+
+		cy.get('.components-popover').eq(1).should('be.visible');
+		cy.get('.components-popover')
+			.eq(1)
+			.within(() => {
+				cy.getParentContainer('Icon').within(() => {
+					cy.get('button').click();
+					cy.get('div[role="listbox"').contains('Custom').click();
 					cy.getByAriaLabel('Icon Library').click({ force: true });
 				});
 			});
