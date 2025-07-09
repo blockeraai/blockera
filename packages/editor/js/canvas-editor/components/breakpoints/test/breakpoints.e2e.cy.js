@@ -36,15 +36,7 @@ describe('Breakpoints Functionalities', () => {
 		cy.getByDataTest('tablet').should('be.visible');
 		cy.getByDataTest('tablet').realHover();
 
-		cy.getByAriaLabel('Delete tablet').should('be.visible');
-		cy.getByAriaLabel('Delete tablet').click();
-
-		cy.get('.components-popover').eq(1).should('be.visible');
-		cy.get('.components-popover')
-			.eq(1)
-			.within(() => {
-				cy.get('a').contains('Upgrade to PRO').should('be.visible');
-			});
+		cy.getByAriaLabel('Delete tablet').should('not.exist');
 	});
 
 	it('should disable tablet breakpoint of top header navigation menu', () => {
