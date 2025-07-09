@@ -181,10 +181,10 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 							'library' => 'ui',
 							'uploadSVG' => '',
 						],
-						'deletable' => false,
-						'isDefault' => true,
 					],
 					'attributes' => [],
+					'deletable' => false,
+					'isDefault' => true,
 				],
 			],
 			[
