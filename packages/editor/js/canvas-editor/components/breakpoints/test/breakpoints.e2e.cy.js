@@ -140,6 +140,7 @@ describe('Breakpoints Functionalities', () => {
 			});
 	});
 
+	// @debug-ignore
 	it.skip('should allow changing breakpoint icon with custom icon field', () => {
 		cy.getByDataTest('blockera-breakpoints-settings-opener').click();
 
