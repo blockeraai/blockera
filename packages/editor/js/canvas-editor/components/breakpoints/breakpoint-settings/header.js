@@ -46,7 +46,9 @@ export default function ({
 		<Flex
 			justifyContent={'space-between'}
 			direction={'row'}
-			className={controlInnerClassNames('breakpoint-header')}
+			className={controlInnerClassNames('breakpoint-header', {
+				'is-deletable': item.deletable,
+			})}
 		>
 			<div
 				className={controlInnerClassNames('repeater-group-header')}

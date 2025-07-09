@@ -34,7 +34,7 @@ export const Breakpoints = ({
 	const {
 		setDeviceType,
 		setCanvasSettings,
-		// updateBreakpoints,
+		updateBreakpoints,
 		updaterDeviceType,
 		updaterDeviceIndicator,
 	} = useDispatch('blockera/editor');
@@ -154,11 +154,16 @@ export const Breakpoints = ({
 		updateSelectedBlock(device);
 	};
 
-	const handleOnChange = (key: string, value: any): void =>
+	const handleOnChange = (key: string, value: any): void => {
+		if ('breakpoints' === key) {
+			updateBreakpoints(value);
+		}
+
 		updateCanvasSettings({
 			...canvasSettings,
 			[key]: value,
 		});
+	};
 
 	return (
 		<>

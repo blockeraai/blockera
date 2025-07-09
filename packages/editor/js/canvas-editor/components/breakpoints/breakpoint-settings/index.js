@@ -18,6 +18,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
 	PromotionPopover,
+	cleanupRepeaterItem,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { defaultItemValue } from '@blockera/controls/js/libs/repeater-control/default-item-value';
@@ -64,18 +65,10 @@ export default function ({
 
 	breakpoints = useMemo(() => {
 		return Object.fromEntries(
-			Object.entries(breakpoints).map(([key, value]) => {
-				if (value?.base) {
-					defaultRepeaterItemValue.deletable = false;
-				} else if (
-					!value?.base &&
-					!defaultRepeaterItemValue.deletable
-				) {
-					defaultRepeaterItemValue.deletable = true;
-				}
-
-				return [key, mergeObject(defaultRepeaterItemValue, value)];
-			})
+			Object.entries(breakpoints).map(([key, value]) => [
+				key,
+				mergeObject(defaultRepeaterItemValue, value),
+			])
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [breakpoints]);
@@ -99,6 +92,31 @@ export default function ({
 					}
 
 					return __('Breakpoint Settings', 'blockera');
+				}}
+				valueCleanup={(value) => {
+					return Object.fromEntries(
+						Object.entries(value).map(([key, item]) => {
+							const cleanRepeaterItem = cleanupRepeaterItem(item);
+
+							if (!item.isDefault) {
+								return [
+									key,
+									{
+										...cleanRepeaterItem,
+										deletable: true,
+									},
+								];
+							}
+
+							return [
+								key,
+								{
+									...cleanRepeaterItem,
+									deletable: false,
+								},
+							];
+						})
+					);
 				}}
 				className={controlInnerClassNames('breakpoints-repeater')}
 				defaultRepeaterItemValue={applyFilters(

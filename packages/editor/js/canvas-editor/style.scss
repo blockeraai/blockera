@@ -43,7 +43,10 @@
 		&:hover {
 
 			.blockera-control-breakpoint-header {
-				width: 91.5%;
+
+				&.is-deletable {
+					width: 91.5%;
+				}
 			}
 		}
 	}
