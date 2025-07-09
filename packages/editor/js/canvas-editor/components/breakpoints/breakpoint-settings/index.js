@@ -89,6 +89,7 @@ export default function ({
 			storeName={REPEATER_STORE_NAME}
 		>
 			<RepeaterControl
+				id="breakpoints"
 				label={__('Breakpoints', 'blockera')}
 				disableRegenerateId={false}
 				isNativeSupport={true}
