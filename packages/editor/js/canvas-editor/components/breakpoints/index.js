@@ -194,7 +194,7 @@ export const Breakpoints = ({
 					>
 						<Icon
 							data-test={'blockera-breakpoints-settings-opener'}
-							icon="more-horizontal"
+							icon="more-vertical"
 							iconSize="24"
 							onClick={() =>
 								handleOnChange(
@@ -203,6 +203,30 @@ export const Breakpoints = ({
 								)
 							}
 						/>
+
+						{canvasSettings.isOpenOtherBreakpoints && (
+							<Popover
+								offset={10}
+								className={controlInnerClassNames(
+									'breakpoints-popover'
+								)}
+								placement={'bottom-end'}
+								title={__('Breakpoint Settings', 'blockera')}
+								onClose={() =>
+									updateCanvasSettings({
+										...canvasSettings,
+										isOpenSettings: false,
+										isOpenOtherBreakpoints: false,
+									})
+								}
+							>
+								<BreakpointSettings
+									onClick={handleOnClick}
+									onChange={handleOnChange}
+									breakpoints={canvasSettings.breakpoints}
+								/>
+							</Popover>
+						)}
 					</div>
 
 					<PickedBreakpoints
@@ -217,31 +241,11 @@ export const Breakpoints = ({
 						updateBlock={updateSelectedBlock}
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
-				</Flex>
 
-				{canvasSettings.isOpenOtherBreakpoints && (
-					<Popover
-						offset={10}
-						className={controlInnerClassNames(
-							'breakpoints-popover'
-						)}
-						placement={'bottom-end'}
-						title={__('Breakpoint Settings', 'blockera')}
-						onClose={() =>
-							updateCanvasSettings({
-								...canvasSettings,
-								isOpenSettings: false,
-								isOpenOtherBreakpoints: false,
-							})
-						}
-					>
-						<BreakpointSettings
-							onClick={handleOnClick}
-							onChange={handleOnChange}
-							breakpoints={canvasSettings.breakpoints}
-						/>
-					</Popover>
-				)}
+					<span style={{ width: '24px', height: '24px' }}>
+						{/* Space holder for canvas settings icon and popover. */}
+					</span>
+				</Flex>
 
 				<Preview />
 			</ControlContextProvider>
