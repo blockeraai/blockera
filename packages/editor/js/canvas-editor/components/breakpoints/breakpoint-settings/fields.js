@@ -12,6 +12,7 @@ import { useContext } from '@wordpress/element';
  */
 import {
 	Flex,
+	Tooltip,
 	IconControl,
 	BaseControl,
 	InputControl,
@@ -19,6 +20,7 @@ import {
 	RepeaterContext,
 	useControlContext,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
@@ -61,27 +63,81 @@ export default function ({
 					</p>
 				</div>
 			)}
-			<InputControl
-				id={'name'}
-				type={'text'}
-				columns={'columns-2'}
-				defaultValue={item.label}
-				onChange={(newValue, ref) =>
-					changeRepeaterItem({
-						ref,
-						itemId,
-						onChange,
-						controlId,
-						repeaterId,
-						valueCleanup,
-						value: {
-							...item,
-							label: newValue,
-						},
-					})
-				}
-				label={__('Name', 'blockera')}
-			/>
+			{!item.isDefault && (
+				<Tooltip
+					width="250px"
+					style={{ '--tooltip-padding': '16px' }}
+					text={
+						<>
+							<h5>{item.label}</h5>
+
+							<Icon icon="attachment" library="ui" />
+
+							<p
+								style={{
+									color: '#b0b0b0',
+								}}
+							>
+								{__('Breakpoint ID: ', 'blockera')}
+								<i
+									style={{
+										backgroundColor: '#f0f0f0',
+										padding: '2px 5px',
+										borderRadius: '2px',
+									}}
+								>
+									{itemId}
+								</i>
+							</p>
+						</>
+					}
+				>
+					<InputControl
+						id={'name'}
+						type={'text'}
+						columns={'columns-2'}
+						defaultValue={item.label}
+						onChange={(newValue, ref) =>
+							changeRepeaterItem({
+								ref,
+								itemId,
+								onChange,
+								controlId,
+								repeaterId,
+								valueCleanup,
+								value: {
+									...item,
+									label: newValue,
+								},
+							})
+						}
+						label={__('Name', 'blockera')}
+					/>
+				</Tooltip>
+			)}
+			{item.isDefault && (
+				<InputControl
+					id={'name'}
+					type={'text'}
+					columns={'columns-2'}
+					defaultValue={item.label}
+					onChange={(newValue, ref) =>
+						changeRepeaterItem({
+							ref,
+							itemId,
+							onChange,
+							controlId,
+							repeaterId,
+							valueCleanup,
+							value: {
+								...item,
+								label: newValue,
+							},
+						})
+					}
+					label={__('Name', 'blockera')}
+				/>
+			)}
 			{itemId !== getBaseBreakpoint() && (
 				<BaseControl columns="columns-1" label={__('Size', 'blockera')}>
 					<Flex
