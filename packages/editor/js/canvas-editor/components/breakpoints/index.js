@@ -156,6 +156,14 @@ export const Breakpoints = ({
 
 	const handleOnChange = (key: string, value: any): void => {
 		if ('breakpoints' === key) {
+			for (const key in value) {
+				if ('' !== value[key].type) {
+					continue;
+				}
+
+				value[key].type = key;
+			}
+
 			updateBreakpoints(value);
 		}
 
