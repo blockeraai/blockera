@@ -160,10 +160,10 @@ export default function ({
 						<PromotionPopover
 							heading={__('Advanced Breakpoints', 'blockera')}
 							featuresList={[
-								__('Custom breakpoints', 'blockera'),
-								__('Unlimited breakpoints', 'blockera'),
-								__('Advanced responsive features', 'blockera'),
-								__('Breakpoint inheritance', 'blockera'),
+								__('7 responsive breakpoints', 'blockera'),
+								__('Edit breakpoint settings', 'blockera'),
+								__('New custom breakpoints', 'blockera'),
+								__('Design for any screen size', 'blockera'),
 							]}
 							isOpen={isOpen}
 							onClose={onClose}
