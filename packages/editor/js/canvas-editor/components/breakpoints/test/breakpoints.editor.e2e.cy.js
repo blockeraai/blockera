@@ -79,13 +79,13 @@ describe('Breakpoints Functionalities', () => {
 			.within(() => {
 				// Assert control value.
 				cy.getParentContainer('Size').within(() => {
-					cy.getParentContainer('Min').within(() => {
+					cy.getParentContainer('Min Width').within(() => {
 						cy.get('input').clear();
 						cy.get('input').type('768', { delay: 0 });
 						cy.get('input').should('have.value', '768');
 					});
 
-					cy.getParentContainer('Max').within(() => {
+					cy.getParentContainer('Max Width').within(() => {
 						cy.get('input').clear();
 						cy.get('input').type('1024', { delay: 0 });
 						cy.get('input').should('have.value', '1024');
@@ -106,13 +106,13 @@ describe('Breakpoints Functionalities', () => {
 			.within(() => {
 				// Assert control value.
 				cy.getParentContainer('Size').within(() => {
-					cy.getParentContainer('Min').within(() => {
+					cy.getParentContainer('Min Width').within(() => {
 						cy.get('input').should('have.value', '768');
 						cy.get('input').clear();
 						cy.get('input').should('have.value', '');
 					});
 
-					cy.getParentContainer('Max').within(() => {
+					cy.getParentContainer('Max Width').within(() => {
 						cy.get('input').clear();
 						cy.get('input').type('991', { delay: 0 });
 						cy.get('input').should('have.value', '991');
