@@ -205,6 +205,7 @@ export const Breakpoints = ({
 									!canvasSettings.isOpenOtherBreakpoints
 								)
 							}
+							className="blockera-breakpoints-settings-opener"
 						/>
 
 						{canvasSettings.isOpenOtherBreakpoints && (

@@ -12,6 +12,11 @@ import { Icon } from '@blockera/icons';
 
 export const iconsOptions = [
 	{
+		value: '',
+		label: __('Choose Icon', 'blockera'),
+		icon: '',
+	},
+	{
 		value: `device-2xl-desktop`,
 		label: __('2XL Desktop', 'blockera'),
 		icon: <Icon icon="device-2xl-desktop" iconSize={24} />,

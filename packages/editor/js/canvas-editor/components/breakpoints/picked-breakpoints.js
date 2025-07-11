@@ -98,15 +98,30 @@ export default function ({
 		return breakpoints;
 	}
 
+	const breakpoints = activeBreakpoints(); // calculate the gap based on the number of breakpoints
+
+	// Calculate gap based on number of breakpoints
+	const getGap = () => {
+		if (breakpoints.length >= 5) {
+			return '5px';
+		}
+
+		if (breakpoints.length > 3) {
+			return '10px';
+		}
+
+		return '12px';
+	};
+
 	return (
 		<Flex
 			className={controlInnerClassNames('blockera-breakpoints')}
 			justifyContent={'space-between'}
 			alignItems="center"
 			aria-label={__('Breakpoints', 'blockera')}
-			gap="5px"
+			gap={getGap()}
 		>
-			{activeBreakpoints()}
+			{breakpoints}
 		</Flex>
 	);
 }

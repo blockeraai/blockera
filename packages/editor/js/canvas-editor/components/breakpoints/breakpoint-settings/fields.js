@@ -5,14 +5,14 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useContext, useState } from '@wordpress/element';
+import { useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
 	Flex,
-	Tooltip,
+	Grid,
 	IconControl,
 	BaseControl,
 	InputControl,
@@ -20,9 +20,8 @@ import {
 	ToggleControl,
 	RepeaterContext,
 	useControlContext,
+	NoticeControl,
 } from '@blockera/controls';
-import { Icon } from '@blockera/icons';
-import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -43,13 +42,19 @@ export default function ({
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
 	const { onChange, repeaterId, valueCleanup } = useContext(RepeaterContext);
-	const [iconType, setIconType] = useState(null);
 
 	return (
 		<>
 			{itemId === getBaseBreakpoint() && (
-				<div className="base-breakpoint-content">
-					<h3>
+				<Flex
+					direction="column"
+					gap="5px"
+					className="base-breakpoint-content"
+					style={{
+						marginBottom: '15px',
+					}}
+				>
+					<h4 style={{ margin: '0' }}>
 						<Flex gap="10" alignItems="center">
 							<BreakpointIcon
 								name={item.type}
@@ -57,227 +62,15 @@ export default function ({
 							/>
 							{__('Base Breakpoint', 'blockera')}
 						</Flex>
-					</h3>
-					<p>
+					</h4>
+					<p style={{ margin: '0' }}>
 						{__(
 							'This is your base breakpoint that defines the default styling for all screen sizes.',
 							'blockera'
 						)}
 					</p>
-				</div>
+				</Flex>
 			)}
-			{!item.isDefault && (
-				<Tooltip
-					width="250px"
-					style={{ '--tooltip-padding': '16px' }}
-					text={
-						<>
-							<h5>{item.label}</h5>
-
-							<Icon icon="attachment" library="ui" />
-
-							<p
-								style={{
-									color: '#b0b0b0',
-								}}
-							>
-								{__('Breakpoint ID: ', 'blockera')}
-								<i
-									style={{
-										backgroundColor: '#f0f0f0',
-										padding: '2px 5px',
-										borderRadius: '2px',
-									}}
-								>
-									{itemId}
-								</i>
-							</p>
-						</>
-					}
-				>
-					<InputControl
-						id={'name'}
-						type={'text'}
-						columns={'columns-2'}
-						defaultValue={item.label}
-						onChange={(newValue, ref) =>
-							changeRepeaterItem({
-								ref,
-								itemId,
-								onChange,
-								controlId,
-								repeaterId,
-								valueCleanup,
-								value: {
-									...item,
-									label: newValue,
-								},
-							})
-						}
-						label={__('Name', 'blockera')}
-					/>
-				</Tooltip>
-			)}
-			{item.isDefault && (
-				<InputControl
-					id={'name'}
-					type={'text'}
-					columns={'columns-2'}
-					defaultValue={item.label}
-					onChange={(newValue, ref) =>
-						changeRepeaterItem({
-							ref,
-							itemId,
-							onChange,
-							controlId,
-							repeaterId,
-							valueCleanup,
-							value: {
-								...item,
-								label: newValue,
-							},
-						})
-					}
-					label={__('Name', 'blockera')}
-				/>
-			)}
-			{itemId !== getBaseBreakpoint() && (
-				<BaseControl columns="columns-1" label={__('Size', 'blockera')}>
-					<Flex
-						style={{
-							width: '173px',
-							alignSelf: 'flex-end',
-							alignItems: 'center',
-						}}
-					>
-						<InputControl
-							id={'settings.min'}
-							type={'number'}
-							unitType={'width'}
-							columns={'columns-2'}
-							defaultValue={item.settings.min}
-							onChange={(newValue, ref) =>
-								changeRepeaterItem({
-									ref,
-									itemId,
-									onChange,
-									controlId,
-									repeaterId,
-									valueCleanup,
-									value: {
-										...item,
-										settings: {
-											...item.settings,
-											min: newValue,
-										},
-									},
-								})
-							}
-							placeholder="0"
-							size="small"
-							className={controlClassNames(
-								'control-first label-center small-gap'
-							)}
-							label={__('Min', 'blockera')}
-							aria-label={__('Min Width', 'blockera')}
-						/>
-						<InputControl
-							id={'settings.max'}
-							type={'number'}
-							unitType={'width'}
-							columns={'columns-2'}
-							defaultValue={item.settings.max}
-							onChange={(newValue, ref) =>
-								changeRepeaterItem({
-									ref,
-									itemId,
-									onChange,
-									controlId,
-									repeaterId,
-									valueCleanup,
-									value: {
-										...item,
-										settings: {
-											...item.settings,
-											max: newValue,
-										},
-									},
-								})
-							}
-							placeholder="0"
-							size="small"
-							className={controlClassNames(
-								'control-first label-center small-gap'
-							)}
-							label={__('Max', 'blockera')}
-							aria-label={__('Max Width', 'blockera')}
-						/>
-					</Flex>
-				</BaseControl>
-			)}
-
-			<BaseControl columns="columns-2" label={__('Icon', 'blockera')}>
-				{null === iconType && (
-					<SelectControl
-						id={`settings.icon`}
-						defaultValue={item.settings.icon.icon}
-						options={iconsOptions}
-						type="custom"
-						aria-label={__('Choose Breakpoint', 'blockera')}
-						onChange={(newValue, ref) => {
-							if ('custom' === newValue) {
-								return setIconType('custom');
-							} else if ('custom' !== iconType) {
-								setIconType(null);
-							}
-
-							changeRepeaterItem({
-								ref,
-								itemId,
-								onChange,
-								controlId,
-								repeaterId,
-								valueCleanup,
-								value: {
-									...item,
-									settings: {
-										...item.settings,
-										icon: {
-											icon: newValue,
-											library: 'ui',
-											uploadSVG: '',
-										},
-									},
-								},
-							});
-						}}
-					/>
-				)}
-				{'custom' === iconType && (
-					<IconControl
-						id={'settings.icon'}
-						columns={'columns-1'}
-						defaultValue={item.settings.icon}
-						onChange={(newValue, ref) =>
-							changeRepeaterItem({
-								ref,
-								itemId,
-								onChange,
-								controlId,
-								repeaterId,
-								valueCleanup,
-								value: {
-									...item,
-									settings: {
-										...item.settings,
-										icon: newValue,
-									},
-								},
-							})
-						}
-					/>
-				)}
-			</BaseControl>
 
 			{itemId !== getBaseBreakpoint() && (
 				<BaseControl
@@ -310,6 +103,250 @@ export default function ({
 							});
 						}}
 					/>
+				</BaseControl>
+			)}
+
+			<InputControl
+				id={'name'}
+				type={'text'}
+				columns={'columns-2'}
+				defaultValue={item.label}
+				onChange={(newValue, ref) =>
+					changeRepeaterItem({
+						ref,
+						itemId,
+						onChange,
+						controlId,
+						repeaterId,
+						valueCleanup,
+						value: {
+							...item,
+							label: newValue,
+						},
+					})
+				}
+				label={__('Name', 'blockera')}
+			>
+				<p
+					style={{
+						color: 'rgb(148 148 148)',
+						margin: '8px 0 0',
+						fontSize: '12px',
+					}}
+				>
+					{__('ID: ', 'blockera')}
+
+					<i
+						style={{
+							backgroundColor: '#f0f0f0',
+							padding: '2px 5px',
+							borderRadius: '2px',
+							color: 'rgb(134 134 134)',
+						}}
+					>
+						{itemId}
+					</i>
+				</p>
+			</InputControl>
+
+			{itemId !== getBaseBreakpoint() && (
+				<BaseControl columns="columns-2" label={__('Size', 'blockera')}>
+					<Grid alignItems="center" gridTemplateColumns="1fr 1fr">
+						<InputControl
+							id={'settings.min'}
+							type={'number'}
+							unitType={'width'}
+							columns={'columns-1'}
+							defaultValue={item.settings.min}
+							onChange={(newValue, ref) =>
+								changeRepeaterItem({
+									ref,
+									itemId,
+									onChange,
+									controlId,
+									repeaterId,
+									valueCleanup,
+									value: {
+										...item,
+										settings: {
+											...item.settings,
+											min: newValue,
+										},
+									},
+								})
+							}
+							placeholder="0"
+							size="small"
+							className="control-first label-center small-gap"
+							label={__('Min Width', 'blockera')}
+							aria-label={__('Min Width', 'blockera')}
+						/>
+
+						<InputControl
+							id={'settings.max'}
+							type={'number'}
+							unitType={'width'}
+							columns={'columns-1'}
+							defaultValue={item.settings.max}
+							onChange={(newValue, ref) =>
+								changeRepeaterItem({
+									ref,
+									itemId,
+									onChange,
+									controlId,
+									repeaterId,
+									valueCleanup,
+									value: {
+										...item,
+										settings: {
+											...item.settings,
+											max: newValue,
+										},
+									},
+								})
+							}
+							placeholder="0"
+							size="small"
+							className="control-first label-center small-gap"
+							label={__('Max Width', 'blockera')}
+							aria-label={__('Max Width', 'blockera')}
+						/>
+					</Grid>
+				</BaseControl>
+			)}
+
+			<BaseControl columns="columns-2" label={__('Icon', 'blockera')}>
+				<SelectControl
+					id={`settings.icon`}
+					defaultValue={(() => {
+						if (item.settings.iconType === 'library') {
+							return item.settings.icon.icon;
+						}
+
+						if (item.settings.iconType === 'custom') {
+							return 'custom';
+						}
+
+						return '';
+					})()}
+					options={iconsOptions}
+					type="custom"
+					aria-label={__('Choose Icon', 'blockera')}
+					onChange={(newValue, ref) => {
+						if ('custom' === newValue) {
+							changeRepeaterItem({
+								ref,
+								itemId,
+								onChange,
+								controlId,
+								repeaterId,
+								valueCleanup,
+								value: {
+									...item,
+									settings: {
+										...item.settings,
+										icon: {
+											icon: '',
+											library: '',
+											uploadSVG: '',
+										},
+										iconType: 'custom',
+									},
+								},
+							});
+							return;
+						}
+
+						changeRepeaterItem({
+							ref,
+							itemId,
+							onChange,
+							controlId,
+							repeaterId,
+							valueCleanup,
+							value: {
+								...item,
+								settings: {
+									...item.settings,
+									iconType: 'library',
+									icon: {
+										icon: newValue,
+										library: 'ui',
+										uploadSVG: '',
+									},
+								},
+							},
+						});
+					}}
+				/>
+
+				{item.settings.iconType === 'custom' && (
+					<IconControl
+						id={'settings.icon'}
+						columns={'columns-1'}
+						defaultValue={item.settings.icon}
+						onChange={(newValue, ref) =>
+							changeRepeaterItem({
+								ref,
+								itemId,
+								onChange,
+								controlId,
+								repeaterId,
+								valueCleanup,
+								value: {
+									...item,
+									settings: {
+										...item.settings,
+										icon: newValue,
+									},
+								},
+							})
+						}
+					/>
+				)}
+			</BaseControl>
+
+			{item.settings.max && !item.settings.min && (
+				<BaseControl columns="columns-1" label="">
+					<NoticeControl type="information">
+						{__(
+							'Smaller screen sizes inherit style from this breakpoint.',
+							'blockera'
+						)}
+					</NoticeControl>
+				</BaseControl>
+			)}
+
+			{item.settings.min && !item.settings.max && (
+				<BaseControl columns="columns-1" label="">
+					<NoticeControl type="information">
+						{__(
+							'Larger screen sizes inherit style from this breakpoint.',
+							'blockera'
+						)}
+					</NoticeControl>
+				</BaseControl>
+			)}
+
+			{item.settings.min && item.settings.max && (
+				<BaseControl columns="columns-1" label="">
+					<NoticeControl type="information">
+						{__(
+							'Screen sizes between min and max width inherit style from this breakpoint.',
+							'blockera'
+						)}
+					</NoticeControl>
+				</BaseControl>
+			)}
+
+			{!item.settings.min && !item.settings.max && (
+				<BaseControl columns="columns-1" label="">
+					<NoticeControl type="error">
+						{__(
+							'Please set min or max width for this breakpoint.',
+							'blockera'
+						)}
+					</NoticeControl>
 				</BaseControl>
 			)}
 		</>

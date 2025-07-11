@@ -109,6 +109,12 @@
 		}
 	}
 
+	.blockera-breakpoints-settings-opener:hover,
+	&.breakpoints-open .blockera-breakpoints-settings-opener {
+		color: var(--blockera-controls-primary-color);
+		fill: currentColor;
+	}
+
 	.blockera-component-breakpoint-icon {
 		cursor: pointer;
 
@@ -284,4 +290,16 @@
     .editor-document-bar {
 		width: min(100%, 300px) !important;
     }
+}
+
+.blockera-control-breakpoints-popover.blockera-component-popover {
+	--popover-height: auto !important;
+}
+
+.blockera-control-breakpoints-edit-popover.blockera-component-popover {
+	--popover-height: auto;
+
+	.components-popover__content {
+		overflow: visible !important;
+	}
 }

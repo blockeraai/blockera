@@ -72,12 +72,12 @@ export default function ({
 
 				{itemId !== getBaseBreakpoint() && (
 					<span className={controlInnerClassNames('header-values')}>
-						{!item.settings.max && (
+						{!item.settings.max && item.settings.min && (
 							<>
 								{sprintf(
 									// translators: %s is the min value of the breakpoint
 									__('>= %s', 'blockera'),
-									item.settings.min.replace(/[a-z]+/i, '')
+									item.settings.min
 								)}
 							</>
 						)}
@@ -87,18 +87,18 @@ export default function ({
 								{sprintf(
 									// translators: %1$s is the min value of the breakpoint, %2$s is the max value of the breakpoint
 									__('%1$s to %2$s', 'blockera'),
-									item.settings.min.replace(/[a-z]+/i, ''),
-									item.settings.max.replace(/[a-z]+/i, '')
+									item.settings.min,
+									item.settings.max
 								)}
 							</>
 						)}
 
-						{!item.settings.min && (
+						{!item.settings.min && item.settings.max && (
 							<>
 								{sprintf(
 									// translators: %s is the max value of the breakpoint
 									__('<= %s', 'blockera'),
-									item.settings.max.replace(/[a-z]+/i, '')
+									item.settings.max
 								)}
 							</>
 						)}

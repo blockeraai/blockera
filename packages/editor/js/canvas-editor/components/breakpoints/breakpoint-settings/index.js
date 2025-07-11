@@ -14,7 +14,10 @@ import { applyFilters } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
-import { controlInnerClassNames } from '@blockera/classnames';
+import {
+	controlInnerClassNames,
+	controlClassNames,
+} from '@blockera/classnames';
 import {
 	RepeaterControl,
 	PromotionPopover,
@@ -83,7 +86,7 @@ export default function ({
 		>
 			<RepeaterControl
 				id="breakpoints"
-				label={__('Breakpoints', 'blockera')}
+				label={__('Responsive Breakpoints', 'blockera')}
 				disableRegenerateId={false}
 				isNativeSupport={true}
 				popoverTitle={(itemId, item) => {
@@ -148,6 +151,7 @@ export default function ({
 					});
 				}}
 				addNewButtonDataTest={'add-new-breakpoint'}
+				popoverClassName={controlClassNames('breakpoints-edit-popover')}
 				PromoComponent={({
 					onClose = () => {},
 					isOpen = false,
