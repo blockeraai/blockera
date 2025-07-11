@@ -22,7 +22,7 @@ import {
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../helpers';
+import { getBaseBreakpoint, prepValueForHeader } from '../helpers';
 import { BreakpointIcon } from '../breakpoint-icon';
 
 export default function ({
@@ -77,7 +77,7 @@ export default function ({
 								{sprintf(
 									// translators: %s is the min value of the breakpoint
 									__('>= %s', 'blockera'),
-									item.settings.min
+									prepValueForHeader(item.settings.min)
 								)}
 							</>
 						)}
@@ -87,8 +87,8 @@ export default function ({
 								{sprintf(
 									// translators: %1$s is the min value of the breakpoint, %2$s is the max value of the breakpoint
 									__('%1$s to %2$s', 'blockera'),
-									item.settings.min,
-									item.settings.max
+									prepValueForHeader(item.settings.min),
+									prepValueForHeader(item.settings.max)
 								)}
 							</>
 						)}
@@ -98,7 +98,7 @@ export default function ({
 								{sprintf(
 									// translators: %s is the max value of the breakpoint
 									__('<= %s', 'blockera'),
-									item.settings.max
+									prepValueForHeader(item.settings.max)
 								)}
 							</>
 						)}
