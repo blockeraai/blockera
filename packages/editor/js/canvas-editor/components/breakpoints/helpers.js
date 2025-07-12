@@ -295,7 +295,7 @@ export function prepValueForHeader(value: any): string {
 	}
 
 	if (value.endsWith('func')) {
-		return __('Custom CSS Size', 'blockera');
+		return __('Custom CSS', 'blockera');
 	}
 
 	return value;
