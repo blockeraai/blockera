@@ -79,6 +79,7 @@ export default function ({
 							})}
 							name={itemId}
 							settings={item.settings}
+							isDefault={item.isDefault}
 							onClick={(event) => {
 								event.stopPropagation();
 

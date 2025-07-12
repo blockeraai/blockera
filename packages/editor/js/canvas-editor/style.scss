@@ -185,6 +185,15 @@
 		paint-order: stroke;
 	}
 
+	.blockera-component-custom-breakpoint-item {
+		position: absolute;
+		left: -1px;
+		top: -1px;
+		stroke-width: 5px;
+		stroke: var(--icon-outline-color);
+		paint-order: stroke;
+	}
+
 	.blockera-component-change-indicator {
 		position: absolute;
 		top: 2px;

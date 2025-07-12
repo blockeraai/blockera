@@ -32,8 +32,10 @@ export function BreakpointIcon({
 	onClick,
 	settings,
 	className,
+	isDefault,
 	...props
 }: {
+	isDefault?: boolean,
 	settings?: {
 		min: string,
 		max: string,
@@ -131,6 +133,16 @@ export function BreakpointIcon({
 						...(settings ? { library: settings.icon.library } : {}),
 					}}
 				/>
+
+				{!isDefault && (
+					<Icon
+						icon="gear"
+						iconSize="12"
+						className={componentInnerClassNames(
+							'custom-breakpoint-item'
+						)}
+					/>
+				)}
 
 				{/* <ChangeIndicator isChanged={true} /> */}
 			</div>
