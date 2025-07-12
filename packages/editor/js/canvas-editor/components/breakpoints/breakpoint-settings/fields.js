@@ -231,7 +231,7 @@ export default function ({
 					})()}
 					options={iconsOptions}
 					type="custom"
-					aria-label={__('Choose Icon', 'blockera')}
+					aria-label={__('Choose an icon', 'blockera')}
 					onChange={(newValue, ref) => {
 						if ('custom' === newValue) {
 							changeRepeaterItem({
