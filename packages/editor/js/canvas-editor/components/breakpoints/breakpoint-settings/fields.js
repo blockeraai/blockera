@@ -175,7 +175,7 @@ export default function ({
 									},
 								})
 							}
-							placeholder="0"
+							placeholder=""
 							size="small"
 							className="control-first label-center small-gap"
 							label={__('Min Width', 'blockera')}
@@ -205,7 +205,7 @@ export default function ({
 									},
 								})
 							}
-							placeholder="0"
+							placeholder=""
 							size="small"
 							className="control-first label-center small-gap"
 							label={__('Max Width', 'blockera')}
