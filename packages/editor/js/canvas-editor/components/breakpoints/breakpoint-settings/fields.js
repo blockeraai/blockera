@@ -155,7 +155,7 @@ export default function ({
 						<InputControl
 							id={'settings.min'}
 							type={'number'}
-							unitType={'width'}
+							unitType={'media-query'}
 							columns={'columns-1'}
 							defaultValue={item.settings.min}
 							onChange={(newValue, ref) =>
@@ -185,7 +185,7 @@ export default function ({
 						<InputControl
 							id={'settings.max'}
 							type={'number'}
-							unitType={'width'}
+							unitType={'media-query'}
 							columns={'columns-1'}
 							defaultValue={item.settings.max}
 							onChange={(newValue, ref) =>
