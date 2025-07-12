@@ -1361,6 +1361,31 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				},
 			];
 			break;
+
+		case 'media-query':
+			cssUnits = [
+				{
+					label: 'Common Value',
+					options: [
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+					],
+				},
+				{
+					label: 'Advanced',
+					options: [
+						{
+							value: 'func',
+							label: 'CSS Functions',
+							format: 'text',
+						},
+					],
+				},
+			];
+			break;
 	}
 
 	return cssUnits;
