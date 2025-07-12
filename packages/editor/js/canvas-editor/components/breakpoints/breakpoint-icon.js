@@ -87,6 +87,26 @@ export function BreakpointIcon({
 						<p>{getBreakpointShortDescription(name)}</p>
 					)}
 
+					{!isDefault && (
+						<Flex
+							direction="row"
+							gap="2px"
+							justifyContent="flex-start"
+							alignItems="center"
+						>
+							<Icon
+								icon="gear"
+								iconSize="18"
+								style={
+									isRTL()
+										? { marginRight: '-5px' }
+										: { marginLeft: '-5px' }
+								}
+							/>
+							{__('Custom breakpoint', 'blockera')}
+						</Flex>
+					)}
+
 					<p
 						style={{
 							color: '#b0b0b0',
