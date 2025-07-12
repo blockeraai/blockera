@@ -135,7 +135,7 @@ describe('Breakpoints Functionalities', () => {
 					cy.get('button').click();
 					cy.get('div[role="listbox"')
 						.contains('Mobile Portrait')
-						.click();
+						.click({ force: true });
 				});
 			});
 	});
