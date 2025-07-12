@@ -202,7 +202,14 @@
 		--indicator-outline-color: var(--icon-outline-color);
 	}
 
-	&.breakpoint-extra-large {
+	&.breakpoint-icon-device-2xl-desktop {
+
+		.blockera-component-custom-breakpoint-item {
+			left: -3px;
+		}
+	}
+
+	&.breakpoint-icon-device-xl-desktop {
 
 		.blockera-component-base-breakpoint-icon {
 			left: -5px;
@@ -211,9 +218,13 @@
 		.blockera-component-change-indicator {
 			right: 0;
 		}
+
+		.blockera-component-custom-breakpoint-item {
+			left: -1px;
+		}
 	}
 
-	&.breakpoint-large {
+	&.breakpoint-icon-device-l-desktop {
 
 		.blockera-component-base-breakpoint-icon {
 			left: -3px;
@@ -222,9 +233,13 @@
 		.blockera-component-change-indicator {
 			right: 2px;
 		}
+
+		.blockera-component-custom-breakpoint-item {
+			left: 0;
+		}
 	}
 
-	&.breakpoint-laptop {
+	&.breakpoint-icon-device-desktop {
 
 		.blockera-component-base-breakpoint-icon {
 			left: -3px;
@@ -233,20 +248,13 @@
 		.blockera-component-change-indicator {
 			right: 2px;
 		}
-	}
 
-	&.breakpoint-desktop {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -3px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 2px;
+		.blockera-component-custom-breakpoint-item {
+			left: -1px;
 		}
 	}
 
-	&.breakpoint-tablet {
+	&.breakpoint-icon-device-tablet {
 
 		.blockera-component-base-breakpoint-icon {
 			left: -1px;
@@ -255,9 +263,13 @@
 		.blockera-component-change-indicator {
 			right: 3px;
 		}
+
+		.blockera-component-custom-breakpoint-item {
+			left: 1px;
+		}
 	}
 
-	&.breakpoint-mobile {
+	&.breakpoint-icon-device-mobile {
 
 		.blockera-component-base-breakpoint-icon {
 			left: -1px;
@@ -266,9 +278,13 @@
 		.blockera-component-change-indicator {
 			right: 4px;
 		}
+
+		.blockera-component-custom-breakpoint-item {
+			left: 2px;
+		}
 	}
 
-	&.breakpoint-mobile-landscape {
+	&.breakpoint-icon-device-mobile-landscape {
 
 		.blockera-component-base-breakpoint-icon {
 			left: -3px;
@@ -276,6 +292,10 @@
 
 		.blockera-component-change-indicator {
 			right: 3px;
+		}
+
+		.blockera-component-custom-breakpoint-item {
+			left: -1px;
 		}
 	}
 }

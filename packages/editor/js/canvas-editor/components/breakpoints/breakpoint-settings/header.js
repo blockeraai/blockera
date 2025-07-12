@@ -63,7 +63,11 @@ export default function ({
 				}}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<BreakpointIcon name={item.type} settings={item.settings} />
+					<BreakpointIcon
+						name={item.type}
+						settings={item.settings}
+						isDefault={item.isDefault}
+					/>
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>

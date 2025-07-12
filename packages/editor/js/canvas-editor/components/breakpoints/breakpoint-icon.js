@@ -32,7 +32,7 @@ export function BreakpointIcon({
 	onClick,
 	settings,
 	className,
-	isDefault,
+	isDefault = false,
 	...props
 }: {
 	isDefault?: boolean,
@@ -111,6 +111,8 @@ export function BreakpointIcon({
 				className={componentClassNames(
 					'breakpoint-icon',
 					'breakpoint-' + name,
+					'breakpoint-icon-' +
+						(settings ? settings.icon.icon : `device-${name}`),
 					className
 				)}
 				aria-label={breakpoints[name].label}
@@ -127,12 +129,20 @@ export function BreakpointIcon({
 					/>
 				)}
 
-				<Icon
-					{...{
-						icon: settings ? settings.icon.icon : `device-${name}`,
-						...(settings ? { library: settings.icon.library } : {}),
-					}}
-				/>
+				{settings && settings.icon?.icon && settings.icon?.library ? (
+					<Icon
+						{...{
+							icon: settings
+								? settings.icon.icon
+								: `device-${name}`,
+							...(settings
+								? { library: settings.icon.library }
+								: {}),
+						}}
+					/>
+				) : (
+					<Icon icon="border" library="wp" iconSize="24px" />
+				)}
 
 				{!isDefault && (
 					<Icon
