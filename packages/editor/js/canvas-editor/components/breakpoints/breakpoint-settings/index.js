@@ -38,6 +38,7 @@ import type { BreakpointSettingsComponentProps } from '../types';
 const defaultRepeaterItemValue = {
 	...defaultItemValue,
 	cloneable: false,
+	deletable: false,
 	visibilitySupport: false,
 	isOpen: false,
 	settings: {
