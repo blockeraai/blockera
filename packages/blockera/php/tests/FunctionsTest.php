@@ -176,6 +176,7 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 						'min' => '',
 						'max' => '',
 						'picked' => true,
+						'iconType' => 'library',
 						'icon' => [
 							'icon' => 'device-desktop',
 							'library' => 'ui',
