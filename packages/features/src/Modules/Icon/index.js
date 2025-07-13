@@ -51,13 +51,16 @@ const editBlockHTML = ({
 	// const root = createRoot(el);
 	const iconNode = document.createElement('span');
 	iconNode.classList.add('blockera-icon');
-	const icon = createRoot(iconNode);
+	iconNode.style.display = 'inline-flex';
+	iconNode.style.alignItems = 'center';
+	iconNode.style.verticalAlign = 'middle';
 
+	const icon = createRoot(iconNode);
 	icon.render(
 		<Icon
 			style={{
-				fill: blockeraIconColor,
-				color: blockeraIconColor,
+				fill: blockeraIconColor || 'currentColor',
+				color: blockeraIconColor || 'inherit',
 				marginLeft:
 					'right' === blockeraIconPosition || !blockeraIconPosition
 						? blockeraIconGap
