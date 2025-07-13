@@ -35,7 +35,7 @@ const editBlockHTML = ({
 
 	const {
 		blockeraIcon,
-		blockeraIconSize = 25,
+		blockeraIconSize = '',
 		blockeraIconColor = '',
 		blockeraIconGap = '5px',
 		blockeraIconPosition = 'right',
@@ -52,7 +52,6 @@ const editBlockHTML = ({
 	const iconNode = document.createElement('span');
 	iconNode.classList.add('blockera-icon');
 	const icon = createRoot(iconNode);
-	const iconSize = blockeraIconSize.replace(/[a-z]+/g, '');
 
 	icon.render(
 		<Icon
@@ -67,7 +66,7 @@ const editBlockHTML = ({
 					'left' === blockeraIconPosition ? blockeraIconGap : 0,
 			}}
 			{...(blockeraIcon ?? {})}
-			size={iconSize}
+			iconSize={blockeraIconSize || '1em'}
 		/>
 	);
 
