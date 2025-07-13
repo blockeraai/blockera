@@ -51,7 +51,6 @@ class RestAPIProvider extends ServiceProvider {
 
 		$routes = $this->app->make( Routes::class );
 		blockera_load( 'Routes.api', dirname( __DIR__ ), compact( 'routes' ) );
-		blockera_load( 'editor.php.Routes.api', dirname( __DIR__, 3), compact( 'routes' ) );
 
 		return $routes::getRoutes();
 	}
