@@ -121,16 +121,8 @@ export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	[key: string]: BreakpointTypes,
 }) {
 	const { setBreakpoints } = dispatch(STORE_NAME);
-	const breakpointsStack: { [key: string]: BreakpointTypes } = {};
 
-	for (const definitionType in definitions) {
-		breakpointsStack[definitionType] = {
-			...definitions[definitionType],
-			native: definitions[definitionType]?.native || false,
-		};
-	}
-
-	setBreakpoints(breakpointsStack);
+	setBreakpoints(definitions);
 }
 
 export function registerCanvasEditorSettings(settings: Object) {
