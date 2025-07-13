@@ -80,7 +80,10 @@ const BreakpointsSettings = memo(
 			<ControlContextProvider
 				value={{
 					name: 'canvas-editor-breakpoints',
-					value: breakpoints,
+					value: applyFilters(
+						'blockera.breakpoints.value',
+						breakpoints
+					),
 				}}
 				storeName={REPEATER_STORE_NAME}
 			>
