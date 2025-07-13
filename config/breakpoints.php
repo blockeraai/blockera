@@ -21,6 +21,8 @@ return [
 			'type'       => '2xl-desktop',
 			'base'       => false,
 			'status'     => false,
+			'isVisible'  => true,
+			'force' 	 => true,
 			'label'      => __( 'Widescreens and TVs', 'blockera' ),
 			'settings'   => [
 				'min' => '1920px',
@@ -42,6 +44,8 @@ return [
 			'type'       => 'xl-desktop',
 			'base'       => false,
 			'status'     => false,
+			'isVisible'  => true,
+			'force' 	 => true,
 			'label'      => __( 'Extra Large Desktop', 'blockera' ),
 			'settings'   => [
 				'min' => '1440px',
@@ -63,6 +67,8 @@ return [
 			'type'       => 'l-desktop',
 			'base'       => false,
 			'status'     => false,
+			'isVisible'  => true,
+			'force' 	 => true,
 			'label'      => __( 'Large Desktop', 'blockera' ),
 			'settings'   => [
 				'min' => '1280px',
@@ -84,6 +90,9 @@ return [
 			'type'       => 'desktop',
 			'base'       => true,
 			'status'     => true,
+			'isVisible'  => true,
+			'force' 	 => true,
+			'native' 	 => false,
 			'label'      => __( 'Desktop', 'blockera' ),
 			'settings'   => [
 				'min' => '',
@@ -104,6 +113,9 @@ return [
 			'type'       => 'tablet',
 			'base'       => false,
 			'status'     => true,
+			'isVisible'  => true,
+			'force' 	 => true,
+			'native' 	 => false,
 			'label'      => __( 'Tablet', 'blockera' ),
 			'settings'   => [
 				'min' => '',
@@ -124,6 +136,8 @@ return [
 			'type'       => 'mobile-landscape',
 			'base'       => false,
 			'status'     => false,
+			'isVisible'  => true,
+			'force' 	 => true,
 			'label'      => __( 'Mobile Landscape', 'blockera' ),
 			'settings'   => [
 				'min' => '',
@@ -145,6 +159,9 @@ return [
 			'type'       => 'mobile',
 			'base'       => false,
 			'status'     => true,
+			'isVisible'  => true,
+			'force' 	 => true,
+			'native' 	 => false,
 			'label'      => __( 'Mobile Portrait', 'blockera' ),
 			'settings'   => [
 				'min' => '',
