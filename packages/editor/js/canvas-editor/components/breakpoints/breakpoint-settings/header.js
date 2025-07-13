@@ -30,9 +30,11 @@ export default function ({
 	itemId,
 	onClick,
 	setOpen,
+	breakpoints,
 }: {
 	item: Object,
 	itemId: number,
+	breakpoints: Object,
 	onClick: (device: string) => void,
 	setOpen: (isOpen: boolean) => void,
 }): MixedElement {
@@ -64,8 +66,10 @@ export default function ({
 			>
 				<span className={controlInnerClassNames('header-icon')}>
 					<BreakpointIcon
+						context="admin"
 						name={item.type}
 						settings={item.settings}
+						breakpoints={breakpoints}
 						isDefault={item.isDefault}
 					/>
 				</span>

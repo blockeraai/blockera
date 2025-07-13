@@ -4,10 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { useMemo } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
@@ -62,16 +60,16 @@ export default function ({
 	onClick,
 	onChange,
 	breakpoints,
+	defaultValue,
 }: BreakpointSettingsComponentProps): MixedElement {
-	const { getBreakpoints } = select('blockera/editor');
-	const { getCurrentUser } = select('core');
-	const { id: userId } = getCurrentUser();
-
 	breakpoints = useMemo(() => {
 		return Object.fromEntries(
 			Object.entries(breakpoints).map(([key, value]) => [
 				key,
-				mergeObject(defaultRepeaterItemValue, value),
+				mergeObject(defaultRepeaterItemValue, {
+					...value,
+					native: value?.native || false,
+				}),
 			])
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,6 +85,7 @@ export default function ({
 		>
 			<RepeaterControl
 				id="breakpoints"
+				mode={'accordion'}
 				label={__('Responsive Breakpoints', 'blockera')}
 				disableRegenerateId={false}
 				isNativeSupport={true}
@@ -131,26 +130,12 @@ export default function ({
 					defaultRepeaterItemValue
 				)}
 				repeaterItemHeader={(props) => (
-					<Header {...{ ...props, onClick }} />
+					<Header {...{ ...props, onClick, breakpoints }} />
 				)}
-				repeaterItemChildren={Fields}
-				onChange={(value) => {
-					onChange('breakpoints', value);
-
-					apiFetch({
-						path: '/blockera/v1/users',
-						method: 'POST',
-						headers: {
-							'X-Blockera-Nonce': blockeraEditorNonce,
-						},
-						data: {
-							user_id: userId,
-							settings: {
-								breakpoints: value,
-							},
-						},
-					});
-				}}
+				repeaterItemChildren={(props) => (
+					<Fields {...{ ...props, breakpoints }} />
+				)}
+				onChange={onChange}
 				addNewButtonDataTest={'add-new-breakpoint'}
 				popoverClassName={controlClassNames('breakpoints-edit-popover')}
 				PromoComponent={({
@@ -171,7 +156,7 @@ export default function ({
 						/>
 					);
 				}}
-				defaultValue={getBreakpoints()}
+				defaultValue={defaultValue}
 			/>
 		</ControlContextProvider>
 	);

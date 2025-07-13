@@ -33,9 +33,11 @@ import { BreakpointIcon } from '../breakpoint-icon';
 export default function ({
 	item,
 	itemId,
+	breakpoints,
 }: {
 	item: Object,
 	itemId: number,
+	breakpoints: Object,
 }): MixedElement {
 	const {
 		controlInfo: { name: controlId },
@@ -57,8 +59,10 @@ export default function ({
 					<h4 style={{ margin: '0' }}>
 						<Flex gap="10" alignItems="center">
 							<BreakpointIcon
+								context="admin"
 								name={item.type}
 								settings={item.settings}
+								breakpoints={breakpoints}
 							/>
 							{__('Base Breakpoint', 'blockera')}
 						</Flex>

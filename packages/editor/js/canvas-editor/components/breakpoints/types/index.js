@@ -17,6 +17,7 @@ export type HandleOnChangeBreakpoints = (key: string, value: any) => void;
 
 export type BreakpointSettingsComponentProps = {
 	breakpoints: BreakpointTypes,
+	defaultValue: BreakpointTypes,
 	onClick: (device: string) => void,
 	onChange: HandleOnChangeBreakpoints,
 };

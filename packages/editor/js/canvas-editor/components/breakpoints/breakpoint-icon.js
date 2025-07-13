@@ -20,7 +20,10 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import type { TBreakpoint } from '../../../extensions/libs/block-card/block-states/types';
+import type {
+	TBreakpoint,
+	BreakpointTypes,
+} from '../../../extensions/libs/block-card/block-states/types';
 import {
 	isBaseBreakpoint,
 	getBreakpointLongDescription,
@@ -32,9 +35,13 @@ export function BreakpointIcon({
 	onClick,
 	settings,
 	className,
+	breakpoints,
 	isDefault = false,
+	context = 'canvas',
 	...props
 }: {
+	context: 'admin' | 'canvas',
+	breakpoints: BreakpointTypes,
 	isDefault?: boolean,
 	settings?: {
 		min: string,
@@ -50,8 +57,10 @@ export function BreakpointIcon({
 	className?: string,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
-	const { getBreakpoints } = select('blockera/editor');
-	const breakpoints = getBreakpoints();
+	if ('canvas' === context) {
+		const { getBreakpoints } = select('blockera/editor');
+		breakpoints = getBreakpoints();
+	}
 
 	if (isUndefined(breakpoints[name])) {
 		return <></>;

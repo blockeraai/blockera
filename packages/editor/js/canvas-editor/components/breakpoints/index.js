@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { select, dispatch, useDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
@@ -11,17 +10,15 @@ import { useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/icons';
-import { controlInnerClassNames, classNames } from '@blockera/classnames';
+import { Flex, ControlContextProvider } from '@blockera/controls';
 import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
-import { Flex, Popover, ControlContextProvider } from '@blockera/controls';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import { Preview } from '../preview';
 import PickedBreakpoints from './picked-breakpoints';
-import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
 import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
 import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
@@ -34,17 +31,13 @@ export const Breakpoints = ({
 	const {
 		setDeviceType,
 		setCanvasSettings,
-		updateBreakpoints,
 		updaterDeviceType,
 		updaterDeviceIndicator,
 	} = useDispatch('blockera/editor');
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
 	);
-	const [canvasSettings, updateCanvasSettings] = useState({
-		...getCanvasSettings(),
-		breakpoints: getBreakpoints(),
-	});
+	const canvasSettings = getCanvasSettings();
 	const [deviceType, updateDeviceType] = useState(getDeviceType());
 	const {
 		blockEditor: { getSelectedBlock },
@@ -154,25 +147,6 @@ export const Breakpoints = ({
 		updateSelectedBlock(device);
 	};
 
-	const handleOnChange = (key: string, value: any): void => {
-		if ('breakpoints' === key) {
-			for (const key in value) {
-				if ('' !== value[key].type) {
-					continue;
-				}
-
-				value[key].type = key;
-			}
-
-			updateBreakpoints(value);
-		}
-
-		updateCanvasSettings({
-			...canvasSettings,
-			[key]: value,
-		});
-	};
-
 	return (
 		<>
 			<ControlContextProvider
@@ -190,55 +164,16 @@ export const Breakpoints = ({
 					})}
 					justifyContent={'space-between'}
 				>
-					<div
-						className={controlInnerClassNames(
-							'blockera-breakpoints'
-						)}
-					>
-						<Icon
-							data-test={'blockera-breakpoints-settings-opener'}
-							icon="more-vertical"
-							iconSize="24"
-							onClick={() =>
-								handleOnChange(
-									'isOpenOtherBreakpoints',
-									!canvasSettings.isOpenOtherBreakpoints
-								)
-							}
-							className="blockera-breakpoints-settings-opener"
-						/>
-
-						{canvasSettings.isOpenOtherBreakpoints && (
-							<Popover
-								offset={10}
-								className={controlInnerClassNames(
-									'breakpoints-popover'
-								)}
-								placement={'bottom-end'}
-								title={__('Breakpoint Settings', 'blockera')}
-								onClose={() =>
-									updateCanvasSettings({
-										...canvasSettings,
-										isOpenSettings: false,
-										isOpenOtherBreakpoints: false,
-									})
-								}
-							>
-								<BreakpointSettings
-									onClick={handleOnClick}
-									onChange={handleOnChange}
-									breakpoints={canvasSettings.breakpoints}
-								/>
-							</Popover>
-						)}
-					</div>
+					<span style={{ width: '24px', height: '24px' }}>
+						{/* Space holder for canvas settings icon and popover. */}
+					</span>
 
 					<PickedBreakpoints
 						items={Object.fromEntries(
-							Object.entries(canvasSettings.breakpoints).filter(
+							Object.entries(getBreakpoints()).filter(
 								([key]) =>
-									canvasSettings.breakpoints[key].settings
-										.picked || key === getBaseBreakpoint()
+									getBreakpoints()[key].settings.picked ||
+									key === getBaseBreakpoint()
 							)
 						)}
 						onClick={handleOnClick}
@@ -259,3 +194,4 @@ export const Breakpoints = ({
 
 export * from './helpers';
 export * from './bootstrap';
+export { default as BreakpointsSettings } from './breakpoint-settings';

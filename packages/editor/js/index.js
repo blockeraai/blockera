@@ -9,6 +9,7 @@ export {
 	CanvasEditor,
 	isBaseBreakpoint,
 	getBaseBreakpoint,
+	BreakpointsSettings,
 	bootstrapBreakpoints,
 	bootstrapCanvasEditor,
 	registerCanvasEditorSettings,
