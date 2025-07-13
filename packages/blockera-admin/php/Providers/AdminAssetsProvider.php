@@ -181,6 +181,10 @@ class AdminAssetsProvider extends AssetsProvider {
 		$blockera_default_settings                           = blockera_core_config( 'panel.std' );
 		$blockera_default_settings['general']['breakpoints'] = $this->app->getEntity('breakpoints');
 
+		if (empty($blockera_settings['general']['breakpoints'])) {
+			$blockera_settings['general']['breakpoints'] = $blockera_default_settings['general']['breakpoints'];
+		}
+
 		return $this->telemetryInlineScripts() . 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
