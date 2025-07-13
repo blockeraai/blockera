@@ -57,7 +57,6 @@ const defaultRepeaterItemValue = {
 };
 
 export default function ({
-	onClick,
 	onChange,
 	breakpoints,
 	defaultValue,
@@ -130,7 +129,7 @@ export default function ({
 					defaultRepeaterItemValue
 				)}
 				repeaterItemHeader={(props) => (
-					<Header {...{ ...props, onClick, breakpoints }} />
+					<Header {...{ ...props, breakpoints }} />
 				)}
 				repeaterItemChildren={(props) => (
 					<Fields {...{ ...props, breakpoints }} />

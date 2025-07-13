@@ -22,20 +22,18 @@ import {
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint, prepValueForHeader } from '../helpers';
 import { BreakpointIcon } from '../breakpoint-icon';
+import { getBaseBreakpoint, prepValueForHeader } from '../helpers';
 
 export default function ({
 	item,
 	itemId,
-	onClick,
 	setOpen,
 	breakpoints,
 }: {
 	item: Object,
 	itemId: number,
 	breakpoints: Object,
-	onClick: (device: string) => void,
 	setOpen: (isOpen: boolean) => void,
 }): MixedElement {
 	const {
@@ -147,7 +145,6 @@ export default function ({
 									},
 								},
 							});
-							onClick(picked ? item.type : getBaseBreakpoint());
 						}}
 					/>
 				</ControlContextProvider>
