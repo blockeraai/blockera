@@ -95,3 +95,49 @@ if ( ! function_exists( 'blockera_get_admin_options' ) ) {
 		return \Blockera\DataEditor\Utility::arrayGet($options, $path);
 	}
 }
+
+if (! function_exists('blockera_update_breakpoints')) {
+
+    /**
+     * Update the breakpoints.
+     * Internal configuration synchronization for device-specific display settings.
+     *
+     * @param array $settings The settings.
+     * @param array $breakpoints The breakpoints.
+     *
+     * @return array
+     */
+    function blockera_update_breakpoints( array $settings, array $breakpoints): array {
+
+        foreach ($breakpoints as $key => $value) {
+
+            // Skip not native breakpoints.
+            if (in_array($key, [ 'desktop', 'tablet', 'mobile' ], true)) {
+                continue;
+            }
+
+            $breakpoints[ $key ]['native']             = true;
+            $breakpoints[ $key ]['status']             = false;
+            $breakpoints[ $key ]['settings']['picked'] = false;
+        }
+
+        if (! isset($settings['general']['breakpoints']) || $settings['general']['breakpoints'] === $breakpoints) {
+
+            return $breakpoints;
+        }
+
+        update_option(
+            'blockera_settings',
+            blockera_get_array_deep_merge(
+                $settings,
+                [
+                    'general' => [
+                        'breakpoints' => $breakpoints,
+                    ],
+                ]
+            )
+        );
+
+        return $breakpoints;
+    }
+}
