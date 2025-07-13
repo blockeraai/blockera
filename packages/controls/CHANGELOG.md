@@ -5,6 +5,7 @@
 
 ### Bug Fixes
 - Fixed an issue where items were not being properly removed when using the delete function in repeatable sections.
+- Fixed an issue where dragging items in collapsible sections would interfere with adjusting input values using drag controls.
 
 ### Improvements
 - Enhanced the user interface and experience for feature options and settings.

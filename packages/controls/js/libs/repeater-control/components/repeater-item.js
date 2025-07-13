@@ -142,10 +142,12 @@ const RepeaterItem = ({
 			<div
 				className={controlInnerClassNames(
 					'repeater-item',
-					'draggable',
-					isVisible ? ' is-active' : ' is-inactive'
+					isVisible ? ' is-active' : ' is-inactive',
+					{
+						draggable: !isOpen,
+					}
 				)}
-				draggable={true}
+				draggable={!isOpen}
 				onDragOver={handleDragOver}
 				onDragEnter={handleDragEnter}
 				onDragLeave={handleDragLeave}
