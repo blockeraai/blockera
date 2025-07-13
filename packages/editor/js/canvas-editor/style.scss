@@ -94,25 +94,12 @@
 	margin: 0;
 	overflow-x: scroll;
 
-	.blockera-control-blockera-breakpoints {
-		display: flex;
-		align-items: center;
-		cursor: pointer;
-	}
-
-	&.breakpoints-open,
 	&:hover {
 		background: #e0e0e0;
 
 		.blockera-component-breakpoint-icon {
 			--icon-outline-color: #e0e0e0;
 		}
-	}
-
-	.blockera-breakpoints-settings-opener:hover,
-	&.breakpoints-open .blockera-breakpoints-settings-opener {
-		color: var(--blockera-controls-primary-color);
-		fill: currentColor;
 	}
 
 	.blockera-component-breakpoint-icon {
