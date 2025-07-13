@@ -10,9 +10,9 @@ import { useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
+import { classNames } from '@blockera/classnames';
 import { Flex, ControlContextProvider } from '@blockera/controls';
 import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
-import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -23,7 +23,7 @@ import type { BreakpointsComponentProps } from './types';
 import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
 import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
 
-export const Breakpoints = ({
+export const CanvasEditor = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
@@ -37,7 +37,7 @@ export const Breakpoints = ({
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
 	);
-	const canvasSettings = getCanvasSettings();
+	const [canvasSettings] = useState(getCanvasSettings());
 	const [deviceType, updateDeviceType] = useState(getDeviceType());
 	const {
 		blockEditor: { getSelectedBlock },

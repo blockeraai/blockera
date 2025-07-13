@@ -12,9 +12,9 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { CanvasEditor } from './index';
 import { getTargets } from './helpers';
 import { STORE_NAME } from '../store';
+import { CanvasEditorApplication } from './index';
 import { IntersectionObserverRenderer } from './intersection-observer-renderer';
 import type { BreakpointTypes } from '../extensions/libs/block-card/block-states/types';
 
@@ -93,7 +93,7 @@ export const bootstrapCanvasEditor = (): void | Object => {
 						new IntersectionObserverRenderer(
 							header,
 							(): MixedElement => (
-								<CanvasEditor
+								<CanvasEditorApplication
 									target={document.querySelector(header)}
 								/>
 							),
