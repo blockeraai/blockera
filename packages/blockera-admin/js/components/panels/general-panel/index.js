@@ -13,12 +13,14 @@ import apiFetch from '@wordpress/api-fetch';
  */
 import { TabsContext, SettingsContext } from '@blockera/wordpress';
 import {
-	Button,
 	Flex,
+	Button,
 	ToggleControl,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { isEquals } from '@blockera/utils';
+import { default as BreakpointsSettings } from '@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings';
 
 /**
  * Internal dependencies
@@ -92,6 +94,60 @@ export const GeneralPanel = (): MixedElement => {
 			className={'blockera-settings-panel-container'}
 			gap={40}
 		>
+			<Flex direction={'column'} className={'blockera-settings-section'}>
+				<h3 className={'blockera-settings-general section-title'}>
+					<Icon
+						icon={'globe'}
+						library={'wp'}
+						iconSize={24}
+						style={{
+							color: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+
+					{__('Breakpoints Settings', 'blockera')}
+				</h3>
+
+				<p className={'blockera-settings-general section-desc'}>
+					{__(
+						'Customize the breakpoints for your website.',
+						'blockera'
+					)}
+				</p>
+
+				<div
+					className={'blockera-settings-general control-wrapper'}
+					aria-label={__(
+						'Opt out of PRO hints and promotions',
+						'blockera'
+					)}
+				>
+					<BreakpointsSettings
+						onChange={(newValue) => {
+							if (
+								isEquals(generalSettings.breakpoints, newValue)
+							) {
+								return;
+							}
+
+							setHasUpdates(true);
+
+							setSettings({
+								...settings,
+								general: {
+									...generalSettings,
+									breakpoints: newValue,
+								},
+							});
+						}}
+						breakpoints={generalSettings.breakpoints}
+						defaultValue={
+							defaultSettings?.general?.breakpoints || {}
+						}
+					/>
+				</div>
+			</Flex>
+
 			<BlockVisibility
 				config={config}
 				settings={settings}
