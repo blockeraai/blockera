@@ -5,8 +5,9 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useContext, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
+import { detailedDiff } from 'deep-object-diff';
+import { useContext, useState, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -19,7 +20,6 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { isEquals } from '@blockera/utils';
 import { default as BreakpointsSettings } from '@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings';
 
 /**
@@ -88,6 +88,35 @@ export const GeneralPanel = (): MixedElement => {
 			});
 	};
 
+	const memoizedCallback = useCallback(
+		(newValue) => {
+			const {
+				added: savedAdded,
+				deleted: savedDeleted,
+				updated: savedUpdated,
+			} = detailedDiff(
+				window.blockeraSettings.general.breakpoints,
+				newValue
+			);
+
+			setHasUpdates(
+				Object.keys(savedAdded).length > 0 ||
+					Object.keys(savedDeleted).length > 0 ||
+					Object.keys(savedUpdated).length > 0
+			);
+
+			setSettings({
+				...settings,
+				general: {
+					...generalSettings,
+					breakpoints: newValue,
+				},
+			});
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[settings, generalSettings]
+	);
+
 	return (
 		<Flex
 			direction={'column'}
@@ -95,7 +124,11 @@ export const GeneralPanel = (): MixedElement => {
 			gap={40}
 		>
 			<Flex direction={'column'} className={'blockera-settings-section'}>
-				<h3 className={'blockera-settings-general section-title'}>
+				<h3
+					className={
+						'blockera-settings-general section-title breakpoints-wrapper'
+					}
+				>
 					<Icon
 						icon={'globe'}
 						library={'wp'}
@@ -123,23 +156,7 @@ export const GeneralPanel = (): MixedElement => {
 					)}
 				>
 					<BreakpointsSettings
-						onChange={(newValue) => {
-							if (
-								isEquals(generalSettings.breakpoints, newValue)
-							) {
-								return;
-							}
-
-							setHasUpdates(true);
-
-							setSettings({
-								...settings,
-								general: {
-									...generalSettings,
-									breakpoints: newValue,
-								},
-							});
-						}}
+						onChange={memoizedCallback}
 						breakpoints={generalSettings.breakpoints}
 						defaultValue={
 							defaultSettings?.general?.breakpoints || {}

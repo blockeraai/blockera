@@ -1,3 +1,5 @@
+@import "./components/breakpoints/breakpoint-settings/style.scss";
+
 .blockera-editor {
 
 	.editor-header__settings > a[aria-label="View Page"], // WP < 6.6.2
@@ -40,46 +42,6 @@
 
 	.components-popover__content {
 		min-width: 320px !important;
-	}
-}
-
-.blockera-control-breakpoints-repeater {
-
-	.blockera-control-group-header {
-
-		&:hover {
-
-			.blockera-control-breakpoint-header {
-
-				&.is-deletable {
-					width: 91.5%;
-				}
-			}
-		}
-	}
-
-	.blockera-component-feature-wrapper + .blockera-component-feature-wrapper {
-		margin-top: 0 !important;
-	}
-
-	.blockera-control-breakpoint-header {
-		align-items: center;
-		width: 100%;
-
-		.components-toggle-control {
-
-			> div {
-
-				> div {
-					gap: 0;
-				}
-			}
-		}
-
-		.blockera-control-header-values {
-			margin-left: 0 !important;
-			color: #a5a5a5;
-		}
 	}
 }
 
@@ -153,137 +115,6 @@
 
 	&.is-disabled-preview-button {
 		opacity: 0.3;
-	}
-}
-
-.blockera-component-breakpoint-icon {
-	width: 24px;
-	height: 24px;
-	position: relative;
-	transition: var(--blockera-controls-transition);
-	--icon-outline-color: #f0f0f0;
-
-	.blockera-component-base-breakpoint-icon {
-		position: absolute;
-		left: -3px;
-		top: -2px;
-		stroke-width: 5px;
-		stroke: var(--icon-outline-color);
-		paint-order: stroke;
-	}
-
-	.blockera-component-custom-breakpoint-item {
-		position: absolute;
-		left: -1px;
-		top: -1px;
-		stroke-width: 5px;
-		stroke: var(--icon-outline-color);
-		paint-order: stroke;
-	}
-
-	.blockera-component-change-indicator {
-		position: absolute;
-		top: 2px;
-		right: 2px;
-		--indicator-size: 4px;
-		--indicator-outline-color: var(--icon-outline-color);
-	}
-
-	&.breakpoint-icon-device-2xl-desktop {
-
-		.blockera-component-custom-breakpoint-item {
-			left: -3px;
-		}
-	}
-
-	&.breakpoint-icon-device-xl-desktop {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -5px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 0;
-		}
-
-		.blockera-component-custom-breakpoint-item {
-			left: -1px;
-		}
-	}
-
-	&.breakpoint-icon-device-l-desktop {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -3px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 2px;
-		}
-
-		.blockera-component-custom-breakpoint-item {
-			left: 0;
-		}
-	}
-
-	&.breakpoint-icon-device-desktop {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -3px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 2px;
-		}
-
-		.blockera-component-custom-breakpoint-item {
-			left: -1px;
-		}
-	}
-
-	&.breakpoint-icon-device-tablet {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -1px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 3px;
-		}
-
-		.blockera-component-custom-breakpoint-item {
-			left: 1px;
-		}
-	}
-
-	&.breakpoint-icon-device-mobile {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -1px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 4px;
-		}
-
-		.blockera-component-custom-breakpoint-item {
-			left: 2px;
-		}
-	}
-
-	&.breakpoint-icon-device-mobile-landscape {
-
-		.blockera-component-base-breakpoint-icon {
-			left: -3px;
-		}
-
-		.blockera-component-change-indicator {
-			right: 3px;
-		}
-
-		.blockera-component-custom-breakpoint-item {
-			left: -1px;
-		}
 	}
 }
 
