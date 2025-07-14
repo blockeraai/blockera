@@ -14,7 +14,7 @@ import {
 	componentClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
-import { Tooltip, Flex } from '@blockera/controls';
+import { Tooltip, Flex, ConditionalWrapper } from '@blockera/controls';
 import { isUndefined } from '@blockera/utils';
 
 /**
@@ -38,6 +38,7 @@ export function BreakpointIcon({
 	breakpoints,
 	isDefault = false,
 	context = 'canvas',
+	tooltip = true,
 	...props
 }: {
 	context: 'admin' | 'canvas',
@@ -55,6 +56,7 @@ export function BreakpointIcon({
 	},
 	name: TBreakpoint | string,
 	className?: string,
+	tooltip?: boolean,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
 	if ('canvas' === context) {
@@ -67,74 +69,81 @@ export function BreakpointIcon({
 	}
 
 	return (
-		<Tooltip
-			width="250px"
-			style={{ '--tooltip-padding': '16px' }}
-			text={
-				<>
-					<h5>{breakpoints[name].label}</h5>
+		<ConditionalWrapper
+			condition={tooltip}
+			wrapper={(children) => (
+				<Tooltip
+					width="250px"
+					style={{ '--tooltip-padding': '16px' }}
+					text={
+						<>
+							<h5>{breakpoints[name].label}</h5>
 
-					{isBaseBreakpoint(name) ? (
-						<Flex
-							direction="row"
-							gap="2px"
-							justifyContent="flex-start"
-							alignItems="center"
-						>
-							<Icon
-								icon="asterisk"
-								iconSize="20"
-								style={
-									isRTL()
-										? { marginRight: '-5px' }
-										: { marginLeft: '-5px' }
-								}
-							/>
-							{getBreakpointShortDescription(name)}
-						</Flex>
-					) : (
-						<p>{getBreakpointShortDescription(name)}</p>
-					)}
+							{isBaseBreakpoint(name) ? (
+								<Flex
+									direction="row"
+									gap="2px"
+									justifyContent="flex-start"
+									alignItems="center"
+								>
+									<Icon
+										icon="asterisk"
+										iconSize="20"
+										style={
+											isRTL()
+												? { marginRight: '-5px' }
+												: { marginLeft: '-5px' }
+										}
+									/>
+									{getBreakpointShortDescription(name)}
+								</Flex>
+							) : (
+								<p>{getBreakpointShortDescription(name)}</p>
+							)}
 
-					{!isDefault && (
-						<Flex
-							direction="row"
-							gap="2px"
-							justifyContent="flex-start"
-							alignItems="center"
-						>
-							<Icon
-								icon="gear"
-								iconSize="18"
-								style={
-									isRTL()
-										? { marginRight: '-5px' }
-										: { marginLeft: '-5px' }
-								}
-							/>
-							{__('Custom breakpoint', 'blockera')}
-						</Flex>
-					)}
+							{!isDefault && (
+								<Flex
+									direction="row"
+									gap="2px"
+									justifyContent="flex-start"
+									alignItems="center"
+								>
+									<Icon
+										icon="gear"
+										iconSize="18"
+										style={
+											isRTL()
+												? { marginRight: '-5px' }
+												: { marginLeft: '-5px' }
+										}
+									/>
+									{__('Custom breakpoint', 'blockera')}
+								</Flex>
+							)}
 
-					<p
-						style={{
-							color: '#b0b0b0',
-						}}
-					>
-						{getBreakpointLongDescription(name)}
-					</p>
+							<p
+								style={{
+									color: '#b0b0b0',
+								}}
+							>
+								{getBreakpointLongDescription(name)}
+							</p>
 
-					{isBaseBreakpoint(name) && (
-						<p
-							style={{
-								color: '#b0b0b0',
-							}}
-						>
-							{__('Start your styling here.', 'blockera')}
-						</p>
-					)}
-				</>
-			}
+							{isBaseBreakpoint(name) && (
+								<p
+									style={{
+										color: '#b0b0b0',
+									}}
+								>
+									{__('Start your styling here.', 'blockera')}
+								</p>
+							)}
+						</>
+					}
+				>
+					{children}
+				</Tooltip>
+			)}
 		>
 			<div
 				className={componentClassNames(
@@ -185,6 +194,6 @@ export function BreakpointIcon({
 
 				{/* <ChangeIndicator isChanged={true} /> */}
 			</div>
-		</Tooltip>
+		</ConditionalWrapper>
 	);
 }

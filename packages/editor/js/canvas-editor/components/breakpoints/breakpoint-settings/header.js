@@ -61,6 +61,7 @@ export default function ({
 					settings={item.settings}
 					breakpoints={breakpoints}
 					isDefault={item.isDefault}
+					tooltip={false}
 				/>
 			</span>
 
