@@ -99,6 +99,7 @@ function IconControl({
 	};
 
 	const defaultIconState = {
+		id,
 		currentIcon,
 		dispatch: currentIconDispatch,
 		handleIconSelect,
