@@ -48,10 +48,7 @@ export default function ({
 				__('Item %s', 'blockera'),
 				itemId
 			)}
-			onClick={(event) => {
-				event.stopPropagation();
-				setOpen(true);
-			}}
+			onClick={() => setOpen(true)}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
 				<BreakpointIcon
