@@ -53,7 +53,7 @@ export function BreakpointIcon({
 		},
 		picked: boolean,
 	},
-	name: TBreakpoint,
+	name: TBreakpoint | string,
 	className?: string,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {

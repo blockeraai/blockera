@@ -3,42 +3,31 @@
 
 	.blockera-control-group-header {
 
+		.blockera-control-header-label {
+			display: flex;
+			gap: 15px;
+			font-weight: 500;
+
+			span {
+				opacity: 0.7;
+			}
+		}
+
 		.blockera-control-toggle {
-			width: 12%;
+			width: 38px;
 		}
 
 		&:hover {
 
-			.blockera-control-breakpoint-header {
-
-				&.is-deletable {
-					width: 91.5%;
-				}
+			.blockera-control-action-buttons:not(:empty) {
+				position: absolute;
+				right: 70px;
 			}
-		}
-	}
 
-	.blockera-component-feature-wrapper + .blockera-component-feature-wrapper {
-		margin-top: 0 !important;
-	}
-
-	.blockera-control-breakpoint-header {
-		align-items: center;
-		width: 100%;
-
-		.components-toggle-control {
-
-			>div {
-
-				>div {
-					gap: 0;
-				}
+			.blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
+				opacity: 1 !important;
+				visibility: visible !important;
 			}
-		}
-
-		.blockera-control-header-values {
-			margin-left: 0 !important;
-			color: #a5a5a5;
 		}
 	}
 }
