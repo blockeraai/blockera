@@ -36,7 +36,6 @@ export default function ({
 }: {
 	item: Object,
 	itemId: number,
-	breakpoints: Object,
 }): MixedElement {
 	const {
 		controlInfo: { name: controlId },

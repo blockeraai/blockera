@@ -140,12 +140,8 @@ const BreakpointsSettings = memo(
 							'blockera.breakpoints.defaultRepeaterItemValue',
 							defaultRepeaterItemValue
 						)}
-						repeaterItemHeader={(props) => (
-							<Header {...{ ...props, breakpoints }} />
-						)}
-						repeaterItemChildren={(props) => (
-							<Fields {...{ ...props, breakpoints }} />
-						)}
+						repeaterItemHeader={Header}
+						repeaterItemChildren={Fields}
 						onChange={onChange}
 						addNewButtonDataTest={'add-new-breakpoint'}
 						popoverClassName={controlClassNames(
@@ -189,9 +185,6 @@ const BreakpointsSettings = memo(
 				</BaseControl>
 			</ControlContextProvider>
 		);
-	},
-	() => {
-		return true;
 	}
 );
 

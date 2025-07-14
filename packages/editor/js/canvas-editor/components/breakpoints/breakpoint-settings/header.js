@@ -28,18 +28,17 @@ export default function ({
 	item,
 	itemId,
 	setOpen,
-	breakpoints,
 }: {
 	item: Object,
 	itemId: string,
-	breakpoints: Object,
 	setOpen: (isOpen: boolean) => void,
 }): MixedElement {
 	const {
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-	const { onChange, repeaterId, valueCleanup } = useContext(RepeaterContext);
+	const { repeaterItems, onChange, repeaterId, valueCleanup } =
+		useContext(RepeaterContext);
 
 	return (
 		<div
@@ -59,7 +58,7 @@ export default function ({
 					context="admin"
 					name={itemId}
 					settings={item.settings}
-					breakpoints={breakpoints}
+					breakpoints={repeaterItems}
 					isDefault={item.isDefault}
 					tooltip={false}
 				/>
