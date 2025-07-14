@@ -65,7 +65,7 @@ export default function ({
 				<span className={controlInnerClassNames('header-icon')}>
 					<BreakpointIcon
 						context="admin"
-						name={item.type}
+						name={itemId}
 						settings={item.settings}
 						breakpoints={breakpoints}
 						isDefault={item.isDefault}
