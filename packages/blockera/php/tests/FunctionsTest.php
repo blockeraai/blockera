@@ -171,6 +171,9 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 					'type'       => 'desktop',
 					'base'       => true,
 					'status'     => true,
+					'isVisible' => true,
+					'force' => true,
+					'native' => false,
 					'label'      => __( 'Desktop', 'blockera' ),
 					'settings'   => [
 						'min' => '',
@@ -186,9 +189,6 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 					'attributes' => [],
 					'deletable' => false,
 					'isDefault' => true,
-					'isVisible' => true,
-					'format' => true,
-					'native' => false,
 				],
 			],
 			[
