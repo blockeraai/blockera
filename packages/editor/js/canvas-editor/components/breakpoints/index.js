@@ -162,12 +162,8 @@ export const CanvasEditor = ({
 						'breakpoints-open':
 							canvasSettings.isOpenOtherBreakpoints,
 					})}
-					justifyContent={'space-between'}
+					justifyContent={'center'}
 				>
-					<span style={{ width: '24px', height: '24px' }}>
-						{/* Space holder for canvas settings icon and popover. */}
-					</span>
-
 					<PickedBreakpoints
 						items={Object.fromEntries(
 							Object.entries(getBreakpoints()).filter(
@@ -180,10 +176,6 @@ export const CanvasEditor = ({
 						updateBlock={updateSelectedBlock}
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
-
-					<span style={{ width: '24px', height: '24px' }}>
-						{/* Space holder for canvas settings icon and popover. */}
-					</span>
 				</Flex>
 
 				<Preview />

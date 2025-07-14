@@ -169,12 +169,12 @@ export default function ({
 
 	// Calculate gap based on number of breakpoints
 	const getGap = () => {
-		if (breakpoints.length >= 5) {
+		if (breakpoints.length >= 7) {
 			return '5px';
 		}
 
-		if (breakpoints.length > 3) {
-			return '10px';
+		if (breakpoints.length >= 5) {
+			return '8px';
 		}
 
 		return '12px';

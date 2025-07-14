@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, isRTL } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useContext } from '@wordpress/element';
 
@@ -22,18 +22,17 @@ import {
 	useControlContext,
 	NoticeControl,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { iconsOptions } from './icons';
 import { getBaseBreakpoint } from '../helpers';
-import { BreakpointIcon } from '../breakpoint-icon';
 
 export default function ({
 	item,
 	itemId,
-	breakpoints,
 }: {
 	item: Object,
 	itemId: number,
@@ -48,21 +47,23 @@ export default function ({
 	return (
 		<>
 			{itemId === getBaseBreakpoint() && (
-				<Flex
-					direction="column"
-					gap="5px"
-					className="base-breakpoint-content"
-					style={{
-						marginBottom: '15px',
-					}}
-				>
+				<NoticeControl type="information">
 					<h4 style={{ margin: '0' }}>
-						<Flex gap="10" alignItems="center">
-							<BreakpointIcon
-								context="admin"
-								name={item.type}
-								settings={item.settings}
-								breakpoints={breakpoints}
+						<Flex gap="2px" alignItems="center">
+							<Icon
+								icon="asterisk"
+								iconSize="20"
+								style={
+									isRTL()
+										? {
+												marginRight: '-5px',
+												fill: 'currentColor',
+										  }
+										: {
+												marginLeft: '-5px',
+												fill: 'currentColor',
+										  }
+								}
 							/>
 							{__('Base Breakpoint', 'blockera')}
 						</Flex>
@@ -73,7 +74,7 @@ export default function ({
 							'blockera'
 						)}
 					</p>
-				</Flex>
+				</NoticeControl>
 			)}
 
 			{itemId !== getBaseBreakpoint() && (
@@ -136,6 +137,7 @@ export default function ({
 						color: 'rgb(148 148 148)',
 						margin: '8px 0 0',
 						fontSize: '12px',
+						textAlign: 'right',
 					}}
 				>
 					{__('ID: ', 'blockera')}
@@ -216,6 +218,54 @@ export default function ({
 							aria-label={__('Max Width', 'blockera')}
 						/>
 					</Grid>
+
+					{itemId !== getBaseBreakpoint() && (
+						<>
+							{item.settings.max && !item.settings.min && (
+								<BaseControl columns="columns-1" label="">
+									<NoticeControl type="information">
+										{__(
+											'Smaller screen sizes inherit style from this breakpoint.',
+											'blockera'
+										)}
+									</NoticeControl>
+								</BaseControl>
+							)}
+
+							{item.settings.min && !item.settings.max && (
+								<BaseControl columns="columns-1" label="">
+									<NoticeControl type="information">
+										{__(
+											'Larger screen sizes inherit style from this breakpoint.',
+											'blockera'
+										)}
+									</NoticeControl>
+								</BaseControl>
+							)}
+
+							{item.settings.min && item.settings.max && (
+								<BaseControl columns="columns-1" label="">
+									<NoticeControl type="information">
+										{__(
+											'Screen sizes between min and max width inherit style from this breakpoint.',
+											'blockera'
+										)}
+									</NoticeControl>
+								</BaseControl>
+							)}
+
+							{!item.settings.min && !item.settings.max && (
+								<BaseControl columns="columns-1" label="">
+									<NoticeControl type="error">
+										{__(
+											'Please set min or max width for this breakpoint.',
+											'blockera'
+										)}
+									</NoticeControl>
+								</BaseControl>
+							)}
+						</>
+					)}
 				</BaseControl>
 			)}
 
@@ -309,50 +359,6 @@ export default function ({
 					/>
 				)}
 			</BaseControl>
-
-			{item.settings.max && !item.settings.min && (
-				<BaseControl columns="columns-1" label="">
-					<NoticeControl type="information">
-						{__(
-							'Smaller screen sizes inherit style from this breakpoint.',
-							'blockera'
-						)}
-					</NoticeControl>
-				</BaseControl>
-			)}
-
-			{item.settings.min && !item.settings.max && (
-				<BaseControl columns="columns-1" label="">
-					<NoticeControl type="information">
-						{__(
-							'Larger screen sizes inherit style from this breakpoint.',
-							'blockera'
-						)}
-					</NoticeControl>
-				</BaseControl>
-			)}
-
-			{item.settings.min && item.settings.max && (
-				<BaseControl columns="columns-1" label="">
-					<NoticeControl type="information">
-						{__(
-							'Screen sizes between min and max width inherit style from this breakpoint.',
-							'blockera'
-						)}
-					</NoticeControl>
-				</BaseControl>
-			)}
-
-			{!item.settings.min && !item.settings.max && (
-				<BaseControl columns="columns-1" label="">
-					<NoticeControl type="error">
-						{__(
-							'Please set min or max width for this breakpoint.',
-							'blockera'
-						)}
-					</NoticeControl>
-				</BaseControl>
-			)}
 		</>
 	);
 }
