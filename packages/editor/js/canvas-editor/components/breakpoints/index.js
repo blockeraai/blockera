@@ -47,11 +47,14 @@ export const CanvasEditor = ({
 	} = useStoreDispatchers();
 
 	useEffect(() => {
+		const iframe = getIframe();
+
 		// Get the editor wrapper (body element of the editor iframe).
 		let editorWrapper = document.querySelector('.editor-styles-wrapper');
 
 		if (!editorWrapper) {
 			editorWrapper = getIframeTag('.editor-styles-wrapper');
+			iframe.style.margin = '0 auto';
 		}
 
 		if (editorWrapper) {
@@ -66,14 +69,12 @@ export const CanvasEditor = ({
 				...getBreakpoint(deviceType),
 			};
 
-			const iframe = getIframe();
-
 			// Add base canvas class.
 			if (!editorWrapper.classList.contains('blockera-canvas')) {
 				editorWrapper.classList.add('blockera-canvas');
 			}
 
-			// Reset styles for base breakpoints (desktop, tablet, mobile).
+			// Reset styles for base breakpoint.
 			if (isBaseBreakpoint(deviceType)) {
 				if (editorWrapper.classList.contains('preview-margin')) {
 					editorWrapper.style.width = '100%';
@@ -116,20 +117,17 @@ export const CanvasEditor = ({
 
 					// Scale down non-base breakpoints for better preview.
 					if (deviceType !== getBaseBreakpoint()) {
-						iframe.style.transform = 'scale(0.8)';
 						iframe.style.transformOrigin = '50% 50%'; // Center both horizontally and vertically.
-						editorWrapper.style.transform = 'scale(0.8)';
 						editorWrapper.style.transformOrigin = '50% 50%'; // Center both horizontally and vertically.
 
 						iframe.parentElement.style.overflowX = 'auto';
 					} else {
-						iframe.style.transform = 'scale(1)';
-						editorWrapper.style.transform = 'scale(1)';
+						iframe.parentElement.style.overflowX = 'none';
 					}
 
 					// Center the preview.
 					editorWrapper.style.margin = '0 auto';
-					iframe.style.margin = '0 auto';
+					iframe.style.margin = '50px auto';
 				}
 			}
 		}
