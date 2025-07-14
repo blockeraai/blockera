@@ -47,15 +47,15 @@ export const CanvasEditor = ({
 	} = useStoreDispatchers();
 
 	useEffect(() => {
-		let editorWrapper: Object = document.querySelector(
-			'.editor-styles-wrapper'
-		);
+		// Get the editor wrapper (body element of the editor iframe).
+		let editorWrapper = document.querySelector('.editor-styles-wrapper');
 
 		if (!editorWrapper) {
 			editorWrapper = getIframeTag('.editor-styles-wrapper');
 		}
 
 		if (editorWrapper) {
+			// Get breakpoint settings for current device.
 			const {
 				settings: { min, max },
 			} = {
@@ -65,46 +65,71 @@ export const CanvasEditor = ({
 				},
 				...getBreakpoint(deviceType),
 			};
+
 			const iframe = getIframe();
 
+			// Add base canvas class.
 			if (!editorWrapper.classList.contains('blockera-canvas')) {
 				editorWrapper.classList.add('blockera-canvas');
 			}
 
-			// We try to clean up additional styles added from our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile')
-			// of iframe and editor styles wrapper elements of post|site editor.
-			if (
-				isBaseBreakpoint(deviceType) &&
-				editorWrapper.classList.contains('preview-margin')
-			) {
-				editorWrapper.style.minWidth = '100%';
-				editorWrapper.style.maxWidth = '100%';
-				editorWrapper.style.removeProperty('margin');
-				editorWrapper.classList.remove('preview-margin');
-				editorWrapper.parentElement.style.removeProperty('background');
+			// Reset styles for base breakpoints (desktop, tablet, mobile).
+			if (isBaseBreakpoint(deviceType)) {
+				if (editorWrapper.classList.contains('preview-margin')) {
+					editorWrapper.style.width = '100%';
+					editorWrapper.style.minWidth = '100%';
+					editorWrapper.style.maxWidth = '100%';
+					editorWrapper.style.margin = '';
+					editorWrapper.style.transform = '';
+					editorWrapper.classList.remove('preview-margin');
+					editorWrapper.parentElement.style.background = '';
 
-				if (iframe) {
-					iframe.style.removeProperty('min-width');
-					iframe.style.removeProperty('max-width');
-					iframe.parentElement.style.removeProperty('background');
+					if (iframe) {
+						iframe.style.width = '100%';
+						iframe.style.minWidth = '';
+						iframe.style.maxWidth = '';
+						iframe.style.transform = '';
+						iframe.parentElement.style.background = '';
+					}
 				}
 			}
-			// We try to set our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile') settings into,
-			// iframe element as dimensions with preview margin style.
-			else if (!['desktop', 'tablet', 'mobile'].includes(deviceType)) {
+			// Apply custom breakpoint styles.
+			else {
+				// Add preview margin class.
+				if (!editorWrapper.classList.contains('preview-margin')) {
+					editorWrapper.classList.add('preview-margin');
+				}
+
 				if (iframe) {
+					// Set width constraints based on breakpoint settings.
 					if (min && max) {
+						iframe.style.width = max;
 						iframe.style.minWidth = min;
 						iframe.style.maxWidth = max;
 					} else if (min) {
+						iframe.style.width = min;
 						iframe.style.minWidth = min;
 					} else if (max) {
+						iframe.style.width = max;
 						iframe.style.maxWidth = max;
 					}
-				}
 
-				if (!editorWrapper.classList.contains('preview-margin')) {
-					editorWrapper.classList.add('preview-margin');
+					// Scale down non-base breakpoints for better preview.
+					if (deviceType !== getBaseBreakpoint()) {
+						iframe.style.transform = 'scale(0.8)';
+						iframe.style.transformOrigin = '50% 50%'; // Center both horizontally and vertically.
+						editorWrapper.style.transform = 'scale(0.8)';
+						editorWrapper.style.transformOrigin = '50% 50%'; // Center both horizontally and vertically.
+
+						iframe.parentElement.style.overflowX = 'auto';
+					} else {
+						iframe.style.transform = 'scale(1)';
+						editorWrapper.style.transform = 'scale(1)';
+					}
+
+					// Center the preview.
+					editorWrapper.style.margin = '0 auto';
+					iframe.style.margin = '0 auto';
 				}
 			}
 		}
