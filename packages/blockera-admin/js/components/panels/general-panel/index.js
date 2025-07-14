@@ -130,8 +130,8 @@ export const GeneralPanel = (): MixedElement => {
 					}
 				>
 					<Icon
-						icon={'globe'}
-						library={'wp'}
+						icon={'responsive-breakpoints'}
+						library={'ui'}
 						iconSize={24}
 						style={{
 							color: 'var(--blockera-controls-primary-color)',
@@ -143,7 +143,7 @@ export const GeneralPanel = (): MixedElement => {
 
 				<p className={'blockera-settings-general section-desc'}>
 					{__(
-						'Customize the breakpoints for your website.',
+						'Adjust the breakpoints used to preview and design for different devices. These settings help you build layouts that adapt smoothly across all screen sizes.',
 						'blockera'
 					)}
 				</p>
