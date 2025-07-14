@@ -48,6 +48,7 @@ const defaultRepeaterItemValue = {
 			library: '',
 			uploadSVG: '',
 		},
+		iconType: 'library',
 		picked: false,
 	},
 	native: true,

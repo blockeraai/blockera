@@ -358,6 +358,20 @@ export default function ({
 						}
 					/>
 				)}
+
+				{((item.settings.iconType === 'library' &&
+					item.settings.icon.icon === '') ||
+					(item.settings.iconType === 'custom' &&
+						item.settings.icon.icon === '')) && (
+					<BaseControl columns="columns-1" label="">
+						<NoticeControl type="error">
+							{__(
+								'Please choose an icon for this breakpoint.',
+								'blockera'
+							)}
+						</NoticeControl>
+					</BaseControl>
+				)}
 			</BaseControl>
 		</>
 	);
