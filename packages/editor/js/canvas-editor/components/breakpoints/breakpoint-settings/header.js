@@ -49,8 +49,15 @@ export default function ({
 				itemId
 			)}
 			onClick={(event) => {
-				event.stopPropagation();
-				setOpen(true);
+				// Check if the click was on an input element and stop propagation or open the repeater item
+				if (
+					event.target.tagName === 'INPUT' ||
+					event.target.closest('input')
+				) {
+					event.stopPropagation();
+				} else {
+					setOpen(true);
+				}
 			}}
 		>
 			<span className={controlInnerClassNames('header-icon')}>
