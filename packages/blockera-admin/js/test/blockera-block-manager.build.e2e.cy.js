@@ -210,48 +210,43 @@ describe('Block Manager Settings Testing ...', () => {
 
 		cy.getByDataTest('text-category=enable').click({ force: true });
 
-		cy.getByDataTest('update-settings').as('update');
+		cy.wait(2000);
 
-		cy.get('@update').then(() => {
-			cy.get('@update').click();
-			cy.wait(2000);
+		createPost();
 
-			createPost();
+		appendBlocks(textBlocksCode);
 
-			appendBlocks(textBlocksCode);
+		cy.getBlock('core/details').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/details').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/code').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/code').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/heading').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/heading').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/list').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/list').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/list-item').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/list-item').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/paragraph').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/paragraph').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/preformatted').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/preformatted').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/pullquote').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/pullquote').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/quote').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/quote').first().click();
-			cy.getByAriaLabel('Add New Background');
+		cy.getBlock('core/table').first().click();
+		cy.getByAriaLabel('Add New Background');
 
-			cy.getBlock('core/table').first().click();
-			cy.getByAriaLabel('Add New Background');
-
-			cy.getBlock('core/verse').first().click();
-			cy.getByAriaLabel('Add New Background');
-		});
+		cy.getBlock('core/verse').first().click();
+		cy.getByAriaLabel('Add New Background');
 	});
 });
