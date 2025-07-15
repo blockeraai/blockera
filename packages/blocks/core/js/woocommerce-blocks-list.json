@@ -683,6 +683,114 @@
 		{
 			"name": "woocommerce/product-filter-chips",
 			"title": "Product Filter Chips"
+		},
+		{
+			"name": "woocommerce/product-description",
+			"title": "Product Description"
+		},
+		{
+			"name": "woocommerce/product-specifications",
+			"title": "Product Specifications"
+		},
+		{
+			"name": "woocommerce/accordion-group",
+			"title": "Accordion Group"
+		},
+		{
+			"name": "woocommerce/accordion-item",
+			"title": "Accordion Item"
+		},
+		{
+			"name": "woocommerce/accordion-panel",
+			"title": "Accordion Panel"
+		},
+		{
+			"name": "woocommerce/accordion-header",
+			"title": "Accordion Header"
+		},
+		{
+			"name": "woocommerce/product-review-rating",
+			"title": "Product Review Rating"
+		},
+		{
+			"name": "woocommerce/product-reviews-title",
+			"title": "Product Reviews Title"
+		},
+		{
+			"name": "woocommerce/product-review-form",
+			"title": "Product Review Form"
+		},
+		{
+			"name": "woocommerce/product-review-date",
+			"title": "Product Review Date"
+		},
+		{
+			"name": "woocommerce/product-review-content",
+			"title": "Product Review Content"
+		},
+		{
+			"name": "woocommerce/product-review-author-name",
+			"title": "Product Review Author Name"
+		},
+		{
+			"name": "woocommerce/product-reviews-pagination",
+			"title": "Product Reviews Pagination"
+		},
+		{
+			"name": "woocommerce/product-reviews-pagination-next",
+			"title": "Product Reviews Pagination Next"
+		},
+		{
+			"name": "woocommerce/product-reviews-pagination-previous",
+			"title": "Product Reviews Pagination Previous"
+		},
+		{
+			"name": "woocommerce/product-reviews-pagination-numbers",
+			"title": "Product Reviews Pagination Numbers"
+		},
+		{
+			"name": "woocommerce/product-review-template",
+			"title": "Product Review Template"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options",
+			"title": "Add to Cart with Options"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-quantity-selector",
+			"title": "Add to Cart with Options Quantity Selector"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-variation-selector",
+			"title": "Add to Cart with Options Variation Selector"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-variation-selector-attribute",
+			"title": "Add to Cart with Options Variation Selector Attribute"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-variation-selector-attribute-name",
+			"title": "Add to Cart with Options Variation Selector Attribute Name"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-variation-selector-attribute-options",
+			"title": "Add to Cart with Options Variation Selector Attribute Options"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-grouped-product-selector",
+			"title": "Add to Cart with Options Grouped Product Selector"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-grouped-product-item",
+			"title": "Add to Cart with Options Grouped Product Item"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-grouped-product-item-selector",
+			"title": "Add to Cart with Options Grouped Product Item Selector"
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-grouped-product-item-label",
+			"title": "Add to Cart with Options Grouped Product Item Label"
 		}
 	]
 }
