@@ -108,9 +108,11 @@ export const CanvasEditor = ({
 						iframe.style.minWidth = min;
 						iframe.style.maxWidth = max;
 					} else if (min) {
+						iframe.style.maxWidth = '';
 						iframe.style.width = min;
 						iframe.style.minWidth = min;
 					} else if (max) {
+						iframe.style.minWidth = '';
 						iframe.style.width = max;
 						iframe.style.maxWidth = max;
 					}
