@@ -90,6 +90,17 @@ export const GeneralPanel = (): MixedElement => {
 
 	const memoizedCallback = useCallback(
 		(newValue) => {
+			newValue = Object.fromEntries(
+				Object.entries(newValue).map(([key, breakpoint]) => {
+					return [
+						key,
+						{
+							...breakpoint,
+							...('' === breakpoint.type ? { type: key } : {}),
+						},
+					];
+				})
+			);
 			const {
 				added: savedAdded,
 				deleted: savedDeleted,
