@@ -122,7 +122,12 @@ export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 }) {
 	const { setBreakpoints } = dispatch(STORE_NAME);
 
-	setBreakpoints(definitions);
+	setBreakpoints(
+		applyFilters(
+			'blockera.editor.canvasEditor.bootstrap.breakpoints',
+			definitions
+		)
+	);
 }
 
 export function registerCanvasEditorSettings(settings: Object) {
