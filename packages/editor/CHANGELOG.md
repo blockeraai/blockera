@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.9.0 (2025-07-16)
+
 ### New Features
 - Added support for automatically generating styles for all screen sizes and devices that you've set up in your responsive settings.
 

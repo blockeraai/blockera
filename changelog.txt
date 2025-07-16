@@ -1,12 +1,22 @@
 == Changelog ==
 
-### Version 1.11.5 - 2025-06-25
+### Version 1.12.0 - 2025-07-16
+
+### New Features
+- Added ability to configure responsive breakpoints through a new visual interface.
+- Added ability to extend and customize repeatable sections with additional features through developer options.
+- Added support for automatically generating styles for all screen sizes and devices that you've set up in your responsive settings.
 
 ### Improvements
-- Added security files including index.php to prevent direct access and ensure proper WordPress integration.
+- Enhanced the responsive design settings to make it easier to customize how your site looks on different devices like Phones, Tablets, Widescreens, Tvs, ... or other custom breakpoints.
+- Enhanced the user interface and experience for feature options and settings.
+- Enhanced the repeater feature to allow better organization and customization of repeated elements.
 
 ### Bug Fixes
-- Fixed an issue where the marker pseudo element's content field was not working properly as a blockera block state.
+- Fixed an issue where items were not being properly removed when using the delete function in repeatable sections.
+- Fixed an issue where dragging items in collapsible sections would interfere with adjusting input values using drag controls.
+- Fixed icon search functionality to work correctly when searching for icons.
+- Fixed an issue where the Update button would incorrectly remain enabled after resetting settings.
 
 ### More
 
