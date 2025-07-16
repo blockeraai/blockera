@@ -54,6 +54,7 @@ export default function RepeaterControl(
 		maxItems = -1,
 		minItems = 0,
 		selectable = false,
+		isNativeSupport = false,
 		actionButtonAdd = true,
 		actionButtonVisibility = true,
 		actionButtonDelete = true,
@@ -62,6 +63,7 @@ export default function RepeaterControl(
 		injectHeaderButtonsEnd = '',
 		withoutAdvancedLabel = false,
 		isSupportInserter = false,
+		disableRegenerateId = true,
 		//
 		label,
 		children,
@@ -155,6 +157,7 @@ export default function RepeaterControl(
 		actionButtonVisibility,
 		actionButtonDelete,
 		actionButtonClone,
+		disableRegenerateId,
 		//
 		onChange,
 		onDelete,
@@ -173,6 +176,7 @@ export default function RepeaterControl(
 		repeaterItems, // value
 		//
 		customProps,
+		isNativeSupport,
 	};
 
 	const addNewButtonOnClick = () => {

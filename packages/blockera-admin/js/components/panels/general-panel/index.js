@@ -5,20 +5,22 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useContext, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
+import { detailedDiff } from 'deep-object-diff';
+import { useContext, useState, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { TabsContext, SettingsContext } from '@blockera/wordpress';
 import {
-	Button,
 	Flex,
+	Button,
 	ToggleControl,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { default as BreakpointsSettings } from '@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings';
 
 /**
  * Internal dependencies
@@ -86,12 +88,94 @@ export const GeneralPanel = (): MixedElement => {
 			});
 	};
 
+	const memoizedCallback = useCallback(
+		(newValue) => {
+			newValue = Object.fromEntries(
+				Object.entries(newValue).map(([key, breakpoint]) => {
+					return [
+						key,
+						{
+							...breakpoint,
+							...('' === breakpoint.type ? { type: key } : {}),
+						},
+					];
+				})
+			);
+			const {
+				added: savedAdded,
+				deleted: savedDeleted,
+				updated: savedUpdated,
+			} = detailedDiff(
+				window.blockeraSettings.general.breakpoints,
+				newValue
+			);
+
+			setHasUpdates(
+				Object.keys(savedAdded).length > 0 ||
+					Object.keys(savedDeleted).length > 0 ||
+					Object.keys(savedUpdated).length > 0
+			);
+
+			setSettings({
+				...settings,
+				general: {
+					...generalSettings,
+					breakpoints: newValue,
+				},
+			});
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[settings, generalSettings]
+	);
+
 	return (
 		<Flex
 			direction={'column'}
 			className={'blockera-settings-panel-container'}
 			gap={40}
 		>
+			<Flex direction={'column'} className={'blockera-settings-section'}>
+				<h3
+					className={
+						'blockera-settings-general section-title breakpoints-wrapper'
+					}
+				>
+					<Icon
+						icon={'responsive-breakpoints'}
+						library={'ui'}
+						iconSize={24}
+						style={{
+							color: 'var(--blockera-controls-primary-color)',
+						}}
+					/>
+
+					{__('Breakpoints Settings', 'blockera')}
+				</h3>
+
+				<p className={'blockera-settings-general section-desc'}>
+					{__(
+						'Adjust the breakpoints used to preview and design for different devices. These settings help you build layouts that adapt smoothly across all screen sizes.',
+						'blockera'
+					)}
+				</p>
+
+				<div
+					className={'blockera-settings-general control-wrapper'}
+					aria-label={__(
+						'Opt out of PRO hints and promotions',
+						'blockera'
+					)}
+				>
+					<BreakpointsSettings
+						onChange={memoizedCallback}
+						breakpoints={generalSettings.breakpoints}
+						defaultValue={
+							defaultSettings?.general?.breakpoints || {}
+						}
+					/>
+				</div>
+			</Flex>
+
 			<BlockVisibility
 				config={config}
 				settings={settings}

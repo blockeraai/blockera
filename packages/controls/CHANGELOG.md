@@ -1,5 +1,17 @@
 ## Unreleased
 
+### New Features
+- Added ability to extend and customize repeatable sections with additional features through developer options.
+
+### Bug Fixes
+- Fixed an issue where items were not being properly removed when using the delete function in repeatable sections.
+- Fixed an issue where dragging items in collapsible sections would interfere with adjusting input values using drag controls.
+- Fixed icon search functionality to work correctly when searching for icons.
+
+### Improvements
+- Enhanced the user interface and experience for feature options and settings.
+- Enhanced the repeater feature to allow better organization and customization of repeated elements.
+
 ## 1.3.4 (2025-06-10)
 
 ### Bug Fixes

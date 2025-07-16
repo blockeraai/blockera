@@ -15,13 +15,13 @@ describe('General Settings Testing ...', () => {
 	it('should not display PRO hints and promotion when add secondary background if user disables it', () => {
 		resetPanelSettings(true);
 
-		cy.get(
-			'div[aria-label="Opt out of PRO hints and promotions"] input'
-		).click();
+		cy.get('div[aria-label="Opt out of PRO hints and promotions"] input')
+			.last()
+			.click();
 
-		cy.get(
-			'div[aria-label="Opt out of PRO hints and promotions"] input'
-		).should('be.checked');
+		cy.get('div[aria-label="Opt out of PRO hints and promotions"] input')
+			.last()
+			.should('be.checked');
 
 		cy.getByDataTest('update-settings').as('update');
 
@@ -45,13 +45,13 @@ describe('General Settings Testing ...', () => {
 	});
 
 	it('should display/hidden PRO hints and promotion when add secondary background', () => {
-		cy.get(
-			'div[aria-label="Opt out of PRO hints and promotions"] input'
-		).click();
+		cy.get('div[aria-label="Opt out of PRO hints and promotions"] input')
+			.last()
+			.click();
 
-		cy.get(
-			'div[aria-label="Opt out of PRO hints and promotions"] input'
-		).should('not.be.checked');
+		cy.get('div[aria-label="Opt out of PRO hints and promotions"] input')
+			.last()
+			.should('not.be.checked');
 
 		cy.getByDataTest('update-settings').as('update');
 

@@ -35,6 +35,7 @@ import { Button, MediaUploader, BaseControl } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
 function IconControl({
+	id,
 	label,
 	columns,
 	field = 'icon',
@@ -50,8 +51,9 @@ function IconControl({
 }: IconControlProps): MixedElement {
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
-			defaultValue,
+			id,
 			onChange,
+			defaultValue,
 		});
 
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
@@ -97,6 +99,7 @@ function IconControl({
 	};
 
 	const defaultIconState = {
+		id,
 		currentIcon,
 		dispatch: currentIconDispatch,
 		handleIconSelect,

@@ -48,12 +48,18 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 		// Keep parent functionalities.
 		parent::__construct();
 
+		$options     = blockera_get_admin_options();
+		$breakpoints = $options['general']['breakpoints'] ?? blockera_core_config('breakpoints.list');
+
+		if (! is_plugin_active('blockera-pro/blockera-pro.php') && ! blockera_is_skip_request()) {
+
+			$breakpoints = blockera_update_breakpoints($options, $breakpoints);
+		}
+
 		$this->setEntities(
 			array_merge(
 				blockera_core_config( 'entities' ),
-				[
-					'breakpoints' => blockera_core_config( 'breakpoints.list' ),
-				]
+				[ 'breakpoints' => $breakpoints ]
 			)
 		);
 

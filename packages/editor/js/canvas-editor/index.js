@@ -9,9 +9,9 @@ import { createPortal } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { Breakpoints } from './components';
+import { CanvasEditor } from './components';
 
-export const CanvasEditor = ({
+export const CanvasEditorApplication = ({
 	target,
 }: {
 	target: HTMLElement | null,
@@ -22,7 +22,7 @@ export const CanvasEditor = ({
 		return <></>;
 	}
 
-	return createPortal(<Breakpoints className={className} />, target);
+	return createPortal(<CanvasEditor className={className} />, target);
 };
 
 export * from './components';

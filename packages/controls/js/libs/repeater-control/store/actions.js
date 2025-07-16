@@ -31,6 +31,7 @@ export function changeRepeaterItem({
 	maxItems = -1,
 	defaultItemValue,
 	repeaterId = null,
+	disableRegenerateId = true,
 }) {
 	return {
 		ref,
@@ -43,6 +44,7 @@ export function changeRepeaterItem({
 		staticType,
 		repeaterId,
 		valueCleanup,
+		disableRegenerateId,
 		type: 'CHANGE_REPEATER_ITEM',
 		defaultItemValue: defaultItemValue ?? {},
 	};
@@ -55,6 +57,7 @@ export function removeRepeaterItem({
 	valueCleanup,
 	itemIdGenerator,
 	repeaterId = null,
+	disableRegenerateId = true,
 }) {
 	return {
 		itemId,
@@ -63,6 +66,7 @@ export function removeRepeaterItem({
 		repeaterId,
 		valueCleanup,
 		itemIdGenerator,
+		disableRegenerateId,
 		type: 'REMOVE_REPEATER_ITEM',
 	};
 }

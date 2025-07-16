@@ -12,9 +12,9 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { CanvasEditor } from './index';
 import { getTargets } from './helpers';
 import { STORE_NAME } from '../store';
+import { CanvasEditorApplication } from './index';
 import { IntersectionObserverRenderer } from './intersection-observer-renderer';
 import type { BreakpointTypes } from '../extensions/libs/block-card/block-states/types';
 
@@ -93,7 +93,7 @@ export const bootstrapCanvasEditor = (): void | Object => {
 						new IntersectionObserverRenderer(
 							header,
 							(): MixedElement => (
-								<CanvasEditor
+								<CanvasEditorApplication
 									target={document.querySelector(header)}
 								/>
 							),
@@ -121,16 +121,13 @@ export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {
 	[key: string]: BreakpointTypes,
 }) {
 	const { setBreakpoints } = dispatch(STORE_NAME);
-	const breakpointsStack: { [key: string]: BreakpointTypes } = {};
 
-	for (const definitionType in definitions) {
-		breakpointsStack[definitionType] = {
-			...definitions[definitionType],
-			native: definitions[definitionType]?.native || false,
-		};
-	}
-
-	setBreakpoints(breakpointsStack);
+	setBreakpoints(
+		applyFilters(
+			'blockera.editor.canvasEditor.bootstrap.breakpoints',
+			definitions
+		)
+	);
 }
 
 export function registerCanvasEditorSettings(settings: Object) {

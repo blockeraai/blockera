@@ -23,6 +23,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import RepeaterItemActions from './actions';
 import { RepeaterContext } from '../context';
+import { FeatureWrapper } from '../../feature-wrapper';
 import {
 	getArialLabelSuffix,
 	isEnabledPromote,
@@ -52,12 +53,13 @@ const RepeaterItem = ({
 		mode,
 		design,
 		onChange,
-		valueCleanup,
 		repeaterId,
+		popoverProps,
+		valueCleanup,
 		popoverTitle,
 		popoverOffset,
 		PromoComponent,
-		popoverProps,
+		isNativeSupport,
 		popoverClassName,
 		repeaterItems: items,
 		repeaterItemOpener: RepeaterItemOpener,
@@ -134,155 +136,168 @@ const RepeaterItem = ({
 	}
 
 	return (
-		<div
-			className={controlInnerClassNames(
-				'repeater-item',
-				'draggable',
-				isVisible ? ' is-active' : ' is-inactive'
-			)}
-			draggable={true}
-			onDragOver={handleDragOver}
-			onDragEnter={handleDragEnter}
-			onDragLeave={handleDragLeave}
-			onDrop={(e) => handleDrop(e, itemId)}
-			onDragStart={(e) => handleDragStart(e, itemId)}
-			data-cy="repeater-item"
-			style={styleRef.current}
-			data-id={itemId}
-			data-test={itemId}
+		<FeatureWrapper
+			type={item?.native && isNativeSupport ? 'native' : 'none'}
 		>
-			<GroupControl
-				mode={
-					isFunction(RepeaterItemChildren?.getMode)
-						? RepeaterItemChildren.getMode(item, itemId)
-						: mode
-				}
-				toggleOpenBorder={true}
-				design={design}
-				popoverProps={popoverProps}
-				popoverTitle={popoverTitle}
-				popoverOffset={popoverOffset}
-				popoverTitleButtonsRight={
-					PopoverTitleButtonsRight && (
-						<PopoverTitleButtonsRight
-							{...repeaterItemActionsProps}
-						/>
-					)
-				}
-				popoverClassName={popoverClassName}
+			<div
 				className={controlInnerClassNames(
-					'repeater-item-group',
-					item?.__className,
+					'repeater-item',
+					isVisible ? ' is-active' : ' is-inactive',
 					{
-						'is-selected-item': item?.selectable
-							? item.isSelected
-							: false,
+						draggable: !isOpen,
 					}
 				)}
-				header={
-					!RepeaterItemHeader ? (
-						<div
-							className={controlInnerClassNames(
-								'repeater-group-header'
-							)}
-							onClick={(event) => {
-								if (isOpenPopoverEvent(event)) setOpen(!isOpen);
-								changeRepeaterItem({
-									itemId,
-									value: {
-										...item,
-										isOpen: !isOpen,
-									},
-									controlId,
-									repeaterId,
-								});
-							}}
-							aria-label={sprintf(
-								// translators: %s is the repeater item id. It's the aria label for repeater item
-								__('Item %s', 'blockera'),
-								getArialLabelSuffix(itemId)
-							)}
-						>
-							{sprintf(
-								// translators: %s is the repeater item id. It's the repeater item name
-								__('Item %s', 'blockera'),
-								getArialLabelSuffix(itemId)
-							)}
-						</div>
-					) : (
-						<RepeaterItemHeader {...repeaterItemActionsProps} />
-					)
-				}
-				headerOpenIcon={
-					RepeaterItemOpener && (
-						<RepeaterItemOpener {...repeaterItemActionsProps} />
-					)
-				}
-				headerOpenButton={
-					RepeaterItemOpener?.hasButton
-						? RepeaterItemOpener.hasButton(item, itemId)
-						: false
-				}
-				injectHeaderButtonsStart={
-					<RepeaterItemActions
-						item={repeaterItemActionsProps.item}
-						itemId={repeaterItemActionsProps.itemId}
-						isVisible={repeaterItemActionsProps.isVisible}
-						setVisibility={repeaterItemActionsProps.setVisibility}
-					/>
-				}
-				children={<RepeaterItemChildren {...{ item, itemId }} />}
-				isOpen={isOpen}
-				onClose={() => {
-					setOpen(false);
-
-					if (isEnabledPromote(PromoComponent, items)) {
-						return;
+				draggable={!isOpen}
+				onDragOver={handleDragOver}
+				onDragEnter={handleDragEnter}
+				onDragLeave={handleDragLeave}
+				onDrop={(e) => handleDrop(e, itemId)}
+				onDragStart={(e) => handleDragStart(e, itemId)}
+				data-cy="repeater-item"
+				style={styleRef.current}
+				data-id={itemId}
+				data-test={itemId}
+			>
+				<GroupControl
+					mode={
+						isFunction(RepeaterItemChildren?.getMode)
+							? RepeaterItemChildren.getMode(item, itemId)
+							: mode
 					}
+					toggleOpenBorder={true}
+					design={design}
+					popoverProps={popoverProps}
+					popoverTitle={
+						'function' === typeof popoverTitle
+							? popoverTitle(itemId, item)
+							: popoverTitle
+					}
+					popoverOffset={popoverOffset}
+					popoverTitleButtonsRight={
+						PopoverTitleButtonsRight && (
+							<PopoverTitleButtonsRight
+								{...repeaterItemActionsProps}
+							/>
+						)
+					}
+					popoverClassName={popoverClassName}
+					className={controlInnerClassNames(
+						'repeater-item-group',
+						item?.__className,
+						{
+							'is-selected-item': item?.selectable
+								? item.isSelected
+								: false,
+						}
+					)}
+					header={
+						!RepeaterItemHeader ? (
+							<div
+								className={controlInnerClassNames(
+									'repeater-group-header'
+								)}
+								onClick={(event) => {
+									if (isOpenPopoverEvent(event))
+										setOpen(!isOpen);
+									changeRepeaterItem({
+										itemId,
+										value: {
+											...item,
+											isOpen: !isOpen,
+										},
+										controlId,
+										repeaterId,
+									});
+								}}
+								aria-label={sprintf(
+									// translators: %s is the repeater item id. It's the aria label for repeater item
+									__('Item %s', 'blockera'),
+									getArialLabelSuffix(itemId)
+								)}
+							>
+								{sprintf(
+									// translators: %s is the repeater item id. It's the repeater item name
+									__('Item %s', 'blockera'),
+									getArialLabelSuffix(itemId)
+								)}
+							</div>
+						) : (
+							<RepeaterItemHeader {...repeaterItemActionsProps} />
+						)
+					}
+					headerOpenIcon={
+						RepeaterItemOpener && (
+							<RepeaterItemOpener {...repeaterItemActionsProps} />
+						)
+					}
+					headerOpenButton={
+						RepeaterItemOpener?.hasButton
+							? RepeaterItemOpener.hasButton(item, itemId)
+							: false
+					}
+					injectHeaderButtonsStart={
+						<RepeaterItemActions
+							item={repeaterItemActionsProps.item}
+							itemId={repeaterItemActionsProps.itemId}
+							isVisible={repeaterItemActionsProps.isVisible}
+							setVisibility={
+								repeaterItemActionsProps.setVisibility
+							}
+						/>
+					}
+					children={<RepeaterItemChildren {...{ item, itemId }} />}
+					isOpen={isOpen}
+					onClose={() => {
+						setOpen(false);
 
-					changeRepeaterItem({
-						itemId,
-						value: {
-							...item,
-							isOpen: !isOpen,
-						},
-						controlId,
-						repeaterId,
-					});
-				}}
-				onClick={(): void | boolean => {
-					if (item?.selectable) {
-						const newItems: { [key: string]: any } = {};
+						if (isEnabledPromote(PromoComponent, items)) {
+							return;
+						}
 
-						Object.entries(items).forEach(
-							([_itemId, _item]: [string, any]): void => {
-								if (_itemId === itemId) {
+						changeRepeaterItem({
+							itemId,
+							value: {
+								...item,
+								isOpen: !isOpen,
+							},
+							controlId,
+							repeaterId,
+						});
+					}}
+					onClick={(): void | boolean => {
+						if (item?.selectable) {
+							const newItems: { [key: string]: any } = {};
+
+							Object.entries(items).forEach(
+								([_itemId, _item]: [string, any]): void => {
+									if (_itemId === itemId) {
+										newItems[_itemId] = {
+											..._item,
+											isSelected: true,
+										};
+
+										return;
+									}
+
 									newItems[_itemId] = {
 										..._item,
-										isSelected: true,
+										isSelected: false,
 									};
-
-									return;
 								}
+							);
 
-								newItems[_itemId] = {
-									..._item,
-									isSelected: false,
-								};
-							}
-						);
+							return onChange({
+								modifyControlValue,
+								controlId,
+								value: newItems,
+							});
+						}
 
-						return onChange({
-							modifyControlValue,
-							controlId,
-							value: newItems,
-						});
-					}
-
-					return true;
-				}}
-			/>
-		</div>
+						return true;
+					}}
+				/>
+			</div>
+		</FeatureWrapper>
 	);
 };
 

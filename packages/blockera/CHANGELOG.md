@@ -1,5 +1,8 @@
 ## Unreleased
 
+### Improvements
+- Enhanced the responsive design settings to make it easier to customize how your site looks on different devices like Phones, Tablets, Widescreens, Tvs, ... or other custom breakpoints.
+
 ## 1.3.2 (2025-06-10)
 
 ### Improvements

@@ -129,6 +129,14 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return $inline_script;
 		}
 
+		$options = blockera_get_admin_options();
+		
+		if ( isset( $options['general']['breakpoints'] ) ) {
+			$breakpoints = $options['general']['breakpoints'];
+		} else {
+			$breakpoints = $this->app->getEntity( 'breakpoints' );
+		}
+
 		$dynamic_value_bootstrapper = 'blockeraData.core.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');';
 
 		$script = 'wp.domReady(() => {
@@ -137,7 +145,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '
 		});
 			window.onload = () => {
-				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $this->app->getEntity( 'breakpoints' ) ) . ');
+				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $breakpoints ) . ');
 				' . $editor_object . '.editor.init();
 			};';
 
