@@ -193,7 +193,8 @@ export const CanvasEditor = ({
 						items={Object.fromEntries(
 							Object.entries(getBreakpoints()).filter(
 								([key]) =>
-									getBreakpoints()[key].settings.picked ||
+									(getBreakpoints()[key].settings.picked &&
+										getBreakpoints()[key].status) ||
 									key === getBaseBreakpoint()
 							)
 						)}

@@ -116,9 +116,8 @@ if (! function_exists('blockera_update_breakpoints')) {
                 continue;
             }
 
-            $breakpoints[ $key ]['native']             = true;
-            $breakpoints[ $key ]['status']             = false;
-            $breakpoints[ $key ]['settings']['picked'] = false;
+            $breakpoints[ $key ]['native'] = true;
+            $breakpoints[ $key ]['status'] = false;
         }
 
         if (! isset($settings['general']['breakpoints']) || $settings['general']['breakpoints'] === $breakpoints) {
