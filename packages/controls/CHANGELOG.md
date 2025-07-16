@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.4.0 (2025-07-16)
+
 ### New Features
 - Added ability to extend and customize repeatable sections with additional features through developer options.
 

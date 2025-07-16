@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 1.3.0 (2025-07-16)
+
 ### New Features
 - Added ability to configure responsive breakpoints through a new visual interface.
 
