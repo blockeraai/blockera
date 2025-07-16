@@ -190,7 +190,6 @@ export { default as GearSmall } from './gear-small.svg';
 export { default as Gear } from './gear.svg';
 export { default as Hreflang } from './hreflang.svg';
 export { default as HtmlTagAttribute } from './html-tag-attribute.svg';
-export { default as ResponsiveBreakpoints } from './responsive-breakpoints.svg';
 export { default as iconPositionLeft } from './icon-position-left.svg';
 export { default as iconPositionRight } from './icon-position-right.svg';
 export { default as Information } from './information.svg';

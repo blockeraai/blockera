@@ -25,12 +25,6 @@ export type BreakpointTypes = {
 	settings: {
 		min: string,
 		max: string,
-		iconType: 'library' | 'custom',
-		icon: {
-			icon: string,
-			library: string,
-			uploadSVG: string,
-		},
 	},
 	attributes?: Object,
 	/**

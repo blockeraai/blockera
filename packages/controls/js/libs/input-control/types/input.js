@@ -41,8 +41,7 @@ export type InputUnitTypes =
 	| 'flex-grow'
 	| 'line-height'
 	| 'min-width'
-	| 'z-index'
-	| 'media-query';
+	| 'z-index';
 
 export type InputControlProps = {
 	...ControlGeneralTypes,

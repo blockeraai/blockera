@@ -1,22 +1,15 @@
 // @flow
 
 /**
- * External dependencies
- */
-import { select } from '@wordpress/data';
-
-/**
  * Blockera dependencies
  */
 import type { BreakpointTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
-
-import { STORE_NAME } from '../../store/constants';
+import breakpoints from '@blockera/editor/js/extensions/libs/block-card/block-states/default-breakpoints';
 
 export const useMedia = (): { [key: string]: string } => {
 	const medias: { [key: string]: string } = {};
-	const { getBreakpoints } = select(STORE_NAME);
 
-	Object.values(getBreakpoints()).forEach(
+	Object.values(breakpoints()).forEach(
 		({ type, settings }: BreakpointTypes): void => {
 			const { min, max } = settings;
 

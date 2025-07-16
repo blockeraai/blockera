@@ -58,10 +58,6 @@ export type RepeaterControlProps = {
 	 */
 	mode?: GroupControlMode,
 	/**
-	 * Specifies that repeater item should use native or not.
-	 */
-	isNativeSupport?: boolean,
-	/**
 	 * Flag for support selectable repeater items or not.
 	 */
 	selectable?: boolean,
@@ -69,10 +65,6 @@ export type RepeaterControlProps = {
 	 * Is support external inserter component?
 	 */
 	isSupportInserter?: boolean,
-	/**
-	 * Flag for support regenerate id or not.
-	 */
-	disableRegenerateId?: boolean,
 	/**
 	 * Flag for support advanced label or not.
 	 */

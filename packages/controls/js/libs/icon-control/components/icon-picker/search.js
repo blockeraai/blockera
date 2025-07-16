@@ -21,7 +21,7 @@ export default function Search({}) {
 	const [searchInput, setSearchInput] = useState('');
 	const [searchData, setSearchData] = useState([]);
 
-	const { id, handleIconSelect } = useContext(IconContext);
+	const { handleIconSelect } = useContext(IconContext);
 
 	return (
 		<div
@@ -31,7 +31,6 @@ export default function Search({}) {
 			)}
 		>
 			<SearchControl
-				{...{ ...(id ? { id: `${id}.icon` } : {}) }}
 				defaultValue={searchInput}
 				onChange={(value) => {
 					setSearchInput(value);

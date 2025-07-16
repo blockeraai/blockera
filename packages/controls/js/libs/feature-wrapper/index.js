@@ -24,13 +24,7 @@ export function FeatureWrapper({
 	showText = 'on-hover',
 	...props
 }: {
-	type:
-		| 'native'
-		| 'state'
-		| 'breakpoint'
-		| 'inner-block'
-		| 'parent-inactive'
-		| 'none',
+	type: 'native' | 'state' | 'breakpoint' | 'inner-block' | 'parent-inactive',
 	upgradeLink?: string,
 	typeName?: string,
 	text?: string | MixedElement,
@@ -38,10 +32,6 @@ export function FeatureWrapper({
 	showText?: 'on-hover' | 'always',
 	children: MixedElement,
 }): MixedElement {
-	if ('none' === type) {
-		return children;
-	}
-
 	let icon = (
 		<Icon
 			icon="warning"

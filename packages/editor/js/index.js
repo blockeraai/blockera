@@ -7,10 +7,8 @@ export * from './extensions';
 export { Observer } from './observer';
 export {
 	CanvasEditor,
-	isBaseBreakpoint,
 	getBaseBreakpoint,
-	BreakpointsSettings,
-	bootstrapBreakpoints,
+	isBaseBreakpoint,
 	bootstrapCanvasEditor,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,

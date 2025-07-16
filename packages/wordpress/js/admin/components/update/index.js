@@ -103,8 +103,7 @@ export const Update = ({
 		const response = await saveEntityRecord(kind, name, record);
 
 		if (response) {
-			const isResetAction = ['reset', 'reset-all'].includes(type);
-			if (isResetAction) {
+			if (['reset', 'reset-all'].includes(type)) {
 				setStatus(statuses.reset);
 				setResetModalOpen(false);
 
@@ -126,7 +125,7 @@ export const Update = ({
 				...record,
 			};
 
-			setHasUpdates(isResetAction ? false : !hasUpdate);
+			setHasUpdates(!hasUpdate);
 		} else {
 			setStatus(statuses.error);
 		}

@@ -43,7 +43,6 @@ export { default as ToggleControl } from './toggle-control';
 export { default as SelectControl } from './select-control';
 export { default as ToggleSelectControl } from './toggle-select-control';
 export { default as RepeaterControl } from './repeater-control';
-export { cleanupRepeaterItem } from './repeater-control/utils';
 export * from './repeater-control/types';
 export * from './repeater-control/helpers';
 export { defaultItemValue } from './repeater-control/default-item-value';

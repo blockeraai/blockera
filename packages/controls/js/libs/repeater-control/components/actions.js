@@ -31,22 +31,21 @@ export default function RepeaterItemActions({
 	const {
 		count,
 		setCount,
+		PromoComponent,
+		setDisableAddNewItem,
+		controlId,
 		maxItems,
 		minItems,
 		onDelete,
 		onChange,
-		controlId,
-		repeaterId,
 		valueCleanup,
+		repeaterId,
 		overrideItem,
-		repeaterItems,
-		PromoComponent,
 		itemIdGenerator,
-		actionButtonClone,
-		actionButtonDelete,
-		disableRegenerateId,
-		setDisableAddNewItem,
 		actionButtonVisibility,
+		actionButtonDelete,
+		actionButtonClone,
+		repeaterItems,
 	} = useContext(RepeaterContext);
 
 	const itemsCount = Object.keys(repeaterItems).length;
@@ -110,13 +109,12 @@ export default function RepeaterItemActions({
 							  };
 
 						changeRepeaterItem({
-							value,
-							itemId,
-							onChange,
 							controlId,
+							itemId,
+							value,
 							repeaterId,
+							onChange,
 							valueCleanup,
-							disableRegenerateId,
 						});
 					}}
 					label={
@@ -199,31 +197,19 @@ export default function RepeaterItemActions({
 								event.stopPropagation();
 
 								if (
-									!disableRegenerateId &&
-									isEnabledPromote(
-										PromoComponent,
-										repeaterItems
-									)
-								) {
-									setCount(count + 1);
-									setDisableAddNewItem(true);
-
-									return;
-								}
-
-								if (
 									!item.selectable ||
 									'function' !== typeof onDelete
 								) {
-									return removeRepeaterItem({
+									removeRepeaterItem({
 										itemId,
 										onChange,
 										controlId,
 										repeaterId,
 										valueCleanup,
 										itemIdGenerator,
-										disableRegenerateId,
 									});
+
+									return;
 								}
 
 								const value = onDelete(itemId, repeaterItems);

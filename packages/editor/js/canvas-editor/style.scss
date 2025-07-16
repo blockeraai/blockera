@@ -1,5 +1,3 @@
-@import "./components/breakpoints/breakpoint-settings/style.scss";
-
 .blockera-editor {
 
 	.editor-header__settings > a[aria-label="View Page"], // WP < 6.6.2
@@ -31,30 +29,15 @@
 	}
 }
 
-@media (min-width: 782px) {
-
-	.editor-header:has(>.editor-header__center) {
-		grid-template: auto / 60px minmax(min-content, 2fr) 3fr minmax(min-content, 2fr) 60px;
-	}
-}
-
-.blockera-control-breakpoints-popover {
-
-	.components-popover__content {
-		min-width: 320px !important;
-	}
-}
-
 .blockera-canvas-breakpoints {
 	max-width: 330px;
 	height: 32px;
 	background: #f0f0f0;
 	border-radius: 3px;
-	padding: 0 3px;
+	padding: 0 10px;
 	width: 100%;
 	min-width: 200px;
 	margin: 0;
-	overflow-x: scroll;
 
 	&:hover {
 		background: #e0e0e0;
@@ -118,6 +101,108 @@
 	}
 }
 
+.blockera-component-breakpoint-icon {
+	width: 24px;
+	height: 24px;
+	position: relative;
+	transition: var(--blockera-controls-transition);
+	--icon-outline-color: #f0f0f0;
+
+	.blockera-component-base-breakpoint-icon {
+		position: absolute;
+		left: -3px;
+		top: -2px;
+		stroke-width: 5px;
+		stroke: var(--icon-outline-color);
+		paint-order: stroke;
+	}
+
+	.blockera-component-change-indicator {
+		position: absolute;
+		top: 2px;
+		right: 2px;
+		--indicator-size: 4px;
+		--indicator-outline-color: var(--icon-outline-color);
+	}
+
+	&.breakpoint-extra-large {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -5px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 0;
+		}
+	}
+
+	&.breakpoint-large {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 2px;
+		}
+	}
+
+	&.breakpoint-laptop {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 2px;
+		}
+	}
+
+	&.breakpoint-desktop {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 2px;
+		}
+	}
+
+	&.breakpoint-tablet {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -1px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 3px;
+		}
+	}
+
+	&.breakpoint-mobile {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -1px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 4px;
+		}
+	}
+
+	&.breakpoint-mobile-landscape {
+
+		.blockera-component-base-breakpoint-icon {
+			left: -3px;
+		}
+
+		.blockera-component-change-indicator {
+			right: 3px;
+		}
+	}
+}
+
 // Compatible with WordPress 6.5.2 - 6.6.1 versions.
 
 .editor-header__center,
@@ -137,16 +222,4 @@
     .editor-document-bar {
 		width: min(100%, 300px) !important;
     }
-}
-
-.blockera-control-breakpoints-popover.blockera-component-popover {
-	--popover-height: auto !important;
-}
-
-.blockera-control-breakpoints-edit-popover.blockera-component-popover {
-	--popover-height: auto;
-
-	.components-popover__content {
-		overflow: visible !important;
-	}
 }

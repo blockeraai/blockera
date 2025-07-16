@@ -1807,31 +1807,6 @@ describe('Util functions', () => {
 			]);
 		});
 
-		test('media-query', () => {
-			expect(getCSSUnits('media-query')).toStrictEqual([
-				{
-					label: 'Common Value',
-					options: [
-						{
-							value: 'px',
-							label: 'PX',
-							format: 'number',
-						},
-					],
-				},
-				{
-					label: 'Advanced',
-					options: [
-						{
-							value: 'func',
-							label: 'CSS Functions',
-							format: 'text',
-						},
-					],
-				},
-			]);
-		});
-
 		test('line-height', () => {
 			expect(getCSSUnits('line-height')).toStrictEqual([
 				{

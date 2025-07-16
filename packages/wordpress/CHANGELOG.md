@@ -1,8 +1,5 @@
 ## Unreleased
 
-### Bug Fixes
-- Fixed an issue where the Update button would incorrectly remain enabled after resetting settings.
-
 ## 1.1.5 (2025-06-10)
 
 ### Bug Fixes

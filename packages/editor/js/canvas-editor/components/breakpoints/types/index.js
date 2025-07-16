@@ -17,13 +17,12 @@ export type HandleOnChangeBreakpoints = (key: string, value: any) => void;
 
 export type BreakpointSettingsComponentProps = {
 	breakpoints: BreakpointTypes,
-	defaultValue: BreakpointTypes,
+	onClick: (device: string) => void,
 	onChange: HandleOnChangeBreakpoints,
 };
 
 export type PickedBreakpointsComponentProps = {
 	onClick: HandleOnPickBreakpoints,
 	updateBlock: (device: string) => void,
-	items: { [key: TBreakpoint]: BreakpointTypes },
 	updaterDeviceIndicator: ((device: TBreakpoint) => void) => void,
 };
