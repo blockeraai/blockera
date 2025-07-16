@@ -97,7 +97,7 @@
 	}
 }
 
-*:not(.blockera-field):not(.blockera-component-flex):not(.blockera-component-grid) {
+*:not(.blockera-field):not(.blockera-component-flex):not(.blockera-component-grid):not(.blockera-control-repeater) {
 
 	& > .blockera-field + .blockera-component-feature-wrapper,
 	& > .blockera-component-feature-wrapper + .blockera-component-feature-wrapper,
