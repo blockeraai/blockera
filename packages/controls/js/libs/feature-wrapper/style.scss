@@ -30,7 +30,7 @@
 		align-items: center;
 		gap: 0;
 		z-index: 10;
-		min-height: var(--blockera-controls-input-height);
+		min-height: var(--repeater-item-height, var(--blockera-controls-input-height));
 		padding: 0 2px 0 0;
 		top: 0;
 

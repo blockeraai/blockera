@@ -16,7 +16,8 @@
 		flex-wrap: nowrap;
 		padding: 0 6px 0 12px;
 		justify-content: space-between;
-		width: 100%;
+		width: auto;
+		max-width: 100%;
 		cursor: pointer;
 		gap: 8px;
 		position: relative;

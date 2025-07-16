@@ -18,12 +18,13 @@ function handleActionIncludeRepeaterId(
 
 	delete targetRepeaterValue[action.itemId];
 
-	return update(
-		controlValue,
-		action.repeaterId,
-		regeneratedIds(targetRepeaterValue, action),
-		true
-	);
+	let newValue = targetRepeaterValue;
+
+	if (action.disableRegenerateId) {
+		newValue = regeneratedIds(targetRepeaterValue, action);
+	}
+
+	return update(controlValue, action.repeaterId, newValue, true);
 }
 
 export function removeItem(state: Object = {}, action: Object): Object {
@@ -49,7 +50,11 @@ export function removeItem(state: Object = {}, action: Object): Object {
 
 	delete value[action.itemId];
 
-	const newValue = regeneratedIds(value, action);
+	let newValue = value;
+
+	if (action.disableRegenerateId) {
+		newValue = regeneratedIds(value, action);
+	}
 
 	repeaterOnChange(newValue, action);
 

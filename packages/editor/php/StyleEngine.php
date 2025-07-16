@@ -148,6 +148,18 @@ final class StyleEngine {
 	}
 
 	/**
+	 * Set breakpoint.
+	 *
+	 * @param string $breakpoint The breakpoint.
+	 *
+	 * @return void
+	 */
+	public function setBreakpoint( string $breakpoint): void {
+	
+		$this->breakpoint = $breakpoint;
+	}
+
+	/**
 	 * Set inline styles.
 	 *
 	 * @param array $inline_styles The inline styles.
@@ -165,9 +177,6 @@ final class StyleEngine {
 	 * @return string
 	 */
 	public function getStylesheet(): string {
-
-		// by default store base breakpoint.
-		$this->breakpoint = $this->breakpoints['base'];
 
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
 			$states = $this->settings['blockeraBlockStates']['value'];
@@ -267,7 +276,7 @@ final class StyleEngine {
 	protected function prepareBreakpointStyles( string $breakpoint, array $settings ): string {
 
 		// Get css media queries.
-		$mediaQueries = blockera_get_css_media_queries($this->breakpoints['list']);
+		$mediaQueries = blockera_get_css_media_queries($this->breakpoints);
 
 		// Validate breakpoint type.
 		if ( ! isset( $breakpoint, $mediaQueries[ $breakpoint ] ) ) {

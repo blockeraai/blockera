@@ -264,8 +264,8 @@ export const getBreakpointShortDescription = (
 			return sprintf(
 				// translators: %1$s and %2$s are breakpoint min-width and max-width values
 				__('Between %1$s and %2$s', 'blockera'),
-				breakpoints[breakpoint].settings.min,
-				breakpoints[breakpoint].settings.max
+				prepValueForHeader(breakpoints[breakpoint].settings.min),
+				prepValueForHeader(breakpoints[breakpoint].settings.max)
 			);
 		}
 
@@ -273,7 +273,7 @@ export const getBreakpointShortDescription = (
 			return sprintf(
 				// translators: %s is breakpoint min-width value
 				__('%s and up', 'blockera'),
-				breakpoints[breakpoint].settings.min
+				prepValueForHeader(breakpoints[breakpoint].settings.min)
 			);
 		}
 
@@ -281,10 +281,22 @@ export const getBreakpointShortDescription = (
 			return sprintf(
 				// translators: %s is breakpoint max-width value
 				__('%s and down', 'blockera'),
-				breakpoints[breakpoint].settings.max
+				prepValueForHeader(breakpoints[breakpoint].settings.max)
 			);
 		}
 	}
 
 	return '';
 };
+
+export function prepValueForHeader(value: any): string {
+	if (value === '') {
+		return '';
+	}
+
+	if (value.endsWith('func')) {
+		return __('Custom CSS', 'blockera');
+	}
+
+	return value;
+}

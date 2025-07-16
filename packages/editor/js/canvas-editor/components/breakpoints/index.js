@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { select, dispatch, useDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
@@ -11,50 +10,34 @@ import { useEffect, useState } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import {
-	Flex,
-	Popover,
-	InputControl,
-	ControlContextProvider,
-} from '@blockera/controls';
-import { Icon } from '@blockera/icons';
-import { experimental } from '@blockera/env';
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames } from '@blockera/classnames';
+import { Flex, ControlContextProvider } from '@blockera/controls';
 import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { Preview } from '../preview';
-import { getBaseBreakpoint, isBaseBreakpoint } from './helpers';
 import PickedBreakpoints from './picked-breakpoints';
-import BreakpointSettings from './breakpoint-settings';
 import type { BreakpointsComponentProps } from './types';
+import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
 import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
 
-export const Breakpoints = ({
+export const CanvasEditor = ({
 	className,
 }: BreakpointsComponentProps): MixedElement => {
-	// todo remove this after finishing development
-	const enableCanvasSettings = experimental().get(
-		'editor.canvasEditor.settings'
-	);
-
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
 		select('blockera/editor');
 	const {
 		setDeviceType,
 		setCanvasSettings,
-		updateBreakpoints,
 		updaterDeviceType,
 		updaterDeviceIndicator,
 	} = useDispatch('blockera/editor');
 	const { changeExtensionCurrentBlockStateBreakpoint } = dispatch(
 		'blockera/extensions'
 	);
-	const [canvasSettings, updateCanvasSettings] = useState(
-		getCanvasSettings()
-	);
+	const [canvasSettings] = useState(getCanvasSettings());
 	const [deviceType, updateDeviceType] = useState(getDeviceType());
 	const {
 		blockEditor: { getSelectedBlock },
@@ -63,61 +46,90 @@ export const Breakpoints = ({
 		blockEditor: { updateBlockAttributes },
 	} = useStoreDispatchers();
 
-	const breakpoints = getBreakpoints();
-
 	useEffect(() => {
-		let editorWrapper: Object = document.querySelector(
-			'.editor-styles-wrapper'
-		);
+		const iframe = getIframe();
+
+		// Get the editor wrapper (body element of the editor iframe).
+		let editorWrapper = document.querySelector('.editor-styles-wrapper');
 
 		if (!editorWrapper) {
 			editorWrapper = getIframeTag('.editor-styles-wrapper');
+			iframe.style.margin = '0 auto';
 		}
 
 		if (editorWrapper) {
+			// Get breakpoint settings for current device.
 			const {
 				settings: { min, max },
-			} = getBreakpoint(deviceType);
-			const iframe = getIframe();
+			} = {
+				settings: {
+					min: '',
+					max: '',
+				},
+				...getBreakpoint(deviceType),
+			};
 
+			// Add base canvas class.
 			if (!editorWrapper.classList.contains('blockera-canvas')) {
 				editorWrapper.classList.add('blockera-canvas');
 			}
 
-			// We try to clean up additional styles added from our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile')
-			// of iframe and editor styles wrapper elements of post|site editor.
-			if (
-				isBaseBreakpoint(deviceType) &&
-				editorWrapper.classList.contains('preview-margin')
-			) {
-				editorWrapper.style.minWidth = '100%';
-				editorWrapper.style.maxWidth = '100%';
-				editorWrapper.style.removeProperty('margin');
-				editorWrapper.classList.remove('preview-margin');
-				editorWrapper.parentElement.style.removeProperty('background');
+			// Reset styles for base breakpoint.
+			if (isBaseBreakpoint(deviceType)) {
+				if (editorWrapper.classList.contains('preview-margin')) {
+					editorWrapper.style.width = '100%';
+					editorWrapper.style.minWidth = '100%';
+					editorWrapper.style.maxWidth = '100%';
+					editorWrapper.style.margin = '';
+					editorWrapper.style.transform = '';
+					editorWrapper.classList.remove('preview-margin');
+					editorWrapper.parentElement.style.background = '';
 
-				if (iframe) {
-					iframe.style.removeProperty('min-width');
-					iframe.style.removeProperty('max-width');
-					iframe.parentElement.style.removeProperty('background');
+					if (iframe) {
+						iframe.style.width = '100%';
+						iframe.style.minWidth = '';
+						iframe.style.maxWidth = '';
+						iframe.style.transform = '';
+						iframe.parentElement.style.background = '';
+					}
 				}
 			}
-			// We try to set our custom breakpoints (means: any breakpoints apart from 'desktop', 'tablet', and 'mobile') settings into,
-			// iframe element as dimensions with preview margin style.
-			else if (!['desktop', 'tablet', 'mobile'].includes(deviceType)) {
+			// Apply custom breakpoint styles.
+			else {
+				// Add preview margin class.
+				if (!editorWrapper.classList.contains('preview-margin')) {
+					editorWrapper.classList.add('preview-margin');
+				}
+
 				if (iframe) {
+					// Set width constraints based on breakpoint settings.
 					if (min && max) {
+						iframe.style.width = max;
 						iframe.style.minWidth = min;
 						iframe.style.maxWidth = max;
 					} else if (min) {
+						iframe.style.maxWidth = '';
+						iframe.style.width = min;
 						iframe.style.minWidth = min;
 					} else if (max) {
+						iframe.style.minWidth = '';
+						iframe.style.width = max;
 						iframe.style.maxWidth = max;
 					}
-				}
 
-				if (!editorWrapper.classList.contains('preview-margin')) {
-					editorWrapper.classList.add('preview-margin');
+					// Scale down non-base breakpoints for better preview.
+					if (deviceType !== getBaseBreakpoint()) {
+						iframe.style.transformOrigin = '50% 50%'; // Center both horizontally and vertically.
+						editorWrapper.style.transformOrigin = '50% 50%'; // Center both horizontally and vertically.
+
+						iframe.parentElement.style.overflowX = 'auto';
+					} else {
+						iframe.parentElement.style.overflowX = 'none';
+					}
+
+					// Center the preview.
+					editorWrapper.style.margin = '0 auto';
+					iframe.style.margin = '50px auto';
 				}
 			}
 		}
@@ -137,47 +149,27 @@ export const Breakpoints = ({
 	const selectedBlock = getSelectedBlock();
 
 	const updateSelectedBlock = (device: string) => {
-		// Check if a block is selected
+		// Check if a block is selected.
 		if (selectedBlock) {
-			// Update the block attributes
+			// Update the block attributes.
 			const updatedAttributes = {
 				blockeraCurrentDevice: device,
 			};
 
-			// Dispatch an action to update the selected block
+			// Dispatch an action to update the selected block.
 			updateBlockAttributes(selectedBlock.clientId, updatedAttributes);
 		}
 	};
 
 	const handleOnClick = (device: string): void => {
-		if (device === getDeviceType()) {
-			const baseBreakpoint = getBaseBreakpoint();
-
-			updateDeviceType(baseBreakpoint);
-			changeExtensionCurrentBlockStateBreakpoint(baseBreakpoint);
-
-			updateSelectedBlock(device);
-
-			return;
-		}
-
+		// Updating the device type by WordPress Core api.
 		updateDeviceType(device);
+
+		// Updating the extension current block state breakpoint global state.
 		changeExtensionCurrentBlockStateBreakpoint(device);
 
+		// Updating the selected block blockeraCurrentDevice attribute.
 		updateSelectedBlock(device);
-	};
-
-	const handleOnChange = (key: string, value: any): void => {
-		if ('breakpoints' === key) {
-			updateBreakpoints(value);
-
-			return;
-		}
-
-		updateCanvasSettings({
-			...canvasSettings,
-			[key]: value,
-		});
 	};
 
 	return (
@@ -191,112 +183,26 @@ export const Breakpoints = ({
 			>
 				<Flex
 					data-test={'blockera-canvas-editor'}
-					className={className}
-					justifyContent={
-						enableCanvasSettings ? 'space-between' : 'center'
-					}
+					className={classNames(className, {
+						'breakpoints-open':
+							canvasSettings.isOpenOtherBreakpoints,
+					})}
+					justifyContent={'center'}
 				>
-					{enableCanvasSettings && (
-						<div
-							className={controlInnerClassNames(
-								'blockera-breakpoints'
-							)}
-						>
-							<Icon
-								icon="more-horizontal"
-								iconSize="24"
-								onClick={() =>
-									handleOnChange(
-										'isOpenOtherBreakpoints',
-										!canvasSettings.isOpenOtherBreakpoints
-									)
-								}
-							/>
-						</div>
-					)}
-
 					<PickedBreakpoints
+						items={Object.fromEntries(
+							Object.entries(getBreakpoints()).filter(
+								([key]) =>
+									(getBreakpoints()[key].settings.picked &&
+										getBreakpoints()[key].status) ||
+									key === getBaseBreakpoint()
+							)
+						)}
 						onClick={handleOnClick}
 						updateBlock={updateSelectedBlock}
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
-
-					{enableCanvasSettings && (
-						<div
-							style={{
-								cursor: 'pointer',
-								lineHeight: '36px',
-							}}
-							aria-label={__('Canvas Zoom', 'blockera')}
-							onClick={() =>
-								handleOnChange(
-									'isOpenSettings',
-									!canvasSettings.isOpenSettings
-								)
-							}
-						>
-							{canvasSettings.zoom}
-						</div>
-					)}
 				</Flex>
-
-				{canvasSettings.isOpenOtherBreakpoints && (
-					<Popover
-						offset={20}
-						placement={'left-end'}
-						title={__('Breakpoint Settings', 'blockera')}
-						onClose={() => handleOnChange('isOpenSettings', false)}
-					>
-						<BreakpointSettings
-							onClick={handleOnClick}
-							onChange={handleOnChange}
-							breakpoints={breakpoints}
-						/>
-					</Popover>
-				)}
-
-				{canvasSettings.isOpenSettings && (
-					<Popover
-						offset={20}
-						placement={'bottom-end'}
-						title={__('Canvas Settings', 'blockera')}
-						onClose={() => handleOnChange('isOpenSettings', false)}
-					>
-						<InputControl
-							id={'width'}
-							type={'number'}
-							placeholder="100"
-							unitType={'width'}
-							columns={'columns-2'}
-							onChange={(newValue) =>
-								handleOnChange('width', newValue)
-							}
-							label={__('Width', 'blockera')}
-						/>
-						<InputControl
-							id={'height'}
-							type={'number'}
-							placeholder="100"
-							unitType={'height'}
-							columns={'columns-2'}
-							onChange={(newValue) =>
-								handleOnChange('height', newValue)
-							}
-							label={__('Height', 'blockera')}
-						/>
-						<InputControl
-							id={'zoom'}
-							type={'number'}
-							placeholder="100"
-							unitType={'width'}
-							columns={'columns-2'}
-							onChange={(newValue) =>
-								handleOnChange('zoom', newValue)
-							}
-							label={__('Zoom', 'blockera')}
-						/>
-					</Popover>
-				)}
 
 				<Preview />
 			</ControlContextProvider>
@@ -305,3 +211,5 @@ export const Breakpoints = ({
 };
 
 export * from './helpers';
+export * from './bootstrap';
+export { default as BreakpointsSettings } from './breakpoint-settings';

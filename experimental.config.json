@@ -7,9 +7,6 @@
 				"mask": false
 			}
 		},
-		"canvasEditor": {
-			"settings": false
-		},
 		"styleEngine": {
 			"enabledCustomClassBlockState": "false"
 		}

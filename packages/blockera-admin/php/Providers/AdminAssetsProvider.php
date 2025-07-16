@@ -177,11 +177,19 @@ class AdminAssetsProvider extends AssetsProvider {
 
 		array_map('blockera_load_script_translations', blockera_core_config('assets.admin.list'));
 
+		$blockera_settings                                   = blockera_get_admin_options();
+		$blockera_default_settings                           = blockera_core_config( 'panel.std' );
+		$blockera_default_settings['general']['breakpoints'] = $this->app->getEntity('breakpoints');
+
+		if (empty($blockera_settings['general']['breakpoints'])) {
+			$blockera_settings['general']['breakpoints'] = $blockera_default_settings['general']['breakpoints'];
+		}
+
 		return $this->telemetryInlineScripts() . 'window.unstableBlockeraBootstrapServerSideEntities = ' . wp_json_encode( $this->app->getEntities() ) . ';
 				wp.blocks.setCategories( ' . wp_json_encode( $block_categories ) . ' );
 				window.unstableBootstrapServerSideBlockTypes = ' . wp_json_encode( blockera_get_available_blocks() ) . ';
-				window.blockeraDefaultSettings = ' . wp_json_encode( blockera_core_config( 'panel.std' ) ) . ';
-				window.blockeraSettings = ' . wp_json_encode( blockera_get_admin_options() ) . ';
+				window.blockeraDefaultSettings = ' . wp_json_encode( $blockera_default_settings ) . ';
+				window.blockeraSettings = ' . wp_json_encode( $blockera_settings ) . ';
 				window.blockeraVersion = "' . blockera_core_config( 'app.version' ) . '";
 				window.blockeraUpgradeUrl = "' . blockera_core_config( 'app.upgrade_url' ) . '"
 				window.blockeraAdminNonce = "' . wp_create_nonce( 'blockera-admin' ) . '";

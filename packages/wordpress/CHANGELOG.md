@@ -3,6 +3,11 @@
 ### New Features
 - Added support for icons in blocks, allowing users to easily add and customize icons in their content.
 
+## 1.1.6 (2025-07-16)
+
+### Bug Fixes
+- Fixed an issue where the Update button would incorrectly remain enabled after resetting settings.
+
 ## 1.1.5 (2025-06-10)
 
 ### Bug Fixes

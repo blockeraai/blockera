@@ -3,6 +3,11 @@
 ### Improvements
 - Improved block features organization for better code structure and easier maintenance.
 
+## 1.9.0 (2025-07-16)
+
+### New Features
+- Added support for automatically generating styles for all screen sizes and devices that you've set up in your responsive settings.
+
 ## 1.8.2 (2025-06-25)
 
 ### Bug Fixes

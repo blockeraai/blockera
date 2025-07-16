@@ -29,6 +29,7 @@ import { initializer } from '@blockera/bootstrap';
 import {
 	applyHooks,
 	defineGlobalProps,
+	bootstrapBreakpoints,
 	bootstrapCanvasEditor,
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
@@ -78,6 +79,9 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 
 			// Bootstrap canvas editor UI on WordPress block editor.
 			bootstrapCanvasEditor();
+
+			// Bootstrap breakpoints.
+			bootstrapBreakpoints();
 
 			// Bootstrap functions for extensions.
 			blockeraExtensionsBootstrap();
