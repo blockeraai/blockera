@@ -8,6 +8,7 @@
 namespace Blockera\Setup;
 
 use Blockera\Bootstrap\Application;
+use Blockera\Utils\Adapters\DomParser;
 use Blockera\Setup\Contracts\ContainerInterface;
 use Blockera\Data\Cache\Contracts\ApplicationCacheStatus;
 
@@ -38,6 +39,13 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	 * @var bool $is_validated the is validated cache.
 	 */
 	protected bool $is_validated = false;
+
+	/**
+	 * Store the DOM parser instance.
+	 * 
+	 * @var DomParser $dom_parser The DOM parser instance.
+	 */
+	public DomParser $dom_parser;
 
 	/**
 	 * Blockera constructor.

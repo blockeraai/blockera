@@ -2,9 +2,37 @@
 
 namespace Blockera\Features;
 
+use Blockera\Bootstrap\Application;
 use Blockera\Features\Contracts\FeatureInterface;
 
 class FeaturesManager {
+
+	/**
+	 * Store the application instance.
+	 * 
+	 * @var Application $app The application instance.
+	 */
+	protected Application $app;
+
+	/**
+	 * Features manager constructor.
+	 *
+	 * @param Application $app
+	 */
+	public function __construct( Application $app) {
+		
+		$this->app = $app;
+	}
+
+	/**
+	 * Get the application container instance.
+	 *
+	 * @return Application
+	 */
+	public function getApp(): Application {
+		
+		return $this->app;
+	}
 
     /**
      * The features array.
@@ -36,7 +64,7 @@ class FeaturesManager {
 			}
 
             $this->features[ $key ] = $feature;
-            $feature->register();
+            $feature->register($this->app);
         }
 
 		return $this;

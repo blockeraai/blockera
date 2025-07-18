@@ -2,7 +2,7 @@
 
 namespace Blockera\Features\Contracts;
 
-use Blockera\Bootstrap\Application;
+use Blockera\Utils\Adapters\DomParser;
 
 interface FeatureInterface {
 
@@ -28,10 +28,12 @@ interface FeatureInterface {
 	public function isEnabled(): bool;
 
 	/**
-	 * Set
+	 * The html manipulate method.
 	 *
-	 * @param Application $app
-	 * @return void
+	 * @param DomParser $dom_parser The dom parser to manipulate.
+	 * @param array     $data The data to manipulate.
+	 * 
+	 * @return string The manipulated html.
 	 */
-	public function setApp( Application $app): void;
+	public function htmlManipulate( DomParser $dom_parser, array $data): string;
 }

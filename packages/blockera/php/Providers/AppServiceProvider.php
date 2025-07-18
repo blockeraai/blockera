@@ -51,7 +51,23 @@ class AppServiceProvider extends ServiceProvider {
         parent::register();
 
         try {
-			$this->app->singleton(FeaturesManager::class);
+			$this->app->singleton(
+                DomParser::class,
+                static function () {
+
+                    return new DomParser();
+                }
+            );
+			
+			$this->app->singleton(
+                FeaturesManager::class,
+                function ( Application $app) {
+					$app->dom_parser = $app->make(DomParser::class);
+
+					return new FeaturesManager($app);
+				}
+            );
+
 			$this->app->singleton(IconsManager::class);
 
 			$this->app->singleton(
@@ -138,14 +154,6 @@ class AppServiceProvider extends ServiceProvider {
 					$style_engine->setBreakpoints($app->getEntity('breakpoints'));
 
                     return $style_engine;
-                }
-            );
-
-            $this->app->singleton(
-                DomParser::class,
-                static function () {
-
-                    return new DomParser();
                 }
             );
 

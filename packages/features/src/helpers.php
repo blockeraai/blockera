@@ -11,12 +11,20 @@ if (! function_exists('blockera_features_list')) {
 	 * @return array<string, FeatureInterface> The list of features.
 	 */
 	function blockera_features_list( string $project_root): array {
+        static $features = null;
+        
+        if (null !== $features) {
+            return $features;
+        }
+        
         $config_file = $project_root . '/config/features.php';
 
 		if (! file_exists($config_file)) {
-			return [];
+			$features = [];
+			return $features;
 		}
 
-		return require $config_file;
+		$features = require $config_file;
+		return $features;
     }
 }

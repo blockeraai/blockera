@@ -7,7 +7,7 @@
 			"Blockera\\Features\\": "src/"
 		},
 		"files": [
-			"src/helper.php"
+			"src/helpers.php"
 		]
 	},
 	"autoload-dev": {

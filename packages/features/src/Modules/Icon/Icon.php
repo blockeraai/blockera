@@ -4,13 +4,11 @@ namespace Blockera\Features\Modules\Icon;
 
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Traits\Singleton;
-use Blockera\Features\Traits\ApplicationTrait;
 use Blockera\Features\Contracts\FeatureInterface;
-use Blockera\Features\Contracts\EditableBlockHTML;
 
-class Icon implements FeatureInterface, EditableBlockHTML {
+class Icon implements FeatureInterface {
 
-    use Singleton, ApplicationTrait;
+    use Singleton;
 
 	/**
 	 * Store the configuration.
@@ -48,22 +46,23 @@ class Icon implements FeatureInterface, EditableBlockHTML {
     }
 
 	/**
-	 * Manipulate the html of the block.
+	 * Manipulate the html of document.
 	 *
-	 * @param string $html the html of the block.
-	 * @param array  $data the data of the block.
+	 * @param DomParser $dom_parser the dom parser of document.
+	 * @param array     $data the data of document.
 	 *
 	 * @return string the manipulated html.
 	 */
-	public function htmlManipulate( string $html, array $data ): string {
+	public function htmlManipulate( DomParser $dom_parser, array $data ): string {
 		
+		// Get the html of the document.
+		$html = $data['origin_html'] ?? '';
+
 		// If icon feature is experimental, check if it's enabled.
 		if (isset($data['experimental-features-status']['icon']) && ! $data['experimental-features-status']['icon']) {
 			
 			return $html;
 		}
-
-		$data['dom'] = $this->app->make(DomParser::class)::str_get_html($html);
 
 		return $this->edit_block_html->htmlManipulate( $html, $data );
 	}

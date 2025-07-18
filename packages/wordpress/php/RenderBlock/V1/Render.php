@@ -94,8 +94,13 @@ class Render {
         // blockera active experimental icon extension?
         $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
 
+		$fm = $this->app->make(FeaturesManager::class);
+
 		// Get all registered features.
-		$features = $this->app->make(FeaturesManager::class)->getRegisteredFeatures();
+		$features = $fm->getRegisteredFeatures();
+
+		// Get dom parser.
+		$dom_parser = $fm->getApp()->dom_parser::str_get_html($html);
 
 		foreach ($features as $feature) {
 
@@ -104,9 +109,10 @@ class Render {
 				continue;
 			}
 
-			$feature->setApp($this->app);
+			$args['dom']         = $dom_parser;
+			$args['origin_html'] = $html;
 
-			$html = $feature->htmlManipulate($html, $args);
+			$html = $feature->htmlManipulate($dom_parser, $args);
 		}
 
 		return $html;
