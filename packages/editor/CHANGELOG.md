@@ -2,6 +2,7 @@
 
 ### Improvements
 - Improved block features organization for better code structure and easier maintenance.
+- Added support for third-party developers to extend and customize the style engine filters.
 
 ## 1.9.0 (2025-07-16)
 
