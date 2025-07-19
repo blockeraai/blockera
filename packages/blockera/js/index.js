@@ -34,7 +34,10 @@ import {
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
-import { unstableBootstrapServerSideFeatures } from '@blockera/features';
+import {
+	unstableBootstrapServerSideFeatures,
+	bootstrapEditorStyleEngineFilters,
+} from '@blockera/features';
 
 /**
  * Registration blockera core block settings with internal definitions.
@@ -60,6 +63,8 @@ addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
 
 		window.unstableBootstrapServerSideFeatures =
 			unstableBootstrapServerSideFeatures;
+
+		bootstrapEditorStyleEngineFilters();
 
 		registerBlockeraBlocks();
 		registerConfigExtensionsOfInnerBlocks();
