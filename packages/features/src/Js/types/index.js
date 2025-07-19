@@ -1,6 +1,15 @@
 // @flow
 
+/**
+ * External dependencies
+ */
 import type { ComponentType } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import type { CssRule } from '@blockera/editor/js/style-engine/types';
+import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
 
 export type TEditBlockHTMLArgs = {
 	name: string,
@@ -17,20 +26,13 @@ export type TBlockFeaturesParams = {
 	},
 };
 
-export type TUseBlockFeaturesProps = {
-	name: string,
-	clientId: string,
-	attributes: Object,
-	blockRefId: { current: HTMLElement },
-	blockFeatures?: TBlockFeaturesParams,
-};
-
 export type TFeature = {
 	name: string,
 	isEnabled: () => boolean,
 	toolbarControls?: TToolbarControls,
 	ToolbarButtonComponent?: ComponentType<any>,
 	editBlockHTML?: (args: TEditBlockHTMLArgs) => void,
+	styleGenerator?: (args: StylesProps) => Array<CssRule>,
 };
 
 export type TToolbarControls = Array<{
@@ -49,4 +51,16 @@ export type TContextualToolbarComponents = ComponentType<{
 export type TCalculatedFeatures = {
 	blockSideEffectFeatures: Array<TFeature>,
 	contextualToolbarFeatures: Array<TFeature>,
+};
+
+export type TUseBlockFeaturesProps = {
+	name: string,
+	clientId: string,
+	attributes: Object,
+	blockRefId: { current: HTMLElement },
+	blockFeatures?: TBlockFeaturesParams,
+};
+
+export type TUseBlockStyleEngineProps = {
+	settings: StylesProps,
 };

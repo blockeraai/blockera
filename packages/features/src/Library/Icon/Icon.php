@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\Features\Modules\Icon;
+namespace Blockera\Features\Library\Icon;
 
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Traits\Singleton;
@@ -54,7 +54,7 @@ class Icon implements FeatureInterface {
 	 * @return string the manipulated html.
 	 */
 	public function htmlManipulate( DomParser $dom_parser, array $data ): string {
-		
+
 		// Get the html of the document.
 		$html = $data['origin_html'] ?? '';
 

@@ -4,5 +4,5 @@
  *
  * Security file.
  *
- * @package src/Modules/index.php
+ * @package src/Library/index.php
  */

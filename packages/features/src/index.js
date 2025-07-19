@@ -3,12 +3,13 @@
 /**
  * External dependencies
  */
-import { dispatch } from '@wordpress/data';
+import { addFilter } from '@wordpress/hooks';
+import { dispatch, select } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
-import featuresStack from './Modules';
+import featuresStack from './Library';
 import { STORE_NAME } from './Js/store';
 import type { TFeature } from './Js/types';
 
@@ -28,6 +29,27 @@ export const unstableBootstrapServerSideFeatures = (
 
 		dispatch(STORE_NAME).registerFeature(standardFeature);
 	}
+};
+
+export const bootstrapEditorStyleEngineFilters = () => {
+	addFilter(
+		'blockera.editor.styleEngine.generators',
+		'blockera.editor.styleEngine.generators',
+		(styleGenerators) => {
+			const { getFeatures } = select(STORE_NAME);
+			const registeredFeatures = getFeatures();
+
+			for (const featureId in registeredFeatures) {
+				const featureObject = featuresStack[featureId];
+
+				if ('function' === typeof featureObject?.styleGenerator) {
+					styleGenerators[featureId] = featureObject.styleGenerator;
+				}
+			}
+
+			return styleGenerators;
+		}
+	);
 };
 
 export * from './Js/use-block-features';
