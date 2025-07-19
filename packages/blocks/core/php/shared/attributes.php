@@ -243,6 +243,7 @@ return [
 				'icon'      => '',
 				'library'   => '',
 				'uploadSVG' => '',
+				'renderedIcon' => '',
 			],
 		],
 	],

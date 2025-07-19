@@ -3,9 +3,10 @@ export function iconReducer(iconData, action) {
 		case 'UPDATE_ICON':
 			return {
 				...iconData,
+				uploadSVG: '',
+				renderedIcon: '',
 				icon: action.icon,
 				library: action.library,
-				uploadSVG: '',
 			};
 
 		case 'UPDATE_SVG':
@@ -13,6 +14,7 @@ export function iconReducer(iconData, action) {
 				...iconData,
 				icon: null,
 				library: null,
+				renderedIcon: '',
 				uploadSVG: action.uploadSVG,
 			};
 
@@ -21,6 +23,7 @@ export function iconReducer(iconData, action) {
 				icon: '',
 				library: '',
 				uploadSVG: '',
+				renderedIcon: '',
 			};
 
 		default:
