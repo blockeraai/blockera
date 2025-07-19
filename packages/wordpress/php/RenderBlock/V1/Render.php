@@ -5,8 +5,6 @@ namespace Blockera\WordPress\RenderBlock\V1;
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Features\FeaturesManager;
-use Blockera\Utils\Adapters\DomParser;
-use Blockera\Features\Contracts\EditableBlockHTML;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
