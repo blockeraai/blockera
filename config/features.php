@@ -1,6 +1,6 @@
 <?php
 
-use Blockera\Features\Modules\Icon\Icon;
+use Blockera\Features\Library\Icon\Icon;
 
 return [
 	'icon' => Icon::getInstance(),
