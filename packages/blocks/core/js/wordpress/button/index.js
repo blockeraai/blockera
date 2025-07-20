@@ -38,10 +38,15 @@ export const Button: BlockType = {
 		visited: sharedBlockStates.visited,
 	},
 	blockFeatures: {
-		hasSideEffect: true,
-		hasContextualToolbar: {
-			enabled: true,
-			type: 'dropdown',
+		icon: {
+			htmlEditable: {
+				status: true,
+				selector: '{{ BLOCK_SELECTOR }} a',
+			},
+			contextualToolbar: {
+				status: true,
+				type: 'dropdown',
+			},
 		},
 	},
 };

@@ -11,18 +11,33 @@ import type { ComponentType } from 'react';
 import type { CssRule } from '@blockera/editor/js/style-engine/types';
 import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
 
+/**
+ * Internal dependencies
+ */
+import type { TFeatureId } from './library';
+
+type TFeatureHTMLEditable = {
+	status: boolean,
+	selector: string,
+};
+
+type TFeatureContextualToolbar = {
+	status: boolean,
+	type: 'button' | 'dropdown' | 'none',
+};
+
 export type TEditBlockHTMLArgs = {
 	name: string,
 	clientId: string,
-	blockRefId: { current: HTMLElement },
 	attributes: Object,
+	featureConfig: TFeatureHTMLEditable,
+	blockRefId: { current: HTMLElement },
 };
 
-export type TBlockFeaturesParams = {
-	hasSideEffect: boolean,
-	hasContextualToolbar: {
-		enabled: boolean,
-		type: 'button' | 'dropdown' | 'none',
+export type TBlockFeatures = {
+	[key: TFeatureId]: {
+		htmlEditable: TFeatureHTMLEditable,
+		contextualToolbar: TFeatureContextualToolbar,
 	},
 };
 
@@ -40,7 +55,7 @@ export type TToolbarControls = Array<{
 	onClick: () => void,
 }>;
 
-export type TBlockFeatures = {
+export type TBlockFeaturesHookValue = {
 	ContextualToolbarComponents: TContextualToolbarComponents,
 };
 
@@ -57,8 +72,8 @@ export type TUseBlockFeaturesProps = {
 	name: string,
 	clientId: string,
 	attributes: Object,
+	blockFeatures?: TBlockFeatures,
 	blockRefId: { current: HTMLElement },
-	blockFeatures?: TBlockFeaturesParams,
 };
 
 export type TUseBlockStyleEngineProps = {

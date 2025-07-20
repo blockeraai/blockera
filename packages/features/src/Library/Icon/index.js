@@ -15,21 +15,16 @@ import { isEmpty, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import iconConfig from './icon.schema.json';
 import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
 
-const allowedBlocks = Object.keys(iconConfig.blocks);
-
 const editBlockHTML = ({
-	name,
+	// name,
 	clientId,
 	blockRefId,
 	attributes,
-}: TEditBlockHTMLArgs): void => {
-	if (
-		!experimental().get('editor.extensions.iconExtension') ||
-		!allowedBlocks.includes(name)
-	) {
+}: // featureConfig,
+TEditBlockHTMLArgs): void => {
+	if (!experimental().get('editor.extensions.iconExtension')) {
 		return;
 	}
 

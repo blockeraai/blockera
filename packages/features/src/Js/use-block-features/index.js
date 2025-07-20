@@ -14,28 +14,17 @@ import { ToolbarGroup, ToolbarDropdownMenu } from '@wordpress/components';
 import { STORE_NAME } from '../store/constants';
 import type {
 	TFeature,
-	TBlockFeatures,
 	TToolbarControls,
 	TCalculatedFeatures,
 	TUseBlockFeaturesProps,
+	TBlockFeaturesHookValue,
 	TContextualToolbarComponents,
 } from '../types';
 import { default as featuresLibrary } from '../../Library';
 
 export const useBlockFeatures = (
 	props: TUseBlockFeaturesProps
-): TBlockFeatures => {
-	const { featuresStack } = featuresLibrary;
-
-	if ('undefined' === typeof props?.blockFeatures) {
-		props.blockFeatures = {
-			hasSideEffect: false,
-			hasContextualToolbar: {
-				enabled: false,
-				type: 'none',
-			},
-		};
-	}
+): TBlockFeaturesHookValue => {
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
 
@@ -46,108 +35,120 @@ export const useBlockFeatures = (
 		const blockSideEffectFeatures: Array<TFeature> = [];
 		const contextualToolbarFeatures: Array<TFeature> = [];
 
+		if (!props?.blockFeatures) {
+			return { blockSideEffectFeatures, contextualToolbarFeatures };
+		}
+
 		for (const featureId in registeredFeatures) {
 			const feature = registeredFeatures[featureId];
-			const featureConfig = featuresStack[featureId];
 
 			// If the feature is not registered, skip it.
-			if (!featuresStack[featureId]) {
+			if (!featuresLibrary[featureId]) {
 				continue;
 			}
-			// Check the feature available in feature blocks configuration.
-			if (!Object.keys(featureConfig.blocks).includes(props.name)) {
-				continue;
-			}
-
-			// Push to blockSideEffectFeatures if the feature has editBlockHTML.
-			if ('function' === typeof feature.editBlockHTML) {
-				if (feature.isEnabled()) {
-					blockSideEffectFeatures.push(feature);
+			// Check the feature available in htmlEditable context of blocks features configuration.
+			if (props?.blockFeatures[featureId]?.htmlEditable?.status) {
+				// Push to blockSideEffectFeatures if the feature has editBlockHTML.
+				if ('function' === typeof feature?.editBlockHTML) {
+					if (feature.isEnabled()) {
+						blockSideEffectFeatures.push(feature);
+					}
 				}
 			}
 
-			// Push to contextualToolbarFeatures if the feature has toolbarControls or ToolbarButtonComponent.
-			if (feature.toolbarControls || feature.ToolbarButtonComponent) {
-				if (feature.isEnabled()) {
-					contextualToolbarFeatures.push(feature);
+			// Check the feature context available in contextualToolbar context of blocks features configuration.
+			if (props?.blockFeatures[featureId]?.contextualToolbar?.status) {
+				// Push to contextualToolbarFeatures if the feature has toolbarControls or ToolbarButtonComponent.
+				if (
+					feature?.toolbarControls ||
+					feature?.ToolbarButtonComponent
+				) {
+					if (feature.isEnabled()) {
+						contextualToolbarFeatures.push(feature);
+					}
 				}
 			}
 		}
 
 		return { blockSideEffectFeatures, contextualToolbarFeatures };
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [registeredFeatures, props]);
 
 	const ContextualToolbarComponents: TContextualToolbarComponents = () => {
-		const { enabled, type } = props?.blockFeatures
-			?.hasContextualToolbar || {
-			enabled: false,
-			type: 'none',
-		};
+		const mappedChildren = [];
 
-		if (!enabled) {
-			return null;
-		}
+		contextualToolbarFeatures.forEach(
+			(feature: TFeature, index: number) => {
+				if (!feature?.toolbarControls?.length) {
+					return <></>;
+				}
 
-		if ('dropdown' === type) {
-			const controls: TToolbarControls = contextualToolbarFeatures
-				.filter(
-					(feature: TFeature): boolean => !!feature?.toolbarControls
-				)
-				.reduce(
-					(
-						acc: TToolbarControls,
-						feature: TFeature
-					): TToolbarControls => {
-						if (!feature.toolbarControls) {
-							return acc;
-						}
+				const { type = 'none' } =
+					props?.blockFeatures[feature.name].contextualToolbar;
 
-						return [...acc, ...feature.toolbarControls];
-					},
-					[]
-				);
+				if ('dropdown' === type) {
+					const controls: TToolbarControls = contextualToolbarFeatures
+						.filter(
+							(feature: TFeature): boolean =>
+								!!feature?.toolbarControls
+						)
+						.reduce(
+							(
+								acc: TToolbarControls,
+								feature: TFeature
+							): TToolbarControls => {
+								if (!feature.toolbarControls) {
+									return acc;
+								}
 
-			// FIXME: Added the required props to the ToolbarDropdownMenu component.
-			// We should provide the suitable label and icon for the ToolbarDropdownMenu component.
-			return (
-				<BlockControls>
-					<ToolbarDropdownMenu
-						icon="ellipsis"
-						label="Blockera Block Features"
-						controls={controls}
-					/>
-				</BlockControls>
-			);
-		}
+								return [...acc, ...feature.toolbarControls];
+							},
+							[]
+						);
 
-		if ('button' !== type) {
-			return null;
-		}
-
-		const components = contextualToolbarFeatures.map(
-			(feature: TFeature) => {
-				if (feature?.ToolbarButtonComponent) {
-					return (
-						<feature.ToolbarButtonComponent key={feature.name} />
+					// FIXME: Added the required props to the ToolbarDropdownMenu component.
+					// We should provide the suitable label and icon for the ToolbarDropdownMenu component.
+					mappedChildren.push(
+						<BlockControls key={`${index}-${feature.name}`}>
+							<ToolbarDropdownMenu
+								icon="ellipsis"
+								controls={controls}
+								label="Blockera Block Features"
+							/>
+						</BlockControls>
 					);
 				}
 
-				return <></>;
+				if ('button' !== type) {
+					return null;
+				}
+
+				const components = contextualToolbarFeatures.map(
+					(feature: TFeature) => {
+						if (feature?.ToolbarButtonComponent) {
+							return (
+								<feature.ToolbarButtonComponent
+									key={feature.name}
+								/>
+							);
+						}
+
+						return <></>;
+					}
+				);
+
+				mappedChildren.push(
+					<BlockControls key={`${index}-${feature.name}`}>
+						<ToolbarGroup>{components}</ToolbarGroup>
+					</BlockControls>
+				);
 			}
 		);
 
-		return (
-			<BlockControls>
-				<ToolbarGroup>{components}</ToolbarGroup>
-			</BlockControls>
-		);
+		return mappedChildren;
 	};
 
 	useEffect((): void => {
-		if (!props?.blockFeatures?.hasSideEffect) {
-			return;
-		}
-
 		blockSideEffectFeatures.forEach((feature: TFeature) => {
 			if ('function' !== typeof feature.editBlockHTML) {
 				return;
@@ -156,7 +157,10 @@ export const useBlockFeatures = (
 			// Remove redundant params.
 			const { blockFeatures, ...rest } = props;
 
-			feature.editBlockHTML({ ...rest });
+			feature.editBlockHTML({
+				...rest,
+				iconConfig: blockFeatures[feature.name].htmlEditable,
+			});
 		});
 	}, [blockSideEffectFeatures, props]);
 
