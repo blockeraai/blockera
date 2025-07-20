@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import apiFetch from '@wordpress/api-fetch';
 import { detailedDiff } from 'deep-object-diff';
-import { useContext, useState, useCallback } from '@wordpress/element';
+import { useContext, useState, useCallback, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -21,6 +21,7 @@ import {
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { default as BreakpointsSettings } from '@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings';
+import { getSortedBreakpoints } from '@blockera/editor/js/canvas-editor/components/breakpoints/helpers';
 
 /**
  * Internal dependencies
@@ -88,45 +89,55 @@ export const GeneralPanel = (): MixedElement => {
 			});
 	};
 
-	const memoizedCallback = useCallback(
-		(newValue) => {
-			newValue = Object.fromEntries(
-				Object.entries(newValue).map(([key, breakpoint]) => {
-					return [
-						key,
-						{
-							...breakpoint,
-							...('' === breakpoint.type ? { type: key } : {}),
-						},
-					];
-				})
-			);
-			const {
-				added: savedAdded,
-				deleted: savedDeleted,
-				updated: savedUpdated,
-			} = detailedDiff(
-				window.blockeraSettings.general.breakpoints,
-				newValue
-			);
+	// Memoize the sorted breakpoints to prevent re-creation on every render.
+	const sortedBreakpoints = useMemo(() => {
+		return getSortedBreakpoints(generalSettings.breakpoints, {
+			output: 'object',
+		});
+	}, [generalSettings.breakpoints]);
 
-			setHasUpdates(
-				Object.keys(savedAdded).length > 0 ||
-					Object.keys(savedDeleted).length > 0 ||
-					Object.keys(savedUpdated).length > 0
-			);
+	// Memoize the default value to prevent re-creation.
+	const breakpointsDefaultValue = useMemo(() => {
+		return defaultSettings?.general?.breakpoints || {};
+	}, [defaultSettings?.general?.breakpoints]);
 
-			setSettings({
-				...settings,
-				general: {
-					...generalSettings,
-					breakpoints: newValue,
-				},
-			});
-		},
+	const memoizedCallback = useCallback((newValue) => {
+		newValue = getSortedBreakpoints(newValue, {
+			output: 'object',
+		});
+
+		newValue = Object.fromEntries(
+			Object.entries(newValue).map(([key, breakpoint]) => {
+				return [
+					key,
+					{
+						...breakpoint,
+						...('' === breakpoint.type ? { type: key } : {}),
+					},
+				];
+			})
+		);
+		const {
+			added: savedAdded,
+			deleted: savedDeleted,
+			updated: savedUpdated,
+		} = detailedDiff(window.blockeraSettings.general.breakpoints, newValue);
+
+		setHasUpdates(
+			Object.keys(savedAdded).length > 0 ||
+				Object.keys(savedDeleted).length > 0 ||
+				Object.keys(savedUpdated).length > 0
+		);
+
+		setSettings({
+			...settings,
+			general: {
+				...generalSettings,
+				breakpoints: newValue,
+			},
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[settings, generalSettings]
-	);
+	}, []);
 
 	return (
 		<Flex
@@ -168,10 +179,8 @@ export const GeneralPanel = (): MixedElement => {
 				>
 					<BreakpointsSettings
 						onChange={memoizedCallback}
-						breakpoints={generalSettings.breakpoints}
-						defaultValue={
-							defaultSettings?.general?.breakpoints || {}
-						}
+						breakpoints={sortedBreakpoints}
+						defaultValue={breakpointsDefaultValue}
 					/>
 				</div>
 			</Flex>
