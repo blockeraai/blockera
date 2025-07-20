@@ -32,7 +32,7 @@ TEditBlockHTMLArgs): void => {
 		blockeraIcon,
 		blockeraIconSize = '',
 		blockeraIconColor = '',
-		blockeraIconGap = '5px',
+		blockeraIconGap = '10px',
 	} = attributes;
 
 	let { blockeraIconPosition } = attributes;
@@ -52,7 +52,7 @@ TEditBlockHTMLArgs): void => {
 	iconNode.classList.add('blockera-icon');
 	iconNode.style.display = 'inline-flex';
 	iconNode.style.alignItems = 'center';
-	iconNode.style.verticalAlign = 'middle';
+	iconNode.style.alignSelf = 'center';
 
 	if ('right' === blockeraIconPosition) {
 		iconNode.style.marginLeft = blockeraIconGap || '10px';
@@ -60,15 +60,25 @@ TEditBlockHTMLArgs): void => {
 		iconNode.style.marginRight = blockeraIconGap || '10px';
 	}
 
+	if (blockeraIconSize) {
+		iconNode.style.verticalAlign = 'middle';
+	}
+
 	const icon = createRoot(iconNode);
 	icon.render(
 		<Icon
 			style={{
+				...(!blockeraIconSize
+					? {
+							position: 'relative',
+							top: `0.125em`,
+					  }
+					: {}),
 				fill: blockeraIconColor || 'currentColor',
 				color: blockeraIconColor || 'inherit',
 			}}
 			{...(blockeraIcon ?? {})}
-			iconSize={blockeraIconSize || '1.33em'}
+			iconSize={blockeraIconSize || '1em'}
 		/>
 	);
 
