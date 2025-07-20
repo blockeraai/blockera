@@ -205,7 +205,7 @@ export const IconExtension: ComponentType<{
 										columns="columns-2"
 										unitType="essential"
 										defaultValue=""
-										min={8}
+										min={0}
 										onChange={(newValue, ref) =>
 											handleOnChangeAttributes(
 												'blockeraIconSize',

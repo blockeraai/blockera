@@ -34,9 +34,13 @@ TEditBlockHTMLArgs): void => {
 		blockeraIcon,
 		blockeraIconSize = '',
 		blockeraIconColor = '',
-		blockeraIconGap = '5px',
-		blockeraIconPosition = 'right',
+		blockeraIconGap = '10px',
 	} = attributes;
+
+	let { blockeraIconPosition } = attributes;
+	if (isEmpty(blockeraIconPosition)) {
+		blockeraIconPosition = 'left';
+	}
 
 	const blockElement = blockRefId.current;
 	const el = blockElement.parentElement?.querySelector(`#block-${clientId}`);
@@ -50,20 +54,32 @@ TEditBlockHTMLArgs): void => {
 	iconNode.classList.add('blockera-icon');
 	iconNode.style.display = 'inline-flex';
 	iconNode.style.alignItems = 'center';
-	iconNode.style.verticalAlign = 'middle';
+	iconNode.style.alignSelf = 'center';
+
+	if ('right' === blockeraIconPosition) {
+		iconNode.style.marginLeft = blockeraIconGap || '10px';
+	} else if ('left' === blockeraIconPosition) {
+		iconNode.style.marginRight = blockeraIconGap || '10px';
+	}
+
+	if (blockeraIconSize) {
+		iconNode.style.verticalAlign = 'middle';
+		iconNode.style.position = 'relative';
+		iconNode.style.top = `-0.025em`;
+	}
 
 	const icon = createRoot(iconNode);
 	icon.render(
 		<Icon
 			style={{
+				...(!blockeraIconSize
+					? {
+							position: 'relative',
+							top: `0.125em`,
+					  }
+					: {}),
 				fill: blockeraIconColor || 'currentColor',
 				color: blockeraIconColor || 'inherit',
-				marginLeft:
-					'right' === blockeraIconPosition || !blockeraIconPosition
-						? blockeraIconGap
-						: 0,
-				marginRight:
-					'left' === blockeraIconPosition ? blockeraIconGap : 0,
 			}}
 			{...(blockeraIcon ?? {})}
 			iconSize={blockeraIconSize || '1em'}
