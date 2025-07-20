@@ -64,7 +64,7 @@ TEditBlockHTMLArgs): void => {
 					'left' === blockeraIconPosition ? blockeraIconGap : 0,
 			}}
 			{...(blockeraIcon ?? {})}
-			iconSize={blockeraIconSize || '1em'}
+			iconSize={blockeraIconSize || '1.33em'}
 		/>
 	);
 
