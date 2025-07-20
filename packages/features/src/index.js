@@ -52,4 +52,5 @@ export const bootstrapEditorStyleEngineFilters = () => {
 	);
 };
 
+export * from './Js/components';
 export * from './Js/use-block-features';

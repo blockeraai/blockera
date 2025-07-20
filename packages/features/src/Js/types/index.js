@@ -34,8 +34,27 @@ export type TEditBlockHTMLArgs = {
 	blockRefId: { current: HTMLElement },
 };
 
+type TFeatureInspector = {
+	status: boolean,
+	extensions: {
+		icon: {
+			tabPosition:
+				| 'blockera-inspector-settings-start'
+				| 'blockera-inspector-settings-end'
+				| 'blockera-inspector-settings'
+				| 'blockera-inspector-styles-start'
+				| 'blockera-inspector-styles-end'
+				| 'blockera-inspector-styles'
+				| 'blockera-inspector-interactions-start'
+				| 'blockera-inspector-interactions'
+				| 'blockera-inspector-interactions-end',
+		},
+	},
+};
+
 export type TBlockFeatures = {
 	[key: TFeatureId]: {
+		inspector: TFeatureInspector,
 		htmlEditable: TFeatureHTMLEditable,
 		contextualToolbar: TFeatureContextualToolbar,
 	},
@@ -44,7 +63,9 @@ export type TBlockFeatures = {
 export type TFeature = {
 	name: string,
 	isEnabled: () => boolean,
+	extensionConfigId: string,
 	toolbarControls?: TToolbarControls,
+	ExtensionComponent: ComponentType<any>,
 	ToolbarButtonComponent?: ComponentType<any>,
 	editBlockHTML?: (args: TEditBlockHTMLArgs) => void,
 	styleGenerator?: (args: StylesProps) => Array<CssRule>,
@@ -79,3 +100,23 @@ export type TUseBlockFeaturesProps = {
 export type TUseBlockStyleEngineProps = {
 	settings: StylesProps,
 };
+
+export type TExtensionSlotFillProps = {
+	block: Object,
+	settings: Object,
+	slotName: string,
+	attributes: Object,
+	additional: Object,
+	currentStateAttributes: Object,
+	handleOnChangeSettings: (newSupports: Object, name: string) => void,
+	handleOnChangeAttributes: (attributes: Object, ref: Object) => void,
+};
+
+export type TExtensionFillComponentProps = ComponentType<{
+	block: Object,
+	settings: Object,
+	attributes: Object,
+	currentStateAttributes: Object,
+	handleOnChangeSettings: (newSupports: Object, name: string) => void,
+	handleOnChangeAttributes: (attributes: Object, ref: Object) => void,
+}>;

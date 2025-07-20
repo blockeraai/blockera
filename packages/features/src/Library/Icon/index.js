@@ -15,6 +15,8 @@ import { isEmpty, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { IconStyles } from './extension/styles';
+import { IconExtension } from './extension/extension';
 import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
 
 const editBlockHTML = ({
@@ -82,7 +84,10 @@ TEditBlockHTMLArgs): void => {
 const IconFeature: TFeature = {
 	name: 'icon',
 	editBlockHTML,
+	styleGenerator: IconStyles,
 	isEnabled: (): boolean => true,
+	extensionConfigId: 'iconConfig',
+	ExtensionComponent: IconExtension,
 };
 
 export default IconFeature;
