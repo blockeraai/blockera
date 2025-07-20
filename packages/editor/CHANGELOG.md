@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 2.0.0 (2025-07-20)
+
 ### Improvements
 - Reorganized the breakpoint device sizes in the settings panel to be more intuitive and easier to understand.
 
