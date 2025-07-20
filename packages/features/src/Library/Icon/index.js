@@ -33,8 +33,12 @@ TEditBlockHTMLArgs): void => {
 		blockeraIconSize = '',
 		blockeraIconColor = '',
 		blockeraIconGap = '5px',
-		blockeraIconPosition = 'right',
 	} = attributes;
+
+	let { blockeraIconPosition } = attributes;
+	if (isEmpty(blockeraIconPosition)) {
+		blockeraIconPosition = 'left';
+	}
 
 	const blockElement = blockRefId.current;
 	const el = blockElement.parentElement?.querySelector(`#block-${clientId}`);
@@ -50,18 +54,18 @@ TEditBlockHTMLArgs): void => {
 	iconNode.style.alignItems = 'center';
 	iconNode.style.verticalAlign = 'middle';
 
+	if ('right' === blockeraIconPosition) {
+		iconNode.style.marginLeft = blockeraIconGap || '10px';
+	} else if ('left' === blockeraIconPosition) {
+		iconNode.style.marginRight = blockeraIconGap || '10px';
+	}
+
 	const icon = createRoot(iconNode);
 	icon.render(
 		<Icon
 			style={{
 				fill: blockeraIconColor || 'currentColor',
 				color: blockeraIconColor || 'inherit',
-				marginLeft:
-					'right' === blockeraIconPosition || !blockeraIconPosition
-						? blockeraIconGap
-						: 0,
-				marginRight:
-					'left' === blockeraIconPosition ? blockeraIconGap : 0,
 			}}
 			{...(blockeraIcon ?? {})}
 			iconSize={blockeraIconSize || '1.33em'}
