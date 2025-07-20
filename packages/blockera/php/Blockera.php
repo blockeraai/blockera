@@ -56,6 +56,9 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 			$breakpoints = blockera_update_breakpoints($options, $breakpoints);
 		}
 
+		$breakpoints = blockera_sort_breakpoints($breakpoints);
+		$breakpoints = array_combine(array_column($breakpoints, 'type'), $breakpoints);
+
 		$this->setEntities(
 			array_merge(
 				blockera_core_config( 'entities' ),

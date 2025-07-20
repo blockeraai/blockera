@@ -967,3 +967,68 @@ if ( ! function_exists( 'blockera_is_wp_block_child_class' ) ) {
 		return preg_match('/wp-block-[a-zA-Z0-9-]+__[a-zA-Z0-9-]+/i', $block_classname);
 	}
 }
+
+if (! function_exists('blockera_sort_breakpoints')) {
+
+	/**
+	 * Sorts breakpoints to ensure correct CSS media query priority for a desktop-first approach.
+	 * The sorting order is:
+	 * 1. The `base` breakpoint (which has no min/max).
+	 * 2. Breakpoints with `max` width (for smaller screens), sorted largest to smallest.
+	 * 3. Breakpoints with `min` width (for larger screens), sorted smallest to largest.
+	 *
+	 * @param array $breakpoints - The array containing breakpoint definitions.
+	 * @return array An array of breakpoint objects sorted for CSS generation.
+	 */
+	function blockera_sort_breakpoints( array $breakpoints): array {
+		// Helper function to parse a pixel value string (e.g., "1920px") into an integer.
+		$parsePx = function ( $value) {
+			return (int) preg_replace('/[^0-9]/', '', $value) ? (int) preg_replace('/[^0-9]/', '', $value) : 0;
+		};
+
+		// Convert the breakpoints array into a sortable array.
+		$breakpointsArray = array_values($breakpoints);
+
+		// Sort the array using a custom comparison function.
+		usort(
+            $breakpointsArray,
+            function ( $a, $b) use ( $parsePx) {
+				$aIsMin  = ! empty($a['settings']['min']);
+				$bIsMin  = ! empty($b['settings']['min']);
+				$aIsBase = empty($a['settings']['min']) && empty($a['settings']['max']);
+				$bIsBase = empty($b['settings']['min']) && empty($b['settings']['max']);
+
+				// Assign a group number to each breakpoint to control the primary sort order.
+				// Group 1: The single `base` breakpoint (no min/max).
+				// Group 2: `max-width` breakpoints (for smaller screens).
+				// Group 3: `min-width` breakpoints (for larger screens).
+				$aGroup = $aIsBase ? 1 : ( $aIsMin ? 3 : 2 );
+				$bGroup = $bIsBase ? 1 : ( $bIsMin ? 3 : 2 );
+
+				// If the breakpoints are in different groups, sort by the group number (1, then 2, then 3).
+				if ($aGroup !== $bGroup) {
+					return $aGroup - $bGroup;
+				}
+
+				// If the breakpoints are in the same group, get their pixel values.
+				$aValue = $parsePx($a['settings']['min'] ?? $a['settings']['max'] ?? '');
+				$bValue = $parsePx($b['settings']['min'] ?? $b['settings']['max'] ?? '');
+
+				// For 'max-width' breakpoints (Group 2), sort descending (largest size first).
+				if (2 === $aGroup) {
+					return $bValue - $aValue;
+				}
+
+				// For 'min-width' breakpoints (Group 3), sort ascending (smallest size first).
+				if (3 === $aGroup) {
+					return $aValue - $bValue;
+				}
+
+				// No sorting needed for the base group as it only has one item.
+				return 0;
+			}
+        );
+
+		return $breakpointsArray;
+	}
+}
