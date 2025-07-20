@@ -11,6 +11,7 @@ import { default as memoize } from 'fast-memoize';
  * Blockera dependencies
  */
 import { isUndefined } from '@blockera/utils';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -299,4 +300,123 @@ export function prepValueForHeader(value: any): string {
 	}
 
 	return value;
+}
+
+export function getSortedBreakpoints(
+	breakpoints: BreakpointTypes[],
+	{
+		BreakpointIcon,
+		output = 'icons',
+		onClick = () => {},
+		setActiveBreakpoint,
+		currentActiveBreakpoint,
+	}
+) {
+	const newBreakpointsList = [];
+
+	// Helper function to extract numeric value from px string
+	const extractNumericValue = (value: string): number => {
+		if (!value || value.includes('func')) return -1;
+		return parseInt(value.replace('px', ''), 10) || 0;
+	};
+
+	// Helper function to determine breakpoint category and sort value
+	const getBreakpointSortInfo = (item: BreakpointTypes) => {
+		const { min, max } = item.settings;
+		const minValue = extractNumericValue(min);
+		const maxValue = extractNumericValue(max);
+		const hasMin = min && minValue >= 0;
+		const hasMax = max && maxValue >= 0;
+		const hasFunc =
+			(min && min.includes('func')) || (max && max.includes('func'));
+
+		// Base breakpoint should be in center (category 2)
+		if (item.base) {
+			return { category: 2, sortValue: 0 };
+		}
+
+		// Items with "func" should be at the very end (category 5)
+		if (hasFunc) {
+			return { category: 5, sortValue: 0 };
+		}
+
+		// Items with both min and max should be at the end (category 4)
+		if (hasMin && hasMax) {
+			return { category: 4, sortValue: maxValue };
+		}
+
+		// Items with only min should be first (category 1), larger values first
+		if (hasMin && !hasMax) {
+			return { category: 1, sortValue: -minValue }; // Negative for descending order
+		}
+
+		// Items with only max should be at the end (category 3), larger values at the end
+		if (!hasMin && hasMax) {
+			return { category: 3, sortValue: -maxValue }; // Negative for ascending order (small to large)
+		}
+
+		// Fallback for items with no min/max
+		return { category: 3, sortValue: 0 };
+	};
+
+	let breakpointsEntries = Object.entries(breakpoints);
+
+	if ('icons' === output) {
+		breakpointsEntries = breakpointsEntries.filter(
+			([, item]: [TBreakpoint, BreakpointTypes]) => item.status
+		);
+	}
+
+	// Convert to array and sort
+	const sortedBreakpoints = breakpointsEntries
+		.map(([itemId, item]: [TBreakpoint, BreakpointTypes]) => {
+			const sortInfo = getBreakpointSortInfo(item);
+			return {
+				itemId,
+				item,
+				...sortInfo,
+			};
+		})
+		.sort((a, b) => {
+			// First sort by category
+			if (a.category !== b.category) {
+				return a.category - b.category;
+			}
+			// Then sort by sortValue within the same category
+			return a.sortValue - b.sortValue;
+		});
+
+	// Create breakpoint components in sorted order
+	sortedBreakpoints.forEach(({ itemId, item }, index: number) => {
+		if (output === 'icons') {
+			newBreakpointsList.push(
+				<BreakpointIcon
+					key={`${itemId}-${index}`}
+					className={classNames({
+						'is-active-breakpoint':
+							itemId === currentActiveBreakpoint,
+					})}
+					name={itemId}
+					settings={{
+						...item.settings,
+						min: item.settings.min || '',
+						max: item.settings.max || '',
+					}}
+					isDefault={item.isDefault}
+					onClick={(event) => {
+						event.stopPropagation();
+
+						if (itemId !== currentActiveBreakpoint) {
+							onClick(itemId);
+							setActiveBreakpoint(itemId);
+						}
+					}}
+				/>
+			);
+		} else {
+			newBreakpointsList[itemId] = item;
+		}
+	});
+
+	return newBreakpointsList;
 }
