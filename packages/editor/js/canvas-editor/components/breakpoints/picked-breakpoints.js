@@ -11,6 +11,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
+import { controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -49,6 +50,8 @@ export default function ({
 	const breakpoints = getSortedBreakpoints(availableBreakpoints, {
 		onClick,
 		output: 'icons',
+		setActiveBreakpoint,
+		currentActiveBreakpoint,
 	}); // calculate the gap based on the number of breakpoints
 
 	// Calculate gap based on number of breakpoints

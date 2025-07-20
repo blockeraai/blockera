@@ -305,7 +305,12 @@ export function prepValueForHeader(value: any): string {
 
 export function getSortedBreakpoints(
 	breakpoints: BreakpointTypes[],
-	{ output = 'icons', onClick = () => {} }
+	{
+		output = 'icons',
+		onClick = () => {},
+		setActiveBreakpoint,
+		currentActiveBreakpoint,
+	}
 ) {
 	const newBreakpointsList = [];
 
@@ -354,9 +359,16 @@ export function getSortedBreakpoints(
 		return { category: 3, sortValue: 0 };
 	};
 
+	let breakpointsEntries = Object.entries(breakpoints);
+
+	if ('icons' === output) {
+		breakpointsEntries = breakpointsEntries.filter(
+			([, item]: [TBreakpoint, BreakpointTypes]) => item.status
+		);
+	}
+
 	// Convert to array and sort
-	const sortedBreakpoints = Object.entries(breakpoints)
-		.filter(([, item]: [TBreakpoint, BreakpointTypes]) => item.status)
+	const sortedBreakpoints = breakpointsEntries
 		.map(([itemId, item]: [TBreakpoint, BreakpointTypes]) => {
 			const sortInfo = getBreakpointSortInfo(item);
 			return {
