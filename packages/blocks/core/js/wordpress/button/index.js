@@ -39,7 +39,7 @@ export const Button: BlockType = {
 	},
 	blockFeatures: {
 		icon: {
-			status: false,
+			status: true,
 			inspector: {
 				status: true,
 				extensions: {
