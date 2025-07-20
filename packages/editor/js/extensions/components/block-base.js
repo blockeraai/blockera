@@ -23,6 +23,7 @@ import {
  */
 import { experimental } from '@blockera/env';
 import { useBlockFeatures } from '@blockera/features';
+import { generalBlockFeatures } from '@blockera/blocks-core';
 import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
 
 /**
@@ -304,7 +305,10 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		clientId,
 		blockRefId: blockEditRef,
 		attributes: currentAttributes,
-		blockFeatures: additional?.blockFeatures,
+		blockFeatures: mergeObject(
+			generalBlockFeatures,
+			additional?.blockFeatures
+		),
 	});
 
 	const inlineStyles = useCleanupStyles({ clientId }, [

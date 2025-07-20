@@ -84,4 +84,6 @@ export const registerConfigExtensionsOfInnerBlocks = (): void => {
 	);
 };
 
+export * from './general-block-features';
+
 export default blocks;
