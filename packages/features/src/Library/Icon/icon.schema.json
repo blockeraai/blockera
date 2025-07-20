@@ -1,23 +1,19 @@
 {
 	"$id": "https://blockera.ai/icon.schema.json",
-	"name": "icon",
-	"description": "Add icon to supported contexts across WordPress websites.",
-	"context": ["blockEditor", "renderBlock"],
-	"blocks": {
-		"core/button": {
-			"selector": "{{ BLOCK_SELECTOR }} a"
+	"status": true,
+	"block": {
+		"status": true,
+		"inspector": {
+			"status": true,
+			"tabPosition": "blockera-inspector-settings-start"
 		},
-		"core/site-title": {
-			"selector": "{{ BLOCK_SELECTOR }} a"
+		"htmlEditable": {
+			"status": true,
+			"selector": "{{ BLOCK_SELECTOR }} div[role=\"textbox\"][contenteditable=\"true\"]"
+		},
+		"contextualToolbar": {
+			"status": false,
+			"type": "none"
 		}
-	},
-	"config": {
-		"blockEditor": {
-			"edit": {
-				"customizeBlockContent": true
-			},
-			"save": {}
-		},
-		"renderBlock": {}
 	}
 }

@@ -7,10 +7,16 @@ import { useMemo } from '@wordpress/element';
 import { Fill } from '@wordpress/components';
 
 /**
+ * Blockera dependencies
+ */
+import { mergeObject } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import { default as Library } from '../../Library';
 import type { TExtensionSlotFillProps } from '../types';
+import { default as featuresSchemas } from '../../Library/schemas';
 
 export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 	const mappedExtensions = useMemo(() => {
@@ -18,7 +24,14 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 
 		for (const featureId in Library) {
 			const feature = Library[featureId];
-			if (!feature.isEnabled(props)) {
+
+			const featureSchema = featuresSchemas[featureId];
+			const featureBlockConfig = mergeObject(
+				featureSchema.block,
+				props.blockFeatures[featureId]
+			);
+
+			if (!feature.isEnabled(featureBlockConfig.status)) {
 				continue;
 			}
 

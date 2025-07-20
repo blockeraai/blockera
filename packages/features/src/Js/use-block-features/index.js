@@ -11,6 +11,7 @@ import { ToolbarGroup, ToolbarDropdownMenu } from '@wordpress/components';
 /**
  * Internal dependencies
  */
+import { mergeObject } from '@blockera/utils';
 import { STORE_NAME } from '../store/constants';
 import type {
 	TFeature,
@@ -21,6 +22,7 @@ import type {
 	TContextualToolbarComponents,
 } from '../types';
 import { default as featuresLibrary } from '../../Library';
+import { default as featuresSchemas } from '../../Library/schemas';
 
 export const useBlockFeatures = (
 	props: TUseBlockFeaturesProps
@@ -46,26 +48,33 @@ export const useBlockFeatures = (
 			if (!featuresLibrary[featureId]) {
 				continue;
 			}
+
+			const featureSchema = featuresSchemas[featureId];
+			const featureBlockConfig = mergeObject(
+				featureSchema.block,
+				props.blockFeatures[featureId]
+			);
+
+			if (!feature.isEnabled(featureBlockConfig.status)) {
+				continue;
+			}
+
 			// Check the feature available in htmlEditable context of blocks features configuration.
-			if (props?.blockFeatures[featureId]?.htmlEditable?.status) {
+			if (featureBlockConfig?.htmlEditable?.status) {
 				// Push to blockSideEffectFeatures if the feature has editBlockHTML.
 				if ('function' === typeof feature?.editBlockHTML) {
-					if (feature.isEnabled()) {
-						blockSideEffectFeatures.push(feature);
-					}
+					blockSideEffectFeatures.push(feature);
 				}
 			}
 
 			// Check the feature context available in contextualToolbar context of blocks features configuration.
-			if (props?.blockFeatures[featureId]?.contextualToolbar?.status) {
+			if (featureBlockConfig?.contextualToolbar?.status) {
 				// Push to contextualToolbarFeatures if the feature has toolbarControls or ToolbarButtonComponent.
 				if (
 					feature?.toolbarControls ||
 					feature?.ToolbarButtonComponent
 				) {
-					if (feature.isEnabled()) {
-						contextualToolbarFeatures.push(feature);
-					}
+					contextualToolbarFeatures.push(feature);
 				}
 			}
 		}
@@ -83,8 +92,13 @@ export const useBlockFeatures = (
 					return <></>;
 				}
 
-				const { type = 'none' } =
-					props?.blockFeatures[feature.name].contextualToolbar;
+				const featureSchema = featuresSchemas[feature.name];
+				const featureBlockConfig = mergeObject(
+					featureSchema.block,
+					props.blockFeatures[feature.name]
+				);
+
+				const { type = 'none' } = featureBlockConfig?.contextualToolbar;
 
 				if ('dropdown' === type) {
 					const controls: TToolbarControls = contextualToolbarFeatures
@@ -157,9 +171,15 @@ export const useBlockFeatures = (
 			// Remove redundant params.
 			const { blockFeatures, ...rest } = props;
 
+			const featureSchema = featuresSchemas[feature.name];
+			const featureBlockConfig = mergeObject(
+				featureSchema.block,
+				blockFeatures[feature.name]
+			);
+
 			feature.editBlockHTML({
 				...rest,
-				iconConfig: blockFeatures[feature.name].htmlEditable,
+				htmlEditable: featureBlockConfig.htmlEditable,
 			});
 		});
 	}, [blockSideEffectFeatures, props]);

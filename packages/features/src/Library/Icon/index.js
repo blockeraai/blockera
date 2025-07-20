@@ -15,6 +15,7 @@ import { isEmpty, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import iconSchema from './icon.schema.json';
 import { IconStyles } from './extension/styles';
 import { IconExtension } from './extension/extension';
 import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
@@ -24,9 +25,11 @@ const editBlockHTML = ({
 	clientId,
 	blockRefId,
 	attributes,
-}: // featureConfig,
-TEditBlockHTMLArgs): void => {
-	if (!experimental().get('editor.extensions.iconExtension')) {
+	htmlEditable,
+}: TEditBlockHTMLArgs): void => {
+	const { status, selector } = htmlEditable;
+
+	if (!experimental().get('editor.extensions.iconExtension') || !status) {
 		return;
 	}
 
@@ -43,7 +46,10 @@ TEditBlockHTMLArgs): void => {
 	}
 
 	const blockElement = blockRefId.current;
-	const el = blockElement.parentElement?.querySelector(`#block-${clientId}`);
+	const _selector: string = selector
+		? selector.replace('{{ BLOCK_SELECTOR }}', `#block-${clientId}`)
+		: `#block-${clientId}`;
+	const el = blockElement.parentElement?.querySelector(_selector);
 
 	if (isUndefined(blockeraIcon) || isEmpty(blockeraIcon) || !el) {
 		return;
@@ -91,9 +97,9 @@ TEditBlockHTMLArgs): void => {
 	}
 
 	if ('left' === blockeraIconPosition) {
-		el.querySelector('*[role="textbox"]')?.prepend(iconNode);
+		el?.prepend(iconNode);
 	} else if (['right', ''].includes(blockeraIconPosition)) {
-		el.querySelector('*[role="textbox"]')?.append(iconNode);
+		el?.append(iconNode);
 	}
 };
 
@@ -101,9 +107,9 @@ const IconFeature: TFeature = {
 	name: 'icon',
 	editBlockHTML,
 	styleGenerator: IconStyles,
-	isEnabled: (): boolean => true,
 	extensionConfigId: 'iconConfig',
 	ExtensionComponent: IconExtension,
+	isEnabled: (status = iconSchema.block.status): boolean => status,
 };
 
 export default IconFeature;

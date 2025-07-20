@@ -16,7 +16,7 @@ import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
  */
 import type { TFeatureId } from './library';
 
-type TFeatureHTMLEditable = {
+type THtmlEditable = {
 	status: boolean,
 	selector: string,
 };
@@ -30,7 +30,7 @@ export type TEditBlockHTMLArgs = {
 	name: string,
 	clientId: string,
 	attributes: Object,
-	featureConfig: TFeatureHTMLEditable,
+	htmlEditable: THtmlEditable,
 	blockRefId: { current: HTMLElement },
 };
 
@@ -55,7 +55,7 @@ type TFeatureInspector = {
 export type TBlockFeatures = {
 	[key: TFeatureId]: {
 		inspector: TFeatureInspector,
-		htmlEditable: TFeatureHTMLEditable,
+		htmlEditable: THtmlEditable,
 		contextualToolbar: TFeatureContextualToolbar,
 	},
 };

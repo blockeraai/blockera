@@ -39,6 +39,7 @@ export const Button: BlockType = {
 	},
 	blockFeatures: {
 		icon: {
+			status: false,
 			inspector: {
 				status: true,
 				extensions: {
@@ -49,7 +50,8 @@ export const Button: BlockType = {
 			},
 			htmlEditable: {
 				status: true,
-				selector: '{{ BLOCK_SELECTOR }} a',
+				selector:
+					'{{ BLOCK_SELECTOR }} div[role="textbox"][contenteditable="true"]',
 			},
 			contextualToolbar: {
 				status: true,

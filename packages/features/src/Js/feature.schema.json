@@ -3,61 +3,63 @@
 	"title": "Blockera Feature Config",
 	"type": "object",
 	"properties": {
-		"name": {
-			"type": "string"
+		"status": {
+			"type": "boolean"
 		},
-		"context": {
-			"type": "array",
-			"items": {
-				"type": "string"
-			}
-		},
-		"description": {
-			"type": "string"
-		},
-		"blocks": {
+		"block": {
 			"type": "object",
-			"patternProperties": {
-				"^.*$": {
+			"properties": {
+				"status": {
+					"type": "boolean"
+				},
+				"inspector": {
 					"type": "object",
 					"properties": {
+						"status": {
+							"type": "boolean"
+						},
+						"tabPosition": {
+							"type": "string",
+							"enum": [
+								"blockera-inspector-settings-start",
+								"blockera-inspector-settings-end",
+								"blockera-inspector-settings",
+								"blockera-inspector-styles-start",
+								"blockera-inspector-styles-end",
+								"blockera-inspector-styles",
+								"blockera-inspector-interactions-start",
+								"blockera-inspector-interactions-end",
+								"blockera-inspector-interactions"
+							]
+						}
+					}
+				},
+				"htmlEditable": {
+					"type": "object",
+					"properties": {
+						"status": {
+							"type": "boolean"
+						},
 						"selector": {
 							"type": "string"
 						}
-					},
-					"required": ["selector"],
-					"additionalProperties": true
-				}
-			},
-			"additionalProperties": true
-		},
-		"config": {
-			"type": "object",
-			"properties": {
-				"blockEditor": {
+					}
+				},
+				"contextualToolbar": {
 					"type": "object",
 					"properties": {
-						"edit": {
-							"type": "object",
-							"additionalProperties": true
+						"status": {
+							"type": "boolean"
 						},
-						"contextualToolbar": {
-							"type": "object",
-							"additionalProperties": true
+						"type": {
+							"type": "string",
+							"enum": ["button", "dropdown", "none"]
 						}
-					},
-					"required": [],
-					"additionalProperties": true
-				},
-				"renderBlock": {
-					"type": "object",
-					"additionalProperties": true
+					}
 				}
-			},
-			"required": [],
-			"additionalProperties": false
+			}
 		}
 	},
-	"required": ["name", "config", "blocks", "context", "description"],
+	"required": ["block"],
 	"additionalProperties": false
 }
