@@ -36,8 +36,8 @@ export type TEditBlockHTMLArgs = {
 
 export type TBlockFeatures = {
 	[key: TFeatureId]: {
-		htmlEditable: TFeatureHTMLEditable,
-		contextualToolbar: TFeatureContextualToolbar,
+		htmlEditable?: TFeatureHTMLEditable,
+		contextualToolbar?: TFeatureContextualToolbar,
 	},
 };
 
