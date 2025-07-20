@@ -62,6 +62,8 @@ TEditBlockHTMLArgs): void => {
 
 	if (blockeraIconSize) {
 		iconNode.style.verticalAlign = 'middle';
+		iconNode.style.position = 'relative';
+		iconNode.style.top = `-0.025em`;
 	}
 
 	const icon = createRoot(iconNode);
