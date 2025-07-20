@@ -20,7 +20,6 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from '../../../extensions/libs/block-card/block-states/types';
-import { BreakpointIcon } from './breakpoint-icon';
 import { default as defaultBreakpoints } from '../../../extensions/libs/block-card/block-states/default-breakpoints';
 
 /**
@@ -306,6 +305,7 @@ export function prepValueForHeader(value: any): string {
 export function getSortedBreakpoints(
 	breakpoints: BreakpointTypes[],
 	{
+		BreakpointIcon,
 		output = 'icons',
 		onClick = () => {},
 		setActiveBreakpoint,

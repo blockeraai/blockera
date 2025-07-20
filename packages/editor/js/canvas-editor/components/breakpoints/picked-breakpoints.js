@@ -16,6 +16,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { BreakpointIcon } from './breakpoint-icon';
 import type { PickedBreakpointsComponentProps } from './types';
 import type {
 	TBreakpoint,
@@ -49,6 +50,7 @@ export default function ({
 
 	const breakpoints = getSortedBreakpoints(availableBreakpoints, {
 		onClick,
+		BreakpointIcon,
 		output: 'icons',
 		setActiveBreakpoint,
 		currentActiveBreakpoint,
