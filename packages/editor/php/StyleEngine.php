@@ -239,13 +239,14 @@ final class StyleEngine {
 					array_map(
                         function( array $stateSettings, string $state): array {
 							$this->pseudo_state = $state;
+							$breakpoints        = blockera_get_array_deep_merge($this->breakpoints, $stateSettings['breakpoints']);
 
 							return array_map(
                                 function ( $breakpointSettings, string $breakpoint): string {
                                     return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes']);
                                 },
-                                $stateSettings['breakpoints'],
-                                array_keys($stateSettings['breakpoints'])
+                                $breakpoints,
+                                array_keys($breakpoints)
 							);
 						},
                         $this->pseudo_classes,
