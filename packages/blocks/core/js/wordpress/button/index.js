@@ -39,6 +39,14 @@ export const Button: BlockType = {
 	},
 	blockFeatures: {
 		icon: {
+			inspector: {
+				status: true,
+				extensions: {
+					icon: {
+						tabPosition: 'blockera-inspector-settings-start',
+					},
+				},
+			},
 			htmlEditable: {
 				status: true,
 				selector: '{{ BLOCK_SELECTOR }} a',
