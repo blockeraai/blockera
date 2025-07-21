@@ -22,7 +22,7 @@ import type {
 	TContextualToolbarComponents,
 } from '../types';
 import { default as featuresLibrary } from '../../Library';
-import { default as featuresSchemas } from '../../Library/schemas';
+import { default as featuresSchemas } from '../../Library/config';
 
 export const useBlockFeatures = (
 	props: TUseBlockFeaturesProps

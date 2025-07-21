@@ -19,7 +19,7 @@ import { mergeObject } from '@blockera/utils';
 import { STORE_NAME } from '../store/constants';
 import { default as featuresLibrary } from '../../Library';
 import type { TExtensionSlotFillProps } from '../types';
-import { default as featuresSchemas } from '../../Library/schemas';
+import { default as featuresSchemas } from '../../Library/config';
 
 export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 	const { getFeatures } = select(STORE_NAME);
