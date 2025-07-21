@@ -184,11 +184,11 @@
         },
         {
             "name": "blockera/editor",
-            "version": "1.9.0",
+            "version": "2.0.0",
             "dist": {
                 "type": "path",
                 "url": "packages/editor",
-                "reference": "6aa7e68584d485aa384e085a926fea80ba2140cd"
+                "reference": "750149e098519aefa9e34fe9548061ce02e291da"
             },
             "type": "library",
             "autoload": {
@@ -1139,12 +1139,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "fb009e144165c6f80523ded0ae75532a99242615"
+                "reference": "d2a4543db8adc6b3d4b2fb652c953db629328986"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/fb009e144165c6f80523ded0ae75532a99242615",
-                "reference": "fb009e144165c6f80523ded0ae75532a99242615",
+                "url": "https://api.github.com/repos/composer/composer/zipball/d2a4543db8adc6b3d4b2fb652c953db629328986",
+                "reference": "d2a4543db8adc6b3d4b2fb652c953db629328986",
                 "shasum": ""
             },
             "require": {
@@ -1246,7 +1246,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-07-10T17:08:17+00:00"
+            "time": "2025-07-20T11:58:42+00:00"
         },
         {
             "name": "composer/metadata-minifier",
