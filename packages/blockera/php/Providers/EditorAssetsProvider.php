@@ -148,8 +148,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		blockeraData.core.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '
 		});
-			' . $features_object . '.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');
-			' . $features_object . '.featuresApplyHooks();
+			' . $features_object . '?.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');
+			' . $features_object . '?.featuresApplyHooks();
 			window.onload = () => {
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $breakpoints ) . ');
 				' . $editor_object . '.editor.init();
