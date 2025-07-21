@@ -24,7 +24,13 @@ import {
 import { experimental } from '@blockera/env';
 import { useBlockFeatures } from '@blockera/features';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/general-block-features';
-import { omit, isEquals, omitWithPattern, cloneObject } from '@blockera/utils';
+import {
+	omit,
+	isEquals,
+	cloneObject,
+	mergeObject,
+	omitWithPattern,
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
