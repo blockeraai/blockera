@@ -4,6 +4,14 @@
 - Improved block features organization for better code structure and easier maintenance.
 - Added support for third-party developers to extend and customize the style engine filters.
 
+## 2.0.0 (2025-07-20)
+
+### Improvements
+- Reorganized the breakpoint device sizes in the settings panel to be more intuitive and easier to understand.
+
+### Bug Fixes
+- Fixed an issue where styles weren't being applied in the correct order across different screen sizes, ensuring your responsive designs now work as expected.
+
 ## 1.9.0 (2025-07-16)
 
 ### New Features
