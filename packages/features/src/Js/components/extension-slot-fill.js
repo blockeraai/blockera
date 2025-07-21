@@ -31,7 +31,10 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 		for (const featureId in featuresLibrary) {
 			const feature = featuresLibrary[featureId];
 
-			if (!registeredFeatures[featureId]) {
+			if (
+				!registeredFeatures[featureId] ||
+				!props?.blockFeatures?.[featureId]
+			) {
 				continue;
 			}
 
@@ -47,7 +50,7 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 			};
 			const featureBlockConfig = mergeObject(
 				featureSchema?.block || {},
-				props?.blockFeatures?.[featureId] || {}
+				props.blockFeatures[featureId]
 			);
 
 			if (!feature.isEnabled(featureBlockConfig.status)) {

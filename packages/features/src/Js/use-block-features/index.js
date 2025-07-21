@@ -37,7 +37,7 @@ export const useBlockFeatures = (
 		const blockSideEffectFeatures: Array<TFeature> = [];
 		const contextualToolbarFeatures: Array<TFeature> = [];
 
-		if (!props?.blockFeatures) {
+		if (!Object.keys(props?.blockFeatures)?.length) {
 			return { blockSideEffectFeatures, contextualToolbarFeatures };
 		}
 
@@ -45,14 +45,17 @@ export const useBlockFeatures = (
 			const feature = registeredFeatures[featureId];
 
 			// If the feature is not registered, skip it.
-			if (!featuresLibrary[featureId]) {
+			if (
+				!featuresLibrary[featureId] ||
+				!props.blockFeatures[featureId]
+			) {
 				continue;
 			}
 
 			const featureSchema = featuresSchemas[featureId];
 			const featureBlockConfig = mergeObject(
 				featureSchema?.block || {},
-				props?.blockFeatures?.[featureId] || {}
+				props.blockFeatures[featureId]
 			);
 
 			if (!feature.isEnabled(featureBlockConfig.status)) {
