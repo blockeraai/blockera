@@ -86,6 +86,7 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 		}
 
 		return mapped;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [props]);
 
 	if (!mappedExtensions.length) {
