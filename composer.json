@@ -102,13 +102,13 @@
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
-		"vlucas/phpdotenv": "^5.5@dev"
+		"vlucas/phpdotenv": "^5.5@dev",
+		"voku/simple_html_dom": "dev-master"
 	},
 	"require-dev": {
 		"blockera/dev-phpunit": "*",
 		"symfony/dom-crawler": "5.4.x-dev",
 		"symfony/css-selector": "5.4.x-dev",
-		"voku/simple_html_dom": "dev-master",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpunit/phpunit": "^9.5.21",
