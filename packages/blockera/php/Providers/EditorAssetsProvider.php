@@ -88,23 +88,24 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 	}
 
 	/**
-	 * @return string
+	 * Get the specific package object.
+	 *
+	 * @return string the specific package object.
 	 */
-	protected function getEditorObject(): string {
+	protected function getPackageObject( string $package_name ): string {
 
-		$editor_package_file = blockera_core_config( 'app.root_path' ) . 'vendor/blockera/editor/package.json';
-
-		if ( ! file_exists( $editor_package_file ) ) {
-
+		$package_file = blockera_core_config( 'app.root_path' ) . 'vendor/blockera/' . $package_name . '/package.json';
+		
+		if ( ! file_exists( $package_file ) ) {
 			return '';
 		}
 
 		ob_start();
-		require $editor_package_file;
-		$editor_package = json_decode( ob_get_clean(), true );
-		$editor_version = str_replace( '.', '_', $editor_package['version'] );
+		require $package_file;
+		$package         = json_decode( ob_get_clean(), true );
+		$package_version = str_replace( '.', '_', $package['version'] );
 
-		return 'blockeraEditor_' . $editor_version;
+		return 'blockera' . ucfirst( $package_name ) . '_' . $package_version;
 	}
 
 	/**
@@ -123,7 +124,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return $inline_script;
 		}
 
-		$editor_object = $this->getEditorObject();
+		$editor_object = $this->getPackageObject( 'editor' );
 
 		if ( empty( $editor_object ) ) {
 
@@ -139,12 +140,16 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		}
 
 		$dynamic_value_bootstrapper = 'blockeraData.core.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');';
+		$requested_features         = array_keys($this->app->make(FeaturesManager::class)->getRegisteredFeatures());
+		$features_object            = $this->getPackageObject( 'features' );
 
 		$script = 'wp.domReady(() => {
 		blockeraData.core.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
 		blockeraData.core.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '
 		});
+			' . $features_object . '.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');
+			' . $features_object . '.featuresApplyHooks();
 			window.onload = () => {
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $breakpoints ) . ');
 				' . $editor_object . '.editor.init();
@@ -190,7 +195,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return $inline_script;
 		}
 
-		$editor_object = $this->getEditorObject();
+		$editor_object = $this->getPackageObject( 'editor' );
 
 		if ( empty( $editor_object ) ) {
 
@@ -226,11 +231,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			apply_filters( 'blockera/assets/provider/inline-script/register/3rd-party-blocks/attributes', [] )
 		);
 
-		$requested_features = array_keys($this->app->make(FeaturesManager::class)->getRegisteredFeatures());
-
 		$script = implode( ";\n", $blocks_attributes_scripts ) . '
-				' . $editor_object . '.editor.unstableRegistrationSharedBlockAttributes(' . wp_json_encode( $shared_block_attributes ) . ');
-				window.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');';
+				' . $editor_object . '.editor.unstableRegistrationSharedBlockAttributes(' . wp_json_encode( $shared_block_attributes ) . ');';
 
 		if ( false !== strpos( $inline_script, $script ) ) {
 
