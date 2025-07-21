@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import { addFilter } from '@wordpress/hooks';
+import { addFilter, applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -39,7 +39,10 @@ export const registerBlockeraBlocks = (): void => {
 			continue;
 		}
 
-		registerBlockExtension(currentBlock.name || key, currentBlock);
+		registerBlockExtension(
+			currentBlock.name || key,
+			applyFilters('blockera.blocks.register', currentBlock)
+		);
 	}
 };
 
