@@ -50,10 +50,16 @@ type TFeatureInspector = {
 		},
 	},
 	innerBlocks: {
-		[key: string]: InnerBlocks,
+		status: boolean,
+		items: {
+			[key: string]: InnerBlocks,
+		},
 	},
 	blockStates: {
-		[key: string]: StateTypes,
+		status: boolean,
+		items: {
+			[key: string]: StateTypes,
+		},
 	},
 };
 

@@ -12,6 +12,7 @@ import { dispatch, select } from '@wordpress/data';
 import featuresStack from './Library';
 import { STORE_NAME } from './Js/store';
 import type { TFeature } from './Js/types';
+import { editorApplyHooks } from './Hooks';
 
 export const unstableBootstrapServerSideFeatures = (
 	features: Array<string>
@@ -52,5 +53,8 @@ export const bootstrapEditorStyleEngineFilters = () => {
 	);
 };
 
+export const featuresApplyHooks = () => {
+	editorApplyHooks();
+};
 export * from './Js/components';
 export * from './Js/use-block-features';
