@@ -77,8 +77,12 @@ export const editorApplyHooks = () => {
 			}
 
 			return mergeObject(block, {
-				blockeraInnerBlocks,
-				availableBlockStates,
+				...(Object.keys(blockeraInnerBlocks)?.length
+					? { blockeraInnerBlocks }
+					: {}),
+				...(Object.keys(availableBlockStates)?.length
+					? { availableBlockStates }
+					: {}),
 			});
 		}
 	);
