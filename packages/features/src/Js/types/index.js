@@ -10,6 +10,8 @@ import type { ComponentType } from 'react';
  */
 import type { CssRule } from '@blockera/editor/js/style-engine/types';
 import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
+import type { StateTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
+import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
 
 /**
  * Internal dependencies
@@ -49,6 +51,12 @@ type TFeatureInspector = {
 				| 'blockera-inspector-interactions'
 				| 'blockera-inspector-interactions-end',
 		},
+	},
+	innerBlocks: {
+		[key: string]: InnerBlocks,
+	},
+	blockStates: {
+		[key: string]: StateTypes,
 	},
 };
 

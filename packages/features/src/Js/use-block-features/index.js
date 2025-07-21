@@ -51,8 +51,8 @@ export const useBlockFeatures = (
 
 			const featureSchema = featuresSchemas[featureId];
 			const featureBlockConfig = mergeObject(
-				featureSchema.block,
-				props.blockFeatures[featureId]
+				featureSchema?.block || {},
+				props?.blockFeatures?.[featureId] || {}
 			);
 
 			if (!feature.isEnabled(featureBlockConfig.status)) {
