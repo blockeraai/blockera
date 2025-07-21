@@ -25,6 +25,10 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 		for (const featureId in Library) {
 			const feature = Library[featureId];
 
+			if (!props?.blockFeatures?.hasOwnProperty(featureId)) {
+				continue;
+			}
+
 			const featureSchema = featuresSchemas[featureId];
 			const featureBlockConfig = mergeObject(
 				featureSchema.block,
