@@ -4,6 +4,14 @@
 - Improved block features organization for better code structure and easier maintenance.
 - Added support for third-party developers to extend and customize the style engine filters.
 
+## 2.0.1 (2025-07-22)
+
+### Improvements
+- Animation of editor frame while changing the responsive breakpoints. 
+
+### Bug Fixes
+- Icons of breakpoints are not showing correctly in features change graph.
+
 ## 2.0.0 (2025-07-20)
 
 ### Improvements
