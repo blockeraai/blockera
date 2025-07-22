@@ -126,7 +126,7 @@ class EditBlockHTML implements EditableBlockHTML {
         }
 
         $gap          = $block['attrs']['blockeraIconGap']['value'] ?? '0';
-        $iconPosition = $block['attrs']['blockeraIconPosition']['value'] ?? 'right';
+        $iconPosition = $block['attrs']['blockeraIconPosition']['value'] ?? 'left';
 
         if (! empty($iconPosition)) {
 
@@ -140,16 +140,16 @@ class EditBlockHTML implements EditableBlockHTML {
         }
 
         // Handle icon color.
-        if (! empty($block['attrs']['blockeraIconColor']['value'])) {
-
-            $iconHTML = $block['attrs']['blockeraIconColor']['value'] ?
-                str_replace(
-                    empty($iconPosition) ? '<svg' : '<svg style="',
-                    sprintf('<svg style="fill: %s;', $block['attrs']['blockeraIconColor']['value']),
-                    $iconHTML
-                ) :
-                $iconHTML;
-        }
+        
+		$iconHTML = str_replace(
+            empty($iconPosition) ? '<svg' : '<svg style="',
+            sprintf(
+                '<svg style="fill: %s; color: %s;',
+                $block['attrs']['blockeraIconColor']['value'] ?? 'currentColor',
+                $block['attrs']['blockeraIconColor']['value'] ?? 'inherit'
+            ),
+            $iconHTML
+        );
 
         // Handle icon link.
         if (! empty($block['attrs']['blockeraIconLink']['value'])) {
