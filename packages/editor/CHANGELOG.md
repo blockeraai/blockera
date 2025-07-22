@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 2.0.1 (2025-07-22)
+
 ### Improvements
 - Animation of editor frame while changing the responsive breakpoints. 
 
