@@ -1,5 +1,11 @@
 ## Unreleased
 
+### Improvements
+- Animation of editor frame while changing the responsive breakpoints. 
+
+### Bug Fixes
+- Icons of breakpoints are not showing correctly in features change graph.
+
 ## 2.0.0 (2025-07-20)
 
 ### Improvements

@@ -36,7 +36,7 @@ export function BreakpointIcon({
 	settings,
 	className,
 	breakpoints,
-	isDefault = false,
+	isDefault,
 	context = 'canvas',
 	tooltip = true,
 	...props
@@ -53,7 +53,7 @@ export function BreakpointIcon({
 			uploadSVG: string,
 		},
 		picked: boolean,
-	},
+	} | null,
 	name: TBreakpoint | string,
 	className?: string,
 	tooltip?: boolean,
@@ -66,6 +66,14 @@ export function BreakpointIcon({
 
 	if (isUndefined(breakpoints[name])) {
 		return <></>;
+	}
+
+	if (isUndefined(settings)) {
+		settings = breakpoints[name]?.settings;
+	}
+
+	if (isUndefined(isDefault)) {
+		isDefault = breakpoints[name]?.isDefault || false;
 	}
 
 	return (
