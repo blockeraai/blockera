@@ -11,7 +11,7 @@ $custom_selectors = array_merge(
 	blockera_load( 'inners.link', dirname( __DIR__ ) ),
 	[
 		'htmlEditable' => [
-			'root' => '.wp-block-site-title a',
+			'root' => 'h1.wp-block-site-title a',
 		],
 	]
 );
