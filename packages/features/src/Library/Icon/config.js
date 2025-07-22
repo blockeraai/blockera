@@ -22,8 +22,6 @@ export const icon = {
 		},
 		htmlEditable: {
 			status: true,
-			selector:
-				'{{ BLOCK_SELECTOR }} div[role="textbox"][contenteditable="true"]',
 		},
 		contextualToolbar: {
 			status: false,

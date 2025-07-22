@@ -66,6 +66,7 @@ import {
 	generalBlockStates,
 	generalInnerBlockStates,
 } from '../libs/block-card/block-states/states';
+import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
@@ -315,6 +316,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			generalBlockFeatures,
 			additional?.blockFeatures
 		),
+		getBlockCSSSelector,
 	});
 
 	const inlineStyles = useCleanupStyles({ clientId }, [

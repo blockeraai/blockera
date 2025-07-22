@@ -17,7 +17,6 @@ type TFeatureId = 'icon';
 
 type THtmlEditable = {
 	status: boolean,
-	selector: string,
 };
 
 type TFeatureContextualToolbar = {
@@ -31,6 +30,11 @@ export type TEditBlockHTMLArgs = {
 	attributes: Object,
 	htmlEditable: THtmlEditable,
 	blockRefId: { current: HTMLElement },
+	getBlockCSSSelector: (
+		blockType: Object,
+		target: Array<string> | string,
+		options: { fallback?: boolean }
+	) => string,
 };
 
 type TFeatureInspector = {

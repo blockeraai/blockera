@@ -107,8 +107,24 @@ class Render {
 				continue;
 			}
 
-			$args['dom']         = $dom_parser;
-			$args['origin_html'] = $html;
+			$selector = blockera_get_compatible_block_css_selector(
+				blockera_get_block_type_property($args['block']['blockName'], 'selectors'),
+				'htmlEditable.root',
+				[
+					'fallback' => false,
+					'block-type' => $args['block']['blockName'],
+					'block-name' => $args['block']['blockName'],
+					'blockera-unique-selector' => $args['unique_class_name'],
+				]
+			);
+
+			if (empty($selector)) {
+				continue;
+			}
+
+			$args['dom']          = $dom_parser;
+			$args['origin_html']  = $html;
+			$args['htmlEditable'] = compact('selector');
 
 			$html = $feature->htmlManipulate($dom_parser, $args);
 		}

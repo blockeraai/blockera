@@ -50,8 +50,6 @@ export const Button: BlockType = {
 			},
 			htmlEditable: {
 				status: true,
-				selector:
-					'{{ BLOCK_SELECTOR }} div[role="textbox"][contenteditable="true"]',
 			},
 			contextualToolbar: {
 				status: true,

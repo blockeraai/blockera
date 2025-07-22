@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import { createRoot } from '@wordpress/element';
 
 /**
@@ -21,15 +22,23 @@ import { IconExtension } from './extension/extension';
 import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
 
 const editBlockHTML = ({
-	// name,
+	name,
 	clientId,
 	blockRefId,
 	attributes,
 	htmlEditable,
+	getBlockCSSSelector,
 }: TEditBlockHTMLArgs): void => {
-	const { status, selector } = htmlEditable;
+	const { status } = htmlEditable;
 
 	if (!experimental().get('editor.extensions.iconExtension') || !status) {
+		return;
+	}
+
+	const blockType = select('core/blocks').getBlockType(name);
+	const selector = getBlockCSSSelector(blockType, 'htmlEditable.root');
+
+	if (!selector) {
 		return;
 	}
 

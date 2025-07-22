@@ -61,13 +61,15 @@ class EditBlockHTML implements EditableBlockHTML {
         [
             'dom'          => $dom,
             'block'        => $block,
+			'htmlEditable' => $htmlEditable,
             'unique_class_name' => $unique_class_name,
         ] = $data;
 
-        $selector = $this->blocks_config[ $block['blockName'] ]['selector'] ?? '{{ BLOCK_SELECTOR }}';
-        $selector = str_replace('{{ BLOCK_SELECTOR }}', $unique_class_name, $selector);
+		if (empty($htmlEditable['selector'])) {
+			return null;
+		}
 
-        $blockElement = $dom->findOne($selector);
+        $blockElement = $dom->findOne($htmlEditable['selector']);
 
         if (empty($blockElement) || empty($blockElement->innerhtml)) {
             return null;

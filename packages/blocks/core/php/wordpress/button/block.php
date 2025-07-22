@@ -16,6 +16,9 @@ return array_merge(
 				'blockera/elements/icon' => [
 					'root' => ' .wp-block-button__link .blockera-icon',
 				],
+				'htmlEditable' => [
+					'root' => '.wp-block-button__link div[role="textbox"][contenteditable="true"], .wp-block-button__link',
+				],
 			]
 		),
 	]
