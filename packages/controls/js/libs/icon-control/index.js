@@ -29,7 +29,7 @@ import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { Button, MediaUploader, BaseControl } from '../index';
+import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
 function IconControl({
@@ -191,25 +191,33 @@ function IconControl({
 							)}
 							onClick={openModal}
 						>
-							<Button
-								aria-label={__('Remove Icon', 'blockera')}
-								className="btn-delete"
-								noBorder={true}
-								isFocus={isOpenModal}
-								icon={
-									<Icon
-										library="wp"
-										icon="close"
-										iconSize="20"
-									/>
-								}
-								onClick={(e) => {
-									e.stopPropagation();
-									currentIconDispatch({
-										type: 'DELETE_ICON',
-									});
+							<Tooltip
+								text={__('Remove Icon', 'blockera')}
+								style={{
+									'--tooltip-bg': '#e20000',
 								}}
-							/>
+								delay={300}
+							>
+								<Button
+									aria-label={__('Remove Icon', 'blockera')}
+									className="btn-delete"
+									noBorder={true}
+									isFocus={isOpenModal}
+									icon={
+										<Icon
+											library="ui"
+											icon="trash"
+											iconSize="20"
+										/>
+									}
+									onClick={(e) => {
+										e.stopPropagation();
+										currentIconDispatch({
+											type: 'DELETE_ICON',
+										});
+									}}
+								/>
+							</Tooltip>
 
 							{currentIcon.uploadSVG ? (
 								<img

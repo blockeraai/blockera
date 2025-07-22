@@ -12,7 +12,7 @@
 	flex-direction: column;
 
 	.blockera-control-icon-preview {
-		height: 140px;
+		height: 100px;
 		display: flex;
 		justify-content: center;
 		cursor: pointer;
@@ -87,6 +87,10 @@
 			.blockera-component-button.btn-delete {
 				visibility: visible;
 				opacity: 1;
+
+				&:hover {
+					color: #e20000;
+				}
 			}
 		}
 	}
