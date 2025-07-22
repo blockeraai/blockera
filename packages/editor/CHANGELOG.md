@@ -3,6 +3,7 @@
 ### Improvements
 - Improved block features organization for better code structure and easier maintenance.
 - Added support for third-party developers to extend and customize the style engine filters.
+- Animation of editor frame while changing the responsive breakpoints. 
 
 ## 2.0.0 (2025-07-20)
 
