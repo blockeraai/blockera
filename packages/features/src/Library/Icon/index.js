@@ -11,7 +11,7 @@ import { createRoot } from '@wordpress/element';
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
-import { isEmpty, isUndefined } from '@blockera/utils';
+import { isEmpty, isUndefined, getIframeTag } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -24,7 +24,6 @@ import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
 const editBlockHTML = ({
 	name,
 	clientId,
-	blockRefId,
 	attributes,
 	htmlEditable,
 	getBlockCSSSelector,
@@ -54,11 +53,11 @@ const editBlockHTML = ({
 		blockeraIconPosition = 'left';
 	}
 
-	const blockElement = blockRefId.current;
 	const _selector: string = selector
 		? selector.replace('{{ BLOCK_SELECTOR }}', `#block-${clientId}`)
 		: `#block-${clientId}`;
-	const el = blockElement.parentElement?.querySelector(_selector);
+	const directElement = document.querySelector(_selector);
+	const el = directElement ? directElement : getIframeTag(_selector);
 
 	if (isUndefined(blockeraIcon) || isEmpty(blockeraIcon) || !el) {
 		return;

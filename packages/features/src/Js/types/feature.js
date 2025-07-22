@@ -29,7 +29,6 @@ export type TEditBlockHTMLArgs = {
 	clientId: string,
 	attributes: Object,
 	htmlEditable: THtmlEditable,
-	blockRefId: { current: HTMLElement },
 	getBlockCSSSelector: (
 		blockType: Object,
 		target: Array<string> | string,

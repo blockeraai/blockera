@@ -23,5 +23,4 @@ export type TUseBlockFeaturesProps = {
 	clientId: string,
 	attributes: Object,
 	blockFeatures?: TBlockFeatures,
-	blockRefId: { current: HTMLElement },
 };

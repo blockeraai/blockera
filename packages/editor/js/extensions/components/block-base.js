@@ -10,7 +10,6 @@ import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
 	memo,
-	useRef,
 	useMemo,
 	useState,
 	useEffect,
@@ -21,7 +20,6 @@ import {
 /**
  * Blockera dependencies
  */
-import { experimental } from '@blockera/env';
 import { useBlockFeatures } from '@blockera/features';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/general-block-features';
 import {
@@ -298,7 +296,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		return getBlockType(name);
 	});
 
-	const blockEditRef = useRef(null);
 	const currentAttributes = useCalculateCurrentAttributes({
 		currentInnerBlock,
 		blockeraInnerBlocks,
@@ -310,7 +307,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { ContextualToolbarComponents } = useBlockFeatures({
 		name,
 		clientId,
-		blockRefId: blockEditRef,
 		attributes: currentAttributes,
 		blockFeatures: mergeObject(
 			generalBlockFeatures,
@@ -484,9 +480,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 					/>
 				</SlotFillProvider>
 			</InspectorControls>
-			{experimental().get('editor.extensions.iconExtension') && (
-				<div ref={blockEditRef} />
-			)}
 
 			<ErrorBoundary
 				fallbackRender={({ error }): MixedElement => (
