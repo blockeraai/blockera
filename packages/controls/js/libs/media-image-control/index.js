@@ -94,7 +94,7 @@ export default function MediaImageControl({
 							className="btn-delete"
 							noBorder={true}
 							icon={
-								<Icon library="ui" icon="close" iconSize="16" />
+								<Icon library="ui" icon="trash" iconSize="20" />
 							}
 							onClick={() => {
 								setValue('');
