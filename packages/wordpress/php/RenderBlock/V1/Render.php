@@ -112,7 +112,7 @@ class Render {
 				'htmlEditable.root',
 				[
 					'fallback' => false,
-					'block-type' => $args['block']['blockName'],
+					'block-type' => 'master',
 					'block-name' => $args['block']['blockName'],
 					'blockera-unique-selector' => $args['unique_class_name'],
 				]
