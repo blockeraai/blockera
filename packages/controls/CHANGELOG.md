@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Improvements
+- Enhance the design of the image uploader control.
+- Enhance the design of the icon control.
+
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.
 
