@@ -37,7 +37,6 @@ export const SiteTitle: BlockType = {
 		icon: {
 			htmlEditable: {
 				status: true,
-				selector: '{{ BLOCK_SELECTOR }} a',
 			},
 		},
 	},
