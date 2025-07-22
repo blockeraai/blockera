@@ -105,12 +105,16 @@ export const CanvasEditor = ({
 					// Set width constraints based on breakpoint settings.
 					if (min && max) {
 						iframe.style.width = max;
-						iframe.style.minWidth = '';
+						iframe.style.minWidth = min;
 						iframe.style.maxWidth = max;
-					} else if (min || max) {
-						iframe.style.width = min || max;
-						iframe.style.minWidth = '';
+					} else if (min) {
 						iframe.style.maxWidth = '';
+						iframe.style.width = min;
+						iframe.style.minWidth = min;
+					} else if (max) {
+						iframe.style.minWidth = '';
+						iframe.style.width = max;
+						iframe.style.maxWidth = max;
 					}
 
 					// Scale down non-base breakpoints for better preview.
