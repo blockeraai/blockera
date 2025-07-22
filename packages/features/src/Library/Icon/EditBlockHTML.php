@@ -60,9 +60,7 @@ class EditBlockHTML implements EditableBlockHTML {
 
         [
             'dom'          => $dom,
-            'block'        => $block,
 			'htmlEditable' => $htmlEditable,
-            'unique_class_name' => $unique_class_name,
         ] = $data;
 
 		if (empty($htmlEditable['selector'])) {
