@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
 
 /**
@@ -93,19 +93,22 @@ export default function BoxSpacingControl({
 	const [paddingLock, setPaddingLock]: [BoxSpacingLock, (string) => void] =
 		useState(_paddingLock);
 
-	if (paddingLock === 'none') {
-		const smartPaddingLock = getSmartLock(value, 'padding');
-		if (smartPaddingLock) {
-			setPaddingLock(smartPaddingLock);
+	// Run only once on mount to detect smart lock state
+	useEffect(() => {
+		if (paddingLock === 'none') {
+			const smartPaddingLock = getSmartLock(value, 'padding');
+			if (smartPaddingLock) {
+				setPaddingLock(smartPaddingLock);
+			}
 		}
-	}
 
-	if (marginLock === 'none') {
-		const smartMarginLock = getSmartLock(value, 'margin');
-		if (smartMarginLock) {
-			setMarginLock(smartMarginLock);
+		if (marginLock === 'none') {
+			const smartMarginLock = getSmartLock(value, 'margin');
+			if (smartMarginLock) {
+				setMarginLock(smartMarginLock);
+			}
 		}
-	}
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const sideProps = {
 		id,
