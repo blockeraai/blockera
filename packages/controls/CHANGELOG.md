@@ -3,6 +3,7 @@
 ### Improvements
 - Enhance the design of the image uploader control.
 - Enhance the design of the icon control.
+- Box spacing control improved to detect lock for horizontal or vertical based on value for blocks.
 
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.
