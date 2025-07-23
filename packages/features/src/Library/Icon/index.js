@@ -11,7 +11,7 @@ import { createRoot } from '@wordpress/element';
  */
 import { Icon } from '@blockera/icons';
 import { experimental } from '@blockera/env';
-import { isEmpty, isUndefined, getIframeTag } from '@blockera/utils';
+import { isEmpty, getIframeTag } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -49,9 +49,9 @@ const editBlockHTML = ({
 		blockeraIconGap = '10px',
 	} = attributes;
 
-	let { blockeraIconPosition } = attributes;
-	if (isEmpty(blockeraIconPosition)) {
-		blockeraIconPosition = 'left';
+	// If icon is empty, don't render anything
+	if (blockeraIcon?.icon === '' && blockeraIcon?.uploadSVG === '') {
+		return;
 	}
 
 	const _selector: string = selector
@@ -60,7 +60,8 @@ const editBlockHTML = ({
 	const directElement = document.querySelector(_selector);
 	const el = directElement ? directElement : getIframeTag(_selector);
 
-	if (isUndefined(blockeraIcon) || isEmpty(blockeraIcon) || !el) {
+	// If element is not found, don't render anything
+	if (!el) {
 		return;
 	}
 
@@ -70,6 +71,11 @@ const editBlockHTML = ({
 	iconNode.style.display = 'inline-flex';
 	iconNode.style.alignItems = 'center';
 	iconNode.style.alignSelf = 'center';
+
+	let { blockeraIconPosition } = attributes;
+	if (isEmpty(blockeraIconPosition)) {
+		blockeraIconPosition = 'left';
+	}
 
 	if ('right' === blockeraIconPosition) {
 		iconNode.style.marginLeft = blockeraIconGap || '10px';
