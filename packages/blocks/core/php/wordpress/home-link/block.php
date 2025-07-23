@@ -19,6 +19,12 @@ return array_merge(
 				'blockera/elements/link' => [
 					'root' => '.wp-block-navigation-item__content',
 				],
+				'blockera/elements/icon' => [
+					'root' => ' .wp-block-button__link .blockera-icon',
+				],
+				'htmlEditable' => [
+					'root' => 'div[role="textbox"]',
+				],
 			]
 		),
 	]
