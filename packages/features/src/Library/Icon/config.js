@@ -34,7 +34,9 @@ export const icon = {
 					name: 'elements/icon',
 					label: __('Icons', 'blockera'),
 					description: __('All icon elements.', 'blockera'),
-					icon: <Icon icon="button" library="wp" iconSize="20" />,
+					icon: (
+						<Icon icon="star-filled" library="wp" iconSize="20" />
+					),
 					settings: {
 						force: false,
 						priority: 10,
