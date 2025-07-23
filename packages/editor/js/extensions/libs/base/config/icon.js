@@ -55,7 +55,7 @@ const blockeraIconColor: FeatureConfig = {
 const blockeraIconLink: FeatureConfig = {
 	show: true,
 	force: true,
-	status: true,
+	status: false,
 	label: __('Icon Link', 'blockera'),
 };
 
