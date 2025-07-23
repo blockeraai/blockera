@@ -8,7 +8,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { FeatureConfig } from '../types';
+import type { FeatureConfig } from '@blockera/editor/js/extensions/libs/base/types';
 
 const blockeraIcon: FeatureConfig = {
 	show: true,
@@ -55,7 +55,7 @@ const blockeraIconColor: FeatureConfig = {
 const blockeraIconLink: FeatureConfig = {
 	show: true,
 	force: true,
-	status: true,
+	status: false,
 	label: __('Icon Link', 'blockera'),
 };
 

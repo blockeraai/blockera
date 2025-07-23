@@ -18,6 +18,7 @@ import { isEmpty, isUndefined, getIframeTag } from '@blockera/utils';
  */
 import { icon } from './config';
 import { IconStyles } from './extension/styles';
+import { iconConfig } from './extension/supports';
 import { IconExtension } from './extension/extension';
 import type { TEditBlockHTMLArgs, TFeature } from '../../Js/types';
 
@@ -115,7 +116,8 @@ const IconFeature: TFeature = {
 	name: 'icon',
 	editBlockHTML,
 	styleGenerator: IconStyles,
-	extensionConfigId: 'iconConfig',
+	extensionSupports: iconConfig,
+	extensionSupportId: 'iconConfig',
 	ExtensionComponent: IconExtension,
 	isEnabled: (status = icon.block.status): boolean => status,
 };
