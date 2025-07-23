@@ -129,6 +129,26 @@ export const IconExtension: ComponentType<{
 															'Position',
 															'blockera'
 														)}
+														labelPopoverTitle={__(
+															'Icon Position',
+															'blockera'
+														)}
+														labelDescription={
+															<>
+																<p>
+																	{__(
+																		'Sets the placement of the icon within the block.',
+																		'blockera'
+																	)}
+																</p>
+																<p>
+																	{__(
+																		'You can choose to display the icon on the left or right side of the block content, allowing better alignment with your layout and design needs.',
+																		'blockera'
+																	)}
+																</p>
+															</>
+														}
 														columns="columns-2"
 														options={[
 															{
@@ -195,6 +215,26 @@ export const IconExtension: ComponentType<{
 															'Gap',
 															'blockera'
 														)}
+														labelPopoverTitle={__(
+															'Icon Gap',
+															'blockera'
+														)}
+														labelDescription={
+															<>
+																<p>
+																	{__(
+																		'Controls the space between the icon and the block content.',
+																		'blockera'
+																	)}
+																</p>
+																<p>
+																	{__(
+																		'Adjust the gap to fine-tune spacing for better visual balance and readability.',
+																		'blockera'
+																	)}
+																</p>
+															</>
+														}
 														columns="columns-2"
 														unitType="essential"
 														defaultValue=""
@@ -235,6 +275,26 @@ export const IconExtension: ComponentType<{
 															'Size',
 															'blockera'
 														)}
+														labelPopoverTitle={__(
+															'Icon Size',
+															'blockera'
+														)}
+														labelDescription={
+															<>
+																<p>
+																	{__(
+																		'Sets the size of the icon used in the block.',
+																		'blockera'
+																	)}
+																</p>
+																<p>
+																	{__(
+																		"By default, it inherits the block's font size, but you can customize it to be larger or smaller for better visual emphasis.",
+																		'blockera'
+																	)}
+																</p>
+															</>
+														}
 														columns="columns-2"
 														unitType="essential"
 														defaultValue=""
@@ -275,6 +335,26 @@ export const IconExtension: ComponentType<{
 															'Color',
 															'blockera'
 														)}
+														labelPopoverTitle={__(
+															'Icon Color',
+															'blockera'
+														)}
+														labelDescription={
+															<>
+																<p>
+																	{__(
+																		'Defines the color of the icon in the block.',
+																		'blockera'
+																	)}
+																</p>
+																<p>
+																	{__(
+																		"By default, it inherits the block's font color, but you can override it to match or contrast with your design.",
+																		'blockera'
+																	)}
+																</p>
+															</>
+														}
 														columns="columns-2"
 														//
 														defaultValue=""
