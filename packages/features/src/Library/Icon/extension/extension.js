@@ -63,6 +63,7 @@ export const IconExtension: ComponentType<{
 			blockeraIconColor: {},
 			blockeraIconPosition: {},
 		},
+		attributes,
 	}: TIconProps): MixedElement => {
 		const { initialOpen, onToggle } = useBlockSection('iconConfig');
 
@@ -100,6 +101,9 @@ export const IconExtension: ComponentType<{
 										newValue,
 										{ ref }
 									)
+								}
+								defaultValue={
+									attributes?.blockeraIcon?.default?.value
 								}
 								{...extensionProps.blockeraIcon}
 							/>
@@ -185,7 +189,11 @@ export const IconExtension: ComponentType<{
 														]}
 														isDeselectable={true}
 														//
-														defaultValue=""
+														defaultValue={
+															attributes
+																?.blockeraIconPosition
+																?.default?.value
+														}
 														onChange={(
 															newValue,
 															ref
@@ -242,7 +250,11 @@ export const IconExtension: ComponentType<{
 														}
 														columns="columns-2"
 														unitType="essential"
-														defaultValue=""
+														defaultValue={
+															attributes
+																?.blockeraIconGap
+																?.default?.value
+														}
 														min={0}
 														onChange={(
 															newValue,
@@ -302,7 +314,11 @@ export const IconExtension: ComponentType<{
 														}
 														columns="columns-2"
 														unitType="essential"
-														defaultValue=""
+														defaultValue={
+															attributes
+																?.blockeraIconSize
+																?.default?.value
+														}
 														min={0}
 														onChange={(
 															newValue,
@@ -362,7 +378,11 @@ export const IconExtension: ComponentType<{
 														}
 														columns="columns-2"
 														//
-														defaultValue=""
+														defaultValue={
+															attributes
+																?.blockeraIconColor
+																?.default?.value
+														}
 														onChange={(
 															newValue,
 															ref
@@ -409,6 +429,11 @@ export const IconExtension: ComponentType<{
 															newValue,
 															{ ref }
 														)
+													}
+													defaultValue={
+														attributes
+															?.blockeraIconLink
+															?.default?.value
 													}
 													{...extensionProps.blockeraIconLink}
 												/>
