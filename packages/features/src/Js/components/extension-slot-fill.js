@@ -82,8 +82,8 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 				Component: ExtensionComponent,
 				extensionProps: {
 					...rest,
-					[feature.extensionConfigId]:
-						settings[feature.extensionConfigId],
+					[feature.extensionSupportId]:
+						settings[feature.extensionSupportId],
 				},
 			});
 		}

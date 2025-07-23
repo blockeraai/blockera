@@ -10,6 +10,7 @@ import type { ComponentType } from 'react';
  */
 import type { CssRule } from '@blockera/editor/js/style-engine/types';
 import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
+import type { FeatureConfig } from '@blockera/editor/js/extensions/libs/base/types';
 import type { StateTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
 
@@ -82,9 +83,12 @@ export type TToolbarControls = Array<{
 export type TFeature = {
 	name: string,
 	isEnabled: () => boolean,
-	extensionConfigId: string,
+	extensionSupportId?: string,
+	extensionSupports?: {
+		[key: string]: FeatureConfig,
+	},
 	toolbarControls?: TToolbarControls,
-	ExtensionComponent: ComponentType<any>,
+	ExtensionComponent?: ComponentType<any>,
 	ToolbarButtonComponent?: ComponentType<any>,
 	editBlockHTML?: (args: TEditBlockHTMLArgs) => void,
 	styleGenerator?: (args: StylesProps) => Array<CssRule>,

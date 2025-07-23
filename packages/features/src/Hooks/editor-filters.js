@@ -34,7 +34,8 @@ export const editorApplyHooks = () => {
 				if (
 					!featureObject ||
 					!block?.blockFeatures ||
-					!block?.blockFeatures[featureId]
+					!block?.blockFeatures[featureId] ||
+					!featureObject?.isEnabled()
 				) {
 					continue;
 				}
@@ -84,6 +85,42 @@ export const editorApplyHooks = () => {
 					? { availableBlockStates }
 					: {}),
 			});
+		}
+	);
+
+	addFilter(
+		'blockera.extensions.supports.configuration',
+		'blockera.features.extensionsSupports.filter',
+		(extensionsSupports) => {
+			const newExtensionsSupports = {};
+			const { getFeatures } = select(STORE_NAME);
+			const registeredFeatures = getFeatures();
+
+			for (const featureId in featuresLibrary) {
+				const featureObject = registeredFeatures[featureId];
+
+				if (
+					!featureObject?.isEnabled() ||
+					!featureObject?.extensionSupports ||
+					!featureObject?.extensionSupportId
+				) {
+					continue;
+				}
+
+				if (extensionsSupports[featureObject.extensionSupportId]) {
+					newExtensionsSupports[featureId] = mergeObject(
+						extensionsSupports[featureObject.extensionSupportId],
+						featureObject.extensionSupports[
+							featureObject.extensionSupportId
+						]
+					);
+				} else {
+					newExtensionsSupports[featureObject.extensionSupportId] =
+						featureObject.extensionSupports;
+				}
+			}
+
+			return mergeObject(extensionsSupports, newExtensionsSupports);
 		}
 	);
 };
