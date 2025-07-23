@@ -20,10 +20,10 @@ return array_merge(
 					'root' => '.wp-block-navigation-item__content',
 				],
 				'blockera/elements/icon' => [
-					'root' => ' .wp-block-button__link .blockera-icon',
+					'root' => ' .wp-block-home-link__content .blockera-icon',
 				],
 				'htmlEditable' => [
-					'root' => 'div[role="textbox"]',
+					'root' => '{{ BLOCK_SELECTOR }} .wp-block-home-link__content div[role="textbox"]',
 				],
 			]
 		),
