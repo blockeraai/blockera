@@ -66,6 +66,11 @@ export const IconExtension: ComponentType<{
 	}: TIconProps): MixedElement => {
 		const { initialOpen, onToggle } = useBlockSection('iconConfig');
 
+		// Icon is not available in inner blocks.
+		if (block.currentBlock !== 'master') {
+			return <></>;
+		}
+
 		return (
 			<PanelBodyControl
 				onToggle={onToggle}
