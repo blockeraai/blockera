@@ -10,6 +10,17 @@
 return array_merge(
 	$args,
 	[
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraIconGap' => [
+					'type'    => 'string',
+					'default' => [
+						'value' => '5px',
+					],
+				],
+			]
+		),
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
