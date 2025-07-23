@@ -92,3 +92,39 @@ export function boxSpacingValueCleanup(value: Object): Object {
 
 	return updatedValue;
 }
+
+// get smart lock for padding and margin
+export function getSmartLock(value: any, side: 'padding' | 'margin'): string {
+	let smartLock = '';
+	const sideValue = value[side];
+
+	// Check if all values are empty (null, undefined, or empty string)
+	const allEmpty = [
+		sideValue.top,
+		sideValue.right,
+		sideValue.bottom,
+		sideValue.left,
+	].every((v) => v === '');
+
+	if (allEmpty) {
+		return '';
+	}
+
+	if (isEquals(sideValue.left, sideValue.right) && sideValue.left !== '') {
+		smartLock = 'horizontal';
+	}
+
+	if (isEquals(sideValue.top, sideValue.bottom) && sideValue.top !== '') {
+		if (smartLock === 'horizontal') {
+			if (isEquals(sideValue.top, sideValue.left)) {
+				smartLock = 'all';
+			} else {
+				smartLock = 'vertical-horizontal';
+			}
+		} else {
+			smartLock = 'vertical';
+		}
+	}
+
+	return smartLock;
+}
