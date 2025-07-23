@@ -10,6 +10,17 @@
 return array_merge(
 	$args,
 	[
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'blockeraIconGap' => [
+					'type'    => 'string',
+					'default' => [
+						'value' => '5px',
+					],
+				],
+			]
+		),
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
@@ -24,6 +35,12 @@ return array_merge(
 				],
 				'blockera/elements/link' => [
 					'root' => '.wp-block-navigation-item__content',
+				],
+				'blockera/elements/icon' => [
+					'root' => ' .wp-block-navigation-item__content .blockera-icon',
+				],
+				'htmlEditable' => [
+					'root' => '{{ BLOCK_SELECTOR }} .wp-block-navigation-item__content div[role="textbox"]',
 				],
 			]
 		),
