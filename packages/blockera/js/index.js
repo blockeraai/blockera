@@ -24,6 +24,10 @@ import {
 	registerBlockeraBlocks,
 	registerConfigExtensionsOfInnerBlocks,
 } from '@blockera/blocks-core';
+import {
+	registerBlockeraBlockTypes,
+	registerBlockeraBlockVariations,
+} from '@blockera/blocks-blockera';
 import { noop } from '@blockera/utils';
 import { initializer } from '@blockera/bootstrap';
 import {
@@ -68,6 +72,9 @@ addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
 
 		registerBlockeraBlocks();
 		registerConfigExtensionsOfInnerBlocks();
+
+		registerBlockeraBlockTypes();
+		registerBlockeraBlockVariations();
 	});
 });
 

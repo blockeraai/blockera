@@ -69,6 +69,16 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		);
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'l10n' ] );
+
+		add_action(
+            'enqueue_block_editor_assets',
+            function () {
+				blockera_enqueue_blocks_editor_styles(
+                    blockera_core_config( 'app.vendor_url' ),
+                    blockera_core_config( 'app.version' )
+				);
+			} 
+        );
 	}
 
 	/**

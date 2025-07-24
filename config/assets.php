@@ -23,6 +23,7 @@ return [
 			'telemetry',
 			'features',
 			'editor',
+			'blocks-blockera',
 			'blocks-core',
 			'bootstrap',
 			'blockera',
