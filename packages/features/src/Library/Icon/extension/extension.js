@@ -129,23 +129,28 @@ export const IconExtension: ComponentType<{
 					);
 
 					setTimeout(() => {
+						const renderedIcon = btoa(
+							unescape(
+								encodeURIComponent(iconNode?.innerHTML || '')
+							)
+						);
+
 						handleOnChangeAttributes(
 							'blockeraIcon',
 							{
-								...newValue.icon,
-								renderedIcon: btoa(
-									unescape(
-										encodeURIComponent(
-											iconNode?.innerHTML || ''
-										)
-									)
-								),
+								...newValue,
+								renderedIcon,
 							},
 							{ ref }
 						);
 
 						setIconState({
-							icon: newValue,
+							icon: {
+								renderedIcon,
+								icon: newValue.icon,
+								library: newValue.library,
+								uploadSVG: newValue.uploadSVG,
+							},
 							...initialIconState,
 						});
 					}, 1);
