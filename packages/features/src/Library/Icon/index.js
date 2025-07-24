@@ -125,6 +125,10 @@ const IconFeature: TFeature = {
 	name: 'icon',
 	// editBlockHTML,
 	InlineStyleComponent: ({ className, clientId, currentAttributes }) => {
+		if (!currentAttributes?.blockeraIcon?.renderedIcon) {
+			return null;
+		}
+
 		return (
 			<>
 				{-1 !== className?.indexOf('blockera-has-icon-style') && (
