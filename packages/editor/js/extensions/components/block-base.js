@@ -75,11 +75,11 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		clientId,
 		attributes: blockAttributes,
 		setAttributes: _setAttributes,
-		className,
 		defaultAttributes,
 		originDefaultAttributes,
 		...props
 	} = _props;
+	const { className } = blockAttributes;
 
 	const _attributes = useMemo(
 		() => sanitizeBlockAttributes(cloneObject(blockAttributes)),
