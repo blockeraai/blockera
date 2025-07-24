@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2fbd57b1a7bfcfaeb003804a326c0920",
+    "content-hash": "9f07a5c05a6d85438774833506edea48",
     "packages": [
         {
             "name": "blockera/blockera",
@@ -51,6 +51,28 @@
                 ]
             },
             "description": "The blockera admin menus on WordPress admin dashboard.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/blocks-blockera",
+            "version": "1.4.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/blocks/blockera",
+                "reference": "4b44961c3aab0cc5b922c63ede13b793959991e9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Blocks\\Blockera\\": "php/"
+                },
+                "files": [
+                    "./php/functions.php"
+                ]
+            },
+            "description": "The Blockera core blocks package for Blockera editor.",
             "transport-options": {
                 "relative": true
             }
@@ -184,11 +206,11 @@
         },
         {
             "name": "blockera/editor",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "dist": {
                 "type": "path",
                 "url": "packages/editor",
-                "reference": "750149e098519aefa9e34fe9548061ce02e291da"
+                "reference": "37d18cacd9b6f80ace664b28be7960b6cde1108a"
             },
             "type": "library",
             "autoload": {
@@ -7957,12 +7979,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "1794f449c23e30a4ffd82c058e80441936aaa822"
+                "reference": "a499fe6c93eab0ee48b660841fe81ec5f311ab31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/1794f449c23e30a4ffd82c058e80441936aaa822",
-                "reference": "1794f449c23e30a4ffd82c058e80441936aaa822",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/a499fe6c93eab0ee48b660841fe81ec5f311ab31",
+                "reference": "a499fe6c93eab0ee48b660841fe81ec5f311ab31",
                 "shasum": ""
             },
             "require": {
@@ -7980,7 +8002,7 @@
                 "wp-cli/entity-command": "^1.2 || ^2",
                 "wp-cli/extension-command": "^1.1 || ^2",
                 "wp-cli/package-command": "^1 || ^2",
-                "wp-cli/wp-cli-tests": "dev-add/phpstan-enhancements"
+                "wp-cli/wp-cli-tests": "^4"
             },
             "suggest": {
                 "ext-readline": "Include for a better --prompt implementation",
@@ -8021,7 +8043,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli/issues",
                 "source": "https://github.com/wp-cli/wp-cli"
             },
-            "time": "2025-07-11T20:37:50+00:00"
+            "time": "2025-07-23T10:41:19+00:00"
         },
         {
             "name": "wp-cli/wp-cli-bundle",
@@ -8029,12 +8051,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli-bundle.git",
-                "reference": "f4415f0a54861f35659c98f125a02ae5b86008fe"
+                "reference": "bc11cdf5f5a7c36a822b7ffae9189622694f7fd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/f4415f0a54861f35659c98f125a02ae5b86008fe",
-                "reference": "f4415f0a54861f35659c98f125a02ae5b86008fe",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli-bundle/zipball/bc11cdf5f5a7c36a822b7ffae9189622694f7fd8",
+                "reference": "bc11cdf5f5a7c36a822b7ffae9189622694f7fd8",
                 "shasum": ""
             },
             "require": {
@@ -8095,7 +8117,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli-bundle/issues",
                 "source": "https://github.com/wp-cli/wp-cli-bundle"
             },
-            "time": "2025-07-12T04:36:27+00:00"
+            "time": "2025-07-23T11:57:57+00:00"
         },
         {
             "name": "wp-cli/wp-config-transformer",

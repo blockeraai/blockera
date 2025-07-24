@@ -62,6 +62,10 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/blocks/blockera"
+		},
+		{
+			"type": "path",
 			"url": "packages/blocks/core"
 		},
 		{
@@ -88,6 +92,7 @@
 		"blockera/blockera": "*",
 		"blockera/features": "*",
 		"blockera/blockera-admin": "*",
+		"blockera/blocks-blockera": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
