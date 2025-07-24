@@ -82,15 +82,20 @@
 	display: inline-block;
 	position: relative;
 	background: var(--blockera--icon--color, currentColor);
-	width: var(--blockera--icon--size, 1em);
-	height: var(--blockera--icon--size, 1em);
-	margin: auto;
-	vertical-align: text-bottom;
+	width: var(--blockera--icon--size, 1.33em);
+	height: var(--blockera--icon--size, 1.33em);
+	margin: auto 0;
+	vertical-align: middle;
+	align-self: center;
 	order: var(--blockera--icon--order, 0);
 	-webkit-mask-image: var(--blockera--icon--url);
 	-webkit-mask-position: center;
 	-webkit-mask-repeat: no-repeat;
 	-webkit-mask-size: cover !important;
+	mask-image: var(--blockera--icon--url);
+	mask-position: center;
+	mask-repeat: no-repeat;
+	mask-size: cover !important;
 }
 
 /* Can't use important. */
