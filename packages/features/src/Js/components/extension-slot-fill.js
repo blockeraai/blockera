@@ -3,9 +3,9 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { Fill } from '@wordpress/components';
+import { select, useSelect } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -24,6 +24,26 @@ import { default as featuresSchemas } from '../../Library/config';
 export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
+	// Using Blockera's extensions store
+	const { activeBlockVariation } = useSelect(
+		(select) => {
+			const { getActiveBlockVariation, getBlockVariations } =
+				select('core/blocks');
+			const { getBlockName, getBlockAttributes } =
+				select('core/block-editor');
+
+			const name = getBlockName(props.block.clientId);
+
+			return {
+				activeBlockVariation: getActiveBlockVariation(
+					name,
+					getBlockAttributes(props.block.clientId)
+				),
+				blockVariations: name && getBlockVariations(name, 'transform'),
+			};
+		},
+		[props.block.clientId]
+	);
 
 	const mappedExtensions = useMemo(() => {
 		const mapped = [];
@@ -53,7 +73,15 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 				props.blockFeatures[featureId]
 			);
 
-			if (!feature.isEnabled(featureBlockConfig.status)) {
+			if (
+				!feature.isEnabled(featureBlockConfig.status) ||
+				(!featureBlockConfig?.context?.includes(
+					props?.block?.blockName
+				) &&
+					!featureBlockConfig?.context?.includes(
+						activeBlockVariation?.name
+					))
+			) {
 				continue;
 			}
 

@@ -42,4 +42,10 @@ export const Image: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	blockFeatures: {
+		icon: {
+			status: true,
+			context: ['blockera/icon'],
+		},
+	},
 };

@@ -87,6 +87,10 @@ export type TFeature = {
 	extensionSupports?: {
 		[key: string]: FeatureConfig,
 	},
+	InlineStyleComponent?: ComponentType<{
+		className: string,
+		currentAttributes: Object,
+	}>,
 	toolbarControls?: TToolbarControls,
 	ExtensionComponent?: ComponentType<any>,
 	ToolbarButtonComponent?: ComponentType<any>,

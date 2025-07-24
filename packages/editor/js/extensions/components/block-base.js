@@ -304,16 +304,17 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	});
 
 	// Boot loading the block features.
-	const { ContextualToolbarComponents } = useBlockFeatures({
-		name,
-		clientId,
-		attributes: currentAttributes,
-		blockFeatures: mergeObject(
-			generalBlockFeatures,
-			additional?.blockFeatures
-		),
-		getBlockCSSSelector,
-	});
+	const { BlockFeaturesInlineStyles, ContextualToolbarComponents } =
+		useBlockFeatures({
+			name,
+			clientId,
+			attributes: currentAttributes,
+			blockFeatures: mergeObject(
+				generalBlockFeatures,
+				additional?.blockFeatures
+			),
+			getBlockCSSSelector,
+		});
 
 	const inlineStyles = useCleanupStyles({ clientId }, [
 		selectedBlock,
@@ -507,6 +508,12 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			{/*</StrictMode>*/}
 
 			<ContextualToolbarComponents />
+
+			<BlockFeaturesInlineStyles
+				clientId={clientId}
+				className={className}
+				currentAttributes={currentAttributes}
+			/>
 
 			{children}
 		</BlockEditContextProvider>

@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import { useEffect, useMemo } from '@wordpress/element';
 import { BlockControls } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarDropdownMenu } from '@wordpress/components';
@@ -30,15 +30,42 @@ export const useBlockFeatures = (
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
 
+	// Using Blockera's extensions store
+	const { activeBlockVariation } = useSelect(
+		(select) => {
+			const { getActiveBlockVariation, getBlockVariations } =
+				select('core/blocks');
+			const { getBlockName, getBlockAttributes } =
+				select('core/block-editor');
+
+			const name = getBlockName(props.clientId);
+
+			return {
+				activeBlockVariation: getActiveBlockVariation(
+					name,
+					getBlockAttributes(props.clientId)
+				),
+				blockVariations: name && getBlockVariations(name, 'transform'),
+			};
+		},
+		[props.clientId]
+	);
+
 	const {
 		blockSideEffectFeatures,
 		contextualToolbarFeatures,
+		mappedFeatureUIComponents,
 	}: TCalculatedFeatures = useMemo((): TCalculatedFeatures => {
+		const mappedFeatureUIComponents: Array<ComponentType> = [];
 		const blockSideEffectFeatures: Array<TFeature> = [];
 		const contextualToolbarFeatures: Array<TFeature> = [];
 
 		if (!Object.keys(props?.blockFeatures)?.length) {
-			return { blockSideEffectFeatures, contextualToolbarFeatures };
+			return {
+				blockSideEffectFeatures,
+				contextualToolbarFeatures,
+				mappedFeatureUIComponents,
+			};
 		}
 
 		for (const featureId in registeredFeatures) {
@@ -80,9 +107,27 @@ export const useBlockFeatures = (
 					contextualToolbarFeatures.push(feature);
 				}
 			}
+
+			if (
+				feature?.InlineStyleComponent &&
+				featureBlockConfig?.context &&
+				((activeBlockVariation &&
+					featureBlockConfig.context.includes(
+						activeBlockVariation?.name
+					) &&
+					activeBlockVariation.isActive(props.attributes)) ||
+					(!activeBlockVariation &&
+						featureBlockConfig.context.includes(props?.name)))
+			) {
+				mappedFeatureUIComponents.push(feature.InlineStyleComponent);
+			}
 		}
 
-		return { blockSideEffectFeatures, contextualToolbarFeatures };
+		return {
+			blockSideEffectFeatures,
+			contextualToolbarFeatures,
+			mappedFeatureUIComponents,
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [registeredFeatures, props]);
 
@@ -189,5 +234,10 @@ export const useBlockFeatures = (
 
 	return {
 		ContextualToolbarComponents,
+		BlockFeaturesInlineStyles: (props) => {
+			return mappedFeatureUIComponents.map((Component, index) => {
+				return <Component key={index} {...props} />;
+			});
+		},
 	};
 };

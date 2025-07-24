@@ -16,6 +16,10 @@ export type TCalculatedFeatures = {
 
 export type TBlockFeaturesHookValue = {
 	ContextualToolbarComponents: TContextualToolbarComponents,
+	BlockFeaturesInlineStyles: ComponentType<{
+		className: string,
+		currentAttributes: Object,
+	}>,
 };
 
 export type TUseBlockFeaturesProps = {
