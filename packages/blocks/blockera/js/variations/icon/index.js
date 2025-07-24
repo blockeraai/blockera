@@ -25,8 +25,8 @@ export const icon = {
 			className: 'blockera-has-icon-style',
 			blockeraIcon: {
 				value: {
-					icon: 'blockera',
-					library: 'blockera',
+					icon: 'star-empty',
+					library: 'wp',
 					uploadSVG: '',
 					renderedIcon: '',
 				},
