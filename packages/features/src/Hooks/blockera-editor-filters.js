@@ -18,7 +18,7 @@ import { STORE_NAME } from '../Js/store/constants';
 import { default as featuresLibrary } from '../Library';
 import { default as featuresStack } from '../Library/config';
 
-export const editorApplyHooks = () => {
+export const blockeraEditorFilters = () => {
 	addFilter(
 		'blockera.blocks.register',
 		'blockera.features.prepareInnerBlockTypes',

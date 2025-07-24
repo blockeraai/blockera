@@ -1,3 +1,3 @@
 // @flow
 
-export * from './editor-filters';
+export * from './blockera-editor-filters';
