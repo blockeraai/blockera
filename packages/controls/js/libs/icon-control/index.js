@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { memo, useState, useReducer, createRoot } from '@wordpress/element';
+import { memo, useState, useReducer } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -57,47 +57,6 @@ function IconControl({
 	const [currentIcon, currentIconDispatch] = useReducer(iconReducer, value);
 
 	useLateEffect(() => {
-		// Prepare rendered icon before setting state
-		if (currentIcon?.icon || currentIcon?.uploadSVG) {
-			const iconWrapper = document.createElement('div');
-			iconWrapper.style.display = 'none';
-			iconWrapper.classList.add('blockera-temp-icon-wrapper');
-
-			const foundedWrapper = document.querySelector(
-				'.blockera-temp-icon-wrapper'
-			);
-
-			if (!foundedWrapper) {
-				document.body?.append(iconWrapper);
-			} else {
-				foundedWrapper.innerHTML = '';
-			}
-
-			const iconNode = document.createElement('span');
-			document
-				.querySelector('.blockera-temp-icon-wrapper')
-				?.append(iconNode);
-			const iconRoot = createRoot(iconNode);
-
-			iconRoot.render(
-				<Icon
-					icon={currentIcon.icon}
-					library={currentIcon.library}
-					uploadSVG={currentIcon.uploadSVG}
-				/>
-			);
-
-			setTimeout(() => {
-				const iconHTML = document.querySelector(
-					'.blockera-temp-icon-wrapper span'
-				)?.innerHTML;
-
-				currentIcon.renderedIcon = btoa(
-					unescape(encodeURIComponent(iconHTML || ''))
-				);
-			}, 100);
-		}
-
 		setValue(currentIcon);
 	}, [currentIcon]);
 
