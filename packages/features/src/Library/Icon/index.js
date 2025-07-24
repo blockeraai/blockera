@@ -136,8 +136,11 @@ const IconFeature: TFeature = {
 										?.renderedIcon || ''
 								)
 							)}");
-							--blockera--icon--size: ${currentAttributes?.blockeraIconSize};
-							--blockera--icon--color: ${currentAttributes?.blockeraIconColor};
+							--blockera--icon--size: ${currentAttributes?.blockeraIconSize || '1.33em'};
+							--blockera--icon--color: ${
+								currentAttributes?.blockeraIconColor ||
+								'currentColor'
+							};
 						}`}
 					</style>
 				)}
