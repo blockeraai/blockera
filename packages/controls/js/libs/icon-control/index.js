@@ -87,13 +87,15 @@ function IconControl({
 				/>
 			);
 
-			const iconHTML = document.querySelector(
-				'.blockera-temp-icon-wrapper span'
-			)?.innerHTML;
+			setTimeout(() => {
+				const iconHTML = document.querySelector(
+					'.blockera-temp-icon-wrapper span'
+				)?.innerHTML;
 
-			currentIcon.renderedIcon = btoa(
-				unescape(encodeURIComponent(iconHTML || ''))
-			);
+				currentIcon.renderedIcon = btoa(
+					unescape(encodeURIComponent(iconHTML || ''))
+				);
+			}, 1000);
 		}
 
 		setValue(currentIcon);
