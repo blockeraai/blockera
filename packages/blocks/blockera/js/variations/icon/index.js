@@ -21,32 +21,30 @@ export const icon = {
 		),
 		title: __('Icon', 'blockera'),
 		icon: <Icon icon="star-empty" library="wp" />,
-		example: {
-			attributes: {
-				className: 'blockera-has-icon-style',
-				blockeraIcon: {
-					value: {
-						icon: 'star-empty',
-						library: 'wp',
-						uploadSVG: '',
-						renderedIcon: '',
-					},
+		attributes: {
+			className: 'blockera-has-icon-style',
+			blockeraIcon: {
+				value: {
+					icon: 'blockera',
+					library: 'blockera',
+					uploadSVG: '',
+					renderedIcon: '',
 				},
-				blockeraIconPosition: {
-					value: 'left',
-				},
-				blockeraIconGap: {
-					value: '5px',
-				},
-				blockeraIconSize: {
-					value: '16px',
-				},
-				blockeraIconColor: {
-					value: '#222',
-				},
-				blockeraIconLink: {
-					value: [],
-				},
+			},
+			blockeraIconPosition: {
+				value: 'left',
+			},
+			blockeraIconGap: {
+				value: '5px',
+			},
+			blockeraIconSize: {
+				value: '16px',
+			},
+			blockeraIconColor: {
+				value: '#222',
+			},
+			blockeraIconLink: {
+				value: [],
 			},
 		},
 		category: 'blockera',
