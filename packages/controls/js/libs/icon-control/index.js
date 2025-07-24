@@ -95,7 +95,7 @@ function IconControl({
 				currentIcon.renderedIcon = btoa(
 					unescape(encodeURIComponent(iconHTML || ''))
 				);
-			}, 1000);
+			}, 100);
 		}
 
 		setValue(currentIcon);
