@@ -124,29 +124,6 @@ import type {
 const IconFeature: TFeature = {
 	name: 'icon',
 	// editBlockHTML,
-	InlineStyleComponent: ({ className, clientId, currentAttributes }) => {
-		return (
-			<>
-				{-1 !== className?.indexOf('blockera-has-icon-style') && (
-					<style>
-						{`#block-${clientId} {
-							--blockera--icon--url: url("data:image/svg+xml,${encodeURIComponent(
-								atob(
-									currentAttributes?.blockeraIcon
-										?.renderedIcon || ''
-								)
-							)}");
-							--blockera--icon--size: ${currentAttributes?.blockeraIconSize || '1.33em'};
-							--blockera--icon--color: ${
-								currentAttributes?.blockeraIconColor ||
-								'currentColor'
-							};
-						}`}
-					</style>
-				)}
-			</>
-		);
-	},
 	styleGenerator: IconStyles,
 	extensionSupports: iconConfig,
 	extensionSupportId: 'iconConfig',

@@ -1,51 +1,206 @@
 // @flow
 
-/**
- * Internal dependencies
- */
-// import * as config from '../base/config';
-import type { StylesProps } from '../types';
-import type { CssRule } from '../../../style-engine/types';
+import {
+	getCompatibleBlockCssSelector,
+	computedCssDeclarations,
+} from '@blockera/editor/js/style-engine';
+import type { CssRule } from '@blockera/editor/js/style-engine/types';
+import { isActiveField } from '@blockera/editor/js/extensions/api/utils';
+import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
+import { getBlockSupportFallback } from '@blockera/editor/js/extensions/utils';
 
 export const IconStyles = ({
-	// eslint-disable-next-line
 	state,
-	// eslint-disable-next-line
+	config,
 	clientId,
-	// eslint-disable-next-line
 	blockName,
-	// eslint-disable-next-line
+	masterState,
 	currentBlock,
-	// supports,
-	// activeDeviceType,
-	// eslint-disable-next-line
+	activeDeviceType,
+	supports: blockSupports,
 	selectors: blockSelectors,
-	// eslint-disable-next-line
+	defaultAttributes: attributes,
 	attributes: currentBlockAttributes,
+	...props
 }: StylesProps): Array<CssRule> => {
-	// const {
-	// blockeraIcon,
-	// blockeraIconOptions,
-	// blockeraIconPosition,
-	// blockeraIconGap,
-	// blockeraIconSize,
-	// blockeraIconColor,
-	// blockeraIconLink,
-	// } = config.iconConfig;
-	// const blockProps = {
-	// 	clientId,
-	// 	blockName,
-	// 	attributes: currentBlockAttributes,
-	// };
-	// const sharedParams = {
-	// 	...props,
-	// 	state,
-	// 	clientId,
-	// 	currentBlock,
-	// 	blockSelectors,
-	// 	className: currentBlockAttributes?.className,
-	// };
+	const {
+		blockeraIcon,
+		// blockeraIconOptions,
+		// blockeraIconPosition,
+		blockeraIconGap,
+		blockeraIconSize,
+		blockeraIconColor,
+		// blockeraIconLink,
+	} = config.iconConfig;
+	const blockProps = {
+		state,
+		attributes: currentBlockAttributes,
+		clientId,
+		blockName,
+		currentBlock,
+	};
+	const sharedParams = {
+		...props,
+		state,
+		clientId,
+		blockName,
+		masterState,
+		currentBlock,
+		blockSelectors,
+		activeDeviceType,
+		supports: blockSupports,
+		className: currentBlockAttributes?.className,
+	};
 	const styleGroup: Array<CssRule> = [];
+	const staticDefinitionParams = {
+		type: 'static',
+		options: {
+			important: true,
+		},
+	};
+
+	if (
+		isActiveField(blockeraIcon) &&
+		currentBlockAttributes.blockeraIcon !== attributes.blockeraIcon.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIcon',
+			support: 'blockeraIcon',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIcon'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIcon: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--url': `url("data:image/svg+xml,${encodeURIComponent(
+									atob(
+										currentBlockAttributes.blockeraIcon
+											?.renderedIcon || ''
+									)
+								)}")`,
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraIconSize) &&
+		currentBlockAttributes.blockeraIconSize !==
+			attributes.blockeraIconSize.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconSize',
+			support: 'blockeraIconSize',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconSize'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconSize: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--size':
+									currentBlockAttributes.blockeraIconSize,
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraIconGap) &&
+		currentBlockAttributes.blockeraIconGap !==
+			attributes.blockeraIconGap.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconGap',
+			support: 'blockeraIconGap',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconGap'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconGap: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--gap':
+									currentBlockAttributes.blockeraIconGap,
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraIconColor) &&
+		currentBlockAttributes.blockeraIconColor !==
+			attributes.blockeraIconColor.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconColor',
+			support: 'blockeraIconColor',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconColor'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconColor: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--color':
+									currentBlockAttributes.blockeraIconColor,
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
 
 	return styleGroup;
 };
