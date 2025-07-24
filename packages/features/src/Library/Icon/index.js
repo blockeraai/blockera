@@ -119,16 +119,12 @@ import type {
 // 	} else if (['right', ''].includes(blockeraIconPosition)) {
 // 		el?.append(iconNode);
 // 	}
-// };
+// }
 
 const IconFeature: TFeature = {
 	name: 'icon',
 	// editBlockHTML,
 	InlineStyleComponent: ({ className, clientId, currentAttributes }) => {
-		if (!currentAttributes?.blockeraIcon?.renderedIcon) {
-			return null;
-		}
-
 		return (
 			<>
 				{-1 !== className?.indexOf('blockera-has-icon-style') && (
@@ -137,7 +133,7 @@ const IconFeature: TFeature = {
 							--blockera--icon--url: url("data:image/svg+xml,${encodeURIComponent(
 								atob(
 									currentAttributes?.blockeraIcon
-										?.renderedIcon
+										?.renderedIcon || ''
 								)
 							)}");
 							--blockera--icon--size: ${currentAttributes?.blockeraIconSize};

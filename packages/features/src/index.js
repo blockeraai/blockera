@@ -57,4 +57,5 @@ export const featuresApplyHooks = () => {
 	blockeraEditorFilters();
 };
 export * from './Js/components';
+export * from './Library/helpers';
 export * from './Js/use-block-features';
