@@ -17,6 +17,7 @@ import { mergeObject } from '@blockera/utils';
 import { STORE_NAME } from '../Js/store/constants';
 import { default as featuresLibrary } from '../Library';
 import { default as featuresStack } from '../Library/config';
+import { getIconAttributes, addIconClassName } from '../Library/helpers';
 
 export const blockeraEditorFilters = () => {
 	addFilter(
@@ -121,6 +122,18 @@ export const blockeraEditorFilters = () => {
 			}
 
 			return mergeObject(extensionsSupports, newExtensionsSupports);
+		}
+	);
+
+	addFilter(
+		'blockera.editor.useAttributes.beforeChangeAttributes',
+		'blockera.features.useAttributes.beforeChangeAttributes',
+		(attributes, attributeId) => {
+			if (getIconAttributes().includes(attributeId)) {
+				attributes = addIconClassName(attributes);
+			}
+
+			return attributes;
 		}
 	);
 };
