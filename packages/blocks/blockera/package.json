@@ -1,0 +1,26 @@
+{
+	"name": "@blockera/blocks-blockera",
+	"version": "1.4.0",
+	"description": "A blocks package to includes all core blocks of Blockera site builder.",
+	"author": "The Blockera Contributors",
+	"license": "ISC",
+	"keywords": [
+		"blockera",
+		"blockera-blocks",
+		"blockera-site-builder",
+		"blockera-blocks-blockera"
+	],
+	"homepage": "https://github.com/blockeraai/blockera/blob/master/packages/blocks/blockera/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blockeraai/blockera",
+		"directory": "packages/blocks/blockera"
+	},
+	"bugs": {
+		"url": "https://github.com/blockeraai/blockera/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "js/index.js"
+}

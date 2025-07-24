@@ -1,0 +1,100 @@
+/* Hide site logo placeholder when icon is set. */
+.blockera-has-icon-style .components-placeholder__illustration,
+.blockera-has-icon-style .components-placeholder__instructions {
+	display: none !important;
+}
+
+.blockera-has-icon-style.wp-block-site-logo .components-placeholder {
+	min-width: 0;
+	min-height: 0;
+}
+
+.components-placeholder.has-illustration::before {
+	opacity: 1;
+	background: transparent;
+}
+
+/* Equivalent to .blockera-has-icon-style .components-placeholder.has-illustration::before */
+.blockera-has-icon-style .components-placeholder.has-illustration::before {
+	display: none;
+}
+
+.blockera-has-icon-style .components-placeholder__fieldset {
+	display: none;
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style {
+	background: transparent !important;
+	float: none !important;
+	padding: 0 !important;
+	border: 0 !important;
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+	box-shadow: none !important;
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style.wp-block-button [data-rich-text-placeholder] {
+	display: none;
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style .components-placeholder__illustration,
+.editor-styles-wrapper div .blockera-has-icon-style img,
+.editor-styles-wrapper div .blockera-has-icon-style figcaption,
+.editor-styles-wrapper div .blockera-has-icon-style iframe,
+.editor-styles-wrapper div .blockera-has-icon-style fieldset,
+.editor-styles-wrapper div .blockera-has-icon-style .components-placeholder__label {
+	display: none !important;
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style.alignleft > div:first-of-type {
+	margin-left: 0;
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style.alignright > div:first-of-type {
+	margin-right: 0;
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style > div:first-of-type:not(.wp-block-button__link) {
+	border-radius: inherit !important;
+	border-width: var(--blockera--icon--border-width, 0) !important;
+	border-style: var(--blockera--icon--border-style, solid) !important;
+	border-color: var(--blockera--icon--border-color, currentColor) !important;
+	background: var(--blockera--icon--background, transparent) !important;
+	color: inherit !important;
+	box-shadow: none;
+	background-color: var(--blockera--icon--background, transparent) !important;
+	padding: var(--blockera--icon--padding, 0);
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style > div:first-of-type {
+	display: inline-flex;
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	width: auto !important;
+	height: auto !important;
+	min-height: 0;
+	min-width: var(--blockera--icon--size, 30px);
+}
+
+.editor-styles-wrapper div .blockera-has-icon-style > div:first-of-type::after {
+	content: "";
+	display: inline-block;
+	position: relative;
+	background: var(--blockera--icon--color, currentColor);
+	width: var(--blockera--icon--size, 1em);
+	height: var(--blockera--icon--size, 1em);
+	margin: auto;
+	vertical-align: text-bottom;
+	order: var(--blockera--icon--order, 0);
+	-webkit-mask-image: var(--blockera--icon--url);
+	-webkit-mask-position: center;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-size: cover !important;
+}
+
+/* Can't use important. */
+.wp-block-image.wp-block-image.is-selected .components-placeholder {
+	box-shadow: none;
+	background-color: transparent;
+}

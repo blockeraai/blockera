@@ -1,0 +1,13 @@
+{
+	"name": "blockera/blocks-blockera",
+	"version": "1.4.0",
+	"description": "The Blockera core blocks package for Blockera editor.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Blocks\\Blockera\\": "php/"
+		},
+		"files": [
+			"./php/functions.php"
+		]
+	}
+}
