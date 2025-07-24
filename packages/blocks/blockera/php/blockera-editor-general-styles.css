@@ -81,7 +81,7 @@
 	content: "";
 	display: inline-block;
 	position: relative;
-	/* background: var(--blockera--icon--color, 'trans'); */
+	background: var(--blockera--icon--color, currentColor);
 	width: var(--blockera--icon--size, 1em);
 	height: var(--blockera--icon--size, 1em);
 	margin: auto;
