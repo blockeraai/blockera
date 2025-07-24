@@ -279,13 +279,19 @@ export const IconExtension: ComponentType<{
 														onChange={(
 															newValue,
 															ref
-														) =>
+														) => {
 															handleOnChangeAttributes(
 																'blockeraIconPosition',
 																newValue,
 																{ ref }
-															)
-														}
+															);
+
+															setIconState({
+																...iconState,
+																iconPosition:
+																	newValue,
+															});
+														}}
 														{...extensionProps.blockeraIconPosition}
 													/>
 												</ControlContextProvider>
@@ -341,13 +347,18 @@ export const IconExtension: ComponentType<{
 														onChange={(
 															newValue,
 															ref
-														) =>
+														) => {
 															handleOnChangeAttributes(
 																'blockeraIconGap',
 																newValue,
 																{ ref }
-															)
-														}
+															);
+															setIconState({
+																...iconState,
+																iconGap:
+																	newValue,
+															});
+														}}
 														{...extensionProps.blockeraIconGap}
 													/>
 												</ControlContextProvider>
@@ -405,13 +416,18 @@ export const IconExtension: ComponentType<{
 														onChange={(
 															newValue,
 															ref
-														) =>
+														) => {
 															handleOnChangeAttributes(
 																'blockeraIconSize',
 																newValue,
 																{ ref }
-															)
-														}
+															);
+															setIconState({
+																...iconState,
+																iconSize:
+																	newValue,
+															});
+														}}
 														{...extensionProps.blockeraIconSize}
 													/>
 												</ControlContextProvider>
@@ -468,13 +484,18 @@ export const IconExtension: ComponentType<{
 														onChange={(
 															newValue,
 															ref
-														) =>
+														) => {
 															handleOnChangeAttributes(
 																'blockeraIconColor',
 																newValue,
 																{ ref }
-															)
-														}
+															);
+															setIconState({
+																...iconState,
+																iconColor:
+																	newValue,
+															});
+														}}
 														{...extensionProps.blockeraIconColor}
 													/>
 												</ControlContextProvider>
@@ -505,13 +526,20 @@ export const IconExtension: ComponentType<{
 														'icon-link'
 													)}
 													//
-													onChange={(newValue, ref) =>
+													onChange={(
+														newValue,
+														ref
+													) => {
 														handleOnChangeAttributes(
 															'blockeraIconLink',
 															newValue,
 															{ ref }
-														)
-													}
+														);
+														setIconState({
+															...iconState,
+															iconLink: newValue,
+														});
+													}}
 													defaultValue={
 														attributes
 															?.blockeraIconLink
