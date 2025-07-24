@@ -3,8 +3,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
+import { memo, createRoot, useCallback, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -20,7 +20,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { hasSameProps } from '@blockera/utils';
+import { isEquals, hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -66,6 +66,94 @@ export const IconExtension: ComponentType<{
 		attributes,
 	}: TIconProps): MixedElement => {
 		const { initialOpen, onToggle } = useBlockSection('iconConfig');
+		const initialIconState = {
+			icon,
+			iconGap,
+			iconSize,
+			iconLink,
+			iconColor,
+			iconPosition,
+		};
+		const [iconState, setIconState] = useState(initialIconState);
+
+		const handleOnChangeAttributesIcon = useCallback(
+			(newValue, ref) => {
+				if (isEquals(iconState, newValue)) {
+					return;
+				}
+
+				// Prepare rendered icon before setting state.
+				if (newValue.icon) {
+					const iconWrapper = document.createElement('div');
+					iconWrapper.style.display = 'none';
+					iconWrapper.classList.add('blockera-temp-icon-wrapper');
+
+					const foundedWrapper = document.querySelector(
+						'.blockera-temp-icon-wrapper'
+					);
+
+					if (!foundedWrapper) {
+						document.body?.append(iconWrapper);
+					} else {
+						foundedWrapper.innerHTML = '';
+					}
+
+					const iconNode = document.createElement('span');
+					document
+						.querySelector('.blockera-temp-icon-wrapper')
+						?.append(iconNode);
+					const iconRoot = createRoot(iconNode);
+
+					iconRoot.render(
+						<Icon
+							style={{
+								color: iconState.iconColor,
+								fill: iconState.iconColor,
+								width: iconState.iconSize
+									? iconState.iconSize
+									: '1em',
+								height: iconState.iconSize
+									? iconState.iconSize
+									: '1em',
+								...(iconState.iconPosition === 'left' && {
+									marginRight: iconState.iconGap,
+								}),
+								...(iconState.iconPosition === 'right' && {
+									marginLeft: iconState.iconGap,
+								}),
+							}}
+							icon={newValue.icon}
+							library={newValue.library}
+							uploadSVG={newValue.uploadSVG}
+						/>
+					);
+
+					setTimeout(() => {
+						handleOnChangeAttributes(
+							'blockeraIcon',
+							{
+								...newValue.icon,
+								renderedIcon: btoa(
+									unescape(
+										encodeURIComponent(
+											iconNode?.innerHTML || ''
+										)
+									)
+								),
+							},
+							{ ref }
+						);
+
+						setIconState({
+							icon: newValue,
+							...initialIconState,
+						});
+					}, 1);
+				}
+			},
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			[initialIconState, iconState]
+		);
 
 		// Icon is not available in inner blocks.
 		if (block.currentBlock !== 'master') {
@@ -85,7 +173,7 @@ export const IconExtension: ComponentType<{
 						<ControlContextProvider
 							value={{
 								name: generateExtensionId(block, 'icon'),
-								value: icon,
+								value: iconState.icon,
 								attribute: 'blockeraIcon',
 								blockName: block.blockName,
 							}}
@@ -95,13 +183,7 @@ export const IconExtension: ComponentType<{
 								suggestionsQuery={() => {
 									return 'button';
 								}}
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraIcon',
-										newValue,
-										{ ref }
-									)
-								}
+								onChange={handleOnChangeAttributesIcon}
 								defaultValue={
 									attributes?.blockeraIcon?.default?.value
 								}
@@ -109,7 +191,7 @@ export const IconExtension: ComponentType<{
 							/>
 						</ControlContextProvider>
 
-						{(icon?.icon || icon?.uploadSVG) && (
+						{(iconState?.icon || iconState?.uploadSVG) && (
 							<>
 								{isActiveField(blockeraIconOptions) && (
 									<>
@@ -126,7 +208,7 @@ export const IconExtension: ComponentType<{
 															block,
 															'icon-position'
 														),
-														value: iconPosition,
+														value: iconState.iconPosition,
 														attribute:
 															'blockeraIconPosition',
 														blockName:
@@ -216,7 +298,7 @@ export const IconExtension: ComponentType<{
 															block,
 															'icon-gap'
 														),
-														value: iconGap,
+														value: iconState.iconGap,
 														attribute:
 															'blockeraIconGap',
 														blockName:
@@ -280,7 +362,7 @@ export const IconExtension: ComponentType<{
 															block,
 															'icon-size'
 														),
-														value: iconSize,
+														value: iconState.iconSize,
 														attribute:
 															'blockeraIconSize',
 														blockName:
@@ -344,7 +426,7 @@ export const IconExtension: ComponentType<{
 															block,
 															'icon-color'
 														),
-														value: iconColor,
+														value: iconState.iconColor,
 														attribute:
 															'blockeraIconColor',
 														blockName:
@@ -406,7 +488,7 @@ export const IconExtension: ComponentType<{
 														block,
 														'icon-link'
 													),
-													value: iconLink,
+													value: iconState.iconLink,
 													attribute:
 														'blockeraIconLink',
 													blockName: block.blockName,
