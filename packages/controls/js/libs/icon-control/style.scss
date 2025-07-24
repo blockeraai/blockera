@@ -1,6 +1,6 @@
 .blockera-control-icon {
 	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
-	border-color: #cccccc;
+	border-color: var(--blockera-controls-border-color);
 	border-style: solid;
 	border-width: 1px;
 	border-radius: var(--blockera-controls-border-radius);
