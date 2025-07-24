@@ -10,6 +10,15 @@
 return array_merge(
 	$args,
 	[
+		'attributes' => array_merge(
+			$args['attributes'] ?? [],
+			[
+				'className' => [
+					'type' => 'string',
+					'default' => 'blockera-has-icon-style',
+				],
+			]
+		),
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
