@@ -1,10 +1,13 @@
 /* Hide site logo placeholder when icon is set. */
-.blockera-has-icon-style .components-placeholder__illustration,
-.blockera-has-icon-style .components-placeholder__instructions {
+[class*="blockera-has-icon-start"] .components-placeholder__illustration,
+[class*="blockera-has-icon-start"] .components-placeholder__instructions,
+[class*="blockera-has-icon-end"] .components-placeholder__illustration,
+[class*="blockera-has-icon-end"] .components-placeholder__instructions {
 	display: none !important;
 }
 
-.blockera-has-icon-style.wp-block-site-logo .components-placeholder {
+[class*="blockera-has-icon-start"].wp-block-site-logo .components-placeholder,
+[class*="blockera-has-icon-end"].wp-block-site-logo .components-placeholder {
 	min-width: 0;
 	min-height: 0;
 }
@@ -15,15 +18,18 @@
 }
 
 /* Equivalent to .blockera-has-icon-style .components-placeholder.has-illustration::before */
-.blockera-has-icon-style .components-placeholder.has-illustration::before {
+[class*="blockera-has-icon-start"] .components-placeholder.has-illustration::before,
+[class*="blockera-has-icon-end"] .components-placeholder.has-illustration::before {
 	display: none;
 }
 
-.blockera-has-icon-style .components-placeholder__fieldset {
+[class*="blockera-has-icon-start"] .components-placeholder__fieldset,
+[class*="blockera-has-icon-end"] .components-placeholder__fieldset {
 	display: none;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"],
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
@@ -33,28 +39,38 @@
 	box-shadow: none !important;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style.wp-block-button [data-rich-text-placeholder] {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"].wp-block-button [data-rich-text-placeholder],
+.editor-styles-wrapper div [class*="blockera-has-icon-end"].wp-block-button [data-rich-text-placeholder] {
 	display: none;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style .components-placeholder__illustration,
-.editor-styles-wrapper div .blockera-has-icon-style img,
-.editor-styles-wrapper div .blockera-has-icon-style figcaption,
-.editor-styles-wrapper div .blockera-has-icon-style iframe,
-.editor-styles-wrapper div .blockera-has-icon-style fieldset,
-.editor-styles-wrapper div .blockera-has-icon-style .components-placeholder__label {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] .components-placeholder__illustration,
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] img,
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] figcaption,
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] iframe,
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] fieldset,
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] .components-placeholder__label,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] .components-placeholder__illustration,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] img,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] figcaption,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] iframe,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] fieldset,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] .components-placeholder__label {
 	display: none !important;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style.alignleft > div:first-of-type {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"].alignleft > div:first-of-type,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"].alignleft > div:first-of-type {
 	margin-left: 0;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style.alignright > div:first-of-type {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"].alignright > div:first-of-type,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"].alignright > div:first-of-type {
 	margin-right: 0;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style > div:first-of-type:not(.wp-block-button__link) {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] > div:first-of-type:not(.wp-block-button__link),
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type:not(.wp-block-button__link) {
 	border-radius: inherit !important;
 	border-width: var(--blockera--icon--border-width, 0) !important;
 	border-style: var(--blockera--icon--border-style, solid) !important;
@@ -66,7 +82,8 @@
 	padding: var(--blockera--icon--padding, 0);
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style > div:first-of-type {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] > div:first-of-type,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type {
 	display: inline-flex;
 	position: relative;
 	margin-left: auto;
@@ -74,10 +91,12 @@
 	width: auto !important;
 	height: auto !important;
 	min-height: 0;
-	min-width: var(--blockera--icon--size, 30px);
+	min-width: var(--blockera--icon--size, 1.33em);
+	align-items: center;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-style > div:first-of-type::after {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] > div:first-of-type::before,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type::after {
 	content: "";
 	display: inline-block;
 	position: relative;
@@ -87,7 +106,7 @@
 	margin: auto 0;
 	vertical-align: middle;
 	align-self: center;
-	order: var(--blockera--icon--order, 0);
+	order: var(--blockera--icon--order, -1);
 	-webkit-mask-image: var(--blockera--icon--url);
 	-webkit-mask-position: center;
 	-webkit-mask-repeat: no-repeat;
@@ -96,6 +115,15 @@
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: cover !important;
+}
+
+.editor-styles-wrapper div [class*="blockera-has-icon-start"]>div:first-of-type::before {
+	margin-right: var(--blockera--icon--gap, 0.5em);
+}
+
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type::after {
+	margin-left: var(--blockera--icon--gap, 0.5em);
+	--blockera--icon--order: 100;
 }
 
 /* Can't use important. */

@@ -17,7 +17,11 @@ import { mergeObject } from '@blockera/utils';
 import { STORE_NAME } from '../Js/store/constants';
 import { default as featuresLibrary } from '../Library';
 import { default as featuresStack } from '../Library/config';
-import { getIconAttributes, addIconClassName } from '../Library/helpers';
+import {
+	getIconAttributes,
+	addIconClassName,
+	removeIconClassName,
+} from '../Library/helpers';
 
 export const blockeraEditorFilters = () => {
 	addFilter(
@@ -128,9 +132,26 @@ export const blockeraEditorFilters = () => {
 	addFilter(
 		'blockera.editor.useAttributes.beforeChangeAttributes',
 		'blockera.features.useAttributes.beforeChangeAttributes',
-		(attributes, attributeId) => {
+		(attributes, attributeId, newValue) => {
 			if (getIconAttributes().includes(attributeId)) {
-				attributes = addIconClassName(attributes);
+				if (attributeId === 'blockeraIcon') {
+					if (newValue?.icon || newValue?.uploadSVG) {
+						attributes = addIconClassName(attributes, {
+							blockeraIcon: newValue,
+							blockeraIconPosition:
+								attributes.blockeraIconPosition?.value,
+						});
+					} else {
+						attributes = removeIconClassName(attributes);
+					}
+				}
+
+				if (attributeId === 'blockeraIconPosition') {
+					attributes = addIconClassName(attributes, {
+						blockeraIcon: attributes.blockeraIcon,
+						blockeraIconPosition: newValue,
+					});
+				}
 			}
 
 			return attributes;
