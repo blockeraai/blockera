@@ -8,6 +8,7 @@ import type { CssRule } from '@blockera/editor/js/style-engine/types';
 import { isActiveField } from '@blockera/editor/js/extensions/api/utils';
 import type { StylesProps } from '@blockera/editor/js/extensions/libs/types';
 import { getBlockSupportFallback } from '@blockera/editor/js/extensions/utils';
+import { isEquals } from '@blockera/utils';
 
 export const IconStyles = ({
 	state,
@@ -61,7 +62,10 @@ export const IconStyles = ({
 
 	if (
 		isActiveField(blockeraIcon) &&
-		currentBlockAttributes.blockeraIcon !== attributes.blockeraIcon.default
+		!isEquals(
+			currentBlockAttributes.blockeraIcon,
+			attributes.blockeraIcon.default
+		)
 	) {
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
