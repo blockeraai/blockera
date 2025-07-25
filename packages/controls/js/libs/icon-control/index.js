@@ -237,8 +237,35 @@ function IconControl({
 								onClick={openModal}
 								className="btn-choose-icon"
 							>
-								{labelChoose}
+								{labelIconLibrary}
 							</Button>
+
+							<MediaUploader
+								onSelect={(media) => {
+									currentIconDispatch({
+										type: 'UPDATE_SVG',
+										uploadSVG: {
+											title: media.title,
+											filename: media.filename,
+											url: media.url,
+											updated: '',
+										},
+									});
+								}}
+								mode="upload"
+								render={({ open }) => (
+									<Button
+										data-cy="upload-svg-btn"
+										className="btn-choose-icon"
+										onClick={(event) => {
+											event.stopPropagation();
+											open();
+										}}
+									>
+										{labelUploadSvg}
+									</Button>
+								)}
+							/>
 						</div>
 					)}
 				</div>
