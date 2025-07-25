@@ -26,7 +26,6 @@ export const IconStyles = ({
 }: StylesProps): Array<CssRule> => {
 	const {
 		blockeraIcon,
-		// blockeraIconOptions,
 		// blockeraIconPosition,
 		blockeraIconGap,
 		blockeraIconSize,

@@ -15,13 +15,8 @@ const blockeraIcon: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Icon', 'blockera'),
-};
-
-const blockeraIconOptions: FeatureConfig = {
-	show: true,
-	force: true,
-	status: true,
-	label: __('Icon Options', 'blockera'),
+	onStates: false,
+	onBreakpoints: false,
 };
 
 const blockeraIconPosition: FeatureConfig = {
@@ -29,6 +24,8 @@ const blockeraIconPosition: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Icon Position', 'blockera'),
+	onStates: false,
+	onBreakpoints: false,
 };
 
 const blockeraIconGap: FeatureConfig = {
@@ -62,7 +59,6 @@ const blockeraIconLink: FeatureConfig = {
 export const iconConfig = {
 	initialOpen: true,
 	blockeraIcon,
-	blockeraIconOptions,
 	blockeraIconPosition,
 	blockeraIconGap,
 	blockeraIconSize,
