@@ -1,0 +1,284 @@
+[
+	{
+		"iconName": "amazon",
+		"title": "Amazon",
+		"library": "social",
+		"tags": ["ecommerce", "shopping", "retail"]
+	},
+	{
+		"iconName": "appstore",
+		"title": "App Store",
+		"library": "social",
+		"tags": ["apple", "mobile", "apps", "store"]
+	},
+	{
+		"iconName": "apple",
+		"title": "Apple",
+		"library": "social",
+		"tags": ["brand", "technology", "company"]
+	},
+	{
+		"iconName": "bandcamp",
+		"title": "Bandcamp",
+		"library": "social",
+		"tags": ["music", "artists", "indie"]
+	},
+	{
+		"iconName": "behance",
+		"title": "Behance",
+		"library": "social",
+		"tags": ["design", "portfolio", "creative"]
+	},
+	{
+		"iconName": "codepen",
+		"title": "CodePen",
+		"library": "social",
+		"tags": ["coding", "development", "frontend"]
+	},
+	{
+		"iconName": "deviantart",
+		"title": "DeviantArt",
+		"library": "social",
+		"tags": ["art", "community", "creative"]
+	},
+	{
+		"iconName": "digg",
+		"title": "Digg",
+		"library": "social",
+		"tags": ["news", "social", "content"]
+	},
+	{
+		"iconName": "dribbble",
+		"title": "Dribbble",
+		"library": "social",
+		"tags": ["design", "inspiration", "creative"]
+	},
+	{
+		"iconName": "dropbox",
+		"title": "Dropbox",
+		"library": "social",
+		"tags": ["cloud", "storage", "file-sharing"]
+	},
+	{
+		"iconName": "etsy",
+		"title": "Etsy",
+		"library": "social",
+		"tags": ["handmade", "crafts", "marketplace"]
+	},
+	{
+		"iconName": "facebook",
+		"title": "Facebook",
+		"library": "social",
+		"tags": ["social media", "networking", "community"]
+	},
+	{
+		"iconName": "feed",
+		"title": "RSS Feed",
+		"library": "social",
+		"tags": ["rss", "subscription", "news"]
+	},
+	{
+		"iconName": "fivehundredpx",
+		"title": "500px",
+		"library": "social",
+		"tags": ["photography", "art", "community"]
+	},
+	{
+		"iconName": "flickr",
+		"title": "Flickr",
+		"library": "social",
+		"tags": ["photography", "photo-sharing", "community"]
+	},
+	{
+		"iconName": "foursquare",
+		"title": "Foursquare",
+		"library": "social",
+		"tags": ["location", "check-in", "social"]
+	},
+	{
+		"iconName": "github",
+		"title": "GitHub",
+		"library": "social",
+		"tags": ["coding", "development", "repository", "code", "open source"]
+	},
+	{
+		"iconName": "goodreads",
+		"title": "Goodreads",
+		"library": "social",
+		"tags": ["books", "reading", "literature"]
+	},
+	{
+		"iconName": "google",
+		"title": "Google",
+		"library": "social",
+		"tags": ["search", "technology", "company"]
+	},
+	{
+		"iconName": "google-drive",
+		"title": "Google Drive",
+		"library": "social",
+		"tags": ["cloud", "storage", "google"]
+	},
+	{
+		"iconName": "instagram",
+		"title": "Instagram",
+		"library": "social",
+		"tags": ["social media", "photos", "sharing"]
+	},
+	{
+		"iconName": "lastfm",
+		"title": "Last.fm",
+		"library": "social",
+		"tags": ["music", "scrobbling", "recommendations"]
+	},
+	{
+		"iconName": "linkedin",
+		"title": "LinkedIn",
+		"library": "social",
+		"tags": ["professional", "networking", "business"]
+	},
+	{
+		"iconName": "mail",
+		"title": "Email",
+		"library": "social",
+		"tags": ["email", "communication", "mail"]
+	},
+	{
+		"iconName": "mastodon",
+		"title": "Mastodon",
+		"library": "social",
+		"tags": ["social media", "federated", "open source"]
+	},
+	{
+		"iconName": "medium",
+		"title": "Medium",
+		"library": "social",
+		"tags": ["blogging", "writing"]
+	},
+	{
+		"iconName": "meetup",
+		"title": "Meetup",
+		"library": "social",
+		"tags": ["events", "groups", "meetings"]
+	},
+	{
+		"iconName": "patreon",
+		"title": "Patreon",
+		"library": "social",
+		"tags": ["crowdfunding", "support", "creators"]
+	},
+	{
+		"iconName": "pinterest",
+		"title": "Pinterest",
+		"library": "social",
+		"tags": ["social media", "inspiration", "pins"]
+	},
+	{
+		"iconName": "pocket",
+		"title": "Pocket",
+		"library": "social",
+		"tags": ["bookmarking", "reading"]
+	},
+	{
+		"iconName": "producthunt",
+		"title": "Product Hunt",
+		"library": "social",
+		"tags": ["products", "discovery", "startups"]
+	},
+	{
+		"iconName": "reddit",
+		"title": "Reddit",
+		"library": "social",
+		"tags": ["community", "discussion"]
+	},
+	{
+		"iconName": "skype",
+		"title": "Skype",
+		"library": "social",
+		"tags": ["communication", "video call", "chat"]
+	},
+	{
+		"iconName": "slack",
+		"title": "Slack",
+		"library": "social",
+		"tags": ["team", "communication", "workplace"]
+	},
+	{
+		"iconName": "snapchat",
+		"title": "Snapchat",
+		"library": "social",
+		"tags": ["messaging"]
+	},
+	{
+		"iconName": "soundcloud",
+		"title": "SoundCloud",
+		"library": "social",
+		"tags": ["music", "audio"]
+	},
+	{
+		"iconName": "spotify",
+		"title": "Spotify",
+		"library": "social",
+		"tags": ["music", "audio"]
+	},
+	{
+		"iconName": "telegram",
+		"title": "Telegram",
+		"library": "social",
+		"tags": ["messaging"]
+	},
+	{
+		"iconName": "tiktok",
+		"title": "TikTok",
+		"library": "social",
+		"tags": ["video"]
+	},
+	{
+		"iconName": "tumblr",
+		"title": "Tumblr",
+		"library": "social",
+		"tags": ["blogging"]
+	},
+	{
+		"iconName": "twitch",
+		"title": "Twitch",
+		"library": "social",
+		"tags": ["gaming", "streaming"]
+	},
+	{
+		"iconName": "vimeo",
+		"title": "Vimeo",
+		"library": "social",
+		"tags": ["video"]
+	},
+	{
+		"iconName": "vk",
+		"title": "VK",
+		"library": "social",
+		"tags": []
+	},
+	{
+		"iconName": "wordpress",
+		"title": "WordPress",
+		"library": "social",
+		"tags": ["cms", "blogging"]
+	},
+	{
+		"iconName": "x",
+		"title": "X (Twitter)",
+		"library": "social",
+		"tags": ["microblogging"]
+	},
+	{
+		"iconName": "yelp",
+		"title": "Yelp",
+		"library": "social",
+		"tags": ["reviews", "business"]
+	},
+	{
+		"iconName": "youtube",
+		"title": "YouTube",
+		"library": "social",
+		"tags": ["video"]
+	}
+]
