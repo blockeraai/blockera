@@ -118,7 +118,7 @@ export function UnitInput({
 				// First check for valid number with unit
 				const match = value.match(/^(-?\d*\.?\d*)([a-zA-Z%]+)?$/);
 				if (match) {
-					const [, numericValue = '', unit = ''] = match;
+					let [, numericValue = '', unit = ''] = match;
 
 					// Normalize decimal value
 					const normalizedValue = normalizeDecimalValue(numericValue);
@@ -137,6 +137,7 @@ export function UnitInput({
 
 					// If there's a unit, update it
 					if (unit) {
+						unit = unit.toLowerCase();
 						const newUnitValue = getUnitByValue(unit, units);
 						if (newUnitValue) {
 							// Update both unit and numeric value
