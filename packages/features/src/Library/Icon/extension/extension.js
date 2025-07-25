@@ -154,6 +154,16 @@ export const IconExtension: ComponentType<{
 							...initialIconState,
 						});
 					}, 1);
+				} else {
+					handleOnChangeAttributes(
+						'blockeraIcon',
+						{
+							icon: '',
+							library: '',
+							uploadSVG: '',
+						},
+						{ ref }
+					);
 				}
 			},
 			// eslint-disable-next-line react-hooks/exhaustive-deps
