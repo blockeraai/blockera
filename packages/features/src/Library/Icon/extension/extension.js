@@ -145,16 +145,24 @@ export const IconExtension: ComponentType<{
 						);
 
 						setIconState({
+							...initialIconState,
 							icon: {
 								renderedIcon,
 								icon: newValue.icon,
 								library: newValue.library,
 								uploadSVG: newValue.uploadSVG,
 							},
-							...initialIconState,
 						});
 					}, 1);
 				} else {
+					setIconState({
+						...iconState,
+						icon: {
+							icon: '',
+							library: '',
+							uploadSVG: '',
+						},
+					});
 					handleOnChangeAttributes(
 						'blockeraIcon',
 						{
@@ -206,7 +214,8 @@ export const IconExtension: ComponentType<{
 							/>
 						</ControlContextProvider>
 
-						{(iconState?.icon || iconState?.uploadSVG) && (
+						{(iconState?.icon?.icon ||
+							iconState?.icon?.uploadSVG) && (
 							<>
 								{isActiveField(blockeraIconOptions) && (
 									<>
