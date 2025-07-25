@@ -115,10 +115,10 @@ export const IconExtension: ComponentType<{
 								height: iconState.iconSize
 									? iconState.iconSize
 									: '1em',
-								...(iconState.iconPosition === 'left' && {
+								...(iconState.iconPosition === 'start' && {
 									marginRight: iconState.iconGap,
 								}),
-								...(iconState.iconPosition === 'right' && {
+								...(iconState.iconPosition === 'end' && {
 									marginLeft: iconState.iconGap,
 								}),
 							}}
@@ -249,10 +249,10 @@ export const IconExtension: ComponentType<{
 														options={[
 															{
 																label: __(
-																	'Left',
+																	'Start',
 																	'blockera'
 																),
-																value: 'left',
+																value: 'start',
 																icon: (
 																	<Icon
 																		icon="icon-position-left"
@@ -262,10 +262,10 @@ export const IconExtension: ComponentType<{
 															},
 															{
 																label: __(
-																	'Right',
+																	'End',
 																	'blockera'
 																),
-																value: 'right',
+																value: 'end',
 																icon: (
 																	<Icon
 																		icon="icon-position-right"
