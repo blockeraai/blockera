@@ -20,12 +20,12 @@ export const icon = {
 			'blockera'
 		),
 		title: __('Icon', 'blockera'),
-		icon: <Icon icon="star-empty" library="wp" />,
+		icon: <Icon icon="star-filled" library="wp" iconSize="24px" />,
 		attributes: {
 			className: 'blockera-has-icon-style',
 			blockeraIcon: {
 				value: {
-					icon: 'star-empty',
+					icon: 'star-filled',
 					library: 'wp',
 					uploadSVG: '',
 					renderedIcon: '',
@@ -47,7 +47,7 @@ export const icon = {
 				value: [],
 			},
 		},
-		category: 'blockera',
+		category: 'media',
 		scope: ['inserter'],
 		isActive: (blockAttributes: Object) => {
 			return (
