@@ -110,7 +110,7 @@ export const useBlockFeatures = (
 
 			if (
 				feature?.InlineStyleComponent &&
-				featureBlockConfig?.context &&
+				featureBlockConfig?.context?.length > 0 &&
 				((activeBlockVariation &&
 					featureBlockConfig.context.includes(
 						activeBlockVariation?.name
