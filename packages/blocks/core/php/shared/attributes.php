@@ -271,6 +271,24 @@ return [
 			'value' => '',
 		],
 	],
+	'blockeraIconRotate'                => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
+	'blockeraIconFlipHorizontal'        => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
+	'blockeraIconFlipVertical'          => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
 	'blockeraIconLink'                  => [
 		'type'    => 'object',
 		'default' => [

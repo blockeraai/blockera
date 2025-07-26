@@ -30,6 +30,9 @@ export const IconStyles = ({
 		blockeraIconGap,
 		blockeraIconSize,
 		blockeraIconColor,
+		blockeraIconRotate,
+		blockeraIconFlipHorizontal,
+		blockeraIconFlipVertical,
 		// blockeraIconLink,
 	} = config.iconConfig;
 	const blockProps = {
@@ -195,6 +198,110 @@ export const IconStyles = ({
 							properties: {
 								'--blockera--icon--color':
 									currentBlockAttributes.blockeraIconColor,
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraIconRotate) &&
+		currentBlockAttributes.blockeraIconRotate !==
+			attributes.blockeraIconRotate.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconRotate',
+			support: 'blockeraIconRotate',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconRotate'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconRotate: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--rotate':
+									currentBlockAttributes.blockeraIconRotate +
+									'deg',
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraIconFlipHorizontal) &&
+		currentBlockAttributes.blockeraIconFlipHorizontal !==
+			attributes.blockeraIconFlipHorizontal.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconFlipHorizontal',
+			support: 'blockeraIconFlipHorizontal',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconFlipHorizontal'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconFlipHorizontal: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--flip-horizontal': '-1',
+							},
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraIconFlipVertical) &&
+		currentBlockAttributes.blockeraIconFlipVertical !==
+			attributes.blockeraIconFlipVertical.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraIconFlipVertical',
+			support: 'blockeraIconFlipVertical',
+			fallbackSupportId: getBlockSupportFallback(
+				blockSupports,
+				'blockeraIconFlipVertical'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraIconFlipVertical: [
+						{
+							...staticDefinitionParams,
+							properties: {
+								'--blockera--icon--flip-vertical': '-1',
 							},
 						},
 					],

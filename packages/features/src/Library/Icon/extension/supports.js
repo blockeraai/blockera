@@ -49,6 +49,27 @@ const blockeraIconColor: FeatureConfig = {
 	label: __('Icon Color', 'blockera'),
 };
 
+const blockeraIconRotate: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Icon Rotate', 'blockera'),
+};
+
+const blockeraIconFlipHorizontal: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Icon Flip Horizontal', 'blockera'),
+};
+
+const blockeraIconFlipVertical: FeatureConfig = {
+	show: true,
+	force: false,
+	status: true,
+	label: __('Icon Flip Vertical', 'blockera'),
+};
+
 const blockeraIconLink: FeatureConfig = {
 	show: true,
 	force: true,
@@ -64,4 +85,7 @@ export const iconConfig = {
 	blockeraIconSize,
 	blockeraIconColor,
 	blockeraIconLink,
+	blockeraIconRotate,
+	blockeraIconFlipHorizontal,
+	blockeraIconFlipVertical,
 };

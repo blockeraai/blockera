@@ -115,6 +115,7 @@
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: cover !important;
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 }
 
 .editor-styles-wrapper div [class*="blockera-has-icon-start"]>div:first-of-type::before {

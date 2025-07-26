@@ -1,4 +1,4 @@
-import { addAngle, subtractAngle } from '../utils';
+import { addAngle, subtractAngle } from '../index';
 
 describe('Testing util functions', () => {
 	describe('addAngle testing', () => {

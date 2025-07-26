@@ -10,6 +10,8 @@ import { memo, createRoot, useCallback, useState } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
+	Flex,
+	Button,
 	BaseControl,
 	IconControl,
 	LinkControl,
@@ -20,7 +22,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { isEquals, hasSameProps } from '@blockera/utils';
+import { isEquals, hasSameProps, addAngle } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -45,6 +47,9 @@ export const IconExtension: ComponentType<{
 			blockeraIconLink,
 			blockeraIconColor,
 			blockeraIconPosition,
+			blockeraIconRotate,
+			blockeraIconFlipHorizontal,
+			blockeraIconFlipVertical,
 		},
 		currentStateAttributes: {
 			blockeraIcon: icon,
@@ -53,6 +58,9 @@ export const IconExtension: ComponentType<{
 			blockeraIconLink: iconLink,
 			blockeraIconColor: iconColor,
 			blockeraIconPosition: iconPosition,
+			blockeraIconRotate: iconRotate,
+			blockeraIconFlipHorizontal: iconFlipHorizontal,
+			blockeraIconFlipVertical: iconFlipVertical,
 		},
 		handleOnChangeAttributes,
 		extensionProps = {
@@ -62,6 +70,9 @@ export const IconExtension: ComponentType<{
 			blockeraIconLink: {},
 			blockeraIconColor: {},
 			blockeraIconPosition: {},
+			blockeraIconRotate: {},
+			blockeraIconFlipHorizontal: {},
+			blockeraIconFlipVertical: {},
 		},
 		attributes,
 	}: TIconProps): MixedElement => {
@@ -73,6 +84,9 @@ export const IconExtension: ComponentType<{
 			iconLink,
 			iconColor,
 			iconPosition,
+			iconRotate,
+			iconFlipHorizontal,
+			iconFlipVertical,
 		};
 		const [iconState, setIconState] = useState(initialIconState);
 
@@ -213,6 +227,21 @@ export const IconExtension: ComponentType<{
 			iconState.iconLink,
 			attributes?.blockeraIconLink?.default?.value
 		);
+		const isShownIconRotate = isShowField(
+			blockeraIconRotate,
+			iconState.iconRotate,
+			attributes?.blockeraIconRotate?.default?.value
+		);
+		const isShownIconFlipHorizontal = isShowField(
+			blockeraIconFlipHorizontal,
+			iconState.iconFlipHorizontal,
+			attributes?.blockeraIconFlipHorizontal?.default?.value
+		);
+		const isShownIconFlipVertical = isShowField(
+			blockeraIconFlipVertical,
+			iconState.iconFlipVertical,
+			attributes?.blockeraIconFlipVertical?.default?.value
+		);
 
 		// Extension is not available because all features are disabled.
 		if (
@@ -221,7 +250,10 @@ export const IconExtension: ComponentType<{
 			!isShownIconGap &&
 			!isShownIconSize &&
 			!isShownIconColor &&
-			!isShownIconLink
+			!isShownIconLink &&
+			!isShownIconRotate &&
+			!isShownIconFlipHorizontal &&
+			!isShownIconFlipVertical
 		) {
 			return <></>;
 		}
@@ -568,6 +600,160 @@ export const IconExtension: ComponentType<{
 								/>
 							</ControlContextProvider>
 						</EditorFeatureWrapper>
+
+						{(isShownIconRotate ||
+							isShownIconFlipHorizontal ||
+							isShownIconFlipVertical) && (
+							<BaseControl
+								columns="1-column"
+								style={{
+									'--blockera-field-gap': '8px',
+								}}
+							>
+								<Flex
+									direction="row"
+									gap="12px"
+									justifyContent="flex-end"
+								>
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__('Rotate', 'blockera')}
+										size="extra-small"
+										style={{
+											padding: '4px',
+											width: 'var(--blockera-controls-input-height)',
+											height: 'var(--blockera-controls-input-height)',
+										}}
+										onClick={() => {
+											let newAngle =
+												iconState.iconRotate !== ''
+													? addAngle(
+															iconState.iconRotate ===
+																''
+																? 0
+																: iconState.iconRotate,
+															90
+													  )
+													: 90;
+
+											if (
+												newAngle === 0 ||
+												newAngle === 360
+											) {
+												newAngle = '';
+											}
+
+											handleOnChangeAttributes(
+												'blockeraIconRotate',
+												newAngle
+											);
+											setIconState({
+												...iconState,
+												iconRotate: newAngle,
+											});
+										}}
+										className={
+											iconState.iconRotate !== ''
+												? 'is-toggle-btn is-toggled'
+												: 'is-toggle-btn'
+										}
+									>
+										<Icon
+											icon="rotate-right"
+											library="wp"
+											iconSize="24"
+											style={{
+												transform: `rotate(${
+													iconState.iconRotate
+														? iconState.iconRotate
+														: 0
+												}deg)`,
+											}}
+										/>
+									</Button>
+
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__(
+											'Flip Horizontal',
+											'blockera'
+										)}
+										size="extra-small"
+										style={{
+											padding: '4px',
+											width: 'var(--blockera-controls-input-height)',
+											height: 'var(--blockera-controls-input-height)',
+										}}
+										className={
+											iconState.iconFlipHorizontal
+												? 'is-toggle-btn is-toggled'
+												: 'is-toggle-btn'
+										}
+										onClick={() => {
+											handleOnChangeAttributes(
+												'blockeraIconFlipHorizontal',
+												iconState.iconFlipHorizontal
+													? ''
+													: true
+											);
+											setIconState({
+												...iconState,
+												iconFlipHorizontal:
+													iconState.iconFlipHorizontal
+														? ''
+														: true,
+											});
+										}}
+									>
+										<Icon
+											icon="flip-horizontal"
+											library="wp"
+											iconSize="24"
+										/>
+									</Button>
+
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__('Flip Vertical', 'blockera')}
+										size="extra-small"
+										style={{
+											padding: '4px',
+											width: 'var(--blockera-controls-input-height)',
+											height: 'var(--blockera-controls-input-height)',
+										}}
+										className={
+											iconState.iconFlipVertical
+												? 'is-toggle-btn is-toggled'
+												: 'is-toggle-btn'
+										}
+										onClick={() => {
+											handleOnChangeAttributes(
+												'blockeraIconFlipVertical',
+												iconState.iconFlipVertical
+													? ''
+													: true
+											);
+											setIconState({
+												...iconState,
+												iconFlipVertical:
+													iconState.iconFlipVertical
+														? ''
+														: true,
+											});
+										}}
+									>
+										<Icon
+											icon="flip-vertical"
+											library="wp"
+											iconSize="24"
+										/>
+									</Button>
+								</Flex>
+							</BaseControl>
+						)}
 					</>
 				)}
 			</PanelBodyControl>

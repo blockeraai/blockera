@@ -1,4 +1,4 @@
-import { isNumber } from '@blockera/utils';
+import { isNumber } from '../index';
 
 export function addAngle(angle, add) {
 	if (!isNumber(angle) || !isNumber(add)) {
