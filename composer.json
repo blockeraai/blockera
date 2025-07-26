@@ -62,11 +62,11 @@
 		},
 		{
 			"type": "path",
-			"url": "packages/blocks/blockera"
+			"url": "packages/blocks-library/icon"
 		},
 		{
 			"type": "path",
-			"url": "packages/blocks/core"
+			"url": "packages/blocks-core"
 		},
 		{
 			"type": "path",
@@ -92,7 +92,7 @@
 		"blockera/blockera": "*",
 		"blockera/features": "*",
 		"blockera/blockera-admin": "*",
-		"blockera/blocks-blockera": "*",
+		"blockera/block-icon": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",

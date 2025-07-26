@@ -4,8 +4,27 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f07a5c05a6d85438774833506edea48",
+    "content-hash": "00c74ca904c80cc4c5cee9c79c12c2a7",
     "packages": [
+        {
+            "name": "blockera/block-icon",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/blocks-library/icon",
+                "reference": "cde175c78e6520fc53c770bad6b65202bd60abea"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Block\\Icon\\": "src/"
+                }
+            },
+            "description": "The Blockera block icon package for Blockera editor.",
+            "transport-options": {
+                "relative": true
+            }
+        },
         {
             "name": "blockera/blockera",
             "version": "1.3.3",
@@ -56,33 +75,11 @@
             }
         },
         {
-            "name": "blockera/blocks-blockera",
-            "version": "1.4.0",
-            "dist": {
-                "type": "path",
-                "url": "packages/blocks/blockera",
-                "reference": "4b44961c3aab0cc5b922c63ede13b793959991e9"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Blockera\\Blocks\\Blockera\\": "php/"
-                },
-                "files": [
-                    "./php/functions.php"
-                ]
-            },
-            "description": "The Blockera core blocks package for Blockera editor.",
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
             "name": "blockera/blocks-core",
             "version": "1.4.0",
             "dist": {
                 "type": "path",
-                "url": "packages/blocks/core",
+                "url": "packages/blocks-core",
                 "reference": "bd38bac5e5f9426dd358c0b8b2e682020b1fab53"
             },
             "type": "library",
@@ -6353,20 +6350,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/db-command.git",
-                "reference": "c821b92c8e3c65f5953e2ccc6790ba09128c708b"
+                "reference": "cf0dba1adb900209b8ae155be5d60170ab4d703e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/db-command/zipball/c821b92c8e3c65f5953e2ccc6790ba09128c708b",
-                "reference": "c821b92c8e3c65f5953e2ccc6790ba09128c708b",
+                "url": "https://api.github.com/repos/wp-cli/db-command/zipball/cf0dba1adb900209b8ae155be5d60170ab4d703e",
+                "reference": "cf0dba1adb900209b8ae155be5d60170ab4d703e",
                 "shasum": ""
             },
             "require": {
-                "wp-cli/wp-cli": "^2.12"
+                "wp-cli/wp-cli": "^2.13"
             },
             "require-dev": {
                 "wp-cli/entity-command": "^1.3 || ^2",
-                "wp-cli/wp-cli-tests": "^4"
+                "wp-cli/wp-cli-tests": "^5"
             },
             "default-branch": true,
             "type": "wp-cli-package",
@@ -6420,7 +6417,7 @@
                 "issues": "https://github.com/wp-cli/db-command/issues",
                 "source": "https://github.com/wp-cli/db-command/tree/main"
             },
-            "time": "2025-05-12T18:23:04+00:00"
+            "time": "2025-07-24T10:59:44+00:00"
         },
         {
             "name": "wp-cli/embed-command",
@@ -6956,12 +6953,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/i18n-command.git",
-                "reference": "d3b22d0e720ad88d416350ed657752aa4d3ff5f5"
+                "reference": "b38c57efbd476c29d3709656b900a349d437015d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/d3b22d0e720ad88d416350ed657752aa4d3ff5f5",
-                "reference": "d3b22d0e720ad88d416350ed657752aa4d3ff5f5",
+                "url": "https://api.github.com/repos/wp-cli/i18n-command/zipball/b38c57efbd476c29d3709656b900a349d437015d",
+                "reference": "b38c57efbd476c29d3709656b900a349d437015d",
                 "shasum": ""
             },
             "require": {
@@ -7018,7 +7015,7 @@
                 "issues": "https://github.com/wp-cli/i18n-command/issues",
                 "source": "https://github.com/wp-cli/i18n-command/tree/main"
             },
-            "time": "2025-07-04T09:41:15+00:00"
+            "time": "2025-07-25T15:36:18+00:00"
         },
         {
             "name": "wp-cli/import-command",

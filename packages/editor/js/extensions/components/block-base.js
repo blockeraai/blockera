@@ -21,7 +21,7 @@ import {
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features';
-import { generalBlockFeatures } from '@blockera/blocks-core/js/general-block-features';
+import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 import {
 	omit,
 	isEquals,

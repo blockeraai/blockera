@@ -150,13 +150,13 @@ class Setup {
 
             // WordPress Core Blocks.
             case 'core':
-                $this->block_dir_path = sprintf('wordpress/%s', $parsedName[1]);
+                $this->block_dir_path = sprintf('libs/wordpress/%s', $parsedName[1]);
                 break;
             case 'woocommerce':
-                $this->block_dir_path = sprintf('woocommerce/%s', $parsedName[1]);
+                $this->block_dir_path = sprintf('libs/woocommerce/%s', $parsedName[1]);
                 break;
 			case 'blocksy':
-				$this->block_dir_path = sprintf( 'third-party/%s', str_replace( '/', '-', $blockType ) );
+				$this->block_dir_path = sprintf( 'libs/third-party/%s', str_replace( '/', '-', $blockType ) );
 				break;
                 // TODO: Implements other blocks in this here ...
         }
