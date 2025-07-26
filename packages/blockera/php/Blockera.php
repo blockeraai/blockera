@@ -8,6 +8,7 @@
 namespace Blockera\Setup;
 
 use Blockera\Bootstrap\Application;
+use Blockera\Utils\Adapters\DomParser;
 use Blockera\Setup\Contracts\ContainerInterface;
 use Blockera\Data\Cache\Contracts\ApplicationCacheStatus;
 
@@ -17,6 +18,13 @@ use Blockera\Data\Cache\Contracts\ApplicationCacheStatus;
  * @package Blockera\Setup\Blockera
  */
 class Blockera extends Application implements ContainerInterface, ApplicationCacheStatus {
+
+	/**
+	 * Store the instance of the class.
+	 *
+	 * @var Blockera|null $instance the instance of the class.
+	 */
+	protected static $instance = null;
 
 	/**
 	 * Holds the registered values.
@@ -33,9 +41,16 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	protected bool $is_validated = false;
 
 	/**
+	 * Store the DOM parser instance.
+	 * 
+	 * @var DomParser $dom_parser The DOM parser instance.
+	 */
+	public DomParser $dom_parser;
+
+	/**
 	 * Blockera constructor.
 	 */
-	public function __construct() {
+	protected function __construct() {
 
 		/**
 		 * This hook for extendable service providers list from internal or third-party developers.
@@ -67,6 +82,20 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 		);
 
 		$this->setRegisteredValueAddons();
+	}
+
+	/**
+	 * Get the instance of the class.
+	 *
+	 * @return Blockera the instance of the class.
+	 */
+	public static function getInstance(): self {
+		
+		if (null === self::$instance) {
+			self::$instance = new self();
+		}
+
+		return self::$instance;
 	}
 
 	/**

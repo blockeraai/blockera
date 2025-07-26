@@ -19,7 +19,9 @@ use Blockera\WordPress\RenderBlock\V2\{
     SavePost as V2SavePost,
 };
 
+use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
+use Blockera\Features\FeaturesManager;
 use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
@@ -49,6 +51,24 @@ class AppServiceProvider extends ServiceProvider {
         parent::register();
 
         try {
+			$this->app->singleton(
+                DomParser::class,
+                static function () {
+
+                    return new DomParser();
+                }
+            );
+			
+			$this->app->singleton(
+                FeaturesManager::class,
+                function ( Application $app) {
+					$app->dom_parser = $app->make(DomParser::class);
+
+					return new FeaturesManager($app);
+				}
+            );
+
+			$this->app->singleton(IconsManager::class);
 
 			$this->app->singleton(
                 Cache::class,
@@ -137,14 +157,6 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            $this->app->singleton(
-                DomParser::class,
-                static function () {
-
-                    return new DomParser();
-                }
-            );
-
             if ( ( defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
 
 				$vendor_path = blockera_core_config('app.vendor_path');
@@ -217,6 +229,15 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
 
         parent::boot();
+
+		$this->app->make(IconsManager::class);
+		$this->app->make(FeaturesManager::class)
+			->registerFeatures(
+				blockera_features_list(
+					blockera_core_config('app.root_path')
+                )
+            )
+			->bootFeatures();
 
 		$this->initCache();
 

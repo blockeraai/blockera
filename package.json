@@ -27,8 +27,10 @@
 	},
 	"dependencies": {
 		"@blockera/blockera": "file:packages/blockera",
+		"@blockera/features": "file:packages/features",
 		"@blockera/blockera-admin": "file:packages/blockera-admin",
-		"@blockera/blocks-core": "file:packages/blocks/core",
+		"@blockera/block-icon": "file:packages/blocks-library/icon",
+		"@blockera/blocks-core": "file:packages/blocks-core",
 		"@blockera/bootstrap": "file:packages/bootstrap",
 		"@blockera/classnames": "file:packages/classnames",
 		"@blockera/controls": "file:packages/controls",

@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Internal dependencies
@@ -41,19 +42,23 @@ const appendStyles = ({
 	settings: Object,
 	disabledStyles: Array<string>,
 }): Array<CssRule> => {
-	const styleGenerators = {
-		SizeStyles,
-		MouseStyles,
-		LayoutStyles,
-		SpacingStyles,
-		EffectsStyles,
-		PositionStyles,
-		FlexChildStyles,
-		TypographyStyles,
-		BackgroundStyles,
-		BlockStatesStyles,
-		BorderAndShadowStyles,
-	};
+	// Extendable style generators by other developers.
+	const styleGenerators = applyFilters(
+		'blockera.editor.styleEngine.generators',
+		{
+			SizeStyles,
+			MouseStyles,
+			LayoutStyles,
+			SpacingStyles,
+			EffectsStyles,
+			PositionStyles,
+			FlexChildStyles,
+			TypographyStyles,
+			BackgroundStyles,
+			BlockStatesStyles,
+			BorderAndShadowStyles,
+		}
+	);
 
 	const enabledStyles = Object.entries(styleGenerators)
 		.filter(([name]) => !disabledStyles?.includes(name))

@@ -142,14 +142,15 @@ export default function BorderRadiusControl({
 					label={__('Custom Border Radius', 'blockera')}
 					size="extra-small"
 					style={{
-						color:
-							value.type === 'custom'
-								? 'var(--blockera-controls-primary-color)'
-								: 'var(--blockera-controls-color)',
-						padding: '5px',
+						padding: '4px',
 						width: 'var(--blockera-controls-input-height)',
 						height: 'var(--blockera-controls-input-height)',
 					}}
+					className={
+						value.type === 'custom'
+							? 'is-toggle-btn is-toggled'
+							: 'is-toggle-btn'
+					}
 					onClick={() => {
 						// old type
 						if (value.type === 'all') {

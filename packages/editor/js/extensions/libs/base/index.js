@@ -16,14 +16,19 @@ export const registerBlockExtensionsSupports = (
 	blockName: string,
 	externalConfig?: Object
 ): void => {
-	Object.keys(externalConfig || config).forEach((name: string) => {
+	const extensionsConfig = applyFilters(
+		'blockera.extensions.supports.configuration',
+		externalConfig || config
+	);
+
+	Object.keys(extensionsConfig).forEach((name: string) => {
 		const targetBlock = blockName.replace(/\//g, '-');
 		dispatch(STORE_NAME).addExtension({
 			name,
 			blockName,
 			supports: applyFilters(
 				`blockera-${targetBlock}-extension-${name}`,
-				(externalConfig || config)[name],
+				extensionsConfig[name],
 				name,
 				targetBlock
 			),

@@ -29,6 +29,9 @@ import { default as LibraryUIIcon } from './library-ui/library-icon';
 // Cursor Library
 import { CursorIcons } from './library-cursor';
 import { default as LibraryCursorIcon } from './library-cursor/library-icon';
+// Social Library
+import { SocialIcons } from './library-social';
+import { default as SocialIcon } from './library-social/library-icon';
 
 export const IconLibraries: {
 	[key: string]: {
@@ -43,10 +46,16 @@ export const IconLibraries: {
 		name: __('WordPress', 'blockera'),
 		icon: <WPLibraryIcon />,
 	},
+	social: {
+		id: 'social',
+		// translators: Icon library name
+		name: __('Social', 'blockera'),
+		icon: <SocialIcon />,
+	},
 	blockera: {
 		id: 'blockera',
 		// translators: Icon library name
-		name: __('Blockera', 'blockera'),
+		name: __('Blockera Branding', 'blockera'),
 		icon: <LibraryIcon />,
 	},
 	ui: {
@@ -98,6 +107,9 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 
 		case 'cursor':
 			return CursorIcons;
+
+		case 'social':
+			return SocialIcons;
 	}
 
 	return {};
@@ -126,6 +138,11 @@ export function getIconLibrarySearchData(
 			case 'blockera':
 				// $FlowFixMe
 				Array.prototype.push.apply(searchData, IconsSearchData);
+				break;
+
+			case 'social':
+				// $FlowFixMe
+				Array.prototype.push.apply(searchData, SocialIconsSearchData);
 				break;
 		}
 

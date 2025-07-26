@@ -22,6 +22,7 @@ return [
     'packages_url'   => BLOCKERA_SB_URI . 'packages/',
     'packages_path'  => blockera_core_env('APP_MODE', 'production') === 'development' ? BLOCKERA_SB_PATH . 'packages/' : BLOCKERA_SB_PATH . 'vendor/',
     'vendor_path'    => BLOCKERA_SB_PATH . 'vendor/',
+    'vendor_url'     => BLOCKERA_SB_URI . 'vendor/',
     'version'        => defined('BLOCKERA_SB_VERSION') ? BLOCKERA_SB_VERSION : blockera_core_env('VERSION'),
     'namespaces'     => [
         'controllers' => '\Blockera\Setup\Http\Controllers\\',

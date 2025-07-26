@@ -24,7 +24,7 @@ if ($blockera_cache !== false) {
     $blockera = $blockera_cache;
 } else {
     // Optimize class initialization.
-    $blockera = new \Blockera\Setup\Blockera();
+    $blockera = \Blockera\Setup\Blockera::getInstance();
     // Cache the instance.
     wp_cache_set($cache_key, $blockera, $cache_group);
 }
@@ -39,6 +39,7 @@ if (is_admin()) {
 }
 
 blockera_load('telemetry.php.hooks', $external_dir);
+blockera_load('blocks-library-hooks', __DIR__);
 
 // Initialize core components with optimized bootstrap.
 $blockera->bootstrap();

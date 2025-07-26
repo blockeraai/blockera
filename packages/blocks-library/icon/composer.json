@@ -1,0 +1,10 @@
+{
+	"name": "blockera/block-icon",
+	"version": "1.0.0",
+	"description": "The Blockera block icon package for Blockera editor.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Block\\Icon\\": "src/"
+		}
+	}
+}

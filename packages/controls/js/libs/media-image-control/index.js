@@ -94,7 +94,7 @@ export default function MediaImageControl({
 							className="btn-delete"
 							noBorder={true}
 							icon={
-								<Icon library="ui" icon="close" iconSize="16" />
+								<Icon library="ui" icon="trash" iconSize="20" />
 							}
 							onClick={() => {
 								setValue('');
@@ -113,18 +113,40 @@ export default function MediaImageControl({
 				)}
 
 				{!value && (
-					<MediaUploader
-						onSelect={(image) => {
-							setValue(image.url);
-						}}
-						allowedTypes={['image']}
-						mode="browse"
-						render={({ open }) => (
-							<Button className="btn-choose-image" onClick={open}>
-								{labelChoose}
-							</Button>
-						)}
-					/>
+					<>
+						<MediaUploader
+							onSelect={(image) => {
+								setValue(image.url);
+							}}
+							allowedTypes={['image']}
+							mode="browse"
+							render={({ open }) => (
+								<Button
+									className="btn-choose-image"
+									onClick={open}
+									label={labelChoose}
+								>
+									{labelMediaLibrary}
+								</Button>
+							)}
+						/>
+
+						<MediaUploader
+							onSelect={(image) => {
+								setValue(image?.url);
+							}}
+							allowedTypes={['image']}
+							mode="upload"
+							render={({ open }) => (
+								<Button
+									className="btn-choose-image"
+									onClick={open}
+								>
+									{labelUploadImage}
+								</Button>
+							)}
+						/>
+					</>
 				)}
 
 				{value && (
@@ -140,6 +162,7 @@ export default function MediaImageControl({
 									className="btn-media-library"
 									noBorder={true}
 									onClick={open}
+									label={labelChoose}
 								>
 									{labelMediaLibrary}
 								</Button>

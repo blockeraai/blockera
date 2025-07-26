@@ -1,0 +1,10 @@
+{
+	"name": "blockera/block-icon",
+	"path": "packages/blocks-library/icon",
+	"dependent": {
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
+	}
+}
