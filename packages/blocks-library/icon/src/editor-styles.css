@@ -82,8 +82,8 @@
 	padding: var(--blockera--icon--padding, 0);
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] > div:first-of-type,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] [role="textbox"],
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] [role="textbox"] {
 	display: inline-flex;
 	position: relative;
 	margin-left: auto;
@@ -95,8 +95,8 @@
 	align-items: center;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] > div:first-of-type::before,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type::after {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] [role="textbox"]::before,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] [role="textbox"]::after {
 	content: "";
 	display: inline-block;
 	position: relative;
@@ -118,11 +118,22 @@
 	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"]>div:first-of-type::before {
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] .wp-block-navigation-item__content,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] .wp-block-navigation-item__content {
+	display: flex;
+	align-items: center;
+}
+
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] a.wp-block-navigation-item__content > [role="textbox"]::before,
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] a.wp-block-navigation-item__content > [role="textbox"]::after {
+	vertical-align: text-bottom;
+}
+
+.editor-styles-wrapper div [class*="blockera-has-icon-start"] [role="textbox"]::before {
 	margin-right: var(--blockera--icon--gap, 0.5em);
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type::after {
+.editor-styles-wrapper div [class*="blockera-has-icon-end"] [role="textbox"]::after {
 	margin-left: var(--blockera--icon--gap, 0.5em);
 	--blockera--icon--order: 100;
 }
