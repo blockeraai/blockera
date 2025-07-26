@@ -93,40 +93,48 @@ export const blockeraEditorFilters = () => {
 		}
 	);
 
+	const filterExtensionsSupports = (extensionsSupports) => {
+		const newExtensionsSupports = {};
+		const { getFeatures } = select(STORE_NAME);
+		const registeredFeatures = getFeatures();
+
+		for (const featureId in featuresLibrary) {
+			const featureObject = registeredFeatures[featureId];
+
+			if (
+				!featureObject?.isEnabled() ||
+				!featureObject?.extensionSupports ||
+				!featureObject?.extensionSupportId
+			) {
+				continue;
+			}
+
+			if (extensionsSupports[featureObject.extensionSupportId]) {
+				newExtensionsSupports[featureId] = mergeObject(
+					extensionsSupports[featureObject.extensionSupportId],
+					featureObject.extensionSupports[
+						featureObject.extensionSupportId
+					]
+				);
+			} else {
+				newExtensionsSupports[featureObject.extensionSupportId] =
+					featureObject.extensionSupports;
+			}
+		}
+
+		return mergeObject(extensionsSupports, newExtensionsSupports);
+	};
+
 	addFilter(
 		'blockera.extensions.supports.configuration',
 		'blockera.features.extensionsSupports.filter',
-		(extensionsSupports) => {
-			const newExtensionsSupports = {};
-			const { getFeatures } = select(STORE_NAME);
-			const registeredFeatures = getFeatures();
+		filterExtensionsSupports
+	);
 
-			for (const featureId in featuresLibrary) {
-				const featureObject = registeredFeatures[featureId];
-
-				if (
-					!featureObject?.isEnabled() ||
-					!featureObject?.extensionSupports ||
-					!featureObject?.extensionSupportId
-				) {
-					continue;
-				}
-
-				if (extensionsSupports[featureObject.extensionSupportId]) {
-					newExtensionsSupports[featureId] = mergeObject(
-						extensionsSupports[featureObject.extensionSupportId],
-						featureObject.extensionSupports[
-							featureObject.extensionSupportId
-						]
-					);
-				} else {
-					newExtensionsSupports[featureObject.extensionSupportId] =
-						featureObject.extensionSupports;
-				}
-			}
-
-			return mergeObject(extensionsSupports, newExtensionsSupports);
-		}
+	addFilter(
+		'blockera.extensions.innerBlocks.config',
+		'blockera.features.extensionsInnerBlocks.config',
+		filterExtensionsSupports
 	);
 
 	addFilter(
