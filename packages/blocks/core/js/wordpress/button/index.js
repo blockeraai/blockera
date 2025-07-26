@@ -40,7 +40,6 @@ export const Button: BlockType = {
 	blockFeatures: {
 		icon: {
 			status: true,
-			context: ['core/button'],
 			inspector: {
 				status: true,
 				extensions: {

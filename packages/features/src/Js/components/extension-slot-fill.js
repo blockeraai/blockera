@@ -73,14 +73,18 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 				props.blockFeatures[featureId]
 			);
 
+			if (!feature.isEnabled(featureBlockConfig.status)) {
+				continue;
+			}
+
 			if (
-				!feature.isEnabled(featureBlockConfig.status) ||
-				(!featureBlockConfig?.context?.includes(
+				featureBlockConfig?.context?.length > 0 &&
+				!featureBlockConfig?.context?.includes(
 					props?.block?.blockName
 				) &&
-					!featureBlockConfig?.context?.includes(
-						activeBlockVariation?.name
-					))
+				!featureBlockConfig?.context?.includes(
+					activeBlockVariation?.name
+				)
 			) {
 				continue;
 			}
