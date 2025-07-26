@@ -104,6 +104,6 @@
 	& > .blockera-control-notice + .blockera-field,
 	& > .blockera-component-feature-wrapper + .blockera-field,
 	& > .blockera-field + .blockera-field {
-		margin-top: 15px;
+		margin-top: var(--blockera-field-gap, 15px);
 	}
 }

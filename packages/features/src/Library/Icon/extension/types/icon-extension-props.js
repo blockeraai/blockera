@@ -19,6 +19,9 @@ export type TIconProps = {
 		blockeraIconLink: Object,
 		blockeraIconColor: string,
 		blockeraIconPosition: string,
+		blockeraIconRotate: string,
+		blockeraIconFlipHorizontal: string,
+		blockeraIconFlipVertical: string,
 	},
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	extensionProps: {
@@ -28,5 +31,8 @@ export type TIconProps = {
 		blockeraIconSize: Object,
 		blockeraIconColor: Object,
 		blockeraIconLink: Object,
+		blockeraIconRotate: Object,
+		blockeraIconFlipHorizontal: Object,
+		blockeraIconFlipVertical: Object,
 	},
 };
