@@ -15,36 +15,28 @@ export const icon = {
 	variationConfig: {
 		name: 'blockera/icon',
 		label: 'Icon',
-		description: __(
-			'Insert an icon to make a design more engaging and attractive.',
-			'blockera'
-		),
+		description: __('Insert an SVG icon or graphic.', 'blockera'),
 		title: __('Icon', 'blockera'),
 		icon: <Icon icon="star-filled" library="wp" iconSize="24px" />,
 		attributes: {
-			className: 'blockera-has-icon-start',
+			className: 'blockera-is-icon-block',
 			blockeraIcon: {
 				value: {
 					icon: 'star-filled',
 					library: 'wp',
 					uploadSVG: '',
-					renderedIcon: '',
+					renderedIcon:
+						'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgc3R5bGU9IndpZHRoOiA1MHB4OyBoZWlnaHQ6IDUwcHg7IG1hcmdpbi1yaWdodDogNXB4OyI+PHBhdGggZD0iTTExLjc3NiA0LjQ1NGEuMjUuMjUgMCAwMS40NDggMGwyLjA2OSA0LjE5MmEuMjUuMjUgMCAwMC4xODguMTM3bDQuNjI2LjY3MmEuMjUuMjUgMCAwMS4xMzkuNDI2bC0zLjM0OCAzLjI2M2EuMjUuMjUgMCAwMC0uMDcyLjIyMmwuNzkgNC42MDdhLjI1LjI1IDAgMDEtLjM2Mi4yNjNsLTQuMTM4LTIuMTc1YS4yNS4yNSAwIDAwLS4yMzIgMGwtNC4xMzggMi4xNzVhLjI1LjI1IDAgMDEtLjM2My0uMjYzbC43OS00LjYwN2EuMjUuMjUgMCAwMC0uMDcxLS4yMjJMNC43NTQgOS44ODFhLjI1LjI1IDAgMDEuMTM5LS40MjZsNC42MjYtLjY3MmEuMjUuMjUgMCAwMC4xODgtLjEzN2wyLjA2OS00LjE5MnoiPjwvcGF0aD48L3N2Zz4=',
 				},
 			},
 			blockeraIconPosition: {
-				value: 'left',
+				value: 'start',
 			},
 			blockeraIconGap: {
 				value: '5px',
 			},
 			blockeraIconSize: {
-				value: '16px',
-			},
-			blockeraIconColor: {
-				value: '#222',
-			},
-			blockeraIconLink: {
-				value: [],
+				value: '50px',
 			},
 		},
 		category: 'media',
@@ -52,12 +44,7 @@ export const icon = {
 		isActive: (blockAttributes: Object) => {
 			return (
 				blockAttributes &&
-				(blockAttributes?.className?.includes(
-					'blockera-has-icon-start'
-				) ||
-					blockAttributes?.className?.includes(
-						'blockera-has-icon-end'
-					))
+				blockAttributes?.className?.includes('blockera-is-icon-block')
 			);
 		},
 	},
