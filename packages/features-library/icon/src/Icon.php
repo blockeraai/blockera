@@ -4,11 +4,12 @@ namespace Blockera\Feature\Icon;
 
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Core\Traits\Singleton;
+use Blockera\Features\Core\Traits\ApplicationTrait;
 use Blockera\Features\Core\Contracts\FeatureInterface;
 
 class Icon implements FeatureInterface {
 
-    use Singleton;
+    use Singleton, ApplicationTrait;
 
 	/**
 	 * Store the configuration.
@@ -63,6 +64,8 @@ class Icon implements FeatureInterface {
 			
 			return $html;
 		}
+
+		$data['app'] = $this->app;
 
 		return $this->edit_block_html->htmlManipulate( $html, $data );
 	}

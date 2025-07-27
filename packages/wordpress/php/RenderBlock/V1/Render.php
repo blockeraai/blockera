@@ -126,6 +126,7 @@ class Render {
 			$args['origin_html']  = $html;
 			$args['htmlEditable'] = compact('selector');
 
+			$feature->setApp($this->app);
 			$html = $feature->htmlManipulate($dom_parser, $args);
 		}
 

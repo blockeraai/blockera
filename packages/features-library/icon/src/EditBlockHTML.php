@@ -5,6 +5,7 @@ namespace Blockera\Feature\Icon;
 use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
 use Blockera\Utils\Adapters\DomParser;
+use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
 class EditBlockHTML implements EditableBlockHTML {
@@ -43,13 +44,14 @@ class EditBlockHTML implements EditableBlockHTML {
      */
     public function htmlManipulate( string $html, array $data): string {
         [
+			'app'          => $app,
             'block'        => $block,
         ] = $data;
 
         $blockElement = $this->findBlockElement($data);
 
         if (! $blockElement) {
-            return $html;
+            return $app->make(IconBlock::class)->render($html, $this, $data);
         }
 
         $original_html           = $blockElement->outerhtml;
@@ -242,7 +244,7 @@ class EditBlockHTML implements EditableBlockHTML {
      *
      * @return string The icon html.
      */
-    protected function getIconHTML( array $value): string {
+    public function getIconHTML( array $value): string {
         [
             'icon'    => $icon,
             'library' => $library,

@@ -24,6 +24,7 @@ use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Block\Icon\Block as IconBlock;
 use Blockera\Features\Core\FeaturesManager;
 use Blockera\Setup\Compatibility\Compatibility;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
@@ -56,6 +57,14 @@ class AppServiceProvider extends ServiceProvider {
 
                     return new DomParser();
                 }
+            );
+
+			$this->app->singleton(
+                IconBlock::class,
+                function ( Application $app, array $args = []): IconBlock {
+
+					return new IconBlock($app, $args);
+				}
             );
 			
 			$this->app->singleton(
