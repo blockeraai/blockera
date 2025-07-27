@@ -1,35 +1,48 @@
+/* Icon block */
 /* Hide site logo placeholder when icon is set. */
-[class*="blockera-has-icon-start"] .components-placeholder__illustration,
-[class*="blockera-has-icon-start"] .components-placeholder__instructions,
-[class*="blockera-has-icon-end"] .components-placeholder__illustration,
-[class*="blockera-has-icon-end"] .components-placeholder__instructions {
+.blockera-is-icon-block .components-placeholder__illustration,
+.blockera-is-icon-block .components-placeholder__instructions {
 	display: none !important;
 }
 
-[class*="blockera-has-icon-start"].wp-block-site-logo .components-placeholder,
-[class*="blockera-has-icon-end"].wp-block-site-logo .components-placeholder {
-	min-width: 0;
-	min-height: 0;
-}
-
-.components-placeholder.has-illustration::before {
+.blockera-is-icon-block .components-placeholder.has-illustration::before {
 	opacity: 1;
 	background: transparent;
 }
 
-/* Equivalent to .blockera-has-icon-style .components-placeholder.has-illustration::before */
-[class*="blockera-has-icon-start"] .components-placeholder.has-illustration::before,
-[class*="blockera-has-icon-end"] .components-placeholder.has-illustration::before {
+.blockera-is-icon-block .components-placeholder.has-illustration::before {
 	display: none;
 }
 
-[class*="blockera-has-icon-start"] .components-placeholder__fieldset,
-[class*="blockera-has-icon-end"] .components-placeholder__fieldset {
+.blockera-is-icon-block .components-placeholder__fieldset {
 	display: none;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"],
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] {
+.editor-styles-wrapper div .blockera-is-icon-block .components-placeholder__illustration,
+.editor-styles-wrapper div .blockera-is-icon-block img,
+.editor-styles-wrapper div .blockera-is-icon-block figcaption,
+.editor-styles-wrapper div .blockera-is-icon-block iframe,
+.editor-styles-wrapper div .blockera-is-icon-block fieldset,
+.editor-styles-wrapper div .blockera-is-icon-block .components-placeholder__label {
+	display: none !important;
+}
+
+/* Can't use important. */
+.wp-block-image.wp-block-image.is-selected .components-placeholder {
+	box-shadow: none;
+	background-color: transparent;
+}
+
+/* Site logo block */
+.blockera-has-icon-start.wp-block-site-logo .components-placeholder,
+.blockera-has-icon-end.wp-block-site-logo .components-placeholder {
+	min-width: 0;
+	min-height: 0;
+}
+
+/* Icon Feature */
+.editor-styles-wrapper div .blockera-has-icon-start,
+.editor-styles-wrapper div .blockera-has-icon-end {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
@@ -39,27 +52,13 @@
 	box-shadow: none !important;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"].wp-block-button [data-rich-text-placeholder],
-.editor-styles-wrapper div [class*="blockera-has-icon-end"].wp-block-button [data-rich-text-placeholder] {
+.editor-styles-wrapper div .blockera-has-icon-start.wp-block-button [data-rich-text-placeholder],
+.editor-styles-wrapper div .blockera-has-icon-end.wp-block-button [data-rich-text-placeholder] {
 	display: none;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] .components-placeholder__illustration,
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] img,
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] figcaption,
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] iframe,
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] fieldset,
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] .components-placeholder__label,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] .components-placeholder__illustration,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] img,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] figcaption,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] iframe,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] fieldset,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] .components-placeholder__label {
-	display: none !important;
-}
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"].alignleft > div:first-of-type,
+/* .editor-styles-wrapper div [class*="blockera-has-icon-start"].alignleft > div:first-of-type,
 .editor-styles-wrapper div [class*="blockera-has-icon-end"].alignleft > div:first-of-type {
 	margin-left: 0;
 }
@@ -67,10 +66,10 @@
 .editor-styles-wrapper div [class*="blockera-has-icon-start"].alignright > div:first-of-type,
 .editor-styles-wrapper div [class*="blockera-has-icon-end"].alignright > div:first-of-type {
 	margin-right: 0;
-}
+} */
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] > div:first-of-type:not(.wp-block-button__link),
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] > div:first-of-type:not(.wp-block-button__link) {
+.editor-styles-wrapper div .blockera-has-icon-start > div:first-of-type:not(.wp-block-button__link),
+.editor-styles-wrapper div .blockera-has-icon-end > div:first-of-type:not(.wp-block-button__link) {
 	border-radius: inherit !important;
 	border-width: var(--blockera--icon--border-width, 0) !important;
 	border-style: var(--blockera--icon--border-style, solid) !important;
@@ -82,8 +81,8 @@
 	padding: var(--blockera--icon--padding, 0);
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] [role="textbox"],
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] [role="textbox"] {
+.editor-styles-wrapper div .blockera-has-icon-start [role="textbox"],
+.editor-styles-wrapper div .blockera-has-icon-end [role="textbox"] {
 	display: inline-flex;
 	position: relative;
 	margin-left: auto;
@@ -95,8 +94,9 @@
 	align-items: center;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] [role="textbox"]::before,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] [role="textbox"]::after {
+.editor-styles-wrapper div figure.blockera-is-icon-block .block-editor-media-placeholder::before,
+.editor-styles-wrapper div .blockera-has-icon-start [role="textbox"]::before,
+.editor-styles-wrapper div .blockera-has-icon-end [role="textbox"]::after {
 	content: "";
 	display: inline-block;
 	position: relative;
@@ -118,28 +118,22 @@
 	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] .wp-block-navigation-item__content,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] .wp-block-navigation-item__content {
+.editor-styles-wrapper div .blockera-has-icon-start .wp-block-navigation-item__content,
+.editor-styles-wrapper div .blockera-has-icon-end .wp-block-navigation-item__content {
 	display: flex;
 	align-items: center;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] a.wp-block-navigation-item__content > [role="textbox"]::before,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] a.wp-block-navigation-item__content > [role="textbox"]::after {
+.editor-styles-wrapper div .blockera-has-icon-start a.wp-block-navigation-item__content > [role="textbox"]::before,
+.editor-styles-wrapper div .blockera-has-icon-end a.wp-block-navigation-item__content > [role="textbox"]::after {
 	vertical-align: text-bottom;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-start"] [role="textbox"]::before {
+.editor-styles-wrapper div .blockera-has-icon-start [role="textbox"]::before {
 	margin-right: var(--blockera--icon--gap, 0.5em);
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-end"] [role="textbox"]::after {
+.editor-styles-wrapper div .blockera-has-icon-end [role="textbox"]::after {
 	margin-left: var(--blockera--icon--gap, 0.5em);
 	--blockera--icon--order: 100;
-}
-
-/* Can't use important. */
-.wp-block-image.wp-block-image.is-selected .components-placeholder {
-	box-shadow: none;
-	background-color: transparent;
 }
