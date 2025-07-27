@@ -175,6 +175,7 @@ export const IconExtension: ComponentType<{
 							icon: '',
 							library: '',
 							uploadSVG: '',
+							renderedIcon: '',
 						},
 					});
 					handleOnChangeAttributes(
@@ -183,6 +184,7 @@ export const IconExtension: ComponentType<{
 							icon: '',
 							library: '',
 							uploadSVG: '',
+							renderedIcon: '',
 						},
 						{ ref }
 					);
