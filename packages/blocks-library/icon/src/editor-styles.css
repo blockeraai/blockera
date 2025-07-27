@@ -31,6 +31,7 @@
 .wp-block-image.wp-block-image.is-selected .components-placeholder {
 	box-shadow: none;
 	background-color: transparent;
+	padding: 0;
 }
 
 /* Site logo block */
@@ -41,8 +42,8 @@
 }
 
 /* Icon Feature */
-.editor-styles-wrapper div .blockera-has-icon-start,
-.editor-styles-wrapper div .blockera-has-icon-end {
+.editor-styles-wrapper div .blockera-has-icon-start:not(.blockera-is-icon-block),
+.editor-styles-wrapper div .blockera-has-icon-end:not(.blockera-is-icon-block) {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
@@ -68,8 +69,8 @@
 	margin-right: 0;
 } */
 
-.editor-styles-wrapper div .blockera-has-icon-start > div:first-of-type:not(.wp-block-button__link),
-.editor-styles-wrapper div .blockera-has-icon-end > div:first-of-type:not(.wp-block-button__link) {
+.editor-styles-wrapper div .blockera-has-icon-start > [role="textbox"]:not(.wp-block-button__link),
+.editor-styles-wrapper div .blockera-has-icon-end > [role="textbox"]:not(.wp-block-button__link) {
 	border-radius: inherit !important;
 	border-width: var(--blockera--icon--border-width, 0) !important;
 	border-style: var(--blockera--icon--border-style, solid) !important;
