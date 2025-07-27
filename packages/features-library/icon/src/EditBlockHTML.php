@@ -4,6 +4,7 @@ namespace Blockera\Feature\Icon;
 
 use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
+use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
 class EditBlockHTML implements EditableBlockHTML {
@@ -15,6 +16,18 @@ class EditBlockHTML implements EditableBlockHTML {
      */
     protected array $blocks_config;
 
+	/**
+	 * Store the dom parser.
+	 *
+	 * @var DomParser $dom the dom parser.
+	 */
+	protected DomParser $dom;
+
+	/**
+	 * Initialize the class.
+	 *
+	 * @param array $args The arguments.
+	 */
     public function __construct( array $args) {
         
 		$this->blocks_config = $args;
@@ -63,11 +76,13 @@ class EditBlockHTML implements EditableBlockHTML {
 			'htmlEditable' => $htmlEditable,
         ] = $data;
 
+		$this->dom = $dom;
+
 		if (empty($htmlEditable['selector'])) {
 			return null;
 		}
 
-        $blockElement = $dom->findOne($htmlEditable['selector']);
+        $blockElement = $this->dom->findOne($htmlEditable['selector']);
 
         if (empty($blockElement) || empty($blockElement->innerhtml)) {
             return null;
@@ -193,24 +208,31 @@ class EditBlockHTML implements EditableBlockHTML {
             }
         }
 
-        // When icon position was not set default append left side.
-        if (empty($iconPosition) || 'left' === $iconPosition) {
+		$combinedContent = '';
+		$originalContent = $blockElement->innerHTML();
 
-            $blockElement->innerhtml = sprintf(
-                '%s%s',
-                $iconHTML,
-                $blockElement->innerhtml
-            );
-        } elseif ('right' === $iconPosition) {
+		if (empty($iconPosition) || 'left' === $iconPosition) {
+			$combinedContent = sprintf(
+				'%s%s',
+				$iconHTML,
+				$originalContent
+			);
+		} elseif ('right' === $iconPosition) {
+			$combinedContent = sprintf(
+				'%s%s',
+				$originalContent,
+				$iconHTML
+			);
+		}
 
-            $blockElement->innerhtml = sprintf(
-                '%s%s',
-                $blockElement->innerhtml,
-                $iconHTML
-            );
-        }
+		// Parse the combined HTML fragment to ensure it's valid.
+		$parsed = $this->dom::str_get_html($combinedContent);
 
-        return $blockElement->innerhtml;
+		if ($parsed) {
+			$blockElement->innerhtml = $parsed->innerHtml();
+		}
+
+		return $blockElement->innerHTML();
     }
 
     /**
