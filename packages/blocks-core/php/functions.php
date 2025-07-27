@@ -9,7 +9,7 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 	function blockera_get_available_blocks(): array {
 
 		$available_blocks = [];
-		$config_files     = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/blocks-core/js/*-blocks-list.json' );
+		$config_files     = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/blocks-core/js/**/*-blocks-list.json' );
 
 		foreach ( $config_files as $config_file ) {
 
