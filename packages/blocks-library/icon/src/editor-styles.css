@@ -100,7 +100,7 @@
 	content: "";
 	display: inline-block;
 	position: relative;
-	background: var(--blockera--icon--color, currentColor);
+	background: var(--blockera--icon--color);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
 	margin: auto 0;

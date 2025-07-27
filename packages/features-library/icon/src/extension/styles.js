@@ -94,6 +94,7 @@ export const IconStyles = ({
 											?.renderedIcon || ''
 									)
 								)}")`,
+								'--blockera--icon--color': 'currentColor',
 							},
 						},
 					],
