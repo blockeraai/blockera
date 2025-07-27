@@ -22,7 +22,7 @@ export const icon = {
 		title: __('Icon', 'blockera'),
 		icon: <Icon icon="star-filled" library="wp" iconSize="24px" />,
 		attributes: {
-			className: 'blockera-has-icon-style',
+			className: 'blockera-has-icon-start',
 			blockeraIcon: {
 				value: {
 					icon: 'star-filled',
@@ -52,7 +52,12 @@ export const icon = {
 		isActive: (blockAttributes: Object) => {
 			return (
 				blockAttributes &&
-				blockAttributes?.className?.includes('blockera-has-icon-style')
+				(blockAttributes?.className?.includes(
+					'blockera-has-icon-start'
+				) ||
+					blockAttributes?.className?.includes(
+						'blockera-has-icon-end'
+					))
 			);
 		},
 	},
