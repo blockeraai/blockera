@@ -92,5 +92,6 @@ export const registerConfigExtensionsOfInnerBlocks = (): void => {
 
 export default blocks;
 
+export * from './helpers';
 export * from './api/registration';
 export * from './libs/general-block-features';

@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added a way for blocks to get a unique ID automatically, making them work more smoothly.
+
 ## 1.4.0 (2025-05-19)
 
 ### New Features
