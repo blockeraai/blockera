@@ -50,7 +50,7 @@ return array_merge(
 						'root' => ' .wp-block-navigation-item__content .blockera-icon',
 					],
 					'htmlEditable' => [
-						'root' => ' .wp-block-navigation-item__content div[role="textbox"]',
+						'root' => ' a.wp-block-navigation-item__content span.wp-block-navigation-item__label',
 					],
 				],
 			)
