@@ -10,8 +10,8 @@ import { applyFilters } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { classNames } from '@blockera/classnames';
-import { getIconAttributes } from '@blockera/features';
 import { getSmallHash, mergeObject } from '@blockera/utils';
+import { getIconAttributes } from '@blockera/feature-icon';
 
 /**
  * Internal dependencies

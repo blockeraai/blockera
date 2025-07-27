@@ -15,17 +15,16 @@ use Blockera\WordPress\RenderBlock\V1\{
 };
 use Blockera\WordPress\RenderBlock\V2\{
     Transpiler,
-	RenderContent as V2RenderContent,
+    RenderContent as V2RenderContent,
     SavePost as V2SavePost,
 };
-
 use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
-use Blockera\Features\FeaturesManager;
 use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Features\Core\FeaturesManager;
 use Blockera\Setup\Compatibility\Compatibility;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;

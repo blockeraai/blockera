@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00c74ca904c80cc4c5cee9c79c12c2a7",
+    "content-hash": "0e4331602b0b26e83c7bc87cd30bf40f",
     "packages": [
         {
             "name": "blockera/block-icon",
@@ -270,17 +270,41 @@
             }
         },
         {
-            "name": "blockera/features",
+            "name": "blockera/feature-icon",
             "version": "1.0.0",
             "dist": {
                 "type": "path",
-                "url": "packages/features",
-                "reference": "9880d61a00fb86ce09e8567e79f546dff6df075e"
+                "url": "packages/features-library/icon",
+                "reference": "b68dfbe86d04b324d1365210c5f046bce1facadf"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Blockera\\Features\\": "src/"
+                    "Blockera\\Feature\\Icon\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Blockera\\Feature\\Icon\\Tests\\": "src/tests/"
+                }
+            },
+            "description": "The Blockera Feature Icon package.",
+            "transport-options": {
+                "relative": true
+            }
+        },
+        {
+            "name": "blockera/features-core",
+            "version": "1.0.0",
+            "dist": {
+                "type": "path",
+                "url": "packages/features-core",
+                "reference": "07cdc99794728e7f870d8633124aae65801f0fe2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Blockera\\Features\\Core\\": "src/"
                 },
                 "files": [
                     "src/helpers.php"
@@ -288,10 +312,10 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Blockera\\Features\\Tests\\": "src/tests/"
+                    "Blockera\\Features\\Core\\Tests\\": "src/tests/"
                 }
             },
-            "description": "The Blockera Features package.",
+            "description": "The Blockera Features Core package.",
             "transport-options": {
                 "relative": true
             }

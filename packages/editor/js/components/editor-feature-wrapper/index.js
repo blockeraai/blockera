@@ -15,10 +15,14 @@ import { isBoolean, isArray } from '@blockera/utils';
  * Internal dependencies
  */
 import type { EditorFeatureWrapperProps } from './types';
-import { useExtensionsStore, useEditorStore } from '../../hooks';
-import { getBaseBreakpoint, isBaseBreakpoint } from '../../canvas-editor';
+import { useEditorStore } from '../../hooks/use-editor-store';
+import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import { isInnerBlock, isNormalState } from '../../extensions/components/utils';
 import type { TStates } from '../../extensions/libs/block-card/block-states/types';
+import {
+	isBaseBreakpoint,
+	getBaseBreakpoint,
+} from '../../canvas-editor/components/breakpoints/helpers';
 
 export default function EditorFeatureWrapper({
 	config,

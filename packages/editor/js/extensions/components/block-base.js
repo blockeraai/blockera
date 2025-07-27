@@ -20,7 +20,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { useBlockFeatures } from '@blockera/features';
+import { useBlockFeatures } from '@blockera/features-core';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 import {
 	omit,

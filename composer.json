@@ -10,7 +10,11 @@
 		},
 		{
 			"type": "path",
-			"url": "packages/features"
+			"url": "packages/features-core"
+		},
+		{
+			"type": "path",
+			"url": "packages/features-library/icon"
 		},
 		{
 			"type": "path",
@@ -90,7 +94,8 @@
 	"require": {
 		"php": ">=7.4",
 		"blockera/blockera": "*",
-		"blockera/features": "*",
+		"blockera/features-core": "*",
+		"blockera/feature-icon": "*",
 		"blockera/blockera-admin": "*",
 		"blockera/block-icon": "*",
 		"blockera/blocks-core": "*",

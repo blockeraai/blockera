@@ -34,13 +34,16 @@ module.exports = (env, argv) => {
 			if (-1 !== packageName.indexOf('block-')) {
 				name = name.split('block-')[1];
 				parentDirectory = 'blocks-library/';
+			} else if (-1 !== packageName.indexOf('feature-')) {
+				name = name.split('feature-')[1];
+				parentDirectory = 'features-library/';
 			}
 
 			const {
 				version,
 			} = require(`./packages/${parentDirectory}${name}/package.json`);
 
-			return [name, version.replace(/\./g, '_')];
+			return [packageName, version.replace(/\./g, '_')];
 		})
 	);
 	const blockeraEntries = blockeraPackages.reduce((memo, packageName) => {
@@ -55,9 +58,12 @@ module.exports = (env, argv) => {
 		if (-1 !== packageName.indexOf('block-')) {
 			_packageName = _packageName.split('block-')[1];
 			parentDirectory = 'blocks-library/';
+		} else if (-1 !== packageName.indexOf('feature-')) {
+			_packageName = _packageName.split('feature-')[1];
+			parentDirectory = 'features-library/';
 		}
 
-		if (!blockeraPackagesVersion[_packageName]) {
+		if (!blockeraPackagesVersion[packageName]) {
 			return memo;
 		}
 
@@ -105,8 +111,16 @@ module.exports = (env, argv) => {
 			'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
 			'@blockera/editor':
 				'blockeraEditor_' + blockeraPackagesVersion.editor,
+			'@blockera/block-icon':
+				'blockeraBlockIcon_' + blockeraPackagesVersion['block-icon'],
 			'@blockera/blocks-core':
 				'blockeraBlocksCore_' + blockeraPackagesVersion['blocks-core'],
+			'@blockera/feature-icon':
+				'blockeraFeatureIcon_' +
+				blockeraPackagesVersion['feature-icon'],
+			'@blockera/features-core':
+				'blockeraFeaturesCore_' +
+				blockeraPackagesVersion['features-core'],
 			'@blockera/controls':
 				'blockeraControls_' + blockeraPackagesVersion.controls,
 			'@blockera/bootstrap':

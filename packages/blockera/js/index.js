@@ -39,7 +39,7 @@ import blockeraEditorPackageInfo from '@blockera/editor/package.json';
 import {
 	unstableBootstrapServerSideFeatures,
 	bootstrapEditorStyleEngineFilters,
-} from '@blockera/features';
+} from '@blockera/features-core';
 
 /**
  * Internal dependencies

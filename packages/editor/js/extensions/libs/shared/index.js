@@ -20,8 +20,8 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { ExtensionSlotFill } from '@blockera/features';
 import { Tabs, type TTabProps } from '@blockera/controls';
+import { ExtensionSlotFill } from '@blockera/features-core';
 import { isEquals, isObject, cloneObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
@@ -54,6 +54,7 @@ import {
 	// FIXME: we are double check this to fix re-rendering problems.
 	// propsAreEqual
 } from '../../components/utils';
+import { useBlockSection } from '../../components';
 import StateContainer from '../../components/state-container';
 import { STORE_NAME } from '../base/store/constants';
 import type {
@@ -401,6 +402,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -449,6 +451,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -508,6 +511,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -533,6 +537,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -873,6 +878,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -1301,6 +1307,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -1328,6 +1335,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -1414,6 +1422,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,
@@ -1511,6 +1520,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 										block,
 										settings,
 										attributes,
+										useBlockSection,
 										blockFeatures: additional.blockFeatures,
 										currentStateAttributes,
 										handleOnChangeSettings,

@@ -30,23 +30,6 @@ styleFiles.forEach((currentEntry) => {
 				return;
 			}
 
-			if (
-				'blocks' === match &&
-				'./packages/blocks/core/js/style.scss' !== currentEntry
-			) {
-				const entryName =
-					'block-' +
-					currentEntry
-						.replace(
-							/\.\/packages\/blocks\/core\/js\/wordpress\//,
-							''
-						)
-						.replace(/\/style(s|)\.(scss|css)/, '-styles');
-				Object.assign(styleEntries, {
-					[entryName]: currentEntry,
-				});
-			}
-
 			Object.assign(styleEntries, {
 				[`${match}-styles`]: [
 					...(styleEntries[`${match}-styles`] || []),

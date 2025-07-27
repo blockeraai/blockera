@@ -1,0 +1,10 @@
+{
+	"name": "blockera/feature-icon",
+	"path": "packages/features-library/icon",
+	"dependent": {
+		"repositories": [
+			"https://github.com/blockeraai/blockera.git",
+			"https://github.com/blockeraai/blockera-pro.git"
+		]
+	}
+}

@@ -8,18 +8,18 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isInnerBlock } from '../extensions/components/utils';
-import type { TStates } from '../extensions/libs/block-card/block-states/types';
 import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
-import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 
 /**
+ 
  * Internal dependencies
  */
 import { replaceVariablesValue } from './utils';
 import type { NormalizedSelectorProps } from './types';
-import { isNormalState } from '../extensions/components';
 import { getBlockCSSSelector } from './get-block-css-selector';
+import { isInnerBlock, isNormalState } from '../extensions/components/utils';
+import type { TStates } from '../extensions/libs/block-card/block-states/types';
+import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 
 /**
  * Returns the appropriate state symbol for the given state.

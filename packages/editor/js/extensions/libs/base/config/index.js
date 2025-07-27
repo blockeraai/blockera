@@ -16,3 +16,4 @@ export { conditionsConfig } from './conditions';
 export { advancedSettingsConfig } from './advanced-settings';
 export { innerBlocksConfig } from './inner-blocks';
 export { statesConfig } from './block-states';
+export { iconConfig } from '@blockera/feature-icon/src/extension/supports';

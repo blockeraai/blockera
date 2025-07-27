@@ -4,7 +4,7 @@ namespace Blockera\WordPress\RenderBlock\V1;
 
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
-use Blockera\Features\FeaturesManager;
+use Blockera\Features\Core\FeaturesManager;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**

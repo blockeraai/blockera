@@ -21,6 +21,11 @@ $filtered_packages = array_filter(
                     foreach (glob($dir . '/*', GLOB_ONLYDIR) as $subdir) {
                         $result[] = $subdir;
                     }
+                } elseif (substr($dir, -strlen('/features-library')) === '/features-library') {
+                    // Add all directories inside /features-library
+                    foreach (glob($dir . '/*', GLOB_ONLYDIR) as $subdir) {
+                        $result[] = $subdir;
+                    }
                 } else {
                     $result[] = $dir;
                 }
@@ -52,7 +57,7 @@ $packages = array_map(
 
         $package_name = str_replace(dirname(__DIR__) . '/packages/', '', $package_name);
 
-        if (preg_match('/\bblocks-library\b/', $package_name)) {
+        if (preg_match('/\bblocks-library\b/', $package_name) || preg_match('/\bfeatures-library\b/', $package_name)) {
             $root_dir = dirname(__DIR__) . '/packages/';
 
             ob_start();

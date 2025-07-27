@@ -4,7 +4,7 @@ namespace Blockera\Setup\Providers;
 
 use Blockera\Setup\Blockera;
 use Blockera\Telemetry\Config;
-use Blockera\Features\FeaturesManager;
+use Blockera\Features\Core\FeaturesManager;
 use Blockera\WordPress\RenderBlock\Setup;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -115,7 +115,14 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		$package         = json_decode( ob_get_clean(), true );
 		$package_version = str_replace( '.', '_', $package['version'] );
 
-		return 'blockera' . ucfirst( $package_name ) . '_' . $package_version;
+		// Convert package_name to PascalCase (e.g., "features-core" => "FeaturesCore").
+		$pascal_case_name = str_replace(
+			' ',
+			'',
+			ucwords(str_replace([ '-', '_' ], ' ', $package_name))
+		);
+
+		return 'blockera' . $pascal_case_name . '_' . $package_version;
 	}
 
 	/**
@@ -151,7 +158,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 		$dynamic_value_bootstrapper = 'blockeraData.core.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');';
 		$requested_features         = array_keys($this->app->make(FeaturesManager::class)->getRegisteredFeatures());
-		$features_object            = $this->getPackageObject( 'features' );
+		$features_object            = $this->getPackageObject( 'features-core' );
 
 		$script = 'wp.domReady(() => {
 		blockeraData.core.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
