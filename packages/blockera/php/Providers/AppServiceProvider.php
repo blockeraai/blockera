@@ -116,9 +116,9 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					SavePost::class,
-					function ( Application $app) {
+					function ( Application $app) use ( $plugin_args) {
 
-						return new SavePost($app, new Render($app));
+						return new SavePost($app, new Render($app, $plugin_args));
 					}
 				);
 			}
