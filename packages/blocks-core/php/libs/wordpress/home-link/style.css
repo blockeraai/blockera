@@ -1,10 +1,10 @@
-.wp-block-home-link.blockera-has-icon-end .wp-block-navigation-item__content,
-.wp-block-home-link.blockera-has-icon-start .wp-block-navigation-item__content {
+.wp-block-home-link[class*="blockera-has-icon-"] .wp-block-navigation-item__content {
+	display: flex;
+	align-items: center;
 	justify-content: flex-start;
 }
 
-.wp-block-home-link.blockera-has-icon-end .wp-block-navigation-item__content svg,
-.wp-block-home-link.blockera-has-icon-start .wp-block-navigation-item__content svg {
+.wp-block-home-link[class*="blockera-has-icon-"] .wp-block-navigation-item__content svg {
 	display: inline-block;
 	position: relative;
 	background: var(--blockera--icon--color);
