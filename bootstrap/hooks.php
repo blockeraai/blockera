@@ -10,6 +10,7 @@ register_activation_hook(BLOCKERA_SB_FILE, 'blockera_activation_hook');
 register_deactivation_hook(BLOCKERA_SB_FILE, 'blockera_deactivation_hook');
 
 $setup = Setup::getInstance();
+$setup->setPluginPath(blockera_core_config('app.vendor_path'));
 $setup->setAvailableBlocks(blockera_get_available_blocks());
 add_filter(
     'register_block_type_args',

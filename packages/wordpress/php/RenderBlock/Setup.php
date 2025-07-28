@@ -17,6 +17,13 @@ class Setup {
 	static $instance = null;
 
 	/**
+	 * Store plugin path.
+	 *
+	 * @var string $plugin_path the plugin path.
+	 */
+	protected string $plugin_path;
+
+	/**
 	 * Get instance.
 	 *
 	 * @return self the instance.
@@ -35,6 +42,18 @@ class Setup {
 	 */
 	protected function __construct() {
 		
+	}
+
+	/**
+	 * Set plugin path.
+	 *
+	 * @param string $plugin_path the plugin path.
+	 *
+	 * @return void
+	 */
+	public function setPluginPath( string $plugin_path): void {
+
+		$this->plugin_path = $plugin_path;
 	}
 
     /**
@@ -106,7 +125,7 @@ class Setup {
 
         $blockFile = sprintf(
             '%1$sblockera/blocks-core/php/%2$s/block.php',
-            blockera_core_config('app.vendor_path'),
+            $this->plugin_path,
             $this->getBlockDirectoryPath()
         );
 
