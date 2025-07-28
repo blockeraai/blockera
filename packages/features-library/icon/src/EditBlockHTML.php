@@ -155,31 +155,53 @@ class EditBlockHTML implements EditableBlockHTML {
             return $blockElement->innerhtml;
         }
 
-        $gap          = $block['attrs']['blockeraIconGap']['value'] ?? '0';
-        $iconPosition = $block['attrs']['blockeraIconPosition']['value'] ?? 'left';
+        $iconPosition = $block['attrs']['blockeraIconPosition']['value'] ?? 'start';
+		$properties   = [];
 
-        if (! empty($iconPosition)) {
+		// Handle icon size.
+		$properties['width']  = $block['attrs']['blockeraIconSize']['value'] ?? '1.33em';
+		$properties['height'] = $block['attrs']['blockeraIconSize']['value'] ?? '1.33em';
 
-            $iconHTML = str_replace(
-                '<svg',
-                'left' === $iconPosition ?
-                            sprintf('<svg style="margin-right: %s;"', $gap) :
-                            sprintf('<svg style="margin-left: %s;"', $gap),
-                $iconHTML
-            );
-        }
+        // Handle icon position and gap.
+		$properties[ 'start' === $iconPosition ? 'margin-right' : 'margin-left' ] = $block['attrs']['blockeraIconGap']['value'] ?? '0.5em';
 
         // Handle icon color.
-        
-		$iconHTML = str_replace(
-            empty($iconPosition) ? '<svg' : '<svg style="',
-            sprintf(
-                '<svg style="fill: %s; color: %s;',
-                $block['attrs']['blockeraIconColor']['value'] ?? 'currentColor',
-                $block['attrs']['blockeraIconColor']['value'] ?? 'inherit'
-            ),
-            $iconHTML
+		$properties['fill']  = 'currentColor';
+		$properties['color'] = $block['attrs']['blockeraIconColor']['value'] ?? 'inherit';
+
+		// Handle icon rotate.
+		$rotate = $block['attrs']['blockeraIconRotate']['value'] ?? '';
+		if (! empty($rotate)) {
+			$properties['--blockera--icon--rotate'] = $rotate . 'deg';
+		}
+
+		// Handle icon flip horizontal.
+		$flipHorizontal = $block['attrs']['blockeraIconFlipHorizontal']['value'] ?? '';
+		if (! empty($flipHorizontal)) {
+			$properties['--blockera--icon--flip-horizontal'] = $flipHorizontal ? '-1' : '1';
+		}
+
+		// Handle icon flip vertical.
+		$flipVertical = $block['attrs']['blockeraIconFlipVertical']['value'] ?? '';
+		if (! empty($flipVertical)) {
+			$properties['--blockera--icon--flip-vertical'] = $flipVertical ? '-1' : '1';
+		}
+
+        // Convert properties array to CSS string.
+        $cssString = implode(
+            '; ',
+            array_map(
+                function( $value, $property) {
+                    return $property . ': ' . $value;
+                },
+                $properties,
+                array_keys($properties)
+            )
         );
+        
+		// update style attribute.
+		$iconHTML = str_replace('style="width: 1em; height: 1em;"', '', $iconHTML);
+        $iconHTML = $this->updateStyleAttribute($iconHTML, 'svg', $cssString);
 
         // Handle icon link.
         if (! empty($block['attrs']['blockeraIconLink']['value'])) {
@@ -226,13 +248,13 @@ class EditBlockHTML implements EditableBlockHTML {
 		$combinedContent = '';
 		$originalContent = $blockElement->innerHTML();
 
-		if (empty($iconPosition) || 'left' === $iconPosition) {
+		if (empty($iconPosition) || 'start' === $iconPosition) {
 			$combinedContent = sprintf(
 				'%s%s',
 				$iconHTML,
 				$originalContent
 			);
-		} elseif ('right' === $iconPosition) {
+		} elseif ('end' === $iconPosition) {
 			$combinedContent = sprintf(
 				'%s%s',
 				$originalContent,
@@ -294,6 +316,45 @@ class EditBlockHTML implements EditableBlockHTML {
                 '',
             ],
             $iconHTML
+        );
+    }
+
+    /**
+     * Append or update style attribute in an HTML tag.
+     *
+     * @param string $html The HTML content.
+     * @param string $tag The tag to modify (e.g., 'svg', 'a').
+     * @param string $newStyle The new style to add.
+     *
+     * @return string The HTML with updated style attribute.
+     */
+    protected function updateStyleAttribute( string $html, string $tag, string $newStyle): string {
+        // Pattern to match the opening tag with or without existing style attribute.
+        $pattern = sprintf('/<%s([^>]*?)>/i', preg_quote($tag, '/'));
+        
+        return preg_replace_callback(
+            $pattern,
+            function( $matches) use ( $newStyle, $tag) {
+				$attributes = $matches[1];
+            
+				// Check if style attribute already exists.
+				if (preg_match('/\bstyle\s*=\s*["\']([^"\']*)["\']/i', $attributes, $styleMatch)) {
+					// Style attribute exists, append new style to existing one.
+					$existingStyle = $styleMatch[1];
+					$updatedStyle  = $existingStyle . '; ' . $newStyle;
+                
+					// Replace the existing style attribute.
+					return preg_replace(
+                        '/\bstyle\s*=\s*["\'][^"\']*["\']/i',
+                        sprintf('style="%s"', $updatedStyle),
+                        $matches[0]
+					);
+				} else {
+					// No style attribute exists, add new one.
+					return sprintf('<%s%s style="%s">', $tag, $attributes, $newStyle);
+				}
+			},
+            $html
         );
     }
 }
