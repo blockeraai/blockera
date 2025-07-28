@@ -220,9 +220,9 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->bind(
 				Render::class,
-				static function ( Application $app): Render {
+				static function ( Application $app) use ( $plugin_args) : Render {
 
-					return new Render($app);
+					return new Render($app, $plugin_args);
 				}
 			);
 

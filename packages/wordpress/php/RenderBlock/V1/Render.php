@@ -5,6 +5,7 @@ namespace Blockera\WordPress\RenderBlock\V1;
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Features\Core\FeaturesManager;
+use Blockera\Setup\Traits\AssetsLoaderTrait;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -13,6 +14,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @package Render
  */
 class Render {
+
+	use AssetsLoaderTrait;
 
     /**
      * Hold application instance.
@@ -42,14 +45,30 @@ class Render {
 	 */
 	protected bool $is_doing_transpile = false;
 
+	/**
+	 * Store the args array.
+	 *
+	 * @var array $args the args array.
+	 */
+	protected array $args = [];
+
+	/**
+	 * Store the id.
+	 *
+	 * @var string $id the id.
+	 */
+	protected string $id;
+
     /**
      * Render constructor.
      *
      * @param Application $app the app instance.
+	 * @param array       $args the args array.
 	 * @param bool        $cache_status true if cache is enabled, false otherwise.
      */
-    public function __construct( Application $app, bool $cache_status = true) { 
+    public function __construct( Application $app, array $args = [], bool $cache_status = true) { 
         $this->app          = $app;
+		$this->args         = $args;
 		$this->cache_status = $cache_status;
     }
 
@@ -149,6 +168,18 @@ class Render {
 
             return $html;
         }
+
+		$block_categories = [
+			'core' => 'wordpress',
+			'woocommerce' => 'woocommerce',
+		];
+
+		$extracted_name = explode('/', $block['blockName']);
+
+		$this->id = $extracted_name[1];
+		$this->setContext('blocks-core');
+		$this->setSubContext($block_categories[ $extracted_name[0] ] ?? 'third-party');
+		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
 
         // Extract block attributes.
         $attributes = $block['attrs'];

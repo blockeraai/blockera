@@ -12,6 +12,13 @@ trait AssetsLoaderTrait {
 	protected string $context;
 
 	/**
+	 * Store the sub context.
+	 *
+	 * @var string $sub_context the sub context.
+	 */
+	protected string $sub_context;
+
+	/**
 	 * Set the context.
 	 *
 	 * @param string $context the context.
@@ -21,6 +28,18 @@ trait AssetsLoaderTrait {
 	public function setContext( string $context): void {
 
 		$this->context = $context;
+	}
+
+	/**
+	 * Set the sub context.
+	 *
+	 * @param string $sub_context the sub context.
+	 *
+	 * @return void
+	 */
+	public function setSubContext( string $sub_context): void {
+
+		$this->sub_context = $sub_context;
 	}
 
 	/**
@@ -34,21 +53,38 @@ trait AssetsLoaderTrait {
 	 */
 	public function enqueueAssets( string $base_path, string $base_url, string $version): void {
 
-		if (file_exists($base_path . $this->context . '-' . $this->getId() . '/src/style.css')) {
+		$subdirectory = '/src/';
+
+		switch ($this->context) {
+			case 'blocks-core':
+				$subdirectory = '/php/libs/' . $this->sub_context . '/';
+				$context_path = $base_path . $this->context . $subdirectory . $this->getId() . '/';
+				$context_url  = $base_url . $this->context . $subdirectory . $this->getId() . '/';
+				break;
+
+			default:
+				$subdirectory = '/src/';
+				$context_path = $base_path . $this->context . '-' . $this->getId() . '/' . $subdirectory;
+				$context_url  = $base_url . $this->context . '-' . $this->getId() . '/' . $subdirectory;
+		}
+
+		$css_file_path = $context_path . 'style.css';
+		$js_file_path  = $context_path . 'script.js';
+
+		if (file_exists($css_file_path)) {
 
 			wp_enqueue_style(
 				'blockera-' . $this->context . '-' . $this->getId() . '-style',
-				$base_url . $this->context . '-' . $this->getId() . '/src/style.css',
+				$context_url . 'style.css',
 				[],
 				$version
 			);
 		}
 
-		if (file_exists($base_path . $this->context . '-' . $this->getId() . '/src/script.js')) {
-
+		if (file_exists($js_file_path)) {
 			wp_enqueue_script(
 				'blockera-' . $this->context . '-' . $this->getId() . '-script',
-				$base_url . $this->context . '-' . $this->getId() . '/src/script.js',
+				$context_url . 'script.js',
 				[],
 				$version,
 				[
