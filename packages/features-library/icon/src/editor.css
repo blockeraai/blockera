@@ -8,8 +8,7 @@
 /* Icon Feature */
 
 /* .blockera-is-icon-block is icon block. */
-.editor-styles-wrapper div .blockera-has-icon-start:not(.blockera-is-icon-block),
-.editor-styles-wrapper div .blockera-has-icon-end:not(.blockera-is-icon-block) {
+.editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block) {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
@@ -19,8 +18,7 @@
 	box-shadow: none !important;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start.wp-block-button [data-rich-text-placeholder],
-.editor-styles-wrapper div .blockera-has-icon-end.wp-block-button [data-rich-text-placeholder] {
+.editor-styles-wrapper div [class*="blockera-has-icon-"].wp-block-button [data-rich-text-placeholder] {
 	display: none;
 }
 
@@ -34,8 +32,7 @@
 	margin-right: 0;
 } */
 
-.editor-styles-wrapper div .blockera-has-icon-start > [role="textbox"]:not(.wp-block-button__link),
-.editor-styles-wrapper div .blockera-has-icon-end > [role="textbox"]:not(.wp-block-button__link) {
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > [role="textbox"]:not(.wp-block-button__link) {
 	border-radius: inherit !important;
 	border-width: var(--blockera--icon--border-width, 0) !important;
 	border-style: var(--blockera--icon--border-style, solid) !important;
@@ -47,10 +44,8 @@
 	padding: var(--blockera--icon--padding, 0);
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start > a > [role="textbox"],
-.editor-styles-wrapper div .blockera-has-icon-end > a >[role="textbox"],
-.editor-styles-wrapper div .blockera-has-icon-start > [role="textbox"],
-.editor-styles-wrapper div .blockera-has-icon-end > [role="textbox"] {
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > a > [role="textbox"],
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > [role="textbox"] {
 	display: inline-flex;
 	position: relative;
 	/* margin-left: auto; */
@@ -88,8 +83,7 @@
 	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start > .wp-block-navigation-item__content,
-.editor-styles-wrapper div .blockera-has-icon-end > .wp-block-navigation-item__content {
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > .wp-block-navigation-item__content {
 	display: flex;
 	align-items: center;
 }
