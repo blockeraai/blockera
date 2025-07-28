@@ -1,6 +1,6 @@
 .wp-block-button.blockera-has-icon-end .wp-block-button__link,
 .wp-block-button.blockera-has-icon-start .wp-block-button__link {
-		justify-content: flex-start;
+	justify-content: flex-start;
 }
 
 .wp-block-button.blockera-has-icon-end .wp-block-button__link svg,
