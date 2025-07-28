@@ -34,7 +34,7 @@ return array_merge(
 					'root' => ' .wp-block-home-link__content .blockera-icon',
 				],
 				'htmlEditable' => [
-					'root' => '{{ BLOCK_SELECTOR }} .wp-block-home-link__content div[role="textbox"]',
+					'root' => ' .wp-block-home-link__content',
 				],
 			]
 		),
