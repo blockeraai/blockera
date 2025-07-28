@@ -34,21 +34,21 @@ trait AssetsLoaderTrait {
 	 */
 	public function enqueueAssets( string $base_path, string $base_url, string $version): void {
 
-		if (file_exists($base_path . $this->context . '-' . $this->getId() . '/src/styles.css')) {
+		if (file_exists($base_path . $this->context . '-' . $this->getId() . '/src/style.css')) {
 
 			wp_enqueue_style(
-				'blockera-' . $this->context . '-' . $this->getId() . '-styles',
-				$base_url . $this->context . '-' . $this->getId() . '/src/styles.css',
+				'blockera-' . $this->context . '-' . $this->getId() . '-style',
+				$base_url . $this->context . '-' . $this->getId() . '/src/style.css',
 				[],
 				$version
 			);
 		}
 
-		if (file_exists($base_path . $this->context . '-' . $this->getId() . '/src/scripts.js')) {
+		if (file_exists($base_path . $this->context . '-' . $this->getId() . '/src/script.js')) {
 
 			wp_enqueue_script(
-				'blockera-' . $this->context . '-' . $this->getId() . '-scripts',
-				$base_url . $this->context . '-' . $this->getId() . '/src/scripts.js',
+				'blockera-' . $this->context . '-' . $this->getId() . '-script',
+				$base_url . $this->context . '-' . $this->getId() . '/src/script.js',
 				[],
 				$version,
 				[

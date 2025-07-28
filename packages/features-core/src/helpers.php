@@ -47,11 +47,11 @@ if (! function_exists('blockera_enqueue_features_editor_styles')) {
 
 			$feature_name = basename($feature_path);
 
-			$editor_styles = glob($feature_path . '/src/editor-styles.css');
+			$editor_styles = glob($feature_path . '/src/editor.css');
 
 			if (empty($editor_styles)) {
 
-				$editor_styles = glob($feature_path . '/php/editor-styles.css');
+				$editor_styles = glob($feature_path . '/php/editor.css');
 
 				if (empty($editor_styles)) {
 
@@ -61,7 +61,7 @@ if (! function_exists('blockera_enqueue_features_editor_styles')) {
 
 			wp_enqueue_style(
 				'blockera-feature-' . $feature_name . '-editor-styles',
-				$base_url . $feature_name . '/src/editor-styles.css',
+				$base_url . $feature_name . '/src/editor.css',
 				[],
 				$version
 			);
