@@ -1,10 +1,10 @@
-.wp-block-button.blockera-has-icon-end .wp-block-button__link,
-.wp-block-button.blockera-has-icon-start .wp-block-button__link {
+.wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link {
+	display: flex;
+	align-items: center;
 	justify-content: flex-start;
 }
 
-.wp-block-button.blockera-has-icon-end .wp-block-button__link svg,
-.wp-block-button.blockera-has-icon-start .wp-block-button__link svg {
+.wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link svg {
 	display: inline-block;
 	position: relative;
 	background: var(--blockera--icon--color);
