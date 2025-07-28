@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\Setup\Traits;
+namespace Blockera\Bootstrap\Traits;
 
 trait AssetsLoaderTrait {
 

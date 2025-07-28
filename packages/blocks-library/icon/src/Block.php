@@ -5,7 +5,7 @@ namespace Blockera\Block\Icon;
 use Blockera\Bootstrap\Application;
 use Blockera\Blocks\Core\BlockInterface;
 use Blockera\Feature\Icon\EditBlockHTML;
-use Blockera\Setup\Traits\AssetsLoaderTrait;
+use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
 class Block implements BlockInterface {

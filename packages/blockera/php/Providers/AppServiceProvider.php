@@ -188,14 +188,15 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					V2RenderContent::class,
-					static function ( Application $app) use ( $cache_instance, $vendor_path): V2RenderContent {
+					static function ( Application $app) use ( $cache_instance, $vendor_path, $plugin_args): V2RenderContent {
 
 						$render_content_instance = new V2RenderContent(
 							$app,
 							$app->make(Transpiler::class),
 							[
 								'cache' => $cache_instance,
-								'render' => new Render($app, false),
+								'plugin_args' => $plugin_args,
+								'render' => new Render($app, $plugin_args, false),
 							]
 						);
 

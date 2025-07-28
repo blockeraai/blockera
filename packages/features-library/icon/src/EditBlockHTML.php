@@ -6,7 +6,7 @@ use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Block\Icon\Block as IconBlock;
-use Blockera\Setup\Traits\AssetsLoaderTrait;
+use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
 class EditBlockHTML implements EditableBlockHTML {
