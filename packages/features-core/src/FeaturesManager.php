@@ -14,13 +14,23 @@ class FeaturesManager {
      */
     protected Application $app;
 
+	/**
+	 * Store the plugin args.
+	 *
+	 * @var array $args The plugin args.
+	 */
+	protected array $args;
+
     /**
      * Features manager constructor.
      *
      * @param Application $app
+	 * @param array       $args The plugin args.
      */
-    public function __construct( Application $app) { 
-        $this->app = $app;
+    public function __construct( Application $app, array $args = []) {
+
+        $this->app  = $app;
+        $this->args = $args;
     }
 
     /**
@@ -63,7 +73,7 @@ class FeaturesManager {
             }
 
             $this->features[ $key ] = $feature;
-            $feature->register($this->app);
+            $feature->register($this->app, $this->args);
         }
 
         return $this;

@@ -2,6 +2,7 @@
 
 namespace Blockera\Feature\Icon;
 
+use Blockera\Bootstrap\Application;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Core\Traits\Singleton;
 use Blockera\Features\Core\Traits\ApplicationTrait;
@@ -25,7 +26,18 @@ class Icon implements FeatureInterface {
 	 */
 	protected EditBlockHTML $edit_block_html;
 
-    public function register(): void {
+	/**
+	 * Register the feature.
+	 *
+	 * @param Application $app the application instance.
+	 * @param array       $args the plugin args.
+	 * 
+	 * @return void
+	 */
+    public function register( Application $app, array $args = []): void {
+
+		$this->setApp($app);
+		$this->args = $args;
 		
 		$config_file = __DIR__ . '/icon.schema.json';
 
@@ -65,7 +77,8 @@ class Icon implements FeatureInterface {
 			return $html;
 		}
 
-		$data['app'] = $this->app;
+		$this->args['app'] = $this->app;
+		$data              = array_merge($data, $this->args);
 
 		return $this->edit_block_html->htmlManipulate( $html, $data );
 	}

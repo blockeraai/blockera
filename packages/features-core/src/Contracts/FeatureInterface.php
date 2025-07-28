@@ -2,6 +2,7 @@
 
 namespace Blockera\Features\Core\Contracts;
 
+use Blockera\Bootstrap\Application;
 use Blockera\Utils\Adapters\DomParser;
 
 interface FeatureInterface {
@@ -9,9 +10,12 @@ interface FeatureInterface {
     /**
 	 * The register method.
 	 *
+	 * @param Application $app the application instance.
+	 * @param array       $args the plugin args.
+	 * 
 	 * @return void
 	 */
-	public function register(): void;
+	public function register( Application $app, array $args = []): void;
 
     /**
 	 * The boot method.

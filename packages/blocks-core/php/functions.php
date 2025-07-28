@@ -54,15 +54,40 @@ if ( ! function_exists( 'blockera_get_shared_block_attributes' ) ) {
 
 if (! function_exists('blockera_enqueue_blocks_editor_styles')) {
 	/**
-	 * Enqueue the blockera blocks editor styles.
+	 * Enqueue the blockera blocks editor styles assets.
 	 * 
+	 * @param string $base_path The base path of the plugin.
 	 * @param string $base_url The base url of the plugin.
 	 * @param string $version The version of the plugin.
 	 *
 	 * @return void
 	 */
-	function blockera_enqueue_blocks_editor_styles( string $base_url, string $version) {
+	function blockera_enqueue_blocks_editor_styles( string $base_path, string $base_url, string $version) {
 
-		do_action('blockera_enqueue_blocks_editor_styles', $base_url, $version);
+		$blocks = glob($base_path . 'block-*', GLOB_ONLYDIR);
+
+		foreach ($blocks as $block_path) {
+
+			$block_name = basename($block_path);
+
+			$editor_styles = glob($block_path . '/src/editor-styles.css');
+
+			if (empty($editor_styles)) {
+
+				$editor_styles = glob($block_path . '/php/editor-styles.css');
+
+				if (empty($editor_styles)) {
+
+					continue;
+				}
+			}
+
+			wp_enqueue_style(
+				'blockera-block-' . $block_name . '-editor-styles',
+				$base_url . $block_name . '/src/editor-styles.css',
+				[],
+				$version
+			);
+		}
 	}
 }

@@ -5,9 +5,19 @@ namespace Blockera\Block\Icon;
 use Blockera\Bootstrap\Application;
 use Blockera\Blocks\Core\BlockInterface;
 use Blockera\Feature\Icon\EditBlockHTML;
+use Blockera\Setup\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
 class Block implements BlockInterface {
+
+	use AssetsLoaderTrait;
+
+	/**
+	 * Store the block id.
+	 *
+	 * @var string $id the block id.
+	 */
+	protected string $id = 'icon';
 
 	/**
 	 * Store the application instance.
@@ -78,6 +88,13 @@ class Block implements BlockInterface {
 		if (! $dom) {
 			return $html;
 		}
+
+		$this->setContext('block');
+		$this->enqueueAssets(
+			$this->args['plugin_base_path'],
+			$this->args['plugin_base_url'],
+			$this->args['plugin_version']
+		);
 
 		foreach ($dom->find('img') as $img) {
 			$img->outertext = '';

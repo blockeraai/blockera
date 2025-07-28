@@ -59,20 +59,26 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
+			$plugin_args = [
+				'plugin_base_path' => blockera_core_config('app.vendor_path') . 'blockera/',
+				'plugin_base_url' => blockera_core_config('app.vendor_url') . 'blockera/',
+				'plugin_version' => blockera_core_config('app.version'),
+			];
+
 			$this->app->singleton(
                 IconBlock::class,
-                function ( Application $app, array $args = []): IconBlock {
+                function ( Application $app, array $args = []) use ( $plugin_args): IconBlock {
 
-					return new IconBlock($app, $args);
+					return new IconBlock($app, array_merge($args, $plugin_args));
 				}
             );
 			
 			$this->app->singleton(
                 FeaturesManager::class,
-                function ( Application $app) {
+                function ( Application $app) use ( $plugin_args) {
 					$app->dom_parser = $app->make(DomParser::class);
 
-					return new FeaturesManager($app);
+					return new FeaturesManager($app, $plugin_args);
 				}
             );
 

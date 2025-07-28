@@ -14,6 +14,13 @@ trait ApplicationTrait {
 	protected Application $app;
 
 	/**
+	 * Store the plugin args.
+	 *
+	 * @var array $args the plugin args.
+	 */
+	protected array $args;
+
+	/**
 	 * Set the instance of the application.
 	 *
 	 * @param Application $app the instance of the application.

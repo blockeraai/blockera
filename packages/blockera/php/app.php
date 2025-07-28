@@ -39,7 +39,6 @@ if (is_admin()) {
 }
 
 blockera_load('telemetry.php.hooks', $external_dir);
-blockera_load('blocks-library-hooks', __DIR__);
 
 // Initialize core components with optimized bootstrap.
 $blockera->bootstrap();

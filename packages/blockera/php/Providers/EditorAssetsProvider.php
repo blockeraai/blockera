@@ -73,10 +73,12 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		add_action(
             'enqueue_block_editor_assets',
             function () {
-				blockera_enqueue_blocks_editor_styles(
-                    blockera_core_config( 'app.vendor_url' ),
-                    blockera_core_config( 'app.version' )
-				);
+                $version   = blockera_core_config('app.version');
+                $base_url  = blockera_core_config('app.vendor_url') . 'blockera/';
+				$base_path = blockera_core_config( 'app.vendor_path' ) . 'blockera/';
+
+				blockera_enqueue_blocks_editor_styles($base_path, $base_url, $version);
+				blockera_enqueue_features_editor_styles($base_path, $base_url, $version);
 			} 
         );
 	}

@@ -6,9 +6,19 @@ use voku\helper\SimpleHtmlDom;
 use Blockera\Icons\IconsManager;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Block\Icon\Block as IconBlock;
+use Blockera\Setup\Traits\AssetsLoaderTrait;
 use Blockera\Features\Core\Contracts\EditableBlockHTML;
 
 class EditBlockHTML implements EditableBlockHTML {
+
+	use AssetsLoaderTrait;
+
+	/**
+	 * Store the id.
+	 *
+	 * @var string $id the id.
+	 */
+	protected string $id = 'icon';
 
     /**
      * Store the blocks configuration.
@@ -47,6 +57,9 @@ class EditBlockHTML implements EditableBlockHTML {
 			'app'          => $app,
             'block'        => $block,
         ] = $data;
+		
+		$this->setContext('feature');
+		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
         $blockElement = $this->findBlockElement($data);
 
