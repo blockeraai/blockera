@@ -15,7 +15,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import searchIndex from './search.json';
+import searchIndex from './search-index.json';
 import type { IconLibraryTypes } from './types';
 // WP Library
 import { WPIcons } from './library-wp';
@@ -36,6 +36,7 @@ import { default as LibraryCursorIcon } from './library-cursor/library-icon';
 import { SocialIcons } from './library-social';
 import SocialIconsSearchData from './library-social/search-data.json';
 import { default as SocialIcon } from './library-social/library-icon';
+import searchLibraries from './search-libraries.json';
 
 export const IconLibraries: {
 	[key: string]: {
@@ -119,6 +120,21 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 	return {};
 }
 
+function _getLibraryIcons(library: IconLibraryTypes): Array<any> {
+	switch (library) {
+		case 'wp':
+			return WPIconsSearchData;
+		case 'blockera':
+			return IconsSearchData;
+		case 'cursor':
+			return CursorIconsSearchData;
+		case 'social':
+			return SocialIconsSearchData;
+	}
+
+	return [];
+}
+
 export function getIconLibrarySearchData(
 	library: IconLibraryTypes | 'all'
 ): Array<any> {
@@ -127,35 +143,21 @@ export function getIconLibrarySearchData(
 	if (library === 'all' || isValidIconLibrary(library))
 		switch (library) {
 			case 'all':
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, WPIconsSearchData);
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, IconsSearchData);
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, CursorIconsSearchData);
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, SocialIconsSearchData);
-				// $FlowFixMe
+				searchLibraries.forEach((library) => {
+					// $FlowFixMe
+					Array.prototype.push.apply(
+						searchData,
+						_getLibraryIcons(library)
+					);
+				});
 				break;
 
-			case 'wp':
+			default:
 				// $FlowFixMe
-				Array.prototype.push.apply(searchData, WPIconsSearchData);
-				break;
-
-			case 'blockera':
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, IconsSearchData);
-				break;
-
-			case 'social':
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, SocialIconsSearchData);
-				break;
-
-			case 'cursor':
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, CursorIconsSearchData);
+				Array.prototype.push.apply(
+					searchData,
+					_getLibraryIcons(library)
+				);
 				break;
 		}
 
