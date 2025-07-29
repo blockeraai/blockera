@@ -41,34 +41,25 @@ for (const file of jsonFiles) {
 	}
 }
 
-// We define which keys in our objects should be searched and how much weight they should have.
-// A higher weight means matches in that key are more relevant.
-const options = {
-	// `includeScore` is useful for debugging or advanced sorting.
-	includeScore: true,
-	// `threshold` determines how "fuzzy" the search is. 0.0 is a perfect match, 1.0 matches anything.
-	threshold: 0.4,
-	// `keys` specifies the properties to search in.
-	keys: [
-		{
-			name: 'title', // Search the 'title' property
-			weight: 2, // Give it a high weight, as titles are very important.
-		},
-		{
-			name: 'tags', // Search the 'tags' array
-			weight: 1.5, // Tags are also very important.
-		},
-		{
-			name: 'iconName', // Search the 'iconName'
-			weight: 1, // Less important than title/tags, but still relevant.
-		},
-	],
-};
+const keys = [
+	{
+		name: 'title', // Search the 'title' property
+		weight: 2, // Give it a high weight, as titles are very important.
+	},
+	{
+		name: 'tags', // Search the 'tags' array
+		weight: 1.5, // Tags are also very important.
+	},
+	{
+		name: 'iconName', // Search the 'iconName'
+		weight: 1, // Less important than title/tags, but still relevant.
+	},
+];
 
 /**
  * Create the search index using Fuse.js.
  */
-const index = Fuse.createIndex(options.keys, icons);
+const index = Fuse.createIndex(keys, icons);
 
 /**
  * Write the index to the specified destination file.
