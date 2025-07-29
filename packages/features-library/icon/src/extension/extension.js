@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement, ComponentType } from 'react';
 import { memo, createRoot, useCallback, useState } from '@wordpress/element';
 
@@ -620,7 +620,18 @@ export const IconExtension: ComponentType<{
 									<Button
 										showTooltip={true}
 										tooltipPosition="top"
-										label={__('Rotate', 'blockera')}
+										label={
+											iconState.iconRotate !== ''
+												? sprintf(
+														// translators: %s is the icon rotation degree.
+														__(
+															'Rotated %s°',
+															'blockera'
+														),
+														iconState.iconRotate
+												  )
+												: __('Rotate', 'blockera')
+										}
 										size="extra-small"
 										style={{
 											padding: '4px',
