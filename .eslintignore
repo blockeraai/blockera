@@ -14,3 +14,4 @@ wordpress*
 **/test/*
 **/stories/*
 /bin/plugin/**
+/bin/create-search-index.js
