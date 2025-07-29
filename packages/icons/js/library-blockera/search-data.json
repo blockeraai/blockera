@@ -1,14 +1,20 @@
 [
 	{
 		"iconName": "blockera",
-		"title": "blockera",
+		"title": "Blockera",
 		"library": "blockera",
-		"tags": []
+		"tags": ["blockera", "blockera-logo", "logo"]
 	},
 	{
-		"iconName": "blockeraCircle",
-		"title": " Circle",
+		"iconName": "blockeraCube",
+		"title": "Blockera Cube",
 		"library": "blockera",
-		"tags": []
+		"tags": ["blockera", "blockera-cube", "logo", "cube"]
+	},
+	{
+		"iconName": "blockeraOne",
+		"title": "Blockera One",
+		"library": "blockera",
+		"tags": ["blockera", "blockera-one", "logo", "one"]
 	}
 ]
