@@ -27,8 +27,7 @@
 	display: none !important;
 }
 
-/* Can't use important. */
-.wp-block-image.wp-block-image.is-selected .components-placeholder {
+.blockera-is-icon-block.blockera-is-icon-block .components-placeholder {
 	box-shadow: none;
 	background-color: transparent;
 	padding: 0;
