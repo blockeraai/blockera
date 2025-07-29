@@ -25,6 +25,7 @@ if (experimental().get('editor.extensions.iconExtension')) {
 		});
 
 		context('Functional', () => {
+			// @debug-ignore
 			it.skip('should be able to upload custom svg when there is selected icon', () => {
 				// act
 				cy.get('[aria-label="button Icon"]').click();
@@ -52,6 +53,7 @@ if (experimental().get('editor.extensions.iconExtension')) {
 				});
 			});
 
+			// @debug-ignore
 			it.skip('should be able to add new icon from library', () => {
 				// act
 				cy.get('[aria-label="Icon Library"]').click();
