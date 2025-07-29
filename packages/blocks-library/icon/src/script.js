@@ -4,7 +4,7 @@ class IconBlock {
 	}
 
 	init() {
-		console.log('Debugging the IconBlock scripts ...');
+		// console.log('Debugging the IconBlock scripts ...');
 	}
 }
 

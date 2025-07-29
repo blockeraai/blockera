@@ -4,7 +4,7 @@ class IconFeature {
 	}
 
 	init() {
-		console.log('Debugging IconFeature scripts ...');
+		// console.log('Debugging IconFeature scripts ...');
 	}
 }
 
