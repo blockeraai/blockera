@@ -227,7 +227,7 @@
 		"storybook:build": "storybook build",
 		"storybook:test": "test-storybook",
 		"storybook:test:start": "test-storybook --watch",
-		"icons:indexing": "node packages/components/bin/icons/index.js search.json",
+		"icons:indexing": "node bin/create-search-index.js search.json",
 		"env": "wp-env",
 		"env:stop": "npm run env stop",
 		"env:start": "node .github/scripts/setup-wp-env.js && wp-env start",
