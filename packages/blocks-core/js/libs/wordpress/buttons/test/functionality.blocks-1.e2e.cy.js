@@ -199,7 +199,7 @@ describe('Buttons Block', () => {
 
 		let expectedCSS = '.wp-block-button__link{text-decoration:inherit';
 
-		cy.get('link[id^="@blockera/blocks-styles-"]')
+		cy.get('link[id^="@blockera/blocks-core-styles-"]')
 			.should('exist')
 			.then(($link) => {
 				// Fetch the CSS file content
