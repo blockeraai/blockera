@@ -14,11 +14,45 @@ function resolveProjectPath(relativePath) {
 }
 
 /**
- * Get all relevant JSON files, excluding index files.
+ * Load search libraries from the configuration file
  */
-const jsonFiles = glob
-	.sync('./packages/icons/js/**/*.json')
-	.filter((file) => !/fuse-index|search-index/i.test(file));
+const searchLibrariesPath = resolveProjectPath(
+	'./packages/icons/js/search-libraries.json'
+);
+let searchLibraries = [];
+try {
+	searchLibraries = require(searchLibrariesPath);
+} catch (err) {
+	console.error(
+		`Failed to load search libraries from ${searchLibrariesPath}:`,
+		err
+	);
+	process.exit(1);
+}
+
+/**
+ * Load search configuration from the config file
+ */
+const searchConfigPath = resolveProjectPath(
+	'./packages/icons/js/search-config.json'
+);
+let searchConfig = {};
+try {
+	searchConfig = require(searchConfigPath);
+} catch (err) {
+	console.error(
+		`Failed to load search config from ${searchConfigPath}:`,
+		err
+	);
+	process.exit(1);
+}
+
+/**
+ * Generate jsonFiles array based on search libraries
+ */
+const jsonFiles = searchLibraries.map(
+	(library) => `./packages/icons/js/library-${library}/search-data.json`
+);
 
 /**
  * Load and flatten all icon data from JSON files.
@@ -41,18 +75,18 @@ for (const file of jsonFiles) {
 	}
 }
 
-const keys = [
+console.log('Library Search Data Files:', jsonFiles);
+
+console.log('Total Icons:', icons.length);
+
+const keys = searchConfig.keys || [
 	{
-		name: 'title', // Search the 'title' property
-		weight: 2, // Give it a high weight, as titles are very important.
+		name: 'title',
+		weight: 0.5,
 	},
 	{
-		name: 'tags', // Search the 'tags' array
-		weight: 1.5, // Tags are also very important.
-	},
-	{
-		name: 'iconName', // Search the 'iconName'
-		weight: 1, // Less important than title/tags, but still relevant.
+		name: 'tags',
+		weight: 0.2,
 	},
 ];
 
