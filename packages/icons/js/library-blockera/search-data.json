@@ -1,20 +1,20 @@
 [
 	{
 		"iconName": "blockera",
-		"title": "Blockera",
+		"title": "blockera",
 		"library": "blockera",
-		"tags": ["blockera", "blockera-logo", "logo"]
+		"tags": []
 	},
 	{
-		"iconName": "blockeraCube",
-		"title": "Blockera Cube",
+		"iconName": "blockera-cube",
+		"title": "cube",
 		"library": "blockera",
-		"tags": ["blockera", "blockera-cube", "logo", "cube"]
+		"tags": ["blockera", "cube"]
 	},
 	{
-		"iconName": "blockeraOne",
-		"title": "Blockera One",
+		"iconName": "blockera-one",
+		"title": "one",
 		"library": "blockera",
-		"tags": ["blockera", "blockera-one", "logo", "one"]
+		"tags": ["blockera", "one"]
 	}
 ]

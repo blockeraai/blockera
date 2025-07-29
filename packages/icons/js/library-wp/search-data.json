@@ -1,48 +1,48 @@
 [
 	{
-		"iconName": "addCard",
+		"iconName": "add-card",
 		"title": "add Card",
 		"library": "wp",
 		"tags": ["card", "credit", "payment"]
 	},
 	{
-		"iconName": "addSubmenu",
+		"iconName": "add-submenu",
 		"title": "add Submenu",
 		"library": "wp",
-		"tags": ["submenu", "expand", "sublist"]
+		"tags": ["submenu", "expand"]
 	},
 	{
-		"iconName": "addTemplate",
+		"iconName": "add-template",
 		"title": "add Template",
 		"library": "wp",
 		"tags": ["template", "layout", "design"]
 	},
 	{
-		"iconName": "alignCenter",
+		"iconName": "align-center",
 		"title": "align Center",
 		"library": "wp",
 		"tags": ["center", "middle", "horizontal"]
 	},
 	{
-		"iconName": "alignJustify",
+		"iconName": "align-justify",
 		"title": "align Justify",
 		"library": "wp",
 		"tags": ["justify", "even", "spread"]
 	},
 	{
-		"iconName": "alignLeft",
+		"iconName": "align-left",
 		"title": "align Left",
 		"library": "wp",
 		"tags": ["left", "start", "beginning"]
 	},
 	{
-		"iconName": "alignNone",
+		"iconName": "align-none",
 		"title": "align None",
 		"library": "wp",
 		"tags": ["none", "default", "standard"]
 	},
 	{
-		"iconName": "alignRight",
+		"iconName": "align-right",
 		"title": "align Right",
 		"library": "wp",
 		"tags": ["right", "end", "finish"]
@@ -54,37 +54,37 @@
 		"tags": ["archive", "store", "save"]
 	},
 	{
-		"iconName": "arrowDown",
+		"iconName": "arrow-down",
 		"title": "arrow Down",
 		"library": "wp",
 		"tags": ["down", "arrow", "point"]
 	},
 	{
-		"iconName": "arrowLeft",
+		"iconName": "arrow-left",
 		"title": "arrow Left",
 		"library": "wp",
 		"tags": ["back", "previous", "return"]
 	},
 	{
-		"iconName": "arrowRight",
+		"iconName": "arrow-right",
 		"title": "arrow Right",
 		"library": "wp",
 		"tags": ["forward", "next", "proceed"]
 	},
 	{
-		"iconName": "arrowUp",
+		"iconName": "arrow-up",
 		"title": "arrow Up",
 		"library": "wp",
 		"tags": ["upward", "ascend", "climb"]
 	},
 	{
-		"iconName": "aspectRatio",
+		"iconName": "aspect-ratio",
 		"title": "aspect Ratio",
 		"library": "wp",
 		"tags": ["proportion", "scale", "dimension"]
 	},
 	{
-		"iconName": "atSymbol",
+		"iconName": "at-symbol",
 		"title": "at Symbol",
 		"library": "wp",
 		"tags": ["email", "contact", "address"]
@@ -102,19 +102,19 @@
 		"tags": ["save", "copy", "protect"]
 	},
 	{
-		"iconName": "blockDefault",
+		"iconName": "block-default",
 		"title": "block Default",
 		"library": "wp",
 		"tags": ["default", "standard", "normal"]
 	},
 	{
-		"iconName": "blockMeta",
+		"iconName": "block-meta",
 		"title": "block Meta",
 		"library": "wp",
 		"tags": ["metadata", "information", "data"]
 	},
 	{
-		"iconName": "blockTable",
+		"iconName": "block-table",
 		"title": "block Table",
 		"library": "wp",
 		"tags": ["table", "list", "chart"]
@@ -147,13 +147,13 @@
 		"iconName": "button",
 		"title": "button",
 		"library": "wp",
-		"tags": ["switch", "control", "click"]
+		"tags": ["switch", "control", "cta", "click"]
 	},
 	{
 		"iconName": "buttons",
 		"title": "buttons",
 		"library": "wp",
-		"tags": ["controls", "options", "choices"]
+		"tags": ["controls", "options", "choices", "cta"]
 	},
 	{
 		"iconName": "calendar",
@@ -162,7 +162,7 @@
 		"tags": ["schedule", "agenda", "datebook"]
 	},
 	{
-		"iconName": "cancelCircleFilled",
+		"iconName": "cancel-circle-filled",
 		"title": "cancel Circle Filled",
 		"library": "wp",
 		"tags": ["delete", "remove", "erase"]
@@ -174,13 +174,13 @@
 		"tags": ["heading", "title", "headline"]
 	},
 	{
-		"iconName": "capturePhoto",
+		"iconName": "capture-photo",
 		"title": "capture Photo",
 		"library": "wp",
 		"tags": ["take picture", "snap photo", "shoot image"]
 	},
 	{
-		"iconName": "captureVideo",
+		"iconName": "capture-video",
 		"title": "capture Video",
 		"library": "wp",
 		"tags": ["video recording", "film", "record", "camera"]
@@ -192,7 +192,7 @@
 		"tags": ["classification", "grouping", "categorization", "folder"]
 	},
 	{
-		"iconName": "chartBar",
+		"iconName": "chart-bar",
 		"title": "chart Bar",
 		"library": "wp",
 		"tags": ["graph", "statistics", "data visualization"]
@@ -204,43 +204,43 @@
 		"tags": ["tick", "confirm", "approve"]
 	},
 	{
-		"iconName": "chevronDown",
+		"iconName": "chevron-down",
 		"title": "chevron Down",
 		"library": "wp",
 		"tags": ["arrow down", "scroll", "dropdown"]
 	},
 	{
-		"iconName": "chevronLeft",
+		"iconName": "chevron-left",
 		"title": "chevron Left",
 		"library": "wp",
 		"tags": ["arrow left", "back", "previous"]
 	},
 	{
-		"iconName": "chevronLeftSmall",
+		"iconName": "chevron-left-small",
 		"title": "chevron Left Small",
 		"library": "wp",
 		"tags": ["arrow left", "back", "previous"]
 	},
 	{
-		"iconName": "chevronRight",
+		"iconName": "chevron-right",
 		"title": "chevron Right",
 		"library": "wp",
 		"tags": ["arrow right", "forward", "next"]
 	},
 	{
-		"iconName": "chevronRightSmall",
+		"iconName": "chevron-right-small",
 		"title": "chevron Right Small",
 		"library": "wp",
 		"tags": ["arrow right", "forward", "next"]
 	},
 	{
-		"iconName": "chevronUp",
+		"iconName": "chevron-up",
 		"title": "chevron Up",
 		"library": "wp",
 		"tags": ["arrow up", "scroll", "scroll to top"]
 	},
 	{
-		"iconName": "chevronUpDown",
+		"iconName": "chevron-up-down",
 		"title": "chevron Up Down",
 		"library": "wp",
 		"tags": ["Arrow", "Directional", "Toggle"]
@@ -258,7 +258,7 @@
 		"tags": ["Delete", "Remove", "Exit"]
 	},
 	{
-		"iconName": "closeSmall",
+		"iconName": "close-small",
 		"title": "close Small",
 		"library": "wp",
 		"tags": ["Delete", "Remove", "Exit"]
@@ -270,7 +270,7 @@
 		"tags": ["Weather", "Storage", "Internet"]
 	},
 	{
-		"iconName": "cloudUpload",
+		"iconName": "cloud-upload",
 		"title": "cloud Upload",
 		"library": "wp",
 		"tags": ["Upload", "Save", "Backup"]
@@ -312,31 +312,31 @@
 		"tags": ["message", "response", "feedback"]
 	},
 	{
-		"iconName": "commentAuthorAvatar",
+		"iconName": "comment-author-avatar",
 		"title": "comment Author Avatar",
 		"library": "wp",
 		"tags": ["profile", "user", "picture"]
 	},
 	{
-		"iconName": "commentAuthorName",
+		"iconName": "comment-author-name",
 		"title": "comment Author Name",
 		"library": "wp",
 		"tags": ["username", "handle", "screen name"]
 	},
 	{
-		"iconName": "commentContent",
+		"iconName": "comment-content",
 		"title": "comment Content",
 		"library": "wp",
 		"tags": ["text", "message body", "feedback content"]
 	},
 	{
-		"iconName": "commentEditLink",
+		"iconName": "comment-edit-link",
 		"title": "comment Edit Link",
 		"library": "wp",
 		"tags": ["update", "modify", "change"]
 	},
 	{
-		"iconName": "commentReplyLink",
+		"iconName": "comment-reply-link",
 		"title": "comment Reply Link",
 		"library": "wp",
 		"tags": ["response", "answer", "react"]
@@ -366,31 +366,31 @@
 		"tags": ["cut", "trim", "resize"]
 	},
 	{
-		"iconName": "currencyDollar",
+		"iconName": "currency-dollar",
 		"title": "currency Dollar",
 		"library": "wp",
 		"tags": ["money", "cash", "USD"]
 	},
 	{
-		"iconName": "currencyEuro",
+		"iconName": "currency-euro",
 		"title": "currency Euro",
 		"library": "wp",
 		"tags": ["euro", "currency", "EUR"]
 	},
 	{
-		"iconName": "currencyPound",
+		"iconName": "currency-pound",
 		"title": "currency Pound",
 		"library": "wp",
 		"tags": ["pound", "money", "GBP"]
 	},
 	{
-		"iconName": "customLink",
+		"iconName": "custom-link",
 		"title": "custom Link",
 		"library": "wp",
 		"tags": ["hyperlink", "URL", "link"]
 	},
 	{
-		"iconName": "customPostType",
+		"iconName": "custom-post-type",
 		"title": "custom Post Type",
 		"library": "wp",
 		"tags": ["post type", "custom", "content"]
@@ -408,19 +408,19 @@
 		"tags": ["downloading", "save", "get"]
 	},
 	{
-		"iconName": "dragHandle",
+		"iconName": "drag-handle",
 		"title": "drag Handle",
 		"library": "wp",
 		"tags": ["move", "grab", "handle"]
 	},
 	{
-		"iconName": "drawerLeft",
+		"iconName": "drawer-left",
 		"title": "drawer Left",
 		"library": "wp",
 		"tags": ["drawer", "menu", "navigation"]
 	},
 	{
-		"iconName": "drawerRight",
+		"iconName": "drawer-right",
 		"title": "drawer Right",
 		"library": "wp",
 		"tags": ["drawer", "menu", "navigation"]
@@ -450,13 +450,13 @@
 		"tags": ["sort", "organize", "refine"]
 	},
 	{
-		"iconName": "flipHorizontal",
+		"iconName": "flip-horizontal",
 		"title": "flip Horizontal",
 		"library": "wp",
 		"tags": ["mirror", "reverse", "flip left"]
 	},
 	{
-		"iconName": "flipVertical",
+		"iconName": "flip-vertical",
 		"title": "flip Vertical",
 		"library": "wp",
 		"tags": ["mirror up", "reverse up", "flip top"]
@@ -468,103 +468,103 @@
 		"tags": ["bottom", "end", "finishing"]
 	},
 	{
-		"iconName": "formatBold",
+		"iconName": "format-bold",
 		"title": "format Bold",
 		"library": "wp",
 		"tags": ["strong", "heavy", "thick"]
 	},
 	{
-		"iconName": "formatCapitalize",
+		"iconName": "format-capitalize",
 		"title": "format Capitalize",
 		"library": "wp",
 		"tags": ["uppercase", "first letter", "capitalize"]
 	},
 	{
-		"iconName": "formatIndent",
+		"iconName": "format-indent",
 		"title": "format Indent",
 		"library": "wp",
 		"tags": ["tab", "align", "spacing"]
 	},
 	{
-		"iconName": "formatIndentRTL",
+		"iconName": "format-indent-r-t-l",
 		"title": "format Indent R T L",
 		"library": "wp",
 		"tags": ["tab right", "align right", "spacing right"]
 	},
 	{
-		"iconName": "formatItalic",
+		"iconName": "format-italic",
 		"title": "format Italic",
 		"library": "wp",
 		"tags": ["italic", "emphasis", "text style"]
 	},
 	{
-		"iconName": "formatListBullets",
+		"iconName": "format-list-bullets",
 		"title": "format List Bullets",
 		"library": "wp",
 		"tags": ["list", "bullet", "unordered list"]
 	},
 	{
-		"iconName": "formatListBulletsRTL",
+		"iconName": "format-list-bullets-r-t-l",
 		"title": "format List Bullets R T L",
 		"library": "wp",
 		"tags": ["list", "bullet", "right to left"]
 	},
 	{
-		"iconName": "formatListNumbered",
+		"iconName": "format-list-numbered",
 		"title": "format List Numbered",
 		"library": "wp",
 		"tags": ["list", "numbered list", "ordered list"]
 	},
 	{
-		"iconName": "formatListNumberedRTL",
+		"iconName": "format-list-numbered-r-t-l",
 		"title": "format List Numbered R T L",
 		"library": "wp",
 		"tags": ["list", "numbered list", "ordered list", "right to left"]
 	},
 	{
-		"iconName": "formatLowercase",
+		"iconName": "format-lowercase",
 		"title": "format Lowercase",
 		"library": "wp",
 		"tags": ["lowercase", "text transform"]
 	},
 	{
-		"iconName": "formatLtr",
+		"iconName": "format-ltr",
 		"title": "format Ltr",
 		"library": "wp",
 		"tags": ["left to right", "text direction"]
 	},
 	{
-		"iconName": "formatOutdent",
+		"iconName": "format-outdent",
 		"title": "format Outdent",
 		"library": "wp",
 		"tags": ["outdent", "decrease indent", "move left"]
 	},
 	{
-		"iconName": "formatOutdentRTL",
+		"iconName": "format-outdent-r-t-l",
 		"title": "format Outdent RTL",
 		"library": "wp",
 		"tags": ["outdent", "decrease indent", "move right to left"]
 	},
 	{
-		"iconName": "formatRtl",
+		"iconName": "format-rtl",
 		"title": "format Rtl",
 		"library": "wp",
 		"tags": ["right to left", "rtl text", "bidirectional"]
 	},
 	{
-		"iconName": "formatStrikethrough",
+		"iconName": "format-strikethrough",
 		"title": "format Strikethrough",
 		"library": "wp",
 		"tags": ["line through", "delete", "cancel"]
 	},
 	{
-		"iconName": "formatUnderline",
+		"iconName": "format-underline",
 		"title": "format Underline",
 		"library": "wp",
 		"tags": ["underscore", "emphasis", "highlight"]
 	},
 	{
-		"iconName": "formatUppercase",
+		"iconName": "format-uppercase",
 		"title": "format Uppercase",
 		"library": "wp",
 		"tags": ["all caps", "uppercase letters", "capitalized"]
@@ -624,7 +624,7 @@
 		"tags": ["question", "support", "assistance"]
 	},
 	{
-		"iconName": "helpFilled",
+		"iconName": "help-filled",
 		"title": "help Filled",
 		"library": "wp",
 		"tags": ["question", "support", "assistance"]
@@ -660,13 +660,13 @@
 		"tags": ["information", "details", "facts"]
 	},
 	{
-		"iconName": "insertAfter",
+		"iconName": "insert-after",
 		"title": "insert After",
 		"library": "wp",
 		"tags": ["add", "append", "attach"]
 	},
 	{
-		"iconName": "insertBefore",
+		"iconName": "insert-before",
 		"title": "insert Before",
 		"library": "wp",
 		"tags": ["add", "prepend", "insert"]
@@ -678,31 +678,31 @@
 		"tags": ["organization", "establishment", "foundation"]
 	},
 	{
-		"iconName": "justifyCenter",
+		"iconName": "justify-center",
 		"title": "justify Center",
 		"library": "wp",
 		"tags": ["align center", "centered text", "centering"]
 	},
 	{
-		"iconName": "justifyLeft",
+		"iconName": "justify-left",
 		"title": "justify Left",
 		"library": "wp",
 		"tags": ["align left", "left alignment", "left positioning"]
 	},
 	{
-		"iconName": "justifyRight",
+		"iconName": "justify-right",
 		"title": "justify Right",
 		"library": "wp",
 		"tags": ["align right", "right alignment", "right positioning"]
 	},
 	{
-		"iconName": "justifySpaceBetween",
+		"iconName": "justify-space-between",
 		"title": "justify Space Between",
 		"library": "wp",
 		"tags": ["space between", "even spacing", "equal distance"]
 	},
 	{
-		"iconName": "justifyStretch",
+		"iconName": "justify-stretch",
 		"title": "justify Stretch",
 		"library": "wp",
 		"tags": ["stretch", "expand", "extend"]
@@ -714,13 +714,13 @@
 		"tags": ["lock", "unlock", "access"]
 	},
 	{
-		"iconName": "keyboardClose",
+		"iconName": "keyboard-close",
 		"title": "keyboard Close",
 		"library": "wp",
 		"tags": ["exit keyboard", "close keyboard", "dismiss keyboard"]
 	},
 	{
-		"iconName": "keyboardReturn",
+		"iconName": "keyboard-return",
 		"title": "keyboard Return",
 		"library": "wp",
 		"tags": ["return", "go back", "previous screen"]
@@ -738,19 +738,19 @@
 		"tags": ["help", "rescue", "emergency"]
 	},
 	{
-		"iconName": "lineDashed",
+		"iconName": "line-dashed",
 		"title": "line Dashed",
 		"library": "wp",
 		"tags": ["dash", "dotted", "striped"]
 	},
 	{
-		"iconName": "lineDotted",
+		"iconName": "line-dotted",
 		"title": "line Dotted",
 		"library": "wp",
 		"tags": ["dot", "dashed", "striped"]
 	},
 	{
-		"iconName": "lineSolid",
+		"iconName": "line-solid",
 		"title": "line Solid",
 		"library": "wp",
 		"tags": ["straight", "continuous", "unbroken"]
@@ -762,7 +762,7 @@
 		"tags": ["connect", "join", "attach"]
 	},
 	{
-		"iconName": "linkOff",
+		"iconName": "link-off",
 		"title": "link Off",
 		"library": "wp",
 		"tags": ["disconnect", "detach", "unplug"]
@@ -774,13 +774,13 @@
 		"tags": ["inventory", "agenda", "schedule"]
 	},
 	{
-		"iconName": "listItem",
+		"iconName": "list-item",
 		"title": "list Item",
 		"library": "wp",
 		"tags": ["task", "to-do", "checkbox"]
 	},
 	{
-		"iconName": "listView",
+		"iconName": "list-view",
 		"title": "list View",
 		"library": "wp",
 		"tags": ["display", "arrange", "order"]
@@ -792,13 +792,13 @@
 		"tags": ["secure", "protect", "seal"]
 	},
 	{
-		"iconName": "lockOutline",
+		"iconName": "lock-outline",
 		"title": "lock Outline",
 		"library": "wp",
 		"tags": ["security", "key", "protection"]
 	},
 	{
-		"iconName": "lockSmall",
+		"iconName": "lock-small",
 		"title": "lock Small",
 		"library": "wp",
 		"tags": ["security", "padlock", "password"]
@@ -816,7 +816,7 @@
 		"tags": ["repeat", "circular", "refresh"]
 	},
 	{
-		"iconName": "mapMarker",
+		"iconName": "map-marker",
 		"title": "map Marker",
 		"library": "wp",
 		"tags": ["location", "pin", "place"]
@@ -828,7 +828,7 @@
 		"tags": ["video", "audio", "multimedia"]
 	},
 	{
-		"iconName": "mediaAndText",
+		"iconName": "media-and-text",
 		"title": "media And Text",
 		"library": "wp",
 		"tags": ["content", "article", "blog"]
@@ -858,25 +858,25 @@
 		"tags": ["additional", "extra", "plus"]
 	},
 	{
-		"iconName": "moreHorizontal",
+		"iconName": "more-horizontal",
 		"title": "more Horizontal",
 		"library": "wp",
 		"tags": ["menu", "options", "settings"]
 	},
 	{
-		"iconName": "moreHorizontalMobile",
+		"iconName": "more-horizontal-mobile",
 		"title": "more Horizontal Mobile",
 		"library": "wp",
 		"tags": ["mobile menu", "options menu", "settings menu"]
 	},
 	{
-		"iconName": "moreVertical",
+		"iconName": "more-vertical",
 		"title": "more Vertical",
 		"library": "wp",
 		"tags": ["dropdown", "menu", "options"]
 	},
 	{
-		"iconName": "moveTo",
+		"iconName": "move-to",
 		"title": "move To",
 		"library": "wp",
 		"tags": ["transfer", "relocate", "shift"]
@@ -894,13 +894,13 @@
 		"tags": ["forward", "proceed", "continue"]
 	},
 	{
-		"iconName": "notFound",
+		"iconName": "not-found",
 		"title": "not Found",
 		"library": "wp",
 		"tags": ["error", "missing", "unavailable"]
 	},
 	{
-		"iconName": "overlayText",
+		"iconName": "overlay-text",
 		"title": "overlay Text",
 		"library": "wp",
 		"tags": ["text on top", "superimposed text", "layered text"]
@@ -912,7 +912,7 @@
 		"tags": ["webpage", "site page", "digital page"]
 	},
 	{
-		"iconName": "pageBreak",
+		"iconName": "page-break",
 		"title": "page Break",
 		"library": "wp",
 		"tags": ["break", "divider", "separator"]
@@ -972,31 +972,31 @@
 		"tags": ["addition", "increase", "positive"]
 	},
 	{
-		"iconName": "plusCircle",
+		"iconName": "plus-circle",
 		"title": "plus Circle",
 		"library": "wp",
 		"tags": ["add", "expand", "growth"]
 	},
 	{
-		"iconName": "plusCircleFilled",
+		"iconName": "plus-circle-filled",
 		"title": "plus Circle Filled",
 		"library": "wp",
 		"tags": ["add", "expand", "growth"]
 	},
 	{
-		"iconName": "positionCenter",
+		"iconName": "position-center",
 		"title": "position Center",
 		"library": "wp",
 		"tags": ["centralize", "middle", "centering"]
 	},
 	{
-		"iconName": "positionLeft",
+		"iconName": "position-left",
 		"title": "position Left",
 		"library": "wp",
 		"tags": ["left-align", "move left", "horizontal positioning"]
 	},
 	{
-		"iconName": "positionRight",
+		"iconName": "position-right",
 		"title": "position Right",
 		"library": "wp",
 		"tags": ["right", "direction", "arrow"]
@@ -1008,67 +1008,67 @@
 		"tags": ["articles", "blog", "content"]
 	},
 	{
-		"iconName": "postAuthor",
+		"iconName": "post-author",
 		"title": "post Author",
 		"library": "wp",
 		"tags": ["writer", "creator", "authorship"]
 	},
 	{
-		"iconName": "postCategories",
+		"iconName": "post-categories",
 		"title": "post Categories",
 		"library": "wp",
 		"tags": ["topics", "subjects", "themes"]
 	},
 	{
-		"iconName": "postComments",
+		"iconName": "post-comments",
 		"title": "post Comments",
 		"library": "wp",
 		"tags": ["discussion", "feedback", "opinions"]
 	},
 	{
-		"iconName": "postCommentsCount",
+		"iconName": "post-comments-count",
 		"title": "post Comments Count",
 		"library": "wp",
 		"tags": ["number of comments", "comment tally", "feedback counter"]
 	},
 	{
-		"iconName": "postCommentsForm",
+		"iconName": "post-comments-form",
 		"title": "post Comments Form",
 		"library": "wp",
 		"tags": ["comment box", "feedback form", "discussion input"]
 	},
 	{
-		"iconName": "postContent",
+		"iconName": "post-content",
 		"title": "post Content",
 		"library": "wp",
 		"tags": ["article body", "blog post", "written content"]
 	},
 	{
-		"iconName": "postDate",
+		"iconName": "post-date",
 		"title": "post Date",
 		"library": "wp",
 		"tags": ["date", "publish", "time"]
 	},
 	{
-		"iconName": "postExcerpt",
+		"iconName": "post-excerpt",
 		"title": "post Excerpt",
 		"library": "wp",
 		"tags": ["summary", "extract", "snippet"]
 	},
 	{
-		"iconName": "postFeaturedImage",
+		"iconName": "post-featured-image",
 		"title": "post Featured Image",
 		"library": "wp",
 		"tags": ["thumbnail", "picture", "photo"]
 	},
 	{
-		"iconName": "postList",
+		"iconName": "post-list",
 		"title": "post List",
 		"library": "wp",
 		"tags": ["archive", "index", "summary"]
 	},
 	{
-		"iconName": "postTerms",
+		"iconName": "post-terms",
 		"title": "post Terms",
 		"library": "wp",
 		"tags": ["category", "tag", "taxonomy"]
@@ -1086,13 +1086,13 @@
 		"tags": ["back", "return", "previous"]
 	},
 	{
-		"iconName": "pullLeft",
+		"iconName": "pull-left",
 		"title": "pull Left",
 		"library": "wp",
 		"tags": ["float left", "align left", "left"]
 	},
 	{
-		"iconName": "pullRight",
+		"iconName": "pull-right",
 		"title": "pull Right",
 		"library": "wp",
 		"tags": ["float right", "align right", "right"]
@@ -1104,25 +1104,25 @@
 		"tags": ["citation", "quote", "excerpt"]
 	},
 	{
-		"iconName": "queryPagination",
+		"iconName": "query-pagination",
 		"title": "query Pagination",
 		"library": "wp",
 		"tags": ["paginate", "pager", "navigation"]
 	},
 	{
-		"iconName": "queryPaginationNext",
+		"iconName": "query-pagination-next",
 		"title": "query Pagination Next",
 		"library": "wp",
 		"tags": ["pagination", "next", "arrow"]
 	},
 	{
-		"iconName": "queryPaginationNumbers",
+		"iconName": "query-pagination-numbers",
 		"title": "query Pagination Numbers",
 		"library": "wp",
 		"tags": ["pagination", "numbers", "page"]
 	},
 	{
-		"iconName": "queryPaginationPrevious",
+		"iconName": "query-pagination-previous",
 		"title": "query Pagination Previous",
 		"library": "wp",
 		"tags": ["pagination", "previous", "arrow"]
@@ -1146,13 +1146,13 @@
 		"tags": ["repeat", "action", "update"]
 	},
 	{
-		"iconName": "removeBug",
+		"iconName": "remove-bug",
 		"title": "remove Bug",
 		"library": "wp",
 		"tags": ["delete", "fix", "error"]
 	},
 	{
-		"iconName": "removeSubmenu",
+		"iconName": "remove-submenu",
 		"title": "remove Submenu",
 		"library": "wp",
 		"tags": ["delete", "menu", "navigation"]
@@ -1170,19 +1170,19 @@
 		"tags": ["restart", "reinitialize", "restore"]
 	},
 	{
-		"iconName": "resizeCornerNE",
+		"iconName": "resize-corner-ne",
 		"title": "resize Corner N E",
 		"library": "wp",
 		"tags": ["scale", "resize", "adjust"]
 	},
 	{
-		"iconName": "reusableBlock",
+		"iconName": "reusable-block",
 		"title": "reusable Block",
 		"library": "wp",
 		"tags": ["template", "pattern", "module"]
 	},
 	{
-		"iconName": "rotateLeft",
+		"iconName": "rotate-left",
 		"title": "rotate Left",
 		"library": "wp",
 		"tags": [
@@ -1192,7 +1192,7 @@
 		]
 	},
 	{
-		"iconName": "rotateRight",
+		"iconName": "rotate-right",
 		"title": "rotate Right",
 		"library": "wp",
 		"tags": ["turn right", "spin clockwise", "rotate clockwise"]
@@ -1276,7 +1276,7 @@
 		"tags": ["menu", "navigation", "panel"]
 	},
 	{
-		"iconName": "siteLogo",
+		"iconName": "site-logo",
 		"title": "site Logo",
 		"library": "wp",
 		"tags": ["branding", "identity", "logotype"]
@@ -1288,19 +1288,19 @@
 		"tags": ["pile", "heap", "stacked"]
 	},
 	{
-		"iconName": "starEmpty",
+		"iconName": "star-empty",
 		"title": "star Empty",
 		"library": "wp",
 		"tags": ["rating", "favorite", "unfilled"]
 	},
 	{
-		"iconName": "starFilled",
+		"iconName": "star-filled",
 		"title": "star Filled",
 		"library": "wp",
 		"tags": ["rating", "favorite", "filled"]
 	},
 	{
-		"iconName": "starHalf",
+		"iconName": "star-half",
 		"title": "star Half",
 		"library": "wp",
 		"tags": ["rating", "favorite", "half-filled"]
@@ -1312,13 +1312,13 @@
 		"tags": ["e-commerce", "shop", "buy"]
 	},
 	{
-		"iconName": "stretchFullWidth",
+		"iconName": "stretch-full-width",
 		"title": "stretch Full Width",
 		"library": "wp",
 		"tags": ["resize", "expand", "fullscreen"]
 	},
 	{
-		"iconName": "stretchWide",
+		"iconName": "stretch-wide",
 		"title": "stretch Wide",
 		"library": "wp",
 		"tags": ["broaden", "widen", "expand"]
@@ -1354,7 +1354,7 @@
 		"tags": ["sign", "logo", "emblem"]
 	},
 	{
-		"iconName": "symbolFilled",
+		"iconName": "symbol-filled",
 		"title": "symbol Filled",
 		"library": "wp",
 		"tags": ["mark", "icon", "badge"]
@@ -1366,37 +1366,37 @@
 		"tags": ["chart", "grid", "spreadsheet"]
 	},
 	{
-		"iconName": "tableColumnAfter",
+		"iconName": "table-column-after",
 		"title": "table Column After",
 		"library": "wp",
 		"tags": ["column", "add", "insert"]
 	},
 	{
-		"iconName": "tableColumnBefore",
+		"iconName": "table-column-before",
 		"title": "table Column Before",
 		"library": "wp",
 		"tags": ["column", "add", "insert"]
 	},
 	{
-		"iconName": "tableColumnDelete",
+		"iconName": "table-column-delete",
 		"title": "table Column Delete",
 		"library": "wp",
 		"tags": ["column", "remove", "delete"]
 	},
 	{
-		"iconName": "tableRowAfter",
+		"iconName": "table-row-after",
 		"title": "table Row After",
 		"library": "wp",
 		"tags": ["row", "add", "insert"]
 	},
 	{
-		"iconName": "tableRowBefore",
+		"iconName": "table-row-before",
 		"title": "table Row Before",
 		"library": "wp",
 		"tags": ["row", "add", "insert"]
 	},
 	{
-		"iconName": "tableRowDelete",
+		"iconName": "table-row-delete",
 		"title": "table Row Delete",
 		"library": "wp",
 		"tags": ["row", "remove", "delete"]
@@ -1414,13 +1414,13 @@
 		"tags": ["label", "category", "metadata"]
 	},
 	{
-		"iconName": "termDescription",
+		"iconName": "term-description",
 		"title": "term Description",
 		"library": "wp",
 		"tags": ["definition", "explanation", "meaning"]
 	},
 	{
-		"iconName": "textColor",
+		"iconName": "text-color",
 		"title": "text Color",
 		"library": "wp",
 		"tags": ["font color", "text styling", "typography"]
@@ -1450,13 +1450,13 @@
 		"tags": ["delete", "discard", "remove"]
 	},
 	{
-		"iconName": "trendingDown",
+		"iconName": "trending-down",
 		"title": "trending Down",
 		"library": "wp",
 		"tags": ["descend", "drop", "decline"]
 	},
 	{
-		"iconName": "trendingUp",
+		"iconName": "trending-up",
 		"title": "trending Up",
 		"library": "wp",
 		"tags": ["growth", "charts", "progress"]
