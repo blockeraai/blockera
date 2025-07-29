@@ -15,6 +15,11 @@ import {
 	createStandardIconObject,
 } from '@blockera/icons';
 
+/**
+ * Internal dependencies
+ */
+import { Tooltip } from '../';
+
 export function getLibraryIcons({
 	library,
 	query,
@@ -85,7 +90,9 @@ export function getLibraryIcons({
 						})
 					}
 				>
-					<Icon library={icon.library} icon={icon} />
+					<Tooltip text={icon.iconName}>
+						<Icon library={icon.library} icon={icon} />
+					</Tooltip>
 				</span>
 			);
 	}
