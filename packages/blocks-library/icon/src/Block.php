@@ -105,7 +105,50 @@ class Block implements BlockInterface {
 		$figure = $dom->findOne('figure');
 		
 		if ($figure) {
-			$figure->innerhtml .= $feature->getIconHTML($value);
+			$figure->innerhtml .= sprintf(
+				'<span title="%1$s" role="img" class="wp-block-image__icon">%2$s</span>', 
+				sprintf( 
+					// translators: %s is the icon name.
+					__('%s Icon', 'blockera'), 
+					str_replace('-', ' ', $value['icon'] ?? '') 
+				), 
+				$feature->getIconHTML($value)
+			);
+
+			$svg = $dom->findOne('svg');
+
+			if ($svg) {
+				$size  = $block['attrs']['blockeraIconSize']['value'] ?? '1.33em';
+				$color = $block['attrs']['blockeraIconColor']['value'] ?? 'currentColor';
+
+				$style = 'width:' . $size . ';height:' . $size . ';fill:' . $color . ';color:' . $color . ';';
+
+				$transform = '';
+
+				// Handle icon rotate.
+				$rotate = $block['attrs']['blockeraIconRotate']['value'] ?? '';
+				if (! empty($rotate)) {
+					$transform .= 'rotate(' . $rotate . 'deg) ';
+				}
+
+				// Handle icon flip horizontal.
+				$flipHorizontal = $block['attrs']['blockeraIconFlipHorizontal']['value'] ?? '';
+				if (! empty($flipHorizontal)) {
+					$transform .= 'scaleX(' . ( $flipHorizontal ? '-1' : '1' ) . ') ';
+				}
+
+				// Handle icon flip vertical.
+				$flipVertical = $block['attrs']['blockeraIconFlipVertical']['value'] ?? '';
+				if (! empty($flipVertical)) {
+					$transform .= 'scaleY(' . ( $flipVertical ? '-1' : '1' ) . ') ';
+				}
+
+				if (! empty($transform)) {
+					$style .= 'transform:' . $transform . ';';
+				}
+
+				$svg->style = $style;
+			}
 		}
 
 		return $dom->outerhtml;

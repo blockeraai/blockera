@@ -1,1 +1,13 @@
-/* Icon Block Styles */
+.wp-block-image.blockera-is-icon-block .wp-block-image__icon {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.wp-block-image.blockera-is-icon-block .wp-block-image__icon svg {
+	box-sizing: border-box;
+	max-width: 100%;
+	height: auto;
+	vertical-align: bottom;
+}
