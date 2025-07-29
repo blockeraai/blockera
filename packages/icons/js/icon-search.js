@@ -12,7 +12,7 @@ import memoize from 'fast-memoize';
 import {
 	getIconLibraryIcons,
 	getIconLibrarySearchData,
-	// getIconLibrariesSearchIndex,
+	getIconLibrariesSearchIndex,
 	isValidIconLibrary,
 } from './icon-library';
 import { isValidIcon } from './icon';
@@ -32,26 +32,34 @@ export function iconSearch({
 	}
 
 	const getMemoizedResult = memoize(() => {
+		// We define which keys in our objects should be searched and how much weight they should have.
+		// A higher weight means matches in that key are more relevant.
+		const options = {
+			// `includeScore` is useful for debugging or advanced sorting.
+			includeScore: true,
+			// `threshold` determines how "fuzzy" the search is. 0.0 is a perfect match, 1.0 matches anything.
+			threshold: 0.4,
+			// `keys` specifies the properties to search in.
+			keys: [
+				{
+					name: 'title', // Search the 'title' property
+					weight: 2, // Give it a high weight, as titles are very important.
+				},
+				{
+					name: 'tags', // Search the 'tags' array
+					weight: 1.5, // Tags are also very important.
+				},
+				{
+					name: 'iconName', // Search the 'iconName'
+					weight: 1, // Less important than title/tags, but still relevant.
+				},
+			],
+		};
+
 		const fuse = new Fuse(
 			getIconLibrarySearchData(library),
-			{
-				shouldSort: true,
-				includeScore: false,
-				keys: [
-					{
-						name: 'title',
-						weight: 0.2,
-					},
-					{
-						name: 'tags',
-						weight: 0.5,
-					},
-				],
-				minMatchCharLength: 3,
-				useExtendedSearch: false,
-				threshold: 0.15,
-			}
-			// getIconLibrariesSearchIndex()
+			options,
+			getIconLibrariesSearchIndex()
 		);
 
 		let result = fuse.search(query);

@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import Fuse from 'fuse.js';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
@@ -14,6 +15,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import searchIndex from './search.json';
 import type { IconLibraryTypes } from './types';
 // WP Library
 import { WPIcons } from './library-wp';
@@ -28,9 +30,11 @@ import { BlockeraUIIcons } from './library-ui';
 import { default as LibraryUIIcon } from './library-ui/library-icon';
 // Cursor Library
 import { CursorIcons } from './library-cursor';
+import CursorIconsSearchData from './library-cursor/search-data.json';
 import { default as LibraryCursorIcon } from './library-cursor/library-icon';
 // Social Library
 import { SocialIcons } from './library-social';
+import SocialIconsSearchData from './library-social/search-data.json';
 import { default as SocialIcon } from './library-social/library-icon';
 
 export const IconLibraries: {
@@ -128,6 +132,10 @@ export function getIconLibrarySearchData(
 				// $FlowFixMe
 				Array.prototype.push.apply(searchData, IconsSearchData);
 				// $FlowFixMe
+				Array.prototype.push.apply(searchData, CursorIconsSearchData);
+				// $FlowFixMe
+				Array.prototype.push.apply(searchData, SocialIconsSearchData);
+				// $FlowFixMe
 				break;
 
 			case 'wp':
@@ -144,11 +152,16 @@ export function getIconLibrarySearchData(
 				// $FlowFixMe
 				Array.prototype.push.apply(searchData, SocialIconsSearchData);
 				break;
+
+			case 'cursor':
+				// $FlowFixMe
+				Array.prototype.push.apply(searchData, CursorIconsSearchData);
+				break;
 		}
 
 	return searchData;
 }
 
-// export function getIconLibrariesSearchIndex(): Object {
-// 	return Fuse.parseIndex(searchIndex);
-// }
+export function getIconLibrariesSearchIndex(): Object {
+	return Fuse.parseIndex(searchIndex);
+}
