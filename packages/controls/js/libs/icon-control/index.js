@@ -5,6 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { applyFilters } from '@wordpress/hooks';
 import { memo, useState, useReducer } from '@wordpress/element';
 
 /**
@@ -25,6 +26,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import { PromotionPopover } from '../';
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
@@ -61,6 +63,7 @@ function IconControl({
 	}, [currentIcon]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
+	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
 
 	// $FlowFixMe
 	const openModal = (event) => {
@@ -187,6 +190,29 @@ function IconControl({
 								<Icon {...currentIcon} iconSize={50} />
 							)}
 
+							{isOpenPromotion && (
+								<PromotionPopover
+									heading={__('Premium Icons', 'blockera')}
+									featuresList={[
+										__(
+											'Access 10,000+ premium icons',
+											'blockera'
+										),
+										__(
+											'Upload custom SVG icons',
+											'blockera'
+										),
+										__('Advanced icon styling', 'blockera'),
+										__(
+											'Unlock all icon libraries',
+											'blockera'
+										),
+									]}
+									isOpen={isOpenPromotion}
+									onClose={() => setIsOpenPromotion(false)}
+								/>
+							)}
+
 							<div
 								className={controlInnerClassNames(
 									'action-btns'
@@ -221,7 +247,14 @@ function IconControl({
 											noBorder={true}
 											onClick={(event) => {
 												event.stopPropagation();
-												open();
+												applyFilters(
+													'blockera.controls.iconControl.uploadSVG.onClick',
+													() =>
+														setIsOpenPromotion(
+															true
+														),
+													open
+												)();
 											}}
 										>
 											{labelUploadSvg}
