@@ -36,3 +36,13 @@
 .wp-block-image.blockera-is-icon-block .block-editor-media-placeholder.is-small {
 	min-height: auto;
 }
+
+.editor-styles-wrapper div figure.blockera-is-icon-block .components-resizable-box__container {
+	display: flex !important;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.editor-styles-wrapper div figure.blockera-is-icon-block .components-resizable-box__container * {
+	display: none;
+}
