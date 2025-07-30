@@ -179,6 +179,20 @@ function IconControl({
 						className
 					)}
 				>
+					{isOpenPromotion && (
+						<PromotionPopover
+							heading={__('Premium Icons', 'blockera')}
+							featuresList={[
+								__('Access 10,000+ premium icons', 'blockera'),
+								__('Upload custom SVG icons', 'blockera'),
+								__('Advanced icon styling', 'blockera'),
+								__('Unlock all icon libraries', 'blockera'),
+							]}
+							isOpen={isOpenPromotion}
+							onClose={() => setIsOpenPromotion(false)}
+						/>
+					)}
+
 					{hasIcon() ? (
 						<div
 							className={controlInnerClassNames(
@@ -222,29 +236,6 @@ function IconControl({
 								/>
 							) : (
 								<Icon {...currentIcon} iconSize={50} />
-							)}
-
-							{isOpenPromotion && (
-								<PromotionPopover
-									heading={__('Premium Icons', 'blockera')}
-									featuresList={[
-										__(
-											'Access 10,000+ premium icons',
-											'blockera'
-										),
-										__(
-											'Upload custom SVG icons',
-											'blockera'
-										),
-										__('Advanced icon styling', 'blockera'),
-										__(
-											'Unlock all icon libraries',
-											'blockera'
-										),
-									]}
-									isOpen={isOpenPromotion}
-									onClose={() => setIsOpenPromotion(false)}
-								/>
 							)}
 
 							<div
