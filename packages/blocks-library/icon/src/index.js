@@ -8,8 +8,12 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/icons';
 import { generateUuid4 } from '@blockera/blocks-core/js';
+
+/**
+ * Internal dependencies
+ */
+import { default as IconBlockIcon } from './block-icon.svg';
 
 export const icon = {
 	originBlockType: 'core/image',
@@ -18,7 +22,7 @@ export const icon = {
 		label: 'Icon',
 		description: __('Insert an SVG icon or graphic.', 'blockera'),
 		title: __('Icon', 'blockera'),
-		icon: <Icon icon="star-filled" library="wp" iconSize="24px" />,
+		icon: <IconBlockIcon />,
 		attributes: {
 			blockeraPropsId: generateUuid4(),
 			className: 'blockera-is-icon-block',
