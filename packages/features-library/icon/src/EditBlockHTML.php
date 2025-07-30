@@ -286,7 +286,7 @@ class EditBlockHTML implements EditableBlockHTML {
             'renderedIcon' => $renderedIcon,
         ] = $value;
 
-        if (! empty($renderedIcon) && 'wp' === $library) {
+        if (! empty($renderedIcon)) {
             $renderedIcon = base64_decode($renderedIcon);
 
             preg_match('/\w"\w/', $renderedIcon, $matches);
