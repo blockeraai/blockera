@@ -58,6 +58,7 @@
 }
 
 .editor-styles-wrapper div figure.blockera-is-icon-block .block-editor-media-placeholder::before,
+.editor-styles-wrapper div figure.blockera-is-icon-block .components-resizable-box__container::before,
 .editor-styles-wrapper div .blockera-has-icon-start > a > [role="textbox"]::before,
 .editor-styles-wrapper div .blockera-has-icon-end > a > [role="textbox"]::after,
 .editor-styles-wrapper div .blockera-has-icon-start > [role="textbox"]::before,
