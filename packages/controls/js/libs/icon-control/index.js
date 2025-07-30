@@ -5,6 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { dispatch } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { memo, useState, useReducer } from '@wordpress/element';
 
@@ -49,6 +50,7 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
+	const { createNotice } = dispatch('core/notices');
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
 			id,
@@ -123,6 +125,38 @@ function IconControl({
 
 		dispatchActions(action);
 	}
+
+	const onSelectSVG = (media) => {
+		if ('svg+xml' !== media.subtype) {
+			createNotice(
+				'error',
+				__('Please upload an SVG file!', 'blockera'),
+				{
+					isDismissible: true,
+				}
+			);
+			return;
+		}
+
+		currentIconDispatch({
+			type: 'UPDATE_SVG',
+			uploadSVG: {
+				title: media.title,
+				filename: media.filename,
+				url: media.url,
+				updated: '',
+			},
+		});
+	};
+
+	const mediaUploaderOpener = (event, open) => {
+		event.stopPropagation();
+		applyFilters(
+			'blockera.controls.iconControl.uploadSVG.onClick',
+			() => setIsOpenPromotion(true),
+			open
+		)();
+	};
 
 	return (
 		<IconContextProvider {...defaultIconState}>
@@ -228,34 +262,17 @@ function IconControl({
 								</Button>
 
 								<MediaUploader
-									onSelect={(media) => {
-										currentIconDispatch({
-											type: 'UPDATE_SVG',
-											uploadSVG: {
-												title: media.title,
-												filename: media.filename,
-												url: media.url,
-												updated: '',
-											},
-										});
-									}}
+									allowedTypes={['image/svg+xml']}
+									onSelect={onSelectSVG}
 									mode="upload"
 									render={({ open }) => (
 										<Button
 											data-cy="upload-svg-btn"
 											className="btn-upload"
 											noBorder={true}
-											onClick={(event) => {
-												event.stopPropagation();
-												applyFilters(
-													'blockera.controls.iconControl.uploadSVG.onClick',
-													() =>
-														setIsOpenPromotion(
-															true
-														),
-													open
-												)();
-											}}
+											onClick={(event) =>
+												mediaUploaderOpener(event, open)
+											}
 										>
 											{labelUploadSvg}
 										</Button>
@@ -274,26 +291,16 @@ function IconControl({
 							</Button>
 
 							<MediaUploader
-								onSelect={(media) => {
-									currentIconDispatch({
-										type: 'UPDATE_SVG',
-										uploadSVG: {
-											title: media.title,
-											filename: media.filename,
-											url: media.url,
-											updated: '',
-										},
-									});
-								}}
+								allowedTypes={['image/svg+xml']}
+								onSelect={onSelectSVG}
 								mode="upload"
 								render={({ open }) => (
 									<Button
 										data-cy="upload-svg-btn"
 										className="btn-choose-icon"
-										onClick={(event) => {
-											event.stopPropagation();
-											open();
-										}}
+										onClick={(event) =>
+											mediaUploaderOpener(event, open)
+										}
 									>
 										{labelUploadSvg}
 									</Button>
