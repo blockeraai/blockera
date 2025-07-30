@@ -32,6 +32,7 @@ import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
+import { parseUploadedMediaAndSetIcon } from './helpers';
 import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
@@ -98,15 +99,15 @@ function IconControl({
 			return false;
 		}
 
-		if (currentIcon.uploadSVG !== '') {
+		if ('' !== currentIcon.uploadSVG || '' !== currentIcon.svgString) {
 			return true;
 		}
 
-		if (currentIcon.icon === null) {
+		if (null === currentIcon.icon) {
 			return false;
 		}
 
-		return currentIcon.icon !== '';
+		return '' !== currentIcon.icon;
 	}
 
 	// $FlowFixMe
@@ -138,24 +139,29 @@ function IconControl({
 			return;
 		}
 
-		currentIconDispatch({
-			type: 'UPDATE_SVG',
-			uploadSVG: {
-				title: media.title,
-				filename: media.filename,
-				url: media.url,
-				updated: '',
-			},
+		parseUploadedMediaAndSetIcon(media, (svgString) => {
+			currentIconDispatch({
+				type: 'UPDATE_SVG',
+				uploadSVG: {
+					title: media.title,
+					filename: media.filename,
+					url: media.url,
+					updated: '',
+				},
+				svgString,
+			});
 		});
 	};
 
 	const mediaUploaderOpener = (event, open) => {
 		event.stopPropagation();
-		applyFilters(
+		const callback = applyFilters(
 			'blockera.controls.iconControl.uploadSVG.onClick',
 			() => setIsOpenPromotion(true),
 			open
-		)();
+		);
+
+		callback();
 	};
 
 	return (
@@ -229,10 +235,12 @@ function IconControl({
 								/>
 							</Tooltip>
 
-							{currentIcon.uploadSVG ? (
-								<img
-									src={currentIcon.uploadSVG.url}
-									alt={currentIcon.uploadSVG.title}
+							{'' !== currentIcon.uploadSVG &&
+							'' !== currentIcon.svgString ? (
+								<div
+									dangerouslySetInnerHTML={{
+										__html: currentIcon.svgString,
+									}}
 								/>
 							) : (
 								<Icon {...currentIcon} iconSize={50} />
