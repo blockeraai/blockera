@@ -3,6 +3,7 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 import type { MixedElement, ComponentType } from 'react';
 import { memo, createRoot, useCallback, useState } from '@wordpress/element';
 
@@ -96,6 +97,10 @@ export const IconExtension: ComponentType<{
 					return;
 				}
 
+				const encodeIcon = (iconHTML: string) => {
+					return btoa(unescape(encodeURIComponent(iconHTML)));
+				};
+
 				// Prepare rendered icon before setting state.
 				if (newValue.icon) {
 					const iconWrapper = document.createElement('div');
@@ -143,10 +148,8 @@ export const IconExtension: ComponentType<{
 					);
 
 					setTimeout(() => {
-						const renderedIcon = btoa(
-							unescape(
-								encodeURIComponent(iconNode?.innerHTML || '')
-							)
+						const renderedIcon = encodeIcon(
+							iconNode?.innerHTML || ''
 						);
 
 						handleOnChangeAttributes(
@@ -168,6 +171,18 @@ export const IconExtension: ComponentType<{
 							},
 						});
 					}, 1);
+				} else if (newValue.uploadSVG && newValue.svgString) {
+					applyFilters(
+						'blockera.featureIcon.extension.uploadSVG.onChangeHandler',
+						{
+							ref,
+							newValue,
+							encodeIcon,
+							setIconState,
+							initialIconState,
+							handleOnChangeAttributes,
+						}
+					);
 				} else {
 					setIconState({
 						...iconState,
