@@ -32,7 +32,7 @@
 	margin-right: 0;
 } */
 
-.editor-styles-wrapper div [class*="blockera-has-icon-"] > [role="textbox"]:not(.wp-block-button__link) {
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > div[role="textbox"]:not(.wp-block-button__link,figcaption):first-of-type {
 	border-radius: inherit !important;
 	border-width: var(--blockera--icon--border-width, 0) !important;
 	border-style: var(--blockera--icon--border-style, solid) !important;
@@ -44,8 +44,8 @@
 	padding: var(--blockera--icon--padding, 0);
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-"] > a > [role="textbox"],
-.editor-styles-wrapper div [class*="blockera-has-icon-"] > [role="textbox"] {
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > a > div[role="textbox"]:first-of-type,
+.editor-styles-wrapper div [class*="blockera-has-icon-"] > div[role="textbox"]:first-of-type {
 	display: inline-flex;
 	position: relative;
 	/* margin-left: auto; */
@@ -59,10 +59,10 @@
 
 .editor-styles-wrapper div figure.blockera-is-icon-block .block-editor-media-placeholder::before,
 .editor-styles-wrapper div figure.blockera-is-icon-block .components-resizable-box__container::before,
-.editor-styles-wrapper div .blockera-has-icon-start > a > [role="textbox"]::before,
-.editor-styles-wrapper div .blockera-has-icon-end > a > [role="textbox"]::after,
-.editor-styles-wrapper div .blockera-has-icon-start > [role="textbox"]::before,
-.editor-styles-wrapper div .blockera-has-icon-end > [role="textbox"]::after {
+.editor-styles-wrapper div .blockera-has-icon-start > a > div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper div .blockera-has-icon-end > a > div[role="textbox"]:first-of-type::after,
+.editor-styles-wrapper div .blockera-has-icon-start > div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper div .blockera-has-icon-end > div[role="textbox"]:first-of-type::after {
 	content: "";
 	display: inline-block;
 	position: relative;
@@ -89,18 +89,18 @@
 	align-items: center;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start > a.wp-block-navigation-item__content>[role="textbox"]::before,
-.editor-styles-wrapper div .blockera-has-icon-end > a.wp-block-navigation-item__content>[role="textbox"]::after {
+.editor-styles-wrapper div .blockera-has-icon-start > a.wp-block-navigation-item__content > div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper div .blockera-has-icon-end > a.wp-block-navigation-item__content > div[role="textbox"]:first-of-type::after {
 	vertical-align: text-bottom;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start > a > [role="textbox"]::before,
-.editor-styles-wrapper div .blockera-has-icon-start > [role="textbox"]::before {
+.editor-styles-wrapper div .blockera-has-icon-start > a > div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper div .blockera-has-icon-start > div[role="textbox"]:first-of-type::before {
 	margin-right: var(--blockera--icon--gap, 0.5em);
 }
 
-.editor-styles-wrapper div .blockera-has-icon-end > a > [role="textbox"]::after,
-.editor-styles-wrapper div .blockera-has-icon-end > [role="textbox"]::after {
+.editor-styles-wrapper div .blockera-has-icon-end > a > div[role="textbox"]:first-of-type::after,
+.editor-styles-wrapper div .blockera-has-icon-end > div[role="textbox"]:first-of-type::after {
 	margin-left: var(--blockera--icon--gap, 0.5em);
 	--blockera--icon--order: 100;
 }

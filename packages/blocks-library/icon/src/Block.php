@@ -96,6 +96,7 @@ class Block implements BlockInterface {
 			$this->args['plugin_version']
 		);
 
+		// Remove all img tags.
 		foreach ($dom->find('img') as $img) {
 			$img->outertext = '';
 		}
@@ -103,9 +104,9 @@ class Block implements BlockInterface {
 		$value = $block['attrs']['blockeraIcon']['value'] ?? $this->fallback_value;
 
 		$figure = $dom->findOne('figure');
-		
+
 		if ($figure) {
-			$figure->innerhtml .= sprintf(
+			$figure->innerhtml = sprintf(
 				'<span title="%1$s" role="img" class="wp-block-image__icon">%2$s</span>', 
 				sprintf( 
 					// translators: %s is the icon name.
@@ -113,7 +114,7 @@ class Block implements BlockInterface {
 					str_replace('-', ' ', $value['icon'] ?? '') 
 				), 
 				$feature->getIconHTML($value)
-			);
+			) . $figure->innerhtml;
 
 			$svg = $dom->findOne('svg');
 
