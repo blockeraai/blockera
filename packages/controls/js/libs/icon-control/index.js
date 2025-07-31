@@ -187,11 +187,10 @@ function IconControl({
 				>
 					{isOpenPromotion && (
 						<PromotionPopover
-							heading={__('Premium Icons', 'blockera')}
+							heading={__('Custom SVG Icons', 'blockera')}
 							featuresList={[
-								__('Access 10,000+ premium icons', 'blockera'),
 								__('Upload custom SVG icons', 'blockera'),
-								__('Advanced icon styling', 'blockera'),
+								__('Unlimited icon uploads', 'blockera'),
 								__('Unlock all icon libraries', 'blockera'),
 							]}
 							isOpen={isOpenPromotion}
