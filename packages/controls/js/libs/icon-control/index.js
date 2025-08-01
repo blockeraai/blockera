@@ -99,7 +99,14 @@ function IconControl({
 			return false;
 		}
 
-		if ('' !== currentIcon.uploadSVG || '' !== currentIcon.svgString) {
+		if ('' !== currentIcon.uploadSVG) {
+			return true;
+		}
+
+		if (
+			!isUndefined(currentIcon?.svgString) &&
+			'' !== currentIcon.svgString
+		) {
 			return true;
 		}
 
