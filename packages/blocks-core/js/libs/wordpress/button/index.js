@@ -40,21 +40,6 @@ export const Button: BlockType = {
 	blockFeatures: {
 		icon: {
 			status: true,
-			inspector: {
-				status: true,
-				extensions: {
-					icon: {
-						tabPosition: 'blockera-inspector-settings-start',
-					},
-				},
-			},
-			htmlEditable: {
-				status: true,
-			},
-			contextualToolbar: {
-				status: true,
-				type: 'dropdown',
-			},
 		},
 	},
 };
