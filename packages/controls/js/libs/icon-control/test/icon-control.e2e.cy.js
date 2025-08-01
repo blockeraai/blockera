@@ -75,7 +75,7 @@ if (experimental().get('editor.extensions.iconExtension')) {
 				// act
 				cy.get('[aria-label="Choose Icon…"]').first().click();
 
-				cy.get('span[aria-label="blockera Icon"]').click();
+				cy.get('span[aria-label="blockera Icon"]').first().click();
 
 				// act
 				// cy.get('[aria-label="button Icon"]').click();
