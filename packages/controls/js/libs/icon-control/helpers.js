@@ -32,6 +32,7 @@ export function parseUploadedMediaAndSetIcon(
 			);
 		})
 		.catch((error) => {
+			/* @debug-ignore */
 			console.log(error);
 		});
 }
