@@ -49,8 +49,8 @@ describe('box-border-control component testing', () => {
 		cy.get('input[type="text"]').should('have.value', '');
 
 		cy.getByAriaLabel('Custom Box Border')
-			.should('have.attr', 'style')
-			.should('include', 'var(--blockera-controls-color)');
+			.should('have.class', 'is-toggle-btn')
+			.should('not.have.class', 'is-toggled');
 	});
 
 	it('should render correctly with no value and default value', () => {
@@ -63,8 +63,8 @@ describe('box-border-control component testing', () => {
 		cy.get('input[type="text"]').should('have.value', '');
 
 		cy.getByAriaLabel('Custom Box Border')
-			.should('have.attr', 'style')
-			.should('include', 'var(--blockera-controls-color)');
+			.should('have.class', 'is-toggle-btn')
+			.should('not.have.class', 'is-toggled');
 	});
 
 	describe('interaction test (type : all)', () => {
@@ -113,8 +113,8 @@ describe('box-border-control component testing', () => {
 
 			cy.getByAriaLabel('Custom Box Border').click();
 			cy.getByAriaLabel('Custom Box Border')
-				.should('have.attr', 'style')
-				.should('include', 'var(--blockera-controls-primary-color)');
+				.should('have.class', 'is-toggle-btn')
+				.should('have.class', 'is-toggled');
 
 			//Check data provider
 			cy.get('body').then(() => {
