@@ -69,10 +69,6 @@ class Block implements BlockInterface {
 	 */
 	public function render( string $html, EditableBlockHTML $feature, array $args = []): string {
 
-		if (! empty($html)) {
-			return $html;
-		}
-
 		if (! $feature instanceof EditBlockHTML) {
 			return $html;
 		}
