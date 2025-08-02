@@ -1,5 +1,5 @@
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] {
-	padding-left: 0;
+	padding-left: 10px;
 }
 
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] li {
@@ -17,8 +17,8 @@
 	background-color: var(--blockera--icon--color, currentColor);
 	mask: var(--blockera--icon--url) no-repeat center;
 	mask-size: contain;
-	width: var(--blockera--icon--size, 16px);
-	height: var(--blockera--icon--size, 16px);
+	width: var(--blockera--icon--size, 20px);
+	height: var(--blockera--icon--size, 20px);
 	top: 50%;
 	transform: translateY(-50%) rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 	transform-origin: center center;
