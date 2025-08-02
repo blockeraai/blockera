@@ -1,25 +1,21 @@
 .wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block.wp-block-list-item[class*="blockera-has-icon-"] {
 	position: relative;
-	padding-left: var(--blockera--icon--gap, 30px);
-	/* to remove marker */
-	display: block;
+	gap: var(--blockera--icon--gap, 0.5em);
+	display: flex;
+	align-items: center;
 	margin-left: -25px;
-	margin-right: calc(var(--blockera--icon--gap, 30px));
 }
 
 .wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block.wp-block-list-item[class*="blockera-has-icon-"]::before {
 	content: '';
-	position: absolute;
-	left: 0;
-	display: inline-block;
+	display: inline-flex;
+	align-self: center;
 	background-color: var(--blockera--icon--color, currentColor);
 	mask: var(--blockera--icon--url) no-repeat center;
 	mask-size: contain;
-	top: 50%;
-	transform: translateY(-50%) rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
-	transform-origin: center center;
 	width: var(--blockera--icon--size, 1em);
 	height: var(--blockera--icon--size, 1em);
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 }
 
 /* Hide the default marker */
