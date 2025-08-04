@@ -54,5 +54,19 @@ export const icon = {
 				blockAttributes?.className?.includes('blockera-is-icon-block')
 			);
 		},
+		supports: {
+			iconConfig: {
+				blockeraIconPosition: {
+					status: false,
+					show: false,
+					force: false,
+				},
+				blockeraIconGap: {
+					status: false,
+					show: false,
+					force: false,
+				},
+			},
+		},
 	},
 };

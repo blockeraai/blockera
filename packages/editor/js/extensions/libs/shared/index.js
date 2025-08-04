@@ -22,7 +22,7 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
 import { Icon } from '@blockera/icons';
 import { Tabs, type TTabProps } from '@blockera/controls';
 import { ExtensionSlotFill } from '@blockera/features-core';
-import { isEquals, isObject, cloneObject } from '@blockera/utils';
+import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
@@ -207,10 +207,10 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			cloneObject(extensions)
 		);
 		const cacheData = useMemo(() => {
-			let cache = getItem(cacheKey);
+			let { [props.name]: cache = {} } = getItem(cacheKey) || {};
 
 			if (!cache) {
-				cache = freshItem(cacheKey, cacheKeyPrefix);
+				cache = freshItem(cacheKey, cacheKeyPrefix)?.[props.name];
 			}
 
 			// If cache data doesn't equal extensions, update cache
@@ -241,7 +241,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			if (!isEquals(cacheOmitted, extensionsOmitted)) {
 				cache = _extensionsWithoutLabel;
-				setItem(cacheKey, _extensionsWithoutLabel);
+				setItem(
+					cacheKey,
+					mergeObject(cache, {
+						[props.name]: _extensionsWithoutLabel,
+					})
+				);
 			}
 
 			return cache;
@@ -249,7 +254,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		}, [cacheKey, extensions]);
 		const supports = useMemo(() => {
 			if (!cacheData) {
-				setItem(cacheKey, _extensionsWithoutLabel);
+				setItem(
+					cacheKey,
+					mergeObject(cacheData, {
+						[props.name]: _extensionsWithoutLabel,
+					})
+				);
 				return extensions;
 			}
 
@@ -331,7 +341,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			setSettings(supports);
-			updateItem(cacheKey, extensionsWithoutLabel(cloneObject(supports)));
+			updateItem(
+				cacheKey,
+				mergeObject(cacheData, {
+					[props.name]: extensionsWithoutLabel(cloneObject(supports)),
+				})
+			);
 			// eslint-disable-next-line
 		}, [currentBlock]);
 
@@ -348,7 +363,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			};
 
 			setSettings(newSettings);
-			updateItem(cacheKey, newSettings);
+			updateItem(
+				cacheKey,
+				mergeObject(cacheData, {
+					[props.name]: newSettings,
+				})
+			);
 			updateExtension({
 				name,
 				newSupports,

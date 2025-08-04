@@ -3,7 +3,13 @@
 /**
  * External dependencies
  */
+import { addFilter } from '@wordpress/hooks';
 import { registerBlockType, registerBlockVariation } from '@wordpress/blocks';
+
+/**
+ * Blockera dependencies
+ */
+import { mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -38,6 +44,26 @@ export const registerBlockeraBlockVariation = (
 	originBlockType: string,
 	variationConfig: TBlockeraVariationType
 ) => {
+	for (const key in variationConfig?.supports || {}) {
+		addFilter(
+			`blockera.block.${originBlockType.replace(
+				/\//g,
+				'.'
+			)}.extension.${key}`,
+			'blockera.blocksCore.extensionsSupports.filter',
+			(extensionConfig, extensionName) => {
+				if (!variationConfig.supports[extensionName]) {
+					return extensionConfig;
+				}
+
+				return mergeObject(
+					extensionConfig,
+					variationConfig.supports[extensionName]
+				);
+			}
+		);
+	}
+
 	return registerBlockVariation(originBlockType, variationConfig);
 };
 
