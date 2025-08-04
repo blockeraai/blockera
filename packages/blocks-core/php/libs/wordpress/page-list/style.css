@@ -1,0 +1,28 @@
+.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] {
+	padding-left: 10px;
+}
+
+.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] li {
+	position: relative;
+	gap: var(--blockera--icon--gap, 0.7em);
+	display: flex;
+	align-items: center;
+}
+
+.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] li::before {
+	content: '';
+	display: inline-block;
+	background-color: var(--blockera--icon--color, currentColor);
+	mask: var(--blockera--icon--url) no-repeat center;
+	mask-size: contain;
+	width: var(--blockera--icon--size, 1em);
+	height: var(--blockera--icon--size, 1em);
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	align-self: center;
+}
+
+/* Hide the default marker */
+.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] li::marker {
+	content: '';
+	display: none;
+}
