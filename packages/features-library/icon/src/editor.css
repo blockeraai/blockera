@@ -8,7 +8,7 @@
 /* Icon Feature */
 
 /* .blockera-is-icon-block is icon block. */
-.editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block, .wp-block-list, .wp-block-list-item) {
+.editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block, .wp-block-list, .wp-block-list-item, .wp-block-categories, .wp-block-page-list, .wp-block-tag-cloud) {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
