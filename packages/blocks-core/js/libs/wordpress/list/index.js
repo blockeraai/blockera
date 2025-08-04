@@ -49,9 +49,9 @@ export const List: BlockType = {
 	blockFeatures: {
 		icon: {
 			status: true,
-		},
-		htmlEditable: {
-			status: false,
+			htmlEditable: {
+				status: false,
+			},
 		},
 	},
 };
