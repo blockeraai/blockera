@@ -29,6 +29,8 @@ export const useBlockFeatures = (
 ): TBlockFeaturesHookValue => {
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
+	const { getBlockType } = select('core/blocks');
+	const blockType = getBlockType(props.name);
 
 	// Using Blockera's extensions store
 	const { activeBlockVariation } = useSelect(
@@ -82,7 +84,10 @@ export const useBlockFeatures = (
 			const featureSchema = featuresSchemas[featureId];
 			const featureBlockConfig = mergeObject(
 				featureSchema?.block || {},
-				props.blockFeatures[featureId]
+				mergeObject(
+					props.blockFeatures[featureId],
+					blockType?.supports.blockFeatures?.[featureId] || {}
+				)
 			);
 
 			if (!feature.isEnabled(featureBlockConfig.status)) {
