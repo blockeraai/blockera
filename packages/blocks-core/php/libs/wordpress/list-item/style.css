@@ -1,4 +1,4 @@
-.wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block.wp-block-list-item[class*="blockera-has-icon-"] {
+.wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block[class*="blockera-has-icon-"] {
 	position: relative;
 	gap: var(--blockera--icon--gap, 0.5em);
 	display: flex;
@@ -6,7 +6,7 @@
 	margin-left: -25px;
 }
 
-.wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block.wp-block-list-item[class*="blockera-has-icon-"]::before {
+.wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block[class*="blockera-has-icon-"]::before {
 	content: '';
 	display: inline-flex;
 	align-self: center;
@@ -19,7 +19,7 @@
 }
 
 /* Hide the default marker */
-.wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block.wp-block-list-item[class*="blockera-has-icon-"]::marker {
+.wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block[class*="blockera-has-icon-"]::marker {
 	content: '';
 	display: none;
 }
