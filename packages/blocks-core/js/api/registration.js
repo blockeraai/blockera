@@ -44,7 +44,7 @@ export const registerBlockeraBlockVariation = (
 	originBlockType: string,
 	variationConfig: TBlockeraVariationType
 ) => {
-	for (const key in variationConfig?.supports || {}) {
+	for (const key in variationConfig?.supports?.blockExtensions || {}) {
 		addFilter(
 			`blockera.block.${originBlockType.replace(
 				/\//g,
@@ -52,13 +52,15 @@ export const registerBlockeraBlockVariation = (
 			)}.extension.${key}`,
 			'blockera.blocksCore.extensionsSupports.filter',
 			(extensionConfig, extensionName) => {
-				if (!variationConfig.supports[extensionName]) {
+				if (
+					!variationConfig.supports?.blockExtensions?.[extensionName]
+				) {
 					return extensionConfig;
 				}
 
 				return mergeObject(
 					extensionConfig,
-					variationConfig.supports[extensionName]
+					variationConfig.supports?.blockExtensions?.[extensionName]
 				);
 			}
 		);
