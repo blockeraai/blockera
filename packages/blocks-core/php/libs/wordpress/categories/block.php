@@ -21,5 +21,19 @@ return array_merge(
 				],
 			]
 		),
+		'supports' => array_merge(
+			$args['supports'] ?? [],
+			[
+				'blockExtensions' => [
+					'iconConfig' => [
+						'blockeraIconPosition' => [
+							'status' => false,
+							'show' => false,
+							'force' => false,
+						],
+					],
+				],
+			],
+		),
 	]
 );
