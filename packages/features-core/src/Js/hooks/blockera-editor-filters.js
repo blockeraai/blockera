@@ -110,12 +110,13 @@ export const blockeraEditorFilters = () => {
 			}
 
 			if (extensionsSupports[featureObject.extensionSupportId]) {
-				newExtensionsSupports[featureId] = mergeObject(
-					extensionsSupports[featureObject.extensionSupportId],
-					featureObject.extensionSupports[
-						featureObject.extensionSupportId
-					]
-				);
+				newExtensionsSupports[featureObject.extensionSupportId] =
+					mergeObject(
+						extensionsSupports[featureObject.extensionSupportId],
+						featureObject.extensionSupports[
+							featureObject.extensionSupportId
+						]
+					);
 			} else {
 				newExtensionsSupports[featureObject.extensionSupportId] =
 					featureObject.extensionSupports;

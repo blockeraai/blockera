@@ -55,16 +55,18 @@ export const icon = {
 			);
 		},
 		supports: {
-			iconConfig: {
-				blockeraIconPosition: {
-					status: false,
-					show: false,
-					force: false,
-				},
-				blockeraIconGap: {
-					status: false,
-					show: false,
-					force: false,
+			blockExtensions: {
+				iconConfig: {
+					blockeraIconPosition: {
+						status: false,
+						show: false,
+						force: false,
+					},
+					blockeraIconGap: {
+						status: false,
+						show: false,
+						force: false,
+					},
 				},
 			},
 		},

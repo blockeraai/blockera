@@ -202,16 +202,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const { getExtensions } = select(STORE_NAME);
 		const cacheKey =
 			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
-		const extensions = getExtensions(props.name);
+		let extensions = getExtensions(props.name);
+		const { getBlockType } = select('core/blocks');
+		const blockType = getBlockType(props.name);
+		extensions = mergeObject(
+			extensions,
+			blockType.supports?.blockExtensions || {}
+		);
 		const _extensionsWithoutLabel = extensionsWithoutLabel(
 			cloneObject(extensions)
 		);
 		const cacheData = useMemo(() => {
-			let { [props.name]: cache = {} } = getItem(cacheKey) || {};
+			const localCache = getItem(cacheKey) || {};
 
-			if (!cache) {
-				cache = freshItem(cacheKey, cacheKeyPrefix)?.[props.name];
+			if (!localCache) {
+				cache = freshItem(cacheKey, cacheKeyPrefix);
 			}
+
+			let { [props.name]: cache = {} } = localCache;
 
 			// If cache data doesn't equal extensions, update cache
 			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
@@ -243,9 +251,15 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				cache = _extensionsWithoutLabel;
 				setItem(
 					cacheKey,
-					mergeObject(cache, {
-						[props.name]: _extensionsWithoutLabel,
-					})
+					mergeObject(
+						{
+							...(getItem(cacheKey) || {}),
+							[props.name]: cache,
+						},
+						{
+							[props.name]: _extensionsWithoutLabel,
+						}
+					)
 				);
 			}
 

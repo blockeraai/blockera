@@ -55,11 +55,13 @@ export const List: BlockType = {
 		},
 	},
 	supports: {
-		iconConfig: {
-			blockeraIconPosition: {
-				status: false,
-				show: false,
-				force: false,
+		blockExtensions: {
+			iconConfig: {
+				blockeraIconPosition: {
+					status: false,
+					show: false,
+					force: false,
+				},
 			},
 		},
 	},
