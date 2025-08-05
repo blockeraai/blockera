@@ -31,12 +31,4 @@ export const ListItem: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
-	blockFeatures: {
-		icon: {
-			status: true,
-			htmlEditable: {
-				status: false,
-			},
-		},
-	},
 };
