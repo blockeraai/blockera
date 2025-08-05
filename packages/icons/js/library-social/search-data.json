@@ -258,7 +258,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "wordpress",
+		"iconName": "word-press",
 		"title": "WordPress",
 		"library": "social",
 		"tags": ["cms", "blogging"]
