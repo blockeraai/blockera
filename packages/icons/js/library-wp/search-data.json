@@ -123,7 +123,7 @@
 		"iconName": "border",
 		"title": "border",
 		"library": "wp",
-		"tags": ["frame", "outline", "edge"]
+		"tags": ["frame", "outline", "edge", "circle"]
 	},
 	{
 		"iconName": "box",
@@ -1532,5 +1532,323 @@
 		"title": "wordpress",
 		"library": "wp",
 		"tags": ["blog", "cms", "website"]
+	},
+	{
+		"iconName": "arrow-down-right",
+		"title": "Arrow Down Right",
+		"library": "wp",
+		"tags": ["arrow", "down", "right"]
+	},
+	{
+		"iconName": "arrow-up-left",
+		"title": "Arrow Up Left",
+		"library": "wp",
+		"tags": ["arrow", "up", "left"]
+	},
+	{
+		"iconName": "background",
+		"title": "Background",
+		"library": "wp",
+		"tags": ["background", "color", "fill"]
+	},
+	{
+		"iconName": "bell",
+		"title": "Bell",
+		"library": "wp",
+		"tags": ["bell", "notification", "alert"]
+	},
+	{
+		"iconName": "bell-unread",
+		"title": "Bell Unread",
+		"library": "wp",
+		"tags": ["bell", "notification", "alert"]
+	},
+	{
+		"iconName": "caution",
+		"title": "Caution",
+		"library": "wp",
+		"tags": ["warning", "caution", "notice"]
+	},
+	{
+		"iconName": "caution-filled",
+		"title": "Caution Filled",
+		"library": "wp",
+		"tags": ["warning", "caution", "notice"]
+	},
+	{
+		"iconName": "chevron-down-small",
+		"title": "Chevron Down Small",
+		"library": "wp",
+		"tags": ["chevron", "down", "small"]
+	},
+	{
+		"iconName": "cloud-download",
+		"title": "Cloud Download",
+		"library": "wp",
+		"tags": ["cloud", "download", "transfer"]
+	},
+	{
+		"iconName": "connection",
+		"title": "Connection",
+		"library": "wp",
+		"tags": ["connection", "network", "link"]
+	},
+	{
+		"iconName": "copy-small",
+		"title": "Copy Small",
+		"library": "wp",
+		"tags": ["copy", "duplicate", "clone"]
+	},
+	{
+		"iconName": "details",
+		"title": "Details",
+		"library": "wp",
+		"tags": ["details", "information", "explanation"]
+	},
+	{
+		"iconName": "drafts",
+		"title": "Drafts",
+		"library": "wp",
+		"tags": ["draft", "pending", "incomplete"]
+	},
+	{
+		"iconName": "envelope",
+		"title": "Envelope",
+		"library": "wp",
+		"tags": ["envelope", "mail", "letter"]
+	},
+	{
+		"iconName": "error",
+		"title": "Error",
+		"library": "wp",
+		"tags": ["error", "alert", "warning"]
+	},
+	{
+		"iconName": "funnel",
+		"title": "Funnel",
+		"library": "wp",
+		"tags": ["funnel", "filter", "sort"]
+	},
+	{
+		"iconName": "heading-level-1",
+		"title": "Heading Level 1",
+		"library": "wp",
+		"tags": ["heading", "title", "h1", "level"]
+	},
+	{
+		"iconName": "heading-level-2",
+		"title": "Heading Level 2",
+		"library": "wp",
+		"tags": ["heading", "title", "h2", "level"]
+	},
+	{
+		"iconName": "heading-level-3",
+		"title": "Heading Level 3",
+		"library": "wp",
+		"tags": ["heading", "title", "h3", "level"]
+	},
+	{
+		"iconName": "heading-level-4",
+		"title": "Heading Level 4",
+		"library": "wp",
+		"tags": ["heading", "title", "h4", "level"]
+	},
+	{
+		"iconName": "heading-level-5",
+		"title": "Heading Level 5",
+		"library": "wp",
+		"tags": ["heading", "title", "h5", "level"]
+	},
+	{
+		"iconName": "heading-level-6",
+		"title": "Heading Level 6",
+		"library": "wp",
+		"tags": ["heading", "title", "h6", "level"]
+	},
+	{
+		"iconName": "home-button",
+		"title": "Home Button",
+		"library": "wp",
+		"tags": ["home", "start", "root"]
+	},
+	{
+		"iconName": "justify-bottom",
+		"title": "Justify Bottom",
+		"library": "wp",
+		"tags": ["justify", "align", "bottom"]
+	},
+	{
+		"iconName": "justify-center-vertical",
+		"title": "Justify Center Vertical",
+		"library": "wp",
+		"tags": ["justify", "align", "center"]
+	},
+	{
+		"iconName": "justify-space-between-vertical",
+		"title": "Justify Space Between Vertical",
+		"library": "wp",
+		"tags": ["justify", "align", "space-between"]
+	},
+	{
+		"iconName": "justify-stretch-vertical",
+		"title": "Justify Stretch Vertical",
+		"library": "wp",
+		"tags": ["justify", "align", "stretch"]
+	},
+	{
+		"iconName": "justify-top",
+		"title": "Justify Top",
+		"library": "wp",
+		"tags": ["justify", "align", "top"]
+	},
+	{
+		"iconName": "keyboard",
+		"title": "Keyboard",
+		"library": "wp",
+		"tags": ["keyboard", "input", "type"]
+	},
+	{
+		"iconName": "language",
+		"title": "Language",
+		"library": "wp",
+		"tags": ["language", "translation", "locale"]
+	},
+	{
+		"iconName": "level-up",
+		"title": "Level Up",
+		"library": "wp",
+		"tags": ["level", "up", "arrow"]
+	},
+	{
+		"iconName": "not-allowed",
+		"title": "Not Allowed",
+		"library": "wp",
+		"tags": ["not-allowed", "forbidden", "prohibited"]
+	},
+	{
+		"iconName": "offline",
+		"title": "Offline",
+		"library": "wp",
+		"tags": ["offline", "disconnected", "unavailable"]
+	},
+	{
+		"iconName": "pending",
+		"title": "Pending",
+		"library": "wp",
+		"tags": ["pending", "incomplete", "waiting"]
+	},
+	{
+		"iconName": "pin-small",
+		"title": "Pin Small",
+		"library": "wp",
+		"tags": ["pin", "location", "bookmark"]
+	},
+	{
+		"iconName": "published",
+		"title": "Published",
+		"library": "wp",
+		"tags": ["published", "live", "public"]
+	},
+	{
+		"iconName": "resize-corner-n-e",
+		"title": "Resize Corner NE",
+		"library": "wp",
+		"tags": ["resize", "corner", "ne"]
+	},
+	{
+		"iconName": "scheduled",
+		"title": "Scheduled",
+		"library": "wp",
+		"tags": ["scheduled", "time", "calendar"]
+	},
+	{
+		"iconName": "send",
+		"title": "Send",
+		"library": "wp",
+		"tags": ["send", "mail", "message"]
+	},
+	{
+		"iconName": "sides-all",
+		"title": "Sides All",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "sides-axial",
+		"title": "Sides Axial",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "sides-bottom",
+		"title": "Sides Bottom",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "sides-horizontal",
+		"title": "Sides Horizontal",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders", "horizontal"]
+	},
+	{
+		"iconName": "sides-left",
+		"title": "Sides Left",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "sides-right",
+		"title": "Sides Right",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "sides-top",
+		"title": "Sides Top",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "sides-vertical",
+		"title": "Sides Vertical",
+		"library": "wp",
+		"tags": ["sides", "edges", "borders"]
+	},
+	{
+		"iconName": "square",
+		"title": "Square",
+		"library": "wp",
+		"tags": ["square", "rectangle", "shape"]
+	},
+	{
+		"iconName": "table-of-contents",
+		"title": "Table Of Contents",
+		"library": "wp",
+		"tags": ["table", "grid", "spreadsheet"]
+	},
+	{
+		"iconName": "text-horizontal",
+		"title": "Text Horizontal",
+		"library": "wp",
+		"tags": ["table", "grid", "spreadsheet", "horizontal"]
+	},
+	{
+		"iconName": "text-vertical",
+		"title": "Text Vertical",
+		"library": "wp",
+		"tags": ["text", "vertical", "alignment"]
+	},
+	{
+		"iconName": "thumbs-down",
+		"title": "Thumbs Down",
+		"library": "wp",
+		"tags": ["thumbs", "down", "dislike"]
+	},
+	{
+		"iconName": "thumbs-up",
+		"title": "ThumbsUp",
+		"library": "wp",
+		"tags": ["thumbs", "up", "like"]
 	}
 ]
