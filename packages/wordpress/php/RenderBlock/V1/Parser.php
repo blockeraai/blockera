@@ -46,7 +46,11 @@ class Parser {
 	 */
 	public function setSupports( array $supports): void {
 
-		$this->supports = $supports;
+		$this->supports = apply_filters(
+			'blockera.render.block.supports',
+			$supports,
+			$this->app
+		);
 	}
 
     /**
