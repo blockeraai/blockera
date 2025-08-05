@@ -24,11 +24,17 @@ return array_merge(
 				],
 			],
 		),
+		'supports' => array_merge(
+			$args['supports'] ?? [],
+			[
+				'iconConfig' => [
+					'blockeraIconPosition' => [
+						'status' => false,
+						'show' => false,
+						'force' => false,
+					],
+				],
+			],
+		),
 	]
 );
-
-
-
-
-
-

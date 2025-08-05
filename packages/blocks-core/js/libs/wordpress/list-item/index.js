@@ -31,4 +31,13 @@ export const ListItem: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	supports: {
+		iconConfig: {
+			blockeraIconPosition: {
+				status: false,
+				show: false,
+				force: false,
+			},
+		},
+	},
 };
