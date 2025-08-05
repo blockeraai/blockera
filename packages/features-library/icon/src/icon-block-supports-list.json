@@ -1,0 +1,62 @@
+{
+	"$schema": "../../../editor/js/schemas/block.supports.schema.json",
+	"title": "Blockera Icon Style Supports",
+	"supports": {
+		"blockeraIcon": {
+			"status": true,
+			"id": "blockeraRenderedIcon",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--url",
+			"fallback": ["blockeraIcon.renderedIcon"],
+			"description": "Support for \"blockeraIcon.renderedIcon\" value, provides a CSS custom property for SVG icon URL."
+		},
+		"blockeraIconSize": {
+			"status": true,
+			"id": "blockeraIconSize",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--size",
+			"fallback": ["blockeraIcon.size"],
+			"description": "Support for \"blockeraIcon.size\" value, provides a CSS custom property for SVG icon size."
+		},
+		"blockeraIconGap": {
+			"status": true,
+			"id": "blockeraIconGap",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--gap",
+			"fallback": ["blockeraIcon.gap"],
+			"description": "Support for \"blockeraIcon.gap\" value, provides a CSS custom property for SVG icon gap."
+		},
+		"blockeraIconColor": {
+			"status": true,
+			"id": "blockeraIconColor",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--color",
+			"fallback": ["blockeraIcon.color"],
+			"description": "Support for \"blockeraIcon.color\" value, provides a CSS custom property for SVG icon color."
+		},
+		"blockeraIconRotate": {
+			"status": true,
+			"id": "blockeraIconRotate",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--rotate",
+			"fallback": ["blockeraIcon.rotate"],
+			"description": "Support for \"blockeraIcon.rotate\" value, provides a CSS custom property for SVG icon rotate."
+		},
+		"blockeraIconFlipHorizontal": {
+			"status": true,
+			"id": "blockeraIconFlipHorizontal",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--flip-horizontal",
+			"fallback": ["blockeraIcon.flipHorizontal"],
+			"description": "Support for \"blockeraIcon.flipHorizontal\" value, provides a CSS custom property for SVG icon flip horizontal."
+		},
+		"blockeraIconFlipVertical": {
+			"status": true,
+			"id": "blockeraIconFlipVertical",
+			"definition": "IconStyleDefinition",
+			"css-property": "--blockera--icon--flip-vertical",
+			"fallback": ["blockeraIcon.flipVertical"],
+			"description": "Support for \"blockeraIcon.flipVertical\" value, provides a CSS custom property for SVG icon flip vertical."
+		}
+	}
+}
