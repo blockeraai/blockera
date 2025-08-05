@@ -51,7 +51,7 @@
 		"iconName": "archive",
 		"title": "archive",
 		"library": "wp",
-		"tags": ["archive", "store", "save"]
+		"tags": ["archive", "store", "save", "folder"]
 	},
 	{
 		"iconName": "arrow-down",
@@ -333,7 +333,7 @@
 		"iconName": "comment-edit-link",
 		"title": "comment Edit Link",
 		"library": "wp",
-		"tags": ["update", "modify", "change"]
+		"tags": ["update", "modify", "change", "refresh"]
 	},
 	{
 		"iconName": "comment-reply-link",
@@ -873,7 +873,7 @@
 		"iconName": "more-vertical",
 		"title": "more Vertical",
 		"library": "wp",
-		"tags": ["dropdown", "menu", "options"]
+		"tags": ["dropdown", "menu", "options", "kebab"]
 	},
 	{
 		"iconName": "move-to",
@@ -1525,7 +1525,7 @@
 		"iconName": "widget",
 		"title": "widget",
 		"library": "wp",
-		"tags": ["gadget", "tool", "app"]
+		"tags": ["gadget", "tool", "app", "calendar"]
 	},
 	{
 		"iconName": "wordpress",
