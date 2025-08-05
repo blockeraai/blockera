@@ -58,6 +58,10 @@ class EditBlockHTML implements EditableBlockHTML {
             'block'        => $block,
         ] = $data;
 
+		if (! $this->isValidBlock($block, $html)) {
+			return $html;
+		}
+
 		$this->setContext('feature');
 		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
@@ -77,6 +81,33 @@ class EditBlockHTML implements EditableBlockHTML {
 
         return str_replace($original_html, $blockElement->outerhtml, $html);
     }
+
+	/**
+	 * Validate the block.
+	 *
+	 * @param array  $block The block.
+	 * @param string $html The html.
+	 *
+	 * @return boolean true on success, false otherwise.
+	 */
+	protected function isValidBlock( array $block, string $html): bool {
+		
+		$blockType = \WP_Block_Type_Registry::get_instance()->get_registered('core/list-item');
+		
+		if (! $blockType) {
+			return $html;
+		}
+
+		if (empty($blockType->supports['blockFeatures']['icon'])) {
+			return $html;
+		}
+
+		$iconSupport = $blockType->supports['blockFeatures']['icon'];
+
+		if (empty($iconSupport['status']) || empty($iconSupport['htmlEditable']['status'])) {
+			return $html;
+		}
+	}
 
     /**
      * Find the block element in the html.
