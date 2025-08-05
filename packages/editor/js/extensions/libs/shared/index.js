@@ -213,11 +213,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			cloneObject(extensions)
 		);
 		const cacheData = useMemo(() => {
-			let { [props.name]: cache = {} } = getItem(cacheKey) || {};
+			const localCache = getItem(cacheKey) || {};
 
-			if (!cache) {
-				cache = freshItem(cacheKey, cacheKeyPrefix)?.[props.name];
+			if (!localCache) {
+				cache = freshItem(cacheKey, cacheKeyPrefix);
 			}
+
+			let { [props.name]: cache = {} } = localCache;
 
 			// If cache data doesn't equal extensions, update cache
 			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
@@ -251,6 +253,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 					cacheKey,
 					mergeObject(
 						{
+							...(getItem(cacheKey) || {}),
 							[props.name]: cache,
 						},
 						{
