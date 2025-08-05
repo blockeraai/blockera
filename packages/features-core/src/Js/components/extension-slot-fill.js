@@ -24,6 +24,13 @@ import { default as featuresSchemas } from '../../features-config';
 export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
+	const { getBlockType } = select('core/blocks');
+	const blockType = getBlockType(props.block.blockName);
+	const blockFeatures = mergeObject(
+		blockType?.supports?.blockFeatures || {},
+		props?.blockFeatures
+	);
+
 	// Using Blockera's extensions store
 	const { activeBlockVariation } = useSelect(
 		(select) => {
@@ -51,10 +58,7 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 		for (const featureId in featuresLibrary) {
 			const feature = featuresLibrary[featureId];
 
-			if (
-				!registeredFeatures[featureId] ||
-				!props?.blockFeatures?.[featureId]
-			) {
+			if (!registeredFeatures[featureId] || !blockFeatures?.[featureId]) {
 				continue;
 			}
 
@@ -70,7 +74,7 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 			};
 			const featureBlockConfig = mergeObject(
 				featureSchema?.block || {},
-				props.blockFeatures[featureId]
+				blockFeatures[featureId]
 			);
 
 			if (!feature.isEnabled(featureBlockConfig.status)) {
