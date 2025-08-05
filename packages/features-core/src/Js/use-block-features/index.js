@@ -53,6 +53,11 @@ export const useBlockFeatures = (
 		[props.clientId]
 	);
 
+	const blockFeatures: Object = mergeObject(
+		blockType?.supports?.blockFeatures || {},
+		props?.blockFeatures
+	);
+
 	const {
 		blockSideEffectFeatures,
 		contextualToolbarFeatures,
@@ -62,7 +67,7 @@ export const useBlockFeatures = (
 		const blockSideEffectFeatures: Array<TFeature> = [];
 		const contextualToolbarFeatures: Array<TFeature> = [];
 
-		if (!Object.keys(props?.blockFeatures)?.length) {
+		if (!Object.keys(blockFeatures)?.length) {
 			return {
 				blockSideEffectFeatures,
 				contextualToolbarFeatures,
@@ -74,20 +79,14 @@ export const useBlockFeatures = (
 			const feature = registeredFeatures[featureId];
 
 			// If the feature is not registered, skip it.
-			if (
-				!featuresLibrary[featureId] ||
-				!props.blockFeatures[featureId]
-			) {
+			if (!featuresLibrary[featureId] || !blockFeatures[featureId]) {
 				continue;
 			}
 
 			const featureSchema = featuresSchemas[featureId];
 			const featureBlockConfig = mergeObject(
 				featureSchema?.block || {},
-				mergeObject(
-					props.blockFeatures[featureId],
-					blockType?.supports.blockFeatures?.[featureId] || {}
-				)
+				blockFeatures[featureId]
 			);
 
 			if (!feature.isEnabled(featureBlockConfig.status)) {
@@ -100,6 +99,8 @@ export const useBlockFeatures = (
 				if ('function' === typeof feature?.editBlockHTML) {
 					blockSideEffectFeatures.push(feature);
 				}
+			} else if (feature?.filterSetAttributes) {
+				blockSideEffectFeatures.push(feature);
 			}
 
 			// Check the feature context available in contextualToolbar context of blocks features configuration.
@@ -148,7 +149,7 @@ export const useBlockFeatures = (
 				const featureSchema = featuresSchemas[feature.name];
 				const featureBlockConfig = mergeObject(
 					featureSchema.block,
-					props.blockFeatures[feature.name]
+					blockFeatures[feature.name]
 				);
 
 				const { type = 'none' } = featureBlockConfig?.contextualToolbar;
@@ -217,6 +218,10 @@ export const useBlockFeatures = (
 
 	useEffect((): void => {
 		blockSideEffectFeatures.forEach((feature: TFeature) => {
+			if ('function' === typeof feature?.filterSetAttributes) {
+				feature.filterSetAttributes();
+			}
+
 			if ('function' !== typeof feature.editBlockHTML) {
 				return;
 			}

@@ -87,6 +87,7 @@ export type TFeature = {
 	extensionSupports?: {
 		[key: string]: FeatureConfig,
 	},
+	filterSetAttributes?: () => void,
 	InlineStyleComponent?: ComponentType<{
 		className: string,
 		currentAttributes: Object,
