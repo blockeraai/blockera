@@ -5,6 +5,7 @@
  */
 // import { select } from '@wordpress/data';
 // import { createRoot } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -121,9 +122,29 @@ import type {
 // 	}
 // }
 
+const filterSetAttributes = () => {
+	addFilter(
+		'blockera.blockEdit.setAttributes',
+		'blockera.features.icon.setAttributes',
+		(attributes, attributeId, newValue) => {
+			if (
+				'blockeraIcon' === attributeId &&
+				attributes?.className?.includes('blockera-is-icon-block')
+			) {
+				const svg = encodeURIComponent(atob(newValue.renderedIcon));
+
+				attributes.url = `data:image/svg+xml;utf8,${svg}`;
+			}
+
+			return attributes;
+		}
+	);
+};
+
 export const Icon: TFeature = {
 	name: 'icon',
 	// editBlockHTML,
+	filterSetAttributes,
 	styleGenerator: IconStyles,
 	extensionSupports: iconConfig,
 	extensionSupportId: 'iconConfig',
