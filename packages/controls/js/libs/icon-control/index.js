@@ -171,6 +171,34 @@ function IconControl({
 		callback();
 	};
 
+	function renderIcon() {
+		if (
+			!isUndefined(currentIcon?.svgString) &&
+			!isEmpty(currentIcon?.svgString)
+		) {
+			return (
+				<div
+					dangerouslySetInnerHTML={{ __html: currentIcon.svgString }}
+				/>
+			);
+		}
+
+		if (
+			!isUndefined(currentIcon?.uploadSVG?.url) &&
+			!isEmpty(currentIcon?.uploadSVG?.url)
+		) {
+			return (
+				<img src={currentIcon.uploadSVG.url} alt={'custom svg icon'} />
+			);
+		}
+
+		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
+			return <Icon {...currentIcon} iconSize={50} />;
+		}
+
+		return null;
+	}
+
 	return (
 		<IconContextProvider {...defaultIconState}>
 			<BaseControl
@@ -241,16 +269,7 @@ function IconControl({
 								/>
 							</Tooltip>
 
-							{'' !== currentIcon.uploadSVG &&
-							'' !== currentIcon.svgString ? (
-								<div
-									dangerouslySetInnerHTML={{
-										__html: currentIcon.svgString,
-									}}
-								/>
-							) : (
-								<Icon {...currentIcon} iconSize={50} />
-							)}
+							{renderIcon()}
 
 							<div
 								className={controlInnerClassNames(
