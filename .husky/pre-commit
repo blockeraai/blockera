@@ -1,4 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Source shell environment to ensure PHP is in PATH
+if [ -f ~/.zshrc ]; then
+    . ~/.zshrc
+fi
+
 npx lint-staged
