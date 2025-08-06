@@ -44,5 +44,18 @@ return array_merge(
 				],
 			]
 		),
+		'supports' => array_merge(
+			$args['supports'] ?? [],
+			[
+				'blockFeatures' => [
+					'icon' => [
+						'status' => true,
+						'htmlEditable' => [
+							'status' => true,
+						],
+					],
+				],
+			],
+		),
 	]
 );
