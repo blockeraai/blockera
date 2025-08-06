@@ -92,21 +92,27 @@ class EditBlockHTML implements EditableBlockHTML {
 	 */
 	protected function isValidBlock( array $block, string $html): bool {
 		
-		$blockType = \WP_Block_Type_Registry::get_instance()->get_registered('core/list-item');
-		
+		if (empty($block['blockName'])) {
+			return false;
+		}
+
+		$blockType = \WP_Block_Type_Registry::get_instance()->get_registered($block['blockName']);
+
 		if (! $blockType) {
-			return $html;
+			return false;
 		}
 
 		if (empty($blockType->supports['blockFeatures']['icon'])) {
-			return $html;
+			return false;
 		}
 
 		$iconSupport = $blockType->supports['blockFeatures']['icon'];
-
-		if (empty($iconSupport['status']) || empty($iconSupport['htmlEditable']['status'])) {
-			return $html;
+		
+		if (! empty($iconSupport['status']) && ! empty($iconSupport['htmlEditable']['status'])) {
+			return true;
 		}
+
+		return false;
 	}
 
     /**
