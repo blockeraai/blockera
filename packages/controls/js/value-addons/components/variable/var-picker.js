@@ -179,6 +179,7 @@ export default function ({
 											? {
 													gap: '5px',
 													padding: '0px 4px 0px 6px',
+													maxWidth: '118px',
 											  }
 											: {}),
 									}}

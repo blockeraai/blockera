@@ -9,6 +9,7 @@
 
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.
+- Fixed variable picker design issue while variable names were too long.
 
 ## 1.4.0 (2025-07-16)
 
