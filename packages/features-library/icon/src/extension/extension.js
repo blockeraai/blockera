@@ -141,9 +141,15 @@ export const IconExtension: ComponentType<{
 									marginLeft: iconState.iconGap,
 								}),
 							}}
+							xmlns="http://www.w3.org/2000/svg"
 							icon={newValue.icon}
 							library={newValue.library}
 							uploadSVG={newValue.uploadSVG}
+							{...{
+								...('fontawesome' === newValue.library
+									? { viewBox: '0 0 512 512' }
+									: {}),
+							}}
 						/>
 					);
 
