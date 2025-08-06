@@ -37,9 +37,4 @@ export const Button: BlockType = {
 		},
 		visited: sharedBlockStates.visited,
 	},
-	blockFeatures: {
-		icon: {
-			status: true,
-		},
-	},
 };
