@@ -58,16 +58,19 @@ class EditBlockHTML implements EditableBlockHTML {
             'block'        => $block,
         ] = $data;
 
-		if (! $this->isValidBlock($block, $html)) {
+		if (! $this->isValidBlock($block, $html) && 'core/image' !== $block['blockName']) {
 			return $html;
+		}
+
+		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
+			$this->setContext('feature');
+			$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
+
+			return $app->make(IconBlock::class)->render($html, $this, $data);
 		}
 
 		$this->setContext('feature');
 		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
-
-		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			return $app->make(IconBlock::class)->render($html, $this, $data);
-		}
 
         $blockElement = $this->findBlockElement($data);
 
