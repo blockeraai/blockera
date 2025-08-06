@@ -18,6 +18,7 @@ import { BlockeraIcon } from './library-blockera/index';
 import { BlockeraUIIcon } from './library-ui/index';
 import { CursorIcon } from './library-cursor/index';
 import { SocialIcon } from './library-social/index';
+import { FontAwesomeIcon } from './library-fontawesome';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 import type { IconProps, IconLibraryTypes } from './types';
 
@@ -46,6 +47,9 @@ export function Icon({
 
 		case 'social':
 			return <SocialIcon library={library} {...props} />;
+
+		case 'fontawesome':
+			return <FontAwesomeIcon library={library} {...props} />;
 
 		default:
 			return <WPIcon library={library} {...props} />;
@@ -142,6 +146,14 @@ export function createStandardIconObject(
 		if (!icon?.icon) {
 			return getIcon(iconName, library, false);
 		}
+	}
+
+	if ('fontawesome' === library) {
+		return {
+			icon,
+			library,
+			iconName,
+		};
 	}
 
 	if (icon?.icon) {
