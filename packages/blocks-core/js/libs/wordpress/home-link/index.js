@@ -41,9 +41,4 @@ export const HomeLink: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
-	blockFeatures: {
-		icon: {
-			status: true,
-		},
-	},
 };
