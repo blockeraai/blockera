@@ -36,6 +36,14 @@ return array_merge(
 						],
 					],
 				],
+				'blockFeatures' => [
+					'icon' => [
+						'status' => true,
+						'htmlEditable' => [
+							'status' => false,
+						],
+					],
+				],
 			],
 		),
 	]
