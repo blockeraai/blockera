@@ -49,13 +49,18 @@ export const blockeraEditorFilters = () => {
 
 				if (
 					blockFeature?.status &&
-					blockFeature?.innerBlocks?.status &&
-					0 < Object.keys(blockFeature?.innerBlocks?.items).length
+					blockFeature?.inspector?.status &&
+					blockFeature?.inspector?.innerBlocks?.status &&
+					0 <
+						Object.keys(blockFeature?.inspector?.innerBlocks?.items)
+							.length
 				) {
-					for (const innerBlockId in blockFeature?.innerBlocks
-						?.items) {
+					for (const innerBlockId in blockFeature?.inspector
+						?.innerBlocks?.items) {
 						const innerBlockObject =
-							blockFeature?.innerBlocks?.items[innerBlockId];
+							blockFeature?.inspector?.innerBlocks?.items[
+								innerBlockId
+							];
 
 						blockeraInnerBlocks[innerBlockId] = mergeObject(
 							blockeraInnerBlocks[innerBlockId] ?? {},
@@ -66,13 +71,17 @@ export const blockeraEditorFilters = () => {
 
 				if (
 					blockFeature?.status &&
-					blockFeature?.blockStates?.status &&
-					0 < Object.keys(blockFeature?.blockStates?.items).length
+					blockFeature?.inspector?.blockStates?.status &&
+					0 <
+						Object.keys(blockFeature?.inspector?.blockStates?.items)
+							.length
 				) {
-					for (const blockStateId in blockFeature?.blockStates
-						?.items) {
+					for (const blockStateId in blockFeature?.inspector
+						?.blockStates?.items) {
 						const blockStateObject =
-							blockFeature?.blockStates?.items[blockStateId];
+							blockFeature?.inspector?.blockStates?.items[
+								blockStateId
+							];
 
 						availableBlockStates[blockStateId] = mergeObject(
 							availableBlockStates[blockStateId] ?? {},

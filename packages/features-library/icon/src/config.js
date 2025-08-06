@@ -17,8 +17,37 @@ export const icon = {
 		inspector: {
 			status: true,
 			tabPosition: 'blockera-inspector-settings-start',
-			innerBlocks: {},
-			blockStates: {},
+			innerBlocks: {
+				status: true,
+				items: {
+					'elements/icon': {
+						name: 'elements/icon',
+						label: __('Icons', 'blockera'),
+						description: __('All icon elements.', 'blockera'),
+						icon: (
+							<Icon
+								icon="star-filled"
+								library="wp"
+								iconSize="20"
+							/>
+						),
+						settings: {
+							force: false,
+							priority: 10,
+						},
+						availableBlockStates: {
+							...generalInnerBlockStates,
+							focus: {
+								...generalInnerBlockStates.focus,
+								force: true,
+							},
+						},
+					},
+				},
+			},
+			blockStates: {
+				status: false,
+			},
 		},
 		htmlEditable: {
 			status: true,
@@ -26,33 +55,6 @@ export const icon = {
 		contextualToolbar: {
 			status: false,
 			type: 'none',
-		},
-		innerBlocks: {
-			status: true,
-			items: {
-				'elements/icon': {
-					name: 'elements/icon',
-					label: __('Icons', 'blockera'),
-					description: __('All icon elements.', 'blockera'),
-					icon: (
-						<Icon icon="star-filled" library="wp" iconSize="20" />
-					),
-					settings: {
-						force: false,
-						priority: 10,
-					},
-					availableBlockStates: {
-						...generalInnerBlockStates,
-						focus: {
-							...generalInnerBlockStates.focus,
-							force: true,
-						},
-					},
-				},
-			},
-		},
-		blockStates: {
-			status: false,
 		},
 	},
 };

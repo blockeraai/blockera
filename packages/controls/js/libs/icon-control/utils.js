@@ -2,6 +2,7 @@
  * External dependencies
  */
 import { sprintf, __ } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -19,6 +20,7 @@ import {
  * Internal dependencies
  */
 import { Tooltip } from '../';
+import { FeatureWrapper } from '../feature-wrapper';
 
 export function getLibraryIcons({
 	library,
@@ -67,33 +69,46 @@ export function getLibraryIcons({
 
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
-				<span
-					key={iconKey}
-					className={controlInnerClassNames(
-						'icon-control-icon',
-						'library-' + icon.library,
-						'icon-' + icon.iconName,
-						isCurrentIcon(icon.iconName, icon.library)
-							? 'icon-current'
-							: ''
+				<FeatureWrapper
+					className={controlInnerClassNames('icon-wrapper')}
+					type={applyFilters(
+						'blockera.controls.iconControl.utils.getLibraryIcons.type',
+						'fontawesome' === library ? 'native' : 'none',
+						library
 					)}
-					aria-label={sprintf(
-						// translators: %s is icon ID in icon libraries for example arrow-left
-						__('%s Icon', 'blockera'),
-						icon.iconName
-					)}
-					onClick={(event) =>
-						onClick(event, {
-							type: 'UPDATE_ICON',
-							icon: icon.iconName,
-							library: icon.library,
-						})
-					}
 				>
-					<Tooltip text={icon.iconName}>
-						<Icon library={icon.library} icon={icon} />
-					</Tooltip>
-				</span>
+					<span
+						key={iconKey}
+						className={controlInnerClassNames(
+							'icon-control-icon',
+							'library-' + icon.library,
+							'icon-' + icon.iconName,
+							isCurrentIcon(icon.iconName, icon.library)
+								? 'icon-current'
+								: ''
+						)}
+						aria-label={sprintf(
+							// translators: %s is icon ID in icon libraries for example arrow-left
+							__('%s Icon', 'blockera'),
+							icon.iconName
+						)}
+						onClick={(event) =>
+							onClick(event, {
+								type: 'UPDATE_ICON',
+								icon: icon.iconName,
+								library: icon.library,
+							})
+						}
+					>
+						<Tooltip text={icon.iconName}>
+							<Icon
+								library={icon.library}
+								icon={icon}
+								iconSize={'fontawesome' === library ? 20 : 24}
+							/>
+						</Tooltip>
+					</span>
+				</FeatureWrapper>
 			);
 	}
 

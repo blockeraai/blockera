@@ -21,6 +21,10 @@ import type { IconLibraryTypes } from './types';
 import { WPIcons } from './library-wp';
 import { default as WPLibraryIcon } from './library-wp/library-icon';
 import WPIconsSearchData from './library-wp/search-data.json';
+// FontAwesome Library
+import { FaIcons } from './library-fontawesome';
+import { default as FaLibraryIcon } from './library-fontawesome/library-icon';
+import FaIconsSearchData from './library-fontawesome/search-data.json';
 // Blockera Library
 import { BlockeraIcons } from './library-blockera';
 import { default as LibraryIcon } from './library-blockera/library-icon';
@@ -50,6 +54,12 @@ export const IconLibraries: {
 		// translators: Icon library name
 		name: __('WordPress', 'blockera'),
 		icon: <WPLibraryIcon />,
+	},
+	fontawesome: {
+		id: 'fontawesome',
+		// translators: Icon library name
+		name: __('FontAwesome', 'blockera'),
+		icon: <FaLibraryIcon />,
 	},
 	social: {
 		id: 'social',
@@ -110,6 +120,9 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 		case 'wp':
 			return WPIcons;
 
+		case 'fontawesome':
+			return FaIcons;
+
 		case 'cursor':
 			return CursorIcons;
 
@@ -124,6 +137,8 @@ function _getLibraryIcons(library: IconLibraryTypes): Array<any> {
 	switch (library) {
 		case 'wp':
 			return WPIconsSearchData;
+		case 'fontawesome':
+			return FaIconsSearchData;
 		case 'blockera':
 			return IconsSearchData;
 		case 'cursor':

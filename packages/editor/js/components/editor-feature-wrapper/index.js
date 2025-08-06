@@ -44,22 +44,6 @@ export default function EditorFeatureWrapper({
 			)
 		);
 
-	if (window?.blockeraFeatureManager_1_0_0?.EditorFeatureWrapper) {
-		const WrapperComponent =
-			window.blockeraFeatureManager_1_0_0.EditorFeatureWrapper;
-
-		return (
-			<WrapperComponent
-				{...{
-					config,
-					isActive,
-					children,
-					...props,
-				}}
-			/>
-		);
-	}
-
 	const getCurrentState = (): TStates =>
 		isInnerBlock(currentBlock) ? currentInnerBlockState : currentState;
 
