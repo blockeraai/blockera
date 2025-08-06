@@ -34,7 +34,11 @@ export function getLibraryIcons({
 	let iconLibraryIcons = {};
 	const iconsStack = [];
 
-	if (library === 'suggestions' || library === 'search') {
+	if (
+		'suggestions' === library ||
+		'search' === library ||
+		'fa-search' === library
+	) {
 		switch (typeof query) {
 			case 'function':
 				iconLibraryIcons = iconSearch({
@@ -49,7 +53,7 @@ export function getLibraryIcons({
 			case 'string':
 				iconLibraryIcons = iconSearch({
 					query,
-					library: 'all',
+					library: 'fa-search' === library ? 'fontawesome' : 'all',
 					limit,
 				});
 				break;

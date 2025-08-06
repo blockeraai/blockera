@@ -17,6 +17,7 @@ import { isUndefined } from '@blockera/utils';
  */
 import searchIndex from './search-index.json';
 import type { IconLibraryTypes } from './types';
+import faSearchIndex from './search-fontawesome-index.json';
 // WP Library
 import { WPIcons } from './library-wp';
 import { default as WPLibraryIcon } from './library-wp/library-icon';
@@ -179,6 +180,12 @@ export function getIconLibrarySearchData(
 	return searchData;
 }
 
-export function getIconLibrariesSearchIndex(): Object {
+export function getIconLibrariesSearchIndex(
+	library: IconLibraryTypes | 'all'
+): Object {
+	if ('fontawesome' === library) {
+		return Fuse.parseIndex(faSearchIndex);
+	}
+
 	return Fuse.parseIndex(searchIndex);
 }

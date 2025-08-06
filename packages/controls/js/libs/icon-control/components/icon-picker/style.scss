@@ -48,7 +48,7 @@
 			justify-items: center;
 			position: relative;
 
-			&::after {
+			&:not(.no-fade)::after {
 				content: "";
 				position: absolute;
 				bottom: 0;
@@ -95,6 +95,10 @@
 
 		svg {
 			fill: currentcolor;
+		}
+
+		&.mt-20 {
+			margin-top: 20px;
 		}
 	}
 }

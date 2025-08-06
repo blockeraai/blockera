@@ -36,7 +36,7 @@ function generateTags(iconName) {
 }
 
 // Process all icons
-const processIcons = (icons) => {
+const processIcons = (icons, prefix) => {
 	return Object.entries(icons)
 		.filter(
 			([key]) =>
@@ -53,6 +53,7 @@ const processIcons = (icons) => {
 				iconName,
 				title: camelToTitle(iconName),
 				library: 'fontawesome',
+				prefix,
 				tags: generateTags(iconName),
 			};
 		});
@@ -60,9 +61,9 @@ const processIcons = (icons) => {
 
 // Combine all icon sets
 const searchData = [
-	...processIcons(fas),
-	...processIcons(fab),
-	...processIcons(far),
+	...processIcons(fas, 'fas'),
+	...processIcons(fab, 'fab'),
+	...processIcons(far, 'far'),
 ];
 
 // Write to search-data.json

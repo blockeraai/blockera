@@ -37,7 +37,7 @@ export function iconSearch({
 		const fuse = new Fuse(
 			getIconLibrarySearchData(library),
 			searchConfig,
-			getIconLibrariesSearchIndex()
+			getIconLibrariesSearchIndex(library)
 		);
 
 		let result = fuse.search(query);

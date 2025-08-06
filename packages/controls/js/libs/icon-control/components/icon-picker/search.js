@@ -20,6 +20,7 @@ import SearchControl from '../../../search-control';
 export default function Search({}) {
 	const [searchInput, setSearchInput] = useState('');
 	const [searchData, setSearchData] = useState([]);
+	const [faSearchData, setFaSearchData] = useState([]);
 
 	const { id, handleIconSelect } = useContext(IconContext);
 
@@ -38,6 +39,14 @@ export default function Search({}) {
 					setSearchData(
 						getLibraryIcons({
 							library: 'search',
+							query: value,
+							onClick: handleIconSelect,
+							limit: 49,
+						})
+					);
+					setFaSearchData(
+						getLibraryIcons({
+							library: 'fa-search',
 							query: value,
 							onClick: handleIconSelect,
 							limit: 49,
@@ -94,10 +103,41 @@ export default function Search({}) {
 							) : (
 								<div
 									className={controlInnerClassNames(
-										'library-body'
+										'library-body',
+										'no-fade'
 									)}
 								>
 									{searchData}
+								</div>
+							)}
+							<div
+								className={controlInnerClassNames(
+									'library-header',
+									'mt-20'
+								)}
+							>
+								<Icon icon="search" iconSize="18" />{' '}
+								{__('Search FontAwesome Result', 'blockera')}
+							</div>
+							{!faSearchData.length ? (
+								<span
+									className={controlInnerClassNames(
+										'library-search-hint'
+									)}
+								>
+									{__(
+										'Sorry, no icons found. Please try a different keyword.',
+										'blockera'
+									)}
+								</span>
+							) : (
+								<div
+									className={controlInnerClassNames(
+										'library-body',
+										'no-fade'
+									)}
+								>
+									{faSearchData}
 								</div>
 							)}
 						</>

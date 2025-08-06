@@ -18,6 +18,8 @@ import {
 // Import the libraries configuration
 import searchLibraries from '../search-libraries.json';
 
+searchLibraries.push('fontawesome');
+
 describe('Icon Libraries → Check all icons are available and search data', () => {
 	beforeEach(() => {
 		createPost();
@@ -25,6 +27,7 @@ describe('Icon Libraries → Check all icons are available and search data', () 
 
 	/**
 	 * Generates search data entries for missing icons that can be copied and pasted
+	 *
 	 * @param {string} libraryId - The library ID
 	 * @return {string} JSON string with search data entries
 	 */
@@ -53,6 +56,7 @@ describe('Icon Libraries → Check all icons are available and search data', () 
 
 	/**
 	 * Generates search data entries for all missing icons across all libraries
+	 *
 	 * @return {Object} Object with library IDs as keys and JSON strings as values
 	 */
 	function generateAllSearchData(): { [string]: string } {
