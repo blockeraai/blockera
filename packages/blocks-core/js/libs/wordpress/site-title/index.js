@@ -33,11 +33,4 @@ export const SiteTitle: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
-	blockFeatures: {
-		icon: {
-			htmlEditable: {
-				status: true,
-			},
-		},
-	},
 };
