@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { memo } from '@wordpress/element';
+import { memo, useMemo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -20,6 +20,9 @@ const IconLibraries = ({
 		wp: {
 			lazyLoad: false,
 		},
+		fontawesome: {
+			lazyLoad: false,
+		},
 		social: {
 			lazyLoad: true,
 		},
@@ -28,34 +31,37 @@ const IconLibraries = ({
 		},
 	},
 }) => {
-	const stack = [];
+	// Memoize the library components to prevent unnecessary re-renders
+	const libraryComponents = useMemo(() => {
+		return Object.entries(libraries).map(([library, config]) => {
+			const iconLibraryInfo = getIconLibrary(library);
+			const icon = iconLibraryInfo[library].icon;
+			const title = (
+				<>
+					{icon}{' '}
+					{sprintf(
+						// translators: %s: Icon Library Name
+						__('%s Icons', 'blockera'),
+						iconLibraryInfo[library].name
+					)}
+				</>
+			);
 
-	for (const library in libraries) {
-		const iconLibraryInfo = getIconLibrary(library);
-
-		const icon = iconLibraryInfo[library].icon;
-		const title = (
-			<>
-				{icon}{' '}
-				{sprintf(
-					// translators: %s: Icon Library Name
-					__('%s Icons', 'blockera'),
-					iconLibraryInfo[library].name
-				)}
-			</>
-		);
-
-		stack.push(
-			<IconLibrary
-				library={library}
-				lazyLoad={libraries[library].lazyLoad}
-				title={title}
-			/>
-		);
-	}
+			return (
+				<IconLibrary
+					key={library}
+					library={library}
+					lazyLoad={config.lazyLoad}
+					title={title}
+				/>
+			);
+		});
+	}, [libraries]);
 
 	return (
-		<div className={controlInnerClassNames('icon-libraries')}>{stack}</div>
+		<div className={controlInnerClassNames('icon-libraries')}>
+			{libraryComponents}
+		</div>
 	);
 };
 
