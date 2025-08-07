@@ -6,12 +6,13 @@ import { FontAwesomeIcon as FaIcon } from '@fortawesome/react-fontawesome';
 /**
  * Blockera dependencies
  */
-import { isString, isUndefined } from '@blockera/utils';
+import { isString, isUndefined, snakeCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { getIcon } from '../index';
+import { FaIcons } from './icons';
 
 export function FontAwesomeIcon({
 	library = 'fontawesome',
@@ -42,19 +43,8 @@ export function FontAwesomeIcon({
 		}
 	}
 
-	// Handle brand icons (fab prefix).
-	if ('fab' === icon.icon.prefix) {
-		return (
-			<FaIcon
-				style={style}
-				icon={{
-					prefix: icon.icon.prefix,
-					iconName: icon.icon.iconName || icon.iconName,
-					icon: icon.icon.icon,
-				}}
-				{...props}
-			/>
-		);
+	if (!FaIcons[icon.iconName]) {
+		icon.iconName = snakeCase(icon.iconName).replace(/_/g, '-');
 	}
 
 	// Handle regular and solid icons
