@@ -77,7 +77,9 @@ export function getLibraryIcons({
 					className={controlInnerClassNames('icon-wrapper')}
 					type={applyFilters(
 						'blockera.controls.iconControl.utils.getLibraryIcons.type',
-						'fontawesome' === library ? 'native' : 'none',
+						['fa-search', 'fontawesome'].includes(library)
+							? 'native'
+							: 'none',
 						library
 					)}
 				>
