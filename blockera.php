@@ -26,7 +26,7 @@ if (! defined('ABSPATH')) {
 require __DIR__ . '/vendor/autoload.php';
 
 // Register into shared autoload coordinator.
-require_once __DIR__ . '/class-shared-autoload-coordinator.php';
+require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
 \Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
 \Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
 
