@@ -1,0 +1,17 @@
+.wp-block-navigation-submenu[class*="blockera-has-icon-"] .wp-block-navigation-item__label {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.wp-block-navigation-submenu[class*="blockera-has-icon-"] .wp-block-navigation-item__label svg {
+	display: inline-block;
+	position: relative;
+	background: var(--blockera--icon--color);
+	width: var(--blockera--icon--size, 1.33em);
+	height: var(--blockera--icon--size, 1.33em);
+	margin: auto 0;
+	align-self: center;
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	vertical-align: text-bottom;
+}

@@ -12,11 +12,13 @@ import memoize from 'fast-memoize';
 import {
 	getIconLibraryIcons,
 	getIconLibrarySearchData,
-	// getIconLibrariesSearchIndex,
+	getIconLibrariesSearchIndex,
 	isValidIconLibrary,
 } from './icon-library';
 import { isValidIcon } from './icon';
 import { type IconLibraryTypes } from './types';
+
+const searchConfig = require('./search-config.json');
 
 export function iconSearch({
 	query,
@@ -34,24 +36,8 @@ export function iconSearch({
 	const getMemoizedResult = memoize(() => {
 		const fuse = new Fuse(
 			getIconLibrarySearchData(library),
-			{
-				shouldSort: true,
-				includeScore: false,
-				keys: [
-					{
-						name: 'title',
-						weight: 0.2,
-					},
-					{
-						name: 'tags',
-						weight: 0.5,
-					},
-				],
-				minMatchCharLength: 3,
-				useExtendedSearch: false,
-				threshold: 0.15,
-			}
-			// getIconLibrariesSearchIndex()
+			searchConfig,
+			getIconLibrariesSearchIndex()
 		);
 
 		let result = fuse.search(query);

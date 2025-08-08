@@ -17,7 +17,6 @@ export { CustomStyleStyles, CustomStyleExtension } from './custom-style';
 export { TypographyStyles, TypographyExtension } from './typography';
 export { InnerBlocksExtension } from './block-card/inner-blocks';
 export { EntranceAnimationExtension } from './entrance-animation';
-export { IconStyles, IconExtension } from './icon';
 export { SharedBlockExtension } from './shared';
 export * as extensionConfig from './base/config';
 export {

@@ -1,0 +1,18 @@
+{
+	"name": "blockera/features-core",
+	"version": "1.0.0",
+	"description": "The Blockera Features Core package.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Features\\Core\\": "src/"
+		},
+		"files": [
+			"src/helpers.php"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Features\\Core\\Tests\\": "src/tests/"
+		}
+	}
+}

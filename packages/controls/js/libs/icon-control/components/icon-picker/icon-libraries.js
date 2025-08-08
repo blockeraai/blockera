@@ -20,6 +20,9 @@ const IconLibraries = ({
 		wp: {
 			lazyLoad: false,
 		},
+		social: {
+			lazyLoad: true,
+		},
 		blockera: {
 			lazyLoad: true,
 		},

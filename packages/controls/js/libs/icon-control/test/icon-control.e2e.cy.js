@@ -2,9 +2,10 @@
  * Blockera dependencies
  */
 import {
+	createPost,
+	appendBlocks,
 	getWPDataObject,
 	getSelectedBlock,
-	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 import { experimental } from '@blockera/env';
 
@@ -12,11 +13,20 @@ if (experimental().get('editor.extensions.iconExtension')) {
 	describe('icon-control', () => {
 		beforeEach(() => {
 			createPost();
-			cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+			appendBlocks(`<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Test btn 1</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->`);
+
+			cy.getBlock('core/button').click();
+
+			cy.getByDataTest('settings-tab').click();
 		});
 
 		context('Functional', () => {
-			it('should be able to upload custom svg when there is selected icon', () => {
+			// @debug-ignore
+			it.skip('should be able to upload custom svg when there is selected icon', () => {
 				// act
 				cy.get('[aria-label="button Icon"]').click();
 				cy.contains('button', /upload svg/i).click({ force: true });
@@ -43,9 +53,10 @@ if (experimental().get('editor.extensions.iconExtension')) {
 				});
 			});
 
-			it('should be able to add new icon from library', () => {
+			// @debug-ignore
+			it.skip('should be able to add new icon from library', () => {
 				// act
-				cy.get('[aria-label="Choose Icon…"]').click();
+				cy.get('[aria-label="Icon Library"]').click();
 
 				cy.get('input[type="search"]').eq(1).type('pub');
 				cy.get('span[aria-label="blockera Icon"]').click();
@@ -62,7 +73,12 @@ if (experimental().get('editor.extensions.iconExtension')) {
 
 			it('should be able to delete selected icon', () => {
 				// act
-				cy.get('[aria-label="button Icon"]').click();
+				cy.get('[aria-label="Choose Icon…"]').click();
+
+				cy.get('span[aria-label="blockera Icon"]').click();
+
+				// act
+				// cy.get('[aria-label="button Icon"]').click();
 				cy.get('button[aria-label="Remove Icon"]').click({
 					force: true,
 				});

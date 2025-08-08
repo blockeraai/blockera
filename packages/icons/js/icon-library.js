@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import Fuse from 'fuse.js';
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 
@@ -14,6 +15,7 @@ import { isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import searchIndex from './search-index.json';
 import type { IconLibraryTypes } from './types';
 // WP Library
 import { WPIcons } from './library-wp';
@@ -28,7 +30,13 @@ import { BlockeraUIIcons } from './library-ui';
 import { default as LibraryUIIcon } from './library-ui/library-icon';
 // Cursor Library
 import { CursorIcons } from './library-cursor';
+import CursorIconsSearchData from './library-cursor/search-data.json';
 import { default as LibraryCursorIcon } from './library-cursor/library-icon';
+// Social Library
+import { SocialIcons } from './library-social';
+import SocialIconsSearchData from './library-social/search-data.json';
+import { default as SocialIcon } from './library-social/library-icon';
+import searchLibraries from './search-libraries.json';
 
 export const IconLibraries: {
 	[key: string]: {
@@ -43,10 +51,16 @@ export const IconLibraries: {
 		name: __('WordPress', 'blockera'),
 		icon: <WPLibraryIcon />,
 	},
+	social: {
+		id: 'social',
+		// translators: Icon library name
+		name: __('Social', 'blockera'),
+		icon: <SocialIcon />,
+	},
 	blockera: {
 		id: 'blockera',
 		// translators: Icon library name
-		name: __('Blockera', 'blockera'),
+		name: __('Blockera Branding', 'blockera'),
 		icon: <LibraryIcon />,
 	},
 	ui: {
@@ -98,9 +112,27 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 
 		case 'cursor':
 			return CursorIcons;
+
+		case 'social':
+			return SocialIcons;
 	}
 
 	return {};
+}
+
+function _getLibraryIcons(library: IconLibraryTypes): Array<any> {
+	switch (library) {
+		case 'wp':
+			return WPIconsSearchData;
+		case 'blockera':
+			return IconsSearchData;
+		case 'cursor':
+			return CursorIconsSearchData;
+		case 'social':
+			return SocialIconsSearchData;
+	}
+
+	return [];
 }
 
 export function getIconLibrarySearchData(
@@ -111,27 +143,27 @@ export function getIconLibrarySearchData(
 	if (library === 'all' || isValidIconLibrary(library))
 		switch (library) {
 			case 'all':
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, WPIconsSearchData);
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, IconsSearchData);
-				// $FlowFixMe
+				searchLibraries.forEach((library) => {
+					// $FlowFixMe
+					Array.prototype.push.apply(
+						searchData,
+						_getLibraryIcons(library)
+					);
+				});
 				break;
 
-			case 'wp':
+			default:
 				// $FlowFixMe
-				Array.prototype.push.apply(searchData, WPIconsSearchData);
-				break;
-
-			case 'blockera':
-				// $FlowFixMe
-				Array.prototype.push.apply(searchData, IconsSearchData);
+				Array.prototype.push.apply(
+					searchData,
+					_getLibraryIcons(library)
+				);
 				break;
 		}
 
 	return searchData;
 }
 
-// export function getIconLibrariesSearchIndex(): Object {
-// 	return Fuse.parseIndex(searchIndex);
-// }
+export function getIconLibrariesSearchIndex(): Object {
+	return Fuse.parseIndex(searchIndex);
+}

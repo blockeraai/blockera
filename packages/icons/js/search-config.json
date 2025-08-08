@@ -1,0 +1,16 @@
+{
+	"includeScore": true,
+	"threshold": 0.15,
+	"keys": [
+		{
+			"name": "title",
+			"weight": 0.5
+		},
+		{
+			"name": "tags",
+			"weight": 0.2
+		}
+	],
+	"minMatchCharLength": 3,
+	"useExtendedSearch": false
+}

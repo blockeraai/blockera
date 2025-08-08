@@ -1,7 +1,6 @@
 // @flow
 
 export { useAttributes } from './use-attributes';
-export { useIconEffect } from './use-icon-effect';
 export { useTraceUpdate } from './use-trace-update';
 export { useBlocksStore } from './use-blocks-store';
 export { useEditorStore } from './use-editor-store';

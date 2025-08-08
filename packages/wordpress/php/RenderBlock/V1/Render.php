@@ -4,7 +4,8 @@ namespace Blockera\WordPress\RenderBlock\V1;
 
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
-use Blockera\Utils\Adapters\DomParser;
+use Blockera\Features\Core\FeaturesManager;
+use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -13,6 +14,8 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @package Render
  */
 class Render {
+
+	use AssetsLoaderTrait;
 
     /**
      * Hold application instance.
@@ -42,14 +45,30 @@ class Render {
 	 */
 	protected bool $is_doing_transpile = false;
 
+	/**
+	 * Store the args array.
+	 *
+	 * @var array $args the args array.
+	 */
+	protected array $args = [];
+
+	/**
+	 * Store the id.
+	 *
+	 * @var string $id the id.
+	 */
+	protected string $id;
+
     /**
      * Render constructor.
      *
      * @param Application $app the app instance.
+	 * @param array       $args the args array.
 	 * @param bool        $cache_status true if cache is enabled, false otherwise.
      */
-    public function __construct( Application $app, bool $cache_status = true) { 
+    public function __construct( Application $app, array $args = [], bool $cache_status = true) { 
         $this->app          = $app;
+		$this->args         = $args;
 		$this->cache_status = $cache_status;
     }
 
@@ -82,41 +101,54 @@ class Render {
      * Render block icon element.
      *
      * @param string $html   The block html output.
-     * @param Parser $parser The block parser instance.
      * @param array  $args   The extra arguments to render block icon element.
      *
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string The block html include icon element if icon is existing.
      */
-    protected function renderIcon( string $html, Parser $parser, array $args): string {
+    protected function renderBlockWithFeatures( string $html, array $args): string {
 
         // blockera active experimental icon extension?
-        $is_enable_icon_extension = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
+        $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
 
-        // phpcs:disable
-        // create dom adapter.
-        /**
-         * @var DomParser $dom
-         */
-        if ($is_enable_icon_extension) {
+		$fm = $this->app->make(FeaturesManager::class);
 
-            $dom = $this->app->make(DomParser::class)::str_get_html($html);
-        }
-        // phpcs:enable
+		// Get all registered features.
+		$features = $fm->getRegisteredFeatures();
 
-        // phpcs:disable
-        // TODO: add into cache mechanism.
-        //manipulation HTML of block content
-        if ($is_enable_icon_extension) {
+		// Get dom parser.
+		$dom_parser = $fm->getApp()->dom_parser::str_get_html($html);
 
-            $parser->htmlManipulate(array_merge($args, [ $dom ]));
-            //retrieve final html of block content
-            $html = preg_replace([ '/(<[^>]+) style=".*?"/i', '/wp-block-\w+__(\w+|\w+-\w+)-\d+(\w+|%)/i' ], [ '$1', '' ], $dom->html());
-        }
+		foreach ($features as $feature) {
 
-        // phpcs:enable
+			// Skip if feature is not enabled.
+			if (! $feature->isEnabled()) {
+				continue;
+			}
 
-        return $html;
+			$selector = blockera_get_compatible_block_css_selector(
+				blockera_get_block_type_property($args['block']['blockName'], 'selectors'),
+				'htmlEditable.root',
+				[
+					'fallback' => false,
+					'block-type' => 'master',
+					'block-name' => $args['block']['blockName'],
+					'blockera-unique-selector' => $args['unique_class_name'],
+				]
+			);
+
+			if (empty($selector)) {
+				continue;
+			}
+
+			$args['dom']          = $dom_parser;
+			$args['origin_html']  = $html;
+			$args['htmlEditable'] = compact('selector');
+
+			$html = $feature->htmlManipulate($dom_parser, $args);
+		}
+
+		return $html;
     }
 
     /**
@@ -136,6 +168,18 @@ class Render {
 
             return $html;
         }
+
+		$block_categories = [
+			'core' => 'wordpress',
+			'woocommerce' => 'woocommerce',
+		];
+
+		$extracted_name = explode('/', $block['blockName']);
+
+		$this->id = $extracted_name[1];
+		$this->setContext('blocks-core');
+		$this->setSubContext($block_categories[ $extracted_name[0] ] ?? 'third-party');
+		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
 
         // Extract block attributes.
         $attributes = $block['attrs'];
@@ -208,14 +252,14 @@ class Render {
         // Print css into inline style on "wp_head" action occur.
         blockera_add_inline_css($computed_css_rules);
 
-        // Render icon element.
-        $html = $this->renderIcon($html, $parser, compact('block', 'unique_class_name'));
-
         if ($need_to_update_html) {
 
             // Represent html string.
             $html = $this->getUpdatedHTML($html, $blockera_class_name);
         }
+
+        // Render block with features.
+        $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
         // Create new block cache data.
         $data = [

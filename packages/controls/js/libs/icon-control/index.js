@@ -4,8 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { memo, useState, useReducer } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,8 +16,6 @@ import {
 } from '@blockera/classnames';
 import {
 	isEmpty,
-	isObject,
-	isEquals,
 	isUndefined,
 	hasSameProps,
 	useLateEffect,
@@ -31,7 +29,7 @@ import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { Button, MediaUploader, BaseControl } from '../index';
+import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
 function IconControl({
@@ -61,27 +59,6 @@ function IconControl({
 	useLateEffect(() => {
 		setValue(currentIcon);
 	}, [currentIcon]);
-
-	useEffect(() => {
-		if (isObject(value) && !isEquals(value, currentIcon)) {
-			currentIconDispatch({
-				type: 'UPDATE_ICON',
-				icon: value.icon,
-				library: value.library,
-			});
-
-			// return undefined;
-		}
-
-		// if (!value) {
-		// 	currentIconDispatch({
-		// 		type: 'DELETE_ICON',
-		// 	});
-		// }
-
-		// return undefined;
-		// eslint-disable-next-line
-	}, [value]);
 
 	const [isOpenModal, setOpenModal] = useState(false);
 
@@ -173,25 +150,33 @@ function IconControl({
 							)}
 							onClick={openModal}
 						>
-							<Button
-								aria-label={__('Remove Icon', 'blockera')}
-								className="btn-delete"
-								noBorder={true}
-								isFocus={isOpenModal}
-								icon={
-									<Icon
-										library="wp"
-										icon="close"
-										iconSize="20"
-									/>
-								}
-								onClick={(e) => {
-									e.stopPropagation();
-									currentIconDispatch({
-										type: 'DELETE_ICON',
-									});
+							<Tooltip
+								text={__('Remove Icon', 'blockera')}
+								style={{
+									'--tooltip-bg': '#e20000',
 								}}
-							/>
+								delay={300}
+							>
+								<Button
+									aria-label={__('Remove Icon', 'blockera')}
+									className="btn-delete"
+									noBorder={true}
+									isFocus={isOpenModal}
+									icon={
+										<Icon
+											library="ui"
+											icon="trash"
+											iconSize="20"
+										/>
+									}
+									onClick={(e) => {
+										e.stopPropagation();
+										currentIconDispatch({
+											type: 'DELETE_ICON',
+										});
+									}}
+								/>
+							</Tooltip>
 
 							{currentIcon.uploadSVG ? (
 								<img
@@ -252,8 +237,35 @@ function IconControl({
 								onClick={openModal}
 								className="btn-choose-icon"
 							>
-								{labelChoose}
+								{labelIconLibrary}
 							</Button>
+
+							<MediaUploader
+								onSelect={(media) => {
+									currentIconDispatch({
+										type: 'UPDATE_SVG',
+										uploadSVG: {
+											title: media.title,
+											filename: media.filename,
+											url: media.url,
+											updated: '',
+										},
+									});
+								}}
+								mode="upload"
+								render={({ open }) => (
+									<Button
+										data-cy="upload-svg-btn"
+										className="btn-choose-icon"
+										onClick={(event) => {
+											event.stopPropagation();
+											open();
+										}}
+									>
+										{labelUploadSvg}
+									</Button>
+								)}
+							/>
 						</div>
 					)}
 				</div>

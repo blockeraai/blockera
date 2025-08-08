@@ -1,5 +1,15 @@
 ## Unreleased
 
+### Improvements
+- Enhance the design of the image uploader control.
+- Enhance the design of the icon control.
+- Box spacing control improved to detect lock for horizontal or vertical based on value for blocks.
+- Border control design and UX improvement.
+- Border radius control design and UX improvement.
+
+### Bug Fixes
+- Fixed an issue where icons weren't updating properly when changed.
+
 ## 1.4.0 (2025-07-16)
 
 ### New Features

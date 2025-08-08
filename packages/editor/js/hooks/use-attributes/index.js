@@ -4,12 +4,14 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
  */
 import { classNames } from '@blockera/classnames';
 import { getSmallHash, mergeObject } from '@blockera/utils';
+import { getIconAttributes } from '@blockera/feature-icon';
 
 /**
  * Internal dependencies
@@ -152,6 +154,16 @@ export const useAttributes = (
 					[`blockera-block-${getSmallHash(clientId)}`]: true,
 				}),
 			};
+		}
+
+		if (getIconAttributes().includes(attributeId)) {
+			_attributes = applyFilters(
+				'blockera.editor.useAttributes.beforeChangeAttributes',
+				_attributes,
+				attributeId,
+				newValue,
+				options
+			);
 		}
 
 		const attributeIsBlockStates = 'blockeraBlockStates' === attributeId;

@@ -17,6 +17,13 @@ class Setup {
 	static $instance = null;
 
 	/**
+	 * Store plugin path.
+	 *
+	 * @var string $plugin_path the plugin path.
+	 */
+	protected string $plugin_path;
+
+	/**
 	 * Get instance.
 	 *
 	 * @return self the instance.
@@ -35,6 +42,18 @@ class Setup {
 	 */
 	protected function __construct() {
 		
+	}
+
+	/**
+	 * Set plugin path.
+	 *
+	 * @param string $plugin_path the plugin path.
+	 *
+	 * @return void
+	 */
+	public function setPluginPath( string $plugin_path): void {
+
+		$this->plugin_path = $plugin_path;
 	}
 
     /**
@@ -106,7 +125,7 @@ class Setup {
 
         $blockFile = sprintf(
             '%1$sblockera/blocks-core/php/%2$s/block.php',
-            blockera_core_config('app.vendor_path'),
+            $this->plugin_path,
             $this->getBlockDirectoryPath()
         );
 
@@ -150,13 +169,13 @@ class Setup {
 
             // WordPress Core Blocks.
             case 'core':
-                $this->block_dir_path = sprintf('wordpress/%s', $parsedName[1]);
+                $this->block_dir_path = sprintf('libs/wordpress/%s', $parsedName[1]);
                 break;
             case 'woocommerce':
-                $this->block_dir_path = sprintf('woocommerce/%s', $parsedName[1]);
+                $this->block_dir_path = sprintf('libs/woocommerce/%s', $parsedName[1]);
                 break;
 			case 'blocksy':
-				$this->block_dir_path = sprintf( 'third-party/%s', str_replace( '/', '-', $blockType ) );
+				$this->block_dir_path = sprintf( 'libs/third-party/%s', str_replace( '/', '-', $blockType ) );
 				break;
                 // TODO: Implements other blocks in this here ...
         }
