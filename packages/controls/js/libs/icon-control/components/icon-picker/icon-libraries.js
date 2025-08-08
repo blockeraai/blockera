@@ -21,7 +21,7 @@ const IconLibraries = ({
 			lazyLoad: false,
 		},
 		fontawesome: {
-			lazyLoad: false,
+			lazyLoad: true,
 		},
 		social: {
 			lazyLoad: true,

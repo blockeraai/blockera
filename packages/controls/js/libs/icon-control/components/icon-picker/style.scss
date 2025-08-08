@@ -94,8 +94,9 @@
 
 .blockera-control-icon-library-loading {
 	display: flex;
+	align-items: center;
 	justify-content: center;
-	margin-bottom: 140px;
+	min-height: 80px;
 
 	svg {
 		animation-name: spin;
