@@ -33,7 +33,7 @@
 	}
 
 	&:not(.is-rendered) {
-		min-height: 400px;
+		min-height: 100px;
 	}
 
 	&.is-rendered {
@@ -47,17 +47,6 @@
 			justify-content: center;
 			justify-items: center;
 			position: relative;
-
-			&:not(.no-fade)::after {
-				content: "";
-				position: absolute;
-				bottom: 0;
-				left: 0;
-				right: 0;
-				height: 40px;
-				background: linear-gradient(to bottom, transparent, #ffffffd4);
-				pointer-events: none;
-			}
 		}
 
 		.blockera-control-library-grid {
