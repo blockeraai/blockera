@@ -18,11 +18,11 @@ jobs:
             - name: Checkout Primary Repo
               uses: actions/checkout@v4
 
-            - name: Check if .sync-pr-env.json exists
+            - name: Check if .pr-sync-env.json exists
               id: check-sync-file
               if: github.event_name == 'pull_request'
               run: |
-                  if [ -f .sync-pr-env.json ]; then
+                  if [ -f .pr-sync-env.json ]; then
                       echo "sync-file-exists=true" >> $GITHUB_OUTPUT
                   else
                       echo "sync-file-exists=false" >> $GITHUB_OUTPUT
@@ -32,17 +32,20 @@ jobs:
               if: steps.check-sync-file.outputs.sync-file-exists == 'true' && github.event_name == 'pull_request'
               id: read-sync-config
               run: |
-                  REPO=$(cat .sync-pr-env.json | jq -r '.repo')
-                  PR=$(cat .sync-pr-env.json | jq -r '.pr')
-                  echo "repo=$REPO" >> $GITHUB_OUTPUT
-                  echo "pr=$PR" >> $GITHUB_OUTPUT
+                  BASE_BRANCH=$(cat .pr-sync-env.json | jq -r '.baseBranch')
+                  IN_SYNC_BRANCH=$(cat .pr-sync-env.json | jq -r '.inSyncBranch')
+                  INTO_REPOSITORY=$(cat .pr-sync-env.json | jq -r '.intoRepository')
+                  echo "baseBranch=$BASE_BRANCH" >> $GITHUB_OUTPUT
+                  echo "inSyncBranch=$IN_SYNC_BRANCH" >> $GITHUB_OUTPUT
+                  echo "intoRepository=$INTO_REPOSITORY" >> $GITHUB_OUTPUT
 
             - name: Sync packages with other dependent repositories
               if: (github.event_name == 'pull_request' && steps.check-sync-file.outputs.sync-file-exists == 'true') || github.event_name == 'push'
               uses: blockeraai/blockera-folder-sync@v1.0.0
               with:
-                  REPO: ${{ steps.read-sync-config.outputs.repo }}
-                  PR: ${{ steps.read-sync-config.outputs.pr }}
+                  BASE_BRANCH: ${{ steps.read-sync-config.outputs.baseBranch }}
+                  CREATE_SYNC_BRANCH: ${{ steps.read-sync-config.outputs.inSyncBranch }}
+                  STATIC_REPOSITORY: ${{ steps.read-sync-config.outputs.intoRepository }}
                   TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   USERNAME: ${{ secrets.BLOCKERABOT_USERNAME }}
                   EMAIL: ${{ secrets.BLOCKERABOT_EMAIL }}
