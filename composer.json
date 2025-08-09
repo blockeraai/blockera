@@ -62,6 +62,10 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/plugin-compatibility"
+		},
+		{
+			"type": "path",
 			"url": "packages/http"
 		},
 		{
@@ -104,6 +108,7 @@
 		"blockera/classnames": "*",
 		"blockera/controls": "*",
 		"blockera/icons": "*",
+		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
