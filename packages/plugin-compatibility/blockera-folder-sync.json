@@ -1,6 +1,6 @@
 {
 	"name": "blockera/compatibility",
-	"path": "packages/compatibility",
+	"path": "packages/plugin-compatibility",
 	"dependent": {
 		"repositories": [
 			"https://github.com/blockeraai/blockera.git",
