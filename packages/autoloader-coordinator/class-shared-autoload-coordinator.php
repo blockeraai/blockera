@@ -14,6 +14,13 @@ if (! \class_exists(Coordinator::class)) {
         /** @var Coordinator|null */
         private static $instance = null;
 
+		/**
+		 * Store the coordinator reference.
+		 *
+		 * @var string $coordinator_ref the coordinator reference.
+		 */
+		protected $coordinator_ref = '';
+
         /** @var array<string,array{plugin_dir:string,packages_dir:string}> */
         private $plugins = [];
 
@@ -53,6 +60,8 @@ if (! \class_exists(Coordinator::class)) {
             \add_action(
                 'init',
                 function (): void {
+					$this->coordinator_ref = $_ENV['AUTOLOADER_COORDINATOR_REF'] ?? $this->coordinator_ref;
+
 					$this->coordinateAutoloads();
 					$this->includePreferredFilesFromPackages();
 				},
@@ -111,7 +120,19 @@ if (! \class_exists(Coordinator::class)) {
 						return version_compare($a['version'], $b['version']) < 0 ? 1 : -1; // desc.
 					}
                 );
-                $preferredLoaderByPrefix[ $prefix ] = $candidates[0]['loader'];
+
+				if (! empty($this->coordinator_ref) && isset($this->plugins[ $this->coordinator_ref ])) {
+					$filtered_candidates = array_filter(
+                        $candidates,
+                        function( $candidate) {
+							return str_starts_with($candidate['base_dir'], $this->plugins[ $this->coordinator_ref ]['plugin_dir'] . '/');
+						}
+                    );
+
+					$preferredLoaderByPrefix[ $prefix ] = ( $filtered_candidates[0] ?? $candidates[0] )['loader'];
+				} else {
+					$preferredLoaderByPrefix[ $prefix ] = $candidates[0]['loader'];
+				}
             }
 
             // Allow overrides via WP filter.
@@ -216,6 +237,11 @@ if (! \class_exists(Coordinator::class)) {
         private function includePreferredFilesFromPackages(): void {
             // Collect packages by name across plugins.
             $packages = [];
+
+			if (! empty($this->coordinator_ref) && isset($this->plugins[ $this->coordinator_ref ])) {
+				$this->plugins = [ $this->coordinator_ref => $this->plugins[ $this->coordinator_ref ] ];
+			}
+
             foreach ($this->plugins as $plugin) {
                 $packagesDir = $plugin['packages_dir'];
                 if (! is_dir($packagesDir)) {
