@@ -4,19 +4,45 @@ on:
     push:
         branches:
             - master
+    pull_request:
+        branches:
+            - master
 
 jobs:
     sync-packages:
         name: Sync Packages to Other Repos
         runs-on: ubuntu-latest
+        if: github.event_name == 'pull_request' || github.event_name == 'push'
 
         steps:
             - name: Checkout Primary Repo
               uses: actions/checkout@v4
 
+            - name: Check if .sync-pr-env.json exists
+              id: check-sync-file
+              if: github.event_name == 'pull_request'
+              run: |
+                  if [ -f .sync-pr-env.json ]; then
+                      echo "sync-file-exists=true" >> $GITHUB_OUTPUT
+                  else
+                      echo "sync-file-exists=false" >> $GITHUB_OUTPUT
+                  fi
+
+            - name: Read sync configuration
+              if: steps.check-sync-file.outputs.sync-file-exists == 'true' && github.event_name == 'pull_request'
+              id: read-sync-config
+              run: |
+                  REPO=$(cat .sync-pr-env.json | jq -r '.repo')
+                  PR=$(cat .sync-pr-env.json | jq -r '.pr')
+                  echo "repo=$REPO" >> $GITHUB_OUTPUT
+                  echo "pr=$PR" >> $GITHUB_OUTPUT
+
             - name: Sync packages with other dependent repositories
+              if: (github.event_name == 'pull_request' && steps.check-sync-file.outputs.sync-file-exists == 'true') || github.event_name == 'push'
               uses: blockeraai/blockera-folder-sync@v1.0.0
               with:
+                  REPO: ${{ steps.read-sync-config.outputs.repo }}
+                  PR: ${{ steps.read-sync-config.outputs.pr }}
                   TOKEN: ${{ secrets.BLOCKERABOT_PAT }}
                   USERNAME: ${{ secrets.BLOCKERABOT_USERNAME }}
                   EMAIL: ${{ secrets.BLOCKERABOT_EMAIL }}
