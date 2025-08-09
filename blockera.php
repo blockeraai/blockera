@@ -6,6 +6,7 @@
  * Requires at least: 6.6
  * Tested up to: 6.8
  * Requires PHP: 7.4
+ * Requires at least blockera-pro: 1.1.2
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about/
  * Version: 1.12.2
@@ -64,6 +65,20 @@ if (! defined('BLOCKERA_SB_VERSION')) {
     define('BLOCKERA_SB_VERSION', get_plugin_data(__FILE__, false, false)['Version']);
 }
 ### END AUTO-GENERATED DEFINES
+
+if (class_exists(\Blockera\PluginCompatibility\CompatibilityCheck::class)) {
+
+	\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()->run(
+        [
+			'file' => __FILE__,
+			'slug' => 'blockera',
+			'version' => BLOCKERA_SB_VERSION,
+			'plugin_path' => BLOCKERA_SB_PATH,
+			'compatible_with_slug' => 'blockera-pro',
+			'mode' => blockera_core_config('app.debug') ? 'development' : 'production',
+		]
+    );
+}
 
 // Initialize hooks on Front Controller.
 blockera_load('bootstrap.hooks', __DIR__);
