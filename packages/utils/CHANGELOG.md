@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added new helper functions to improve plugin functionality.
+
 ## 1.2.1 (2025-06-10)
 
 ### Improvements
