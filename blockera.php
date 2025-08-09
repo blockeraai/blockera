@@ -23,13 +23,13 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-// loading autoloader.
-require __DIR__ . '/vendor/autoload.php';
-
 // Register into shared autoload coordinator.
 require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
 \Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
 \Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+
+// loading autoloader.
+require __DIR__ . '/vendor/autoload.php';
 
 if (file_exists(__DIR__ . '/.env')) {
 
