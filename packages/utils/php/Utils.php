@@ -157,15 +157,16 @@ class Utils {
 	 * Convert a string to pascal case.
 	 *
 	 * @param string $string The string to convert to pascal case.
+	 * @param array  $args   The arguments to convert to pascal case.
 	 *
 	 * @return string The pascal case string.
 	 */
-	public static function pascalCase( string $string ): string {
+	public static function pascalCase( string $string, array $args = [] ): string {
 
 		$parsed_string = explode( '-', $string );
 
 		return implode(
-            '', 
+            $args['separator'] ?? '', 
             array_map(
                 function( string $item ):string {
                     return ucfirst( $item );
@@ -173,6 +174,18 @@ class Utils {
                 $parsed_string
             )
 		);
+	}
+
+	/**
+	 * Convert a string to pascal case with space.
+	 *
+	 * @param string $string The string to convert to pascal case with space.
+	 *
+	 * @return string The pascal case with space string.
+	 */
+	public static function pascalCaseWithSpace( string $string ): string {
+
+		return static::pascalCase($string, [ 'separator' => ' ' ]);
 	}
 
 	/**
