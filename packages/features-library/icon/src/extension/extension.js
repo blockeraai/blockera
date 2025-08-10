@@ -146,7 +146,11 @@ export const IconExtension: ComponentType<{
 							library={newValue.library}
 							uploadSVG={newValue.uploadSVG}
 							{...{
-								...('fontawesome' === newValue.library
+								...([
+									'faregular',
+									'fasolid',
+									'fabrands',
+								].includes(newValue.library)
 									? { viewBox: '0 0 512 512' }
 									: {}),
 							}}

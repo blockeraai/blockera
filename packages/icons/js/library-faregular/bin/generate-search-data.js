@@ -1,7 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const { fas } = require('@fortawesome/free-solid-svg-icons');
-const { fab } = require('@fortawesome/free-brands-svg-icons');
 const { far } = require('@fortawesome/free-regular-svg-icons');
 
 // Function to convert camelCase to Title Case
@@ -10,29 +8,6 @@ function camelToTitle(str) {
 		.replace(/([A-Z])/g, ' $1')
 		.replace(/^./, (str) => str.toUpperCase())
 		.trim();
-}
-
-// Function to generate tags from icon name
-function generateTags(iconName) {
-	const words = iconName
-		.replace(/([A-Z])/g, ' $1')
-		.toLowerCase()
-		.split(' ')
-		.filter((word) => word.length > 0);
-
-	// Add the original words as tags
-	const tags = [...new Set(words)];
-
-	// Add some common variations
-	if (tags.includes('arrow')) {
-		tags.push('direction', 'pointer');
-	}
-	if (tags.includes('user')) {
-		tags.push('person', 'profile', 'account');
-	}
-	// Add more variations as needed
-
-	return tags;
 }
 
 // Process all icons
@@ -52,19 +27,15 @@ const processIcons = (icons, prefix) => {
 			return {
 				iconName,
 				title: camelToTitle(iconName),
-				library: 'fontawesome',
+				library: 'faregular',
 				prefix,
-				tags: generateTags(iconName),
+				tags: [],
 			};
 		});
 };
 
 // Combine all icon sets
-const searchData = [
-	...processIcons(fas, 'fas'),
-	...processIcons(fab, 'fab'),
-	...processIcons(far, 'far'),
-];
+const searchData = [...processIcons(far, 'far')];
 
 // Write to search-data.json
 const outputPath = path.join(__dirname, 'search-data.json');

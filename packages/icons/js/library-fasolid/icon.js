@@ -12,12 +12,12 @@ import { isString, isUndefined, snakeCase } from '@blockera/utils';
  * Internal dependencies
  */
 import { getIcon } from '../index';
-import { FaIcons } from './icons';
+import { FaSolidIcons } from './icons';
 
-export function FontAwesomeIcon({
-	library = 'fontawesome',
+export function FaSolidIcon({
+	library = 'fasolid',
 	style = {},
-	iconSize = 24,
+	iconSize = 18,
 	icon,
 	...props
 }) {
@@ -43,7 +43,7 @@ export function FontAwesomeIcon({
 		}
 	}
 
-	if (!FaIcons[icon.iconName]) {
+	if (!FaSolidIcons[icon.iconName]) {
 		icon.iconName = snakeCase(icon.iconName).replace(/_/g, '-');
 	}
 

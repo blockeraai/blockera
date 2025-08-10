@@ -37,7 +37,7 @@ export function getLibraryIcons({
 	if (
 		'suggestions' === library ||
 		'search' === library ||
-		'fa-search' === library
+		'search-2' === library
 	) {
 		switch (typeof query) {
 			case 'function':
@@ -53,7 +53,7 @@ export function getLibraryIcons({
 			case 'string':
 				iconLibraryIcons = iconSearch({
 					query,
-					library: 'fa-search' === library ? 'fontawesome' : 'all',
+					library: 'search-2' === library ? 'all2' : 'all',
 					limit,
 				});
 				break;
@@ -71,13 +71,20 @@ export function getLibraryIcons({
 			iconLibraryIcons[iconKey]
 		);
 
+		console.log('library', library);
+
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
 				<FeatureWrapper
 					className={controlInnerClassNames('icon-wrapper')}
 					type={applyFilters(
 						'blockera.controls.iconControl.utils.getLibraryIcons.type',
-						['fa-search', 'fontawesome'].includes(library)
+						[
+							'search-2',
+							'faregular',
+							'fasolid',
+							'fabrands',
+						].includes(library)
 							? 'native'
 							: 'none',
 						library
@@ -110,7 +117,15 @@ export function getLibraryIcons({
 							<Icon
 								library={icon.library}
 								icon={icon}
-								iconSize={'fontawesome' === library ? 20 : 24}
+								iconSize={
+									[
+										'faregular',
+										'fasolid',
+										'fabrands',
+									].includes(icon.library)
+										? 18
+										: 24
+								}
 							/>
 						</Tooltip>
 					</span>

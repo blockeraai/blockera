@@ -5,21 +5,17 @@
  */
 import { library } from '@fortawesome/fontawesome-svg-core';
 import * as freeIcons from '@fortawesome/free-solid-svg-icons';
-import * as freeBrandsIcons from '@fortawesome/free-brands-svg-icons';
-import * as freeRegularIcons from '@fortawesome/free-regular-svg-icons';
 
-library.add(freeIcons.fas, freeBrandsIcons.fab, freeRegularIcons.far);
+library.add(freeIcons.fas);
 
 /**
  * Internal dependencies
  */
 import { getIconKebabId } from '../helpers';
 
-const FaIcons: Object = Object.fromEntries(
+const FaSolidIcons: Object = Object.fromEntries(
 	Object.entries({
 		...freeIcons,
-		...freeBrandsIcons,
-		...freeRegularIcons,
 	})
 		.map(([key, value]) => {
 			let newKey = getIconKebabId(key);
@@ -88,8 +84,8 @@ const FaIcons: Object = Object.fromEntries(
 			return [newKey, value];
 		})
 		.filter(([key]) => {
-			return !['icon', 'fa', 'far', 'fas', 'fab'].includes(key);
+			return !['fas'].includes(key);
 		})
 );
 
-export { FaIcons };
+export { FaSolidIcons };

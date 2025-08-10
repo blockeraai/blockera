@@ -18,7 +18,9 @@ import { BlockeraIcon } from './library-blockera/index';
 import { BlockeraUIIcon } from './library-ui/index';
 import { CursorIcon } from './library-cursor/index';
 import { SocialIcon } from './library-social/index';
-import { FontAwesomeIcon } from './library-fontawesome';
+import { FaRegularIcon } from './library-faregular';
+import { FaBrandsIcon } from './library-fabrands';
+import { FaSolidIcon } from './library-fasolid';
 import { isValidIconLibrary, getIconLibraryIcons } from './icon-library';
 import type { IconProps, IconLibraryTypes } from './types';
 
@@ -48,8 +50,14 @@ export function Icon({
 		case 'social':
 			return <SocialIcon library={library} {...props} />;
 
-		case 'fontawesome':
-			return <FontAwesomeIcon library={library} {...props} />;
+		case 'faregular':
+			return <FaRegularIcon library={library} {...props} />;
+
+		case 'fabrands':
+			return <FaBrandsIcon library={library} {...props} />;
+
+		case 'fasolid':
+			return <FaSolidIcon library={library} {...props} />;
 
 		default:
 			return <WPIcon library={library} {...props} />;
@@ -148,7 +156,7 @@ export function createStandardIconObject(
 		}
 	}
 
-	if ('fontawesome' === library) {
+	if (['faregular', 'fabrands', 'fasolid'].includes(library)) {
 		return {
 			icon,
 			library,

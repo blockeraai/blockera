@@ -20,7 +20,7 @@ import SearchControl from '../../../search-control';
 export default function Search({}) {
 	const [searchInput, setSearchInput] = useState('');
 	const [searchData, setSearchData] = useState([]);
-	const [faSearchData, setFaSearchData] = useState([]);
+	const [searchData2, setSearchData2] = useState([]);
 
 	const { id, handleIconSelect } = useContext(IconContext);
 
@@ -44,9 +44,9 @@ export default function Search({}) {
 							limit: 49,
 						})
 					);
-					setFaSearchData(
+					setSearchData2(
 						getLibraryIcons({
-							library: 'fa-search',
+							library: 'search-2',
 							query: value,
 							onClick: handleIconSelect,
 							limit: 49,
@@ -68,6 +68,13 @@ export default function Search({}) {
 					<div className={controlInnerClassNames('library-header')}>
 						<Icon icon="search" iconSize="18" />{' '}
 						{__('Search Result', 'blockera')}
+						<span
+							className={controlInnerClassNames(
+								'library-header__label'
+							)}
+						>
+							{__('Free', 'blockera')}
+						</span>
 					</div>
 
 					{searchInput.length < 3 ? (
@@ -110,6 +117,7 @@ export default function Search({}) {
 									{searchData}
 								</div>
 							)}
+
 							<div
 								className={controlInnerClassNames(
 									'library-header',
@@ -117,9 +125,17 @@ export default function Search({}) {
 								)}
 							>
 								<Icon icon="search" iconSize="18" />{' '}
-								{__('Search FontAwesome Result', 'blockera')}
+								{__('Search Result', 'blockera')}
+								<span
+									className={controlInnerClassNames(
+										'library-header__label'
+									)}
+								>
+									{__('Pro', 'blockera')}
+								</span>
 							</div>
-							{!faSearchData.length ? (
+
+							{!searchData2.length ? (
 								<span
 									className={controlInnerClassNames(
 										'library-search-hint'
@@ -137,7 +153,7 @@ export default function Search({}) {
 										'no-fade'
 									)}
 								>
-									{faSearchData}
+									{searchData2}
 								</div>
 							)}
 						</>

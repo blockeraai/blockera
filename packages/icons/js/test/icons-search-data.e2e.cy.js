@@ -18,7 +18,9 @@ import {
 // Import the libraries configuration
 import searchLibraries from '../search-libraries.json';
 
-searchLibraries.push('fontawesome');
+searchLibraries.push('faregular');
+searchLibraries.push('fasolid');
+searchLibraries.push('fabrands');
 
 describe('Icon Libraries → Check all icons are available and search data', () => {
 	beforeEach(() => {

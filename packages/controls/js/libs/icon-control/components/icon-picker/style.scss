@@ -89,6 +89,14 @@
 		&.mt-20 {
 			margin-top: 20px;
 		}
+
+		.blockera-control-library-header__label {
+			background: var(--blockera-controls-primary-color);
+			color: #ffffff;
+			padding: 1px 8px;
+			border-radius: 32px;
+			font-size: 11px;
+		}
 	}
 }
 

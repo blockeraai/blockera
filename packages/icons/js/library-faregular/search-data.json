@@ -1,0 +1,1913 @@
+[
+	{
+		"iconName": "squareMinus",
+		"title": "Square Minus",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["remove", "subtract", "less"]
+	},
+	{
+		"iconName": "minusSquare",
+		"title": "Minus Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["remove", "subtract", "less"]
+	},
+	{
+		"iconName": "calendarCheck",
+		"title": "Calendar Check",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner"]
+	},
+	{
+		"iconName": "faceKiss",
+		"title": "Face Kiss",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["love", "kiss", "heart"]
+	},
+	{
+		"iconName": "kiss",
+		"title": "Kiss",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["love", "kiss", "heart"]
+	},
+	{
+		"iconName": "paste",
+		"title": "Paste",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["copy", "paste", "clipboard"]
+	},
+	{
+		"iconName": "fileClipboard",
+		"title": "File Clipboard",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "handPointLeft",
+		"title": "Hand Point Left",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["back", "previous", "west"]
+	},
+	{
+		"iconName": "fileExcel",
+		"title": "File Excel",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "envelope",
+		"title": "Envelope",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["email", "mail", "message"]
+	},
+	{
+		"iconName": "squareCaretDown",
+		"title": "Square Caret Down",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bottom", "descend", "south"]
+	},
+	{
+		"iconName": "caretSquareDown",
+		"title": "Caret Square Down",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bottom", "descend", "south"]
+	},
+	{
+		"iconName": "truck",
+		"title": "Truck",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delivery", "shipping", "logistics"]
+	},
+	{
+		"iconName": "bell",
+		"title": "Bell",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["notification", "alert", "reminder"]
+	},
+	{
+		"iconName": "message",
+		"title": "Message",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["email", "mail", "message"]
+	},
+	{
+		"iconName": "commentAlt",
+		"title": "Comment Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["reply", "message", "feedback"]
+	},
+	{
+		"iconName": "faceDizzy",
+		"title": "Face Dizzy",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["dizzy", "headache", "unwell"]
+	},
+	{
+		"iconName": "dizzy",
+		"title": "Dizzy",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["dizzy", "headache", "unwell"]
+	},
+	{
+		"iconName": "calendarDays",
+		"title": "Calendar Days",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner"]
+	},
+	{
+		"iconName": "calendarAlt",
+		"title": "Calendar Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner"]
+	},
+	{
+		"iconName": "handPointUp",
+		"title": "Hand Point Up",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["top", "ascend", "north"]
+	},
+	{
+		"iconName": "handLizard",
+		"title": "Hand Lizard",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["lizard", "hand", "rock"]
+	},
+	{
+		"iconName": "squareFull",
+		"title": "Square Full",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["square", "full", "fill"]
+	},
+	{
+		"iconName": "circlePause",
+		"title": "Circle Pause",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hold", "wait", "stop"]
+	},
+	{
+		"iconName": "pauseCircle",
+		"title": "Pause Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hold", "wait", "stop"]
+	},
+	{
+		"iconName": "hardDrive",
+		"title": "Hard Drive",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["disk", "hdd", "flash disk"]
+	},
+	{
+		"iconName": "hdd",
+		"title": "Hdd",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["floppy", "disk", "save"]
+	},
+	{
+		"iconName": "fileZipper",
+		"title": "File Zipper",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "fileArchive",
+		"title": "File Archive",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "floppyDisk",
+		"title": "Floppy Disk",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["save", "floppy", "disk"]
+	},
+	{
+		"iconName": "save",
+		"title": "Save",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["download", "store", "bookmark"]
+	},
+	{
+		"iconName": "faceGrinTongueSquint",
+		"title": "Face Grin Tongue Squint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tongue", "squint", "smile"]
+	},
+	{
+		"iconName": "grinTongueSquint",
+		"title": "Grin Tongue Squint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tongue", "squint", "smile"]
+	},
+	{
+		"iconName": "camera",
+		"title": "Camera",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["photo", "picture", "shoot"]
+	},
+	{
+		"iconName": "cameraAlt",
+		"title": "Camera Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["photo", "picture", "shoot"]
+	},
+	{
+		"iconName": "faceGrinStars",
+		"title": "Face Grin Stars",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "rating", "bookmark"]
+	},
+	{
+		"iconName": "grinStars",
+		"title": "Grin Stars",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "rating", "bookmark"]
+	},
+	{
+		"iconName": "eye",
+		"title": "Eye",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["view", "see", "preview"]
+	},
+	{
+		"iconName": "faceSadTear",
+		"title": "Face Sad Tear",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "sadTear",
+		"title": "Sad Tear",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "shareFromSquare",
+		"title": "Share From Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["export", "forward", "send"]
+	},
+	{
+		"iconName": "shareSquare",
+		"title": "Share Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["export", "forward", "send"]
+	},
+	{
+		"iconName": "noteSticky",
+		"title": "Note Sticky",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sticky", "note", "memo"]
+	},
+	{
+		"iconName": "stickyNote",
+		"title": "Sticky Note",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sticky", "note", "memo"]
+	},
+	{
+		"iconName": "handBackFist",
+		"title": "Hand Back Fist",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["fist", "hand", "back"]
+	},
+	{
+		"iconName": "handRock",
+		"title": "Hand Rock",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["rock", "hand", "fist"]
+	},
+	{
+		"iconName": "chessQueen",
+		"title": "Chess Queen",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["queen", "chess", "game"]
+	},
+	{
+		"iconName": "faceGrinTears",
+		"title": "Face Grin Tears",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "grinTears",
+		"title": "Grin Tears",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "penToSquare",
+		"title": "Pen To Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["edit", "write", "draw"]
+	},
+	{
+		"iconName": "edit",
+		"title": "Edit",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["pencil", "modify", "write"]
+	},
+	{
+		"iconName": "faceGrinBeamSweat",
+		"title": "Face Grin Beam Sweat",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "grinBeamSweat",
+		"title": "Grin Beam Sweat",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "clock",
+		"title": "Clock",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["time", "watch", "schedule"]
+	},
+	{
+		"iconName": "clockFour",
+		"title": "Clock Four",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["time", "watch", "schedule"]
+	},
+	{
+		"iconName": "faceLaughWink",
+		"title": "Face Laugh Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "laughWink",
+		"title": "Laugh Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "paperPlane",
+		"title": "Paper Plane",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["like", "love", "favorite"]
+	},
+	{
+		"iconName": "heart",
+		"title": "Heart",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["like", "love", "favorite"]
+	},
+	{
+		"iconName": "fontAwesome",
+		"title": "Font Awesome",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": []
+	},
+	{
+		"iconName": "fontAwesomeFlag",
+		"title": "Font Awesome Flag",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["report", "marker", "pin"]
+	},
+	{
+		"iconName": "fontAwesomeLogoFull",
+		"title": "Font Awesome Logo Full",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": []
+	},
+	{
+		"iconName": "clone",
+		"title": "Clone",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["copy", "duplicate", "clone"]
+	},
+	{
+		"iconName": "folderOpen",
+		"title": "Folder Open",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["directory", "catalog", "container"]
+	},
+	{
+		"iconName": "windowMinimize",
+		"title": "Window Minimize",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["minimize", "shrink", "window"]
+	},
+	{
+		"iconName": "starHalf",
+		"title": "Star Half",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "rating", "bookmark"]
+	},
+	{
+		"iconName": "alarmClock",
+		"title": "Alarm Clock",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["alert", "timer", "time"]
+	},
+	{
+		"iconName": "newspaper",
+		"title": "Newspaper",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["magazine", "news", "paper"]
+	},
+	{
+		"iconName": "hospital",
+		"title": "Hospital",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hospital", "medical", "health"]
+	},
+	{
+		"iconName": "hospitalAlt",
+		"title": "Hospital Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hospital", "medical", "health"]
+	},
+	{
+		"iconName": "hospitalWide",
+		"title": "Hospital Wide",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hospital", "medical", "health"]
+	},
+	{
+		"iconName": "circleStop",
+		"title": "Circle Stop",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["end", "halt", "square"]
+	},
+	{
+		"iconName": "stopCircle",
+		"title": "Stop Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["end", "halt", "square"]
+	},
+	{
+		"iconName": "objectUngroup",
+		"title": "Object Ungroup",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["group", "ungroup", "split"]
+	},
+	{
+		"iconName": "comment",
+		"title": "Comment",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["reply", "message", "feedback"]
+	},
+	{
+		"iconName": "chessPawn",
+		"title": "Chess Pawn",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["pawn", "chess", "game"]
+	},
+	{
+		"iconName": "calendarPlus",
+		"title": "Calendar Plus",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner"]
+	},
+	{
+		"iconName": "clipboard",
+		"title": "Clipboard",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["copy", "paste", "clipboard"]
+	},
+	{
+		"iconName": "thumbsDown",
+		"title": "Thumbs Down",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bottom", "descend", "south"]
+	},
+	{
+		"iconName": "idBadge",
+		"title": "Id Badge",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["id", "card", "badge"]
+	},
+	{
+		"iconName": "squareCheck",
+		"title": "Square Check",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tick", "confirm", "done"]
+	},
+	{
+		"iconName": "checkSquare",
+		"title": "Check Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tick", "confirm", "done"]
+	},
+	{
+		"iconName": "chessBishop",
+		"title": "Chess Bishop",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bishop", "chess", "game"]
+	},
+	{
+		"iconName": "envelopeOpen",
+		"title": "Envelope Open",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["unlock", "start", "enter"]
+	},
+	{
+		"iconName": "circleXmark",
+		"title": "Circle Xmark",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close"]
+	},
+	{
+		"iconName": "timesCircle",
+		"title": "Times Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close", "circle"]
+	},
+	{
+		"iconName": "xmarkCircle",
+		"title": "Xmark Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close", "circle"]
+	},
+	{
+		"iconName": "squareCaretUp",
+		"title": "Square Caret Up",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["top", "ascend", "north"]
+	},
+	{
+		"iconName": "caretSquareUp",
+		"title": "Caret Square Up",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["top", "ascend", "north"]
+	},
+	{
+		"iconName": "fileImage",
+		"title": "File Image",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "squareCaretRight",
+		"title": "Square Caret Right",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["next", "forward", "east"]
+	},
+	{
+		"iconName": "caretSquareRight",
+		"title": "Caret Square Right",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["next", "forward", "east"]
+	},
+	{
+		"iconName": "sun",
+		"title": "Sun",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["brightness", "day", "light"]
+	},
+	{
+		"iconName": "image",
+		"title": "Image",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["photo", "picture", "media"]
+	},
+	{
+		"iconName": "lightbulb",
+		"title": "Lightbulb",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["idea", "light", "bulb"]
+	},
+	{
+		"iconName": "addressCard",
+		"title": "Address Card",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["location", "place", "contact"]
+	},
+	{
+		"iconName": "contactCard",
+		"title": "Contact Card",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["location", "place", "contact"]
+	},
+	{
+		"iconName": "vcard",
+		"title": "Vcard",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["location", "place", "contact"]
+	},
+	{
+		"iconName": "faceMeh",
+		"title": "Face Meh",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["neutral", "meh", "indifference"]
+	},
+	{
+		"iconName": "meh",
+		"title": "Meh",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["neutral", "meh", "indifference"]
+	},
+	{
+		"iconName": "map",
+		"title": "Map",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["location", "route", "navigation"]
+	},
+	{
+		"iconName": "handPointDown",
+		"title": "Hand Point Down",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bottom", "descend", "south"]
+	},
+	{
+		"iconName": "faceMehBlank",
+		"title": "Face Meh Blank",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["neutral", "meh", "indifference"]
+	},
+	{
+		"iconName": "mehBlank",
+		"title": "Meh Blank",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["neutral", "meh", "indifference"]
+	},
+	{
+		"iconName": "faceGrinTongue",
+		"title": "Face Grin Tongue",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tongue", "smile", "grin"]
+	},
+	{
+		"iconName": "grinTongue",
+		"title": "Grin Tongue",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tongue", "smile", "grin"]
+	},
+	{
+		"iconName": "futbol",
+		"title": "Futbol",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["soccer", "football", "ball"]
+	},
+	{
+		"iconName": "futbolBall",
+		"title": "Futbol Ball",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["soccer", "football", "ball"]
+	},
+	{
+		"iconName": "soccerBall",
+		"title": "Soccer Ball",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["soccer", "football", "ball"]
+	},
+	{
+		"iconName": "faceSurprise",
+		"title": "Face Surprise",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["surprise", "shock", "surprise"]
+	},
+	{
+		"iconName": "surprise",
+		"title": "Surprise",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["surprise", "shock", "surprise"]
+	},
+	{
+		"iconName": "folder",
+		"title": "Folder",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["directory", "catalog", "container"]
+	},
+	{
+		"iconName": "folderBlank",
+		"title": "Folder Blank",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["directory", "catalog", "container"]
+	},
+	{
+		"iconName": "cloud",
+		"title": "Cloud",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["storage", "server", "sync"]
+	},
+	{
+		"iconName": "circle",
+		"title": "Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["circle", "round", "shape"]
+	},
+	{
+		"iconName": "faceGrinSquint",
+		"title": "Face Grin Squint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "grinSquint",
+		"title": "Grin Squint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "circleUser",
+		"title": "Circle User",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["person", "profile", "customer"]
+	},
+	{
+		"iconName": "userCircle",
+		"title": "User Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["person", "profile", "customer"]
+	},
+	{
+		"iconName": "rectangleList",
+		"title": "Rectangle List",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["items", "bullets", "menu"]
+	},
+	{
+		"iconName": "listAlt",
+		"title": "List Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["items", "bullets", "menu"]
+	},
+	{
+		"iconName": "hand",
+		"title": "Hand",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hand", "finger", "gesture"]
+	},
+	{
+		"iconName": "handPaper",
+		"title": "Hand Paper",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hand", "finger", "gesture"]
+	},
+	{
+		"iconName": "thumbsUp",
+		"title": "Thumbs Up",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["top", "ascend", "north"]
+	},
+	{
+		"iconName": "building",
+		"title": "Building",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["building", "house", "home"]
+	},
+	{
+		"iconName": "chessRook",
+		"title": "Chess Rook",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["rook", "chess", "game"]
+	},
+	{
+		"iconName": "circleQuestion",
+		"title": "Circle Question",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["question", "help", "support"]
+	},
+	{
+		"iconName": "questionCircle",
+		"title": "Question Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["question", "help", "support"]
+	},
+	{
+		"iconName": "file",
+		"title": "File",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "faceSadCry",
+		"title": "Face Sad Cry",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "sadCry",
+		"title": "Sad Cry",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "calendarMinus",
+		"title": "Calendar Minus",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner"]
+	},
+	{
+		"iconName": "faceTired",
+		"title": "Face Tired",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tired", "sleepy", "sleep"]
+	},
+	{
+		"iconName": "tired",
+		"title": "Tired",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tired", "sleepy", "sleep"]
+	},
+	{
+		"iconName": "handPointRight",
+		"title": "Hand Point Right",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["next", "forward", "east"]
+	},
+	{
+		"iconName": "circleUp",
+		"title": "Circle Up",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["top", "ascend", "north"]
+	},
+	{
+		"iconName": "arrowAltCircleUp",
+		"title": "Arrow Alt Circle Up",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["top", "ascend", "north"]
+	},
+	{
+		"iconName": "handScissors",
+		"title": "Hand Scissors",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["scissors", "cut", "slice"]
+	},
+	{
+		"iconName": "gem",
+		"title": "Gem",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["diamond", "jewel", "precious"]
+	},
+	{
+		"iconName": "rectangleXmark",
+		"title": "Rectangle Xmark",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close"]
+	},
+	{
+		"iconName": "rectangleTimes",
+		"title": "Rectangle Times",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close"]
+	},
+	{
+		"iconName": "timesRectangle",
+		"title": "Times Rectangle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close"]
+	},
+	{
+		"iconName": "windowClose",
+		"title": "Window Close",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["delete", "cancel", "close"]
+	},
+	{
+		"iconName": "trashCan",
+		"title": "Trash Can",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bin", "delete", "remove"]
+	},
+	{
+		"iconName": "trashAlt",
+		"title": "Trash Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bin", "delete", "remove"]
+	},
+	{
+		"iconName": "lifeRing",
+		"title": "Life Ring",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["copyright", "legal", "license"]
+	},
+	{
+		"iconName": "copyright",
+		"title": "Copyright",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["copyright", "legal", "license"]
+	},
+	{
+		"iconName": "circleLeft",
+		"title": "Circle Left",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["back", "previous", "west"]
+	},
+	{
+		"iconName": "arrowAltCircleLeft",
+		"title": "Arrow Alt Circle Left",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["back", "previous", "west"]
+	},
+	{
+		"iconName": "calendar",
+		"title": "Calendar",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner"]
+	},
+	{
+		"iconName": "faceFrownOpen",
+		"title": "Face Frown Open",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["unlock", "start", "enter"]
+	},
+	{
+		"iconName": "frownOpen",
+		"title": "Frown Open",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["unlock", "start", "enter"]
+	},
+	{
+		"iconName": "chartBar",
+		"title": "Chart Bar",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["chart", "graph", "data"]
+	},
+	{
+		"iconName": "barChart",
+		"title": "Bar Chart",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["chart", "graph", "data"]
+	},
+	{
+		"iconName": "house",
+		"title": "House",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["house", "apartment", "property"]
+	},
+	{
+		"iconName": "home",
+		"title": "Home",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["house", "apartment", "property"]
+	},
+	{
+		"iconName": "homeAlt",
+		"title": "Home Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["house", "apartment", "property"]
+	},
+	{
+		"iconName": "homeLgAlt",
+		"title": "Home Lg Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["house", "apartment", "property"]
+	},
+	{
+		"iconName": "faceFrown",
+		"title": "Face Frown",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "frown",
+		"title": "Frown",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["sad", "tear", "cry"]
+	},
+	{
+		"iconName": "user",
+		"title": "User",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["person", "profile", "customer"]
+	},
+	{
+		"iconName": "userAlt",
+		"title": "User Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["person", "profile", "customer"]
+	},
+	{
+		"iconName": "userLarge",
+		"title": "User Large",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["person", "profile", "customer"]
+	},
+	{
+		"iconName": "snowflake",
+		"title": "Snowflake",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["snow", "flake", "winter"]
+	},
+	{
+		"iconName": "bookmark",
+		"title": "Bookmark",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "save", "mark"]
+	},
+	{
+		"iconName": "squareCaretLeft",
+		"title": "Square Caret Left",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["back", "previous", "west"]
+	},
+	{
+		"iconName": "caretSquareLeft",
+		"title": "Caret Square Left",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["back", "previous", "west"]
+	},
+	{
+		"iconName": "handshake",
+		"title": "Handshake",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["business", "meeting", "agreement", "negotiation"]
+	},
+	{
+		"iconName": "handshakeAlt",
+		"title": "Handshake Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["business", "meeting", "agreement", "negotiation"]
+	},
+	{
+		"iconName": "handshakeSimple",
+		"title": "Handshake Simple",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["business", "deal", "negotiation"]
+	},
+	{
+		"iconName": "faceSmileWink",
+		"title": "Face Smile Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "smileWink",
+		"title": "Smile Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "faceGrinSquintTears",
+		"title": "Face Grin Squint Tears",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "grinSquintTears",
+		"title": "Grin Squint Tears",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["happy", "emoji", "grin"]
+	},
+	{
+		"iconName": "fileAudio",
+		"title": "File Audio",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper", "music"]
+	},
+	{
+		"iconName": "calendarXmark",
+		"title": "Calendar Xmark",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner", "delete"]
+	},
+	{
+		"iconName": "calendarTimes",
+		"title": "Calendar Times",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["date", "schedule", "planner", "delete"]
+	},
+	{
+		"iconName": "circleDown",
+		"title": "Circle Down",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bottom", "descend", "south"]
+	},
+	{
+		"iconName": "arrowAltCircleDown",
+		"title": "Arrow Alt Circle Down",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["bottom", "descend", "south"]
+	},
+	{
+		"iconName": "fileLines",
+		"title": "File Lines",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "fileAlt",
+		"title": "File Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "fileText",
+		"title": "File Text",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "comments",
+		"title": "Comments",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["reply", "message", "feedback"]
+	},
+	{
+		"iconName": "circleCheck",
+		"title": "Circle Check",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tick", "confirm", "done"]
+	},
+	{
+		"iconName": "checkCircle",
+		"title": "Check Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tick", "confirm", "done"]
+	},
+	{
+		"iconName": "moon",
+		"title": "Moon",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["night", "dark", "sleep"]
+	},
+	{
+		"iconName": "closedCaptioning",
+		"title": "Closed Captioning",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": []
+	},
+	{
+		"iconName": "images",
+		"title": "Images",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["photo", "picture", "media"]
+	},
+	{
+		"iconName": "circleRight",
+		"title": "Circle Right",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["next", "forward", "east"]
+	},
+	{
+		"iconName": "arrowAltCircleRight",
+		"title": "Arrow Alt Circle Right",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["next", "forward", "east"]
+	},
+	{
+		"iconName": "idCard",
+		"title": "Id Card",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["id", "card", "badge"]
+	},
+	{
+		"iconName": "driversLicense",
+		"title": "Drivers License",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["license", "card", "badge", "car"]
+	},
+	{
+		"iconName": "circlePlay",
+		"title": "Circle Play",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["start", "triangle", "begin"]
+	},
+	{
+		"iconName": "playCircle",
+		"title": "Play Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["start", "triangle", "begin"]
+	},
+	{
+		"iconName": "faceLaughBeam",
+		"title": "Face Laugh Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["laugh", "smile", "happy"]
+	},
+	{
+		"iconName": "laughBeam",
+		"title": "Laugh Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["laugh", "smile", "happy"]
+	},
+	{
+		"iconName": "addressBook",
+		"title": "Address Book",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["location", "place", "contact"]
+	},
+	{
+		"iconName": "contactBook",
+		"title": "Contact Book",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["read", "library", "manual"]
+	},
+	{
+		"iconName": "hourglass",
+		"title": "Hourglass",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hourglass", "time", "timer"]
+	},
+	{
+		"iconName": "hourglassEmpty",
+		"title": "Hourglass Empty",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hourglass", "time", "timer"]
+	},
+	{
+		"iconName": "headphones",
+		"title": "Headphones",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["headset", "audio", "listen"]
+	},
+	{
+		"iconName": "headphonesAlt",
+		"title": "Headphones Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["headset", "audio", "listen"]
+	},
+	{
+		"iconName": "headphonesSimple",
+		"title": "Headphones Simple",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["headset", "audio", "listen"]
+	},
+	{
+		"iconName": "filePowerpoint",
+		"title": "File Powerpoint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "windowMaximize",
+		"title": "Window Maximize",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["maximize", "expand", "window"]
+	},
+	{
+		"iconName": "commentDots",
+		"title": "Comment Dots",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["reply", "message", "feedback"]
+	},
+	{
+		"iconName": "commenting",
+		"title": "Commenting",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["reply", "message", "feedback"]
+	},
+	{
+		"iconName": "faceGrinTongueWink",
+		"title": "Face Grin Tongue Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tongue", "smile", "grin"]
+	},
+	{
+		"iconName": "grinTongueWink",
+		"title": "Grin Tongue Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["tongue", "smile", "grin"]
+	},
+	{
+		"iconName": "hourglassHalf",
+		"title": "Hourglass Half",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hourglass", "time", "timer"]
+	},
+	{
+		"iconName": "hourglass2",
+		"title": "Hourglass2",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hourglass", "time", "timer"]
+	},
+	{
+		"iconName": "creditCard",
+		"title": "Credit Card",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["payment", "debit", "checkout"]
+	},
+	{
+		"iconName": "creditCardAlt",
+		"title": "Credit Card Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["payment", "debit", "checkout"]
+	},
+	{
+		"iconName": "handSpock",
+		"title": "Hand Spock",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["hand", "finger", "gesture"]
+	},
+	{
+		"iconName": "bellSlash",
+		"title": "Bell Slash",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["notification", "alert", "reminder"]
+	},
+	{
+		"iconName": "star",
+		"title": "Star",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "rating", "bookmark"]
+	},
+	{
+		"iconName": "flag",
+		"title": "Flag",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["report", "marker", "pin"]
+	},
+	{
+		"iconName": "lemon",
+		"title": "Lemon",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["fruit", "food", "juicy"]
+	},
+	{
+		"iconName": "windowRestore",
+		"title": "Window Restore",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["restore", "restore", "window"]
+	},
+	{
+		"iconName": "faceGrinHearts",
+		"title": "Face Grin Hearts",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["like", "love", "favorite"]
+	},
+	{
+		"iconName": "grinHearts",
+		"title": "Grin Hearts",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["like", "love", "favorite"]
+	},
+	{
+		"iconName": "faceKissBeam",
+		"title": "Face Kiss Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["kiss", "love", "favorite"]
+	},
+	{
+		"iconName": "kissBeam",
+		"title": "Kiss Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["kiss", "love", "favorite"]
+	},
+	{
+		"iconName": "filePdf",
+		"title": "File Pdf",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "faceGrinWide",
+		"title": "Face Grin Wide",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grin", "smile", "happy"]
+	},
+	{
+		"iconName": "grinAlt",
+		"title": "Grin Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grin", "smile", "happy"]
+	},
+	{
+		"iconName": "faceLaughSquint",
+		"title": "Face Laugh Squint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["kiss", "love", "favorite"]
+	},
+	{
+		"iconName": "laughSquint",
+		"title": "Laugh Squint",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["kiss", "love", "favorite"]
+	},
+	{
+		"iconName": "faceKissWinkHeart",
+		"title": "Face Kiss Wink Heart",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["like", "love", "favorite"]
+	},
+	{
+		"iconName": "kissWinkHeart",
+		"title": "Kiss Wink Heart",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["like", "love", "favorite"]
+	},
+	{
+		"iconName": "copy",
+		"title": "Copy",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["duplicate", "clone", "replicate"]
+	},
+	{
+		"iconName": "chessKing",
+		"title": "Chess King",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["king", "chess", "game"]
+	},
+	{
+		"iconName": "squarePlus",
+		"title": "Square Plus",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["add", "new", "create"]
+	},
+	{
+		"iconName": "plusSquare",
+		"title": "Plus Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["add", "new", "create"]
+	},
+	{
+		"iconName": "fileCode",
+		"title": "File Code",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "faceGrinWink",
+		"title": "Face Grin Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grin", "smile", "happy"]
+	},
+	{
+		"iconName": "grinWink",
+		"title": "Grin Wink",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grin", "smile", "happy"]
+	},
+	{
+		"iconName": "moneyBill1",
+		"title": "Money Bill1",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["cash", "currency", "payment"]
+	},
+	{
+		"iconName": "moneyBillAlt",
+		"title": "Money Bill Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["cash", "currency", "payment"]
+	},
+	{
+		"iconName": "eyeSlash",
+		"title": "Eye Slash",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["view", "see", "preview"]
+	},
+	{
+		"iconName": "fileWord",
+		"title": "File Word",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "faceAngry",
+		"title": "Face Angry",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["angry", "mad", "frustrated"]
+	},
+	{
+		"iconName": "angry",
+		"title": "Angry",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["angry", "mad", "frustrated"]
+	},
+	{
+		"iconName": "chessKnight",
+		"title": "Chess Knight",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["knight", "chess", "game"]
+	},
+	{
+		"iconName": "faceGrinBeam",
+		"title": "Face Grin Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["beam", "smile", "happy"]
+	},
+	{
+		"iconName": "grinBeam",
+		"title": "Grin Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["beam", "smile", "happy"]
+	},
+	{
+		"iconName": "handPeace",
+		"title": "Hand Peace",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["peace", "harmony", "balance"]
+	},
+	{
+		"iconName": "compass",
+		"title": "Compass",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["navigate", "direction", "bearing"]
+	},
+	{
+		"iconName": "square",
+		"title": "Square",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["square", "shape", "rectangle"]
+	},
+	{
+		"iconName": "faceGrin",
+		"title": "Face Grin",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grin", "smile", "happy"]
+	},
+	{
+		"iconName": "grin",
+		"title": "Grin",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grin", "smile", "happy"]
+	},
+	{
+		"iconName": "faceSmile",
+		"title": "Face Smile",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["smile", "happy", "joy"]
+	},
+	{
+		"iconName": "smile",
+		"title": "Smile",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["smile", "happy", "joy"]
+	},
+	{
+		"iconName": "faceSmileBeam",
+		"title": "Face Smile Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["smile", "happy", "joy"]
+	},
+	{
+		"iconName": "smileBeam",
+		"title": "Smile Beam",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["smile", "happy", "joy"]
+	},
+	{
+		"iconName": "folderClosed",
+		"title": "Folder Closed",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["directory", "catalog", "container"]
+	},
+	{
+		"iconName": "keyboard",
+		"title": "Keyboard",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["type", "input", "keys"]
+	},
+	{
+		"iconName": "faceRollingEyes",
+		"title": "Face Rolling Eyes",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["view", "see", "preview"]
+	},
+	{
+		"iconName": "mehRollingEyes",
+		"title": "Meh Rolling Eyes",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["view", "see", "preview"]
+	},
+	{
+		"iconName": "faceGrimace",
+		"title": "Face Grimace",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grimace", "face", "expression"]
+	},
+	{
+		"iconName": "grimace",
+		"title": "Grimace",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["grimace", "face", "expression"]
+	},
+	{
+		"iconName": "circleDot",
+		"title": "Circle Dot",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["circle", "shape", "round"]
+	},
+	{
+		"iconName": "dotCircle",
+		"title": "Dot Circle",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["circle", "shape", "round"]
+	},
+	{
+		"iconName": "objectGroup",
+		"title": "Object Group",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["group", "collection", "objects"]
+	},
+	{
+		"iconName": "faceFlushed",
+		"title": "Face Flushed",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["face", "expression", "embarrassed"]
+	},
+	{
+		"iconName": "flushed",
+		"title": "Flushed",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["face", "expression", "embarrassed"]
+	},
+	{
+		"iconName": "starHalfStroke",
+		"title": "Star Half Stroke",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "rating", "bookmark"]
+	},
+	{
+		"iconName": "starHalfAlt",
+		"title": "Star Half Alt",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["favorite", "rating", "bookmark"]
+	},
+	{
+		"iconName": "fileVideo",
+		"title": "File Video",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["document", "doc", "paper"]
+	},
+	{
+		"iconName": "faceLaugh",
+		"title": "Face Laugh",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["laugh", "smile", "happy"]
+	},
+	{
+		"iconName": "laugh",
+		"title": "Laugh",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["laugh", "smile", "happy"]
+	},
+	{
+		"iconName": "handPointer",
+		"title": "Hand Pointer",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["pointer", "hand", "gesture"]
+	},
+	{
+		"iconName": "registered",
+		"title": "Registered",
+		"library": "faregular",
+		"prefix": "far",
+		"tags": ["copyright", "legal", "license"]
+	}
+]

@@ -20,7 +20,13 @@ const IconLibraries = ({
 		wp: {
 			lazyLoad: false,
 		},
-		fontawesome: {
+		faregular: {
+			lazyLoad: true,
+		},
+		fasolid: {
+			lazyLoad: true,
+		},
+		fabrands: {
 			lazyLoad: true,
 		},
 		social: {
