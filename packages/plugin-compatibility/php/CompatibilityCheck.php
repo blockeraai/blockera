@@ -76,6 +76,13 @@ class CompatibilityCheck {
 	 */
 	protected $callback;
 
+	/**
+	 * Store the cache key.
+	 *
+	 * @var string $cache_key the cache key.
+	 */
+	protected string $cache_key = 'blockera-compat-redirect';
+
     /**
      * Static access to the instance of the class.
      *
@@ -168,22 +175,50 @@ class CompatibilityCheck {
 	 */
     public function load(): void {
 
-        // When Current Plugin exists but is below minimum, disable it functionality via filter and set redirect.
-        if ($this->requires_at_least && $this->required_plugin_version && version_compare($this->required_plugin_version, $this->requires_at_least, '<')) {
-            add_filter(sprintf('%1$s/is-enabled', $this->compatible_with_slug), '__return_false', 9999);
+        $this->checkVersions(
+            function (){
+				// Disable the plugin functionality.
+				add_filter(sprintf('%1$s/is-enabled', $this->compatible_with_slug), '__return_false', 9999);
 
-			if ($this->callback && is_callable($this->callback)) {
-				call_user_func($this->callback);
+				if ($this->callback && is_callable($this->callback)) {
+					call_user_func($this->callback);
+				}
+
+				// Schedule one-time redirect to compatibility page.
+				if (is_admin() && current_user_can('update_plugins')) {
+					if (! get_transient($this->cache_key)) {
+						set_transient($this->cache_key, 1, 60);
+					}
+				}
 			}
-
-            // Schedule one-time redirect to compatibility page.
-            if (is_admin() && current_user_can('update_plugins')) {
-                if (! get_transient('blockera_compat_redirect')) {
-                    set_transient('blockera_compat_redirect', 1, 60);
-                }
-            }
-        }
+        );
     }
+
+	/**
+	 * Check the plugin versions with the callback.
+	 * 
+	 * @param callable $callback the callback.
+	 * @param bool     $status the status. default is false.
+	 *
+	 * @return void
+	 */
+	protected function checkVersions( callable $callback, bool $status = false): void {
+
+		// When Current Plugin exists but is below minimum, disable it functionality via filter and set redirect.
+        if ($this->requires_at_least && $this->required_plugin_version && version_compare($this->required_plugin_version, $this->requires_at_least, '<')) {
+			
+			if ($callback && is_callable($callback) && ! $status) {
+				
+				call_user_func($callback);
+			}
+        } elseif ($status) {
+
+			if ($callback && is_callable($callback)) {
+			
+				call_user_func($callback);
+			}
+		}
+	}
 
     /**
      * Admin initialization.
@@ -195,10 +230,17 @@ class CompatibilityCheck {
         if (! is_admin() || ! current_user_can('update_plugins')) {
             return;
         }
-        if (! get_transient('blockera_compat_redirect')) {
+        if (! get_transient($this->cache_key)) {
             return;
         }
-        delete_transient('blockera_compat_redirect');
+        
+		$this->checkVersions(
+            function (){
+				// Delete the transient.
+				delete_transient($this->cache_key);
+			},
+            true
+        );
 
         // Avoid redirect loops.
         if (isset($_GET['page']) && 'blockera-compat' === $_GET['page']) {
