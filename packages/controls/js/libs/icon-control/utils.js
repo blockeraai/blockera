@@ -71,8 +71,6 @@ export function getLibraryIcons({
 			iconLibraryIcons[iconKey]
 		);
 
-		console.log('library', library);
-
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
 				<FeatureWrapper
