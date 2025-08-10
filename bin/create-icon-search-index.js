@@ -4,29 +4,30 @@
 const path = require('path');
 const { spawn } = require('child_process');
 
-const scriptType = process.argv[2];
+// Run both scripts sequentially without requiring a script type argument
+const scriptPaths = [
+	path.resolve(__dirname, './create-icon-search-index-1.js'),
+	path.resolve(__dirname, './create-icon-search-index-2.js'),
+];
 
-if (!scriptType) {
-	console.error('Error: Script type must be provided as an argument.');
-	console.error('Usage: node create-icon-search-index.js <all|fontawesome>');
-	process.exit(1);
+// Pass through any additional args (if provided)
+const remainingArgs = process.argv.slice(2);
+
+function runScript(scriptPath) {
+	return new Promise((resolve) => {
+		const child = spawn('node', [scriptPath, ...remainingArgs], {
+			stdio: 'inherit',
+		});
+		child.on('exit', (code) => resolve(code));
+	});
 }
 
-const scriptPath = path.resolve(
-	__dirname,
-	scriptType === 'all'
-		? './create-search-all-libraries-index.js'
-		: './create-search-fontawesome-index.js'
-);
-
-// Get remaining arguments to pass through
-const remainingArgs = process.argv.slice(3);
-
-// Spawn the appropriate script
-const child = spawn('node', [scriptPath, ...remainingArgs], {
-	stdio: 'inherit',
-});
-
-child.on('exit', (code) => {
-	process.exit(code);
-});
+(async () => {
+	for (const scriptPath of scriptPaths) {
+		const code = await runScript(scriptPath);
+		if (code !== 0) {
+			process.exit(code);
+		}
+	}
+	process.exit(0);
+})();

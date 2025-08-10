@@ -98,13 +98,8 @@ const index = Fuse.createIndex(keys, icons);
 /**
  * Write the index to the specified destination file.
  */
-const outputFileName = process.argv[2];
-if (!outputFileName) {
-	console.error('Error: Output file name must be provided as an argument.');
-	process.exit(1);
-}
 const destinationFile = resolveProjectPath(
-	`./packages/icons/js/${outputFileName}`
+	`./packages/icons/js/search-index.json`
 );
 
 try {

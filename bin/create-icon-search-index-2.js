@@ -2,6 +2,7 @@
  * External dependencies
  */
 const fs = require('fs');
+const glob = require('glob');
 const path = require('path');
 const Fuse = require('fuse.js');
 
@@ -10,6 +11,23 @@ const Fuse = require('fuse.js');
  */
 function resolveProjectPath(relativePath) {
 	return path.resolve(__dirname, '../', relativePath.replace(/^\.\//, ''));
+}
+
+/**
+ * Load search libraries from the configuration file
+ */
+const searchLibrariesPath = resolveProjectPath(
+	'./packages/icons/js/search-libraries-2.json'
+);
+let searchLibraries = [];
+try {
+	searchLibraries = require(searchLibrariesPath);
+} catch (err) {
+	console.error(
+		`Failed to load search libraries from ${searchLibrariesPath}:`,
+		err
+	);
+	process.exit(1);
 }
 
 /**
@@ -30,28 +48,36 @@ try {
 }
 
 /**
- * Load Font Awesome icon data from JSON file.
+ * Generate jsonFiles array based on search libraries
  */
-const fontAwesomeDataPath = resolveProjectPath(
-	'./packages/icons/js/library-fontawesome/search-data.json'
+const jsonFiles = searchLibraries.map(
+	(library) => `./packages/icons/js/library-${library}/search-data.json`
 );
-let icons = [];
-try {
-	const data = require(fontAwesomeDataPath);
-	if (Array.isArray(data)) {
-		icons = data;
-	} else if (data && typeof data === 'object') {
-		icons = [data];
+
+/**
+ * Load and flatten all icon data from JSON files.
+ */
+const icons = [];
+
+for (const file of jsonFiles) {
+	const absPath = resolveProjectPath(file);
+	let data;
+	try {
+		data = require(absPath);
+	} catch (err) {
+		console.error(`Failed to require ${absPath}:`, err);
+		continue;
 	}
-} catch (err) {
-	console.error(
-		`Failed to load Font Awesome data from ${fontAwesomeDataPath}:`,
-		err
-	);
-	process.exit(1);
+	if (Array.isArray(data)) {
+		icons.push(...data);
+	} else if (data && typeof data === 'object') {
+		icons.push(data);
+	}
 }
 
-console.log('Total Font Awesome Icons:', icons.length);
+console.log('Library Search Data Files:', jsonFiles);
+
+console.log('Total Icons:', icons.length);
 
 const keys = searchConfig.keys || [
 	{
@@ -72,14 +98,13 @@ const index = Fuse.createIndex(keys, icons);
 /**
  * Write the index to the specified destination file.
  */
-const outputFileName = process.argv[2] || 'search-fontawesome-index.json';
 const destinationFile = resolveProjectPath(
-	`./packages/icons/js/${outputFileName}`
+	`./packages/icons/js/search-index-2.json`
 );
 
 try {
 	fs.writeFileSync(destinationFile, JSON.stringify(index.toJSON(), null, 2));
-	console.log(`Font Awesome search index written to ${destinationFile}`);
+	console.log(`Search index written to ${destinationFile}`);
 } catch (err) {
 	console.error(`Failed to write search index to ${destinationFile}:`, err);
 	process.exit(1);
