@@ -173,6 +173,10 @@ class CompatibilityCheck {
 	 */
     public function load(): void {
 
+		if (! $this->isActivePlugin()) {
+			return;
+		}
+
         $this->checkVersions(
             function (){
 				// Disable the plugin functionality.
@@ -256,14 +260,17 @@ class CompatibilityCheck {
         if (! get_transient($this->cache_key)) {
             return;
         }
-        	
-		$this->checkVersions(
-			function () {
-				// Delete the transient.
-				delete_transient($this->cache_key);
-			},
-			true
-		);
+
+		if (! $this->isActivePlugin()) {
+
+			$this->checkVersions(
+				function () {
+					// Delete the transient.
+					delete_transient($this->cache_key);
+				},
+				true
+			);
+		}
 
         // Avoid redirect loops.
         if (isset($_GET['page']) && 'blockera-compat' === $_GET['page']) {
