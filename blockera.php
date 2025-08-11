@@ -6,7 +6,7 @@
  * Requires at least: 6.6
  * Tested up to: 6.8
  * Requires PHP: 7.4
- * Requires at least blockera-pro: 1.1.1
+ * Requires at least blockera-pro: 1.1.2
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about/
  * Version: 1.12.2
@@ -16,8 +16,6 @@
  *
  * @package Blockera
  */
-
-use Blockera\PluginCompatibility\CompatibilityCheck;
 
 // direct access is not allowed.
 if (! defined('ABSPATH')) {
@@ -73,18 +71,19 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 $env_mode = 'development' === $_ENV['APP_MODE'] ?? 'production';
 $mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $env_mode;
 
-\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()
-	->setProps(
-        [
-			'file' => __FILE__,
-			'slug' => 'blockera',
-			'version' => BLOCKERA_SB_VERSION,
-			'plugin_path' => BLOCKERA_SB_PATH,
-			'compatible_with_slug' => 'blockera-pro',
-			'transient_key' => 'blockera-compat-redirect',
-			'mode' => $mode ? 'development' : 'production',
-		]
-    );
+global $blockera_compat_free_with_pro;
+
+$blockera_compat_free_with_pro = new \Blockera\PluginCompatibility\CompatibilityCheck(
+    [
+		'file' => __FILE__,
+		'slug' => 'blockera',
+		'version' => BLOCKERA_SB_VERSION,
+		'plugin_path' => BLOCKERA_SB_PATH,
+		'compatible_with_slug' => 'blockera-pro',
+		'transient_key' => 'blockera-compat-redirect',
+		'mode' => $mode ? 'development' : 'production',
+	]
+);
 
 add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
 
@@ -95,7 +94,9 @@ add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
  */
 function blockera_load_compatibility_check(): void{
 
-	\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()->load();
+	global $blockera_compat_free_with_pro;
+
+	$blockera_compat_free_with_pro->load();
 }
 
 // Initialize hooks on Front Controller.
@@ -113,8 +114,10 @@ function blockera_init(): void {
      */
     do_action('blockera/before/setup');
 
-	add_action('admin_init', [ \Blockera\PluginCompatibility\CompatibilityCheck::getInstance(), 'adminInitialize' ]);
-	add_action('admin_menu', [ \Blockera\PluginCompatibility\CompatibilityCheck::getInstance(), 'adminMenus' ]);
+	global $blockera_compat_free_with_pro;
+
+	add_action('admin_init', [ $blockera_compat_free_with_pro, 'adminInitialize' ]);
+	add_action('admin_menu', [ $blockera_compat_free_with_pro, 'adminMenus' ]);
 
     new \Blockera\Telemetry\Jobs(
         new \Blockera\WordPress\Sender(),

@@ -83,19 +83,15 @@ class CompatibilityCheck {
 	 */
 	protected string $cache_key = 'blockera-compat-redirect';
 
-    /**
-     * Static access to the instance of the class.
-     *
-     * @return self
-     */
-    public static function getInstance(): self {
+	/**
+	 * Compatibility checking object constructor.
+	 *
+	 * @param array $args
+	 */
+	public function __construct( array $args) {
 
-        if (null === self::$instance) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
+		$this->setProps($args);
+	}
 
 	/**
 	 * Get the property of the class.
