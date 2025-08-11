@@ -108,6 +108,16 @@ class CompatibilityCheck {
 
 		$this->setProps($plugin_args);
 
+        // Check if Blockera Pro plugin is active.
+        if (! function_exists('is_plugin_active')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        
+        $required_plugin_file = $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+        if (! is_plugin_active($required_plugin_file)) {
+            return;
+        }
+
         add_action('plugins_loaded', [ $this, 'load' ], 1);
 
         add_action('admin_init', [ $this, 'adminInitialize' ]);
