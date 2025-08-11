@@ -297,8 +297,23 @@ class CompatibilityCheck {
             function () {
 
 				$plugin_name = Utils::pascalCaseWithSpace($this->plugin_slug);
+				
+				// Get update plugins transient to check for available updates.
+				$update_plugins = get_site_transient('update_plugins');
+				$update_url     = '';
+
+				if ($update_plugins && isset($update_plugins->response)) {
+					// Check if the required plugin has available updates.
+					foreach ($update_plugins->response as $plugin_file => $plugin_data) {
+						if (false !== strpos($plugin_file, $this->compatible_with_slug)) {
+							$update_url = $plugin_data->package;
+							break;
+						}
+					}
+				}
 
 				echo '<script>
+					window.blockeraPluginUpdateUrl = "' . $update_url . '";
 					window.blockeraPluginName = "' . $plugin_name . '";
 					window.blockeraPluginVersion = "' . $this->plugin_version . '";
 					window.blockeraPluginExists = "' . $this->checkPluginExists() . '";

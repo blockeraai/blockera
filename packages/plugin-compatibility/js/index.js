@@ -11,10 +11,17 @@ const App = () => {
 	const {
 		blockeraPluginName,
 		blockeraPluginVersion,
+		blockeraPluginUpdateUrl,
 		blockeraPluginRequiredVersion,
 		blockeraPluginRequiredPluginSlug,
 		blockeraPluginRequiredPluginVersion,
 	} = window;
+
+	const hasDirectUpdateURL = applyFilters(
+		'blockera.compatibility.directUpdateRequiredPlugin',
+		blockeraPluginExists,
+		blockeraPluginUpdateUrl
+	);
 
 	return (
 		<div className="blockera-compatibility-notice">
@@ -69,15 +76,22 @@ const App = () => {
 							{__(' Plugin', 'blockera')}
 						</a>
 					)}
-					{applyFilters(
-						'blockera/compatibility/directUpdateRequiredPlugin',
-						blockeraPluginExists
-					) && (
+					{hasDirectUpdateURL && (
 						<a
 							className="button button-primary"
-							href={`${window.location.origin}/wp-admin/update-core.php`}
+							href={blockeraPluginUpdateUrl}
 						>
 							{__('Update Required Plugin', 'blockera')}
+						</a>
+					)}
+					{!hasDirectUpdateURL && (
+						<a
+							target="_blank"
+							className="button button-primary"
+							href={'https://blockera.ai/my-account/licenses'}
+							rel="noreferrer"
+						>
+							{__('Update Manually', 'blockera')}
 						</a>
 					)}
 					<a
