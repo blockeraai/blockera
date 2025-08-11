@@ -86,15 +86,15 @@ class CompatibilityCheck {
     /**
      * Static access to the instance of the class.
      *
-     * @return static
+     * @return self
      */
-    public static function getInstance(): static {
+    public static function getInstance(): self {
 
-        if (null === static::$instance) {
-            static::$instance = new static();
+        if (null === self::$instance) {
+            self::$instance = new self();
         }
 
-        return static::$instance;
+        return self::$instance;
     }
 
     /**
