@@ -83,14 +83,14 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 		]
     );
 
-add_action('plugins_loaded', 'blockera_load', 5);
+add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
 
 /**
  * Blockera is loading ...
  *
  * @return void
  */
-function blockera_load(): void{
+function blockera_load_compatibility_check(): void{
 
 	\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()->load();
 }
