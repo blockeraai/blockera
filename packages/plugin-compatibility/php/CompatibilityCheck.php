@@ -90,6 +90,12 @@ class CompatibilityCheck {
 	 */
 	public function __construct( array $args) {
 
+		$this->compatible_with_slug = $args['compatible_with_slug'];
+
+		if (! $this->isActivePlugin()) {
+			return;
+		}
+
 		$this->setProps($args);
 	}
 
@@ -114,14 +120,13 @@ class CompatibilityCheck {
 	 */
 	public function setProps( array $plugin_args): self {
 
-		$this->app_mode             = $plugin_args['mode'];
-		$this->plugin_path          = $plugin_args['plugin_path'];
-		$this->plugin_file          = $plugin_args['file'];
-		$this->plugin_slug          = $plugin_args['slug'];
-		$this->plugin_version       = $plugin_args['version'];
-		$this->callback             = $plugin_args['callback'] ?? null;
-		$this->compatible_with_slug = $plugin_args['compatible_with_slug'];
-		$this->cache_key 		    = $plugin_args['transient_key'];
+		$this->app_mode       = $plugin_args['mode'];
+		$this->plugin_path    = $plugin_args['plugin_path'];
+		$this->plugin_file    = $plugin_args['file'];
+		$this->plugin_slug    = $plugin_args['slug'];
+		$this->plugin_version = $plugin_args['version'];
+		$this->callback       = $plugin_args['callback'] ?? null;
+		$this->cache_key      = $plugin_args['transient_key'];
 
 		if (! function_exists('get_plugin_data')) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -168,11 +173,6 @@ class CompatibilityCheck {
 	 */
     public function load(): void {
 
-		if (! $this->checkPluginExists()) {
-
-			return;
-		}
-
         $this->checkVersions(
             function (){
 				// Disable the plugin functionality.
@@ -193,11 +193,11 @@ class CompatibilityCheck {
     }
 
 	/**
-	 * Check if the plugin exists.
+	 * Check if the plugin is active.
 	 *
 	 * @return bool true on success, false on failure!
 	 */
-	protected function checkPluginExists(): bool {
+	protected function isActivePlugin(): bool {
 		
 		// Check if Blockera Pro plugin is active.
         if (! function_exists('is_plugin_active')) {
@@ -256,17 +256,14 @@ class CompatibilityCheck {
         if (! get_transient($this->cache_key)) {
             return;
         }
-        
-		if ($this->checkPluginExists()) {
-			
-			$this->checkVersions(
-				function () {
-					// Delete the transient.
-					delete_transient($this->cache_key);
-				},
-				true
-			);
-		}
+        	
+		$this->checkVersions(
+			function () {
+				// Delete the transient.
+				delete_transient($this->cache_key);
+			},
+			true
+		);
 
         // Avoid redirect loops.
         if (isset($_GET['page']) && 'blockera-compat' === $_GET['page']) {
