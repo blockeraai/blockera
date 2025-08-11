@@ -6,7 +6,7 @@
  * Requires at least: 6.6
  * Tested up to: 6.8
  * Requires PHP: 7.4
- * Requires at least blockera-pro: 1.1.2
+ * Requires at least blockera-pro: 1.1.1
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about/
  * Version: 1.12.2
