@@ -14,12 +14,13 @@ const App = () => {
 		blockeraPluginUpdateUrl,
 		blockeraPluginRequiredVersion,
 		blockeraPluginRequiredPluginSlug,
+		blockeraIsActiveCompatiblePlugin,
 		blockeraPluginRequiredPluginVersion,
 	} = window;
 
 	const hasDirectUpdateURL = applyFilters(
 		'blockera.compatibility.directUpdateRequiredPlugin',
-		blockeraPluginExists,
+		blockeraIsActiveCompatiblePlugin,
 		blockeraPluginUpdateUrl
 	);
 
