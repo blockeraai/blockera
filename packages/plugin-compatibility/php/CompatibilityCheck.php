@@ -136,7 +136,7 @@ class CompatibilityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php');
+		$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php', true, false);
 		if (isset($required_plugin_data['Version'])) {
 			$this->required_plugin_version = $required_plugin_data['Version'];
 		}
