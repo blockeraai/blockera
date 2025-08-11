@@ -70,31 +70,6 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()
-	->setProps(
-        [
-			'file' => __FILE__,
-			'slug' => 'blockera',
-			'version' => BLOCKERA_SB_VERSION,
-			'plugin_path' => BLOCKERA_SB_PATH,
-			'compatible_with_slug' => 'blockera-pro',
-			'transient_key' => 'blockera-compat-redirect',
-			'mode' => blockera_core_config('app.debug') ? 'development' : 'production',
-		]
-    );
-
-add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
-
-/**
- * Blockera is loading ...
- *
- * @return void
- */
-function blockera_load_compatibility_check(): void{
-
-	\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()->load();
-}
-
 // Initialize hooks on Front Controller.
 blockera_load('bootstrap.hooks', __DIR__);
 
@@ -109,9 +84,6 @@ function blockera_init(): void {
      * @since 1.3.0
      */
     do_action('blockera/before/setup');
-
-	add_action('admin_init', [ \Blockera\PluginCompatibility\CompatibilityCheck::getInstance(), 'adminInitialize' ]);
-	add_action('admin_menu', [ \Blockera\PluginCompatibility\CompatibilityCheck::getInstance(), 'adminMenus' ]);
 
     new \Blockera\Telemetry\Jobs(
         new \Blockera\WordPress\Sender(),
