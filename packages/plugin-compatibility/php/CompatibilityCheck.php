@@ -98,6 +98,18 @@ class CompatibilityCheck {
     }
 
 	/**
+	 * Get the property of the class.
+	 *
+	 * @param string $prop the property.
+	 *
+	 * @return mixed the property.
+	 */
+	public function get( string $prop): mixed {
+
+		return $this->$prop;
+	}
+
+	/**
 	 * Set the properties of the class.
 	 *
 	 * @param array $plugin_args the plugin arguments.
@@ -289,12 +301,15 @@ class CompatibilityCheck {
 				echo '<script>
 					window.blockeraPluginName = "' . $plugin_name . '";
 					window.blockeraPluginVersion = "' . $this->plugin_version . '";
+					window.blockeraPluginExists = "' . $this->checkPluginExists() . '";
 					window.blockeraPluginRequiredVersion = "' . $this->requires_at_least . '";
 					window.blockeraPluginRequiredPluginVersion = "' . $this->required_plugin_version . '";
 					window.blockeraPluginRequiredPluginSlug = "' . $this->compatible_with_slug . '";
 				</script>';
 
 				$base_url = str_replace(ABSPATH, home_url('/'), $this->plugin_path);
+
+				do_action('blockera/compatibility/admin-menus', $base_url, $this);
 
 				if ('development' === $this->app_mode) {
 					$filename = 'plugin-compatibility.js';
