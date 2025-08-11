@@ -1,6 +1,6 @@
 {
 	"name": "blockera/feature-icon",
-	"path": "packages/features-library/icon",
+	"path": "packages/features-library",
 	"dependent": {
 		"repositories": [
 			"https://github.com/blockeraai/blockera.git",
