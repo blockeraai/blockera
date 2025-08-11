@@ -261,7 +261,7 @@ class CompatibilityCheck {
             return;
         }
 
-		if (! $this->isActivePlugin()) {
+		if ($this->isActivePlugin()) {
 
 			$this->checkVersions(
 				function () {
