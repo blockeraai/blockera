@@ -70,6 +70,9 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
+$env_mode = 'development' === $_ENV['APP_MODE'] ?? 'production';
+$mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $env_mode;
+
 \Blockera\PluginCompatibility\CompatibilityCheck::getInstance()
 	->setProps(
         [
@@ -79,7 +82,7 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 			'plugin_path' => BLOCKERA_SB_PATH,
 			'compatible_with_slug' => 'blockera-pro',
 			'transient_key' => 'blockera-compat-redirect',
-			'mode' => blockera_core_config('app.debug') ? 'development' : 'production',
+			'mode' => $mode ? 'development' : 'production',
 		]
     );
 
