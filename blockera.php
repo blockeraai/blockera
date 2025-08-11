@@ -6,7 +6,7 @@
  * Requires at least: 6.6
  * Tested up to: 6.8
  * Requires PHP: 7.4
- * Requires at least blockera-pro: 1.2.0
+ * Requires at least blockera-pro: 1.1.1
  * Author: Blockera AI
  * Author URI: https://blockera.ai/about/
  * Version: 1.12.2
@@ -23,6 +23,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+### BEGIN AUTO-GENERATED AUTOLOADER
 // Register into shared autoload coordinator.
 require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
 \Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
@@ -30,6 +31,7 @@ require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-c
 
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';
+### END AUTO-GENERATED AUTOLOADER
 
 if (file_exists(__DIR__ . '/.env')) {
 

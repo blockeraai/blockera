@@ -102,6 +102,7 @@ mv readme.tmp.txt readme.txt
 status "Generating inc/app.php 📝"
 mkdir -p "inc"
 cp packages/blockera/php/app.php inc/app.php
+cp packages/autoloader-coordinator/class-shared-autoload-coordinator.php inc/class-shared-autoload-coordinator.php
 
 build_files=$(
 	ls dist/*/*.{min.js,min.css,asset.php} \

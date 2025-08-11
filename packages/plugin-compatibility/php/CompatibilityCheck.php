@@ -86,15 +86,15 @@ class CompatibilityCheck {
     /**
      * Static access to the instance of the class.
      *
-     * @return static
+     * @return self
      */
-    public static function getInstance(): static {
+    public static function getInstance(): self {
 
-        if (null === static::$instance) {
-            static::$instance = new static();
+        if (null === self::$instance) {
+            self::$instance = new self();
         }
 
-        return static::$instance;
+        return self::$instance;
     }
 
     /**
@@ -107,6 +107,16 @@ class CompatibilityCheck {
     public function run( array $plugin_args): void {
 
 		$this->setProps($plugin_args);
+
+        // Check if Blockera Pro plugin is active.
+        if (! function_exists('is_plugin_active')) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+        
+        $required_plugin_file = $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+        if (! is_plugin_active($required_plugin_file)) {
+            return;
+        }
 
         add_action('plugins_loaded', [ $this, 'load' ], 1);
 
@@ -136,7 +146,7 @@ class CompatibilityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php');
+		$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php', true, false);
 		if (isset($required_plugin_data['Version'])) {
 			$this->required_plugin_version = $required_plugin_data['Version'];
 		}
