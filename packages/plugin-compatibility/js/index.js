@@ -67,7 +67,7 @@ const App = () => {
 					{__('features.', 'blockera')}
 				</p>
 				<p>
-					{!blockeraPluginExists && (
+					{!blockeraIsActiveCompatiblePlugin && (
 						<a
 							className="button button-primary"
 							href={`${window.location.origin}/wp-admin/update-core.php`}
