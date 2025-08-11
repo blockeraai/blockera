@@ -17,6 +17,8 @@
  * @package Blockera
  */
 
+use Blockera\PluginCompatibility\CompatibilityCheck;
+
 // direct access is not allowed.
 if (! defined('ABSPATH')) {
 
@@ -68,18 +70,29 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-if (class_exists(\Blockera\PluginCompatibility\CompatibilityCheck::class)) {
-
-	\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()->run(
+\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()
+	->setProps(
         [
 			'file' => __FILE__,
 			'slug' => 'blockera',
 			'version' => BLOCKERA_SB_VERSION,
 			'plugin_path' => BLOCKERA_SB_PATH,
 			'compatible_with_slug' => 'blockera-pro',
+			'transient_key' => 'blockera-compat-redirect',
 			'mode' => blockera_core_config('app.debug') ? 'development' : 'production',
 		]
     );
+
+add_action('plugins_loaded', 'blockera_load', 5);
+
+/**
+ * Blockera is loading ...
+ *
+ * @return void
+ */
+function blockera_load(): void{
+
+	\Blockera\PluginCompatibility\CompatibilityCheck::getInstance()->load();
 }
 
 // Initialize hooks on Front Controller.
@@ -96,6 +109,9 @@ function blockera_init(): void {
      * @since 1.3.0
      */
     do_action('blockera/before/setup');
+
+	add_action('admin_init', [ \Blockera\PluginCompatibility\CompatibilityCheck::getInstance(), 'adminInitialize' ]);
+	add_action('admin_menu', [ \Blockera\PluginCompatibility\CompatibilityCheck::getInstance(), 'adminMenus' ]);
 
     new \Blockera\Telemetry\Jobs(
         new \Blockera\WordPress\Sender(),
