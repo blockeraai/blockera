@@ -102,10 +102,7 @@ export default function Search({}) {
 										'library-search-hint'
 									)}
 								>
-									{__(
-										'Sorry, no icons found. Please try a different keyword.',
-										'blockera'
-									)}
+									{__('Sorry, no icons found.', 'blockera')}
 								</span>
 							) : (
 								<div

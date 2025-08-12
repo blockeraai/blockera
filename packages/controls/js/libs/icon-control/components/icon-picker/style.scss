@@ -90,12 +90,17 @@
 			margin-top: 20px;
 		}
 
+		.blockera-control-library-header__count,
 		.blockera-control-library-header__label {
 			background: var(--blockera-controls-primary-color);
 			color: #ffffff;
 			padding: 1px 8px;
 			border-radius: 32px;
 			font-size: 11px;
+		}
+
+		.blockera-control-library-header__count {
+			margin-left: auto;
 		}
 	}
 }

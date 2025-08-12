@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { memo, useMemo } from '@wordpress/element';
-import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -44,12 +43,14 @@ const IconLibraries = ({
 			const icon = iconLibraryInfo[library].icon;
 			const title = (
 				<>
-					{icon}{' '}
-					{sprintf(
-						// translators: %s: Icon Library Name
-						__('%s Icons', 'blockera'),
-						iconLibraryInfo[library].name
-					)}
+					{icon} {iconLibraryInfo[library].name}
+					<span
+						className={controlInnerClassNames(
+							'library-header__count'
+						)}
+					>
+						{iconLibraryInfo[library]?.count}
+					</span>
 				</>
 			);
 
