@@ -68,7 +68,7 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-$env_mode = 'development' === $_ENV['APP_MODE'] ?? 'production';
+$env_mode = 'development' === ( $_ENV['APP_MODE'] ?? 'production' );
 $mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $env_mode;
 
 global $blockera_compat_free_with_pro;
