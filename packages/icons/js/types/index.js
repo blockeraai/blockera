@@ -1,6 +1,23 @@
 //@flow
 
-export type IconLibraryTypes = 'wp' | 'ui' | 'blockera' | 'cursor' | 'social';
+import type { MixedElement } from 'react';
+
+export type IconLibraryTypes =
+	| 'wp'
+	| 'ui'
+	| 'blockera'
+	| 'cursor'
+	| 'social'
+	| 'faregular'
+	| 'fasolid'
+	| 'fabrands';
+
+export type IconLibrary = {
+	id: IconLibraryTypes,
+	name: string,
+	icon: MixedElement,
+	count: number,
+};
 
 export type UploadSVGProps = {
 	title: string,

@@ -5,7 +5,6 @@
  */
 import Fuse from 'fuse.js';
 import { __ } from '@wordpress/i18n';
-import type { MixedElement } from 'react';
 
 /**
  * Blockera dependencies
@@ -17,7 +16,7 @@ import { isUndefined } from '@blockera/utils';
  */
 import searchIndex from './search-index.json';
 import searchIndex2 from './search-index-2.json';
-import type { IconLibraryTypes } from './types';
+import type { IconLibraryTypes, IconLibrary } from './types';
 // WP Library
 import { WPIcons } from './library-wp';
 import { default as WPLibraryIcon } from './library-wp/library-icon';
@@ -53,59 +52,63 @@ import searchLibraries from './search-libraries.json';
 import searchLibraries2 from './search-libraries-2.json';
 
 export const IconLibraries: {
-	[key: string]: {
-		id: IconLibraryTypes,
-		name: string,
-		icon: MixedElement,
-	},
+	[key: string]: IconLibrary,
 } = {
 	wp: {
 		id: 'wp',
 		// translators: Icon library name
-		name: __('WordPress', 'blockera'),
+		name: __('WordPress Icons', 'blockera'),
 		icon: <WPLibraryIcon />,
+		count: Object.keys(WPIcons).length,
 	},
 	faregular: {
 		id: 'faregular',
 		// translators: Icon library name
 		name: __('FontAwesome Regular', 'blockera'),
 		icon: <FaRegularLibraryIcon />,
+		count: Object.keys(FaRegularIcons).length,
 	},
 	fasolid: {
 		id: 'fasolid',
 		// translators: Icon library name
 		name: __('FontAwesome Solid', 'blockera'),
 		icon: <FaSolidLibraryIcon />,
+		count: Object.keys(FaSolidIcons).length,
 	},
 	fabrands: {
 		id: 'fabrands',
 		// translators: Icon library name
 		name: __('FontAwesome Brands', 'blockera'),
 		icon: <FaBrandsLibraryIcon />,
+		count: Object.keys(FaBrandsIcons).length,
 	},
 	social: {
 		id: 'social',
 		// translators: Icon library name
 		name: __('Social', 'blockera'),
 		icon: <SocialIcon />,
+		count: Object.keys(SocialIcons).length,
 	},
 	blockera: {
 		id: 'blockera',
 		// translators: Icon library name
 		name: __('Blockera Branding', 'blockera'),
 		icon: <LibraryIcon />,
+		count: Object.keys(BlockeraIcons).length,
 	},
 	ui: {
 		id: 'ui',
 		// translators: Icon library name
 		name: __('User Interface', 'blockera'),
 		icon: <LibraryUIIcon />,
+		count: Object.keys(BlockeraUIIcons).length,
 	},
 	cursor: {
 		id: 'cursor',
 		// translators: Icon library name
 		name: __('Cursors', 'blockera'),
 		icon: <LibraryCursorIcon />,
+		count: Object.keys(CursorIcons).length,
 	},
 };
 
