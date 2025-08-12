@@ -109,14 +109,7 @@
 		"title": "Rotate",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["refresh", "spin", "reload"]
-	},
-	{
-		"iconName": "sync-alt",
-		"title": "Sync Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["refresh", "reload", "update"]
+		"tags": ["refresh", "spin", "reload", "update"]
 	},
 	{
 		"iconName": "square-minus",
@@ -357,13 +350,6 @@
 		"tags": ["alphabet", "reverse", "sort"]
 	},
 	{
-		"iconName": "sort-alpha-up-alt",
-		"title": "Sort Alpha Up Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["alphabet", "ascending", "sort"]
-	},
-	{
 		"iconName": "microphone-slash",
 		"title": "Microphone Slash",
 		"library": "fasolid",
@@ -457,13 +443,6 @@
 	{
 		"iconName": "crop-simple",
 		"title": "Crop Simple",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["trim", "cut", "resize"]
-	},
-	{
-		"iconName": "crop-alt",
-		"title": "Crop Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["trim", "cut", "resize"]
@@ -604,13 +583,6 @@
 	{
 		"iconName": "cloud-upload",
 		"title": "Cloud Upload",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["upload", "backup", "send"]
-	},
-	{
-		"iconName": "cloud-upload-alt",
-		"title": "Cloud Upload Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["upload", "backup", "send"]
@@ -844,14 +816,7 @@
 		"title": "Message",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["chat", "text", "bubble"]
-	},
-	{
-		"iconName": "comment-alt",
-		"title": "Comment Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["message", "bubble", "text"]
+		"tags": ["chat", "text", "bubble", "comment"]
 	},
 	{
 		"iconName": "trophy",
@@ -942,14 +907,7 @@
 		"title": "Calendar Days",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["date", "month", "schedule"]
-	},
-	{
-		"iconName": "calendar-alt",
-		"title": "Calendar Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["date", "schedule", "planner"]
+		"tags": ["date", "month", "schedule", "calendar"]
 	},
 	{
 		"iconName": "diamond-turn-right",
@@ -1033,14 +991,7 @@
 		"title": "Up Right From Square",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["open", "external", "share"]
-	},
-	{
-		"iconName": "external-link-alt",
-		"title": "External Link Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["open", "external", "outbound"]
+		"tags": ["open", "external", "share", "link", "outbound"]
 	},
 	{
 		"iconName": "square-full",
@@ -1204,13 +1155,6 @@
 		"tags": ["speedometer", "meter", "average"]
 	},
 	{
-		"iconName": "tachometer-alt-average",
-		"title": "Tachometer Alt Average",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["speedometer", "meter", "average"]
-	},
-	{
 		"iconName": "envelope-open-text",
 		"title": "Envelope Open Text",
 		"library": "fasolid",
@@ -1321,13 +1265,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["share", "connect", "network"]
-	},
-	{
-		"iconName": "share-alt",
-		"title": "Share Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["share", "alt"]
 	},
 	{
 		"iconName": "person-circle-exclamation",
@@ -1463,13 +1400,6 @@
 		"tags": ["pin", "location", "map"]
 	},
 	{
-		"iconName": "map-marked-alt",
-		"title": "Map Marked Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["map", "location", "pin"]
-	},
-	{
 		"iconName": "heart-crack",
 		"title": "Heart Crack",
 		"library": "fasolid",
@@ -1535,13 +1465,6 @@
 	{
 		"iconName": "boxes",
 		"title": "Boxes",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["packages", "inventory", "shipping"]
-	},
-	{
-		"iconName": "boxes-alt",
-		"title": "Boxes Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["packages", "inventory", "shipping"]
@@ -1806,13 +1729,6 @@
 		"tags": ["call", "hotline", "contact"]
 	},
 	{
-		"iconName": "phone-square-alt",
-		"title": "Phone Square Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["call", "hotline", "contact"]
-	},
-	{
 		"iconName": "face-grin-tongue-squint",
 		"title": "Face Grin Tongue Squint",
 		"library": "fasolid",
@@ -1911,13 +1827,6 @@
 		"tags": ["camera", "photo", "image"]
 	},
 	{
-		"iconName": "camera-alt",
-		"title": "Camera Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["camera", "photo", "image"]
-	},
-	{
 		"iconName": "users-rays",
 		"title": "Users Rays",
 		"library": "fasolid",
@@ -1983,13 +1892,6 @@
 	{
 		"iconName": "apple-whole",
 		"title": "Apple Whole",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["fruit", "food", "healthy"]
-	},
-	{
-		"iconName": "apple-alt",
-		"title": "Apple Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["fruit", "food", "healthy"]
@@ -2457,13 +2359,6 @@
 		"tags": ["login", "enter", "sign-in"]
 	},
 	{
-		"iconName": "sign-in-alt",
-		"title": "Sign In Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["login", "enter", "sign-in"]
-	},
-	{
 		"iconName": "sd-card",
 		"title": "Sd Card",
 		"library": "fasolid",
@@ -2553,13 +2448,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["unlock", "keyhole"]
-	},
-	{
-		"iconName": "unlock-alt",
-		"title": "Unlock Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["unlock", "alt"]
 	},
 	{
 		"iconName": "file-arrow-up",
@@ -3192,13 +3080,6 @@
 		"tags": ["landmark", "dome", "building"]
 	},
 	{
-		"iconName": "landmark-alt",
-		"title": "Landmark Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["landmark", "alt", "building"]
-	},
-	{
 		"iconName": "worm",
 		"title": "Worm",
 		"library": "fasolid",
@@ -3259,14 +3140,7 @@
 		"title": "Transgender",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["transgender", "gender", "identity"]
-	},
-	{
-		"iconName": "transgender-alt",
-		"title": "Transgender Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["transgender", "alt", "gender"]
+		"tags": ["transgender", "gender", "identity", "gender"]
 	},
 	{
 		"iconName": "star-half",
@@ -3507,13 +3381,6 @@
 		"tags": ["maximize", "enlarge", "grow"]
 	},
 	{
-		"iconName": "expand-arrows-alt",
-		"title": "Expand Arrows Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["enlarge", "maximize", "grow"]
-	},
-	{
 		"iconName": "location-arrow",
 		"title": "Location Arrow",
 		"library": "fasolid",
@@ -3574,14 +3441,7 @@
 		"title": "Up Long",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["up", "long", "arrow"]
-	},
-	{
-		"iconName": "long-arrow-alt-up",
-		"title": "Long Arrow Alt Up",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["direction", "chevron", "indicator"]
+		"tags": ["up", "long", "arrow", "direction", "chevron", "indicator"]
 	},
 	{
 		"iconName": "hexagon-nodes",
@@ -3593,13 +3453,6 @@
 	{
 		"iconName": "hospital",
 		"title": "Hospital",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["hospital", "medical", "health"]
-	},
-	{
-		"iconName": "hospital-alt",
-		"title": "Hospital Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["hospital", "medical", "health"]
@@ -3661,22 +3514,8 @@
 		"tags": ["flame", "heat", "burn"]
 	},
 	{
-		"iconName": "fire-alt",
-		"title": "Fire Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["flame", "heat", "burn"]
-	},
-	{
 		"iconName": "bus-simple",
 		"title": "Bus Simple",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["bus", "simple"]
-	},
-	{
-		"iconName": "bus-alt",
-		"title": "Bus Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["bus", "vehicle", "public transport"]
@@ -3722,13 +3561,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["phone", "flip", "rotate"]
-	},
-	{
-		"iconName": "phone-alt",
-		"title": "Phone Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["phone", "alt"]
 	},
 	{
 		"iconName": "toilet-portable",
@@ -3952,14 +3784,7 @@
 		"title": "Wheelchair Move",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["wheelchair", "move"]
-	},
-	{
-		"iconName": "wheelchair-alt",
-		"title": "Wheelchair Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["wheelchair", "disabled", "accessibility"]
+		"tags": ["wheelchair", "move", "disabled", "accessibility"]
 	},
 	{
 		"iconName": "user-shield",
@@ -3992,13 +3817,6 @@
 	{
 		"iconName": "square-root-variable",
 		"title": "Square Root Variable",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["box", "tile", "shape"]
-	},
-	{
-		"iconName": "square-root-alt",
-		"title": "Square Root Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["box", "tile", "shape"]
@@ -4394,13 +4212,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["healthcare", "aid", "clinic"]
-	},
-	{
-		"iconName": "prescription-bottle-alt",
-		"title": "Prescription Bottle Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["prescription", "bottle", "alt"]
 	},
 	{
 		"iconName": "draw-polygon",
@@ -4970,13 +4781,6 @@
 		"tags": ["edit", "write", "sketch"]
 	},
 	{
-		"iconName": "pencil-alt",
-		"title": "Pencil Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["edit", "write", "sketch"]
-	},
-	{
 		"iconName": "person-walking-arrow-loop-left",
 		"title": "Person Walking Arrow Loop Left",
 		"library": "fasolid",
@@ -5017,13 +4821,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["wheat", "awn", "agriculture"]
-	},
-	{
-		"iconName": "wheat-alt",
-		"title": "Wheat Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["wheat", "agriculture"]
 	},
 	{
 		"iconName": "plane-up",
@@ -5142,14 +4939,7 @@
 		"title": "Feather Pointed",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["feather", "pointed"]
-	},
-	{
-		"iconName": "feather-alt",
-		"title": "Feather Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["feather", "bird", "animal"]
+		"tags": ["feather", "pointed", "bird"]
 	},
 	{
 		"iconName": "file-circle-question",
@@ -5698,13 +5488,6 @@
 		"tags": ["automobile", "vehicle", "transport"]
 	},
 	{
-		"iconName": "car-alt",
-		"title": "Car Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["automobile", "vehicle", "transport"]
-	},
-	{
 		"iconName": "thumbtack-slash",
 		"title": "Thumbtack Slash",
 		"library": "fasolid",
@@ -5926,14 +5709,7 @@
 		"title": "Rectangle List",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["panel", "tile, ", "shape"]
-	},
-	{
-		"iconName": "list-alt",
-		"title": "List Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["list", "alt"]
+		"tags": ["panel", "tile", "list", "grid", "shape"]
 	},
 	{
 		"iconName": "hand",
@@ -6241,14 +6017,7 @@
 		"title": "Right From Bracket",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["next", "forward", "east"]
-	},
-	{
-		"iconName": "sign-out-alt",
-		"title": "Sign Out Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["sign", "out", "alt"]
+		"tags": ["next", "forward", "east", "sign", "out", "alt"]
 	},
 	{
 		"iconName": "file",
@@ -6283,28 +6052,14 @@
 		"title": "Turn Down",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["turn", "down", "angle"]
-	},
-	{
-		"iconName": "level-down-alt",
-		"title": "Level Down Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["level", "down", "alt"]
+		"tags": ["turn", "down", "angle", "level", "down"]
 	},
 	{
 		"iconName": "up-right-and-down-left-from-center",
 		"title": "Up Right And Down Left From Center",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["next", "forward", "east"]
-	},
-	{
-		"iconName": "expand-alt",
-		"title": "Expand Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["enlarge", "maximize", "grow"]
+		"tags": ["next", "forward", "east", "enlarge", "maximize", "grow"]
 	},
 	{
 		"iconName": "user-tag",
@@ -6860,13 +6615,6 @@
 		"tags": ["bin", "delete", "remove"]
 	},
 	{
-		"iconName": "trash-alt",
-		"title": "Trash Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["bin", "delete", "remove"]
-	},
-	{
 		"iconName": "table-cells",
 		"title": "Table Cells",
 		"library": "fasolid",
@@ -6899,14 +6647,14 @@
 		"title": "Up Down Left Right",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["back", "previous", "west"]
-	},
-	{
-		"iconName": "arrows-alt",
-		"title": "Arrows Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["direction", "chevron", "indicator"]
+		"tags": [
+			"back",
+			"previous",
+			"west",
+			"direction",
+			"chevron",
+			"indicator"
+		]
 	},
 	{
 		"iconName": "car-side",
@@ -7133,13 +6881,6 @@
 		"tags": ["smartphone", "device", "handset"]
 	},
 	{
-		"iconName": "mobile-alt",
-		"title": "Mobile Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["smartphone", "device", "handset"]
-	},
-	{
 		"iconName": "anchor-circle-check",
 		"title": "Anchor Circle Check",
 		"library": "fasolid",
@@ -7165,14 +6906,7 @@
 		"title": "File Waveform",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["file", "waveform", "audio"]
-	},
-	{
-		"iconName": "file-medical-alt",
-		"title": "File Medical Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["healthcare", "aid", "clinic"]
+		"tags": ["file", "waveform", "audio", "healthcare", "aid", "clinic"]
 	},
 	{
 		"iconName": "house-crack",
@@ -7301,20 +7035,6 @@
 		"tags": ["home", "building", "property"]
 	},
 	{
-		"iconName": "home-alt",
-		"title": "Home Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["home", "building", "property"]
-	},
-	{
-		"iconName": "home-lg-alt",
-		"title": "Home Lg Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["home", "lg", "alt"]
-	},
-	{
 		"iconName": "spinner",
 		"title": "Spinner",
 		"library": "fasolid",
@@ -7340,14 +7060,7 @@
 		"title": "Ticket Simple",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["ticket", "simple", "event"]
-	},
-	{
-		"iconName": "ticket-alt",
-		"title": "Ticket Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["ticket", "alt", "event"]
+		"tags": ["ticket", "event", "booking"]
 	},
 	{
 		"iconName": "dove",
@@ -7375,14 +7088,7 @@
 		"title": "Turn Up",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["turn", "up", "angle"]
-	},
-	{
-		"iconName": "level-up-alt",
-		"title": "Level Up Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["level", "up", "alt", "level"]
+		"tags": ["turn", "up", "angle", "level", "louder", "volume"]
 	},
 	{
 		"iconName": "temperature-quarter",
@@ -7511,13 +7217,6 @@
 		"tags": ["drink", "alcohol", "glass", "wine", "drink"]
 	},
 	{
-		"iconName": "wine-glass-alt",
-		"title": "Wine Glass Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["drink", "alcohol", "glass", "wine", "drink"]
-	},
-	{
 		"iconName": "clapperboard",
 		"title": "Clapperboard",
 		"library": "fasolid",
@@ -7543,14 +7242,7 @@
 		"title": "Square Up Right",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["box", "tile", "shape", "direction"]
-	},
-	{
-		"iconName": "external-link-square-alt",
-		"title": "External Link Square Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["box", "tile", "shape", "link"]
+		"tags": ["box", "tile", "shape", "direction", "link"]
 	},
 	{
 		"iconName": "book-journal-whills",
@@ -7686,13 +7378,6 @@
 		"tags": ["circle", "radiation", "energy"]
 	},
 	{
-		"iconName": "radiation-alt",
-		"title": "Radiation Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["radiation", "alt", "energy"]
-	},
-	{
 		"iconName": "laptop-code",
 		"title": "Laptop Code",
 		"library": "fasolid",
@@ -7737,13 +7422,6 @@
 	{
 		"iconName": "user",
 		"title": "User",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["person", "profile", "customer", "user"]
-	},
-	{
-		"iconName": "user-alt",
-		"title": "User Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["person", "profile", "customer", "user"]
@@ -8019,14 +7697,7 @@
 		"title": "Gauge High",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["gauge", "high", "speed"]
-	},
-	{
-		"iconName": "tachometer-alt",
-		"title": "Tachometer Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["tachometer", "alt", "speed"]
+		"tags": ["gauge", "high", "speed", "tachometer"]
 	},
 	{
 		"iconName": "tachometer-alt-fast",
@@ -8059,13 +7730,6 @@
 	{
 		"iconName": "handshake",
 		"title": "Handshake",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["handshake", "agreement", "meeting"]
-	},
-	{
-		"iconName": "handshake-alt",
-		"title": "Handshake Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["handshake", "agreement", "meeting"]
@@ -8230,13 +7894,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["next", "forward", "east"]
-	},
-	{
-		"iconName": "exchange-alt",
-		"title": "Exchange Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["exchange", "currency"]
 	},
 	{
 		"iconName": "pills",
@@ -8446,14 +8103,7 @@
 		"title": "File Lines",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["file", "lines", "text"]
-	},
-	{
-		"iconName": "file-alt",
-		"title": "File Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["file", "text", "document"]
+		"tags": ["file", "lines", "text", "document"]
 	},
 	{
 		"iconName": "file-text",
@@ -8509,25 +8159,11 @@
 		"title": "Shop",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["shop", "store", "commerce"]
-	},
-	{
-		"iconName": "store-alt",
-		"title": "Store Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["store", "commerce"]
+		"tags": ["shop", "store", "commerce", "bazaar", "market", "vendor"]
 	},
 	{
 		"iconName": "film",
 		"title": "Film",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["film", "movie", "video"]
-	},
-	{
-		"iconName": "film-alt",
-		"title": "Film Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["film", "movie", "video"]
@@ -8587,13 +8223,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["id", "card", "clip", "id"]
-	},
-	{
-		"iconName": "id-card-alt",
-		"title": "Id Card Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["id", "card", "id"]
 	},
 	{
 		"iconName": "moon",
@@ -8698,14 +8327,7 @@
 		"title": "Mobile Screen",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["smartphone", "device", "handset", "mobile"]
-	},
-	{
-		"iconName": "mobile-android-alt",
-		"title": "Mobile Android Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["smartphone", "device", "handset", "mobile"]
+		"tags": ["smartphone", "device", "handset", "mobile", "android"]
 	},
 	{
 		"iconName": "guarani-sign",
@@ -8799,13 +8421,6 @@
 		"tags": ["next", "forward", "east", "direction"]
 	},
 	{
-		"iconName": "quote-right-alt",
-		"title": "Quote Right Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["next", "forward", "east", "direction"]
-	},
-	{
 		"iconName": "house-medical-flag",
 		"title": "House Medical Flag",
 		"library": "fasolid",
@@ -8892,13 +8507,6 @@
 	{
 		"iconName": "rotate-right",
 		"title": "Rotate Right",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["refresh", "spin", "reload"]
-	},
-	{
-		"iconName": "redo-alt",
-		"title": "Redo Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["redo", "refresh", "spin", "reload"]
@@ -8988,13 +8596,6 @@
 		"tags": ["mic", "voice", "record", "audio"]
 	},
 	{
-		"iconName": "microphone-alt",
-		"title": "Microphone Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["mic", "voice", "record", "audio"]
-	},
-	{
 		"iconName": "reply-all",
 		"title": "Reply All",
 		"library": "fasolid",
@@ -9021,13 +8622,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["toilet", "paper"]
-	},
-	{
-		"iconName": "toilet-paper-alt",
-		"title": "Toilet Paper Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["toilet", "paper", "alt"]
 	},
 	{
 		"iconName": "toilet-paper-blank",
@@ -9205,13 +8799,6 @@
 		"tags": ["headphones", "audio"]
 	},
 	{
-		"iconName": "headphones-alt",
-		"title": "Headphones Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["headphones", "audio"]
-	},
-	{
 		"iconName": "headphones-simple",
 		"title": "Headphones Simple",
 		"library": "fasolid",
@@ -9237,14 +8824,7 @@
 		"title": "Quote Left",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["back", "previous", "west"]
-	},
-	{
-		"iconName": "quote-left-alt",
-		"title": "Quote Left Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["back", "previous", "west"]
+		"tags": ["quote", "speech", "comment", "back", "previous", "west"]
 	},
 	{
 		"iconName": "chevron-down",
@@ -9293,14 +8873,7 @@
 		"title": "Martini Glass",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["drink", "alcohol", "glass", "wine", "drink"]
-	},
-	{
-		"iconName": "glass-martini-alt",
-		"title": "Glass Martini Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["drink", "alcohol", "glass", "wine", "drink"]
+		"tags": ["drink", "alcohol", "glass", "wine", "drink", "martini"]
 	},
 	{
 		"iconName": "plug",
@@ -9347,13 +8920,6 @@
 	{
 		"iconName": "cloud-download",
 		"title": "Cloud Download",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["storage", "server", "sync"]
-	},
-	{
-		"iconName": "cloud-download-alt",
-		"title": "Cloud Download Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["storage", "server", "sync"]
@@ -9625,13 +9191,6 @@
 		"tags": ["order", "arrange", "rank", "sort"]
 	},
 	{
-		"iconName": "sort-amount-down-alt",
-		"title": "Sort Amount Down Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["order", "arrange", "rank", "sort"]
-	},
-	{
 		"iconName": "hourglass-half",
 		"title": "Hourglass Half",
 		"library": "fasolid",
@@ -9662,13 +9221,6 @@
 	{
 		"iconName": "credit-card",
 		"title": "Credit Card",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["credit", "card", "payment"]
-	},
-	{
-		"iconName": "credit-card-alt",
-		"title": "Credit Card Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["credit", "card", "payment"]
@@ -9849,13 +9401,6 @@
 		"tags": ["order", "arrange", "rank"]
 	},
 	{
-		"iconName": "sort-alpha-down-alt",
-		"title": "Sort Alpha Down Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["order", "arrange", "rank"]
-	},
-	{
 		"iconName": "brush",
 		"title": "Brush",
 		"library": "fasolid",
@@ -9874,14 +9419,14 @@
 		"title": "Arrow Up Short Wide",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["direction", "chevron", "indicator"]
-	},
-	{
-		"iconName": "sort-amount-up-alt",
-		"title": "Sort Amount Up Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["order", "arrange", "rank"]
+		"tags": [
+			"direction",
+			"chevron",
+			"indicator",
+			"order",
+			"arrange",
+			"rank"
+		]
 	},
 	{
 		"iconName": "grip-vertical",
@@ -9931,13 +9476,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["television", "tv"]
-	},
-	{
-		"iconName": "tv-alt",
-		"title": "Tv Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["tv", "television"]
 	},
 	{
 		"iconName": "section",
@@ -10154,14 +9692,7 @@
 		"title": "Rotate Backward",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["refresh", "spin", "reload"]
-	},
-	{
-		"iconName": "undo-alt",
-		"title": "Undo Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["undo", "back", "time"]
+		"tags": ["refresh", "spin", "reload", "undo", "back", "time"]
 	},
 	{
 		"iconName": "heading",
@@ -10598,13 +10129,6 @@
 		"tags": ["bin", "delete", "remove"]
 	},
 	{
-		"iconName": "trash-restore-alt",
-		"title": "Trash Restore Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["bin", "delete", "remove"]
-	},
-	{
 		"iconName": "font",
 		"title": "Font",
 		"library": "fasolid",
@@ -10644,14 +10168,7 @@
 		"title": "Shield Halved",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["shield", "halved", "protection"]
-	},
-	{
-		"iconName": "shield-alt",
-		"title": "Shield Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["shield", "protection", "security"]
+		"tags": ["shield", "halved", "protection", "security"]
 	},
 	{
 		"iconName": "caret-up",
@@ -10728,14 +10245,15 @@
 		"title": "Minimize",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["minimize", "shrink"]
-	},
-	{
-		"iconName": "compress-arrows-alt",
-		"title": "Compress Arrows Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["direction", "chevron", "indicator"]
+		"tags": [
+			"minimize",
+			"shrink",
+			"compress",
+			"arrows",
+			"direction",
+			"chevron",
+			"indicator"
+		]
 	},
 	{
 		"iconName": "arrow-right-to-city",
@@ -10798,14 +10316,16 @@
 		"title": "Arrow Up91",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["direction", "chevron", "indicator"]
-	},
-	{
-		"iconName": "sort-numeric-up-alt",
-		"title": "Sort Numeric Up Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["order", "arrange", "rank"]
+		"tags": [
+			"direction",
+			"chevron",
+			"indicator",
+			"order",
+			"arrange",
+			"rank",
+			"numeric",
+			"sort"
+		]
 	},
 	{
 		"iconName": "mountain-city",
@@ -10826,28 +10346,23 @@
 		"title": "Sort Numeric Desc",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["order", "arrange", "rank"]
-	},
-	{
-		"iconName": "sort-numeric-down-alt",
-		"title": "Sort Numeric Down Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["order", "arrange", "rank"]
+		"tags": [
+			"order",
+			"arrange",
+			"rank",
+			"numeric",
+			"sort",
+			"order",
+			"arrange",
+			"rank"
+		]
 	},
 	{
 		"iconName": "face-grin-wide",
 		"title": "Face Grin Wide",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["emoji", "smiley", "emoticon"]
-	},
-	{
-		"iconName": "grin-alt",
-		"title": "Grin Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["grin", "smile"]
+		"tags": ["emoji", "smiley", "emoticon", "grin", "smile"]
 	},
 	{
 		"iconName": "poop",
@@ -11067,13 +10582,6 @@
 		"tags": ["back", "previous", "west"]
 	},
 	{
-		"iconName": "compress-alt",
-		"title": "Compress Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["compress", "shrink"]
-	},
-	{
 		"iconName": "gifts",
 		"title": "Gifts",
 		"library": "fasolid",
@@ -11156,13 +10664,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["money", "bill1", "wave"]
-	},
-	{
-		"iconName": "money-bill-wave-alt",
-		"title": "Money Bill Wave Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["money", "bill", "wave"]
 	},
 	{
 		"iconName": "landmark",
@@ -11382,13 +10883,6 @@
 		"tags": ["edit", "write", "draw", "clip"]
 	},
 	{
-		"iconName": "pen-alt",
-		"title": "Pen Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["edit", "write", "draw", "clip"]
-	},
-	{
 		"iconName": "door-closed",
 		"title": "Door Closed",
 		"library": "fasolid",
@@ -11456,7 +10950,14 @@
 		"title": "Compress",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["compress"]
+		"tags": [
+			"compress",
+			"shrink",
+			"arrows",
+			"direction",
+			"chevron",
+			"indicator"
+		]
 	},
 	{
 		"iconName": "arrow-up-az",
@@ -11573,13 +11074,6 @@
 	{
 		"iconName": "money-bill1",
 		"title": "Money Bill1",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["money", "bill", "currency"]
-	},
-	{
-		"iconName": "money-bill-alt",
-		"title": "Money Bill Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["money", "bill", "currency"]
@@ -11883,14 +11377,7 @@
 		"title": "Money Check Dollar",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["usd", "currency", "money"]
-	},
-	{
-		"iconName": "money-check-alt",
-		"title": "Money Check Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["money", "check", "currency"]
+		"tags": ["usd", "currency", "money", "check", "dollar"]
 	},
 	{
 		"iconName": "eye-low-vision",
@@ -12579,13 +12066,6 @@
 		"tags": ["desktop", "computer"]
 	},
 	{
-		"iconName": "desktop-alt",
-		"title": "Desktop Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["desktop", "computer"]
-	},
-	{
 		"iconName": "plane-circle-xmark",
 		"title": "Plane Circle Xmark",
 		"library": "fasolid",
@@ -12660,14 +12140,7 @@
 		"title": "Location Dot",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["location", "dot", "map"]
-	},
-	{
-		"iconName": "map-marker-alt",
-		"title": "Map Marker Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["map", "marker", "map"]
+		"tags": ["location", "dot", "map", "marker", "map"]
 	},
 	{
 		"iconName": "plug-circle-exclamation",
@@ -13507,14 +12980,7 @@
 		"title": "Bars Progress",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["menu", "lines", "list", "menu"]
-	},
-	{
-		"iconName": "tasks-alt",
-		"title": "Tasks Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["tasks", "list", "todo"]
+		"tags": ["menu", "lines", "list", "menu", "tasks", "todo"]
 	},
 	{
 		"iconName": "heart-circle-check",
@@ -13603,13 +13069,6 @@
 	{
 		"iconName": "star-half-stroke",
 		"title": "Star Half Stroke",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["star", "half", "stroke"]
-	},
-	{
-		"iconName": "star-half-alt",
-		"title": "Star Half Alt",
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["star", "half", "stroke"]
@@ -13781,13 +13240,6 @@
 		"library": "fasolid",
 		"prefix": "fas",
 		"tags": ["tablet", "screen", "button"]
-	},
-	{
-		"iconName": "tablet-alt",
-		"title": "Tablet Alt",
-		"library": "fasolid",
-		"prefix": "fas",
-		"tags": ["tablet", "alt"]
 	},
 	{
 		"iconName": "hand-holding-dollar",

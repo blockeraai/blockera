@@ -40,7 +40,7 @@ const FaSolidIcons: Object = Object.fromEntries(
 			return [newKey, value];
 		})
 		.filter(([key]) => {
-			return !['fas', 'prefix'].includes(key);
+			return !['fas', 'prefix'].includes(key) && !key.endsWith('-alt');
 		})
 );
 

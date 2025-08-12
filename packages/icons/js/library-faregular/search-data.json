@@ -102,14 +102,7 @@
 		"title": "Message",
 		"library": "faregular",
 		"prefix": "far",
-		"tags": ["email", "mail", "message"]
-	},
-	{
-		"iconName": "comment-alt",
-		"title": "Comment Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["reply", "message", "feedback"]
+		"tags": ["email", "mail", "message", "comment"]
 	},
 	{
 		"iconName": "face-dizzy",
@@ -128,13 +121,6 @@
 	{
 		"iconName": "calendar-days",
 		"title": "Calendar Days",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["date", "schedule", "planner"]
-	},
-	{
-		"iconName": "calendar-alt",
-		"title": "Calendar Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["date", "schedule", "planner"]
@@ -233,13 +219,6 @@
 	{
 		"iconName": "camera",
 		"title": "Camera",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["photo", "picture", "shoot"]
-	},
-	{
-		"iconName": "camera-alt",
-		"title": "Camera Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["photo", "picture", "shoot"]
@@ -478,13 +457,6 @@
 	{
 		"iconName": "hospital",
 		"title": "Hospital",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["hospital", "medical", "health"]
-	},
-	{
-		"iconName": "hospital-alt",
-		"title": "Hospital Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["hospital", "medical", "health"]
@@ -840,13 +812,6 @@
 		"tags": ["items", "bullets", "menu"]
 	},
 	{
-		"iconName": "list-alt",
-		"title": "List Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["items", "bullets", "menu"]
-	},
-	{
 		"iconName": "hand",
 		"title": "Hand",
 		"library": "faregular",
@@ -1008,13 +973,6 @@
 		"tags": ["bin", "delete", "remove"]
 	},
 	{
-		"iconName": "trash-alt",
-		"title": "Trash Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["bin", "delete", "remove"]
-	},
-	{
 		"iconName": "life-ring",
 		"title": "Life Ring",
 		"library": "faregular",
@@ -1092,20 +1050,6 @@
 		"tags": ["house", "apartment", "property"]
 	},
 	{
-		"iconName": "home-alt",
-		"title": "Home Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["house", "apartment", "property"]
-	},
-	{
-		"iconName": "home-lg-alt",
-		"title": "Home Lg Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["house", "apartment", "property"]
-	},
-	{
 		"iconName": "face-frown",
 		"title": "Face Frown",
 		"library": "faregular",
@@ -1122,13 +1066,6 @@
 	{
 		"iconName": "user",
 		"title": "User",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["person", "profile", "customer"]
-	},
-	{
-		"iconName": "user-alt",
-		"title": "User Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["person", "profile", "customer"]
@@ -1171,13 +1108,6 @@
 	{
 		"iconName": "handshake",
 		"title": "Handshake",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["business", "meeting", "agreement", "negotiation"]
-	},
-	{
-		"iconName": "handshake-alt",
-		"title": "Handshake Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["business", "meeting", "agreement", "negotiation"]
@@ -1255,13 +1185,6 @@
 	{
 		"iconName": "file-lines",
 		"title": "File Lines",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["document", "doc", "paper"]
-	},
-	{
-		"iconName": "file-alt",
-		"title": "File Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["document", "doc", "paper"]
@@ -1407,13 +1330,6 @@
 		"tags": ["headset", "audio", "listen"]
 	},
 	{
-		"iconName": "headphones-alt",
-		"title": "Headphones Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["headset", "audio", "listen"]
-	},
-	{
 		"iconName": "headphones-simple",
 		"title": "Headphones Simple",
 		"library": "faregular",
@@ -1479,13 +1395,6 @@
 	{
 		"iconName": "credit-card",
 		"title": "Credit Card",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["payment", "debit", "checkout"]
-	},
-	{
-		"iconName": "credit-card-alt",
-		"title": "Credit Card Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["payment", "debit", "checkout"]
@@ -1575,13 +1484,6 @@
 		"tags": ["grin", "smile", "happy"]
 	},
 	{
-		"iconName": "grin-alt",
-		"title": "Grin Alt",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["grin", "smile", "happy"]
-	},
-	{
 		"iconName": "face-laugh-squint",
 		"title": "Face Laugh Squint",
 		"library": "faregular",
@@ -1661,13 +1563,6 @@
 	{
 		"iconName": "money-bill1",
 		"title": "Money Bill1",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["cash", "currency", "payment"]
-	},
-	{
-		"iconName": "money-bill-alt",
-		"title": "Money Bill Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["cash", "currency", "payment"]
@@ -1864,13 +1759,6 @@
 	{
 		"iconName": "star-half-stroke",
 		"title": "Star Half Stroke",
-		"library": "faregular",
-		"prefix": "far",
-		"tags": ["favorite", "rating", "bookmark"]
-	},
-	{
-		"iconName": "star-half-alt",
-		"title": "Star Half Alt",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["favorite", "rating", "bookmark"]

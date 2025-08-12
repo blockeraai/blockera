@@ -21,7 +21,7 @@ const FaRegularIcons: Object = Object.fromEntries(
 			return [getIconKebabId(key), value];
 		})
 		.filter(([key]) => {
-			return !['far', 'prefix'].includes(key);
+			return !['far', 'prefix'].includes(key) && !key.endsWith('-alt');
 		})
 );
 
