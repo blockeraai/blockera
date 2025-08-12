@@ -23,18 +23,6 @@ const FaBrandsIcons: Object = Object.fromEntries(
 					newKey = '500px';
 					break;
 
-				case 'fa-dice-d-2-0':
-					newKey = 'dice-d20';
-					break;
-
-				case 'fa-dice-d-6':
-					newKey = 'dice-d6';
-					break;
-
-				case 'fa-stopwatch-2-0':
-					newKey = 'stopwatch-20';
-					break;
-
 				case 'fa-1-1ty':
 					newKey = '11ty';
 					break;
@@ -82,7 +70,7 @@ const FaBrandsIcons: Object = Object.fromEntries(
 			return [newKey, value];
 		})
 		.filter(([key]) => {
-			return !['fab'].includes(key);
+			return !['fab', 'prefix'].includes(key);
 		})
 );
 
