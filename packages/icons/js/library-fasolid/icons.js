@@ -18,18 +18,18 @@ const FaSolidIcons: Object = Object.fromEntries(
 		...freeIcons,
 	})
 		.map(([key, value]) => {
-			let newKey = getIconKebabId(key);
+			let newKey = getIconKebabId(key).replace('fa-', '');
 
 			switch (newKey) {
-				case 'fa-dice-d-2-0':
+				case 'dice-d-2-0':
 					newKey = 'dice-d20';
 					break;
 
-				case 'fa-dice-d-6':
+				case 'dice-d-6':
 					newKey = 'dice-d6';
 					break;
 
-				case 'fa-stopwatch-2-0':
+				case 'stopwatch-2-0':
 					newKey = 'stopwatch-20';
 					break;
 

@@ -1,27 +1,27 @@
 [
 	{
-		"iconName": "squareGithub",
+		"iconName": "square-github",
 		"title": "Square Github",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "githubSquare",
+		"iconName": "github-square",
 		"title": "Github Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "thinkPeaks",
+		"iconName": "think-peaks",
 		"title": "Think Peaks",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "googleDrive",
+		"iconName": "google-drive",
 		"title": "Google Drive",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -35,14 +35,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareViadeo",
+		"iconName": "square-viadeo",
 		"title": "Square Viadeo",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "viadeoSquare",
+		"iconName": "viadeo-square",
 		"title": "Viadeo Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -84,7 +84,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "accessibleIcon",
+		"iconName": "accessible-icon",
 		"title": "Accessible Icon",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -98,7 +98,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccJcb",
+		"iconName": "cc-jcb",
 		"title": "Cc Jcb",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -140,7 +140,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ggCircle",
+		"iconName": "gg-circle",
 		"title": "Gg Circle",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -189,21 +189,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "stripeS",
+		"iconName": "stripe-s",
 		"title": "Stripe S",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareBehance",
+		"iconName": "square-behance",
 		"title": "Square Behance",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "behanceSquare",
+		"iconName": "behance-square",
 		"title": "Behance Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -231,7 +231,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareWebAwesome",
+		"iconName": "square-web-awesome",
 		"title": "Square Web Awesome",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -266,7 +266,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "googleScholar",
+		"iconName": "google-scholar",
 		"title": "Google Scholar",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -280,7 +280,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "stackOverflow",
+		"iconName": "stack-overflow",
 		"title": "Stack Overflow",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -294,7 +294,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsNcJp",
+		"iconName": "creative-commons-nc-jp",
 		"title": "Creative Commons Nc Jp",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -322,7 +322,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "signalMessenger",
+		"iconName": "signal-messenger",
 		"title": "Signal Messenger",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -336,14 +336,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareJs",
+		"iconName": "square-js",
 		"title": "Square Js",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "jsSquare",
+		"iconName": "js-square",
 		"title": "Js Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -364,7 +364,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "amazonPay",
+		"iconName": "amazon-pay",
 		"title": "Amazon Pay",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -441,14 +441,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "nfcDirectional",
+		"iconName": "nfc-directional",
 		"title": "Nfc Directional",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsBy",
+		"iconName": "creative-commons-by",
 		"title": "Creative Commons By",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -469,14 +469,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareGit",
+		"iconName": "square-git",
 		"title": "Square Git",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "gitSquare",
+		"iconName": "git-square",
 		"title": "Git Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -497,7 +497,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "bloggerB",
+		"iconName": "blogger-b",
 		"title": "Blogger B",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -511,7 +511,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "facebookF",
+		"iconName": "facebook-f",
 		"title": "Facebook F",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -525,7 +525,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccAmazonPay",
+		"iconName": "cc-amazon-pay",
 		"title": "Cc Amazon Pay",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -609,21 +609,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "googlePlusG",
+		"iconName": "google-plus-g",
 		"title": "Google Plus G",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "githubAlt",
+		"iconName": "github-alt",
 		"title": "Github Alt",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "getPocket",
+		"iconName": "get-pocket",
 		"title": "Get Pocket",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -672,7 +672,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "theRedYeti",
+		"iconName": "the-red-yeti",
 		"title": "The Red Yeti",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -721,7 +721,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "itchIo",
+		"iconName": "itch-io",
 		"title": "Itch Io",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -756,7 +756,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "hackerNews",
+		"iconName": "hacker-news",
 		"title": "Hacker News",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -791,35 +791,35 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareTwitter",
+		"iconName": "square-twitter",
 		"title": "Square Twitter",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "twitterSquare",
+		"iconName": "twitter-square",
 		"title": "Twitter Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "fontAwesome",
+		"iconName": "font-awesome",
 		"title": "Font Awesome",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "fontAwesomeFlag",
+		"iconName": "font-awesome-flag",
 		"title": "Font Awesome Flag",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "fontAwesomeLogoFull",
+		"iconName": "font-awesome-logo-full",
 		"title": "Font Awesome Logo Full",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -917,7 +917,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsPd",
+		"iconName": "creative-commons-pd",
 		"title": "Creative Commons Pd",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -931,14 +931,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareOdnoklassniki",
+		"iconName": "square-odnoklassniki",
 		"title": "Square Odnoklassniki",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "odnoklassnikiSquare",
+		"iconName": "odnoklassniki-square",
 		"title": "Odnoklassniki Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -994,21 +994,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareInstagram",
+		"iconName": "square-instagram",
 		"title": "Square Instagram",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "instagramSquare",
+		"iconName": "instagram-square",
 		"title": "Instagram Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "firstOrderAlt",
+		"iconName": "first-order-alt",
 		"title": "First Order Alt",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1022,7 +1022,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "braveReverse",
+		"iconName": "brave-reverse",
 		"title": "Brave Reverse",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1043,21 +1043,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "squarePinterest",
+		"iconName": "square-pinterest",
 		"title": "Square Pinterest",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "pinterestSquare",
+		"iconName": "pinterest-square",
 		"title": "Pinterest Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "bluetoothB",
+		"iconName": "bluetooth-b",
 		"title": "Bluetooth B",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1071,21 +1071,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareGooglePlus",
+		"iconName": "square-google-plus",
 		"title": "Square Google Plus",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "googlePlusSquare",
+		"iconName": "google-plus-square",
 		"title": "Google Plus Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "appStore",
+		"iconName": "app-store",
 		"title": "App Store",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1120,7 +1120,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsRemix",
+		"iconName": "creative-commons-remix",
 		"title": "Creative Commons Remix",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1134,14 +1134,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareWebAwesomeStroke",
+		"iconName": "square-web-awesome-stroke",
 		"title": "Square Web Awesome Stroke",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "vimeoV",
+		"iconName": "vimeo-v",
 		"title": "Vimeo V",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1162,7 +1162,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccDinersClub",
+		"iconName": "cc-diners-club",
 		"title": "Cc Diners Club",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1190,7 +1190,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "octopusDeploy",
+		"iconName": "octopus-deploy",
 		"title": "Octopus Deploy",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1211,14 +1211,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareThreads",
+		"iconName": "square-threads",
 		"title": "Square Threads",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "oldRepublic",
+		"iconName": "old-republic",
 		"title": "Old Republic",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1232,21 +1232,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "appStoreIos",
+		"iconName": "app-store-ios",
 		"title": "App Store Ios",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareDribbble",
+		"iconName": "square-dribbble",
 		"title": "Square Dribbble",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "dribbbleSquare",
+		"iconName": "dribbble-square",
 		"title": "Dribbble Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1295,21 +1295,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareXing",
+		"iconName": "square-xing",
 		"title": "Square Xing",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "xingSquare",
+		"iconName": "xing-square",
 		"title": "Xing Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "css3Alt",
+		"iconName": "css3alt",
 		"title": "Css3 Alt",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1351,14 +1351,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareBluesky",
+		"iconName": "square-bluesky",
 		"title": "Square Bluesky",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "dAndDBeyond",
+		"iconName": "d-and-dbeyond",
 		"title": "D And D Beyond",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1379,14 +1379,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccStripe",
+		"iconName": "cc-stripe",
 		"title": "Cc Stripe",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "wordpressSimple",
+		"iconName": "wordpress-simple",
 		"title": "Wordpress Simple",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1414,7 +1414,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "wolfPackBattalion",
+		"iconName": "wolf-pack-battalion",
 		"title": "Wolf Pack Battalion",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1463,7 +1463,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "dAndD",
+		"iconName": "d-and-d",
 		"title": "D And D",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1484,7 +1484,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsShare",
+		"iconName": "creative-commons-share",
 		"title": "Creative Commons Share",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1526,14 +1526,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "piedPiper",
+		"iconName": "pied-piper",
 		"title": "Pied Piper",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "raspberryPi",
+		"iconName": "raspberry-pi",
 		"title": "Raspberry Pi",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1575,7 +1575,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "firstOrder",
+		"iconName": "first-order",
 		"title": "First Order",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1596,7 +1596,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccPaypal",
+		"iconName": "cc-paypal",
 		"title": "Cc Paypal",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1624,28 +1624,28 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareReddit",
+		"iconName": "square-reddit",
 		"title": "Square Reddit",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "redditSquare",
+		"iconName": "reddit-square",
 		"title": "Reddit Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsNc",
+		"iconName": "creative-commons-nc",
 		"title": "Creative Commons Nc",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "galacticRepublic",
+		"iconName": "galactic-republic",
 		"title": "Galactic Republic",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1701,21 +1701,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "snapchatGhost",
+		"iconName": "snapchat-ghost",
 		"title": "Snapchat Ghost",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "galacticSenate",
+		"iconName": "galactic-senate",
 		"title": "Galactic Senate",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "phoenixFramework",
+		"iconName": "phoenix-framework",
 		"title": "Phoenix Framework",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1729,7 +1729,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "optinMonster",
+		"iconName": "optin-monster",
 		"title": "Optin Monster",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1757,7 +1757,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "digitalOcean",
+		"iconName": "digital-ocean",
 		"title": "Digital Ocean",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1771,14 +1771,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareFigma",
+		"iconName": "square-figma",
 		"title": "Square Figma",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsSa",
+		"iconName": "creative-commons-sa",
 		"title": "Creative Commons Sa",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1792,7 +1792,7 @@
 		"tags": ["browser"]
 	},
 	{
-		"iconName": "tradeFederation",
+		"iconName": "trade-federation",
 		"title": "Trade Federation",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1820,7 +1820,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "mediumM",
+		"iconName": "medium-m",
 		"title": "Medium M",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1834,7 +1834,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "yCombinator",
+		"iconName": "y-combinator",
 		"title": "Y Combinator",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1911,7 +1911,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "googlePlus",
+		"iconName": "google-plus",
 		"title": "Google Plus",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1939,7 +1939,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "filesPinwheel",
+		"iconName": "files-pinwheel",
 		"title": "Files Pinwheel",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1960,7 +1960,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "speakerDeck",
+		"iconName": "speaker-deck",
 		"title": "Speaker Deck",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1974,7 +1974,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccVisa",
+		"iconName": "cc-visa",
 		"title": "Cc Visa",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -1988,7 +1988,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "kakaoTalk",
+		"iconName": "kakao-talk",
 		"title": "Kakao Talk",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2016,7 +2016,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "googlePay",
+		"iconName": "google-pay",
 		"title": "Google Pay",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2037,7 +2037,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "phoenixSquadron",
+		"iconName": "phoenix-squadron",
 		"title": "Phoenix Squadron",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2072,7 +2072,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "webAwesome",
+		"iconName": "web-awesome",
 		"title": "Web Awesome",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2086,14 +2086,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareWhatsapp",
+		"iconName": "square-whatsapp",
 		"title": "Square Whatsapp",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "whatsappSquare",
+		"iconName": "whatsapp-square",
 		"title": "Whatsapp Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2135,21 +2135,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsSampling",
+		"iconName": "creative-commons-sampling",
 		"title": "Creative Commons Sampling",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "jediOrder",
+		"iconName": "jedi-order",
 		"title": "Jedi Order",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "rProject",
+		"iconName": "r-project",
 		"title": "R Project",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2163,7 +2163,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "canadianMapleLeaf",
+		"iconName": "canadian-maple-leaf",
 		"title": "Canadian Maple Leaf",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2198,7 +2198,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareKickstarter",
+		"iconName": "square-kickstarter",
 		"title": "Square Kickstarter",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2226,7 +2226,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "nfcSymbol",
+		"iconName": "nfc-symbol",
 		"title": "Nfc Symbol",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2240,21 +2240,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareSteam",
+		"iconName": "square-steam",
 		"title": "Square Steam",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "steamSquare",
+		"iconName": "steam-square",
 		"title": "Steam Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsNcEu",
+		"iconName": "creative-commons-nc-eu",
 		"title": "Creative Commons Nc Eu",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2282,7 +2282,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "googlePlay",
+		"iconName": "google-play",
 		"title": "Google Play",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2317,7 +2317,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "glideG",
+		"iconName": "glide-g",
 		"title": "Glide G",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2338,7 +2338,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "lumonDrop",
+		"iconName": "lumon-drop",
 		"title": "Lumon Drop",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2366,14 +2366,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "gitAlt",
+		"iconName": "git-alt",
 		"title": "Git Alt",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "firefoxBrowser",
+		"iconName": "firefox-browser",
 		"title": "Firefox Browser",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2387,14 +2387,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "wizardsOfTheCoast",
+		"iconName": "wizards-of-the-coast",
 		"title": "Wizards Of The Coast",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsNd",
+		"iconName": "creative-commons-nd",
 		"title": "Creative Commons Nd",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2408,7 +2408,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareLetterboxd",
+		"iconName": "square-letterboxd",
 		"title": "Square Letterboxd",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2429,7 +2429,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "slackHash",
+		"iconName": "slack-hash",
 		"title": "Slack Hash",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2457,7 +2457,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "fonticonsFi",
+		"iconName": "fonticons-fi",
 		"title": "Fonticons Fi",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2485,14 +2485,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "productHunt",
+		"iconName": "product-hunt",
 		"title": "Product Hunt",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareUpwork",
+		"iconName": "square-upwork",
 		"title": "Square Upwork",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2520,14 +2520,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareTumblr",
+		"iconName": "square-tumblr",
 		"title": "Square Tumblr",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "tumblrSquare",
+		"iconName": "tumblr-square",
 		"title": "Tumblr Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2548,7 +2548,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareLinkedin",
+		"iconName": "square-linkedin",
 		"title": "Square Linkedin",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2569,7 +2569,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "redditAlien",
+		"iconName": "reddit-alien",
 		"title": "Reddit Alien",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2597,7 +2597,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "piedPiperPp",
+		"iconName": "pied-piper-pp",
 		"title": "Pied Piper Pp",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2611,7 +2611,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "fortAwesomeAlt",
+		"iconName": "fort-awesome-alt",
 		"title": "Fort Awesome Alt",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2674,14 +2674,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareFontAwesomeStroke",
+		"iconName": "square-font-awesome-stroke",
 		"title": "Square Font Awesome Stroke",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "fontAwesomeAlt",
+		"iconName": "font-awesome-alt",
 		"title": "Font Awesome Alt",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2695,7 +2695,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "fantasyFlightGames",
+		"iconName": "fantasy-flight-games",
 		"title": "Fantasy Flight Games",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2709,14 +2709,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "cottonBureau",
+		"iconName": "cotton-bureau",
 		"title": "Cotton Bureau",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "googleWallet",
+		"iconName": "google-wallet",
 		"title": "Google Wallet",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2779,28 +2779,28 @@
 		"tags": []
 	},
 	{
-		"iconName": "hireAHelper",
+		"iconName": "hire-ahelper",
 		"title": "Hire A Helper",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareHackerNews",
+		"iconName": "square-hacker-news",
 		"title": "Square Hacker News",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "hackerNewsSquare",
+		"iconName": "hacker-news-square",
 		"title": "Hacker News Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsPdAlt",
+		"iconName": "creative-commons-pd-alt",
 		"title": "Creative Commons Pd Alt",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2849,14 +2849,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareVimeo",
+		"iconName": "square-vimeo",
 		"title": "Square Vimeo",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "vimeoSquare",
+		"iconName": "vimeo-square",
 		"title": "Vimeo Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2877,7 +2877,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "yandexInternational",
+		"iconName": "yandex-international",
 		"title": "Yandex International",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2891,21 +2891,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsZero",
+		"iconName": "creative-commons-zero",
 		"title": "Creative Commons Zero",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareSnapchat",
+		"iconName": "square-snapchat",
 		"title": "Square Snapchat",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "snapchatSquare",
+		"iconName": "snapchat-square",
 		"title": "Snapchat Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2919,7 +2919,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "dartLang",
+		"iconName": "dart-lang",
 		"title": "Dart Lang",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2940,14 +2940,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "buyNLarge",
+		"iconName": "buy-nlarge",
 		"title": "Buy N Large",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "watchmanMonitoring",
+		"iconName": "watchman-monitoring",
 		"title": "Watchman Monitoring",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -2989,28 +2989,28 @@
 		"tags": []
 	},
 	{
-		"iconName": "tencentWeibo",
+		"iconName": "tencent-weibo",
 		"title": "Tencent Weibo",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "freeCodeCamp",
+		"iconName": "free-code-camp",
 		"title": "Free Code Camp",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "xTwitter",
+		"iconName": "x-twitter",
 		"title": "X Twitter",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "stickerMule",
+		"iconName": "sticker-mule",
 		"title": "Sticker Mule",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3024,21 +3024,21 @@
 		"tags": []
 	},
 	{
-		"iconName": "kickstarterK",
+		"iconName": "kickstarter-k",
 		"title": "Kickstarter K",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "criticalRole",
+		"iconName": "critical-role",
 		"title": "Critical Role",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "steamSymbol",
+		"iconName": "steam-symbol",
 		"title": "Steam Symbol",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3066,7 +3066,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommonsSamplingPlus",
+		"iconName": "creative-commons-sampling-plus",
 		"title": "Creative Commons Sampling Plus",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3080,14 +3080,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squarePiedPiper",
+		"iconName": "square-pied-piper",
 		"title": "Square Pied Piper",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "piedPiperSquare",
+		"iconName": "pied-piper-square",
 		"title": "Pied Piper Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3115,14 +3115,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "cashApp",
+		"iconName": "cash-app",
 		"title": "Cash App",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "pinterestP",
+		"iconName": "pinterest-p",
 		"title": "Pinterest P",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3143,14 +3143,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareYoutube",
+		"iconName": "square-youtube",
 		"title": "Square Youtube",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "youtubeSquare",
+		"iconName": "youtube-square",
 		"title": "Youtube Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3164,14 +3164,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "piedPiperHat",
+		"iconName": "pied-piper-hat",
 		"title": "Pied Piper Hat",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "internetExplorer",
+		"iconName": "internet-explorer",
 		"title": "Internet Explorer",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3206,7 +3206,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "creativeCommons",
+		"iconName": "creative-commons",
 		"title": "Creative Commons",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3227,7 +3227,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "wikipediaW",
+		"iconName": "wikipedia-w",
 		"title": "Wikipedia W",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3241,14 +3241,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareGitlab",
+		"iconName": "square-gitlab",
 		"title": "Square Gitlab",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "gitlabSquare",
+		"iconName": "gitlab-square",
 		"title": "Gitlab Square",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3276,7 +3276,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccApplePay",
+		"iconName": "cc-apple-pay",
 		"title": "Cc Apple Pay",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3311,14 +3311,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "squareXTwitter",
+		"iconName": "square-xtwitter",
 		"title": "Square X Twitter",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareFontAwesome",
+		"iconName": "square-font-awesome",
 		"title": "Square Font Awesome",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3332,7 +3332,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "42Group",
+		"iconName": "42group",
 		"title": "42 Group",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3346,7 +3346,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "stumbleuponCircle",
+		"iconName": "stumbleupon-circle",
 		"title": "Stumbleupon Circle",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3374,7 +3374,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "linkedinIn",
+		"iconName": "linkedin-in",
 		"title": "Linkedin In",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3430,7 +3430,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "redRiver",
+		"iconName": "red-river",
 		"title": "Red River",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3444,7 +3444,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "fortAwesome",
+		"iconName": "fort-awesome",
 		"title": "Fort Awesome",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3465,7 +3465,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "applePay",
+		"iconName": "apple-pay",
 		"title": "Apple Pay",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3479,7 +3479,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "nodeJs",
+		"iconName": "node-js",
 		"title": "Node Js",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3521,14 +3521,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "telegramPlane",
+		"iconName": "telegram-plane",
 		"title": "Telegram Plane",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "itunesNote",
+		"iconName": "itunes-note",
 		"title": "Itunes Note",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3556,7 +3556,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "facebookMessenger",
+		"iconName": "facebook-messenger",
 		"title": "Facebook Messenger",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3626,7 +3626,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccDiscover",
+		"iconName": "cc-discover",
 		"title": "Cc Discover",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3640,7 +3640,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "spaceAwesome",
+		"iconName": "space-awesome",
 		"title": "Space Awesome",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3675,14 +3675,14 @@
 		"tags": []
 	},
 	{
-		"iconName": "ccAmex",
+		"iconName": "cc-amex",
 		"title": "Cc Amex",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "piedPiperAlt",
+		"iconName": "pied-piper-alt",
 		"title": "Pied Piper Alt",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3724,7 +3724,7 @@
 		"tags": []
 	},
 	{
-		"iconName": "stackExchange",
+		"iconName": "stack-exchange",
 		"title": "Stack Exchange",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3766,35 +3766,35 @@
 		"tags": []
 	},
 	{
-		"iconName": "edgeLegacy",
+		"iconName": "edge-legacy",
 		"title": "Edge Legacy",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareLastfm",
+		"iconName": "square-lastfm",
 		"title": "Square Lastfm",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "lastfmSquare",
+		"iconName": "lastfm-square",
 		"title": "Lastfm Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "goodreadsG",
+		"iconName": "goodreads-g",
 		"title": "Goodreads G",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "ccMastercard",
+		"iconName": "cc-mastercard",
 		"title": "Cc Mastercard",
 		"library": "fabrands",
 		"prefix": "fab",
@@ -3808,28 +3808,28 @@
 		"tags": []
 	},
 	{
-		"iconName": "blackTie",
+		"iconName": "black-tie",
 		"title": "Black Tie",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "squareFacebook",
+		"iconName": "square-facebook",
 		"title": "Square Facebook",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "facebookSquare",
+		"iconName": "facebook-square",
 		"title": "Facebook Square",
 		"library": "fabrands",
 		"prefix": "fab",
 		"tags": []
 	},
 	{
-		"iconName": "battleNet",
+		"iconName": "battle-net",
 		"title": "Battle Net",
 		"library": "fabrands",
 		"prefix": "fab",
