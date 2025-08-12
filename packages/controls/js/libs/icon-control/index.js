@@ -219,6 +219,7 @@ function IconControl({
 						isOpenModal ? 'is-open-icon-picker' : '',
 						className
 					)}
+					onClick={openModal}
 				>
 					{isOpenPromotion && (
 						<PromotionPopover
