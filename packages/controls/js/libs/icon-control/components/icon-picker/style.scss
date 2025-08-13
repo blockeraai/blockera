@@ -47,6 +47,11 @@
 			justify-content: center;
 			justify-items: center;
 			position: relative;
+
+			.blockera-component-feature-wrapper,
+			.blockera-component-feature-wrapper + .blockera-component-feature-wrapper {
+				margin-top: 0 !important;
+			}
 		}
 
 		.blockera-control-library-grid {
