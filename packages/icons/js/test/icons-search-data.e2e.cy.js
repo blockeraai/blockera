@@ -16,11 +16,10 @@ import {
 } from '../.patch/icons';
 
 // Import the libraries configuration
-import searchLibraries from '../search-libraries.json';
+import searchLibraries1 from '../search-libraries.json';
+import searchLibraries2 from '../search-libraries-2.json';
 
-searchLibraries.push('faregular');
-searchLibraries.push('fasolid');
-searchLibraries.push('fabrands');
+let searchLibraries = [...searchLibraries1, ...searchLibraries2];
 
 describe('Icon Libraries → Check all icons are available and search data', () => {
 	beforeEach(() => {

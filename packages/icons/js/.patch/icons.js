@@ -16,6 +16,15 @@ import CursorSearchData from '../library-cursor/search-data.json';
 import { SocialIcons } from '../library-social/icons';
 import SocialSearchData from '../library-social/search-data.json';
 
+import { FaRegularIcons } from '../library-faregular/icons';
+import FaRegularSearchData from '../library-faregular/search-data.json';
+
+import { FaSolidIcons } from '../library-fasolid/icons';
+import FaSolidSearchData from '../library-fasolid/search-data.json';
+
+import { FaBrandsIcons } from '../library-fabrands/icons';
+import FaBrandsSearchData from '../library-fabrands/search-data.json';
+
 // Import the libraries configuration
 import searchLibraries from '../search-libraries.json';
 
@@ -42,6 +51,21 @@ const libraryConfigs = {
 		icons: SocialIcons,
 		searchData: SocialSearchData,
 		name: 'Social',
+	},
+	faregular: {
+		icons: FaRegularIcons,
+		searchData: FaRegularSearchData,
+		name: 'Font Awesome Regular',
+	},
+	fasolid: {
+		icons: FaSolidIcons,
+		searchData: FaSolidSearchData,
+		name: 'Font Awesome Solid',
+	},
+	fabrands: {
+		icons: FaBrandsIcons,
+		searchData: FaBrandsSearchData,
+		name: 'Font Awesome Brands',
 	},
 };
 
