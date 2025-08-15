@@ -42,7 +42,15 @@ const IconLibrary = ({
 	// Handle non-lazy loading
 	useEffect(() => {
 		if (!lazyLoad && !isRendered) {
-			loadIcons();
+			const icons = getLibraryIcons({
+				library,
+				query: searchQuery,
+				onClick: handleIconSelect,
+				isCurrentIcon,
+			});
+
+			setIconsStack([icons]);
+			setRendered(true);
 		}
 	}, [lazyLoad, isRendered]);
 
