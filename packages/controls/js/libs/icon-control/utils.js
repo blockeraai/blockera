@@ -21,6 +21,7 @@ import {
  */
 import { Tooltip } from '../';
 import { FeatureWrapper } from '../feature-wrapper';
+import ConditionalWrapper from '../conditional-wrapper';
 
 export function getLibraryIcons({
 	library,
@@ -62,6 +63,14 @@ export function getLibraryIcons({
 		iconLibraryIcons = getIconLibraryIcons(library);
 	}
 
+	const iconType = applyFilters(
+		'blockera.controls.iconControl.utils.getLibraryIcons.type',
+		['search-2', 'faregular', 'fasolid', 'fabrands'].includes(library)
+			? 'native'
+			: 'none',
+		library
+	);
+
 	for (const iconKey in iconLibraryIcons) {
 		const icon = createStandardIconObject(
 			iconKey,
@@ -73,19 +82,15 @@ export function getLibraryIcons({
 
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
-				<FeatureWrapper
-					className={controlInnerClassNames('icon-wrapper')}
-					type={applyFilters(
-						'blockera.controls.iconControl.utils.getLibraryIcons.type',
-						[
-							'search-2',
-							'faregular',
-							'fasolid',
-							'fabrands',
-						].includes(library)
-							? 'native'
-							: 'none',
-						library
+				<ConditionalWrapper
+					condition={iconType === 'native'}
+					wrapper={(children) => (
+						<FeatureWrapper
+							className={controlInnerClassNames('icon-wrapper')}
+							type={iconType}
+						>
+							{children}
+						</FeatureWrapper>
 					)}
 				>
 					<span
@@ -127,7 +132,7 @@ export function getLibraryIcons({
 							/>
 						</Tooltip>
 					</span>
-				</FeatureWrapper>
+				</ConditionalWrapper>
 			);
 	}
 
