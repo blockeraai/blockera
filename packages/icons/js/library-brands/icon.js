@@ -17,8 +17,8 @@ import { isString, isUndefined } from '@blockera/utils';
 import { getIcon } from '../index';
 import type { IconProps } from '../types';
 
-export function SocialIcon({
-	library = 'social',
+export function BrandsIcon({
+	library = 'brands',
 	icon,
 	iconSize,
 	...props

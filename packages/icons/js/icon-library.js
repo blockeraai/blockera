@@ -44,10 +44,10 @@ import { default as LibraryUIIcon } from './library-ui/library-icon';
 import { CursorIcons } from './library-cursor';
 import CursorIconsSearchData from './library-cursor/search-data.json';
 import { default as LibraryCursorIcon } from './library-cursor/library-icon';
-// Social Library
-import { SocialIcons } from './library-social';
-import SocialIconsSearchData from './library-social/search-data.json';
-import { default as SocialIcon } from './library-social/library-icon';
+// Brands Library
+import { BrandsIcons } from './library-brands';
+import BrandsIconsSearchData from './library-brands/search-data.json';
+import { default as BrandsIcon } from './library-brands/library-icon';
 import searchLibraries from './search-libraries.json';
 import searchLibraries2 from './search-libraries-2.json';
 
@@ -82,12 +82,12 @@ export const IconLibraries: {
 		icon: <FaBrandsLibraryIcon />,
 		count: Object.keys(FaBrandsIcons).length,
 	},
-	social: {
-		id: 'social',
+	brands: {
+		id: 'brands',
 		// translators: Icon library name
-		name: __('Social', 'blockera'),
-		icon: <SocialIcon />,
-		count: Object.keys(SocialIcons).length,
+		name: __('Brands', 'blockera'),
+		icon: <BrandsIcon />,
+		count: Object.keys(BrandsIcons).length,
 	},
 	blockera: {
 		id: 'blockera',
@@ -157,8 +157,8 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 		case 'cursor':
 			return CursorIcons;
 
-		case 'social':
-			return SocialIcons;
+		case 'brands':
+			return BrandsIcons;
 	}
 
 	return {};
@@ -178,8 +178,8 @@ function _getLibraryIcons(library: IconLibraryTypes): Array<any> {
 			return IconsSearchData;
 		case 'cursor':
 			return CursorIconsSearchData;
-		case 'social':
-			return SocialIconsSearchData;
+		case 'brands':
+			return BrandsIconsSearchData;
 	}
 
 	return [];

@@ -22,9 +22,9 @@ const allMissingIcons = getAllMissingIcons();
 console.log('All missing icons:', allMissingIcons);
 
 // Example 3: Get detailed information about missing icons
-console.log('\n=== Example 3: Get detailed information for Social library ===');
-const socialMissingDetails = getMissingIconsDetails('social');
-console.log('Social library missing details:', socialMissingDetails);
+console.log('\n=== Example 3: Get detailed information for Brands library ===');
+const brandsMissingDetails = getMissingIconsDetails('brands');
+console.log('Brands library missing details:', brandsMissingDetails);
 
 // Example 4: Generate a search data template
 console.log(
@@ -43,7 +43,7 @@ logMissingIcons();
 
 // Example 6: Check if a specific library has missing icons
 console.log('\n=== Example 7: Check specific library status ===');
-const libraries = ['wp', 'blockera', 'cursor', 'social'];
+const libraries = ['wp', 'blockera', 'cursor', 'brands'];
 
 libraries.forEach((libraryId) => {
 	const missingCount = getMissingIcons(libraryId).length;

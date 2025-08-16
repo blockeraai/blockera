@@ -7,7 +7,7 @@ export type IconLibraryTypes =
 	| 'ui'
 	| 'blockera'
 	| 'cursor'
-	| 'social'
+	| 'brands'
 	| 'faregular'
 	| 'fasolid'
 	| 'fabrands';

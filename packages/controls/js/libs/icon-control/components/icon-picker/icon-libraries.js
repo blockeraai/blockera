@@ -28,7 +28,7 @@ const IconLibraries = ({
 		fabrands: {
 			lazyLoad: true,
 		},
-		social: {
+		brands: {
 			lazyLoad: true,
 		},
 		blockera: {

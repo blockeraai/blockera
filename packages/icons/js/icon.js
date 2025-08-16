@@ -17,7 +17,7 @@ import { WPIcon } from './library-wp/index';
 import { BlockeraIcon } from './library-blockera/index';
 import { BlockeraUIIcon } from './library-ui/index';
 import { CursorIcon } from './library-cursor/index';
-import { SocialIcon } from './library-social/index';
+import { BrandsIcon } from './library-brands/index';
 import { FaRegularIcon } from './library-faregular';
 import { FaBrandsIcon } from './library-fabrands';
 import { FaSolidIcon } from './library-fasolid';
@@ -47,8 +47,8 @@ export function Icon({
 		case 'cursor':
 			return <CursorIcon library={library} {...props} />;
 
-		case 'social':
-			return <SocialIcon library={library} {...props} />;
+		case 'brands':
+			return <BrandsIcon library={library} {...props} />;
 
 		case 'faregular':
 			return <FaRegularIcon library={library} {...props} />;
@@ -142,7 +142,7 @@ export function createStandardIconObject(
 		};
 	}
 
-	if (['blockera', 'ui', 'cursor', 'social'].includes(library)) {
+	if (['blockera', 'ui', 'cursor', 'brands'].includes(library)) {
 		if (isFunction(icon)) {
 			return {
 				icon,

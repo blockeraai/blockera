@@ -13,8 +13,8 @@ import BlockeraSearchData from '../library-blockera/search-data.json';
 import { CursorIcons } from '../library-cursor/icons';
 import CursorSearchData from '../library-cursor/search-data.json';
 
-import { SocialIcons } from '../library-social/icons';
-import SocialSearchData from '../library-social/search-data.json';
+import { BrandsIcons } from '../library-brands/icons';
+import BrandsSearchData from '../library-brands/search-data.json';
 
 import { FaRegularIcons } from '../library-faregular/icons';
 import FaRegularSearchData from '../library-faregular/search-data.json';
@@ -47,10 +47,10 @@ const libraryConfigs = {
 		searchData: CursorSearchData,
 		name: 'Cursor',
 	},
-	social: {
-		icons: SocialIcons,
-		searchData: SocialSearchData,
-		name: 'Social',
+	brands: {
+		icons: BrandsIcons,
+		searchData: BrandsSearchData,
+		name: 'Brands',
 	},
 	faregular: {
 		icons: FaRegularIcons,
