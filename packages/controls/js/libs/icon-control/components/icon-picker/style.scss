@@ -8,6 +8,15 @@
 		display: flex;
 		flex-direction: column;
 		gap: 25px;
+		position: relative;
+
+		.blockera-control-icon-search {
+			position: sticky;
+			top: -28px;
+			z-index: 100;
+			outline: 14px solid #ffffff;
+			outline-offset: 2px;
+		}
 	}
 }
 
@@ -102,10 +111,12 @@
 			padding: 1px 8px;
 			border-radius: 32px;
 			font-size: 11px;
+			font-weight: 600;
 		}
 
 		.blockera-control-library-header__count {
-			margin-left: auto;
+			background: color-mix(in srgb, var(--blockera-controls-primary-color) 30%, #ffffff 100%);
+			color: var(--blockera-controls-primary-color);
 		}
 	}
 }
