@@ -30,6 +30,18 @@
 		"tags": ["design", "portfolio", "creative"]
 	},
 	{
+		"iconName": "chatgpt",
+		"title": "ChatGPT",
+		"library": "social",
+		"tags": ["ai", "chatbot", "openai"]
+	},
+	{
+		"iconName": "claude",
+		"title": "Claude",
+		"library": "social",
+		"tags": ["ai", "chatbot", "anthropic"]
+	},
+	{
 		"iconName": "codepen",
 		"title": "CodePen",
 		"library": "social",
@@ -120,6 +132,12 @@
 		"tags": ["cloud", "storage", "google"]
 	},
 	{
+		"iconName": "google-gemini",
+		"title": "Google Gemini",
+		"library": "social",
+		"tags": ["ai", "chatbot", "google"]
+	},
+	{
 		"iconName": "instagram",
 		"title": "Instagram",
 		"library": "social",
@@ -166,6 +184,12 @@
 		"title": "Patreon",
 		"library": "social",
 		"tags": ["crowdfunding", "support", "creators"]
+	},
+	{
+		"iconName": "perplexity",
+		"title": "Perplexity",
+		"library": "social",
+		"tags": ["ai", "search", "question"]
 	},
 	{
 		"iconName": "pinterest",
