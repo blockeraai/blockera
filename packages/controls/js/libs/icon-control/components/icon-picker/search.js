@@ -65,18 +65,6 @@ export default function Search({}) {
 						!searchInput ? 'is-empty' : ''
 					)}
 				>
-					<div className={controlInnerClassNames('library-header')}>
-						<Icon icon="search" iconSize="18" />{' '}
-						{__('Search Result', 'blockera')}
-						<span
-							className={controlInnerClassNames(
-								'library-header__label'
-							)}
-						>
-							{__('Free', 'blockera')}
-						</span>
-					</div>
-
 					{searchInput.length < 3 ? (
 						<span
 							className={controlInnerClassNames(
@@ -96,14 +84,30 @@ export default function Search({}) {
 						</span>
 					) : (
 						<>
-							{!searchData.length ? (
+							<div
+								className={controlInnerClassNames(
+									'library-header'
+								)}
+							>
+								<Icon icon="search" iconSize="18" />{' '}
+								{__('Search Result', 'blockera')}
 								<span
+									className={controlInnerClassNames(
+										'library-header__label'
+									)}
+								>
+									{__('Free', 'blockera')}
+								</span>
+							</div>
+
+							{!searchData.length ? (
+								<p
 									className={controlInnerClassNames(
 										'library-search-hint'
 									)}
 								>
 									{__('Sorry, no icons found.', 'blockera')}
-								</span>
+								</p>
 							) : (
 								<div
 									className={controlInnerClassNames(
@@ -133,16 +137,13 @@ export default function Search({}) {
 							</div>
 
 							{!searchData2.length ? (
-								<span
+								<p
 									className={controlInnerClassNames(
 										'library-search-hint'
 									)}
 								>
-									{__(
-										'Sorry, no icons found. Please try a different keyword.',
-										'blockera'
-									)}
-								</span>
+									{__('Sorry, no icons found.', 'blockera')}
+								</p>
 							) : (
 								<div
 									className={controlInnerClassNames(
@@ -152,6 +153,19 @@ export default function Search({}) {
 								>
 									{searchData2}
 								</div>
+							)}
+
+							{!searchData.length && !searchData2.length && (
+								<p
+									className={controlInnerClassNames(
+										'library-search-hint'
+									)}
+								>
+									{__(
+										'Please try a different keyword.',
+										'blockera'
+									)}
+								</p>
 							)}
 						</>
 					)}
