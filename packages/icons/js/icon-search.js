@@ -4,7 +4,6 @@
  * External dependencies
  */
 import Fuse from 'fuse.js';
-import memoize from 'fast-memoize';
 
 /**
  * Internal dependencies
@@ -33,7 +32,7 @@ export function iconSearch({
 		return {};
 	}
 
-	const getMemoizedResult = memoize(() => {
+	const getResult = () => {
 		const fuse = new Fuse(
 			getIconLibrarySearchData(library),
 			searchConfig,
@@ -52,17 +51,18 @@ export function iconSearch({
 
 		const finalResult = {};
 
-		const memoizedRegistration = memoize((foundItem) => {
+		const iconRegistration = (foundItem: Object) => {
+			console.log('foundItem', foundItem);
 			if (foundItem?.item?.iconName)
 				finalResult[foundItem.item.iconName] = foundItem.item;
-		});
+		};
 
-		result.forEach(memoizedRegistration);
+		result.forEach(iconRegistration);
 
 		return finalResult;
-	});
+	};
 
-	return getMemoizedResult();
+	return getResult();
 }
 
 export function createIconsBaseSearchData({
