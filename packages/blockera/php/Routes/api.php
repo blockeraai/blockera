@@ -30,6 +30,9 @@ try {
     $routes->post('telemetry/log-error', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'log' ]);
     $routes->post('telemetry/log-error/status', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'status' ]);
 
+
+	$routes->get('theme-json', [ Blockera\Setup\Http\Controllers\Theme\JSONController::class, 'response' ]);
+
 } catch (Exception $exception) {
 
     return $exception->getMessage();
