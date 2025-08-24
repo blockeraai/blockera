@@ -50,7 +50,6 @@ export {
 	getWidthSize,
 } from './width-size';
 export {
-	getColorsTitle,
 	getColors,
 	getColorBy,
 	getColor,

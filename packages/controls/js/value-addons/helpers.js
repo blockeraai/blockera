@@ -17,7 +17,6 @@ import {
 	getPostDynamicValueItemsBy,
 	getSiteDynamicValueItemsBy,
 	getUserDynamicValueItemsBy,
-	getColorsTitle,
 	getColors,
 	getFontSizes,
 	getFontSizesTitle,
@@ -298,7 +297,7 @@ export function getVariableCategory(
 
 		case 'color':
 			return {
-				label: getColorsTitle(),
+				label: __('Color Variables', 'blockera'),
 				items: getColors(),
 				type: 'color',
 			};
