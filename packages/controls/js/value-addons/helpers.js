@@ -19,7 +19,6 @@ import {
 	getUserDynamicValueItemsBy,
 	getColors,
 	getFontSizes,
-	getFontSizesTitle,
 	getLinearGradients,
 	getRadialGradients,
 	getSpacings,
@@ -258,7 +257,7 @@ export function getVariableCategory(
 	switch (category) {
 		case 'font-size':
 			return {
-				label: getFontSizesTitle(),
+				label: __('Font Size Variables', 'blockera'),
 				items: getFontSizes(),
 				type: 'font-size',
 			};
