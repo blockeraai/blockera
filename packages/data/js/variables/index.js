@@ -17,7 +17,6 @@ export {
 	getLinearGradient,
 } from './linear-gradient';
 export {
-	getRadialGradientsTitle,
 	getRadialGradients,
 	getRadialGradientBy,
 	getRadialGradient,

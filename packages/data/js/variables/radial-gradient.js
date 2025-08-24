@@ -4,7 +4,6 @@
  */
 import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -80,21 +79,6 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 			});
 	}
 );
-
-export const getRadialGradientsTitle: () => string = memoize(function () {
-	if (isBlockTheme()) {
-		if (
-			!isUndefined(
-				getBlockEditorSettings()?.__experimentalFeatures?.color
-					?.gradients?.theme
-			)
-		) {
-			return __('Theme Radial Gradients', 'blockera');
-		}
-	}
-
-	return __('Editor Radial Gradients', 'blockera');
-});
 
 export const getRadialGradient: (id: string) => ?VariableItem = memoize(
 	function (id: string): ?VariableItem {

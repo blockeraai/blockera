@@ -22,7 +22,6 @@ import {
 	getFontSizesTitle,
 	getLinearGradientsTitle,
 	getLinearGradients,
-	getRadialGradientsTitle,
 	getRadialGradients,
 	getSpacings,
 	getVariable,
@@ -274,7 +273,7 @@ export function getVariableCategory(
 
 		case 'radial-gradient':
 			return {
-				label: getRadialGradientsTitle(),
+				label: __('Radial Gradient Variables', 'blockera'),
 				items: getRadialGradients(),
 				type: 'radial-gradient',
 			};
