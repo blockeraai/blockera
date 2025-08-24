@@ -25,7 +25,6 @@ import {
 	getRadialGradientsTitle,
 	getRadialGradients,
 	getSpacings,
-	getSpacingsTitle,
 	getVariable,
 	getWidthSizesTitle,
 	getWidthSizes,
@@ -290,7 +289,7 @@ export function getVariableCategory(
 
 		case 'spacing':
 			return {
-				label: getSpacingsTitle(),
+				label: __('Spacing Variables', 'blockera'),
 				items: getSpacings(),
 				type: 'spacing',
 			};

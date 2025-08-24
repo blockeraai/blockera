@@ -36,7 +36,6 @@ export {
 	getFontSizesTitle,
 } from './font-size';
 export {
-	getSpacingsTitle,
 	getSpacings,
 	getSpacingBy,
 	getSpacing,
