@@ -42,12 +42,7 @@ export {
 	getSpacingVAFromIdString,
 	getSpacingVAFromVarString,
 } from './spacing';
-export {
-	getWidthSizesTitle,
-	getWidthSizes,
-	getWidthSizeBy,
-	getWidthSize,
-} from './width-size';
+export { getWidthSizes, getWidthSizeBy, getWidthSize } from './width-size';
 export {
 	getColors,
 	getColorBy,

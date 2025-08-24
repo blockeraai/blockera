@@ -26,7 +26,6 @@ import {
 	getRadialGradients,
 	getSpacings,
 	getVariable,
-	getWidthSizesTitle,
 	getWidthSizes,
 	type VariableCategory,
 } from '@blockera/data';
@@ -282,7 +281,7 @@ export function getVariableCategory(
 
 		case 'width-size':
 			return {
-				label: getWidthSizesTitle(),
+				label: __('Width & Height Variables', 'blockera'),
 				items: getWidthSizes(),
 				type: 'width-size',
 			};
