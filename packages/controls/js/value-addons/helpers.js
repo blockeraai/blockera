@@ -20,7 +20,6 @@ import {
 	getColors,
 	getFontSizes,
 	getFontSizesTitle,
-	getLinearGradientsTitle,
 	getLinearGradients,
 	getRadialGradients,
 	getSpacings,
@@ -266,7 +265,7 @@ export function getVariableCategory(
 
 		case 'linear-gradient':
 			return {
-				label: getLinearGradientsTitle(),
+				label: __('Linear Gradient Variables', 'blockera'),
 				items: getLinearGradients(),
 				type: 'linear-gradient',
 			};

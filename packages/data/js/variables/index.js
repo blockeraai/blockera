@@ -11,7 +11,6 @@ export const getBlockEditorSettings = (): Object => {
 };
 
 export {
-	getLinearGradientsTitle,
 	getLinearGradients,
 	getLinearGradientBy,
 	getLinearGradient,
