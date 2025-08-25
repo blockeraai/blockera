@@ -51,6 +51,7 @@ export function BlockCard({
 	currentInnerBlock,
 	currentBreakpoint,
 	blockeraInnerBlocks,
+	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
@@ -61,6 +62,7 @@ export function BlockCard({
 	supports: Object,
 	availableStates: Object,
 	blockeraInnerBlocks: Object,
+	insideBlockInspector: boolean,
 	currentStateAttributes: Object,
 	additional: Object,
 	notice: MixedElement,
@@ -244,13 +246,22 @@ export function BlockCard({
 				>
 					<div
 						className={extensionInnerClassNames(
-							'block-card__actions'
+							'block-card__actions',
+							{
+								'no-flex': !insideBlockInspector,
+							}
 						)}
 					>
 						<BlockStyleVariations
 							clientId={clientId}
+							blockName={blockName}
 							currentBlock={currentBlock}
 							currentState={currentState}
+							context={
+								insideBlockInspector
+									? 'inspector-controls'
+									: 'global-styles-panel'
+							}
 							currentBreakpoint={currentBreakpoint}
 						/>
 

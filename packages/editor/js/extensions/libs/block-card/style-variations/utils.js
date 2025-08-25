@@ -99,16 +99,23 @@ export function getDefaultStyle(styles: Array<Object>): Object {
 export function useStylesForBlocks({
 	clientId,
 	onSwitch,
+	blockName,
 }: {
 	clientId: string,
+	blockName: string,
 	onSwitch: () => void,
 }): Object {
 	const selector = (select: any) => {
 		const { getBlock } = select(blockEditorStore);
-		const block = getBlock(clientId);
+		let block = getBlock(clientId);
 
 		if (!block) {
-			return {};
+			block = {
+				name: blockName,
+				attributes: {
+					className: '',
+				},
+			};
 		}
 		const blockType = getBlockType(block.name);
 		const { getBlockStyles } = select(blocksStore);
@@ -122,6 +129,7 @@ export function useStylesForBlocks({
 	};
 	const { styles, block, blockType, className } = useSelect(selector, [
 		clientId,
+		blockName,
 	]);
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 	const stylesToRender = getRenderedStyles(styles);

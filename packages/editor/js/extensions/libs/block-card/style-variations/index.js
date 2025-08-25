@@ -29,14 +29,17 @@ type TBlockStyleVariations = {
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
+	context?: 'inspector-controls' | 'global-styles-panel',
 };
 
 export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 	({
 		clientId,
+		blockName,
 		currentBlock,
 		currentState,
 		currentBreakpoint,
+		context = 'inspector-controls',
 	}: TBlockStyleVariations): MixedElement => {
 		const [popoverAnchor, setPopoverAnchor] = useState(null);
 		const [isOpen, setIsOpen] = useState(false);
@@ -50,6 +53,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			className: previewClassName,
 		} = useStylesForBlocks({
 			clientId,
+			blockName,
 			onSwitch: () => {},
 		});
 
@@ -68,7 +72,11 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			}
 		}, [currentPreviewStyle]);
 
-		if (!stylesToRender || stylesToRender.length === 0) {
+		if (
+			!stylesToRender ||
+			stylesToRender.length === 0 ||
+			!['global-styles-panel', 'inspector-controls'].includes(context)
+		) {
 			return <></>;
 		}
 
@@ -80,6 +88,25 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		const activeStyleId = currentActiveStyle?.isDefault
 			? 'default'
 			: currentActiveStyle?.name || 'default';
+
+		if ('global-styles-panel' === context) {
+			return (
+				<BlockStyles
+					context={context}
+					styles={{
+						onSelect,
+						stylesToRender,
+						genericPreviewBlock,
+						activeStyle: currentActiveStyle,
+						setCurrentActiveStyle,
+						setCurrentPreviewStyle,
+						previewClassName,
+						popoverAnchor,
+						setIsOpen,
+					}}
+				/>
+			);
+		}
 
 		return (
 			<>

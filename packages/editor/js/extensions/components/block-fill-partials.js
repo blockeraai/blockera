@@ -68,6 +68,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				<BlockCard
 					isActive={isActive}
 					notice={notice}
+					insideBlockInspector={insideBlockInspector}
 					clientId={clientId}
 					blockName={blockProps.name}
 					innerBlocks={blockeraInnerBlocks}
