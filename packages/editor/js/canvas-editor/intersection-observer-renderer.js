@@ -14,6 +14,7 @@ export class IntersectionObserverRenderer {
 	Component: ComponentType<any>;
 	targetElementIsRoot: boolean;
 	callback: Function;
+	onShouldNotRenderer: boolean;
 
 	constructor(
 		targetSelector: string,
@@ -23,6 +24,7 @@ export class IntersectionObserverRenderer {
 			componentSelector = '',
 			callback = null,
 			targetElementIsRoot = false,
+			onShouldNotRenderer = false,
 		}: {
 			callback: Function,
 			root: string,
@@ -30,6 +32,7 @@ export class IntersectionObserverRenderer {
 			componentSelector: string,
 			whileNotExistSelectors: string[],
 			targetElementIsRoot: boolean,
+			onShouldNotRenderer: boolean,
 		} = {}
 	) {
 		this.whileNotExistSelectors = whileNotExistSelectors;
@@ -38,6 +41,7 @@ export class IntersectionObserverRenderer {
 		this.Component = Component;
 		this.callback = callback;
 		this.targetElementIsRoot = targetElementIsRoot;
+		this.onShouldNotRenderer = onShouldNotRenderer;
 
 		// Create mutation observer to watch DOM changes
 		this.observer = new MutationObserver((mutations) => {
@@ -85,6 +89,10 @@ export class IntersectionObserverRenderer {
 
 		if (shouldRerender && 'function' === typeof this.callback) {
 			this.callback();
+		}
+
+		if (!shouldRerender && 'function' === typeof this.onShouldNotRenderer) {
+			this.onShouldNotRenderer();
 		}
 	}
 
