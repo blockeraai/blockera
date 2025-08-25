@@ -149,3 +149,10 @@ export const setBlockAppSettings = (settings: Object): Object => {
 		type: 'SET_BLOCK_APP_SETTINGS',
 	};
 };
+
+export const setSelectedBlockStyle = (selectedBlockStyle: string): Object => {
+	return {
+		selectedBlockStyle,
+		type: 'SET_SELECTED_BLOCK_STYLE',
+	};
+};

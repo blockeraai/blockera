@@ -284,3 +284,33 @@ export const getBlockAppSettings = ({
 }): Object => {
 	return blockAppSettings;
 };
+
+/**
+ * Get global styles.
+ *
+ * @param {{globalStyles: Object}} state the global styles.
+ *
+ * @return {Object} the global styles data stored in redux.
+ */
+export const getGlobalStyles = ({
+	globalStyles,
+}: {
+	globalStyles: Object,
+}): Object => {
+	return globalStyles;
+};
+
+/**
+ * Get selected block style.
+ *
+ * @param {{globalStyles: Object}} state the global styles.
+ *
+ * @return {string} the selected block style.
+ */
+export const getSelectedBlockStyle = ({
+	globalStyles,
+}: {
+	globalStyles: Object,
+}): string => {
+	return globalStyles.selectedBlockStyle;
+};

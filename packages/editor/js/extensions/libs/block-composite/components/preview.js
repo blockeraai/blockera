@@ -16,6 +16,7 @@ import {
 	InnerBlocksExtension,
 	useInnerBlocks,
 } from '../../block-card/inner-blocks';
+import { BlockStyleVariations } from '../../block-card/block-style-variations';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
@@ -77,59 +78,65 @@ export const Preview = ({
 	});
 
 	return (
-		<StatesManager
-			states={states}
-			onDelete={onDelete}
-			overrideItem={overrideItem}
-			defaultStates={defaultStates}
-			preparedStates={preparedStates}
-			handleOnChange={handleOnChange}
-			deleteCacheData={deleteCacheData}
-			contextValue={blockStatesContextValue}
-			defaultRepeaterItemValue={defaultRepeaterItemValue}
-			maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
-			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
-			{...{
-				InserterComponent: (props: Object) => (
-					<Inserter
+		<>
+			<BlockStyleVariations name={block.blockName} />
+			<StatesManager
+				states={states}
+				onDelete={onDelete}
+				overrideItem={overrideItem}
+				defaultStates={defaultStates}
+				preparedStates={preparedStates}
+				handleOnChange={handleOnChange}
+				deleteCacheData={deleteCacheData}
+				contextValue={blockStatesContextValue}
+				defaultRepeaterItemValue={defaultRepeaterItemValue}
+				maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
+				getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
+				{...{
+					InserterComponent: (props: Object) => (
+						<Inserter
+							{...{
+								...props,
+								maxItems:
+									maxItems +
+									Object.keys(preparedStates).length,
+								AvailableBlocks: () => (
+									<Categories
+										blocks={blocks}
+										elements={elements}
+										states={preparedStates}
+										clientId={block?.clientId}
+										savedStates={calculatedStates}
+										setBlockState={handleOnChange}
+										getBlockInners={getBlockInners}
+										setCurrentBlock={setCurrentBlock}
+										getBlockStates={() => calculatedStates}
+										setBlockClientInners={
+											setBlockClientInners
+										}
+									/>
+								),
+							}}
+						/>
+					),
+				}}
+			>
+				{innerBlocksContextValue && (
+					<InnerBlocksExtension
 						{...{
-							...props,
-							maxItems:
-								maxItems + Object.keys(preparedStates).length,
-							AvailableBlocks: () => (
-								<Categories
-									blocks={blocks}
-									elements={elements}
-									states={preparedStates}
-									clientId={block?.clientId}
-									savedStates={calculatedStates}
-									setBlockState={handleOnChange}
-									getBlockInners={getBlockInners}
-									setCurrentBlock={setCurrentBlock}
-									getBlockStates={() => calculatedStates}
-									setBlockClientInners={setBlockClientInners}
-								/>
-							),
+							...innerBlocksProps,
+							maxItems,
+							setCurrentBlock,
+							setBlockClientInners,
+							currentState,
+							currentBreakpoint,
+							contextValue: innerBlocksContextValue,
 						}}
+						block={block}
+						onChange={onChange}
 					/>
-				),
-			}}
-		>
-			{innerBlocksContextValue && (
-				<InnerBlocksExtension
-					{...{
-						...innerBlocksProps,
-						maxItems,
-						setCurrentBlock,
-						setBlockClientInners,
-						currentState,
-						currentBreakpoint,
-						contextValue: innerBlocksContextValue,
-					}}
-					block={block}
-					onChange={onChange}
-				/>
-			)}
-		</StatesManager>
+				)}
+			</StatesManager>
+		</>
 	);
 };

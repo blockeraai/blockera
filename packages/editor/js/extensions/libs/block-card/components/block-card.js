@@ -12,6 +12,7 @@ import {
 import { Slot } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
+import { getBlockType } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -77,9 +78,16 @@ export function BlockCard({
 	setAttributes: (attributes: Object) => void,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
+	const {
+		icon: blockIcon,
+		title: blockTitle,
+		description: blockDescription,
+	} = getBlockType(blockName);
 	const blockInformation = useBlockDisplayInformation(clientId);
-	const [name, setName] = useState(blockInformation.name || '');
-	const [title, setTitle] = useState(blockInformation.title);
+	const [name, setName] = useState(
+		blockInformation?.name || blockTitle || ''
+	);
+	const [title, setTitle] = useState(blockInformation?.title || blockTitle);
 
 	useEffect(() => {
 		// Name changed from outside
@@ -87,13 +95,26 @@ export function BlockCard({
 			setName(blockInformation?.name);
 		}
 
+		if (blockTitle && blockTitle.trim() !== name) {
+			setName(blockTitle);
+		}
+
 		// title changed from outside. For example: changing block variation
 		if (blockInformation?.title !== title) {
 			setTitle(blockInformation?.title);
 		}
 
+		if (blockTitle && blockTitle.trim() !== title) {
+			setTitle(blockTitle);
+		}
+
 		// eslint-disable-next-line
-	}, [blockInformation.name, blockInformation.title]);
+	}, [
+		blockName,
+		blockTitle,
+		blockInformation?.title,
+		blockInformation?.name,
+	]);
 
 	const { parentNavBlockClientId } = useSelect((select) => {
 		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
@@ -161,7 +182,7 @@ export function BlockCard({
 						/>
 					)}
 
-					<BlockIcon icon={blockInformation.icon} />
+					<BlockIcon icon={blockInformation?.icon || blockIcon} />
 
 					<div
 						className={extensionInnerClassNames(
@@ -200,13 +221,15 @@ export function BlockCard({
 							/>
 						</h2>
 
-						{blockInformation?.description && (
+						{(blockInformation?.description ||
+							blockDescription) && (
 							<span
 								className={extensionInnerClassNames(
 									'block-card__description'
 								)}
 							>
-								{blockInformation.description}
+								{blockInformation?.description ||
+									blockDescription}
 							</span>
 						)}
 					</div>

@@ -153,6 +153,7 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 	({
 		children,
 		additional,
+		insideBlockInspector,
 		attributes: blockAttributes,
 		defaultAttributes: attributes,
 		setAttributes,
@@ -194,9 +195,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			props.clientId
 		);
 
-		const directParentBlock = select('core/block-editor').getBlock(
-			parentClientIds[parentClientIds.length - 1]
-		);
+		const directParentBlock =
+			parentClientIds?.length > 0
+				? select('core/block-editor').getBlock(
+						parentClientIds[parentClientIds.length - 1]
+				  )
+				: {};
 
 		const { updateExtension } = useDispatch(STORE_NAME);
 		const { getExtensions } = select(STORE_NAME);
@@ -1596,12 +1600,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			},
 		];
 
+		const displayBlockControls = useDisplayBlockControls();
+
 		return (
 			<StateContainer
 				availableStates={availableStates}
 				blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
 			>
-				{useDisplayBlockControls() && (
+				{displayBlockControls && insideBlockInspector && (
+					<Tabs
+						design="modern"
+						orientation="horizontal"
+						tabs={tabs}
+						activeTab={currentTab}
+						getPanel={MappedExtensions}
+						setCurrentTab={setCurrentTab}
+						className="block-inspector-tabs"
+					/>
+				)}
+				{!displayBlockControls && !insideBlockInspector && (
 					<Tabs
 						design="modern"
 						orientation="horizontal"

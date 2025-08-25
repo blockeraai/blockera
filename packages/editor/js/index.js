@@ -12,6 +12,7 @@ export {
 	BreakpointsSettings,
 	bootstrapBreakpoints,
 	bootstrapCanvasEditor,
+	registerSiteEditorPlugin,
 	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
 } from './canvas-editor';

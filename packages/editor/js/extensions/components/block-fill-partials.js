@@ -36,6 +36,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		BlockEditComponent,
 		blockeraInnerBlocks,
 		availableInnerStates,
+		insideBlockInspector,
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
@@ -62,68 +63,92 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			);
 		}, [isActive]);
 
-		return (
+		const BlockCardComponent = () => (
 			<>
-				<Fill name={`blockera-block-card-content-${clientId}`}>
-					<BlockCard
+				<BlockCard
+					isActive={isActive}
+					notice={notice}
+					clientId={clientId}
+					blockName={blockProps.name}
+					innerBlocks={blockeraInnerBlocks}
+					currentInnerBlock={currentInnerBlock}
+					currentBlock={currentBlock}
+					currentState={currentState}
+					currentBreakpoint={currentBreakpoint}
+					currentInnerBlockState={currentInnerBlockState}
+					currentStateAttributes={blockProps.attributes}
+					availableStates={availableStates}
+					additional={blockProps.additional}
+					blockeraInnerBlocks={blockeraInnerBlocks}
+					supports={blockProps.supports}
+					setAttributes={blockProps.setAttributes}
+					handleOnChangeAttributes={
+						blockProps.controllerProps.handleOnChangeAttributes
+					}
+				/>
+
+				{isInnerBlock(currentBlock) && (
+					<InnerBlockCard
 						isActive={isActive}
-						notice={notice}
 						clientId={clientId}
+						activeBlock={currentBlock}
 						blockName={blockProps.name}
 						innerBlocks={blockeraInnerBlocks}
-						currentInnerBlock={currentInnerBlock}
+						handleOnClick={updateBlockEditorSettings}
 						currentBlock={currentBlock}
 						currentState={currentState}
+						availableStates={availableInnerStates}
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
-						currentStateAttributes={blockProps.attributes}
-						availableStates={availableStates}
+						currentStateAttributes={
+							blockProps.currentStateAttributes
+						}
 						additional={blockProps.additional}
-						blockeraInnerBlocks={blockeraInnerBlocks}
 						supports={blockProps.supports}
 						setAttributes={blockProps.setAttributes}
 						handleOnChangeAttributes={
 							blockProps.controllerProps.handleOnChangeAttributes
 						}
 					/>
+				)}
+			</>
+		);
 
-					{isInnerBlock(currentBlock) && (
-						<InnerBlockCard
-							isActive={isActive}
-							clientId={clientId}
-							activeBlock={currentBlock}
-							blockName={blockProps.name}
-							innerBlocks={blockeraInnerBlocks}
-							handleOnClick={updateBlockEditorSettings}
-							currentBlock={currentBlock}
-							currentState={currentState}
-							availableStates={availableInnerStates}
-							currentBreakpoint={currentBreakpoint}
-							currentInnerBlockState={currentInnerBlockState}
-							currentStateAttributes={
-								blockProps.currentStateAttributes
-							}
-							additional={blockProps.additional}
-							supports={blockProps.supports}
-							setAttributes={blockProps.setAttributes}
-							handleOnChangeAttributes={
-								blockProps.controllerProps
-									.handleOnChangeAttributes
-							}
-						/>
-					)}
-				</Fill>
-				{isActive && (
-					<Fill name={`blockera-block-edit-content-${clientId}`}>
+		return (
+			<>
+				{insideBlockInspector && (
+					<>
+						<Fill name={`blockera-block-card-content-${clientId}`}>
+							<BlockCardComponent />
+						</Fill>
+						{isActive && (
+							<Fill
+								name={`blockera-block-edit-content-${clientId}`}
+							>
+								<BlockEditComponent
+									{...{ ...blockProps, insideBlockInspector }}
+									availableStates={
+										isInnerBlock(currentBlock)
+											? availableInnerStates
+											: availableStates
+									}
+								/>
+							</Fill>
+						)}
+					</>
+				)}
+				{!insideBlockInspector && (
+					<>
+						<BlockCardComponent />
 						<BlockEditComponent
-							{...blockProps}
+							{...{ ...blockProps, insideBlockInspector }}
 							availableStates={
 								isInnerBlock(currentBlock)
 									? availableInnerStates
 									: availableStates
 							}
 						/>
-					</Fill>
+					</>
 				)}
 			</>
 		);

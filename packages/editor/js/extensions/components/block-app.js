@@ -82,10 +82,12 @@ export const BlockAppContextProvider = ({
 	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
 
 	useEffect(() => {
-		const isEditMode = selectedBlockClientId === props?.clientId;
+		if (props?.insideBlockInspector) {
+			const isEditMode = selectedBlockClientId === props?.clientId;
 
-		if (!isEditMode) {
-			return;
+			if (!isEditMode) {
+				return;
+			}
 		}
 
 		const cacheData = getItem(cacheKey);
@@ -115,6 +117,7 @@ export const BlockAppContextProvider = ({
 		calculatedSections,
 		setBlockAppSettings,
 		selectedBlockClientId,
+		props?.insideBlockInspector,
 	]);
 
 	return (

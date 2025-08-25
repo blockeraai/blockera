@@ -34,7 +34,10 @@ export const useAvailableItems = ({
 	const { getBlockType } = select('core/blocks');
 	const { getAllowedBlocks, getSelectedBlock } = select('core/block-editor');
 	const allowedBlockTypes = getAllowedBlocks(clientId);
-	const { innerBlocks, attributes } = getSelectedBlock();
+	const { innerBlocks, attributes } = getSelectedBlock() || {
+		innerBlocks: [],
+		attributes: {},
+	};
 
 	return useMemo(() => {
 		const forces: Array<InnerBlockModel> = [];

@@ -77,6 +77,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		setAttributes: _setAttributes,
 		defaultAttributes,
 		originDefaultAttributes,
+		insideBlockInspector = true,
 		...props
 	} = _props;
 	const { className } = blockAttributes;
@@ -407,33 +408,90 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			}}
 		>
 			{/*<StrictMode>*/}
-			<InspectorControls>
-				<BlockCompatibility
-					{...{
-						args,
-						isActive,
-						setCompatibilities,
-						originalAttributes,
-						availableAttributes,
-						getAttributesWithIds,
-						attributes: blockAttributes,
-						defaultAttributes: originDefaultAttributes,
-					}}
-				/>
-				<SideEffect
-					{...{
-						activeBlockVariation: activeBlockVariation?.name || '',
-						blockName: name,
-						currentBlock,
-						currentTab,
-						currentState: isInnerBlock(currentBlock)
-							? currentInnerBlockState
-							: currentState,
-						isActive,
-					}}
-				/>
+			{insideBlockInspector && (
+				<InspectorControls>
+					<BlockCompatibility
+						{...{
+							args,
+							isActive,
+							setCompatibilities,
+							originalAttributes,
+							availableAttributes,
+							getAttributesWithIds,
+							attributes: blockAttributes,
+							defaultAttributes: originDefaultAttributes,
+						}}
+					/>
+					<SideEffect
+						{...{
+							activeBlockVariation:
+								activeBlockVariation?.name || '',
+							blockName: name,
+							currentBlock,
+							currentTab,
+							currentState: isInnerBlock(currentBlock)
+								? currentInnerBlockState
+								: currentState,
+							isActive,
+						}}
+					/>
+					<SlotFillProvider>
+						<BlockPartials
+							name={name}
+							clientId={clientId}
+							isActive={isActive}
+							setActive={setActive}
+						/>
+						<BlockFillPartials
+							{...{
+								notice,
+								clientId,
+								isActive,
+								currentState,
+								currentBlock,
+								availableStates,
+								currentInnerBlock,
+								currentBreakpoint,
+								BlockEditComponent,
+								blockeraInnerBlocks,
+								availableInnerStates,
+								insideBlockInspector,
+								currentInnerBlockState,
+								updateBlockEditorSettings,
+								blockProps: {
+									// Sending props like exactly "edit" function props of WordPress Block.
+									// Because needs total block props in outside overriding component like "blockera" in overriding process.
+									name,
+									clientId,
+									supports,
+									className,
+									attributes: sanitizedAttributes,
+									setAttributes,
+									defaultAttributes,
+									currentAttributes,
+									controllerProps: {
+										currentTab,
+										currentBlock,
+										currentState,
+										currentBreakpoint,
+										blockeraInnerBlocks,
+										currentInnerBlockState,
+										handleOnChangeAttributes,
+									},
+									additional,
+									currentStateAttributes: currentAttributes,
+									...props,
+								},
+							}}
+						/>
+					</SlotFillProvider>
+				</InspectorControls>
+			)}
+
+			{!insideBlockInspector && (
 				<SlotFillProvider>
 					<BlockPartials
+						name={name}
 						clientId={clientId}
 						isActive={isActive}
 						setActive={setActive}
@@ -451,6 +509,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 							BlockEditComponent,
 							blockeraInnerBlocks,
 							availableInnerStates,
+							insideBlockInspector,
 							currentInnerBlockState,
 							updateBlockEditorSettings,
 							blockProps: {
@@ -480,42 +539,46 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 						}}
 					/>
 				</SlotFillProvider>
-			</InspectorControls>
+			)}
 
-			<ErrorBoundary
-				fallbackRender={({ error }): MixedElement => (
-					<ErrorBoundaryFallback
-						{...{
-							error,
-							notice,
-							clientId,
-							setNotice,
-							from: 'style-wrapper',
-							props: blockStyleProps,
-							isReportingErrorCompleted,
-							setIsReportingErrorCompleted,
-							fallbackComponent: BlockStyle,
-						}}
+			{insideBlockInspector && (
+				<>
+					<ErrorBoundary
+						fallbackRender={({ error }): MixedElement => (
+							<ErrorBoundaryFallback
+								{...{
+									error,
+									notice,
+									clientId,
+									setNotice,
+									from: 'style-wrapper',
+									props: blockStyleProps,
+									isReportingErrorCompleted,
+									setIsReportingErrorCompleted,
+									fallbackComponent: BlockStyle,
+								}}
+							/>
+						)}
+					>
+						<StylesWrapper clientId={clientId}>
+							<Fill name={'blockera-styles-wrapper-' + clientId}>
+								<BlockStyle {...blockStyleProps} />
+							</Fill>
+						</StylesWrapper>
+					</ErrorBoundary>
+					{/*</StrictMode>*/}
+
+					<ContextualToolbarComponents />
+
+					<BlockFeaturesInlineStyles
+						clientId={clientId}
+						className={className}
+						currentAttributes={currentAttributes}
 					/>
-				)}
-			>
-				<StylesWrapper clientId={clientId}>
-					<Fill name={'blockera-styles-wrapper-' + clientId}>
-						<BlockStyle {...blockStyleProps} />
-					</Fill>
-				</StylesWrapper>
-			</ErrorBoundary>
-			{/*</StrictMode>*/}
 
-			<ContextualToolbarComponents />
-
-			<BlockFeaturesInlineStyles
-				clientId={clientId}
-				className={className}
-				currentAttributes={currentAttributes}
-			/>
-
-			{children}
+					{children}
+				</>
+			)}
 		</BlockEditContextProvider>
 	);
 });

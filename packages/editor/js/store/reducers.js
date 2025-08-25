@@ -140,9 +140,23 @@ export const blockAppSettings = (
 	return state;
 };
 
+export const globalStyles = (state: Object = {}, action: Object): Object => {
+	switch (action.type) {
+		case 'SET_SELECTED_BLOCK_STYLE':
+			state = {
+				...state,
+				selectedBlockStyle: action.selectedBlockStyle,
+			};
+			break;
+	}
+
+	return state;
+};
+
 export default (combineReducers({
 	breakpoints,
 	blockStates,
+	globalStyles,
 	innerBlockStates,
 	blockAppSettings,
 	canvasEditorSettings,
