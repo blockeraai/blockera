@@ -18,6 +18,7 @@ import { BlockeraIcon } from './library-blockera/index';
 import { BlockeraUIIcon } from './library-ui/index';
 import { CursorIcon } from './library-cursor/index';
 import { BrandsIcon } from './library-brands/index';
+import { EssentialsIcon } from './library-essentials/icon';
 import { FaRegularIcon } from './library-faregular';
 import { FaBrandsIcon } from './library-fabrands';
 import { FaSolidIcon } from './library-fasolid';
@@ -58,6 +59,9 @@ export function Icon({
 
 		case 'fasolid':
 			return <FaSolidIcon library={library} {...props} />;
+
+		case 'essentials':
+			return <EssentialsIcon library={library} {...props} />;
 
 		default:
 			return <WPIcon library={library} {...props} />;
@@ -142,7 +146,9 @@ export function createStandardIconObject(
 		};
 	}
 
-	if (['blockera', 'ui', 'cursor', 'brands'].includes(library)) {
+	if (
+		['blockera', 'ui', 'cursor', 'brands', 'essentials'].includes(library)
+	) {
 		if (isFunction(icon)) {
 			return {
 				icon,

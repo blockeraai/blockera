@@ -34,6 +34,9 @@ const IconLibraries = ({
 		blockera: {
 			lazyLoad: true,
 		},
+		essentials: {
+			lazyLoad: true,
+		},
 	},
 }) => {
 	// Memoize the library components to prevent unnecessary re-renders
