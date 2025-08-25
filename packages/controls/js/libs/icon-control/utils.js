@@ -83,6 +83,7 @@ export function getLibraryIcons({
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
 				<ConditionalWrapper
+					key={`${iconKey}-${icon.iconName}`}
 					condition={iconType === 'native'}
 					wrapper={(children) => (
 						<FeatureWrapper
