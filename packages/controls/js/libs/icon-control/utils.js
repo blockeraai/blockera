@@ -94,7 +94,6 @@ export function getLibraryIcons({
 					)}
 				>
 					<span
-						key={iconKey}
 						className={controlInnerClassNames(
 							'icon-control-icon',
 							'library-' + icon.library,
