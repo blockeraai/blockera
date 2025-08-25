@@ -3560,7 +3560,7 @@
 		"title": "Phone Flip",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["phone", "flip", "rotate"]
+		"tags": ["phone", "call", "rotate", "communication"]
 	},
 	{
 		"iconName": "fa-toilet-portable",
@@ -8369,7 +8369,7 @@
 		"title": "Phone Volume",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["phone", "volume", "communication"]
+		"tags": ["phone", "volume", "communication", "call"]
 	},
 	{
 		"iconName": "fa-volume-control-phone",
@@ -8390,7 +8390,7 @@
 		"title": "Phone",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["phone", "communication"]
+		"tags": ["phone", "communication", "call"]
 	},
 	{
 		"iconName": "fa-torii-gate",
@@ -11503,7 +11503,7 @@
 		"title": "Phone Slash",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["phone", "slash", "mute"]
+		"tags": ["phone", "slash", "mute", "call"]
 	},
 	{
 		"iconName": "fa-road-circle-check",
@@ -12672,7 +12672,7 @@
 		"title": "Phone Square",
 		"library": "fasolid",
 		"prefix": "fas",
-		"tags": ["box", "tile", "shape"]
+		"tags": ["box", "tile", "shape", "call"]
 	},
 	{
 		"iconName": "fa-ruler-combined",
