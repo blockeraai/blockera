@@ -148,34 +148,6 @@ const App = () => {
 							width="25"
 							height="24"
 							viewBox="0 0 25 24"
-							fill="#B80000"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path d="M12.75 4C17.1683 4 20.75 7.58172 20.75 12C20.75 16.4183 17.1683 20 12.75 20C8.33172 20 4.75 16.4183 4.75 12C4.75 7.58172 8.33172 4 12.75 4ZM16.0293 8.7207C15.6908 8.38225 15.1422 8.38225 14.8037 8.7207L12.75 10.7744L10.6963 8.7207C10.3578 8.38226 9.80916 8.38227 9.4707 8.7207C9.13225 9.05916 9.13225 9.60783 9.4707 9.94629L11.5244 12L9.4707 14.0537C9.13225 14.3922 9.13225 14.9408 9.4707 15.2793C9.80916 15.6177 10.3578 15.6177 10.6963 15.2793L12.75 13.2256L14.8037 15.2793C15.1422 15.6178 15.6908 15.6178 16.0293 15.2793C16.3677 14.9408 16.3677 14.3922 16.0293 14.0537L13.9756 12L16.0293 9.94629C16.3677 9.60784 16.3677 9.05916 16.0293 8.7207Z" />
-						</svg>
-
-						{sprintf(
-							// translators: it's the product type (Free or Pro)
-							__('Current %s Version:', 'blockera'),
-							requiredPluginType === 'pro'
-								? __('Pro', 'blockera')
-								: __('Free', 'blockera')
-						)}
-
-						<strong style={{ color: '#B80000' }}>
-							{sprintf(
-								// translators: it's the required product version
-								__('v%s', 'blockera'),
-								blockeraPluginRequiredPluginVersion
-							)}
-						</strong>
-					</li>
-
-					<li>
-						<svg
-							width="25"
-							height="24"
-							viewBox="0 0 25 24"
 							fill="#008F0A"
 							xmlns="http://www.w3.org/2000/svg"
 						>
@@ -195,6 +167,34 @@ const App = () => {
 								// translators: it's the required product version
 								__('v%s', 'blockera'),
 								blockeraPluginRequiredVersion
+							)}
+						</strong>
+					</li>
+
+					<li>
+						<svg
+							width="25"
+							height="24"
+							viewBox="0 0 25 24"
+							fill="#B80000"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path d="M12.75 4C17.1683 4 20.75 7.58172 20.75 12C20.75 16.4183 17.1683 20 12.75 20C8.33172 20 4.75 16.4183 4.75 12C4.75 7.58172 8.33172 4 12.75 4ZM16.0293 8.7207C15.6908 8.38225 15.1422 8.38225 14.8037 8.7207L12.75 10.7744L10.6963 8.7207C10.3578 8.38226 9.80916 8.38227 9.4707 8.7207C9.13225 9.05916 9.13225 9.60783 9.4707 9.94629L11.5244 12L9.4707 14.0537C9.13225 14.3922 9.13225 14.9408 9.4707 15.2793C9.80916 15.6177 10.3578 15.6177 10.6963 15.2793L12.75 13.2256L14.8037 15.2793C15.1422 15.6178 15.6908 15.6178 16.0293 15.2793C16.3677 14.9408 16.3677 14.3922 16.0293 14.0537L13.9756 12L16.0293 9.94629C16.3677 9.60784 16.3677 9.05916 16.0293 8.7207Z" />
+						</svg>
+
+						{sprintf(
+							// translators: it's the product type (Free or Pro)
+							__('Current %s Version:', 'blockera'),
+							requiredPluginType === 'pro'
+								? __('Pro', 'blockera')
+								: __('Free', 'blockera')
+						)}
+
+						<strong style={{ color: '#B80000' }}>
+							{sprintf(
+								// translators: it's the required product version
+								__('v%s', 'blockera'),
+								blockeraPluginRequiredPluginVersion
 							)}
 						</strong>
 					</li>
