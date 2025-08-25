@@ -163,11 +163,7 @@ const App = () => {
 						)}
 
 						<strong style={{ color: '#008F0A' }}>
-							{sprintf(
-								// translators: it's the required product version
-								__('v%s', 'blockera'),
-								blockeraPluginRequiredVersion
-							)}
+							v{blockeraPluginRequiredVersion}
 						</strong>
 					</li>
 
@@ -191,11 +187,7 @@ const App = () => {
 						)}
 
 						<strong style={{ color: '#B80000' }}>
-							{sprintf(
-								// translators: it's the required product version
-								__('v%s', 'blockera'),
-								blockeraPluginRequiredPluginVersion
-							)}
+							v{blockeraPluginRequiredPluginVersion}
 						</strong>
 					</li>
 				</ul>
@@ -223,9 +215,14 @@ const App = () => {
 								className="button button-primary"
 								href={`${window.location.origin}/wp-admin/update-core.php`}
 							>
-								{__('Install or Update ', 'blockera')}
-								{blockeraPluginName}
-								{__(' Plugin', 'blockera')}
+								{sprintf(
+									// translators: it's the plugin name
+									__(
+										'Install or Update %s Plugin',
+										'blockera'
+									),
+									blockeraPluginName
+								)}
 							</a>
 						)}
 
@@ -245,7 +242,7 @@ const App = () => {
 								href={'https://blockera.ai/my-account/licenses'}
 								rel="noreferrer"
 							>
-								{__('Update Manually', 'blockera')}
+								{__('Download and Update Manually', 'blockera')}
 							</a>
 						)}
 
@@ -253,7 +250,7 @@ const App = () => {
 							className="button"
 							href={`${window.location.origin}/wp-admin/plugins.php?s=${blockeraPluginRequiredPluginSlug}`}
 						>
-							{__('View Plugins', 'blockera')}
+							{__('Manage Plugin', 'blockera')}
 						</a>
 					</p>
 
