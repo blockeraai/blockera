@@ -7,6 +7,13 @@ use Blockera\Utils\Utils;
 class CompatibilityCheck {
 
 	/**
+	 * Store the compatibility status.
+	 *
+	 * @var bool $is_compatible the compatibility status. Default is true.
+	 */
+	protected bool $is_compatible = true;
+
+	/**
 	 * Store the app mode.
 	 *
 	 * @var string $app_mode the app mode.
@@ -92,11 +99,11 @@ class CompatibilityCheck {
 
 		$this->compatible_with_slug = $args['compatible_with_slug'];
 
+		$this->setProps($args);
+
 		if (! $this->isActivePlugin()) {
 			return;
 		}
-
-		$this->setProps($args);
 	}
 
 	/**
@@ -179,6 +186,9 @@ class CompatibilityCheck {
 
         $this->checkVersions(
             function (){
+
+				$this->is_compatible = false;
+
 				// Disable the plugin functionality.
 				add_filter(sprintf('%1$s/is-enabled', $this->compatible_with_slug), '__return_false', 9999);
 
@@ -267,6 +277,8 @@ class CompatibilityCheck {
 				function () {
 					// Delete the transient.
 					delete_transient($this->cache_key);
+
+					$this->redirectToDashboard();
 				},
 				true
 			);
@@ -280,6 +292,25 @@ class CompatibilityCheck {
         wp_safe_redirect(admin_url('admin.php?page=blockera-compat'));
         exit;
     }
+
+	/**
+	 * Redirect to the dashboard.
+	 *
+	 * @return void
+	 */
+	private function redirectToDashboard(): void {
+		
+		if (! $this->is_compatible) {
+			return;
+		}
+
+		if ('/wp-admin/admin.php?page=blockera-compat' !== $_SERVER['REQUEST_URI']) {
+			return;
+		}
+
+		wp_safe_redirect(admin_url());
+		exit;
+	}
 
     /**
      * Add menus to the admin dashboard.
@@ -295,6 +326,10 @@ class CompatibilityCheck {
             'manage_options',
             'blockera-compat',
             function () {
+
+				if ( $this->is_compatible) {
+					return;
+				}
 
 				$plugin_name = Utils::pascalCaseWithSpace($this->plugin_slug);
 				
