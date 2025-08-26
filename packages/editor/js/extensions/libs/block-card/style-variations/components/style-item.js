@@ -84,13 +84,18 @@ export const StyleItem = ({
 						alignItems={'center'}
 					>
 						{buttonText}
-						<Icon
-							icon="more-vertical"
-							iconSize="24"
-							onClick={() => {
-								setIsOpenContextMenu(true);
-							}}
-						/>
+						<Flex gap={2}>
+							{!(style?.isEnabled || true) && (
+								<Icon icon="eye-hide" iconSize="20" />
+							)}
+							<Icon
+								icon="more-vertical"
+								iconSize="20"
+								onClick={() => {
+									setIsOpenContextMenu(true);
+								}}
+							/>
+						</Flex>
 					</Flex>
 				</Truncate>
 			</Button>
@@ -143,7 +148,9 @@ export const StyleItem = ({
 							justifyContent={'flex-start'}
 							gap={8}
 							alignItems={'center'}
-							className={controlInnerClassNames('menu-item')}
+							className={controlInnerClassNames('menu-item', {
+								'is-disabled': !style?.isEnabled || false,
+							})}
 							onClick={() => handleOnEnable(false)}
 						>
 							<Icon icon="eye-hide" iconSize="24" />
@@ -153,7 +160,9 @@ export const StyleItem = ({
 							justifyContent={'flex-start'}
 							gap={8}
 							alignItems={'center'}
-							className={controlInnerClassNames('menu-item')}
+							className={controlInnerClassNames('menu-item', {
+								'delete-style': true,
+							})}
 							onClick={() => handleOnDelete(style.name)}
 						>
 							<Icon icon="icon-recycle-bin" iconSize="24" />

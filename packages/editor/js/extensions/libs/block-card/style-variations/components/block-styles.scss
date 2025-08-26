@@ -92,4 +92,17 @@
 
 .blockera-control-menu-item {
 	cursor: pointer;
+
+	&.is-disabled {
+		color: var(--blockera-value-addon-deleted-color);
+
+		svg {
+			fill: var(--blockera-value-addon-deleted-color);
+		}
+	}
+
+	&.delete-style {
+		opacity: 0.5;
+		color: var(--blockera-value-addon-deleted-color);
+	}
 }
