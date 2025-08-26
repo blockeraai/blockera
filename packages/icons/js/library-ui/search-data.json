@@ -548,6 +548,12 @@
 		"tags": ["border", "style", "horizontal", "dashed", "line"]
 	},
 	{
+		"iconName": "duplicate",
+		"title": "Duplicate",
+		"library": "ui",
+		"tags": ["duplicate", "copy", "clone", "replicate", "mirror"]
+	},
+	{
 		"iconName": "border-style-horizontal-dotted",
 		"title": "Border Style Horizontal Dotted",
 		"library": "ui",
@@ -1270,6 +1276,23 @@
 		]
 	},
 	{
+		"iconName": "icon-circle-arrow-left",
+		"title": "Icon Circle Arrow Left",
+		"library": "ui",
+		"tags": [
+			"icon",
+			"circle",
+			"arrow",
+			"left",
+			"side",
+			"placement",
+			"alignment",
+			"rollback",
+			"undo",
+			"back"
+		]
+	},
+	{
 		"iconName": "icon-position-left",
 		"title": "Icon Position Left",
 		"library": "ui",
@@ -1280,6 +1303,12 @@
 		"title": "Icon Position Right",
 		"library": "ui",
 		"tags": ["icon", "position", "right", "side", "placement", "alignment"]
+	},
+	{
+		"iconName": "icon-recycle-bin",
+		"title": "Icon Recycle Bin",
+		"library": "ui",
+		"tags": ["icon", "recycle", "bin", "trash", "delete", "remove", "empty"]
 	},
 	{
 		"iconName": "information",
