@@ -5,10 +5,7 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { useViewportMatch } from '@wordpress/compose';
-import {
-	__experimentalTruncate as Truncate,
-	Popover as WPPopover,
-} from '@wordpress/components';
+import { Popover as WPPopover } from '@wordpress/components';
 import type { MixedElement } from 'react';
 
 /**
@@ -33,14 +30,17 @@ import { isBlockTheme } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { default as BlockStylesPreviewPanel } from './preview-panel';
+import { StyleItem } from './style-item';
 import { useBlockContext } from '../../../../hooks';
+import { AddNewStyleButton } from './add-new-style-button';
+import { default as BlockStylesPreviewPanel } from './preview-panel';
 
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({
 	styles,
 	onHoverClassName = () => {},
 	context = 'inspector-controls',
+	handleOnChangeBlockStyles = () => {},
 }: {
 	context?: 'global-styles-panel' | 'inspector-controls',
 	styles: {
@@ -54,11 +54,12 @@ function BlockStyles({
 		popoverAnchor: Object,
 		setIsOpen: (isOpen: boolean) => void,
 	},
+	handleOnChangeBlockStyles?: (blockStyles: Array<Object>) => void,
 	onHoverClassName?: (style?: string | null) => void,
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
-	const [filteredStyles, setFilteredStyles] = useState(styles.stylesToRender);
+	const [blockStyles, setBlockStyles] = useState(styles.stylesToRender);
 	const [hoveredStyle, setHoveredStyle] = useState(null);
 	const [showPreview, setShowPreview] = useState(false);
 	const hoveredStyleRef = useRef(null);
@@ -76,6 +77,13 @@ function BlockStyles({
 		popoverAnchor,
 		setIsOpen,
 	} = styles;
+
+	// Update global block styles state whenever blockStyles local state changes
+	useEffect(() => {
+		if ('function' === typeof handleOnChangeBlockStyles) {
+			handleOnChangeBlockStyles(blockStyles);
+		}
+	}, [blockStyles]);
 
 	// Update ref whenever hoveredStyle changes
 	useEffect(() => {
@@ -103,7 +111,6 @@ function BlockStyles({
 		onSelect(style);
 		setIsOpen(false);
 		onHoverClassName(null);
-		setHoveredStyle(null);
 		setHoveredStyle(null);
 	};
 
@@ -145,7 +152,7 @@ function BlockStyles({
 		setSearchTerm(newValue);
 
 		if (!newValue) {
-			setFilteredStyles(stylesToRender);
+			setBlockStyles(stylesToRender);
 			return;
 		}
 
@@ -155,7 +162,7 @@ function BlockStyles({
 			return label.toLowerCase().includes(newValue.toLowerCase());
 		});
 
-		setFilteredStyles(filtered);
+		setBlockStyles(filtered);
 	};
 
 	const Component = ({ inGlobalStylesPanel }) => (
@@ -178,7 +185,7 @@ function BlockStyles({
 				</ControlContextProvider>
 			)}
 
-			{filteredStyles.length === 0 ? (
+			{blockStyles.length === 0 ? (
 				<Flex
 					alignItems="center"
 					direction="column"
@@ -209,31 +216,10 @@ function BlockStyles({
 						)}
 
 						{inGlobalStylesPanel && (
-							<Flex justifyContent={'space-between'}>
-								<h2
-									className={classNames(
-										'blockera-block-styles-category'
-									)}
-								>
-									{__('Style Variations', 'blockera')}
-								</h2>
-								<Button
-									data-test={'add-new-block-style-variation'}
-									size="extra-small"
-									className={controlInnerClassNames(
-										'btn-add',
-										{
-											'is-deactivate': true,
-										}
-									)}
-									// disabled={disabledAddNewItem}
-									onClick={() => {
-										console.log('Added new style!');
-									}}
-								>
-									<Icon icon="plus" iconSize="20" />
-								</Button>
-							</Flex>
+							<AddNewStyleButton
+								blockStyles={blockStyles}
+								setBlockStyles={setBlockStyles}
+							/>
 						)}
 
 						<div
@@ -241,63 +227,18 @@ function BlockStyles({
 								'block-styles__variants'
 							)}
 						>
-							{filteredStyles.map((style) => {
-								const buttonText =
-									style.label ||
-									style.name ||
-									__('Default', 'blockera');
-
-								return (
-									<Button
-										className={classNames(
-											'block-editor-block-styles__item',
-											{
-												'is-active':
-													activeStyle.name ===
-													style.name,
-											}
-										)}
-										key={style.name}
-										variant="secondary"
-										label={
-											style?.isDefault &&
-											style?.name !== 'default'
-												? buttonText +
-												  ` (${__(
-														'Default',
-														'blockera'
-												  )})`
-												: ''
-										}
-										onMouseEnter={() =>
-											styleItemHandler(style)
-										}
-										onFocus={() => styleItemHandler(style)}
-										onMouseLeave={() =>
-											styleItemHandler(null)
-										}
-										onBlur={() => {
-											setCurrentPreviewStyle(null);
-											styleItemHandler(null);
-										}}
-										onClick={() =>
-											onSelectStylePreview(style)
-										}
-										aria-current={
-											activeStyle.name === style.name
-										}
-										size="input"
-										data-test={`style-${style.name}`}
-									>
-										<Truncate
-											numberOfLines={1}
-											className="block-editor-block-styles__item-text"
-										>
-											{buttonText}
-										</Truncate>
-									</Button>
-								);
-							})}
+							{blockStyles.map((style) => (
+								<StyleItem
+									key={style.name}
+									style={style}
+									activeStyle={activeStyle}
+									onSelectStylePreview={onSelectStylePreview}
+									setCurrentPreviewStyle={
+										setCurrentPreviewStyle
+									}
+									styleItemHandler={styleItemHandler}
+								/>
+							))}
 
 							{hoveredStyle &&
 								!isMobileViewport &&

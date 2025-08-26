@@ -49,6 +49,7 @@
 				text-align-last: center;
 				white-space: normal;
 				word-break: break-all;
+				width: 100%;
 			}
 
 			&:hover:not(.is-active) {
@@ -87,4 +88,8 @@
 			color: var(--blockera-controls-primary-color);
 		}
 	}
+}
+
+.blockera-control-menu-item {
+	cursor: pointer;
 }
