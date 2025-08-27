@@ -156,3 +156,18 @@ export const setSelectedBlockStyle = (selectedBlockStyle: string): Object => {
 		type: 'SET_SELECTED_BLOCK_STYLE',
 	};
 };
+
+export const setGlobalStyles = (styles: Object): Object => {
+	return {
+		styles,
+		type: 'SET_GLOBAL_STYLES',
+	};
+};
+
+export const setBlockStyles = (blockName: string, styles: Object): Object => {
+	return {
+		styles,
+		blockName,
+		type: 'SET_BLOCK_STYLES',
+	};
+};
