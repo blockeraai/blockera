@@ -3,10 +3,11 @@
 /**
  * External dependencies
  */
+import { detailedDiff } from 'deep-object-diff';
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 // import { ErrorBoundary } from 'react-error-boundary';
-import { useMemo, useState, useEffect } from '@wordpress/element';
+import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 // import { store as blocksStore } from '@wordpress/blocks';
 
@@ -23,6 +24,8 @@ import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../../components';
+// import { useGlobalStyle } from './hooks';
+import { useGlobalStylesContext } from './global-styles-provider';
 import { SharedBlockExtension } from '../../../extensions/libs/shared';
 import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
 import { prepareBlockeraDefaultAttributesValues } from '../../../extensions/components/utils';
@@ -36,7 +39,11 @@ import { STORE_NAME } from '../../../extensions/store/constants';
 
 export default function App(props: Object): MixedElement {
 	const {
-		blockType: { name, attributes },
+		blockType: {
+			name,
+			attributes,
+			// variation
+		},
 	} = props;
 	const {
 		// getBlockExtensionBy,
@@ -71,16 +78,36 @@ export default function App(props: Object): MixedElement {
 		});
 	}, [originDefaultAttributes]);
 
-	const [styles, setStyles] = useState(
-		prepareBlockeraDefaultAttributesValues(defaultStyles)
-	);
+	const {
+		merged: mergedConfig,
+		// base: baseConfig,
+		user: userConfig,
+		setUserConfig,
+	} = useGlobalStylesContext();
+
+	const initialStyles = useMemo(() => {
+		return mergeObject(
+			mergedConfig?.styles?.blocks[name] || {},
+			prepareBlockeraDefaultAttributesValues(defaultStyles)
+		);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [mergedConfig, defaultStyles]);
+	const [styles, setStyles] = useState(initialStyles);
+
+	// let prefixParts = [];
+	// if (variation) {
+	// 	prefixParts = ['variations', variation].concat(prefixParts);
+	// }
+	// const prefix = prefixParts.join('.');
+	// const [inheritedStyle, setStyle] = useGlobalStyle(prefix, name, 'all', {
+	// 	shouldDecodeEncode: false,
+	// });
 
 	const { getBlockStyles } = select('blockera/editor');
 	const { setBlockStyles } = dispatch('blockera/editor');
 
-	// Update global styles state when local styles change.
-	useEffect(() => {
-		if (!isEquals(getBlockStyles(name), styles)) {
+	const getCalculatedBlockStyles = useCallback(
+		(styles) => {
 			const calculatedBlockStyles = {};
 
 			for (const key in styles) {
@@ -95,7 +122,7 @@ export default function App(props: Object): MixedElement {
 				}
 
 				if (
-					!defaultStyles[key].hasOwnProperty('default') &&
+					!defaultStyles[key]?.hasOwnProperty('default') &&
 					styles[key]
 				) {
 					calculatedBlockStyles[key] = styles[key];
@@ -108,7 +135,38 @@ export default function App(props: Object): MixedElement {
 				}
 			}
 
-			setBlockStyles(name, calculatedBlockStyles);
+			return calculatedBlockStyles;
+		},
+		[defaultStyles]
+	);
+
+	// Update global styles state when local styles change.
+	useEffect(() => {
+		if (!isEquals(getBlockStyles(name), styles)) {
+			setBlockStyles(name, getCalculatedBlockStyles(styles));
+
+			const { added, deleted, updated } = detailedDiff(
+				initialStyles,
+				styles
+			);
+
+			if (
+				!Object.keys(added).length &&
+				!Object.keys(deleted).length &&
+				!Object.keys(updated).length
+			) {
+				return;
+			}
+
+			setUserConfig(
+				mergeObject(userConfig, {
+					styles: {
+						blocks: {
+							[name]: getCalculatedBlockStyles(styles),
+						},
+					},
+				})
+			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [styles]);

@@ -30,11 +30,12 @@ import { Icon } from '@blockera/icons';
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import { EditableBlockName } from './editable-block-name';
+import { BlockStyleVariations } from '../style-variations';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
-import { BlockStyleVariations } from '../style-variations';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
+import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 
 export function BlockCard({
 	notice,
@@ -252,6 +253,12 @@ export function BlockCard({
 							}
 						)}
 					>
+						{!insideBlockInspector && (
+							<BlockPreviewPanel
+								name={blockName}
+								variation={''}
+							/>
+						)}
 						<BlockStyleVariations
 							clientId={clientId}
 							blockName={blockName}

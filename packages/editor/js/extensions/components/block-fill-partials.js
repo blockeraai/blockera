@@ -7,7 +7,7 @@ import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
-import { useEffect, memo } from '@wordpress/element';
+import { useEffect, memo, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -64,57 +64,68 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			);
 		}, [isActive]);
 
-		const BlockCardComponent = () => (
-			<>
-				<BlockCard
-					isActive={isActive}
-					notice={notice}
-					insideBlockInspector={insideBlockInspector}
-					clientId={clientId}
-					blockName={blockProps.name}
-					innerBlocks={blockeraInnerBlocks}
-					currentInnerBlock={currentInnerBlock}
-					currentBlock={currentBlock}
-					currentState={currentState}
-					currentBreakpoint={currentBreakpoint}
-					currentInnerBlockState={currentInnerBlockState}
-					currentStateAttributes={blockProps.attributes}
-					availableStates={availableStates}
-					additional={blockProps.additional}
-					blockeraInnerBlocks={blockeraInnerBlocks}
-					supports={blockProps.supports}
-					setAttributes={blockProps.setAttributes}
-					handleOnChangeAttributes={
-						blockProps.controllerProps.handleOnChangeAttributes
-					}
-				/>
-
-				{isInnerBlock(currentBlock) && (
-					<InnerBlockCard
-						insideBlockInspector={insideBlockInspector}
+		const memoizedBlockCardComponent = useMemo(
+			() => (
+				<>
+					<BlockCard
 						isActive={isActive}
+						notice={notice}
+						insideBlockInspector={insideBlockInspector}
 						clientId={clientId}
-						activeBlock={currentBlock}
 						blockName={blockProps.name}
 						innerBlocks={blockeraInnerBlocks}
-						handleOnClick={updateBlockEditorSettings}
+						currentInnerBlock={currentInnerBlock}
 						currentBlock={currentBlock}
 						currentState={currentState}
-						availableStates={availableInnerStates}
 						currentBreakpoint={currentBreakpoint}
 						currentInnerBlockState={currentInnerBlockState}
-						currentStateAttributes={
-							blockProps.currentStateAttributes
-						}
+						currentStateAttributes={blockProps.attributes}
+						availableStates={availableStates}
 						additional={blockProps.additional}
+						blockeraInnerBlocks={blockeraInnerBlocks}
 						supports={blockProps.supports}
 						setAttributes={blockProps.setAttributes}
 						handleOnChangeAttributes={
 							blockProps.controllerProps.handleOnChangeAttributes
 						}
 					/>
-				)}
-			</>
+
+					{isInnerBlock(currentBlock) && (
+						<InnerBlockCard
+							insideBlockInspector={insideBlockInspector}
+							isActive={isActive}
+							clientId={clientId}
+							activeBlock={currentBlock}
+							blockName={blockProps.name}
+							innerBlocks={blockeraInnerBlocks}
+							handleOnClick={updateBlockEditorSettings}
+							currentBlock={currentBlock}
+							currentState={currentState}
+							availableStates={availableInnerStates}
+							currentBreakpoint={currentBreakpoint}
+							currentInnerBlockState={currentInnerBlockState}
+							currentStateAttributes={
+								blockProps.currentStateAttributes
+							}
+							additional={blockProps.additional}
+							supports={blockProps.supports}
+							setAttributes={blockProps.setAttributes}
+							handleOnChangeAttributes={
+								blockProps.controllerProps
+									.handleOnChangeAttributes
+							}
+						/>
+					)}
+				</>
+			),
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+			[
+				isActive,
+				currentBlock,
+				currentState,
+				currentBreakpoint,
+				currentInnerBlockState,
+			]
 		);
 
 		return (
@@ -122,7 +133,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				{insideBlockInspector && (
 					<>
 						<Fill name={`blockera-block-card-content-${clientId}`}>
-							<BlockCardComponent />
+							{memoizedBlockCardComponent}
 						</Fill>
 						{isActive && (
 							<Fill
@@ -153,7 +164,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 									: availableStates
 							}
 						>
-							<BlockCardComponent />
+							{memoizedBlockCardComponent}
 						</StateContainer>
 						<BlockEditComponent
 							{...{ ...blockProps, insideBlockInspector }}

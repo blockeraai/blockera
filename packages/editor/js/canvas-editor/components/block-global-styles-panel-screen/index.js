@@ -35,7 +35,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	});
 
 	useEffect(() => {
-		if (!hasBlockeraExtensions) {
+		if (!hasBlockeraExtensions && getSelectedBlockStyle()) {
 			screenElement.classList.remove('has-blockera-extensions');
 			screenElement.classList.add('has-not-blockera-extensions');
 		}
