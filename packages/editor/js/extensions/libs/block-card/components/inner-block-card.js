@@ -46,6 +46,7 @@ export function InnerBlockCard({
 	currentBreakpoint,
 	availableStates,
 	additional,
+	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
@@ -63,6 +64,7 @@ export function InnerBlockCard({
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+	insideBlockInspector: boolean,
 	handleOnChangeAttributes: (
 		attribute: string,
 		value: any,
@@ -171,6 +173,7 @@ export function InnerBlockCard({
 				}}
 			>
 				<StateContainer
+					insideBlockInspector={insideBlockInspector}
 					availableStates={availableStates}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData

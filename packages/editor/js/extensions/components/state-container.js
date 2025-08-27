@@ -15,6 +15,7 @@ export default function StateContainer({
 	children,
 	availableStates,
 	blockeraUnsavedData,
+	insideBlockInspector = true,
 }: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
 		useExtensionsStore();
@@ -39,6 +40,8 @@ export default function StateContainer({
 			isNormalState(currentInnerBlockState)
 		) {
 			color = '#cc0000';
+		} else if (!insideBlockInspector) {
+			color = '#1ca120';
 		}
 
 		return color;

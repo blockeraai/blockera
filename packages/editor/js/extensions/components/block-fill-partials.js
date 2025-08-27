@@ -18,6 +18,7 @@ import { unregisterControl } from '@blockera/controls';
  * Internal dependencies
  */
 import { isInnerBlock } from './utils';
+import StateContainer from './state-container';
 import { BlockCard, InnerBlockCard } from '../libs/block-card';
 
 const excludedControls = ['canvas-editor'];
@@ -90,6 +91,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 
 				{isInnerBlock(currentBlock) && (
 					<InnerBlockCard
+						insideBlockInspector={insideBlockInspector}
 						isActive={isActive}
 						clientId={clientId}
 						activeBlock={currentBlock}
@@ -140,7 +142,19 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				)}
 				{!insideBlockInspector && (
 					<>
-						<BlockCardComponent />
+						<StateContainer
+							blockeraUnsavedData={
+								blockProps.attributes?.blockeraUnsavedData
+							}
+							insideBlockInspector={insideBlockInspector}
+							availableStates={
+								isInnerBlock(currentBlock)
+									? availableInnerStates
+									: availableStates
+							}
+						>
+							<BlockCardComponent />
+						</StateContainer>
 						<BlockEditComponent
 							{...{ ...blockProps, insideBlockInspector }}
 							availableStates={
