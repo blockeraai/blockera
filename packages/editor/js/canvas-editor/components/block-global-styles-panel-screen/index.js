@@ -57,7 +57,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	return createPortal(
 		<div className={className}>
 			<App
-				name={getSelectedBlockStyle()}
+				blockType={getBlockType(getSelectedBlockStyle())}
 				clientId={Math.random().toString(36).substr(2, 9)}
 			/>
 		</div>,

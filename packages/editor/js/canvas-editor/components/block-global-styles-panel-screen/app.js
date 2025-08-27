@@ -4,16 +4,16 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { select } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 // import { ErrorBoundary } from 'react-error-boundary';
-import { useMemo, useState } from '@wordpress/element';
+import { useMemo, useState, useEffect } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 // import { store as blocksStore } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
  */
-import { isEmpty } from '@blockera/utils'; //mergeObject
+import { isEmpty, mergeObject, isEquals } from '@blockera/utils';
 import { BaseControlContext } from '@blockera/controls';
 
 /**
@@ -24,7 +24,7 @@ import {
 	EditorAdvancedLabelControl,
 } from '../../../components';
 import { SharedBlockExtension } from '../../../extensions/libs/shared';
-// import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
+import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
 import { prepareBlockeraDefaultAttributesValues } from '../../../extensions/components/utils';
 import {
 	BlockApp,
@@ -35,9 +35,9 @@ import {
 import { STORE_NAME } from '../../../extensions/store/constants';
 
 export default function App(props: Object): MixedElement {
-	const { name } = props;
-	const { getSelectedBlockStyle } = select('blockera/editor');
-	const selectedBlockStyle = getSelectedBlockStyle();
+	const {
+		blockType: { name, attributes },
+	} = props;
 	const {
 		// getBlockExtensionBy,
 		getBlockTypeAttributes,
@@ -61,16 +61,57 @@ export default function App(props: Object): MixedElement {
 		[]
 	);
 
-	const [defaultAttributes, setDefaultAttributes] = useState(
-		prepareBlockeraDefaultAttributesValues(
-			blockeraOverrideBlockAttributes,
-			{ defaultWithoutValue: true }
-		)
+	const originDefaultAttributes = useMemo(() => {
+		return mergeObject(attributes, blockeraOverrideBlockAttributes);
+	}, [attributes, blockeraOverrideBlockAttributes]);
+
+	const defaultStyles = useMemo(() => {
+		return sanitizeDefaultAttributes(originDefaultAttributes, {
+			defaultWithoutValue: true,
+		});
+	}, [originDefaultAttributes]);
+
+	const [styles, setStyles] = useState(
+		prepareBlockeraDefaultAttributesValues(defaultStyles)
 	);
 
-	if (selectedBlockStyle !== name || !selectedBlockStyle || !name) {
-		return <></>;
-	}
+	const { getBlockStyles } = select('blockera/editor');
+	const { setBlockStyles } = dispatch('blockera/editor');
+
+	// Update global styles state when local styles change.
+	useEffect(() => {
+		if (!isEquals(getBlockStyles(name), styles)) {
+			const calculatedBlockStyles = {};
+
+			for (const key in styles) {
+				if (
+					[
+						'blockeraPropsId',
+						'blockeraCompatId',
+						'className',
+					].includes(key)
+				) {
+					continue;
+				}
+
+				if (
+					!defaultStyles[key].hasOwnProperty('default') &&
+					styles[key]
+				) {
+					calculatedBlockStyles[key] = styles[key];
+
+					continue;
+				}
+
+				if (!isEquals(defaultStyles[key]?.default, styles[key])) {
+					calculatedBlockStyles[key] = styles[key];
+				}
+			}
+
+			setBlockStyles(name, calculatedBlockStyles);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [styles]);
 
 	// const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 	// 	useState(false);
@@ -94,27 +135,17 @@ export default function App(props: Object): MixedElement {
 			<BaseControlContext.Provider value={baseContextValue}>
 				<BlockApp
 					{...{
-						name: props.name,
+						name,
 						clientId: props.clientId,
-						setAttributes: setDefaultAttributes,
-						defaultAttributes: {
-							...defaultAttributes,
-							blockeraBlockStates: {
-								default: {
-									normal: {
-										breakpoints: {},
-										isVisible: true,
-									},
-								},
-							},
-						},
+						setAttributes: setStyles,
+						defaultAttributes: defaultStyles,
 						additional: {
 							edit: SharedBlockExtension,
 						},
 						insideBlockInspector: false,
 						className: props?.className,
-						attributes: defaultAttributes,
-						originDefaultAttributes: defaultAttributes,
+						attributes: styles,
+						originDefaultAttributes,
 					}}
 				>
 					<div className="blockera-block-global-panel" />
