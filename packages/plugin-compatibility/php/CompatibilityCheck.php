@@ -372,9 +372,9 @@ class CompatibilityCheck {
 				do_action('blockera/compatibility/admin-menus', $base_url, $this);
 
 				if ('development' === $this->app_mode) {
-					$filename = 'plugin-compatibility.js';
+					$filename = 'plugin-compatibility';
 				} else {
-					$filename = 'plugin-compatibility.min.js';
+					$filename = 'plugin-compatibility.min';
 				}
 
 				if ('development' === $this->app_mode) {
@@ -383,14 +383,14 @@ class CompatibilityCheck {
 					$css_filename = 'style.min.css';
 				}
 
-				$asset = $this->plugin_path . '/dist/plugin-compatibility/plugin-compatibility.asset.php';
+				$asset = $this->plugin_path . '/dist/plugin-compatibility/' . $filename . '.asset.php';
 				if (file_exists($asset)) {
 					$asset = require $asset;
 				}
 
 				wp_enqueue_script(
 					'blockera-compat',
-					$base_url . '/dist/plugin-compatibility/' . $filename,
+					$base_url . '/dist/plugin-compatibility/' . $filename . '.js',
 					$asset['dependencies'],
 					$asset['version'],
 					[
