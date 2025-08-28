@@ -82,7 +82,8 @@ $blockera_compat_free_with_pro = new \Blockera\PluginCompatibility\Compatibility
 		'compatible_with_slug' => 'blockera-pro',
 		'transient_key' => 'blockera-compat-redirect',
 		'mode' => $mode ? 'development' : 'production',
-	]
+	],
+	new Blockera\Utils\Utils()
 );
 
 add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
