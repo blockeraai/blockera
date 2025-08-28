@@ -43,7 +43,7 @@ if (! \class_exists(Coordinator::class)) {
         public function registerPlugin( string $slug, string $pluginDir): void {
             $this->plugins[ $slug ] = [
                 'plugin_dir'   => rtrim($pluginDir, '/\\'),
-                'packages_dir' => rtrim($pluginDir, '/\\') . '/packages',
+                'packages_dir' => rtrim($pluginDir, '/\\') . '/vendor/blockera',
             ];
         }
 
