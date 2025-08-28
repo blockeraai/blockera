@@ -104,10 +104,6 @@ if (! \class_exists(Coordinator::class)) {
                 }
             }
 
-            if (count($candidateLoaders) < 2) {
-                return; // nothing to coordinate.
-            }
-
             // Build prefix candidates with their package versions and loaders.
             $prefixCandidates = $this->collectPrefixCandidates($candidateLoaders);
 
