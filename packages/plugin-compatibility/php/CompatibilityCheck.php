@@ -84,6 +84,13 @@ class CompatibilityCheck {
 	protected $callback;
 
 	/**
+	 * Store the instance of the utils class.
+	 *
+	 * @var Utils $utils the instance of the utils class.
+	 */
+	protected Utils $utils;
+
+	/**
 	 * Store the cache key.
 	 *
 	 * @var string $cache_key the cache key.
@@ -95,7 +102,9 @@ class CompatibilityCheck {
 	 *
 	 * @param array $args
 	 */
-	public function __construct( array $args) {
+	public function __construct( array $args, Utils $utils) {
+
+		$this->utils = $utils;
 
 		$this->compatible_with_slug = $args['compatible_with_slug'];
 
@@ -331,7 +340,7 @@ class CompatibilityCheck {
 					return;
 				}
 
-				$plugin_name = Utils::pascalCaseWithSpace($this->plugin_slug);
+				$plugin_name = $this->utils::pascalCaseWithSpace($this->plugin_slug);
 				
 				// Get update plugins transient to check for available updates.
 				$update_plugins = get_site_transient('update_plugins');
@@ -352,7 +361,7 @@ class CompatibilityCheck {
 					window.blockeraPluginName = "' . $plugin_name . '";
 					window.blockeraPluginVersion = "' . $this->plugin_version . '";
 					window.blockeraIsActiveCompatiblePlugin = "' . $this->isActivePlugin() . '";
-					window.blockeraPluginRequiredName = "' . Utils::pascalCaseWithSpace($this->compatible_with_slug) . '";
+					window.blockeraPluginRequiredName = "' . $this->utils::pascalCaseWithSpace($this->compatible_with_slug) . '";
 					window.blockeraPluginRequiredVersion = "' . $this->requires_at_least . '";
 					window.blockeraPluginRequiredPluginVersion = "' . $this->required_plugin_version . '";
 					window.blockeraPluginRequiredPluginSlug = "' . $this->compatible_with_slug . '";
