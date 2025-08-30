@@ -134,7 +134,7 @@ const App = () => {
 								requiredPluginType === 'pro'
 									? __('Pro', 'blockera')
 									: __('Free', 'blockera'),
-								requiredPluginType === 'free'
+								requiredPluginType === 'pro'
 									? __('Free', 'blockera')
 									: __('Pro', 'blockera')
 							)}
