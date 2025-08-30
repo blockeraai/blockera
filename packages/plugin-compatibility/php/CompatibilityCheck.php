@@ -386,7 +386,7 @@ class CompatibilityCheck {
 					window.blockeraPluginUpdateUrl = "' . $update_url . '";
 					window.blockeraPluginName = "' . $plugin_name . '";
 					window.blockeraPluginVersion = "' . $this->plugin_version . '";
-					window.blockeraIsActiveCompatiblePlugin = "' . $this->isActivePlugin() . '";
+					window.blockeraIsActiveCompatiblePlugin = ' . $this->isActivePlugin() . ';
 					window.blockeraPluginRequiredName = "' . $this->utils::pascalCaseWithSpace($this->compatible_with_slug) . '";
 					window.blockeraPluginRequiredVersion = "' . $this->requires_at_least . '";
 					window.blockeraPluginRequiredPluginVersion = "' . $this->required_plugin_version . '";
