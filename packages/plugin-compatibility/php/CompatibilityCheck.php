@@ -369,7 +369,14 @@ class CompatibilityCheck {
 					// Check if the required plugin has available updates.
 					foreach ($update_plugins->response as $plugin_file => $plugin_data) {
 						if (false !== strpos($plugin_file, $this->compatible_with_slug)) {
-							$update_url = $plugin_data->package;
+							$id = 'upgrade-plugin_' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+
+							// Standardize update URL to use WordPress core update functionality.							
+							$update_url = wp_nonce_url(
+								self_admin_url('update.php?action=upgrade-plugin&plugin=' . urlencode($id)),
+								'upgrade-plugin_' . $id
+							);
+
 							break;
 						}
 					}
