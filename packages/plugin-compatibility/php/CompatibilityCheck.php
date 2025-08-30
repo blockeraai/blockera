@@ -98,6 +98,13 @@ class CompatibilityCheck {
 	protected string $cache_key = 'blockera-compat-redirect';
 
 	/**
+	 * Store the controller pages.
+	 *
+	 * @var array $specific_pages the controller pages.
+	 */
+	protected array $specific_pages = [];
+
+	/**
 	 * Compatibility checking object constructor.
 	 *
 	 * @param array $args
@@ -112,6 +119,10 @@ class CompatibilityCheck {
 
 		if (! $this->isActivePlugin()) {
 			return;
+		}
+
+		if (! function_exists('wp_safe_redirect')) {
+			require_once ABSPATH . 'wp-includes/pluggable.php';
 		}
 	}
 
@@ -143,6 +154,7 @@ class CompatibilityCheck {
 		$this->plugin_version = $plugin_args['version'];
 		$this->callback       = $plugin_args['callback'] ?? null;
 		$this->cache_key      = $plugin_args['transient_key'];
+		$this->specific_pages = apply_filters('blockera/compatibility/specific_pages', []);
 
 		if (! function_exists('get_plugin_data')) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -210,6 +222,13 @@ class CompatibilityCheck {
 					if (! get_transient($this->cache_key)) {
 						set_transient($this->cache_key, 1, 60);
 					}
+				}
+
+				// First redirect to dashboard page after redirect to blockera-compat page
+				// if the request is a specific page of target plugin.
+				if (in_array($_SERVER['REQUEST_URI'], $this->specific_pages, true)) {
+					wp_safe_redirect(admin_url());
+					exit;
 				}
 			}
         );
