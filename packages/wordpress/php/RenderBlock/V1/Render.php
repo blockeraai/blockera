@@ -108,9 +108,6 @@ class Render {
      */
     protected function renderBlockWithFeatures( string $html, array $args): string {
 
-        // blockera active experimental icon extension?
-        $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
-
 		$fm = $this->app->make(FeaturesManager::class);
 
 		// Get all registered features.

@@ -1,7 +1,6 @@
 {
 	"editor": {
 		"extensions": {
-			"iconExtension": true,
 			"effectsExtension": {
 				"divider": false,
 				"mask": false

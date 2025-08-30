@@ -86,12 +86,6 @@ class Icon implements FeatureInterface {
 		// Get the html of the document.
 		$html = $data['origin_html'] ?? '';
 
-		// If icon feature is experimental, check if it's enabled.
-		if (isset($data['experimental-features-status']['icon']) && ! $data['experimental-features-status']['icon']) {
-			
-			return $html;
-		}
-
 		$this->args['app'] = $this->app;
 		$data              = array_merge($data, $this->args);
 
