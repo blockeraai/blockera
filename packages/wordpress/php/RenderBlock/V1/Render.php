@@ -63,10 +63,10 @@ class Render {
      * Render constructor.
      *
      * @param Application $app the app instance.
-	 * @param array       $args the args array.
 	 * @param bool        $cache_status true if cache is enabled, false otherwise.
+	 * @param array       $args the args array.
      */
-    public function __construct( Application $app, array $args = [], bool $cache_status = true) { 
+    public function __construct( Application $app, bool $cache_status = true, array $args = []) { 
         $this->app          = $app;
 		$this->args         = $args;
 		$this->cache_status = $cache_status;

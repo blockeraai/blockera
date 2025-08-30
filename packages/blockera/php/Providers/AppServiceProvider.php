@@ -118,7 +118,7 @@ class AppServiceProvider extends ServiceProvider {
 					SavePost::class,
 					function ( Application $app) use ( $plugin_args) {
 
-						return new SavePost($app, new Render($app, $plugin_args));
+						return new SavePost($app, new Render($app, true, $plugin_args));
 					}
 				);
 			}
@@ -196,7 +196,7 @@ class AppServiceProvider extends ServiceProvider {
 							[
 								'cache' => $cache_instance,
 								'plugin_args' => $plugin_args,
-								'render' => new Render($app, $plugin_args, false),
+								'render' => new Render($app, false, $plugin_args),
 							]
 						);
 
@@ -223,7 +223,7 @@ class AppServiceProvider extends ServiceProvider {
 				Render::class,
 				static function ( Application $app) use ( $plugin_args) : Render {
 
-					return new Render($app, $plugin_args);
+					return new Render($app, true, $plugin_args);
 				}
 			);
 
