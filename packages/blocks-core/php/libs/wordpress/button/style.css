@@ -7,7 +7,7 @@
 .wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link svg {
 	display: inline-block;
 	position: relative;
-	background: var(--blockera--icon--color);
+	fill: var(--blockera--icon--color, currentColor);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
 	margin: auto 0;
