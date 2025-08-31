@@ -220,7 +220,18 @@ class Render {
 
             // Print css into inline style on "wp_head" action occur.
             blockera_add_inline_css($css);
+			
+			// Render block with features.
+			$html = $this->renderBlockWithFeatures(
+                $html,
+                [
+					'block' => $block,
+					'unique_class_name' => $unique_class_name,
+					'computed_css_rules' => $css,
+				]
+            );
 
+            // Render block with features.
             if ($need_to_update_html) {
 
                 // Represent html string.
