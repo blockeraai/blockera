@@ -138,7 +138,7 @@ const App = () => {
 							{sprintf(
 								// translators: it's the product name (a theme or plugin name)
 								__(
-									'Your %1$s version is older than the %2$s version you just installed.',
+									'Your %1$s version is older than the %2$s version you just installed and needs to be updated.',
 									'blockera'
 								),
 								requiredPluginType === 'pro'
