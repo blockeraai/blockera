@@ -5,7 +5,13 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 import type { MixedElement, ComponentType } from 'react';
-import { memo, createRoot, useCallback, useState } from '@wordpress/element';
+import {
+	memo,
+	useState,
+	useEffect,
+	createRoot,
+	useCallback,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -78,7 +84,34 @@ export const IconExtension: ComponentType<{
 		useBlockSection,
 	}: TIconProps): MixedElement => {
 		const { initialOpen, onToggle } = useBlockSection('iconConfig');
-		const initialIconState = {
+
+		// Initialize state with current values
+		const [iconState, setIconState] = useState({
+			icon,
+			iconGap,
+			iconSize,
+			iconLink,
+			iconColor,
+			iconRotate,
+			iconPosition,
+			iconFlipVertical,
+			iconFlipHorizontal,
+		});
+
+		// Update state when props change
+		useEffect(() => {
+			setIconState({
+				icon,
+				iconGap,
+				iconSize,
+				iconLink,
+				iconColor,
+				iconRotate,
+				iconPosition,
+				iconFlipVertical,
+				iconFlipHorizontal,
+			});
+		}, [
 			icon,
 			iconGap,
 			iconSize,
@@ -88,99 +121,107 @@ export const IconExtension: ComponentType<{
 			iconRotate,
 			iconFlipHorizontal,
 			iconFlipVertical,
-		};
-		const [iconState, setIconState] = useState(initialIconState);
+		]);
 
-		const handleOnChangeAttributesIcon = useCallback(
-			(newValue, ref) => {
-				if (isEquals(iconState, newValue)) {
-					return;
+		const encodeIcon = useCallback((iconHTML: string) => {
+			return btoa(unescape(encodeURIComponent(iconHTML)));
+		}, []);
+
+		const renderIcon = useCallback(
+			async (newValue) => {
+				const iconWrapper = document.createElement('div');
+				iconWrapper.style.display = 'none';
+				iconWrapper.classList.add('blockera-temp-icon-wrapper');
+
+				const foundedWrapper = document.querySelector(
+					'.blockera-temp-icon-wrapper'
+				);
+
+				if (!foundedWrapper) {
+					document.body?.append(iconWrapper);
+				} else {
+					foundedWrapper.innerHTML = '';
 				}
 
-				const encodeIcon = (iconHTML: string) => {
-					return btoa(unescape(encodeURIComponent(iconHTML)));
-				};
+				const iconNode = document.createElement('span');
+				document
+					.querySelector('.blockera-temp-icon-wrapper')
+					?.append(iconNode);
+				const iconRoot = createRoot(iconNode);
 
-				// Prepare rendered icon before setting state.
-				if (newValue.icon) {
-					const iconWrapper = document.createElement('div');
-					iconWrapper.style.display = 'none';
-					iconWrapper.classList.add('blockera-temp-icon-wrapper');
+				iconRoot.render(
+					<Icon
+						style={{
+							color: iconState.iconColor,
+							fill: iconState.iconColor,
+							width: iconState.iconSize
+								? iconState.iconSize
+								: '1em',
+							height: iconState.iconSize
+								? iconState.iconSize
+								: '1em',
+							...(iconState.iconPosition === 'start' && {
+								marginRight: iconState.iconGap,
+							}),
+							...(iconState.iconPosition === 'end' && {
+								marginLeft: iconState.iconGap,
+							}),
+						}}
+						xmlns="http://www.w3.org/2000/svg"
+						icon={newValue.icon}
+						library={newValue.library}
+						uploadSVG={newValue.uploadSVG}
+						{...{
+							...(['faregular', 'fasolid', 'fabrands'].includes(
+								newValue.library
+							)
+								? { viewBox: '0 0 512 512' }
+								: {}),
+						}}
+					/>
+				);
 
-					const foundedWrapper = document.querySelector(
-						'.blockera-temp-icon-wrapper'
-					);
-
-					if (!foundedWrapper) {
-						document.body?.append(iconWrapper);
-					} else {
-						foundedWrapper.innerHTML = '';
-					}
-
-					const iconNode = document.createElement('span');
-					document
-						.querySelector('.blockera-temp-icon-wrapper')
-						?.append(iconNode);
-					const iconRoot = createRoot(iconNode);
-
-					iconRoot.render(
-						<Icon
-							style={{
-								color: iconState.iconColor,
-								fill: iconState.iconColor,
-								width: iconState.iconSize
-									? iconState.iconSize
-									: '1em',
-								height: iconState.iconSize
-									? iconState.iconSize
-									: '1em',
-								...(iconState.iconPosition === 'start' && {
-									marginRight: iconState.iconGap,
-								}),
-								...(iconState.iconPosition === 'end' && {
-									marginLeft: iconState.iconGap,
-								}),
-							}}
-							xmlns="http://www.w3.org/2000/svg"
-							icon={newValue.icon}
-							library={newValue.library}
-							uploadSVG={newValue.uploadSVG}
-							{...{
-								...([
-									'faregular',
-									'fasolid',
-									'fabrands',
-								].includes(newValue.library)
-									? { viewBox: '0 0 512 512' }
-									: {}),
-							}}
-						/>
-					);
-
+				return new Promise((resolve) => {
 					setTimeout(() => {
 						const renderedIcon = encodeIcon(
 							iconNode?.innerHTML || ''
 						);
-
-						handleOnChangeAttributes(
-							'blockeraIcon',
-							{
-								...newValue,
-								renderedIcon,
-							},
-							{ ref }
-						);
-
-						setIconState({
-							...initialIconState,
-							icon: {
-								renderedIcon,
-								icon: newValue.icon,
-								library: newValue.library,
-								uploadSVG: newValue.uploadSVG,
-							},
-						});
+						resolve(renderedIcon);
+						iconRoot.unmount();
+						iconWrapper.remove();
 					}, 1);
+				});
+			},
+			[iconState, encodeIcon]
+		);
+
+		const handleOnChangeAttributesIcon = useCallback(
+			async (newValue, ref) => {
+				if (isEquals(iconState.icon, newValue)) {
+					return;
+				}
+
+				if (newValue.icon) {
+					const renderedIcon = await renderIcon(newValue);
+
+					handleOnChangeAttributes(
+						'blockeraIcon',
+						{
+							...newValue,
+							renderedIcon,
+						},
+						{ ref }
+					);
+
+					setIconState((prev) => ({
+						...prev,
+						icon: {
+							renderedIcon,
+							icon: newValue.icon,
+							library: newValue.library,
+							uploadSVG: newValue.uploadSVG,
+						},
+					}));
 				} else if (newValue.uploadSVG && newValue.svgString) {
 					applyFilters(
 						'blockera.featureIcon.extension.uploadSVG.onChangeHandler',
@@ -189,34 +230,28 @@ export const IconExtension: ComponentType<{
 							newValue,
 							encodeIcon,
 							setIconState,
-							initialIconState,
 							handleOnChangeAttributes,
 						}
 					);
 				} else {
-					setIconState({
-						...iconState,
-						icon: {
-							icon: '',
-							library: '',
-							uploadSVG: '',
-							renderedIcon: '',
-						},
+					const emptyIcon = {
+						icon: '',
+						library: '',
+						uploadSVG: '',
+						renderedIcon: '',
+					};
+
+					setIconState((prev) => ({
+						...prev,
+						icon: emptyIcon,
+					}));
+
+					handleOnChangeAttributes('blockeraIcon', emptyIcon, {
+						ref,
 					});
-					handleOnChangeAttributes(
-						'blockeraIcon',
-						{
-							icon: '',
-							library: '',
-							uploadSVG: '',
-							renderedIcon: '',
-						},
-						{ ref }
-					);
 				}
 			},
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-			[initialIconState, iconState]
+			[iconState, renderIcon, encodeIcon, handleOnChangeAttributes]
 		);
 
 		// Icon is not available in inner blocks.
@@ -386,7 +421,6 @@ export const IconExtension: ComponentType<{
 											},
 										]}
 										isDeselectable={true}
-										//
 										defaultValue={
 											attributes?.blockeraIconPosition
 												?.default?.value
@@ -398,10 +432,10 @@ export const IconExtension: ComponentType<{
 												{ ref }
 											);
 
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconPosition: newValue,
-											});
+											}));
 										}}
 										{...extensionProps.blockeraIconPosition}
 									/>
@@ -458,10 +492,10 @@ export const IconExtension: ComponentType<{
 												newValue,
 												{ ref }
 											);
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconGap: newValue,
-											});
+											}));
 										}}
 										{...extensionProps.blockeraIconGap}
 									/>
@@ -518,10 +552,10 @@ export const IconExtension: ComponentType<{
 												newValue,
 												{ ref }
 											);
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconSize: newValue,
-											});
+											}));
 										}}
 										{...extensionProps.blockeraIconSize}
 									/>
@@ -566,7 +600,6 @@ export const IconExtension: ComponentType<{
 											</>
 										}
 										columns="columns-2"
-										//
 										defaultValue={
 											attributes?.blockeraIconColor
 												?.default?.value
@@ -577,10 +610,10 @@ export const IconExtension: ComponentType<{
 												newValue,
 												{ ref }
 											);
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconColor: newValue,
-											});
+											}));
 										}}
 										{...extensionProps.blockeraIconColor}
 									/>
@@ -607,17 +640,16 @@ export const IconExtension: ComponentType<{
 									columns="1fr 3fr"
 									label={__('Link', 'blockera')}
 									id={generateExtensionId(block, 'icon-link')}
-									//
 									onChange={(newValue, ref) => {
 										handleOnChangeAttributes(
 											'blockeraIconLink',
 											newValue,
 											{ ref }
 										);
-										setIconState({
-											...iconState,
+										setIconState((prev) => ({
+											...prev,
 											iconLink: newValue,
-										});
+										}));
 									}}
 									defaultValue={
 										attributes?.blockeraIconLink?.default
@@ -686,10 +718,10 @@ export const IconExtension: ComponentType<{
 												'blockeraIconRotate',
 												newAngle
 											);
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconRotate: newAngle,
-											});
+											}));
 										}}
 										className={
 											iconState.iconRotate !== ''
@@ -736,13 +768,13 @@ export const IconExtension: ComponentType<{
 													? ''
 													: true
 											);
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconFlipHorizontal:
 													iconState.iconFlipHorizontal
 														? ''
 														: true,
-											});
+											}));
 										}}
 									>
 										<Icon
@@ -774,13 +806,13 @@ export const IconExtension: ComponentType<{
 													? ''
 													: true
 											);
-											setIconState({
-												...iconState,
+											setIconState((prev) => ({
+												...prev,
 												iconFlipVertical:
 													iconState.iconFlipVertical
 														? ''
 														: true,
-											});
+											}));
 										}}
 									>
 										<Icon
