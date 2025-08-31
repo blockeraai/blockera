@@ -74,6 +74,7 @@ describe('Button Block → Icon Feature', () => {
 		cy.setColorControlValue('Color', '666666');
 
 		// select group block
+		cy.getByAriaLabel('Select Buttons').click();
 		cy.getByAriaLabel('Select Group').click();
 
 		cy.getIframeBody()
