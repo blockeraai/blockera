@@ -13,7 +13,8 @@ describe('Button Block → Icon Feature', () => {
 	});
 
 	it('should be able to add icon to button + visual test', () => {
-		appendBlocks(`<!-- wp:buttons -->
+		appendBlocks(`<!-- wp:group {"blockeraPropsId":"0d0c133a-f40f-4846-bfbb-66a99db8888f","blockeraCompatId":"73117745690","blockeraSpacing":{"value":{"padding":{"top":"50px","right":"50px","bottom":"100px","left":"50px"}}},"className":"blockera-block blockera-block\u002d\u002dugv338","style":{"spacing":{"padding":{"top":"50px","right":"50px","bottom":"100px","left":"50px"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group blockera-block blockera-block--ugv338" style="padding-top:50px;padding-right:50px;padding-bottom:100px;padding-left:50px"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button 1</a></div>
 <!-- /wp:button -->
@@ -21,7 +22,8 @@ describe('Button Block → Icon Feature', () => {
 <!-- wp:button -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button 2</a></div>
 <!-- /wp:button --></div>
-<!-- /wp:buttons -->`);
+<!-- /wp:buttons --></div>
+<!-- /wp:group -->`);
 
 		//
 		// 1. Check editor
@@ -71,21 +73,27 @@ describe('Button Block → Icon Feature', () => {
 		// set color
 		cy.setColorControlValue('Color', '666666');
 
-		cy.getBlock('core/buttons').first().compareSnapshot({
-			name: '1-editor',
-			testThreshold: 0.2,
-			padding: 20,
-		});
+		cy.getBlock('core/group').click();
+
+		cy.getIframeBody()
+			.find(`[data-type="core/group"]`)
+			.first()
+			.compareSnapshot({
+				name: '1-editor',
+				testThreshold: 0.02,
+			});
 
 		//Check frontend
 		savePage();
 
 		redirectToFrontPage();
 
-		cy.get('.wp-block-buttons').first().compareSnapshot({
+		// disable wp navbar to avoid screenshot issue
+		cy.get('#wpadminbar').invoke('css', 'position', 'relative');
+
+		cy.get('.wp-block-group.blockera-block').first().compareSnapshot({
 			name: '1-frontend',
-			testThreshold: 0.2,
-			padding: 20,
+			testThreshold: 0.02,
 		});
 	});
 });
