@@ -7,6 +7,13 @@ use Blockera\Utils\Utils;
 class CompatibilityCheck {
 
 	/**
+	 * Store the status of the third party plugin installation.
+	 *
+	 * @var bool $is_installed_third_party_plugin the status of the third party plugin installation.
+	 */
+	protected bool $is_installed_third_party_plugin = false;
+
+	/**
 	 * Store the compatibility status.
 	 *
 	 * @var bool $is_compatible the compatibility status. Default is true.
@@ -160,9 +167,13 @@ class CompatibilityCheck {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php', true, false);
-		if (isset($required_plugin_data['Version'])) {
-			$this->required_plugin_version = $required_plugin_data['Version'];
+		// If the plugin is installed, read required minimum version for Blockera Pro from this file header.
+		if ($this->isPluginInstalled()) {
+			// Read required minimum version for Blockera Pro from this file header.
+			$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php', true, false);
+			if (isset($required_plugin_data['Version'])) {
+				$this->required_plugin_version = $required_plugin_data['Version'];
+			}	
 		}
 
 		// Read required minimum version for Blockera Pro from this file header.
@@ -201,7 +212,7 @@ class CompatibilityCheck {
 	 */
     public function load(): void {
 
-		if (! $this->isActivePlugin()) {
+		if (! $this->is_installed_third_party_plugin || ! $this->isActivePlugin()) {
 			return;
 		}
 
@@ -233,6 +244,25 @@ class CompatibilityCheck {
 			}
         );
     }
+
+	/**
+	 * Check if the plugin is installed.
+	 *
+	 * @return bool true if plugin is installed, false otherwise.
+	 */
+	protected function isPluginInstalled(): bool {
+		
+		if (! function_exists('get_plugins')) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$all_plugins = get_plugins();
+		$plugin_base = $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+		
+		$this->is_installed_third_party_plugin = array_key_exists($plugin_base, $all_plugins);
+
+		return $this->is_installed_third_party_plugin;
+	}
 
 	/**
 	 * Check if the plugin is active.
@@ -284,7 +314,7 @@ class CompatibilityCheck {
      */
     public function adminInitialize(): void {
 
-        if (! is_admin() || ! current_user_can('update_plugins')) {
+        if (! $this->is_installed_third_party_plugin || ! is_admin() || ! current_user_can('update_plugins')) {
             return;
         }
 
@@ -346,6 +376,10 @@ class CompatibilityCheck {
 	 * @return void
 	 */
     public function adminMenus(): void {
+
+		if (! $this->is_installed_third_party_plugin) {
+			return;
+		}
 
         add_submenu_page(
             'blockera-compat',
