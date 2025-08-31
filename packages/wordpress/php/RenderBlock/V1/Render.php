@@ -295,7 +295,7 @@ class Render {
         if (preg_match($this->getUniqueClassnameRegex(), $block_classname, $matches)) {
 
             // If inner html is empty, we should update html output.
-            if (empty($inner_html)) {
+            if (empty(trim($inner_html))) {
 
                 return true;
             }
