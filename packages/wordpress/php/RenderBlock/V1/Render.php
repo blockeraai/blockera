@@ -63,10 +63,10 @@ class Render {
      * Render constructor.
      *
      * @param Application $app the app instance.
-	 * @param array       $args the args array.
 	 * @param bool        $cache_status true if cache is enabled, false otherwise.
+	 * @param array       $args the args array.
      */
-    public function __construct( Application $app, array $args = [], bool $cache_status = true) { 
+    public function __construct( Application $app, bool $cache_status = true, array $args = []) { 
         $this->app          = $app;
 		$this->args         = $args;
 		$this->cache_status = $cache_status;
@@ -107,9 +107,6 @@ class Render {
      * @return string The block html include icon element if icon is existing.
      */
     protected function renderBlockWithFeatures( string $html, array $args): string {
-
-        // blockera active experimental icon extension?
-        $args['experimental-features-status']['icon'] = blockera_get_experimental([ 'editor', 'extensions', 'iconExtension' ]);
 
 		$fm = $this->app->make(FeaturesManager::class);
 
@@ -223,7 +220,18 @@ class Render {
 
             // Print css into inline style on "wp_head" action occur.
             blockera_add_inline_css($css);
+			
+			// Render block with features.
+			$html = $this->renderBlockWithFeatures(
+                $html,
+                [
+					'block' => $block,
+					'unique_class_name' => $unique_class_name,
+					'computed_css_rules' => $css,
+				]
+            );
 
+            // Render block with features.
             if ($need_to_update_html) {
 
                 // Represent html string.
@@ -288,8 +296,8 @@ class Render {
      */
     protected function needToUpdateHTML( string $block_classname, string $inner_html): bool {
 
-        // Imagine th block classname or classnames property is empty, so we should update html output.
-        if (empty($block_classname) || empty($this->classnames)) {
+        // Imagine the block classname and classnames property is empty, so we should update html output.
+        if (empty($block_classname) && empty($this->classnames)) {
 
             return true;
         }
@@ -298,7 +306,7 @@ class Render {
         if (preg_match($this->getUniqueClassnameRegex(), $block_classname, $matches)) {
 
             // If inner html is empty, we should update html output.
-            if (empty($inner_html)) {
+            if (empty(trim($inner_html))) {
 
                 return true;
             }

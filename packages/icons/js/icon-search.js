@@ -52,7 +52,6 @@ export function iconSearch({
 		const finalResult = {};
 
 		const iconRegistration = (foundItem: Object) => {
-			console.log('foundItem', foundItem);
 			if (foundItem?.item?.iconName)
 				finalResult[foundItem.item.iconName] = foundItem.item;
 		};

@@ -7,6 +7,20 @@ use Blockera\Utils\Utils;
 class CompatibilityCheck {
 
 	/**
+	 * Store the status of the third party plugin installation.
+	 *
+	 * @var bool $is_installed_third_party_plugin the status of the third party plugin installation.
+	 */
+	protected bool $is_installed_third_party_plugin = false;
+
+	/**
+	 * Store the compatibility status.
+	 *
+	 * @var bool $is_compatible the compatibility status. Default is true.
+	 */
+	protected bool $is_compatible = true;
+
+	/**
 	 * Store the app mode.
 	 *
 	 * @var string $app_mode the app mode.
@@ -77,6 +91,13 @@ class CompatibilityCheck {
 	protected $callback;
 
 	/**
+	 * Store the instance of the utils class.
+	 *
+	 * @var Utils $utils the instance of the utils class.
+	 */
+	protected Utils $utils;
+
+	/**
 	 * Store the cache key.
 	 *
 	 * @var string $cache_key the cache key.
@@ -84,19 +105,32 @@ class CompatibilityCheck {
 	protected string $cache_key = 'blockera-compat-redirect';
 
 	/**
+	 * Store the controller pages.
+	 *
+	 * @var array $specific_pages the controller pages.
+	 */
+	protected array $specific_pages = [];
+
+	/**
 	 * Compatibility checking object constructor.
 	 *
 	 * @param array $args
 	 */
-	public function __construct( array $args) {
+	public function __construct( array $args, Utils $utils) {
+
+		$this->utils = $utils;
 
 		$this->compatible_with_slug = $args['compatible_with_slug'];
+
+		$this->setProps($args);
 
 		if (! $this->isActivePlugin()) {
 			return;
 		}
 
-		$this->setProps($args);
+		if (! function_exists('wp_safe_redirect')) {
+			require_once ABSPATH . 'wp-includes/pluggable.php';
+		}
 	}
 
 	/**
@@ -127,14 +161,19 @@ class CompatibilityCheck {
 		$this->plugin_version = $plugin_args['version'];
 		$this->callback       = $plugin_args['callback'] ?? null;
 		$this->cache_key      = $plugin_args['transient_key'];
+		$this->specific_pages = apply_filters('blockera/compatibility/specific_pages', []);
 
 		if (! function_exists('get_plugin_data')) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
-		$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php', true, false);
-		if (isset($required_plugin_data['Version'])) {
-			$this->required_plugin_version = $required_plugin_data['Version'];
+		// If the plugin is installed, read required minimum version for Blockera Pro from this file header.
+		if ($this->isPluginInstalled()) {
+			// Read required minimum version for Blockera Pro from this file header.
+			$required_plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php', true, false);
+			if (isset($required_plugin_data['Version'])) {
+				$this->required_plugin_version = $required_plugin_data['Version'];
+			}	
 		}
 
 		// Read required minimum version for Blockera Pro from this file header.
@@ -173,12 +212,15 @@ class CompatibilityCheck {
 	 */
     public function load(): void {
 
-		if (! $this->isActivePlugin()) {
+		if (! $this->is_installed_third_party_plugin || ! $this->isActivePlugin()) {
 			return;
 		}
 
         $this->checkVersions(
             function (){
+
+				$this->is_compatible = false;
+
 				// Disable the plugin functionality.
 				add_filter(sprintf('%1$s/is-enabled', $this->compatible_with_slug), '__return_false', 9999);
 
@@ -192,9 +234,35 @@ class CompatibilityCheck {
 						set_transient($this->cache_key, 1, 60);
 					}
 				}
+
+				// First redirect to dashboard page after redirect to blockera-compat page
+				// if the request is a specific page of target plugin.
+				if (in_array($_SERVER['REQUEST_URI'], $this->specific_pages, true)) {
+					wp_safe_redirect(admin_url());
+					exit;
+				}
 			}
         );
     }
+
+	/**
+	 * Check if the plugin is installed.
+	 *
+	 * @return bool true if plugin is installed, false otherwise.
+	 */
+	protected function isPluginInstalled(): bool {
+		
+		if (! function_exists('get_plugins')) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$all_plugins = get_plugins();
+		$plugin_base = $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+		
+		$this->is_installed_third_party_plugin = array_key_exists($plugin_base, $all_plugins);
+
+		return $this->is_installed_third_party_plugin;
+	}
 
 	/**
 	 * Check if the plugin is active.
@@ -246,7 +314,7 @@ class CompatibilityCheck {
      */
     public function adminInitialize(): void {
 
-        if (! is_admin() || ! current_user_can('update_plugins')) {
+        if (! $this->is_installed_third_party_plugin || ! is_admin() || ! current_user_can('update_plugins')) {
             return;
         }
 
@@ -267,6 +335,8 @@ class CompatibilityCheck {
 				function () {
 					// Delete the transient.
 					delete_transient($this->cache_key);
+
+					$this->redirectToDashboard();
 				},
 				true
 			);
@@ -281,12 +351,35 @@ class CompatibilityCheck {
         exit;
     }
 
+	/**
+	 * Redirect to the dashboard.
+	 *
+	 * @return void
+	 */
+	private function redirectToDashboard(): void {
+		
+		if (! $this->is_compatible) {
+			return;
+		}
+
+		if ('/wp-admin/admin.php?page=blockera-compat' !== $_SERVER['REQUEST_URI']) {
+			return;
+		}
+
+		wp_safe_redirect(admin_url());
+		exit;
+	}
+
     /**
      * Add menus to the admin dashboard.
 	 *
 	 * @return void
 	 */
     public function adminMenus(): void {
+
+		if (! $this->is_installed_third_party_plugin) {
+			return;
+		}
 
         add_submenu_page(
             'blockera-compat',
@@ -296,7 +389,11 @@ class CompatibilityCheck {
             'blockera-compat',
             function () {
 
-				$plugin_name = Utils::pascalCaseWithSpace($this->plugin_slug);
+				if ( $this->is_compatible) {
+					return;
+				}
+
+				$plugin_name = $this->utils::pascalCaseWithSpace($this->plugin_slug);
 				
 				// Get update plugins transient to check for available updates.
 				$update_plugins = get_site_transient('update_plugins');
@@ -306,7 +403,14 @@ class CompatibilityCheck {
 					// Check if the required plugin has available updates.
 					foreach ($update_plugins->response as $plugin_file => $plugin_data) {
 						if (false !== strpos($plugin_file, $this->compatible_with_slug)) {
-							$update_url = $plugin_data->package;
+							$id = 'upgrade-plugin_' . $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
+
+							// Standardize update URL to use WordPress core update functionality.							
+							$update_url = wp_nonce_url(
+								self_admin_url('update.php?action=upgrade-plugin&plugin=' . urlencode($id)),
+								'upgrade-plugin_' . $id
+							);
+
 							break;
 						}
 					}
@@ -316,7 +420,8 @@ class CompatibilityCheck {
 					window.blockeraPluginUpdateUrl = "' . $update_url . '";
 					window.blockeraPluginName = "' . $plugin_name . '";
 					window.blockeraPluginVersion = "' . $this->plugin_version . '";
-					window.blockeraIsActiveCompatiblePlugin = "' . $this->isActivePlugin() . '";
+					window.blockeraIsActiveCompatiblePlugin = ' . $this->isActivePlugin() . ';
+					window.blockeraPluginRequiredName = "' . $this->utils::pascalCaseWithSpace($this->compatible_with_slug) . '";
 					window.blockeraPluginRequiredVersion = "' . $this->requires_at_least . '";
 					window.blockeraPluginRequiredPluginVersion = "' . $this->required_plugin_version . '";
 					window.blockeraPluginRequiredPluginSlug = "' . $this->compatible_with_slug . '";
@@ -327,9 +432,9 @@ class CompatibilityCheck {
 				do_action('blockera/compatibility/admin-menus', $base_url, $this);
 
 				if ('development' === $this->app_mode) {
-					$filename = 'plugin-compatibility.js';
+					$filename = 'plugin-compatibility';
 				} else {
-					$filename = 'plugin-compatibility.min.js';
+					$filename = 'plugin-compatibility.min';
 				}
 
 				if ('development' === $this->app_mode) {
@@ -338,14 +443,14 @@ class CompatibilityCheck {
 					$css_filename = 'style.min.css';
 				}
 
-				$asset = $this->plugin_path . '/dist/plugin-compatibility/plugin-compatibility.asset.php';
+				$asset = $this->plugin_path . '/dist/plugin-compatibility/' . $filename . '.asset.php';
 				if (file_exists($asset)) {
 					$asset = require $asset;
 				}
 
 				wp_enqueue_script(
 					'blockera-compat',
-					$base_url . '/dist/plugin-compatibility/' . $filename,
+					$base_url . '/dist/plugin-compatibility/' . $filename . '.js',
 					$asset['dependencies'],
 					$asset['version'],
 					[

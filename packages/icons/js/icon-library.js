@@ -47,6 +47,10 @@ import { default as LibraryCursorIcon } from './library-cursor/library-icon';
 // Brands Library
 import { BrandsIcons } from './library-brands';
 import BrandsIconsSearchData from './library-brands/search-data.json';
+// Essentials Library
+import { EssentialsIcons } from './library-essentials';
+import { default as EssentialsLibraryIcon } from './library-essentials/library-icon';
+import EssentialsIconsSearchData from './library-essentials/search-data.json';
 import { default as BrandsIcon } from './library-brands/library-icon';
 import searchLibraries from './search-libraries.json';
 import searchLibraries2 from './search-libraries-2.json';
@@ -110,6 +114,13 @@ export const IconLibraries: {
 		icon: <LibraryCursorIcon />,
 		count: Object.keys(CursorIcons).length,
 	},
+	essentials: {
+		id: 'essentials',
+		// translators: Icon library name
+		name: __('Essentials', 'blockera'),
+		icon: <EssentialsLibraryIcon />,
+		count: Object.keys(EssentialsIcons).length,
+	},
 };
 
 export function isValidIconLibrary(library: IconLibraryTypes): boolean {
@@ -159,6 +170,9 @@ export function getIconLibraryIcons(iconLibrary: IconLibraryTypes): Object {
 
 		case 'brands':
 			return BrandsIcons;
+
+		case 'essentials':
+			return EssentialsIcons;
 	}
 
 	return {};
@@ -180,6 +194,8 @@ function _getLibraryIcons(library: IconLibraryTypes): Array<any> {
 			return CursorIconsSearchData;
 		case 'brands':
 			return BrandsIconsSearchData;
+		case 'essentials':
+			return EssentialsIconsSearchData;
 	}
 
 	return [];

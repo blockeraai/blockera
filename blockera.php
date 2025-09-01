@@ -24,13 +24,15 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-// Register into shared autoload coordinator.
-require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
-\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
-\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
-
 // loading autoloader.
 require __DIR__ . '/vendor/autoload.php';
+
+// Register into shared autoload coordinator.
+require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
+
+// Register into shared autoload coordinator.
+\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
+\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
 ### END AUTO-GENERATED AUTOLOADER
 
 if (file_exists(__DIR__ . '/.env')) {
@@ -82,7 +84,8 @@ $blockera_compat_free_with_pro = new \Blockera\PluginCompatibility\Compatibility
 		'compatible_with_slug' => 'blockera-pro',
 		'transient_key' => 'blockera-compat-redirect',
 		'mode' => $mode ? 'development' : 'production',
-	]
+	],
+	new Blockera\Utils\Utils()
 );
 
 add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);

@@ -13,6 +13,8 @@
 	background-color: var(--blockera--icon--color, currentColor);
 	mask: var(--blockera--icon--url) no-repeat center;
 	mask-size: contain;
+	-webkit-mask: var(--blockera--icon--url) no-repeat center;
+	-webkit-mask-size: contain;
 	width: var(--blockera--icon--size, 1em);
 	height: var(--blockera--icon--size, 1em);
 	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));

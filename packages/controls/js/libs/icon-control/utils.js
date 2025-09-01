@@ -83,6 +83,7 @@ export function getLibraryIcons({
 		if (isValidIcon(icon, iconKey))
 			iconsStack.push(
 				<ConditionalWrapper
+					key={`${iconKey}-${icon.iconName}`}
 					condition={iconType === 'native'}
 					wrapper={(children) => (
 						<FeatureWrapper
@@ -94,7 +95,6 @@ export function getLibraryIcons({
 					)}
 				>
 					<span
-						key={iconKey}
 						className={controlInnerClassNames(
 							'icon-control-icon',
 							'library-' + icon.library,
