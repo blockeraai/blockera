@@ -24,10 +24,17 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	const { getSelectedBlockStyle } = select(STORE_NAME);
 	const { setSelectedBlockStyle } = dispatch(STORE_NAME);
+	const { getSelectedBlock } = select('core/block-editor');
+	let selectedBlockStyle = getSelectedBlockStyle();
+
+	if (!selectedBlockStyle && getSelectedBlock()) {
+		selectedBlockStyle = getSelectedBlock().name;
+	}
+
+	const blockType = getBlockType(selectedBlockStyle);
 
 	const screenElement = document.querySelector(screen);
-	const hasBlockeraExtensions = getBlockType(getSelectedBlockStyle())
-		?.attributes?.blockeraPropsId;
+	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
 
 	useBackButton({
 		screenElement,
@@ -35,7 +42,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	});
 
 	useEffect(() => {
-		if (!hasBlockeraExtensions && getSelectedBlockStyle()) {
+		if (!hasBlockeraExtensions && selectedBlockStyle) {
 			screenElement.classList.remove('has-blockera-extensions');
 			screenElement.classList.add('has-not-blockera-extensions');
 		}
@@ -57,7 +64,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	return createPortal(
 		<div className={className}>
 			<App
-				blockType={getBlockType(getSelectedBlockStyle())}
+				blockType={blockType}
 				clientId={Math.random().toString(36).substr(2, 9)}
 			/>
 		</div>,
