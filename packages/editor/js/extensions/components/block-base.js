@@ -437,7 +437,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 					/>
 					<SlotFillProvider>
 						<BlockPartials
-							name={name}
 							clientId={clientId}
 							isActive={isActive}
 							setActive={setActive}
@@ -491,7 +490,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			{!insideBlockInspector && (
 				<SlotFillProvider>
 					<BlockPartials
-						name={name}
 						clientId={clientId}
 						isActive={isActive}
 						setActive={setActive}

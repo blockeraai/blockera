@@ -15,7 +15,7 @@ import { prependPortal } from '@blockera/utils';
  */
 import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
 
-export const BlockPartials = memo(({ clientId, isActive, setActive, name }) => {
+export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 	const stickyWrapperRef = useRef(null);
 	const sentinelRef = useRef(null);
 
@@ -84,7 +84,12 @@ export const BlockPartials = memo(({ clientId, isActive, setActive, name }) => {
 		</>
 	);
 
-	if (name === select('blockera/editor').getSelectedBlockStyle()) {
+	const { getActiveComplementaryArea } = select('core/interface');
+
+	const activeComplementaryArea =
+		getActiveComplementaryArea('core/edit-site');
+
+	if ('edit-site/global-styles' === activeComplementaryArea) {
 		return <Component />;
 	}
 
