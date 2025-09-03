@@ -287,11 +287,14 @@ if (! \class_exists(Coordinator::class)) {
         private function globRecursiveComposerJson( string $root): array {
             $result   = [];
             $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS)
+                new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS)
             );
             foreach ($iterator as $file) {
                 if ($file->isFile() && $file->getFilename() === 'composer.json') {
-                    $result[] = $file->getPathname();
+					
+					// Get real path in case of symlinks.
+					$realpath = realpath($file->getPathname());
+                    $result[] = $realpath ? $realpath: $file->getPathname();
                 }
             }
             return $result;
