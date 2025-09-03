@@ -78,7 +78,6 @@ describe('Icon Libraries → Check all icons are available and search data', () 
 		const config = libraryConfigs[libraryId];
 
 		if (!config) {
-			cy.log(`⚠️  No configuration found for library: ${libraryId}`);
 			return;
 		}
 

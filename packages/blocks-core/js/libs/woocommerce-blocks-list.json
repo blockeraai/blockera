@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 175,
+		"total": 176,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 72,
+		"not-supported": 73,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -791,6 +791,10 @@
 		{
 			"name": "woocommerce/add-to-cart-with-options-grouped-product-item-label",
 			"title": "Add to Cart with Options Grouped Product Item Label"
+		},
+		{
+			"name": "woocommerce/payment-method-icons",
+			"title": "Payment Method Icons"
 		}
 	]
 }

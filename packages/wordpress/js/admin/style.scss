@@ -16,12 +16,8 @@ body.wp-admin[class*="blockera_page_"] {
 	--card-padding: 25px;
 	--card-bg-color: #ffffff;
 	font-size: 16px;
-	margin: 0;
+	margin: 0 0 0 -20px;
 	padding: 0;
-	position: absolute;
-	left: -20px;
-	top: 0;
-	right: 0;
 	background: #eaecee;
 }
 

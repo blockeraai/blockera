@@ -22,9 +22,9 @@ describe('Compatibility with Blocksy Theme', () => {
 		cy.get('.blockera-component-popover')
 			.last()
 			.within(() => {
-				cy.contains('Blocksy Colors').should('exist');
+				cy.contains('Blocksy Color Variables').should('exist');
 
-				cy.contains('Blocksy Color Palette').should('exist');
+				cy.contains('Color Variables').should('exist');
 			});
 
 		// select variable
@@ -76,7 +76,7 @@ describe('Compatibility with Blocksy Theme', () => {
 		cy.get('.blockera-component-popover')
 			.last()
 			.within(() => {
-				cy.contains('Blocksy Width Size').should('exist');
+				cy.contains('Blocksy Width Size Variables').should('exist');
 			});
 
 		// select variable
