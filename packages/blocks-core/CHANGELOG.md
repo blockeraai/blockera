@@ -5,6 +5,7 @@
 
 ### Automated Tests
 - Added E2E tests to check icon functionality of `Categories` block.
+- Added E2E tests to check icon functionality of `Page List` block.
 
 ## 1.4.0 (2025-05-19)
 

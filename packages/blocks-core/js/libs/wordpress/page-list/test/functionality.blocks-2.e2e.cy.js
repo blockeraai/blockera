@@ -25,6 +25,13 @@ describe('Page List Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		// Icon extension is active
+		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaLabel('Choose Icon…').should('be.visible');
+
+		// switch back to style tab
+		cy.getByDataTest('style-tab').click();
+
 		cy.checkBlockCardItems([
 			'normal',
 			'hover',
