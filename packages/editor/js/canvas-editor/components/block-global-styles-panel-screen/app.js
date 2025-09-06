@@ -84,14 +84,14 @@ export default function App(props: Object): MixedElement {
 		user: userConfig,
 		setUserConfig,
 	} = useGlobalStylesContext();
-
 	const initialStyles = useMemo(() => {
 		return mergeObject(
-			mergedConfig?.styles?.blocks[name] || {},
-			prepareBlockeraDefaultAttributesValues(defaultStyles)
+			prepareBlockeraDefaultAttributesValues(defaultStyles),
+			mergedConfig?.styles?.blocks[name] || {}
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mergedConfig, defaultStyles]);
+
 	const [styles, setStyles] = useState(initialStyles);
 
 	// let prefixParts = [];
