@@ -13,6 +13,7 @@ import {
 	iconSearch,
 	isValidIcon,
 	getIconLibraryIcons,
+	NativeIconLibrariesList,
 	createStandardIconObject,
 } from '@blockera/icons';
 
@@ -65,7 +66,7 @@ export function getLibraryIcons({
 
 	const iconType = applyFilters(
 		'blockera.controls.iconControl.utils.getLibraryIcons.type',
-		['search-2', 'faregular', 'fasolid', 'fabrands'].includes(library)
+		['search-2', ...NativeIconLibrariesList].includes(library)
 			? 'native'
 			: 'none',
 		library
