@@ -20,3 +20,6 @@ add_filter(
     9e2,
     2
 );
+
+// Filter to register the global styles post type arguments.
+add_filter('register_wp_global_styles_post_type_args', 'blockera_register_wp_global_styles_post_type_args');

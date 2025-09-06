@@ -84,6 +84,7 @@ export default function App(props: Object): MixedElement {
 		user: userConfig,
 		setUserConfig,
 	} = useGlobalStylesContext();
+
 	const initialStyles = useMemo(() => {
 		return mergeObject(
 			prepareBlockeraDefaultAttributesValues(defaultStyles),

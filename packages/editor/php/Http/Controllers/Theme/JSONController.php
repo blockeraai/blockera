@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\Setup\Http\Controllers\Theme;
+namespace Blockera\Editor\Http\Controllers\Theme;
 
 use Blockera\Http\RestController;
 

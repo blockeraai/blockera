@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added support for WordPress block theme developers to include Blockera features in their theme.json files, making it easier to customize and configure themes with Blockera's capabilities.
+
 ### Improvements
 - Improved block features organization for better code structure and easier maintenance.
 - Added support for third-party developers to extend and customize the style engine filters.

@@ -7,7 +7,8 @@
 			"Blockera\\Editor\\": "php/"
 		},
 		"files": [
-			"php/helpers.php"
+			"php/helpers.php",
+			"php/rest-api-helpers.php"
 		]
 	},
 	"autoload-dev": {

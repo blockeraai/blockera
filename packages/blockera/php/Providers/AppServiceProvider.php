@@ -286,6 +286,8 @@ class AppServiceProvider extends ServiceProvider {
 		}
 
 		$this->loadTextDomain();
+
+		blockera_editor_hooks();
 	}
 
 	/**
