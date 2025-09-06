@@ -57,29 +57,6 @@ class SavePost {
      */
     public function save( int $postId, \WP_Post $post, array $supports): void {
 
-		$fm = $this->app->make(FeaturesManager::class);
-
-		// Get dom parser.
-		$dom_parser = $fm->getApp()->dom_parser::str_get_html($post->post_content);
-		$icons      = $dom_parser->find('span.blockera-icon');
-
-		$previous_content = $post->post_content;
-
-		if (! empty($icons)) {
-			foreach ($icons as $icon) {
-				$post->post_content = str_replace($icon->outerhtml, '', $post->post_content);
-			}
-		}
-
-		if ( $previous_content !== $post->post_content ) {
-			wp_update_post(
-                [
-					'ID' => $postId,
-					'post_content' => $post->post_content,
-				]
-            );
-		}
-
         $parsed_blocks = parse_blocks($post->post_content);
 
         // Excluding empty post content.
