@@ -36,7 +36,12 @@ export const blockeraEditorFilters = () => {
 			for (const featureId in featuresLibrary) {
 				const featureObject = registeredFeatures[featureId];
 
-				if (!featureObject || !featureObject?.isEnabled()) {
+				if (
+					!featureObject ||
+					!block?.blockFeatures ||
+					!block?.blockFeatures[featureId] ||
+					!featureObject?.isEnabled()
+				) {
 					continue;
 				}
 
