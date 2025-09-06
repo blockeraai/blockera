@@ -37,7 +37,9 @@ describe(
 
 			cy.get('.block-editor-list-view-tree').within(() => {
 				// Open blocks menu
-				cy.get('[aria-label="Add block"]').first().click();
+				cy.get('[aria-label="Add block"]')
+					.first()
+					.click({ force: true });
 			});
 
 			// search for home link
@@ -46,10 +48,12 @@ describe(
 			);
 
 			// insert
-			cy.get('button.editor-block-list-item-home-link').last().click();
+			cy.get('button.editor-block-list-item-home-link')
+				.last()
+				.click({ force: true });
 
 			// switch to target block
-			cy.getBlock('core/home-link').last().click();
+			cy.getBlock('core/home-link').last().click({ force: true });
 
 			// Block supported is active
 			cy.get('.blockera-extension-block-card').should('be.visible');
@@ -62,6 +66,13 @@ describe(
 					).should('be.visible');
 				}
 			);
+
+			// Icon extension is active
+			cy.getByDataTest('settings-tab').click();
+			cy.getByAriaLabel('Choose Icon…').should('be.visible');
+
+			// switch back to style tab
+			cy.getByDataTest('style-tab').click();
 
 			//
 			// 1. Inner blocks existence
