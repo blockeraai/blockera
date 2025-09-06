@@ -35,13 +35,7 @@ export const icon = {
 							force: false,
 							priority: 10,
 						},
-						availableBlockStates: {
-							...generalInnerBlockStates,
-							focus: {
-								...generalInnerBlockStates.focus,
-								force: true,
-							},
-						},
+						availableBlockStates: generalInnerBlockStates,
 					},
 				},
 			},
