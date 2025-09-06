@@ -14,7 +14,7 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/elements/icon' => [
-					'root' => ' .wp-block-button__link:before',
+					'root' => 'svg',
 				],
 				'htmlEditable' => [
 					'root' => '.wp-block-button .wp-block-button__link',
