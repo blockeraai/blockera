@@ -33,55 +33,89 @@ export const blockeraEditorFilters = () => {
 			const { getFeatures } = select(STORE_NAME);
 			const registeredFeatures = getFeatures();
 
+			const blockFeatures = block?.blockFeatures || {};
+
 			for (const featureId in featuresLibrary) {
 				const featureObject = registeredFeatures[featureId];
 
-				if (
-					!featureObject ||
-					!block?.blockFeatures ||
-					!block?.blockFeatures[featureId] ||
-					!featureObject?.isEnabled()
-				) {
+				if (!featureObject || !featureObject?.isEnabled()) {
 					continue;
 				}
 
-				const { block: blockFeature } = featuresStack[featureId];
+				const { block: blockFeaturesSchema = {} } =
+					featuresStack[featureId];
+
+				const featureBlockConfig = mergeObject(
+					blockFeaturesSchema,
+					blockFeatures[featureId]
+				);
+
+				if (!featureObject.isEnabled(featureBlockConfig.status)) {
+					continue;
+				}
 
 				if (
-					blockFeature?.status &&
-					blockFeature?.inspector?.status &&
-					blockFeature?.inspector?.innerBlocks?.status &&
+					featureBlockConfig?.status &&
+					featureBlockConfig?.inspector?.status &&
+					featureBlockConfig?.inspector?.innerBlocks?.status &&
 					0 <
-						Object.keys(blockFeature?.inspector?.innerBlocks?.items)
-							.length
+						Object.keys(
+							featureBlockConfig?.inspector?.innerBlocks?.items
+						).length
 				) {
-					for (const innerBlockId in blockFeature?.inspector
+					for (const innerBlockId in featureBlockConfig?.inspector
 						?.innerBlocks?.items) {
-						const innerBlockObject =
-							blockFeature?.inspector?.innerBlocks?.items[
+						const innerBlockObject = mergeObject(
+							blockFeaturesSchema?.inspector?.innerBlocks?.items[
 								innerBlockId
-							];
+							] || {},
+							blockFeatures[featureId]?.inspector?.innerBlocks
+								?.items[innerBlockId] || {},
+							{
+								forceUpdated: blockFeatures[featureId]
+									?.inspector?.innerBlocks?.items[
+									innerBlockId
+								]?.availableBlockStates
+									? ['availableBlockStates']
+									: [],
+							}
+						);
 
 						blockeraInnerBlocks[innerBlockId] = mergeObject(
 							blockeraInnerBlocks[innerBlockId] ?? {},
-							innerBlockObject
+							innerBlockObject,
+							{
+								forceUpdated: ['availableBlockStates'],
+							}
 						);
 					}
 				}
 
 				if (
-					blockFeature?.status &&
-					blockFeature?.inspector?.blockStates?.status &&
+					featureBlockConfig?.status &&
+					featureBlockConfig?.inspector?.blockStates?.status &&
 					0 <
-						Object.keys(blockFeature?.inspector?.blockStates?.items)
-							.length
+						Object.keys(
+							featureBlockConfig?.inspector?.blockStates?.items
+						).length
 				) {
-					for (const blockStateId in blockFeature?.inspector
+					for (const blockStateId in featureBlockConfig?.inspector
 						?.blockStates?.items) {
-						const blockStateObject =
-							blockFeature?.inspector?.blockStates?.items[
+						const blockStateObject = mergeObject(
+							blockFeaturesSchema?.inspector?.blockStates?.items[
 								blockStateId
-							];
+							] || {},
+							blockFeatures[featureId]?.inspector?.blockStates
+								?.items[blockStateId] || {},
+							{
+								forceUpdated: blockFeatures[featureId]
+									?.inspector?.blockStates?.items[
+									blockStateId
+								]?.availableBlockStates
+									? ['availableBlockStates']
+									: [],
+							}
+						);
 
 						availableBlockStates[blockStateId] = mergeObject(
 							availableBlockStates[blockStateId] ?? {},
