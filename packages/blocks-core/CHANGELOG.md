@@ -8,6 +8,7 @@
 - Added E2E tests to check icon functionality of `Page List` block.
 - Added E2E tests to check icon functionality of `Home Link` block.
 - Added E2E tests to check icon functionality of `Navigation Link` block.
+- Added E2E tests to check icon functionality of `Navigation Submenu` block.
 
 ## 1.4.0 (2025-05-19)
 
