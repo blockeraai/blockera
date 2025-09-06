@@ -203,14 +203,17 @@ export function BlockCard({
 								className={extensionInnerClassNames(
 									'block-card__title__input',
 									{
+										'inside-block-inspector':
+											insideBlockInspector,
 										'is-edited': name && name !== title,
 									}
 								)}
 							>
 								<EditableBlockName
-									placeholder={title}
 									content={name}
+									placeholder={title}
 									onChange={handleTitleChange}
+									contentEditable={insideBlockInspector}
 								/>
 							</Flex>
 

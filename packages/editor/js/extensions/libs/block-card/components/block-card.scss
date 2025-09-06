@@ -91,28 +91,32 @@
 					text-overflow: ellipsis;
 				}
 
-				span:hover,
-				span:focus,
-				&.is-edited span {
+				&.inside-block-inspector span:hover,
+				&.inside-block-inspector span:focus,
+				&.inside-block-inspector.is-edited span {
 					background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%) !important;
 					box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%) !important;
 					color: var(--blockera-controls-primary-color) !important;
 				}
 
-				span:focus:focus {
+				&.inside-block-inspector span:focus:focus {
 					box-shadow: 0 0 0 2px var(--blockera-controls-primary-color) !important;
 				}
 
-				span::placeholder {
+				&.inside-block-inspector span::placeholder {
 					opacity: 1;
 					font-weight: 500;
 					color: #1e1e1e;
 				}
 
-				span:empty::before {
+				&.inside-block-inspector span:empty::before {
 					content: attr(placeholder);
 					font-weight: 500;
 					color: #1e1e1e;
+				}
+
+				span.block-type {
+					color: var(--blockera-controls-primary-color) !important;
 				}
 			}
 
