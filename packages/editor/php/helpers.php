@@ -321,19 +321,53 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			
 			// Handle && pattern.
 			if ( str_starts_with( $selector, '&&' ) ) {
-				$selector              = $root_first_part . substr( $selector, 2 );
-				$formatted_selectors[] = $selector . 
-					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
+				$selector        = $root_first_part . substr( $selector, 2 );
+				$merged_selector = $selector . 
+					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol($pseudo_class) . $pseudo_class : '' );
+
+				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector'));
 			} else {
-				$formatted_selectors[] = $root . 
+				$merged_selector = blockera_process_ampersand_selector_char($selector) .
+					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
+
+				$origin_selector = $root . 
 					( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
 					( $needs_space ? ' ' : '' ) .
-					blockera_process_ampersand_selector_char($selector) .
-					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
+					$merged_selector;
+
+				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'origin_selector'));
 			}
 		}
 
 		return implode(', ', $formatted_selectors);
+	}
+}
+
+if (! function_exists('blockera_create_standard_selector')) {
+	/**
+	 * Create standard css selector.
+	 * If selector ends with a pseudo-class (:before or :after), combine it with the current state pseudo-class to create a valid CSS selector.
+     * For example, an icon selector like "any:before" becomes "any:hover:before".
+	 *
+	 * @param string $selector The selector to create standard css selector.
+	 * @param string $pseudo_state The pseudo state to create standard css selector.
+	 * @param array  $args The extra arguments to create standard css selector. contains 'merged_selector' and 'origin_selector'.
+	 *
+	 * @return string the standard css selector.
+	 */
+	function blockera_create_standard_selector( string $selector, string $pseudo_state, array $args): string {
+
+		$merged_selector = $args['merged_selector'] ?? '';
+		$origin_selector = $args['origin_selector'] ?? $args['merged_selector'] ?? '';
+
+		if (preg_match('/:(before|after)$/', $selector, $matches)) {
+			$pseudo_element = $matches[1];
+			$new_selector   = $selector . blockera_get_state_symbol( $pseudo_state ) . $pseudo_state . blockera_get_state_symbol( $pseudo_element ) . $pseudo_element;
+			
+			return str_replace($merged_selector, $new_selector, $origin_selector);
+		}
+
+		return $origin_selector;
 	}
 }
 
@@ -475,7 +509,7 @@ if ( ! function_exists( 'blockera_append_css_selector_suffix' ) ) {
 	 * Concat block css selector with suffix.
 	 *
 	 * @param string $selector The css selector.
-	 * @param string $suffix   The suffix string to concat with recieved selector.
+	 * @param string $suffix   The suffix string to concat with received selector.
 	 *
 	 * @return string the css selector.
 	 */
@@ -504,9 +538,9 @@ if ( ! function_exists( 'blockera_append_css_selector_suffix' ) ) {
 if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 
 	/**
-	 * Appending blockera block root css selector inside recieved selector.
+	 * Appending blockera block root css selector inside received selector.
 	 *
-	 * @param string $selector The recieved block css selector.
+	 * @param string $selector The received block css selector.
 	 * @param string $root     The root block css selector.
 	 * @param array  $args     The arguments {@type string $block -name The block type name}.
 	 *
