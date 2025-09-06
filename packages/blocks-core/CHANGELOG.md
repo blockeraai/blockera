@@ -3,6 +3,9 @@
 ### New Features
 - Added a way for blocks to get a unique ID automatically, making them work more smoothly.
 
+### Automated Tests
+- Added E2E tests to check icon functionality of `Categories` block.
+
 ## 1.4.0 (2025-05-19)
 
 ### New Features
