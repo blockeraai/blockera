@@ -400,6 +400,93 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Returns the style variations defined by the theme.
+	 *
+	 * @since 6.0.0
+	 * @since 6.2.0 Returns parent theme variations if theme is a child.
+	 * @since 6.6.0 Added configurable scope parameter to allow filtering
+	 *              theme.json partial files by the scope to which they
+	 *              can be applied e.g. theme vs block etc.
+	 *              Added basic caching for read theme.json partial files.
+	 *
+	 * @param string $scope The scope or type of style variation to retrieve e.g. theme, block etc.
+	 * @return array
+	 */
+	public static function get_style_variations( $scope = 'theme' ) {
+		$variation_files    = array();
+		$variations         = array();
+		$base_directory     = get_stylesheet_directory() . '/styles';
+		$template_directory = get_template_directory() . '/styles';
+		if ( is_dir( $base_directory ) ) {
+			$variation_files = static::recursively_iterate_json( $base_directory );
+		}
+		if ( is_dir( $template_directory ) && $template_directory !== $base_directory ) {
+			$variation_files_parent = static::recursively_iterate_json( $template_directory );
+			// If the child and parent variation file basename are the same, only include the child theme's.
+			foreach ( $variation_files_parent as $parent_path => $parent ) {
+				foreach ( $variation_files as $child_path => $child ) {
+					if ( basename( $parent_path ) === basename( $child_path ) ) {
+						unset( $variation_files_parent[ $parent_path ] );
+					}
+				}
+			}
+			$variation_files = array_merge( $variation_files, $variation_files_parent );
+		}
+		ksort( $variation_files );
+		foreach ( $variation_files as $path => $file ) {
+			$decoded_file = self::read_json_file( $path );
+			if ( is_array( $decoded_file ) && static::style_variation_has_scope( $decoded_file, $scope ) ) {
+				$translated = static::translate( $decoded_file, wp_get_theme()->get( 'TextDomain' ) );
+				$variation  = ( new JSON( $translated ) )->get_raw_data();
+				if ( empty( $variation['title'] ) ) {
+					$variation['title'] = basename( $path, '.json' );
+				}
+				$variations[] = $variation;
+			}
+		}
+		return $variations;
+	}
+
+	/**
+	 * Determines if a supplied style variation matches the provided scope.
+	 *
+	 * For backwards compatibility, if a variation does not define any scope
+	 * related property, e.g. `blockTypes`, it is assumed to be a theme style
+	 * variation.
+	 *
+	 * @since 6.6.0
+	 *
+	 * @param array  $variation Theme.json shaped style variation object.
+	 * @param string $scope     Scope to check e.g. theme, block etc.
+	 * @return boolean
+	 */
+	private static function style_variation_has_scope( $variation, $scope ) {
+		if ( 'block' === $scope ) {
+			return isset( $variation['blockTypes'] );
+		}
+
+		if ( 'theme' === $scope ) {
+			return ! isset( $variation['blockTypes'] );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns an array of all nested JSON files within a given directory.
+	 *
+	 * @since 6.2.0
+	 *
+	 * @param string $dir The directory to recursively iterate and list files of.
+	 * @return array The merged array.
+	 */
+	private static function recursively_iterate_json( $dir ) {
+		$nested_files      = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $dir ) );
+		$nested_json_files = iterator_to_array( new \RegexIterator( $nested_files, '/^.+\.json$/i', \RecursiveRegexIterator::GET_MATCH ) );
+		return $nested_json_files;
+	}
+
+	/**
 	 * When given an array, this will remove any keys with the name `//`.
 	 *
 	 * @since 6.1.0
