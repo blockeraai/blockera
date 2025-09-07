@@ -13,6 +13,9 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'blockera/elements/icon' => [
+					'root' => 'li.cat-item::before',
+				],
 				'blockera/elements/term-item' => [
 					'root' => 'li.cat-item > a',
 				],
