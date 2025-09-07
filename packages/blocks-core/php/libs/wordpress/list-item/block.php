@@ -13,6 +13,9 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'blockera/elements/icon'        => [
+					'root' => '&:before',
+				],
 				'blockera/elements/link'        => [
 					'root' => 'a:not(.wp-element-button)',
 				],
