@@ -10,18 +10,18 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
-import { default as featuresLibrary } from '../../features';
-import { default as featuresStack } from '../../features-config';
-
-/**
- * Internal dependencies
- */
-import { STORE_NAME } from '../store/constants';
 import {
 	getIconAttributes,
 	addIconClassName,
 	removeIconClassName,
 } from '@blockera/feature-icon';
+
+/**
+ * Internal dependencies
+ */
+import { STORE_NAME } from '../store/constants';
+import { default as featuresLibrary } from '../../features';
+import { default as featuresStack } from '../../features-config';
 
 export const blockeraEditorFilters = () => {
 	addFilter(
