@@ -60,7 +60,7 @@ export const createStandardSelector = ({
 }) => {
 	const matches = selector.match(/:(before|after)$/);
 
-	if (matches) {
+	if (matches && !isNormalState(state)) {
 		const detectedPseudoElement = matches[1];
 
 		const newSelectorSection = selector.replace(

@@ -325,7 +325,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 				$merged_selector = $selector . 
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol($pseudo_class) . $pseudo_class : '' );
 
-				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector'));
+				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'has_pseudo'));
 			} else {
 				$merged_selector = blockera_process_ampersand_selector_char($selector) .
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
@@ -335,7 +335,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 					( $needs_space ? ' ' : '' ) .
 					$merged_selector;
 
-				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'origin_selector'));
+				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'origin_selector', 'has_pseudo'));
 			}
 		}
 
@@ -357,11 +357,13 @@ if (! function_exists('blockera_create_standard_selector')) {
 	 */
 	function blockera_create_standard_selector( string $selector, string $pseudo_state, array $args): string {
 
+		$has_pseudo      = $args['has_pseudo'] ?? false;
 		$merged_selector = $args['merged_selector'] ?? '';
 		$origin_selector = $args['origin_selector'] ?? $args['merged_selector'] ?? '';
 
-		if (preg_match('/:(before|after)$/', $selector, $matches)) {
+		if (preg_match('/:(before|after)$/', $selector, $matches) && $has_pseudo) {
 			$pseudo_element = $matches[1];
+			$selector       = str_replace($matches[0], '', $selector);
 			$new_selector   = $selector . blockera_get_state_symbol( $pseudo_state ) . $pseudo_state . blockera_get_state_symbol( $pseudo_element ) . $pseudo_element;
 			
 			return str_replace($merged_selector, $new_selector, $origin_selector);
