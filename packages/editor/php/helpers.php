@@ -363,7 +363,7 @@ if (! function_exists('blockera_create_standard_selector')) {
 
 		if (preg_match('/:(before|after)$/', $selector, $matches) && $has_pseudo) {
 			$pseudo_element = $matches[1];
-			$selector       = str_replace($matches[0], '', $selector);
+			$selector       = blockera_process_ampersand_selector_char(str_replace($matches[0], '', $selector));
 			$new_selector   = $selector . blockera_get_state_symbol( $pseudo_state ) . $pseudo_state . blockera_get_state_symbol( $pseudo_element ) . $pseudo_element;
 			
 			return str_replace($merged_selector, $new_selector, $origin_selector);
