@@ -22,8 +22,8 @@ export const icon = {
 				items: {
 					'elements/icon': {
 						name: 'elements/icon',
-						label: __('Icons', 'blockera'),
-						description: __('All icon elements.', 'blockera'),
+						label: __('Icon', 'blockera'),
+						description: __('The icon element.', 'blockera'),
 						icon: (
 							<Icon
 								icon="star-filled"

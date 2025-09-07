@@ -822,6 +822,26 @@ export const IconExtension: ComponentType<{
 										/>
 									</Button>
 								</Flex>
+
+								<Button
+									showTooltip={true}
+									tooltipPosition="top"
+									label={__(
+										'Advanced Icon Settings',
+										'blockera'
+									)}
+									size="extra-small"
+									style={{
+										padding: '4px 8px',
+										width: 'auto',
+										height: 'var(--blockera-controls-input-height)',
+									}}
+									onClick={() => {
+										// open the icon inner block settings
+									}}
+								>
+									{__('Advanced Settings', 'blockera')}
+								</Button>
 							</BaseControl>
 						)}
 					</>
