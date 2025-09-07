@@ -22,6 +22,9 @@ return array_merge(
 				'blockera/states/marker'        => [
 					'root' => ' li::marker',
 				],
+				'blockera/elements/icon' => [
+					'root' => 'li::before',
+				],
 			],
 		),
 		'supports' => array_merge(
