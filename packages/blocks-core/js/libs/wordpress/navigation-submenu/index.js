@@ -116,4 +116,9 @@ export const NavigationSubmenu: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	selectors: {
+		'blockera/elements/icon': {
+			root: ' a.wp-block-navigation-item__content .wp-block-navigation-item__label:before',
+		},
+	},
 };
