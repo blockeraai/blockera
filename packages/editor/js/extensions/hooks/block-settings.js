@@ -18,6 +18,7 @@ import {
 } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -198,6 +199,19 @@ function mergeBlockSettings(
 		allowedPostTypes = [],
 	}: extraArguments
 ): Object {
+	/**
+	 * Filters the additional settings of extension.
+	 *
+	 * External developers can use this filter to modify the additional settings of extension.
+	 *
+	 * @since 1.12.2
+	 */
+	additional = applyFilters(
+		'blockera.editor.extensions.mergeBlockSettings',
+		additional,
+		settings
+	);
+
 	if (!isEnabledExtension(additional)) {
 		return settings;
 	}

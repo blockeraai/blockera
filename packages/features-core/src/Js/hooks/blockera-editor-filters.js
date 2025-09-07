@@ -3,85 +3,137 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
+import { select, dispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
-import { default as featuresLibrary } from '../../features';
-import { default as featuresStack } from '../../features-config';
-
-/**
- * Internal dependencies
- */
-import { STORE_NAME } from '../store/constants';
 import {
 	getIconAttributes,
 	addIconClassName,
 	removeIconClassName,
 } from '@blockera/feature-icon';
 
+/**
+ * Internal dependencies
+ */
+import { STORE_NAME } from '../store/constants';
+import { default as featuresLibrary } from '../../features';
+import { default as featuresStack } from '../../features-config';
+
+const MapProcessedBlockSettings: Map<string, boolean> = new Map();
+
 export const blockeraEditorFilters = () => {
 	addFilter(
-		'blockera.blocks.register',
+		'blockera.editor.extensions.mergeBlockSettings',
 		'blockera.features.prepareInnerBlockTypes',
-		(block) => {
+		(block, originalBlock) => {
+			if (MapProcessedBlockSettings.has(block.targetBlock)) {
+				return block;
+			}
+
+			MapProcessedBlockSettings.set(block.targetBlock, true);
+
 			const blockeraInnerBlocks = block?.blockeraInnerBlocks || {};
 			const availableBlockStates = block?.availableBlockStates || {};
 			const { getFeatures } = select(STORE_NAME);
 			const registeredFeatures = getFeatures();
+			const { updateBlockExtensions } = dispatch('blockera/extensions');
+
+			const blockFeatures = mergeObject(
+				block?.blockFeatures || {},
+				originalBlock?.supports?.blockFeatures || {}
+			);
 
 			for (const featureId in featuresLibrary) {
 				const featureObject = registeredFeatures[featureId];
 
 				if (
 					!featureObject ||
-					!block?.blockFeatures ||
-					!block?.blockFeatures[featureId] ||
-					!featureObject?.isEnabled()
+					!featureObject?.isEnabled() ||
+					!blockFeatures ||
+					!blockFeatures[featureId] ||
+					!blockFeatures[featureId]?.status
 				) {
 					continue;
 				}
 
-				const { block: blockFeature } = featuresStack[featureId];
+				const { block: blockFeaturesSchema = {} } =
+					featuresStack[featureId];
+
+				const featureBlockConfig = mergeObject(
+					blockFeaturesSchema,
+					blockFeatures[featureId]
+				);
+
+				if (!featureObject.isEnabled(featureBlockConfig.status)) {
+					continue;
+				}
 
 				if (
-					blockFeature?.status &&
-					blockFeature?.inspector?.status &&
-					blockFeature?.inspector?.innerBlocks?.status &&
+					featureBlockConfig?.status &&
+					featureBlockConfig?.inspector?.status &&
+					featureBlockConfig?.inspector?.innerBlocks?.status &&
 					0 <
-						Object.keys(blockFeature?.inspector?.innerBlocks?.items)
-							.length
+						Object.keys(
+							featureBlockConfig?.inspector?.innerBlocks?.items
+						).length
 				) {
-					for (const innerBlockId in blockFeature?.inspector
+					for (const innerBlockId in featureBlockConfig?.inspector
 						?.innerBlocks?.items) {
-						const innerBlockObject =
-							blockFeature?.inspector?.innerBlocks?.items[
+						const innerBlockObject = mergeObject(
+							blockFeaturesSchema?.inspector?.innerBlocks?.items[
 								innerBlockId
-							];
+							] || {},
+							blockFeatures[featureId]?.inspector?.innerBlocks
+								?.items[innerBlockId] || {},
+							{
+								forceUpdated: blockFeatures[featureId]
+									?.inspector?.innerBlocks?.items[
+									innerBlockId
+								]?.availableBlockStates
+									? ['availableBlockStates']
+									: [],
+							}
+						);
 
 						blockeraInnerBlocks[innerBlockId] = mergeObject(
 							blockeraInnerBlocks[innerBlockId] ?? {},
-							innerBlockObject
+							innerBlockObject,
+							{
+								forceUpdated: ['availableBlockStates'],
+							}
 						);
 					}
 				}
 
 				if (
-					blockFeature?.status &&
-					blockFeature?.inspector?.blockStates?.status &&
+					featureBlockConfig?.status &&
+					featureBlockConfig?.inspector?.blockStates?.status &&
 					0 <
-						Object.keys(blockFeature?.inspector?.blockStates?.items)
-							.length
+						Object.keys(
+							featureBlockConfig?.inspector?.blockStates?.items
+						).length
 				) {
-					for (const blockStateId in blockFeature?.inspector
+					for (const blockStateId in featureBlockConfig?.inspector
 						?.blockStates?.items) {
-						const blockStateObject =
-							blockFeature?.inspector?.blockStates?.items[
+						const blockStateObject = mergeObject(
+							blockFeaturesSchema?.inspector?.blockStates?.items[
 								blockStateId
-							];
+							] || {},
+							blockFeatures[featureId]?.inspector?.blockStates
+								?.items[blockStateId] || {},
+							{
+								forceUpdated: blockFeatures[featureId]
+									?.inspector?.blockStates?.items[
+									blockStateId
+								]?.availableBlockStates
+									? ['availableBlockStates']
+									: [],
+							}
+						);
 
 						availableBlockStates[blockStateId] = mergeObject(
 							availableBlockStates[blockStateId] ?? {},
@@ -91,7 +143,7 @@ export const blockeraEditorFilters = () => {
 				}
 			}
 
-			return mergeObject(block, {
+			const updatedBlockExtension = mergeObject(block, {
 				...(Object.keys(blockeraInnerBlocks)?.length
 					? { blockeraInnerBlocks }
 					: {}),
@@ -99,6 +151,10 @@ export const blockeraEditorFilters = () => {
 					? { availableBlockStates }
 					: {}),
 			});
+
+			updateBlockExtensions(updatedBlockExtension);
+
+			return updatedBlockExtension;
 		}
 	);
 

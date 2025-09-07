@@ -4,6 +4,13 @@
 - Added a way for blocks to get a unique ID automatically, making them work more smoothly.
 - Added support for blocks to better integrate with the block editor's features.
 
+### Automated Tests
+- Added E2E tests to check icon functionality of `Categories` block.
+- Added E2E tests to check icon functionality of `Page List` block.
+- Added E2E tests to check icon functionality of `Home Link` block.
+- Added E2E tests to check icon functionality of `Navigation Link` block.
+- Added E2E tests to check icon functionality of `Navigation Submenu` block.
+
 ## 1.4.0 (2025-05-19)
 
 ### New Features

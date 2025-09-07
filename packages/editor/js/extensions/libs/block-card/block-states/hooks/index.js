@@ -64,7 +64,9 @@ export const useBlockStates = ({
 
 	if (isEmpty(states)) {
 		// Sets initialize states ...
-		states = savedBlockStates;
+		if (Object.keys(availableStates)?.length) {
+			states = savedBlockStates;
+		}
 	} else {
 		states = mergeObject(savedBlockStates, states);
 	}

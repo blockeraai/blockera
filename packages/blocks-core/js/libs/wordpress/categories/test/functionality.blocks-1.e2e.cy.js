@@ -31,6 +31,13 @@ describe('Categories Block', () => {
 			'elements/list-item',
 		]);
 
+		// Icon extension is active
+		cy.getByDataTest('settings-tab').click();
+		cy.getByAriaLabel('Choose Icon…').should('be.visible');
+
+		// switch back to style tab
+		cy.getByDataTest('style-tab').click();
+
 		//
 		// 1. Edit Block
 		//

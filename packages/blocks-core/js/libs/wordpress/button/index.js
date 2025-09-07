@@ -37,4 +37,9 @@ export const Button: BlockType = {
 		},
 		visited: sharedBlockStates.visited,
 	},
+	selectors: {
+		'blockera/elements/icon': {
+			root: '.wp-block-button__link:before',
+		},
+	},
 };

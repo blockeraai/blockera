@@ -22,8 +22,8 @@ export const icon = {
 				items: {
 					'elements/icon': {
 						name: 'elements/icon',
-						label: __('Icons', 'blockera'),
-						description: __('All icon elements.', 'blockera'),
+						label: __('Icon', 'blockera'),
+						description: __('The icon element.', 'blockera'),
 						icon: (
 							<Icon
 								icon="star-filled"
@@ -35,13 +35,7 @@ export const icon = {
 							force: false,
 							priority: 10,
 						},
-						availableBlockStates: {
-							...generalInnerBlockStates,
-							focus: {
-								...generalInnerBlockStates.focus,
-								force: true,
-							},
-						},
+						availableBlockStates: generalInnerBlockStates,
 					},
 				},
 			},

@@ -7,6 +7,7 @@
 - Improved block features organization for better code structure and easier maintenance.
 - Added support for third-party developers to extend and customize the style engine filters.
 - Made the application faster by identifying and fixing slow areas of the code 🚀.
+- Improved how styles are applied to blocks to ensure they follow web standards and work reliably across different browsers.
 
 ## 2.0.1 (2025-07-22)
 

@@ -42,6 +42,10 @@ const StatesManager: ComponentType<StatesManagerProps> = memo(
 		defaultRepeaterItemValue,
 		getDynamicDefaultRepeaterItem,
 	}: StatesManagerProps): Element<any> => {
+		if (Object.keys(states)?.length < 1) {
+			return null;
+		}
+
 		return (
 			<ControlContextProvider
 				value={contextValue}

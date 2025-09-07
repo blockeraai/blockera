@@ -6,6 +6,7 @@
 - Box spacing control improved to detect lock for horizontal or vertical based on value for blocks.
 - Border control design and UX improvement.
 - Border radius control design and UX improvement.
+- Tooltip control design improvement.
 
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.

@@ -12,6 +12,7 @@ import {
 	createRoot,
 	useCallback,
 } from '@wordpress/element';
+import { dispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -83,6 +84,8 @@ export const IconExtension: ComponentType<{
 		attributes,
 		useBlockSection,
 	}: TIconProps): MixedElement => {
+		const { changeExtensionCurrentBlock: setCurrentBlock } =
+			dispatch('blockera/extensions') || {};
 		const { initialOpen, onToggle } = useBlockSection('iconConfig');
 
 		// Initialize state with current values
@@ -822,6 +825,27 @@ export const IconExtension: ComponentType<{
 										/>
 									</Button>
 								</Flex>
+
+								<Button
+									showTooltip={true}
+									tooltipPosition="top"
+									label={__(
+										'Advanced Icon Settings',
+										'blockera'
+									)}
+									size="extra-small"
+									style={{
+										padding: '4px 8px',
+										width: 'auto',
+										height: 'var(--blockera-controls-input-height)',
+									}}
+									onClick={() => {
+										// open the icon inner block settings
+										setCurrentBlock('elements/icon');
+									}}
+								>
+									{__('Advanced Settings', 'blockera')}
+								</Button>
 							</BaseControl>
 						)}
 					</>

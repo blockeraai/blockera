@@ -52,7 +52,7 @@ describe('List Block → Icon Feature', () => {
 		cy.setColorControlValue('Color', '666666');
 
 		//
-		// 1.1. Right icon
+		// 1.2. List item icon
 		//
 		cy.getBlock('core/list-item').eq(1).click();
 		cy.getByDataTest('settings-tab').click();
@@ -77,6 +77,35 @@ describe('List Block → Icon Feature', () => {
 
 		// set color
 		cy.setColorControlValue('Color', 'FF6060');
+
+		//
+		// 1.3. List item icon
+		//
+		cy.getBlock('core/list-item').last().click();
+		cy.getByDataTest('settings-tab').click();
+
+		// set icon
+		cy.getByAriaLabel('Choose Icon…').click();
+		cy.get('[data-wp-component="Popover"]')
+			.last()
+			.within(() => {
+				cy.getByAriaLabel('block-meta Icon').click();
+			});
+
+		// switch by advanced icon settings button from extension
+		cy.getByAriaLabel('Advanced Icon Settings').click();
+
+		cy.get('.blockera-extension-block-card.block-card--inner-block').should(
+			'exist'
+		);
+
+		cy.getByDataTest('style-tab').click();
+
+		cy.setColorControlValue('BG Color', '0065FE');
+
+		//
+		// 1.4. Check visual
+		//
 
 		// select group block
 		cy.getByAriaLabel('Select List').click();
