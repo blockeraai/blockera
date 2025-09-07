@@ -3,8 +3,8 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
+import { select, dispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -23,22 +23,40 @@ import { STORE_NAME } from '../store/constants';
 import { default as featuresLibrary } from '../../features';
 import { default as featuresStack } from '../../features-config';
 
+const MapProcessedBlockSettings: Map<string, boolean> = new Map();
+
 export const blockeraEditorFilters = () => {
 	addFilter(
-		'blockera.blocks.register',
+		'blockera.editor.extensions.mergeBlockSettings',
 		'blockera.features.prepareInnerBlockTypes',
-		(block) => {
+		(block, originalBlock) => {
+			if (MapProcessedBlockSettings.has(block.targetBlock)) {
+				return block;
+			}
+
+			MapProcessedBlockSettings.set(block.targetBlock, true);
+
 			const blockeraInnerBlocks = block?.blockeraInnerBlocks || {};
 			const availableBlockStates = block?.availableBlockStates || {};
 			const { getFeatures } = select(STORE_NAME);
 			const registeredFeatures = getFeatures();
+			const { updateBlockExtensions } = dispatch('blockera/extensions');
 
-			const blockFeatures = block?.blockFeatures || {};
+			const blockFeatures = mergeObject(
+				block?.blockFeatures || {},
+				originalBlock?.supports?.blockFeatures || {}
+			);
 
 			for (const featureId in featuresLibrary) {
 				const featureObject = registeredFeatures[featureId];
 
-				if (!featureObject || !featureObject?.isEnabled()) {
+				if (
+					!featureObject ||
+					!featureObject?.isEnabled() ||
+					!blockFeatures ||
+					!blockFeatures[featureId] ||
+					!blockFeatures[featureId]?.status
+				) {
 					continue;
 				}
 
@@ -125,7 +143,7 @@ export const blockeraEditorFilters = () => {
 				}
 			}
 
-			return mergeObject(block, {
+			const updatedBlockExtension = mergeObject(block, {
 				...(Object.keys(blockeraInnerBlocks)?.length
 					? { blockeraInnerBlocks }
 					: {}),
@@ -133,6 +151,10 @@ export const blockeraEditorFilters = () => {
 					? { availableBlockStates }
 					: {}),
 			});
+
+			updateBlockExtensions(updatedBlockExtension);
+
+			return updatedBlockExtension;
 		}
 	);
 

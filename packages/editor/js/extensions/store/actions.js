@@ -32,6 +32,28 @@ export function addBlockExtensions(
 }
 
 /**
+ * Returns an action object used in signalling that block types have been updated.
+ * Ignored from documentation as the recommended usage for this action through registerBlockType from @wordpress/blocks.
+ *
+ * @ignore
+ *
+ * @param {blockeraBlockExtensionType|blockeraBlockExtensionType[]} blockExtension Object or array of objects representing blocks to added.
+ *
+ *
+ * @return {Object} Action object.
+ */
+export function updateBlockExtensions(
+	blockExtension: Array<Object> | Object
+): Object {
+	return {
+		type: 'UPDATE_BLOCK_EXTENSIONS',
+		blockExtensions: Array.isArray(blockExtension)
+			? blockExtension
+			: [blockExtension],
+	};
+}
+
+/**
  * Signals that the passed block extension's settings should be stored in the state.
  *
  * @param {blockeraBlockExtensionType} blockExtension Unprocessed block extension settings.

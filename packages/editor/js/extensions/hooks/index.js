@@ -15,6 +15,8 @@ export {
 	BlockEditContextProvider,
 } from './context';
 
+const MappedProcessedRegisterBlockType: Map<string, boolean> = new Map();
+
 export default function applyHooks(beforeApplyHooks: () => void) {
 	if ('function' === typeof beforeApplyHooks) {
 		beforeApplyHooks();
@@ -23,8 +25,14 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 	addFilter(
 		'blocks.registerBlockType',
 		'blockera.editor.extensions.withAdvancedControlsAttributes',
-		(settings: Object, name: Object): Object =>
-			withBlockSettings(settings, name, {
+		(settings: Object, name: Object): Object => {
+			if (MappedProcessedRegisterBlockType.has(name)) {
+				return settings;
+			}
+
+			MappedProcessedRegisterBlockType.set(name, true);
+
+			return withBlockSettings(settings, name, {
 				currentUser: applyFilters(
 					'blockera.editor.extensions.currentUser',
 					{
@@ -43,7 +51,8 @@ export default function applyHooks(beforeApplyHooks: () => void) {
 					'blockera.editor.extensions.hooks.withBlockSettings.allowedPostTypes',
 					[]
 				),
-			}),
+			});
+		},
 		9e2
 	);
 }
