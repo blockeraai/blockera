@@ -31,7 +31,7 @@ return array_merge(
 					'root' => '.wp-block-navigation-item__content',
 				],
 				'blockera/elements/icon' => [
-					'root' => ' .wp-block-home-link__content .blockera-icon',
+					'root' => 'svg',
 				],
 				'htmlEditable' => [
 					'root' => ' .wp-block-home-link__content',

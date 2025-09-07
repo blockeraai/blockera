@@ -41,4 +41,9 @@ export const HomeLink: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	selectors: {
+		'blockera/elements/icon': {
+			root: '.wp-block-home-link__label:before',
+		},
+	},
 };
