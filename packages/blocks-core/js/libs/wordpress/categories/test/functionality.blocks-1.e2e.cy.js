@@ -31,19 +31,41 @@ describe('Categories Block', () => {
 			'elements/list-item',
 		]);
 
-		// Icon extension is active
-		cy.getByDataTest('settings-tab').click();
-		cy.getByAriaLabel('Choose Icon…').should('be.visible');
-
-		// switch back to style tab
-		cy.getByDataTest('style-tab').click();
-
 		//
 		// 1. Edit Block
 		//
 
 		//
-		// 1.0. Block Styles
+		// 1.0. Check icon extension & inner block
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.getByAriaLabel('Choose Icon…').click();
+
+		cy.get('[data-wp-component="Popover"]')
+			.last()
+			.within(() => {
+				cy.getByAriaLabel('add-card Icon').click();
+			});
+
+		// switch by advanced icon settings button from extension
+		cy.getByAriaLabel('Advanced Icon Settings').click();
+
+		cy.get('.blockera-extension-block-card.block-card--inner-block')
+			.should('exist')
+			.within(() => {
+				// the block states should not be available
+				cy.getByDataId('normal').should('not.exist');
+				cy.getByDataId('hover').should('not.exist');
+			});
+
+		setParentBlock();
+
+		// switch back to style tab
+		cy.getByDataTest('style-tab').click();
+
+		//
+		// 1.1. Block Styles
 		//
 		cy.getBlock('core/categories').should(
 			'not.have.css',
@@ -62,14 +84,14 @@ describe('Categories Block', () => {
 		);
 
 		//
-		// 1.1. Term item inner block
+		// 1.2. Term item inner block
 		//
 		setInnerBlock('elements/term-item');
 
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active'], true);
 
 		//
-		// 1.1.1. BG color
+		// 1.2.1. BG color
 		//
 		cy.setColorControlValue('BG Color', 'cccccc ');
 
@@ -86,7 +108,7 @@ describe('Categories Block', () => {
 			});
 
 		//
-		// 1.2. Term parent inner block
+		// 1.3. Term parent inner block
 		//
 		setParentBlock();
 		setInnerBlock('elements/list-item');
@@ -94,7 +116,7 @@ describe('Categories Block', () => {
 		cy.checkBlockCardItems(['normal', 'hover', 'marker'], true);
 
 		//
-		// 1.2.1. BG color
+		// 1.3.1. BG color
 		//
 		cy.setColorControlValue('BG Color', 'eeeeee ');
 
@@ -120,6 +142,7 @@ describe('Categories Block', () => {
 		cy.get('.block-editor-block-inspector').within(() => {
 			cy.get('.components-tools-panel-header')
 				.contains('Settings')
+				.scrollIntoView()
 				.should('be.visible');
 		});
 
