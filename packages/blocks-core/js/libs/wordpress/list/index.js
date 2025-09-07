@@ -46,4 +46,18 @@ export const List: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	blockFeatures: {
+		icon: {
+			status: true,
+			inspector: {
+				innerBlocks: {
+					items: {
+						'elements/icon': {
+							availableBlockStates: {},
+						},
+					},
+				},
+			},
+		},
+	},
 };
