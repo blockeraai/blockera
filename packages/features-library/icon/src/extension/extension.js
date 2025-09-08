@@ -274,6 +274,7 @@ export const IconExtension: ComponentType<{
 							encodeIcon,
 							setIconState,
 							handleOnChangeAttributes,
+							effectiveItems,
 						}
 					);
 				} else {
