@@ -118,6 +118,10 @@ export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
 				Component: ExtensionComponent,
 				extensionProps: {
 					...rest,
+					block: {
+						...props.block,
+						activeBlockVariation,
+					},
 					[feature.extensionSupportId]:
 						settings[feature.extensionSupportId],
 				},
