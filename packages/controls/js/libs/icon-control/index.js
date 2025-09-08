@@ -192,6 +192,21 @@ function IconControl({
 			);
 		}
 
+		if (
+			!isUndefined(currentIcon?.renderedIcon) &&
+			!isEmpty(currentIcon?.renderedIcon) &&
+			isString(currentIcon?.renderedIcon)
+		) {
+			return (
+				<img
+					src={
+						'data:image/svg+xml;base64,' + currentIcon.renderedIcon
+					}
+					alt={'custom svg icon'}
+				/>
+			);
+		}
+
 		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
 			return <Icon {...currentIcon} iconSize={50} />;
 		}
