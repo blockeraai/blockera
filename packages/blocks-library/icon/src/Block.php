@@ -114,11 +114,6 @@ class Block implements BlockInterface {
 			$svg = $dom->findOne('svg');
 
 			if ($svg) {
-				$size  = $block['attrs']['blockeraIconSize']['value'] ?? '1.33em';
-				$color = $block['attrs']['blockeraIconColor']['value'] ?? 'currentColor';
-
-				$style = 'width:' . $size . ';height:' . $size . ';fill:' . $color . ';color:' . $color . ';';
-
 				$transform = '';
 
 				// Handle icon rotate.
@@ -140,10 +135,10 @@ class Block implements BlockInterface {
 				}
 
 				if (! empty($transform)) {
-					$style .= 'transform:' . $transform . ';';
+					$transform .= 'transform:' . $transform . ';';
 				}
 
-				$svg->style = $style;
+				$svg->style = $transform;
 			}
 		}
 

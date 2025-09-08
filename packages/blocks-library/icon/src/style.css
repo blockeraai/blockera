@@ -1,7 +1,5 @@
 .wp-block-image.blockera-is-icon-block .wp-block-image__icon {
 	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
 	align-items: center;
 }
 
@@ -10,4 +8,5 @@
 	max-width: 100%;
 	height: auto;
 	vertical-align: bottom;
+	fill: var(--blockera--icon--color, currentColor);
 }

@@ -31,7 +31,7 @@ import {
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { extensionClassNames } from '@blockera/classnames';
-import { isEquals, hasSameProps, addAngle } from '@blockera/utils';
+import { isEquals, hasSameProps, addAngle, isEmpty } from '@blockera/utils';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
 import { generateExtensionId } from '@blockera/editor/js/extensions/libs/utils';
 import { default as EditorFeatureWrapper } from '@blockera/editor/js/components/editor-feature-wrapper';
@@ -132,7 +132,7 @@ export const IconExtension: ComponentType<{
 		}, []);
 
 		const renderIcon = useCallback(
-			async (newValue) => {
+			async (newValue, effectiveItems = {}) => {
 				const iconWrapper = document.createElement('div');
 				iconWrapper.style.display = 'none';
 				iconWrapper.classList.add('blockera-temp-icon-wrapper');
@@ -156,8 +156,14 @@ export const IconExtension: ComponentType<{
 				iconRoot.render(
 					<Icon
 						style={{
-							color: iconState.iconColor,
-							fill: iconState.iconColor,
+							color: effectiveItems?.blockeraIconColor?.value
+								? effectiveItems?.blockeraIconColor?.value
+								: iconState.iconColor?.value ||
+								  iconState.iconColor,
+							fill: effectiveItems?.blockeraIconColor?.value
+								? effectiveItems?.blockeraIconColor?.value
+								: iconState.iconColor?.value ||
+								  iconState.iconColor,
 							width: iconState.iconSize
 								? iconState.iconSize
 								: '1em',
@@ -190,7 +196,10 @@ export const IconExtension: ComponentType<{
 						const renderedIcon = encodeIcon(
 							iconNode?.innerHTML || ''
 						);
-						resolve(renderedIcon);
+						resolve({
+							encodedIcon: renderedIcon,
+							icon: iconNode?.innerHTML,
+						});
 						iconRoot.unmount();
 						iconWrapper.remove();
 					}, 1);
@@ -200,27 +209,57 @@ export const IconExtension: ComponentType<{
 		);
 
 		const handleOnChangeAttributesIcon = useCallback(
-			async (newValue, ref) => {
-				if (isEquals(iconState.icon, newValue)) {
+			async (newValue, ref, effectiveItems = {}) => {
+				if (
+					isEquals(iconState.icon, newValue) &&
+					isEmpty(effectiveItems)
+				) {
 					return;
 				}
 
 				if (newValue.icon) {
-					const renderedIcon = await renderIcon(newValue);
-
-					handleOnChangeAttributes(
-						'blockeraIcon',
-						{
-							...newValue,
-							renderedIcon,
-						},
-						{ ref }
+					const renderedIcon = await renderIcon(
+						newValue,
+						effectiveItems
 					);
+
+					if (blockName === 'blockera/icon') {
+						handleOnChangeAttributes(
+							'blockeraIcon',
+							{
+								...newValue,
+								renderedIcon: renderedIcon.encodedIcon,
+							},
+							{
+								ref,
+								effectiveItems: {
+									...effectiveItems,
+									url:
+										'data:image/svg+xml;utf8,' +
+										renderedIcon.icon,
+									alt: sprintf(
+										// translators: %s is the icon name.
+										__('%s Icon', 'blockera'),
+										newValue.icon
+									),
+								},
+							}
+						);
+					} else {
+						handleOnChangeAttributes(
+							'blockeraIcon',
+							{
+								...newValue,
+								renderedIcon: renderedIcon.encodedIcon,
+							},
+							{ ref, effectiveItems }
+						);
+					}
 
 					setIconState((prev) => ({
 						...prev,
 						icon: {
-							renderedIcon,
+							renderedIcon: renderedIcon.encodedIcon,
 							icon: newValue.icon,
 							library: newValue.library,
 							uploadSVG: newValue.uploadSVG,
@@ -252,10 +291,17 @@ export const IconExtension: ComponentType<{
 
 					handleOnChangeAttributes('blockeraIcon', emptyIcon, {
 						ref,
+						effectiveItems,
 					});
 				}
 			},
-			[iconState, renderIcon, encodeIcon, handleOnChangeAttributes]
+			[
+				blockName,
+				iconState,
+				renderIcon,
+				encodeIcon,
+				handleOnChangeAttributes,
+			]
 		);
 
 		// Icon is not available in inner blocks.
@@ -556,6 +602,7 @@ export const IconExtension: ComponentType<{
 												newValue,
 												{ ref }
 											);
+
 											setIconState((prev) => ({
 												...prev,
 												iconSize: newValue,
@@ -609,15 +656,28 @@ export const IconExtension: ComponentType<{
 												?.default?.value
 										}
 										onChange={(newValue, ref) => {
-											handleOnChangeAttributes(
-												'blockeraIconColor',
-												newValue,
-												{ ref }
-											);
 											setIconState((prev) => ({
 												...prev,
 												iconColor: newValue,
 											}));
+
+											if (blockName === 'blockera/icon') {
+												handleOnChangeAttributesIcon(
+													iconState.icon,
+													ref,
+													{
+														blockeraIconColor: {
+															value: newValue,
+														},
+													}
+												);
+											} else {
+												handleOnChangeAttributes(
+													'blockeraIconColor',
+													newValue,
+													{ ref }
+												);
+											}
 										}}
 										{...extensionProps.blockeraIconColor}
 									/>
@@ -846,6 +906,12 @@ export const IconExtension: ComponentType<{
 											setCurrentBlock('elements/icon');
 										}}
 									>
+										<Icon
+											library="wp"
+											icon="chevron-down"
+											iconSize="20"
+										/>
+
 										{__('Advanced Settings', 'blockera')}
 									</Button>
 								)}

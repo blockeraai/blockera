@@ -36,19 +36,14 @@ export const icon = {
 						'PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgc3R5bGU9IndpZHRoOiA1MHB4OyBoZWlnaHQ6IDUwcHg7IG1hcmdpbi1yaWdodDogNXB4OyI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNOS43MDYgOC42NDZhLjI1LjI1IDAgMDEtLjE4OC4xMzdsLTQuNjI2LjY3MmEuMjUuMjUgMCAwMC0uMTM5LjQyN2wzLjM0OCAzLjI2MmEuMjUuMjUgMCAwMS4wNzIuMjIybC0uNzkgNC42MDdhLjI1LjI1IDAgMDAuMzYyLjI2NGw0LjEzOC0yLjE3NmEuMjUuMjUgMCAwMS4yMzMgMGw0LjEzNyAyLjE3NWEuMjUuMjUgMCAwMC4zNjMtLjI2M2wtLjc5LTQuNjA3YS4yNS4yNSAwIDAxLjA3Mi0uMjIybDMuMzQ3LTMuMjYyYS4yNS4yNSAwIDAwLS4xMzktLjQyN2wtNC42MjYtLjY3MmEuMjUuMjUgMCAwMS0uMTg4LS4xMzdsLTIuMDY5LTQuMTkyYS4yNS4yNSAwIDAwLS40NDggMEw5LjcwNiA4LjY0NnpNMTIgNy4zOWwtLjk0OCAxLjkyMWExLjc1IDEuNzUgMCAwMS0xLjMxNy45NTdsLTIuMTIuMzA4IDEuNTM0IDEuNDk1Yy40MTIuNDAyLjYuOTgyLjUwMyAxLjU1bC0uMzYyIDIuMTEgMS44OTYtLjk5N2ExLjc1IDEuNzUgMCAwMTEuNjI5IDBsMS44OTUuOTk3LS4zNjItMi4xMWExLjc1IDEuNzUgMCAwMS41MDQtMS41NWwxLjUzMy0xLjQ5NS0yLjEyLS4zMDhhMS43NSAxLjc1IDAgMDEtMS4zMTctLjk1N0wxMiA3LjM5eiIgY2xpcC1ydWxlPSJldmVub2RkIj48L3BhdGg+PC9zdmc+',
 				},
 			},
-			blockeraIconPosition: {
-				value: 'start',
+			blockeraWidth: {
+				value: '100px',
 			},
-			blockeraIconGap: {
-				value: '5px',
-			},
-			blockeraIconSize: {
-				value: '50px',
-			},
+			align: 'center',
 		},
 		category: 'media',
 		scope: ['inserter'],
-		isActive: (blockAttributes: Object) => {
+		isActive: (blockAttributes: Object): boolean => {
 			return (
 				blockAttributes &&
 				blockAttributes?.className?.includes('blockera-is-icon-block')
@@ -63,6 +58,11 @@ export const icon = {
 						force: false,
 					},
 					blockeraIconGap: {
+						status: false,
+						show: false,
+						force: false,
+					},
+					blockeraIconSize: {
 						status: false,
 						show: false,
 						force: false,

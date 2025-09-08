@@ -17,6 +17,9 @@ import { Icon } from '@blockera/icons';
 import type { BlockType } from '../../type';
 import sharedInnerBlocks from '../inners/shared';
 
+const imageSelector =
+	'.wp-block-image img,.wp-block-image svg,.wp-block-image .wp-block-image__crop-area,.wp-block-image .components-placeholder,.wp-block-image .block-editor-media-placeholder::before,.wp-block-image .components-resizable-box__container::before';
+
 export const Image: BlockType = {
 	name: 'blockeraImage',
 	targetBlock: 'core/image',
@@ -46,6 +49,29 @@ export const Image: BlockType = {
 		icon: {
 			status: true,
 			context: ['blockera/icon'],
+		},
+	},
+	selectors: {
+		blockeraWidth: {
+			root: imageSelector,
+		},
+		blockeraMinWidth: {
+			root: imageSelector,
+		},
+		blockeraMaxWidth: {
+			root: imageSelector,
+		},
+		blockeraHeight: {
+			root: imageSelector,
+		},
+		blockeraMinHeight: {
+			root: imageSelector,
+		},
+		blockeraMaxHeight: {
+			root: imageSelector,
+		},
+		blockeraRatio: {
+			root: imageSelector,
 		},
 	},
 };
