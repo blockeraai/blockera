@@ -128,7 +128,10 @@ export const IconExtension: ComponentType<{
 		]);
 
 		const encodeIcon = useCallback((iconHTML: string) => {
-			return btoa(unescape(encodeURIComponent(iconHTML)));
+			return {
+				encodedIcon: btoa(unescape(encodeURIComponent(iconHTML))),
+				icon: encodeURIComponent(iconHTML),
+			};
 		}, []);
 
 		const renderIcon = useCallback(
@@ -196,10 +199,7 @@ export const IconExtension: ComponentType<{
 						const renderedIcon = encodeIcon(
 							iconNode?.innerHTML || ''
 						);
-						resolve({
-							encodedIcon: renderedIcon,
-							icon: iconNode?.innerHTML,
-						});
+						resolve(renderedIcon);
 						iconRoot.unmount();
 						iconWrapper.remove();
 					}, 1);
