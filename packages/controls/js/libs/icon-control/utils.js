@@ -139,3 +139,292 @@ export function getLibraryIcons({
 
 	return iconsStack;
 }
+
+/**
+ * Sanitize the raw string and make sure it's an SVG.
+ *
+ * @param {string} rawString The media object for the selected SVG file.
+ * @return { string }        The sanitized svg string.
+ */
+export function sanitizeRawSVGString(rawString) {
+	if (!rawString || typeof rawString !== 'string') {
+		return '';
+	}
+
+	// Remove any potential CDATA sections that might contain malicious content
+	const cleanedString = rawString.replace(/<!\[CDATA\[.*?\]\]>/gs, '');
+
+	let svgDoc;
+	try {
+		svgDoc = new window.DOMParser().parseFromString(
+			cleanedString,
+			'image/svg+xml'
+		);
+	} catch (error) {
+		// Handle parsing errors
+		console.warn('SVG parsing error:', error);
+		return '';
+	}
+
+	// Check for parsing errors
+	if (svgDoc.querySelector('parsererror')) {
+		console.warn('SVG contains parsing errors');
+		return '';
+	}
+
+	// Validate that we have exactly one SVG element
+	if (
+		svgDoc.childNodes.length !== 1 ||
+		svgDoc.firstChild.nodeName !== 'svg'
+	) {
+		console.warn('Invalid SVG structure: expected single SVG element');
+		return '';
+	}
+
+	const svgElement = svgDoc.documentElement;
+
+	// Sanitize the SVG element
+	sanitizeSVGElement(svgElement);
+
+	// Serialize the sanitized SVG
+	let svgString = '';
+	try {
+		svgString = new window.XMLSerializer().serializeToString(svgElement);
+	} catch (error) {
+		console.warn('SVG serialization error:', error);
+		return '';
+	}
+
+	return svgString;
+}
+
+/**
+ * Sanitize SVG element by removing dangerous content and attributes.
+ *
+ * @param {Element} svgElement The SVG element to sanitize.
+ */
+function sanitizeSVGElement(svgElement) {
+	// Define whitelist of allowed SVG elements
+	const allowedElements = new Set([
+		'svg',
+		'g',
+		'defs',
+		'symbol',
+		'use',
+		'marker',
+		'pattern',
+		'clipPath',
+		'mask',
+		'linearGradient',
+		'radialGradient',
+		'stop',
+		'path',
+		'rect',
+		'circle',
+		'ellipse',
+		'line',
+		'polyline',
+		'polygon',
+		'text',
+		'tspan',
+		'textPath',
+		'image',
+		'switch',
+		'foreignObject',
+		'title',
+		'desc',
+		'metadata',
+		'style',
+	]);
+
+	// Define whitelist of allowed attributes
+	const allowedAttributes = new Set([
+		// Core attributes
+		'id',
+		'class',
+		'style',
+		'transform',
+		'opacity',
+		'fill',
+		'stroke',
+		'stroke-width',
+		'stroke-linecap',
+		'stroke-linejoin',
+		'stroke-dasharray',
+		'stroke-dashoffset',
+		'fill-opacity',
+		'stroke-opacity',
+		'fill-rule',
+		'stroke-miterlimit',
+		'vector-effect',
+		'clip-path',
+		'mask',
+		'filter',
+		'display',
+		'visibility',
+		'pointer-events',
+		'cursor',
+		'color',
+		'color-interpolation',
+		'color-interpolation-filters',
+		'color-rendering',
+		'image-rendering',
+		'shape-rendering',
+		'text-rendering',
+
+		// SVG specific attributes
+		'viewBox',
+		'preserveAspectRatio',
+		'width',
+		'height',
+		'x',
+		'y',
+		'cx',
+		'cy',
+		'r',
+		'rx',
+		'ry',
+		'x1',
+		'y1',
+		'x2',
+		'y2',
+		'points',
+		'd',
+		'pathLength',
+		'font-family',
+		'font-size',
+		'font-weight',
+		'font-style',
+		'text-anchor',
+		'dominant-baseline',
+		'baseline-shift',
+		'letter-spacing',
+		'word-spacing',
+		'text-decoration',
+		'text-transform',
+		'writing-mode',
+		'glyph-orientation-horizontal',
+		'glyph-orientation-vertical',
+		'unicode-bidi',
+		'direction',
+		'text-rendering',
+
+		// Gradient attributes
+		'gradientUnits',
+		'gradientTransform',
+		'spreadMethod',
+		'xlink:href',
+		'offset',
+		'stop-color',
+		'stop-opacity',
+
+		// Pattern attributes
+		'patternUnits',
+		'patternContentUnits',
+		'patternTransform',
+
+		// Clip and mask attributes
+		'clipPathUnits',
+		'maskUnits',
+		'maskContentUnits',
+
+		// Image attributes
+		'href',
+		'xlink:href',
+		'preserveAspectRatio',
+
+		// Animation attributes (basic support)
+		'begin',
+		'dur',
+		'end',
+		'repeatCount',
+		'repeatDur',
+		'restart',
+		'fill',
+		'calcMode',
+		'values',
+		'keyTimes',
+		'keySplines',
+		'from',
+		'to',
+		'by',
+		'attributeName',
+		'attributeType',
+		'additive',
+		'accumulate',
+	]);
+
+	// Remove dangerous elements and attributes
+	removeDangerousContent(svgElement, allowedElements, allowedAttributes);
+}
+
+/**
+ * Recursively remove dangerous content from SVG elements.
+ *
+ * @param {Element} element The element to process.
+ * @param {Set} allowedElements Set of allowed element names.
+ * @param {Set} allowedAttributes Set of allowed attribute names.
+ */
+function removeDangerousContent(element, allowedElements, allowedAttributes) {
+	// Remove dangerous elements
+	const dangerousElements = [
+		'script',
+		'object',
+		'embed',
+		'iframe',
+		'link',
+		'meta',
+	];
+	dangerousElements.forEach((tagName) => {
+		const elements = element.querySelectorAll(tagName);
+		elements.forEach((el) => el.remove());
+	});
+
+	// Process all child elements
+	const children = Array.from(element.children);
+	children.forEach((child) => {
+		// Remove element if not in whitelist
+		if (!allowedElements.has(child.tagName.toLowerCase())) {
+			child.remove();
+			return;
+		}
+
+		// Remove dangerous attributes
+		const attributes = Array.from(child.attributes);
+		attributes.forEach((attr) => {
+			const attrName = attr.name.toLowerCase();
+
+			// Remove event handlers and dangerous attributes
+			if (
+				attrName.startsWith('on') || // Event handlers (onclick, onload, etc.)
+				attrName.startsWith('javascript:') || // JavaScript URLs
+				attrName.includes('expression') || // CSS expressions
+				(attrName === 'href' &&
+					attr.value.toLowerCase().startsWith('javascript:')) || // JavaScript href
+				!allowedAttributes.has(attrName) // Not in whitelist
+			) {
+				child.removeAttribute(attr.name);
+			}
+		});
+
+		// Recursively process child elements
+		removeDangerousContent(child, allowedElements, allowedAttributes);
+	});
+
+	// Remove dangerous attributes from the current element
+	const attributes = Array.from(element.attributes);
+	attributes.forEach((attr) => {
+		const attrName = attr.name.toLowerCase();
+
+		if (
+			attrName.startsWith('on') || // Event handlers
+			attrName.startsWith('javascript:') || // JavaScript URLs
+			attrName.includes('expression') || // CSS expressions
+			(attrName === 'href' &&
+				attr.value.toLowerCase().startsWith('javascript:')) || // JavaScript href
+			!allowedAttributes.has(attrName) // Not in whitelist
+		) {
+			element.removeAttribute(attr.name);
+		}
+	});
+}

@@ -17,6 +17,7 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import {
+	isString,
 	isEmpty,
 	isUndefined,
 	hasSameProps,
@@ -33,6 +34,7 @@ import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
 import { parseUploadedMediaAndSetIcon } from './helpers';
+import { sanitizeRawSVGString } from './utils';
 import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
@@ -155,7 +157,7 @@ function IconControl({
 					url: media.url,
 					updated: '',
 				},
-				svgString,
+				svgString: sanitizeRawSVGString(svgString),
 			});
 		});
 	};
