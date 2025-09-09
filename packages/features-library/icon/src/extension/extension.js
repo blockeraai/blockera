@@ -127,12 +127,58 @@ export const IconExtension: ComponentType<{
 			iconFlipVertical,
 		]);
 
-		const encodeIcon = useCallback((iconHTML: string) => {
-			return {
-				encodedIcon: btoa(unescape(encodeURIComponent(iconHTML))),
-				icon: encodeURIComponent(iconHTML),
-			};
-		}, []);
+		const encodeIcon = useCallback(
+			(iconHTML: string, hasInlineStyle = false) => {
+				if (hasInlineStyle) {
+					// Apply inline styles based on iconState
+					const iconDoc = new DOMParser().parseFromString(
+						iconHTML,
+						'text/html'
+					);
+					const svgElement = iconDoc.querySelector('svg');
+
+					if (svgElement) {
+						// Apply transformations
+						let transform = '';
+						if (iconState.iconRotate) {
+							transform += `rotate(${iconState.iconRotate}deg) `;
+						}
+						if (iconState.iconFlipHorizontal) {
+							transform += 'scaleX(-1) ';
+						}
+						if (iconState.iconFlipVertical) {
+							transform += 'scaleY(-1) ';
+						}
+						if (transform) {
+							svgElement.style.transform = transform.trim();
+						}
+
+						// Apply size
+						if (iconState.iconSize) {
+							svgElement.style.width = iconState.iconSize;
+							svgElement.style.height = iconState.iconSize;
+						}
+
+						// Apply color
+						if (iconState.iconColor) {
+							const color =
+								iconState.iconColor.value ||
+								iconState.iconColor;
+							svgElement.style.color = color;
+							svgElement.style.fill = color;
+						}
+
+						iconHTML = svgElement.outerHTML;
+					}
+				}
+
+				return {
+					encodedIcon: btoa(unescape(encodeURIComponent(iconHTML))),
+					icon: encodeURIComponent(iconHTML),
+				};
+			},
+			[iconState]
+		);
 
 		const renderIcon = useCallback(
 			async (newValue, effectiveItems = {}) => {
@@ -265,8 +311,8 @@ export const IconExtension: ComponentType<{
 							newValue,
 							encodeIcon,
 							setIconState,
-							handleOnChangeAttributes,
 							effectiveItems,
+							handleOnChangeAttributes,
 						}
 					);
 				} else if (blockName === 'blockera/icon') {
