@@ -330,7 +330,7 @@ class EditBlockHTML implements EditableBlockHTML {
             'renderedIcon' => $renderedIcon,
         ] = $value;
 
-        if (! empty($renderedIcon)) {
+		if (! empty($renderedIcon)) {
             $renderedIcon = base64_decode($renderedIcon);
 
             preg_match('/\w"\w/', $renderedIcon, $matches);

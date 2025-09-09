@@ -174,24 +174,8 @@ function IconControl({
 	};
 
 	function renderIcon() {
-		if (
-			!isUndefined(currentIcon?.svgString) &&
-			!isEmpty(currentIcon?.svgString)
-		) {
-			return (
-				<div
-					dangerouslySetInnerHTML={{ __html: currentIcon.svgString }}
-				/>
-			);
-		}
-
-		if (
-			!isUndefined(currentIcon?.uploadSVG?.url) &&
-			!isEmpty(currentIcon?.uploadSVG?.url)
-		) {
-			return (
-				<img src={currentIcon.uploadSVG.url} alt={'custom svg icon'} />
-			);
+		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
+			return <Icon {...currentIcon} iconSize={50} />;
 		}
 
 		if (
@@ -200,17 +184,25 @@ function IconControl({
 			isString(currentIcon?.renderedIcon)
 		) {
 			return (
-				<img
-					src={
-						'data:image/svg+xml;base64,' + currentIcon.renderedIcon
-					}
-					alt={'custom svg icon'}
+				<div
+					dangerouslySetInnerHTML={{
+						__html: atob(currentIcon.renderedIcon),
+					}}
 				/>
 			);
 		}
 
-		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
-			return <Icon {...currentIcon} iconSize={50} />;
+		// if custom uploaded svg icon url is available
+		if (
+			!isUndefined(currentIcon?.uploadSVG?.url) &&
+			!isEmpty(currentIcon?.uploadSVG?.url)
+		) {
+			return (
+				<img
+					src={currentIcon.uploadSVG.url}
+					alt={currentIcon?.uploadSVG?.title || 'custom svg icon'}
+				/>
+			);
 		}
 
 		return null;
