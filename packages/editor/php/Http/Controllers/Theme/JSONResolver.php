@@ -2,6 +2,8 @@
 
 namespace Blockera\Editor\Http\Controllers\Theme;
 
+use Blockera\Utils\Utils;
+
 class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 	/**
@@ -108,6 +110,33 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Register the block style variations from the user data.
+	 *
+	 * @param array $decoded_data The decoded data.
+	 * @return void
+	 */
+	private static function register_block_style_variations_from_user_data( $decoded_data ): void {
+		if ( isset( $decoded_data['styles']['blocks'] ) ) {
+			foreach ( $decoded_data['styles']['blocks'] as $block_name => $block_data ) {
+				if ( isset( $block_data['variations'] ) ) {
+					foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
+						if ( \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
+							continue;
+						}
+
+						$variation = [
+							'name' => $variation_name,
+							'label' => Utils::pascalCaseWithSpace($variation_name),
+						];
+
+						register_block_style($block_name, $variation);
+					}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Get the user data.
 	 *
 	 * This is a copy of the parent function with the addition of the Gutenberg resolver.
@@ -125,6 +154,8 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		if ( array_key_exists( 'post_content', $user_cpt ) ) {
 			$decoded_data = json_decode( $user_cpt['post_content'], true );
 
+			static::register_block_style_variations_from_user_data( $decoded_data );
+			
 			$json_decoding_error = json_last_error();
 			if ( JSON_ERROR_NONE !== $json_decoding_error ) {
 				wp_trigger_error( __METHOD__, 'Error when decoding a theme.json schema for user data. ' . json_last_error_msg() );
