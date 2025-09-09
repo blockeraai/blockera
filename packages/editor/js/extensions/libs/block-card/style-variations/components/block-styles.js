@@ -12,17 +12,16 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
-	Button,
-	SearchControl,
 	Flex,
-	ControlContextProvider,
 	Popover,
+	SearchControl,
+	ControlContextProvider,
 } from '@blockera/controls';
 import {
 	classNames,
 	componentClassNames,
 	componentInnerClassNames,
-	controlInnerClassNames,
+	// controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -37,11 +36,17 @@ import { default as BlockStylesPreviewPanel } from './preview-panel';
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({
 	styles,
+	blockName,
 	onHoverClassName = () => {},
 	context = 'inspector-controls',
+	currentBlockStyleVariation,
+	setCurrentBlockStyleVariation,
 	handleOnChangeBlockStyles = () => {},
 }: {
+	blockName: string,
 	context?: 'global-styles-panel' | 'inspector-controls',
+	currentBlockStyleVariation: Object,
+	setCurrentBlockStyleVariation: (style: Object) => void,
 	styles: {
 		onSelect: (style: string) => void,
 		stylesToRender: Array<Object>,
@@ -82,6 +87,7 @@ function BlockStyles({
 		if ('function' === typeof handleOnChangeBlockStyles) {
 			handleOnChangeBlockStyles(blockStyles);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);
 
 	// Update ref whenever hoveredStyle changes
@@ -164,7 +170,11 @@ function BlockStyles({
 		setBlockStyles(filtered);
 	};
 
-	const Component = ({ inGlobalStylesPanel }) => (
+	const Component = ({
+		inGlobalStylesPanel = false,
+	}: {
+		inGlobalStylesPanel?: boolean,
+	}) => (
 		<Flex
 			className={componentClassNames('block-styles')}
 			direction="column"
@@ -202,22 +212,12 @@ function BlockStyles({
 			) : (
 				<>
 					<Flex direction="column" gap="10px">
-						{!inGlobalStylesPanel && (
-							<h2
-								className={classNames(
-									'blockera-block-styles-category'
-								)}
-							>
-								{__('Style Variations', 'blockera')}
-							</h2>
-						)}
-
-						{inGlobalStylesPanel && (
-							<AddNewStyleButton
-								blockStyles={blockStyles}
-								setBlockStyles={setBlockStyles}
-							/>
-						)}
+						<AddNewStyleButton
+							blockName={blockName}
+							label={__('Style Variations', 'blockera')}
+							blockStyles={blockStyles}
+							setBlockStyles={setBlockStyles}
+						/>
 
 						<div
 							className={componentInnerClassNames(
@@ -229,9 +229,16 @@ function BlockStyles({
 									key={style.name}
 									style={style}
 									activeStyle={activeStyle}
+									inGlobalStylesPanel={inGlobalStylesPanel}
 									onSelectStylePreview={onSelectStylePreview}
 									setCurrentPreviewStyle={
 										setCurrentPreviewStyle
+									}
+									currentBlockStyleVariation={
+										currentBlockStyleVariation
+									}
+									setCurrentBlockStyleVariation={
+										setCurrentBlockStyleVariation
 									}
 									styleItemHandler={styleItemHandler}
 								/>
@@ -273,24 +280,7 @@ function BlockStyles({
 									'blockera-block-styles-category'
 								)}
 							>
-								{__('Custom Styles', 'blockera')}
-
-								<Button
-									size="extra-small"
-									className={controlInnerClassNames(
-										'btn-add',
-										'blockera-control-is-not-active'
-									)}
-									onClick={() => {}}
-									style={{
-										width: '24px',
-										height: '24px',
-										padding: 0,
-										marginLeft: 'auto',
-									}}
-								>
-									<Icon icon="plus" iconSize="20" />
-								</Button>
+								{__('Actions', 'blockera')}
 							</h2>
 
 							<p

@@ -36,6 +36,7 @@ import {
 } from '../../../extensions/components';
 // import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { STORE_NAME } from '../../../extensions/store/constants';
+import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
 
 export default function App(props: Object): MixedElement {
 	const {
@@ -85,27 +86,41 @@ export default function App(props: Object): MixedElement {
 		setUserConfig,
 	} = useGlobalStylesContext();
 
+	const { getBlockStyles, getSelectedBlockStyleVariation } =
+		select(EDITOR_STORE_NAME);
+	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
+
+	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
+		useState(getSelectedBlockStyleVariation());
+
 	const initialStyles = useMemo(() => {
+		const defaultStylesValue =
+			prepareBlockeraDefaultAttributesValues(defaultStyles);
+
+		if (currentBlockStyleVariation) {
+			return mergeObject(
+				defaultStylesValue,
+				mergedConfig?.styles?.blocks[name]?.variations[
+					currentBlockStyleVariation.name
+				] || {}
+			);
+		}
+
 		return mergeObject(
-			prepareBlockeraDefaultAttributesValues(defaultStyles),
+			defaultStylesValue,
 			mergedConfig?.styles?.blocks[name] || {}
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [mergedConfig, defaultStyles]);
+	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
 
 	const [styles, setStyles] = useState(initialStyles);
 
-	// let prefixParts = [];
-	// if (variation) {
-	// 	prefixParts = ['variations', variation].concat(prefixParts);
-	// }
-	// const prefix = prefixParts.join('.');
-	// const [inheritedStyle, setStyle] = useGlobalStyle(prefix, name, 'all', {
-	// 	shouldDecodeEncode: false,
-	// });
-
-	const { getBlockStyles } = select('blockera/editor');
-	const { setBlockStyles } = dispatch('blockera/editor');
+	useEffect(() => {
+		if (!isEquals(styles, initialStyles)) {
+			setStyles(initialStyles);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initialStyles]);
 
 	const getCalculatedBlockStyles = useCallback(
 		(styles) => {
@@ -159,6 +174,23 @@ export default function App(props: Object): MixedElement {
 				return;
 			}
 
+			if (currentBlockStyleVariation) {
+				return setUserConfig(
+					mergeObject(userConfig, {
+						styles: {
+							blocks: {
+								[name]: {
+									variations: {
+										[currentBlockStyleVariation.name]:
+											getCalculatedBlockStyles(styles),
+									},
+								},
+							},
+						},
+					})
+				);
+			}
+
 			setUserConfig(
 				mergeObject(userConfig, {
 					styles: {
@@ -171,6 +203,15 @@ export default function App(props: Object): MixedElement {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [styles]);
+
+	// let prefixParts = [];
+	// if (variation) {
+	// 	prefixParts = ['variations', variation].concat(prefixParts);
+	// }
+	// const prefix = prefixParts.join('.');
+	// const [inheritedStyle, setStyle] = useGlobalStyle(prefix, name, 'all', {
+	// 	shouldDecodeEncode: false,
+	// });
 
 	// const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 	// 	useState(false);
@@ -196,6 +237,8 @@ export default function App(props: Object): MixedElement {
 					{...{
 						name,
 						clientId: props.clientId,
+						currentBlockStyleVariation,
+						setCurrentBlockStyleVariation,
 						setAttributes: setStyles,
 						defaultAttributes: defaultStyles,
 						additional: {

@@ -5,6 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { dispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import {
 	__experimentalTruncate as Truncate,
@@ -21,12 +22,18 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 export const StyleItem = ({
 	style,
 	activeStyle,
-}: // styleItemHandler,
-// onSelectStylePreview,
-// setCurrentPreviewStyle,
-{
+	styleItemHandler,
+	onSelectStylePreview,
+	setCurrentPreviewStyle,
+	// currentBlockStyleVariation,
+	setCurrentBlockStyleVariation,
+	inGlobalStylesPanel = false,
+}: {
 	style: Object,
 	activeStyle: Object,
+	inGlobalStylesPanel: boolean,
+	currentBlockStyleVariation: Object,
+	setCurrentBlockStyleVariation: (style: Object) => void,
 	styleItemHandler: (style: Object) => void,
 	onSelectStylePreview: (style: Object) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
@@ -63,14 +70,48 @@ export const StyleItem = ({
 						? buttonText + ` (${__('Default', 'blockera')})`
 						: ''
 				}
-				// onMouseEnter={() => styleItemHandler(style)}
-				// onFocus={() => styleItemHandler(style)}
-				// onMouseLeave={() => styleItemHandler(null)}
-				// onBlur={() => {
-				// 	setCurrentPreviewStyle(null);
-				// 	styleItemHandler(null);
-				// }}
-				// onClick={() => onSelectStylePreview(style)}
+				onMouseEnter={() => {
+					if (inGlobalStylesPanel) {
+						return;
+					}
+
+					styleItemHandler(style);
+				}}
+				onFocus={() => {
+					if (inGlobalStylesPanel) {
+						return;
+					}
+
+					styleItemHandler(style);
+				}}
+				onMouseLeave={() => {
+					if (inGlobalStylesPanel) {
+						return;
+					}
+
+					styleItemHandler(null);
+				}}
+				onBlur={() => {
+					if (inGlobalStylesPanel) {
+						return;
+					}
+
+					setCurrentPreviewStyle(null);
+					styleItemHandler(null);
+				}}
+				onClick={() => {
+					if (inGlobalStylesPanel) {
+						// Navigate to the block style variation customization panel when clicked in global styles context.
+
+						const { setSelectedBlockStyleVariation } =
+							dispatch('blockera/editor');
+
+						setSelectedBlockStyleVariation(style);
+						return setCurrentBlockStyleVariation(style);
+					}
+
+					onSelectStylePreview(style);
+				}}
 				aria-current={activeStyle.name === style.name}
 				size="input"
 				data-test={`style-${style.name}`}

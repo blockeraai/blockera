@@ -52,13 +52,13 @@ export const BlockGlobalStylesPanelScreen = ({
 	}, []);
 
 	if (!hasBlockeraExtensions) {
-		return;
+		return <></>;
 	}
 
 	screenElement.classList.add('has-blockera-extensions');
 
 	if (screenElement.querySelector(`.${className}`)) {
-		return;
+		return <></>;
 	}
 
 	return createPortal(

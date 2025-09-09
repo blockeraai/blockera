@@ -39,6 +39,8 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		currentBlock,
 		currentState,
 		currentBreakpoint,
+		currentBlockStyleVariation,
+		setCurrentBlockStyleVariation,
 		context = 'inspector-controls',
 	}: TBlockStyleVariations): MixedElement => {
 		const [popoverAnchor, setPopoverAnchor] = useState(null);
@@ -92,7 +94,12 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		if ('global-styles-panel' === context) {
 			return (
 				<BlockStyles
+					blockName={blockName}
 					context={context}
+					currentBlockStyleVariation={currentBlockStyleVariation}
+					setCurrentBlockStyleVariation={
+						setCurrentBlockStyleVariation
+					}
 					styles={{
 						onSelect,
 						stylesToRender,
@@ -169,6 +176,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 
 				{isOpen && popoverAnchor && (
 					<BlockStyles
+						blockName={blockName}
 						styles={{
 							onSelect,
 							stylesToRender,

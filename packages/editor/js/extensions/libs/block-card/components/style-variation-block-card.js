@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
 
@@ -15,8 +14,8 @@ import {
 	extensionClassNames,
 	extensionInnerClassNames,
 } from '@blockera/classnames';
-import { kebabCase } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
+import { kebabCase } from '@blockera/utils';
 import { Tooltip, Flex } from '@blockera/controls';
 
 /**
@@ -24,21 +23,19 @@ import { Tooltip, Flex } from '@blockera/controls';
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import type { UpdateBlockEditorSettings } from '../../types';
-import type { InnerBlockModel, InnerBlockType } from '../inner-blocks/types';
-import StateContainer from '../../../components/state-container';
 import { useBlockSection } from '../../../components';
+import type { UpdateBlockEditorSettings } from '../../types';
+import type { InnerBlockType } from '../inner-blocks/types';
+import StateContainer from '../../../components/state-container';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 
-export function InnerBlockCard({
+export function StyleVariationBlockCard({
 	clientId,
 	isActive,
 	children,
 	supports,
 	blockName,
-	activeBlock,
-	innerBlocks,
 	handleOnClick,
 	currentBlock,
 	currentState,
@@ -61,7 +58,6 @@ export function InnerBlockCard({
 	additional: Object,
 	availableStates: Object,
 	children?: MixedElement,
-	activeBlock: 'master' | InnerBlockType,
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
@@ -72,45 +68,35 @@ export function InnerBlockCard({
 		value: any,
 		options?: Object
 	) => void,
-	setAttributes: (attributes: Object) => void,
-	handleOnClick: UpdateBlockEditorSettings,
-	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 	currentBlockStyleVariation: Object,
 	setCurrentBlockStyleVariation: (style: Object) => void,
+	setAttributes: (attributes: Object) => void,
+	handleOnClick: UpdateBlockEditorSettings,
 }): MixedElement {
-	const { getBlockType } = select('core/blocks');
-	const { getExtensionCurrentBlock } = select('blockera/extensions');
-
-	const getInnerBlockDetails = (): Object => {
-		if (innerBlocks[activeBlock]) {
-			return innerBlocks[activeBlock];
-		}
-
-		const registeredBlock = getBlockType(getExtensionCurrentBlock());
-
-		if (!registeredBlock) {
-			return {};
-		}
-
-		return {
-			...registeredBlock,
-			label: registeredBlock?.title,
-		};
-	};
-
-	const blockInformation = getInnerBlockDetails();
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 
 	return (
 		<div
 			className={extensionClassNames(
 				'block-card',
-				'block-card--inner-block'
+				'block-card--style-variation'
 			)}
 			data-test={'blockera-block-card'}
 		>
-			<div className={extensionInnerClassNames('block-card__inner')}>
-				<BlockIcon icon={blockInformation?.icon} />
+			<div
+				className={extensionInnerClassNames(
+					'block-card__style-variation'
+				)}
+			>
+				<BlockIcon
+					icon={
+						<Icon
+							icon="style-variations-animated"
+							iconSize={24}
+							isAnimated={true}
+						/>
+					}
+				/>
 
 				<div
 					className={extensionInnerClassNames('block-card__content')}
@@ -127,20 +113,20 @@ export function InnerBlockCard({
 							)}
 							aria-label={__('Selected Inner Block', 'blockera')}
 						>
-							{blockInformation?.label}
+							{currentBlockStyleVariation?.label}
 						</span>
 
 						<Breadcrumb
 							clientId={clientId}
 							blockName={blockName}
-							activeBlock={activeBlock}
+							activeBlock={currentBlockStyleVariation?.name}
 							availableStates={availableStates}
 							blockeraUnsavedData={
 								currentStateAttributes?.blockeraUnsavedData
 							}
 						/>
 
-						<Tooltip text={__('Close Inner Block', 'blockera')}>
+						<Tooltip text={__('Close Block Style', 'blockera')}>
 							<Icon
 								className={extensionInnerClassNames(
 									'block-card__close'
@@ -148,24 +134,17 @@ export function InnerBlockCard({
 								library="wp"
 								icon="close-small"
 								iconSize="24"
-								data-test={'Close Inner Block'}
+								data-test={'Close Block Style'}
 								onClick={() => {
 									onToggle(true, 'switch-to-parent');
-									handleOnClick('current-block', 'master');
+									handleOnClick(
+										'current-block-style-variation',
+										undefined
+									);
 								}}
 							/>
 						</Tooltip>
 					</h2>
-
-					{blockInformation?.description && (
-						<span
-							className={extensionInnerClassNames(
-								'block-card__description'
-							)}
-						>
-							{blockInformation.description}
-						</span>
-					)}
 				</div>
 			</div>
 
@@ -185,8 +164,8 @@ export function InnerBlockCard({
 				>
 					<Slot
 						name={`blockera-${kebabCase(
-							activeBlock
-						)}-inner-block-card-children`}
+							currentBlockStyleVariation?.name
+						)}-style-variation-block-card-children`}
 					/>
 				</StateContainer>
 
@@ -209,7 +188,9 @@ export function InnerBlockCard({
 						blockConfig={additional}
 						blockStatesProps={{
 							attributes: currentStateAttributes,
-							id: `block-states-${kebabCase(currentBlock)}`,
+							id: `block-states-${kebabCase(
+								currentBlockStyleVariation?.name
+							)}`,
 						}}
 						currentBlockStyleVariation={currentBlockStyleVariation}
 						setCurrentBlockStyleVariation={

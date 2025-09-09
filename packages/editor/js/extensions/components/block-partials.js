@@ -61,15 +61,23 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 				ref={stickyWrapperRef}
 				className="blockera-block-card-wrapper is-sticky-active"
 			>
-				<Slot name={`blockera-block-card-content-${clientId}`} />
+				<Slot
+					name={`blockera-block-card-content-${
+						clientId || blockName
+					}`}
+				/>
 			</div>
 
 			<div className="blockera-block-edit-wrapper">
-				<Slot name={`blockera-block-edit-content-${clientId}`} />
+				<Slot
+					name={`blockera-block-edit-content-${
+						clientId || blockName
+					}`}
+				/>
 			</div>
 
 			<Fill
-				key={`${clientId}-card-menu`}
+				key={`${clientId || blockName}-card-menu`}
 				name={'blockera-block-card-children'}
 			>
 				<div className={'blockera-dropdown-menu'}>

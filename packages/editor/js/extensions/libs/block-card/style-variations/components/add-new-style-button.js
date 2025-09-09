@@ -6,6 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useCallback } from '@wordpress/element';
+import { registerBlockStyle } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -15,9 +16,13 @@ import { Button, Flex } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 export const AddNewStyleButton = ({
+	label,
+	blockName,
 	blockStyles,
 	setBlockStyles,
 }: {
+	label: string,
+	blockName: string,
 	blockStyles: Array<Object>,
 	setBlockStyles: (styles: Array<Object>) => void,
 }): MixedElement => {
@@ -47,22 +52,32 @@ export const AddNewStyleButton = ({
 				label: styleLabel,
 			},
 		]);
+
+		registerBlockStyle(blockName, {
+			name,
+			label: styleLabel,
+		});
+
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);
 
 	return (
 		<Flex justifyContent={'space-between'}>
 			<h2 className={classNames('blockera-block-styles-category')}>
-				{__('Style Variations', 'blockera')}
+				{label}
 			</h2>
+
 			<Button
-				data-test={'add-new-block-style-variation'}
 				size="extra-small"
-				className={controlInnerClassNames('btn-add', {
-					'is-deactivate': true,
-				})}
-				// disabled={disabledAddNewItem}
+				className={controlInnerClassNames('btn-add')} // blockera-is-not-active
 				onClick={addNew}
+				style={{
+					width: '24px',
+					height: '24px',
+					padding: 0,
+					marginLeft: 'auto',
+				}}
+				data-test={'add-new-block-style-variation'}
 			>
 				<Icon icon="plus" iconSize="20" />
 			</Button>

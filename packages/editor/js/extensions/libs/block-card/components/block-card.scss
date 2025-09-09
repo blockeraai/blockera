@@ -23,7 +23,8 @@
 		}
 	}
 
-	.blockera-extension-block-card__inner {
+	.blockera-extension-block-card__inner,
+	 .blockera-extension-block-card__style-variation {
 		align-items: flex-start;
 		display: flex;
 		flex-grow: 1;
@@ -180,7 +181,8 @@
 		}
 	}
 
-	&.inner-block-is-selected {
+	&.inner-block-is-selected,
+	&.style-variation-is-selected {
 		background-color: #f6f6f6;
 		overflow: hidden;
 		max-height: 55px;
@@ -196,7 +198,8 @@
 		}
 	}
 
-	&.block-card--inner-block {
+	&.block-card--inner-block,
+	&.block-card--style-variation {
 		--blockera-controls-primary-color: #cc0000;
 
 		.blockera-extension-block-card__title,
