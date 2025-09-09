@@ -357,7 +357,7 @@ export const IconExtension: ComponentType<{
 					</ControlContextProvider>
 				</EditorFeatureWrapper>
 
-				{(icon?.icon || icon?.uploadSVG) && (
+				{icon?.renderedIcon && (
 					<>
 						<BaseControl
 							label={__('Style', 'blockera')}
