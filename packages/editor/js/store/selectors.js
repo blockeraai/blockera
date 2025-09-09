@@ -377,3 +377,18 @@ export const getBlockStyleVariation = (
 		] || null
 	);
 };
+
+/**
+ * Get selected block style variation.
+ *
+ * @param {{globalStyles: Object}} state the global styles.
+ *
+ * @return {Object} the selected block style variation.
+ */
+export const getSelectedBlockStyleVariation = ({
+	globalStyles,
+}: {
+	globalStyles: Object,
+}): Object => {
+	return globalStyles.selectedBlockStyleVariation;
+};

@@ -171,3 +171,12 @@ export const setBlockStyles = (blockName: string, styles: Object): Object => {
 		type: 'SET_BLOCK_STYLES',
 	};
 };
+
+export const setSelectedBlockStyleVariation = (
+	selectedBlockStyleVariation: Object
+): Object => {
+	return {
+		selectedBlockStyleVariation,
+		type: 'SET_SELECTED_BLOCK_STYLE_VARIATION',
+	};
+};
