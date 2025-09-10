@@ -215,6 +215,7 @@ export const IconExtension: ComponentType<{
 						{
 							ref,
 							newValue,
+							blockName,
 							encodeIcon,
 							effectiveItems: {
 								...effectiveItems,
