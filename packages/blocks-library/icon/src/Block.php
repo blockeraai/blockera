@@ -102,13 +102,18 @@ class Block implements BlockInterface {
 
 		if ($figure) {
 			$figure->outerhtml = sprintf(
-				'<span title="%1$s" role="img" class="wp-block-image__icon">%2$s</span>', 
-				sprintf( 
-					// translators: %s is the icon name.
-					__('%s Icon', 'blockera'), 
-					str_replace('-', ' ', $value['icon'] ?? '') 
-				), 
-				$feature->getIconHTML($value)
+				'<span class="wp-block-image__icon">%1$s</span>', 
+				$feature->getIconHTML(
+                    $value,
+                    [
+						'title' => str_contains($html, 'figcaption') ? '' : sprintf(
+							// translators: %s is the icon name.
+							__('%s Icon', 'blockera'), 
+							str_replace('-', ' ', $value['icon'] ?? '') 
+						),
+						'role' => 'img',
+					]
+                )
 			);
 
 			$svg = $dom->findOne('svg');
@@ -137,7 +142,7 @@ class Block implements BlockInterface {
 				if (! empty($transform)) {
 					$transform .= 'transform:' . $transform . ';';
 					$svg->setAttribute('style', $transform);
-				}else {
+				} else {
 					$svg->removeAttribute('style');
 				}				
 			} else {

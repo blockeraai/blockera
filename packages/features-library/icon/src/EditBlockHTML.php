@@ -323,12 +323,20 @@ class EditBlockHTML implements EditableBlockHTML {
      *
      * @return string The icon html.
      */
-    public function getIconHTML( array $value): string {
+    public function getIconHTML( array $value, array $args = [
+		'title' => '',
+		'role' => '',
+	]): string {
         [
             'icon'    => $icon,
             'library' => $library,
             'renderedIcon' => $renderedIcon,
         ] = $value;
+
+		[
+			'title' => $title,
+			'role' => $role,
+		] = $args;
 
 		if (! empty($renderedIcon)) {
             $renderedIcon = base64_decode($renderedIcon);
@@ -349,6 +357,16 @@ class EditBlockHTML implements EditableBlockHTML {
         if (empty($iconHTML)) {
             return '';
         }
+
+        // Add role="img" to SVG tag for accessibility (only if not already present)
+		if (! empty($role)) {
+        	$iconHTML = preg_replace('/<svg((?![^>]*role="img")[^>]*?)>/i', '<svg$1 role="' . $role . '">', $iconHTML);
+		}
+
+        // Add title to SVG tag for accessibility (only if not already present)
+		if (! empty($title)) {
+        	$iconHTML = preg_replace('/<svg((?![^>]*title=)[^>]*?)>/i', '<svg$1 title="' . $title . '">', $iconHTML);
+		}
 
         return preg_replace(
             [
