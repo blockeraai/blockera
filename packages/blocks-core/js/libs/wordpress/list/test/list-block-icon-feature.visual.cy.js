@@ -51,6 +51,17 @@ describe('List Block → Icon Feature', () => {
 		// set color
 		cy.setColorControlValue('Color', '666666');
 
+		// switch by advanced icon settings button from extension
+		cy.getByAriaLabel('Advanced Icon Settings').click();
+
+		cy.get('.blockera-extension-block-card.block-card--inner-block')
+			.should('exist')
+			.within(() => {
+				// the block states should not be available
+				cy.getByDataId('normal').should('not.exist');
+				cy.getByDataId('hover').should('not.exist');
+			});
+
 		//
 		// 1.2. List item icon
 		//
@@ -95,9 +106,13 @@ describe('List Block → Icon Feature', () => {
 		// switch by advanced icon settings button from extension
 		cy.getByAriaLabel('Advanced Icon Settings').click();
 
-		cy.get('.blockera-extension-block-card.block-card--inner-block').should(
-			'exist'
-		);
+		cy.get('.blockera-extension-block-card.block-card--inner-block')
+			.should('exist')
+			.within(() => {
+				// the block states should not be available
+				cy.getByDataId('normal').should('not.exist');
+				cy.getByDataId('hover').should('not.exist');
+			});
 
 		cy.getByDataTest('style-tab').click();
 

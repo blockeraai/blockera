@@ -44,4 +44,9 @@ export const NavigationLink: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	selectors: {
+		'blockera/elements/icon': {
+			root: '.wp-block-navigation-item__content .wp-block-navigation-item__label:before',
+		},
+	},
 };

@@ -17,6 +17,7 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import {
+	isString,
 	isEmpty,
 	isUndefined,
 	hasSameProps,
@@ -33,6 +34,7 @@ import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
 import { parseUploadedMediaAndSetIcon } from './helpers';
+import { sanitizeRawSVGString } from './utils';
 import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
@@ -155,7 +157,7 @@ function IconControl({
 					url: media.url,
 					updated: '',
 				},
-				svgString,
+				svgString: sanitizeRawSVGString(svgString),
 			});
 		});
 	};
@@ -172,28 +174,38 @@ function IconControl({
 	};
 
 	function renderIcon() {
+		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
+			return <Icon {...currentIcon} iconSize={50} />;
+		}
+
 		if (
-			!isUndefined(currentIcon?.svgString) &&
-			!isEmpty(currentIcon?.svgString)
+			!isUndefined(currentIcon?.renderedIcon) &&
+			!isEmpty(currentIcon?.renderedIcon) &&
+			isString(currentIcon?.renderedIcon)
 		) {
 			return (
 				<div
-					dangerouslySetInnerHTML={{ __html: currentIcon.svgString }}
+					dangerouslySetInnerHTML={{
+						__html: atob(currentIcon.renderedIcon).replace(
+							/\s*style\s*=\s*["'][^"']*["']/g,
+							''
+						),
+					}}
 				/>
 			);
 		}
 
+		// if custom uploaded svg icon url is available
 		if (
 			!isUndefined(currentIcon?.uploadSVG?.url) &&
 			!isEmpty(currentIcon?.uploadSVG?.url)
 		) {
 			return (
-				<img src={currentIcon.uploadSVG.url} alt={'custom svg icon'} />
+				<img
+					src={currentIcon.uploadSVG.url}
+					alt={currentIcon?.uploadSVG?.title || 'custom svg icon'}
+				/>
 			);
-		}
-
-		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
-			return <Icon {...currentIcon} iconSize={50} />;
 		}
 
 		return null;

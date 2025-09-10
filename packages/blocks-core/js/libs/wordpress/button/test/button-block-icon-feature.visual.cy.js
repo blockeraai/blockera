@@ -21,6 +21,10 @@ describe('Button Block → Icon Feature', () => {
 
 <!-- wp:button -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button 2</a></div>
+<!-- /wp:button -->
+
+<!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">button 3</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:group -->`);
@@ -44,7 +48,7 @@ describe('Button Block → Icon Feature', () => {
 			});
 
 		//
-		// 1.1. Right icon
+		// 1.2. Right icon
 		//
 		cy.getBlock('core/button').eq(1).click();
 		cy.getByDataTest('settings-tab').click();
@@ -72,6 +76,36 @@ describe('Button Block → Icon Feature', () => {
 
 		// set color
 		cy.setColorControlValue('Color', '666666');
+
+		//
+		// 1.3. Icon inner block
+		//
+		cy.getBlock('core/button').eq(2).click();
+		cy.getByDataTest('settings-tab').click();
+
+		// set icon
+		cy.getByAriaLabel('Choose Icon…').click();
+		cy.get('[data-wp-component="Popover"]')
+			.last()
+			.within(() => {
+				cy.getByAriaLabel('block-meta Icon').click();
+			});
+
+		// switch by advanced icon settings button from extension
+		cy.getByAriaLabel('Advanced Icon Settings').click();
+
+		cy.get('.blockera-extension-block-card.block-card--inner-block').should(
+			'exist'
+		);
+
+		cy.getByDataTest('style-tab').click();
+		cy.setColorControlValue('BG Color', '0065FE');
+
+		//
+		// 1.4. Visual Test
+		//
+		cy.getBlock('core/button').eq(1).click();
+		cy.getByDataTest('settings-tab').click();
 
 		// select group block
 		cy.getByAriaLabel('Select Buttons').click();

@@ -37,7 +37,7 @@ return array_merge(
 					'root' => '.wp-block-navigation-item__content',
 				],
 				'blockera/elements/icon' => [
-					'root' => ' .wp-block-navigation-item__content .blockera-icon',
+					'root' => ' .wp-block-navigation-item__content .wp-block-navigation-item__label svg',
 				],
 				'htmlEditable' => [
 					'root' => ' .wp-block-navigation-item__content .wp-block-navigation-item__label',

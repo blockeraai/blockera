@@ -24,12 +24,26 @@ export function parseUploadedMediaAndSetIcon(
 				return;
 			}
 
-			setSvgString(
-				svgString.replace(
+			// Check if width attribute already exists and replace it, otherwise add it
+			const widthValue = (!media.width ? 50 : media.width) + 'px';
+			let updatedSvgString = svgString;
+
+			// Check if width attribute exists
+			if (svgString.includes('width=')) {
+				// Replace existing width attribute
+				updatedSvgString = svgString.replace(
+					/width\s*=\s*["'][^"']*["']/,
+					`width="${widthValue}"`
+				);
+			} else {
+				// Add width attribute after <svg
+				updatedSvgString = svgString.replace(
 					'<svg ',
-					'<svg width="' + (!media.width ? 50 : media.width) + 'px" '
-				)
-			);
+					`<svg width="${widthValue}" `
+				);
+			}
+
+			setSvgString(updatedSvgString);
 		})
 		.catch((error) => {
 			/* @debug-ignore */

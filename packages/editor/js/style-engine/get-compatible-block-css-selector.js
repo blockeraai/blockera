@@ -160,6 +160,7 @@ export const getNormalizedSelector = (
 
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
+		// Handle selectors starting with {{BLOCK_ID}}&
 		if (/^{{BLOCK_ID}}&/.test(selector)) {
 			return selector.replace(/^{{BLOCK_ID}}&/, '{{BLOCK_ID}}');
 		}
@@ -172,6 +173,7 @@ export const getNormalizedSelector = (
 			return `${rootFirstPart}${selector.trim().substring(2)}`;
 		}
 
+		// Handle selectors starting with &
 		if (selector.trim().startsWith('&')) {
 			isProcessedSelector = true;
 
@@ -672,7 +674,7 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 		}
 
 		const subject = matches[0];
-		const regexp = new RegExp('^.\\b' + subject + '\\b', 'gi');
+		const regexp = new RegExp('.\\b' + subject + '\\b', 'gi');
 
 		return `${selector.replace(regexp, `${root}.${subject}`)}`;
 	}

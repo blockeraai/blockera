@@ -1,12 +1,3 @@
-/* Site logo block */
-/* .blockera-has-icon-start.wp-block-site-logo .components-placeholder,
-.blockera-has-icon-end.wp-block-site-logo .components-placeholder {
-	min-width: 0;
-	min-height: 0;
-} */
-
-/* Icon Feature */
-
 /* .blockera-is-icon-block is icon block. */
 .editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block, .wp-block-list, .wp-block-list-item, .wp-block-categories, .wp-block-page-list, .wp-block-tag-cloud) {
 	background: transparent !important;
@@ -21,16 +12,6 @@
 .editor-styles-wrapper div [class*="blockera-has-icon-"].wp-block-button [data-rich-text-placeholder] {
 	display: none;
 }
-
-/* .editor-styles-wrapper div [class*="blockera-has-icon-start"].alignleft > div:first-of-type,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"].alignleft > div:first-of-type {
-	margin-left: 0;
-}
-
-.editor-styles-wrapper div [class*="blockera-has-icon-start"].alignright > div:first-of-type,
-.editor-styles-wrapper div [class*="blockera-has-icon-end"].alignright > div:first-of-type {
-	margin-right: 0;
-} */
 
 .editor-styles-wrapper div [class*="blockera-has-icon-"]:not(.wp-block-list-item) > div[role="textbox"]:not(.wp-block-button__link,figcaption):first-of-type {
 	border-radius: inherit !important;
@@ -48,8 +29,6 @@
 .editor-styles-wrapper div [class*="blockera-has-icon-"]:not(.wp-block-list-item) > div[role="textbox"]:first-of-type {
 	display: inline-flex;
 	position: relative;
-	/* margin-left: auto; */
-	/* margin-right: auto; */
 	width: auto !important;
 	height: auto !important;
 	min-height: 0;
@@ -57,8 +36,6 @@
 	align-items: center;
 }
 
-.editor-styles-wrapper div figure.blockera-is-icon-block .block-editor-media-placeholder::before,
-.editor-styles-wrapper div figure.blockera-is-icon-block .components-resizable-box__container::before,
 .editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::before,
 .editor-styles-wrapper div .blockera-has-icon-end:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::after,
 .editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > div[role="textbox"]:first-of-type::before,
