@@ -37,6 +37,7 @@ import {
 // import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { STORE_NAME } from '../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
+import { GlobalStylesPanelContextProvider } from './context';
 
 export default function App(props: Object): MixedElement {
 	const {
@@ -231,14 +232,15 @@ export default function App(props: Object): MixedElement {
 		// 		/>
 		// 	)}
 		// >
-		<>
+		<GlobalStylesPanelContextProvider
+			currentBlockStyleVariation={currentBlockStyleVariation}
+			setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
+		>
 			<BaseControlContext.Provider value={baseContextValue}>
 				<BlockApp
 					{...{
 						name,
 						clientId: props.clientId,
-						currentBlockStyleVariation,
-						setCurrentBlockStyleVariation,
 						setAttributes: setStyles,
 						defaultAttributes: defaultStyles,
 						additional: {
@@ -271,6 +273,6 @@ export default function App(props: Object): MixedElement {
 				</BlockApp>
 			</BaseControlContext.Provider>
 			{/* </ErrorBoundary> */}
-		</>
+		</GlobalStylesPanelContextProvider>
 	);
 }

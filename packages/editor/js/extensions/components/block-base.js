@@ -65,9 +65,13 @@ import {
 	generalInnerBlockStates,
 } from '../libs/block-card/block-states/states';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
+import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
+	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+		setCurrentBlockStyleVariation: () => {},
+	};
 	const {
 		additional,
 		children,
@@ -77,8 +81,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		setAttributes: _setAttributes,
 		defaultAttributes,
 		originDefaultAttributes,
-		currentBlockStyleVariation,
-		setCurrentBlockStyleVariation,
 		insideBlockInspector = true,
 		...props
 	} = _props;
@@ -242,7 +244,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
 		currentBreakpoint,
 		currentBlock,
-		currentBlockStyleVariation,
 		currentState: isInnerBlock(currentBlock)
 			? currentInnerBlockState
 			: currentState,
@@ -407,8 +408,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				currentInnerBlockState,
 				handleOnChangeAttributes,
 				updateBlockEditorSettings,
-				currentBlockStyleVariation,
-				setCurrentBlockStyleVariation,
 				BlockComponent: () => children,
 				attributes: sanitizedAttributes,
 				activeDeviceType: getDeviceType(),
@@ -464,8 +463,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 								availableInnerStates,
 								insideBlockInspector,
 								currentInnerBlockState,
-								currentBlockStyleVariation,
-								setCurrentBlockStyleVariation,
 								updateBlockEditorSettings,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.
@@ -520,8 +517,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 							insideBlockInspector,
 							currentInnerBlockState,
 							updateBlockEditorSettings,
-							currentBlockStyleVariation,
-							setCurrentBlockStyleVariation,
 							blockProps: {
 								// Sending props like exactly "edit" function props of WordPress Block.
 								// Because needs total block props in outside overriding component like "blockera" in overriding process.

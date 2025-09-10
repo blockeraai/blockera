@@ -11,6 +11,7 @@ import {
 	__experimentalTruncate as Truncate,
 	__experimentalDivider as Divider,
 } from '@wordpress/components';
+import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 /**
  * Blockera dependencies
@@ -25,19 +26,18 @@ export const StyleItem = ({
 	styleItemHandler,
 	onSelectStylePreview,
 	setCurrentPreviewStyle,
-	// currentBlockStyleVariation,
-	setCurrentBlockStyleVariation,
 	inGlobalStylesPanel = false,
 }: {
 	style: Object,
 	activeStyle: Object,
 	inGlobalStylesPanel: boolean,
-	currentBlockStyleVariation: Object,
-	setCurrentBlockStyleVariation: (style: Object) => void,
 	styleItemHandler: (style: Object) => void,
 	onSelectStylePreview: (style: Object) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
+	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+		setCurrentBlockStyleVariation: () => {},
+	};
 	const buttonText = style.label || style.name || __('Default', 'blockera');
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 

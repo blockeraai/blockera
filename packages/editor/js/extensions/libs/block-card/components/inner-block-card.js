@@ -50,8 +50,6 @@ export function InnerBlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
-	currentBlockStyleVariation,
-	setCurrentBlockStyleVariation,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -75,8 +73,6 @@ export function InnerBlockCard({
 	setAttributes: (attributes: Object) => void,
 	handleOnClick: UpdateBlockEditorSettings,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
-	currentBlockStyleVariation: Object,
-	setCurrentBlockStyleVariation: (style: Object) => void,
 }): MixedElement {
 	const { getBlockType } = select('core/blocks');
 	const { getExtensionCurrentBlock } = select('blockera/extensions');
@@ -211,10 +207,6 @@ export function InnerBlockCard({
 							attributes: currentStateAttributes,
 							id: `block-states-${kebabCase(currentBlock)}`,
 						}}
-						currentBlockStyleVariation={currentBlockStyleVariation}
-						setCurrentBlockStyleVariation={
-							setCurrentBlockStyleVariation
-						}
 					/>
 				)}
 			</Flex>

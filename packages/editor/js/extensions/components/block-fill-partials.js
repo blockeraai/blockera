@@ -44,8 +44,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		insideBlockInspector,
 		currentInnerBlockState,
 		updateBlockEditorSettings,
-		currentBlockStyleVariation,
-		setCurrentBlockStyleVariation,
 	}): Element<any> => {
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
@@ -96,12 +94,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 								blockProps.controllerProps
 									.handleOnChangeAttributes
 							}
-							currentBlockStyleVariation={
-								currentBlockStyleVariation
-							}
-							setCurrentBlockStyleVariation={
-								setCurrentBlockStyleVariation
-							}
 						/>
 
 						{isInnerBlock(currentBlock) && (
@@ -128,47 +120,32 @@ export const BlockFillPartials: ComponentType<any> = memo(
 									blockProps.controllerProps
 										.handleOnChangeAttributes
 								}
-								currentBlockStyleVariation={
-									currentBlockStyleVariation
+							/>
+						)}
+						{!insideBlockInspector && (
+							<StyleVariationBlockCard
+								insideBlockInspector={insideBlockInspector}
+								isActive={isActive}
+								clientId={clientId}
+								blockName={blockProps.name}
+								handleOnClick={updateBlockEditorSettings}
+								currentBlock={currentBlock}
+								currentState={currentState}
+								availableStates={availableInnerStates}
+								currentBreakpoint={currentBreakpoint}
+								currentInnerBlockState={currentInnerBlockState}
+								currentStateAttributes={
+									blockProps.currentStateAttributes
 								}
-								setCurrentBlockStyleVariation={
-									setCurrentBlockStyleVariation
+								additional={blockProps.additional}
+								supports={blockProps.supports}
+								setAttributes={blockProps.setAttributes}
+								handleOnChangeAttributes={
+									blockProps.controllerProps
+										.handleOnChangeAttributes
 								}
 							/>
 						)}
-						{!insideBlockInspector &&
-							currentBlockStyleVariation && (
-								<StyleVariationBlockCard
-									currentBlockStyleVariation={
-										currentBlockStyleVariation
-									}
-									setCurrentBlockStyleVariation={
-										setCurrentBlockStyleVariation
-									}
-									insideBlockInspector={insideBlockInspector}
-									isActive={isActive}
-									clientId={clientId}
-									blockName={blockProps.name}
-									handleOnClick={updateBlockEditorSettings}
-									currentBlock={currentBlock}
-									currentState={currentState}
-									availableStates={availableInnerStates}
-									currentBreakpoint={currentBreakpoint}
-									currentInnerBlockState={
-										currentInnerBlockState
-									}
-									currentStateAttributes={
-										blockProps.currentStateAttributes
-									}
-									additional={blockProps.additional}
-									supports={blockProps.supports}
-									setAttributes={blockProps.setAttributes}
-									handleOnChangeAttributes={
-										blockProps.controllerProps
-											.handleOnChangeAttributes
-									}
-								/>
-							)}
 					</>
 				);
 			},
@@ -179,7 +156,6 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				currentState,
 				currentBreakpoint,
 				currentInnerBlockState,
-				currentBlockStyleVariation,
 			]
 		);
 

@@ -56,8 +56,6 @@ export function BlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
-	currentBlockStyleVariation,
-	setCurrentBlockStyleVariation,
 }: {
 	isActive: boolean,
 	clientId: string,
@@ -82,8 +80,6 @@ export function BlockCard({
 	) => void,
 	setAttributes: (attributes: Object) => void,
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
-	currentBlockStyleVariation: Object,
-	setCurrentBlockStyleVariation: (variation: Object) => void,
 }): MixedElement {
 	const {
 		icon: blockIcon,
@@ -279,12 +275,6 @@ export function BlockCard({
 									: 'global-styles-panel'
 							}
 							currentBreakpoint={currentBreakpoint}
-							currentBlockStyleVariation={
-								currentBlockStyleVariation
-							}
-							setCurrentBlockStyleVariation={
-								setCurrentBlockStyleVariation
-							}
 						/>
 
 						<BlockVariationTransforms blockClientId={clientId} />
@@ -316,12 +306,6 @@ export function BlockCard({
 								values: currentStateAttributes.blockeraInnerBlocks,
 								innerBlocks: blockeraInnerBlocks,
 							}}
-							currentBlockStyleVariation={
-								currentBlockStyleVariation
-							}
-							setCurrentBlockStyleVariation={
-								setCurrentBlockStyleVariation
-							}
 						/>
 					)}
 				</Flex>

@@ -29,6 +29,7 @@ import type { InnerBlockType } from '../inner-blocks/types';
 import StateContainer from '../../../components/state-container';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
+import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 export function StyleVariationBlockCard({
 	clientId,
@@ -47,8 +48,6 @@ export function StyleVariationBlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
-	currentBlockStyleVariation,
-	setCurrentBlockStyleVariation,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -68,12 +67,21 @@ export function StyleVariationBlockCard({
 		value: any,
 		options?: Object
 	) => void,
-	currentBlockStyleVariation: Object,
-	setCurrentBlockStyleVariation: (style: Object) => void,
 	setAttributes: (attributes: Object) => void,
 	handleOnClick: UpdateBlockEditorSettings,
 }): MixedElement {
+	const { currentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+		currentBlockStyleVariation: {
+			name: '',
+			label: '',
+		},
+	};
+
 	const { onToggle } = useBlockSection('innerBlocksConfig');
+
+	if (!currentBlockStyleVariation?.name) {
+		return <></>;
+	}
 
 	return (
 		<div
@@ -192,10 +200,6 @@ export function StyleVariationBlockCard({
 								currentBlockStyleVariation?.name
 							)}`,
 						}}
-						currentBlockStyleVariation={currentBlockStyleVariation}
-						setCurrentBlockStyleVariation={
-							setCurrentBlockStyleVariation
-						}
 					/>
 				)}
 			</Flex>
