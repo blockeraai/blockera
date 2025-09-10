@@ -84,7 +84,8 @@ export const IconExtension: ComponentType<{
 		const blockName = block.activeBlockVariation?.name || block?.blockName;
 
 		const encodeIcon = useCallback(
-			(iconHTML: string, hasInlineStyle = false) => {
+			(iconHTML: string, { hasInlineStyle = false, color } = {}) => {
+				console.log(hasInlineStyle, color);
 				if (hasInlineStyle) {
 					// Apply inline styles based on iconState
 					const iconDoc = new DOMParser().parseFromString(
@@ -95,13 +96,9 @@ export const IconExtension: ComponentType<{
 
 					if (svgElement) {
 						// Apply color
-						if (iconColor) {
-							const color = iconColor.value || iconColor;
+						if (color) {
 							svgElement.style.color = color;
 							svgElement.style.fill = color;
-						} else {
-							svgElement.style.removeProperty('color');
-							svgElement.style.removeProperty('fill');
 						}
 
 						iconHTML = svgElement.outerHTML;
@@ -113,7 +110,7 @@ export const IconExtension: ComponentType<{
 					icon: encodeURIComponent(iconHTML),
 				};
 			},
-			[iconColor]
+			[]
 		);
 
 		const renderIcon = useCallback(
