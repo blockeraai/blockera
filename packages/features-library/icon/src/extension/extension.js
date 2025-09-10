@@ -25,7 +25,13 @@ import {
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { extensionClassNames } from '@blockera/classnames';
-import { isEquals, hasSameProps, addAngle, isEmpty } from '@blockera/utils';
+import {
+	isEquals,
+	hasSameProps,
+	addAngle,
+	isEmpty,
+	isUndefined,
+} from '@blockera/utils';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
 import { generateExtensionId } from '@blockera/editor/js/extensions/libs/utils';
 import { default as EditorFeatureWrapper } from '@blockera/editor/js/components/editor-feature-wrapper';
@@ -120,15 +126,16 @@ export const IconExtension: ComponentType<{
 					?.append(iconNode);
 				const iconRoot = createRoot(iconNode);
 
+				const color = !isUndefined(
+					effectiveItems?.blockeraIconColor?.value
+				)
+					? effectiveItems?.blockeraIconColor?.value
+					: iconColor?.value || iconColor;
 				iconRoot.render(
 					<Icon
 						style={{
-							color: effectiveItems?.blockeraIconColor?.value
-								? effectiveItems?.blockeraIconColor?.value
-								: iconColor?.value || iconColor,
-							fill: effectiveItems?.blockeraIconColor?.value
-								? effectiveItems?.blockeraIconColor?.value
-								: iconColor?.value || iconColor,
+							color,
+							fill: color,
 							width: iconSize ? iconSize : '1em',
 							height: iconSize ? iconSize : '1em',
 							...(iconPosition === 'start' && {
