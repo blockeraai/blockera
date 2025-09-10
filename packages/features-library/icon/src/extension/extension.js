@@ -85,7 +85,6 @@ export const IconExtension: ComponentType<{
 
 		const encodeIcon = useCallback(
 			(iconHTML: string, { hasInlineStyle = false, color } = {}) => {
-				console.log(hasInlineStyle, color);
 				if (hasInlineStyle) {
 					// Apply inline styles based on iconState
 					const iconDoc = new DOMParser().parseFromString(
