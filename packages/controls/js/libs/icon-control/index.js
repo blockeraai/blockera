@@ -186,7 +186,10 @@ function IconControl({
 			return (
 				<div
 					dangerouslySetInnerHTML={{
-						__html: atob(currentIcon.renderedIcon),
+						__html: atob(currentIcon.renderedIcon).replace(
+							/\s*style\s*=\s*["'][^"']*["']/g,
+							''
+						),
 					}}
 				/>
 			);
