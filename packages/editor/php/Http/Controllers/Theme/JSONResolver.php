@@ -681,4 +681,29 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		// Does this clear the Gutenberg equivalent?
 		static::$theme_json_file_cache = array();
 	}
+
+	/**
+	 * Resolves relative paths in theme.json styles to theme absolute paths
+	 * and merges them with incoming theme JSON.
+	 *
+	 * @since 6.6.0
+	 *
+	 * @param JSON $theme_json A theme json instance.
+	 * @return JSON Theme merged with resolved paths, if any found.
+	 */
+	public static function resolve_theme_file_uris( $theme_json ) {
+		$resolved_urls = static::get_resolved_theme_uris( $theme_json );
+		if ( empty( $resolved_urls ) ) {
+			return $theme_json;
+		}
+
+		$resolved_theme_json_data = $theme_json->get_raw_data();
+
+		foreach ( $resolved_urls as $resolved_url ) {
+			$path = explode( '.', $resolved_url['target'] );
+			_wp_array_set( $resolved_theme_json_data, $path, $resolved_url['href'] );
+		}
+
+		return new JSON( $resolved_theme_json_data );
+	}
 }

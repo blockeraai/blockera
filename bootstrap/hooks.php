@@ -23,3 +23,7 @@ add_filter(
 
 // Filter to register the global styles post type arguments.
 add_filter('register_wp_global_styles_post_type_args', 'blockera_register_wp_global_styles_post_type_args');
+
+// Global styles can be enqueued in both the header and the footer. See https://core.trac.wordpress.org/ticket/53494.
+add_action('wp_enqueue_scripts', 'blockera_enqueue_global_styles');
+// add_action('wp_footer', 'blockera_enqueue_global_styles', 1);.

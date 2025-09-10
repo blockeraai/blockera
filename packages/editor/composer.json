@@ -8,7 +8,8 @@
 		},
 		"files": [
 			"php/helpers.php",
-			"php/rest-api-helpers.php"
+			"php/rest-api-helpers.php",
+			"php/global-styles-and-settings.php"
 		]
 	},
 	"autoload-dev": {
