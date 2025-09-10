@@ -187,7 +187,7 @@ export const IconExtension: ComponentType<{
 									alt: sprintf(
 										// translators: %s is the icon name.
 										__('%s Icon', 'blockera'),
-										newValue.icon
+										newValue.icon.replaceAll('-', ' ')
 									),
 								},
 							}
