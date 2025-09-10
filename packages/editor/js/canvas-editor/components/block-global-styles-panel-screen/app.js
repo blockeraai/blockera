@@ -98,18 +98,18 @@ export default function App(props: Object): MixedElement {
 			prepareBlockeraDefaultAttributesValues(defaultStyles);
 
 		if (currentBlockStyleVariation) {
-			return mergeObject(
-				defaultStylesValue,
-				mergedConfig?.styles?.blocks[name]?.variations[
+			return {
+				...defaultStylesValue,
+				...(mergedConfig?.styles?.blocks[name]?.variations[
 					currentBlockStyleVariation.name
-				] || {}
-			);
+				] || {}),
+			};
 		}
 
-		return mergeObject(
-			defaultStylesValue,
-			mergedConfig?.styles?.blocks[name] || {}
-		);
+		return {
+			...defaultStylesValue,
+			...(mergedConfig?.styles?.blocks[name] || {}),
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
 
