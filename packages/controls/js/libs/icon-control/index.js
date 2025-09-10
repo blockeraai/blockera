@@ -195,6 +195,23 @@ function IconControl({
 			);
 		}
 
+		if (
+			!isUndefined(currentIcon?.svgString) &&
+			!isEmpty(currentIcon?.svgString) &&
+			isString(currentIcon?.svgString)
+		) {
+			return (
+				<div
+					dangerouslySetInnerHTML={{
+						__html: currentIcon.svgString.replace(
+							/\s*style\s*=\s*["'][^"']*["']/g,
+							''
+						),
+					}}
+				/>
+			);
+		}
+
 		// if custom uploaded svg icon url is available
 		if (
 			!isUndefined(currentIcon?.uploadSVG?.url) &&
@@ -203,7 +220,11 @@ function IconControl({
 			return (
 				<img
 					src={currentIcon.uploadSVG.url}
-					alt={currentIcon?.uploadSVG?.title || 'custom svg icon'}
+					alt={
+						currentIcon?.uploadSVG?.title
+							? currentIcon?.uploadSVG?.title.replaceAll('-', ' ')
+							: 'custom svg icon'
+					}
 				/>
 			);
 		}
