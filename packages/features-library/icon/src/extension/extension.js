@@ -216,7 +216,12 @@ export const IconExtension: ComponentType<{
 							ref,
 							newValue,
 							encodeIcon,
-							effectiveItems,
+							effectiveItems: {
+								...effectiveItems,
+								blockeraIconColor: {
+									value: iconColor,
+								},
+							},
 							handleOnChangeAttributes,
 						}
 					);
