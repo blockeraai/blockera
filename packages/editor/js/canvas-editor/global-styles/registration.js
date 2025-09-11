@@ -6,7 +6,6 @@
 import { useEffect } from '@wordpress/element';
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
-import { dispatch, select } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -72,17 +71,6 @@ export const registration = ({
 						/>
 					),
 					{
-						onShouldNotRenderer: () => {
-							if (
-								select(
-									'blockera/editor'
-								).getSelectedBlockStyle()
-							) {
-								dispatch(
-									'blockera/editor'
-								).setSelectedBlockStyle('');
-							}
-						},
 						targetElementIsRoot: true,
 						whileNotExistSelectors: [
 							blocksButton,
