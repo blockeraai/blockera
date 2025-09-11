@@ -14,6 +14,7 @@ import { useExtensionsStore } from '../../hooks/use-extensions-store';
 
 export const BlockStyle = ({
 	customCss,
+	isGlobalStylesWrapper = false,
 	...props
 }: BlockStyleProps): MixedElement => {
 	const {
@@ -42,6 +43,7 @@ export const BlockStyle = ({
 					currentState,
 					currentBlock,
 					currentBreakpoint,
+					isGlobalStylesWrapper,
 					currentInnerBlockState,
 					styleEngineConfig: props.supports?.blockeraStyleEngine,
 				}}

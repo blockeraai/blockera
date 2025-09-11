@@ -388,6 +388,7 @@ export const getCompatibleBlockCssSelector = ({
 	className = '',
 	suffixClass = '',
 	fallbackSupportId,
+	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
 	const rootSelector = '{{BLOCK_ID}}';
@@ -553,12 +554,10 @@ export const getCompatibleBlockCssSelector = ({
 		selectors: blockSelectors,
 	});
 
-	const { getSelectedBlockStyle } = select('blockera/editor');
-
 	if (selector && selector.trim()) {
 		if (isInnerBlock(currentBlock)) {
 			register(selector);
-		} else if (getSelectedBlockStyle()) {
+		} else if (isGlobalStylesWrapper) {
 			// Normalizing selector before registration for global styles purposes.
 			register(`:root :where(${selector})`);
 		} else {
