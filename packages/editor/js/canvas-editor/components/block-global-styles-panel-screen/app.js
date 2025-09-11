@@ -233,6 +233,7 @@ export default function App(props: Object): MixedElement {
 		// 	)}
 		// >
 		<GlobalStylesPanelContextProvider
+			blockName={name}
 			currentBlockStyleVariation={currentBlockStyleVariation}
 			setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
 		>
@@ -240,7 +241,7 @@ export default function App(props: Object): MixedElement {
 				<BlockApp
 					{...{
 						name,
-						clientId: props.clientId,
+						clientId: name.replace('/', '-'),
 						setAttributes: setStyles,
 						defaultAttributes: defaultStyles,
 						additional: {

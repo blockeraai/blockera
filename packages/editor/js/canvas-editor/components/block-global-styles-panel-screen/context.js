@@ -4,6 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
+import { select, dispatch } from '@wordpress/data';
+import { store as editorStore } from '@wordpress/editor';
 import { createContext, useContext } from '@wordpress/element';
 
 export const GlobalStylesPanelContext = createContext({
@@ -26,5 +28,14 @@ export const GlobalStylesPanelContextProvider = ({
 };
 
 export const useGlobalStylesPanelContext = () => {
-	return useContext(GlobalStylesPanelContext);
+	const contextReceivedValue = useContext(GlobalStylesPanelContext);
+
+	const { getEditorSettings } = select(editorStore);
+	const { updateEditorSettings } = dispatch(editorStore);
+
+	return {
+		...contextReceivedValue,
+		updateEditorSettings,
+		getEditorSettings,
+	};
 };

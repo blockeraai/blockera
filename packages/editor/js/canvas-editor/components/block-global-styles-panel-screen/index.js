@@ -63,10 +63,7 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	return createPortal(
 		<div className={className}>
-			<App
-				blockType={blockType}
-				clientId={Math.random().toString(36).substr(2, 9)}
-			/>
+			<App blockType={blockType} />
 		</div>,
 		screenElement
 	);
