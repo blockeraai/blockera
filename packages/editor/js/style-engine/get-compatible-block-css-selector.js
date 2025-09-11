@@ -553,9 +553,14 @@ export const getCompatibleBlockCssSelector = ({
 		selectors: blockSelectors,
 	});
 
+	const { getSelectedBlockStyle } = select('blockera/editor');
+
 	if (selector && selector.trim()) {
 		if (isInnerBlock(currentBlock)) {
 			register(selector);
+		} else if (getSelectedBlockStyle()) {
+			// Normalizing selector before registration for global styles purposes.
+			register(`:root :where(${selector})`);
 		} else {
 			register(appendRootBlockCssSelector(selector, rootSelector));
 		}
