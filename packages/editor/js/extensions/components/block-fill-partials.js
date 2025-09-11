@@ -161,11 +161,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 
 		return (
 			<>
-				<Fill
-					name={`blockera-block-card-content-${
-						clientId || blockProps.name
-					}`}
-				>
+				<Fill name={`blockera-block-card-content-${clientId}`}>
 					{!insideBlockInspector && (
 						<StateContainer
 							blockeraUnsavedData={
@@ -185,11 +181,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 					{insideBlockInspector && memoizedBlockCardComponent}
 				</Fill>
 				{isActive && (
-					<Fill
-						name={`blockera-block-edit-content-${
-							clientId || blockProps.name
-						}`}
-					>
+					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<BlockEditComponent
 							{...{ ...blockProps, insideBlockInspector }}
 							availableStates={
