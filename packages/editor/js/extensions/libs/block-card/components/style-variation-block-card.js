@@ -79,7 +79,10 @@ export function StyleVariationBlockCard({
 
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 
-	if (!currentBlockStyleVariation?.name) {
+	if (
+		!currentBlockStyleVariation?.name ||
+		currentBlockStyleVariation?.isDefault
+	) {
 		return <></>;
 	}
 
