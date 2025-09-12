@@ -90,10 +90,22 @@ export default function App(props: Object): MixedElement {
 
 	const { getBlockStyles, getSelectedBlockStyleVariation } =
 		select(EDITOR_STORE_NAME);
-	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
+	const { setBlockStyles, setSelectedBlockStyleVariation } =
+		dispatch(EDITOR_STORE_NAME);
 
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
-		useState(getSelectedBlockStyleVariation());
+		useState(undefined);
+
+	useEffect(() => {
+		const prevCurrentBlockStyleVariation = getSelectedBlockStyleVariation();
+
+		if (currentBlockStyleVariation !== prevCurrentBlockStyleVariation) {
+			return;
+		}
+
+		setSelectedBlockStyleVariation(currentBlockStyleVariation);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlockStyleVariation]);
 
 	const initialStyles = useMemo(() => {
 		const defaultStylesValue =
