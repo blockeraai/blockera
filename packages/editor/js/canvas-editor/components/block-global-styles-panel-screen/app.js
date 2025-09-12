@@ -71,7 +71,7 @@ export default function App(props: Object): MixedElement {
 	);
 
 	const originDefaultAttributes = useMemo(() => {
-		return mergeObject(attributes, blockeraOverrideBlockAttributes);
+		return mergeObject(blockeraOverrideBlockAttributes, attributes);
 	}, [attributes, blockeraOverrideBlockAttributes]);
 
 	const defaultStyles = useMemo(() => {
