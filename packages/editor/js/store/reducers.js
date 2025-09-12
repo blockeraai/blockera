@@ -164,7 +164,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 						[action.blockName]: {
 							...(state?.styles?.blocks?.[action.blockName] ||
 								{}),
-							variations: action.styles,
+							...action.styles,
 						},
 					},
 				},
@@ -174,21 +174,6 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 			state = {
 				...state,
 				selectedBlockStyleVariation: action.selectedBlockStyleVariation,
-			};
-			break;
-		case 'SET_BLOCK_DEFAULT_STYLES':
-			state = {
-				...state,
-				styles: {
-					...(state?.styles || {}),
-					blocks: {
-						...(state?.styles?.blocks || {}),
-						[action.blockName]: mergeObject(
-							state?.styles?.blocks?.[action.blockName] || {},
-							action.styles
-						),
-					},
-				},
 			};
 			break;
 	}
