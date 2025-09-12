@@ -207,6 +207,7 @@ export const useAttributes = (
 			updateInnerBlockInsideParentState,
 		}: UseAttributesActions = actions({
 			blockId,
+			clientId,
 			newValue,
 			attributeId,
 			innerBlocks,

@@ -219,17 +219,25 @@ export const memoizedBlockStates: (
 			currentState: 'normal',
 			insideInnerBlock: false,
 			currentBlock: 'master',
+			clientId: '',
+			name: '',
 		}
 	): Object => {
 		const {
 			currentState: receivedState,
 			insideInnerBlock,
 			currentBlock,
+			clientId: _clientId,
+			name: _name,
 		} = args;
 		const { currentState, currentBreakpoint } = action;
 		const { getBlockStates } = select('blockera/extensions');
-		const { clientId, name } =
-			select('core/block-editor')?.getSelectedBlock();
+		const { clientId, name } = select(
+			'core/block-editor'
+		)?.getSelectedBlock() || {
+			name: _name,
+			clientId: _clientId,
+		};
 		const blockStates = blockStatesValueCleanup(
 			getBlockStates(
 				clientId,
