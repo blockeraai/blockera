@@ -13,8 +13,8 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
 /**
  * Blockera dependencies
  */
-import { isEmpty, mergeObject, isEquals } from '@blockera/utils';
 import { BaseControlContext } from '@blockera/controls';
+import { isEmpty, mergeObject, isEquals, omit } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -99,9 +99,15 @@ export default function App(props: Object): MixedElement {
 		const defaultStylesValue =
 			prepareBlockeraDefaultAttributesValues(defaultStyles);
 
-		if (currentBlockStyleVariation) {
+		if (
+			currentBlockStyleVariation &&
+			!currentBlockStyleVariation?.isDefault
+		) {
 			return {
 				...defaultStylesValue,
+				...omit(mergedConfig?.styles?.blocks[name] || {}, [
+					'variations',
+				]),
 				...(mergedConfig?.styles?.blocks[name]?.variations[
 					currentBlockStyleVariation.name
 				] || {}),
@@ -144,6 +150,7 @@ export default function App(props: Object): MixedElement {
 			const cleanStyles = {};
 
 			for (const key in styles) {
+				// Skip identifiers and className keys.
 				if (
 					[
 						'blockeraPropsId',
@@ -151,6 +158,12 @@ export default function App(props: Object): MixedElement {
 						'className',
 					].includes(key)
 				) {
+					continue;
+				}
+
+				// Compatible with WordPress core block styles or other third party plugins blocks styles.
+				if (!/^blockera/.test(key)) {
+					cleanStyles[key] = styles[key];
 					continue;
 				}
 
@@ -187,7 +200,10 @@ export default function App(props: Object): MixedElement {
 
 	const handleOnChangeStyles = useCallback(
 		(newStyles) => {
-			if (currentBlockStyleVariation) {
+			if (
+				currentBlockStyleVariation &&
+				!currentBlockStyleVariation?.isDefault
+			) {
 				const newUserConfig = mergeObject(userConfig, {
 					styles: {
 						blocks: {
