@@ -133,7 +133,10 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			setAttributes(initialBlockGlobalStyles);
 		}, [initialBlockGlobalStyles, attributes]);
 
-		if (!defaultAttributes.hasOwnProperty('blockeraPropsId')) {
+		if (
+			!defaultAttributes.hasOwnProperty('blockeraPropsId') ||
+			!Object.keys(sanitizedAttributes).length
+		) {
 			return <></>;
 		}
 

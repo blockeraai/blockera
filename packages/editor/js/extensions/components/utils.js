@@ -59,7 +59,9 @@ export const prepareBlockeraDefaultAttributesValues = (
 
 		if (rootAttributes[key].default !== undefined) {
 			attributes[key] = {
-				value: rootAttributes[key].default,
+				value:
+					rootAttributes[key].default?.value ||
+					rootAttributes[key].default,
 			};
 
 			continue;
