@@ -21,7 +21,6 @@ import {
 	classNames,
 	componentClassNames,
 	componentInnerClassNames,
-	// controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -37,6 +36,7 @@ import { default as BlockStylesPreviewPanel } from './preview-panel';
 function BlockStyles({
 	styles,
 	blockName,
+	isNotActive,
 	onHoverClassName = () => {},
 	context = 'inspector-controls',
 	currentBlockStyleVariation,
@@ -44,6 +44,7 @@ function BlockStyles({
 	handleOnChangeBlockStyles = () => {},
 }: {
 	blockName: string,
+	isNotActive: boolean,
 	context?: 'global-styles-panel' | 'inspector-controls',
 	currentBlockStyleVariation: Object,
 	setCurrentBlockStyleVariation: (style: Object) => void,
@@ -308,7 +309,13 @@ function BlockStyles({
 	);
 
 	if ('global-styles-panel' === context) {
-		return <Component inGlobalStylesPanel={true} />;
+		return (
+			<div
+				className={isNotActive ? 'blockera-control-is-not-active' : ''}
+			>
+				<Component inGlobalStylesPanel={true} />
+			</div>
+		);
 	}
 
 	return (

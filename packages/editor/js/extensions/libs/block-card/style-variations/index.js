@@ -94,6 +94,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 				<BlockStyles
 					blockName={blockName}
 					context={context}
+					isNotActive={isNotActive}
 					styles={{
 						onSelect,
 						stylesToRender,
