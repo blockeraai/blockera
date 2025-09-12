@@ -37,6 +37,10 @@ export const StylesWrapper = ({
 			return;
 		}
 
+		if (entries[0].target.querySelector(`#${slotName}`)) {
+			return setEntry(entries[0].target.querySelector(`#${slotName}`));
+		}
+
 		const blockeraStylesWrapper = document.createElement('div');
 		blockeraStylesWrapper.id = slotName;
 
@@ -61,10 +65,6 @@ export const StylesWrapper = ({
 		]);
 		// eslint-disable-next-line
 	}, []);
-
-	if (!entry) {
-		return <></>;
-	}
 
 	const iframeBodyElement: HTMLElement | void = getIframeTag('body');
 

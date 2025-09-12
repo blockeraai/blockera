@@ -14,6 +14,7 @@ import { BlockGlobalStylesPanelScreen } from '../components';
 import { sidebarListener, sidebarSelector } from './side-bar-listener';
 import { styleBookListener, styleBookSelector } from './style-book-listener';
 import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
+import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
 
 export const registration = ({
 	screen,
@@ -78,6 +79,43 @@ export const registration = ({
 							blockScreenListItem,
 						],
 						componentSelector: '.blockera-extensions-wrapper',
+					}
+				);
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
+
+			return blockTypes.map(
+				(blockType: Object, index: number): MixedElement => (
+					<GlobalStylesRenderer
+						{...blockType}
+						key={blockType.name + index}
+					/>
+				)
+			);
+		},
+	});
+
+	registerPlugin('blockera-global-styles-output', {
+		render() {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useEffect(() => {
+				new IntersectionObserverRenderer(
+					'iframe.edit-site-visual-editor__editor-canvas',
+					() =>
+						blockTypes.map(
+							(
+								blockType: Object,
+								index: number
+							): MixedElement => (
+								<GlobalStylesRenderer
+									{...blockType}
+									key={blockType.name + index}
+								/>
+							)
+						),
+					{
+						targetElementIsRoot: true,
+						componentSelector: '#blockera-global-styles-wrapper',
 					}
 				);
 				// eslint-disable-next-line react-hooks/exhaustive-deps
