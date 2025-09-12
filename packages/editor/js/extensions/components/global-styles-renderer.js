@@ -98,7 +98,8 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			...initialBlockGlobalStyles,
 			blockeraBlockStates: {
 				value: {
-					...(initialBlockGlobalStyles?.blockeraBlockStates || {}),
+					...(initialBlockGlobalStyles?.blockeraBlockStates?.value ||
+						{}),
 					normal: {
 						breakpoints: {},
 						isVisible: true,

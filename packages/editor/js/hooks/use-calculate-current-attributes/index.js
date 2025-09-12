@@ -17,6 +17,8 @@ import { useExtensionsStore } from '../use-extensions-store';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 
 export const useCalculateCurrentAttributes = ({
+	name,
+	clientId,
 	attributes,
 	blockAttributes,
 	currentInnerBlock,
@@ -24,7 +26,7 @@ export const useCalculateCurrentAttributes = ({
 }: CalculateCurrentAttributesProps): Object => {
 	let currentAttributes: Object = {};
 	const { currentBlock, currentState, currentBreakpoint } =
-		useExtensionsStore();
+		useExtensionsStore({ name, clientId });
 	const blockAttributesDefaults =
 		prepareBlockeraDefaultAttributesValues(blockAttributes);
 

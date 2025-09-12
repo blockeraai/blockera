@@ -305,6 +305,8 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	});
 
 	const currentAttributes = useCalculateCurrentAttributes({
+		name,
+		clientId,
 		currentInnerBlock,
 		blockeraInnerBlocks,
 		attributes: sanitizedAttributes,
