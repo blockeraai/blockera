@@ -58,30 +58,44 @@ export const prepareBlockeraDefaultAttributesValues = (
 		}
 
 		if (rootAttributes[key].default !== undefined) {
-			attributes[key] = rootAttributes[key].default;
+			attributes[key] = {
+				value: rootAttributes[key].default,
+			};
 
 			continue;
 		}
 
 		switch (rootAttributes[key]?.type) {
 			case 'string':
-				attributes[key] = '';
+				attributes[key] = {
+					value: '',
+				};
 				break;
 			case 'object':
-				attributes[key] = {};
+				attributes[key] = {
+					value: {},
+				};
 				break;
 			case 'array':
-				attributes[key] = [];
+				attributes[key] = {
+					value: [],
+				};
 				break;
 			case 'boolean':
-				attributes[key] = false;
+				attributes[key] = {
+					value: false,
+				};
 				break;
 			case 'number':
 			case 'integer':
-				attributes[key] = 0;
+				attributes[key] = {
+					value: 0,
+				};
 				break;
 			case 'null':
-				attributes[key] = null;
+				attributes[key] = {
+					value: null,
+				};
 				break;
 		}
 	}

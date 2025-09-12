@@ -546,40 +546,44 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				</SlotFillProvider>
 			)}
 
-			<ErrorBoundary
-				fallbackRender={({ error }): MixedElement => (
-					<ErrorBoundaryFallback
-						{...{
-							error,
-							notice,
-							clientId,
-							setNotice,
-							from: 'style-wrapper',
-							props: blockStyleProps,
-							isReportingErrorCompleted,
-							setIsReportingErrorCompleted,
-							fallbackComponent: BlockStyle,
-						}}
+			{insideBlockInspector && (
+				<>
+					<ErrorBoundary
+						fallbackRender={({ error }): MixedElement => (
+							<ErrorBoundaryFallback
+								{...{
+									error,
+									notice,
+									clientId,
+									setNotice,
+									from: 'style-wrapper',
+									props: blockStyleProps,
+									isReportingErrorCompleted,
+									setIsReportingErrorCompleted,
+									fallbackComponent: BlockStyle,
+								}}
+							/>
+						)}
+					>
+						<StylesWrapper clientId={clientId}>
+							<Fill name={'blockera-styles-wrapper-' + clientId}>
+								<BlockStyle {...blockStyleProps} />
+							</Fill>
+						</StylesWrapper>
+					</ErrorBoundary>
+					{/*</StrictMode>*/}
+
+					<ContextualToolbarComponents />
+
+					<BlockFeaturesInlineStyles
+						clientId={clientId}
+						className={className}
+						currentAttributes={currentAttributes}
 					/>
-				)}
-			>
-				<StylesWrapper clientId={clientId}>
-					<Fill name={'blockera-styles-wrapper-' + clientId}>
-						<BlockStyle {...blockStyleProps} />
-					</Fill>
-				</StylesWrapper>
-			</ErrorBoundary>
-			{/*</StrictMode>*/}
 
-			<ContextualToolbarComponents />
-
-			<BlockFeaturesInlineStyles
-				clientId={clientId}
-				className={className}
-				currentAttributes={currentAttributes}
-			/>
-
-			{children}
+					{children}
+				</>
+			)}
 		</BlockEditContextProvider>
 	);
 });
