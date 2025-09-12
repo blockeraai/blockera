@@ -84,14 +84,7 @@ export const registration = ({
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, []);
 
-			return blockTypes.map(
-				(blockType: Object, index: number): MixedElement => (
-					<GlobalStylesRenderer
-						{...blockType}
-						key={blockType.name + index}
-					/>
-				)
-			);
+			return <></>;
 		},
 	});
 
