@@ -38,6 +38,7 @@ export const EditorAdvancedLabelControl = ({
 	path = null,
 	label,
 	value,
+	attributesRef,
 	className,
 	ariaLabel,
 	attribute = '',
@@ -63,7 +64,7 @@ export const EditorAdvancedLabelControl = ({
 		currentInnerBlockState,
 	} = useBlockContext();
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	let { attributes } = getSelectedBlock() || {};
+	let { attributes } = getSelectedBlock() || { attributes: attributesRef };
 	attributes = sanitizeBlockAttributes(attributes);
 
 	const { onChange, valueCleanup } = useContext(RepeaterContext) || {};
@@ -225,6 +226,7 @@ export const EditorAdvancedLabelControl = ({
 								onClick={switchBlockState}
 								defaultValue={defaultValue}
 								path={path}
+								attributesRef={attributesRef}
 								isRepeaterItem={!isUndefined(repeaterItem)}
 							/>
 

@@ -60,16 +60,6 @@ export default function App(props: Object): MixedElement {
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
-	const baseContextValue = useMemo(
-		() => ({
-			components: {
-				FeatureWrapper: EditorFeatureWrapper,
-				AdvancedLabelControl: EditorAdvancedLabelControl,
-			},
-		}),
-		[]
-	);
-
 	const originDefaultAttributes = useMemo(() => {
 		return mergeObject(blockeraOverrideBlockAttributes, attributes);
 	}, [attributes, blockeraOverrideBlockAttributes]);
@@ -124,6 +114,29 @@ export default function App(props: Object): MixedElement {
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
+
+	const baseContextValue = useMemo(
+		() => ({
+			components: {
+				FeatureWrapper: (props: Object) => (
+					<EditorFeatureWrapper
+						{...{
+							...props,
+							name,
+							clientId: name.replace('/', '-'),
+						}}
+					/>
+				),
+				AdvancedLabelControl: (props: Object) => (
+					<EditorAdvancedLabelControl
+						attributesRef={styles}
+						{...props}
+					/>
+				),
+			},
+		}),
+		[name, styles]
+	);
 
 	// To clean up the user styles configuration.
 	const cleanupStyles = useCallback(
