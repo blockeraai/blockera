@@ -173,6 +173,8 @@ export function InnerBlockCard({
 				}}
 			>
 				<StateContainer
+					name={blockName}
+					clientId={clientId}
 					insideBlockInspector={insideBlockInspector}
 					availableStates={availableStates}
 					blockeraUnsavedData={

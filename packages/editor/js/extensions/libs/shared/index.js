@@ -1604,6 +1604,8 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		return (
 			<StateContainer
+				name={props.name}
+				clientId={props.clientId}
 				insideBlockInspector={insideBlockInspector}
 				availableStates={availableStates}
 				blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}

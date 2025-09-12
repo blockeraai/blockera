@@ -164,6 +164,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 				<Fill name={`blockera-block-card-content-${clientId}`}>
 					{!insideBlockInspector && (
 						<StateContainer
+							name={blockProps.name}
+							clientId={clientId}
+							isGlobalStylesCardWrapper={!insideBlockInspector}
 							blockeraUnsavedData={
 								blockProps.attributes?.blockeraUnsavedData
 							}

@@ -164,6 +164,9 @@ export function StyleVariationBlockCard({
 				}}
 			>
 				<StateContainer
+					name={blockName}
+					clientId={clientId}
+					isGlobalStylesCard={true}
 					insideBlockInspector={insideBlockInspector}
 					availableStates={availableStates}
 					blockeraUnsavedData={
