@@ -24,15 +24,8 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	const { getSelectedBlockStyle } = select(STORE_NAME);
 	const { setSelectedBlockStyle } = dispatch(STORE_NAME);
-	const { getSelectedBlock } = select('core/block-editor');
-	let selectedBlockStyle = getSelectedBlockStyle();
-
-	if (!selectedBlockStyle && getSelectedBlock()) {
-		selectedBlockStyle = getSelectedBlock().name;
-	}
-
+	const selectedBlockStyle = getSelectedBlockStyle();
 	const blockType = getBlockType(selectedBlockStyle);
-
 	const screenElement = document.querySelector(screen);
 	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
 

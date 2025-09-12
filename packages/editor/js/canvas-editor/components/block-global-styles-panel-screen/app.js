@@ -201,8 +201,6 @@ export default function App(props: Object): MixedElement {
 				},
 			});
 
-			console.log(newUserConfig);
-
 			setBlockStyles(name, newUserConfig.styles.blocks[name]);
 
 			setUserConfig(newUserConfig);
