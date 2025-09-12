@@ -34,7 +34,7 @@ export const BlockStyle = ({
 	}
 
 	return (
-		<style>
+		<style id={props.clientId}>
 			{customCss}
 			<StateStyle
 				{...{
