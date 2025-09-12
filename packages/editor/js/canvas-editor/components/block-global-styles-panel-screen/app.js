@@ -6,7 +6,7 @@
 import { detailedDiff } from 'deep-object-diff';
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
-// import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 // import { store as blocksStore } from '@wordpress/blocks';
@@ -28,6 +28,7 @@ import {
 import { useGlobalStylesContext } from './global-styles-provider';
 import { SharedBlockExtension } from '../../../extensions/libs/shared';
 import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
+import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { prepareBlockeraDefaultAttributesValues } from '../../../extensions/components/utils';
 import {
 	BlockApp,
@@ -214,66 +215,66 @@ export default function App(props: Object): MixedElement {
 	// 	shouldDecodeEncode: false,
 	// });
 
-	// const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
-	// 	useState(false);
+	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+		useState(false);
 
 	return (
-		// <ErrorBoundary
-		// 	fallbackRender={({ error }) => (
-		// 		<ErrorBoundaryFallback
-		// 			{...{
-		// 				props,
-		// 				error,
-		// 				from: 'root',
-		// 				isReportingErrorCompleted,
-		// 				setIsReportingErrorCompleted,
-		// 				fallbackComponent: settings.edit,
-		// 			}}
-		// 		/>
-		// 	)}
-		// >
-		<GlobalStylesPanelContextProvider
-			blockName={name}
-			currentBlockStyleVariation={currentBlockStyleVariation}
-			setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
-		>
-			<BaseControlContext.Provider value={baseContextValue}>
-				<BlockApp
+		<ErrorBoundary
+			fallbackRender={({ error }) => (
+				<ErrorBoundaryFallback
 					{...{
-						name,
-						clientId: name.replace('/', '-'),
-						setAttributes: setStyles,
-						defaultAttributes: defaultStyles,
-						additional: {
-							edit: SharedBlockExtension,
-						},
-						insideBlockInspector: false,
-						className: props?.className,
-						attributes: styles,
-						originDefaultAttributes,
+						props,
+						error,
+						from: 'root',
+						isReportingErrorCompleted,
+						setIsReportingErrorCompleted,
+						fallbackComponent: () => <></>,
 					}}
-				>
-					<div className="blockera-block-global-panel" />
-					<BlockBase>
-						<SlotFillProvider>
-							<Slot name={'blockera-block-before'} />
+				/>
+			)}
+		>
+			<GlobalStylesPanelContextProvider
+				blockName={name}
+				currentBlockStyleVariation={currentBlockStyleVariation}
+				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
+			>
+				<BaseControlContext.Provider value={baseContextValue}>
+					<BlockApp
+						{...{
+							name,
+							clientId: name.replace('/', '-'),
+							setAttributes: setStyles,
+							defaultAttributes: defaultStyles,
+							additional: {
+								edit: SharedBlockExtension,
+							},
+							insideBlockInspector: false,
+							className: props?.className,
+							attributes: styles,
+							originDefaultAttributes,
+						}}
+					>
+						<div className="blockera-block-global-panel" />
+						<BlockBase>
+							<SlotFillProvider>
+								<Slot name={'blockera-block-before'} />
 
-							<BlockPortals
-								blockId={`#block-${props.clientId}`}
-								mainSlot={'blockera-block-slot'}
-								slots={
-									// slot selectors is feature on configuration block to create custom slots for anywhere.
-									// we can add slotSelectors property on block configuration to handle custom preview of block.
-									{}
-								}
-							/>
+								<BlockPortals
+									blockId={`#block-${props.clientId}`}
+									mainSlot={'blockera-block-slot'}
+									slots={
+										// slot selectors is feature on configuration block to create custom slots for anywhere.
+										// we can add slotSelectors property on block configuration to handle custom preview of block.
+										{}
+									}
+								/>
 
-							<Slot name={'blockera-block-after'} />
-						</SlotFillProvider>
-					</BlockBase>
-				</BlockApp>
-			</BaseControlContext.Provider>
-			{/* </ErrorBoundary> */}
-		</GlobalStylesPanelContextProvider>
+								<Slot name={'blockera-block-after'} />
+							</SlotFillProvider>
+						</BlockBase>
+					</BlockApp>
+				</BaseControlContext.Provider>
+			</GlobalStylesPanelContextProvider>
+		</ErrorBoundary>
 	);
 }
