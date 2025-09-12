@@ -25,6 +25,7 @@ export const StyleItem = ({
 	activeStyle,
 	styleItemHandler,
 	onSelectStylePreview,
+	setCurrentActiveStyle,
 	setCurrentPreviewStyle,
 	inGlobalStylesPanel = false,
 }: {
@@ -33,6 +34,7 @@ export const StyleItem = ({
 	inGlobalStylesPanel: boolean,
 	styleItemHandler: (style: Object) => void,
 	onSelectStylePreview: (style: Object) => void,
+	setCurrentActiveStyle: (style: Object) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
 	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
@@ -107,6 +109,7 @@ export const StyleItem = ({
 							dispatch('blockera/editor');
 
 						setSelectedBlockStyleVariation(style);
+						setCurrentActiveStyle(style);
 						return setCurrentBlockStyleVariation(style);
 					}
 

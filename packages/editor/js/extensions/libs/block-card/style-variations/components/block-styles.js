@@ -230,6 +230,9 @@ function BlockStyles({
 									key={style.name}
 									style={style}
 									activeStyle={activeStyle}
+									setCurrentActiveStyle={
+										setCurrentActiveStyle
+									}
 									inGlobalStylesPanel={inGlobalStylesPanel}
 									onSelectStylePreview={onSelectStylePreview}
 									setCurrentPreviewStyle={
