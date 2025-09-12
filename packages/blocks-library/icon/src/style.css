@@ -9,4 +9,6 @@
 	height: auto;
 	vertical-align: bottom;
 	fill: var(--blockera--icon--color, currentColor);
+	color: var(--blockera--icon--color, inherit);
+	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 }
