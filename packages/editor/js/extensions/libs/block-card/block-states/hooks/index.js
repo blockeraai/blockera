@@ -370,6 +370,7 @@ export const useBlockStates = ({
 			onChangeBlockStates(
 				newValue,
 				{
+					block,
 					states,
 					onChange,
 					currentState,
