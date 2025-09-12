@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { detailedDiff } from 'deep-object-diff';
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -88,8 +87,7 @@ export default function App(props: Object): MixedElement {
 		setUserConfig,
 	} = useGlobalStylesContext();
 
-	const { getBlockStyles, getSelectedBlockStyleVariation } =
-		select(EDITOR_STORE_NAME);
+	const { getSelectedBlockStyleVariation } = select(EDITOR_STORE_NAME);
 	const { setBlockStyles, setSelectedBlockStyleVariation } =
 		dispatch(EDITOR_STORE_NAME);
 
@@ -107,7 +105,7 @@ export default function App(props: Object): MixedElement {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currentBlockStyleVariation]);
 
-	const initialStyles = useMemo(() => {
+	const styles = useMemo(() => {
 		const defaultStylesValue =
 			prepareBlockeraDefaultAttributesValues(defaultStyles);
 
@@ -127,18 +125,10 @@ export default function App(props: Object): MixedElement {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
 
-	const [styles, setStyles] = useState(initialStyles);
-
-	useEffect(() => {
-		if (!isEquals(styles, initialStyles)) {
-			setStyles(initialStyles);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [initialStyles]);
-
-	const getCalculatedBlockStyles = useCallback(
+	// To clean up the user styles configuration.
+	const cleanupStyles = useCallback(
 		(styles) => {
-			const calculatedBlockStyles = {};
+			const cleanStyles = {};
 
 			for (const key in styles) {
 				if (
@@ -155,68 +145,71 @@ export default function App(props: Object): MixedElement {
 					!defaultStyles[key]?.hasOwnProperty('default') &&
 					styles[key]
 				) {
-					calculatedBlockStyles[key] = styles[key];
+					if (!styles[key].hasOwnProperty('value')) {
+						cleanStyles[key] = {
+							value: styles[key],
+						};
+					} else {
+						cleanStyles[key] = styles[key];
+					}
 
 					continue;
 				}
 
 				if (!isEquals(defaultStyles[key]?.default, styles[key])) {
-					calculatedBlockStyles[key] = styles[key];
+					if (!styles[key].hasOwnProperty('value')) {
+						cleanStyles[key] = {
+							value: styles[key],
+						};
+					} else {
+						cleanStyles[key] = styles[key];
+					}
 				}
 			}
 
-			return calculatedBlockStyles;
+			return cleanStyles;
 		},
 		[defaultStyles]
 	);
 
-	// Update global styles state when local styles change.
-	useEffect(() => {
-		if (!isEquals(getBlockStyles(name), styles)) {
-			setBlockStyles(name, getCalculatedBlockStyles(styles));
-
-			const { added, deleted, updated } = detailedDiff(
-				initialStyles,
-				styles
-			);
-
-			if (
-				!Object.keys(added).length &&
-				!Object.keys(deleted).length &&
-				!Object.keys(updated).length
-			) {
-				return;
-			}
-
+	const handleOnChangeStyles = useCallback(
+		(newStyles) => {
 			if (currentBlockStyleVariation) {
-				return setUserConfig(
-					mergeObject(userConfig, {
-						styles: {
-							blocks: {
-								[name]: {
-									variations: {
-										[currentBlockStyleVariation.name]:
-											getCalculatedBlockStyles(styles),
-									},
+				const newUserConfig = mergeObject(userConfig, {
+					styles: {
+						blocks: {
+							[name]: {
+								variations: {
+									[currentBlockStyleVariation.name]:
+										cleanupStyles(newStyles),
 								},
 							},
 						},
-					})
-				);
+					},
+				});
+
+				setBlockStyles(name, newUserConfig.styles.blocks[name]);
+
+				return setUserConfig(newUserConfig);
 			}
 
-			setUserConfig(
-				mergeObject(userConfig, {
-					styles: {
-						blocks: {
-							[name]: getCalculatedBlockStyles(styles),
-						},
+			const newUserConfig = mergeObject(userConfig, {
+				styles: {
+					blocks: {
+						[name]: cleanupStyles(newStyles),
 					},
-				})
-			);
-		}
+				},
+			});
+
+			console.log(newUserConfig);
+
+			setBlockStyles(name, newUserConfig.styles.blocks[name]);
+
+			setUserConfig(newUserConfig);
+		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [styles]);
+		[currentBlockStyleVariation, styles, name, userConfig]
+	);
 
 	// let prefixParts = [];
 	// if (variation) {
@@ -255,7 +248,7 @@ export default function App(props: Object): MixedElement {
 						{...{
 							name,
 							clientId: name.replace('/', '-'),
-							setAttributes: setStyles,
+							setAttributes: handleOnChangeStyles,
 							defaultAttributes: defaultStyles,
 							additional: {
 								edit: SharedBlockExtension,
