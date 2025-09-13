@@ -227,7 +227,12 @@ export const IconExtension: ComponentType<{
 							effectiveItems: {
 								...effectiveItems,
 								blockeraIconColor: {
-									value: iconColor,
+									value: !isUndefined(
+										effectiveItems?.blockeraIconColor?.value
+									)
+										? effectiveItems?.blockeraIconColor
+												?.value
+										: iconColor,
 								},
 							},
 							handleOnChangeAttributes,
