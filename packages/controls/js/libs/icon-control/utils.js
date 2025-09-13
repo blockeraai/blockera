@@ -140,12 +140,6 @@ export function getLibraryIcons({
 	return iconsStack;
 }
 
-/**
- * Sanitize the raw string and make sure it's an SVG.
- *
- * @param {string} rawString The media object for the selected SVG file.
- * @return { string }        The sanitized svg string.
- */
 export function sanitizeRawSVGString(rawString) {
 	if (!rawString || typeof rawString !== 'string') {
 		return '';
@@ -198,11 +192,6 @@ export function sanitizeRawSVGString(rawString) {
 	return svgString;
 }
 
-/**
- * Sanitize SVG element by removing dangerous content and attributes.
- *
- * @param {Element} svgElement The SVG element to sanitize.
- */
 function sanitizeSVGElement(svgElement) {
 	// Define whitelist of allowed SVG elements
 	const allowedElements = new Set([
@@ -359,13 +348,6 @@ function sanitizeSVGElement(svgElement) {
 	removeDangerousContent(svgElement, allowedElements, allowedAttributes);
 }
 
-/**
- * Recursively remove dangerous content from SVG elements.
- *
- * @param {Element} element The element to process.
- * @param {Set} allowedElements Set of allowed element names.
- * @param {Set} allowedAttributes Set of allowed attribute names.
- */
 function removeDangerousContent(element, allowedElements, allowedAttributes) {
 	// Remove dangerous elements
 	const dangerousElements = [
