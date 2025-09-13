@@ -33,6 +33,8 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			name,
 			supports,
 			selectors,
+			styleVariationName,
+			isStyleVariation = false,
 			attributes: defaultAttributes,
 		} = blockType;
 		const [attributes, setAttributes] = useState({});
@@ -93,6 +95,11 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			},
 		} = mergedConfig;
 
+		if (isStyleVariation && styleVariationName) {
+			initialBlockGlobalStyles =
+				initialBlockGlobalStyles.variations[styleVariationName];
+		}
+
 		initialBlockGlobalStyles = {
 			...prepareBlockeraDefaultAttributesValues(defaultStyles),
 			...initialBlockGlobalStyles,
@@ -116,8 +123,10 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			selectors,
 			customCss: '',
 			additional: {},
-			inlineStyles: [],
 			blockName: name,
+			isStyleVariation,
+			inlineStyles: [],
+			styleVariationName,
 			isGlobalStylesWrapper: true,
 			defaultAttributes: defaultStyles,
 			attributes: sanitizedAttributes,
