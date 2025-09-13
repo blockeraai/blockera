@@ -524,9 +524,13 @@ export function openMoreFeaturesControl(label) {
 		});
 }
 
-export const reSelectBlock = (blockType = 'core/paragraph') => {
-	// unfocus block
+// unfocus block
+export const deSelectBlock = () => {
 	cy.getIframeBody().find('h1').click();
+};
+
+export const reSelectBlock = (blockType = 'core/paragraph') => {
+	deSelectBlock();
 
 	// reselect block
 	cy.getIframeBody()
