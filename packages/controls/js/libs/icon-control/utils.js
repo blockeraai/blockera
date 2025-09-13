@@ -156,12 +156,14 @@ export function sanitizeRawSVGString(rawString) {
 		);
 	} catch (error) {
 		// Handle parsing errors
+		/* @debug-ignore */
 		console.warn('SVG parsing error:', error);
 		return '';
 	}
 
 	// Check for parsing errors
 	if (svgDoc.querySelector('parsererror')) {
+		/* @debug-ignore */
 		console.warn('SVG contains parsing errors');
 		return '';
 	}
@@ -171,6 +173,7 @@ export function sanitizeRawSVGString(rawString) {
 		svgDoc.childNodes.length !== 1 ||
 		svgDoc.firstChild.nodeName !== 'svg'
 	) {
+		/* @debug-ignore */
 		console.warn('Invalid SVG structure: expected single SVG element');
 		return '';
 	}
@@ -185,6 +188,7 @@ export function sanitizeRawSVGString(rawString) {
 	try {
 		svgString = new window.XMLSerializer().serializeToString(svgElement);
 	} catch (error) {
+		/* @debug-ignore */
 		console.warn('SVG serialization error:', error);
 		return '';
 	}
