@@ -127,7 +127,10 @@ export function getBlockInserter() {
  * From inside the WordPress editor open the blockera Gutenberg editor panel
  *
  * for simple blocks you can use the blockName as 'core/image'
- * for blocks with variations you can use the blockName as 'core/image/blockera/icon'
+ * for blocks with variations you can use the blockName as {category}/{blockType}/{variation}
+ * examples:
+ * - 'core/group/group'
+ * - 'core/image/blockera/icon'
  *
  * @param {string}  blockName   The name to find in the block inserter
  *                              e.g 'core/image'.
@@ -139,17 +142,23 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 
 	let blockCategory = false;
 	let blockType = false;
-	let blockVariation = false;
 	let blockID = false;
+	let blockSearchName = false;
 
 	if (blockNameArray.length === 4) {
 		blockCategory = blockNameArray[0];
 		blockType = blockNameArray[1];
-		blockVariation = blockNameArray[2];
-		blockID = blockNameArray[3];
+		blockID = blockNameArray[2] + '/' + blockNameArray[3];
+		blockSearchName = blockNameArray[3];
+	} else if (blockNameArray.length === 3) {
+		blockCategory = blockNameArray[0];
+		blockType = blockNameArray[1];
+		blockID = blockNameArray[2];
+		blockSearchName = blockNameArray[2];
 	} else {
 		blockCategory = blockNameArray[0];
 		blockID = blockNameArray[1];
+		blockSearchName = blockNameArray[1];
 	}
 
 	if (!blockCategory || !blockID) {
@@ -167,7 +176,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
 	)
 		.click()
-		.type(blockID, { delay: 0 });
+		.type(blockSearchName, { delay: 0 });
 
 	/**
 	 * The network request to block-directory may be cached and is not consistently fired with each test.
@@ -178,12 +187,12 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 
 	let targetClassName = '';
 
-	if (blockVariation) {
+	if (blockType) {
 		targetClassName = `.editor-block-list-item-${CSS.escape(
-			`${blockType}/${blockVariation}/${blockID}`
+			`${blockType}/${blockID}`
 		)}`;
 	} else {
-		targetClassName = `.editor-block-list-item-${blockID}`;
+		targetClassName = `.editor-block-list-item-${CSS.escape(blockID)}`;
 	}
 
 	cy.get(targetClassName).first().click({ force: true });
@@ -203,11 +212,10 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 
 	cy.openDocumentSettingsSidebar('Block');
 
-	// Click on added new block item.
-	if (blockVariation) {
-		cy.getBlock(`${blockCategory}/${blockType}`).click();
+	if (blockType) {
+		cy.getBlock(`${blockCategory}/${blockType}`).last().click();
 	} else {
-		cy.getBlock(blockName).click();
+		cy.getBlock(`${blockCategory}/${blockID}`).last().click();
 	}
 
 	cy.window()
