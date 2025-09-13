@@ -358,12 +358,12 @@ class EditBlockHTML implements EditableBlockHTML {
             return '';
         }
 
-        // Add role="img" to SVG tag for accessibility (only if not already present)
+        // Add role="img" to SVG tag for accessibility (only if not already present).
 		if (! empty($role)) {
         	$iconHTML = preg_replace('/<svg((?![^>]*role="img")[^>]*?)>/i', '<svg$1 role="' . $role . '">', $iconHTML);
 		}
 
-        // Add title to SVG tag for accessibility (only if not already present)
+        // Add title to SVG tag for accessibility (only if not already present).
 		if (! empty($title)) {
         	$iconHTML = preg_replace('/<svg((?![^>]*title=)[^>]*?)>/i', '<svg$1 title="' . $title . '">', $iconHTML);
 		}
