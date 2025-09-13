@@ -117,7 +117,10 @@ export function disableGutenbergFeatures() {
 	});
 }
 
-export function getBlockInserter() {
+export function getBlockInserter(selector = false) {
+	if (selector) {
+		return cy.getIframeBody().find(selector);
+	}
 	return cy.get(
 		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header [aria-label="Block Inserter"], .edit-site-header [aria-label="Block Inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle is-primary[aria-pressed="false"]'
 	);
@@ -137,7 +140,12 @@ export function getBlockInserter() {
  * @param {boolean} clearEditor Should clear editor of all blocks
  * @param {string} className The block css class name
  */
-export function addBlockToPost(blockName, clearEditor = false, className = '') {
+export function addBlockToPost(
+	blockName,
+	clearEditor = false,
+	className = '',
+	blockInserterSelector = false
+) {
 	const blockNameArray = blockName.split('/');
 
 	let blockCategory = false;
@@ -169,7 +177,7 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 		clearBlocks();
 	}
 
-	getBlockInserter().click();
+	getBlockInserter(blockInserterSelector).click();
 
 	// eslint-disable-next-line
 	cy.get(
@@ -183,7 +191,8 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 	 * Instead of intercepting we can await known dom elements that appear only when search results are present.
 	 * This should correct a race condition in CI.
 	 */
-	cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
+	if (!blockInserterSelector)
+		cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
 
 	let targetClassName = '';
 
