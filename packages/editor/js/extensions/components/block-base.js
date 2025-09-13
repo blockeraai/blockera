@@ -150,6 +150,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		currentBlock,
 		currentState,
 		currentBreakpoint,
+		getBlockExtensionBy,
 		currentInnerBlockState,
 	} = useExtensionsStore({ name, clientId });
 
@@ -261,7 +262,9 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			className,
 			blockId: name,
 			isNormalState,
-			getAttributes,
+			...(insideBlockInspector
+				? { getAttributes }
+				: { getAttributes: () => attributes }),
 			currentBlock,
 			currentState,
 			blockVariations,
@@ -338,7 +341,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		);
 	}, [_attributes]);
 
-	const { getBlockExtensionBy } = useExtensionsStore();
 	const availableStates =
 		additional?.availableBlockStates || generalBlockStates;
 	const availableInnerStates = useMemo(() => {
