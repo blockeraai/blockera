@@ -2,7 +2,7 @@
  * WordPress dependencies
  */
 import { getBlockType } from '@wordpress/blocks';
-import { useMemo } from '@wordpress/element';
+import { useMemo, memo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -11,12 +11,12 @@ import InserterPreviewPanel from './inserter-preview-panel';
 import { replaceActiveStyle } from '../utils';
 
 // It's a clone of '@wordpress/block-editor/js/components/block-styles/preview-panel'
-export default function BlockStylesPreviewPanel({
+const BlockStylesPreviewPanel = ({
 	genericPreviewBlock,
 	style,
 	className,
 	activeStyle,
-}) {
+}) => {
 	const example = getBlockType(genericPreviewBlock.name)?.example;
 
 	const styleClassName = replaceActiveStyle(className, activeStyle, style);
@@ -38,4 +38,6 @@ export default function BlockStylesPreviewPanel({
 	}, [genericPreviewBlock, styleClassName]);
 
 	return <InserterPreviewPanel item={previewBlocks} />;
-}
+};
+
+export default memo(BlockStylesPreviewPanel);

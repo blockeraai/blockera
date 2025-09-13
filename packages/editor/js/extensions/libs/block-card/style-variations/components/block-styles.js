@@ -171,17 +171,127 @@ function BlockStyles({
 		setBlockStyles(filtered);
 	};
 
-	const Component = ({
-		inGlobalStylesPanel = false,
-	}: {
-		inGlobalStylesPanel?: boolean,
-	}) => (
-		<Flex
-			className={componentClassNames('block-styles')}
-			direction="column"
-			gap="20px"
+	if ('global-styles-panel' === context) {
+		return (
+			<div
+				className={isNotActive ? 'blockera-control-is-not-active' : ''}
+			>
+				<Flex
+					className={componentClassNames('block-styles')}
+					direction="column"
+					gap="20px"
+				>
+					{blockStyles.length === 0 ? (
+						<Flex
+							alignItems="center"
+							direction="column"
+							justifyContent="space-between"
+							gap="0"
+							style={{ padding: '40px 0' }}
+						>
+							<Icon
+								icon="block-default"
+								library="wp"
+								style={{ fill: '#949494' }}
+							/>
+							<p>{__('No styles found.', 'blockera')}</p>
+						</Flex>
+					) : (
+						<>
+							<Flex direction="column" gap="10px">
+								<AddNewStyleButton
+									blockName={blockName}
+									label={__('Style Variations', 'blockera')}
+									blockStyles={blockStyles}
+									setBlockStyles={setBlockStyles}
+								/>
+
+								<div
+									className={componentInnerClassNames(
+										'block-styles__variants'
+									)}
+								>
+									{blockStyles.map((style) => (
+										<StyleItem
+											key={style.name}
+											style={style}
+											activeStyle={activeStyle}
+											setCurrentActiveStyle={
+												setCurrentActiveStyle
+											}
+											inGlobalStylesPanel={true}
+											onSelectStylePreview={
+												onSelectStylePreview
+											}
+											setCurrentPreviewStyle={
+												setCurrentPreviewStyle
+											}
+											currentBlockStyleVariation={
+												currentBlockStyleVariation
+											}
+											setCurrentBlockStyleVariation={
+												setCurrentBlockStyleVariation
+											}
+											styleItemHandler={styleItemHandler}
+										/>
+									))}
+
+									{hoveredStyle &&
+										!isMobileViewport &&
+										showPreview && (
+											<WPPopover
+												placement="left-start"
+												offset={40}
+												focusOnMount={false}
+												animate={false}
+											>
+												<div
+													className="block-editor-block-styles__preview-panel"
+													onMouseLeave={() =>
+														styleItemHandler(null)
+													}
+												>
+													<BlockStylesPreviewPanel
+														activeStyle={
+															activeStyle
+														}
+														className={
+															previewClassName
+														}
+														genericPreviewBlock={
+															genericPreviewBlock
+														}
+														style={hoveredStyle}
+													/>
+												</div>
+											</WPPopover>
+										)}
+								</div>
+							</Flex>
+						</>
+					)}
+				</Flex>
+			</div>
+		);
+	}
+
+	return (
+		<Popover
+			title={''}
+			offset={10}
+			placement="bottom-start"
+			className="variations-picker-popover"
+			onClose={() => {
+				setIsOpen(false);
+				setCurrentPreviewStyle(null);
+			}}
+			anchor={popoverAnchor}
 		>
-			{!inGlobalStylesPanel && (
+			<Flex
+				className={componentClassNames('block-styles')}
+				direction="column"
+				gap="20px"
+			>
 				<ControlContextProvider
 					value={{
 						name: 'search-styles',
@@ -193,91 +303,91 @@ function BlockStyles({
 						placeholder={__('Search styles…', 'blockera')}
 					/>
 				</ControlContextProvider>
-			)}
 
-			{blockStyles.length === 0 ? (
-				<Flex
-					alignItems="center"
-					direction="column"
-					justifyContent="space-between"
-					gap="0"
-					style={{ padding: '40px 0' }}
-				>
-					<Icon
-						icon="block-default"
-						library="wp"
-						style={{ fill: '#949494' }}
-					/>
-					<p>{__('No styles found.', 'blockera')}</p>
-				</Flex>
-			) : (
-				<>
-					<Flex direction="column" gap="10px">
-						<AddNewStyleButton
-							blockName={blockName}
-							label={__('Style Variations', 'blockera')}
-							blockStyles={blockStyles}
-							setBlockStyles={setBlockStyles}
+				{blockStyles.length === 0 ? (
+					<Flex
+						alignItems="center"
+						direction="column"
+						justifyContent="space-between"
+						gap="0"
+						style={{ padding: '40px 0' }}
+					>
+						<Icon
+							icon="block-default"
+							library="wp"
+							style={{ fill: '#949494' }}
 						/>
-
-						<div
-							className={componentInnerClassNames(
-								'block-styles__variants'
-							)}
-						>
-							{blockStyles.map((style) => (
-								<StyleItem
-									key={style.name}
-									style={style}
-									activeStyle={activeStyle}
-									setCurrentActiveStyle={
-										setCurrentActiveStyle
-									}
-									inGlobalStylesPanel={inGlobalStylesPanel}
-									onSelectStylePreview={onSelectStylePreview}
-									setCurrentPreviewStyle={
-										setCurrentPreviewStyle
-									}
-									currentBlockStyleVariation={
-										currentBlockStyleVariation
-									}
-									setCurrentBlockStyleVariation={
-										setCurrentBlockStyleVariation
-									}
-									styleItemHandler={styleItemHandler}
-								/>
-							))}
-
-							{hoveredStyle &&
-								!isMobileViewport &&
-								showPreview && (
-									<WPPopover
-										placement="left-start"
-										offset={40}
-										focusOnMount={false}
-										animate={false}
-									>
-										<div
-											className="block-editor-block-styles__preview-panel"
-											onMouseLeave={() =>
-												styleItemHandler(null)
-											}
-										>
-											<BlockStylesPreviewPanel
-												activeStyle={activeStyle}
-												className={previewClassName}
-												genericPreviewBlock={
-													genericPreviewBlock
-												}
-												style={hoveredStyle}
-											/>
-										</div>
-									</WPPopover>
-								)}
-						</div>
+						<p>{__('No styles found.', 'blockera')}</p>
 					</Flex>
+				) : (
+					<>
+						<Flex direction="column" gap="10px">
+							<AddNewStyleButton
+								blockName={blockName}
+								label={__('Style Variations', 'blockera')}
+								blockStyles={blockStyles}
+								setBlockStyles={setBlockStyles}
+							/>
 
-					{!inGlobalStylesPanel && (
+							<div
+								className={componentInnerClassNames(
+									'block-styles__variants'
+								)}
+							>
+								{blockStyles.map((style) => (
+									<StyleItem
+										key={style.name}
+										style={style}
+										activeStyle={activeStyle}
+										setCurrentActiveStyle={
+											setCurrentActiveStyle
+										}
+										inGlobalStylesPanel={false}
+										onSelectStylePreview={
+											onSelectStylePreview
+										}
+										setCurrentPreviewStyle={
+											setCurrentPreviewStyle
+										}
+										currentBlockStyleVariation={
+											currentBlockStyleVariation
+										}
+										setCurrentBlockStyleVariation={
+											setCurrentBlockStyleVariation
+										}
+										styleItemHandler={styleItemHandler}
+									/>
+								))}
+
+								{hoveredStyle &&
+									!isMobileViewport &&
+									showPreview && (
+										<WPPopover
+											placement="left-start"
+											offset={40}
+											focusOnMount={false}
+											animate={false}
+										>
+											<div
+												className="block-editor-block-styles__preview-panel"
+												onMouseLeave={() =>
+													styleItemHandler(null)
+												}
+											>
+												<BlockStylesPreviewPanel
+													activeStyle={activeStyle}
+													className={previewClassName}
+													genericPreviewBlock={
+														genericPreviewBlock
+													}
+													style={hoveredStyle}
+												/>
+											</div>
+										</WPPopover>
+									)}
+							</div>
+						</Flex>
+
 						<Flex direction="column" gap="8px">
 							<h2
 								className={classNames(
@@ -305,35 +415,9 @@ function BlockStyles({
 								</a>
 							</p>
 						</Flex>
-					)}
-				</>
-			)}
-		</Flex>
-	);
-
-	if ('global-styles-panel' === context) {
-		return (
-			<div
-				className={isNotActive ? 'blockera-control-is-not-active' : ''}
-			>
-				<Component inGlobalStylesPanel={true} />
-			</div>
-		);
-	}
-
-	return (
-		<Popover
-			title={''}
-			offset={10}
-			placement="bottom-start"
-			className="variations-picker-popover"
-			onClose={() => {
-				setIsOpen(false);
-				setCurrentPreviewStyle(null);
-			}}
-			anchor={popoverAnchor}
-		>
-			<Component />
+					</>
+				)}
+			</Flex>
 		</Popover>
 	);
 }
