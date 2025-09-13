@@ -388,6 +388,8 @@ export const getCompatibleBlockCssSelector = ({
 	className = '',
 	suffixClass = '',
 	fallbackSupportId,
+	styleVariationName,
+	isStyleVariation = false,
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
@@ -555,11 +557,13 @@ export const getCompatibleBlockCssSelector = ({
 	});
 
 	if (selector && selector.trim()) {
-		if (isInnerBlock(currentBlock)) {
-			register(selector);
+		if (isStyleVariation && styleVariationName) {
+			register(`.is-style-${styleVariationName}`);
 		} else if (isGlobalStylesWrapper) {
 			// Normalizing selector before registration for global styles purposes.
 			register(`:root :where(${selector})`);
+		} else if (isInnerBlock(currentBlock)) {
+			register(selector);
 		} else {
 			register(appendRootBlockCssSelector(selector, rootSelector));
 		}

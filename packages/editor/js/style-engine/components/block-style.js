@@ -34,7 +34,7 @@ export const BlockStyle = ({
 	}
 
 	return (
-		<style id={props.clientId}>
+		<>
 			{customCss}
 			<StateStyle
 				{...{
@@ -48,6 +48,6 @@ export const BlockStyle = ({
 					styleEngineConfig: props.supports?.blockeraStyleEngine,
 				}}
 			/>
-		</style>
+		</>
 	);
 };

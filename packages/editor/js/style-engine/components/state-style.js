@@ -115,6 +115,7 @@ export const StateStyle = (
 				index: number
 			): MixedElement => (
 				<Style
+					clientId={props.clientId}
 					key={`${type}-${index}-style`}
 					selector={selector}
 					cssDeclaration={declarations}
