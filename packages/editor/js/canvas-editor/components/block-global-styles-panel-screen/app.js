@@ -169,27 +169,17 @@ export default function App(props: Object): MixedElement {
 
 				if (
 					!defaultStyles[key]?.hasOwnProperty('default') &&
-					styles[key]
+					styles[key]?.value
 				) {
-					if (!styles[key].hasOwnProperty('value')) {
-						cleanStyles[key] = {
-							value: styles[key],
-						};
-					} else {
-						cleanStyles[key] = styles[key];
-					}
+					cleanStyles[key] = styles[key];
 
 					continue;
 				}
 
-				if (!isEquals(defaultStyles[key]?.default, styles[key])) {
-					if (!styles[key].hasOwnProperty('value')) {
-						cleanStyles[key] = {
-							value: styles[key],
-						};
-					} else {
-						cleanStyles[key] = styles[key];
-					}
+				if (
+					!isEquals(defaultStyles[key]?.default, styles[key]?.value)
+				) {
+					cleanStyles[key] = styles[key];
 				}
 			}
 
