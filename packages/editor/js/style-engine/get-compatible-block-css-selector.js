@@ -558,7 +558,9 @@ export const getCompatibleBlockCssSelector = ({
 
 	if (selector && selector.trim()) {
 		if (isStyleVariation && styleVariationName) {
-			register(`.is-style-${styleVariationName}`);
+			register(
+				`:root :where(${selector}.is-style-${styleVariationName})`
+			);
 		} else if (isGlobalStylesWrapper) {
 			// Normalizing selector before registration for global styles purposes.
 			register(`:root :where(${selector})`);
