@@ -94,7 +94,7 @@ export const registration = ({
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useEffect(() => {
 				new IntersectionObserverRenderer(
-					'iframe.edit-site-visual-editor__editor-canvas',
+					'iframe',
 					() =>
 						blockTypes.map(
 							(
