@@ -15,6 +15,7 @@ import { sidebarListener, sidebarSelector } from './side-bar-listener';
 import { styleBookListener, styleBookSelector } from './style-book-listener';
 import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
+import { useGlobalStylesContext } from '../components/block-global-styles-panel-screen/global-styles-provider';
 
 export const registration = ({
 	screen,
@@ -99,12 +100,53 @@ export const registration = ({
 							(
 								blockType: Object,
 								index: number
-							): MixedElement => (
-								<GlobalStylesRenderer
-									{...blockType}
-									key={blockType.name + index}
-								/>
-							)
+							): MixedElement => {
+								const {
+									merged: mergedConfig,
+									// base: baseConfig,
+									// user: userConfig,
+									// setUserConfig,
+								} = useGlobalStylesContext();
+
+								const {
+									styles: {
+										blocks: {
+											[blockType.name]:
+												blockTypeGlobalStyles,
+										},
+									},
+								} = mergedConfig;
+
+								return (
+									<>
+										<GlobalStylesRenderer
+											{...blockType}
+											key={blockType.name + index}
+										/>
+										{Object.values(
+											blockTypeGlobalStyles?.variations ||
+												{}
+										).map(
+											(
+												variation: Object,
+												index: number
+											) => (
+												<GlobalStylesRenderer
+													{...{
+														...blockType,
+														isStyleVariation: true,
+														styleVariationName:
+															Object.keys(
+																blockTypeGlobalStyles.variations
+															)[index],
+													}}
+													key={variation.name + index}
+												/>
+											)
+										)}
+									</>
+								);
+							}
 						),
 					{
 						targetElementIsRoot: true,
