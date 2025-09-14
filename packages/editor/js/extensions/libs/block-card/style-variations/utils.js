@@ -69,7 +69,13 @@ export function replaceActiveStyle(
  */
 export function getRenderedStyles(styles: Array<any>): Array<Object> {
 	if (!styles || styles.length === 0) {
-		return [];
+		return [
+			{
+				name: 'default',
+				label: _x('Default', 'block style', 'blockera'),
+				isDefault: true,
+			},
+		];
 	}
 
 	return getDefaultStyle(styles)

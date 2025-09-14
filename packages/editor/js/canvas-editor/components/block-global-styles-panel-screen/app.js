@@ -6,7 +6,7 @@
 import type { MixedElement } from 'react';
 import { select, dispatch } from '@wordpress/data';
 import { ErrorBoundary } from 'react-error-boundary';
-import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
+import { useMemo, useState, useCallback } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 // import { store as blocksStore } from '@wordpress/blocks';
 
@@ -78,22 +78,10 @@ export default function App(props: Object): MixedElement {
 	} = useGlobalStylesContext();
 
 	const { getSelectedBlockStyleVariation } = select(EDITOR_STORE_NAME);
-	const { setBlockStyles, setSelectedBlockStyleVariation } =
-		dispatch(EDITOR_STORE_NAME);
+	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
 
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
-		useState(undefined);
-
-	useEffect(() => {
-		const prevCurrentBlockStyleVariation = getSelectedBlockStyleVariation();
-
-		if (currentBlockStyleVariation !== prevCurrentBlockStyleVariation) {
-			return;
-		}
-
-		setSelectedBlockStyleVariation(currentBlockStyleVariation);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentBlockStyleVariation]);
+		useState(getSelectedBlockStyleVariation());
 
 	const styles = useMemo(() => {
 		const defaultStylesValue =
@@ -190,10 +178,9 @@ export default function App(props: Object): MixedElement {
 
 	const handleOnChangeStyles = useCallback(
 		(newStyles) => {
-			if (
-				currentBlockStyleVariation &&
-				!currentBlockStyleVariation?.isDefault
-			) {
+			const currentStyleVariation = getSelectedBlockStyleVariation();
+
+			if (currentStyleVariation && !currentStyleVariation?.isDefault) {
 				const { variations, ...rest } = newStyles;
 
 				const newUserConfig = mergeObject(userConfig, {
@@ -201,7 +188,7 @@ export default function App(props: Object): MixedElement {
 						blocks: {
 							[name]: {
 								variations: {
-									[currentBlockStyleVariation.name]:
+									[currentStyleVariation.name]:
 										cleanupStyles(rest),
 								},
 							},
@@ -227,7 +214,7 @@ export default function App(props: Object): MixedElement {
 			setUserConfig(newUserConfig);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[currentBlockStyleVariation, styles, name, userConfig]
+		[styles, name, userConfig]
 	);
 
 	// let prefixParts = [];
