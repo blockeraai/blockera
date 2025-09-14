@@ -14,6 +14,13 @@ abstract class BaseStyleDefinition {
      */
     protected array $block = [];
 
+	/**
+	 * Store the flag to determine if the style is a style variation.
+	 *
+	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
+	 */
+	protected bool $is_style_variation = false;
+
     /**
      * Store style definition identifier.
      *
@@ -199,6 +206,26 @@ abstract class BaseStyleDefinition {
         return $this->selector;
     }
 
+	/**
+	 * Get the flag to determine if the style is a style variation.
+	 *
+	 * @return boolean
+	 */
+	public function getIsStyleVariation(): bool {
+		return $this->is_style_variation;
+	}
+
+	/**
+	 * Set the flag to determine if the style is a style variation.
+	 *
+	 * @param boolean $is_style_variation the flag to indicate current style is variation style or not.
+	 *
+	 * @return void
+	 */
+	public function setIsStyleVariation( bool $is_style_variation): void {
+		$this->is_style_variation = $is_style_variation;
+	}
+
     /**
      * Sets suitable css selector for related property.
      *
@@ -214,6 +241,11 @@ abstract class BaseStyleDefinition {
 
         $fallback  = $this->getFallbackSupport($support);
         $selectors = blockera_get_block_type_property($this->block['blockName'], 'selectors');
+
+		if ($this->is_style_variation) {
+			$this->selector = $this->blockera_unique_selector;
+			return;
+		}
 
         $this->selector = blockera_get_compatible_block_css_selector(
             $selectors,

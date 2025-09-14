@@ -46,6 +46,13 @@ final class StyleEngine {
 	protected string $selector = '';
 
 	/**
+	 * Store the flag to determine if the style is a style variation.
+	 *
+	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
+	 */
+	protected bool $is_style_variation = false;
+
+	/**
 	 * Store instance of current style definition class.
 	 *
 	 * @var BaseStyleDefinition|null $definition
@@ -133,6 +140,18 @@ final class StyleEngine {
 	public function setSupports( array $supports): void {
 
 		$this->supports = blockera_array_flat(array_column($supports, 'supports'));
+	}
+
+	/**
+	 * Set the flag to determine if the style is a style variation.
+	 *
+	 * @param boolean $is_style_variation the flag to indicate current style is variation style or not.
+	 *
+	 * @return void
+	 */
+	public function setIsStyleVariation( bool $is_style_variation): void {
+
+		$this->is_style_variation = $is_style_variation;
 	}
 
 	/**
@@ -529,6 +548,7 @@ final class StyleEngine {
 		$this->definition->setBreakpoint( $this->breakpoint );
 		$this->definition->setBlockType( 'master' );
 		$this->definition->setPseudoState( $this->pseudo_state );
+		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		$css_rules = $this->definition->getCssRules();
@@ -671,6 +691,7 @@ final class StyleEngine {
 		$this->definition->setInnerPseudoState( $args['state'] ?? '' );
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setSettings( $settings );
+		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		return $this->definition->getCssRules();
