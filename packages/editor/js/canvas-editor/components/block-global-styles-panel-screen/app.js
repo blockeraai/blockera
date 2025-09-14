@@ -108,7 +108,7 @@ export default function App(props: Object): MixedElement {
 				...omit(mergedConfig?.styles?.blocks[name] || {}, [
 					'variations',
 				]),
-				...(mergedConfig?.styles?.blocks[name]?.variations[
+				...((mergedConfig?.styles?.blocks[name]?.variations || {})[
 					currentBlockStyleVariation.name
 				] || {}),
 			};
