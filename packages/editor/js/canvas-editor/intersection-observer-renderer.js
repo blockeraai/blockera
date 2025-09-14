@@ -116,13 +116,18 @@ export class IntersectionObserverRenderer {
 					return;
 				}
 
-				setTimeout(() => {
-					const containerDiv = document.createElement('div');
-					const root = createRoot(containerDiv);
-					root.render(
-						<this.Component clickedBlock={this.clickedBlock} />
+				const containerDiv = document.createElement('div');
+				const root = createRoot(containerDiv);
+				root.render(
+					<this.Component clickedBlock={this.clickedBlock} />
+				);
+
+				// If the target element is an iframe, append the container to the iframe body.
+				if ('IFRAME' === targetElement.tagName) {
+					targetElement.contentDocument.body.appendChild(
+						containerDiv
 					);
-				});
+				}
 
 				return;
 			}
