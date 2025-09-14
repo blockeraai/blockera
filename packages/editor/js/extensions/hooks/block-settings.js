@@ -449,6 +449,7 @@ function mergeBlockSettings(
 
 	return {
 		...settings,
+		styles: [...(settings?.styles || []), ...(additional?.styles || [])],
 		// Sanitizing attributes to convert all array values to object.
 		attributes: !settings.attributes?.blockeraPropsId
 			? mergeObject(
