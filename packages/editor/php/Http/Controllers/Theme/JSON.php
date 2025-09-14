@@ -242,6 +242,7 @@ class JSON extends \WP_Theme_JSON {
         $settings             = isset($this->theme_json['settings']) ? $this->theme_json['settings'] : array();
         $feature_declarations = static::get_feature_declarations_for_node($block_metadata, $node);
         $is_root_selector     = static::ROOT_BLOCK_SELECTOR === $selector;
+		$computed_css_rules   = '';
 
         // If there are style variations, generate the declarations for them, including any feature selectors the block may have.
         $style_variation_declarations = array();
@@ -253,6 +254,20 @@ class JSON extends \WP_Theme_JSON {
 
                 // Generate any feature/subfeature style declarations for the current style variation.
                 $variation_declarations = static::get_feature_declarations_for_node($block_metadata, $style_variation_node);
+
+				$style_engine = Blockera::getInstance()->make(
+					class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
+					[
+						'block' => [
+							'blockName' => $block_metadata['name'],
+							'attrs' => $style_variation_node,
+						],
+						'fallbackSelector' => ":root :where($clean_style_variation_selector)",
+					]
+				);
+				$style_engine->setIsStyleVariation(true);
+				$style_engine->setSupports(static::$supports);
+				$computed_css_rules .= $style_engine->getStylesheet();
 
                 // Combine selectors with style variation's selector and add to overall style variation declarations.
                 foreach ($variation_declarations as $current_selector => $new_declarations) {
@@ -345,7 +360,7 @@ class JSON extends \WP_Theme_JSON {
 				]
 			);
 			$style_engine->setSupports(static::$supports);
-			$computed_css_rules = $style_engine->getStylesheet();
+			$computed_css_rules .= $style_engine->getStylesheet();
 
             $declarations = static::compute_style_properties($node, $settings, null, $this->theme_json, $selector, $use_root_padding);
         }
@@ -507,5 +522,154 @@ class JSON extends \WP_Theme_JSON {
         }
 
         return $declarations;
+    }
+
+	/**
+     * A public helper to get the block nodes from a theme.json file.
+     *
+     * @since 6.1.0
+     *
+     * @return array The block nodes in theme.json.
+     */
+    public function get_blockera_styles_block_nodes() {
+        return static::get_blockera_block_nodes(
+            $this->theme_json,
+            [],
+            [
+				'include_block_style_variations' => true,
+			]
+		);
+    }
+
+	/**
+     * An internal method to get the block nodes from a theme.json file.
+     *
+     * @since 6.1.0
+     * @since 6.3.0 Refactored and stabilized selectors API.
+     * @since 6.6.0 Added optional selectors and options for generating block nodes.
+     * @since 6.7.0 Added $include_node_paths_only option.
+     *
+     * @param array $theme_json The theme.json converted to an array.
+     * @param array $selectors  Optional list of selectors per block.
+     * @param array $options {
+     *     Optional. An array of options for now used for internal purposes only (may change without notice).
+     *
+     *     @type bool $include_block_style_variations Include nodes for block style variations. Default false.
+     *     @type bool $include_node_paths_only        Return only block nodes node paths. Default false.
+     * }
+     * @return array The block nodes in theme.json.
+     */
+    private static function get_blockera_block_nodes( $theme_json, $selectors = array(), $options = array()) {
+        $nodes = array();
+        
+        if (! isset($theme_json['styles']['blocks'])) {
+            return $nodes;
+        }
+
+        $include_variations      = $options['include_block_style_variations'] ?? false;
+        $include_node_paths_only = $options['include_node_paths_only'] ?? false;
+
+        // If only node paths are to be returned, skip selector assignment.
+        if (! $include_node_paths_only) {
+            $selectors = empty($selectors) ? static::get_blocks_metadata() : $selectors;
+        }
+
+        foreach ($theme_json['styles']['blocks'] as $name => $node) {
+            $node_path = array( 'styles', 'blocks', $name );
+
+            if ($include_node_paths_only) {
+                $variation_paths = array();
+                if ($include_variations && isset($node['variations'])) {
+                    foreach ($node['variations'] as $variation => $variation_node) {
+                        $variation_paths[] = array(
+                            'path' => array( 'styles', 'blocks', $name, 'variations', $variation ),
+                        );
+                    }
+                }
+
+                $node = array(
+                    'path' => $node_path,
+                );
+                if (! empty($variation_paths)) {
+                    $node['variations'] = $variation_paths;
+                }
+                $nodes[] = $node;
+            } else {
+                $selector = null;
+                if (isset($selectors[ $name ]['selector'])) {
+                    $selector = $selectors[ $name ]['selector'];
+                }
+
+                $duotone_selector = null;
+                if (isset($selectors[ $name ]['duotone'])) {
+                    $duotone_selector = $selectors[ $name ]['duotone'];
+                }
+
+                $feature_selectors = null;
+                if (isset($selectors[ $name ]['selectors'])) {
+                    $feature_selectors = $selectors[ $name ]['selectors'];
+                }
+
+                $variation_selectors = array();
+                if ($include_variations && isset($node['variations'])) {
+                    foreach ($node['variations'] as $variation => $node) {
+                        $variation_selectors[] = array(
+                            'path'     => array( 'styles', 'blocks', $name, 'variations', $variation ),
+                            'selector' => $selectors[ $name ]['styleVariations'][ $variation ],
+                        );
+                    }
+                }
+
+                $nodes[] = array(
+                    'name'       => $name,
+                    'path'       => $node_path,
+                    'selector'   => $selector,
+                    'selectors'  => $feature_selectors,
+                    'duotone'    => $duotone_selector,
+                    'features'   => $feature_selectors,
+                    'variations' => $variation_selectors,
+                    'css'        => $selector,
+                );
+            }
+
+            if (isset($theme_json['styles']['blocks'][ $name ]['elements'])) {
+                foreach ($theme_json['styles']['blocks'][ $name ]['elements'] as $element => $node) {
+                    $node_path = array( 'styles', 'blocks', $name, 'elements', $element );
+                    if ($include_node_paths_only) {
+                        $nodes[] = array(
+                            'path' => $node_path,
+                        );
+                        continue;
+                    }
+
+                    $nodes[] = array(
+                        'path'     => $node_path,
+                        'selector' => $selectors[ $name ]['elements'][ $element ],
+                    );
+
+                    // Handle any pseudo selectors for the element.
+                    if (isset(static::VALID_ELEMENT_PSEUDO_SELECTORS[ $element ])) {
+                        foreach (static::VALID_ELEMENT_PSEUDO_SELECTORS[ $element ] as $pseudo_selector) {
+                            if (isset($theme_json['styles']['blocks'][ $name ]['elements'][ $element ][ $pseudo_selector ])) {
+                                $node_path = array( 'styles', 'blocks', $name, 'elements', $element );
+                                if ($include_node_paths_only) {
+                                    $nodes[] = array(
+                                        'path' => $node_path,
+                                    );
+                                    continue;
+                                }
+
+                                $nodes[] = array(
+                                    'path'     => $node_path,
+                                    'selector' => static::append_to_selector($selectors[ $name ]['elements'][ $element ], $pseudo_selector),
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $nodes;
     }
 }
