@@ -194,13 +194,15 @@ export default function App(props: Object): MixedElement {
 				currentBlockStyleVariation &&
 				!currentBlockStyleVariation?.isDefault
 			) {
+				const { variations, ...rest } = newStyles;
+
 				const newUserConfig = mergeObject(userConfig, {
 					styles: {
 						blocks: {
 							[name]: {
 								variations: {
 									[currentBlockStyleVariation.name]:
-										cleanupStyles(newStyles),
+										cleanupStyles(rest),
 								},
 							},
 						},
