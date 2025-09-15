@@ -220,12 +220,12 @@ class CompatibilityCheck {
 	/**
 	 * Load the compatibility check.
 	 *
-	 * @return void
+	 * @return bool true if the compatibility check is loaded, false otherwise.
 	 */
-    public function load(): void {
+    public function load(): bool {
 
 		if (! $this->is_installed_third_party_plugin || ! $this->isActivePlugin()) {
-			return;
+			return true;
 		}
 
         $this->checkVersions(
@@ -255,6 +255,8 @@ class CompatibilityCheck {
 				}
 			}
         );
+
+		return $this->is_compatible;
     }
 
 	/**
