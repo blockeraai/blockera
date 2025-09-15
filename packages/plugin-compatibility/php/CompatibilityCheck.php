@@ -112,6 +112,18 @@ class CompatibilityCheck {
 	protected array $specific_pages = [];
 
 	/**
+	 * List of whitelisted pages to not redirect to compatibility page.
+	 *
+	 * @var array $whitelist_pages list of pages.
+	 */
+	protected array $whitelist_pages = [
+		'plugins.php', 
+		'update-core.php', 
+		'update.php', 
+		'plugin-install.php',
+	];
+
+	/**
 	 * Compatibility checking object constructor.
 	 *
 	 * @param array $args
@@ -208,12 +220,12 @@ class CompatibilityCheck {
 	/**
 	 * Load the compatibility check.
 	 *
-	 * @return void
+	 * @return bool true if the compatibility check is loaded, false otherwise.
 	 */
-    public function load(): void {
+    public function load(): bool {
 
 		if (! $this->is_installed_third_party_plugin || ! $this->isActivePlugin()) {
-			return;
+			return true;
 		}
 
         $this->checkVersions(
@@ -243,6 +255,8 @@ class CompatibilityCheck {
 				}
 			}
         );
+
+		return $this->is_compatible;
     }
 
 	/**
@@ -321,7 +335,7 @@ class CompatibilityCheck {
         global $pagenow;
 
         // Avoid running on plugins page to prevent interference.
-		if (in_array($pagenow, [ 'plugins.php', 'update-core.php', 'update.php' ], true)) {
+		if (in_array($pagenow, $this->whitelist_pages, true)) {
 			return;
 		}
 
@@ -390,7 +404,23 @@ class CompatibilityCheck {
             function () {
 
 				if ( $this->is_compatible) {
-					return;
+					$redirect_url = admin_url('admin.php?page=blockera-settings-dashboard');
+
+					// Try PHP redirect first.
+					if (! headers_sent()) {
+						wp_safe_redirect($redirect_url);
+						exit;
+					}
+
+					// Fallback to JavaScript redirect if headers already sent.
+					echo '<script type="text/javascript">';
+					echo 'window.location.href = "' . esc_url($redirect_url) . '";';
+					echo '</script>';
+					echo '<noscript>';
+					echo '<meta http-equiv="refresh" content="0;url=' . esc_url($redirect_url) . '">';
+					echo '</noscript>';
+					echo '<p>If you are not redirected automatically, <a href="' . esc_url($redirect_url) . '">click here</a>.</p>';
+					exit;
 				}
 
 				$plugin_name = $this->utils::pascalCaseWithSpace($this->plugin_slug);

@@ -209,7 +209,7 @@ export const blockeraEditorFilters = () => {
 		(attributes, attributeId, newValue) => {
 			if (getIconAttributes().includes(attributeId)) {
 				if (attributeId === 'blockeraIcon') {
-					if (newValue?.icon || newValue?.uploadSVG) {
+					if (newValue?.icon || newValue?.renderedIcon) {
 						attributes = addIconClassName(attributes, {
 							blockeraIcon: newValue,
 							blockeraIconPosition:

@@ -97,9 +97,9 @@ add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
  */
 function blockera_load_compatibility_check(): void{
 
-	global $blockera_compat_free_with_pro;
+	global $blockera_compat_free_with_pro, $is_compatible_with_pro;
 
-	$blockera_compat_free_with_pro->load();
+	$is_compatible_with_pro = $blockera_compat_free_with_pro->load();
 }
 
 // Initialize hooks on Front Controller.
@@ -117,10 +117,13 @@ function blockera_init(): void {
      */
     do_action('blockera/before/setup');
 
-	global $blockera_compat_free_with_pro;
+	global $blockera_compat_free_with_pro, $is_compatible_with_pro;
 
-	add_action('admin_init', [ $blockera_compat_free_with_pro, 'adminInitialize' ]);
-	add_action('admin_menu', [ $blockera_compat_free_with_pro, 'adminMenus' ]);
+	if (! $is_compatible_with_pro) {
+		// Add compatibility check hooks.
+		add_action('admin_init', [ $blockera_compat_free_with_pro, 'adminInitialize' ]);
+		add_action('admin_menu', [ $blockera_compat_free_with_pro, 'adminMenus' ]);
+	}
 
     new \Blockera\Telemetry\Jobs(
         new \Blockera\WordPress\Sender(),

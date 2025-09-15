@@ -142,13 +142,7 @@ export function getLibraryIcons({
 	return iconsStack;
 }
 
-/**
- * Sanitize the raw string and make sure it's an SVG.
- *
- * @param {string} rawString The media object for the selected SVG file.
- * @return { string }        The sanitized svg string.
- */
-export function sanitizeRawSVGString(rawString: string): string {
+export function sanitizeRawSVGString(rawString) {
 	if (!rawString || typeof rawString !== 'string') {
 		return '';
 	}
@@ -164,12 +158,14 @@ export function sanitizeRawSVGString(rawString: string): string {
 		);
 	} catch (error) {
 		// Handle parsing errors
+		/* @debug-ignore */
 		console.warn('SVG parsing error:', error);
 		return '';
 	}
 
 	// Check for parsing errors
 	if (svgDoc.querySelector('parsererror')) {
+		/* @debug-ignore */
 		console.warn('SVG contains parsing errors');
 		return '';
 	}
@@ -179,6 +175,7 @@ export function sanitizeRawSVGString(rawString: string): string {
 		svgDoc.childNodes.length !== 1 ||
 		svgDoc.firstChild.nodeName !== 'svg'
 	) {
+		/* @debug-ignore */
 		console.warn('Invalid SVG structure: expected single SVG element');
 		return '';
 	}
@@ -193,6 +190,7 @@ export function sanitizeRawSVGString(rawString: string): string {
 	try {
 		svgString = new window.XMLSerializer().serializeToString(svgElement);
 	} catch (error) {
+		/* @debug-ignore */
 		console.warn('SVG serialization error:', error);
 		return '';
 	}
@@ -200,12 +198,7 @@ export function sanitizeRawSVGString(rawString: string): string {
 	return svgString;
 }
 
-/**
- * Sanitize SVG element by removing dangerous content and attributes.
- *
- * @param {Element} svgElement The SVG element to sanitize.
- */
-function sanitizeSVGElement(svgElement: Element) {
+function sanitizeSVGElement(svgElement) {
 	// Define whitelist of allowed SVG elements
 	const allowedElements = new Set([
 		'svg',
@@ -361,18 +354,7 @@ function sanitizeSVGElement(svgElement: Element) {
 	removeDangerousContent(svgElement, allowedElements, allowedAttributes);
 }
 
-/**
- * Recursively remove dangerous content from SVG elements.
- *
- * @param {Element} element The element to process.
- * @param {Set} allowedElements Set of allowed element names.
- * @param {Set} allowedAttributes Set of allowed attribute names.
- */
-function removeDangerousContent(
-	element: Element,
-	allowedElements: Set<string>,
-	allowedAttributes: Set<string>
-) {
+function removeDangerousContent(element, allowedElements, allowedAttributes) {
 	// Remove dangerous elements
 	const dangerousElements = [
 		'script',
