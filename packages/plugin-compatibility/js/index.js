@@ -128,10 +128,13 @@ const App = () => {
 							{sprintf(
 								// translators: it's the product name (a theme or plugin name)
 								__(
-									'Your %s plugin is out of date and has been temporarily deactivated.',
+									'Your %1$s plugin is out of date and the %2$s version has been temporarily deactivated.',
 									'blockera'
 								),
-								blockeraPluginRequiredPluginSlug
+								blockeraPluginRequiredPluginSlug,
+								requiredPluginType === 'free'
+									? __('Pro', 'blockera')
+									: __('Free', 'blockera')
 							)}
 						</p>
 						<p>
