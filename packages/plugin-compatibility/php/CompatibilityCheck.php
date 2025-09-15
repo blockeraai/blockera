@@ -404,13 +404,13 @@ class CompatibilityCheck {
 				if ( $this->is_compatible) {
 					$redirect_url = admin_url('admin.php?page=blockera-settings-dashboard');
 
-					// Try PHP redirect first
+					// Try PHP redirect first.
 					if (! headers_sent()) {
 						wp_safe_redirect($redirect_url);
 						exit;
 					}
 
-					// Fallback to JavaScript redirect if headers already sent
+					// Fallback to JavaScript redirect if headers already sent.
 					echo '<script type="text/javascript">';
 					echo 'window.location.href = "' . esc_url($redirect_url) . '";';
 					echo '</script>';
