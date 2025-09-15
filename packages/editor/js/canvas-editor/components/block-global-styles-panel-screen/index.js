@@ -23,7 +23,8 @@ export const BlockGlobalStylesPanelScreen = ({
 	const className = 'blockera-extensions-wrapper';
 
 	const { getSelectedBlockStyle } = select(STORE_NAME);
-	const { setSelectedBlockStyle } = dispatch(STORE_NAME);
+	const { setSelectedBlockStyle, setSelectedBlockStyleVariation } =
+		dispatch(STORE_NAME);
 	const selectedBlockStyle = getSelectedBlockStyle();
 	const blockType = getBlockType(selectedBlockStyle);
 	const screenElement = document.querySelector(screen);
@@ -32,6 +33,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	useBackButton({
 		screenElement,
 		setSelectedBlockStyle,
+		setSelectedBlockStyleVariation,
 	});
 
 	useEffect(() => {

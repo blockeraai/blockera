@@ -15,9 +15,11 @@ import { getValueFromObjectPath, setImmutably } from './utils';
 export const useBackButton = ({
 	screenElement,
 	setSelectedBlockStyle,
+	setSelectedBlockStyleVariation,
 }: {
 	screenElement: HTMLElement,
 	setSelectedBlockStyle: (blockName: string) => void,
+	setSelectedBlockStyleVariation: (blockName: string) => void,
 }) => {
 	const backButton = screenElement.querySelector('div');
 
@@ -27,7 +29,8 @@ export const useBackButton = ({
 		backButton.style.display = 'block';
 
 		backButton?.addEventListener('click', () => {
-			setSelectedBlockStyle('');
+			setSelectedBlockStyle(undefined);
+			setSelectedBlockStyleVariation(undefined);
 		});
 	}
 };
