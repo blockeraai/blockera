@@ -175,21 +175,21 @@ jobs:
               run: |
                   # Check if baseline directory exists and has files
                   if [ -d "visual-screenshots/baseline" ]; then
-                    # Count files in baseline directory
-                    baseline_count=$(find visual-screenshots/baseline -type f | wc -l)
-                    echo "Found $baseline_count files in visual-screenshots/baseline directory"
+                    # Count untracked files in baseline directory (files that exist but are not in git)
+                    untracked_files=$(git ls-files --others --exclude-standard visual-screenshots/baseline/ | wc -l)
+                    echo "Found $untracked_files untracked files in visual-screenshots/baseline directory"
                     
-                    # List all baseline files for debugging
-                    echo "Baseline files:"
-                    find visual-screenshots/baseline -type f | sort
+                    # List untracked baseline files for debugging
+                    echo "Untracked baseline files:"
+                    git ls-files --others --exclude-standard visual-screenshots/baseline/ | sort
                     
-                    # If there are any files, this indicates new baseline files were generated
-                    if [ "$baseline_count" -gt 0 ]; then
+                    # If there are untracked files, this indicates new baseline files were generated
+                    if [ "$untracked_files" -gt 0 ]; then
                       echo "New baseline files detected! These need to be added to the repository."
                       echo "baseline_files_detected=true" >> $GITHUB_OUTPUT
-                      echo "baseline_count=$baseline_count" >> $GITHUB_OUTPUT
+                      echo "baseline_count=$untracked_files" >> $GITHUB_OUTPUT
                     else
-                      echo "No baseline files found."
+                      echo "No new baseline files found."
                       echo "baseline_files_detected=false" >> $GITHUB_OUTPUT
                     fi
                   else
@@ -204,7 +204,7 @@ jobs:
                   echo "❌ FAILURE: New baseline files detected in visual-screenshots/baseline directory!"
                   echo "This means there are visual tests that don't have baseline files in the repository."
                   echo "Please add the following baseline files to the repository:"
-                  find visual-screenshots/baseline -type f | sort
+                  git ls-files --others --exclude-standard visual-screenshots/baseline/ | sort
                   echo ""
                   echo "The baseline files have been uploaded as artifacts for you to download and add manually."
                   exit 1
