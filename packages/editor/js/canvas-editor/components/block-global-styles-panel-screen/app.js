@@ -187,10 +187,32 @@ export default function App(props: Object): MixedElement {
 	);
 
 	const handleOnChangeStyles = useCallback(
-		(newStyles) => {
+		(
+			newStyles,
+			{ action }: { action: 'clear-all-customizations' } = {}
+		) => {
 			const currentStyleVariation = getSelectedBlockStyleVariation();
 
 			if (currentStyleVariation && !currentStyleVariation?.isDefault) {
+				if ('clear-all-customizations' === action) {
+					setBlockStyles(name, cleanupStyles(newStyles));
+					return setUserConfig(
+						mergeObject(
+							userConfig,
+							{
+								styles: {
+									blocks: {
+										[name]: cleanupStyles(newStyles),
+									},
+								},
+							},
+							{
+								forceUpdated: [currentStyleVariation.name],
+							}
+						)
+					);
+				}
+
 				const { variations, ...rest } = newStyles;
 
 				const newUserConfig = mergeObject(userConfig, {

@@ -17,6 +17,7 @@ export const useBlockStyleItem = ({
 	setStyles,
 	blockStyles,
 	setBlockStyles,
+	setIsOpenContextMenu,
 	setCurrentActiveStyle,
 	setCurrentBlockStyleVariation,
 }: {
@@ -25,6 +26,7 @@ export const useBlockStyleItem = ({
 	blockStyles: Array<Object>,
 	setStyles: (styles: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
+	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }) => {
@@ -60,13 +62,18 @@ export const useBlockStyleItem = ({
 	);
 
 	const handleOnClearAllCustomizations = (currentStyle) => {
-		setStyles({
-			...styles,
-			variations: {
-				...(styles.variations || {}),
-				[currentStyle.name]: {},
+		setStyles(
+			{
+				variations: {
+					[currentStyle.name]: {},
+				},
 			},
-		});
+			{
+				action: 'clear-all-customizations',
+			}
+		);
+
+		setIsOpenContextMenu(false);
 	};
 
 	const handleOnEnable = (status) => {

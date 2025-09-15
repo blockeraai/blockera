@@ -65,6 +65,7 @@ export const StyleItem = ({
 		setStyles,
 		blockStyles,
 		setBlockStyles,
+		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setCurrentBlockStyleVariation,
 	});
