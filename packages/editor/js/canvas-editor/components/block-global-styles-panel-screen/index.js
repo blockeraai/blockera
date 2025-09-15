@@ -15,12 +15,15 @@ import { useState, useEffect, createPortal } from '@wordpress/element';
 import App from './app';
 import { useBackButton } from './hooks';
 import { STORE_NAME } from '../../../store';
+import { unsubscribe } from './subscribe-unsubscribe';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
 }: {
 	screen: string,
 }): MixedElement => {
+	unsubscribe();
+
 	const className = 'blockera-extensions-wrapper';
 
 	const { getSelectedBlock } = select(blockEditorStore);
