@@ -112,6 +112,18 @@ class CompatibilityCheck {
 	protected array $specific_pages = [];
 
 	/**
+	 * List of whitelisted pages to not redirect to compatibility page.
+	 *
+	 * @var array $whitelist_pages list of pages.
+	 */
+	protected array $whitelist_pages = [
+		'plugins.php', 
+		'update-core.php', 
+		'update.php', 
+		'plugin-install.php',
+	];
+
+	/**
 	 * Compatibility checking object constructor.
 	 *
 	 * @param array $args
@@ -321,7 +333,7 @@ class CompatibilityCheck {
         global $pagenow;
 
         // Avoid running on plugins page to prevent interference.
-		if (in_array($pagenow, [ 'plugins.php', 'update-core.php', 'update.php' ], true)) {
+		if (in_array($pagenow, $this->whitelist_pages, true)) {
 			return;
 		}
 
