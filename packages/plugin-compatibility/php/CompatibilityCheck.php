@@ -402,6 +402,7 @@ class CompatibilityCheck {
             function () {
 
 				if ( $this->is_compatible) {
+					wp_safe_redirect(admin_url('admin.php?page=blockera-settings-dashboard'));
 					return;
 				}
 
