@@ -402,8 +402,23 @@ class CompatibilityCheck {
             function () {
 
 				if ( $this->is_compatible) {
-					wp_safe_redirect(admin_url('admin.php?page=blockera-settings-dashboard'));
-					return;
+					$redirect_url = admin_url('admin.php?page=blockera-settings-dashboard');
+
+					// Try PHP redirect first
+					if (! headers_sent()) {
+						wp_safe_redirect($redirect_url);
+						exit;
+					}
+
+					// Fallback to JavaScript redirect if headers already sent
+					echo '<script type="text/javascript">';
+					echo 'window.location.href = "' . esc_url($redirect_url) . '";';
+					echo '</script>';
+					echo '<noscript>';
+					echo '<meta http-equiv="refresh" content="0;url=' . esc_url($redirect_url) . '">';
+					echo '</noscript>';
+					echo '<p>If you are not redirected automatically, <a href="' . esc_url($redirect_url) . '">click here</a>.</p>';
+					exit;
 				}
 
 				$plugin_name = $this->utils::pascalCaseWithSpace($this->plugin_slug);
