@@ -14,6 +14,8 @@ export const GlobalStylesPanelContext = createContext({
 		label: '',
 	},
 	setCurrentBlockStyleVariation: () => {},
+	setStyles: () => {},
+	styles: {},
 });
 
 export const GlobalStylesPanelContextProvider = ({

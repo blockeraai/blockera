@@ -31,6 +31,7 @@ import { StyleItem } from './style-item';
 import { useBlockContext } from '../../../../hooks';
 import { AddNewStyleButton } from './add-new-style-button';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
+import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({
@@ -39,15 +40,10 @@ function BlockStyles({
 	isNotActive,
 	onHoverClassName = () => {},
 	context = 'inspector-controls',
-	currentBlockStyleVariation,
-	setCurrentBlockStyleVariation,
-	handleOnChangeBlockStyles = () => {},
 }: {
 	blockName: string,
 	isNotActive: boolean,
 	context?: 'global-styles-panel' | 'inspector-controls',
-	currentBlockStyleVariation: Object,
-	setCurrentBlockStyleVariation: (style: Object) => void,
 	styles: {
 		onSelect: (style: string) => void,
 		stylesToRender: Array<Object>,
@@ -59,7 +55,6 @@ function BlockStyles({
 		popoverAnchor: Object,
 		setIsOpen: (isOpen: boolean) => void,
 	},
-	handleOnChangeBlockStyles?: (blockStyles: Array<Object>) => void,
 	onHoverClassName?: (style?: string | null) => void,
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
@@ -70,6 +65,10 @@ function BlockStyles({
 	const hoveredStyleRef = useRef(null);
 	const hasShownPreviewRef = useRef(false);
 	const isMobileViewport = useViewportMatch('medium', '<');
+	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+		currentBlockStyleVariation: undefined,
+		setCurrentBlockStyleVariation: () => {},
+	};
 
 	const {
 		onSelect,
@@ -203,6 +202,12 @@ function BlockStyles({
 									blockName={blockName}
 									label={__('Style Variations', 'blockera')}
 									blockStyles={blockStyles}
+									setCurrentBlockStyleVariation={
+										setCurrentBlockStyleVariation
+									}
+									setCurrentActiveStyle={
+										setCurrentActiveStyle
+									}
 									setBlockStyles={setBlockStyles}
 								/>
 
@@ -215,6 +220,9 @@ function BlockStyles({
 										<StyleItem
 											key={style.name}
 											style={style}
+											blockName={blockName}
+											blockStyles={blockStyles}
+											setBlockStyles={setBlockStyles}
 											activeStyle={activeStyle}
 											setCurrentActiveStyle={
 												setCurrentActiveStyle
@@ -225,12 +233,6 @@ function BlockStyles({
 											}
 											setCurrentPreviewStyle={
 												setCurrentPreviewStyle
-											}
-											currentBlockStyleVariation={
-												currentBlockStyleVariation
-											}
-											setCurrentBlockStyleVariation={
-												setCurrentBlockStyleVariation
 											}
 											styleItemHandler={styleItemHandler}
 										/>
@@ -327,6 +329,10 @@ function BlockStyles({
 								label={__('Style Variations', 'blockera')}
 								blockStyles={blockStyles}
 								setBlockStyles={setBlockStyles}
+								setCurrentBlockStyleVariation={
+									setCurrentBlockStyleVariation
+								}
+								setCurrentActiveStyle={setCurrentActiveStyle}
 							/>
 
 							<div
@@ -348,12 +354,6 @@ function BlockStyles({
 										}
 										setCurrentPreviewStyle={
 											setCurrentPreviewStyle
-										}
-										currentBlockStyleVariation={
-											currentBlockStyleVariation
-										}
-										setCurrentBlockStyleVariation={
-											setCurrentBlockStyleVariation
 										}
 										styleItemHandler={styleItemHandler}
 									/>

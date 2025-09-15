@@ -109,6 +109,16 @@ export default function App(props: Object): MixedElement {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
 
+	const getStyles = useCallback(() => {
+		const defaultStylesValue =
+			prepareBlockeraDefaultAttributesValues(defaultStyles);
+
+		return {
+			...defaultStylesValue,
+			...(mergedConfig?.styles?.blocks[name] || {}),
+		};
+	}, [mergedConfig, defaultStyles, name]);
+
 	const baseContextValue = useMemo(
 		() => ({
 			components: {
@@ -246,6 +256,8 @@ export default function App(props: Object): MixedElement {
 		>
 			<GlobalStylesPanelContextProvider
 				blockName={name}
+				styles={getStyles()}
+				setStyles={handleOnChangeStyles}
 				currentBlockStyleVariation={currentBlockStyleVariation}
 				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
 			>

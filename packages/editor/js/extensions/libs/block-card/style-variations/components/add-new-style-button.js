@@ -20,11 +20,15 @@ export const AddNewStyleButton = ({
 	blockName,
 	blockStyles,
 	setBlockStyles,
+	setCurrentActiveStyle,
+	setCurrentBlockStyleVariation,
 }: {
 	label: string,
 	blockName: string,
 	blockStyles: Array<Object>,
+	setCurrentActiveStyle: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
+	setCurrentBlockStyleVariation: (style: Object) => void,
 }): MixedElement => {
 	const addNew = useCallback(() => {
 		// Find first available number by checking existing style names
@@ -37,6 +41,15 @@ export const AddNewStyleButton = ({
 			})
 			.filter((num) => num !== null);
 
+		// reset number if there are no existing numbers.
+		if (!existingNumbers.length) {
+			number = 1;
+		} else {
+			// Sort existing numbers and get the highest number
+			const maxNumber = Math.max(...existingNumbers);
+			number = maxNumber + 1;
+		}
+
 		// Find first gap in sequence or use next number
 		while (existingNumbers.includes(number)) {
 			number++;
@@ -44,19 +57,18 @@ export const AddNewStyleButton = ({
 
 		const name = `style-${number}`;
 		const styleLabel = __('Style', 'blockera') + ' ' + number;
-
-		setBlockStyles([
-			...blockStyles,
-			{
-				name,
-				label: styleLabel,
-			},
-		]);
-
-		registerBlockStyle(blockName, {
+		const newStyle = {
 			name,
 			label: styleLabel,
-		});
+		};
+
+		setBlockStyles([...blockStyles, newStyle]);
+
+		registerBlockStyle(blockName, newStyle);
+
+		setCurrentBlockStyleVariation(newStyle);
+
+		setCurrentActiveStyle(newStyle);
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);

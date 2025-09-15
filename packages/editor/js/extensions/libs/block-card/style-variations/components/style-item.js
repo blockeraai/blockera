@@ -11,7 +11,6 @@ import {
 	__experimentalTruncate as Truncate,
 	__experimentalDivider as Divider,
 } from '@wordpress/components';
-import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 /**
  * Blockera dependencies
@@ -20,9 +19,18 @@ import { Icon } from '@blockera/icons';
 import { Flex, Button, Popover } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
+/**
+ * Internal dependencies
+ */
+import { useBlockStyleItem } from './use-block-style-item';
+import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
+
 export const StyleItem = ({
 	style,
+	blockName,
 	activeStyle,
+	blockStyles,
+	setBlockStyles,
 	styleItemHandler,
 	onSelectStylePreview,
 	setCurrentActiveStyle,
@@ -30,34 +38,35 @@ export const StyleItem = ({
 	inGlobalStylesPanel = false,
 }: {
 	style: Object,
+	blockName: string,
 	activeStyle: Object,
+	blockStyles: Array<Object>,
+	setBlockStyles: (styles: Array<Object>) => void,
 	inGlobalStylesPanel: boolean,
 	styleItemHandler: (style: Object) => void,
 	onSelectStylePreview: (style: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
-	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
-		setCurrentBlockStyleVariation: () => {},
-	};
+	const { styles, setStyles, setCurrentBlockStyleVariation } =
+		useGlobalStylesPanelContext() || {
+			setCurrentBlockStyleVariation: () => {},
+		};
 	const buttonText = style.label || style.name || __('Default', 'blockera');
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
-
-	const handleOnDuplicate = (currentStyle) => {
-		console.log(currentStyle);
-	};
-
-	const handleOnClearAllCustomizations = (currentStyle) => {
-		console.log(currentStyle);
-	};
-
-	const handleOnEnable = (status) => {
-		console.log(status);
-	};
-
-	const handleOnDelete = (currentStyleName) => {
-		console.log(currentStyleName);
-	};
+	const {
+		handleOnEnable,
+		handleOnDelete,
+		handleOnDuplicate,
+		handleOnClearAllCustomizations,
+	} = useBlockStyleItem({
+		styles,
+		blockName,
+		setStyles,
+		blockStyles,
+		setBlockStyles,
+		setCurrentBlockStyleVariation,
+	});
 
 	return (
 		<>
