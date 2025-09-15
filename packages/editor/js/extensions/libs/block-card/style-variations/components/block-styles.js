@@ -65,7 +65,11 @@ function BlockStyles({
 	const hoveredStyleRef = useRef(null);
 	const hasShownPreviewRef = useRef(false);
 	const isMobileViewport = useViewportMatch('medium', '<');
-	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+	const {
+		styles: editorStyles,
+		setStyles,
+		setCurrentBlockStyleVariation,
+	} = useGlobalStylesPanelContext() || {
 		currentBlockStyleVariation: undefined,
 		setCurrentBlockStyleVariation: () => {},
 	};
@@ -199,6 +203,8 @@ function BlockStyles({
 						<>
 							<Flex direction="column" gap="10px">
 								<AddNewStyleButton
+									styles={editorStyles}
+									setStyles={setStyles}
 									blockName={blockName}
 									label={__('Style Variations', 'blockera')}
 									blockStyles={blockStyles}

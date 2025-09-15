@@ -17,6 +17,8 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 export const AddNewStyleButton = ({
 	label,
+	styles,
+	setStyles,
 	blockName,
 	blockStyles,
 	setBlockStyles,
@@ -24,8 +26,10 @@ export const AddNewStyleButton = ({
 	setCurrentBlockStyleVariation,
 }: {
 	label: string,
+	styles?: Object,
 	blockName: string,
 	blockStyles: Array<Object>,
+	setStyles?: (styles: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
@@ -63,6 +67,16 @@ export const AddNewStyleButton = ({
 		};
 
 		setBlockStyles([...blockStyles, newStyle]);
+
+		if (styles && 'function' === typeof setStyles) {
+			setStyles({
+				...styles,
+				variations: {
+					...(styles.variations || {}),
+					[newStyle.name]: {},
+				},
+			});
+		}
 
 		registerBlockStyle(blockName, newStyle);
 

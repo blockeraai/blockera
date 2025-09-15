@@ -17,12 +17,14 @@ export const useBlockStyleItem = ({
 	setStyles,
 	blockStyles,
 	setBlockStyles,
+	setCurrentActiveStyle,
 	setCurrentBlockStyleVariation,
 }: {
 	styles: Object,
 	blockName: string,
 	blockStyles: Array<Object>,
 	setStyles: (styles: Object) => void,
+	setCurrentActiveStyle: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }) => {
@@ -48,6 +50,8 @@ export const useBlockStyleItem = ({
 			});
 
 			setCurrentBlockStyleVariation(duplicateStyle);
+
+			setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 		},
