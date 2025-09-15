@@ -117,6 +117,7 @@ class CompatibilityCheck {
 	 * @var array $whitelist_pages list of pages.
 	 */
 	protected array $whitelist_pages = [
+		'admin-ajax.php', 
 		'plugins.php', 
 		'update-core.php', 
 		'update.php', 
