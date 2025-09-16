@@ -34,6 +34,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			supports,
 			selectors,
 			styleVariationName,
+			renderInPortal = true,
 			isStyleVariation = false,
 			attributes: defaultAttributes,
 		} = blockType;
@@ -168,11 +169,15 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 					/>
 				)}
 			>
-				<StylesWrapper clientId={name} isGlobalStylesWrapper={true}>
-					<Fill name={'blockera-global-styles-wrapper-' + name}>
-						<BlockStyle {...blockStyleProps} />
-					</Fill>
-				</StylesWrapper>
+				{renderInPortal ? (
+					<StylesWrapper clientId={name} isGlobalStylesWrapper={true}>
+						<Fill name={'blockera-global-styles-wrapper-' + name}>
+							<BlockStyle {...blockStyleProps} />
+						</Fill>
+					</StylesWrapper>
+				) : (
+					<BlockStyle {...blockStyleProps} />
+				)}
 			</ErrorBoundary>
 		);
 	}
