@@ -17,9 +17,6 @@ let previouslySelectedBlockClientId = null;
 export const unsubscribe = subscribe(() => {
 	// Get the currently selected block
 	const selectedBlock = select('core/block-editor').getSelectedBlock();
-	// Get the interface selectors
-	const activeComplementaryArea =
-		select('core/interface').getActiveComplementaryArea('core');
 
 	// If there's a selected block and it's different from the previous one
 	if (
@@ -29,13 +26,11 @@ export const unsubscribe = subscribe(() => {
 		// Update the previously selected block ID
 		previouslySelectedBlockClientId = selectedBlock.clientId;
 
-		if ('edit-site/global-styles' !== activeComplementaryArea) {
-			return;
-		}
-
 		// Set the selected block style
-		const { setSelectedBlockStyle } = dispatch(blockeraEditorStore);
+		const { setSelectedBlockStyle, setSelectedBlockRef } =
+			dispatch(blockeraEditorStore);
 
 		setSelectedBlockStyle(selectedBlock.name);
+		setSelectedBlockRef('edit-post/block');
 	}
 });

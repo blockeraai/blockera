@@ -157,6 +157,13 @@ export const setSelectedBlockStyle = (selectedBlockStyle: string): Object => {
 	};
 };
 
+export const setSelectedBlockRef = (selectedBlockRef: string): Object => {
+	return {
+		selectedBlockRef,
+		type: 'SET_SELECTED_BLOCK_REF',
+	};
+};
+
 export const setGlobalStyles = (styles: Object): Object => {
 	return {
 		styles,

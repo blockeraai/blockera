@@ -148,6 +148,12 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 				selectedBlockStyle: action.selectedBlockStyle,
 			};
 			break;
+		case 'SET_SELECTED_BLOCK_REF':
+			state = {
+				...state,
+				selectedBlockRef: action.selectedBlockRef,
+			};
+			break;
 		case 'SET_GLOBAL_STYLES':
 			state = {
 				...state,

@@ -17,21 +17,25 @@ import { useBackButton } from './hooks';
 import { STORE_NAME } from '../../../store';
 import { unsubscribe } from './subscribe-unsubscribe';
 
+unsubscribe();
+
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
 }: {
 	screen: string,
 }): MixedElement => {
-	unsubscribe();
-
 	const className = 'blockera-extensions-wrapper';
-
 	const { getBlocks, getSelectedBlock } = select(blockEditorStore);
+	const { getSelectedBlockStyle, getSelectedBlockRef } = select(STORE_NAME);
+	const {
+		setSelectedBlockRef,
+		setSelectedBlockStyle,
+		setSelectedBlockStyleVariation,
+	} = dispatch(STORE_NAME);
+
 	const blocks = getBlocks();
-	const { getSelectedBlockStyle } = select(STORE_NAME);
-	const { setSelectedBlockStyle, setSelectedBlockStyleVariation } =
-		dispatch(STORE_NAME);
 	const selectedBlock = getSelectedBlock();
+	const selectedBlockRef = getSelectedBlockRef();
 	const selectedBlockStyle = getSelectedBlockStyle();
 	const [blockType, setBlockType] = useState(
 		getBlockType(selectedBlockStyle)
@@ -41,6 +45,7 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	useBackButton({
 		screenElement,
+		setSelectedBlockRef,
 		setSelectedBlockStyle,
 		setSelectedBlockStyleVariation,
 	});
@@ -80,6 +85,10 @@ export const BlockGlobalStylesPanelScreen = ({
 	}, [selectedBlockStyle, selectedBlock, blocks]);
 
 	useEffect(() => {
+		if ('edit-site/global-styles' === selectedBlockRef) {
+			return;
+		}
+
 		if (
 			(!selectedBlockStyle && selectedBlock) ||
 			(selectedBlockStyle &&
@@ -90,13 +99,15 @@ export const BlockGlobalStylesPanelScreen = ({
 			setSelectedBlockStyle(selectedBlock?.name);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedBlock, selectedBlockStyle]);
+	}, [selectedBlockRef, selectedBlock, selectedBlockStyle]);
 
 	useEffect(() => {
 		if (!hasBlockeraExtensions && selectedBlockStyle) {
 			screenElement.classList.remove('has-blockera-extensions');
 			screenElement.classList.add('has-not-blockera-extensions');
 		}
+
+		return () => screenElement.removeChild(`.${className}`);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, hasBlockeraExtensions]);
 
@@ -107,12 +118,17 @@ export const BlockGlobalStylesPanelScreen = ({
 	if (
 		selectedBlockStyle &&
 		selectedBlock &&
-		selectedBlock?.name !== selectedBlockStyle
+		selectedBlock?.name !== selectedBlockStyle &&
+		'edit-site/global-styles' !== selectedBlockRef
 	) {
 		return <></>;
 	}
 
 	screenElement.classList.add('has-blockera-extensions');
+
+	if (screenElement.querySelector(`.${className}`)) {
+		return <></>;
+	}
 
 	return createPortal(
 		<div className={className}>

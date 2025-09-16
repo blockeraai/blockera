@@ -335,6 +335,21 @@ export const getBlockStyles = (
 };
 
 /**
+ * Get selected block ref.
+ *
+ * @param {{globalStyles: Object}} state the global styles.
+ *
+ * @return {string} the selected block ref.
+ */
+export const getSelectedBlockRef = ({
+	globalStyles,
+}: {
+	globalStyles: Object,
+}): string => {
+	return globalStyles.selectedBlockRef;
+};
+
+/**
  * Get block style variations.
  *
  * @param {{globalStyles: Object}} state the global styles.

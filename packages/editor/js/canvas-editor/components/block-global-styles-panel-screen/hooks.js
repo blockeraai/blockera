@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { dispatch } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 
 /**
@@ -15,24 +14,24 @@ import { getValueFromObjectPath, setImmutably } from './utils';
 
 export const useBackButton = ({
 	screenElement,
+	setSelectedBlockRef,
 	setSelectedBlockStyle,
 	setSelectedBlockStyleVariation,
 }: {
 	screenElement: HTMLElement,
+	setSelectedBlockRef: (blockRef: string) => void,
 	setSelectedBlockStyle: (blockName: string) => void,
 	setSelectedBlockStyleVariation: (blockName: string) => void,
 }) => {
 	const backButton = screenElement.querySelector('div');
 
 	if (backButton) {
-		const { clearSelectedBlock } = dispatch('core/block-editor');
-
 		const h2 = backButton.querySelector('h2');
 		h2.innerText = __('Blocks', 'blockera');
 		backButton.style.display = 'block';
 
 		backButton?.addEventListener('click', () => {
-			clearSelectedBlock();
+			setSelectedBlockRef(undefined);
 			setSelectedBlockStyle(undefined);
 			setSelectedBlockStyleVariation(undefined);
 		});

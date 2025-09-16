@@ -11,7 +11,8 @@ import { dispatch } from '@wordpress/data';
 import { STORE_NAME } from '../../store';
 
 export const sharedListenerCallback = (blockName: string): void => {
-	const { setSelectedBlockStyle } = dispatch(STORE_NAME);
+	const { setSelectedBlockStyle, setSelectedBlockRef } = dispatch(STORE_NAME);
 
 	setSelectedBlockStyle(blockName);
+	setSelectedBlockRef('edit-site/global-styles');
 };

@@ -40,7 +40,7 @@ export const sidebarListener = (blockTypes: Array<Object>): void => {
 	document
 		.querySelector('button[aria-controls="edit-site:global-styles"]')
 		?.addEventListener('click', () => {
-			dispatch('core/block-editor').clearSelectedBlock();
+			dispatch('blockera/editor').setSelectedBlockRef(undefined);
 		});
 
 	document
