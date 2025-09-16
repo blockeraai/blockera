@@ -289,7 +289,7 @@ export default function App(props: Object): MixedElement {
 					<BlockApp
 						{...{
 							name,
-							clientId: name.replace('/', '-'),
+							clientId: props?.clientId || name.replace('/', '-'),
 							setAttributes: handleOnChangeStyles,
 							defaultAttributes: defaultStyles,
 							additional: blockExtension,
