@@ -9,6 +9,11 @@ import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
 import { __experimentalSpacer as Spacer } from '@wordpress/components';
 
 /**
+ * Blockera dependencies
+ */
+import { hasSameProps } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import { getVariationClassName } from './utils';
@@ -80,4 +85,4 @@ const BlockPreviewPanel = ({ name, variation = '' }) => {
 	);
 };
 
-export default memo(BlockPreviewPanel);
+export default memo(BlockPreviewPanel, hasSameProps);
