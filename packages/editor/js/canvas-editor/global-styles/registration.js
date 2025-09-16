@@ -3,9 +3,9 @@
 /**
  * External dependencies
  */
-import { useEffect } from '@wordpress/element';
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
+import { useEffect, Fragment } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -99,7 +99,7 @@ export const registration = ({
 						blockTypes.map(
 							(
 								blockType: Object,
-								index: number
+								blockIndex: number
 							): MixedElement => {
 								const {
 									merged: mergedConfig,
@@ -118,33 +118,30 @@ export const registration = ({
 								} = mergedConfig;
 
 								return (
-									<>
-										<GlobalStylesRenderer
-											{...blockType}
-											key={blockType.name + index}
-										/>
-										{Object.values(
+									<Fragment
+										key={`${blockType.name}-${blockIndex}`}
+									>
+										<GlobalStylesRenderer {...blockType} />
+										{Object.entries(
 											blockTypeGlobalStyles?.variations ||
 												{}
 										).map(
 											(
-												variation: Object,
-												index: number
+												[variationName],
+												variationIndex
 											) => (
 												<GlobalStylesRenderer
 													{...{
 														...blockType,
 														isStyleVariation: true,
 														styleVariationName:
-															Object.keys(
-																blockTypeGlobalStyles.variations
-															)[index],
+															variationName,
 													}}
-													key={variation.name + index}
+													key={`${blockType.name}-${variationName}-${variationIndex}`}
 												/>
 											)
 										)}
-									</>
+									</Fragment>
 								);
 							}
 						),
