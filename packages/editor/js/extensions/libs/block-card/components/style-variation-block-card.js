@@ -29,6 +29,7 @@ import type { InnerBlockType } from '../inner-blocks/types';
 import StateContainer from '../../../components/state-container';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
+import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 export function StyleVariationBlockCard({
@@ -158,6 +159,11 @@ export function StyleVariationBlockCard({
 					</h2>
 				</div>
 			</div>
+
+			<BlockPreviewPanel
+				name={blockName}
+				variation={currentBlockStyleVariation?.name}
+			/>
 
 			<Flex
 				gap={10}
