@@ -84,8 +84,10 @@ export default function App(props: Object): MixedElement {
 		useState(getSelectedBlockStyleVariation());
 
 	const styles = useMemo(() => {
-		const defaultStylesValue =
-			prepareBlockeraDefaultAttributesValues(defaultStyles);
+		const defaultStylesValue = prepareBlockeraDefaultAttributesValues(
+			defaultStyles,
+			{ context: 'global-styles-panel' }
+		);
 
 		if (
 			currentBlockStyleVariation &&
@@ -110,8 +112,10 @@ export default function App(props: Object): MixedElement {
 	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
 
 	const getStyles = useCallback(() => {
-		const defaultStylesValue =
-			prepareBlockeraDefaultAttributesValues(defaultStyles);
+		const defaultStylesValue = prepareBlockeraDefaultAttributesValues(
+			defaultStyles,
+			{ context: 'global-styles-panel' }
+		);
 
 		return {
 			...defaultStylesValue,
