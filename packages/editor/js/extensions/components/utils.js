@@ -47,7 +47,10 @@ export const isNormalState = (selectedState: TStates | string): boolean =>
  * @return {Object} the attributes cleaned.
  */
 export const prepareBlockeraDefaultAttributesValues = (
-	rootAttributes: Object
+	rootAttributes: Object,
+	{
+		context = 'block-inspector',
+	}: { context?: 'global-styles-panel' | 'block-inspector' } = {}
 ): Object => {
 	// Extracting default prop of items and assigning to a new object
 	const attributes: { [key: string]: any } = {};
@@ -58,46 +61,72 @@ export const prepareBlockeraDefaultAttributesValues = (
 		}
 
 		if (rootAttributes[key].default !== undefined) {
-			attributes[key] = {
-				value:
-					rootAttributes[key].default?.value ||
-					rootAttributes[key].default,
-			};
+			if ('global-styles-panel' === context) {
+				attributes[key] = {
+					value: rootAttributes[key].default,
+				};
+			} else {
+				attributes[key] = rootAttributes[key].default;
+			}
 
 			continue;
 		}
 
 		switch (rootAttributes[key]?.type) {
 			case 'string':
-				attributes[key] = {
-					value: '',
-				};
+				if ('global-styles-panel' === context) {
+					attributes[key] = {
+						value: '',
+					};
+				} else {
+					attributes[key] = '';
+				}
 				break;
 			case 'object':
-				attributes[key] = {
-					value: {},
-				};
+				if ('global-styles-panel' === context) {
+					attributes[key] = {
+						value: {},
+					};
+				} else {
+					attributes[key] = {};
+				}
 				break;
 			case 'array':
-				attributes[key] = {
-					value: [],
-				};
+				if ('global-styles-panel' === context) {
+					attributes[key] = {
+						value: [],
+					};
+				} else {
+					attributes[key] = [];
+				}
 				break;
 			case 'boolean':
-				attributes[key] = {
-					value: false,
-				};
+				if ('global-styles-panel' === context) {
+					attributes[key] = {
+						value: false,
+					};
+				} else {
+					attributes[key] = false;
+				}
 				break;
 			case 'number':
 			case 'integer':
-				attributes[key] = {
-					value: 0,
-				};
+				if ('global-styles-panel' === context) {
+					attributes[key] = {
+						value: 0,
+					};
+				} else {
+					attributes[key] = 0;
+				}
 				break;
 			case 'null':
-				attributes[key] = {
-					value: null,
-				};
+				if ('global-styles-panel' === context) {
+					attributes[key] = {
+						value: null,
+					};
+				} else {
+					attributes[key] = null;
+				}
 				break;
 		}
 	}
