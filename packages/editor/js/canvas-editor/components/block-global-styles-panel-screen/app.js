@@ -25,7 +25,6 @@ import {
 } from '../../../components';
 // import { useGlobalStyle } from './hooks';
 import { useGlobalStylesContext } from './global-styles-provider';
-import { SharedBlockExtension } from '../../../extensions/libs/shared';
 import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
 import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { prepareBlockeraDefaultAttributesValues } from '../../../extensions/components/utils';
@@ -34,7 +33,6 @@ import {
 	BlockBase,
 	BlockPortals,
 } from '../../../extensions/components';
-// import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { STORE_NAME } from '../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
 import { GlobalStylesPanelContextProvider } from './context';
@@ -48,11 +46,11 @@ export default function App(props: Object): MixedElement {
 		},
 	} = props;
 	const {
-		// getBlockExtensionBy,
+		getBlockExtensionBy,
 		getBlockTypeAttributes,
 		getSharedBlockAttributes,
 	} = select(STORE_NAME) || {};
-	// const blockExtension = getBlockExtensionBy('targetBlock', name);
+	const blockExtension = getBlockExtensionBy('targetBlock', name);
 	const blockeraOverrideBlockTypeAttributes = getBlockTypeAttributes(name);
 	const blockeraOverrideBlockAttributes = isEmpty(
 		blockeraOverrideBlockTypeAttributes
@@ -294,9 +292,7 @@ export default function App(props: Object): MixedElement {
 							clientId: name.replace('/', '-'),
 							setAttributes: handleOnChangeStyles,
 							defaultAttributes: defaultStyles,
-							additional: {
-								edit: SharedBlockExtension,
-							},
+							additional: blockExtension,
 							insideBlockInspector: false,
 							className: props?.className,
 							attributes: styles,
