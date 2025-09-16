@@ -277,7 +277,11 @@ export function BlockCard({
 							currentBreakpoint={currentBreakpoint}
 						/>
 
-						<BlockVariationTransforms blockClientId={clientId} />
+						{insideBlockInspector && (
+							<BlockVariationTransforms
+								blockClientId={clientId}
+							/>
+						)}
 					</div>
 
 					<Slot name={'blockera-block-card-children'} />
