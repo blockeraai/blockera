@@ -24,6 +24,7 @@ const BlockStylesPreviewPanel = ({
 	const previewBlocks = useMemo(() => {
 		return {
 			...genericPreviewBlock,
+			variation: style.name,
 			title: style.label || style.name,
 			description: style.description,
 			initialAttributes: {
