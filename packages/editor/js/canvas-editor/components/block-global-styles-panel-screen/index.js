@@ -7,7 +7,7 @@ import type { MixedElement } from 'react';
 import { getBlockType } from '@wordpress/blocks';
 import { select, dispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
-import { useState, useEffect, createPortal } from '@wordpress/element';
+import { useState, useMemo, useEffect, createPortal } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -26,7 +26,8 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	const className = 'blockera-extensions-wrapper';
 
-	const { getSelectedBlock } = select(blockEditorStore);
+	const { getBlocks, getSelectedBlock } = select(blockEditorStore);
+	const blocks = getBlocks();
 	const { getSelectedBlockStyle } = select(STORE_NAME);
 	const { setSelectedBlockStyle, setSelectedBlockStyleVariation } =
 		dispatch(STORE_NAME);
@@ -43,6 +44,40 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockStyle,
 		setSelectedBlockStyleVariation,
 	});
+
+	const memoizedSelectedBlock = useMemo(() => {
+		// Prevent of expensive calculation if selected block is already set.
+		if (selectedBlock) {
+			return selectedBlock;
+		}
+
+		// Find block with matching name and get its clientId
+		let matchingBlock = blocks.find(
+			(block) => block.name === selectedBlockStyle
+		);
+
+		// If no direct match found, search through innerBlocks
+		if (!matchingBlock) {
+			const findInInnerBlocks = (blockList) => {
+				for (const block of blockList) {
+					if (block.name === selectedBlockStyle) {
+						return block;
+					}
+					if (block.innerBlocks?.length) {
+						const found = findInInnerBlocks(block.innerBlocks);
+						if (found) return found;
+					}
+				}
+				return null;
+			};
+			matchingBlock = findInInnerBlocks(blocks);
+		}
+
+		if (matchingBlock && !selectedBlock) {
+			return matchingBlock;
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedBlockStyle, selectedBlock, blocks]);
 
 	useEffect(() => {
 		if (
@@ -82,7 +117,12 @@ export const BlockGlobalStylesPanelScreen = ({
 	return createPortal(
 		<div className={className}>
 			<App
-				{...{ ...(selectedBlock ? { ...selectedBlock } : {}) }}
+				{...{
+					...(selectedBlock ? { ...selectedBlock } : {}),
+					...(memoizedSelectedBlock
+						? { ...memoizedSelectedBlock }
+						: {}),
+				}}
 				blockType={blockType}
 			/>
 		</div>,
