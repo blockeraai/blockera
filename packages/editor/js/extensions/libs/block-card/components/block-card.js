@@ -98,26 +98,13 @@ export function BlockCard({
 			setName(blockInformation?.name);
 		}
 
-		if (blockTitle && blockTitle.trim() !== name) {
-			setName(blockTitle);
-		}
-
 		// title changed from outside. For example: changing block variation
 		if (blockInformation?.title !== title) {
 			setTitle(blockInformation?.title);
 		}
 
-		if (blockTitle && blockTitle.trim() !== title) {
-			setTitle(blockTitle);
-		}
-
 		// eslint-disable-next-line
-	}, [
-		blockName,
-		blockTitle,
-		blockInformation?.title,
-		blockInformation?.name,
-	]);
+	}, [blockInformation.name, blockInformation.title]);
 
 	const { parentNavBlockClientId } = useSelect((select) => {
 		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
