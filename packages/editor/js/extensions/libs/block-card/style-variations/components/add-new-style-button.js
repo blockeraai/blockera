@@ -5,15 +5,50 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useCallback } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 import { registerBlockStyle } from '@wordpress/blocks';
+import { useState, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { Button, Flex } from '@blockera/controls';
+import { Button, Flex, PromotionPopover } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { useGlobalStylesContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
+
+const PromoteGlobalStylesPremiumFeature = ({
+	items,
+	onClose = () => {},
+	isOpen = false,
+}): MixedElement | null => {
+	if (items.length < 2) {
+		return null;
+	}
+
+	return (
+		<PromotionPopover
+			heading={__('Advanced Global Styles', 'blockera')}
+			featuresList={[
+				__('Multiple styles', 'blockera'),
+				__('All styles', 'blockera'),
+				__('Advanced features', 'blockera'),
+				__('Premium styles', 'blockera'),
+			]}
+			isOpen={isOpen}
+			onClose={onClose}
+		/>
+	);
+};
+
+const MAX_ITEMS_FOR_PROMOTION = applyFilters(
+	'blockera.block.style.variations.maxItemsForPromotion',
+	2
+);
 
 export const AddNewStyleButton = ({
 	label,
@@ -34,7 +69,31 @@ export const AddNewStyleButton = ({
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }): MixedElement => {
+	const {
+		base: {
+			styles: {
+				blocks: { [blockName]: { variations } = { variations: {} } },
+			},
+		},
+	} = useGlobalStylesContext();
+
+	const [counter, setCounter] = useState(0);
+	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 	const addNew = useCallback(() => {
+		setCounter(counter + 1);
+
+		const staticStylesCount = Object.keys(variations).length;
+		const dynamicStylesCount = blockStyles.length;
+
+		if (
+			counter >= MAX_ITEMS_FOR_PROMOTION ||
+			(staticStylesCount < dynamicStylesCount &&
+				dynamicStylesCount - staticStylesCount >=
+					MAX_ITEMS_FOR_PROMOTION)
+		) {
+			return setIsPromotionPopoverOpen(true);
+		}
+
 		// Find first available number by checking existing style names
 		let number = blockStyles.length + 1;
 
@@ -107,6 +166,14 @@ export const AddNewStyleButton = ({
 			>
 				<Icon icon="plus" iconSize="20" />
 			</Button>
+
+			{isPromotionPopoverOpen && (
+				<PromoteGlobalStylesPremiumFeature
+					items={blockStyles}
+					onClose={() => setIsPromotionPopoverOpen(false)}
+					isOpen={isPromotionPopoverOpen}
+				/>
+			)}
 		</Flex>
 	);
 };
