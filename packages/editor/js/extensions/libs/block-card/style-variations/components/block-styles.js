@@ -362,6 +362,9 @@ function BlockStyles({
 											setCurrentPreviewStyle
 										}
 										styleItemHandler={styleItemHandler}
+										blockName={blockName}
+										blockStyles={blockStyles}
+										setBlockStyles={setBlockStyles}
 									/>
 								))}
 
