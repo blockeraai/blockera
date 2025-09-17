@@ -106,7 +106,7 @@ export function BlockCard({
 		}
 
 		// eslint-disable-next-line
-	}, [blockInformation.name, blockInformation.title]);
+	}, [blockInformation?.name, blockInformation?.title]);
 
 	const { parentNavBlockClientId } = useSelect((select) => {
 		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
