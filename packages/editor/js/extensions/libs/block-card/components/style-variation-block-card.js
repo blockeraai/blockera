@@ -106,10 +106,15 @@ export function StyleVariationBlockCard({
 	}, [blockeraGlobalStylesMetaData, blockName, currentBlockStyleVariation]);
 
 	const [title, setTitle] = useState(initializeTitle);
+	const [hasUserEdited, setHasUserEdited] = useState(false);
 
 	// Debounced update function
 	const updateGlobalStyles = useCallback(
 		(newTitle: string) => {
+			if (!hasUserEdited) {
+				return;
+			}
+
 			const { blockeraMetaData = {} } = globalStyles;
 
 			const updatedMetaData = mergeObject(blockeraMetaData, {
@@ -131,19 +136,30 @@ export function StyleVariationBlockCard({
 
 			// Updating the global cache object.
 			window.blockeraGlobalStylesMetaData = updatedMetaData;
+
+			// Reset the hasUserEdited state.
+			setHasUserEdited(false);
 		},
-		[globalStyles, blockName, currentBlockStyleVariation, setGlobalStyles]
+		[
+			globalStyles,
+			blockName,
+			currentBlockStyleVariation,
+			setGlobalStyles,
+			hasUserEdited,
+		]
 	);
 
 	useEffect(() => {
-		if (!initializeTitle) {
+		if (hasUserEdited) {
 			return;
 		}
 
-		if (!title) {
+		if (!title && initializeTitle) {
+			setTitle(initializeTitle);
+		} else if (title && initializeTitle && title !== initializeTitle) {
 			setTitle(initializeTitle);
 		}
-	}, [initializeTitle, title]);
+	}, [title, hasUserEdited, initializeTitle]);
 
 	useEffect(() => {
 		if (!title || !initializeTitle || title === initializeTitle) {
@@ -157,7 +173,7 @@ export function StyleVariationBlockCard({
 
 		// Cleanup timeout on unmount or when title changes
 		return () => clearTimeout(timeoutId);
-	}, [title, updateGlobalStyles, initializeTitle]);
+	}, [title, updateGlobalStyles, initializeTitle, hasUserEdited]);
 
 	if (
 		!currentBlockStyleVariation?.name ||
@@ -177,6 +193,7 @@ export function StyleVariationBlockCard({
 			return;
 		}
 
+		setHasUserEdited(true);
 		setTitle(newTitle);
 	};
 
