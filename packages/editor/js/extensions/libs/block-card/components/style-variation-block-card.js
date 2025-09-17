@@ -4,8 +4,11 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
+import { useState, useMemo, useEffect, useCallback } from '@wordpress/element';
+import { useEntityProp } from '@wordpress/core-data';
 
 /**
  * Blockera dependencies
@@ -15,7 +18,7 @@ import {
 	extensionInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
-import { kebabCase } from '@blockera/utils';
+import { kebabCase, mergeObject } from '@blockera/utils';
 import { Tooltip, Flex } from '@blockera/controls';
 
 /**
@@ -24,6 +27,7 @@ import { Tooltip, Flex } from '@blockera/controls';
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import { useBlockSection } from '../../../components';
+import { EditableBlockName } from './editable-block-name';
 import type { UpdateBlockEditorSettings } from '../../types';
 import type { InnerBlockType } from '../inner-blocks/types';
 import StateContainer from '../../../components/state-container';
@@ -79,6 +83,71 @@ export function StyleVariationBlockCard({
 	};
 
 	const { onToggle } = useBlockSection('innerBlocksConfig');
+	const { blockeraGlobalStylesMetaData } = window;
+	const kind = 'root';
+	const name = 'globalStyles';
+	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
+	const [globalStyles, setGlobalStyles] = useEntityProp(
+		kind,
+		name,
+		'styles',
+		postId
+	);
+
+	// Get initial title from metadata or variation label
+	const initializeTitle = useMemo(() => {
+		return (
+			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
+				currentBlockStyleVariation?.name
+			]?.label ||
+			currentBlockStyleVariation?.label ||
+			''
+		);
+	}, [blockeraGlobalStylesMetaData, blockName, currentBlockStyleVariation]);
+
+	const [title, setTitle] = useState(initializeTitle);
+
+	// Debounced update function
+	const updateGlobalStyles = useCallback(
+		(newTitle: string) => {
+			const { blockeraMetaData = {} } = globalStyles;
+
+			const updatedMetaData = mergeObject(blockeraMetaData, {
+				blocks: {
+					[blockName]: {
+						variations: {
+							[currentBlockStyleVariation.name]: {
+								label: newTitle,
+							},
+						},
+					},
+				},
+			});
+
+			setGlobalStyles({
+				...globalStyles,
+				blockeraMetaData: updatedMetaData,
+			});
+
+			// Updating the global cache object.
+			window.blockeraGlobalStylesMetaData = updatedMetaData;
+		},
+		[globalStyles, blockName, currentBlockStyleVariation, setGlobalStyles]
+	);
+
+	useEffect(() => {
+		if (!title) {
+			return;
+		}
+
+		// Create a timeout to debounce the update
+		const timeoutId = setTimeout(() => {
+			updateGlobalStyles(title);
+		}, 300); // Wait 300ms before updating
+
+		// Cleanup timeout on unmount or when title changes
+		return () => clearTimeout(timeoutId);
+	}, [title, updateGlobalStyles]);
 
 	if (
 		!currentBlockStyleVariation?.name ||
@@ -86,6 +155,20 @@ export function StyleVariationBlockCard({
 	) {
 		return <></>;
 	}
+
+	const handleTitleChange = (newTitle: string) => {
+		const { blockeraMetaData = {} } = globalStyles;
+
+		if (
+			blockeraMetaData?.blocks?.[blockName]?.variations?.[
+				currentBlockStyleVariation?.name
+			]?.label === newTitle
+		) {
+			return;
+		}
+
+		setTitle(newTitle);
+	};
 
 	return (
 		<div
@@ -119,14 +202,26 @@ export function StyleVariationBlockCard({
 							'block-card__title'
 						)}
 					>
-						<span
+						<Flex
+							justifyContent="center"
+							alignItems="center"
 							className={extensionInnerClassNames(
-								'block-card__title__block'
+								'block-card__title__input',
+								{
+									'is-edited':
+										currentBlockStyleVariation &&
+										currentBlockStyleVariation?.label !==
+											title,
+								}
 							)}
-							aria-label={__('Selected Inner Block', 'blockera')}
 						>
-							{currentBlockStyleVariation?.label}
-						</span>
+							<EditableBlockName
+								content={title}
+								placeholder={currentBlockStyleVariation?.label}
+								onChange={handleTitleChange}
+								contentEditable={true}
+							/>
+						</Flex>
 
 						<Breadcrumb
 							clientId={clientId}

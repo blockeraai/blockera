@@ -6,7 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useState, useMemo } from '@wordpress/element';
 import {
 	__experimentalTruncate as Truncate,
 	__experimentalDivider as Divider,
@@ -52,7 +52,17 @@ export const StyleItem = ({
 		useGlobalStylesPanelContext() || {
 			setCurrentBlockStyleVariation: () => {},
 		};
-	const buttonText = style.label || style.name || __('Default', 'blockera');
+	const { blockeraGlobalStylesMetaData } = window;
+	const buttonText = useMemo(() => {
+		return (
+			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
+				style?.name
+			]?.label ||
+			style.label ||
+			style.name ||
+			__('Default', 'blockera')
+		);
+	}, [blockeraGlobalStylesMetaData, blockName, style]);
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const {
 		handleOnEnable,
