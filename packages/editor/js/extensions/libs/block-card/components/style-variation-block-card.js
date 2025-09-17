@@ -136,7 +136,17 @@ export function StyleVariationBlockCard({
 	);
 
 	useEffect(() => {
+		if (!initializeTitle) {
+			return;
+		}
+
 		if (!title) {
+			setTitle(initializeTitle);
+		}
+	}, [initializeTitle, title]);
+
+	useEffect(() => {
+		if (!title || !initializeTitle || title === initializeTitle) {
 			return;
 		}
 
@@ -147,7 +157,7 @@ export function StyleVariationBlockCard({
 
 		// Cleanup timeout on unmount or when title changes
 		return () => clearTimeout(timeoutId);
-	}, [title, updateGlobalStyles]);
+	}, [title, updateGlobalStyles, initializeTitle]);
 
 	if (
 		!currentBlockStyleVariation?.name ||
