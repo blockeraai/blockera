@@ -34,7 +34,6 @@ import StateContainer from '../../../components/state-container';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
-import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 const DEBOUNCE_DELAY = 300;
 
@@ -55,6 +54,7 @@ export function StyleVariationBlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
+	currentBlockStyleVariation,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -64,6 +64,7 @@ export function StyleVariationBlockCard({
 	additional: Object,
 	availableStates: Object,
 	children?: MixedElement,
+	currentBlockStyleVariation: { name: string, label: string },
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
@@ -77,8 +78,6 @@ export function StyleVariationBlockCard({
 	setAttributes: (attributes: Object) => void,
 	handleOnClick: UpdateBlockEditorSettings,
 }): MixedElement {
-	const { currentBlockStyleVariation = { name: '', label: '' } } =
-		useGlobalStylesPanelContext() || {};
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 	const { blockeraGlobalStylesMetaData } = window;
 
@@ -188,7 +187,7 @@ export function StyleVariationBlockCard({
 				'block-card',
 				'block-card--style-variation'
 			)}
-			data-test={'blockera-block-card'}
+			data-test={'blockera-style-variation-block-card'}
 		>
 			<div
 				className={extensionInnerClassNames(

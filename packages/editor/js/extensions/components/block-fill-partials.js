@@ -24,6 +24,7 @@ import {
 	StyleVariationBlockCard,
 } from '../libs/block-card';
 import StateContainer from './state-container';
+import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 const excludedControls = ['canvas-editor'];
 
@@ -45,6 +46,8 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
+		const { currentBlockStyleVariation } =
+			useGlobalStylesPanelContext() || {};
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
 			const others = select('blockera/controls').getControls();
@@ -108,6 +111,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 									blockProps.controllerProps
 										.handleOnChangeAttributes
 								}
+								currentBlockStyleVariation={
+									currentBlockStyleVariation
+								}
 							/>
 
 							{isInnerBlock(currentBlock) && (
@@ -139,28 +145,35 @@ export const BlockFillPartials: ComponentType<any> = memo(
 								/>
 							)}
 
-							<StyleVariationBlockCard
-								insideBlockInspector={insideBlockInspector}
-								isActive={isActive}
-								clientId={clientId}
-								blockName={blockProps.name}
-								handleOnClick={updateBlockEditorSettings}
-								currentBlock={currentBlock}
-								currentState={currentState}
-								availableStates={availableInnerStates}
-								currentBreakpoint={currentBreakpoint}
-								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={
-									blockProps.currentStateAttributes
-								}
-								additional={blockProps.additional}
-								supports={blockProps.supports}
-								setAttributes={blockProps.setAttributes}
-								handleOnChangeAttributes={
-									blockProps.controllerProps
-										.handleOnChangeAttributes
-								}
-							/>
+							{Boolean(currentBlockStyleVariation?.name) && (
+								<StyleVariationBlockCard
+									insideBlockInspector={insideBlockInspector}
+									isActive={isActive}
+									clientId={clientId}
+									blockName={blockProps.name}
+									handleOnClick={updateBlockEditorSettings}
+									currentBlock={currentBlock}
+									currentState={currentState}
+									availableStates={availableInnerStates}
+									currentBreakpoint={currentBreakpoint}
+									currentInnerBlockState={
+										currentInnerBlockState
+									}
+									currentStateAttributes={
+										blockProps.currentStateAttributes
+									}
+									additional={blockProps.additional}
+									supports={blockProps.supports}
+									setAttributes={blockProps.setAttributes}
+									handleOnChangeAttributes={
+										blockProps.controllerProps
+											.handleOnChangeAttributes
+									}
+									currentBlockStyleVariation={
+										currentBlockStyleVariation
+									}
+								/>
+							)}
 						</StateContainer>
 					)}
 

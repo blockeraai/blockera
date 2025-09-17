@@ -56,6 +56,7 @@ export function BlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
+	currentBlockStyleVariation,
 }: {
 	isActive: boolean,
 	clientId: string,
@@ -79,6 +80,7 @@ export function BlockCard({
 		options?: Object
 	) => void,
 	setAttributes: (attributes: Object) => void,
+	currentBlockStyleVariation?: { name: string, label: string },
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
 	const {
@@ -143,6 +145,9 @@ export function BlockCard({
 				className={extensionClassNames('block-card', {
 					'master-block-card': true,
 					'inner-block-is-selected': currentInnerBlock !== null,
+					'style-variation-is-selected': Boolean(
+						currentBlockStyleVariation?.name
+					),
 				})}
 				data-test={'blockera-block-card'}
 			>
