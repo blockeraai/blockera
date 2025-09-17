@@ -36,6 +36,8 @@ import { Preview as BlockCompositePreview } from '../../block-composite';
 import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
+const DEBOUNCE_DELAY = 300;
+
 export function StyleVariationBlockCard({
 	clientId,
 	isActive,
@@ -75,48 +77,37 @@ export function StyleVariationBlockCard({
 	setAttributes: (attributes: Object) => void,
 	handleOnClick: UpdateBlockEditorSettings,
 }): MixedElement {
-	const { currentBlockStyleVariation } = useGlobalStylesPanelContext() || {
-		currentBlockStyleVariation: {
-			name: '',
-			label: '',
-		},
-	};
-
+	const { currentBlockStyleVariation = { name: '', label: '' } } =
+		useGlobalStylesPanelContext() || {};
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 	const { blockeraGlobalStylesMetaData } = window;
-	const kind = 'root';
-	const name = 'globalStyles';
+
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
-		kind,
-		name,
+		'root',
+		'globalStyles',
 		'styles',
 		postId
 	);
 
-	// Get initial title from metadata or variation label
-	const initializeTitle = useMemo(() => {
-		return (
+	const initializeTitle = useMemo(
+		() =>
 			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
 				currentBlockStyleVariation?.name
 			]?.label ||
 			currentBlockStyleVariation?.label ||
-			''
-		);
-	}, [blockeraGlobalStylesMetaData, blockName, currentBlockStyleVariation]);
+			'',
+		[blockeraGlobalStylesMetaData, blockName, currentBlockStyleVariation]
+	);
 
 	const [title, setTitle] = useState(initializeTitle);
 	const [hasUserEdited, setHasUserEdited] = useState(false);
 
-	// Debounced update function
 	const updateGlobalStyles = useCallback(
 		(newTitle: string) => {
-			if (!hasUserEdited) {
-				return;
-			}
+			if (!hasUserEdited) return;
 
 			const { blockeraMetaData = {} } = globalStyles;
-
 			const updatedMetaData = mergeObject(blockeraMetaData, {
 				blocks: {
 					[blockName]: {
@@ -134,44 +125,36 @@ export function StyleVariationBlockCard({
 				blockeraMetaData: updatedMetaData,
 			});
 
-			// Updating the global cache object.
 			window.blockeraGlobalStylesMetaData = updatedMetaData;
-
-			// Reset the hasUserEdited state.
 			setHasUserEdited(false);
 		},
 		[
 			globalStyles,
 			blockName,
-			currentBlockStyleVariation,
+			currentBlockStyleVariation.name,
 			setGlobalStyles,
 			hasUserEdited,
 		]
 	);
 
 	useEffect(() => {
-		if (hasUserEdited) {
-			return;
-		}
+		if (hasUserEdited) return;
 
-		if (!title && initializeTitle) {
-			setTitle(initializeTitle);
-		} else if (title && initializeTitle && title !== initializeTitle) {
+		if (
+			(!title && initializeTitle) ||
+			(title && initializeTitle && title !== initializeTitle)
+		) {
 			setTitle(initializeTitle);
 		}
 	}, [title, hasUserEdited, initializeTitle]);
 
 	useEffect(() => {
-		if (!title || !initializeTitle || title === initializeTitle) {
-			return;
-		}
+		if (!title || !initializeTitle || title === initializeTitle) return;
 
-		// Create a timeout to debounce the update
-		const timeoutId = setTimeout(() => {
-			updateGlobalStyles(title);
-		}, 300); // Wait 300ms before updating
-
-		// Cleanup timeout on unmount or when title changes
+		const timeoutId = setTimeout(
+			() => updateGlobalStyles(title),
+			DEBOUNCE_DELAY
+		);
 		return () => clearTimeout(timeoutId);
 	}, [title, updateGlobalStyles, initializeTitle, hasUserEdited]);
 
@@ -179,22 +162,24 @@ export function StyleVariationBlockCard({
 		!currentBlockStyleVariation?.name ||
 		currentBlockStyleVariation?.isDefault
 	) {
-		return <></>;
+		return null;
 	}
 
 	const handleTitleChange = (newTitle: string) => {
-		const { blockeraMetaData = {} } = globalStyles;
-
-		if (
-			blockeraMetaData?.blocks?.[blockName]?.variations?.[
+		const currentLabel =
+			globalStyles?.blockeraMetaData?.blocks?.[blockName]?.variations?.[
 				currentBlockStyleVariation?.name
-			]?.label === newTitle
-		) {
-			return;
-		}
+			]?.label;
+
+		if (currentLabel === newTitle) return;
 
 		setHasUserEdited(true);
 		setTitle(newTitle);
+	};
+
+	const handleClose = () => {
+		onToggle(true, 'switch-to-parent');
+		handleOnClick('current-block-style-variation', undefined);
 	};
 
 	return (
@@ -239,6 +224,7 @@ export function StyleVariationBlockCard({
 										currentBlockStyleVariation &&
 										currentBlockStyleVariation?.label !==
 											title,
+									'inside-block-inspector': true,
 								}
 							)}
 						>
@@ -268,14 +254,8 @@ export function StyleVariationBlockCard({
 								library="wp"
 								icon="close-small"
 								iconSize="24"
-								data-test={'Close Block Style'}
-								onClick={() => {
-									onToggle(true, 'switch-to-parent');
-									handleOnClick(
-										'current-block-style-variation',
-										undefined
-									);
-								}}
+								data-test="Close Block Style"
+								onClick={handleClose}
 							/>
 						</Tooltip>
 					</h2>
