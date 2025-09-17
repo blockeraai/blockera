@@ -45,11 +45,6 @@ const PromoteGlobalStylesPremiumFeature = ({
 	);
 };
 
-const MAX_ITEMS_FOR_PROMOTION = applyFilters(
-	'blockera.block.style.variations.globalStylesMaxItems',
-	2
-);
-
 export const AddNewStyleButton = ({
 	label,
 	styles,
@@ -69,6 +64,11 @@ export const AddNewStyleButton = ({
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }): MixedElement => {
+	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
+		'blockera.block.style.variations.globalStylesMaxItems',
+		2
+	);
+
 	const {
 		base: {
 			styles: {
@@ -86,11 +86,11 @@ export const AddNewStyleButton = ({
 		const dynamicStylesCount = blockStyles.length;
 
 		if (
-			-1 === MAX_ITEMS_FOR_PROMOTION ||
-			counter >= MAX_ITEMS_FOR_PROMOTION ||
-			(staticStylesCount < dynamicStylesCount &&
-				dynamicStylesCount - staticStylesCount >=
-					MAX_ITEMS_FOR_PROMOTION)
+			-1 !== MAX_ITEMS_FOR_PROMOTION &&
+			(counter >= MAX_ITEMS_FOR_PROMOTION ||
+				(staticStylesCount < dynamicStylesCount &&
+					dynamicStylesCount - staticStylesCount >=
+						MAX_ITEMS_FOR_PROMOTION))
 		) {
 			return setIsPromotionPopoverOpen(true);
 		}
