@@ -2,9 +2,9 @@
 /**
  * External dependencies
  */
-import { memo, useState } from '@wordpress/element';
-import type { ComponentType, MixedElement } from 'react';
 import { __ } from '@wordpress/i18n';
+import type { ComponentType, MixedElement } from 'react';
+import { memo, useMemo, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -71,6 +71,19 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 				onSelect(currentActiveStyle);
 			}
 		}, [currentPreviewStyle]);
+
+		const { blockeraGlobalStylesMetaData } = window;
+
+		const buttonText = useMemo(() => {
+			return (
+				blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
+					currentActiveStyle?.name
+				]?.label ||
+				currentActiveStyle.label ||
+				currentActiveStyle.name ||
+				__('Default', 'blockera')
+			);
+		}, [blockeraGlobalStylesMetaData, blockName, currentActiveStyle]);
 
 		if (
 			!stylesToRender ||
@@ -163,7 +176,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 						data-test="style-variations-button-label"
 						gap={0}
 					>
-						{currentActiveStyle?.label || __('Default', 'blockera')}
+						{buttonText}
 
 						<Icon icon="more-vertical-small" iconSize={24} />
 					</Flex>
