@@ -7,7 +7,7 @@ import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import type { ComponentType, Element } from 'react';
 import { Fill } from '@wordpress/components';
-import { useEffect, memo, useMemo } from '@wordpress/element';
+import { useEffect, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -68,52 +68,40 @@ export const BlockFillPartials: ComponentType<any> = memo(
 			);
 		}, [isActive]);
 
-		const memoizedBlockCardComponent = useMemo(
-			() => {
-				return (
-					<>
-						<BlockCard
-							isActive={isActive}
-							notice={notice}
-							insideBlockInspector={insideBlockInspector}
+		return (
+			<>
+				<Fill name={`blockera-block-card-content-${clientId}`}>
+					{!insideBlockInspector && (
+						<StateContainer
+							name={blockProps.name}
 							clientId={clientId}
-							blockName={blockProps.name}
-							innerBlocks={blockeraInnerBlocks}
-							currentInnerBlock={currentInnerBlock}
-							currentBlock={currentBlock}
-							currentState={currentState}
-							currentBreakpoint={currentBreakpoint}
-							currentInnerBlockState={currentInnerBlockState}
-							currentStateAttributes={blockProps.attributes}
-							availableStates={availableStates}
-							additional={blockProps.additional}
-							blockeraInnerBlocks={blockeraInnerBlocks}
-							supports={blockProps.supports}
-							setAttributes={blockProps.setAttributes}
-							handleOnChangeAttributes={
-								blockProps.controllerProps
-									.handleOnChangeAttributes
+							isGlobalStylesCardWrapper={!insideBlockInspector}
+							blockeraUnsavedData={
+								blockProps.attributes?.blockeraUnsavedData
 							}
-						/>
-
-						{isInnerBlock(currentBlock) && (
-							<InnerBlockCard
-								insideBlockInspector={insideBlockInspector}
+							insideBlockInspector={insideBlockInspector}
+							availableStates={
+								isInnerBlock(currentBlock)
+									? availableInnerStates
+									: availableStates
+							}
+						>
+							<BlockCard
 								isActive={isActive}
+								notice={notice}
+								insideBlockInspector={insideBlockInspector}
 								clientId={clientId}
-								activeBlock={currentBlock}
 								blockName={blockProps.name}
 								innerBlocks={blockeraInnerBlocks}
-								handleOnClick={updateBlockEditorSettings}
+								currentInnerBlock={currentInnerBlock}
 								currentBlock={currentBlock}
 								currentState={currentState}
-								availableStates={availableInnerStates}
 								currentBreakpoint={currentBreakpoint}
 								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={
-									blockProps.currentStateAttributes
-								}
+								currentStateAttributes={blockProps.attributes}
+								availableStates={availableStates}
 								additional={blockProps.additional}
+								blockeraInnerBlocks={blockeraInnerBlocks}
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
@@ -121,8 +109,36 @@ export const BlockFillPartials: ComponentType<any> = memo(
 										.handleOnChangeAttributes
 								}
 							/>
-						)}
-						{!insideBlockInspector && (
+
+							{isInnerBlock(currentBlock) && (
+								<InnerBlockCard
+									insideBlockInspector={insideBlockInspector}
+									isActive={isActive}
+									clientId={clientId}
+									activeBlock={currentBlock}
+									blockName={blockProps.name}
+									innerBlocks={blockeraInnerBlocks}
+									handleOnClick={updateBlockEditorSettings}
+									currentBlock={currentBlock}
+									currentState={currentState}
+									availableStates={availableInnerStates}
+									currentBreakpoint={currentBreakpoint}
+									currentInnerBlockState={
+										currentInnerBlockState
+									}
+									currentStateAttributes={
+										blockProps.currentStateAttributes
+									}
+									additional={blockProps.additional}
+									supports={blockProps.supports}
+									setAttributes={blockProps.setAttributes}
+									handleOnChangeAttributes={
+										blockProps.controllerProps
+											.handleOnChangeAttributes
+									}
+								/>
+							)}
+
 							<StyleVariationBlockCard
 								insideBlockInspector={insideBlockInspector}
 								isActive={isActive}
@@ -145,43 +161,65 @@ export const BlockFillPartials: ComponentType<any> = memo(
 										.handleOnChangeAttributes
 								}
 							/>
-						)}
-					</>
-				);
-			},
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-			[
-				isActive,
-				currentBlock,
-				currentState,
-				currentBreakpoint,
-				currentInnerBlockState,
-			]
-		);
-
-		return (
-			<>
-				<Fill name={`blockera-block-card-content-${clientId}`}>
-					{!insideBlockInspector && (
-						<StateContainer
-							name={blockProps.name}
-							clientId={clientId}
-							isGlobalStylesCardWrapper={!insideBlockInspector}
-							blockeraUnsavedData={
-								blockProps.attributes?.blockeraUnsavedData
-							}
-							insideBlockInspector={insideBlockInspector}
-							availableStates={
-								isInnerBlock(currentBlock)
-									? availableInnerStates
-									: availableStates
-							}
-						>
-							{memoizedBlockCardComponent}
 						</StateContainer>
 					)}
 
-					{insideBlockInspector && memoizedBlockCardComponent}
+					{insideBlockInspector && (
+						<>
+							<BlockCard
+								isActive={isActive}
+								notice={notice}
+								insideBlockInspector={insideBlockInspector}
+								clientId={clientId}
+								blockName={blockProps.name}
+								innerBlocks={blockeraInnerBlocks}
+								currentInnerBlock={currentInnerBlock}
+								currentBlock={currentBlock}
+								currentState={currentState}
+								currentBreakpoint={currentBreakpoint}
+								currentInnerBlockState={currentInnerBlockState}
+								currentStateAttributes={blockProps.attributes}
+								availableStates={availableStates}
+								additional={blockProps.additional}
+								blockeraInnerBlocks={blockeraInnerBlocks}
+								supports={blockProps.supports}
+								setAttributes={blockProps.setAttributes}
+								handleOnChangeAttributes={
+									blockProps.controllerProps
+										.handleOnChangeAttributes
+								}
+							/>
+
+							{isInnerBlock(currentBlock) && (
+								<InnerBlockCard
+									insideBlockInspector={insideBlockInspector}
+									isActive={isActive}
+									clientId={clientId}
+									activeBlock={currentBlock}
+									blockName={blockProps.name}
+									innerBlocks={blockeraInnerBlocks}
+									handleOnClick={updateBlockEditorSettings}
+									currentBlock={currentBlock}
+									currentState={currentState}
+									availableStates={availableInnerStates}
+									currentBreakpoint={currentBreakpoint}
+									currentInnerBlockState={
+										currentInnerBlockState
+									}
+									currentStateAttributes={
+										blockProps.currentStateAttributes
+									}
+									additional={blockProps.additional}
+									supports={blockProps.supports}
+									setAttributes={blockProps.setAttributes}
+									handleOnChangeAttributes={
+										blockProps.controllerProps
+											.handleOnChangeAttributes
+									}
+								/>
+							)}
+						</>
+					)}
 				</Fill>
 				{isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>

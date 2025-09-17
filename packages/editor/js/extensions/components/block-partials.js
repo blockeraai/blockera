@@ -15,6 +15,45 @@ import { prependPortal } from '@blockera/utils';
  */
 import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
 
+const Component = ({
+	clientId,
+	isActive,
+	setActive,
+	sentinelRef,
+	stickyWrapperRef,
+}) => (
+	<>
+		<div
+			ref={sentinelRef}
+			className="blockera-block-card-sticky-sentinel"
+		></div>
+		<div
+			ref={stickyWrapperRef}
+			className="blockera-block-card-wrapper is-sticky-active"
+		>
+			<Slot name={`blockera-block-card-content-${clientId}`} />
+		</div>
+
+		<div className="blockera-block-edit-wrapper">
+			<Slot name={`blockera-block-edit-content-${clientId}`} />
+		</div>
+
+		<Fill
+			key={`${clientId}-card-menu`}
+			name={'blockera-block-card-children'}
+		>
+			<div className={'blockera-dropdown-menu'}>
+				<BlockDropdownAllMenu
+					{...{
+						isActive,
+						setActive,
+					}}
+				/>
+			</div>
+		</Fill>
+	</>
+);
+
 export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 	const stickyWrapperRef = useRef(null);
 	const sentinelRef = useRef(null);
@@ -51,50 +90,31 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 		return () => observer.disconnect();
 	}, []);
 
-	const Component = () => (
-		<>
-			<div
-				ref={sentinelRef}
-				className="blockera-block-card-sticky-sentinel"
-			></div>
-			<div
-				ref={stickyWrapperRef}
-				className="blockera-block-card-wrapper is-sticky-active"
-			>
-				<Slot name={`blockera-block-card-content-${clientId}`} />
-			</div>
-
-			<div className="blockera-block-edit-wrapper">
-				<Slot name={`blockera-block-edit-content-${clientId}`} />
-			</div>
-
-			<Fill
-				key={`${clientId}-card-menu`}
-				name={'blockera-block-card-children'}
-			>
-				<div className={'blockera-dropdown-menu'}>
-					<BlockDropdownAllMenu
-						{...{
-							isActive,
-							setActive,
-						}}
-					/>
-				</div>
-			</Fill>
-		</>
-	);
-
 	const { getActiveComplementaryArea } = select('core/interface');
 
 	const activeComplementaryArea =
 		getActiveComplementaryArea('core/edit-site');
 
 	if ('edit-site/global-styles' === activeComplementaryArea) {
-		return <Component />;
+		return (
+			<Component
+				isActive={isActive}
+				setActive={setActive}
+				clientId={clientId}
+				sentinelRef={sentinelRef}
+				stickyWrapperRef={stickyWrapperRef}
+			/>
+		);
 	}
 
 	return prependPortal(
-		<Component />,
+		<Component
+			isActive={isActive}
+			setActive={setActive}
+			clientId={clientId}
+			sentinelRef={sentinelRef}
+			stickyWrapperRef={stickyWrapperRef}
+		/>,
 		document.querySelector('.block-editor-block-inspector'),
 		{
 			className: isActive ? 'blockera-active-block' : '',
