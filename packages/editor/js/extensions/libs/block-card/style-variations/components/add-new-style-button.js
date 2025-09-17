@@ -86,6 +86,7 @@ export const AddNewStyleButton = ({
 		const dynamicStylesCount = blockStyles.length;
 
 		if (
+			-1 === MAX_ITEMS_FOR_PROMOTION ||
 			counter >= MAX_ITEMS_FOR_PROMOTION ||
 			(staticStylesCount < dynamicStylesCount &&
 				dynamicStylesCount - staticStylesCount >=
