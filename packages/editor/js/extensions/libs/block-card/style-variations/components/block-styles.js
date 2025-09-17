@@ -86,14 +86,6 @@ function BlockStyles({
 		setIsOpen,
 	} = styles;
 
-	// Update global block styles state whenever blockStyles local state changes
-	useEffect(() => {
-		if ('function' === typeof handleOnChangeBlockStyles) {
-			handleOnChangeBlockStyles(blockStyles);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockStyles]);
-
 	// Update ref whenever hoveredStyle changes
 	useEffect(() => {
 		hoveredStyleRef.current = hoveredStyle;
