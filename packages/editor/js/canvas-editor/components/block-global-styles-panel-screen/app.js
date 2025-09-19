@@ -14,7 +14,13 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
  * Blockera dependencies
  */
 import { BaseControlContext } from '@blockera/controls';
-import { isEmpty, mergeObject, isEquals, omit } from '@blockera/utils';
+import {
+	omit,
+	isEmpty,
+	isEquals,
+	pascalCase,
+	mergeObject,
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -233,6 +239,21 @@ export default function App(props: Object): MixedElement {
 				setBlockStyles(name, newUserConfig.styles.blocks[name]);
 
 				return setUserConfig(newUserConfig);
+			}
+
+			for (const variation in newStyles.variations) {
+				if (!Object.keys(newStyles.variations[variation])?.length) {
+					newStyles.variations[variation] = {
+						blockeraMetaData: {
+							name: variation,
+							label: pascalCase(
+								variation.replace(/-/g, ' ')
+							).replace(/_/g, ' '),
+						},
+					};
+
+					continue;
+				}
 			}
 
 			const newUserConfig = mergeObject(userConfig, {
