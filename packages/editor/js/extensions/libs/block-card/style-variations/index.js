@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { ComponentType, MixedElement } from 'react';
-import { memo, useMemo, useState } from '@wordpress/element';
+import { memo, useMemo, useState, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -17,12 +17,13 @@ import { Button, Flex } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { useStylesForBlocks } from './utils';
 import BlockStyles from './components/block-styles';
 import { isInnerBlock } from '../../../components';
 import type { InnerBlockType } from '../inner-blocks/types';
-import type { TBreakpoint, TStates } from '../block-states/types';
 import { isBaseBreakpoint } from '../../../../canvas-editor';
+import { useStylesForBlocks, getDefaultStyle } from './utils';
+import type { TBreakpoint, TStates } from '../block-states/types';
+import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 type TBlockStyleVariations = {
 	clientId: string,
@@ -41,6 +42,10 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		currentBreakpoint,
 		context = 'inspector-controls',
 	}: TBlockStyleVariations): MixedElement => {
+		const { currentBlockStyleVariation } =
+			useGlobalStylesPanelContext() || {
+				currentBlockStyleVariation: undefined,
+			};
 		const [popoverAnchor, setPopoverAnchor] = useState(null);
 		const [isOpen, setIsOpen] = useState(false);
 		const [isHovered, setIsHovered] = useState(false);
@@ -60,6 +65,15 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 		const [currentActiveStyle, setCurrentActiveStyle] =
 			useState(activeStyle);
 		const [currentPreviewStyle, setCurrentPreviewStyle] = useState(null);
+
+		useEffect(() => {
+			if (
+				undefined === currentBlockStyleVariation &&
+				!currentActiveStyle.isDefault
+			) {
+				setCurrentActiveStyle(getDefaultStyle(stylesToRender));
+			}
+		}, [currentBlockStyleVariation, currentActiveStyle, stylesToRender]);
 
 		// Update cached style when active style changes
 		useLateEffect(() => {
