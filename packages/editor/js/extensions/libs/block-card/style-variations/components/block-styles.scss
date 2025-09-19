@@ -104,8 +104,8 @@
 	&.delete-style {
 		color: var(--blockera-value-addon-deleted-color);
 	}
+}
 
-	.action-disabled {
-		opacity: 0.5;
-	}
+.action-disabled {
+	opacity: 0.5;
 }

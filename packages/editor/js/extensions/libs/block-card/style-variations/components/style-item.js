@@ -53,16 +53,19 @@ export const StyleItem = ({
 			setCurrentBlockStyleVariation: () => {},
 		};
 	const { blockeraGlobalStylesMetaData } = window;
+	const [cachedStyle, setCachedStyle] = useState(
+		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
+			style?.name
+		] || {}
+	);
 	const buttonText = useMemo(() => {
 		return (
-			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
-				style?.name
-			]?.label ||
+			cachedStyle?.label ||
 			style.label ||
 			style.name ||
 			__('Default', 'blockera')
 		);
-	}, [blockeraGlobalStylesMetaData, blockName, style]);
+	}, [cachedStyle, style]);
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const {
 		handleOnEnable,
@@ -74,7 +77,9 @@ export const StyleItem = ({
 		blockName,
 		setStyles,
 		blockStyles,
+		cachedStyle,
 		setBlockStyles,
+		setCachedStyle,
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setCurrentBlockStyleVariation,
@@ -85,6 +90,7 @@ export const StyleItem = ({
 			<Button
 				className={classNames('block-editor-block-styles__item', {
 					'is-active': activeStyle.name === style.name,
+					'action-disabled': false === cachedStyle?.status,
 				})}
 				key={style.name}
 				variant="secondary"
@@ -94,6 +100,11 @@ export const StyleItem = ({
 						: ''
 				}
 				onMouseEnter={() => {
+					// Skip mouse enter if style is disabled.
+					if (false === cachedStyle?.status) {
+						return;
+					}
+					// Skip mouse enter if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
 					}
@@ -101,6 +112,11 @@ export const StyleItem = ({
 					styleItemHandler(style);
 				}}
 				onFocus={() => {
+					// Skip focus if style is disabled.
+					if (false === cachedStyle?.status) {
+						return;
+					}
+					// Skip focus if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
 					}
@@ -108,6 +124,11 @@ export const StyleItem = ({
 					styleItemHandler(style);
 				}}
 				onMouseLeave={() => {
+					// Skip mouse leave if style is disabled.
+					if (false === cachedStyle?.status) {
+						return;
+					}
+					// Skip mouse leave if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
 					}
@@ -115,6 +136,11 @@ export const StyleItem = ({
 					styleItemHandler(null);
 				}}
 				onBlur={() => {
+					// Skip blur if style is disabled.
+					if (false === cachedStyle?.status) {
+						return;
+					}
+					// Skip blur if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
 					}
@@ -122,7 +148,20 @@ export const StyleItem = ({
 					setCurrentPreviewStyle(null);
 					styleItemHandler(null);
 				}}
-				onClick={() => {
+				onClick={(event) => {
+					// Skip click if style is disabled.
+					if (false === cachedStyle?.status) {
+						return;
+					}
+					// Skip click on actions opener element.
+					if (
+						['svg', 'path', 'SVG', 'PATH'].includes(
+							event.target.tagName
+						)
+					) {
+						return;
+					}
+
 					if (inGlobalStylesPanel) {
 						// Navigate to the block style variation customization panel when clicked in global styles context.
 
@@ -156,9 +195,7 @@ export const StyleItem = ({
 							<Icon
 								icon="more-vertical"
 								iconSize="20"
-								onClick={() => {
-									setIsOpenContextMenu(true);
-								}}
+								onClick={() => setIsOpenContextMenu(true)}
 							/>
 						</Flex>
 					</Flex>
@@ -199,28 +236,33 @@ export const StyleItem = ({
 							{__('Clear all customizations', 'blockera')}
 						</Flex>
 						<Divider />
-						<Flex
-							justifyContent={'flex-start'}
-							gap={8}
-							alignItems={'center'}
-							className={controlInnerClassNames('menu-item')}
-							onClick={() => handleOnEnable(true)}
-						>
-							<Icon icon="eye-show" iconSize="24" />
-							{__('Enable', 'blockera')}
-						</Flex>
-						<Flex
-							justifyContent={'flex-start'}
-							gap={8}
-							alignItems={'center'}
-							className={controlInnerClassNames('menu-item', {
-								'is-disabled': !style?.isEnabled || false,
-							})}
-							onClick={() => handleOnEnable(false)}
-						>
-							<Icon icon="eye-hide" iconSize="24" />
-							{__('Disable', 'blockera')}
-						</Flex>
+						{false === cachedStyle?.status && (
+							<Flex
+								justifyContent={'flex-start'}
+								gap={8}
+								alignItems={'center'}
+								className={controlInnerClassNames('menu-item')}
+								onClick={() => handleOnEnable(true, style)}
+							>
+								<Icon icon="eye-show" iconSize="24" />
+								{__('Enable', 'blockera')}
+							</Flex>
+						)}
+						{(true === cachedStyle?.status ||
+							!cachedStyle.hasOwnProperty('status')) && (
+							<Flex
+								justifyContent={'flex-start'}
+								gap={8}
+								alignItems={'center'}
+								className={controlInnerClassNames('menu-item', {
+									'is-disabled': !style?.isEnabled || false,
+								})}
+								onClick={() => handleOnEnable(false, style)}
+							>
+								<Icon icon="eye-hide" iconSize="24" />
+								{__('Disable', 'blockera')}
+							</Flex>
+						)}
 						<Flex
 							justifyContent={'flex-start'}
 							gap={8}
