@@ -98,7 +98,8 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 
 		if (isStyleVariation && styleVariationName) {
 			initialBlockGlobalStyles =
-				initialBlockGlobalStyles.variations[styleVariationName];
+				initialBlockGlobalStyles?.variations?.[styleVariationName] ||
+				{};
 		}
 
 		initialBlockGlobalStyles = {
