@@ -15,6 +15,9 @@ function blockera_register_block_style_variations_from_theme_json_partials( $var
 		return;
 	}
 
+	$post_id            = WP_Theme_JSON_Resolver::get_user_global_styles_post_id();
+	$blockera_meta_data = get_post_meta($post_id, 'blockeraGlobalStylesMetaData', true);
+
 	$registry = WP_Block_Styles_Registry::get_instance();
 
 	foreach ( $variations as $variation ) {
@@ -28,6 +31,9 @@ function blockera_register_block_style_variations_from_theme_json_partials( $var
 		foreach ( $variation['blockTypes'] as $block_type ) {
 			$registered_styles = $registry->get_registered_styles_for_block( $block_type );
 
+			$cached_variations = $blockera_meta_data['blocks'][ $block_type ]['variations'] ?? [];
+			$refs              = array_column($cached_variations, 'refId');
+
 			// Register block style variation if it hasn't already been registered.
 			if ( ! array_key_exists( $variation_name, $registered_styles ) ) {
 				register_block_style(
@@ -35,6 +41,25 @@ function blockera_register_block_style_variations_from_theme_json_partials( $var
 					array(
 						'name'  => $variation_name,
 						'label' => $variation_label,
+					)
+				);
+			} elseif (in_array($variation_name, $refs, true)) {
+				unregister_block_style(
+					$block_type,
+					$variation_name
+				);
+
+				$index                    = array_search($variation_name, $refs, true);
+				$cached_variations_values = array_values($cached_variations);
+				$cached_variations_keys   = array_keys($cached_variations);
+				$ref_value                = $cached_variations_values[ $index ];
+				$ref_key                  = $cached_variations_keys[ $index ];
+
+				register_block_style(
+					$block_type,
+					array(
+						'name'  => $ref_key,
+						'label' => $ref_value['label'],
 					)
 				);
 			}

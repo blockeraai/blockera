@@ -46,7 +46,7 @@ export const BlockFillPartials: ComponentType<any> = memo(
 		currentInnerBlockState,
 		updateBlockEditorSettings,
 	}): Element<any> => {
-		const { currentBlockStyleVariation } =
+		const { currentBlockStyleVariation, setCurrentBlockStyleVariation } =
 			useGlobalStylesPanelContext() || {};
 		// prevent memory leak, componentDidMount.
 		useEffect(() => {
@@ -168,6 +168,9 @@ export const BlockFillPartials: ComponentType<any> = memo(
 									handleOnChangeAttributes={
 										blockProps.controllerProps
 											.handleOnChangeAttributes
+									}
+									setCurrentBlockStyleVariation={
+										setCurrentBlockStyleVariation
 									}
 									currentBlockStyleVariation={
 										currentBlockStyleVariation

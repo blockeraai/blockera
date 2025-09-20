@@ -7,8 +7,15 @@ import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
-import { useState, useMemo, useEffect, useCallback } from '@wordpress/element';
 import { useEntityProp } from '@wordpress/core-data';
+import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
+import {
+	useRef,
+	useState,
+	useMemo,
+	useEffect,
+	useCallback,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -55,6 +62,7 @@ export function StyleVariationBlockCard({
 	currentInnerBlockState,
 	handleOnChangeAttributes,
 	currentBlockStyleVariation,
+	setCurrentBlockStyleVariation,
 }: {
 	clientId: string,
 	isActive: boolean,
@@ -65,6 +73,10 @@ export function StyleVariationBlockCard({
 	availableStates: Object,
 	children?: MixedElement,
 	currentBlockStyleVariation: { name: string, label: string },
+	setCurrentBlockStyleVariation: (style: {
+		name: string,
+		label: string,
+	}) => void,
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
@@ -99,6 +111,11 @@ export function StyleVariationBlockCard({
 		[blockeraGlobalStylesMetaData, blockName, currentBlockStyleVariation]
 	);
 
+	const refId = useRef(
+		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
+			currentBlockStyleVariation.name
+		]?.refId || currentBlockStyleVariation.name
+	);
 	const [title, setTitle] = useState(initializeTitle);
 	const [hasUserEdited, setHasUserEdited] = useState(false);
 
@@ -111,22 +128,60 @@ export function StyleVariationBlockCard({
 				blocks: {
 					[blockName]: {
 						variations: {
-							[currentBlockStyleVariation.name]: {
+							[kebabCase(newTitle)]: {
 								label: newTitle,
+								refId: refId.current,
 							},
 						},
 					},
 				},
 			});
 
+			delete updatedMetaData.blocks[blockName].variations[
+				currentBlockStyleVariation.name
+			];
+
+			const editedStyle = {
+				name: kebabCase(newTitle),
+				label: newTitle,
+			};
+
+			setCurrentBlockStyleVariation(editedStyle);
+
+			const editedGlobalStyles = mergeObject(globalStyles, {
+				blocks: {
+					[blockName]: {
+						variations: {
+							[editedStyle.name]:
+								globalStyles?.blocks?.[blockName]?.variations?.[
+									currentBlockStyleVariation.name
+								],
+						},
+					},
+				},
+			});
+
+			delete editedGlobalStyles?.blocks?.[blockName]?.variations?.[
+				currentBlockStyleVariation.name
+			];
+
+			const hasCustomizations =
+				globalStyles?.blocks?.[blockName]?.variations?.[
+					currentBlockStyleVariation.name
+				];
+
 			setGlobalStyles({
-				...globalStyles,
+				...(hasCustomizations ? editedGlobalStyles : globalStyles),
 				blockeraMetaData: updatedMetaData,
 			});
+
+			registerBlockStyle(blockName, editedStyle);
+			unregisterBlockStyle(blockName, currentBlockStyleVariation.name);
 
 			window.blockeraGlobalStylesMetaData = updatedMetaData;
 			setHasUserEdited(false);
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[
 			globalStyles,
 			blockName,
@@ -149,6 +204,8 @@ export function StyleVariationBlockCard({
 
 	useEffect(() => {
 		if (!title || !initializeTitle || title === initializeTitle) return;
+
+		updateGlobalStyles(title);
 
 		const timeoutId = setTimeout(
 			() => updateGlobalStyles(title),

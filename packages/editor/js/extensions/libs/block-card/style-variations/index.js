@@ -73,6 +73,13 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = memo(
 			) {
 				setCurrentActiveStyle(getDefaultStyle(stylesToRender));
 			}
+
+			if (
+				currentBlockStyleVariation?.name &&
+				currentBlockStyleVariation?.name !== currentActiveStyle.name
+			) {
+				setCurrentActiveStyle(currentBlockStyleVariation);
+			}
 		}, [currentBlockStyleVariation, currentActiveStyle, stylesToRender]);
 
 		// Update cached style when active style changes
