@@ -35,7 +35,7 @@ export const BlockStyle = ({
 
 	return (
 		<>
-			{customCss}
+			{/#block*(?:-.*)\n\s+\}/gm.test(customCss) ? '' : <>{customCss}</>}
 			<StateStyle
 				{...{
 					...props,
