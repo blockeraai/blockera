@@ -205,8 +205,6 @@ export function StyleVariationBlockCard({
 	useEffect(() => {
 		if (!title || !initializeTitle || title === initializeTitle) return;
 
-		updateGlobalStyles(title);
-
 		const timeoutId = setTimeout(
 			() => updateGlobalStyles(title),
 			DEBOUNCE_DELAY
