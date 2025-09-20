@@ -8,6 +8,7 @@ import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 import { useState, useMemo } from '@wordpress/element';
 import {
+	Fill,
 	__experimentalTruncate as Truncate,
 	__experimentalDivider as Divider,
 } from '@wordpress/components';
@@ -71,6 +72,8 @@ export const StyleItem = ({
 		handleOnEnable,
 		handleOnDelete,
 		handleOnDuplicate,
+		handleOnDetachStyle,
+		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		styles,
@@ -85,11 +88,13 @@ export const StyleItem = ({
 		setCurrentBlockStyleVariation,
 	});
 
+	const isActive: boolean = activeStyle.name === style.name;
+
 	return (
 		<>
 			<Button
 				className={classNames('block-editor-block-styles__item', {
-					'is-active': activeStyle.name === style.name,
+					'is-active': isActive,
 					'action-disabled': false === cachedStyle?.status,
 				})}
 				key={style.name}
@@ -277,6 +282,53 @@ export const StyleItem = ({
 						</Flex>
 					</Flex>
 				</Popover>
+			)}
+			{isActive && (
+				<Fill name="block-inspector-style-actions">
+					<Button
+						className={classNames('action-save-customizations', {
+							'action-disabled': false,
+						})}
+						variant="secondary"
+						onClick={() => handleOnSaveCustomizations(style)}
+						size="input"
+						data-test={'save-customizations'}
+					>
+						{__('Save Customizations', 'blockera')}
+					</Button>
+					<Flex gap="8px" justifyContent="space-between">
+						<Button
+							className={classNames(
+								'action-save-customizations',
+								{
+									'action-disabled': false,
+									'block-styles-actions': true,
+								}
+							)}
+							variant="secondary"
+							onClick={() => handleOnDetachStyle(style)}
+							size="input"
+							data-test={'save-customizations'}
+						>
+							{__('Detach Style', 'blockera')}
+						</Button>
+						<Button
+							className={classNames(
+								'action-save-customizations',
+								{
+									'action-disabled': false,
+									'block-styles-actions': true,
+								}
+							)}
+							variant="secondary"
+							onClick={() => handleOnDuplicate(style)}
+							size="input"
+							data-test={'save-customizations'}
+						>
+							{__('Duplicate', 'blockera')}
+						</Button>
+					</Flex>
+				</Fill>
 			)}
 		</>
 	);

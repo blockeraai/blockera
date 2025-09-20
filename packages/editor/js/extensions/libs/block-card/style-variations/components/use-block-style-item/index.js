@@ -3,9 +3,10 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
 import { useEntityProp } from '@wordpress/core-data';
+import { store as blockEditorStore } from '@wordpress/block-editor';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 
 /**
@@ -22,6 +23,7 @@ import { mergeObject } from '@blockera/utils';
  */
 import { getDefaultStyle } from '../../utils';
 import { getCalculatedNewStyle } from './helpers';
+import { useGlobalStylesContext } from '../../../../../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
 
 export const useBlockStyleItem = ({
 	styles,
@@ -46,6 +48,7 @@ export const useBlockStyleItem = ({
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }) => {
+	const { base } = useGlobalStylesContext();
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
 		'root',
@@ -150,10 +153,51 @@ export const useBlockStyleItem = ({
 		setCurrentBlockStyleVariation(undefined);
 	};
 
+	const handleOnSaveCustomizations = (currentStyle) => {
+		const { getSelectedBlock } = select(blockEditorStore);
+		const selectedBlock = getSelectedBlock();
+
+		const styleAttributes = selectedBlock.attributes;
+
+		setGlobalStyles(
+			mergeObject(globalStyles, {
+				blocks: {
+					[blockName]: {
+						variations: {
+							[currentStyle.name]: styleAttributes,
+						},
+					},
+				},
+			})
+		);
+	};
+
+	const handleOnDetachStyle = (currentStyle) => {
+		setCurrentActiveStyle(getDefaultStyle(blockStyles));
+
+		const { getSelectedBlock } = select(blockEditorStore);
+		const { updateBlockAttributes } = dispatch(blockEditorStore);
+
+		const selectedBlock = getSelectedBlock();
+
+		updateBlockAttributes(
+			selectedBlock.clientId,
+			mergeObject(
+				mergeObject(
+					selectedBlock.attributes,
+					base.styles.blocks[blockName].variations[currentStyle.name]
+				),
+				globalStyles.blocks[blockName].variations[currentStyle.name]
+			)
+		);
+	};
+
 	return {
 		handleOnEnable,
 		handleOnDelete,
 		handleOnDuplicate,
+		handleOnDetachStyle,
+		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	};
 };
