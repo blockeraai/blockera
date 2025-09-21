@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { useState, useEffect, createRoot } from '@wordpress/element';
+import { useState, useEffect, createRoot, useMemo } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -16,55 +16,75 @@ export const useBlockPreviewStyles = (
 ): string => {
 	const [additionalStyles, setAdditionalStyles] = useState('');
 
+	// Memoize props passed to GlobalStylesRenderer to prevent unnecessary re-renders
+	const rendererProps = useMemo(
+		() => ({
+			...blockType,
+			renderInPortal: false,
+			styleVariationName: variation,
+			isStyleVariation: Boolean(variation),
+		}),
+		[blockType, variation]
+	);
+
 	useEffect(() => {
 		const tempElementId = 'blockera-global-styles-preview-panel';
-		const prevTempElement = document.querySelector(`#${tempElementId}`);
+		let tempElement = document.querySelector(`#${tempElementId}`);
+		let root;
 
-		if (prevTempElement) {
-			document.body.removeChild(prevTempElement);
+		// Reuse existing element if possible
+		if (!tempElement) {
+			tempElement = document.createElement('div');
+			tempElement.id = tempElementId;
+			document.body.appendChild(tempElement);
 		}
 
-		// Create temporary container for styles
-		const tempElement = document.createElement('div');
-		tempElement.id = tempElementId;
-		document.body.appendChild(tempElement);
-		const root = createRoot(tempElement);
+		try {
+			root = createRoot(tempElement);
+			// Render global styles
+			root.render(<GlobalStylesRenderer {...rendererProps} />);
 
-		// Render global styles
-		root.render(
-			<GlobalStylesRenderer
-				{...{
-					...blockType,
-					renderInPortal: false,
-					styleVariationName: variation,
-					isStyleVariation: Boolean(variation),
-				}}
-			/>
-		);
+			// Debounce observer callback to reduce unnecessary updates
+			let timeoutId;
+			const observer = new MutationObserver(() => {
+				if (timeoutId) {
+					clearTimeout(timeoutId);
+				}
 
-		const observer = new MutationObserver(() => {
-			// Only update if styles have changed
-			if (additionalStyles !== tempElement.textContent) {
-				setAdditionalStyles(tempElement.textContent);
+				timeoutId = setTimeout(() => {
+					const newStyles = tempElement?.textContent || '';
+					if (additionalStyles !== newStyles) {
+						setAdditionalStyles(newStyles);
+					}
+				}, 100);
+			});
 
-				tempElement.remove();
-			}
-		});
+			// Observe changes to the temp element
+			observer.observe(tempElement, {
+				childList: true,
+				subtree: true,
+				characterData: true,
+			});
 
-		// Observe changes to the temp element
-		observer.observe(tempElement, {
-			childList: true,
-			subtree: true,
-			characterData: true,
-		});
-
-		return () => {
-			observer.disconnect();
-			root.unmount();
-			document.body.removeChild(tempElement);
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockType, variation]); // Remove additionalStyles dependency to prevent loops
+			return () => {
+				clearTimeout(timeoutId);
+				observer.disconnect();
+				if (root) {
+					root.unmount();
+				}
+				if (tempElement && document.body.contains(tempElement)) {
+					document.body.removeChild(tempElement);
+				}
+			};
+		} catch (error) {
+			console.error('Error in useBlockPreviewStyles:', error);
+			return () => {
+				if (tempElement && document.body.contains(tempElement)) {
+					document.body.removeChild(tempElement);
+				}
+			};
+		}
+	}, [rendererProps, additionalStyles]);
 
 	return additionalStyles;
 };
