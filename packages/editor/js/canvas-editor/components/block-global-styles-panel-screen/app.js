@@ -8,7 +8,6 @@ import { select, dispatch } from '@wordpress/data';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useMemo, useState, useCallback } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
-// import { store as blocksStore } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -29,7 +28,6 @@ import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../../components';
-// import { useGlobalStyle } from './hooks';
 import { useGlobalStylesContext } from './global-styles-provider';
 import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
 import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
@@ -43,26 +41,85 @@ import { STORE_NAME } from '../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
 import { GlobalStylesPanelContextProvider } from './context';
 
-export default function App(props: Object): MixedElement {
-	const {
-		blockType: {
-			name,
-			attributes,
-			// variation
-		},
-	} = props;
+// Helper functions
+const getBlockAttributes = (name) => {
 	const {
 		getBlockExtensionBy,
 		getBlockTypeAttributes,
 		getSharedBlockAttributes,
 	} = select(STORE_NAME) || {};
-	const blockExtension = getBlockExtensionBy('targetBlock', name);
+
 	const blockeraOverrideBlockTypeAttributes = getBlockTypeAttributes(name);
-	const blockeraOverrideBlockAttributes = isEmpty(
-		blockeraOverrideBlockTypeAttributes
-	)
-		? getSharedBlockAttributes()
-		: blockeraOverrideBlockTypeAttributes;
+	return {
+		blockExtension: getBlockExtensionBy('targetBlock', name),
+		blockeraOverrideBlockAttributes: isEmpty(
+			blockeraOverrideBlockTypeAttributes
+		)
+			? getSharedBlockAttributes()
+			: blockeraOverrideBlockTypeAttributes,
+	};
+};
+
+const getComputedStyles = (
+	currentBlockStyleVariation,
+	defaultStylesValue,
+	mergedConfig,
+	name
+) => {
+	if (currentBlockStyleVariation && !currentBlockStyleVariation?.isDefault) {
+		return {
+			...defaultStylesValue,
+			...omit(mergedConfig?.styles?.blocks[name] || {}, ['variations']),
+			...((mergedConfig?.styles?.blocks[name]?.variations || {})[
+				currentBlockStyleVariation.name
+			] || {}),
+		};
+	}
+
+	return {
+		...defaultStylesValue,
+		...(mergedConfig?.styles?.blocks[name] || {}),
+	};
+};
+
+const cleanupStylesHelper = (styles, defaultStyles) => {
+	const cleanStyles = {};
+
+	for (const key in styles) {
+		if (
+			['blockeraPropsId', 'blockeraCompatId', 'className'].includes(key)
+		) {
+			continue;
+		}
+
+		if (!/^blockera/.test(key)) {
+			cleanStyles[key] = styles[key];
+			continue;
+		}
+
+		if (
+			!defaultStyles[key]?.hasOwnProperty('default') &&
+			styles[key]?.value
+		) {
+			cleanStyles[key] = styles[key];
+			continue;
+		}
+
+		if (!isEquals(defaultStyles[key]?.default, styles[key]?.value)) {
+			cleanStyles[key] = styles[key];
+		}
+	}
+
+	return cleanStyles;
+};
+
+export default function App(props: Object): MixedElement {
+	const {
+		blockType: { name, attributes },
+	} = props;
+
+	const { blockExtension, blockeraOverrideBlockAttributes } =
+		getBlockAttributes(name);
 
 	const originDefaultAttributes = useMemo(() => {
 		return mergeObject(blockeraOverrideBlockAttributes, attributes);
@@ -76,7 +133,6 @@ export default function App(props: Object): MixedElement {
 
 	const {
 		merged: mergedConfig,
-		// base: baseConfig,
 		user: userConfig,
 		setUserConfig,
 	} = useGlobalStylesContext();
@@ -87,45 +143,33 @@ export default function App(props: Object): MixedElement {
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
 		useState(getSelectedBlockStyleVariation());
 
-	const styles = useMemo(() => {
-		const defaultStylesValue = prepareBlockeraDefaultAttributesValues(
-			defaultStyles,
-			{ context: 'global-styles-panel' }
-		);
+	const defaultStylesValue = useMemo(
+		() =>
+			prepareBlockeraDefaultAttributesValues(defaultStyles, {
+				context: 'global-styles-panel',
+			}),
+		[defaultStyles]
+	);
 
-		if (
-			currentBlockStyleVariation &&
-			!currentBlockStyleVariation?.isDefault
-		) {
-			return {
-				...defaultStylesValue,
-				...omit(mergedConfig?.styles?.blocks[name] || {}, [
-					'variations',
-				]),
-				...((mergedConfig?.styles?.blocks[name]?.variations || {})[
-					currentBlockStyleVariation.name
-				] || {}),
-			};
-		}
-
-		return {
-			...defaultStylesValue,
-			...(mergedConfig?.styles?.blocks[name] || {}),
-		};
+	const styles = useMemo(
+		() =>
+			getComputedStyles(
+				currentBlockStyleVariation,
+				defaultStylesValue,
+				mergedConfig,
+				name
+			),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [mergedConfig, defaultStyles, currentBlockStyleVariation]);
+		[name, currentBlockStyleVariation]
+	);
 
-	const getStyles = useCallback(() => {
-		const defaultStylesValue = prepareBlockeraDefaultAttributesValues(
-			defaultStyles,
-			{ context: 'global-styles-panel' }
-		);
-
-		return {
+	const getStyles = useCallback(
+		() => ({
 			...defaultStylesValue,
 			...(mergedConfig?.styles?.blocks[name] || {}),
-		};
-	}, [mergedConfig, defaultStyles, name]);
+		}),
+		[mergedConfig, defaultStylesValue, name]
+	);
 
 	const baseContextValue = useMemo(
 		() => ({
@@ -150,47 +194,8 @@ export default function App(props: Object): MixedElement {
 		[name, styles]
 	);
 
-	// To clean up the user styles configuration.
 	const cleanupStyles = useCallback(
-		(styles) => {
-			const cleanStyles = {};
-
-			for (const key in styles) {
-				// Skip identifiers and className keys.
-				if (
-					[
-						'blockeraPropsId',
-						'blockeraCompatId',
-						'className',
-					].includes(key)
-				) {
-					continue;
-				}
-
-				// Compatible with WordPress core block styles or other third party plugins blocks styles.
-				if (!/^blockera/.test(key)) {
-					cleanStyles[key] = styles[key];
-					continue;
-				}
-
-				if (
-					!defaultStyles[key]?.hasOwnProperty('default') &&
-					styles[key]?.value
-				) {
-					cleanStyles[key] = styles[key];
-
-					continue;
-				}
-
-				if (
-					!isEquals(defaultStyles[key]?.default, styles[key]?.value)
-				) {
-					cleanStyles[key] = styles[key];
-				}
-			}
-
-			return cleanStyles;
-		},
+		(styles) => cleanupStylesHelper(styles, defaultStyles),
 		[defaultStyles]
 	);
 
