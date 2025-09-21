@@ -43,15 +43,11 @@ export const useBlockPreviewStyles = (
 		);
 
 		const observer = new MutationObserver(() => {
-			const styleElement = document.querySelector(
-				`#${tempElementId} style`
-			);
+			// Only update if styles have changed
+			if (additionalStyles !== tempElement.textContent) {
+				setAdditionalStyles(tempElement.textContent);
 
-			if (styleElement && styleElement.textContent) {
-				// Only update if styles have changed
-				if (additionalStyles !== styleElement.textContent) {
-					setAdditionalStyles(styleElement.textContent);
-				}
+				tempElement.remove();
 			}
 		});
 
