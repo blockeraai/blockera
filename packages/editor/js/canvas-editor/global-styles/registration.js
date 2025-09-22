@@ -10,7 +10,7 @@ import { memo, useEffect, Fragment } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { omitWithPattern, isEquals, mergeObject } from '@blockera/utils';
+import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -243,6 +243,7 @@ export const registration = ({
 					'iframe',
 					GlobalStylesComponent,
 					{
+						isRootComponent: true,
 						targetElementIsRoot: true,
 						componentSelector: '#blockera-global-styles-wrapper',
 					}
