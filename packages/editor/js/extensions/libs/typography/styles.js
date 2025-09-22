@@ -78,6 +78,42 @@ export function TypographyStyles({
 		className: currentBlockAttributes?.className,
 	};
 
+	// Create cache key from inputs that affect output
+	const cacheKey = JSON.stringify({
+		blockeraFontFamily: currentBlockAttributes?.blockeraFontFamily,
+		blockeraFontAppearance: currentBlockAttributes?.blockeraFontAppearance,
+		blockeraFontSize: currentBlockAttributes?.blockeraFontSize,
+		blockeraLineHeight: currentBlockAttributes?.blockeraLineHeight,
+		blockeraFontColor: currentBlockAttributes?.blockeraFontColor,
+		blockeraTextAlign: currentBlockAttributes?.blockeraTextAlign,
+		blockeraTextDecoration: currentBlockAttributes?.blockeraTextDecoration,
+		blockeraTextTransform: currentBlockAttributes?.blockeraTextTransform,
+		blockeraDirection: currentBlockAttributes?.blockeraDirection,
+		blockeraLetterSpacing: currentBlockAttributes?.blockeraLetterSpacing,
+		blockeraWordSpacing: currentBlockAttributes?.blockeraWordSpacing,
+		blockeraTextIndent: currentBlockAttributes?.blockeraTextIndent,
+		blockeraTextOrientation:
+			currentBlockAttributes?.blockeraTextOrientation,
+		blockeraTextColumns: currentBlockAttributes?.blockeraTextColumns,
+		blockeraTextStroke: currentBlockAttributes?.blockeraTextStroke,
+		blockeraWordBreak: currentBlockAttributes?.blockeraWordBreak,
+		blockeraTextWrap: currentBlockAttributes?.blockeraTextWrap,
+		blockeraTextShadow: currentBlockAttributes?.blockeraTextShadow,
+		state,
+		clientId,
+		blockName,
+		masterState,
+		activeDeviceType,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	});
+
+	// Check if we have cached result
+	const cachedResult = TypographyStyles.cache?.get(cacheKey);
+	if (cachedResult) {
+		return cachedResult;
+	}
+
 	const styleGroup: Array<CssRule> = [];
 
 	if (isActiveField(blockeraFontFamily)) {
@@ -811,6 +847,12 @@ export function TypographyStyles({
 			),
 		});
 	}
+
+	// Cache the result
+	if (!TypographyStyles.cache) {
+		TypographyStyles.cache = new Map();
+	}
+	TypographyStyles.cache.set(cacheKey, styleGroup);
 
 	return styleGroup;
 }

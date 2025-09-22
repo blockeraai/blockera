@@ -122,6 +122,24 @@ export const SpacingStyles = ({
 
 	const { hasBlockSupport } = useBlocksStore();
 
+	// Create cache key from inputs that affect output
+	const cacheKey = JSON.stringify({
+		blockeraSpacing: currentBlockAttributes?.blockeraSpacing,
+		state,
+		clientId,
+		blockName,
+		masterState,
+		activeDeviceType,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+		style: currentBlockAttributes?.style?.spacing,
+	});
+
+	// Check if we have cached result
+	if (SpacingStyles.cache?.[cacheKey]) {
+		return SpacingStyles.cache[cacheKey];
+	}
+
 	const fallbackProps = !hasBlockSupport(blockName, 'spacing')
 		? {}
 		: updateCssProps(_attributes?.style?.spacing);
@@ -138,7 +156,7 @@ export const SpacingStyles = ({
 		fallbackSupportId: getBlockSupportFallback(supports, 'blockeraSpacing'),
 	});
 
-	return [
+	const styleGroup = [
 		{
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
@@ -155,4 +173,12 @@ export const SpacingStyles = ({
 			),
 		},
 	];
+
+	// Cache the result
+	if (!SpacingStyles.cache) {
+		SpacingStyles.cache = {};
+	}
+	SpacingStyles.cache[cacheKey] = styleGroup;
+
+	return styleGroup;
 };

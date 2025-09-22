@@ -31,6 +31,23 @@ export const BlockStatesStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
+	// Create cache key from inputs that affect output
+	const cacheKey = JSON.stringify({
+		blockeraBlockStates: currentBlockAttributes.blockeraBlockStates,
+		state,
+		clientId,
+		blockName,
+		masterState,
+		activeDeviceType,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	});
+
+	// Check if we have cached result
+	if (BlockStatesStyles.cache?.[cacheKey]) {
+		return BlockStatesStyles.cache[cacheKey];
+	}
+
 	const { contentField } = config.statesConfig;
 	const blockProps = {
 		state,
@@ -95,6 +112,12 @@ export const BlockStatesStyles = ({
 			),
 		});
 	}
+
+	// Cache the result
+	if (!BlockStatesStyles.cache) {
+		BlockStatesStyles.cache = {};
+	}
+	BlockStatesStyles.cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

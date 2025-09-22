@@ -36,6 +36,28 @@ export const LayoutStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
+	// Create cache key from inputs that affect output
+	const cacheKey = JSON.stringify({
+		blockeraDisplay: currentBlockAttributes.blockeraDisplay,
+		blockeraFlexLayout: currentBlockAttributes.blockeraFlexLayout,
+		blockeraFlexWrap: currentBlockAttributes.blockeraFlexWrap,
+		blockeraAlignContent: currentBlockAttributes.blockeraAlignContent,
+		blockeraGap: currentBlockAttributes.blockeraGap,
+		state,
+		clientId,
+		blockName,
+		masterState,
+		activeDeviceType,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+		styleEngineConfig,
+	});
+
+	// Check if we have cached result
+	if (LayoutStyles.cache?.[cacheKey]) {
+		return LayoutStyles.cache[cacheKey];
+	}
+
 	const {
 		blockeraDisplay,
 		blockeraGap,
@@ -513,6 +535,12 @@ export const LayoutStyles = ({
 			),
 		});
 	}
+
+	// Cache the result
+	if (!LayoutStyles.cache) {
+		LayoutStyles.cache = {};
+	}
+	LayoutStyles.cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };
