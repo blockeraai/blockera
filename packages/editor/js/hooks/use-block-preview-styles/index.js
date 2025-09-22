@@ -6,15 +6,36 @@
 import { useState, useEffect, createRoot } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { omitWithPattern } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
+import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
 
 export const useBlockPreviewStyles = (
 	blockType: Object,
-	variation: string
+	variation: string,
+	styles: Object
 ): string => {
 	const [additionalStyles, setAdditionalStyles] = useState('');
+	const omittedStyles = omitWithPattern(styles, /^(?!blockera).*/i);
+	const blockeraBlockTypeGlobalStyles = sanitizeBlockAttributes({
+		...omittedStyles,
+		blockeraBlockStates: {
+			value: {
+				...(omittedStyles?.blockeraBlockStates?.value || {}),
+				normal: {
+					breakpoints: {},
+					isVisible: true,
+				},
+			},
+		},
+		blockeraPropsId: Math.random().toString(36).substring(2, 15),
+	});
 
 	useEffect(() => {
 		const tempElementId = 'blockera-global-styles-preview-panel';
@@ -38,6 +59,7 @@ export const useBlockPreviewStyles = (
 					renderInPortal: false,
 					styleVariationName: variation,
 					isStyleVariation: Boolean(variation),
+					blockeraBlockTypeGlobalStyles,
 				}}
 			/>
 		);
@@ -61,10 +83,12 @@ export const useBlockPreviewStyles = (
 		return () => {
 			observer.disconnect();
 			root.unmount();
-			document.body.removeChild(tempElement);
+			if (document.getElementById(tempElementId)) {
+				document.getElementById(tempElementId).remove();
+			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockType, variation]); // Remove additionalStyles dependency to prevent loops
+	}, [blockType, variation, blockeraBlockTypeGlobalStyles]); // Remove additionalStyles dependency to prevent loops
 
 	return additionalStyles;
 };

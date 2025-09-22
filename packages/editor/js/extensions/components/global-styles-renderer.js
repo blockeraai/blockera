@@ -7,25 +7,21 @@ import { select } from '@wordpress/data';
 import { type MixedElement } from 'react';
 import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
-import { memo, useState, useMemo, useEffect } from '@wordpress/element';
+import { memo, useState, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { isEquals, cloneObject, omitWithPattern } from '@blockera/utils';
+import { omitWithPattern } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { StylesWrapper } from '../../style-engine';
-import {
-	sanitizeBlockAttributes,
-	sanitizeDefaultAttributes,
-} from '../hooks/utils';
+import { sanitizeDefaultAttributes } from '../hooks/utils';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { prepareBlockeraDefaultAttributesValues } from './utils';
 import { BlockStyle } from '../../style-engine/components/block-style';
-import { useGlobalStylesContext } from '../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
 
 export const GlobalStylesRenderer: ComponentType<any> = memo(
 	(blockType: Object): MixedElement => {
@@ -36,16 +32,12 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			styleVariationName,
 			renderInPortal = true,
 			isStyleVariation = false,
+			blockeraBlockTypeGlobalStyles,
 			attributes: defaultAttributes,
 		} = blockType;
-		const [attributes, setAttributes] = useState({});
 		const [notice, setNotice] = useState(null);
 		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 			useState(false);
-		const sanitizedAttributes = useMemo(
-			() => sanitizeBlockAttributes(cloneObject(attributes)),
-			[attributes]
-		);
 		const defaultStyles = useMemo(() => {
 			const processedAttributes = {};
 
@@ -84,40 +76,6 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			);
 		}, [defaultAttributes]);
 
-		const {
-			merged: mergedConfig,
-			// base: baseConfig,
-			// user: userConfig,
-			// setUserConfig,
-		} = useGlobalStylesContext();
-		let {
-			styles: {
-				blocks: { [name]: initialBlockGlobalStyles },
-			},
-		} = mergedConfig;
-
-		if (isStyleVariation && styleVariationName) {
-			initialBlockGlobalStyles =
-				initialBlockGlobalStyles?.variations?.[styleVariationName] ||
-				{};
-		}
-
-		initialBlockGlobalStyles = {
-			...prepareBlockeraDefaultAttributesValues(defaultStyles),
-			...initialBlockGlobalStyles,
-			blockeraBlockStates: {
-				value: {
-					...(initialBlockGlobalStyles?.blockeraBlockStates?.value ||
-						{}),
-					normal: {
-						breakpoints: {},
-						isVisible: true,
-					},
-				},
-			},
-			blockeraPropsId: encodeURIComponent(name),
-		};
-
 		const { getDeviceType } = select('blockera/editor');
 
 		const blockStyleProps = {
@@ -131,23 +89,17 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			styleVariationName,
 			isGlobalStylesWrapper: true,
 			defaultAttributes: defaultStyles,
-			attributes: sanitizedAttributes,
 			clientId: name.replace('/', '-'),
 			activeDeviceType: getDeviceType(),
+			attributes: {
+				...prepareBlockeraDefaultAttributesValues(defaultStyles),
+				...blockeraBlockTypeGlobalStyles,
+			},
 		};
-
-		// Based on the merged config changeset, we should update the state of our component.
-		useEffect(() => {
-			if (isEquals(initialBlockGlobalStyles, attributes)) {
-				return;
-			}
-
-			setAttributes(initialBlockGlobalStyles);
-		}, [initialBlockGlobalStyles, attributes]);
 
 		if (
 			!defaultAttributes.hasOwnProperty('blockeraPropsId') ||
-			!Object.keys(sanitizedAttributes).length
+			!Object.keys(blockeraBlockTypeGlobalStyles).length
 		) {
 			return <></>;
 		}

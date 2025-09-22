@@ -11,6 +11,11 @@ import { store as coreStore } from '@wordpress/core-data';
 // import { privateApis as blockEditorPrivateApis } from '@wordpress/block-editor';
 
 /**
+ * Blockera dependencies
+ */
+import { prepare } from '@blockera/data-editor';
+
+/**
  * Internal dependencies
  */
 import { cleanEmptyObject } from './utils';
@@ -215,9 +220,22 @@ function useGlobalStylesBaseConfig(): Object {
 /**
  * Use the global styles context.
  *
+ * @param {{
+ * 	path: string,
+ * 	single: boolean,
+ * 	from: 'merged' | 'base' | 'user',
+ * }} options - The options.
  * @return {Object} The global styles context.
  */
-export function useGlobalStylesContext(): Object {
+export function useGlobalStylesContext({
+	path = '',
+	from = 'merged',
+	single = false,
+}: {
+	path: string,
+	single: boolean,
+	from: 'merged' | 'base' | 'user',
+} = {}): Object {
 	const [isUserConfigReady, userConfig, setUserConfig] =
 		useGlobalStylesUserConfig();
 	const [isBaseConfigReady, baseConfig] = useGlobalStylesBaseConfig();
@@ -231,21 +249,40 @@ export function useGlobalStylesContext(): Object {
 	}, [userConfig, baseConfig]);
 
 	const context = useMemo(() => {
+		let single = {};
+
+		if (path) {
+			switch (from) {
+				case 'merged':
+					single = prepare(path, mergedConfig);
+					break;
+				case 'base':
+					single = prepare(path, baseConfig);
+					break;
+				case 'user':
+					single = prepare(path, userConfig);
+					break;
+			}
+		}
+
 		return {
-			isReady: isUserConfigReady && isBaseConfigReady,
+			single,
+			setUserConfig,
 			user: userConfig,
 			base: baseConfig,
 			merged: mergedConfig,
-			setUserConfig,
+			isReady: isUserConfigReady && isBaseConfigReady,
 		};
 	}, [
-		mergedConfig,
+		path,
+		from,
 		userConfig,
 		baseConfig,
+		mergedConfig,
 		setUserConfig,
 		isUserConfigReady,
 		isBaseConfigReady,
 	]);
 
-	return context;
+	return single ? context.single : context;
 }

@@ -17,9 +17,11 @@ import { hasSameProps } from '@blockera/utils';
  * Internal dependencies
  */
 import { getVariationClassName } from './utils';
+import { useBlockContext } from '../../../extensions/hooks/context';
 import { useBlockPreviewStyles } from '../../../hooks/use-block-preview-styles';
 
 const BlockPreviewPanel = ({ name, variation = '' }) => {
+	const { getAttributes } = useBlockContext();
 	const blockType = getBlockType(name);
 	const blockExample = blockType?.example;
 	const blocks = useMemo(() => {
@@ -51,7 +53,11 @@ const BlockPreviewPanel = ({ name, variation = '' }) => {
 			? previewHeight / scale
 			: previewHeight;
 
-	const blockPreviewCssStyles = useBlockPreviewStyles(blockType, variation);
+	const blockPreviewCssStyles = useBlockPreviewStyles(
+		blockType,
+		variation,
+		getAttributes()
+	);
 
 	if (!blockExample) {
 		return null;
