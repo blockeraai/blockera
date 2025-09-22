@@ -131,6 +131,8 @@ export default function App(props: Object): MixedElement {
 		});
 	}, [originDefaultAttributes]);
 
+	// We should work on mergedConfig because it's contains the all styles but for save user customizations,
+	// we should use userConfig to save user customizations.
 	const {
 		merged: mergedConfig,
 		user: userConfig,
