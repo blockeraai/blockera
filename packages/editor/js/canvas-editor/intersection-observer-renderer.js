@@ -15,6 +15,7 @@ export class IntersectionObserverRenderer {
 	targetElementIsRoot: boolean;
 	callback: Function;
 	onShouldNotRenderer: boolean;
+	isRootComponent: boolean;
 
 	constructor(
 		targetSelector: string,
@@ -25,6 +26,7 @@ export class IntersectionObserverRenderer {
 			callback = null,
 			targetElementIsRoot = false,
 			onShouldNotRenderer = false,
+			isRootComponent = false,
 		}: {
 			callback: Function,
 			root: string,
@@ -33,6 +35,7 @@ export class IntersectionObserverRenderer {
 			whileNotExistSelectors: string[],
 			targetElementIsRoot: boolean,
 			onShouldNotRenderer: boolean,
+			isRootComponent: any,
 		} = {}
 	) {
 		this.whileNotExistSelectors = whileNotExistSelectors;
@@ -42,6 +45,7 @@ export class IntersectionObserverRenderer {
 		this.callback = callback;
 		this.targetElementIsRoot = targetElementIsRoot;
 		this.onShouldNotRenderer = onShouldNotRenderer;
+		this.isRootComponent = isRootComponent;
 
 		// Create mutation observer to watch DOM changes
 		this.observer = new MutationObserver((mutations) => {
@@ -97,6 +101,8 @@ export class IntersectionObserverRenderer {
 	}
 
 	renderComponent() {
+		if (this.isRendered) return;
+
 		const targetElement = document.querySelector(this.targetSelector);
 
 		if (targetElement && !document.querySelector(this.componentSelector)) {
@@ -118,6 +124,7 @@ export class IntersectionObserverRenderer {
 
 				const containerDiv = document.createElement('div');
 				const root = createRoot(containerDiv);
+
 				root.render(
 					<this.Component clickedBlock={this.clickedBlock} />
 				);
@@ -127,6 +134,13 @@ export class IntersectionObserverRenderer {
 					targetElement.contentDocument.body.appendChild(
 						containerDiv
 					);
+
+					// If the component is a root component, set the isRendered flag to true, because it will be rendered only once.
+					if (this.isRootComponent) {
+						this.isRendered = true;
+
+						containerDiv.remove();
+					}
 				}
 
 				return;
@@ -138,11 +152,19 @@ export class IntersectionObserverRenderer {
 			targetElement.appendChild(containerDiv);
 			const root = createRoot(containerDiv);
 			root.render(<this.Component />);
+
+			// If the component is a root component, set the isRendered flag to true, because it will be rendered only once.
+			if (this.isRootComponent) {
+				this.isRendered = true;
+			}
+
 			containerDiv.remove();
 		}
 	}
 
 	destroy() {
+		this.isRendered = false;
+
 		// Clean up observer when done
 		this.observer.disconnect();
 	}
