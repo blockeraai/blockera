@@ -106,8 +106,6 @@ export const BlockGlobalStylesPanelScreen = ({
 			screenElement.classList.remove('has-blockera-extensions');
 			screenElement.classList.add('has-not-blockera-extensions');
 		}
-
-		return () => screenElement.removeChild(`.${className}`);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, hasBlockeraExtensions]);
 
@@ -126,19 +124,17 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	screenElement.classList.add('has-blockera-extensions');
 
-	if (screenElement.querySelector(`.${className}`)) {
-		return <></>;
-	}
-
 	return createPortal(
 		<div className={className}>
 			<App
-				{...{
-					...(selectedBlock ? { ...selectedBlock } : {}),
-					...(memoizedSelectedBlock
-						? { ...memoizedSelectedBlock }
-						: {}),
-				}}
+				selectedBlockClientId={
+					{
+						...(selectedBlock ? { ...selectedBlock } : {}),
+						...(memoizedSelectedBlock
+							? { ...memoizedSelectedBlock }
+							: {}),
+					}.clientId
+				}
 				blockType={blockType}
 			/>
 		</div>,

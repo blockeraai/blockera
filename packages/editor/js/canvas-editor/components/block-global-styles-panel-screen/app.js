@@ -309,6 +309,7 @@ export default function App(props: Object): MixedElement {
 			<GlobalStylesPanelContextProvider
 				blockName={name}
 				styles={getStyles()}
+				selectedBlockClientId={props?.selectedBlockClientId || ''}
 				setStyles={handleOnChangeStyles}
 				currentBlockStyleVariation={currentBlockStyleVariation}
 				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
@@ -317,7 +318,7 @@ export default function App(props: Object): MixedElement {
 					<BlockApp
 						{...{
 							name,
-							clientId: props?.clientId || name.replace('/', '-'),
+							clientId: name.replace('/', '-'),
 							setAttributes: handleOnChangeStyles,
 							defaultAttributes: defaultStyles,
 							additional: blockExtension,
