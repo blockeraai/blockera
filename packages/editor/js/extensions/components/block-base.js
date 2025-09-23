@@ -154,16 +154,41 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		currentInnerBlockState,
 	} = useExtensionsStore({ name, clientId });
 
-	const { availableAttributes, selectedBlock } = useSelect((select) => {
-		const { getActiveBlockVariation } = select('blockera/extensions');
-
-		const { getBlockType } = select('core/blocks');
-		const { getSelectedBlock } = select('core/block-editor');
+	const {
+		supports,
+		selectors,
+		selectedBlock,
+		blockVariations,
+		availableAttributes,
+		activeBlockVariation,
+		getActiveBlockVariation,
+	} = useSelect((select) => {
+		const { getActiveBlockVariation: _getActiveBlockVariation } = select(
+			'blockera/extensions'
+		);
+		const { getBlockType, getActiveBlockVariation, getBlockVariations } =
+			select('core/blocks');
+		const { getSelectedBlock, getBlockName, getBlockAttributes } =
+			select('core/block-editor');
+		const name = clientId && getBlockName(clientId);
+		const {
+			supports,
+			selectors,
+			attributes: availableAttributes,
+		} = getBlockType(name);
 
 		return {
-			activeVariation: getActiveBlockVariation(),
+			supports,
+			selectors,
+			availableAttributes,
+			getActiveBlockVariation,
+			activeBlockVariation: getActiveBlockVariation(
+				name,
+				getBlockAttributes(clientId)
+			),
+			blockVariations: name && getBlockVariations(name, 'transform'),
+			activeVariation: _getActiveBlockVariation(),
 			selectedBlock: (getSelectedBlock() || {})?.name,
-			availableAttributes: getBlockType(name)?.attributes,
 		};
 	});
 
@@ -215,26 +240,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 
 		return sanitizedAttributes;
 	};
-
-	const { activeBlockVariation, blockVariations, getActiveBlockVariation } =
-		useSelect((select) => {
-			const { getActiveBlockVariation, getBlockVariations } =
-				select('core/blocks');
-
-			const { getBlockName, getBlockAttributes } =
-				select('core/block-editor');
-
-			const name = clientId && getBlockName(clientId);
-
-			return {
-				getActiveBlockVariation,
-				activeBlockVariation: getActiveBlockVariation(
-					name,
-					getBlockAttributes(clientId)
-				),
-				blockVariations: name && getBlockVariations(name, 'transform'),
-			};
-		});
 
 	const args = {
 		blockId: name,
@@ -300,12 +305,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 				break;
 		}
 	};
-
-	const { supports, selectors } = useSelect((select) => {
-		const { getBlockType } = select('core/blocks');
-
-		return getBlockType(name);
-	});
 
 	const currentAttributes = useCalculateCurrentAttributes({
 		name,
