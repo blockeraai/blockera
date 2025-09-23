@@ -163,7 +163,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const {
 		supports,
 		selectors,
-		selectedBlock,
 		blockVariations,
 		availableAttributes,
 		activeBlockVariation,
@@ -174,9 +173,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		);
 		const { getBlockType, getActiveBlockVariation, getBlockVariations } =
 			select('core/blocks');
-		const { getSelectedBlock, getBlockName, getBlockAttributes } =
-			select('core/block-editor');
-		const name = clientId && getBlockName(clientId);
+		const { getBlockAttributes } = select('core/block-editor');
 		const {
 			supports,
 			selectors,
@@ -194,7 +191,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			),
 			blockVariations: name && getBlockVariations(name, 'transform'),
 			activeVariation: _getActiveBlockVariation(),
-			selectedBlock: (getSelectedBlock() || {})?.name,
 		};
 	});
 
@@ -334,10 +330,7 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			getBlockCSSSelector,
 		});
 
-	const inlineStyles = useCleanupStyles({ clientId }, [
-		selectedBlock,
-		attributes,
-	]);
+	const inlineStyles = useCleanupStyles({ clientId }, [name, attributes]);
 
 	const originalAttributes = useMemo(() => {
 		return omitWithPattern(
