@@ -60,8 +60,13 @@ export const prepareBlockeraDefaultAttributesValues = (
 			continue;
 		}
 
+		const isGlobalStylesPanel =
+			'global-styles-panel' === context &&
+			!['blockeraPropsId', 'blockeraCompatId'].includes(key) &&
+			/^blockera/i.test(key);
+
 		if (rootAttributes[key].default !== undefined) {
-			if ('global-styles-panel' === context) {
+			if (isGlobalStylesPanel) {
 				attributes[key] = {
 					value: rootAttributes[key].default,
 				};
@@ -74,7 +79,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 
 		switch (rootAttributes[key]?.type) {
 			case 'string':
-				if ('global-styles-panel' === context) {
+				if (isGlobalStylesPanel) {
 					attributes[key] = {
 						value: '',
 					};
@@ -83,7 +88,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 				}
 				break;
 			case 'object':
-				if ('global-styles-panel' === context) {
+				if (isGlobalStylesPanel) {
 					attributes[key] = {
 						value: {},
 					};
@@ -92,7 +97,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 				}
 				break;
 			case 'array':
-				if ('global-styles-panel' === context) {
+				if (isGlobalStylesPanel) {
 					attributes[key] = {
 						value: [],
 					};
@@ -101,7 +106,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 				}
 				break;
 			case 'boolean':
-				if ('global-styles-panel' === context) {
+				if (isGlobalStylesPanel) {
 					attributes[key] = {
 						value: false,
 					};
@@ -111,7 +116,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 				break;
 			case 'number':
 			case 'integer':
-				if ('global-styles-panel' === context) {
+				if (isGlobalStylesPanel) {
 					attributes[key] = {
 						value: 0,
 					};
@@ -120,7 +125,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 				}
 				break;
 			case 'null':
-				if ('global-styles-panel' === context) {
+				if (isGlobalStylesPanel) {
 					attributes[key] = {
 						value: null,
 					};
