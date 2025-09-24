@@ -9,7 +9,6 @@ import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
-	memo,
 	useMemo,
 	useState,
 	useEffect,
@@ -67,7 +66,7 @@ import {
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
-export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
+export const BlockBase: ComponentType<any> = (): Element<any> | null => {
 	const { props: _props } = useBlockAppContext();
 	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
 		setCurrentBlockStyleVariation: () => {},
@@ -582,4 +581,4 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			)}
 		</BlockEditContextProvider>
 	);
-});
+};
