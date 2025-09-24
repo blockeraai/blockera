@@ -19,7 +19,7 @@ import { GlobalStylesRenderer } from '../../extensions/components/global-styles-
 export const useBlockPreviewStyles = (
 	blockType: Object,
 	variation: string,
-	styles: Object
+	styles: Object = {}
 ): string => {
 	const [additionalStyles, setAdditionalStyles] = useState('');
 	const omittedStyles = omitWithPattern(styles, /^(?!blockera).*/i);
