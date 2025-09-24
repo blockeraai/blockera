@@ -14,7 +14,6 @@ import {
 	useState,
 	useEffect,
 	useCallback,
-	useDeferredValue,
 	// StrictMode,
 } from '@wordpress/element';
 
@@ -128,20 +127,15 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		updateAttributes(newAttributes);
 	};
 
-	const deferredAttributes = useDeferredValue(attributes);
-
 	/**
 	 * Updating block original attributes state while changed native attributes state.
 	 */
 	useEffect(() => {
-		if (
-			!isEquals(deferredAttributes, blockAttributes) &&
-			!isCompatibleWithWP
-		) {
-			_setAttributes(deferredAttributes);
+		if (!isEquals(attributes, blockAttributes) && !isCompatibleWithWP) {
+			_setAttributes(attributes);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [deferredAttributes]);
+	}, [attributes]);
 	/**
 	 * Updating block native attributes state while changed block original attributes state.
 	 */
