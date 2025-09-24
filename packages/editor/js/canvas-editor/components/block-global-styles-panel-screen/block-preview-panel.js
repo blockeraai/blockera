@@ -3,15 +3,10 @@
 /**
  * External dependencies
  */
-import { useMemo, memo } from '@wordpress/element';
+import { useMemo } from '@wordpress/element';
 import { BlockPreview } from '@wordpress/block-editor';
 import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
 import { __experimentalSpacer as Spacer } from '@wordpress/components';
-
-/**
- * Blockera dependencies
- */
-import { hasSameProps } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -98,4 +93,4 @@ const BlockPreviewPanel = ({ name, variation = '' }) => {
 	);
 };
 
-export default memo(BlockPreviewPanel, hasSameProps);
+export default BlockPreviewPanel;
