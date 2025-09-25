@@ -7,6 +7,7 @@
 - `List` block: `Icon` inner block added.
 - `List Item` block: `Icon` inner block added.
 - `Button` block: `Icon` inner block added.
+- `Page List` block: `Current Page` inner block added.
 
 
 ### Automated Tests

@@ -60,6 +60,15 @@ export const PageList: BlockType = {
 				force: true,
 			},
 		},
+		'elements/current-page': {
+			name: 'elements/current-page',
+			label: __('Current Page', 'blockera'),
+			description: __('Current page item.', 'blockera'),
+			icon: <Icon icon="block-list-item" library="ui" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
 	},
 	availableBlockStates: {
 		...generalBlockStates,

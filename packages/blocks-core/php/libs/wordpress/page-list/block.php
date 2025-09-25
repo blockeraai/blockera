@@ -25,6 +25,9 @@ return array_merge(
 				'blockera/elements/icon' => [
 					'root' => 'li::before',
 				],
+				'blockera/elements/current-page' => [
+					'root' => 'li.current-menu-item',
+				],
 			],
 		),
 		'supports' => array_merge(
