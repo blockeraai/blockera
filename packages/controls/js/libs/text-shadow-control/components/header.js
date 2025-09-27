@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -61,4 +62,4 @@ const RepeaterItemHeader = ({
 	);
 };
 
-export default RepeaterItemHeader;
+export default memo(RepeaterItemHeader);

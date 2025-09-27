@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { memo, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -512,4 +512,4 @@ const Fields = ({
 };
 
 // $FlowFixMe
-export default Fields;
+export default memo(Fields);

@@ -4,6 +4,7 @@
  * External dependencies
  */
 import {
+	memo,
 	useMemo,
 	useEffect,
 	useContext,
@@ -21,6 +22,7 @@ import { setItem, getItem, updateItem, freshItem } from '@blockera/storage';
 /**
  * Internal dependencies
  */
+import { propsAreEqual } from './utils';
 import * as sections from '../libs/base/config';
 import type {
 	BlockSection,
@@ -296,11 +298,13 @@ export const useBlockSections = (): BlockSections => {
 	};
 };
 
-export const BlockApp: ComponentType<any> = ({
-	children,
-	...props
-}: BlockBaseProps): MixedElement => {
-	return (
-		<BlockAppContextProvider {...props}>{children}</BlockAppContextProvider>
-	);
-};
+export const BlockApp: ComponentType<any> = memo(
+	({ children, ...props }: BlockBaseProps): MixedElement => {
+		return (
+			<BlockAppContextProvider {...props}>
+				{children}
+			</BlockAppContextProvider>
+		);
+	},
+	propsAreEqual
+);

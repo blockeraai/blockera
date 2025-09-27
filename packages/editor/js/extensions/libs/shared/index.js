@@ -6,7 +6,13 @@ import { __ } from '@wordpress/i18n';
 import { ErrorBoundary } from 'react-error-boundary';
 import { select, useDispatch } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { useMemo, useState, Fragment, useEffect } from '@wordpress/element';
+import {
+	memo,
+	useMemo,
+	useState,
+	Fragment,
+	useEffect,
+} from '@wordpress/element';
 import { doAction } from '@wordpress/hooks';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 
@@ -143,302 +149,309 @@ const extensionsWithoutLabel = (extensionsObj: Object): Object => {
 	return newExtensions;
 };
 
-export const SharedBlockExtension: ComponentType<Props> = ({
-	children,
-	additional,
-	insideBlockInspector,
-	attributes: blockAttributes,
-	defaultAttributes: attributes,
-	setAttributes,
-	availableStates,
-	currentStateAttributes,
-	currentAttributes: currentBlockAttributes,
-	controllerProps: {
-		currentTab,
-		currentBlock,
-		currentState,
-		currentBreakpoint,
-		currentInnerBlockState,
-		handleOnChangeAttributes,
-	},
-	...props
-}: Props): MixedElement => {
-	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
-		useState(false);
-	useEffect(() => {
-		// When component unmount!
-		return () => {
-			resetExtensionSettings();
-		};
-		// eslint-disable-next-line
-	}, []);
-
-	const { setCurrentTab } = useBlockContext();
-
-	props = {
-		...props,
-		currentState,
+export const SharedBlockExtension: ComponentType<Props> = memo(
+	({
+		children,
+		additional,
+		insideBlockInspector,
+		attributes: blockAttributes,
+		defaultAttributes: attributes,
 		setAttributes,
-		currentBreakpoint,
-		handleOnChangeAttributes,
-	};
+		availableStates,
+		currentStateAttributes,
+		currentAttributes: currentBlockAttributes,
+		controllerProps: {
+			currentTab,
+			currentBlock,
+			currentState,
+			currentBreakpoint,
+			currentInnerBlockState,
+			handleOnChangeAttributes,
+		},
+		...props
+	}: Props): MixedElement => {
+		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+			useState(false);
+		useEffect(() => {
+			// When component unmount!
+			return () => {
+				resetExtensionSettings();
+			};
+			// eslint-disable-next-line
+		}, []);
 
-	const { version } = select('blockera/data').getEntity('blockera');
-	const parentClientIds = select('core/block-editor').getBlockParents(
-		props.clientId
-	);
+		const { setCurrentTab } = useBlockContext();
 
-	const directParentBlock =
-		parentClientIds?.length > 0
-			? select('core/block-editor').getBlock(
-					parentClientIds[parentClientIds.length - 1]
-			  )
-			: {};
-
-	const { updateExtension } = useDispatch(STORE_NAME);
-	const { getExtensions } = select(STORE_NAME);
-	const cacheKey = cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
-	let extensions = getExtensions(props.name);
-	const { getBlockType } = select('core/blocks');
-	const blockType = getBlockType(props.name);
-	extensions = mergeObject(
-		extensions,
-		blockType.supports?.blockExtensions || {}
-	);
-	const _extensionsWithoutLabel = extensionsWithoutLabel(
-		cloneObject(extensions)
-	);
-	const cacheData = useMemo(() => {
-		const localCache = getItem(cacheKey) || {};
-
-		if (!localCache) {
-			cache = freshItem(cacheKey, cacheKeyPrefix);
-		}
-
-		let { [props.name]: cache = {} } = localCache;
-
-		// If cache data doesn't equal extensions, update cache
-		// Compare cache and _extensionsWithoutLabel, ignoring specific properties
-		const omitProps = ['status', 'label', 'show', 'force', 'config'];
-
-		const omitDeep = (obj: Object, props: Array<string>): Object => {
-			if (Array.isArray(obj)) {
-				return obj.map((item) => omitDeep(item, props));
-			}
-			if (obj && typeof obj === 'object') {
-				const newObj: Object = {};
-				for (const key in obj) {
-					if (!props.includes(key)) {
-						newObj[key] = omitDeep(obj[key], props);
-					}
-				}
-				return newObj;
-			}
-			return obj;
+		props = {
+			...props,
+			currentState,
+			setAttributes,
+			currentBreakpoint,
+			handleOnChangeAttributes,
 		};
 
-		const cacheOmitted = omitDeep(cache, omitProps);
-		const extensionsOmitted = omitDeep(_extensionsWithoutLabel, omitProps);
+		const { version } = select('blockera/data').getEntity('blockera');
+		const parentClientIds = select('core/block-editor').getBlockParents(
+			props.clientId
+		);
 
-		if (!isEquals(cacheOmitted, extensionsOmitted)) {
-			cache = _extensionsWithoutLabel;
-			setItem(
-				cacheKey,
-				mergeObject(
-					{
-						...(getItem(cacheKey) || {}),
-						[props.name]: cache,
-					},
-					{
-						[props.name]: _extensionsWithoutLabel,
-					}
-				)
-			);
-		}
+		const directParentBlock =
+			parentClientIds?.length > 0
+				? select('core/block-editor').getBlock(
+						parentClientIds[parentClientIds.length - 1]
+				  )
+				: {};
 
-		return cache;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [cacheKey, extensions]);
-	const supports = useMemo(() => {
-		if (!cacheData) {
-			setItem(
-				cacheKey,
-				mergeObject(cacheData, {
-					[props.name]: _extensionsWithoutLabel,
-				})
-			);
-			return extensions;
-		}
+		const { updateExtension } = useDispatch(STORE_NAME);
+		const { getExtensions } = select(STORE_NAME);
+		const cacheKey =
+			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
+		let extensions = getExtensions(props.name);
+		const { getBlockType } = select('core/blocks');
+		const blockType = getBlockType(props.name);
+		extensions = mergeObject(
+			extensions,
+			blockType.supports?.blockExtensions || {}
+		);
+		const _extensionsWithoutLabel = extensionsWithoutLabel(
+			cloneObject(extensions)
+		);
+		const cacheData = useMemo(() => {
+			const localCache = getItem(cacheKey) || {};
 
-		const mergedEntries = new Map<string, Object>();
+			if (!localCache) {
+				cache = freshItem(cacheKey, cacheKeyPrefix);
+			}
 
-		// First add all entries from cacheData.
-		Object.entries(cacheData).forEach(([support, settings]) => {
-			mergedEntries.set(
-				support,
-				Object.fromEntries(
-					Object.entries(settings).map(([key, value]) => {
-						if (
-							null !== value &&
-							isObject(value) &&
-							value.hasOwnProperty('config') &&
-							extensions[support]?.[key]?.config
-						) {
-							value.config = extensions[support][key].config;
+			let { [props.name]: cache = {} } = localCache;
+
+			// If cache data doesn't equal extensions, update cache
+			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
+			const omitProps = ['status', 'label', 'show', 'force', 'config'];
+
+			const omitDeep = (obj: Object, props: Array<string>): Object => {
+				if (Array.isArray(obj)) {
+					return obj.map((item) => omitDeep(item, props));
+				}
+				if (obj && typeof obj === 'object') {
+					const newObj: Object = {};
+					for (const key in obj) {
+						if (!props.includes(key)) {
+							newObj[key] = omitDeep(obj[key], props);
 						}
-						return [key, value];
-					})
-				)
+					}
+					return newObj;
+				}
+				return obj;
+			};
+
+			const cacheOmitted = omitDeep(cache, omitProps);
+			const extensionsOmitted = omitDeep(
+				_extensionsWithoutLabel,
+				omitProps
 			);
-		});
 
-		// Add entries from extensions that don't exist in cacheData.
-		Object.entries(extensions).forEach(([support, settings]) => {
-			if (!mergedEntries.has(support)) {
-				mergedEntries.set(support, settings);
+			if (!isEquals(cacheOmitted, extensionsOmitted)) {
+				cache = _extensionsWithoutLabel;
+				setItem(
+					cacheKey,
+					mergeObject(
+						{
+							...(getItem(cacheKey) || {}),
+							[props.name]: cache,
+						},
+						{
+							[props.name]: _extensionsWithoutLabel,
+						}
+					)
+				);
+			}
 
+			return cache;
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [cacheKey, extensions]);
+		const supports = useMemo(() => {
+			if (!cacheData) {
+				setItem(
+					cacheKey,
+					mergeObject(cacheData, {
+						[props.name]: _extensionsWithoutLabel,
+					})
+				);
+				return extensions;
+			}
+
+			const mergedEntries = new Map<string, Object>();
+
+			// First add all entries from cacheData.
+			Object.entries(cacheData).forEach(([support, settings]) => {
+				mergedEntries.set(
+					support,
+					Object.fromEntries(
+						Object.entries(settings).map(([key, value]) => {
+							if (
+								null !== value &&
+								isObject(value) &&
+								value.hasOwnProperty('config') &&
+								extensions[support]?.[key]?.config
+							) {
+								value.config = extensions[support][key].config;
+							}
+							return [key, value];
+						})
+					)
+				);
+			});
+
+			// Add entries from extensions that don't exist in cacheData.
+			Object.entries(extensions).forEach(([support, settings]) => {
+				if (!mergedEntries.has(support)) {
+					mergedEntries.set(support, settings);
+
+					return;
+				}
+
+				// Check if internal items from settings exist in support
+				Object.entries(settings).forEach(([key, value]) => {
+					if (!mergedEntries.get(support)?.[key]) {
+						mergedEntries.set(support, {
+							...mergedEntries.get(support),
+							[key]: value,
+						});
+					}
+					if (
+						'object' === typeof mergedEntries.get(support)?.[key] &&
+						!mergedEntries.get(support)?.[key]?.label
+					) {
+						mergedEntries.set(support, {
+							...mergedEntries.get(support),
+							[key]: {
+								...mergedEntries.get(support)?.[key],
+								label: extensions[support][key].label,
+							},
+						});
+					}
+				});
+			});
+
+			return Object.fromEntries(mergedEntries);
+			// eslint-disable-next-line
+		}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
+
+		const [settings, setSettings] = useState(supports);
+
+		// On mounting shared extension component, we can bootstrap scripts.
+		useEffect(() => {
+			bootstrapScripts();
+			// eslint-disable-next-line
+		}, []);
+
+		// Get next settings after switch between blocks.
+		useEffect(() => {
+			doAction(
+				'blockera.editor.extensions.sharedExtension.blockSupports.cacheData',
+				cacheKey,
+				props
+			);
+
+			if (isEquals(supports, settings)) {
 				return;
 			}
 
-			// Check if internal items from settings exist in support
-			Object.entries(settings).forEach(([key, value]) => {
-				if (!mergedEntries.get(support)?.[key]) {
-					mergedEntries.set(support, {
-						...mergedEntries.get(support),
-						[key]: value,
-					});
-				}
-				if (
-					'object' === typeof mergedEntries.get(support)?.[key] &&
-					!mergedEntries.get(support)?.[key]?.label
-				) {
-					mergedEntries.set(support, {
-						...mergedEntries.get(support),
-						[key]: {
-							...mergedEntries.get(support)?.[key],
-							label: extensions[support][key].label,
-						},
-					});
-				}
+			setSettings(supports);
+			updateItem(
+				cacheKey,
+				mergeObject(cacheData, {
+					[props.name]: extensionsWithoutLabel(cloneObject(supports)),
+				})
+			);
+			// eslint-disable-next-line
+		}, [currentBlock]);
+
+		const handleOnChangeSettings = (
+			newSupports: Object,
+			name: string
+		): void => {
+			const newSettings = {
+				...settings,
+				[name]: {
+					...settings[name],
+					...newSupports,
+				},
+			};
+
+			setSettings(newSettings);
+			updateItem(
+				cacheKey,
+				mergeObject(cacheData, {
+					[props.name]: newSettings,
+				})
+			);
+			updateExtension({
+				name,
+				newSupports,
+				blockName: props.name,
 			});
-		});
-
-		return Object.fromEntries(mergedEntries);
-		// eslint-disable-next-line
-	}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
-
-	const [settings, setSettings] = useState(supports);
-
-	// On mounting shared extension component, we can bootstrap scripts.
-	useEffect(() => {
-		bootstrapScripts();
-		// eslint-disable-next-line
-	}, []);
-
-	// Get next settings after switch between blocks.
-	useEffect(() => {
-		doAction(
-			'blockera.editor.extensions.sharedExtension.blockSupports.cacheData',
-			cacheKey,
-			props
-		);
-
-		if (isEquals(supports, settings)) {
-			return;
-		}
-
-		setSettings(supports);
-		updateItem(
-			cacheKey,
-			mergeObject(cacheData, {
-				[props.name]: extensionsWithoutLabel(cloneObject(supports)),
-			})
-		);
-		// eslint-disable-next-line
-	}, [currentBlock]);
-
-	const handleOnChangeSettings = (
-		newSupports: Object,
-		name: string
-	): void => {
-		const newSettings = {
-			...settings,
-			[name]: {
-				...settings[name],
-				...newSupports,
-			},
 		};
 
-		setSettings(newSettings);
-		updateItem(
-			cacheKey,
-			mergeObject(cacheData, {
-				[props.name]: newSettings,
-			})
-		);
-		updateExtension({
-			name,
-			newSupports,
+		const {
+			mouseConfig,
+			sizeConfig,
+			layoutConfig,
+			statesConfig,
+			spacingConfig,
+			effectsConfig,
+			positionConfig,
+			flexChildConfig,
+			backgroundConfig,
+			typographyConfig,
+			customStyleConfig,
+			borderAndShadowConfig,
+			// entranceAnimationConfig,
+			// scrollAnimationConfig,
+			clickAnimationConfig,
+			// conditionsConfig,
+			advancedSettingsConfig,
+		} = settings;
+
+		const block = {
+			currentBlock,
+			currentState,
+			currentBreakpoint,
 			blockName: props.name,
-		});
-	};
+			currentInnerBlockState,
+			supports: props.supports,
+			clientId: props.clientId,
+		};
 
-	const {
-		mouseConfig,
-		sizeConfig,
-		layoutConfig,
-		statesConfig,
-		spacingConfig,
-		effectsConfig,
-		positionConfig,
-		flexChildConfig,
-		backgroundConfig,
-		typographyConfig,
-		customStyleConfig,
-		borderAndShadowConfig,
-		// entranceAnimationConfig,
-		// scrollAnimationConfig,
-		clickAnimationConfig,
-		// conditionsConfig,
-		advancedSettingsConfig,
-	} = settings;
+		const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
+			const activePanel = [];
 
-	const block = {
-		currentBlock,
-		currentState,
-		currentBreakpoint,
-		blockName: props.name,
-		currentInnerBlockState,
-		supports: props.supports,
-		clientId: props.clientId,
-	};
+			switch (tab.name) {
+				case 'settings':
+					activePanel.push(
+						<Fragment key={`${props.clientId}-settings-panel`}>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-settings-start'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-settings-start',
+									}}
+								/>
+							</SlotFillProvider>
 
-	const MappedExtensions = (tab: TTabProps): Array<MixedElement> => {
-		const activePanel = [];
-
-		switch (tab.name) {
-			case 'settings':
-				activePanel.push(
-					<Fragment key={`${props.clientId}-settings-panel`}>
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-settings-start'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName:
-										'blockera-inspector-settings-start',
-								}}
-							/>
-						</SlotFillProvider>
-
-						{/* <ErrorBoundary
+							{/* <ErrorBoundary
 								fallbackRender={({ error }): MixedElement => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
@@ -469,873 +482,908 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 									}
 								/>
 							</ErrorBoundary> */}
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-settings'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName: 'blockera-inspector-settings',
-								}}
-							/>
-						</SlotFillProvider>
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									configId={'advancedSettingsConfig'}
-									title={__('Advanced', 'blockera')}
-									icon={<Icon icon="extension-advanced" />}
-									error={error}
+							<SlotFillProvider>
+								<Slot name={'blockera-inspector-settings'} />
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName: 'blockera-inspector-settings',
+									}}
 								/>
-							)}
-						>
-							<AdvancedSettingsExtension
-								block={block}
-								extensionConfig={advancedSettingsConfig}
-								values={{
-									blockeraAttributes:
-										currentStateAttributes.blockeraAttributes,
-								}}
-								attributes={{
-									blockeraAttributes:
-										attributes.blockeraAttributes,
-								}}
-								extensionProps={{
-									blockeraAttributes: {
-										attributeElement: '',
-									},
-								}}
-								setSettings={handleOnChangeSettings}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-						</ErrorBoundary>
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-settings-end'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName: 'blockera-inspector-settings-end',
-								}}
-							/>
-						</SlotFillProvider>
-					</Fragment>
-				);
-				break;
-
-			case 'style':
-				activePanel.push(
-					<Fragment key={`${props.clientId}-style-panel`}>
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-styles-start'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName: 'blockera-inspector-styles-start',
-								}}
-							/>
-						</SlotFillProvider>
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'statesConfig'}
-									title={__(
-										'Block State Options',
-										'blockera'
-									)}
-									// icon={<Icon icon="extension-states" />}
-								/>
-							)}
-						>
-							<StateOptionsExtension
-								block={block}
-								extensionConfig={statesConfig}
-								values={
-									currentStateAttributes.blockeraBlockStates
-								}
-								attributes={{
-									blockeraBlockStates:
-										attributes.blockeraBlockStates,
-								}}
-								extensionProps={{}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-								currentBlock={currentBlock}
-								currentState={
-									isInnerBlock(currentBlock)
-										? currentInnerBlockState
-										: currentState
-								}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'spacingConfig'}
-									title={__('Spacing', 'blockera')}
-									icon={<Icon icon={'extension-spacing'} />}
-								/>
-							)}
-						>
-							<SpacingExtension
-								block={block}
-								extensionConfig={spacingConfig}
-								values={{
-									blockeraSpacing:
-										currentStateAttributes.blockeraSpacing,
-								}}
-								attributes={{
-									blockeraSpacing: attributes.blockeraSpacing,
-								}}
-								extensionProps={{
-									blockeraSpacing: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-						</ErrorBoundary>
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'typographyConfig'}
-									title={__('Typography', 'blockera')}
-									icon={<Icon icon="extension-typography" />}
-								/>
-							)}
-						>
-							<TypographyExtension
-								block={block}
-								extensionConfig={typographyConfig}
-								extensionProps={{
-									blockeraFontFamily: {},
-									blockeraFontAppearance: {},
-									blockeraFontColor: {},
-									blockeraFontSize: {},
-									blockeraLineHeight: {},
-									blockeraTextAlign: {},
-									blockeraTextDecoration: {},
-									blockeraTextTransform: {},
-									blockeraDirection: {},
-									blockeraTextShadow: {},
-									blockeraLetterSpacing: {},
-									blockeraWordSpacing: {},
-									blockeraTextIndent: {},
-									blockeraTextOrientation: {},
-									blockeraTextColumns: {},
-									blockeraTextStroke: {},
-									blockeraWordBreak: {},
-									blockeraTextWrap: {},
-								}}
-								values={{
-									blockeraFontFamily:
-										currentStateAttributes?.blockeraFontFamily,
-									blockeraFontAppearance:
-										currentStateAttributes?.blockeraFontAppearance,
-									blockeraFontColor:
-										currentStateAttributes?.blockeraFontColor,
-									blockeraFontSize:
-										currentStateAttributes?.blockeraFontSize,
-									blockeraLineHeight:
-										currentStateAttributes?.blockeraLineHeight,
-									blockeraTextAlign:
-										currentStateAttributes?.blockeraTextAlign,
-									blockeraTextDecoration:
-										currentStateAttributes?.blockeraTextDecoration,
-									blockeraTextTransform:
-										currentStateAttributes?.blockeraTextTransform,
-									blockeraDirection:
-										currentStateAttributes?.blockeraDirection,
-									blockeraTextShadow:
-										currentStateAttributes?.blockeraTextShadow,
-									blockeraLetterSpacing:
-										currentStateAttributes?.blockeraLetterSpacing,
-									blockeraWordSpacing:
-										currentStateAttributes?.blockeraWordSpacing,
-									blockeraTextIndent:
-										currentStateAttributes?.blockeraTextIndent,
-									blockeraTextOrientation:
-										currentStateAttributes?.blockeraTextOrientation,
-									blockeraTextColumns:
-										currentStateAttributes?.blockeraTextColumns,
-									blockeraTextStroke:
-										currentStateAttributes?.blockeraTextStroke,
-									blockeraWordBreak:
-										currentStateAttributes?.blockeraWordBreak,
-									blockeraTextWrap:
-										currentStateAttributes?.blockeraTextWrap,
-								}}
-								attributes={{
-									blockeraFontFamily:
-										attributes?.blockeraFontFamily,
-									blockeraFontAppearance:
-										attributes?.blockeraFontAppearance,
-									blockeraFontColor:
-										attributes?.blockeraFontColor,
-									blockeraFontSize:
-										attributes?.blockeraFontSize,
-									blockeraLineHeight:
-										attributes?.blockeraLineHeight,
-									blockeraTextAlign:
-										attributes?.blockeraTextAlign,
-									blockeraTextDecoration:
-										attributes?.blockeraTextDecoration,
-									blockeraTextTransform:
-										attributes?.blockeraTextTransform,
-									blockeraDirection:
-										attributes?.blockeraDirection,
-									blockeraTextShadow:
-										attributes?.blockeraTextShadow,
-									blockeraLetterSpacing:
-										attributes?.blockeraLetterSpacing,
-									blockeraWordSpacing:
-										attributes?.blockeraWordSpacing,
-									blockeraTextIndent:
-										attributes?.blockeraTextIndent,
-									blockeraTextOrientation:
-										attributes?.blockeraTextOrientation,
-									blockeraTextColumns:
-										attributes?.blockeraTextColumns,
-									blockeraTextStroke:
-										attributes?.blockeraTextStroke,
-									blockeraWordBreak:
-										attributes?.blockeraWordBreak,
-									blockeraTextWrap:
-										attributes?.blockeraTextWrap,
-								}}
-								display={
-									currentStateAttributes?.blockeraDisplay
-								}
-								backgroundClip={
-									currentStateAttributes?.blockeraBackgroundClip
-								}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									title={__('Background', 'blockera')}
-									icon={<Icon icon="extension-background" />}
-									configId={'backgroundConfig'}
-									error={error}
-								/>
-							)}
-						>
-							<BackgroundExtension
-								block={block}
-								setSettings={handleOnChangeSettings}
-								extensionConfig={backgroundConfig}
-								extensionProps={{
-									blockeraBackground: {},
-									blockeraBackgroundColor: {},
-									blockeraBackgroundClip: {},
-								}}
-								values={{
-									blockeraBackground:
-										currentStateAttributes?.blockeraBackground,
-									blockeraBackgroundColor:
-										currentStateAttributes?.blockeraBackgroundColor,
-									blockeraBackgroundClip:
-										currentStateAttributes?.blockeraBackgroundClip,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								attributes={{
-									blockeraBackground:
-										attributes.blockeraBackground,
-									blockeraBackgroundColor:
-										attributes.blockeraBackgroundColor,
-									blockeraBackgroundClip:
-										attributes.blockeraBackgroundClip,
-								}}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'borderAndShadowConfig'}
-									title={__('Border And Shadow', 'blockera')}
-									icon={<Icon icon="extension-border" />}
-								/>
-							)}
-						>
-							<BorderAndShadowExtension
-								block={block}
-								extensionConfig={borderAndShadowConfig}
-								extensionProps={{
-									blockeraBorder: {},
-									blockeraBorderRadius: {},
-									blockeraBoxShadow: {},
-									blockeraOutline: {},
-								}}
-								values={{
-									blockeraBorder:
-										currentStateAttributes.blockeraBorder,
-									blockeraBorderRadius:
-										currentStateAttributes.blockeraBorderRadius,
-									blockeraOutline:
-										currentStateAttributes.blockeraOutline,
-									blockeraBoxShadow:
-										currentStateAttributes.blockeraBoxShadow,
-								}}
-								attributes={{
-									blockeraBorder: attributes.blockeraBorder,
-									blockeraBorderRadius:
-										attributes.blockeraBorderRadius,
-									blockeraOutline: attributes.blockeraOutline,
-									blockeraBoxShadow:
-										attributes.blockeraBoxShadow,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-styles'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName: 'blockera-inspector-styles',
-								}}
-							/>
-						</SlotFillProvider>
-
-						{directParentBlock?.innerBlocks?.length > 0 &&
-							directParentBlock?.attributes.blockeraDisplay
-								?.value === 'flex' && (
-								<ErrorBoundary
-									fallbackRender={({ error }) => (
-										<ErrorBoundaryFallback
-											isReportingErrorCompleted={
-												isReportingErrorCompleted
-											}
-											setIsReportingErrorCompleted={
-												setIsReportingErrorCompleted
-											}
-											from={'extension'}
-											error={error}
-											configId={'flexChildConfig'}
-											title={__('Flex Child', 'blockera')}
-											icon={
-												<Icon icon="extension-flex-child" />
-											}
-										/>
-									)}
-								>
-									<FlexChildExtension
-										block={block}
-										extensionConfig={flexChildConfig}
-										values={{
-											blockeraFlexChildAlign:
-												currentStateAttributes.blockeraFlexChildAlign,
-											blockeraFlexChildSizing:
-												currentStateAttributes.blockeraFlexChildSizing,
-											blockeraFlexChildGrow:
-												currentStateAttributes.blockeraFlexChildGrow,
-											blockeraFlexChildShrink:
-												currentStateAttributes.blockeraFlexChildShrink,
-											blockeraFlexChildBasis:
-												currentStateAttributes.blockeraFlexChildBasis,
-											blockeraFlexChildOrder:
-												currentStateAttributes.blockeraFlexChildOrder,
-											blockeraFlexChildOrderCustom:
-												currentStateAttributes.blockeraFlexChildOrderCustom,
-											blockeraFlexDirection:
-												directParentBlock?.attributes
-													?.blockeraFlexLayout?.value
-													?.direction,
-										}}
-										attributes={{
-											blockeraFlexChildSizing:
-												attributes.blockeraFlexChildSizing,
-											blockeraFlexChildGrow:
-												attributes.blockeraFlexChildGrow,
-											blockeraFlexChildShrink:
-												attributes.blockeraFlexChildShrink,
-											blockeraFlexChildBasis:
-												attributes.blockeraFlexChildBasis,
-											blockeraFlexChildAlign:
-												attributes.blockeraFlexChildAlign,
-											blockeraFlexChildOrder:
-												attributes.blockeraFlexChildOrder,
-											blockeraFlexChildOrderCustom:
-												attributes.blockeraFlexChildOrderCustom,
-										}}
-										extensionProps={{
-											blockeraFlexChildSizing: {},
-											blockeraFlexChildGrow: {},
-											blockeraFlexChildShrink: {},
-											blockeraFlexChildBasis: {},
-											blockeraFlexChildAlign: {},
-											blockeraFlexChildOrder: {},
-											blockeraFlexChildOrderCustom: {},
-										}}
-										handleOnChangeAttributes={
-											handleOnChangeAttributes
+							</SlotFillProvider>
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
 										}
-										setSettings={handleOnChangeSettings}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										configId={'advancedSettingsConfig'}
+										title={__('Advanced', 'blockera')}
+										icon={
+											<Icon icon="extension-advanced" />
+										}
+										error={error}
 									/>
-								</ErrorBoundary>
-							)}
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'layoutConfig'}
-									title={__('Layout', 'blockera')}
-									icon={<Icon icon="extension-layout" />}
-								/>
-							)}
-						>
-							<LayoutExtension
-								block={block}
-								extensionConfig={layoutConfig}
-								extensionProps={{
-									blockeraDisplay: {},
-									blockeraFlexLayout: {},
-									blockeraGap: {},
-									blockeraFlexWrap: {},
-									blockeraAlignContent: {},
-								}}
-								values={{
-									blockeraDisplay:
-										currentStateAttributes.blockeraDisplay,
-									blockeraFlexLayout:
-										currentStateAttributes.blockeraFlexLayout,
-									blockeraGap:
-										currentStateAttributes.blockeraGap,
-									blockeraFlexWrap:
-										currentStateAttributes.blockeraFlexWrap,
-									blockeraAlignContent:
-										currentStateAttributes.blockeraAlignContent,
-								}}
-								attributes={{
-									blockeraDisplay: attributes.blockeraDisplay,
-									blockeraFlexLayout:
-										attributes.blockeraFlexLayout,
-									blockeraGap: attributes.blockeraGap,
-									blockeraFlexWrap:
-										attributes.blockeraFlexWrap,
-									blockeraAlignContent:
-										attributes.blockeraAlignContent,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'sizeConfig'}
-									title={__('Size', 'blockera')}
-									icon={<Icon icon="extension-size" />}
-								/>
-							)}
-						>
-							<SizeExtension
-								block={block}
-								extensionConfig={sizeConfig}
-								values={{
-									blockeraWidth:
-										currentStateAttributes.blockeraWidth,
-									blockeraMinWidth:
-										currentStateAttributes.blockeraMinWidth,
-									blockeraMaxWidth:
-										currentStateAttributes.blockeraMaxWidth,
-									blockeraHeight:
-										currentStateAttributes.blockeraHeight,
-									blockeraMinHeight:
-										currentStateAttributes.blockeraMinHeight,
-									blockeraMaxHeight:
-										currentStateAttributes.blockeraMaxHeight,
-									blockeraOverflow:
-										currentStateAttributes.blockeraOverflow,
-									blockeraRatio:
-										currentStateAttributes.blockeraRatio,
-									blockeraFit:
-										currentStateAttributes.blockeraFit,
-									blockeraFitPosition:
-										currentStateAttributes.blockeraFitPosition,
-									blockeraBoxSizing:
-										currentStateAttributes.blockeraBoxSizing,
-								}}
-								attributes={{
-									blockeraWidth: attributes.blockeraWidth,
-									blockeraMinWidth:
-										attributes.blockeraMinWidth,
-									blockeraMaxWidth:
-										attributes.blockeraMaxWidth,
-									blockeraHeight: attributes.blockeraHeight,
-									blockeraMinHeight:
-										attributes.blockeraMinHeight,
-									blockeraMaxHeight:
-										attributes.blockeraMaxHeight,
-									blockeraOverflow:
-										attributes.blockeraOverflow,
-									blockeraRatio: attributes.blockeraRatio,
-									blockeraFit: attributes.blockeraFit,
-									blockeraFitPosition:
-										attributes.blockeraFitPosition,
-									blockeraBoxSizing:
-										attributes.blockeraBoxSizing,
-								}}
-								extensionProps={{
-									blockeraWidth: {},
-									blockeraHeight: {},
-									blockeraMinWidth: {},
-									blockeraMinHeight: {},
-									blockeraMaxWidth: {},
-									blockeraMaxHeight: {},
-									blockeraOverflow: {},
-									blockeraRatio: {},
-									blockeraFit: {},
-									blockeraFitPosition: {},
-									blockeraBoxSizing: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'positionConfig'}
-									title={__('Position', 'blockera')}
-									icon={<Icon icon="extension-position" />}
-								/>
-							)}
-						>
-							<PositionExtension
-								block={block}
-								extensionConfig={positionConfig}
-								values={{
-									blockeraPosition:
-										currentStateAttributes.blockeraPosition,
-									blockeraZIndex:
-										currentStateAttributes.blockeraZIndex,
-								}}
-								attributes={{
-									blockeraPosition:
-										attributes.blockeraPosition,
-									blockeraZIndex: attributes.blockeraZIndex,
-								}}
-								extensionProps={{
-									blockeraPosition: {},
-									blockeraZIndex: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									error={error}
-									from={'extension'}
-									configId={'effectsConfig'}
-									title={__('Effects', 'blockera')}
-									icon={<Icon icon="extension-effects" />}
-								/>
-							)}
-						>
-							<EffectsExtension
-								block={block}
-								extensionConfig={effectsConfig}
-								extensionProps={{
-									blockeraOpacity: {},
-									blockeraTransform: {},
-									blockeraTransformSelfPerspective: {},
-									blockeraTransformSelfOrigin: {},
-									blockeraBackfaceVisibility: {},
-									blockeraTransformChildPerspective: {},
-									blockeraTransformChildOrigin: {},
-									blockeraTransition: {},
-									blockeraFilter: {},
-									blockeraBackdropFilter: {},
-									blockeraBlendMode: {},
-									blockeraDivider: {},
-									blockeraMask: {},
-								}}
-								values={{
-									blockeraOpacity:
-										currentStateAttributes.blockeraOpacity,
-									blockeraTransform:
-										currentStateAttributes.blockeraTransform,
-									blockeraBackfaceVisibility:
-										currentStateAttributes.blockeraBackfaceVisibility,
-									blockeraTransformSelfPerspective:
-										currentStateAttributes.blockeraTransformSelfPerspective,
-									blockeraTransformSelfOrigin:
-										currentStateAttributes.blockeraTransformSelfOrigin,
-									blockeraTransformChildOrigin:
-										currentStateAttributes.blockeraTransformChildOrigin,
-									blockeraTransformChildPerspective:
-										currentStateAttributes.blockeraTransformChildPerspective,
-									blockeraTransition:
-										currentStateAttributes.blockeraTransition,
-									blockeraFilter:
-										currentStateAttributes.blockeraFilter,
-									blockeraBackdropFilter:
-										currentStateAttributes.blockeraBackdropFilter,
-									blockeraBlendMode:
-										currentStateAttributes.blockeraBlendMode,
-									blockeraDivider:
-										currentStateAttributes.blockeraDivider,
-									blockeraMask:
-										currentStateAttributes.blockeraMask,
-								}}
-								attributes={{
-									blockeraOpacity: attributes.blockeraOpacity,
-									blockeraTransform:
-										attributes.blockeraTransform,
-									blockeraBackfaceVisibility:
-										attributes.blockeraBackfaceVisibility,
-									blockeraTransformSelfPerspective:
-										attributes.blockeraTransformSelfPerspective,
-									blockeraTransformSelfOrigin:
-										attributes.blockeraTransformSelfOrigin,
-									blockeraTransformChildOrigin:
-										attributes.blockeraTransformChildOrigin,
-									blockeraTransformChildPerspective:
-										attributes.blockeraTransformChildPerspective,
-									blockeraTransition:
-										attributes.blockeraTransition,
-									blockeraFilter: attributes.blockeraFilter,
-									blockeraBackdropFilter:
-										attributes.blockeraBackdropFilter,
-									blockeraBlendMode:
-										attributes.blockeraBlendMode,
-									blockeraDivider: attributes.blockeraDivider,
-									blockeraMask: attributes.blockeraMask,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'customStyleConfig'}
-									title={__('Custom CSS', 'blockera')}
-									icon={
-										<Icon icon="extension-custom-style" />
+								)}
+							>
+								<AdvancedSettingsExtension
+									block={block}
+									extensionConfig={advancedSettingsConfig}
+									values={{
+										blockeraAttributes:
+											currentStateAttributes.blockeraAttributes,
+									}}
+									attributes={{
+										blockeraAttributes:
+											attributes.blockeraAttributes,
+									}}
+									extensionProps={{
+										blockeraAttributes: {
+											attributeElement: '',
+										},
+									}}
+									setSettings={handleOnChangeSettings}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
 									}
 								/>
-							)}
-						>
-							<CustomStyleExtension
-								block={block}
-								extensionConfig={customStyleConfig}
-								extensionProps={{
-									blockeraCustomCSS: {},
-								}}
-								values={{
-									blockeraCustomCSS:
-										currentStateAttributes.blockeraCustomCSS,
-								}}
-								attributes={{
-									blockeraCustomCSS:
-										attributes.blockeraCustomCSS,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
+							</ErrorBoundary>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-settings-end'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-settings-end',
+									}}
+								/>
+							</SlotFillProvider>
+						</Fragment>
+					);
+					break;
 
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-styles-end'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName:
-										'blockera-inspector-interactions-start',
-								}}
-							/>
-						</SlotFillProvider>
-					</Fragment>
-				);
-				break;
+				case 'style':
+					activePanel.push(
+						<Fragment key={`${props.clientId}-style-panel`}>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-styles-start'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-styles-start',
+									}}
+								/>
+							</SlotFillProvider>
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'statesConfig'}
+										title={__(
+											'Block State Options',
+											'blockera'
+										)}
+										// icon={<Icon icon="extension-states" />}
+									/>
+								)}
+							>
+								<StateOptionsExtension
+									block={block}
+									extensionConfig={statesConfig}
+									values={
+										currentStateAttributes.blockeraBlockStates
+									}
+									attributes={{
+										blockeraBlockStates:
+											attributes.blockeraBlockStates,
+									}}
+									extensionProps={{}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+									currentBlock={currentBlock}
+									currentState={
+										isInnerBlock(currentBlock)
+											? currentInnerBlockState
+											: currentState
+									}
+								/>
+							</ErrorBoundary>
 
-			case 'interactions':
-				activePanel.push(
-					<Fragment key={`${props.clientId}-interactions-panel`}>
-						<SlotFillProvider>
-							<Slot
-								name={'blockera-inspector-interactions-start'}
-							/>
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName:
-										'blockera-inspector-interactions-start',
-								}}
-							/>
-						</SlotFillProvider>
-						{/* <ErrorBoundary
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'spacingConfig'}
+										title={__('Spacing', 'blockera')}
+										icon={
+											<Icon icon={'extension-spacing'} />
+										}
+									/>
+								)}
+							>
+								<SpacingExtension
+									block={block}
+									extensionConfig={spacingConfig}
+									values={{
+										blockeraSpacing:
+											currentStateAttributes.blockeraSpacing,
+									}}
+									attributes={{
+										blockeraSpacing:
+											attributes.blockeraSpacing,
+									}}
+									extensionProps={{
+										blockeraSpacing: {},
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+								/>
+							</ErrorBoundary>
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'typographyConfig'}
+										title={__('Typography', 'blockera')}
+										icon={
+											<Icon icon="extension-typography" />
+										}
+									/>
+								)}
+							>
+								<TypographyExtension
+									block={block}
+									extensionConfig={typographyConfig}
+									extensionProps={{
+										blockeraFontFamily: {},
+										blockeraFontAppearance: {},
+										blockeraFontColor: {},
+										blockeraFontSize: {},
+										blockeraLineHeight: {},
+										blockeraTextAlign: {},
+										blockeraTextDecoration: {},
+										blockeraTextTransform: {},
+										blockeraDirection: {},
+										blockeraTextShadow: {},
+										blockeraLetterSpacing: {},
+										blockeraWordSpacing: {},
+										blockeraTextIndent: {},
+										blockeraTextOrientation: {},
+										blockeraTextColumns: {},
+										blockeraTextStroke: {},
+										blockeraWordBreak: {},
+										blockeraTextWrap: {},
+									}}
+									values={{
+										blockeraFontFamily:
+											currentStateAttributes?.blockeraFontFamily,
+										blockeraFontAppearance:
+											currentStateAttributes?.blockeraFontAppearance,
+										blockeraFontColor:
+											currentStateAttributes?.blockeraFontColor,
+										blockeraFontSize:
+											currentStateAttributes?.blockeraFontSize,
+										blockeraLineHeight:
+											currentStateAttributes?.blockeraLineHeight,
+										blockeraTextAlign:
+											currentStateAttributes?.blockeraTextAlign,
+										blockeraTextDecoration:
+											currentStateAttributes?.blockeraTextDecoration,
+										blockeraTextTransform:
+											currentStateAttributes?.blockeraTextTransform,
+										blockeraDirection:
+											currentStateAttributes?.blockeraDirection,
+										blockeraTextShadow:
+											currentStateAttributes?.blockeraTextShadow,
+										blockeraLetterSpacing:
+											currentStateAttributes?.blockeraLetterSpacing,
+										blockeraWordSpacing:
+											currentStateAttributes?.blockeraWordSpacing,
+										blockeraTextIndent:
+											currentStateAttributes?.blockeraTextIndent,
+										blockeraTextOrientation:
+											currentStateAttributes?.blockeraTextOrientation,
+										blockeraTextColumns:
+											currentStateAttributes?.blockeraTextColumns,
+										blockeraTextStroke:
+											currentStateAttributes?.blockeraTextStroke,
+										blockeraWordBreak:
+											currentStateAttributes?.blockeraWordBreak,
+										blockeraTextWrap:
+											currentStateAttributes?.blockeraTextWrap,
+									}}
+									attributes={{
+										blockeraFontFamily:
+											attributes?.blockeraFontFamily,
+										blockeraFontAppearance:
+											attributes?.blockeraFontAppearance,
+										blockeraFontColor:
+											attributes?.blockeraFontColor,
+										blockeraFontSize:
+											attributes?.blockeraFontSize,
+										blockeraLineHeight:
+											attributes?.blockeraLineHeight,
+										blockeraTextAlign:
+											attributes?.blockeraTextAlign,
+										blockeraTextDecoration:
+											attributes?.blockeraTextDecoration,
+										blockeraTextTransform:
+											attributes?.blockeraTextTransform,
+										blockeraDirection:
+											attributes?.blockeraDirection,
+										blockeraTextShadow:
+											attributes?.blockeraTextShadow,
+										blockeraLetterSpacing:
+											attributes?.blockeraLetterSpacing,
+										blockeraWordSpacing:
+											attributes?.blockeraWordSpacing,
+										blockeraTextIndent:
+											attributes?.blockeraTextIndent,
+										blockeraTextOrientation:
+											attributes?.blockeraTextOrientation,
+										blockeraTextColumns:
+											attributes?.blockeraTextColumns,
+										blockeraTextStroke:
+											attributes?.blockeraTextStroke,
+										blockeraWordBreak:
+											attributes?.blockeraWordBreak,
+										blockeraTextWrap:
+											attributes?.blockeraTextWrap,
+									}}
+									display={
+										currentStateAttributes?.blockeraDisplay
+									}
+									backgroundClip={
+										currentStateAttributes?.blockeraBackgroundClip
+									}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										title={__('Background', 'blockera')}
+										icon={
+											<Icon icon="extension-background" />
+										}
+										configId={'backgroundConfig'}
+										error={error}
+									/>
+								)}
+							>
+								<BackgroundExtension
+									block={block}
+									setSettings={handleOnChangeSettings}
+									extensionConfig={backgroundConfig}
+									extensionProps={{
+										blockeraBackground: {},
+										blockeraBackgroundColor: {},
+										blockeraBackgroundClip: {},
+									}}
+									values={{
+										blockeraBackground:
+											currentStateAttributes?.blockeraBackground,
+										blockeraBackgroundColor:
+											currentStateAttributes?.blockeraBackgroundColor,
+										blockeraBackgroundClip:
+											currentStateAttributes?.blockeraBackgroundClip,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									attributes={{
+										blockeraBackground:
+											attributes.blockeraBackground,
+										blockeraBackgroundColor:
+											attributes.blockeraBackgroundColor,
+										blockeraBackgroundClip:
+											attributes.blockeraBackgroundClip,
+									}}
+								/>
+							</ErrorBoundary>
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'borderAndShadowConfig'}
+										title={__(
+											'Border And Shadow',
+											'blockera'
+										)}
+										icon={<Icon icon="extension-border" />}
+									/>
+								)}
+							>
+								<BorderAndShadowExtension
+									block={block}
+									extensionConfig={borderAndShadowConfig}
+									extensionProps={{
+										blockeraBorder: {},
+										blockeraBorderRadius: {},
+										blockeraBoxShadow: {},
+										blockeraOutline: {},
+									}}
+									values={{
+										blockeraBorder:
+											currentStateAttributes.blockeraBorder,
+										blockeraBorderRadius:
+											currentStateAttributes.blockeraBorderRadius,
+										blockeraOutline:
+											currentStateAttributes.blockeraOutline,
+										blockeraBoxShadow:
+											currentStateAttributes.blockeraBoxShadow,
+									}}
+									attributes={{
+										blockeraBorder:
+											attributes.blockeraBorder,
+										blockeraBorderRadius:
+											attributes.blockeraBorderRadius,
+										blockeraOutline:
+											attributes.blockeraOutline,
+										blockeraBoxShadow:
+											attributes.blockeraBoxShadow,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<SlotFillProvider>
+								<Slot name={'blockera-inspector-styles'} />
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName: 'blockera-inspector-styles',
+									}}
+								/>
+							</SlotFillProvider>
+
+							{directParentBlock?.innerBlocks?.length > 0 &&
+								directParentBlock?.attributes.blockeraDisplay
+									?.value === 'flex' && (
+									<ErrorBoundary
+										fallbackRender={({ error }) => (
+											<ErrorBoundaryFallback
+												isReportingErrorCompleted={
+													isReportingErrorCompleted
+												}
+												setIsReportingErrorCompleted={
+													setIsReportingErrorCompleted
+												}
+												from={'extension'}
+												error={error}
+												configId={'flexChildConfig'}
+												title={__(
+													'Flex Child',
+													'blockera'
+												)}
+												icon={
+													<Icon icon="extension-flex-child" />
+												}
+											/>
+										)}
+									>
+										<FlexChildExtension
+											block={block}
+											extensionConfig={flexChildConfig}
+											values={{
+												blockeraFlexChildAlign:
+													currentStateAttributes.blockeraFlexChildAlign,
+												blockeraFlexChildSizing:
+													currentStateAttributes.blockeraFlexChildSizing,
+												blockeraFlexChildGrow:
+													currentStateAttributes.blockeraFlexChildGrow,
+												blockeraFlexChildShrink:
+													currentStateAttributes.blockeraFlexChildShrink,
+												blockeraFlexChildBasis:
+													currentStateAttributes.blockeraFlexChildBasis,
+												blockeraFlexChildOrder:
+													currentStateAttributes.blockeraFlexChildOrder,
+												blockeraFlexChildOrderCustom:
+													currentStateAttributes.blockeraFlexChildOrderCustom,
+												blockeraFlexDirection:
+													directParentBlock
+														?.attributes
+														?.blockeraFlexLayout
+														?.value?.direction,
+											}}
+											attributes={{
+												blockeraFlexChildSizing:
+													attributes.blockeraFlexChildSizing,
+												blockeraFlexChildGrow:
+													attributes.blockeraFlexChildGrow,
+												blockeraFlexChildShrink:
+													attributes.blockeraFlexChildShrink,
+												blockeraFlexChildBasis:
+													attributes.blockeraFlexChildBasis,
+												blockeraFlexChildAlign:
+													attributes.blockeraFlexChildAlign,
+												blockeraFlexChildOrder:
+													attributes.blockeraFlexChildOrder,
+												blockeraFlexChildOrderCustom:
+													attributes.blockeraFlexChildOrderCustom,
+											}}
+											extensionProps={{
+												blockeraFlexChildSizing: {},
+												blockeraFlexChildGrow: {},
+												blockeraFlexChildShrink: {},
+												blockeraFlexChildBasis: {},
+												blockeraFlexChildAlign: {},
+												blockeraFlexChildOrder: {},
+												blockeraFlexChildOrderCustom:
+													{},
+											}}
+											handleOnChangeAttributes={
+												handleOnChangeAttributes
+											}
+											setSettings={handleOnChangeSettings}
+										/>
+									</ErrorBoundary>
+								)}
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'layoutConfig'}
+										title={__('Layout', 'blockera')}
+										icon={<Icon icon="extension-layout" />}
+									/>
+								)}
+							>
+								<LayoutExtension
+									block={block}
+									extensionConfig={layoutConfig}
+									extensionProps={{
+										blockeraDisplay: {},
+										blockeraFlexLayout: {},
+										blockeraGap: {},
+										blockeraFlexWrap: {},
+										blockeraAlignContent: {},
+									}}
+									values={{
+										blockeraDisplay:
+											currentStateAttributes.blockeraDisplay,
+										blockeraFlexLayout:
+											currentStateAttributes.blockeraFlexLayout,
+										blockeraGap:
+											currentStateAttributes.blockeraGap,
+										blockeraFlexWrap:
+											currentStateAttributes.blockeraFlexWrap,
+										blockeraAlignContent:
+											currentStateAttributes.blockeraAlignContent,
+									}}
+									attributes={{
+										blockeraDisplay:
+											attributes.blockeraDisplay,
+										blockeraFlexLayout:
+											attributes.blockeraFlexLayout,
+										blockeraGap: attributes.blockeraGap,
+										blockeraFlexWrap:
+											attributes.blockeraFlexWrap,
+										blockeraAlignContent:
+											attributes.blockeraAlignContent,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'sizeConfig'}
+										title={__('Size', 'blockera')}
+										icon={<Icon icon="extension-size" />}
+									/>
+								)}
+							>
+								<SizeExtension
+									block={block}
+									extensionConfig={sizeConfig}
+									values={{
+										blockeraWidth:
+											currentStateAttributes.blockeraWidth,
+										blockeraMinWidth:
+											currentStateAttributes.blockeraMinWidth,
+										blockeraMaxWidth:
+											currentStateAttributes.blockeraMaxWidth,
+										blockeraHeight:
+											currentStateAttributes.blockeraHeight,
+										blockeraMinHeight:
+											currentStateAttributes.blockeraMinHeight,
+										blockeraMaxHeight:
+											currentStateAttributes.blockeraMaxHeight,
+										blockeraOverflow:
+											currentStateAttributes.blockeraOverflow,
+										blockeraRatio:
+											currentStateAttributes.blockeraRatio,
+										blockeraFit:
+											currentStateAttributes.blockeraFit,
+										blockeraFitPosition:
+											currentStateAttributes.blockeraFitPosition,
+										blockeraBoxSizing:
+											currentStateAttributes.blockeraBoxSizing,
+									}}
+									attributes={{
+										blockeraWidth: attributes.blockeraWidth,
+										blockeraMinWidth:
+											attributes.blockeraMinWidth,
+										blockeraMaxWidth:
+											attributes.blockeraMaxWidth,
+										blockeraHeight:
+											attributes.blockeraHeight,
+										blockeraMinHeight:
+											attributes.blockeraMinHeight,
+										blockeraMaxHeight:
+											attributes.blockeraMaxHeight,
+										blockeraOverflow:
+											attributes.blockeraOverflow,
+										blockeraRatio: attributes.blockeraRatio,
+										blockeraFit: attributes.blockeraFit,
+										blockeraFitPosition:
+											attributes.blockeraFitPosition,
+										blockeraBoxSizing:
+											attributes.blockeraBoxSizing,
+									}}
+									extensionProps={{
+										blockeraWidth: {},
+										blockeraHeight: {},
+										blockeraMinWidth: {},
+										blockeraMinHeight: {},
+										blockeraMaxWidth: {},
+										blockeraMaxHeight: {},
+										blockeraOverflow: {},
+										blockeraRatio: {},
+										blockeraFit: {},
+										blockeraFitPosition: {},
+										blockeraBoxSizing: {},
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'positionConfig'}
+										title={__('Position', 'blockera')}
+										icon={
+											<Icon icon="extension-position" />
+										}
+									/>
+								)}
+							>
+								<PositionExtension
+									block={block}
+									extensionConfig={positionConfig}
+									values={{
+										blockeraPosition:
+											currentStateAttributes.blockeraPosition,
+										blockeraZIndex:
+											currentStateAttributes.blockeraZIndex,
+									}}
+									attributes={{
+										blockeraPosition:
+											attributes.blockeraPosition,
+										blockeraZIndex:
+											attributes.blockeraZIndex,
+									}}
+									extensionProps={{
+										blockeraPosition: {},
+										blockeraZIndex: {},
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										error={error}
+										from={'extension'}
+										configId={'effectsConfig'}
+										title={__('Effects', 'blockera')}
+										icon={<Icon icon="extension-effects" />}
+									/>
+								)}
+							>
+								<EffectsExtension
+									block={block}
+									extensionConfig={effectsConfig}
+									extensionProps={{
+										blockeraOpacity: {},
+										blockeraTransform: {},
+										blockeraTransformSelfPerspective: {},
+										blockeraTransformSelfOrigin: {},
+										blockeraBackfaceVisibility: {},
+										blockeraTransformChildPerspective: {},
+										blockeraTransformChildOrigin: {},
+										blockeraTransition: {},
+										blockeraFilter: {},
+										blockeraBackdropFilter: {},
+										blockeraBlendMode: {},
+										blockeraDivider: {},
+										blockeraMask: {},
+									}}
+									values={{
+										blockeraOpacity:
+											currentStateAttributes.blockeraOpacity,
+										blockeraTransform:
+											currentStateAttributes.blockeraTransform,
+										blockeraBackfaceVisibility:
+											currentStateAttributes.blockeraBackfaceVisibility,
+										blockeraTransformSelfPerspective:
+											currentStateAttributes.blockeraTransformSelfPerspective,
+										blockeraTransformSelfOrigin:
+											currentStateAttributes.blockeraTransformSelfOrigin,
+										blockeraTransformChildOrigin:
+											currentStateAttributes.blockeraTransformChildOrigin,
+										blockeraTransformChildPerspective:
+											currentStateAttributes.blockeraTransformChildPerspective,
+										blockeraTransition:
+											currentStateAttributes.blockeraTransition,
+										blockeraFilter:
+											currentStateAttributes.blockeraFilter,
+										blockeraBackdropFilter:
+											currentStateAttributes.blockeraBackdropFilter,
+										blockeraBlendMode:
+											currentStateAttributes.blockeraBlendMode,
+										blockeraDivider:
+											currentStateAttributes.blockeraDivider,
+										blockeraMask:
+											currentStateAttributes.blockeraMask,
+									}}
+									attributes={{
+										blockeraOpacity:
+											attributes.blockeraOpacity,
+										blockeraTransform:
+											attributes.blockeraTransform,
+										blockeraBackfaceVisibility:
+											attributes.blockeraBackfaceVisibility,
+										blockeraTransformSelfPerspective:
+											attributes.blockeraTransformSelfPerspective,
+										blockeraTransformSelfOrigin:
+											attributes.blockeraTransformSelfOrigin,
+										blockeraTransformChildOrigin:
+											attributes.blockeraTransformChildOrigin,
+										blockeraTransformChildPerspective:
+											attributes.blockeraTransformChildPerspective,
+										blockeraTransition:
+											attributes.blockeraTransition,
+										blockeraFilter:
+											attributes.blockeraFilter,
+										blockeraBackdropFilter:
+											attributes.blockeraBackdropFilter,
+										blockeraBlendMode:
+											attributes.blockeraBlendMode,
+										blockeraDivider:
+											attributes.blockeraDivider,
+										blockeraMask: attributes.blockeraMask,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'customStyleConfig'}
+										title={__('Custom CSS', 'blockera')}
+										icon={
+											<Icon icon="extension-custom-style" />
+										}
+									/>
+								)}
+							>
+								<CustomStyleExtension
+									block={block}
+									extensionConfig={customStyleConfig}
+									extensionProps={{
+										blockeraCustomCSS: {},
+									}}
+									values={{
+										blockeraCustomCSS:
+											currentStateAttributes.blockeraCustomCSS,
+									}}
+									attributes={{
+										blockeraCustomCSS:
+											attributes.blockeraCustomCSS,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
+									}
+									setSettings={handleOnChangeSettings}
+								/>
+							</ErrorBoundary>
+
+							<SlotFillProvider>
+								<Slot name={'blockera-inspector-styles-end'} />
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions-start',
+									}}
+								/>
+							</SlotFillProvider>
+						</Fragment>
+					);
+					break;
+
+				case 'interactions':
+					activePanel.push(
+						<Fragment key={`${props.clientId}-interactions-panel`}>
+							<SlotFillProvider>
+								<Slot
+									name={
+										'blockera-inspector-interactions-start'
+									}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions-start',
+									}}
+								/>
+							</SlotFillProvider>
+							{/* <ErrorBoundary
 								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
@@ -1369,7 +1417,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 								/>
 							</ErrorBoundary> */}
 
-						{/* <ErrorBoundary
+							{/* <ErrorBoundary
 								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
@@ -1403,188 +1451,195 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 								/>
 							</ErrorBoundary> */}
 
-						<SlotFillProvider>
-							<Slot name={'blockera-inspector-interactions'} />
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName: 'blockera-inspector-interactions',
-								}}
-							/>
-						</SlotFillProvider>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-interactions'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions',
+									}}
+								/>
+							</SlotFillProvider>
 
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'clickAnimationConfig'}
-									title={__('On Click', 'blockera')}
-									icon={
-										<Icon icon="extension-click-animation" />
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'clickAnimationConfig'}
+										title={__('On Click', 'blockera')}
+										icon={
+											<Icon icon="extension-click-animation" />
+										}
+									/>
+								)}
+							>
+								<ClickAnimationExtension
+									block={block}
+									extensionConfig={clickAnimationConfig}
+									extensionProps={{}}
+									values={{}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
 									}
 								/>
-							)}
-						>
-							<ClickAnimationExtension
-								block={block}
-								extensionConfig={clickAnimationConfig}
-								extensionProps={{}}
-								values={{}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-							/>
-						</ErrorBoundary>
+							</ErrorBoundary>
 
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
+							<ErrorBoundary
+								fallbackRender={({ error }) => (
+									<ErrorBoundaryFallback
+										isReportingErrorCompleted={
+											isReportingErrorCompleted
+										}
+										clientId={props.clientId}
+										setIsReportingErrorCompleted={
+											setIsReportingErrorCompleted
+										}
+										from={'extension'}
+										error={error}
+										configId={'mouseConfig'}
+										title={__('Mouse', 'blockera')}
+										icon={<Icon icon="extension-mouse" />}
+									/>
+								)}
+							>
+								<MouseExtension
+									block={block}
+									mouseConfig={mouseConfig}
+									extensionProps={{
+										blockeraCursor: {},
+										blockeraUserSelect: {},
+										blockeraPointerEvents: {},
+									}}
+									values={{
+										cursor: currentStateAttributes.blockeraCursor,
+										userSelect:
+											currentStateAttributes.blockeraUserSelect,
+										pointerEvents:
+											currentStateAttributes.blockeraPointerEvents,
+									}}
+									attributes={{
+										blockeraCursor:
+											attributes.blockeraCursor,
+										blockeraUserSelect:
+											attributes.blockeraUserSelect,
+										blockeraPointerEvents:
+											attributes.blockeraPointerEvents,
+									}}
+									handleOnChangeAttributes={
+										handleOnChangeAttributes
 									}
-									clientId={props.clientId}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'mouseConfig'}
-									title={__('Mouse', 'blockera')}
-									icon={<Icon icon="extension-mouse" />}
+									setSettings={handleOnChangeSettings}
 								/>
-							)}
-						>
-							<MouseExtension
-								block={block}
-								mouseConfig={mouseConfig}
-								extensionProps={{
-									blockeraCursor: {},
-									blockeraUserSelect: {},
-									blockeraPointerEvents: {},
-								}}
-								values={{
-									cursor: currentStateAttributes.blockeraCursor,
-									userSelect:
-										currentStateAttributes.blockeraUserSelect,
-									pointerEvents:
-										currentStateAttributes.blockeraPointerEvents,
-								}}
-								attributes={{
-									blockeraCursor: attributes.blockeraCursor,
-									blockeraUserSelect:
-										attributes.blockeraUserSelect,
-									blockeraPointerEvents:
-										attributes.blockeraPointerEvents,
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-						<SlotFillProvider>
-							<Slot
-								name={'blockera-inspector-interactions-end'}
-							/>
-							<ExtensionSlotFill
-								{...{
-									block,
-									settings,
-									attributes,
-									useBlockSection,
-									blockFeatures: additional.blockFeatures,
-									currentStateAttributes,
-									handleOnChangeSettings,
-									handleOnChangeAttributes,
-									slotName:
-										'blockera-inspector-interactions-end',
-								}}
-							/>
-						</SlotFillProvider>
-					</Fragment>
-				);
-				break;
-		}
+							</ErrorBoundary>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-interactions-end'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions-end',
+									}}
+								/>
+							</SlotFillProvider>
+						</Fragment>
+					);
+					break;
+			}
 
-		return activePanel;
-	};
+			return activePanel;
+		};
 
-	const tabs = [
-		...(insideBlockInspector
-			? [
-					{
-						name: 'settings',
-						title: __('General', 'blockera'),
-						tooltip: __('General Block Settings', 'blockera'),
-						className: 'settings-tab',
-						icon: <Icon icon="gear" iconSize="20" />,
-					},
-			  ]
-			: []),
-		{
-			name: 'style',
-			title: __('Styles', 'blockera'),
-			tooltip: __('Block Design & Style Settings', 'blockera'),
-			className: 'style-tab',
-			icon: <Icon library="wp" icon="styles" iconSize="20" />,
-		},
-		{
-			name: 'interactions',
-			title: __('Animations', 'blockera'),
-			tooltip: __('Block Interactions and Animations', 'blockera'),
-			className: 'interactions-tab',
-			icon: <Icon icon="animations" iconSize="20" />,
-		},
-	];
+		const tabs = [
+			...(insideBlockInspector
+				? [
+						{
+							name: 'settings',
+							title: __('General', 'blockera'),
+							tooltip: __('General Block Settings', 'blockera'),
+							className: 'settings-tab',
+							icon: <Icon icon="gear" iconSize="20" />,
+						},
+				  ]
+				: []),
+			{
+				name: 'style',
+				title: __('Styles', 'blockera'),
+				tooltip: __('Block Design & Style Settings', 'blockera'),
+				className: 'style-tab',
+				icon: <Icon library="wp" icon="styles" iconSize="20" />,
+			},
+			{
+				name: 'interactions',
+				title: __('Animations', 'blockera'),
+				tooltip: __('Block Interactions and Animations', 'blockera'),
+				className: 'interactions-tab',
+				icon: <Icon icon="animations" iconSize="20" />,
+			},
+		];
 
-	const displayBlockControls = useDisplayBlockControls();
+		const displayBlockControls = useDisplayBlockControls();
 
-	return (
-		<StateContainer
-			name={props.name}
-			clientId={props.clientId}
-			insideBlockInspector={insideBlockInspector}
-			availableStates={availableStates}
-			blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
-		>
-			{displayBlockControls && insideBlockInspector && (
-				<Tabs
-					design="modern"
-					orientation="horizontal"
-					tabs={tabs}
-					activeTab={currentTab}
-					getPanel={MappedExtensions}
-					setCurrentTab={setCurrentTab}
-					className="block-inspector-tabs"
-				/>
-			)}
-			{!displayBlockControls && !insideBlockInspector && (
-				<Tabs
-					design="modern"
-					orientation="horizontal"
-					tabs={tabs}
-					activeTab={currentTab}
-					getPanel={MappedExtensions}
-					setCurrentTab={setCurrentTab}
-					className="block-inspector-tabs"
-				/>
-			)}
-			{children}
-		</StateContainer>
-	);
-};
+		return (
+			<StateContainer
+				name={props.name}
+				clientId={props.clientId}
+				insideBlockInspector={insideBlockInspector}
+				availableStates={availableStates}
+				blockeraUnsavedData={blockAttributes?.blockeraUnsavedData}
+			>
+				{displayBlockControls && insideBlockInspector && (
+					<Tabs
+						design="modern"
+						orientation="horizontal"
+						tabs={tabs}
+						activeTab={currentTab}
+						getPanel={MappedExtensions}
+						setCurrentTab={setCurrentTab}
+						className="block-inspector-tabs"
+					/>
+				)}
+				{!displayBlockControls && !insideBlockInspector && (
+					<Tabs
+						design="modern"
+						orientation="horizontal"
+						tabs={tabs}
+						activeTab={currentTab}
+						getPanel={MappedExtensions}
+						setCurrentTab={setCurrentTab}
+						className="block-inspector-tabs"
+					/>
+				)}
+				{children}
+			</StateContainer>
+		);
+	}
+	// FIXME: we should double check this to fix re-rendering problems.
+	// propsAreEqual
+);

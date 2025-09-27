@@ -1,7 +1,8 @@
 // @flow
 /**
- * External dependencies
+ * WordPress dependencies
  */
+import { memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
@@ -104,4 +105,4 @@ const RepeaterItemHeader = ({
 };
 
 // $FlowFixMe
-export default RepeaterItemHeader;
+export default memo(RepeaterItemHeader);

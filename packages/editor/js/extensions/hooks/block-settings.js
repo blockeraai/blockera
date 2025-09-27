@@ -10,6 +10,7 @@ import {
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
 import {
+	memo,
 	useMemo,
 	useState,
 	useEffect,
@@ -151,32 +152,34 @@ export default function withBlockSettings(
 	return result;
 }
 
-export const ErrorBoundaryFallback: ComponentType<Object> = ({
-	error,
-	from,
-	setNotice,
-	fallbackComponent,
-	props,
-	clientId,
-	...rest
-}: Object): MixedElement => {
-	useBugReporter({
+export const ErrorBoundaryFallback: ComponentType<Object> = memo(
+	({
 		error,
-		...rest,
-	});
+		from,
+		setNotice,
+		fallbackComponent,
+		props,
+		clientId,
+		...rest
+	}: Object): MixedElement => {
+		useBugReporter({
+			error,
+			...rest,
+		});
 
-	return (
-		<FallbackUI
-			{...rest}
-			from={from}
-			id={clientId}
-			error={error}
-			setNotice={setNotice}
-			fallbackComponentProps={props}
-			fallbackComponent={fallbackComponent}
-		/>
-	);
-};
+		return (
+			<FallbackUI
+				{...rest}
+				from={from}
+				id={clientId}
+				error={error}
+				setNotice={setNotice}
+				fallbackComponentProps={props}
+				fallbackComponent={fallbackComponent}
+			/>
+		);
+	}
+);
 
 /**
  * Merge settings of block type.
