@@ -35,7 +35,7 @@ export {
 	useBlockContext,
 	BlockEditContextProvider,
 } from './hooks';
-export { isInnerBlock } from './components';
+export { isInnerBlock, bootstrapBlockAppSettings } from './components';
 export { store as extensionsStore } from './store';
 
 export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
