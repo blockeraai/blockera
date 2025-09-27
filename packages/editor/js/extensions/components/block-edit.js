@@ -24,6 +24,7 @@ import {
 import { BlockApp, BlockBase, BlockPortals } from './';
 import { sanitizeDefaultAttributes } from '../hooks/utils';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
+import bootstrapScripts from '../scripts';
 
 export const Edit = memo(
 	({
@@ -32,6 +33,9 @@ export const Edit = memo(
 		isAvailableBlock,
 		...props
 	}: Object): MixedElement => {
+		// On rendering the block settings, we can bootstrap all scripts.
+		bootstrapScripts();
+
 		const baseContextValue = useMemo(
 			() => ({
 				components: {

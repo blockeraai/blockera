@@ -70,7 +70,6 @@ import type {
 	TStates,
 } from '../block-card/block-states/types';
 import { useBlockContext } from '../../hooks';
-import bootstrapScripts from '../../scripts';
 import { getNormalizedCacheVersion } from '../../helpers';
 
 type Props = {
@@ -339,12 +338,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
 
 		const [settings, setSettings] = useState(supports);
-
-		// On mounting shared extension component, we can bootstrap scripts.
-		useEffect(() => {
-			bootstrapScripts();
-			// eslint-disable-next-line
-		}, []);
 
 		// Get next settings after switch between blocks.
 		useEffect(() => {
