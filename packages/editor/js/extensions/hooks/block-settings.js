@@ -9,23 +9,14 @@ import {
 } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import {
-	memo,
-	useMemo,
-	useState,
-	useEffect,
-	createElement,
-} from '@wordpress/element';
-import { SlotFillProvider, Slot } from '@wordpress/components';
-import { ErrorBoundary } from 'react-error-boundary';
+import { memo, useEffect, createElement } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
  */
 import { useBugReporter } from '@blockera/telemetry';
-import { BaseControlContext } from '@blockera/controls';
-import { isEmpty, isObject, isFunction, mergeObject } from '@blockera/utils';
+import { isEmpty, isObject, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -35,15 +26,12 @@ import {
 	registerBlockExtensionsSupports,
 	registerInnerBlockExtensionsSupports,
 } from '../libs';
-import {
-	EditorFeatureWrapper,
-	EditorAdvancedLabelControl,
-} from '../../components';
 import { STORE_NAME } from '../store/constants';
 import { useStoreSelectors, useBlockSideEffectsRestore } from '../../hooks';
 import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
-import { BlockApp, BlockBase, BlockIcon, BlockPortals } from '../components';
+import { BlockIcon } from '../components';
+import { Edit } from '../components/block-edit';
 
 const useSharedBlockSideEffect = (): void => {
 	const {
@@ -355,98 +343,6 @@ function mergeBlockSettings(
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
-	const Edit = (props: Object): MixedElement => {
-		const baseContextValue = useMemo(
-			() => ({
-				components: {
-					FeatureWrapper: EditorFeatureWrapper,
-					AdvancedLabelControl: EditorAdvancedLabelControl,
-				},
-			}),
-			[]
-		);
-
-		if (isFunction(additional?.edit) && isAvailableBlock()) {
-			// eslint-disable-next-line
-			const attributes = useMemo(() => {
-				const { content, ...attributes } = props.attributes;
-
-				return attributes;
-			}, [props.attributes]);
-
-			const defaultAttributes = !settings.attributes?.blockeraPropsId
-				? mergeObject(
-						blockeraOverrideBlockAttributes,
-						settings.attributes
-				  )
-				: settings.attributes;
-
-			const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
-				// eslint-disable-next-line react-hooks/rules-of-hooks
-				useState(false);
-
-			return (
-				<ErrorBoundary
-					fallbackRender={({ error }) => (
-						<ErrorBoundaryFallback
-							{...{
-								props,
-								error,
-								from: 'root',
-								clientId: props.clientId,
-								isReportingErrorCompleted,
-								setIsReportingErrorCompleted,
-								fallbackComponent: settings.edit,
-							}}
-						/>
-					)}
-				>
-					<BaseControlContext.Provider value={baseContextValue}>
-						<BlockApp
-							{...{
-								attributes,
-								additional,
-								name: props.name,
-								clientId: props.clientId,
-								className: props?.className,
-								setAttributes: props.setAttributes,
-								originDefaultAttributes: defaultAttributes,
-								defaultAttributes: sanitizeDefaultAttributes(
-									defaultAttributes,
-									{ defaultWithoutValue: true }
-								),
-							}}
-						>
-							<BlockBase>
-								<SlotFillProvider>
-									<Slot name={'blockera-block-before'} />
-
-									<BlockPortals
-										blockId={`#block-${props.clientId}`}
-										mainSlot={'blockera-block-slot'}
-										slots={
-											// slot selectors is feature on configuration block to create custom slots for anywhere.
-											// we can add slotSelectors property on block configuration to handle custom preview of block.
-											additional?.slotSelectors || {}
-										}
-									/>
-
-									<Slot name={'blockera-block-after'} />
-								</SlotFillProvider>
-							</BlockBase>
-						</BlockApp>
-					</BaseControlContext.Provider>
-					{settings.edit(props)}
-				</ErrorBoundary>
-			);
-		}
-
-		// eslint-disable-next-line react-hooks/rules-of-hooks
-		useSharedBlockSideEffect();
-
-		return settings.edit(props);
-	};
-
 	return {
 		...settings,
 		styles: [...(settings?.styles || []), ...(additional?.styles || [])],
@@ -464,7 +360,14 @@ function mergeBlockSettings(
 			...(additional?.transforms || {}),
 		},
 		variations: getVariations(),
-		edit: Edit,
+		edit: (props) => (
+			<Edit
+				{...props}
+				settings={settings}
+				additional={additional}
+				isAvailableBlock={isAvailableBlock}
+			/>
+		),
 		deprecated: !isAvailableBlock()
 			? settings?.deprecated
 			: [
