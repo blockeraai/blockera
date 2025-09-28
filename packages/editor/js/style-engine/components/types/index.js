@@ -26,6 +26,9 @@ export type BlockStyleProps = {
 	defaultAttributes: Object,
 	currentAttributes: Object,
 	activeDeviceType: TStates,
+	isGlobalStylesWrapper?: boolean,
+	styleVariationName?: string,
+	isStyleVariation?: boolean,
 };
 
 export type StateStyleProps = {

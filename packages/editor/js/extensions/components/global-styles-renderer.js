@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
-import { type MixedElement } from 'react';
+import { type MixedElement, type ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 import { memo, useState, useMemo } from '@wordpress/element';
@@ -39,7 +39,9 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 			useState(false);
 		const defaultStyles = useMemo(() => {
-			const processedAttributes = {};
+			const processedAttributes: {
+				[key: string]: { type: string, default: any },
+			} = {};
 
 			// Process each attribute to ensure it has both type and default
 			for (const [key, attr] of Object.entries(defaultAttributes)) {
@@ -78,6 +80,11 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 
 		const { getDeviceType } = select('blockera/editor');
 
+		const currentAttributes = {
+			...prepareBlockeraDefaultAttributesValues(defaultStyles),
+			...blockeraBlockTypeGlobalStyles,
+		};
+
 		const blockStyleProps = {
 			supports,
 			selectors,
@@ -91,10 +98,8 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			defaultAttributes: defaultStyles,
 			clientId: name.replace('/', '-'),
 			activeDeviceType: getDeviceType(),
-			attributes: {
-				...prepareBlockeraDefaultAttributesValues(defaultStyles),
-				...blockeraBlockTypeGlobalStyles,
-			},
+			attributes: currentAttributes,
+			currentAttributes,
 		};
 
 		if (

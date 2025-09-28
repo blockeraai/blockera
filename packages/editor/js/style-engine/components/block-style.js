@@ -35,7 +35,8 @@ export const BlockStyle = ({
 
 	return (
 		<>
-			{/#block*(?:-.*)\n\s+\}/gm.test(customCss) ? (
+			{'undefined' !== typeof customCss &&
+			/#block*(?:-.*)\n\s+\}/gm.test(customCss) ? (
 				''
 			) : (
 				<style id={props.clientId}>{customCss}</style>
