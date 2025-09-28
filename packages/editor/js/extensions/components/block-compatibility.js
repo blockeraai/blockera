@@ -10,7 +10,7 @@ import { applyFilters } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { detailedDiff } from 'deep-object-diff';
-import { isEquals, omitWithPattern } from '@blockera/utils';
+import { isEquals, omitWithPattern, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -99,5 +99,11 @@ export const useBlockCompatibilities = ({
 		}
 
 		return filteredAttributes;
-	}, [attributes, defaultAttributes, isActive, args]);
+	}, [
+		attributes,
+		defaultAttributes,
+		isActive,
+		args,
+		availableAttributes?.blockeraPropsId,
+	]);
 };
