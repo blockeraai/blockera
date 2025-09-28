@@ -1,6 +1,15 @@
 // @flow
 
 /**
+ * External dependencies
+ */
+import type { ComponentType } from 'react';
+
+/**
+ * Internal dependencies
+ */
+
+/**
  * Internal dependencies
  */
 import type {
