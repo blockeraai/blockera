@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { type MixedElement } from 'react';
+import { type MixedElement, type ComponentType } from 'react';
 import { memo, useMemo, useState } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -26,7 +26,7 @@ import { sanitizeDefaultAttributes } from '../hooks/utils';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import bootstrapScripts from '../scripts';
 
-export const Edit = memo(
+export const Edit: ComponentType<any> = memo(
 	({
 		settings,
 		additional,
@@ -82,22 +82,23 @@ export const Edit = memo(
 					)}
 				>
 					<BaseControlContext.Provider value={baseContextValue}>
-						<BlockApp
-							{...{
-								attributes,
-								additional,
-								name: props.name,
-								clientId: props.clientId,
-								className: props?.className,
-								setAttributes: props.setAttributes,
-								originDefaultAttributes: defaultAttributes,
-								defaultAttributes: sanitizeDefaultAttributes(
-									defaultAttributes,
-									{ defaultWithoutValue: true }
-								),
-							}}
-						>
-							<BlockBase>
+						<BlockApp>
+							<BlockBase
+								{...{
+									attributes,
+									additional,
+									name: props.name,
+									clientId: props.clientId,
+									className: props?.className,
+									setAttributes: props.setAttributes,
+									originDefaultAttributes: defaultAttributes,
+									defaultAttributes:
+										sanitizeDefaultAttributes(
+											defaultAttributes,
+											{ defaultWithoutValue: true }
+										),
+								}}
+							>
 								<SlotFillProvider>
 									<Slot name={'blockera-block-before'} />
 

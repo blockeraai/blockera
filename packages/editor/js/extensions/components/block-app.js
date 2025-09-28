@@ -4,7 +4,7 @@
  * External dependencies
  */
 import {
-	memo,
+	useMemo,
 	useContext,
 	useCallback,
 	createContext,
@@ -20,7 +20,6 @@ import { updateItem } from '@blockera/storage';
 /**
  * Internal dependencies
  */
-import { propsAreEqual } from './utils';
 import type {
 	BlockSection,
 	BlockSections,
@@ -32,21 +31,19 @@ import { defaultValue, cacheKeyPrefix } from './initializer';
 
 const BlockAppContext = createContext(defaultValue);
 
-export const BlockAppContextProvider = ({
-	children,
-	...props
-}: Object): MixedElement => {
+export const BlockAppContextProvider = ({ children }: Object): MixedElement => {
 	const { blockAppSettings } = useSelect((select) => ({
 		blockAppSettings: select('blockera/editor').getBlockAppSettings(),
 	}));
+	const memoizedContextValue = useMemo(
+		() => ({
+			settings: blockAppSettings,
+		}),
+		[blockAppSettings]
+	);
 
 	return (
-		<BlockAppContext.Provider
-			value={{
-				props,
-				settings: blockAppSettings,
-			}}
-		>
+		<BlockAppContext.Provider value={memoizedContextValue}>
 			{children}
 		</BlockAppContext.Provider>
 	);
@@ -218,13 +215,8 @@ export const useBlockSections = (): BlockSections => {
 	};
 };
 
-export const BlockApp: ComponentType<any> = memo(
-	({ children, ...props }: BlockBaseProps): MixedElement => {
-		return (
-			<BlockAppContextProvider {...props}>
-				{children}
-			</BlockAppContextProvider>
-		);
-	},
-	propsAreEqual
-);
+export const BlockApp: ComponentType<any> = ({
+	children,
+}: BlockBaseProps): MixedElement => {
+	return <BlockAppContextProvider>{children}</BlockAppContextProvider>;
+};

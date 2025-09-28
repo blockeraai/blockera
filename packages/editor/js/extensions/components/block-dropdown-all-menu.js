@@ -18,19 +18,17 @@ import { classNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { useBlockSections, useBlockAppContext } from './block-app';
+import { useBlockSections } from './block-app';
 
 export const BlockDropdownAllMenu = ({
+	blockId,
 	isActive,
 	setActive,
 }: {
+	blockId: string,
 	isActive: boolean,
 	setActive: (isActive: boolean) => void,
 }): MixedElement => {
-	const {
-		props: { name: blockId },
-	} = useBlockAppContext();
-
 	const {
 		blockSections: { expandAll, collapseAll, focusMode },
 		updateBlockSections,

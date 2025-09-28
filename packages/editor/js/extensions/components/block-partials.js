@@ -16,6 +16,7 @@ import { prependPortal } from '@blockera/utils';
 import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
 
 const Component = ({
+	blockId,
 	clientId,
 	isActive,
 	setActive,
@@ -45,6 +46,7 @@ const Component = ({
 			<div className={'blockera-dropdown-menu'}>
 				<BlockDropdownAllMenu
 					{...{
+						blockId,
 						isActive,
 						setActive,
 					}}
@@ -54,70 +56,76 @@ const Component = ({
 	</>
 );
 
-export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
-	const stickyWrapperRef = useRef(null);
-	const sentinelRef = useRef(null);
+export const BlockPartials = memo(
+	({ blockId, clientId, isActive, setActive }) => {
+		const stickyWrapperRef = useRef(null);
+		const sentinelRef = useRef(null);
 
-	// implementing block card sticky behavior
-	useEffect(() => {
-		const stickyWrapper = stickyWrapperRef.current;
-		const sentinel = sentinelRef.current;
+		// implementing block card sticky behavior
+		useEffect(() => {
+			const stickyWrapper = stickyWrapperRef.current;
+			const sentinel = sentinelRef.current;
 
-		if (!stickyWrapper || !sentinel) return;
+			if (!stickyWrapper || !sentinel) return;
 
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				// Add `is-stuck-monitoring` to prevent `is-stuck` atr first time
-				if (stickyWrapper.classList.contains('is-stuck-monitoring')) {
-					// Add `is-stuck` only when the sentinel is out of view (element has become sticky)
-					if (!entry.isIntersecting) {
-						stickyWrapper.classList.add('is-stuck');
+			const observer = new IntersectionObserver(
+				([entry]) => {
+					// Add `is-stuck-monitoring` to prevent `is-stuck` atr first time
+					if (
+						stickyWrapper.classList.contains('is-stuck-monitoring')
+					) {
+						// Add `is-stuck` only when the sentinel is out of view (element has become sticky)
+						if (!entry.isIntersecting) {
+							stickyWrapper.classList.add('is-stuck');
+						} else {
+							stickyWrapper.classList.remove('is-stuck');
+						}
 					} else {
-						stickyWrapper.classList.remove('is-stuck');
+						stickyWrapper.classList.add('is-stuck-monitoring');
 					}
-				} else {
-					stickyWrapper.classList.add('is-stuck-monitoring');
+				},
+				{
+					root: null, // relative to the viewport
+					threshold: 0, // trigger when sentinel is fully out of view
 				}
-			},
-			{
-				root: null, // relative to the viewport
-				threshold: 0, // trigger when sentinel is fully out of view
-			}
-		);
+			);
 
-		observer.observe(sentinel);
+			observer.observe(sentinel);
 
-		return () => observer.disconnect();
-	}, []);
+			return () => observer.disconnect();
+		}, []);
 
-	const { getActiveComplementaryArea } = select('core/interface');
+		const { getActiveComplementaryArea } = select('core/interface');
 
-	const activeComplementaryArea =
-		getActiveComplementaryArea('core/edit-site');
+		const activeComplementaryArea =
+			getActiveComplementaryArea('core/edit-site');
 
-	if ('edit-site/global-styles' === activeComplementaryArea) {
-		return (
+		if ('edit-site/global-styles' === activeComplementaryArea) {
+			return (
+				<Component
+					blockId={blockId}
+					isActive={isActive}
+					setActive={setActive}
+					clientId={clientId}
+					sentinelRef={sentinelRef}
+					stickyWrapperRef={stickyWrapperRef}
+				/>
+			);
+		}
+
+		return prependPortal(
 			<Component
+				blockId={blockId}
 				isActive={isActive}
 				setActive={setActive}
 				clientId={clientId}
 				sentinelRef={sentinelRef}
 				stickyWrapperRef={stickyWrapperRef}
-			/>
+			/>,
+			document.querySelector('.block-editor-block-inspector'),
+			{
+				className: isActive ? 'blockera-active-block' : '',
+			}
 		);
 	}
-
-	return prependPortal(
-		<Component
-			isActive={isActive}
-			setActive={setActive}
-			clientId={clientId}
-			sentinelRef={sentinelRef}
-			stickyWrapperRef={stickyWrapperRef}
-		/>,
-		document.querySelector('.block-editor-block-inspector'),
-		{
-			className: isActive ? 'blockera-active-block' : '',
-		}
-	);
-});
+);
