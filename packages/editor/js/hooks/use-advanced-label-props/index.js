@@ -24,7 +24,7 @@ import {
 	isInnerBlock,
 	isNormalState as _isNormalState,
 } from '../../extensions/components/utils';
-import { useBlockContext } from '../../extensions/hooks/context';
+import { useBlockContext } from '../../extensions/components/block-context';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 import type {
 	CalculatedAdvancedLabelProps,

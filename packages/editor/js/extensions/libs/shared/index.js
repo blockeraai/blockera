@@ -54,7 +54,7 @@ import {
 	// FIXME: we are double check this to fix re-rendering problems.
 	// propsAreEqual
 } from '../../components/utils';
-import { useBlockSection } from '../../components';
+import { useBlockSection, useBlockContext } from '../../components';
 import StateContainer from '../../components/state-container';
 import { STORE_NAME } from '../base/store/constants';
 import type {
@@ -69,7 +69,6 @@ import type {
 	TBreakpoint,
 	TStates,
 } from '../block-card/block-states/types';
-import { useBlockContext } from '../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 
 type Props = {
@@ -341,6 +340,9 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 		// Get next settings after switch between blocks.
 		useEffect(() => {
+			if (!isInnerBlock(currentBlock)) {
+				return;
+			}
 			doAction(
 				'blockera.editor.extensions.sharedExtension.blockSupports.cacheData',
 				cacheKey,

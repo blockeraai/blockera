@@ -9,3 +9,8 @@ export * from './block-portals';
 export * from './block-partials';
 export * from './state-container';
 export * from './block-fill-partials';
+export {
+	useBlockContext,
+	BlockEditContext,
+	BlockEditContextProvider,
+} from './block-context';

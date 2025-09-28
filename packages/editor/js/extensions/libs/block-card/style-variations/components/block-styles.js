@@ -32,7 +32,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { StyleItem } from './style-item';
-import { useBlockContext } from '../../../../hooks';
+import { useBlockContext } from '../../../../components';
 import { AddNewStyleButton } from './add-new-style-button';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';

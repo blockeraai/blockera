@@ -10,7 +10,7 @@ import { createContext, useContext, useMemo } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../components/utils';
+import { isInnerBlock } from './utils';
 import type { THandleOnChangeAttributes } from '../libs/types';
 import type {
 	TStates,

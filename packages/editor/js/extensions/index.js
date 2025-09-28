@@ -28,14 +28,14 @@ import {
 // Exports
 export * from './api';
 export * from './libs';
+export { default as applyHooks, withBlockSettings } from './hooks';
 export {
-	default as applyHooks,
-	withBlockSettings,
+	isInnerBlock,
 	BlockEditContext,
 	useBlockContext,
 	BlockEditContextProvider,
-} from './hooks';
-export { isInnerBlock, bootstrapBlockAppSettings } from './components';
+	bootstrapBlockAppSettings,
+} from './components';
 export { store as extensionsStore } from './store';
 
 export const defineGlobalProps = (outsideDefinitions?: () => void): void => {

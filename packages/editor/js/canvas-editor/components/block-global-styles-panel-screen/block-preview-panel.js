@@ -12,7 +12,7 @@ import { __experimentalSpacer as Spacer } from '@wordpress/components';
  * Internal dependencies
  */
 import { getVariationClassName } from './utils';
-import { useBlockContext } from '../../../extensions/hooks/context';
+import { useBlockContext } from '../../../extensions/components/block-context';
 import { useBlockPreviewStyles } from '../../../hooks/use-block-preview-styles';
 
 const BlockPreviewPanel = ({ name, variation = '' }) => {

@@ -23,11 +23,10 @@ import { Icon } from '@blockera/icons';
  */
 import { isShowField } from '../../api/utils';
 import { generateExtensionId } from '../utils';
-import { useBlockContext } from '../../hooks';
 import { EditorFeatureWrapper } from '../../../';
-import { useBlockSection } from '../../components';
 import { getBaseBreakpoint } from '../../../canvas-editor';
 import type { CustomStyleExtensionProps } from './types/props';
+import { useBlockContext, useBlockSection } from '../../components';
 
 export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> =
 	memo(

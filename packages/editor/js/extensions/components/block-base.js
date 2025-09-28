@@ -28,7 +28,7 @@ import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-bloc
  * Internal dependencies
  */
 import { BlockStyle, StylesWrapper } from '../../style-engine';
-import { BlockEditContextProvider } from '../hooks';
+import { BlockEditContextProvider } from './';
 import {
 	// useIconEffect,
 	useAttributes,
