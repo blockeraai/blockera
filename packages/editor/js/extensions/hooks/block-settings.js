@@ -33,7 +33,7 @@ import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 import { BlockIcon } from '../components';
 import { Edit } from '../components/block-edit';
 
-const useSharedBlockSideEffect = (): void => {
+export const useSharedBlockSideEffect = (): void => {
 	const {
 		blockEditor: { getSelectedBlock },
 	} = useStoreSelectors();
@@ -82,7 +82,7 @@ type extraArguments = {
 	allowedPostTypes: Array<string>,
 };
 
-const registeredBlockTypes = new Map();
+const registeredBlockTypes = new Map<string, Object>();
 
 /**
  * Filters registered WordPress block type settings, extending block settings with settings and block name.
@@ -130,7 +130,7 @@ export default function withBlockSettings(
 
 	result = {
 		...settings,
-		edit: (props) => (
+		edit: (props: Object): MixedElement => (
 			<EdiBlockWithoutExtensions {...{ ...props, settings }} />
 		),
 	};
@@ -366,6 +366,9 @@ function mergeBlockSettings(
 				settings={settings}
 				additional={additional}
 				isAvailableBlock={isAvailableBlock}
+				blockeraOverrideBlockAttributes={
+					blockeraOverrideBlockAttributes
+				}
 			/>
 		),
 		deprecated: !isAvailableBlock()

@@ -21,16 +21,20 @@ import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../components';
+import bootstrapScripts from '../scripts';
 import { BlockApp, BlockBase, BlockPortals } from './';
 import { sanitizeDefaultAttributes } from '../hooks/utils';
-import { ErrorBoundaryFallback } from '../hooks/block-settings';
-import bootstrapScripts from '../scripts';
+import {
+	ErrorBoundaryFallback,
+	useSharedBlockSideEffect,
+} from '../hooks/block-settings';
 
 export const Edit: ComponentType<any> = memo(
 	({
 		settings,
 		additional,
 		isAvailableBlock,
+		blockeraOverrideBlockAttributes,
 		...props
 	}: Object): MixedElement => {
 		// On rendering the block settings, we can bootstrap all scripts.
