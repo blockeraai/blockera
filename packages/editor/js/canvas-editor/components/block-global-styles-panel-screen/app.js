@@ -315,21 +315,21 @@ export default function App(props: Object): MixedElement {
 				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
 			>
 				<BaseControlContext.Provider value={baseContextValue}>
-					<BlockApp
-						{...{
-							name,
-							clientId: name.replace('/', '-'),
-							setAttributes: handleOnChangeStyles,
-							defaultAttributes: defaultStyles,
-							additional: blockExtension,
-							insideBlockInspector: false,
-							className: props?.className,
-							attributes: styles,
-							originDefaultAttributes,
-						}}
-					>
+					<BlockApp>
 						<div className="blockera-block-global-panel" />
-						<BlockBase>
+						<BlockBase
+							{...{
+								name,
+								clientId: name.replace('/', '-'),
+								setAttributes: handleOnChangeStyles,
+								defaultAttributes: defaultStyles,
+								additional: blockExtension,
+								insideBlockInspector: false,
+								className: props?.className,
+								attributes: styles,
+								originDefaultAttributes,
+							}}
+						>
 							<SlotFillProvider>
 								<Slot name={'blockera-block-before'} />
 
