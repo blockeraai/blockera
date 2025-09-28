@@ -24,7 +24,7 @@ export const StylesWrapper = ({
 }: {
 	clientId: string,
 	children: MixedElement,
-	isGlobalStylesWrapper: boolean,
+	isGlobalStylesWrapper?: boolean,
 }): Object => {
 	const slotName = isGlobalStylesWrapper
 		? 'blockera-global-styles-wrapper'

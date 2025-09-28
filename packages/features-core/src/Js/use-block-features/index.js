@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import type { ComponentType } from 'react';
 import { select, useSelect } from '@wordpress/data';
 import { useEffect, useMemo } from '@wordpress/element';
 import { BlockControls } from '@wordpress/block-editor';
@@ -63,7 +64,7 @@ export const useBlockFeatures = (
 		contextualToolbarFeatures,
 		mappedFeatureUIComponents,
 	}: TCalculatedFeatures = useMemo((): TCalculatedFeatures => {
-		const mappedFeatureUIComponents: Array<ComponentType> = [];
+		const mappedFeatureUIComponents: Array<ComponentType<any>> = [];
 		const blockSideEffectFeatures: Array<TFeature> = [];
 		const contextualToolbarFeatures: Array<TFeature> = [];
 
