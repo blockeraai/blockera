@@ -5,7 +5,7 @@
  */
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
-import { memo, useEffect, Fragment } from '@wordpress/element';
+import { useEffect, Fragment } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -104,64 +104,59 @@ export const registration = ({
 	};
 	const blockeraPropsId = Math.random().toString(36).substring(2, 15);
 
-	const GlobalBlockStyleVariationStylesRenderer = memo(
-		({
-			blockType,
-			variationName,
-			variationGlobalStyles,
-		}: {
-			blockType: Object,
-			variationName: string,
-			variationGlobalStyles: Object,
-		}) => {
-			const memoizedGlobalStyles = omitWithPattern(
-				variationGlobalStyles || {},
-				/^(?!blockera).*/i
-			);
-			const blockeraBlockTypeGlobalStyles = sanitizeBlockAttributes({
-				...memoizedGlobalStyles,
-				blockeraBlockStates: mergeObject(
-					defaultBlockStates,
-					memoizedGlobalStyles?.blockeraBlockStates?.value || {}
-				),
-				blockeraPropsId,
-			});
+	const GlobalBlockStyleVariationStylesRenderer = ({
+		blockType,
+		variationName,
+		variationGlobalStyles,
+	}: {
+		blockType: Object,
+		variationName: string,
+		variationGlobalStyles: Object,
+	}) => {
+		const memoizedGlobalStyles = omitWithPattern(
+			variationGlobalStyles || {},
+			/^(?!blockera).*/i
+		);
+		const blockeraBlockTypeGlobalStyles = sanitizeBlockAttributes({
+			...memoizedGlobalStyles,
+			blockeraBlockStates: mergeObject(
+				defaultBlockStates,
+				memoizedGlobalStyles?.blockeraBlockStates?.value || {}
+			),
+			blockeraPropsId,
+		});
 
-			if (
-				(!blockeraBlockTypeGlobalStyles ||
-					!Object.keys(blockeraBlockTypeGlobalStyles).length) &&
-				!Object.keys(variationGlobalStyles).length
-			) {
-				return null;
-			}
-
-			if (
-				isEquals(
-					Object.keys(blockeraBlockTypeGlobalStyles),
-					staticKeys
-				) &&
-				isEquals(
-					defaultBlockStates,
-					blockeraBlockTypeGlobalStyles.blockeraBlockStates
-				)
-			) {
-				return null;
-			}
-
-			return (
-				<GlobalStylesRenderer
-					{...{
-						...blockType,
-						isStyleVariation: true,
-						blockeraBlockTypeGlobalStyles,
-						styleVariationName: variationName,
-					}}
-				/>
-			);
+		if (
+			(!blockeraBlockTypeGlobalStyles ||
+				!Object.keys(blockeraBlockTypeGlobalStyles).length) &&
+			!Object.keys(variationGlobalStyles).length
+		) {
+			return null;
 		}
-	);
 
-	const GlobalBlockStylesRenderer = memo((blockType: Object) => {
+		if (
+			isEquals(Object.keys(blockeraBlockTypeGlobalStyles), staticKeys) &&
+			isEquals(
+				defaultBlockStates,
+				blockeraBlockTypeGlobalStyles.blockeraBlockStates
+			)
+		) {
+			return null;
+		}
+
+		return (
+			<GlobalStylesRenderer
+				{...{
+					...blockType,
+					isStyleVariation: true,
+					blockeraBlockTypeGlobalStyles,
+					styleVariationName: variationName,
+				}}
+			/>
+		);
+	};
+
+	const GlobalBlockStylesRenderer = (blockType: Object) => {
 		const { name } = blockType;
 		const blockTypeGlobalStyles = useGlobalStylesContext({
 			single: true,
@@ -222,7 +217,7 @@ export const registration = ({
 				)}
 			</>
 		);
-	});
+	};
 
 	const GlobalStylesComponent = () => {
 		return blockTypes.map(

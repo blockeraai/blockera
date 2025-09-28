@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
-import { memo, useState, useReducer } from '@wordpress/element';
+import { useState, useReducer } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,14 +16,8 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
-import {
-	isString,
-	isEmpty,
-	isUndefined,
-	hasSameProps,
-	useLateEffect,
-} from '@blockera/utils';
 import { Icon } from '@blockera/icons';
+import { isString, isEmpty, isUndefined, useLateEffect } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -382,4 +376,4 @@ function IconControl({
 }
 
 // $FlowFixMe
-export default memo(IconControl, hasSameProps);
+export default IconControl;
