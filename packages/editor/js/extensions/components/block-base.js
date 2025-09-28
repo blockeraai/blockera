@@ -21,14 +21,8 @@ import {
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
+import { cloneObject, mergeObject } from '@blockera/utils';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
-import {
-	omit,
-	isEquals,
-	cloneObject,
-	mergeObject,
-	omitWithPattern,
-} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -49,10 +43,9 @@ import { useBlockAppContext } from './block-app';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
-import { BlockCompatibility } from './block-compatibility';
+import { useBlockCompatibilities } from './block-compatibility';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
-import { ignoreBlockeraAttributeKeysRegExp } from '../libs/utils';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
 import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
@@ -78,25 +71,12 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		name,
 		clientId,
 		attributes: blockAttributes,
-		setAttributes: _setAttributes,
+		setAttributes,
 		defaultAttributes,
 		originDefaultAttributes,
 		insideBlockInspector = true,
 		...props
 	} = _props;
-	const { className } = blockAttributes;
-
-	const _attributes = useMemo(
-		() => sanitizeBlockAttributes(cloneObject(blockAttributes)),
-		[blockAttributes]
-	);
-
-	const [attributes, updateAttributes] = useState(blockAttributes);
-
-	const sanitizedAttributes = useMemo(
-		() => sanitizeBlockAttributes(cloneObject(attributes)),
-		[attributes]
-	);
 
 	const [notice, setNotice] = useState(null);
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
@@ -104,47 +84,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 	const [currentTab, setCurrentTab] = useState(
 		additional?.activeTab || 'style'
 	);
-	const [isCompatibleWithWP, setWPCompatibility] = useState(false);
-
-	/**
-	 * Sets attributes and wp compatibility states.
-	 *
-	 * @param {Object} newAttributes the next attributes state.
-	 */
-	const setAttributes = (newAttributes: Object): void => {
-		setWPCompatibility(false);
-		updateAttributes(newAttributes);
-	};
-
-	/**
-	 * Sets native attributes and wp compatibility and block original states.
-	 *
-	 * @param {Object} newAttributes the next attributes state.
-	 */
-	const setCompatibilities = (newAttributes: Object): void => {
-		setWPCompatibility(true);
-		_setAttributes(newAttributes);
-		updateAttributes(newAttributes);
-	};
-
-	/**
-	 * Updating block original attributes state while changed native attributes state.
-	 */
-	useEffect(() => {
-		if (!isEquals(attributes, blockAttributes) && !isCompatibleWithWP) {
-			_setAttributes(attributes);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [attributes]);
-	/**
-	 * Updating block native attributes state while changed block original attributes state.
-	 */
-	useEffect(() => {
-		if (!isEquals(attributes, blockAttributes)) {
-			setAttributes(blockAttributes);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockAttributes]);
 
 	const {
 		currentBlock,
@@ -203,18 +142,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 
 	const { getDeviceType } = select('blockera/editor');
 
-	const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
-		additional,
-		currentBlock,
-		currentState,
-		currentBreakpoint,
-		defaultAttributes,
-		currentInnerBlockState,
-		attributes: sanitizedAttributes,
-	});
-
-	const { edit: BlockEditComponent } = additional;
-
 	const masterIsNormalState = (): boolean =>
 		'normal' === currentState && isBaseBreakpoint(getDeviceType());
 
@@ -227,14 +154,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		}
 
 		return masterIsNormalState();
-	};
-
-	const getAttributes = (key: string = ''): any => {
-		if (key && sanitizedAttributes[key]) {
-			return sanitizedAttributes[key];
-		}
-
-		return sanitizedAttributes;
 	};
 
 	const args = {
@@ -256,30 +175,62 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		innerBlocks: additional?.blockeraInnerBlocks,
 	};
 
-	const { getAttributesWithIds, handleOnChangeAttributes } = useAttributes(
-		setAttributes,
-		{
-			clientId,
-			className,
-			blockId: name,
-			isNormalState,
-			...(insideBlockInspector
-				? { getAttributes }
-				: { getAttributes: () => attributes }),
-			currentBlock,
-			currentState,
-			blockVariations,
-			defaultAttributes,
-			currentBreakpoint,
-			availableAttributes,
-			masterIsNormalState,
-			blockeraInnerBlocks,
-			activeBlockVariation,
-			currentInnerBlockState,
-			getActiveBlockVariation,
-			innerBlocks: additional?.blockeraInnerBlocks,
-		}
+	const attributes = useBlockCompatibilities({
+		args,
+		isActive,
+		availableAttributes,
+		attributes: blockAttributes,
+		defaultAttributes: originDefaultAttributes,
+	});
+
+	const { className } = attributes;
+
+	const sanitizedAttributes = useMemo(
+		() => sanitizeBlockAttributes(cloneObject(attributes)),
+		[attributes]
 	);
+
+	const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
+		additional,
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		defaultAttributes,
+		currentInnerBlockState,
+		attributes: sanitizedAttributes,
+	});
+
+	const { edit: BlockEditComponent } = additional;
+
+	const getAttributes = (key: string = ''): any => {
+		if (key && sanitizedAttributes[key]) {
+			return sanitizedAttributes[key];
+		}
+
+		return sanitizedAttributes;
+	};
+
+	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+		clientId,
+		className,
+		blockId: name,
+		isNormalState,
+		...(insideBlockInspector
+			? { getAttributes }
+			: { getAttributes: () => attributes }),
+		currentBlock,
+		currentState,
+		blockVariations,
+		defaultAttributes,
+		currentBreakpoint,
+		availableAttributes,
+		masterIsNormalState,
+		blockeraInnerBlocks,
+		activeBlockVariation,
+		currentInnerBlockState,
+		getActiveBlockVariation,
+		innerBlocks: additional?.blockeraInnerBlocks,
+	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = (
 		key: string,
@@ -325,13 +276,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 		});
 
 	const inlineStyles = useCleanupStyles({ clientId }, [name, attributes]);
-
-	const originalAttributes = useMemo(() => {
-		return omitWithPattern(
-			omit(_attributes, ['content']),
-			ignoreBlockeraAttributeKeysRegExp()
-		);
-	}, [_attributes]);
 
 	const availableStates =
 		additional?.availableBlockStates || generalBlockStates;
@@ -413,18 +357,6 @@ export const BlockBase: ComponentType<any> = memo((): Element<any> | null => {
 			{/*<StrictMode>*/}
 			{insideBlockInspector && (
 				<InspectorControls>
-					<BlockCompatibility
-						{...{
-							args,
-							isActive,
-							setCompatibilities,
-							originalAttributes,
-							availableAttributes,
-							getAttributesWithIds,
-							attributes: blockAttributes,
-							defaultAttributes: originDefaultAttributes,
-						}}
-					/>
 					<SideEffect
 						{...{
 							activeBlockVariation:
