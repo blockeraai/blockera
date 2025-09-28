@@ -7,7 +7,7 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import type { TBlockFeatures } from '@blockera/features/src/Js/types';
+import type { TBlockFeatures } from '@blockera/features-core/src/Js/types';
 import type { StateTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
 
@@ -22,5 +22,6 @@ export type BlockType = {
 	},
 	registerExtensions?: (blockName: string) => void,
 	supports?: Object,
+	selectors?: Object,
 	blockFeatures?: TBlockFeatures,
 };

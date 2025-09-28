@@ -13,7 +13,7 @@ import { mergeObjects } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Spacer: BlockType = {
 	name: 'blockeraSpacer',
