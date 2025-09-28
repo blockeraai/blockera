@@ -69,7 +69,7 @@ export const bootstrap = (): void => {
 		): Object => {
 			const { blockId } = blockDetail;
 
-			if (isInvalidCompatibilityRun(blockDetail, ref)) {
+			if (isInvalidCompatibilityRun(blockDetail)) {
 				return nextState;
 			}
 

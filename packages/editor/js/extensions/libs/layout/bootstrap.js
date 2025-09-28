@@ -130,7 +130,7 @@ export const bootstrap = (): void => {
 			const { blockId, blockAttributes, activeBlockVariation } =
 				blockDetail;
 
-			if (isInvalidCompatibilityRun(blockDetail, ref)) {
+			if (isInvalidCompatibilityRun(blockDetail)) {
 				return nextState;
 			}
 
