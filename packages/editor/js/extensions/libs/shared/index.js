@@ -21,58 +21,20 @@ import { Icon } from '@blockera/icons';
 import { Tabs } from '@blockera/controls';
 import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
-// import { useTraceUpdate } from '@blockera/editor';
-
-const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 /**
  * Internal dependencies
  */
-import {
-	isInnerBlock,
-	// FIXME: we are double check this to fix re-rendering problems.
-	// propsAreEqual
-} from '../../components/utils';
-import StateContainer from '../../components/state-container';
+import type { Props } from './types';
 import { STORE_NAME } from '../base/store/constants';
-import type {
-	InnerBlocks,
-	InnerBlockType,
-} from '../block-card/inner-blocks/types';
-import type { THandleOnChangeAttributes } from '../types';
 import { resetExtensionSettings } from '../../utils';
-import { useDisplayBlockControls } from '../../../hooks';
-import type {
-	StateTypes,
-	TBreakpoint,
-	TStates,
-} from '../block-card/block-states/types';
-import { getNormalizedCacheVersion } from '../../helpers';
+import { isInnerBlock } from '../../components/utils';
 import { MappedExtensions } from './mapped-extensions';
+import { useDisplayBlockControls } from '../../../hooks';
+import { getNormalizedCacheVersion } from '../../helpers';
+import StateContainer from '../../components/state-container';
 
-type Props = {
-	name: string,
-	clientId: string,
-	supports: Object,
-	additional: Object,
-	attributes: Object,
-	currentAttributes: Object,
-	defaultAttributes: Object,
-	controllerProps: {
-		currentTab: string,
-		currentState: TStates,
-		blockeraInnerBlocks: Object,
-		currentBreakpoint: TBreakpoint,
-		currentInnerBlockState: TStates,
-		currentBlock: 'master' | InnerBlockType,
-		handleOnChangeAttributes: THandleOnChangeAttributes,
-	},
-	children?: ComponentType<any>,
-	currentStateAttributes: Object,
-	blockeraInnerBlocks: InnerBlocks,
-	setAttributes: (attributes: Object) => void,
-	availableStates: { [key: TStates | string]: StateTypes },
-};
+const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 // Function to remove 'label' property from each extension's config item
 // Memoized cache for extensionsWithoutLabel results
@@ -223,13 +185,13 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			cloneObject(extensions)
 		);
 		const cacheData = useMemo(() => {
-			const localCache = getItem(cacheKey) || {};
+			let localCache = getItem(cacheKey) || {};
 
 			if (!localCache) {
-				cache = freshItem(cacheKey, cacheKeyPrefix);
+				localCache = freshItem(cacheKey, cacheKeyPrefix);
 			}
 
-			let { [props.name]: cache = {} } = localCache;
+			let { [props.name]: cache = {} } = localCache || {};
 
 			// If cache data doesn't equal extensions, update cache
 			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
