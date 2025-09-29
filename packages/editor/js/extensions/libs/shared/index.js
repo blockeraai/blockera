@@ -27,7 +27,6 @@ import { MappedExtensions } from './mapped-extensions';
 import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
-import { useTraceUpdate } from '../../../hooks/use-trace-update';
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 const omitDeep = (obj: Object, props: Array<string>): Object => {
@@ -147,24 +146,6 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	handleOnChangeAttributes,
 	...props
 }: Props): MixedElement => {
-	useTraceUpdate({
-		children,
-		additional,
-		setCurrentTab,
-		insideBlockInspector,
-		attributes: blockAttributes,
-		defaultAttributes: attributes,
-		setAttributes,
-		availableStates,
-		currentStateAttributes,
-		currentAttributes: currentBlockAttributes,
-		currentTab,
-		currentBlock,
-		currentState,
-		currentBreakpoint,
-		currentInnerBlockState,
-		handleOnChangeAttributes,
-	});
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	useEffect(() => {
