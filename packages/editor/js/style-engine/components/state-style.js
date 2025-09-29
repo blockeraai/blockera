@@ -94,7 +94,7 @@ export const StateStyle = (
 	}
 
 	const devicesCssStyles: { [key: TBreakpoint]: Array<MixedElement> } = {};
-	const sortedBreakpoints = sortBreakpoints(breakpoints);
+	const sortedBreakpoints: Object = sortBreakpoints(breakpoints);
 
 	for (const name in sortedBreakpoints) {
 		const breakpoint = sortedBreakpoints[name];
@@ -167,13 +167,13 @@ const sortBreakpoints = (breakpointsObj: {
 	[key: string]: TBreakpoint,
 }): Array<TBreakpoint> => {
 	// Helper function to parse a pixel value string (e.g., "1920px") into an integer.
-	const parsePx = (value) => parseInt(value, 10) || 0;
+	const parsePx = (value: string): number => parseInt(value, 10) || 0;
 
 	// Convert the breakpoints object into an array of its values to make it sortable.
 	const breakpointsArray = Object.values(breakpointsObj);
 
 	// Sort the array using a custom comparison function.
-	breakpointsArray.sort((a, b) => {
+	breakpointsArray.sort((a: Object, b: Object) => {
 		const aIsMin = !!a.settings?.min;
 		const bIsMin = !!b.settings?.min;
 		const aIsBase = !a.settings?.min && !a.settings?.max;
