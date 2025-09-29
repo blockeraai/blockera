@@ -40,7 +40,6 @@ import { useBlockSection } from '../../components';
 
 export const MappedExtensions = ({
 	tab,
-	props,
 	block,
 	settings,
 	attributes,
@@ -56,7 +55,6 @@ export const MappedExtensions = ({
 	setIsReportingErrorCompleted,
 }: {
 	tab: TTabProps,
-	props: Object,
 	block: Object,
 	settings: Object,
 	attributes: Object,
@@ -71,7 +69,7 @@ export const MappedExtensions = ({
 	isReportingErrorCompleted: boolean,
 	setIsReportingErrorCompleted: Function,
 }): Array<MixedElement> => {
-	const activePanel = [];
+	const activePanel: Array<MixedElement> = [];
 	const {
 		mouseConfig,
 		sizeConfig,
@@ -95,7 +93,7 @@ export const MappedExtensions = ({
 	switch (tab.name) {
 		case 'settings':
 			activePanel.push(
-				<Fragment key={`${props.clientId}-settings-panel`}>
+				<Fragment key={`${block.clientId}-settings-panel`}>
 					<SlotFillProvider>
 						<Slot name={'blockera-inspector-settings-start'} />
 						<ExtensionSlotFill
@@ -117,7 +115,7 @@ export const MappedExtensions = ({
 								fallbackRender={({ error }): MixedElement => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={props.clientId}
+													clientId={block.clientId}
 													setIsReportingErrorCompleted={
 														setIsReportingErrorCompleted
 													}
@@ -166,7 +164,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -220,7 +218,7 @@ export const MappedExtensions = ({
 
 		case 'style':
 			activePanel.push(
-				<Fragment key={`${props.clientId}-style-panel`}>
+				<Fragment key={`${block.clientId}-style-panel`}>
 					<SlotFillProvider>
 						<Slot name={'blockera-inspector-styles-start'} />
 						<ExtensionSlotFill
@@ -243,7 +241,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -281,7 +279,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -315,7 +313,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -439,7 +437,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -486,7 +484,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -630,7 +628,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -683,7 +681,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -759,7 +757,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -799,7 +797,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -890,7 +888,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -943,7 +941,7 @@ export const MappedExtensions = ({
 
 		case 'interactions':
 			activePanel.push(
-				<Fragment key={`${props.clientId}-interactions-panel`}>
+				<Fragment key={`${block.clientId}-interactions-panel`}>
 					<SlotFillProvider>
 						<Slot name={'blockera-inspector-interactions-start'} />
 						<ExtensionSlotFill
@@ -965,7 +963,7 @@ export const MappedExtensions = ({
 								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={props.clientId}
+													clientId={block.clientId}
 													setIsReportingErrorCompleted={
 														setIsReportingErrorCompleted
 													}
@@ -999,7 +997,7 @@ export const MappedExtensions = ({
 								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
 													isReportingErrorCompleted={isReportingErrorCompleted}
-													clientId={props.clientId}
+													clientId={block.clientId}
 													setIsReportingErrorCompleted={
 														setIsReportingErrorCompleted
 													}
@@ -1052,7 +1050,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}
@@ -1079,7 +1077,7 @@ export const MappedExtensions = ({
 								isReportingErrorCompleted={
 									isReportingErrorCompleted
 								}
-								clientId={props.clientId}
+								clientId={block.clientId}
 								setIsReportingErrorCompleted={
 									setIsReportingErrorCompleted
 								}

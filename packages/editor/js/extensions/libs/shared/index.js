@@ -27,8 +27,24 @@ import { MappedExtensions } from './mapped-extensions';
 import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
-
+import { useTraceUpdate } from '../../../hooks/use-trace-update';
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
+
+const omitDeep = (obj: Object, props: Array<string>): Object => {
+	if (Array.isArray(obj)) {
+		return obj.map((item) => omitDeep(item, props));
+	}
+	if (obj && typeof obj === 'object') {
+		const newObj: Object = {};
+		for (const key in obj) {
+			if (!props.includes(key)) {
+				newObj[key] = omitDeep(obj[key], props);
+			}
+		}
+		return newObj;
+	}
+	return obj;
+};
 
 // Function to remove 'label' property from each extension's config item
 // Memoized cache for extensionsWithoutLabel results
@@ -123,16 +139,32 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	availableStates,
 	currentStateAttributes,
 	currentAttributes: currentBlockAttributes,
-	controllerProps: {
+	currentTab,
+	currentBlock,
+	currentState,
+	currentBreakpoint,
+	currentInnerBlockState,
+	handleOnChangeAttributes,
+	...props
+}: Props): MixedElement => {
+	useTraceUpdate({
+		children,
+		additional,
+		setCurrentTab,
+		insideBlockInspector,
+		attributes: blockAttributes,
+		defaultAttributes: attributes,
+		setAttributes,
+		availableStates,
+		currentStateAttributes,
+		currentAttributes: currentBlockAttributes,
 		currentTab,
 		currentBlock,
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
 		handleOnChangeAttributes,
-	},
-	...props
-}: Props): MixedElement => {
+	});
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	useEffect(() => {
@@ -140,28 +172,22 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		return () => {
 			resetExtensionSettings();
 		};
-		// eslint-disable-next-line
 	}, []);
-
-	props = {
-		...props,
-		currentState,
-		setAttributes,
-		currentBreakpoint,
-		handleOnChangeAttributes,
-	};
 
 	const { version } = select('blockera/data').getEntity('blockera');
 	const parentClientIds = select('core/block-editor').getBlockParents(
 		props.clientId
 	);
 
-	const directParentBlock =
-		parentClientIds?.length > 0
-			? select('core/block-editor').getBlock(
-					parentClientIds[parentClientIds.length - 1]
-			  )
-			: {};
+	const directParentBlock = useMemo(
+		() =>
+			parentClientIds?.length > 0
+				? select('core/block-editor').getBlock(
+						parentClientIds[parentClientIds.length - 1]
+				  )
+				: {},
+		[parentClientIds]
+	);
 
 	const { updateExtension } = useDispatch(STORE_NAME);
 	const { getExtensions } = select(STORE_NAME);
@@ -169,12 +195,14 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	let extensions = getExtensions(props.name);
 	const { getBlockType } = select('core/blocks');
 	const blockType = getBlockType(props.name);
-	extensions = mergeObject(
-		extensions,
-		blockType.supports?.blockExtensions || {}
+	extensions = useMemo(
+		() =>
+			mergeObject(extensions, blockType.supports?.blockExtensions || {}),
+		[extensions, blockType.supports?.blockExtensions]
 	);
-	const _extensionsWithoutLabel = extensionsWithoutLabel(
-		cloneObject(extensions)
+	const _extensionsWithoutLabel = useMemo(
+		() => extensionsWithoutLabel(cloneObject(extensions)),
+		[extensions]
 	);
 	const cacheData = useMemo(() => {
 		let localCache = getItem(cacheKey) || {};
@@ -188,23 +216,6 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		// If cache data doesn't equal extensions, update cache
 		// Compare cache and _extensionsWithoutLabel, ignoring specific properties
 		const omitProps = ['status', 'label', 'show', 'force', 'config'];
-
-		const omitDeep = (obj: Object, props: Array<string>): Object => {
-			if (Array.isArray(obj)) {
-				return obj.map((item) => omitDeep(item, props));
-			}
-			if (obj && typeof obj === 'object') {
-				const newObj: Object = {};
-				for (const key in obj) {
-					if (!props.includes(key)) {
-						newObj[key] = omitDeep(obj[key], props);
-					}
-				}
-				return newObj;
-			}
-			return obj;
-		};
-
 		const cacheOmitted = omitDeep(cache, omitProps);
 		const extensionsOmitted = omitDeep(_extensionsWithoutLabel, omitProps);
 
@@ -225,8 +236,8 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		}
 
 		return cache;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [cacheKey, extensions]);
+		// eslint-disable-next-line
+	}, [cacheKey, props.name]);
 	const supports = useMemo(() => {
 		if (!cacheData) {
 			setItem(
@@ -319,8 +330,16 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 				[props.name]: extensionsWithoutLabel(cloneObject(supports)),
 			})
 		);
-		// eslint-disable-next-line
-	}, [currentBlock]);
+	}, [
+		currentBlock,
+		cacheData,
+		cacheKey,
+		props,
+		supports,
+		extensions,
+		settings,
+		updateExtension,
+	]);
 
 	const handleOnChangeSettings = useCallback(
 		(newSupports: Object, name: string): void => {
@@ -373,7 +392,6 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		<MappedExtensions
 			directParentBlock={directParentBlock}
 			tab={tab}
-			props={props}
 			block={block}
 			settings={settings}
 			attributes={attributes}
