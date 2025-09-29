@@ -20,7 +20,6 @@ import { getComputedCssProps } from '../get-computed-css-props';
 /**
  * Internal dependencies
  */
-import { Style } from './style';
 import { MediaQuery } from './media-query';
 import type { StateStyleProps } from './types';
 import { combineDeclarations } from '../utils';
@@ -93,64 +92,64 @@ export const StateStyle = (
 		states.push(states.splice(0, 1)[0]);
 	}
 
-	const devicesCssStyles: { [key: TBreakpoint]: Array<MixedElement> } = {};
-	const sortedBreakpoints: Object = sortBreakpoints(breakpoints);
+	return useMemo(() => {
+		const devicesCssStyles: { [key: TBreakpoint]: Array<string> } = {};
+		const sortedBreakpoints: Object = sortBreakpoints(breakpoints);
 
-	for (const name in sortedBreakpoints) {
-		const breakpoint = sortedBreakpoints[name];
-		const { type } = breakpoint;
+		for (const name in sortedBreakpoints) {
+			const breakpoint = sortedBreakpoints[name];
+			const { type } = breakpoint;
 
-		const combinedDeclarations = combineDeclarations(
-			getComputedCssProps({
-				...props,
-				states,
-				currentBreakpoint: type,
-			}),
-			props.inlineStyles
-		);
+			const combinedDeclarations = combineDeclarations(
+				getComputedCssProps({
+					...props,
+					states,
+					currentBreakpoint: type,
+				}),
+				props.inlineStyles
+			);
 
-		const stylesheet = combinedDeclarations.map(
+			const stylesheet: Array<string> = combinedDeclarations.map(
+				({ selector, declarations }: Object): string =>
+					`${selector}{${declarations}}`
+			);
+
+			if (!stylesheet.length) {
+				continue;
+			}
+
+			if (devicesCssStyles[type]) {
+				devicesCssStyles[type] = mergeObject(
+					devicesCssStyles[type],
+					stylesheet
+				);
+
+				continue;
+			}
+
+			devicesCssStyles[type] = stylesheet;
+		}
+
+		return Object.entries(devicesCssStyles).map(
 			(
-				{ selector, declarations }: Object,
-				index: number
-			): MixedElement => (
-				<Style
-					clientId={props.clientId}
-					key={`${type}-${index}-style`}
-					selector={selector}
-					cssDeclaration={declarations}
-				/>
-			)
+				[type, stylesheet]: [TBreakpoint, Array<string>],
+				i: number
+			): MixedElement => {
+				if (!stylesheet.length) {
+					return <></>;
+				}
+
+				return (
+					<MediaQuery
+						key={`${type}-${i}-media-query`}
+						breakpoint={type}
+						clientId={props.clientId}
+						declarations={stylesheet.join('')}
+					/>
+				);
+			}
 		);
-
-		if (!stylesheet.length) {
-			continue;
-		}
-
-		if (devicesCssStyles[type]) {
-			devicesCssStyles[type] = mergeObject(
-				devicesCssStyles[type],
-				stylesheet
-			);
-
-			continue;
-		}
-
-		devicesCssStyles[type] = stylesheet;
-	}
-
-	return Object.entries(devicesCssStyles).map(
-		(
-			[type, stylesheet]: [TBreakpoint, Array<MixedElement>],
-			i: number
-		): MixedElement => {
-			return (
-				<MediaQuery key={`${type}-${i}-media-query`} breakpoint={type}>
-					{stylesheet}
-				</MediaQuery>
-			);
-		}
-	);
+	}, [props, breakpoints, states]);
 };
 
 /**

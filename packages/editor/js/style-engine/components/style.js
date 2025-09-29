@@ -6,24 +6,11 @@
 import type { MixedElement } from 'react';
 
 export const Style = ({
-	selector,
 	clientId,
-	cssDeclaration,
+	declarations,
 }: {
-	selector: string,
 	clientId: string,
-	cssDeclaration: Array<string>,
+	declarations: string,
 }): MixedElement => {
-	if (!cssDeclaration.length) {
-		return <></>;
-	}
-
-	return (
-		<style id={clientId}>
-			{selector}
-			{'{'}
-			{cssDeclaration}
-			{'}'}
-		</style>
-	);
+	return <style id={clientId}>{declarations}</style>;
 };
