@@ -9,14 +9,20 @@ import {
 } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { useEffect, createElement } from '@wordpress/element';
+import { useEffect, createElement, useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
  */
 import { useBugReporter } from '@blockera/telemetry';
-import { isEmpty, isObject, mergeObject } from '@blockera/utils';
+import {
+	omit,
+	isEmpty,
+	isObject,
+	isFunction,
+	mergeObject,
+} from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,6 +38,11 @@ import { sanitizeDefaultAttributes } from './utils';
 import { isBlockTypeExtension, isEnabledExtension } from '../api/utils';
 import { BlockIcon } from '../components';
 import { Edit } from '../components/block-edit';
+import {
+	EditorFeatureWrapper,
+	EditorAdvancedLabelControl,
+} from '../../components';
+import bootstrapScripts from '../scripts';
 
 export const useSharedBlockSideEffect = (): void => {
 	const {
@@ -340,7 +351,8 @@ function mergeBlockSettings(
 	)
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
-
+	// On rendering the block settings, we can bootstrap all scripts.
+	bootstrapScripts();
 	return {
 		...settings,
 		styles: [...(settings?.styles || []), ...(additional?.styles || [])],
@@ -358,17 +370,54 @@ function mergeBlockSettings(
 			...(additional?.transforms || {}),
 		},
 		variations: getVariations(),
-		edit: (props) => (
-			<Edit
-				{...props}
-				settings={settings}
-				additional={additional}
-				isAvailableBlock={isAvailableBlock}
-				blockeraOverrideBlockAttributes={
-					blockeraOverrideBlockAttributes
-				}
-			/>
-		),
+		edit: (props) => {
+			const { attributes: _attributes, ...rest } = props;
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const attributes = useMemo(
+				() => omit(_attributes, ['content', 'text']),
+				[_attributes]
+			);
+
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const stableAdditional = useMemo(() => {
+				return additional;
+			}, []);
+
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			const baseContextValue = useMemo(
+				() => ({
+					components: {
+						FeatureWrapper: EditorFeatureWrapper,
+						AdvancedLabelControl: EditorAdvancedLabelControl,
+					},
+				}),
+				[]
+			);
+
+			if (isFunction(additional?.edit) && isAvailableBlock()) {
+				return (
+					<>
+						<Edit
+							{...rest}
+							baseContextValue={baseContextValue}
+							attributes={attributes}
+							settings={settings}
+							additional={stableAdditional}
+							isAvailableBlock={isAvailableBlock}
+							blockeraOverrideBlockAttributes={
+								blockeraOverrideBlockAttributes
+							}
+						/>
+						{settings.edit(props)}
+					</>
+				);
+			}
+
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useSharedBlockSideEffect();
+
+			return settings.edit(props);
+		},
 		deprecated: !isAvailableBlock()
 			? settings?.deprecated
 			: [

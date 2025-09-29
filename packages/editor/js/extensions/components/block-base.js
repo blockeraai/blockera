@@ -9,7 +9,6 @@ import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
-	memo,
 	useMemo,
 	useState,
 	useEffect,
@@ -38,7 +37,7 @@ import {
 import { SideEffect } from '../libs/base';
 // import { BlockPortals } from './block-portals';
 import { BlockPartials } from './block-partials';
-import { isInnerBlock, propsAreEqual } from './utils';
+import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
@@ -59,377 +58,325 @@ import {
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
-export const BlockBase: ComponentType<any> = memo(
-	(_props: Object): Element<any> | null => {
-		const { setCurrentBlockStyleVariation } =
-			useGlobalStylesPanelContext() || {
-				setCurrentBlockStyleVariation: () => {},
-			};
-		const {
-			additional,
-			children,
-			name,
-			clientId,
-			attributes: blockAttributes,
-			setAttributes,
-			defaultAttributes,
-			originDefaultAttributes,
-			insideBlockInspector = true,
-			...props
-		} = _props;
+export const BlockBase: ComponentType<any> = (
+	_props: Object
+): Element<any> | null => {
+	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+		setCurrentBlockStyleVariation: () => {},
+	};
+	const {
+		additional,
+		children,
+		name,
+		clientId,
+		attributes: blockAttributes,
+		setAttributes,
+		defaultAttributes,
+		originDefaultAttributes,
+		insideBlockInspector = true,
+		...props
+	} = _props;
 
-		const [notice, setNotice] = useState(null);
-		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
-			useState(false);
-		const [currentTab, setCurrentTab] = useState(
-			additional?.activeTab || 'style'
+	const [notice, setNotice] = useState(null);
+	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
+		useState(false);
+	const [currentTab, setCurrentTab] = useState(
+		additional?.activeTab || 'style'
+	);
+
+	const {
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		getBlockExtensionBy,
+		currentInnerBlockState,
+	} = useExtensionsStore({ name, clientId });
+
+	const {
+		supports,
+		selectors,
+		blockVariations,
+		availableAttributes,
+		activeBlockVariation,
+		getActiveBlockVariation,
+	} = useSelect((select) => {
+		const { getActiveBlockVariation: _getActiveBlockVariation } = select(
+			'blockera/extensions'
 		);
-
-		const {
-			currentBlock,
-			currentState,
-			currentBreakpoint,
-			getBlockExtensionBy,
-			currentInnerBlockState,
-		} = useExtensionsStore({ name, clientId });
-
+		const { getBlockType, getActiveBlockVariation, getBlockVariations } =
+			select('core/blocks');
+		const { getBlockAttributes } = select('core/block-editor');
 		const {
 			supports,
 			selectors,
-			blockVariations,
+			attributes: availableAttributes,
+		} = getBlockType(name);
+
+		return {
+			supports,
+			selectors,
 			availableAttributes,
-			activeBlockVariation,
 			getActiveBlockVariation,
-		} = useSelect((select) => {
-			const { getActiveBlockVariation: _getActiveBlockVariation } =
-				select('blockera/extensions');
-			const {
-				getBlockType,
-				getActiveBlockVariation,
-				getBlockVariations,
-			} = select('core/blocks');
-			const { getBlockAttributes } = select('core/block-editor');
-			const {
-				supports,
-				selectors,
-				attributes: availableAttributes,
-			} = getBlockType(name);
-
-			return {
-				supports,
-				selectors,
-				availableAttributes,
-				getActiveBlockVariation,
-				activeBlockVariation: getActiveBlockVariation(
-					name,
-					getBlockAttributes(clientId)
-				),
-				blockVariations: name && getBlockVariations(name, 'transform'),
-				activeVariation: _getActiveBlockVariation(),
-			};
-		});
-
-		const [isActive, _setActive] = useState(true);
-		const setActive = useCallback(
-			(_isActive: boolean): void => _setActive(_isActive),
-			// eslint-disable-next-line
-			[]
-		);
-
-		const {
-			changeExtensionCurrentBlock: setCurrentBlock,
-			changeExtensionCurrentBlockState: setCurrentState,
-			changeExtensionInnerBlockState: setInnerBlockState,
-		} = dispatch('blockera/extensions') || {};
-
-		const { getDeviceType } = select('blockera/editor');
-
-		const masterIsNormalState = (): boolean =>
-			'normal' === currentState && isBaseBreakpoint(getDeviceType());
-
-		const isNormalState = (): boolean => {
-			if (isInnerBlock(currentBlock)) {
-				return (
-					'normal' === currentInnerBlockState &&
-					isBaseBreakpoint(getDeviceType())
-				);
-			}
-
-			return masterIsNormalState();
+			activeBlockVariation: getActiveBlockVariation(
+				name,
+				getBlockAttributes(clientId)
+			),
+			blockVariations: name && getBlockVariations(name, 'transform'),
+			activeVariation: _getActiveBlockVariation(),
 		};
+	});
 
-		const args = {
-			blockId: name,
-			blockClientId: clientId,
-			isMasterNormalState: masterIsNormalState(),
-			isNormalState: isNormalState(),
-			isMasterBlock: !isInnerBlock(currentBlock),
-			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
-			currentBreakpoint,
-			currentBlock,
-			currentState: isInnerBlock(currentBlock)
-				? currentInnerBlockState
-				: currentState,
-			blockVariations,
-			activeBlockVariation,
-			getActiveBlockVariation,
-			blockAttributes: originDefaultAttributes,
-			innerBlocks: additional?.blockeraInnerBlocks,
-		};
+	const [isActive, _setActive] = useState(true);
+	const setActive = useCallback(
+		(_isActive: boolean): void => _setActive(_isActive),
+		// eslint-disable-next-line
+		[]
+	);
 
-		const attributes = useBlockCompatibilities({
-			args,
-			isActive,
-			availableAttributes,
-			attributes: blockAttributes,
-			defaultAttributes: originDefaultAttributes,
-		});
+	const {
+		changeExtensionCurrentBlock: setCurrentBlock,
+		changeExtensionCurrentBlockState: setCurrentState,
+		changeExtensionInnerBlockState: setInnerBlockState,
+	} = dispatch('blockera/extensions') || {};
 
-		const { className } = attributes;
+	const { getDeviceType } = select('blockera/editor');
 
-		const sanitizedAttributes = useMemo(
-			() => sanitizeBlockAttributes(cloneObject(attributes)),
-			[attributes]
-		);
+	const masterIsNormalState = useCallback(
+		(): boolean =>
+			'normal' === currentState && isBaseBreakpoint(getDeviceType()),
+		[currentState, getDeviceType]
+	);
 
-		const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
-			additional,
-			currentBlock,
-			currentState,
-			currentBreakpoint,
-			defaultAttributes,
-			currentInnerBlockState,
-			attributes: sanitizedAttributes,
-		});
+	const isNormalState = useCallback((): boolean => {
+		if (isInnerBlock(currentBlock)) {
+			return (
+				'normal' === currentInnerBlockState &&
+				isBaseBreakpoint(getDeviceType())
+			);
+		}
 
-		const { edit: BlockEditComponent } = additional;
+		return masterIsNormalState();
+	}, [
+		currentBlock,
+		currentInnerBlockState,
+		getDeviceType,
+		masterIsNormalState,
+	]);
 
-		const getAttributes = (key: string = ''): any => {
-			if (key && sanitizedAttributes[key]) {
-				return sanitizedAttributes[key];
-			}
+	const args = {
+		blockId: name,
+		blockClientId: clientId,
+		isMasterNormalState: masterIsNormalState(),
+		isNormalState: isNormalState(),
+		isMasterBlock: !isInnerBlock(currentBlock),
+		isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+		currentBreakpoint,
+		currentBlock,
+		currentState: isInnerBlock(currentBlock)
+			? currentInnerBlockState
+			: currentState,
+		blockVariations,
+		activeBlockVariation,
+		getActiveBlockVariation,
+		blockAttributes: originDefaultAttributes,
+		innerBlocks: additional?.blockeraInnerBlocks,
+	};
 
-			return sanitizedAttributes;
-		};
+	const attributes = useBlockCompatibilities({
+		args,
+		isActive,
+		availableAttributes,
+		attributes: blockAttributes,
+		defaultAttributes: originDefaultAttributes,
+	});
 
-		const { handleOnChangeAttributes } = useAttributes(setAttributes, {
-			clientId,
-			className,
-			blockId: name,
-			isNormalState,
-			...(insideBlockInspector
-				? { getAttributes }
-				: { getAttributes: () => attributes }),
-			currentBlock,
-			currentState,
-			blockVariations,
-			defaultAttributes,
-			currentBreakpoint,
-			availableAttributes,
-			masterIsNormalState,
-			blockeraInnerBlocks,
-			activeBlockVariation,
-			currentInnerBlockState,
-			getActiveBlockVariation,
-			innerBlocks: additional?.blockeraInnerBlocks,
-		});
+	const { className } = attributes;
 
-		const updateBlockEditorSettings: UpdateBlockEditorSettings = (
-			key: string,
-			value: any
-		): void => {
-			switch (key) {
-				case 'current-block':
-					setCurrentBlock(value);
-					break;
-				case 'current-state':
-					if (isInnerBlock(currentBlock)) {
-						return setInnerBlockState(value);
-					}
+	const sanitizedAttributes = useMemo(
+		() => sanitizeBlockAttributes(cloneObject(attributes)),
+		[attributes]
+	);
 
-					setCurrentState(value);
-					break;
-				case 'current-block-style-variation':
-					setCurrentBlockStyleVariation(value);
-					break;
-			}
-		};
+	const { currentInnerBlock, blockeraInnerBlocks } = useInnerBlocksInfo({
+		additional,
+		currentBlock,
+		currentState,
+		currentBreakpoint,
+		defaultAttributes,
+		currentInnerBlockState,
+		attributes: sanitizedAttributes,
+	});
 
-		const currentAttributes = useCalculateCurrentAttributes({
+	const { edit: BlockEditComponent } = additional;
+
+	const getAttributes = (key: string = ''): any => {
+		if (key && sanitizedAttributes[key]) {
+			return sanitizedAttributes[key];
+		}
+
+		return sanitizedAttributes;
+	};
+
+	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
+		clientId,
+		className,
+		blockId: name,
+		isNormalState,
+		...(insideBlockInspector
+			? { getAttributes }
+			: { getAttributes: () => attributes }),
+		currentBlock,
+		currentState,
+		blockVariations,
+		defaultAttributes,
+		currentBreakpoint,
+		availableAttributes,
+		masterIsNormalState,
+		blockeraInnerBlocks,
+		activeBlockVariation,
+		currentInnerBlockState,
+		getActiveBlockVariation,
+		innerBlocks: additional?.blockeraInnerBlocks,
+	});
+
+	const updateBlockEditorSettings: UpdateBlockEditorSettings = (
+		key: string,
+		value: any
+	): void => {
+		switch (key) {
+			case 'current-block':
+				setCurrentBlock(value);
+				break;
+			case 'current-state':
+				if (isInnerBlock(currentBlock)) {
+					return setInnerBlockState(value);
+				}
+
+				setCurrentState(value);
+				break;
+			case 'current-block-style-variation':
+				setCurrentBlockStyleVariation(value);
+				break;
+		}
+	};
+
+	const currentAttributes = useCalculateCurrentAttributes({
+		name,
+		clientId,
+		currentInnerBlock,
+		blockeraInnerBlocks,
+		attributes: sanitizedAttributes,
+		blockAttributes: defaultAttributes,
+	});
+
+	// Boot loading the block features.
+	const { BlockFeaturesInlineStyles, ContextualToolbarComponents } =
+		useBlockFeatures({
 			name,
 			clientId,
-			currentInnerBlock,
-			blockeraInnerBlocks,
-			attributes: sanitizedAttributes,
-			blockAttributes: defaultAttributes,
+			attributes: currentAttributes,
+			blockFeatures: mergeObject(
+				generalBlockFeatures,
+				additional?.blockFeatures
+			),
+			getBlockCSSSelector,
 		});
 
-		// Boot loading the block features.
-		const { BlockFeaturesInlineStyles, ContextualToolbarComponents } =
-			useBlockFeatures({
-				name,
-				clientId,
-				attributes: currentAttributes,
-				blockFeatures: mergeObject(
-					generalBlockFeatures,
-					additional?.blockFeatures
-				),
-				getBlockCSSSelector,
-			});
+	const inlineStyles = useCleanupStyles({ clientId }, [name, attributes]);
 
-		const inlineStyles = useCleanupStyles({ clientId }, [name, attributes]);
+	const availableStates =
+		additional?.availableBlockStates || generalBlockStates;
+	const availableInnerStates = useMemo(() => {
+		let blockStates =
+			((additional?.blockeraInnerBlocks || {})[currentBlock] || {})
+				?.availableBlockStates || generalInnerBlockStates;
 
-		const availableStates =
-			additional?.availableBlockStates || generalBlockStates;
-		const availableInnerStates = useMemo(() => {
-			let blockStates =
-				((additional?.blockeraInnerBlocks || {})[currentBlock] || {})
-					?.availableBlockStates || generalInnerBlockStates;
+		if (isInnerBlock(currentBlock)) {
+			if (!isVirtualBlock(currentBlock)) {
+				const { availableBlockStates } =
+					getBlockExtensionBy('targetBlock', currentBlock) || {};
 
-			if (isInnerBlock(currentBlock)) {
-				if (!isVirtualBlock(currentBlock)) {
-					const { availableBlockStates } =
-						getBlockExtensionBy('targetBlock', currentBlock) || {};
-
-					if (Object.keys(availableBlockStates || {}).length) {
-						blockStates = availableBlockStates;
-					}
+				if (Object.keys(availableBlockStates || {}).length) {
+					blockStates = availableBlockStates;
 				}
 			}
+		}
 
-			return blockStates;
-			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [currentBlock, additional]);
+		return blockStates;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlock, additional]);
 
-		useEffect(() => {
-			if (isInnerBlock(currentBlock)) {
-				unstableBootstrapInnerBlockStatesDefinitions(
-					availableInnerStates
-				);
-			} else {
-				unstableBootstrapBlockStatesDefinitions(availableStates);
-			}
-		}, [currentBlock, availableStates, availableInnerStates]);
+	useEffect(() => {
+		if (isInnerBlock(currentBlock)) {
+			unstableBootstrapInnerBlockStatesDefinitions(availableInnerStates);
+		} else {
+			unstableBootstrapBlockStatesDefinitions(availableStates);
+		}
+	}, [currentBlock, availableStates, availableInnerStates]);
 
-		const blockStyleProps = {
-			clientId,
-			supports,
-			selectors,
-			additional,
-			inlineStyles,
-			attributes: sanitizedAttributes,
-			blockName: name,
-			currentAttributes,
-			defaultAttributes,
-			customCss: attributes?.blockeraCustomCSS?.value?.replace(
-				/(\.|#)block/gi,
-				`#block-${clientId}`
-			),
-			activeDeviceType: getDeviceType(),
-		};
+	const blockStyleProps = {
+		clientId,
+		supports,
+		selectors,
+		additional,
+		inlineStyles,
+		attributes: sanitizedAttributes,
+		blockName: name,
+		currentAttributes,
+		defaultAttributes,
+		customCss: attributes?.blockeraCustomCSS?.value?.replace(
+			/(\.|#)block/gi,
+			`#block-${clientId}`
+		),
+		activeDeviceType: getDeviceType(),
+	};
 
-		return (
-			<BlockEditContextProvider
-				{...{
-					block: {
-						blockName: name,
-						clientId,
-						handleOnChangeAttributes,
-						attributes: currentAttributes,
-						storeName: 'blockera/controls',
-					},
-					currentTab,
-					currentBlock,
-					currentState,
-					setCurrentTab,
-					isNormalState,
-					setAttributes,
-					getAttributes,
-					currentBreakpoint,
-					currentInnerBlock,
-					masterIsNormalState,
-					blockeraInnerBlocks,
-					currentInnerBlockState,
+	return (
+		<BlockEditContextProvider
+			{...{
+				block: {
+					blockName: name,
+					clientId,
 					handleOnChangeAttributes,
-					updateBlockEditorSettings,
-					BlockComponent: () => children,
-					attributes: sanitizedAttributes,
-					activeDeviceType: getDeviceType(),
-					getBlockType: () =>
-						select('core/blocks').getBlockType(name),
-				}}
-			>
-				{/*<StrictMode>*/}
-				{insideBlockInspector && (
-					<InspectorControls>
-						<SideEffect
-							{...{
-								activeBlockVariation:
-									activeBlockVariation?.name || '',
-								blockName: name,
-								currentBlock,
-								currentTab,
-								currentState: isInnerBlock(currentBlock)
-									? currentInnerBlockState
-									: currentState,
-								isActive,
-							}}
-						/>
-						<SlotFillProvider>
-							<BlockPartials
-								blockId={name}
-								clientId={clientId}
-								isActive={isActive}
-								setActive={setActive}
-							/>
-							<BlockFillPartials
-								{...{
-									notice,
-									clientId,
-									isActive,
-									currentState,
-									currentBlock,
-									availableStates,
-									currentInnerBlock,
-									currentBreakpoint,
-									BlockEditComponent,
-									blockeraInnerBlocks,
-									availableInnerStates,
-									insideBlockInspector,
-									currentInnerBlockState,
-									updateBlockEditorSettings,
-									blockProps: {
-										// Sending props like exactly "edit" function props of WordPress Block.
-										// Because needs total block props in outside overriding component like "blockera" in overriding process.
-										name,
-										clientId,
-										supports,
-										className,
-										attributes: sanitizedAttributes,
-										setAttributes,
-										defaultAttributes,
-										currentAttributes,
-										controllerProps: {
-											currentTab,
-											currentBlock,
-											currentState,
-											currentBreakpoint,
-											blockeraInnerBlocks,
-											currentInnerBlockState,
-											handleOnChangeAttributes,
-										},
-										additional,
-										currentStateAttributes:
-											currentAttributes,
-										...props,
-									},
-								}}
-							/>
-						</SlotFillProvider>
-					</InspectorControls>
-				)}
-
-				{!insideBlockInspector && (
+					attributes: currentAttributes,
+					storeName: 'blockera/controls',
+				},
+				currentTab,
+				currentBlock,
+				currentState,
+				setCurrentTab,
+				isNormalState,
+				setAttributes,
+				getAttributes,
+				currentBreakpoint,
+				currentInnerBlock,
+				masterIsNormalState,
+				blockeraInnerBlocks,
+				currentInnerBlockState,
+				handleOnChangeAttributes,
+				updateBlockEditorSettings,
+				BlockComponent: () => children,
+				attributes: sanitizedAttributes,
+				activeDeviceType: getDeviceType(),
+				getBlockType: () => select('core/blocks').getBlockType(name),
+			}}
+		>
+			{/*<StrictMode>*/}
+			{insideBlockInspector && (
+				<InspectorControls>
+					<SideEffect
+						{...{
+							activeBlockVariation:
+								activeBlockVariation?.name || '',
+							blockName: name,
+							currentBlock,
+							currentTab,
+							currentState: isInnerBlock(currentBlock)
+								? currentInnerBlockState
+								: currentState,
+							isActive,
+						}}
+					/>
 					<SlotFillProvider>
 						<BlockPartials
 							blockId={name}
@@ -480,50 +427,100 @@ export const BlockBase: ComponentType<any> = memo(
 							}}
 						/>
 					</SlotFillProvider>
-				)}
+				</InspectorControls>
+			)}
 
-				{insideBlockInspector && (
-					<>
-						<ErrorBoundary
-							fallbackRender={({ error }): MixedElement => (
-								<ErrorBoundaryFallback
-									{...{
-										error,
-										notice,
-										clientId,
-										setNotice,
-										from: 'style-wrapper',
-										props: blockStyleProps,
-										isReportingErrorCompleted,
-										setIsReportingErrorCompleted,
-										fallbackComponent: BlockStyle,
-									}}
-								/>
-							)}
-						>
-							<StylesWrapper clientId={clientId}>
-								<Fill
-									name={'blockera-styles-wrapper-' + clientId}
-								>
-									<BlockStyle {...blockStyleProps} />
-								</Fill>
-							</StylesWrapper>
-						</ErrorBoundary>
-						{/*</StrictMode>*/}
+			{!insideBlockInspector && (
+				<SlotFillProvider>
+					<BlockPartials
+						blockId={name}
+						clientId={clientId}
+						isActive={isActive}
+						setActive={setActive}
+					/>
+					<BlockFillPartials
+						{...{
+							notice,
+							clientId,
+							isActive,
+							currentState,
+							currentBlock,
+							availableStates,
+							currentInnerBlock,
+							currentBreakpoint,
+							BlockEditComponent,
+							blockeraInnerBlocks,
+							availableInnerStates,
+							insideBlockInspector,
+							currentInnerBlockState,
+							updateBlockEditorSettings,
+							blockProps: {
+								// Sending props like exactly "edit" function props of WordPress Block.
+								// Because needs total block props in outside overriding component like "blockera" in overriding process.
+								name,
+								clientId,
+								supports,
+								className,
+								attributes: sanitizedAttributes,
+								setAttributes,
+								defaultAttributes,
+								currentAttributes,
+								controllerProps: {
+									currentTab,
+									currentBlock,
+									currentState,
+									currentBreakpoint,
+									blockeraInnerBlocks,
+									currentInnerBlockState,
+									handleOnChangeAttributes,
+								},
+								additional,
+								currentStateAttributes: currentAttributes,
+								...props,
+							},
+						}}
+					/>
+				</SlotFillProvider>
+			)}
 
-						<ContextualToolbarComponents />
+			{insideBlockInspector && (
+				<>
+					<ErrorBoundary
+						fallbackRender={({ error }): MixedElement => (
+							<ErrorBoundaryFallback
+								{...{
+									error,
+									notice,
+									clientId,
+									setNotice,
+									from: 'style-wrapper',
+									props: blockStyleProps,
+									isReportingErrorCompleted,
+									setIsReportingErrorCompleted,
+									fallbackComponent: BlockStyle,
+								}}
+							/>
+						)}
+					>
+						<StylesWrapper clientId={clientId}>
+							<Fill name={'blockera-styles-wrapper-' + clientId}>
+								<BlockStyle {...blockStyleProps} />
+							</Fill>
+						</StylesWrapper>
+					</ErrorBoundary>
+					{/*</StrictMode>*/}
 
-						<BlockFeaturesInlineStyles
-							clientId={clientId}
-							className={className}
-							currentAttributes={currentAttributes}
-						/>
+					<ContextualToolbarComponents />
 
-						{children}
-					</>
-				)}
-			</BlockEditContextProvider>
-		);
-	},
-	propsAreEqual
-);
+					<BlockFeaturesInlineStyles
+						clientId={clientId}
+						className={className}
+						currentAttributes={currentAttributes}
+					/>
+
+					{children}
+				</>
+			)}
+		</BlockEditContextProvider>
+	);
+};
