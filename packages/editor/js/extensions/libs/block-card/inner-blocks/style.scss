@@ -11,6 +11,10 @@
 		width: max-content;
 		--icon-size: 16px;
 
+		.blockera-control-group {
+			border-style: dashed;
+		}
+
 		.blockera-control-group-header {
 			padding: 0 5px 0 3px;
 
