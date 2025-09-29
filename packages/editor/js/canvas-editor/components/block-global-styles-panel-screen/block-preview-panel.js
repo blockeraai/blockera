@@ -15,7 +15,13 @@ import { getVariationClassName } from './utils';
 import { useBlockContext } from '../../../extensions/components/block-context';
 import { useBlockPreviewStyles } from '../../../hooks/use-block-preview-styles';
 
-const BlockPreviewPanel = ({ name, variation = '' }) => {
+const BlockPreviewPanel = ({
+	name,
+	variation = '',
+}: {
+	name: string,
+	variation: string,
+}): Object => {
 	const { getAttributes } = useBlockContext();
 	const blockType = getBlockType(name);
 	const blockExample = blockType?.example;

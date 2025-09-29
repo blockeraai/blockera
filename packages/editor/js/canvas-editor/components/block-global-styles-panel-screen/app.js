@@ -42,7 +42,7 @@ import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
 import { GlobalStylesPanelContextProvider } from './context';
 
 // Helper functions
-const getBlockAttributes = (name) => {
+const getBlockAttributes = (name: string): Object => {
 	const {
 		getBlockExtensionBy,
 		getBlockTypeAttributes,
@@ -61,11 +61,11 @@ const getBlockAttributes = (name) => {
 };
 
 const getComputedStyles = (
-	currentBlockStyleVariation,
-	defaultStylesValue,
-	mergedConfig,
-	name
-) => {
+	currentBlockStyleVariation: Object,
+	defaultStylesValue: Object,
+	mergedConfig: Object,
+	name: string
+): Object => {
 	if (currentBlockStyleVariation && !currentBlockStyleVariation?.isDefault) {
 		return {
 			...defaultStylesValue,
@@ -82,8 +82,8 @@ const getComputedStyles = (
 	};
 };
 
-const cleanupStylesHelper = (styles, defaultStyles) => {
-	const cleanStyles = {};
+const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
+	const cleanStyles: { [key: string]: Object } = {};
 
 	for (const key in styles) {
 		if (
@@ -204,7 +204,13 @@ export default function App(props: Object): MixedElement {
 	const handleOnChangeStyles = useCallback(
 		(
 			newStyles,
-			{ action }: { action: 'clear-all-customizations' } = {}
+			{
+				action,
+			}: {
+				action: 'clear-all-customizations' | 'save-all-customizations',
+			} = {
+				action: 'save-all-customizations',
+			}
 		) => {
 			const currentStyleVariation = getSelectedBlockStyleVariation();
 
