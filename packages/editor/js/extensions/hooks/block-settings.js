@@ -351,8 +351,7 @@ function mergeBlockSettings(
 	)
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
-	// On rendering the block settings, we can bootstrap all scripts.
-	bootstrapScripts();
+
 	return {
 		...settings,
 		styles: [...(settings?.styles || []), ...(additional?.styles || [])],
@@ -393,6 +392,12 @@ function mergeBlockSettings(
 				}),
 				[]
 			);
+
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useEffect(() => {
+				// On rendering the block settings, we can bootstrap all scripts.
+				bootstrapScripts();
+			}, []);
 
 			if (isFunction(additional?.edit) && isAvailableBlock()) {
 				return (
