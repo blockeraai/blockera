@@ -111,7 +111,7 @@ export const StateStyle = (
 
 			const stylesheet: Array<string> = combinedDeclarations.map(
 				({ selector, declarations }: Object): string =>
-					`${selector}{${declarations}}`
+					`${selector}{${declarations.join('')}}`
 			);
 
 			if (!stylesheet.length) {
