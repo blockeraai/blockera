@@ -39,7 +39,7 @@ export const Button: BlockType = {
 	},
 	selectors: {
 		'blockera/elements/icon': {
-			root: '.wp-block-button__link:before',
+			root: '.wp-block-button__link:before,.wp-block-button__link:after',
 		},
 	},
 };

@@ -46,7 +46,7 @@ export const NavigationLink: BlockType = {
 	},
 	selectors: {
 		'blockera/elements/icon': {
-			root: '.wp-block-navigation-item__content .wp-block-navigation-item__label:before',
+			root: '.wp-block-navigation-item__content .wp-block-navigation-item__label:before,.wp-block-navigation-item__content .wp-block-navigation-item__label:after',
 		},
 	},
 };
