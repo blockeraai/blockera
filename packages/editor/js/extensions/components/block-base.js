@@ -41,7 +41,6 @@ import { isInnerBlock } from './utils';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
-import { useBlockCompatibilities } from './block-compatibility';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
@@ -56,6 +55,7 @@ import {
 	generalInnerBlockStates,
 } from '../libs/block-card/block-states/states';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
+import { useBlockCompatibilities } from '../../hooks/use-block-compatibilities';
 import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 export const BlockBase: ComponentType<any> = (

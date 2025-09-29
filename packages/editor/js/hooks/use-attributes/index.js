@@ -136,6 +136,13 @@ export const useAttributes = (
 					blockeraPropsId: clientId,
 				};
 			}
+			// Sets "blockeraCompatId" if it is empty.
+			if (!_attributes?.blockeraCompatId) {
+				_attributes = getAttributesWithIds(
+					_attributes,
+					'blockeraCompatId'
+				);
+			}
 
 			const indexOfBlockeraSelector =
 				attributes?.className?.indexOf('blockera-block');

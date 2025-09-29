@@ -15,8 +15,8 @@ import { isEquals, omitWithPattern, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { prepareBlockeraDefaultAttributesValues } from './utils';
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
+import { prepareBlockeraDefaultAttributesValues } from '../extensions/components/utils';
+import { ignoreDefaultBlockAttributeKeysRegExp } from '../extensions/libs';
 
 export const useBlockCompatibilities = ({
 	args,
