@@ -12,6 +12,15 @@
 	background-color: #ffffff;
 	transition: max-height 0.2s ease, box-shadow 0.075s ease;
 
+	&.outside-block-inspector {
+		padding: 16px 0;
+
+		.blockera-extension-block-card__inner,
+		 .blockera-extension-block-card__style-variation {
+			padding: 0 16px;
+		}
+	}
+
 	.blockera-control-block-states-repeater {
 
 		.blockera-control-repeater-items-container {

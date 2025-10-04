@@ -143,6 +143,7 @@ export function BlockCard({
 			<div
 				className={extensionClassNames('block-card', {
 					'master-block-card': true,
+					'outside-block-inspector': !insideBlockInspector,
 					'inner-block-is-selected': currentInnerBlock !== null,
 					'style-variation-is-selected': Boolean(
 						currentBlockStyleVariation?.name
