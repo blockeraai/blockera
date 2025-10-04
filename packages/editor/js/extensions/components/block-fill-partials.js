@@ -217,7 +217,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 					</>
 				)}
 			</Fill>
-			{isActive && (
+			{insideBlockInspector && isActive && (
 				<Fill name={`blockera-block-edit-content-${clientId}`}>
 					<BlockEditComponent
 						{...{ ...blockProps, insideBlockInspector }}
@@ -229,6 +229,21 @@ export const BlockFillPartials: ComponentType<any> = ({
 					/>
 				</Fill>
 			)}
+
+			{!insideBlockInspector &&
+				currentBlockStyleVariation?.name &&
+				isActive && (
+					<Fill name={`blockera-block-edit-content-${clientId}`}>
+						<BlockEditComponent
+							{...{ ...blockProps, insideBlockInspector }}
+							availableStates={
+								isInnerBlock(currentBlock)
+									? availableInnerStates
+									: availableStates
+							}
+						/>
+					</Fill>
+				)}
 		</>
 	);
 };
