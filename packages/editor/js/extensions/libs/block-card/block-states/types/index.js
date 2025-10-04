@@ -29,7 +29,7 @@ export type TStatesProps = {
 	values: { [key: TStates]: { ...StateTypes, content?: string } },
 	extensionProps: Object,
 	currentState: TStates,
-	currentBlock: 'master' | InnerBlockType,
+	currentBlock: 'master' | InnerBlockType | string,
 };
 
 export type BlockDetail = {
