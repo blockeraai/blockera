@@ -41,7 +41,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 	getDynamicDefaultRepeaterItem,
 }: StatesManagerProps): Element<any> => {
 	if (Object.keys(states)?.length < 1) {
-		return null;
+		return <></>;
 	}
 
 	return (
