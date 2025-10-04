@@ -207,8 +207,16 @@
 		}
 	}
 
-	&.block-card--inner-block,
 	&.block-card--style-variation {
+		--blockera-controls-primary-color: #1ca120;
+
+		.blockera-extension-block-card__title,
+		.blockera-component-block-icon {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+
+	&.block-card--inner-block {
 		--blockera-controls-primary-color: #cc0000;
 
 		.blockera-extension-block-card__title,

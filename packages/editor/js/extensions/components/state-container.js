@@ -43,10 +43,7 @@ export default function StateContainer({
 			isNormalState(currentInnerBlockState)
 		) {
 			color = '#cc0000';
-		} else if (
-			(!insideBlockInspector && isNormalState(selectedState)) ||
-			isGlobalStylesCardWrapper
-		) {
+		} else if (!insideBlockInspector || isGlobalStylesCardWrapper) {
 			color = '#1ca120';
 		}
 
@@ -57,6 +54,7 @@ export default function StateContainer({
 		currentState,
 		availableStates,
 		blockeraUnsavedData,
+		insideBlockInspector,
 		currentInnerBlockState,
 	]);
 
