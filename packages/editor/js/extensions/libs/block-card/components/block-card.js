@@ -280,7 +280,7 @@ export function BlockCard({
 
 					{children}
 
-					{isActive && (
+					{isActive && insideBlockInspector && (
 						<BlockCompositePreview
 							block={{
 								clientId,

@@ -34,6 +34,7 @@ import { Icon } from '@blockera/icons';
 import { StyleItem } from './style-item';
 import { useBlockContext } from '../../../../components';
 import { AddNewStyleButton } from './add-new-style-button';
+import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
@@ -191,110 +192,20 @@ function BlockStyles({
 
 	if ('global-styles-panel' === context) {
 		return (
-			<div
-				className={isNotActive ? 'blockera-control-is-not-active' : ''}
-			>
-				<Flex
-					className={componentClassNames('block-styles')}
-					direction="column"
-					gap="20px"
-				>
-					{blockStyles.length === 0 ? (
-						<Flex
-							alignItems="center"
-							direction="column"
-							justifyContent="space-between"
-							gap="0"
-							style={{ padding: '40px 0' }}
-						>
-							<Icon
-								icon="block-default"
-								library="wp"
-								style={{ fill: '#949494' }}
-							/>
-							<p>{__('No styles found.', 'blockera')}</p>
-						</Flex>
-					) : (
-						<>
-							<Flex direction="column" gap="10px">
-								<AddNewStyleButton
-									styles={editorStyles}
-									setStyles={setStyles}
-									blockName={blockName}
-									label={__('Style Variations', 'blockera')}
-									blockStyles={blockStyles}
-									setCurrentBlockStyleVariation={
-										setCurrentBlockStyleVariation
-									}
-									setCurrentActiveStyle={
-										setCurrentActiveStyle
-									}
-									setBlockStyles={setBlockStyles}
-								/>
-
-								<div
-									className={componentInnerClassNames(
-										'block-styles__variants'
-									)}
-								>
-									{blockStyles.map((style) => (
-										<StyleItem
-											key={style.name}
-											style={style}
-											blockName={blockName}
-											blockStyles={blockStyles}
-											setBlockStyles={setBlockStyles}
-											activeStyle={activeStyle}
-											setCurrentActiveStyle={
-												setCurrentActiveStyle
-											}
-											inGlobalStylesPanel={true}
-											onSelectStylePreview={
-												onSelectStylePreview
-											}
-											setCurrentPreviewStyle={
-												setCurrentPreviewStyle
-											}
-											styleItemHandler={styleItemHandler}
-										/>
-									))}
-
-									{hoveredStyle &&
-										!isMobileViewport &&
-										showPreview && (
-											<WPPopover
-												placement="left-start"
-												offset={40}
-												focusOnMount={false}
-												animate={false}
-											>
-												<div
-													className="block-editor-block-styles__preview-panel"
-													onMouseLeave={() =>
-														styleItemHandler(null)
-													}
-												>
-													<BlockStylesPreviewPanel
-														activeStyle={
-															activeStyle
-														}
-														className={
-															previewClassName
-														}
-														genericPreviewBlock={
-															genericPreviewBlock
-														}
-														style={hoveredStyle}
-													/>
-												</div>
-											</WPPopover>
-										)}
-								</div>
-							</Flex>
-						</>
-					)}
-				</Flex>
-			</div>
+			<StyleVariationsManager
+				activeStyle={activeStyle}
+				blockName={blockName}
+				blockStyles={blockStyles}
+				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
+				setCurrentActiveStyle={setCurrentActiveStyle}
+				setBlockStyles={setBlockStyles}
+				onSelectStylePreview={onSelectStylePreview}
+				setCurrentPreviewStyle={setCurrentPreviewStyle}
+				styleItemHandler={styleItemHandler}
+				editorStyles={editorStyles}
+				setStyles={setStyles}
+				isNotActive={isNotActive}
+			/>
 		);
 	}
 
