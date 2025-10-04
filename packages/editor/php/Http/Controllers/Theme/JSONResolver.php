@@ -159,14 +159,8 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			$json_decoding_error = json_last_error();
 			if ( JSON_ERROR_NONE !== $json_decoding_error ) {
 				wp_trigger_error( __METHOD__, 'Error when decoding a theme.json schema for user data. ' . json_last_error_msg() );
-				/**
-				 * Filters the data provided by the user for global styles & settings.
-				 *
-				 * @since 1.13.0
-				 *
-				 * @param JSONData $theme_json Class to access and update the underlying data.
-				 */
-				$theme_json = apply_filters( 'blockera/wp/theme/json/data/user', new JSONData( $config, 'custom' ) );
+
+				$theme_json = new JSONData( $config, 'custom' );
 
 				/*
 				 * Backward compatibility for extenders returning a JSONData
@@ -194,8 +188,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			}
 		}
 
-		/** This filter is documented in packages/blockera/php/Http/Controllers/Theme/JSONResolver.php */
-		$theme_json = apply_filters( 'blockera/wp/theme/json/data/user', new JSONData( $config, 'custom' ) );
+		$theme_json = new JSONData( $config, 'custom' );
 
 		/*
 		 * Backward compatibility for extenders returning a WP_Theme_JSON_Data
@@ -274,14 +267,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			$theme_json_data = static::inject_variations_from_block_style_variation_files( $theme_json_data, $variations );
 			$theme_json_data = static::inject_variations_from_block_styles_registry( $theme_json_data );
 
-			/**
-			 * Filters the data provided by the theme for global styles and settings.
-			 *
-			 * @since 6.1.0
-			 *
-			 * @param JSONData $theme_json Class to access and update the underlying data.
-			 */
-			$theme_json = apply_filters( 'blockera/wp/theme/json/data/theme', new JSONData( $theme_json_data, 'theme' ) );
+			$theme_json = new JSONData( $theme_json_data, 'theme' );
 
 			/*
 			 * Backward compatibility for extenders returning a JSONData
@@ -407,14 +393,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			}
 		}
 
-		/**
-		 * Filters the data provided by the blocks for global styles & settings.
-		 *
-		 * @since 6.1.0
-		 *
-		 * @param WP_Theme_JSON_Data $theme_json Class to access and update the underlying data.
-		 */
-		$theme_json = apply_filters( 'blockera/wp/theme/json/data/blocks', new JSONData( $config, 'blocks' ) );
+		$theme_json = new JSONData( $config, 'blocks' );
 
 		/*
 		 * Backward compatibility for extenders returning a WP_Theme_JSON_Data
