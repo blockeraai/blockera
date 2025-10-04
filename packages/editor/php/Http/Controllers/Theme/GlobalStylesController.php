@@ -5,7 +5,7 @@ namespace Blockera\Editor\Http\Controllers\Theme;
 /**
  * Base Global Styles REST API Controller.
  */
-class GlobalStylesController extends \WP_REST_Posts_Controller {
+class GlobalStylesController extends \WP_REST_Global_Styles_Controller {
 
 	/**
 	 * Whether the controller supports batching.

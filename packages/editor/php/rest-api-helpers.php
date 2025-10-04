@@ -75,11 +75,8 @@ function blockera_register_block_style_variations_from_theme_json_partials( $var
  * @return array The arguments for the global styles post type.
  */
 function blockera_register_wp_global_styles_post_type_args( $args ): array {
-	
-	$args['rest_controller_class']   = '\Blockera\Editor\Http\Controllers\Theme\GlobalStylesController';
-    $args['late_route_registration'] = true;
-    $args['show_in_rest']            = true;
-    $args['rest_base']               = 'global-styles';
+
+	$args['rest_controller_class'] = '\Blockera\Editor\Http\Controllers\Theme\GlobalStylesController';
 
     return $args;
 }
