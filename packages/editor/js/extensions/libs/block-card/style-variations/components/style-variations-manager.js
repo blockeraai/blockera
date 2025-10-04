@@ -83,7 +83,19 @@ export const StyleVariationsManager = ({
 					/>
 				))}
 
+				<p
+					className={componentInnerClassNames(
+						'block-style-variations-description'
+					)}
+				>
+					{__(
+						'Create style presets for blocks and apply them instantly across multiple blocks or pages.',
+						'blockera'
+					)}
+				</p>
+
 				<AddNewStyleButton
+					design="with-label"
 					label={__('Add New Style Variation', 'blockera')}
 					styles={editorStyles}
 					setStyles={setStyles}

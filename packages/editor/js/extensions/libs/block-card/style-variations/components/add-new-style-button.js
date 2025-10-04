@@ -56,12 +56,14 @@ export const AddNewStyleButton = ({
 	blockName,
 	blockStyles,
 	setBlockStyles,
+	design = 'no-label',
 	setCurrentActiveStyle,
 	setCurrentBlockStyleVariation,
 }: {
 	label?: string,
 	styles?: Object,
 	blockName: string,
+	design?: 'no-label' | 'with-label',
 	blockStyles: Array<Object>,
 	setStyles?: (styles: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
@@ -154,25 +156,40 @@ export const AddNewStyleButton = ({
 
 	return (
 		<Flex justifyContent={'space-between'}>
-			{'undefined' !== typeof label && label?.length > 0 && (
-				<h2 className={classNames('blockera-block-styles-category')}>
-					{label}
-				</h2>
-			)}
+			{'no-label' === design &&
+				'undefined' !== typeof label &&
+				label?.length > 0 && (
+					<h2
+						className={classNames('blockera-block-styles-category')}
+					>
+						{label}
+					</h2>
+				)}
 
 			<Button
 				size="extra-small"
 				className={controlInnerClassNames('btn-add')} // blockera-is-not-active
 				onClick={addNew}
-				style={{
-					width: '24px',
-					height: '24px',
-					padding: 0,
-					marginLeft: 'auto',
-				}}
+				style={
+					'no-label' === design
+						? {
+								width: '24px',
+								height: '24px',
+								padding: 0,
+								marginLeft: 'auto',
+						  }
+						: {
+								width: '100%',
+						  }
+				}
 				data-test={'add-new-block-style-variation'}
 			>
 				<Icon icon="plus" iconSize="20" />
+
+				{'with-label' === design &&
+					'undefined' !== typeof label &&
+					label?.length > 0 &&
+					label}
 			</Button>
 
 			{isPromotionPopoverOpen && (
