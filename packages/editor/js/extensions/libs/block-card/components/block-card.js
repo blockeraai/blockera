@@ -35,7 +35,6 @@ import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
-import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 
 export function BlockCard({
 	notice,
@@ -219,9 +218,8 @@ export function BlockCard({
 							/>
 						</h2>
 
-						{insideBlockInspector &&
-							(blockInformation?.description ||
-								blockDescription) && (
+						{blockInformation?.description ||
+							(blockDescription && (
 								<span
 									className={extensionInnerClassNames(
 										'block-card__description'
@@ -230,7 +228,7 @@ export function BlockCard({
 									{blockInformation?.description ||
 										blockDescription}
 								</span>
-							)}
+							))}
 					</div>
 				</div>
 
@@ -249,13 +247,6 @@ export function BlockCard({
 							}
 						)}
 					>
-						{!insideBlockInspector && (
-							<BlockPreviewPanel
-								name={blockName}
-								variation={''}
-							/>
-						)}
-
 						<BlockStyleVariations
 							clientId={clientId}
 							blockName={blockName}

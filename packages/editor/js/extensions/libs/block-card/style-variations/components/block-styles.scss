@@ -1,3 +1,25 @@
+.blockera-extension-style-variations {
+	padding: 0;
+}
+
+.blockera-component-block-style-variations {
+
+	&.design-large {
+		background: #f6f6f6;
+		padding: 15px 20px;
+		text-align: center;
+		border-radius: 5px;
+		min-height: 180px;
+
+		> button {
+			width: 100%;
+			display: block;
+			margin-bottom: 8px;
+			padding: 0 10px;
+		}
+	}
+}
+
 .blockera-component-block-styles {
 
 	.blockera-block-styles-category {

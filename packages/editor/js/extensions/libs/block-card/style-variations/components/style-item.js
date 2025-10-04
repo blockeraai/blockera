@@ -184,27 +184,23 @@ export const StyleItem = ({
 				size="input"
 				data-test={`style-${style.name}`}
 			>
-				<Truncate
-					numberOfLines={1}
+				<Flex
+					alignItems={'center'}
+					justifyContent={'space-between'}
 					className="block-editor-block-styles__item-text"
 				>
-					<Flex
-						justifyContent={'space-between'}
-						alignItems={'center'}
-					>
-						{buttonText}
-						<Flex gap={2}>
-							{!(style?.isEnabled || true) && (
-								<Icon icon="eye-hide" iconSize="20" />
-							)}
-							<Icon
-								icon="more-vertical"
-								iconSize="20"
-								onClick={() => setIsOpenContextMenu(true)}
-							/>
-						</Flex>
+					<Truncate numberOfLines={1}>{buttonText}</Truncate>
+					<Flex gap={2}>
+						{!(style?.isEnabled || true) && (
+							<Icon icon="eye-hide" iconSize="20" />
+						)}
+						<Icon
+							icon="more-vertical"
+							iconSize="20"
+							onClick={() => setIsOpenContextMenu(true)}
+						/>
 					</Flex>
-				</Truncate>
+				</Flex>
 			</Button>
 
 			{isOpenContextMenu && (

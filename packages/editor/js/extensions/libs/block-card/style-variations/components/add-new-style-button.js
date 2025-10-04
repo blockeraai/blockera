@@ -59,7 +59,7 @@ export const AddNewStyleButton = ({
 	setCurrentActiveStyle,
 	setCurrentBlockStyleVariation,
 }: {
-	label: string,
+	label?: string,
 	styles?: Object,
 	blockName: string,
 	blockStyles: Array<Object>,
@@ -154,9 +154,11 @@ export const AddNewStyleButton = ({
 
 	return (
 		<Flex justifyContent={'space-between'}>
-			<h2 className={classNames('blockera-block-styles-category')}>
-				{label}
-			</h2>
+			{'undefined' !== typeof label && label?.length > 0 && (
+				<h2 className={classNames('blockera-block-styles-category')}>
+					{label}
+				</h2>
+			)}
 
 			<Button
 				size="extra-small"

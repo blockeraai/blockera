@@ -184,10 +184,7 @@ export function StyleVariationBlockCard({
 		return () => clearTimeout(timeoutId);
 	}, [title, updateGlobalStyles, initializeTitle, hasUserEdited]);
 
-	if (
-		!currentBlockStyleVariation?.name ||
-		currentBlockStyleVariation?.isDefault
-	) {
+	if (!currentBlockStyleVariation?.name) {
 		return <></>;
 	}
 

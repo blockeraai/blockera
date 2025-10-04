@@ -8,11 +8,12 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { Flex } from '@blockera/controls';
 import {
-	componentClassNames,
+	extensionClassNames,
 	componentInnerClassNames,
 } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
+import { PanelBodyControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -48,19 +49,45 @@ export const StyleVariationsManager = ({
 	styleItemHandler: (style: Object) => void,
 }): MixedElement => {
 	return (
-		<Flex
-			className={componentClassNames('block-styles', {
-				'blockera-control-is-not-active': isNotActive,
-			})}
-			direction="column"
-			gap="20px"
+		<PanelBodyControl
+			title={__('Style Variations', 'blockera')}
+			initialOpen={true}
+			icon={
+				<Icon
+					icon="style-variations-animated"
+					iconSize={24}
+					isAnimated={true}
+				/>
+			}
+			className={extensionClassNames('style-variations')}
 		>
-			<Flex direction="column" gap="10px">
+			<div
+				className={componentInnerClassNames('block-style-variations', {
+					'blockera-control-is-not-active': isNotActive,
+					'design-large': true,
+				})}
+			>
+				{blockStyles.map((style) => (
+					<StyleItem
+						key={style.name}
+						style={style}
+						blockName={blockName}
+						blockStyles={blockStyles}
+						setBlockStyles={setBlockStyles}
+						activeStyle={activeStyle}
+						setCurrentActiveStyle={setCurrentActiveStyle}
+						inGlobalStylesPanel={true}
+						onSelectStylePreview={onSelectStylePreview}
+						setCurrentPreviewStyle={setCurrentPreviewStyle}
+						styleItemHandler={styleItemHandler}
+					/>
+				))}
+
 				<AddNewStyleButton
+					label={__('Add New Style Variation', 'blockera')}
 					styles={editorStyles}
 					setStyles={setStyles}
 					blockName={blockName}
-					label={__('Style Variations', 'blockera')}
 					blockStyles={blockStyles}
 					setCurrentBlockStyleVariation={
 						setCurrentBlockStyleVariation
@@ -68,29 +95,7 @@ export const StyleVariationsManager = ({
 					setCurrentActiveStyle={setCurrentActiveStyle}
 					setBlockStyles={setBlockStyles}
 				/>
-
-				<div
-					className={componentInnerClassNames(
-						'block-styles__variants'
-					)}
-				>
-					{blockStyles.map((style) => (
-						<StyleItem
-							key={style.name}
-							style={style}
-							blockName={blockName}
-							blockStyles={blockStyles}
-							setBlockStyles={setBlockStyles}
-							activeStyle={activeStyle}
-							setCurrentActiveStyle={setCurrentActiveStyle}
-							inGlobalStylesPanel={true}
-							onSelectStylePreview={onSelectStylePreview}
-							setCurrentPreviewStyle={setCurrentPreviewStyle}
-							styleItemHandler={styleItemHandler}
-						/>
-					))}
-				</div>
-			</Flex>
-		</Flex>
+			</div>
+		</PanelBodyControl>
 	);
 };
