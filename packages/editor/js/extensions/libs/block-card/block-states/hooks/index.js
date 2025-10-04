@@ -310,12 +310,14 @@ export const useBlockStates = ({
 						: clonedSavedStates,
 					{
 						ref: {
-							path: isInnerBlock(currentBlock)
-								? `blockeraInnerBlocks.value[${currentBlock}].attributes.blockeraBlockStates`
-								: `blockeraBlockStates`,
-							reset: false,
-							action: 'normal',
-							defaultValue: {},
+							current: {
+								path: isInnerBlock(currentBlock)
+									? `blockeraInnerBlocks.value[${currentBlock}].attributes.blockeraBlockStates`
+									: `blockeraBlockStates`,
+								reset: false,
+								action: 'normal',
+								defaultValue: {},
+							},
 						},
 					}
 				);

@@ -54,14 +54,16 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 
 						onChange('blockeraInnerBlocks', values, {
 							ref: {
-								path:
-									'normal' === currentState &&
-									'desktop' === currentBreakpoint
-										? `blockeraBlockStates.value[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks`
-										: 'blockeraInnerBlocks.value',
-								reset: false,
-								action: 'normal',
-								defaultValue: {},
+								current: {
+									path:
+										'normal' === currentState &&
+										'desktop' === currentBreakpoint
+											? `blockeraBlockStates.value[${currentState}].breakpoints[${currentBreakpoint}].attributes.blockeraInnerBlocks`
+											: 'blockeraInnerBlocks.value',
+									reset: false,
+									action: 'normal',
+									defaultValue: {},
+								},
 							},
 						});
 
@@ -85,6 +87,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 									continue;
 								}
 
+								// $FlowFixMe
 								setCurrentBlock(name);
 								onToggle(true, 'switch-to-inner', name);
 							}
