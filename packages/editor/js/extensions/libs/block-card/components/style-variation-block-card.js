@@ -35,10 +35,8 @@ import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import { useBlockSection } from '../../../components';
 import { EditableBlockName } from './editable-block-name';
-import type { UpdateBlockEditorSettings } from '../../types';
-import type { InnerBlockType } from '../inner-blocks/types';
+import type { TStyleVariationBlockCardProps } from '../types';
 import StateContainer from '../../../components/state-container';
-import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 
@@ -63,33 +61,7 @@ export function StyleVariationBlockCard({
 	handleOnChangeAttributes,
 	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
-}: {
-	clientId: string,
-	isActive: boolean,
-	blockName: string,
-	supports: Object,
-	currentStateAttributes: Object,
-	additional: Object,
-	availableStates: Object,
-	children?: MixedElement,
-	currentBlockStyleVariation: { name: string, label: string },
-	setCurrentBlockStyleVariation: (style: {
-		name: string,
-		label: string,
-	}) => void,
-	currentBlock: 'master' | InnerBlockType | string,
-	currentState: TStates,
-	currentBreakpoint: TBreakpoint,
-	currentInnerBlockState: TStates,
-	insideBlockInspector: boolean,
-	handleOnChangeAttributes: (
-		attribute: string,
-		value: any,
-		options?: Object
-	) => void,
-	setAttributes: (attributes: Object) => void,
-	handleOnClick: UpdateBlockEditorSettings,
-}): MixedElement {
+}: TStyleVariationBlockCardProps): MixedElement {
 	const { onToggle } = useBlockSection('innerBlocksConfig');
 	const { blockeraGlobalStylesMetaData } = window;
 
@@ -216,7 +188,7 @@ export function StyleVariationBlockCard({
 		!currentBlockStyleVariation?.name ||
 		currentBlockStyleVariation?.isDefault
 	) {
-		return null;
+		return <></>;
 	}
 
 	const handleTitleChange = (newTitle: string) => {

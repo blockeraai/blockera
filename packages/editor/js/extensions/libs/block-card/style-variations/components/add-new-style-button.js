@@ -25,6 +25,10 @@ const PromoteGlobalStylesPremiumFeature = ({
 	items,
 	onClose = () => {},
 	isOpen = false,
+}: {
+	items: Array<Object>,
+	onClose: () => void,
+	isOpen: boolean,
 }): MixedElement | null => {
 	if (items.length < 2) {
 		return null;
@@ -110,6 +114,7 @@ export const AddNewStyleButton = ({
 			number = 1;
 		} else {
 			// Sort existing numbers and get the highest number
+			// $FlowFixMe
 			const maxNumber = Math.max(...existingNumbers);
 			number = maxNumber + 1;
 		}

@@ -30,6 +30,10 @@ export type FlexWrapTypes = 'nowrap' | 'wrap' | 'wrap-reverse';
 export type FlexProps = {
 	...ControlGeneralTypes,
 	/**
+	 * The onClick function is called when the flex container is clicked.
+	 */
+	onClick?: () => void,
+	/**
 	 * The flex-direction sets how flex items are placed in the flex container
 	 * defining the main axis and the direction (normal or reversed).
 	 */

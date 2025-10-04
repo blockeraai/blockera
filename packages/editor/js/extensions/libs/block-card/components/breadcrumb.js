@@ -37,7 +37,7 @@ export function Breadcrumb({
 	children?: MixedElement,
 	blockeraUnsavedData: Object,
 	availableStates: { [key: TStates]: StateTypes },
-	activeBlock?: 'master' | InnerBlockType,
+	activeBlock?: 'master' | InnerBlockType | string,
 }): MixedElement {
 	const { getActiveInnerState, getActiveMasterState, getBlockExtensionBy } =
 		select('blockera/extensions');

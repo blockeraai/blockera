@@ -27,9 +27,10 @@ import { useGlobalStylesPanelContext } from '../../../../canvas-editor/component
 
 type TBlockStyleVariations = {
 	clientId: string,
-	currentBlock: 'master' | InnerBlockType | string,
+	blockName: string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
+	currentBlock: 'master' | InnerBlockType | string,
 	context?: 'inspector-controls' | 'global-styles-panel',
 };
 

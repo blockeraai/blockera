@@ -46,7 +46,7 @@ function BlockStyles({
 	context = 'inspector-controls',
 }: {
 	blockName: string,
-	isNotActive: boolean,
+	isNotActive?: boolean,
 	context?: 'global-styles-panel' | 'inspector-controls',
 	styles: {
 		onSelect: (style: string) => void,

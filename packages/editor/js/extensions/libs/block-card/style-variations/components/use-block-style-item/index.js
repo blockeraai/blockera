@@ -41,12 +41,19 @@ export const useBlockStyleItem = ({
 	blockName: string,
 	cachedStyle: Object,
 	blockStyles: Array<Object>,
-	setStyles: (styles: Object) => void,
 	setCachedStyle: (style: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
+	setStyles: (styles: Object, options?: Object) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
+}): ({
+	handleOnDelete: (currentStyleName: string) => void,
+	handleOnDuplicate: (currentStyle: Object) => void,
+	handleOnDetachStyle: (currentStyle: Object) => void,
+	handleOnSaveCustomizations: (currentStyle: Object) => void,
+	handleOnEnable: (status: boolean, currentStyle: Object) => void,
+	handleOnClearAllCustomizations: (currentStyle: Object) => void,
 }) => {
 	const { base } = useGlobalStylesContext();
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
@@ -88,7 +95,7 @@ export const useBlockStyleItem = ({
 		[styles, blockStyles]
 	);
 
-	const handleOnClearAllCustomizations = (currentStyle) => {
+	const handleOnClearAllCustomizations = (currentStyle: Object) => {
 		setStyles(
 			{
 				variations: {
@@ -134,7 +141,7 @@ export const useBlockStyleItem = ({
 		}
 	};
 
-	const handleOnDelete = (currentStyleName) => {
+	const handleOnDelete = (currentStyleName: string) => {
 		setBlockStyles(
 			blockStyles.filter((style) => style.name !== currentStyleName)
 		);
@@ -153,7 +160,7 @@ export const useBlockStyleItem = ({
 		setCurrentBlockStyleVariation(undefined);
 	};
 
-	const handleOnSaveCustomizations = (currentStyle) => {
+	const handleOnSaveCustomizations = (currentStyle: Object) => {
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
 
@@ -172,7 +179,7 @@ export const useBlockStyleItem = ({
 		);
 	};
 
-	const handleOnDetachStyle = (currentStyle) => {
+	const handleOnDetachStyle = (currentStyle: Object) => {
 		setCurrentActiveStyle(getDefaultStyle(blockStyles));
 
 		const { getSelectedBlock } = select(blockEditorStore);
