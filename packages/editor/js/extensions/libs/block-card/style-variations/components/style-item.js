@@ -194,6 +194,13 @@ export const StyleItem = ({
 						{!(style?.isEnabled || true) && (
 							<Icon icon="eye-hide" iconSize="20" />
 						)}
+						{style.icon && (
+							<Icon
+								icon={style.icon.name}
+								library={style.icon.library}
+								iconSize="20"
+							/>
+						)}
 						<Icon
 							icon="more-vertical"
 							iconSize="20"

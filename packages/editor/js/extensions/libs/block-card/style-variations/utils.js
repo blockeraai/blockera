@@ -15,6 +15,11 @@ import { _x } from '@wordpress/i18n';
 import { useMemo } from '@wordpress/element';
 
 /**
+ * Internal dependencies
+ */
+import { useGlobalStylesContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
+
+/**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
  *
  * Returns the active style from the given className.
@@ -67,27 +72,47 @@ export function replaceActiveStyle(
  * act as a fallback for when there is no active style applied to a block. The default item also serves
  * as a switch on the frontend to deactivate non-default styles.
  */
-export function getRenderedStyles(styles: Array<any>): Array<Object> {
+export function getRenderedStyles(
+	styles: Array<any>,
+	baseVariations: Array<Object>
+): Array<Object> {
+	const defaultGlobalStyle = {
+		name: 'default',
+		label: _x('Default global style', 'block style', 'blockera'),
+		isDefault: true,
+		icon: {
+			name: 'wordpress',
+			library: 'wp',
+		},
+	};
+
 	if (!styles || styles.length === 0) {
-		return [
-			{
-				name: 'default',
-				label: _x('Default', 'block style', 'blockera'),
-				isDefault: true,
-			},
-		];
+		return [defaultGlobalStyle];
 	}
 
-	return getDefaultStyle(styles)
-		? styles
-		: [
-				{
-					name: 'default',
-					label: _x('Default', 'block style', 'blockera'),
-					isDefault: true,
+	const normalizeStyle = (style: Object): Object => {
+		if (style.name in baseVariations) {
+			return {
+				...style,
+				icon: {
+					name: 'wordpress',
+					library: 'wp',
 				},
-				...styles,
-		  ];
+			};
+		}
+
+		return {
+			...style,
+			icon: {
+				name: 'blockera',
+				library: 'blockera',
+			},
+		};
+	};
+
+	return getDefaultStyle(styles)
+		? styles.map(normalizeStyle)
+		: [defaultGlobalStyle, ...styles.map(normalizeStyle)];
 }
 
 /**
@@ -137,8 +162,18 @@ export function useStylesForBlocks({
 		clientId,
 		blockName,
 	]);
+	const {
+		base: {
+			styles: {
+				blocks: {
+					[blockName]: { variations: baseVariations },
+				},
+			},
+		},
+	} = useGlobalStylesContext();
+
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
-	const stylesToRender = getRenderedStyles(styles);
+	const stylesToRender = getRenderedStyles(styles, baseVariations);
 	const activeStyle = getActiveStyle(stylesToRender, className);
 	const genericPreviewBlock = useGenericPreviewBlock(block, blockType);
 
