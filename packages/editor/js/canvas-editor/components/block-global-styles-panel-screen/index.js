@@ -63,7 +63,7 @@ export const BlockGlobalStylesPanelScreen = ({
 
 		// If no direct match found, search through innerBlocks
 		if (!matchingBlock) {
-			const findInInnerBlocks = (blockList) => {
+			const findInInnerBlocks = (blockList: Object[]): ?Object => {
 				for (const block of blockList) {
 					if (block.name === selectedBlockStyle) {
 						return block;
@@ -75,6 +75,7 @@ export const BlockGlobalStylesPanelScreen = ({
 				}
 				return null;
 			};
+
 			matchingBlock = findInInnerBlocks(blocks);
 		}
 
@@ -103,8 +104,8 @@ export const BlockGlobalStylesPanelScreen = ({
 
 	useEffect(() => {
 		if (!hasBlockeraExtensions && selectedBlockStyle) {
-			screenElement.classList.remove('has-blockera-extensions');
-			screenElement.classList.add('has-not-blockera-extensions');
+			screenElement?.classList.remove('has-blockera-extensions');
+			screenElement?.classList.add('has-not-blockera-extensions');
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, hasBlockeraExtensions]);
@@ -122,7 +123,7 @@ export const BlockGlobalStylesPanelScreen = ({
 		return <></>;
 	}
 
-	screenElement.classList.add('has-blockera-extensions');
+	screenElement?.classList.add('has-blockera-extensions');
 
 	return createPortal(
 		<div className={className}>

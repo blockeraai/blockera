@@ -11,10 +11,10 @@ import { select, dispatch, subscribe } from '@wordpress/data';
 import { STORE_NAME as blockeraEditorStore } from '../../../store/constants';
 
 // Keep track of the previously selected block
-let previouslySelectedBlockClientId = null;
+let previouslySelectedBlockClientId: ?string = null;
 
 // Subscribe to block selection changes
-export const unsubscribe = subscribe(() => {
+export const unsubscribe: () => void = subscribe(() => {
 	// Get the currently selected block
 	const selectedBlock = select('core/block-editor').getSelectedBlock();
 

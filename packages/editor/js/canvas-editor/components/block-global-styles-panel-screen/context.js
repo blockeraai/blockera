@@ -8,7 +8,7 @@ import { select, dispatch } from '@wordpress/data';
 import { store as editorStore } from '@wordpress/editor';
 import { createContext, useContext } from '@wordpress/element';
 
-export const GlobalStylesPanelContext = createContext({
+export const GlobalStylesPanelContext: Object = createContext({
 	currentBlockStyleVariation: {
 		name: '',
 		label: '',
@@ -29,15 +29,30 @@ export const GlobalStylesPanelContextProvider = ({
 	);
 };
 
-export const useGlobalStylesPanelContext = () => {
-	const contextReceivedValue = useContext(GlobalStylesPanelContext);
-
-	const { getEditorSettings } = select(editorStore);
-	const { updateEditorSettings } = dispatch(editorStore);
-
-	return {
-		...contextReceivedValue,
-		updateEditorSettings,
-		getEditorSettings,
-	};
+type UseGlobalStylesPanelContextReturnType = {
+	currentBlockStyleVariation: {
+		name: string,
+		label: string,
+	},
+	setCurrentBlockStyleVariation: (Object) => void,
+	setStyles: (Object) => void,
+	styles: Object,
+	blockName: string,
+	selectedBlockClientId: string,
+	updateEditorSettings: (Object) => void,
+	getEditorSettings: () => Object,
 };
+
+export const useGlobalStylesPanelContext =
+	(): UseGlobalStylesPanelContextReturnType => {
+		const contextReceivedValue = useContext(GlobalStylesPanelContext);
+
+		const { getEditorSettings } = select(editorStore);
+		const { updateEditorSettings } = dispatch(editorStore);
+
+		return {
+			...contextReceivedValue,
+			updateEditorSettings,
+			getEditorSettings,
+		};
+	};

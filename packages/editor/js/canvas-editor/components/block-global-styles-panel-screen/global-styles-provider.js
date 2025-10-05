@@ -227,15 +227,21 @@ function useGlobalStylesBaseConfig(): Object {
  * }} options - The options.
  * @return {Object} The global styles context.
  */
-export function useGlobalStylesContext({
-	path = '',
-	from = 'merged',
-	single = false,
-}: {
-	path: string,
-	single: boolean,
-	from: 'merged' | 'base' | 'user',
-} = {}): Object {
+export function useGlobalStylesContext(
+	{
+		path,
+		from,
+		single,
+	}: {
+		path: string,
+		single: boolean,
+		from: 'merged' | 'base' | 'user',
+	} = {
+		path: '',
+		single: false,
+		from: 'merged',
+	}
+): Object {
 	const [isUserConfigReady, userConfig, setUserConfig] =
 		useGlobalStylesUserConfig();
 	const [isBaseConfigReady, baseConfig] = useGlobalStylesBaseConfig();

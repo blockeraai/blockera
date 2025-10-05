@@ -18,11 +18,15 @@ export const useBackButton = ({
 	setSelectedBlockStyle,
 	setSelectedBlockStyleVariation,
 }: {
-	screenElement: HTMLElement,
+	screenElement: HTMLElement | null,
 	setSelectedBlockRef: (blockRef: string) => void,
 	setSelectedBlockStyle: (blockName: string) => void,
 	setSelectedBlockStyleVariation: (blockName: string) => void,
 }) => {
+	if (!screenElement) {
+		return;
+	}
+
 	const backButton = screenElement.querySelector('div');
 
 	if (backButton) {

@@ -11,7 +11,7 @@ import { getCSSValueFromRawStyle } from '@wordpress/style-engine';
 export const ROOT_BLOCK_SELECTOR = 'body';
 export const ROOT_CSS_PROPERTIES_SELECTOR = ':root';
 
-export function useToolsPanelDropdownMenuProps() {
+export function useToolsPanelDropdownMenuProps(): Object {
 	const isMobile = useViewportMatch('medium', '<');
 	return !isMobile
 		? {
@@ -25,12 +25,12 @@ export function useToolsPanelDropdownMenuProps() {
 }
 
 function findInPresetsBy(
-	features,
-	blockName,
-	presetPath,
-	presetProperty,
-	presetValueValue
-) {
+	features: Object,
+	blockName: string,
+	presetPath: string[],
+	presetProperty: string,
+	presetValueValue: string
+): ?Object {
 	// Block presets take priority above root level presets.
 	const orderedPresetsByOrigin = [
 		getValueFromObjectPath(features, ['blocks', blockName, ...presetPath]),
@@ -60,8 +60,9 @@ function findInPresetsBy(
 							presetObject.slug
 						);
 						if (
+							highestPresetObjectWithSameSlug &&
 							highestPresetObjectWithSameSlug[presetProperty] ===
-							presetObject[presetProperty]
+								presetObject[presetProperty]
 						) {
 							return presetObject;
 						}
@@ -74,17 +75,19 @@ function findInPresetsBy(
 }
 
 export function getPresetVariableFromValue(
-	features,
-	blockName,
-	variableStylePath,
-	presetPropertyValue
-) {
+	features: Object,
+	blockName: string,
+	variableStylePath: string,
+	presetPropertyValue: string
+): string | Object {
 	if (!presetPropertyValue) {
 		return presetPropertyValue;
 	}
 
+	// $FlowFixMe
 	const cssVarInfix = STYLE_PATH_TO_CSS_VAR_INFIX[variableStylePath];
 
+	// $FlowFixMe
 	const metadata = PRESET_METADATA.find(
 		(data) => data.cssVarInfix === cssVarInfix
 	);
@@ -114,11 +117,12 @@ export function getPresetVariableFromValue(
 }
 
 function getValueFromPresetVariable(
-	features,
-	blockName,
-	variable,
-	[presetType, slug]
+	features: Object,
+	blockName: string,
+	variable: string,
+	[presetType, slug]: [string, string]
 ) {
+	// $FlowFixMe
 	const metadata = PRESET_METADATA.find(
 		(data) => data.cssVarInfix === presetType
 	);
@@ -143,7 +147,12 @@ function getValueFromPresetVariable(
 	return variable;
 }
 
-function getValueFromCustomVariable(features, blockName, variable, path) {
+function getValueFromCustomVariable(
+	features: Object,
+	blockName: string,
+	variable: string,
+	path: string[]
+): string | Object {
 	const result =
 		getValueFromObjectPath(features.settings, [
 			'blocks',
@@ -205,6 +214,7 @@ export function getValueFromVariable(
 
 	const [type, ...path] = parsedVar;
 	if (type === 'preset') {
+		// $FlowFixMe
 		return getValueFromPresetVariable(features, blockName, variable, path);
 	}
 	if (type === 'custom') {
@@ -273,12 +283,12 @@ export function scopeSelector(scope: string, selector: string): string {
 export function scopeFeatureSelectors(
 	scope: string,
 	selectors: Object
-): Object | undefined {
+): Object | void {
 	if (!scope || !selectors) {
 		return;
 	}
 
-	const featureSelectors = {};
+	const featureSelectors: Object = {};
 
 	Object.entries(selectors).forEach(([feature, selector]) => {
 		if (typeof selector === 'string') {
@@ -380,7 +390,11 @@ export function getBlockStyleVariationSelector(
 	}
 
 	const ancestorRegex = /((?::\([^)]+\))?\s*)([^\s:]+)/;
-	const addVariationClass = (_match, group1, group2) => {
+	const addVariationClass = (
+		_match: string,
+		group1: string,
+		group2: string
+	) => {
 		return group1 + group2 + variationClass;
 	};
 
@@ -475,10 +489,10 @@ export function getResolvedValue(
 	}
 
 	// Resolve ref values.
-	const resolvedValue = getResolvedRefValue(ruleValue, tree);
+	const resolvedValue: Object | string = getResolvedRefValue(ruleValue, tree);
 
 	// Resolve relative paths.
-	if (resolvedValue?.url) {
+	if ('object' === typeof resolvedValue && resolvedValue?.url) {
 		resolvedValue.url = getResolvedThemeFilePath(
 			resolvedValue.url,
 			tree?._links?.['wp:theme-file']
@@ -596,7 +610,7 @@ export function uniqByProperty(
 	array: Array<Object>,
 	property: string
 ): Array<Object> {
-	const seen = new Set();
+	const seen = new Set<string>();
 	return array.filter((item) => {
 		const value = item[property];
 		return seen.has(value) ? false : seen.add(value);
