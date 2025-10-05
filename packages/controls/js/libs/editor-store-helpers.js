@@ -19,9 +19,19 @@ export const updateConfig = (name: string, value: Object): void => {
 	}
 
 	const { getSelectedBlock = () => ({}) } = select('core/block-editor');
-	const { name: blockName } = getSelectedBlock() || {};
+	let { name: blockName } = getSelectedBlock() || {};
 
-	if (!blockName) {
+	const { getSelectedBlockStyle } = select('blockera/editor');
+	const { getActiveComplementaryArea } = select('core/interface');
+
+	const activeComplementaryArea =
+		getActiveComplementaryArea('core/edit-site');
+
+	if ('edit-site/global-styles' === activeComplementaryArea) {
+		blockName = getSelectedBlockStyle();
+	}
+
+	if (!blockName && 'edit-site/global-styles' !== activeComplementaryArea) {
 		return;
 	}
 

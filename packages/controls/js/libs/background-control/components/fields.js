@@ -62,7 +62,18 @@ const Fields: FieldItem = memo<FieldItem>(
 
 		const { getSelectedBlock = () => ({}) } =
 			select('core/block-editor') || {};
-		const { name = '' } = getSelectedBlock() || {};
+
+		let { name = '' } = getSelectedBlock() || {};
+		const { getSelectedBlockStyle } = select('blockera/editor');
+		const { getActiveComplementaryArea } = select('core/interface');
+
+		const activeComplementaryArea =
+			getActiveComplementaryArea('core/edit-site');
+
+		if ('edit-site/global-styles' === activeComplementaryArea) {
+			name = getSelectedBlockStyle();
+		}
+
 		const { getExtension } = select('blockera/extensions/config') || {};
 		const blockeraBackground =
 			'function' === typeof getExtension
