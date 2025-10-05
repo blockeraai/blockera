@@ -56,8 +56,8 @@ export const BorderAndShadowStyles = ({
 	});
 
 	// Check if we have cached result
-	if (BorderAndShadowStyles.cache?.[cacheKey]) {
-		return BorderAndShadowStyles.cache[cacheKey];
+	if ((BorderAndShadowStyles: any).cache?.[cacheKey]) {
+		return (BorderAndShadowStyles: any).cache[cacheKey];
 	}
 
 	const {
@@ -228,10 +228,10 @@ export const BorderAndShadowStyles = ({
 	}
 
 	// Cache the result
-	if (!BorderAndShadowStyles.cache) {
-		BorderAndShadowStyles.cache = {};
+	if (!(BorderAndShadowStyles: any).cache) {
+		(BorderAndShadowStyles: any).cache = {};
 	}
-	BorderAndShadowStyles.cache[cacheKey] = styleGroup;
+	(BorderAndShadowStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

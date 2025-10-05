@@ -74,8 +74,8 @@ export const EffectsStyles = ({
 	});
 
 	// Check if we have cached result
-	if (EffectsStyles.cache?.[cacheKey]) {
-		return EffectsStyles.cache[cacheKey];
+	if ((EffectsStyles: any).cache?.[cacheKey]) {
+		return (EffectsStyles: any).cache[cacheKey];
 	}
 
 	const {
@@ -559,10 +559,10 @@ export const EffectsStyles = ({
 	}
 
 	// Cache the result
-	if (!EffectsStyles.cache) {
-		EffectsStyles.cache = {};
+	if (!(EffectsStyles: any).cache) {
+		(EffectsStyles: any).cache = {};
 	}
-	EffectsStyles.cache[cacheKey] = styleGroup;
+	(EffectsStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

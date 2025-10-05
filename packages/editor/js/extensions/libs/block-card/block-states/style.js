@@ -44,8 +44,8 @@ export const BlockStatesStyles = ({
 	});
 
 	// Check if we have cached result
-	if (BlockStatesStyles.cache?.[cacheKey]) {
-		return BlockStatesStyles.cache[cacheKey];
+	if ((BlockStatesStyles: any).cache?.[cacheKey]) {
+		return (BlockStatesStyles: any).cache[cacheKey];
 	}
 
 	const { contentField } = config.statesConfig;
@@ -114,10 +114,10 @@ export const BlockStatesStyles = ({
 	}
 
 	// Cache the result
-	if (!BlockStatesStyles.cache) {
-		BlockStatesStyles.cache = {};
+	if (!(BlockStatesStyles: any).cache) {
+		(BlockStatesStyles: any).cache = {};
 	}
-	BlockStatesStyles.cache[cacheKey] = styleGroup;
+	(BlockStatesStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

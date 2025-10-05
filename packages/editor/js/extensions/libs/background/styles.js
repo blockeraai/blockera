@@ -49,8 +49,8 @@ export const BackgroundStyles = ({
 	});
 
 	// Check if we have cached result
-	if (BackgroundStyles.cache?.[cacheKey]) {
-		return BackgroundStyles.cache[cacheKey];
+	if ((BackgroundStyles: any).cache?.[cacheKey]) {
+		return (BackgroundStyles: any).cache[cacheKey];
 	}
 
 	const {
@@ -186,10 +186,10 @@ export const BackgroundStyles = ({
 	}
 
 	// Cache the result
-	if (!BackgroundStyles.cache) {
-		BackgroundStyles.cache = {};
+	if (!(BackgroundStyles: any).cache) {
+		(BackgroundStyles: any).cache = {};
 	}
-	BackgroundStyles.cache[cacheKey] = styleGroup;
+	(BackgroundStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

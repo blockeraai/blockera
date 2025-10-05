@@ -109,7 +109,7 @@ export function TypographyStyles({
 	});
 
 	// Check if we have cached result
-	const cachedResult = TypographyStyles.cache?.get(cacheKey);
+	const cachedResult = (TypographyStyles: any).cache?.get(cacheKey);
 	if (cachedResult) {
 		return cachedResult;
 	}
@@ -849,10 +849,10 @@ export function TypographyStyles({
 	}
 
 	// Cache the result
-	if (!TypographyStyles.cache) {
-		TypographyStyles.cache = new Map();
+	if (!(TypographyStyles: any).cache) {
+		(TypographyStyles: any).cache = new Map();
 	}
-	TypographyStyles.cache.set(cacheKey, styleGroup);
+	(TypographyStyles: any).cache.set(cacheKey, styleGroup);
 
 	return styleGroup;
 }

@@ -54,8 +54,8 @@ export const LayoutStyles = ({
 	});
 
 	// Check if we have cached result
-	if (LayoutStyles.cache?.[cacheKey]) {
-		return LayoutStyles.cache[cacheKey];
+	if ((LayoutStyles: any).cache?.[cacheKey]) {
+		return (LayoutStyles: any).cache[cacheKey];
 	}
 
 	const {
@@ -537,10 +537,10 @@ export const LayoutStyles = ({
 	}
 
 	// Cache the result
-	if (!LayoutStyles.cache) {
-		LayoutStyles.cache = {};
+	if (!(LayoutStyles: any).cache) {
+		(LayoutStyles: any).cache = {};
 	}
-	LayoutStyles.cache[cacheKey] = styleGroup;
+	(LayoutStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

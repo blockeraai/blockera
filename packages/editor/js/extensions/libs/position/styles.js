@@ -47,8 +47,8 @@ export const PositionStyles = ({
 	});
 
 	// Check if we have cached result
-	if (PositionStyles.cache?.[cacheKey]) {
-		return PositionStyles.cache[cacheKey];
+	if ((PositionStyles: any).cache?.[cacheKey]) {
+		return (PositionStyles: any).cache[cacheKey];
 	}
 
 	const { blockeraPosition, blockeraZIndex } = config.positionConfig;
@@ -277,10 +277,10 @@ export const PositionStyles = ({
 	}
 
 	// Cache the result
-	if (!PositionStyles.cache) {
-		PositionStyles.cache = {};
+	if (!(PositionStyles: any).cache) {
+		(PositionStyles: any).cache = {};
 	}
-	PositionStyles.cache[cacheKey] = styleGroup;
+	(PositionStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

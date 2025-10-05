@@ -43,8 +43,8 @@ export const MouseStyles = ({
 	});
 
 	// Check if we have cached result
-	if (MouseStyles.cache?.[cacheKey]) {
-		return MouseStyles.cache[cacheKey];
+	if ((MouseStyles: any).cache?.[cacheKey]) {
+		return (MouseStyles: any).cache[cacheKey];
 	}
 
 	const { blockeraCursor, blockeraUserSelect, blockeraPointerEvents } =
@@ -181,10 +181,10 @@ export const MouseStyles = ({
 	}
 
 	// Cache the result
-	if (!MouseStyles.cache) {
-		MouseStyles.cache = {};
+	if (!(MouseStyles: any).cache) {
+		(MouseStyles: any).cache = {};
 	}
-	MouseStyles.cache[cacheKey] = styleGroup;
+	(MouseStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

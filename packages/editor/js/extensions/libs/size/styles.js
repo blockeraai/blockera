@@ -59,8 +59,8 @@ export const SizeStyles = ({
 	});
 
 	// Check if we have cached result
-	if (SizeStyles.cache?.[cacheKey]) {
-		return SizeStyles.cache[cacheKey];
+	if ((SizeStyles: any).cache?.[cacheKey]) {
+		return (SizeStyles: any).cache[cacheKey];
 	}
 
 	const {
@@ -547,10 +547,10 @@ export const SizeStyles = ({
 	}
 
 	// Cache the result
-	if (!SizeStyles.cache) {
-		SizeStyles.cache = {};
+	if (!(SizeStyles: any).cache) {
+		(SizeStyles: any).cache = {};
 	}
-	SizeStyles.cache[cacheKey] = styleGroup;
+	(SizeStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

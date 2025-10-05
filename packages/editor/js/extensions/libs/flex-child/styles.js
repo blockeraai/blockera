@@ -53,8 +53,8 @@ export const FlexChildStyles = ({
 	});
 
 	// Check if we have cached result
-	if (FlexChildStyles.cache?.[cacheKey]) {
-		return FlexChildStyles.cache[cacheKey];
+	if ((FlexChildStyles: any).cache?.[cacheKey]) {
+		return (FlexChildStyles: any).cache[cacheKey];
 	}
 
 	const {
@@ -245,10 +245,10 @@ export const FlexChildStyles = ({
 	}
 
 	// Cache the result
-	if (!FlexChildStyles.cache) {
-		FlexChildStyles.cache = {};
+	if (!(FlexChildStyles: any).cache) {
+		(FlexChildStyles: any).cache = {};
 	}
-	FlexChildStyles.cache[cacheKey] = styleGroup;
+	(FlexChildStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

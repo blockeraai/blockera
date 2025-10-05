@@ -136,8 +136,8 @@ export const SpacingStyles = ({
 	});
 
 	// Check if we have cached result
-	if (SpacingStyles.cache?.[cacheKey]) {
-		return SpacingStyles.cache[cacheKey];
+	if ((SpacingStyles: any).cache?.[cacheKey]) {
+		return (SpacingStyles: any).cache[cacheKey];
 	}
 
 	const fallbackProps = !hasBlockSupport(blockName, 'spacing')
@@ -175,10 +175,10 @@ export const SpacingStyles = ({
 	];
 
 	// Cache the result
-	if (!SpacingStyles.cache) {
-		SpacingStyles.cache = {};
+	if (!(SpacingStyles: any).cache) {
+		(SpacingStyles: any).cache = {};
 	}
-	SpacingStyles.cache[cacheKey] = styleGroup;
+	(SpacingStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };
