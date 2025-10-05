@@ -161,8 +161,7 @@ export default function App(props: Object): MixedElement {
 				mergedConfig,
 				name
 			),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[name, currentBlockStyleVariation]
+		[name, mergedConfig, defaultStylesValue, currentBlockStyleVariation]
 	);
 
 	const getStyles = useCallback(
@@ -281,8 +280,35 @@ export default function App(props: Object): MixedElement {
 
 			setUserConfig(newUserConfig);
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[styles, name, userConfig]
+		[
+			name,
+			userConfig,
+			setUserConfig,
+			cleanupStyles,
+			setBlockStyles,
+			getSelectedBlockStyleVariation,
+		]
+	);
+
+	const children = useMemo(
+		() => (
+			<SlotFillProvider>
+				<Slot name={'blockera-block-before'} />
+
+				<BlockPortals
+					blockId={`#block-${props.clientId}`}
+					mainSlot={'blockera-block-slot'}
+					slots={
+						// slot selectors is feature on configuration block to create custom slots for anywhere.
+						// we can add slotSelectors property on block configuration to handle custom preview of block.
+						{}
+					}
+				/>
+
+				<Slot name={'blockera-block-after'} />
+			</SlotFillProvider>
+		),
+		[props.clientId]
 	);
 
 	// let prefixParts = [];
@@ -336,21 +362,7 @@ export default function App(props: Object): MixedElement {
 								originDefaultAttributes,
 							}}
 						>
-							<SlotFillProvider>
-								<Slot name={'blockera-block-before'} />
-
-								<BlockPortals
-									blockId={`#block-${props.clientId}`}
-									mainSlot={'blockera-block-slot'}
-									slots={
-										// slot selectors is feature on configuration block to create custom slots for anywhere.
-										// we can add slotSelectors property on block configuration to handle custom preview of block.
-										{}
-									}
-								/>
-
-								<Slot name={'blockera-block-after'} />
-							</SlotFillProvider>
+							{children}
 						</BlockBase>
 					</BlockApp>
 				</BaseControlContext.Provider>
