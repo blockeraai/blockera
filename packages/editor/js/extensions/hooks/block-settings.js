@@ -393,11 +393,17 @@ function mergeBlockSettings(
 				[]
 			);
 
+			const selectedBlock =
+				select('core/block-editor').getSelectedBlock();
+
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useEffect(() => {
+				if (!selectedBlock) {
+					return;
+				}
 				// On rendering the block settings, we can bootstrap all scripts.
 				bootstrapScripts();
-			}, []);
+			}, [selectedBlock]);
 
 			if (isFunction(additional?.edit) && isAvailableBlock()) {
 				return (
