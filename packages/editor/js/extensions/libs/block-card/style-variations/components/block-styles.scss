@@ -15,8 +15,8 @@
 		> button {
 			width: 100%;
 			display: block;
+			padding: 0 10px !important;
 			margin-bottom: 8px;
-			padding: 0 10px;
 		}
 
 		.blockera-component-block-style-variations-description {
@@ -24,6 +24,11 @@
 			font-size: 12px;
 			margin: 10px 0;
 			text-align: center;
+		}
+
+		.blockera-control-btn-add {
+			width: 80%;
+			margin: 0 auto;
 		}
 	}
 }

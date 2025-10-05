@@ -131,6 +131,10 @@ export const AddNewStyleButton = ({
 		const newStyle = {
 			name,
 			label: styleLabel,
+			icon: {
+				name: 'blockera',
+				library: 'blockera',
+			},
 		};
 
 		setBlockStyles([...blockStyles, newStyle]);
@@ -178,9 +182,7 @@ export const AddNewStyleButton = ({
 								padding: 0,
 								marginLeft: 'auto',
 						  }
-						: {
-								width: '100%',
-						  }
+						: {}
 				}
 				data-test={'add-new-block-style-variation'}
 			>
