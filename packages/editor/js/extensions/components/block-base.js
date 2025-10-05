@@ -44,7 +44,6 @@ import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
-import { useExtensionsStore } from '../../hooks/use-extensions-store';
 import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
 import {
 	unstableBootstrapBlockStatesDefinitions,
@@ -90,9 +89,7 @@ export const BlockBase: ComponentType<any> = (
 		currentBreakpoint,
 		getBlockExtensionBy,
 		currentInnerBlockState,
-	} = useExtensionsStore({ name, clientId });
-
-	const {
+		getDeviceType,
 		supports,
 		selectors,
 		blockVariations,
@@ -100,6 +97,18 @@ export const BlockBase: ComponentType<any> = (
 		activeBlockVariation,
 		getActiveBlockVariation,
 	} = useSelect((select) => {
+		const {
+			getBlockExtensionBy,
+			getActiveInnerState,
+			getActiveMasterState,
+			getExtensionCurrentBlock,
+			getExtensionCurrentBlockStateBreakpoint,
+		} = select('blockera/extensions');
+
+		const currentBlock = getExtensionCurrentBlock();
+
+		////
+
 		const { getActiveBlockVariation: _getActiveBlockVariation } = select(
 			'blockera/extensions'
 		);
@@ -112,7 +121,15 @@ export const BlockBase: ComponentType<any> = (
 			attributes: availableAttributes,
 		} = getBlockType(name);
 
+		const { getDeviceType } = select('blockera/editor');
+
 		return {
+			getDeviceType,
+			currentBlock,
+			getBlockExtensionBy,
+			currentState: getActiveMasterState(clientId, name),
+			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+			currentInnerBlockState: getActiveInnerState(clientId, currentBlock),
 			supports,
 			selectors,
 			availableAttributes,
@@ -138,8 +155,6 @@ export const BlockBase: ComponentType<any> = (
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
 	} = dispatch('blockera/extensions') || {};
-
-	const { getDeviceType } = select('blockera/editor');
 
 	const masterIsNormalState = useCallback(
 		(): boolean =>
@@ -239,30 +254,37 @@ export const BlockBase: ComponentType<any> = (
 		innerBlocks: additional?.blockeraInnerBlocks,
 	});
 
-	const updateBlockEditorSettings: UpdateBlockEditorSettings = (
-		key: string,
-		value: any
-	): void => {
-		switch (key) {
-			case 'current-block':
-				setCurrentBlock(value);
-				break;
-			case 'current-state':
-				if (isInnerBlock(currentBlock)) {
-					return setInnerBlockState(value);
-				}
+	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
+		(key: string, value: any): void => {
+			switch (key) {
+				case 'current-block':
+					setCurrentBlock(value);
+					break;
+				case 'current-state':
+					if (isInnerBlock(currentBlock)) {
+						return setInnerBlockState(value);
+					}
 
-				setCurrentState(value);
-				break;
-			case 'current-block-style-variation':
-				setCurrentBlockStyleVariation(value);
-				break;
-		}
-	};
+					setCurrentState(value);
+					break;
+				case 'current-block-style-variation':
+					setCurrentBlockStyleVariation(value);
+					break;
+			}
+		},
+		[
+			currentBlock,
+			setCurrentBlock,
+			setCurrentState,
+			setInnerBlockState,
+			setCurrentBlockStyleVariation,
+		]
+	);
 
 	const currentAttributes = useCalculateCurrentAttributes({
-		name,
-		clientId,
+		currentBlock,
+		currentState,
+		currentBreakpoint,
 		currentInnerBlock,
 		blockeraInnerBlocks,
 		attributes: sanitizedAttributes,

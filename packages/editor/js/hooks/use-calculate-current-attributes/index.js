@@ -18,20 +18,17 @@ import {
 	isInnerBlock,
 	prepareBlockeraDefaultAttributesValues,
 } from '../../extensions/components/utils';
-import { useExtensionsStore } from '../use-extensions-store';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 
 export const useCalculateCurrentAttributes = ({
-	name,
-	clientId,
 	attributes,
+	currentBlock,
+	currentState,
 	blockAttributes,
+	currentBreakpoint,
 	currentInnerBlock,
 	blockeraInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
-	const { currentBlock, currentState, currentBreakpoint } =
-		useExtensionsStore({ name, clientId });
-
 	return useMemo(() => {
 		let currentAttributes: Object = {};
 

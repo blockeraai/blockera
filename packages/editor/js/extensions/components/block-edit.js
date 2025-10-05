@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { type MixedElement, type ComponentType } from 'react';
-import { memo, useState } from '@wordpress/element';
+import { memo, useState, useMemo } from '@wordpress/element';
 import { SlotFillProvider, Slot } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -37,6 +37,27 @@ export const Edit: ComponentType<any> = memo(
 		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useState(false);
+
+		const children = useMemo(
+			() => (
+				<SlotFillProvider>
+					<Slot name={'blockera-block-before'} />
+
+					<BlockPortals
+						blockId={`#block-${props.clientId}`}
+						mainSlot={'blockera-block-slot'}
+						slots={
+							// slot selectors is feature on configuration block to create custom slots for anywhere.
+							// we can add slotSelectors property on block configuration to handle custom preview of block.
+							additional?.slotSelectors || {}
+						}
+					/>
+
+					<Slot name={'blockera-block-after'} />
+				</SlotFillProvider>
+			),
+			[props.clientId, additional?.slotSelectors]
+		);
 
 		return (
 			<ErrorBoundary
@@ -71,21 +92,7 @@ export const Edit: ComponentType<any> = memo(
 								),
 							}}
 						>
-							<SlotFillProvider>
-								<Slot name={'blockera-block-before'} />
-
-								<BlockPortals
-									blockId={`#block-${props.clientId}`}
-									mainSlot={'blockera-block-slot'}
-									slots={
-										// slot selectors is feature on configuration block to create custom slots for anywhere.
-										// we can add slotSelectors property on block configuration to handle custom preview of block.
-										additional?.slotSelectors || {}
-									}
-								/>
-
-								<Slot name={'blockera-block-after'} />
-							</SlotFillProvider>
+							{children}
 						</BlockBase>
 					</BlockApp>
 				</BaseControlContext.Provider>
