@@ -57,27 +57,22 @@
 	}
 
 	.blockera-component-block-styles__variants {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 8px;
-		justify-content: space-between;
 
 		& > span:empty {
 			display: none;
 		}
 
 		.blockera-component-button {
+			width: 100%;
 			--blockera-controls-input-height: 30px;
 			box-shadow: inset 0 0 0 1px #e0e0e0;
 			color: var(--blockera-controls-color, #1e1e1e);
-			width: calc(50% - 4px);
 			height: var(--blockera-controls-input-height);
 			line-height: var(--blockera-controls-input-height);
-			display: inline-flex;
-    		justify-content: flex-start !important;
 			align-content: center;
 			padding: 0 0 0 8px !important;
 			font-size: 12px;
+			margin-bottom: 8px;
 
 			.block-editor-block-styles__item-text {
 				text-align: start;

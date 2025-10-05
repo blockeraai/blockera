@@ -106,7 +106,7 @@ export const StyleItem = ({
 				}
 				onMouseEnter={() => {
 					// Skip mouse enter if style is disabled.
-					if (false === cachedStyle?.status) {
+					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
 					// Skip mouse enter if rendered inside global styles panel.
@@ -118,7 +118,7 @@ export const StyleItem = ({
 				}}
 				onFocus={() => {
 					// Skip focus if style is disabled.
-					if (false === cachedStyle?.status) {
+					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
 					// Skip focus if rendered inside global styles panel.
@@ -130,7 +130,7 @@ export const StyleItem = ({
 				}}
 				onMouseLeave={() => {
 					// Skip mouse leave if style is disabled.
-					if (false === cachedStyle?.status) {
+					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
 					// Skip mouse leave if rendered inside global styles panel.
@@ -142,7 +142,7 @@ export const StyleItem = ({
 				}}
 				onBlur={() => {
 					// Skip blur if style is disabled.
-					if (false === cachedStyle?.status) {
+					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
 					// Skip blur if rendered inside global styles panel.
