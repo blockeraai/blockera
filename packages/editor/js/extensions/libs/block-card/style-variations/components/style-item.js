@@ -208,84 +208,94 @@ export const StyleItem = ({
 						/>
 					</Flex>
 				</Flex>
-			</Button>
-
-			{isOpenContextMenu && (
-				<Popover
-					title={''}
-					offset={10}
-					placement="bottom-start"
-					className="variations-picker-popover"
-					onClose={() => {
-						setIsOpenContextMenu(false);
-					}}
-				>
-					<Flex direction="column" gap={10}>
-						<Flex
-							justifyContent={'flex-start'}
-							gap={8}
-							alignItems={'center'}
-							className={controlInnerClassNames('menu-item')}
-							onClick={() => handleOnDuplicate(style)}
-						>
-							<Icon icon="duplicate" iconSize="24" />
-							{__('Duplicate', 'blockera')}
-						</Flex>
-						<Flex
-							justifyContent={'flex-start'}
-							gap={8}
-							alignItems={'center'}
-							className={controlInnerClassNames('menu-item')}
-							onClick={() =>
-								handleOnClearAllCustomizations(style)
-							}
-						>
-							<Icon icon="icon-circle-arrow-left" iconSize="24" />
-							{__('Clear all customizations', 'blockera')}
-						</Flex>
-						<Divider />
-						{false === cachedStyle?.status && (
+				{isOpenContextMenu && (
+					<Popover
+						title={''}
+						offset={50}
+						draggable={true}
+						placement="left-start"
+						className="variations-picker-popover"
+						onClose={() => {
+							setIsOpenContextMenu(false);
+						}}
+					>
+						<Flex direction="column" gap={10}>
 							<Flex
 								justifyContent={'flex-start'}
 								gap={8}
 								alignItems={'center'}
 								className={controlInnerClassNames('menu-item')}
-								onClick={() => handleOnEnable(true, style)}
+								onClick={() => handleOnDuplicate(style)}
 							>
-								<Icon icon="eye-show" iconSize="24" />
-								{__('Enable', 'blockera')}
+								<Icon icon="duplicate" iconSize="24" />
+								{__('Duplicate', 'blockera')}
 							</Flex>
-						)}
-						{(true === cachedStyle?.status ||
-							!cachedStyle.hasOwnProperty('status')) && (
+							<Flex
+								justifyContent={'flex-start'}
+								gap={8}
+								alignItems={'center'}
+								className={controlInnerClassNames('menu-item')}
+								onClick={() =>
+									handleOnClearAllCustomizations(style)
+								}
+							>
+								<Icon
+									icon="icon-circle-arrow-left"
+									iconSize="24"
+								/>
+								{__('Clear all customizations', 'blockera')}
+							</Flex>
+							<Divider />
+							{false === cachedStyle?.status && (
+								<Flex
+									justifyContent={'flex-start'}
+									gap={8}
+									alignItems={'center'}
+									className={controlInnerClassNames(
+										'menu-item'
+									)}
+									onClick={() => handleOnEnable(true, style)}
+								>
+									<Icon icon="eye-show" iconSize="24" />
+									{__('Enable', 'blockera')}
+								</Flex>
+							)}
+							{(true === cachedStyle?.status ||
+								!cachedStyle.hasOwnProperty('status')) && (
+								<Flex
+									justifyContent={'flex-start'}
+									gap={8}
+									alignItems={'center'}
+									className={controlInnerClassNames(
+										'menu-item',
+										{
+											'is-disabled':
+												!style?.isEnabled || false,
+										}
+									)}
+									onClick={() => handleOnEnable(false, style)}
+								>
+									<Icon icon="eye-hide" iconSize="24" />
+									{__('Disable', 'blockera')}
+								</Flex>
+							)}
 							<Flex
 								justifyContent={'flex-start'}
 								gap={8}
 								alignItems={'center'}
 								className={controlInnerClassNames('menu-item', {
-									'is-disabled': !style?.isEnabled || false,
+									'delete-style': true,
 								})}
-								onClick={() => handleOnEnable(false, style)}
+								onClick={() => handleOnDelete(style.name)}
 							>
-								<Icon icon="eye-hide" iconSize="24" />
-								{__('Disable', 'blockera')}
+								<Icon icon="icon-recycle-bin" iconSize="24" />
+								{__('Delete', 'blockera')}
 							</Flex>
-						)}
-						<Flex
-							justifyContent={'flex-start'}
-							gap={8}
-							alignItems={'center'}
-							className={controlInnerClassNames('menu-item', {
-								'delete-style': true,
-							})}
-							onClick={() => handleOnDelete(style.name)}
-						>
-							<Icon icon="icon-recycle-bin" iconSize="24" />
-							{__('Delete', 'blockera')}
 						</Flex>
-					</Flex>
-				</Popover>
-			)}
+					</Popover>
+				)}
+			</Button>
+
 			{isActive && (
 				<Fill name="block-inspector-style-actions">
 					<Button
