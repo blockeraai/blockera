@@ -190,8 +190,8 @@ export function useGlobalStyle(
 		);
 		blockRootStyleWithoutVariation = omit(
 			shouldDecodeEncode
-				? getValueFromVariable(mergedConfig, blockName, rawResult)
-				: rawResult,
+				? getValueFromVariable(mergedConfig, blockName, rawResult) || {}
+				: rawResult || {},
 			['variations']
 		);
 	}

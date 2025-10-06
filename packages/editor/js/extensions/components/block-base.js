@@ -136,7 +136,7 @@ export const BlockBase: ComponentType<any> = (
 			getActiveBlockVariation,
 			activeBlockVariation: getActiveBlockVariation(
 				name,
-				getBlockAttributes(clientId)
+				getBlockAttributes(clientId) || {}
 			),
 			blockVariations: name && getBlockVariations(name, 'transform'),
 			activeVariation: _getActiveBlockVariation(),
