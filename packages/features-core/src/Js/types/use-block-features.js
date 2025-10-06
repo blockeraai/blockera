@@ -17,6 +17,7 @@ export type TContextualToolbarComponents = ComponentType<{
 export type TCalculatedFeatures = {
 	blockSideEffectFeatures: Array<TFeature>,
 	contextualToolbarFeatures: Array<TFeature>,
+	mappedFeatureUIComponents: Array<ComponentType<any>>,
 };
 
 export type TBlockFeaturesHookValue = {

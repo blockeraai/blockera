@@ -16,6 +16,7 @@ import App from './app';
 import { useBackButton } from './hooks';
 import { STORE_NAME } from '../../../store';
 import { unsubscribe } from './subscribe-unsubscribe';
+import bootstrapScripts from '../../../extensions/scripts';
 
 unsubscribe();
 
@@ -103,6 +104,9 @@ export const BlockGlobalStylesPanelScreen = ({
 	}, [selectedBlockRef, selectedBlock, selectedBlockStyle]);
 
 	useEffect(() => {
+		// On rendering the block settings, we can bootstrap all scripts.
+		bootstrapScripts();
+
 		if (!hasBlockeraExtensions && selectedBlockStyle) {
 			screenElement?.classList.remove('has-blockera-extensions');
 			screenElement?.classList.add('has-not-blockera-extensions');

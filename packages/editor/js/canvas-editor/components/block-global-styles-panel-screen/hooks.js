@@ -4,7 +4,12 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useCallback } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { omit } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -108,8 +113,11 @@ export function useGlobalStyle(
 	path: string,
 	blockName: string,
 	source: string = 'all',
-	{ shouldDecodeEncode = true }: { shouldDecodeEncode: boolean } = {}
-): [any, (newValue: any) => void] {
+	{
+		shouldDecodeEncode = true,
+		defaultStylesValue = {},
+	}: { shouldDecodeEncode: boolean, defaultStylesValue: Object } = {}
+): [any, any, (newValue: any) => void] {
 	const {
 		merged: mergedConfig,
 		base: baseConfig,
@@ -122,22 +130,32 @@ export function useGlobalStyle(
 		? `styles${appendedPath}`
 		: `styles.blocks.${blockName}${appendedPath}`;
 
-	const setStyle = (newValue) => {
-		setUserConfig((currentConfig) =>
-			setImmutably(
-				currentConfig,
-				finalPath.split('.'),
-				shouldDecodeEncode
-					? getPresetVariableFromValue(
-							mergedConfig.settings,
-							blockName,
-							path,
-							newValue
-					  )
-					: newValue
-			)
-		);
-	};
+	const setStyle = useCallback(
+		(newValue) => {
+			setUserConfig((currentConfig) =>
+				setImmutably(
+					currentConfig,
+					finalPath.split('.'),
+					shouldDecodeEncode
+						? getPresetVariableFromValue(
+								mergedConfig.settings,
+								blockName,
+								path,
+								newValue
+						  )
+						: newValue
+				)
+			);
+		},
+		[
+			finalPath,
+			shouldDecodeEncode,
+			mergedConfig,
+			blockName,
+			path,
+			setUserConfig,
+		]
+	);
 
 	let rawResult, result;
 	switch (source) {
@@ -163,5 +181,27 @@ export function useGlobalStyle(
 			throw 'Unsupported source';
 	}
 
-	return [result, setStyle];
+	let blockRootStyleWithoutVariation = {};
+
+	if (blockName) {
+		rawResult = getValueFromObjectPath(
+			mergedConfig,
+			finalPath.replace(appendedPath, '')
+		);
+		blockRootStyleWithoutVariation = omit(
+			shouldDecodeEncode
+				? getValueFromVariable(mergedConfig, blockName, rawResult)
+				: rawResult,
+			['variations']
+		);
+	}
+
+	return [
+		useMemo(
+			() => ({ ...defaultStylesValue, ...result }),
+			[result, defaultStylesValue]
+		),
+		blockRootStyleWithoutVariation,
+		setStyle,
+	];
 }

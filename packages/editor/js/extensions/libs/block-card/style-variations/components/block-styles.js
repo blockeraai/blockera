@@ -43,7 +43,6 @@ function BlockStyles({
 	styles,
 	blockName,
 	isNotActive,
-	onHoverClassName = () => {},
 	context = 'inspector-controls',
 }: {
 	blockName: string,
@@ -60,7 +59,6 @@ function BlockStyles({
 		popoverAnchor: Object,
 		setIsOpen: (isOpen: boolean) => void,
 	},
-	onHoverClassName?: (style?: string | null) => void,
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
@@ -135,7 +133,6 @@ function BlockStyles({
 		setCurrentActiveStyle(style);
 		onSelect(style);
 		setIsOpen(false);
-		onHoverClassName(null);
 		setHoveredStyle(null);
 	};
 
@@ -168,8 +165,6 @@ function BlockStyles({
 			setShowPreview(false);
 			setHoveredStyle(null);
 		}
-
-		onHoverClassName(item?.name ?? null);
 	};
 
 	// Handle search

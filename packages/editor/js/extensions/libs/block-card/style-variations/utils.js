@@ -12,7 +12,12 @@ import {
 import { useDispatch, useSelect } from '@wordpress/data';
 import TokenList from '@wordpress/token-list';
 import { _x } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useCallback } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { prepare } from '@blockera/data-editor';
 
 /**
  * Internal dependencies
@@ -162,32 +167,33 @@ export function useStylesForBlocks({
 		clientId,
 		blockName,
 	]);
-	const {
-		base: {
-			styles: {
-				blocks: {
-					[blockName]: { variations: baseVariations },
-				},
-			},
-		},
-	} = useGlobalStylesContext();
+	const { base } = useGlobalStylesContext();
 
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
-	const stylesToRender = getRenderedStyles(styles, baseVariations);
-	const activeStyle = getActiveStyle(stylesToRender, className);
+	const stylesToRender = getRenderedStyles(
+		styles,
+		prepare(`styles.blocks.${blockName}.variations`, base) || {}
+	);
+	const activeStyle = useMemo(
+		() => getActiveStyle(stylesToRender, className),
+		[stylesToRender, className]
+	);
 	const genericPreviewBlock = useGenericPreviewBlock(block, blockType);
 
-	const onSelect = (style: string) => {
-		const styleClassName = replaceActiveStyle(
-			className,
-			activeStyle,
-			style
-		);
-		updateBlockAttributes(clientId, {
-			className: styleClassName,
-		});
-		onSwitch();
-	};
+	const onSelect = useCallback(
+		(style: string) => {
+			const styleClassName = replaceActiveStyle(
+				className,
+				activeStyle,
+				style
+			);
+			updateBlockAttributes(clientId, {
+				className: styleClassName,
+			});
+			onSwitch();
+		},
+		[clientId, className, activeStyle, onSwitch, updateBlockAttributes]
+	);
 
 	return {
 		onSelect,

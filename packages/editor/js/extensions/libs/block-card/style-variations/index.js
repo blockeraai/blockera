@@ -4,7 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { ComponentType, MixedElement } from 'react';
-import { useMemo, useState, useEffect } from '@wordpress/element';
+import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -49,6 +49,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 
+	const onSwitch = useCallback(() => {}, []);
 	const {
 		onSelect,
 		stylesToRender,
@@ -58,7 +59,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	} = useStylesForBlocks({
 		clientId,
 		blockName,
-		onSwitch: () => {},
+		onSwitch,
 	});
 
 	const [currentActiveStyle, setCurrentActiveStyle] = useState(activeStyle);
@@ -104,6 +105,31 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		);
 	}, [blockeraGlobalStylesMetaData, blockName, currentActiveStyle]);
 
+	const memoizedStyles = useMemo(
+		() => ({
+			onSelect,
+			stylesToRender,
+			genericPreviewBlock,
+			activeStyle: currentActiveStyle,
+			setCurrentActiveStyle,
+			setCurrentPreviewStyle,
+			previewClassName,
+			popoverAnchor,
+			setIsOpen,
+		}),
+		[
+			onSelect,
+			stylesToRender,
+			genericPreviewBlock,
+			currentActiveStyle,
+			setCurrentActiveStyle,
+			setCurrentPreviewStyle,
+			previewClassName,
+			popoverAnchor,
+			setIsOpen,
+		]
+	);
+
 	if (
 		!stylesToRender ||
 		stylesToRender.length === 0 ||
@@ -127,17 +153,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				blockName={blockName}
 				context={context}
 				isNotActive={isNotActive}
-				styles={{
-					onSelect,
-					stylesToRender,
-					genericPreviewBlock,
-					activeStyle: currentActiveStyle,
-					setCurrentActiveStyle,
-					setCurrentPreviewStyle,
-					previewClassName,
-					popoverAnchor,
-					setIsOpen,
-				}}
+				styles={memoizedStyles}
 			/>
 		);
 	}

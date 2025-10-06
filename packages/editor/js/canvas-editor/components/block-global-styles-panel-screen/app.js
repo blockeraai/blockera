@@ -13,13 +13,7 @@ import { SlotFillProvider, Slot } from '@wordpress/components';
  * Blockera dependencies
  */
 import { BaseControlContext } from '@blockera/controls';
-import {
-	omit,
-	isEmpty,
-	isEquals,
-	pascalCase,
-	mergeObject,
-} from '@blockera/utils';
+import { isEmpty, isEquals, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -28,7 +22,6 @@ import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
 } from '../../../components';
-import { useGlobalStylesContext } from './global-styles-provider';
 import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
 import { ErrorBoundaryFallback } from '../../../extensions/hooks/block-settings';
 import { prepareBlockeraDefaultAttributesValues } from '../../../extensions/components/utils';
@@ -40,6 +33,7 @@ import {
 import { STORE_NAME } from '../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
 import { GlobalStylesPanelContextProvider } from './context';
+import { useGlobalStyle } from './hooks';
 
 // Helper functions
 const getBlockAttributes = (name: string): Object => {
@@ -57,28 +51,6 @@ const getBlockAttributes = (name: string): Object => {
 		)
 			? getSharedBlockAttributes()
 			: blockeraOverrideBlockTypeAttributes,
-	};
-};
-
-const getComputedStyles = (
-	currentBlockStyleVariation: Object,
-	defaultStylesValue: Object,
-	mergedConfig: Object,
-	name: string
-): Object => {
-	if (currentBlockStyleVariation && !currentBlockStyleVariation?.isDefault) {
-		return {
-			...defaultStylesValue,
-			...omit(mergedConfig?.styles?.blocks[name] || {}, ['variations']),
-			...((mergedConfig?.styles?.blocks[name]?.variations || {})[
-				currentBlockStyleVariation.name
-			] || {}),
-		};
-	}
-
-	return {
-		...defaultStylesValue,
-		...(mergedConfig?.styles?.blocks[name] || {}),
 	};
 };
 
@@ -118,8 +90,10 @@ export default function App(props: Object): MixedElement {
 		blockType: { name, attributes },
 	} = props;
 
-	const { blockExtension, blockeraOverrideBlockAttributes } =
-		getBlockAttributes(name);
+	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
+		() => getBlockAttributes(name),
+		[name]
+	);
 
 	const originDefaultAttributes = useMemo(() => {
 		return mergeObject(blockeraOverrideBlockAttributes, attributes);
@@ -130,14 +104,6 @@ export default function App(props: Object): MixedElement {
 			defaultWithoutValue: true,
 		});
 	}, [originDefaultAttributes]);
-
-	// We should work on mergedConfig because it's contains the all styles but for save user customizations,
-	// we should use userConfig to save user customizations.
-	const {
-		merged: mergedConfig,
-		user: userConfig,
-		setUserConfig,
-	} = useGlobalStylesContext();
 
 	const { getSelectedBlockStyleVariation } = select(EDITOR_STORE_NAME);
 	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
@@ -153,23 +119,34 @@ export default function App(props: Object): MixedElement {
 		[defaultStyles]
 	);
 
-	const styles = useMemo(
-		() =>
-			getComputedStyles(
-				currentBlockStyleVariation,
-				defaultStylesValue,
-				mergedConfig,
-				name
-			),
-		[name, mergedConfig, defaultStylesValue, currentBlockStyleVariation]
+	let prefixParts: Array<string> = [];
+	if (currentBlockStyleVariation && !currentBlockStyleVariation?.isDefault) {
+		prefixParts = ['variations', currentBlockStyleVariation.name].concat(
+			prefixParts
+		);
+	}
+	const prefix = prefixParts.join('.');
+	const [inheritedStyle, rootStyle, setStyle] = useGlobalStyle(
+		prefix,
+		name,
+		'all',
+		{
+			shouldDecodeEncode: false,
+			defaultStylesValue,
+		}
 	);
 
-	const getStyles = useCallback(
+	let style = inheritedStyle;
+	if (!currentBlockStyleVariation?.isDefault) {
+		style = mergeObject(rootStyle, inheritedStyle);
+	}
+
+	const getStyle = useCallback(
 		() => ({
 			...defaultStylesValue,
-			...(mergedConfig?.styles?.blocks[name] || {}),
+			...(style || {}),
 		}),
-		[mergedConfig, defaultStylesValue, name]
+		[style, defaultStylesValue]
 	);
 
 	const baseContextValue = useMemo(
@@ -186,108 +163,19 @@ export default function App(props: Object): MixedElement {
 				),
 				AdvancedLabelControl: (props: Object) => (
 					<EditorAdvancedLabelControl
-						attributesRef={styles}
+						getAttributesRef={getStyle}
 						{...props}
 					/>
 				),
 			},
 		}),
-		[name, styles]
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[name]
 	);
 
 	const cleanupStyles = useCallback(
 		(styles) => cleanupStylesHelper(styles, defaultStyles),
 		[defaultStyles]
-	);
-
-	const handleOnChangeStyles = useCallback(
-		(
-			newStyles,
-			{
-				action,
-			}: {
-				action: 'clear-all-customizations' | 'save-all-customizations',
-			} = {
-				action: 'save-all-customizations',
-			}
-		) => {
-			const currentStyleVariation = getSelectedBlockStyleVariation();
-
-			if (currentStyleVariation && !currentStyleVariation?.isDefault) {
-				if ('clear-all-customizations' === action) {
-					setBlockStyles(name, cleanupStyles(newStyles));
-					return setUserConfig(
-						mergeObject(
-							userConfig,
-							{
-								styles: {
-									blocks: {
-										[name]: cleanupStyles(newStyles),
-									},
-								},
-							},
-							{
-								forceUpdated: [currentStyleVariation.name],
-							}
-						)
-					);
-				}
-
-				const { variations, ...rest } = newStyles;
-
-				const newUserConfig = mergeObject(userConfig, {
-					styles: {
-						blocks: {
-							[name]: {
-								variations: {
-									[currentStyleVariation.name]:
-										cleanupStyles(rest),
-								},
-							},
-						},
-					},
-				});
-
-				setBlockStyles(name, newUserConfig.styles.blocks[name]);
-
-				return setUserConfig(newUserConfig);
-			}
-
-			for (const variation in newStyles.variations) {
-				if (!Object.keys(newStyles.variations[variation])?.length) {
-					newStyles.variations[variation] = {
-						blockeraMetaData: {
-							name: variation,
-							label: pascalCase(
-								variation.replace(/-/g, ' ')
-							).replace(/_/g, ' '),
-						},
-					};
-
-					continue;
-				}
-			}
-
-			const newUserConfig = mergeObject(userConfig, {
-				styles: {
-					blocks: {
-						[name]: cleanupStyles(newStyles),
-					},
-				},
-			});
-
-			setBlockStyles(name, newUserConfig.styles.blocks[name]);
-
-			setUserConfig(newUserConfig);
-		},
-		[
-			name,
-			userConfig,
-			setUserConfig,
-			cleanupStyles,
-			setBlockStyles,
-			getSelectedBlockStyleVariation,
-		]
 	);
 
 	const children = useMemo(
@@ -311,17 +199,41 @@ export default function App(props: Object): MixedElement {
 		[props.clientId]
 	);
 
-	// let prefixParts = [];
-	// if (variation) {
-	// 	prefixParts = ['variations', variation].concat(prefixParts);
-	// }
-	// const prefix = prefixParts.join('.');
-	// const [inheritedStyle, setStyle] = useGlobalStyle(prefix, name, 'all', {
-	// 	shouldDecodeEncode: false,
-	// });
-
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
+
+	const memoizedBlockBaseProps = useMemo(
+		() => ({
+			name,
+			clientId: name.replace('/', '-'),
+			setAttributes: (newStyle: Object) => {
+				const cleanedStyle = cleanupStyles(
+					mergeObject(style, newStyle)
+				);
+
+				setBlockStyles(name, cleanedStyle);
+
+				setStyle(cleanedStyle);
+			},
+			defaultAttributes: defaultStyles,
+			additional: blockExtension,
+			insideBlockInspector: false,
+			className: props?.className,
+			attributes: style,
+			originDefaultAttributes,
+		}),
+		[
+			name,
+			style,
+			setStyle,
+			defaultStyles,
+			cleanupStyles,
+			setBlockStyles,
+			blockExtension,
+			props?.className,
+			originDefaultAttributes,
+		]
+	);
 
 	return (
 		<ErrorBoundary
@@ -340,28 +252,16 @@ export default function App(props: Object): MixedElement {
 		>
 			<GlobalStylesPanelContextProvider
 				blockName={name}
-				styles={getStyles()}
+				styles={getStyle()}
 				selectedBlockClientId={props?.selectedBlockClientId || ''}
-				setStyles={handleOnChangeStyles}
+				setStyles={memoizedBlockBaseProps.setAttributes}
 				currentBlockStyleVariation={currentBlockStyleVariation}
 				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
 			>
 				<BaseControlContext.Provider value={baseContextValue}>
 					<BlockApp>
 						<div className="blockera-block-global-panel" />
-						<BlockBase
-							{...{
-								name,
-								clientId: name.replace('/', '-'),
-								setAttributes: handleOnChangeStyles,
-								defaultAttributes: defaultStyles,
-								additional: blockExtension,
-								insideBlockInspector: false,
-								className: props?.className,
-								attributes: styles,
-								originDefaultAttributes,
-							}}
-						>
+						<BlockBase {...memoizedBlockBaseProps}>
 							{children}
 						</BlockBase>
 					</BlockApp>
