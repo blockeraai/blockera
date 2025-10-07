@@ -3,9 +3,10 @@
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
-import { memo, useEffect, Fragment } from '@wordpress/element';
+import { memo, useEffect, Fragment, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -172,14 +173,19 @@ export const registration = ({
 			blockTypeGlobalStyles || {},
 			/^(?!blockera).*/i
 		);
-		const blockeraBlockTypeGlobalStyles = sanitizeBlockAttributes({
-			...memoizedBlockTypeGlobalStyles,
-			blockeraBlockStates: mergeObject(
-				defaultBlockStates,
-				memoizedBlockTypeGlobalStyles?.blockeraBlockStates?.value || {}
-			),
-			blockeraPropsId,
-		});
+		const blockeraBlockTypeGlobalStyles = useMemo(
+			() =>
+				sanitizeBlockAttributes({
+					...memoizedBlockTypeGlobalStyles,
+					blockeraBlockStates: mergeObject(
+						defaultBlockStates,
+						memoizedBlockTypeGlobalStyles?.blockeraBlockStates
+							?.value || {}
+					),
+					blockeraPropsId,
+				}),
+			[memoizedBlockTypeGlobalStyles]
+		);
 
 		if (
 			(!blockeraBlockTypeGlobalStyles ||
