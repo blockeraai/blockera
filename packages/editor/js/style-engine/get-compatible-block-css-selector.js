@@ -590,6 +590,9 @@ export const getCompatibleBlockCssSelector = ({
 			register(selector, {
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
+					if ('default' === styleVariationName) {
+						return `:root :where(${generatedSelector})`;
+					}
 					return `:root :where(${generatedSelector}.is-style-${styleVariationName})`;
 				},
 			});
