@@ -20,7 +20,7 @@ import {
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
-import { cloneObject, mergeObject } from '@blockera/utils';
+import { cloneObject, mergeObject, isEquals } from '@blockera/utils';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 
 /**
@@ -69,7 +69,7 @@ export const BlockBase: ComponentType<any> = (
 		name,
 		clientId,
 		attributes: blockAttributes,
-		setAttributes,
+		setAttributes: setBlockAttributes,
 		defaultAttributes,
 		originDefaultAttributes,
 		insideBlockInspector = true,
@@ -197,13 +197,40 @@ export const BlockBase: ComponentType<any> = (
 		innerBlocks: additional?.blockeraInnerBlocks,
 	};
 
-	const attributes = useBlockCompatibilities({
+	const initializedAttributes = useBlockCompatibilities({
 		args,
 		isActive,
 		availableAttributes,
 		attributes: blockAttributes,
 		defaultAttributes: originDefaultAttributes,
 	});
+
+	const [attributes, setAttributes] = useState(initializedAttributes);
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			if (!isEquals(attributes, initializedAttributes)) {
+				setBlockAttributes(attributes);
+			}
+		}, 100);
+
+		return () => clearTimeout(timeoutId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [attributes]);
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => {
+			if (
+				!isEquals(initializedAttributes, attributes) &&
+				insideBlockInspector
+			) {
+				setAttributes(initializedAttributes);
+			}
+		}, 100);
+
+		return () => clearTimeout(timeoutId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initializedAttributes, insideBlockInspector]);
 
 	const { className } = attributes;
 
