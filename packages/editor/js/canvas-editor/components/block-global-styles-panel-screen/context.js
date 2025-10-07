@@ -251,6 +251,7 @@ export const GlobalStylesPanelContextProvider = ({
 			className,
 			defaultStyles,
 			blockExtension,
+			handleOnChangeStyle,
 			originDefaultAttributes,
 		]
 	);
