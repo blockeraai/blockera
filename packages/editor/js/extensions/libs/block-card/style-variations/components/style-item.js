@@ -158,12 +158,9 @@ export const StyleItem = ({
 					if (false === cachedStyle?.status) {
 						return;
 					}
+
 					// Skip click on actions opener element.
-					if (
-						['svg', 'path', 'SVG', 'PATH'].includes(
-							event.target.tagName
-						)
-					) {
+					if (-1 === event.target.innerText.indexOf(style.label)) {
 						return;
 					}
 
@@ -191,7 +188,7 @@ export const StyleItem = ({
 				>
 					<Truncate numberOfLines={1}>{buttonText}</Truncate>
 					<Flex gap={2}>
-						{!(style?.isEnabled || true) && (
+						{false === cachedStyle?.status && (
 							<Icon icon="eye-hide" iconSize="20" />
 						)}
 						{style.icon && (
@@ -245,23 +242,47 @@ export const StyleItem = ({
 								/>
 								{__('Clear all customizations', 'blockera')}
 							</Flex>
-							<Divider />
-							{false === cachedStyle?.status && (
-								<Flex
-									justifyContent={'flex-start'}
-									gap={8}
-									alignItems={'center'}
-									className={controlInnerClassNames(
-										'menu-item'
-									)}
-									onClick={() => handleOnEnable(true, style)}
-								>
-									<Icon icon="eye-show" iconSize="24" />
-									{__('Enable', 'blockera')}
-								</Flex>
-							)}
-							{(true === cachedStyle?.status ||
-								!cachedStyle.hasOwnProperty('status')) && (
+							{!style.isDefault && <Divider />}
+							{false === cachedStyle?.status &&
+								!style?.isDefault && (
+									<Flex
+										justifyContent={'flex-start'}
+										gap={8}
+										alignItems={'center'}
+										className={controlInnerClassNames(
+											'menu-item'
+										)}
+										onClick={() =>
+											handleOnEnable(true, style)
+										}
+									>
+										<Icon icon="eye-show" iconSize="24" />
+										{__('Enable', 'blockera')}
+									</Flex>
+								)}
+							{!style?.isDefault &&
+								(true === cachedStyle?.status ||
+									!style.hasOwnProperty('status')) && (
+									<Flex
+										justifyContent={'flex-start'}
+										gap={8}
+										alignItems={'center'}
+										className={controlInnerClassNames(
+											'menu-item',
+											{
+												'is-disabled':
+													!style?.isEnabled || false,
+											}
+										)}
+										onClick={() =>
+											handleOnEnable(false, style)
+										}
+									>
+										<Icon icon="eye-hide" iconSize="24" />
+										{__('Disable', 'blockera')}
+									</Flex>
+								)}
+							{!style.isDefault && (
 								<Flex
 									justifyContent={'flex-start'}
 									gap={8}
@@ -269,28 +290,18 @@ export const StyleItem = ({
 									className={controlInnerClassNames(
 										'menu-item',
 										{
-											'is-disabled':
-												!style?.isEnabled || false,
+											'delete-style': true,
 										}
 									)}
-									onClick={() => handleOnEnable(false, style)}
+									onClick={() => handleOnDelete(style.name)}
 								>
-									<Icon icon="eye-hide" iconSize="24" />
-									{__('Disable', 'blockera')}
+									<Icon
+										icon="icon-recycle-bin"
+										iconSize="24"
+									/>
+									{__('Delete', 'blockera')}
 								</Flex>
 							)}
-							<Flex
-								justifyContent={'flex-start'}
-								gap={8}
-								alignItems={'center'}
-								className={controlInnerClassNames('menu-item', {
-									'delete-style': true,
-								})}
-								onClick={() => handleOnDelete(style.name)}
-							>
-								<Icon icon="icon-recycle-bin" iconSize="24" />
-								{__('Delete', 'blockera')}
-							</Flex>
 						</Flex>
 					</Popover>
 				)}
