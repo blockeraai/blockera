@@ -79,7 +79,8 @@ export function replaceActiveStyle(
  */
 export function getRenderedStyles(
 	styles: Array<any>,
-	baseVariations: Array<Object>
+	baseVariations: Array<Object>,
+	blockName: string
 ): Array<Object> {
 	const defaultGlobalStyle = {
 		name: 'default',
@@ -90,6 +91,17 @@ export function getRenderedStyles(
 			library: 'wp',
 		},
 	};
+	const { blockeraGlobalStylesMetaData } = window;
+	const variations =
+		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations || {};
+
+	if (Object.keys(variations).length > 0) {
+		for (const variation in variations) {
+			if (variations[variation]?.refId === defaultGlobalStyle.name) {
+				defaultGlobalStyle.label = variations[variation].label;
+			}
+		}
+	}
 
 	if (!styles || styles.length === 0) {
 		return [defaultGlobalStyle];
@@ -172,7 +184,8 @@ export function useStylesForBlocks({
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 	const stylesToRender = getRenderedStyles(
 		styles,
-		prepare(`styles.blocks.${blockName}.variations`, base) || {}
+		prepare(`styles.blocks.${blockName}.variations`, base) || {},
+		blockName
 	);
 	const activeStyle = useMemo(
 		() => getActiveStyle(stylesToRender, className),

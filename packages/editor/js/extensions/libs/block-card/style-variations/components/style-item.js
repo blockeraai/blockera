@@ -49,16 +49,33 @@ export const StyleItem = ({
 	setCurrentActiveStyle: (style: Object) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
-	const { styles, setStyles, setCurrentBlockStyleVariation } =
-		useGlobalStylesPanelContext() || {
-			setCurrentBlockStyleVariation: () => {},
-		};
+	const {
+		style: styleData,
+		setStyle: setStyleData,
+		setCurrentBlockStyleVariation,
+	} = useGlobalStylesPanelContext() || {
+		setCurrentBlockStyleVariation: () => {},
+	};
 	const { blockeraGlobalStylesMetaData } = window;
-	const [cachedStyle, setCachedStyle] = useState(
-		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
-			style?.name
-		] || {}
-	);
+	const initializedCachedStyle = useMemo(() => {
+		const variations =
+			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations || {};
+
+		if (Object.keys(variations).length > 0) {
+			for (const variation in variations) {
+				if (variations[variation]?.refId === style.name) {
+					return variations[variation];
+				}
+				if (variation === style.name) {
+					return variations[variation];
+				}
+			}
+		}
+
+		return {};
+	}, [blockeraGlobalStylesMetaData, blockName, style]);
+
+	const [cachedStyle, setCachedStyle] = useState(initializedCachedStyle);
 	const buttonText = useMemo(() => {
 		return (
 			cachedStyle?.label ||
@@ -76,15 +93,15 @@ export const StyleItem = ({
 		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
-		styles,
 		blockName,
-		setStyles,
 		blockStyles,
 		cachedStyle,
 		setBlockStyles,
 		setCachedStyle,
+		styles: styleData,
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
+		setStyles: setStyleData,
 		setCurrentBlockStyleVariation,
 	});
 
@@ -187,7 +204,13 @@ export const StyleItem = ({
 					className="block-editor-block-styles__item-text"
 				>
 					<Truncate numberOfLines={1}>{buttonText}</Truncate>
-					<Flex gap={2}>
+					<Flex gap={2} alignItems={'center'}>
+						{cachedStyle?.label === buttonText &&
+							style.isDefault && (
+								<Truncate numberOfLines={1}>
+									{__('Default', 'blockera')}
+								</Truncate>
+							)}
 						{false === cachedStyle?.status && (
 							<Icon icon="eye-hide" iconSize="20" />
 						)}
