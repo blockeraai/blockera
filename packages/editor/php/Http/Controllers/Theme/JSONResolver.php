@@ -116,21 +116,38 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return void
 	 */
 	private static function register_block_style_variations_from_user_data( $decoded_data ): void {
-		if ( isset( $decoded_data['styles']['blocks'] ) ) {
-			foreach ( $decoded_data['styles']['blocks'] as $block_name => $block_data ) {
-				if ( isset( $block_data['variations'] ) ) {
-					foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
-						if ( \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
-							continue;
-						}
 
-						$variation = [
-							'name' => $variation_name,
-							'label' => Utils::pascalCaseWithSpace($variation_name),
-						];
+		$post_id            = \WP_Theme_JSON_Resolver::get_user_global_styles_post_id();
+		$blockera_meta_data = get_post_meta($post_id, 'blockeraGlobalStylesMetaData', true);
 
-						register_block_style($block_name, $variation);
+		// Register the block style from the user data.
+		static::register_block_style($decoded_data['styles']['blocks'] ?? []);
+
+		// Register the block style from the blockera user meta data.
+		static::register_block_style($blockera_meta_data['blocks'] ?? []);
+	}
+
+	/**
+	 * Register the block style.
+	 *
+	 * @param array $blocks The blocks.
+	 * @return void
+	 */
+	private static function register_block_style( array $blocks ): void {
+		
+		foreach ( $blocks as $block_name => $block_data ) {
+			if ( isset( $block_data['variations'] ) ) {
+				foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
+					if ( \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
+						continue;
 					}
+
+					$variation = [
+						'name' => $variation_name,
+						'label' => Utils::pascalCaseWithSpace($variation_name),
+					];
+
+					register_block_style($block_name, $variation);
 				}
 			}
 		}
