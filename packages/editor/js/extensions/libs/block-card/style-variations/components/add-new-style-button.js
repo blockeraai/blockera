@@ -13,6 +13,7 @@ import { useState, useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import { mergeObject } from '@blockera/utils';
 import { Button, Flex, PromotionPopover } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
@@ -81,6 +82,7 @@ export const AddNewStyleButton = ({
 				blocks: { [blockName]: { variations } = { variations: {} } },
 			},
 		},
+		setUserConfig,
 	} = useGlobalStylesContext();
 
 	const [counter, setCounter] = useState(0);
@@ -155,6 +157,19 @@ export const AddNewStyleButton = ({
 
 		setCurrentActiveStyle(newStyle);
 
+		setUserConfig((prevConfig: Object): Object => {
+			return mergeObject(prevConfig, {
+				styles: {
+					blocks: {
+						[blockName]: {
+							variations: {
+								[newStyle.name]: newStyle,
+							},
+						},
+					},
+				},
+			});
+		});
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);
 
