@@ -5,7 +5,9 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { select } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
+import { useEntityProp } from '@wordpress/core-data';
 import { registerBlockStyle } from '@wordpress/blocks';
 import { useState, useCallback } from '@wordpress/element';
 
@@ -76,13 +78,20 @@ export const AddNewStyleButton = ({
 		2
 	);
 
+	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
+	const [globalStyles, setGlobalStyles] = useEntityProp(
+		'root',
+		'globalStyles',
+		'styles',
+		postId
+	);
+
 	const {
 		base: {
 			styles: {
 				blocks: { [blockName]: { variations } = { variations: {} } },
 			},
 		},
-		setUserConfig,
 	} = useGlobalStylesContext();
 
 	const [counter, setCounter] = useState(0);
@@ -157,9 +166,9 @@ export const AddNewStyleButton = ({
 
 		setCurrentActiveStyle(newStyle);
 
-		setUserConfig((prevConfig: Object): Object => {
-			return mergeObject(prevConfig, {
-				styles: {
+		setGlobalStyles(
+			mergeObject(globalStyles, {
+				blockeraMetaData: {
 					blocks: {
 						[blockName]: {
 							variations: {
@@ -168,8 +177,15 @@ export const AddNewStyleButton = ({
 						},
 					},
 				},
-			});
-		});
+				blocks: {
+					[blockName]: {
+						variations: {
+							[newStyle.name]: newStyle,
+						},
+					},
+				},
+			})
+		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);
 

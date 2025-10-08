@@ -164,6 +164,10 @@ export function StyleVariationBlockCard({
 	);
 
 	useEffect(() => {
+		refId.current = currentBlockStyleVariation.name;
+	}, [currentBlockStyleVariation.name]);
+
+	useEffect(() => {
 		if (hasUserEdited) return;
 
 		if (
