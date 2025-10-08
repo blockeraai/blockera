@@ -143,12 +143,7 @@ export const BlockBase: ComponentType<any> = (
 		};
 	});
 
-	const [isActive, _setActive] = useState(true);
-	const setActive = useCallback(
-		(_isActive: boolean): void => _setActive(_isActive),
-		// eslint-disable-next-line
-		[]
-	);
+	const [isActive, setActive] = useState(true);
 
 	const {
 		changeExtensionCurrentBlock: setCurrentBlock,
