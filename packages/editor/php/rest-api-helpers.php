@@ -172,6 +172,7 @@ function blockera_get_valid_supports( array $default_supports): array {
 	$with_blockera_supports['blockeraMetaData'] = [
 		'name' => null,
 		'label' => null,
+		'blocks' => null,
 	];
 
 	return $with_blockera_supports;
