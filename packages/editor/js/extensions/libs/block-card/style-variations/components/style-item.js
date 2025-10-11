@@ -239,7 +239,7 @@ export const StyleItem = ({
 					<Flex gap={2} alignItems={'center'}>
 						{defaultStyle &&
 							style.isDefault &&
-							buttonText !== defaultStyle.name && (
+							buttonText !== defaultStyle.label && (
 								<Truncate numberOfLines={1}>
 									{__('Default', 'blockera')}
 								</Truncate>
@@ -389,6 +389,7 @@ export const StyleItem = ({
 			{isActive && (
 				<Fill name="block-inspector-style-actions">
 					<Button
+						disabled={false === cachedStyle?.status}
 						className={classNames('action-save-customizations', {
 							'action-disabled': false,
 						})}
@@ -401,6 +402,7 @@ export const StyleItem = ({
 					</Button>
 					<Flex gap="8px" justifyContent="space-between">
 						<Button
+							disabled={false === cachedStyle?.status}
 							className={classNames(
 								'action-save-customizations',
 								{
