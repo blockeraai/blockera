@@ -18,7 +18,13 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { isEquals } from '@blockera/utils';
-import { Flex, Button, Popover } from '@blockera/controls';
+import {
+	Flex,
+	Button,
+	Popover,
+	ToggleControl,
+	ControlContextProvider,
+} from '@blockera/controls';
 import {
 	classNames,
 	controlInnerClassNames,
@@ -328,45 +334,33 @@ export const StyleItem = ({
 								>{`ID: ${style.name}`}</code>
 							</Flex>
 							{!style.isDefault && <Divider />}
-							{false === cachedStyle?.status &&
-								!style?.isDefault && (
-									<Flex
-										justifyContent={'flex-start'}
-										gap={8}
-										alignItems={'center'}
-										className={controlInnerClassNames(
-											'menu-item'
-										)}
-										onClick={() =>
-											handleOnEnable(true, style)
+							{!style?.isDefault && (
+								<ControlContextProvider
+									value={{
+										name: `${style.name}-toggle`,
+										value:
+											true === cachedStyle?.status ||
+											!cachedStyle.hasOwnProperty(
+												'status'
+											),
+									}}
+								>
+									<ToggleControl
+										columns={'2'}
+										label={
+											false === cachedStyle?.status
+												? __('Active Style', 'blockera')
+												: __(
+														'Inactive Style',
+														'blockera'
+												  )
 										}
-									>
-										<Icon icon="eye-show" iconSize="24" />
-										{__('Enable', 'blockera')}
-									</Flex>
-								)}
-							{!style?.isDefault &&
-								(true === cachedStyle?.status ||
-									!style.hasOwnProperty('status')) && (
-									<Flex
-										justifyContent={'flex-start'}
-										gap={8}
-										alignItems={'center'}
-										className={controlInnerClassNames(
-											'menu-item',
-											{
-												'is-disabled':
-													!style?.isEnabled || false,
-											}
-										)}
-										onClick={() =>
-											handleOnEnable(false, style)
+										onChange={(value: boolean): void =>
+											handleOnEnable(value, style)
 										}
-									>
-										<Icon icon="eye-hide" iconSize="24" />
-										{__('Disable', 'blockera')}
-									</Flex>
-								)}
+									/>
+								</ControlContextProvider>
+							)}
 							{!style.isDefault && (
 								<Flex
 									justifyContent={'flex-start'}
