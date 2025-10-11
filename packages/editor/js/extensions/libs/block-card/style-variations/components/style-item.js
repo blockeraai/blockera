@@ -6,7 +6,7 @@
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
-import { useState, useMemo } from '@wordpress/element';
+import { useState, useMemo, useEffect } from '@wordpress/element';
 import {
 	Fill,
 	__experimentalTruncate as Truncate,
@@ -17,12 +17,19 @@ import {
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import { isEquals } from '@blockera/utils';
 import { Flex, Button, Popover } from '@blockera/controls';
-import { classNames, controlInnerClassNames } from '@blockera/classnames';
+import {
+	classNames,
+	controlInnerClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
+import { getDefaultStyle } from '../utils';
+import { RenameModal } from './rename-modal';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
@@ -52,8 +59,10 @@ export const StyleItem = ({
 	const {
 		style: styleData,
 		setStyle: setStyleData,
+		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 	} = useGlobalStylesPanelContext() || {
+		currentBlockStyleVariation: undefined,
 		setCurrentBlockStyleVariation: () => {},
 	};
 	const { blockeraGlobalStylesMetaData } = window;
@@ -76,6 +85,13 @@ export const StyleItem = ({
 	}, [blockeraGlobalStylesMetaData, blockName, style]);
 
 	const [cachedStyle, setCachedStyle] = useState(initializedCachedStyle);
+
+	useEffect(() => {
+		if (!isEquals(cachedStyle, initializedCachedStyle)) {
+			setCachedStyle(initializedCachedStyle);
+		}
+	}, [cachedStyle, initializedCachedStyle]);
+
 	const buttonText = useMemo(() => {
 		return (
 			cachedStyle?.label ||
@@ -88,8 +104,13 @@ export const StyleItem = ({
 	const {
 		handleOnEnable,
 		handleOnDelete,
+		handleOnRename,
+		isOpenRenameModal,
 		handleOnDuplicate,
+		isConfirmedChangeID,
 		handleOnDetachStyle,
+		setIsOpenRenameModal,
+		setIsConfirmedChangeID,
 		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
@@ -102,10 +123,12 @@ export const StyleItem = ({
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setStyles: setStyleData,
+		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 	});
 
 	const isActive: boolean = activeStyle.name === style.name;
+	const defaultStyle = getDefaultStyle(blockStyles);
 
 	return (
 		<>
@@ -177,7 +200,10 @@ export const StyleItem = ({
 					}
 
 					// Skip click on actions opener element.
-					if (-1 === event.target.innerText.indexOf(style.label)) {
+					if (
+						!event.target.innerText ||
+						-1 === event.target.innerText.indexOf(style.label)
+					) {
 						return;
 					}
 
@@ -205,8 +231,9 @@ export const StyleItem = ({
 				>
 					<Truncate numberOfLines={1}>{buttonText}</Truncate>
 					<Flex gap={2} alignItems={'center'}>
-						{cachedStyle?.label === buttonText &&
-							style.isDefault && (
+						{defaultStyle &&
+							style.isDefault &&
+							buttonText !== defaultStyle.name && (
 								<Truncate numberOfLines={1}>
 									{__('Default', 'blockera')}
 								</Truncate>
@@ -228,6 +255,16 @@ export const StyleItem = ({
 						/>
 					</Flex>
 				</Flex>
+				{isOpenRenameModal && (
+					<RenameModal
+						style={style}
+						buttonText={buttonText}
+						handleOnRename={handleOnRename}
+						isConfirmedChangeID={isConfirmedChangeID}
+						setIsOpenRenameModal={setIsOpenRenameModal}
+						setIsConfirmedChangeID={setIsConfirmedChangeID}
+					/>
+				)}
 				{isOpenContextMenu && (
 					<Popover
 						title={''}
@@ -264,6 +301,31 @@ export const StyleItem = ({
 									iconSize="24"
 								/>
 								{__('Clear all customizations', 'blockera')}
+							</Flex>
+							<Flex
+								justifyContent={'space-between'}
+								gap={8}
+								alignItems={'center'}
+								className={controlInnerClassNames('menu-item')}
+								onClick={() => {
+									setCurrentBlockStyleVariation(style);
+
+									if (isOpenRenameModal) {
+										return setIsOpenRenameModal(false);
+									}
+
+									setIsOpenRenameModal(true);
+								}}
+							>
+								<Flex alignItems={'center'} gap={8}>
+									<Icon icon="pen" iconSize="24" />
+									{__('Rename', 'blockera')}
+								</Flex>
+								<code
+									className={componentInnerClassNames(
+										'rename-style'
+									)}
+								>{`ID: ${style.name}`}</code>
 							</Flex>
 							{!style.isDefault && <Divider />}
 							{false === cachedStyle?.status &&

@@ -41,6 +41,7 @@ export type TStyleVariationBlockCardProps = {
 	setCurrentBlockStyleVariation: (style: {
 		name: string,
 		label: string,
+		isDefault?: boolean,
 	}) => void,
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,

@@ -166,9 +166,26 @@ export const AddNewStyleButton = ({
 
 		setCurrentActiveStyle(newStyle);
 
+		const { blockeraGlobalStylesMetaData } = window;
+
 		setGlobalStyles(
-			mergeObject(globalStyles, {
-				blockeraMetaData: {
+			mergeObject(
+				{
+					...globalStyles,
+					...(!globalStyles?.blockeraMetaData
+						? { blockeraMetaData: blockeraGlobalStylesMetaData }
+						: {}),
+				},
+				{
+					blockeraMetaData: {
+						blocks: {
+							[blockName]: {
+								variations: {
+									[newStyle.name]: newStyle,
+								},
+							},
+						},
+					},
 					blocks: {
 						[blockName]: {
 							variations: {
@@ -176,15 +193,8 @@ export const AddNewStyleButton = ({
 							},
 						},
 					},
-				},
-				blocks: {
-					[blockName]: {
-						variations: {
-							[newStyle.name]: newStyle,
-						},
-					},
-				},
-			})
+				}
+			)
 		);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);

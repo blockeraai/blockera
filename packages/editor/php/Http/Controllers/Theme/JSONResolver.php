@@ -121,7 +121,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		$blockera_meta_data = get_post_meta($post_id, 'blockeraGlobalStylesMetaData', true);
 
 		// Register the block style from the user data.
-		static::register_block_style($decoded_data['styles']['blocks'] ?? []);
+		static::register_block_style($decoded_data['styles']['blocks'] ?? [], $blockera_meta_data['blocks'] ?? []);
 
 		// Register the block style from the blockera user meta data.
 		static::register_block_style($blockera_meta_data['blocks'] ?? []);
@@ -131,10 +131,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * Register the block style.
 	 *
 	 * @param array $blocks The blocks.
+	 * @param array $cache The cache data.
+	 * 
 	 * @return void
 	 */
-	private static function register_block_style( array $blocks ): void {
-		
+	private static function register_block_style( array $blocks, array $cache = [] ): void {
+
 		foreach ( $blocks as $block_name => $block_data ) {
 			if ( isset( $block_data['variations'] ) ) {
 				foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
@@ -142,10 +144,34 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 						continue;
 					}
 
+					if (! empty($cache) && isset($cache[ $block_name ]['variations'][ $variation_name ]) ) {
+						$data = $cache[ $block_name ]['variations'][ $variation_name ];
+						$name = $data['refId'] ?? $data['name'];
+
+						if ($name === $variation_name) {
+							$variation = [
+								'name' => $name,
+								'label' => $data['label'],
+							];
+
+							if (isset($cache[ $block_name ]['variations'][ $variation_name ]['isDefault'])) {
+								$variation['isDefault'] = true;
+							}
+
+							register_block_style($block_name, $variation);
+
+							continue;
+						}
+					}
+
 					$variation = [
 						'name' => $variation_name,
-						'label' => Utils::pascalCaseWithSpace($variation_name),
+						'label' => $variation_data['label'] ?? Utils::pascalCaseWithSpace($variation_name),
 					];
+
+					if (isset($variation_data['isDefault'])) {
+						$variation['is_default'] = true;
+					}
 
 					register_block_style($block_name, $variation);
 				}

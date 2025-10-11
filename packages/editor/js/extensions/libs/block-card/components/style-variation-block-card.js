@@ -40,7 +40,7 @@ import StateContainer from '../../../components/state-container';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 
-const DEBOUNCE_DELAY = 300;
+const DEBOUNCE_DELAY = 1000;
 
 export function StyleVariationBlockCard({
 	clientId,
@@ -92,66 +92,84 @@ export function StyleVariationBlockCard({
 	const [hasUserEdited, setHasUserEdited] = useState(false);
 
 	const updateGlobalStyles = useCallback(
-		(newTitle: string) => {
+		(newTitle: string, isConfirmedChange: boolean = false) => {
 			if (!hasUserEdited) return;
 
-			const { blockeraMetaData = {} } = globalStyles;
-			const updatedMetaData = mergeObject(blockeraMetaData, {
-				blocks: {
-					[blockName]: {
-						variations: {
-							[kebabCase(newTitle)]: {
-								label: newTitle,
-								refId: refId.current,
+			const { blockeraMetaData = blockeraGlobalStylesMetaData } =
+				globalStyles;
+
+			const editedStyle = {
+				...currentBlockStyleVariation,
+				label: newTitle,
+				...(currentBlockStyleVariation.isDefault
+					? { isDefault: true }
+					: {}),
+			};
+
+			const getUpdatedMetaData = (newStyle: Object): Object => {
+				const updatedMetaData = mergeObject(blockeraMetaData, {
+					blocks: {
+						[blockName]: {
+							variations: {
+								[currentBlockStyleVariation.name]: {
+									...newStyle,
+									refId: refId.current,
+								},
 							},
 						},
 					},
-				},
-			});
+				});
 
-			delete updatedMetaData.blocks[blockName].variations[
-				currentBlockStyleVariation.name
-			];
-
-			const editedStyle = {
-				name: kebabCase(newTitle),
-				label: newTitle,
+				return updatedMetaData;
 			};
 
-			setCurrentBlockStyleVariation(editedStyle);
+			let updatedMetaData;
 
-			const editedGlobalStyles = mergeObject(globalStyles, {
-				blocks: {
-					[blockName]: {
-						variations: {
-							[editedStyle.name]:
-								globalStyles?.blocks?.[blockName]?.variations?.[
-									currentBlockStyleVariation.name
-								],
+			// Is user confirmed the change style name?
+			if (isConfirmedChange) {
+				editedStyle.name = kebabCase(newTitle);
+
+				updatedMetaData = getUpdatedMetaData(editedStyle);
+
+				setCurrentBlockStyleVariation(editedStyle);
+
+				const editedGlobalStyles = mergeObject(globalStyles, {
+					blocks: {
+						[blockName]: {
+							variations: {
+								[editedStyle.name]:
+									globalStyles?.blocks?.[blockName]
+										?.variations?.[
+										currentBlockStyleVariation.name
+									],
+							},
 						},
 					},
-				},
-			});
+				});
 
-			delete editedGlobalStyles?.blocks?.[blockName]?.variations?.[
-				currentBlockStyleVariation.name
-			];
+				setGlobalStyles({
+					...editedGlobalStyles,
+					blockeraMetaData: updatedMetaData,
+				});
 
-			const hasCustomizations =
-				globalStyles?.blocks?.[blockName]?.variations?.[
+				unregisterBlockStyle(
+					blockName,
 					currentBlockStyleVariation.name
-				];
+				);
+				registerBlockStyle(blockName, editedStyle);
+			} else {
+				updatedMetaData = getUpdatedMetaData(editedStyle);
 
-			setGlobalStyles({
-				...(hasCustomizations ? editedGlobalStyles : globalStyles),
-				blockeraMetaData: updatedMetaData,
-			});
+				setCurrentBlockStyleVariation(editedStyle);
 
-			registerBlockStyle(blockName, editedStyle);
-			unregisterBlockStyle(blockName, currentBlockStyleVariation.name);
+				setGlobalStyles({
+					...globalStyles,
+					blockeraMetaData: updatedMetaData,
+				});
+			}
 
 			window.blockeraGlobalStylesMetaData = updatedMetaData;
-			setHasUserEdited(false);
+			setHasUserEdited(true);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[
@@ -247,10 +265,7 @@ export function StyleVariationBlockCard({
 							className={extensionInnerClassNames(
 								'block-card__title__input',
 								{
-									'is-edited':
-										currentBlockStyleVariation &&
-										currentBlockStyleVariation?.label !==
-											title,
+									'is-edited': true,
 									'inside-block-inspector': true,
 								}
 							)}

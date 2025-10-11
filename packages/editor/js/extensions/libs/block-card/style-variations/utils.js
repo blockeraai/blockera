@@ -95,20 +95,42 @@ export function getRenderedStyles(
 	const variations =
 		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations || {};
 
-	if (Object.keys(variations).length > 0) {
-		for (const variation in variations) {
-			if (variations[variation]?.refId === defaultGlobalStyle.name) {
-				defaultGlobalStyle.label = variations[variation].label;
-			}
-		}
-	}
-
 	if (!styles || styles.length === 0) {
 		return [defaultGlobalStyle];
 	}
 
+	styles = styles
+		.map((style) => {
+			if (style.name in variations) {
+				return {
+					...style,
+					label: variations[style.name].label,
+					// $FlowFixMe
+					...(variations[style.name].isDefault
+						? { isDefault: true }
+						: {}),
+					...(variations[style.name].isDeleted &&
+					style.name in baseVariations
+						? { name: variations[style.name].name }
+						: {}),
+				};
+			}
+
+			return style;
+		})
+		.filter(Boolean);
+	styles = [...(styles || [])].sort((a, b) => {
+		if (a?.isDefault) return -1;
+		if (b?.isDefault) return 1;
+		return 0;
+	});
+
 	const normalizeStyle = (style: Object): Object => {
-		if (style.name in baseVariations) {
+		if (style?.icon) {
+			return style;
+		}
+
+		if (style.name in baseVariations || style.isDefault) {
 			return {
 				...style,
 				icon: {

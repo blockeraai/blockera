@@ -4,15 +4,15 @@
  * External dependencies
  */
 import { select, dispatch } from '@wordpress/data';
-import { useCallback } from '@wordpress/element';
 import { useEntityProp } from '@wordpress/core-data';
+import { useCallback, useState } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
  */
-import { mergeObject } from '@blockera/utils';
+import { mergeObject, kebabCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -35,12 +35,14 @@ export const useBlockStyleItem = ({
 	setCachedStyle,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
+	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
 }: {
 	styles: Object,
 	blockName: string,
 	cachedStyle: Object,
 	blockStyles: Array<Object>,
+	currentBlockStyleVariation: Object,
 	setCachedStyle: (style: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
@@ -48,9 +50,17 @@ export const useBlockStyleItem = ({
 	setStyles: (styles: Object, options?: Object) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }): ({
+	isOpenRenameModal: boolean,
+	isConfirmedChangeID: boolean,
+	handleOnRename: (
+		newValue: { label: string, name: string },
+		currentStyle: Object
+	) => void,
+	setIsOpenRenameModal: (isOpen: boolean) => void,
 	handleOnDelete: (currentStyleName: string) => void,
 	handleOnDuplicate: (currentStyle: Object) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
+	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	handleOnSaveCustomizations: (currentStyle: Object) => void,
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
@@ -62,6 +72,113 @@ export const useBlockStyleItem = ({
 		'globalStyles',
 		'styles',
 		postId
+	);
+
+	const [isConfirmedChangeID, setIsConfirmedChangeID] = useState(false);
+	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
+
+	const { blockeraGlobalStylesMetaData } = window;
+
+	const handleOnRename = useCallback(
+		(
+			newValue: { label: string, name: string },
+			currentStyle: Object
+		): void => {
+			const { blockeraMetaData = blockeraGlobalStylesMetaData } =
+				globalStyles;
+
+			const editedStyle = {
+				...currentStyle,
+				...newValue,
+			};
+
+			const getUpdatedMetaData = (newStyle: Object): Object => {
+				const updatedMetaData = mergeObject(blockeraMetaData, {
+					blocks: {
+						[blockName]: {
+							variations: {
+								[currentStyle.name]: {
+									...newStyle,
+									refId: newStyle.name,
+									isDeleted:
+										currentBlockStyleVariation?.name !==
+										newStyle?.name,
+								},
+							},
+						},
+					},
+				});
+
+				return updatedMetaData;
+			};
+
+			let updatedMetaData;
+
+			// Is user confirmed the change style name?
+			if (isConfirmedChangeID) {
+				editedStyle.name = kebabCase(newValue.name);
+
+				updatedMetaData = getUpdatedMetaData(editedStyle);
+
+				const editedGlobalStyles = mergeObject(globalStyles, {
+					blocks: {
+						[blockName]: {
+							variations: {
+								[editedStyle.name]:
+									globalStyles?.blocks?.[blockName]
+										?.variations?.[
+										currentBlockStyleVariation.name
+									],
+							},
+						},
+					},
+				});
+
+				setGlobalStyles({
+					...editedGlobalStyles,
+					blockeraMetaData: updatedMetaData,
+				});
+
+				unregisterBlockStyle(
+					blockName,
+					currentBlockStyleVariation.name
+				);
+				registerBlockStyle(blockName, editedStyle);
+
+				const foundedStyle = blockStyles.find(
+					(style) => style.name === currentBlockStyleVariation?.name
+				);
+				const index = blockStyles.indexOf(foundedStyle);
+
+				setBlockStyles([
+					...blockStyles.slice(0, index),
+					currentBlockStyleVariation,
+					...blockStyles.slice(index + 1),
+				]);
+			} else {
+				updatedMetaData = getUpdatedMetaData(editedStyle);
+
+				setGlobalStyles({
+					...globalStyles,
+					blockeraMetaData: updatedMetaData,
+				});
+			}
+
+			setCurrentBlockStyleVariation(editedStyle);
+
+			window.blockeraGlobalStylesMetaData = updatedMetaData;
+		},
+		[
+			blockName,
+			blockStyles,
+			globalStyles,
+			setBlockStyles,
+			setGlobalStyles,
+			isConfirmedChangeID,
+			currentBlockStyleVariation,
+			blockeraGlobalStylesMetaData,
+			setCurrentBlockStyleVariation,
+		]
 	);
 
 	const handleOnDuplicate = useCallback(
@@ -200,10 +317,15 @@ export const useBlockStyleItem = ({
 	};
 
 	return {
+		handleOnRename,
 		handleOnEnable,
 		handleOnDelete,
+		isOpenRenameModal,
+		isConfirmedChangeID,
 		handleOnDuplicate,
 		handleOnDetachStyle,
+		setIsOpenRenameModal,
+		setIsConfirmedChangeID,
 		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	};

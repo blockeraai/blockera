@@ -143,3 +143,21 @@
 .block-styles-actions {
 	width: calc(50% - 4px);
 }
+
+.blockera-component-rename-modal {
+
+	h1 {
+		display: flex;
+		align-items: center;
+		flex-direction: row !important;
+	}
+}
+
+.variations-picker-popover {
+
+	.blockera-component-rename-style {
+		font-size: 11px;
+		color: #7a7a7a !important;
+		background: #f6f6f6 !important;
+	}
+}

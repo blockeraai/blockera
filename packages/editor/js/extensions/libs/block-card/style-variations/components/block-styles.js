@@ -69,9 +69,8 @@ function BlockStyles({
 	const hasShownPreviewRef = useRef(false);
 	const isMobileViewport = useViewportMatch('medium', '<');
 	const {
-		styles: editorStyles,
-		setStyles,
-		currentBlockStyleVariation,
+		style: editorStyles,
+		setStyle: setStyles,
 		setCurrentBlockStyleVariation,
 	} = useGlobalStylesPanelContext() || {
 		currentBlockStyleVariation: undefined,
@@ -89,24 +88,6 @@ function BlockStyles({
 		popoverAnchor,
 		setIsOpen,
 	} = styles;
-
-	useEffect(() => {
-		if (
-			currentBlockStyleVariation?.name &&
-			activeStyle?.name !== currentBlockStyleVariation?.name
-		) {
-			const foundedStyle = blockStyles.find(
-				(style) => style.name === activeStyle?.name
-			);
-			const index = blockStyles.indexOf(foundedStyle);
-
-			setBlockStyles([
-				...blockStyles.slice(0, index),
-				currentBlockStyleVariation,
-				...blockStyles.slice(index + 1),
-			]);
-		}
-	}, [currentBlockStyleVariation, activeStyle, blockStyles]);
 
 	// Update ref whenever hoveredStyle changes
 	useEffect(() => {
