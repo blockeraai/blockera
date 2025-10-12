@@ -62,6 +62,7 @@ function BlockStyles({
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
+	const [counter, setCounter] = useState(0);
 	const [blockStyles, setBlockStyles] = useState(styles.stylesToRender);
 	const [hoveredStyle, setHoveredStyle] = useState(null);
 	const [showPreview, setShowPreview] = useState(false);
@@ -169,6 +170,8 @@ function BlockStyles({
 	if ('global-styles-panel' === context) {
 		return (
 			<StyleVariationsManager
+				counter={counter}
+				setCounter={setCounter}
 				activeStyle={activeStyle}
 				blockName={blockName}
 				blockStyles={blockStyles}
@@ -234,6 +237,8 @@ function BlockStyles({
 						<>
 							<Flex direction="column" gap="10px">
 								<AddNewStyleButton
+									counter={counter}
+									setCounter={setCounter}
 									blockName={blockName}
 									label={__('Style Variations', 'blockera')}
 									blockStyles={blockStyles}
@@ -253,6 +258,8 @@ function BlockStyles({
 								>
 									{blockStyles.map((style) => (
 										<StyleItem
+											counter={counter}
+											setCounter={setCounter}
 											key={style.name}
 											style={style}
 											activeStyle={activeStyle}

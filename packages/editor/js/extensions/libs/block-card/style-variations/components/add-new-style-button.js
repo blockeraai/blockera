@@ -55,8 +55,10 @@ const PromoteGlobalStylesPremiumFeature = ({
 export const AddNewStyleButton = ({
 	label,
 	styles,
+	counter,
 	setStyles,
 	blockName,
+	setCounter,
 	blockStyles,
 	setBlockStyles,
 	design = 'no-label',
@@ -64,11 +66,13 @@ export const AddNewStyleButton = ({
 	setCurrentBlockStyleVariation,
 }: {
 	label?: string,
+	counter: number,
 	styles?: Object,
 	blockName: string,
 	design?: 'no-label' | 'with-label',
 	blockStyles: Array<Object>,
 	setStyles?: (styles: Object) => void,
+	setCounter: (counter: number) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
@@ -94,7 +98,6 @@ export const AddNewStyleButton = ({
 		},
 	} = useGlobalStylesContext();
 
-	const [counter, setCounter] = useState(0);
 	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 	const addNew = useCallback(() => {
 		setCounter(counter + 1);

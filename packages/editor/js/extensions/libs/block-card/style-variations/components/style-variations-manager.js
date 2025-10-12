@@ -27,6 +27,8 @@ export const StyleVariationsManager = ({
 	editorStyles,
 	setStyles,
 	blockName,
+	counter,
+	setCounter,
 	setCurrentBlockStyleVariation,
 	setCurrentActiveStyle,
 	setBlockStyles,
@@ -35,6 +37,8 @@ export const StyleVariationsManager = ({
 	setCurrentPreviewStyle,
 	styleItemHandler,
 }: {
+	counter: number,
+	setCounter: (counter: number) => void,
 	isNotActive?: boolean,
 	blockStyles: Array<Object>,
 	editorStyles: Array<Object>,
@@ -69,6 +73,8 @@ export const StyleVariationsManager = ({
 			>
 				{blockStyles.map((style) => (
 					<StyleItem
+						counter={counter}
+						setCounter={setCounter}
 						key={style.name}
 						style={style}
 						blockName={blockName}
@@ -95,6 +101,8 @@ export const StyleVariationsManager = ({
 				</p>
 
 				<AddNewStyleButton
+					counter={counter}
+					setCounter={setCounter}
 					design="with-label"
 					label={__('Add New Style Variation', 'blockera')}
 					styles={editorStyles}

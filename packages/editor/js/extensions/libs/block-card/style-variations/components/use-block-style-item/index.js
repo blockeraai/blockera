@@ -267,7 +267,7 @@ export const useBlockStyleItem = ({
 		setStyles({
 			...styles,
 			variations: Object.fromEntries(
-				Object.entries(styles.variations).filter(
+				Object.entries(styles?.variations || {}).filter(
 					([key]) => key !== currentStyleName
 				)
 			),

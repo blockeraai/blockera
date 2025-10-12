@@ -40,6 +40,8 @@ import { useBlockStyleItem } from './use-block-style-item';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 const ContextMenu = ({
+	counter,
+	setCounter,
 	cachedStyle,
 	isOpenRenameModal,
 	setIsOpenRenameModal,
@@ -56,6 +58,8 @@ const ContextMenu = ({
 	isConfirmedChangeID,
 	setIsConfirmedChangeID,
 }: {
+	counter: number,
+	setCounter: (counter: number) => void,
 	cachedStyle: Object,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 	handleOnDuplicate: (style: Object) => void,
@@ -169,7 +173,10 @@ const ContextMenu = ({
 							className={controlInnerClassNames('menu-item', {
 								'delete-style': true,
 							})}
-							onClick={() => handleOnDelete(style.name)}
+							onClick={() => {
+								handleOnDelete(style.name);
+								setCounter(counter - 1);
+							}}
 						>
 							<Icon icon="icon-recycle-bin" iconSize="24" />
 							{__('Delete', 'blockera')}
@@ -183,7 +190,9 @@ const ContextMenu = ({
 
 export const StyleItem = ({
 	style,
+	counter,
 	blockName,
+	setCounter,
 	activeStyle,
 	blockStyles,
 	setBlockStyles,
@@ -194,18 +203,20 @@ export const StyleItem = ({
 	inGlobalStylesPanel = false,
 }: {
 	style: Object,
+	counter: number,
 	blockName: string,
 	activeStyle: Object,
 	blockStyles: Array<Object>,
-	setBlockStyles: (styles: Array<Object>) => void,
 	inGlobalStylesPanel: boolean,
+	setCounter: (counter: number) => void,
 	styleItemHandler: (style: Object) => void,
 	onSelectStylePreview: (style: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
+	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
 	const {
-		style: styleData,
+		getStyle,
 		setStyle: setStyleData,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
@@ -271,7 +282,7 @@ export const StyleItem = ({
 		cachedStyle,
 		setBlockStyles,
 		setCachedStyle,
-		styles: styleData,
+		styles: getStyle(),
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setStyles: setStyleData,
@@ -404,6 +415,8 @@ export const StyleItem = ({
 				</Flex>
 				<ContextMenu
 					style={style}
+					counter={counter}
+					setCounter={setCounter}
 					buttonText={buttonText}
 					handleOnRename={handleOnRename}
 					handleOnDuplicate={handleOnDuplicate}
@@ -488,6 +501,8 @@ export const StyleItem = ({
 					/>
 					<ContextMenu
 						style={style}
+						counter={counter}
+						setCounter={setCounter}
 						buttonText={buttonText}
 						handleOnRename={handleOnRename}
 						handleOnDuplicate={handleOnDuplicate}
