@@ -29,7 +29,7 @@
 			height: 24px;
 			align-items: center;
 			justify-content: center;
-			transition: var(--blockera-controls-transition);
+			transition: 100ms ease-in-out;
 			border-radius: var(--blockera-controls-border-radius);
 			opacity: 0.2;
 			--blockera-controls-primary-color: #0051e7;

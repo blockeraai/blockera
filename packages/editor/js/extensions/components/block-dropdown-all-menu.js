@@ -92,7 +92,7 @@ export const BlockDropdownAllMenu = ({
 					style={{
 						'--tooltip-bg': '#0051e7',
 					}}
-					delay={200}
+					delay={100}
 				>
 					<a
 						href="https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link"
