@@ -101,6 +101,10 @@ export function getRenderedStyles(
 
 	styles = styles
 		.map((style) => {
+			if (variations[style.name]?.isDeleted) {
+				return null;
+			}
+
 			if (style.name in variations) {
 				return {
 					...style,

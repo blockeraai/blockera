@@ -216,10 +216,10 @@ export const StyleItem = ({
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
 	const {
-		getStyle,
-		setStyle: setStyleData,
+		getStyle = () => ({}),
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
+		setStyle: setStyleData = () => {},
 	} = useGlobalStylesPanelContext() || {
 		currentBlockStyleVariation: undefined,
 		setCurrentBlockStyleVariation: () => {},

@@ -258,6 +258,24 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnDelete = (currentStyleName: string) => {
+		setGlobalStyles({
+			...globalStyles,
+			blockeraMetaData: mergeObject(blockeraGlobalStylesMetaData, {
+				blocks: {
+					[blockName]: {
+						variations: {
+							[currentStyleName]: {
+								isDeleted: true,
+								...(blockStyles.filter(
+									(style) => style.name === currentStyleName
+								)?.[0] ?? {}),
+							},
+						},
+					},
+				},
+			}),
+		});
+
 		setBlockStyles(
 			blockStyles.filter((style) => style.name !== currentStyleName)
 		);
@@ -266,11 +284,16 @@ export const useBlockStyleItem = ({
 
 		setStyles({
 			...styles,
-			variations: Object.fromEntries(
-				Object.entries(styles?.variations || {}).filter(
-					([key]) => key !== currentStyleName
-				)
-			),
+			...(styles.hasOwnProperty('variations') &&
+			Object.keys(styles.variations).length > 0
+				? {
+						variations: Object.fromEntries(
+							Object.entries(styles?.variations || {}).filter(
+								([key]) => key !== currentStyleName
+							)
+						),
+				  }
+				: {}),
 		});
 
 		setCurrentBlockStyleVariation(undefined);
