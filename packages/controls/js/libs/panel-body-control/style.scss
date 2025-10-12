@@ -1,4 +1,11 @@
 .blockera-control.blockera-control-panel-body {
+	overflow: auto;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 
 	.components-panel__body-title {
 
