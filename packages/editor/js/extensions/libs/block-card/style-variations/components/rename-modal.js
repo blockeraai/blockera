@@ -135,7 +135,10 @@ export const RenameModal = ({
 					</Button>
 					<Button
 						variant="secondary"
-						onClick={() => setIsOpenRenameModal(false)}
+						onClick={() => {
+							setIsOpenRenameModal(false);
+							setIsConfirmedChangeID(false);
+						}}
 					>
 						{__('Cancel', 'blockera')}
 					</Button>

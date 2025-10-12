@@ -50,17 +50,15 @@ export const useBlockStyleItem = ({
 	setStyles: (styles: Object, options?: Object) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }): ({
-	isOpenRenameModal: boolean,
 	isConfirmedChangeID: boolean,
+	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	handleOnRename: (
 		newValue: { label: string, name: string },
 		currentStyle: Object
 	) => void,
-	setIsOpenRenameModal: (isOpen: boolean) => void,
 	handleOnDelete: (currentStyleName: string) => void,
 	handleOnDuplicate: (currentStyle: Object) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
-	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	handleOnSaveCustomizations: (currentStyle: Object) => void,
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
@@ -75,7 +73,6 @@ export const useBlockStyleItem = ({
 	);
 
 	const [isConfirmedChangeID, setIsConfirmedChangeID] = useState(false);
-	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
 
 	const { blockeraGlobalStylesMetaData } = window;
 
@@ -322,11 +319,9 @@ export const useBlockStyleItem = ({
 		handleOnRename,
 		handleOnEnable,
 		handleOnDelete,
-		isOpenRenameModal,
-		isConfirmedChangeID,
 		handleOnDuplicate,
 		handleOnDetachStyle,
-		setIsOpenRenameModal,
+		isConfirmedChangeID,
 		setIsConfirmedChangeID,
 		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,

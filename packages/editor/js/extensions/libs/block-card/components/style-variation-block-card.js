@@ -287,7 +287,9 @@ export function StyleVariationBlockCard({
 								currentStateAttributes?.blockeraUnsavedData
 							}
 						/>
-
+						<Slot
+							name={`blockera-style-variation-block-card-menu-${currentBlockStyleVariation?.name}`}
+						/>
 						<Tooltip text={__('Close Block Style', 'blockera')}>
 							<Icon
 								className={extensionInnerClassNames(
