@@ -349,11 +349,11 @@ export const StyleItem = ({
 										columns={'2'}
 										label={
 											false === cachedStyle?.status
-												? __('Active Style', 'blockera')
-												: __(
+												? __(
 														'Inactive Style',
 														'blockera'
 												  )
+												: __('Active Style', 'blockera')
 										}
 										onChange={(value: boolean): void =>
 											handleOnEnable(value, style)
