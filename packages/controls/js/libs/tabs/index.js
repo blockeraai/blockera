@@ -9,7 +9,7 @@ import { useRef } from '@wordpress/element';
  * Internal dependencies
  */
 import TabPanel from './tab-panel';
-import type { TTabsProps, TTabProps } from './types';
+import type { TTabsProps } from './types';
 
 /**
  * Handle on select event!
@@ -32,13 +32,6 @@ export function Tabs({
 	setCurrentTab,
 	className,
 }: TTabsProps): Element<any> {
-	const tabsRef: {
-		current: Array<{
-			...TTabProps,
-			icon?: Element<any>,
-			settingSlug?: string,
-		}>,
-	} = useRef(tabs);
 	const ref = useRef();
 
 	return (
@@ -48,7 +41,8 @@ export function Tabs({
 				onSelect={(tabName) => {
 					onSelect(tabName, setCurrentTab);
 				}}
-				tabs={tabsRef.current}
+				// $FlowFixMe
+				tabs={tabs}
 				initialTabName={activeTab}
 				design={design}
 				orientation={orientation}

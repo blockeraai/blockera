@@ -1573,13 +1573,17 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const tabs = [
-			{
-				name: 'settings',
-				title: __('General', 'blockera'),
-				tooltip: __('General Block Settings', 'blockera'),
-				className: 'settings-tab',
-				icon: <Icon icon="gear" iconSize="20" />,
-			},
+			...(isInnerBlock(currentBlock)
+				? []
+				: [
+						{
+							name: 'settings',
+							title: __('General', 'blockera'),
+							tooltip: __('General Block Settings', 'blockera'),
+							className: 'settings-tab',
+							icon: <Icon icon="gear" iconSize="20" />,
+						},
+				  ]),
 			{
 				name: 'style',
 				title: __('Styles', 'blockera'),
