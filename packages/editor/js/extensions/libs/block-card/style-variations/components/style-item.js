@@ -346,7 +346,7 @@ export const StyleItem = ({
 									}}
 								>
 									<ToggleControl
-										columns={'2'}
+										labelType={'self'}
 										label={
 											false === cachedStyle?.status
 												? __(

@@ -228,13 +228,15 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
-		const { blockeraMetaData = {} } = globalStyles;
+		const { blockeraMetaData = blockeraGlobalStylesMetaData } =
+			globalStyles;
 		const updatedMetaData = mergeObject(blockeraMetaData, {
 			blocks: {
 				[blockName]: {
 					variations: {
 						[currentStyle.name]: {
 							status,
+							...currentStyle,
 						},
 					},
 				},
