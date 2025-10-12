@@ -109,8 +109,39 @@ describe('Icon Block → Functionality + Visual Test', () => {
 			cy.get('input').type(150, { force: true });
 		});
 
+		//
+		// 4. Check settings tab
+		//
+		cy.getByDataTest('settings-tab').click();
+
+		cy.get('.block-editor-block-inspector').within(() => {
+			cy.get('.components-tools-panel-header')
+				.contains('Settings')
+				.scrollIntoView()
+				.should('be.visible');
+
+			cy.get(
+				'.components-tools-panel:not(.block-editor-bindings__panel)'
+			).within(() => {
+				cy.get('.components-input-control__label')
+					.contains('Aspect ratio')
+					.should('exist')
+					.should('not.be.visible');
+
+				cy.get('.components-input-control__label')
+					.contains('Width')
+					.should('exist')
+					.should('not.be.visible');
+
+				cy.get('.components-input-control__label')
+					.contains('Height')
+					.should('exist')
+					.should('not.be.visible');
+			});
+		});
+
 		/**
-		 * 4. Visual test in editor
+		 * 5. Visual test in editor
 		 */
 		deSelectBlock();
 
