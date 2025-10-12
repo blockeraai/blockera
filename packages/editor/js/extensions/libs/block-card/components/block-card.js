@@ -79,7 +79,11 @@ export function BlockCard({
 		options?: Object
 	) => void,
 	setAttributes: (attributes: Object) => void,
-	currentBlockStyleVariation?: { name: string, label: string },
+	currentBlockStyleVariation?: {
+		name: string,
+		label: string,
+		isDefault?: boolean,
+	},
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 }): MixedElement {
 	const {

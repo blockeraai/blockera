@@ -286,6 +286,7 @@ type UseGlobalStylesPanelContextReturnType = {
 	currentBlockStyleVariation: {
 		name: string,
 		label: string,
+		isDefault?: boolean,
 	},
 	setCurrentBlockStyleVariation: (Object) => void,
 	setStyle: (Object) => void,
