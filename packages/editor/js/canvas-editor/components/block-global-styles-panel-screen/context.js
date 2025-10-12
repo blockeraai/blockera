@@ -167,9 +167,9 @@ export const GlobalStylesPanelContextProvider = ({
 	const getStyle = useCallback(
 		() => ({
 			...defaultStylesValue,
-			...(style || {}),
+			...(rootStyle || {}),
 		}),
-		[style, defaultStylesValue]
+		[rootStyle, defaultStylesValue]
 	);
 
 	const baseContextValue = useMemo(
