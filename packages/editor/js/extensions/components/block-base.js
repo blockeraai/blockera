@@ -393,6 +393,7 @@ export const BlockBase: ComponentType<any> = (
 				setAttributes,
 				getAttributes,
 				currentBreakpoint,
+				defaultAttributes,
 				currentInnerBlock,
 				masterIsNormalState,
 				blockeraInnerBlocks,

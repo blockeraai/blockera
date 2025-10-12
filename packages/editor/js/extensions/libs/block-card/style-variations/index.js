@@ -4,15 +4,16 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { ComponentType, MixedElement } from 'react';
+import { detailedDiff } from 'deep-object-diff';
 import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
-import { useLateEffect } from '@blockera/utils';
-import { Button, Flex } from '@blockera/controls';
+import { omit, useLateEffect } from '@blockera/utils';
+import { controlInnerClassNames } from '@blockera/classnames';
+import { Button, Flex, ChangeIndicator } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -23,6 +24,8 @@ import type { InnerBlockType } from '../inner-blocks/types';
 import { isBaseBreakpoint } from '../../../../canvas-editor';
 import { useStylesForBlocks, getDefaultStyle } from './utils';
 import type { TBreakpoint, TStates } from '../block-states/types';
+import { useBlockContext } from '../../../components/block-context';
+import { prepareBlockeraDefaultAttributesValues } from '../../../components/utils';
 import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 type TBlockStyleVariations = {
@@ -130,6 +133,8 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		]
 	);
 
+	const { defaultAttributes, getAttributes } = useBlockContext();
+
 	if (
 		!stylesToRender ||
 		stylesToRender.length === 0 ||
@@ -157,6 +162,13 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 			/>
 		);
 	}
+	const { updated } = detailedDiff(
+		prepareBlockeraDefaultAttributesValues(defaultAttributes),
+		getAttributes()
+	);
+	const hasChangesets =
+		Object.keys(omit(updated, ['blockeraPropsId', 'blockeraCompatId']))
+			.length > 0;
 
 	return (
 		<>
@@ -208,10 +220,13 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					)}
 					direction="row"
 					alignItems="center"
+					justifyContent="space-around"
 					data-test="style-variations-button-label"
-					gap={0}
+					gap={5}
 				>
 					{buttonText}
+
+					<ChangeIndicator isChanged={hasChangesets} />
 
 					<Icon icon="more-vertical-small" iconSize={24} />
 				</Flex>
@@ -219,6 +234,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 
 			{isOpen && popoverAnchor && (
 				<BlockStyles
+					hasChangesets={hasChangesets}
 					blockName={blockName}
 					styles={{
 						onSelect,

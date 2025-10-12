@@ -195,6 +195,7 @@ export const StyleItem = ({
 	setCounter,
 	activeStyle,
 	blockStyles,
+	hasChangesets,
 	setBlockStyles,
 	styleItemHandler,
 	onSelectStylePreview,
@@ -206,6 +207,7 @@ export const StyleItem = ({
 	counter: number,
 	blockName: string,
 	activeStyle: Object,
+	hasChangesets?: boolean,
 	blockStyles: Array<Object>,
 	inGlobalStylesPanel: boolean,
 	setCounter: (counter: number) => void,
@@ -441,7 +443,9 @@ export const StyleItem = ({
 			{isActive && (
 				<Fill name="block-inspector-style-actions">
 					<Button
-						disabled={false === cachedStyle?.status}
+						disabled={
+							false === cachedStyle?.status || !hasChangesets
+						}
 						className={classNames('action-save-customizations', {
 							'action-disabled': false,
 						})}

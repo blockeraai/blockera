@@ -43,8 +43,10 @@ function BlockStyles({
 	styles,
 	blockName,
 	isNotActive,
+	hasChangesets,
 	context = 'inspector-controls',
 }: {
+	hasChangesets?: boolean,
 	blockName: string,
 	isNotActive?: boolean,
 	context?: 'global-styles-panel' | 'inspector-controls',
@@ -262,6 +264,7 @@ function BlockStyles({
 											setCounter={setCounter}
 											key={style.name}
 											style={style}
+											hasChangesets={hasChangesets}
 											activeStyle={activeStyle}
 											setCurrentActiveStyle={
 												setCurrentActiveStyle
