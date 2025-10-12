@@ -37,6 +37,7 @@ import {
 import { getDefaultStyle } from '../utils';
 import { RenameModal } from './rename-modal';
 import { useBlockStyleItem } from './use-block-style-item';
+import { useUserCan } from '../../../../../hooks/use-user-can';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 const ContextMenu = ({
@@ -292,6 +293,8 @@ export const StyleItem = ({
 		setCurrentBlockStyleVariation,
 	});
 
+	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
+
 	const isActive: boolean = activeStyle.name === style.name;
 	const defaultStyle = getDefaultStyle(blockStyles);
 
@@ -444,7 +447,9 @@ export const StyleItem = ({
 				<Fill name="block-inspector-style-actions">
 					<Button
 						disabled={
-							false === cachedStyle?.status || !hasChangesets
+							false === cachedStyle?.status ||
+							!hasChangesets ||
+							!isUserCanSaveCustomizations
 						}
 						className={classNames('action-save-customizations', {
 							'action-disabled': false,
@@ -474,6 +479,7 @@ export const StyleItem = ({
 							{__('Detach Style', 'blockera')}
 						</Button>
 						<Button
+							disabled={!isUserCanSaveCustomizations}
 							className={classNames(
 								'action-save-customizations',
 								{
@@ -494,39 +500,41 @@ export const StyleItem = ({
 			<Fill
 				name={`blockera-style-variation-block-card-menu-${style.name}`}
 			>
-				<Flex alignItems={'center'}>
-					{false === cachedStyle?.status && (
-						<Icon icon="eye-hide" iconSize="20" />
-					)}
-					<Icon
-						icon="more-vertical"
-						iconSize="20"
-						onClick={() => setIsOpenContextMenu(true)}
-					/>
-					<ContextMenu
-						style={style}
-						counter={counter}
-						setCounter={setCounter}
-						buttonText={buttonText}
-						handleOnRename={handleOnRename}
-						handleOnDuplicate={handleOnDuplicate}
-						handleOnClearAllCustomizations={
-							handleOnClearAllCustomizations
-						}
-						handleOnEnable={handleOnEnable}
-						handleOnDelete={handleOnDelete}
-						isConfirmedChangeID={isConfirmedChangeID}
-						setIsConfirmedChangeID={setIsConfirmedChangeID}
-						cachedStyle={cachedStyle}
-						isOpenRenameModal={isOpenBlockCardRenameModal}
-						setIsOpenRenameModal={setIsOpenBlockCardRenameModal}
-						isOpenContextMenu={isOpenBlockCardContextMenu}
-						setIsOpenContextMenu={setIsOpenBlockCardContextMenu}
-						setCurrentBlockStyleVariation={
-							setCurrentBlockStyleVariation
-						}
-					/>
-				</Flex>
+				{isUserCanSaveCustomizations && (
+					<Flex alignItems={'center'}>
+						{false === cachedStyle?.status && (
+							<Icon icon="eye-hide" iconSize="20" />
+						)}
+						<Icon
+							icon="more-vertical"
+							iconSize="20"
+							onClick={() => setIsOpenContextMenu(true)}
+						/>
+						<ContextMenu
+							style={style}
+							counter={counter}
+							setCounter={setCounter}
+							buttonText={buttonText}
+							handleOnRename={handleOnRename}
+							handleOnDuplicate={handleOnDuplicate}
+							handleOnClearAllCustomizations={
+								handleOnClearAllCustomizations
+							}
+							handleOnEnable={handleOnEnable}
+							handleOnDelete={handleOnDelete}
+							isConfirmedChangeID={isConfirmedChangeID}
+							setIsConfirmedChangeID={setIsConfirmedChangeID}
+							cachedStyle={cachedStyle}
+							isOpenRenameModal={isOpenBlockCardRenameModal}
+							setIsOpenRenameModal={setIsOpenBlockCardRenameModal}
+							isOpenContextMenu={isOpenBlockCardContextMenu}
+							setIsOpenContextMenu={setIsOpenBlockCardContextMenu}
+							setCurrentBlockStyleVariation={
+								setCurrentBlockStyleVariation
+							}
+						/>
+					</Flex>
+				)}
 			</Fill>
 		</>
 	);
