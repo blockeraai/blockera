@@ -84,7 +84,7 @@ export function getRenderedStyles(
 ): Array<Object> {
 	const defaultGlobalStyle = {
 		name: 'default',
-		label: _x('Default global style', 'block style', 'blockera'),
+		label: _x('Default', 'block style', 'blockera'),
 		isDefault: true,
 		icon: {
 			name: 'wordpress',
