@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 176,
+		"total": 178,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 73,
+		"not-supported": 75,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -795,6 +795,14 @@
 		{
 			"name": "woocommerce/payment-method-icons",
 			"title": "Payment Method Icons"
+		},
+		{
+			"name": "woocommerce/email-content",
+			"title": "A placeholder block for email content."
+		},
+		{
+			"name": "woocommerce/product-filter-taxonomy",
+			"title": "Enable customers to filter the product collection by selecting one or more taxonomy terms, such as categories, brands, or tags."
 		}
 	]
 }
