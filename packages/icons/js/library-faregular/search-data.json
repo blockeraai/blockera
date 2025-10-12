@@ -15,7 +15,7 @@
 	},
 	{
 		"iconName": "fa-money-bill-1",
-		"title": "FaMoneyBill1",
+		"title": "Money Bill",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["money", "bill", "currency"]
@@ -1324,7 +1324,7 @@
 	},
 	{
 		"iconName": "fa-hourglass-2",
-		"title": "FaHourglass2",
+		"title": "Hourglass",
 		"library": "faregular",
 		"prefix": "far",
 		"tags": ["hourglass", "time", "timer"]
