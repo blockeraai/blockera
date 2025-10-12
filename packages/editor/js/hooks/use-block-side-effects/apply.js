@@ -8,14 +8,26 @@ import { useEffect } from '@wordpress/element';
  */
 import { classes as classCombinations } from './classes';
 
-const handleSpecificClassCombinations = (container, blockName) => {
+const handleSpecificClassCombinations = (
+	container,
+	blockName,
+	activeBlockVariation
+) => {
 	classCombinations.forEach(
 		({ parent, children, exclude, include, childrenCheck }) => {
-			if (exclude && exclude.includes(blockName)) {
+			if (
+				exclude &&
+				(exclude.includes(blockName) ||
+					exclude.includes(activeBlockVariation))
+			) {
 				return;
 			}
 
-			if (include && !include.includes(blockName)) {
+			if (
+				include &&
+				!include.includes(blockName) &&
+				!include.includes(activeBlockVariation)
+			) {
 				return;
 			}
 
@@ -167,7 +179,11 @@ export const useBlockSideEffects = ({
 			}
 
 			settingsOutsideAnyTabs.forEach((tab) => {
-				handleSpecificClassCombinations(tab, blockName);
+				handleSpecificClassCombinations(
+					tab,
+					blockName,
+					activeBlockVariation
+				);
 			});
 
 			return;
@@ -179,10 +195,18 @@ export const useBlockSideEffects = ({
 		if (inspectorTabs) {
 			if ('settings' === currentTab) {
 				setTimeout(() => {
-					handleSpecificClassCombinations(inspectorTabs, blockName);
+					handleSpecificClassCombinations(
+						inspectorTabs,
+						blockName,
+						activeBlockVariation
+					);
 				}, 30);
 			} else {
-				handleSpecificClassCombinations(inspectorTabs, blockName);
+				handleSpecificClassCombinations(
+					inspectorTabs,
+					blockName,
+					activeBlockVariation
+				);
 			}
 		}
 
