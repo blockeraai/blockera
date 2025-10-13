@@ -734,6 +734,12 @@
 		"tags": ["css3", "css", "styling", "web", "design"]
 	},
 	{
+		"iconName": "design-system-category",
+		"title": "Design System",
+		"library": "ui",
+		"tags": ["design", "design-system"]
+	},
+	{
 		"iconName": "data-attribute",
 		"title": "Data Attribute",
 		"library": "ui",
@@ -1232,6 +1238,24 @@
 		"tags": ["font", "style", "normal", "regular", "standard", "default"]
 	},
 	{
+		"iconName": "general-category",
+		"title": "General",
+		"library": "ui",
+		"tags": ["general", "public", "common", "default"]
+	},
+	{
+		"iconName": "global-styles-category",
+		"title": "Global Styles",
+		"library": "ui",
+		"tags": [
+			"global",
+			"styles",
+			"global-styles",
+			"global-style",
+			"global-style-category"
+		]
+	},
+	{
 		"iconName": "gear-small",
 		"title": "Gear Small",
 		"library": "ui",
@@ -1617,6 +1641,12 @@
 		"title": "Outline",
 		"library": "ui",
 		"tags": ["outline", "border", "frame", "edge", "perimeter", "boundary"]
+	},
+	{
+		"iconName": "other-category",
+		"title": "Other",
+		"library": "ui",
+		"tags": ["other", "other-category", "other-styles"]
 	},
 	{
 		"iconName": "overflow-hidden",
