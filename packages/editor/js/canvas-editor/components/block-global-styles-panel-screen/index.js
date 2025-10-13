@@ -146,3 +146,5 @@ export const BlockGlobalStylesPanelScreen = ({
 		screenElement
 	);
 };
+
+export * from './navigator';

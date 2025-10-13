@@ -30,7 +30,10 @@ import {
 /**
  * Internal dependencies
  */
-import { BlockGlobalStylesPanelScreen } from '../components';
+import {
+	BlockGlobalStylesPanelScreen,
+	BlockeraGlobalStylesNavigator,
+} from '../components';
 import { sidebarListener, sidebarSelector } from './side-bar-listener';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { styleBookListener, styleBookSelector } from './style-book-listener';
@@ -154,12 +157,9 @@ export const registration = ({
 					'button[id="/blocks"]',
 					() => {
 						return createPortal(
-							<div className="blockera-block-inspector-controls-wrapper">
-								<h2 className={className}>
-									<Icon icon="other-category" size={20} />
-									{__('Other', 'blockera')}
-								</h2>
-							</div>,
+							<BlockeraGlobalStylesNavigator
+								className={className}
+							/>,
 							document.querySelector('button[id="/blocks"]')
 								?.parentElement
 						);

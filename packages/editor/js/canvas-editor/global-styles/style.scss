@@ -7,7 +7,10 @@
 		.edit-site-block-types-item-list,
 		div:has(+ .edit-site-global-styles-screen),
 		.edit-site-global-styles-screen,
-		div:first-child) {
+		div:first-child,
+		.edit-site-global-styles-screen-css,
+		.edit-site-global-styles-screen-style-variations,
+		.components-tools-panel) {
 		display: none;
 	}
 
@@ -68,6 +71,95 @@ button[id^="/blocks/"] {
 
 .components-surface.components-card.edit-site-global-styles-screen-root {
 
+	&.is-open-blockera-navigation {
+
+		div {
+
+			.components-card-body,
+			 hr {
+				display: none;
+
+				&:last-child {
+					display: block;
+
+					*:not(.components-item-group, .components-item-group *) {
+						display: none;
+					}
+
+					.components-item-group {
+
+						button[id="/blocks"] {
+							display: none;
+						}
+
+						.blockera-extension.blockera-extension-global-styles-navigation.navigation-category {
+							display: none;
+						}
+
+						.components-navigation__menu {
+							margin-top: 0;
+						}
+
+						.edit-site-global-styles-header__description {
+							padding: 0;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.blockera-extension-navigation {
+		padding: 0;
+
+		.blockera-extension-navigation-category {
+			padding: 0;
+			margin: 0;
+
+			button {
+				justify-content: space-between;
+
+				.components-truncate {
+					margin: 0;
+					width: 200px;
+				}
+			}
+
+			.full-width {
+				width: 100%;
+				color: #cccccc;
+			}
+		}
+	}
+
+	.blockera-extension-navigation-item {
+
+		&.coming-soon {
+			pointer-events: none;
+			cursor: not-allowed;
+
+			svg,
+			path {
+				color: #cccccc;
+				fill: #cccccc;
+			}
+		}
+
+		span {
+			font-size: 13px;
+		}
+
+		.coming-soon {
+			background-color: #cccccc;
+			color: #ffffff;
+			text-transform: uppercase;
+			font-size: 8px;
+			font-weight: 600;
+			padding: 0.2em 0.5em;
+			border-radius: 0.2em;
+		}
+	}
+
 	hr[role="separator"] {
 		border: none;
 		margin: 0;
@@ -104,7 +196,7 @@ button[id^="/blocks/"] {
 		margin-top: 1em;
 
 		+ p {
-			color: #1e1e1e;
+			color: #cccccc;
 		}
 
 		&.no-margin-top {
