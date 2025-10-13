@@ -164,68 +164,67 @@ export const BlockeraGlobalStylesNavigator = ({
 					parentMenu="root"
 					className={extensionClassNames('back-navigation')}
 					backButtonLabel={__('Back', 'blockera')}
-				>
-					{isOpenCustomCss && (
-						<Navigation>
-							<p className="edit-site-global-styles-header__description">
-								Add your own CSS to customize the appearance and
-								layout of your site.
-								<br />
-								<a
-									className="components-external-link edit-site-global-styles-screen-css-help-link"
-									href="https://developer.wordpress.org/advanced-administration/wordpress/css/"
-									target="_blank"
-									rel="external noreferrer noopener"
-								>
-									<span className="components-external-link__contents">
-										Learn more about CSS
-									</span>
-									<span
-										className="components-external-link__icon"
-										aria-label="(opens in a new tab)"
-									>
-										↗
-									</span>
-								</a>
-							</p>
-							<ControlContextProvider
-								value={{
-									name: 'custom-css',
-									value: '',
-								}}
+				/>
+				{isOpenCustomCss && (
+					<Navigation>
+						<p className="edit-site-global-styles-header__description">
+							Add your own CSS to customize the appearance and
+							layout of your site.
+							<br />
+							<a
+								className="components-external-link edit-site-global-styles-screen-css-help-link"
+								href="https://developer.wordpress.org/advanced-administration/wordpress/css/"
+								target="_blank"
+								rel="external noreferrer noopener"
 							>
-								<CodeControl
-									label={__('Custom CSS Code', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Once you input your CSS, the customization is automatically applied to the block.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									onChange={() => {}}
-									editable={true}
-									defaultValue={''}
-								/>
-							</ControlContextProvider>
-						</Navigation>
-					)}
-				</NavigationMenu>
+								<span className="components-external-link__contents">
+									Learn more about CSS
+								</span>
+								<span
+									className="components-external-link__icon"
+									aria-label="(opens in a new tab)"
+								>
+									↗
+								</span>
+							</a>
+						</p>
+						<ControlContextProvider
+							value={{
+								name: 'custom-css',
+								value: '',
+							}}
+						>
+							<CodeControl
+								label={__('Custom CSS Code', 'blockera')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'With this feature, you have the capability to apply custom CSS codes directly to this block, enabling you to tailor its style effortlessly.',
+												'blockera'
+											)}
+										</p>
+										<p>
+											{__(
+												'Once you input your CSS, the customization is automatically applied to the block.',
+												'blockera'
+											)}
+										</p>
+										<p>
+											{__(
+												'Simply use ".block" to target this specific block, and it will seamlessly convert to the correct selector for precise styling.',
+												'blockera'
+											)}
+										</p>
+									</>
+								}
+								onChange={() => {}}
+								editable={true}
+								defaultValue={''}
+							/>
+						</ControlContextProvider>
+					</Navigation>
+				)}
 			</Navigation>
 		</div>
 	);
