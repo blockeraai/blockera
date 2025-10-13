@@ -68,6 +68,11 @@ button[id^="/blocks/"] {
 
 .components-surface.components-card.edit-site-global-styles-screen-root {
 
+	hr[role="separator"] {
+		border: none;
+		margin: 0;
+	}
+
 	.components-card-body {
 		padding: 0;
 	}
@@ -83,7 +88,7 @@ button[id^="/blocks/"] {
 		}
 
 		+ div {
-			margin: 1em;
+			margin: 0 1em 0 1em;
 		}
 
 		+ div + div {

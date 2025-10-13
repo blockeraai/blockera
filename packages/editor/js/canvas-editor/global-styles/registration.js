@@ -131,7 +131,7 @@ export const registration = ({
 
 							button.innerHTML = button.innerHTML.replace(
 								'Blocks',
-								__('Block style variations', 'blockera')
+								__('Block Style Variations', 'blockera')
 							);
 						}, []);
 
