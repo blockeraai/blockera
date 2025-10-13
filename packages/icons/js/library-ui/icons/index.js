@@ -98,6 +98,11 @@ export { default as BorderStyleVerticalSolid } from './border-style-vertical-sol
 export { default as Border } from './border.svg';
 export { default as BreakAll } from './break-all.svg';
 export { default as BreakNormal } from './break-normal.svg';
+export { default as CookieConsent } from './cookie-consent.svg';
+export { default as WebsiteFrame } from './website-frame.svg';
+export { default as JavascriptCodes } from './javascript.svg';
+export { default as BackToTop } from './back-to-top.svg';
+export { default as CustomCss } from './curly-braces.svg';
 export { default as Changelog } from './changelog.svg';
 export { default as Check } from './check.svg';
 export { default as CheckCircle } from './check-circle.svg';

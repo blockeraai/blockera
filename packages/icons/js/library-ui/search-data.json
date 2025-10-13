@@ -74,6 +74,12 @@
 		"tags": ["asterisk", "star", "required", "mandatory", "mark"]
 	},
 	{
+		"iconName": "back-to-top",
+		"title": "Back to Top",
+		"library": "ui",
+		"tags": ["back", "top", "scroll", "navigation", "button"]
+	},
+	{
 		"iconName": "background-image",
 		"title": "Background Image",
 		"library": "ui",
@@ -618,6 +624,18 @@
 		"title": "Changelog",
 		"library": "ui",
 		"tags": ["changelog", "version", "history", "updates", "changes"]
+	},
+	{
+		"iconName": "curly-braces",
+		"title": "Curly Braces",
+		"library": "ui",
+		"tags": ["curly", "braces", "code", "syntax", "programming", "css"]
+	},
+	{
+		"iconName": "cookie-consent",
+		"title": "Cookie Consent",
+		"library": "ui",
+		"tags": ["cookie", "consent", "privacy", "tracking", "gdpr"]
 	},
 	{
 		"iconName": "check",
@@ -1377,6 +1395,12 @@
 			"horizontal",
 			"align"
 		]
+	},
+	{
+		"iconName": "javascript-codes",
+		"title": "JavaScript",
+		"library": "ui",
+		"tags": ["javascript", "js", "code", "syntax", "programming"]
 	},
 	{
 		"iconName": "justify-content-empty",
@@ -2524,6 +2548,12 @@
 			"distraction-free",
 			"zen"
 		]
+	},
+	{
+		"iconName": "website-frame",
+		"title": "Website Frame",
+		"library": "ui",
+		"tags": ["website", "frame", "layout", "structure", "container"]
 	},
 	{
 		"iconName": "zap-fast",
