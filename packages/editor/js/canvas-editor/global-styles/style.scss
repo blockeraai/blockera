@@ -65,3 +65,68 @@ button[id^="/blocks/"] {
 		opacity: 0.4;
 	}
 }
+
+.components-surface.components-card.edit-site-global-styles-screen-root {
+
+	.components-card-body {
+		padding: 0;
+	}
+
+	.edit-site-global-styles-screen-root__active-style-tile {
+		margin: 1em;
+
+		.edit-site-global-styles-preview__wrapper {
+
+			div[data-wp-component="HStack"] {
+				gap: calc(16px);
+			}
+		}
+
+		+ div {
+			margin: 1em;
+		}
+
+		+ div + div {
+			padding: 0;
+
+			div[role="list-item"] {
+				margin: 1em;
+			}
+		}
+	}
+
+	.blockera-block-inspector-controls-wrapper {
+		margin-top: 1em;
+
+		+ p {
+			color: #1e1e1e;
+		}
+
+		&.no-margin-top {
+			margin: 0;
+		}
+
+		&.inline-block {
+			display: inline-block;
+		}
+
+		.blockera-extension-global-styles-navigation {
+
+			&.navigation-category {
+				gap: 8px;
+				margin: 0;
+				padding: 1em;
+				display: flex;
+				align-items: center;
+				color: var(--blockera-controls-primary-color);
+				border-top: 1px solid #e0e0e0;
+			}
+		}
+	}
+
+	button[id="/blocks"] {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+}
