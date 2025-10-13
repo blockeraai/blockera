@@ -140,7 +140,9 @@
 			&.active-addon-pointers {
 
 				svg {
-					outline: 2px solid #ffffff;
+					outline: none;
+					width: 14px;
+					height: 14px;
 				}
 			}
 		}
@@ -151,7 +153,7 @@
 
 				svg {
 					fill: #ffffff;
-					outline: 2px solid #ffffff;
+					outline: none #ffffff;
 				}
 
 				.blockera-control-value-addon-pointer {
@@ -168,8 +170,8 @@
 			height: 28px;
 
 			.blockera-control-value-addon-pointers {
-				top: -13.5px;
-				right: 15px;
+				top: 0;
+				left: 25px;
 			}
 		}
 
@@ -180,8 +182,10 @@
 			width: 30px;
 
 			.blockera-control-value-addon-pointers {
-				right: -13.5px;
-				top: 15px;
+				top: 10px;
+				left: initial;
+				right: -5px;
+				text-align: right;
 			}
 
 			.blockera-control-reset-icon {
@@ -197,10 +201,8 @@
 			height: 28px;
 
 			.blockera-control-value-addon-pointers {
-				right: initial;
-				top: initial;
-				bottom: -13.5px;
-				left: 15px;
+				top: 0;
+				left: 25px;
 				text-align: left;
 			}
 		}
@@ -213,10 +215,8 @@
 
 			.blockera-control-value-addon-pointers {
 				text-align: left;
-				top: initial;
-				right: initial;
-				bottom: 15px;
-				left: -13.5px;
+				top: 10px;
+				left: -5px;
 			}
 		}
 

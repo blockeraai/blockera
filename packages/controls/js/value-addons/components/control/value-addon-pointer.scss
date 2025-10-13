@@ -17,12 +17,12 @@ body {
 .blockera-control.blockera-control-value-addon-pointers {
 	position: absolute;
 	top: -14px;
-	right: -14px;
+	left: -14px;
 	z-index: 1;
 	width: 100px;
 	pointer-events: none;
 	direction: revert;
-	text-align: right;
+	text-align: left;
 
 	&.active-addon-pointers {
 
