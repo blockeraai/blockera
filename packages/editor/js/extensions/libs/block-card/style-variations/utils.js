@@ -260,6 +260,10 @@ function useGenericPreviewBlock(block: Object, type: Object) {
 		}
 
 		if (block) {
+			if (!block.hasOwnProperty('innerBlocks')) {
+				block.innerBlocks = [];
+			}
+
 			return cloneBlock(block);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
