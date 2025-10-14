@@ -9,7 +9,10 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlClassNames } from '@blockera/classnames';
+import {
+	controlClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -123,6 +126,9 @@ export default function FilterControl({
 			id={id}
 			className={controlClassNames('filter', className)}
 			popoverTitle={popoverTitle || __('Filter Effects', 'blockera')}
+			popoverClassName={componentInnerClassNames(
+				'popover-filter-control'
+			)}
 			label={label || __('Filters', 'blockera')}
 			labelPopoverTitle={
 				labelPopoverTitle || __('Filter Effects', 'blockera')
