@@ -147,4 +147,4 @@ export const BlockGlobalStylesPanelScreen = ({
 	);
 };
 
-export * from './navigator';
+export * from './blockera-global-styles-navigation';

@@ -24,7 +24,7 @@ import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
  */
 import {
 	BlockGlobalStylesPanelScreen,
-	BlockeraGlobalStylesNavigator,
+	BlockeraGlobalStylesNavigation,
 } from '../components';
 import { sidebarListener, sidebarSelector } from './side-bar-listener';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
@@ -54,7 +54,7 @@ export const registration = ({
 					'.edit-site-global-styles-screen-root__active-style-tile',
 					() => {
 						return createPortal(
-							<BlockeraGlobalStylesNavigator />,
+							<BlockeraGlobalStylesNavigation />,
 							document.querySelector(
 								'.edit-site-global-styles-screen-root__active-style-tile'
 							)?.parentElement
