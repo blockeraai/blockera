@@ -2556,6 +2556,36 @@
 		"tags": ["website", "frame", "layout", "structure", "container"]
 	},
 	{
+		"iconName": "wp-background",
+		"title": "WP Background",
+		"library": "ui",
+		"tags": ["wp", "background", "color", "palette", "theme", "design"]
+	},
+	{
+		"iconName": "wp-colors",
+		"title": "WP Colors",
+		"library": "ui",
+		"tags": ["wp", "colors", "color", "palette", "theme", "design"]
+	},
+	{
+		"iconName": "wp-layout",
+		"title": "WP Layout",
+		"library": "ui",
+		"tags": ["wp", "layout", "structure", "container", "grid", "flex"]
+	},
+	{
+		"iconName": "wp-shadows",
+		"title": "WP Shadows",
+		"library": "ui",
+		"tags": ["wp", "shadows", "shadow", "drop", "overlay", "depth"]
+	},
+	{
+		"iconName": "wp-typography",
+		"title": "WP Typography",
+		"library": "ui",
+		"tags": ["wp", "typography", "font", "text", "style", "design"]
+	},
+	{
 		"iconName": "zap-fast",
 		"title": "Zap Fast",
 		"library": "ui",
