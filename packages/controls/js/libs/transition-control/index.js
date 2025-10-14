@@ -8,7 +8,10 @@ import type { MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-import { controlClassNames } from '@blockera/classnames';
+import {
+	controlClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -40,6 +43,9 @@ export default function TransitionControl({
 		<RepeaterControl
 			className={controlClassNames('transition', className)}
 			popoverTitle={popoverTitle || __('Transitions', 'blockera')}
+			popoverClassName={componentInnerClassNames(
+				'popover-transition-control'
+			)}
 			label={label || __('Transitions', 'blockera')}
 			labelDescription={labelDescription || <LabelDescription />}
 			addNewButtonLabel={__('Add New Transition', 'blockera')}
