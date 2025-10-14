@@ -24,14 +24,17 @@ export const getTargets = (version: string): GetTarget => {
 	const dotsMatches = /\./g.exec(version);
 	version = version?.replace(/\./g, '');
 
-	const globalStylesPanel = {
+	const globalStylesPanel: Object = {
 		blocksButton: `button[id="\/blocks"]`,
 		screen: '.edit-site-global-styles-sidebar__navigator-screen',
 		blockScreenListItem: `button[id^="\/blocks\/core%2F"]:not([id*="\/variations\/"])`,
 		globalStylesScreen: '.edit-site-global-styles-screen',
 	};
 
-	const targets = {
+	const targets: {
+		header: string,
+		globalStylesPanel: Object,
+	} = {
 		header: '.editor-header__center',
 		globalStylesPanel,
 	};

@@ -11,15 +11,17 @@ export class IntersectionObserverRenderer {
 	targetSelector: string;
 	whileNotExistSelectors: string[];
 	componentSelector: string;
-	Component: ComponentType<any>;
+	Component: null | ComponentType<any>;
 	targetElementIsRoot: boolean;
 	callback: Function;
 	onShouldNotRenderer: boolean;
 	isRootComponent: boolean;
+	isRendered: boolean;
+	clickedBlock: boolean;
 
 	constructor(
 		targetSelector: string,
-		Component: ComponentType<any>,
+		Component: ComponentType<any> | null,
 		{
 			whileNotExistSelectors = [],
 			componentSelector = '',
@@ -28,14 +30,13 @@ export class IntersectionObserverRenderer {
 			onShouldNotRenderer = false,
 			isRootComponent = false,
 		}: {
-			callback: Function,
-			root: string,
-			after: string,
-			componentSelector: string,
-			whileNotExistSelectors: string[],
-			targetElementIsRoot: boolean,
-			onShouldNotRenderer: boolean,
-			isRootComponent: any,
+			callback?: Function,
+			root?: string,
+			componentSelector?: string,
+			whileNotExistSelectors?: string[],
+			targetElementIsRoot?: boolean,
+			onShouldNotRenderer?: boolean,
+			isRootComponent?: any,
 		} = {}
 	) {
 		this.whileNotExistSelectors = whileNotExistSelectors;
@@ -125,12 +126,15 @@ export class IntersectionObserverRenderer {
 				const containerDiv = document.createElement('div');
 				const root = createRoot(containerDiv);
 
-				root.render(
-					<this.Component clickedBlock={this.clickedBlock} />
-				);
+				if (this.Component) {
+					root.render(
+						<this.Component clickedBlock={this.clickedBlock} />
+					);
+				}
 
 				// If the target element is an iframe, append the container to the iframe body.
 				if ('IFRAME' === targetElement.tagName) {
+					// $FlowFixMe
 					targetElement.contentDocument.body.appendChild(
 						containerDiv
 					);
@@ -151,7 +155,9 @@ export class IntersectionObserverRenderer {
 			// Append the new container to target instead of replacing content.
 			targetElement.appendChild(containerDiv);
 			const root = createRoot(containerDiv);
-			root.render(<this.Component />);
+			if (this.Component) {
+				root.render(<this.Component />);
+			}
 
 			// If the component is a root component, set the isRendered flag to true, because it will be rendered only once.
 			if (this.isRootComponent) {

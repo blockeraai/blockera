@@ -139,14 +139,7 @@ export const registration = ({
 			useEffect(() => {
 				new IntersectionObserverRenderer(
 					screen,
-					() => (
-						<BlockGlobalStylesPanelScreen
-							screen={screen}
-							blocksButton={blocksButton}
-							globalStylesScreen={globalStylesScreen}
-							blockScreenListItem={blockScreenListItem}
-						/>
-					),
+					() => <BlockGlobalStylesPanelScreen screen={screen} />,
 					{
 						targetElementIsRoot: true,
 						whileNotExistSelectors: [

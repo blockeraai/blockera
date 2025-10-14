@@ -14,6 +14,7 @@ export const styleBookListener = (blockTypes: Array<Object>): void => {
 		blockTypes.forEach((blockType) => {
 			document
 				.querySelector(styleBookSelector)
+				// $FlowFixMe
 				?.contentWindow?.document?.querySelector(
 					getBlockTypeSelector(blockType.name)
 				)
