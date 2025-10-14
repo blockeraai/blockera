@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
@@ -18,14 +17,7 @@ import {
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/icons';
-import { extensionClassNames } from '@blockera/classnames';
-import {
-	isEquals,
-	mergeObject,
-	prependPortal,
-	omitWithPattern,
-} from '@blockera/utils';
+import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -58,110 +50,14 @@ export const registration = ({
 		render() {
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useEffect(() => {
-				const className = extensionClassNames(
-					'global-styles-navigation',
-					{
-						'navigation-category': true,
-					}
-				);
 				new IntersectionObserverRenderer(
-					'button[id="/typography"]',
-					() => {
-						return prependPortal(
-							<h2 className={className}>
-								<Icon icon="design-system-category" size={20} />
-								{__('Design System', 'blockera')}
-							</h2>,
-							document.querySelector('button[id="/typography"]')
-								?.parentElement?.parentElement,
-							{
-								className: 'no-margin-top',
-							}
-						);
-					},
-					{
-						isRootComponent: true,
-						targetElementIsRoot: true,
-						componentSelector: '.blockera-styles-navigation',
-					}
-				);
-
-				new IntersectionObserverRenderer(
-					'button[id="/layout"]',
-					() => {
-						return prependPortal(
-							<h2 className={className}>
-								<Icon icon="general-category" size={20} />
-								{__('General', 'blockera')}
-							</h2>,
-							document.querySelector('button[id="/layout"]')
-								?.parentElement
-						);
-					},
-					{
-						isRootComponent: true,
-						targetElementIsRoot: true,
-						componentSelector: '.blockera-styles-navigation',
-					}
-				);
-
-				new IntersectionObserverRenderer(
-					'button[id="/blocks"]',
-					() => {
-						return prependPortal(
-							<h2 className={className}>
-								<Icon icon="global-styles-category" size={20} />
-								{__('Global Styles', 'blockera')}
-							</h2>,
-							document.querySelector('button[id="/blocks"]')
-								?.parentElement?.parentElement?.parentElement
-						);
-					},
-					{
-						isRootComponent: true,
-						targetElementIsRoot: true,
-						componentSelector: '.blockera-styles-navigation',
-					}
-				);
-
-				new IntersectionObserverRenderer(
-					'button[id="/blocks"]',
-					() => {
-						useEffect(() => {
-							const button = document.querySelector(
-								'button[id="/blocks"]'
-							);
-
-							button.innerHTML = button.innerHTML.replace(
-								'Blocks',
-								__('Block Style Variations', 'blockera')
-							);
-						}, []);
-
-						return prependPortal(
-							<Icon icon="style-variations-animated" size={20} />,
-							document.querySelector('button[id="/blocks"]'),
-							{
-								className: ['inline-block', 'no-margin-top'],
-							}
-						);
-					},
-					{
-						isRootComponent: true,
-						targetElementIsRoot: true,
-						componentSelector: '.blockera-styles-navigation',
-					}
-				);
-
-				new IntersectionObserverRenderer(
-					'button[id="/blocks"]',
+					'.edit-site-global-styles-screen-root__active-style-tile',
 					() => {
 						return createPortal(
-							<BlockeraGlobalStylesNavigator
-								className={className}
-							/>,
-							document.querySelector('button[id="/blocks"]')
-								?.parentElement
+							<BlockeraGlobalStylesNavigator />,
+							document.querySelector(
+								'.edit-site-global-styles-screen-root__active-style-tile'
+							)?.parentElement
 						);
 					},
 					{

@@ -3,8 +3,10 @@
 /**
  * External dependencies
  */
+import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
 import {
+	__experimentalSpacer as Spacer,
 	__experimentalNavigation as Navigation,
 	__experimentalNavigationItem as NavigationItem,
 	__experimentalNavigationMenu as NavigationMenu,
@@ -18,13 +20,7 @@ import { Icon } from '@blockera/icons';
 import { extensionClassNames } from '@blockera/classnames';
 import { Flex, ControlContextProvider, CodeControl } from '@blockera/controls';
 
-import { __ } from '@wordpress/i18n';
-
-export const BlockeraGlobalStylesNavigator = ({
-	className,
-}: {
-	className: string,
-}): MixedElement => {
+export const BlockeraGlobalStylesNavigator = (): MixedElement => {
 	const [backButton, setBackButton] = useState(null);
 	const [isOpenCustomCss, setIsOpenCustomCss] = useState(false);
 	const openCallback = (action: 'open-custom-css-panel') => {
@@ -63,12 +59,147 @@ export const BlockeraGlobalStylesNavigator = ({
 
 	return (
 		<div className="blockera-block-inspector-controls-wrapper">
-			<h2 className={className}>
-				<Icon icon="other-category" size={20} />
-				{__('Other', 'blockera')}
-			</h2>
 			<Navigation className={extensionClassNames('navigation')}>
 				<NavigationMenu
+					className={extensionClassNames('navigation-category')}
+				>
+					<NavigationItem
+						item="variations"
+						onClick={() =>
+							document
+								.querySelector('button[id="/variations"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item', {
+							inRoot: true,
+						})}
+						navigateToMenu="variations"
+						title={__('Browse Styles', 'blockera')}
+					/>
+				</NavigationMenu>
+				<NavigationMenu
+					title={
+						<>
+							<Icon icon="design-system-category" size={20} />
+							{__('Design system', 'blockera')}
+						</>
+					}
+					className={extensionClassNames('navigation-category')}
+				>
+					<NavigationItem
+						item="typography"
+						onClick={() =>
+							document
+								.querySelector('button[id="/typography"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item')}
+						navigateToMenu="typography"
+						title={__('Typography', 'blockera')}
+						icon={<Icon icon="wp-typography" size={20} />}
+					/>
+					<NavigationItem
+						item="colors"
+						onClick={() =>
+							document
+								.querySelector('button[id="/colors"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item')}
+						navigateToMenu="colors"
+						title={__('Colors', 'blockera')}
+						icon={<Icon icon="wp-colors" size={20} />}
+					/>
+					<NavigationItem
+						item="background"
+						onClick={() =>
+							document
+								.querySelector('button[id="/background"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item')}
+						navigateToMenu="background"
+						title={__('Background', 'blockera')}
+						icon={<Icon icon="wp-background" size={20} />}
+					/>
+					<NavigationItem
+						item="shadows"
+						onClick={() =>
+							document
+								.querySelector('button[id="/shadows"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item')}
+						navigateToMenu="shadows"
+						title={__('Shadows', 'blockera')}
+						icon={<Icon icon="wp-shadows" size={20} />}
+					/>
+				</NavigationMenu>
+				<NavigationMenu
+					title={
+						<>
+							<Icon icon="general-category" size={20} />
+							{__('General', 'blockera')}
+						</>
+					}
+					className={extensionClassNames('navigation-category')}
+				>
+					<NavigationItem
+						item="layout"
+						onClick={() =>
+							document
+								.querySelector('button[id="/layout"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item')}
+						navigateToMenu="layout"
+						title={__('Layout', 'blockera')}
+						icon={<Icon icon="wp-layout" size={20} />}
+					/>
+				</NavigationMenu>
+				<NavigationMenu
+					title={
+						<>
+							<Icon icon="global-styles-category" size={20} />
+							{__('Global Styles', 'blockera')}
+						</>
+					}
+					className={extensionClassNames('navigation-category')}
+				>
+					<Spacer
+						className={extensionClassNames('navigation-category', {
+							description: true,
+						})}
+					>
+						{__(
+							'Customize the appearance of specific blocks for the whole site.',
+							'blockera'
+						)}
+					</Spacer>
+					<NavigationItem
+						item="blocks"
+						onClick={() =>
+							document
+								.querySelector('button[id="/blocks"]')
+								?.click()
+						}
+						className={extensionClassNames('navigation-item', {
+							inRoot: true,
+						})}
+						navigateToMenu="blocks"
+						title={__('Block Style Variations', 'blockera')}
+						icon={
+							<Icon icon="style-variations-animated" size={20} />
+						}
+					/>
+				</NavigationMenu>
+				<NavigationMenu
+					title={
+						<>
+							<Icon icon="other-category" size={20} />
+							{__('Other', 'blockera')}
+						</>
+					}
 					className={extensionClassNames('navigation-category')}
 				>
 					<NavigationItem
@@ -158,7 +289,6 @@ export const BlockeraGlobalStylesNavigator = ({
 						icon={<Icon icon="cookie-consent" size={20} />}
 					/>
 				</NavigationMenu>
-
 				<NavigationMenu
 					menu="css"
 					parentMenu="root"

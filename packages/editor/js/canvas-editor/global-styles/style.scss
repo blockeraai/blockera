@@ -71,41 +71,17 @@ button[id^="/blocks/"] {
 
 .components-surface.components-card.edit-site-global-styles-screen-root {
 
-	&.is-open-blockera-navigation {
+	.components-item-group,
+	 p.components-spacer {
+		display: none;
+	}
 
-		div {
+	hr[role="separator"] {
+		display: none;
+		border: none;
 
-			.components-card-body,
-			 hr {
-				display: none;
-
-				&:last-child {
-					display: block;
-
-					*:not(.components-item-group, .components-item-group *) {
-						display: none;
-					}
-
-					.components-item-group {
-
-						button[id="/blocks"] {
-							display: none;
-						}
-
-						.blockera-extension.blockera-extension-global-styles-navigation.navigation-category {
-							display: none;
-						}
-
-						.components-navigation__menu {
-							margin-top: 0;
-						}
-
-						.edit-site-global-styles-header__description {
-							padding: 0;
-						}
-					}
-				}
-			}
+		+ .components-card-body {
+			display: none;
 		}
 	}
 
@@ -113,15 +89,50 @@ button[id^="/blocks/"] {
 		padding: 0;
 
 		.blockera-extension-navigation-category {
-			padding: 0;
-			margin: 0;
+
+			h3 {
+				padding: 0;
+			}
+
+			h2 {
+				margin: 0;
+				font-size: 14px;
+				color: var(--blockera-controls-primary-color);
+				padding: 0;
+
+				span {
+					display: flex;
+					align-items: center;
+					gap: 8px;
+				}
+			}
 
 			button {
+				opacity: 1;
+				padding: 0;
 				justify-content: space-between;
+
+				&:focus {
+					outline: none;
+					box-shadow: none;
+				}
 
 				.components-truncate {
 					margin: 0;
 					width: 200px;
+				}
+			}
+
+			.blockera-extension-navigation-item {
+
+				&:not(.inRoot) {
+
+					button {
+
+						> svg:last-child {
+							display: none;
+						}
+					}
 				}
 			}
 
@@ -137,12 +148,7 @@ button[id^="/blocks/"] {
 		&.coming-soon {
 			pointer-events: none;
 			cursor: not-allowed;
-
-			svg,
-			path {
-				color: #cccccc;
-				fill: #cccccc;
-			}
+			opacity: 0.5;
 		}
 
 		span {
@@ -160,43 +166,14 @@ button[id^="/blocks/"] {
 		}
 	}
 
-	hr[role="separator"] {
-		border: none;
-		margin: 0;
-	}
-
-	.components-card-body {
-		padding: 0;
-	}
-
-	.edit-site-global-styles-screen-root__active-style-tile {
-		margin: 1em;
-
-		.edit-site-global-styles-preview__wrapper {
-
-			div[data-wp-component="HStack"] {
-				gap: calc(16px);
-			}
-		}
-
-		+ div {
-			margin: 0 1em 0 1em;
-		}
-
-		+ div + div {
-			padding: 0;
-
-			div[role="list-item"] {
-				margin: 1em;
-			}
-		}
-	}
-
 	.blockera-block-inspector-controls-wrapper {
-		margin-top: 1em;
 
-		+ p {
+		.components-spacer {
 			color: #cccccc;
+			margin-bottom: calc(16px);
+			padding-left: 13px;
+			padding-right: 13px;
+			padding-top: calc(8px);
 		}
 
 		&.no-margin-top {
@@ -219,11 +196,5 @@ button[id^="/blocks/"] {
 				border-top: 1px solid #e0e0e0;
 			}
 		}
-	}
-
-	button[id="/blocks"] {
-		display: flex;
-		align-items: center;
-		gap: 8px;
 	}
 }
