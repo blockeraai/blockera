@@ -75,22 +75,6 @@ export const ExtensionSettings = ({
 					onClose={() => setIsOpen(false)}
 					focusOnMount={true}
 				>
-					{hasItems(defaults) && (
-						<div className={'settings-category'}>
-							<span className={'settings-category__title'}>
-								{__('Essential Features', 'blockera')}
-							</span>
-
-							<div className={'settings-category__items'}>
-								<Supports
-									update={update}
-									supports={defaults}
-									allFeatures={features}
-								/>
-							</div>
-						</div>
-					)}
-
 					<div className={'settings-category'}>
 						<span className={'settings-category__title'}>
 							{hasItems(defaults)
@@ -106,6 +90,22 @@ export const ExtensionSettings = ({
 							/>
 						</div>
 					</div>
+
+					{hasItems(defaults) && (
+						<div className={'settings-category'}>
+							<span className={'settings-category__title'}>
+								{__('Essential Features', 'blockera')}
+							</span>
+
+							<div className={'settings-category__items'}>
+								<Supports
+									update={update}
+									supports={defaults}
+									allFeatures={features}
+								/>
+							</div>
+						</div>
+					)}
 				</Popover>
 			)}
 		</>
