@@ -36,4 +36,5 @@ export type LayoutMatrix = {
 	justifyContent: JustifyContent,
 	direction: 'row' | 'column',
 	dense?: boolean,
+	props?: Object,
 };
