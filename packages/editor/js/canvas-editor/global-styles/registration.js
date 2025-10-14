@@ -26,7 +26,7 @@ import {
 	BlockGlobalStylesPanelScreen,
 	BlockeraGlobalStylesNavigation,
 } from '../components';
-import { sidebarListener, sidebarSelector } from './side-bar-listener';
+import { AddBlockTypeIcons, sidebarSelector } from './side-bar-listener';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { styleBookListener, styleBookSelector } from './style-book-listener';
 import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
@@ -109,9 +109,13 @@ export const registration = ({
 		render() {
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useEffect(() => {
-				new IntersectionObserverRenderer(sidebarSelector, null, {
-					callback: () => sidebarListener(blockTypes),
-				});
+				new IntersectionObserverRenderer(
+					sidebarSelector,
+					() => <AddBlockTypeIcons blockTypes={blockTypes} />,
+					{
+						componentSelector: '.blockera-block-types-icons',
+					}
+				);
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, []);
 
