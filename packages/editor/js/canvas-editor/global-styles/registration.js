@@ -73,6 +73,38 @@ export const registration = ({
 		},
 	});
 
+	registerPlugin('blockera-additional-css-contextmenu-observer', {
+		render() {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useEffect(() => {
+				new IntersectionObserverRenderer(
+					'.components-popover__content button:first-child',
+					null,
+					{
+						callback: () => {
+							document
+								.querySelector(
+									'.components-popover__content button:first-child'
+								)
+								?.addEventListener('click', (e) => {
+									e.preventDefault();
+									e.stopPropagation();
+									document
+										.querySelector(
+											'.custom-css-button button'
+										)
+										?.click();
+								});
+						},
+					}
+				);
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
+
+			return <></>;
+		},
+	});
+
 	registerPlugin('blockera-sidebar-global-styles-listeners', {
 		render() {
 			// eslint-disable-next-line react-hooks/rules-of-hooks

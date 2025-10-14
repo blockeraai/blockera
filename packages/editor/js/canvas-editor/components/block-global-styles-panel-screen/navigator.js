@@ -205,7 +205,9 @@ export const BlockeraGlobalStylesNavigator = (): MixedElement => {
 					<NavigationItem
 						item="css"
 						onClick={() => openCallback('open-custom-css-panel')}
-						className={extensionClassNames('navigation-item')}
+						className={extensionClassNames('navigation-item', {
+							'custom-css-button': true,
+						})}
 						navigateToMenu="css"
 						title={__('Custom Css', 'blockera')}
 						icon={<Icon icon="custom-css" size={20} />}
@@ -296,7 +298,7 @@ export const BlockeraGlobalStylesNavigator = (): MixedElement => {
 					backButtonLabel={__('Back', 'blockera')}
 				/>
 				{isOpenCustomCss && (
-					<Navigation>
+					<div>
 						<p className="edit-site-global-styles-header__description">
 							Add your own CSS to customize the appearance and
 							layout of your site.
@@ -353,7 +355,7 @@ export const BlockeraGlobalStylesNavigator = (): MixedElement => {
 								defaultValue={''}
 							/>
 						</ControlContextProvider>
-					</Navigation>
+					</div>
 				)}
 			</Navigation>
 		</div>

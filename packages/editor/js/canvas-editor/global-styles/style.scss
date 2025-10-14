@@ -71,6 +71,27 @@ button[id^="/blocks/"] {
 
 .components-surface.components-card.edit-site-global-styles-screen-root {
 
+	.blockera-extension.blockera-extension-back-navigation {
+		margin-top: 0;
+		margin-bottom: 0;
+
+		button {
+			padding: 6px 0;
+			margin-bottom: calc(16px);
+		}
+	}
+
+	&.is-open-blockera-navigation {
+
+		.edit-site-global-styles-screen-root__active-style-tile {
+			display: none;
+		}
+
+		.components-spacer {
+			display: none;
+		}
+	}
+
 	.components-item-group,
 	 p.components-spacer {
 		display: none;
@@ -87,6 +108,10 @@ button[id^="/blocks/"] {
 
 	.blockera-extension-navigation {
 		padding: 0;
+
+		p.edit-site-global-styles-header__description {
+			padding: 0;
+		}
 
 		.blockera-extension-navigation-category {
 
