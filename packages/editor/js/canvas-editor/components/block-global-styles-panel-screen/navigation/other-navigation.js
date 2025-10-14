@@ -4,16 +4,19 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 import { type MixedElement } from 'react';
 import {
 	__experimentalNavigationMenu as NavigationMenu,
 	__experimentalNavigationItem as NavigationItem,
 } from '@wordpress/components';
+import { useEntityProp } from '@wordpress/core-data';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import { mergeObject } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Flex, ControlContextProvider, CodeControl } from '@blockera/controls';
 
@@ -24,6 +27,15 @@ export const OtherNavigation = ({
 	openCallback: (action: 'open-custom-css-panel') => void,
 	isOpenCustomCss: boolean,
 }): MixedElement => {
+	const { __experimentalGetCurrentGlobalStylesId } = select('core');
+	const postId = __experimentalGetCurrentGlobalStylesId();
+	const [globalStyles, setGlobalStyles] = useEntityProp(
+		'root',
+		'globalStyles',
+		'styles',
+		postId
+	);
+
 	return (
 		<>
 			<NavigationMenu
@@ -154,7 +166,7 @@ export const OtherNavigation = ({
 					<ControlContextProvider
 						value={{
 							name: 'custom-css',
-							value: '',
+							value: globalStyles?.css || '',
 						}}
 					>
 						<CodeControl
@@ -181,7 +193,13 @@ export const OtherNavigation = ({
 									</p>
 								</>
 							}
-							onChange={() => {}}
+							onChange={(newValue: string): void => {
+								setGlobalStyles(
+									mergeObject(globalStyles, {
+										css: newValue,
+									})
+								);
+							}}
 							editable={true}
 							defaultValue={''}
 						/>
