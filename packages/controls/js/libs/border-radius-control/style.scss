@@ -5,10 +5,11 @@
 	gap: 10px;
 
 	.blockera-control-border-header {
-		display: flex;
-		gap: 8px;
+		display: grid;
+		gap: 0;
 		align-items: center;
 		justify-content: flex-end;
+		grid-template-columns: 1fr 158px;
 
 		.blockera-control-input {
 			width: 122px;
@@ -69,6 +70,7 @@
 			left: 50%;
 			bottom: 25px;
 			border-right: 1px dashed #e2e2e2;
+			margin-left: -0.5px;
 		}
 
 		&::after {
