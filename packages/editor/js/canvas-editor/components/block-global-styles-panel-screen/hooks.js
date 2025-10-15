@@ -116,7 +116,7 @@ export function useGlobalStyle(
 	{
 		shouldDecodeEncode = true,
 		defaultStylesValue = {},
-	}: { shouldDecodeEncode: boolean, defaultStylesValue: Object } = {}
+	}: { shouldDecodeEncode: boolean, defaultStylesValue: Object }
 ): [any, any, (newValue: any) => void] {
 	const {
 		merged: mergedConfig,
