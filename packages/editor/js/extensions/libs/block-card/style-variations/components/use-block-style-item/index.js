@@ -23,7 +23,6 @@ import { mergeObject, kebabCase } from '@blockera/utils';
  */
 import { getDefaultStyle } from '../../utils';
 import { getCalculatedNewStyle } from './helpers';
-import { useGlobalStylesContext } from '../../../../../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
 
 export const useBlockStyleItem = ({
 	styles,
@@ -63,7 +62,7 @@ export const useBlockStyleItem = ({
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
 }) => {
-	const { base } = useGlobalStylesContext();
+	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
 		'root',

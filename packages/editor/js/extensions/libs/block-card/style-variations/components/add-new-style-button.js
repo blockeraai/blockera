@@ -19,11 +19,6 @@ import { mergeObject } from '@blockera/utils';
 import { Button, Flex, PromotionPopover } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
-/**
- * Internal dependencies
- */
-import { useGlobalStylesContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
-
 const PromoteGlobalStylesPremiumFeature = ({
 	items,
 	onClose = () => {},
@@ -91,12 +86,10 @@ export const AddNewStyleButton = ({
 	);
 
 	const {
-		base: {
-			styles: {
-				blocks: { [blockName]: { variations } = { variations: {} } },
-			},
+		styles: {
+			blocks: { [blockName]: { variations } = { variations: {} } },
 		},
-	} = useGlobalStylesContext();
+	} = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 
 	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 	const addNew = useCallback(() => {

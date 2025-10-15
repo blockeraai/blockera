@@ -9,7 +9,7 @@ import {
 	getBlockFromExample,
 	getBlockType,
 } from '@wordpress/blocks';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect, select } from '@wordpress/data';
 import TokenList from '@wordpress/token-list';
 import { _x } from '@wordpress/i18n';
 import { useMemo, useCallback } from '@wordpress/element';
@@ -18,11 +18,6 @@ import { useMemo, useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { prepare } from '@blockera/data-editor';
-
-/**
- * Internal dependencies
- */
-import { useGlobalStylesContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/global-styles-provider';
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
@@ -205,7 +200,7 @@ export function useStylesForBlocks({
 		clientId,
 		blockName,
 	]);
-	const { base } = useGlobalStylesContext();
+	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 	const stylesToRender = getRenderedStyles(
