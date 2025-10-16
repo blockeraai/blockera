@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
@@ -66,6 +67,28 @@ export const registration = ({
 						componentSelector: '.blockera-styles-navigation',
 					}
 				);
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
+
+			return <></>;
+		},
+	});
+
+	registerPlugin('blockera-global-styles-panel-activator-observer', {
+		render() {
+			// eslint-disable-next-line react-hooks/rules-of-hooks
+			useEffect(() => {
+				new IntersectionObserverRenderer(screen, null, {
+					callback: () => {
+						const className =
+							'activated-blockera-global-styles-panel';
+						if (select('blockera/editor').getSelectedBlockStyle()) {
+							document.body?.classList?.add(className);
+						} else {
+							document.body?.classList?.remove(className);
+						}
+					},
+				});
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 			}, []);
 

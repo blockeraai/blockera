@@ -45,7 +45,7 @@ export const BlockGlobalStylesPanelScreen = ({
 	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
 
 	useBackButton({
-		screenElement,
+		selectedBlockStyle,
 		setSelectedBlockRef,
 		setSelectedBlockStyle,
 		setSelectedBlockStyleVariation,

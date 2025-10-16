@@ -18,32 +18,41 @@ import { useGlobalStylesContext } from './global-styles-provider';
 import { getValueFromObjectPath, setImmutably } from './utils';
 
 export const useBackButton = ({
-	screenElement,
+	selectedBlockStyle,
 	setSelectedBlockRef,
 	setSelectedBlockStyle,
 	setSelectedBlockStyleVariation,
 }: {
-	screenElement: HTMLElement | null,
+	selectedBlockStyle: string,
 	setSelectedBlockRef: (blockRef: string) => void,
 	setSelectedBlockStyle: (blockName: string) => void,
 	setSelectedBlockStyleVariation: (blockName: string) => void,
 }) => {
-	if (!screenElement) {
+	const backElement = document.querySelector('.components-heading');
+
+	if (!backElement) {
 		return;
 	}
 
-	const backButton = screenElement.querySelector('div');
+	if (backElement && selectedBlockStyle) {
+		backElement.innerText = __('Blocks', 'blockera');
+		const parent =
+			backElement?.parentElement?.parentElement?.parentElement
+				?.parentElement?.parentElement;
 
-	if (backButton) {
-		const h2 = backButton.querySelector('h2');
-		h2.innerText = __('Blocks', 'blockera');
-		backButton.style.display = 'block';
+		// $FlowFixMe
+		if (parent && parent?.style) {
+			// $FlowFixMe
+			parent.style.display = 'block';
+		}
 
-		backButton?.addEventListener('click', () => {
-			setSelectedBlockRef(undefined);
-			setSelectedBlockStyle(undefined);
-			setSelectedBlockStyleVariation(undefined);
-		});
+		backElement?.parentElement?.parentElement
+			?.querySelector('button')
+			?.addEventListener('click', () => {
+				setSelectedBlockRef(undefined);
+				setSelectedBlockStyle(undefined);
+				setSelectedBlockStyleVariation(undefined);
+			});
 	}
 };
 

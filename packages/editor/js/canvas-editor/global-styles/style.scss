@@ -1,50 +1,22 @@
-.edit-site-global-styles-sidebar__navigator-screen {
+.activated-blockera-global-styles-panel {
 
-	>*:not(.blockera-extensions-wrapper,
-		.edit-site-global-styles-screen-root,
-		div:has(+ .edit-site-block-types-search),
-		.edit-site-block-types-search,
-		.edit-site-block-types-item-list,
-		div:has(+ .edit-site-global-styles-screen),
-		.edit-site-global-styles-screen,
-		div:first-child,
-		.edit-site-global-styles-screen-css,
-		.edit-site-global-styles-screen-style-variations,
-		.components-tools-panel) {
-		display: none;
-	}
+	.edit-site-global-styles-sidebar__navigator-screen {
 
-	>div:first-child:has(h2.edit-site-global-styles-header):not(:has(p)) {
-		display: none;
-		border-bottom: 1px solid #e0e0e0;
-	}
-}
+		>*:not(.blockera-extensions-wrapper,
+			.edit-site-global-styles-screen-root,
+			div:has(+ .edit-site-block-types-search),
+			.edit-site-block-types-search,
+			.edit-site-block-types-item-list,
+			div:has(+ .edit-site-global-styles-screen),
+			.edit-site-global-styles-screen,
+			div:first-child) {
+			display: none;
+		}
 
-.edit-site-global-styles-sidebar__navigator-screen.has-blockera-extensions {
-
-	>*:not(.blockera-extensions-wrapper,
-		.edit-site-global-styles-screen-root,
-		div:has(+ .edit-site-block-types-search),
-		.edit-site-block-types-search,
-		.edit-site-block-types-item-list,
-		div:has(+ .edit-site-global-styles-screen),
-		.edit-site-global-styles-screen,
-		div:first-child) {
-		display: none;
-	}
-}
-
-.edit-site-global-styles-sidebar__navigator-screen.has-not-blockera-extensions {
-
-	>*:not(.blockera-extensions-wrapper,
-		.edit-site-global-styles-screen-root,
-		div:has(+ .edit-site-block-types-search),
-		.edit-site-block-types-search,
-		.edit-site-block-types-item-list,
-		div:has(+ .edit-site-global-styles-screen),
-		.edit-site-global-styles-screen,
-		div:first-child) {
-		display: block;
+		> div:first-child:has(h2.edit-site-global-styles-header):not(:has(p)) {
+			display: none;
+			border-bottom: 1px solid #e0e0e0;
+		}
 	}
 }
 
