@@ -47,7 +47,7 @@ export const AddBlockTypeIcons = ({
 		});
 	}, [blockTypes]);
 
-	return blockTypes.map((blockType) => {
+	return blockTypes.map((blockType, index) => {
 		if (!blockType.attributes?.blockeraPropsId) {
 			return <></>;
 		}
@@ -61,7 +61,10 @@ export const AddBlockTypeIcons = ({
 		}
 
 		return createPortal(
-			<span className="blockera-block-icon-wrapper">
+			<span
+				className="blockera-block-icon-wrapper"
+				key={index + '-block-icon'}
+			>
 				<BlockIcon name={blockType.name} />
 			</span>,
 			blockElement
