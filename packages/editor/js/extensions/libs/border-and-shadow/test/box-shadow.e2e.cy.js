@@ -55,6 +55,8 @@ describe('Box Shadow → Functionality', () => {
 			'rgba(197, 238, 240, 0.67) 10px 50px 30px 40px'
 		);
 
+		cy.waitForAssertValue();
+
 		//Check store
 		getWPDataObject().then((data) => {
 			expect({
