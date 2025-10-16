@@ -36,6 +36,15 @@ Cypress.Commands.add('login', (user = '', pass = '') => {
 	});
 });
 
+const BLOCKERA_DELAY_EXPECTED_TIME = 300;
+
+Cypress.Commands.add(
+	'waiForAssertValue',
+	(time = BLOCKERA_DELAY_EXPECTED_TIME) => {
+		cy.wait(time);
+	}
+);
+
 Cypress.Commands.add('logout', () => {
 	goTo('/wp-login.php?loggedout=true&wp_lang=en_US', true).then(() => {
 		// Clear all sessions saved on the backend, including cached global sessions.
