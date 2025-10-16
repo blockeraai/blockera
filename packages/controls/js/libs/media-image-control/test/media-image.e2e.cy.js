@@ -47,7 +47,7 @@ describe('media-image', () => {
 				).should('be.visible');
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			getWPDataObject().then((data) => {
 				const uploadedImageFileName = getSelectedBlock(
@@ -68,7 +68,7 @@ describe('media-image', () => {
 				);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			// data assertion
 			getWPDataObject().then((data) => {

@@ -39,7 +39,7 @@ Cypress.Commands.add('login', (user = '', pass = '') => {
 const BLOCKERA_DELAY_EXPECTED_TIME = 300;
 
 Cypress.Commands.add(
-	'waiForAssertValue',
+	'waitForAssertValue',
 	(time = BLOCKERA_DELAY_EXPECTED_TIME) => {
 		cy.wait(time);
 	}

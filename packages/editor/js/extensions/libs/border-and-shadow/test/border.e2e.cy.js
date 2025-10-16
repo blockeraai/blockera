@@ -44,7 +44,7 @@ describe('Border → Functionality', () => {
 				'5px dashed rgb(55, 230, 212)'
 			);
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -92,7 +92,7 @@ describe('Border → Functionality', () => {
 				'5px solid rgb(55, 230, 212)'
 			);
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -152,7 +152,7 @@ describe('Border → Functionality', () => {
 				'1px solid rgb(115, 221, 171)'
 			);
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -206,7 +206,7 @@ describe('Border → Functionality', () => {
 				'2px dashed rgb(153, 88, 227)'
 			);
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -264,7 +264,7 @@ describe('Border → Functionality', () => {
 				'3px dotted rgb(235, 164, 146)'
 			);
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -326,7 +326,7 @@ describe('Border → Functionality', () => {
 				'4px double rgb(24, 147, 218)'
 			);
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -412,7 +412,7 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -477,7 +477,7 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -509,6 +509,8 @@ describe('Border → Functionality', () => {
 			cy.get('@container').within(() => {
 				cy.removeValueAddon();
 			});
+
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -562,7 +564,7 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -624,6 +626,8 @@ describe('Border → Functionality', () => {
 					});
 			});
 
+			cy.waitForAssertValue();
+
 			cy.selectValueAddonItem('contrast');
 
 			//Check block
@@ -636,7 +640,7 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -717,6 +721,8 @@ describe('Border → Functionality', () => {
 					});
 			});
 
+			cy.waitForAssertValue();
+
 			cy.selectValueAddonItem('contrast');
 
 			//Check block
@@ -729,7 +735,7 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -829,6 +835,8 @@ describe('Border → Functionality', () => {
 					});
 			});
 
+			cy.waitForAssertValue();
+
 			cy.selectValueAddonItem('contrast');
 
 			//Check block
@@ -841,7 +849,7 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waiForAssertValue();
+			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
