@@ -44,6 +44,8 @@ describe('Border → Functionality', () => {
 				'5px dashed rgb(55, 230, 212)'
 			);
 
+			cy.waiForAssertValue();
+
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -89,6 +91,8 @@ describe('Border → Functionality', () => {
 				'border',
 				'5px solid rgb(55, 230, 212)'
 			);
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -148,6 +152,8 @@ describe('Border → Functionality', () => {
 				'1px solid rgb(115, 221, 171)'
 			);
 
+			cy.waiForAssertValue();
+
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -199,6 +205,8 @@ describe('Border → Functionality', () => {
 				'border-right',
 				'2px dashed rgb(153, 88, 227)'
 			);
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -255,6 +263,8 @@ describe('Border → Functionality', () => {
 				'border-bottom',
 				'3px dotted rgb(235, 164, 146)'
 			);
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -315,6 +325,8 @@ describe('Border → Functionality', () => {
 				'border-left',
 				'4px double rgb(24, 147, 218)'
 			);
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -400,6 +412,8 @@ describe('Border → Functionality', () => {
 					);
 			});
 
+			cy.waiForAssertValue();
+
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -462,6 +476,8 @@ describe('Border → Functionality', () => {
 						'border: 5px solid var(--wp--preset--color--contrast)'
 					);
 			});
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -546,6 +562,8 @@ describe('Border → Functionality', () => {
 					);
 			});
 
+			cy.waiForAssertValue();
+
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -617,6 +635,8 @@ describe('Border → Functionality', () => {
 						'border-right: 2px dashed var(--wp--preset--color--contrast)'
 					);
 			});
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -708,6 +728,8 @@ describe('Border → Functionality', () => {
 						'border-bottom: 3px dotted var(--wp--preset--color--contrast)'
 					);
 			});
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -818,6 +840,8 @@ describe('Border → Functionality', () => {
 						'border-left: 4px double var(--wp--preset--color--contrast)'
 					);
 			});
+
+			cy.waiForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
