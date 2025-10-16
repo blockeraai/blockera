@@ -105,11 +105,16 @@ export const registration = ({
 					null,
 					{
 						callback: () => {
-							document
-								.querySelector(
+							{
+								const element = document.querySelector(
 									'.components-popover__content button:first-child'
-								)
-								?.addEventListener('click', (e) => {
+								);
+
+								if (!document.querySelector(screen)) {
+									return;
+								}
+
+								element?.addEventListener('click', (e) => {
 									e.preventDefault();
 									e.stopPropagation();
 									document
@@ -118,6 +123,7 @@ export const registration = ({
 										)
 										?.click();
 								});
+							}
 						},
 					}
 				);
