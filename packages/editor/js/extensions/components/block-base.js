@@ -9,18 +9,20 @@ import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
+	useRef,
 	useMemo,
 	useState,
 	useEffect,
 	useCallback,
 	// StrictMode,
 } from '@wordpress/element';
+import isShallowEqual from '@wordpress/is-shallow-equal';
 
 /**
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
-import { cloneObject, mergeObject, isEquals } from '@blockera/utils';
+import { cloneObject, mergeObject } from '@blockera/utils';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 
 /**
@@ -192,40 +194,42 @@ export const BlockBase: ComponentType<any> = (
 		innerBlocks: additional?.blockeraInnerBlocks,
 	};
 
-	const initializedAttributes = useBlockCompatibilities({
-		args,
-		isActive,
-		availableAttributes,
-		attributes: blockAttributes,
-		defaultAttributes: originDefaultAttributes,
-	});
+	const [state, setState] = useState(blockAttributes);
+	const attributesRef = useRef(blockAttributes);
 
-	const [attributes, setAttributes] = useState(initializedAttributes);
-
-	useEffect(() => {
-		const timeoutId = setTimeout(() => {
-			if (!isEquals(attributes, initializedAttributes)) {
-				setBlockAttributes(attributes);
-			}
-		}, 100);
-
-		return () => clearTimeout(timeoutId);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [attributes]);
+	const setAttributes = (value: any) => {
+		attributesRef.current = value;
+		setState(value);
+	};
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			if (
-				!isEquals(initializedAttributes, attributes) &&
-				insideBlockInspector
+				!isShallowEqual(blockAttributes, state) &&
+				isShallowEqual(state, attributesRef.current)
 			) {
-				setAttributes(initializedAttributes);
+				setBlockAttributes(state);
 			}
 		}, 100);
 
 		return () => clearTimeout(timeoutId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [initializedAttributes, insideBlockInspector]);
+	}, [state, attributesRef]);
+
+	const attributes = useBlockCompatibilities({
+		args,
+		isActive,
+		availableAttributes,
+		attributes: cloneObject(state),
+		defaultAttributes: originDefaultAttributes,
+	});
+
+	useEffect(() => {
+		if (!isShallowEqual(blockAttributes, state) && insideBlockInspector) {
+			setAttributes(blockAttributes);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [blockAttributes]);
 
 	const { className } = attributes;
 
