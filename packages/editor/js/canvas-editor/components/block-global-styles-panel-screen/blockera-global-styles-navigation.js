@@ -79,12 +79,16 @@ export const BlockeraGlobalStylesNavigation = (): MixedElement => {
 							inRoot: true,
 						})}
 						navigateToMenu="variations"
-						title={__('Browse Styles', 'blockera')}
+						title={__('Browse styles', 'blockera')}
 					/>
 				</NavigationMenu>
+
 				<DesignSystemNavigation />
+
 				<GeneralNavigation />
+
 				<GlobalStylesNavigation />
+
 				<OtherNavigation
 					openCallback={openCallback}
 					isOpenCustomCss={isOpenCustomCss}

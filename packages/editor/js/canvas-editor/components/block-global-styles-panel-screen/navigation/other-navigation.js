@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
 import { type MixedElement } from 'react';
 import {
@@ -18,7 +18,11 @@ import { useEntityProp } from '@wordpress/core-data';
 import { Icon } from '@blockera/icons';
 import { mergeObject } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
-import { Flex, ControlContextProvider, CodeControl } from '@blockera/controls';
+import {
+	ControlContextProvider,
+	CodeControl,
+	DynamicHtmlFormatter,
+} from '@blockera/controls';
 
 export const OtherNavigation = ({
 	openCallback,
@@ -54,7 +58,7 @@ export const OtherNavigation = ({
 						'custom-css-button': true,
 					})}
 					navigateToMenu="css"
-					title={__('Custom Css', 'blockera')}
+					title={__('Custom CSS', 'blockera')}
 					icon={<Icon icon="custom-css" size={20} />}
 				/>
 				<NavigationItem
@@ -64,15 +68,12 @@ export const OtherNavigation = ({
 					})}
 					navigateToMenu="css"
 					title={
-						<Flex
-							className="full-width"
-							justifyContent="space-between"
-						>
-							<span>{__('JavaScript Codes', 'blockera')}</span>
+						<>
+							<span>{__('HTML & JS Codes', 'blockera')}</span>
 							<span className="coming-soon">
-								{__('Coming soon', 'blockera')}
+								{__('Soon', 'blockera')}
 							</span>
-						</Flex>
+						</>
 					}
 					icon={<Icon icon="javascript-codes" size={20} />}
 				/>
@@ -83,68 +84,31 @@ export const OtherNavigation = ({
 					})}
 					navigateToMenu="css"
 					title={
-						<Flex
-							className="full-width"
-							justifyContent="space-between"
-						>
-							<span>{__('Back to Top', 'blockera')}</span>
+						<>
+							<span>{__('Back To Top Button', 'blockera')}</span>
 							<span className="coming-soon">
-								{__('Coming soon', 'blockera')}
+								{__('Soon', 'blockera')}
 							</span>
-						</Flex>
+						</>
 					}
 					icon={<Icon icon="back-to-top" size={20} />}
 				/>
-				<NavigationItem
-					item="css"
-					className={extensionClassNames('navigation-item', {
-						'coming-soon': true,
-					})}
-					navigateToMenu="css"
-					title={
-						<Flex
-							className="full-width"
-							justifyContent="space-between"
-						>
-							<span>{__('Website Frame', 'blockera')}</span>
-							<span className="coming-soon">
-								{__('Coming soon', 'blockera')}
-							</span>
-						</Flex>
-					}
-					icon={<Icon icon="website-frame" size={20} />}
-				/>
-				<NavigationItem
-					item="css"
-					className={extensionClassNames('navigation-item', {
-						'coming-soon': true,
-					})}
-					navigateToMenu="css"
-					title={
-						<Flex
-							className="full-width"
-							justifyContent="space-between"
-						>
-							<span>{__('Cookie consent', 'blockera')}</span>
-							<span className="coming-soon">
-								{__('Coming soon', 'blockera')}
-							</span>
-						</Flex>
-					}
-					icon={<Icon icon="cookie-consent" size={20} />}
-				/>
 			</NavigationMenu>
+
 			<NavigationMenu
 				menu="css"
 				parentMenu="root"
 				className={extensionClassNames('back-navigation')}
-				backButtonLabel={__('Back', 'blockera')}
+				backButtonLabel={__('Custom CSS', 'blockera')}
 			/>
+
 			{isOpenCustomCss && (
-				<div>
+				<>
 					<p className="edit-site-global-styles-header__description">
-						Add your own CSS to customize the appearance and layout
-						of your site.
+						{__(
+							'Add your own CSS to customize the appearance and layout of your site.',
+							'blockera'
+						)}
 						<br />
 						<a
 							className="components-external-link edit-site-global-styles-screen-css-help-link"
@@ -153,16 +117,21 @@ export const OtherNavigation = ({
 							rel="external noreferrer noopener"
 						>
 							<span className="components-external-link__contents">
-								Learn more about CSS
+								{__('Learn more about CSS', 'blockera')}
 							</span>
+
 							<span
 								className="components-external-link__icon"
-								aria-label="(opens in a new tab)"
+								aria-label={__(
+									'(opens in a new tab)',
+									'blockera'
+								)}
 							>
 								↗
 							</span>
 						</a>
 					</p>
+
 					<ControlContextProvider
 						value={{
 							name: 'custom-css',
@@ -170,7 +139,7 @@ export const OtherNavigation = ({
 						}}
 					>
 						<CodeControl
-							label={__('Custom CSS Code', 'blockera')}
+							label={__('Additional CSS Code', 'blockera')}
 							labelDescription={
 								<>
 									<p>
@@ -202,9 +171,39 @@ export const OtherNavigation = ({
 							}}
 							editable={true}
 							defaultValue={''}
+							height={400}
+							suggestionsType="site"
+							placeholder={
+								<>
+									body {'{'}
+									<br />
+									&nbsp;&nbsp;&nbsp;{'/* Your CSS here */'}
+									<br />
+									{'}'}
+								</>
+							}
+							description={
+								<p>
+									<DynamicHtmlFormatter
+										text={sprintf(
+											/* translators: $1%s is a CSS selector, $2%s is ID. */
+											__(
+												'Use %1$s to target the body element or %2$s to target the group block.',
+												'blockera'
+											),
+											'{body}',
+											'{group}'
+										)}
+										replacements={{
+											body: <code>body</code>,
+											group: <code>.wp-block-group</code>,
+										}}
+									/>
+								</p>
+							}
 						/>
 					</ControlContextProvider>
-				</div>
+				</>
 			)}
 		</>
 	);

@@ -6,7 +6,6 @@
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
 import {
-	__experimentalSpacer as Spacer,
 	__experimentalNavigationMenu as NavigationMenu,
 	__experimentalNavigationItem as NavigationItem,
 } from '@wordpress/components';
@@ -15,7 +14,10 @@ import {
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { extensionClassNames } from '@blockera/classnames';
+import {
+	extensionClassNames,
+	extensionInnerClassNames,
+} from '@blockera/classnames';
 
 export const GlobalStylesNavigation = (): MixedElement => {
 	return (
@@ -28,16 +30,17 @@ export const GlobalStylesNavigation = (): MixedElement => {
 			}
 			className={extensionClassNames('navigation-category')}
 		>
-			<Spacer
-				className={extensionClassNames('navigation-category', {
-					description: true,
-				})}
+			<p
+				className={extensionInnerClassNames(
+					'navigation-category-description'
+				)}
 			>
 				{__(
 					'Customize the appearance of specific blocks for the whole site.',
 					'blockera'
 				)}
-			</Spacer>
+			</p>
+
 			<NavigationItem
 				item="blocks"
 				onClick={() =>
@@ -48,7 +51,7 @@ export const GlobalStylesNavigation = (): MixedElement => {
 				})}
 				navigateToMenu="blocks"
 				title={__('Block Style Variations', 'blockera')}
-				icon={<Icon icon="style-variations-animated" size={20} />}
+				icon={<Icon icon="style-variations" size={20} />}
 			/>
 		</NavigationMenu>
 	);
