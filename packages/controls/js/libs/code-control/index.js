@@ -209,6 +209,7 @@ const CodeControl = ({
 	placeholder = '',
 	editable = true,
 	description = '',
+	suggestionsType = 'block',
 	//
 	id,
 	label = '',
@@ -259,23 +260,21 @@ const CodeControl = ({
 		case 'css':
 			if (!description) {
 				description = (
-					<>
-						<p>
-							<DynamicHtmlFormatter
-								text={sprintf(
-									/* translators: $1%s is a CSS selector, $2%s is ID. */
-									__(
-										'Use %1$s to target current block.',
-										'blockera'
-									),
-									'{.block}'
-								)}
-								replacements={{
-									'.block': <code>.block</code>,
-								}}
-							/>
-						</p>
-					</>
+					<p>
+						<DynamicHtmlFormatter
+							text={sprintf(
+								/* translators: $1%s is a CSS selector, $2%s is ID. */
+								__(
+									'Use %1$s to target current block.',
+									'blockera'
+								),
+								'{.block}'
+							)}
+							replacements={{
+								'.block': <code>.block</code>,
+							}}
+						/>
+					</p>
 				);
 			}
 
@@ -387,28 +386,102 @@ const CodeControl = ({
 												.trim()
 												.endsWith('.')
 										) {
+											if (suggestionsType === 'block') {
+												return {
+													suggestions: [
+														{
+															label: '.block',
+															kind: monaco
+																.languages
+																.CompletionItemKind
+																.Class,
+															insertText:
+																'.block {\n\t$0\n}\n',
+															insertTextRules:
+																monaco.languages
+																	.CompletionItemInsertTextRule
+																	.InsertAsSnippet,
+															documentation: __(
+																'Target the current block',
+																'blockera'
+															),
+															detail: __(
+																'Current Block',
+																'blockera'
+															),
+															sortText: '.block',
+															range: {
+																startLineNumber:
+																	position.lineNumber,
+																startColumn:
+																	position.column -
+																	1,
+																endLineNumber:
+																	position.lineNumber,
+																endColumn:
+																	position.column,
+															},
+														},
+														{
+															label: '.block:hover',
+															kind: monaco
+																.languages
+																.CompletionItemKind
+																.Class,
+															insertText:
+																'.block:hover {\n\t$0\n}\n',
+															insertTextRules:
+																monaco.languages
+																	.CompletionItemInsertTextRule
+																	.InsertAsSnippet,
+															documentation: __(
+																'Target the current block on hover',
+																'blockera'
+															),
+															detail: __(
+																'Current Block on Hover',
+																'blockera'
+															),
+															sortText:
+																'.block:hover',
+															range: {
+																startLineNumber:
+																	position.lineNumber,
+																startColumn:
+																	position.column -
+																	1,
+																endLineNumber:
+																	position.lineNumber,
+																endColumn:
+																	position.column,
+															},
+														},
+													],
+												};
+											}
+
 											return {
 												suggestions: [
 													{
-														label: '.block',
+														label: 'body',
 														kind: monaco.languages
 															.CompletionItemKind
 															.Class,
 														insertText:
-															'.block {\n\t$0\n}\n',
+															'body {\n\t$0\n}\n',
 														insertTextRules:
 															monaco.languages
 																.CompletionItemInsertTextRule
 																.InsertAsSnippet,
 														documentation: __(
-															'Target the current block',
+															'Target the body element',
 															'blockera'
 														),
 														detail: __(
-															'Current Block',
+															'Body Element',
 															'blockera'
 														),
-														sortText: '.block',
+														sortText: 'body',
 														range: {
 															startLineNumber:
 																position.lineNumber,
@@ -422,26 +495,26 @@ const CodeControl = ({
 														},
 													},
 													{
-														label: '.block:hover',
+														label: '.wp-block-group',
 														kind: monaco.languages
 															.CompletionItemKind
 															.Class,
 														insertText:
-															'.block:hover {\n\t$0\n}\n',
+															'.wp-block-group {\n\t$0\n}\n',
 														insertTextRules:
 															monaco.languages
 																.CompletionItemInsertTextRule
 																.InsertAsSnippet,
 														documentation: __(
-															'Target the current block on hover',
+															'Target the group block',
 															'blockera'
 														),
 														detail: __(
-															'Current Block on Hover',
+															'Group Block',
 															'blockera'
 														),
 														sortText:
-															'.block:hover',
+															'.wp-block-group',
 														range: {
 															startLineNumber:
 																position.lineNumber,
