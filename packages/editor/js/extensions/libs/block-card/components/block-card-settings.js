@@ -42,49 +42,71 @@ export const BlockCardSettings = ({
 
 	let text = '';
 
-	if (isActive && poweredBy) {
-		if (
-			blockName.startsWith('blockera/') ||
-			activeBlockVariation.startsWith('blockera/')
-		) {
-			text = sprintf(
-				// translators: %s is the brand name (Required)
-				__('Powered by %s', 'blockera'),
-				'{brand-name}'
-			);
+	if (poweredBy) {
+		if (isActive) {
+			if (
+				blockName.startsWith('blockera/') ||
+				activeBlockVariation.startsWith('blockera/')
+			) {
+				text = sprintf(
+					// translators: %s is the brand name (Required)
+					__('Powered by %s', 'blockera'),
+					'{brand-name}'
+				);
 
-			// For backward brand name to prevent removing it
-			if (!text.includes('{brand-name}')) {
-				text = 'Powered by {brand-name}';
+				// For backward brand name to prevent removing it
+				if (!text.includes('{brand-name}')) {
+					text = 'Powered by {brand-name}';
+				}
+			} else {
+				text = sprintf(
+					// translators: %s is the brand name (Required)
+					__('Empowered by %s', 'blockera'),
+					'{brand-name}'
+				);
+
+				// For backward brand name to prevent removing it
+				if (!text.includes('{brand-name}')) {
+					text = 'Empowered by {brand-name}';
+				}
 			}
+
+			text = DynamicHtmlFormatter({
+				text,
+				replacements: {
+					'brand-name': (
+						<Flex direction="row" alignItems="center" gap="8px">
+							<Icon
+								icon="blockera"
+								library="blockera"
+								iconSize="18"
+							/>
+							Blockera Site Builder
+						</Flex>
+					),
+				},
+			});
 		} else {
 			text = sprintf(
-				// translators: %s is the brand name (Required)
-				__('Empowered by %s', 'blockera'),
+				// translators: %s is WordPress name (Required)
+				__('%s Basic Core Block', 'blockera'),
 				'{brand-name}'
 			);
 
 			// For backward brand name to prevent removing it
 			if (!text.includes('{brand-name}')) {
-				text = 'Empowered by {brand-name}';
+				text = '{brand-name} Basic Core Block';
 			}
-		}
 
-		text = DynamicHtmlFormatter({
-			text,
-			replacements: {
-				'brand-name': (
-					<Flex direction="row" alignItems="center" gap="8px">
-						<Icon
-							icon="blockera"
-							library="blockera"
-							iconSize="18"
-						/>
-						Blockera Site Builder
-					</Flex>
-				),
-			},
-		});
+			text = DynamicHtmlFormatter({
+				text,
+				replacements: {
+					'brand-name': (
+						<Icon icon="wordpress" library="wp" iconSize="18" />
+					),
+				},
+			});
+		}
 	}
 
 	return (
@@ -288,12 +310,41 @@ export const BlockCardSettings = ({
 						target="_blank"
 						rel="noopener noreferrer"
 						className="blockera-powered-by-icon"
+						style={{
+							'--blockera-controls-primary-color': '#0051e7',
+						}}
 					>
 						<Icon
 							library="blockera"
 							icon="blockera"
 							iconSize={18}
 						/>
+					</a>
+				</Tooltip>
+			)}
+
+			{!isActive && poweredBy && (
+				<Tooltip
+					text={
+						<Flex direction="row" alignItems="center" gap="8px">
+							{text}
+						</Flex>
+					}
+					style={{
+						'--tooltip-bg': '#007cba',
+					}}
+					delay={200}
+				>
+					<a
+						href="https://blockera.ai/products/site-builder/?utm_source=block-section-powered-by&utm_medium=referral&utm_campaign=powered-by&utm_content=cta-link"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="blockera-powered-by-icon"
+						style={{
+							'--blockera-controls-primary-color': '#007cba',
+						}}
+					>
+						<Icon library="wp" icon="wordpress" iconSize={18} />
 					</a>
 				</Tooltip>
 			)}
