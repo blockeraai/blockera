@@ -427,17 +427,13 @@ export const BlockBase: ComponentType<any> = (
 						}}
 					/>
 					<SlotFillProvider>
-						<BlockPartials
-							blockId={name}
-							clientId={clientId}
-							isActive={isActive}
-							setActive={setActive}
-						/>
+						<BlockPartials clientId={clientId} />
 						<BlockFillPartials
 							{...{
 								notice,
 								clientId,
 								isActive,
+								setActive,
 								currentState,
 								currentBlock,
 								availableStates,
@@ -479,17 +475,13 @@ export const BlockBase: ComponentType<any> = (
 
 			{!insideBlockInspector && (
 				<SlotFillProvider>
-					<BlockPartials
-						blockId={name}
-						clientId={clientId}
-						isActive={isActive}
-						setActive={setActive}
-					/>
+					<BlockPartials clientId={clientId} />
 					<BlockFillPartials
 						{...{
 							notice,
 							clientId,
 							isActive,
+							setActive,
 							currentState,
 							currentBlock,
 							availableStates,

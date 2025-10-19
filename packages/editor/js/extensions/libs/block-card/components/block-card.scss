@@ -80,7 +80,7 @@
 			.blockera-extension-block-card__title__input {
 
 				span {
-					max-width: 164px;
+					max-width: 158px;
 					white-space: nowrap;
 					overflow: hidden;
 					cursor: text;
@@ -123,10 +123,6 @@
 					content: attr(placeholder);
 					font-weight: 500;
 					color: #1e1e1e;
-				}
-
-				span.block-type {
-					color: var(--blockera-controls-primary-color) !important;
 				}
 			}
 
@@ -241,6 +237,46 @@
 
 	.blockera-control-style-variations-button + .blockera-block-variation-transforms {
 		margin-left: initial;
+	}
+
+	.blockera-dropdown-menu {
+		position: absolute;
+		top: 16px;
+		right: 12px;
+		display: flex;
+		flex-direction: row-reverse;
+		gap: 0;
+
+		.blockera-powered-by-icon {
+			color: #1e1e1e;
+			fill: currentColor;
+			display: flex;
+			width: 24px;
+			height: 24px;
+			align-items: center;
+			justify-content: center;
+			transition: var(--blockera-controls-transition);
+			border-radius: var(--blockera-controls-border-radius);
+			opacity: 0.2;
+			--blockera-controls-primary-color: #0051e7;
+
+			&:hover {
+				opacity: 1;
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+
+		.components-dropdown-menu {
+			padding: 0;
+			margin: 0;
+
+			.components-button.has-icon {
+				justify-content: center;
+				min-width: 24px;
+				height: 24px;
+				padding: 0;
+			}
+		}
 	}
 }
 

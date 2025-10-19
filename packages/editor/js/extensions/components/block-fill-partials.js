@@ -32,6 +32,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 	notice,
 	clientId,
 	isActive,
+	setActive,
 	blockProps,
 	currentBlock,
 	currentState,
@@ -170,6 +171,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 					<>
 						<BlockCard
 							isActive={isActive}
+							setActive={setActive}
 							notice={notice}
 							insideBlockInspector={insideBlockInspector}
 							clientId={clientId}
