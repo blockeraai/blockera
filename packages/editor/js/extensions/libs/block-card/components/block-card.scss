@@ -16,7 +16,7 @@
 		padding: 16px 0;
 
 		.blockera-extension-block-card__inner,
-		 .blockera-extension-block-card__style-variation {
+		.blockera-extension-block-card__style-variation {
 			padding: 0 16px;
 		}
 	}
@@ -187,6 +187,7 @@
 			-webkit-line-clamp: 2;
 			overflow: hidden;
 			cursor: default;
+			height: 36px;
 		}
 	}
 

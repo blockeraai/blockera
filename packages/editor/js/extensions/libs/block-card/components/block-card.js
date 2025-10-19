@@ -35,10 +35,12 @@ import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
+import { BlockCardSettings } from './block-card-settings';
 
 export function BlockCard({
 	notice,
 	isActive,
+	setActive,
 	clientId,
 	supports,
 	children,
@@ -58,6 +60,7 @@ export function BlockCard({
 	currentBlockStyleVariation,
 }: {
 	isActive: boolean,
+	setActive: (isActive: boolean) => void,
 	clientId: string,
 	blockName: string,
 	supports: Object,
@@ -223,17 +226,17 @@ export function BlockCard({
 							/>
 						</h2>
 
-						{blockInformation?.description ||
-							(blockDescription && (
-								<span
-									className={extensionInnerClassNames(
-										'block-card__description'
-									)}
-								>
-									{blockInformation?.description ||
-										blockDescription}
-								</span>
-							))}
+						{(blockInformation?.description ||
+							blockDescription) && (
+							<span
+								className={extensionInnerClassNames(
+									'block-card__description'
+								)}
+							>
+								{blockInformation?.description ||
+									blockDescription}
+							</span>
+						)}
 					</div>
 				</div>
 
@@ -273,6 +276,14 @@ export function BlockCard({
 					</div>
 
 					<Slot name={'blockera-block-card-children'} />
+
+					<BlockCardSettings
+						blockId={clientId}
+						isActive={isActive}
+						setActive={setActive}
+						actionsMenu={insideBlockInspector}
+						poweredBy={true}
+					/>
 
 					{children}
 
