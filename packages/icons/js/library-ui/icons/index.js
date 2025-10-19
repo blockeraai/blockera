@@ -294,6 +294,7 @@ export { default as Repeat } from './repeat.svg';
 export { default as ReverseHorizontal } from './reverse-horizontal.svg';
 export { default as RotateAntiClockwise } from './rotate-anti-clockwise.svg';
 export { default as RotateClockwise } from './rotate-clockwise.svg';
+export { default as Save } from './save.svg';
 export { default as ScrollAnimation } from './scroll-animation.svg';
 export { default as Search } from './search.svg';
 export { default as Share } from './share.svg';

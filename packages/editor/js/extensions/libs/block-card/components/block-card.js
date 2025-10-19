@@ -246,7 +246,7 @@ export function BlockCard({
 					gap={10}
 					direction="column"
 					style={{
-						margin: '0 -3px',
+						margin: insideBlockInspector ? '0 -3px' : '0',
 					}}
 				>
 					<div

@@ -226,7 +226,15 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 				>
 					{buttonText}
 
-					<ChangeIndicator isChanged={hasChangesets} />
+					<ChangeIndicator
+						isChanged={hasChangesets}
+						animated={true}
+						primaryColor={
+							activeStyleId === 'default' ? '#1ca120' : '#ffffff'
+						}
+						size={'5'}
+						outlineSize={activeStyleId === 'default' ? '1.5' : '0'}
+					/>
 
 					<Icon icon="more-vertical-small" iconSize={24} />
 				</Flex>

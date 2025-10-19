@@ -56,14 +56,9 @@ export const StyleVariationsManager = ({
 		<PanelBodyControl
 			title={__('Style Variations', 'blockera')}
 			initialOpen={true}
-			icon={
-				<Icon
-					icon="style-variations-animated"
-					iconSize={24}
-					isAnimated={true}
-				/>
-			}
+			icon={<Icon icon="extension-style-variations" size={20} />}
 			className={extensionClassNames('style-variations')}
+			accordion={false}
 		>
 			<div
 				className={componentInnerClassNames('block-style-variations', {

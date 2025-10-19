@@ -24,6 +24,7 @@ import {
 	Popover,
 	ToggleControl,
 	ControlContextProvider,
+	ChangeIndicator,
 } from '@blockera/controls';
 import {
 	classNames,
@@ -237,6 +238,7 @@ export const StyleItem = ({
 				if (variations[variation]?.refId === style.name) {
 					return variations[variation];
 				}
+
 				if (variation === style.name) {
 					return variations[variation];
 				}
@@ -262,6 +264,7 @@ export const StyleItem = ({
 			__('Default', 'blockera')
 		);
 	}, [cachedStyle, style]);
+
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
 	const [isOpenBlockCardContextMenu, setIsOpenBlockCardContextMenu] =
@@ -306,7 +309,7 @@ export const StyleItem = ({
 					'action-disabled': false === cachedStyle?.status,
 				})}
 				key={style.name}
-				variant="secondary"
+				variant="tertiary"
 				label={
 					style?.isDefault && style?.name !== 'default'
 						? buttonText + ` (${__('Default', 'blockera')})`
@@ -383,7 +386,7 @@ export const StyleItem = ({
 
 					onSelectStylePreview(style);
 				}}
-				aria-current={activeStyle.name === style.name}
+				aria-current={isActive}
 				size="input"
 				data-test={`style-${style.name}`}
 			>
@@ -393,7 +396,8 @@ export const StyleItem = ({
 					className="block-editor-block-styles__item-text"
 				>
 					<Truncate numberOfLines={1}>{buttonText}</Truncate>
-					<Flex gap={2} alignItems={'center'}>
+
+					<Flex gap={0} alignItems={'center'}>
 						{defaultStyle &&
 							style.isDefault &&
 							buttonText !== defaultStyle.label && (
@@ -401,23 +405,33 @@ export const StyleItem = ({
 									{__('Default', 'blockera')}
 								</Truncate>
 							)}
+
 						{false === cachedStyle?.status && (
 							<Icon icon="eye-hide" iconSize="20" />
 						)}
+
 						{style.icon && (
 							<Icon
 								icon={style.icon.name}
 								library={style.icon.library}
-								iconSize="20"
+								iconSize="16"
+								style={{
+									opacity: '0.4',
+								}}
 							/>
 						)}
+
 						<Icon
 							icon="more-vertical"
 							iconSize="20"
 							onClick={() => setIsOpenContextMenu(true)}
+							style={{
+								opacity: '0.4',
+							}}
 						/>
 					</Flex>
 				</Flex>
+
 				<ContextMenu
 					style={style}
 					counter={counter}
@@ -454,13 +468,29 @@ export const StyleItem = ({
 						className={classNames('action-save-customizations', {
 							'action-disabled': false,
 						})}
-						variant="secondary"
+						variant="tertiary"
 						onClick={() => handleOnSaveCustomizations(style)}
 						size="input"
 						data-test={'save-customizations'}
+						style={{
+							gap: '4px',
+							padding: '2px 0',
+						}}
 					>
+						<Icon icon="save" iconSize="20" />
+
 						{__('Save Customizations', 'blockera')}
+
+						{hasChangesets && (
+							<ChangeIndicator
+								isChanged={hasChangesets}
+								animated={true}
+								primaryColor={'#1ca120'}
+								size={'5'}
+							/>
+						)}
 					</Button>
+
 					<Flex gap="8px" justifyContent="space-between">
 						<Button
 							disabled={false === cachedStyle?.status}
@@ -471,13 +501,20 @@ export const StyleItem = ({
 									'block-styles-actions': true,
 								}
 							)}
-							variant="secondary"
+							variant="tertiary"
 							onClick={() => handleOnDetachStyle(style)}
 							size="input"
 							data-test={'save-customizations'}
+							style={{
+								gap: '2px',
+								padding: '2px 0',
+							}}
 						>
+							<Icon icon="unlink" iconSize="20" />
+
 							{__('Detach Style', 'blockera')}
 						</Button>
+
 						<Button
 							disabled={!isUserCanSaveCustomizations}
 							className={classNames(
@@ -487,16 +524,23 @@ export const StyleItem = ({
 									'block-styles-actions': true,
 								}
 							)}
-							variant="secondary"
+							variant="tertiary"
 							onClick={() => handleOnDuplicate(style)}
 							size="input"
 							data-test={'save-customizations'}
+							style={{
+								gap: '2px',
+								padding: '2px 0',
+							}}
 						>
+							<Icon icon="duplicate" iconSize="20" />
+
 							{__('Duplicate', 'blockera')}
 						</Button>
 					</Flex>
 				</Fill>
 			)}
+
 			<Fill
 				name={`blockera-style-variation-block-card-menu-${style.name}`}
 			>
