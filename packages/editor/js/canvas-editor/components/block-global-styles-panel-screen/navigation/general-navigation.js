@@ -21,7 +21,7 @@ export const GeneralNavigation = (): MixedElement => {
 		<NavigationMenu
 			title={
 				<>
-					<Icon icon="general-category" size={20} />
+					<Icon icon="extension-general" size={20} />
 					{__('General', 'blockera')}
 				</>
 			}

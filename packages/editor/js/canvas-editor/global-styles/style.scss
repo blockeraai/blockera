@@ -126,6 +126,10 @@ button[id^="/blocks/"] {
 				color: var(--blockera-controls-primary-color);
 				min-height: 40px;
 
+				svg {
+					fill: currentColor;
+				}
+
 				span {
 					display: flex;
 					align-items: center;

@@ -21,7 +21,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 		<NavigationMenu
 			title={
 				<>
-					<Icon icon="design-system-category" size={20} />
+					<Icon icon="extension-typography" size={20} />
 					{__('Design system', 'blockera')}
 				</>
 			}

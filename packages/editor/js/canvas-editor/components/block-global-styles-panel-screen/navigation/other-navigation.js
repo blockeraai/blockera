@@ -45,7 +45,7 @@ export const OtherNavigation = ({
 			<NavigationMenu
 				title={
 					<>
-						<Icon icon="other-category" size={20} />
+						<Icon icon="extension-advanced" size={20} />
 						{__('Other', 'blockera')}
 					</>
 				}

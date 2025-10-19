@@ -24,7 +24,7 @@ export const GlobalStylesNavigation = (): MixedElement => {
 		<NavigationMenu
 			title={
 				<>
-					<Icon icon="global-styles-category" size={20} />
+					<Icon icon="extension-style-variations" size={20} />
 					{__('Global Styles', 'blockera')}
 				</>
 			}
