@@ -36,4 +36,10 @@ export type PanelBodyControlProps = {
 	 * Show Blockera powered by branding
 	 */
 	showPoweredBy?: boolean,
+	/**
+	 * Is panel accordion?
+	 *
+	 * @default true
+	 */
+	accordion?: boolean,
 };
