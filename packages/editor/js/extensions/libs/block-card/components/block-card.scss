@@ -325,3 +325,13 @@
 		overflow: hidden;
 	}
 }
+
+.blockera-dropdown-menu__menu {
+
+	.blockera-block-menu-item {
+
+		&.blockera-block-menu-item-selected {
+			color: var(--blockera-controls-primary-color);
+		}
+	}
+}

@@ -17,14 +17,6 @@
 	}
 }
 
-.blockera-block-menu-item-selected {
-	color: var(--blockera-controls-primary-color);
-
-	&:hover {
-		color: inherit !important;
-	}
-}
-
 .blockera-not-allowed {
 	opacity: 0.5;
 	user-select: none;

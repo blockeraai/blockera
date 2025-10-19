@@ -120,6 +120,9 @@ export const BlockCardSettings = ({
 						focusOnMount: true,
 						placement: 'bottom-end',
 					}}
+					menuProps={{
+						className: 'blockera-dropdown-menu__menu',
+					}}
 				>
 					{({ onClose }) => {
 						return (
@@ -139,6 +142,11 @@ export const BlockCardSettings = ({
 											'blockera-block-menu-item-selected':
 												isActive,
 										})}
+										style={{
+											'pointer-events': isActive
+												? 'none'
+												: 'all',
+										}}
 									>
 										<Flex alignItems="center" gap="10px">
 											<Icon
@@ -199,6 +207,11 @@ export const BlockCardSettings = ({
 												'blockera-not-allowed':
 													focusMode,
 											})}
+											style={{
+												'pointer-events': focusMode
+													? 'none'
+													: 'all',
+											}}
 										>
 											<Flex
 												alignItems="center"
@@ -212,6 +225,7 @@ export const BlockCardSettings = ({
 												{__('Expand All', 'blockera')}
 											</Flex>
 										</MenuItem>
+
 										<MenuItem
 											data-test={'Collapse All'}
 											icon={collapseAll ? check : ''}
@@ -234,6 +248,11 @@ export const BlockCardSettings = ({
 												'blockera-not-allowed':
 													focusMode,
 											})}
+											style={{
+												'pointer-events': focusMode
+													? 'none'
+													: 'all',
+											}}
 										>
 											<Flex
 												alignItems="center"
@@ -247,6 +266,7 @@ export const BlockCardSettings = ({
 												{__('Collapse All', 'blockera')}
 											</Flex>
 										</MenuItem>
+
 										<MenuItem
 											data-test={'Focus Mode'}
 											icon={focusMode ? check : ''}
