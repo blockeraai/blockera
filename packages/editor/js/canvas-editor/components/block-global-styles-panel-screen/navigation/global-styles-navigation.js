@@ -46,9 +46,7 @@ export const GlobalStylesNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/blocks"]')?.click()
 				}
-				className={extensionClassNames('navigation-item', {
-					inRoot: true,
-				})}
+				className={extensionClassNames('navigation-item')}
 				navigateToMenu="blocks"
 				title={__('Block Style Variations', 'blockera')}
 				icon={<Icon icon="style-variations" size={20} />}

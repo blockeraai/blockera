@@ -32,7 +32,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/typography"]')?.click()
 				}
-				className={extensionClassNames('navigation-item')}
+				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="typography"
 				title={__('Typography', 'blockera')}
 				icon={<Icon icon="wp-typography" size={20} />}
@@ -42,7 +42,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/colors"]')?.click()
 				}
-				className={extensionClassNames('navigation-item')}
+				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="colors"
 				title={__('Colors', 'blockera')}
 				icon={<Icon icon="wp-colors" size={20} />}
@@ -52,7 +52,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/background"]')?.click()
 				}
-				className={extensionClassNames('navigation-item')}
+				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="background"
 				title={__('Background', 'blockera')}
 				icon={<Icon icon="wp-background" size={20} />}
@@ -62,7 +62,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/shadows"]')?.click()
 				}
-				className={extensionClassNames('navigation-item')}
+				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="shadows"
 				title={__('Shadows', 'blockera')}
 				icon={<Icon icon="wp-shadows" size={20} />}

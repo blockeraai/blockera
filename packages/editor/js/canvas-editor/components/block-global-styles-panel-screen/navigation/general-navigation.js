@@ -32,7 +32,7 @@ export const GeneralNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/layout"]')?.click()
 				}
-				className={extensionClassNames('navigation-item')}
+				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="layout"
 				title={__('Layout', 'blockera')}
 				icon={<Icon icon="wp-layout" size={20} />}

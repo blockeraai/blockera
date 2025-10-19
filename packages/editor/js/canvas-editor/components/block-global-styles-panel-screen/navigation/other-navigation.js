@@ -56,6 +56,7 @@ export const OtherNavigation = ({
 					onClick={() => openCallback('open-custom-css-panel')}
 					className={extensionClassNames('navigation-item', {
 						'custom-css-button': true,
+						'hide-caret': true,
 					})}
 					navigateToMenu="css"
 					title={__('Custom CSS', 'blockera')}
@@ -65,6 +66,7 @@ export const OtherNavigation = ({
 					item="css"
 					className={extensionClassNames('navigation-item', {
 						'coming-soon': true,
+						'hide-caret': true,
 					})}
 					navigateToMenu="css"
 					title={
@@ -81,6 +83,7 @@ export const OtherNavigation = ({
 					item="css"
 					className={extensionClassNames('navigation-item', {
 						'coming-soon': true,
+						'hide-caret': true,
 					})}
 					navigateToMenu="css"
 					title={

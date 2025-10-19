@@ -75,9 +75,7 @@ export const BlockeraGlobalStylesNavigation = (): MixedElement => {
 								.querySelector('button[id="/variations"]')
 								?.click()
 						}
-						className={extensionClassNames('navigation-item', {
-							inRoot: true,
-						})}
+						className={extensionClassNames('navigation-item')}
 						navigateToMenu="variations"
 						title={__('Browse styles', 'blockera')}
 					/>
