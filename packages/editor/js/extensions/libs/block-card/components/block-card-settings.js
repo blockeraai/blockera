@@ -21,13 +21,15 @@ import { classNames } from '@blockera/classnames';
 import { useBlockSections } from '../../../components/block-app';
 
 export const BlockCardSettings = ({
-	blockId,
+	blockName,
+	activeBlockVariation,
 	isActive = true,
 	setActive = () => {},
 	actionsMenu = true,
 	poweredBy = true,
 }: {
-	blockId: string,
+	blockName: string,
+	activeBlockVariation: string,
 	isActive: boolean,
 	setActive: (isActive: boolean) => void,
 	actionsMenu: boolean,
@@ -41,7 +43,10 @@ export const BlockCardSettings = ({
 	let text = '';
 
 	if (isActive && poweredBy) {
-		if (blockId.startsWith('blockera/')) {
+		if (
+			blockName.startsWith('blockera/') ||
+			activeBlockVariation.startsWith('blockera/')
+		) {
 			text = sprintf(
 				// translators: %s is the brand name (Required)
 				__('Powered by %s', 'blockera'),

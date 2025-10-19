@@ -87,6 +87,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 					>
 						<BlockCard
 							isActive={isActive}
+							setActive={setActive}
 							notice={notice}
 							insideBlockInspector={insideBlockInspector}
 							clientId={clientId}
@@ -106,6 +107,9 @@ export const BlockFillPartials: ComponentType<any> = ({
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							currentBlockStyleVariation={
 								currentBlockStyleVariation
+							}
+							activeBlockVariation={
+								blockProps?.activeBlockVariation || ''
 							}
 						/>
 
@@ -189,6 +193,12 @@ export const BlockFillPartials: ComponentType<any> = ({
 							supports={blockProps.supports}
 							setAttributes={blockProps.setAttributes}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							currentBlockStyleVariation={
+								currentBlockStyleVariation
+							}
+							activeBlockVariation={
+								blockProps?.activeBlockVariation || ''
+							}
 						/>
 
 						{isInnerBlock(currentBlock) && (

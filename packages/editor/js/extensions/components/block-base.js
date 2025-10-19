@@ -449,6 +449,8 @@ export const BlockBase: ComponentType<any> = (
 									// Sending props like exactly "edit" function props of WordPress Block.
 									// Because needs total block props in outside overriding component like "blockera" in overriding process.
 									name,
+									activeBlockVariation:
+										activeBlockVariation?.name || '',
 									clientId,
 									supports,
 									className,
@@ -497,6 +499,8 @@ export const BlockBase: ComponentType<any> = (
 								// Sending props like exactly "edit" function props of WordPress Block.
 								// Because needs total block props in outside overriding component like "blockera" in overriding process.
 								name,
+								activeBlockVariation:
+									activeBlockVariation?.name || '',
 								clientId,
 								supports,
 								className,

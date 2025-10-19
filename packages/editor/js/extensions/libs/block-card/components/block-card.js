@@ -58,6 +58,7 @@ export function BlockCard({
 	currentInnerBlockState,
 	handleOnChangeAttributes,
 	currentBlockStyleVariation,
+	activeBlockVariation = '',
 }: {
 	isActive: boolean,
 	setActive: (isActive: boolean) => void,
@@ -88,6 +89,7 @@ export function BlockCard({
 		isDefault?: boolean,
 	},
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
+	activeBlockVariation: string,
 }): MixedElement {
 	const {
 		icon: blockIcon,
@@ -278,7 +280,8 @@ export function BlockCard({
 					<Slot name={'blockera-block-card-children'} />
 
 					<BlockCardSettings
-						blockId={clientId}
+						blockName={blockName}
+						activeBlockVariation={activeBlockVariation}
 						isActive={isActive}
 						setActive={setActive}
 						actionsMenu={insideBlockInspector}
