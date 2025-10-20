@@ -31,6 +31,7 @@ export default function ToggleControl({
 	className,
 	children,
 	labelType = 'advanced',
+	size = 'normal',
 	...props
 }: TToggleControlProps): MixedElement {
 	const {
@@ -72,7 +73,11 @@ export default function ToggleControl({
 				label={columns ? '' : label}
 				checked={value}
 				onChange={setValue}
-				className={controlClassNames('toggle', className)}
+				className={controlClassNames(
+					'toggle',
+					className,
+					`size-${size}`
+				)}
 				{...props}
 			/>
 			{children}
