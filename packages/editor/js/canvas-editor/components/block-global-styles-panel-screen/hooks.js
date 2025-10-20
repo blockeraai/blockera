@@ -145,24 +145,23 @@ export function useGlobalStyle(
 				setImmutably(
 					currentConfig,
 					finalPath.split('.'),
-					newValue
-					// shouldDecodeEncode
-					// 	? getPresetVariableFromValue(
-					// 			mergedConfig.settings,
-					// 			blockName,
-					// 			path,
-					// 			newValue
-					// 	  )
-					// 	: newValue
+					shouldDecodeEncode
+						? getPresetVariableFromValue(
+								mergedConfig.settings,
+								blockName,
+								path,
+								newValue
+						  )
+						: newValue
 				)
 			);
 		},
 		[
 			finalPath,
-			// shouldDecodeEncode,
-			// mergedConfig,
-			// blockName,
-			// path,
+			shouldDecodeEncode,
+			mergedConfig,
+			blockName,
+			path,
 			setUserConfig,
 		]
 	);

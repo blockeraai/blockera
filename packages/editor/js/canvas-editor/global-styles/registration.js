@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
@@ -258,11 +258,25 @@ export const registration = ({
 
 	const GlobalBlockStylesRenderer = memo((blockType: Object) => {
 		const { name } = blockType;
-		const blockTypeGlobalStyles = useGlobalStylesContext({
+		const wpBlockTypeGlobalStyles = useGlobalStylesContext({
 			single: true,
 			from: 'merged',
 			path: `styles.blocks.${name}`,
 		});
+		const { localBlockTypeGlobalStyles } = useSelect(
+			(select) => {
+				const { getBlockStyles } = select('blockera/editor');
+
+				return {
+					localBlockTypeGlobalStyles: getBlockStyles(name, 'default'),
+				};
+			},
+			[name]
+		);
+		const blockTypeGlobalStyles = !Object.keys(localBlockTypeGlobalStyles)
+			.length
+			? mergeObject(wpBlockTypeGlobalStyles, localBlockTypeGlobalStyles)
+			: localBlockTypeGlobalStyles;
 		const memoizedBlockTypeGlobalStyles = omitWithPattern(
 			blockTypeGlobalStyles || {},
 			/^(?!blockera).*/i
