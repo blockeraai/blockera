@@ -165,6 +165,7 @@ export const StyleItem = ({
 					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
+
 					// Skip mouse enter if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
@@ -177,6 +178,7 @@ export const StyleItem = ({
 					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
+
 					// Skip focus if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
@@ -189,6 +191,7 @@ export const StyleItem = ({
 					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
+
 					// Skip mouse leave if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
@@ -201,6 +204,7 @@ export const StyleItem = ({
 					if (false === cachedStyle?.status || isOpenContextMenu) {
 						return;
 					}
+
 					// Skip blur if rendered inside global styles panel.
 					if (inGlobalStylesPanel) {
 						return;
@@ -237,19 +241,30 @@ export const StyleItem = ({
 			>
 				<Flex
 					alignItems={'center'}
-					justifyContent={'space-between'}
+					justifyContent={'flex-start'}
 					className="block-editor-block-styles__item-text"
+					gap={2}
 				>
 					<Truncate numberOfLines={1}>{buttonText}</Truncate>
 
-					<Flex gap={4} alignItems={'center'}>
-						{defaultStyle &&
-							style.isDefault &&
-							buttonText !== defaultStyle.label && (
-								<Truncate numberOfLines={1}>
-									{__('Default', 'blockera')}
-								</Truncate>
-							)}
+					{!inGlobalStylesPanel && isActive && (
+						<Icon icon="check" library="wp" iconSize="20" />
+					)}
+
+					<Flex
+						gap={4}
+						alignItems={'center'}
+						style={{ marginLeft: 'auto' }}
+					>
+						{defaultStyle && style.isDefault && (
+							<Icon
+								icon="asterisk"
+								iconSize="16"
+								style={{
+									opacity: '0.4',
+								}}
+							/>
+						)}
 
 						{false === cachedStyle?.status && (
 							<Icon
@@ -269,6 +284,8 @@ export const StyleItem = ({
 								style={{
 									opacity: '0.4',
 									'margin-right': '-4px',
+									position: 'relative',
+									'z-index': '10',
 								}}
 							/>
 						)}
@@ -327,11 +344,12 @@ export const StyleItem = ({
 						style={{
 							gap: '4px',
 							padding: '2px 0',
+							'letter-spacing': '-0.2px',
 						}}
 					>
-						<Icon icon="save" iconSize="20" />
+						<Icon icon="save" iconSize="18" />
 
-						{__('Save Customizations', 'blockera')}
+						{__('Save Changes to Style Variation', 'blockera')}
 
 						{hasChangesets && (
 							<ChangeIndicator
@@ -360,9 +378,10 @@ export const StyleItem = ({
 							style={{
 								gap: '2px',
 								padding: '2px 0',
+								'letter-spacing': '-0.2px',
 							}}
 						>
-							<Icon icon="unlink" iconSize="20" />
+							<Icon icon="unlink" iconSize="18" />
 
 							{__('Detach Style', 'blockera')}
 						</Button>
@@ -383,9 +402,10 @@ export const StyleItem = ({
 							style={{
 								gap: '2px',
 								padding: '2px 0',
+								'letter-spacing': '-0.2px',
 							}}
 						>
-							<Icon icon="clone" iconSize="20" />
+							<Icon icon="clone" iconSize="18" />
 
 							{__('Duplicate', 'blockera')}
 						</Button>
