@@ -62,9 +62,8 @@ import { useGlobalStylesPanelContext } from '../../canvas-editor/components/bloc
 export const BlockBase: ComponentType<any> = (
 	_props: Object
 ): Element<any> | null => {
-	const { setCurrentBlockStyleVariation } = useGlobalStylesPanelContext() || {
-		setCurrentBlockStyleVariation: () => {},
-	};
+	const { setCurrentBlockStyleVariation, handleOnChangeStyleInLocalState } =
+		useGlobalStylesPanelContext();
 	const {
 		additional,
 		children,
@@ -203,6 +202,14 @@ export const BlockBase: ComponentType<any> = (
 	};
 
 	useEffect(() => {
+		if (
+			'function' === typeof handleOnChangeStyleInLocalState &&
+			!isShallowEqual(blockAttributes, state) &&
+			isShallowEqual(state, attributesRef.current)
+		) {
+			handleOnChangeStyleInLocalState(state);
+		}
+
 		const timeoutId = setTimeout(() => {
 			if (
 				!isShallowEqual(blockAttributes, state) &&
@@ -225,7 +232,7 @@ export const BlockBase: ComponentType<any> = (
 	});
 
 	useEffect(() => {
-		if (!isShallowEqual(blockAttributes, state) && insideBlockInspector) {
+		if (!isShallowEqual(blockAttributes, state)) {
 			setAttributes(blockAttributes);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -274,6 +281,7 @@ export const BlockBase: ComponentType<any> = (
 		availableAttributes,
 		masterIsNormalState,
 		blockeraInnerBlocks,
+		insideBlockInspector,
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,

@@ -48,6 +48,7 @@ export const useAttributes = (
 		availableAttributes,
 		masterIsNormalState,
 		blockeraInnerBlocks,
+		insideBlockInspector,
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,
@@ -63,6 +64,7 @@ export const useAttributes = (
 		blockeraInnerBlocks: Object,
 		isNormalState: () => boolean,
 		activeBlockVariation: Object,
+		insideBlockInspector: boolean,
 		currentBreakpoint: TBreakpoint,
 		currentInnerBlockState: TStates,
 		masterIsNormalState: () => boolean,
@@ -100,7 +102,10 @@ export const useAttributes = (
 		(attributeId, newValue, options = {}): void => {
 			const { ref, effectiveItems = {} } = options;
 			const { getSelectedBlock } = select('core/block-editor');
-			const { attributes = getAttributes() } = getSelectedBlock() || {};
+			const { attributes } =
+				false === insideBlockInspector
+					? { attributes: getAttributes() }
+					: getSelectedBlock() || { attributes: getAttributes() };
 
 			// attributes => immutable - mean just read-only!
 			// _attributes => mutable - mean readable and writable constant!

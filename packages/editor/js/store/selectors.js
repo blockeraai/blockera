@@ -320,6 +320,7 @@ export const getSelectedBlockStyle = ({
  *
  * @param {{globalStyles: Object}} state the global styles.
  * @param {string} blockName the name of the block.
+ * @param {string} variation the variation of the block.
  *
  * @return {Object} the block styles data stored in redux.
  */
@@ -329,9 +330,16 @@ export const getBlockStyles = (
 	}: {
 		globalStyles: Object,
 	},
-	blockName: string
+	blockName: string,
+	variation: string
 ): Object => {
-	return globalStyles?.styles?.blocks?.[blockName] || {};
+	if ('default' === variation) {
+		return globalStyles?.styles?.blocks?.[blockName] || {};
+	}
+
+	return (
+		globalStyles?.styles?.blocks?.[blockName]?.variations?.[variation] || {}
+	);
 };
 
 /**
