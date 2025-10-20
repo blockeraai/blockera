@@ -49,4 +49,10 @@ export type IndicatorComponentProps = {
 	 * @default '1.5'
 	 */
 	outlineSize?: string,
+	/**
+	 * Style
+	 *
+	 * @default {}
+	 */
+	style?: Object,
 };

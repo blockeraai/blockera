@@ -26,6 +26,7 @@ export default function ChangeIndicator({
 	outlineSize = '1.5',
 	animated = false,
 	className,
+	style,
 	...props
 }: IndicatorComponentProps): MixedElement {
 	if (!isChanged && !isChangedOnStates) {
@@ -36,6 +37,7 @@ export default function ChangeIndicator({
 		<div
 			className={componentClassNames('change-indicator', className)}
 			data-test="change-indicator"
+			style={style}
 			{...props}
 		>
 			{isChanged && (
