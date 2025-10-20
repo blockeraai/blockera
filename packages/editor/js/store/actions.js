@@ -171,10 +171,15 @@ export const setGlobalStyles = (styles: Object): Object => {
 	};
 };
 
-export const setBlockStyles = (blockName: string, styles: Object): Object => {
+export const setBlockStyles = (
+	blockName: string,
+	variation: string,
+	styles: Object
+): Object => {
 	return {
 		styles,
 		blockName,
+		variation,
 		type: 'SET_BLOCK_STYLES',
 	};
 };

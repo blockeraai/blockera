@@ -170,7 +170,16 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 						[action.blockName]: {
 							...(state?.styles?.blocks?.[action.blockName] ||
 								{}),
-							...action.styles,
+							...('default' === action.variation
+								? action.styles
+								: {
+										variations: {
+											...(state?.styles?.blocks?.[
+												action.blockName
+											]?.variations || {}),
+											[action.variation]: action.styles,
+										},
+								  }),
 						},
 					},
 				},

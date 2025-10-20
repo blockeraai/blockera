@@ -150,20 +150,11 @@ export const GlobalStylesPanelContextProvider = ({
 		);
 	}
 	const prefix = prefixParts.join('.');
-	const [inheritedStyle, rootStyle, setStyle] = useGlobalStyle(
-		prefix,
-		name,
-		'all',
-		{
-			shouldDecodeEncode: false,
-			defaultStylesValue,
-		}
-	);
+	const [style, rootStyle, setStyle] = useGlobalStyle(prefix, name, 'user', {
+		shouldDecodeEncode: false,
+		defaultStylesValue,
+	});
 
-	let style = inheritedStyle;
-	if (!currentBlockStyleVariation?.isDefault && !style?.blockeraPropsId) {
-		style = mergeObject(rootStyle, inheritedStyle);
-	}
 	const getStyle = useCallback(
 		() => ({
 			...defaultStylesValue,
@@ -222,15 +213,43 @@ export const GlobalStylesPanelContextProvider = ({
 		[clientId]
 	);
 
+	const normalizedNewStyle = useCallback(
+		(newStyle: Object): Object => {
+			if (newStyle?.style) {
+				newStyle = {
+					...newStyle,
+					...newStyle.style,
+				};
+
+				delete newStyle.style;
+			}
+
+			return cleanupStyles(newStyle);
+		},
+		[cleanupStyles]
+	);
+
 	const handleOnChangeStyle = useCallback(
 		(newStyle: Object) => {
-			const cleanedStyle = cleanupStyles(mergeObject(style, newStyle));
-
-			setBlockStyles(name, cleanedStyle);
+			const cleanedStyle = normalizedNewStyle(newStyle);
 
 			setStyle(cleanedStyle);
 		},
-		[cleanupStyles, style, setBlockStyles, name, setStyle]
+		[normalizedNewStyle, setStyle]
+	);
+	const handleOnChangeStyleInLocalState = useCallback(
+		(newStyle: Object): void => {
+			const cleanedStyle = normalizedNewStyle(newStyle);
+
+			setBlockStyles(
+				name,
+				currentBlockStyleVariation?.isDefault
+					? 'default'
+					: currentBlockStyleVariation?.name,
+				cleanedStyle
+			);
+		},
+		[name, setBlockStyles, normalizedNewStyle, currentBlockStyleVariation]
 	);
 
 	const memoizedBlockBaseProps = useMemo(
@@ -259,14 +278,15 @@ export const GlobalStylesPanelContextProvider = ({
 	return (
 		<GlobalStylesPanelContext.Provider
 			value={{
-				getStyle,
 				style,
+				getStyle,
 				setStyle,
 				baseContextValue,
 				childrenComponent,
 				memoizedBlockBaseProps,
 				currentBlockStyleVariation,
 				setCurrentBlockStyleVariation,
+				handleOnChangeStyleInLocalState,
 			}}
 		>
 			{children}
@@ -295,6 +315,7 @@ type UseGlobalStylesPanelContextReturnType = {
 	selectedBlockClientId: string,
 	updateEditorSettings: (Object) => void,
 	getEditorSettings: () => Object,
+	handleOnChangeStyleInLocalState: (newStyle: Object) => void,
 };
 
 export const useGlobalStylesPanelContext =

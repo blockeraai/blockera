@@ -27,6 +27,8 @@ import { MappedExtensions } from './mapped-extensions';
 import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
+import { useGlobalStylesPanelContext } from '../../../canvas-editor/components/block-global-styles-panel-screen/context';
+
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
 const omitDeep = (obj: Object, props: Array<string>): Object => {
@@ -146,6 +148,9 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	handleOnChangeAttributes,
 	...props
 }: Props): MixedElement => {
+	const { currentBlockStyleVariation } = useGlobalStylesPanelContext() || {
+		currentBlockStyleVariation: {},
+	};
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	useEffect(() => {
@@ -357,6 +362,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			currentInnerBlockState,
 			supports: props.supports,
 			clientId: props.clientId,
+			currentBlockStyleVariation,
 		}),
 		[
 			currentBlock,
@@ -366,6 +372,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			props.name,
 			props.supports,
 			props.clientId,
+			currentBlockStyleVariation,
 		]
 	);
 
