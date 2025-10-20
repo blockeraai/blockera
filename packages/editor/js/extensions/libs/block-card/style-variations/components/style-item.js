@@ -239,8 +239,26 @@ export const StyleItem = ({
 
 					onSelectStylePreview(style);
 				}}
+				onKeyDown={(event) => {
+					// Handle Enter key press
+					if (event.key !== 'Enter') {
+						return;
+					}
+
+					if (inGlobalStylesPanel) {
+						// Navigate to the block style variation customization panel when Enter is pressed in global styles context.
+
+						const { setSelectedBlockStyleVariation } =
+							dispatch('blockera/editor');
+
+						setSelectedBlockStyleVariation(style);
+						setCurrentActiveStyle(style);
+						return setCurrentBlockStyleVariation(style);
+					}
+
+					onSelectStylePreview(style);
+				}}
 				aria-current={isActive}
-				size="input"
 				data-test={`style-${style.name}`}
 			>
 				<Flex
