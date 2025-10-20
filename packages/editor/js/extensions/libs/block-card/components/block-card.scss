@@ -202,7 +202,7 @@
 		max-height: 55px;
 		transition: max-height 0.55s ease, box-shadow 0.075s ease;
 
-		&:hover {
+		&:not(.is-selected-delay):hover {
 			max-height: 100vh;
 			transition: max-height 0.55s ease, box-shadow 0.075s ease;
 		}

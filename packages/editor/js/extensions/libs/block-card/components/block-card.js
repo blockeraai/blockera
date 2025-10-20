@@ -101,6 +101,7 @@ export function BlockCard({
 		blockInformation?.name || blockTitle || ''
 	);
 	const [title, setTitle] = useState(blockInformation?.title || blockTitle);
+	const [hasSelectionDelay, setHasSelectionDelay] = useState(false);
 
 	useEffect(() => {
 		// Name changed from outside
@@ -115,6 +116,27 @@ export function BlockCard({
 
 		// eslint-disable-next-line
 	}, [blockInformation?.name, blockInformation?.title]);
+
+	useEffect(() => {
+		// Check if inner block or style variation is selected
+		const isSelected =
+			currentInnerBlock !== null ||
+			Boolean(currentBlockStyleVariation?.name);
+
+		if (isSelected) {
+			// Add delay class instantly
+			setHasSelectionDelay(true);
+
+			// Remove delay class after 300ms
+			const timer = setTimeout(() => {
+				setHasSelectionDelay(false);
+			}, 1000);
+
+			return () => clearTimeout(timer);
+		}
+		// Reset delay when nothing is selected
+		setHasSelectionDelay(false);
+	}, [currentInnerBlock, currentBlockStyleVariation]);
 
 	const { parentNavBlockClientId } = useSelect((select) => {
 		const { getSelectedBlockClientId, getBlockParentsByBlockName } =
@@ -157,6 +179,7 @@ export function BlockCard({
 					'style-variation-is-selected': Boolean(
 						currentBlockStyleVariation?.name
 					),
+					'is-selected-delay': hasSelectionDelay,
 				})}
 				data-test={'blockera-block-card'}
 			>
