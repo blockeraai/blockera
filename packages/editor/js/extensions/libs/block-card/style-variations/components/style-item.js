@@ -10,7 +10,6 @@ import { useState, useMemo, useEffect } from '@wordpress/element';
 import {
 	Fill,
 	__experimentalTruncate as Truncate,
-	__experimentalDivider as Divider,
 } from '@wordpress/components';
 
 /**
@@ -18,177 +17,17 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { isEquals } from '@blockera/utils';
-import {
-	Flex,
-	Button,
-	Popover,
-	ToggleControl,
-	ControlContextProvider,
-	ChangeIndicator,
-} from '@blockera/controls';
-import {
-	classNames,
-	controlInnerClassNames,
-	componentInnerClassNames,
-} from '@blockera/classnames';
+import { Flex, Button, ChangeIndicator } from '@blockera/controls';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import { getDefaultStyle } from '../utils';
-import { RenameModal } from './rename-modal';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useUserCan } from '../../../../../hooks/use-user-can';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
-
-const ContextMenu = ({
-	counter,
-	setCounter,
-	cachedStyle,
-	isOpenRenameModal,
-	setIsOpenRenameModal,
-	isOpenContextMenu,
-	setIsOpenContextMenu,
-	style,
-	buttonText,
-	handleOnRename,
-	handleOnDuplicate,
-	handleOnClearAllCustomizations,
-	setCurrentBlockStyleVariation,
-	handleOnEnable,
-	handleOnDelete,
-	isConfirmedChangeID,
-	setIsConfirmedChangeID,
-}: {
-	counter: number,
-	setCounter: (counter: number) => void,
-	cachedStyle: Object,
-	setCurrentBlockStyleVariation: (style: Object) => void,
-	handleOnDuplicate: (style: Object) => void,
-	handleOnClearAllCustomizations: (style: Object) => void,
-	handleOnEnable: (value: boolean, style: Object) => void,
-	handleOnDelete: (style: Object) => void,
-	isOpenRenameModal: boolean,
-	setIsOpenRenameModal: (isOpen: boolean) => void,
-	isOpenContextMenu: boolean,
-	setIsOpenContextMenu: (isOpen: boolean) => void,
-	style: Object,
-	buttonText: string,
-	handleOnRename: (style: Object) => void,
-	isConfirmedChangeID: boolean,
-	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
-}) => (
-	<>
-		{isOpenRenameModal && (
-			<RenameModal
-				style={style}
-				buttonText={buttonText}
-				handleOnRename={handleOnRename}
-				isConfirmedChangeID={isConfirmedChangeID}
-				setIsOpenRenameModal={setIsOpenRenameModal}
-				setIsConfirmedChangeID={setIsConfirmedChangeID}
-			/>
-		)}
-		{isOpenContextMenu && (
-			<Popover
-				title={''}
-				offset={50}
-				draggable={true}
-				placement="left-start"
-				className="variations-picker-popover"
-				onClose={() => {
-					setIsOpenContextMenu(false);
-				}}
-			>
-				<Flex direction="column" gap={10}>
-					<Flex
-						justifyContent={'flex-start'}
-						gap={8}
-						alignItems={'center'}
-						className={controlInnerClassNames('menu-item')}
-						onClick={() => handleOnDuplicate(style)}
-					>
-						<Icon icon="duplicate" iconSize="24" />
-						{__('Duplicate', 'blockera')}
-					</Flex>
-					<Flex
-						justifyContent={'flex-start'}
-						gap={8}
-						alignItems={'center'}
-						className={controlInnerClassNames('menu-item')}
-						onClick={() => handleOnClearAllCustomizations(style)}
-					>
-						<Icon icon="icon-circle-arrow-left" iconSize="24" />
-						{__('Clear all customizations', 'blockera')}
-					</Flex>
-					<Flex
-						justifyContent={'space-between'}
-						gap={8}
-						alignItems={'center'}
-						className={controlInnerClassNames('menu-item')}
-						onClick={() => {
-							setCurrentBlockStyleVariation(style);
-
-							if (isOpenRenameModal) {
-								return setIsOpenRenameModal(false);
-							}
-
-							setIsOpenRenameModal(true);
-						}}
-					>
-						<Flex alignItems={'center'} gap={8}>
-							<Icon icon="pen" iconSize="24" />
-							{__('Rename', 'blockera')}
-						</Flex>
-						<code
-							className={componentInnerClassNames('rename-style')}
-						>{`ID: ${style.name}`}</code>
-					</Flex>
-					{!style.isDefault && <Divider />}
-					{!style?.isDefault && (
-						<ControlContextProvider
-							value={{
-								name: `${style.name}-toggle`,
-								value:
-									true === cachedStyle?.status ||
-									!cachedStyle.hasOwnProperty('status'),
-							}}
-						>
-							<ToggleControl
-								labelType={'self'}
-								label={
-									false === cachedStyle?.status
-										? __('Inactive Style', 'blockera')
-										: __('Active Style', 'blockera')
-								}
-								onChange={(value: boolean): void =>
-									handleOnEnable(value, style)
-								}
-							/>
-						</ControlContextProvider>
-					)}
-					{!style.isDefault && (
-						<Flex
-							justifyContent={'flex-start'}
-							gap={8}
-							alignItems={'center'}
-							className={controlInnerClassNames('menu-item', {
-								'delete-style': true,
-							})}
-							onClick={() => {
-								handleOnDelete(style.name);
-								setCounter(counter - 1);
-							}}
-						>
-							<Icon icon="icon-recycle-bin" iconSize="24" />
-							{__('Delete', 'blockera')}
-						</Flex>
-					)}
-				</Flex>
-			</Popover>
-		)}
-	</>
-);
+import { StyleItemMenu } from './style-item-menu';
 
 export const StyleItem = ({
 	style,
@@ -299,6 +138,12 @@ export const StyleItem = ({
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
 
 	const isActive: boolean = activeStyle.name === style.name;
+
+	// disabled items should not be visible in the block editor
+	if (!inGlobalStylesPanel && false === cachedStyle?.status) {
+		return <></>;
+	}
+
 	const defaultStyle = getDefaultStyle(blockStyles);
 
 	return (
@@ -306,7 +151,6 @@ export const StyleItem = ({
 			<Button
 				className={classNames('block-editor-block-styles__item', {
 					'is-active': isActive,
-					'action-disabled': false === cachedStyle?.status,
 				})}
 				key={style.name}
 				variant="tertiary"
@@ -315,6 +159,7 @@ export const StyleItem = ({
 						? buttonText + ` (${__('Default', 'blockera')})`
 						: ''
 				}
+				isFocus={isOpenBlockCardContextMenu}
 				onMouseEnter={() => {
 					// Skip mouse enter if style is disabled.
 					if (false === cachedStyle?.status || isOpenContextMenu) {
@@ -397,7 +242,7 @@ export const StyleItem = ({
 				>
 					<Truncate numberOfLines={1}>{buttonText}</Truncate>
 
-					<Flex gap={0} alignItems={'center'}>
+					<Flex gap={4} alignItems={'center'}>
 						{defaultStyle &&
 							style.isDefault &&
 							buttonText !== defaultStyle.label && (
@@ -407,7 +252,13 @@ export const StyleItem = ({
 							)}
 
 						{false === cachedStyle?.status && (
-							<Icon icon="eye-hide" iconSize="20" />
+							<Icon
+								icon="eye-hide"
+								iconSize="20"
+								style={{
+									color: '#E20000',
+								}}
+							/>
 						)}
 
 						{style.icon && (
@@ -417,6 +268,7 @@ export const StyleItem = ({
 								iconSize="16"
 								style={{
 									opacity: '0.4',
+									'margin-right': '-4px',
 								}}
 							/>
 						)}
@@ -432,7 +284,7 @@ export const StyleItem = ({
 					</Flex>
 				</Flex>
 
-				<ContextMenu
+				<StyleItemMenu
 					style={style}
 					counter={counter}
 					setCounter={setCounter}
@@ -533,7 +385,7 @@ export const StyleItem = ({
 								padding: '2px 0',
 							}}
 						>
-							<Icon icon="duplicate" iconSize="20" />
+							<Icon icon="clone" iconSize="20" />
 
 							{__('Duplicate', 'blockera')}
 						</Button>
@@ -545,16 +397,25 @@ export const StyleItem = ({
 				name={`blockera-style-variation-block-card-menu-${style.name}`}
 			>
 				{isUserCanSaveCustomizations && (
-					<Flex alignItems={'center'}>
+					<Flex alignItems={'center'} gap={0}>
 						{false === cachedStyle?.status && (
-							<Icon icon="eye-hide" iconSize="20" />
+							<Icon
+								icon="eye-hide"
+								iconSize="20"
+								style={{
+									color: '#E20000',
+									cursor: 'initial',
+								}}
+							/>
 						)}
+
 						<Icon
 							icon="more-vertical"
 							iconSize="20"
 							onClick={() => setIsOpenContextMenu(true)}
 						/>
-						<ContextMenu
+
+						<StyleItemMenu
 							style={style}
 							counter={counter}
 							setCounter={setCounter}

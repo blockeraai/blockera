@@ -125,7 +125,6 @@ export function InnerBlockCard({
 						>
 							{blockInformation?.label}
 						</span>
-
 						<Breadcrumb
 							clientId={clientId}
 							blockName={blockName}
@@ -136,21 +135,30 @@ export function InnerBlockCard({
 							}
 						/>
 
-						<Tooltip text={__('Close Inner Block', 'blockera')}>
-							<Icon
-								className={extensionInnerClassNames(
-									'block-card__close'
-								)}
-								library="wp"
-								icon="close-small"
-								iconSize="24"
-								data-test={'Close Inner Block'}
-								onClick={() => {
-									onToggle(true, 'switch-to-parent');
-									handleOnClick('current-block', 'master');
-								}}
-							/>
-						</Tooltip>
+						<div
+							className={extensionInnerClassNames(
+								'block-card__settings'
+							)}
+						>
+							<Tooltip text={__('Close Inner Block', 'blockera')}>
+								<Icon
+									className={extensionInnerClassNames(
+										'block-card__close'
+									)}
+									library="wp"
+									icon="close-small"
+									iconSize="24"
+									data-test={'Close Inner Block'}
+									onClick={() => {
+										onToggle(true, 'switch-to-parent');
+										handleOnClick(
+											'current-block',
+											'master'
+										);
+									}}
+								/>
+							</Tooltip>
+						</div>
 					</h2>
 
 					{blockInformation?.description && (

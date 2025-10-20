@@ -158,16 +158,23 @@
 				box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
 			}
 
-			.blockera-extension-block-card__close {
+			.blockera-extension-block-card__settings {
 				position: absolute;
 				right: 12px;
-				opacity: 1;
-				cursor: pointer;
-				color: #1e1e1e;
-				fill: currentColor;
+				display: flex;
+				gap: 0;
+				align-items: center;
+				justify-content: flex-end;
 
-				&:hover {
-					color: var(--blockera-controls-primary-color);
+				svg {
+					fill: currentColor;
+					color: #1e1e1e;
+					opacity: 1;
+					cursor: pointer;
+
+					&:hover {
+						color: var(--blockera-controls-primary-color);
+					}
 				}
 			}
 		}

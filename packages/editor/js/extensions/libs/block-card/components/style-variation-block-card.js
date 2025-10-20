@@ -253,7 +253,6 @@ export function StyleVariationBlockCard({
 				<div
 					className={extensionInnerClassNames('block-card__content')}
 				>
-					{/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
 					<h2
 						className={extensionInnerClassNames(
 							'block-card__title'
@@ -287,21 +286,29 @@ export function StyleVariationBlockCard({
 								currentStateAttributes?.blockeraUnsavedData
 							}
 						/>
-						<Slot
-							name={`blockera-style-variation-block-card-menu-${currentBlockStyleVariation?.name}`}
-						/>
-						<Tooltip text={__('Close Block Style', 'blockera')}>
-							<Icon
-								className={extensionInnerClassNames(
-									'block-card__close'
-								)}
-								library="wp"
-								icon="close-small"
-								iconSize="24"
-								data-test="Close Block Style"
-								onClick={handleClose}
+
+						<div
+							className={extensionInnerClassNames(
+								'block-card__settings'
+							)}
+						>
+							<Slot
+								name={`blockera-style-variation-block-card-menu-${currentBlockStyleVariation?.name}`}
 							/>
-						</Tooltip>
+
+							<Tooltip text={__('Close Block Style', 'blockera')}>
+								<Icon
+									className={extensionInnerClassNames(
+										'block-card__close'
+									)}
+									library="wp"
+									icon="close-small"
+									iconSize="24"
+									data-test="Close Block Style"
+									onClick={handleClose}
+								/>
+							</Tooltip>
+						</div>
 					</h2>
 				</div>
 			</div>
