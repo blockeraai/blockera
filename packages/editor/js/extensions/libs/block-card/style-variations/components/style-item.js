@@ -275,7 +275,9 @@ export const StyleItem = ({
 								icon="eye-hide"
 								iconSize="20"
 								style={{
-									color: '#E20000',
+									color: !isActive
+										? '#E20000'
+										: 'currentColor',
 								}}
 							/>
 						)}
