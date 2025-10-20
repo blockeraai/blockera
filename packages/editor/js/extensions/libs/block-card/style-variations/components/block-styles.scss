@@ -11,14 +11,6 @@
 		text-align: center;
 		border-radius: 5px;
 
-		> button {
-			width: 100%;
-			display: block;
-			padding: 0 0 0 8px !important;
-			margin-bottom: 8px;
-			background-color: #ffffff !important;
-		}
-
 		.blockera-component-block-style-variations-description {
 			font-size: 12px;
 			margin: 10px 0;
@@ -62,60 +54,6 @@
 		& > span:empty {
 			display: none;
 		}
-
-		.block-editor-block-styles__item.blockera-component-button {
-			width: 100%;
-			--blockera-controls-input-height: 30px;
-			box-shadow: inset 0 0 0 1px #e0e0e0;
-			color: var(--blockera-controls-color, #1e1e1e);
-			height: var(--blockera-controls-input-height);
-			line-height: var(--blockera-controls-input-height);
-			align-content: center;
-			padding: 0 0 0 8px !important;
-			font-size: 12px;
-			margin-bottom: 8px;
-			gap: 4px;
-			background-color: #ffffff;
-
-			& > span:empty {
-				display: none;
-			}
-
-			.block-editor-block-styles__item-text {
-				text-align: start;
-				text-align-last: center;
-				white-space: normal;
-				word-break: break-all;
-				width: 100%;
-			}
-
-			&:hover:not(.is-active) {
-				box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
-				color: var(--blockera-controls-primary-color);
-			}
-
-			&:not(.is-active):not(:hover) {
-				--blockera-controls-primary-color: var(--blockera-controls-border-color);
-				color: #1e1e1e;
-			}
-
-			&.is-active,
-			&.is-active:hover {
-				--blockera-controls-border-color: var(--blockera-controls-primary-color);
-				background-color: var(--blockera-controls-primary-color) !important;
-				box-shadow: none;
-			}
-
-			&.is-active .block-editor-block-styles__item-text,
-			&.is-active:hover .block-editor-block-styles__item-text {
-				color: #ffffff;
-			}
-
-			&.is-active:focus,
-			&:focus {
-				box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color), 0 0 0 var(--wp-admin-border-width-focus) var(--blockera-controls-primary-color);
-			}
-		}
 	}
 
 	.blockera-component-block-styles__coming-soon {
@@ -125,6 +63,72 @@
 		&:hover {
 			color: var(--blockera-controls-primary-color);
 		}
+	}
+}
+
+.block-editor-block-styles__item__button {
+	width: 100%;
+	display: block;
+	padding: 0 0 0 8px !important;
+	margin-bottom: 8px;
+	background-color: #ffffff !important;
+	white-space: nowrap;
+	transition: var(--blockera-controls-transition);
+	font-weight: 400;
+	height: var(--blockera-controls-input-height);
+	line-height: var(--blockera-controls-input-height);
+	font-size: 12px;
+	color: var(--blockera-controls-color);
+	box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color);
+	outline: 1px solid transparent;
+	border-radius: 2px;
+	cursor: pointer;
+
+	&:hover:not(.is-active) {
+		--blockera-controls-border-color: var(--blockera-controls-primary-color);
+		color: var(--blockera-controls-primary-color);
+		box-shadow: inset 0 0 0 1px var(--blockera-controls-primary-color);
+	}
+
+	&.is-active {
+		--blockera-controls-border-color: var(--blockera-controls-primary-color);
+		background-color: var(--blockera-controls-primary-color) !important;
+		color: #ffffff;
+	}
+
+	svg {
+		fill: currentColor;
+	}
+
+	& > span:empty {
+		display: none;
+	}
+
+	.block-editor-block-styles__item-text {
+		text-align: start;
+		text-align-last: center;
+		white-space: normal;
+		word-break: break-all;
+		width: 100%;
+	}
+
+	&.is-active,
+	&.is-active:hover {
+		--blockera-controls-border-color: var(--blockera-controls-primary-color);
+		background-color: var(--blockera-controls-primary-color) !important;
+		box-shadow: none;
+	}
+
+	&.is-active .block-editor-block-styles__item-text,
+	&.is-active:hover .block-editor-block-styles__item-text {
+		color: #ffffff;
+	}
+
+	&.is-focus,
+	&.is-active:focus,
+	&:focus {
+		outline: 2px solid var(--blockera-controls-primary-color);
+		outline-offset: 1px;
 	}
 }
 

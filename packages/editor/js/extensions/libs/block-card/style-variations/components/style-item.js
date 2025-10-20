@@ -148,18 +148,22 @@ export const StyleItem = ({
 
 	return (
 		<>
-			<Button
-				className={classNames('block-editor-block-styles__item', {
-					'is-active': isActive,
-				})}
+			<div
+				role="button"
+				tabIndex={0}
+				className={classNames(
+					'block-editor-block-styles__item__button',
+					{
+						'is-active': isActive,
+						'is-focus': isOpenBlockCardContextMenu,
+					}
+				)}
 				key={style.name}
-				variant="tertiary"
 				label={
 					style?.isDefault && style?.name !== 'default'
 						? buttonText + ` (${__('Default', 'blockera')})`
 						: ''
 				}
-				isFocus={isOpenBlockCardContextMenu}
 				onMouseEnter={() => {
 					// Skip mouse enter if style is disabled.
 					if (false === cachedStyle?.status || isOpenContextMenu) {
@@ -324,7 +328,7 @@ export const StyleItem = ({
 						setCurrentBlockStyleVariation
 					}
 				/>
-			</Button>
+			</div>
 
 			{isActive && (
 				<Fill name="block-inspector-style-actions">
