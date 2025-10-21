@@ -47,42 +47,95 @@ export const RenameModal = ({
 	return (
 		<Modal
 			className={componentInnerClassNames('rename-modal')}
-			headerIcon={<Icon icon="pen" iconSize="24" />}
+			headerIcon={<Icon icon="pen" iconSize="34" />}
 			headerTitle={__('Rename style variation', 'blockera')}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenRenameModal(false)}
 		>
-			<Flex direction="column" gap={15}>
-				<p>
-					{__(
-						'Adjust the name and ID of this style variation to keep your styles organized and consistent.',
-						'blockera'
-					)}
-				</p>
-				<ControlContextProvider
-					value={{
-						name: 'rename-style',
-						value: styleName,
-					}}
-				>
-					<InputControl
-						label={__('Name', 'blockera')}
-						onChange={(newValue: string) => setStyleName(newValue)}
-					/>
-				</ControlContextProvider>
-				<ControlContextProvider
-					value={{
-						name: 'rename-style-id',
-						value: styleID,
-					}}
-				>
-					<InputControl
-						label={__('ID', 'blockera')}
-						onChange={(newValue: string) =>
-							setStyleID(kebabCase(newValue.toLowerCase().trim()))
-						}
-					/>
-				</ControlContextProvider>
+			<Flex direction="column" gap={40}>
+				<Flex direction="column" gap={25}>
+					<p style={{ margin: '0', color: '#707070' }}>
+						{__(
+							'Adjust the name and ID of this style variation to keep your styles organized and consistent.',
+							'blockera'
+						)}
+					</p>
+
+					<Flex direction="column" gap={20}>
+						<ControlContextProvider
+							value={{
+								name: 'rename-style',
+								value: styleName,
+							}}
+						>
+							<InputControl
+								label={__('Name', 'blockera')}
+								onChange={(newValue: string) =>
+									setStyleName(newValue)
+								}
+								columns="1fr 3fr"
+							/>
+						</ControlContextProvider>
+
+						<ControlContextProvider
+							value={{
+								name: 'rename-style-id',
+								value: styleID,
+							}}
+						>
+							<InputControl
+								label={__('ID', 'blockera')}
+								onChange={(newValue: string) =>
+									setStyleID(
+										kebabCase(newValue.toLowerCase().trim())
+									)
+								}
+								columns="1fr 3fr"
+								style={{ position: 'relative' }}
+							>
+								<p
+									style={{
+										margin: '5px 0 0',
+										color: '#707070',
+										'font-style': 'italic',
+										'font-size': '13px',
+									}}
+								>
+									{__(
+										'Use a-z, 0-9, and hyphens only.',
+										'blockera'
+									)}
+								</p>
+
+								{styleID !== style.name && (
+									<Button
+										onClick={() => setStyleID(style.name)}
+										variant="tertiary"
+										icon={
+											<Icon icon="undo" iconSize="16" />
+										}
+										size="input"
+										style={{
+											position: 'absolute',
+											right: '4px',
+											top: '4px',
+											padding: '2px 6px 2px 4px',
+											'--blockera-controls-input-height':
+												'22px',
+											gap: '2px',
+											'font-size': '11px',
+											'text-transform': 'uppercase',
+											'font-weight': '500',
+										}}
+									>
+										{__('Undo', 'blockera')}
+									</Button>
+								)}
+							</InputControl>
+						</ControlContextProvider>
+					</Flex>
+				</Flex>
+
 				{styleID !== style.name && (
 					<Flex
 						gap={15}
@@ -109,6 +162,7 @@ export const RenameModal = ({
 								onChange={(newValue: boolean) =>
 									setIsConfirmedChangeID(newValue)
 								}
+								isBold={true}
 							/>
 						</ControlContextProvider>
 					</Flex>
@@ -133,8 +187,9 @@ export const RenameModal = ({
 					>
 						{__('Save', 'blockera')}
 					</Button>
+
 					<Button
-						variant="secondary"
+						variant="tertiary"
 						onClick={() => {
 							setIsOpenRenameModal(false);
 							setIsConfirmedChangeID(false);

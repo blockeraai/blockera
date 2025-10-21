@@ -174,11 +174,22 @@
 }
 
 .blockera-component-rename-modal {
+	--blockera-controls-primary-color: var(--blockera-controls-variations-color);
+
+	.components-modal__content {
+		width: 470px;
+	}
 
 	h1 {
 		display: flex;
 		align-items: center;
 		flex-direction: row !important;
+		color: var(--blockera-controls-primary-color);
+		font-size: 30px;
+
+		svg {
+			fill: currentColor;
+		}
 	}
 }
 
