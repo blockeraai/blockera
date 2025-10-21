@@ -43,7 +43,10 @@ export default function StateContainer({
 			isNormalState(currentInnerBlockState)
 		) {
 			color = '#cc0000';
-		} else if (!insideBlockInspector || isGlobalStylesCardWrapper) {
+		} else if (
+			(!insideBlockInspector || isGlobalStylesCardWrapper) &&
+			isNormalState(currentState)
+		) {
 			color = '#1ca120';
 		}
 
