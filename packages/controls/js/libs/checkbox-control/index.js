@@ -30,6 +30,7 @@ export default function CheckboxControl({
 	defaultValue = false,
 	onChange,
 	field = 'checkbox',
+	isBold = false,
 	//
 	className,
 	...props
@@ -70,7 +71,9 @@ export default function CheckboxControl({
 			{...labelProps}
 		>
 			<WPCheckboxControl
-				className={controlClassNames('checkbox', className)}
+				className={controlClassNames('checkbox', className, {
+					'is-bold': isBold,
+				})}
 				checked={value}
 				onChange={setValue}
 				label={checkboxLabel}
