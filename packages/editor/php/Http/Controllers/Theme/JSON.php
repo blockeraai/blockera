@@ -263,6 +263,7 @@ class JSON extends \WP_Theme_JSON {
 							'attrs' => $style_variation_node,
 						],
 						'fallbackSelector' => ":root :where($clean_style_variation_selector)",
+						'isGlobalStyle' => true,
 					]
 				);
 				$style_engine->setIsStyleVariation(true);
@@ -357,6 +358,7 @@ class JSON extends \WP_Theme_JSON {
 						'attrs' => $node,
 					],
 					'fallbackSelector' => $selector,
+					'isGlobalStyle' => true,
 				]
 			);
 			$style_engine->setSupports(static::$supports);

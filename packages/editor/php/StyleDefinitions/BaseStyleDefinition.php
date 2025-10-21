@@ -15,6 +15,13 @@ abstract class BaseStyleDefinition {
     protected array $block = [];
 
 	/**
+	 * Store the flag to determine if the style is a global style.
+	 *
+	 * @var bool $is_global_style
+	 */
+	protected bool $is_global_style = false;
+
+	/**
 	 * Store the flag to determine if the style is a style variation.
 	 *
 	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
@@ -173,6 +180,18 @@ abstract class BaseStyleDefinition {
         $this->style_id = $id;
     }
 
+	/**
+	 * Set the flag to determine if the style is a global style.
+	 *
+	 * @param bool $is_global_style the flag to determine if the style is a global style.
+	 *
+	 * @return void
+	 */
+	public function setIsGlobalStyle( bool $is_global_style): void {
+		
+		$this->is_global_style = $is_global_style;
+	}
+
     /**
      * Set the current breakpoint.
      *
@@ -247,7 +266,7 @@ abstract class BaseStyleDefinition {
 			return;
 		}
 
-        $this->selector = blockera_get_compatible_block_css_selector(
+		$prepared_selector = blockera_get_compatible_block_css_selector(
             $selectors,
             $support,
             [
@@ -261,7 +280,13 @@ abstract class BaseStyleDefinition {
                 'blockera-unique-selector' => $this->blockera_unique_selector,
                 'breakpoint'               => $this->breakpoint,
             ]
-        );
+		);
+
+		if ($this->is_global_style) {
+			$prepared_selector = ":root :where($prepared_selector)";
+		}
+
+		$this->selector = $prepared_selector;
     }
 
     /**

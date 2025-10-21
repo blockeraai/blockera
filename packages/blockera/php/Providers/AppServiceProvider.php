@@ -161,7 +161,7 @@ class AppServiceProvider extends ServiceProvider {
             $this->app->bind(
                 StyleEngine::class,
                 static function ( Application $app, array $params) {
-					$style_engine = new StyleEngine( $params['block'], $params['fallbackSelector'] );
+					$style_engine = new StyleEngine( $params['block'], $params['fallbackSelector'], $params['isGlobalStyle'] ?? false );
 
 					$style_engine->setApp($app);
 					$style_engine->setBreakpoint(blockera_core_config('breakpoints.base'));
