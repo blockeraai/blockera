@@ -59,6 +59,7 @@ export const AddNewStyleButton = ({
 	design = 'no-label',
 	setCurrentActiveStyle,
 	setCurrentBlockStyleVariation,
+	style = {},
 }: {
 	label?: string,
 	counter: number,
@@ -71,6 +72,7 @@ export const AddNewStyleButton = ({
 	setCurrentActiveStyle: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
+	style?: Object,
 }): MixedElement => {
 	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
 		'blockera.block.style.variations.globalStylesMaxItems',
@@ -196,7 +198,7 @@ export const AddNewStyleButton = ({
 	}, [blockStyles]);
 
 	return (
-		<Flex justifyContent={'space-between'}>
+		<Flex justifyContent={'space-between'} style={style}>
 			{'no-label' === design &&
 				'undefined' !== typeof label &&
 				label?.length > 0 && (
@@ -232,15 +234,15 @@ export const AddNewStyleButton = ({
 					'undefined' !== typeof label &&
 					label?.length > 0 &&
 					label}
-			</Button>
 
-			{isPromotionPopoverOpen && (
-				<PromoteGlobalStylesPremiumFeature
-					items={blockStyles}
-					onClose={() => setIsPromotionPopoverOpen(false)}
-					isOpen={isPromotionPopoverOpen}
-				/>
-			)}
+				{isPromotionPopoverOpen && (
+					<PromoteGlobalStylesPremiumFeature
+						items={blockStyles}
+						onClose={() => setIsPromotionPopoverOpen(false)}
+						isOpen={isPromotionPopoverOpen}
+					/>
+				)}
+			</Button>
 		</Flex>
 	);
 };
