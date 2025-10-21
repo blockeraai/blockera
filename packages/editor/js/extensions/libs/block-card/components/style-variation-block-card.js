@@ -351,6 +351,7 @@ export function StyleVariationBlockCard({
 							supports,
 							blockName,
 							setAttributes,
+							currentBlockStyleVariation,
 						}}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}

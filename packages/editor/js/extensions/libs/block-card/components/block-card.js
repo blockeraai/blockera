@@ -320,6 +320,7 @@ export function BlockCard({
 								supports,
 								blockName,
 								setAttributes,
+								currentBlockStyleVariation,
 							}}
 							blockConfig={additional}
 							onChange={handleOnChangeAttributes}

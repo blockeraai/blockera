@@ -205,6 +205,7 @@ export function InnerBlockCard({
 							supports,
 							blockName,
 							setAttributes,
+							currentBlockStyleVariation: {},
 						}}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}

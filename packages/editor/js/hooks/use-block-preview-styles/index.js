@@ -42,13 +42,13 @@ export const useBlockPreviewStyles = (
 		const prevTempElement = document.querySelector(`#${tempElementId}`);
 
 		if (prevTempElement) {
-			document.body.removeChild(prevTempElement);
+			document.body?.removeChild(prevTempElement);
 		}
 
 		// Create temporary container for styles
 		const tempElement = document.createElement('div');
 		tempElement.id = tempElementId;
-		document.body.appendChild(tempElement);
+		document.body?.appendChild(tempElement);
 		const root = createRoot(tempElement);
 
 		// Render global styles
@@ -84,7 +84,7 @@ export const useBlockPreviewStyles = (
 			observer.disconnect();
 			root.unmount();
 			if (document.getElementById(tempElementId)) {
-				document.getElementById(tempElementId).remove();
+				document.getElementById(tempElementId)?.remove();
 			}
 		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
