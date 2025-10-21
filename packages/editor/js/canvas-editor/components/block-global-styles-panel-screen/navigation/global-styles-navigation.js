@@ -43,6 +43,7 @@ export const GlobalStylesNavigation = (): MixedElement => {
 
 			<NavigationItem
 				item="blocks"
+				data-test="block-style-variations"
 				onClick={() =>
 					document.querySelector('button[id="/blocks"]')?.click()
 				}
