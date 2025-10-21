@@ -75,6 +75,21 @@ export function getSelectedBlock(data, field = '') {
 }
 
 /**
+ * Get the style of the selected block.
+ *
+ * @param {Object} data the WordPress data.
+ * @param {string} name the name of the block.
+ * @param {string} variation the variation of the block. Default is 'default'.
+ *
+ * @return {*} retrieved the style of the selected block.
+ */
+export function getSelectedBlockStyle(data, name, variation = 'default') {
+	const { getBlockStyles } = data.select('blockera/editor');
+
+	return getBlockStyles(name, variation);
+}
+
+/**
  * Get editor content.
  *
  * @param {Object} data the WordPress data.
@@ -332,7 +347,9 @@ export function redirectToFrontPage() {
 		win.stop();
 	});
 
-	cy.get('.blockera-control-canvas-editor-preview-link a')
+	cy.get(
+		'.blockera-control-canvas-editor-preview-link a, a.components-button.components-snackbar__action.is-link'
+	)
 		.invoke('attr', 'href')
 		.then((href) => {
 			cy.visit(href);
