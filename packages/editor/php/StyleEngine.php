@@ -14,15 +14,22 @@ use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 final class StyleEngine {
 
 	/**
+	 * Store the list of allowed pseudo-states.
+	 *
+	 * @var array $allowed_pseudo_states
+	 */
+	protected array $allowed_pseudo_states = [
+		'hover',
+	];
+
+	/**
 	 * Store pseudo-classes list are used to define a special state of an element.
 	 * For example, it can be used to:
 	 * - Style an element when a user mouses over it
 	 *
 	 * @var array $pseudo_classes
 	 */
-	protected array $pseudo_classes = [
-		'hover',
-	];
+	protected array $pseudo_classes = [];
 
 	/**
 	 * Store the flag to determine if the style is a global style.
@@ -209,15 +216,16 @@ final class StyleEngine {
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
 			$states = $this->settings['blockeraBlockStates']['value'];
 
-			// Filter pseudo classes to only include states that exist in the block.
-			$this->pseudo_classes = array_filter(
+			// Filter block states to only include normal state and existing pseudo classes.
+			$states = array_filter(
                 $states,
                 function( string $state):bool {
-					return 'normal' === $state || in_array($state, $this->pseudo_classes, true);
+					return 'normal' === $state || in_array($state, $this->allowed_pseudo_states, true);
 				},
 				ARRAY_FILTER_USE_KEY
             );
 
+			// prepare all breakpoints.
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
 
 			// Add force base breakpoint if not exists.
@@ -236,7 +244,7 @@ final class StyleEngine {
             );
 
 			// Add normal pseudo class if not exists.
-			if (! array_key_exists('normal', $this->pseudo_classes)) {
+			if (! array_key_exists('normal', $states)) {
 
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => [
@@ -261,6 +269,9 @@ final class StyleEngine {
 					'isVisible' => true,
 				];
 			}
+
+			// prepare all block states.
+			$this->pseudo_classes = array_merge($this->pseudo_classes, $states);
 
 			$breakpointsCssRules = blockera_array_flat(
 				array_filter(
