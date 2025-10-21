@@ -362,9 +362,6 @@ export function StyleVariationBlockCard({
 						blockConfig={additional}
 						blockStatesProps={{
 							attributes: currentStateAttributes,
-							id: `block-states-${kebabCase(
-								currentBlockStyleVariation?.name
-							)}`,
 						}}
 					/>
 				)}
