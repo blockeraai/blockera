@@ -30,7 +30,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 		});
 	});
 
-	it.only('should show the block type empowered icon global styles on searching results', () => {
+	it('should show the block type empowered icon global styles on searching results', () => {
 		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
 
 		cy.getGlobalStylesPanel().click();
