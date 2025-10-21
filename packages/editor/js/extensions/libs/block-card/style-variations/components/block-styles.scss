@@ -97,7 +97,15 @@
 	}
 
 	svg {
+		transition: var(--blockera-controls-transition);
 		fill: currentColor;
+	}
+
+	&:hover {
+
+		svg {
+			opacity: 1 !important;
+		}
 	}
 
 	& > span:empty {
