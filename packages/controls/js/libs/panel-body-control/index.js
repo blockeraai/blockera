@@ -168,6 +168,8 @@ const PanelBodyTitle: ComponentType<any> = forwardRef(
 							ref={ref}
 							{...props}
 						>
+							{children}
+
 							{/*
 								Firefox + NVDA don't announce aria-expanded because the browser
 								repaints the whole element, so this wrapping span hides that.
@@ -178,8 +180,6 @@ const PanelBodyTitle: ComponentType<any> = forwardRef(
 									icon={isOpened ? chevronUp : chevronDown}
 								/>
 							</span>
-
-							{children}
 						</Button>
 					)}
 					elseWrapper={(children) => (
@@ -195,8 +195,6 @@ const PanelBodyTitle: ComponentType<any> = forwardRef(
 						</div>
 					)}
 				>
-					{title}
-
 					{icon && (
 						<Icon
 							icon={icon}
@@ -204,6 +202,8 @@ const PanelBodyTitle: ComponentType<any> = forwardRef(
 							size={20}
 						/>
 					)}
+
+					{title}
 				</ConditionalWrapper>
 			</h2>
 		);

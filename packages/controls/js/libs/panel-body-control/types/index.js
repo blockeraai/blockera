@@ -8,7 +8,7 @@ export type PanelBodyControlProps = {
 	/**
 	 * Title of Inspect Element
 	 */
-	title: string,
+	title: string | Node,
 	/**
 	 * Default open or close status for panel body
 	 */
