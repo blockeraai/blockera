@@ -17,7 +17,7 @@ import {
  */
 import { Icon } from '@blockera/icons';
 import { isEquals } from '@blockera/utils';
-import { Flex, Button, ChangeIndicator } from '@blockera/controls';
+import { Flex, Button, ChangeIndicator, Tooltip } from '@blockera/controls';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -279,39 +279,72 @@ export const StyleItem = ({
 						style={{ marginLeft: 'auto' }}
 					>
 						{defaultStyle && style.isDefault && (
-							<Icon
-								icon="asterisk"
-								iconSize="16"
-								style={{
-									opacity: '0.4',
-								}}
-							/>
+							<Tooltip
+								text={__(
+									'Default style variation used globally for all blocks',
+									'blockera'
+								)}
+							>
+								<Icon
+									icon="asterisk"
+									iconSize="16"
+									style={{
+										opacity: '0.4',
+									}}
+								/>
+							</Tooltip>
 						)}
 
 						{false === cachedStyle?.status && (
-							<Icon
-								icon="eye-hide"
-								iconSize="20"
+							<Tooltip
+								text={__(
+									'This style variation is disabled',
+									'blockera'
+								)}
 								style={{
-									color: !isActive
+									'--tooltip-bg': !isActive
 										? '#E20000'
-										: 'currentColor',
+										: '#000000',
 								}}
-							/>
+							>
+								<Icon
+									icon="eye-hide"
+									iconSize="20"
+									style={{
+										color: !isActive
+											? '#E20000'
+											: 'currentColor',
+									}}
+								/>
+							</Tooltip>
 						)}
 
 						{style.icon && (
-							<Icon
-								icon={style.icon.name}
-								library={style.icon.library}
-								iconSize="16"
-								style={{
-									opacity: '0.4',
-									'margin-right': '-4px',
-									position: 'relative',
-									'z-index': '10',
-								}}
-							/>
+							<Tooltip
+								text={
+									style.icon.name === 'blockera'
+										? __(
+												'Style variation added or customized by Blockera',
+												'blockera'
+										  )
+										: __(
+												'Style variation from theme or block editor',
+												'blockera'
+										  )
+								}
+							>
+								<Icon
+									icon={style.icon.name}
+									library={style.icon.library}
+									iconSize="16"
+									style={{
+										opacity: '0.4',
+										'margin-right': '-4px',
+										position: 'relative',
+										'z-index': '10',
+									}}
+								/>
+							</Tooltip>
 						)}
 
 						<Icon
