@@ -82,7 +82,7 @@ export const StyleItemMenu = ({
 					offset={50}
 					draggable={true}
 					placement="left-start"
-					className="variations-picker-popover"
+					className="variations-settings-popover"
 					onClose={() => {
 						setIsOpenContextMenu(false);
 					}}
