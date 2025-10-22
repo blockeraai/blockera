@@ -77,6 +77,16 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 	});
 }
 
+export function openSiteEditor() {
+	goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit').then(() => {
+		// eslint-disable-next-line
+		cy.wait(2000);
+
+		// Close welcome guide if it exists
+		closeWelcomeGuide();
+	});
+}
+
 /**
  * Safely set absolutely block top toolbar.
  */

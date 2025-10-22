@@ -1,16 +1,20 @@
 import {
-	goTo,
 	savePage,
+	openSiteEditor,
 	getWPDataObject,
-	getSelectedBlockStyle,
+	closeWelcomeGuide,
 	redirectToFrontPage,
+	getSelectedBlockStyle,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Background Color Inside Style Variations → Functionality', () => {
 	beforeEach(() => {
-		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
+		openSiteEditor();
 
 		cy.openGlobalStylesPanel();
+
+		closeWelcomeGuide();
+
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
 		cy.get(`button[id="/blocks/core%2Fparagraph"]`).click();

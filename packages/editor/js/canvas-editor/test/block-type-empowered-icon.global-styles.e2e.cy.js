@@ -1,10 +1,19 @@
-import { goTo, getWPDataObject } from '@blockera/dev-cypress/js/helpers';
+import {
+	openSiteEditor,
+	getWPDataObject,
+	closeWelcomeGuide,
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Block Type Empowered Blocker Global Styles', () => {
-	it('should show the block type empowered icon global styles', () => {
-		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
+	beforeEach(() => {
+		openSiteEditor();
 
 		cy.openGlobalStylesPanel();
+
+		closeWelcomeGuide();
+	});
+
+	it('should show the block type empowered icon global styles', () => {
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
 		getWPDataObject().then((data) => {
@@ -31,9 +40,6 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 	});
 
 	it('should show the block type empowered icon global styles on searching results', () => {
-		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
-
-		cy.openGlobalStylesPanel();
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
 		cy.get('input[type="search"]').type('heading');
