@@ -102,7 +102,8 @@ describe('Style Engine → Global Styles', () => {
 		getWPDataObject().then((data) => {
 			expect('20px').to.be.equal(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
-					?.blockeraFontSize?.value
+					?.blockeraBlockStates?.value?.hover?.breakpoints?.desktop
+					?.attributes?.blockeraFontSize
 			);
 		});
 
