@@ -6,7 +6,7 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-describe('Children Wrap → Functionality', () => {
+describe('Flex Wrap → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
@@ -18,7 +18,7 @@ describe('Children Wrap → Functionality', () => {
 	});
 
 	it('functionality of flex-wrap', () => {
-		cy.getParentContainer('Children Wrap').within(() => {
+		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 

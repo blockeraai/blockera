@@ -53,7 +53,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
-		cy.getParentContainer('Children Wrap').within(() => {
+		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
@@ -68,7 +68,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFlexWrap'));
 		});
 
-		cy.getParentContainer('Children Wrap').within(() => {
+		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('No Wrap').click();
 		});
 
@@ -88,7 +88,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 		//
 
 		// deselect
-		cy.getParentContainer('Children Wrap').within(() => {
+		cy.getParentContainer('Flex Wrap').within(() => {
 			// rechecking on it remove the selection
 			cy.getByAriaLabel('No Wrap').click();
 		});
@@ -140,7 +140,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 		// Test 2: Blockera value to WP data
 		//
 
-		cy.getParentContainer('Children Wrap').within(() => {
+		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
@@ -160,7 +160,7 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 		//
 
 		// deselect
-		cy.getParentContainer('Children Wrap').within(() => {
+		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});
 
