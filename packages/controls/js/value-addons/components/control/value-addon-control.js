@@ -89,9 +89,15 @@ export default function ({
 			<Tooltip
 				text={
 					controlProps.value?.valueType === 'variable'
-						? __('Change Variable', 'blockera')
-						: __('Change Dynamic Value', 'blockera')
+						? __('Change variable', 'blockera')
+						: __('Change dynamic value', 'blockera')
 				}
+				style={{
+					'--tooltip-bg':
+						controlProps.value?.valueType === 'variable'
+							? 'var(--blockera-value-addon-var-color)'
+							: 'var(--blockera-value-addon-dv-color)',
+				}}
 			>
 				<button
 					className={controlClassNames(

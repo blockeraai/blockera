@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 describe('box-border-control component testing', () => {
 	it('should render correctly', () => {
 		cy.withDataProvider({
-			component: <BoxBorderControl />,
+			component: <BoxBorderControl label="Box Border" />,
 			value: {
 				type: 'all',
 				all: {
@@ -72,7 +72,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value: {
 					type: 'all',
 					all: {
@@ -99,7 +99,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value: {
 					type: 'all',
 					all: {
@@ -157,7 +157,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value: {
 					type: 'all',
 					all: {
@@ -202,7 +202,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value,
 				name,
 			});
@@ -223,7 +223,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value,
 				name,
 			});
@@ -249,7 +249,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value,
 				name,
 			});
@@ -279,7 +279,7 @@ describe('box-border-control component testing', () => {
 			const name = nanoid();
 
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value,
 				name,
 			});
@@ -302,6 +302,7 @@ describe('box-border-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<BoxBorderControl
+						label="Box Border"
 						defaultValue={{
 							type: 'all',
 							all: {
@@ -321,6 +322,7 @@ describe('box-border-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<BoxBorderControl
+						label="Box Border"
 						defaultValue={{
 							type: 'all',
 							all: {
@@ -351,6 +353,7 @@ describe('box-border-control component testing', () => {
 			cy.withDataProvider({
 				component: (
 					<BoxBorderControl
+						label="Box Border"
 						defaultValue={{
 							type: 'all',
 							all: {
@@ -370,7 +373,7 @@ describe('box-border-control component testing', () => {
 
 		it('should render value when:defaultValue !OK && id !OK && value exists on root', () => {
 			cy.withDataProvider({
-				component: <BoxBorderControl />,
+				component: <BoxBorderControl label="Box Border" />,
 				value: {
 					type: 'all',
 					all: {
@@ -387,6 +390,7 @@ describe('box-border-control component testing', () => {
 
 	it('should onChange be called, when interacting', () => {
 		const defaultProps = {
+			label: 'Box Border',
 			onChange: (value) => {
 				controlReducer(
 					select('blockera/controls').getControl(name),

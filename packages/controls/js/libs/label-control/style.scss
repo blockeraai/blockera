@@ -16,7 +16,7 @@
 	min-height: 20px;
 	border-radius: var(--blockera-controls-border-radius);
 	letter-spacing: -0.2px;
-	transition: all 100ms linear;
+	transition: all 75ms ease-in;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	position: relative;
@@ -125,6 +125,12 @@
 	padding: 0 3px;
 	box-shadow: 0 0 0 1px transparent;
 	outline-offset: 0 !important;
+}
+
+.blockera-field:not(.label-center) > .blockera-field-label > .blockera-control-label.changed-in-other-state,
+.blockera-field:not(.label-center) > .blockera-field-label > .blockera-control-label.changed-in-normal-state,
+.blockera-field:not(.label-center) > .blockera-field-label > .blockera-control-label.changed-in-secondary-state {
+	transform: translateX(-3px);
 }
 
 .blockera-control-label.changed-in-other-state {

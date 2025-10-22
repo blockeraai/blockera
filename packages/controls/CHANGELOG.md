@@ -7,10 +7,12 @@
 - Border control design and UX improvement.
 - Border radius control design and UX improvement.
 - Tooltip control design improvement.
+- Features Labels: design improved.
 
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.
 - Fixed variable picker design issue while variable names were too long.
+- Fixed extra horizontal scrollbar while opening variable picker.
 
 ## 1.4.0 (2025-07-16)
 

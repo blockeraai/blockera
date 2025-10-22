@@ -92,16 +92,16 @@ export const isBlock = (entity: InnerBlockModel): boolean => {
 export const getVirtualInnerBlockDescription = (): MixedElement => {
 	return (
 		<>
-			<h5>{__('What is a Virtual Block?', 'blockera')}</h5>
+			<h5>{__('What is a Virtual Inner Block?', 'blockera')}</h5>
 			<p>
 				{__(
-					'A Virtual Block is a child inner element of a block that there is no way to select and customize it in editor.',
+					'A Virtual Inner Block is a child inner element of a block that there is no way to select and customize it in editor.',
 					'blockera'
 				)}
 			</p>
 			<p>
 				{__(
-					"We've included these elements as Virtual Blocks so you can fully customize them.",
+					"We've included these elements as Virtual Inner Blocks so you can fully customize them.",
 					'blockera'
 				)}
 			</p>
