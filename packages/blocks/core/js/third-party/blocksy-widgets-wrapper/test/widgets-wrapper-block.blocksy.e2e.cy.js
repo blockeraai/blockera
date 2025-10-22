@@ -1,0 +1,71 @@
+/**
+ * Blockera dependencies
+ */
+import {
+	appendBlocks,
+	createPost,
+	openInnerBlocksExtension,
+	openMoreFeaturesControl,
+	savePage,
+	redirectToFrontPage,
+} from '@blockera/dev-cypress/js/helpers';
+
+describe('Blocksy → Widgets Wrapper Block → Block support', () => {
+	beforeEach(() => {
+		createPost();
+	});
+
+	it('Block support + Should not have inner blocks', () => {
+		appendBlocks(`<!-- wp:blocksy/widgets-wrapper {"heading":"About Me","block":"blocksy/about-me"} -->
+<!-- wp:heading {"level":3,"className":"","fontSize":"medium"} -->
+<h3 class="wp-block-heading has-medium-font-size">About Me</h3>
+<!-- /wp:heading -->
+
+<!-- wp:blocksy/about-me {"lock":{"remove":true}} -->
+<div>Blocksy: About Me</div>
+<!-- /wp:blocksy/about-me -->
+<!-- /wp:blocksy/widgets-wrapper -->
+		`);
+
+		cy.getBlock('blocksy/about-me').click();
+
+		cy.getByAriaLabel('Select parent block: About Me').click();
+
+		cy.get('.blockera-extension-block-card').should('be.visible');
+
+		cy.checkBlockCardItems(['normal', 'hover']);
+
+		//
+		// 1. Edit Blocks
+		//
+
+		//
+		// 1.0. Block Style
+		//
+		cy.getBlock('blocksy/widgets-wrapper').should(
+			'have.css',
+			'background-clip',
+			'border-box'
+		);
+
+		cy.getParentContainer('Clipping').within(() => {
+			cy.customSelect('Clip to Padding');
+		});
+
+		cy.getBlock('blocksy/widgets-wrapper').should(
+			'have.css',
+			'background-clip',
+			'padding-box'
+		);
+
+		//
+		// 2. Assert styles in front end
+		//
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('.blockera-block')
+			.first()
+			.should('have.css', 'background-clip', 'padding-box');
+	});
+});

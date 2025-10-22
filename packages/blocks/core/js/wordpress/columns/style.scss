@@ -1,0 +1,25 @@
+.wp-block-columns {
+
+	&:not(.is-not-stacked-on-mobile) > .blockera-block.wp-block-column {
+		@media (min-width: 782px) {
+			// Columns with an explicitly-assigned width should maintain their
+			// `flex-basis` width and not grow.
+			&.blockera-has-flex-basis, &[style*="flex-basis"] {
+				// Add this to column to make sure it works exactly like the default behavior of core block editor
+				flex-grow: 0;
+			}
+		}
+	}
+
+	&.is-not-stacked-on-mobile {
+
+		> .blockera-block.wp-block-column {
+			// Columns with an explicitly-assigned width should maintain their
+			// `flex-basis` width and not grow.
+			&.blockera-has-flex-basis, &[style*="flex-basis"] {
+				// Add this to column to make sure it works exactly like the default behavior of core block editor
+				flex-grow: 0;
+			}
+		}
+	}
+}
