@@ -49,7 +49,8 @@ export const isChanged = (
 export const memoizedRootBreakpoints: (
 	breakpoint: BreakpointTypes,
 	action: Object,
-	insideInnerBlock: boolean
+	insideInnerBlock: boolean,
+	ref: Object
 ) => BreakpointTypes = memoize(
 	(
 		breakpoint,
@@ -62,7 +63,8 @@ export const memoizedRootBreakpoints: (
 			defaultAttributes,
 			currentInnerBlockState,
 		},
-		insideInnerBlock: boolean = false
+		insideInnerBlock: boolean = false,
+		ref: Object
 	) => {
 		let _effectiveItems = { ...effectiveItems };
 
@@ -192,7 +194,10 @@ export const memoizedRootBreakpoints: (
 			{
 				attributes: {
 					...effectiveItems,
-					[attributeId]: isEqualsWithDefault ? undefined : newValue,
+					[attributeId]:
+						isEqualsWithDefault && ref?.reset
+							? undefined
+							: newValue,
 				},
 			},
 			{
@@ -224,6 +229,7 @@ export const memoizedBlockStates: (
 		}
 	): Object => {
 		const {
+			ref,
 			currentState: receivedState,
 			insideInnerBlock,
 			currentBlock,
@@ -266,7 +272,8 @@ export const memoizedBlockStates: (
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
 								action,
-								insideInnerBlock
+								insideInnerBlock,
+								ref
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
@@ -293,7 +300,8 @@ export const memoizedBlockStates: (
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
 								action,
-								insideInnerBlock
+								insideInnerBlock,
+								ref
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions

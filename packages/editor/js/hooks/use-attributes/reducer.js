@@ -177,6 +177,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		case 'UPDATE_BLOCK_STATES':
 		case 'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE':
 			const blockeraBlockStates = memoizedBlockStates(state, action, {
+				ref,
 				currentState,
 				insideInnerBlock:
 					'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type,
