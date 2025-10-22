@@ -564,7 +564,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = memo(
 										showTooltip={true}
 										tooltipPosition="top"
 										label={__(
-											'Reverse Children Wrapping',
+											'Reverse Flex Children Wrapping',
 											'blockera'
 										)}
 										size="small"

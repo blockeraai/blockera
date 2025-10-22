@@ -32,7 +32,7 @@ describe('Flex Wrap → Functionality', () => {
 		});
 
 		// reverse
-		cy.getByAriaLabel('Reverse Children Wrapping').click();
+		cy.getByAriaLabel('Reverse Flex Children Wrapping').click();
 
 		cy.getBlock('core/paragraph').should(
 			'have.css',
