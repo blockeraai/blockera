@@ -80,11 +80,13 @@ export const EditorAdvancedLabelControl = ({
 		{
 			path,
 			value,
+			blockName,
 			singularId,
 			attribute,
 			isRepeater,
 			defaultValue,
 			isNormalState: isNormalState(),
+			clientId: props?.clientId || '',
 			blockAttributes: getAttributes(),
 		},
 		200
@@ -161,6 +163,9 @@ export const EditorAdvancedLabelControl = ({
 						isChangedOnCurrentState &&
 						isFunction(resetToDefault)
 							? () => {
+									if ('function' !== typeof resetToDefault) {
+										return;
+									}
 									if (
 										(isNull(path) ||
 											isEmpty(path) ||

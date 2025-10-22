@@ -49,6 +49,8 @@ export const useAdvancedLabelProps = (
 		isRepeater,
 		defaultValue,
 		isNormalState,
+		blockName,
+		clientId,
 		blockAttributes,
 	}: AdvancedLabelHookProps,
 	delay: number
@@ -67,7 +69,10 @@ export const useAdvancedLabelProps = (
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
-	} = useExtensionsStore();
+	} = useExtensionsStore({
+		clientId,
+		name: blockName,
+	});
 	// Get static blockeraInnerBlocks value to use as fallback.
 	const { blockeraInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {

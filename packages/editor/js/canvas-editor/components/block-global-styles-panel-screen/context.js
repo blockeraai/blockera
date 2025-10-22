@@ -110,7 +110,7 @@ export const GlobalStylesPanelContextProvider = ({
 }: Object): MixedElement => {
 	const {
 		blockType: { name, attributes },
-		clientId,
+		selectedBlockClientId: clientId,
 		className,
 	} = value;
 
@@ -178,6 +178,7 @@ export const GlobalStylesPanelContextProvider = ({
 				AdvancedLabelControl: (props: Object) => (
 					<EditorAdvancedLabelControl
 						getAttributesRef={getStyle}
+						clientId={name.replace('/', '-')}
 						{...props}
 					/>
 				),
