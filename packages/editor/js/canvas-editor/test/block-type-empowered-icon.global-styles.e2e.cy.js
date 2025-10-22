@@ -4,7 +4,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 	it('should show the block type empowered icon global styles', () => {
 		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
 
-		cy.getGlobalStylesPanel().click();
+		cy.openGlobalStylesPanel();
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
 		getWPDataObject().then((data) => {
@@ -33,7 +33,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 	it('should show the block type empowered icon global styles on searching results', () => {
 		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
 
-		cy.getGlobalStylesPanel().click();
+		cy.openGlobalStylesPanel();
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
 		cy.get('input[type="search"]').type('heading');

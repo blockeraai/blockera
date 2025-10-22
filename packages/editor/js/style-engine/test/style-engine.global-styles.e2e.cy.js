@@ -11,7 +11,7 @@ describe('Style Engine → Global Styles', () => {
 	beforeEach(() => {
 		goTo('/wp-admin/site-editor.php?p=%2F&canvas=edit');
 
-		cy.getGlobalStylesPanel().click();
+		cy.openGlobalStylesPanel();
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
 		cy.get(`button[id="/blocks/core%2Fparagraph"]`).click();

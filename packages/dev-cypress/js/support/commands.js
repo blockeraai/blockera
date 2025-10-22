@@ -818,7 +818,9 @@ export const registerCommands = () => {
 		}
 	);
 
-	Cypress.Commands.add('getGlobalStylesPanel', () => {
-		return cy.get('button[aria-controls="edit-site:global-styles"]');
+	Cypress.Commands.add('openGlobalStylesPanel', () => {
+		return cy
+			.get('button[aria-controls="edit-site:global-styles"]')
+			.click({ force: true });
 	});
 };
