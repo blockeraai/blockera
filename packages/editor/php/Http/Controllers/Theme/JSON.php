@@ -350,19 +350,21 @@ class JSON extends \WP_Theme_JSON {
         ) {
             $declarations = static::compute_style_properties($node[ $pseudo_selector ], $settings, null, $this->theme_json, $selector, $use_root_padding);
         } else {
-			$style_engine = Blockera::getInstance()->make(
-				class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
-				[
-					'block' => [
-						'blockName' => $block_metadata['name'],
-						'attrs' => $node,
-					],
-					'fallbackSelector' => $selector,
-					'isGlobalStyle' => true,
-				]
-			);
-			$style_engine->setSupports(static::$supports);
-			$computed_css_rules .= $style_engine->getStylesheet();
+			if (isset($block_metadata['name'])) {
+				$style_engine = Blockera::getInstance()->make(
+					class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
+					[
+						'block' => [
+							'blockName' => $block_metadata['name'],
+							'attrs' => $node,
+						],
+						'fallbackSelector' => $selector,
+						'isGlobalStyle' => true,
+					]
+				);
+				$style_engine->setSupports(static::$supports);
+				$computed_css_rules .= $style_engine->getStylesheet();
+			}
 
             $declarations = static::compute_style_properties($node, $settings, null, $this->theme_json, $selector, $use_root_padding);
         }
