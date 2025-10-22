@@ -17,7 +17,7 @@ jobs:
 
             - name: Remove Pull Request env files
               run: |
-                  find . -name ".pr-*" ! -name "*.env-example*" ! -name "*.example" -delete
+                  find . -name ".pr-*" ! -name "*.env-example*" ! -name "*.example.*" -delete
 
             # Step 3: Configure Git (required for committing changes)
             - name: Set up Git
