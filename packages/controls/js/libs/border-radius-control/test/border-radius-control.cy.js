@@ -98,11 +98,8 @@ describe('border-radius-control component testing', () => {
 				cy.getByAriaLabel('Custom Border Radius').click();
 
 				cy.getByAriaLabel('Custom Border Radius')
-					.should('have.attr', 'style')
-					.should(
-						'include',
-						'var(--blockera-controls-primary-color)'
-					);
+					.should('have.class', 'is-toggle-btn')
+					.should('have.class', 'is-toggled');
 
 				//Check data provider value
 				cy.get('input').then(() => {

@@ -71,7 +71,7 @@ export const SupportItem = ({
 				'force-item': force,
 				'active-item': show,
 			})}
-			{...(!force ? { tabIndex: 1 } : {})}
+			{...(force ? { tabIndex: 1 } : {})}
 		>
 			{label}
 

@@ -23,7 +23,7 @@ describe('media-image', () => {
 			});
 
 			cy.get('.blockera-component-popover').within(() => {
-				cy.contains('button', /choose image/i).click();
+				cy.contains('button', /media library/i).click();
 			});
 
 			cy.get('.media-modal').should('be.visible');
@@ -82,7 +82,7 @@ describe('media-image', () => {
 			});
 
 			cy.get('.blockera-component-popover').within(() => {
-				cy.contains('button', /choose image/i).click();
+				cy.contains('button', /media library/i).click();
 			});
 
 			cy.get('.media-modal').should('be.visible');
@@ -120,7 +120,7 @@ describe('media-image', () => {
 			});
 
 			cy.get('.blockera-component-popover').within(() => {
-				cy.contains('button', /choose image/i).click();
+				cy.contains('button', /media library/i).click();
 			});
 
 			cy.get('.media-modal').should('be.visible');

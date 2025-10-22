@@ -13,6 +13,10 @@ if (! defined('ABSPATH')) {
 
 global $blockera;
 
+$external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
+
+blockera_load('feature-icon.src.hooks', $external_dir);
+
 // Add blockera object cache to non persistent group to compatible with third party cache plugins.
 $cache_group = 'plugins';
 $cache_key = 'blockera_instance' . BLOCKERA_SB_VERSION;
@@ -24,12 +28,10 @@ if ($blockera_cache !== false) {
     $blockera = $blockera_cache;
 } else {
     // Optimize class initialization.
-    $blockera = new \Blockera\Setup\Blockera();
+    $blockera = \Blockera\Setup\Blockera::getInstance();
     // Cache the instance.
     wp_cache_set($cache_key, $blockera, $cache_group);
 }
-
-$external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
 // Conditional loading based on context.
 if (is_admin()) {

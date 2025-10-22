@@ -529,6 +529,18 @@ class TestHelpers extends \WP_UnitTestCase {
                 ['pseudo_class' => 'active'], 
                 '.block .blockera__item:active, .block .blockera__other:active'
             ],
+			[
+				'.block',
+				'&:before',
+				['pseudo_class' => 'hover'],
+				'.block:hover::before'
+			],
+			[
+				'.block',
+				'.blockera-icon:before',
+				['pseudo_class' => 'hover'],
+				'.block .blockera-icon:hover::before'
+			]
         ];
 
         foreach ($cases as [$root, $picked, $args, $expected]) {

@@ -32,7 +32,7 @@ describe('Background Image → Functionality', () => {
 			cy.get('[data-test="popover-header"]')
 				.parent()
 				.within(() => {
-					cy.contains('button', /choose image/i).click();
+					cy.contains('button', /media library/i).click();
 				});
 
 			cy.get('#menu-item-upload').click();

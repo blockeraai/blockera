@@ -36,7 +36,7 @@ class TestSetup extends \WP_UnitTestCase {
 
 		// Test core block type
 		$setup->setBlockDirectoryPath( 'core/paragraph' );
-		$this->assertEquals( 'wordpress/paragraph', $setup->getBlockDirectoryPath() );
+		$this->assertEquals( 'libs/wordpress/paragraph', $setup->getBlockDirectoryPath() );
 
 		// Test invalid block type
 		$setup->setBlockDirectoryPath( 'invalid-block' );

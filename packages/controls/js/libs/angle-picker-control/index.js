@@ -15,13 +15,14 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { addAngle, subtractAngle } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { Button, Flex, BaseControl } from '../';
 import { useControlContext } from '../../context';
-import { addAngle, subtractAngle } from './utils';
+
 import type { AnglePickerControlProps } from './types';
 
 export default function AnglePickerControl({

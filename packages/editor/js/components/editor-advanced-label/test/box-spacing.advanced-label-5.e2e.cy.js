@@ -749,8 +749,8 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 	describe('Single Reset', () => {
 		beforeEach(() => {
 			// we use prepared block to run test faster
-			appendBlocks(`<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"20px","right":"20px","bottom":"20px","left":"20px"},"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}}},"blockeraSpacing":{"value":{"margin":{"top":"20px","right":"20px","bottom":"20px","left":"20px"},"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}}},"blockeraBlockStates":{"value":{"hover":{"breakpoints":{"desktop":{"attributes":{"blockeraSpacing":{"margin":{"right":"25px","bottom":"25px","left":"25px","top":"25px"},"padding":{"top":"25px","right":"25px","bottom":"25px","left":"25px"}}}},"tablet":{"attributes":{"blockeraSpacing":{"margin":{"right":"35px","bottom":"35px","left":"35px","top":"35px"},"padding":{"top":"35px","right":"35px","bottom":"35px","left":"35px"}}}}},"isVisible":true},"normal":{"breakpoints":{"tablet":{"attributes":{"blockeraSpacing":{"margin":{"right":"30px","bottom":"30px","left":"30px","top":"30px"},"padding":{"top":"30px","right":"30px","bottom":"30px","left":"30px"}}}}},"isVisible":true}}},"blockeraPropsId":"61714437610","blockeraCompatId":"61714437692"} -->
-<p style="margin-top:20px;margin-right:20px;margin-bottom:20px;margin-left:20px;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px">This is test paragraph</p>
+			appendBlocks(`<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"20px","right":"30px","bottom":"40px","left":"50px"},"padding":{"top":"20px","right":"30px","bottom":"40px","left":"50px"}}},"blockeraSpacing":{"value":{"margin":{"top":"20px","right":"30px","bottom":"40px","left":"50px"},"padding":{"top":"20px","right":"30px","bottom":"40px","left":"50px"}}},"blockeraBlockStates":{"value":{"hover":{"breakpoints":{"desktop":{"attributes":{"blockeraSpacing":{"margin":{"right":"25px","bottom":"35px","left":"45px","top":"55px"},"padding":{"top":"25px","right":"35px","bottom":"45px","left":"55px"}}}},"tablet":{"attributes":{"blockeraSpacing":{"margin":{"top":"35px","right":"45px","bottom":"55px","left":"65px"},"padding":{"top":"35px","right":"45px","bottom":"55px","left":"65px"}}}}},"isVisible":true},"normal":{"breakpoints":{"tablet":{"attributes":{"blockeraSpacing":{"margin":{"top":"40px","right":"50px","bottom":"60px","left":"70px"},"padding":{"top":"40px","right":"50px","bottom":"60px","left":"70px"}}}}},"isVisible":true}}},"blockeraPropsId":"61714437610","blockeraCompatId":"61714437692"} -->
+<p style="margin-top:20px;margin-right:30px;margin-bottom:40px;margin-left:50px;padding-top:20px;padding-right:30px;padding-bottom:40px;padding-left:50px">This is test paragraph</p>
 <!-- /wp:paragraph -->`);
 
 			cy.getBlock('core/paragraph').click();
@@ -771,7 +771,24 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '20');
+						let value = 0;
+
+						switch (side) {
+							case 'top':
+								value = 20;
+								break;
+							case 'right':
+								value = 30;
+								break;
+							case 'bottom':
+								value = 40;
+								break;
+							case 'left':
+								value = 50;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.resetBoxSpacingAttribute(type, side, 'reset');
 
@@ -843,7 +860,24 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '20');
+						let value = 0;
+
+						switch (side) {
+							case 'top':
+								value = 20;
+								break;
+							case 'right':
+								value = 30;
+								break;
+							case 'bottom':
+								value = 40;
+								break;
+							case 'left':
+								value = 50;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.checkBoxSpacingLabelClassName(
 							type,
@@ -938,7 +972,24 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '30');
+						let value = 0;
+
+						switch (side) {
+							case 'top':
+								value = 40;
+								break;
+							case 'right':
+								value = 50;
+								break;
+							case 'bottom':
+								value = 60;
+								break;
+							case 'left':
+								value = 70;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.resetBoxSpacingAttribute(type, side, 'reset');
 
@@ -959,7 +1010,22 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 							'not-have'
 						);
 
-						cy.checkBoxSpacingLabelContent(type, side, '20');
+						switch (side) {
+							case 'top':
+								value = 20;
+								break;
+							case 'right':
+								value = 30;
+								break;
+							case 'bottom':
+								value = 40;
+								break;
+							case 'left':
+								value = 50;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 					});
 
 					// assert the spacing type label
@@ -1019,7 +1085,23 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '30');
+						let value = 0;
+						switch (side) {
+							case 'top':
+								value = 40;
+								break;
+							case 'right':
+								value = 50;
+								break;
+							case 'bottom':
+								value = 60;
+								break;
+							case 'left':
+								value = 70;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.checkBoxSpacingLabelClassName(
 							type,
@@ -1128,7 +1210,24 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '35');
+						let value = 0;
+
+						switch (side) {
+							case 'top':
+								value = 35;
+								break;
+							case 'right':
+								value = 45;
+								break;
+							case 'bottom':
+								value = 55;
+								break;
+							case 'left':
+								value = 65;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.resetBoxSpacingAttribute(type, side, 'reset');
 
@@ -1222,7 +1321,23 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '35');
+						let value = 0;
+						switch (side) {
+							case 'top':
+								value = 35;
+								break;
+							case 'right':
+								value = 45;
+								break;
+							case 'bottom':
+								value = 55;
+								break;
+							case 'left':
+								value = 65;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.checkBoxSpacingLabelClassName(
 							type,
@@ -1247,7 +1362,23 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 
 					// assert sides label
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '20');
+						let value = 0;
+						switch (side) {
+							case 'top':
+								value = 20;
+								break;
+							case 'right':
+								value = 30;
+								break;
+							case 'bottom':
+								value = 40;
+								break;
+							case 'left':
+								value = 50;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.checkBoxSpacingLabelClassName(
 							type,
@@ -1309,8 +1440,8 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 	describe('Reset All', () => {
 		beforeEach(() => {
 			// we use prepared block to run test faster
-			appendBlocks(`<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"20px","right":"20px","bottom":"20px","left":"20px"},"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}}},"blockeraSpacing":{"value":{"margin":{"top":"20px","right":"20px","bottom":"20px","left":"20px"},"padding":{"top":"20px","right":"20px","bottom":"20px","left":"20px"}}},"blockeraBlockStates":{"value":{"hover":{"breakpoints":{"desktop":{"attributes":{"blockeraSpacing":{"margin":{"right":"25px","bottom":"25px","left":"25px","top":"25px"},"padding":{"top":"25px","right":"25px","bottom":"25px","left":"25px"}}}},"tablet":{"attributes":{"blockeraSpacing":{"margin":{"right":"35px","bottom":"35px","left":"35px","top":"35px"},"padding":{"top":"35px","right":"35px","bottom":"35px","left":"35px"}}}}},"isVisible":true},"normal":{"breakpoints":{"tablet":{"attributes":{"blockeraSpacing":{"margin":{"right":"30px","bottom":"30px","left":"30px","top":"30px"},"padding":{"top":"30px","right":"30px","bottom":"30px","left":"30px"}}}}},"isVisible":true}}},"blockeraPropsId":"61714437610","blockeraCompatId":"61714437692"} -->
-<p style="margin-top:20px;margin-right:20px;margin-bottom:20px;margin-left:20px;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px">This is test paragraph</p>
+			appendBlocks(`<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"20px","right":"30px","bottom":"40px","left":"50px"},"padding":{"top":"20px","right":"30px","bottom":"40px","left":"50px"}}},"blockeraSpacing":{"value":{"margin":{"top":"20px","right":"30px","bottom":"40px","left":"50px"},"padding":{"top":"20px","right":"30px","bottom":"40px","left":"50px"}}},"blockeraBlockStates":{"value":{"hover":{"breakpoints":{"desktop":{"attributes":{"blockeraSpacing":{"margin":{"right":"25px","bottom":"35px","left":"45px","top":"55px"},"padding":{"top":"25px","right":"35px","bottom":"45px","left":"55px"}}}},"tablet":{"attributes":{"blockeraSpacing":{"margin":{"top":"35px","right":"45px","bottom":"55px","left":"65px"},"padding":{"top":"35px","right":"45px","bottom":"55px","left":"65px"}}}}},"isVisible":true},"normal":{"breakpoints":{"tablet":{"attributes":{"blockeraSpacing":{"margin":{"right":"40px","bottom":"50px","left":"60px","top":"30px"},"padding":{"right":"40px","bottom":"50px","left":"60px","top":"30px"}}}}},"isVisible":true}}},"blockeraPropsId":"61714437610","blockeraCompatId":"61714437692"} -->
+<p style="margin-top:20px;margin-right:30px;margin-bottom:40px;margin-left:50px;padding-top:20px;padding-right:30px;padding-bottom:40px;padding-left:50px">This is test paragraph</p>
 <!-- /wp:paragraph -->`);
 
 			cy.getBlock('core/paragraph').click();
@@ -1331,7 +1462,23 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '20');
+						let value = 0;
+						switch (side) {
+							case 'top':
+								value = 20;
+								break;
+							case 'right':
+								value = 30;
+								break;
+							case 'bottom':
+								value = 40;
+								break;
+							case 'left':
+								value = 50;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.resetBoxSpacingAttribute(type, side, 'reset-all');
 
@@ -1387,7 +1534,24 @@ describe('Box spacing label testing (Box Spacing Control)', () => {
 				// Reset to normal
 				['margin', 'padding'].forEach((type) => {
 					['top', 'right', 'bottom', 'left'].forEach((side) => {
-						cy.checkBoxSpacingLabelContent(type, side, '20');
+						let value = 0;
+
+						switch (side) {
+							case 'top':
+								value = 20;
+								break;
+							case 'right':
+								value = 30;
+								break;
+							case 'bottom':
+								value = 40;
+								break;
+							case 'left':
+								value = 50;
+								break;
+						}
+
+						cy.checkBoxSpacingLabelContent(type, side, value);
 
 						cy.checkBoxSpacingLabelClassName(
 							type,

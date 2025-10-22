@@ -1,0 +1,2475 @@
+[
+	{
+		"iconName": "align-content-center",
+		"title": "Align Content Center",
+		"library": "ui",
+		"tags": ["align", "content", "center", "flexbox", "layout", "middle"]
+	},
+	{
+		"iconName": "align-content-flex-end",
+		"title": "Align Content Flex End",
+		"library": "ui",
+		"tags": ["align", "content", "flex-end", "flexbox", "bottom", "end"]
+	},
+	{
+		"iconName": "align-content-flex-start",
+		"title": "Align Content Flex Start",
+		"library": "ui",
+		"tags": ["align", "content", "flex-start", "flexbox", "top", "start"]
+	},
+	{
+		"iconName": "align-content-space-around",
+		"title": "Align Content Space Around",
+		"library": "ui",
+		"tags": [
+			"align",
+			"content",
+			"space-around",
+			"flexbox",
+			"spacing",
+			"distribute"
+		]
+	},
+	{
+		"iconName": "align-content-space-between",
+		"title": "Align Content Space Between",
+		"library": "ui",
+		"tags": [
+			"align",
+			"content",
+			"space-between",
+			"flexbox",
+			"spacing",
+			"distribute"
+		]
+	},
+	{
+		"iconName": "align-content-stretch",
+		"title": "Align Content Stretch",
+		"library": "ui",
+		"tags": ["align", "content", "stretch", "flexbox", "expand", "fill"]
+	},
+	{
+		"iconName": "animations",
+		"title": "Animations",
+		"library": "ui",
+		"tags": ["animation", "motion", "transition", "effect", "dynamic"]
+	},
+	{
+		"iconName": "aria-label",
+		"title": "Aria Label",
+		"library": "ui",
+		"tags": ["aria", "label", "accessibility", "screen-reader", "semantic"]
+	},
+	{
+		"iconName": "arrow-new-tab",
+		"title": "Arrow New Tab",
+		"library": "ui",
+		"tags": ["arrow", "new-tab", "external", "link", "open"]
+	},
+	{
+		"iconName": "asterisk",
+		"title": "Asterisk",
+		"library": "ui",
+		"tags": ["asterisk", "star", "required", "mandatory", "mark"]
+	},
+	{
+		"iconName": "background-image",
+		"title": "Background Image",
+		"library": "ui",
+		"tags": ["background", "image", "picture", "photo", "bg"]
+	},
+	{
+		"iconName": "background-linear-gradient",
+		"title": "Background Linear Gradient",
+		"library": "ui",
+		"tags": ["background", "linear", "gradient", "color", "transition"]
+	},
+	{
+		"iconName": "background-mesh-gradient",
+		"title": "Background Mesh Gradient",
+		"library": "ui",
+		"tags": ["background", "mesh", "gradient", "complex", "pattern"]
+	},
+	{
+		"iconName": "background-radial-gradient",
+		"title": "Background Radial Gradient",
+		"library": "ui",
+		"tags": ["background", "radial", "gradient", "circular", "center"]
+	},
+	{
+		"iconName": "background-slideshow",
+		"title": "Background Slideshow",
+		"library": "ui",
+		"tags": ["background", "slideshow", "carousel", "gallery", "slides"]
+	},
+	{
+		"iconName": "background-video",
+		"title": "Background Video",
+		"library": "ui",
+		"tags": ["background", "video", "movie", "media", "play"]
+	},
+	{
+		"iconName": "blending",
+		"title": "Blending",
+		"library": "ui",
+		"tags": ["blend", "mix", "overlay", "mode", "combine"]
+	},
+	{
+		"iconName": "block-blocksy-about-texts",
+		"title": "Block Blocksy About Texts",
+		"library": "ui",
+		"tags": ["block", "blocksy", "about", "texts", "content"]
+	},
+	{
+		"iconName": "block-blocksy-about-icons",
+		"title": "Block Blocksy About Icons",
+		"library": "ui",
+		"tags": ["block", "blocksy", "about", "icons", "symbols"]
+	},
+	{
+		"iconName": "block-blocksy-about-avatar",
+		"title": "Block Blocksy About Avatar",
+		"library": "ui",
+		"tags": ["block", "blocksy", "about", "avatar", "profile"]
+	},
+	{
+		"iconName": "block-blocksy-about-name",
+		"title": "Block Blocksy About Name",
+		"library": "ui",
+		"tags": ["block", "blocksy", "about", "name", "title"]
+	},
+	{
+		"iconName": "block-blocksy-about-link",
+		"title": "Block Blocksy About Link",
+		"library": "ui",
+		"tags": ["block", "blocksy", "about", "link", "url"]
+	},
+	{
+		"iconName": "block-blocksy-contact-info-texts",
+		"title": "Block Blocksy Contact Info Texts",
+		"library": "ui",
+		"tags": ["block", "blocksy", "contact", "info", "texts"]
+	},
+	{
+		"iconName": "block-blocksy-contact-info-link",
+		"title": "Block Blocksy Contact Info Link",
+		"library": "ui",
+		"tags": ["block", "blocksy", "contact", "info", "link"]
+	},
+	{
+		"iconName": "block-blocksy-contact-info-icons",
+		"title": "Block Blocksy Contact Info Icons",
+		"library": "ui",
+		"tags": ["block", "blocksy", "contact", "info", "icons"]
+	},
+	{
+		"iconName": "block-blocksy-contact-info-titles",
+		"title": "Block Blocksy Contact Info Titles",
+		"library": "ui",
+		"tags": ["block", "blocksy", "contact", "info", "titles"]
+	},
+	{
+		"iconName": "block-blocksy-contact-info-contents",
+		"title": "Block Blocksy Contact Info Contents",
+		"library": "ui",
+		"tags": ["block", "blocksy", "contact", "info", "contents"]
+	},
+	{
+		"iconName": "block-blocksy-search-result-link",
+		"title": "Block Blocksy Search Result Link",
+		"library": "ui",
+		"tags": ["block", "blocksy", "search", "result", "link"]
+	},
+	{
+		"iconName": "block-blocksy-search-result-dropdown",
+		"title": "Block Blocksy Search Result Dropdown",
+		"library": "ui",
+		"tags": ["block", "blocksy", "search", "result", "dropdown"]
+	},
+	{
+		"iconName": "block-blocksy-search-button",
+		"title": "Block Blocksy Search Button",
+		"library": "ui",
+		"tags": ["block", "blocksy", "search", "button", "submit"]
+	},
+	{
+		"iconName": "block-blocksy-search-input",
+		"title": "Block Blocksy Search Input",
+		"library": "ui",
+		"tags": ["block", "blocksy", "search", "input", "field"]
+	},
+	{
+		"iconName": "block-blocksy-search-filter",
+		"title": "Block Blocksy Search Filter",
+		"library": "ui",
+		"tags": ["block", "blocksy", "search", "filter", "refine"]
+	},
+	{
+		"iconName": "block-comments-form-button",
+		"title": "Block Comments Form Button",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "button", "submit"]
+	},
+	{
+		"iconName": "block-comments-form-container",
+		"title": "Block Comments Form Container",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "container", "wrapper"]
+	},
+	{
+		"iconName": "block-comments-form-cookie-consent",
+		"title": "Block Comments Form Cookie Consent",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "cookie", "consent"]
+	},
+	{
+		"iconName": "block-comments-form-inputs",
+		"title": "Block Comments Form Inputs",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "inputs", "fields"]
+	},
+	{
+		"iconName": "block-comments-form-labels",
+		"title": "Block Comments Form Labels",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "labels", "text"]
+	},
+	{
+		"iconName": "block-comments-form-notes",
+		"title": "Block Comments Form Notes",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "notes", "info"]
+	},
+	{
+		"iconName": "block-comments-form-reply-title",
+		"title": "Block Comments Form Reply Title",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "reply", "title"]
+	},
+	{
+		"iconName": "block-comments-form-textarea",
+		"title": "Block Comments Form Textarea",
+		"library": "ui",
+		"tags": ["block", "comments", "form", "textarea", "message"]
+	},
+	{
+		"iconName": "block-details-arrow",
+		"title": "Block Details Arrow",
+		"library": "ui",
+		"tags": ["block", "details", "arrow", "expand", "collapse"]
+	},
+	{
+		"iconName": "block-details-title",
+		"title": "Block Details Title",
+		"library": "ui",
+		"tags": ["block", "details", "title", "heading", "label"]
+	},
+	{
+		"iconName": "block-details-paragraph",
+		"title": "Block Details Paragraph",
+		"library": "ui",
+		"tags": ["block", "details", "paragraph", "text", "content"]
+	},
+	{
+		"iconName": "block-footnote-return",
+		"title": "Block Footnote Return",
+		"library": "ui",
+		"tags": ["block", "footnote", "return", "back", "reference"]
+	},
+	{
+		"iconName": "block-gallery-caption",
+		"title": "Block Gallery Caption",
+		"library": "ui",
+		"tags": ["block", "gallery", "caption", "description", "text"]
+	},
+	{
+		"iconName": "block-image-caption",
+		"title": "Block Image Caption",
+		"library": "ui",
+		"tags": ["block", "image", "caption", "description", "alt"]
+	},
+	{
+		"iconName": "block-input",
+		"title": "Block Input",
+		"library": "ui",
+		"tags": ["block", "input", "field", "form", "text"]
+	},
+	{
+		"iconName": "block-link",
+		"title": "Block Link",
+		"library": "ui",
+		"tags": ["block", "link", "url", "href", "anchor"]
+	},
+	{
+		"iconName": "block-list-item-container",
+		"title": "Block List Item Container",
+		"library": "ui",
+		"tags": ["block", "list", "item", "container", "wrapper"]
+	},
+	{
+		"iconName": "block-list-item-marker",
+		"title": "Block List Item Marker",
+		"library": "ui",
+		"tags": ["block", "list", "item", "marker", "bullet"]
+	},
+	{
+		"iconName": "block-list-item",
+		"title": "Block List Item",
+		"library": "ui",
+		"tags": ["block", "list", "item", "element", "entry"]
+	},
+	{
+		"iconName": "block-login-form-button",
+		"title": "Block Login Form Button",
+		"library": "ui",
+		"tags": ["block", "login", "form", "button", "submit"]
+	},
+	{
+		"iconName": "block-login-form-container",
+		"title": "Block Login Form Container",
+		"library": "ui",
+		"tags": ["block", "login", "form", "container", "wrapper"]
+	},
+	{
+		"iconName": "block-login-form-inputs",
+		"title": "Block Login Form Inputs",
+		"library": "ui",
+		"tags": ["block", "login", "form", "inputs", "fields"]
+	},
+	{
+		"iconName": "block-login-form-labels",
+		"title": "Block Login Form Labels",
+		"library": "ui",
+		"tags": ["block", "login", "form", "labels", "text"]
+	},
+	{
+		"iconName": "block-login-form-remember",
+		"title": "Block Login Form Remember",
+		"library": "ui",
+		"tags": ["block", "login", "form", "remember", "checkbox"]
+	},
+	{
+		"iconName": "block-navigation-submenu-container",
+		"title": "Block Navigation Submenu Container",
+		"library": "ui",
+		"tags": ["block", "navigation", "submenu", "container", "dropdown"]
+	},
+	{
+		"iconName": "block-navigation-submenu-items",
+		"title": "Block Navigation Submenu Items",
+		"library": "ui",
+		"tags": ["block", "navigation", "submenu", "items", "links"]
+	},
+	{
+		"iconName": "block-order-confirmation-summary-item-container",
+		"title": "Block Order Confirmation Summary Item Container",
+		"library": "ui",
+		"tags": ["block", "order", "confirmation", "summary", "container"]
+	},
+	{
+		"iconName": "block-order-confirmation-summary-item-title",
+		"title": "Block Order Confirmation Summary Item Title",
+		"library": "ui",
+		"tags": ["block", "order", "confirmation", "summary", "title"]
+	},
+	{
+		"iconName": "block-order-confirmation-summary-item-value",
+		"title": "Block Order Confirmation Summary Item Value",
+		"library": "ui",
+		"tags": ["block", "order", "confirmation", "summary", "value"]
+	},
+	{
+		"iconName": "block-pagination-next-arrow",
+		"title": "Block Pagination Next Arrow",
+		"library": "ui",
+		"tags": ["block", "pagination", "next", "arrow", "forward"]
+	},
+	{
+		"iconName": "block-pagination-numbers-current",
+		"title": "Block Pagination Numbers Current",
+		"library": "ui",
+		"tags": ["block", "pagination", "numbers", "current", "active"]
+	},
+	{
+		"iconName": "block-pagination-numbers-dots",
+		"title": "Block Pagination Numbers Dots",
+		"library": "ui",
+		"tags": ["block", "pagination", "numbers", "dots", "ellipsis"]
+	},
+	{
+		"iconName": "block-pagination-numbers",
+		"title": "Block Pagination Numbers",
+		"library": "ui",
+		"tags": ["block", "pagination", "numbers", "pages", "sequence"]
+	},
+	{
+		"iconName": "block-pagination-previous-arrow",
+		"title": "Block Pagination Previous Arrow",
+		"library": "ui",
+		"tags": ["block", "pagination", "previous", "arrow", "back"]
+	},
+	{
+		"iconName": "block-post-author-avatar",
+		"title": "Block Post Author Avatar",
+		"library": "ui",
+		"tags": ["block", "post", "author", "avatar", "profile"]
+	},
+	{
+		"iconName": "block-post-author-byline",
+		"title": "Block Post Author Byline",
+		"library": "ui",
+		"tags": ["block", "post", "author", "byline", "credit"]
+	},
+	{
+		"iconName": "block-post-author-name",
+		"title": "Block Post Author Name",
+		"library": "ui",
+		"tags": ["block", "post", "author", "name", "title"]
+	},
+	{
+		"iconName": "block-post-terms-prefix",
+		"title": "Block Post Terms Prefix",
+		"library": "ui",
+		"tags": ["block", "post", "terms", "prefix", "before"]
+	},
+	{
+		"iconName": "block-post-terms-separator",
+		"title": "Block Post Terms Separator",
+		"library": "ui",
+		"tags": ["block", "post", "terms", "separator", "divider"]
+	},
+	{
+		"iconName": "block-post-terms-suffix",
+		"title": "Block Post Terms Suffix",
+		"library": "ui",
+		"tags": ["block", "post", "terms", "suffix", "after"]
+	},
+	{
+		"iconName": "block-product-image-sale",
+		"title": "Block Product Image Sale",
+		"library": "ui",
+		"tags": ["block", "product", "image", "sale", "discount"]
+	},
+	{
+		"iconName": "block-product-price-currency-symbol",
+		"title": "Block Product Price Currency Symbol",
+		"library": "ui",
+		"tags": ["block", "product", "price", "currency", "symbol"]
+	},
+	{
+		"iconName": "block-product-price-discount",
+		"title": "Block Product Price Discount",
+		"library": "ui",
+		"tags": ["block", "product", "price", "discount", "sale"]
+	},
+	{
+		"iconName": "block-product-price-normal",
+		"title": "Block Product Price Normal",
+		"library": "ui",
+		"tags": ["block", "product", "price", "normal", "regular"]
+	},
+	{
+		"iconName": "block-post-terms-term",
+		"title": "Block Post Terms Term",
+		"library": "ui",
+		"tags": ["block", "post", "terms", "term", "tag"]
+	},
+	{
+		"iconName": "block-search-button",
+		"title": "Block Search Button",
+		"library": "ui",
+		"tags": ["block", "search", "button", "submit", "find"]
+	},
+	{
+		"iconName": "block-search-input",
+		"title": "Block Search Input",
+		"library": "ui",
+		"tags": ["block", "search", "input", "field", "query"]
+	},
+	{
+		"iconName": "block-search-label",
+		"title": "Block Search Label",
+		"library": "ui",
+		"tags": ["block", "search", "label", "text", "description"]
+	},
+	{
+		"iconName": "block-social-link-container",
+		"title": "Block Social Link Container",
+		"library": "ui",
+		"tags": ["block", "social", "link", "container", "wrapper"]
+	},
+	{
+		"iconName": "block-social-link-icon",
+		"title": "Block Social Link Icon",
+		"library": "ui",
+		"tags": ["block", "social", "link", "icon", "symbol"]
+	},
+	{
+		"iconName": "block-social-link-name",
+		"title": "Block Social Link Name",
+		"library": "ui",
+		"tags": ["block", "social", "link", "name", "text"]
+	},
+	{
+		"iconName": "bolb",
+		"title": "Bolb",
+		"library": "ui",
+		"tags": ["bolb", "light", "bulb", "idea", "bright"]
+	},
+	{
+		"iconName": "border-radius",
+		"title": "Border Radius",
+		"library": "ui",
+		"tags": ["border", "radius", "rounded", "corner", "curve"]
+	},
+	{
+		"iconName": "breadcrumb-separator",
+		"title": "Breadcrumb Separator",
+		"library": "ui",
+		"tags": ["breadcrumb", "separator", "divider", "slash", "path"]
+	},
+	{
+		"iconName": "breadcrumb-text",
+		"title": "Breadcrumb Text",
+		"library": "ui",
+		"tags": ["breadcrumb", "text", "label", "navigation", "path"]
+	},
+	{
+		"iconName": "breadcrumb-links",
+		"title": "Breadcrumb Links",
+		"library": "ui",
+		"tags": ["breadcrumb", "links", "navigation", "url", "path"]
+	},
+	{
+		"iconName": "border-style-horizontal-dashed",
+		"title": "Border Style Horizontal Dashed",
+		"library": "ui",
+		"tags": ["border", "style", "horizontal", "dashed", "line"]
+	},
+	{
+		"iconName": "border-style-horizontal-dotted",
+		"title": "Border Style Horizontal Dotted",
+		"library": "ui",
+		"tags": ["border", "style", "horizontal", "dotted", "line"]
+	},
+	{
+		"iconName": "border-style-horizontal-double",
+		"title": "Border Style Horizontal Double",
+		"library": "ui",
+		"tags": ["border", "style", "horizontal", "double", "line"]
+	},
+	{
+		"iconName": "border-style-horizontal-solid",
+		"title": "Border Style Horizontal Solid",
+		"library": "ui",
+		"tags": ["border", "style", "horizontal", "solid", "line"]
+	},
+	{
+		"iconName": "border-style-vertical-dashed",
+		"title": "Border Style Vertical Dashed",
+		"library": "ui",
+		"tags": ["border", "style", "vertical", "dashed", "line"]
+	},
+	{
+		"iconName": "border-style-vertical-dotted",
+		"title": "Border Style Vertical Dotted",
+		"library": "ui",
+		"tags": ["border", "style", "vertical", "dotted", "line"]
+	},
+	{
+		"iconName": "border-style-vertical-double",
+		"title": "Border Style Vertical Double",
+		"library": "ui",
+		"tags": ["border", "style", "vertical", "double", "line"]
+	},
+	{
+		"iconName": "border-style-vertical-solid",
+		"title": "Border Style Vertical Solid",
+		"library": "ui",
+		"tags": ["border", "style", "vertical", "solid", "line"]
+	},
+	{
+		"iconName": "border",
+		"title": "Border",
+		"library": "ui",
+		"tags": ["border", "outline", "frame", "edge", "line"]
+	},
+	{
+		"iconName": "break-all",
+		"title": "Break All",
+		"library": "ui",
+		"tags": ["break", "all", "word", "wrap", "overflow"]
+	},
+	{
+		"iconName": "break-normal",
+		"title": "Break Normal",
+		"library": "ui",
+		"tags": ["break", "normal", "word", "wrap", "text"]
+	},
+	{
+		"iconName": "changelog",
+		"title": "Changelog",
+		"library": "ui",
+		"tags": ["changelog", "version", "history", "updates", "changes"]
+	},
+	{
+		"iconName": "check",
+		"title": "Check",
+		"library": "ui",
+		"tags": ["check", "tick", "mark", "done", "complete"]
+	},
+	{
+		"iconName": "check-circle",
+		"title": "Check Circle",
+		"library": "ui",
+		"tags": ["check", "circle", "success", "verified", "complete"]
+	},
+	{
+		"iconName": "click-animation",
+		"title": "Click Animation",
+		"library": "ui",
+		"tags": ["click", "animation", "interaction", "effect", "motion"]
+	},
+	{
+		"iconName": "clip-content",
+		"title": "Clip Content",
+		"library": "ui",
+		"tags": ["clip", "content", "overflow", "hidden", "crop"]
+	},
+	{
+		"iconName": "clip-padding",
+		"title": "Clip Padding",
+		"library": "ui",
+		"tags": ["clip", "padding", "space", "margin", "trim"]
+	},
+	{
+		"iconName": "clip-text",
+		"title": "Clip Text",
+		"library": "ui",
+		"tags": ["clip", "text", "overflow", "ellipsis", "truncate"]
+	},
+	{
+		"iconName": "clone",
+		"title": "Clone",
+		"library": "ui",
+		"tags": ["clone", "copy", "duplicate", "replicate", "mirror"]
+	},
+	{
+		"iconName": "close-small",
+		"title": "Close Small",
+		"library": "ui",
+		"tags": ["close", "small", "x", "cancel", "dismiss"]
+	},
+	{
+		"iconName": "close",
+		"title": "Close",
+		"library": "ui",
+		"tags": ["close", "x", "cancel", "dismiss", "exit"]
+	},
+	{
+		"iconName": "community-conversation",
+		"title": "Community Conversation",
+		"library": "ui",
+		"tags": ["community", "conversation", "chat", "discussion", "talk"]
+	},
+	{
+		"iconName": "condition",
+		"title": "Condition",
+		"library": "ui",
+		"tags": ["condition", "if", "logic", "rule", "statement"]
+	},
+	{
+		"iconName": "coordinate-rotate-x",
+		"title": "Coordinate Rotate X",
+		"library": "ui",
+		"tags": ["coordinate", "rotate", "x", "axis", "3d"]
+	},
+	{
+		"iconName": "coordinate-rotate-y",
+		"title": "Coordinate Rotate Y",
+		"library": "ui",
+		"tags": ["coordinate", "rotate", "y", "axis", "3d"]
+	},
+	{
+		"iconName": "coordinate-rotate-z",
+		"title": "Coordinate Rotate Z",
+		"library": "ui",
+		"tags": ["coordinate", "rotate", "z", "axis", "3d"]
+	},
+	{
+		"iconName": "coordinate-x",
+		"title": "Coordinate X",
+		"library": "ui",
+		"tags": ["coordinate", "x", "axis", "position", "horizontal"]
+	},
+	{
+		"iconName": "coordinate-y",
+		"title": "Coordinate Y",
+		"library": "ui",
+		"tags": ["coordinate", "y", "axis", "position", "vertical"]
+	},
+	{
+		"iconName": "coordinate-z",
+		"title": "Coordinate Z",
+		"library": "ui",
+		"tags": ["coordinate", "z", "axis", "position", "depth"]
+	},
+	{
+		"iconName": "crown",
+		"title": "Crown",
+		"library": "ui",
+		"tags": ["crown", "royal", "king", "queen", "premium"]
+	},
+	{
+		"iconName": "css3",
+		"title": "CSS3",
+		"library": "ui",
+		"tags": ["css3", "css", "styling", "web", "design"]
+	},
+	{
+		"iconName": "data-attribute",
+		"title": "Data Attribute",
+		"library": "ui",
+		"tags": ["data", "attribute", "html", "custom", "property"]
+	},
+	{
+		"iconName": "device-l-desktop",
+		"title": "Device L Desktop",
+		"library": "ui",
+		"tags": ["device", "l-desktop", "large", "screen", "monitor"]
+	},
+	{
+		"iconName": "device-2xl-desktop",
+		"title": "Device 2XL Desktop",
+		"library": "ui",
+		"tags": ["device", "2xl-desktop", "extra-large", "screen", "monitor"]
+	},
+	{
+		"iconName": "device-desktop",
+		"title": "Device Desktop",
+		"library": "ui",
+		"tags": ["device", "desktop", "computer", "screen", "monitor"]
+	},
+	{
+		"iconName": "device-xl-desktop",
+		"title": "Device XL Desktop",
+		"library": "ui",
+		"tags": ["device", "xl-desktop", "extra-large", "screen", "monitor"]
+	},
+	{
+		"iconName": "device-mobile-landscape",
+		"title": "Device Mobile Landscape",
+		"library": "ui",
+		"tags": ["device", "mobile", "landscape", "phone", "horizontal"]
+	},
+	{
+		"iconName": "device-mobile",
+		"title": "Device Mobile",
+		"library": "ui",
+		"tags": ["device", "mobile", "phone", "smartphone", "portrait"]
+	},
+	{
+		"iconName": "device-tablet",
+		"title": "Device Tablet",
+		"library": "ui",
+		"tags": ["device", "tablet", "ipad", "screen", "portable"]
+	},
+	{
+		"iconName": "direction-ltr",
+		"title": "Direction LTR",
+		"library": "ui",
+		"tags": ["direction", "ltr", "left-to-right", "text", "writing"]
+	},
+	{
+		"iconName": "direction-rtl",
+		"title": "Direction RTL",
+		"library": "ui",
+		"tags": ["direction", "rtl", "right-to-left", "text", "writing"]
+	},
+	{
+		"iconName": "dismiss",
+		"title": "Dismiss",
+		"library": "ui",
+		"tags": ["dismiss", "close", "cancel", "remove", "exit"]
+	},
+	{
+		"iconName": "display-block",
+		"title": "Display Block",
+		"library": "ui",
+		"tags": ["display", "block", "css", "layout", "box"]
+	},
+	{
+		"iconName": "display-flex",
+		"title": "Display Flex",
+		"library": "ui",
+		"tags": ["display", "flex", "flexbox", "layout", "container"]
+	},
+	{
+		"iconName": "display-grid",
+		"title": "Display Grid",
+		"library": "ui",
+		"tags": ["display", "grid", "css-grid", "layout", "container"]
+	},
+	{
+		"iconName": "display-inline-block",
+		"title": "Display Inline Block",
+		"library": "ui",
+		"tags": ["display", "inline-block", "css", "layout", "inline"]
+	},
+	{
+		"iconName": "display-inline",
+		"title": "Display Inline",
+		"library": "ui",
+		"tags": ["display", "inline", "css", "layout", "text"]
+	},
+	{
+		"iconName": "display-none",
+		"title": "Display None",
+		"library": "ui",
+		"tags": ["display", "none", "hidden", "invisible", "css"]
+	},
+	{
+		"iconName": "entrance-animation",
+		"title": "Entrance Animation",
+		"library": "ui",
+		"tags": ["entrance", "animation", "enter", "appear", "motion"]
+	},
+	{
+		"iconName": "download-box",
+		"title": "Download Box",
+		"library": "ui",
+		"tags": ["download", "box", "save", "file", "export"]
+	},
+	{
+		"iconName": "error",
+		"title": "Error",
+		"library": "ui",
+		"tags": ["error", "alert", "warning", "problem", "issue"]
+	},
+	{
+		"iconName": "extension-advanced",
+		"title": "Extension Advanced",
+		"library": "ui",
+		"tags": ["extension", "advanced", "pro", "premium", "feature"]
+	},
+	{
+		"iconName": "extension-background",
+		"title": "Extension Background",
+		"library": "ui",
+		"tags": ["extension", "background", "bg", "color", "image"]
+	},
+	{
+		"iconName": "extension-border",
+		"title": "Extension Border",
+		"library": "ui",
+		"tags": ["extension", "border", "outline", "frame", "edge", "boundary"]
+	},
+	{
+		"iconName": "extension-click-animation",
+		"title": "Extension Click Animation",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"click",
+			"animation",
+			"interaction",
+			"button",
+			"effect"
+		]
+	},
+	{
+		"iconName": "extension-conditions",
+		"title": "Extension Conditions",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"conditions",
+			"logic",
+			"rules",
+			"if",
+			"conditional"
+		]
+	},
+	{
+		"iconName": "extension-custom-style",
+		"title": "Extension Custom Style",
+		"library": "ui",
+		"tags": ["extension", "custom", "style", "css", "design", "personalize"]
+	},
+	{
+		"iconName": "extension-effects",
+		"title": "Extension Effects",
+		"library": "ui",
+		"tags": ["extension", "effects", "visual", "filter", "blur", "shadow"]
+	},
+	{
+		"iconName": "extension-entrance-animation",
+		"title": "Extension Entrance Animation",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"entrance",
+			"animation",
+			"enter",
+			"appear",
+			"fade-in"
+		]
+	},
+	{
+		"iconName": "extension-flex-child",
+		"title": "Extension Flex Child",
+		"library": "ui",
+		"tags": ["extension", "flex", "child", "flexbox", "layout", "container"]
+	},
+	{
+		"iconName": "extension-icon",
+		"title": "Extension Icon",
+		"library": "ui",
+		"tags": ["extension", "icon", "symbol", "graphic", "visual", "image"]
+	},
+	{
+		"iconName": "extension-layout",
+		"title": "Extension Layout",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"layout",
+			"structure",
+			"arrangement",
+			"design",
+			"composition"
+		]
+	},
+	{
+		"iconName": "extension-mouse",
+		"title": "Extension Mouse",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"mouse",
+			"cursor",
+			"pointer",
+			"interaction",
+			"hover"
+		]
+	},
+	{
+		"iconName": "extension-position",
+		"title": "Extension Position",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"position",
+			"placement",
+			"location",
+			"coordinates",
+			"placement"
+		]
+	},
+	{
+		"iconName": "extension-scroll-animation",
+		"title": "Extension Scroll Animation",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"scroll",
+			"animation",
+			"motion",
+			"parallax",
+			"reveal"
+		]
+	},
+	{
+		"iconName": "extension-size",
+		"title": "Extension Size",
+		"library": "ui",
+		"tags": ["extension", "size", "dimensions", "width", "height", "scale"]
+	},
+	{
+		"iconName": "extension-spacing",
+		"title": "Extension Spacing",
+		"library": "ui",
+		"tags": ["extension", "spacing", "margin", "padding", "gap", "distance"]
+	},
+	{
+		"iconName": "extension-typography",
+		"title": "Extension Typography",
+		"library": "ui",
+		"tags": ["extension", "typography", "text", "font", "type", "lettering"]
+	},
+	{
+		"iconName": "eye-dropper",
+		"title": "Eye Dropper",
+		"library": "ui",
+		"tags": ["eye", "dropper", "color", "picker", "select", "sample"]
+	},
+	{
+		"iconName": "eye-hide",
+		"title": "Eye Hide",
+		"library": "ui",
+		"tags": ["eye", "hide", "conceal", "invisible", "mask", "private"]
+	},
+	{
+		"iconName": "eye-show",
+		"title": "Eye Show",
+		"library": "ui",
+		"tags": ["eye", "show", "visible", "reveal", "display", "public"]
+	},
+	{
+		"iconName": "filter-blur",
+		"title": "Filter Blur",
+		"library": "ui",
+		"tags": ["filter", "blur", "fuzzy", "soft", "gaussian", "effect"]
+	},
+	{
+		"iconName": "filter-brightness",
+		"title": "Filter Brightness",
+		"library": "ui",
+		"tags": [
+			"filter",
+			"brightness",
+			"light",
+			"luminance",
+			"exposure",
+			"adjust"
+		]
+	},
+	{
+		"iconName": "filter-contrast",
+		"title": "Filter Contrast",
+		"library": "ui",
+		"tags": [
+			"filter",
+			"contrast",
+			"difference",
+			"distinction",
+			"clarity",
+			"enhance"
+		]
+	},
+	{
+		"iconName": "filter-drop-shadow",
+		"title": "Filter Drop Shadow",
+		"library": "ui",
+		"tags": [
+			"filter",
+			"drop-shadow",
+			"shadow",
+			"depth",
+			"elevation",
+			"cast"
+		]
+	},
+	{
+		"iconName": "filter-grayscale",
+		"title": "Filter Grayscale",
+		"library": "ui",
+		"tags": [
+			"filter",
+			"grayscale",
+			"monochrome",
+			"black-white",
+			"desaturate",
+			"neutral"
+		]
+	},
+	{
+		"iconName": "filter-hue-rotate",
+		"title": "Filter Hue Rotate",
+		"library": "ui",
+		"tags": ["filter", "hue-rotate", "color", "shift", "tint", "spectrum"]
+	},
+	{
+		"iconName": "filter-invert",
+		"title": "Filter Invert",
+		"library": "ui",
+		"tags": ["filter", "invert", "negative", "reverse", "opposite", "flip"]
+	},
+	{
+		"iconName": "filter-saturate",
+		"title": "Filter Saturate",
+		"library": "ui",
+		"tags": [
+			"filter",
+			"saturate",
+			"color",
+			"vibrance",
+			"intensity",
+			"richness"
+		]
+	},
+	{
+		"iconName": "filter-sepia",
+		"title": "Filter Sepia",
+		"library": "ui",
+		"tags": ["filter", "sepia", "vintage", "antique", "brown", "nostalgic"]
+	},
+	{
+		"iconName": "fit-contain",
+		"title": "Fit Contain",
+		"library": "ui",
+		"tags": ["fit", "contain", "scale", "proportional", "within", "bounds"]
+	},
+	{
+		"iconName": "fit-cover",
+		"title": "Fit Cover",
+		"library": "ui",
+		"tags": ["fit", "cover", "fill", "crop", "overflow", "complete"]
+	},
+	{
+		"iconName": "fit-fill",
+		"title": "Fit Fill",
+		"library": "ui",
+		"tags": ["fit", "fill", "stretch", "expand", "occupy", "complete"]
+	},
+	{
+		"iconName": "fit-none",
+		"title": "Fit None",
+		"library": "ui",
+		"tags": ["fit", "none", "original", "natural", "default", "unchanged"]
+	},
+	{
+		"iconName": "fit-normal",
+		"title": "Fit Normal",
+		"library": "ui",
+		"tags": ["fit", "normal", "standard", "default", "regular", "usual"]
+	},
+	{
+		"iconName": "fit-scale-down",
+		"title": "Fit Scale Down",
+		"library": "ui",
+		"tags": ["fit", "scale-down", "reduce", "shrink", "smaller", "diminish"]
+	},
+	{
+		"iconName": "flag",
+		"title": "Flag",
+		"library": "ui",
+		"tags": ["flag", "marker", "indicator", "signal", "banner", "symbol"]
+	},
+	{
+		"iconName": "flex-align-baseline",
+		"title": "Flex Align Baseline",
+		"library": "ui",
+		"tags": ["flex", "align", "baseline", "text", "line", "typography"]
+	},
+	{
+		"iconName": "flex-align-center",
+		"title": "Flex Align Center",
+		"library": "ui",
+		"tags": ["flex", "align", "center", "middle", "vertical", "position"]
+	},
+	{
+		"iconName": "flex-align-empty",
+		"title": "Flex Align Empty",
+		"library": "ui",
+		"tags": ["flex", "align", "empty", "none", "default", "reset"]
+	},
+	{
+		"iconName": "flex-align-end",
+		"title": "Flex Align End",
+		"library": "ui",
+		"tags": ["flex", "align", "end", "bottom", "finish", "conclude"]
+	},
+	{
+		"iconName": "flex-align-start",
+		"title": "Flex Align Start",
+		"library": "ui",
+		"tags": ["flex", "align", "start", "top", "begin", "initial"]
+	},
+	{
+		"iconName": "flex-align-stretch",
+		"title": "Flex Align Stretch",
+		"library": "ui",
+		"tags": ["flex", "align", "stretch", "expand", "fill", "extend"]
+	},
+	{
+		"iconName": "flex-child-size-grow",
+		"title": "Flex Child Size Grow",
+		"library": "ui",
+		"tags": ["flex", "child", "size", "grow", "expand", "increase"]
+	},
+	{
+		"iconName": "flex-child-size-no-grow",
+		"title": "Flex Child Size No Grow",
+		"library": "ui",
+		"tags": ["flex", "child", "size", "no-grow", "fixed", "static"]
+	},
+	{
+		"iconName": "flex-child-size-shrink",
+		"title": "Flex Child Size Shrink",
+		"library": "ui",
+		"tags": ["flex", "child", "size", "shrink", "reduce", "decrease"]
+	},
+	{
+		"iconName": "flex-direction-column",
+		"title": "Flex Direction Column",
+		"library": "ui",
+		"tags": ["flex", "direction", "column", "vertical", "stack", "tower"]
+	},
+	{
+		"iconName": "flex-direction-row",
+		"title": "Flex Direction Row",
+		"library": "ui",
+		"tags": ["flex", "direction", "row", "horizontal", "line", "sequence"]
+	},
+	{
+		"iconName": "font-style-italic",
+		"title": "Font Style Italic",
+		"library": "ui",
+		"tags": ["font", "style", "italic", "slanted", "tilted", "emphasis"]
+	},
+	{
+		"iconName": "font-style-normal",
+		"title": "Font Style Normal",
+		"library": "ui",
+		"tags": ["font", "style", "normal", "regular", "standard", "default"]
+	},
+	{
+		"iconName": "gear-small",
+		"title": "Gear Small",
+		"library": "ui",
+		"tags": ["gear", "small", "settings", "cog", "wheel", "configuration"]
+	},
+	{
+		"iconName": "gear",
+		"title": "Gear",
+		"library": "ui",
+		"tags": ["gear", "settings", "cog", "wheel", "configuration", "options"]
+	},
+	{
+		"iconName": "hreflang",
+		"title": "Hreflang",
+		"library": "ui",
+		"tags": [
+			"hreflang",
+			"language",
+			"locale",
+			"international",
+			"seo",
+			"multilingual"
+		]
+	},
+	{
+		"iconName": "html-tag-attribute",
+		"title": "HTML Tag Attribute",
+		"library": "ui",
+		"tags": ["html", "tag", "attribute", "property", "parameter", "element"]
+	},
+	{
+		"iconName": "responsive-breakpoints",
+		"title": "Responsive Breakpoints",
+		"library": "ui",
+		"tags": [
+			"responsive",
+			"breakpoints",
+			"mobile",
+			"tablet",
+			"desktop",
+			"adaptive"
+		]
+	},
+	{
+		"iconName": "icon-position-left",
+		"title": "Icon Position Left",
+		"library": "ui",
+		"tags": ["icon", "position", "left", "side", "placement", "alignment"]
+	},
+	{
+		"iconName": "icon-position-right",
+		"title": "Icon Position Right",
+		"library": "ui",
+		"tags": ["icon", "position", "right", "side", "placement", "alignment"]
+	},
+	{
+		"iconName": "information",
+		"title": "Information",
+		"library": "ui",
+		"tags": ["information", "info", "details", "data", "facts", "knowledge"]
+	},
+	{
+		"iconName": "inherit-circle",
+		"title": "Inherit Circle",
+		"library": "ui",
+		"tags": [
+			"inherit",
+			"circle",
+			"parent",
+			"pass-down",
+			"transfer",
+			"round"
+		]
+	},
+	{
+		"iconName": "inherit-square",
+		"title": "Inherit Square",
+		"library": "ui",
+		"tags": ["inherit", "square", "parent", "pass-down", "transfer", "box"]
+	},
+	{
+		"iconName": "inner-blocks",
+		"title": "Inner Blocks",
+		"library": "ui",
+		"tags": ["inner", "blocks", "nested", "contained", "embedded", "inside"]
+	},
+	{
+		"iconName": "justify-content-center",
+		"title": "Justify Content Center",
+		"library": "ui",
+		"tags": [
+			"justify",
+			"content",
+			"center",
+			"middle",
+			"horizontal",
+			"align"
+		]
+	},
+	{
+		"iconName": "justify-content-empty",
+		"title": "Justify Content Empty",
+		"library": "ui",
+		"tags": ["justify", "content", "empty", "none", "default", "reset"]
+	},
+	{
+		"iconName": "justify-content-end",
+		"title": "Justify Content End",
+		"library": "ui",
+		"tags": ["justify", "content", "end", "right", "finish", "conclude"]
+	},
+	{
+		"iconName": "justify-content-space-around",
+		"title": "Justify Content Space Around",
+		"library": "ui",
+		"tags": [
+			"justify",
+			"content",
+			"space-around",
+			"distribute",
+			"even",
+			"spacing"
+		]
+	},
+	{
+		"iconName": "justify-content-space-between",
+		"title": "Justify Content Space Between",
+		"library": "ui",
+		"tags": [
+			"justify",
+			"content",
+			"space-between",
+			"distribute",
+			"separate",
+			"spacing"
+		]
+	},
+	{
+		"iconName": "justify-content-start",
+		"title": "Justify Content Start",
+		"library": "ui",
+		"tags": ["justify", "content", "start", "left", "begin", "initial"]
+	},
+	{
+		"iconName": "linear-gradient-no-repeat",
+		"title": "Linear Gradient No Repeat",
+		"library": "ui",
+		"tags": ["linear", "gradient", "no-repeat", "single", "once", "unique"]
+	},
+	{
+		"iconName": "linear-gradient-repeat",
+		"title": "Linear Gradient Repeat",
+		"library": "ui",
+		"tags": ["linear", "gradient", "repeat", "pattern", "tile", "multiple"]
+	},
+	{
+		"iconName": "lock",
+		"title": "Lock",
+		"library": "ui",
+		"tags": ["lock", "secure", "protected", "private", "key", "closed"]
+	},
+	{
+		"iconName": "margin-all",
+		"title": "Margin All",
+		"library": "ui",
+		"tags": ["margin", "all", "sides", "spacing", "around", "uniform"]
+	},
+	{
+		"iconName": "margin-bottom",
+		"title": "Margin Bottom",
+		"library": "ui",
+		"tags": ["margin", "bottom", "down", "spacing", "lower", "under"]
+	},
+	{
+		"iconName": "margin-horizontal",
+		"title": "Margin Horizontal",
+		"library": "ui",
+		"tags": [
+			"margin",
+			"horizontal",
+			"left-right",
+			"spacing",
+			"side",
+			"lateral"
+		]
+	},
+	{
+		"iconName": "margin-left",
+		"title": "Margin Left",
+		"library": "ui",
+		"tags": ["margin", "left", "spacing", "side", "lateral", "start"]
+	},
+	{
+		"iconName": "margin-right",
+		"title": "Margin Right",
+		"library": "ui",
+		"tags": ["margin", "right", "spacing", "side", "lateral", "end"]
+	},
+	{
+		"iconName": "margin-top",
+		"title": "Margin Top",
+		"library": "ui",
+		"tags": ["margin", "top", "up", "spacing", "upper", "above"]
+	},
+	{
+		"iconName": "margin-vertical",
+		"title": "Margin Vertical",
+		"library": "ui",
+		"tags": [
+			"margin",
+			"vertical",
+			"top-bottom",
+			"spacing",
+			"up-down",
+			"perpendicular"
+		]
+	},
+	{
+		"iconName": "maximize",
+		"title": "Maximize",
+		"library": "ui",
+		"tags": [
+			"maximize",
+			"expand",
+			"fullscreen",
+			"enlarge",
+			"grow",
+			"increase"
+		]
+	},
+	{
+		"iconName": "more-horizontal",
+		"title": "More Horizontal",
+		"library": "ui",
+		"tags": ["more", "horizontal", "dots", "menu", "options", "ellipsis"]
+	},
+	{
+		"iconName": "more-vertical",
+		"title": "More Vertical",
+		"library": "ui",
+		"tags": ["more", "vertical", "dots", "menu", "options", "ellipsis"]
+	},
+	{
+		"iconName": "more-vertical-small",
+		"title": "More Vertical Small",
+		"library": "ui",
+		"tags": ["more", "vertical", "small", "dots", "menu", "compact"]
+	},
+	{
+		"iconName": "none-circle",
+		"title": "None Circle",
+		"library": "ui",
+		"tags": ["none", "circle", "empty", "zero", "reset", "clear"]
+	},
+	{
+		"iconName": "none-clean",
+		"title": "None Clean",
+		"library": "ui",
+		"tags": ["none", "clean", "empty", "clear", "reset", "remove"]
+	},
+	{
+		"iconName": "none-square",
+		"title": "None Square",
+		"library": "ui",
+		"tags": ["none", "square", "empty", "zero", "reset", "box"]
+	},
+	{
+		"iconName": "number-2",
+		"title": "Number 2",
+		"library": "ui",
+		"tags": ["number", "2", "two", "digit", "numeral", "count"]
+	},
+	{
+		"iconName": "number-3",
+		"title": "Number 3",
+		"library": "ui",
+		"tags": ["number", "3", "three", "digit", "numeral", "count"]
+	},
+	{
+		"iconName": "number-4",
+		"title": "Number 4",
+		"library": "ui",
+		"tags": ["number", "4", "four", "digit", "numeral", "count"]
+	},
+	{
+		"iconName": "number-5",
+		"title": "Number 5",
+		"library": "ui",
+		"tags": ["number", "5", "five", "digit", "numeral", "count"]
+	},
+	{
+		"iconName": "number-circle-1",
+		"title": "Number Circle 1",
+		"library": "ui",
+		"tags": ["number", "circle", "1", "one", "round", "first"]
+	},
+	{
+		"iconName": "number-circle-2",
+		"title": "Number Circle 2",
+		"library": "ui",
+		"tags": ["number", "circle", "2", "two", "round", "second"]
+	},
+	{
+		"iconName": "number-circle-3",
+		"title": "Number Circle 3",
+		"library": "ui",
+		"tags": ["number", "circle", "3", "three", "round", "third"]
+	},
+	{
+		"iconName": "number-circle-4",
+		"title": "Number Circle 4",
+		"library": "ui",
+		"tags": ["number", "circle", "4", "four", "round", "fourth"]
+	},
+	{
+		"iconName": "number-circle-5",
+		"title": "Number Circle 5",
+		"library": "ui",
+		"tags": ["number", "circle", "5", "five", "round", "fifth"]
+	},
+	{
+		"iconName": "ol",
+		"title": "Ordered List",
+		"library": "ui",
+		"tags": ["ol", "ordered", "list", "numbered", "sequence", "items"]
+	},
+	{
+		"iconName": "ol-order-ascending",
+		"title": "Ordered List Order Ascending",
+		"library": "ui",
+		"tags": ["ol", "order", "ascending", "up", "increase", "sort"]
+	},
+	{
+		"iconName": "ol-order-descending",
+		"title": "Ordered List Order Descending",
+		"library": "ui",
+		"tags": ["ol", "order", "descending", "down", "decrease", "sort"]
+	},
+	{
+		"iconName": "order-horizontal-first",
+		"title": "Order Horizontal First",
+		"library": "ui",
+		"tags": [
+			"order",
+			"horizontal",
+			"first",
+			"beginning",
+			"start",
+			"initial"
+		]
+	},
+	{
+		"iconName": "order-horizontal-last",
+		"title": "Order Horizontal Last",
+		"library": "ui",
+		"tags": ["order", "horizontal", "last", "end", "final", "conclude"]
+	},
+	{
+		"iconName": "outline",
+		"title": "Outline",
+		"library": "ui",
+		"tags": ["outline", "border", "frame", "edge", "perimeter", "boundary"]
+	},
+	{
+		"iconName": "overflow-hidden",
+		"title": "Overflow Hidden",
+		"library": "ui",
+		"tags": ["overflow", "hidden", "conceal", "clip", "cut", "mask"]
+	},
+	{
+		"iconName": "overflow-scroll",
+		"title": "Overflow Scroll",
+		"library": "ui",
+		"tags": ["overflow", "scroll", "move", "pan", "navigate", "browse"]
+	},
+	{
+		"iconName": "overflow-visible",
+		"title": "Overflow Visible",
+		"library": "ui",
+		"tags": ["overflow", "visible", "show", "display", "reveal", "appear"]
+	},
+	{
+		"iconName": "padding-all",
+		"title": "Padding All",
+		"library": "ui",
+		"tags": ["padding", "all", "sides", "spacing", "around", "uniform"]
+	},
+	{
+		"iconName": "padding-bottom",
+		"title": "Padding Bottom",
+		"library": "ui",
+		"tags": ["padding", "bottom", "down", "spacing", "lower", "under"]
+	},
+	{
+		"iconName": "padding-horizontal",
+		"title": "Padding Horizontal",
+		"library": "ui",
+		"tags": [
+			"padding",
+			"horizontal",
+			"left-right",
+			"spacing",
+			"side",
+			"lateral"
+		]
+	},
+	{
+		"iconName": "padding-left",
+		"title": "Padding Left",
+		"library": "ui",
+		"tags": ["padding", "left", "spacing", "side", "lateral", "start"]
+	},
+	{
+		"iconName": "padding-right",
+		"title": "Padding Right",
+		"library": "ui",
+		"tags": ["padding", "right", "spacing", "side", "lateral", "end"]
+	},
+	{
+		"iconName": "padding-top",
+		"title": "Padding Top",
+		"library": "ui",
+		"tags": ["padding", "top", "up", "spacing", "upper", "above"]
+	},
+	{
+		"iconName": "padding-vertical",
+		"title": "Padding Vertical",
+		"library": "ui",
+		"tags": [
+			"padding",
+			"vertical",
+			"top-bottom",
+			"spacing",
+			"up-down",
+			"perpendicular"
+		]
+	},
+	{
+		"iconName": "pen-circle",
+		"title": "Pen Circle",
+		"library": "ui",
+		"tags": ["pen", "circle", "edit", "write", "draw", "round"]
+	},
+	{
+		"iconName": "pen",
+		"title": "Pen",
+		"library": "ui",
+		"tags": ["pen", "edit", "write", "draw", "tool", "modify"]
+	},
+	{
+		"iconName": "plus",
+		"title": "Plus",
+		"library": "ui",
+		"tags": ["plus", "add", "increase", "more", "positive", "cross"]
+	},
+	{
+		"iconName": "position-absolute",
+		"title": "Position Absolute",
+		"library": "ui",
+		"tags": [
+			"position",
+			"absolute",
+			"fixed",
+			"placed",
+			"located",
+			"coordinates"
+		]
+	},
+	{
+		"iconName": "position-absolute-bottom",
+		"title": "Position Absolute Bottom",
+		"library": "ui",
+		"tags": ["position", "absolute", "bottom", "down", "lower", "under"]
+	},
+	{
+		"iconName": "position-absolute-bottom-left",
+		"title": "Position Absolute Bottom Left",
+		"library": "ui",
+		"tags": ["position", "absolute", "bottom", "left", "corner", "diagonal"]
+	},
+	{
+		"iconName": "position-absolute-bottom-right",
+		"title": "Position Absolute Bottom Right",
+		"library": "ui",
+		"tags": [
+			"position",
+			"absolute",
+			"bottom",
+			"right",
+			"corner",
+			"diagonal"
+		]
+	},
+	{
+		"iconName": "position-absolute-center",
+		"title": "Position Absolute Center",
+		"library": "ui",
+		"tags": [
+			"position",
+			"absolute",
+			"center",
+			"middle",
+			"centered",
+			"balanced"
+		]
+	},
+	{
+		"iconName": "position-absolute-full",
+		"title": "Position Absolute Full",
+		"library": "ui",
+		"tags": ["position", "absolute", "full", "complete", "entire", "whole"]
+	},
+	{
+		"iconName": "position-absolute-left",
+		"title": "Position Absolute Left",
+		"library": "ui",
+		"tags": ["position", "absolute", "left", "side", "lateral", "start"]
+	},
+	{
+		"iconName": "position-absolute-right",
+		"title": "Position Absolute Right",
+		"library": "ui",
+		"tags": ["position", "absolute", "right", "side", "lateral", "end"]
+	},
+	{
+		"iconName": "position-absolute-top",
+		"title": "Position Absolute Top",
+		"library": "ui",
+		"tags": ["position", "absolute", "top", "up", "upper", "above"]
+	},
+	{
+		"iconName": "position-absolute-top-left",
+		"title": "Position Absolute Top Left",
+		"library": "ui",
+		"tags": ["position", "absolute", "top", "left", "corner", "diagonal"]
+	},
+	{
+		"iconName": "position-absolute-top-right",
+		"title": "Position Absolute Top Right",
+		"library": "ui",
+		"tags": ["position", "absolute", "top", "right", "corner", "diagonal"]
+	},
+	{
+		"iconName": "position-fixed",
+		"title": "Position Fixed",
+		"library": "ui",
+		"tags": [
+			"position",
+			"fixed",
+			"sticky",
+			"attached",
+			"locked",
+			"stationary"
+		]
+	},
+	{
+		"iconName": "position-relative",
+		"title": "Position Relative",
+		"library": "ui",
+		"tags": [
+			"position",
+			"relative",
+			"comparative",
+			"contextual",
+			"dependent",
+			"related"
+		]
+	},
+	{
+		"iconName": "position-side-bottom",
+		"title": "Position Side Bottom",
+		"library": "ui",
+		"tags": ["position", "side", "bottom", "down", "lower", "under"]
+	},
+	{
+		"iconName": "position-side-left",
+		"title": "Position Side Left",
+		"library": "ui",
+		"tags": ["position", "side", "left", "lateral", "start", "beginning"]
+	},
+	{
+		"iconName": "position-side-right",
+		"title": "Position Side Right",
+		"library": "ui",
+		"tags": ["position", "side", "right", "lateral", "end", "finish"]
+	},
+	{
+		"iconName": "position-side-top",
+		"title": "Position Side Top",
+		"library": "ui",
+		"tags": ["position", "side", "top", "up", "upper", "above"]
+	},
+	{
+		"iconName": "position-static",
+		"title": "Position Static",
+		"library": "ui",
+		"tags": [
+			"position",
+			"static",
+			"default",
+			"normal",
+			"standard",
+			"regular"
+		]
+	},
+	{
+		"iconName": "position-sticky",
+		"title": "Position Sticky",
+		"library": "ui",
+		"tags": ["position", "sticky", "adhesive", "cling", "attach", "hold"]
+	},
+	{
+		"iconName": "question-circle",
+		"title": "Question Circle",
+		"library": "ui",
+		"tags": ["question", "circle", "help", "assistance", "support", "round"]
+	},
+	{
+		"iconName": "radial-gradient-closest-corner",
+		"title": "Radial Gradient Closest Corner",
+		"library": "ui",
+		"tags": ["radial", "gradient", "closest", "corner", "nearest", "angle"]
+	},
+	{
+		"iconName": "radial-gradient-closest-side",
+		"title": "Radial Gradient Closest Side",
+		"library": "ui",
+		"tags": ["radial", "gradient", "closest", "side", "nearest", "edge"]
+	},
+	{
+		"iconName": "radial-gradient-farthest-corner",
+		"title": "Radial Gradient Farthest Corner",
+		"library": "ui",
+		"tags": ["radial", "gradient", "farthest", "corner", "distant", "angle"]
+	},
+	{
+		"iconName": "radial-gradient-farthest-side",
+		"title": "Radial Gradient Farthest Side",
+		"library": "ui",
+		"tags": ["radial", "gradient", "farthest", "side", "distant", "edge"]
+	},
+	{
+		"iconName": "radial-gradient-no-repeat",
+		"title": "Radial Gradient No Repeat",
+		"library": "ui",
+		"tags": ["radial", "gradient", "no-repeat", "single", "once", "unique"]
+	},
+	{
+		"iconName": "radial-gradient-repeat",
+		"title": "Radial Gradient Repeat",
+		"library": "ui",
+		"tags": [
+			"radial",
+			"gradient",
+			"repeat",
+			"multiple",
+			"pattern",
+			"duplicate"
+		]
+	},
+	{
+		"iconName": "redo",
+		"title": "Redo",
+		"library": "ui",
+		"tags": ["redo", "repeat", "forward", "next", "advance", "restore"]
+	},
+	{
+		"iconName": "regenerate",
+		"title": "Regenerate",
+		"library": "ui",
+		"tags": [
+			"regenerate",
+			"refresh",
+			"renew",
+			"recreate",
+			"rebuild",
+			"restart"
+		]
+	},
+	{
+		"iconName": "repeat-horizontally",
+		"title": "Repeat Horizontally",
+		"library": "ui",
+		"tags": [
+			"repeat",
+			"horizontal",
+			"sideways",
+			"left-right",
+			"across",
+			"duplicate"
+		]
+	},
+	{
+		"iconName": "repeat-no",
+		"title": "Repeat No",
+		"library": "ui",
+		"tags": ["repeat", "no", "single", "once", "unique", "stop"]
+	},
+	{
+		"iconName": "repeat-vertically",
+		"title": "Repeat Vertically",
+		"library": "ui",
+		"tags": [
+			"repeat",
+			"vertical",
+			"up-down",
+			"top-bottom",
+			"stack",
+			"duplicate"
+		]
+	},
+	{
+		"iconName": "repeat",
+		"title": "Repeat",
+		"library": "ui",
+		"tags": ["repeat", "duplicate", "copy", "loop", "cycle", "multiply"]
+	},
+	{
+		"iconName": "reverse-horizontal",
+		"title": "Reverse Horizontal",
+		"library": "ui",
+		"tags": [
+			"reverse",
+			"horizontal",
+			"flip",
+			"mirror",
+			"invert",
+			"opposite"
+		]
+	},
+	{
+		"iconName": "rotate-anti-clockwise",
+		"title": "Rotate Anti Clockwise",
+		"library": "ui",
+		"tags": [
+			"rotate",
+			"anti-clockwise",
+			"counter-clockwise",
+			"left",
+			"turn",
+			"spin"
+		]
+	},
+	{
+		"iconName": "rotate-clockwise",
+		"title": "Rotate Clockwise",
+		"library": "ui",
+		"tags": ["rotate", "clockwise", "right", "turn", "spin", "direction"]
+	},
+	{
+		"iconName": "scroll-animation",
+		"title": "Scroll Animation",
+		"library": "ui",
+		"tags": [
+			"scroll",
+			"animation",
+			"motion",
+			"effect",
+			"dynamic",
+			"transition"
+		]
+	},
+	{
+		"iconName": "search",
+		"title": "Search",
+		"library": "ui",
+		"tags": ["search", "find", "lookup", "magnify", "discover", "explore"]
+	},
+	{
+		"iconName": "share",
+		"title": "Share",
+		"library": "ui",
+		"tags": ["share", "distribute", "send", "connect", "social", "network"]
+	},
+	{
+		"iconName": "shield-checked",
+		"title": "Shield Checked",
+		"library": "ui",
+		"tags": ["shield", "checked", "secure", "protected", "verified", "safe"]
+	},
+	{
+		"iconName": "shortcut",
+		"title": "Shortcut",
+		"library": "ui",
+		"tags": [
+			"shortcut",
+			"quick",
+			"fast",
+			"accelerator",
+			"keyboard",
+			"hotkey"
+		]
+	},
+	{
+		"iconName": "side-lock-all",
+		"title": "Side Lock All",
+		"library": "ui",
+		"tags": ["side", "lock", "all", "secure", "protect", "restrict"]
+	},
+	{
+		"iconName": "side-lock-horizontal",
+		"title": "Side Lock Horizontal",
+		"library": "ui",
+		"tags": [
+			"side",
+			"lock",
+			"horizontal",
+			"left-right",
+			"secure",
+			"protect"
+		]
+	},
+	{
+		"iconName": "side-lock-none",
+		"title": "Side Lock None",
+		"library": "ui",
+		"tags": ["side", "lock", "none", "unlock", "free", "open"]
+	},
+	{
+		"iconName": "side-lock-vertical-horizontal",
+		"title": "Side Lock Vertical Horizontal",
+		"library": "ui",
+		"tags": ["side", "lock", "vertical", "horizontal", "both", "secure"]
+	},
+	{
+		"iconName": "side-lock-vertical",
+		"title": "Side Lock Vertical",
+		"library": "ui",
+		"tags": ["side", "lock", "vertical", "up-down", "secure", "protect"]
+	},
+	{
+		"iconName": "style-variations",
+		"title": "Style Variations",
+		"library": "ui",
+		"tags": [
+			"style",
+			"variations",
+			"options",
+			"themes",
+			"design",
+			"presets"
+		]
+	},
+	{
+		"iconName": "style-variations-animated",
+		"title": "Style Variations Animated",
+		"library": "ui",
+		"tags": [
+			"style",
+			"variations",
+			"animated",
+			"motion",
+			"dynamic",
+			"effects"
+		]
+	},
+	{
+		"iconName": "slash-circle",
+		"title": "Slash Circle",
+		"library": "ui",
+		"tags": ["slash", "circle", "cancel", "deny", "prohibit", "forbidden"]
+	},
+	{
+		"iconName": "sku",
+		"title": "SKU",
+		"library": "ui",
+		"tags": ["sku", "product", "code", "identifier", "inventory", "stock"]
+	},
+	{
+		"iconName": "success",
+		"title": "Success",
+		"library": "ui",
+		"tags": [
+			"success",
+			"check",
+			"complete",
+			"done",
+			"positive",
+			"achievement"
+		]
+	},
+	{
+		"iconName": "support",
+		"title": "Support",
+		"library": "ui",
+		"tags": ["support", "help", "assistance", "aid", "service", "customer"]
+	},
+	{
+		"iconName": "target-blank",
+		"title": "Target Blank",
+		"library": "ui",
+		"tags": ["target", "blank", "new", "window", "tab", "external"]
+	},
+	{
+		"iconName": "target",
+		"title": "Target",
+		"library": "ui",
+		"tags": ["target", "aim", "goal", "objective", "destination", "focus"]
+	},
+	{
+		"iconName": "text-align-center",
+		"title": "Text Align Center",
+		"library": "ui",
+		"tags": ["text", "align", "center", "middle", "justify", "typography"]
+	},
+	{
+		"iconName": "text-align-justify",
+		"title": "Text Align Justify",
+		"library": "ui",
+		"tags": ["text", "align", "justify", "full", "stretch", "typography"]
+	},
+	{
+		"iconName": "text-align-left",
+		"title": "Text Align Left",
+		"library": "ui",
+		"tags": ["text", "align", "left", "start", "beginning", "typography"]
+	},
+	{
+		"iconName": "text-align-right",
+		"title": "Text Align Right",
+		"library": "ui",
+		"tags": ["text", "align", "right", "end", "finish", "typography"]
+	},
+	{
+		"iconName": "text-decoration-overline",
+		"title": "Text Decoration Overline",
+		"library": "ui",
+		"tags": [
+			"text",
+			"decoration",
+			"overline",
+			"line",
+			"above",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-decoration-underline",
+		"title": "Text Decoration Underline",
+		"library": "ui",
+		"tags": [
+			"text",
+			"decoration",
+			"underline",
+			"line",
+			"below",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-decoration-line-through",
+		"title": "Text Decoration Line Through",
+		"library": "ui",
+		"tags": [
+			"text",
+			"decoration",
+			"line-through",
+			"strikethrough",
+			"cross",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-orientation-style-1",
+		"title": "Text Orientation Style 1",
+		"library": "ui",
+		"tags": [
+			"text",
+			"orientation",
+			"style",
+			"direction",
+			"angle",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-orientation-style-2",
+		"title": "Text Orientation Style 2",
+		"library": "ui",
+		"tags": [
+			"text",
+			"orientation",
+			"style",
+			"direction",
+			"angle",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-orientation-style-3",
+		"title": "Text Orientation Style 3",
+		"library": "ui",
+		"tags": [
+			"text",
+			"orientation",
+			"style",
+			"direction",
+			"angle",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-orientation-style-4",
+		"title": "Text Orientation Style 4",
+		"library": "ui",
+		"tags": [
+			"text",
+			"orientation",
+			"style",
+			"direction",
+			"angle",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-transform-capitalize",
+		"title": "Text Transform Capitalize",
+		"library": "ui",
+		"tags": [
+			"text",
+			"transform",
+			"capitalize",
+			"case",
+			"first",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-transform-lowercase",
+		"title": "Text Transform Lowercase",
+		"library": "ui",
+		"tags": [
+			"text",
+			"transform",
+			"lowercase",
+			"case",
+			"small",
+			"typography"
+		]
+	},
+	{
+		"iconName": "text-transform-uppercase",
+		"title": "Text Transform Uppercase",
+		"library": "ui",
+		"tags": [
+			"text",
+			"transform",
+			"uppercase",
+			"case",
+			"capital",
+			"typography"
+		]
+	},
+	{
+		"iconName": "three-d",
+		"title": "Three D",
+		"library": "ui",
+		"tags": ["three", "d", "3d", "dimensional", "depth", "perspective"]
+	},
+	{
+		"iconName": "tools",
+		"title": "Tools",
+		"library": "ui",
+		"tags": [
+			"tools",
+			"utilities",
+			"equipment",
+			"instruments",
+			"gear",
+			"settings"
+		]
+	},
+	{
+		"iconName": "transform-move",
+		"title": "Transform Move",
+		"library": "ui",
+		"tags": [
+			"transform",
+			"move",
+			"translate",
+			"position",
+			"relocate",
+			"shift"
+		]
+	},
+	{
+		"iconName": "transform-rotate",
+		"title": "Transform Rotate",
+		"library": "ui",
+		"tags": ["transform", "rotate", "turn", "spin", "angle", "direction"]
+	},
+	{
+		"iconName": "transform-scale",
+		"title": "Transform Scale",
+		"library": "ui",
+		"tags": ["transform", "scale", "size", "resize", "grow", "shrink"]
+	},
+	{
+		"iconName": "transform-skew",
+		"title": "Transform Skew",
+		"library": "ui",
+		"tags": ["transform", "skew", "tilt", "angle", "distort", "slant"]
+	},
+	{
+		"iconName": "transition",
+		"title": "Transition",
+		"library": "ui",
+		"tags": [
+			"transition",
+			"change",
+			"animation",
+			"effect",
+			"motion",
+			"transform"
+		]
+	},
+	{
+		"iconName": "trash",
+		"title": "Trash",
+		"library": "ui",
+		"tags": ["trash", "delete", "remove", "garbage", "bin", "dispose"]
+	},
+	{
+		"iconName": "tutorials",
+		"title": "Tutorials",
+		"library": "ui",
+		"tags": [
+			"tutorials",
+			"guide",
+			"learn",
+			"education",
+			"help",
+			"instruction"
+		]
+	},
+	{
+		"iconName": "undo",
+		"title": "Undo",
+		"library": "ui",
+		"tags": ["undo", "reverse", "back", "previous", "cancel", "restore"]
+	},
+	{
+		"iconName": "unlink",
+		"title": "Unlink",
+		"library": "ui",
+		"tags": [
+			"unlink",
+			"disconnect",
+			"separate",
+			"break",
+			"remove",
+			"detach"
+		]
+	},
+	{
+		"iconName": "unlock",
+		"title": "Unlock",
+		"library": "ui",
+		"tags": ["unlock", "open", "free", "release", "access", "permit"]
+	},
+	{
+		"iconName": "variable-font-size",
+		"title": "Variable Font Size",
+		"library": "ui",
+		"tags": ["variable", "font", "size", "text", "typography", "dynamic"]
+	},
+	{
+		"iconName": "variable-spacing",
+		"title": "Variable Spacing",
+		"library": "ui",
+		"tags": ["variable", "spacing", "gap", "margin", "padding", "dynamic"]
+	},
+	{
+		"iconName": "variable-width-size",
+		"title": "Variable Width Size",
+		"library": "ui",
+		"tags": ["variable", "width", "size", "dimension", "scale", "dynamic"]
+	},
+	{
+		"iconName": "variable",
+		"title": "Variable",
+		"library": "ui",
+		"tags": [
+			"variable",
+			"dynamic",
+			"changeable",
+			"flexible",
+			"adaptive",
+			"customizable"
+		]
+	},
+	{
+		"iconName": "video-circle",
+		"title": "Video Circle",
+		"library": "ui",
+		"tags": ["video", "circle", "play", "media", "round", "content"]
+	},
+	{
+		"iconName": "warning",
+		"title": "Warning",
+		"library": "ui",
+		"tags": ["warning", "alert", "caution", "attention", "notice", "danger"]
+	},
+	{
+		"iconName": "wrap-no",
+		"title": "Wrap No",
+		"library": "ui",
+		"tags": ["wrap", "no", "nowrap", "single", "line", "overflow"]
+	},
+	{
+		"iconName": "wrap",
+		"title": "Wrap",
+		"library": "ui",
+		"tags": ["wrap", "text", "line", "break", "flow", "layout"]
+	},
+	{
+		"iconName": "expand-all",
+		"title": "Expand All",
+		"library": "ui",
+		"tags": ["expand", "all", "open", "show", "reveal", "full"]
+	},
+	{
+		"iconName": "collapse-all",
+		"title": "Collapse All",
+		"library": "ui",
+		"tags": ["collapse", "all", "close", "hide", "minimize", "compact"]
+	},
+	{
+		"iconName": "focus-mode",
+		"title": "Focus Mode",
+		"library": "ui",
+		"tags": [
+			"focus",
+			"mode",
+			"concentrate",
+			"attention",
+			"distraction-free",
+			"zen"
+		]
+	},
+	{
+		"iconName": "zap-fast",
+		"title": "Zap Fast",
+		"library": "ui",
+		"tags": ["zap", "fast", "lightning", "quick", "speed", "energy"]
+	}
+]

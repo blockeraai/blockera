@@ -1,6 +1,7 @@
 import {
 	boxPositionControlDefaultValue,
 	boxSpacingValueCleanup,
+	getSmartLock,
 } from '../utils';
 
 describe('Testing util functions', () => {
@@ -326,5 +327,94 @@ describe('Testing util functions', () => {
 				});
 			});
 		});
+	});
+});
+
+describe('getSmartLock', () => {
+	test('returns empty string when all values are empty', () => {
+		const value = {
+			padding: { top: '', right: '', bottom: '', left: '' },
+			margin: { top: '', right: '', bottom: '', left: '' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('');
+		expect(getSmartLock(value, 'margin')).toBe('');
+	});
+
+	test('returns empty string when only one value is set', () => {
+		const value = {
+			padding: { top: '10px', right: '', bottom: '', left: '' },
+			margin: { top: '', right: '', bottom: '', left: '5px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('');
+		expect(getSmartLock(value, 'margin')).toBe('');
+	});
+
+	test('returns horizontal when left and right are equal and top/bottom are not', () => {
+		const value = {
+			padding: { top: '1px', right: '10px', bottom: '2px', left: '10px' },
+			margin: { top: '3px', right: '5px', bottom: '4px', left: '5px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('horizontal');
+		expect(getSmartLock(value, 'margin')).toBe('horizontal');
+	});
+
+	test('returns vertical when top and bottom are equal and left/right are not', () => {
+		const value = {
+			padding: { top: '10px', right: '1px', bottom: '10px', left: '2px' },
+			margin: { top: '5px', right: '3px', bottom: '5px', left: '4px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('vertical');
+		expect(getSmartLock(value, 'margin')).toBe('vertical');
+	});
+
+	test('returns all when all values are equal and not empty', () => {
+		const value = {
+			padding: {
+				top: '10px',
+				right: '10px',
+				bottom: '10px',
+				left: '10px',
+			},
+			margin: { top: '5px', right: '5px', bottom: '5px', left: '5px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('all');
+		expect(getSmartLock(value, 'margin')).toBe('all');
+	});
+
+	test('returns vertical-horizontal when top/bottom are equal, left/right are equal, but top != left', () => {
+		const value = {
+			padding: {
+				top: '10px',
+				right: '20px',
+				bottom: '10px',
+				left: '20px',
+			},
+			margin: { top: '5px', right: '15px', bottom: '5px', left: '15px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('vertical-horizontal');
+		expect(getSmartLock(value, 'margin')).toBe('vertical-horizontal');
+	});
+
+	test('returns empty string for mixed/unequal values', () => {
+		const value = {
+			padding: { top: '1px', right: '2px', bottom: '3px', left: '4px' },
+			margin: { top: '5px', right: '6px', bottom: '7px', left: '8px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('');
+		expect(getSmartLock(value, 'margin')).toBe('');
+	});
+
+	test('returns correct lock when some values are empty', () => {
+		const value = {
+			padding: {
+				top: '10px',
+				right: '',
+				bottom: '10px',
+				left: '',
+			},
+			margin: { top: '', right: '5px', bottom: '', left: '5px' },
+		};
+		expect(getSmartLock(value, 'padding')).toBe('vertical');
+		expect(getSmartLock(value, 'margin')).toBe('horizontal');
 	});
 });

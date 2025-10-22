@@ -31,9 +31,12 @@ module.exports = (env, argv) => {
 			let parentDirectory = '';
 			let name = packageName;
 
-			if (-1 !== packageName.indexOf('blocks-')) {
-				parentDirectory = 'blocks/';
-				name = name.split('blocks-')[1];
+			if (-1 !== packageName.indexOf('block-')) {
+				name = name.split('block-')[1];
+				parentDirectory = 'blocks-library/';
+			} else if (-1 !== packageName.indexOf('feature-')) {
+				name = name.split('feature-')[1];
+				parentDirectory = 'features-library/';
 			}
 
 			const {
@@ -49,17 +52,21 @@ module.exports = (env, argv) => {
 			return memo;
 		}
 
+		let _packageName = packageName;
+		let parentDirectory = '';
+
+		if (-1 !== packageName.indexOf('block-')) {
+			_packageName = _packageName.split('block-')[1];
+			parentDirectory = 'blocks-library/';
+		} else if (-1 !== packageName.indexOf('feature-')) {
+			_packageName = _packageName.split('feature-')[1];
+			parentDirectory = 'features-library/';
+		}
+
 		if (!blockeraPackagesVersion[packageName]) {
 			return memo;
 		}
 
-		let parentDirectory = '';
-		let _packageName = packageName;
-
-		if (-1 !== packageName.indexOf('blocks-')) {
-			parentDirectory = 'blocks/';
-			_packageName = _packageName.split('blocks-')[1];
-		}
 		const version = blockeraPackagesVersion[packageName];
 
 		let name = packageName.startsWith('blockera')
@@ -104,8 +111,16 @@ module.exports = (env, argv) => {
 			'@blockera/utils': 'blockeraUtils_' + blockeraPackagesVersion.utils,
 			'@blockera/editor':
 				'blockeraEditor_' + blockeraPackagesVersion.editor,
-			'@blockera/core-blocks':
+			'@blockera/block-icon':
+				'blockeraBlockIcon_' + blockeraPackagesVersion['block-icon'],
+			'@blockera/blocks-core':
 				'blockeraBlocksCore_' + blockeraPackagesVersion['blocks-core'],
+			'@blockera/feature-icon':
+				'blockeraFeatureIcon_' +
+				blockeraPackagesVersion['feature-icon'],
+			'@blockera/features-core':
+				'blockeraFeaturesCore_' +
+				blockeraPackagesVersion['features-core'],
 			'@blockera/controls':
 				'blockeraControls_' + blockeraPackagesVersion.controls,
 			'@blockera/bootstrap':

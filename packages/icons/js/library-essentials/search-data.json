@@ -1,0 +1,50 @@
+[
+	{
+		"iconName": "check-circle",
+		"title": "Circle Check",
+		"library": "essentials",
+		"tags": ["check circle", "check", "circle", "checkmark"]
+	},
+	{
+		"iconName": "check-circle-border",
+		"title": "Circle Check Border",
+		"library": "essentials",
+		"tags": ["check circle border", "check", "circle", "checkmark"]
+	},
+	{
+		"iconName": "check-round",
+		"title": "Round Check",
+		"library": "essentials",
+		"tags": ["check round", "check", "round", "checkmark"]
+	},
+	{
+		"iconName": "check-sharp",
+		"title": "Sharp Check",
+		"library": "essentials",
+		"tags": ["check sharp", "check", "sharp", "checkmark"]
+	},
+	{
+		"iconName": "check-handwritten",
+		"title": "Handwritten Check",
+		"library": "essentials",
+		"tags": ["check handwritten", "check", "handwritten", "checkmark"]
+	},
+	{
+		"iconName": "check-circle-2",
+		"title": "Circle Check",
+		"library": "essentials",
+		"tags": ["check circle", "check", "circle", "checkmark"]
+	},
+	{
+		"iconName": "time-filled",
+		"title": "Time Filled",
+		"library": "essentials",
+		"tags": ["time", "clock", "timer", "stopwatch"]
+	},
+	{
+		"iconName": "time-border",
+		"title": "Time Border",
+		"library": "essentials",
+		"tags": ["time", "clock", "timer", "stopwatch"]
+	}
+]

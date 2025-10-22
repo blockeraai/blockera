@@ -4,6 +4,7 @@ namespace Blockera\Setup\Providers;
 
 use Blockera\Setup\Blockera;
 use Blockera\Telemetry\Config;
+use Blockera\Features\Core\FeaturesManager;
 use Blockera\WordPress\RenderBlock\Setup;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
@@ -68,6 +69,18 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		);
 
 		add_action( 'admin_enqueue_scripts', [ $this, 'l10n' ] );
+
+		add_action(
+            'enqueue_block_editor_assets',
+            function () {
+                $version   = blockera_core_config('app.version');
+                $base_url  = blockera_core_config('app.vendor_url') . 'blockera/';
+				$base_path = blockera_core_config( 'app.vendor_path' ) . 'blockera/';
+
+				blockera_enqueue_blocks_editor_styles($base_path, $base_url, $version);
+				blockera_enqueue_features_editor_styles($base_path, $base_url, $version);
+			} 
+        );
 	}
 
 	/**
@@ -87,23 +100,31 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 	}
 
 	/**
-	 * @return string
+	 * Get the specific package object.
+	 *
+	 * @return string the specific package object.
 	 */
-	protected function getEditorObject(): string {
+	protected function getPackageObject( string $package_name ): string {
 
-		$editor_package_file = blockera_core_config( 'app.root_path' ) . 'vendor/blockera/editor/package.json';
-
-		if ( ! file_exists( $editor_package_file ) ) {
-
+		$package_file = blockera_core_config( 'app.root_path' ) . 'vendor/blockera/' . $package_name . '/package.json';
+		
+		if ( ! file_exists( $package_file ) ) {
 			return '';
 		}
 
 		ob_start();
-		require $editor_package_file;
-		$editor_package = json_decode( ob_get_clean(), true );
-		$editor_version = str_replace( '.', '_', $editor_package['version'] );
+		require $package_file;
+		$package         = json_decode( ob_get_clean(), true );
+		$package_version = str_replace( '.', '_', $package['version'] );
 
-		return 'blockeraEditor_' . $editor_version;
+		// Convert package_name to PascalCase (e.g., "features-core" => "FeaturesCore").
+		$pascal_case_name = str_replace(
+			' ',
+			'',
+			ucwords(str_replace([ '-', '_' ], ' ', $package_name))
+		);
+
+		return 'blockera' . $pascal_case_name . '_' . $package_version;
 	}
 
 	/**
@@ -122,7 +143,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return $inline_script;
 		}
 
-		$editor_object = $this->getEditorObject();
+		$editor_object = $this->getPackageObject( 'editor' );
 
 		if ( empty( $editor_object ) ) {
 
@@ -138,12 +159,16 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		}
 
 		$dynamic_value_bootstrapper = 'blockeraData.core.unstableBootstrapServerSideDynamicValueDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'dynamic-value', false ) ) . ');';
+		$requested_features         = array_keys($this->app->make(FeaturesManager::class)->getRegisteredFeatures());
+		$features_object            = $this->getPackageObject( 'features-core' );
 
 		$script = 'wp.domReady(() => {
 		blockeraData.core.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
 		blockeraData.core.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '
 		});
+			' . $features_object . '?.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');
+			' . $features_object . '?.featuresApplyHooks();
 			window.onload = () => {
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $breakpoints ) . ');
 				' . $editor_object . '.editor.init();
@@ -189,7 +214,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			return $inline_script;
 		}
 
-		$editor_object = $this->getEditorObject();
+		$editor_object = $this->getPackageObject( 'editor' );
 
 		if ( empty( $editor_object ) ) {
 

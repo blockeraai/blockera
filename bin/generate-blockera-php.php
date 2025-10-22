@@ -62,6 +62,23 @@ while (true) {
             echo '	require BLOCKERA_SB_PATH . ' . "'inc/app.php';\n";
             break;
 
+		case '### BEGIN AUTO-GENERATED AUTOLOADER':
+			$inside_defines = true;
+			echo $line;
+			echo "require_once __DIR__ . '/inc/class-shared-autoload-coordinator.php';
+\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
+\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+
+// loading autoloader.
+require __DIR__ . '/vendor/autoload.php';
+";
+			break;
+
+		case '### END AUTO-GENERATED AUTOLOADER':
+			$inside_defines = false;
+			echo $line;
+			break;
+
         default:
             if (! $inside_defines) {
                 echo $line;

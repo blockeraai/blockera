@@ -28,7 +28,6 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
-import { isBlockTheme } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -208,9 +207,7 @@ function BlockStyles({
 									'blockera-block-styles-category'
 								)}
 							>
-								{isBlockTheme()
-									? __('Theme Block Styles', 'blockera')
-									: __('Block Styles', 'blockera')}
+								{__('Style Variations', 'blockera')}
 							</h2>
 
 							<div

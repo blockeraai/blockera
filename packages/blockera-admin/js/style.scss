@@ -10,6 +10,13 @@
 @import "~@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings/style.scss";
 
 
+.wp-admin[class*="toplevel_page_blockera-"] {
+
+	#wpbody-content {
+		position: relative;
+	}
+}
+
 #blockera-admin-settings-container {
 
 	.blockera-settings-tabs {

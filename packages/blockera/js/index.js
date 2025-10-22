@@ -20,8 +20,10 @@ if ('development' === process.env.APP_MODE) {
  * Blockera dependencies
  */
 import {
-	blockeraBootstrapBlocks,
 	registerBlockeraBlocks,
+	blockeraBootstrapBlocks,
+	registerBlockeraBlockTypes,
+	registerBlockeraBlockVariations,
 	registerConfigExtensionsOfInnerBlocks,
 } from '@blockera/blocks-core';
 import { noop } from '@blockera/utils';
@@ -34,6 +36,16 @@ import {
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
+import {
+	unstableBootstrapServerSideFeatures,
+	bootstrapEditorStyleEngineFilters,
+} from '@blockera/features-core';
+
+/**
+ * Internal dependencies
+ */
+import { default as blockTypes } from './block-types';
+import { default as blockVariations } from './block-variations';
 
 /**
  * Registration blockera core block settings with internal definitions.
@@ -57,8 +69,16 @@ addFilter('blockera.bootstrapper.before.domReady', 'blockera.bootstrap', () => {
 				registerBlockTypeAttributes,
 		};
 
+		window.unstableBootstrapServerSideFeatures =
+			unstableBootstrapServerSideFeatures;
+
+		bootstrapEditorStyleEngineFilters();
+
 		registerBlockeraBlocks();
 		registerConfigExtensionsOfInnerBlocks();
+
+		registerBlockeraBlockTypes(blockTypes);
+		registerBlockeraBlockVariations(blockVariations);
 	});
 });
 

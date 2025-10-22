@@ -15,15 +15,17 @@ use Blockera\WordPress\RenderBlock\V1\{
 };
 use Blockera\WordPress\RenderBlock\V2\{
     Transpiler,
-	RenderContent as V2RenderContent,
+    RenderContent as V2RenderContent,
     SavePost as V2SavePost,
 };
-
+use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\EntityRegistry;
 use Blockera\Utils\Adapters\DomParser;
 use Blockera\Exceptions\BaseException;
 use Blockera\Bootstrap\ServiceProvider;
+use Blockera\Block\Icon\Block as IconBlock;
+use Blockera\Features\Core\FeaturesManager;
 use Blockera\Setup\Compatibility\Compatibility;
 use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
@@ -49,6 +51,38 @@ class AppServiceProvider extends ServiceProvider {
         parent::register();
 
         try {
+			$this->app->singleton(
+                DomParser::class,
+                static function () {
+
+                    return new DomParser();
+                }
+            );
+
+			$plugin_args = [
+				'plugin_base_path' => blockera_core_config('app.vendor_path') . 'blockera/',
+				'plugin_base_url' => blockera_core_config('app.vendor_url') . 'blockera/',
+				'plugin_version' => blockera_core_config('app.version'),
+			];
+
+			$this->app->singleton(
+                IconBlock::class,
+                function ( Application $app, array $args = []) use ( $plugin_args): IconBlock {
+
+					return new IconBlock($app, array_merge($args, $plugin_args));
+				}
+            );
+			
+			$this->app->singleton(
+                FeaturesManager::class,
+                function ( Application $app) use ( $plugin_args) {
+					$app->dom_parser = $app->make(DomParser::class);
+
+					return new FeaturesManager($app, $plugin_args);
+				}
+            );
+
+			$this->app->singleton(IconsManager::class);
 
 			$this->app->singleton(
                 Cache::class,
@@ -82,9 +116,9 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					SavePost::class,
-					function ( Application $app) {
+					function ( Application $app) use ( $plugin_args) {
 
-						return new SavePost($app, new Render($app));
+						return new SavePost($app, new Render($app, true, $plugin_args));
 					}
 				);
 			}
@@ -137,14 +171,6 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            $this->app->singleton(
-                DomParser::class,
-                static function () {
-
-                    return new DomParser();
-                }
-            );
-
             if ( ( defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
 
 				$vendor_path = blockera_core_config('app.vendor_path');
@@ -162,14 +188,15 @@ class AppServiceProvider extends ServiceProvider {
 
 				$this->app->singleton(
 					V2RenderContent::class,
-					static function ( Application $app) use ( $cache_instance, $vendor_path): V2RenderContent {
+					static function ( Application $app) use ( $cache_instance, $vendor_path, $plugin_args): V2RenderContent {
 
 						$render_content_instance = new V2RenderContent(
 							$app,
 							$app->make(Transpiler::class),
 							[
 								'cache' => $cache_instance,
-								'render' => new Render($app, false),
+								'plugin_args' => $plugin_args,
+								'render' => new Render($app, false, $plugin_args),
 							]
 						);
 
@@ -194,9 +221,9 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->bind(
 				Render::class,
-				static function ( Application $app): Render {
+				static function ( Application $app) use ( $plugin_args) : Render {
 
-					return new Render($app);
+					return new Render($app, true, $plugin_args);
 				}
 			);
 
@@ -217,6 +244,15 @@ class AppServiceProvider extends ServiceProvider {
     public function boot(): void {
 
         parent::boot();
+
+		$this->app->make(IconsManager::class);
+		$this->app->make(FeaturesManager::class)
+			->registerFeatures(
+				blockera_features_list(
+					blockera_core_config('app.root_path')
+                )
+            )
+			->bootFeatures();
 
 		$this->initCache();
 

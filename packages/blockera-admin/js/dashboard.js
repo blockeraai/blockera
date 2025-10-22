@@ -188,157 +188,155 @@ export const Dashboard = (): MixedElement => {
 	);
 
 	return (
-		<div className={'blockera-settings-dashboard'}>
-			<SettingsContext.Provider
-				value={{
-					config,
-					settings,
-					defaultSettings: blockeraDefaultSettings,
-				}}
+		<>
+			<Header
+				icon={
+					<Icon
+						library={'blockera'}
+						icon={'blockera'}
+						iconSize={32}
+					/>
+				}
+				version={`v${blockeraVersion}`}
+				name={__('Blockera', 'blockera')}
 			>
-				<Header
-					icon={
-						<Icon
-							library={'blockera'}
-							icon={'blockera'}
-							iconSize={32}
-						/>
-					}
-					version={`v${blockeraVersion}`}
-					name={__('Blockera', 'blockera')}
+				<Flex
+					className={'blockera-settings-header-links'}
+					direction="row"
+					gap={10}
+					alignItems="center"
 				>
-					<Flex
-						className={'blockera-settings-header-links'}
-						direction="row"
-						gap={10}
-						alignItems="center"
+					<ProCallToActions />
+
+					<Button
+						variant="tertiary"
+						href={
+							'https://community.blockera.ai/changelog-9l8hbrv0?utm_source=blockera-admin&utm_medium=referral&utm_campaign=changelog-page&utm_content=cta-link'
+						}
+						target="_blank"
 					>
-						<ProCallToActions />
+						<Icon library={'ui'} icon={'changelog'} iconSize={22} />
 
-						<Button
-							variant="tertiary"
-							href={
-								'https://community.blockera.ai/changelog-9l8hbrv0?utm_source=blockera-admin&utm_medium=referral&utm_campaign=changelog-page&utm_content=cta-link'
-							}
-							target="_blank"
-						>
-							<Icon
-								library={'ui'}
-								icon={'changelog'}
-								iconSize={22}
-							/>
+						{__('Changelog', 'blockera')}
+					</Button>
+				</Flex>
+			</Header>
 
-							{__('Changelog', 'blockera')}
-						</Button>
-					</Flex>
-				</Header>
-
-				<Tabs
-					onSelect={(tabKey: string): void =>
-						handleCurrentActiveMenuPage(tabKey)
-					}
-					activeTab={currentPage}
-					setSettings={setSettings}
-					settings={settings}
-					items={tabItems}
-					getPanel={Panel}
-					injectMenuEnd={
-						<NavigableMenu
-							orientation={'vertical'}
-							className={componentClassNames('tabs__list')}
-							style={{
-								height: '100%',
-							}}
-						>
-							<div
-								className={componentInnerClassNames(
-									'tabs__heading'
-								)}
+			<div className={'blockera-settings-dashboard'}>
+				<SettingsContext.Provider
+					value={{
+						config,
+						settings,
+						defaultSettings: blockeraDefaultSettings,
+					}}
+				>
+					<Tabs
+						onSelect={(tabKey: string): void =>
+							handleCurrentActiveMenuPage(tabKey)
+						}
+						activeTab={currentPage}
+						setSettings={setSettings}
+						settings={settings}
+						items={tabItems}
+						getPanel={Panel}
+						injectMenuEnd={
+							<NavigableMenu
+								orientation={'vertical'}
+								className={componentClassNames('tabs__list')}
+								style={{
+									height: '100%',
+								}}
 							>
-								{__('Resources', 'blockera')}
-							</div>
-
-							<WPButton
-								className={componentInnerClassNames(
-									'tabs__list__item',
-									'tab-item-button'
-								)}
-								target="_blank"
-								href={
-									'https://community.blockera.ai/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=community-page&utm_content=cta-link'
-								}
-							>
-								{__('Community', 'blockera')}
-
-								<span
+								<div
 									className={componentInnerClassNames(
-										'active-icon'
+										'tabs__heading'
 									)}
 								>
-									<Icon
-										library={'ui'}
-										icon={'arrow-new-tab'}
-										iconSize={22}
-									/>
-								</span>
-							</WPButton>
+									{__('Resources', 'blockera')}
+								</div>
 
-							<WPButton
-								className={componentInnerClassNames(
-									'tabs__list__item',
-									'tab-item-button'
-								)}
-								target="_blank"
-								href={
-									'https://community.blockera.ai/roadmap?utm_source=blockera-admin&utm_medium=referral&utm_campaign=roadmap-page&utm_content=cta-link'
-								}
-							>
-								{__('Roadmap', 'blockera')}
-
-								<span
+								<WPButton
 									className={componentInnerClassNames(
-										'active-icon'
+										'tabs__list__item',
+										'tab-item-button'
 									)}
+									target="_blank"
+									href={
+										'https://community.blockera.ai/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=community-page&utm_content=cta-link'
+									}
 								>
-									<Icon
-										library={'ui'}
-										icon={'arrow-new-tab'}
-										iconSize={22}
-									/>
-								</span>
-							</WPButton>
+									{__('Community', 'blockera')}
 
-							<WPButton
-								className={componentInnerClassNames(
-									'tabs__list__item',
-									'tab-item-button'
-								)}
-								target="_blank"
-								href={
-									'https://community.blockera.ai/feature-request-1rsjg2ck?utm_source=blockera-admin&utm_medium=referral&utm_campaign=feature-request-page&utm_content=cta-link'
-								}
-							>
-								{__('Feature Request', 'blockera')}
+									<span
+										className={componentInnerClassNames(
+											'active-icon'
+										)}
+									>
+										<Icon
+											library={'ui'}
+											icon={'arrow-new-tab'}
+											iconSize={22}
+										/>
+									</span>
+								</WPButton>
 
-								<span
+								<WPButton
 									className={componentInnerClassNames(
-										'active-icon'
+										'tabs__list__item',
+										'tab-item-button'
 									)}
+									target="_blank"
+									href={
+										'https://community.blockera.ai/roadmap?utm_source=blockera-admin&utm_medium=referral&utm_campaign=roadmap-page&utm_content=cta-link'
+									}
 								>
-									<Icon
-										library={'ui'}
-										icon={'arrow-new-tab'}
-										iconSize={22}
-									/>
-								</span>
-							</WPButton>
+									{__('Roadmap', 'blockera')}
 
-							{promotionComponent}
-							{profileComponent}
-						</NavigableMenu>
-					}
-				/>
-			</SettingsContext.Provider>
-		</div>
+									<span
+										className={componentInnerClassNames(
+											'active-icon'
+										)}
+									>
+										<Icon
+											library={'ui'}
+											icon={'arrow-new-tab'}
+											iconSize={22}
+										/>
+									</span>
+								</WPButton>
+
+								<WPButton
+									className={componentInnerClassNames(
+										'tabs__list__item',
+										'tab-item-button'
+									)}
+									target="_blank"
+									href={
+										'https://community.blockera.ai/feature-request-1rsjg2ck?utm_source=blockera-admin&utm_medium=referral&utm_campaign=feature-request-page&utm_content=cta-link'
+									}
+								>
+									{__('Feature Request', 'blockera')}
+
+									<span
+										className={componentInnerClassNames(
+											'active-icon'
+										)}
+									>
+										<Icon
+											library={'ui'}
+											icon={'arrow-new-tab'}
+											iconSize={22}
+										/>
+									</span>
+								</WPButton>
+
+								{promotionComponent}
+								{profileComponent}
+							</NavigableMenu>
+						}
+					/>
+				</SettingsContext.Provider>
+			</div>
+		</>
 	);
 };

@@ -1,0 +1,54 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
+import { generalInnerBlockStates } from '@blockera/editor/js/extensions/libs/block-card/block-states/states';
+
+export const icon = {
+	block: {
+		status: true,
+		inspector: {
+			status: true,
+			tabPosition: 'blockera-inspector-settings-start',
+			innerBlocks: {
+				status: true,
+				items: {
+					'elements/icon': {
+						name: 'elements/icon',
+						label: __('Icon', 'blockera'),
+						description: __('The icon element.', 'blockera'),
+						icon: (
+							<Icon
+								icon="star-filled"
+								library="wp"
+								iconSize="20"
+							/>
+						),
+						settings: {
+							force: false,
+							priority: 10,
+						},
+						availableBlockStates: generalInnerBlockStates,
+					},
+				},
+			},
+			blockStates: {
+				status: false,
+			},
+		},
+		htmlEditable: {
+			status: true,
+		},
+		contextualToolbar: {
+			status: false,
+			type: 'none',
+		},
+	},
+};

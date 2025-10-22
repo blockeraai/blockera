@@ -1,0 +1,15 @@
+{
+	"name": "blockera/feature-icon",
+	"version": "1.0.0",
+	"description": "The Blockera Feature Icon package.",
+	"autoload": {
+		"psr-4": {
+			"Blockera\\Feature\\Icon\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Feature\\Icon\\Tests\\": "src/tests/"
+		}
+	}
+}

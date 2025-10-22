@@ -1,0 +1,308 @@
+[
+	{
+		"iconName": "amazon",
+		"title": "Amazon",
+		"library": "brands",
+		"tags": ["ecommerce", "shopping", "retail"]
+	},
+	{
+		"iconName": "appstore",
+		"title": "App Store",
+		"library": "brands",
+		"tags": ["apple", "mobile", "apps", "store"]
+	},
+	{
+		"iconName": "apple",
+		"title": "Apple",
+		"library": "brands",
+		"tags": ["brand", "technology", "company"]
+	},
+	{
+		"iconName": "bandcamp",
+		"title": "Bandcamp",
+		"library": "brands",
+		"tags": ["music", "artists", "indie"]
+	},
+	{
+		"iconName": "behance",
+		"title": "Behance",
+		"library": "brands",
+		"tags": ["design", "portfolio", "creative"]
+	},
+	{
+		"iconName": "chatgpt",
+		"title": "ChatGPT",
+		"library": "brands",
+		"tags": ["ai", "chatbot", "openai"]
+	},
+	{
+		"iconName": "claude",
+		"title": "Claude",
+		"library": "brands",
+		"tags": ["ai", "chatbot", "anthropic"]
+	},
+	{
+		"iconName": "codepen",
+		"title": "CodePen",
+		"library": "brands",
+		"tags": ["coding", "development", "frontend"]
+	},
+	{
+		"iconName": "deviantart",
+		"title": "DeviantArt",
+		"library": "brands",
+		"tags": ["art", "community", "creative"]
+	},
+	{
+		"iconName": "digg",
+		"title": "Digg",
+		"library": "brands",
+		"tags": ["news", "social", "content"]
+	},
+	{
+		"iconName": "dribbble",
+		"title": "Dribbble",
+		"library": "brands",
+		"tags": ["design", "inspiration", "creative"]
+	},
+	{
+		"iconName": "dropbox",
+		"title": "Dropbox",
+		"library": "brands",
+		"tags": ["cloud", "storage", "file-sharing"]
+	},
+	{
+		"iconName": "etsy",
+		"title": "Etsy",
+		"library": "brands",
+		"tags": ["handmade", "crafts", "marketplace"]
+	},
+	{
+		"iconName": "facebook",
+		"title": "Facebook",
+		"library": "brands",
+		"tags": ["social media", "networking", "community"]
+	},
+	{
+		"iconName": "feed",
+		"title": "RSS Feed",
+		"library": "brands",
+		"tags": ["rss", "subscription", "news"]
+	},
+	{
+		"iconName": "fivehundredpx",
+		"title": "500px",
+		"library": "brands",
+		"tags": ["photography", "art", "community"]
+	},
+	{
+		"iconName": "flickr",
+		"title": "Flickr",
+		"library": "brands",
+		"tags": ["photography", "photo-sharing", "community"]
+	},
+	{
+		"iconName": "foursquare",
+		"title": "Foursquare",
+		"library": "brands",
+		"tags": ["location", "check-in", "social"]
+	},
+	{
+		"iconName": "github",
+		"title": "GitHub",
+		"library": "brands",
+		"tags": ["coding", "development", "repository", "code", "open source"]
+	},
+	{
+		"iconName": "goodreads",
+		"title": "Goodreads",
+		"library": "brands",
+		"tags": ["books", "reading", "literature"]
+	},
+	{
+		"iconName": "google",
+		"title": "Google",
+		"library": "brands",
+		"tags": ["search", "technology", "company"]
+	},
+	{
+		"iconName": "google-drive",
+		"title": "Google Drive",
+		"library": "brands",
+		"tags": ["cloud", "storage", "google"]
+	},
+	{
+		"iconName": "google-gemini",
+		"title": "Google Gemini",
+		"library": "brands",
+		"tags": ["ai", "chatbot", "google"]
+	},
+	{
+		"iconName": "instagram",
+		"title": "Instagram",
+		"library": "brands",
+		"tags": ["social media", "photos", "sharing"]
+	},
+	{
+		"iconName": "lastfm",
+		"title": "Last.fm",
+		"library": "brands",
+		"tags": ["music", "scrobbling", "recommendations"]
+	},
+	{
+		"iconName": "linkedin",
+		"title": "LinkedIn",
+		"library": "brands",
+		"tags": ["professional", "networking", "business"]
+	},
+	{
+		"iconName": "mail",
+		"title": "Email",
+		"library": "brands",
+		"tags": ["email", "communication", "mail"]
+	},
+	{
+		"iconName": "mastodon",
+		"title": "Mastodon",
+		"library": "brands",
+		"tags": ["social media", "federated", "open source"]
+	},
+	{
+		"iconName": "medium",
+		"title": "Medium",
+		"library": "brands",
+		"tags": ["blogging", "writing"]
+	},
+	{
+		"iconName": "meetup",
+		"title": "Meetup",
+		"library": "brands",
+		"tags": ["events", "groups", "meetings"]
+	},
+	{
+		"iconName": "patreon",
+		"title": "Patreon",
+		"library": "brands",
+		"tags": ["crowdfunding", "support", "creators"]
+	},
+	{
+		"iconName": "perplexity",
+		"title": "Perplexity",
+		"library": "brands",
+		"tags": ["ai", "search", "question"]
+	},
+	{
+		"iconName": "pinterest",
+		"title": "Pinterest",
+		"library": "brands",
+		"tags": ["social media", "inspiration", "pins"]
+	},
+	{
+		"iconName": "pocket",
+		"title": "Pocket",
+		"library": "brands",
+		"tags": ["bookmarking", "reading"]
+	},
+	{
+		"iconName": "producthunt",
+		"title": "Product Hunt",
+		"library": "brands",
+		"tags": ["products", "discovery", "startups"]
+	},
+	{
+		"iconName": "reddit",
+		"title": "Reddit",
+		"library": "brands",
+		"tags": ["community", "discussion"]
+	},
+	{
+		"iconName": "skype",
+		"title": "Skype",
+		"library": "brands",
+		"tags": ["communication", "video call", "chat"]
+	},
+	{
+		"iconName": "slack",
+		"title": "Slack",
+		"library": "brands",
+		"tags": ["team", "communication", "workplace"]
+	},
+	{
+		"iconName": "snapchat",
+		"title": "Snapchat",
+		"library": "brands",
+		"tags": ["messaging"]
+	},
+	{
+		"iconName": "soundcloud",
+		"title": "SoundCloud",
+		"library": "brands",
+		"tags": ["music", "audio"]
+	},
+	{
+		"iconName": "spotify",
+		"title": "Spotify",
+		"library": "brands",
+		"tags": ["music", "audio"]
+	},
+	{
+		"iconName": "telegram",
+		"title": "Telegram",
+		"library": "brands",
+		"tags": ["messaging"]
+	},
+	{
+		"iconName": "tiktok",
+		"title": "TikTok",
+		"library": "brands",
+		"tags": ["video"]
+	},
+	{
+		"iconName": "tumblr",
+		"title": "Tumblr",
+		"library": "brands",
+		"tags": ["blogging"]
+	},
+	{
+		"iconName": "twitch",
+		"title": "Twitch",
+		"library": "brands",
+		"tags": ["gaming", "streaming"]
+	},
+	{
+		"iconName": "vimeo",
+		"title": "Vimeo",
+		"library": "brands",
+		"tags": ["video"]
+	},
+	{
+		"iconName": "vk",
+		"title": "VK",
+		"library": "brands",
+		"tags": []
+	},
+	{
+		"iconName": "word-press",
+		"title": "WordPress",
+		"library": "brands",
+		"tags": ["cms", "blogging"]
+	},
+	{
+		"iconName": "x",
+		"title": "X (Twitter)",
+		"library": "brands",
+		"tags": ["microblogging"]
+	},
+	{
+		"iconName": "yelp",
+		"title": "Yelp",
+		"library": "brands",
+		"tags": ["reviews", "business"]
+	},
+	{
+		"iconName": "youtube",
+		"title": "YouTube",
+		"library": "brands",
+		"tags": ["video"]
+	}
+]

@@ -4,8 +4,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo, useState, useReducer, useEffect } from '@wordpress/element';
 import type { MixedElement } from 'react';
+import { dispatch } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
+import { memo, useState, useReducer } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -15,9 +17,8 @@ import {
 	controlInnerClassNames,
 } from '@blockera/classnames';
 import {
+	isString,
 	isEmpty,
-	isObject,
-	isEquals,
 	isUndefined,
 	hasSameProps,
 	useLateEffect,
@@ -27,11 +28,14 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import { PromotionPopover } from '../';
 import { iconReducer } from './store/reducer';
 import { IconContextProvider } from './context';
 import type { IconControlProps } from './types';
 import { useControlContext } from '../../context';
-import { Button, MediaUploader, BaseControl } from '../index';
+import { parseUploadedMediaAndSetIcon } from './helpers';
+import { sanitizeRawSVGString } from './utils';
+import { Button, MediaUploader, BaseControl, Tooltip } from '../index';
 import { default as IconPickerPopover } from './components/icon-picker/icon-picker-popover';
 
 function IconControl({
@@ -49,6 +53,7 @@ function IconControl({
 	//
 	className,
 }: IconControlProps): MixedElement {
+	const { createNotice } = dispatch('core/notices');
 	const { value, setValue, attribute, blockName, resetToDefault } =
 		useControlContext({
 			id,
@@ -62,28 +67,8 @@ function IconControl({
 		setValue(currentIcon);
 	}, [currentIcon]);
 
-	useEffect(() => {
-		if (isObject(value) && !isEquals(value, currentIcon)) {
-			currentIconDispatch({
-				type: 'UPDATE_ICON',
-				icon: value.icon,
-				library: value.library,
-			});
-
-			// return undefined;
-		}
-
-		// if (!value) {
-		// 	currentIconDispatch({
-		// 		type: 'DELETE_ICON',
-		// 	});
-		// }
-
-		// return undefined;
-		// eslint-disable-next-line
-	}, [value]);
-
 	const [isOpenModal, setOpenModal] = useState(false);
+	const [isOpenPromotion, setIsOpenPromotion] = useState(false);
 
 	// $FlowFixMe
 	const openModal = (event) => {
@@ -116,15 +101,22 @@ function IconControl({
 			return false;
 		}
 
-		if (currentIcon.uploadSVG !== '') {
+		if ('' !== currentIcon.uploadSVG) {
 			return true;
 		}
 
-		if (currentIcon.icon === null) {
+		if (
+			!isUndefined(currentIcon?.svgString) &&
+			'' !== currentIcon.svgString
+		) {
+			return true;
+		}
+
+		if (null === currentIcon.icon) {
 			return false;
 		}
 
-		return currentIcon.icon !== '';
+		return '' !== currentIcon.icon;
 	}
 
 	// $FlowFixMe
@@ -142,6 +134,102 @@ function IconControl({
 		}
 
 		dispatchActions(action);
+	}
+
+	const onSelectSVG = (media) => {
+		if ('svg+xml' !== media.subtype) {
+			createNotice(
+				'error',
+				__('Please upload an SVG file!', 'blockera'),
+				{
+					isDismissible: true,
+				}
+			);
+			return;
+		}
+
+		parseUploadedMediaAndSetIcon(media, (svgString) => {
+			currentIconDispatch({
+				type: 'UPDATE_SVG',
+				uploadSVG: {
+					title: media.title,
+					filename: media.filename,
+					url: media.url,
+					updated: '',
+				},
+				svgString: sanitizeRawSVGString(svgString),
+			});
+		});
+	};
+
+	const mediaUploaderOpener = (event, open) => {
+		event.stopPropagation();
+		const callback = applyFilters(
+			'blockera.controls.iconControl.uploadSVG.onClick',
+			() => setIsOpenPromotion(true),
+			open
+		);
+
+		callback();
+	};
+
+	function renderIcon() {
+		if (!isUndefined(currentIcon?.icon) && !isEmpty(currentIcon?.icon)) {
+			return <Icon {...currentIcon} iconSize={50} />;
+		}
+
+		if (
+			!isUndefined(currentIcon?.renderedIcon) &&
+			!isEmpty(currentIcon?.renderedIcon) &&
+			isString(currentIcon?.renderedIcon)
+		) {
+			return (
+				<div
+					dangerouslySetInnerHTML={{
+						__html: atob(currentIcon.renderedIcon).replace(
+							/\s*style\s*=\s*["'][^"']*["']/g,
+							''
+						),
+					}}
+				/>
+			);
+		}
+
+		if (
+			!isUndefined(currentIcon?.svgString) &&
+			!isEmpty(currentIcon?.svgString) &&
+			isString(currentIcon?.svgString)
+		) {
+			return (
+				<div
+					dangerouslySetInnerHTML={{
+						__html: currentIcon.svgString.replace(
+							/\s*style\s*=\s*["'][^"']*["']/g,
+							''
+						),
+					}}
+				/>
+			);
+		}
+
+		// if custom uploaded svg icon url is available
+		if (
+			!isUndefined(currentIcon?.uploadSVG?.url) &&
+			!isEmpty(currentIcon?.uploadSVG?.url)
+		) {
+			return (
+				<img
+					src={currentIcon.uploadSVG.url}
+					alt={
+						currentIcon?.uploadSVG?.title
+							? currentIcon?.uploadSVG?.title.replaceAll('-', ' ')
+							: 'custom svg icon'
+					}
+				/>
+			);
+		}
+
+		return null;
 	}
 
 	return (
@@ -164,7 +252,21 @@ function IconControl({
 						isOpenModal ? 'is-open-icon-picker' : '',
 						className
 					)}
+					onClick={openModal}
 				>
+					{isOpenPromotion && (
+						<PromotionPopover
+							heading={__('Custom SVG Icons', 'blockera')}
+							featuresList={[
+								__('Upload custom SVG icons', 'blockera'),
+								__('Unlimited icon uploads', 'blockera'),
+								__('Unlock all icon libraries', 'blockera'),
+							]}
+							isOpen={isOpenPromotion}
+							onClose={() => setIsOpenPromotion(false)}
+						/>
+					)}
+
 					{hasIcon() ? (
 						<div
 							className={controlInnerClassNames(
@@ -173,34 +275,35 @@ function IconControl({
 							)}
 							onClick={openModal}
 						>
-							<Button
-								aria-label={__('Remove Icon', 'blockera')}
-								className="btn-delete"
-								noBorder={true}
-								isFocus={isOpenModal}
-								icon={
-									<Icon
-										library="wp"
-										icon="close"
-										iconSize="20"
-									/>
-								}
-								onClick={(e) => {
-									e.stopPropagation();
-									currentIconDispatch({
-										type: 'DELETE_ICON',
-									});
+							<Tooltip
+								text={__('Remove Icon', 'blockera')}
+								style={{
+									'--tooltip-bg': '#e20000',
 								}}
-							/>
-
-							{currentIcon.uploadSVG ? (
-								<img
-									src={currentIcon.uploadSVG.url}
-									alt={currentIcon.uploadSVG.title}
+								delay={300}
+							>
+								<Button
+									aria-label={__('Remove Icon', 'blockera')}
+									className="btn-delete"
+									noBorder={true}
+									isFocus={isOpenModal}
+									icon={
+										<Icon
+											library="ui"
+											icon="trash"
+											iconSize="20"
+										/>
+									}
+									onClick={(e) => {
+										e.stopPropagation();
+										currentIconDispatch({
+											type: 'DELETE_ICON',
+										});
+									}}
 								/>
-							) : (
-								<Icon {...currentIcon} iconSize={50} />
-							)}
+							</Tooltip>
+
+							{renderIcon()}
 
 							<div
 								className={controlInnerClassNames(
@@ -217,27 +320,17 @@ function IconControl({
 								</Button>
 
 								<MediaUploader
-									onSelect={(media) => {
-										currentIconDispatch({
-											type: 'UPDATE_SVG',
-											uploadSVG: {
-												title: media.title,
-												filename: media.filename,
-												url: media.url,
-												updated: '',
-											},
-										});
-									}}
+									allowedTypes={['image/svg+xml']}
+									onSelect={onSelectSVG}
 									mode="upload"
 									render={({ open }) => (
 										<Button
 											data-cy="upload-svg-btn"
 											className="btn-upload"
 											noBorder={true}
-											onClick={(event) => {
-												event.stopPropagation();
-												open();
-											}}
+											onClick={(event) =>
+												mediaUploaderOpener(event, open)
+											}
 										>
 											{labelUploadSvg}
 										</Button>
@@ -252,8 +345,25 @@ function IconControl({
 								onClick={openModal}
 								className="btn-choose-icon"
 							>
-								{labelChoose}
+								{labelIconLibrary}
 							</Button>
+
+							<MediaUploader
+								allowedTypes={['image/svg+xml']}
+								onSelect={onSelectSVG}
+								mode="upload"
+								render={({ open }) => (
+									<Button
+										data-cy="upload-svg-btn"
+										className="btn-choose-icon"
+										onClick={(event) =>
+											mediaUploaderOpener(event, open)
+										}
+									>
+										{labelUploadSvg}
+									</Button>
+								)}
+							/>
 						</div>
 					)}
 				</div>

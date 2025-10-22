@@ -11,6 +11,14 @@
 		width: max-content;
 		--icon-size: 16px;
 
+		.blockera-control-group {
+			border-style: dashed;
+		}
+
+		.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
+			border-style: solid;
+		}
+
 		.blockera-control-group-header {
 			padding: 0 5px 0 3px;
 

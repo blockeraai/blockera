@@ -10,6 +10,14 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/features-core"
+		},
+		{
+			"type": "path",
+			"url": "packages/features-library/icon"
+		},
+		{
+			"type": "path",
 			"url": "packages/blockera-admin"
 		},
 		{
@@ -54,11 +62,19 @@
 		},
 		{
 			"type": "path",
+			"url": "packages/plugin-compatibility"
+		},
+		{
+			"type": "path",
 			"url": "packages/http"
 		},
 		{
 			"type": "path",
-			"url": "packages/blocks/core"
+			"url": "packages/blocks-library/icon"
+		},
+		{
+			"type": "path",
+			"url": "packages/blocks-core"
 		},
 		{
 			"type": "path",
@@ -82,13 +98,17 @@
 	"require": {
 		"php": ">=7.4",
 		"blockera/blockera": "*",
+		"blockera/features-core": "*",
+		"blockera/feature-icon": "*",
 		"blockera/blockera-admin": "*",
+		"blockera/block-icon": "*",
 		"blockera/blocks-core": "*",
 		"blockera/bootstrap": "*",
 		"blockera/env": "*",
 		"blockera/classnames": "*",
 		"blockera/controls": "*",
 		"blockera/icons": "*",
+		"blockera/plugin-compatibility": "*",
 		"blockera/editor": "*",
 		"blockera/utils": "*",
 		"blockera/wordpress": "*",
@@ -97,13 +117,13 @@
 		"blockera/data-editor": "*",
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
-		"vlucas/phpdotenv": "^5.5@dev"
+		"vlucas/phpdotenv": "^5.5@dev",
+		"voku/simple_html_dom": "dev-master"
 	},
 	"require-dev": {
 		"blockera/dev-phpunit": "*",
 		"symfony/dom-crawler": "5.4.x-dev",
 		"symfony/css-selector": "5.4.x-dev",
-		"voku/simple_html_dom": "dev-master",
 		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpunit/phpunit": "^9.5.21",

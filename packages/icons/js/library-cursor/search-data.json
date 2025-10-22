@@ -1,0 +1,206 @@
+[
+	{
+		"iconName": "alias",
+		"title": "Alias",
+		"library": "cursor",
+		"tags": ["alias", "link", "shortcut", "reference", "pointer"]
+	},
+	{
+		"iconName": "cell",
+		"title": "Cell",
+		"library": "cursor",
+		"tags": ["cell", "table", "grid", "spreadsheet", "data"]
+	},
+	{
+		"iconName": "col-resize",
+		"title": "Column Resize",
+		"library": "cursor",
+		"tags": ["column", "resize", "width", "adjust", "table"]
+	},
+	{
+		"iconName": "context-menu",
+		"title": "Context Menu",
+		"library": "cursor",
+		"tags": ["context", "menu", "right-click", "options", "dropdown"]
+	},
+	{
+		"iconName": "crosshair",
+		"title": "Crosshair",
+		"library": "cursor",
+		"tags": ["crosshair", "target", "aim", "precision", "center"]
+	},
+	{
+		"iconName": "e-resize",
+		"title": "East Resize",
+		"library": "cursor",
+		"tags": ["east", "right", "resize", "horizontal", "arrow"]
+	},
+	{
+		"iconName": "ew-resize",
+		"title": "East-West Resize",
+		"library": "cursor",
+		"tags": [
+			"east-west",
+			"horizontal",
+			"resize",
+			"left-right",
+			"bidirectional"
+		]
+	},
+	{
+		"iconName": "grab",
+		"title": "Grab",
+		"library": "cursor",
+		"tags": ["grab", "hand", "drag", "move", "interactive"]
+	},
+	{
+		"iconName": "grabbing",
+		"title": "Grabbing",
+		"library": "cursor",
+		"tags": ["grabbing", "hand", "dragging", "active", "move"]
+	},
+	{
+		"iconName": "help",
+		"title": "Help",
+		"library": "cursor",
+		"tags": ["help", "question", "assistance", "info", "support"]
+	},
+	{
+		"iconName": "move",
+		"title": "Move",
+		"library": "cursor",
+		"tags": ["move", "relocate", "position", "drag", "transport"]
+	},
+	{
+		"iconName": "n-resize",
+		"title": "North Resize",
+		"library": "cursor",
+		"tags": ["north", "up", "resize", "vertical", "arrow"]
+	},
+	{
+		"iconName": "ne-resize",
+		"title": "North-East Resize",
+		"library": "cursor",
+		"tags": ["north-east", "diagonal", "resize", "corner", "arrow"]
+	},
+	{
+		"iconName": "nesw-resize",
+		"title": "North-East-South-West Resize",
+		"library": "cursor",
+		"tags": [
+			"north-east-south-west",
+			"diagonal",
+			"resize",
+			"bidirectional",
+			"corner"
+		]
+	},
+	{
+		"iconName": "none",
+		"title": "None",
+		"library": "cursor",
+		"tags": ["none", "hidden", "invisible", "disabled", "empty"]
+	},
+	{
+		"iconName": "not-allowed",
+		"title": "Not Allowed",
+		"library": "cursor",
+		"tags": ["not-allowed", "forbidden", "blocked", "denied", "prohibited"]
+	},
+	{
+		"iconName": "ns-resize",
+		"title": "North-South Resize",
+		"library": "cursor",
+		"tags": [
+			"north-south",
+			"vertical",
+			"resize",
+			"up-down",
+			"bidirectional"
+		]
+	},
+	{
+		"iconName": "nw-resize",
+		"title": "North-West Resize",
+		"library": "cursor",
+		"tags": ["north-west", "diagonal", "resize", "corner", "arrow"]
+	},
+	{
+		"iconName": "nwse-resize",
+		"title": "North-West-South-East Resize",
+		"library": "cursor",
+		"tags": [
+			"north-west-south-east",
+			"diagonal",
+			"resize",
+			"bidirectional",
+			"corner"
+		]
+	},
+	{
+		"iconName": "pointer",
+		"title": "Pointer",
+		"library": "cursor",
+		"tags": ["pointer", "cursor", "click", "select", "arrow"]
+	},
+	{
+		"iconName": "row-resize",
+		"title": "Row Resize",
+		"library": "cursor",
+		"tags": ["row", "resize", "height", "adjust", "table"]
+	},
+	{
+		"iconName": "s-resize",
+		"title": "South Resize",
+		"library": "cursor",
+		"tags": ["south", "down", "resize", "vertical", "arrow"]
+	},
+	{
+		"iconName": "se-resize",
+		"title": "South-East Resize",
+		"library": "cursor",
+		"tags": ["south-east", "diagonal", "resize", "corner", "arrow"]
+	},
+	{
+		"iconName": "sw-resize",
+		"title": "South-West Resize",
+		"library": "cursor",
+		"tags": ["south-west", "diagonal", "resize", "corner", "arrow"]
+	},
+	{
+		"iconName": "text",
+		"title": "Text",
+		"library": "cursor",
+		"tags": ["text", "typing", "input", "cursor", "edit"]
+	},
+	{
+		"iconName": "vertical-text",
+		"title": "Vertical Text",
+		"library": "cursor",
+		"tags": ["vertical", "text", "typing", "input", "cursor"]
+	},
+	{
+		"iconName": "w-resize",
+		"title": "West Resize",
+		"library": "cursor",
+		"tags": ["west", "left", "resize", "horizontal", "arrow"]
+	},
+	{
+		"iconName": "wait",
+		"title": "Wait",
+		"library": "cursor",
+		"tags": ["wait", "loading", "hourglass", "time", "busy"]
+	},
+	{
+		"iconName": "zoom-in",
+		"title": "Zoom In",
+		"library": "cursor",
+		"tags": ["zoom", "in", "magnify", "enlarge", "magnification"]
+	},
+	{
+		"iconName": "zoom-out",
+		"title": "Zoom Out",
+		"library": "cursor",
+		"tags": ["zoom", "out", "reduce", "shrink", "magnification"]
+	}
+]

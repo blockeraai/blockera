@@ -54,16 +54,6 @@ export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 	}
 );
 
-export const getWidthSizesTitle: () => string = memoize(function (): string {
-	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
-
-	if (isUndefined(layout)) {
-		return __('Editor Width & Height Sizes', 'blockera');
-	}
-
-	return __('Theme Width & Height Sizes', 'blockera');
-});
-
 export const getWidthSize: (id: string) => ?VariableItem = memoize(function (
 	id: string
 ): ?VariableItem {

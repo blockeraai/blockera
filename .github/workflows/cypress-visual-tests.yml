@@ -169,6 +169,55 @@ jobs:
             - name: Stop WordPress Environment
               run: npm run env:stop
 
+            # Check for new baseline files that need to be added to the repository
+            - name: Check for new baseline files
+              id: check_baseline
+              run: |
+                  # Check if baseline directory exists and has files
+                  if [ -d "visual-screenshots/baseline" ]; then
+                    # Count untracked files in baseline directory (files that exist but are not in git)
+                    untracked_files=$(git ls-files --others --exclude-standard visual-screenshots/baseline/ | wc -l)
+                    echo "Found $untracked_files untracked files in visual-screenshots/baseline directory"
+                    
+                    # List untracked baseline files for debugging
+                    echo "Untracked baseline files:"
+                    git ls-files --others --exclude-standard visual-screenshots/baseline/ | sort
+                    
+                    # If there are untracked files, this indicates new baseline files were generated
+                    if [ "$untracked_files" -gt 0 ]; then
+                      echo "New baseline files detected! These need to be added to the repository."
+                      echo "baseline_files_detected=true" >> $GITHUB_OUTPUT
+                      echo "baseline_count=$untracked_files" >> $GITHUB_OUTPUT
+                    else
+                      echo "No new baseline files found."
+                      echo "baseline_files_detected=false" >> $GITHUB_OUTPUT
+                    fi
+                  else
+                    echo "Baseline directory does not exist."
+                    echo "baseline_files_detected=false" >> $GITHUB_OUTPUT
+                  fi
+
+            # Fail the workflow if new baseline files are detected
+            - name: Fail if new baseline files detected
+              if: steps.check_baseline.outputs.baseline_files_detected == 'true'
+              run: |
+                  echo "❌ FAILURE: New baseline files detected in visual-screenshots/baseline directory!"
+                  echo "This means there are visual tests that don't have baseline files in the repository."
+                  echo "Please add the following baseline files to the repository:"
+                  git ls-files --others --exclude-standard visual-screenshots/baseline/ | sort
+                  echo ""
+                  echo "The baseline files have been uploaded as artifacts for you to download and add manually."
+                  exit 1
+
+            # Upload new baseline files as artifacts for developers to add manually
+            - name: Upload new baseline files as artifacts
+              if: steps.check_baseline.outputs.baseline_files_detected == 'true'
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ${{ matrix.category }}-new-baseline-files
+                  path: visual-screenshots/baseline/
+                  retention-days: 7
+
             # Upload diff artifacts if tests fail
             - name: Upload diff artifacts
               if: failure()

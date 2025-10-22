@@ -14,14 +14,15 @@ import {
 	useEffect,
 } from '@wordpress/element';
 import { doAction } from '@wordpress/hooks';
+import { SlotFillProvider, Slot } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { experimental } from '@blockera/env';
 import { Tabs, type TTabProps } from '@blockera/controls';
-import { isEquals, isObject, cloneObject } from '@blockera/utils';
+import { ExtensionSlotFill } from '@blockera/features-core';
+import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
 // import { useTraceUpdate } from '@blockera/editor';
 
@@ -32,7 +33,6 @@ const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
  */
 import { ErrorBoundaryFallback } from '../../hooks/block-settings';
 import { BackgroundExtension } from '../background';
-import { IconExtension } from '../icon';
 import { BorderAndShadowExtension } from '../border-and-shadow';
 import { EffectsExtension } from '../effects';
 import { TypographyExtension } from '../typography';
@@ -54,6 +54,7 @@ import {
 	// FIXME: we are double check this to fix re-rendering problems.
 	// propsAreEqual
 } from '../../components/utils';
+import { useBlockSection } from '../../components';
 import StateContainer from '../../components/state-container';
 import { STORE_NAME } from '../base/store/constants';
 import type {
@@ -201,16 +202,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		const { getExtensions } = select(STORE_NAME);
 		const cacheKey =
 			cacheKeyPrefix + '_' + getNormalizedCacheVersion(version);
-		const extensions = getExtensions(props.name);
+		let extensions = getExtensions(props.name);
+		const { getBlockType } = select('core/blocks');
+		const blockType = getBlockType(props.name);
+		extensions = mergeObject(
+			extensions,
+			blockType.supports?.blockExtensions || {}
+		);
 		const _extensionsWithoutLabel = extensionsWithoutLabel(
 			cloneObject(extensions)
 		);
 		const cacheData = useMemo(() => {
-			let cache = getItem(cacheKey);
+			const localCache = getItem(cacheKey) || {};
 
-			if (!cache) {
+			if (!localCache) {
 				cache = freshItem(cacheKey, cacheKeyPrefix);
 			}
+
+			let { [props.name]: cache = {} } = localCache;
 
 			// If cache data doesn't equal extensions, update cache
 			// Compare cache and _extensionsWithoutLabel, ignoring specific properties
@@ -240,7 +249,18 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 
 			if (!isEquals(cacheOmitted, extensionsOmitted)) {
 				cache = _extensionsWithoutLabel;
-				setItem(cacheKey, _extensionsWithoutLabel);
+				setItem(
+					cacheKey,
+					mergeObject(
+						{
+							...(getItem(cacheKey) || {}),
+							[props.name]: cache,
+						},
+						{
+							[props.name]: _extensionsWithoutLabel,
+						}
+					)
+				);
 			}
 
 			return cache;
@@ -248,7 +268,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		}, [cacheKey, extensions]);
 		const supports = useMemo(() => {
 			if (!cacheData) {
-				setItem(cacheKey, _extensionsWithoutLabel);
+				setItem(
+					cacheKey,
+					mergeObject(cacheData, {
+						[props.name]: _extensionsWithoutLabel,
+					})
+				);
 				return extensions;
 			}
 
@@ -330,7 +355,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			}
 
 			setSettings(supports);
-			updateItem(cacheKey, extensionsWithoutLabel(cloneObject(supports)));
+			updateItem(
+				cacheKey,
+				mergeObject(cacheData, {
+					[props.name]: extensionsWithoutLabel(cloneObject(supports)),
+				})
+			);
 			// eslint-disable-next-line
 		}, [currentBlock]);
 
@@ -347,7 +377,12 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 			};
 
 			setSettings(newSettings);
-			updateItem(cacheKey, newSettings);
+			updateItem(
+				cacheKey,
+				mergeObject(cacheData, {
+					[props.name]: newSettings,
+				})
+			);
 			updateExtension({
 				name,
 				newSupports,
@@ -356,7 +391,6 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const {
-			iconConfig,
 			mouseConfig,
 			sizeConfig,
 			layoutConfig,
@@ -393,39 +427,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'settings':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-settings-panel`}>
-							{experimental().get(
-								'editor.extensions.iconExtension'
-							) && (
-								<IconExtension
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-settings-start'}
+								/>
+								<ExtensionSlotFill
 									{...{
-										iconConfig,
 										block,
-										values: {
-											blockeraIcon:
-												currentStateAttributes.blockeraIcon,
-											blockeraIconGap:
-												currentStateAttributes.blockeraIconGap,
-											blockeraIconSize:
-												currentStateAttributes.blockeraIconSize,
-											blockeraIconLink:
-												currentStateAttributes.blockeraIconLink,
-											blockeraIconColor:
-												currentStateAttributes.blockeraIconColor,
-											blockeraIconPosition:
-												currentStateAttributes.blockeraIconPosition,
-										},
-										extensionProps: {
-											blockeraIcon: {},
-											blockeraIconPosition: {},
-											blockeraIconGap: {},
-											blockeraIconSize: {},
-											blockeraIconColor: {},
-											blockeraIconLink: {},
-										},
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
 										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-settings-start',
 									}}
 								/>
-							)}
+							</SlotFillProvider>
 
 							{/* <ErrorBoundary
 								fallbackRender={({ error }): MixedElement => (
@@ -458,6 +478,22 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									}
 								/>
 							</ErrorBoundary> */}
+							<SlotFillProvider>
+								<Slot name={'blockera-inspector-settings'} />
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName: 'blockera-inspector-settings',
+									}}
+								/>
+							</SlotFillProvider>
 							<ErrorBoundary
 								fallbackRender={({ error }) => (
 									<ErrorBoundaryFallback
@@ -500,6 +536,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									}
 								/>
 							</ErrorBoundary>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-settings-end'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-settings-end',
+									}}
+								/>
+							</SlotFillProvider>
 						</Fragment>
 					);
 					break;
@@ -507,6 +562,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'style':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-style-panel`}>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-styles-start'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-styles-start',
+									}}
+								/>
+							</SlotFillProvider>
 							<ErrorBoundary
 								fallbackRender={({ error }) => (
 									<ErrorBoundaryFallback
@@ -830,6 +904,23 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									setSettings={handleOnChangeSettings}
 								/>
 							</ErrorBoundary>
+
+							<SlotFillProvider>
+								<Slot name={'blockera-inspector-styles'} />
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName: 'blockera-inspector-styles',
+									}}
+								/>
+							</SlotFillProvider>
 
 							{directParentBlock?.innerBlocks?.length > 0 &&
 								directParentBlock?.attributes.blockeraDisplay
@@ -1242,6 +1333,24 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									setSettings={handleOnChangeSettings}
 								/>
 							</ErrorBoundary>
+
+							<SlotFillProvider>
+								<Slot name={'blockera-inspector-styles-end'} />
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions-start',
+									}}
+								/>
+							</SlotFillProvider>
 						</Fragment>
 					);
 					break;
@@ -1249,6 +1358,27 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 				case 'interactions':
 					activePanel.push(
 						<Fragment key={`${props.clientId}-interactions-panel`}>
+							<SlotFillProvider>
+								<Slot
+									name={
+										'blockera-inspector-interactions-start'
+									}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions-start',
+									}}
+								/>
+							</SlotFillProvider>
 							{/* <ErrorBoundary
 								fallbackRender={({ error }) => (
 												<ErrorBoundaryFallback
@@ -1316,6 +1446,26 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									}
 								/>
 							</ErrorBoundary> */}
+
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-interactions'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions',
+									}}
+								/>
+							</SlotFillProvider>
 
 							<ErrorBoundary
 								fallbackRender={({ error }) => (
@@ -1395,6 +1545,25 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 									setSettings={handleOnChangeSettings}
 								/>
 							</ErrorBoundary>
+							<SlotFillProvider>
+								<Slot
+									name={'blockera-inspector-interactions-end'}
+								/>
+								<ExtensionSlotFill
+									{...{
+										block,
+										settings,
+										attributes,
+										useBlockSection,
+										blockFeatures: additional.blockFeatures,
+										currentStateAttributes,
+										handleOnChangeSettings,
+										handleOnChangeAttributes,
+										slotName:
+											'blockera-inspector-interactions-end',
+									}}
+								/>
+							</SlotFillProvider>
 						</Fragment>
 					);
 					break;
@@ -1404,13 +1573,17 @@ export const SharedBlockExtension: ComponentType<Props> = memo(
 		};
 
 		const tabs = [
-			{
-				name: 'settings',
-				title: __('General', 'blockera'),
-				tooltip: __('General Block Settings', 'blockera'),
-				className: 'settings-tab',
-				icon: <Icon icon="gear" iconSize="20" />,
-			},
+			...(isInnerBlock(currentBlock)
+				? []
+				: [
+						{
+							name: 'settings',
+							title: __('General', 'blockera'),
+							tooltip: __('General Block Settings', 'blockera'),
+							className: 'settings-tab',
+							icon: <Icon icon="gear" iconSize="20" />,
+						},
+				  ]),
 			{
 				name: 'style',
 				title: __('Styles', 'blockera'),

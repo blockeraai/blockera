@@ -17,12 +17,12 @@ body {
 .blockera-control.blockera-control-value-addon-pointers {
 	position: absolute;
 	top: -14px;
-	right: -14px;
+	left: -14px;
 	z-index: 1;
 	width: 100px;
 	pointer-events: none;
 	direction: revert;
-	text-align: right;
+	text-align: left;
 
 	&.active-addon-pointers {
 
@@ -79,6 +79,16 @@ body {
 
 				.blockera-control-remove-icon {
 					display: block;
+				}
+			}
+		}
+
+		&.active-value-addon {
+
+			&:hover {
+
+				.blockera-control-remove-icon {
+					--blockera-value-addon-var-color: #e20000;
 				}
 			}
 		}

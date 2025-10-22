@@ -117,7 +117,10 @@ export function disableGutenbergFeatures() {
 	});
 }
 
-export function getBlockInserter() {
+export function getBlockInserter(selector = false) {
+	if (selector) {
+		return cy.getIframeBody().find(selector);
+	}
 	return cy.get(
 		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header [aria-label="Block Inserter"], .edit-site-header [aria-label="Block Inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle is-primary[aria-pressed="false"]'
 	);
@@ -126,14 +129,45 @@ export function getBlockInserter() {
 /**
  * From inside the WordPress editor open the blockera Gutenberg editor panel
  *
+ * for simple blocks you can use the blockName as 'core/image'
+ * for blocks with variations you can use the blockName as {category}/{blockType}/{variation}
+ * examples:
+ * - 'core/group/group'
+ * - 'core/image/blockera/icon'
+ *
  * @param {string}  blockName   The name to find in the block inserter
  *                              e.g 'core/image'.
  * @param {boolean} clearEditor Should clear editor of all blocks
  * @param {string} className The block css class name
  */
-export function addBlockToPost(blockName, clearEditor = false, className = '') {
-	const blockCategory = blockName.split('/')[0] || false;
-	const blockID = blockName.split('/')[1] || false;
+export function addBlockToPost(
+	blockName,
+	clearEditor = false,
+	className = '',
+	blockInserterSelector = false
+) {
+	const blockNameArray = blockName.split('/');
+
+	let blockCategory = false;
+	let blockType = false;
+	let blockID = false;
+	let blockSearchName = false;
+
+	if (blockNameArray.length === 4) {
+		blockCategory = blockNameArray[0];
+		blockType = blockNameArray[1];
+		blockID = blockNameArray[2] + '/' + blockNameArray[3];
+		blockSearchName = blockNameArray[3];
+	} else if (blockNameArray.length === 3) {
+		blockCategory = blockNameArray[0];
+		blockType = blockNameArray[1];
+		blockID = blockNameArray[2];
+		blockSearchName = blockNameArray[2];
+	} else {
+		blockCategory = blockNameArray[0];
+		blockID = blockNameArray[1];
+		blockSearchName = blockNameArray[1];
+	}
 
 	if (!blockCategory || !blockID) {
 		return;
@@ -143,27 +177,34 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 		clearBlocks();
 	}
 
-	getBlockInserter().click();
+	getBlockInserter(blockInserterSelector).click();
 
 	// eslint-disable-next-line
 	cy.get(
 		'.block-editor-inserter__search-input,input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
 	)
 		.click()
-		.type(blockName, { delay: 0 });
+		.type(blockSearchName, { delay: 0 });
 
 	/**
 	 * The network request to block-directory may be cached and is not consistently fired with each test.
 	 * Instead of intercepting we can await known dom elements that appear only when search results are present.
 	 * This should correct a race condition in CI.
 	 */
-	cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
+	if (!blockInserterSelector)
+		cy.get('div.block-editor-inserter__main-area:not(.show-as-tabs)');
 
-	const targetClassName =
-		(blockCategory === 'core' ? '' : `-${blockCategory}`) + `-${blockID}`;
-	cy.get('.editor-block-list-item' + targetClassName)
-		.first()
-		.click({ force: true });
+	let targetClassName = '';
+
+	if (blockType) {
+		targetClassName = `.editor-block-list-item-${CSS.escape(
+			`${blockType}/${blockID}`
+		)}`;
+	} else {
+		targetClassName = `.editor-block-list-item-${CSS.escape(blockID)}`;
+	}
+
+	cy.get(targetClassName).first().click({ force: true });
 
 	// Make sure the block was added to our page
 	cy.get(`[class*="-visual-editor"]`)
@@ -180,8 +221,11 @@ export function addBlockToPost(blockName, clearEditor = false, className = '') {
 
 	cy.openDocumentSettingsSidebar('Block');
 
-	// Click on added new block item.
-	cy.getBlock(blockName).click();
+	if (blockType) {
+		cy.getBlock(`${blockCategory}/${blockType}`).last().click();
+	} else {
+		cy.getBlock(`${blockCategory}/${blockID}`).last().click();
+	}
 
 	cy.window()
 		.its('wp.hooks')
@@ -489,9 +533,13 @@ export function openMoreFeaturesControl(label) {
 		});
 }
 
-export const reSelectBlock = (blockType = 'core/paragraph') => {
-	// unfocus block
+// unfocus block
+export const deSelectBlock = () => {
 	cy.getIframeBody().find('h1').click();
+};
+
+export const reSelectBlock = (blockType = 'core/paragraph') => {
+	deSelectBlock();
 
 	// reselect block
 	cy.getIframeBody()

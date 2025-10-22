@@ -16,7 +16,8 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Remove Pull Request env files
-              run: rm -rf .pr-* ! -name "*.example"
+              run: |
+                  find . -name ".pr-*" ! -name "*.env-example*" ! -name "*.example.*" -delete
 
             # Step 3: Configure Git (required for committing changes)
             - name: Set up Git

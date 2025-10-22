@@ -20,7 +20,6 @@ import { registerCommands } from './commands';
 /**
  * Style dependencies
  */
-import '../../../controls/js/style.scss';
 import '../../../../.storybook/styles/style.lazy.scss';
 import { WithControlDataProvider } from './components/providers/control-provider/with-control-data-provider';
 import { controlReducer } from '@blockera/controls/js/store/reducers/control-reducer';

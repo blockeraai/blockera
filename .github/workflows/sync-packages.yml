@@ -1,4 +1,4 @@
-name: Sync Packages to Other Repos
+name: Sync Packages to Other Repos on Push in Master
 
 on:
     push:
@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout Primary Repo
+            - name: Checkout Repository
               uses: actions/checkout@v4
 
             - name: Sync packages with other dependent repositories

@@ -71,6 +71,11 @@ export function blockExtensions(state: Object = {}, action: Object): Object {
 			};
 		case 'REMOVE_BLOCK_EXTENSIONS':
 			return omit(state, action.names);
+		case 'UPDATE_BLOCK_EXTENSIONS':
+			return {
+				...state,
+				...keyBlockExtensionsByName(action.blockExtensions),
+			};
 		case 'CHANGE_CURRENT_BLOCK':
 			return {
 				...state,

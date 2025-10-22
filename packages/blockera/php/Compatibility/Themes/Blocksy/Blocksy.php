@@ -57,7 +57,7 @@ class Blocksy {
 					'label' => sprintf(
 					// translators: it's the product name (a theme or plugin name).
 						__(
-							'%s Colors',
+							'%s Color Variables',
 							'blockera' 
 						),
 						// translators: Blocksy is a theme name.
@@ -69,7 +69,7 @@ class Blocksy {
 					'label' => sprintf(
 						// translators: it's the product name (a theme or plugin name).
 						__(
-							'%s Width Size',
+							'%s Width Size Variables',
 							'blockera' 
 						),
 						// translators: Blocksy is a theme name.

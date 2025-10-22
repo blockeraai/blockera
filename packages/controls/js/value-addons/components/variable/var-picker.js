@@ -179,6 +179,7 @@ export default function ({
 											? {
 													gap: '5px',
 													padding: '0px 4px 0px 6px',
+													maxWidth: '118px',
 											  }
 											: {}),
 									}}
@@ -221,7 +222,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'blockera')}
+							label={__('Remove variable', 'blockera')}
 						>
 							<Icon icon="trash" iconSize="20" />
 						</Button>
