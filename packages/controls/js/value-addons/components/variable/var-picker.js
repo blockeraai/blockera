@@ -222,7 +222,7 @@ export default function ({
 							size={'extra-small'}
 							onClick={controlProps.handleOnClickRemove}
 							style={{ padding: '5px' }}
-							label={__('Remove', 'blockera')}
+							label={__('Remove variable', 'blockera')}
 						>
 							<Icon icon="trash" iconSize="20" />
 						</Button>

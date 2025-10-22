@@ -83,6 +83,16 @@ body {
 			}
 		}
 
+		&.active-value-addon {
+
+			&:hover {
+
+				.blockera-control-remove-icon {
+					--blockera-value-addon-var-color: #e20000;
+				}
+			}
+		}
+
 		&.open-value-addon {
 			transform: scale3d(1.25, 1.25, 1.25) !important;
 		}
