@@ -411,7 +411,7 @@ export const StyleItem = ({
 						{hasChangesets && (
 							<ChangeIndicator
 								isChanged={hasChangesets}
-								animated={true}
+								isAnimated={true}
 								primaryColor={'#1ca120'}
 								size={'5'}
 							/>

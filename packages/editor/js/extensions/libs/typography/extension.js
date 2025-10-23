@@ -395,6 +395,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 					ariaLabel={__('More typography settings', 'blockera')}
 					isOpen={false}
 					isChanged={isAdvancedEdited}
+					isAnimated={true}
 				>
 					{(isShowTextAlign ||
 						isShowTextDecoration ||

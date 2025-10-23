@@ -228,7 +228,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 
 					<ChangeIndicator
 						isChanged={hasChangesets}
-						animated={true}
+						isAnimated={true}
 						primaryColor={
 							activeStyleId === 'default' ? '#1ca120' : '#ffffff'
 						}
