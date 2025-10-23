@@ -187,7 +187,7 @@ export default function RepeaterItemActions({
 					<Tooltip
 						text={__('Delete', 'blockera')}
 						style={{
-							'--tooltip-bg': '#e20000',
+							'--tooltip-bg': '#e20b0b',
 						}}
 						delay={300}
 					>
@@ -244,7 +244,7 @@ export default function RepeaterItemActions({
 								getArialLabelSuffix(itemId)
 							)}
 							style={{
-								'--blockera-controls-primary-color': '#e20000',
+								'--blockera-controls-primary-color': '#e20b0b',
 							}}
 						/>
 					</Tooltip>

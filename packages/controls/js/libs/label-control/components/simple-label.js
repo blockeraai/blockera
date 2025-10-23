@@ -60,7 +60,7 @@ export const SimpleLabelControl = ({
 				<Tooltip
 					text={__('Reset to default', 'blockera')}
 					style={{
-						'--tooltip-bg': '#e20000',
+						'--tooltip-bg': '#e20b0b',
 					}}
 					delay={300}
 				>
