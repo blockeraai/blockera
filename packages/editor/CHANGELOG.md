@@ -10,6 +10,7 @@
 - Improved how styles are applied to blocks to ensure they follow web standards and work reliably across different browsers.
 - The inner block items design improved to make them different of the block states.
 - Block Settings Section: improve design and UX.
+- Add `&` support for targeting current block in custom CSS feature.
 
 ## 2.0.1 (2025-07-22)
 

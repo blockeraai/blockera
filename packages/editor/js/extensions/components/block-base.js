@@ -380,10 +380,9 @@ export const BlockBase: ComponentType<any> = (
 		blockName: name,
 		currentAttributes,
 		defaultAttributes,
-		customCss: attributes?.blockeraCustomCSS?.value?.replace(
-			/(\.|#)block/gi,
-			`#block-${clientId}`
-		),
+		customCss: attributes?.blockeraCustomCSS?.value
+			?.replace(/(\.|#)block/gi, `#block-${clientId}`)
+			?.replace(/&/gi, `#block-${clientId}`),
 		activeDeviceType: getDeviceType(),
 	};
 
