@@ -20,6 +20,8 @@
 - Added E2E tests to check icon functionality of `Navigation Link` block.
 - Added E2E tests to check icon functionality of `Navigation Submenu` block.
 - Added E2E tests to check icon functionality of `Navigation Submenu` block.
+- Added E2E tests to check functionality and support of `Post Time to Read` block.
+- Added E2E tests to check functionality and support of `Post Word Count` block.
 
 ## 1.4.0 (2025-05-19)
 
