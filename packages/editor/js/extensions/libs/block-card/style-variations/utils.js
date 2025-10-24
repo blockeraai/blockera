@@ -221,22 +221,36 @@ export function useStylesForBlocks({
 	);
 	const genericPreviewBlock = useGenericPreviewBlock(block, blockType);
 
+	const isDeletedStyle = isString(activeStyle) ? activeStyle : false;
+
 	const onSelect = useCallback(
-		(style: string) => {
+		(newStyle: string) => {
 			const styleClassName = replaceActiveStyle(
 				className,
-				activeStyle,
-				style
+				isString(isDeletedStyle)
+					? {
+							name: isDeletedStyle,
+							label: isDeletedStyle,
+							isDefault: false,
+							isDeleted: true,
+					  }
+					: activeStyle,
+				newStyle
 			);
 			updateBlockAttributes(clientId, {
 				className: styleClassName,
 			});
 			onSwitch();
 		},
-		[clientId, className, activeStyle, onSwitch, updateBlockAttributes]
+		[
+			clientId,
+			className,
+			activeStyle,
+			onSwitch,
+			updateBlockAttributes,
+			isDeletedStyle,
+		]
 	);
-
-	const isDeletedStyle = isString(activeStyle) ? activeStyle : false;
 
 	return {
 		onSelect,

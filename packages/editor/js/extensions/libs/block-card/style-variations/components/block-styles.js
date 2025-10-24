@@ -213,49 +213,6 @@ function BlockStyles({
 					direction="column"
 					gap="20px"
 				>
-					{isString(isDeletedStyle) && (
-						<NoticeControl type="error">
-							<p>
-								<DynamicHtmlFormatter
-									text={sprintf(
-										/* translators: $1%s is a CSS selector, $2%s is ID. */
-										__(
-											'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
-											'blockera'
-										),
-										'{style}'
-									)}
-									replacements={{
-										style: (
-											<strong>{isDeletedStyle}</strong>
-										),
-									}}
-								/>
-							</p>
-
-							<p>
-								<DynamicHtmlFormatter
-									text={sprintf(
-										/* translators: $1%s is a CSS selector, $2%s is ID. */
-										__(
-											'This block is currently using the “%s” style instead.',
-											'blockera'
-										),
-										'{style}'
-									)}
-									replacements={{
-										style: (
-											<strong>
-												{activeStyle?.name ||
-													__('Default', 'blockera')}
-											</strong>
-										),
-									}}
-								/>
-							</p>
-						</NoticeControl>
-					)}
-
 					<ControlContextProvider
 						value={{
 							name: 'search-styles',
@@ -376,6 +333,49 @@ function BlockStyles({
 								<Slot name="block-inspector-style-actions" />
 							</Flex>
 						</>
+					)}
+
+					{isString(isDeletedStyle) && (
+						<NoticeControl type="error">
+							<p>
+								<DynamicHtmlFormatter
+									text={sprintf(
+										/* translators: $1%s is a CSS selector, $2%s is ID. */
+										__(
+											'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+											'blockera'
+										),
+										'{style}'
+									)}
+									replacements={{
+										style: (
+											<strong>{isDeletedStyle}</strong>
+										),
+									}}
+								/>
+							</p>
+
+							<p>
+								<DynamicHtmlFormatter
+									text={sprintf(
+										/* translators: $1%s is a CSS selector, $2%s is ID. */
+										__(
+											'This block is currently using the “%s” style instead.',
+											'blockera'
+										),
+										'{style}'
+									)}
+									replacements={{
+										style: (
+											<strong>
+												{activeStyle?.name ||
+													__('Default', 'blockera')}
+											</strong>
+										),
+									}}
+								/>
+							</p>
+						</NoticeControl>
 					)}
 				</Flex>
 			</Popover>
