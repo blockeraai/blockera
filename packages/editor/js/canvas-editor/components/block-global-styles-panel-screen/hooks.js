@@ -79,8 +79,6 @@ export function useGlobalSetting(propertyPath, blockName, source = 'all') {
 
 		let result = {};
 
-		console.log(configToUse);
-
 		VALID_SETTINGS.forEach((setting) => {
 			const value =
 				getValueFromObjectPath(
