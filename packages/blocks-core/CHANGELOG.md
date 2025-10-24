@@ -3,6 +3,8 @@
 ### New Features
 - Added a way for blocks to get a unique ID automatically, making them work more smoothly.
 - Added support for blocks to better integrate with the block editor's features.
+- `Post Time to Read` block: add support.
+- `Post Word Count` block: add support.
 
 ### Improvements
 - `List` block: `Icon` inner block added.

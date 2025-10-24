@@ -53,6 +53,7 @@ export * from './post-featured-image';
 export * from './post-navigation-link';
 export * from './post-template';
 export * from './post-terms';
+export * from './post-time-to-read';
 export * from './post-title';
 export * from './preformatted';
 export * from './pullquote';
