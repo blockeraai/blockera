@@ -37,6 +37,7 @@ export * from './latest-posts';
 export * from './list';
 export * from './list-item';
 export * from './loginout';
+export * from './math';
 export * from './media-text';
 export * from './navigation-link';
 export * from './navigation-submenu';
