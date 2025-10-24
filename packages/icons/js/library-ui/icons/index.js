@@ -15,6 +15,10 @@ export { default as BackgroundRadialGradient } from './background-radial-gradien
 export { default as BackgroundSlideshow } from './background-slideshow.svg';
 export { default as BackgroundVideo } from './background-video.svg';
 export { default as Blending } from './blending.svg';
+export { default as BlockAccordionItems } from './block-accordion-items.svg';
+export { default as BlockAccordionIcon } from './block-accordion-icon.svg';
+export { default as BlockAccordionHeading } from './block-accordion-heading.svg';
+export { default as BlockAccordionPanel } from './block-accordion-panel.svg';
 export { default as BlockBlocksyAboutTexts } from './block-blocksy-about-texts.svg';
 export { default as BlockBlocksyAboutIcons } from './block-blocksy-about-icons.svg';
 export { default as BlockBlocksyAboutAvatar } from './block-blocksy-about-avatar.svg';

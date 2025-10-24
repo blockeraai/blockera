@@ -1,9 +1,9 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 96,
-		"supported": 81,
-		"soft-supported": 95,
+		"total": 100,
+		"supported": 85,
+		"soft-supported": 99,
 		"not-supported": 1,
 		"no-need-to-support": 14
 	},
@@ -334,6 +334,22 @@
 		{
 			"name": "core/math",
 			"title": "Math"
+		},
+		{
+			"name": "core/accordion",
+			"title": "Accordion"
+		},
+		{
+			"name": "core/accordion-item",
+			"title": "Accordion Item"
+		},
+		{
+			"name": "core/accordion-heading",
+			"title": "Accordion Heading"
+		},
+		{
+			"name": "core/accordion-panel",
+			"title": "Accordion Panel"
 		}
 	],
 	"no-need-to-support": [

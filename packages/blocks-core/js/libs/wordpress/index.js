@@ -1,5 +1,9 @@
 // @flow
 
+export * from './accordion';
+export * from './accordion-heading';
+export * from './accordion-item';
+export * from './accordion-panel';
 export * from './archives';
 export * from './audio';
 export * from './avatar';
