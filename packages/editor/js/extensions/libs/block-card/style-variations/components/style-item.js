@@ -106,6 +106,7 @@ export const StyleItem = ({
 
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
+	const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
 	const [isOpenBlockCardContextMenu, setIsOpenBlockCardContextMenu] =
 		useState(false);
 	const [isOpenBlockCardRenameModal, setIsOpenBlockCardRenameModal] =
@@ -366,6 +367,8 @@ export const StyleItem = ({
 				<StyleItemMenu
 					style={style}
 					counter={counter}
+					isOpenDeleteModal={isOpenDeleteModal}
+					setIsOpenDeleteModal={setIsOpenDeleteModal}
 					setCounter={setCounter}
 					buttonText={buttonText}
 					handleOnRename={handleOnRename}
@@ -505,6 +508,8 @@ export const StyleItem = ({
 						<StyleItemMenu
 							style={style}
 							counter={counter}
+							isOpenDeleteModal={isOpenDeleteModal}
+							setIsOpenDeleteModal={setIsOpenDeleteModal}
 							setCounter={setCounter}
 							buttonText={buttonText}
 							handleOnRename={handleOnRename}
