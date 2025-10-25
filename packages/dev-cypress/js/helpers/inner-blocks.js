@@ -12,7 +12,7 @@ export function setInnerBlock(blockType) {
 				.length > 0
 		) {
 			cy.getByDataId(blockType).within(() => {
-				cy.get('span:nth-child(2)').click({ force: true });
+				cy.get('span').click({ force: true });
 			});
 		} else {
 			openInserter();
