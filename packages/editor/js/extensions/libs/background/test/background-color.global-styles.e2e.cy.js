@@ -36,14 +36,13 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		cy.get('.components-popover').each(() => {
 			cy.get('.components-popover input').as('hexColorInput');
 			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('666');
+			cy.get('@hexColorInput').type('666666');
 		});
+
+		cy.waitForAssertValue();
 
 		//assert data
 		getWPDataObject().then((data) => {
-			console.log(
-				getSelectedBlockStyle(data, 'core/paragraph', 'default')
-			);
 			expect(
 				getSelectedBlockStyle(data, 'core/paragraph', 'default')
 					?.blockeraBackgroundColor?.value
@@ -85,6 +84,8 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 
 		// select variable
 		cy.selectValueAddonItem('accent-4');
+
+		cy.waitForAssertValue();
 
 		//assert data
 		getWPDataObject().then((data) => {
