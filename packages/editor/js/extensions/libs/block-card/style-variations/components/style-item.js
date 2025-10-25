@@ -347,14 +347,19 @@ export const StyleItem = ({
 							</Tooltip>
 						)}
 
-						<Icon
-							icon="more-vertical"
-							iconSize="20"
-							onClick={() => setIsOpenContextMenu(true)}
-							style={{
-								opacity: '0.4',
-							}}
-						/>
+						<span
+							className="context-menu-trigger"
+							data-test={`open-${style.name}-contextmenu`}
+						>
+							<Icon
+								icon="more-vertical"
+								iconSize="20"
+								onClick={() => setIsOpenContextMenu(true)}
+								style={{
+									opacity: '0.4',
+								}}
+							/>
+						</span>
 					</Flex>
 				</Flex>
 
@@ -486,11 +491,16 @@ export const StyleItem = ({
 							/>
 						)}
 
-						<Icon
-							icon="more-vertical"
-							iconSize="20"
-							onClick={() => setIsOpenContextMenu(true)}
-						/>
+						<span
+							className="context-menu-trigger"
+							data-test={`open-${style.name}-contextmenu`}
+						>
+							<Icon
+								iconSize="20"
+								icon="more-vertical"
+								onClick={() => setIsOpenContextMenu(true)}
+							/>
+						</span>
 
 						<StyleItemMenu
 							style={style}
