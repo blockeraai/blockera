@@ -4,12 +4,10 @@
  */
 import type { Element } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { Icon as WordPressIconComponent } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import { isString } from '@blockera/utils';
 import { controlInnerClassNames } from '@blockera/classnames';
 
 export default function ItemHeader({
@@ -39,16 +37,6 @@ export default function ItemHeader({
 				item?.name
 			)}
 		>
-			{item.icon && (
-				<span className={controlInnerClassNames('header-icon')}>
-					{isString(item.icon) ? (
-						<WordPressIconComponent icon={item.icon} />
-					) : (
-						item.icon
-					)}
-				</span>
-			)}
-
 			<span
 				className={controlInnerClassNames(
 					'header-label',

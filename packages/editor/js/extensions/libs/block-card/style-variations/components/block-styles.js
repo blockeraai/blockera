@@ -2,7 +2,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState, useRef, useEffect } from '@wordpress/element';
 import { useViewportMatch } from '@wordpress/compose';
 import {
@@ -20,6 +20,8 @@ import {
 	Popover,
 	SearchControl,
 	ControlContextProvider,
+	NoticeControl,
+	DynamicHtmlFormatter,
 } from '@blockera/controls';
 import {
 	classNames,
@@ -27,6 +29,7 @@ import {
 	componentInnerClassNames,
 } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
+import { isString } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -60,6 +63,7 @@ function BlockStyles({
 		previewClassName: string,
 		popoverAnchor: Object,
 		setIsOpen: (isOpen: boolean) => void,
+		isDeletedStyle: string | false,
 	},
 }): MixedElement | null {
 	const { isNormalState } = useBlockContext();
@@ -90,6 +94,7 @@ function BlockStyles({
 		previewClassName,
 		popoverAnchor,
 		setIsOpen,
+		isDeletedStyle,
 	} = styles;
 
 	// Update ref whenever hoveredStyle changes
@@ -328,6 +333,49 @@ function BlockStyles({
 								<Slot name="block-inspector-style-actions" />
 							</Flex>
 						</>
+					)}
+
+					{isString(isDeletedStyle) && (
+						<NoticeControl type="error">
+							<p>
+								<DynamicHtmlFormatter
+									text={sprintf(
+										/* translators: $1%s is a CSS selector, $2%s is ID. */
+										__(
+											'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+											'blockera'
+										),
+										'{style}'
+									)}
+									replacements={{
+										style: (
+											<strong>{isDeletedStyle}</strong>
+										),
+									}}
+								/>
+							</p>
+
+							<p>
+								<DynamicHtmlFormatter
+									text={sprintf(
+										/* translators: $1%s is a CSS selector, $2%s is ID. */
+										__(
+											'This block is currently using the “%s” style instead.',
+											'blockera'
+										),
+										'{style}'
+									)}
+									replacements={{
+										style: (
+											<strong>
+												{activeStyle?.name ||
+													__('Default', 'blockera')}
+											</strong>
+										),
+									}}
+								/>
+							</p>
+						</NoticeControl>
 					)}
 				</Flex>
 			</Popover>

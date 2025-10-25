@@ -211,7 +211,7 @@ export const StyleItemMenu = ({
 								}}
 								style={{
 									'--blockera-controls-primary-color':
-										'#E20000',
+										'#e20b0b',
 								}}
 							>
 								<Icon icon="trash" iconSize="24" />

@@ -413,7 +413,7 @@ export const Categories = ({
 					category={'elements'}
 					title={
 						<>
-							{__('Virtual Blocks', 'blockera')}
+							{__('Virtual Inner Blocks', 'blockera')}
 
 							<Tooltip
 								width="220px"

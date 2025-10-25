@@ -182,7 +182,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 							wrapper={(children) => (
 								<Flex
 									style={{
-										width: '160px',
+										width: '150px',
 										alignSelf: 'flex-end',
 									}}
 								>
@@ -196,7 +196,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 								>
 									<Flex
 										style={{
-											width: '160px',
+											width: '150px',
 											alignSelf: 'flex-end',
 										}}
 									>
@@ -402,7 +402,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 							wrapper={(children) => (
 								<Flex
 									style={{
-										width: '160px',
+										width: '150px',
 										alignSelf: 'flex-end',
 									}}
 								>
@@ -416,7 +416,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 								>
 									<Flex
 										style={{
-											width: '160px',
+											width: '150px',
 											alignSelf: 'flex-end',
 										}}
 									>

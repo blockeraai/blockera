@@ -199,7 +199,7 @@
 	}
 
 	&.type-native {
-		--locked-color: #e20000;
+		--locked-color: #e20b0b;
 		--locked-bg-color: #ffdcdc;
 
 		&.show-text-always:hover,
@@ -214,7 +214,7 @@
 		&.show-text-always {
 
 			.blockera-component-feature-wrapper__notice {
-				--locked-color: #e20000;
+				--locked-color: #e20b0b;
 				--locked-bg-color: #ffdcdc;
 			}
 		}

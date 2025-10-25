@@ -38,6 +38,7 @@ describe('Page List Block', () => {
 			'marker',
 			'elements/item',
 			'elements/item-container',
+			'elements/current-page',
 		]);
 
 		//

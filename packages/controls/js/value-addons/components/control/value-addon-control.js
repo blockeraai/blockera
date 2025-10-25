@@ -84,14 +84,35 @@ export default function ({
 		isIconActive = !isValid(controlProps.value);
 	}
 
+	const isVariable =
+		controlProps.value?.valueType === 'variable' ||
+		controlProps.isOpen.startsWith('var-');
+
+	let tooltipColor = '';
+
+	if (isVariable) {
+		if (isDeleted) {
+			tooltipColor = '#e20b0b';
+		} else {
+			tooltipColor = 'var(--blockera-value-addon-var-color)';
+		}
+	} else if (isDeleted) {
+		tooltipColor = '#e20b0b';
+	} else {
+		tooltipColor = 'var(--blockera-value-addon-dv-color)';
+	}
+
 	return (
 		<>
 			<Tooltip
 				text={
-					controlProps.value?.valueType === 'variable'
-						? __('Change Variable', 'blockera')
-						: __('Change Dynamic Value', 'blockera')
+					isVariable
+						? __('Change variable', 'blockera')
+						: __('Change dynamic value', 'blockera')
 				}
+				style={{
+					'--tooltip-bg': tooltipColor,
+				}}
 			>
 				<button
 					className={controlClassNames(
@@ -136,6 +157,7 @@ export default function ({
 					</span>
 				</button>
 			</Tooltip>
+
 			<ValueAddonPointer controlProps={controlProps} />
 		</>
 	);

@@ -22,9 +22,9 @@ export default function ChangeIndicator({
 	isChangedOnStates = false,
 	primaryColor = '#007cba',
 	statesColor = '#d47c14',
-	size = '6',
+	size = '5',
 	outlineSize = '1.5',
-	animated = false,
+	isAnimated = false,
 	className,
 	style,
 	...props
@@ -45,7 +45,7 @@ export default function ChangeIndicator({
 					className={componentInnerClassNames(
 						'indicator',
 						'indicator-primary',
-						animated && 'is-animated'
+						isAnimated && 'is-animated'
 					)}
 					data-test="primary-change-indicator"
 					data-color={primaryColor}
@@ -62,7 +62,7 @@ export default function ChangeIndicator({
 					className={componentInnerClassNames(
 						'indicator',
 						'indicator-states',
-						animated && 'is-animated'
+						isAnimated && 'is-animated'
 					)}
 					data-test="states-change-indicator"
 					data-color={statesColor}

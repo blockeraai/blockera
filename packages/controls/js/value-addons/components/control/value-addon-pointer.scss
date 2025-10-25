@@ -4,9 +4,9 @@ body {
 	--blockera-value-addon-var-border-color: #75bf7c;
 	--blockera-value-addon-var-color-darker-20: #00800d;
 	--blockera-value-addon-var-bg-color: #f3faf4;
-	--blockera-value-addon-deleted-color: #ff5454;
-	--blockera-value-addon-deleted-border-color: #ff9b9b;
-	--blockera-value-addon-deleted-color-darker-20: #dc4444;
+	--blockera-value-addon-deleted-color: #e20b0b;
+	--blockera-value-addon-deleted-border-color: #e20b0b;
+	--blockera-value-addon-deleted-color-darker-20: #c70101;
 	--blockera-value-addon-deleted-bg-color: #fff6f6;
 	--blockera-value-addon-dv-color: #7405ff;
 	--blockera-value-addon-dv-border-color: #a761ff;
@@ -17,12 +17,12 @@ body {
 .blockera-control.blockera-control-value-addon-pointers {
 	position: absolute;
 	top: -14px;
-	right: -14px;
+	left: -14px;
 	z-index: 1;
 	width: 100px;
 	pointer-events: none;
 	direction: revert;
-	text-align: right;
+	text-align: left;
 
 	&.active-addon-pointers {
 
@@ -79,6 +79,16 @@ body {
 
 				.blockera-control-remove-icon {
 					display: block;
+				}
+			}
+		}
+
+		&.active-value-addon {
+
+			&:hover {
+
+				.blockera-control-remove-icon {
+					--blockera-value-addon-var-color: #e20b0b;
 				}
 			}
 		}

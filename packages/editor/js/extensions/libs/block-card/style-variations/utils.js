@@ -18,25 +18,32 @@ import { useMemo, useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { prepare } from '@blockera/data-editor';
+import { isString } from '@blockera/utils';
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
  *
  * Returns the active style from the given className.
  */
-export function getActiveStyle(styles: Array<any>, className: string): Object {
+export function getActiveStyle(
+	styles: Array<any>,
+	className: string
+): Object | string {
 	for (const style of new TokenList(className).values()) {
 		if (style.indexOf('is-style-') === -1) {
 			continue;
 		}
 
 		const potentialStyleName = style.substring(9);
+
 		const activeStyle = styles?.find(
 			({ name }) => name === potentialStyleName
 		);
+
 		if (activeStyle) {
 			return activeStyle;
 		}
+		return potentialStyleName;
 	}
 
 	return getDefaultStyle(styles);
@@ -214,27 +221,46 @@ export function useStylesForBlocks({
 	);
 	const genericPreviewBlock = useGenericPreviewBlock(block, blockType);
 
+	const isDeletedStyle = isString(activeStyle) ? activeStyle : false;
+
 	const onSelect = useCallback(
-		(style: string) => {
+		(newStyle: string) => {
 			const styleClassName = replaceActiveStyle(
 				className,
-				activeStyle,
-				style
+				isString(isDeletedStyle)
+					? {
+							name: isDeletedStyle,
+							label: isDeletedStyle,
+							isDefault: false,
+							isDeleted: true,
+					  }
+					: activeStyle,
+				newStyle
 			);
 			updateBlockAttributes(clientId, {
 				className: styleClassName,
 			});
 			onSwitch();
 		},
-		[clientId, className, activeStyle, onSwitch, updateBlockAttributes]
+		[
+			clientId,
+			className,
+			activeStyle,
+			onSwitch,
+			updateBlockAttributes,
+			isDeletedStyle,
+		]
 	);
 
 	return {
 		onSelect,
 		stylesToRender,
-		activeStyle,
+		activeStyle: isDeletedStyle
+			? getDefaultStyle(stylesToRender)
+			: activeStyle,
 		genericPreviewBlock,
 		className,
+		isDeletedStyle,
 	};
 }
 

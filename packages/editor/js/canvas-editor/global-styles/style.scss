@@ -1,6 +1,6 @@
 .activated-blockera-global-styles-panel {
 
-	.edit-site-global-styles-sidebar__navigator-screen {
+	.edit-site-global-styles-sidebar__navigator-screen:not(.has-not-blockera-extensions) {
 
 		>*:not(.blockera-extensions-wrapper,
 			.edit-site-global-styles-screen-root,

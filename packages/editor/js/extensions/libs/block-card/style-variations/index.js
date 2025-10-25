@@ -59,6 +59,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		activeStyle,
 		genericPreviewBlock,
 		className: previewClassName,
+		isDeletedStyle,
 	} = useStylesForBlocks({
 		clientId,
 		blockName,
@@ -98,6 +99,10 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	const { blockeraGlobalStylesMetaData } = window;
 
 	const buttonText = useMemo(() => {
+		if (isDeletedStyle) {
+			return __('Missing Style Variation', 'blockera');
+		}
+
 		return (
 			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
 				currentActiveStyle?.name
@@ -106,7 +111,12 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 			currentActiveStyle.name ||
 			__('Default', 'blockera')
 		);
-	}, [blockeraGlobalStylesMetaData, blockName, currentActiveStyle]);
+	}, [
+		blockeraGlobalStylesMetaData,
+		blockName,
+		currentActiveStyle,
+		isDeletedStyle,
+	]);
 
 	const memoizedStyles = useMemo(
 		() => ({
@@ -179,6 +189,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 					{
 						'blockera-control-is-not-active': isNotActive,
 						'is-variation-picker-open': isOpen,
+						'is-variation-deleted': isDeletedStyle ? true : false,
 					}
 				)}
 				onClick={(event: MouseEvent) => {
@@ -228,7 +239,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 
 					<ChangeIndicator
 						isChanged={hasChangesets}
-						animated={true}
+						isAnimated={true}
 						primaryColor={
 							activeStyleId === 'default' ? '#1ca120' : '#ffffff'
 						}
@@ -257,6 +268,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 						previewClassName,
 						popoverAnchor,
 						setIsOpen,
+						isDeletedStyle,
 					}}
 				/>
 			)}

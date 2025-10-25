@@ -4,18 +4,29 @@
     flex-wrap: wrap;
     position: relative;
 	margin-bottom: 6px;
-	--repeater-gap: 6px;
+	--repeater-gap: 5px;
 	--repeater-item-height: 26px;
 
 	.blockera-control-repeater-item {
 		width: max-content;
 		--icon-size: 16px;
 
+		.blockera-control-group {
+			border-style: dashed;
+		}
+
+		.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
+			border-style: solid;
+		}
+
 		.blockera-control-group-header {
-			padding: 0 5px 0 3px;
+			padding: 0 5px;
 
 			.blockera-control-repeater-group-header {
 				gap: 1px;
+				letter-spacing: -0.3px;
+				font-size: 12px;
+				font-weight: 500;
 
 				.blockera-control-header-icon {
 					min-width: 16px;

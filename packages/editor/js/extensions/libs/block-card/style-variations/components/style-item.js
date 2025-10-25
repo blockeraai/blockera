@@ -303,7 +303,7 @@ export const StyleItem = ({
 								)}
 								style={{
 									'--tooltip-bg': !isActive
-										? '#E20000'
+										? '#e20b0b'
 										: '#000000',
 								}}
 							>
@@ -312,7 +312,7 @@ export const StyleItem = ({
 									iconSize="20"
 									style={{
 										color: !isActive
-											? '#E20000'
+											? '#e20b0b'
 											: 'currentColor',
 									}}
 								/>
@@ -411,7 +411,7 @@ export const StyleItem = ({
 						{hasChangesets && (
 							<ChangeIndicator
 								isChanged={hasChangesets}
-								animated={true}
+								isAnimated={true}
 								primaryColor={'#1ca120'}
 								size={'5'}
 							/>
@@ -480,7 +480,7 @@ export const StyleItem = ({
 								icon="eye-hide"
 								iconSize="20"
 								style={{
-									color: '#E20000',
+									color: '#e20b0b',
 									cursor: 'initial',
 								}}
 							/>

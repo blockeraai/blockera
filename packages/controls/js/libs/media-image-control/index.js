@@ -85,7 +85,7 @@ export default function MediaImageControl({
 					<Tooltip
 						text={__('Delete image', 'blockera')}
 						style={{
-							'--tooltip-bg': '#e20000',
+							'--tooltip-bg': '#e20b0b',
 						}}
 						delay={300}
 					>

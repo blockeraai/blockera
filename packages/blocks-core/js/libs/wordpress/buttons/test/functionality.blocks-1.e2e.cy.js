@@ -5,6 +5,7 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	setParentBlock,
 	setInnerBlock,
 	redirectToFrontPage,
 	openMoreFeaturesControl,
@@ -112,6 +113,7 @@ describe('Buttons Block', () => {
 		//
 		// 2. Check settings tab
 		//
+		setParentBlock();
 		cy.getByDataTest('settings-tab').click();
 
 		// layout settings should be hidden

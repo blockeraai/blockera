@@ -43,7 +43,7 @@ export const HomeLink: BlockType = {
 	},
 	selectors: {
 		'blockera/elements/icon': {
-			root: '.wp-block-home-link__label:before',
+			root: '.wp-block-home-link__label:before,.wp-block-home-link__label:after',
 		},
 	},
 };

@@ -16,9 +16,9 @@ export type IndicatorComponentProps = {
 	/**
 	 * Is changed indicator animated?
 	 *
-	 * @default true
+	 * @default false
 	 */
-	animated?: boolean,
+	isAnimated?: boolean,
 	/**
 	 * Class name
 	 *
@@ -40,7 +40,7 @@ export type IndicatorComponentProps = {
 	/**
 	 * Size
 	 *
-	 * @default '6'
+	 * @default '5'
 	 */
 	size?: string,
 	/**

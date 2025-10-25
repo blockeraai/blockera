@@ -3,6 +3,7 @@
  * External dependencies
  */
 import type { Element } from 'react';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
@@ -29,6 +30,7 @@ import { isValid } from '../../utils';
 import RemoveIcon from '../../icons/remove';
 import type { ValueAddonControlProps } from './types';
 import DynamicValueIcon from '../../icons/dynamic-value';
+import { Tooltip } from '../../../';
 
 export default function ({
 	controlProps,
@@ -50,7 +52,7 @@ export default function ({
 		handleVariableModal,
 		handleDynamicValueModal,
 	}: Object): Element<any> => {
-		const pointers = [];
+		const pointers: Array<Element<any>> = [];
 
 		if (
 			controlProps.types.includes('dynamic-value') &&
@@ -82,32 +84,48 @@ export default function ({
 
 		if (controlProps.types.includes('variable')) {
 			pointers.push(
-				<div
-					key={'variable-value-addon-pointer'}
-					className={controlInnerClassNames(
-						'value-addon-pointer',
-						'var-pointer',
-						isVarActive && 'active-value-addon',
-						controlProps.isOpen.startsWith('var-') &&
-							'open-value-addon',
-						controlProps.isDeletedVar && 'is-value-addon-deleted'
-					)}
-					onClick={handleVariableModal}
-					{...pointerProps}
+				<Tooltip
+					text={
+						!isVarActive
+							? __('Choose a variable', 'blockera')
+							: __('Remove variable', 'blockera')
+					}
+					style={{
+						'--tooltip-bg': !isVarActive
+							? 'var(--blockera-value-addon-var-color)'
+							: '#e20b0b',
+					}}
 				>
-					<Icon
-						icon="variable"
-						iconSize="16"
-						data-cy="value-addon-btn-open"
-						className={controlInnerClassNames('var-pointer-icon')}
-					/>
+					<div
+						key={'variable-value-addon-pointer'}
+						className={controlInnerClassNames(
+							'value-addon-pointer',
+							'var-pointer',
+							isVarActive && 'active-value-addon',
+							controlProps.isOpen.startsWith('var-') &&
+								'open-value-addon',
+							controlProps.isDeletedVar &&
+								'is-value-addon-deleted'
+						)}
+						onClick={handleVariableModal}
+						{...pointerProps}
+					>
+						<Icon
+							icon="variable"
+							iconSize="16"
+							data-cy="value-addon-btn-open"
+							className={controlInnerClassNames(
+								'var-pointer-icon'
+							)}
+						/>
 
-					<Icon
-						icon="close-small"
-						data-cy="value-addon-btn-remove"
-						className={controlInnerClassNames('remove-icon')}
-					/>
-				</div>
+						<Icon
+							icon="close-small"
+							data-cy="value-addon-btn-remove"
+							className={controlInnerClassNames('remove-icon')}
+						/>
+					</div>
+				</Tooltip>
 			);
 		}
 
