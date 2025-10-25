@@ -52,6 +52,7 @@ export * from './post-author-biography';
 export * from './post-author-name';
 export * from './post-comments-count';
 export * from './post-comments-form';
+export * from './post-comments-link';
 export * from './post-content';
 export * from './post-date';
 export * from './post-excerpt';
