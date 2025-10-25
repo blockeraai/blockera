@@ -823,4 +823,10 @@ export const registerCommands = () => {
 			.get('button[aria-controls="edit-site:global-styles"]')
 			.click({ force: true });
 	});
+
+	Cypress.Commands.add('openSettingsPanel', () => {
+		return cy
+			.get('button[aria-controls="edit-post:document"]')
+			.click({ force: true });
+	});
 };
