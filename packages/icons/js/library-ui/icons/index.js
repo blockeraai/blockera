@@ -82,6 +82,7 @@ export { default as BlockSocialLinkContainer } from './block-social-link-contain
 export { default as BlockSocialLinkIcon } from './block-social-link-icon.svg';
 export { default as BlockSocialLinkName } from './block-social-link-name.svg';
 export { default as Bolb } from './bolb.svg';
+export { default as BlockTypes } from './block-types.svg';
 export { default as BorderRadius } from './border-radius.svg';
 export { default as BreadcrumbSeparator } from './breadcrumb-separator.svg';
 export { default as BreadcrumbText } from './breadcrumb-text.svg';
