@@ -61,8 +61,6 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 		// select variable
 		cy.selectValueAddonItem('accent-4');
 
-		cy.waitForAssertValue();
-
 		//assert data
 		getWPDataObject().then((data) => {
 			expect({
@@ -91,8 +89,6 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 		cy.get('.blockera-component-popover-body button')
 			.contains('Clear all customizations')
 			.click();
-
-		cy.waitForAssertValue();
 
 		//assert blockera data
 		getWPDataObject().then((data) => {

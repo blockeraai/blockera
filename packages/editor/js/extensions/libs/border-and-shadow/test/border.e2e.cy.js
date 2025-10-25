@@ -44,8 +44,6 @@ describe('Border → Functionality', () => {
 				'5px dashed rgb(55, 230, 212)'
 			);
 
-			cy.waitForAssertValue();
-
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -91,8 +89,6 @@ describe('Border → Functionality', () => {
 				'border',
 				'5px solid rgb(55, 230, 212)'
 			);
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -152,8 +148,6 @@ describe('Border → Functionality', () => {
 				'1px solid rgb(115, 221, 171)'
 			);
 
-			cy.waitForAssertValue();
-
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -205,8 +199,6 @@ describe('Border → Functionality', () => {
 				'border-right',
 				'2px dashed rgb(153, 88, 227)'
 			);
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -263,8 +255,6 @@ describe('Border → Functionality', () => {
 				'border-bottom',
 				'3px dotted rgb(235, 164, 146)'
 			);
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -325,8 +315,6 @@ describe('Border → Functionality', () => {
 				'border-left',
 				'4px double rgb(24, 147, 218)'
 			);
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -412,8 +400,6 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waitForAssertValue();
-
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -477,8 +463,6 @@ describe('Border → Functionality', () => {
 					);
 			});
 
-			cy.waitForAssertValue();
-
 			//Check store
 			getWPDataObject().then((data) => {
 				expect({
@@ -509,8 +493,6 @@ describe('Border → Functionality', () => {
 			cy.get('@container').within(() => {
 				cy.removeValueAddon();
 			});
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -563,8 +545,6 @@ describe('Border → Functionality', () => {
 						'border-top: 1px solid var(--wp--preset--color--contrast)'
 					);
 			});
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -626,8 +606,6 @@ describe('Border → Functionality', () => {
 					});
 			});
 
-			cy.waitForAssertValue();
-
 			cy.selectValueAddonItem('contrast');
 
 			//Check block
@@ -639,8 +617,6 @@ describe('Border → Functionality', () => {
 						'border-right: 2px dashed var(--wp--preset--color--contrast)'
 					);
 			});
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -721,8 +697,6 @@ describe('Border → Functionality', () => {
 					});
 			});
 
-			cy.waitForAssertValue();
-
 			cy.selectValueAddonItem('contrast');
 
 			//Check block
@@ -734,8 +708,6 @@ describe('Border → Functionality', () => {
 						'border-bottom: 3px dotted var(--wp--preset--color--contrast)'
 					);
 			});
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
@@ -835,8 +807,6 @@ describe('Border → Functionality', () => {
 					});
 			});
 
-			cy.waitForAssertValue();
-
 			cy.selectValueAddonItem('contrast');
 
 			//Check block
@@ -848,8 +818,6 @@ describe('Border → Functionality', () => {
 						'border-left: 4px double var(--wp--preset--color--contrast)'
 					);
 			});
-
-			cy.waitForAssertValue();
 
 			//Check store
 			getWPDataObject().then((data) => {
