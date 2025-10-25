@@ -50,6 +50,7 @@ export * from './paragraph';
 export * from './post-author';
 export * from './post-author-biography';
 export * from './post-author-name';
+export * from './post-comments-count';
 export * from './post-comments-form';
 export * from './post-content';
 export * from './post-date';

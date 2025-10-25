@@ -6,6 +6,7 @@
 - `Post Time to Read` block: add support.
 - `Post Word Count` block: add support.
 - `Math` block: add support.
+- `Post Comments Count` block: add support.
 
 ### Improvements
 - `List` block: `Icon` inner block added.
