@@ -91,3 +91,27 @@ if (! function_exists('blockera_enqueue_blocks_editor_styles')) {
 		}
 	}
 }
+
+if (! function_exists('blockera_get_supports')) {
+
+	/**
+	 * Get the supports for the blocks.
+	 * 
+	 * @return array the supports.
+	 */
+	function blockera_get_supports(): array {
+
+		$attributes = include __DIR__ . '/shared/attributes.php';
+		$supports   = array_keys($attributes);
+		
+		return array_filter(
+            $supports,
+            function ( string $support): bool {
+
+				$specific_supports = [ 'blockeraPropsId', 'blockeraCompatId' ];
+
+				return ! in_array($support, $specific_supports, true);
+			}
+        );
+	}
+}

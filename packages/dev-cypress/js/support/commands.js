@@ -742,8 +742,9 @@ export const registerCommands = () => {
 
 	/**
 	 * Normalize CSS content by removing comments, extra whitespace, and standardizing formatting
+	 *
 	 * @param {string} cssContent - The CSS content to normalize
-	 * @returns {string} - The normalized CSS content
+	 * @return {string} - The normalized CSS content
 	 */
 	Cypress.Commands.add('normalizeCSSContent', (cssContent) => {
 		return cssContent
@@ -816,4 +817,16 @@ export const registerCommands = () => {
 			});
 		}
 	);
+
+	Cypress.Commands.add('openGlobalStylesPanel', () => {
+		return cy
+			.get('button[aria-controls="edit-site:global-styles"]')
+			.click({ force: true });
+	});
+
+	Cypress.Commands.add('openSettingsPanel', () => {
+		return cy
+			.get('button[aria-controls="edit-post:document"]')
+			.click({ force: true });
+	});
 };

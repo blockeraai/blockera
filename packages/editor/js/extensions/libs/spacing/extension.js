@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { memo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -15,7 +14,6 @@ import {
 	BoxSpacingControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { hasSameProps } from '@blockera/utils';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
@@ -28,67 +26,62 @@ import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
 import type { TSpacingProps } from './types/spacing-props';
 
-export const SpacingExtension: ComponentType<TSpacingProps> = memo(
-	({
-		block,
-		values,
-		extensionConfig,
-		handleOnChangeAttributes,
-		extensionProps,
-		attributes,
-	}: TSpacingProps): MixedElement => {
-		const { initialOpen, onToggle } = useBlockSection('spacingConfig');
-		const isShowSpacing = isShowField(
-			extensionConfig.blockeraSpacing,
-			values.blockeraSpacing,
-			attributes.blockeraSpacing.default
-		);
+export const SpacingExtension: ComponentType<TSpacingProps> = ({
+	block,
+	values,
+	extensionConfig,
+	handleOnChangeAttributes,
+	extensionProps,
+	attributes,
+}: TSpacingProps): MixedElement => {
+	const { initialOpen, onToggle } = useBlockSection('spacingConfig');
+	const isShowSpacing = isShowField(
+		extensionConfig.blockeraSpacing,
+		values.blockeraSpacing,
+		attributes.blockeraSpacing.default
+	);
 
-		if (!isShowSpacing) {
-			return <></>;
-		}
+	if (!isShowSpacing) {
+		return <></>;
+	}
 
-		return (
-			<PanelBodyControl
-				onToggle={onToggle}
-				title={__('Spacing', 'blockera')}
-				initialOpen={initialOpen}
-				icon={<Icon icon={'extension-spacing'} />}
-				className={extensionClassNames('spacing')}
+	return (
+		<PanelBodyControl
+			onToggle={onToggle}
+			title={__('Spacing', 'blockera')}
+			initialOpen={initialOpen}
+			icon={<Icon icon={'extension-spacing'} />}
+			className={extensionClassNames('spacing')}
+		>
+			<EditorFeatureWrapper
+				isActive={isShowSpacing}
+				config={extensionConfig.blockeraSpacing}
 			>
-				<EditorFeatureWrapper
-					isActive={isShowSpacing}
-					config={extensionConfig.blockeraSpacing}
+				<ControlContextProvider
+					value={{
+						name: generateExtensionId(block, 'spacing'),
+						value: values.blockeraSpacing,
+						attribute: 'blockeraSpacing',
+						blockName: block.blockName,
+					}}
 				>
-					<ControlContextProvider
-						value={{
-							name: generateExtensionId(block, 'spacing'),
-							value: values.blockeraSpacing,
-							attribute: 'blockeraSpacing',
-							blockName: block.blockName,
-						}}
-					>
-						<BaseControl controlName="box-spacing">
-							<BoxSpacingControl
-								onChange={(newValue, ref) => {
-									handleOnChangeAttributes(
-										'blockeraSpacing',
-										newValue,
-										{ ref }
-									);
-								}}
-								defaultValue={
-									attributes.blockeraSpacing.default
-								}
-								marginLock={'none'}
-								paddingLock={'none'}
-								{...extensionProps.blockeraSpacing}
-							/>
-						</BaseControl>
-					</ControlContextProvider>
-				</EditorFeatureWrapper>
-			</PanelBodyControl>
-		);
-	},
-	hasSameProps
-);
+					<BaseControl controlName="box-spacing">
+						<BoxSpacingControl
+							onChange={(newValue, ref) => {
+								handleOnChangeAttributes(
+									'blockeraSpacing',
+									newValue,
+									{ ref }
+								);
+							}}
+							defaultValue={attributes.blockeraSpacing.default}
+							marginLock={'none'}
+							paddingLock={'none'}
+							{...extensionProps.blockeraSpacing}
+						/>
+					</BaseControl>
+				</ControlContextProvider>
+			</EditorFeatureWrapper>
+		</PanelBodyControl>
+	);
+};

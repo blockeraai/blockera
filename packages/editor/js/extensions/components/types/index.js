@@ -15,6 +15,7 @@ export type BlockBaseProps = {
 	className: string,
 	defaultAttributes: Object,
 	originDefaultAttributes: Object,
+	insideBlockInspector?: boolean,
 };
 
 export * from './block-sections';

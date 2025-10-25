@@ -9,12 +9,6 @@ import { addFilter, applyFilters } from '@wordpress/hooks';
  */
 import withBlockSettings from './block-settings';
 
-export {
-	useBlockContext,
-	BlockEditContext,
-	BlockEditContextProvider,
-} from './context';
-
 export default function applyHooks(beforeApplyHooks: () => void) {
 	if ('function' === typeof beforeApplyHooks) {
 		beforeApplyHooks();

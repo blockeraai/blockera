@@ -70,7 +70,7 @@ describe('computedCssDeclarations', () => {
 			baseSelector
 		);
 
-		expect(result).toEqual(['color: #f50505 !important;\n\n']);
+		expect(result).toEqual(['color: #f50505 !important;']);
 	});
 
 	test('should handle style definition with important flag', () => {
@@ -94,7 +94,7 @@ describe('computedCssDeclarations', () => {
 			baseSelector
 		);
 
-		expect(result).toEqual(['margin: 10px !important;\n\n']);
+		expect(result).toEqual(['margin: 10px !important;']);
 	});
 
 	test('should handle multiple style definitions', () => {
@@ -124,8 +124,8 @@ describe('computedCssDeclarations', () => {
 		);
 
 		expect(result).toEqual([
-			'color: #f50505 !important;\n\n',
-			'margin: 10px !important;\n\n',
+			'color: #f50505 !important;',
+			'margin: 10px !important;',
 		]);
 	});
 
@@ -167,7 +167,7 @@ describe('computedCssDeclarations', () => {
 			baseSelector
 		);
 
-		expect(result).toEqual(['color: #f50505 !important;\n\n']);
+		expect(result).toEqual(['color: #f50505 !important;']);
 	});
 
 	test('should handle empty style definitions', () => {

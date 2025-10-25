@@ -562,6 +562,12 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$selector = substr( $selector, 1 );
 		}
 
+		// If root is the same as selector or selector starts with root, we should remove the root.
+		if ($root === $selector || str_starts_with($selector, $root)) {
+
+			$root = '';
+		}
+
 		$is_child_selector = false;
 
 		// Check if selector is a child of root.

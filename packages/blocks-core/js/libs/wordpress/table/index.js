@@ -14,7 +14,7 @@ import { SharedBlockExtension } from '@blockera/editor';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Table: BlockType = {
 	name: 'blockeraTable',

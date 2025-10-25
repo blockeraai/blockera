@@ -14,7 +14,7 @@
 		flex-direction: column;
 		gap: 6px;
 		font-size: 13px;
-		line-height: 1.4;
+		line-height: 1.7;
 		color: #929292;
 		transition: var(--blockera-controls-transition);
 
@@ -24,7 +24,7 @@
 
 		p {
 			margin: 0;
-			line-height: 1.4;
+			line-height: 1.7;
 			font-size: 13px;
 			color: currentColor;
 		}
@@ -62,6 +62,7 @@
 	}
 }
 
+.blockera-block-inspector-controls-wrapper,
 .block-editor-block-inspector {
 
 	.blockera-control.blockera-control-code {

@@ -10,7 +10,7 @@ import { createContext, useContext, useMemo } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../components/utils';
+import { isInnerBlock } from './utils';
 import type { THandleOnChangeAttributes } from '../libs/types';
 import type {
 	TStates,
@@ -57,6 +57,7 @@ const BlockEditContextProvider = ({
 			isNormalState,
 			currentBlock,
 			currentState,
+			defaultAttributes,
 			currentBreakpoint,
 			currentInnerBlockState,
 			masterIsNormalState,
@@ -71,6 +72,7 @@ const BlockEditContextProvider = ({
 			breakpointId,
 			getAttributes,
 			isNormalState,
+			defaultAttributes,
 			masterIsNormalState,
 			blockeraInnerBlocks,
 			handleOnChangeAttributes,
