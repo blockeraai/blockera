@@ -33,6 +33,7 @@
 - Added E2E tests to check functionality and support of `Accordion Panel` block.
 - Added E2E tests to check functionality and support of `Post Comments Count` block.
 - Added E2E tests to check functionality and support of `Post Comments Link` block.
+- Added E2E tests to check functionality and support of `Term Template` block.
 
 ## 1.4.0 (2025-05-19)
 
