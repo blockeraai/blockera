@@ -98,6 +98,6 @@ if (! function_exists('blockera_is_admin_request')) {
 
 		$admin_page = '/wp-admin/admin.php?page=blockera-settings';
 
-		return is_admin() && str_starts_with($_SERVER['REQUEST_URI'] ?? '', $admin_page);
+		return is_admin() || str_starts_with($_SERVER['REQUEST_URI'] ?? '', $admin_page);
 	}
 }
