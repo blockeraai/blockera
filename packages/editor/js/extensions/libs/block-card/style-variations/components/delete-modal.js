@@ -93,7 +93,7 @@ export const DeleteModal = ({
 
 				<Flex justifyContent="space-between">
 					<Button
-						data-test="save-rename-button"
+						data-test="delete-button"
 						disabled={!isConfirmedDelete}
 						variant="primary"
 						onClick={() => {
@@ -106,7 +106,7 @@ export const DeleteModal = ({
 					</Button>
 
 					<Button
-						data-test="cancel-rename-button"
+						data-test="cancel-delete-button"
 						variant="tertiary"
 						onClick={() => {
 							setIsOpenDeleteModal(false);

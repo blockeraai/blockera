@@ -202,4 +202,41 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 				});
 			});
 	});
+
+	it('should be able to delete specific style variation', () => {
+		cy.getByDataTest('open-section-1-contextmenu').eq(0).click();
+
+		cy.get('.blockera-component-popover-body button')
+			.contains('Delete')
+			.click();
+
+		cy.get('.components-modal__content').within(() => {
+			cy.get('input[type="checkbox"]').check();
+
+			cy.getByDataTest('delete-button').click();
+		});
+
+		cy.getByDataTest('style-new-id').should('not.exist');
+
+		getWPDataObject().then((data) => {
+			expect(4).to.be.deep.equal(
+				data.select('core/blocks').getBlockStyles('core/group')
+					?.length || 0
+			);
+		});
+
+		cy.openSettingsPanel();
+
+		cy.getBlock('core/group').eq(0).click();
+
+		cy.getByDataTest('style-variations-button').should('exist');
+
+		cy.getByDataTest('style-variations-button').click();
+
+		cy.get('.blockera-component-popover.variations-picker-popover')
+			.last()
+			.within(() => {
+				cy.getByDataTest('style-section-1').should('not.exist');
+			});
+	});
 });
