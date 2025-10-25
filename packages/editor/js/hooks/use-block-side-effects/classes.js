@@ -50,6 +50,7 @@ export const classes = [
 			'core/file',
 			'outermost/icon-block',
 			'core/accordion',
+			'core/accordion-item',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
