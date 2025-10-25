@@ -46,7 +46,7 @@ export const useBlockStyleItem = ({
 	setCurrentActiveStyle: (style: Object) => void,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
-	setStyles: (styles: Object, options?: Object) => void,
+	setStyles: (styles: Object) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 }): ({
 	isConfirmedChangeID: boolean,
@@ -62,6 +62,8 @@ export const useBlockStyleItem = ({
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
 }) => {
+	const { setBlockStyles: setGlobalBlockStyles } =
+		dispatch('blockera/editor');
 	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
@@ -209,16 +211,13 @@ export const useBlockStyleItem = ({
 	);
 
 	const handleOnClearAllCustomizations = (currentStyle: Object) => {
-		setStyles(
-			{
-				variations: {
-					[currentStyle.name]: {},
-				},
+		setStyles({
+			variations: {
+				[currentStyle.name]: {},
 			},
-			{
-				action: 'clear-all-customizations',
-			}
-		);
+		});
+
+		setGlobalBlockStyles(blockName, currentBlockStyleVariation.name, {});
 
 		setIsOpenContextMenu(false);
 	};

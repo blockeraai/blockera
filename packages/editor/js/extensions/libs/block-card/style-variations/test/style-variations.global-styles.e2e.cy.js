@@ -5,6 +5,7 @@ import {
 	closeWelcomeGuide,
 	redirectToFrontPage,
 	getSelectedBlockStyle,
+	getEditedGlobalStylesRecord,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Style Variations Inside Global Styles Panel → Functionality', () => {
@@ -37,12 +38,75 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 
 		cy.getByDataTest('style-default-copy-1').should('be.visible');
 
-		cy.getByDataTest('open-style-1-contextmenu').click();
+		cy.getByDataTest('open-style-section-1-contextmenu').click();
 
 		cy.get('.blockera-component-popover-body button')
 			.contains('Duplicate')
 			.click();
 
-		cy.getByDataTest('style-style-1-copy').should('be.visible');
+		cy.getByDataTest('style-style-section-1-copy').should('be.visible');
+	});
+
+	it('should be able to clear customizations from specific style variation', () => {
+		cy.getByDataTest('style-section-1').click();
+
+		// add alias to the feature container
+		cy.getParentContainer('BG Color').as('bgColorContainer');
+
+		// act: clicking on color button
+		cy.get('@bgColorContainer').within(() => {
+			cy.openValueAddon();
+		});
+
+		// select variable
+		cy.selectValueAddonItem('accent-4');
+
+		cy.waitForAssertValue();
+
+		//assert data
+		getWPDataObject().then((data) => {
+			expect({
+				settings: {
+					name: 'Accent 4',
+					id: 'accent-4',
+					value: '#686868',
+					reference: {
+						type: 'theme',
+						theme: 'Twenty Twenty-Five',
+					},
+					type: 'color',
+					var: '--wp--preset--color--accent-4',
+				},
+				name: 'Accent 4',
+				isValueAddon: true,
+				valueType: 'variable',
+			}).to.be.deep.equal(
+				getSelectedBlockStyle(data, 'core/group', 'section-1')
+					?.blockeraBackgroundColor?.value
+			);
+		});
+
+		cy.getByDataTest('open-section-1-contextmenu').eq(1).click();
+
+		cy.get('.blockera-component-popover-body button')
+			.contains('Clear all customizations')
+			.click();
+
+		cy.waitForAssertValue();
+
+		//assert blockera data
+		getWPDataObject().then((data) => {
+			expect(undefined).to.be.deep.equal(
+				getSelectedBlockStyle(data, 'core/group', 'section-1')
+					?.blockeraBackgroundColor?.value
+			);
+		});
+
+		//assert WordPress data
+		getWPDataObject().then((data) => {
+			expect({}).to.be.deep.equal(
+				getEditedGlobalStylesRecord(data, 'styles')
+			);
+		});
 	});
 });
