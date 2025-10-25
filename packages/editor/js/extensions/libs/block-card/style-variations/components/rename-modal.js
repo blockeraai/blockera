@@ -170,6 +170,7 @@ export const RenameModal = ({
 
 				<Flex justifyContent="space-between">
 					<Button
+						data-test="save-rename-button"
 						disabled={
 							styleID === style.name
 								? styleName === buttonText
@@ -189,6 +190,7 @@ export const RenameModal = ({
 					</Button>
 
 					<Button
+						data-test="cancel-rename-button"
 						variant="tertiary"
 						onClick={() => {
 							setIsOpenRenameModal(false);

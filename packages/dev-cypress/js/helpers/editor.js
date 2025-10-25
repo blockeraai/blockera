@@ -34,6 +34,8 @@ export function getWindowProperty(path) {
  * when the window object is not available.
  */
 export function getWPDataObject() {
+	cy.waitForAssertValue();
+
 	return cy
 		.window()
 		.its('wp.data')

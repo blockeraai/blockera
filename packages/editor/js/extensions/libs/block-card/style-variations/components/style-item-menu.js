@@ -25,12 +25,15 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { RenameModal } from './rename-modal';
+import { DeleteModal } from './delete-modal';
 
 export const StyleItemMenu = ({
 	counter,
 	setCounter,
 	cachedStyle,
 	isOpenRenameModal,
+	isOpenDeleteModal,
+	setIsOpenDeleteModal,
 	setIsOpenRenameModal,
 	isOpenContextMenu,
 	setIsOpenContextMenu,
@@ -54,6 +57,8 @@ export const StyleItemMenu = ({
 	handleOnEnable: (value: boolean, style: Object) => void,
 	handleOnDelete: (style: Object) => void,
 	isOpenRenameModal: boolean,
+	isOpenDeleteModal: boolean,
+	setIsOpenDeleteModal: (isOpen: boolean) => void,
 	setIsOpenRenameModal: (isOpen: boolean) => void,
 	isOpenContextMenu: boolean,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
@@ -73,6 +78,17 @@ export const StyleItemMenu = ({
 					isConfirmedChangeID={isConfirmedChangeID}
 					setIsOpenRenameModal={setIsOpenRenameModal}
 					setIsConfirmedChangeID={setIsConfirmedChangeID}
+				/>
+			)}
+
+			{isOpenDeleteModal && (
+				<DeleteModal
+					style={style}
+					buttonText={buttonText}
+					handleOnDelete={handleOnDelete}
+					setCounter={setCounter}
+					counter={counter}
+					setIsOpenDeleteModal={setIsOpenDeleteModal}
 				/>
 			)}
 
@@ -206,8 +222,7 @@ export const StyleItemMenu = ({
 								contentAlign="left"
 								className={controlInnerClassNames('menu-item')}
 								onClick={() => {
-									handleOnDelete(style.name);
-									setCounter(counter - 1);
+									setIsOpenDeleteModal(true);
 								}}
 								style={{
 									'--blockera-controls-primary-color':

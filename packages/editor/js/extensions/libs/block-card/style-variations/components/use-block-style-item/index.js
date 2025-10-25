@@ -116,8 +116,6 @@ export const useBlockStyleItem = ({
 			if (isConfirmedChangeID) {
 				editedStyle.name = kebabCase(newValue.name);
 
-				updatedMetaData = getUpdatedMetaData(editedStyle);
-
 				const editedGlobalStyles = mergeObject(globalStyles, {
 					blocks: {
 						[blockName]: {
@@ -132,6 +130,24 @@ export const useBlockStyleItem = ({
 					},
 				});
 
+				const foundedStyle = blockStyles.find(
+					(style) => style.name === currentBlockStyleVariation?.name
+				);
+				const index = blockStyles.indexOf(foundedStyle);
+
+				setBlockStyles([
+					...blockStyles.filter(
+						(style) =>
+							style.name !== currentBlockStyleVariation?.name
+					),
+					editedStyle,
+				]);
+
+				updatedMetaData = getUpdatedMetaData({
+					...editedStyle,
+					index,
+				});
+
 				setGlobalStyles({
 					...editedGlobalStyles,
 					blockeraMetaData: updatedMetaData,
@@ -142,17 +158,6 @@ export const useBlockStyleItem = ({
 					currentBlockStyleVariation.name
 				);
 				registerBlockStyle(blockName, editedStyle);
-
-				const foundedStyle = blockStyles.find(
-					(style) => style.name === currentBlockStyleVariation?.name
-				);
-				const index = blockStyles.indexOf(foundedStyle);
-
-				setBlockStyles([
-					...blockStyles.slice(0, index),
-					currentBlockStyleVariation,
-					...blockStyles.slice(index + 1),
-				]);
 			} else {
 				updatedMetaData = getUpdatedMetaData(editedStyle);
 

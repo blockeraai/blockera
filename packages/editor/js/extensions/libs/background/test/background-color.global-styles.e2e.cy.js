@@ -39,8 +39,6 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 			cy.get('@hexColorInput').type('666666');
 		});
 
-		cy.waitForAssertValue();
-
 		//assert data
 		getWPDataObject().then((data) => {
 			expect(
@@ -84,8 +82,6 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 
 		// select variable
 		cy.selectValueAddonItem('accent-4');
-
-		cy.waitForAssertValue();
 
 		//assert data
 		getWPDataObject().then((data) => {

@@ -61,8 +61,6 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 		// select variable
 		cy.selectValueAddonItem('accent-4');
 
-		cy.waitForAssertValue();
-
 		//assert data
 		getWPDataObject().then((data) => {
 			expect({
@@ -92,8 +90,6 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 			.contains('Clear all customizations')
 			.click();
 
-		cy.waitForAssertValue();
-
 		//assert blockera data
 		getWPDataObject().then((data) => {
 			expect(undefined).to.be.deep.equal(
@@ -108,5 +104,54 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 				getEditedGlobalStylesRecord(data, 'styles')
 			);
 		});
+	});
+
+	it('should be able to rename specific style variation', () => {
+		cy.getByDataTest('style-section-1').click();
+
+		cy.getByDataTest('open-section-1-contextmenu').eq(1).click();
+
+		cy.get('.blockera-component-popover-body button')
+			.contains('Rename')
+			.click();
+
+		cy.get('.components-modal__content').within(() => {
+			cy.getParentContainer('Name').within(() => {
+				cy.get('input').clear();
+				cy.get('input').type('New Name');
+			});
+
+			cy.getByDataTest('save-rename-button').click();
+		});
+
+		cy.getByDataTest('style-section-1').contains('New Name');
+	});
+
+	it('should be able to rename with new ID specific style variation', () => {
+		cy.getByDataTest('style-section-1').click();
+
+		cy.getByDataTest('open-section-1-contextmenu').eq(1).click();
+
+		cy.get('.blockera-component-popover-body button')
+			.contains('Rename')
+			.click();
+
+		cy.get('.components-modal__content').within(() => {
+			cy.getParentContainer('Name').within(() => {
+				cy.get('input').clear();
+				cy.get('input').type('New Name');
+			});
+
+			cy.getParentContainer('ID').within(() => {
+				cy.get('input').clear();
+				cy.get('input').type('new id');
+			});
+
+			cy.get('input[type="checkbox"]').check();
+
+			cy.getByDataTest('save-rename-button').click();
+		});
+
+		cy.getByDataTest('style-new-id').contains('New Name');
 	});
 });
