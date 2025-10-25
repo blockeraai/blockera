@@ -109,4 +109,53 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 			);
 		});
 	});
+
+	it('should be able to rename specific style variation', () => {
+		cy.getByDataTest('style-section-1').click();
+
+		cy.getByDataTest('open-section-1-contextmenu').eq(1).click();
+
+		cy.get('.blockera-component-popover-body button')
+			.contains('Rename')
+			.click();
+
+		cy.get('.components-modal__content').within(() => {
+			cy.getParentContainer('Name').within(() => {
+				cy.get('input').clear();
+				cy.get('input').type('New Name');
+			});
+
+			cy.getByDataTest('save-rename-button').click();
+		});
+
+		cy.getByDataTest('style-section-1').contains('New Name');
+	});
+
+	it('should be able to rename with new ID specific style variation', () => {
+		cy.getByDataTest('style-section-1').click();
+
+		cy.getByDataTest('open-section-1-contextmenu').eq(1).click();
+
+		cy.get('.blockera-component-popover-body button')
+			.contains('Rename')
+			.click();
+
+		cy.get('.components-modal__content').within(() => {
+			cy.getParentContainer('Name').within(() => {
+				cy.get('input').clear();
+				cy.get('input').type('New Name');
+			});
+
+			cy.getParentContainer('ID').within(() => {
+				cy.get('input').clear();
+				cy.get('input').type('new id');
+			});
+
+			cy.get('input[type="checkbox"]').check();
+
+			cy.getByDataTest('save-rename-button').click();
+		});
+
+		cy.getByDataTest('style-new-id').contains('New Name');
+	});
 });
