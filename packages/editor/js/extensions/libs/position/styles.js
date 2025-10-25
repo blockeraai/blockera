@@ -33,6 +33,24 @@ export const PositionStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
+	// Create cache key from inputs that affect output
+	const cacheKey = JSON.stringify({
+		blockeraPosition: currentBlockAttributes.blockeraPosition,
+		blockeraZIndex: currentBlockAttributes.blockeraZIndex,
+		state,
+		clientId,
+		blockName,
+		masterState,
+		activeDeviceType,
+		blockSelectors,
+		className: currentBlockAttributes?.className,
+	});
+
+	// Check if we have cached result
+	if ((PositionStyles: any).cache?.[cacheKey]) {
+		return (PositionStyles: any).cache[cacheKey];
+	}
+
 	const { blockeraPosition, blockeraZIndex } = config.positionConfig;
 	const blockProps = {
 		state,
@@ -257,6 +275,12 @@ export const PositionStyles = ({
 			}
 		}
 	}
+
+	// Cache the result
+	if (!(PositionStyles: any).cache) {
+		(PositionStyles: any).cache = {};
+	}
+	(PositionStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

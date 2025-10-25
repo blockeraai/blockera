@@ -33,6 +33,7 @@ import {
 	defineGlobalProps,
 	bootstrapBreakpoints,
 	bootstrapCanvasEditor,
+	bootstrapBlockAppSettings,
 	blockeraExtensionsBootstrap,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
@@ -90,6 +91,8 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 
 	return () => {
 		defineGlobalProps(() => {
+			bootstrapBlockAppSettings();
+
 			// Bootstrap functions for blocks.
 			blockeraBootstrapBlocks();
 

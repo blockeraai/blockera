@@ -10,8 +10,9 @@ import type {
 import type { InnerBlockType } from '../../../extensions/libs/block-card/inner-blocks/types';
 
 export type MediaQueryProps = {
+	clientId: string,
+	declarations: string,
 	breakpoint: TBreakpoint,
-	children: any,
 };
 
 export type BlockStyleProps = {
@@ -26,6 +27,9 @@ export type BlockStyleProps = {
 	defaultAttributes: Object,
 	currentAttributes: Object,
 	activeDeviceType: TStates,
+	isGlobalStylesWrapper?: boolean,
+	styleVariationName?: string,
+	isStyleVariation?: boolean,
 };
 
 export type StateStyleProps = {

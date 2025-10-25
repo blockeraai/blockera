@@ -13,7 +13,13 @@ export function prependPortal(
 	portalContainer.classList.add('blockera-block-inspector-controls-wrapper');
 
 	if (className) {
-		portalContainer.classList.add(className);
+		if (Array.isArray(className)) {
+			className.forEach((cls) => {
+				portalContainer.classList.add(cls);
+			});
+		} else {
+			portalContainer.classList.add(className);
+		}
 	}
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks

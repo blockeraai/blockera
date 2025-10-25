@@ -1,0 +1,81 @@
+<?php
+
+namespace Blockera\Editor\Http\Controllers\Theme;
+
+/**
+ * Class to provide access to update a theme.json structure.
+ */
+#[\AllowDynamicProperties]
+class JSONData extends \WP_Theme_JSON_Data {
+
+	/**
+	 * Container of the data to update.
+	 *
+	 * @since 1.13.0
+	 * @var JSON
+	 */
+	private $theme_json = null;
+
+	/**
+	 * The origin of the data: default, theme, user, etc.
+	 *
+	 * @since 1.13.0
+	 * @var string
+	 */
+	private $origin = '';
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 1.13.0
+	 *
+	 * @link https://developer.wordpress.org/block-editor/reference-guides/theme-json-reference/
+	 *
+	 * @param array  $data   Array following the theme.json specification.
+	 * @param string $origin The origin of the data: default, theme, user.
+	 */
+	public function __construct( $data = array( 'version' => \WP_Theme_JSON::LATEST_SCHEMA ), $origin = 'theme' ) {
+
+		$this->origin     = $origin;
+		$this->theme_json = new JSON( $data, $this->origin );
+	}
+
+	/**
+	 * Updates the theme.json with the the given data.
+	 *
+	 * @since 1.13.0
+	 *
+	 * @param array $new_data Array following the theme.json specification.
+	 *
+	 * @return \WP_Theme_JSON_Data The own instance with access to the modified data.
+	 */
+	public function update_with( $new_data ) {
+
+		$this->theme_json->merge( new JSON( $new_data, $this->origin ) );
+
+		return $this;
+	}
+
+	/**
+	 * Returns an array containing the underlying data
+	 * following the theme.json specification.
+	 *
+	 * @since 6.1.0
+	 *
+	 * @return array
+	 */
+	public function get_data() {
+		return $this->theme_json->get_raw_data();
+	}
+
+	/**
+	 * Returns theme JSON object.
+	 *
+	 * @since 6.6.0
+	 *
+	 * @return WP_Theme_JSON The theme JSON structure stored in this data object.
+	 */
+	public function get_theme_json() {
+		return $this->theme_json;
+	}
+}

@@ -16,9 +16,35 @@
 }
 
 .blockera-control.blockera-control-toggle {
+	--wp-components-color-accent: var(--blockera-controls-primary-color);
 
-	.components-form-toggle.is-checked .components-form-toggle__track {
-		background-color: var(--blockera-controls-primary-color);
-		border-color: var(--blockera-controls-primary-color);
+	&.size-small {
+
+		input[type="checkbox"],
+		input[type="radio"] {
+			width: 24px;
+			min-width: 24px;
+		}
+
+		.components-form-toggle {
+			height: 12px;
+			width: 24px;
+
+			.components-form-toggle__thumb {
+				border: 4px solid #000000;
+				height: 8px;
+				width: 8px;
+			}
+
+			.components-form-toggle__track {
+				width: 24px;
+				height: 12px;
+			}
+
+			&.is-checked .components-form-toggle__thumb {
+				transform: translateX(12px);
+				border-width: 0;
+			}
+		}
 	}
 }

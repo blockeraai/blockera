@@ -58,9 +58,19 @@ export function onChangeBlockStates(
 		newValue = onChangeValue?.value;
 	}
 
-	const { currentBlock, getStateInfo, getBlockStates, isMasterBlockStates } =
-		params;
+	const {
+		block,
+		currentBlock,
+		getStateInfo,
+		getBlockStates,
+		isMasterBlockStates,
+	} = params;
+
 	const { getSelectedBlock } = select('core/block-editor');
+	const { name, clientId } = getSelectedBlock() || {
+		name: block?.blockName,
+		clientId: block?.clientId,
+	};
 
 	const {
 		setBlockClientStates,
@@ -81,7 +91,7 @@ export function onChangeBlockStates(
 			setBlockClientInnerState({
 				currentState: stateType,
 				innerBlockType: currentBlock,
-				clientId: getSelectedBlock()?.clientId,
+				clientId,
 			});
 		};
 		const setBlockDetails = () => {
@@ -89,8 +99,8 @@ export function onChangeBlockStates(
 			setCurrentState(stateType);
 			setBlockClientMasterState({
 				currentState: stateType,
-				name: getSelectedBlock()?.name,
-				clientId: getSelectedBlock()?.clientId,
+				name,
+				clientId,
 			});
 		};
 
@@ -108,17 +118,14 @@ export function onChangeBlockStates(
 	}
 
 	setBlockClientStates({
-		clientId: getSelectedBlock()?.clientId,
-		blockType: !isMasterBlockStates
-			? currentBlock
-			: getSelectedBlock()?.name,
+		clientId,
+		blockType: !isMasterBlockStates ? currentBlock : name,
 		blockStates: newValue,
 	});
 
 	if (onChangeValue.hasOwnProperty('modifyControlValue')) {
 		let blockStates = {};
 		const { modifyControlValue, controlId } = onChangeValue;
-		const { clientId, name } = getSelectedBlock();
 
 		blockStates = getBlockStates(
 			clientId,

@@ -5,12 +5,12 @@ import {
 	getWPDataObject,
 	setBlockState,
 	setInnerBlock,
-	setDeviceType,
 	addBlockState,
 	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 import { experimental } from '@blockera/env';
+import { setDevice } from './helpers';
 
 describe('Style Engine Testing ...', () => {
 	beforeEach(() => {
@@ -29,23 +29,6 @@ describe('Style Engine Testing ...', () => {
 	const enabledOptimizeStyleGeneration = experimental().get(
 		'earlyAccessLab.optimizeStyleGeneration'
 	);
-
-	function setDevice(device) {
-		if ('desktop' !== device) {
-			if (
-				!Cypress.$('iframe[name="editor-canvas"]')
-					.find('body')
-					.hasClass(`is-${device}-preview`)
-			) {
-				setDeviceType('Desktop');
-				setDeviceType(device);
-
-				return;
-			}
-		}
-
-		setDeviceType('Desktop');
-	}
 
 	describe('Responsive design', () => {
 		it('should generate css for desktop device', () => {

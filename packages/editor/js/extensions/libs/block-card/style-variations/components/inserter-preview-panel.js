@@ -3,19 +3,31 @@
  * External dependencies
  */
 import {
-	isReusableBlock,
 	createBlock,
+	getBlockType,
+	isReusableBlock,
 	getBlockFromExample,
 } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { BlockPreview } from '@wordpress/block-editor';
 import type { MixedElement } from 'react';
 
+/**
+ * Internal dependencies
+ */
+import { useBlockPreviewStyles } from '../../../../../hooks';
+
 // It's a clone of '@wordpress/block-editor/js/components/inserter/preview-panel'
 function InserterPreviewPanel({ item }: { item: Object }): MixedElement {
-	const { name, title, description, initialAttributes, example } = item;
+	const { name, title, description, initialAttributes, example, variation } =
+		item;
 
 	const isReusable = isReusableBlock(item);
+
+	const blockPreviewCssStyles = useBlockPreviewStyles(
+		getBlockType(name),
+		variation
+	);
 
 	return (
 		<div className="block-editor-inserter__preview-container">
@@ -36,7 +48,12 @@ function InserterPreviewPanel({ item }: { item: Object }): MixedElement {
 							}
 							viewportWidth={example?.viewportWidth ?? 500}
 							additionalStyles={[
-								{ css: 'body { padding: 16px; }' },
+								{
+									css: 'body { padding: 16px; }',
+									...(blockPreviewCssStyles
+										? { css: blockPreviewCssStyles }
+										: {}),
+								},
 							]}
 						/>
 					</div>

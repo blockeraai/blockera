@@ -24,7 +24,7 @@ import {
 	isInnerBlock,
 	isNormalState as _isNormalState,
 } from '../../extensions/components/utils';
-import { useBlockContext } from '../../extensions/hooks/context';
+import { useBlockContext } from '../../extensions/components/block-context';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 import type {
 	CalculatedAdvancedLabelProps,
@@ -49,6 +49,8 @@ export const useAdvancedLabelProps = (
 		isRepeater,
 		defaultValue,
 		isNormalState,
+		blockName,
+		clientId,
 		blockAttributes,
 	}: AdvancedLabelHookProps,
 	delay: number
@@ -67,7 +69,10 @@ export const useAdvancedLabelProps = (
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
-	} = useExtensionsStore();
+	} = useExtensionsStore({
+		clientId,
+		name: blockName,
+	});
 	// Get static blockeraInnerBlocks value to use as fallback.
 	const { blockeraInnerBlocks } = useBlockContext();
 	const currentBlockAttributes = useMemo(() => {
