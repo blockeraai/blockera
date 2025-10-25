@@ -140,11 +140,6 @@ export const StyleItem = ({
 
 	const isActive: boolean = activeStyle.name === style.name;
 
-	// disabled items should not be visible in the block editor
-	if (!inGlobalStylesPanel && false === cachedStyle?.status) {
-		return <></>;
-	}
-
 	const defaultStyle = getDefaultStyle(blockStyles);
 
 	return (
@@ -155,8 +150,14 @@ export const StyleItem = ({
 				className={classNames(
 					'block-editor-block-styles__item__button',
 					{
-						'is-active': isActive,
+						'is-active':
+							inGlobalStylesPanel && !currentBlockStyleVariation
+								? false
+								: isActive,
 						'is-focus': isOpenBlockCardContextMenu,
+						'is-enabled':
+							!cachedStyle?.hasOwnProperty('status') ||
+							true === cachedStyle?.status,
 					}
 				)}
 				key={style.name}
@@ -219,6 +220,11 @@ export const StyleItem = ({
 					styleItemHandler(null);
 				}}
 				onClick={(event) => {
+					// Skip blur if style is disabled.
+					if (false === cachedStyle?.status) {
+						return;
+					}
+
 					// Skip click on actions opener element.
 					if (
 						!event.target.innerText ||
