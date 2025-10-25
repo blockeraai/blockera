@@ -90,6 +90,36 @@ export function getSelectedBlockStyle(data, name, variation = 'default') {
 }
 
 /**
+ * Get the WordPress globalStyles entity record.
+ *
+ * @param {*} data the @wordpress/data package object.
+ * @param {*} prop the property of record. like style, settings, etc.
+ * @param {*} innerField the inner property name in record[prop] object.
+ *
+ * @returns anythings.
+ */
+export function getEditedGlobalStylesRecord(data, prop, innerField) {
+	const { __experimentalGetCurrentGlobalStylesId } = data.select('core');
+	const { getEditedEntityRecord } = data.select('core');
+
+	const record = getEditedEntityRecord(
+		'root',
+		'globalStyles',
+		__experimentalGetCurrentGlobalStylesId()
+	);
+
+	if (prop) {
+		if (innerField) {
+			return record?.[prop]?.[innerField];
+		}
+
+		return record?.[prop];
+	}
+
+	return record;
+}
+
+/**
  * Get editor content.
  *
  * @param {Object} data the WordPress data.
