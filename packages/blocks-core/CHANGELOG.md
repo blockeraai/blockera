@@ -27,6 +27,7 @@
 - Added E2E tests to check functionality and support of `Accordion` block.
 - Added E2E tests to check functionality and support of `Accordion Item` block.
 - Added E2E tests to check functionality and support of `Accordion Heading` block.
+- Added E2E tests to check functionality and support of `Accordion Panel` block.
 
 ## 1.4.0 (2025-05-19)
 
