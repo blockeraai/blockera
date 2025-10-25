@@ -155,7 +155,10 @@ export const StyleItem = ({
 				className={classNames(
 					'block-editor-block-styles__item__button',
 					{
-						'is-active': isActive,
+						'is-active':
+							inGlobalStylesPanel && !currentBlockStyleVariation
+								? false
+								: isActive,
 						'is-focus': isOpenBlockCardContextMenu,
 					}
 				)}
