@@ -101,6 +101,10 @@
 		fill: currentColor;
 	}
 
+	span.context-menu-trigger {
+		display: inline-flex;
+	}
+
 	&:hover {
 
 		svg {

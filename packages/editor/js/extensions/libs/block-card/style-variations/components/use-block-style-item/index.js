@@ -198,9 +198,9 @@ export const useBlockStyleItem = ({
 				},
 			});
 
-			setCurrentBlockStyleVariation(duplicateStyle);
-
-			setCurrentActiveStyle(duplicateStyle);
+			// TODO: Uncomment this when we will have a way to set the current block style variation while duplicating.
+			// setCurrentBlockStyleVariation(duplicateStyle);
+			// setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 		},
