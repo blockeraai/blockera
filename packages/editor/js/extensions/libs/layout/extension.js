@@ -391,7 +391,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											? 'value'
 											: 'val'
 									}
-									columns="1fr 120px"
+									columns="1fr 121px"
 									style={{
 										'--gap': '0',
 									}}
@@ -665,7 +665,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											</p>
 										</>
 									}
-									columns="1fr 150px"
+									columns="1fr 160px"
 									style={{
 										'--gap': '0',
 									}}
