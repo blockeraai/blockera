@@ -90,6 +90,8 @@ export const GlobalStylesPanelContext: Object = createContext({
 		label: '',
 	},
 	setCurrentBlockStyleVariation: () => {},
+	getStyleVariationBlocks: () => [],
+	setStyleVariationBlocks: () => {},
 	setStyles: () => {},
 	styles: {},
 });

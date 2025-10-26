@@ -148,9 +148,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	handleOnChangeAttributes,
 	...props
 }: Props): MixedElement => {
-	const { currentBlockStyleVariation } = useGlobalStylesPanelContext() || {
-		currentBlockStyleVariation: {},
-	};
+	const { currentBlockStyleVariation } = useGlobalStylesPanelContext();
 	const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 		useState(false);
 	useEffect(() => {

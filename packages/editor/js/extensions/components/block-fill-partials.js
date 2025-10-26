@@ -48,7 +48,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 	updateBlockEditorSettings,
 }): Element<any> => {
 	const { currentBlockStyleVariation, setCurrentBlockStyleVariation } =
-		useGlobalStylesPanelContext() || {};
+		useGlobalStylesPanelContext();
 	// prevent memory leak, componentDidMount.
 	useEffect(() => {
 		const others = select('blockera/controls').getControls();
