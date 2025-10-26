@@ -10,6 +10,7 @@
 - `Post Comments Link` block: add support.
 - `Term Template` block: add support.
 - `Term Query → Term Name` block: add support.
+- `Term Query → Term Count` block: add support.
 
 ### Improvements
 - `List` block: `Icon` inner block added.
