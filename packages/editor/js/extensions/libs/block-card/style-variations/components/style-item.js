@@ -28,7 +28,6 @@ import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useUserCan } from '../../../../../hooks/use-user-can';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
-import { useTraceUpdate } from '../../../../../hooks/use-trace-update';
 
 export const StyleItem = ({
 	style,
@@ -59,10 +58,6 @@ export const StyleItem = ({
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
-	useTraceUpdate({
-		styleItemHandler,
-		onSelectStylePreview,
-	});
 	const {
 		getStyle = () => ({}),
 		currentBlockStyleVariation,
