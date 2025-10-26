@@ -4,8 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { __experimentalDivider as Divider } from '@wordpress/components';
 import type { MixedElement } from 'react';
+import { __experimentalDivider as Divider } from '@wordpress/components';
 
 /**
  * Blockera dependencies
