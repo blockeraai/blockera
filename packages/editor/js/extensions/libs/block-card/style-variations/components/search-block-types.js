@@ -3,9 +3,8 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { Slot, SlotFillProvider } from '@wordpress/components';
 
@@ -28,10 +27,10 @@ import { search } from '../../../block-composite/search-items';
 export const SearchBlockTypes = ({
 	style,
 	blocks: _blocks,
+	handleOnUsageForMultipleBlocks,
 }: Object): MixedElement => {
 	const [blocks, setBlocks] = useState(_blocks);
 	const [searchTerm, setSearchTerm] = useState('');
-	const { getBlockType } = select('core/blocks');
 
 	return (
 		<SlotFillProvider>
@@ -130,9 +129,11 @@ export const SearchBlockTypes = ({
 				)}
 
 				<BlockTypes
-					limited={true}
+					style={style}
 					items={blocks}
-					{...{ getBlockType, style }}
+					handleOnUsageForMultipleBlocks={
+						handleOnUsageForMultipleBlocks
+					}
 				/>
 			</Flex>
 		</SlotFillProvider>

@@ -58,7 +58,7 @@ export const useBlockStyleItem = ({
 	handleOnDelete: (currentStyleName: string) => void,
 	handleOnDuplicate: (currentStyle: Object) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
-	handleOnApplyToBlockTypes: (currentStyle: Object) => void,
+	handleOnUsageForMultipleBlocks: (currentStyle: Object) => void,
 	handleOnSaveCustomizations: (currentStyle: Object) => void,
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
@@ -185,9 +185,23 @@ export const useBlockStyleItem = ({
 		]
 	);
 
-	const handleOnApplyToBlockTypes = useCallback((currentStyle: Object) => {
-		console.log(currentStyle);
-	}, []);
+	const handleOnUsageForMultipleBlocks = useCallback(
+		(currentStyle: Object, action: 'add' | 'delete') => {
+			if ('add' === action && !blockStyles.includes(currentStyle)) {
+				setBlockStyles([...blockStyles, currentStyle]);
+			} else if (
+				'delete' === action &&
+				blockStyles.includes(currentStyle)
+			) {
+				setBlockStyles(
+					blockStyles.filter(
+						(style) => style.name !== currentStyle.name
+					)
+				);
+			}
+		},
+		[blockStyles, setBlockStyles]
+	);
 
 	const handleOnDuplicate = useCallback(
 		(currentStyle) => {
@@ -354,8 +368,8 @@ export const useBlockStyleItem = ({
 		handleOnDetachStyle,
 		isConfirmedChangeID,
 		setIsConfirmedChangeID,
-		handleOnApplyToBlockTypes,
 		handleOnSaveCustomizations,
+		handleOnUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	};
 };

@@ -22,12 +22,15 @@ import { SearchBlockTypes } from './search-block-types';
 export const UsageForMultipleBlocksModal = ({
 	style,
 	clientId,
-	// handleOnApplyToBlockTypes,
+	handleOnUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
 }: {
 	style: Object,
 	clientId: string,
-	handleOnApplyToBlockTypes: (style: Object) => void,
+	handleOnUsageForMultipleBlocks: (
+		style: Object,
+		action: 'add' | 'delete'
+	) => void,
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
 }): MixedElement => {
 	const blocks = getBlockTypes();
@@ -55,6 +58,7 @@ export const UsageForMultipleBlocksModal = ({
 				style={style}
 				blocks={blocks}
 				clientId={clientId}
+				handleOnUsageForMultipleBlocks={handleOnUsageForMultipleBlocks}
 			/>
 		</Modal>
 	);

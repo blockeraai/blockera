@@ -44,7 +44,7 @@ export const StyleItemMenu = ({
 	handleOnRename,
 	handleOnDuplicate,
 	handleOnClearAllCustomizations,
-	handleOnApplyToBlockTypes,
+	handleOnUsageForMultipleBlocks,
 	setCurrentBlockStyleVariation,
 	setIsOpenUsageForMultipleBlocks,
 	isOpenUsageForMultipleBlocks,
@@ -62,7 +62,10 @@ export const StyleItemMenu = ({
 	handleOnClearAllCustomizations: (style: Object) => void,
 	handleOnEnable: (value: boolean, style: Object) => void,
 	handleOnDelete: (style: Object) => void,
-	handleOnApplyToBlockTypes: (style: Object) => void,
+	handleOnUsageForMultipleBlocks: (
+		style: Object,
+		action: 'add' | 'delete'
+	) => void,
 	isOpenRenameModal: boolean,
 	isOpenDeleteModal: boolean,
 	setIsOpenDeleteModal: (isOpen: boolean) => void,
@@ -103,7 +106,9 @@ export const StyleItemMenu = ({
 				<UsageForMultipleBlocksModal
 					style={style}
 					clientId={blockName.replace('/', '-')}
-					handleOnApplyToBlockTypes={handleOnApplyToBlockTypes}
+					handleOnUsageForMultipleBlocks={
+						handleOnUsageForMultipleBlocks
+					}
 					setIsOpenUsageForMultipleBlocks={
 						setIsOpenUsageForMultipleBlocks
 					}
