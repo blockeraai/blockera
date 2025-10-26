@@ -5,7 +5,6 @@
  */
 import { select, useSelect } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { getBlockTypes } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
 import {
 	memo,
@@ -14,6 +13,11 @@ import {
 	useEffect,
 	createPortal,
 } from '@wordpress/element';
+import {
+	getBlockTypes,
+	registerBlockStyle,
+	unregisterBlockStyle,
+} from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -46,6 +50,26 @@ export const registration = ({
 	globalStylesScreen: string,
 }): void => {
 	const blockTypes = getBlockTypes();
+	const { blockeraGlobalStylesMetaData } = window;
+
+	// Register block styles for saved block types.
+	Object.entries(blockeraGlobalStylesMetaData?.variations || {})?.forEach(
+		([, variation]) => {
+			variation.enabledIn.forEach((blockType) => {
+				const { disabledIn, ...rest } = variation;
+				registerBlockStyle(blockType, rest);
+			});
+		}
+	);
+
+	// Unregister block styles for saved block types.
+	Object.entries(blockeraGlobalStylesMetaData?.variations || {})?.forEach(
+		([variationName, variation]) => {
+			variation?.disabledIn?.forEach((blockType) => {
+				unregisterBlockStyle(blockType, variationName);
+			});
+		}
+	);
 
 	registerPlugin('blockera-global-styles-navigation', {
 		render() {

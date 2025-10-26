@@ -70,8 +70,15 @@ export const BlockTypes = ({
 	const [blocksState, setBlocksState] = useState({
 		all: false,
 		items:
-			globalStyles?.blockeraMetaData?.variations?.[style.name]
-				?.blockTypes || enabledItems,
+			globalStyles?.blockeraMetaData?.variations?.[
+				style.name
+			]?.enabledIn?.filter((blockType) => {
+				const disabledIn =
+					globalStyles?.blockeraMetaData?.variations?.[style.name]
+						?.disabledIn;
+
+				return !disabledIn?.includes(blockType);
+			}) || enabledItems,
 	});
 
 	useEffect(() => {
@@ -114,39 +121,72 @@ export const BlockTypes = ({
 				| 'single-disable',
 			blockType: string
 		) => {
-			let blockTypes;
+			let disabledIn: Array<string> = [];
+			let enabledIn: Array<string> = [];
 
 			if ('disable-all' === action) {
-				blockTypes = [];
+				disabledIn = validItems.map((blockType) => blockType.name);
+				enabledIn = [];
 				setAction('disable-all');
 			} else if ('enable-all' === action) {
-				blockTypes = validItems.map((blockType) => blockType.name);
+				disabledIn = [];
+				enabledIn = validItems.map((blockType) => blockType.name);
 				setAction('enable-all');
 			} else if ('single-enable' === action) {
-				blockTypes = [
-					...(globalStyles?.blockeraMetaData?.blockTypes || []),
-					blockType,
+				disabledIn =
+					globalStyles?.blockeraMetaData?.variations?.[
+						style.name
+					]?.disabledIn?.filter((type) => type !== blockType) || [];
+				enabledIn = [
+					...new Set([
+						...(globalStyles?.blockeraMetaData?.variations?.[
+							style.name
+						]?.enabledIn || []),
+						blockType,
+					]),
 				];
 				registerBlockStyle(blockType, style);
 			} else if ('single-disable' === action) {
-				blockTypes = globalStyles?.blockeraMetaData?.blockTypes?.filter(
-					(type) => type !== blockType
-				);
+				disabledIn = [
+					...new Set([
+						...(globalStyles?.blockeraMetaData?.variations?.[
+							style.name
+						]?.disabledIn || []),
+						blockType,
+					]),
+				];
+				enabledIn =
+					globalStyles?.blockeraMetaData?.variations?.[
+						style.name
+					]?.enabledIn?.filter((type) => type !== blockType) || [];
 				unregisterBlockStyle(blockType, style.name);
 			}
 
-			setGlobalStyles(
-				mergeObject(globalStyles, {
+			const { blockeraGlobalStylesMetaData } = window;
+			const newGlobalStyles = mergeObject(
+				{
+					...globalStyles,
+					...(!globalStyles?.blockeraMetaData
+						? { blockeraMetaData: blockeraGlobalStylesMetaData }
+						: {}),
+				},
+				{
 					blockeraMetaData: {
 						variations: {
 							[style.name]: {
 								...style,
-								blockTypes,
+								enabledIn,
+								disabledIn,
 							},
 						},
 					},
-				})
+				}
 			);
+
+			window.blockeraGlobalStylesMetaData =
+				newGlobalStyles.blockeraMetaData;
+
+			setGlobalStyles(newGlobalStyles);
 		},
 		[style, validItems, globalStyles, setGlobalStyles, setAction]
 	);
