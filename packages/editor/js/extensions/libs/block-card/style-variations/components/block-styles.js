@@ -124,7 +124,7 @@ function BlockStyles({
 		[
 			isNormalState,
 			setCurrentActiveStyle,
-			// onSelect,
+			onSelect,
 			setIsOpen,
 			setHoveredStyle,
 		]
@@ -162,7 +162,7 @@ function BlockStyles({
 			}
 		},
 		[
-			// onSelect,
+			onSelect,
 			hoveredStyle,
 			isNormalState,
 			setShowPreview,
