@@ -87,5 +87,6 @@ export * from './table';
 export * from './tag-cloud';
 export * from './term-description';
 export * from './term-template';
+export * from './term-name';
 export * from './verse';
 export * from './video';
