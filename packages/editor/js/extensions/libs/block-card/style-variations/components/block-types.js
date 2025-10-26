@@ -270,16 +270,27 @@ export const BlockTypes = ({
 					gap={'8px'}
 					className={`blockera-features-types blockera-feature-wrapper`}
 				>
-					{validItems.map((item, index) => (
-						<BlockType
-							item={item}
-							style={style}
-							blocksState={blocksState}
-							setGlobalData={setGlobalData}
-							key={index + '-' + item.name}
-							setBlocksState={setBlocksState}
-						/>
-					))}
+					{validItems
+						.sort((a, b) => {
+							const aHasStyle = blockHasStyle(a.name, style.name)
+								? 1
+								: 0;
+							const bHasStyle = blockHasStyle(b.name, style.name)
+								? 1
+								: 0;
+
+							return bHasStyle - aHasStyle; // Sort enabled items first
+						})
+						.map((item, index) => (
+							<BlockType
+								item={item}
+								style={style}
+								blocksState={blocksState}
+								setGlobalData={setGlobalData}
+								key={index + '-' + item.name}
+								setBlocksState={setBlocksState}
+							/>
+						))}
 				</Grid>
 			</Flex>
 		</>
