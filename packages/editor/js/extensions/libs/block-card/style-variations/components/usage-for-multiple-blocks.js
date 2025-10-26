@@ -21,12 +21,10 @@ import { SearchBlockTypes } from './search-block-types';
 
 export const UsageForMultipleBlocksModal = ({
 	style,
-	clientId,
 	handleOnUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
 }: {
 	style: Object,
-	clientId: string,
 	handleOnUsageForMultipleBlocks: (
 		style: Object,
 		action: 'add' | 'delete'
@@ -57,7 +55,6 @@ export const UsageForMultipleBlocksModal = ({
 			<SearchBlockTypes
 				style={style}
 				blocks={blocks}
-				clientId={clientId}
 				handleOnUsageForMultipleBlocks={handleOnUsageForMultipleBlocks}
 			/>
 		</Modal>

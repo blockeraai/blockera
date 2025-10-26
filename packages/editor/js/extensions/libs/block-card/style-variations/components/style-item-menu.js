@@ -29,7 +29,6 @@ import { DeleteModal } from './delete-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 
 export const StyleItemMenu = ({
-	blockName,
 	counter,
 	setCounter,
 	cachedStyle,
@@ -105,7 +104,6 @@ export const StyleItemMenu = ({
 			{isOpenUsageForMultipleBlocks && (
 				<UsageForMultipleBlocksModal
 					style={style}
-					clientId={blockName.replace('/', '-')}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}

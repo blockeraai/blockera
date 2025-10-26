@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select, useSelect } from '@wordpress/data';
+import { select, useSelect, dispatch } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { registerPlugin } from '@wordpress/plugins';
 import {
@@ -51,6 +51,7 @@ export const registration = ({
 }): void => {
 	const blockTypes = getBlockTypes();
 	const { blockeraGlobalStylesMetaData } = window;
+	const { setStyleVariationBlocks } = dispatch('blockera/editor');
 
 	// Register block styles for saved block types.
 	Object.entries(blockeraGlobalStylesMetaData?.variations || {})?.forEach(
@@ -59,6 +60,38 @@ export const registration = ({
 				const { disabledIn, ...rest } = variation;
 				registerBlockStyle(blockType, rest);
 			});
+
+			const wpEnabledBlocks = blockTypes
+				.map((blockType) => {
+					if (
+						!blockType?.attributes?.hasOwnProperty(
+							'blockeraPropsId'
+						) ||
+						variation.disabledIn.includes(blockType.name)
+					) {
+						return null;
+					}
+
+					const blockStyles =
+						select('core/blocks').getBlockStyles(blockType.name) ||
+						[];
+
+					if (
+						blockStyles.some(
+							(style) => style.name === variation.name
+						)
+					) {
+						return blockType.name;
+					}
+
+					return null;
+				})
+				.filter(Boolean);
+
+			// Register style variation blocks in global store.
+			setStyleVariationBlocks(variation.name, [
+				...new Set([...variation.enabledIn, ...wpEnabledBlocks]),
+			]);
 		}
 	);
 

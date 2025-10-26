@@ -415,3 +415,14 @@ export const getSelectedBlockStyleVariation = ({
 }): Object => {
 	return globalStyles.selectedBlockStyleVariation;
 };
+
+export const getStyleVariationBlocks = (
+	{
+		globalStyles,
+	}: {
+		globalStyles: Object,
+	},
+	variationName: string
+): Object => {
+	return globalStyles.styleVariationBlocks[variationName] || [];
+};

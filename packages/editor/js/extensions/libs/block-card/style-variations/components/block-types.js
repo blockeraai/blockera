@@ -4,8 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { select } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
+import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { useState, useCallback, useEffect } from '@wordpress/element';
 import { Icon as WordPressIconComponent, Fill } from '@wordpress/components';
@@ -59,6 +59,8 @@ export const BlockTypes = ({
 	const enabledItems = validItems
 		.filter((item) => blockHasStyle(item.name, style.name))
 		.map((item) => item.name);
+	const { setStyleVariationBlocks, deleteStyleVariationBlock } =
+		dispatch('blockera/editor');
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
 		'root',
@@ -88,6 +90,7 @@ export const BlockTypes = ({
 
 		const timeoutId = setTimeout(() => {
 			if ('disable-all' === action) {
+				deleteStyleVariationBlock(style.name, false);
 				// FIXME: @ali This is close modal and removed the style variation from list.
 				// validItems.forEach((blockType) =>
 				// 	unregisterBlockStyle(blockType.name, style.name)
@@ -97,6 +100,10 @@ export const BlockTypes = ({
 				validItems.forEach((blockType) => {
 					registerBlockStyle(blockType.name, style);
 				});
+				setStyleVariationBlocks(
+					style.name,
+					validItems.map((blockType) => blockType.name)
+				);
 				handleOnUsageForMultipleBlocks(style, 'add');
 			} else if ('single-enable' === action) {
 				handleOnUsageForMultipleBlocks(style, 'add');
@@ -110,7 +117,14 @@ export const BlockTypes = ({
 		}, 1000);
 
 		return () => clearTimeout(timeoutId);
-	}, [action, style, validItems, handleOnUsageForMultipleBlocks]);
+	}, [
+		action,
+		style,
+		validItems,
+		setStyleVariationBlocks,
+		deleteStyleVariationBlock,
+		handleOnUsageForMultipleBlocks,
+	]);
 
 	const setGlobalData = useCallback(
 		(
@@ -145,6 +159,7 @@ export const BlockTypes = ({
 						blockType,
 					]),
 				];
+				setStyleVariationBlocks(style.name, enabledIn);
 				registerBlockStyle(blockType, style);
 			} else if ('single-disable' === action) {
 				disabledIn = [
@@ -159,6 +174,7 @@ export const BlockTypes = ({
 					globalStyles?.blockeraMetaData?.variations?.[
 						style.name
 					]?.enabledIn?.filter((type) => type !== blockType) || [];
+				deleteStyleVariationBlock(style.name, true, blockType);
 				unregisterBlockStyle(blockType, style.name);
 			}
 

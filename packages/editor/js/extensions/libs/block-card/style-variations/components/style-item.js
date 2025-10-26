@@ -3,14 +3,15 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { dispatch } from '@wordpress/data';
+import { __, sprintf } from '@wordpress/i18n';
 import { useState, useMemo, useEffect } from '@wordpress/element';
 import {
 	Fill,
 	__experimentalTruncate as Truncate,
 } from '@wordpress/components';
+import { getBlockType } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -60,10 +61,12 @@ export const StyleItem = ({
 }): MixedElement => {
 	const {
 		getStyle = () => ({}),
+		getStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		setStyle: setStyleData = () => {},
 	} = useGlobalStylesPanelContext() || {
+		getStyleVariationBlocks: () => [],
 		currentBlockStyleVariation: undefined,
 		setCurrentBlockStyleVariation: () => {},
 	};
@@ -144,6 +147,8 @@ export const StyleItem = ({
 	const isActive: boolean = activeStyle.name === style.name;
 
 	const defaultStyle = getDefaultStyle(blockStyles);
+
+	const activeInBlocks = getStyleVariationBlocks(style.name);
 
 	return (
 		<>
@@ -327,6 +332,52 @@ export const StyleItem = ({
 									}}
 								/>
 							</Tooltip>
+						)}
+
+						{!style?.isDefault && activeInBlocks.length > 0 && (
+							<Flex
+								gap={0}
+								direction="row"
+								style={{ position: 'relative' }}
+							>
+								{activeInBlocks
+									.slice(0, 3)
+									.map((block, index) => {
+										const { icon, title } =
+											getBlockType(block);
+
+										return (
+											<Tooltip
+												key={`${block}-${index}`}
+												text={sprintf(
+													/* translators: $1%s is a block title. */
+													__(
+														'This style variation is used in the “%1$s” block',
+														'blockera'
+													),
+													title
+												)}
+												style={{
+													'--tooltip-bg': !isActive
+														? '#e20b0b'
+														: '#000000',
+												}}
+											>
+												<div
+													className="circle-multiple-blocks"
+													style={{
+														marginRight: '4px',
+													}}
+												>
+													{icon.src}
+												</div>
+											</Tooltip>
+										);
+									})}
+								<div className="circle-multiple-blocks">
+									{activeInBlocks.length}
+								</div>
+							</Flex>
 						)}
 
 						{style.icon && (
