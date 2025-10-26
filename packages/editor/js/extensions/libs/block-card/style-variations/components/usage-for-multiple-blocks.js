@@ -36,19 +36,13 @@ export const UsageForMultipleBlocksModal = ({
 	return (
 		<Modal
 			size="large"
-			className={componentInnerClassNames('rename-modal')}
-			headerIcon={<Icon icon="attachment" iconSize="34" />}
-			headerTitle={
-				// $FlowFixMe
-				<>
-					<Icon icon="block-types" iconSize="34" />
-					{sprintf(
-						/* translators: $1%s is a style name. */
-						__('Use “%1$s” for Multiple Blocks', 'blockera'),
-						style.label
-					)}
-				</>
-			}
+			className={componentInnerClassNames('style-variation-modal')}
+			headerIcon={<Icon icon="block-types" iconSize="34" />}
+			headerTitle={sprintf(
+				/* translators: $1%s is a style name. */
+				__('Use “%1$s” for Multiple Blocks', 'blockera'),
+				style.label
+			)}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenUsageForMultipleBlocks(false)}
 		>

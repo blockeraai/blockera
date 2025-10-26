@@ -212,7 +212,7 @@
 	width: calc(50% - 4px);
 }
 
-.blockera-component-rename-modal {
+.blockera-component-style-variation-modal {
 	--blockera-controls-primary-color: var(--blockera-controls-variations-color);
 
 	.components-modal__content {
@@ -228,6 +228,10 @@
 
 		svg {
 			fill: currentColor;
+
+			path {
+				fill: currentColor;
+			}
 		}
 	}
 }
