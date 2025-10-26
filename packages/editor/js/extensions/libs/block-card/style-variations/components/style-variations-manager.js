@@ -4,6 +4,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -52,6 +53,39 @@ export const StyleVariationsManager = ({
 	setCurrentPreviewStyle: (style: Object) => void,
 	styleItemHandler: (style: Object) => void,
 }): MixedElement => {
+	const memoizedStyles = useMemo(
+		() =>
+			blockStyles.map((style) => (
+				<StyleItem
+					counter={counter}
+					setCounter={setCounter}
+					key={style.name}
+					style={style}
+					blockName={blockName}
+					blockStyles={blockStyles}
+					setBlockStyles={setBlockStyles}
+					activeStyle={activeStyle}
+					setCurrentActiveStyle={setCurrentActiveStyle}
+					inGlobalStylesPanel={true}
+					onSelectStylePreview={onSelectStylePreview}
+					setCurrentPreviewStyle={setCurrentPreviewStyle}
+					styleItemHandler={styleItemHandler}
+				/>
+			)),
+		[
+			counter,
+			blockName,
+			setCounter,
+			blockStyles,
+			activeStyle,
+			setBlockStyles,
+			styleItemHandler,
+			onSelectStylePreview,
+			setCurrentActiveStyle,
+			setCurrentPreviewStyle,
+		]
+	);
+
 	return (
 		<PanelBodyControl
 			title={
@@ -87,23 +121,7 @@ export const StyleVariationsManager = ({
 					'design-large': true,
 				})}
 			>
-				{blockStyles.map((style) => (
-					<StyleItem
-						counter={counter}
-						setCounter={setCounter}
-						key={style.name}
-						style={style}
-						blockName={blockName}
-						blockStyles={blockStyles}
-						setBlockStyles={setBlockStyles}
-						activeStyle={activeStyle}
-						setCurrentActiveStyle={setCurrentActiveStyle}
-						inGlobalStylesPanel={true}
-						onSelectStylePreview={onSelectStylePreview}
-						setCurrentPreviewStyle={setCurrentPreviewStyle}
-						styleItemHandler={styleItemHandler}
-					/>
-				))}
+				{memoizedStyles}
 
 				<p
 					className={componentInnerClassNames(

@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useRef, useEffect } from '@wordpress/element';
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import { useViewportMatch } from '@wordpress/compose';
 import {
 	Slot,
@@ -109,52 +109,73 @@ function BlockStyles({
 		}
 	}, [showPreview]);
 
+	const onSelectStylePreview = useCallback(
+		(style: string) => {
+			// It should not work for other states
+			if (!isNormalState()) {
+				return;
+			}
+
+			setCurrentActiveStyle(style);
+			onSelect(style);
+			setIsOpen(false);
+			setHoveredStyle(null);
+		},
+		[
+			isNormalState,
+			setCurrentActiveStyle,
+			// onSelect,
+			setIsOpen,
+			setHoveredStyle,
+		]
+	);
+
+	const styleItemHandler = useCallback(
+		(item: Object) => {
+			// It should not work for other states
+			if (!isNormalState()) {
+				return;
+			}
+
+			if (hoveredStyle === item || activeStyle?.name === item?.name) {
+				setHoveredStyle(null);
+				setCurrentPreviewStyle(item);
+				return;
+			}
+
+			// Set preview style when hovering/focusing
+			if (item) {
+				setHoveredStyle(item);
+				setCurrentPreviewStyle(item);
+				onSelect(item);
+				// Add timeout to show preview with dynamic delay
+				setTimeout(() => {
+					if (hoveredStyleRef.current?.name === item?.name) {
+						setShowPreview(true);
+					}
+				}, 1200);
+			} else {
+				// Clear preview style when mouse leaves or blur
+				setCurrentPreviewStyle(null);
+				setShowPreview(false);
+				setHoveredStyle(null);
+			}
+		},
+		[
+			// onSelect,
+			hoveredStyle,
+			isNormalState,
+			setShowPreview,
+			setHoveredStyle,
+			hoveredStyleRef,
+			activeStyle?.name,
+			setCurrentPreviewStyle,
+		]
+	);
+
 	if (!stylesToRender || stylesToRender.length === 0) {
 		return null;
 	}
-
-	const onSelectStylePreview = (style: string) => {
-		// It should not work for other states
-		if (!isNormalState()) {
-			return;
-		}
-
-		setCurrentActiveStyle(style);
-		onSelect(style);
-		setIsOpen(false);
-		setHoveredStyle(null);
-	};
-
-	const styleItemHandler = (item: Object) => {
-		// It should not work for other states
-		if (!isNormalState()) {
-			return;
-		}
-
-		if (hoveredStyle === item || activeStyle?.name === item?.name) {
-			setHoveredStyle(null);
-			setCurrentPreviewStyle(item);
-			return;
-		}
-
-		// Set preview style when hovering/focusing
-		if (item) {
-			setHoveredStyle(item);
-			setCurrentPreviewStyle(item);
-			onSelect(item);
-			// Add timeout to show preview with dynamic delay
-			setTimeout(() => {
-				if (hoveredStyleRef.current?.name === item?.name) {
-					setShowPreview(true);
-				}
-			}, 1200);
-		} else {
-			// Clear preview style when mouse leaves or blur
-			setCurrentPreviewStyle(null);
-			setShowPreview(false);
-			setHoveredStyle(null);
-		}
-	};
 
 	// Handle search
 	const handleSearch = (newValue: string) => {

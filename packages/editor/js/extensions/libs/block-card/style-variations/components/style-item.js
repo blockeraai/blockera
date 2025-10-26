@@ -24,10 +24,11 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { getDefaultStyle } from '../utils';
+import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useUserCan } from '../../../../../hooks/use-user-can';
 import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
-import { StyleItemMenu } from './style-item-menu';
+import { useTraceUpdate } from '../../../../../hooks/use-trace-update';
 
 export const StyleItem = ({
 	style,
@@ -58,6 +59,10 @@ export const StyleItem = ({
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
+	useTraceUpdate({
+		styleItemHandler,
+		onSelectStylePreview,
+	});
 	const {
 		getStyle = () => ({}),
 		currentBlockStyleVariation,
@@ -107,6 +112,8 @@ export const StyleItem = ({
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
 	const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+	const [isOpenUsageForMultipleBlocks, setIsOpenUsageForMultipleBlocks] =
+		useState(false);
 	const [isOpenBlockCardContextMenu, setIsOpenBlockCardContextMenu] =
 		useState(false);
 	const [isOpenBlockCardRenameModal, setIsOpenBlockCardRenameModal] =
@@ -120,6 +127,7 @@ export const StyleItem = ({
 		handleOnDetachStyle,
 		isConfirmedChangeID,
 		setIsConfirmedChangeID,
+		handleOnApplyToBlockTypes,
 		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
@@ -375,6 +383,7 @@ export const StyleItem = ({
 					counter={counter}
 					isOpenDeleteModal={isOpenDeleteModal}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
+					blockName={blockName}
 					setCounter={setCounter}
 					buttonText={buttonText}
 					handleOnRename={handleOnRename}
@@ -384,7 +393,12 @@ export const StyleItem = ({
 					}
 					handleOnEnable={handleOnEnable}
 					handleOnDelete={handleOnDelete}
+					handleOnApplyToBlockTypes={handleOnApplyToBlockTypes}
 					isConfirmedChangeID={isConfirmedChangeID}
+					setIsOpenUsageForMultipleBlocks={
+						setIsOpenUsageForMultipleBlocks
+					}
+					isOpenUsageForMultipleBlocks={isOpenUsageForMultipleBlocks}
 					setIsConfirmedChangeID={setIsConfirmedChangeID}
 					cachedStyle={cachedStyle}
 					isOpenRenameModal={isOpenRenameModal}
@@ -516,6 +530,7 @@ export const StyleItem = ({
 							counter={counter}
 							isOpenDeleteModal={isOpenDeleteModal}
 							setIsOpenDeleteModal={setIsOpenDeleteModal}
+							blockName={blockName}
 							setCounter={setCounter}
 							buttonText={buttonText}
 							handleOnRename={handleOnRename}
@@ -525,7 +540,16 @@ export const StyleItem = ({
 							}
 							handleOnEnable={handleOnEnable}
 							handleOnDelete={handleOnDelete}
+							handleOnApplyToBlockTypes={
+								handleOnApplyToBlockTypes
+							}
 							isConfirmedChangeID={isConfirmedChangeID}
+							setIsOpenUsageForMultipleBlocks={
+								setIsOpenUsageForMultipleBlocks
+							}
+							isOpenUsageForMultipleBlocks={
+								isOpenUsageForMultipleBlocks
+							}
 							setIsConfirmedChangeID={setIsConfirmedChangeID}
 							cachedStyle={cachedStyle}
 							isOpenRenameModal={isOpenBlockCardRenameModal}

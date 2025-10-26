@@ -58,6 +58,7 @@ export const useBlockStyleItem = ({
 	handleOnDelete: (currentStyleName: string) => void,
 	handleOnDuplicate: (currentStyle: Object) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
+	handleOnApplyToBlockTypes: (currentStyle: Object) => void,
 	handleOnSaveCustomizations: (currentStyle: Object) => void,
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
@@ -183,6 +184,10 @@ export const useBlockStyleItem = ({
 			setCurrentBlockStyleVariation,
 		]
 	);
+
+	const handleOnApplyToBlockTypes = useCallback((currentStyle: Object) => {
+		console.log(currentStyle);
+	}, []);
 
 	const handleOnDuplicate = useCallback(
 		(currentStyle) => {
@@ -349,6 +354,7 @@ export const useBlockStyleItem = ({
 		handleOnDetachStyle,
 		isConfirmedChangeID,
 		setIsConfirmedChangeID,
+		handleOnApplyToBlockTypes,
 		handleOnSaveCustomizations,
 		handleOnClearAllCustomizations,
 	};

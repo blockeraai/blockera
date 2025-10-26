@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { select } from '@wordpress/data';
 
 export const getCalculatedNewStyle = ({
 	action,
@@ -77,4 +78,11 @@ export const getCalculatedNewStyle = ({
 		name: newName,
 		label: newLabel,
 	};
+};
+
+export const blockHasStyle = (blockName: string, style: string): boolean => {
+	const { getBlockStyles } = select('core/blocks');
+	const blockStyles = getBlockStyles(blockName);
+
+	return blockStyles.some((blockStyle) => blockStyle.name === style);
 };
