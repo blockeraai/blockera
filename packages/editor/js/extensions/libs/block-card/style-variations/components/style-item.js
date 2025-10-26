@@ -65,11 +65,7 @@ export const StyleItem = ({
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		setStyle: setStyleData = () => {},
-	} = useGlobalStylesPanelContext() || {
-		getStyleVariationBlocks: () => [],
-		currentBlockStyleVariation: undefined,
-		setCurrentBlockStyleVariation: () => {},
-	};
+	} = useGlobalStylesPanelContext();
 	const { blockeraGlobalStylesMetaData } = window;
 	const initializedCachedStyle = useMemo(() => {
 		const variations =
@@ -116,6 +112,12 @@ export const StyleItem = ({
 		useState(false);
 	const [isOpenBlockCardRenameModal, setIsOpenBlockCardRenameModal] =
 		useState(false);
+	const [isOpenBlockCardDeleteModal, setIsOpenBlockCardDeleteModal] =
+		useState(false);
+	const [
+		isOpenBlockCardUsageForMultipleBlocks,
+		setIsOpenBlockCardUsageForMultipleBlocks,
+	] = useState(false);
 
 	const {
 		handleOnEnable,
@@ -576,8 +578,8 @@ export const StyleItem = ({
 						<StyleItemMenu
 							style={style}
 							counter={counter}
-							isOpenDeleteModal={isOpenDeleteModal}
-							setIsOpenDeleteModal={setIsOpenDeleteModal}
+							isOpenDeleteModal={isOpenBlockCardDeleteModal}
+							setIsOpenDeleteModal={setIsOpenBlockCardDeleteModal}
 							blockName={blockName}
 							setCounter={setCounter}
 							buttonText={buttonText}
@@ -593,10 +595,10 @@ export const StyleItem = ({
 							}
 							isConfirmedChangeID={isConfirmedChangeID}
 							setIsOpenUsageForMultipleBlocks={
-								setIsOpenUsageForMultipleBlocks
+								setIsOpenBlockCardUsageForMultipleBlocks
 							}
 							isOpenUsageForMultipleBlocks={
-								isOpenUsageForMultipleBlocks
+								isOpenBlockCardUsageForMultipleBlocks
 							}
 							setIsConfirmedChangeID={setIsConfirmedChangeID}
 							cachedStyle={cachedStyle}
