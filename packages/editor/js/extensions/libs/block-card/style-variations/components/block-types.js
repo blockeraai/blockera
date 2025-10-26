@@ -204,7 +204,15 @@ export const BlockTypes = ({
 
 			setGlobalStyles(newGlobalStyles);
 		},
-		[style, validItems, globalStyles, setGlobalStyles, setAction]
+		[
+			style,
+			setAction,
+			validItems,
+			globalStyles,
+			setGlobalStyles,
+			setStyleVariationBlocks,
+			deleteStyleVariationBlock,
+		]
 	);
 
 	if (!items || !itemsCount) {
