@@ -210,10 +210,14 @@ export function useStylesForBlocks({
 	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
-	const stylesToRender = getRenderedStyles(
-		styles,
-		prepare(`styles.blocks.${blockName}.variations`, base) || {},
-		blockName
+	const stylesToRender = useMemo(
+		() =>
+			getRenderedStyles(
+				styles,
+				prepare(`styles.blocks.${blockName}.variations`, base) || {},
+				blockName
+			),
+		[styles, blockName, base]
 	);
 	const activeStyle = useMemo(
 		() => getActiveStyle(stylesToRender, className),
@@ -244,11 +248,11 @@ export function useStylesForBlocks({
 		},
 		[
 			clientId,
+			onSwitch,
 			className,
 			activeStyle,
-			onSwitch,
-			updateBlockAttributes,
 			isDeletedStyle,
+			updateBlockAttributes,
 		]
 	);
 

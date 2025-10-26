@@ -178,8 +178,10 @@
 	width: calc(50% - 4px);
 }
 
+.blockera-component-delete-modal,
 .blockera-component-rename-modal {
 	--blockera-controls-primary-color: var(--blockera-controls-variations-color);
+	--blockera-controls-primary-color-darker-20: var(--blockera-controls-variations-color-darker-20);
 
 	.components-modal__content {
 		width: 470px;
@@ -196,6 +198,11 @@
 			fill: currentColor;
 		}
 	}
+}
+
+.blockera-component-delete-modal {
+	--blockera-controls-primary-color: #e20b0b;
+	--blockera-controls-primary-color-darker-20: #b30808;
 }
 
 .variations-picker-popover {

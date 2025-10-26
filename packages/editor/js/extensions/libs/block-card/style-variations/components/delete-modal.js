@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
 import { useState } from '@wordpress/element';
 
@@ -16,6 +16,7 @@ import {
 	Button,
 	NoticeControl,
 	CheckboxControl,
+	DynamicHtmlFormatter,
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
@@ -40,17 +41,28 @@ export const DeleteModal = ({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('rename-modal')}
-			headerIcon={<Icon icon="pen" iconSize="34" />}
+			className={componentInnerClassNames('delete-modal')}
+			headerIcon={<Icon icon="trash" iconSize="34" />}
 			headerTitle={__('Delete style variation', 'blockera')}
 			isDismissible={true}
 			onRequestClose={() => setIsOpenDeleteModal(false)}
 		>
 			<Flex direction="column" gap={40}>
-				<Flex direction="column" gap={25}>
-					<p style={{ margin: '0', color: '#707070' }}>
-						{__('Are you sure you want to remove ', 'blockera')}
-						<strong>{buttonText}</strong>
+				<Flex direction="column" gap={15}>
+					<p style={{ margin: '0', color: '#1e1e1e' }}>
+						<DynamicHtmlFormatter
+							text={sprintf(
+								/* translators: $1%s is a CSS selector, $2%s is ID. */
+								__(
+									'Are you sure you want to delete %s?',
+									'blockera'
+								),
+								'{item}'
+							)}
+							replacements={{
+								item: <strong>{buttonText}</strong>,
+							}}
+						/>
 					</p>
 
 					<p style={{ margin: '0', color: '#707070' }}>
@@ -66,12 +78,13 @@ export const DeleteModal = ({
 					className={componentInnerClassNames('consent-wrapper')}
 					direction="column"
 				>
-					<NoticeControl type={'warning'}>
+					<NoticeControl type={'error'}>
 						{__(
-							'Deleting this style variation cannot be undone.',
+							'Deleting this style variation cannot be undone. Blocks using the style variation will lose their styles unless updated manually.',
 							'blockera'
 						)}
 					</NoticeControl>
+
 					<ControlContextProvider
 						value={{
 							name: 'confirm-change-style-id',

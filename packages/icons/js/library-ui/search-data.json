@@ -518,6 +518,12 @@
 		"tags": ["block", "social", "link", "name", "text"]
 	},
 	{
+		"iconName": "block-types",
+		"title": "Block Types",
+		"library": "ui",
+		"tags": ["block", "types", "categories", "collections", "groups"]
+	},
+	{
 		"iconName": "bolb",
 		"title": "Bolb",
 		"library": "ui",
