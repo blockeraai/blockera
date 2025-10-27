@@ -47,6 +47,7 @@ export const classes = [
 			'core/tag-cloud',
 			'core/video',
 			'core/audio',
+			'core/avatar',
 			'core/image',
 			'core/file',
 			'outermost/icon-block',
@@ -59,7 +60,7 @@ export const classes = [
 	{
 		parent: '.components-range-control',
 		children: [
-			'.components-panel__body .components-range-control .components-base-control__label',
+			'.components-tools-panel .components-range-control .components-base-control__label',
 		],
 		include: ['core/avatar'],
 	},
