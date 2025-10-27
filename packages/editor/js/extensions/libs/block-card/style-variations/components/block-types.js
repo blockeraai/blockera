@@ -7,7 +7,6 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
-import isShallowEqual from '@wordpress/is-shallow-equal';
 import { Icon as WordPressIconComponent, Fill } from '@wordpress/components';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
@@ -15,7 +14,7 @@ import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { isString, mergeObject } from '@blockera/utils';
+import { isString, mergeObject, isEquals } from '@blockera/utils';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import {
 	Flex,
@@ -73,20 +72,22 @@ export const BlockTypes = ({
 		postId
 	);
 	const [action, setAction] = useState(null);
+	const savedEnabledItems = useMemo(() => {
+		return globalStyles?.blockeraMetaData?.variations?.[style.name]
+			?.enabledIn;
+	}, [globalStyles, style]);
 	const initBlocksState = useMemo(
 		() => ({
-			items: [
-				...(globalStyles?.blockeraMetaData?.variations?.[
-					style.name
-				]?.enabledIn?.filter((blockType) => {
-					const disabledIn =
-						globalStyles?.blockeraMetaData?.variations?.[style.name]
-							?.disabledIn;
+			items: savedEnabledItems
+				? savedEnabledItems?.filter((blockType) => {
+						const disabledIn =
+							globalStyles?.blockeraMetaData?.variations?.[
+								style.name
+							]?.disabledIn;
 
-					return !disabledIn?.includes(blockType);
-				}) || []),
-				...enabledItems,
-			],
+						return !disabledIn?.includes(blockType);
+				  }) || []
+				: enabledItems,
 			primitiveItems: validItems.sort((a, b) => {
 				const aHasStyle = blockHasStyle(a.name, style.name) ? 1 : 0;
 				const bHasStyle = blockHasStyle(b.name, style.name) ? 1 : 0;
@@ -94,13 +95,19 @@ export const BlockTypes = ({
 				return bHasStyle - aHasStyle; // Sort enabled items first
 			}),
 		}),
-		[validItems, globalStyles, style, enabledItems]
+		[validItems, globalStyles, style, enabledItems, savedEnabledItems]
 	);
 	const [blocksState, setBlocksState] = useState(initBlocksState);
+	const [isModified, setIsModified] = useState(false);
 
 	useEffect(() => {
+		if (isEquals(blocksState, initBlocksState)) {
+			return;
+		}
+
 		setBlocksState(initBlocksState);
-	}, [initBlocksState]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [items]);
 
 	const setGlobalData = useCallback(
 		(
@@ -186,6 +193,8 @@ export const BlockTypes = ({
 				newGlobalStyles.blockeraMetaData;
 
 			setGlobalStyles(newGlobalStyles);
+
+			setIsModified(true);
 		},
 		[
 			style,
@@ -240,7 +249,10 @@ export const BlockTypes = ({
 				<Flex justifyContent="space-between">
 					<Button
 						data-test="save-usage-for-multiple-blocks-button"
-						disabled={isShallowEqual(blocksState, initBlocksState)}
+						disabled={
+							!isModified &&
+							isEquals(blocksState, initBlocksState)
+						}
 						variant="primary"
 						onClick={() => {
 							handleOnSave();
@@ -265,7 +277,10 @@ export const BlockTypes = ({
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
-						setBlocksState({ ...blocksState, items: [] });
+						setBlocksState({
+							items: [],
+							primitiveItems: blocksState.primitiveItems,
+						});
 						setGlobalData('disable-all');
 					}}
 				>
@@ -278,8 +293,8 @@ export const BlockTypes = ({
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
 						setBlocksState({
-							...blocksState,
 							items: validItems.map((item) => item.name),
+							primitiveItems: blocksState.primitiveItems,
 						});
 						setGlobalData('enable-all');
 					}}
