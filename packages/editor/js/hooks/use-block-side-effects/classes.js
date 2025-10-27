@@ -55,6 +55,7 @@ export const classes = [
 			'core/accordion-item',
 			'core/term-name',
 			'core/comment-author-name',
+			'core/comment-date',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
