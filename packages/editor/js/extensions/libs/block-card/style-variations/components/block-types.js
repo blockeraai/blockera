@@ -99,15 +99,19 @@ export const BlockTypes = ({
 		) => {
 			let disabledIn: Array<string> = [];
 			let enabledIn: Array<string> = [];
+			const allBlockTypes = validItems.reduce(
+				(acc, blockType) => [...acc, blockType.name],
+				[]
+			);
 
 			if ('disable-all' === action) {
-				disabledIn = validItems.map((blockType) => blockType.name);
+				disabledIn = allBlockTypes;
 				enabledIn = [];
 				setAction('disable-all');
 				deleteStyleVariationBlocks(style.name, false);
 			} else if ('enable-all' === action) {
 				disabledIn = [];
-				enabledIn = validItems.map((blockType) => blockType.name);
+				enabledIn = allBlockTypes;
 				setAction('enable-all');
 			} else if ('single-enable' === action) {
 				disabledIn =
