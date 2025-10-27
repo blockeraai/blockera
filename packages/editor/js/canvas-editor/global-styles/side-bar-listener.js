@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 import { useEffect, createPortal } from '@wordpress/element';
 
 /**
@@ -22,11 +22,18 @@ export const AddBlockTypeIcons = ({
 }: {
 	blockTypes: Array<Object>,
 }): Array<MixedElement> => {
+	const {
+		setSelectedBlockRef,
+		setSelectedBlockStyle,
+		setStyleVariationBlocks,
+	} = dispatch('blockera/editor');
+	const { getBlockStyles } = select('core/blocks');
+
 	useEffect(() => {
 		document
 			.querySelector('button[aria-controls="edit-site:global-styles"]')
 			?.addEventListener('click', () => {
-				dispatch('blockera/editor').setSelectedBlockRef(undefined);
+				setSelectedBlockRef(undefined);
 			});
 
 		document
@@ -34,7 +41,7 @@ export const AddBlockTypeIcons = ({
 				'.editor-header__settings button[aria-controls="edit-site:global-styles"]'
 			)
 			?.addEventListener('click', () => {
-				dispatch('blockera/editor').setSelectedBlockStyle('');
+				setSelectedBlockStyle('');
 			});
 
 		blockTypes.forEach((blockType) => {
@@ -44,8 +51,20 @@ export const AddBlockTypeIcons = ({
 			blockElement?.addEventListener('click', () =>
 				sharedListenerCallback(blockType.name)
 			);
+
+			const blockStyles = getBlockStyles(blockType.name) || [];
+
+			blockStyles.forEach((blockStyle) => {
+				setStyleVariationBlocks(blockStyle.name, [blockType.name]);
+			});
 		});
-	}, [blockTypes]);
+	}, [
+		blockTypes,
+		getBlockStyles,
+		setSelectedBlockRef,
+		setSelectedBlockStyle,
+		setStyleVariationBlocks,
+	]);
 
 	return blockTypes.map((blockType, index) => {
 		if (!blockType.attributes?.blockeraPropsId) {

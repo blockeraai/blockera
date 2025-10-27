@@ -79,10 +79,7 @@ function BlockStyles({
 		style: editorStyles,
 		setStyle: setStyles,
 		setCurrentBlockStyleVariation,
-	} = useGlobalStylesPanelContext() || {
-		currentBlockStyleVariation: undefined,
-		setCurrentBlockStyleVariation: () => {},
-	};
+	} = useGlobalStylesPanelContext();
 
 	const {
 		onSelect,

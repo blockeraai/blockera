@@ -4,8 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { __experimentalDivider as Divider } from '@wordpress/components';
 import type { MixedElement } from 'react';
+import { __experimentalDivider as Divider } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -29,7 +29,6 @@ import { DeleteModal } from './delete-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 
 export const StyleItemMenu = ({
-	blockName,
 	counter,
 	setCounter,
 	cachedStyle,
@@ -105,7 +104,6 @@ export const StyleItemMenu = ({
 			{isOpenUsageForMultipleBlocks && (
 				<UsageForMultipleBlocksModal
 					style={style}
-					clientId={blockName.replace('/', '-')}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}

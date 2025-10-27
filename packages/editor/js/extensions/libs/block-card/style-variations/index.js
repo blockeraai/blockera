@@ -45,9 +45,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	currentBreakpoint,
 	context = 'inspector-controls',
 }: TBlockStyleVariations): MixedElement => {
-	const { currentBlockStyleVariation } = useGlobalStylesPanelContext() || {
-		currentBlockStyleVariation: undefined,
-	};
+	const { currentBlockStyleVariation } = useGlobalStylesPanelContext();
 	const [popoverAnchor, setPopoverAnchor] = useState(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);

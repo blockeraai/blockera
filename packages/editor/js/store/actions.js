@@ -192,3 +192,27 @@ export const setSelectedBlockStyleVariation = (
 		type: 'SET_SELECTED_BLOCK_STYLE_VARIATION',
 	};
 };
+
+export const setStyleVariationBlocks = (
+	variationName: string,
+	blocks: Array<string>
+): Object => {
+	return {
+		variationName,
+		blocks,
+		type: 'SET_STYLE_VARIATION_BLOCKS',
+	};
+};
+
+export const deleteStyleVariationBlock = (
+	variationName: string,
+	single: boolean = true,
+	blockName: string
+): Object => {
+	return {
+		single,
+		blockName,
+		variationName,
+		type: 'DELETE_STYLE_VARIATION_BLOCK',
+	};
+};
