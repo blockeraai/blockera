@@ -124,7 +124,7 @@ describe('Block Manager Settings Testing ...', () => {
 <!-- /wp:details -->
 
 <!-- wp:list -->
-<ul><!-- wp:list-item -->
+<ul class="wp-block-list"><!-- wp:list-item -->
 <li></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->

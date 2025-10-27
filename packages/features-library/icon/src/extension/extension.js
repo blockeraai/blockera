@@ -355,7 +355,7 @@ export const IconExtension: ComponentType<{
 				<>
 					<BaseControl
 						label={__('Style', 'blockera')}
-						columns="1fr 3fr"
+						columns="1fr 180px"
 					>
 						<EditorFeatureWrapper
 							isActive={isShownIconPosition}
