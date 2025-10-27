@@ -207,7 +207,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 				},
 			};
 			break;
-		case 'DELETE_STYLE_VARIATION_BLOCK':
+		case 'DELETE_STYLE_VARIATION_BLOCKS':
 			state = {
 				...state,
 				styleVariationBlocks: {

@@ -24,7 +24,6 @@ import {
 	ToggleControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -34,10 +33,14 @@ import { blockHasStyle } from './use-block-style-item/helpers';
 export const BlockTypes = ({
 	items,
 	style,
+	blockName,
+	blockTitle,
 	handleOnUsageForMultipleBlocks,
 }: {
 	items: Object,
 	style: Object,
+	blockName: string,
+	blockTitle: string,
 	handleOnUsageForMultipleBlocks: (
 		style: Object,
 		action: 'add' | 'delete'
@@ -59,7 +62,7 @@ export const BlockTypes = ({
 	const enabledItems = validItems
 		.filter((item) => blockHasStyle(item.name, style.name))
 		.map((item) => item.name);
-	const { setStyleVariationBlocks, deleteStyleVariationBlock } =
+	const { setStyleVariationBlocks, deleteStyleVariationBlocks } =
 		dispatch('blockera/editor');
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
@@ -68,6 +71,8 @@ export const BlockTypes = ({
 		'styles',
 		postId
 	);
+	const [forceDisableICurrentBlock, setForceDisableICurrentBlock] =
+		useState(false);
 	const [action, setAction] = useState(null);
 	const [blocksState, setBlocksState] = useState({
 		all: false,
@@ -90,12 +95,22 @@ export const BlockTypes = ({
 
 		const timeoutId = setTimeout(() => {
 			if ('disable-all' === action) {
-				deleteStyleVariationBlock(style.name, false);
-				// FIXME: @ali This is close modal and removed the style variation from list.
-				// validItems.forEach((blockType) =>
-				// 	unregisterBlockStyle(blockType.name, style.name)
-				// );
-				// handleOnUsageForMultipleBlocks(style, 'delete');
+				validItems.forEach((blockType) => {
+					if (
+						!forceDisableICurrentBlock &&
+						blockType.name === blockName
+					) {
+						return;
+					}
+
+					unregisterBlockStyle(blockType.name, style.name);
+				});
+
+				deleteStyleVariationBlocks(style.name, false);
+
+				if (forceDisableICurrentBlock) {
+					handleOnUsageForMultipleBlocks(style, 'delete');
+				}
 			} else if ('enable-all' === action) {
 				validItems.forEach((blockType) => {
 					registerBlockStyle(blockType.name, style);
@@ -107,11 +122,12 @@ export const BlockTypes = ({
 				handleOnUsageForMultipleBlocks(style, 'add');
 			} else if ('single-enable' === action) {
 				handleOnUsageForMultipleBlocks(style, 'add');
+			} else if (
+				'single-disable' === action &&
+				forceDisableICurrentBlock
+			) {
+				handleOnUsageForMultipleBlocks(style, 'delete');
 			}
-			// FIXME: @ali This is close modal and removed the style variation from list.
-			// else if ('single-disable' === action) {
-			// 	handleOnUsageForMultipleBlocks(style, 'delete');
-			// }
 
 			setAction(null);
 		}, 1000);
@@ -120,9 +136,11 @@ export const BlockTypes = ({
 	}, [
 		action,
 		style,
+		blockName,
 		validItems,
 		setStyleVariationBlocks,
-		deleteStyleVariationBlock,
+		forceDisableICurrentBlock,
+		deleteStyleVariationBlocks,
 		handleOnUsageForMultipleBlocks,
 	]);
 
@@ -139,7 +157,18 @@ export const BlockTypes = ({
 			let enabledIn: Array<string> = [];
 
 			if ('disable-all' === action) {
-				disabledIn = validItems.map((blockType) => blockType.name);
+				disabledIn = validItems
+					.map((blockType) => {
+						if (
+							!forceDisableICurrentBlock &&
+							blockType.name === blockName
+						) {
+							return null;
+						}
+
+						return blockType.name;
+					})
+					.filter(Boolean);
 				enabledIn = [];
 				setAction('disable-all');
 			} else if ('enable-all' === action) {
@@ -162,6 +191,10 @@ export const BlockTypes = ({
 				setStyleVariationBlocks(style.name, enabledIn);
 				registerBlockStyle(blockType, style);
 			} else if ('single-disable' === action) {
+				if (!forceDisableICurrentBlock && blockType === blockName) {
+					return;
+				}
+
 				disabledIn = [
 					...new Set([
 						...(globalStyles?.blockeraMetaData?.variations?.[
@@ -174,7 +207,7 @@ export const BlockTypes = ({
 					globalStyles?.blockeraMetaData?.variations?.[
 						style.name
 					]?.enabledIn?.filter((type) => type !== blockType) || [];
-				deleteStyleVariationBlock(style.name, true, blockType);
+				deleteStyleVariationBlocks(style.name, true, blockType);
 				unregisterBlockStyle(blockType, style.name);
 			}
 
@@ -207,11 +240,13 @@ export const BlockTypes = ({
 		[
 			style,
 			setAction,
+			blockName,
 			validItems,
 			globalStyles,
 			setGlobalStyles,
 			setStyleVariationBlocks,
-			deleteStyleVariationBlock,
+			forceDisableICurrentBlock,
+			deleteStyleVariationBlocks,
 		]
 	);
 
@@ -221,6 +256,33 @@ export const BlockTypes = ({
 
 	return (
 		<>
+			<Fill name="usage-for-multiple-blocks-force-disable-current-block">
+				<ControlContextProvider
+					value={{
+						name: `${blockName}-${style.name}-force-disable-current-block`,
+						value: forceDisableICurrentBlock,
+					}}
+				>
+					<ToggleControl
+						labelType="self"
+						label={
+							<span style={{ color: 'red' }}>
+								{sprintf(
+									/* translators: $1%s is a block title. */
+									__(
+										'Permanently disable and delete the style from the current selected “%1$s” block.',
+										'blockera'
+									),
+									blockTitle
+								)}
+							</span>
+						}
+						onChange={(newValue: boolean) => {
+							setForceDisableICurrentBlock(newValue);
+						}}
+					/>
+				</ControlContextProvider>
+			</Fill>
 			<Fill name="usage-for-multiple-blocks-actions">
 				<Button
 					variant="secondary"
@@ -232,7 +294,6 @@ export const BlockTypes = ({
 						setGlobalData('disable-all');
 					}}
 				>
-					<Icon icon="attachment" iconSize="24" />
 					{'disable-all' === action
 						? __('Disabling…', 'blockera')
 						: __('Disable all', 'blockera')}
@@ -251,7 +312,6 @@ export const BlockTypes = ({
 						setGlobalData('enable-all');
 					}}
 				>
-					<Icon icon="attachment" iconSize="24" />
 					{'enable-all' === action
 						? __('Enabling…', 'blockera')
 						: __('Enable all', 'blockera')}
@@ -289,6 +349,10 @@ export const BlockTypes = ({
 								setGlobalData={setGlobalData}
 								key={index + '-' + item.name}
 								setBlocksState={setBlocksState}
+								notAllowed={
+									!forceDisableICurrentBlock &&
+									item.name === blockName
+								}
 							/>
 						))}
 				</Grid>
@@ -300,6 +364,7 @@ export const BlockTypes = ({
 const BlockType = ({
 	item,
 	style,
+	notAllowed,
 	blocksState,
 	setGlobalData,
 	setBlocksState,
@@ -385,24 +450,42 @@ const BlockType = ({
 						value: blocksState.items.includes(name),
 					}}
 				>
-					<ToggleControl
-						labelType={'self'}
-						label={' '}
-						onChange={(newValue: boolean) => {
-							setBlocksState({
-								...blocksState,
-								items: blocksState.items.includes(name)
-									? blocksState.items.filter(
-											(item) => item !== name
-									  )
-									: [...blocksState.items, name],
-							});
-							setGlobalData(
-								newValue ? 'single-enable' : 'single-disable',
-								name
-							);
-						}}
-					/>
+					<div
+						style={
+							notAllowed
+								? {
+										display: 'inline-block',
+										opacity: 0.5,
+										pointerEvents: 'none',
+								  }
+								: { display: 'inline-block' }
+						}
+					>
+						<ToggleControl
+							labelType={'self'}
+							label={' '}
+							onChange={(newValue: boolean) => {
+								if (notAllowed && !newValue) {
+									return;
+								}
+
+								setBlocksState({
+									...blocksState,
+									items: blocksState.items.includes(name)
+										? blocksState.items.filter(
+												(item) => item !== name
+										  )
+										: [...blocksState.items, name],
+								});
+								setGlobalData(
+									newValue
+										? 'single-enable'
+										: 'single-disable',
+									name
+								);
+							}}
+						/>
+					</div>
 				</ControlContextProvider>
 			</Flex>
 		</Tooltip>

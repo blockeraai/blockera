@@ -336,7 +336,7 @@ export const StyleItem = ({
 							</Tooltip>
 						)}
 
-						{!style?.isDefault && activeInBlocks.length > 0 && (
+						{!style?.isDefault && activeInBlocks.length > 1 && (
 							<Flex
 								gap={0}
 								direction="row"
@@ -427,6 +427,7 @@ export const StyleItem = ({
 				</Flex>
 
 				<StyleItemMenu
+					blockTitle={getBlockType(blockName).title}
 					style={style}
 					counter={counter}
 					isOpenDeleteModal={isOpenDeleteModal}
@@ -578,6 +579,7 @@ export const StyleItem = ({
 						<StyleItemMenu
 							style={style}
 							counter={counter}
+							blockTitle={getBlockType(blockName).title}
 							isOpenDeleteModal={isOpenBlockCardDeleteModal}
 							setIsOpenDeleteModal={setIsOpenBlockCardDeleteModal}
 							blockName={blockName}

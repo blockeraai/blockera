@@ -29,6 +29,8 @@ import { DeleteModal } from './delete-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 
 export const StyleItemMenu = ({
+	blockName,
+	blockTitle,
 	counter,
 	setCounter,
 	cachedStyle,
@@ -53,6 +55,7 @@ export const StyleItemMenu = ({
 	setIsConfirmedChangeID,
 }: {
 	blockName: string,
+	blockTitle: string,
 	counter: number,
 	setCounter: (counter: number) => void,
 	cachedStyle: Object,
@@ -104,6 +107,8 @@ export const StyleItemMenu = ({
 			{isOpenUsageForMultipleBlocks && (
 				<UsageForMultipleBlocksModal
 					style={style}
+					blockName={blockName}
+					blockTitle={blockTitle}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}

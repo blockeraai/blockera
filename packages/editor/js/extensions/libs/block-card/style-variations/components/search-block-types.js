@@ -26,6 +26,8 @@ import { search } from '../../../block-composite/search-items';
 
 export const SearchBlockTypes = ({
 	style,
+	blockName,
+	blockTitle,
 	blocks: _blocks,
 	handleOnUsageForMultipleBlocks,
 }: Object): MixedElement => {
@@ -51,6 +53,7 @@ export const SearchBlockTypes = ({
 						style.label
 					)}
 				</p>
+				<Slot name="usage-for-multiple-blocks-force-disable-current-block" />
 				<Flex direction={'row'} gap={'10px'}>
 					<ControlContextProvider
 						value={{
@@ -131,6 +134,8 @@ export const SearchBlockTypes = ({
 				<BlockTypes
 					style={style}
 					items={blocks}
+					blockName={blockName}
+					blockTitle={blockTitle}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}

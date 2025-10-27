@@ -204,7 +204,7 @@ export const setStyleVariationBlocks = (
 	};
 };
 
-export const deleteStyleVariationBlock = (
+export const deleteStyleVariationBlocks = (
 	variationName: string,
 	single: boolean = true,
 	blockName: string
@@ -213,6 +213,6 @@ export const deleteStyleVariationBlock = (
 		single,
 		blockName,
 		variationName,
-		type: 'DELETE_STYLE_VARIATION_BLOCK',
+		type: 'DELETE_STYLE_VARIATION_BLOCKS',
 	};
 };
