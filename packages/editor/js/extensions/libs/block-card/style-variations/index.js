@@ -163,9 +163,9 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	if ('global-styles-panel' === context) {
 		return (
 			<BlockStyles
-				blockName={blockName}
 				context={context}
-				isNotActive={isNotActive}
+				isNotActive={false}
+				blockName={blockName}
 				styles={memoizedStyles}
 			/>
 		);

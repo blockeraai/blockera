@@ -140,40 +140,38 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		foreach ( $blocks as $block_name => $block_data ) {
 			if ( isset( $block_data['variations'] ) ) {
 				foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
-					if ( \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
-						continue;
-					}
+					if (! \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name) && ! empty($cache)) {
+						if (isset($cache[ $block_name ]['variations'][ $variation_name ]) ) {
+							$data = $cache[ $block_name ]['variations'][ $variation_name ];
+							$name = $data['refId'] ?? $data['name'];
 
-					if (! empty($cache) && isset($cache[ $block_name ]['variations'][ $variation_name ]) ) {
-						$data = $cache[ $block_name ]['variations'][ $variation_name ];
-						$name = $data['refId'] ?? $data['name'];
+							if ($name === $variation_name) {
+								$variation = [
+									'name' => $name,
+									'label' => $data['label'],
+								];
 
-						if ($name === $variation_name) {
-							$variation = [
-								'name' => $name,
-								'label' => $data['label'],
-							];
+								if (isset($cache[ $block_name ]['variations'][ $variation_name ]['isDefault'])) {
+									$variation['isDefault'] = true;
+								}
 
-							if (isset($cache[ $block_name ]['variations'][ $variation_name ]['isDefault'])) {
-								$variation['isDefault'] = true;
+								register_block_style($block_name, $variation);
+
+								continue;
 							}
-
-							register_block_style($block_name, $variation);
-
-							continue;
 						}
+					} elseif (\WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
+						$variation = [
+							'name' => $variation_name,
+							'label' => $variation_data['label'] ?? Utils::pascalCaseWithSpace($variation_name),
+						];
+
+						if (isset($variation_data['isDefault'])) {
+							$variation['is_default'] = true;
+						}
+
+						register_block_style($block_name, $variation);
 					}
-
-					$variation = [
-						'name' => $variation_name,
-						'label' => $variation_data['label'] ?? Utils::pascalCaseWithSpace($variation_name),
-					];
-
-					if (isset($variation_data['isDefault'])) {
-						$variation['is_default'] = true;
-					}
-
-					register_block_style($block_name, $variation);
 				}
 			}
 		}

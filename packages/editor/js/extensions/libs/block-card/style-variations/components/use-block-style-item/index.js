@@ -34,6 +34,7 @@ export const useBlockStyleItem = ({
 	setCachedStyle,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
+	deleteStyleVariationBlocks,
 	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
 }: {
@@ -42,12 +43,17 @@ export const useBlockStyleItem = ({
 	cachedStyle: Object,
 	blockStyles: Array<Object>,
 	currentBlockStyleVariation: Object,
+	setStyles: (styles: Object) => void,
 	setCachedStyle: (style: Object) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
-	setStyles: (styles: Object) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
+	deleteStyleVariationBlocks: (
+		style: string,
+		single: boolean,
+		blockName?: string
+	) => void,
 }): ({
 	isConfirmedChangeID: boolean,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
@@ -99,7 +105,7 @@ export const useBlockStyleItem = ({
 								[currentStyle.name]: {
 									...newStyle,
 									refId: newStyle.name,
-									isDeleted:
+									hasNewID:
 										currentBlockStyleVariation?.name !==
 										newStyle?.name,
 								},
@@ -159,6 +165,8 @@ export const useBlockStyleItem = ({
 					currentBlockStyleVariation.name
 				);
 				registerBlockStyle(blockName, editedStyle);
+
+				deleteStyleVariationBlocks(currentStyle.name, true, blockName);
 			} else {
 				updatedMetaData = getUpdatedMetaData(editedStyle);
 
@@ -180,6 +188,7 @@ export const useBlockStyleItem = ({
 			setGlobalStyles,
 			isConfirmedChangeID,
 			currentBlockStyleVariation,
+			deleteStyleVariationBlocks,
 			blockeraGlobalStylesMetaData,
 			setCurrentBlockStyleVariation,
 		]

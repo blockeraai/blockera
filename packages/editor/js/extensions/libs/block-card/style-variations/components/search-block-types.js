@@ -26,8 +26,11 @@ import { search } from '../../../block-composite/search-items';
 
 export const SearchBlockTypes = ({
 	style,
+	blockName,
+	blockTitle,
 	blocks: _blocks,
 	handleOnUsageForMultipleBlocks,
+	setIsOpenUsageForMultipleBlocks,
 }: Object): MixedElement => {
 	const [blocks, setBlocks] = useState(_blocks);
 	const [searchTerm, setSearchTerm] = useState('');
@@ -131,10 +134,16 @@ export const SearchBlockTypes = ({
 				<BlockTypes
 					style={style}
 					items={blocks}
+					blockName={blockName}
+					blockTitle={blockTitle}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}
+					setIsOpenUsageForMultipleBlocks={
+						setIsOpenUsageForMultipleBlocks
+					}
 				/>
+				<Slot name="usage-for-multiple-blocks-save-cancel-actions" />
 			</Flex>
 		</SlotFillProvider>
 	);
