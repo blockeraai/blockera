@@ -62,6 +62,7 @@ export const StyleItem = ({
 	const {
 		getStyle = () => ({}),
 		getStyleVariationBlocks,
+		deleteStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		setStyle: setStyleData = () => {},
@@ -127,8 +128,8 @@ export const StyleItem = ({
 		handleOnDetachStyle,
 		isConfirmedChangeID,
 		setIsConfirmedChangeID,
-		handleOnUsageForMultipleBlocks,
 		handleOnSaveCustomizations,
+		handleOnUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		blockName,
@@ -140,6 +141,7 @@ export const StyleItem = ({
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setStyles: setStyleData,
+		deleteStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 	});

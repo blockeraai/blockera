@@ -53,6 +53,20 @@ export const registration = ({
 	const { blockeraGlobalStylesMetaData } = window;
 	const { setStyleVariationBlocks } = dispatch('blockera/editor');
 
+	// Reregister block styles where renamed by identifiers.
+	Object.entries(blockeraGlobalStylesMetaData?.blocks || {})?.forEach(
+		([blockName, blockData]) => {
+			Object.entries(blockData?.variations || {})?.forEach(
+				([variationName, variation]) => {
+					if (variation?.hasNewID) {
+						unregisterBlockStyle(blockName, variationName);
+						registerBlockStyle(blockName, variation);
+					}
+				}
+			);
+		}
+	);
+
 	// Register block styles for saved block types.
 	Object.entries(blockeraGlobalStylesMetaData?.variations || {})?.forEach(
 		([, variation]) => {
