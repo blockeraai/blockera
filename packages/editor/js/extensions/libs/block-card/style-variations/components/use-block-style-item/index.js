@@ -188,6 +188,7 @@ export const useBlockStyleItem = ({
 			setGlobalStyles,
 			isConfirmedChangeID,
 			currentBlockStyleVariation,
+			deleteStyleVariationBlocks,
 			blockeraGlobalStylesMetaData,
 			setCurrentBlockStyleVariation,
 		]
