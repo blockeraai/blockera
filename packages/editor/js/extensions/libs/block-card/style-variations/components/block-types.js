@@ -75,8 +75,8 @@ export const BlockTypes = ({
 	const [action, setAction] = useState(null);
 	const initBlocksState = {
 		all: false,
-		items:
-			globalStyles?.blockeraMetaData?.variations?.[
+		items: [
+			...(globalStyles?.blockeraMetaData?.variations?.[
 				style.name
 			]?.enabledIn?.filter((blockType) => {
 				const disabledIn =
@@ -84,7 +84,15 @@ export const BlockTypes = ({
 						?.disabledIn;
 
 				return !disabledIn?.includes(blockType);
-			}) || enabledItems,
+			}) || []),
+			...enabledItems,
+		],
+		primitiveItems: validItems.sort((a, b) => {
+			const aHasStyle = blockHasStyle(a.name, style.name) ? 1 : 0;
+			const bHasStyle = blockHasStyle(b.name, style.name) ? 1 : 0;
+
+			return bHasStyle - aHasStyle; // Sort enabled items first
+		}),
 	};
 	const [blocksState, setBlocksState] = useState(initBlocksState);
 
@@ -286,27 +294,16 @@ export const BlockTypes = ({
 					gap={'8px'}
 					className={`blockera-features-types blockera-feature-wrapper`}
 				>
-					{validItems
-						.sort((a, b) => {
-							const aHasStyle = blockHasStyle(a.name, style.name)
-								? 1
-								: 0;
-							const bHasStyle = blockHasStyle(b.name, style.name)
-								? 1
-								: 0;
-
-							return bHasStyle - aHasStyle; // Sort enabled items first
-						})
-						.map((item, index) => (
-							<BlockType
-								item={item}
-								style={style}
-								blocksState={blocksState}
-								setGlobalData={setGlobalData}
-								key={index + '-' + item.name}
-								setBlocksState={setBlocksState}
-							/>
-						))}
+					{blocksState.primitiveItems.map((item, index) => (
+						<BlockType
+							item={item}
+							style={style}
+							blocksState={blocksState}
+							setGlobalData={setGlobalData}
+							key={index + '-' + item.name}
+							setBlocksState={setBlocksState}
+						/>
+					))}
 				</Grid>
 			</Flex>
 		</>
