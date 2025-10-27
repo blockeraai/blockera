@@ -357,7 +357,7 @@ describe('Background Image → Functionality', () => {
 					settings: {
 						name: 'Vivid cyan blue to vivid purple',
 						id: 'vivid-cyan-blue-to-vivid-purple',
-						value: 'linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%)',
+						value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)',
 						reference: {
 							type: 'theme',
 							theme: 'Twenty Twenty-Five',
