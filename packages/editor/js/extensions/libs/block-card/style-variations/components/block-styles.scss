@@ -216,6 +216,10 @@
 	--blockera-controls-primary-color: var(--blockera-controls-variations-color);
 	--blockera-controls-primary-color-darker-20: var(--blockera-controls-variations-color-darker-20);
 
+	.components-modal__header {
+		background-color: #ffffff;
+	}
+
 	.components-modal__content {
 		width: 470px;
 	}
