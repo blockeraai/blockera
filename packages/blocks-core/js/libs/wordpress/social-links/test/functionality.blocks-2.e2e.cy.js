@@ -4,9 +4,11 @@
 import {
 	savePage,
 	createPost,
+	selectBlock,
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
+	openBlockNavigator,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -24,11 +26,14 @@ describe('Social Links Block', () => {
 <!-- wp:social-link {"url":"#test","service":"behance"} /--></ul>
 <!-- /wp:social-links -->`);
 
-		// Select target block
-		cy.getBlock('core/social-link').first().click();
+		// select target block by opening block navigator and selecting the block
+		// because there is a strange behavior in the block navigator that sometimes the block is not selected
 
-		// Switch to parent block
-		cy.getByAriaLabel('Select parent block: Social Icons').click();
+		// Open block navigator
+		openBlockNavigator();
+
+		// Select target block
+		selectBlock('Social Icons');
 
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
