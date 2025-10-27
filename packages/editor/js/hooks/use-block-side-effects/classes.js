@@ -56,6 +56,7 @@ export const classes = [
 			'core/term-name',
 			'core/comment-author-name',
 			'core/comment-date',
+			'core/comment-edit-link',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
