@@ -58,6 +58,7 @@ export const classes = [
 			'core/comment-date',
 			'core/comment-edit-link',
 			'core/comments-pagination',
+			'core/gallery',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
