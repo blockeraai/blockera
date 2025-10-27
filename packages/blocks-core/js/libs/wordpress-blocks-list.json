@@ -1,11 +1,11 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 105,
+		"total": 106,
 		"supported": 90,
 		"soft-supported": 104,
 		"not-supported": 1,
-		"no-need-to-support": 14
+		"no-need-to-support": 15
 	},
 	"supported": [
 		{
@@ -442,6 +442,11 @@
 			"name": "core/page-list-item",
 			"title": "Page List Item",
 			"note": "This block is not selectable and there is no ui for it for user and we do not need to support it."
+		},
+		{
+			"name": "core/terms-query",
+			"title": "Terms Query",
+			"note": "No supported for front end needed but we can add some custom functionality like advanced query filters."
 		}
 	],
 	"not-supported": [
