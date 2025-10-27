@@ -241,14 +241,16 @@ export function BlockCard({
 								/>
 							</Flex>
 
-							<Breadcrumb
-								clientId={clientId}
-								blockName={blockName}
-								blockeraUnsavedData={
-									currentStateAttributes?.blockeraUnsavedData
-								}
-								availableStates={availableStates}
-							/>
+							{insideBlockInspector && (
+								<Breadcrumb
+									clientId={clientId}
+									blockName={blockName}
+									blockeraUnsavedData={
+										currentStateAttributes?.blockeraUnsavedData
+									}
+									availableStates={availableStates}
+								/>
+							)}
 						</h2>
 
 						{(blockInformation?.description ||

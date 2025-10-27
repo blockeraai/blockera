@@ -279,8 +279,8 @@ export function StyleVariationBlockCard({
 
 						<Breadcrumb
 							clientId={clientId}
-							blockName={blockName}
-							activeBlock={currentBlockStyleVariation?.name}
+							blockName={currentBlockStyleVariation?.name}
+							activeBlock={blockName}
 							availableStates={availableStates}
 							blockeraUnsavedData={
 								currentStateAttributes?.blockeraUnsavedData
