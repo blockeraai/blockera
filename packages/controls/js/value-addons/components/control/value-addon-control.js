@@ -113,6 +113,7 @@ export default function ({
 				style={{
 					'--tooltip-bg': tooltipColor,
 				}}
+				delay={400}
 			>
 				<button
 					className={controlClassNames(

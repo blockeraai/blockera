@@ -95,6 +95,7 @@ export default function ({
 							? 'var(--blockera-value-addon-var-color)'
 							: '#e20b0b',
 					}}
+					delay={400}
 				>
 					<div
 						key={'variable-value-addon-pointer'}
