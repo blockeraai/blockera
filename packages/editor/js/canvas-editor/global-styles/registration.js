@@ -53,7 +53,7 @@ export const registration = ({
 	const { blockeraGlobalStylesMetaData } = window;
 	const { setStyleVariationBlocks } = dispatch('blockera/editor');
 
-	// Reregister block styles where renamed by identifiers.
+	// Reregister block styles where (renamed by identifier, or deleted)
 	Object.entries(blockeraGlobalStylesMetaData?.blocks || {})?.forEach(
 		([blockName, blockData]) => {
 			Object.entries(blockData?.variations || {})?.forEach(
@@ -61,6 +61,9 @@ export const registration = ({
 					if (variation?.hasNewID) {
 						unregisterBlockStyle(blockName, variationName);
 						registerBlockStyle(blockName, variation);
+					}
+					if (variation?.deleted) {
+						unregisterBlockStyle(blockName, variationName);
 					}
 				}
 			);
