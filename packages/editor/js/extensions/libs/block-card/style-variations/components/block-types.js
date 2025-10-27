@@ -4,8 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { select } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
+import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { useState, useCallback, useEffect } from '@wordpress/element';
 import { Icon as WordPressIconComponent, Fill } from '@wordpress/components';
@@ -59,6 +59,8 @@ export const BlockTypes = ({
 	const enabledItems = validItems
 		.filter((item) => blockHasStyle(item.name, style.name))
 		.map((item) => item.name);
+	const { setStyleVariationBlocks, deleteStyleVariationBlock } =
+		dispatch('blockera/editor');
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
 		'root',
@@ -70,8 +72,15 @@ export const BlockTypes = ({
 	const [blocksState, setBlocksState] = useState({
 		all: false,
 		items:
-			globalStyles?.blockeraMetaData?.variations?.[style.name]
-				?.blockTypes || enabledItems,
+			globalStyles?.blockeraMetaData?.variations?.[
+				style.name
+			]?.enabledIn?.filter((blockType) => {
+				const disabledIn =
+					globalStyles?.blockeraMetaData?.variations?.[style.name]
+						?.disabledIn;
+
+				return !disabledIn?.includes(blockType);
+			}) || enabledItems,
 	});
 
 	useEffect(() => {
@@ -81,6 +90,7 @@ export const BlockTypes = ({
 
 		const timeoutId = setTimeout(() => {
 			if ('disable-all' === action) {
+				deleteStyleVariationBlock(style.name, false);
 				// FIXME: @ali This is close modal and removed the style variation from list.
 				// validItems.forEach((blockType) =>
 				// 	unregisterBlockStyle(blockType.name, style.name)
@@ -90,6 +100,10 @@ export const BlockTypes = ({
 				validItems.forEach((blockType) => {
 					registerBlockStyle(blockType.name, style);
 				});
+				setStyleVariationBlocks(
+					style.name,
+					validItems.map((blockType) => blockType.name)
+				);
 				handleOnUsageForMultipleBlocks(style, 'add');
 			} else if ('single-enable' === action) {
 				handleOnUsageForMultipleBlocks(style, 'add');
@@ -103,7 +117,14 @@ export const BlockTypes = ({
 		}, 1000);
 
 		return () => clearTimeout(timeoutId);
-	}, [action, style, validItems, handleOnUsageForMultipleBlocks]);
+	}, [
+		action,
+		style,
+		validItems,
+		setStyleVariationBlocks,
+		deleteStyleVariationBlock,
+		handleOnUsageForMultipleBlocks,
+	]);
 
 	const setGlobalData = useCallback(
 		(
@@ -114,41 +135,84 @@ export const BlockTypes = ({
 				| 'single-disable',
 			blockType: string
 		) => {
-			let blockTypes;
+			let disabledIn: Array<string> = [];
+			let enabledIn: Array<string> = [];
 
 			if ('disable-all' === action) {
-				blockTypes = [];
+				disabledIn = validItems.map((blockType) => blockType.name);
+				enabledIn = [];
 				setAction('disable-all');
 			} else if ('enable-all' === action) {
-				blockTypes = validItems.map((blockType) => blockType.name);
+				disabledIn = [];
+				enabledIn = validItems.map((blockType) => blockType.name);
 				setAction('enable-all');
 			} else if ('single-enable' === action) {
-				blockTypes = [
-					...(globalStyles?.blockeraMetaData?.blockTypes || []),
-					blockType,
+				disabledIn =
+					globalStyles?.blockeraMetaData?.variations?.[
+						style.name
+					]?.disabledIn?.filter((type) => type !== blockType) || [];
+				enabledIn = [
+					...new Set([
+						...(globalStyles?.blockeraMetaData?.variations?.[
+							style.name
+						]?.enabledIn || []),
+						blockType,
+					]),
 				];
+				setStyleVariationBlocks(style.name, enabledIn);
 				registerBlockStyle(blockType, style);
 			} else if ('single-disable' === action) {
-				blockTypes = globalStyles?.blockeraMetaData?.blockTypes?.filter(
-					(type) => type !== blockType
-				);
+				disabledIn = [
+					...new Set([
+						...(globalStyles?.blockeraMetaData?.variations?.[
+							style.name
+						]?.disabledIn || []),
+						blockType,
+					]),
+				];
+				enabledIn =
+					globalStyles?.blockeraMetaData?.variations?.[
+						style.name
+					]?.enabledIn?.filter((type) => type !== blockType) || [];
+				deleteStyleVariationBlock(style.name, true, blockType);
 				unregisterBlockStyle(blockType, style.name);
 			}
 
-			setGlobalStyles(
-				mergeObject(globalStyles, {
+			const { blockeraGlobalStylesMetaData } = window;
+			const newGlobalStyles = mergeObject(
+				{
+					...globalStyles,
+					...(!globalStyles?.blockeraMetaData
+						? { blockeraMetaData: blockeraGlobalStylesMetaData }
+						: {}),
+				},
+				{
 					blockeraMetaData: {
 						variations: {
 							[style.name]: {
 								...style,
-								blockTypes,
+								enabledIn,
+								disabledIn,
 							},
 						},
 					},
-				})
+				}
 			);
+
+			window.blockeraGlobalStylesMetaData =
+				newGlobalStyles.blockeraMetaData;
+
+			setGlobalStyles(newGlobalStyles);
 		},
-		[style, validItems, globalStyles, setGlobalStyles, setAction]
+		[
+			style,
+			setAction,
+			validItems,
+			globalStyles,
+			setGlobalStyles,
+			setStyleVariationBlocks,
+			deleteStyleVariationBlock,
+		]
 	);
 
 	if (!items || !itemsCount) {
@@ -206,16 +270,27 @@ export const BlockTypes = ({
 					gap={'8px'}
 					className={`blockera-features-types blockera-feature-wrapper`}
 				>
-					{validItems.map((item, index) => (
-						<BlockType
-							item={item}
-							style={style}
-							blocksState={blocksState}
-							setGlobalData={setGlobalData}
-							key={index + '-' + item.name}
-							setBlocksState={setBlocksState}
-						/>
-					))}
+					{validItems
+						.sort((a, b) => {
+							const aHasStyle = blockHasStyle(a.name, style.name)
+								? 1
+								: 0;
+							const bHasStyle = blockHasStyle(b.name, style.name)
+								? 1
+								: 0;
+
+							return bHasStyle - aHasStyle; // Sort enabled items first
+						})
+						.map((item, index) => (
+							<BlockType
+								item={item}
+								style={style}
+								blocksState={blocksState}
+								setGlobalData={setGlobalData}
+								key={index + '-' + item.name}
+								setBlocksState={setBlocksState}
+							/>
+						))}
 				</Grid>
 			</Flex>
 		</>

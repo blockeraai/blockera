@@ -26,6 +26,41 @@
 	}
 }
 
+.circle-multiple-blocks {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	border: solid 1px #c4c4c4;
+	line-height: 1.5;
+	position: relative;
+	margin-left: -12px;
+	z-index: calc(100 - var(--i));
+	background-color: #ffffff;
+	transition: z-index 0.3s ease-in-out;
+	color: #000000 !important;
+
+	svg {
+		min-width: 16px;
+		max-width: 16px;
+		fill: #000000 !important;
+		color: #000000 !important;
+	}
+
+	&:hover {
+		z-index: 999;
+		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+		color: var(--blockera-controls-primary-color) !important;
+
+		svg {
+			fill: var(--blockera-controls-primary-color) !important;
+			color: var(--blockera-controls-primary-color) !important;
+		}
+	}
+}
+
 .blockera-component-block-styles {
 
 	.blockera-block-styles-category {
@@ -177,8 +212,7 @@
 	width: calc(50% - 4px);
 }
 
-.blockera-component-delete-modal,
-.blockera-component-rename-modal {
+.blockera-component-style-variation-modal {
 	--blockera-controls-primary-color: var(--blockera-controls-variations-color);
 	--blockera-controls-primary-color-darker-20: var(--blockera-controls-variations-color-darker-20);
 
@@ -195,6 +229,10 @@
 
 		svg {
 			fill: currentColor;
+
+			path {
+				fill: currentColor;
+			}
 		}
 	}
 }

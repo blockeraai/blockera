@@ -46,7 +46,7 @@ export const RenameModal = ({
 
 	return (
 		<Modal
-			className={componentInnerClassNames('rename-modal')}
+			className={componentInnerClassNames('style-variation-modal')}
 			headerIcon={<Icon icon="pen" iconSize="34" />}
 			headerTitle={__('Rename style variation', 'blockera')}
 			isDismissible={true}

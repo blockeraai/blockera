@@ -191,6 +191,35 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 				selectedBlockStyleVariation: action.selectedBlockStyleVariation,
 			};
 			break;
+		case 'SET_STYLE_VARIATION_BLOCKS':
+			state = {
+				...state,
+				styleVariationBlocks: {
+					...(state?.styleVariationBlocks || {}),
+					[action.variationName]: [
+						...new Set([
+							...(state?.styleVariationBlocks?.[
+								action.variationName
+							] || []),
+							...action.blocks,
+						]),
+					],
+				},
+			};
+			break;
+		case 'DELETE_STYLE_VARIATION_BLOCK':
+			state = {
+				...state,
+				styleVariationBlocks: {
+					...(state?.styleVariationBlocks || {}),
+					[action.variationName]: action.single
+						? state?.styleVariationBlocks?.[
+								action.variationName
+						  ]?.filter((block) => block !== action.blockName)
+						: [],
+				},
+			};
+			break;
 	}
 
 	return state;
