@@ -36,7 +36,10 @@ export function clearBoxPositionSide(side) {
  * @param {string}  side   Name of the panel to open
  */
 export function openBoxPositionSide(side) {
+	// try to close all popovers
+	cy.get('body').type('{esc}');
+
 	cy.get(
 		`[data-cy="box-position-label-${side}"] [data-cy="label-control"]`
-	).click();
+	).click({ force: true });
 }
