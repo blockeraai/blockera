@@ -7,10 +7,10 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
-import { useState, useCallback } from '@wordpress/element';
+import isShallowEqual from '@wordpress/is-shallow-equal';
 import { Icon as WordPressIconComponent, Fill } from '@wordpress/components';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
-import isShallowEqual from '@wordpress/is-shallow-equal';
+import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -73,28 +73,34 @@ export const BlockTypes = ({
 		postId
 	);
 	const [action, setAction] = useState(null);
-	const initBlocksState = {
-		all: false,
-		items: [
-			...(globalStyles?.blockeraMetaData?.variations?.[
-				style.name
-			]?.enabledIn?.filter((blockType) => {
-				const disabledIn =
-					globalStyles?.blockeraMetaData?.variations?.[style.name]
-						?.disabledIn;
+	const initBlocksState = useMemo(
+		() => ({
+			items: [
+				...(globalStyles?.blockeraMetaData?.variations?.[
+					style.name
+				]?.enabledIn?.filter((blockType) => {
+					const disabledIn =
+						globalStyles?.blockeraMetaData?.variations?.[style.name]
+							?.disabledIn;
 
-				return !disabledIn?.includes(blockType);
-			}) || []),
-			...enabledItems,
-		],
-		primitiveItems: validItems.sort((a, b) => {
-			const aHasStyle = blockHasStyle(a.name, style.name) ? 1 : 0;
-			const bHasStyle = blockHasStyle(b.name, style.name) ? 1 : 0;
+					return !disabledIn?.includes(blockType);
+				}) || []),
+				...enabledItems,
+			],
+			primitiveItems: validItems.sort((a, b) => {
+				const aHasStyle = blockHasStyle(a.name, style.name) ? 1 : 0;
+				const bHasStyle = blockHasStyle(b.name, style.name) ? 1 : 0;
 
-			return bHasStyle - aHasStyle; // Sort enabled items first
+				return bHasStyle - aHasStyle; // Sort enabled items first
+			}),
 		}),
-	};
+		[validItems, globalStyles, style, enabledItems]
+	);
 	const [blocksState, setBlocksState] = useState(initBlocksState);
+
+	useEffect(() => {
+		setBlocksState(initBlocksState);
+	}, [initBlocksState]);
 
 	const setGlobalData = useCallback(
 		(
@@ -259,7 +265,7 @@ export const BlockTypes = ({
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
-						setBlocksState({ all: false, items: [] });
+						setBlocksState({ ...blocksState, items: [] });
 						setGlobalData('disable-all');
 					}}
 				>
@@ -272,7 +278,7 @@ export const BlockTypes = ({
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
 						setBlocksState({
-							all: true,
+							...blocksState,
 							items: validItems.map((item) => item.name),
 						});
 						setGlobalData('enable-all');
