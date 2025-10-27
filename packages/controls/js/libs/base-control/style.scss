@@ -21,6 +21,10 @@
 		&:empty {
 			display: none;
 		}
+
+		&:hover {
+			z-index: 100;
+		}
 	}
 
 	&.small-gap .blockera-field-label .blockera-control-label {
