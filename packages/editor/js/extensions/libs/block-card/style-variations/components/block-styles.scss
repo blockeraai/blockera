@@ -222,6 +222,12 @@
 
 	.components-modal__content {
 		width: 470px;
+
+		.blockera-block-inserter-types {
+			height: 265px;
+			overflow-y: scroll;
+			box-shadow: inset 0 -25px 10px -10px rgba(0, 0, 0, 0.1);
+		}
 	}
 
 	h1 {
