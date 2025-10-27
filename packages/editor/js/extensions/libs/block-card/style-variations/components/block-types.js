@@ -7,9 +7,10 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
-import { useState, useCallback, useEffect } from '@wordpress/element';
+import { useState, useCallback } from '@wordpress/element';
 import { Icon as WordPressIconComponent, Fill } from '@wordpress/components';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
+import isShallowEqual from '@wordpress/is-shallow-equal';
 
 /**
  * Blockera dependencies
@@ -33,9 +34,8 @@ import { blockHasStyle } from './use-block-style-item/helpers';
 export const BlockTypes = ({
 	items,
 	style,
-	blockName,
-	blockTitle,
 	handleOnUsageForMultipleBlocks,
+	setIsOpenUsageForMultipleBlocks,
 }: {
 	items: Object,
 	style: Object,
@@ -45,6 +45,7 @@ export const BlockTypes = ({
 		style: Object,
 		action: 'add' | 'delete'
 	) => void,
+	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
 }): MixedElement => {
 	const itemsCount = Array.isArray(items)
 		? items.length
@@ -71,10 +72,8 @@ export const BlockTypes = ({
 		'styles',
 		postId
 	);
-	const [forceDisableICurrentBlock, setForceDisableICurrentBlock] =
-		useState(false);
 	const [action, setAction] = useState(null);
-	const [blocksState, setBlocksState] = useState({
+	const initBlocksState = {
 		all: false,
 		items:
 			globalStyles?.blockeraMetaData?.variations?.[
@@ -86,63 +85,8 @@ export const BlockTypes = ({
 
 				return !disabledIn?.includes(blockType);
 			}) || enabledItems,
-	});
-
-	useEffect(() => {
-		if (!action) {
-			return;
-		}
-
-		const timeoutId = setTimeout(() => {
-			if ('disable-all' === action) {
-				validItems.forEach((blockType) => {
-					if (
-						!forceDisableICurrentBlock &&
-						blockType.name === blockName
-					) {
-						return;
-					}
-
-					unregisterBlockStyle(blockType.name, style.name);
-				});
-
-				deleteStyleVariationBlocks(style.name, false);
-
-				if (forceDisableICurrentBlock) {
-					handleOnUsageForMultipleBlocks(style, 'delete');
-				}
-			} else if ('enable-all' === action) {
-				validItems.forEach((blockType) => {
-					registerBlockStyle(blockType.name, style);
-				});
-				setStyleVariationBlocks(
-					style.name,
-					validItems.map((blockType) => blockType.name)
-				);
-				handleOnUsageForMultipleBlocks(style, 'add');
-			} else if ('single-enable' === action) {
-				handleOnUsageForMultipleBlocks(style, 'add');
-			} else if (
-				'single-disable' === action &&
-				forceDisableICurrentBlock
-			) {
-				handleOnUsageForMultipleBlocks(style, 'delete');
-			}
-
-			setAction(null);
-		}, 1000);
-
-		return () => clearTimeout(timeoutId);
-	}, [
-		action,
-		style,
-		blockName,
-		validItems,
-		setStyleVariationBlocks,
-		forceDisableICurrentBlock,
-		deleteStyleVariationBlocks,
-		handleOnUsageForMultipleBlocks,
-	]);
+	};
+	const [blocksState, setBlocksState] = useState(initBlocksState);
 
 	const setGlobalData = useCallback(
 		(
@@ -157,20 +101,10 @@ export const BlockTypes = ({
 			let enabledIn: Array<string> = [];
 
 			if ('disable-all' === action) {
-				disabledIn = validItems
-					.map((blockType) => {
-						if (
-							!forceDisableICurrentBlock &&
-							blockType.name === blockName
-						) {
-							return null;
-						}
-
-						return blockType.name;
-					})
-					.filter(Boolean);
+				disabledIn = validItems.map((blockType) => blockType.name);
 				enabledIn = [];
 				setAction('disable-all');
+				deleteStyleVariationBlocks(style.name, false);
 			} else if ('enable-all' === action) {
 				disabledIn = [];
 				enabledIn = validItems.map((blockType) => blockType.name);
@@ -191,10 +125,6 @@ export const BlockTypes = ({
 				setStyleVariationBlocks(style.name, enabledIn);
 				registerBlockStyle(blockType, style);
 			} else if ('single-disable' === action) {
-				if (!forceDisableICurrentBlock && blockType === blockName) {
-					return;
-				}
-
 				disabledIn = [
 					...new Set([
 						...(globalStyles?.blockeraMetaData?.variations?.[
@@ -240,15 +170,45 @@ export const BlockTypes = ({
 		[
 			style,
 			setAction,
-			blockName,
 			validItems,
 			globalStyles,
 			setGlobalStyles,
 			setStyleVariationBlocks,
-			forceDisableICurrentBlock,
 			deleteStyleVariationBlocks,
 		]
 	);
+
+	const handleOnSave = useCallback(() => {
+		if ('disable-all' === action) {
+			validItems.forEach((blockType) =>
+				unregisterBlockStyle(blockType.name, style.name)
+			);
+
+			handleOnUsageForMultipleBlocks(style, 'delete');
+		} else if ('enable-all' === action) {
+			validItems.forEach((blockType) => {
+				registerBlockStyle(blockType.name, style);
+			});
+			setStyleVariationBlocks(
+				style.name,
+				validItems.map((blockType) => blockType.name)
+			);
+			handleOnUsageForMultipleBlocks(style, 'add');
+		} else if ('single-enable' === action) {
+			handleOnUsageForMultipleBlocks(style, 'add');
+		} else if ('single-disable' === action) {
+			handleOnUsageForMultipleBlocks(style, 'delete');
+		}
+
+		setAction(null);
+	}, [
+		style,
+		action,
+		setAction,
+		validItems,
+		setStyleVariationBlocks,
+		handleOnUsageForMultipleBlocks,
+	]);
 
 	if (!items || !itemsCount) {
 		return <></>;
@@ -256,32 +216,28 @@ export const BlockTypes = ({
 
 	return (
 		<>
-			<Fill name="usage-for-multiple-blocks-force-disable-current-block">
-				<ControlContextProvider
-					value={{
-						name: `${blockName}-${style.name}-force-disable-current-block`,
-						value: forceDisableICurrentBlock,
-					}}
-				>
-					<ToggleControl
-						labelType="self"
-						label={
-							<span style={{ color: 'red' }}>
-								{sprintf(
-									/* translators: $1%s is a block title. */
-									__(
-										'Permanently disable and delete the style from the current selected “%1$s” block.',
-										'blockera'
-									),
-									blockTitle
-								)}
-							</span>
-						}
-						onChange={(newValue: boolean) => {
-							setForceDisableICurrentBlock(newValue);
+			<Fill name="usage-for-multiple-blocks-save-cancel-actions">
+				<Flex justifyContent="space-between">
+					<Button
+						data-test="save-usage-for-multiple-blocks-button"
+						disabled={isShallowEqual(blocksState, initBlocksState)}
+						variant="primary"
+						onClick={() => {
+							handleOnSave();
+							setIsOpenUsageForMultipleBlocks(false);
 						}}
-					/>
-				</ControlContextProvider>
+					>
+						{__('Save', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="cancel-usage-for-multiple-blocks-button"
+						variant="tertiary"
+						onClick={() => setIsOpenUsageForMultipleBlocks(false)}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+				</Flex>
 			</Fill>
 			<Fill name="usage-for-multiple-blocks-actions">
 				<Button
@@ -349,10 +305,6 @@ export const BlockTypes = ({
 								setGlobalData={setGlobalData}
 								key={index + '-' + item.name}
 								setBlocksState={setBlocksState}
-								notAllowed={
-									!forceDisableICurrentBlock &&
-									item.name === blockName
-								}
 							/>
 						))}
 				</Grid>
@@ -364,7 +316,6 @@ export const BlockTypes = ({
 const BlockType = ({
 	item,
 	style,
-	notAllowed,
 	blocksState,
 	setGlobalData,
 	setBlocksState,
@@ -450,25 +401,11 @@ const BlockType = ({
 						value: blocksState.items.includes(name),
 					}}
 				>
-					<div
-						style={
-							notAllowed
-								? {
-										display: 'inline-block',
-										opacity: 0.5,
-										pointerEvents: 'none',
-								  }
-								: { display: 'inline-block' }
-						}
-					>
+					<div>
 						<ToggleControl
 							labelType={'self'}
 							label={' '}
 							onChange={(newValue: boolean) => {
-								if (notAllowed && !newValue) {
-									return;
-								}
-
 								setBlocksState({
 									...blocksState,
 									items: blocksState.items.includes(name)

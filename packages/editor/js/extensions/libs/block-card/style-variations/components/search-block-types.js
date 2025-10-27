@@ -30,6 +30,7 @@ export const SearchBlockTypes = ({
 	blockTitle,
 	blocks: _blocks,
 	handleOnUsageForMultipleBlocks,
+	setIsOpenUsageForMultipleBlocks,
 }: Object): MixedElement => {
 	const [blocks, setBlocks] = useState(_blocks);
 	const [searchTerm, setSearchTerm] = useState('');
@@ -53,7 +54,6 @@ export const SearchBlockTypes = ({
 						style.label
 					)}
 				</p>
-				<Slot name="usage-for-multiple-blocks-force-disable-current-block" />
 				<Flex direction={'row'} gap={'10px'}>
 					<ControlContextProvider
 						value={{
@@ -139,7 +139,11 @@ export const SearchBlockTypes = ({
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}
+					setIsOpenUsageForMultipleBlocks={
+						setIsOpenUsageForMultipleBlocks
+					}
 				/>
+				<Slot name="usage-for-multiple-blocks-save-cancel-actions" />
 			</Flex>
 		</SlotFillProvider>
 	);

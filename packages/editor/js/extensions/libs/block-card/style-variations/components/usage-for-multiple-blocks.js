@@ -55,6 +55,9 @@ export const UsageForMultipleBlocksModal = ({
 				blocks={blocks}
 				blockName={blockName}
 				blockTitle={blockTitle}
+				setIsOpenUsageForMultipleBlocks={
+					setIsOpenUsageForMultipleBlocks
+				}
 				handleOnUsageForMultipleBlocks={handleOnUsageForMultipleBlocks}
 			/>
 		</Modal>
