@@ -124,6 +124,7 @@ export const BlockTypes = ({
 				];
 				setStyleVariationBlocks(style.name, enabledIn);
 				registerBlockStyle(blockType, style);
+				setAction('single-enable');
 			} else if ('single-disable' === action) {
 				disabledIn = [
 					...new Set([
@@ -139,6 +140,7 @@ export const BlockTypes = ({
 					]?.enabledIn?.filter((type) => type !== blockType) || [];
 				deleteStyleVariationBlocks(style.name, true, blockType);
 				unregisterBlockStyle(blockType, style.name);
+				setAction('single-disable');
 			}
 
 			const { blockeraGlobalStylesMetaData } = window;
@@ -243,22 +245,18 @@ export const BlockTypes = ({
 				<Button
 					variant="secondary"
 					contentAlign="left"
-					disabled={null !== action && 'disable-all' !== action}
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
 						setBlocksState({ all: false, items: [] });
 						setGlobalData('disable-all');
 					}}
 				>
-					{'disable-all' === action
-						? __('Disabling…', 'blockera')
-						: __('Disable all', 'blockera')}
+					{__('Disable all', 'blockera')}
 				</Button>
 
 				<Button
 					variant="secondary"
 					contentAlign="left"
-					disabled={null !== action && 'enable-all' !== action}
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
 						setBlocksState({
@@ -268,9 +266,7 @@ export const BlockTypes = ({
 						setGlobalData('enable-all');
 					}}
 				>
-					{'enable-all' === action
-						? __('Enabling…', 'blockera')
-						: __('Enable all', 'blockera')}
+					{__('Enable all', 'blockera')}
 				</Button>
 			</Fill>
 			<Flex
