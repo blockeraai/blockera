@@ -46,6 +46,7 @@ export const classes = [
 			'core/table',
 			'core/tag-cloud',
 			'core/video',
+			'core/audio',
 			'core/image',
 			'core/file',
 			'outermost/icon-block',
