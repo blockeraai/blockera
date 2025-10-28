@@ -87,6 +87,12 @@ describe('Site Logo Block', () => {
 				.contains('Settings')
 				.scrollIntoView()
 				.should('be.visible');
+
+			cy.get(
+				'.components-tools-panel-item .components-range-control__slider'
+			)
+				.should('be.exist')
+				.should('not.be.visible');
 		});
 
 		//

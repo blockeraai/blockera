@@ -117,4 +117,13 @@ export const classes = [
 		include: ['blockera/icon'],
 		childrenCheck: 'all',
 	},
+	// "core/site-logo" - Remove range control for width
+	{
+		parent: '.components-tools-panel-item',
+		children: [
+			'.components-tools-panel-item .components-range-control__slider',
+		],
+		include: ['core/site-logo'],
+		childrenCheck: 'all',
+	},
 ];
