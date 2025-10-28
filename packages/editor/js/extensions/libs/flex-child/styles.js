@@ -33,30 +33,6 @@ export const FlexChildStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	// Create cache key from inputs that affect output
-	const cacheKey = JSON.stringify({
-		blockeraFlexChildSizing: currentBlockAttributes.blockeraFlexChildSizing,
-		blockeraFlexChildGrow: currentBlockAttributes.blockeraFlexChildGrow,
-		blockeraFlexChildShrink: currentBlockAttributes.blockeraFlexChildShrink,
-		blockeraFlexChildBasis: currentBlockAttributes.blockeraFlexChildBasis,
-		blockeraFlexChildAlign: currentBlockAttributes.blockeraFlexChildAlign,
-		blockeraFlexChildOrder: currentBlockAttributes.blockeraFlexChildOrder,
-		blockeraFlexChildOrderCustom:
-			currentBlockAttributes.blockeraFlexChildOrderCustom,
-		state,
-		clientId,
-		blockName,
-		masterState,
-		activeDeviceType,
-		blockSelectors,
-		className: currentBlockAttributes?.className,
-	});
-
-	// Check if we have cached result
-	if ((FlexChildStyles: any).cache?.[cacheKey]) {
-		return (FlexChildStyles: any).cache[cacheKey];
-	}
-
 	const {
 		blockeraFlexChildSizing,
 		blockeraFlexChildAlign,
@@ -243,12 +219,6 @@ export const FlexChildStyles = ({
 			),
 		});
 	}
-
-	// Cache the result
-	if (!(FlexChildStyles: any).cache) {
-		(FlexChildStyles: any).cache = {};
-	}
-	(FlexChildStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

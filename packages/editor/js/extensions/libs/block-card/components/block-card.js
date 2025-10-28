@@ -98,7 +98,9 @@ export function BlockCard({
 	} = getBlockType(blockName);
 	const blockInformation = useBlockDisplayInformation(clientId);
 	const [name, setName] = useState(
-		blockInformation?.name || blockTitle || ''
+		insideBlockInspector
+			? blockInformation?.name || ''
+			: blockInformation?.name || blockTitle || ''
 	);
 	const [title, setTitle] = useState(blockInformation?.title || blockTitle);
 	const [hasSelectionDelay, setHasSelectionDelay] = useState(false);

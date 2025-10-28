@@ -44,40 +44,6 @@ export const EffectsStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	// Create cache key from inputs that affect output
-	const cacheKey = JSON.stringify({
-		blockeraFilter: currentBlockAttributes.blockeraFilter,
-		blockeraOpacity: currentBlockAttributes.blockeraOpacity,
-		blockeraTransform: currentBlockAttributes.blockeraTransform,
-		blockeraBlendMode: currentBlockAttributes.blockeraBlendMode,
-		blockeraTransition: currentBlockAttributes.blockeraTransition,
-		blockeraBackdropFilter: currentBlockAttributes.blockeraBackdropFilter,
-		blockeraDivider: currentBlockAttributes.blockeraDivider,
-		blockeraMask: currentBlockAttributes.blockeraMask,
-		blockeraTransformSelfPerspective:
-			currentBlockAttributes.blockeraTransformSelfPerspective,
-		blockeraTransformSelfOrigin:
-			currentBlockAttributes.blockeraTransformSelfOrigin,
-		blockeraBackfaceVisibility:
-			currentBlockAttributes.blockeraBackfaceVisibility,
-		blockeraTransformChildPerspective:
-			currentBlockAttributes.blockeraTransformChildPerspective,
-		blockeraTransformChildOrigin:
-			currentBlockAttributes.blockeraTransformChildOrigin,
-		state,
-		clientId,
-		blockName,
-		masterState,
-		activeDeviceType,
-		blockSelectors,
-		className: currentBlockAttributes?.className,
-	});
-
-	// Check if we have cached result
-	if ((EffectsStyles: any).cache?.[cacheKey]) {
-		return (EffectsStyles: any).cache[cacheKey];
-	}
-
 	const {
 		blockeraFilter,
 		blockeraOpacity,
@@ -557,12 +523,6 @@ export const EffectsStyles = ({
 			),
 		});
 	}
-
-	// Cache the result
-	if (!(EffectsStyles: any).cache) {
-		(EffectsStyles: any).cache = {};
-	}
-	(EffectsStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

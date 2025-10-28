@@ -271,7 +271,7 @@ final class StyleEngine {
 			}
 
 			// prepare all block states.
-			$this->pseudo_classes = array_merge($this->pseudo_classes, $states);
+			$this->pseudo_classes = blockera_get_array_deep_merge($this->pseudo_classes, $states);
 
 			$breakpointsCssRules = blockera_array_flat(
 				array_filter(

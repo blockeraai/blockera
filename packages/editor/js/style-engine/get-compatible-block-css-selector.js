@@ -57,7 +57,7 @@ export const createStandardSelector = ({
 	selector: string,
 	mergedSelector: string,
 	originSelector: string,
-}) => {
+}): string => {
 	const matches = selector.match(/:(before|after)$/);
 
 	if (matches && !isNormalState(state)) {
@@ -531,7 +531,7 @@ export const getCompatibleBlockCssSelector = ({
 							currentStateHasSelectors,
 							rootSelector:
 								'edit-site/global-styles' === from
-									? getBlockCSSSelector(blockType)
+									? getBlockCSSSelector(blockType) || ''
 									: rootSelector,
 						})
 					);
@@ -560,7 +560,7 @@ export const getCompatibleBlockCssSelector = ({
 							currentStateHasSelectors,
 							rootSelector:
 								'edit-site/global-styles' === from
-									? getBlockCSSSelector(blockType)
+									? getBlockCSSSelector(blockType) || ''
 									: rootSelector,
 						})
 					);

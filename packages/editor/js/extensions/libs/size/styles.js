@@ -35,34 +35,6 @@ export const SizeStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	// Create cache key from inputs that affect output
-	const cacheKey = JSON.stringify({
-		blockeraWidth: currentBlockAttributes?.blockeraWidth,
-		blockeraHeight: currentBlockAttributes?.blockeraHeight,
-		blockeraMinWidth: currentBlockAttributes?.blockeraMinWidth,
-		blockeraMinHeight: currentBlockAttributes?.blockeraMinHeight,
-		blockeraMaxWidth: currentBlockAttributes?.blockeraMaxWidth,
-		blockeraMaxHeight: currentBlockAttributes?.blockeraMaxHeight,
-		blockeraOverflow: currentBlockAttributes?.blockeraOverflow,
-		blockeraRatio: currentBlockAttributes?.blockeraRatio,
-		blockeraFit: currentBlockAttributes?.blockeraFit,
-		blockeraFitPosition: currentBlockAttributes?.blockeraFitPosition,
-		blockeraBoxSizing: currentBlockAttributes?.blockeraBoxSizing,
-		state,
-		clientId,
-		blockName,
-		masterState,
-		activeDeviceType,
-		blockSelectors,
-		className: currentBlockAttributes?.className,
-		height: currentBlockAttributes?.height,
-	});
-
-	// Check if we have cached result
-	if ((SizeStyles: any).cache?.[cacheKey]) {
-		return (SizeStyles: any).cache[cacheKey];
-	}
-
 	const {
 		blockeraWidth,
 		blockeraHeight,
@@ -545,12 +517,6 @@ export const SizeStyles = ({
 			});
 		}
 	}
-
-	// Cache the result
-	if (!(SizeStyles: any).cache) {
-		(SizeStyles: any).cache = {};
-	}
-	(SizeStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

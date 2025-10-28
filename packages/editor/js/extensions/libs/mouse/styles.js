@@ -28,25 +28,6 @@ export const MouseStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	// Create cache key from inputs that affect output
-	const cacheKey = JSON.stringify({
-		blockeraCursor: currentBlockAttributes.blockeraCursor,
-		blockeraUserSelect: currentBlockAttributes.blockeraUserSelect,
-		blockeraPointerEvents: currentBlockAttributes.blockeraPointerEvents,
-		state,
-		clientId,
-		blockName,
-		masterState,
-		activeDeviceType,
-		blockSelectors,
-		className: currentBlockAttributes?.className,
-	});
-
-	// Check if we have cached result
-	if ((MouseStyles: any).cache?.[cacheKey]) {
-		return (MouseStyles: any).cache[cacheKey];
-	}
-
 	const { blockeraCursor, blockeraUserSelect, blockeraPointerEvents } =
 		config.mouseConfig;
 	const blockProps = {
@@ -179,12 +160,6 @@ export const MouseStyles = ({
 			),
 		});
 	}
-
-	// Cache the result
-	if (!(MouseStyles: any).cache) {
-		(MouseStyles: any).cache = {};
-	}
-	(MouseStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };

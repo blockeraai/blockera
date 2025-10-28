@@ -44,7 +44,6 @@ export const BlockFillPartials: ComponentType<any> = ({
 	availableInnerStates,
 	insideBlockInspector,
 	currentInnerBlockState,
-	handleOnChangeAttributes,
 	updateBlockEditorSettings,
 }): Element<any> => {
 	const { currentBlockStyleVariation, setCurrentBlockStyleVariation } =
@@ -104,7 +103,9 @@ export const BlockFillPartials: ComponentType<any> = ({
 							blockeraInnerBlocks={blockeraInnerBlocks}
 							supports={blockProps.supports}
 							setAttributes={blockProps.setAttributes}
-							handleOnChangeAttributes={handleOnChangeAttributes}
+							handleOnChangeAttributes={
+								blockProps.handleOnChangeAttributes
+							}
 							currentBlockStyleVariation={
 								currentBlockStyleVariation
 							}
@@ -134,7 +135,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
-									handleOnChangeAttributes
+									blockProps.handleOnChangeAttributes
 								}
 							/>
 						)}
@@ -158,7 +159,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
-									handleOnChangeAttributes
+									blockProps.handleOnChangeAttributes
 								}
 								setCurrentBlockStyleVariation={
 									setCurrentBlockStyleVariation
@@ -192,7 +193,9 @@ export const BlockFillPartials: ComponentType<any> = ({
 							blockeraInnerBlocks={blockeraInnerBlocks}
 							supports={blockProps.supports}
 							setAttributes={blockProps.setAttributes}
-							handleOnChangeAttributes={handleOnChangeAttributes}
+							handleOnChangeAttributes={
+								blockProps.handleOnChangeAttributes
+							}
 							currentBlockStyleVariation={
 								currentBlockStyleVariation
 							}
@@ -222,7 +225,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
-									handleOnChangeAttributes
+									blockProps.handleOnChangeAttributes
 								}
 							/>
 						)}

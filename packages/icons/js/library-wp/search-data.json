@@ -396,6 +396,12 @@
 		"tags": ["post type", "custom", "content"]
 	},
 	{
+		"iconName": "dashboard",
+		"title": "dashboard",
+		"library": "wp",
+		"tags": ["dashboard", "overview", "statistics", "panel"]
+	},
+	{
 		"iconName": "desktop",
 		"title": "desktop",
 		"library": "wp",

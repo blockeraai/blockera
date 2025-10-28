@@ -34,25 +34,6 @@ export const BackgroundStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	// Create cache key from inputs that affect output
-	const cacheKey = JSON.stringify({
-		blockeraBackground: currentBlockAttributes.blockeraBackground,
-		blockeraBackgroundColor: currentBlockAttributes.blockeraBackgroundColor,
-		blockeraBackgroundClip: currentBlockAttributes.blockeraBackgroundClip,
-		state,
-		clientId,
-		blockName,
-		masterState,
-		activeDeviceType,
-		blockSelectors,
-		className: currentBlockAttributes?.className,
-	});
-
-	// Check if we have cached result
-	if ((BackgroundStyles: any).cache?.[cacheKey]) {
-		return (BackgroundStyles: any).cache[cacheKey];
-	}
-
 	const {
 		blockeraBackground,
 		blockeraBackgroundColor,
@@ -184,12 +165,6 @@ export const BackgroundStyles = ({
 			),
 		});
 	}
-
-	// Cache the result
-	if (!(BackgroundStyles: any).cache) {
-		(BackgroundStyles: any).cache = {};
-	}
-	(BackgroundStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };
