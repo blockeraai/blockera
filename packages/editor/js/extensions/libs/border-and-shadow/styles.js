@@ -40,26 +40,6 @@ export const BorderAndShadowStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	// Create cache key from inputs that affect output
-	const cacheKey = JSON.stringify({
-		blockeraBorder: currentBlockAttributes.blockeraBorder,
-		blockeraOutline: currentBlockAttributes.blockeraOutline,
-		blockeraBoxShadow: currentBlockAttributes.blockeraBoxShadow,
-		blockeraBorderRadius: currentBlockAttributes.blockeraBorderRadius,
-		state,
-		clientId,
-		blockName,
-		masterState,
-		activeDeviceType,
-		blockSelectors,
-		className: currentBlockAttributes?.className,
-	});
-
-	// Check if we have cached result
-	if ((BorderAndShadowStyles: any).cache?.[cacheKey]) {
-		return (BorderAndShadowStyles: any).cache[cacheKey];
-	}
-
 	const {
 		blockeraBorder,
 		blockeraOutline,
@@ -226,12 +206,6 @@ export const BorderAndShadowStyles = ({
 			});
 		}
 	}
-
-	// Cache the result
-	if (!(BorderAndShadowStyles: any).cache) {
-		(BorderAndShadowStyles: any).cache = {};
-	}
-	(BorderAndShadowStyles: any).cache[cacheKey] = styleGroup;
 
 	return styleGroup;
 };
