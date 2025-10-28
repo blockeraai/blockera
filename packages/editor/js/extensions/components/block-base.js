@@ -205,7 +205,8 @@ export const BlockBase: ComponentType<any> = (
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
 			!isShallowEqual(blockAttributes, state) &&
-			isShallowEqual(state, attributesRef.current)
+			isShallowEqual(state, attributesRef.current) &&
+			false === insideBlockInspector
 		) {
 			handleOnChangeStyleInLocalState(state);
 		}
