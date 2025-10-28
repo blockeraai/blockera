@@ -9,6 +9,7 @@ import {
 	redirectToFrontPage,
 	setBoxSpacingSide,
 	openBoxSpacingSide,
+	clearBoxSpacingSide,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Spacing Extension', () => {
@@ -1448,15 +1449,7 @@ describe('Spacing Extension', () => {
 
 		['margin', 'padding'].forEach((item) => {
 			['top', 'bottom', 'left', 'right'].forEach((_side) => {
-				cy.get(
-					`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
-				).click();
-
-				cy.get('.blockera-component-popover.spacing-edit-popover')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel('Remove value').click();
-					});
+				clearBoxSpacingSide(`${item}-${_side}`);
 
 				cy.get(
 					`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
