@@ -42,18 +42,25 @@ describe(
 					.click({ force: true });
 			});
 
-			// search for home link
-			cy.get('.block-editor-inserter__popover input[type="search"]').type(
-				'Home Link'
-			);
-
-			// insert
-			cy.get('button.editor-block-list-item-home-link')
+			// click on add block button
+			cy.get('.components-popover')
 				.last()
-				.click({ force: true });
+				.within(() => {
+					cy.get('button').contains('Add block').click();
+				});
+
+			// open block inserter
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.get('button').contains('Browse all').click();
+				});
 
 			// switch to target block
-			cy.getBlock('core/home-link').last().click({ force: true });
+			// cy.getBlock('core/home-link').last().click({ force: true });
+			cy.get('.block-editor-block-types-list__list-item')
+				.contains('Home Link')
+				.click();
 
 			// Block supported is active
 			cy.get('.blockera-extension-block-card').should('be.visible');
