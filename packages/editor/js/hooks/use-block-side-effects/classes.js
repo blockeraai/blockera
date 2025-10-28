@@ -61,6 +61,7 @@ export const classes = [
 			'core/gallery',
 			'core/site-logo',
 			'core/rss',
+			'core/comments-title',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
