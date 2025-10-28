@@ -43,18 +43,27 @@ describe(
 					.click({ force: true });
 			});
 
-			// search for Submenu
-			cy.get('.block-editor-inserter__popover input[type="search"]').type(
-				'Submenu'
-			);
-
-			// insert
-			cy.get('button.editor-block-list-item-navigation-submenu')
+			// click on add block button
+			cy.get('.components-popover')
 				.last()
-				.click({ force: true });
+				.within(() => {
+					cy.get('button').contains('Add block').click();
+				});
+
+			// open block inserter
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.get('button').contains('Browse all').click();
+				});
+
+			// switch to target block
+			cy.get('.block-editor-block-types-list__list-item')
+				.contains('Submenu')
+				.click();
 
 			// enter link value
-			cy.get('input[type="text"]:focus').type('#test{enter}');
+			cy.get('input[type="text"]:focus').type('#submenu-parent{enter}');
 
 			// switch to target block
 			cy.getBlock('core/navigation-submenu')
@@ -111,23 +120,27 @@ describe(
 				cy.get('[aria-label="Add block"]').first().click();
 			});
 
-			// search for Submenu
-			cy.get('.block-editor-inserter__popover input[type="search"]').type(
-				'Submenu'
-			);
-
-			// insert
-			cy.get('button.editor-block-list-item-navigation-submenu')
+			// click on add block button
+			cy.get('.components-popover')
 				.last()
+				.within(() => {
+					cy.get('button').contains('Add block').click();
+				});
+
+			// open block inserter
+			cy.get('.components-popover')
+				.last()
+				.within(() => {
+					cy.get('button').contains('Browse all').click();
+				});
+
+			// switch to target block
+			cy.get('.block-editor-block-types-list__list-item')
+				.contains('Submenu')
 				.click();
 
 			// enter link value
-			cy.get('input[type="text"]:focus').type('#test{enter}');
-
-			// switch to target block
-			cy.getBlock('core/navigation-submenu')
-				.last()
-				.click({ force: true });
+			cy.get('input[type="text"]:focus').type('#submenu-parent{enter}');
 
 			// add submenu items
 			cy.getBlock('core/navigation-submenu')
@@ -137,7 +150,9 @@ describe(
 				});
 
 			// enter link value
-			cy.get('input[type="text"]:focus').type('#custom-test{enter}');
+			cy.get('input[type="text"]:focus').type(
+				'#submenu-child-item{enter}'
+			);
 
 			// Switch back to submenu block
 			cy.getBlock('core/navigation-submenu')
