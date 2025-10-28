@@ -24,6 +24,8 @@ export type NormalizedSelectorProps = {
 	styleVariationName?: string,
 	fallbackSupportId?: string | Array<string>,
 	styleEngineConfig?: Object,
+	isStyleVariation?: boolean,
+	isGlobalStylesWrapper?: boolean,
 	activeDeviceType?: TBreakpoint,
 	currentStateHasSelectors?: boolean,
 	currentBlock: 'master' | InnerBlockType | string,
