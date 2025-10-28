@@ -65,6 +65,7 @@ export const classes = [
 			'core/file',
 			'core/latest-posts',
 			'core/post-author',
+			'core/post-title',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
