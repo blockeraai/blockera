@@ -64,6 +64,7 @@ export const classes = [
 			'core/comments-title',
 			'core/file',
 			'core/latest-posts',
+			'core/post-author',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
