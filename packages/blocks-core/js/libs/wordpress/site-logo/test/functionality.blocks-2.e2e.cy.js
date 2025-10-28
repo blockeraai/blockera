@@ -78,12 +78,12 @@ describe('Site Logo Block', () => {
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-panel__body-title button')
+			cy.get('.components-tools-panel-header')
 				.contains('Media')
 				.scrollIntoView()
 				.should('be.visible');
 
-			cy.get('.components-panel__body-title button')
+			cy.get('.components-tools-panel-header')
 				.contains('Settings')
 				.scrollIntoView()
 				.should('be.visible');
