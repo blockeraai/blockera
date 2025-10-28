@@ -60,6 +60,7 @@ export const classes = [
 			'core/comments-pagination',
 			'core/gallery',
 			'core/site-logo',
+			'core/rss',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
