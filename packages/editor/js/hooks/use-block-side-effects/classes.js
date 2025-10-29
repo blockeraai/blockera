@@ -112,20 +112,14 @@ export const classes = [
 		],
 		include: ['core/gallery'],
 	},
-	// "blockera/icon" - Hide ratio
-	{
-		parent: '.components-tools-panel-item',
-		children: ['.components-tools-panel-item select'],
-		include: ['blockera/icon'],
-	},
-	// "blockera/icon" - Hide width & height
+	// "blockera/icon" - Hide ratio, width & height
 	{
 		parent: '.components-tools-panel-item',
 		children: [
+			'.components-tools-panel-item select',
 			'.components-tools-panel-item .components-input-control__input',
 		],
 		include: ['blockera/icon'],
-		childrenCheck: 'all',
 	},
 	// "core/site-logo" - Remove range control for width
 	{
