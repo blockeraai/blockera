@@ -36,6 +36,7 @@ export type SimpleLabelControlProps = {
 	...Object,
 	label?: string,
 	className?: string,
+	labelClassName?: string, // used to pass additional classes to the label control from parent component like BaseControl
 	ariaLabel?: string,
 	labelDescription?: string | MixedElement,
 	advancedIsOpen?: boolean,
