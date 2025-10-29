@@ -136,4 +136,13 @@ export const classes = [
 		include: ['core/site-logo'],
 		childrenCheck: 'all',
 	},
+	// "outermost/icon-block" - Remove range control for width
+	{
+		parent: '.components-tools-panel-item',
+		children: [
+			'.components-tools-panel .components-tools-panel-item input[type="number"]',
+		],
+		include: ['outermost/icon-block'],
+		childrenCheck: 'all',
+	},
 ];
