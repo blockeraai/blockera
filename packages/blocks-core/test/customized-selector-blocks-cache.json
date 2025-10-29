@@ -33,6 +33,12 @@
 			"root": "h6.wp-block-heading"
 		}
 	},
+	"core/accordion-heading": {
+		"typography": {
+			"letterSpacing": ".wp-block-accordion-heading .wp-block-accordion-heading__toggle-title",
+			"textDecoration": ".wp-block-accordion-heading .wp-block-accordion-heading__toggle-title"
+		}
+	},
 	"core/button": {
 		"root": ".wp-block-button .wp-block-button__link",
 		"typography": {
@@ -83,6 +89,9 @@
 		}
 	},
 	"core/cover": {
+		"filter": {
+			"duotone": ".wp-block-cover > .wp-block-cover__image-background, .wp-block-cover > .wp-block-cover__video-background"
+		},
 		"heading1": {
 			"root": "h1.wp-block-heading"
 		},
@@ -156,19 +165,32 @@
 			"root": " a.wp-block-navigation-item__content span.wp-block-navigation-item__label"
 		}
 	},
+	"core/site-logo": {
+		"filter": {
+			"duotone": ".wp-block-site-logo img, .wp-block-site-logo .components-placeholder__illustration, .wp-block-site-logo .components-placeholder::before"
+		}
+	},
 	"core/site-title": {
 		"htmlEditable": {
 			"root": ".wp-block-site-title a"
 		}
 	},
 	"core/avatar": {
-		"border": ".wp-block-avatar img"
+		"border": ".wp-block-avatar img",
+		"filter": {
+			"duotone": ".wp-block-avatar img"
+		}
 	},
 	"core/post-featured-image": {
 		"border": ".wp-block-post-featured-image img, .wp-block-post-featured-image .block-editor-media-placeholder, .wp-block-post-featured-image .wp-block-post-featured-image__overlay",
 		"shadow": ".wp-block-post-featured-image img, .wp-block-post-featured-image .components-placeholder",
 		"filter": {
 			"duotone": ".wp-block-post-featured-image img, .wp-block-post-featured-image .wp-block-post-featured-image__placeholder, .wp-block-post-featured-image .components-placeholder__illustration, .wp-block-post-featured-image .components-placeholder::before"
+		}
+	},
+	"core/post-author": {
+		"filter": {
+			"duotone": ".wp-block-post-author .wp-block-post-author__avatar img"
 		}
 	},
 	"core/comments": {
