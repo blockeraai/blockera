@@ -102,6 +102,16 @@ export const classes = [
 		],
 		include: ['core/image'],
 	},
+	// "core/gallery" - Hide aspect ratio
+	{
+		parent: '.components-tools-panel-item',
+		children: [
+			'.components-tools-panel select.components-select-control__input option[value="auto"]',
+			'.components-tools-panel select.components-select-control__input option[value="1"]',
+			'.components-tools-panel select.components-select-control__input option[value="4/3"]',
+		],
+		include: ['core/gallery'],
+	},
 	// "blockera/icon" - Hide ratio
 	{
 		parent: '.components-tools-panel-item',

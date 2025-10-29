@@ -145,6 +145,15 @@ describe('Gallery Block', () => {
 			cy.get('.components-tools-panel-header')
 				.contains('Settings')
 				.should('be.visible');
+
+			cy.get(
+				'.components-tools-panel:not(.block-editor-bindings__panel)'
+			).within(() => {
+				cy.get('.components-input-control__label')
+					.contains('Aspect ratio')
+					.should('exist')
+					.should('not.be.visible');
+			});
 		});
 
 		//
