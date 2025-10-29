@@ -1964,13 +1964,13 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.blockera-block .ct-search-form').should(
+		cy.get('.blockera-block.ct-search-box .ct-search-form').should(
 			'have.css',
 			'background-clip',
 			'padding-box'
 		);
 
-		cy.get('.blockera-block').within(() => {
+		cy.get('.blockera-block.ct-search-box').within(() => {
 			cy.get('.ct-search-form input').should(
 				'have.css',
 				'background-color',
