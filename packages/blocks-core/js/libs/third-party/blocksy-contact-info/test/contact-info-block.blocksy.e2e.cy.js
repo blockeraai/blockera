@@ -36,6 +36,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -118,6 +120,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -245,6 +249,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -329,6 +335,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -456,6 +464,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -544,6 +554,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -675,6 +687,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -759,6 +773,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -886,6 +902,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -974,6 +992,8 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/contact-info').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
