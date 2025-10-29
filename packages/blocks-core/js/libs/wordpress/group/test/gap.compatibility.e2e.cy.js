@@ -30,6 +30,8 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.getByAriaLabel('Select Group').click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -183,6 +185,8 @@ describe('Group Block → Gap → Compatibility', () => {
 				cy.getBlock('core/paragraph').first().click();
 
 				cy.getByAriaLabel('Select Group').click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -460,6 +464,8 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.getByAriaLabel('Select parent block: Row').click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -540,6 +546,8 @@ describe('Group Block → Gap → Compatibility', () => {
 				cy.getBlock('core/paragraph').first().click();
 
 				cy.getByAriaLabel('Select parent block: Row').click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -655,6 +663,8 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.getByAriaLabel('Select parent block: Stack').click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -735,6 +745,8 @@ describe('Group Block → Gap → Compatibility', () => {
 				cy.getBlock('core/paragraph').first().click();
 
 				cy.getByAriaLabel('Select parent block: Stack').click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -850,6 +862,8 @@ describe('Group Block → Gap → Compatibility', () => {
 
 				cy.getByAriaLabel('Select parent block: Grid').click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -930,6 +944,8 @@ describe('Group Block → Gap → Compatibility', () => {
 				cy.getBlock('core/paragraph').first().click();
 
 				cy.getByAriaLabel('Select parent block: Grid').click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera

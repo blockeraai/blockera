@@ -121,6 +121,8 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 
 		cy.getByAriaLabel('Select Row').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//

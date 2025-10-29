@@ -33,6 +33,8 @@ describe('Flex Layout → WP Data Compatibility', () => {
 
 		cy.getByAriaLabel('Select Stack').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//

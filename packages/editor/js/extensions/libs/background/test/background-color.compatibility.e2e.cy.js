@@ -27,6 +27,8 @@ describe('Background Color → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('BG Color').as('bgColorContainer');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -101,6 +103,8 @@ describe('Background Color → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('BG Color').as('bgColorContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

@@ -30,6 +30,8 @@ describe('Text Transform → WP Compatibility', () => {
 
 			cy.getParentContainer('Capitalize').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//

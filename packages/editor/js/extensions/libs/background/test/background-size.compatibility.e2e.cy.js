@@ -36,6 +36,8 @@ describe('Background → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -147,6 +149,8 @@ describe('Background → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -257,6 +261,8 @@ describe('Background → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -490,6 +496,8 @@ describe('Background → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Image & Gradient').as('bgContainer');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera

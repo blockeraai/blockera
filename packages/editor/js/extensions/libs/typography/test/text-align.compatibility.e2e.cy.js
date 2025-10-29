@@ -30,6 +30,8 @@ describe('Text Align → WP Compatibility', () => {
 
 			cy.getParentContainer('Text Align').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -176,6 +178,8 @@ describe('Text Align → WP Compatibility', () => {
 			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Text Align').as('container');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

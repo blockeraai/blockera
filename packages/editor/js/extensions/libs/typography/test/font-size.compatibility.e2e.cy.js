@@ -27,6 +27,8 @@ describe('Font Size → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Size').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -97,6 +99,8 @@ describe('Font Size → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Size').as('container');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

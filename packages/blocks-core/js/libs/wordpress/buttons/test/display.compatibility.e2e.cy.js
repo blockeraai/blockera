@@ -5,9 +5,6 @@ import {
 	appendBlocks,
 	getSelectedBlock,
 	getWPDataObject,
-	setInnerBlock,
-	setBlockState,
-	addBlockState,
 	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -168,6 +165,8 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 
 		// Select target block
 		cy.getBlock('core/buttons').first().click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera

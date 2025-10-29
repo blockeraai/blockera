@@ -30,6 +30,8 @@ describe('Border → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Border Line').as('container');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -176,6 +178,8 @@ describe('Border → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Border Line').as('container');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -413,6 +417,8 @@ describe('Border → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Border Line').as('container');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -556,6 +562,8 @@ describe('Border → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Border Line').as('container');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -711,6 +719,8 @@ describe('Border → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Border Line').as('container');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera

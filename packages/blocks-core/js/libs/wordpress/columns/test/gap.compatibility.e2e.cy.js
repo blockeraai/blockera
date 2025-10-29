@@ -1,8 +1,6 @@
 import {
-	savePage,
 	getWPDataObject,
 	getSelectedBlock,
-	redirectToFrontPage,
 	createPost,
 	appendBlocks,
 } from '@blockera/dev-cypress/js/helpers';
@@ -33,6 +31,8 @@ describe('Columns Block → Gap → Compatibility', () => {
 
 			cy.getByAriaLabel('Select parent block: Column').click();
 			cy.getByAriaLabel('Select parent block: Columns').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -227,6 +227,8 @@ describe('Columns Block → Gap → Compatibility', () => {
 
 			cy.getByAriaLabel('Select parent block: Column').click();
 			cy.getByAriaLabel('Select parent block: Columns').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -452,6 +454,8 @@ describe('Columns Block → Gap → Compatibility', () => {
 
 			cy.getByAriaLabel('Select parent block: Column').click();
 			cy.getByAriaLabel('Select parent block: Columns').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -785,6 +789,8 @@ describe('Columns Block → Gap → Compatibility', () => {
 
 			cy.getByAriaLabel('Select parent block: Column').click();
 			cy.getByAriaLabel('Select parent block: Columns').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

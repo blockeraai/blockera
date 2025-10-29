@@ -99,6 +99,8 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-row');
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//
@@ -170,6 +172,8 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group-stack');
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//
@@ -240,6 +244,8 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 		cy.getByAriaLabel('Select parent block: Grid').click();
 
 		cy.checkActiveBlockVariation('group-grid');
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera

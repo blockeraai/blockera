@@ -25,6 +25,7 @@ describe('Font Appearance → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -32,7 +33,6 @@ describe('Font Appearance → WP Compatibility', () => {
 
 			// WP data should come to Blockera
 			getWPDataObject().then((data) => {
-
 				expect('italic').to.be.equal(
 					getSelectedBlock(data, 'blockeraFontAppearance')?.style
 				);
@@ -57,7 +57,6 @@ describe('Font Appearance → WP Compatibility', () => {
 			cy.getParentContainer('Appearance').within(() => {
 				cy.get('select').select('200-normal');
 			});
-
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {

@@ -44,6 +44,8 @@ describe('Box Position → WP Compatibility', () => {
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.position);
 			});
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -148,6 +150,8 @@ describe('Box Position → WP Compatibility', () => {
 					getSelectedBlock(data, 'style')?.position?.top
 				);
 			});
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

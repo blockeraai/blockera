@@ -30,6 +30,8 @@ describe('Text Orientation → WP Compatibility', () => {
 
 			cy.getParentContainer('Orientation').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -173,6 +175,8 @@ describe('Text Orientation → WP Compatibility', () => {
 			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Orientation').as('container');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
