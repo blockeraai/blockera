@@ -55,8 +55,8 @@ import {
 	generalBlockStates,
 	generalInnerBlockStates,
 } from '../libs/block-card/block-states/states';
+import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
-import { useBlockCompatibilities } from '../../hooks/use-block-compatibilities';
 import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 export const BlockBase: ComponentType<any> = (
@@ -224,17 +224,29 @@ export const BlockBase: ComponentType<any> = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [state, attributesRef]);
 
-	const attributes = useBlockCompatibilities({
-		args,
-		isActive,
-		availableAttributes,
-		attributes: cloneObject(state),
-		defaultAttributes: originDefaultAttributes,
-	});
+	const attributes = useMemo(
+		() =>
+			getCompatibleAttributes({
+				args,
+				isActive,
+				availableAttributes,
+				attributes: cloneObject(state),
+				defaultAttributes: originDefaultAttributes,
+			}),
+		[args, isActive, availableAttributes, state, originDefaultAttributes]
+	);
 
 	useEffect(() => {
 		if (!isShallowEqual(blockAttributes, state)) {
-			setAttributes(blockAttributes);
+			setAttributes(
+				getCompatibleAttributes({
+					args,
+					isActive,
+					availableAttributes,
+					attributes: cloneObject(blockAttributes),
+					defaultAttributes: originDefaultAttributes,
+				})
+			);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockAttributes]);
