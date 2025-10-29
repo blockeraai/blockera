@@ -58,6 +58,12 @@ export { default as BlockLoginFormContainer } from './block-login-form-container
 export { default as BlockLoginFormInputs } from './block-login-form-inputs.svg';
 export { default as BlockLoginFormLabels } from './block-login-form-labels.svg';
 export { default as BlockLoginFormRemember } from './block-login-form-remember.svg';
+export { default as BlockMathMi } from './block-math-mi.svg';
+export { default as BlockMathMn } from './block-math-mn.svg';
+export { default as BlockMathMo } from './block-math-mo.svg';
+export { default as BlockMathMfrac } from './block-math-mfrac.svg';
+export { default as BlockMathMsup } from './block-math-msup.svg';
+export { default as BlockMathMsub } from './block-math-msub.svg';
 export { default as BlockNavigationSubmenuContainer } from './block-navigation-submenu-container.svg';
 export { default as BlockNavigationSubmenuItems } from './block-navigation-submenu-items.svg';
 export { default as BlockOrderConfirmationSummaryItemContainer } from './block-order-confirmation-summary-item-container.svg';
