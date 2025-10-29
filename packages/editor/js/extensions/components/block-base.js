@@ -174,24 +174,41 @@ export const BlockBase: ComponentType<any> = (
 		masterIsNormalState,
 	]);
 
-	const args = {
-		blockId: name,
-		blockClientId: clientId,
-		isMasterNormalState: masterIsNormalState(),
-		isNormalState: isNormalState(),
-		isMasterBlock: !isInnerBlock(currentBlock),
-		isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
-		currentBreakpoint,
-		currentBlock,
-		currentState: isInnerBlock(currentBlock)
-			? currentInnerBlockState
-			: currentState,
-		blockVariations,
-		activeBlockVariation,
-		getActiveBlockVariation,
-		blockAttributes: originDefaultAttributes,
-		innerBlocks: additional?.blockeraInnerBlocks,
-	};
+	const args = useMemo(
+		() => ({
+			blockId: name,
+			blockClientId: clientId,
+			isMasterNormalState: masterIsNormalState(),
+			isNormalState: isNormalState(),
+			isMasterBlock: !isInnerBlock(currentBlock),
+			isBaseBreakpoint: isBaseBreakpoint(currentBreakpoint),
+			currentBreakpoint,
+			currentBlock,
+			currentState: isInnerBlock(currentBlock)
+				? currentInnerBlockState
+				: currentState,
+			blockVariations,
+			activeBlockVariation,
+			getActiveBlockVariation,
+			blockAttributes: originDefaultAttributes,
+			innerBlocks: additional?.blockeraInnerBlocks,
+		}),
+		[
+			name,
+			clientId,
+			currentBlock,
+			currentState,
+			isNormalState,
+			blockVariations,
+			currentBreakpoint,
+			masterIsNormalState,
+			activeBlockVariation,
+			currentInnerBlockState,
+			getActiveBlockVariation,
+			originDefaultAttributes,
+			additional?.blockeraInnerBlocks,
+		]
+	);
 
 	const [state, setState] = useState(blockAttributes);
 	const attributesRef = useRef(blockAttributes);
