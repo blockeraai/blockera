@@ -33,6 +33,8 @@ describe('Social Links Block → WP Compatibility', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select parent block: Social Icons').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//
@@ -276,6 +278,8 @@ describe('Social Links Block → WP Compatibility', () => {
 
 		// Switch to parent block
 		cy.getByAriaLabel('Select parent block: Social Icons').click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera
