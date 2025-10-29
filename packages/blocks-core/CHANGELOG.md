@@ -18,6 +18,7 @@
 - `Button` block: `Icon` inner block added.
 - `Page List` block: `Current Page` inner block added.
 - `Gallery` block: improve support.
+- `Search` block: improve support.
 
 
 ### Automated Tests

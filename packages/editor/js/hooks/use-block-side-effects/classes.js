@@ -66,6 +66,7 @@ export const classes = [
 			'core/latest-posts',
 			'core/post-author',
 			'core/post-title',
+			'core/search',
 		],
 	},
 	// "core/avatar" - Hide range control for image size
@@ -137,6 +138,14 @@ export const classes = [
 			'.components-tools-panel .components-tools-panel-item input[type="number"]',
 		],
 		include: ['outermost/icon-block'],
-		childrenCheck: 'all',
+	},
+	// "core/search" - Remove width input control
+	{
+		parent: '.components-tools-panel-item',
+		children: [
+			'.components-tools-panel .components-tools-panel-item input[type="number"]',
+			'.components-tools-panel .components-tools-panel-item .components-toggle-group-control',
+		],
+		include: ['core/search'],
 	},
 ];
