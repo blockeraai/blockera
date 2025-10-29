@@ -25,6 +25,8 @@ describe('Social Links Block → Gap → Compatibility', () => {
 
 			cy.getByAriaLabel('Select parent block: Social Icons').click();
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -209,6 +211,8 @@ describe('Social Links Block → Gap → Compatibility', () => {
 			cy.getBlock('core/social-link').first().click();
 
 			cy.getByAriaLabel('Select parent block: Social Icons').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -425,6 +429,8 @@ describe('Social Links Block → Gap → Compatibility', () => {
 			cy.getBlock('core/social-link').first().click();
 
 			cy.getByAriaLabel('Select parent block: Social Icons').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -749,6 +755,8 @@ describe('Social Links Block → Gap → Compatibility', () => {
 			cy.getBlock('core/social-link').first().click();
 
 			cy.getByAriaLabel('Select parent block: Social Icons').click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

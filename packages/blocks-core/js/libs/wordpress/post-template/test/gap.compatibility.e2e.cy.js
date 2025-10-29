@@ -45,6 +45,8 @@ describe('Post Template Block → Gap → Compatibility', () => {
 
 		cy.get('button[aria-label="Post Template"]').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//

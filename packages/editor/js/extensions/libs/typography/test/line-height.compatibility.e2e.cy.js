@@ -26,6 +26,8 @@ describe('Line Height → WP Compatibility', () => {
 
 			cy.getParentContainer('Line Height').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//

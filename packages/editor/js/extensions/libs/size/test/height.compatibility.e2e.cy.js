@@ -27,6 +27,8 @@ describe('Height → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -146,6 +148,8 @@ describe('Height → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -240,6 +244,8 @@ describe('Height → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -294,6 +300,8 @@ describe('Height → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Height').as('container');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: Blockera dat to WP

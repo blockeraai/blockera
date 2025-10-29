@@ -30,6 +30,8 @@ describe('Letter Spacing → WP Compatibility', () => {
 
 			cy.getParentContainer('Letters').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//

@@ -28,6 +28,8 @@ describe('Buttons Block → Gap → Compatibility', () => {
 
 		cy.getByAriaLabel('Select parent block: Buttons').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//

@@ -27,6 +27,8 @@ describe('Font Color → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('core/paragraph').click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -165,6 +167,8 @@ describe('Font Color → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Text Color').as('container');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -270,6 +274,8 @@ describe('Font Color → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Text Color').as('container');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -358,6 +364,8 @@ describe('Font Color → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Text Color').as('container');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -479,6 +487,8 @@ describe('Font Color → WP Compatibility', () => {
 
 				// add alias to the feature container
 				cy.getParentContainer('Text Color').as('container');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera

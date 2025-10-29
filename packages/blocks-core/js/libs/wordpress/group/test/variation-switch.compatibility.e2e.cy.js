@@ -38,6 +38,8 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		// Switch to parent block
 		cy.getByAriaLabel('Select parent block: Group').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//

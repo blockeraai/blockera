@@ -28,6 +28,8 @@ describe('Quote Block → Gap → Compatibility', () => {
 
 		cy.getByAriaLabel('Select parent block: Quote').click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//

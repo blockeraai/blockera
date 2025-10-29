@@ -30,6 +30,8 @@ describe('Text Decoration → WP Compatibility', () => {
 
 			cy.getParentContainer('Decoration').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//

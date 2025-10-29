@@ -45,6 +45,8 @@ describe('Box Spacing → WP Compatibility', () => {
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -182,6 +184,8 @@ describe('Box Spacing → WP Compatibility', () => {
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -318,6 +322,8 @@ describe('Box Spacing → WP Compatibility', () => {
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -766,6 +772,8 @@ describe('Box Spacing → WP Compatibility', () => {
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

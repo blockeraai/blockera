@@ -34,6 +34,8 @@ describe('Min Height → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Min').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//

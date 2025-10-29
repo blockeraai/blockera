@@ -30,6 +30,8 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				cy.getParentContainer('Border Line').as('border');
 				cy.getParentContainer('Radius').as('radius');
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -175,6 +177,8 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				// add alias to the feature container
 				cy.getParentContainer('Border Line').as('border');
 				cy.getParentContainer('Radius').as('radius');
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera

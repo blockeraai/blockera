@@ -28,6 +28,8 @@ describe('Media Fit → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Media Fit').as('container');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -85,6 +87,8 @@ describe('Media Fit → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Media Fit').as('container');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

@@ -25,6 +25,8 @@ describe('All Features Together → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//

@@ -30,6 +30,8 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				'aspectContainer'
 			);
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -107,6 +109,12 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			cy.getParentContainer('Aspect Ratio', 'base-control').as(
 				'aspectContainer'
 			);
+
+			cy.addNewTransition();
+
+			//
+			// Test 1: WP data to Blockera
+			//
 
 			getWPDataObject().then((data) => {
 				expect('4/3').to.be.equal(
@@ -202,6 +210,8 @@ describe('Aspect Ratio → WP Compatibility', () => {
 				'aspectContainer'
 			);
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -283,6 +293,12 @@ describe('Aspect Ratio → WP Compatibility', () => {
 			cy.getParentContainer('Aspect Ratio', 'base-control').as(
 				'aspectContainer'
 			);
+
+			cy.addNewTransition();
+
+			//
+			// Test 1: WP data to Blockera
+			//
 
 			getWPDataObject().then((data) => {
 				expect('3/2').to.be.equal(

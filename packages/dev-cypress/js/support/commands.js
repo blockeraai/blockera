@@ -829,4 +829,12 @@ export const registerCommands = () => {
 			.get('button[aria-controls="edit-post:document"]')
 			.click({ force: true });
 	});
+
+	Cypress.Commands.add('addNewTransition', () => {
+		cy.getParentContainer('Transitions').as('transition');
+
+		cy.get('@transition').within(() => {
+			cy.getByAriaLabel('Add New Transition').click();
+		});
+	});
 };

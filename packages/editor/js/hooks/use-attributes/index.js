@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { useCallback } from '@wordpress/element';
 
@@ -48,7 +47,6 @@ export const useAttributes = (
 		availableAttributes,
 		masterIsNormalState,
 		blockeraInnerBlocks,
-		insideBlockInspector,
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,
@@ -101,11 +99,7 @@ export const useAttributes = (
 	const handleOnChangeAttributes: THandleOnChangeAttributes = useCallback(
 		(attributeId, newValue, options = {}): void => {
 			const { ref, effectiveItems = {} } = options;
-			const { getSelectedBlock } = select('core/block-editor');
-			const { attributes } =
-				false === insideBlockInspector
-					? { attributes: getAttributes() }
-					: getSelectedBlock() || { attributes: getAttributes() };
+			const attributes = getAttributes();
 
 			// attributes => immutable - mean just read-only!
 			// _attributes => mutable - mean readable and writable constant!

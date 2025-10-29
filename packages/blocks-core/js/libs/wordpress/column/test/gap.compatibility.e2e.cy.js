@@ -1,8 +1,6 @@
 import {
-	savePage,
 	getWPDataObject,
 	getSelectedBlock,
-	redirectToFrontPage,
 	createPost,
 	appendBlocks,
 } from '@blockera/dev-cypress/js/helpers';
@@ -29,6 +27,8 @@ describe('Single Column Block → Gap → Compatibility', () => {
 		cy.getBlock('core/paragraph').first().click();
 
 		cy.getByAriaLabel('Select parent block: Column').click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera

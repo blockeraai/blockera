@@ -25,6 +25,8 @@ describe('Width → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -83,6 +85,8 @@ describe('Width → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -147,6 +151,8 @@ describe('Width → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -199,6 +205,8 @@ describe('Width → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -254,6 +262,8 @@ describe('Width → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -305,6 +315,8 @@ describe('Width → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -366,6 +378,8 @@ describe('Width → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -422,6 +436,8 @@ describe('Width → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -481,6 +497,8 @@ describe('Width → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -613,6 +631,8 @@ describe('Width → WP Compatibility', () => {
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
+			cy.addNewTransition();
+
 			//
 			// Test 1: WP data to Blockera
 			//
@@ -715,6 +735,8 @@ describe('Width → WP Compatibility', () => {
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
