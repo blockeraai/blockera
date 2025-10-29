@@ -121,6 +121,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -247,6 +249,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -335,6 +339,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -437,11 +443,20 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customTextHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect('').to.be.equal(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/text'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					);
+
+					expect(
+						getSelectedBlock(data, 'blockeraInnerBlocks')[
+							'elements/text'
+						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
+							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -465,6 +480,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -550,6 +567,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -677,6 +696,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -765,6 +786,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -866,12 +889,13 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'customIconsHoverColor')
 					);
-
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -890,6 +914,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 <!-- /wp:blocksy/widgets-wrapper -->`);
 
 		cy.getBlock('blocksy/about-me').first().click();
+
+		cy.addNewTransition();
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 

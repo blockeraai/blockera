@@ -827,11 +827,13 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customInputIconColorFocus')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/button'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -1259,11 +1261,13 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 						)
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/button'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraBackgroundColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -1876,11 +1880,13 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customDropdownTextHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/result-link'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});

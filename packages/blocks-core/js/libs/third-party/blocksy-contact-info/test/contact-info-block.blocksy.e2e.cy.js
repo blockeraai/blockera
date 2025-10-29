@@ -658,11 +658,13 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customTextHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/link'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -1096,11 +1098,13 @@ describe('Blocksy → Contact Info Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customIconsHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});

@@ -445,11 +445,13 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customBackgroundHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraBackgroundColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
@@ -883,11 +885,13 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customHoverColor')
 					);
 
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/icons'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});

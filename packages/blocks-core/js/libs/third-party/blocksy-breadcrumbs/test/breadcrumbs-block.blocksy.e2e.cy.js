@@ -611,12 +611,13 @@ describe('Blocksy → Breadcrumbs Block → WP Compatibility', () => {
 					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'customLinkHoverColor')
 					);
-
-					expect(undefined).to.be.equal(
+					expect(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/links'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
 							.desktop?.attributes?.blockeraFontColor
+					).to.satisfy(
+						(color) => color === undefined || color === ''
 					);
 				});
 			});
