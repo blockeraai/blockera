@@ -2,12 +2,14 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
 	createPost,
+	selectBlock,
+	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
+	getWPDataObject,
+	getSelectedBlock,
+	openBlockNavigator,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Social Links Block → WP Compatibility', () => {
@@ -27,11 +29,14 @@ describe('Social Links Block → WP Compatibility', () => {
 			`
 		);
 
-		// Select target block
-		cy.getBlock('core/social-link').first().click();
+		// select target block by opening block navigator and selecting the block
+		// because there is a strange behavior in the block navigator that sometimes the block is not selected
 
-		// Switch to parent block
-		cy.getByAriaLabel('Select parent block: Social Icons').click();
+		// Open block navigator
+		openBlockNavigator();
+
+		// Select target block
+		selectBlock('Social Icons');
 
 		cy.addNewTransition();
 
@@ -235,11 +240,14 @@ describe('Social Links Block → WP Compatibility', () => {
 			`
 		);
 
-		// Select target block
-		cy.getBlock('core/social-link').first().click();
+		// select target block by opening block navigator and selecting the block
+		// because there is a strange behavior in the block navigator that sometimes the block is not selected
 
-		// Switch to parent block
-		cy.getByAriaLabel('Select parent block: Social Icons').click();
+		// Open block navigator
+		openBlockNavigator();
+
+		// Select target block
+		selectBlock('Social Icons');
 
 		cy.addNewTransition();
 
