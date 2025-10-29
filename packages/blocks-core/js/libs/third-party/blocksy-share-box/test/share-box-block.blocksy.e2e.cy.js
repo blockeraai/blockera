@@ -36,6 +36,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -120,6 +122,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -247,6 +251,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -335,6 +341,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -466,6 +474,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -550,6 +560,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera
@@ -677,6 +689,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -765,6 +779,8 @@ describe('Blocksy → Share Box Block → WP Compatibility', () => {
 
 				// Select target block
 				cy.getBlock('blocksy/share-box').first().click();
+
+				cy.addNewTransition();
 
 				//
 				// Test 1: WP data to Blockera

@@ -26,6 +26,8 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 		// Select target block
 		cy.getBlock('outermost/icon-block').first().click();
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//
@@ -83,6 +85,8 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('outermost/icon-block').first().click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera
@@ -227,6 +231,8 @@ describe('Icon Block → Inner Blocks → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('outermost/icon-block').first().click();
+
+			cy.addNewTransition();
 
 			//
 			// Test 1: WP data to Blockera

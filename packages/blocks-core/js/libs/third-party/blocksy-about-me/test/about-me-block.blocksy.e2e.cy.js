@@ -36,6 +36,8 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				// Select target block
 				cy.getBlock('blocksy/about-me').first().click();
 
+				cy.addNewTransition();
+
 				//
 				// Test 1: WP data to Blockera
 				//
