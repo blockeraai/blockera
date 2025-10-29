@@ -271,9 +271,6 @@ export const BlockBase: ComponentType<any> = (
 		className,
 		blockId: name,
 		isNormalState,
-		...(insideBlockInspector
-			? { getAttributes }
-			: { getAttributes: () => attributes }),
 		currentBlock,
 		currentState,
 		blockVariations,
@@ -286,6 +283,7 @@ export const BlockBase: ComponentType<any> = (
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,
+		getAttributes: () => attributes,
 		innerBlocks: additional?.blockeraInnerBlocks,
 	});
 
