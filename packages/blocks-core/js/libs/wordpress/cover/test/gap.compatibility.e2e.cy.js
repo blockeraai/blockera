@@ -14,7 +14,7 @@ describe('Quote Block → Gap → Compatibility', () => {
 
 	it('Simple value', () => {
 		appendBlocks(`<!-- wp:cover {"url":"https://placehold.co/600x400","id":58,"dimRatio":50,"customOverlayColor":"#a49893","isDark":false,"style":{"spacing":{"blockGap":"30px"}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-cover is-light"><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#a49893"></span><img class="wp-block-cover__image-background wp-image-58" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
+<div class="wp-block-cover is-light"><img class="wp-block-cover__image-background wp-image-58" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#a49893"></span><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
 <p class="has-text-align-center has-large-font-size">test paragraph 1</p>
 <!-- /wp:paragraph -->
 
