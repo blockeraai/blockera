@@ -100,7 +100,7 @@
 			padding: 0 1px;
 			min-width: 15px;
 			min-height: 14px;
-			letter-spacing: -0.3px;
+			letter-spacing: -0.75px;
 			font-weight: 500;
 			margin-left: -2px;
 			margin-right: -2px;
@@ -117,13 +117,11 @@
 				position: absolute;
 				left: calc(100% + 4px);
 				top: -2px;
+				white-space: nowrap;
 			}
 
 			b {
 				font-weight: 500;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
 			}
 		}
 
