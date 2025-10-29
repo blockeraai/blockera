@@ -373,7 +373,14 @@ function mergeBlockSettings(
 			const { attributes: _attributes, ...rest } = props;
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const attributes = useMemo(
-				() => omit(_attributes, ['content', 'text', 'summary']),
+				() =>
+					omit(_attributes, [
+						'content',
+						'text',
+						'summary',
+						'value',
+						'citation',
+					]),
 				[_attributes]
 			);
 
