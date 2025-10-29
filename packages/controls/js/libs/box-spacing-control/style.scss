@@ -93,15 +93,17 @@
 		.blockera-control-label {
 			pointer-events: all;
 			cursor: pointer;
-			font-size: 10px;
+			font-size: 11px;
 			display: flex;
 			justify-content: center;
 			align-items: center;
 			padding: 0 1px;
 			min-width: 15px;
-			height: 12px;
-			min-height: 12px;
+			min-height: 14px;
 			letter-spacing: -0.3px;
+			font-weight: 500;
+			margin-left: -2px;
+			margin-right: -2px;
 
 			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
 				background: #ffffff;
@@ -361,9 +363,8 @@
 
 		.blockera-control-label {
 			font-size: 11px;
-			min-height: 12px;
+			min-height: 14px;
 			line-height: 12px;
-			height: 12px;
 			font-weight: 500;
 
 			&.label-changed {

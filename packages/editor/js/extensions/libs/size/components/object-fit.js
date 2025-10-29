@@ -124,7 +124,7 @@ export const ObjectFit: ComponentType<Object> = ({
 					</p>
 				</>
 			}
-			columns="columns-2"
+			columns="1fr 160px"
 			className={'blockera-object-fit'}
 			{...labelProps}
 		>

@@ -65,7 +65,7 @@ export const AspectRatio: ComponentType<any> = ({
 
 	return (
 		<BaseControl
-			columns="1fr 150px"
+			columns="1fr 160px"
 			controlName="toggle-select"
 			label={__('Aspect Ratio', 'blockera')}
 			labelDescription={
@@ -95,9 +95,6 @@ export const AspectRatio: ComponentType<any> = ({
 					</p>
 				</>
 			}
-			style={{
-				'--gap': '0',
-			}}
 			{...labelProps}
 		>
 			<SelectControl

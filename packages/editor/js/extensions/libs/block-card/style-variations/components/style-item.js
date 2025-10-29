@@ -292,6 +292,10 @@ export const StyleItem = ({
 						<Icon icon="check" library="wp" iconSize="20" />
 					)}
 
+					{inGlobalStylesPanel &&
+						currentBlockStyleVariation &&
+						isActive && <Icon icon="pen" iconSize="18" />}
+
 					<Flex
 						gap={4}
 						alignItems={'center'}

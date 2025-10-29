@@ -214,9 +214,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 							</>
 						}
 						columns="1fr 160px"
-						style={{
-							'--gap': '0',
-						}}
 						options={[
 							{
 								label: __('Flex', 'blockera'),
@@ -391,10 +388,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											? 'value'
 											: 'val'
 									}
-									columns="1fr 120px"
-									style={{
-										'--gap': '0',
-									}}
+									columns="1fr 121px"
 									label={__('Flex Wrap', 'blockera')}
 									labelDescription={
 										<>
@@ -665,10 +659,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											</p>
 										</>
 									}
-									columns="1fr 150px"
-									style={{
-										'--gap': '0',
-									}}
+									columns="1fr 160px"
 									options={[
 										{
 											label: __('Flex Start', 'blockera'),

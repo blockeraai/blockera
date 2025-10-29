@@ -43,18 +43,11 @@ describe(
 					.click({ force: true });
 			});
 
-			// search for custom link
-			cy.get('.block-editor-inserter__popover input[type="search"]').type(
-				'Custom Link'
-			);
-
-			// insert
-			cy.get('button.editor-block-list-item-navigation-link')
+			cy.get('.components-popover')
 				.last()
-				.click({ force: true });
-
-			// enter link value
-			cy.get('input[type="text"]:focus').type('#test{enter}');
+				.within(() => {
+					cy.get('input[type="text"]').type('#test{enter}');
+				});
 
 			// switch to target block
 			cy.getBlock('core/navigation-link').last().click({ force: true });

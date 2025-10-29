@@ -87,9 +87,6 @@ export default function ({
 			}
 			id={'gap'}
 			columns="1fr 160px"
-			style={{
-				'--gap': '0',
-			}}
 			{...labelProps}
 		>
 			<Grid gap="10px" gridTemplateColumns="120px 30px">

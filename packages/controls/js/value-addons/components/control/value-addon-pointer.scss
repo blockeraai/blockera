@@ -18,7 +18,7 @@ body {
 	position: absolute;
 	top: -14px;
 	left: -14px;
-	z-index: 1;
+	z-index: 12;
 	width: 100px;
 	pointer-events: none;
 	direction: revert;
@@ -254,6 +254,7 @@ body {
 	&.blockera-value-addon-support-dynamic-value,
 	&.blockera-value-addon-support-variable {
 		position: relative;
+		z-index: 11;
 
 		&:hover {
 

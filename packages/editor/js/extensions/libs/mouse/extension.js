@@ -108,7 +108,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 								</p>
 							</>
 						}
-						columns="columns-2"
+						columns="1fr 160px"
 						options={cursorFieldOptions()}
 						type="custom"
 						customMenuPosition="top"
@@ -161,7 +161,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 								</p>
 							</>
 						}
-						columns="columns-2"
+						columns="1fr 160px"
 						options={userSelectOptions()}
 						type="native"
 						defaultValue={attributes.blockeraUserSelect.default}
@@ -213,7 +213,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 								</p>
 							</>
 						}
-						columns="columns-2"
+						columns="1fr 160px"
 						options={pointerEventsOptions()}
 						type="native"
 						defaultValue={attributes.blockeraPointerEvents.default}

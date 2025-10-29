@@ -3,6 +3,14 @@
 ### New Features
 - Added a way for blocks to get a unique ID automatically, making them work more smoothly.
 - Added support for blocks to better integrate with the block editor's features.
+- `Post Time to Read` block: add support.
+- `Post Word Count` block: add support.
+- `Math` block: add support.
+- `Post Comments Count` block: add support.
+- `Post Comments Link` block: add support.
+- `Term Template` block: add support.
+- `Term Query → Term Name` block: add support.
+- `Term Query → Term Count` block: add support.
 
 ### Improvements
 - `List` block: `Icon` inner block added.
@@ -18,6 +26,18 @@
 - Added E2E tests to check icon functionality of `Navigation Link` block.
 - Added E2E tests to check icon functionality of `Navigation Submenu` block.
 - Added E2E tests to check icon functionality of `Navigation Submenu` block.
+- Added E2E tests to check functionality and support of `Post Time to Read` block.
+- Added E2E tests to check functionality and support of `Post Word Count` block.
+- Added E2E tests to check functionality and support of `Math` block.
+- Added E2E tests to check functionality and support of `Accordion` block.
+- Added E2E tests to check functionality and support of `Accordion Item` block.
+- Added E2E tests to check functionality and support of `Accordion Heading` block.
+- Added E2E tests to check functionality and support of `Accordion Panel` block.
+- Added E2E tests to check functionality and support of `Post Comments Count` block.
+- Added E2E tests to check functionality and support of `Post Comments Link` block.
+- Added E2E tests to check functionality and support of `Term Template` block.
+- Added E2E tests to check functionality and support of `Term Query → Term Name` block.
+- Added E2E tests to check functionality and support of `Term Query → Term Count` block.
 
 ## 1.4.0 (2025-05-19)
 

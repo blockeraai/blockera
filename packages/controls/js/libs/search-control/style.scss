@@ -21,6 +21,15 @@
 		}
 	}
 
+	.components-input-control__container {
+
+		.components-input-control__prefix {
+			order: 100;
+			padding-inline-start: 0;
+			padding-inline-end: 8px;
+		}
+	}
+
 	.components-input-control__input {
 		height: var(--search-control-height) !important;
 		min-height: var(--search-control-height) !important;

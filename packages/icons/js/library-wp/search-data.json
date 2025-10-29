@@ -3,1189 +3,1988 @@
 		"iconName": "add-card",
 		"title": "add Card",
 		"library": "wp",
-		"tags": ["card", "credit", "payment"]
+		"tags": [
+			"card",
+			"credit",
+			"payment"
+		]
 	},
 	{
 		"iconName": "add-submenu",
 		"title": "add Submenu",
 		"library": "wp",
-		"tags": ["submenu", "expand"]
+		"tags": [
+			"submenu",
+			"expand"
+		]
 	},
 	{
 		"iconName": "add-template",
 		"title": "add Template",
 		"library": "wp",
-		"tags": ["template", "layout", "design"]
+		"tags": [
+			"template",
+			"layout",
+			"design"
+		]
 	},
 	{
 		"iconName": "align-center",
 		"title": "align Center",
 		"library": "wp",
-		"tags": ["center", "middle", "horizontal"]
+		"tags": [
+			"center",
+			"middle",
+			"horizontal"
+		]
 	},
 	{
 		"iconName": "align-justify",
 		"title": "align Justify",
 		"library": "wp",
-		"tags": ["justify", "even", "spread"]
+		"tags": [
+			"justify",
+			"even",
+			"spread"
+		]
 	},
 	{
 		"iconName": "align-left",
 		"title": "align Left",
 		"library": "wp",
-		"tags": ["left", "start", "beginning"]
+		"tags": [
+			"left",
+			"start",
+			"beginning"
+		]
 	},
 	{
 		"iconName": "align-none",
 		"title": "align None",
 		"library": "wp",
-		"tags": ["none", "default", "standard"]
+		"tags": [
+			"none",
+			"default",
+			"standard"
+		]
 	},
 	{
 		"iconName": "align-right",
 		"title": "align Right",
 		"library": "wp",
-		"tags": ["right", "end", "finish"]
+		"tags": [
+			"right",
+			"end",
+			"finish"
+		]
 	},
 	{
 		"iconName": "archive",
 		"title": "archive",
 		"library": "wp",
-		"tags": ["archive", "store", "save", "folder"]
+		"tags": [
+			"archive",
+			"store",
+			"save",
+			"folder"
+		]
 	},
 	{
 		"iconName": "arrow-down",
 		"title": "arrow Down",
 		"library": "wp",
-		"tags": ["down", "arrow", "point"]
+		"tags": [
+			"down",
+			"arrow",
+			"point"
+		]
 	},
 	{
 		"iconName": "arrow-left",
 		"title": "arrow Left",
 		"library": "wp",
-		"tags": ["back", "previous", "return"]
+		"tags": [
+			"back",
+			"previous",
+			"return"
+		]
 	},
 	{
 		"iconName": "arrow-right",
 		"title": "arrow Right",
 		"library": "wp",
-		"tags": ["forward", "next", "proceed"]
+		"tags": [
+			"forward",
+			"next",
+			"proceed"
+		]
 	},
 	{
 		"iconName": "arrow-up",
 		"title": "arrow Up",
 		"library": "wp",
-		"tags": ["upward", "ascend", "climb"]
+		"tags": [
+			"upward",
+			"ascend",
+			"climb"
+		]
 	},
 	{
 		"iconName": "aspect-ratio",
 		"title": "aspect Ratio",
 		"library": "wp",
-		"tags": ["proportion", "scale", "dimension"]
+		"tags": [
+			"proportion",
+			"scale",
+			"dimension"
+		]
 	},
 	{
 		"iconName": "at-symbol",
 		"title": "at Symbol",
 		"library": "wp",
-		"tags": ["email", "contact", "address"]
+		"tags": [
+			"email",
+			"contact",
+			"address"
+		]
 	},
 	{
 		"iconName": "audio",
 		"title": "audio",
 		"library": "wp",
-		"tags": ["sound", "music", "voice"]
+		"tags": [
+			"sound",
+			"music",
+			"voice"
+		]
 	},
 	{
 		"iconName": "backup",
 		"title": "backup",
 		"library": "wp",
-		"tags": ["save", "copy", "protect"]
+		"tags": [
+			"save",
+			"copy",
+			"protect"
+		]
 	},
 	{
 		"iconName": "block-default",
 		"title": "block Default",
 		"library": "wp",
-		"tags": ["default", "standard", "normal"]
+		"tags": [
+			"default",
+			"standard",
+			"normal"
+		]
 	},
 	{
 		"iconName": "block-meta",
 		"title": "block Meta",
 		"library": "wp",
-		"tags": ["metadata", "information", "data"]
+		"tags": [
+			"metadata",
+			"information",
+			"data"
+		]
 	},
 	{
 		"iconName": "block-table",
 		"title": "block Table",
 		"library": "wp",
-		"tags": ["table", "list", "chart"]
+		"tags": [
+			"table",
+			"list",
+			"chart"
+		]
 	},
 	{
 		"iconName": "border",
 		"title": "border",
 		"library": "wp",
-		"tags": ["frame", "outline", "edge", "circle"]
+		"tags": [
+			"frame",
+			"outline",
+			"edge",
+			"circle"
+		]
 	},
 	{
 		"iconName": "box",
 		"title": "box",
 		"library": "wp",
-		"tags": ["package", "container", "carton"]
+		"tags": [
+			"package",
+			"container",
+			"carton"
+		]
 	},
 	{
 		"iconName": "brush",
 		"title": "brush",
 		"library": "wp",
-		"tags": ["paintbrush", "tool", "applicator"]
+		"tags": [
+			"paintbrush",
+			"tool",
+			"applicator"
+		]
 	},
 	{
 		"iconName": "bug",
 		"title": "bug",
 		"library": "wp",
-		"tags": ["insect", "pest", "creepy-crawly"]
+		"tags": [
+			"insect",
+			"pest",
+			"creepy-crawly"
+		]
 	},
 	{
 		"iconName": "button",
 		"title": "button",
 		"library": "wp",
-		"tags": ["switch", "control", "cta", "click"]
+		"tags": [
+			"switch",
+			"control",
+			"cta",
+			"click"
+		]
 	},
 	{
 		"iconName": "buttons",
 		"title": "buttons",
 		"library": "wp",
-		"tags": ["controls", "options", "choices", "cta"]
+		"tags": [
+			"controls",
+			"options",
+			"choices",
+			"cta"
+		]
 	},
 	{
 		"iconName": "calendar",
 		"title": "calendar",
 		"library": "wp",
-		"tags": ["schedule", "agenda", "datebook"]
+		"tags": [
+			"schedule",
+			"agenda",
+			"datebook"
+		]
 	},
 	{
 		"iconName": "cancel-circle-filled",
 		"title": "cancel Circle Filled",
 		"library": "wp",
-		"tags": ["delete", "remove", "erase"]
+		"tags": [
+			"delete",
+			"remove",
+			"erase"
+		]
 	},
 	{
 		"iconName": "caption",
 		"title": "caption",
 		"library": "wp",
-		"tags": ["heading", "title", "headline"]
+		"tags": [
+			"heading",
+			"title",
+			"headline"
+		]
 	},
 	{
 		"iconName": "capture-photo",
 		"title": "capture Photo",
 		"library": "wp",
-		"tags": ["take picture", "snap photo", "shoot image"]
+		"tags": [
+			"take picture",
+			"snap photo",
+			"shoot image"
+		]
 	},
 	{
 		"iconName": "capture-video",
 		"title": "capture Video",
 		"library": "wp",
-		"tags": ["video recording", "film", "record", "camera"]
+		"tags": [
+			"video recording",
+			"film",
+			"record",
+			"camera"
+		]
 	},
 	{
 		"iconName": "category",
 		"title": "category",
 		"library": "wp",
-		"tags": ["classification", "grouping", "categorization", "folder"]
+		"tags": [
+			"classification",
+			"grouping",
+			"categorization",
+			"folder"
+		]
 	},
 	{
 		"iconName": "chart-bar",
 		"title": "chart Bar",
 		"library": "wp",
-		"tags": ["graph", "statistics", "data visualization"]
+		"tags": [
+			"graph",
+			"statistics",
+			"data visualization"
+		]
 	},
 	{
 		"iconName": "check",
 		"title": "check",
 		"library": "wp",
-		"tags": ["tick", "confirm", "approve"]
+		"tags": [
+			"tick",
+			"confirm",
+			"approve"
+		]
 	},
 	{
 		"iconName": "chevron-down",
 		"title": "chevron Down",
 		"library": "wp",
-		"tags": ["arrow down", "scroll", "dropdown"]
+		"tags": [
+			"arrow down",
+			"scroll",
+			"dropdown"
+		]
 	},
 	{
 		"iconName": "chevron-left",
 		"title": "chevron Left",
 		"library": "wp",
-		"tags": ["arrow left", "back", "previous"]
+		"tags": [
+			"arrow left",
+			"back",
+			"previous"
+		]
 	},
 	{
 		"iconName": "chevron-left-small",
 		"title": "chevron Left Small",
 		"library": "wp",
-		"tags": ["arrow left", "back", "previous"]
+		"tags": [
+			"arrow left",
+			"back",
+			"previous"
+		]
 	},
 	{
 		"iconName": "chevron-right",
 		"title": "chevron Right",
 		"library": "wp",
-		"tags": ["arrow right", "forward", "next"]
+		"tags": [
+			"arrow right",
+			"forward",
+			"next"
+		]
 	},
 	{
 		"iconName": "chevron-right-small",
 		"title": "chevron Right Small",
 		"library": "wp",
-		"tags": ["arrow right", "forward", "next"]
+		"tags": [
+			"arrow right",
+			"forward",
+			"next"
+		]
 	},
 	{
 		"iconName": "chevron-up",
 		"title": "chevron Up",
 		"library": "wp",
-		"tags": ["arrow up", "scroll", "scroll to top"]
+		"tags": [
+			"arrow up",
+			"scroll",
+			"scroll to top"
+		]
 	},
 	{
 		"iconName": "chevron-up-down",
 		"title": "chevron Up Down",
 		"library": "wp",
-		"tags": ["Arrow", "Directional", "Toggle"]
+		"tags": [
+			"Arrow",
+			"Directional",
+			"Toggle"
+		]
 	},
 	{
 		"iconName": "classic",
 		"title": "classic",
 		"library": "wp",
-		"tags": ["Vintage", "Traditional", "Timeless"]
+		"tags": [
+			"Vintage",
+			"Traditional",
+			"Timeless"
+		]
 	},
 	{
 		"iconName": "close",
 		"title": "close",
 		"library": "wp",
-		"tags": ["Delete", "Remove", "Exit"]
+		"tags": [
+			"Delete",
+			"Remove",
+			"Exit"
+		]
 	},
 	{
 		"iconName": "close-small",
 		"title": "close Small",
 		"library": "wp",
-		"tags": ["Delete", "Remove", "Exit"]
+		"tags": [
+			"Delete",
+			"Remove",
+			"Exit"
+		]
 	},
 	{
 		"iconName": "cloud",
 		"title": "cloud",
 		"library": "wp",
-		"tags": ["Weather", "Storage", "Internet"]
+		"tags": [
+			"Weather",
+			"Storage",
+			"Internet"
+		]
 	},
 	{
 		"iconName": "cloud-upload",
 		"title": "cloud Upload",
 		"library": "wp",
-		"tags": ["Upload", "Save", "Backup"]
+		"tags": [
+			"Upload",
+			"Save",
+			"Backup"
+		]
 	},
 	{
 		"iconName": "code",
 		"title": "code",
 		"library": "wp",
-		"tags": ["Programming", "Markup", "Syntax"]
+		"tags": [
+			"Programming",
+			"Markup",
+			"Syntax"
+		]
 	},
 	{
 		"iconName": "cog",
 		"title": "cog",
 		"library": "wp",
-		"tags": ["Settings", "Gear", "Configuration"]
+		"tags": [
+			"Settings",
+			"Gear",
+			"Configuration"
+		]
 	},
 	{
 		"iconName": "color",
 		"title": "color",
 		"library": "wp",
-		"tags": ["Palette", "Hue", "Tint"]
+		"tags": [
+			"Palette",
+			"Hue",
+			"Tint"
+		]
 	},
 	{
 		"iconName": "column",
 		"title": "column",
 		"library": "wp",
-		"tags": ["Layout", "Structure", "Arrangement"]
+		"tags": [
+			"Layout",
+			"Structure",
+			"Arrangement"
+		]
 	},
 	{
 		"iconName": "columns",
 		"title": "columns",
 		"library": "wp",
-		"tags": ["Layout", "Structure", "Arrangement"]
+		"tags": [
+			"Layout",
+			"Structure",
+			"Arrangement"
+		]
 	},
 	{
 		"iconName": "comment",
 		"title": "comment",
 		"library": "wp",
-		"tags": ["message", "response", "feedback"]
+		"tags": [
+			"message",
+			"response",
+			"feedback"
+		]
 	},
 	{
 		"iconName": "comment-author-avatar",
 		"title": "comment Author Avatar",
 		"library": "wp",
-		"tags": ["profile", "user", "picture"]
+		"tags": [
+			"profile",
+			"user",
+			"picture"
+		]
 	},
 	{
 		"iconName": "comment-author-name",
 		"title": "comment Author Name",
 		"library": "wp",
-		"tags": ["username", "handle", "screen name"]
+		"tags": [
+			"username",
+			"handle",
+			"screen name"
+		]
 	},
 	{
 		"iconName": "comment-content",
 		"title": "comment Content",
 		"library": "wp",
-		"tags": ["text", "message body", "feedback content"]
+		"tags": [
+			"text",
+			"message body",
+			"feedback content"
+		]
 	},
 	{
 		"iconName": "comment-edit-link",
 		"title": "comment Edit Link",
 		"library": "wp",
-		"tags": ["update", "modify", "change", "refresh"]
+		"tags": [
+			"update",
+			"modify",
+			"change",
+			"refresh"
+		]
 	},
 	{
 		"iconName": "comment-reply-link",
 		"title": "comment Reply Link",
 		"library": "wp",
-		"tags": ["response", "answer", "react"]
+		"tags": [
+			"response",
+			"answer",
+			"react"
+		]
 	},
 	{
 		"iconName": "copy",
 		"title": "copy",
 		"library": "wp",
-		"tags": ["duplicate", "replicate", "clone"]
+		"tags": [
+			"duplicate",
+			"replicate",
+			"clone"
+		]
 	},
 	{
 		"iconName": "cover",
 		"title": "cover",
 		"library": "wp",
-		"tags": ["banner", "header", "top image"]
+		"tags": [
+			"banner",
+			"header",
+			"top image"
+		]
 	},
 	{
 		"iconName": "create",
 		"title": "create",
 		"library": "wp",
-		"tags": ["make", "produce", "generate"]
+		"tags": [
+			"make",
+			"produce",
+			"generate"
+		]
 	},
 	{
 		"iconName": "crop",
 		"title": "crop",
 		"library": "wp",
-		"tags": ["cut", "trim", "resize"]
+		"tags": [
+			"cut",
+			"trim",
+			"resize"
+		]
 	},
 	{
 		"iconName": "currency-dollar",
 		"title": "currency Dollar",
 		"library": "wp",
-		"tags": ["money", "cash", "USD"]
+		"tags": [
+			"money",
+			"cash",
+			"USD"
+		]
 	},
 	{
 		"iconName": "currency-euro",
 		"title": "currency Euro",
 		"library": "wp",
-		"tags": ["euro", "currency", "EUR"]
+		"tags": [
+			"euro",
+			"currency",
+			"EUR"
+		]
 	},
 	{
 		"iconName": "currency-pound",
 		"title": "currency Pound",
 		"library": "wp",
-		"tags": ["pound", "money", "GBP"]
+		"tags": [
+			"pound",
+			"money",
+			"GBP"
+		]
 	},
 	{
 		"iconName": "custom-link",
 		"title": "custom Link",
 		"library": "wp",
-		"tags": ["hyperlink", "URL", "link"]
+		"tags": [
+			"hyperlink",
+			"URL",
+			"link"
+		]
 	},
 	{
 		"iconName": "custom-post-type",
 		"title": "custom Post Type",
 		"library": "wp",
-		"tags": ["post type", "custom", "content"]
+		"tags": [
+			"post type",
+			"custom",
+			"content"
+		]
 	},
 	{
 		"iconName": "dashboard",
 		"title": "dashboard",
 		"library": "wp",
-		"tags": ["dashboard", "overview", "statistics", "panel"]
+		"tags": [
+			"dashboard",
+			"overview",
+			"statistics",
+			"panel"
+		]
 	},
 	{
 		"iconName": "desktop",
 		"title": "desktop",
 		"library": "wp",
-		"tags": ["computer", "PC", "workstation"]
+		"tags": [
+			"computer",
+			"PC",
+			"workstation"
+		]
 	},
 	{
 		"iconName": "download",
 		"title": "download",
 		"library": "wp",
-		"tags": ["downloading", "save", "get"]
+		"tags": [
+			"downloading",
+			"save",
+			"get"
+		]
 	},
 	{
 		"iconName": "drag-handle",
 		"title": "drag Handle",
 		"library": "wp",
-		"tags": ["move", "grab", "handle"]
+		"tags": [
+			"move",
+			"grab",
+			"handle"
+		]
 	},
 	{
 		"iconName": "drawer-left",
 		"title": "drawer Left",
 		"library": "wp",
-		"tags": ["drawer", "menu", "navigation"]
+		"tags": [
+			"drawer",
+			"menu",
+			"navigation"
+		]
 	},
 	{
 		"iconName": "drawer-right",
 		"title": "drawer Right",
 		"library": "wp",
-		"tags": ["drawer", "menu", "navigation"]
+		"tags": [
+			"drawer",
+			"menu",
+			"navigation"
+		]
 	},
 	{
 		"iconName": "edit",
 		"title": "edit",
 		"library": "wp",
-		"tags": ["modify", "change", "update"]
+		"tags": [
+			"modify",
+			"change",
+			"update"
+		]
 	},
 	{
 		"iconName": "external",
 		"title": "external",
 		"library": "wp",
-		"tags": ["outside", "third-party", "web"]
+		"tags": [
+			"outside",
+			"third-party",
+			"web"
+		]
 	},
 	{
 		"iconName": "file",
 		"title": "file",
 		"library": "wp",
-		"tags": ["document", "data", "record"]
+		"tags": [
+			"document",
+			"data",
+			"record"
+		]
 	},
 	{
 		"iconName": "filter",
 		"title": "filter",
 		"library": "wp",
-		"tags": ["sort", "organize", "refine"]
+		"tags": [
+			"sort",
+			"organize",
+			"refine"
+		]
 	},
 	{
 		"iconName": "flip-horizontal",
 		"title": "flip Horizontal",
 		"library": "wp",
-		"tags": ["mirror", "reverse", "flip left"]
+		"tags": [
+			"mirror",
+			"reverse",
+			"flip left"
+		]
 	},
 	{
 		"iconName": "flip-vertical",
 		"title": "flip Vertical",
 		"library": "wp",
-		"tags": ["mirror up", "reverse up", "flip top"]
+		"tags": [
+			"mirror up",
+			"reverse up",
+			"flip top"
+		]
 	},
 	{
 		"iconName": "footer",
 		"title": "footer",
 		"library": "wp",
-		"tags": ["bottom", "end", "finishing"]
+		"tags": [
+			"bottom",
+			"end",
+			"finishing"
+		]
 	},
 	{
 		"iconName": "format-bold",
 		"title": "format Bold",
 		"library": "wp",
-		"tags": ["strong", "heavy", "thick"]
+		"tags": [
+			"strong",
+			"heavy",
+			"thick"
+		]
 	},
 	{
 		"iconName": "format-capitalize",
 		"title": "format Capitalize",
 		"library": "wp",
-		"tags": ["uppercase", "first letter", "capitalize"]
+		"tags": [
+			"uppercase",
+			"first letter",
+			"capitalize"
+		]
 	},
 	{
 		"iconName": "format-indent",
 		"title": "format Indent",
 		"library": "wp",
-		"tags": ["tab", "align", "spacing"]
+		"tags": [
+			"tab",
+			"align",
+			"spacing"
+		]
 	},
 	{
 		"iconName": "format-indent-r-t-l",
 		"title": "format Indent R T L",
 		"library": "wp",
-		"tags": ["tab right", "align right", "spacing right"]
+		"tags": [
+			"tab right",
+			"align right",
+			"spacing right"
+		]
 	},
 	{
 		"iconName": "format-italic",
 		"title": "format Italic",
 		"library": "wp",
-		"tags": ["italic", "emphasis", "text style"]
+		"tags": [
+			"italic",
+			"emphasis",
+			"text style"
+		]
 	},
 	{
 		"iconName": "format-list-bullets",
 		"title": "format List Bullets",
 		"library": "wp",
-		"tags": ["list", "bullet", "unordered list"]
+		"tags": [
+			"list",
+			"bullet",
+			"unordered list"
+		]
 	},
 	{
 		"iconName": "format-list-bullets-r-t-l",
 		"title": "format List Bullets R T L",
 		"library": "wp",
-		"tags": ["list", "bullet", "right to left"]
+		"tags": [
+			"list",
+			"bullet",
+			"right to left"
+		]
 	},
 	{
 		"iconName": "format-list-numbered",
 		"title": "format List Numbered",
 		"library": "wp",
-		"tags": ["list", "numbered list", "ordered list"]
+		"tags": [
+			"list",
+			"numbered list",
+			"ordered list"
+		]
 	},
 	{
 		"iconName": "format-list-numbered-r-t-l",
 		"title": "format List Numbered R T L",
 		"library": "wp",
-		"tags": ["list", "numbered list", "ordered list", "right to left"]
+		"tags": [
+			"list",
+			"numbered list",
+			"ordered list",
+			"right to left"
+		]
 	},
 	{
 		"iconName": "format-lowercase",
 		"title": "format Lowercase",
 		"library": "wp",
-		"tags": ["lowercase", "text transform"]
+		"tags": [
+			"lowercase",
+			"text transform"
+		]
 	},
 	{
 		"iconName": "format-ltr",
 		"title": "format Ltr",
 		"library": "wp",
-		"tags": ["left to right", "text direction"]
+		"tags": [
+			"left to right",
+			"text direction"
+		]
 	},
 	{
 		"iconName": "format-outdent",
 		"title": "format Outdent",
 		"library": "wp",
-		"tags": ["outdent", "decrease indent", "move left"]
+		"tags": [
+			"outdent",
+			"decrease indent",
+			"move left"
+		]
 	},
 	{
 		"iconName": "format-outdent-r-t-l",
 		"title": "format Outdent RTL",
 		"library": "wp",
-		"tags": ["outdent", "decrease indent", "move right to left"]
+		"tags": [
+			"outdent",
+			"decrease indent",
+			"move right to left"
+		]
 	},
 	{
 		"iconName": "format-rtl",
 		"title": "format Rtl",
 		"library": "wp",
-		"tags": ["right to left", "rtl text", "bidirectional"]
+		"tags": [
+			"right to left",
+			"rtl text",
+			"bidirectional"
+		]
 	},
 	{
 		"iconName": "format-strikethrough",
 		"title": "format Strikethrough",
 		"library": "wp",
-		"tags": ["line through", "delete", "cancel"]
+		"tags": [
+			"line through",
+			"delete",
+			"cancel"
+		]
 	},
 	{
 		"iconName": "format-underline",
 		"title": "format Underline",
 		"library": "wp",
-		"tags": ["underscore", "emphasis", "highlight"]
+		"tags": [
+			"underscore",
+			"emphasis",
+			"highlight"
+		]
 	},
 	{
 		"iconName": "format-uppercase",
 		"title": "format Uppercase",
 		"library": "wp",
-		"tags": ["all caps", "uppercase letters", "capitalized"]
+		"tags": [
+			"all caps",
+			"uppercase letters",
+			"capitalized"
+		]
 	},
 	{
 		"iconName": "fullscreen",
 		"title": "fullscreen",
 		"library": "wp",
-		"tags": ["full screen", "maximize", "expand"]
+		"tags": [
+			"full screen",
+			"maximize",
+			"expand"
+		]
 	},
 	{
 		"iconName": "gallery",
 		"title": "gallery",
 		"library": "wp",
-		"tags": ["pictures", "albums", "photos"]
+		"tags": [
+			"pictures",
+			"albums",
+			"photos"
+		]
 	},
 	{
 		"iconName": "globe",
 		"title": "globe",
 		"library": "wp",
-		"tags": ["world", "earth", "planet"]
+		"tags": [
+			"world",
+			"earth",
+			"planet"
+		]
 	},
 	{
 		"iconName": "grid",
 		"title": "grid",
 		"library": "wp",
-		"tags": ["table", "chart", "graph"]
+		"tags": [
+			"table",
+			"chart",
+			"graph"
+		]
 	},
 	{
 		"iconName": "group",
 		"title": "group",
 		"library": "wp",
-		"tags": ["team", "members", "collaboration"]
+		"tags": [
+			"team",
+			"members",
+			"collaboration"
+		]
 	},
 	{
 		"iconName": "handle",
 		"title": "handle",
 		"library": "wp",
-		"tags": ["drag", "move", "manipulate"]
+		"tags": [
+			"drag",
+			"move",
+			"manipulate"
+		]
 	},
 	{
 		"iconName": "header",
 		"title": "header",
 		"library": "wp",
-		"tags": ["title", "top", "heading"]
+		"tags": [
+			"title",
+			"top",
+			"heading"
+		]
 	},
 	{
 		"iconName": "heading",
 		"title": "heading",
 		"library": "wp",
-		"tags": ["title", "header", "heading text"]
+		"tags": [
+			"title",
+			"header",
+			"heading text"
+		]
 	},
 	{
 		"iconName": "help",
 		"title": "help",
 		"library": "wp",
-		"tags": ["question", "support", "assistance"]
+		"tags": [
+			"question",
+			"support",
+			"assistance"
+		]
 	},
 	{
 		"iconName": "help-filled",
 		"title": "help Filled",
 		"library": "wp",
-		"tags": ["question", "support", "assistance"]
+		"tags": [
+			"question",
+			"support",
+			"assistance"
+		]
 	},
 	{
 		"iconName": "home",
 		"title": "home",
 		"library": "wp",
-		"tags": ["house", "residence", "dwelling"]
+		"tags": [
+			"house",
+			"residence",
+			"dwelling"
+		]
 	},
 	{
 		"iconName": "html",
 		"title": "html",
 		"library": "wp",
-		"tags": ["web", "markup", "coding"]
+		"tags": [
+			"web",
+			"markup",
+			"coding"
+		]
 	},
 	{
 		"iconName": "image",
 		"title": "image",
 		"library": "wp",
-		"tags": ["picture", "photo", "graphic"]
+		"tags": [
+			"picture",
+			"photo",
+			"graphic"
+		]
 	},
 	{
 		"iconName": "inbox",
 		"title": "inbox",
 		"library": "wp",
-		"tags": ["mail", "message", "email"]
+		"tags": [
+			"mail",
+			"message",
+			"email"
+		]
 	},
 	{
 		"iconName": "info",
 		"title": "info",
 		"library": "wp",
-		"tags": ["information", "details", "facts"]
+		"tags": [
+			"information",
+			"details",
+			"facts"
+		]
 	},
 	{
 		"iconName": "insert-after",
 		"title": "insert After",
 		"library": "wp",
-		"tags": ["add", "append", "attach"]
+		"tags": [
+			"add",
+			"append",
+			"attach"
+		]
 	},
 	{
 		"iconName": "insert-before",
 		"title": "insert Before",
 		"library": "wp",
-		"tags": ["add", "prepend", "insert"]
+		"tags": [
+			"add",
+			"prepend",
+			"insert"
+		]
 	},
 	{
 		"iconName": "institution",
 		"title": "institution",
 		"library": "wp",
-		"tags": ["organization", "establishment", "foundation"]
+		"tags": [
+			"organization",
+			"establishment",
+			"foundation"
+		]
 	},
 	{
 		"iconName": "justify-center",
 		"title": "justify Center",
 		"library": "wp",
-		"tags": ["align center", "centered text", "centering"]
+		"tags": [
+			"align center",
+			"centered text",
+			"centering"
+		]
 	},
 	{
 		"iconName": "justify-left",
 		"title": "justify Left",
 		"library": "wp",
-		"tags": ["align left", "left alignment", "left positioning"]
+		"tags": [
+			"align left",
+			"left alignment",
+			"left positioning"
+		]
 	},
 	{
 		"iconName": "justify-right",
 		"title": "justify Right",
 		"library": "wp",
-		"tags": ["align right", "right alignment", "right positioning"]
+		"tags": [
+			"align right",
+			"right alignment",
+			"right positioning"
+		]
 	},
 	{
 		"iconName": "justify-space-between",
 		"title": "justify Space Between",
 		"library": "wp",
-		"tags": ["space between", "even spacing", "equal distance"]
+		"tags": [
+			"space between",
+			"even spacing",
+			"equal distance"
+		]
 	},
 	{
 		"iconName": "justify-stretch",
 		"title": "justify Stretch",
 		"library": "wp",
-		"tags": ["stretch", "expand", "extend"]
+		"tags": [
+			"stretch",
+			"expand",
+			"extend"
+		]
 	},
 	{
 		"iconName": "key",
 		"title": "key",
 		"library": "wp",
-		"tags": ["lock", "unlock", "access"]
+		"tags": [
+			"lock",
+			"unlock",
+			"access"
+		]
 	},
 	{
 		"iconName": "keyboard-close",
 		"title": "keyboard Close",
 		"library": "wp",
-		"tags": ["exit keyboard", "close keyboard", "dismiss keyboard"]
+		"tags": [
+			"exit keyboard",
+			"close keyboard",
+			"dismiss keyboard"
+		]
 	},
 	{
 		"iconName": "keyboard-return",
 		"title": "keyboard Return",
 		"library": "wp",
-		"tags": ["return", "go back", "previous screen"]
+		"tags": [
+			"return",
+			"go back",
+			"previous screen"
+		]
 	},
 	{
 		"iconName": "layout",
 		"title": "layout",
 		"library": "wp",
-		"tags": ["design", "arrangement", "format"]
+		"tags": [
+			"design",
+			"arrangement",
+			"format"
+		]
 	},
 	{
 		"iconName": "lifesaver",
 		"title": "lifesaver",
 		"library": "wp",
-		"tags": ["help", "rescue", "emergency"]
+		"tags": [
+			"help",
+			"rescue",
+			"emergency"
+		]
 	},
 	{
 		"iconName": "line-dashed",
 		"title": "line Dashed",
 		"library": "wp",
-		"tags": ["dash", "dotted", "striped"]
+		"tags": [
+			"dash",
+			"dotted",
+			"striped"
+		]
 	},
 	{
 		"iconName": "line-dotted",
 		"title": "line Dotted",
 		"library": "wp",
-		"tags": ["dot", "dashed", "striped"]
+		"tags": [
+			"dot",
+			"dashed",
+			"striped"
+		]
 	},
 	{
 		"iconName": "line-solid",
 		"title": "line Solid",
 		"library": "wp",
-		"tags": ["straight", "continuous", "unbroken"]
+		"tags": [
+			"straight",
+			"continuous",
+			"unbroken"
+		]
 	},
 	{
 		"iconName": "link",
 		"title": "link",
 		"library": "wp",
-		"tags": ["connect", "join", "attach"]
+		"tags": [
+			"connect",
+			"join",
+			"attach"
+		]
 	},
 	{
 		"iconName": "link-off",
 		"title": "link Off",
 		"library": "wp",
-		"tags": ["disconnect", "detach", "unplug"]
+		"tags": [
+			"disconnect",
+			"detach",
+			"unplug"
+		]
 	},
 	{
 		"iconName": "list",
 		"title": "list",
 		"library": "wp",
-		"tags": ["inventory", "agenda", "schedule"]
+		"tags": [
+			"inventory",
+			"agenda",
+			"schedule"
+		]
 	},
 	{
 		"iconName": "list-item",
 		"title": "list Item",
 		"library": "wp",
-		"tags": ["task", "to-do", "checkbox"]
+		"tags": [
+			"task",
+			"to-do",
+			"checkbox"
+		]
 	},
 	{
 		"iconName": "list-view",
 		"title": "list View",
 		"library": "wp",
-		"tags": ["display", "arrange", "order"]
+		"tags": [
+			"display",
+			"arrange",
+			"order"
+		]
 	},
 	{
 		"iconName": "lock",
 		"title": "lock",
 		"library": "wp",
-		"tags": ["secure", "protect", "seal"]
+		"tags": [
+			"secure",
+			"protect",
+			"seal"
+		]
 	},
 	{
 		"iconName": "lock-outline",
 		"title": "lock Outline",
 		"library": "wp",
-		"tags": ["security", "key", "protection"]
+		"tags": [
+			"security",
+			"key",
+			"protection"
+		]
 	},
 	{
 		"iconName": "lock-small",
 		"title": "lock Small",
 		"library": "wp",
-		"tags": ["security", "padlock", "password"]
+		"tags": [
+			"security",
+			"padlock",
+			"password"
+		]
 	},
 	{
 		"iconName": "login",
 		"title": "login",
 		"library": "wp",
-		"tags": ["user", "username", "authentication"]
+		"tags": [
+			"user",
+			"username",
+			"authentication"
+		]
 	},
 	{
 		"iconName": "loop",
 		"title": "loop",
 		"library": "wp",
-		"tags": ["repeat", "circular", "refresh"]
+		"tags": [
+			"repeat",
+			"circular",
+			"refresh"
+		]
 	},
 	{
 		"iconName": "map-marker",
 		"title": "map Marker",
 		"library": "wp",
-		"tags": ["location", "pin", "place"]
+		"tags": [
+			"location",
+			"pin",
+			"place"
+		]
 	},
 	{
 		"iconName": "media",
 		"title": "media",
 		"library": "wp",
-		"tags": ["video", "audio", "multimedia"]
+		"tags": [
+			"video",
+			"audio",
+			"multimedia"
+		]
 	},
 	{
 		"iconName": "media-and-text",
 		"title": "media And Text",
 		"library": "wp",
-		"tags": ["content", "article", "blog"]
+		"tags": [
+			"content",
+			"article",
+			"blog"
+		]
 	},
 	{
 		"iconName": "megaphone",
 		"title": "megaphone",
 		"library": "wp",
-		"tags": ["announcement", "broadcast", "loud"]
+		"tags": [
+			"announcement",
+			"broadcast",
+			"loud"
+		]
 	},
 	{
 		"iconName": "menu",
 		"title": "menu",
 		"library": "wp",
-		"tags": ["navigation", "list", "options"]
+		"tags": [
+			"navigation",
+			"list",
+			"options"
+		]
 	},
 	{
 		"iconName": "mobile",
 		"title": "mobile",
 		"library": "wp",
-		"tags": ["cellphone", "smartphone", "device"]
+		"tags": [
+			"cellphone",
+			"smartphone",
+			"device"
+		]
 	},
 	{
 		"iconName": "more",
 		"title": "more",
 		"library": "wp",
-		"tags": ["additional", "extra", "plus"]
+		"tags": [
+			"additional",
+			"extra",
+			"plus"
+		]
 	},
 	{
 		"iconName": "more-horizontal",
 		"title": "more Horizontal",
 		"library": "wp",
-		"tags": ["menu", "options", "settings"]
+		"tags": [
+			"menu",
+			"options",
+			"settings"
+		]
 	},
 	{
 		"iconName": "more-horizontal-mobile",
 		"title": "more Horizontal Mobile",
 		"library": "wp",
-		"tags": ["mobile menu", "options menu", "settings menu"]
+		"tags": [
+			"mobile menu",
+			"options menu",
+			"settings menu"
+		]
 	},
 	{
 		"iconName": "more-vertical",
 		"title": "more Vertical",
 		"library": "wp",
-		"tags": ["dropdown", "menu", "options", "kebab"]
+		"tags": [
+			"dropdown",
+			"menu",
+			"options",
+			"kebab"
+		]
 	},
 	{
 		"iconName": "move-to",
 		"title": "move To",
 		"library": "wp",
-		"tags": ["transfer", "relocate", "shift"]
+		"tags": [
+			"transfer",
+			"relocate",
+			"shift"
+		]
 	},
 	{
 		"iconName": "navigation",
 		"title": "navigation",
 		"library": "wp",
-		"tags": ["directions", "route", "map"]
+		"tags": [
+			"directions",
+			"route",
+			"map"
+		]
 	},
 	{
 		"iconName": "next",
 		"title": "next",
 		"library": "wp",
-		"tags": ["forward", "proceed", "continue"]
+		"tags": [
+			"forward",
+			"proceed",
+			"continue"
+		]
 	},
 	{
 		"iconName": "not-found",
 		"title": "not Found",
 		"library": "wp",
-		"tags": ["error", "missing", "unavailable"]
+		"tags": [
+			"error",
+			"missing",
+			"unavailable"
+		]
 	},
 	{
 		"iconName": "overlay-text",
 		"title": "overlay Text",
 		"library": "wp",
-		"tags": ["text on top", "superimposed text", "layered text"]
+		"tags": [
+			"text on top",
+			"superimposed text",
+			"layered text"
+		]
 	},
 	{
 		"iconName": "page",
 		"title": "page",
 		"library": "wp",
-		"tags": ["webpage", "site page", "digital page"]
+		"tags": [
+			"webpage",
+			"site page",
+			"digital page"
+		]
 	},
 	{
 		"iconName": "page-break",
 		"title": "page Break",
 		"library": "wp",
-		"tags": ["break", "divider", "separator"]
+		"tags": [
+			"break",
+			"divider",
+			"separator"
+		]
 	},
 	{
 		"iconName": "pages",
 		"title": "pages",
 		"library": "wp",
-		"tags": ["documents", "sheets", "files"]
+		"tags": [
+			"documents",
+			"sheets",
+			"files"
+		]
 	},
 	{
 		"iconName": "paragraph",
 		"title": "paragraph",
 		"library": "wp",
-		"tags": ["text", "writing", "composition"]
+		"tags": [
+			"text",
+			"writing",
+			"composition"
+		]
 	},
 	{
 		"iconName": "payment",
 		"title": "payment",
 		"library": "wp",
-		"tags": ["transactions", "billing", "money"]
+		"tags": [
+			"transactions",
+			"billing",
+			"money"
+		]
 	},
 	{
 		"iconName": "pencil",
 		"title": "pencil",
 		"library": "wp",
-		"tags": ["writing", "drawing", "sketching"]
+		"tags": [
+			"writing",
+			"drawing",
+			"sketching"
+		]
 	},
 	{
 		"iconName": "people",
 		"title": "people",
 		"library": "wp",
-		"tags": ["human", "users", "population"]
+		"tags": [
+			"human",
+			"users",
+			"population"
+		]
 	},
 	{
 		"iconName": "percent",
 		"title": "percent",
 		"library": "wp",
-		"tags": ["percentage", "rate", "ratio"]
+		"tags": [
+			"percentage",
+			"rate",
+			"ratio"
+		]
 	},
 	{
 		"iconName": "pin",
 		"title": "pin",
 		"library": "wp",
-		"tags": ["location", "marker", "point"]
+		"tags": [
+			"location",
+			"marker",
+			"point"
+		]
 	},
 	{
 		"iconName": "plugins",
 		"title": "plugins",
 		"library": "wp",
-		"tags": ["add-ons", "extensions", "modules"]
+		"tags": [
+			"add-ons",
+			"extensions",
+			"modules"
+		]
 	},
 	{
 		"iconName": "plus",
 		"title": "plus",
 		"library": "wp",
-		"tags": ["addition", "increase", "positive"]
+		"tags": [
+			"addition",
+			"increase",
+			"positive"
+		]
 	},
 	{
 		"iconName": "plus-circle",
 		"title": "plus Circle",
 		"library": "wp",
-		"tags": ["add", "expand", "growth"]
+		"tags": [
+			"add",
+			"expand",
+			"growth"
+		]
 	},
 	{
 		"iconName": "plus-circle-filled",
 		"title": "plus Circle Filled",
 		"library": "wp",
-		"tags": ["add", "expand", "growth"]
+		"tags": [
+			"add",
+			"expand",
+			"growth"
+		]
 	},
 	{
 		"iconName": "position-center",
 		"title": "position Center",
 		"library": "wp",
-		"tags": ["centralize", "middle", "centering"]
+		"tags": [
+			"centralize",
+			"middle",
+			"centering"
+		]
 	},
 	{
 		"iconName": "position-left",
 		"title": "position Left",
 		"library": "wp",
-		"tags": ["left-align", "move left", "horizontal positioning"]
+		"tags": [
+			"left-align",
+			"move left",
+			"horizontal positioning"
+		]
 	},
 	{
 		"iconName": "position-right",
 		"title": "position Right",
 		"library": "wp",
-		"tags": ["right", "direction", "arrow"]
+		"tags": [
+			"right",
+			"direction",
+			"arrow"
+		]
 	},
 	{
 		"iconName": "post",
 		"title": "post",
 		"library": "wp",
-		"tags": ["articles", "blog", "content"]
+		"tags": [
+			"articles",
+			"blog",
+			"content"
+		]
 	},
 	{
 		"iconName": "post-author",
 		"title": "post Author",
 		"library": "wp",
-		"tags": ["writer", "creator", "authorship"]
+		"tags": [
+			"writer",
+			"creator",
+			"authorship"
+		]
 	},
 	{
 		"iconName": "post-categories",
 		"title": "post Categories",
 		"library": "wp",
-		"tags": ["topics", "subjects", "themes"]
+		"tags": [
+			"topics",
+			"subjects",
+			"themes"
+		]
 	},
 	{
 		"iconName": "post-comments",
 		"title": "post Comments",
 		"library": "wp",
-		"tags": ["discussion", "feedback", "opinions"]
+		"tags": [
+			"discussion",
+			"feedback",
+			"opinions"
+		]
 	},
 	{
 		"iconName": "post-comments-count",
 		"title": "post Comments Count",
 		"library": "wp",
-		"tags": ["number of comments", "comment tally", "feedback counter"]
+		"tags": [
+			"number of comments",
+			"comment tally",
+			"feedback counter"
+		]
 	},
 	{
 		"iconName": "post-comments-form",
 		"title": "post Comments Form",
 		"library": "wp",
-		"tags": ["comment box", "feedback form", "discussion input"]
+		"tags": [
+			"comment box",
+			"feedback form",
+			"discussion input"
+		]
 	},
 	{
 		"iconName": "post-content",
 		"title": "post Content",
 		"library": "wp",
-		"tags": ["article body", "blog post", "written content"]
+		"tags": [
+			"article body",
+			"blog post",
+			"written content"
+		]
 	},
 	{
 		"iconName": "post-date",
 		"title": "post Date",
 		"library": "wp",
-		"tags": ["date", "publish", "time"]
+		"tags": [
+			"date",
+			"publish",
+			"time"
+		]
 	},
 	{
 		"iconName": "post-excerpt",
 		"title": "post Excerpt",
 		"library": "wp",
-		"tags": ["summary", "extract", "snippet"]
+		"tags": [
+			"summary",
+			"extract",
+			"snippet"
+		]
 	},
 	{
 		"iconName": "post-featured-image",
 		"title": "post Featured Image",
 		"library": "wp",
-		"tags": ["thumbnail", "picture", "photo"]
+		"tags": [
+			"thumbnail",
+			"picture",
+			"photo"
+		]
 	},
 	{
 		"iconName": "post-list",
 		"title": "post List",
 		"library": "wp",
-		"tags": ["archive", "index", "summary"]
+		"tags": [
+			"archive",
+			"index",
+			"summary"
+		]
 	},
 	{
 		"iconName": "post-terms",
 		"title": "post Terms",
 		"library": "wp",
-		"tags": ["category", "tag", "taxonomy"]
+		"tags": [
+			"category",
+			"tag",
+			"taxonomy"
+		]
 	},
 	{
 		"iconName": "preformatted",
 		"title": "preformatted",
 		"library": "wp",
-		"tags": ["code", "formatted", "xml"]
+		"tags": [
+			"code",
+			"formatted",
+			"xml"
+		]
 	},
 	{
 		"iconName": "previous",
 		"title": "previous",
 		"library": "wp",
-		"tags": ["back", "return", "previous"]
+		"tags": [
+			"back",
+			"return",
+			"previous"
+		]
 	},
 	{
 		"iconName": "pull-left",
 		"title": "pull Left",
 		"library": "wp",
-		"tags": ["float left", "align left", "left"]
+		"tags": [
+			"float left",
+			"align left",
+			"left"
+		]
 	},
 	{
 		"iconName": "pull-right",
 		"title": "pull Right",
 		"library": "wp",
-		"tags": ["float right", "align right", "right"]
+		"tags": [
+			"float right",
+			"align right",
+			"right"
+		]
 	},
 	{
 		"iconName": "pullquote",
 		"title": "pullquote",
 		"library": "wp",
-		"tags": ["citation", "quote", "excerpt"]
+		"tags": [
+			"citation",
+			"quote",
+			"excerpt"
+		]
 	},
 	{
 		"iconName": "query-pagination",
 		"title": "query Pagination",
 		"library": "wp",
-		"tags": ["paginate", "pager", "navigation"]
+		"tags": [
+			"paginate",
+			"pager",
+			"navigation"
+		]
 	},
 	{
 		"iconName": "query-pagination-next",
 		"title": "query Pagination Next",
 		"library": "wp",
-		"tags": ["pagination", "next", "arrow"]
+		"tags": [
+			"pagination",
+			"next",
+			"arrow"
+		]
 	},
 	{
 		"iconName": "query-pagination-numbers",
 		"title": "query Pagination Numbers",
 		"library": "wp",
-		"tags": ["pagination", "numbers", "page"]
+		"tags": [
+			"pagination",
+			"numbers",
+			"page"
+		]
 	},
 	{
 		"iconName": "query-pagination-previous",
 		"title": "query Pagination Previous",
 		"library": "wp",
-		"tags": ["pagination", "previous", "arrow"]
+		"tags": [
+			"pagination",
+			"previous",
+			"arrow"
+		]
 	},
 	{
 		"iconName": "quote",
 		"title": "quote",
 		"library": "wp",
-		"tags": ["comment", "saying", "quotation"]
+		"tags": [
+			"comment",
+			"saying",
+			"quotation"
+		]
 	},
 	{
 		"iconName": "receipt",
 		"title": "receipt",
 		"library": "wp",
-		"tags": ["bill", "invoice", "payment"]
+		"tags": [
+			"bill",
+			"invoice",
+			"payment"
+		]
 	},
 	{
 		"iconName": "redo",
 		"title": "redo",
 		"library": "wp",
-		"tags": ["repeat", "action", "update"]
+		"tags": [
+			"repeat",
+			"action",
+			"update"
+		]
 	},
 	{
 		"iconName": "remove-bug",
 		"title": "remove Bug",
 		"library": "wp",
-		"tags": ["delete", "fix", "error"]
+		"tags": [
+			"delete",
+			"fix",
+			"error"
+		]
 	},
 	{
 		"iconName": "remove-submenu",
 		"title": "remove Submenu",
 		"library": "wp",
-		"tags": ["delete", "menu", "navigation"]
+		"tags": [
+			"delete",
+			"menu",
+			"navigation"
+		]
 	},
 	{
 		"iconName": "replace",
 		"title": "replace",
 		"library": "wp",
-		"tags": ["substitute", "switch", "exchange"]
+		"tags": [
+			"substitute",
+			"switch",
+			"exchange"
+		]
 	},
 	{
 		"iconName": "reset",
 		"title": "reset",
 		"library": "wp",
-		"tags": ["restart", "reinitialize", "restore"]
+		"tags": [
+			"restart",
+			"reinitialize",
+			"restore"
+		]
 	},
 	{
 		"iconName": "resize-corner-ne",
 		"title": "resize Corner N E",
 		"library": "wp",
-		"tags": ["scale", "resize", "adjust"]
+		"tags": [
+			"scale",
+			"resize",
+			"adjust"
+		]
 	},
 	{
 		"iconName": "reusable-block",
 		"title": "reusable Block",
 		"library": "wp",
-		"tags": ["template", "pattern", "module"]
+		"tags": [
+			"template",
+			"pattern",
+			"module"
+		]
 	},
 	{
 		"iconName": "rotate-left",
@@ -1201,660 +2000,1237 @@
 		"iconName": "rotate-right",
 		"title": "rotate Right",
 		"library": "wp",
-		"tags": ["turn right", "spin clockwise", "rotate clockwise"]
+		"tags": [
+			"turn right",
+			"spin clockwise",
+			"rotate clockwise"
+		]
 	},
 	{
 		"iconName": "row",
 		"title": "row",
 		"library": "wp",
-		"tags": ["line", "sequence", "series"]
+		"tags": [
+			"line",
+			"sequence",
+			"series"
+		]
 	},
 	{
 		"iconName": "rss",
 		"title": "rss",
 		"library": "wp",
-		"tags": ["feed", "news", "syndication"]
+		"tags": [
+			"feed",
+			"news",
+			"syndication"
+		]
 	},
 	{
 		"iconName": "search",
 		"title": "search",
 		"library": "wp",
-		"tags": ["zoom", "find", "look for", "locate"]
+		"tags": [
+			"zoom",
+			"find",
+			"look for",
+			"locate"
+		]
 	},
 	{
 		"iconName": "seen",
 		"title": "seen",
 		"library": "wp",
-		"tags": ["viewed", "watched", "read"]
+		"tags": [
+			"viewed",
+			"watched",
+			"read"
+		]
 	},
 	{
 		"iconName": "separator",
 		"title": "separator",
 		"library": "wp",
-		"tags": ["divider", "line", "bar"]
+		"tags": [
+			"divider",
+			"line",
+			"bar"
+		]
 	},
 	{
 		"iconName": "settings",
 		"title": "settings",
 		"library": "wp",
-		"tags": ["preferences", "options", "configuration"]
+		"tags": [
+			"preferences",
+			"options",
+			"configuration"
+		]
 	},
 	{
 		"iconName": "shadow",
 		"title": "shadow",
 		"library": "wp",
-		"tags": ["darkness", "outline", "silhouette"]
+		"tags": [
+			"darkness",
+			"outline",
+			"silhouette"
+		]
 	},
 	{
 		"iconName": "share",
 		"title": "share",
 		"library": "wp",
-		"tags": ["social", "network", "community"]
+		"tags": [
+			"social",
+			"network",
+			"community"
+		]
 	},
 	{
 		"iconName": "shield",
 		"title": "shield",
 		"library": "wp",
-		"tags": ["protection", "security", "armor"]
+		"tags": [
+			"protection",
+			"security",
+			"armor"
+		]
 	},
 	{
 		"iconName": "shipping",
 		"title": "shipping",
 		"library": "wp",
-		"tags": ["delivery", "transport", "logistics"]
+		"tags": [
+			"delivery",
+			"transport",
+			"logistics"
+		]
 	},
 	{
 		"iconName": "shortcode",
 		"title": "shortcode",
 		"library": "wp",
-		"tags": ["code", "snippet", "script"]
+		"tags": [
+			"code",
+			"snippet",
+			"script"
+		]
 	},
 	{
 		"iconName": "shuffle",
 		"title": "shuffle",
 		"library": "wp",
-		"tags": ["music", "random", "mix"]
+		"tags": [
+			"music",
+			"random",
+			"mix"
+		]
 	},
 	{
 		"iconName": "sidebar",
 		"title": "sidebar",
 		"library": "wp",
-		"tags": ["menu", "navigation", "panel"]
+		"tags": [
+			"menu",
+			"navigation",
+			"panel"
+		]
 	},
 	{
 		"iconName": "site-logo",
 		"title": "site Logo",
 		"library": "wp",
-		"tags": ["branding", "identity", "logotype"]
+		"tags": [
+			"branding",
+			"identity",
+			"logotype"
+		]
 	},
 	{
 		"iconName": "stack",
 		"title": "stack",
 		"library": "wp",
-		"tags": ["pile", "heap", "stacked"]
+		"tags": [
+			"pile",
+			"heap",
+			"stacked"
+		]
 	},
 	{
 		"iconName": "star-empty",
 		"title": "star Empty",
 		"library": "wp",
-		"tags": ["rating", "favorite", "unfilled"]
+		"tags": [
+			"rating",
+			"favorite",
+			"unfilled"
+		]
 	},
 	{
 		"iconName": "star-filled",
 		"title": "star Filled",
 		"library": "wp",
-		"tags": ["rating", "favorite", "filled"]
+		"tags": [
+			"rating",
+			"favorite",
+			"filled"
+		]
 	},
 	{
 		"iconName": "star-half",
 		"title": "star Half",
 		"library": "wp",
-		"tags": ["rating", "favorite", "half-filled"]
+		"tags": [
+			"rating",
+			"favorite",
+			"half-filled"
+		]
 	},
 	{
 		"iconName": "store",
 		"title": "store",
 		"library": "wp",
-		"tags": ["e-commerce", "shop", "buy"]
+		"tags": [
+			"e-commerce",
+			"shop",
+			"buy"
+		]
 	},
 	{
 		"iconName": "stretch-full-width",
 		"title": "stretch Full Width",
 		"library": "wp",
-		"tags": ["resize", "expand", "fullscreen"]
+		"tags": [
+			"resize",
+			"expand",
+			"fullscreen"
+		]
 	},
 	{
 		"iconName": "stretch-wide",
 		"title": "stretch Wide",
 		"library": "wp",
-		"tags": ["broaden", "widen", "expand"]
+		"tags": [
+			"broaden",
+			"widen",
+			"expand"
+		]
 	},
 	{
 		"iconName": "styles",
 		"title": "styles",
 		"library": "wp",
-		"tags": ["designs", "fashions", "looks"]
+		"tags": [
+			"designs",
+			"fashions",
+			"looks"
+		]
 	},
 	{
 		"iconName": "subscript",
 		"title": "subscript",
 		"library": "wp",
-		"tags": ["small", "lowered", "reduced"]
+		"tags": [
+			"small",
+			"lowered",
+			"reduced"
+		]
 	},
 	{
 		"iconName": "superscript",
 		"title": "superscript",
 		"library": "wp",
-		"tags": ["big", "raised", "enlarged"]
+		"tags": [
+			"big",
+			"raised",
+			"enlarged"
+		]
 	},
 	{
 		"iconName": "swatch",
 		"title": "swatch",
 		"library": "wp",
-		"tags": ["color", "palette", "sample"]
+		"tags": [
+			"color",
+			"palette",
+			"sample"
+		]
 	},
 	{
 		"iconName": "symbol",
 		"title": "symbol",
 		"library": "wp",
-		"tags": ["sign", "logo", "emblem"]
+		"tags": [
+			"sign",
+			"logo",
+			"emblem"
+		]
 	},
 	{
 		"iconName": "symbol-filled",
 		"title": "symbol Filled",
 		"library": "wp",
-		"tags": ["mark", "icon", "badge"]
+		"tags": [
+			"mark",
+			"icon",
+			"badge"
+		]
 	},
 	{
 		"iconName": "table",
 		"title": "table",
 		"library": "wp",
-		"tags": ["chart", "grid", "spreadsheet"]
+		"tags": [
+			"chart",
+			"grid",
+			"spreadsheet"
+		]
 	},
 	{
 		"iconName": "table-column-after",
 		"title": "table Column After",
 		"library": "wp",
-		"tags": ["column", "add", "insert"]
+		"tags": [
+			"column",
+			"add",
+			"insert"
+		]
 	},
 	{
 		"iconName": "table-column-before",
 		"title": "table Column Before",
 		"library": "wp",
-		"tags": ["column", "add", "insert"]
+		"tags": [
+			"column",
+			"add",
+			"insert"
+		]
 	},
 	{
 		"iconName": "table-column-delete",
 		"title": "table Column Delete",
 		"library": "wp",
-		"tags": ["column", "remove", "delete"]
+		"tags": [
+			"column",
+			"remove",
+			"delete"
+		]
 	},
 	{
 		"iconName": "table-row-after",
 		"title": "table Row After",
 		"library": "wp",
-		"tags": ["row", "add", "insert"]
+		"tags": [
+			"row",
+			"add",
+			"insert"
+		]
 	},
 	{
 		"iconName": "table-row-before",
 		"title": "table Row Before",
 		"library": "wp",
-		"tags": ["row", "add", "insert"]
+		"tags": [
+			"row",
+			"add",
+			"insert"
+		]
 	},
 	{
 		"iconName": "table-row-delete",
 		"title": "table Row Delete",
 		"library": "wp",
-		"tags": ["row", "remove", "delete"]
+		"tags": [
+			"row",
+			"remove",
+			"delete"
+		]
 	},
 	{
 		"iconName": "tablet",
 		"title": "tablet",
 		"library": "wp",
-		"tags": ["device", "mobile", "computer"]
+		"tags": [
+			"device",
+			"mobile",
+			"computer"
+		]
 	},
 	{
 		"iconName": "tag",
 		"title": "tag",
 		"library": "wp",
-		"tags": ["label", "category", "metadata"]
+		"tags": [
+			"label",
+			"category",
+			"metadata"
+		]
 	},
 	{
 		"iconName": "term-description",
 		"title": "term Description",
 		"library": "wp",
-		"tags": ["definition", "explanation", "meaning"]
+		"tags": [
+			"definition",
+			"explanation",
+			"meaning"
+		]
 	},
 	{
 		"iconName": "text-color",
 		"title": "text Color",
 		"library": "wp",
-		"tags": ["font color", "text styling", "typography"]
+		"tags": [
+			"font color",
+			"text styling",
+			"typography"
+		]
 	},
 	{
 		"iconName": "tip",
 		"title": "tip",
 		"library": "wp",
-		"tags": ["recommendation", "advice", "suggestion"]
+		"tags": [
+			"recommendation",
+			"advice",
+			"suggestion"
+		]
 	},
 	{
 		"iconName": "title",
 		"title": "title",
 		"library": "wp",
-		"tags": ["headline", "caption", "heading"]
+		"tags": [
+			"headline",
+			"caption",
+			"heading"
+		]
 	},
 	{
 		"iconName": "tool",
 		"title": "tool",
 		"library": "wp",
-		"tags": ["equipment", "instrument", "utensil"]
+		"tags": [
+			"equipment",
+			"instrument",
+			"utensil"
+		]
 	},
 	{
 		"iconName": "trash",
 		"title": "trash",
 		"library": "wp",
-		"tags": ["delete", "discard", "remove"]
+		"tags": [
+			"delete",
+			"discard",
+			"remove"
+		]
 	},
 	{
 		"iconName": "trending-down",
 		"title": "trending Down",
 		"library": "wp",
-		"tags": ["descend", "drop", "decline"]
+		"tags": [
+			"descend",
+			"drop",
+			"decline"
+		]
 	},
 	{
 		"iconName": "trending-up",
 		"title": "trending Up",
 		"library": "wp",
-		"tags": ["growth", "charts", "progress"]
+		"tags": [
+			"growth",
+			"charts",
+			"progress"
+		]
 	},
 	{
 		"iconName": "typography",
 		"title": "typography",
 		"library": "wp",
-		"tags": ["font", "text", "design"]
+		"tags": [
+			"font",
+			"text",
+			"design"
+		]
 	},
 	{
 		"iconName": "undo",
 		"title": "undo",
 		"library": "wp",
-		"tags": ["redo", "reverse", "back"]
+		"tags": [
+			"redo",
+			"reverse",
+			"back"
+		]
 	},
 	{
 		"iconName": "ungroup",
 		"title": "ungroup",
 		"library": "wp",
-		"tags": ["split", "diverge", "separate"]
+		"tags": [
+			"split",
+			"diverge",
+			"separate"
+		]
 	},
 	{
 		"iconName": "unlock",
 		"title": "unlock",
 		"library": "wp",
-		"tags": ["open", "access", "key"]
+		"tags": [
+			"open",
+			"access",
+			"key"
+		]
 	},
 	{
 		"iconName": "unseen",
 		"title": "unseen",
 		"library": "wp",
-		"tags": ["hidden", "invisible", "concealed"]
+		"tags": [
+			"hidden",
+			"invisible",
+			"concealed"
+		]
 	},
 	{
 		"iconName": "update",
 		"title": "update",
 		"library": "wp",
-		"tags": ["refresh", "upgrade", "modernize"]
+		"tags": [
+			"refresh",
+			"upgrade",
+			"modernize"
+		]
 	},
 	{
 		"iconName": "upload",
 		"title": "upload",
 		"library": "wp",
-		"tags": ["add", "import", "send"]
+		"tags": [
+			"add",
+			"import",
+			"send"
+		]
 	},
 	{
 		"iconName": "verse",
 		"title": "verse",
 		"library": "wp",
-		"tags": ["lyrics", "poem", "rhyme"]
+		"tags": [
+			"lyrics",
+			"poem",
+			"rhyme"
+		]
 	},
 	{
 		"iconName": "video",
 		"title": "video",
 		"library": "wp",
-		"tags": ["movie", "film", "clip"]
+		"tags": [
+			"movie",
+			"film",
+			"clip"
+		]
 	},
 	{
 		"iconName": "warning",
 		"title": "warning",
 		"library": "wp",
-		"tags": ["alert", "caution", "notice"]
+		"tags": [
+			"alert",
+			"caution",
+			"notice"
+		]
 	},
 	{
 		"iconName": "widget",
 		"title": "widget",
 		"library": "wp",
-		"tags": ["gadget", "tool", "app", "calendar"]
+		"tags": [
+			"gadget",
+			"tool",
+			"app",
+			"calendar"
+		]
 	},
 	{
 		"iconName": "wordpress",
 		"title": "wordpress",
 		"library": "wp",
-		"tags": ["blog", "cms", "website"]
+		"tags": [
+			"blog",
+			"cms",
+			"website"
+		]
 	},
 	{
 		"iconName": "arrow-down-right",
 		"title": "Arrow Down Right",
 		"library": "wp",
-		"tags": ["arrow", "down", "right"]
+		"tags": [
+			"arrow",
+			"down",
+			"right"
+		]
 	},
 	{
 		"iconName": "arrow-up-left",
 		"title": "Arrow Up Left",
 		"library": "wp",
-		"tags": ["arrow", "up", "left"]
+		"tags": [
+			"arrow",
+			"up",
+			"left"
+		]
 	},
 	{
 		"iconName": "background",
 		"title": "Background",
 		"library": "wp",
-		"tags": ["background", "color", "fill"]
+		"tags": [
+			"background",
+			"color",
+			"fill"
+		]
 	},
 	{
 		"iconName": "bell",
 		"title": "Bell",
 		"library": "wp",
-		"tags": ["bell", "notification", "alert"]
+		"tags": [
+			"bell",
+			"notification",
+			"alert"
+		]
 	},
 	{
 		"iconName": "bell-unread",
 		"title": "Bell Unread",
 		"library": "wp",
-		"tags": ["bell", "notification", "alert"]
+		"tags": [
+			"bell",
+			"notification",
+			"alert"
+		]
 	},
 	{
 		"iconName": "caution",
 		"title": "Caution",
 		"library": "wp",
-		"tags": ["warning", "caution", "notice"]
+		"tags": [
+			"warning",
+			"caution",
+			"notice"
+		]
 	},
 	{
 		"iconName": "caution-filled",
 		"title": "Caution Filled",
 		"library": "wp",
-		"tags": ["warning", "caution", "notice"]
+		"tags": [
+			"warning",
+			"caution",
+			"notice"
+		]
 	},
 	{
 		"iconName": "chevron-down-small",
 		"title": "Chevron Down Small",
 		"library": "wp",
-		"tags": ["chevron", "down", "small"]
+		"tags": [
+			"chevron",
+			"down",
+			"small"
+		]
 	},
 	{
 		"iconName": "cloud-download",
 		"title": "Cloud Download",
 		"library": "wp",
-		"tags": ["cloud", "download", "transfer"]
+		"tags": [
+			"cloud",
+			"download",
+			"transfer"
+		]
 	},
 	{
 		"iconName": "connection",
 		"title": "Connection",
 		"library": "wp",
-		"tags": ["connection", "network", "link"]
+		"tags": [
+			"connection",
+			"network",
+			"link"
+		]
 	},
 	{
 		"iconName": "copy-small",
 		"title": "Copy Small",
 		"library": "wp",
-		"tags": ["copy", "duplicate", "clone"]
+		"tags": [
+			"copy",
+			"duplicate",
+			"clone"
+		]
 	},
 	{
 		"iconName": "details",
 		"title": "Details",
 		"library": "wp",
-		"tags": ["details", "information", "explanation"]
+		"tags": [
+			"details",
+			"information",
+			"explanation"
+		]
 	},
 	{
 		"iconName": "drafts",
 		"title": "Drafts",
 		"library": "wp",
-		"tags": ["draft", "pending", "incomplete"]
+		"tags": [
+			"draft",
+			"pending",
+			"incomplete"
+		]
 	},
 	{
 		"iconName": "envelope",
 		"title": "Envelope",
 		"library": "wp",
-		"tags": ["envelope", "mail", "letter"]
+		"tags": [
+			"envelope",
+			"mail",
+			"letter"
+		]
 	},
 	{
 		"iconName": "error",
 		"title": "Error",
 		"library": "wp",
-		"tags": ["error", "alert", "warning"]
+		"tags": [
+			"error",
+			"alert",
+			"warning"
+		]
 	},
 	{
 		"iconName": "funnel",
 		"title": "Funnel",
 		"library": "wp",
-		"tags": ["funnel", "filter", "sort"]
+		"tags": [
+			"funnel",
+			"filter",
+			"sort"
+		]
 	},
 	{
 		"iconName": "heading-level-1",
 		"title": "Heading Level 1",
 		"library": "wp",
-		"tags": ["heading", "title", "h1", "level"]
+		"tags": [
+			"heading",
+			"title",
+			"h1",
+			"level"
+		]
 	},
 	{
 		"iconName": "heading-level-2",
 		"title": "Heading Level 2",
 		"library": "wp",
-		"tags": ["heading", "title", "h2", "level"]
+		"tags": [
+			"heading",
+			"title",
+			"h2",
+			"level"
+		]
 	},
 	{
 		"iconName": "heading-level-3",
 		"title": "Heading Level 3",
 		"library": "wp",
-		"tags": ["heading", "title", "h3", "level"]
+		"tags": [
+			"heading",
+			"title",
+			"h3",
+			"level"
+		]
 	},
 	{
 		"iconName": "heading-level-4",
 		"title": "Heading Level 4",
 		"library": "wp",
-		"tags": ["heading", "title", "h4", "level"]
+		"tags": [
+			"heading",
+			"title",
+			"h4",
+			"level"
+		]
 	},
 	{
 		"iconName": "heading-level-5",
 		"title": "Heading Level 5",
 		"library": "wp",
-		"tags": ["heading", "title", "h5", "level"]
+		"tags": [
+			"heading",
+			"title",
+			"h5",
+			"level"
+		]
 	},
 	{
 		"iconName": "heading-level-6",
 		"title": "Heading Level 6",
 		"library": "wp",
-		"tags": ["heading", "title", "h6", "level"]
+		"tags": [
+			"heading",
+			"title",
+			"h6",
+			"level"
+		]
 	},
 	{
 		"iconName": "home-button",
 		"title": "Home Button",
 		"library": "wp",
-		"tags": ["home", "start", "root"]
+		"tags": [
+			"home",
+			"start",
+			"root"
+		]
 	},
 	{
 		"iconName": "justify-bottom",
 		"title": "Justify Bottom",
 		"library": "wp",
-		"tags": ["justify", "align", "bottom"]
+		"tags": [
+			"justify",
+			"align",
+			"bottom"
+		]
 	},
 	{
 		"iconName": "justify-center-vertical",
 		"title": "Justify Center Vertical",
 		"library": "wp",
-		"tags": ["justify", "align", "center"]
+		"tags": [
+			"justify",
+			"align",
+			"center"
+		]
 	},
 	{
 		"iconName": "justify-space-between-vertical",
 		"title": "Justify Space Between Vertical",
 		"library": "wp",
-		"tags": ["justify", "align", "space-between"]
+		"tags": [
+			"justify",
+			"align",
+			"space-between"
+		]
 	},
 	{
 		"iconName": "justify-stretch-vertical",
 		"title": "Justify Stretch Vertical",
 		"library": "wp",
-		"tags": ["justify", "align", "stretch"]
+		"tags": [
+			"justify",
+			"align",
+			"stretch"
+		]
 	},
 	{
 		"iconName": "justify-top",
 		"title": "Justify Top",
 		"library": "wp",
-		"tags": ["justify", "align", "top"]
+		"tags": [
+			"justify",
+			"align",
+			"top"
+		]
 	},
 	{
 		"iconName": "keyboard",
 		"title": "Keyboard",
 		"library": "wp",
-		"tags": ["keyboard", "input", "type"]
+		"tags": [
+			"keyboard",
+			"input",
+			"type"
+		]
 	},
 	{
 		"iconName": "language",
 		"title": "Language",
 		"library": "wp",
-		"tags": ["language", "translation", "locale"]
+		"tags": [
+			"language",
+			"translation",
+			"locale"
+		]
 	},
 	{
 		"iconName": "level-up",
 		"title": "Level Up",
 		"library": "wp",
-		"tags": ["level", "up", "arrow"]
+		"tags": [
+			"level",
+			"up",
+			"arrow"
+		]
 	},
 	{
 		"iconName": "not-allowed",
 		"title": "Not Allowed",
 		"library": "wp",
-		"tags": ["not-allowed", "forbidden", "prohibited"]
+		"tags": [
+			"not-allowed",
+			"forbidden",
+			"prohibited"
+		]
 	},
 	{
 		"iconName": "offline",
 		"title": "Offline",
 		"library": "wp",
-		"tags": ["offline", "disconnected", "unavailable"]
+		"tags": [
+			"offline",
+			"disconnected",
+			"unavailable"
+		]
 	},
 	{
 		"iconName": "pending",
 		"title": "Pending",
 		"library": "wp",
-		"tags": ["pending", "incomplete", "waiting"]
+		"tags": [
+			"pending",
+			"incomplete",
+			"waiting"
+		]
 	},
 	{
 		"iconName": "pin-small",
 		"title": "Pin Small",
 		"library": "wp",
-		"tags": ["pin", "location", "bookmark"]
+		"tags": [
+			"pin",
+			"location",
+			"bookmark"
+		]
 	},
 	{
 		"iconName": "published",
 		"title": "Published",
 		"library": "wp",
-		"tags": ["published", "live", "public"]
+		"tags": [
+			"published",
+			"live",
+			"public"
+		]
 	},
 	{
 		"iconName": "resize-corner-n-e",
 		"title": "Resize Corner NE",
 		"library": "wp",
-		"tags": ["resize", "corner", "ne"]
+		"tags": [
+			"resize",
+			"corner",
+			"ne"
+		]
 	},
 	{
 		"iconName": "scheduled",
 		"title": "Scheduled",
 		"library": "wp",
-		"tags": ["scheduled", "time", "calendar"]
+		"tags": [
+			"scheduled",
+			"time",
+			"calendar"
+		]
 	},
 	{
 		"iconName": "send",
 		"title": "Send",
 		"library": "wp",
-		"tags": ["send", "mail", "message"]
+		"tags": [
+			"send",
+			"mail",
+			"message"
+		]
 	},
 	{
 		"iconName": "sides-all",
 		"title": "Sides All",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "sides-axial",
 		"title": "Sides Axial",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "sides-bottom",
 		"title": "Sides Bottom",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "sides-horizontal",
 		"title": "Sides Horizontal",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders", "horizontal"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders",
+			"horizontal"
+		]
 	},
 	{
 		"iconName": "sides-left",
 		"title": "Sides Left",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "sides-right",
 		"title": "Sides Right",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "sides-top",
 		"title": "Sides Top",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "sides-vertical",
 		"title": "Sides Vertical",
 		"library": "wp",
-		"tags": ["sides", "edges", "borders"]
+		"tags": [
+			"sides",
+			"edges",
+			"borders"
+		]
 	},
 	{
 		"iconName": "square",
 		"title": "Square",
 		"library": "wp",
-		"tags": ["square", "rectangle", "shape"]
+		"tags": [
+			"square",
+			"rectangle",
+			"shape"
+		]
 	},
 	{
 		"iconName": "table-of-contents",
 		"title": "Table Of Contents",
 		"library": "wp",
-		"tags": ["table", "grid", "spreadsheet"]
+		"tags": [
+			"table",
+			"grid",
+			"spreadsheet"
+		]
 	},
 	{
 		"iconName": "text-horizontal",
 		"title": "Text Horizontal",
 		"library": "wp",
-		"tags": ["table", "grid", "spreadsheet", "horizontal"]
+		"tags": [
+			"table",
+			"grid",
+			"spreadsheet",
+			"horizontal"
+		]
 	},
 	{
 		"iconName": "text-vertical",
 		"title": "Text Vertical",
 		"library": "wp",
-		"tags": ["text", "vertical", "alignment"]
+		"tags": [
+			"text",
+			"vertical",
+			"alignment"
+		]
 	},
 	{
 		"iconName": "thumbs-down",
 		"title": "Thumbs Down",
 		"library": "wp",
-		"tags": ["thumbs", "down", "dislike"]
+		"tags": [
+			"thumbs",
+			"down",
+			"dislike"
+		]
 	},
 	{
 		"iconName": "thumbs-up",
 		"title": "ThumbsUp",
 		"library": "wp",
-		"tags": ["thumbs", "up", "like"]
+		"tags": [
+			"thumbs",
+			"up",
+			"like"
+		]
+	},
+	{
+		"iconName": "breadcrumbs",
+		"title": "Breadcrumbs",
+		"library": "wp",
+		"tags": [
+			"navigation",
+			"links"
+		]
+	},
+	{
+		"iconName": "corner-all",
+		"title": "Corner All",
+		"library": "wp",
+		"tags": [
+			"radius",
+			"corners"
+		]
+	},
+	{
+		"iconName": "corner-bottom-left",
+		"title": "Corner Bottom Left",
+		"library": "wp",
+		"tags": [
+			"radius",
+			"corners"
+		]
+	},
+	{
+		"iconName": "corner-bottom-right",
+		"title": "Corner Bottom Right",
+		"library": "wp",
+		"tags": [
+			"radius",
+			"corners"
+		]
+	},
+	{
+		"iconName": "corner-top-left",
+		"title": "Corner Top Left",
+		"library": "wp",
+		"tags": [
+			"radius",
+			"corners"
+		]
+	},
+	{
+		"iconName": "corner-top-right",
+		"title": "Corner Top Right",
+		"library": "wp",
+		"tags": [
+			"radius",
+			"corners"
+		]
+	},
+	{
+		"iconName": "format-r-t-l",
+		"title": "RTL Format",
+		"library": "wp",
+		"tags": [
+			"RTL",
+			"right to left",
+			"direction"
+		]
+	},
+	{
+		"iconName": "gift",
+		"title": "Gift",
+		"library": "wp",
+		"tags": [
+			"gift",
+			"present",
+			"reward"
+		]
+	},
+	{
+		"iconName": "math",
+		"title": "Math",
+		"library": "wp",
+		"tags": [
+			"formula",
+			"equation",
+			"science"
+		]
+	},
+	{
+		"iconName": "term-count",
+		"title": "Term Count",
+		"library": "wp",
+		"tags": [
+			"term",
+			"count",
+			"number",
+			"tags"
+		]
+	},
+	{
+		"iconName": "term-name",
+		"title": "Term Name",
+		"library": "wp",
+		"tags": [
+			"term",
+			"name",
+			"tags"
+		]
+	},
+	{
+		"iconName": "time-to-read",
+		"title": "Time To Read",
+		"library": "wp",
+		"tags": [
+			"time",
+			"reading",
+			"duration",
+			"clock"
+		]
+	},
+	{
+		"iconName": "word-count",
+		"title": "Word Count",
+		"library": "wp",
+		"tags": [
+			"word",
+			"count",
+			"number",
+			"text"
+		]
 	}
 ]
