@@ -249,7 +249,7 @@ describe('outline control component testing', () => {
 				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('ad2dcc ');
+					cy.get('input[maxlength="9"]').type('ad2dcc', { delay: 0 });
 				});
 
 			cy.get('.blockera-control-border-color-wrapper').next().click();

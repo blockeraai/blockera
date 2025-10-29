@@ -147,7 +147,7 @@ describe('Avatar Block', () => {
 			.first()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 			});
 
 		cy.get('@borderContainer').within(() => {

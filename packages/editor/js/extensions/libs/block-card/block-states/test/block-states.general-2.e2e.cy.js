@@ -482,7 +482,7 @@ describe('Block State E2E Test', () => {
 					cy.get('input[maxlength="9"]').clear({
 						force: true,
 					});
-					cy.get('input[maxlength="9"]').type('000000 ');
+					cy.get('input[maxlength="9"]').type('000000', { delay: 0 });
 				});
 
 			context(
@@ -497,7 +497,9 @@ describe('Block State E2E Test', () => {
 							cy.get('input[maxlength="9"]').clear({
 								force: true,
 							});
-							cy.get('input[maxlength="9"]').type('cccccc ');
+							cy.get('input[maxlength="9"]').type('cccccc', {
+								delay: 0,
+							});
 						});
 
 					// inherit of normal.

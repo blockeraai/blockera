@@ -29,7 +29,7 @@ describe('Border → Functionality', () => {
 
 			cy.getByDataTest('popover-body').within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 			});
 
 			cy.get('@container').within(() => {
@@ -80,7 +80,7 @@ describe('Border → Functionality', () => {
 
 			cy.getByDataTest('popover-body').within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 			});
 
 			//Check block
@@ -138,7 +138,7 @@ describe('Border → Functionality', () => {
 			// color
 			cy.getByDataTest('popover-body').within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('73ddab ');
+				cy.get('input[maxlength="9"]').type('73ddab', { delay: 0 });
 			});
 
 			//Check block
@@ -190,7 +190,7 @@ describe('Border → Functionality', () => {
 			// color
 			cy.getByDataTest('popover-body').within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('9958e3 ');
+				cy.get('input[maxlength="9"]').type('9958e3', { delay: 0 });
 			});
 
 			//Check block
@@ -246,7 +246,9 @@ describe('Border → Functionality', () => {
 			// color
 			cy.getByDataTest('popover-body').within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('eba492 ');
+				cy.get('input[maxlength="9"]').type('eba492', {
+					delay: 0,
+				});
 			});
 
 			//Check block
@@ -306,7 +308,7 @@ describe('Border → Functionality', () => {
 			// color
 			cy.getByDataTest('popover-body').within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('1893da ');
+				cy.get('input[maxlength="9"]').type('1893da', { delay: 0 });
 			});
 
 			//Check block

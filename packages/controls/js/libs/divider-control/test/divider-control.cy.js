@@ -230,7 +230,7 @@ describe('divider-control component testing', () => {
 				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('43d5b7 ');
+					cy.get('input[maxlength="9"]').type('43d5b7', { delay: 0 });
 				});
 
 			//Check control

@@ -49,7 +49,7 @@ describe('Backdrop Filters → Functionality', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('cccccc ');
+				cy.get('input[maxlength="9"]').type('cccccc', { delay: 0 });
 			});
 
 		// Check block
