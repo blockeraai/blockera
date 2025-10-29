@@ -144,7 +144,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 								</p>
 							</>
 						}
-						columns="columns-2"
+						columns="1fr 160px"
 						onChange={(newValue, ref) =>
 							handleOnChangeAttributes(
 								'blockeraBackgroundColor',
@@ -242,7 +242,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 								</p>
 							</>
 						}
-						columns="columns-2"
+						columns="1fr 160px"
 						options={blockeraBackgroundClip?.config?.options}
 						type="custom"
 						onChange={(newValue, ref) =>
