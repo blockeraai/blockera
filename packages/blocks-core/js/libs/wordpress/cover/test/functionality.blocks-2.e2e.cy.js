@@ -17,7 +17,7 @@ describe('Cover Block', () => {
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:cover {"url":"https://placehold.co/600x400","id":60,"dimRatio":50,"customOverlayColor":"#4658a9","layout":{"type":"constrained"}} -->
-<div class="wp-block-cover"><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#4658a9"></span><img class="wp-block-cover__image-background wp-image-60" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
+<div class="wp-block-cover"><img class="wp-block-cover__image-background wp-image-60" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#4658a9"></span><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
 <p class="has-text-align-center has-large-font-size">Paragraph text here...</p>
 <!-- /wp:paragraph --></div></div>
 <!-- /wp:cover -->`);
