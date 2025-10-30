@@ -55,21 +55,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				// Test 2: Blockera value to WP data
 				//
-
-				// open color popover
-				cy.getParentContainer('Text Color').within(() => {
-					cy.get('button').as('colorBtn');
-					cy.get('@colorBtn').click();
-				});
-
-				// change color to #666 (#666666)
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.get('input').as('hexColorInput');
-						cy.get('@hexColorInput').clear();
-						cy.get('@hexColorInput').type('666');
-					});
+				cy.setColorControlValue('Text Color', '666666');
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -122,18 +108,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				setParentBlock();
 
-				// open color popover
-				cy.getParentContainer('Text Color').within(() => {
-					cy.get('button').as('colorBtn');
-					cy.get('@colorBtn').click();
-				});
-
-				// clear value
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel('Reset Color (Clear)').click();
-					});
+				cy.clearColorControlValue('Text Color');
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -195,21 +170,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				// Test 2: Blockera value to WP data
 				//
-
-				// open color popover
-				cy.get('@container').within(() => {
-					cy.get('button').as('colorBtn');
-					cy.get('@colorBtn').click();
-				});
-
-				// change color to #666 (#666666)
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.get('input').as('hexColorInput');
-						cy.get('@hexColorInput').clear();
-						cy.get('@hexColorInput').type('666');
-					});
+				cy.setColorControlValue('Text Color', '666666');
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -233,13 +194,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				// Test 3: Clear Blockera value and check WP data
 				//
-
-				// clear value
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel('Reset Color (Clear)').click();
-					});
+				cy.clearColorControlValue('Text Color');
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -298,20 +253,7 @@ describe('Font Color → WP Compatibility', () => {
 				// Test 2: Blockera value to WP data
 				//
 
-				// open color popover
-				cy.get('@container').within(() => {
-					cy.get('button').as('colorBtn');
-					cy.get('@colorBtn').click();
-				});
-
-				// change color to #666 (#666666)
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.get('input').as('hexColorInput');
-						cy.get('@hexColorInput').clear();
-						cy.get('@hexColorInput').type('666');
-					});
+				cy.setColorControlValue('Text Color', '666666');
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -329,12 +271,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				// Test 3: Clear Blockera value and check WP data
 				//
-				// clear value
-				cy.get('.components-popover')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel('Reset Color (Clear)').click();
-					});
+				cy.clearColorControlValue('Text Color');
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
