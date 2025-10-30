@@ -107,6 +107,19 @@
 			margin-left: -2px;
 			margin-right: -2px;
 
+			&.changed-in-other-state,
+			&.changed-in-normal-state,
+			&.changed-in-secondary-state {
+				outline: 2px solid #ffffff;
+				outline-offset: 1px !important;
+
+				&:hover {
+					background: var(--blockera-controls-primary-color);
+					box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+					color: #ffffff;
+				}
+			}
+
 			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
 				background: #ffffff;
 				border: 1px solid var(--blockera-controls-border-color);
