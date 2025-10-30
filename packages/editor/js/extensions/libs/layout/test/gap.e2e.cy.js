@@ -306,4 +306,156 @@ describe('Gap → Functionality (Type: gap)', () => {
 				.should('include', 'row-gap: var(--wp--preset--spacing--40)');
 		});
 	});
+
+	context('Reset Value', () => {
+		it('should reset gap correctly (Simple and advanced mode)', () => {
+			//
+			// 1. Reset simple mode
+			//
+			cy.getParentContainer('Gap').within(() => {
+				cy.get('input').type(10);
+			});
+
+			cy.resetBlockeraAttribute('Layout', 'Gap', 'reset');
+
+			cy.getBlock('core/paragraph').should('have.css', 'gap', 'normal');
+
+			getWPDataObject().then((data) => {
+				expect({
+					lock: true,
+					gap: '',
+					rows: '',
+					columns: '',
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
+			});
+
+			//
+			// 2. Reset advanced mode - Reset from Gap control (parent label)
+			//
+			cy.getParentContainer('Gap').within(() => {
+				cy.get('input').type(20);
+				cy.getByAriaLabel('Custom Row & Column Gap').click();
+			});
+
+			cy.resetBlockeraAttribute('Layout', 'Gap', 'reset');
+
+			cy.getBlock('core/paragraph').should('have.css', 'gap', 'normal');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'column-gap',
+				'normal'
+			);
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'row-gap',
+				'normal'
+			);
+
+			getWPDataObject().then((data) => {
+				expect({
+					lock: true,
+					gap: '',
+					rows: '',
+					columns: '',
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
+			});
+
+			//
+			// 3. Reset advanced mode - Reset from Rows control (child label)
+			//
+			cy.getParentContainer('Gap').within(() => {
+				cy.get('input').type(30);
+				cy.getByAriaLabel('Custom Row & Column Gap').click();
+			});
+
+			cy.resetBlockeraAttribute('Layout', 'Rows', 'reset');
+
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'gap',
+				'normal 30px'
+			);
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'column-gap',
+				'30px'
+			);
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'row-gap',
+				'normal'
+			);
+
+			getWPDataObject().then((data) => {
+				expect({
+					lock: true,
+					gap: '30px',
+					rows: '',
+					columns: '30px',
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
+			});
+
+			//
+			// 4. Reset advanced mode - Reset from Columns control (child label)
+			//
+			cy.resetBlockeraAttribute('Layout', 'Gap', 'reset');
+
+			cy.getParentContainer('Gap').within(() => {
+				cy.get('input').type(40);
+				cy.getByAriaLabel('Custom Row & Column Gap').click();
+			});
+
+			cy.resetBlockeraAttribute('Layout', 'Columns', 'reset');
+
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'column-gap',
+				'normal'
+			);
+			cy.getBlock('core/paragraph').should('have.css', 'row-gap', '40px');
+
+			getWPDataObject().then((data) => {
+				expect({
+					lock: true,
+					gap: '40px',
+					rows: '40px',
+					columns: '',
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
+			});
+
+			//
+			// 5. Reset advanced mode - Reset from both Columns and Rows control (child labels)
+			//
+			cy.resetBlockeraAttribute('Layout', 'Gap', 'reset');
+
+			cy.getParentContainer('Gap').within(() => {
+				cy.get('input').type(50);
+				cy.getByAriaLabel('Custom Row & Column Gap').click();
+			});
+
+			cy.resetBlockeraAttribute('Layout', 'Columns', 'reset');
+			cy.resetBlockeraAttribute('Layout', 'Rows', 'reset');
+
+			cy.getBlock('core/paragraph').should('have.css', 'gap', 'normal');
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'column-gap',
+				'normal'
+			);
+			cy.getBlock('core/paragraph').should(
+				'have.css',
+				'row-gap',
+				'normal'
+			);
+
+			getWPDataObject().then((data) => {
+				expect({
+					lock: true,
+					gap: '50px',
+					rows: '',
+					columns: '',
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
+			});
+		});
+	});
 });
