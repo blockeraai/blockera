@@ -272,6 +272,18 @@
 		border-top: 1px solid #282d32;
 	}
 
+	.blockera-control-label-section:last-child {
+
+		h3.blockera-control-label-section-title {
+			position: sticky;
+			top: 40px;
+			background-color: var(--popover-bg-color);
+			padding: 10px 0 10px 0;
+			z-index: 1;
+			margin: -15px 0 -10px;
+		}
+	}
+
 	.blockera-control-states-changes {
 		display: flex;
 		flex-direction: column;

@@ -124,7 +124,7 @@ export default function ColorPickerControl({
 						title={popoverTitle}
 						offset={120}
 						placement={placement}
-						className={`components-palette-edit-popover ${
+						className={`blockera-color-picker-popover ${
 							isPopoverHidden ? 'hidden' : ''
 						}`}
 						onClose={onClose}
