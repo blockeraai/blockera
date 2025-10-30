@@ -582,7 +582,7 @@ export const registerCommands = () => {
 					.parent()
 					.parent()
 					.within(() => {
-						cy.getByAriaLabel(label).click({ force: true });
+						cy.getByAriaLabel(label).first().click({ force: true });
 					});
 
 			cy.getByDataTest('popover-body')
