@@ -17,9 +17,9 @@ describe('All Features Together → WP Compatibility', () => {
 	describe('Paragraph Block', () => {
 		it('Simple value', () => {
 			appendBlocks(
-				'<!-- wp:paragraph {"style":{"typography":{"textTransform":"uppercase","fontSize":"20px","fontStyle":"italic","fontWeight":"600","lineHeight":"2","textDecoration":"underline","letterSpacing":"2px","writingMode":"vertical-rl"}}} -->\n' +
-					'<p style="font-size:20px;font-style:normal;font-weight:400;letter-spacing:2px;line-height:2;text-decoration:underline;text-transform:uppercase;writing-mode:vertical-rl">Test paragraph</p>\n' +
-					'<!-- /wp:paragraph --> '
+				`<!-- wp:paragraph {"style":{"typography":{"textTransform":"uppercase","fontSize":"20px","fontStyle":"italic","fontWeight":"600","lineHeight":"2","textDecoration":"underline","letterSpacing":"2px","writingMode":"vertical-rl"}}} -->
+<p style="font-size:20px;font-style:italic;font-weight:600;letter-spacing:2px;line-height:2;text-decoration:underline;text-transform:uppercase;writing-mode:vertical-rl">Test paragraph</p>
+<!-- /wp:paragraph -->`
 			);
 
 			// Select target block

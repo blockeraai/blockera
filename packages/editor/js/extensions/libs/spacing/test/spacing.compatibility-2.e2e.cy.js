@@ -159,7 +159,7 @@ describe('Box Spacing → WP Compatibility', () => {
 		it('Simple value without px unit', () => {
 			appendBlocks(
 				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"0","right":"30","bottom":"40","left":"50"},"margin":{"top":"15","right":"30","bottom":"45","left":"60"}}}} -->
-<p style="margin-top:0;margin-right:30px;margin-bottom:45px;margin-left:60px;padding-top:20px;padding-right:30px;padding-bottom:40px;padding-left:50px">Test paragraph...</p>
+<p style="margin-top:15;margin-right:30;margin-bottom:45;margin-left:60;padding-top:0;padding-right:30;padding-bottom:40;padding-left:50">Test paragraph...</p>
 <!-- /wp:paragraph -->`
 			);
 
