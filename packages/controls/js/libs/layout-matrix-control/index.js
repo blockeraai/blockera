@@ -1003,7 +1003,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-empty"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-empty"
 											/>
 										),
@@ -1014,7 +1014,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-start"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-start"
 											/>
 										),
@@ -1025,7 +1025,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-center"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-center"
 											/>
 										),
@@ -1036,7 +1036,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-end"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-end"
 											/>
 										),
@@ -1047,7 +1047,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-stretch"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-stretch"
 											/>
 										),
@@ -1080,7 +1080,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-empty"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-empty"
 											/>
 										),
@@ -1091,7 +1091,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-start"
-												iconSize="18"
+												iconSize="20"
 												className="blockera-flex-justify-content-flex-start"
 												data-test="layout-matrix-justify-start"
 											/>
@@ -1103,7 +1103,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-center"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-center"
 											/>
 										),
@@ -1114,7 +1114,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-end"
-												iconSize="18"
+												iconSize="20"
 												className="blockera-flex-justify-content-flex-end"
 												data-test="layout-matrix-justify-end"
 											/>
@@ -1126,7 +1126,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-space-around"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-around"
 											/>
 										),
@@ -1137,7 +1137,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-space-between"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-between"
 											/>
 										),
