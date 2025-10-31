@@ -75,7 +75,7 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			if (isInvalidCompatibilityRun(blockDetail)) {
+			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
 
