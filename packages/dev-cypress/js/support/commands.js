@@ -403,7 +403,9 @@ export const registerCommands = () => {
 				cy.get('[data-wp-component="Popover"]')
 					.last()
 					.within(() => {
-						cy.get('[data-cy="label-control"]').first().click();
+						cy.get('[data-cy="label-control"]')
+							.first()
+							.click({ force: true });
 					});
 			}
 
