@@ -380,6 +380,7 @@ function mergeBlockSettings(
 						'summary',
 						'value',
 						'citation',
+						'caption',
 					]),
 				[_attributes]
 			);
