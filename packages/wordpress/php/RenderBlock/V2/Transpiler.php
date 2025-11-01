@@ -191,7 +191,7 @@ class Transpiler {
      * @return bool true if block is valid, false otherwise.
      */
     protected function isValidBlock( array $block): bool {
-        return ! empty($block) && ! empty($block['innerContent']) && ! empty($block['blockName']);
+        return ! empty($block) && ! empty($block['innerContent']) && ! empty($block['blockName']) && ! blockera_block_is_dynamic($block);
     }
 
     /**
