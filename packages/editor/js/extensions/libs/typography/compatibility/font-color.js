@@ -92,8 +92,8 @@ export function fontColorToWPCompatibility({
 			if (blockDetail?.innerBlocks) {
 				Object.keys(blockDetail.innerBlocks).forEach((innerBlock) => {
 					if (
-						!attributes?.blockeraInnerBlocks[innerBlock]?.attributes
-							?.blockeraFontColor
+						!attributes?.blockeraInnerBlocks?.value?.[innerBlock]
+							?.attributes?.blockeraFontColor
 					) {
 						return;
 					}
