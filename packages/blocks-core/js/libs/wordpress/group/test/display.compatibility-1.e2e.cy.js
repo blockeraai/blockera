@@ -34,6 +34,8 @@ describe('Group Block → Display → WP Data Compatibility', () => {
 
 		cy.checkActiveBlockVariation('group');
 
+		cy.addNewTransition();
+
 		//
 		// Test 1: WP data to Blockera
 		//
