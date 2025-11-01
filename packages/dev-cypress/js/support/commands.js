@@ -841,8 +841,6 @@ export const registerCommands = () => {
 	});
 
 	Cypress.Commands.add('prepareEditorForScreenshot', (reset = false) => {
-		console.log('reset', reset);
-
 		if (!reset) {
 			cy.getByAriaLabel('Close Settings').click();
 
