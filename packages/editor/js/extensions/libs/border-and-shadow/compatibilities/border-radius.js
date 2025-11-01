@@ -21,17 +21,42 @@ export function borderRadiusFromWPCompatibility({
 					},
 				};
 			} else if (isObject(attributes?.style?.border?.radius)) {
-				attributes.blockeraBorderRadius = {
-					value: {
-						topLeft: '',
-						topRight: '',
-						bottomLeft: '',
-						bottomRight: '',
-						...attributes?.style?.border?.radius,
-						type: 'custom',
-						all: '',
-					},
+				const corners: {
+					topLeft?: string,
+					topRight?: string,
+					bottomLeft?: string,
+					bottomRight?: string,
+				} = {
+					topLeft: attributes?.style?.border?.radius?.topLeft ?? '',
+					topRight: attributes?.style?.border?.radius?.topRight ?? '',
+					bottomLeft:
+						attributes?.style?.border?.radius?.bottomLeft ?? '',
+					bottomRight:
+						attributes?.style?.border?.radius?.bottomRight ?? '',
 				};
+
+				const areCordersEqual = Object.values(corners).every(
+					(corner) => {
+						return corner === corners.topLeft;
+					}
+				);
+
+				if (areCordersEqual) {
+					attributes.blockeraBorderRadius = {
+						value: {
+							type: 'all',
+							all: corners.topLeft,
+						},
+					};
+				} else {
+					attributes.blockeraBorderRadius = {
+						value: {
+							...corners,
+							type: 'custom',
+							all: '',
+						},
+					};
+				}
 			}
 		}
 	}
