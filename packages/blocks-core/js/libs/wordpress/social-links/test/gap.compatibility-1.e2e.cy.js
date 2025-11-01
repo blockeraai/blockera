@@ -4,6 +4,7 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 	createPost,
+	selectBlock,
 	appendBlocks,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -21,9 +22,7 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
-			cy.getBlock('core/social-link').first().click();
-
-			cy.getByAriaLabel('Select parent block: Social Icons').click();
+			selectBlock('Social Icons');
 
 			cy.addNewTransition();
 
@@ -208,9 +207,7 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
-			cy.getBlock('core/social-link').first().click();
-
-			cy.getByAriaLabel('Select parent block: Social Icons').click();
+			selectBlock('Social Icons');
 
 			cy.addNewTransition();
 
@@ -426,9 +423,7 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
-			cy.getBlock('core/social-link').first().click();
-
-			cy.getByAriaLabel('Select parent block: Social Icons').click();
+			selectBlock('Social Icons');
 
 			cy.addNewTransition();
 
@@ -752,9 +747,7 @@ describe('Social Links Block → Gap → Compatibility', () => {
 <!-- /wp:social-links -->
 					`);
 
-			cy.getBlock('core/social-link').first().click();
-
-			cy.getByAriaLabel('Select parent block: Social Icons').click();
+			selectBlock('Social Icons');
 
 			cy.addNewTransition();
 
