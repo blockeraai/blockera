@@ -45,19 +45,7 @@ describe('Background Color → WP Compatibility', () => {
 			//
 
 			// open color popover
-			cy.get('@bgColorContainer').within(() => {
-				cy.get('button').as('colorBtn');
-				cy.get('@colorBtn').click();
-			});
-
-			// change color to #666 (#666666)
-			cy.get('.components-popover')
-				.last()
-				.within(() => {
-					cy.get('input').as('hexColorInput');
-					cy.get('@hexColorInput').clear();
-					cy.get('@hexColorInput').type('666');
-				});
+			cy.setColorControlValue('BG Color', '#666666');
 
 			// Blockera value should be moved to WP data
 			getWPDataObject().then((data) => {
@@ -71,11 +59,7 @@ describe('Background Color → WP Compatibility', () => {
 			//
 
 			// clear bg color
-			cy.get('.components-popover')
-				.last()
-				.within(() => {
-					cy.get('button[aria-label="Reset Color (Clear)"]').click();
-				});
+			cy.clearColorControlValue('BG Color');
 
 			// WP data should be removed too
 			getWPDataObject().then((data) => {

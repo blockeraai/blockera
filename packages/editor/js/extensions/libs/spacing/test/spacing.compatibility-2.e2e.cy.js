@@ -297,8 +297,8 @@ describe('Box Spacing → WP Compatibility', () => {
 
 		it('Variable Value', () => {
 			appendBlocks(
-				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","right":"var:preset|spacing|40","bottom":"var:preset|spacing|20","left":"var:preset|spacing|40"},"margin":{"top":"var:preset|spacing|20","right":"var:preset|spacing|30","bottom":"var:preset|spacing|20","left":"var:preset|spacing|30"}}}} -->
-<p style="margin-top:var(--wp--preset--spacing--20);margin-right:var(--wp--preset--spacing--30);margin-bottom:var(--wp--preset--spacing--20);margin-left:var(--wp--preset--spacing--30);padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--40)">Test paragraph...</p>
+				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"var:preset|spacing|20","right":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|50"},"margin":{"top":"var:preset|spacing|20","right":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|50"}}}} -->
+<p style="margin-top:var(--wp--preset--spacing--20);margin-right:var(--wp--preset--spacing--30);margin-bottom:var(--wp--preset--spacing--40);margin-left:var(--wp--preset--spacing--50);padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--50)">Test paragraph...</p>
 <!-- /wp:paragraph -->`
 			);
 
@@ -311,14 +311,14 @@ describe('Box Spacing → WP Compatibility', () => {
 					margin: {
 						top: 'var:preset|spacing|20',
 						right: 'var:preset|spacing|30',
-						bottom: 'var:preset|spacing|20',
-						left: 'var:preset|spacing|30',
+						bottom: 'var:preset|spacing|40',
+						left: 'var:preset|spacing|50',
 					},
 					padding: {
 						top: 'var:preset|spacing|20',
-						right: 'var:preset|spacing|40',
-						bottom: 'var:preset|spacing|20',
-						left: 'var:preset|spacing|40',
+						right: 'var:preset|spacing|30',
+						bottom: 'var:preset|spacing|40',
+						left: 'var:preset|spacing|50',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
@@ -351,38 +351,22 @@ describe('Box Spacing → WP Compatibility', () => {
 						},
 						right: {
 							settings: {
-								name: 'Small',
-								id: '40',
-								value: '30px',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--40',
+								var: '--wp--preset--spacing--30',
 							},
-							name: 'Small',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						bottom: {
 							settings: {
-								name: 'Tiny',
-								id: '20',
-								value: '10px',
-								reference: {
-									type: 'theme',
-									theme: 'Twenty Twenty-Five',
-								},
-								type: 'spacing',
-								var: '--wp--preset--spacing--20',
-							},
-							name: 'Tiny',
-							isValueAddon: true,
-							valueType: 'variable',
-						},
-						left: {
-							settings: {
 								name: 'Small',
 								id: '40',
 								value: '30px',
@@ -394,6 +378,22 @@ describe('Box Spacing → WP Compatibility', () => {
 								var: '--wp--preset--spacing--40',
 							},
 							name: 'Small',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						left: {
+							settings: {
+								name: 'Regular',
+								id: '50',
+								value: 'clamp(30px, 5vw, 50px)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Five',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--50',
+							},
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -433,33 +433,33 @@ describe('Box Spacing → WP Compatibility', () => {
 						},
 						bottom: {
 							settings: {
-								name: 'Tiny',
-								id: '20',
-								value: '10px',
+								name: 'Small',
+								id: '40',
+								value: '30px',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--40',
 							},
-							name: 'Tiny',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
 						left: {
 							settings: {
-								name: 'X-Small',
-								id: '30',
-								value: '20px',
+								name: 'Regular',
+								id: '50',
+								value: 'clamp(30px, 5vw, 50px)',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--30',
+								var: '--wp--preset--spacing--50',
 							},
-							name: 'X-Small',
+							name: 'Regular',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -477,7 +477,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('30');
+					cy.selectValueAddonItem('40');
 				});
 
 			// change right margin
@@ -486,7 +486,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('40');
+					cy.selectValueAddonItem('50');
 				});
 
 			// change bottom margin
@@ -495,7 +495,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('50');
+					cy.selectValueAddonItem('60');
 				});
 
 			// change left margin
@@ -504,7 +504,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('60');
+					cy.selectValueAddonItem('70');
 				});
 
 			// change top padding
@@ -513,7 +513,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('20');
+					cy.selectValueAddonItem('40');
 				});
 
 			// change right padding
@@ -522,7 +522,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('30');
+					cy.selectValueAddonItem('50');
 				});
 
 			// change bottom padding
@@ -531,7 +531,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('40');
+					cy.selectValueAddonItem('60');
 				});
 
 			// change left padding
@@ -540,7 +540,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				.last()
 				.within(() => {
 					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('50');
+					cy.selectValueAddonItem('70');
 				});
 
 			// Assert Blockera value
@@ -548,22 +548,6 @@ describe('Box Spacing → WP Compatibility', () => {
 				expect({
 					margin: {
 						top: {
-							settings: {
-								name: 'X-Small',
-								id: '30',
-								value: '20px',
-								reference: {
-									type: 'theme',
-									theme: 'Twenty Twenty-Five',
-								},
-								type: 'spacing',
-								var: '--wp--preset--spacing--30',
-							},
-							name: 'X-Small',
-							isValueAddon: true,
-							valueType: 'variable',
-						},
-						right: {
 							settings: {
 								name: 'Small',
 								id: '40',
@@ -579,7 +563,7 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						bottom: {
+						right: {
 							settings: {
 								name: 'Regular',
 								id: '50',
@@ -595,7 +579,7 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						left: {
+						bottom: {
 							settings: {
 								name: 'Large',
 								id: '60',
@@ -611,41 +595,25 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
+						left: {
+							settings: {
+								name: 'X-Large',
+								id: '70',
+								value: 'clamp(50px, 7vw, 90px)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Five',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--70',
+							},
+							name: 'X-Large',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
 					},
 					padding: {
 						top: {
-							settings: {
-								name: 'Tiny',
-								id: '20',
-								value: '10px',
-								reference: {
-									type: 'theme',
-									theme: 'Twenty Twenty-Five',
-								},
-								type: 'spacing',
-								var: '--wp--preset--spacing--20',
-							},
-							name: 'Tiny',
-							isValueAddon: true,
-							valueType: 'variable',
-						},
-						right: {
-							settings: {
-								name: 'X-Small',
-								id: '30',
-								value: '20px',
-								reference: {
-									type: 'theme',
-									theme: 'Twenty Twenty-Five',
-								},
-								type: 'spacing',
-								var: '--wp--preset--spacing--30',
-							},
-							name: 'X-Small',
-							isValueAddon: true,
-							valueType: 'variable',
-						},
-						bottom: {
 							settings: {
 								name: 'Small',
 								id: '40',
@@ -661,7 +629,7 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						left: {
+						right: {
 							settings: {
 								name: 'Regular',
 								id: '50',
@@ -677,6 +645,38 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
+						bottom: {
+							settings: {
+								name: 'Large',
+								id: '60',
+								value: 'clamp(30px, 7vw, 70px)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Five',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--60',
+							},
+							name: 'Large',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						left: {
+							settings: {
+								name: 'X-Large',
+								id: '70',
+								value: 'clamp(50px, 7vw, 90px)',
+								reference: {
+									type: 'theme',
+									theme: 'Twenty Twenty-Five',
+								},
+								type: 'spacing',
+								var: '--wp--preset--spacing--70',
+							},
+							name: 'X-Large',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
 			});
@@ -685,16 +685,16 @@ describe('Box Spacing → WP Compatibility', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					margin: {
-						top: 'var:preset|spacing|30',
-						right: 'var:preset|spacing|40',
-						bottom: 'var:preset|spacing|50',
-						left: 'var:preset|spacing|60',
+						top: 'var:preset|spacing|40',
+						right: 'var:preset|spacing|50',
+						bottom: 'var:preset|spacing|60',
+						left: 'var:preset|spacing|70',
 					},
 					padding: {
-						top: 'var:preset|spacing|20',
-						right: 'var:preset|spacing|30',
-						bottom: 'var:preset|spacing|40',
-						left: 'var:preset|spacing|50',
+						top: 'var:preset|spacing|40',
+						right: 'var:preset|spacing|50',
+						bottom: 'var:preset|spacing|60',
+						left: 'var:preset|spacing|70',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});
@@ -747,8 +747,8 @@ describe('Box Spacing → WP Compatibility', () => {
 
 		it('Both (Variable and simple values)', () => {
 			appendBlocks(
-				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"100px","bottom":"100px","left":"var:preset|spacing|20","right":"var:preset|spacing|20"},"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20","left":"100px","right":"100px"}}}} -->
-<p style="margin-top:var(--wp--preset--spacing--20);margin-right:100px;margin-bottom:var(--wp--preset--spacing--20);margin-left:100px;padding-top:100px;padding-right:var(--wp--preset--spacing--20);padding-bottom:100px;padding-left:var(--wp--preset--spacing--20)">Test paragraph...</p>
+				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"100px","bottom":"200px","left":"var:preset|spacing|20","right":"var:preset|spacing|30"},"margin":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|30","left":"100px","right":"200px"}}}} -->
+<p style="margin-top:var(--wp--preset--spacing--20);margin-right:200px;margin-bottom:var(--wp--preset--spacing--30);margin-left:100px;padding-top:100px;padding-right:var(--wp--preset--spacing--30);padding-bottom:200px;padding-left:var(--wp--preset--spacing--20)">Test paragraph...</p>
 <!-- /wp:paragraph -->`
 			);
 
@@ -760,14 +760,14 @@ describe('Box Spacing → WP Compatibility', () => {
 				expect({
 					margin: {
 						top: 'var:preset|spacing|20',
-						right: '100px',
-						bottom: 'var:preset|spacing|20',
+						right: '200px',
+						bottom: 'var:preset|spacing|30',
 						left: '100px',
 					},
 					padding: {
 						top: '100px',
-						right: 'var:preset|spacing|20',
-						bottom: '100px',
+						right: 'var:preset|spacing|30',
+						bottom: '200px',
 						left: 'var:preset|spacing|20',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
@@ -786,21 +786,21 @@ describe('Box Spacing → WP Compatibility', () => {
 						top: '100px',
 						right: {
 							settings: {
-								name: 'Tiny',
-								id: '20',
-								value: '10px',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: 'Tiny',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						bottom: '100px',
+						bottom: '200px',
 						left: {
 							settings: {
 								name: 'Tiny',
@@ -835,20 +835,20 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						right: '100px',
+						right: '200px',
 						bottom: {
 							settings: {
-								name: 'Tiny',
-								id: '20',
-								value: '10px',
+								name: 'X-Small',
+								id: '30',
+								value: '20px',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--20',
+								var: '--wp--preset--spacing--30',
 							},
-							name: 'Tiny',
+							name: 'X-Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -865,48 +865,56 @@ describe('Box Spacing → WP Compatibility', () => {
 			cy.get(`[data-cy="box-spacing-margin-top"]`).within(() => {
 				cy.removeValueAddon();
 			});
+			cy.wait(50);
 			setBoxSpacingSide('margin-top', '50');
 
 			// change right margin
 			cy.get(`[data-cy="box-spacing-margin-right"]`).within(() => {
 				cy.openValueAddon();
 			});
-			cy.selectValueAddonItem('50');
+			cy.wait(50);
+			cy.selectValueAddonItem('40');
 
 			// // change bottom margin
 			cy.get(`[data-cy="box-spacing-margin-bottom"]`).within(() => {
 				cy.removeValueAddon();
 			});
-			setBoxSpacingSide('margin-bottom', '50');
+			cy.wait(50);
+			setBoxSpacingSide('margin-bottom', '60');
 
 			// // change left margin
 			cy.get(`[data-cy="box-spacing-margin-left"]`).within(() => {
 				cy.openValueAddon();
 			});
+			cy.wait(50);
 			cy.selectValueAddonItem('50');
 
 			// change top padding
 			cy.get(`[data-cy="box-spacing-padding-top"]`).within(() => {
 				cy.openValueAddon();
 			});
+			cy.wait(50);
 			cy.selectValueAddonItem('50');
 
 			// change right padding
 			cy.get(`[data-cy="box-spacing-padding-right"]`).within(() => {
 				cy.removeValueAddon();
 			});
-			setBoxSpacingSide('padding-right', '50');
+			cy.wait(50);
+			setBoxSpacingSide('padding-right', '40');
 
 			// change bottom padding
 			cy.get(`[data-cy="box-spacing-padding-bottom"]`).within(() => {
 				cy.openValueAddon();
 			});
-			cy.selectValueAddonItem('50');
+			cy.wait(50);
+			cy.selectValueAddonItem('60');
 
 			// change left padding
 			cy.get(`[data-cy="box-spacing-padding-left"]`).within(() => {
 				cy.removeValueAddon();
 			});
+			cy.wait(50);
 			setBoxSpacingSide('padding-left', '50');
 
 			// Assert Blockera value
@@ -916,21 +924,21 @@ describe('Box Spacing → WP Compatibility', () => {
 						top: '50px',
 						right: {
 							settings: {
-								name: 'Regular',
-								id: '50',
-								value: 'clamp(30px, 5vw, 50px)',
+								name: 'Small',
+								id: '40',
+								value: '30px',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--50',
+								var: '--wp--preset--spacing--40',
 							},
-							name: 'Regular',
+							name: 'Small',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						bottom: '50px',
+						bottom: '60px',
 						left: {
 							settings: {
 								name: 'Regular',
@@ -965,20 +973,20 @@ describe('Box Spacing → WP Compatibility', () => {
 							isValueAddon: true,
 							valueType: 'variable',
 						},
-						right: '50px',
+						right: '40px',
 						bottom: {
 							settings: {
-								name: 'Regular',
-								id: '50',
-								value: 'clamp(30px, 5vw, 50px)',
+								name: 'Large',
+								id: '60',
+								value: 'clamp(30px, 7vw, 70px)',
 								reference: {
 									type: 'theme',
 									theme: 'Twenty Twenty-Five',
 								},
 								type: 'spacing',
-								var: '--wp--preset--spacing--50',
+								var: '--wp--preset--spacing--60',
 							},
-							name: 'Regular',
+							name: 'Large',
 							isValueAddon: true,
 							valueType: 'variable',
 						},
@@ -992,15 +1000,15 @@ describe('Box Spacing → WP Compatibility', () => {
 				expect({
 					padding: {
 						top: 'var:preset|spacing|50',
-						bottom: 'var:preset|spacing|50',
+						bottom: 'var:preset|spacing|60',
 						left: '50px',
-						right: '50px',
+						right: '40px',
 					},
 					margin: {
 						top: '50px',
-						bottom: '50px',
+						bottom: '60px',
 						left: 'var:preset|spacing|50',
-						right: 'var:preset|spacing|50',
+						right: 'var:preset|spacing|40',
 					},
 				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
 			});

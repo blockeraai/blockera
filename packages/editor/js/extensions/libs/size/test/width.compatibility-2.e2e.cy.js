@@ -694,6 +694,8 @@ describe('Width → WP Compatibility', () => {
 				'[aria-label="Select Column"], [aria-label="Select parent block: Column"]'
 			).click();
 
+			cy.addNewTransition();
+
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
 
@@ -787,6 +789,8 @@ describe('Width → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('core/post-featured-image').click();
+
+			cy.addNewTransition();
 
 			// add alias to the feature container
 			cy.getParentContainer('Width').as('widthContainer');
