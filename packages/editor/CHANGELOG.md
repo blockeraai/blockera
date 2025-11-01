@@ -11,6 +11,7 @@
 - The inner block items design improved to make them different of the block states.
 - Block Settings Section: improve design and UX.
 - Add `&` support for targeting current block in custom CSS feature.
+- `Flex Child` settings support added to `Column` block.
 
 ## 2.0.1 (2025-07-22)
 
