@@ -214,6 +214,13 @@ describe('Icon Block → Functionality + Visual Test', () => {
 		// disable wp navbar to avoid screenshot issue
 		cy.get('#wpadminbar').invoke('css', 'position', 'relative');
 
+		// icon tag should be svg tag
+		cy.get('.wp-block-group.blockera-block')
+			.first()
+			.within(() => {
+				cy.get('svg').should('exist');
+			});
+
 		cy.get('.wp-block-group.blockera-block').first().compareSnapshot({
 			name: '1-frontend',
 			testThreshold: 0.02,
