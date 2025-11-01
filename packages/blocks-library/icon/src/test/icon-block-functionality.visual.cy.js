@@ -201,6 +201,9 @@ describe('Icon Block → Functionality + Visual Test', () => {
 		 */
 		deSelectBlock();
 
+		// wait for the block to be rendered and styles to be generated and applied
+		cy.wait(500);
+
 		cy.getBlock('core/group').first().compareSnapshot({
 			name: '1-editor',
 			testThreshold: 0.02,
