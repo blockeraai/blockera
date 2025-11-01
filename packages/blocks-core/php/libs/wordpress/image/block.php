@@ -28,6 +28,9 @@ return array_merge(
 				'blockera/elements/link'    => [
 					'root' => 'a',
 				],
+				'blockera/elements/img-tag' => [
+					'root' => '&.wp-block-image img, &.wp-block-image svg',
+				],
 			]
 		),
 	]

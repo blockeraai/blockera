@@ -20,6 +20,7 @@
 - `Gallery` block: improve support.
 - `Search` block: improve support.
 - `Post Navigation Link` block: improve support.
+- `Image` block: `img/svg` inner block added
 
 
 ### Automated Tests
