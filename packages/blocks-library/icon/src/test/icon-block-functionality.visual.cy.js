@@ -203,7 +203,7 @@ describe('Icon Block → Functionality + Visual Test', () => {
 
 		cy.getBlock('core/group').first().compareSnapshot({
 			name: '1-editor',
-			testThreshold: 0.2,
+			testThreshold: 0.02,
 		});
 
 		//Check frontend
@@ -216,7 +216,7 @@ describe('Icon Block → Functionality + Visual Test', () => {
 
 		cy.get('.wp-block-group.blockera-block').first().compareSnapshot({
 			name: '1-frontend',
-			testThreshold: 0.2,
+			testThreshold: 0.02,
 		});
 	});
 });

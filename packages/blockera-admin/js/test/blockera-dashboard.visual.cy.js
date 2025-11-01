@@ -12,7 +12,7 @@ describe('Visual Regression Test', () => {
 
 		cy.compareSnapshot({
 			name: 'dashboard',
-			testThreshold: 0.2,
+			testThreshold: 0.02,
 		});
 	});
 });
