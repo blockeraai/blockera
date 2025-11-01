@@ -558,6 +558,16 @@
 		]
 	},
 	{
+		"iconName": "block-image-tag",
+		"title": "Img SVG tag",
+		"library": "ui",
+		"tags": [
+			"image",
+			"tag",
+			"svg"
+		]
+	},
+	{
 		"iconName": "block-image-caption",
 		"title": "Block Image Caption",
 		"library": "ui",

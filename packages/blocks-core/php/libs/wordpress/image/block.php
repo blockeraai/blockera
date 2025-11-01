@@ -22,11 +22,16 @@ return array_merge(
 				'blockeraMinHeight'         => $sizeSelector,
 				'blockeraMaxHeight'         => $sizeSelector, 
 				'blockeraRatio'             => $sizeSelector,
+				'blockeraBorder'            => $sizeSelector,
+				'blockeraBorderRadius'      => $sizeSelector,
 				'blockera/elements/caption' => [
 					'root' => 'figcaption',
 				],
 				'blockera/elements/link'    => [
 					'root' => 'a',
+				],
+				'blockera/elements/img-tag' => [
+					'root' => '&.wp-block-image img, &.wp-block-image svg',
 				],
 			]
 		),

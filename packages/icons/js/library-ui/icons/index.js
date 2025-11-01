@@ -48,6 +48,7 @@ export { default as BlockDetailsParagraph } from './block-details-paragraph.svg'
 export { default as BlockFootnoteReturn } from './block-footnote-return.svg';
 export { default as BlockGalleryCaption } from './block-gallery-caption.svg';
 export { default as BlockImageCaption } from './block-image-caption.svg';
+export { default as BlockImageTag } from './block-image-tag.svg';
 export { default as BlockInput } from './block-input.svg';
 export { default as BlockLink, default as Link } from './block-link.svg'; // link is alias for block-link
 export { default as BlockListItemContainer } from './block-list-item-container.svg';
