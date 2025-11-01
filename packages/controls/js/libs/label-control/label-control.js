@@ -22,7 +22,8 @@ const LabelControl = ({
 	labelDescription,
 	path,
 	singularId,
-	className,
+	className = '',
+	labelClassName = '',
 	ariaLabel = '',
 	attribute,
 	blockName,
@@ -46,7 +47,7 @@ const LabelControl = ({
 				{...{
 					label,
 					singularId,
-					className,
+					className: `${className} ${labelClassName}`.trim(),
 					ariaLabel,
 					attribute,
 					blockName,
@@ -66,7 +67,7 @@ const LabelControl = ({
 		<SimpleLabelControl
 			label={label}
 			ariaLabel={ariaLabel}
-			className={className}
+			className={`${className} ${labelClassName}`.trim()}
 			labelDescription={labelDescription}
 			{...props}
 		/>

@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { type MixedElement } from 'react';
 import { useMemo } from '@wordpress/element';
 import { Fill } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
@@ -21,7 +22,9 @@ import type { TExtensionSlotFillProps } from '../types';
 import { default as featuresLibrary } from '../../features';
 import { default as featuresSchemas } from '../../features-config';
 
-export const ExtensionSlotFill = (props: TExtensionSlotFillProps) => {
+export const ExtensionSlotFill = (
+	props: TExtensionSlotFillProps
+): MixedElement => {
 	const { getFeatures } = select(STORE_NAME);
 	const registeredFeatures = getFeatures();
 	const { getBlockType } = select('core/blocks');

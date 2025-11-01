@@ -191,7 +191,7 @@ class Transpiler {
      * @return bool true if block is valid, false otherwise.
      */
     protected function isValidBlock( array $block): bool {
-        return ! empty($block) && ! empty($block['innerContent']) && ! empty($block['blockName']);
+        return ! empty($block) && ! empty($block['innerContent']) && ! empty($block['blockName']) && ! blockera_is_icon_block($block);
     }
 
     /**
@@ -234,7 +234,7 @@ class Transpiler {
 
 				// If custom css is set, add it to the block css stack.
 				if (! empty($block['attrs']['blockeraCustomCSS']['value']) && ! in_array($block['attrs']['blockeraCustomCSS']['value'], $this->styles, true)) {
-					$this->styles[] = preg_replace('/(\.|#)block/i', $unique_class_name, $block['attrs']['blockeraCustomCSS']['value']);
+					$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $block['attrs']['blockeraCustomCSS']['value']);
 				}
 			}
 		}

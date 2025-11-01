@@ -38,7 +38,7 @@ export const LetterSpacing = ({
 			}}
 		>
 			<InputControl
-				columns="2fr 2.6fr"
+				columns="2fr 2fr"
 				label={__('Letters', 'blockera')}
 				labelPopoverTitle={__('Letters Spacing', 'blockera')}
 				labelDescription={

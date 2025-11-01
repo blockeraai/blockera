@@ -46,7 +46,6 @@ export function getExtensionConfig(
 
 export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 	const {
-		config,
 		getBlockExtensionBy,
 		currentBlock = 'master',
 		currentState = 'normal',
@@ -68,7 +67,6 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 		return {
 			currentBlock,
 			getBlockExtensionBy,
-			config: getExtensionConfig(name, currentBlock),
 			currentState: getActiveMasterState(clientId, name),
 			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
 			currentInnerBlockState: getActiveInnerState(clientId, currentBlock),
@@ -80,7 +78,6 @@ export const useExtensionsStore = (props: Object): ExtensionsStoreType => {
 	);
 
 	return {
-		config,
 		currentState,
 		currentBlock,
 		currentBreakpoint,

@@ -283,7 +283,6 @@ if (! function_exists('blockera_get_dist_assets')) {
     }
 }
 
-
 if (! function_exists('blockera_load_script_translations')) {
     /**
      * Load script translations.
@@ -350,5 +349,17 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 				return $older_css . $css;
 			}
 		);
+	}
+}
+
+if (! function_exists('blockera_enqueue_global_styles')) {
+	/**
+	 * Enqueueing the blockera global styles.
+	 *
+	 * @return void
+	 */
+	function blockera_enqueue_global_styles(): void {
+
+		blockera_add_global_styles_for_blocks();
 	}
 }

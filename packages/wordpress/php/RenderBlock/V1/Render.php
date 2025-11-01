@@ -194,7 +194,7 @@ class Render {
 		}
 
         // Is need to update block HTML output?
-        $need_to_update_html = $this->needToUpdateHTML($attributes['className'] ?? '', $block['innerHTML']);
+        $need_to_update_html = $this->needToUpdateHTML($html, $attributes['className'] ?? '', $block['innerHTML']);
 
         // Pushing block classname into stack.
         $this->setClassname($attributes['className'] ?? '');
@@ -215,7 +215,7 @@ class Render {
 
 			// If custom css is set, add it to the block css.
 			if (! empty($attributes['blockeraCustomCSS']['value'])) {
-				$css .= preg_replace('/(\.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+				$css .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
 			}
 
             // Print css into inline style on "wp_head" action occur.
@@ -254,7 +254,7 @@ class Render {
 
 		// If custom css is set, add it to the block css.
 		if (! empty($attributes['blockeraCustomCSS']['value'])) {
-			$computed_css_rules .= preg_replace('/(\.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+			$computed_css_rules .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
 		}
 
         // Print css into inline style on "wp_head" action occur.
@@ -289,12 +289,13 @@ class Render {
      * Is need to update block content?
      * The target of this method is prevented of avoid block unique classnames.
      *
+	 * @param string $html the block html output.
      * @param string $block_classname the block "className" attribute value.
      * @param string $inner_html The block inner html output.
      *
      * @return bool true on success, false on otherwise.
      */
-    protected function needToUpdateHTML( string $block_classname, string $inner_html): bool {
+    protected function needToUpdateHTML( string $html, string $block_classname, string $inner_html): bool {
 
         // Imagine the block classname and classnames property is empty, so we should update html output.
         if (empty($block_classname) && empty($this->classnames)) {
@@ -310,6 +311,11 @@ class Render {
 
                 return true;
             }
+
+			if (! str_contains($html, $matches[0])) {
+
+				return true;
+			}
 
             return in_array($matches[0], $this->classnames, true);
         }

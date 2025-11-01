@@ -149,3 +149,70 @@ export const setBlockAppSettings = (settings: Object): Object => {
 		type: 'SET_BLOCK_APP_SETTINGS',
 	};
 };
+
+export const setSelectedBlockStyle = (selectedBlockStyle: string): Object => {
+	return {
+		selectedBlockStyle,
+		type: 'SET_SELECTED_BLOCK_STYLE',
+	};
+};
+
+export const setSelectedBlockRef = (selectedBlockRef: string): Object => {
+	return {
+		selectedBlockRef,
+		type: 'SET_SELECTED_BLOCK_REF',
+	};
+};
+
+export const setGlobalStyles = (styles: Object): Object => {
+	return {
+		styles,
+		type: 'SET_GLOBAL_STYLES',
+	};
+};
+
+export const setBlockStyles = (
+	blockName: string,
+	variation: string,
+	styles: Object
+): Object => {
+	return {
+		styles,
+		blockName,
+		variation,
+		type: 'SET_BLOCK_STYLES',
+	};
+};
+
+export const setSelectedBlockStyleVariation = (
+	selectedBlockStyleVariation: Object
+): Object => {
+	return {
+		selectedBlockStyleVariation,
+		type: 'SET_SELECTED_BLOCK_STYLE_VARIATION',
+	};
+};
+
+export const setStyleVariationBlocks = (
+	variationName: string,
+	blocks: Array<string>
+): Object => {
+	return {
+		variationName,
+		blocks,
+		type: 'SET_STYLE_VARIATION_BLOCKS',
+	};
+};
+
+export const deleteStyleVariationBlocks = (
+	variationName: string,
+	single: boolean = true,
+	blockName: string
+): Object => {
+	return {
+		single,
+		blockName,
+		variationName,
+		type: 'DELETE_STYLE_VARIATION_BLOCKS',
+	};
+};

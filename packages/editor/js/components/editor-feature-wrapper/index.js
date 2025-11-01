@@ -28,6 +28,8 @@ export default function EditorFeatureWrapper({
 	config,
 	isActive = true,
 	children,
+	name,
+	clientId,
 	...props
 }: EditorFeatureWrapperProps): Node {
 	const {
@@ -35,7 +37,7 @@ export default function EditorFeatureWrapper({
 		currentState,
 		currentBreakpoint,
 		currentInnerBlockState,
-	} = useExtensionsStore();
+	} = useExtensionsStore({ name, clientId });
 	const { availableStates, availableBreakpoints, availableInnerStates } =
 		useEditorStore(
 			applyFilters(

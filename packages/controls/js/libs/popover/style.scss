@@ -35,17 +35,10 @@
 		border-radius: var(--popover-radius);
 	}
 
-	&.with-header {
-
-		.components-popover__content {
-			padding-top: var(--popover-header-height);
-		}
-	}
-
 	.blockera-component-popover-header {
 		padding: 0 var(--popover-padding);
 		box-shadow: 0 2px 6px 0 var(--popover-header-shadow-color);
-		position: fixed;
+		position: sticky;
 		top: 0;
 		left: 0;
 		right: 0;

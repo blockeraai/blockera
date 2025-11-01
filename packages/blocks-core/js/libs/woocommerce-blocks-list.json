@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 178,
+		"total": 179,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 75,
+		"not-supported": 76,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -803,6 +803,10 @@
 		{
 			"name": "woocommerce/product-filter-taxonomy",
 			"title": "Enable customers to filter the product collection by selecting one or more taxonomy terms, such as categories, brands, or tags."
+		},
+		{
+			"name": "woocommerce/add-to-cart-with-options-variation-description",
+			"title": "Variation Description"
 		}
 	]
 }

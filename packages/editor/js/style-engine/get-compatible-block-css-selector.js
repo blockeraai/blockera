@@ -57,7 +57,7 @@ export const createStandardSelector = ({
 	selector: string,
 	mergedSelector: string,
 	originSelector: string,
-}) => {
+}): string => {
 	const matches = selector.match(/:(before|after)$/);
 
 	if (matches && !isNormalState(state)) {
@@ -388,6 +388,9 @@ export const getCompatibleBlockCssSelector = ({
 	className = '',
 	suffixClass = '',
 	fallbackSupportId,
+	styleVariationName,
+	isStyleVariation = false,
+	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
 	const rootSelector = '{{BLOCK_ID}}';
@@ -419,7 +422,19 @@ export const getCompatibleBlockCssSelector = ({
 		block = getSelectedBlock();
 	}
 
-	const register = (_selector: string): void => {
+	const register = (
+		_selector: string,
+		{
+			from,
+			getSelectorBasedOnContext,
+		}: {
+			from?: 'edit-post/block' | 'edit-site/global-styles',
+			getSelectorBasedOnContext?: (generatedSelector: string) => string,
+		} = {
+			from: 'edit-post/block',
+			getSelectorBasedOnContext: undefined,
+		}
+	): void => {
 		const registerSelector = (generatedSelector: string) => {
 			switch (state) {
 				case 'parent-class':
@@ -446,7 +461,10 @@ export const getCompatibleBlockCssSelector = ({
 
 			selectors[state] = {
 				// $FlowFixMe
-				[currentBlock]: generatedSelector,
+				[currentBlock]:
+					'function' === typeof getSelectorBasedOnContext
+						? getSelectorBasedOnContext(generatedSelector)
+						: generatedSelector,
 			};
 		};
 
@@ -467,7 +485,10 @@ export const getCompatibleBlockCssSelector = ({
 
 					selectors[state] = {
 						// $FlowFixMe
-						[currentBlock]: _selector,
+						[currentBlock]:
+							'function' === typeof getSelectorBasedOnContext
+								? getSelectorBasedOnContext(_selector)
+								: _selector,
 					};
 
 					return;
@@ -476,11 +497,16 @@ export const getCompatibleBlockCssSelector = ({
 
 			selectors[state] = {
 				// $FlowFixMe
-				[currentBlock]: rootSelector + suffixClass,
+				[currentBlock]:
+					'function' === typeof getSelectorBasedOnContext
+						? getSelectorBasedOnContext(rootSelector + suffixClass)
+						: rootSelector + suffixClass,
 			};
 
 			return;
 		}
+
+		const blockType = select('core/blocks')?.getBlockType(blockName);
 
 		// Assume current block is one of inners type.
 		if (isInnerBlock(currentBlock)) {
@@ -498,12 +524,15 @@ export const getCompatibleBlockCssSelector = ({
 							state,
 							suffixClass,
 							masterState,
-							rootSelector,
 							getInnerState,
 							getMasterState,
 							fromInnerBlock: true,
 							customizedPseudoClasses,
 							currentStateHasSelectors,
+							rootSelector:
+								'edit-site/global-styles' === from
+									? getBlockCSSSelector(blockType) || ''
+									: rootSelector,
 						})
 					);
 					break;
@@ -525,11 +554,14 @@ export const getCompatibleBlockCssSelector = ({
 							state,
 							suffixClass,
 							masterState,
-							rootSelector,
 							getInnerState,
 							getMasterState,
 							customizedPseudoClasses,
 							currentStateHasSelectors,
+							rootSelector:
+								'edit-site/global-styles' === from
+									? getBlockCSSSelector(blockType) || ''
+									: rootSelector,
 						})
 					);
 					break;
@@ -554,7 +586,25 @@ export const getCompatibleBlockCssSelector = ({
 	});
 
 	if (selector && selector.trim()) {
-		if (isInnerBlock(currentBlock)) {
+		if (isStyleVariation && styleVariationName) {
+			register(selector, {
+				from: 'edit-site/global-styles',
+				getSelectorBasedOnContext: (generatedSelector: string) => {
+					if ('default' === styleVariationName) {
+						return `:root :where(${generatedSelector})`;
+					}
+					return `:root :where(${generatedSelector}.is-style-${styleVariationName})`;
+				},
+			});
+		} else if (isGlobalStylesWrapper) {
+			// Normalizing selector before registration for global styles purposes.
+			register(selector, {
+				from: 'edit-site/global-styles',
+				getSelectorBasedOnContext: (generatedSelector: string) => {
+					return `:root :where(${generatedSelector})`;
+				},
+			});
+		} else if (isInnerBlock(currentBlock)) {
 			register(selector);
 		} else {
 			register(appendRootBlockCssSelector(selector, rootSelector));

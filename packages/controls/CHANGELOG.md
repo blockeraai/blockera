@@ -8,6 +8,7 @@
 - Border radius control design and UX improvement.
 - Tooltip control design improvement.
 - Features Labels: design improved.
+- Flex Layout Control: improve design and tooltips to show corresponding CSS values on hover.
 
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.

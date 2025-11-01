@@ -99,7 +99,7 @@ export const TextColumns = ({
 						</p>
 					</>
 				}
-				columns="columns-2"
+				columns="1fr 150px"
 				className={
 					display === 'flex' ? 'blockera-control-is-not-active' : ''
 				}

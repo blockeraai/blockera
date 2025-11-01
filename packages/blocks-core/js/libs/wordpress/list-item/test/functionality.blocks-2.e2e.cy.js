@@ -16,7 +16,7 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:list -->
-<ul><!-- wp:list-item -->
+<ul class="wp-block-list"><!-- wp:list-item -->
 <li>item 1 <a href="#">link is here</a></li>
 <!-- /wp:list-item -->
 

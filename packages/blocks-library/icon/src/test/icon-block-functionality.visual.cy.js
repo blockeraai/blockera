@@ -2,7 +2,9 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	setInnerBlock,
 	deSelectBlock,
+	setParentBlock,
 	addBlockToPost,
 	setBoxSpacingSide,
 	redirectToFrontPage,
@@ -10,6 +12,8 @@ import {
 
 describe('Icon Block → Functionality + Visual Test', () => {
 	beforeEach(() => {
+		cy.viewport(1280, 1200);
+
 		createPost();
 	});
 
@@ -109,9 +113,61 @@ describe('Icon Block → Functionality + Visual Test', () => {
 			cy.get('input').type(150, { force: true });
 		});
 
+		/**
+		 * 3. customize img/svg inner block
+		 */
+		// Switch to parent block
+		cy.getByAriaLabel('Select Group').click();
+
+		addBlockToPost(
+			'core/image/blockera/icon',
+			false,
+			false,
+			'.block-editor-inserter__toggle'
+		);
+
+		cy.getBlock('core/image').last().click();
+
+		cy.getByDataTest('settings-tab').click();
+
+		cy.getByAriaLabel('Icon Library').click({ force: true });
+
+		cy.get('[data-wp-component="Popover"]')
+			.last()
+			.within(() => {
+				cy.getByAriaLabel('audio Icon').click();
+			});
+
+		cy.getByDataTest('style-tab').click();
+
+		cy.setColorControlValue('BG Color', 'eeeeee');
+
+		setBoxSpacingSide('padding-top', 50);
+		setBoxSpacingSide('padding-right', 50);
+		setBoxSpacingSide('padding-left', 50);
+		setBoxSpacingSide('padding-bottom', 50);
+
+		cy.getParentContainer('Radius').within(() => {
+			cy.get('input[type="text"]').clear({ force: true });
+			cy.get('input[type="text"]').type(25, { force: true });
+		});
+
+		//
+		// 3.1. img/svg tag inner block
+		//
+		setInnerBlock('elements/img-tag');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		//
+		// 3.1.1. BG color
+		//
+		cy.setColorControlValue('BG Color', '59ff00');
+
 		//
 		// 4. Check settings tab
 		//
+		setParentBlock();
 		cy.getByDataTest('settings-tab').click();
 
 		cy.get('.block-editor-block-inspector').within(() => {
@@ -145,9 +201,12 @@ describe('Icon Block → Functionality + Visual Test', () => {
 		 */
 		deSelectBlock();
 
+		// wait for the block to be rendered and styles to be generated and applied
+		cy.wait(500);
+
 		cy.getBlock('core/group').first().compareSnapshot({
 			name: '1-editor',
-			testThreshold: 0.2,
+			testThreshold: 0.02,
 		});
 
 		//Check frontend
@@ -158,9 +217,16 @@ describe('Icon Block → Functionality + Visual Test', () => {
 		// disable wp navbar to avoid screenshot issue
 		cy.get('#wpadminbar').invoke('css', 'position', 'relative');
 
+		// icon tag should be svg tag
+		cy.get('.wp-block-group.blockera-block')
+			.first()
+			.within(() => {
+				cy.get('svg').should('exist');
+			});
+
 		cy.get('.wp-block-group.blockera-block').first().compareSnapshot({
 			name: '1-frontend',
-			testThreshold: 0.2,
+			testThreshold: 0.02,
 		});
 	});
 });

@@ -15,7 +15,7 @@ describe('Block Style Variations', () => {
 
 	it('Check style variations functionality', () => {
 		//
-		// 1. Check that style variations button is not visible for code block
+		// 1. Check that style variations button is visible for code block and there is only one style variation
 		//
 		appendBlocks(`<!-- wp:code -->
 <pre class="wp-block-code"><code>// hello work!</code></pre>
@@ -23,7 +23,23 @@ describe('Block Style Variations', () => {
 
 		cy.getBlock('core/code').first().click();
 
-		cy.getByDataTest('style-variations-button').should('not.exist');
+		cy.getByDataTest('style-variations-button').should('exist');
+
+		cy.getByDataTest('style-variations-button').should(
+			'have.text',
+			'Default'
+		);
+		cy.getByDataTest('style-variations-button').click();
+
+		cy.get('.blockera-component-popover.variations-picker-popover')
+			.last()
+			.within(() => {
+				// there should be only one style variation
+				cy.get('.block-editor-block-styles__item__button').should(
+					'have.length',
+					1
+				);
+			});
 
 		//
 		// 2. Add a group block

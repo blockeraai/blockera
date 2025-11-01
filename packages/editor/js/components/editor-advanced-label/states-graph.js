@@ -30,7 +30,9 @@ export const StatesGraph = ({
 	defaultValue,
 	path,
 	isRepeaterItem,
+	attributesRef,
 }: {
+	attributesRef?: Object,
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
@@ -49,6 +51,7 @@ export const StatesGraph = ({
 		blockName,
 		defaultValue,
 		path,
+		attributesRef,
 		isRepeaterItem,
 	});
 

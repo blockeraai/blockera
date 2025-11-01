@@ -1,4 +1,4 @@
-.blockera-component-tooltip {
+.blockera-component-tooltip.blockera-component-tooltip {
 	--tooltip-bg: #000000;
 	--tooltip-color: #ffffff;
 	--tooltip-padding: 6px;
@@ -78,7 +78,7 @@
 		padding: 3px 4px;
 		margin: var(--tooltip-gap) 0;
 		border-radius: var(--blockera-controls-border-radius);
-		background: color-mix(in srgb, var(--tooltip-bg) 100%, #000000 20%);
+		background-color: color-mix(in srgb, var(--tooltip-bg) 100%, #000000 20%);
 		display: inline-block;
 	}
 }

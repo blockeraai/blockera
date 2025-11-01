@@ -30,6 +30,8 @@ try {
     $routes->post('telemetry/log-error', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'log' ]);
     $routes->post('telemetry/log-error/status', [ Blockera\Telemetry\Http\Controllers\BugDetectorAndReporterController::class, 'status' ]);
 
+	blockera_editor_register_routes($routes);
+
 } catch (Exception $exception) {
 
     return $exception->getMessage();

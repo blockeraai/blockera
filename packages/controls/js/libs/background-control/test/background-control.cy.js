@@ -437,7 +437,7 @@ describe(
 					});
 
 					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('FFA33C ');
+					cy.get('input[maxlength="9"]').type('FFA33C', { delay: 0 });
 
 					cy.get('@gradientBar').should(($gradientBar) => {
 						const background = $gradientBar.css('background');

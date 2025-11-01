@@ -83,7 +83,7 @@ describe('Comments Pagination Block', () => {
 				.contains('Layout')
 				.should('not.be.visible');
 
-			cy.get('.components-panel__body-title button')
+			cy.get('.components-tools-panel-header')
 				.contains('Settings')
 				.should('be.visible');
 		});

@@ -1,20 +1,35 @@
 /**
  * External dependencies
  */
-import { Slot, Fill } from '@wordpress/components';
+import { Slot } from '@wordpress/components';
 import { useEffect, memo, useRef } from '@wordpress/element';
+import { select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
  */
 import { prependPortal } from '@blockera/utils';
 
-/**
- * Internal dependencies
- */
-import { BlockDropdownAllMenu } from './block-dropdown-all-menu';
+const Component = ({ clientId, sentinelRef, stickyWrapperRef }) => (
+	<>
+		<div
+			ref={sentinelRef}
+			className="blockera-block-card-sticky-sentinel"
+		></div>
+		<div
+			ref={stickyWrapperRef}
+			className="blockera-block-card-wrapper is-sticky-active"
+		>
+			<Slot name={`blockera-block-card-content-${clientId}`} />
+		</div>
 
-export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
+		<div className="blockera-block-edit-wrapper">
+			<Slot name={`blockera-block-edit-content-${clientId}`} />
+		</div>
+	</>
+);
+
+export const BlockPartials = memo(({ clientId, isActive }) => {
 	const stickyWrapperRef = useRef(null);
 	const sentinelRef = useRef(null);
 
@@ -50,37 +65,27 @@ export const BlockPartials = memo(({ clientId, isActive, setActive }) => {
 		return () => observer.disconnect();
 	}, []);
 
+	const { getActiveComplementaryArea } = select('core/interface');
+
+	const activeComplementaryArea =
+		getActiveComplementaryArea('core/edit-site');
+
+	if ('edit-site/global-styles' === activeComplementaryArea) {
+		return (
+			<Component
+				clientId={clientId}
+				sentinelRef={sentinelRef}
+				stickyWrapperRef={stickyWrapperRef}
+			/>
+		);
+	}
+
 	return prependPortal(
-		<>
-			<div
-				ref={sentinelRef}
-				className="blockera-block-card-sticky-sentinel"
-			></div>
-			<div
-				ref={stickyWrapperRef}
-				className="blockera-block-card-wrapper is-sticky-active"
-			>
-				<Slot name={`blockera-block-card-content-${clientId}`} />
-			</div>
-
-			<div className="blockera-block-edit-wrapper">
-				<Slot name={`blockera-block-edit-content-${clientId}`} />
-			</div>
-
-			<Fill
-				key={`${clientId}-card-menu`}
-				name={'blockera-block-card-children'}
-			>
-				<div className={'blockera-dropdown-menu'}>
-					<BlockDropdownAllMenu
-						{...{
-							isActive,
-							setActive,
-						}}
-					/>
-				</div>
-			</Fill>
-		</>,
+		<Component
+			clientId={clientId}
+			sentinelRef={sentinelRef}
+			stickyWrapperRef={stickyWrapperRef}
+		/>,
 		document.querySelector('.block-editor-block-inspector'),
 		{
 			className: isActive ? 'blockera-active-block' : '',

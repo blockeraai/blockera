@@ -14,7 +14,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 import sharedInnerBlocks from '../inners/shared';
 
 const imageSelector =
@@ -35,6 +35,15 @@ export const Image: BlockType = {
 			settings: {
 				force: true,
 			},
+		},
+		'elements/img-tag': {
+			name: 'elements/img-tag',
+			label: __('Img/SVG Tag', 'blockera'),
+			description: __(
+				'The img or svg tag element inside image block.',
+				'blockera'
+			),
+			icon: <Icon icon="block-image-tag" library="ui" iconSize="20" />,
 		},
 		'elements/link': {
 			...sharedInnerBlocks['elements/link'],

@@ -38,6 +38,7 @@ export const EditorAdvancedLabelControl = ({
 	path = null,
 	label,
 	value,
+	getAttributesRef,
 	className,
 	ariaLabel,
 	attribute = '',
@@ -63,7 +64,7 @@ export const EditorAdvancedLabelControl = ({
 		currentInnerBlockState,
 	} = useBlockContext();
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	let { attributes } = getSelectedBlock() || {};
+	let { attributes } = getSelectedBlock() || { attributes: getAttributesRef };
 	attributes = sanitizeBlockAttributes(attributes);
 
 	const { onChange, valueCleanup } = useContext(RepeaterContext) || {};
@@ -79,11 +80,13 @@ export const EditorAdvancedLabelControl = ({
 		{
 			path,
 			value,
+			blockName,
 			singularId,
 			attribute,
 			isRepeater,
 			defaultValue,
 			isNormalState: isNormalState(),
+			clientId: props?.clientId || '',
 			blockAttributes: getAttributes(),
 		},
 		200
@@ -160,6 +163,9 @@ export const EditorAdvancedLabelControl = ({
 						isChangedOnCurrentState &&
 						isFunction(resetToDefault)
 							? () => {
+									if ('function' !== typeof resetToDefault) {
+										return;
+									}
 									if (
 										(isNull(path) ||
 											isEmpty(path) ||
@@ -225,6 +231,11 @@ export const EditorAdvancedLabelControl = ({
 								onClick={switchBlockState}
 								defaultValue={defaultValue}
 								path={path}
+								attributesRef={
+									'undefined' !== typeof getAttributesRef
+										? getAttributesRef()
+										: {}
+								}
 								isRepeaterItem={!isUndefined(repeaterItem)}
 							/>
 

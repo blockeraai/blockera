@@ -96,6 +96,7 @@ export default function ({
 							? __('Coming soon…', 'blockera')
 							: __('Pro Feature', 'blockera')
 					}
+					delay={400}
 					{...props}
 				>
 					{children}

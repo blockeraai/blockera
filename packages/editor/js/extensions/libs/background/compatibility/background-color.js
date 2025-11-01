@@ -3,6 +3,7 @@
 /**
  * Blockera dependencies
  */
+import { isEquals } from '@blockera/utils';
 import { isValid } from '@blockera/controls';
 import { getColor, generateVariableString } from '@blockera/data';
 
@@ -14,8 +15,10 @@ export function backgroundColorFromWPCompatibility({
 	blockAttributes: Object,
 }): Object {
 	if (
-		attributes?.blockeraBackgroundColor !==
-		blockAttributes.blockeraBackgroundColor.default
+		!isEquals(
+			attributes?.blockeraBackgroundColor,
+			blockAttributes.blockeraBackgroundColor.default
+		)
 	) {
 		return attributes;
 	}

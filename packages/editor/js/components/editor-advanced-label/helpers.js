@@ -36,15 +36,17 @@ export const getStatesGraph = ({
 	blockName,
 	defaultValue,
 	path,
+	attributesRef,
 	isRepeaterItem,
 }: {
 	controlId: string,
 	blockName: string,
 	defaultValue: any,
 	path: null | string,
+	attributesRef?: Object,
 	isRepeaterItem: Boolean,
 }): Array<LabelStates> => {
-	const blockStates = controlId ? getStatesGraphNodes() : [];
+	const blockStates = controlId ? getStatesGraphNodes(attributesRef) : [];
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { getAttributes = () => {}, currentBlock } = useBlockContext();

@@ -98,7 +98,11 @@ export default function BlockCategory(props: {
 	}
 
 	return (
-		<Flex gap={15} direction={'column'}>
+		<Flex
+			gap={15}
+			direction={'column'}
+			className={'blockera-settings-section'}
+		>
 			<Flex
 				alignItems={'center'}
 				justifyContent={'space-between'}

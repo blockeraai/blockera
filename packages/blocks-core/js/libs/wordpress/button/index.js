@@ -17,7 +17,7 @@ import {
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const Button: BlockType = {
 	name: 'blockeraButton',

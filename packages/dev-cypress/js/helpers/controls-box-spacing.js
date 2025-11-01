@@ -38,10 +38,13 @@ export function clearBoxSpacingSide(side) {
  * @param {string}  side   Name of the panel to open
  */
 export function openBoxSpacingSide(side, element = 'label') {
+	// try to close all popovers
+	cy.get('body').type('{esc}');
+
 	if (element === 'label') {
 		cy.get(
 			`[data-cy="box-spacing-${side}"] [data-cy="label-control"]`
-		).click();
+		).click({ force: true });
 	} else if (element === 'shape') {
 		cy.get(`[data-cy="box-spacing-control"]`).within(() => {
 			cy.get(`path.blockera-control-spacing-shape-side.side-${side}`)

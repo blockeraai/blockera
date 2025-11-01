@@ -54,6 +54,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'ObjectPosition' => \Blockera\Editor\StyleDefinitions\ObjectPosition::class,
 				'Opacity' => \Blockera\Editor\StyleDefinitions\Opacity::class,
 				'Overflow' => \Blockera\Editor\StyleDefinitions\Overflow::class,
+				'Flex' => \Blockera\Editor\StyleDefinitions\Flex::class,
 				'Position' => \Blockera\Editor\StyleDefinitions\Position::class,
 				'Spacing' => \Blockera\Editor\StyleDefinitions\Spacing::class,
 				'TextAlign' => \Blockera\Editor\StyleDefinitions\TextAlign::class,

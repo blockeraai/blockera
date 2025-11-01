@@ -72,7 +72,7 @@ describe('Button Block', () => {
 
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('37e6d4 ');
+			cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 		});
 
 		cy.getParentContainer('Border Line').within(() => {

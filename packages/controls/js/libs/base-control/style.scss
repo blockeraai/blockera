@@ -21,10 +21,14 @@
 		&:empty {
 			display: none;
 		}
+
+		&:hover {
+			z-index: 100;
+		}
 	}
 
 	&.small-gap .blockera-field-label .blockera-control-label {
-		min-height: initial;
+		min-height: 18px;
 	}
 
 	&.label-center .blockera-field-label {
@@ -88,12 +92,12 @@
 
 	code,
 	kbd {
-		padding: 2px 4px;
-		margin: 0 1px;
-		background: #def0fb;
-		color: var(--blockera-controls-color);
-		border-radius: var(--blockera-controls-border-radius);
-		font-size: 90%;
+		padding: 2px 4px !important;
+		margin: 0 1px !important;
+		background: #def0fb !important;
+		color: var(--blockera-controls-color) !important;
+		border-radius: var(--blockera-controls-border-radius) !important;
+		font-size: 90% !important;
 	}
 }
 
