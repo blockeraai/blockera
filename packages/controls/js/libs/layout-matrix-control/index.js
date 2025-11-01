@@ -188,6 +188,15 @@ export default function LayoutMatrixControl({
 							<>
 								<MatrixItem
 									id={'top-left'}
+									tooltipText={
+										<>
+											<span>
+												align-items: flex-start;
+												<br />
+												justify-content: flex-start;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-start' &&
 										value.justifyContent === 'flex-start'
@@ -222,6 +231,23 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'top-center'}
+									tooltipText={
+										<>
+											{direction === 'row' ? (
+												<span>
+													align-items: flex-start;
+													<br />
+													justify-content: center;
+												</span>
+											) : (
+												<span>
+													align-items: center;
+													<br />
+													justify-content: flex-start;
+												</span>
+											)}
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-start' &&
 										value.justifyContent === 'center'
@@ -266,6 +292,23 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'top-right'}
+									tooltipText={
+										<>
+											{direction === 'row' ? (
+												<span>
+													align-items: flex-start;
+													<br />
+													justify-content: flex-end;
+												</span>
+											) : (
+												<span>
+													align-items: flex-end;
+													<br />
+													justify-content: flex-start;
+												</span>
+											)}
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-start' &&
 										value.justifyContent === 'flex-end'
@@ -310,6 +353,23 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'center-left'}
+									tooltipText={
+										<>
+											{direction === 'row' ? (
+												<span>
+													align-items: center;
+													<br />
+													justify-content: flex-start;
+												</span>
+											) : (
+												<span>
+													align-items: flex-start;
+													<br />
+													justify-content: center;
+												</span>
+											)}
+										</>
+									}
 									selected={
 										value.alignItems === 'center' &&
 										value.justifyContent === 'flex-start'
@@ -354,6 +414,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'center-center'}
+									tooltipText={
+										<>
+											<span>
+												align-items: center;
+												<br />
+												justify-content: center;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'center' &&
 										value.justifyContent === 'center'
@@ -388,6 +457,23 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'center-right'}
+									tooltipText={
+										<>
+											{direction === 'row' ? (
+												<span>
+													align-items: center;
+													<br />
+													justify-content: flex-end;
+												</span>
+											) : (
+												<span>
+													align-items: flex-end;
+													<br />
+													justify-content: center;
+												</span>
+											)}
+										</>
+									}
 									selected={
 										value.alignItems === 'center' &&
 										value.justifyContent === 'flex-end'
@@ -432,6 +518,23 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'bottom-left'}
+									tooltipText={
+										<>
+											{direction === 'row' ? (
+												<span>
+													align-items: flex-end;
+													<br />
+													justify-content: flex-start;
+												</span>
+											) : (
+												<span>
+													align-items: flex-start;
+													<br />
+													justify-content: flex-end;
+												</span>
+											)}
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-end' &&
 										value.justifyContent === 'flex-start'
@@ -476,6 +579,23 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'bottom-center'}
+									tooltipText={
+										<>
+											{direction === 'row' ? (
+												<span>
+													align-items: flex-end;
+													<br />
+													justify-content: center;
+												</span>
+											) : (
+												<span>
+													align-items: center;
+													<br />
+													justify-content: flex-end;
+												</span>
+											)}
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-end' &&
 										value.justifyContent === 'center'
@@ -520,6 +640,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'bottom-right'}
+									tooltipText={
+										<>
+											<span>
+												align-items: flex-end;
+												<br />
+												justify-content: flex-end;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-end' &&
 										value.justifyContent === 'flex-end'
@@ -558,6 +687,15 @@ export default function LayoutMatrixControl({
 							<>
 								<MatrixItem
 									id={'stretch-space-around'}
+									tooltipText={
+										<>
+											<span>
+												align-items: stretch;
+												<br />
+												justify-content: space-around;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'stretch' &&
 										value.justifyContent === 'space-around'
@@ -596,6 +734,15 @@ export default function LayoutMatrixControl({
 							<>
 								<MatrixItem
 									id={'stretch-space-between'}
+									tooltipText={
+										<>
+											<span>
+												align-items: stretch;
+												<br />
+												justify-content: space-between;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'stretch' &&
 										value.justifyContent === 'space-between'
@@ -634,6 +781,15 @@ export default function LayoutMatrixControl({
 							<>
 								<MatrixItem
 									id={'start'}
+									tooltipText={
+										<>
+											<span>
+												align-items: stretch;
+												<br />
+												justify-content: flex-start;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'stretch' &&
 										value.justifyContent === 'flex-start'
@@ -668,6 +824,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'center'}
+									tooltipText={
+										<>
+											<span>
+												align-items: stretch;
+												<br />
+												justify-content: center;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'stretch' &&
 										value.justifyContent === 'center'
@@ -702,6 +867,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'end'}
+									tooltipText={
+										<>
+											<span>
+												align-items: stretch;
+												<br />
+												justify-content: flex-end;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'stretch' &&
 										value.justifyContent === 'flex-end'
@@ -740,6 +914,15 @@ export default function LayoutMatrixControl({
 							<>
 								<MatrixItem
 									id={'start'}
+									tooltipText={
+										<>
+											<span>
+												align-items: flex-start;
+												<br />
+												justify-content: space-around;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-start' &&
 										value.justifyContent === 'space-around'
@@ -774,6 +957,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'center'}
+									tooltipText={
+										<>
+											<span>
+												align-items: center;
+												<br />
+												justify-content: space-around;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'center' &&
 										value.justifyContent === 'space-around'
@@ -808,6 +1000,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'end'}
+									tooltipText={
+										<>
+											<span>
+												align-items: flex-end;
+												<br />
+												justify-content: space-around;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-end' &&
 										value.justifyContent === 'space-around'
@@ -846,6 +1047,15 @@ export default function LayoutMatrixControl({
 							<>
 								<MatrixItem
 									id={'start'}
+									tooltipText={
+										<>
+											<span>
+												align-items: flex-start;
+												<br />
+												justify-content: space-between;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-start' &&
 										value.justifyContent === 'space-between'
@@ -880,6 +1090,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'center'}
+									tooltipText={
+										<>
+											<span>
+												align-items: center;
+												<br />
+												justify-content: space-between;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'center' &&
 										value.justifyContent === 'space-between'
@@ -914,6 +1133,15 @@ export default function LayoutMatrixControl({
 
 								<MatrixItem
 									id={'end'}
+									tooltipText={
+										<>
+											<span>
+												align-items: flex-end;
+												<br />
+												justify-content: space-between;
+											</span>
+										</>
+									}
 									selected={
 										value.alignItems === 'flex-end' &&
 										value.justifyContent === 'space-between'
@@ -1003,7 +1231,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-empty"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-empty"
 											/>
 										),
@@ -1014,7 +1242,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-start"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-start"
 											/>
 										),
@@ -1025,7 +1253,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-center"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-center"
 											/>
 										),
@@ -1036,7 +1264,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-end"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-end"
 											/>
 										),
@@ -1047,7 +1275,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="flex-align-stretch"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-align-stretch"
 											/>
 										),
@@ -1080,7 +1308,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-empty"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-empty"
 											/>
 										),
@@ -1091,7 +1319,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-start"
-												iconSize="18"
+												iconSize="20"
 												className="blockera-flex-justify-content-flex-start"
 												data-test="layout-matrix-justify-start"
 											/>
@@ -1103,7 +1331,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-center"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-center"
 											/>
 										),
@@ -1114,7 +1342,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-end"
-												iconSize="18"
+												iconSize="20"
 												className="blockera-flex-justify-content-flex-end"
 												data-test="layout-matrix-justify-end"
 											/>
@@ -1126,7 +1354,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-space-around"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-around"
 											/>
 										),
@@ -1137,7 +1365,7 @@ export default function LayoutMatrixControl({
 										icon: (
 											<Icon
 												icon="justify-content-space-between"
-												iconSize="18"
+												iconSize="20"
 												data-test="layout-matrix-justify-between"
 											/>
 										),

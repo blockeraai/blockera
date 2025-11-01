@@ -346,13 +346,18 @@
 			gap: 10px;
 			padding: 0 6px 0 12px;
 			border: 1px solid var(--blockera-controls-border-color);
-			background-color: #272c31;
+			background-color: var(--popover-bg-color, #1c2024);
 			color: #ffffff;
 			border-radius: var(--blockera-controls-border-radius);
 			font-size: 12px;
 			position: relative;
-
+			font-weight: 500;
 			transition: all 0.1s linear;
+
+			&.is-current-active-item {
+				color: var(--blockera-controls-primary-color);
+				background-color: var(--popover-header-bg-color, #272c31);
+			}
 
 			&:not(.is-current-active-item) {
 				cursor: pointer;
@@ -369,11 +374,11 @@
 
 			&::after {
 				content: "";
-				width: calc(var(--item-padding) - 11px);
+				width: calc(var(--item-padding) - 12px);
 				height: 1px;
 				border-top: 1px dashed var(--blockera-controls-border-color);
 				position: absolute;
-				right: 100%;
+				right: calc(100% + 1px);
 				top: 50%;
 				transform: translateY(-50%);
 			}
