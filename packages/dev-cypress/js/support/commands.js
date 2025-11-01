@@ -839,4 +839,76 @@ export const registerCommands = () => {
 			cy.getByAriaLabel('Add New Transition').click();
 		});
 	});
+
+	Cypress.Commands.add('prepareEditorForScreenshot', (reset = false) => {
+		console.log('reset', reset);
+
+		if (!reset) {
+			cy.getByAriaLabel('Close Settings').click();
+
+			cy.get('#wpadminbar').invoke('css', 'display', 'none');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__footer'
+			).invoke('css', 'display', 'none');
+
+			cy.getIframeBody()
+				.find('.edit-post-visual-editor__post-title-wrapper')
+				.invoke('css', 'display', 'none');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__header'
+			).invoke('css', 'display', 'none');
+		} else {
+			cy.setScreenshotViewport('desktop');
+
+			cy.get('#wpadminbar').invoke('css', 'display', 'flex');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__footer'
+			).invoke('css', 'display', 'flex');
+
+			cy.getIframeBody()
+				.find('.edit-post-visual-editor__post-title-wrapper')
+				.invoke('css', 'display', 'block');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__header'
+			).invoke('css', 'display', 'block');
+		}
+	});
+
+	Cypress.Commands.add('prepareFrontendForScreenshot', () => {
+		// disable wp navbar to avoid screenshot issue
+		cy.get('#wpadminbar').invoke('css', 'display', 'none');
+	});
+
+	Cypress.Commands.add(
+		'setScreenshotViewport',
+		(size = 'desktop', config = {}) => {
+			let width = '';
+			let height = '';
+
+			if (size === 'desktop') {
+				width = 1600;
+				height = 2000;
+			} else if (size === 'mobile') {
+				width = 450;
+				height = 2000;
+			}
+
+			config = {
+				width: config?.width || width,
+				height: config?.height || height,
+				wait: 250,
+				...config,
+			};
+
+			cy.viewport(config.width, config.height);
+
+			if (config?.wait) {
+				cy.wait(config.wait);
+			}
+		}
+	);
 };
