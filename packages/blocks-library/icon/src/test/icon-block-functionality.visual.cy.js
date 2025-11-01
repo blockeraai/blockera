@@ -147,6 +147,11 @@ describe('Icon Block → Functionality + Visual Test', () => {
 		setBoxSpacingSide('padding-left', 50);
 		setBoxSpacingSide('padding-bottom', 50);
 
+		cy.getParentContainer('Radius').within(() => {
+			cy.get('input[type="text"]').clear({ force: true });
+			cy.get('input[type="text"]').type(25, { force: true });
+		});
+
 		//
 		// 3.1. img/svg tag inner block
 		//
