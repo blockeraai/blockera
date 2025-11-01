@@ -10,9 +10,8 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-import { section1 } from './blocks-visual-content';
+import { sections } from './blocks-visual-content';
 
-const sections = ['section-1'];
 describe('Style Engine and Blocks Visual Test', () => {
 	beforeEach(() => {
 		cy.setScreenshotViewport('desktop');
@@ -20,19 +19,9 @@ describe('Style Engine and Blocks Visual Test', () => {
 		createPost();
 	});
 
-	sections.forEach((section) => {
+	Object.keys(sections).forEach((section) => {
 		it(section, () => {
-			let sectionContent = '';
-
-			switch (section) {
-				case 'section-1':
-					sectionContent = section1;
-					break;
-				default:
-					sectionContent = '';
-					break;
-			}
-
+			const sectionContent = sections[section] || '';
 			if (!sectionContent) {
 				return;
 			}
