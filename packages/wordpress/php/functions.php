@@ -233,15 +233,6 @@ if (! function_exists('blockera_block_is_dynamic')) {
 	 */
 	function blockera_block_is_dynamic( array $block ): bool {
 
-		// phpcs:disable
-		// TODO: please implements these block types.
-		// Use this block types in the_content process to handle dynamic blocks.
-		// if (in_array($block['blockName'], ['blockera/the-content', 'blockera/the-content-inners'], true)) {
-
-		// 	return false;
-		// }
-		// phpcs:enable
-
 		$registered_block = WP_Block_Type_Registry::get_instance()->get_registered( $block['blockName'] ?? '' );
 
 		if ( ! $registered_block ) {
