@@ -192,7 +192,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 		it('Simple Value', () => {
 			appendBlocks(
 				`<!-- wp:cover {"url":"https://placehold.co/600x400","id":27,"dimRatio":50,"customOverlayColor":"#5c594d","style":{"dimensions":{"aspectRatio":"3/2"}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-cover"><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#5c594d"></span><img class="wp-block-cover__image-background wp-image-27" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
+<div class="wp-block-cover"><img class="wp-block-cover__image-background wp-image-27" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#5c594d"></span><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
 <p class="has-text-align-center has-large-font-size">Test text</p>
 <!-- /wp:paragraph --></div></div>
 <!-- /wp:cover -->`
@@ -275,7 +275,7 @@ describe('Aspect Ratio → WP Compatibility', () => {
 		it('Use custom aspect ratio - WP6.6 compatibility', () => {
 			appendBlocks(
 				`<!-- wp:cover {"url":"https://placehold.co/600x400","id":27,"dimRatio":50,"customOverlayColor":"#5c594d","style":{"dimensions":{"aspectRatio":"3/2"}},"layout":{"type":"constrained"}} -->
-<div class="wp-block-cover"><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#5c594d"></span><img class="wp-block-cover__image-background wp-image-27" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
+<div class="wp-block-cover"><img class="wp-block-cover__image-background wp-image-27" alt="" src="https://placehold.co/600x400" data-object-fit="cover"/><span aria-hidden="true" class="wp-block-cover__background has-background-dim" style="background-color:#5c594d"></span><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"Write title…","fontSize":"large"} -->
 <p class="has-text-align-center has-large-font-size">Test text</p>
 <!-- /wp:paragraph --></div></div>
 <!-- /wp:cover -->`
