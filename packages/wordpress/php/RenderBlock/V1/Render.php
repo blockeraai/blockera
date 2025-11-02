@@ -166,16 +166,11 @@ class Render {
             return $html;
         }
 
-		$block_categories = [
-			'core' => 'wordpress',
-			'woocommerce' => 'woocommerce',
-		];
-
 		$extracted_name = explode('/', $block['blockName']);
 
 		$this->id = $extracted_name[1];
 		$this->setContext('blocks-core');
-		$this->setSubContext($block_categories[ $extracted_name[0] ] ?? 'third-party');
+		$this->setSubContext(blockera_get_block_library_name( $extracted_name[0] ));
 		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
 
         // Extract block attributes.

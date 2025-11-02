@@ -115,3 +115,21 @@ if (! function_exists('blockera_get_supports')) {
         );
 	}
 }
+
+if ( ! function_exists('blockera_get_block_category')) {
+	/**
+	 * Get the block library name.
+	 * 
+	 * @param string $block_name The block name.
+	 * 
+	 * @return string the block library name.
+	 */
+	function blockera_get_block_library_name( string $block_name): string {
+		$block_libraries = [
+			'core' => 'wordpress',
+			'woocommerce' => 'woocommerce',
+		];
+
+		return $block_libraries[ $block_name ] ?? 'third-party';
+	}
+}

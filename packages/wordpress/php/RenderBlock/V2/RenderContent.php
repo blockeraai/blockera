@@ -183,7 +183,7 @@ class RenderContent {
 
 			$this->id = $extracted_name[1];
 			$this->setContext('blocks-core');
-			$this->setSubContext($block_categories[ $extracted_name[0] ] ?? 'third-party');
+			$this->setSubContext(blockera_get_block_library_name( $extracted_name[0] ));
 			$this->enqueueAssets($this->plugin_info['plugin_base_path'], $this->plugin_info['plugin_base_url'], $this->plugin_info['plugin_version']);
         }
 
