@@ -10,9 +10,9 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-import { sections } from './blocks-visual-content';
+import { sections } from './sections-visual-content';
 
-describe('Style Engine and Blocks Visual Test', () => {
+describe('Sections design with Style Engine', () => {
 	beforeEach(() => {
 		cy.setScreenshotViewport('desktop');
 
@@ -125,7 +125,7 @@ describe('Style Engine and Blocks Visual Test', () => {
 						.map((f, i) => `\n${i + 1}. ${f.name}:\n   ${f.error}`)
 						.join('\n');
 					throw new Error(
-						`${failures.length} snapshot(s) failed:${errorMessage}`
+						`${failures.length} screenshot(s) failed:${errorMessage}`
 					);
 				}
 			});
