@@ -191,7 +191,7 @@ class Transpiler {
      * @return bool true if block is valid, false otherwise.
      */
     protected function isValidBlock( array $block): bool {
-        return ! empty($block) && ! empty($block['innerContent']) && ! empty($block['blockName']) && ! blockera_is_icon_block($block);
+        return ! empty($block) && ! empty($block['attrs']) && ! empty($block['innerContent']) && ! empty($block['blockName']) && ! blockera_is_icon_block($block);
     }
 
     /**
@@ -277,13 +277,13 @@ class Transpiler {
 				if ($style) {
 					foreach ($this->global_css_props_classes as $prop => $prop_class) {
 						if (str_contains($style, $prop)) {
-							$this->updateClassname($processor, $prop_class);
+							$this->updateClassname($processor, $prop_class, $args['block']);
 						}
 					}
 				}
 
 				if ( null === $class || ! blockera_is_wp_block_child_class($class)) {
-					$this->updateClassname($processor, $args['blockera_class_name']);
+					$this->updateClassname($processor, $args['blockera_class_name'], $args['block']);
 				}
             }
 
@@ -423,10 +423,11 @@ class Transpiler {
      *
      * @param \WP_HTML_Tag_Processor $processor The HTML tag processor object.
      * @param string                 $classname The classname to update.
+	 * @param array                  $block The block data.
      *
      * @return void
      */
-    protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname): void {
+    protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname, array $block): void {
         $previous_class  = $processor->get_attribute('class');
         $regexp          = blockera_get_unique_class_name_regex();
 		$final_classname = '';
@@ -442,7 +443,7 @@ class Transpiler {
             }
         }
 		
-		if (! str_contains($final_classname, 'blockera-is-transpiled')) {
+		if (! str_contains($final_classname, 'blockera-is-transpiled') && ! blockera_block_has_icon($block)) {
 			$final_classname .= ' blockera-is-transpiled';
 		}
 
