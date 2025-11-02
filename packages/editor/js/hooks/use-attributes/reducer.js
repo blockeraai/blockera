@@ -185,6 +185,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				getState,
 				clientId,
 				name: blockId,
+				hookParams,
 				getInnerState,
 			});
 			const {

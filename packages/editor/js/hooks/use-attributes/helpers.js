@@ -90,7 +90,18 @@ export const memoizedRootBreakpoints: (
 									[currentBlock]: {
 										attributes: {
 											...effectiveItems,
-											[attributeId]: newValue,
+											[attributeId]:
+												isEquals(
+													newValue,
+													defaultAttributes[
+														attributeId
+													]?.default?.value ||
+														defaultAttributes[
+															attributeId
+														]?.default
+												) || ref?.reset
+													? undefined
+													: newValue,
 										},
 									},
 								},
@@ -103,7 +114,8 @@ export const memoizedRootBreakpoints: (
 				}
 
 				const isEqualsWithDefault = isEquals(
-					defaultAttributes[attributeId]?.default,
+					defaultAttributes[attributeId]?.default?.value ||
+						defaultAttributes[attributeId]?.default,
 					newValue
 				);
 
@@ -195,7 +207,7 @@ export const memoizedRootBreakpoints: (
 				attributes: {
 					...effectiveItems,
 					[attributeId]:
-						isEqualsWithDefault && ref?.reset
+						isEqualsWithDefault || ref?.reset
 							? undefined
 							: newValue,
 				},
@@ -273,7 +285,7 @@ export const memoizedBlockStates: (
 								breakpoints[currentBreakpoint],
 								action,
 								insideInnerBlock,
-								ref
+								args
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
