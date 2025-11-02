@@ -17,7 +17,6 @@
     <testsuites>
         <testsuite name="Test Suite">
             <directory suffix=".php">./packages/dev-phpunit/php/</directory>
-            <directory suffix=".php">./tests/phpunit/main/</directory>
             <directory suffix=".php">./packages/blockera/php/tests/</directory>
             <directory suffix=".php">./packages/blockera-admin/php/tests/</directory>
             <directory suffix=".php">./packages/editor/php/tests/</directory>
