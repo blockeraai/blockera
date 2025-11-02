@@ -77,14 +77,15 @@ export function fontColorToWPCompatibility({
 	if ('reset' === ref?.current?.action || newValue === '') {
 		// link and font color are equal
 		if (
-			isColorsEqual(
+			attributes?.style?.elements?.link?.color?.text &&
+			(isColorsEqual(
 				attributes?.style?.color?.text,
 				attributes?.style?.elements?.link?.color?.text
 			) ||
-			isColorsEqual(
-				attributes?.textColor,
-				attributes?.style?.elements?.link?.color?.text
-			)
+				isColorsEqual(
+					attributes?.textColor,
+					attributes?.style?.elements?.link?.color?.text
+				))
 		) {
 			let advancedAttrCleanup = {};
 

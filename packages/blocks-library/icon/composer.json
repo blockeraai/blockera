@@ -5,6 +5,9 @@
 	"autoload": {
 		"psr-4": {
 			"Blockera\\Block\\Icon\\": "src/"
-		}
+		},
+		"files": [
+			"src/functions.php"
+		]
 	}
 }

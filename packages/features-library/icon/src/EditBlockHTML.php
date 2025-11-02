@@ -82,8 +82,21 @@ class EditBlockHTML implements EditableBlockHTML {
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
         $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
 
-        return str_replace($original_html, $blockElement->outerhtml, $html);
+		$html = $this->normalizedHTML($html);
+		
+        return str_replace($this->normalizedHTML($original_html), $this->normalizedHTML($blockElement->outerhtml), $this->normalizedHTML($html));
     }
+
+	/**
+	 * Normalize the html.
+	 *
+	 * @param string $html The html to normalize.
+	 *
+	 * @return string The normalized html.
+	 */
+	protected function normalizedHTML( string $html): string {
+		return preg_replace('/\s*>/', '>', $html);
+	}
 
 	/**
 	 * Validate the block.
