@@ -1,3 +1,4 @@
+/* Icon style */
 .wp-block-list:not([class*="blockera-has-icon-"]) .blockera-block[class*="blockera-has-icon-"] {
 	position: relative;
 	gap: var(--blockera--icon--gap, 0.5em);
