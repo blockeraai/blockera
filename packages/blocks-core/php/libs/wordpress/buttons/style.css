@@ -1,0 +1,6 @@
+.blockera-block.wp-block-buttons[style*=text-decoration] .wp-block-button,
+.blockera-block.wp-block-buttons[style*=text-decoration] .wp-block-button__link,
+.blockera-block.wp-block-buttons.blockera-has-text-decoration .wp-block-button,
+.blockera-block.wp-block-buttons.blockera-has-text-decoration .wp-block-button__link {
+	text-decoration: inherit;
+}
