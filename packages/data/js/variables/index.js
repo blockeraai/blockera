@@ -47,6 +47,7 @@ export { getVariable } from './get-variable';
 export {
 	generateVariableString,
 	generateAttributeVarStringFromVA,
+	generateVariableStringFromAttributeVarString,
 } from './utils';
 
 export * from './types';

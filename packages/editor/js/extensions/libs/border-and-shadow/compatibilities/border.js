@@ -3,10 +3,7 @@
 /**
  * Blockera dependencies
  */
-import {
-	getColorVAFromIdString,
-	getColorVAFromVarString,
-} from '@blockera/data';
+import { getColorVAFromVarString } from '@blockera/data';
 import { isValid, isBorderEmpty } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
@@ -19,7 +16,9 @@ export function borderFromWPCompatibility({
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor !== undefined) {
-			const colorVar = getColorVAFromIdString(attributes?.borderColor);
+			const colorVar = getColorVAFromVarString(
+				`var:preset|color|${attributes?.borderColor}`
+			);
 
 			if (colorVar) {
 				attributes.blockeraBorder = {

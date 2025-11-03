@@ -5,7 +5,7 @@
  */
 import { isEquals } from '@blockera/utils';
 import { isValid } from '@blockera/controls';
-import { getColor, generateVariableString } from '@blockera/data';
+import { getColorVAFromVarString } from '@blockera/data';
 
 export function backgroundColorFromWPCompatibility({
 	attributes,
@@ -26,26 +26,11 @@ export function backgroundColorFromWPCompatibility({
 	// backgroundColor attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
 	if (attributes?.backgroundColor !== undefined) {
-		const colorVar = getColor(attributes?.backgroundColor);
-
-		if (colorVar) {
-			attributes.blockeraBackgroundColor = {
-				value: {
-					settings: {
-						...colorVar,
-						type: 'color',
-						var: generateVariableString({
-							reference: colorVar?.reference || { type: '' },
-							type: 'color',
-							id: colorVar?.id || '',
-						}),
-					},
-					name: colorVar?.name,
-					isValueAddon: true,
-					valueType: 'variable',
-				},
-			};
-		}
+		attributes.blockeraBackgroundColor = {
+			value: getColorVAFromVarString(
+				`var:preset|color|${attributes?.backgroundColor}`
+			),
+		};
 	}
 	// style.color.background is not variable
 	else if (attributes?.style?.color?.background !== undefined) {
