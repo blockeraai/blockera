@@ -114,6 +114,9 @@ describe('Background Color → WP Compatibility', () => {
 				}).to.be.deep.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
+				expect('accent-3').to.be.equal(
+					getSelectedBlock(data, 'backgroundColor')
+				);
 			});
 
 			//
@@ -155,6 +158,50 @@ describe('Background Color → WP Compatibility', () => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
+			});
+		});
+
+		it('Not found variable', () => {
+			appendBlocks(`<!-- wp:paragraph {"backgroundColor":"unknown"} -->
+<p class="has-unknown-background-color has-background">Test paragraph</p>
+<!-- /wp:paragraph -->`);
+
+			// Select target block
+			cy.getBlock('core/paragraph').click();
+
+			cy.addNewTransition();
+
+			//
+			// Test 1: WP data to Blockera
+			//
+
+			// WP data should come to Blockera
+			getWPDataObject().then((data) => {
+				expect({
+					settings: {
+						name: 'unknown',
+						id: 'var:preset|color|unknown',
+						value: 'var(--wp--preset--color--unknown)',
+						type: 'color',
+						var: '--wp--preset--color--unknown',
+					},
+					name: 'unknown',
+					isValueAddon: true,
+					valueType: 'variable',
+				}).to.be.deep.equal(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
+				);
+				expect('unknown').to.be.equal(
+					getSelectedBlock(data, 'backgroundColor')
+				);
+			});
+
+			//
+			// Test 2: Check interface for showing deleted value addon
+			//
+
+			cy.getParentContainer('BG Color').within(() => {
+				cy.get('[data-test="value-addon-deleted"]').should('exist');
 			});
 		});
 	});

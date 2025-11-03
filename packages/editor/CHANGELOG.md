@@ -15,7 +15,8 @@
 - Compatibility for detecting variables from core blocks if the variable not found.
 
 ### Automated Tests
-- Automated test to check color WP data compatibility if variables not found. 
+- Automated test to check `font color` WP data compatibility if variables not found. 
+- Automated test to check `background color` WP data compatibility if variables not found. 
 
 
 ## 2.0.1 (2025-07-22)
