@@ -116,7 +116,7 @@ if (! function_exists('blockera_get_supports')) {
 	}
 }
 
-if ( ! function_exists('blockera_get_block_category')) {
+if ( ! function_exists('blockera_get_block_library_name')) {
 	/**
 	 * Get the block library name.
 	 * 
