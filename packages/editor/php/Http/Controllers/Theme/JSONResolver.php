@@ -495,7 +495,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 				$variations[] = $variation;
 			}
 		}
-		return $variations;
+		return apply_filters('blockera/json/resolver/get_style_variations', $variations);
 	}
 
 	/**
