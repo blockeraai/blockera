@@ -16,11 +16,13 @@ import {
 import section1 from './fixtures/section-1.txt';
 import section2 from './fixtures/section-2.txt';
 import section3 from './fixtures/section-3.txt';
+import section4 from './fixtures/section-4.txt';
 
 const sections = {
 	'section-1': section1,
 	'section-2': section2,
 	'section-3': section3,
+	'section-4': section4,
 };
 
 describe('Sections design with Style Engine', () => {
