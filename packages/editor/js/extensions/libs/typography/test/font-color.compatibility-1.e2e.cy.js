@@ -57,6 +57,8 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				cy.setColorControlValue('Text Color', '666666');
 
+				cy.wait(50);
+
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
@@ -81,7 +83,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				setInnerBlock('elements/link');
 
-				cy.wait(100);
+				cy.wait(50);
 
 				cy.setColorControlValue('Text Color', '555555');
 
@@ -172,6 +174,8 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				cy.setColorControlValue('Text Color', '666666');
 
+				cy.wait(50);
+
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
@@ -195,6 +199,8 @@ describe('Font Color → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 				cy.clearColorControlValue('Text Color');
+
+				cy.wait(50);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -255,6 +261,8 @@ describe('Font Color → WP Compatibility', () => {
 
 				cy.setColorControlValue('Text Color', '666666');
 
+				cy.wait(50);
+
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
 					expect('#666666').to.be.equal(
@@ -272,6 +280,8 @@ describe('Font Color → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 				cy.clearColorControlValue('Text Color');
+
+				cy.wait(50);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -352,6 +362,8 @@ describe('Font Color → WP Compatibility', () => {
 				// change variable
 				cy.selectValueAddonItem('contrast');
 
+				cy.wait(50);
+
 				// Check WP data
 				getWPDataObject().then((data) => {
 					expect({
@@ -392,6 +404,8 @@ describe('Font Color → WP Compatibility', () => {
 				cy.get('@container').within(() => {
 					cy.removeValueAddon();
 				});
+
+				cy.wait(50);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
@@ -479,6 +493,8 @@ describe('Font Color → WP Compatibility', () => {
 						cy.selectValueAddonItem('contrast');
 					});
 
+				cy.wait(50);
+
 				// Check WP data
 				getWPDataObject().then((data) => {
 					expect({
@@ -519,6 +535,8 @@ describe('Font Color → WP Compatibility', () => {
 				cy.get('@container').within(() => {
 					cy.removeValueAddon();
 				});
+
+				cy.wait(50);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
