@@ -139,10 +139,12 @@ export default function ({
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									attributeId,
-									{
-										...gap,
-										rows: newValue,
-									},
+									ref?.current?.reset
+										? newValue
+										: {
+												...gap,
+												rows: newValue,
+										  },
 									{ ref }
 								)
 							}
@@ -175,10 +177,12 @@ export default function ({
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
 									attributeId,
-									{
-										...gap,
-										columns: newValue,
-									},
+									ref?.current?.reset
+										? newValue
+										: {
+												...gap,
+												columns: newValue,
+										  },
 									{ ref }
 								)
 							}
