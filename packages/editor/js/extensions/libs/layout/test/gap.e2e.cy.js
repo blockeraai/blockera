@@ -388,7 +388,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			getWPDataObject().then((data) => {
 				expect({
-					lock: true,
+					lock: false,
 					gap: '30px',
 					rows: '',
 					columns: '30px',

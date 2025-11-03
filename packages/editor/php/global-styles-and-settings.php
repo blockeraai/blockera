@@ -14,8 +14,15 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 
 		$tree = new \Blockera\Editor\Http\Controllers\Theme\JSON();
 		$tree->setSupports(blockera_get_available_block_supports());
-		$tree->merge(\Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_user_data());
-		$tree        = \Blockera\Editor\Http\Controllers\Theme\JSONResolver::resolve_theme_file_uris($tree);
+		$merged_data = \Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_merged_data();
+
+		if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {
+			return;
+		}
+
+		$tree->merge($merged_data);
+		$tree = \Blockera\Editor\Http\Controllers\Theme\JSONResolver::resolve_theme_file_uris($tree);
+
 		$block_nodes = $tree->get_blockera_styles_block_nodes();
 
 		$can_use_cached = ! wp_is_development_mode('theme');
