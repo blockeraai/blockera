@@ -13,17 +13,19 @@ class BlockeraTest extends AppTestCase {
 
 	use MatchesSnapshots;
 
-	protected Application $app;
-
 	protected string $design;
+	protected Application $app;
+	protected bool $is_global_styles = false;
 
 	protected function getSnapshotId(): string {
 
+		$id = $this->is_global_styles ? 'frontend-global-styles' : 'frontend';
+
 		if (1 === $this->snapshotIncrementor) {
-			return 'frontend';
+			return $id;
 		}
 
-		return 'frontend' . '__' . $this->snapshotIncrementor;
+		return $id . '__' . $this->snapshotIncrementor;
 	}
 
 	protected function getSnapshotDirectory(): string {
@@ -113,6 +115,60 @@ class BlockeraTest extends AppTestCase {
 		$inline_css = apply_filters('blockera/front-page/print-inline-css-styles', '');
 
 		$this->assertMatchesSnapshot($inline_css, new CssDriver());
+
+		wp_delete_post($post_id);
+	}
+
+	/**
+	 * Test the frontend global styles of a design.
+	 *
+	 * @param string $designName The design name.
+	 * 
+	 * @dataProvider designNameProvider
+	 *
+	 * @return void
+	 */
+	public function test_frontend_global_styles(string $designName): void {
+		
+		$this->design = $designName;
+		$this->is_global_styles = true;
+
+		require_once BLOCKERA_SB_PATH . 'bootstrap/hooks.php';
+
+		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
+			return blockera_test_register_style_variations($this->design, $variations);
+		});
+
+		do_action('wp_enqueue_scripts');
+
+		try {
+			// Arrange
+			$post_content = blockera_test_get_design_input($designName);
+		} catch (\Exception $e) {
+			$this->fail($e->getMessage());
+		}
+
+		$post_id =$this->factory()->post->create([
+			'post_title'   => 'Test Design: ' . $designName,
+			'post_content' => $post_content,
+			'post_status'  => 'publish',
+			'post_type'    => 'post',
+		]);
+
+		$this->go_to(get_permalink($post_id));
+
+		while(have_posts()) {
+			the_post();
+
+			get_the_content();
+		}
+
+		$cache_key  = 'wp_styles_for_blocks';
+		$cached     = get_transient($cache_key);
+
+		$global_styles = $cached['blocks']['core/paragraph'] ?? '';
+
+		$this->assertMatchesSnapshot($global_styles, new CssDriver());
 
 		wp_delete_post($post_id);
 	}
