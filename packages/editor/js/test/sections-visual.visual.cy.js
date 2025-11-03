@@ -10,7 +10,18 @@ import {
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
-import { sections } from './sections-visual-content';
+/**
+ * Internal dependencies
+ */
+import section1 from './fixtures/section-1.txt';
+import section2 from './fixtures/section-2.txt';
+import section3 from './fixtures/section-3.txt';
+
+const sections = {
+	'section-1': section1,
+	'section-2': section2,
+	'section-3': section3,
+};
 
 describe('Sections design with Style Engine', () => {
 	beforeEach(() => {
@@ -35,7 +46,7 @@ describe('Sections design with Style Engine', () => {
 
 			// Editor Desktop Snapshot
 			cy.getIframeBody()
-				.find('.blockera-test-' + section)
+				.find('.is-root-container > *:first-child')
 				.scrollIntoView()
 				.compareSnapshot({
 					name: section + '-editor-desktop',
@@ -55,7 +66,7 @@ describe('Sections design with Style Engine', () => {
 
 			// Editor Mobile Snapshot
 			cy.getIframeBody()
-				.find('.blockera-test-' + section)
+				.find('.is-root-container > *:first-child')
 				.scrollIntoView()
 				.compareSnapshot({
 					name: section + '-editor-mobile',
@@ -81,7 +92,7 @@ describe('Sections design with Style Engine', () => {
 			cy.setScreenshotViewport('desktop');
 
 			// Frontend Desktop Snapshot
-			cy.get('.blockera-test-' + section)
+			cy.get('.entry-content > *:first-child')
 				.first()
 				.scrollIntoView()
 				.compareSnapshot({
@@ -101,7 +112,7 @@ describe('Sections design with Style Engine', () => {
 			cy.setScreenshotViewport('mobile');
 
 			// Frontend Mobile Snapshot
-			cy.get('.blockera-test-' + section)
+			cy.get('.entry-content > *:first-child')
 				.first()
 				.scrollIntoView()
 				.compareSnapshot({
