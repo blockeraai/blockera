@@ -558,6 +558,60 @@ describe('Font Color → WP Compatibility', () => {
 					);
 				});
 			});
+
+			it('Not found variable', () => {
+				appendBlocks(`<!-- wp:paragraph {"style":{"elements":{"link":{"color":{"text":"var:preset|color|unknown"}}}},"textColor":"unknown"} -->
+<p class="has-unknown-color has-text-color has-link-color">Test paragraph</p>
+<!-- /wp:paragraph -->`);
+
+				// Select target block
+				cy.getBlock('core/paragraph').click();
+
+				// add alias to the feature container
+				cy.getParentContainer('Text Color').as('container');
+
+				cy.addNewTransition();
+
+				//
+				// Test 1: WP data to Blockera
+				//
+
+				// WP data should come to Blockera
+				getWPDataObject().then((data) => {
+					expect({
+						settings: {
+							name: 'unknown',
+							id: 'var:preset|color|unknown',
+							value: 'var(--wp--preset--color--unknown)',
+							type: 'color',
+							var: '--wp--preset--color--unknown',
+						},
+						name: 'unknown',
+						isValueAddon: true,
+						valueType: 'variable',
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraFontColor')
+					);
+					expect('unknown').to.be.equal(
+						getSelectedBlock(data, 'textColor')
+					);
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'style')?.color?.text
+					);
+					expect('var:preset|color|unknown').to.be.equal(
+						getSelectedBlock(data, 'style')?.elements?.link?.color
+							?.text
+					);
+				});
+
+				//
+				// Test 2: Check interface for showing deleted value addon
+				//
+
+				cy.get('@container').within(() => {
+					cy.get('[data-test="value-addon-deleted"]').should('exist');
+				});
+			});
 		});
 	});
 });
