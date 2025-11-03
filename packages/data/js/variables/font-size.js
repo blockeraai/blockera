@@ -122,6 +122,7 @@ export const getFontSizeVAFromVarString: (
 					value: `var(${varString})`,
 					type: 'font-size',
 					var: varString,
+					fluid: null,
 				},
 				name: varId,
 				isValueAddon: true,

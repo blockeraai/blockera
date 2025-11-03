@@ -200,5 +200,52 @@ describe('Font Size → WP Compatibility', () => {
 				);
 			});
 		});
+
+		it('Not found variable', () => {
+			appendBlocks(`<!-- wp:paragraph {"fontSize":"unknown"} -->
+<p class="has-unknown-font-size">Test paragraph</p>
+<!-- /wp:paragraph -->`);
+
+			// Select target block
+			cy.getBlock('core/paragraph').click();
+
+			cy.addNewTransition();
+
+			//
+			// Test 1: WP data to Blockera
+			//
+
+			// WP data should come to Blockera
+			getWPDataObject().then((data) => {
+				expect({
+					settings: {
+						name: 'unknown',
+						id: 'var:preset|font-size|unknown',
+						value: 'var(--wp--preset--font-size--unknown)',
+						type: 'font-size',
+						var: '--wp--preset--font-size--unknown',
+						fluid: null,
+					},
+					name: 'unknown',
+					isValueAddon: true,
+					valueType: 'variable',
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraFontSize'));
+
+				expect('unknown').to.be.equal(
+					getSelectedBlock(data, 'fontSize')
+				);
+
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.typography?.fontSize
+				);
+			});
+
+			//
+			// Test 2: Check interface for showing deleted value addon
+			//
+			cy.getParentContainer('Size').within(() => {
+				cy.get('[data-test="value-addon-deleted"]').should('exist');
+			});
+		});
 	});
 });
