@@ -1119,6 +1119,192 @@ describe('Border → WP Compatibility', () => {
 					);
 				});
 			});
+
+			it('Not found variable', () => {
+				//
+				// Test 1: First test with not found variable (compacted borders)
+				//
+				appendBlocks(
+					`<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button {"style":{"border":{"width":"1px"}},"borderColor":"unknown"} -->
+<div class="wp-block-button"><a class="wp-block-button__link has-border-color has-unknown-border-color wp-element-button" style="border-width:1px">button</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->`
+				);
+
+				// Select target block
+				cy.getBlock('core/button').click();
+
+				cy.addNewTransition();
+
+				//
+				// Test 1.1: WP data to Blockera
+				//
+
+				// WP data should come to Blockera
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'all',
+						all: {
+							width: '1px',
+							color: {
+								settings: {
+									name: 'unknown',
+									id: 'var:preset|color|unknown',
+									value: 'var(--wp--preset--color--unknown)',
+									type: 'color',
+									var: '--wp--preset--color--unknown',
+								},
+								name: 'unknown',
+								isValueAddon: true,
+								valueType: 'variable',
+							},
+							style: 'solid',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraBorder')
+					);
+
+					expect('unknown').to.be.equal(
+						getSelectedBlock(data, 'borderColor')
+					);
+
+					expect({ width: '1px' }).to.be.deep.equal(
+						getSelectedBlock(data, 'style')?.border
+					);
+				});
+
+				//
+				// Test 1.2: Check interface for showing deleted value addon
+				//
+				cy.getParentContainer('Border Line').within(() => {
+					cy.get('[data-test="value-addon-deleted"]').should('exist');
+				});
+
+				//
+				// Test 2: First test with not found variable (custom side borders)
+				//
+				appendBlocks(`<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button {"style":{"border":{"top":{"width":"1px","color":"var:preset|color|unknown"},"right":{"color":"var:preset|color|unknown","width":"1px"},"bottom":{"color":"var:preset|color|unknown","width":"1px"},"left":{"color":"var:preset|color|unknown","width":"1px"}}}} -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" style="border-top-color:var(--wp--preset--color--unknown);border-top-width:1px;border-right-color:var(--wp--preset--color--unknown);border-right-width:1px;border-bottom-color:var(--wp--preset--color--unknown);border-bottom-width:1px;border-left-color:var(--wp--preset--color--unknown);border-left-width:1px">button</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->`);
+
+				// Select target block
+				cy.getBlock('core/button').click();
+
+				cy.addNewTransition();
+
+				//
+				// Test 2.1: WP data to Blockera
+				//
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'custom',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+						top: {
+							width: '1px',
+							color: {
+								settings: {
+									name: 'unknown',
+									id: 'var:preset|color|unknown',
+									value: 'var(--wp--preset--color--unknown)',
+									type: 'color',
+									var: '--wp--preset--color--unknown',
+								},
+								name: 'unknown',
+								isValueAddon: true,
+								valueType: 'variable',
+							},
+							style: 'solid',
+						},
+						right: {
+							width: '1px',
+							color: {
+								settings: {
+									name: 'unknown',
+									id: 'var:preset|color|unknown',
+									value: 'var(--wp--preset--color--unknown)',
+									type: 'color',
+									var: '--wp--preset--color--unknown',
+								},
+								name: 'unknown',
+								isValueAddon: true,
+								valueType: 'variable',
+							},
+							style: 'solid',
+						},
+						bottom: {
+							width: '1px',
+							color: {
+								settings: {
+									name: 'unknown',
+									id: 'var:preset|color|unknown',
+									value: 'var(--wp--preset--color--unknown)',
+									type: 'color',
+									var: '--wp--preset--color--unknown',
+								},
+								name: 'unknown',
+								isValueAddon: true,
+								valueType: 'variable',
+							},
+							style: 'solid',
+						},
+						left: {
+							width: '1px',
+							color: {
+								settings: {
+									name: 'unknown',
+									id: 'var:preset|color|unknown',
+									value: 'var(--wp--preset--color--unknown)',
+									type: 'color',
+									var: '--wp--preset--color--unknown',
+								},
+								name: 'unknown',
+								isValueAddon: true,
+								valueType: 'variable',
+							},
+							style: 'solid',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraBorder')
+					);
+
+					expect({
+						top: {
+							width: '1px',
+							color: 'var:preset|color|unknown',
+						},
+						right: {
+							color: 'var:preset|color|unknown',
+							width: '1px',
+						},
+						bottom: {
+							color: 'var:preset|color|unknown',
+							width: '1px',
+						},
+						left: {
+							color: 'var:preset|color|unknown',
+							width: '1px',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'style')?.border
+					);
+				});
+
+				//
+				// Test 2.2: Check interface for showing deleted value addon
+				//
+				cy.getParentContainer('Border Line').within(() => {
+					cy.get('[data-test="value-addon-deleted"]')
+						.should('exist')
+						.eq(3);
+				});
+			});
 		});
 	});
 });
