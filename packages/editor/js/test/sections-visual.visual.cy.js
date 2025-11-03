@@ -13,10 +13,10 @@ import {
 /**
  * Internal dependencies
  */
-import section1 from './fixtures/section-1.txt';
-import section2 from './fixtures/section-2.txt';
-import section3 from './fixtures/section-3.txt';
-import section4 from './fixtures/section-4.txt';
+import section1 from './fixtures/section-1.html';
+import section2 from './fixtures/section-2.html';
+import section3 from './fixtures/section-3.html';
+import section4 from './fixtures/section-4.html';
 
 const sections = {
 	'section-1': section1,
