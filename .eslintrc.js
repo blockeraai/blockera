@@ -54,10 +54,10 @@ module.exports = {
 		'plugin:ft-flow/recommended',
 	],
 	settings: {
-		'import/extensions': ['.js', '.jsx', '.txt'],
+		'import/extensions': ['.js', '.jsx', '.txt', '.html'],
 		'import/resolver': {
 			node: {
-				extensions: ['.js', '.jsx', '.json', '.txt'],
+				extensions: ['.js', '.jsx', '.json', '.txt', '.html'],
 			},
 		},
 	},
@@ -74,7 +74,7 @@ module.exports = {
 		'import/no-unresolved': [
 			'error',
 			{
-				ignore: ['\\.txt$'],
+				ignore: ['\\.txt$', '\\.html$'],
 			},
 		],
 		'@wordpress/no-unsafe-wp-apis': 'off',

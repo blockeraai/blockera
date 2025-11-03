@@ -98,7 +98,7 @@ module.exports = (env, argv) => {
 					use: ['@svgr/webpack'],
 				},
 				{
-					test: /\.txt$/,
+					test: /\.(txt|html)$/,
 					type: 'asset/source',
 				},
 			],

@@ -49,7 +49,7 @@ module.exports = {
 				use: ['@svgr/webpack'],
 			},
 			{
-				test: /\.txt$/,
+				test: /\.(txt|html)$/,
 				type: 'asset/source',
 			},
 		],
