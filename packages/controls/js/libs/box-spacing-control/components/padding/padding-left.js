@@ -138,6 +138,13 @@ export function PaddingLeft({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingLeftShape
@@ -223,6 +230,7 @@ export function PaddingLeft({
 					labelClassName
 				)}
 				data-cy="box-spacing-padding-left"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Left Padding', 'blockera')}

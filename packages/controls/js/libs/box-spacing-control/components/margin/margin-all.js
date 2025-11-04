@@ -120,6 +120,13 @@ export function MarginAll({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<MarginAllSideShape
@@ -206,6 +213,7 @@ export function MarginAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-top"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Margin', 'blockera')}
@@ -241,6 +249,7 @@ export function MarginAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-right"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Margin', 'blockera')}
@@ -274,6 +283,7 @@ export function MarginAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-bottom"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Margin', 'blockera')}
@@ -307,6 +317,7 @@ export function MarginAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-left"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Margin', 'blockera')}

@@ -145,6 +145,13 @@ export function MarginVertical({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<MarginVerticalSideShape
@@ -231,6 +238,7 @@ export function MarginVertical({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-top"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('Top & Bottom Margin', 'blockera')}
@@ -266,6 +274,7 @@ export function MarginVertical({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-bottom"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('Top & Bottom Margin', 'blockera')}
