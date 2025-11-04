@@ -1137,6 +1137,8 @@ describe('Border → WP Compatibility', () => {
 
 				cy.addNewTransition();
 
+				cy.getParentContainer('Border Line').as('container');
+
 				//
 				// Test 1.1: WP data to Blockera
 				//
@@ -1177,8 +1179,48 @@ describe('Border → WP Compatibility', () => {
 				//
 				// Test 1.2: Check interface for showing deleted value addon
 				//
-				cy.getParentContainer('Border Line').within(() => {
+				cy.get('@container').within(() => {
 					cy.get('[data-test="value-addon-deleted"]').should('exist');
+				});
+
+				//
+				// Test 1.3: Clear Blockera value and check WP data
+				//
+
+				// clear all
+				cy.get('@container').within(() => {
+					cy.get('input').clear({ force: true });
+
+					cy.removeValueAddon();
+				});
+
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'all',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraBorder')
+					);
+
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'borderColor')
+					);
+
+					expect({
+						color: undefined,
+						style: undefined,
+						width: undefined,
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'style')?.border
+					);
 				});
 
 				//
@@ -1303,6 +1345,98 @@ describe('Border → WP Compatibility', () => {
 					cy.get('[data-test="value-addon-deleted"]')
 						.should('exist')
 						.eq(3);
+				});
+
+				//
+				// Test 1.3: Clear Blockera value and check WP data
+				//
+
+				cy.get('@container').within(() => {
+					cy.get('input[type="text"]').eq(0).clear({ force: true });
+
+					cy.get('input[type="text"]').eq(1).clear({ force: true });
+
+					cy.get('input[type="text"]').eq(2).clear({ force: true });
+
+					cy.get('input[type="text"]').eq(3).clear({ force: true });
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(0)
+						.within(() => {
+							cy.removeValueAddon();
+						});
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(1)
+						.within(() => {
+							cy.removeValueAddon();
+						});
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(2)
+						.within(() => {
+							cy.removeValueAddon();
+						});
+				});
+
+				cy.get('@container').within(() => {
+					cy.getByDataTest('border-control-component')
+						.eq(3)
+						.within(() => {
+							cy.removeValueAddon();
+						});
+				});
+
+				// WP data should be removed too
+				getWPDataObject().then((data) => {
+					expect({
+						type: 'custom',
+						all: {
+							width: '',
+							style: '',
+							color: '',
+						},
+						top: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						right: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						bottom: {
+							width: '',
+							color: '',
+							style: '',
+						},
+						left: {
+							width: '',
+							color: '',
+							style: '',
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraBorder')
+					);
+
+					expect({
+						color: undefined,
+						style: undefined,
+						width: undefined,
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'style')?.border
+					);
 				});
 			});
 		});
