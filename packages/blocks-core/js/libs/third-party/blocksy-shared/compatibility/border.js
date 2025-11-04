@@ -4,7 +4,7 @@
  * Blockera dependencies
  */
 import { mergeObject, isEmpty, isUndefined } from '@blockera/utils';
-import { getColorVAFromIdString } from '@blockera/data';
+import { getColorVAFromVarString } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 import { isValid } from '@blockera/controls';
 
@@ -30,7 +30,9 @@ export function borderFromWPCompatibility({
 	}
 
 	if (!color && attributes?.[property] !== defaultValue) {
-		color = getColorVAFromIdString(attributes?.[property]);
+		color = getColorVAFromVarString(
+			`var:preset|color|${attributes?.[property]}`
+		);
 	}
 
 	if (color) {
