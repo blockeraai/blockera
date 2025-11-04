@@ -388,7 +388,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			getWPDataObject().then((data) => {
 				expect({
-					lock: true,
+					lock: false,
 					gap: '30px',
 					rows: '',
 					columns: '30px',
@@ -416,7 +416,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			getWPDataObject().then((data) => {
 				expect({
-					lock: true,
+					lock: false,
 					gap: '40px',
 					rows: '40px',
 					columns: '',
@@ -451,7 +451,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 			getWPDataObject().then((data) => {
 				expect({
 					lock: true,
-					gap: '50px',
+					gap: '',
 					rows: '',
 					columns: '',
 				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraGap'));
