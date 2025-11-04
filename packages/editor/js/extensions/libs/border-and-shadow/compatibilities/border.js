@@ -15,7 +15,7 @@ export function borderFromWPCompatibility({
 	if (isBorderEmpty(attributes?.blockeraBorder?.value)) {
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.borderColor !== undefined) {
+		if (attributes?.borderColor) {
 			const colorVar = getColorVAFromVarString(
 				`var:preset|color|${attributes?.borderColor}`
 			);
@@ -34,7 +34,7 @@ export function borderFromWPCompatibility({
 			}
 		}
 		// does not use var color and is custom border
-		else if (attributes?.style?.border?.top !== undefined) {
+		else if (attributes?.style?.border?.top) {
 			const border = {
 				type: 'custom',
 				all: {
@@ -76,9 +76,9 @@ export function borderFromWPCompatibility({
 		}
 		// is all and does not use var color
 		else if (
-			attributes?.style?.border?.width !== undefined ||
-			attributes?.style?.border?.style !== undefined ||
-			attributes?.style?.border?.color !== undefined
+			attributes?.style?.border?.width ||
+			attributes?.style?.border?.style ||
+			attributes?.style?.border?.color
 		) {
 			attributes.blockeraBorder = {
 				value: {
