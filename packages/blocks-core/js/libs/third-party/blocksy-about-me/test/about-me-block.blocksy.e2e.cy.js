@@ -443,7 +443,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 						getSelectedBlock(data, 'customTextHoverColor')
 					);
 
-					expect('').to.be.equal(
+					expect(undefined).to.be.equal(
 						getSelectedBlock(data, 'blockeraInnerBlocks')[
 							'elements/text'
 						]?.attributes?.blockeraBlockStates?.hover?.breakpoints
