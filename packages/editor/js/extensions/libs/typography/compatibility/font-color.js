@@ -37,7 +37,7 @@ export function fontColorFromWPCompatibility({
 	if (attributes?.blockeraFontColor?.value === '') {
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.textColor !== undefined) {
+		if (attributes?.textColor) {
 			const color = getColorVAFromVarString(
 				`var:preset|color|${attributes?.textColor}`
 			);
@@ -52,7 +52,7 @@ export function fontColorFromWPCompatibility({
 		}
 
 		// font color is not variable
-		if (attributes?.style?.color?.text !== undefined) {
+		if (attributes?.style?.color?.text) {
 			attributes.blockeraFontColor = {
 				value: attributes?.style?.color?.text,
 			};
