@@ -152,9 +152,7 @@ describe('Background Color → WP Compatibility', () => {
 				expect(undefined).to.be.equal(
 					getSelectedBlock(data, 'backgroundColor')
 				);
-			});
 
-			getWPDataObject().then((data) => {
 				expect('').to.be.equal(
 					getSelectedBlock(data, 'blockeraBackgroundColor')
 				);
@@ -170,6 +168,8 @@ describe('Background Color → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			cy.addNewTransition();
+
+			cy.getParentContainer('BG Color').as('bgColorContainer');
 
 			//
 			// Test 1: WP data to Blockera
@@ -200,8 +200,27 @@ describe('Background Color → WP Compatibility', () => {
 			// Test 2: Check interface for showing deleted value addon
 			//
 
-			cy.getParentContainer('BG Color').within(() => {
+			cy.get('@bgColorContainer').within(() => {
 				cy.get('[data-test="value-addon-deleted"]').should('exist');
+			});
+
+			//
+			// Test 3: Clear Blockera value and check WP data
+			//
+
+			cy.get('@bgColorContainer').within(() => {
+				cy.removeValueAddon();
+			});
+
+			// Check WP data
+			getWPDataObject().then((data) => {
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'backgroundColor')
+				);
+
+				expect('').to.be.equal(
+					getSelectedBlock(data, 'blockeraBackgroundColor')
+				);
 			});
 		});
 	});
