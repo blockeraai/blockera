@@ -183,6 +183,13 @@ export function SideItem({
 		return '';
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<SideShape
@@ -279,6 +286,7 @@ export function SideItem({
 						'side-' + side,
 						labelClassName
 					)}
+					data-test={dataTest}
 					data-cy={'box-position-label-' + side}
 				>
 					<LabelControl
