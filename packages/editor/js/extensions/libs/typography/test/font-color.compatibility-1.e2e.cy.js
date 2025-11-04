@@ -611,6 +611,35 @@ describe('Font Color → WP Compatibility', () => {
 				cy.get('@container').within(() => {
 					cy.get('[data-test="value-addon-deleted"]').should('exist');
 				});
+
+				//
+				// Test 3: Clear Blockera value and check WP data
+				//
+
+				// open color popover
+				cy.get('@container').within(() => {
+					cy.removeValueAddon();
+				});
+
+				cy.wait(50);
+
+				// Check WP data
+				getWPDataObject().then((data) => {
+					// default value is empty
+					expect('').to.be.equal(
+						getSelectedBlock(data, 'blockeraFontColor')
+					);
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'textColor')
+					);
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'style')?.color?.text
+					);
+					expect(undefined).to.be.equal(
+						getSelectedBlock(data, 'style')?.elements?.link?.color
+							?.text
+					);
+				});
 			});
 		});
 	});
