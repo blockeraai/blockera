@@ -26,8 +26,8 @@ export function colorFromWPCompatibility({
 	let color: ValueAddon | string | false = false;
 
 	if (
-		attributes?.[propertyCustom] !== defaultValue &&
-		attributes?.[propertyCustom]
+		attributes?.[propertyCustom] &&
+		attributes?.[propertyCustom] !== defaultValue
 	) {
 		color = attributes?.[propertyCustom];
 	}
