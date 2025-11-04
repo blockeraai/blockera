@@ -136,18 +136,26 @@ export default function ({
 							defaultValue={defaultValue.rows}
 							id={'rows'}
 							singularId={'rows'}
-							onChange={(newValue, ref) =>
+							onChange={(newValue, ref) => {
+								const gapResetValue = !gap?.columns
+									? {
+											...newValue,
+											gap: '',
+											lock: true,
+									  }
+									: newValue;
+
 								handleOnChangeAttributes(
 									attributeId,
 									ref?.current?.reset
-										? newValue
+										? gapResetValue
 										: {
 												...gap,
 												rows: newValue,
 										  },
 									{ ref }
-								)
-							}
+								);
+							}}
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
@@ -174,18 +182,26 @@ export default function ({
 							defaultValue={defaultValue.columns}
 							id={'columns'}
 							singularId={'columns'}
-							onChange={(newValue, ref) =>
+							onChange={(newValue, ref) => {
+								const gapResetValue = !gap?.rows
+									? {
+											...newValue,
+											gap: '',
+											lock: true,
+									  }
+									: newValue;
+
 								handleOnChangeAttributes(
 									attributeId,
 									ref?.current?.reset
-										? newValue
+										? gapResetValue
 										: {
 												...gap,
 												columns: newValue,
 										  },
 									{ ref }
-								)
-							}
+								);
+							}}
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
