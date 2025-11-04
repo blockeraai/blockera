@@ -15,7 +15,7 @@ export function fontSizeFromWPCompatibility({
 		// fontSize attribute in root always is variable
 		// medium → var(--wp--preset--font-size--medium)
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.fontSize !== undefined) {
+		if (attributes?.fontSize) {
 			const fontSizeVar = getFontSizeVAFromVarString(
 				`var:preset|font-size|${attributes?.fontSize}`
 			);
@@ -30,7 +30,7 @@ export function fontSizeFromWPCompatibility({
 		}
 
 		// font size is not variable
-		if (attributes?.style?.typography?.fontSize !== undefined) {
+		if (attributes?.style?.typography?.fontSize) {
 			attributes.blockeraFontSize = {
 				value: attributes?.style?.typography?.fontSize,
 			};
