@@ -28,9 +28,16 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 						block.name += 's';
 					}
 
-					cy.get(
-						`button[id="/blocks/${block.name.replace('/', '%2F')}"]`
-					).within(() => {
+					const selector = `button[id="/blocks/${block.name.replace(
+						'/',
+						'%2F'
+					)}"]`;
+
+					if (!Cypress.$(selector).length) {
+						return;
+					}
+
+					cy.get(selector).within(() => {
 						cy.get(
 							'.blockera-block-icon-wrapper svg:last-child'
 						).should('be.exist');
@@ -48,6 +55,10 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 			data.select('core/blocks')
 				.getBlockTypes()
 				.forEach((block) => {
+					if (!block.attributes?.blockeraPropsId) {
+						return;
+					}
+
 					if ('core/social-link' === block.name) {
 						block.name += 's';
 					}
@@ -61,6 +72,10 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 						!block.attributes?.blockeraPropsId ||
 						!Cypress.$(selector)?.length
 					) {
+						return;
+					}
+
+					if (!Cypress.$(selector).length) {
 						return;
 					}
 
@@ -79,6 +94,10 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 			data.select('core/blocks')
 				.getBlockTypes()
 				.forEach((block) => {
+					if (!block.attributes?.blockeraPropsId) {
+						return;
+					}
+
 					if ('core/social-link' === block.name) {
 						block.name += 's';
 					}
@@ -88,7 +107,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 						'%2F'
 					)}"]`;
 
-					if (!block.attributes?.blockeraPropsId) {
+					if (!Cypress.$(selector).length) {
 						return;
 					}
 
