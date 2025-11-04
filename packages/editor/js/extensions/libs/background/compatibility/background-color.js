@@ -25,7 +25,7 @@ export function backgroundColorFromWPCompatibility({
 
 	// backgroundColor attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
-	if (attributes?.backgroundColor !== undefined) {
+	if (attributes?.backgroundColor) {
 		attributes.blockeraBackgroundColor = {
 			value: getColorVAFromVarString(
 				`var:preset|color|${attributes?.backgroundColor}`
@@ -33,7 +33,7 @@ export function backgroundColorFromWPCompatibility({
 		};
 	}
 	// style.color.background is not variable
-	else if (attributes?.style?.color?.background !== undefined) {
+	else if (attributes?.style?.color?.background) {
 		attributes.blockeraBackgroundColor = {
 			value: attributes?.style?.color?.background,
 		};
