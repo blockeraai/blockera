@@ -137,6 +137,13 @@ export function MarginBottom({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<MarginBottomSideShape
@@ -222,6 +229,7 @@ export function MarginBottom({
 					labelClassName
 				)}
 				data-cy="box-spacing-margin-bottom"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Bottom Margin', 'blockera')}

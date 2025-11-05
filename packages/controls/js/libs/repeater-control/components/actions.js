@@ -79,9 +79,9 @@ export default function RepeaterItemActions({
 						noBorder={true}
 						icon={
 							isVisible ? (
-								<Icon icon="eye-show" iconSize="20" />
+								<Icon icon="eye-show" iconSize={22} />
 							) : (
-								<Icon icon="eye-hide" iconSize="20" />
+								<Icon icon="eye-hide" iconSize={22} />
 							)
 						}
 						onClick={(event) => {
@@ -162,7 +162,7 @@ export default function RepeaterItemActions({
 						<Button
 							className={controlInnerClassNames('btn-clone')}
 							noBorder={true}
-							icon={<Icon icon="clone" size="20" />}
+							icon={<Icon icon="clone" iconSize={20} />}
 							onClick={(event) => {
 								event.stopPropagation();
 
@@ -211,7 +211,7 @@ export default function RepeaterItemActions({
 						<Button
 							className={controlInnerClassNames('btn-delete')}
 							noBorder={true}
-							icon={<Icon icon="trash" size="20" />}
+							icon={<Icon icon="trash" iconSize={20} />}
 							onClick={(event) => {
 								event.stopPropagation();
 

@@ -26,6 +26,9 @@ describe('Math Block', () => {
 		appendBlocks(content);
 
 		cy.getBlock('core/math').click({ force: true });
+
+		cy.wait(100);
+
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
 		cy.checkBlockCardItems([

@@ -3,7 +3,7 @@
  * Blockera dependencies
  */
 import { isValid, type ValueAddon } from '@blockera/controls';
-import { getGradientType, getGradientVAFromIdString } from '@blockera/data';
+import { getGradientType, getGradientVAFromVarString } from '@blockera/data';
 import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
 
 export function backgroundFromWPCompatibility({
@@ -90,7 +90,9 @@ export function backgroundFromWPCompatibility({
 	// gradient attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
 	if (attributes?.gradient !== undefined) {
-		gradient = getGradientVAFromIdString(attributes?.gradient);
+		gradient = getGradientVAFromVarString(
+			`var:preset|gradient|${attributes?.gradient}`
+		);
 
 		if (isValid(gradient)) {
 			gradientType = getGradientType(gradient);

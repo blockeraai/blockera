@@ -32,7 +32,7 @@ export const BackButton = (): MixedElement => {
 						?.click();
 				}}
 			>
-				<Icon icon="chevron-left" size={20} library="wp" />
+				<Icon icon="chevron-left" iconSize={20} library="wp" />
 			</Button>
 			<h2>{__('Back', 'blockera')}</h2>
 		</Flex>

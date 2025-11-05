@@ -146,6 +146,13 @@ export function PaddingHorizontal({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingHorizontalShape
@@ -232,6 +239,7 @@ export function PaddingHorizontal({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-right"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('left & Right Padding', 'blockera')}
@@ -267,6 +275,7 @@ export function PaddingHorizontal({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-left"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('left & Right Padding', 'blockera')}

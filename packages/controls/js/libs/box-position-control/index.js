@@ -216,28 +216,33 @@ const BoxPositionControl = ({
 								<Icon
 									icon="none-circle"
 									className="icon-soft-color"
+									iconSize={18}
 								/>
 							),
 						},
 						{
 							label: __('Relative', 'blockera'),
 							value: 'relative',
-							icon: <Icon icon="position-relative" />,
+							icon: (
+								<Icon icon="position-relative" iconSize={18} />
+							),
 						},
 						{
 							label: __('Absolute', 'blockera'),
 							value: 'absolute',
-							icon: <Icon icon="position-absolute" />,
+							icon: (
+								<Icon icon="position-absolute" iconSize={18} />
+							),
 						},
 						{
 							label: __('Fixed', 'blockera'),
 							value: 'fixed',
-							icon: <Icon icon="position-fixed" />,
+							icon: <Icon icon="position-fixed" iconSize={18} />,
 						},
 						{
 							label: __('Sticky', 'blockera'),
 							value: 'sticky',
-							icon: <Icon icon="position-sticky" />,
+							icon: <Icon icon="position-sticky" iconSize={18} />,
 						},
 					]}
 					type="custom"

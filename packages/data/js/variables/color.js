@@ -15,7 +15,11 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
-import { generateVariableString, getBlockEditorSettings } from './index';
+import {
+	generateVariableString,
+	getBlockEditorSettings,
+	generateVariableStringFromAttributeVarString,
+} from './index';
 import type { VariableItem } from './types';
 
 export const getColors: () => Array<VariableItem> = memoize(
@@ -146,7 +150,29 @@ export const getColorVAFromIdString: (value: string) => ValueAddon | string =
 export const getColorVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
 		if (isString(value) && value.startsWith('var:')) {
-			return getColorVAFromIdString(value.split('|')[2]);
+			const varId = value.split('|')[2];
+			const colorVA = getColorVAFromIdString(varId);
+
+			// same value means the variable not found but should be returned as not found
+			if (colorVA === varId) {
+				const varString =
+					generateVariableStringFromAttributeVarString(value);
+
+				return {
+					settings: {
+						name: varId,
+						id: value,
+						value: `var(${varString})`,
+						type: 'color',
+						var: varString,
+					},
+					name: varId,
+					isValueAddon: true,
+					valueType: 'variable',
+				};
+			}
+
+			return colorVA;
 		}
 
 		return value;
