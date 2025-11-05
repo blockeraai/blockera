@@ -171,6 +171,10 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 						}
 
 						if (\WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
+							if (! isset($variation_data['name'])) {
+								continue;
+							}
+
 							if ($variation_name === $variation_data['name'] && \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_data['name'])) {
 								continue;
 							}
