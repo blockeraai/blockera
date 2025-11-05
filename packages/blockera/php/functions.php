@@ -217,7 +217,14 @@ if (! function_exists('blockera_array_flat')) {
             return [];
         }
 
-        $result = array_merge(...array_values($nestedArray));
+        // Filter out non-array values before merging
+        $arrayValues = array_filter($nestedArray, 'is_array');
+        
+        if (empty($arrayValues)) {
+            return [];
+        }
+
+        $result = array_merge(...array_values($arrayValues));
         
         // Handle nested arrays with same keys.
         foreach ($result as $key => $value) {
