@@ -50,6 +50,7 @@ module.exports = {
 			},
 			{
 				test: /\.(txt|html)$/,
+				exclude: /public\/index\.html$/,
 				type: 'asset/source',
 			},
 		],
