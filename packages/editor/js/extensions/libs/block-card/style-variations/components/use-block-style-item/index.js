@@ -17,12 +17,12 @@ import { mergeObject, kebabCase } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-
-/**
- * Internal dependencies
- */
 import { getDefaultStyle } from '../../utils';
 import { getCalculatedNewStyle } from './helpers';
+import {
+	getBlockeraGlobalStylesMetaData,
+	setBlockeraGlobalStylesMetaData,
+} from '../../../../../../canvas-editor/global-styles/helpers';
 
 export const useBlockStyleItem = ({
 	styles,
@@ -238,6 +238,27 @@ export const useBlockStyleItem = ({
 			// setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
+
+			const blockeraMetaData = mergeObject(
+				getBlockeraGlobalStylesMetaData(),
+				{
+					blocks: {
+						[blockName]: {
+							variations: {
+								[duplicateStyle.name]: duplicateStyle,
+							},
+						},
+					},
+				}
+			);
+
+			setBlockeraGlobalStylesMetaData(blockeraMetaData);
+
+			setGlobalStyles(
+				mergeObject(globalStyles, {
+					blockeraMetaData,
+				})
+			);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[styles, blockStyles]
