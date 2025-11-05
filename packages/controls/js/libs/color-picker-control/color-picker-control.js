@@ -102,7 +102,7 @@ export default function ColorPickerControl({
 			<div style={{ paddingBottom: '15px' }}>
 				<NoticeControl
 					type="error"
-					icon={<Icon icon="eye-dropper" size="18" />}
+					icon={<Icon icon="eye-dropper" iconSize="18" />}
 				>
 					{colorPickerLabel}
 				</NoticeControl>
@@ -144,7 +144,7 @@ export default function ColorPickerControl({
 									disabled={eyeDropper === null}
 									aria-label={__('Pick Color', 'blockera')}
 								>
-									<Icon icon="eye-dropper" size="18" />
+									<Icon icon="eye-dropper" iconSize="18" />
 								</Button>
 
 								<Button
@@ -163,7 +163,7 @@ export default function ColorPickerControl({
 									)}
 									disabled={!value}
 								>
-									<Icon icon="trash" size="20" />
+									<Icon icon="trash" iconSize="20" />
 								</Button>
 							</>
 						}

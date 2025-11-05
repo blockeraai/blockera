@@ -192,17 +192,17 @@ const Fields: TFieldItem = memo<TFieldItem>(
 						{
 							label: __('Custom', 'blockera'),
 							value: 'custom',
-							icon: <Icon icon="fit-normal" size="18" />,
+							icon: <Icon icon="fit-normal" iconSize="18" />,
 						},
 						{
 							label: __('Cover', 'blockera'),
 							value: 'cover',
-							icon: <Icon icon="fit-cover" size="18" />,
+							icon: <Icon icon="fit-cover" iconSize="18" />,
 						},
 						{
 							label: __('Contain', 'blockera'),
 							value: 'contain',
-							icon: <Icon icon="fit-contain" size="18" />,
+							icon: <Icon icon="fit-contain" iconSize="18" />,
 						},
 					]}
 					defaultValue={defaultRepeaterItemValue.size}

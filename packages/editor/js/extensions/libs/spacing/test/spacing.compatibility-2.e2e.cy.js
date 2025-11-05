@@ -1062,5 +1062,201 @@ describe('Box Spacing → WP Compatibility', () => {
 				);
 			});
 		});
+
+		it('Not found variable', () => {
+			appendBlocks(
+				`<!-- wp:paragraph {"style":{"spacing":{"padding":{"top":"var:preset|spacing|unknown-1","right":"var:preset|spacing|unknown-2","bottom":"var:preset|spacing|unknown-3","left":"var:preset|spacing|unknown-4"},"margin":{"top":"var:preset|spacing|unknown-1","right":"var:preset|spacing|unknown-2","bottom":"var:preset|spacing|unknown-3","left":"var:preset|spacing|unknown-4"}}}} -->
+<p style="margin-top:var(--wp--preset--spacing--unknown-1);margin-right:var(--wp--preset--spacing--unknown-2);margin-bottom:var(--wp--preset--spacing--unknown-3);margin-left:var(--wp--preset--spacing--unknown-4);padding-top:var(--wp--preset--spacing--unknown-1);padding-right:var(--wp--preset--spacing--unknown-2);padding-bottom:var(--wp--preset--spacing--unknown-3);padding-left:var(--wp--preset--spacing--unknown-4)">Test paragraph...</p>
+<!-- /wp:paragraph -->`
+			);
+
+			// Select target block
+			cy.getBlock('core/paragraph').click();
+
+			// Assert WP value
+			getWPDataObject().then((data) => {
+				expect({
+					margin: {
+						top: 'var:preset|spacing|unknown-1',
+						right: 'var:preset|spacing|unknown-2',
+						bottom: 'var:preset|spacing|unknown-3',
+						left: 'var:preset|spacing|unknown-4',
+					},
+					padding: {
+						top: 'var:preset|spacing|unknown-1',
+						right: 'var:preset|spacing|unknown-2',
+						bottom: 'var:preset|spacing|unknown-3',
+						left: 'var:preset|spacing|unknown-4',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'style')?.spacing);
+			});
+
+			cy.addNewTransition();
+
+			//
+			// Test 1: WP data to Blockera
+			//
+
+			// Assert Blockera value
+			getWPDataObject().then((data) => {
+				expect({
+					padding: {
+						top: {
+							settings: {
+								name: 'unknown-1',
+								id: 'var:preset|spacing|unknown-1',
+								value: 'var(--wp--preset--spacing--unknown-1)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-1',
+							},
+							name: 'unknown-1',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						right: {
+							settings: {
+								name: 'unknown-2',
+								id: 'var:preset|spacing|unknown-2',
+								value: 'var(--wp--preset--spacing--unknown-2)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-2',
+							},
+							name: 'unknown-2',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						bottom: {
+							settings: {
+								name: 'unknown-3',
+								id: 'var:preset|spacing|unknown-3',
+								value: 'var(--wp--preset--spacing--unknown-3)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-3',
+							},
+							name: 'unknown-3',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						left: {
+							settings: {
+								name: 'unknown-4',
+								id: 'var:preset|spacing|unknown-4',
+								value: 'var(--wp--preset--spacing--unknown-4)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-4',
+							},
+							name: 'unknown-4',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+					},
+					margin: {
+						top: {
+							settings: {
+								name: 'unknown-1',
+								id: 'var:preset|spacing|unknown-1',
+								value: 'var(--wp--preset--spacing--unknown-1)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-1',
+							},
+							name: 'unknown-1',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						right: {
+							settings: {
+								name: 'unknown-2',
+								id: 'var:preset|spacing|unknown-2',
+								value: 'var(--wp--preset--spacing--unknown-2)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-2',
+							},
+							name: 'unknown-2',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						bottom: {
+							settings: {
+								name: 'unknown-3',
+								id: 'var:preset|spacing|unknown-3',
+								value: 'var(--wp--preset--spacing--unknown-3)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-3',
+							},
+							name: 'unknown-3',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+						left: {
+							settings: {
+								name: 'unknown-4',
+								id: 'var:preset|spacing|unknown-4',
+								value: 'var(--wp--preset--spacing--unknown-4)',
+								type: 'spacing',
+								var: '--wp--preset--spacing--unknown-4',
+							},
+							name: 'unknown-4',
+							isValueAddon: true,
+							valueType: 'variable',
+						},
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
+			});
+
+			//
+			// Test 2: Check interface for showing deleted value addon
+			//
+
+			cy.get('.blockera-control-box-spacing-container').within(() => {
+				cy.get('[data-test="value-addon-deleted"]')
+					.should('exist')
+					.eq(7);
+			});
+
+			//
+			// Test 2: Clear Blockera value and check WP data
+			//
+
+			// change top margin
+			[
+				'margin-top',
+				'margin-right',
+				'margin-bottom',
+				'margin-left',
+				'padding-top',
+				'padding-right',
+				'padding-bottom',
+				'padding-left',
+			].forEach((side) => {
+				cy.get(`[data-cy="box-spacing-${side}"]`).within(() => {
+					cy.removeValueAddon();
+				});
+			});
+
+			// WP data should be removed too
+			getWPDataObject().then((data) => {
+				expect({
+					margin: {
+						top: '',
+						right: '',
+						bottom: '',
+						left: '',
+					},
+					padding: {
+						top: '',
+						right: '',
+						bottom: '',
+						left: '',
+					},
+				}).to.be.deep.equal(getSelectedBlock(data, 'blockeraSpacing'));
+
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.spacing?.margin
+				);
+				expect(undefined).to.be.equal(
+					getSelectedBlock(data, 'style')?.spacing?.padding
+				);
+			});
+		});
 	});
 });

@@ -252,9 +252,9 @@ export default function ({
 					}}
 				>
 					{gap?.lock ? (
-						<Icon icon="lock" size="18" />
+						<Icon icon="lock" iconSize="18" />
 					) : (
-						<Icon icon="unlock" size="18" />
+						<Icon icon="unlock" iconSize="18" />
 					)}
 				</Button>
 			</Grid>

@@ -139,6 +139,13 @@ export function MarginTop({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<MarginTopSideShape
@@ -224,6 +231,7 @@ export function MarginTop({
 					labelClassName
 				)}
 				data-cy="box-spacing-margin-top"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Top Margin', 'blockera')}

@@ -28,7 +28,7 @@ export const QueryPaginationNext: BlockType = {
 			name: 'elements/arrow',
 			label: __('Arrow', 'blockera'),
 			description: __('The pagination next arrow element.', 'blockera'),
-			icon: <Icon icon="block-pagination-next-arrow" size="20" />,
+			icon: <Icon icon="block-pagination-next-arrow" iconSize="20" />,
 			settings: {
 				force: true,
 			},

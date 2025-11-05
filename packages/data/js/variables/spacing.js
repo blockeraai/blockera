@@ -15,7 +15,11 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 /**
  * Internal dependencies
  */
-import { generateVariableString, getBlockEditorSettings } from './index';
+import {
+	generateVariableString,
+	generateVariableStringFromAttributeVarString,
+	getBlockEditorSettings,
+} from './index';
 import type { VariableItem } from './types';
 
 export const getSpacings: () => Array<VariableItem> = memoize(
@@ -111,7 +115,29 @@ export const getSpacingVAFromIdString: (value: string) => ValueAddon | string =
 export const getSpacingVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
 		if (isString(value) && value.startsWith('var:')) {
-			return getSpacingVAFromIdString(value.split('|')[2]);
+			const varId = value.split('|')[2];
+			const spacingVA = getSpacingVAFromIdString(varId);
+
+			// same value means the variable not found but should be returned as not found
+			if (spacingVA === varId) {
+				const varString =
+					generateVariableStringFromAttributeVarString(value);
+
+				return {
+					settings: {
+						name: varId,
+						id: value,
+						value: `var(${varString})`,
+						type: 'spacing',
+						var: varString,
+					},
+					name: varId,
+					isValueAddon: true,
+					valueType: 'variable',
+				};
+			}
+
+			return spacingVA;
 		}
 
 		return value;
