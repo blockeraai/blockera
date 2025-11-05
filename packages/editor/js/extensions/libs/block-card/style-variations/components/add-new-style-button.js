@@ -19,6 +19,14 @@ import { mergeObject } from '@blockera/utils';
 import { Button, Flex, PromotionPopover } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
+/**
+ * Internal dependencies
+ */
+import {
+	getBlockeraGlobalStylesMetaData,
+	setBlockeraGlobalStylesMetaData,
+} from '../../../../../canvas-editor/global-styles/helpers';
+
 const PromoteGlobalStylesPremiumFeature = ({
 	items,
 	onClose = () => {},
@@ -164,26 +172,17 @@ export const AddNewStyleButton = ({
 
 		setCurrentActiveStyle(newStyle);
 
-		const { blockeraGlobalStylesMetaData } = window;
-
-		setGlobalStyles(
-			mergeObject(
-				{
-					...globalStyles,
-					...(!globalStyles?.blockeraMetaData
-						? { blockeraMetaData: blockeraGlobalStylesMetaData }
-						: {}),
-				},
-				{
-					blockeraMetaData: {
-						blocks: {
-							[blockName]: {
-								variations: {
-									[newStyle.name]: newStyle,
-								},
-							},
-						},
-					},
+		const newGlobalStyles = mergeObject(
+			{
+				...globalStyles,
+				...(!globalStyles?.blockeraMetaData
+					? {
+							blockeraMetaData: getBlockeraGlobalStylesMetaData(),
+					  }
+					: {}),
+			},
+			{
+				blockeraMetaData: {
 					blocks: {
 						[blockName]: {
 							variations: {
@@ -191,9 +190,19 @@ export const AddNewStyleButton = ({
 							},
 						},
 					},
-				}
-			)
+				},
+				blocks: {
+					[blockName]: {
+						variations: {
+							[newStyle.name]: newStyle,
+						},
+					},
+				},
+			}
 		);
+
+		setGlobalStyles(newGlobalStyles);
+		setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [blockStyles]);
 
