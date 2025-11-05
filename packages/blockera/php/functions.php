@@ -217,7 +217,7 @@ if (! function_exists('blockera_array_flat')) {
             return [];
         }
 
-        // Filter out non-array values before merging
+        // Filter out non-array values before merging.
         $arrayValues = array_filter($nestedArray, 'is_array');
         
         if (empty($arrayValues)) {
