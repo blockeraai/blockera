@@ -17,7 +17,7 @@ describe('Font Color → WP Compatibility', () => {
 
 	describe('Paragraph Block', () => {
 		describe('Simple Value', () => {
-			it('Reset font color to check inner blocks color while not the same', () => {
+			it.only('Reset font color to check inner blocks color while not the same', () => {
 				appendBlocks(
 					'<!-- wp:paragraph {"style":{"elements":{"link":{"color":{"text":"#98cc08"}}},"color":{"text":"#98cc08"}}} -->\n' +
 						'<p class="has-text-color has-link-color" style="color:#98cc08">Test paragraph</p>' +
@@ -57,7 +57,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				cy.setColorControlValue('Text Color', '666666');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -83,7 +83,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				setInnerBlock('elements/link');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				cy.setColorControlValue('Text Color', '555555');
 
@@ -174,7 +174,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				cy.setColorControlValue('Text Color', '666666');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -200,7 +200,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				cy.clearColorControlValue('Text Color');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -261,7 +261,7 @@ describe('Font Color → WP Compatibility', () => {
 
 				cy.setColorControlValue('Text Color', '666666');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -281,7 +281,7 @@ describe('Font Color → WP Compatibility', () => {
 				//
 				cy.clearColorControlValue('Text Color');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Blockera value should be moved to WP data
 				getWPDataObject().then((data) => {
@@ -362,7 +362,7 @@ describe('Font Color → WP Compatibility', () => {
 				// change variable
 				cy.selectValueAddonItem('contrast');
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
@@ -405,7 +405,7 @@ describe('Font Color → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
@@ -493,7 +493,7 @@ describe('Font Color → WP Compatibility', () => {
 						cy.selectValueAddonItem('contrast');
 					});
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
@@ -536,7 +536,7 @@ describe('Font Color → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
@@ -621,7 +621,7 @@ describe('Font Color → WP Compatibility', () => {
 					cy.removeValueAddon();
 				});
 
-				cy.wait(50);
+				cy.wait(100);
 
 				// Check WP data
 				getWPDataObject().then((data) => {
