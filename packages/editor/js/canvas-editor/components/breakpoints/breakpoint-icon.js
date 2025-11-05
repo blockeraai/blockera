@@ -168,7 +168,7 @@ export function BreakpointIcon({
 				{isBaseBreakpoint(name) && (
 					<Icon
 						icon="asterisk"
-						iconSize="13"
+						iconSize="14"
 						className={componentInnerClassNames(
 							'base-breakpoint-icon'
 						)}
@@ -185,6 +185,7 @@ export function BreakpointIcon({
 								? { library: settings.icon.library }
 								: {}),
 						}}
+						iconSize={24}
 					/>
 				) : (
 					<Icon icon="border" library="wp" iconSize="24px" />
