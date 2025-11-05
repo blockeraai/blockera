@@ -257,15 +257,14 @@ class Transpiler {
         // Inline styles stacks.
         $inline_styles       = [];
 		$inline_declarations = [];
-
-        // The counter is used to determine if the current tag is the first tag in the block.
-        $counter = 0;
+		$roo_selector        = blockera_get_normalized_selector($args['block']['attrs']['className'] ?? '');
+		$selector            = $roo_selector ? $roo_selector : $args['unique_class_name'];
 
         // Process in a single pass.
         while ($processor->next_tag()) {
             $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
-            $class        = $processor->get_attribute('class');			
+            $class        = $processor->get_attribute('class');
 
 			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
 			if ($class && str_contains($class, 'blockera-is-transpiled')) {
@@ -273,46 +272,45 @@ class Transpiler {
 				return;
 			}
 
-            if (! empty(trim($class ?? '')) && preg_match('/wp-(block|elements)/i', $class, $matches) || 0 === $counter) {
-				if ($style) {
-					foreach ($this->global_css_props_classes as $prop => $prop_class) {
-						if (str_contains($style, $prop)) {
-							$this->updateClassname($processor, $prop_class, $args['block']);
-						}
+			// Update classname based on global css props classes.
+			// Just for backward compatibility with WordPress original block output.
+			if ($style) {
+				foreach ($this->global_css_props_classes as $prop => $prop_class) {
+					if (str_contains($style, $prop)) {
+						$this->updateClassname($processor, $prop_class, $args['block']);
 					}
 				}
+			}
 
-				if ( null === $class || ! blockera_is_wp_block_child_class($class)) {
-					$this->updateClassname($processor, $args['blockera_class_name'], $args['block']);
-				}
-            }
-
-            ++$counter;
+			// Update classname based on blockera class name.
+			// Add blockera-is-transpiled class to the block wrapper element.
+			$this->updateClassname($processor, $class ? $class : $args['blockera_class_name'], $args['block']);
 
 			if ($style) {
 				$declarations = explode(';', $style);
+				$root_class   = str_replace('.blockera-block.', '', $selector);
 
-				if ($id_attribute && 1 < $counter) {
-					$inline_declarations[ $args['unique_class_name'] . ' #' . $id_attribute ] = $declarations;
-				} elseif (1 < $counter && ! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) ) {
-					$inline_declarations[ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ] = $declarations;
+				if ($id_attribute) {
+					$inline_declarations[ $selector . ' #' . $id_attribute ] = $declarations;
+				} elseif (! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) && ! str_contains($class, $root_class)) {
+					$inline_declarations[ $selector . ' .' . str_replace(' ', '.', $class) ] = $declarations;
 				} else {
-					$inline_declarations[ $args['unique_class_name'] ] = $declarations;
+					$inline_declarations[ $selector ] = $declarations;
 				}
 
 				$processor->remove_attribute('style');
 			}
         }
 
-		foreach ($inline_declarations as $selector => $declarations) {
+		foreach ($inline_declarations as $_selector => $declarations) {
 
 			foreach ($declarations as $declaration) {
-				if ($selector === $args['unique_class_name']) {
-					$inline_styles[ $args['unique_class_name'] ][] = $declaration;
+				if ($_selector === $selector) {
+					$inline_styles[ $selector ][] = $declaration;
 					continue;
 				}
 
-            	$inline_styles[ $args['unique_class_name'] ][ $selector ][] = $declaration;            
+            	$inline_styles[ $selector ][ $_selector ][] = $declaration;            
         	}
 		}
 
@@ -321,7 +319,7 @@ class Transpiler {
             class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
             [
                 'block' => $args['block'],
-                'fallbackSelector' => $args['unique_class_name'],
+                'fallbackSelector' => $selector,
             ]
         );
 		$this->style_engine->setSupports($args['supports']);
@@ -434,15 +432,17 @@ class Transpiler {
 
         if (! empty($previous_class)) {
 
-            if (preg_match($regexp, $classname, $matches) && preg_match($regexp, $previous_class)) {
-
-                $final_classname = preg_replace($regexp, $matches[0], $previous_class);
-            } else {
+            if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
 
                 $final_classname = $classname . ' ' . $previous_class;
-            }
+            } else {
+
+				$final_classname = $previous_class;
+			}
         }
-		
+
+		// Prevent double adding the blockera-is-transpiled class to block wrapper element.
+		// It should has not icon element.
 		if (! str_contains($final_classname, 'blockera-is-transpiled') && ! blockera_block_has_icon($block)) {
 			$final_classname .= ' blockera-is-transpiled';
 		}
