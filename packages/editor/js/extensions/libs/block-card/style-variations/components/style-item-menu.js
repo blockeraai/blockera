@@ -130,6 +130,7 @@ export const StyleItemMenu = ({
 					}}
 				>
 					<Flex direction="column" gap={2}>
+						<span />
 						<Button
 							variant="link"
 							contentAlign="left"
