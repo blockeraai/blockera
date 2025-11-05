@@ -35,11 +35,11 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 			.contains('Duplicate')
 			.click();
 		cy.getByDataTest('style-default-copy-1').should('be.visible');
-		cy.getByDataTest('open-style-section-1-contextmenu').click();
+		cy.getByDataTest('open-section-1-contextmenu').click();
 		cy.get('.blockera-component-popover-body button')
 			.contains('Duplicate')
 			.click();
-		cy.getByDataTest('style-style-section-1-copy').should('be.visible');
+		cy.getByDataTest('style-section-1-copy').should('be.visible');
 
 		savePage();
 		cy.reload();
@@ -48,7 +48,7 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 		cy.getByDataTest('open-default-contextmenu').click();
 		cy.getByDataTest('style-default-copy').should('be.visible');
 		cy.getByDataTest('style-default-copy-1').should('be.visible');
-		cy.getByDataTest('style-style-section-1-copy').should('be.visible');
+		cy.getByDataTest('style-section-1-copy').should('be.visible');
 	});
 
 	it('should be able to clear customizations from specific style variation', () => {
