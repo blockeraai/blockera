@@ -29,13 +29,28 @@
 		position: absolute;
 		opacity: 0;
 		visibility: hidden;
-		right: -19px;
 		top: 50%;
 		transition: all 100ms linear;
 		transform: translateY(-50%) scale(0.5);
 
 		&:hover {
 			fill: var(--blockera-controls-primary-color);
+		}
+	}
+
+	&.label-icon-end {
+
+		.blockera-control-help-icon,
+		.blockera-control-reset-icon {
+			right: -19px;
+		}
+	}
+
+	&.label-icon-start {
+
+		.blockera-control-help-icon,
+		.blockera-control-reset-icon {
+			left: -19px;
 		}
 	}
 

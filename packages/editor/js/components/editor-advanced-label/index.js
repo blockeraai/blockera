@@ -52,6 +52,7 @@ export const EditorAdvancedLabelControl = ({
 	resetToDefault,
 	onClick,
 	offset = 35,
+	iconPosition = 'end',
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -105,6 +106,7 @@ export const EditorAdvancedLabelControl = ({
 					ariaLabel={ariaLabel}
 					labelDescription={labelDescription}
 					advancedIsOpen={isOpenModal}
+					iconPosition={iconPosition}
 					className={controlClassNames('label', className, {
 						'changed-in-inner-normal-state':
 							(isInnerBlock &&
