@@ -17,7 +17,7 @@ describe('Font Color → WP Compatibility', () => {
 
 	describe('Paragraph Block', () => {
 		describe('Simple Value', () => {
-			it.only('Reset font color to check inner blocks color while not the same', () => {
+			it('Reset font color to check inner blocks color while not the same', () => {
 				appendBlocks(
 					'<!-- wp:paragraph {"style":{"elements":{"link":{"color":{"text":"#98cc08"}}},"color":{"text":"#98cc08"}}} -->\n' +
 						'<p class="has-text-color has-link-color" style="color:#98cc08">Test paragraph</p>' +
