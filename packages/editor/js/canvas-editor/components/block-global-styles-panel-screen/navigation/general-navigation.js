@@ -21,7 +21,7 @@ export const GeneralNavigation = (): MixedElement => {
 		<NavigationMenu
 			title={
 				<>
-					<Icon icon="extension-general" size={20} />
+					<Icon icon="extension-general" iconSize={20} />
 					{__('General', 'blockera')}
 				</>
 			}
@@ -35,7 +35,7 @@ export const GeneralNavigation = (): MixedElement => {
 				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="layout"
 				title={__('Layout', 'blockera')}
-				icon={<Icon icon="wp-layout" size={20} />}
+				icon={<Icon icon="wp-layout" iconSize={20} />}
 			/>
 		</NavigationMenu>
 	);

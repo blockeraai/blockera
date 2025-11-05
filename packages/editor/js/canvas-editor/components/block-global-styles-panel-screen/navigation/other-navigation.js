@@ -45,7 +45,7 @@ export const OtherNavigation = ({
 			<NavigationMenu
 				title={
 					<>
-						<Icon icon="extension-advanced" size={20} />
+						<Icon icon="extension-advanced" iconSize={20} />
 						{__('Other', 'blockera')}
 					</>
 				}
@@ -60,7 +60,7 @@ export const OtherNavigation = ({
 					})}
 					navigateToMenu="css"
 					title={__('Custom CSS', 'blockera')}
-					icon={<Icon icon="custom-css" size={20} />}
+					icon={<Icon icon="custom-css" iconSize={20} />}
 				/>
 				<NavigationItem
 					item="css"
@@ -77,7 +77,7 @@ export const OtherNavigation = ({
 							</span>
 						</>
 					}
-					icon={<Icon icon="javascript-codes" size={20} />}
+					icon={<Icon icon="javascript-codes" iconSize={20} />}
 				/>
 				<NavigationItem
 					item="css"
@@ -94,7 +94,7 @@ export const OtherNavigation = ({
 							</span>
 						</>
 					}
-					icon={<Icon icon="back-to-top" size={20} />}
+					icon={<Icon icon="back-to-top" iconSize={20} />}
 				/>
 			</NavigationMenu>
 

@@ -21,7 +21,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 		<NavigationMenu
 			title={
 				<>
-					<Icon icon="extension-typography" size={20} />
+					<Icon icon="extension-typography" iconSize={20} />
 					{__('Design system', 'blockera')}
 				</>
 			}
@@ -35,7 +35,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="typography"
 				title={__('Typography', 'blockera')}
-				icon={<Icon icon="wp-typography" size={20} />}
+				icon={<Icon icon="wp-typography" iconSize={20} />}
 			/>
 			<NavigationItem
 				item="colors"
@@ -45,7 +45,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="colors"
 				title={__('Colors', 'blockera')}
-				icon={<Icon icon="wp-colors" size={20} />}
+				icon={<Icon icon="wp-colors" iconSize={20} />}
 			/>
 			<NavigationItem
 				item="background"
@@ -55,7 +55,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="background"
 				title={__('Background', 'blockera')}
-				icon={<Icon icon="wp-background" size={20} />}
+				icon={<Icon icon="wp-background" iconSize={20} />}
 			/>
 			<NavigationItem
 				item="shadows"
@@ -65,7 +65,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				className={extensionClassNames('navigation-item', 'hide-caret')}
 				navigateToMenu="shadows"
 				title={__('Shadows', 'blockera')}
-				icon={<Icon icon="wp-shadows" size={20} />}
+				icon={<Icon icon="wp-shadows" iconSize={20} />}
 			/>
 		</NavigationMenu>
 	);
