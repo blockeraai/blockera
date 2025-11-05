@@ -53,7 +53,7 @@ function blockera_test_register_style_variations( string $design_name, array $va
 	$blocks_styles = glob($pattern);
 
 	if (empty($blocks_styles)) {
-		throw new \Exception('Design not has blocks styles: ' . $design_name);
+		return $variations;
 	}
 
 	foreach ($blocks_styles as $block_style) {
