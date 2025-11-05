@@ -15,7 +15,10 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 /**
  * Internal dependencies
  */
-import { generateVariableString } from './utils';
+import {
+	generateVariableString,
+	generateVariableStringFromAttributeVarString,
+} from './utils';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 
@@ -94,6 +97,25 @@ export const getGradientVAFromVarString: (
 
 		if (isObject(variable)) {
 			return variable;
+		}
+
+		// same value means the variable not found but should be returned as not found
+		if (variable === id) {
+			const varString =
+				generateVariableStringFromAttributeVarString(value);
+
+			return {
+				settings: {
+					name: id,
+					id: value,
+					value: `var(${varString})`,
+					type: 'linear-gradient',
+					var: varString,
+				},
+				name: id,
+				isValueAddon: true,
+				valueType: 'variable',
+			};
 		}
 	}
 
