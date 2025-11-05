@@ -73,5 +73,18 @@ export function bgColorStateFromWPCompatibility({
 		});
 	}
 
+	// If the property and propertyCustom are the same as the default value,
+	// remove the property and propertyCustom because keeping them creates other problems
+	// as they are general and used for other settings.
+	if (
+		attributes?.[property] === defaultValue &&
+		attributes?.[propertyCustom] === defaultValue
+	) {
+		return mergeObject(attributes, {
+			[property]: undefined,
+			[propertyCustom]: undefined,
+		});
+	}
+
 	return attributes;
 }
