@@ -160,7 +160,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 								continue;
 							}
 						}
-					} elseif (\WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
+					} else {
 						$variation = [
 							'name' => $variation_name,
 							'label' => $variation_data['label'] ?? Utils::pascalCaseWithSpace($variation_name),
@@ -168,6 +168,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 						if (isset($variation_data['isDefault'])) {
 							$variation['is_default'] = true;
+						}
+
+						if (\WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
+							if ($variation_name === $variation_data['name'] && \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_data['name'])) {
+								continue;
+							}
 						}
 
 						register_block_style($block_name, $variation);
