@@ -17,6 +17,7 @@
 ### Automated Tests
 - Automated test to check `font color` WP data compatibility if variables not found. 
 - Automated test to check `background color` WP data compatibility if variables not found. 
+- Automated test to check `background image` WP data compatibility if variables not found. 
 - Automated test to check `border color` WP data compatibility if variables not found. 
 - Automated test to check `font size` WP data compatibility if variables not found. 
 - Automated test to check `spacing` WP data compatibility if variables not found. 
