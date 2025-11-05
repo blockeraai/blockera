@@ -1912,6 +1912,8 @@ describe('Blocksy → Search Block → WP Compatibility', () => {
 			'elements/result-link',
 		]);
 
+		cy.addNewTransition();
+
 		//
 		//  1. Assert inner blocks selectors in editor
 		//

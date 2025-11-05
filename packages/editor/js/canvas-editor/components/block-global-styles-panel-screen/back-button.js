@@ -22,6 +22,9 @@ export const BackButton = (): MixedElement => {
 			<Button
 				className="blockera-back-button"
 				onClick={() => {
+					const className = 'activated-blockera-global-styles-panel';
+
+					document.body?.classList?.remove(className);
 					document
 						.querySelector(
 							'button.components-navigator-back-button'

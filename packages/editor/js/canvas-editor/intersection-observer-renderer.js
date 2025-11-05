@@ -18,6 +18,9 @@ export class IntersectionObserverRenderer {
 	isRootComponent: boolean;
 	isRendered: boolean;
 	clickedBlock: boolean;
+	cachedRoot: any;
+	cachedContainer: HTMLElement | null;
+	renderTimeout: TimeoutID | null;
 
 	constructor(
 		targetSelector: string,
@@ -47,6 +50,9 @@ export class IntersectionObserverRenderer {
 		this.targetElementIsRoot = targetElementIsRoot;
 		this.onShouldNotRenderer = onShouldNotRenderer;
 		this.isRootComponent = isRootComponent;
+		this.cachedRoot = null;
+		this.cachedContainer = null;
+		this.renderTimeout = null;
 
 		// Create mutation observer to watch DOM changes
 		this.observer = new MutationObserver((mutations) => {
@@ -66,6 +72,8 @@ export class IntersectionObserverRenderer {
 			this.observer.observe(document.body, {
 				childList: true, // Watch for child element changes
 				subtree: true, // Watch all descendants
+				attributes: true, // Watch for attribute changes
+				attributeFilter: ['value'], // Watch for input value changes
 			});
 		}
 	}
@@ -73,26 +81,51 @@ export class IntersectionObserverRenderer {
 	handleDomChanges(mutations: MutationRecord[]) {
 		// Check if our target element was added or removed
 		const shouldRerender = mutations.some((mutation) => {
+			// Detect node addition/removal
 			const addedNodes = Array.from(mutation.addedNodes);
 			const removedNodes = Array.from(mutation.removedNodes);
 
-			// Check if target element was added or removed
-			return [...addedNodes, ...removedNodes].some((node) => {
-				if (node instanceof Element) {
-					return (
-						node.matches(this.targetSelector) ||
-						node.querySelector(this.targetSelector)
-					);
+			const nodeChanged = [...addedNodes, ...removedNodes].some(
+				(node) => {
+					if (node instanceof Element) {
+						return (
+							node.matches(this.targetSelector) ||
+							node.querySelector(this.targetSelector)
+						);
+					}
+					return false;
 				}
-				return false;
-			});
+			);
+
+			// Detect attribute changes on target element
+			const attrChanged =
+				mutation.type === 'attributes' &&
+				mutation.target instanceof Element &&
+				mutation.target.matches(this.targetSelector);
+
+			if (
+				this.targetElementIsRoot &&
+				this.cachedRoot &&
+				this.cachedContainer
+			) {
+				this.cachedRoot = null;
+				this.cachedContainer = null;
+			}
+
+			return nodeChanged || attrChanged;
 		});
 
 		if (shouldRerender && this.Component) {
-			this.renderComponent();
+			// Debounce render calls
+			if (this.renderTimeout) {
+				clearTimeout(this.renderTimeout);
+			}
+			this.renderTimeout = setTimeout(() => {
+				this.renderComponent();
+			}, 100);
 		}
 
-		if (shouldRerender && 'function' === typeof this.callback) {
+		if ('function' === typeof this.callback) {
 			this.callback();
 		}
 
@@ -123,40 +156,49 @@ export class IntersectionObserverRenderer {
 					return;
 				}
 
-				const containerDiv = document.createElement('div');
-				const root = createRoot(containerDiv);
+				if (!this.cachedContainer) {
+					this.cachedContainer = document.createElement('div');
+					this.cachedRoot = createRoot(this.cachedContainer);
+				}
 
 				if (this.Component) {
-					root.render(
+					this.cachedRoot.render(
 						<this.Component clickedBlock={this.clickedBlock} />
 					);
 				}
 
 				// If the target element is an iframe, append the container to the iframe body.
-				if ('IFRAME' === targetElement.tagName) {
+				if (
+					'IFRAME' === targetElement.tagName &&
+					// $FlowFixMe
+					targetElement?.contentDocument?.body
+				) {
 					// $FlowFixMe
 					targetElement.contentDocument.body.appendChild(
-						containerDiv
+						this.cachedContainer
 					);
 
 					// If the component is a root component, set the isRendered flag to true, because it will be rendered only once.
 					if (this.isRootComponent) {
 						this.isRendered = true;
-
-						containerDiv.remove();
 					}
 				}
 
 				return;
 			}
 
-			// Create a new div to hold our component.
-			const containerDiv = document.createElement('div');
-			// Append the new container to target instead of replacing content.
-			targetElement.appendChild(containerDiv);
-			const root = createRoot(containerDiv);
+			// Reuse cached container and root if available
+			if (!this.cachedContainer) {
+				this.cachedContainer = document.createElement('div');
+				this.cachedRoot = createRoot(this.cachedContainer);
+			}
+
+			if (this.cachedContainer) {
+				targetElement.appendChild(this.cachedContainer);
+			}
+
 			if (this.Component) {
-				root.render(<this.Component />);
+				this.cachedRoot.render(<this.Component />);
 			}
 
 			// If the component is a root component, set the isRendered flag to true, because it will be rendered only once.
@@ -164,12 +206,22 @@ export class IntersectionObserverRenderer {
 				this.isRendered = true;
 			}
 
-			containerDiv.remove();
+			this.cachedContainer?.remove();
 		}
 	}
 
 	destroy() {
+		if (this.renderTimeout) {
+			clearTimeout(this.renderTimeout);
+		}
+
+		if (this.cachedRoot) {
+			this.cachedRoot.unmount();
+		}
+
 		this.isRendered = false;
+		this.cachedContainer = null;
+		this.cachedRoot = null;
 
 		// Clean up observer when done
 		this.observer.disconnect();
