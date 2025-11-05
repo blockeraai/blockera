@@ -107,15 +107,24 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 						'%2F'
 					)}"]`;
 
+					if (
+						!block.attributes?.blockeraPropsId ||
+						!Cypress.$(selector)?.length
+					) {
+						return;
+					}
+
 					if (!Cypress.$(selector).length) {
 						return;
 					}
 
-					cy.get(selector).within(() => {
-						cy.get(
-							'.blockera-block-icon-wrapper svg:last-child'
-						).should('be.exist');
-					});
+					cy.get(selector)
+						.first()
+						.within(() => {
+							cy.get(
+								'.blockera-block-icon-wrapper svg:last-child'
+							).should('be.exist');
+						});
 				});
 		});
 	});

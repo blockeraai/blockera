@@ -31,7 +31,12 @@ import {
 	BlockGlobalStylesPanelScreen,
 	BlockeraGlobalStylesNavigation,
 } from '../components';
-import { AddBlockTypeIcons, sidebarSelector } from './side-bar-listener';
+import { sharedListenerCallback } from './listener-callback';
+import {
+	AddBlockTypeIcons,
+	getBlockTypeSelector,
+	sidebarSelector,
+} from './side-bar-listener';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { styleBookListener, styleBookSelector } from './style-book-listener';
 import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
@@ -150,17 +155,46 @@ export const registration = ({
 
 	registerPlugin('blockera-global-styles-panel-activator-observer', {
 		render() {
+			const {
+				setSelectedBlockRef,
+				setSelectedBlockStyle,
+				setStyleVariationBlocks,
+			} = dispatch('blockera/editor');
+
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useEffect(() => {
 				new IntersectionObserverRenderer(screen, null, {
 					callback: () => {
 						const className =
 							'activated-blockera-global-styles-panel';
-						if (select('blockera/editor').getSelectedBlockStyle()) {
-							document.body?.classList?.add(className);
-						} else {
-							document.body?.classList?.remove(className);
-						}
+						document
+							.querySelector(
+								'button[aria-controls="edit-site:global-styles"]'
+							)
+							?.addEventListener('click', () => {
+								setSelectedBlockStyle('');
+								setSelectedBlockRef(undefined);
+							});
+
+						blockTypes.forEach((blockType) => {
+							const { getBlockStyles } = select('core/blocks');
+
+							const blockStyles =
+								getBlockStyles(blockType.name) || [];
+
+							blockStyles.forEach((blockStyle) => {
+								setStyleVariationBlocks(blockStyle.name, [
+									blockType.name,
+								]);
+							});
+							const blockElement = document.querySelector(
+								getBlockTypeSelector(blockType.name)
+							);
+							blockElement?.addEventListener('click', () => {
+								document.body?.classList?.add(className);
+								sharedListenerCallback(blockType.name);
+							});
+						});
 					},
 				});
 				// eslint-disable-next-line react-hooks/exhaustive-deps
