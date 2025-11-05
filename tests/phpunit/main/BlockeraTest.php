@@ -77,7 +77,14 @@ class BlockeraTest extends AppTestCase {
 		while(have_posts()) {
 			the_post();
 			
-			$this->assertMatchesHtmlSnapshot(get_the_content());
+			$blocks = parse_blocks(get_the_content());
+			$content = '';
+
+			foreach ($blocks as $block) {
+				$content .= render_block($block);
+			}
+
+			$this->assertMatchesHtmlSnapshot($content);
 		}
 
 		wp_delete_post($post_id);
