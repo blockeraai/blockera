@@ -258,6 +258,7 @@ export function MarginHorizontal({
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
 						}}
+						iconPosition="start"
 						{...{
 							attribute,
 							blockName,
