@@ -208,7 +208,7 @@ class Transpiler {
 
         // Pre-calculate common values.
         $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
-        $blockera_class_name = defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
 		// Process only valid blocks and supported blocks and not dynamic blocks.
