@@ -15,7 +15,7 @@ export const getCalculatedNewStyle = ({
 	currentStyle: Object,
 	blockStyles: Array<Object>,
 	action: 'duplicate' | 'add-new',
-}): { name: string, label: string } => {
+}): { name: string, label: string, icon: Object } => {
 	// Get existing style names from both variations and blockStyles
 	const existingStylesNames = blockStyles.map((style) => style.name);
 	const existingStylesLabels = blockStyles.map((style) => style.label);
@@ -77,6 +77,10 @@ export const getCalculatedNewStyle = ({
 	return {
 		name: newName,
 		label: newLabel,
+		icon: {
+			name: 'blockera',
+			library: 'blockera',
+		},
 	};
 };
 
