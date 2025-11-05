@@ -204,6 +204,69 @@ describe('Background → WP Compatibility', () => {
 					);
 				});
 			});
+
+			it('Not found variable', () => {
+				appendBlocks(
+					`<!-- wp:paragraph {"gradient":"unknown"} -->
+<p class="has-unknown-gradient-background has-background">p gradient</p>
+<!-- /wp:paragraph -->`
+				);
+
+				// Select target block
+				cy.getBlock('core/paragraph').click();
+
+				// add alias to the feature container
+				cy.getParentContainer('Image & Gradient').as('bgContainer');
+
+				cy.addNewTransition();
+
+				//
+				// Test 1: WP data to Blockera
+				//
+
+				// WP data should come to Blockera
+				getWPDataObject().then((data) => {
+					expect({
+						'linear-gradient-0': {
+							type: 'linear-gradient',
+							'linear-gradient': {
+								settings: {
+									name: 'unknown',
+									id: 'var:preset|gradient|unknown',
+									value: 'var(--wp--preset--gradient--unknown)',
+									type: 'linear-gradient',
+									var: '--wp--preset--gradient--unknown',
+								},
+								name: 'unknown',
+								isValueAddon: true,
+								valueType: 'variable',
+							},
+							'linear-gradient-angel': '',
+							'linear-gradient-repeat': 'no-repeat',
+							'linear-gradient-attachment': 'scroll',
+							isVisible: true,
+							order: 1,
+						},
+					}).to.be.deep.equal(
+						getSelectedBlock(data, 'blockeraBackground')
+					);
+				});
+
+				//
+				// Test 2: Check interface for showing deleted value addon
+				//
+
+				cy.get('@bgContainer').within(() => {
+					cy.get('[data-id="linear-gradient-0"]').as('repeaterBtn');
+					cy.get('@repeaterBtn').click();
+				});
+
+				cy.get(
+					'.components-popover.blockera-control-background-popover'
+				).within(() => {
+					cy.get('[data-test="value-addon-deleted"]').should('exist');
+				});
+			});
 		});
 
 		describe('Radial Gradient Background', () => {

@@ -31,7 +31,7 @@ export const CommentsPaginationPrevious: BlockType = {
 				'The pagination previous arrow element.',
 				'blockera'
 			),
-			icon: <Icon icon="block-pagination-previous-arrow" size="20" />,
+			icon: <Icon icon="block-pagination-previous-arrow" iconSize="20" />,
 			settings: {
 				force: true,
 			},

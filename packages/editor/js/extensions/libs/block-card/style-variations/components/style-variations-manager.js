@@ -111,7 +111,7 @@ export const StyleVariationsManager = ({
 				</>
 			}
 			initialOpen={true}
-			icon={<Icon icon="extension-style-variations" size={20} />}
+			icon={<Icon icon="extension-style-variations" iconSize={20} />}
 			className={extensionClassNames('style-variations')}
 			accordion={false}
 		>

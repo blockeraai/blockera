@@ -37,7 +37,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'font-size', '10px');
+		cy.get('p.blockera-block').should('have.css', 'font-size', '10px');
 	});
 
 	it('Variable value', () => {

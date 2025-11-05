@@ -43,7 +43,7 @@ export default function CustomPropertyControl({
 			popoverTitle={
 				popoverTitle || (
 					<>
-						<Icon icon="css-3" size="24" />
+						<Icon icon="css-3" iconSize="24" />
 						{__('CSS Property', 'blockera')}
 					</>
 				)
