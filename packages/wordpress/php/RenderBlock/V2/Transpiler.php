@@ -208,7 +208,7 @@ class Transpiler {
 
         // Pre-calculate common values.
         $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
-        $blockera_class_name = defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+        $blockera_class_name = defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
 		// Process only valid blocks and supported blocks and not dynamic blocks.
@@ -395,7 +395,7 @@ class Transpiler {
         $updated_html = $processor->get_updated_html();
 
         if (empty($args['block_path'])) {
-			if (! defined('BLOCKERA_PHPUNIT_RUN_TESTS') || ! BLOCKERA_PHPUNIT_RUN_TESTS) {
+			if (! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT) {
 				$this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
 				$this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
 			}
@@ -410,7 +410,7 @@ class Transpiler {
             $current = &$current[ $path['id'] ]['innerBlocks'];
         }
 
-        if (! defined('BLOCKERA_PHPUNIT_RUN_TESTS') || ! BLOCKERA_PHPUNIT_RUN_TESTS) {
+        if (! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT) {
 			$current[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
 			$current[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
 		}

@@ -276,7 +276,7 @@ class RenderContent {
 	 */
 	public function thePosts( array $posts, \WP_Query $query): array {
 
-		if ($this->is_processed_posts) {
+		if ($this->is_processed_posts && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT )) {
 			return $posts;
 		}
 

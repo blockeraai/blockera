@@ -178,7 +178,7 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            if ( ( defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
+            if ( ( defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
 
 				$vendor_path = blockera_core_config('app.vendor_path');
 
@@ -354,7 +354,7 @@ class AppServiceProvider extends ServiceProvider {
 			add_action(
                 'pre_get_posts',
                 function( \WP_Query $query) use ( $supports): void {
-					if ($this->is_processed_posts) {
+					if ($this->is_processed_posts && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT )) {
 						return;
 					}
 

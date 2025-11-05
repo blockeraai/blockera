@@ -180,7 +180,7 @@ class Render {
         // Generate blockera hash identify with "blockeraPropsId" attribute value.
         $blockera_hash_id = blockera_get_small_random_hash($attributes['blockeraPropsId']);
 
-		if (defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS) {
+		if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT) {
 			// Get blockera block unique css classname.
         	$blockera_class_name = 'blockera-block blockera-block-test';
 		} else {
