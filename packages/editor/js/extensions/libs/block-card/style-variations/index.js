@@ -26,6 +26,7 @@ import { useStylesForBlocks, getDefaultStyle } from './utils';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { useBlockContext } from '../../../components/block-context';
 import { prepareBlockeraDefaultAttributesValues } from '../../../components/utils';
+import { getBlockeraGlobalStylesMetaData } from '../../../../canvas-editor/global-styles/helpers';
 import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 type TBlockStyleVariations = {
@@ -94,7 +95,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		}
 	}, [currentPreviewStyle]);
 
-	const { blockeraGlobalStylesMetaData } = window;
+	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	const buttonText = useMemo(() => {
 		if (isDeletedStyle) {

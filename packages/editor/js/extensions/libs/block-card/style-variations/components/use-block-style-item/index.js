@@ -82,14 +82,12 @@ export const useBlockStyleItem = ({
 
 	const [isConfirmedChangeID, setIsConfirmedChangeID] = useState(false);
 
-	const { blockeraGlobalStylesMetaData } = window;
-
 	const handleOnRename = useCallback(
 		(
 			newValue: { label: string, name: string },
 			currentStyle: Object
 		): void => {
-			const { blockeraMetaData = blockeraGlobalStylesMetaData } =
+			const { blockeraMetaData = getBlockeraGlobalStylesMetaData() } =
 				globalStyles;
 
 			const editedStyle = {
@@ -155,6 +153,8 @@ export const useBlockStyleItem = ({
 					index,
 				});
 
+				setBlockeraGlobalStylesMetaData(updatedMetaData);
+
 				setGlobalStyles({
 					...editedGlobalStyles,
 					blockeraMetaData: updatedMetaData,
@@ -169,6 +169,8 @@ export const useBlockStyleItem = ({
 				deleteStyleVariationBlocks(currentStyle.name, true, blockName);
 			} else {
 				updatedMetaData = getUpdatedMetaData(editedStyle);
+
+				setBlockeraGlobalStylesMetaData(updatedMetaData);
 
 				setGlobalStyles({
 					...globalStyles,
@@ -189,7 +191,6 @@ export const useBlockStyleItem = ({
 			isConfirmedChangeID,
 			currentBlockStyleVariation,
 			deleteStyleVariationBlocks,
-			blockeraGlobalStylesMetaData,
 			setCurrentBlockStyleVariation,
 		]
 	);
@@ -277,7 +278,7 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
-		const { blockeraMetaData = blockeraGlobalStylesMetaData } =
+		const { blockeraMetaData = getBlockeraGlobalStylesMetaData() } =
 			globalStyles;
 		const updatedMetaData = mergeObject(blockeraMetaData, {
 			blocks: {
@@ -296,7 +297,7 @@ export const useBlockStyleItem = ({
 			...globalStyles,
 			blockeraMetaData: updatedMetaData,
 		});
-		window.blockeraGlobalStylesMetaData = updatedMetaData;
+		setBlockeraGlobalStylesMetaData(updatedMetaData);
 
 		setCachedStyle({
 			...cachedStyle,
@@ -310,9 +311,9 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnDelete = (currentStyleName: string) => {
-		setGlobalStyles({
-			...globalStyles,
-			blockeraMetaData: mergeObject(blockeraGlobalStylesMetaData, {
+		const blockeraMetaData = mergeObject(
+			getBlockeraGlobalStylesMetaData(),
+			{
 				blocks: {
 					[blockName]: {
 						variations: {
@@ -325,7 +326,14 @@ export const useBlockStyleItem = ({
 						},
 					},
 				},
-			}),
+			}
+		);
+
+		setBlockeraGlobalStylesMetaData(blockeraMetaData);
+
+		setGlobalStyles({
+			...globalStyles,
+			blockeraMetaData,
 		});
 
 		setBlockStyles(

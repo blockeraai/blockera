@@ -38,6 +38,10 @@ import { EditableBlockName } from './editable-block-name';
 import type { TStyleVariationBlockCardProps } from '../types';
 import StateContainer from '../../../components/state-container';
 import { Preview as BlockCompositePreview } from '../../block-composite';
+import {
+	getBlockeraGlobalStylesMetaData,
+	setBlockeraGlobalStylesMetaData,
+} from '../../../../canvas-editor/global-styles/helpers';
 import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
 
 const DEBOUNCE_DELAY = 1000;
@@ -63,7 +67,7 @@ export function StyleVariationBlockCard({
 	setCurrentBlockStyleVariation,
 }: TStyleVariationBlockCardProps): MixedElement {
 	const { onToggle } = useBlockSection('innerBlocksConfig');
-	const { blockeraGlobalStylesMetaData } = window;
+	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
@@ -168,7 +172,7 @@ export function StyleVariationBlockCard({
 				});
 			}
 
-			window.blockeraGlobalStylesMetaData = updatedMetaData;
+			setBlockeraGlobalStylesMetaData(updatedMetaData);
 			setHasUserEdited(true);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps

@@ -29,6 +29,10 @@ import {
  * Internal dependencies
  */
 import { blockHasStyle } from './use-block-style-item/helpers';
+import {
+	getBlockeraGlobalStylesMetaData,
+	setBlockeraGlobalStylesMetaData,
+} from '../../../../../canvas-editor/global-styles/helpers';
 
 export const BlockTypes = ({
 	items,
@@ -168,7 +172,8 @@ export const BlockTypes = ({
 				setAction('single-disable');
 			}
 
-			const { blockeraGlobalStylesMetaData } = window;
+			const blockeraGlobalStylesMetaData =
+				getBlockeraGlobalStylesMetaData();
 			const newGlobalStyles = mergeObject(
 				{
 					...globalStyles,
@@ -189,8 +194,7 @@ export const BlockTypes = ({
 				}
 			);
 
-			window.blockeraGlobalStylesMetaData =
-				newGlobalStyles.blockeraMetaData;
+			setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
 
 			setGlobalStyles(newGlobalStyles);
 

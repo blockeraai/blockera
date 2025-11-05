@@ -37,6 +37,7 @@ import {
 	getBlockTypeSelector,
 	sidebarSelector,
 } from './side-bar-listener';
+import { getBlockeraGlobalStylesMetaData } from './helpers';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { styleBookListener, styleBookSelector } from './style-book-listener';
 import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
@@ -55,8 +56,8 @@ export const registration = ({
 	globalStylesScreen: string,
 }): void => {
 	const blockTypes = getBlockTypes();
-	const { blockeraGlobalStylesMetaData } = window;
 	const { setStyleVariationBlocks } = dispatch('blockera/editor');
+	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	// Reregister block styles where (renamed by identifier, or deleted)
 	Object.entries(blockeraGlobalStylesMetaData?.blocks || {})?.forEach(

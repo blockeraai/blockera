@@ -21,6 +21,11 @@ import { prepare } from '@blockera/data-editor';
 import { isString } from '@blockera/utils';
 
 /**
+ * Internal dependencies
+ */
+import { getBlockeraGlobalStylesMetaData } from '../../../../canvas-editor/global-styles/helpers';
+
+/**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
  *
  * Returns the active style from the given className.
@@ -93,7 +98,7 @@ export function getRenderedStyles(
 			library: 'wp',
 		},
 	};
-	const { blockeraGlobalStylesMetaData } = window;
+	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 	const variations =
 		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations || {};
 
