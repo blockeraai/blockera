@@ -60,6 +60,7 @@ export default function LayoutMatrixControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	columns,
 	style,
 	defaultValue = {
@@ -114,6 +115,7 @@ export default function LayoutMatrixControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	let matrixType = 'normal';

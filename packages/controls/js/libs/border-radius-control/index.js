@@ -36,6 +36,7 @@ export default function BorderRadiusControl({
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	defaultValue = {
@@ -96,6 +97,7 @@ export default function BorderRadiusControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (

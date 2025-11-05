@@ -38,6 +38,7 @@ const BoxPositionControl = ({
 	label = __('Position', 'blockera'),
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	defaultValue = {
@@ -136,6 +137,7 @@ const BoxPositionControl = ({
 				</p>
 			</>
 		),
+		...propsForLabelControl,
 	};
 
 	const sideProps = {

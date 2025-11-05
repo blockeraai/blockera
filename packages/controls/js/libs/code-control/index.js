@@ -215,6 +215,7 @@ const CodeControl = ({
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	columns = 'columns-1',
@@ -254,6 +255,7 @@ const CodeControl = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	switch (lang) {

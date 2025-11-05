@@ -35,6 +35,7 @@ import { default as IconPickerPopover } from './components/icon-picker/icon-pick
 function IconControl({
 	id,
 	label,
+	labelProps: propsForLabelControl = {},
 	columns,
 	field = 'icon',
 	//
@@ -238,6 +239,7 @@ function IconControl({
 					blockName,
 					resetToDefault,
 				}}
+				{...propsForLabelControl}
 			>
 				<div
 					className={controlClassNames(
