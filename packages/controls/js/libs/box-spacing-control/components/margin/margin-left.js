@@ -137,6 +137,13 @@ export function MarginLeft({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<MarginLeftSideShape
@@ -222,6 +229,7 @@ export function MarginLeft({
 					labelClassName
 				)}
 				data-cy="box-spacing-margin-left"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Left Margin', 'blockera')}

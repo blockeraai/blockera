@@ -146,6 +146,13 @@ export function PaddingVertical({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingVerticalShape
@@ -232,6 +239,7 @@ export function PaddingVertical({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-top"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('Top & Bottom Padding', 'blockera')}
@@ -267,6 +275,7 @@ export function PaddingVertical({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-bottom"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('Top & Bottom Padding', 'blockera')}

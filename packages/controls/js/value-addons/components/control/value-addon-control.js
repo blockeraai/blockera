@@ -145,6 +145,9 @@ export default function ({
 						}
 					}}
 					data-cy="value-addon-btn"
+					data-test={
+						isDeleted ? 'value-addon-deleted' : 'value-addon-normal'
+					}
 					{...props}
 				>
 					{isIconActive && (

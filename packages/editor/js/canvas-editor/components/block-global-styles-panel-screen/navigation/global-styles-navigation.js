@@ -24,7 +24,7 @@ export const GlobalStylesNavigation = (): MixedElement => {
 		<NavigationMenu
 			title={
 				<>
-					<Icon icon="extension-style-variations" size={20} />
+					<Icon icon="extension-style-variations" iconSize={20} />
 					{__('Global Styles', 'blockera')}
 				</>
 			}
@@ -50,7 +50,7 @@ export const GlobalStylesNavigation = (): MixedElement => {
 				className={extensionClassNames('navigation-item')}
 				navigateToMenu="blocks"
 				title={__('Block Style Variations', 'blockera')}
-				icon={<Icon icon="style-variations" size={20} />}
+				icon={<Icon icon="style-variations" iconSize={20} />}
 			/>
 		</NavigationMenu>
 	);
