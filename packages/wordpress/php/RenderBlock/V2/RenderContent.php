@@ -17,6 +17,13 @@ class RenderContent {
 	use AssetsLoaderTrait;
 
 	/**
+	 * Store the flag to determine if the posts are already processed.
+	 *
+	 * @var boolean $is_processed_posts the flag to indicate if the posts are already processed or not!
+	 */
+	protected $is_processed_posts = false;
+
+	/**
 	 * Store the id.
 	 *
 	 * @var string $id the id.
@@ -156,7 +163,8 @@ class RenderContent {
 
 		$this->supports = $supports;
 
-        add_filter('the_posts', [ $this, 'thePosts' ]);
+		// Low priority to ensure that other plugins can override the posts.
+        add_filter('the_posts', [ $this, 'thePosts' ], 10e2, 2);
     }
 
 	/**
@@ -261,24 +269,39 @@ class RenderContent {
 	/**
 	 * Filtering posts.
 	 *
-	 * @param array $posts The posts array.
+	 * @param array     $posts The posts array.
+	 * @param \WP_Query $query The WordPress query instance.
 	 *
 	 * @return array The posts array.
 	 */
-	public function thePosts( array $posts): array {
+	public function thePosts( array $posts, \WP_Query $query): array {
+
+		if ($this->is_processed_posts) {
+			return $posts;
+		}
+
+		$this->is_processed_posts = true;
+		
 		if (empty($posts)) {
 			return $posts;
 		}
 
         return array_map(
-            function ( \WP_Post $post): \WP_Post {
+            function ( \WP_Post $post) use ( $query): \WP_Post {
 
-				if (empty($post->post_content)) {
+				if (empty($post->post_content) || ! str_contains($post->post_content, 'blockera-block')) {
 					return $post;
 				}
 
 				// Skip global styles post type.
 				if ('wp_global_styles' === $post->post_type) {
+					return $post;
+				}
+
+				// Skip if post ID doesn't match the queried object ID.
+				$queried_object_id = $query->get_queried_object_id();
+
+				if ($queried_object_id && $query->is_main_query() && $post->ID !== $queried_object_id) {
 					return $post;
 				}
 
