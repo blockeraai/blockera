@@ -33,12 +33,12 @@ class Gap extends BaseStyleDefinition {
 		// Add suffix to selector based on gap type.
 		switch ($gapType) {
 			case 'margin':
-				$selectorSuffix = ' > * + *';
+				$selectorSuffix = '.is-layout-constrained > * + *';
 				break;
 
 			case 'gap-and-margin':
 				if ('flex' !== $display && 'grid' !== $display) {
-					$selectorSuffix = ' > * + *';
+					$selectorSuffix = '.is-layout-constrained > * + *';
 				}
 				break;
 		}
@@ -78,15 +78,6 @@ class Gap extends BaseStyleDefinition {
 			'gap-and-margin' === $gapType &&
 			( 'flex' === $display || 'grid' === $display || '' === $display )
 		) {
-
-			$this->setCss(
-				'' === $display ? $this->declarations : [
-					'margin-block-start' => '0' . ( $optimizeStyleGeneration ? ' !important' : '' ),
-				],
-				'margin-block-start',
-				' > * + *'
-			);
-
 			// Remove margin-block-start because if display is empty, the gap will be applied with margin-block-start in previous step.
 			if ('' === $display) {
 				unset($this->declarations['margin-block-start']);
