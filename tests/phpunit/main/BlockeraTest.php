@@ -33,7 +33,7 @@ class BlockeraTest extends AppTestCase {
 
 		return dirname((new ReflectionClass($this))->getFileName(), 3).
 			DIRECTORY_SEPARATOR.
-			'fixtures' . DIRECTORY_SEPARATOR . 'designs' . DIRECTORY_SEPARATOR . $this->design . DIRECTORY_SEPARATOR . 'snapshot';
+			'fixtures' . DIRECTORY_SEPARATOR . $this->design . DIRECTORY_SEPARATOR . 'snapshot';
 	}
 
     protected function setUp(): void {
@@ -188,7 +188,7 @@ class BlockeraTest extends AppTestCase {
 	 */
 	public function designNameProvider(): array {
 
-		$designs = glob(dirname(__DIR__, 2) . '/fixtures/designs/*/');
+		$designs = glob(dirname(__DIR__, 2) . '/fixtures/*/');
 
 		return array_map(function($design) {
 			return [basename($design)];

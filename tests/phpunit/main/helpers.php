@@ -27,7 +27,7 @@ function blockera_test_get_frontend_output( string $design_name): string {
  * @return string The design input file.
  */
 function blockera_test_get_design_input( string $design_name): string {
-	$fixtures_path = dirname(__DIR__, 2) . '/fixtures/designs/';
+	$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
 
 	$fixtures_file = $fixtures_path . $design_name . '/input.html';
 
@@ -47,7 +47,7 @@ function blockera_test_get_design_input( string $design_name): string {
  * @return array The variations.
  */
 function blockera_test_register_style_variations( string $design_name, array $variations): array {
-	$fixtures_path = dirname(__DIR__, 2) . '/fixtures/designs/';
+	$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
 	$pattern = $fixtures_path . $design_name . '/styles/blocks/*.json';
 
 	$blocks_styles = glob($pattern);
