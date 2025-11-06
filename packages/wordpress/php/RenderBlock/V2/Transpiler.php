@@ -266,8 +266,8 @@ class Transpiler {
             $style        = $processor->get_attribute('style');
             $class        = $processor->get_attribute('class');
 
-			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
-			if ($class && str_contains($class, 'blockera-is-transpiled')) {
+			// Skip if the class contains 'be-transpiled', because it shows that the block is already transpiled.
+			if ($class && str_contains($class, 'be-transpiled')) {
 
 				return;
 			}
@@ -283,7 +283,7 @@ class Transpiler {
 			}
 
 			// Update classname based on blockera class name.
-			// Add blockera-is-transpiled class to the block wrapper element.
+			// Add be-transpiled class to the block wrapper element.
 			$this->updateClassname($processor, $class ? $class : $args['blockera_class_name'], $args['block']);
 
 			if ($style) {
@@ -441,10 +441,10 @@ class Transpiler {
 			}
         }
 
-		// Prevent double adding the blockera-is-transpiled class to block wrapper element.
+		// Prevent double adding the be-transpiled class to block wrapper element.
 		// It should has not icon element.
-		if (! empty($final_classname) && ! str_contains($final_classname, 'blockera-is-transpiled') && ! blockera_block_has_icon($block)) {
-			$final_classname .= ' blockera-is-transpiled';
+		if (! empty($final_classname) && ! str_contains($final_classname, 'be-transpiled') && ! blockera_block_has_icon($block)) {
+			$final_classname .= ' be-transpiled';
 		}
 
 		if (! empty($final_classname)) {
