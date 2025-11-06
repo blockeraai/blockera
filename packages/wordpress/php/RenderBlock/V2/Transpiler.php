@@ -443,11 +443,13 @@ class Transpiler {
 
 		// Prevent double adding the blockera-is-transpiled class to block wrapper element.
 		// It should has not icon element.
-		if (! str_contains($final_classname, 'blockera-is-transpiled') && ! blockera_block_has_icon($block)) {
+		if (! empty($final_classname) && ! str_contains($final_classname, 'blockera-is-transpiled') && ! blockera_block_has_icon($block)) {
 			$final_classname .= ' blockera-is-transpiled';
 		}
 
-		$processor->set_attribute('class', $final_classname);
+		if (! empty($final_classname)) {
+			$processor->set_attribute('class', $final_classname);
+		}
     }
 
     /**
