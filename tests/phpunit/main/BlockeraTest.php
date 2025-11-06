@@ -6,6 +6,7 @@ use ReflectionClass;
 use Blockera\Setup\Blockera;
 use Blockera\Bootstrap\Application;
 use Blockera\Dev\PhpUnit\CssDriver;
+use Blockera\Dev\PhpUnit\HtmlDriver;
 use Blockera\Dev\PHPUnit\AppTestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -84,7 +85,7 @@ class BlockeraTest extends AppTestCase {
 				$content .= render_block($block);
 			}
 
-			$this->assertMatchesHtmlSnapshot($content);
+			$this->assertMatchesSnapshot($content, new HtmlDriver());
 		}
 
 		wp_delete_post($post_id);
