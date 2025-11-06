@@ -492,7 +492,10 @@ export const LayoutStyles = ({
 			query: 'blockeraGap',
 			support: 'blockeraGap',
 			fallbackSupportId: getBlockSupportFallback(supports, 'blockeraGap'),
-			suffixClass: blockName === 'core/columns' ? ' > *' : ' > * + *',
+			suffixClass:
+				blockName === 'core/columns'
+					? '.is-layout-constrained > *'
+					: '.is-layout-constrained > * + *',
 		});
 
 		styleGroup.push({
