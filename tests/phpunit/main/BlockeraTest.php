@@ -31,9 +31,9 @@ class BlockeraTest extends AppTestCase {
 
 	protected function getSnapshotDirectory(): string {
 
-		return dirname((new ReflectionClass($this))->getFileName()).
+		return dirname((new ReflectionClass($this))->getFileName(), 3).
 			DIRECTORY_SEPARATOR.
-			'snapshots' . DIRECTORY_SEPARATOR . 'designs' . DIRECTORY_SEPARATOR . $this->design;
+			'fixtures' . DIRECTORY_SEPARATOR . 'designs' . DIRECTORY_SEPARATOR . $this->design . DIRECTORY_SEPARATOR . 'snapshot';
 	}
 
     protected function setUp(): void {
