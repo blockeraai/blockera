@@ -10,7 +10,11 @@ import { __ } from '@wordpress/i18n';
  */
 import { Icon } from '@blockera/icons';
 import type { InnerBlocks } from '@blockera/editor/js/extensions/libs/block-card/inner-blocks/types';
-import { generalInnerBlockStates, sharedBlockStates } from '@blockera/editor';
+import {
+	generalInnerBlockStates,
+	sharedBlockStates,
+	generalSimpleInnerBlockStates,
+} from '@blockera/editor';
 
 const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -213,6 +217,41 @@ const sharedInnerBlocks: InnerBlocks = {
 			force: false,
 			priority: 10,
 		},
+	},
+	'elements/bold': {
+		name: 'elements/bold',
+		label: __('Bold', 'blockera'),
+		description: __('All bold text elements.', 'blockera'),
+		icon: <Icon icon="format-bold" library="wp" iconSize="20" />,
+		availableBlockStates: generalSimpleInnerBlockStates,
+	},
+	'elements/italic': {
+		name: 'elements/italic',
+		label: __('Italic', 'blockera'),
+		description: __('All italic text elements.', 'blockera'),
+		icon: <Icon icon="format-italic" library="wp" iconSize="20" />,
+		availableBlockStates: generalSimpleInnerBlockStates,
+	},
+	'elements/kbd': {
+		name: 'elements/kbd',
+		label: __('Keyboard Inputs', 'blockera'),
+		description: __('All keyboard input elements.', 'blockera'),
+		icon: <Icon icon="button" library="wp" iconSize="20" />,
+		availableBlockStates: generalSimpleInnerBlockStates,
+	},
+	'elements/code': {
+		name: 'elements/code',
+		label: __('Code', 'blockera'),
+		description: __('All code elements.', 'blockera'),
+		icon: <Icon icon="code" library="wp" iconSize="20" />,
+		availableBlockStates: generalSimpleInnerBlockStates,
+	},
+	'elements/span': {
+		name: 'elements/span',
+		label: __('Span', 'blockera'),
+		description: __('All span elements.', 'blockera'),
+		icon: <Icon icon="code" library="wp" iconSize="20" />,
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 };
 
