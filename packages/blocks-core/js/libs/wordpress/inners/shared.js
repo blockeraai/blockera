@@ -73,6 +73,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -92,6 +93,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -111,6 +113,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -130,6 +133,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -149,6 +153,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -168,6 +173,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/headings.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
@@ -187,6 +193,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	// Compatibility tests: ../group/test/button.cy.e2e.inner-blocks-compatibility.js
 	// Functionality tests: ../buttons/test/block.cy.e2e.inner-blocks.js
@@ -217,6 +224,7 @@ const sharedInnerBlocks: InnerBlocks = {
 			force: false,
 			priority: 10,
 		},
+		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 	'elements/bold': {
 		name: 'elements/bold',
