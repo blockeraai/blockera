@@ -1,0 +1,29 @@
+
+.blockera-block.blockera-block-1.wp-block-columns {
+	gap: 50px;
+}
+
+.blockera-block.blockera-block-2.wp-block-column {
+	background-color: #d7f283;
+	flex-basis: 30%;
+}
+
+p.blockera-block.blockera-block--3 {
+	color: #455a08;
+}
+
+.blockera-block.blockera-block--3 a:not(.wp-element-button) {
+	color: #455a08;
+}
+
+.blockera-block.blockera-block--4.wp-block-column {
+	background-color: #f47b7b;
+}
+
+p.blockera-block.blockera-block--5 {
+	color: #6e0f0f;
+}
+
+.blockera-block.blockera-block--5 a:not(.wp-element-button) {
+	color: #6e0f0f;
+}

@@ -9,3 +9,5 @@ define('BLOCKERA_SB_URI', trailingslashit(
 define('BLOCKERA_SB_TESTING', true);
 
 switch_theme('twentytwentyfive');
+
+require_once BLOCKERA_SB_PATH . 'bootstrap/hooks.php';

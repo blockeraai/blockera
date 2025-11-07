@@ -1,0 +1,22 @@
+
+.blockera-block.blockera-block-1.wp-block-buttons {
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 30px;
+	text-transform: uppercase;
+}
+
+.blockera-block.blockera-block-1 .wp-block-button > .wp-element-button {
+	background-color: #95aaff;
+	color: #0023b1;
+}
+
+.blockera-block.blockera-block-1 .wp-block-button > .wp-element-button:hover {
+	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-2);
+	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-1);
+}
+
+.blockera-block.blockera-block-2.wp-block-button .wp-block-button__link {
+	background-color: #ffb8b8;
+}

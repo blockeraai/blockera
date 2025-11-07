@@ -141,8 +141,6 @@ class BlockeraTest extends AppTestCase {
 		$this->design = $designName;
 		$this->is_global_styles = true;
 
-		require_once BLOCKERA_SB_PATH . 'bootstrap/hooks.php';
-
 		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
 			return blockera_test_register_style_variations($this->design, $variations);
 		});

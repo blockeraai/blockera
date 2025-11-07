@@ -1,0 +1,9 @@
+
+p.blockera-block.blockera-block--1 {
+	background-color: #d8e0ff;
+	color: #ff8989;
+}
+
+.blockera-block.blockera-block--1 a:not(.wp-element-button) {
+	color: #f62525;
+}

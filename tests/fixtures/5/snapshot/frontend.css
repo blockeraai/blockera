@@ -1,0 +1,23 @@
+
+p.blockera-block.blockera-block-1 {
+	background-color: #d8e0ff;
+}
+
+.blockera-block.blockera-block-1 .has-inline-color {
+	background-color: #5577ff;
+	color: #ffffff;
+}
+
+p.blockera-block.blockera-block-2 {
+	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3);
+	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002dbase);
+}
+
+.blockera-block.blockera-block-2 .has-inline-color.has-contrast-color {
+	background-color: #FFEE58;
+}
+
+p.blockera-block.blockera-block-3 {
+	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3);
+	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002dbase);
+}
