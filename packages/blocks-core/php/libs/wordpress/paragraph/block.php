@@ -16,6 +16,24 @@ return array_merge(
 				'blockera/elements/link' => [
 					'root' => 'a:not(.wp-element-button)',
 				],
+				'blockera/elements/bold' => [
+					'root' => 'strong, b',
+				],
+				'blockera/elements/italic' => [
+					'root' => 'i, em',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span',
+				],
+				'blockera/elements/mark' => [
+					'root' => 'mark',
+				],
 			]
 		),
 	]

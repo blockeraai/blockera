@@ -20,7 +20,8 @@
 - `Gallery` block: improve support.
 - `Search` block: improve support.
 - `Post Navigation Link` block: improve support.
-- `Image` block: `img/svg` inner block added
+- `Image` block: `img/svg` inner block added.
+- `Paragraph` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -43,6 +44,7 @@
 - Added E2E tests to check functionality and support of `Term Query → Term Name` block.
 - Added E2E tests to check functionality and support of `Term Query → Term Count` block.
 - Added E2E tests to check functionality and support of `Image Block → Img/SVG` block.
+- Added E2E tests to check functionality `Paragraph` new inner block.
 
 ## 1.4.0 (2025-05-19)
 

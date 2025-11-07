@@ -820,6 +820,39 @@ export const registerCommands = () => {
 		}
 	);
 
+	Cypress.Commands.add(
+		'checkBlockStatesPickerItems',
+		(expectedItems, checkExtraItems = false) => {
+			cy.get(
+				'[data-test="blockera-block-state-container"] [data-test="add-new-block-state"]'
+			).click();
+
+			cy.get(
+				'.blockera-component-popover.blockera-states-picker-popover'
+			).within(() => {
+				expectedItems.forEach((state) => {
+					cy.get(`[data-test="${state}"]`).should('exist');
+				});
+			});
+
+			if (checkExtraItems) {
+				cy.get(
+					'.blockera-component-popover.blockera-states-picker-popover .blockera-feature-type'
+				).then(($items) => {
+					const actualItems = Array.from($items).map((item) =>
+						item.getAttribute('data-test')
+					);
+					const unexpectedItems = actualItems.filter(
+						(item) => !expectedItems.includes(item)
+					);
+
+					expect(unexpectedItems, 'Unexpected items found').to.be
+						.empty;
+				});
+			}
+		}
+	);
+
 	Cypress.Commands.add('openGlobalStylesPanel', () => {
 		return cy
 			.get('button[aria-controls="edit-site:global-styles"]')
