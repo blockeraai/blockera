@@ -22,6 +22,7 @@
 - `Post Navigation Link` block: improve support.
 - `Image` block: `img/svg` inner block added.
 - `Paragraph` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Accordion Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
