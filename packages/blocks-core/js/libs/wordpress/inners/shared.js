@@ -213,6 +213,18 @@ const sharedInnerBlocks: InnerBlocks = {
 			],
 			priority: 10,
 		},
+		availableBlockStates: {
+			...generalInnerBlockStates,
+			focus: {
+				...generalInnerBlockStates.focus,
+				force: true,
+			},
+			active: {
+				...sharedBlockStates.active,
+				force: true,
+			},
+			visited: sharedBlockStates.visited,
+		},
 	},
 	// Functionality tests: ../packages/gallery/test/block.inner-blocks.e2e.cy.js
 	'core/image': {

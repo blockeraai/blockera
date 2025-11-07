@@ -41,6 +41,24 @@ describe('Buttons Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'core/button']);
 
+		cy.checkBlockStatesPickerItems([
+			'states/hover',
+			'states/focus',
+			'states/focus-within',
+			'states/first-child',
+			'states/last-child',
+			'states/only-child',
+			'states/empty',
+			'states/before',
+			'states/after',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Block
 		//

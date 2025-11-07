@@ -23,7 +23,27 @@ return array_merge(
 		),
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
-			blockera_load( 'inners.button', dirname( __DIR__ ) )
+			blockera_load( 'inners.button', dirname( __DIR__ ) ),
+			[
+				'blockera/elements/bold' => [
+					'root' => 'strong, b',
+				],
+				'blockera/elements/italic' => [
+					'root' => 'em, i',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span',
+				],
+				'blockera/elements/mark' => [
+					'root' => 'mark',
+				],
+			]
 		),
 	]
 );
