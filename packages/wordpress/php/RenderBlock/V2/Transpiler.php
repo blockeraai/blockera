@@ -262,7 +262,6 @@ class Transpiler {
 
         // Process in a single pass.
         while ($processor->next_tag()) {
-            $id_attribute = $processor->get_attribute('id');
             $style        = $processor->get_attribute('style');
             $class        = $processor->get_attribute('class');
 
@@ -290,9 +289,7 @@ class Transpiler {
 				$declarations = explode(';', $style);
 				$root_class   = str_replace('.blockera-block.', '', $selector);
 
-				if ($id_attribute) {
-					$inline_declarations[ $selector . ' #' . $id_attribute ] = $declarations;
-				} elseif (! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) && ! str_contains($class, $root_class)) {
+				if (! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) && ! str_contains($class, $root_class)) {
 					$inline_declarations[ $selector . ' .' . str_replace(' ', '.', $class) ] = $declarations;
 				} else {
 					$inline_declarations[ $selector ] = $declarations;
