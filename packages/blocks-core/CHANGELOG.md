@@ -42,6 +42,7 @@
 - `Post Title` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Quote` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Pullquote` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Table` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -85,6 +86,7 @@
 - Added E2E tests to check functionality `Post Title` new inner block.
 - Added E2E tests to check functionality `Quote` new inner block.
 - Added E2E tests to check functionality `Pullquote` new inner block.
+- Added E2E tests to check functionality `Table` new inner block.
 
 ## 1.4.0 (2025-05-19)
 

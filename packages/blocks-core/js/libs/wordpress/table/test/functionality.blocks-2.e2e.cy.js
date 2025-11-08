@@ -35,6 +35,19 @@ describe('Table Block', () => {
 			'elements/footer-cells',
 		]);
 
+		cy.checkBlockStatesPickerItems([
+			'elements/caption',
+			'elements/header-cells',
+			'elements/body-cells',
+			'elements/footer-cells',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Blocks
 		//
