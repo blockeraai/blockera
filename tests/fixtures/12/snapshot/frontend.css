@@ -12,11 +12,11 @@ p.blockera-block.blockera-block--1 {
 	background-color: #cccccc;
 }
 
-.blockera-block.blockera-block--1 strong, .blockera-block.blockera-block--1 b {
+.blockera-block.blockera-block--1 :is(strong, b) {
 	color: #ff6c6c;
 }
 
-.blockera-block.blockera-block--1 i, .blockera-block.blockera-block--1 em {
+.blockera-block.blockera-block--1 :is(em, i) {
 	color: #6cff6c;
 }
 

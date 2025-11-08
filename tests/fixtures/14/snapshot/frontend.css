@@ -1,0 +1,34 @@
+
+.blockera-block.blockera-block-1.wp-block-group {
+	background-color: #faeaea;
+	display: flex;
+	flex-direction: column;
+}
+
+.blockera-block.blockera-block-1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+	color: #ff4141;
+}
+
+.blockera-block.blockera-block-1 h1.wp-block-heading {
+	color: #00ff0d;
+}
+
+.blockera-block.blockera-block-1 h2.wp-block-heading {
+	color: #ffc800;
+}
+
+.blockera-block.blockera-block-1 h3.wp-block-heading {
+	color: #00ff44;
+}
+
+.blockera-block.blockera-block-1 h4.wp-block-heading {
+	color: #00d6ff;
+}
+
+.blockera-block.blockera-block-1 h5.wp-block-heading {
+	color: #001cff;
+}
+
+.blockera-block.blockera-block-1 h6.wp-block-heading {
+	color: #ff0099;
+}
