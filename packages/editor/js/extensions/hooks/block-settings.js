@@ -352,16 +352,18 @@ function mergeBlockSettings(
 		? getSharedBlockAttributes()
 		: blockeraOverrideBlockTypeAttributes;
 
+	const overrideAttributes = !settings.attributes?.blockeraPropsId
+		? mergeObject(
+				sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
+				sanitizeDefaultAttributes(settings.attributes)
+		  )
+		: sanitizeDefaultAttributes(settings.attributes);
+
 	return {
 		...settings,
 		styles: [...(settings?.styles || []), ...(additional?.styles || [])],
 		// Sanitizing attributes to convert all array values to object.
-		attributes: !settings.attributes?.blockeraPropsId
-			? mergeObject(
-					sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
-					sanitizeDefaultAttributes(settings.attributes)
-			  )
-			: sanitizeDefaultAttributes(settings.attributes),
+		attributes: overrideAttributes,
 		supports: mergeObject(settings.supports, additional.supports),
 		selectors: mergeObject(settings.selectors, additional.selectors),
 		transforms: {
@@ -372,18 +374,24 @@ function mergeBlockSettings(
 		edit: (props) => {
 			const { attributes: _attributes, ...rest } = props;
 			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const attributes = useMemo(
-				() =>
-					omit(_attributes, [
-						'content',
-						'text',
-						'summary',
-						'value',
-						'citation',
-						'caption',
-					]),
-				[_attributes]
-			);
+			const attributes = useMemo(() => {
+				const ignoredAttributes = [];
+
+				for (const attribute in _attributes) {
+					if (
+						ignoredAttributes.includes(attribute) ||
+						!overrideAttributes.hasOwnProperty(attribute)
+					) {
+						continue;
+					}
+
+					if ('rich-text' === overrideAttributes[attribute]?.type) {
+						ignoredAttributes.push(attribute);
+					}
+				}
+
+				return omit(_attributes, ignoredAttributes);
+			}, [_attributes]);
 
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const stableAdditional = useMemo(() => {
