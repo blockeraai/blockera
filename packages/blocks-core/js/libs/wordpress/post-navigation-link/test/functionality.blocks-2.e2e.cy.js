@@ -28,6 +28,21 @@ describe('Post Navigation Link Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'elements/arrow']);
 
+		cy.checkBlockStatesPickerItems([
+			'states/hover',
+			'states/focus',
+			'states/active',
+			'states/visited',
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+			'elements/arrow',
+		]);
+
 		//
 		// 1. Edit Block
 		//
