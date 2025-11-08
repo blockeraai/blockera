@@ -53,10 +53,10 @@ return array_merge(
 						'root' => ' a.wp-block-navigation-item__content span.wp-block-navigation-item__label',
 					],
 					'blockera/elements/bold' => [
-						'root' => 'strong, b',
+						'root' => ':is(strong,b)',
 					],
 					'blockera/elements/italic' => [
-						'root' => 'em, i',
+						'root' => ':is(em,i)',
 					],
 					'blockera/elements/kbd' => [
 						'root' => 'kbd',

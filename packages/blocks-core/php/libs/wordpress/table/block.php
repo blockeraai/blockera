@@ -26,10 +26,10 @@ return array_merge(
 					'root' => 'tfoot td',
 				],
 				'blockera/elements/bold' => [
-					'root' => 'strong, b',
+					'root' => ':is(strong,b)',
 				],
 				'blockera/elements/italic' => [
-					'root' => 'em, i',
+					'root' => ':is(em,i)',
 				],
 				'blockera/elements/kbd' => [
 					'root' => 'kbd',

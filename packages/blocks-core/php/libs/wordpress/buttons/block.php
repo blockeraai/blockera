@@ -26,10 +26,10 @@ return array_merge(
 			blockera_load( 'inners.button', dirname( __DIR__ ) ),
 			[
 				'blockera/elements/bold' => [
-					'root' => 'strong, b',
+					'root' => ':is(strong,b)',
 				],
 				'blockera/elements/italic' => [
-					'root' => 'em, i',
+					'root' => ':is(em,i)',
 				],
 				'blockera/elements/kbd' => [
 					'root' => 'kbd',
