@@ -9,7 +9,7 @@
 
 return [
 	'blockera/core/heading' => [
-		'root' => 'h1.wp-block-heading, h2.wp-block-heading, h3.wp-block-heading, h4.wp-block-heading, h5.wp-block-heading, h6.wp-block-heading',
+		'root' => ':is(h1,h2,h3,h4,h5,h6).wp-block-heading',
 	],
 	'heading1'              => [
 		'root' => 'h1.wp-block-heading',
