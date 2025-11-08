@@ -41,6 +41,17 @@ describe('List Block → Functionality + Inner blocks', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'elements/item']);
 
+		cy.checkBlockStatesPickerItems([
+			'elements/item',
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Block
 		//

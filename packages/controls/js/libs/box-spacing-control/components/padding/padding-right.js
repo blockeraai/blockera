@@ -243,6 +243,7 @@ export function PaddingRight({
 						setFocusSide(sideId);
 						setOpenPopover(sideId);
 					}}
+					iconPosition="start"
 					{...{
 						attribute,
 						blockName,

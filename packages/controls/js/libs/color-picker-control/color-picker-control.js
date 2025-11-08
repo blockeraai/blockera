@@ -29,6 +29,7 @@ export default function ColorPickerControl({
 	//
 	id,
 	label = '',
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange,
@@ -117,7 +118,12 @@ export default function ColorPickerControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, resetToDefault }}
+				{...{
+					attribute,
+					blockName,
+					resetToDefault,
+				}}
+				{...propsForLabelControl}
 			>
 				{isOpen && (
 					<Popover

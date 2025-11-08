@@ -28,6 +28,7 @@ export const SimpleLabelControl = ({
 	labelDescription,
 	advancedIsOpen = false,
 	resetToDefault,
+	iconPosition = 'end',
 	...props
 }: SimpleLabelControlProps): MixedElement => {
 	if (!label) {
@@ -42,7 +43,12 @@ export const SimpleLabelControl = ({
 	return (
 		<span
 			{...props}
-			className={controlClassNames('label', className, labelClass)}
+			className={controlClassNames(
+				'label',
+				className,
+				labelClass,
+				'label-icon-' + iconPosition
+			)}
 			aria-label={ariaLabel || label}
 			data-cy="label-control"
 			onClick={(event) => {

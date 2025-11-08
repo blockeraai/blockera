@@ -12,7 +12,27 @@ return array_merge(
 	[
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
-			blockera_load( 'inners.link', dirname( __DIR__ ) )
+			blockera_load( 'inners.link', dirname( __DIR__ ) ),
+			[
+				'blockera/elements/bold' => [
+					'root' => ':is(strong,b)',
+				],
+				'blockera/elements/italic' => [
+					'root' => ':is(em,i)',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span',
+				],
+				'blockera/elements/mark' => [
+					'root' => 'mark',
+				],
+			]
 		),
 	]
 );

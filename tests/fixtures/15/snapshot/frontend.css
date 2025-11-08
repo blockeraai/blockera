@@ -1,0 +1,30 @@
+
+.blockera-block.blockera-block--1.wp-block-column {
+	background-color: #fecbcb;
+	flex-basis: 100px !important;
+}
+
+p.blockera-block.blockera-block--2 {
+	text-decoration: line-through;
+}
+
+p.blockera-block.blockera-block--3 {
+	font-weight: 1000;
+	font-style: normal;
+}
+
+p.blockera-block.blockera-block--4 {
+	font-family: var(--wp--preset--font-family--fira-code) !important;
+}
+
+p.blockera-block.blockera-block--5 {
+	line-height: 2;
+}
+
+p.blockera-block.blockera-block--6 {
+	font-size: 30px;
+}
+
+p.blockera-block.blockera-block--7 {
+	letter-spacing: 5px;
+}

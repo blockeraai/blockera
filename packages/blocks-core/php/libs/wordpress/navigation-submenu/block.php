@@ -52,6 +52,24 @@ return array_merge(
 					'htmlEditable' => [
 						'root' => ' a.wp-block-navigation-item__content span.wp-block-navigation-item__label',
 					],
+					'blockera/elements/bold' => [
+						'root' => ':is(strong,b)',
+					],
+					'blockera/elements/italic' => [
+						'root' => ':is(em,i)',
+					],
+					'blockera/elements/kbd' => [
+						'root' => 'kbd',
+					],
+					'blockera/elements/code' => [
+						'root' => 'code',
+					],
+					'blockera/elements/span' => [
+						'root' => 'span',
+					],
+					'blockera/elements/mark' => [
+						'root' => 'mark',
+					],
 				],
 			)
 		),

@@ -583,6 +583,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 														'Text Direction',
 														'blockera'
 													)}
+													labelProps={{
+														iconPosition: 'start',
+													}}
 													labelDescription={
 														<>
 															<p>

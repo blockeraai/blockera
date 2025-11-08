@@ -30,6 +30,7 @@ export type LabelControlProps = {
 		valueCleanup?: (newValue: any) => any,
 	}) => any,
 	offset?: number,
+	iconPosition?: 'start' | 'end',
 };
 
 export type SimpleLabelControlProps = {
@@ -40,4 +41,5 @@ export type SimpleLabelControlProps = {
 	ariaLabel?: string,
 	labelDescription?: string | MixedElement,
 	advancedIsOpen?: boolean,
+	iconPosition?: 'start' | 'end',
 };

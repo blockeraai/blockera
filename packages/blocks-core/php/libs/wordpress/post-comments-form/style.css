@@ -1,0 +1,29 @@
+.blockera-block.wp-block-post-comments-form.blockera-has-font-weight :where(.comment-reply-title),
+.blockera-block.wp-block-post-comments-form[style*=font-weight] :where(.comment-reply-title) {
+	font-weight: inherit;
+}
+
+.blockera-block.wp-block-post-comments-form.blockera-has-font-family :where(.comment-reply-title),
+.blockera-block.wp-block-post-comments-form[style*=font-family] :where(.comment-reply-title) {
+	font-family: inherit;
+}
+
+.blockera-block.wp-block-post-comments-form.blockera-has-font-size :where(.comment-reply-title),
+.blockera-block.wp-block-post-comments-form[style*=font-size] :where(.comment-reply-title) {
+	font-size: inherit;
+}
+
+.blockera-block.wp-block-post-comments-form.blockera-has-line-height :where(.comment-reply-title),
+.blockera-block.wp-block-post-comments-form[style*=line-height] :where(.comment-reply-title) {
+	line-height: inherit;
+}
+
+.blockera-block.wp-block-post-comments-form.blockera-has-font-style :where(.comment-reply-title),
+.blockera-block.wp-block-post-comments-form[style*=font-style] :where(.comment-reply-title) {
+	font-style: inherit;
+}
+
+.blockera-block.wp-block-post-comments-form.blockera-has-letter-spacing :where(.comment-reply-title),
+.blockera-block.wp-block-post-comments-form[style*=letter-spacing] :where(.comment-reply-title) {
+	letter-spacing: inherit;
+}

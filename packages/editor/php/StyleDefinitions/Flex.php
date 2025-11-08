@@ -46,7 +46,8 @@ class Flex extends BaseStyleDefinition implements CustomStyle {
 
 				$basis = $setting['custom']['blockeraFlexChildBasis'] ? blockera_get_value_addon_real_value($setting['custom']['blockeraFlexChildBasis']) : '';
 				if ( $basis ) {
-					$this->setDeclaration('flex-basis', $basis);
+					// Use !important only for flex-basis because WP have some styles for flex-basis with !important.
+					$this->setDeclaration('flex-basis', $basis . ' !important');
 				}
 				break;
 		}

@@ -39,6 +39,13 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class AppServiceProvider extends ServiceProvider {
 
+	/**
+	 * Store the flag to determine if the posts are already processed.
+	 *
+	 * @var boolean $is_processed_posts the flag to indicate if the posts are already processed or not!
+	 */
+	protected $is_processed_posts = false;
+
     /**
      * Registering services classes.
      *
@@ -171,7 +178,7 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            if ( ( defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
+            if ( ( defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
 
 				$vendor_path = blockera_core_config('app.vendor_path');
 
@@ -347,8 +354,16 @@ class AppServiceProvider extends ServiceProvider {
 			add_action(
                 'pre_get_posts',
                 function( \WP_Query $query) use ( $supports): void {
+					if ($this->is_processed_posts && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT )) {
+						return;
+					}
+
+					$this->is_processed_posts = true;
+
 					$this->app->make(V2RenderContent::class)->getPosts($query, $supports);
-				}
+				},
+				// Low priority to ensure that other plugins can override the query.
+				10e2,
             );
 
 			// Filtering render block content if it name is exact "core/block" and has ref attribute.

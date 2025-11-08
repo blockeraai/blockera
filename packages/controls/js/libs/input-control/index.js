@@ -37,6 +37,7 @@ export default function InputControl({
 	id,
 	range = false,
 	label,
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange = () => {},
@@ -113,6 +114,7 @@ export default function InputControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	const extractedValue = extractNumberAndUnit(value);

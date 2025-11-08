@@ -244,6 +244,7 @@ export function MarginRight({
 								setFocusSide(sideId);
 								setOpenPopover(sideId);
 							}}
+							iconPosition="start"
 							{...{
 								attribute,
 								blockName,

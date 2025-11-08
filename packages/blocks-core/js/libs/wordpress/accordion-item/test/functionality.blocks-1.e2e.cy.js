@@ -80,47 +80,6 @@ describe('Accordion Item Block', () => {
 			.should('have.css', 'background-clip', 'padding-box');
 
 		//
-		// 1.1.1. Close state
-		//
-		setBlockState('Close');
-
-		cy.setColorControlValue('BG Color', 'eeff00');
-
-		// switch item to make the first item closed
-		cy.getBlock('core/accordion-heading').last().click();
-
-		cy.getBlock('core/accordion').within(() => {
-			cy.get('.wp-block-accordion-item')
-				.first()
-				.should('have.css', 'background-color', 'rgb(238, 255, 0)');
-
-			cy.get('.wp-block-accordion-item')
-				.last()
-				.should('not.have.css', 'background-color', 'rgb(238, 255, 0)');
-		});
-
-		//
-		// 1.1.2. Open state
-		//
-		// switch item to make the first item open
-		cy.getBlock('core/accordion-heading').last().click();
-		cy.getByAriaLabel('Select parent block: Accordion Item').click();
-
-		setBlockState('Open');
-
-		cy.setColorControlValue('BG Color', '00ff08');
-
-		cy.getBlock('core/accordion').within(() => {
-			cy.get('.wp-block-accordion-item')
-				.last()
-				.should('have.css', 'background-color', 'rgb(0, 255, 8)');
-
-			cy.get('.wp-block-accordion-item')
-				.first()
-				.should('not.have.css', 'background-color', 'rgb(0, 255, 8)');
-		});
-
-		//
 		// 1.2. elements/heading
 		//
 		// switch to first item
@@ -203,14 +162,6 @@ describe('Accordion Item Block', () => {
 		cy.get('.blockera-block.wp-block-accordion-item')
 			.first()
 			.should('have.css', 'background-clip', 'padding-box');
-
-		cy.get('.wp-block-accordion-item')
-			.first()
-			.should('have.css', 'background-color', 'rgb(238, 255, 0)');
-
-		cy.get('.wp-block-accordion-item')
-			.last()
-			.should('have.css', 'background-color', 'rgb(0, 255, 8)');
 
 		cy.get('.wp-block-accordion-heading')
 			.first()

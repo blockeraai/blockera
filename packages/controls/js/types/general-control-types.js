@@ -13,6 +13,7 @@ import type { VariableCategory, DynamicValueTypes } from '@blockera/data';
  * Internal dependencies
  */
 import { type AddonTypes } from '../value-addons/types';
+import type { LabelControlProps } from '../libs/label-control/types';
 
 export type ControlSize = 'normal' | 'input' | 'small' | 'extra-small';
 
@@ -33,6 +34,7 @@ export type ControlGeneralTypes = {
 	label?: any,
 	labelPopoverTitle?: string | MixedElement,
 	labelDescription?: string | MixedElement,
+	labelProps?: LabelControlProps,
 	columns?: string,
 	style?: Object,
 	//

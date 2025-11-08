@@ -262,6 +262,7 @@ export function MarginAll({
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
 						}}
+						iconPosition="start"
 						{...{
 							attribute,
 							blockName,

@@ -1,3 +1,9 @@
+.blockera-block.wp-block-button[style*=text-decoration] .wp-block-button__link,
+.blockera-block.wp-block-button.blockera-has-text-decoration .wp-block-button__link {
+	text-decoration: inherit;
+}
+
+/* Icon style */
 .wp-block-button[class*="blockera-has-icon-"] .wp-block-button__link {
 	display: flex;
 	align-items: center;

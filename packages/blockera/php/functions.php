@@ -217,7 +217,14 @@ if (! function_exists('blockera_array_flat')) {
             return [];
         }
 
-        $result = array_merge(...array_values($nestedArray));
+        // Filter out non-array values before merging.
+        $arrayValues = array_filter($nestedArray, 'is_array');
+        
+        if (empty($arrayValues)) {
+            return [];
+        }
+
+        $result = array_merge(...array_values($arrayValues));
         
         // Handle nested arrays with same keys.
         foreach ($result as $key => $value) {
@@ -338,15 +345,26 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 			return;
 		}
 
+		// Normalize CSS: remove extra whitespace and format for readability.
+		$css = preg_replace('/\s+/', ' ', $css); // Replace multiple spaces with single space.
+		$css = preg_replace('/\s*{\s*/', ' {' . "\n\t", $css); // Format opening braces.
+		$css = preg_replace('/\s*}\s*/', "\n" . '}' . "\n\n", $css); // Format closing braces.
+		$css = preg_replace('/\s*;\s*/', ';' . "\n\t", $css); // Format semicolons.
+		$css = preg_replace('/\s*,\s*/', ', ', $css); // Format commas in selectors.
+		$css = preg_replace('/\t}/', '}', $css); // Remove tab before closing brace.
+		$css = trim($css); // Remove leading/trailing whitespace.
+
 		add_filter(
 			'blockera/front-page/print-inline-css-styles',
 			function ( string $older_css ) use ( $css ): string {
 
-				if (false !== strpos($older_css, $css)) {
+				// Prevent duplicate CSS rules.
+				if ( false !== strpos( $older_css, $css ) ) {
 					return $older_css;
 				}
 
-				return $older_css . $css;
+				// Append new CSS with proper formatting.
+				return trim($older_css) . "\n" . trim($css);
 			}
 		);
 	}

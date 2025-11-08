@@ -47,6 +47,8 @@ export function displayFromWPCompatibility({
 						value: '',
 					};
 				}
+			} else if ('default' === attributes?.layout?.type) {
+				attributes.layout.type = undefined;
 			} else {
 				attributes.blockeraDisplay = {
 					value: attributes?.layout?.type,

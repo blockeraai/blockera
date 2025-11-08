@@ -22,6 +22,24 @@ return array_merge(
 				'blockera/elements/icon' => [
 					'root' => ' li::before',
 				],
+				'blockera/elements/bold' => [
+					'root' => ':is(strong,b)',
+				],
+				'blockera/elements/italic' => [
+					'root' => ':is(em,i)',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span',
+				],
+				'blockera/elements/mark' => [
+					'root' => 'mark',
+				],
 			],
 		),
 		'supports' => array_merge(

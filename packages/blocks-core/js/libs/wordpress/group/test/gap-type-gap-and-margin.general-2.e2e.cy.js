@@ -94,7 +94,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', '> * + * {\n margin-block-start: 43px');
+				.should('include', '> * + * {\n\tmargin-block-start: 43px');
 		});
 
 		it('Unlocked gap - the css property should be margin-block-start', () => {
@@ -174,7 +174,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', '> * + * {\n margin-block-start: 43px');
+				.should('include', '> * + * {\n\tmargin-block-start: 43px');
 		});
 	});
 
