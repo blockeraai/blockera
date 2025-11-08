@@ -7,7 +7,7 @@
  * @package blockera/packages/blocks/js/wordpress/image
  */
 
-$sizeSelector = '.wp-block-image :is(img,svg)';
+$sizeSelector = '.wp-block-image :is(img:not([src=""]),svg:not(:empty))';
 
 return array_merge(
 	$args,
