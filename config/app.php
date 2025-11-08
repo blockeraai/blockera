@@ -10,7 +10,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-$env_mode = 'development' === blockera_core_env('APP_MODE', 'production');
+global $blockera_mode;
 
 return [
     'root_url'       => BLOCKERA_SB_URI,
@@ -27,7 +27,7 @@ return [
     'namespaces'     => [
         'controllers' => '\Blockera\Setup\Http\Controllers\\',
     ],
-    'debug'          => defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $env_mode,
+    'debug'          => $blockera_mode,
     'upgrade_url' 	 => 'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link',
     /**
      * Extendable blockera application providers by external developers.

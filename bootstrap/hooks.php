@@ -14,13 +14,13 @@ if (! blockera_is_frontend_request() && ! blockera_is_editor_request()) {
     return;
 }
 
-$setup = Setup::getInstance();
-$setup->setPluginPath(blockera_core_config('app.vendor_path'));
-$setup->setAvailableBlocks(blockera_get_available_blocks());
+$blockera_setup_render_block = Setup::getInstance();
+$blockera_setup_render_block->setPluginPath(blockera_core_config('app.vendor_path'));
+$blockera_setup_render_block->setAvailableBlocks(blockera_get_available_blocks());
 add_filter(
     'register_block_type_args',
-    function ( array $args, string $block_type ) use ( $setup ): array {
-        return $setup->registerBlock($args, $block_type);
+    function ( array $args, string $block_type ) use ( $blockera_setup_render_block ): array {
+        return $blockera_setup_render_block->registerBlock($args, $block_type);
     },
     9e2,
     2
