@@ -262,8 +262,8 @@ class Transpiler {
 
         // Process in a single pass.
         while ($processor->next_tag()) {
-            $style        = $processor->get_attribute('style');
-            $class        = $processor->get_attribute('class');
+            $style = $processor->get_attribute('style');
+            $class = $processor->get_attribute('class');
 
 			// Skip if the class contains 'be-transpiled', because it shows that the block is already transpiled.
 			if ($class && str_contains($class, 'be-transpiled')) {
