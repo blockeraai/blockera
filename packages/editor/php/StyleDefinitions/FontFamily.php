@@ -14,7 +14,7 @@ class FontFamily extends BaseStyleDefinition {
             return $declaration;
 		}
 		
-		$this->setDeclaration($cssProperty, 'var(--wp--preset--font-family--' . $setting[ $cssProperty ] . ')');
+		$this->setDeclaration($cssProperty, 'var(--wp--preset--font-family--' . $setting[ $cssProperty ] . ') !important');
 
 		$this->setCss($this->declarations);
 
