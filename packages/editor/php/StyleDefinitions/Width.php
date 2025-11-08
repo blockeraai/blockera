@@ -16,7 +16,11 @@ class Width extends BaseStyleDefinition {
 		
 		$width_config = $this->getStyleEngineConfig('blockeraWidth');
 
-		$this->setDeclaration($width_config['width'], blockera_get_value_addon_real_value($setting[ $cssProperty ]));
+		$this->setDeclaration(
+			$width_config['width'], 
+			// Use !important only for flex-basis because WP have some styles for flex-basis with !important.
+			blockera_get_value_addon_real_value($setting[ $cssProperty ]) . ( $width_config['width'] === 'flex-basis' ? ' !important' : '' )
+		);
 
 		$this->setCss($this->declarations);
 
