@@ -1,5 +1,5 @@
 
-.blockera-block.blockera-block-1.wp-block-image :is(img, svg) {
+.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 20px;
 	width: 300px;
 	aspect-ratio: 4/3;
@@ -15,7 +15,7 @@
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1.wp-block-image :is(img, svg) {
+	.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	width: 200px;
 	aspect-ratio: 1;
 }
