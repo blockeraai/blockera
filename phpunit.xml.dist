@@ -15,18 +15,25 @@
     </coverage>
 
     <testsuites>
-        <testsuite name="Test Suite">
+        <testsuite name="units">
             <directory suffix=".php">./packages/dev-phpunit/php/</directory>
-            <directory suffix=".php">./tests/phpunit/main/</directory>
             <directory suffix=".php">./packages/blockera/php/tests/</directory>
             <directory suffix=".php">./packages/blockera-admin/php/tests/</directory>
             <directory suffix=".php">./packages/editor/php/tests/</directory>
             <directory suffix=".php">./packages/wordpress/php/tests/</directory>
             <directory suffix=".php">./packages/utils/php/tests/</directory>
-            <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
-            <exclude>./packages/editor/php/tests/Fixtures/</exclude>
             <exclude>./node_modules/</exclude>
             <exclude>./dist/</exclude>
+            <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/tests/Fixtures/</exclude>
+        </testsuite>
+        <testsuite name="snapshots">
+            <directory suffix=".php">./packages/dev-phpunit/php/</directory>
+            <directory suffix=".php">./tests/phpunit/main/</directory>
+            <exclude>./node_modules/</exclude>
+            <exclude>./dist/</exclude>
+            <exclude>./packages/blockera/php/tests/Fixtures/</exclude>
+            <exclude>./packages/editor/php/tests/Fixtures/</exclude>
         </testsuite>
     </testsuites>
 
