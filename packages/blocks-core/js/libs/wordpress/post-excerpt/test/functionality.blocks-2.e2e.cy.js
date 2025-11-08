@@ -5,7 +5,6 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	openInserter,
 	setInnerBlock,
 	setParentBlock,
 	redirectToFrontPage,
@@ -27,11 +26,15 @@ describe('Post Excerpt Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 
-		openInserter();
-		cy.getByDataTest('elements/link').should('exist');
-
-		// no other item
-		cy.getByDataTest('core/heading').should('not.exist');
+		cy.checkBlockStatesPickerItems([
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
 
 		//
 		// 1. Edit Block
