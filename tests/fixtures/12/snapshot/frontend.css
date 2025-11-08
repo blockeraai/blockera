@@ -1,0 +1,41 @@
+
+p.blockera-block.blockera-block--1 {
+	background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+}
+
+.blockera-block.blockera-block--1 .has-inline-color {
+	background-color: #dfdfdf;
+}
+
+.blockera-block.blockera-block--1 a:not(.wp-element-button) {
+	background-color: #cccccc;
+}
+
+.blockera-block.blockera-block--1 strong, .blockera-block.blockera-block--1 b {
+	color: #ff6c6c;
+}
+
+.blockera-block.blockera-block--1 i, .blockera-block.blockera-block--1 em {
+	color: #6cff6c;
+}
+
+.blockera-block.blockera-block--1 kbd {
+	color: #6c6cff;
+}
+
+.blockera-block.blockera-block--1 code {
+	color: #ff6cff;
+}
+
+.blockera-block.blockera-block--1 span {
+	color: #6cff6c;
+}
+
+.blockera-block.blockera-block--2.wp-block-button .wp-block-button__link {
+	background-color: #9f9f9f;
+}
+
+.blockera-block.blockera-block--2 .has-inline-color {
+	background-color: #dfdfdf;
+}
