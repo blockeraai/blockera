@@ -354,6 +354,10 @@ class AppServiceProvider extends ServiceProvider {
 			add_action(
                 'pre_get_posts',
                 function( \WP_Query $query) use ( $supports): void {
+					if (! $query->is_main_query()) {
+						return;
+					}
+
 					if ($this->is_processed_posts && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT )) {
 						return;
 					}

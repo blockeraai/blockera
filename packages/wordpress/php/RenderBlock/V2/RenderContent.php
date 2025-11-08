@@ -157,7 +157,7 @@ class RenderContent {
      * @return void
      */
     public function getPosts( \WP_Query $query, array $supports = []): void {
-		if (! $query->is_main_query() || is_admin() || wp_doing_ajax() || isset($_REQUEST['_wp-find-template'])) {
+		if (is_admin() || wp_doing_ajax() || isset($_REQUEST['_wp-find-template'])) {
             return;
 		}
 
