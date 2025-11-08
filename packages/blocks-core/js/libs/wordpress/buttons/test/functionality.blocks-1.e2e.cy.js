@@ -58,6 +58,7 @@ describe('Buttons Block', () => {
 				'elements/code',
 				'elements/span',
 				'elements/mark',
+				'core/button',
 			],
 			true
 		);

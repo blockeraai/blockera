@@ -20,6 +20,12 @@ export const Heading: BlockType = {
 	targetBlock: 'core/heading',
 	blockeraInnerBlocks: {
 		'elements/link': sharedInnerBlocks['elements/link'],
+		'elements/bold': sharedInnerBlocks['elements/bold'],
+		'elements/italic': sharedInnerBlocks['elements/italic'],
+		'elements/kbd': sharedInnerBlocks['elements/kbd'],
+		'elements/code': sharedInnerBlocks['elements/code'],
+		'elements/span': sharedInnerBlocks['elements/span'],
+		'elements/mark': sharedInnerBlocks['elements/mark'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

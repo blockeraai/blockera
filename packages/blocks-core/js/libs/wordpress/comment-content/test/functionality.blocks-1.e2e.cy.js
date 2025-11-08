@@ -30,6 +30,16 @@ describe('Comment Content Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 
+		cy.checkBlockStatesPickerItems([
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1.0. Block Styles
 		//

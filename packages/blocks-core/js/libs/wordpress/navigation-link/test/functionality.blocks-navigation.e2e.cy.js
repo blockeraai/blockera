@@ -52,6 +52,24 @@ describe(
 			// switch to target block
 			cy.getBlock('core/navigation-link').last().click({ force: true });
 
+			cy.checkBlockCardItems(['normal', 'hover', 'current-menu-item']);
+
+			cy.checkBlockStatesPickerItems([
+				'states/current-menu-item',
+				'states/current-menu-parent',
+				'states/current-menu-ancestor',
+				'states/active',
+				'states/visited',
+				'elements/link',
+				'elements/bold',
+				'elements/italic',
+				'elements/kbd',
+				'elements/code',
+				'elements/span',
+				'elements/mark',
+				'elements/icon',
+			]);
+
 			// assert block card
 			cy.get('.blockera-extension-block-card.master-block-card').should(
 				'exist'

@@ -27,6 +27,25 @@
 - `Column` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Columns` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Accordion Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Comment Content` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Excerpt` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Details` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Group` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `List` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `List Item` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Navigation Link` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Navigation Submenu` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Content` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Navigation Link` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Title` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Quote` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Pullquote` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Table` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Term Description` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Term Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Verse` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -55,6 +74,25 @@
 - Added E2E tests to check functionality `Column` new inner block.
 - Added E2E tests to check functionality `Columns` new inner block.
 - Added E2E tests to check functionality `Accordion Heading` new inner block.
+- Added E2E tests to check functionality `Comment Content` new inner block.
+- Added E2E tests to check functionality `Post Excerpt` new inner block.
+- Added E2E tests to check functionality `Details` new inner block.
+- Added E2E tests to check functionality `Group` new inner block.
+- Added E2E tests to check functionality `Heading` new inner block.
+- Added E2E tests to check functionality `List` new inner block.
+- Added E2E tests to check functionality `List Item` new inner block.
+- Added E2E tests to check functionality `Navigation Link` new inner block.
+- Added E2E tests to check functionality `Navigation Submenu` new inner block.
+- Added E2E tests to check functionality `Post Content` new inner block.
+- Added E2E tests to check functionality `Post Navigation Link` new inner block.
+- Added E2E tests to check functionality `Post Template` new inner block.
+- Added E2E tests to check functionality `Post Title` new inner block.
+- Added E2E tests to check functionality `Quote` new inner block.
+- Added E2E tests to check functionality `Pullquote` new inner block.
+- Added E2E tests to check functionality `Table` new inner block.
+- Added E2E tests to check functionality `Term Description` new inner block.
+- Added E2E tests to check functionality `Term Template` new inner block.
+- Added E2E tests to check functionality `Verse` new inner block.
 
 ## 1.4.0 (2025-05-19)
 

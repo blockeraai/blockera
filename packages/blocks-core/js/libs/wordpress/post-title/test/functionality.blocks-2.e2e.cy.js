@@ -4,7 +4,6 @@
 import {
 	savePage,
 	createPost,
-	openInserter,
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
@@ -27,9 +26,15 @@ describe('Post Title Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover']);
 
-		openInserter();
-		cy.getByDataTest('elements/link').should('exist');
-		cy.getByDataTest('core/heading').should('not.exist');
+		cy.checkBlockStatesPickerItems([
+			'elements/link',
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
 
 		//
 		// 1. Edit Block

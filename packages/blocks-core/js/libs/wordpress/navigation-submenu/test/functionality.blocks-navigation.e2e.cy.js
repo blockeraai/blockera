@@ -75,6 +75,33 @@ describe(
 				'exist'
 			);
 
+			cy.checkBlockCardItems([
+				'normal',
+				'hover',
+				'current-menu-item',
+				'elements/link',
+				'elements/submenu-icon',
+				'elements/submenu-container',
+				'elements/submenu-items',
+			]);
+
+			cy.checkBlockStatesPickerItems([
+				'states/current-menu-item',
+				'states/current-menu-parent',
+				'states/current-menu-ancestor',
+				'elements/link',
+				'elements/submenu-icon',
+				'states/focus',
+				'states/active',
+				'states/visited',
+				'elements/bold',
+				'elements/italic',
+				'elements/kbd',
+				'elements/code',
+				'elements/span',
+				'elements/mark',
+			]);
+
 			// Icon extension is active
 			cy.getByDataTest('settings-tab').click();
 			cy.getByAriaLabel('Choose Icon…').should('be.visible');
