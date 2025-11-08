@@ -13,26 +13,6 @@
 		"root": ".wp-block-list > li",
 		"border": ".wp-block-list:not(.wp-block-list .wp-block-list) > li"
 	},
-	"core/quote": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
-		}
-	},
 	"core/accordion-heading": {
 		"typography": {
 			"letterSpacing": ".wp-block-accordion-heading .wp-block-accordion-heading__toggle-title",
@@ -48,107 +28,9 @@
 			"root": ".wp-block-button .wp-block-button__link"
 		}
 	},
-	"core/column": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
-		}
-	},
-	"core/columns": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
-		}
-	},
 	"core/cover": {
 		"filter": {
 			"duotone": ".wp-block-cover > .wp-block-cover__image-background, .wp-block-cover > .wp-block-cover__video-background"
-		},
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
-		}
-	},
-	"core/group": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
-		}
-	},
-	"core/media-text": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
 		}
 	},
 	"core/table": {
@@ -191,46 +73,6 @@
 	"core/post-author": {
 		"filter": {
 			"duotone": ".wp-block-post-author .wp-block-post-author__avatar img"
-		}
-	},
-	"core/comments": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
-		}
-	},
-	"core/post-comments-form": {
-		"heading1": {
-			"root": "h1.wp-block-heading"
-		},
-		"heading2": {
-			"root": "h2.wp-block-heading"
-		},
-		"heading3": {
-			"root": "h3.wp-block-heading"
-		},
-		"heading4": {
-			"root": "h4.wp-block-heading"
-		},
-		"heading5": {
-			"root": "h5.wp-block-heading"
-		},
-		"heading6": {
-			"root": "h6.wp-block-heading"
 		}
 	},
 	"core/home-link": {
