@@ -67,6 +67,7 @@ describe('Accordion Heading Block', () => {
 				'elements/code',
 				'elements/span',
 				'elements/mark',
+				'elements/icon',
 			],
 			true
 		);
