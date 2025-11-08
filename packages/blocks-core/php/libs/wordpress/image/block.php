@@ -15,6 +15,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'width'                     => $sizeSelector,
 				'blockeraWidth'             => $sizeSelector,
 				'blockeraMinWidth'          => $sizeSelector,
 				'blockeraMaxWidth'          => $sizeSelector,
@@ -24,6 +25,10 @@ return array_merge(
 				'blockeraRatio'             => $sizeSelector,
 				'blockeraBorder'            => $sizeSelector,
 				'blockeraBorderRadius'      => $sizeSelector,
+				'border'                    => $sizeSelector,
+				'shadow'                    => $sizeSelector,
+				'filter'                    => $sizeSelector,
+				'radius'                    => $sizeSelector,
 				'blockera/elements/caption' => [
 					'root' => 'figcaption',
 				],
