@@ -71,3 +71,69 @@ function blockera_test_register_style_variations( string $design_name, array $va
 
 	return $variations;
 }
+
+/**
+ * Normalize the CSS.
+ *
+ * @param string $css The CSS.
+ *
+ * @return string The normalized CSS.
+ */
+function blockera_test_normalize_css( string $css): string {
+	// Remove comments.
+	$css = preg_replace('/\/\*.*?\*\//s', '', $css);
+	
+	// Remove multiple spaces and normalize whitespace.
+	$css = preg_replace('/\s+/', ' ', $css);
+	
+	// Add newlines after opening braces.
+	$css = preg_replace('/\{/', "{\n", $css);
+	
+	// Add newlines after closing braces.
+	$css = preg_replace('/\}/', "}\n", $css);
+	
+	// Add newlines after semicolons (but not inside url() or other functions).
+	$css = preg_replace('/;(?![^(]*\))/', ";\n", $css);
+	
+	// Add semicolon to declarations that don't have one before closing brace.
+	$css = preg_replace('/([^\s\{;])\s*\}/', "$1;\n}", $css);
+	
+	// Split into lines for processing.
+	$lines = explode("\n", $css);
+	
+	// Trim and indent lines.
+	$formatted_lines = [];
+	$indent_level = 0;
+	
+	foreach ($lines as $line) {
+		$line = trim($line);
+		
+		if (empty($line)) {
+			continue;
+		}
+		
+		// Decrease indent for closing braces.
+		if (strpos($line, '}') === 0) {
+			$indent_level--;
+		}
+		
+		// Add indentation.
+		$formatted_lines[] = str_repeat("\t", max(0, $indent_level)) . $line;
+		
+		// Increase indent after opening braces.
+		if (strpos($line, '{') !== false) {
+			$indent_level++;
+		}
+	}
+	
+	// Join lines with single newlines.
+	$css = implode("\n", $formatted_lines);
+	
+	// Add blank line between rule sets.
+	$css = preg_replace('/\}\n(?!\n)/', "}\n\n", $css);
+	
+	// Clean up any trailing whitespace.
+	$css = trim($css);
+	
+	return $css;
+}

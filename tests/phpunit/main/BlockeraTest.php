@@ -174,7 +174,7 @@ class BlockeraTest extends AppTestCase {
 
 		$global_styles = $cached['blocks']['core/paragraph'] ?? '';
 
-		$this->assertMatchesSnapshot($global_styles, new CssDriver());
+		$this->assertMatchesSnapshot(blockera_test_normalize_css($global_styles), new CssDriver());
 
 		wp_delete_post($post_id);
 	}
