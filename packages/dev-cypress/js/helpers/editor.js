@@ -331,7 +331,7 @@ export function addNewGroupToPost() {
  * From inside the WordPress editor open the blockera Gutenberg editor panel
  */
 export function savePage() {
-	cy.get('.editor-post-publish-button').click({ force: true });
+	cy.get('.editor-post-publish-button').click();
 
 	// Check for snackbar and click primary button if it exists
 	cy.get('body').then(($body) => {
@@ -342,7 +342,7 @@ export function savePage() {
 		) {
 			cy.get(
 				'.entities-saved-states__panel .editor-entities-saved-states__save-button'
-			).click({ force: true });
+			).click();
 		}
 	});
 
