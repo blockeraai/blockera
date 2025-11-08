@@ -7,7 +7,7 @@
  * @package blockera/packages/blocks/js/wordpress/image
  */
 
-$sizeSelector = '.wp-block-image img, .wp-block-image svg';
+$sizeSelector = '.wp-block-image :is(img, svg)';
 
 return array_merge(
 	$args,
@@ -31,7 +31,7 @@ return array_merge(
 					'root' => 'a',
 				],
 				'blockera/elements/img-tag' => [
-					'root' => '&.wp-block-image img, &.wp-block-image svg',
+					'root' => '&.wp-block-image :is(img, svg)',
 				],
 			]
 		),

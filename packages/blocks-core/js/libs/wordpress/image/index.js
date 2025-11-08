@@ -18,7 +18,7 @@ import type { BlockType } from '../../../type';
 import sharedInnerBlocks from '../inners/shared';
 
 const imageSelector =
-	'.wp-block-image img,.wp-block-image svg,.wp-block-image .wp-block-image__crop-area,.wp-block-image .components-placeholder,.wp-block-image .block-editor-media-placeholder::before,.wp-block-image .components-resizable-box__container::before';
+	'.wp-block-image :is(img, svg, .wp-block-image__crop-area, .components-placeholder, .block-editor-media-placeholder::before, .components-resizable-box__container::before)';
 
 export const Image: BlockType = {
 	name: 'blockeraImage',
