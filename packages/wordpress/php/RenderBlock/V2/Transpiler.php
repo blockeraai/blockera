@@ -44,13 +44,6 @@ class Transpiler {
      */
     protected $style_engine;
 
-	/**
-	 * Global css props classes.
-	 *
-	 * @var array
-	 */
-	protected array $global_css_props_classes = [];
-
     /**
      * The Parser class constructor.
      *
@@ -61,17 +54,6 @@ class Transpiler {
         $this->app   = $app;
         $this->cache = $cache;
     }
-
-	/**
-	 * Set the global css props classes.
-	 *
-	 * @param array $global_css_props_classes The global css props classes.
-	 *
-	 * @return void
-	 */
-	public function setGlobalCssPropsClasses( array $global_css_props_classes): void {
-		$this->global_css_props_classes = $global_css_props_classes;
-	}
 
     /**
      * Clean up inline styles from parsed blocks and convert them to CSS classes.
@@ -275,7 +257,7 @@ class Transpiler {
 			// Update classname based on global css props classes.
 			// Just for backward compatibility with WordPress original block output.
 			if ($style) {
-				foreach ($this->global_css_props_classes as $prop => $prop_class) {
+				foreach ($this->prepareCssPropsClasses($style) as $prop => $prop_class) {
 					if (str_contains($style, $prop)) {
 						$this->updateClassname($processor, $prop_class, $args['block']);
 					}
@@ -344,6 +326,27 @@ class Transpiler {
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
     }
+
+	/**
+	 * Prepare CSS properties classes from style string.
+	 *
+	 * @param string $style The style string.
+	 *
+	 * @return array The CSS properties classes in format of [ 'blockera-has-' + property name => class name ].
+	 */
+	protected function prepareCssPropsClasses( string $style): array {
+		$style_array        = [];
+		$style_declarations = array_filter(array_map('trim', explode(';', $style)));
+		
+		foreach ($style_declarations as $declaration) {
+			if (strpos($declaration, ':') !== false) {
+				list($property)           = array_map('trim', explode(':', $declaration, 2));
+				$style_array[ $property ] = 'blockera-has-' . $property;
+			}
+		}
+
+		return $style_array;
+	}
 
 	/**
 	 * Force add inline styles.
@@ -437,7 +440,13 @@ class Transpiler {
                 $final_classname = $classname . ' ' . $previous_class;
             } else {
 
-				$final_classname = $previous_class;
+				if (! preg_match($regexp, $classname) && ! str_contains($previous_class, $classname)) {
+
+					$final_classname = $classname . ' ' . $previous_class;
+				} else {
+					
+					$final_classname = $previous_class;
+				}
 			}
         }
 
