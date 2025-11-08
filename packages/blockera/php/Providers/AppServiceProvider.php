@@ -186,7 +186,10 @@ class AppServiceProvider extends ServiceProvider {
 					Transpiler::class,
 					static function ( Application $app) use ( $cache_instance, $vendor_path) {
 
-						return new Transpiler($app, $cache_instance);
+						$transpiler_instance = new Transpiler($app, $cache_instance);
+						$transpiler_instance->setGlobalCssPropsClasses(include($vendor_path . 'blockera/wordpress/php/RenderBlock/V2/global-css-props-classes.php'));
+
+						return $transpiler_instance;
 					}
 				);
 
