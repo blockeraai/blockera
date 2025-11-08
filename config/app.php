@@ -27,7 +27,7 @@ return [
     'namespaces'     => [
         'controllers' => '\Blockera\Setup\Http\Controllers\\',
     ],
-    'debug'          => $blockera_mode,
+    'debug'          => (bool) $blockera_mode,
     'upgrade_url' 	 => 'https://blockera.ai/products/site-builder/upgrade/?utm_source=blockera-admin&utm_medium=referral&utm_campaign=upgrade-page&utm_content=cta-link',
     /**
      * Extendable blockera application providers by external developers.
