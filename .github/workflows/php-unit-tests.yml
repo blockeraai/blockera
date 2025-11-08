@@ -40,7 +40,7 @@ jobs:
                   rm versions.json
 
     test-php:
-        name: PHP ${{ matrix.php }}${{ matrix.multisite && ' multisite' || '' }}${{ matrix.wordpress != '' && format( ' (WP {0}) ', matrix.wordpress ) || '' }} on ubuntu-latest
+        name: PHP ${{ matrix.php }}${{ matrix.multisite && ' multisite' || '' }}${{ matrix.wordpress != '' && format( ' (WP {0}) ', matrix.wordpress ) || '' }} snapshots tests on ubuntu-latest
         needs: compute-previous-wordpress-version
         runs-on: ubuntu-latest
         timeout-minutes: 20
@@ -116,7 +116,7 @@ jobs:
               if: ${{ ! matrix.multisite }}
               run: |
                   set -o pipefail
-                  npm run test:unit:php -- --testsuite units | tee phpunit.log
+                  npm run test:unit:php | tee phpunit.log
 
             # Verifies that PHPUnit actually runs in the first place. We want visibility
             # into issues which can cause it to fail silently, so we check the output
