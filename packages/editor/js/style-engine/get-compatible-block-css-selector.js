@@ -184,7 +184,14 @@ export const getNormalizedSelector = (
 	};
 
 	// Helper to generate the appropriate selector string based on various states.
-	const generateSelector = (selector: string): string => {
+	const generateSelector = (
+		selector: string,
+		startsWithPseudoClass: boolean
+	): string => {
+		if (startsWithPseudoClass) {
+			return `${selector}${suffixClass}`;
+		}
+
 		const innerStateType = getInnerState();
 		const masterStateType = getMasterState();
 
@@ -358,11 +365,18 @@ export const getNormalizedSelector = (
 	// Handle single selector case.
 	if (parsedSelectors.length === 1) {
 		const processedSelector = processAmpersand(selector);
+		// Check if selector starts with a pseudo-class (e.g., :hover, :focus, ::before)
+		const startsWithPseudoClass = /^::?[a-z-]+/.test(
+			processedSelector.trim()
+		);
 
 		return customizedPseudoClasses.includes(state)
 			? processedSelector
-			: generateSelector(processedSelector);
+			: generateSelector(processedSelector, startsWithPseudoClass);
 	}
+
+	// Check if selector starts with a pseudo-class (e.g., :hover, :focus, ::before)
+	const startsWithPseudoClass = /^::?[a-z-]+/.test(selector.trim());
 
 	// Handle multiple selectors.
 	return parsedSelectors
@@ -370,7 +384,7 @@ export const getNormalizedSelector = (
 			const processedSelector = processAmpersand(selector);
 			return customizedPseudoClasses.includes(state)
 				? processedSelector
-				: generateSelector(processedSelector);
+				: generateSelector(processedSelector, startsWithPseudoClass);
 		})
 		.join(', ');
 };
