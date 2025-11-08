@@ -89,10 +89,11 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
             'blockName' => 'core/heading',
             'attrs' => [
 				'blockeraPropsId' => wp_generate_uuid4(),
+				'className' => 'blockera-block blockera-block-test',
 			],
 			'innerBlocks' => [],
-			'innerHTML' => '\n<h2 class=\"wp-block-heading\">Test heading<\/h2>\n',
-			'innerContent' => ["\n<h2 class=\"wp-block-heading\">Test heading<\/h2>\n"]
+			'innerHTML' => '\n<h2 class=\"blockera-block blockera-block-test wp-block-heading\">Test heading<\/h2>\n',
+			'innerContent' => ["\n<h2 class=\"blockera-block blockera-block-test wp-block-heading\">Test heading<\/h2>\n"]
         ];
 
         \WP_Mock::userFunction('wp_doing_ajax')->andReturn(false);
@@ -104,12 +105,15 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
 		$supports = blockera_get_available_block_supports();
         $result = $this->renderContent->renderBlock($block['innerHTML'], $block, $supports);
 
-        $this->assertEquals('\n<h2 class="blockera-block blockera-block-test \&quot;wp-block-heading\&quot;">Test heading<\/h2>\n', $result);
+        $this->assertEquals('\n<h2 class=\"blockera-block blockera-block-test wp-block-heading\">Test heading<\/h2>\n', $result);
     }
 
     public function testThePostsWithEmptyPosts(): void
     {
-        $result = $this->renderContent->thePosts([]);
+		$query = $this->createMock(\WP_Query::class);
+        $query->method('is_main_query')->willReturn(true);
+
+        $result = $this->renderContent->thePosts([], $query);
         $this->assertEquals([], $result);
     }
 
@@ -127,7 +131,11 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
 
 		$supports = blockera_get_available_block_supports();
 		$this->renderContent->setSupports($supports);
-        $result = $this->renderContent->thePosts([new \WP_Post($post)]);
+
+		$query = $this->createMock(\WP_Query::class);
+        $query->method('is_main_query')->willReturn(true);
+
+        $result = $this->renderContent->thePosts([new \WP_Post($post)], $query);
         
         $this->assertCount(1, $result);
 

@@ -434,7 +434,13 @@ class Transpiler {
                 $final_classname = $classname . ' ' . $previous_class;
             } else {
 
-				$final_classname = $previous_class;
+				if (! preg_match($regexp, $classname) && ! str_contains($previous_class, $classname)) {
+
+					$final_classname = $classname . ' ' . $previous_class;
+				} else {
+					
+					$final_classname = $previous_class;
+				}
 			}
         }
 
