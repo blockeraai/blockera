@@ -22,6 +22,7 @@ return array_merge(
 				'blockeraHeight'            => $sizeSelector,
 				'blockeraMinHeight'         => $sizeSelector,
 				'blockeraMaxHeight'         => $sizeSelector, 
+				'blockeraFit'               => $sizeSelector,
 				'blockeraRatio'             => $sizeSelector,
 				'blockeraBorder'            => $sizeSelector,
 				'blockeraBorderRadius'      => $sizeSelector,

@@ -3,10 +3,10 @@
 	border-radius: 20px;
 	width: 300px;
 	aspect-ratio: 4/3;
+	object-fit: cover;
 }
 
 .blockera-block.blockera-block-1.wp-block-image {
-	object-fit: cover;
 	margin-bottom: 24px;
 }
 
