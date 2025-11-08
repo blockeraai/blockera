@@ -33,6 +33,7 @@
 - `Group` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `List` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `List Item` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -67,6 +68,7 @@
 - Added E2E tests to check functionality `Group` new inner block.
 - Added E2E tests to check functionality `Heading` new inner block.
 - Added E2E tests to check functionality `List` new inner block.
+- Added E2E tests to check functionality `List Item` new inner block.
 
 ## 1.4.0 (2025-05-19)
 
