@@ -39,6 +39,7 @@
 - `Post Content` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Post Navigation Link` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Post Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Post Title` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -79,6 +80,7 @@
 - Added E2E tests to check functionality `Post Content` new inner block.
 - Added E2E tests to check functionality `Post Navigation Link` new inner block.
 - Added E2E tests to check functionality `Post Template` new inner block.
+- Added E2E tests to check functionality `Post Title` new inner block.
 
 ## 1.4.0 (2025-05-19)
 
