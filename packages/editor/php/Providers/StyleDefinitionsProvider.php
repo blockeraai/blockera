@@ -21,6 +21,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
         $styleDefinitions = apply_filters(
             'blockera.editor.style.definitions',
             [
+				'AlignContent' => \Blockera\Editor\StyleDefinitions\AlignContent::class,
 				'AlignSelf' => \Blockera\Editor\StyleDefinitions\AlignSelf::class,
 				'AspectRatio' => \Blockera\Editor\StyleDefinitions\AspectRatio::class,
 				'BackdropFilter' => \Blockera\Editor\StyleDefinitions\BackdropFilter::class,
