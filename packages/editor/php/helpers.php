@@ -315,7 +315,17 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 		}
 		
 		$formatted_selectors = [];
-		foreach (explode( ', ', $picked_selector ) as $selector) {
+		$selectors           = [ $picked_selector ];
+
+		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
+		// These functions can contain multiple selectors separated by commas, which should not be split.
+		if ( ! preg_match( '/:(\w+)\s*\([^)]+\)/', $picked_selector, $matches ) ) {
+		
+			// Split the selector by commas.
+			$selectors = explode( ', ', $picked_selector );
+		}
+
+		foreach ($selectors as $selector) {
 			$selector    = trim($selector);
 			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
 			
