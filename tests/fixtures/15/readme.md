@@ -4,8 +4,6 @@
 
 **blockera-block--3**: has `font-style` and `font-weight`. It should have the `blockera-has-font-style` and `blockera-has-font-weight` classes.
 
-**blockera-block--4**: has `font-family`. It should have the `blockera-has-font-family` class.
-
 **blockera-block--5**: has `line-height`. It should have the `blockera-has-line-height` class.
 
 **blockera-block--6**: has `font-size`. It should have the `blockera-has-font-size` class.
