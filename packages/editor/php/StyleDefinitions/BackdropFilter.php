@@ -23,7 +23,7 @@ class BackdropFilter extends BaseStyleDefinition implements Repeater {
 			return $declaration;
 		}
 
-        $this->setBackdropFilter($filteredBackdropFilters[0]);
+		array_map([ $this, 'setBackdropFilter' ], $filteredBackdropFilters);
 
         $this->setCss($this->declarations);
 
