@@ -45,3 +45,26 @@ p.blockera-block.blockera-block--6 {
 	background-image: url('https://placehold.co/400x400'), repeating-radial-gradient( circle farthest-corner at 50% 50%, rgb(0, 159, 251) 56%, rgb(229, 46, 0) 100%);
 	background-attachment: scroll, fixed;
 }
+
+p.blockera-block.blockera-block--7 {
+	background-color: #c6ffbf;
+}
+
+p.blockera-block.blockera-block--8 {
+	background-color: #c6ffbf;
+	background-clip: content-box;
+	-webkit-background-clip: content-box;
+}
+
+p.blockera-block.blockera-block--9 {
+	background-color: #ff4949;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+p.blockera-block.blockera-block--10 {
+	background-color: #c6ffbe;
+	background-clip: inherit;
+	-webkit-background-clip: inherit;
+}
