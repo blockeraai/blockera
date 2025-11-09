@@ -65,6 +65,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'Order' => \Blockera\Editor\StyleDefinitions\Order::class,
 				'Overflow' => \Blockera\Editor\StyleDefinitions\Overflow::class,
 				'Outline' => \Blockera\Editor\StyleDefinitions\Outline::class,
+				'WordBreak' => \Blockera\Editor\StyleDefinitions\WordBreak::class,
 				'TextIndent' => \Blockera\Editor\StyleDefinitions\TextIndent::class,
 				'TextWrap' => \Blockera\Editor\StyleDefinitions\TextWrap::class,
 				'Flex' => \Blockera\Editor\StyleDefinitions\Flex::class,
