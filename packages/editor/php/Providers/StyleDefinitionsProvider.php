@@ -21,6 +21,10 @@ class StyleDefinitionsProvider extends ServiceProvider {
         $styleDefinitions = apply_filters(
             'blockera.editor.style.definitions',
             [
+				'BackfaceVisibility' => \Blockera\Editor\StyleDefinitions\BackfaceVisibility::class,
+				'ChildOrigin' => \Blockera\Editor\StyleDefinitions\ChildOrigin::class,
+				'SelfOrigin' => \Blockera\Editor\StyleDefinitions\SelfOrigin::class,
+				'ChildPerspective' => \Blockera\Editor\StyleDefinitions\ChildPerspective::class,
 				'AlignContent' => \Blockera\Editor\StyleDefinitions\AlignContent::class,
 				'AlignSelf' => \Blockera\Editor\StyleDefinitions\AlignSelf::class,
 				'AspectRatio' => \Blockera\Editor\StyleDefinitions\AspectRatio::class,
