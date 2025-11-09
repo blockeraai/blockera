@@ -58,6 +58,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'MinHeight' => \Blockera\Editor\StyleDefinitions\MinHeight::class,
 				'MinWidth' => \Blockera\Editor\StyleDefinitions\MinWidth::class,
 				'MixBlendMode' => \Blockera\Editor\StyleDefinitions\MixBlendMode::class,
+				'Mouse' => \Blockera\Editor\StyleDefinitions\Mouse::class,
 				'ObjectFit' => \Blockera\Editor\StyleDefinitions\ObjectFit::class,
 				'ObjectPosition' => \Blockera\Editor\StyleDefinitions\ObjectPosition::class,
 				'Opacity' => \Blockera\Editor\StyleDefinitions\Opacity::class,
