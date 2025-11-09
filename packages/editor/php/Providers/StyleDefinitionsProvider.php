@@ -26,6 +26,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'SelfOrigin' => \Blockera\Editor\StyleDefinitions\SelfOrigin::class,
 				'ChildPerspective' => \Blockera\Editor\StyleDefinitions\ChildPerspective::class,
 				'ColumnCount' => \Blockera\Editor\StyleDefinitions\ColumnCount::class,
+				'Content' => \Blockera\Editor\StyleDefinitions\Content::class,
 				'AlignContent' => \Blockera\Editor\StyleDefinitions\AlignContent::class,
 				'AlignSelf' => \Blockera\Editor\StyleDefinitions\AlignSelf::class,
 				'AspectRatio' => \Blockera\Editor\StyleDefinitions\AspectRatio::class,
