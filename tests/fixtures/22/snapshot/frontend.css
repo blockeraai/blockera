@@ -1,0 +1,75 @@
+
+.blockera-block.blockera-block--1.wp-block-group {
+	background-color: #e9ffe7;
+	display: flex;
+	flex-direction: column;
+}
+
+p.blockera-block.blockera-block--2 {
+	background-color: #c6ffc2;
+	order: 100;
+}
+
+p.blockera-block.blockera-block--3 {
+	background-color: #c6ffc2;
+	order: 2;
+}
+
+p.blockera-block.blockera-block--4 {
+	background-color: #c6ffc2;
+	order: 1;
+}
+
+p.blockera-block.blockera-block--5 {
+	background-color: #c6ffc2;
+	order: -1;
+}
+
+.blockera-block.blockera-block--6.wp-block-group {
+	background-color: #e9ffe7;
+	display: flex;
+	flex-direction: column;
+}
+
+p.blockera-block.blockera-block--7 {
+	background-color: #c6ffc2;
+	align-self: flex-end;
+}
+
+p.blockera-block.blockera-block--8 {
+	background-color: #c6ffc2;
+	align-self: center;
+}
+
+p.blockera-block.blockera-block--9 {
+	background-color: #c6ffc2;
+}
+
+.blockera-block.blockera-block--10.wp-block-group {
+	background-color: #e9ffe7;
+	display: flex;
+	flex-direction: column;
+	height: 500px;
+}
+
+p.blockera-block.blockera-block--11 {
+	background-color: #a2ef9d;
+	flex: 1 1 0%;
+}
+
+p.blockera-block.blockera-block--12 {
+	background-color: #c6ffc2;
+	flex: 0 1 auto;
+}
+
+p.blockera-block.blockera-block--13 {
+	background-color: #c6ffc2;
+	flex: 0 0 auto;
+}
+
+p.blockera-block.blockera-block--14 {
+	background-color: #a2ef9d;
+	flex-grow: 2;
+	flex-shrink: 1;
+	flex-basis: content !important;
+}
