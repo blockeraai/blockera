@@ -75,3 +75,8 @@ p.blockera-block.blockera-block--14 {
 	background-color: #fed7d7;
 	mix-blend-mode: exclusion;
 }
+
+p.blockera-block.blockera-block--15 {
+	outline: 2px solid #bde1ff;
+	outline-offset: 12px;
+}
