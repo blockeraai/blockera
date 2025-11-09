@@ -78,6 +78,8 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'Transform' => \Blockera\Editor\StyleDefinitions\Transform::class,
 				'Transition' => \Blockera\Editor\StyleDefinitions\Transition::class,
 				'Width' => \Blockera\Editor\StyleDefinitions\Width::class,
+				'WebkitTextStrokeColor' => \Blockera\Editor\StyleDefinitions\WebkitTextStrokeColor::class,
+				'WebkitTextStrokeWidth' => \Blockera\Editor\StyleDefinitions\WebkitTextStrokeWidth::class,
 				'ZIndex' => \Blockera\Editor\StyleDefinitions\ZIndex::class,
 			]
         );
