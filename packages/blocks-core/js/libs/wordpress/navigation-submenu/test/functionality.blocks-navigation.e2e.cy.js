@@ -102,6 +102,9 @@ describe(
 				'elements/mark',
 			]);
 
+			// Close inserter
+			cy.getByDataTest('add-new-block-state').click();
+
 			// Icon extension is active
 			cy.getByDataTest('settings-tab').click({ force: true });
 			cy.getByAriaLabel('Choose Icon…').should('exist');
