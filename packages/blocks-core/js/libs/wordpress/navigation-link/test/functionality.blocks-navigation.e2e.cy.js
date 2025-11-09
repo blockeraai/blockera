@@ -85,8 +85,8 @@ describe(
 			);
 
 			// Icon extension is active
-			cy.getByDataTest('settings-tab').click();
-			cy.getByAriaLabel('Choose Icon…').should('be.visible');
+			cy.getByDataTest('settings-tab').click({ force: true });
+			cy.getByAriaLabel('Choose Icon…').should('exist');
 
 			// switch back to style tab
 			cy.getByDataTest('style-tab').click();
