@@ -168,6 +168,17 @@ class UtilsTest extends \WP_UnitTestCase {
 		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
 	}
 
+	public function testModifySelectorWithPseudoClassFunctions() {
+
+		$selector = '.wp-block-sample:is(.a, .b), .wp-block-sample:where(.a, .b), .wp-block-sample:not(.a, .b), .wp-block-sample:has(.a, .b), .wp-block-sample:host(.a, .b), .wp-block-sample:host-context(.a, .b), .wp-block-sample:any(.a, .b)';
+		$part     = '.wp-block-sample';
+		$args     = [ 'prefix' => '.test-before', 'suffix' => '.test-after' ];
+
+		$expected = '.test-before.wp-block-sample:is(.a, .b), .test-before.wp-block-sample:where(.a, .b), .test-before.wp-block-sample:not(.a, .b), .test-before.wp-block-sample:has(.a, .b), .test-before.wp-block-sample:host(.a, .b), .test-before.wp-block-sample:host-context(.a, .b), .test-before.wp-block-sample:any(.a, .b), .wp-block-sample.test-after:is(.a, .b), .wp-block-sample.test-after:where(.a, .b), .wp-block-sample.test-after:not(.a, .b), .wp-block-sample.test-after:has(.a, .b), .wp-block-sample.test-after:host(.a, .b), .wp-block-sample.test-after:host-context(.a, .b), .wp-block-sample.test-after:any(.a, .b)';
+
+		$this->assertEquals( $expected, Utils::modifySelectorPos( $selector, $part, $args ) );
+	}
+
 	/**
 	 * Test snake case conversion with various input strings
 	 *
