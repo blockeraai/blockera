@@ -63,8 +63,15 @@ class Utils {
 		$prefix = $args['prefix'] ?? '';
 		$suffix = $args['suffix'] ?? '';
 
-		// Split the selector by commas.
-		$selectors = explode( ',', $selector );
+		$selectors = [ $selector ];
+
+		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
+		// These functions can contain multiple selectors separated by commas, which should not be split.
+		if ( ! preg_match( '/:(\w+)\s*\([^)]+\)/', $selector, $matches ) ) {
+		
+			// Split the selector by commas.
+			$selectors = explode( ',', $selector );
+		}
 
 		// Initialize an array to store modified selectors.
 		$modifiedSelectors = [];
