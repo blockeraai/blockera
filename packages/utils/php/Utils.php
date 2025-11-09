@@ -67,7 +67,7 @@ class Utils {
 
 		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
 		// These functions can contain multiple selectors separated by commas, which should not be split.
-		if ( ! preg_match( '/:(\w+)\s*\([^)]+\)/', $selector, $matches ) ) {
+		if ( ! preg_match( blockera_regex_pseudo_class_functions_pattern(), $selector, $matches ) ) {
 		
 			// Split the selector by commas.
 			$selectors = explode( ',', $selector );

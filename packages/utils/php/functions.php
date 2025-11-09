@@ -101,3 +101,18 @@ if (! function_exists('blockera_is_admin_request')) {
 		return is_admin() || str_starts_with($_SERVER['REQUEST_URI'] ?? '', $admin_page);
 	}
 }
+
+if (! function_exists('blockera_regex_pseudo_class_functions_pattern')) {
+	
+	/**
+	 * Get the regex pattern for pseudo-class functions.
+	 * Like :is(), :where(), :not(), etc.
+	 * These functions can contain multiple selectors separated by commas.
+	 *
+	 * @return string the regex pattern.
+	 */
+	function blockera_regex_pseudo_class_functions_pattern(): string {
+			
+		return '/:(\w+(?:-\w+|))\s*\([^)]+\)/';
+	}
+}

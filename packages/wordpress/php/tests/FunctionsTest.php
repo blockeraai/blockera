@@ -2,7 +2,7 @@
 
 namespace Blockera\WordPress\Tests;
 
-class TestFunctions extends \WP_UnitTestCase {
+class FunctionsTest extends \WP_UnitTestCase {
 
 	// Mock function for blockera_convert_to_unique_hash
 	protected function blockera_convert_to_unique_hash( string $input ): string {
@@ -142,5 +142,26 @@ class TestFunctions extends \WP_UnitTestCase {
 		// Check if all hashes are unique by comparing the count of unique values
 		$uniqueHashes = array_unique($hashes);
 		$this->assertCount(1000, $uniqueHashes, 'All generated hashes should be unique.');
+	}
+
+	/**
+	 * @dataProvider dataProviderGetCssSelectorFormat
+	 */
+	public function testGetCssSelectorFormat(string $picked_selector, string $expected)	{
+		$root_selector = '.blockera-block';
+		$args = [];
+		$result = blockera_get_css_selector_format($root_selector, $picked_selector, $args);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function dataProviderGetCssSelectorFormat() {
+		return [
+			[ '.wp-block-sample:is(.a, .b)', '.blockera-block .wp-block-sample:is(.a, .b)' ],
+			[ '.wp-block-sample:not(.a, .b)', '.blockera-block .wp-block-sample:not(.a, .b)' ],
+			[ '.wp-block-sample:has(.a, .b)', '.blockera-block .wp-block-sample:has(.a, .b)' ],
+			[ '.wp-block-sample:host(.a, .b)', '.blockera-block .wp-block-sample:host(.a, .b)' ],
+			[ '.wp-block-sample:host-context(.a, .b)', '.blockera-block .wp-block-sample:host-context(.a, .b)' ],
+			[ '.wp-block-sample:any(.a, .b)', '.blockera-block .wp-block-sample:any(.a, .b)' ],
+		];
 	}
 }

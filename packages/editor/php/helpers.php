@@ -319,7 +319,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 
 		// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
 		// These functions can contain multiple selectors separated by commas, which should not be split.
-		if ( ! preg_match( '/:(\w+)\s*\([^)]+\)/', $picked_selector, $matches ) ) {
+		if ( ! preg_match( blockera_regex_pseudo_class_functions_pattern(), $picked_selector, $matches ) ) {
 		
 			// Split the selector by commas.
 			$selectors = explode( ', ', $picked_selector );
