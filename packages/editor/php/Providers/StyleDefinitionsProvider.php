@@ -81,6 +81,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'Width' => \Blockera\Editor\StyleDefinitions\Width::class,
 				'WebkitTextStrokeColor' => \Blockera\Editor\StyleDefinitions\WebkitTextStrokeColor::class,
 				'WebkitTextStrokeWidth' => \Blockera\Editor\StyleDefinitions\WebkitTextStrokeWidth::class,
+				'WordSpacing' => \Blockera\Editor\StyleDefinitions\WordSpacing::class,
 				'ZIndex' => \Blockera\Editor\StyleDefinitions\ZIndex::class,
 			]
         );
