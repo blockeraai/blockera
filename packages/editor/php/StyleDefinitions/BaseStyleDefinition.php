@@ -258,10 +258,8 @@ abstract class BaseStyleDefinition {
             return;
         }
 
-		$target_block = blockera_is_inner_block($this->block_type) ? $this->block_type : $this->block['blockName'];
-
         $fallback  = $this->getFallbackSupport($support);
-        $selectors = blockera_get_block_type_property($target_block, 'selectors');
+        $selectors = blockera_get_block_type_property($this->block['blockName'], 'selectors');
 
 		if ($this->is_style_variation) {
 			$this->selector = $this->blockera_unique_selector;
@@ -273,14 +271,14 @@ abstract class BaseStyleDefinition {
             $support,
             [
                 'fallback'                 => $fallback,
-                'block-name'               => $target_block,
-                'breakpoint'               => $this->breakpoint,
                 'block-type'               => $this->block_type,
                 'pseudo-class'             => $this->pseudo_state,
                 'block-settings'           => $this->block['attrs'],
+                'block-name'               => $this->block['blockName'],
                 'inner-pseudo-class'       => $this->inner_pseudo_state,
                 'root'                     => $selectors['root'] ?? null,
                 'blockera-unique-selector' => $this->blockera_unique_selector,
+                'breakpoint'               => $this->breakpoint,
             ]
 		);
 

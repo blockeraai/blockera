@@ -594,9 +594,9 @@ export const getCompatibleBlockCssSelector = ({
 		query,
 		support,
 		supports,
+		blockName,
 		fallbackSupportId,
 		selectors: blockSelectors,
-		blockName: isInnerBlock(currentBlock) ? currentBlock : blockName,
 	});
 
 	if (selector && selector.trim()) {
