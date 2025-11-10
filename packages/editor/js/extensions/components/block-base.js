@@ -46,7 +46,7 @@ import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
 import { ErrorBoundaryFallback } from '../hooks/block-settings';
 import { useCleanupStyles } from '../../hooks/use-cleanup-styles';
-import { isVirtualBlock } from '../libs/block-card/inner-blocks/helpers';
+import { isVirtualBlock } from '../libs/block-card/inner-blocks/utils';
 import {
 	unstableBootstrapBlockStatesDefinitions,
 	unstableBootstrapInnerBlockStatesDefinitions,

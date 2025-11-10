@@ -14,7 +14,7 @@ import { isString, mergeObject, getSortedObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { isBlock, isElement } from '../helpers';
+import { isBlock, isElement } from '../utils';
 import type {
 	InnerBlocks,
 	AvailableItems,
