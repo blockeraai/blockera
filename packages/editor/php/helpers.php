@@ -130,8 +130,14 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
 
-			// Handle multiple selector where separated with comma.
-			$parsedValue = explode( ',', trim( $selector ) );
+			$parsedValue = [ $selector ];
+
+			// Check if selector contains pseudo-class functions like :is(), :where(), :not(), etc.
+			// These functions can contain multiple selectors separated by commas, which should not be split.
+			if (! preg_match( blockera_regex_pseudo_class_functions_pattern(), $selector, $matches ) ) {
+				
+				$parsedValue = explode( ',', trim( $selector ) );
+			}
 
 			// Assume current selector is multiple.
 			if ( count( $parsedValue ) > 1 ) {
