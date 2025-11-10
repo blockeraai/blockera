@@ -1,4 +1,9 @@
 
 .blockera-block.blockera-block-1 li {
 	background-color: #d8e0ff;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 100px;
 }

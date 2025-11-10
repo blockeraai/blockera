@@ -14,15 +14,6 @@ use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 final class StyleEngine {
 
 	/**
-	 * Store the list of allowed pseudo-states.
-	 *
-	 * @var array $allowed_pseudo_states
-	 */
-	protected array $allowed_pseudo_states = [
-		'hover',
-	];
-
-	/**
 	 * Store pseudo-classes list are used to define a special state of an element.
 	 * For example, it can be used to:
 	 * - Style an element when a user mouses over it
@@ -65,6 +56,13 @@ final class StyleEngine {
 	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
 	 */
 	protected bool $is_style_variation = false;
+
+	/**
+	 * Store the definitions instances stack.
+	 *
+	 * @var array $definitions
+	 */
+	protected array $definitions = [];
 
 	/**
 	 * Store instance of current style definition class.
@@ -216,15 +214,6 @@ final class StyleEngine {
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
 			$states = $this->settings['blockeraBlockStates']['value'];
 
-			// Filter block states to only include normal state and existing pseudo classes.
-			$states = array_filter(
-                $states,
-                function( string $state):bool {
-					return 'normal' === $state || in_array($state, $this->allowed_pseudo_states, true);
-				},
-				ARRAY_FILTER_USE_KEY
-            );
-
 			// prepare all breakpoints.
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
 
@@ -278,10 +267,26 @@ final class StyleEngine {
 					array_map(
                         function( array $stateSettings, string $state): array {
 							$this->pseudo_state = $state;
-							$breakpoints        = blockera_get_array_deep_merge($this->breakpoints, $stateSettings['breakpoints']);
+
+							if (empty($stateSettings['breakpoints']) && ! empty($stateSettings['content'])) {
+								return [
+									$this->prepareBreakpointStyles(
+                                        $this->breakpoint,
+                                        [
+											'blockeraContentPseudoElement' => '"' . $stateSettings['content'] . '"',
+										]
+                                    ),
+								];
+							}
+
+							$breakpoints = blockera_get_array_deep_merge($this->breakpoints, $stateSettings['breakpoints']);
 
 							return array_map(
-                                function ( $breakpointSettings, string $breakpoint): string {
+                                function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {
+									if (isset($stateSettings['content'])) {
+										$breakpointSettings['attributes']['blockeraContentPseudoElement'] = '"' . $stateSettings['content'] . '"';
+									}
+
                                     return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes']);
                                 },
                                 $breakpoints,
@@ -623,7 +628,7 @@ final class StyleEngine {
 			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
 
 			// Merge with existing rules, avoiding duplicates.
-			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {				
+			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {                
 				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 			}
 
@@ -713,6 +718,7 @@ final class StyleEngine {
 		$this->definition->setInnerPseudoState( $args['state'] ?? '' );
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setSettings( $settings );
+		$this->definition->setNoChecks( true );
 		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
