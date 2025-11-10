@@ -5,7 +5,6 @@ namespace Blockera\WordPress\RenderBlock\V2;
 use Blockera\Data\Cache\Cache;
 use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\Application;
-use Blockera\SiteBuilder\StyleEngine as SiteBuilderStyleEngine;
 
 class Transpiler {
 
@@ -313,7 +312,7 @@ class Transpiler {
 
         // Generate styles once.
         $this->style_engine = $this->app->make(
-            class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
+            StyleEngine::class,
             [
                 'block' => $args['block'],
                 'fallbackSelector' => $selector,

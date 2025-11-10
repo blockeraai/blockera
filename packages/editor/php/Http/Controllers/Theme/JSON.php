@@ -4,7 +4,6 @@ namespace Blockera\Editor\Http\Controllers\Theme;
 
 use Blockera\Setup\Blockera;
 use Blockera\Editor\StyleEngine;
-use Blockera\SiteBuilder\StyleEngine as SiteBuilderStyleEngine;
 
 class JSON extends \WP_Theme_JSON {
 
@@ -256,7 +255,7 @@ class JSON extends \WP_Theme_JSON {
                 $variation_declarations = static::get_feature_declarations_for_node($block_metadata, $style_variation_node);
 
 				$style_engine = Blockera::getInstance()->make(
-					class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
+					StyleEngine::class,
 					[
 						'block' => [
 							'blockName' => $block_metadata['name'],
@@ -352,7 +351,7 @@ class JSON extends \WP_Theme_JSON {
         } else {
 			if (isset($block_metadata['name'])) {
 				$style_engine = Blockera::getInstance()->make(
-					class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
+					StyleEngine::class,
 					[
 						'block' => [
 							'blockName' => $block_metadata['name'],
