@@ -9,8 +9,8 @@ p.blockera-block.blockera-block-1 {
 }
 
 p.blockera-block.blockera-block-2 {
-	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3);
-	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002dbase);
+	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3, #503AA8);
+	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002dbase, #FFFFFF);
 }
 
 .blockera-block.blockera-block-2 .has-inline-color.has-contrast-color {
@@ -18,6 +18,6 @@ p.blockera-block.blockera-block-2 {
 }
 
 p.blockera-block.blockera-block-3 {
-	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3);
-	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002dbase);
+	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3, #503AA8);
+	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002dbase, #FFFFFF);
 }
