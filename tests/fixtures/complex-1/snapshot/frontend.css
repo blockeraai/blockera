@@ -1,0 +1,140 @@
+
+.blockera-block.blockera-block--1.wp-block-group {
+	background-color: #ffdede;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
+.blockera-block.blockera-block--1.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 50px !important;
+}
+
+.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+	font-weight: 700;
+	font-style: normal;
+	color: #c91205;
+	font-size: 40px;
+}
+
+.blockera-block.blockera-block--1 p {
+	color: #c79c00;
+}
+
+.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button {
+	background-color: #cc0000;
+}
+
+.blockera-block.blockera-block--1 .wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 50px !important;
+}
+
+.blockera-block.blockera-block--1 .wp-block-group {
+	background-color: #39d92e;
+	color: #ff902e;
+	font-size: 15px;
+}
+
+.blockera-block.blockera-block--1 p::before {
+	border-radius: 5px;
+	content: "This is:";
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+	padding-left: 10px;
+	margin-right: 10px !important;
+	background-color: #c79c0042;
+}
+
+.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button:hover {
+	background-color: #a30000;
+}
+
+.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button:focus {
+	background-color: #8d0000;
+}
+
+.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button:active {
+	background-color: #370000;
+}
+
+.blockera-block.blockera-block--1 .wp-block-group:hover {
+	background-color: #20b316;
+}
+
+.blockera-block.blockera-block--1 :is(h1:hover, .blockera-block.blockera-block--1 h2:hover, .blockera-block.blockera-block--1 h3:hover, .blockera-block.blockera-block--1 h4:hover, .blockera-block.blockera-block--1 h5:hover, .blockera-block.blockera-block--1 h6).wp-block-heading:hover {
+	color: #006eff;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+	color: #34d200;
+}
+
+.blockera-block.blockera-block--1 :is(h1:hover, .blockera-block.blockera-block--1 h2:hover, .blockera-block.blockera-block--1 h3:hover, .blockera-block.blockera-block--1 h4:hover, .blockera-block.blockera-block--1 h5:hover, .blockera-block.blockera-block--1 h6).wp-block-heading:hover {
+	color: #1f7c00;
+}
+
+
+}
+
+@media screen and (min-width: 1920px) {
+	p.blockera-block.blockera-block--2::before {
+	content: "Simple Overrided";
+}
+
+
+}
+
+p.blockera-block.blockera-block--3::before {
+	background-color: #c79c00;
+	color: #f1f1f1;
+	content: "Advanced Overrided";
+}
+
+@media screen and (max-width: 991px) {
+	p.blockera-block.blockera-block--3::before {
+	content: "Advanced Overrided";
+}
+
+
+}
+
+@media screen and (max-width: 767px) {
+	p.blockera-block.blockera-block--3::before {
+	content: "Advanced Overrided";
+}
+
+
+}
+
+@media screen and (max-width: 478px) {
+	p.blockera-block.blockera-block--3::before {
+	content: "Advanced Overrided";
+}
+
+
+}
+
+@media screen and (min-width: 1280px) {
+	p.blockera-block.blockera-block--3::before {
+	content: "Advanced Overrided";
+}
+
+
+}
+
+@media screen and (min-width: 1440px) {
+	p.blockera-block.blockera-block--3::before {
+	content: "Advanced Overrided";
+}
+
+
+}
+
+@media screen and (min-width: 1920px) {
+	p.blockera-block.blockera-block--3::before {
+	content: "Advanced Overrided";
+}
+
+
+}
