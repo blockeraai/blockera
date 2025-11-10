@@ -69,7 +69,7 @@
 	background-color: #20b316;
 }
 
-.blockera-block.blockera-block--1 :is(h1:hover, .blockera-block.blockera-block--1 h2:hover, .blockera-block.blockera-block--1 h3:hover, .blockera-block.blockera-block--1 h4:hover, .blockera-block.blockera-block--1 h5:hover, .blockera-block.blockera-block--1 h6).wp-block-heading:hover {
+.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading:hover {
 	color: #006eff;
 }
 
@@ -78,7 +78,7 @@
 	color: #34d200;
 }
 
-.blockera-block.blockera-block--1 :is(h1:hover, .blockera-block.blockera-block--1 h2:hover, .blockera-block.blockera-block--1 h3:hover, .blockera-block.blockera-block--1 h4:hover, .blockera-block.blockera-block--1 h5:hover, .blockera-block.blockera-block--1 h6).wp-block-heading:hover {
+.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading:hover {
 	color: #1f7c00;
 }
 

@@ -89,11 +89,11 @@
 	color: #db0000;
 }
 
-.blockera-block.blockera-block-1 :is(strong:hover, .blockera-block.blockera-block-1 b):hover {
+.blockera-block.blockera-block-1 :is(strong, b):hover {
 	background-color: #aeac66;
 }
 
-.blockera-block.blockera-block-1 :is(em:hover, .blockera-block.blockera-block-1 i):hover {
+.blockera-block.blockera-block-1 :is(em, i):hover {
 	background-color: #92c59d;
 }
 
