@@ -8,6 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
+import { prepare } from '@blockera/data-editor';
 import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
 
 /**
@@ -17,6 +18,7 @@ import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
 import { replaceVariablesValue } from './utils';
 import type { NormalizedSelectorProps } from './types';
 import { getBlockCSSSelector } from './get-block-css-selector';
+import { isBlock } from '../extensions/libs/block-card/inner-blocks/utils';
 import { isInnerBlock, isNormalState } from '../extensions/components/utils';
 import type { TStates } from '../extensions/libs/block-card/block-states/types';
 import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
@@ -589,6 +591,70 @@ export const getCompatibleBlockCssSelector = ({
 		return '';
 	}
 
+	if (
+		isInnerBlock(currentBlock) &&
+		blockName !== currentBlock &&
+		isBlock({ name: currentBlock })
+	) {
+		const { getBlockType } = select('core/blocks') || {};
+		const { selectors: currentBlockSelectors } = getBlockType(
+			currentBlock
+		) || {
+			selectors: {},
+		};
+
+		if (!currentBlockSelectors.hasOwnProperty('root')) {
+			blockSelectors = {
+				...blockSelectors,
+				// $FlowFixMe
+				[currentBlock]: {
+					...(blockSelectors?.[currentBlock] || {}),
+					root:
+						'.wp-block-' +
+						currentBlock.replace('core/', '').replace('/', '-'),
+				},
+			};
+		}
+
+		for (const supportId in currentBlockSelectors) {
+			if ('root' === supportId) {
+				blockSelectors = {
+					...blockSelectors,
+					// $FlowFixMe
+					[currentBlock]: {
+						...(blockSelectors?.[currentBlock] || {}),
+						root: currentBlockSelectors[supportId],
+					},
+				};
+				continue;
+			}
+			if (!blockSelectors?.[currentBlock]?.[supportId]) {
+				blockSelectors = {
+					...blockSelectors,
+					// $FlowFixMe
+					[currentBlock]: {
+						...(blockSelectors?.[currentBlock] || {}),
+						[supportId]: currentBlockSelectors[supportId],
+					},
+				};
+			}
+		}
+
+		if (query) {
+			if (!Array.isArray(query) && currentBlockSelectors[query]) {
+				query = [currentBlock, query];
+			} else if (
+				Array.isArray(query) &&
+				query.length > 0 &&
+				prepare(currentBlockSelectors, query)
+			) {
+				query = [currentBlock, ...query];
+			} else {
+				query = [currentBlock];
+			}
+		}
+	}
+
 	// preparing css selector from support path as key in block selectors map as object.
 	const selector = prepareBlockCssSelector({
 		query,
@@ -645,7 +711,7 @@ export const getCompatibleBlockCssSelector = ({
  * @return {string} the css selector for support.
  */
 export function prepareBlockCssSelector(params: {
-	query?: string,
+	query?: Array<string> | string,
 	support?: string,
 	supports: Object,
 	blockName: string,

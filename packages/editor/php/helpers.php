@@ -437,6 +437,41 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$current_state_has_selectors = false;
 
+		$additional_selectors = [];
+
+		if (blockera_is_inner_block($args['block-type']) && $args['block-type'] !== $args['block-name'] && blockera_is_valid_block_type($args['block-type'])) {
+
+			$additional_selectors = blockera_get_block_type($args['block-type'])->selectors;
+
+			if (! empty($additional_selectors)) {
+
+				$additional_root_selector = $additional_selectors['root'] ?? '';
+
+				if (empty($additional_root_selector)) {
+
+					$additional_root_selector = blockera_generate_block_root_selector($args['block-type']);
+				}
+
+				$additional_selectors['root'] = $additional_root_selector;
+
+				$selectors = array_merge(
+                    $selectors,
+                    [
+						$args['block-type'] => $additional_selectors,
+					]
+                );
+
+				if (isset($additional_selectors[ $feature_id ])) {
+					$feature_id = [
+						$args['block-type'],
+						$feature_id,
+					];
+				} else {
+					$feature_id = $args['block-type'];
+				}
+			}
+		}
+
 		if ( ! empty( $args['block-type'] ) && isset($cloned_block_type) ) {
 
 			if (blockera_is_inner_block( $args['block-type'] )) {
@@ -1082,5 +1117,37 @@ if (! function_exists('blockera_sort_breakpoints')) {
         );
 
 		return $breakpointsArray;
+	}
+}
+
+if (! function_exists('blockera_is_valid_block_type')) {
+
+	/**
+	 * Check if the block type is registered.
+	 *
+	 * @param string $block_type the block type.
+	 *
+	 * @return bool true if the block type is valid, false otherwise.
+	 */
+	function blockera_is_valid_block_type( string $block_type ): bool {
+
+		return (bool) blockera_get_block_type($block_type);
+	}
+}
+
+if (! function_exists('blockera_generate_block_root_selector')) {
+
+	/**
+	 * Generate block root selector.
+	 *
+	 * @param string $block_type the block type.
+	 *
+	 * @return string the block root selector.
+	 */
+	function blockera_generate_block_root_selector( string $block_type ): string {
+
+		$prefix = '.wp-block-';
+
+		return $prefix . str_replace('/', '-', str_replace('core/', '', $block_type));
 	}
 }

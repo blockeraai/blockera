@@ -10,7 +10,7 @@ import type {
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 export type NormalizedSelectorProps = {
-	query?: string,
+	query?: Array<string> | string,
 	state: TStates,
 	clientId: string,
 	support?: string,
