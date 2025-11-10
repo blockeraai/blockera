@@ -285,7 +285,7 @@ const CodeControl = ({
 			if (!placeholder) {
 				placeholder = (
 					<>
-						.block {'{'}
+						& {'{'}
 						<br />
 						&nbsp;&nbsp;&nbsp;{'/* Your CSS here */'}
 						<br />
@@ -603,7 +603,12 @@ const CodeControl = ({
 						}
 
 						// Set cursor position between curly braces for CSS
-						if (lang === 'css' && value === '.block {\n    \n}\n') {
+						if (
+							lang === 'css' &&
+							['& {\n    \n}\n', '.block {\n    \n}\n'].includes(
+								value
+							)
+						) {
 							const position = editor.getPosition();
 							if (position) {
 								editor.setPosition({

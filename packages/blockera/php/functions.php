@@ -37,7 +37,6 @@ if (! function_exists('blockera_core_config')) {
         // Cache config directory and files mapping.
         static $mapped_configs = [];
         $config_dir            = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
-        
         if (! isset($mapped_configs[ $config_dir ])) {
             $config_files                  = glob($config_dir . '/config/*.php');
             $config_keys                   = array_map(
@@ -172,8 +171,23 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
                 }
             }
 
-            // todo validate that variable is currently available or not.
             if ('variable' === $value['valueType'] && isset($value['settings']['var'])) {
+				/**
+				 * If the value is not empty and is not the same as the variable, return the var with the value as fallback.
+				 */
+				if (
+				isset($value['settings']['value']) && 
+				'' !== $value['settings']['value'] && 
+				'var(' . $value['settings']['var'] . ')' !== $value['settings']['value']) {
+
+					// If the value already starts with var({$value['settings']['var']}, return it as is
+					if (str_starts_with($value['settings']['value'], "var({$value['settings']['var']}")) {
+						return $value['settings']['value'];
+					}
+					
+					return "var({$value['settings']['var']}, {$value['settings']['value']})";
+				}
+
                 return 'var(' . $value['settings']['var'] . ')';
             }
         }

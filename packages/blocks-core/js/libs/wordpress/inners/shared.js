@@ -261,8 +261,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	},
 	'elements/code': {
 		name: 'elements/code',
-		label: __('Code', 'blockera'),
-		description: __('All code tags.', 'blockera'),
+		label: __('Inline Code', 'blockera'),
+		description: __('All inline code tags.', 'blockera'),
 		icon: <Icon icon="code" library="wp" iconSize="20" />,
 		availableBlockStates: generalSimpleInnerBlockStates,
 	},
