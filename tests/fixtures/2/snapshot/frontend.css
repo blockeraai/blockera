@@ -8,8 +8,13 @@
 }
 
 .blockera-block.blockera-block-1 .wp-block-button > .wp-element-button {
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
 	background-color: #95aaff;
 	color: #0023b1;
+	border: 2px solid var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-1);
 }
 
 .blockera-block.blockera-block-1 .wp-block-button > .wp-element-button:hover {
