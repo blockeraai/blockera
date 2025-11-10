@@ -236,7 +236,7 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 	public function testItShouldRetrieveRealValueOfRecievedValueAddon(): void {
 
 		$this->assertSame(
-			'var(--wp--preset--color--contrast-2)',
+			'var(--wp--preset--color--contrast-2, #636363)',
 			blockera_get_value_addon_real_value(
 				[
 					'settings'     => [
