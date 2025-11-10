@@ -48,6 +48,12 @@ class SavePost {
      */
     public function save( int $postId, \WP_Post $post, array $supports): void {
 
+		// Skip save functionality in development mode.
+		// This is to avoid unnecessary cache generation and save time.
+		if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT) {
+			return;
+		}
+
 		$this->saveGlobalStyles($postId, $post);
 
 		// phpcs:disable
