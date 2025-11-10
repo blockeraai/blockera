@@ -15,7 +15,7 @@ n p.blockera-block.blockera-block-2 {
 }
 
 u0026 {
-	n color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-3, #503AA8);
+	n color: var(--wp--preset--color--accent-3, #503AA8);
 	n
 }
 

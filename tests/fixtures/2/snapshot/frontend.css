@@ -14,12 +14,12 @@
 	padding-left: 30px;
 	background-color: #95aaff;
 	color: #0023b1;
-	border: 2px solid var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-1, #FFEE58);
+	border: 2px solid var(--wp--preset--color--accent-1, #FFEE58);
 }
 
 .blockera-block.blockera-block-1 .wp-block-button > .wp-element-button:hover {
-	color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-2, #F6CFF4);
-	background-color: var(u002du002dwpu002du002dpresetu002du002dcoloru002du002daccent-1, #FFEE58);
+	color: var(--wp--preset--color--accent-2, #F6CFF4);
+	background-color: var(--wp--preset--color--accent-1, #FFEE58);
 }
 
 .blockera-block.blockera-block-2.wp-block-button .wp-block-button__link {
