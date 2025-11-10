@@ -101,7 +101,7 @@ return [
 	'blockeraCustomCSS'                 => [
 		'type'    => 'object',
 		'default' => [
-			'value' => ".block {\n    \n}\n",
+			'value' => "& {\n    \n}\n",
 		],
 	],
 	// Effects.
