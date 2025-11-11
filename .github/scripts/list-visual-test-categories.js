@@ -40,6 +40,11 @@ const main = () => {
 		categories.add('general');
 	}
 
+	const baseFiles = getFiles('tests', /\/[\w-]+\.visual\.cy\.js/);
+	if (baseFiles.length) {
+		categories.add('general');
+	}
+
 	// sort the categories
 	let sortedCategories = Array.from(categories).sort();
 
