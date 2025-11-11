@@ -159,6 +159,7 @@
 		gap: 2px;
 		align-items: center;
 		flex-direction: row-reverse;
+		z-index: 11; // fix value addon pointer overlap issue
 	}
 }
 

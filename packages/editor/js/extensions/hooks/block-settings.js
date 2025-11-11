@@ -385,7 +385,12 @@ function mergeBlockSettings(
 						continue;
 					}
 
-					if ('rich-text' === overrideAttributes[attribute]?.type) {
+					// If the attribute is a rich text or has source, it is ignored.
+					// We should not changed them cross the block type.
+					if (
+						'rich-text' === overrideAttributes[attribute]?.type ||
+						overrideAttributes[attribute]?.source
+					) {
 						ignoredAttributes.push(attribute);
 					}
 				}
