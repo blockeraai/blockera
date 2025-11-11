@@ -1,0 +1,108 @@
+
+p.blockera-block.blockera-block-1 {
+	background-color: #ffe7e7;
+	font-weight: 1000;
+	font-style: normal;
+	font-size: calc(30px);
+}
+
+p.blockera-block.blockera-block-2 {
+	background-color: #ffe5e5;
+	padding-top: calc(100px);
+	margin-top: calc(100px);
+}
+
+p.blockera-block.blockera-block-3 {
+	background-color: #ffd3d3;
+	width: calc(100px);
+}
+
+p.blockera-block.blockera-block-4 {
+	background-color: #d8e0ff;
+}
+
+.blockera-block.blockera-block-4 .has-inline-color {
+	background-color: #5577ff;
+	color: #ffffff;
+}
+
+p.blockera-block.blockera-block-5 {
+	background-color: var(--wp--preset--color--accent-3, #503AA8);
+	color: var(--wp--preset--color--base, #FFFFFF);
+}
+
+.blockera-block.blockera-block-5 .has-inline-color.has-contrast-color {
+	background-color: #FFEE58;
+}
+
+p.blockera-block.blockera-block-6 {
+	background-color: var(--wp--preset--color--accent-3, #503AA8);
+	color: var(--wp--preset--color--base, #FFFFFF);
+}
+
+p.blockera-block.blockera-block-7 {
+	background-color: #d8e0ff;
+}
+
+p.blockera-block.blockera-block-8 {
+	background-color: #d8e0ff;
+}
+
+p.blockera-block.blockera-block-9 {
+	background-color: #d8e0ff;
+}
+
+p.blockera-block.blockera-block-10 {
+	background-color: #d8e0ff;
+}
+
+p.blockera-block.blockera-block-11 {
+	background-color: #d8e0ff;
+	color: #ff8989;
+}
+
+.blockera-block.blockera-block-11 a:not(.wp-element-button) {
+	color: #f62525;
+	text-transform: uppercase;
+}
+
+p.blockera-block.blockera-block-12 {
+	background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+}
+
+.blockera-block.blockera-block-12 .has-inline-color {
+	background-color: #dfdfdf;
+}
+
+.blockera-block.blockera-block-12 a:not(.wp-element-button) {
+	background-color: #cccccc;
+}
+
+.blockera-block.blockera-block-12 :is(strong, b) {
+	color: #ff6c6c;
+}
+
+.blockera-block.blockera-block-12 :is(em, i) {
+	color: #6cff6c;
+}
+
+.blockera-block.blockera-block-12 kbd {
+	color: #6c6cff;
+}
+
+.blockera-block.blockera-block-12 code {
+	color: #ff6cff;
+}
+
+.blockera-block.blockera-block-12 span {
+	color: #6cff6c;
+}
+
+p.blockera-block.blockera-block-13 {
+	background-color: #f3f3f3;
+}
+
+.blockera-block.blockera-block-13 .has-inline-color {
+	background-color: #dfdfdf;
+}
