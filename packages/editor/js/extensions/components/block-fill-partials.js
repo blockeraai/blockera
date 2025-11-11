@@ -29,6 +29,7 @@ import { useGlobalStylesPanelContext } from '../../canvas-editor/components/bloc
 const excludedControls = ['canvas-editor'];
 
 export const BlockFillPartials: ComponentType<any> = ({
+	props,
 	notice,
 	clientId,
 	isActive,
@@ -235,7 +236,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 			{insideBlockInspector && isActive && (
 				<Fill name={`blockera-block-edit-content-${clientId}`}>
 					<BlockEditComponent
-						{...{ ...blockProps, insideBlockInspector }}
+						{...{ ...blockProps, ...props, insideBlockInspector }}
 						availableStates={
 							isInnerBlock(currentBlock)
 								? availableInnerStates
@@ -250,7 +251,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 				isActive && (
 					<Fill name={`blockera-block-edit-content-${clientId}`}>
 						<BlockEditComponent
-							{...{ ...blockProps, insideBlockInspector }}
+							{...{
+								...blockProps,
+								...props,
+								insideBlockInspector,
+							}}
 							availableStates={
 								isInnerBlock(currentBlock)
 									? availableInnerStates
