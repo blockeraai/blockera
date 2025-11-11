@@ -51,3 +51,35 @@
 
 
 }
+
+.blockera-block.blockera-block-3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	border-radius: 20px;
+	width: 300px;
+	aspect-ratio: 4/3;
+	object-fit: cover;
+}
+
+.blockera-block.blockera-block-3.wp-block-image {
+	margin-bottom: 24px;
+}
+
+.blockera-block.blockera-block-3 figcaption {
+	color: #ff0101;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	width: 200px;
+	aspect-ratio: 1;
+}
+
+
+}
+
+p.blockera-block.blockera-block-4 {
+	background-color: #d8e0ff;
+}
+
+.blockera-block.blockera-block-4 .wp-image-30 {
+	width: 100px;
+}
