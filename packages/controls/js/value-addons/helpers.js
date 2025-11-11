@@ -216,7 +216,6 @@ export function getValueAddonRealValue(value: ValueAddon | string): any {
 			}
 
 			if (currentValue && currentVar) {
-				// console.log('currentValue', currentValue);
 				// If the value already starts with var({$value['settings']['var']}), return it as is
 				if (
 					typeof currentValue === 'string' &&
