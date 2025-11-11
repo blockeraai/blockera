@@ -138,12 +138,12 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
 
         if (is_string($value)) {
 			// If the value ends with 'func', return the value without the 'func' suffix.
-			if( substr($value, -4) === 'func' ) {
+			if ( 'func' === substr($value, -4) ) {
 				return substr($value, 0, -4);
 			}
 
 			// If the value is '0px', return '0'.
-			if( $value === '0px' ) {
+			if ( '0px' === $value ) {
 				return '0';
 			}
 
