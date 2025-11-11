@@ -32,8 +32,9 @@ import type {
 	TStates,
 } from '../extensions/libs/block-card/block-states/types';
 import { appendBlockeraPrefix } from './utils';
-import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
+import { isBlock } from '../extensions/libs/block-card/inner-blocks/utils';
+import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 
 const appendStyles = ({
 	settings,
@@ -83,6 +84,58 @@ export const getComputedCssProps = ({
 		params.defaultAttributes
 	);
 
+	const updateBlockSelectors = (currentBlock: string): Object => {
+		if (!isBlock({ name: currentBlock })) {
+			return selectors;
+		}
+
+		const { getBlockType } = select('core/blocks') || {};
+		const { selectors: currentBlockSelectors } = getBlockType(
+			currentBlock
+		) || {
+			selectors: {},
+		};
+
+		if (!currentBlockSelectors.hasOwnProperty('root')) {
+			selectors = {
+				...selectors,
+				// $FlowFixMe
+				[currentBlock]: {
+					...(selectors?.[currentBlock] || {}),
+					root:
+						'.wp-block-' +
+						currentBlock.replace('core/', '').replace('/', '-'),
+				},
+			};
+		}
+
+		for (const supportId in currentBlockSelectors) {
+			if ('root' === supportId) {
+				selectors = {
+					...selectors,
+					// $FlowFixMe
+					[currentBlock]: {
+						...(selectors?.[currentBlock] || {}),
+						root: currentBlockSelectors[supportId],
+					},
+				};
+				continue;
+			}
+			if (!selectors?.[currentBlock]?.[supportId]) {
+				selectors = {
+					...selectors,
+					// $FlowFixMe
+					[currentBlock]: {
+						...(selectors?.[currentBlock] || {}),
+						[supportId]: currentBlockSelectors[supportId],
+					},
+				};
+			}
+		}
+
+		return selectors;
+	};
+
 	states.forEach((state: TStates | string): void => {
 		const calculatedProps = {
 			...params,
@@ -107,6 +160,7 @@ export const getComputedCssProps = ({
 					continue;
 				}
 
+				selectors = updateBlockSelectors(blockType);
 				const breakpoints = stateItem.breakpoints;
 
 				const {
@@ -118,7 +172,9 @@ export const getComputedCssProps = ({
 
 				let currentStateHasSelectors = false;
 				let calculatedSelectors =
-					selectors[appendBlockeraPrefix(blockType)] || {};
+					selectors[appendBlockeraPrefix(blockType)] ||
+					selectors[blockType] ||
+					{};
 
 				if (
 					!isNormalState(stateType) &&
@@ -211,6 +267,8 @@ export const getComputedCssProps = ({
 				return;
 			}
 
+			selectors = updateBlockSelectors(blockType);
+
 			generateCssStyleForInnerBlocksInPseudoStates({
 				blockType,
 				attributes,
@@ -224,7 +282,9 @@ export const getComputedCssProps = ({
 						state: 'normal',
 						masterState,
 						selectors:
-							selectors[appendBlockeraPrefix(blockType)] || {},
+							selectors[appendBlockeraPrefix(blockType)] ||
+							selectors[blockType] ||
+							{},
 						attributes: {
 							...defaultAttributes,
 							...attributes,

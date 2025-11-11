@@ -213,10 +213,10 @@ export const BlockBase: ComponentType<any> = (
 	const [state, setState] = useState(blockAttributes);
 	const attributesRef = useRef(blockAttributes);
 
-	const setAttributes = (value: any) => {
+	const setAttributes = useCallback((value: any) => {
 		attributesRef.current = value;
 		setState(value);
-	};
+	}, []);
 
 	useEffect(() => {
 		if (
@@ -414,6 +414,52 @@ export const BlockBase: ComponentType<any> = (
 		activeDeviceType: getDeviceType(),
 	};
 
+	const blockProps = useMemo(
+		() => ({
+			// Sending props like exactly "edit" function props of WordPress Block.
+			// Because needs total block props in outside overriding component like "blockera" in overriding process.
+			name,
+			clientId,
+			supports,
+			className,
+			additional,
+			currentTab,
+			currentBlock,
+			currentState,
+			setCurrentTab,
+			setAttributes,
+			currentAttributes,
+			defaultAttributes,
+			currentBreakpoint,
+			blockeraInnerBlocks,
+			currentInnerBlockState,
+			handleOnChangeAttributes,
+			attributes: sanitizedAttributes,
+			currentStateAttributes: currentAttributes,
+			activeBlockVariation: activeBlockVariation?.name || '',
+		}),
+		[
+			name,
+			clientId,
+			supports,
+			className,
+			additional,
+			currentTab,
+			currentBlock,
+			currentState,
+			setAttributes,
+			setCurrentTab,
+			defaultAttributes,
+			currentAttributes,
+			currentBreakpoint,
+			sanitizedAttributes,
+			blockeraInnerBlocks,
+			activeBlockVariation,
+			currentInnerBlockState,
+			handleOnChangeAttributes,
+		]
+	);
+
 	return (
 		<BlockEditContextProvider
 			{...{
@@ -465,10 +511,12 @@ export const BlockBase: ComponentType<any> = (
 						<BlockPartials clientId={clientId} />
 						<BlockFillPartials
 							{...{
+								props,
 								notice,
 								clientId,
 								isActive,
 								setActive,
+								blockProps,
 								currentState,
 								currentBlock,
 								availableStates,
@@ -480,31 +528,6 @@ export const BlockBase: ComponentType<any> = (
 								insideBlockInspector,
 								currentInnerBlockState,
 								updateBlockEditorSettings,
-								blockProps: {
-									// Sending props like exactly "edit" function props of WordPress Block.
-									// Because needs total block props in outside overriding component like "blockera" in overriding process.
-									name,
-									activeBlockVariation:
-										activeBlockVariation?.name || '',
-									clientId,
-									supports,
-									className,
-									attributes: sanitizedAttributes,
-									setAttributes,
-									defaultAttributes,
-									currentAttributes,
-									currentTab,
-									currentBlock,
-									currentState,
-									setCurrentTab,
-									currentBreakpoint,
-									blockeraInnerBlocks,
-									currentInnerBlockState,
-									handleOnChangeAttributes,
-									additional,
-									currentStateAttributes: currentAttributes,
-									...props,
-								},
 							}}
 						/>
 					</SlotFillProvider>
@@ -516,10 +539,12 @@ export const BlockBase: ComponentType<any> = (
 					<BlockPartials clientId={clientId} />
 					<BlockFillPartials
 						{...{
+							props,
 							notice,
 							clientId,
 							isActive,
 							setActive,
+							blockProps,
 							currentState,
 							currentBlock,
 							availableStates,
@@ -531,31 +556,6 @@ export const BlockBase: ComponentType<any> = (
 							insideBlockInspector,
 							currentInnerBlockState,
 							updateBlockEditorSettings,
-							blockProps: {
-								// Sending props like exactly "edit" function props of WordPress Block.
-								// Because needs total block props in outside overriding component like "blockera" in overriding process.
-								name,
-								activeBlockVariation:
-									activeBlockVariation?.name || '',
-								clientId,
-								supports,
-								className,
-								attributes: sanitizedAttributes,
-								setAttributes,
-								defaultAttributes,
-								currentAttributes,
-								currentTab,
-								currentBlock,
-								currentState,
-								setCurrentTab,
-								currentBreakpoint,
-								blockeraInnerBlocks,
-								currentInnerBlockState,
-								handleOnChangeAttributes,
-								additional,
-								currentStateAttributes: currentAttributes,
-								...props,
-							},
 						}}
 					/>
 				</SlotFillProvider>
