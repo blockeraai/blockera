@@ -2,58 +2,58 @@
 p.blockera-block.blockera-block--1 {
 	background-color: #fed7d7;
 	position: relative;
-	top: 0px;
+	top: 0;
 }
 
 p.blockera-block.blockera-block--2 {
 	background-color: #fed7d7;
 	position: relative;
-	right: 0px;
+	right: 0;
 }
 
 p.blockera-block.blockera-block--3 {
 	background-color: #fed7d7;
 	position: relative;
-	bottom: 0px;
+	bottom: 0;
 }
 
 p.blockera-block.blockera-block--4 {
 	background-color: #fed7d7;
 	position: relative;
-	left: 0px;
+	left: 0;
 }
 
 p.blockera-block.blockera-block--5 {
 	background-color: #ff9696;
 	position: relative;
-	top: 0px;
-	right: 0px;
-	bottom: 0px;
-	left: 0px;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
 }
 
 p.blockera-block.blockera-block--6 {
 	background-color: #ffbfbf;
 	position: absolute;
-	top: 0px;
+	top: 0;
 }
 
 p.blockera-block.blockera-block--7 {
 	background-color: #ffbfbf;
 	position: absolute;
-	right: 0px;
+	right: 0;
 }
 
 p.blockera-block.blockera-block--8 {
 	background-color: #ff7171;
 	position: absolute;
-	bottom: 0px;
+	bottom: 0;
 }
 
 p.blockera-block.blockera-block--9 {
 	background-color: #ff9696;
 	position: absolute;
-	left: 0px;
+	left: 0;
 }
 
 p.blockera-block.blockera-block--10 {
@@ -63,6 +63,6 @@ p.blockera-block.blockera-block--10 {
 p.blockera-block.blockera-block--11 {
 	background-color: #ff9696;
 	position: relative;
-	top: 0px;
+	top: 0;
 	z-index: 20;
 }

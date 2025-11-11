@@ -356,7 +356,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
@@ -505,14 +505,14 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.eq(0)
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.get('.wp-block-group.blockera-block p')
 				.eq(1)
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
@@ -530,14 +530,14 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.eq(2)
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-end');
 
 			cy.get('.wp-block-group.blockera-block p')
 				.eq(3)
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-end');
@@ -623,14 +623,14 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.first()
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
@@ -716,14 +716,14 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.first()
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
 
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px')
+				.should('have.css', 'margin-block-start', '0')
 				.should('not.have.css', 'flex-direction', 'column')
 				.should('not.have.css', 'align-items', 'flex-start')
 				.should('not.have.css', 'justify-content', 'flex-start');
@@ -797,7 +797,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0');
 		});
 
 		it('Unlocked gap - the css property should be gap', () => {
@@ -869,7 +869,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			//
 			cy.get('.wp-block-group.blockera-block p')
 				.last()
-				.should('have.css', 'margin-block-start', '0px');
+				.should('have.css', 'margin-block-start', '0');
 		});
 	});
 });

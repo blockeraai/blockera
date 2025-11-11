@@ -11,7 +11,7 @@
 
 .blockera-block.blockera-block-2.wp-block-group {
 	background-color: #95aaff;
-	box-shadow: 15px 15px 0px 0px #5577ff;
+	box-shadow: 15px 15px 0 0 #5577ff;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -43,10 +43,10 @@
 
 .blockera-block.blockera-block-3.wp-block-heading {
 	background-color: #5577ff;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 	color: #000000;
 	font-size: 16px;
 }
@@ -54,10 +54,10 @@
 p.blockera-block.blockera-block-4 {
 	background-color: #5577ff;
 	min-width: 550px;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 	font-weight: 700;
 	font-style: normal;
 	color: #000000;
@@ -65,7 +65,7 @@ p.blockera-block.blockera-block-4 {
 	line-height: 0.9;
 	text-decoration: none;
 	text-transform: none;
-	letter-spacing: 0px;
+	letter-spacing: 0;
 }
 
 @media screen and (max-width: 478px) {
@@ -87,10 +87,10 @@ p.blockera-block.blockera-block-5 {
 	flex-direction: column;
 	gap: 3vw;
 	flex-wrap: nowrap !important;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 }
 
 .blockera-block.blockera-block-6.wp-block-group.is-layout-constrained > * + * {
@@ -263,7 +263,7 @@ p.blockera-block.blockera-block-17 {
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	margin-left: 0px !important;
+	margin-left: 0 !important;
 }
 
 .blockera-block.blockera-block-18.wp-block-group {
@@ -298,18 +298,18 @@ p.blockera-block.blockera-block-17 {
 
 p.blockera-block.blockera-block-19 {
 	background-color: #021c99;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 }
 
 p.blockera-block.blockera-block-20 {
 	background-color: #021c99;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 }
 
 p.blockera-block.blockera-block-21 {
