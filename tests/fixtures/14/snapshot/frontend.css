@@ -9,27 +9,27 @@
 	color: #ff4141;
 }
 
-.blockera-block.blockera-block-1 h1.wp-block-heading {
+.blockera-block.blockera-block-1 h1:is(h1.wp-block-heading) {
 	color: #00ff0d;
 }
 
-.blockera-block.blockera-block-1 h2.wp-block-heading {
+.blockera-block.blockera-block-1 h2:is(h2.wp-block-heading) {
 	color: #ffc800;
 }
 
-.blockera-block.blockera-block-1 h3.wp-block-heading {
+.blockera-block.blockera-block-1 h3:is(h3.wp-block-heading) {
 	color: #00ff44;
 }
 
-.blockera-block.blockera-block-1 h4.wp-block-heading {
+.blockera-block.blockera-block-1 h4:is(h4.wp-block-heading) {
 	color: #00d6ff;
 }
 
-.blockera-block.blockera-block-1 h5.wp-block-heading {
+.blockera-block.blockera-block-1 h5:is(h5.wp-block-heading) {
 	color: #001cff;
 }
 
-.blockera-block.blockera-block-1 h6.wp-block-heading {
+.blockera-block.blockera-block-1 h6:is(h6.wp-block-heading) {
 	color: #ff0099;
 }
 
@@ -61,27 +61,27 @@
 	background-color: #ff3180;
 }
 
-.blockera-block.blockera-block-1 h1.wp-block-heading:hover {
+.blockera-block.blockera-block-1 h1:is(h1.wp-block-heading):hover {
 	color: #00d90b;
 }
 
-.blockera-block.blockera-block-1 h2.wp-block-heading:hover {
+.blockera-block.blockera-block-1 h2:is(h2.wp-block-heading):hover {
 	color: #c29800;
 }
 
-.blockera-block.blockera-block-1 h3.wp-block-heading:hover {
+.blockera-block.blockera-block-1 h3:is(h3.wp-block-heading):hover {
 	color: #00c936;
 }
 
-.blockera-block.blockera-block-1 h4.wp-block-heading:hover {
+.blockera-block.blockera-block-1 h4:is(h4.wp-block-heading):hover {
 	color: #00a9cb;
 }
 
-.blockera-block.blockera-block-1 h5.wp-block-heading:hover {
+.blockera-block.blockera-block-1 h5:is(h5.wp-block-heading):hover {
 	color: #0017c7;
 }
 
-.blockera-block.blockera-block-1 h6.wp-block-heading:hover {
+.blockera-block.blockera-block-1 h6:is(h6.wp-block-heading):hover {
 	color: #b7006e;
 }
 
