@@ -447,16 +447,15 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		if (blockera_is_inner_block($args['block-type']) && $args['block-type'] !== $args['block-name'] && blockera_is_valid_block_type($args['block-type'])) {
 
-			$additional_selectors = blockera_get_block_type($args['block-type'])->selectors;
+			$additional_selectors     = blockera_get_block_type($args['block-type'])->selectors;
+			$additional_root_selector = $additional_selectors['root'] ?? '';
+
+			if (empty($additional_root_selector)) {
+
+				$additional_root_selector = blockera_generate_block_root_selector($args['block-type']);
+			}
 
 			if (! empty($additional_selectors)) {
-
-				$additional_root_selector = $additional_selectors['root'] ?? '';
-
-				if (empty($additional_root_selector)) {
-
-					$additional_root_selector = blockera_generate_block_root_selector($args['block-type']);
-				}
 
 				$additional_selectors['root'] = $additional_root_selector;
 
@@ -466,15 +465,19 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 						$args['block-type'] => $additional_selectors,
 					]
                 );
+			} else {
+				$selectors[ $args['block-type'] ] = [
+					'root' => $additional_root_selector,
+				];
+			}
 
-				if (isset($additional_selectors[ $feature_id ])) {
-					$feature_id = [
-						$args['block-type'],
-						$feature_id,
-					];
-				} else {
-					$feature_id = $args['block-type'];
-				}
+			if (isset($additional_selectors[ $feature_id ])) {
+				$feature_id = [
+					$args['block-type'],
+					$feature_id,
+				];
+			} else {
+				$feature_id = $args['block-type'];
 			}
 		}
 
