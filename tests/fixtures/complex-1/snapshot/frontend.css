@@ -85,64 +85,12 @@
 
 }
 
-@media screen and (min-width: 1920px) {
-	p.blockera-block.blockera-block--2::before {
+p.blockera-block.blockera-block--2::before {
 	content: "Simple Overrided";
-}
-
-
 }
 
 p.blockera-block.blockera-block--3::before {
 	background-color: #c79c00;
 	color: #f1f1f1;
 	content: "Advanced Overrided";
-}
-
-@media screen and (max-width: 991px) {
-	p.blockera-block.blockera-block--3::before {
-	content: "Advanced Overrided";
-}
-
-
-}
-
-@media screen and (max-width: 767px) {
-	p.blockera-block.blockera-block--3::before {
-	content: "Advanced Overrided";
-}
-
-
-}
-
-@media screen and (max-width: 478px) {
-	p.blockera-block.blockera-block--3::before {
-	content: "Advanced Overrided";
-}
-
-
-}
-
-@media screen and (min-width: 1280px) {
-	p.blockera-block.blockera-block--3::before {
-	content: "Advanced Overrided";
-}
-
-
-}
-
-@media screen and (min-width: 1440px) {
-	p.blockera-block.blockera-block--3::before {
-	content: "Advanced Overrided";
-}
-
-
-}
-
-@media screen and (min-width: 1920px) {
-	p.blockera-block.blockera-block--3::before {
-	content: "Advanced Overrided";
-}
-
-
 }
