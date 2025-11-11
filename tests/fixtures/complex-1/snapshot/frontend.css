@@ -34,7 +34,7 @@
 	font-size: 15px;
 }
 
-.blockera-block.blockera-block--1 .wp-block-group {
+.blockera-block.blockera-block--1 .wp-block-code {
 	background-color: #39d92e;
 }
 
@@ -65,7 +65,7 @@
 	background-color: #db9999;
 }
 
-.blockera-block.blockera-block--1 .wp-block-group:hover {
+.blockera-block.blockera-block--1 .wp-block-code:hover {
 	background-color: #20b316;
 }
 
