@@ -264,16 +264,20 @@ describe('Buttons Block', () => {
 		// there is no ; at the end of the rule
 		expectedCSS = '.wp-block-button__link{text-decoration:inherit';
 
-		if (enabledOptimizeStyleGeneration) {
-			cy.get('style#blockera-inline-css')
-				.invoke('text')
-				.then((styleContent) => {
+		//Check block
+		cy.get('link[id="blockera-blocks-core-buttons-style-css"]')
+			.should('exist')
+			.then(($link) => {
+				// Fetch the CSS file content
+				cy.request($link.attr('href')).then((response) => {
+					const styleContent = response.body;
+
 					cy.normalizeCSSContent(styleContent).then(
 						(normalizedContent) => {
 							expect(normalizedContent).to.include(expectedCSS);
 						}
 					);
 				});
-		}
+			});
 	});
 });
