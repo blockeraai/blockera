@@ -6,7 +6,7 @@ p.blockera-block.blockera-block--1 {
 
 p.blockera-block.blockera-block--2 {
 	background-color: #fed7d7;
-	transform: perspective(20px) translate3d(10px, 10px, 0px);
+	transform: perspective(20px) translate3d(10px, 10px, 0);
 	transform-origin: 0% 0%;
 	backface-visibility: hidden;
 	perspective: 20px;
@@ -15,7 +15,7 @@ p.blockera-block.blockera-block--2 {
 
 p.blockera-block.blockera-block--3 {
 	background-color: #fed7d7;
-	transform: translate3d(10px, 10px, 0px);
+	transform: translate3d(10px, 10px, 0);
 }
 
 p.blockera-block.blockera-block--4 {
@@ -35,7 +35,7 @@ p.blockera-block.blockera-block--6 {
 
 p.blockera-block.blockera-block--7 {
 	background-color: #f88e8f;
-	transform: translate3d(20px, 70px, 0px) scale3d(120%, 120%, 50%) rotateX(50deg) rotateY(15deg) rotateZ(0deg);
+	transform: translate3d(20px, 70px, 0) scale3d(120%, 120%, 50%) rotateX(50deg) rotateY(15deg) rotateZ(0deg);
 	position: relative;
 	z-index: 100;
 	width: 250px;

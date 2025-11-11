@@ -55,14 +55,14 @@ class Spacing extends BaseStyleDefinition {
 		$declaration = array_merge(
 			...array_map(
 				static function ( string $item, string $property ): array {
-					return [ "padding-{$property}" => blockera_get_value_addon_real_value( $item ) ];
+					return [ "padding-{$property}" => $item ];
 				},
 				$padding,
 				array_keys( $padding )
 			),
 			...array_map(
 				static function ( string $item, string $property ): array {
-					$value = blockera_get_value_addon_real_value( $item );
+					$value = $item;
 					$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
 
 					// Add !important only to margin-left and margin-right
@@ -84,7 +84,7 @@ class Spacing extends BaseStyleDefinition {
 
 	private function filteredItems( string $item ): bool {
 
-		return ! empty( $item );
+		return $item !== '';
 	}
 
 }
