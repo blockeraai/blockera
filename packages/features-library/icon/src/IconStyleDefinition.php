@@ -29,7 +29,7 @@ class IconStyleDefinition extends BaseStyleDefinition {
 
 		switch ($cssProperty) {
 			case '--blockera--icon--url':				
-				$svg = $value['renderedIcon'];
+				$svg = isset($value['renderedIcon']) ?? '';
 
 				if (! empty($svg)) {
 					$decoded_svg = base64_decode($svg);
