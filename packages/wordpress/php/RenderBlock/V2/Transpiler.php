@@ -337,6 +337,13 @@ class Transpiler {
 			$this->force_add_inline_styles($inline_styles);
 		}
 
+		$attributes = $args['block']['attrs'] ?? [];
+
+		// If custom css is set, add it to the block css.
+		if (! empty($attributes['blockeraCustomCSS']['value'])) {
+			$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $selector, $attributes['blockeraCustomCSS']['value']);
+		}
+
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
     }
