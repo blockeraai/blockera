@@ -877,6 +877,10 @@ export const registerCommands = () => {
 		if (!reset) {
 			cy.getByAriaLabel('Close Settings').click();
 
+			cy.get(
+				'body.is-fullscreen-mode .interface-interface-skeleton'
+			).invoke('css', 'top', '0');
+			cy.get('#wpbody').invoke('css', 'padding-top', '0');
 			cy.get('#wpadminbar').invoke('css', 'display', 'none');
 
 			cy.get(
@@ -893,6 +897,9 @@ export const registerCommands = () => {
 		} else {
 			cy.setScreenshotViewport('desktop');
 
+			cy.get(
+				'body.is-fullscreen-mode .interface-interface-skeleton'
+			).invoke('css', 'top', '32px');
 			cy.get('#wpadminbar').invoke('css', 'display', 'flex');
 
 			cy.get(

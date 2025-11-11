@@ -84,7 +84,7 @@ describe('Background Color → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'background-color: var(--wp--preset--color--accent-4)'
+					'background-color: var(--wp--preset--color--accent-4, #686868)'
 				);
 		});
 
@@ -95,7 +95,7 @@ describe('Background Color → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'background-color: var(--wp--preset--color--accent-4)'
+				'background-color: var(--wp--preset--color--accent-4, #686868)'
 			);
 	});
 });

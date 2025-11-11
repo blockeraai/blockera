@@ -40,7 +40,7 @@ describe('Max Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'max-height', '200px');
+		cy.get('p.blockera-block').should('have.css', 'max-height', '200px');
 	});
 
 	it('variable value', () => {
@@ -61,7 +61,7 @@ describe('Max Height → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'max-height: var(--wp--style--global--content-size)'
+					'max-height: var(--wp--style--global--content-size, 645px)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Max Height → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'max-height: var(--wp--style--global--content-size)'
+				'max-height: var(--wp--style--global--content-size, 645px)'
 			);
 	});
 });

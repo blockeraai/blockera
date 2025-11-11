@@ -190,25 +190,50 @@ export function getValueAddonRealValue(value: ValueAddon | string): any {
 				value?.settings?.id
 			);
 
+			let currentValue = '';
+			let currentVar = '';
+
 			//
-			// use current saved value if variable was not found
+			// use current saved value
+			//
+			if (!isUndefined(variable?.value) && variable?.value) {
+				currentValue = variable.value;
+			}
+
+			//
+			// use saved value if current value is not set
 			//
 			if (
-				isUndefined(variable?.value) &&
+				!currentValue &&
 				!isUndefined(value.settings.value) &&
-				value.settings.value !== ''
+				value.settings.value
 			) {
-				return value.settings.value;
+				currentValue = value.settings.value;
 			}
 
-			if (
-				isUndefined(value?.settings?.var) ||
-				value?.settings?.var === ''
-			) {
-				return '';
+			if (!isUndefined(value?.settings?.var) && value?.settings?.var) {
+				currentVar = value.settings.var;
 			}
 
-			return `var(${value?.settings?.var})`;
+			if (currentValue && currentVar) {
+				// If the value already starts with var({$value['settings']['var']}), return it as is
+				if (
+					typeof currentValue === 'string' &&
+					currentValue.startsWith(`var(${currentVar}`)
+				) {
+					return currentValue;
+				}
+
+				return `var(${currentVar}, ${currentValue})`;
+			}
+
+			if (currentValue) {
+				return currentValue;
+			}
+
+			if (currentVar) {
+				return `var(${currentVar})`;
+			}
 		}
 
 		return ''; // return empty string because there is no real string value

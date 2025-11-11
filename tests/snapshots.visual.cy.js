@@ -2,28 +2,45 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	setInnerBlock,
-	deSelectBlock,
-	setParentBlock,
-	addBlockToPost,
-	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
  */
-import section1 from './fixtures/section-1.html';
-import section2 from './fixtures/section-2.html';
-import section3 from './fixtures/section-3.html';
-import section4 from './fixtures/section-4.html';
+const sectionsContext = require.context(
+	'../tests/fixtures',
+	true,
+	/input\.html$/
+);
 
-const sections = {
-	'section-1': section1,
-	'section-2': section2,
-	'section-3': section3,
-	'section-4': section4,
-};
+const sections = sectionsContext
+	.keys()
+	.map((key) => {
+		const matches = key.match(/^\.\/([^/]+)\/input\.html$/);
+
+		if (!matches) {
+			return null;
+		}
+
+		const sectionId = matches[1];
+		const sectionContent = sectionsContext(key);
+
+		if (!sectionContent) {
+			return null;
+		}
+
+		return [sectionId, sectionContent];
+	})
+	.filter(Boolean)
+	.reduce((accumulator, [sectionId, sectionContent]) => {
+		accumulator[sectionId] = sectionContent;
+		return accumulator;
+	}, {});
+
+// sections = {
+// 	12: sections['12'],
+// };
 
 describe('Sections design with Style Engine', () => {
 	beforeEach(() => {
@@ -46,19 +63,23 @@ describe('Sections design with Style Engine', () => {
 
 			cy.prepareEditorForScreenshot();
 
+			// wait to make sure images loaded and content is ready
+			cy.wait(1000); // eslint-disable-line cypress/no-unnecessary-waiting
+
 			// Editor Desktop Snapshot
+			cy.getIframeBody().find('.is-root-container').scrollIntoView();
+
 			cy.getIframeBody()
-				.find('.is-root-container > *:first-child')
-				.scrollIntoView()
+				.find('.is-root-container')
 				.compareSnapshot({
-					name: section + '-editor-desktop',
+					name: 'test-' + section + '-editor-desktop',
 					threshold: 0.02,
 				})
 				.then(
 					() => {},
 					(error) => {
 						failures.push({
-							name: section + '-editor-desktop',
+							name: 'test-' + section + '-editor-desktop',
 							error: error.message,
 						});
 					}
@@ -67,18 +88,19 @@ describe('Sections design with Style Engine', () => {
 			cy.setScreenshotViewport('mobile');
 
 			// Editor Mobile Snapshot
+			cy.getIframeBody().find('.is-root-container').scrollIntoView();
+
 			cy.getIframeBody()
-				.find('.is-root-container > *:first-child')
-				.scrollIntoView()
+				.find('.is-root-container')
 				.compareSnapshot({
-					name: section + '-editor-mobile',
+					name: 'test-' + section + '-editor-mobile',
 					threshold: 0.02,
 				})
 				.then(
 					() => {},
 					(error) => {
 						failures.push({
-							name: section + '-editor-mobile',
+							name: 'test-' + section + '-editor-mobile',
 							error: error.message,
 						});
 					}
@@ -91,21 +113,25 @@ describe('Sections design with Style Engine', () => {
 			redirectToFrontPage();
 			cy.prepareFrontendForScreenshot();
 
+			// wait to make sure images loaded and content is ready
+			cy.wait(500); // eslint-disable-line cypress/no-unnecessary-waiting
+
 			cy.setScreenshotViewport('desktop');
 
 			// Frontend Desktop Snapshot
-			cy.get('.entry-content > *:first-child')
+			cy.get('.entry-content').first().scrollIntoView();
+
+			cy.get('.entry-content')
 				.first()
-				.scrollIntoView()
 				.compareSnapshot({
-					name: section + '-frontend-desktop',
+					name: 'test-' + section + '-frontend-desktop',
 					threshold: 0.02,
 				})
 				.then(
 					() => {},
 					(error) => {
 						failures.push({
-							name: section + '-frontend-desktop',
+							name: 'test-' + section + '-frontend-desktop',
 							error: error.message,
 						});
 					}
@@ -114,18 +140,19 @@ describe('Sections design with Style Engine', () => {
 			cy.setScreenshotViewport('mobile');
 
 			// Frontend Mobile Snapshot
-			cy.get('.entry-content > *:first-child')
+			cy.get('.entry-content').first().scrollIntoView();
+
+			cy.get('.entry-content')
 				.first()
-				.scrollIntoView()
 				.compareSnapshot({
-					name: section + '-frontend-mobile',
+					name: 'test-' + section + '-frontend-mobile',
 					threshold: 0.02,
 				})
 				.then(
 					() => {},
 					(error) => {
 						failures.push({
-							name: section + '-frontend-mobile',
+							name: 'test-' + section + '-frontend-mobile',
 							error: error.message,
 						});
 					}

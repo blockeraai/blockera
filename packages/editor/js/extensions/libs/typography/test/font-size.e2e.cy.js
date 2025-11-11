@@ -53,7 +53,7 @@ describe('Font Size → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'font-size: var(--wp--preset--font-size--small)'
+					'font-size: var(--wp--preset--font-size--small, 0.875rem)'
 				);
 		});
 
@@ -87,7 +87,7 @@ describe('Font Size → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'font-size: var(--wp--preset--font-size--small)'
+				'font-size: var(--wp--preset--font-size--small, 0.875rem)'
 			);
 	});
 });

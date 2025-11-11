@@ -40,7 +40,7 @@ describe('Min Height → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'min-height', '10px');
+		cy.get('p.blockera-block').should('have.css', 'min-height', '10px');
 	});
 
 	it('variable value', () => {
@@ -61,7 +61,7 @@ describe('Min Height → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'min-height: var(--wp--style--global--content-size)'
+					'min-height: var(--wp--style--global--content-size, 645px)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Min Height → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'min-height: var(--wp--style--global--content-size)'
+				'min-height: var(--wp--style--global--content-size, 645px)'
 			);
 	});
 });

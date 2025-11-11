@@ -1,0 +1,317 @@
+
+.blockera-block.blockera-block-1.wp-block-group {
+	background-color: #d8e0ff;
+	display: default;
+	margin-block-start: 30px !important;
+	padding-top: 6vw;
+	padding-right: 6vw;
+	padding-bottom: 6vw;
+	padding-left: 6vw;
+}
+
+.blockera-block.blockera-block-2.wp-block-group {
+	background-color: #95aaff;
+	box-shadow: 15px 15px 0px 0px #5577ff;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	gap: 20px;
+	flex-wrap: nowrap !important;
+	padding-top: 20px;
+	padding-right: 30px;
+	padding-bottom: 20px;
+	padding-left: 30px;
+}
+
+.blockera-block.blockera-block-2.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}
+
+.blockera-block.blockera-block-2 p {
+	text-transform: lowercase;
+	font-weight: 800;
+	font-style: normal;
+	color: #000000;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	background-color: #5577ff;
+	min-width: 100%;
+}
+
+.blockera-block.blockera-block-3.wp-block-heading {
+	background-color: #5577ff;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	color: #000000;
+	font-size: 16px;
+}
+
+p.blockera-block.blockera-block-4 {
+	background-color: #5577ff;
+	min-width: 550px;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	font-weight: 700;
+	font-style: normal;
+	color: #000000;
+	font-size: 2em;
+	line-height: 0.9;
+	text-decoration: none;
+	text-transform: none;
+	letter-spacing: 0px;
+}
+
+@media screen and (max-width: 478px) {
+	p.blockera-block.blockera-block-4 {
+	min-width: fit-content;
+	font-size: 1em;
+}
+
+
+}
+
+p.blockera-block.blockera-block-5 {
+	box-sizing: border-box;
+}
+
+.blockera-block.blockera-block-6.wp-block-group {
+	background-color: #95aaff;
+	display: flex;
+	flex-direction: column;
+	gap: 3vw;
+	flex-wrap: nowrap !important;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+
+.blockera-block.blockera-block-6.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}
+
+.blockera-block.blockera-block-7.wp-block-group {
+	background-color: #5577ff;
+	border-top-left-radius: 50px;
+	border-top-right-radius: 50px;
+	align-self: stretch;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	flex-wrap: nowrap !important;
+	overflow: hidden;
+	padding-bottom: 20px;
+}
+
+.blockera-block.blockera-block-7.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-7.wp-block-group {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+}
+
+.blockera-block.blockera-block-8.wp-block-group {
+	background-color: #213fbe;
+	display: flex;
+	flex-direction: column;
+	padding-top: 50px;
+	padding-right: 30px;
+	padding-bottom: 50px;
+	padding-left: 30px;
+}
+
+p.blockera-block.blockera-block-9 {
+	font-weight: 700;
+	font-style: normal;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-9 a:not(.wp-element-button) {
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-10.wp-block-group {
+	background-color: #213fbe;
+	border-top: 5px solid #99a4d0;
+	border-right: 10px solid #00946c;
+	border-bottom: 5px solid #4159c5;
+	border-left: 10px solid #940078;
+	display: flex;
+	flex-direction: column;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+p.blockera-block.blockera-block-11 {
+	font-weight: 700;
+	font-style: normal;
+	color: #ffffff;
+	text-decoration: line-through;
+}
+
+.blockera-block.blockera-block-11 a:not(.wp-element-button) {
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-12.wp-block-group {
+	background-color: #213fbe;
+	border-radius: 15px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 30%;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+p.blockera-block.blockera-block-13 {
+	font-weight: 700;
+	font-style: normal;
+	color: #ffffff;
+	text-transform: uppercase;
+	word-spacing: 20px;
+}
+
+.blockera-block.blockera-block-13 a:not(.wp-element-button) {
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-14.wp-block-group {
+	background-color: #213fbe;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	margin-right: 50px !important;
+	font-weight: 1000;
+	font-style: normal;
+	color: #2ed445;
+	font-size: 30px;
+	line-height: 2.1;
+	text-decoration: line-through;
+	text-transform: uppercase;
+	letter-spacing: 10px;
+}
+
+.blockera-block.blockera-block-14 a:not(.wp-element-button) {
+	color: #2ed445;
+}
+
+p.blockera-block.blockera-block-15 {
+	font-weight: 700;
+	font-style: normal;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-15 a:not(.wp-element-button) {
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-16.wp-block-group {
+	background-color: #5577ff;
+	align-self: stretch;
+	display: default;
+	margin-block-start: 30px !important;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-16 p {
+	background-color: #213fbe;
+	font-size: 30px;
+	font-weight: 700;
+	font-style: normal;
+	color: #ffffff;
+	text-transform: uppercase;
+	text-decoration: line-through;
+	letter-spacing: 2px;
+	word-spacing: 20px;
+	text-align: center;
+	width: 50%;
+}
+
+p.blockera-block.blockera-block-17 {
+	background-color: #001c99;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	margin-left: 0px !important;
+}
+
+.blockera-block.blockera-block-18.wp-block-group {
+	background-color: #213fbe;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 50px;
+	flex-wrap: nowrap !important;
+	width: 100%;
+}
+
+.blockera-block.blockera-block-18.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}
+
+.blockera-block.blockera-block-18 p {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-18.wp-block-group {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+}
+
+p.blockera-block.blockera-block-19 {
+	background-color: #021c99;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+
+p.blockera-block.blockera-block-20 {
+	background-color: #021c99;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+
+p.blockera-block.blockera-block-21 {
+	background-color: #5577ff;
+}

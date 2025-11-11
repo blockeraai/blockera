@@ -398,7 +398,7 @@ describe('Border → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'border: 5px solid var(--wp--preset--color--contrast)'
+						'border: 5px solid var(--wp--preset--color--contrast, #111111)'
 					);
 			});
 
@@ -437,7 +437,7 @@ describe('Border → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'border: 5px solid var(--wp--preset--color--contrast)'
+					'border: 5px solid var(--wp--preset--color--contrast, #111111)'
 				);
 		});
 
@@ -461,7 +461,7 @@ describe('Border → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'border: 5px solid var(--wp--preset--color--contrast)'
+						'border: 5px solid var(--wp--preset--color--contrast, #111111)'
 					);
 			});
 
@@ -544,7 +544,7 @@ describe('Border → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'border-top: 1px solid var(--wp--preset--color--contrast)'
+						'border-top: 1px solid var(--wp--preset--color--contrast, #111111)'
 					);
 			});
 
@@ -616,7 +616,7 @@ describe('Border → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'border-right: 2px dashed var(--wp--preset--color--contrast)'
+						'border-right: 2px dashed var(--wp--preset--color--contrast, #111111)'
 					);
 			});
 
@@ -707,7 +707,7 @@ describe('Border → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'border-bottom: 3px dotted var(--wp--preset--color--contrast)'
+						'border-bottom: 3px dotted var(--wp--preset--color--contrast, #111111)'
 					);
 			});
 
@@ -817,7 +817,7 @@ describe('Border → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'border-left: 4px double var(--wp--preset--color--contrast)'
+						'border-left: 4px double var(--wp--preset--color--contrast, #111111)'
 					);
 			});
 
@@ -917,19 +917,19 @@ describe('Border → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'border-top: 1px solid var(--wp--preset--color--contrast)'
+					'border-top: 1px solid var(--wp--preset--color--contrast, #111111)'
 				)
 				.and(
 					'include',
-					'border-right: 2px dashed var(--wp--preset--color--contrast)'
+					'border-right: 2px dashed var(--wp--preset--color--contrast, #111111)'
 				)
 				.and(
 					'include',
-					'border-bottom: 3px dotted var(--wp--preset--color--contrast)'
+					'border-bottom: 3px dotted var(--wp--preset--color--contrast, #111111)'
 				)
 				.and(
 					'include',
-					'border-left: 4px double var(--wp--preset--color--contrast)'
+					'border-left: 4px double var(--wp--preset--color--contrast, #111111)'
 				);
 		});
 	});

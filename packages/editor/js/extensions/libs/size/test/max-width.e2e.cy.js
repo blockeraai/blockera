@@ -40,7 +40,7 @@ describe('Max Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'max-width', '200px');
+		cy.get('p.blockera-block').should('have.css', 'max-width', '200px');
 	});
 
 	it('variable value', () => {
@@ -61,7 +61,7 @@ describe('Max Width → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'max-width: var(--wp--style--global--content-size)'
+					'max-width: var(--wp--style--global--content-size, 645px)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Max Width → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'max-width: var(--wp--style--global--content-size)'
+				'max-width: var(--wp--style--global--content-size, 645px)'
 			);
 	});
 });
