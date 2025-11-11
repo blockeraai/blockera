@@ -104,7 +104,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 	});
 
 	context('Variable Value', () => {
-		it.only('should update gap correctly, when add data', () => {
+		it('should update gap correctly, when add data', () => {
 			cy.getParentContainer('Gap').within(() => {
 				cy.openValueAddon();
 			});
