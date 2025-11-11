@@ -40,7 +40,7 @@ describe('Min Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'min-width', '10px');
+		cy.get('p.blockera-block').should('have.css', 'min-width', '10px');
 	});
 
 	it('variable value', () => {
@@ -61,7 +61,7 @@ describe('Min Width → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'min-width: var(--wp--style--global--content-size)'
+					'min-width: var(--wp--style--global--content-size, 645px)'
 				);
 		});
 
@@ -93,7 +93,7 @@ describe('Min Width → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'min-width: var(--wp--style--global--content-size)'
+				'min-width: var(--wp--style--global--content-size, 645px)'
 			);
 	});
 });

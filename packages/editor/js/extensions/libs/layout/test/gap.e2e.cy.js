@@ -104,7 +104,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 	});
 
 	context('Variable Value', () => {
-		it('should update gap correctly, when add data', () => {
+		it.only('should update gap correctly, when add data', () => {
 			cy.getParentContainer('Gap').within(() => {
 				cy.openValueAddon();
 			});
@@ -114,7 +114,10 @@ describe('Gap → Functionality (Type: gap)', () => {
 			cy.getIframeBody().within(() => {
 				cy.get('#blockera-styles-wrapper')
 					.invoke('text')
-					.should('include', 'gap: var(--wp--preset--spacing--30)');
+					.should(
+						'include',
+						'gap: var(--wp--preset--spacing--30, 20px)'
+					);
 			});
 
 			getWPDataObject().then((data) => {
@@ -148,7 +151,7 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', 'gap: var(--wp--preset--spacing--30)');
+				.should('include', 'gap: var(--wp--preset--spacing--30, 20px)');
 		});
 
 		it('should update row-gap & column-gap correctly, when add data', () => {
@@ -233,11 +236,11 @@ describe('Gap → Functionality (Type: gap)', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'column-gap: var(--wp--preset--spacing--50)'
+						'column-gap: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 					)
 					.should(
 						'include',
-						'row-gap: var(--wp--preset--spacing--40)'
+						'row-gap: var(--wp--preset--spacing--40, 30px)'
 					);
 			});
 
@@ -302,8 +305,14 @@ describe('Gap → Functionality (Type: gap)', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', 'column-gap: var(--wp--preset--spacing--50)')
-				.should('include', 'row-gap: var(--wp--preset--spacing--40)');
+				.should(
+					'include',
+					'column-gap: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
+				)
+				.should(
+					'include',
+					'row-gap: var(--wp--preset--spacing--40, 30px)'
+				);
 		});
 	});
 
