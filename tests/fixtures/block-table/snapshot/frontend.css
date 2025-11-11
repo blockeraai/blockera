@@ -1,0 +1,79 @@
+
+.blockera-block.blockera-block-1.wp-block-table > table {
+	background-color: #ffe1e1;
+}
+
+.blockera-block.blockera-block-1 .has-background.has-fixed-layout {
+	background-color: #ffe1e1;
+}
+
+.blockera-block.blockera-block-1.wp-block-table {
+	width: 100%;
+	min-width: 100px;
+	max-width: 400px !important;
+}
+
+.blockera-block.blockera-block-1.wp-block-table > table:hover {
+	background-color: #ff3939;
+}
+
+.blockera-block.blockera-block-1.wp-block-table:hover {
+	width: 50%;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table {
+	background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+}
+
+.blockera-block.blockera-block-2 .has-inline-color {
+	color: #ffcaca;
+}
+
+.blockera-block.blockera-block-2.wp-block-table {
+	padding-top: 50px;
+}
+
+.blockera-block.blockera-block-2.wp-block-table .wp-element-caption {
+	background-color: #FFC7C7;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table thead th {
+	background-color: #808080;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table tbody td {
+	background-color: #909090;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table tfoot td {
+	background-color: #a0a0a0;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table :is(strong, b) {
+	background-color: #ff0000;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table :is(em, i) {
+	background-color: #ff8800;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table kbd {
+	background-color: #4ed739;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table code {
+	background-color: #00c8ff;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table span {
+	background-color: #6f00ff;
+}
+
+.blockera-block.blockera-block-2.wp-block-table > table mark {
+	background-color: #0022ff;
+}
+
+.blockera-block.blockera-block-2.wp-block-table:hover {
+	padding-top: 100px;
+}

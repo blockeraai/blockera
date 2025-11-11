@@ -13,6 +13,12 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// Features selectors.
+				'blockeraBoxSpacing' => '.wp-block-table',
+				'blockeraWidth' => '.wp-block-table',
+				'blockeraMinWidth' => '.wp-block-table',
+				'blockeraMaxWidth' => '.wp-block-table',
+				// Inner blocks selectors.
 				'blockera/elements/caption' => [
 					'root' => '&& .wp-element-caption',
 				],
