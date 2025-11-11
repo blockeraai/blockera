@@ -7,6 +7,9 @@ import {
 	getEditedGlobalStylesRecord,
 } from '@blockera/dev-cypress/js/helpers';
 
+const consoleErrors = [];
+const failures = [];
+
 describe('Style Variations Inside Global Styles Panel → Functionality', () => {
 	const before = () => {
 		cy.openGlobalStylesPanel();
@@ -53,6 +56,13 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 
 	it('should be able to clear customizations from specific style variation', () => {
 		cy.getByDataTest('style-section-1').click();
+
+		// Track console errors
+		cy.on('window:before:load', (win) => {
+			cy.stub(win.console, 'error').callsFake((...args) => {
+				consoleErrors.push(args.join(' '));
+			});
+		});
 
 		cy.setScreenshotViewport('desktop');
 
@@ -146,6 +156,13 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 	it('should be able to rename specific style variation', () => {
 		cy.getByDataTest('style-section-1').click();
 
+		// Track console errors
+		cy.on('window:before:load', (win) => {
+			cy.stub(win.console, 'error').callsFake((...args) => {
+				consoleErrors.push(args.join(' '));
+			});
+		});
+
 		cy.setScreenshotViewport('desktop');
 
 		cy.compareSnapshot({
@@ -184,6 +201,13 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 
 	it('should be able to rename with new ID specific style variation', () => {
 		cy.getByDataTest('style-section-1').click();
+
+		// Track console errors
+		cy.on('window:before:load', (win) => {
+			cy.stub(win.console, 'error').callsFake((...args) => {
+				consoleErrors.push(args.join(' '));
+			});
+		});
 
 		cy.setScreenshotViewport('desktop');
 
@@ -227,6 +251,13 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 
 	it('should be able to Active/Inactive specific style variation', () => {
 		cy.getByDataTest('open-new-id-contextmenu').eq(0).click();
+
+		// Track console errors
+		cy.on('window:before:load', (win) => {
+			cy.stub(win.console, 'error').callsFake((...args) => {
+				consoleErrors.push(args.join(' '));
+			});
+		});
 
 		cy.setScreenshotViewport('desktop');
 
@@ -318,6 +349,13 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 	it('should be able to delete specific style variation', () => {
 		cy.getByDataTest('open-new-id-contextmenu').eq(0).click();
 
+		// Track console errors
+		cy.on('window:before:load', (win) => {
+			cy.stub(win.console, 'error').callsFake((...args) => {
+				consoleErrors.push(args.join(' '));
+			});
+		});
+
 		cy.setScreenshotViewport('desktop');
 
 		cy.compareSnapshot({
@@ -382,6 +420,14 @@ describe('Style Variations Inside Global Styles Panel → Functionality', () => 
 	after(() => {
 		// After all snapshots, check if any failed and throw combined error
 		cy.then(() => {
+			if (consoleErrors.length > 0) {
+				const errorMessage = consoleErrors
+					.map((e, i) => `\n${i + 1}. ${e}`)
+					.join('\n');
+				throw new Error(
+					`${consoleErrors.length} console error(s):${errorMessage}`
+				);
+			}
 			if (failures.length > 0) {
 				const errorMessage = failures
 					.map((f, i) => `\n${i + 1}. ${f.name}:\n   ${f.error}`)
