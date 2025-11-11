@@ -328,12 +328,12 @@ export const LayoutStyles = ({
 
 		switch (gapType) {
 			case 'margin':
-				gapSuffixClass = '> * + *';
+				gapSuffixClass = '.is-layout-constrained > * + *';
 				break;
 
 			case 'gap-and-margin':
 				if (!['flex', 'grid'].includes(_attributes.blockeraDisplay)) {
-					gapSuffixClass = '> * + *';
+					gapSuffixClass = '.is-layout-constrained > * + *';
 				}
 				break;
 		}
