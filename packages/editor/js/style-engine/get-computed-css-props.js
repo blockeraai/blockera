@@ -172,8 +172,8 @@ export const getComputedCssProps = ({
 
 				let currentStateHasSelectors = false;
 				let calculatedSelectors =
-					selectors[blockType] ||
 					selectors[appendBlockeraPrefix(blockType)] ||
+					selectors[blockType] ||
 					{};
 
 				if (
@@ -282,8 +282,8 @@ export const getComputedCssProps = ({
 						state: 'normal',
 						masterState,
 						selectors:
-							selectors[blockType] ||
 							selectors[appendBlockeraPrefix(blockType)] ||
+							selectors[blockType] ||
 							{},
 						attributes: {
 							...defaultAttributes,
