@@ -215,20 +215,24 @@ export function getValueAddonRealValue(value: ValueAddon | string): any {
 				currentVar = value.settings.var;
 			}
 
-			if (currentValue !== '' && currentVar !== '') {
+			if (currentValue && currentVar) {
+				// console.log('currentValue', currentValue);
 				// If the value already starts with var({$value['settings']['var']}), return it as is
-				if (currentValue.startsWith(`var(${currentVar}`)) {
+				if (
+					typeof currentValue === 'string' &&
+					currentValue.startsWith(`var(${currentVar}`)
+				) {
 					return currentValue;
 				}
 
 				return `var(${currentVar}, ${currentValue})`;
 			}
 
-			if (currentValue !== '') {
+			if (currentValue) {
 				return currentValue;
 			}
 
-			if (currentVar !== '') {
+			if (currentVar) {
 				return `var(${currentVar})`;
 			}
 		}
