@@ -279,7 +279,7 @@ final class StyleEngine {
 								];
 							}
 
-							$breakpoints = blockera_get_array_deep_merge($this->breakpoints, $stateSettings['breakpoints']);
+							$breakpoints = $this->prepareBreakpointsSettings($stateSettings['breakpoints']);
 
 							return array_map(
                                 function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {
@@ -308,6 +308,30 @@ final class StyleEngine {
 		unset($settings['blockeraBlockStates'], $settings['blockeraPropsId'], $settings['blockeraCompatId']);
 
 		return $this->prepareBreakpointStyles($this->breakpoint, $settings);
+	}
+
+	/**
+	 * Prepare breakpoints settings.
+	 *
+	 * @param array $breakpoints The breakpoints settings.
+	 *
+	 * @return array The prepared breakpoints settings.
+	 */
+	protected function prepareBreakpointsSettings( array $breakpoints ): array {
+
+		if (empty($breakpoints)) {
+
+			return [];
+		}
+
+		$available_breakpoints = array_intersect(array_keys($this->breakpoints), array_keys($breakpoints));
+
+		return array_filter(
+			blockera_get_array_deep_merge($this->breakpoints, $breakpoints),
+			function ( $breakpoint) use ( $available_breakpoints): bool {
+				return in_array($breakpoint['type'], $available_breakpoints, true);
+			}
+		);
 	}
 
 	/**
