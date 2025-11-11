@@ -526,7 +526,7 @@ describe('Columns Block', () => {
 		cy.get('.blockera-block.wp-block-columns').within(() => {
 			cy.get('.wp-block-column')
 				.first()
-				.should('have.css', 'margin-block-start', '0');
+				.should('have.css', 'margin-block-start', '0px');
 		});
 	});
 });
