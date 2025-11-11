@@ -180,7 +180,7 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
 				'' !== $value['settings']['value'] && 
 				'var(' . $value['settings']['var'] . ')' !== $value['settings']['value']) {
 
-					// If the value already starts with var({$value['settings']['var']}, return it as is
+					// If the value already starts with var({$value['settings']['var']}, return it as is.
 					if (str_starts_with($value['settings']['value'], "var({$value['settings']['var']}")) {
 						return $value['settings']['value'];
 					}
