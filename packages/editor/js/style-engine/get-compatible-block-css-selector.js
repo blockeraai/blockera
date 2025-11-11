@@ -149,12 +149,12 @@ export const getNormalizedSelector = (
 		customizedPseudoClasses,
 		currentStateHasSelectors,
 	} = options;
-	let parsedSelectors = [selector];
+	let parsedSelectors = selector.split(',');
 	// Check if selector starts with a pseudo-class (e.g., :hover, :focus, ::before)
 	const startsWithPseudoClass = /^::?[a-z-]+/.test(selector.trim());
 
 	if (startsWithPseudoClass) {
-		parsedSelectors = selector.split(',');
+		parsedSelectors = [selector];
 	}
 
 	const { getState, getInnerState: _getInnerState } =
