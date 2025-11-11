@@ -59,3 +59,10 @@ p.blockera-block.blockera-block--9 {
 p.blockera-block.blockera-block--10 {
 	background-color: #fed7d7;
 }
+
+p.blockera-block.blockera-block--11 {
+	background-color: #ff9696;
+	position: relative;
+	top: 0px;
+	z-index: 20;
+}
