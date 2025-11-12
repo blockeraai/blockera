@@ -92,8 +92,8 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
 				'className' => 'blockera-block blockera-block-test',
 			],
 			'innerBlocks' => [],
-			'innerHTML' => '\n<h2 class=\"blockera-block blockera-block-test wp-block-heading\">Test heading<\/h2>\n',
-			'innerContent' => ["\n<h2 class=\"blockera-block blockera-block-test wp-block-heading\">Test heading<\/h2>\n"]
+			'innerHTML' => '<h2 class="blockera-block blockera-block-test wp-block-heading">Test heading</h2>',
+			'innerContent' => ['<h2 class="blockera-block blockera-block-test wp-block-heading">Test heading</h2>']
         ];
 
         \WP_Mock::userFunction('wp_doing_ajax')->andReturn(false);
@@ -105,7 +105,7 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
 		$supports = blockera_get_available_block_supports();
         $result = $this->renderContent->renderBlock($block['innerHTML'], $block, $supports);
 
-        $this->assertEquals('\n<h2 class=\"blockera-block blockera-block-test wp-block-heading\">Test heading<\/h2>\n', $result);
+        $this->assertEquals('<h2 class="blockera-block blockera-block-test wp-block-heading">Test heading</h2>', $result);
     }
 
     public function testThePostsWithEmptyPosts(): void
