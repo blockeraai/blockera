@@ -95,7 +95,7 @@ p.blockera-block.blockera-block-12 {
 	color: #ff6cff;
 }
 
-.blockera-block.blockera-block-12 span {
+.blockera-block.blockera-block-12 span:not([data-rich-text-placeholder]) {
 	color: #6cff6c;
 }
 

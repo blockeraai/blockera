@@ -50,11 +50,11 @@
 	background-color: #004cff;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span {
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:not([data-rich-text-placeholder]) {
 	background-color: #cf00fe;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link mark {
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(mark, mark[class]) {
 	background-color: #ff0090;
 }
 
@@ -74,10 +74,10 @@
 	background-color: #0031a3;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:hover {
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:not([data-rich-text-placeholder]):hover {
 	background-color: #9100b1;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link mark:hover {
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(mark, mark[class]):hover {
 	background-color: #9d0059;
 }

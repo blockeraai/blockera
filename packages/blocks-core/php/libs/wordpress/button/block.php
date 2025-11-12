@@ -26,10 +26,10 @@ return array_merge(
 					'root' => 'code',
 				],
 				'blockera/elements/span' => [
-					'root' => 'span',
+					'root' => 'span:not([data-rich-text-placeholder])',
 				],
 				'blockera/elements/mark' => [
-					'root' => 'mark',
+					'root' => ':is(mark,mark[class])',
 				],
 				'blockera/elements/icon' => [
 					'root' => 'svg',
