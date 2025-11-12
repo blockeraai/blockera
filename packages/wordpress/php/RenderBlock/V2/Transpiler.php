@@ -28,7 +28,21 @@ class Transpiler {
      * @var array
      */
     protected array $parsed_blocks = [];
+	
+	/**
+	 * Store current block.
+	 *
+	 * @var array
+	 */
+	protected array $current_block = [];
 
+	/**
+	 * Store allowed inner block flag.
+	 *
+	 * @var boolean
+	 */
+	protected bool $is_allowed_inner = false;
+	
     /**
      * Cache instance.
      *
@@ -143,6 +157,8 @@ class Transpiler {
 
 		for ($i = 0; $i < count($this->parsed_blocks); $i++) {
 
+			$this->current_block = $this->parsed_blocks[ $i ];
+
 			$this->processBlockContent($i, $this->parsed_blocks[ $i ], compact('supports'));
 		}
     }
@@ -163,6 +179,11 @@ class Transpiler {
         }
 		
 		foreach ($blocks as $inner_key => $inner_block) {
+			$attributes     = $inner_block['attrs'];
+			$has_attributes = (bool) ( $attributes['blockeraPropsId'] ?? '' );
+
+			$content = implode('', $inner_block['innerContent']);
+
 			// Process inner block content.
 			$this->processBlockContent(
 				$inner_key,
@@ -176,7 +197,9 @@ class Transpiler {
 							],
 						]
                     ),
+					'is_inner' => true,
 					'supports' => $args['supports'],
+					'force_process' => ( empty($attributes) && str_contains($content, 'style="') ) || $has_attributes,
 				]
 			);
 		}
@@ -210,12 +233,21 @@ class Transpiler {
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
-		// Process only valid blocks and supported blocks and not dynamic blocks.
-		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) ) {
+		$is_inner      = ! empty($args['is_inner']);
+		$invalid_inner = empty($args['force_process']);
+
+		$is_allowed = $is_inner && ! $invalid_inner && in_array($block, $this->current_block['innerBlocks'], true);
+
+		// Process only valid, supported, and not dynamic blocks or one of items in parent block inners list.
+		if ($this->isValidBlock( $block ) && blockera_is_supported_block($block) || $is_allowed) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent)) {
 					continue;
+				}
+
+				if (! $invalid_inner && $is_inner) {
+					$this->is_allowed_inner = true;
 				}
 
 				$this->cleanupProcess(
@@ -228,13 +260,10 @@ class Transpiler {
 						'block_path' => $args['block_path'] ?? [],
 						'unique_class_name' => $unique_class_name,
 						'blockera_class_name' => $blockera_class_name,
+						'force-process' => $args['force-process'] ?? false,
+						'permitted_inner' => ! $invalid_inner && $is_inner,
 					]
 				);
-
-				// If custom css is set, add it to the block css stack.
-				if (! empty($block['attrs']['blockeraCustomCSS']['value']) && ! in_array($block['attrs']['blockeraCustomCSS']['value'], $this->styles, true)) {
-					$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $block['attrs']['blockeraCustomCSS']['value']);
-				}
 			}
 		}
 
@@ -265,7 +294,7 @@ class Transpiler {
             $class = $processor->get_attribute('class');
 
 			// Skip if the class contains 'be-transpiled', because it shows that the block is already transpiled.
-			if ($class && str_contains($class, 'be-transpiled')) {
+			if ($class && str_contains($class, 'be-transpiled') || ( ! $this->is_allowed_inner && ! $args['permitted_inner'] && $args['block'] !== $this->current_block )) {
 
 				return;
 			}

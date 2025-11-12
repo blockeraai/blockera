@@ -183,9 +183,6 @@ class Render {
 		// Get blockera block unique css classname.
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
 
-        // Is need to update block HTML output?
-        $need_to_update_html = $this->needToUpdateHTML($html, $attributes['className'] ?? '', $block['innerHTML']);
-
         // Pushing block classname into stack.
         $this->setClassname($attributes['className'] ?? '');
 
@@ -196,7 +193,7 @@ class Render {
         // Get cache validate result.
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 		// Get normalized blockera block unique css classname.
-        $unique_class_name = blockera_get_normalized_selector($need_to_update_html ? $blockera_class_name : $attributes['className']);
+        $unique_class_name = blockera_get_normalized_selector($attributes['className'] ?? $blockera_class_name);
 
         // Validate cache data.
         if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
@@ -222,13 +219,7 @@ class Render {
             );
 
             // Render block with features.
-            if ($need_to_update_html) {
-
-                // Represent html string.
-                return $this->getUpdatedHTML($html, $cache_data['classname']);
-            }
-
-            return $html;
+            return $this->getUpdatedHTML($html, $cache_data['classname']);
         }
 
         /**
@@ -250,12 +241,8 @@ class Render {
         // Print css into inline style on "wp_head" action occur.
         blockera_add_inline_css($computed_css_rules);
 
-        if ($need_to_update_html) {
-
-            // Represent html string.
-            $html = $this->getUpdatedHTML($html, $blockera_class_name);
-        }
-
+		// Represent html string.
+        $html = $this->getUpdatedHTML($html, $blockera_class_name);
         // Render block with features.
         $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
@@ -263,7 +250,7 @@ class Render {
         $data = [
             'hash'      => $hash,
             'css'       => $computed_css_rules,
-            'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
+            'classname' => $attributes['className'] ?? $blockera_class_name,
         ];
 
 		if ($this->cache_status) {
@@ -281,11 +268,12 @@ class Render {
      *
 	 * @param string $html the block html output.
      * @param string $block_classname the block "className" attribute value.
-     * @param string $inner_html The block inner html output.
+	 * 
+	 * @deprecated 1.12.3 Remove this method in the future.
      *
      * @return bool true on success, false on otherwise.
      */
-    protected function needToUpdateHTML( string $html, string $block_classname, string $inner_html): bool {
+    protected function needToUpdateHTML( string $html, string $block_classname): bool {
 
         // Imagine the block classname and classnames property is empty, so we should update html output.
         if (empty($block_classname) && empty($this->classnames)) {
@@ -295,12 +283,6 @@ class Render {
 
         // Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
         if (preg_match($this->getUniqueClassnameRegex(), $block_classname, $matches)) {
-
-            // If inner html is empty, we should update html output.
-            if (empty(trim($inner_html))) {
-
-                return true;
-            }
 
 			if (! str_contains($html, $matches[0])) {
 
@@ -335,18 +317,19 @@ class Render {
 
             if (! empty($previous_class)) {
 
-                // Backward compatibility.
-                if (preg_match($regexp, $classname, $matches) && preg_match($regexp, $previous_class)) {
+				if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
 
-                    $final_classname = preg_replace($regexp, $matches[0], $previous_class);
+					$final_classname = $classname . ' ' . $previous_class;
+				} else {
 
-                } else {
-
-                    $final_classname = $classname . ' ' . $previous_class;
-                }
+					$final_classname = $previous_class;
+				}
             }
 
-            $processor->set_attribute('class', $final_classname ?? $classname);
+            if ($final_classname !== $classname) {
+
+				$processor->set_attribute('class', $final_classname);
+			}
 
 			// Remove style attribute if transpiling.
 			if ($this->is_doing_transpile) {

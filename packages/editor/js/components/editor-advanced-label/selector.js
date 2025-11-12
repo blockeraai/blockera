@@ -146,13 +146,13 @@ export const getStatesGraphNodes = (
 
 			if (
 				isInnerBlock(currentBlock) &&
-				state.breakpoints[breakpoint.type]?.attributes &&
-				state.breakpoints[breakpoint.type]?.attributes
-					?.blockeraInnerBlocks[currentBlock]
+				state?.breakpoints?.[breakpoint.type]?.attributes &&
+				state?.breakpoints?.[breakpoint.type]?.attributes
+					?.blockeraInnerBlocks?.[currentBlock]
 			) {
 				const currentAttributes =
-					state.breakpoints[breakpoint.type]?.attributes
-						?.blockeraInnerBlocks[currentBlock]?.attributes;
+					state.breakpoints[breakpoint.type].attributes
+						.blockeraInnerBlocks[currentBlock]?.attributes;
 
 				// $FlowFixMe
 				states.push({

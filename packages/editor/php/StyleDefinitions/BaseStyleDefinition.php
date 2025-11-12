@@ -667,10 +667,36 @@ abstract class BaseStyleDefinition {
 
 	/**
 	 * Get current breakpoint settings.
+	 * 
+	 * @param bool $is_inner_block The flag to determine if the current settings are for an inner block.
 	 *
 	 * @return array
 	 */
-	protected function getCurrentBreakpointSettings(): array {
+	protected function getCurrentBreakpointSettings( bool $is_inner_block = false): array {
+
+		if ($is_inner_block) {
+
+			$settings = $this->getCurrentInnerBlockSettings();
+
+			if (empty($settings['blockeraBlockStates']['value'])) {
+
+				return $settings;
+			}
+
+			$block_states = $settings['blockeraBlockStates']['value'] ?? [];
+
+			if (empty($block_states[ $this->pseudo_state ])) {
+
+				return [];
+			}
+
+			if (empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
+
+				return [];
+			}
+
+			return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+		}
 
 		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
 
@@ -690,6 +716,28 @@ abstract class BaseStyleDefinition {
 		}
 
 		return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+	}
+
+	/**
+	 * Get current inner block settings.
+	 *
+	 * @return array
+	 */
+	protected function getCurrentInnerBlockSettings(): array {
+
+		if (empty($this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ])) {
+
+			return [];
+		}
+		
+		$current_block = $this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ]['attributes'] ?? [];
+
+		if (empty($current_block)) {
+
+			return [];
+		}
+
+		return $current_block;
 	}
 
     /**
