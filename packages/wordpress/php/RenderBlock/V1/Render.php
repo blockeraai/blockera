@@ -183,9 +183,6 @@ class Render {
 		// Get blockera block unique css classname.
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
 
-        // Is need to update block HTML output?
-        $need_to_update_html = $this->needToUpdateHTML($html, $attributes['className'] ?? '');
-
         // Pushing block classname into stack.
         $this->setClassname($attributes['className'] ?? '');
 
@@ -196,7 +193,7 @@ class Render {
         // Get cache validate result.
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 		// Get normalized blockera block unique css classname.
-        $unique_class_name = blockera_get_normalized_selector($need_to_update_html ? $blockera_class_name : $attributes['className']);
+        $unique_class_name = blockera_get_normalized_selector($attributes['className'] ?? $blockera_class_name);
 
         // Validate cache data.
         if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
@@ -222,13 +219,7 @@ class Render {
             );
 
             // Render block with features.
-            if ($need_to_update_html) {
-
-                // Represent html string.
-                return $this->getUpdatedHTML($html, $cache_data['classname']);
-            }
-
-            return $html;
+            return $this->getUpdatedHTML($html, $cache_data['classname']);
         }
 
         /**
@@ -250,12 +241,8 @@ class Render {
         // Print css into inline style on "wp_head" action occur.
         blockera_add_inline_css($computed_css_rules);
 
-        if ($need_to_update_html) {
-
-            // Represent html string.
-            $html = $this->getUpdatedHTML($html, $blockera_class_name);
-        }
-
+		// Represent html string.
+        $html = $this->getUpdatedHTML($html, $blockera_class_name);
         // Render block with features.
         $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
@@ -263,7 +250,7 @@ class Render {
         $data = [
             'hash'      => $hash,
             'css'       => $computed_css_rules,
-            'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
+            'classname' => $attributes['className'] ?? $blockera_class_name,
         ];
 
 		if ($this->cache_status) {
@@ -281,6 +268,8 @@ class Render {
      *
 	 * @param string $html the block html output.
      * @param string $block_classname the block "className" attribute value.
+	 * 
+	 * @deprecated 1.12.3 Remove this method in the future.
      *
      * @return bool true on success, false on otherwise.
      */
