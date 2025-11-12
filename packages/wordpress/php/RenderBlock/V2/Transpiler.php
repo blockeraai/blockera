@@ -28,7 +28,14 @@ class Transpiler {
      * @var array
      */
     protected array $parsed_blocks = [];
-
+	
+	/**
+	 * Store current block.
+	 *
+	 * @var array
+	 */
+	protected array $current_block = [];
+	
     /**
      * Cache instance.
      *
@@ -143,6 +150,8 @@ class Transpiler {
 
 		for ($i = 0; $i < count($this->parsed_blocks); $i++) {
 
+			$this->current_block = $this->parsed_blocks[ $i ];
+
 			$this->processBlockContent($i, $this->parsed_blocks[ $i ], compact('supports'));
 		}
     }
@@ -177,6 +186,7 @@ class Transpiler {
 						]
                     ),
 					'supports' => $args['supports'],
+					'is-inner' => true,
 				]
 			);
 		}
@@ -210,8 +220,8 @@ class Transpiler {
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
-		// Process only valid blocks and supported blocks and not dynamic blocks.
-		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) ) {
+		// Process only valid, supported, and not dynamic blocks or one of items in parent block inners list.
+		if ( ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) ) || ( ! empty($args['is-inner']) && in_array($block, $this->current_block['innerBlocks'], true) ) ) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent)) {
