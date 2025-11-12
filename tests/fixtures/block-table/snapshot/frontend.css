@@ -66,11 +66,11 @@
 	background-color: #00c8ff;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table span {
+.blockera-block.blockera-block-2.wp-block-table > table span:not([data-rich-text-placeholder]) {
 	background-color: #6f00ff;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table mark {
+.blockera-block.blockera-block-2.wp-block-table > table :is(mark, mark[class]) {
 	background-color: #0022ff;
 }
 

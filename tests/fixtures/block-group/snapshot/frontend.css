@@ -53,11 +53,11 @@
 	background-color: #bffffa;
 }
 
-.blockera-block.blockera-block-1 span {
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
 	background-color: #e5baff;
 }
 
-.blockera-block.blockera-block-1 mark {
+.blockera-block.blockera-block-1 :is(mark, mark[class]) {
 	background-color: #ff3180;
 }
 
@@ -105,17 +105,18 @@
 	background-color: #7ac5bf;
 }
 
-.blockera-block.blockera-block-1 span:hover {
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]):hover {
 	background-color: #a770c9;
 }
 
-.blockera-block.blockera-block-1 mark:hover {
+.blockera-block.blockera-block-1 :is(mark, mark[class]):hover {
 	background-color: #c5004c;
 }
 
-.blockera-block.blockera-block-2yagm1 .has-inline-color {
-	background-color:#dfdfdf
+p.blockera-block.blockera-block-2 {
+	background-color: #00000024;
 }
 
-.blockera-block.blockera-block-2yagm1 {
+.blockera-block.blockera-block-2 .has-inline-color {
+	background-color: #dfdfdf;
 }

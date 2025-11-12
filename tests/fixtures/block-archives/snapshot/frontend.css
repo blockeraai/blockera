@@ -1,0 +1,65 @@
+.blockera-block.blockera-block-1.wp-block-archives {
+	background-color: #c5eba7;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1.wp-block-archives:hover {
+	background-color: #9bc77a;
+}
+.blockera-block.blockera-block-2.wp-block-archives {
+	background-color: #a7ebe9;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-2 a {
+	background-color: #00000038;
+	display: block;
+	padding-right: 20px;
+	padding-left: 20px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 li {
+	background-color: #0000002e;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 li::marker {
+	color: #a30000;
+}
+
+.blockera-block.blockera-block-2 li:hover {
+	background-color: #00000066;
+}
+
+.blockera-block.blockera-block-2 a:hover {
+	background-color: #0000005e;
+}
+
+.blockera-block.blockera-block-2:hover li::marker {
+	color: #00ff1e;
+}
+.blockera-block.blockera-block-3.wp-block-archives {
+	background-color: #a7ebe9;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-3 a {
+	background-color: #00000038;
+	display: block;
+	padding-right: 20px;
+	padding-left: 20px;
+}

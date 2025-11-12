@@ -53,6 +53,15 @@ describe('Accordion Panel Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'core/paragraph']);
 
+		cy.checkBlockStatesPickerItems([
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Block
 		//

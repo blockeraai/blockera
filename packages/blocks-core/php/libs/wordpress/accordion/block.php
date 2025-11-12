@@ -22,22 +22,22 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'blockera/states/open'      => [
-					'root' => ' .wp-block-accordion-item.is-open',
+					'root' => ' :where(.wp-block-accordion-item.is-open)',
 				], 
 				'blockera/states/close'      => [
-					'root' => ' .wp-block-accordion-item:not(.is-open)',
+					'root' => ' :where(.wp-block-accordion-item:not(.is-open))',
 				], 
 				'blockera/elements/items'      => [
-					'root' => '.wp-block-accordion-item',
+					'root' => ' :where(.wp-block-accordion-item)',
 				],
 				'blockera/elements/heading'      => [
-					'root' => '.wp-block-accordion-heading',
+					'root' => ' :where(.wp-block-accordion-heading)',
 				],
 				'blockera/elements/icon' => [
-					'root' => '.wp-block-accordion-heading__toggle-icon',
+					'root' => ' :where(.wp-block-accordion-heading__toggle-icon)',
 				],
 				'blockera/elements/panel'      => [
-					'root' => '.wp-block-accordion-panel',
+					'root' => ' :where(.wp-block-accordion-panel)',
 				],
 			],
 		),

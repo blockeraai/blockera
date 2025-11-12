@@ -27,6 +27,7 @@
 - `Column` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Columns` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Accordion Heading` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Accordion Panel` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Comment Content` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Post Excerpt` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Details` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
