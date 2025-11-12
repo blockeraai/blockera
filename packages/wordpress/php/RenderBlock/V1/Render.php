@@ -242,7 +242,8 @@ class Render {
         blockera_add_inline_css($computed_css_rules);
 
 		// Represent html string.
-        $html = $this->getUpdatedHTML($html, $blockera_class_name);
+        $html = $this->getUpdatedHTML($html, $unique_class_name);
+
         // Render block with features.
         $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
