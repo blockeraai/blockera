@@ -184,7 +184,7 @@ class Render {
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
 
         // Is need to update block HTML output?
-        $need_to_update_html = $this->needToUpdateHTML($html, $attributes['className'] ?? '', $block['innerHTML']);
+        $need_to_update_html = $this->needToUpdateHTML($html, $attributes['className'] ?? '');
 
         // Pushing block classname into stack.
         $this->setClassname($attributes['className'] ?? '');
@@ -281,11 +281,10 @@ class Render {
      *
 	 * @param string $html the block html output.
      * @param string $block_classname the block "className" attribute value.
-     * @param string $inner_html The block inner html output.
      *
      * @return bool true on success, false on otherwise.
      */
-    protected function needToUpdateHTML( string $html, string $block_classname, string $inner_html): bool {
+    protected function needToUpdateHTML( string $html, string $block_classname,): bool {
 
         // Imagine the block classname and classnames property is empty, so we should update html output.
         if (empty($block_classname) && empty($this->classnames)) {
@@ -295,12 +294,6 @@ class Render {
 
         // Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
         if (preg_match($this->getUniqueClassnameRegex(), $block_classname, $matches)) {
-
-            // If inner html is empty, we should update html output.
-            if (empty(trim($inner_html))) {
-
-                return true;
-            }
 
 			if (! str_contains($html, $matches[0])) {
 
@@ -335,18 +328,19 @@ class Render {
 
             if (! empty($previous_class)) {
 
-                // Backward compatibility.
-                if (preg_match($regexp, $classname, $matches) && preg_match($regexp, $previous_class)) {
+				if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
 
-                    $final_classname = preg_replace($regexp, $matches[0], $previous_class);
+					$final_classname = $classname . ' ' . $previous_class;
+				} else {
 
-                } else {
-
-                    $final_classname = $classname . ' ' . $previous_class;
-                }
+					$final_classname = $previous_class;
+				}
             }
 
-            $processor->set_attribute('class', $final_classname ?? $classname);
+            if ($final_classname !== $classname) {
+
+				$processor->set_attribute('class', $final_classname);
+			}
 
 			// Remove style attribute if transpiling.
 			if ($this->is_doing_transpile) {
