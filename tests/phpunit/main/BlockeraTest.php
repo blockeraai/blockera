@@ -119,6 +119,21 @@ class BlockeraTest extends AppTestCase {
 		]);
 
 		$this->go_to(get_permalink($post_id));
+
+		while(have_posts()) {
+			the_post();
+			
+			$blocks = parse_blocks(get_the_content());
+			$content = '';
+
+			foreach ($blocks as $block) {
+				if(!empty($block['innerContent'])){
+					continue;
+				}
+
+				$content .= render_block($block);
+			}
+		}
 		
 		$inline_css = apply_filters('blockera/front-page/print-inline-css-styles', '');
 
@@ -163,16 +178,22 @@ class BlockeraTest extends AppTestCase {
 
 		$this->go_to(get_permalink($post_id));
 
+		$blocks = [];
+
 		while(have_posts()) {
 			the_post();
-
-			get_the_content();
+			
+			$blocks = array_column(parse_blocks(get_the_content()), 'blockName');
 		}
 
-		$cache_key  = 'wp_styles_for_blocks';
-		$cached     = get_transient($cache_key);
+		$global_styles = '';
 
-		$global_styles = $cached['blocks']['core/paragraph'] ?? '';
+		foreach (array_filter(array_unique($blocks)) as $block) {
+			$cache_key  = 'wp_styles_for_blocks';
+			$cached     = get_transient($cache_key);
+
+			$global_styles .= $cached['blocks'][$block] ?? '';
+		}
 
 		$this->assertMatchesSnapshot(blockera_test_normalize_css($global_styles), new CssDriver());
 

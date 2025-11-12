@@ -1,0 +1,37 @@
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__label {
+	background-color: #fff1f1;
+	margin-bottom: 12px;
+	text-align: center;
+	border-radius: 72px;
+	height: 40px;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__input::placeholder {
+	color: #ff3838;
+}
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__input:focus {
+	margin-right: 20px !important;
+	border: 1px solid #ff4c4c;
+}
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__button {
+	background-color: #ff5c5c;
+}
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__input {
+	border: 1px solid #c3c3c3;
+}
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__button:hover {
+	background-color: #ff2222;
+}
+
+.blockera-block.blockera-block-6xp646 .wp-block-search__button:focus {
+	background-color: #b32e2e;
+}
