@@ -121,3 +121,109 @@ p.blockera-block.blockera-block-7 {
 .blockera-block.blockera-block-7 a:not(.wp-element-button) {
 	color: #7500ff;
 }
+
+.blockera-block.blockera-block-8.wp-block-accordion {
+	background-color: #ffe6e6;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-9.wp-block-accordion-item {
+	background-color: #ffffff;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.blockera-block.blockera-block-9 .wp-block-accordion-heading__toggle-icon {
+	color: #ff0202;
+}
+
+.blockera-block.blockera-block-10 .wp-block-accordion-heading__toggle {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-11.wp-block-accordion-panel {
+	background-color: #e8e8e8;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	margin-top: 0;
+}
+
+.blockera-block.blockera-block-12.wp-block-accordion-item {
+	background-color: #ffffff;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+.blockera-block.blockera-block-13 .wp-block-accordion-heading__toggle {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-14.wp-block-accordion-panel {
+	background-color: #e8e8e8;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	margin-top: 0;
+}
+
+.blockera-block.blockera-block-15.wp-block-accordion-item {
+	background-color: #d2e7ff;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-16 p {
+	background-color: #ffd7d7;
+	font-size: 20px;
+}
+
+.blockera-block.blockera-block-16 :is(strong, b) {
+	background-color: #f1c513;
+}
+
+.blockera-block.blockera-block-16 :is(em, i) {
+	background-color: #20db1a;
+}
+
+.blockera-block.blockera-block-16 kbd {
+	background-color: #1de1b6;
+}
+
+.blockera-block.blockera-block-16 code {
+	background-color: #301dff;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-16 span:not([data-rich-text-placeholder]) {
+	background-color: #a600ff;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-16 :is(mark, mark[class]) {
+	background-color: #ff0000;
+}
+
+p.blockera-block.blockera-block-17 {
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-17 .has-inline-color {
+	background-color: #dfdfdf;
+}
