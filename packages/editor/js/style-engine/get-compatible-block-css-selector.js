@@ -671,13 +671,13 @@ export function prepareBlockCssSelector(params: {
 			const fallbacks = union(
 				fallbackSupportId.map((supportId) =>
 					getBlockCSSSelector(blockType, supportId || 'root', {
-						fallback: true,
+						fallback: false,
 					})
 				)
 			);
 
 			fallbackSelector = fallbacks
-				.filter((selector: any): boolean => !isObject(selector))
+				.filter((selector: any): boolean => !isEmpty(selector))
 				.join(', ');
 		} else {
 			fallbackSelector = getBlockCSSSelector(

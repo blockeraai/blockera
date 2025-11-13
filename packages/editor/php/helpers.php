@@ -524,7 +524,23 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 			if (! $selector && $has_fallback) {
 
-				$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+				if ( is_array($args['fallback']) ) {
+					// Try to get the first fallback that is not empty.
+					foreach ($args['fallback'] as $fallback) {
+						$selector = wp_get_block_css_selector($cloned_block_type, $fallback, false);
+
+						if ($selector) {
+							break;
+						}
+					}
+				} else {
+					$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+				}
+
+				// If no fallback is found, try to get the feature id with fallback forced.
+				if (! $selector) {
+					$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, true);
+				}
 			}
 		}
 
