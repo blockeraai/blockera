@@ -21,6 +21,7 @@
 - `Search` block: improve support.
 - `Post Navigation Link` block: improve support.
 - `Image` block: `img/svg` inner block added.
+- `Audio` block: `caption` inner block added.
 - `Paragraph` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Button` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Buttons` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.

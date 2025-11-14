@@ -19,6 +19,7 @@ export { default as BlockAccordionItems } from './block-accordion-items.svg';
 export { default as BlockAccordionIcon } from './block-accordion-icon.svg';
 export { default as BlockAccordionHeading } from './block-accordion-heading.svg';
 export { default as BlockAccordionPanel } from './block-accordion-panel.svg';
+export { default as BlockAudioCaption } from './block-audio-caption.svg';
 export { default as BlockBlocksyAboutTexts } from './block-blocksy-about-texts.svg';
 export { default as BlockBlocksyAboutIcons } from './block-blocksy-about-icons.svg';
 export { default as BlockBlocksyAboutAvatar } from './block-blocksy-about-avatar.svg';
