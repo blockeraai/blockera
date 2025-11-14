@@ -22,6 +22,7 @@
 - `Post Navigation Link` block: improve support.
 - `Image` block: `img/svg` inner block added.
 - `Audio` block: `caption` inner block added.
+- `Embed` block: `caption` inner block added.
 - `Calendar` block: `Body → Link Cells` and `Link` inner blocks added.
 - `Paragraph` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Button` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
