@@ -1,0 +1,11 @@
+:root :where(.wp-block-code){
+	background-color: var(--wp--preset--color--accent-5);
+	color: var(--wp--preset--color--contrast);
+	font-family: var(--wp--preset--font-family--fira-code);
+	font-size: var(--wp--preset--font-size--medium);
+	font-weight: 300;
+	padding-top: var(--wp--preset--spacing--40);
+	padding-right: var(--wp--preset--spacing--40);
+	padding-bottom: var(--wp--preset--spacing--40);
+	padding-left: var(--wp--preset--spacing--40);
+}
