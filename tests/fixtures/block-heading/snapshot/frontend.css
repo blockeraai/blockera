@@ -1,0 +1,103 @@
+
+.blockera-block.blockera-block-1.wp-block-heading {
+	background-color: #d5f5ff;
+	border: 2px solid #00000033;
+	border-radius: 60px;
+	font-weight: 700;
+	font-style: normal;
+	text-transform: uppercase;
+}
+
+.blockera-block.blockera-block-1.wp-block-heading::before {
+	background-color: #7ae0ff;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	content: "Before:";
+}
+
+.blockera-block.blockera-block-1.wp-block-heading::after {
+	background-color: #67b5cc;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	content: ":after";
+}
+
+.blockera-block.blockera-block-2.wp-block-heading {
+	background-color: #fff8e7;
+	border-radius: 20px;
+	color: #009f08;
+}
+
+.blockera-block.blockera-block-2 .has-inline-color {
+	background-color: #dfdfdf;
+}
+
+.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+	color: #ce9000;
+	font-weight: 700;
+	font-style: normal;
+}
+
+.blockera-block.blockera-block-2 :is(strong, b) {
+	color: #d65500;
+}
+
+.blockera-block.blockera-block-2 :is(em, i) {
+	color: #00c3bd;
+}
+
+.blockera-block.blockera-block-2 kbd {
+	color: #0014cc;
+}
+
+.blockera-block.blockera-block-2 code {
+	color: #9602b3;
+}
+
+.blockera-block.blockera-block-2 span:not([data-rich-text-placeholder]) {
+	color: #008ae6;
+}
+
+.blockera-block.blockera-block-2 :is(mark, mark[class]) {
+	color: #b36e08;
+}
+
+.blockera-block.blockera-block-2 :is(strong, b):hover {
+	color: #943b00;
+}
+
+.blockera-block.blockera-block-2 :is(em, i):hover {
+	color: #008783;
+}
+
+.blockera-block.blockera-block-2 kbd:hover {
+	color: #00109d;
+}
+
+.blockera-block.blockera-block-2 code:hover {
+	color: #600173;
+}
+
+.blockera-block.blockera-block-2 span:not([data-rich-text-placeholder]):hover {
+	color: #006bb3;
+}
+
+.blockera-block.blockera-block-2 :is(mark, mark[class]):hover {
+	color: #875100;
+}
+
+.blockera-block.blockera-block-2 a:not(.wp-element-button):hover {
+	color: #a37200;
+}
+
+.blockera-block.blockera-block-2 a:not(.wp-element-button):focus {
+	color: #825b00;
+}
+
+.blockera-block.blockera-block-2 a:not(.wp-element-button):active {
+	color: #493500;
+}
