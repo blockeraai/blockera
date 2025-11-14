@@ -690,9 +690,17 @@ export function prepareBlockCssSelector(params: {
 		}
 
 		if (isUndefined(support)) {
-			return (
-				fallbackSelector || selectors[support].root || selectors.root
-			);
+			if (fallbackSelector) {
+				return fallbackSelector;
+			}
+
+			if (selectors?.[support]?.root) {
+				return selectors[support].root;
+			}
+
+			if (selectors?.root) {
+				return selectors.root;
+			}
 		}
 
 		// Preparing selector with support identifier.
