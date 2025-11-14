@@ -19,6 +19,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import type { BlockType } from '../../../type';
+import sharedInnerBlocks from '../inners/shared';
 
 export const Calendar: BlockType = {
 	name: 'blockeraCalendar',
@@ -80,6 +81,16 @@ export const Calendar: BlockType = {
 				priority: 10,
 			},
 		},
+		'elements/tbody-link-cells': {
+			name: 'elements/tbody-link-cells',
+			label: __('Body → Link Cells', 'blockera'),
+			description: __('Body link cells that contain a link.', 'blockera'),
+			icon: <Icon icon="target" iconSize="20" />,
+			settings: {
+				force: true,
+				priority: 10,
+			},
+		},
 		'elements/tbody-empty-cells': {
 			name: 'elements/tbody-empty-cells',
 			label: __('Body → Empty Cells', 'blockera'),
@@ -118,6 +129,7 @@ export const Calendar: BlockType = {
 				visited: sharedBlockStates.visited,
 			},
 		},
+		'elements/link': sharedInnerBlocks['elements/link'],
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

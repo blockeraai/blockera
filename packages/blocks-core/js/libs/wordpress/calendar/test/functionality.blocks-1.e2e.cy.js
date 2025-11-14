@@ -35,7 +35,19 @@ describe('Calendar Block', () => {
 			'elements/caption',
 			'elements/thead-cells',
 			'elements/tbody-cells',
+			'elements/tbody-link-cells',
 			'elements/navigation-item',
+		]);
+
+		cy.checkBlockStatesPickerItems([
+			'elements/caption',
+			'elements/thead-cells',
+			'elements/tbody-cells',
+			'elements/navigation-item',
+			'elements/tbody-link-cells',
+			'elements/tbody-empty-cells',
+			'elements/tbody',
+			'elements/link',
 		]);
 
 		//
@@ -186,6 +198,24 @@ describe('Calendar Block', () => {
 			});
 
 		//
+		// 1.8. elements/tbody-link-cells
+		//
+		setParentBlock();
+		setInnerBlock('elements/tbody-link-cells');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		cy.setColorControlValue('Text Color', '4efd33');
+
+		cy.getBlock('core/calendar')
+			.first()
+			.within(() => {
+				cy.get('tbody td:has(a)')
+					.first()
+					.should('have.css', 'color', 'rgb(78, 253, 51)');
+			});
+
+		//
 		// 2. Assert front end
 		//
 		savePage();
@@ -227,6 +257,11 @@ describe('Calendar Block', () => {
 			cy.get('tbody td.pad')
 				.first()
 				.should('have.css', 'color', 'rgb(255, 80, 80)');
+
+			// elements/tbody-link-cells
+			cy.get('tbody td:has(a)')
+				.first()
+				.should('have.css', 'color', 'rgb(78, 253, 51)');
 
 			// elements/navigation-item
 			cy.get('.wp-calendar-nav a')
