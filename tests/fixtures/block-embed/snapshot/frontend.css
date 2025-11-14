@@ -1,0 +1,65 @@
+
+.blockera-block.blockera-block-1 .wp-block-embed__wrapper {
+	background-color: #ffcccc;
+	border: 7px solid #ff4343;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-1 .wp-block-embed__wrapper figcaption {
+	background-color: #68ffe1;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	margin-top: 19px;
+	text-align: center;
+}
+
+.blockera-block.blockera-block-1.wp-block-embed__wrapper:hover {
+	border: 7px solid #0fcdf3;
+}
+
+.blockera-block.blockera-block-2 .wp-block-embed__wrapper {
+	border: 10px solid #2ec211;
+	width: 400px;
+	aspect-ratio: 1;
+	object-fit: fill;
+}
+
+.blockera-block.blockera-block-2 .wp-block-embed__wrapper figcaption {
+	text-align: center;
+}
+
+.blockera-block.blockera-block-2.wp-block-embed__wrapper:hover {
+	border: 7px solid #0fcdf3;
+}
+
+.blockera-block.blockera-block-3 .wp-block-embed__wrapper {
+	background-color: #d7d7d7;
+	border: 7px solid #808080;
+	border-radius: 10px;
+	width: 400px;
+	height: 200px;
+	aspect-ratio: 4/3;
+	object-fit: contain;
+}
+
+.blockera-block.blockera-block-3 .wp-block-embed__wrapper figcaption {
+	background-color: #68ffe1;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	margin-top: 19px;
+	margin-right: auto !important;
+	margin-left: auto !important;
+	text-align: center;
+	display: inline-block;
+	border-radius: 5px;
+	font-weight: 700;
+	font-style: normal;
+}
+
+.blockera-block.blockera-block-3.wp-block-embed__wrapper:hover {
+	border: 7px solid #0fcdf3;
+}
