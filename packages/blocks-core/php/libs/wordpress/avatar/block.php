@@ -21,6 +21,7 @@ return array_merge(
 				'blockeraHeight'    => $sizeSelector,
 				'blockeraMinHeight' => $sizeSelector,
 				'blockeraMaxHeight' => $sizeSelector,
+				'shadow'            => $sizeSelector,
 			]
 		),
 	]

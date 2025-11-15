@@ -421,6 +421,45 @@ if ( ! function_exists( 'blockera_is_inner_block' ) ) {
 	}
 }
 
+if ( ! function_exists( 'blockera_update_dynamic_inner_selectors' ) ) {
+	/**
+	 * Update dynamic inner selectors.
+	 *
+	 * @param array $selectors The selectors to update.
+	 * @param array $args The arguments to update the selectors.
+	 *
+	 * @return array the updated selectors.
+	 */
+	function blockera_update_dynamic_inner_selectors( array $selectors, array $args ): array {
+
+		$additional_selectors     = blockera_get_block_type($args['block-type'])->selectors;
+		$additional_root_selector = $additional_selectors['root'] ?? '';
+
+		if (empty($additional_root_selector)) {
+
+			$additional_root_selector = blockera_generate_block_root_selector($args['block-type']);
+		}
+
+		// Ensure the additional root selector is set.
+		$additional_selectors['root'] = $additional_root_selector;
+
+		// Create the inner selector id.
+		$inner_selector_id = blockera_append_selector_prefix($args['block-type']);
+
+		// If the inner selector id exists, merge the additional selectors with the existing selectors.
+		// Otherwise, create a new inner selector id with the additional selectors.
+		if (isset($selectors[ $inner_selector_id ])) {
+
+			$selectors[ $inner_selector_id ] = array_merge($additional_selectors, $selectors[ $inner_selector_id ]);
+		} else {
+
+			$selectors[ $inner_selector_id ] = $additional_selectors;
+		}
+
+		return $selectors;
+	}
+}
+
 if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 	/**
@@ -443,42 +482,9 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 		$current_state_has_selectors = false;
 
-		$additional_selectors = [];
-
 		if (blockera_is_inner_block($args['block-type']) && $args['block-type'] !== $args['block-name'] && blockera_is_valid_block_type($args['block-type'])) {
 
-			$additional_selectors     = blockera_get_block_type($args['block-type'])->selectors;
-			$additional_root_selector = $additional_selectors['root'] ?? '';
-
-			if (empty($additional_root_selector)) {
-
-				$additional_root_selector = blockera_generate_block_root_selector($args['block-type']);
-			}
-
-			if (! empty($additional_selectors)) {
-
-				$additional_selectors['root'] = $additional_root_selector;
-
-				$selectors = array_merge(
-                    $selectors,
-                    [
-						$args['block-type'] => $additional_selectors,
-					]
-                );
-			} else {
-				$selectors[ $args['block-type'] ] = [
-					'root' => $additional_root_selector,
-				];
-			}
-
-			if (isset($additional_selectors[ $feature_id ])) {
-				$feature_id = [
-					$args['block-type'],
-					$feature_id,
-				];
-			} else {
-				$feature_id = $args['block-type'];
-			}
+			$selectors = blockera_update_dynamic_inner_selectors($selectors, $args);
 		}
 
 		if ( ! empty( $args['block-type'] ) && isset($cloned_block_type) ) {
@@ -524,7 +530,23 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 			if (! $selector && $has_fallback) {
 
-				$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+				if ( is_array($args['fallback']) ) {
+					// Try to get the first fallback that is not empty.
+					foreach ($args['fallback'] as $fallback) {
+						$selector = wp_get_block_css_selector($cloned_block_type, $fallback, false);
+
+						if ($selector) {
+							break;
+						}
+					}
+				} else {
+					$selector = wp_get_block_css_selector($cloned_block_type, $args['fallback'], true);
+				}
+
+				// If no fallback is found, try to get the feature id with fallback forced.
+				if (! $selector) {
+					$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, true);
+				}
 			}
 		}
 
@@ -541,7 +563,7 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 		}
 
 		// We not needs append blockera root block css selector into inners selector.
-		// Like => current $selector value is one of feature id of "elements/link" inner block selectors.
+		// because it's already appended in the inner block selector.
 		if ( ! $feature_id || str_starts_with( $feature_id, 'blockera/' ) ) {
 
 			return ! empty( $selector ) ? $selector : $args['blockera-unique-selector'];

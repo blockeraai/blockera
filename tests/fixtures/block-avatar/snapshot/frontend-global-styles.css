@@ -1,0 +1,3 @@
+:root :where(.wp-block-avatar img){
+	border-radius: 100px;
+}

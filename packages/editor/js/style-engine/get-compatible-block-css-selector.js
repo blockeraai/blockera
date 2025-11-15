@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
+import { isEmpty, isUndefined, union } from '@blockera/utils';
 
 /**
  
@@ -140,13 +140,13 @@ export const getNormalizedSelector = (
 		state,
 		suffixClass,
 		masterState,
-		rootSelector,
 		getInnerState,
 		getMasterState,
 		fromInnerBlock = false,
 		customizedPseudoClasses,
 		currentStateHasSelectors,
 	} = options;
+	let { rootSelector } = options;
 	let parsedSelectors = selector.split(',');
 	// Check if selector starts with a pseudo-class (e.g., :hover, :focus, ::before)
 	const startsWithPseudoClass = /^::?[a-z-]+/.test(selector.trim());
@@ -194,6 +194,11 @@ export const getNormalizedSelector = (
 	const generateSelector = (selector: string): string => {
 		const innerStateType = getInnerState();
 		const masterStateType = getMasterState();
+
+		// If selector contains root selector, set root selector to empty string to avoid duplicate selectors.
+		if (-1 !== selector.indexOf(rootSelector)) {
+			rootSelector = '';
+		}
 
 		// Current Block is inner block.
 		if (fromInnerBlock) {
@@ -671,13 +676,13 @@ export function prepareBlockCssSelector(params: {
 			const fallbacks = union(
 				fallbackSupportId.map((supportId) =>
 					getBlockCSSSelector(blockType, supportId || 'root', {
-						fallback: true,
+						fallback: false,
 					})
 				)
 			);
 
 			fallbackSelector = fallbacks
-				.filter((selector: any): boolean => !isObject(selector))
+				.filter((selector: any): boolean => !isEmpty(selector))
 				.join(', ');
 		} else {
 			fallbackSelector = getBlockCSSSelector(
@@ -690,9 +695,17 @@ export function prepareBlockCssSelector(params: {
 		}
 
 		if (isUndefined(support)) {
-			return (
-				fallbackSelector || selectors[support].root || selectors.root
-			);
+			if (fallbackSelector) {
+				return fallbackSelector;
+			}
+
+			if (selectors?.[support]?.root) {
+				return selectors[support].root;
+			}
+
+			if (selectors?.root) {
+				return selectors.root;
+			}
 		}
 
 		// Preparing selector with support identifier.
@@ -730,10 +743,16 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 			return `${selector}${root}, ${root}${selector}`;
 		}
 
+		// If selector starts with a space, append root before the selector to handle cases like:
+		// " .wp-block-foo" becomes ".wp-block-bar .wp-block-foo"
+		if (selector.startsWith(' ')) {
+			return `${root}${selector}`;
+		}
+
 		const subject = matches[0];
 		const regexp = new RegExp('.\\b' + subject + '\\b', 'gi');
 
-		return `${selector.replace(regexp, `${root}.${subject}`)}`;
+		return selector.replace(regexp, `${root}.${subject}`);
 	}
 
 	// If selector has combinators (space, >, +, ~) or starts with a-z html tag name,

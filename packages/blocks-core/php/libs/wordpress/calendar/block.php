@@ -13,6 +13,9 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'blockera/elements/link' => [
+					'root' => '&& a',
+				],
 				'blockera/elements/caption' => [
 					'root' => '&& caption',
 				],
@@ -24,6 +27,9 @@ return array_merge(
 				],
 				'blockera/elements/tbody' => [
 					'root' => '&& table tbody',
+				],
+				'blockera/elements/tbody-link-cells' => [
+					'root' => '&& table tbody td:has(a)',
 				],
 				'blockera/elements/tbody-cells' => [
 					'root' => '&& table tbody td',

@@ -1,0 +1,13 @@
+.blockera-block.wp-block-audio {
+	background-color: transparent !important;
+	border: none !important;
+	padding: 0 !important;
+}
+
+.blockera-block.wp-block-audio audio {
+	font-size: 0;
+}
+
+.blockera-block.wp-block-audio audio::-webkit-media-controls-enclosure {
+	max-height: inherit !important;
+}

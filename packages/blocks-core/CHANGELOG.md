@@ -21,6 +21,9 @@
 - `Search` block: improve support.
 - `Post Navigation Link` block: improve support.
 - `Image` block: `img/svg` inner block added.
+- `Audio` block: `caption` inner block added.
+- `Embed` block: `caption` inner block added.
+- `Calendar` block: `Body → Link Cells` and `Link` inner blocks added.
 - `Paragraph` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Button` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Buttons` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
@@ -47,6 +50,7 @@
 - `Term Description` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Term Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Verse` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Code` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
@@ -94,6 +98,7 @@
 - Added E2E tests to check functionality `Term Description` new inner block.
 - Added E2E tests to check functionality `Term Template` new inner block.
 - Added E2E tests to check functionality `Verse` new inner block.
+- Added E2E tests to check functionality `Code` new inner block.
 
 ## 1.4.0 (2025-05-19)
 
