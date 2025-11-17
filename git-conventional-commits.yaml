@@ -18,6 +18,7 @@ convention:
         - story
         - ci
         - patch
+        - snapshot
     commitScopes: []
     releaseTagGlobPattern: v[0-9]*.[0-9]*.[0-9]*
 changelog:
