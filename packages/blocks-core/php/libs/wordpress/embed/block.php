@@ -14,6 +14,10 @@ return array_merge(
 			$args['selectors'] ?? [],
 			[
 				'root' => ' .wp-block-embed__wrapper',
+				'spacing' => '.wp-block-embed',
+				'layout' => '.wp-block-embed',
+				'effects' => '.wp-block-embed',
+				'position' => '.wp-block-embed',
 				'blockera/elements/caption' => [
 					'root' => '&& figcaption',
 				],
