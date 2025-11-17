@@ -302,18 +302,6 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			cacheKey,
 			props
 		);
-
-		if (isEquals(supports, settings)) {
-			return;
-		}
-
-		setSettings(supports);
-		updateItem(
-			cacheKey,
-			mergeObject(cacheData, {
-				[props.name]: extensionsWithoutLabel(cloneObject(supports)),
-			})
-		);
 	}, [
 		currentBlock,
 		cacheData,
