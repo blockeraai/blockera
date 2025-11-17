@@ -85,9 +85,11 @@ export const useCalculateCurrentAttributes = ({
 
 		return currentAttributes;
 	}, [
+		getState,
 		attributes,
 		currentBlock,
 		currentState,
+		getInnerState,
 		blockAttributes,
 		currentBreakpoint,
 		currentInnerBlock,
