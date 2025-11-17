@@ -1,0 +1,7 @@
+:where(.blockera-block.wp-block-image :is(img:not([src=""]), svg:not(:empty), a)) {
+	transition: inherit;
+}
+
+:where(.blockera-block.wp-block-image figcaption) {
+	transition: inherit;
+}
