@@ -7,7 +7,7 @@
 			"id": "blockeraTransform",
 			"definition": "Transform",
 			"css-property": "transform",
-			"fallback": "transform",
+			"fallback": ["transform", "effects"],
 			"description": "Support for \"blockeraTransform\" value."
 		},
 		"blockeraTransition": {
@@ -15,7 +15,7 @@
 			"id": "blockeraTransition",
 			"definition": "Transition",
 			"css-property": "transition",
-			"fallback": "transition",
+			"fallback": ["transition", "effects"],
 			"description": "Support for \"blockeraTransition\" value."
 		},
 		"blockeraBlendMode": {
@@ -23,7 +23,7 @@
 			"id": "blockeraBlendMode",
 			"definition": "MixBlendMode",
 			"css-property": "mix-blend-mode",
-			"fallback": "mix-blend-mode",
+			"fallback": ["mix-blend-mode", "effects"],
 			"description": "Support for \"blockeraBlendMode\" value."
 		},
 		"blockeraBackdropFilter": {
@@ -31,7 +31,7 @@
 			"id": "blockeraBackdropFilter",
 			"definition": "BackdropFilter",
 			"css-property": "backdrop-filter",
-			"fallback": "backdrop-filter",
+			"fallback": ["backdrop-filter", "effects"],
 			"description": "Support for \"blockeraBackdropFilter\" value."
 		},
 		"blockeraTransformSelfOrigin": {
@@ -39,7 +39,7 @@
 			"id": "blockeraTransformSelfOrigin",
 			"definition": "SelfOrigin",
 			"css-property": "self-origin",
-			"fallback": "self-origin",
+			"fallback": ["self-origin", "effects"],
 			"description": "Support for \"blockeraTransformSelfOrigin\" value."
 		},
 		"blockeraMask": {
@@ -47,7 +47,7 @@
 			"id": "blockeraMask",
 			"definition": "Mask",
 			"css-property": "mask",
-			"fallback": "mask",
+			"fallback": ["mask", "effects"],
 			"description": "Support for \"blockeraMask\" value."
 		},
 		"blockeraDivider": {
@@ -55,7 +55,7 @@
 			"id": "blockeraDivider",
 			"definition": "Divider",
 			"css-property": "divider",
-			"fallback": "divider",
+			"fallback": ["divider", "effects"],
 			"description": "Support for \"blockeraDivider\" value."
 		},
 		"blockeraTransformChildOrigin": {
@@ -63,7 +63,7 @@
 			"id": "blockeraTransformChildOrigin",
 			"definition": "ChildOrigin",
 			"css-property": "child-origin",
-			"fallback": "child-origin",
+			"fallback": ["child-origin", "effects"],
 			"description": "Support for \"blockeraTransformChildOrigin\" value."
 		},
 		"blockeraBackfaceVisibility": {
@@ -71,7 +71,7 @@
 			"id": "blockeraBackfaceVisibility",
 			"definition": "BackfaceVisibility",
 			"css-property": "backface-visibility",
-			"fallback": "backface-visibility",
+			"fallback": ["backface-visibility", "effects"],
 			"description": "Support for \"blockeraBackfaceVisibility\" value."
 		},
 		"blockeraTransformSelfPerspective": {
@@ -79,7 +79,7 @@
 			"id": "blockeraTransformSelfPerspective",
 			"definition": "SelfPerspective",
 			"css-property": "self-perspective",
-			"fallback": "self-perspective",
+			"fallback": ["self-perspective", "effects"],
 			"description": "Support for \"blockeraTransformSelfPerspective\" value."
 		},
 		"blockeraTransformChildPerspective": {
@@ -87,7 +87,7 @@
 			"id": "blockeraTransformChildPerspective",
 			"definition": "ChildPerspective",
 			"css-property": "child-perspective",
-			"fallback": "child-perspective",
+			"fallback": ["child-perspective", "effects"],
 			"description": "Support for \"blockeraTransformChildPerspective\" value."
 		},
 		"blockeraFilter": {
@@ -95,7 +95,7 @@
 			"id": "blockeraFilter",
 			"definition": "Filter",
 			"css-property": "filter",
-			"fallback": ["filter.duotone", "filter"],
+			"fallback": ["filter.duotone", "filter", "effects"],
 			"description": "Support for \"blockeraFilter\" value."
 		},
 		"blockeraOpacity": {
@@ -103,7 +103,7 @@
 			"id": "blockeraOpacity",
 			"definition": "Opacity",
 			"css-property": "opacity",
-			"fallback": "opacity",
+			"fallback": ["opacity", "effects"],
 			"description": "Support for \"blockeraOpacity\" value."
 		}
 	}
