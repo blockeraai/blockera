@@ -5,7 +5,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-embed__wrapper figcaption {
+.blockera-block.blockera-block-1 figcaption {
 	background-color: #68ffe1;
 	padding-top: 10px;
 	padding-right: 20px;
@@ -26,7 +26,7 @@
 	object-fit: fill;
 }
 
-.blockera-block.blockera-block-2 .wp-block-embed__wrapper figcaption {
+.blockera-block.blockera-block-2 figcaption {
 	text-align: center;
 }
 
@@ -44,7 +44,7 @@
 	object-fit: contain;
 }
 
-.blockera-block.blockera-block-3 .wp-block-embed__wrapper figcaption {
+.blockera-block.blockera-block-3 figcaption {
 	background-color: #68ffe1;
 	padding-top: 10px;
 	padding-right: 20px;

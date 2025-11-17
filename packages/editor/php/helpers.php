@@ -291,19 +291,14 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 	/**
 	 * Get css selector valid and standard format.
 	 *
-	 * @param string $root_selector   the root selector.
+	 * @param string $root   the root selector.
 	 * @param string $picked_selector the picked selector.
 	 * @param array  $args            the extra arguments to format css selector.
 	 *
 	 * @throws BaseException Exception for invalid selector.
 	 * @return string the standard formatted css selector.
 	 */
-	function blockera_get_css_selector_format( string $root_selector, string $picked_selector, array $args ): string {
-
-		if ( str_starts_with( $picked_selector, '&' ) && ! str_starts_with( $picked_selector, '&&' ) && ! preg_match( '/^\.|:/', substr( $picked_selector, 1 ) ) ) {
-
-			throw new BaseException( "Invalid {$picked_selector} selector!", 500 );
-		}
+	function blockera_get_css_selector_format( string $root, string $picked_selector, array $args ): string {
 
 		$pseudo_class                = $args['pseudo_class'] ?? '';
 		$parent_pseudo_class         = $args['parent_pseudo_class'] ?? '';
@@ -311,7 +306,6 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 		// Pre-calculate reused values.
 		$has_parent_pseudo = ! empty( $parent_pseudo_class );
 		$has_pseudo        = ! empty( $pseudo_class );
-		$root              = trim( $root_selector );
 		$root_first_part   = '';
 		
 		// Get the first part of root selector for && pattern.
@@ -332,18 +326,18 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 		}
 
 		foreach ($selectors as $selector) {
-			$selector    = trim($selector);
-			$needs_space = ! str_starts_with($selector, '&') && ! empty($root);
-			
+			$new_selector = blockera_process_ampersand_selector_char($selector);
+			$needs_space  = ! str_starts_with($selector, '&') && ! empty($root);
+
 			// Handle && pattern.
 			if ( str_starts_with( $selector, '&&' ) ) {
-				$selector        = $root_first_part . substr( $selector, 2 );
-				$merged_selector = $selector . 
+				$new_selector    = $root_first_part . $new_selector;
+				$merged_selector = $new_selector . 
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol($pseudo_class) . $pseudo_class : '' );
 
-				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'has_pseudo'));
+				$formatted_selectors[] = blockera_create_standard_selector($new_selector, $pseudo_class, compact('merged_selector', 'has_pseudo'));
 			} else {
-				$merged_selector = blockera_process_ampersand_selector_char($selector) .
+				$merged_selector = $new_selector .
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
 
 				$origin_selector = $root . 
@@ -351,7 +345,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 					( $needs_space ? ' ' : '' ) .
 					$merged_selector;
 
-				$formatted_selectors[] = blockera_create_standard_selector($selector, $pseudo_class, compact('merged_selector', 'origin_selector', 'has_pseudo'));
+				$formatted_selectors[] = blockera_create_standard_selector($new_selector, $pseudo_class, compact('merged_selector', 'origin_selector', 'has_pseudo'));
 			}
 		}
 
@@ -379,7 +373,7 @@ if (! function_exists('blockera_create_standard_selector')) {
 
 		if (preg_match('/:(before|after)$/', $selector, $matches) && $has_pseudo) {
 			$pseudo_element = $matches[1];
-			$selector       = blockera_process_ampersand_selector_char(str_replace($matches[0], '', $selector));
+			$selector       = str_replace($matches[0], '', $selector);
 			$new_selector   = $selector . blockera_get_state_symbol( $pseudo_state ) . $pseudo_state . blockera_get_state_symbol( $pseudo_element ) . $pseudo_element;
 			
 			return str_replace($merged_selector, $new_selector, $origin_selector);
@@ -392,7 +386,7 @@ if (! function_exists('blockera_create_standard_selector')) {
 if ( ! function_exists( 'blockera_process_ampersand_selector_char' ) ) {
 
 	/**
-	 * Create standard css selector with processing by '&' character.
+	 * Process ampersand selector character.
 	 *
 	 * @param string $selector The selector to process.
 	 *
@@ -400,9 +394,21 @@ if ( ! function_exists( 'blockera_process_ampersand_selector_char' ) ) {
 	 */
 	function blockera_process_ampersand_selector_char( string $selector ): string {
 
-		return str_starts_with( trim( $selector ), '&' )
-			? substr( trim( $selector ), 1 )
-			: trim( $selector );
+		// Remove the leading and trailing whitespace from the selector.
+		// We imagine the selector is already trimmed. because it should be starts with single or double ampersand character.
+		$selector = trim( $selector );
+
+		// Handle && pattern.
+		// It should be removed the double ampersand character and return the new selector.
+		if (str_starts_with( $selector, '&&' )) {
+			return substr( $selector, 2 );
+		}
+
+		// Handle & pattern.
+		// It should be removed the ampersand character and return the new selector.
+		return str_starts_with( $selector, '&' )
+			? substr( $selector, 1 )
+			: $selector;
 	}
 }
 

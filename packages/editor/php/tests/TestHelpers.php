@@ -614,15 +614,6 @@ class TestHelpers extends \WP_UnitTestCase {
     }
 
     /**
-     * Test invalid selector cases
-     */
-    public function testInvalidSelectors() {
-        $this->expectException(BaseException::class);
-        $this->expectExceptionMessage('Invalid &item selector!');
-        blockera_get_css_selector_format('.block', '&item', []);
-    }
-
-    /**
      * Test selector formatting with && pattern
      */
     public function testSelectorWithDoubleAmpersandPattern() {

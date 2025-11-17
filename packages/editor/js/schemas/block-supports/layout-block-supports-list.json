@@ -7,7 +7,10 @@
 			"id": "blockeraGap",
 			"definition": "Gap",
 			"css-property": "gap",
-			"fallback": ["gap"],
+			"fallback": [
+				"gap",
+				"layout"
+			],
 			"description": "Support for \"blockeraGap\" value, this is mirror for WordPress block core \"gap\" support"
 		},
 		"blockeraFlexChildSizing": {
@@ -15,7 +18,10 @@
 			"id": "blockeraFlexChildSizing",
 			"definition": "Flex",
 			"css-property": "flex",
-			"fallback": ["flex"],
+			"fallback": [
+				"flex",
+				"layout"
+			],
 			"description": "Support for \"blockeraFlexChildSizing\" value, this is mirror for WordPress block core \"flex\" support"
 		},
 		"blockeraFlexChildOrder": {
@@ -23,7 +29,10 @@
 			"id": "blockeraFlexChildOrder",
 			"definition": "Order",
 			"css-property": "order",
-			"fallback": ["order"],
+			"fallback": [
+				"order",
+				"layout"
+			],
 			"description": "Support for \"blockeraFlexChildOrder\" value, this is mirror for WordPress block core \"order\" support"
 		},
 		"blockeraDisplay": {
@@ -31,7 +40,10 @@
 			"id": "blockeraDisplay",
 			"definition": "Display",
 			"css-property": "display",
-			"fallback": ["display"],
+			"fallback": [
+				"display",
+				"layout"
+			],
 			"description": "Support for \"blockeraDisplay\" value, this is mirror for WordPress block core \"display\" support"
 		},
 		"blockeraFlexWrap": {
@@ -39,7 +51,10 @@
 			"id": "blockeraFlexWrap",
 			"definition": "FlexWrap",
 			"css-property": "flex-wrap",
-			"fallback": ["flex-wrap"],
+			"fallback": [
+				"flex-wrap",
+				"layout"
+			],
 			"description": "Support for \"blockeraFlexWrap\" value."
 		},
 		"blockeraFlexChildAlign": {
@@ -47,7 +62,10 @@
 			"id": "blockeraFlexChildAlign",
 			"definition": "AlignSelf",
 			"css-property": "align-self",
-			"fallback": ["align-self"],
+			"fallback": [
+				"align-self",
+				"layout"
+			],
 			"description": "Support for \"blockeraFlexChildAlign\" value."
 		},
 		"blockeraAlignContent": {
@@ -55,7 +73,10 @@
 			"id": "blockeraAlignContent",
 			"definition": "AlignContent",
 			"css-property": "align-content",
-			"fallback": ["align-content"],
+			"fallback": [
+				"align-content",
+				"layout"
+			],
 			"description": "Support for \"blockeraAlignContent\" value."
 		},
 		"blockeraFlexLayout": {
@@ -63,7 +84,10 @@
 			"id": "blockeraFlexLayout",
 			"definition": "FlexDirection",
 			"css-property": "flex-direction",
-			"fallback": ["flex-direction"],
+			"fallback": [
+				"flex-direction",
+				"layout"
+			],
 			"description": "Support for \"blockeraFlexLayout\" value."
 		}
 	}

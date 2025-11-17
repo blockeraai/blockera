@@ -40,6 +40,8 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		//
 
 		getWPDataObject().then((data) => {
+			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
+
 			expect('vertical').to.be.equal(
 				getSelectedBlock(data, 'layout')?.orientation
 			);
@@ -68,6 +70,8 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		});
 
 		getWPDataObject().then((data) => {
+			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
+
 			expect('horizontal').to.be.equal(
 				getSelectedBlock(data, 'layout')?.orientation
 			);
@@ -96,6 +100,8 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		});
 
 		getWPDataObject().then((data) => {
+			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
+
 			expect('horizontal').to.be.equal(
 				getSelectedBlock(data, 'layout')?.orientation
 			);
@@ -124,6 +130,8 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		cy.getByAriaLabel('Reset To Default Setting').click();
 
 		getWPDataObject().then((data) => {
+			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
+
 			expect('horizontal').to.be.equal(
 				getSelectedBlock(data, 'layout')?.orientation
 			);

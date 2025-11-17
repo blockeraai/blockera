@@ -1,0 +1,4 @@
+/* Fix not adding display: flex to pagination block (0.0.0 specificity). */
+:where(.blockera-block.wp-block-query-pagination:is(.is-vertical,.is-horizontal):not(.is-layout-flex)) {
+	display: flex;
+}
