@@ -48,9 +48,14 @@ export function getParentFlexBlockInfo(block: {
 			// Get the parent element of the current inner block.
 			// It can be different than the master block element.
 			if (currentInnerBlockSelector) {
-				parentElement = currentBlockElement?.querySelector(
-					currentInnerBlockSelector
-				)?.parentElement;
+				try {
+					parentElement = currentBlockElement?.querySelector(
+						currentInnerBlockSelector
+					)?.parentElement;
+				} catch (error) {
+					// Invalid selector, will fall back to master block element
+					parentElement = null;
+				}
 			}
 
 			// If the parent element is not found, use the master block as parent element.
