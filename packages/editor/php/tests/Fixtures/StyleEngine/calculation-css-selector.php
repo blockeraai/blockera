@@ -32,7 +32,7 @@ return [
 	[
 		'blockType' => 'master',
 		'featureId'  => 'blockeraWidth',
-		'fallbackId' => [ 'blockera/elements/link', 'width' ],
+		'fallbackId' => 'blockera/elements/link.width',
 		'expected'   => $optimizeStyleGeneration ? 
 		'.blockera-block.blockera-block--phggmy.wp-block-sample a'
 		:'.blockera-block.blockera-block--phggmy.wp-block-sample a, .wp-block-sample.blockera-block.blockera-block--phggmy a',
