@@ -37,7 +37,7 @@ import { ClickAnimationExtension } from '../click-animation';
 // import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { useBlockSection } from '../../components';
-import { flexChildBlocks } from '../flex-child/helpers';
+import { getParentFlexBlockInfo } from './utils';
 
 export const MappedExtensions = ({
 	tab,
@@ -45,7 +45,6 @@ export const MappedExtensions = ({
 	settings,
 	attributes,
 	additional,
-	directParentBlock,
 	currentStateAttributes,
 	handleOnChangeSettings,
 	handleOnChangeAttributes,
@@ -60,7 +59,6 @@ export const MappedExtensions = ({
 	settings: Object,
 	attributes: Object,
 	additional: Object,
-	directParentBlock: Object,
 	currentStateAttributes: Object,
 	handleOnChangeSettings: Function,
 	handleOnChangeAttributes: Function,
@@ -92,29 +90,14 @@ export const MappedExtensions = ({
 	} = settings;
 
 	/**
-	 * Check if the parent block is a flex block and if it is, set the parentFlexBlock variable to true
+	 * Get the parent flex block information
 	 * to show the flex child extension.
 	 */
-	let parentFlexBlock: boolean =
-		directParentBlock?.attributes?.blockeraDisplay?.value === 'flex';
-	if (!parentFlexBlock && flexChildBlocks[block?.blockName]) {
-		parentFlexBlock = true;
-	}
-
-	/**
-	 * For flex blocks, we need to set the parent flex block direction to the direction of the parent block
-	 * or the direction of special flex child blocks (from flexChildBlocks).
-	 */
-	let parentFlexBlockDirection: 'row' | 'column' | '' = '';
-	if (parentFlexBlock) {
-		parentFlexBlockDirection =
-			directParentBlock?.attributes?.blockeraFlexLayout?.value?.direction;
-
-		if (!parentFlexBlockDirection) {
-			parentFlexBlockDirection =
-				flexChildBlocks[block?.blockName]?.direction || 'row';
-		}
-	}
+	const { isParentFlexBlock, parentFlexDirection } = getParentFlexBlockInfo({
+		clientId: block.clientId,
+		blockName: block.blockName,
+		currentBlock: block.currentBlock,
+	});
 
 	switch (tab.name) {
 		case 'settings':
@@ -570,7 +553,7 @@ export const MappedExtensions = ({
 						/>
 					</SlotFillProvider>
 
-					{parentFlexBlock && (
+					{isParentFlexBlock && (
 						<ErrorBoundary
 							fallbackRender={({ error }) => (
 								<ErrorBoundaryFallback
@@ -606,8 +589,7 @@ export const MappedExtensions = ({
 										currentStateAttributes.blockeraFlexChildOrder,
 									blockeraFlexChildOrderCustom:
 										currentStateAttributes.blockeraFlexChildOrderCustom,
-									blockeraFlexDirection:
-										parentFlexBlockDirection,
+									blockeraFlexDirection: parentFlexDirection,
 								}}
 								attributes={{
 									blockeraFlexChildSizing:

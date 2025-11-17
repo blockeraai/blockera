@@ -159,19 +159,6 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	}, []);
 
 	const { version } = select('blockera/data').getEntity('blockera');
-	const parentClientIds = select('core/block-editor').getBlockParents(
-		props.clientId
-	);
-
-	const directParentBlock = useMemo(
-		() =>
-			parentClientIds?.length > 0
-				? select('core/block-editor').getBlock(
-						parentClientIds[parentClientIds.length - 1]
-				  )
-				: {},
-		[parentClientIds]
-	);
 
 	const { updateExtension } = useDispatch(STORE_NAME);
 	const { getExtensions } = select(STORE_NAME);
@@ -364,7 +351,6 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 
 	const Panel = (tab: Object) => (
 		<MappedExtensions
-			directParentBlock={directParentBlock}
 			tab={tab}
 			block={block}
 			settings={settings}

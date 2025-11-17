@@ -11,8 +11,9 @@
 - The inner block items design improved to make them different of the block states.
 - Block Settings Section: improve design and UX.
 - Add `&` support for targeting current block in custom CSS feature.
-- `Flex Child` settings support added to `Column` block.
 - Compatibility for detecting variables from core blocks if the variable not found.
+- Improve to show `Flex Child` settings smartly for all blocks and inner blocks that have `flex` parent.
+
 
 ### Automated Tests
 - Automated test to check `font color` WP data compatibility if variables not found. 
