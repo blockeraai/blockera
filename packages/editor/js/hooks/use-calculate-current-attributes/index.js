@@ -13,6 +13,7 @@ import { prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
+import { useEditorStore } from '../use-editor-store';
 import type { CalculateCurrentAttributesProps } from './types';
 import {
 	isInnerBlock,
@@ -29,6 +30,8 @@ export const useCalculateCurrentAttributes = ({
 	currentInnerBlock,
 	blockeraInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
+	const { getState, getInnerState } = useEditorStore();
+
 	return useMemo(() => {
 		let currentAttributes: Object = {};
 
@@ -55,9 +58,20 @@ export const useCalculateCurrentAttributes = ({
 		else if (
 			!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)
 		) {
+			const {
+				settings: { hasContent },
+			} = getState(currentState) ||
+				getInnerState(currentState) || {
+					settings: { hasContent: false },
+				};
 			currentAttributes = {
 				...blockAttributesDefaults,
-				...attributes,
+				...(!hasContent
+					? attributes
+					: {
+							blockeraBlockStates:
+								attributes.blockeraBlockStates || {},
+					  }),
 				...(prepare(
 					`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes`,
 					attributes
