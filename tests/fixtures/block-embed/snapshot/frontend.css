@@ -26,8 +26,39 @@
 	object-fit: fill;
 }
 
+.blockera-block.blockera-block-2.wp-block-embed {
+	display: flex;
+	gap: 30px;
+	padding-right: 10px;
+	padding-left: 60px;
+}
+
 .blockera-block.blockera-block-2 figcaption {
 	text-align: center;
+	color: #2cc210;
+	font-weight: 600;
+	font-style: normal;
+	background-color: #dbfac2;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-embed {
+	padding-right: 10px;
+	padding-left: 0;
+	flex-direction: column;
+	gap: 50px;
+}
+
+.blockera-block.blockera-block-2 figcaption {
+	height: 50px;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	border-radius: 80px;
+}
+
+
 }
 
 .blockera-block.blockera-block-2.wp-block-embed__wrapper:hover {
@@ -42,6 +73,11 @@
 	height: 200px;
 	aspect-ratio: 4/3;
 	object-fit: contain;
+}
+
+.blockera-block.blockera-block-3.wp-block-embed {
+	opacity: 50%;
+	position: relative;
 }
 
 .blockera-block.blockera-block-3 figcaption {
