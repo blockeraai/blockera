@@ -388,7 +388,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											? 'value'
 											: 'val'
 									}
-									columns="1fr 121px"
+									columns="1fr 120px"
 									label={__('Flex Wrap', 'blockera')}
 									labelDescription={
 										<>

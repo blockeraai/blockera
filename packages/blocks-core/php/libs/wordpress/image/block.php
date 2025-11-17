@@ -31,7 +31,7 @@ return array_merge(
 				'filter'                    => $sizeSelector,
 				'radius'                    => $sizeSelector,
 				'blockera/elements/caption' => [
-					'root' => 'figcaption',
+					'root' => '&:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption',
 				],
 				'blockera/elements/link'    => [
 					'root' => 'a',

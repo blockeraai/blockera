@@ -2,3 +2,20 @@
 :where(.blockera-block.wp-block-gallery:is(.is-vertical,.is-horizontal):not(.is-layout-flex)) {
 	display: flex;
 }
+
+/* Fix passing transition to gallery caption (0.0.0 specificity). */
+:where(.blockera-block.wp-block-gallery > figcaption) {
+	transition: inherit;
+	order: 1001; /* Ensure caption is always last. */
+}
+
+/* Fix passing transition to images inside gallery block (0.0.0 specificity). */
+:where(.blockera-block.wp-block-gallery .wp-block-image) {
+	transition: inherit;
+}
+:where(.blockera-block.wp-block-gallery .wp-block-image :is(img:not([src=""]), svg:not(:empty), a)) {
+	transition: inherit;
+}
+:where(.blockera-block.wp-block-gallery .wp-block-image figcaption) {
+	transition: inherit;
+}
