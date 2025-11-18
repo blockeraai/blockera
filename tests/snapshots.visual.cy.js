@@ -14,6 +14,12 @@ const sectionsContext = require.context(
 	/input\.html$/
 );
 
+const configContext = require.context(
+	'../tests/fixtures',
+	true,
+	/config\.json$/
+);
+
 const sections = sectionsContext
 	.keys()
 	.map((key) => {
@@ -30,9 +36,27 @@ const sections = sectionsContext
 			return null;
 		}
 
-		return [sectionId, sectionContent];
+		// Try to load config.json for this section
+		let config = null;
+		try {
+			const configKey = `./${sectionId}/config.json`;
+			if (configContext.keys().includes(configKey)) {
+				config = configContext(configKey);
+			}
+		} catch (error) {
+			// Config file doesn't exist or can't be loaded
+			config = null;
+		}
+
+		// Check if screenshot is enabled in config
+		// Default to true (test visually) if config doesn't exist
+		// Only skip if config exists and screenshot is explicitly false
+		const shouldScreenshot = !config || config.screenshot !== false;
+
+		return [sectionId, sectionContent, shouldScreenshot];
 	})
 	.filter(Boolean)
+	.filter(([, , shouldScreenshot]) => shouldScreenshot)
 	.reduce((accumulator, [sectionId, sectionContent]) => {
 		accumulator[sectionId] = sectionContent;
 		return accumulator;

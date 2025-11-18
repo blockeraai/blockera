@@ -212,6 +212,7 @@ export { default as FontStyleNormal } from './font-style-normal.svg';
 export { default as GearSmall } from './gear-small.svg';
 export { default as Gear } from './gear.svg';
 export { default as Hreflang } from './hreflang.svg';
+export { default as Highlight } from './highlight.svg';
 export { default as HtmlTagAttribute } from './html-tag-attribute.svg';
 export { default as ResponsiveBreakpoints } from './responsive-breakpoints.svg';
 export { default as iconPositionLeft } from './icon-position-left.svg';

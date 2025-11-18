@@ -17,7 +17,7 @@ return array_merge(
 					'root' => 'a:not(.wp-element-button)',
 				],
 				'blockera/elements/item'        => [
-					'root' => 'li',
+					'root' => ':where(li)',
 				],
 				'blockera/elements/icon' => [
 					'root' => ' li::before',
@@ -40,6 +40,7 @@ return array_merge(
 				'blockera/elements/mark' => [
 					'root' => ':is(mark,mark[class])',
 				],
+				'border' => 'ul',
 			],
 		),
 		'supports' => array_merge(

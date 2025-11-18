@@ -99,9 +99,12 @@ const extensionsWithoutLabel = (extensionsObj: Object): Object => {
 	return newExtensions;
 };
 
-const getTabs = (insideBlockInspector: boolean): Array<Object> => {
+const getTabs = (
+	insideBlockInspector: boolean,
+	currentBlock: string
+): Array<Object> => {
 	return [
-		...(insideBlockInspector
+		...(!isInnerBlock(currentBlock) && insideBlockInspector
 			? [
 					{
 						name: 'settings',
@@ -381,7 +384,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 				<Tabs
 					design="modern"
 					orientation="horizontal"
-					tabs={getTabs(insideBlockInspector)}
+					tabs={getTabs(insideBlockInspector, currentBlock)}
 					activeTab={currentTab}
 					setCurrentTab={setCurrentTab}
 					className="block-inspector-tabs"
@@ -392,7 +395,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 				<Tabs
 					design="modern"
 					orientation="horizontal"
-					tabs={getTabs(insideBlockInspector)}
+					tabs={getTabs(insideBlockInspector, currentBlock)}
 					activeTab={currentTab}
 					setCurrentTab={setCurrentTab}
 					className="block-inspector-tabs"

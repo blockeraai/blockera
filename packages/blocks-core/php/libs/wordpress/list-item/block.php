@@ -13,13 +13,16 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockera/elements/icon'        => [
+				'blockera/elements/item' => [
+					'root' => ':where(li)',
+				],
+				'blockera/elements/icon' => [
 					'root' => '&:before',
 				],
-				'blockera/elements/link'        => [
+				'blockera/elements/link' => [
 					'root' => 'a:not(.wp-element-button)',
 				],
-				'blockera/states/marker'        => [
+				'blockera/states/marker' => [
 					'root' => '&::marker',
 				],
 				'blockera/elements/bold' => [

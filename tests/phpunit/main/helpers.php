@@ -73,6 +73,127 @@ function blockera_test_register_style_variations( string $design_name, array $va
 }
 
 /**
+ * Get the global config.json.
+ *
+ * @return array|null The global config array or null if not found.
+ */
+function blockera_test_get_global_config(): ?array {
+	$tests_path = dirname(__DIR__, 2);
+	$config_file = $tests_path . '/global-config.json';
+
+	if (!file_exists($config_file)) {
+		return null;
+	}
+
+	$config_content = file_get_contents($config_file);
+	if ($config_content === false) {
+		return null;
+	}
+
+	$config = json_decode($config_content, true);
+	
+	if (json_last_error() !== JSON_ERROR_NONE) {
+		return null;
+	}
+	
+	return is_array($config) ? $config : null;
+}
+
+/**
+ * Get the config.json for a design.
+ *
+ * @param string $design_name The design name.
+ *
+ * @return array|null The config array or null if not found.
+ */
+function blockera_test_get_config( string $design_name): ?array {
+	$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
+	$config_file = $fixtures_path . $design_name . '/config.json';
+
+	if (!file_exists($config_file)) {
+		return null;
+	}
+
+	$config_content = file_get_contents($config_file);
+	if ($config_content === false) {
+		return null;
+	}
+
+	$config = json_decode($config_content, true);
+	
+	return is_array($config) ? $config : null;
+}
+
+/**
+ * Apply html-search-replace operations on content.
+ *
+ * @param string $content The content to process.
+ * @param array $search_replace_config Array of search-replace operations.
+ *
+ * @return string The processed content.
+ */
+function blockera_test_apply_html_search_replace( string $content, array $search_replace_config): string {
+	foreach ($search_replace_config as $operation) {
+		if (!isset($operation['search']) || !isset($operation['replace'])) {
+			continue;
+		}
+
+		$search = $operation['search'];
+		$replace = $operation['replace'];
+
+		// If search is an array, apply each pattern
+		if (is_array($search)) {
+			foreach ($search as $pattern) {
+				$content = blockera_test_apply_single_search_replace($content, $pattern, $replace);
+			}
+		} else {
+			// Single search pattern
+			$content = blockera_test_apply_single_search_replace($content, $search, $replace);
+		}
+	}
+
+	return $content;
+}
+
+/**
+ * Apply a single search-replace operation.
+ *
+ * @param string $content The content to process.
+ * @param string $search The search pattern (can be plain text or regex).
+ * @param string $replace The replacement string.
+ *
+ * @return string The processed content.
+ */
+function blockera_test_apply_single_search_replace( string $content, string $search, string $replace): string {
+	// Check if the pattern contains regex metacharacters (backslash sequences like \d, \w, etc. or quantifiers)
+	// This helps distinguish between plain text and regex patterns
+	$has_regex_metacharacters = preg_match('/\\\\[dDwWsSnrt0-9]|[\.\*\?\+\{\}\[\]\(\)\^\$\|]/', $search);
+	
+	if ($has_regex_metacharacters) {
+		// Treat as regex pattern
+		// Use a delimiter that's less likely to appear in HTML patterns
+		// Escape the delimiter if it appears in the pattern
+		$delimiter = '#';
+		// If the delimiter appears in the pattern, try another one
+		if (strpos($search, $delimiter) !== false) {
+			$delimiter = '~';
+			if (strpos($search, $delimiter) !== false) {
+				$delimiter = '/';
+				// Escape forward slashes in the pattern
+				$search = str_replace('/', '\/', $search);
+			}
+		}
+		
+		$content = preg_replace($delimiter . $search . $delimiter, $replace, $content);
+	} else {
+		// Use str_replace for plain text (faster and safer)
+		$content = str_replace($search, $replace, $content);
+	}
+	
+	return $content;
+}
+
+/**
  * Normalize the CSS.
  *
  * @param string $css The CSS.

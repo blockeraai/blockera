@@ -85,6 +85,18 @@ class BlockeraTest extends AppTestCase {
 				$content .= render_block($block);
 			}
 
+			// Apply global html-search-replace first if configured
+			$global_config = blockera_test_get_global_config();
+			if ($global_config && isset($global_config['html-search-replace']) && is_array($global_config['html-search-replace'])) {
+				$content = blockera_test_apply_html_search_replace($content, $global_config['html-search-replace']);
+			}
+
+			// Apply test-specific html-search-replace if configured
+			$config = blockera_test_get_config($designName);
+			if ($config && isset($config['html-search-replace']) && is_array($config['html-search-replace'])) {
+				$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
+			}
+
 			$this->assertMatchesSnapshot($content, new HtmlDriver());
 		}
 
@@ -207,10 +219,39 @@ class BlockeraTest extends AppTestCase {
 	 */
 	public function designNameProvider(): array {
 
-		$designs = glob(dirname(__DIR__, 2) . '/fixtures/*/');
+		$fixtures_dir = dirname(__DIR__, 2) . '/fixtures';
+		$designs = glob($fixtures_dir . '/*/');
+
+		// Filter designs based on config.json snapshot setting
+		$filtered_designs = array_filter($designs, function($design) use ($fixtures_dir) {
+			$config_path = $design . 'config.json';
+
+			// If config.json doesn't exist, default to true (run snapshot test)
+			if (!file_exists($config_path)) {
+				return true;
+			}
+
+			// Read config.json
+			$config_content = file_get_contents($config_path);
+			if ($config_content === false) {
+				// If we can't read the config, default to true (run snapshot test)
+				return true;
+			}
+
+			$config = json_decode($config_content, true);
+			
+			// If json_decode failed or config is not an array, default to true (run snapshot test)
+			if (!is_array($config)) {
+				return true;
+			}
+			
+			// If snapshot property is not set or is not explicitly false, run the test
+			// Only skip if snapshot is explicitly false
+			return !isset($config['snapshot']) || $config['snapshot'] !== false;
+		});
 
 		return array_map(function($design) {
 			return [basename($design)];
-		}, $designs);
+		}, $filtered_designs);
 	}
 }

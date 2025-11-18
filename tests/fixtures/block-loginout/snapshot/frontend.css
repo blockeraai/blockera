@@ -1,0 +1,33 @@
+
+.blockera-block.blockera-block-1.wp-block-loginout {
+	background-color: #e6d7d7;
+	border-radius: 10px;
+	padding-top: 30px;
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-left: 30px;
+}
+
+.blockera-block.blockera-block-1 form {
+	background-color: #bea4a4;
+}
+
+.blockera-block.blockera-block-1 :is(.login-password, .login-username) label {
+	color: #fc6060;
+}
+
+.blockera-block.blockera-block-1 :is(.login-password, .login-username) input {
+	color: #e20404;
+}
+
+.blockera-block.blockera-block-1 .login-remember label {
+	color: #a62626;
+}
+
+.blockera-block.blockera-block-1 .login-submit .button.button-primary {
+	color: #4d0000;
+}
+
+.blockera-block.blockera-block-1.wp-block-loginout:hover {
+	background-color: #fec0c0;
+}
