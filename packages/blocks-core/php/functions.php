@@ -52,18 +52,6 @@ if ( ! function_exists( 'blockera_get_shared_block_attributes' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_get_shared_block_selectors' ) ) {
-	/**
-	 * Get blockera shared block selectors.
-	 *
-	 * @return array the shared block selectors.
-	 */
-	function blockera_get_shared_block_selectors(): array {
-
-		return blockera_load( 'shared.selectors', __DIR__ );
-	}
-}
-
 if (! function_exists('blockera_enqueue_blocks_editor_styles')) {
 	/**
 	 * Enqueue the blockera blocks editor styles assets.
