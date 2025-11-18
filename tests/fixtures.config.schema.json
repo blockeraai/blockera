@@ -1,0 +1,12 @@
+{
+	"$id": "https://blockera.ai/snapshot-tests-config.schema.json",
+	"title": "Snapshot Tests Config",
+	"description": "The configuration for snapshot tests.",
+	"type": "object",
+	"properties": {
+		"screenshot": {
+			"type": "boolean",
+			"default": true
+		}
+	}
+}
