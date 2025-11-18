@@ -2,8 +2,12 @@
 	"$schema": "./fixtures.config.schema.json",
 	"html-search-replace": [
 		{
-			"search": "action=\"http://localhost:8889/\"",
-			"replace": "action=\"https://blockera.ai/\""
+			"search": "http://localhost:\\d+/",
+			"replace": "https://blockera.ai/"
+		},
+		{
+			"search": "wp-elements-[^\\s\"]+",
+			"replace": "wp-elements-hash-id"
 		}
 	]
 }
