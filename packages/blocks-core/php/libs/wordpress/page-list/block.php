@@ -13,20 +13,20 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockera/elements/item'           => [
-					'root' => 'a',
+				'blockera/elements/item' => [
+					'root' => ':where(a)',
 				],
 				'blockera/elements/item-container' => [
-					'root' => 'li',
+					'root' => ':where(li)',
 				],
 				'blockera/states/marker'        => [
-					'root' => ' li::marker',
+					'root' => ' :where(li)::marker',
 				],
 				'blockera/elements/icon' => [
-					'root' => 'li::before',
+					'root' => ' :where(li)::before',
 				],
 				'blockera/elements/current-page' => [
-					'root' => 'li.current-menu-item',
+					'root' => ':where(li.current-menu-item a)',
 				],
 			],
 		),

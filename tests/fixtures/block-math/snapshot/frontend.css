@@ -1,0 +1,64 @@
+
+.blockera-block.blockera-block-1.wp-block-math {
+	background-color: #ffe3e3;
+	border: 2px solid #870000;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1 mi {
+	color: #d60000;
+}
+
+.blockera-block.blockera-block-1 mn {
+	color: #00aa4f;
+}
+
+.blockera-block.blockera-block-1 mo {
+	color: #00a0b8;
+}
+
+.blockera-block.blockera-block-1 mfrac {
+	color: #0300b1;
+}
+
+.blockera-block.blockera-block-1 msup {
+	color: #b500a0;
+}
+
+.blockera-block.blockera-block-1 msub {
+	color: #ba9b00;
+}
+
+.blockera-block.blockera-block-1.wp-block-math:hover {
+	background-color: #f6b5b5;
+	border: 2px solid #630000;
+}
+
+.blockera-block.blockera-block-1:hover mi {
+	color: #e20000;
+}
+
+.blockera-block.blockera-block-1:hover mn {
+	color: #00d765;
+}
+
+.blockera-block.blockera-block-1:hover mo {
+	color: #00c6e4;
+}
+
+.blockera-block.blockera-block-1:hover mfrac {
+	color: #0400fa;
+}
+
+.blockera-block.blockera-block-1:hover msup {
+	color: #ff00e1;
+}
+
+.blockera-block.blockera-block-1:hover msub {
+	color: #ffd500;
+}

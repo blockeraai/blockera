@@ -67,42 +67,79 @@ p.blockera-block.blockera-block-11 {
 }
 
 p.blockera-block.blockera-block-12 {
+	font-weight: 600;
+	font-style: normal;
+	color: #3b14fe;
+	text-align: center;
+}
+
+.blockera-block.blockera-block-12 a:not(.wp-element-button) {
+	color: #3b14fe;
+}
+
+p.blockera-block.blockera-block-12::before {
+	color: #8800ff;
+	background-color: #ebd0ff;
+	font-size: 18px;
+	padding-top: 5px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	margin-right: 20px !important;
+	border-radius: 38px;
+	content: "[:Before]";
+}
+
+p.blockera-block.blockera-block-12::after {
+	color: #009f6a;
+	background-color: #9ee8cd;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-left: 20px !important;
+	border-radius: 60px;
+	font-size: 18px;
+	content: "[:after]";
+}
+
+p.blockera-block.blockera-block-13 {
 	background-clip: padding-box;
 	-webkit-background-clip: padding-box;
 }
 
-.blockera-block.blockera-block-12 .has-inline-color {
+.blockera-block.blockera-block-13 .has-inline-color {
 	background-color: #dfdfdf;
 }
 
-.blockera-block.blockera-block-12 a:not(.wp-element-button) {
+.blockera-block.blockera-block-13 a:not(.wp-element-button) {
 	background-color: #cccccc;
 }
 
-.blockera-block.blockera-block-12 :is(strong, b) {
+.blockera-block.blockera-block-13 :is(strong, b) {
 	color: #ff6c6c;
 }
 
-.blockera-block.blockera-block-12 :is(em, i) {
+.blockera-block.blockera-block-13 :is(em, i) {
 	color: #6cff6c;
 }
 
-.blockera-block.blockera-block-12 kbd {
+.blockera-block.blockera-block-13 kbd {
 	color: #6c6cff;
 }
 
-.blockera-block.blockera-block-12 code {
+.blockera-block.blockera-block-13 code {
 	color: #ff6cff;
 }
 
-.blockera-block.blockera-block-12 span:not([data-rich-text-placeholder]) {
+.blockera-block.blockera-block-13 span:not([data-rich-text-placeholder]) {
 	color: #6cff6c;
 }
 
-p.blockera-block.blockera-block-13 {
+p.blockera-block.blockera-block-14 {
 	background-color: #f3f3f3;
 }
 
-.blockera-block.blockera-block-13 .has-inline-color {
+.blockera-block.blockera-block-14 .has-inline-color {
 	background-color: #dfdfdf;
 }
