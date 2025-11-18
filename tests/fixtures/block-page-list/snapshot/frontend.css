@@ -1,0 +1,74 @@
+.blockera-block.blockera-block-1 :where(a) {
+	color: #ff2121;
+}
+
+.blockera-block.blockera-block-1 :where(li) {
+	background-color: #fff0f0;
+	margin-bottom: 10px;
+}
+
+.blockera-block.blockera-block-1 :where(li.current-menu-item a) {
+	color: #00ff8c;
+}
+
+.blockera-block.blockera-block-1 :where(a):hover {
+	color: #00b518;
+}
+
+.blockera-block.blockera-block-1 :where(li.current-menu-item a):hover {
+	color: #00d6ff;
+}
+
+.blockera-block.blockera-block-1 :where(li):hover {
+	background-color: #ffd6d6;
+}
+
+.blockera-block.blockera-block-1 :where(li)::marker {
+	color: #b5b5b5;
+}
+.blockera-block.blockera-block-2 :where(li) {
+	margin-bottom: 10px;
+}
+
+.blockera-block.blockera-block-2 :where(a) {
+	color: #d08b00;
+	font-weight: 600;
+	font-style: normal;
+}
+
+.blockera-block.blockera-block-2 :where(li.current-menu-item a) {
+	color: #00ff44;
+}
+
+.blockera-block.blockera-block-2 :where(li.current-menu-item a):hover {
+	color: #f200ff;
+}
+.blockera-block.blockera-block-3 :where(li) {
+	padding-top: 5px;
+	padding-right: 12px;
+	padding-bottom: 5px;
+	padding-left: 12px;
+	margin-bottom: 10px;
+	background-color: #daddd3;
+	border-radius: 5px;
+	border: 1px solid #00000029;
+	font-size: 16px;
+	font-weight: 500;
+	font-style: normal;
+}
+
+.blockera-block.blockera-block-3 :where(a) {
+	color: #d08b00;
+}
+
+.blockera-block.blockera-block-3 :where(li.current-menu-item a) {
+	color: #00ff44;
+}
+
+.blockera-block.blockera-block-3 :where(li)::before {
+	background-color: #081cff;
+}
+
+.blockera-block.blockera-block-3 :where(li.current-menu-item a):hover {
+	color: #f200ff;
+}
