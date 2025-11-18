@@ -105,6 +105,10 @@ class Setup {
                     $args['attributes'] ?? [],
                     blockera_get_shared_block_attributes()
                 ),
+				'selectors' => array_merge(
+					$args['selectors'] ?? [],
+					blockera_get_shared_block_selectors()
+				),
             ]
         );
 
