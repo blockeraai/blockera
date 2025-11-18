@@ -7,7 +7,7 @@
 		"radius": ".wp-block-image :is(img:not([src=\"\"]),svg:not(:empty))"
 	},
 	"core/list": {
-		"border": ".wp-block-list:not(.wp-block-list .wp-block-list)"
+		"border": "ul"
 	},
 	"core/list-item": {
 		"root": ".wp-block-list > li",
@@ -17,6 +17,26 @@
 		"typography": {
 			"letterSpacing": ".wp-block-accordion-heading .wp-block-accordion-heading__toggle-title",
 			"textDecoration": ".wp-block-accordion-heading .wp-block-accordion-heading__toggle-title"
+		}
+	},
+	"core/audio": {
+		"spacing": {
+			"root": ".wp-block-audio audio::-webkit-media-controls-enclosure"
+		},
+		"background": {
+			"root": ".wp-block-audio audio::-webkit-media-controls-enclosure"
+		},
+		"border": {
+			"root": ".wp-block-audio audio::-webkit-media-controls-enclosure"
+		},
+		"shadow": {
+			"root": ".wp-block-audio audio"
+		},
+		"width": {
+			"root": ".wp-block-audio audio"
+		},
+		"dimensions": {
+			"root": ".wp-block-audio audio"
 		}
 	},
 	"core/button": {
@@ -32,6 +52,13 @@
 		"filter": {
 			"duotone": ".wp-block-cover > .wp-block-cover__image-background, .wp-block-cover > .wp-block-cover__video-background"
 		}
+	},
+	"core/embed": {
+		"root": " .wp-block-embed__wrapper",
+		"spacing": ".wp-block-embed",
+		"layout": ".wp-block-embed",
+		"effects": ".wp-block-embed",
+		"position": ".wp-block-embed"
 	},
 	"core/table": {
 		"root": ".wp-block-table > table",
@@ -61,14 +88,14 @@
 		"border": ".wp-block-avatar img",
 		"filter": {
 			"duotone": ".wp-block-avatar img"
-		}
+		},
+		"shadow": ".wp-block-avatar img"
 	},
 	"core/post-featured-image": {
-		"border": ".wp-block-post-featured-image img, .wp-block-post-featured-image .block-editor-media-placeholder, .wp-block-post-featured-image .wp-block-post-featured-image__overlay",
-		"shadow": ".wp-block-post-featured-image img, .wp-block-post-featured-image .components-placeholder",
-		"filter": {
-			"duotone": ".wp-block-post-featured-image img, .wp-block-post-featured-image .wp-block-post-featured-image__placeholder, .wp-block-post-featured-image .components-placeholder__illustration, .wp-block-post-featured-image .components-placeholder::before"
-		}
+		"border": ".wp-block-post-featured-image img",
+		"shadow": ".wp-block-post-featured-image img",
+		"filter": ".wp-block-post-featured-image img",
+		"radius": ".wp-block-post-featured-image img"
 	},
 	"core/post-author": {
 		"filter": {
