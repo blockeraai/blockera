@@ -1,0 +1,18 @@
+
+.blockera-block.blockera-block-3q1ewd.wp-block-post-author-biography {
+	background-color: #ffd7d7;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 600;
+	font-style: normal;
+	color: #c90a0a;
+	font-size: 18px;
+	text-align: center;
+}
+
+.blockera-block.blockera-block-3q1ewd a:not(.wp-element-button) {
+	color: #c90a0a;
+}
