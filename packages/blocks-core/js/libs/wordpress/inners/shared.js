@@ -277,7 +277,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'elements/mark',
 		label: __('Highlight', 'blockera'),
 		description: __('All highlighted text (mark) elements.', 'blockera'),
-		icon: <Icon icon="color" library="wp" iconSize="20" />,
+		icon: <Icon icon="highlight" iconSize="22" />,
 		availableBlockStates: generalSimpleInnerBlockStates,
 	},
 };
