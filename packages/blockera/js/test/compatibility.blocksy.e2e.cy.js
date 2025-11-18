@@ -35,7 +35,7 @@ describe('Compatibility with Blocksy Theme', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'color: var(--theme-link-initial-color, #2872fa)'
+					'color: var(--theme-link-initial-color, var(--theme-palette-color-1, #2872fa))'
 				);
 		});
 
@@ -70,7 +70,7 @@ describe('Compatibility with Blocksy Theme', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'color: var(--theme-link-initial-color, #2872fa)'
+				'color: var(--theme-link-initial-color, var(--theme-palette-color-1, #2872fa))'
 			);
 	});
 
