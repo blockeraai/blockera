@@ -29,7 +29,7 @@ export const propsAreEqual = (perv: Object, next: Object): boolean => {
  */
 export const isInnerBlock = (
 	currentBlock: 'master' | InnerBlockType | string
-): boolean => 'master' !== currentBlock;
+): boolean => 'master' !== currentBlock && currentBlock.startsWith('elements/');
 
 /**
  * is current block on normal state?
