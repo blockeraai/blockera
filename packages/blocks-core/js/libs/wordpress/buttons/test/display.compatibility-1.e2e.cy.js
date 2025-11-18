@@ -56,9 +56,7 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 
 		getWPDataObject().then((data) => {
 			// default display value for buttons is "flex"
-			expect(undefined).to.be.equal(
-				getSelectedBlock(data, 'layout')?.type
-			);
+			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
 			expect('flex').to.be.equal(
 				getSelectedBlock(data, 'blockeraDisplay')
