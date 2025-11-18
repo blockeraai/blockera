@@ -1,6 +1,6 @@
 {
 	"$schema": "../block.supports.schema.json",
-	"title": "state",
+	"title": "pseudo elements",
 	"supports": {
 		"blockeraContentPseudoElement": {
 			"status": true,
@@ -9,7 +9,7 @@
 			"css-property": "content",
 			"fallback": [],
 			"description": "Support for \"content\" value.",
-			"hasDefaultValueInStates": ["before", "after"]
+			"allowedInners": ["elements/before", "elements/after"]
 		}
 	}
 }

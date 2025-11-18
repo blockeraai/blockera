@@ -15,5 +15,5 @@ export { clickAnimationConfig } from './click-animation';
 export { conditionsConfig } from './conditions';
 export { advancedSettingsConfig } from './advanced-settings';
 export { innerBlocksConfig } from './inner-blocks';
-export { statesConfig } from './block-states';
+export { contentConfig } from './content';
 export { iconConfig } from '@blockera/feature-icon/src/extension/supports';

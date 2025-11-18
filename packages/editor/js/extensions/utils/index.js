@@ -9,7 +9,6 @@ import { dispatch } from '@wordpress/data';
  * Internal dependencies
  */
 import size from '../../schemas/block-supports/size-block-supports-list.json';
-import state from '../../schemas/block-supports/state-block-supports-list.json';
 import mouse from '../../schemas/block-supports/mouse-block-supports-list.json';
 import border from '../../schemas/block-supports/border-block-supports-list.json';
 import layout from '../../schemas/block-supports/layout-block-supports-list.json';
@@ -21,6 +20,7 @@ import position from '../../schemas/block-supports/position-block-supports-list.
 import boxShadow from '../../schemas/block-supports/box-shadow-block-supports-list.json';
 import background from '../../schemas/block-supports/background-block-supports-list.json';
 import typography from '../../schemas/block-supports/typography-block-supports-list.json';
+import pseudoElements from '../../schemas/block-supports/pseudo-elements-block-supports-list.json';
 
 export const resetExtensionSettings = () => {
 	const {
@@ -45,7 +45,6 @@ export const resetExtensionSettings = () => {
 export const getBlockSupportCategory = (name: string): Object => {
 	const supports = {
 		size,
-		state,
 		mouse,
 		border,
 		layout,
@@ -57,6 +56,8 @@ export const getBlockSupportCategory = (name: string): Object => {
 		boxShadow,
 		background,
 		typography,
+		textShadow,
+		pseudoElements,
 	};
 
 	return supports[name]?.supports;

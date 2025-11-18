@@ -3,12 +3,32 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import type { TBlockProps, THandleOnChangeAttributes } from '../../../types';
+import type {
+	TBlockProps,
+	BaseExtensionProps,
+	THandleOnChangeAttributes,
+} from '../../../types';
 import type {
 	TStates,
 	TBreakpoint,
 	StateTypes,
 } from '../../block-states/types';
+import type { FeatureConfig } from '../../../base';
+
+export type TInnerBlockOptionsExtensionProps = {
+	...BaseExtensionProps,
+	block: TBlockProps,
+	extensionConfig: { [key: string]: FeatureConfig },
+	values: {
+		[key: InnerBlockType | string]: {
+			...InnerBlockModel,
+			content?: string,
+		},
+	},
+	extensionProps: Object,
+	currentBlock: 'master' | InnerBlockType | string,
+	innerBlocks: InnerBlocks,
+};
 
 export type InnerBlockType =
 	| 'heading'

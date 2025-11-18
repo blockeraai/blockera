@@ -17,7 +17,6 @@ import { ExtensionSlotFill } from '@blockera/features-core';
 /**
  * Internal dependencies
  */
-import { isInnerBlock } from '../../components/utils';
 import { ErrorBoundaryFallback } from '../../hooks/block-settings';
 import { BackgroundExtension } from '../background';
 import { BorderAndShadowExtension } from '../border-and-shadow';
@@ -30,7 +29,6 @@ import { LayoutExtension } from '../layout';
 import { FlexChildExtension } from '../flex-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
-import { StateOptionsExtension } from '../block-card/block-states/extension';
 // import { EntranceAnimationExtension } from '../entrance-animation';
 // import { ScrollAnimationExtension } from '../scroll-animation';
 import { ClickAnimationExtension } from '../click-animation';
@@ -38,6 +36,7 @@ import { ClickAnimationExtension } from '../click-animation';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { useBlockSection } from '../../components';
 import { getParentFlexBlockInfo } from './utils';
+import { InnerBlockOptionsExtension } from '../block-card/inner-blocks/inner-block-options-extension';
 
 export const MappedExtensions = ({
 	tab,
@@ -45,12 +44,11 @@ export const MappedExtensions = ({
 	settings,
 	attributes,
 	additional,
+	currentBlock,
+	blockeraInnerBlocks,
 	currentStateAttributes,
 	handleOnChangeSettings,
 	handleOnChangeAttributes,
-	currentBlock,
-	currentState,
-	currentInnerBlockState,
 	isReportingErrorCompleted,
 	setIsReportingErrorCompleted,
 }: {
@@ -59,13 +57,12 @@ export const MappedExtensions = ({
 	settings: Object,
 	attributes: Object,
 	additional: Object,
+	currentBlock: string,
+	blockeraInnerBlocks: Object,
 	currentStateAttributes: Object,
 	handleOnChangeSettings: Function,
-	handleOnChangeAttributes: Function,
-	currentBlock: string,
-	currentState: string,
-	currentInnerBlockState: string,
 	isReportingErrorCompleted: boolean,
+	handleOnChangeAttributes: Function,
 	setIsReportingErrorCompleted: Function,
 }): Array<MixedElement> => {
 	const activePanel: Array<MixedElement> = [];
@@ -73,7 +70,7 @@ export const MappedExtensions = ({
 		mouseConfig,
 		sizeConfig,
 		layoutConfig,
-		statesConfig,
+		contentConfig,
 		spacingConfig,
 		effectsConfig,
 		positionConfig,
@@ -256,29 +253,25 @@ export const MappedExtensions = ({
 								}
 								from={'extension'}
 								error={error}
-								configId={'statesConfig'}
-								title={__('Block State Options', 'blockera')}
+								configId={'contentConfig'}
+								title={__('Inner Block Options', 'blockera')}
 								// icon={<Icon icon="extension-states" />}
 							/>
 						)}
 					>
-						<StateOptionsExtension
+						<InnerBlockOptionsExtension
 							block={block}
-							extensionConfig={statesConfig}
-							values={currentStateAttributes.blockeraBlockStates}
+							innerBlocks={blockeraInnerBlocks}
+							extensionConfig={contentConfig}
+							values={currentStateAttributes.blockeraInnerBlocks}
 							attributes={{
-								blockeraBlockStates:
-									attributes.blockeraBlockStates,
+								blockeraInnerBlocks:
+									attributes.blockeraInnerBlocks,
 							}}
 							extensionProps={{}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							setSettings={handleOnChangeSettings}
 							currentBlock={currentBlock}
-							currentState={
-								isInnerBlock(currentBlock)
-									? currentInnerBlockState
-									: currentState
-							}
 						/>
 					</ErrorBoundary>
 

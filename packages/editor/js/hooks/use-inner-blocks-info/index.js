@@ -14,6 +14,7 @@ import { prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
+import { inners } from './shared/inners';
 import { prepareInnerBlockTypes } from '../../extensions/libs/block-card/inner-blocks';
 import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
 import type {
@@ -35,10 +36,14 @@ export const useInnerBlocksInfo = ({
 	currentInnerBlockState,
 }: InnerBlocksInfoProps): InnerBlocksInfo => {
 	return useMemo(() => {
-		const blockeraInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
-			additional?.blockeraInnerBlocks || {},
-			defaultAttributes
-		);
+		// Preparing reserved inner blocks by current block and merge with shared inner blocks.
+		const blockeraInnerBlocks: InnerBlocks = {
+			...inners,
+			...prepareInnerBlockTypes(
+				additional?.blockeraInnerBlocks || {},
+				defaultAttributes
+			),
+		};
 
 		/**
 		 * Get sanitized current block name.
@@ -167,6 +172,7 @@ export const useInnerBlocksInfo = ({
 				(innerBlock: InnerBlockType | string): InnerBlockModel => {
 					return {
 						...innerBlock,
+						...(inners[innerBlock] ?? {}),
 						...(additional.blockeraInnerBlocks[innerBlock] ?? {}),
 						attributes: {
 							...attributes,

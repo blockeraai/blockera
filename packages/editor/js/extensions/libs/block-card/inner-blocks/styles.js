@@ -15,9 +15,9 @@ import {
 	getBlockSupportFallback,
 } from '../../../utils';
 
-const supports = getBlockSupportCategory('state');
+const supports = getBlockSupportCategory('pseudoElements');
 
-export const BlockStatesStyles = ({
+export const BlockeraInnerBlocksStyles = ({
 	state,
 	config,
 	clientId,
@@ -31,7 +31,7 @@ export const BlockStatesStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	const { contentField } = config.statesConfig;
+	const { contentField } = config.contentConfig;
 	const blockProps = {
 		state,
 		clientId,
@@ -55,25 +55,25 @@ export const BlockStatesStyles = ({
 
 	if (
 		isActiveField(contentField) &&
-		null !== blockProps.attributes.blockeraBlockStates[state]?.content &&
-		undefined !== blockProps.attributes.blockeraBlockStates[state]?.content
+		null !== blockProps.attributes?.blockeraContentPseudoElement &&
+		undefined !== blockProps.attributes?.blockeraContentPseudoElement
 	) {
 		if (
-			!supports?.blockeraContentPseudoElement?.hasDefaultValueInStates.includes(
-				state
+			!supports?.blockeraContentPseudoElement?.allowedInners.includes(
+				currentBlock
 			) &&
-			'' === blockProps.attributes.blockeraBlockStates[state].content
+			'' === blockProps.attributes?.blockeraContentPseudoElement
 		) {
 			return styleGroup;
 		}
 
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
-			query: 'blockera/states/before',
-			support: 'blockera/states/before',
+			query: 'blockera/elements/' + currentBlock,
+			support: 'blockera/elements/' + currentBlock,
 			fallbackSupportId: getBlockSupportFallback(
 				supports,
-				'blockera/states/before'
+				'blockera/elements/' + currentBlock
 			),
 		});
 
@@ -85,7 +85,7 @@ export const BlockStatesStyles = ({
 						{
 							type: 'static',
 							properties: {
-								content: `"${blockProps.attributes.blockeraBlockStates[state]?.content}"`,
+								content: `"${blockProps.attributes.blockeraContentPseudoElement}"`,
 							},
 						},
 					],

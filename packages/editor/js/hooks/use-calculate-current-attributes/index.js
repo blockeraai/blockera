@@ -13,7 +13,6 @@ import { prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { useEditorStore } from '../use-editor-store';
 import type { CalculateCurrentAttributesProps } from './types';
 import {
 	isInnerBlock,
@@ -30,8 +29,6 @@ export const useCalculateCurrentAttributes = ({
 	currentInnerBlock,
 	blockeraInnerBlocks,
 }: CalculateCurrentAttributesProps): Object => {
-	const { getState, getInnerState } = useEditorStore();
-
 	return useMemo(() => {
 		let currentAttributes: Object = {};
 
@@ -40,8 +37,19 @@ export const useCalculateCurrentAttributes = ({
 
 		// Assume block is inner block type.
 		if (isInnerBlock(currentBlock)) {
+			const {
+				settings: { hasContent },
+			} = blockeraInnerBlocks[currentBlock] || {
+				settings: { hasContent: false },
+			};
 			currentAttributes = {
 				...blockAttributesDefaults,
+				...(!hasContent
+					? currentInnerBlock
+					: {
+							blockeraInnerBlocks:
+								attributes.blockeraInnerBlocks || {},
+					  }),
 				...currentInnerBlock,
 			};
 		}
@@ -58,20 +66,8 @@ export const useCalculateCurrentAttributes = ({
 		else if (
 			!isNormalStateOnBaseBreakpoint(currentState, currentBreakpoint)
 		) {
-			const {
-				settings: { hasContent },
-			} = getState(currentState) ||
-				getInnerState(currentState) || {
-					settings: { hasContent: false },
-				};
 			currentAttributes = {
 				...blockAttributesDefaults,
-				...(!hasContent
-					? attributes
-					: {
-							blockeraBlockStates:
-								attributes.blockeraBlockStates || {},
-					  }),
 				...(prepare(
 					`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes`,
 					attributes
@@ -79,17 +75,15 @@ export const useCalculateCurrentAttributes = ({
 			};
 		}
 
-		if (!Object(currentAttributes?.blockeraInnerBlocks).length) {
+		if (!Object.values(currentAttributes?.blockeraInnerBlocks).length) {
 			currentAttributes.blockeraInnerBlocks = { ...blockeraInnerBlocks };
 		}
 
 		return currentAttributes;
 	}, [
-		getState,
 		attributes,
 		currentBlock,
 		currentState,
-		getInnerState,
 		blockAttributes,
 		currentBreakpoint,
 		currentInnerBlock,

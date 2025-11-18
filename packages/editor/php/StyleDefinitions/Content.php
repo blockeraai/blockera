@@ -23,19 +23,20 @@ class Content extends BaseStyleDefinition implements StandardDefinition {
      */
     protected function validate( array $setting): bool {
 
-		$existing_state = in_array($this->pseudo_state, $this->getSupports(false)['blockeraContentPseudoElement']['hasDefaultValueInStates'], true);
+		$allowed_inners = $this->getSupports(false)['blockeraContentPseudoElement']['allowedInners'];
+		$allowed        = in_array($this->block_type, $allowed_inners, true);
 
 		if (! empty($setting['content'])) {
 
 			// If the content is equals to double quotes, it means that the content is empty.
 			if ( '""' === $setting['content']) {
 
-				return $existing_state;
+				return $allowed;
 			}
 
-			return true;
+			return $allowed;
 		}
 
-        return $existing_state;
+        return $allowed;
     }
 }
