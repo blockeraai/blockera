@@ -85,6 +85,18 @@ class BlockeraTest extends AppTestCase {
 				$content .= render_block($block);
 			}
 
+			// Apply global html-search-replace first if configured
+			$global_config = blockera_test_get_global_config();
+			if ($global_config && isset($global_config['html-search-replace']) && is_array($global_config['html-search-replace'])) {
+				$content = blockera_test_apply_html_search_replace($content, $global_config['html-search-replace']);
+			}
+
+			// Apply test-specific html-search-replace if configured
+			$config = blockera_test_get_config($designName);
+			if ($config && isset($config['html-search-replace']) && is_array($config['html-search-replace'])) {
+				$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
+			}
+
 			$this->assertMatchesSnapshot($content, new HtmlDriver());
 		}
 
