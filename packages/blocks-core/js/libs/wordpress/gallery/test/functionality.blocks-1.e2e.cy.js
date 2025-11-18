@@ -87,7 +87,7 @@ describe('Gallery Block', () => {
 		cy.getBlock('core/gallery')
 			.first()
 			.within(() => {
-				cy.get('.wp-block-image img')
+				cy.get('.wp-block-image')
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 			});
@@ -170,7 +170,7 @@ describe('Gallery Block', () => {
 
 		cy.get('.blockera-block.wp-block-gallery').within(() => {
 			// image inner block
-			cy.get('.wp-block-image img')
+			cy.get('.wp-block-image')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 
