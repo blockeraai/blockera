@@ -790,7 +790,7 @@ export function TypographyStyles({
 			query: 'blockeraTextShadow',
 			support: 'blockeraTextShadow',
 			fallbackSupportId: getBlockSupportFallback(
-				getBlockSupportCategory('textShadow'),
+				supports,
 				'blockeraTextShadow'
 			),
 		});
