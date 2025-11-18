@@ -41,6 +41,7 @@ describe('List Item Block → Functionality + Inner blocks', () => {
 			'elements/code',
 			'elements/span',
 			'elements/mark',
+			'elements/item',
 		]);
 
 		//
