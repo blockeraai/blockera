@@ -136,6 +136,7 @@ const baseBlockStates = {
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
 			hasContent: true,
+			supportsInnerBlocks: false,
 		},
 	},
 	after: {
@@ -166,6 +167,7 @@ const baseBlockStates = {
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
 			hasContent: true,
+			supportsInnerBlocks: false,
 		},
 	},
 	'first-child': {
@@ -384,6 +386,7 @@ const baseSharedBlockStates = {
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
 			hasContent: true,
+			supportsInnerBlocks: false,
 		},
 	},
 	placeholder: {
@@ -413,6 +416,7 @@ const baseSharedBlockStates = {
 		force: false,
 		settings: {
 			color: 'var(--blockera-controls-states-color)',
+			supportsInnerBlocks: false,
 		},
 	},
 	'current-menu-item': {
