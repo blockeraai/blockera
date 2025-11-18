@@ -6,7 +6,13 @@
 	"properties": {
 		"screenshot": {
 			"type": "boolean",
-			"default": true
+			"default": true,
+			"description": "Whether to take a screenshot of the block."
+		},
+		"snapshot": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether to take a snapshot (html and CSS) of the block."
 		}
 	}
 }
