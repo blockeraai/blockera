@@ -19,10 +19,7 @@ import type { NormalizedSelectorProps } from './types';
 import { getBlockCSSSelector } from './get-block-css-selector';
 import { isInnerBlock, isNormalState } from '../extensions/components/utils';
 import type { TStates } from '../extensions/libs/block-card/block-states/types';
-import type {
-	InnerBlocks,
-	InnerBlockType,
-} from '../extensions/libs/block-card/inner-blocks/types';
+import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 
 /**
  * Returns the appropriate state symbol for the given state.
@@ -132,9 +129,7 @@ export const getNormalizedSelector = (
 		getInnerState: () => TStates,
 		getMasterState: () => TStates,
 		currentStateHasSelectors: boolean,
-		blockeraInnerBlocks?: InnerBlocks,
 		customizedPseudoClasses: Array<string>,
-		currentBlock: 'master' | InnerBlockType | string,
 	}
 ): string => {
 	if (isEmpty(selector)) {
@@ -145,10 +140,8 @@ export const getNormalizedSelector = (
 		state,
 		suffixClass,
 		masterState,
-		currentBlock,
 		getInnerState,
 		getMasterState,
-		blockeraInnerBlocks,
 		fromInnerBlock = false,
 		customizedPseudoClasses,
 		currentStateHasSelectors,
@@ -276,26 +269,6 @@ export const getNormalizedSelector = (
 							state
 						)}${state}`,
 					});
-				}
-
-				const selectorWithoutPseudo = selector.replace(
-					/[:|::]([a-z-]+)/g,
-					''
-				);
-
-				// if current inner block the `hasContent` value is true and selector has pseudo-class,
-				// Replace any pseudo-class in selector before appending suffix.
-				if (
-					blockeraInnerBlocks?.[currentBlock]?.settings?.hasContent &&
-					selectorWithoutPseudo !== selector
-				) {
-					const pseudoClasses = selector.substring(
-						selectorWithoutPseudo.length
-					);
-
-					return `${selectorWithoutPseudo}${rootSelector}${getStateSymbol(
-						masterState
-					)}${masterState}${pseudoClasses}${suffixClass}`;
 				}
 
 				return `${rootSelector}${getStateSymbol(
@@ -428,7 +401,6 @@ export const getCompatibleBlockCssSelector = ({
 	suffixClass = '',
 	fallbackSupportId,
 	styleVariationName,
-	blockeraInnerBlocks,
 	isStyleVariation = false,
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
@@ -564,10 +536,8 @@ export const getCompatibleBlockCssSelector = ({
 							state,
 							suffixClass,
 							masterState,
-							currentBlock,
 							getInnerState,
 							getMasterState,
-							blockeraInnerBlocks,
 							fromInnerBlock: true,
 							customizedPseudoClasses,
 							currentStateHasSelectors,
@@ -596,7 +566,6 @@ export const getCompatibleBlockCssSelector = ({
 							state,
 							suffixClass,
 							masterState,
-							currentBlock,
 							getInnerState,
 							getMasterState,
 							customizedPseudoClasses,

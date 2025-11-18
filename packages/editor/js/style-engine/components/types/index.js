@@ -7,10 +7,7 @@ import type {
 	TBreakpoint,
 	TStates,
 } from '../../../extensions/libs/block-card/block-states/types';
-import type {
-	InnerBlocks,
-	InnerBlockType,
-} from '../../../extensions/libs/block-card/inner-blocks/types';
+import type { InnerBlockType } from '../../../extensions/libs/block-card/inner-blocks/types';
 
 export type MediaQueryProps = {
 	clientId: string,
@@ -33,7 +30,6 @@ export type BlockStyleProps = {
 	isGlobalStylesWrapper?: boolean,
 	styleVariationName?: string,
 	isStyleVariation?: boolean,
-	blockeraInnerBlocks?: InnerBlocks,
 };
 
 export type StateStyleProps = {

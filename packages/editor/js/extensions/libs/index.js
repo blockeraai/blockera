@@ -24,10 +24,7 @@ export {
 	EXTENSIONS_SUPPORT_STORE_NAME,
 	registerBlockExtensionsSupports,
 } from './base';
-export {
-	BlockeraInnerBlocksStyles,
-	registerInnerBlockExtensionsSupports,
-} from './block-card/inner-blocks';
+export { registerInnerBlockExtensionsSupports } from './block-card/inner-blocks';
 
 export { blockeraExtensionsBootstrap } from './bootstrap';
 export * from './block-card/block-states';

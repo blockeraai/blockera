@@ -404,11 +404,10 @@ export const BlockBase: ComponentType<any> = (
 		selectors,
 		additional,
 		inlineStyles,
+		attributes: sanitizedAttributes,
 		blockName: name,
 		currentAttributes,
 		defaultAttributes,
-		blockeraInnerBlocks,
-		attributes: sanitizedAttributes,
 		customCss: attributes?.blockeraCustomCSS?.value
 			?.replace(/(\.|#)block/gi, `#block-${clientId}`)
 			?.replace(/&/gi, `#block-${clientId}`),
@@ -485,24 +484,25 @@ export const BlockBase: ComponentType<any> = (
 									// Sending props like exactly "edit" function props of WordPress Block.
 									// Because needs total block props in outside overriding component like "blockera" in overriding process.
 									name,
+									activeBlockVariation:
+										activeBlockVariation?.name || '',
 									clientId,
 									supports,
 									className,
-									additional,
+									attributes: sanitizedAttributes,
+									setAttributes,
+									defaultAttributes,
+									currentAttributes,
 									currentTab,
 									currentBlock,
 									currentState,
 									setCurrentTab,
-									setAttributes,
-									currentAttributes,
 									currentBreakpoint,
-									defaultAttributes,
 									blockeraInnerBlocks,
 									currentInnerBlockState,
 									handleOnChangeAttributes,
-									activeBlockVariation:
-										activeBlockVariation?.name || '',
-									attributes: sanitizedAttributes,
+									additional,
+									currentStateAttributes: currentAttributes,
 									...props,
 								},
 							}}
@@ -535,24 +535,25 @@ export const BlockBase: ComponentType<any> = (
 								// Sending props like exactly "edit" function props of WordPress Block.
 								// Because needs total block props in outside overriding component like "blockera" in overriding process.
 								name,
+								activeBlockVariation:
+									activeBlockVariation?.name || '',
 								clientId,
 								supports,
 								className,
-								additional,
+								attributes: sanitizedAttributes,
+								setAttributes,
+								defaultAttributes,
+								currentAttributes,
 								currentTab,
 								currentBlock,
 								currentState,
 								setCurrentTab,
-								setAttributes,
-								currentAttributes,
 								currentBreakpoint,
-								defaultAttributes,
 								blockeraInnerBlocks,
 								currentInnerBlockState,
 								handleOnChangeAttributes,
-								activeBlockVariation:
-									activeBlockVariation?.name || '',
-								attributes: sanitizedAttributes,
+								additional,
+								currentStateAttributes: currentAttributes,
 								...props,
 							},
 						}}

@@ -262,42 +262,40 @@ final class StyleEngine {
 			// prepare all block states.
 			$this->pseudo_classes = blockera_get_array_deep_merge($this->pseudo_classes, $states);
 
-			$generated_pseudo_classes_css = array_map(
-				function( array $stateSettings, string $state): array {
-					$this->pseudo_state = $state;
-
-					if (empty($stateSettings['breakpoints']) && ! empty($stateSettings['content'])) {
-						return [
-							$this->prepareBreakpointStyles(
-								$this->breakpoint,
-								[
-									'blockeraContentPseudoElement' => '"' . $stateSettings['content'] . '"',
-								]
-							),
-						];
-					}
-
-					$breakpoints = $this->prepareBreakpointsSettings($stateSettings['breakpoints']);
-
-					return array_map(
-                        function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {
-							if (isset($stateSettings['content'])) {
-								$breakpointSettings['attributes']['blockeraContentPseudoElement'] = '"' . $stateSettings['content'] . '"';
-							}
-
-                            return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes']);
-                        },
-                        $breakpoints,
-                        array_keys($breakpoints)
-					);
-				},
-                $this->pseudo_classes,
-                array_keys($this->pseudo_classes)
-			);
-
 			$breakpointsCssRules = blockera_array_flat(
 				array_filter(
-					$generated_pseudo_classes_css,
+					array_map(
+                        function( array $stateSettings, string $state): array {
+							$this->pseudo_state = $state;
+
+							if (empty($stateSettings['breakpoints']) && ! empty($stateSettings['content'])) {
+								return [
+									$this->prepareBreakpointStyles(
+                                        $this->breakpoint,
+                                        [
+											'blockeraContentPseudoElement' => '"' . $stateSettings['content'] . '"',
+										]
+                                    ),
+								];
+							}
+
+							$breakpoints = $this->prepareBreakpointsSettings($stateSettings['breakpoints']);
+
+							return array_map(
+                                function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {
+									if (isset($stateSettings['content'])) {
+										$breakpointSettings['attributes']['blockeraContentPseudoElement'] = '"' . $stateSettings['content'] . '"';
+									}
+
+                                    return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes']);
+                                },
+                                $breakpoints,
+                                array_keys($breakpoints)
+							);
+						},
+                        $this->pseudo_classes,
+                        array_keys($this->pseudo_classes)
+                    ),
 					'blockera_get_filter_empty_array_item'
 				)
 			);
@@ -465,8 +463,6 @@ final class StyleEngine {
 			
 			$inner_blocks_css = array_map(
 				function ( array $settings, string $blockType): array {
-					$attributes = $settings['attributes'] ?? [];
-
 					return array_map(
 						function ( $settings, $id) use ( $blockType): array {
 
@@ -475,6 +471,25 @@ final class StyleEngine {
 								return blockera_array_flat(
 									array_map(
 										function ( array $settings, string $state) use ( $blockType): array {
+
+											if (empty($settings['breakpoints']) && ! empty($settings['content'])) {
+												$id = 'blockeraContentPseudoElement';
+
+												$this->setDefinition($id);
+
+												if (! $this->definition) {
+
+													return [];
+												}
+
+												return $this->generateInnerBlockCss(
+													[
+														'value' => '"' . $settings['content'] . '"',
+													],
+													$blockType,
+													compact('id', 'state')
+												);
+											}
 
 											if (empty($settings['breakpoints']) || blockera_is_normal_on_base_breakpoint($state, $this->breakpoint)) {
 
@@ -495,7 +510,31 @@ final class StyleEngine {
 																		return [];
 																	}
 
-																	return $this->generateInnerBlockCss(is_string($_settings) ? [ 'value' => $_settings ] : $_settings, $blockType, compact('id', 'state'));
+																	$css_rules = $this->generateInnerBlockCss(is_string($_settings) ? [ 'value' => $_settings ] : $_settings, $blockType, compact('id', 'state'));
+
+																	if (isset($settings['content'])) {
+																		$id = 'blockeraContentPseudoElement';
+
+																		$this->setDefinition($id);
+
+																		if (! $this->definition) {
+
+																			return [];
+																		}
+
+																		$css_rules = blockera_get_array_deep_merge(
+																			$css_rules,
+																			$this->generateInnerBlockCss(
+																				[
+																					'value' => '"' . $settings['content'] . '"',
+																				],
+																				$blockType,
+																				compact('id', 'state')
+																			)
+																		);
+																	}
+
+																	return $css_rules;
 																},
 																$breakpointSettings['attributes'] ?? [],
 																array_keys($breakpointSettings['attributes'] ?? [])
@@ -519,22 +558,11 @@ final class StyleEngine {
 								return [];
 							}
 
-							if ('blockeraContentPseudoElement' === $id) {
-
-								return $this->generateInnerBlockCss(
-                                    [
-										'value' => '"' . $settings . '"',
-									],
-									$blockType,
-									compact('id')
-								);
-							}
-
 							return $this->generateInnerBlockCss(is_string($settings) ? [ 'value' => $settings ] : $settings, $blockType, compact('id'));
 
 						},
-						$attributes,
-						array_keys($attributes)
+						$settings['attributes'] ?? [],
+						array_keys($settings['attributes'] ?? [])
 					);
 				},
 				blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) ? $settings['blockeraInnerBlocks']['value'] ?? [] : $settings['blockeraInnerBlocks'] ?? [],

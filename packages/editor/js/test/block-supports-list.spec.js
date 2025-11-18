@@ -20,7 +20,6 @@ import size from '../schemas/block-supports/size-block-supports-list.json';
 import spacing from '../schemas/block-supports/spacing-block-supports-list.json';
 import textShadow from '../schemas/block-supports/text-shadow-block-supports-list.json';
 import typography from '../schemas/block-supports/typography-block-supports-list.json';
-import pseudoElements from '../schemas/block-supports/pseudo-elements-block-supports-list.json';
 
 const ajv = new Ajv({ allowUnionTypes: true });
 
@@ -38,7 +37,6 @@ const ajv = new Ajv({ allowUnionTypes: true });
 	'spacing',
 	'textShadow',
 	'typography',
-	'pseudoElements',
 ].forEach((support) => {
 	let supports;
 
@@ -83,9 +81,6 @@ const ajv = new Ajv({ allowUnionTypes: true });
 			break;
 		case 'typography':
 			supports = typography;
-			break;
-		case 'pseudoElements':
-			supports = pseudoElements;
 			break;
 	}
 	describe(`Validate blockera ${support} supports of Block Supports JSON`, () => {

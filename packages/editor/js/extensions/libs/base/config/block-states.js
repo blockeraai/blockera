@@ -8,17 +8,16 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import type { FeatureConfig } from '..';
+import type { FeatureConfig } from '../../base';
 
 const contentField: FeatureConfig = {
 	status: true,
 	show: true,
 	force: true,
-	onNativeOnInnerBlocks: false,
 	label: __('Content', 'blockera'),
 };
 
-export const contentConfig = {
+export const statesConfig = {
 	initialOpen: true,
 	contentField,
 };

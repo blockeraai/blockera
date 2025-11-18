@@ -135,19 +135,19 @@ const getTabs = (
 export const SharedBlockExtension: ComponentType<Props> = ({
 	children,
 	additional,
+	setCurrentTab,
+	insideBlockInspector,
+	attributes: blockAttributes,
+	defaultAttributes: attributes,
+	setAttributes,
+	availableStates,
+	currentStateAttributes,
+	currentAttributes: currentBlockAttributes,
 	currentTab,
 	currentBlock,
 	currentState,
-	setCurrentTab,
-	setAttributes,
-	availableStates,
 	currentBreakpoint,
-	blockeraInnerBlocks,
-	insideBlockInspector,
 	currentInnerBlockState,
-	attributes: blockAttributes,
-	defaultAttributes: attributes,
-	currentAttributes: currentStateAttributes,
 	handleOnChangeAttributes,
 	...props
 }: Props): MixedElement => {
@@ -359,11 +359,12 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			settings={settings}
 			attributes={attributes}
 			additional={additional}
-			currentBlock={currentBlock}
-			blockeraInnerBlocks={blockeraInnerBlocks}
 			currentStateAttributes={currentStateAttributes}
 			handleOnChangeSettings={handleOnChangeSettings}
 			handleOnChangeAttributes={handleOnChangeAttributes}
+			currentBlock={currentBlock}
+			currentState={currentState}
+			currentInnerBlockState={currentInnerBlockState}
 			isReportingErrorCompleted={isReportingErrorCompleted}
 			setIsReportingErrorCompleted={setIsReportingErrorCompleted}
 		/>

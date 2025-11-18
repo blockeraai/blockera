@@ -15,9 +15,9 @@ import {
 	getBlockSupportFallback,
 } from '../../../utils';
 
-const supports = getBlockSupportCategory('pseudoElements');
+const supports = getBlockSupportCategory('state');
 
-export const BlockeraInnerBlocksStyles = ({
+export const BlockStatesStyles = ({
 	state,
 	config,
 	clientId,
@@ -31,7 +31,7 @@ export const BlockeraInnerBlocksStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	const { contentField } = config.contentConfig;
+	const { contentField } = config.statesConfig;
 	const blockProps = {
 		state,
 		clientId,
@@ -55,25 +55,25 @@ export const BlockeraInnerBlocksStyles = ({
 
 	if (
 		isActiveField(contentField) &&
-		null !== blockProps.attributes?.blockeraContentPseudoElement &&
-		undefined !== blockProps.attributes?.blockeraContentPseudoElement
+		null !== blockProps.attributes.blockeraBlockStates[state]?.content &&
+		undefined !== blockProps.attributes.blockeraBlockStates[state]?.content
 	) {
 		if (
-			!supports?.blockeraContentPseudoElement?.allowedInners.includes(
-				currentBlock
+			!supports?.blockeraContentPseudoElement?.hasDefaultValueInStates.includes(
+				state
 			) &&
-			'' === blockProps.attributes?.blockeraContentPseudoElement
+			'' === blockProps.attributes.blockeraBlockStates[state].content
 		) {
 			return styleGroup;
 		}
 
 		const pickedSelector = getCompatibleBlockCssSelector({
 			...sharedParams,
-			query: 'blockera/elements/' + currentBlock,
-			support: 'blockera/elements/' + currentBlock,
+			query: 'blockera/states/before',
+			support: 'blockera/states/before',
 			fallbackSupportId: getBlockSupportFallback(
 				supports,
-				'blockera/elements/' + currentBlock
+				'blockera/states/before'
 			),
 		});
 
@@ -85,7 +85,7 @@ export const BlockeraInnerBlocksStyles = ({
 						{
 							type: 'static',
 							properties: {
-								content: `"${blockProps.attributes.blockeraContentPseudoElement}"`,
+								content: `"${blockProps.attributes.blockeraBlockStates[state]?.content}"`,
 							},
 						},
 					],

@@ -45,8 +45,8 @@
 							"type": ["string", "boolean"]
 						}
 					},
-					"allowedInners": {
-						"description": "The list of inner blocks to allow usage of the support.",
+					"hasDefaultValueInStates": {
+						"description": "The list of states that have a default value.",
 						"type": ["array"]
 					}
 				},
