@@ -1,0 +1,13 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "data-wp-key=\"[^\"]+\"",
+			"replace": "data-wp-key=\"image-id\""
+		},
+		{
+			"search": "data-wp-context=\"\\{&quot;imageId&quot;:&quot;[^&]+&quot;\\}\"",
+			"replace": "data-wp-context=\"{&quot;imageId&quot;:&quot;image-id&quot;}\""
+		}
+	]
+}
