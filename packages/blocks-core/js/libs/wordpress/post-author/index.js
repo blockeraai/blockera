@@ -21,8 +21,8 @@ export const PostAuthor: BlockType = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
 	blockeraInnerBlocks: {
-		'core/avatar': {
-			name: 'core/avatar',
+		'elements/avatar': {
+			name: 'elements/avatar',
 			type: 'avatar',
 			label: __('Avatar', 'blockera'),
 			description: __(

@@ -27,7 +27,7 @@ describe('Post Author Block', () => {
 		cy.checkBlockCardItems([
 			'normal',
 			'hover',
-			'core/avatar',
+			'elements/avatar',
 			'elements/byline',
 			'elements/author',
 		]);
@@ -56,9 +56,9 @@ describe('Post Author Block', () => {
 		);
 
 		//
-		// 1.1. core/avatar inner block
+		// 1.1. elements/avatar inner block
 		//
-		setInnerBlock('core/avatar');
+		setInnerBlock('elements/avatar');
 
 		cy.checkBlockCardItems(['normal', 'hover'], true);
 
@@ -137,7 +137,7 @@ describe('Post Author Block', () => {
 		);
 
 		cy.get('.blockera-block.wp-block-post-author').within(() => {
-			// core/avatar inner block
+			// elements/avatar inner block
 			cy.get('.wp-block-post-author__avatar > img')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
