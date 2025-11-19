@@ -125,6 +125,31 @@ function blockera_test_get_config( string $design_name): ?array {
 }
 
 /**
+ * Get the post type for a test design.
+ * Checks test-specific config first, then global config, then defaults to 'post'.
+ *
+ * @param string $design_name The design name.
+ *
+ * @return string The post type to use.
+ */
+function blockera_test_get_post_type( string $design_name): string {
+	// Check test-specific config first
+	$config = blockera_test_get_config($design_name);
+	if ($config && isset($config['wp-post']) && is_array($config['wp-post']) && isset($config['wp-post']['post_type'])) {
+		return $config['wp-post']['post_type'];
+	}
+	
+	// Check global config
+	$global_config = blockera_test_get_global_config();
+	if ($global_config && isset($global_config['wp-post']) && is_array($global_config['wp-post']) && isset($global_config['wp-post']['post_type'])) {
+		return $global_config['wp-post']['post_type'];
+	}
+	
+	// Default to 'post'
+	return 'post';
+}
+
+/**
  * Apply html-search-replace operations on content.
  *
  * @param string $content The content to process.

@@ -36,6 +36,22 @@ class BlockeraTest extends AppTestCase {
 			'fixtures' . DIRECTORY_SEPARATOR . $this->design . DIRECTORY_SEPARATOR . 'snapshot';
 	}
 
+	/**
+	 * Create or update a post for testing.
+	 *
+	 * @param string $designName The design name.
+	 * @param string $post_content The post content.
+	 * @return int The post ID.
+	 */
+	protected function createOrUpdateTestPost(string $designName, string $post_content): int {
+		return $this->factory()->post->create([
+			'post_title'   => 'Test Design: ' . $designName,
+			'post_content' => $post_content,
+			'post_status'  => 'publish',
+			'post_type'    => blockera_test_get_post_type($designName),
+		]);
+	}
+
     protected function setUp(): void {
         parent::setUp();
 
@@ -66,13 +82,7 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
-		$post_id =$this->factory()->post->create([
-			'post_title'   => 'Test Design: ' . $designName,
-			'post_content' => $post_content,
-			'post_status'  => 'publish',
-			'post_type'    => 'post',
-		]);
-
+		$post_id = $this->createOrUpdateTestPost($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
 		while(have_posts()) {
@@ -123,13 +133,7 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
-		$post_id =$this->factory()->post->create([
-			'post_title'   => 'Test Design: ' . $designName,
-			'post_content' => $post_content,
-			'post_status'  => 'publish',
-			'post_type'    => 'post',
-		]);
-
+		$post_id = $this->createOrUpdateTestPost($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
 		while(have_posts()) {
@@ -181,13 +185,7 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
-		$post_id =$this->factory()->post->create([
-			'post_title'   => 'Test Design: ' . $designName,
-			'post_content' => $post_content,
-			'post_status'  => 'publish',
-			'post_type'    => 'post',
-		]);
-
+		$post_id = $this->createOrUpdateTestPost($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
 		$blocks = [];
