@@ -28,6 +28,14 @@
 		{
 			"search": "src=[\"']https://secure\\.gravatar\\.com/avatar/[^\"']+[\"']",
 			"replace": "src='https://blockera.ai/avatar.png'"
+		},
+		{
+			"search": "<time datetime=\"[^\"]+\">[^<]*</time>",
+			"replace": "<time datetime=\"MM DD, YYYY\">Month Day, Year</time>"
+		},
+		{
+			"search": "<time datetime=\"[^\"]+\"><a href=\"[^\"]+\">[^<]*</a></time>",
+			"replace": "<time datetime=\"MM DD, YYYY\"><a href=\"https://blockera.ai/?p=id\">Month Day, Year</a></time>"
 		}
 	],
 	"wp-post": {
