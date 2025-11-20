@@ -63,6 +63,7 @@ export function onChangeBlockStates(
 		currentBlock,
 		getStateInfo,
 		getBlockStates,
+		setCurrentBlock,
 		isMasterBlockStates,
 	} = params;
 
@@ -102,6 +103,18 @@ export function onChangeBlockStates(
 				name,
 				clientId,
 			});
+
+			const { getState, getInnerState } = select('blockera/editor');
+			const {
+				settings: { supportsInnerBlocks },
+			} = getState(stateType) ||
+				getInnerState(stateType) || {
+					settings: { supportsInnerBlocks: true },
+				};
+
+			if (false === supportsInnerBlocks) {
+				setCurrentBlock('master');
+			}
 		};
 
 		if (!isMasterBlockStates && state?.isSelected) {
