@@ -396,7 +396,8 @@ function mergeBlockSettings(
 				}
 
 				return omit(_attributes, ignoredAttributes);
-			}, [_attributes]);
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+			}, []);
 
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const stableAdditional = useMemo(() => {

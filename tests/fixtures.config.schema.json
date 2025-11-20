@@ -14,6 +14,11 @@
 			"default": true,
 			"description": "Whether to take a snapshot (html and CSS) of the block."
 		},
+		"tags-inline-style-check": {
+			"type": "boolean",
+			"default": true,
+			"description": "Whether to check for inline style attributes on tags with 'blockera-block' or 'be-transpiled' classes."
+		},
 		"html-search-replace": {
 			"type": "array",
 			"description": "List of search and replace operations to perform on the HTML output.",

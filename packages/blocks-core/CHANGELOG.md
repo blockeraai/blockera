@@ -51,6 +51,7 @@
 - `Term Template` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Verse` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Code` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Footnotes` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests

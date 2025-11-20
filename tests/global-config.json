@@ -6,11 +6,40 @@
 			"replace": "https://blockera.ai/"
 		},
 		{
-			"search": "wp-elements-[^\\s\"]+",
+			"search": "wp-elements-[^\\s\"']+",
 			"replace": "wp-elements-hash-id"
+		},
+		{
+			"search": "\\?page_id=\\d+[\"']",
+			"replace": "?page_id=page-id\""
+		},
+		{
+			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"']*\\.png",
+			"replace": "uploads/featured-image.png"
+		},
+		{
+			"search": "srcset=(?:\"[^\"]*\"|'[^']*')",
+			"replace": ""
+		},
+		{
+			"search": "sizes=(?:\"[^\"]*\"|'[^']*')",
+			"replace": ""
+		},
+		{
+			"search": "src=[\"']https://secure\\.gravatar\\.com/avatar/[^\"']+[\"']",
+			"replace": "src='https://blockera.ai/avatar.png'"
+		},
+		{
+			"search": "<time datetime=\"[^\"]+\">[^<]*</time>",
+			"replace": "<time datetime=\"MM DD, YYYY\">Month Day, Year</time>"
+		},
+		{
+			"search": "<time datetime=\"[^\"]+\"><a href=\"[^\"]+\">[^<]*</a></time>",
+			"replace": "<time datetime=\"MM DD, YYYY\"><a href=\"https://blockera.ai/?p=id\">Month Day, Year</a></time>"
 		}
 	],
 	"wp-post": {
 		"post_type": "post"
-	}
+	},
+	"tags-inline-style-check": true
 }

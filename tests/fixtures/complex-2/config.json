@@ -1,0 +1,4 @@
+{
+	"$schema": "https://blockera.ai/snapshot-tests-config.schema.json",
+	"tags-inline-style-check": false
+}

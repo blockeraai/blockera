@@ -1,0 +1,4 @@
+:root :where(.wp-block-post-date){
+	color: var(--wp--preset--color--accent-4);
+	font-size: var(--wp--preset--font-size--small);
+}

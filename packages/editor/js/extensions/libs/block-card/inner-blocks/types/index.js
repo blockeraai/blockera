@@ -55,6 +55,7 @@ export type InnerBlocksProps = {
 	onChange: THandleOnChangeAttributes,
 	maxItems: number,
 	contextValue: Object,
+	doingSwitchToInner: () => void,
 	setCurrentBlock: (block: InnerBlockType) => void,
 	setBlockClientInners: ({
 		clientId: string,

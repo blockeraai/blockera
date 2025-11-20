@@ -20,6 +20,8 @@ const configContext = require.context(
 	/config\.json$/
 );
 
+const setupContext = require.context('../tests/fixtures', true, /setup\.js$/);
+
 const sections = sectionsContext
 	.keys()
 	.map((key) => {
@@ -30,6 +32,11 @@ const sections = sectionsContext
 		}
 
 		const sectionId = matches[1];
+
+		// if (sectionId !== 'block-footnotes') {
+		// 	return null;
+		// }
+
 		const sectionContent = sectionsContext(key);
 
 		if (!sectionContent) {
@@ -48,40 +55,63 @@ const sections = sectionsContext
 			config = null;
 		}
 
+		// Try to load setup.js for this section
+		let setupFn = null;
+		try {
+			const setupKey = `./${sectionId}/setup.js`;
+			if (setupContext.keys().includes(setupKey)) {
+				const setupModule = setupContext(setupKey);
+				setupFn = setupModule.setup || setupModule.default;
+
+				console.log('setupFn', setupFn);
+			}
+		} catch (error) {
+			// Setup file doesn't exist or can't be loaded
+			setupFn = null;
+		}
+
 		// Check if screenshot is enabled in config
 		// Default to true (test visually) if config doesn't exist
 		// Only skip if config exists and screenshot is explicitly false
 		const shouldScreenshot = !config || config.screenshot !== false;
 
-		return [sectionId, sectionContent, shouldScreenshot];
+		return [sectionId, sectionContent, shouldScreenshot, setupFn];
 	})
 	.filter(Boolean)
 	.filter(([, , shouldScreenshot]) => shouldScreenshot)
-	.reduce((accumulator, [sectionId, sectionContent]) => {
-		accumulator[sectionId] = sectionContent;
+	.reduce((accumulator, [sectionId, sectionContent, , setupFn]) => {
+		accumulator[sectionId] = { setupFn, sectionContent };
 		return accumulator;
 	}, {});
 
-// sections = {
-// 	12: sections['12'],
-// };
-
 describe('Sections design with Style Engine', () => {
-	beforeEach(() => {
-		cy.setScreenshotViewport('desktop');
-
-		createPost();
-	});
-
 	Object.keys(sections).forEach((section) => {
+		const sectionData = sections[section];
+		const sectionContent = sectionData.sectionContent || '';
+		const setupFn = sectionData?.setupFn;
+
 		it(section, () => {
-			const sectionContent = sections[section] || '';
 			if (!sectionContent) {
 				return;
 			}
 
 			// Collect all snapshot failures
 			const failures = [];
+
+			// Check if custom setup.js exists for this test
+			if (setupFn) {
+				// Run custom setup function
+				// if returns true it means we need to createPost
+				if (setupFn()) {
+					// Run default setup
+					cy.setScreenshotViewport('desktop');
+					createPost();
+				}
+			} else {
+				// Run default setup
+				cy.setScreenshotViewport('desktop');
+				createPost();
+			}
 
 			appendBlocks(sectionContent);
 

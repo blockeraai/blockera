@@ -1,0 +1,58 @@
+
+.blockera-block.blockera-block-1.wp-block-footnotes {
+	background-color: #ffcccc;
+	border: 2px solid #ff2e2e;
+	border-radius: 10px;
+	padding-top: 20px;
+	padding-right: 50px;
+	padding-bottom: 20px;
+	padding-left: 50px;
+}
+
+.blockera-block.blockera-block-1 a:not(.wp-element-button):last-child {
+	background-color: #5fff75;
+	padding-top: 0;
+	padding-right: 4px;
+	padding-bottom: 0;
+	padding-left: 4px;
+	border-radius: 36px;
+	text-decoration: initial;
+	color: #007b10;
+	font-size: 20px;
+}
+
+.blockera-block.blockera-block-1 a:not(.wp-element-button):not(:last-child) {
+	background-color: #ffa600;
+}
+
+.blockera-block.blockera-block-1 :is(strong, b) {
+	background-color: #88ff2d;
+}
+
+.blockera-block.blockera-block-1 :is(em, i) {
+	background-color: #00d619;
+}
+
+.blockera-block.blockera-block-1 kbd {
+	background-color: #01c4ff;
+}
+
+.blockera-block.blockera-block-1 code {
+	background-color: #0066ff;
+}
+
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder], [role="textbox"]) {
+	background-color: #be25ff;
+}
+
+.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+	background-color: #fe009c;
+}
+
+.blockera-block.blockera-block-1 a:not(.wp-element-button):not(:last-child):hover {
+	background-color: #bc7a00;
+}
+
+.blockera-block.blockera-block-1.wp-block-footnotes:hover {
+	background-color: #ff9797;
+}

@@ -49,12 +49,13 @@ class BlockeraTest extends AppTestCase {
 			'post_content' => $post_content,
 			'post_status'  => 'publish',
 			'post_type'    => blockera_test_get_post_type($designName),
+			'post_author'  => 1,
 		]);
 	}
 
 	/**
-	 * Create test post, checking for snapshot.php file first.
-	 * If snapshot.php exists, it will be included and executed.
+	 * Create test post, checking for setup.php file first.
+	 * If setup.php exists, it will be included and executed.
 	 * Otherwise, falls back to createOrUpdateTestPost.
 	 *
 	 * @param string $designName The design name.
@@ -63,17 +64,17 @@ class BlockeraTest extends AppTestCase {
 	 */
 	protected function createTestPostWithSnapshot(string $designName, string $post_content): int {
 		$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
-		$snapshot_file = $fixtures_path . $designName . '/snapshot.php';
+		$setup_file = $fixtures_path . $designName . '/setup.php';
 
-		// Check if snapshot.php exists
-		if (file_exists($snapshot_file)) {
-			// Make variables available to snapshot.php
+		// Check if setup.php exists
+		if (file_exists($setup_file)) {
+			// Make variables available to setup.php
 			$post_id = null;
 			
-			// Include snapshot.php - it should set $post_id
-			include $snapshot_file;
+			// Include setup.php - it should set $post_id
+			include $setup_file;
 			
-			// If snapshot.php set $post_id, return it
+			// If setup.php set $post_id, return it
 			if (isset($post_id) && is_int($post_id) && $post_id > 0) {
 				return $post_id;
 			}
@@ -159,7 +160,21 @@ class BlockeraTest extends AppTestCase {
 				$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
 			}
 
+			// Check with snapshot content
 			$this->assertMatchesSnapshot($content, new HtmlDriver());
+
+			// Check if inline style checks should be performed
+			// Test-specific config overrides global config
+			$should_check_inline_styles = true;
+			if ($config && isset($config['tags-inline-style-check'])) {
+				$should_check_inline_styles = (bool) $config['tags-inline-style-check'];
+			} elseif ($global_config && isset($global_config['tags-inline-style-check'])) {
+				$should_check_inline_styles = (bool) $global_config['tags-inline-style-check'];
+			}
+
+			if ($should_check_inline_styles) {
+				$this->checkInlineStyles($content, $designName);
+			}
 		}
 
 		wp_delete_post($post_id);
@@ -264,6 +279,75 @@ class BlockeraTest extends AppTestCase {
 		$this->assertMatchesSnapshot(blockera_test_normalize_css($global_styles), new CssDriver());
 
 		wp_delete_post($post_id);
+	}
+
+	/**
+	 * Check that tags with inline styles follow the rules:
+	 * 1. Tags with inline style that have 'blockera-block' or 'be-transpiled' should fail
+	 * 2. Tags with inline style without these classes should check parents recursively
+	 *
+	 * @param string $content The HTML content to check.
+	 * @param string $designName The design name for error messages.
+	 * @return void
+	 */
+	protected function checkInlineStyles(string $content, string $designName): void {
+		$dom = new \DOMDocument();
+		@$dom->loadHTML('<?xml encoding="UTF-8">' . $content, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+		$xpath = new \DOMXPath($dom);
+		
+		// Find all elements with inline style attributes
+		$elements_with_style = $xpath->query('//*[@style]');
+		
+		foreach ($elements_with_style as $element) {
+			// Skip SVG tags and their descendants (exception)
+			$is_svg_or_descendant = false;
+			$current = $element;
+			while ($current && $current instanceof \DOMElement) {
+				if (strtolower($current->tagName) === 'svg') {
+					$is_svg_or_descendant = true;
+					break;
+				}
+				$current = $current->parentNode;
+			}
+			
+			if ($is_svg_or_descendant) {
+				continue;
+			}
+			
+			$class = $element->getAttribute('class');
+			$has_blockera_block = strpos($class, 'blockera-block') !== false;
+			$has_be_transpiled = strpos($class, 'be-transpiled') !== false;
+			
+			// Condition 1: If tag has inline style and has blockera-block or be-transpiled, fail
+			if ($has_blockera_block || $has_be_transpiled) {
+				$tag_name = $element->tagName;
+				$classes = $has_blockera_block && $has_be_transpiled 
+					? 'blockera-block and be-transpiled' 
+					: ($has_blockera_block ? 'blockera-block' : 'be-transpiled');
+				$this->fail("Tag <{$tag_name}> with '{$classes}' class has inline style attribute.\nTest: {$designName}");
+			}
+			
+			// Condition 2: If tag has inline style but doesn't have these classes, check parents recursively
+			if (!$has_blockera_block && !$has_be_transpiled) {
+				$parent = $element->parentNode;
+				while ($parent && $parent instanceof \DOMElement) {
+					$parent_class = $parent->getAttribute('class');
+					$parent_has_blockera_block = strpos($parent_class, 'blockera-block') !== false;
+					$parent_has_be_transpiled = strpos($parent_class, 'be-transpiled') !== false;
+					
+					if ($parent_has_blockera_block || $parent_has_be_transpiled) {
+						$tag_name = $element->tagName;
+						$parent_tag_name = $parent->tagName;
+						$parent_classes = $parent_has_blockera_block && $parent_has_be_transpiled 
+							? 'blockera-block and be-transpiled' 
+							: ($parent_has_blockera_block ? 'blockera-block' : 'be-transpiled');
+						$this->fail("Tag <{$tag_name}> has inline style attribute and parent <{$parent_tag_name}> has '{$parent_classes}' class.\nTest: {$designName}");
+					}
+					
+					$parent = $parent->parentNode;
+				}
+			}
+		}
 	}
 
 	/**
