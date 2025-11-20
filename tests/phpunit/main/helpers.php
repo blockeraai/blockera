@@ -233,7 +233,14 @@ function blockera_test_execute_wp_cli_command( string $command, bool $ignore_err
 		} elseif (preg_match('/--post_title=([^\s]+)/', $args_string, $title_matches)) {
 			$post_args['post_title'] = $title_matches[1];
 		}
-		
+
+		// Parse --post_type="..."
+		if (preg_match('/--post_type=["\']([^"\']+)["\']/', $args_string, $type_matches)) {
+			$post_args['post_type'] = $type_matches[1];
+		} elseif (preg_match('/--post_type=([^\s]+)/', $args_string, $type_matches)) {
+			$post_args['post_type'] = $type_matches[1];
+		}
+
 		// Parse --post_status=...
 		if (preg_match('/--post_status=([^\s]+)/', $args_string, $status_matches)) {
 			$post_args['post_status'] = $status_matches[1];
