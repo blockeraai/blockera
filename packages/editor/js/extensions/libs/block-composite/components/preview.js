@@ -85,7 +85,7 @@ export const Preview = ({
 			settings: { supportsInnerBlocks },
 		} = getState(currentState) ||
 			getInnerState(currentInnerBlockState) || {
-				settings: { supportsInnerBlocks: false },
+				settings: { supportsInnerBlocks: true },
 			};
 
 		if (false === supportsInnerBlocks) {
@@ -133,8 +133,6 @@ export const Preview = ({
 							...props,
 							maxItems:
 								maxItems + Object.keys(preparedStates).length,
-							currentState,
-							currentInnerBlockState,
 							AvailableBlocks: () => (
 								<Categories
 									blocks={blocks}
