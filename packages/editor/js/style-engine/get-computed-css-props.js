@@ -403,7 +403,7 @@ export const getComputedCssProps = ({
 							selectors: calculatedSelectors,
 							attributes: {
 								...defaultAttributes,
-								...params.attributes,
+								...(hasContent ? {} : params.attributes),
 								...breakpoint?.attributes,
 								...(hasContent
 									? {
