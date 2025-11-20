@@ -297,7 +297,7 @@ export const CategorizedItems = ({
 										{
 											'not-allowed':
 												false === supportsInnerBlocks &&
-												isInnerBlock(id, true),
+												isInnerBlock(id),
 										}
 									)}
 								>
