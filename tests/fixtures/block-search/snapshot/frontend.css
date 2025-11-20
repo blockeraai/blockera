@@ -1,4 +1,3 @@
-
 .blockera-block.blockera-block-1 .wp-block-search__label {
 	background-color: #fff1f1;
 	margin-bottom: 12px;
@@ -34,4 +33,72 @@
 
 .blockera-block.blockera-block-1 .wp-block-search__button:focus {
 	background-color: #b32e2e;
+}
+.blockera-block.blockera-block-2.wp-block-search {
+	background-color: #cde2ff;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: flex-start !important;
+	gap: 20px;
+	padding-top: 30px;
+	padding-right: 40px;
+	padding-bottom: 30px;
+	padding-left: 40px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-search {
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.blockera-block.blockera-block-2 .wp-block-search__label {
+	box-sizing: border-box;
+	order: 100;
+}
+
+.blockera-block.blockera-block-2 .wp-block-search__input {
+	background-color: #f263ff;
+	border: 1px solid #ba18c9;
+	border-radius: 50px;
+}
+
+.blockera-block.blockera-block-2 .wp-block-search__button {
+	background-color: #f263ff;
+	border: 1px solid #a109af;
+	color: #7f008b;
+	border-radius: 50px;
+}
+
+
+}
+
+.blockera-block.blockera-block-2:hover .wp-block-search__label {
+	border-radius: 57px;
+}
+
+.blockera-block.blockera-block-2:hover .wp-block-search__input {
+	border-radius: 80px;
+}
+
+.blockera-block.blockera-block-2:hover .wp-block-search__button {
+	border-radius: 70px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-search:hover {
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.blockera-block.blockera-block-2:hover .wp-block-search__label {
+	order: 100;
+}
+
+
 }
