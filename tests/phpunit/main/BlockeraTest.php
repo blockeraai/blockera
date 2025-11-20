@@ -54,8 +54,8 @@ class BlockeraTest extends AppTestCase {
 	}
 
 	/**
-	 * Create test post, checking for snapshot.php file first.
-	 * If snapshot.php exists, it will be included and executed.
+	 * Create test post, checking for setup.php file first.
+	 * If setup.php exists, it will be included and executed.
 	 * Otherwise, falls back to createOrUpdateTestPost.
 	 *
 	 * @param string $designName The design name.
@@ -64,17 +64,17 @@ class BlockeraTest extends AppTestCase {
 	 */
 	protected function createTestPostWithSnapshot(string $designName, string $post_content): int {
 		$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
-		$snapshot_file = $fixtures_path . $designName . '/snapshot.php';
+		$setup_file = $fixtures_path . $designName . '/setup.php';
 
-		// Check if snapshot.php exists
-		if (file_exists($snapshot_file)) {
-			// Make variables available to snapshot.php
+		// Check if setup.php exists
+		if (file_exists($setup_file)) {
+			// Make variables available to setup.php
 			$post_id = null;
 			
-			// Include snapshot.php - it should set $post_id
-			include $snapshot_file;
+			// Include setup.php - it should set $post_id
+			include $setup_file;
 			
-			// If snapshot.php set $post_id, return it
+			// If setup.php set $post_id, return it
 			if (isset($post_id) && is_int($post_id) && $post_id > 0) {
 				return $post_id;
 			}
