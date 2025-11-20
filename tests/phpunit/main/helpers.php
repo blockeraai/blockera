@@ -211,8 +211,6 @@ function blockera_test_execute_wp_cli_command( string $command, bool $ignore_err
 		$term_name = trim($matches[1]);
 		$term = get_term_by('name', $term_name, 'category');
 
-		error_log(print_r($term, true));
-		
 		if (!$term) {
 			$result = wp_insert_term($term_name, 'category');
 			if (is_wp_error($result) && !$ignore_errors) {
