@@ -16,6 +16,7 @@ class BlockeraTest extends AppTestCase {
 
 	protected string $design;
 	protected Application $app;
+	protected int $sample_page_id;
 	protected bool $is_global_styles = false;
 
 	protected function getSnapshotId(): string {
@@ -49,6 +50,7 @@ class BlockeraTest extends AppTestCase {
 			'post_content' => $post_content,
 			'post_status'  => 'publish',
 			'post_type'    => blockera_test_get_post_type($designName),
+			'post_author'  => 1,
 		]);
 	}
 
@@ -110,6 +112,14 @@ class BlockeraTest extends AppTestCase {
 
         // Setup WP_Mock
         \WP_Mock::setUp();
+
+		// Create some sample pages for page-list block to render.
+		$this->sample_page_id = $this->factory()->post->create(array(
+			'post_type' => 'page',
+			'post_title' => 'Sample Page ',
+			'post_status' => 'publish',
+			'menu_order' => 1,
+		));
     }
 
 	/**
@@ -307,5 +317,11 @@ class BlockeraTest extends AppTestCase {
 		return array_map(function($design) {
 			return [basename($design)];
 		}, $filtered_designs);
+	}
+
+	public function tearDown(): void {
+		parent::tearDown();
+
+		wp_delete_post($this->sample_page_id, true);
 	}
 }
