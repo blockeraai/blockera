@@ -52,6 +52,25 @@ class BlockeraTest extends AppTestCase {
 		]);
 	}
 
+	/**
+	 * Execute WP-CLI commands for a design.
+	 *
+	 * @param string $designName The design name.
+	 * @return void
+	 */
+	protected function executeWpCliCommands(string $designName): void {
+				
+		$wp_cli_commands = blockera_test_get_wp_cli_commands($designName);
+
+		if (!empty($wp_cli_commands)) {
+			try {
+				blockera_test_execute_wp_cli_commands($wp_cli_commands);
+			} catch (\Exception $e) {
+				$this->fail('WP-CLI command execution failed: ' . $e->getMessage());
+			}
+		}
+	}
+
     protected function setUp(): void {
         parent::setUp();
 
@@ -81,6 +100,8 @@ class BlockeraTest extends AppTestCase {
 		} catch (\Exception $e) {
 			$this->fail($e->getMessage());
 		}
+
+		$this->executeWpCliCommands($designName);
 
 		$post_id = $this->createOrUpdateTestPost($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
@@ -133,6 +154,8 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
+		$this->executeWpCliCommands($designName);
+
 		$post_id = $this->createOrUpdateTestPost($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
@@ -184,6 +207,8 @@ class BlockeraTest extends AppTestCase {
 		} catch (\Exception $e) {
 			$this->fail($e->getMessage());
 		}
+
+		$this->executeWpCliCommands($designName);
 
 		$post_id = $this->createOrUpdateTestPost($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
