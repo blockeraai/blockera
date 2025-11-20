@@ -51,4 +51,6 @@ export default function setup() {
 			editPost({ postID: postId });
 		});
 	});
+
+	return false;
 }

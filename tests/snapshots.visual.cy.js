@@ -101,7 +101,12 @@ describe('Sections design with Style Engine', () => {
 			// Check if custom setup.js exists for this test
 			if (setupFn) {
 				// Run custom setup function
-				setupFn();
+				// if returns true it means we need to createPost
+				if (setupFn()) {
+					// Run default setup
+					cy.setScreenshotViewport('desktop');
+					createPost();
+				}
 			} else {
 				// Run default setup
 				cy.setScreenshotViewport('desktop');
