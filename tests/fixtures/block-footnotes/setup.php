@@ -1,6 +1,6 @@
 <?php
 /**
- * Snapshot for the post featured image block.
+ * Setup for the footnotes block.
  * 
  * @var string $post_content The post content.
  * @var BlockeraTest $this The test instance.
@@ -27,3 +27,4 @@ $insert_result = $wpdb->insert(
 	],
 	['%d', '%s', '%s']
 );
+
