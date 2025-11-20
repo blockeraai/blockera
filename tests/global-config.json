@@ -6,24 +6,28 @@
 			"replace": "https://blockera.ai/"
 		},
 		{
-			"search": "wp-elements-[^\\s\"]+",
+			"search": "wp-elements-[^\\s\"']+",
 			"replace": "wp-elements-hash-id"
 		},
 		{
-			"search": "\\?page_id=\\d+\"",
+			"search": "\\?page_id=\\d+[\"']",
 			"replace": "?page_id=page-id\""
 		},
 		{
-			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"]*\\.png",
+			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"']*\\.png",
 			"replace": "uploads/featured-image.png"
 		},
 		{
-			"search": "srcset=\".*\"",
+			"search": "srcset=(?:\"[^\"]*\"|'[^']*')",
 			"replace": ""
 		},
 		{
-			"search": "sizes=\".*\"",
+			"search": "sizes=(?:\"[^\"]*\"|'[^']*')",
 			"replace": ""
+		},
+		{
+			"search": "src=[\"']https://secure\\.gravatar\\.com/avatar/[^\"']+[\"']",
+			"replace": "src='https://blockera.ai/avatar.png'"
 		}
 	],
 	"wp-post": {
