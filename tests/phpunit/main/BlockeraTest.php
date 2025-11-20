@@ -50,6 +50,7 @@ class BlockeraTest extends AppTestCase {
 			'post_content' => $post_content,
 			'post_status'  => 'publish',
 			'post_type'    => blockera_test_get_post_type($designName),
+			'post_author'  => 1,
 		]);
 	}
 
