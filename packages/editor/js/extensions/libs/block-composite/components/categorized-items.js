@@ -19,7 +19,6 @@ import { Flex, Grid, Tooltip } from '@blockera/controls';
  */
 import { getTooltipStyle } from '../utils';
 import type { TCategorizedItemsProps } from '../types';
-import { isInnerBlock } from '../../../components/utils';
 import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
 
@@ -297,7 +296,7 @@ export const CategorizedItems = ({
 										{
 											'not-allowed':
 												false === supportsInnerBlocks &&
-												isInnerBlock(id),
+												!item.hasOwnProperty('type'),
 										}
 									)}
 								>
