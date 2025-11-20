@@ -4,7 +4,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
 import type { Element, ComponentType, MixedElement } from 'react';
 
 /**
@@ -35,22 +34,12 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 	maxItems,
 	contextValue,
 	overrideItem,
-	currentState,
 	defaultStates,
 	handleOnChange,
 	InserterComponent,
-	currentInnerBlockState,
 	defaultRepeaterItemValue,
 	getDynamicDefaultRepeaterItem,
 }: StatesManagerProps): Element<any> => {
-	const { getState, getInnerState } = select('blockera/editor');
-	const {
-		settings: { supportsInnerBlocks },
-	} = getState(currentState) ||
-		getInnerState(currentInnerBlockState) || {
-			settings: { supportsInnerBlocks: false },
-		};
-
 	if (Object.keys(states)?.length < 1) {
 		return <></>;
 	}
@@ -129,16 +118,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 						);
 					}}
 				>
-					<div
-						className={controlInnerClassNames(
-							'block-states-manager-children',
-							{
-								'not-allowed': false === supportsInnerBlocks,
-							}
-						)}
-					>
-						{children}
-					</div>
+					{children}
 				</RepeaterControl>
 			</div>
 		</ControlContextProvider>

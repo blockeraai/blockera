@@ -3,8 +3,8 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 import { Icon as WordPressIconComponent } from '@wordpress/components';
 
 /**
@@ -36,7 +36,7 @@ export const CategorizedItems = ({
 	getBlockInners,
 	limited = false,
 	setCurrentBlock,
-	supportsInnerBlocks,
+	doingSwitchToInner,
 	setBlockClientInners,
 }: TCategorizedItemsProps): MixedElement => {
 	// Filtering items while not exists on received category ...
@@ -67,6 +67,8 @@ export const CategorizedItems = ({
 
 		if (name) {
 			const inners = getBlockInners(clientId);
+
+			doingSwitchToInner();
 
 			setBlockClientInners({
 				clientId,
@@ -292,12 +294,7 @@ export const CategorizedItems = ({
 									}
 									className={classNames(
 										'blockera-feature-type',
-										'is-item',
-										{
-											'not-allowed':
-												false === supportsInnerBlocks &&
-												!item.hasOwnProperty('type'),
-										}
+										'is-item'
 									)}
 								>
 									{icon && (
