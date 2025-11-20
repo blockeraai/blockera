@@ -8,6 +8,14 @@
 		{
 			"search": "wp-elements-[^\\s\"]+",
 			"replace": "wp-elements-hash-id"
+		},
+		{
+			"search": "\\?page_id=\\d+\"",
+			"replace": "?page_id=page-id\""
+		},
+		{
+			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"]*\\.png",
+			"replace": "uploads/featured-image.png"
 		}
 	],
 	"wp-post": {
