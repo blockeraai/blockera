@@ -39,12 +39,21 @@
 						"description": "The replacement string."
 					}
 				},
-				"required": [
-					"search",
-					"replace"
-				],
+				"required": ["search", "replace"],
 				"additionalProperties": false
 			}
+		},
+		"wp-post": {
+			"type": "object",
+			"description": "Configuration for the WordPress post created for this test.",
+			"properties": {
+				"post_type": {
+					"type": "string",
+					"description": "The post type to use for the test post (e.g., 'post', 'page', 'custom-post-type').",
+					"default": "post"
+				}
+			},
+			"additionalProperties": false
 		}
 	}
 }

@@ -9,5 +9,8 @@
 			"search": "wp-elements-[^\\s\"]+",
 			"replace": "wp-elements-hash-id"
 		}
-	]
+	],
+	"wp-post": {
+		"post_type": "post"
+	}
 }
