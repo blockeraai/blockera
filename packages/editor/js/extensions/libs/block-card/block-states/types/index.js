@@ -77,6 +77,7 @@ export type StatesManagerHookProps = {
 	availableStates: { [key: TStates | string]: StateTypes },
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,
+	setCurrentBlock: (blockType: 'master' | InnerBlockType | string) => void,
 };
 
 export type StatesManagerProps = {

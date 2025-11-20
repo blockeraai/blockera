@@ -73,6 +73,7 @@ export const Preview = ({
 		onChange,
 		currentBlock,
 		currentState,
+		setCurrentBlock,
 		availableStates,
 		deleteCacheData,
 		currentBreakpoint,
