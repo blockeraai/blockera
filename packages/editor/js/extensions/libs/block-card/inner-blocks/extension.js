@@ -32,6 +32,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 		currentState,
 		setCurrentBlock,
 		currentBreakpoint,
+		doingSwitchToInner,
 		setBlockClientInners,
 	} = props;
 	const { onToggle } = useBlockSection('innerBlocksConfig');
@@ -86,6 +87,8 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 								if (!item?.isSelected) {
 									continue;
 								}
+
+								doingSwitchToInner();
 
 								// $FlowFixMe
 								setCurrentBlock(name);
