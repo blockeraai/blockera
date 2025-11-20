@@ -40,5 +40,6 @@
 	],
 	"wp-post": {
 		"post_type": "post"
-	}
+	},
+	"tags-inline-style-check": true
 }
