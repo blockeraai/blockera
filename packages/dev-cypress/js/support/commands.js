@@ -765,6 +765,7 @@ export const registerCommands = () => {
 	 *
 	 * @param command - WP CLI command. The 'wp ' prefix is required.
 	 * @param ignoreFailures - Prevent command to fail if CLI command exits with error
+	 * @param skipEscaping - Skip escaping quotes and backslashes (useful for complex values)
 	 *
 	 * @example
 	 * ```
@@ -774,20 +775,28 @@ export const registerCommands = () => {
 	 * });
 	 * ```
 	 */
-	Cypress.Commands.add('wpCli', (command, ignoreFailures = false) => {
-		const escapedCommand = command
-			.replace(/\\/g, '\\\\')
-			.replace(/"/g, '\\"');
-		const options = {
-			failOnNonZeroExit: !ignoreFailures,
-		};
-		cy.exec(
-			`npm --silent run env run cli -- ${escapedCommand}`,
-			options
-		).then((result) => {
-			cy.wrap(result);
-		});
-	});
+	Cypress.Commands.add(
+		'wpCli',
+		(command, ignoreFailures = false, skipEscaping = false) => {
+			const escapedCommand = skipEscaping
+				? command
+				: command.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+			const options = {
+				failOnNonZeroExit: !ignoreFailures,
+			};
+
+			console.log(
+				'inner command',
+				`npm --silent run env run cli -- ${escapedCommand}`
+			);
+			cy.exec(
+				`npm --silent run env run cli -- ${escapedCommand}`,
+				options
+			).then((result) => {
+				cy.wrap(result);
+			});
+		}
+	);
 
 	Cypress.Commands.add(
 		'checkBlockCardItems',
