@@ -36,6 +36,72 @@ class BlockeraTest extends AppTestCase {
 			'fixtures' . DIRECTORY_SEPARATOR . $this->design . DIRECTORY_SEPARATOR . 'snapshot';
 	}
 
+	/**
+	 * Create or update a post for testing.
+	 *
+	 * @param string $designName The design name.
+	 * @param string $post_content The post content.
+	 * @return int The post ID.
+	 */
+	protected function createOrUpdateTestPost(string $designName, string $post_content): int {
+		return $this->factory()->post->create([
+			'post_title'   => 'Test Design: ' . $designName,
+			'post_content' => $post_content,
+			'post_status'  => 'publish',
+			'post_type'    => blockera_test_get_post_type($designName),
+		]);
+	}
+
+	/**
+	 * Create test post, checking for snapshot.php file first.
+	 * If snapshot.php exists, it will be included and executed.
+	 * Otherwise, falls back to createOrUpdateTestPost.
+	 *
+	 * @param string $designName The design name.
+	 * @param string $post_content The post content.
+	 * @return int The post ID.
+	 */
+	protected function createTestPostWithSnapshot(string $designName, string $post_content): int {
+		$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
+		$snapshot_file = $fixtures_path . $designName . '/snapshot.php';
+
+		// Check if snapshot.php exists
+		if (file_exists($snapshot_file)) {
+			// Make variables available to snapshot.php
+			$post_id = null;
+			
+			// Include snapshot.php - it should set $post_id
+			include $snapshot_file;
+			
+			// If snapshot.php set $post_id, return it
+			if (isset($post_id) && is_int($post_id) && $post_id > 0) {
+				return $post_id;
+			}
+		}
+
+		// Fall back to default post creation
+		return $this->createOrUpdateTestPost($designName, $post_content);
+	}
+
+	/**
+	 * Execute WP-CLI commands for a design.
+	 *
+	 * @param string $designName The design name.
+	 * @return void
+	 */
+	protected function executeWpCliCommands(string $designName): void {
+				
+		$wp_cli_commands = blockera_test_get_wp_cli_commands($designName);
+
+		if (!empty($wp_cli_commands)) {
+			try {
+				blockera_test_execute_wp_cli_commands($wp_cli_commands);
+			} catch (\Exception $e) {
+				$this->fail('WP-CLI command execution failed: ' . $e->getMessage());
+			}
+		}
+	}
+
     protected function setUp(): void {
         parent::setUp();
 
@@ -66,13 +132,9 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
-		$post_id =$this->factory()->post->create([
-			'post_title'   => 'Test Design: ' . $designName,
-			'post_content' => $post_content,
-			'post_status'  => 'publish',
-			'post_type'    => 'post',
-		]);
+		$this->executeWpCliCommands($designName);
 
+		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
 		while(have_posts()) {
@@ -123,13 +185,9 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
-		$post_id =$this->factory()->post->create([
-			'post_title'   => 'Test Design: ' . $designName,
-			'post_content' => $post_content,
-			'post_status'  => 'publish',
-			'post_type'    => 'post',
-		]);
+		$this->executeWpCliCommands($designName);
 
+		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
 		while(have_posts()) {
@@ -181,13 +239,9 @@ class BlockeraTest extends AppTestCase {
 			$this->fail($e->getMessage());
 		}
 
-		$post_id =$this->factory()->post->create([
-			'post_title'   => 'Test Design: ' . $designName,
-			'post_content' => $post_content,
-			'post_status'  => 'publish',
-			'post_type'    => 'post',
-		]);
+		$this->executeWpCliCommands($designName);
 
+		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
 		$blocks = [];

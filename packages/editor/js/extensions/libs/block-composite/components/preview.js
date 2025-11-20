@@ -80,12 +80,14 @@ export const Preview = ({
 		<StatesManager
 			states={states}
 			onDelete={onDelete}
+			currentState={currentState}
 			overrideItem={overrideItem}
 			defaultStates={defaultStates}
 			preparedStates={preparedStates}
 			handleOnChange={handleOnChange}
 			deleteCacheData={deleteCacheData}
 			contextValue={blockStatesContextValue}
+			currentInnerBlockState={currentInnerBlockState}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			maxItems={Object.keys(preparedStates).length + (maxItems || 0)}
 			getDynamicDefaultRepeaterItem={getDynamicDefaultRepeaterItem}
@@ -96,7 +98,13 @@ export const Preview = ({
 							...props,
 							maxItems:
 								maxItems + Object.keys(preparedStates).length,
-							AvailableBlocks: () => (
+							currentState,
+							currentInnerBlockState,
+							AvailableBlocks: ({
+								supportsInnerBlocks,
+							}: {
+								supportsInnerBlocks: boolean,
+							}) => (
 								<Categories
 									blocks={blocks}
 									elements={elements}
@@ -107,6 +115,7 @@ export const Preview = ({
 									getBlockInners={getBlockInners}
 									setCurrentBlock={setCurrentBlock}
 									getBlockStates={() => calculatedStates}
+									supportsInnerBlocks={supportsInnerBlocks}
 									setBlockClientInners={setBlockClientInners}
 								/>
 							),

@@ -1,0 +1,17 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "uploads/\\d{4}/\\d{2}/",
+			"replace": "uploads/"
+		},
+		{
+			"search": "featured-image-\\d+.png",
+			"replace": "featured-image.png"
+		},
+		{
+			"search": "featured-image-\\d+-300x200.png",
+			"replace": "featured-image-300x200.png"
+		}
+	]
+}

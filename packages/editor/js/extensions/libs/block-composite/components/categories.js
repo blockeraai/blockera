@@ -51,6 +51,7 @@ export const Categories = ({
 	setBlockState,
 	getBlockInners,
 	setCurrentBlock,
+	supportsInnerBlocks,
 	setBlockClientInners,
 }: TCategoriesProps): MixedElement => {
 	// const [customSelector, setCustomSelector] = useState(
@@ -382,6 +383,7 @@ export const Categories = ({
 							{...categorizedItemsProps}
 							items={categorizedStates[category]}
 							category={category}
+							supportsInnerBlocks={supportsInnerBlocks}
 							title={
 								<>
 									{categoryTitle}
@@ -409,6 +411,7 @@ export const Categories = ({
 					itemType={'element'}
 					items={elements}
 					category={'elements'}
+					supportsInnerBlocks={supportsInnerBlocks}
 					title={
 						<>
 							{__('Virtual Inner Blocks', 'blockera')}
@@ -433,6 +436,7 @@ export const Categories = ({
 				({ slug, title }, index) => (
 					<CategorizedItems
 						{...categorizedItemsProps}
+						supportsInnerBlocks={supportsInnerBlocks}
 						itemType={'inner-block'}
 						title={sprintf(
 							// translators: %s is the category title
