@@ -25,11 +25,22 @@ export const propsAreEqual = (perv: Object, next: Object): boolean => {
  * is current block is inner block?
  *
  * @param {'master' | InnerBlockType | string} currentBlock The current block type.
+ * @param {boolean} checkByPrefix Check by prefix. default is false.
+ *
  * @return {boolean} true on success, false on otherwise.
  */
 export const isInnerBlock = (
-	currentBlock: 'master' | InnerBlockType | string
-): boolean => 'master' !== currentBlock && currentBlock.startsWith('elements/');
+	currentBlock: 'master' | InnerBlockType | string,
+	checkByPrefix: boolean = false
+): boolean => {
+	const isInner = 'master' !== currentBlock;
+
+	if (checkByPrefix) {
+		return isInner && currentBlock.startsWith('elements/');
+	}
+
+	return isInner;
+};
 
 /**
  * is current block on normal state?
