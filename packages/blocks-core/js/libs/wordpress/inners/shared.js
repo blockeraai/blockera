@@ -60,7 +60,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('Headings', 'blockera'),
 		description: __('All heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading" iconSize="20" />,
 		settings: {
 			// because "core/heading" block default value for "level" attribute is "2".
 			level: 2,
@@ -81,7 +81,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H1', 'blockera'),
 		description: __('All H1 heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading-level-1" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading-level-1" iconSize="20" />,
 		settings: {
 			level: 1,
 			force: false,
@@ -101,7 +101,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H2', 'blockera'),
 		description: __('All H2 heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading-level-2" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading-level-2" iconSize="20" />,
 		settings: {
 			level: 2,
 			force: false,
@@ -121,7 +121,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H3', 'blockera'),
 		description: __('All H3 heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading-level-3" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading-level-3" iconSize="20" />,
 		settings: {
 			level: 3,
 			force: false,
@@ -141,7 +141,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H4', 'blockera'),
 		description: __('All H4 heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading-level-4" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading-level-4" iconSize="20" />,
 		settings: {
 			level: 4,
 			force: false,
@@ -161,7 +161,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H5', 'blockera'),
 		description: __('All H5 heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading-level-5" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading-level-5" iconSize="20" />,
 		settings: {
 			level: 5,
 			force: false,
@@ -181,7 +181,7 @@ const sharedInnerBlocks: InnerBlocks = {
 		name: 'core/heading',
 		label: __('H6', 'blockera'),
 		description: __('All H6 heading tag elements.', 'blockera'),
-		icon: <Icon icon="heading-level-6" library="wp" iconSize="20" />,
+		icon: <Icon icon="block-heading-level-6" iconSize="20" />,
 		settings: {
 			level: 6,
 			force: false,
