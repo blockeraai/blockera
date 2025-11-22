@@ -785,10 +785,6 @@ export const registerCommands = () => {
 				failOnNonZeroExit: !ignoreFailures,
 			};
 
-			console.log(
-				'inner command',
-				`npm --silent run env run cli -- ${escapedCommand}`
-			);
 			cy.exec(
 				`npm --silent run env run cli -- ${escapedCommand}`,
 				options
