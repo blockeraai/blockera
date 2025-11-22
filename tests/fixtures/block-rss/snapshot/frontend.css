@@ -1,0 +1,45 @@
+
+.blockera-block.blockera-block-1.wp-block-rss {
+	background-color: #ffdede;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item {
+	background-color: #fec8c8;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	margin-bottom: 40px;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item-title {
+	background-color: #ff9898;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item-publish-date {
+	background-color: #ff5858;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item-author {
+	background-color: #ff1e1e;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item-excerpt {
+	background-color: #d90707;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item:last-child {
+	margin-bottom: 0;
+}
+
+.blockera-block.blockera-block-1 .wp-block-rss__item:hover {
+	background-color: #e7fcaf;
+}
+
+.blockera-block.blockera-block-1.wp-block-rss:hover {
+	background-color: #ff9e9e;
+}
