@@ -16,6 +16,7 @@ export type TPreviewProps = {
 	currentState: Object,
 	availableStates: Object,
 	currentBreakpoint: string,
+	setCurrentTab?: (tab: string) => void,
 	currentInnerBlockState: Object,
 
 	// States Manager props.
