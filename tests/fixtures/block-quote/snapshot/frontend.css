@@ -1,0 +1,113 @@
+
+.blockera-block.blockera-block-1.wp-block-quote {
+	background-color: #ffeebe;
+	border-top: 5px solid #e6a900;
+	border-left: 0px solid;
+	padding-top: 31px;
+	padding-right: 31px;
+	padding-bottom: 31px;
+	padding-left: 31px;
+	font-size: 20px;
+	text-align: center;
+}
+
+.blockera-block.blockera-block-1.wp-block-quote.is-layout-constrained > * + * {
+	margin-block-start: 50px !important;
+}
+
+.blockera-block.blockera-block-1 cite {
+	background-color: #f8d573;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border-radius: 40px;
+	font-size: 16px;
+	font-weight: 700;
+	font-style: normal;
+}
+
+.blockera-block.blockera-block-1 p {
+	background-color: #e8d192;
+}
+
+.blockera-block.blockera-block-1 :is(strong, b) {
+	background-color: #ffbb00;
+}
+
+.blockera-block.blockera-block-1 :is(em, i) {
+	background-color: #ff5151;
+}
+
+.blockera-block.blockera-block-1 kbd {
+	background-color: #2eff0a;
+}
+
+.blockera-block.blockera-block-1 code {
+	background-color: #25f4ff;
+}
+
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+	background-color: #757eff;
+}
+
+.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+	background-color: #ff25ed;
+}
+
+.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+	background-color: #00acff;
+}
+
+.blockera-block.blockera-block-xm3zjd .has-inline-color {
+	background-color:#dfdfdf
+}
+
+.blockera-block.blockera-block-xm3zjd {
+}
+
+.blockera-block.blockera-block-2.wp-block-quote {
+	background-color: #ffdcdc;
+}
+
+.blockera-block.blockera-block-2 p {
+	background-color: #ffb2b2;
+}
+
+.blockera-block.blockera-block-2 h2:is(h2.wp-block-heading) {
+	background-color: #5dff5d;
+}
+
+.blockera-block.blockera-block-2 p::before {
+	background-color: #ff6868;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2 p::after {
+	background-color: #d43a3a;
+	content: "After";
+}
+
+.blockera-block.blockera-block-2 h2:is(h2.wp-block-heading)::before {
+	background-color: #00c503;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2 h2:is(h2.wp-block-heading)::after {
+	background-color: #00c503;
+	content: "After";
+}
+
+.blockera-block.blockera-block-2.wp-block-quote::before {
+	background-color: #ff8a8a;
+	display: block;
+	margin-bottom: 20px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2.wp-block-quote::after {
+	background-color: #ff3838;
+	display: block;
+	margin-top: 20px;
+	content: "After";
+}
