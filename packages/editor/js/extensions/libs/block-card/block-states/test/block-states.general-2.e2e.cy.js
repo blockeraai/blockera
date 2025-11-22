@@ -11,7 +11,6 @@ import {
 	createPost,
 	appendBlocks,
 	setDeviceType,
-	addBlockState,
 	reSelectBlock,
 	setBlockState,
 	setInnerBlock,
