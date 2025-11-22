@@ -1,0 +1,13 @@
+:root :where(.wp-block-separator){
+	border-color: currentColor;
+	border-width: 0 0 1px 0;
+	border-style: solid;
+	color: var(--wp--preset--color--accent-6);
+}
+
+:root :where(.wp-block-separator.is-style-wide){
+}
+
+:root :where(.wp-block-separator.is-style-wide:not(.alignfull)){
+	max-width: var(--wp--style--global--wide-size) !important;
+}
