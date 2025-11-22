@@ -22,14 +22,24 @@ export function openInserter() {
 	});
 }
 
-export function setBlockState(state) {
-	cy.getByAriaLabel('Blockera Block State Container')
-		.last()
-		.within(() => {
-			cy.getByDataCy('group-control-header')
-				.contains(state)
-				.click({ force: true });
-		});
+export function setBlockState(state, blockType) {
+	if (blockType === 'master-block') {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.first()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.click({ force: true });
+			});
+	} else {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.last()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.click({ force: true });
+			});
+	}
 }
 
 export const checkCurrentState = (id) => {
