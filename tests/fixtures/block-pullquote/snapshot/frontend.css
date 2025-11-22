@@ -1,0 +1,61 @@
+
+.blockera-block.blockera-block-1.wp-block-pullquote {
+	background-color: #ffe6e6;
+	border: 2px solid #ff5151;
+	border-radius: 20px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1 p {
+	font-size: 24px;
+	font-weight: 700;
+	font-style: normal;
+	background-color: #ffabab;
+	margin-bottom: 40px;
+	border-radius: 60px;
+}
+
+.blockera-block.blockera-block-1 cite {
+	font-size: 18px;
+	font-weight: 700;
+	font-style: normal;
+	background-color: #fc6262;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	border-radius: 60px;
+}
+
+.blockera-block.blockera-block-2.wp-block-pullquote {
+	background-color: #d0ffd0;
+	padding-top: 20px;
+	padding-right: 30px;
+	padding-bottom: 20px;
+	padding-left: 30px;
+	font-weight: 500;
+	font-style: normal;
+	font-size: 20px;
+}
+
+.blockera-block.blockera-block-2 p {
+	background-color: #6acb6a;
+	margin-bottom: 0;
+}
+
+.blockera-block.blockera-block-2 cite {
+	background-color: #4fb54f;
+}
+
+.blockera-block.blockera-block-2.wp-block-pullquote::before {
+	display: block;
+	background-color: #9ce29c;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2.wp-block-pullquote::after {
+	background-color: #7fd07f;
+	display: block;
+	content: "After";
+}
