@@ -62,14 +62,14 @@ class EditBlockHTML implements EditableBlockHTML {
 			return $html;
 		}
 
+		$this->setContext('feature');
+
 		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			$this->setContext('feature');
 			$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
 			return $app->make(IconBlock::class)->render($html, $this, $data);
 		}
 
-		$this->setContext('feature');
 		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
         $blockElement = $this->findBlockElement($data);
@@ -82,9 +82,11 @@ class EditBlockHTML implements EditableBlockHTML {
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
         $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
 
-		$html = $this->normalizedHTML($html);
-		
-        return str_replace($this->normalizedHTML($original_html), $this->normalizedHTML($blockElement->outerhtml), $this->normalizedHTML($html));
+		$subject = $this->normalizedHTML($html);
+		$search  = $this->normalizedHTML($original_html);
+		$replace = $this->normalizedHTML($blockElement->outerhtml);
+
+        return str_replace($search, $replace, $subject);
     }
 
 	/**
@@ -95,7 +97,12 @@ class EditBlockHTML implements EditableBlockHTML {
 	 * @return string The normalized html.
 	 */
 	protected function normalizedHTML( string $html): string {
-		return preg_replace('/\s*>/', '>', $html);
+		// Remove extra whitespace and normalize line endings.
+		$html = preg_replace([ '/\s*>/', '/\s+/' ], [ '>', ' ' ], $html);
+		$html = str_replace([ "\r\n", "\r", "\n" ], '', $html);
+		$html = trim($html);
+		
+		return $html;
 	}
 
 	/**
