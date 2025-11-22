@@ -1,0 +1,92 @@
+.blockera-block.blockera-block-1.wp-block-post-date {
+	background-color: #fee4e4;
+	border-radius: 5px;
+	transition: all 500ms ease 0ms;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 700;
+	font-style: normal;
+	color: #980000;
+}
+
+.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+	color: #980000;
+}
+
+.blockera-block.blockera-block-1.wp-block-post-date:hover {
+	background-color: #ffa7a7;
+	border-radius: 35px;
+}
+.blockera-block.blockera-block-2.wp-block-post-date {
+	background-color: #ced3ff;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	font-weight: 500;
+	font-style: normal;
+	color: #2050ff;
+	font-size: 20px;
+}
+
+.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+	color: #ffffff;
+	background-color: #00b4ba;
+	padding-top: 5px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	border-radius: 50px;
+}
+
+.blockera-block.blockera-block-2:hover a:not(.wp-element-button) {
+	background-color: #006568;
+}
+.blockera-block.blockera-block-3.wp-block-post-date {
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+.blockera-block.blockera-block-3 a:not(.wp-element-button) {
+	background-color: #0015ff;
+	color: #ffffff;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border-radius: 5px;
+}
+
+.blockera-block.blockera-block-3.wp-block-post-date::before {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	margin-right: 20px !important;
+	background-color: #ffc0c0;
+	border-radius: 5px;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-3.wp-block-post-date::after {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	margin-left: 20px !important;
+	background-color: #7ae890;
+	border-radius: 5px;
+	content: "After";
+}

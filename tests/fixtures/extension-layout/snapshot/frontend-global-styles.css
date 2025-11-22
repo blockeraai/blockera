@@ -1,0 +1,52 @@
+:root :where(.wp-block-group.is-style-section-1){
+	background-color: var(--wp--preset--color--accent-5);
+	color: var(--wp--preset--color--contrast);
+}
+
+:root :where(.wp-block-group.is-style-section-2){
+	background-color: var(--wp--preset--color--accent-2);
+	color: var(--wp--preset--color--contrast);
+}
+
+:root :where(.wp-block-group.is-style-section-3){
+	background-color: var(--wp--preset--color--accent-1);
+	color: var(--wp--preset--color--contrast);
+}
+
+:root :where(.wp-block-group.is-style-section-4){
+	background-color: var(--wp--preset--color--accent-3);
+	color: var(--wp--preset--color--accent-2);
+}
+
+:root :where(.wp-block-group.is-style-section-5){
+	background-color: var(--wp--preset--color--contrast);
+	color: var(--wp--preset--color--base);
+}
+
+:root :where(p.is-style-text-display){
+	font-size: clamp(2.2rem, 2.2rem + ((1vw - 0.2rem) * 1.333), 3.5rem);
+	line-height: 1.2;
+}
+
+:root :where(p.is-style-text-subtitle){
+	font-size: clamp(1.5rem, 1.5rem + ((1vw - 0.2rem) * 0.392), 1.75rem);
+	line-height: 1.2;
+}
+
+:root :where(p.is-style-text-annotation){
+	border-radius: 16px;
+	border-color: currentColor;
+	border-width: 1px;
+	border-style: solid;
+	font-size: var(--wp--preset--font-size--small);
+	letter-spacing: normal;
+	line-height: 1.5;
+	padding-top: 0.2rem;
+	padding-right: 0.6rem;
+	padding-bottom: 0.25rem;
+	padding-left: 0.6rem;
+}
+
+:root :where(p.is-style-text-annotation){
+	width: fit-content;
+}

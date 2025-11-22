@@ -66,6 +66,48 @@ trait WithDisplayValueTrait {
 			}
 		}
 
+		$current_settings = $this->getCurrentInnerBlockSettings();
+
+		//
+		// Get display value from current inner block settings.
+		//
+		if (isset($current_settings[ $property ])) {
+
+			if (is_string(
+				$current_settings[ $property ]
+			) ) {
+				return $current_settings[ $property ];
+			}
+
+			if (! empty(
+				$current_settings[ $property ]
+				['value']
+			)) {
+				return $current_settings[ $property ]['value'];
+			}
+		}
+
+		$current_settings = $this->getCurrentBreakpointSettings(true);
+
+		//
+		// Get display value from current breakpoint settings.
+		//
+		if (isset($current_settings[ $property ])) {
+
+			if (is_string(
+				$current_settings[ $property ]
+			) ) {
+				return $current_settings[ $property ];
+			}
+
+			if (! empty(
+				$current_settings[ $property ]
+				['value']
+			)) {
+				return $current_settings[ $property ]['value'];
+			}
+		}
+
 		//
 		// Get display value from default settings.
 		//

@@ -118,7 +118,8 @@
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"voku/simple_html_dom": "dev-master"
+		"voku/simple_html_dom": "dev-master",
+		"10up/wp_mock": "dev-trunk"
 	},
 	"require-dev": {
 		"blockera/dev-phpunit": "*",
@@ -134,7 +135,7 @@
 		"filp/whoops": "^2.15",
 		"yoast/phpunit-polyfills": "^2.0@dev",
 		"symfony/var-dumper": "5.4.x-dev",
-		"10up/wp_mock": "^0.4"
+		"spatie/phpunit-snapshot-assertions": "v4.x-dev"
 	},
 	"config": {
 		"process-timeout": 0,
@@ -151,6 +152,14 @@
 		"lint": "phpcs --standard=phpcs.xml",
 		"format": "phpcbf --standard=phpcs.xml --report-summary --report-source",
 		"test:coverage": "@php ./vendor/bin/phpunit --coverage-html php-coverage"
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Blockera\\Tests\\": "tests/phpunit/main/"
+		},
+		"files": [
+			"tests/phpunit/main/helpers.php"
+		]
 	},
 	"optimize-autoloader": "true",
 	"apcu-autoloader": true,

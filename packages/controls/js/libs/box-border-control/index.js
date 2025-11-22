@@ -35,6 +35,7 @@ export default function BoxBorderControl({
 	label = '',
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	repeaterItem,
 	singularId,
 	defaultValue = {
@@ -132,6 +133,7 @@ export default function BoxBorderControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (
@@ -155,7 +157,7 @@ export default function BoxBorderControl({
 
 					<Grid
 						gridTemplateColumns="122px 30px"
-						gap="8px"
+						gap="6px"
 						justifyItems="end"
 						justifyContent="end"
 					>

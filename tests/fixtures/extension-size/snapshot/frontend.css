@@ -1,0 +1,65 @@
+
+p.blockera-block.blockera-block--1 {
+	background-color: #dce9ff;
+	width: 100px;
+}
+
+p.blockera-block.blockera-block--2 {
+	background-color: #dce9ff;
+	min-width: 30px;
+}
+
+p.blockera-block.blockera-block--3 {
+	background-color: #dce9ff;
+	max-width: 200px !important;
+}
+
+p.blockera-block.blockera-block--4 {
+	background-color: #dce9ff;
+	height: 100px;
+}
+
+p.blockera-block.blockera-block--5 {
+	background-color: #dce9ff;
+	min-height: 100px;
+}
+
+p.blockera-block.blockera-block--6 {
+	background-color: #dce9ff;
+	max-height: 20px;
+}
+
+p.blockera-block.blockera-block--7 {
+	background-color: #dce9ff;
+	overflow: hidden;
+}
+
+p.blockera-block.blockera-block--8 {
+	background-color: #dce9ff;
+	overflow: scroll;
+}
+
+p.blockera-block.blockera-block--9 {
+	background-color: #dce9ff;
+	aspect-ratio: 3/2;
+}
+
+p.blockera-block.blockera-block--10 {
+	background-color: #dce9ff;
+	aspect-ratio: 5 / 1;
+}
+
+p.blockera-block.blockera-block--11 {
+	background-color: #dce9ff;
+	object-fit: contain;
+}
+
+p.blockera-block.blockera-block--12 {
+	background-color: #dce9ff;
+	object-position: 100% 100%;
+}
+
+p.blockera-block.blockera-block--13 {
+	background-color: #dce9ff;
+	box-sizing: border-box;
+}

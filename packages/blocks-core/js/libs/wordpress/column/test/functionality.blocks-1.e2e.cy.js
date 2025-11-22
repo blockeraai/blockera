@@ -74,6 +74,15 @@ describe('Column Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
+		cy.checkBlockStatesPickerItems([
+			'elements/bold',
+			'elements/italic',
+			'elements/kbd',
+			'elements/code',
+			'elements/span',
+			'elements/mark',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -450,16 +459,20 @@ describe('Column Block', () => {
 			.should('have.css', 'flex-basis', '30%')
 			.should('not.have.css', 'width', '30%');
 
-		if (enabledOptimizeStyleGeneration) {
-			cy.get('style#blockera-inline-css')
-				.invoke('text')
-				.then((styleContent) => {
+		//Check block
+		cy.get('link[id="blockera-blocks-core-column-style-css"]')
+			.should('exist')
+			.then(($link) => {
+				// Fetch the CSS file content
+				cy.request($link.attr('href')).then((response) => {
+					const styleContent = response.body;
+
 					cy.normalizeCSSContent(styleContent).then(
 						(normalizedContent) => {
 							expect(normalizedContent).to.include(expectedCSS);
 						}
 					);
 				});
-		}
+			});
 	});
 });

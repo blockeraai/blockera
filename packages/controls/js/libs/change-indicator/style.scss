@@ -1,5 +1,6 @@
 .blockera-component-change-indicator {
 	--indicator-size: 6px;
+	--indicator-outline-size: 1.5px;
 	--indicator-outline-color: #ffffff;
 	display: flex;
 	align-items: center;
@@ -11,7 +12,7 @@
 		background: #ffffff;
 		border-radius: 50%;
 		z-index: 1;
-		outline: 1.5px solid var(--indicator-outline-color);
+		outline: var(--indicator-outline-size) solid var(--indicator-outline-color);
 		position: relative;
 
 		&::before {
@@ -19,22 +20,30 @@
 			display: inline-block;
 			width: var(--indicator-size);
 			height: var(--indicator-size);
-			background: var(--blockera-controls-primary-color-bk);
+			background: var(--indicator-color);
 			border-radius: 50%;
 			position: absolute;
 			left: 0;
 			top: 0;
 		}
 
-		&.indicator-states {
-
-			&::before {
-				background: var(--blockera-controls-states-color-bk);
-			}
-		}
-
 		&:not(:first-child) {
 			z-index: 0;
 		}
+
+		&.is-animated {
+			animation: blockera-change-indicator-pulse-animation 1.4s infinite;
+		}
+	}
+}
+
+@keyframes blockera-change-indicator-pulse-animation {
+
+	0% {
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--indicator-color), transparent 0%);
+	}
+
+	100% {
+		box-shadow: 0 0 0 var(--indicator-size) color-mix(in srgb, var(--indicator-color), transparent 100%);
 	}
 }

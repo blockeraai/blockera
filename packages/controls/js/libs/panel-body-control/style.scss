@@ -1,4 +1,7 @@
 .blockera-control.blockera-control-panel-body {
+	border: none;
+	border-top: 1px solid #e0e0e0;
+	margin-top: -1px;
 
 	.components-panel__body-title {
 
@@ -9,14 +12,17 @@
 			padding: 0 16px;
 			height: 48px;
 			position: relative;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			gap: 5px;
 
 			&:focus {
 				z-index: 1;
 			}
 
 			.components-panel__icon {
-				order: -1;
-				margin: 0 5px 0 0;
+				margin: 0;
 				display: inline-flex;
 
 				svg {
@@ -34,11 +40,16 @@
 			}
 		}
 
-		&:hover {
+		&.is-accordion:hover {
+			background: #f0f0f0;
 
 			.blockera-component-change-indicator {
 				--indicator-outline-color: #f0f0f0;
 			}
+		}
+
+		&:not(.is-accordion):hover {
+			background: transparent;
 		}
 	}
 

@@ -121,6 +121,13 @@ export function PaddingAll({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingAllSideShape
@@ -207,6 +214,7 @@ export function PaddingAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-top"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'blockera')}
@@ -242,6 +250,7 @@ export function PaddingAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-right"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'blockera')}
@@ -254,6 +263,7 @@ export function PaddingAll({
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
 						}}
+						iconPosition="start"
 						{...{
 							attribute,
 							blockName,
@@ -275,6 +285,7 @@ export function PaddingAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-bottom"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'blockera')}
@@ -308,6 +319,7 @@ export function PaddingAll({
 						labelClassName
 					)}
 					data-cy="box-spacing-padding-left"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('All Sides Padding', 'blockera')}

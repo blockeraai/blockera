@@ -1,0 +1,8 @@
+:root :where(.wp-block-post-terms){
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+:root :where(.wp-block-post-terms a){
+	white-space: nowrap;
+}

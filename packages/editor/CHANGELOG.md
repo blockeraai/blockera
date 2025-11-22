@@ -1,5 +1,8 @@
 ## Unreleased
 
+### New Features
+- Added support for WordPress block theme developers to include Blockera features in their theme.json files, making it easier to customize and configure themes with Blockera's capabilities.
+
 ### Improvements
 - Improved block features organization for better code structure and easier maintenance.
 - Added support for third-party developers to extend and customize the style engine filters.
@@ -7,6 +10,19 @@
 - Improved how styles are applied to blocks to ensure they follow web standards and work reliably across different browsers.
 - The inner block items design improved to make them different of the block states.
 - Block Settings Section: improve design and UX.
+- Add `&` support for targeting current block in custom CSS feature.
+- Compatibility for detecting variables from core blocks if the variable not found.
+- Improve to show `Flex Child` settings smartly for all blocks and inner blocks that have `flex` parent.
+
+
+### Automated Tests
+- Automated test to check `font color` WP data compatibility if variables not found. 
+- Automated test to check `background color` WP data compatibility if variables not found. 
+- Automated test to check `background image` WP data compatibility if variables not found. 
+- Automated test to check `border color` WP data compatibility if variables not found. 
+- Automated test to check `font size` WP data compatibility if variables not found. 
+- Automated test to check `spacing` WP data compatibility if variables not found. 
+
 
 ## 2.0.1 (2025-07-22)
 

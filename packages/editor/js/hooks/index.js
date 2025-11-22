@@ -16,3 +16,4 @@ export {
 } from './use-block-side-effects';
 export { useDisplayBlockControls } from './use-display-block-controls';
 export { useCalculateCurrentAttributes } from './use-calculate-current-attributes';
+export { useBlockPreviewStyles } from './use-block-preview-styles';

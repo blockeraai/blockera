@@ -145,6 +145,13 @@ export function MarginHorizontal({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<>
@@ -238,6 +245,7 @@ export function MarginHorizontal({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-right"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('Left & Right Margin', 'blockera')}
@@ -250,6 +258,7 @@ export function MarginHorizontal({
 							setFocusSide(sideId);
 							setOpenPopover(sideId);
 						}}
+						iconPosition="start"
 						{...{
 							attribute,
 							blockName,
@@ -273,6 +282,7 @@ export function MarginHorizontal({
 						labelClassName
 					)}
 					data-cy="box-spacing-margin-left"
+					data-test={dataTest}
 				>
 					<LabelControl
 						ariaLabel={__('Left & Right Margin', 'blockera')}

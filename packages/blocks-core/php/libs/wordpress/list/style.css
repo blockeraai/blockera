@@ -1,12 +1,19 @@
+/* Icon style */
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] {
 	padding-left: 10px;
 }
 
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] li {
 	position: relative;
-	gap: var(--blockera--icon--gap, 0.7em);
+	column-gap: var(--blockera--icon--gap, 0.7em);
 	display: flex;
 	align-items: center;
+	flex-wrap: wrap;
+}
+
+.blockera-block.wp-block-list[class*="blockera-has-icon-"] .wp-block-list {
+	width: 100%;
+	flex-grow: 1;
 }
 
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] li::before {

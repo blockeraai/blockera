@@ -47,7 +47,10 @@ export const isNormalState = (selectedState: TStates | string): boolean =>
  * @return {Object} the attributes cleaned.
  */
 export const prepareBlockeraDefaultAttributesValues = (
-	rootAttributes: Object
+	rootAttributes: Object,
+	{
+		context = 'block-inspector',
+	}: { context?: 'global-styles-panel' | 'block-inspector' } = {}
 ): Object => {
 	// Extracting default prop of items and assigning to a new object
 	const attributes: { [key: string]: any } = {};
@@ -57,31 +60,78 @@ export const prepareBlockeraDefaultAttributesValues = (
 			continue;
 		}
 
+		const isGlobalStylesPanel =
+			'global-styles-panel' === context &&
+			!['blockeraPropsId', 'blockeraCompatId'].includes(key) &&
+			/^blockera/i.test(key);
+
 		if (rootAttributes[key].default !== undefined) {
-			attributes[key] = rootAttributes[key].default;
+			if (isGlobalStylesPanel) {
+				attributes[key] = {
+					value: rootAttributes[key].default,
+				};
+			} else {
+				attributes[key] = rootAttributes[key].default;
+			}
 
 			continue;
 		}
 
 		switch (rootAttributes[key]?.type) {
 			case 'string':
-				attributes[key] = '';
+				if (isGlobalStylesPanel) {
+					attributes[key] = {
+						value: '',
+					};
+				} else {
+					attributes[key] = '';
+				}
 				break;
 			case 'object':
-				attributes[key] = {};
+				if (isGlobalStylesPanel) {
+					attributes[key] = {
+						value: {},
+					};
+				} else {
+					attributes[key] = {};
+				}
 				break;
 			case 'array':
-				attributes[key] = [];
+				if (isGlobalStylesPanel) {
+					attributes[key] = {
+						value: [],
+					};
+				} else {
+					attributes[key] = [];
+				}
 				break;
 			case 'boolean':
-				attributes[key] = false;
+				if (isGlobalStylesPanel) {
+					attributes[key] = {
+						value: false,
+					};
+				} else {
+					attributes[key] = false;
+				}
 				break;
 			case 'number':
 			case 'integer':
-				attributes[key] = 0;
+				if (isGlobalStylesPanel) {
+					attributes[key] = {
+						value: 0,
+					};
+				} else {
+					attributes[key] = 0;
+				}
 				break;
 			case 'null':
-				attributes[key] = null;
+				if (isGlobalStylesPanel) {
+					attributes[key] = {
+						value: null,
+					};
+				} else {
+					attributes[key] = null;
+				}
 				break;
 		}
 	}

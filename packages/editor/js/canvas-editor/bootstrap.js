@@ -5,15 +5,16 @@
  */
 import type { MixedElement } from 'react';
 import { applyFilters } from '@wordpress/hooks';
-import { select, dispatch } from '@wordpress/data';
-import { getPlugin, registerPlugin } from '@wordpress/plugins';
 import { useEffect } from '@wordpress/element';
+import { select, useSelect, dispatch } from '@wordpress/data';
+import { getPlugin, registerPlugin } from '@wordpress/plugins';
 
 /**
  * Internal dependencies
  */
-import { getTargets } from './helpers';
 import { STORE_NAME } from '../store';
+import { getTargets } from './helpers';
+import { registration } from './global-styles';
 import { CanvasEditorApplication } from './index';
 import { IntersectionObserverRenderer } from './intersection-observer-renderer';
 import type { BreakpointTypes } from '../extensions/libs/block-card/block-states/types';
@@ -75,15 +76,26 @@ export const bootstrapCanvasEditor = (): void | Object => {
 	const observerPlugin = 'blockera-canvas-editor-observer';
 
 	const { version } = getEntity('wp');
-	const { header } = getTargets(version);
+	const { header, globalStylesPanel } = getTargets(version);
 
 	const registry = () => {
 		registerPlugin(observerPlugin, {
 			render() {
 				const componentSelector = '.blockera-canvas-breakpoints';
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				const { editorMode } = useSelect((select) => {
+					const { getEditorMode } = select('core/editor');
+					const editorMode = getEditorMode();
+
+					return { editorMode };
+				});
 
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				useEffect(() => {
+					if ('visual' !== editorMode) {
+						return;
+					}
+
 					if (
 						!document.querySelector(componentSelector) &&
 						!cache.get(componentSelector)
@@ -98,18 +110,18 @@ export const bootstrapCanvasEditor = (): void | Object => {
 								/>
 							),
 							{
-								root: '.editor-header',
-								after: '.editor-header__toolbar',
 								componentSelector,
 							}
 						);
 					}
 					// eslint-disable-next-line react-hooks/exhaustive-deps
-				}, []);
+				}, [editorMode]);
 
 				return <></>;
 			},
 		});
+
+		registration(globalStylesPanel);
 	};
 
 	if (!getPlugin(observerPlugin)) {

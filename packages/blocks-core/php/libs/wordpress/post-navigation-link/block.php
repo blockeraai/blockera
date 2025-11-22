@@ -19,6 +19,24 @@ return array_merge(
 				'blockera/elements/arrow' => [
 					'root' => '.wp-block-post-navigation-link__arrow-previous',
 				],
+				'blockera/elements/bold' => [
+					'root' => ':is(strong,b)',
+				],
+				'blockera/elements/italic' => [
+					'root' => ':is(em,i)',
+				],
+				'blockera/elements/kbd' => [
+					'root' => 'kbd',
+				],
+				'blockera/elements/code' => [
+					'root' => 'code',
+				],
+				'blockera/elements/span' => [
+					'root' => 'span:not([data-rich-text-placeholder])',
+				],
+				'blockera/elements/mark' => [
+					'root' => ':is(mark,mark[class])',
+				],
 			]
 		),
 	]

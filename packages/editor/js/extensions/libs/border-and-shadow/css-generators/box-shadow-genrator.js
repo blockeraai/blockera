@@ -1,7 +1,7 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue } from '@blockera/controls';
+import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -20,7 +20,7 @@ export function BoxShadowGenerator(id, props, options) {
 	};
 
 	// Collect all properties
-	Object.entries(attributes?.blockeraBoxShadow)?.map(([, item]) => {
+	getSortedRepeater(attributes?.blockeraBoxShadow)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}

@@ -37,7 +37,7 @@ describe('Font Size → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'font-size', '10px');
+		cy.get('p.blockera-block').should('have.css', 'font-size', '10px');
 	});
 
 	it('Variable value', () => {
@@ -53,7 +53,7 @@ describe('Font Size → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'font-size: var(--wp--preset--font-size--small)'
+					'font-size: var(--wp--preset--font-size--small, 0.875rem)'
 				);
 		});
 
@@ -87,7 +87,7 @@ describe('Font Size → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				'font-size: var(--wp--preset--font-size--small)'
+				'font-size: var(--wp--preset--font-size--small, 0.875rem)'
 			);
 	});
 });

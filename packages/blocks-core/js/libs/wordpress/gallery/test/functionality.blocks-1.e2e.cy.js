@@ -87,7 +87,7 @@ describe('Gallery Block', () => {
 		cy.getBlock('core/gallery')
 			.first()
 			.within(() => {
-				cy.get('.wp-block-image img')
+				cy.get('.wp-block-image')
 					.first()
 					.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 			});
@@ -142,9 +142,18 @@ describe('Gallery Block', () => {
 
 		// layout settings should be hidden
 		cy.get('.block-editor-block-inspector').within(() => {
-			cy.get('.components-panel__body-title button')
+			cy.get('.components-tools-panel-header')
 				.contains('Settings')
 				.should('be.visible');
+
+			cy.get(
+				'.components-tools-panel:not(.block-editor-bindings__panel)'
+			).within(() => {
+				cy.get('.components-input-control__label')
+					.contains('Aspect ratio')
+					.should('exist')
+					.should('not.be.visible');
+			});
 		});
 
 		//
@@ -161,7 +170,7 @@ describe('Gallery Block', () => {
 
 		cy.get('.blockera-block.wp-block-gallery').within(() => {
 			// image inner block
-			cy.get('.wp-block-image img')
+			cy.get('.wp-block-image')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
 

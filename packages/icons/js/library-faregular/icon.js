@@ -17,7 +17,7 @@ import { FaRegularIcons } from './icons';
 export function FaRegularIcon({
 	library = 'faregular',
 	style = {},
-	iconSize = 24,
+	iconSize = 20,
 	icon,
 	...props
 }) {
@@ -34,13 +34,8 @@ export function FaRegularIcon({
 	}
 
 	if (iconSize) {
-		if (!props?.width) {
-			style.width = `${iconSize}px`;
-		}
-
-		if (!props?.height) {
-			style.height = `${iconSize}px`;
-		}
+		style.width = `${iconSize}px`;
+		style.height = `${iconSize}px`;
 	}
 
 	if (!FaRegularIcons[icon.iconName]) {

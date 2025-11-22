@@ -14,13 +14,14 @@ import { isString, mergeObject, getSortedObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { isBlock, isElement } from '../helpers';
+import { isBlock, isElement } from '../utils';
 import type {
 	InnerBlocks,
 	AvailableItems,
 	InnerBlockType,
 	InnerBlockModel,
 } from '../types';
+import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 export const useAvailableItems = ({
 	clientId,
@@ -33,8 +34,15 @@ export const useAvailableItems = ({
 	// External selectors. to access registered block types on WordPress blocks store api.
 	const { getBlockType } = select('core/blocks');
 	const { getAllowedBlocks, getSelectedBlock } = select('core/block-editor');
-	const allowedBlockTypes = getAllowedBlocks(clientId);
-	const { innerBlocks, attributes } = getSelectedBlock();
+	const { selectedBlockClientId } = useGlobalStylesPanelContext();
+
+	const allowedBlockTypes = getAllowedBlocks(
+		selectedBlockClientId || clientId
+	);
+	const { innerBlocks, attributes } = getSelectedBlock() || {
+		innerBlocks: [],
+		attributes: {},
+	};
 
 	return useMemo(() => {
 		const forces: Array<InnerBlockModel> = [];

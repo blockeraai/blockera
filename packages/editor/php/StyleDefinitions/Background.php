@@ -46,7 +46,7 @@ class Background extends BaseStyleDefinition implements Repeater {
 			return false;
 		}
 
-		return ! empty( $setting['isVisible'] );
+		return ! empty( $setting['isVisible'] ) || ! empty( $setting[ $setting['type'] ] );
 	}
 
 	/**
@@ -73,7 +73,7 @@ class Background extends BaseStyleDefinition implements Repeater {
 			return $declaration;
 		}
 
-		$this->setActiveBackgroundType( $filteredSettings[0] );
+		array_map([ $this, 'setActiveBackgroundType' ], $filteredSettings);
 
 		$this->setCss( $this->declarations );
 
@@ -327,11 +327,6 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 * @return array the modified props by merge with perv values.
 	 */
 	protected function modifyProperties( array $props ): array {
-
-		if ( empty( $this->declarations['image'] ) ) {
-
-			return $props;
-		}
 
 		foreach ( $props as $prop => $propValue ) {
 

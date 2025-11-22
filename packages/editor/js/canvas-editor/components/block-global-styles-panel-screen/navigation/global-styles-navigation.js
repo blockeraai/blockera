@@ -1,0 +1,57 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import { type MixedElement } from 'react';
+import {
+	__experimentalNavigationMenu as NavigationMenu,
+	__experimentalNavigationItem as NavigationItem,
+} from '@wordpress/components';
+
+/**
+ * Blockera dependencies
+ */
+import { Icon } from '@blockera/icons';
+import {
+	extensionClassNames,
+	extensionInnerClassNames,
+} from '@blockera/classnames';
+
+export const GlobalStylesNavigation = (): MixedElement => {
+	return (
+		<NavigationMenu
+			title={
+				<>
+					<Icon icon="extension-style-variations" iconSize={20} />
+					{__('Global Styles', 'blockera')}
+				</>
+			}
+			className={extensionClassNames('navigation-category')}
+		>
+			<p
+				className={extensionInnerClassNames(
+					'navigation-category-description'
+				)}
+			>
+				{__(
+					'Customize the appearance of specific blocks for the whole site.',
+					'blockera'
+				)}
+			</p>
+
+			<NavigationItem
+				item="blocks"
+				data-test="block-style-variations"
+				onClick={() =>
+					document.querySelector('button[id="/blocks"]')?.click()
+				}
+				className={extensionClassNames('navigation-item')}
+				navigateToMenu="blocks"
+				title={__('Block Style Variations', 'blockera')}
+				icon={<Icon icon="style-variations" iconSize={20} />}
+			/>
+		</NavigationMenu>
+	);
+};

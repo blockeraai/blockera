@@ -124,7 +124,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('cecece ');
+					cy.get('input[maxlength="9"]').type('cecece', { delay: 0 });
 				});
 
 			//Check block
@@ -310,7 +310,7 @@ if (!experimental().get('editor.extensions.effectsExtension.divider')) {
 				.last()
 				.within(() => {
 					cy.get('input[maxlength="9"]').clear({ force: true });
-					cy.get('input[maxlength="9"]').type('cecece ');
+					cy.get('input[maxlength="9"]').type('cecece', { delay: 0 });
 				});
 
 			//Check block

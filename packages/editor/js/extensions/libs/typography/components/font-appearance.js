@@ -44,6 +44,9 @@ export const FontAppearance = ({
 		>
 			<SelectControl
 				label={__('Appearance', 'blockera')}
+				labelProps={{
+					iconPosition: 'start',
+				}}
 				labelDescription={
 					<>
 						<p>

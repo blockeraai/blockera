@@ -535,6 +535,11 @@ export function UnitInput({
 	};
 
 	const handleBlur = () => {
+		// Prevent continuing if no value was typed.
+		if (typedValue === inputValue) {
+			return;
+		}
+
 		// First try to evaluate any complete calculation
 		if (evaluateCalculation(typedValue) || 0 === typedValue) {
 			return;

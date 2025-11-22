@@ -26,7 +26,7 @@ describe('Value Addon → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'width: var(--wp--style--global--content-size)'
+						'width: var(--wp--style--global--content-size, 645px)'
 					);
 			});
 		});
@@ -48,7 +48,7 @@ describe('Value Addon → Functionality', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'width: var(--wp--style--global--content-size)'
+						'width: var(--wp--style--global--content-size, 645px)'
 					);
 			});
 		});

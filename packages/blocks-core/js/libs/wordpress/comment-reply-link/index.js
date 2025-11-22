@@ -13,7 +13,7 @@ import { SharedBlockExtension } from '@blockera/editor';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const CommentReplyLink: BlockType = {
 	name: 'blockeraCommentReplyLink',

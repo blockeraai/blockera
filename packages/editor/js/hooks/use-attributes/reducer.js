@@ -29,6 +29,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		type,
 		ref,
 		blockId,
+		clientId,
 		newValue,
 		attributeId,
 		innerBlocks,
@@ -176,11 +177,15 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		case 'UPDATE_BLOCK_STATES':
 		case 'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE':
 			const blockeraBlockStates = memoizedBlockStates(state, action, {
+				ref,
 				currentState,
 				insideInnerBlock:
 					'UPDATE_INNER_BLOCK_INSIDE_PARENT_STATE' === type,
 				currentBlock,
 				getState,
+				clientId,
+				name: blockId,
+				hookParams,
 				getInnerState,
 			});
 			const {
@@ -232,6 +237,8 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					currentState: currentInnerBlockState,
 					insideInnerBlock: false,
 					currentBlock,
+					clientId,
+					name: blockId,
 				}
 			);
 

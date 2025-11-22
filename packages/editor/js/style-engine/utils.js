@@ -135,7 +135,7 @@ export const createCssDeclarations = (
 	return getProperties({
 		options,
 		properties: _props,
-	}).join('\n');
+	}).join('');
 };
 
 /**
@@ -150,8 +150,6 @@ export const getProperties = (props: {
 }): Array<string> => {
 	const { properties, options } = props;
 	const _properties: Object = {};
-	const keys = Object.keys(properties);
-	const lastKeyIndex = keys.length - 1;
 
 	for (const property: string in properties) {
 		if (!Object.hasOwnProperty.call(properties, property)) {
@@ -175,14 +173,13 @@ export const getProperties = (props: {
 
 			tempValue = `${property}: ${value}${
 				options.important && !hasImportantFlag ? ' !important' : ''
-			};\n`;
+			};`;
 		} else if (options.important) {
-			tempValue = value.replace(';', ' !important;\n');
+			tempValue = value.replace(';', ' !important;');
 		} else {
 			tempValue = `${property}: ${value}`;
 		}
 
-		tempValue += lastKeyIndex === keys.indexOf(property) ? '\n' : '';
 		_properties[property] = tempValue;
 	}
 

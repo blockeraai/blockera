@@ -26,8 +26,10 @@ return array_merge(
 			(array) array_merge(
 				blockera_load( 'inners.link', dirname( __DIR__ ) ),
 				[
-					'blockera/core/avatar'     => [
+					'blockera/elements/avatar'     => [
 						'root' => '.wp-block-post-author__avatar > img',
+						'layout' => '.wp-block-post-author__avatar',
+						'spacing' => '.wp-block-post-author__avatar',
 					],
 					'blockera/elements/byline' => [
 						'root' => '.wp-block-post-author__byline',

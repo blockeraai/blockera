@@ -31,6 +31,30 @@ describe('Button Block', () => {
 
 		cy.checkBlockCardItems(['normal', 'hover', 'focus', 'active']);
 
+		cy.checkBlockStatesPickerItems(
+			[
+				'states/hover',
+				'states/focus',
+				'states/focus-within',
+				'states/visited',
+				'states/active',
+				'states/first-child',
+				'states/last-child',
+				'states/only-child',
+				'states/empty',
+				'states/before',
+				'states/after',
+				'elements/bold',
+				'elements/italic',
+				'elements/kbd',
+				'elements/code',
+				'elements/span',
+				'elements/mark',
+				'elements/icon',
+			],
+			true
+		);
+
 		//
 		// 1. Block Styles
 		//
@@ -72,7 +96,7 @@ describe('Button Block', () => {
 
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('37e6d4 ');
+			cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 		});
 
 		cy.getParentContainer('Border Line').within(() => {

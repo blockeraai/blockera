@@ -10,7 +10,6 @@ import type {
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
 export type ExtensionsStoreType = {
-	config: Object,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
 	currentInnerBlockState: TStates,

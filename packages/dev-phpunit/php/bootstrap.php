@@ -44,7 +44,7 @@ require_once $_tests_dir . '/includes/functions.php';
 tests_add_filter('muplugins_loaded', function () use ($root_dir) {
 
 	define( '__PACKAGES_DIR__', dirname( __DIR__, 2 ) );
-	define( 'BLOCKERA_PHPUNIT_RUN_TESTS', true );
+	define( 'BLOCKERA_DEVELOPMENT', true );
 
 	include trailingslashit($root_dir) . 'tests/phpunit/bootstrap.php';
 } );

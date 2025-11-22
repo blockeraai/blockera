@@ -26,7 +26,7 @@ describe('Font Color → Functionality', () => {
 
 		cy.getByDataTest('popover-body').within(() => {
 			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('70ca9e ');
+			cy.get('input[maxlength="9"]').type('70ca9e', { delay: 0 });
 		});
 
 		//Check block
@@ -66,7 +66,10 @@ describe('Font Color → Functionality', () => {
 		cy.getIframeBody().within(() => {
 			cy.get('#blockera-styles-wrapper')
 				.invoke('text')
-				.should('include', 'color: var(--wp--preset--color--contrast)');
+				.should(
+					'include',
+					'color: var(--wp--preset--color--contrast, #111111)'
+				);
 		});
 
 		//Check store
@@ -99,8 +102,8 @@ describe('Font Color → Functionality', () => {
 			.should(
 				'include',
 				!enabledOptimizeStyleGeneration
-					? 'color: var(--wp--preset--color--contrast) !important'
-					: 'color: var(--wp--preset--color--contrast)'
+					? 'color: var(--wp--preset--color--contrast, #111111) !important'
+					: 'color: var(--wp--preset--color--contrast, #111111)'
 			);
 	});
 });

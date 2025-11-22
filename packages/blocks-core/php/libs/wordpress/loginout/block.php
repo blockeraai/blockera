@@ -17,10 +17,10 @@ return array_merge(
 					'root' => 'form',
 				],
 				'blockera/elements/input-label' => [
-					'root' => '.login-password label, .login-username label',
+					'root' => ':is(.login-password, .login-username) label',
 				],
 				'blockera/elements/input'       => [
-					'root' => '.login-password input, .login-username input',
+					'root' => ':is(.login-password, .login-username) input',
 				],
 				'blockera/elements/remember'    => [
 					'root' => '.login-remember label',

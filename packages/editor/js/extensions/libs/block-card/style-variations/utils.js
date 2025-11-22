@@ -9,29 +9,46 @@ import {
 	getBlockFromExample,
 	getBlockType,
 } from '@wordpress/blocks';
-import { useDispatch, useSelect } from '@wordpress/data';
+import { useDispatch, useSelect, select } from '@wordpress/data';
 import TokenList from '@wordpress/token-list';
 import { _x } from '@wordpress/i18n';
-import { useMemo } from '@wordpress/element';
+import { useMemo, useCallback } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { prepare } from '@blockera/data-editor';
+import { isString } from '@blockera/utils';
+
+/**
+ * Internal dependencies
+ */
+import { getBlockeraGlobalStylesMetaData } from '../../../../canvas-editor/global-styles/helpers';
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
  *
  * Returns the active style from the given className.
  */
-export function getActiveStyle(styles: Array<any>, className: string): Object {
+export function getActiveStyle(
+	styles: Array<any>,
+	className: string
+): Object | string {
 	for (const style of new TokenList(className).values()) {
 		if (style.indexOf('is-style-') === -1) {
 			continue;
 		}
 
 		const potentialStyleName = style.substring(9);
+
 		const activeStyle = styles?.find(
 			({ name }) => name === potentialStyleName
 		);
+
 		if (activeStyle) {
 			return activeStyle;
 		}
+		return potentialStyleName;
 	}
 
 	return getDefaultStyle(styles);
@@ -67,21 +84,85 @@ export function replaceActiveStyle(
  * act as a fallback for when there is no active style applied to a block. The default item also serves
  * as a switch on the frontend to deactivate non-default styles.
  */
-export function getRenderedStyles(styles: Array<any>): Array<Object> {
+export function getRenderedStyles(
+	styles: Array<any>,
+	baseVariations: Array<Object>,
+	blockName: string
+): Array<Object> {
+	const defaultGlobalStyle = {
+		name: 'default',
+		label: _x('Default', 'block style', 'blockera'),
+		isDefault: true,
+		icon: {
+			name: 'wordpress',
+			library: 'wp',
+		},
+	};
+	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
+	const variations =
+		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations || {};
+
 	if (!styles || styles.length === 0) {
-		return [];
+		return [defaultGlobalStyle];
 	}
 
-	return getDefaultStyle(styles)
-		? styles
-		: [
-				{
-					name: 'default',
-					label: _x('Default', 'block style', 'blockera'),
-					isDefault: true,
+	styles = styles
+		.map((style) => {
+			if (variations[style.name]?.isDeleted) {
+				return null;
+			}
+
+			if (style.name in variations) {
+				return {
+					...style,
+					label: variations[style.name].label,
+					// $FlowFixMe
+					...(variations[style.name].isDefault
+						? { isDefault: true }
+						: {}),
+					...(variations[style.name].isDeleted &&
+					style.name in baseVariations
+						? { name: variations[style.name].name }
+						: {}),
+				};
+			}
+
+			return style;
+		})
+		.filter(Boolean);
+	styles = [...(styles || [])].sort((a, b) => {
+		if (a?.isDefault) return -1;
+		if (b?.isDefault) return 1;
+		return 0;
+	});
+
+	const normalizeStyle = (style: Object): Object => {
+		if (style?.icon) {
+			return style;
+		}
+
+		if (style.name in baseVariations || style.isDefault) {
+			return {
+				...style,
+				icon: {
+					name: 'wordpress',
+					library: 'wp',
 				},
-				...styles,
-		  ];
+			};
+		}
+
+		return {
+			...style,
+			icon: {
+				name: 'blockera',
+				library: 'blockera',
+			},
+		};
+	};
+
+	return getDefaultStyle(styles)
+		? styles.map(normalizeStyle)
+		: [defaultGlobalStyle, ...styles.map(normalizeStyle)];
 }
 
 /**
@@ -99,16 +180,23 @@ export function getDefaultStyle(styles: Array<Object>): Object {
 export function useStylesForBlocks({
 	clientId,
 	onSwitch,
+	blockName,
 }: {
 	clientId: string,
+	blockName: string,
 	onSwitch: () => void,
 }): Object {
 	const selector = (select: any) => {
 		const { getBlock } = select(blockEditorStore);
-		const block = getBlock(clientId);
+		let block = getBlock(clientId);
 
 		if (!block) {
-			return {};
+			block = {
+				name: blockName,
+				attributes: {
+					className: '',
+				},
+			};
 		}
 		const blockType = getBlockType(block.name);
 		const { getBlockStyles } = select(blocksStore);
@@ -122,30 +210,66 @@ export function useStylesForBlocks({
 	};
 	const { styles, block, blockType, className } = useSelect(selector, [
 		clientId,
+		blockName,
 	]);
+	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
+
 	const { updateBlockAttributes } = useDispatch(blockEditorStore);
-	const stylesToRender = getRenderedStyles(styles);
-	const activeStyle = getActiveStyle(stylesToRender, className);
+	const stylesToRender = useMemo(
+		() =>
+			getRenderedStyles(
+				styles,
+				prepare(`styles.blocks.${blockName}.variations`, base) || {},
+				blockName
+			),
+		[styles, blockName, base]
+	);
+	const activeStyle = useMemo(
+		() => getActiveStyle(stylesToRender, className),
+		[stylesToRender, className]
+	);
 	const genericPreviewBlock = useGenericPreviewBlock(block, blockType);
 
-	const onSelect = (style: string) => {
-		const styleClassName = replaceActiveStyle(
+	const isDeletedStyle = isString(activeStyle) ? activeStyle : false;
+
+	const onSelect = useCallback(
+		(newStyle: string) => {
+			const styleClassName = replaceActiveStyle(
+				className,
+				isString(isDeletedStyle)
+					? {
+							name: isDeletedStyle,
+							label: isDeletedStyle,
+							isDefault: false,
+							isDeleted: true,
+					  }
+					: activeStyle,
+				newStyle
+			);
+			updateBlockAttributes(clientId, {
+				className: styleClassName,
+			});
+			onSwitch();
+		},
+		[
+			clientId,
+			onSwitch,
 			className,
 			activeStyle,
-			style
-		);
-		updateBlockAttributes(clientId, {
-			className: styleClassName,
-		});
-		onSwitch();
-	};
+			isDeletedStyle,
+			updateBlockAttributes,
+		]
+	);
 
 	return {
 		onSelect,
 		stylesToRender,
-		activeStyle,
+		activeStyle: isDeletedStyle
+			? getDefaultStyle(stylesToRender)
+			: activeStyle,
 		genericPreviewBlock,
 		className,
+		isDeletedStyle,
 	};
 }
 
@@ -166,6 +290,10 @@ function useGenericPreviewBlock(block: Object, type: Object) {
 		}
 
 		if (block) {
+			if (!block.hasOwnProperty('innerBlocks')) {
+				block.innerBlocks = [];
+			}
+
 			return cloneBlock(block);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps

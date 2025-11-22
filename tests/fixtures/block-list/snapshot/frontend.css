@@ -1,0 +1,109 @@
+
+.blockera-block.blockera-block-1 :where(li) {
+	background-color: #d8e0ff;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 20px;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-2 .wp-block-list {
+	margin-right: 5px !important;
+	margin-bottom: 5px;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-2 :where(li) {
+	background-color: #00000029;
+	border-radius: 5px;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-4 {
+	background-color: #eb8c50;
+	color: #ffffff;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-4 a:not(.wp-element-button) {
+	color: #ffffff;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-5 {
+	background-color: #ffd3d3;
+	font-weight: 600;
+	font-style: normal;
+	color: #c73535;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-5 a:not(.wp-element-button) {
+	color: #c73535;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-6 {
+	background-color: #ffdada;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 600;
+	font-style: normal;
+	color: #900000;
+	font-size: 18px;
+}
+
+.wp-block-list.blockera-block.blockera-block-6:not(.wp-block-list .wp-block-list) > li {
+	border-radius: 10px;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-6 .wp-block-list {
+	background-color: #d2daff;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 35px;
+	margin-top: 10px;
+	margin-right: 10px !important;
+	margin-bottom: 10px;
+	margin-left: 10px !important;
+	color: #003de4;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-6 a:not(.wp-element-button) {
+	color: #900000;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-6 ul {
+	border-radius: 20px;
+}
+
+.blockera-block.blockera-block-8.wp-block-list {
+	background-color: #edffcf;
+	transition: all 500ms ease 0ms;
+	display: flex;
+	flex-direction: column;
+}
+
+ul.blockera-block.blockera-block-8 {
+	border: 2px solid #26ff00;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-8.wp-block-list:hover {
+	background-color: #b3d27e;
+}
+
+ul.blockera-block.blockera-block-8:hover {
+	border: 2px solid #189d00;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-9 {
+	background-color: #0000002e;
+	order: 100;
+}
+
+@media screen and (max-width: 478px) {
+	.wp-block-list > li.blockera-block.blockera-block-9 {
+	order: -1;
+}
+
+
+}

@@ -55,9 +55,9 @@ class BoxShadow extends BaseStyleDefinition {
 			return $declaration;
 		}
 
-		$boxShadow = $this->getBoxShadow( $filteredBoxShadows[0] );
+		$this->setDeclaration($cssProperty, implode(', ', array_map([ $this, 'getBoxShadow' ], $filteredBoxShadows)));
 
-		$this->setCss( [ $cssProperty => $boxShadow ] );
+		$this->setCss( $this->declarations );
 
 		return $this->css;
 	}

@@ -1,9 +1,2 @@
-.blockera-block.wp-block-buttons {
-	&[style*="text-decoration"], 
-	&.blockera-has-text-decoration {
-		.wp-block-button,
-		.wp-block-button__link {
-			text-decoration: inherit;
-		}
-	}
-}
+// import style from php file to keep only one style for both editor and front end
+@import '../../../../php/libs/wordpress/buttons/style.css';

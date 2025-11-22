@@ -1,20 +1,24 @@
 import {
 	savePage,
+	createPost,
+	appendBlocks,
+	addBlockToPost,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Shadows → Functionality', () => {
 	beforeEach(() => {
 		createPost();
-
-		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
-		cy.getByDataTest('style-tab').click();
 	});
 
 	it('single text shadow + promotion popover', () => {
+		cy.getBlock('default').type('This is test paragraph', {
+			delay: 0,
+		});
+		cy.getByDataTest('style-tab').click();
+
 		/* One Text Shadow */
 		cy.getParentContainer('Text Shadows').within(() => {
 			cy.getByAriaLabel('Add New Text Shadow').click();
@@ -81,13 +85,58 @@ describe('Text Shadows → Functionality', () => {
 
 		//Check frontend
 		savePage();
-
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'text-shadow',
 			'rgb(112, 202, 158) 2px 3px 4px'
+		);
+	});
+
+	it('multiple text shadows', () => {
+		appendBlocks(`<!-- wp:paragraph {"blockeraPropsId":"9692dad8-b400-483f-9c1a-0e0bb0465e36","blockeraCompatId":"109184054630","blockeraTextShadow":{"value":{"0":{"isVisible":true,"x":"2px","y":"3px","blur":"4px","color":"#70ca9e","order":0},"1":{"isVisible":true,"x":"5px","y":"6px","blur":"7px","color":"#70ca9e","order":1}}},"className":"blockera-block blockera-block-negdp8"} -->
+<p class="blockera-block blockera-block-negdp8">This is test text.</p>
+<!-- /wp:paragraph -->`);
+		cy.getBlock('core/paragraph').click();
+
+		//Check block
+		cy.getBlock('core/paragraph').should(
+			'have.css',
+			'text-shadow',
+			'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'
+		);
+
+		//Check store
+		getWPDataObject().then((data) => {
+			expect({
+				0: {
+					isVisible: true,
+					x: '2px',
+					y: '3px',
+					blur: '4px',
+					color: '#70ca9e',
+					order: 0,
+				},
+				1: {
+					isVisible: true,
+					x: '5px',
+					y: '6px',
+					blur: '7px',
+					color: '#70ca9e',
+					order: 1,
+				},
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTextShadow'));
+		});
+
+		//Check frontend
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('p.blockera-block').should(
+			'have.css',
+			'text-shadow',
+			'rgb(112, 202, 158) 2px 3px 4px, rgb(112, 202, 158) 5px 6px 7px'
 		);
 	});
 });

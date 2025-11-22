@@ -138,7 +138,7 @@ export const SpacingStyles = ({
 		fallbackSupportId: getBlockSupportFallback(supports, 'blockeraSpacing'),
 	});
 
-	return [
+	const styleGroup = [
 		{
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
@@ -155,4 +155,6 @@ export const SpacingStyles = ({
 			),
 		},
 	];
+
+	return styleGroup;
 };

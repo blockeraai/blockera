@@ -38,8 +38,8 @@ require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-c
 if (file_exists(__DIR__ . '/.env')) {
 
     // Env Loading ...
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->safeLoad();
+    $blockera_dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $blockera_dotenv->safeLoad();
 }
 
 if (! defined('BLOCKERA_SB_FILE')) {
@@ -70,8 +70,10 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-$env_mode = 'development' === ( $_ENV['APP_MODE'] ?? 'production' );
-$mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $env_mode;
+global $blockera_env_mode, $blockera_mode;
+
+$blockera_env_mode = 'development' === ( $_ENV['APP_MODE'] ?? 'production' );
+$blockera_mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $blockera_env_mode;
 
 global $blockera_compat_free_with_pro;
 
@@ -83,7 +85,7 @@ $blockera_compat_free_with_pro = new \Blockera\PluginCompatibility\Compatibility
 		'plugin_path' => BLOCKERA_SB_PATH,
 		'compatible_with_slug' => 'blockera-pro',
 		'transient_key' => 'blockera-compat-redirect',
-		'mode' => $mode ? 'development' : 'production',
+		'mode' => $blockera_mode ? 'development' : 'production',
 	],
 	new Blockera\Utils\Utils()
 );
@@ -97,9 +99,9 @@ add_action('plugins_loaded', 'blockera_load_compatibility_check', 5);
  */
 function blockera_load_compatibility_check(): void{
 
-	global $blockera_compat_free_with_pro, $is_compatible_with_pro;
+	global $blockera_compat_free_with_pro, $blockera_is_compatible_with_pro;
 
-	$is_compatible_with_pro = $blockera_compat_free_with_pro->load();
+	$blockera_is_compatible_with_pro = $blockera_compat_free_with_pro->load();
 }
 
 // Initialize hooks on Front Controller.
@@ -117,9 +119,9 @@ function blockera_init(): void {
      */
     do_action('blockera/before/setup');
 
-	global $blockera_compat_free_with_pro, $is_compatible_with_pro;
+	global $blockera_compat_free_with_pro, $blockera_is_compatible_with_pro;
 
-	if (! $is_compatible_with_pro) {
+	if (! $blockera_is_compatible_with_pro) {
 		// Add compatibility check hooks.
 		add_action('admin_init', [ $blockera_compat_free_with_pro, 'adminInitialize' ]);
 		add_action('admin_menu', [ $blockera_compat_free_with_pro, 'adminMenus' ]);

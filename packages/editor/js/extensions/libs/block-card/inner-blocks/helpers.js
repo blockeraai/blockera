@@ -11,7 +11,7 @@ import type { MixedElement } from 'react';
  * Internal dependencies
  */
 import { prepareBlockeraDefaultAttributesValues } from '../../../components';
-import type { InnerBlocks, InnerBlockModel, InnerBlockType } from './types';
+import type { InnerBlocks, InnerBlockType } from './types';
 
 /**
  * Preparing inner blocks.
@@ -60,35 +60,6 @@ export function prepareInnerBlockTypes(
 	return getMemoizedInnerBlocks(keys);
 }
 
-/**
- * Is element instance.
- *
- * @param {InnerBlockModel} entity the inner block model.
- * @return {boolean} true on success, false on failure.
- */
-export const isElement = (entity: InnerBlockModel): boolean => {
-	const isElementType = new RegExp('^elements/', 'ig').test(entity.name);
-
-	if (isElementType) {
-		return isElementType;
-	}
-
-	return (
-		entity?.settings?.hasOwnProperty('level') ||
-		entity?.settings?.hasOwnProperty('instanceId')
-	);
-};
-
-/**
- * Is block instance.
- *
- * @param {InnerBlockModel} entity the inner block model.
- * @return {boolean} true on success, false on failure.
- */
-export const isBlock = (entity: InnerBlockModel): boolean => {
-	return new RegExp('^core/', 'ig').test(entity.name);
-};
-
 export const getVirtualInnerBlockDescription = (): MixedElement => {
 	return (
 		<>
@@ -107,14 +78,4 @@ export const getVirtualInnerBlockDescription = (): MixedElement => {
 			</p>
 		</>
 	);
-};
-
-/**
- * Is virtual block.
- *
- * @param {string} blockType The block type.
- * @return {boolean} true on success, false on failure.
- */
-export const isVirtualBlock = (blockType: string): boolean => {
-	return blockType.startsWith('elements/');
 };

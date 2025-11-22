@@ -1,0 +1,33 @@
+:root :where(.wp-block-buttons-is-layout-flow) > :first-child{
+	margin-block-start: 0;
+}
+
+:root :where(.wp-block-buttons-is-layout-flow) > :last-child{
+	margin-block-end: 0;
+}
+
+:root :where(.wp-block-buttons-is-layout-flow) > *{
+	margin-block-start: 16px;
+	margin-block-end: 0;
+}
+
+:root :where(.wp-block-buttons-is-layout-constrained) > :first-child{
+	margin-block-start: 0;
+}
+
+:root :where(.wp-block-buttons-is-layout-constrained) > :last-child{
+	margin-block-end: 0;
+}
+
+:root :where(.wp-block-buttons-is-layout-constrained) > *{
+	margin-block-start: 16px;
+	margin-block-end: 0;
+}
+
+:root :where(.wp-block-buttons-is-layout-flex){
+	gap: 16px;
+}
+
+:root :where(.wp-block-buttons-is-layout-grid){
+	gap: 16px;
+}

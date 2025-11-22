@@ -124,7 +124,7 @@ describe('Image Block → Selectors test', () => {
 			.first()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 			});
 
 		cy.get('@borderContainer').within(() => {
@@ -199,7 +199,7 @@ describe('Image Block → Selectors test', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('c5eef0ab ');
+				cy.get('input[maxlength="9"]').type('c5eef0ab', { delay: 0 });
 			});
 		cy.getBlock('core/image')
 			.first()
@@ -241,7 +241,7 @@ describe('Image Block → Selectors test', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('cccccc ');
+				cy.get('input[maxlength="9"]').type('cccccc', { delay: 0 });
 			});
 
 		cy.getBlock('core/image')

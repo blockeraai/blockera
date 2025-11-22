@@ -63,6 +63,12 @@ export function generateVariableString({
 	return `--wp--${_reference}--${_type}--${id}`;
 }
 
+export function generateVariableStringFromAttributeVarString(
+	varString: string
+): string {
+	return varString.replace('var:', '--wp--').replaceAll('|', '--');
+}
+
 export function generateAttributeVarStringFromVA(
 	valueAddon: ValueAddon | string
 ): string {

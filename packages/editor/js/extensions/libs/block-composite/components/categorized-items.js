@@ -3,8 +3,8 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
 import { Icon as WordPressIconComponent } from '@wordpress/components';
 
 /**
@@ -17,10 +17,10 @@ import { Flex, Grid, Tooltip } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { getTooltipStyle } from '../utils';
 import type { TCategorizedItemsProps } from '../types';
 import type { InnerBlockModel } from '../../block-card/inner-blocks/types';
 import type { TStates, StateTypes } from '../../block-card/block-states/types';
-import { getTooltipStyle } from '../utils';
 
 export const CategorizedItems = ({
 	itemType = 'state',
@@ -36,6 +36,7 @@ export const CategorizedItems = ({
 	getBlockInners,
 	limited = false,
 	setCurrentBlock,
+	doingSwitchToInner,
 	setBlockClientInners,
 }: TCategorizedItemsProps): MixedElement => {
 	// Filtering items while not exists on received category ...
@@ -66,6 +67,8 @@ export const CategorizedItems = ({
 
 		if (name) {
 			const inners = getBlockInners(clientId);
+
+			doingSwitchToInner();
 
 			setBlockClientInners({
 				clientId,

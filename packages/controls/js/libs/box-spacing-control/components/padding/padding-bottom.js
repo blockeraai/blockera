@@ -138,6 +138,13 @@ export function PaddingBottom({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingBottomSideShape
@@ -223,6 +230,7 @@ export function PaddingBottom({
 					labelClassName
 				)}
 				data-cy="box-spacing-padding-bottom"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Bottom Padding', 'blockera')}

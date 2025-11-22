@@ -17,7 +17,7 @@ import { FaSolidIcons } from './icons';
 export function FaSolidIcon({
 	library = 'fasolid',
 	style = {},
-	iconSize = 18,
+	iconSize = 20,
 	icon,
 	...props
 }) {
@@ -34,13 +34,8 @@ export function FaSolidIcon({
 	}
 
 	if (iconSize) {
-		if (!props?.width) {
-			style.width = `${iconSize}px`;
-		}
-
-		if (!props?.height) {
-			style.height = `${iconSize}px`;
-		}
+		style.width = `${iconSize}px`;
+		style.height = `${iconSize}px`;
 	}
 
 	if (!FaSolidIcons[icon.iconName]) {

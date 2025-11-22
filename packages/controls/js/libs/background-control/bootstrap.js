@@ -8,8 +8,12 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { updateConfig } from '@blockera/utils';
 import { Icon } from '@blockera/icons';
+
+/**
+ * Internal dependencies
+ */
+import { updateConfig } from '../editor-store-helpers';
 
 export const backgroundComponentConfig: Object = {
 	blockeraBackground: {

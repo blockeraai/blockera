@@ -14,6 +14,20 @@ abstract class BaseStyleDefinition {
      */
     protected array $block = [];
 
+	/**
+	 * Store the flag to determine if the style is a global style.
+	 *
+	 * @var bool $is_global_style
+	 */
+	protected bool $is_global_style = false;
+
+	/**
+	 * Store the flag to determine if the style is a style variation.
+	 *
+	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
+	 */
+	protected bool $is_style_variation = false;
+
     /**
      * Store style definition identifier.
      *
@@ -166,6 +180,18 @@ abstract class BaseStyleDefinition {
         $this->style_id = $id;
     }
 
+	/**
+	 * Set the flag to determine if the style is a global style.
+	 *
+	 * @param bool $is_global_style the flag to determine if the style is a global style.
+	 *
+	 * @return void
+	 */
+	public function setIsGlobalStyle( bool $is_global_style): void {
+		
+		$this->is_global_style = $is_global_style;
+	}
+
     /**
      * Set the current breakpoint.
      *
@@ -199,6 +225,26 @@ abstract class BaseStyleDefinition {
         return $this->selector;
     }
 
+	/**
+	 * Get the flag to determine if the style is a style variation.
+	 *
+	 * @return boolean
+	 */
+	public function getIsStyleVariation(): bool {
+		return $this->is_style_variation;
+	}
+
+	/**
+	 * Set the flag to determine if the style is a style variation.
+	 *
+	 * @param boolean $is_style_variation the flag to indicate current style is variation style or not.
+	 *
+	 * @return void
+	 */
+	public function setIsStyleVariation( bool $is_style_variation): void {
+		$this->is_style_variation = $is_style_variation;
+	}
+
     /**
      * Sets suitable css selector for related property.
      *
@@ -215,7 +261,12 @@ abstract class BaseStyleDefinition {
         $fallback  = $this->getFallbackSupport($support);
         $selectors = blockera_get_block_type_property($this->block['blockName'], 'selectors');
 
-        $this->selector = blockera_get_compatible_block_css_selector(
+		if ($this->is_style_variation) {
+			$this->selector = $this->blockera_unique_selector;
+			return;
+		}
+
+		$prepared_selector = blockera_get_compatible_block_css_selector(
             $selectors,
             $support,
             [
@@ -229,7 +280,13 @@ abstract class BaseStyleDefinition {
                 'blockera-unique-selector' => $this->blockera_unique_selector,
                 'breakpoint'               => $this->breakpoint,
             ]
-        );
+		);
+
+		if ($this->is_global_style) {
+			$prepared_selector = ":root :where($prepared_selector)";
+		}
+
+		$this->selector = $prepared_selector;
     }
 
     /**
@@ -610,10 +667,36 @@ abstract class BaseStyleDefinition {
 
 	/**
 	 * Get current breakpoint settings.
+	 * 
+	 * @param bool $is_inner_block The flag to determine if the current settings are for an inner block.
 	 *
 	 * @return array
 	 */
-	protected function getCurrentBreakpointSettings(): array {
+	protected function getCurrentBreakpointSettings( bool $is_inner_block = false): array {
+
+		if ($is_inner_block) {
+
+			$settings = $this->getCurrentInnerBlockSettings();
+
+			if (empty($settings['blockeraBlockStates']['value'])) {
+
+				return $settings;
+			}
+
+			$block_states = $settings['blockeraBlockStates']['value'] ?? [];
+
+			if (empty($block_states[ $this->pseudo_state ])) {
+
+				return [];
+			}
+
+			if (empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
+
+				return [];
+			}
+
+			return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+		}
 
 		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
 
@@ -633,6 +716,28 @@ abstract class BaseStyleDefinition {
 		}
 
 		return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+	}
+
+	/**
+	 * Get current inner block settings.
+	 *
+	 * @return array
+	 */
+	protected function getCurrentInnerBlockSettings(): array {
+
+		if (empty($this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ])) {
+
+			return [];
+		}
+		
+		$current_block = $this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ]['attributes'] ?? [];
+
+		if (empty($current_block)) {
+
+			return [];
+		}
+
+		return $current_block;
 	}
 
     /**

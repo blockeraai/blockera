@@ -34,6 +34,8 @@ export function getWindowProperty(path) {
  * when the window object is not available.
  */
 export function getWPDataObject() {
+	cy.waitForAssertValue();
+
 	return cy
 		.window()
 		.its('wp.data')
@@ -72,6 +74,51 @@ export function getSelectedBlock(data, field = '') {
 	}
 
 	return selectedBlock.attributes[field];
+}
+
+/**
+ * Get the style of the selected block.
+ *
+ * @param {Object} data the WordPress data.
+ * @param {string} name the name of the block.
+ * @param {string} variation the variation of the block. Default is 'default'.
+ *
+ * @return {*} retrieved the style of the selected block.
+ */
+export function getSelectedBlockStyle(data, name, variation = 'default') {
+	const { getBlockStyles } = data.select('blockera/editor');
+
+	return getBlockStyles(name, variation);
+}
+
+/**
+ * Get the WordPress globalStyles entity record.
+ *
+ * @param {*} data the @wordpress/data package object.
+ * @param {*} prop the property of record. like style, settings, etc.
+ * @param {*} innerField the inner property name in record[prop] object.
+ *
+ * @returns anythings.
+ */
+export function getEditedGlobalStylesRecord(data, prop, innerField) {
+	const { __experimentalGetCurrentGlobalStylesId } = data.select('core');
+	const { getEditedEntityRecord } = data.select('core');
+
+	const record = getEditedEntityRecord(
+		'root',
+		'globalStyles',
+		__experimentalGetCurrentGlobalStylesId()
+	);
+
+	if (prop) {
+		if (innerField) {
+			return record?.[prop]?.[innerField];
+		}
+
+		return record?.[prop];
+	}
+
+	return record;
 }
 
 /**
@@ -332,7 +379,9 @@ export function redirectToFrontPage() {
 		win.stop();
 	});
 
-	cy.get('.blockera-control-canvas-editor-preview-link a')
+	cy.get(
+		'.blockera-control-canvas-editor-preview-link a, a.components-button.components-snackbar__action.is-link'
+	)
 		.invoke('attr', 'href')
 		.then((href) => {
 			cy.visit(href);

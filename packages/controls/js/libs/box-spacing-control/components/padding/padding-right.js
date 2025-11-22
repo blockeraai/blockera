@@ -138,6 +138,13 @@ export function PaddingRight({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingRightShape
@@ -223,6 +230,7 @@ export function PaddingRight({
 					labelClassName
 				)}
 				data-cy="box-spacing-padding-right"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Right Padding', 'blockera')}
@@ -235,6 +243,7 @@ export function PaddingRight({
 						setFocusSide(sideId);
 						setOpenPopover(sideId);
 					}}
+					iconPosition="start"
 					{...{
 						attribute,
 						blockName,

@@ -1,0 +1,12 @@
+@media (min-width: 782px) {
+
+	.wp-block-columns:not(.is-not-stacked-on-mobile)>.blockera-block.wp-block-column.blockera-has-flex-basis,
+	.wp-block-columns:not(.is-not-stacked-on-mobile)>.blockera-block.wp-block-column[style*=flex-basis] {
+		flex-grow: 0;
+	}
+}
+
+.wp-block-columns.is-not-stacked-on-mobile>.blockera-block.wp-block-column.blockera-has-flex-basis,
+.wp-block-columns.is-not-stacked-on-mobile>.blockera-block.wp-block-column[style*=flex-basis] {
+	flex-grow: 0;
+}

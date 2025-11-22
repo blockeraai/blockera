@@ -1,0 +1,115 @@
+
+p.blockera-block.blockera-block--1 {
+	font-family: var(--wp--preset--font-family--fira-code) !important;
+}
+
+p.blockera-block.blockera-block--2 {
+	font-weight: 600;
+	font-style: normal;
+}
+
+p.blockera-block.blockera-block--3 {
+	font-size: 20px;
+}
+
+p.blockera-block.blockera-block--4 {
+	line-height: 2;
+}
+
+p.blockera-block.blockera-block--5 {
+	color: #ff0000;
+}
+
+.blockera-block.blockera-block--5 a:not(.wp-element-button) {
+	color: #ff0000;
+}
+
+p.blockera-block.blockera-block--6 {
+	text-shadow: 1px 1px 1px #ff0000;
+}
+
+p.blockera-block.blockera-block--7 {
+	text-shadow: 5px -3px 2px #5ac200, -2px 4px 2px #000effab;
+}
+
+p.blockera-block.blockera-block--8 {
+	text-align: center;
+}
+
+p.blockera-block.blockera-block--9 {
+	text-transform: uppercase;
+}
+
+p.blockera-block.blockera-block--10 {
+	text-decoration: overline;
+}
+
+p.blockera-block.blockera-block--11 {
+	direction: rtl;
+}
+
+p.blockera-block.blockera-block--12 {
+	writing-mode: vertical-lr;
+	text-orientation: mixed;
+}
+
+p.blockera-block.blockera-block--13 {
+	writing-mode: vertical-rl;
+	text-orientation: mixed;
+}
+
+p.blockera-block.blockera-block--14 {
+	writing-mode: vertical-lr;
+	text-orientation: upright;
+}
+
+p.blockera-block.blockera-block--15 {
+	writing-mode: vertical-rl;
+	text-orientation: upright;
+}
+
+p.blockera-block.blockera-block--16 {
+	letter-spacing: 10px;
+}
+
+p.blockera-block.blockera-block--17 {
+	word-spacing: 40px;
+}
+
+p.blockera-block.blockera-block--18 {
+	text-indent: 20px;
+}
+
+p.blockera-block.blockera-block--19 {
+	column-count: 2;
+	column-gap: 20px;
+}
+
+p.blockera-block.blockera-block--20 {
+	column-count: 3;
+	column-gap: 2.5rem;
+	column-rule-color: #ffd6d6;
+	column-rule-style: solid;
+	column-rule-width: 2px;
+}
+
+p.blockera-block.blockera-block--21 {
+	column-count: 5;
+	column-gap: 20px;
+	column-rule-color: #ffb4b4;
+	column-rule-style: dashed;
+	column-rule-width: 1px;
+}
+
+p.blockera-block.blockera-block--22 {
+	-webkit-text-stroke-color: #fe3d3d;
+	-webkit-text-stroke-width: 1px;
+}
+
+p.blockera-block.blockera-block--23 {
+	text-wrap: pretty;
+}
+
+p.blockera-block.blockera-block--24 {
+	word-break: break-all;
+}

@@ -139,8 +139,15 @@ jobs:
               run: |
                   if [ "${{ matrix.category }}" != "general" ]; then
                     spec_pattern="packages/**/*.${{ matrix.category }}.visual.cy.js"
+                    if [ -d "tests" ]; then
+                      spec_pattern="${spec_pattern},tests/**/*.${{ matrix.category }}.visual.cy.js"
+                    fi
                   else
-                    spec_pattern=$(find packages -type f -name "*.visual.cy.js" ! -name "*.*.visual.cy.js" | tr '\n' ',')
+                    search_dirs="packages"
+                    if [ -d "tests" ]; then
+                      search_dirs="${search_dirs} tests"
+                    fi
+                    spec_pattern=$(find $search_dirs -type f -name "*.visual.cy.js" ! -name "*.*.visual.cy.js" | tr '\n' ',')
                     spec_pattern="${spec_pattern%,}" # Remove trailing comma
                   fi
 
@@ -160,6 +167,9 @@ jobs:
                     for category in $filtered_categories; do
                       if [ "${{ matrix.category }}" == "$category" ]; then
                         spec_pattern="packages/**/*.${{ matrix.category }}.visual.cy.js"
+                        if [ -d "tests" ]; then
+                          spec_pattern="${spec_pattern},tests/**/*.${{ matrix.category }}.visual.cy.js"
+                        fi
                       fi
                     done
                   fi

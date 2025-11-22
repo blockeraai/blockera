@@ -11,6 +11,11 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+// Blockera should be loaded only on frontend, editor and admin requests.
+if (! blockera_is_frontend_request() && ! blockera_is_editor_request() && ! blockera_is_admin_request()) {
+    return;
+}
+
 global $blockera;
 
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';

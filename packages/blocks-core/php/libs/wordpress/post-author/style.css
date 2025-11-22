@@ -1,0 +1,9 @@
+.blockera-block.wp-block-post-author :where(.wp-block-post-author__avatar) {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.blockera-block.wp-block-post-author :where(.wp-block-post-author__avatar img) {
+	height: auto;
+}

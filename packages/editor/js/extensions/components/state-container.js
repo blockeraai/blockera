@@ -12,12 +12,16 @@ import { isInnerBlock, isNormalState } from './utils';
 import { useEditorStore, useExtensionsStore } from '../../hooks';
 
 export default function StateContainer({
+	name,
+	clientId,
 	children,
 	availableStates,
 	blockeraUnsavedData,
+	isGlobalStylesCardWrapper = false,
+	insideBlockInspector = true,
 }: Object): Element<any> {
 	const { currentBlock, currentState, currentInnerBlockState } =
-		useExtensionsStore();
+		useExtensionsStore({ name, clientId });
 	const { getState, getInnerState } = useEditorStore();
 
 	const activeColor = useMemo(() => {
@@ -39,6 +43,11 @@ export default function StateContainer({
 			isNormalState(currentInnerBlockState)
 		) {
 			color = '#cc0000';
+		} else if (
+			(!insideBlockInspector || isGlobalStylesCardWrapper) &&
+			isNormalState(currentState)
+		) {
+			color = '#1ca120';
 		}
 
 		return color;
@@ -48,6 +57,7 @@ export default function StateContainer({
 		currentState,
 		availableStates,
 		blockeraUnsavedData,
+		insideBlockInspector,
 		currentInnerBlockState,
 	]);
 

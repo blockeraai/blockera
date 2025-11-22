@@ -19,7 +19,7 @@ export function positionFromWPCompatibility({
 		// Blockera don't have position
 		attributes?.blockeraPosition?.value?.type === 'static' &&
 		// WP  do have position
-		attributes?.style?.position?.type !== undefined
+		attributes?.style?.position?.type
 	) {
 		let top: ValueAddon | string = '';
 		if (attributes?.style?.position?.top) {

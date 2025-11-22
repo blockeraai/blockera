@@ -1,22 +1,25 @@
 import {
 	savePage,
+	createPost,
+	appendBlocks,
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
-	createPost,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Transitions → Functionality', () => {
 	beforeEach(() => {
 		createPost();
+	});
 
-		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
+	it('One transition', () => {
+		cy.getBlock('default').type('This is test paragraph', {
+			delay: 0,
+		});
 		cy.getByDataTest('style-tab').click();
 
 		cy.getParentContainer('Transitions').as('transition');
-	});
 
-	it('Should update transition correctly, when add one transition', () => {
 		cy.get('@transition').within(() => {
 			cy.getByAriaLabel('Add New Transition').click();
 		});
@@ -85,11 +88,56 @@ describe('Transitions → Functionality', () => {
 
 		//Check frontend
 		savePage();
-
 		redirectToFrontPage();
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
 			.should('include', 'transition: all 200ms ease-in-out 2000ms');
+	});
+
+	it('Multiple transition', () => {
+		appendBlocks(`<!-- wp:paragraph {"blockeraPropsId":"e1f79119-b472-4a2c-b769-91c20788f386","blockeraCompatId":"10919539758","blockeraTransition":{"value":{"margin-0":{"isVisible":true,"type":"margin","duration":"200ms","timing":"ease-in-out","delay":"2000ms","order":0},"border-0":{"isVisible":true,"type":"border","duration":"300ms","timing":"ease-in","delay":"3000ms","order":1}}},"className":"blockera-block blockera-block\u002d\u002dkkwigh"} -->
+<p class="blockera-block blockera-block--kkwigh">This is test paragraph</p>
+<!-- /wp:paragraph -->`);
+		cy.getBlock('core/paragraph').click();
+
+		//Check block
+		cy.getBlock('core/paragraph').should(
+			'have.css',
+			'transition',
+			'margin 0.2s ease-in-out 2s, border 0.3s ease-in 3s'
+		);
+
+		//Check store
+		getWPDataObject().then((data) => {
+			expect({
+				'margin-0': {
+					isVisible: true,
+					type: 'margin',
+					duration: '200ms',
+					timing: 'ease-in-out',
+					delay: '2000ms',
+					order: 0,
+				},
+				'border-0': {
+					isVisible: true,
+					type: 'border',
+					duration: '300ms',
+					timing: 'ease-in',
+					delay: '3000ms',
+					order: 1,
+				},
+			}).to.be.deep.equal(getSelectedBlock(data, 'blockeraTransition'));
+		});
+
+		//Check frontend
+		savePage();
+		redirectToFrontPage();
+
+		cy.get('p.blockera-block').should(
+			'have.css',
+			'transition',
+			'margin 0.2s ease-in-out 2s, border 0.3s ease-in 3s'
+		);
 	});
 });

@@ -1,0 +1,6 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"wp-post": {
+		"post_type": "post"
+	}
+}

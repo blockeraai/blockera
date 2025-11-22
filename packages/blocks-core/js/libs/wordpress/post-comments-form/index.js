@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const PostCommentsFrom: BlockType = {
 	name: 'blockeraPostCommentsForm',

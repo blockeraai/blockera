@@ -37,7 +37,7 @@ describe('Width → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should('have.css', 'width', '100px');
+		cy.get('p.blockera-block').should('have.css', 'width', '100px');
 	});
 
 	it('variable value', () => {
@@ -55,7 +55,7 @@ describe('Width → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'width: var(--wp--style--global--content-size)'
+					'width: var(--wp--style--global--content-size, 645px)'
 				);
 		});
 
@@ -85,6 +85,9 @@ describe('Width → Functionality', () => {
 
 		cy.get('style#blockera-inline-css')
 			.invoke('text')
-			.should('include', 'width: var(--wp--style--global--content-size)');
+			.should(
+				'include',
+				'width: var(--wp--style--global--content-size, 645px)'
+			);
 	});
 });

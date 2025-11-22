@@ -57,6 +57,8 @@ class SavePost {
      */
     public function save( int $postId, \WP_Post $post, array $supports): void {
 
+		$this->saveGlobalStyles($postId, $post);
+		
         $parsed_blocks = parse_blocks($post->post_content);
 
         // Excluding empty post content.
@@ -90,4 +92,36 @@ class SavePost {
         $this->render->render($block['innerHTML'], $block, $this->supports);
     }
 
+	/**
+	 * Save global styles meta data to post meta.
+	 *
+	 * @param integer  $postId The current post Identifier.
+	 * @param \WP_Post $post The instance of WP_Post class.
+	 * 
+	 * @return void
+	 */
+	protected function saveGlobalStyles( int $postId, \WP_Post $post): void {
+		if (get_post_type($postId) !== 'wp_global_styles') {
+			return;
+		}
+
+		$post_content = $post->post_content;
+		$post_content = json_decode($post_content, true);
+
+		if (! isset($post_content['styles']['blockeraMetaData'])) {
+			return;
+		}
+
+		update_post_meta($postId, 'blockeraGlobalStylesMetaData', $post_content['styles']['blockeraMetaData']);
+		
+		unset($post_content['styles']['blockeraMetaData']);
+		$post_content = json_encode($post_content);
+
+		wp_update_post(
+            array(
+				'ID' => $postId,
+				'post_content' => $post_content,
+            )
+        );
+	}
 }

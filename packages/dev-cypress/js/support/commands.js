@@ -403,7 +403,9 @@ export const registerCommands = () => {
 				cy.get('[data-wp-component="Popover"]')
 					.last()
 					.within(() => {
-						cy.get('[data-cy="label-control"]').first().click();
+						cy.get('[data-cy="label-control"]')
+							.first()
+							.click({ force: true });
 					});
 			}
 
@@ -582,7 +584,7 @@ export const registerCommands = () => {
 					.parent()
 					.parent()
 					.within(() => {
-						cy.getByAriaLabel(label).click({ force: true });
+						cy.getByAriaLabel(label).first().click({ force: true });
 					});
 
 			cy.getByDataTest('popover-body')
@@ -742,8 +744,9 @@ export const registerCommands = () => {
 
 	/**
 	 * Normalize CSS content by removing comments, extra whitespace, and standardizing formatting
+	 *
 	 * @param {string} cssContent - The CSS content to normalize
-	 * @returns {string} - The normalized CSS content
+	 * @return {string} - The normalized CSS content
 	 */
 	Cypress.Commands.add('normalizeCSSContent', (cssContent) => {
 		return cssContent
@@ -762,6 +765,7 @@ export const registerCommands = () => {
 	 *
 	 * @param command - WP CLI command. The 'wp ' prefix is required.
 	 * @param ignoreFailures - Prevent command to fail if CLI command exits with error
+	 * @param skipEscaping - Skip escaping quotes and backslashes (useful for complex values)
 	 *
 	 * @example
 	 * ```
@@ -771,20 +775,24 @@ export const registerCommands = () => {
 	 * });
 	 * ```
 	 */
-	Cypress.Commands.add('wpCli', (command, ignoreFailures = false) => {
-		const escapedCommand = command
-			.replace(/\\/g, '\\\\')
-			.replace(/"/g, '\\"');
-		const options = {
-			failOnNonZeroExit: !ignoreFailures,
-		};
-		cy.exec(
-			`npm --silent run env run cli -- ${escapedCommand}`,
-			options
-		).then((result) => {
-			cy.wrap(result);
-		});
-	});
+	Cypress.Commands.add(
+		'wpCli',
+		(command, ignoreFailures = false, skipEscaping = false) => {
+			const escapedCommand = skipEscaping
+				? command
+				: command.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+			const options = {
+				failOnNonZeroExit: !ignoreFailures,
+			};
+
+			cy.exec(
+				`npm --silent run env run cli -- ${escapedCommand}`,
+				options
+			).then((result) => {
+				cy.wrap(result);
+			});
+		}
+	);
 
 	Cypress.Commands.add(
 		'checkBlockCardItems',
@@ -814,6 +822,136 @@ export const registerCommands = () => {
 						.to.be.empty;
 				});
 			});
+		}
+	);
+
+	Cypress.Commands.add(
+		'checkBlockStatesPickerItems',
+		(expectedItems, checkExtraItems = false) => {
+			cy.get(
+				'[data-test="blockera-block-state-container"] [data-test="add-new-block-state"]'
+			).click();
+
+			cy.get(
+				'.blockera-component-popover.blockera-states-picker-popover'
+			).within(() => {
+				expectedItems.forEach((state) => {
+					cy.get(`[data-test="${state}"]`).should('exist');
+				});
+			});
+
+			if (checkExtraItems) {
+				cy.get(
+					'.blockera-component-popover.blockera-states-picker-popover .blockera-feature-type'
+				).then(($items) => {
+					const actualItems = Array.from($items).map((item) =>
+						item.getAttribute('data-test')
+					);
+					const unexpectedItems = actualItems.filter(
+						(item) => !expectedItems.includes(item)
+					);
+
+					expect(unexpectedItems, 'Unexpected items found').to.be
+						.empty;
+				});
+			}
+		}
+	);
+
+	Cypress.Commands.add('openGlobalStylesPanel', () => {
+		return cy
+			.get('button[aria-controls="edit-site:global-styles"]')
+			.click({ force: true });
+	});
+
+	Cypress.Commands.add('openSettingsPanel', () => {
+		return cy
+			.get('button[aria-controls="edit-post:document"]')
+			.click({ force: true });
+	});
+
+	Cypress.Commands.add('addNewTransition', () => {
+		cy.getParentContainer('Transitions').as('transition');
+
+		cy.get('@transition').within(() => {
+			cy.getByAriaLabel('Add New Transition').click();
+		});
+	});
+
+	Cypress.Commands.add('prepareEditorForScreenshot', (reset = false) => {
+		if (!reset) {
+			cy.getByAriaLabel('Close Settings').click();
+
+			cy.get(
+				'body.is-fullscreen-mode .interface-interface-skeleton'
+			).invoke('css', 'top', '0');
+			cy.get('#wpbody').invoke('css', 'padding-top', '0');
+			cy.get('#wpadminbar').invoke('css', 'display', 'none');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__footer'
+			).invoke('css', 'display', 'none');
+
+			cy.getIframeBody()
+				.find('.edit-post-visual-editor__post-title-wrapper')
+				.invoke('css', 'display', 'none');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__header'
+			).invoke('css', 'display', 'none');
+		} else {
+			cy.setScreenshotViewport('desktop');
+
+			cy.get(
+				'body.is-fullscreen-mode .interface-interface-skeleton'
+			).invoke('css', 'top', '32px');
+			cy.get('#wpadminbar').invoke('css', 'display', 'flex');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__footer'
+			).invoke('css', 'display', 'flex');
+
+			cy.getIframeBody()
+				.find('.edit-post-visual-editor__post-title-wrapper')
+				.invoke('css', 'display', 'block');
+
+			cy.get(
+				'.admin-ui-navigable-region.interface-interface-skeleton__header'
+			).invoke('css', 'display', 'block');
+		}
+	});
+
+	Cypress.Commands.add('prepareFrontendForScreenshot', () => {
+		// disable wp navbar to avoid screenshot issue
+		cy.get('#wpadminbar').invoke('css', 'display', 'none');
+	});
+
+	Cypress.Commands.add(
+		'setScreenshotViewport',
+		(size = 'desktop', config = {}) => {
+			let width = '';
+			let height = '';
+
+			if (size === 'desktop') {
+				width = 1600;
+				height = 2000;
+			} else if (size === 'mobile') {
+				width = 450;
+				height = 2000;
+			}
+
+			config = {
+				width: config?.width || width,
+				height: config?.height || height,
+				wait: 250,
+				...config,
+			};
+
+			cy.viewport(config.width, config.height);
+
+			if (config?.wait) {
+				cy.wait(config.wait);
+			}
 		}
 	);
 };

@@ -1,10 +1,13 @@
 {
+	"core": "https://wordpress.org/wordpress-6.9-beta3.zip",
 	"plugins": [
 		".",
 		"https://downloads.wordpress.org/plugin/icon-block.latest-stable.zip"
 	],
 	"config": {
-		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
+		"SCRIPT_DEBUG": false,
+		"WP_DEBUG": false
 	},
 	"lifecycleScripts": {
 		"afterStart": "wp-env run cli wp theme activate twentytwentyfive"

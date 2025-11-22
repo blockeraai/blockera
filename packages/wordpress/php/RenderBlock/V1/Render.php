@@ -118,8 +118,10 @@ class Render {
 
 		foreach ($features as $feature) {
 
+			$feature->setBlock($args['block']);
+
 			// Skip if feature is not enabled.
-			if (! $feature->isEnabled()) {
+			if (! $feature->isBlockSupported()) {
 				continue;
 			}
 
@@ -166,16 +168,11 @@ class Render {
             return $html;
         }
 
-		$block_categories = [
-			'core' => 'wordpress',
-			'woocommerce' => 'woocommerce',
-		];
-
 		$extracted_name = explode('/', $block['blockName']);
 
 		$this->id = $extracted_name[1];
 		$this->setContext('blocks-core');
-		$this->setSubContext($block_categories[ $extracted_name[0] ] ?? 'third-party');
+		$this->setSubContext(blockera_get_block_library_name( $extracted_name[0] ));
 		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
 
         // Extract block attributes.
@@ -185,16 +182,8 @@ class Render {
         // Generate blockera hash identify with "blockeraPropsId" attribute value.
         $blockera_hash_id = blockera_get_small_random_hash($attributes['blockeraPropsId']);
 
-		if (defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS) {
-			// Get blockera block unique css classname.
-        	$blockera_class_name = 'blockera-block blockera-block-test';
-		} else {
-			// Get blockera block unique css classname.
-        	$blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
-		}
-
-        // Is need to update block HTML output?
-        $need_to_update_html = $this->needToUpdateHTML($attributes['className'] ?? '', $block['innerHTML']);
+		// Get blockera block unique css classname.
+        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
 
         // Pushing block classname into stack.
         $this->setClassname($attributes['className'] ?? '');
@@ -206,7 +195,7 @@ class Render {
         // Get cache validate result.
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 		// Get normalized blockera block unique css classname.
-        $unique_class_name = blockera_get_normalized_selector($need_to_update_html ? $blockera_class_name : $attributes['className']);
+        $unique_class_name = blockera_get_normalized_selector($attributes['className'] ?? $blockera_class_name);
 
         // Validate cache data.
         if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
@@ -215,7 +204,7 @@ class Render {
 
 			// If custom css is set, add it to the block css.
 			if (! empty($attributes['blockeraCustomCSS']['value'])) {
-				$css .= preg_replace('/(\.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+				$css .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
 			}
 
             // Print css into inline style on "wp_head" action occur.
@@ -232,13 +221,7 @@ class Render {
             );
 
             // Render block with features.
-            if ($need_to_update_html) {
-
-                // Represent html string.
-                return $this->getUpdatedHTML($html, $cache_data['classname']);
-            }
-
-            return $html;
+            return $this->getUpdatedHTML($html, $cache_data['classname']);
         }
 
         /**
@@ -254,17 +237,14 @@ class Render {
 
 		// If custom css is set, add it to the block css.
 		if (! empty($attributes['blockeraCustomCSS']['value'])) {
-			$computed_css_rules .= preg_replace('/(\.|#)block/i', $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+			$computed_css_rules .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
 		}
 
         // Print css into inline style on "wp_head" action occur.
         blockera_add_inline_css($computed_css_rules);
 
-        if ($need_to_update_html) {
-
-            // Represent html string.
-            $html = $this->getUpdatedHTML($html, $blockera_class_name);
-        }
+		// Represent html string.
+        $html = $this->getUpdatedHTML($html, $unique_class_name);
 
         // Render block with features.
         $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
@@ -273,7 +253,7 @@ class Render {
         $data = [
             'hash'      => $hash,
             'css'       => $computed_css_rules,
-            'classname' => $need_to_update_html ? $blockera_class_name : $attributes['className'],
+            'classname' => $attributes['className'] ?? $blockera_class_name,
         ];
 
 		if ($this->cache_status) {
@@ -289,12 +269,14 @@ class Render {
      * Is need to update block content?
      * The target of this method is prevented of avoid block unique classnames.
      *
+	 * @param string $html the block html output.
      * @param string $block_classname the block "className" attribute value.
-     * @param string $inner_html The block inner html output.
+	 * 
+	 * @deprecated 1.12.3 Remove this method in the future.
      *
      * @return bool true on success, false on otherwise.
      */
-    protected function needToUpdateHTML( string $block_classname, string $inner_html): bool {
+    protected function needToUpdateHTML( string $html, string $block_classname): bool {
 
         // Imagine the block classname and classnames property is empty, so we should update html output.
         if (empty($block_classname) && empty($this->classnames)) {
@@ -305,11 +287,10 @@ class Render {
         // Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
         if (preg_match($this->getUniqueClassnameRegex(), $block_classname, $matches)) {
 
-            // If inner html is empty, we should update html output.
-            if (empty(trim($inner_html))) {
+			if (! str_contains($html, $matches[0])) {
 
-                return true;
-            }
+				return true;
+			}
 
             return in_array($matches[0], $this->classnames, true);
         }
@@ -339,18 +320,19 @@ class Render {
 
             if (! empty($previous_class)) {
 
-                // Backward compatibility.
-                if (preg_match($regexp, $classname, $matches) && preg_match($regexp, $previous_class)) {
+				if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
 
-                    $final_classname = preg_replace($regexp, $matches[0], $previous_class);
+					$final_classname = $classname . ' ' . $previous_class;
+				} else {
 
-                } else {
-
-                    $final_classname = $classname . ' ' . $previous_class;
-                }
+					$final_classname = $previous_class;
+				}
             }
 
-            $processor->set_attribute('class', $final_classname ?? $classname);
+            if ($final_classname !== $classname) {
+
+				$processor->set_attribute('class', $final_classname);
+			}
 
 			// Remove style attribute if transpiling.
 			if ($this->is_doing_transpile) {

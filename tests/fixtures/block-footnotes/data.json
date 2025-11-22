@@ -1,0 +1,18 @@
+{
+	"post": {
+		"post_type": "post",
+		"post_title": "Test Post for Footnotes",
+		"post_status": "publish",
+		"post_date": "2024-12-01 12:00:00"
+	},
+	"footnotes": [
+		{
+			"content": "This is a test <a href=\"#a\">link</a> element. It include<br><strong>strong</strong>, <em>italic</em> , <span>span</span>, <kbd>CMD + K</kbd> key, <code>const $akbar</code><br>inline code and <mark>highlight</mark> elements.",
+			"id": "446c523d-801e-4020-b4d3-733ca3f55404"
+		},
+		{
+			"content": "Foot note 2",
+			"id": "e527f2d5-aa41-4500-93ae-30a5d4f1b463"
+		}
+	]
+}

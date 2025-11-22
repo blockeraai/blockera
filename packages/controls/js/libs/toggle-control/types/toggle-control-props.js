@@ -9,4 +9,5 @@ export type TToggleControlProps = {
 	...ControlGeneralTypes,
 	defaultValue?: boolean,
 	labelType?: 'advanced' | 'simple' | 'self',
+	size?: 'small' | 'normal',
 };

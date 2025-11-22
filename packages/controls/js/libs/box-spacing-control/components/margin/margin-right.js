@@ -137,6 +137,13 @@ export function MarginRight({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<MarginRightSideShape
@@ -224,6 +231,7 @@ export function MarginRight({
 							labelClassName
 						)}
 						data-cy="box-spacing-margin-right"
+						data-test={dataTest}
 					>
 						<LabelControl
 							ariaLabel={__('Right Margin', 'blockera')}
@@ -236,6 +244,7 @@ export function MarginRight({
 								setFocusSide(sideId);
 								setOpenPopover(sideId);
 							}}
+							iconPosition="start"
 							{...{
 								attribute,
 								blockName,

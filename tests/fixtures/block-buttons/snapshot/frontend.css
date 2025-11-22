@@ -1,0 +1,205 @@
+
+.blockera-block.blockera-block-1.wp-block-buttons {
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 30px;
+	text-transform: uppercase;
+}
+
+.blockera-block.blockera-block-1 .wp-block-button > .wp-element-button {
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	background-color: #95aaff;
+	color: #0023b1;
+	border: 2px solid var(--wp--preset--color--accent-1, #FFEE58);
+}
+
+.blockera-block.blockera-block-1 .wp-block-button > .wp-element-button:hover {
+	color: var(--wp--preset--color--accent-2, #F6CFF4);
+	background-color: var(--wp--preset--color--accent-1, #FFEE58);
+}
+
+.blockera-block.blockera-block-2.wp-block-button .wp-block-button__link {
+	background-color: #ffb8b8;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link {
+	background-color: #9f9f9f;
+}
+
+.blockera-block.blockera-block-3 .has-inline-color {
+	background-color: #dfdfdf;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(strong, b) {
+	background-color: #ffa200;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(em, i) {
+	background-color: #87e100;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link kbd {
+	background-color: #00e870;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link code {
+	background-color: #004cff;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:not([data-rich-text-placeholder]) {
+	background-color: #cf00fe;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(mark, mark[class]) {
+	background-color: #ff0090;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(strong, b):hover {
+	background-color: #ae6e00;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(em, i):hover {
+	background-color: #568f00;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link kbd:hover {
+	background-color: #009b4b;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link code:hover {
+	background-color: #0031a3;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:not([data-rich-text-placeholder]):hover {
+	background-color: #9100b1;
+}
+
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(mark, mark[class]):hover {
+	background-color: #9d0059;
+}
+
+.blockera-block.blockera-block-4.wp-block-buttons {
+	background-color: #c2edff;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-4 .wp-block-button > .wp-element-button {
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	font-size: 16px;
+	font-weight: 900;
+	font-style: normal;
+	background-color: #4dacff;
+	transition: all 500ms ease 0ms;
+	border: 4px solid #00000038;
+	color: #000000;
+}
+
+.blockera-block.blockera-block-4 .wp-block-button > .wp-element-button:hover {
+	background-color: #338edf;
+}
+
+.blockera-block.blockera-block-4 .wp-block-button > .wp-element-button:focus {
+	background-color: #1b79cb;
+}
+
+.blockera-block.blockera-block-4 .wp-block-button > .wp-element-button:active {
+	background-color: #015cac;
+}
+
+.blockera-block.blockera-block-4.wp-block-buttons:hover {
+	background-color: #9ae1ff;
+}
+
+.blockera-block.blockera-block-5 .wp-block-button > .wp-element-button {
+	background-color: #70ae6b;
+	font-size: 18px;
+	font-weight: 800;
+	font-style: normal;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	border-radius: 0;
+	box-shadow: 3px 3px 0 0 #468943, 6px 6px 0 0 #3a7936;
+	transition: all 200ms ease 0ms;
+}
+
+.blockera-block.blockera-block-5 .wp-block-button > .wp-element-button:hover {
+	box-shadow: 6px 6px 0 0 #468943, 12px 12px 0 0 #3a7936;
+	transform: translate3d(-3px, -3px, 0);
+}
+
+.blockera-block.blockera-block-6.wp-block-button .wp-block-button__link {
+	background-color: #ff3a3a;
+}
+
+.blockera-block.blockera-block-6.wp-block-button .wp-block-button__link:hover {
+	background-color: #cb0808;
+}
+
+.blockera-block.blockera-block-6.wp-block-button .wp-block-button__link:focus {
+	background-color: #9b0000;
+}
+
+.blockera-block.blockera-block-6.wp-block-button .wp-block-button__link:active {
+	background-color: #940000;
+}
+
+.blockera-block.blockera-block-7.wp-block-button .wp-block-button__link {
+	color: #47ff04;
+}
+
+.blockera-block.blockera-block-8.wp-block-button .wp-block-button__link {
+	color: #b8a4ff;
+}
+
+.blockera-block.blockera-block-12.wp-block-buttons::before {
+	color: #ff0000;
+	font-weight: 700;
+	font-style: normal;
+	content: ":before";
+}
+
+.blockera-block.blockera-block-12.wp-block-buttons::after {
+	font-weight: 700;
+	font-style: normal;
+	color: #0bf3a2;
+	content: ":after";
+}
+
+.blockera-block.blockera-block-13.wp-block-button .wp-block-button__link {
+	display: flex;
+	gap: 13px;
+}
+
+.blockera-block.blockera-block-13.wp-block-button .wp-block-button__link::before {
+	opacity: 60%;
+	font-weight: 800;
+	font-style: normal;
+	background-color: #2d9d00;
+	content: ":before";
+}
+
+.blockera-block.blockera-block-13.wp-block-button .wp-block-button__link::after {
+	font-weight: 800;
+	font-style: normal;
+	opacity: 60%;
+	background-color: #ff0202;
+	content: ":after";
+}

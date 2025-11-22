@@ -67,6 +67,8 @@ describe('Active Filters Block', () => {
 		savePage();
 		redirectToFrontPage();
 
+		cy.wait(500);
+
 		cy.get('.blockera-block.wp-block-woocommerce-active-filters').should(
 			'have.css',
 			'background-clip',

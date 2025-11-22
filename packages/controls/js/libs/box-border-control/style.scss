@@ -9,7 +9,7 @@
 		gap: 0;
 		align-items: center;
 		justify-content: flex-end;
-		grid-template-columns: 1fr 158px;
+		grid-template-columns: 1fr 160px;
 
 		.blockera-control-border {
 			width: 122px !important;
@@ -67,7 +67,7 @@
 
 	.blockera-control-border-corner-right {
 		position: absolute;
-		right: 0;
+		right: 3px;
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;
@@ -87,7 +87,7 @@
 
 	.blockera-control-border-corner-left {
 		position: absolute;
-		left: 0;
+		left: 3px;
 		top: 50%;
 		transform: translate(0, -50%);
 		background: #ffffff;

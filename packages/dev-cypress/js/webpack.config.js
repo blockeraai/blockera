@@ -48,6 +48,12 @@ module.exports = {
 				issuer: /\.[jt]sx?$/,
 				use: ['@svgr/webpack'],
 			},
+			{
+				test: /\.(txt|html)$/,
+				exclude:
+					/(public\/index\.html|support\/component-index\.html)$/,
+				type: 'asset/source',
+			},
 		],
 	},
 	plugins: [

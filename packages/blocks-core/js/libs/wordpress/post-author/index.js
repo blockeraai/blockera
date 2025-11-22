@@ -15,14 +15,14 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const PostAuthor: BlockType = {
 	name: 'blockeraPostAuthor',
 	targetBlock: 'core/post-author',
 	blockeraInnerBlocks: {
-		'core/avatar': {
-			name: 'core/avatar',
+		'elements/avatar': {
+			name: 'elements/avatar',
 			type: 'avatar',
 			label: __('Avatar', 'blockera'),
 			description: __(

@@ -1,0 +1,3 @@
+.blockera-block.wp-block-post-terms :where(:is(.wp-block-post-terms__prefix, .wp-block-post-terms__suffix, .wp-block-post-terms__separator, a)) {
+	transition: inherit;
+}

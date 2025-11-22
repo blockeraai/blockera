@@ -23,7 +23,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 			return $declaration;
 		}
 		
-		$this->setTextShadow($filteredTextShadows[0]);
+		array_map([ $this, 'setTextShadow' ], $filteredTextShadows);
 
 		$this->setCss( $this->declarations );
 
@@ -51,10 +51,13 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setTextShadow( array $setting ): void {
 		
+		$previous_value = $this->declarations['text-shadow'] ?? '';
+
 		$this->setDeclaration(
             'text-shadow',
             sprintf(
-                '%1$s %2$s %3$s %4$s',
+                '%1$s %2$s %3$s %4$s %5$s',
+				empty($previous_value) ? '' : $previous_value . ', ',
                 ! empty($setting['x']) ? blockera_get_value_addon_real_value($setting['x']) : '',
                 ! empty($setting['y']) ? blockera_get_value_addon_real_value($setting['y']) : '',
                 ! empty($setting['blur']) ? blockera_get_value_addon_real_value($setting['blur']) : '',

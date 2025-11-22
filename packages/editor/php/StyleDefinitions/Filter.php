@@ -23,7 +23,7 @@ class Filter extends BaseStyleDefinition implements Repeater {
 			return $declaration;
 		}
 		
-		$this->setFilter($filteredFilters[0]);
+		array_map([ $this, 'setFilter' ], $filteredFilters);
 
         $this->setCss($this->declarations);
 

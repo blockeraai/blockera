@@ -86,10 +86,7 @@ export default function ({
 				</>
 			}
 			id={'gap'}
-			columns="1fr 160px"
-			style={{
-				'--gap': '0',
-			}}
+			columns="1fr 161px"
 			{...labelProps}
 		>
 			<Grid gap="10px" gridTemplateColumns="120px 30px">
@@ -118,7 +115,7 @@ export default function ({
 						/>
 					)
 				) : (
-					<Grid gridTemplateColumns="55px 55px" gap="10px">
+					<Grid gridTemplateColumns="1fr 1fr" gap="8px">
 						<InputControl
 							columns="columns-1"
 							className="control-first label-center small-gap"
@@ -139,16 +136,26 @@ export default function ({
 							defaultValue={defaultValue.rows}
 							id={'rows'}
 							singularId={'rows'}
-							onChange={(newValue, ref) =>
+							onChange={(newValue, ref) => {
+								const gapResetValue = !gap?.columns
+									? {
+											...newValue,
+											gap: '',
+											lock: true,
+									  }
+									: newValue;
+
 								handleOnChangeAttributes(
 									attributeId,
-									{
-										...gap,
-										rows: newValue,
-									},
+									ref?.current?.reset
+										? gapResetValue
+										: {
+												...gap,
+												rows: newValue,
+										  },
 									{ ref }
-								)
-							}
+								);
+							}}
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
@@ -175,16 +182,26 @@ export default function ({
 							defaultValue={defaultValue.columns}
 							id={'columns'}
 							singularId={'columns'}
-							onChange={(newValue, ref) =>
+							onChange={(newValue, ref) => {
+								const gapResetValue = !gap?.rows
+									? {
+											...newValue,
+											gap: '',
+											lock: true,
+									  }
+									: newValue;
+
 								handleOnChangeAttributes(
 									attributeId,
-									{
-										...gap,
-										columns: newValue,
-									},
+									ref?.current?.reset
+										? gapResetValue
+										: {
+												...gap,
+												columns: newValue,
+										  },
 									{ ref }
-								)
-							}
+								);
+							}}
 							size="small"
 							controlAddonTypes={['variable']}
 							variableTypes={['spacing']}
@@ -235,9 +252,9 @@ export default function ({
 					}}
 				>
 					{gap?.lock ? (
-						<Icon icon="lock" size="18" />
+						<Icon icon="lock" iconSize="18" />
 					) : (
-						<Icon icon="unlock" size="18" />
+						<Icon icon="unlock" iconSize="18" />
 					)}
 				</Button>
 			</Grid>

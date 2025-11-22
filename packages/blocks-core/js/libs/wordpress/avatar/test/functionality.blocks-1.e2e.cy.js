@@ -147,7 +147,7 @@ describe('Avatar Block', () => {
 			.first()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 			});
 
 		cy.get('@borderContainer').within(() => {
@@ -185,12 +185,14 @@ describe('Avatar Block', () => {
 		cy.get('.block-editor-block-inspector').within(() => {
 			// the range slide for image size should be hidden
 			cy.get(
-				'.components-panel__body .components-range-control .components-base-control__label'
+				'.components-tools-panel .components-range-control .components-base-control__label'
 			).should('not.visible');
-			cy.get('.components-panel__body .components-range-control').should(
+
+			cy.get('.components-tools-panel .components-range-control').should(
 				'not.visible'
 			);
-			cy.get('.components-panel__body .components-toggle-control').should(
+
+			cy.get('.components-tools-panel .components-toggle-control').should(
 				'be.visible'
 			);
 		});

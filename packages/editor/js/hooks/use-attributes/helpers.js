@@ -49,7 +49,8 @@ export const isChanged = (
 export const memoizedRootBreakpoints: (
 	breakpoint: BreakpointTypes,
 	action: Object,
-	insideInnerBlock: boolean
+	insideInnerBlock: boolean,
+	ref: Object
 ) => BreakpointTypes = memoize(
 	(
 		breakpoint,
@@ -62,7 +63,8 @@ export const memoizedRootBreakpoints: (
 			defaultAttributes,
 			currentInnerBlockState,
 		},
-		insideInnerBlock: boolean = false
+		insideInnerBlock: boolean = false,
+		ref: Object
 	) => {
 		let _effectiveItems = { ...effectiveItems };
 
@@ -88,7 +90,18 @@ export const memoizedRootBreakpoints: (
 									[currentBlock]: {
 										attributes: {
 											...effectiveItems,
-											[attributeId]: newValue,
+											[attributeId]:
+												isEquals(
+													newValue,
+													defaultAttributes[
+														attributeId
+													]?.default?.value ||
+														defaultAttributes[
+															attributeId
+														]?.default
+												) || ref?.reset
+													? undefined
+													: newValue,
 										},
 									},
 								},
@@ -101,7 +114,8 @@ export const memoizedRootBreakpoints: (
 				}
 
 				const isEqualsWithDefault = isEquals(
-					defaultAttributes[attributeId]?.default,
+					defaultAttributes[attributeId]?.default?.value ||
+						defaultAttributes[attributeId]?.default,
 					newValue
 				);
 
@@ -192,7 +206,10 @@ export const memoizedRootBreakpoints: (
 			{
 				attributes: {
 					...effectiveItems,
-					[attributeId]: isEqualsWithDefault ? undefined : newValue,
+					[attributeId]:
+						isEqualsWithDefault || ref?.reset
+							? undefined
+							: newValue,
 				},
 			},
 			{
@@ -219,17 +236,26 @@ export const memoizedBlockStates: (
 			currentState: 'normal',
 			insideInnerBlock: false,
 			currentBlock: 'master',
+			clientId: '',
+			name: '',
 		}
 	): Object => {
 		const {
+			ref,
 			currentState: receivedState,
 			insideInnerBlock,
 			currentBlock,
+			clientId: _clientId,
+			name: _name,
 		} = args;
 		const { currentState, currentBreakpoint } = action;
 		const { getBlockStates } = select('blockera/extensions');
-		const { clientId, name } =
-			select('core/block-editor')?.getSelectedBlock();
+		const { clientId, name } = select(
+			'core/block-editor'
+		)?.getSelectedBlock() || {
+			name: _name,
+			clientId: _clientId,
+		};
 		const blockStates = blockStatesValueCleanup(
 			getBlockStates(
 				clientId,
@@ -258,7 +284,8 @@ export const memoizedBlockStates: (
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
 								action,
-								insideInnerBlock
+								insideInnerBlock,
+								args
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions
@@ -285,7 +312,8 @@ export const memoizedBlockStates: (
 							[currentBreakpoint]: memoizedRootBreakpoints(
 								breakpoints[currentBreakpoint],
 								action,
-								insideInnerBlock
+								insideInnerBlock,
+								ref
 							),
 						},
 						// FIXME: The "isVisible" is retrieved from the getBlockStates() store API of extensions

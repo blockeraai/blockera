@@ -53,6 +53,14 @@ module.exports = {
 		'plugin:cypress/recommended',
 		'plugin:ft-flow/recommended',
 	],
+	settings: {
+		'import/extensions': ['.js', '.jsx', '.txt', '.html'],
+		'import/resolver': {
+			node: {
+				extensions: ['.js', '.jsx', '.json', '.txt', '.html'],
+			},
+		},
+	},
 	rules: {
 		'prettier/prettier': [
 			'error',
@@ -63,6 +71,12 @@ module.exports = {
 		'ft-flow/space-after-type-colon': 'off',
 		'@wordpress/i18n-no-collapsible-whitespace': 'off',
 		'import/no-extraneous-dependencies': 'off',
+		'import/no-unresolved': [
+			'error',
+			{
+				ignore: ['\\.txt$', '\\.html$'],
+			},
+		],
 		'@wordpress/no-unsafe-wp-apis': 'off',
 		'@wordpress/no-base-control-with-label-without-id': 'off',
 		'jsdoc/check-line-alignment': 'off',

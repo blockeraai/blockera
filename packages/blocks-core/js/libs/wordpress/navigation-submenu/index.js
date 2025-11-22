@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 import sharedInnerBlocks from '../inners/shared';
 
 export const NavigationSubmenu: BlockType = {
@@ -101,6 +101,12 @@ export const NavigationSubmenu: BlockType = {
 				visited: sharedBlockStates.visited,
 			},
 		},
+		'elements/bold': sharedInnerBlocks['elements/bold'],
+		'elements/italic': sharedInnerBlocks['elements/italic'],
+		'elements/kbd': sharedInnerBlocks['elements/kbd'],
+		'elements/code': sharedInnerBlocks['elements/code'],
+		'elements/span': sharedInnerBlocks['elements/span'],
+		'elements/mark': sharedInnerBlocks['elements/mark'],
 	},
 	availableBlockStates: {
 		...generalBlockStates,

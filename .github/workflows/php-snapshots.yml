@@ -1,0 +1,136 @@
+name: PHP Snapshots
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    # The concurrency group contains the workflow name and the branch name for pull requests
+    # or the commit hash for any other events.
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    compute-previous-wordpress-version:
+        name: Compute previous WordPress version
+        runs-on: ubuntu-latest
+        outputs:
+            previous-wordpress-version: ${{ steps.get-previous-wordpress-version.outputs.previous-wordpress-version }}
+
+        steps:
+            - name: Get previous WordPress version
+              id: get-previous-wordpress-version
+              run: |
+                  curl \
+                    -H "Accept: application/json" \
+                    -o versions.json \
+                    "http://api.wordpress.org/core/stable-check/1.0/"
+                  LATEST_WP_VERSION=$(jq --raw-output 'with_entries(select(.value=="latest"))|keys[]' versions.json)
+                  IFS='.' read LATEST_WP_MAJOR LATEST_WP_MINOR LATEST_WP_PATCH <<< "${LATEST_WP_VERSION}"
+                  if [[ ${LATEST_WP_MINOR} == "0" ]]; then
+                    PREVIOUS_WP_SERIES="$((LATEST_WP_MAJOR - 1)).9"
+                  else
+                    PREVIOUS_WP_SERIES="${LATEST_WP_MAJOR}.$((LATEST_WP_MINOR - 1))"
+                  fi
+                  PREVIOUS_WP_VERSION=$(jq --raw-output --arg series "${PREVIOUS_WP_SERIES}" 'with_entries(select(.key|startswith($series)))|keys[-1]' versions.json)
+                  echo "previous-wordpress-version=${PREVIOUS_WP_VERSION}" >> $GITHUB_OUTPUT
+                  rm versions.json
+
+    test-php:
+        name: PHP ${{ matrix.php }}${{ matrix.multisite && ' multisite' || '' }}${{ matrix.wordpress != '' && format( ' (WP {0}) ', matrix.wordpress ) || '' }} snapshots tests on ubuntu-latest
+        needs: compute-previous-wordpress-version
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        strategy:
+            fail-fast: true
+            matrix:
+                php:
+                    - '8.2'
+                multisite: [false]
+                wordpress: [''] # Latest WordPress version.
+        #                include:
+        #                    # Test with the previous WP version.
+        #                    - php: '7.4'
+        #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
+        #                    - php: '8.2'
+        #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
+
+        env:
+            WP_ENV_PHP_VERSION: ${{ matrix.php }}
+            WP_ENV_CORE: ${{ matrix.wordpress == '' && 'WordPress/WordPress' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Setup PHP Composer install dependencies
+              uses: ./.github/setup-php
+              with:
+                  php-version: ${{ matrix.php }}
+
+            - name: Npm build
+              run: npm run build
+
+            #            - name: Docker debug information
+            #              run: |
+            #                  docker -v
+            #                  docker-compose -v
+
+            - name: General debug information
+              run: |
+                  npm --version
+                  node --version
+                  curl --version
+                  git --version
+                  locale -a
+
+            - name: Create requires environment files
+              run: |
+                  # Set the base configuration file
+                  WP_ENV_CONFIG=".github/wp-env-configs/base.json"
+
+                  # Copy the base configuration and add PHP version
+                  cp "$WP_ENV_CONFIG" .wp-env.json
+                  jq --arg php "${{ matrix.php }}" '. + {"phpVersion": $php}' .wp-env.json > .wp-env.json.tmp && mv .wp-env.json.tmp .wp-env.json
+
+                  cat .wp-env.json
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Start WordPress Environment
+              run: npm run env:start
+
+            - name: Running single site unit tests
+              if: ${{ ! matrix.multisite }}
+              run: |
+                  set -o pipefail
+                  npm run test:snapshots:php | tee phpunit.log
+
+            # Verifies that PHPUnit actually runs in the first place. We want visibility
+            # into issues which can cause it to fail silently, so we check the output
+            # to verify that at least 500 tests have passed. This is an arbitrary
+            # number, but makes sure a drastic change doesn't happen without us noticing.
+            - name: Check number of passed tests
+              run: |
+                  # Note: relies on PHPUnit execution to fail on test failure.
+                  # Extract the number of executed tests from the log file.
+                  if ! num_tests=$(grep -Eo 'OK \([0-9]+ tests' phpunit.log) ; then
+                    if ! num_tests=$(grep -Eo 'Tests: [0-9]+, Assertions:' phpunit.log) ; then
+                      echo "PHPUnit failed or did not run. Check the PHPUnit output in the previous step to debug." && exit 1
+                    fi
+                  fi
+                  # Extract just the number of tests from the string.
+                  num_tests=$(echo "$num_tests" | grep -Eo '[0-9]+')
+                  if [ $num_tests -lt 54 ] ; then
+                    echo "Only $num_tests tests passed, which is much fewer than expected." && exit 1
+                  fi
+                  echo "$num_tests tests passed."

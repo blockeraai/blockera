@@ -8,7 +8,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined, union, isObject } from '@blockera/utils';
+import { isEmpty, isUndefined, union } from '@blockera/utils';
 
 /**
  
@@ -57,7 +57,7 @@ export const createStandardSelector = ({
 	selector: string,
 	mergedSelector: string,
 	originSelector: string,
-}) => {
+}): string => {
 	const matches = selector.match(/:(before|after)$/);
 
 	if (matches && !isNormalState(state)) {
@@ -140,14 +140,21 @@ export const getNormalizedSelector = (
 		state,
 		suffixClass,
 		masterState,
-		rootSelector,
 		getInnerState,
 		getMasterState,
 		fromInnerBlock = false,
 		customizedPseudoClasses,
 		currentStateHasSelectors,
 	} = options;
-	const parsedSelectors = selector.split(',');
+	let { rootSelector } = options;
+	let parsedSelectors = selector.split(',');
+	// Check if selector starts with a pseudo-class (e.g., :hover, :focus, ::before)
+	const startsWithPseudoClass = /^::?[a-z-]+/.test(selector.trim());
+
+	if (startsWithPseudoClass) {
+		parsedSelectors = [selector];
+	}
+
 	const { getState, getInnerState: _getInnerState } =
 		select('blockera/editor') || {};
 	const {
@@ -187,6 +194,11 @@ export const getNormalizedSelector = (
 	const generateSelector = (selector: string): string => {
 		const innerStateType = getInnerState();
 		const masterStateType = getMasterState();
+
+		// If selector contains root selector, set root selector to empty string to avoid duplicate selectors.
+		if (-1 !== selector.indexOf(rootSelector)) {
+			rootSelector = '';
+		}
 
 		// Current Block is inner block.
 		if (fromInnerBlock) {
@@ -388,6 +400,9 @@ export const getCompatibleBlockCssSelector = ({
 	className = '',
 	suffixClass = '',
 	fallbackSupportId,
+	styleVariationName,
+	isStyleVariation = false,
+	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
 	const rootSelector = '{{BLOCK_ID}}';
@@ -419,7 +434,19 @@ export const getCompatibleBlockCssSelector = ({
 		block = getSelectedBlock();
 	}
 
-	const register = (_selector: string): void => {
+	const register = (
+		_selector: string,
+		{
+			from,
+			getSelectorBasedOnContext,
+		}: {
+			from?: 'edit-post/block' | 'edit-site/global-styles',
+			getSelectorBasedOnContext?: (generatedSelector: string) => string,
+		} = {
+			from: 'edit-post/block',
+			getSelectorBasedOnContext: undefined,
+		}
+	): void => {
 		const registerSelector = (generatedSelector: string) => {
 			switch (state) {
 				case 'parent-class':
@@ -446,7 +473,10 @@ export const getCompatibleBlockCssSelector = ({
 
 			selectors[state] = {
 				// $FlowFixMe
-				[currentBlock]: generatedSelector,
+				[currentBlock]:
+					'function' === typeof getSelectorBasedOnContext
+						? getSelectorBasedOnContext(generatedSelector)
+						: generatedSelector,
 			};
 		};
 
@@ -467,7 +497,10 @@ export const getCompatibleBlockCssSelector = ({
 
 					selectors[state] = {
 						// $FlowFixMe
-						[currentBlock]: _selector,
+						[currentBlock]:
+							'function' === typeof getSelectorBasedOnContext
+								? getSelectorBasedOnContext(_selector)
+								: _selector,
 					};
 
 					return;
@@ -476,11 +509,16 @@ export const getCompatibleBlockCssSelector = ({
 
 			selectors[state] = {
 				// $FlowFixMe
-				[currentBlock]: rootSelector + suffixClass,
+				[currentBlock]:
+					'function' === typeof getSelectorBasedOnContext
+						? getSelectorBasedOnContext(rootSelector + suffixClass)
+						: rootSelector + suffixClass,
 			};
 
 			return;
 		}
+
+		const blockType = select('core/blocks')?.getBlockType(blockName);
 
 		// Assume current block is one of inners type.
 		if (isInnerBlock(currentBlock)) {
@@ -498,12 +536,15 @@ export const getCompatibleBlockCssSelector = ({
 							state,
 							suffixClass,
 							masterState,
-							rootSelector,
 							getInnerState,
 							getMasterState,
 							fromInnerBlock: true,
 							customizedPseudoClasses,
 							currentStateHasSelectors,
+							rootSelector:
+								'edit-site/global-styles' === from
+									? getBlockCSSSelector(blockType) || ''
+									: rootSelector,
 						})
 					);
 					break;
@@ -525,11 +566,14 @@ export const getCompatibleBlockCssSelector = ({
 							state,
 							suffixClass,
 							masterState,
-							rootSelector,
 							getInnerState,
 							getMasterState,
 							customizedPseudoClasses,
 							currentStateHasSelectors,
+							rootSelector:
+								'edit-site/global-styles' === from
+									? getBlockCSSSelector(blockType) || ''
+									: rootSelector,
 						})
 					);
 					break;
@@ -554,7 +598,25 @@ export const getCompatibleBlockCssSelector = ({
 	});
 
 	if (selector && selector.trim()) {
-		if (isInnerBlock(currentBlock)) {
+		if (isStyleVariation && styleVariationName) {
+			register(selector, {
+				from: 'edit-site/global-styles',
+				getSelectorBasedOnContext: (generatedSelector: string) => {
+					if ('default' === styleVariationName) {
+						return `:root :where(${generatedSelector})`;
+					}
+					return `:root :where(${generatedSelector}.is-style-${styleVariationName})`;
+				},
+			});
+		} else if (isGlobalStylesWrapper) {
+			// Normalizing selector before registration for global styles purposes.
+			register(selector, {
+				from: 'edit-site/global-styles',
+				getSelectorBasedOnContext: (generatedSelector: string) => {
+					return `:root :where(${generatedSelector})`;
+				},
+			});
+		} else if (isInnerBlock(currentBlock)) {
 			register(selector);
 		} else {
 			register(appendRootBlockCssSelector(selector, rootSelector));
@@ -581,7 +643,7 @@ export const getCompatibleBlockCssSelector = ({
  * @return {string} the css selector for support.
  */
 export function prepareBlockCssSelector(params: {
-	query?: string,
+	query?: Array<string> | string,
 	support?: string,
 	supports: Object,
 	blockName: string,
@@ -614,13 +676,13 @@ export function prepareBlockCssSelector(params: {
 			const fallbacks = union(
 				fallbackSupportId.map((supportId) =>
 					getBlockCSSSelector(blockType, supportId || 'root', {
-						fallback: true,
+						fallback: false,
 					})
 				)
 			);
 
 			fallbackSelector = fallbacks
-				.filter((selector: any): boolean => !isObject(selector))
+				.filter((selector: any): boolean => !isEmpty(selector))
 				.join(', ');
 		} else {
 			fallbackSelector = getBlockCSSSelector(
@@ -633,9 +695,17 @@ export function prepareBlockCssSelector(params: {
 		}
 
 		if (isUndefined(support)) {
-			return (
-				fallbackSelector || selectors[support].root || selectors.root
-			);
+			if (fallbackSelector) {
+				return fallbackSelector;
+			}
+
+			if (selectors?.[support]?.root) {
+				return selectors[support].root;
+			}
+
+			if (selectors?.root) {
+				return selectors.root;
+			}
 		}
 
 		// Preparing selector with support identifier.
@@ -673,10 +743,16 @@ const appendRootBlockCssSelector = (selector: string, root: string): string => {
 			return `${selector}${root}, ${root}${selector}`;
 		}
 
+		// If selector starts with a space, append root before the selector to handle cases like:
+		// " .wp-block-foo" becomes ".wp-block-bar .wp-block-foo"
+		if (selector.startsWith(' ')) {
+			return `${root}${selector}`;
+		}
+
 		const subject = matches[0];
 		const regexp = new RegExp('.\\b' + subject + '\\b', 'gi');
 
-		return `${selector.replace(regexp, `${root}.${subject}`)}`;
+		return selector.replace(regexp, `${root}.${subject}`);
 	}
 
 	// If selector has combinators (space, >, +, ~) or starts with a-z html tag name,

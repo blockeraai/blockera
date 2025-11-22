@@ -8,14 +8,18 @@ import { __ } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { SharedBlockExtension } from '@blockera/editor';
+import {
+	SharedBlockExtension,
+	generalBlockStates,
+	sharedBlockStates,
+} from '@blockera/editor';
 import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import sharedInnerBlocks from '../inners/shared';
-import type { BlockType } from '../../type';
+import type { BlockType } from '../../../type';
 
 export const PostNavigationLink: BlockType = {
 	name: 'blockeraPostNavigationLink',
@@ -36,6 +40,18 @@ export const PostNavigationLink: BlockType = {
 			label: __('Link', 'blockera'),
 			description: __('Hyperlink element.', 'blockera'),
 		},
+		'elements/bold': sharedInnerBlocks['elements/bold'],
+		'elements/italic': sharedInnerBlocks['elements/italic'],
+		'elements/kbd': sharedInnerBlocks['elements/kbd'],
+		'elements/code': sharedInnerBlocks['elements/code'],
+		'elements/span': sharedInnerBlocks['elements/span'],
+		'elements/mark': sharedInnerBlocks['elements/mark'],
+	},
+	availableBlockStates: {
+		...generalBlockStates,
+		focus: generalBlockStates.focus,
+		active: sharedBlockStates.active,
+		visited: sharedBlockStates.visited,
 	},
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;

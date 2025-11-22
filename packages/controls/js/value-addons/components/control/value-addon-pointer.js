@@ -93,8 +93,9 @@ export default function ({
 					style={{
 						'--tooltip-bg': !isVarActive
 							? 'var(--blockera-value-addon-var-color)'
-							: '#e20000',
+							: '#e20b0b',
 					}}
+					delay={400}
 				>
 					<div
 						key={'variable-value-addon-pointer'}

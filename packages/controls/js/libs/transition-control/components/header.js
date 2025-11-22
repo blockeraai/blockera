@@ -41,7 +41,7 @@ const RepeaterItemHeader: THeaderItem = memo<THeaderItem>(
 				)}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
-					<Icon icon="transition" />
+					<Icon icon="transition" iconSize={18} />
 				</span>
 
 				<span className={controlInnerClassNames('header-label')}>

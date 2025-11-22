@@ -29,6 +29,7 @@ export default function ColorPickerControl({
 	//
 	id,
 	label = '',
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange,
@@ -102,7 +103,7 @@ export default function ColorPickerControl({
 			<div style={{ paddingBottom: '15px' }}>
 				<NoticeControl
 					type="error"
-					icon={<Icon icon="eye-dropper" size="18" />}
+					icon={<Icon icon="eye-dropper" iconSize="18" />}
 				>
 					{colorPickerLabel}
 				</NoticeControl>
@@ -117,14 +118,19 @@ export default function ColorPickerControl({
 				columns={columns}
 				controlName={field}
 				className={className}
-				{...{ attribute, blockName, resetToDefault }}
+				{...{
+					attribute,
+					blockName,
+					resetToDefault,
+				}}
+				{...propsForLabelControl}
 			>
 				{isOpen && (
 					<Popover
 						title={popoverTitle}
 						offset={120}
 						placement={placement}
-						className={`components-palette-edit-popover ${
+						className={`blockera-color-picker-popover ${
 							isPopoverHidden ? 'hidden' : ''
 						}`}
 						onClose={onClose}
@@ -144,7 +150,7 @@ export default function ColorPickerControl({
 									disabled={eyeDropper === null}
 									aria-label={__('Pick Color', 'blockera')}
 								>
-									<Icon icon="eye-dropper" size="18" />
+									<Icon icon="eye-dropper" iconSize="18" />
 								</Button>
 
 								<Button
@@ -163,7 +169,7 @@ export default function ColorPickerControl({
 									)}
 									disabled={!value}
 								>
-									<Icon icon="trash" size="20" />
+									<Icon icon="trash" iconSize="20" />
 								</Button>
 							</>
 						}

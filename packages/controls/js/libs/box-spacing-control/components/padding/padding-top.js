@@ -138,6 +138,13 @@ export function PaddingTop({
 		};
 	}
 
+	let dataTest = 'norma-value';
+	if (_isSetValueAddon) {
+		dataTest = valueAddonControlProps.isDeletedVar
+			? 'value-addon-deleted'
+			: 'value-addon-normal';
+	}
+
 	return {
 		shape: (
 			<PaddingTopShape
@@ -223,6 +230,7 @@ export function PaddingTop({
 					labelClassName
 				)}
 				data-cy="box-spacing-padding-top"
+				data-test={dataTest}
 			>
 				<LabelControl
 					ariaLabel={__('Top Padding', 'blockera')}

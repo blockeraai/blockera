@@ -5,7 +5,6 @@ namespace Blockera\WordPress\RenderBlock\V2;
 use Blockera\Data\Cache\Cache;
 use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\Application;
-use Blockera\SiteBuilder\StyleEngine as SiteBuilderStyleEngine;
 
 class Transpiler {
 
@@ -29,7 +28,21 @@ class Transpiler {
      * @var array
      */
     protected array $parsed_blocks = [];
+	
+	/**
+	 * Store current block.
+	 *
+	 * @var array
+	 */
+	protected array $current_block = [];
 
+	/**
+	 * Store allowed inner block flag.
+	 *
+	 * @var boolean
+	 */
+	protected bool $is_allowed_inner = false;
+	
     /**
      * Cache instance.
      *
@@ -144,6 +157,8 @@ class Transpiler {
 
 		for ($i = 0; $i < count($this->parsed_blocks); $i++) {
 
+			$this->current_block = $this->parsed_blocks[ $i ];
+
 			$this->processBlockContent($i, $this->parsed_blocks[ $i ], compact('supports'));
 		}
     }
@@ -164,6 +179,11 @@ class Transpiler {
         }
 		
 		foreach ($blocks as $inner_key => $inner_block) {
+			$attributes     = $inner_block['attrs'];
+			$has_attributes = (bool) ( $attributes['blockeraPropsId'] ?? '' );
+
+			$content = implode('', $inner_block['innerContent']);
+
 			// Process inner block content.
 			$this->processBlockContent(
 				$inner_key,
@@ -177,7 +197,9 @@ class Transpiler {
 							],
 						]
                     ),
+					'is_inner' => true,
 					'supports' => $args['supports'],
+					'force_process' => ( empty($attributes) && str_contains($content, 'style="') ) || $has_attributes,
 				]
 			);
 		}
@@ -191,7 +213,7 @@ class Transpiler {
      * @return bool true if block is valid, false otherwise.
      */
     protected function isValidBlock( array $block): bool {
-        return ! empty($block) && ! empty($block['innerContent']) && ! empty($block['blockName']);
+        return ! empty($block) && ! empty($block['attrs']) && ! empty($block['innerContent']) && ! empty($block['blockName']) && ! blockera_is_icon_block($block);
     }
 
     /**
@@ -208,15 +230,24 @@ class Transpiler {
 
         // Pre-calculate common values.
         $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
-        $blockera_class_name = defined('BLOCKERA_PHPUNIT_RUN_TESTS') && BLOCKERA_PHPUNIT_RUN_TESTS ? 'blockera-block blockera-block-test' : sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
         $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
 
-		// Process only valid blocks and supported blocks and not dynamic blocks.
-		if ( $this->isValidBlock( $block ) && blockera_is_supported_block($block) ) {
+		$is_inner      = ! empty($args['is_inner']);
+		$invalid_inner = empty($args['force_process']);
+
+		$is_allowed = $is_inner && ! $invalid_inner && in_array($block, $this->current_block['innerBlocks'], true);
+
+		// Process only valid, supported, and not dynamic blocks or one of items in parent block inners list.
+		if ($this->isValidBlock( $block ) && blockera_is_supported_block($block) || $is_allowed) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent)) {
 					continue;
+				}
+
+				if (! $invalid_inner && $is_inner) {
+					$this->is_allowed_inner = true;
 				}
 
 				$this->cleanupProcess(
@@ -229,13 +260,10 @@ class Transpiler {
 						'block_path' => $args['block_path'] ?? [],
 						'unique_class_name' => $unique_class_name,
 						'blockera_class_name' => $blockera_class_name,
+						'force-process' => $args['force-process'] ?? false,
+						'permitted_inner' => ! $invalid_inner && $is_inner,
 					]
 				);
-
-				// If custom css is set, add it to the block css stack.
-				if (! empty($block['attrs']['blockeraCustomCSS']['value']) && ! in_array($block['attrs']['blockeraCustomCSS']['value'], $this->styles, true)) {
-					$this->styles[] = preg_replace('/(\.|#)block/i', $unique_class_name, $block['attrs']['blockeraCustomCSS']['value']);
-				}
 			}
 		}
 
@@ -257,71 +285,66 @@ class Transpiler {
         // Inline styles stacks.
         $inline_styles       = [];
 		$inline_declarations = [];
-
-        // The counter is used to determine if the current tag is the first tag in the block.
-        $counter = 0;
+		$roo_selector        = blockera_get_normalized_selector($args['block']['attrs']['className'] ?? '');
+		$selector            = $roo_selector ? $roo_selector : $args['unique_class_name'];
 
         // Process in a single pass.
         while ($processor->next_tag()) {
-            $id_attribute = $processor->get_attribute('id');
-            $style        = $processor->get_attribute('style');
-            $class        = $processor->get_attribute('class');			
+            $style = $processor->get_attribute('style');
+            $class = $processor->get_attribute('class');
 
-			// Skip if the class contains 'blockera-is-transpiled', because it shows that the block is already transpiled.
-			if ($class && str_contains($class, 'blockera-is-transpiled')) {
+			// Skip if the class contains 'be-transpiled', because it shows that the block is already transpiled.
+			if ($class && str_contains($class, 'be-transpiled') || ( ! $this->is_allowed_inner && ! $args['permitted_inner'] && $args['block'] !== $this->current_block )) {
 
 				return;
 			}
 
-            if (! empty(trim($class ?? '')) && preg_match('/wp-(block|elements)/i', $class, $matches) || 0 === $counter) {
-				if ($style) {
-					foreach ($this->global_css_props_classes as $prop => $prop_class) {
-						if (str_contains($style, $prop)) {
-							$this->updateClassname($processor, $prop_class);
-						}
+			// Update classname based on global css props classes.
+			// Just for backward compatibility with WordPress original block output.
+			if ($style) {
+				foreach ($this->global_css_props_classes as $prop => $prop_class) {
+					if (str_contains($style, $prop)) {
+						$this->updateClassname($processor, $prop_class, $args['block']);
 					}
 				}
+			}
 
-				if ( null === $class || ! blockera_is_wp_block_child_class($class)) {
-					$this->updateClassname($processor, $args['blockera_class_name']);
-				}
-            }
-
-            ++$counter;
+			// Update classname based on blockera class name.
+			// Add be-transpiled class to the block wrapper element.
+			$this->updateClassname($processor, $class ? $class : $args['blockera_class_name'], $args['block']);
 
 			if ($style) {
 				$declarations = explode(';', $style);
+				$root_class   = str_replace('.blockera-block.', '', $selector);
 
-				if ($id_attribute && 1 < $counter) {
-					$inline_declarations[ $args['unique_class_name'] . ' #' . $id_attribute ] = $declarations;
-				} elseif (1 < $counter && ! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) ) {
-					$inline_declarations[ $args['unique_class_name'] . ' .' . str_replace(' ', '.', $class) ] = $declarations;
+				if (! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) && ! str_contains($class, $root_class)) {
+					$inline_declarations[ $selector . ' .' . str_replace(' ', '.', $class) ] = $declarations;
 				} else {
-					$inline_declarations[ $args['unique_class_name'] ] = $declarations;
+					$inline_declarations[ $selector ] = $declarations;
 				}
 
 				$processor->remove_attribute('style');
 			}
         }
 
-		foreach ($inline_declarations as $selector => $declarations) {
+		foreach ($inline_declarations as $_selector => $declarations) {
 
 			foreach ($declarations as $declaration) {
-				if ($selector === $args['unique_class_name']) {
-					$inline_styles[ $args['unique_class_name'] ][] = $declaration;
+				if ($_selector === $selector) {
+					$inline_styles[ $selector ][] = $declaration;
 					continue;
 				}
 
-            	$inline_styles[ $args['unique_class_name'] ][ $selector ][] = $declaration;            
+            	$inline_styles[ $selector ][ $_selector ][] = $declaration;            
         	}
 		}
 
         // Generate styles once.
         $this->style_engine = $this->app->make(
-            class_exists(SiteBuilderStyleEngine::class) ? SiteBuilderStyleEngine::class : StyleEngine::class,
+            StyleEngine::class,
             [
                 'block' => $args['block'],
-                'fallbackSelector' => $args['unique_class_name'],
+                'fallbackSelector' => $selector,
             ]
         );
 		$this->style_engine->setSupports($args['supports']);
@@ -341,6 +364,13 @@ class Transpiler {
         } elseif (empty($computed_css_rules)) {
 
 			$this->force_add_inline_styles($inline_styles);
+		}
+
+		$attributes = $args['block']['attrs'] ?? [];
+
+		// If custom css is set, add it to the block css.
+		if (! empty($attributes['blockeraCustomCSS']['value'])) {
+			$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $selector, $attributes['blockeraCustomCSS']['value']);
 		}
 
         // Update block content.
@@ -395,7 +425,7 @@ class Transpiler {
         $updated_html = $processor->get_updated_html();
 
         if (empty($args['block_path'])) {
-			if (! defined('BLOCKERA_PHPUNIT_RUN_TESTS') || ! BLOCKERA_PHPUNIT_RUN_TESTS) {
+			if (! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT) {
 				$this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
 				$this->parsed_blocks[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
 			}
@@ -410,7 +440,7 @@ class Transpiler {
             $current = &$current[ $path['id'] ]['innerBlocks'];
         }
 
-        if (! defined('BLOCKERA_PHPUNIT_RUN_TESTS') || ! BLOCKERA_PHPUNIT_RUN_TESTS) {
+        if (! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT) {
 			$current[ $args['block_id'] ]['attrs']['blockeraProcessed'] = true;
 			$current[ $args['block_id'] ]['attrs']['blockeraPropsId']   = wp_generate_uuid4();
 		}
@@ -423,30 +453,41 @@ class Transpiler {
      *
      * @param \WP_HTML_Tag_Processor $processor The HTML tag processor object.
      * @param string                 $classname The classname to update.
+	 * @param array                  $block The block data.
      *
      * @return void
      */
-    protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname): void {
+    protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname, array $block): void {
         $previous_class  = $processor->get_attribute('class');
         $regexp          = blockera_get_unique_class_name_regex();
 		$final_classname = '';
 
         if (! empty($previous_class)) {
 
-            if (preg_match($regexp, $classname, $matches) && preg_match($regexp, $previous_class)) {
-
-                $final_classname = preg_replace($regexp, $matches[0], $previous_class);
-            } else {
+            if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
 
                 $final_classname = $classname . ' ' . $previous_class;
-            }
+            } else {
+
+				if (! preg_match($regexp, $classname) && ! str_contains($previous_class, $classname)) {
+
+					$final_classname = $classname . ' ' . $previous_class;
+				} else {
+					
+					$final_classname = $previous_class;
+				}
+			}
         }
-		
-		if (! str_contains($final_classname, 'blockera-is-transpiled')) {
-			$final_classname .= ' blockera-is-transpiled';
+
+		// Prevent double adding the be-transpiled class to block wrapper element.
+		// It should has not icon element.
+		if (! empty($final_classname) && ! str_contains($final_classname, 'be-transpiled') && ! blockera_block_has_icon($block)) {
+			$final_classname .= ' be-transpiled';
 		}
 
-		$processor->set_attribute('class', $final_classname);
+		if (! empty($final_classname)) {
+			$processor->set_attribute('class', $final_classname);
+		}
     }
 
     /**

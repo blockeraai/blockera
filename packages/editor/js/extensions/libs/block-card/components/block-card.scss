@@ -12,6 +12,16 @@
 	background-color: #ffffff;
 	transition: max-height 0.2s ease, box-shadow 0.075s ease;
 
+	&.outside-block-inspector {
+		padding: 16px 0;
+		gap: 22px;
+
+		.blockera-extension-block-card__inner,
+		.blockera-extension-block-card__style-variation {
+			padding: 0 16px;
+		}
+	}
+
 	.blockera-control-block-states-repeater {
 
 		.blockera-control-repeater-items-container {
@@ -23,7 +33,8 @@
 		}
 	}
 
-	.blockera-extension-block-card__inner {
+	.blockera-extension-block-card__inner,
+	 .blockera-extension-block-card__style-variation {
 		align-items: flex-start;
 		display: flex;
 		flex-grow: 1;
@@ -70,7 +81,7 @@
 			.blockera-extension-block-card__title__input {
 
 				span {
-					max-width: 164px;
+					max-width: 158px;
 					white-space: nowrap;
 					overflow: hidden;
 					cursor: text;
@@ -91,25 +102,25 @@
 					text-overflow: ellipsis;
 				}
 
-				span:hover,
-				span:focus,
-				&.is-edited span {
+				&.inside-block-inspector span:hover,
+				&.inside-block-inspector span:focus,
+				&.inside-block-inspector.is-edited span {
 					background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%) !important;
 					box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%) !important;
 					color: var(--blockera-controls-primary-color) !important;
 				}
 
-				span:focus:focus {
+				&.inside-block-inspector span:focus:focus {
 					box-shadow: 0 0 0 2px var(--blockera-controls-primary-color) !important;
 				}
 
-				span::placeholder {
+				&.inside-block-inspector span::placeholder {
 					opacity: 1;
 					font-weight: 500;
 					color: #1e1e1e;
 				}
 
-				span:empty::before {
+				&.inside-block-inspector span:empty::before {
 					content: attr(placeholder);
 					font-weight: 500;
 					color: #1e1e1e;
@@ -147,16 +158,23 @@
 				box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
 			}
 
-			.blockera-extension-block-card__close {
+			.blockera-extension-block-card__settings {
 				position: absolute;
 				right: 12px;
-				opacity: 1;
-				cursor: pointer;
-				color: #1e1e1e;
-				fill: currentColor;
+				display: flex;
+				gap: 0;
+				align-items: center;
+				justify-content: flex-end;
 
-				&:hover {
-					color: var(--blockera-controls-primary-color);
+				svg {
+					fill: currentColor;
+					color: #1e1e1e;
+					opacity: 1;
+					cursor: pointer;
+
+					&:hover {
+						color: var(--blockera-controls-primary-color);
+					}
 				}
 			}
 		}
@@ -173,22 +191,33 @@
 			-webkit-line-clamp: 2;
 			overflow: hidden;
 			cursor: default;
+			height: 36px;
 		}
 	}
 
-	&.inner-block-is-selected {
+	&.inner-block-is-selected,
+	&.style-variation-is-selected {
 		background-color: #f6f6f6;
 		overflow: hidden;
 		max-height: 55px;
 		transition: max-height 0.55s ease, box-shadow 0.075s ease;
 
-		&:hover {
+		&:not(.is-selected-delay):hover {
 			max-height: 100vh;
 			transition: max-height 0.55s ease, box-shadow 0.075s ease;
 		}
 
 		& + .blockera-extension-block-card {
 			box-shadow: 0 -1px 0 #cbcbcb, 0 -11px 11px -6px rgba(0, 0, 0, 0.16);
+		}
+	}
+
+	&.block-card--style-variation {
+		--blockera-controls-primary-color: #1ca120;
+
+		.blockera-extension-block-card__title,
+		.blockera-component-block-icon {
+			color: var(--blockera-controls-primary-color);
 		}
 	}
 
@@ -208,10 +237,54 @@
 		justify-content: space-between;
 		align-items: center;
 		flex-wrap: wrap;
+
+		&.no-flex {
+			display: block;
+		}
 	}
 
 	.blockera-control-style-variations-button + .blockera-block-variation-transforms {
 		margin-left: initial;
+	}
+
+	.blockera-dropdown-menu {
+		position: absolute;
+		top: 16px;
+		right: 12px;
+		display: flex;
+		flex-direction: row-reverse;
+		gap: 0;
+
+		.blockera-powered-by-icon {
+			color: #1e1e1e;
+			fill: currentColor;
+			display: flex;
+			width: 24px;
+			height: 24px;
+			align-items: center;
+			justify-content: center;
+			transition: var(--blockera-controls-transition);
+			border-radius: var(--blockera-controls-border-radius);
+			opacity: 0.2;
+			--blockera-controls-primary-color: #0051e7;
+
+			&:hover {
+				opacity: 1;
+				color: var(--blockera-controls-primary-color);
+			}
+		}
+
+		.components-dropdown-menu {
+			padding: 0;
+			margin: 0;
+
+			.components-button.has-icon {
+				justify-content: center;
+				min-width: 24px;
+				height: 24px;
+				padding: 0;
+			}
+		}
 	}
 }
 
@@ -257,5 +330,15 @@
 		-webkit-line-clamp: 2;
 		display: -webkit-box;
 		overflow: hidden;
+	}
+}
+
+.blockera-dropdown-menu__menu {
+
+	.blockera-block-menu-item {
+
+		&.blockera-block-menu-item-selected {
+			color: var(--blockera-controls-primary-color);
+		}
 	}
 }

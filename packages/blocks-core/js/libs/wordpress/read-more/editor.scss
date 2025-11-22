@@ -1,12 +1,2 @@
-.blockera-block.wp-block-read-more {
-
-	&:where(:not([style*="text-decoration"])),
-	&:where(:not(.blockera-has-text-decoration)) {
-		text-decoration: none;
-
-		&:focus,
-		&:active {
-			text-decoration: none;
-		}
-	}
-}
+// Import style from php file to keep only one style for both editor and front end 
+@import '../../../../php/libs/wordpress/read-more/style.css';

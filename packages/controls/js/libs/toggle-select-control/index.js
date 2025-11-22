@@ -25,6 +25,7 @@ export default function ToggleSelectControl({
 	label = '',
 	labelDescription,
 	labelPopoverTitle,
+	labelProps: propsForLabelControl = {},
 	columns,
 	defaultValue = '',
 	onChange = () => {},
@@ -100,6 +101,7 @@ export default function ToggleSelectControl({
 				mode: 'advanced',
 				path: getControlPath(attribute, id),
 				style: props?.style || {},
+				...propsForLabelControl,
 			}}
 		>
 			<div

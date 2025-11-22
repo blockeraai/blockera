@@ -99,9 +99,17 @@ export const FlexChildStyles = ({
 					_attributes.blockeraFlexChildBasis
 				);
 
-				properties.flex = `${grow ? grow : 0} ${shrink ? shrink : 0} ${
-					basis ? basis : 'auto'
-				}`;
+				if (grow) {
+					properties['flex-grow'] = grow;
+				}
+
+				if (shrink) {
+					properties['flex-shrink'] = shrink;
+				}
+
+				if (basis) {
+					properties['flex-basis'] = basis;
+				}
 				break;
 		}
 

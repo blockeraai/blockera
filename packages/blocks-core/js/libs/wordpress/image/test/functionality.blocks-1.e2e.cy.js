@@ -99,6 +99,29 @@ describe('Image Block', () => {
 			});
 
 		//
+		// 1.3. Image img/svg tag inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/img-tag');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		//
+		// 1.3.1. BG color
+		//
+		cy.setColorControlValue('BG Color', '59ff00');
+
+		cy.getBlock('core/image')
+			.first()
+			.within(() => {
+				cy.get('img').should(
+					'have.css',
+					'background-color',
+					'rgb(89, 255, 0)'
+				);
+			});
+
+		//
 		// 2. Check settings tab
 		//
 		setParentBlock();
@@ -150,6 +173,11 @@ describe('Image Block', () => {
 			cy.get('a')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 0, 0)');
+
+			// img/svg tag inner block
+			cy.get('img')
+				.first()
+				.should('have.css', 'background-color', 'rgb(89, 255, 0)');
 		});
 	});
 });

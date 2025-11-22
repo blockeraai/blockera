@@ -1,0 +1,155 @@
+// @flow
+/**
+ * External dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
+import { useMemo } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import {
+	extensionClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
+import { PanelBodyControl } from '@blockera/controls';
+
+/**
+ * Internal dependencies
+ */
+import { StyleItem } from './style-item';
+import { AddNewStyleButton } from './add-new-style-button';
+
+export const StyleVariationsManager = ({
+	isNotActive,
+	blockStyles,
+	editorStyles,
+	setStyles,
+	blockName,
+	counter,
+	setCounter,
+	setCurrentBlockStyleVariation,
+	setCurrentActiveStyle,
+	setBlockStyles,
+	activeStyle,
+	onSelectStylePreview,
+	setCurrentPreviewStyle,
+	styleItemHandler,
+}: {
+	counter: number,
+	setCounter: (counter: number) => void,
+	isNotActive?: boolean,
+	blockStyles: Array<Object>,
+	editorStyles: Array<Object>,
+	setStyles: (styles: Array<Object>) => void,
+	blockName: string,
+	setCurrentBlockStyleVariation: (style: Object) => void,
+	setCurrentActiveStyle: (style: Object) => void,
+	setBlockStyles: (styles: Array<Object>) => void,
+	activeStyle: Object,
+	onSelectStylePreview: (style: Object) => void,
+	setCurrentPreviewStyle: (style: Object) => void,
+	styleItemHandler: (style: Object) => void,
+}): MixedElement => {
+	const memoizedStyles = useMemo(
+		() =>
+			blockStyles.map((style) => (
+				<StyleItem
+					counter={counter}
+					setCounter={setCounter}
+					key={style.name}
+					style={style}
+					blockName={blockName}
+					blockStyles={blockStyles}
+					setBlockStyles={setBlockStyles}
+					activeStyle={activeStyle}
+					setCurrentActiveStyle={setCurrentActiveStyle}
+					inGlobalStylesPanel={true}
+					onSelectStylePreview={onSelectStylePreview}
+					setCurrentPreviewStyle={setCurrentPreviewStyle}
+					styleItemHandler={styleItemHandler}
+				/>
+			)),
+		[
+			counter,
+			blockName,
+			setCounter,
+			blockStyles,
+			activeStyle,
+			setBlockStyles,
+			styleItemHandler,
+			onSelectStylePreview,
+			setCurrentActiveStyle,
+			setCurrentPreviewStyle,
+		]
+	);
+
+	return (
+		<PanelBodyControl
+			title={
+				<>
+					{__('Style Variations', 'blockera')}
+
+					<AddNewStyleButton
+						counter={counter}
+						setCounter={setCounter}
+						design="no-label"
+						// label={__('Add New Style Variation', 'blockera')}
+						styles={editorStyles}
+						setStyles={setStyles}
+						blockName={blockName}
+						blockStyles={blockStyles}
+						setCurrentBlockStyleVariation={
+							setCurrentBlockStyleVariation
+						}
+						setCurrentActiveStyle={setCurrentActiveStyle}
+						setBlockStyles={setBlockStyles}
+						style={{ marginLeft: 'auto' }}
+					/>
+				</>
+			}
+			initialOpen={true}
+			icon={<Icon icon="extension-style-variations" iconSize={20} />}
+			className={extensionClassNames('style-variations')}
+			accordion={false}
+		>
+			<div
+				className={componentInnerClassNames('block-style-variations', {
+					'blockera-control-is-not-active': isNotActive,
+					'design-large': true,
+				})}
+			>
+				{memoizedStyles}
+
+				<p
+					className={componentInnerClassNames(
+						'block-style-variations-description'
+					)}
+				>
+					{__(
+						'Create style presets for blocks and apply them instantly across multiple blocks or pages.',
+						'blockera'
+					)}
+				</p>
+
+				<AddNewStyleButton
+					counter={counter}
+					setCounter={setCounter}
+					design="with-label"
+					label={__('Add New', 'blockera')}
+					styles={editorStyles}
+					setStyles={setStyles}
+					blockName={blockName}
+					blockStyles={blockStyles}
+					setCurrentBlockStyleVariation={
+						setCurrentBlockStyleVariation
+					}
+					setCurrentActiveStyle={setCurrentActiveStyle}
+					setBlockStyles={setBlockStyles}
+				/>
+			</div>
+		</PanelBodyControl>
+	);
+};

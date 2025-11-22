@@ -20,9 +20,14 @@ final class StyleEngine {
 	 *
 	 * @var array $pseudo_classes
 	 */
-	protected array $pseudo_classes = [
-		'hover',
-	];
+	protected array $pseudo_classes = [];
+
+	/**
+	 * Store the flag to determine if the style is a global style.
+	 *
+	 * @var bool $is_global_style
+	 */
+	protected bool $is_global_style = false;
 
 	/**
 	 * Store block array.
@@ -44,6 +49,20 @@ final class StyleEngine {
 	 * @var string $selector The css selector for target element.
 	 */
 	protected string $selector = '';
+
+	/**
+	 * Store the flag to determine if the style is a style variation.
+	 *
+	 * @var boolean $is_style_variation the flag to indicate current style is variation style or not!
+	 */
+	protected bool $is_style_variation = false;
+
+	/**
+	 * Store the definitions instances stack.
+	 *
+	 * @var array $definitions
+	 */
+	protected array $definitions = [];
 
 	/**
 	 * Store instance of current style definition class.
@@ -99,16 +118,18 @@ final class StyleEngine {
 	 *
 	 * @param array  $block            The current block.
 	 * @param string $fallbackSelector The css selector for target element.
+	 * @param bool   $isGlobalStyle    The flag to determine if the style is a global style. Default is `false`.
 	 */
-	public function __construct( array $block, string $fallbackSelector ) {
+	public function __construct( array $block, string $fallbackSelector, bool $isGlobalStyle = false ) {
 
 		[
 			'attrs' => $settings,
 		] = $block;
 
-		$this->block    = $block;
-		$this->settings = $settings;
-		$this->selector = $fallbackSelector;
+		$this->block           = $block;
+		$this->settings        = $settings;
+		$this->selector        = $fallbackSelector;
+		$this->is_global_style = $isGlobalStyle;
 	}
 
 	/**
@@ -133,6 +154,18 @@ final class StyleEngine {
 	public function setSupports( array $supports): void {
 
 		$this->supports = blockera_array_flat(array_column($supports, 'supports'));
+	}
+
+	/**
+	 * Set the flag to determine if the style is a style variation.
+	 *
+	 * @param boolean $is_style_variation the flag to indicate current style is variation style or not.
+	 *
+	 * @return void
+	 */
+	public function setIsStyleVariation( bool $is_style_variation): void {
+
+		$this->is_style_variation = $is_style_variation;
 	}
 
 	/**
@@ -181,15 +214,7 @@ final class StyleEngine {
 		if (! empty($this->settings['blockeraBlockStates']['value'])) {
 			$states = $this->settings['blockeraBlockStates']['value'];
 
-			// Filter pseudo classes to only include states that exist in the block.
-			$this->pseudo_classes = array_filter(
-                $states,
-                function( string $state):bool {
-					return 'normal' === $state || in_array($state, $this->pseudo_classes, true);
-				},
-				ARRAY_FILTER_USE_KEY
-            );
-
+			// prepare all breakpoints.
 			$breakpoints = array_keys(blockera_array_flat(array_column($states, 'breakpoints')));
 
 			// Add force base breakpoint if not exists.
@@ -208,7 +233,7 @@ final class StyleEngine {
             );
 
 			// Add normal pseudo class if not exists.
-			if (! array_key_exists('normal', $this->pseudo_classes)) {
+			if (! array_key_exists('normal', $states)) {
 
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => [
@@ -234,15 +259,34 @@ final class StyleEngine {
 				];
 			}
 
+			// prepare all block states.
+			$this->pseudo_classes = blockera_get_array_deep_merge($this->pseudo_classes, $states);
+
 			$breakpointsCssRules = blockera_array_flat(
 				array_filter(
 					array_map(
                         function( array $stateSettings, string $state): array {
 							$this->pseudo_state = $state;
-							$breakpoints        = blockera_get_array_deep_merge($this->breakpoints, $stateSettings['breakpoints']);
+
+							if (empty($stateSettings['breakpoints']) && ! empty($stateSettings['content'])) {
+								return [
+									$this->prepareBreakpointStyles(
+                                        $this->breakpoint,
+                                        [
+											'blockeraContentPseudoElement' => '"' . $stateSettings['content'] . '"',
+										]
+                                    ),
+								];
+							}
+
+							$breakpoints = $this->prepareBreakpointsSettings($stateSettings['breakpoints']);
 
 							return array_map(
-                                function ( $breakpointSettings, string $breakpoint): string {
+                                function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {
+									if (isset($stateSettings['content'])) {
+										$breakpointSettings['attributes']['blockeraContentPseudoElement'] = '"' . $stateSettings['content'] . '"';
+									}
+
                                     return $this->prepareBreakpointStyles($breakpoint, $breakpointSettings['attributes']);
                                 },
                                 $breakpoints,
@@ -264,6 +308,30 @@ final class StyleEngine {
 		unset($settings['blockeraBlockStates'], $settings['blockeraPropsId'], $settings['blockeraCompatId']);
 
 		return $this->prepareBreakpointStyles($this->breakpoint, $settings);
+	}
+
+	/**
+	 * Prepare breakpoints settings.
+	 *
+	 * @param array $breakpoints The breakpoints settings.
+	 *
+	 * @return array The prepared breakpoints settings.
+	 */
+	protected function prepareBreakpointsSettings( array $breakpoints ): array {
+
+		if (empty($breakpoints)) {
+
+			return [];
+		}
+
+		$available_breakpoints = array_intersect(array_keys($this->breakpoints), array_keys($breakpoints));
+
+		return array_filter(
+			blockera_get_array_deep_merge($this->breakpoints, $breakpoints),
+			function ( $breakpoint) use ( $available_breakpoints): bool {
+				return in_array($breakpoint['type'], $available_breakpoints, true);
+			}
+		);
 	}
 
 	/**
@@ -529,6 +597,8 @@ final class StyleEngine {
 		$this->definition->setBreakpoint( $this->breakpoint );
 		$this->definition->setBlockType( 'master' );
 		$this->definition->setPseudoState( $this->pseudo_state );
+		$this->definition->setIsGlobalStyle( $this->is_global_style );
+		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		$css_rules = $this->definition->getCssRules();
@@ -582,7 +652,7 @@ final class StyleEngine {
 			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
 
 			// Merge with existing rules, avoiding duplicates.
-			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {				
+			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {                
 				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 			}
 
@@ -668,9 +738,12 @@ final class StyleEngine {
 		$this->definition->setStyleId($args['id']);
 		$this->definition->setBlockType( $blockType );
 		$this->definition->setBreakpoint( $this->breakpoint );
+		$this->definition->setIsGlobalStyle( $this->is_global_style );
 		$this->definition->setInnerPseudoState( $args['state'] ?? '' );
 		$this->definition->setPseudoState( $this->pseudo_state );
 		$this->definition->setSettings( $settings );
+		$this->definition->setNoChecks( true );
+		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
 		return $this->definition->getCssRules();

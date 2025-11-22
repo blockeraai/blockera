@@ -35,6 +35,7 @@ export default function LinkControl({
 	label,
 	labelPopoverTitle,
 	labelDescription,
+	labelProps: propsForLabelControl = {},
 	singularId,
 	repeaterItem,
 	columns,
@@ -91,6 +92,7 @@ export default function LinkControl({
 		resetToDefault,
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
+		...propsForLabelControl,
 	};
 
 	return (

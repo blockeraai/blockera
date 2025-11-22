@@ -23,7 +23,7 @@ class Transition extends BaseStyleDefinition implements Repeater {
 			return $declaration;
 		}
 
-		$this->setTransition($filteredTransitions[0]);
+		array_map([ $this, 'setTransition' ], $filteredTransitions);
 
         $this->setCss($this->declarations);
 

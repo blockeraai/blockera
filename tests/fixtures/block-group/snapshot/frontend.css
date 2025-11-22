@@ -1,0 +1,122 @@
+
+.blockera-block.blockera-block-1.wp-block-group {
+	background-color: #faeaea;
+	display: flex;
+	flex-direction: column;
+}
+
+.blockera-block.blockera-block-1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+	color: #ff4141;
+}
+
+.blockera-block.blockera-block-1 h1:is(h1.wp-block-heading) {
+	color: #00ff0d;
+}
+
+.blockera-block.blockera-block-1 h2:is(h2.wp-block-heading) {
+	color: #ffc800;
+}
+
+.blockera-block.blockera-block-1 h3:is(h3.wp-block-heading) {
+	color: #00ff44;
+}
+
+.blockera-block.blockera-block-1 h4:is(h4.wp-block-heading) {
+	color: #00d6ff;
+}
+
+.blockera-block.blockera-block-1 h5:is(h5.wp-block-heading) {
+	color: #001cff;
+}
+
+.blockera-block.blockera-block-1 h6:is(h6.wp-block-heading) {
+	color: #ff0099;
+}
+
+.blockera-block.blockera-block-1 p {
+	color: #ff0000;
+}
+
+.blockera-block.blockera-block-1 :is(strong, b) {
+	background-color: #fffdd4;
+}
+
+.blockera-block.blockera-block-1 :is(em, i) {
+	background-color: #d1ffdb;
+}
+
+.blockera-block.blockera-block-1 kbd {
+	background-color: #baccff;
+}
+
+.blockera-block.blockera-block-1 code {
+	background-color: #bffffa;
+}
+
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+	background-color: #e5baff;
+}
+
+.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+	background-color: #ff3180;
+}
+
+.blockera-block.blockera-block-1 h1:is(h1.wp-block-heading):hover {
+	color: #00d90b;
+}
+
+.blockera-block.blockera-block-1 h2:is(h2.wp-block-heading):hover {
+	color: #c29800;
+}
+
+.blockera-block.blockera-block-1 h3:is(h3.wp-block-heading):hover {
+	color: #00c936;
+}
+
+.blockera-block.blockera-block-1 h4:is(h4.wp-block-heading):hover {
+	color: #00a9cb;
+}
+
+.blockera-block.blockera-block-1 h5:is(h5.wp-block-heading):hover {
+	color: #0017c7;
+}
+
+.blockera-block.blockera-block-1 h6:is(h6.wp-block-heading):hover {
+	color: #b7006e;
+}
+
+.blockera-block.blockera-block-1 p:hover {
+	color: #db0000;
+}
+
+.blockera-block.blockera-block-1 :is(strong, b):hover {
+	background-color: #aeac66;
+}
+
+.blockera-block.blockera-block-1 :is(em, i):hover {
+	background-color: #92c59d;
+}
+
+.blockera-block.blockera-block-1 kbd:hover {
+	background-color: #7689be;
+}
+
+.blockera-block.blockera-block-1 code:hover {
+	background-color: #7ac5bf;
+}
+
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]):hover {
+	background-color: #a770c9;
+}
+
+.blockera-block.blockera-block-1 :is(mark, mark[class]):hover {
+	background-color: #c5004c;
+}
+
+p.blockera-block.blockera-block-2 {
+	background-color: #00000024;
+}
+
+.blockera-block.blockera-block-2 .has-inline-color {
+	background-color: #dfdfdf;
+}

@@ -7,7 +7,7 @@
 			"id": "blockeraFontFamily",
 			"definition": "FontFamily",
 			"css-property": "font-family",
-			"fallback": ["font-size"],
+			"fallback": ["font-size", "typography"],
 			"description": "Support for \"blockeraFontFamily\" value."
 		},
 		"blockeraFontAppearance": {
@@ -15,7 +15,7 @@
 			"id": "blockeraFontAppearance",
 			"definition": "FontWeight",
 			"css-property": "font-weight",
-			"fallback": ["font-size"],
+			"fallback": ["font-size", "typography"],
 			"description": "Support for \"blockeraFontAppearance\" value."
 		},
 		"blockeraTextShadow": {
@@ -23,7 +23,7 @@
 			"id": "blockeraTextShadow",
 			"definition": "TextShadow",
 			"css-property": "text-shadow",
-			"fallback": ["text-shadow"],
+			"fallback": ["text-shadow", "typography"],
 			"description": "Support for \"blockeraTextShadow\" value."
 		},
 		"blockeraFontColor": {
@@ -114,7 +114,7 @@
 			"id": "blockeraLetterSpacing",
 			"definition": "LetterSpacing",
 			"css-property": "letter-spacing",
-			"fallback": ["typography"],
+			"fallback": ["letter-spacing", "typography"],
 			"description": "Support for \"blockeraLetterSpacing\" value, this is mirror for WordPress block core \"letter-spacing\" support."
 		},
 		"blockeraTextDecoration": {

@@ -74,6 +74,12 @@
 		"tags": ["asterisk", "star", "required", "mandatory", "mark"]
 	},
 	{
+		"iconName": "back-to-top",
+		"title": "Back to Top",
+		"library": "ui",
+		"tags": ["back", "top", "scroll", "navigation", "button"]
+	},
+	{
 		"iconName": "background-image",
 		"title": "Background Image",
 		"library": "ui",
@@ -282,6 +288,12 @@
 		"title": "Block Gallery Caption",
 		"library": "ui",
 		"tags": ["block", "gallery", "caption", "description", "text"]
+	},
+	{
+		"iconName": "block-image-tag",
+		"title": "Img SVG tag",
+		"library": "ui",
+		"tags": ["image", "tag", "svg"]
 	},
 	{
 		"iconName": "block-image-caption",
@@ -512,6 +524,12 @@
 		"tags": ["block", "social", "link", "name", "text"]
 	},
 	{
+		"iconName": "block-types",
+		"title": "Block Types",
+		"library": "ui",
+		"tags": ["block", "types", "categories", "collections", "groups"]
+	},
+	{
 		"iconName": "bolb",
 		"title": "Bolb",
 		"library": "ui",
@@ -546,6 +564,12 @@
 		"title": "Border Style Horizontal Dashed",
 		"library": "ui",
 		"tags": ["border", "style", "horizontal", "dashed", "line"]
+	},
+	{
+		"iconName": "duplicate",
+		"title": "Duplicate",
+		"library": "ui",
+		"tags": ["duplicate", "copy", "clone", "replicate", "mirror"]
 	},
 	{
 		"iconName": "border-style-horizontal-dotted",
@@ -612,6 +636,18 @@
 		"title": "Changelog",
 		"library": "ui",
 		"tags": ["changelog", "version", "history", "updates", "changes"]
+	},
+	{
+		"iconName": "curly-braces",
+		"title": "Curly Braces",
+		"library": "ui",
+		"tags": ["curly", "braces", "code", "syntax", "programming", "css"]
+	},
+	{
+		"iconName": "cookie-consent",
+		"title": "Cookie Consent",
+		"library": "ui",
+		"tags": ["cookie", "consent", "privacy", "tracking", "gdpr"]
 	},
 	{
 		"iconName": "check",
@@ -726,6 +762,12 @@
 		"title": "CSS3",
 		"library": "ui",
 		"tags": ["css3", "css", "styling", "web", "design"]
+	},
+	{
+		"iconName": "design-system-category",
+		"title": "Design System",
+		"library": "ui",
+		"tags": ["design", "design-system"]
 	},
 	{
 		"iconName": "data-attribute",
@@ -1226,6 +1268,24 @@
 		"tags": ["font", "style", "normal", "regular", "standard", "default"]
 	},
 	{
+		"iconName": "general-category",
+		"title": "General",
+		"library": "ui",
+		"tags": ["general", "public", "common", "default"]
+	},
+	{
+		"iconName": "global-styles-category",
+		"title": "Global Styles",
+		"library": "ui",
+		"tags": [
+			"global",
+			"styles",
+			"global-styles",
+			"global-style",
+			"global-style-category"
+		]
+	},
+	{
 		"iconName": "gear-small",
 		"title": "Gear Small",
 		"library": "ui",
@@ -1251,6 +1311,20 @@
 		]
 	},
 	{
+		"iconName": "highlight",
+		"title": "Highlight",
+		"library": "ui",
+		"tags": [
+			"highlight",
+			"mark",
+			"highlighted",
+			"color",
+			"drop",
+			"background",
+			"background color"
+		]
+	},
+	{
 		"iconName": "html-tag-attribute",
 		"title": "HTML Tag Attribute",
 		"library": "ui",
@@ -1270,6 +1344,23 @@
 		]
 	},
 	{
+		"iconName": "icon-circle-arrow-left",
+		"title": "Icon Circle Arrow Left",
+		"library": "ui",
+		"tags": [
+			"icon",
+			"circle",
+			"arrow",
+			"left",
+			"side",
+			"placement",
+			"alignment",
+			"rollback",
+			"undo",
+			"back"
+		]
+	},
+	{
 		"iconName": "icon-position-left",
 		"title": "Icon Position Left",
 		"library": "ui",
@@ -1280,6 +1371,12 @@
 		"title": "Icon Position Right",
 		"library": "ui",
 		"tags": ["icon", "position", "right", "side", "placement", "alignment"]
+	},
+	{
+		"iconName": "icon-recycle-bin",
+		"title": "Icon Recycle Bin",
+		"library": "ui",
+		"tags": ["icon", "recycle", "bin", "trash", "delete", "remove", "empty"]
 	},
 	{
 		"iconName": "information",
@@ -1324,6 +1421,12 @@
 			"horizontal",
 			"align"
 		]
+	},
+	{
+		"iconName": "javascript-codes",
+		"title": "JavaScript",
+		"library": "ui",
+		"tags": ["javascript", "js", "code", "syntax", "programming"]
 	},
 	{
 		"iconName": "justify-content-empty",
@@ -1588,6 +1691,12 @@
 		"title": "Outline",
 		"library": "ui",
 		"tags": ["outline", "border", "frame", "edge", "perimeter", "boundary"]
+	},
+	{
+		"iconName": "other-category",
+		"title": "Other",
+		"library": "ui",
+		"tags": ["other", "other-category", "other-styles"]
 	},
 	{
 		"iconName": "overflow-hidden",
@@ -2467,9 +2576,81 @@
 		]
 	},
 	{
+		"iconName": "website-frame",
+		"title": "Website Frame",
+		"library": "ui",
+		"tags": ["website", "frame", "layout", "structure", "container"]
+	},
+	{
+		"iconName": "wp-background",
+		"title": "WP Background",
+		"library": "ui",
+		"tags": ["wp", "background", "color", "palette", "theme", "design"]
+	},
+	{
+		"iconName": "wp-colors",
+		"title": "WP Colors",
+		"library": "ui",
+		"tags": ["wp", "colors", "color", "palette", "theme", "design"]
+	},
+	{
+		"iconName": "wp-layout",
+		"title": "WP Layout",
+		"library": "ui",
+		"tags": ["wp", "layout", "structure", "container", "grid", "flex"]
+	},
+	{
+		"iconName": "wp-shadows",
+		"title": "WP Shadows",
+		"library": "ui",
+		"tags": ["wp", "shadows", "shadow", "drop", "overlay", "depth"]
+	},
+	{
+		"iconName": "wp-typography",
+		"title": "WP Typography",
+		"library": "ui",
+		"tags": ["wp", "typography", "font", "text", "style", "design"]
+	},
+	{
 		"iconName": "zap-fast",
 		"title": "Zap Fast",
 		"library": "ui",
 		"tags": ["zap", "fast", "lightning", "quick", "speed", "energy"]
+	},
+	{
+		"iconName": "block-math-mi",
+		"title": "Math Variable",
+		"library": "ui",
+		"tags": ["math", "variable", "identifier"]
+	},
+	{
+		"iconName": "block-math-mn",
+		"title": "Math Number",
+		"library": "ui",
+		"tags": ["math", "number", "integer"]
+	},
+	{
+		"iconName": "block-math-mo",
+		"title": "Math Operator",
+		"library": "ui",
+		"tags": ["math", "operator", "symbol", "function", "expression"]
+	},
+	{
+		"iconName": "block-math-mfrac",
+		"title": "Math Fraction",
+		"library": "ui",
+		"tags": ["math", "fraction", "numerator", "denominator"]
+	},
+	{
+		"iconName": "block-math-msup",
+		"title": "Math Superscript",
+		"library": "ui",
+		"tags": ["math", "superscript", "power", "raise"]
+	},
+	{
+		"iconName": "block-math-msub",
+		"title": "Math Subscript",
+		"library": "ui",
+		"tags": ["math", "sub", "subscript", "lower"]
 	}
 ]

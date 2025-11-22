@@ -62,14 +62,14 @@ class EditBlockHTML implements EditableBlockHTML {
 			return $html;
 		}
 
+		$this->setContext('feature');
+
 		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			$this->setContext('feature');
 			$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
 			return $app->make(IconBlock::class)->render($html, $this, $data);
 		}
 
-		$this->setContext('feature');
 		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
         $blockElement = $this->findBlockElement($data);
@@ -82,7 +82,11 @@ class EditBlockHTML implements EditableBlockHTML {
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
         $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
 
-        return str_replace($original_html, $blockElement->outerhtml, $html);
+		try {
+			return $blockElement->parent()->outerhtml;
+		} catch (\Exception $e) {
+			return $blockElement->outerhtml;
+		}
     }
 
 	/**

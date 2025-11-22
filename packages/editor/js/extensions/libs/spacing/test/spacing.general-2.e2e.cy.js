@@ -9,6 +9,7 @@ import {
 	redirectToFrontPage,
 	setBoxSpacingSide,
 	openBoxSpacingSide,
+	clearBoxSpacingSide,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Spacing Extension', () => {
@@ -99,19 +100,19 @@ describe('Spacing Extension', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'margin-top: var(--wp--preset--spacing--20)'
+						'margin-top: var(--wp--preset--spacing--20, 10px)'
 					)
 					.should(
 						'include',
-						'margin-right: var(--wp--preset--spacing--30)'
+						'margin-right: var(--wp--preset--spacing--30, 20px)'
 					)
 					.should(
 						'include',
-						'margin-bottom: var(--wp--preset--spacing--40)'
+						'margin-bottom: var(--wp--preset--spacing--40, 30px)'
 					)
 					.should(
 						'include',
-						'margin-left: var(--wp--preset--spacing--50)'
+						'margin-left: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 					);
 			});
 
@@ -194,18 +195,21 @@ describe('Spacing Extension', () => {
 
 			cy.get('style#blockera-inline-css')
 				.invoke('text')
-				.should('include', 'margin-top: var(--wp--preset--spacing--20)')
 				.should(
 					'include',
-					'margin-right: var(--wp--preset--spacing--30)'
+					'margin-top: var(--wp--preset--spacing--20, 10px)'
 				)
 				.should(
 					'include',
-					'margin-bottom: var(--wp--preset--spacing--40)'
+					'margin-right: var(--wp--preset--spacing--30, 20px)'
 				)
 				.should(
 					'include',
-					'margin-left: var(--wp--preset--spacing--50)'
+					'margin-bottom: var(--wp--preset--spacing--40, 30px)'
+				)
+				.should(
+					'include',
+					'margin-left: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 				);
 		});
 	});
@@ -287,19 +291,19 @@ describe('Spacing Extension', () => {
 					.invoke('text')
 					.should(
 						'include',
-						'padding-top: var(--wp--preset--spacing--20)'
+						'padding-top: var(--wp--preset--spacing--20, 10px)'
 					)
 					.should(
 						'include',
-						'padding-right: var(--wp--preset--spacing--30)'
+						'padding-right: var(--wp--preset--spacing--30, 20px)'
 					)
 					.should(
 						'include',
-						'padding-bottom: var(--wp--preset--spacing--40)'
+						'padding-bottom: var(--wp--preset--spacing--40, 30px)'
 					)
 					.should(
 						'include',
-						'padding-left: var(--wp--preset--spacing--50)'
+						'padding-left: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 					);
 			});
 
@@ -384,19 +388,19 @@ describe('Spacing Extension', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'padding-top: var(--wp--preset--spacing--20)'
+					'padding-top: var(--wp--preset--spacing--20, 10px)'
 				)
 				.should(
 					'include',
-					'padding-right: var(--wp--preset--spacing--30)'
+					'padding-right: var(--wp--preset--spacing--30, 20px)'
 				)
 				.should(
 					'include',
-					'padding-bottom: var(--wp--preset--spacing--40)'
+					'padding-bottom: var(--wp--preset--spacing--40, 30px)'
 				)
 				.should(
 					'include',
-					'padding-left: var(--wp--preset--spacing--50)'
+					'padding-left: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 				);
 		});
 	});
@@ -456,22 +460,22 @@ describe('Spacing Extension', () => {
 					.should('include', 'padding-top: 10px')
 					.should(
 						'include',
-						'padding-right: var(--wp--preset--spacing--20)'
+						'padding-right: var(--wp--preset--spacing--20, 10px)'
 					)
 					.should('include', 'padding-bottom: 30px')
 					.should(
 						'include',
-						'padding-left: var(--wp--preset--spacing--40)'
+						'padding-left: var(--wp--preset--spacing--40, 30px)'
 					)
 					.should('include', 'margin-top: 20px')
 					.should(
 						'include',
-						'margin-right: var(--wp--preset--spacing--30)'
+						'margin-right: var(--wp--preset--spacing--30, 20px)'
 					)
 					.should('include', 'margin-bottom: 40px')
 					.should(
 						'include',
-						'margin-left: var(--wp--preset--spacing--50)'
+						'margin-left: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 					);
 			});
 
@@ -563,22 +567,22 @@ describe('Spacing Extension', () => {
 				.should('include', 'padding-top: 10px')
 				.should(
 					'include',
-					'padding-right: var(--wp--preset--spacing--20)'
+					'padding-right: var(--wp--preset--spacing--20, 10px)'
 				)
 				.should('include', 'padding-bottom: 30px')
 				.should(
 					'include',
-					'padding-left: var(--wp--preset--spacing--40)'
+					'padding-left: var(--wp--preset--spacing--40, 30px)'
 				)
 				.should('include', 'margin-top: 20px')
 				.should(
 					'include',
-					'margin-right: var(--wp--preset--spacing--30)'
+					'margin-right: var(--wp--preset--spacing--30, 20px)'
 				)
 				.should('include', 'margin-bottom: 40px')
 				.should(
 					'include',
-					'margin-left: var(--wp--preset--spacing--50)'
+					'margin-left: var(--wp--preset--spacing--50, clamp(30px, 5vw, 50px))'
 				);
 		});
 	});
@@ -1448,15 +1452,7 @@ describe('Spacing Extension', () => {
 
 		['margin', 'padding'].forEach((item) => {
 			['top', 'bottom', 'left', 'right'].forEach((_side) => {
-				cy.get(
-					`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`
-				).click();
-
-				cy.get('.blockera-component-popover.spacing-edit-popover')
-					.last()
-					.within(() => {
-						cy.getByAriaLabel('Remove value').click();
-					});
+				clearBoxSpacingSide(`${item}-${_side}`);
 
 				cy.get(
 					`[data-cy="box-spacing-${item}-${_side}"] [data-cy="label-control"]`

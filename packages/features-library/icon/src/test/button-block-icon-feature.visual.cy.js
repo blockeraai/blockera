@@ -61,6 +61,8 @@ describe('Button Block → Icon Feature', () => {
 				cy.getByAriaLabel('add-submenu Icon').click();
 			});
 
+		cy.wait(100);
+
 		// set end icon
 		cy.getByAriaLabel('End').click();
 

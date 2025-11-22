@@ -3,19 +3,22 @@
 /**
  * External dependencies
  */
+import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { useCallback } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import { Inserter, Categories } from './';
-import type { TPreviewProps } from '../types';
-import { useBlockStates } from '../../block-card/block-states/hooks';
-import StatesManager from '../../block-card/block-states/components/states-manager';
 import {
 	InnerBlocksExtension,
 	useInnerBlocks,
 } from '../../block-card/inner-blocks';
+import { Inserter, Categories } from './';
+import type { TPreviewProps } from '../types';
+import { useBlockStates } from '../../block-card/block-states/hooks';
+import type { TStates, StateTypes } from '../../block-card/block-states/types';
+import StatesManager from '../../block-card/block-states/components/states-manager';
 
 // the instance of in-memory cache.
 const deleteCacheData: Object = new Map();
@@ -36,6 +39,9 @@ export const Preview = ({
 
 	// Inner Blocks props.
 	innerBlocksProps,
+
+	// External props.
+	setCurrentTab,
 }: TPreviewProps): MixedElement => {
 	const {
 		blocks,
@@ -70,11 +76,47 @@ export const Preview = ({
 		onChange,
 		currentBlock,
 		currentState,
+		setCurrentBlock,
 		availableStates,
 		deleteCacheData,
 		currentBreakpoint,
 		currentInnerBlockState,
 	});
+
+	const doingSwitchToInner = useCallback(() => {
+		setCurrentTab?.('style');
+		const { getState, getInnerState } = select('blockera/editor');
+		const {
+			settings: { supportsInnerBlocks },
+		} = getState(currentState) ||
+			getInnerState(currentInnerBlockState) || {
+				settings: { supportsInnerBlocks: true },
+			};
+
+		if (false === supportsInnerBlocks) {
+			const newStates: {
+				[key: TStates]: StateTypes,
+				// $FlowFixMe
+			} = {
+				...states,
+				normal: {
+					...states.normal,
+					isSelected: true,
+					selectable: true,
+				},
+			};
+
+			// Reset isSelected flag for all other states
+			Object.keys(newStates).forEach((stateName) => {
+				if (stateName !== 'normal') {
+					// $FlowFixMe
+					newStates[stateName].isSelected = false;
+				}
+			});
+
+			handleOnChange(newStates);
+		}
+	}, [states, handleOnChange, currentState, currentInnerBlockState]);
 
 	return (
 		<StatesManager
@@ -106,6 +148,7 @@ export const Preview = ({
 									setBlockState={handleOnChange}
 									getBlockInners={getBlockInners}
 									setCurrentBlock={setCurrentBlock}
+									doingSwitchToInner={doingSwitchToInner}
 									getBlockStates={() => calculatedStates}
 									setBlockClientInners={setBlockClientInners}
 								/>
@@ -120,10 +163,12 @@ export const Preview = ({
 					{...{
 						...innerBlocksProps,
 						maxItems,
-						setCurrentBlock,
-						setBlockClientInners,
 						currentState,
+						setCurrentBlock,
 						currentBreakpoint,
+						doingSwitchToInner,
+						setBlockClientInners,
+						currentInnerBlockState,
 						contextValue: innerBlocksContextValue,
 					}}
 					block={block}

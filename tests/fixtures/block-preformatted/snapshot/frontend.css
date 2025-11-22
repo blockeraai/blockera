@@ -1,0 +1,98 @@
+
+.blockera-block.blockera-block-1.wp-block-preformatted {
+	background-color: #ffdfdf;
+	border: 2px solid #ff3737;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	font-size: 18px;
+}
+
+.blockera-block.blockera-block-1 .has-inline-color {
+	background-color: #dfdfdf;
+}
+
+.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+	background-color: #ff1212;
+}
+
+.blockera-block.blockera-block-1 :is(strong, b) {
+	background-color: #ffd500;
+}
+
+.blockera-block.blockera-block-1 :is(em, i) {
+	background-color: #47eb22;
+}
+
+.blockera-block.blockera-block-1 kbd {
+	background-color: #00e5ff;
+}
+
+.blockera-block.blockera-block-1 code {
+	background-color: #ad9aff;
+}
+
+.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+	background-color: #d500ff;
+}
+
+.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+	background-color: #acff05;
+}
+
+.blockera-block.blockera-block-1.wp-block-preformatted:hover {
+	background-color: #ffadad;
+}
+
+.blockera-block.blockera-block-2.wp-block-preformatted {
+	background-color: #ceffac;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	text-align: center;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-preformatted {
+	text-align: right;
+}
+
+
+}
+
+.blockera-block.blockera-block-3.wp-block-preformatted {
+	background-color: #d1f5ff;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-3.wp-block-preformatted {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+}
+
+.blockera-block.blockera-block-3.wp-block-preformatted::before {
+	background-color: #ff8484;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-3.wp-block-preformatted::after {
+	background-color: #ff5e5e;
+	content: "After";
+}

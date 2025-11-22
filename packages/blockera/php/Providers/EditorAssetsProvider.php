@@ -162,7 +162,11 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 		$requested_features         = array_keys($this->app->make(FeaturesManager::class)->getRegisteredFeatures());
 		$features_object            = $this->getPackageObject( 'features-core' );
 
+		$active_global_styles_id = \WP_Theme_JSON_Resolver::get_user_global_styles_post_id();
+		$blockera_meta_data      = get_post_meta( $active_global_styles_id, 'blockeraGlobalStylesMetaData', true );		
+
 		$script = 'wp.domReady(() => {
+		blockeraGlobalStylesMetaData = ' . wp_json_encode( $blockera_meta_data ) . ';
 		blockeraData.core.unstableBootstrapServerSideEntities(' . wp_json_encode( $this->app->getEntities() ) . ');
 		blockeraData.core.unstableBootstrapServerSideVariableDefinitions(' . wp_json_encode( $this->app->getRegisteredValueAddons( 'variable', false ) ) . ');
 		' . ( blockera_get_experimental( [ 'data', 'dynamicValue' ] ) ? $dynamic_value_bootstrapper : '' ) . '

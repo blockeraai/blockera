@@ -6,11 +6,11 @@
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { memo, useContext } from '@wordpress/element';
-import { __experimentalVStack as VStack } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
+import { Flex } from '@blockera/controls';
 import { SettingsContext, TabsContext } from '@blockera/wordpress';
 import { difference, union, without, isEquals } from '@blockera/utils';
 
@@ -133,8 +133,12 @@ export const BlockManagerPanel = (): MixedElement => {
 	);
 
 	return (
-		<VStack className={'blockera-settings-panel-container'}>
+		<Flex
+			className={'blockera-settings-panel-container'}
+			direction={'column'}
+			gap={30}
+		>
 			<Categories />
-		</VStack>
+		</Flex>
 	);
 };

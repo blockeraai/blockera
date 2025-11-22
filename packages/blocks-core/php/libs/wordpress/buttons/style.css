@@ -1,0 +1,11 @@
+.blockera-block.wp-block-buttons[style*=text-decoration] .wp-block-button,
+.blockera-block.wp-block-buttons[style*=text-decoration] .wp-block-button__link,
+.blockera-block.wp-block-buttons.blockera-has-text-decoration .wp-block-button,
+.blockera-block.wp-block-buttons.blockera-has-text-decoration .wp-block-button__link {
+	text-decoration: inherit;
+}
+
+/* Fix not adding display: flex to buttons block (0.0.0 specificity). */
+:where(.blockera-block.wp-block-buttons:is(.is-vertical,.is-horizontal):not(.is-layout-flex)) {
+	display: flex;
+}

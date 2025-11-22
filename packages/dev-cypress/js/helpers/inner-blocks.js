@@ -12,7 +12,7 @@ export function setInnerBlock(blockType) {
 				.length > 0
 		) {
 			cy.getByDataId(blockType).within(() => {
-				cy.get('span:nth-child(2)').click({ force: true });
+				cy.get('span').click({ force: true });
 			});
 		} else {
 			openInserter();
@@ -45,4 +45,14 @@ export function getBlockTypeInnerBlocksStore(data) {
 
 export function search(term) {
 	cy.getByDataId('search bar').type(term, { delay: 0 });
+}
+
+export function checkSelectedInnerBlock(blockTitle, exist = true) {
+	if (exist) {
+		cy.getByDataTest('blockera-inner-block-card')
+			.contains(blockTitle)
+			.should('exist');
+	} else {
+		cy.getByDataTest('blockera-inner-block-card').should('not.exist');
+	}
 }

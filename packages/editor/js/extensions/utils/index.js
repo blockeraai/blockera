@@ -21,7 +21,6 @@ import position from '../../schemas/block-supports/position-block-supports-list.
 import boxShadow from '../../schemas/block-supports/box-shadow-block-supports-list.json';
 import background from '../../schemas/block-supports/background-block-supports-list.json';
 import typography from '../../schemas/block-supports/typography-block-supports-list.json';
-import textShadow from '../../schemas/block-supports/text-shadow-block-supports-list.json';
 
 export const resetExtensionSettings = () => {
 	const {
@@ -58,7 +57,6 @@ export const getBlockSupportCategory = (name: string): Object => {
 		boxShadow,
 		background,
 		typography,
-		textShadow,
 	};
 
 	return supports[name]?.supports;

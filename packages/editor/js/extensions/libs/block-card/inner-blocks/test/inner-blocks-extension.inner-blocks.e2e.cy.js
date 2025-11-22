@@ -67,7 +67,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 						.within(() => {
 							cy.get('.blockera-feature-type').should(
 								'have.length',
-								75
+								90
 							);
 
 							// Searching verse block type.
@@ -106,7 +106,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 						.within(() => {
 							cy.get('.blockera-feature-type').should(
 								'have.length',
-								74
+								89
 							);
 
 							// Searching verse block type.
@@ -119,7 +119,7 @@ describe('Inner Blocks Functionality Tests ...', () => {
 
 			// Check real allowed blocks.
 			getAllowedBlocks().then((allowedBlocks) => {
-				expect(58).to.be.deep.equal(allowedBlocks.length);
+				expect(67).to.be.deep.equal(allowedBlocks.length);
 			});
 
 			// Check value clean up and store api.

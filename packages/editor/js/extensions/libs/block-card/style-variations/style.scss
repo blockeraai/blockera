@@ -1,5 +1,3 @@
-@import "components/block-styles";
-
 body {
 	--blockera-controls-variations-color: #1ca120;
 	--blockera-controls-variations-color-bk: hsl(122, 70%, 37%);
@@ -20,6 +18,12 @@ body {
 
 	box-shadow: inset 0 0 0 1px var(--border-color) !important;
     outline: 1px solid transparent !important;
+
+	&.is-variation-deleted {
+		--border-color: #e20b0b !important;
+		--primary-color: #e20b0b !important;
+		--secondary-color: #fff6f6 !important;
+	}
 
 	.blockera-control-style-variations-button__icon {
 		width: var(--height);
@@ -50,14 +54,14 @@ body {
 
 		svg {
 			transition: var(--blockera-controls-transition);
-			margin: 0 -4px;
+			margin: 0 -4px 0 -10px;
 			opacity: 0.5;
 		}
 	}
 
 	&.is-variation-default {
 
-		&:not(.is-variation-picker-open):hover {
+		&:not(.is-variation-picker-open, .is-variation-deleted):hover {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
 
 			svg {
@@ -101,8 +105,8 @@ body {
 			color: var(--secondary-color);
 		}
 
-		&:focus,
-		&:hover:not(:disabled, .is-variation-picker-open) {
+		&:focus:not(:disabled, .is-variation-picker-open, .is-variation-deleted),
+		&:hover:not(:disabled, .is-variation-picker-open, .is-variation-deleted) {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
 			--primary-color: var(--blockera-controls-variations-color-darker-20);
 

@@ -55,7 +55,7 @@ describe('Featured Image Block → Selectors test', () => {
 			.first()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4 ');
+				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 			});
 
 		cy.get('@borderContainer').within(() => {
@@ -130,7 +130,7 @@ describe('Featured Image Block → Selectors test', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('c5eef0ab ');
+				cy.get('input[maxlength="9"]').type('c5eef0ab', { delay: 0 });
 			});
 		cy.getBlock('core/post-featured-image')
 			.first()
@@ -172,7 +172,7 @@ describe('Featured Image Block → Selectors test', () => {
 			.last()
 			.within(() => {
 				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('cccccc ');
+				cy.get('input[maxlength="9"]').type('cccccc', { delay: 0 });
 			});
 
 		cy.getBlock('core/post-featured-image')

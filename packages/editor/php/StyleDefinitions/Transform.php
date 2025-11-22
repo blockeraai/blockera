@@ -20,12 +20,14 @@ class Transform extends BaseStyleDefinition implements Repeater {
 
 		if (! empty($filteredTransforms)) {
 
-			$this->setTransform($filteredTransforms[0]);
+			array_map([ $this, 'setTransform' ], $filteredTransforms);
 		}
 
-		if ( 'self-perspective' === $cssProperty && ! empty( $this->declarations['transform'] ) && ! empty( $settings[ $cssProperty ] )) {
+		$currentSettings = $this->getCurrentBreakpointSettings();
 
-			$perspective = blockera_get_value_addon_real_value( $setting[ $cssProperty ] );
+		if ( ! empty( $this->declarations['transform'] ) && isset( $currentSettings['blockeraTransformSelfPerspective'] )) {
+
+			$perspective = blockera_get_value_addon_real_value( $currentSettings['blockeraTransformSelfPerspective']['value'] ?? $currentSettings['blockeraTransformSelfPerspective'] );
 
 			if ( ! empty( $perspective ) ) {
 				$this->setDeclaration(

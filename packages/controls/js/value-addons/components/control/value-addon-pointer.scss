@@ -4,9 +4,9 @@ body {
 	--blockera-value-addon-var-border-color: #75bf7c;
 	--blockera-value-addon-var-color-darker-20: #00800d;
 	--blockera-value-addon-var-bg-color: #f3faf4;
-	--blockera-value-addon-deleted-color: #ff5454;
-	--blockera-value-addon-deleted-border-color: #ff9b9b;
-	--blockera-value-addon-deleted-color-darker-20: #dc4444;
+	--blockera-value-addon-deleted-color: #e20b0b;
+	--blockera-value-addon-deleted-border-color: #e20b0b;
+	--blockera-value-addon-deleted-color-darker-20: #c70101;
 	--blockera-value-addon-deleted-bg-color: #fff6f6;
 	--blockera-value-addon-dv-color: #7405ff;
 	--blockera-value-addon-dv-border-color: #a761ff;
@@ -18,7 +18,7 @@ body {
 	position: absolute;
 	top: -14px;
 	left: -14px;
-	z-index: 1;
+	z-index: 12;
 	width: 100px;
 	pointer-events: none;
 	direction: revert;
@@ -88,7 +88,7 @@ body {
 			&:hover {
 
 				.blockera-control-remove-icon {
-					--blockera-value-addon-var-color: #e20000;
+					--blockera-value-addon-var-color: #e20b0b;
 				}
 			}
 		}
@@ -254,6 +254,7 @@ body {
 	&.blockera-value-addon-support-dynamic-value,
 	&.blockera-value-addon-support-variable {
 		position: relative;
+		z-index: 11;
 
 		&:hover {
 

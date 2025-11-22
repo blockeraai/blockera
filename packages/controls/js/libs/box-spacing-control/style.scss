@@ -99,9 +99,24 @@
 			align-items: center;
 			padding: 0 1px;
 			min-width: 15px;
-			height: 12px;
-			min-height: 12px;
-			letter-spacing: -0.3px;
+			min-height: 14px;
+			letter-spacing: -0.5px;
+			font-weight: 600;
+			margin-left: -2px;
+			margin-right: -2px;
+
+			&.changed-in-other-state,
+			&.changed-in-normal-state,
+			&.changed-in-secondary-state {
+				outline: 2px solid #ffffff;
+				outline-offset: 1px !important;
+
+				&:hover {
+					background: var(--blockera-controls-primary-color);
+					box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
+					color: #ffffff;
+				}
+			}
 
 			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
 				background: #ffffff;
@@ -115,13 +130,11 @@
 				position: absolute;
 				left: calc(100% + 4px);
 				top: -2px;
+				white-space: nowrap;
 			}
 
 			b {
-				font-weight: 500;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
+				font-weight: 600;
 			}
 		}
 
@@ -228,11 +241,6 @@
 				text-align: right;
 				left: initial;
 			}
-
-			.blockera-control-reset-icon {
-				left: -19px;
-				right: initial;
-			}
 		}
 
 		&.side-margin-bottom {
@@ -272,7 +280,7 @@
 
 			.blockera-control-value-addon-pointers {
 				top: 0;
-				left: 25px;
+				left: 20px;
 			}
 		}
 
@@ -289,11 +297,6 @@
 				right: -5px;
 				text-align: right;
 			}
-
-			.blockera-control-reset-icon {
-				left: -19px;
-				right: initial;
-			}
 		}
 
 		&.side-padding-bottom {
@@ -305,7 +308,7 @@
 			.blockera-control-value-addon-pointers {
 				top: 0;
 				right: initial;
-				left: 25px;
+				left: 20px;
 				text-align: left;
 			}
 		}
@@ -321,6 +324,34 @@
 				right: initial;
 				top: 7px;
 				left: -5px;
+			}
+		}
+	}
+
+	&.margin-lock-all {
+
+		.blockera-control-label-side {
+
+			&.side-margin-top {
+
+				.blockera-control-value-addon-pointers {
+					top: 3px;
+					left: 3px;
+				}
+			}
+		}
+	}
+
+	&.padding-lock-all {
+
+		.blockera-control-label-side {
+
+			&.side-padding-top {
+
+				.blockera-control-value-addon-pointers {
+					top: 2px;
+					left: 0;
+				}
 			}
 		}
 	}
@@ -361,9 +392,8 @@
 
 		.blockera-control-label {
 			font-size: 11px;
-			min-height: 12px;
+			min-height: 14px;
 			line-height: 12px;
-			height: 12px;
 			font-weight: 500;
 
 			&.label-changed {

@@ -58,6 +58,9 @@ export const LineHeight = ({
 						</p>
 					</>
 				}
+				labelProps={{
+					iconPosition: 'start',
+				}}
 				columns="columns-2"
 				unitType="line-height"
 				min={0}

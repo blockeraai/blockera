@@ -20,18 +20,25 @@ import { Observer } from '../../observer';
 export const StylesWrapper = ({
 	children,
 	clientId,
+	isGlobalStylesWrapper = false,
 }: {
 	clientId: string,
 	children: MixedElement,
+	isGlobalStylesWrapper?: boolean,
 }): Object => {
-	const slotName = 'blockera-styles-wrapper';
-	const blockId = 'block-styles-' + clientId;
+	const slotName = isGlobalStylesWrapper
+		? 'blockera-global-styles-wrapper'
+		: 'blockera-styles-wrapper';
 
 	const [entry, setEntry] = useState(null);
 
 	const callback = (entries: Array<IntersectionObserverEntry>) => {
 		if (!entries[0]?.target) {
 			return;
+		}
+
+		if (entries[0].target.querySelector(`#${slotName}`)) {
+			return setEntry(entries[0].target.querySelector(`#${slotName}`));
 		}
 
 		const blockeraStylesWrapper = document.createElement('div');
@@ -41,20 +48,7 @@ export const StylesWrapper = ({
 			entries[0].target?.append(blockeraStylesWrapper);
 		}
 
-		const clientStylesWrapper = document.createElement('div');
-		clientStylesWrapper.id = blockId;
-
-		if (!entries[0].target.querySelector(`#${slotName} #${blockId}`)) {
-			entries[0].target
-				.querySelector(`#${slotName}`)
-				?.append(clientStylesWrapper);
-		}
-
-		if (!entries[0].target.querySelector(`#${slotName} #${blockId}`)) {
-			return;
-		}
-
-		setEntry(entries[0].target.querySelector(`#${slotName} #${blockId}`));
+		setEntry(entries[0].target.querySelector(`#${slotName}`));
 	};
 
 	useEffect(() => {
@@ -71,10 +65,6 @@ export const StylesWrapper = ({
 		]);
 		// eslint-disable-next-line
 	}, []);
-
-	if (!entry) {
-		return <></>;
-	}
 
 	const iframeBodyElement: HTMLElement | void = getIframeTag('body');
 

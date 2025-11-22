@@ -37,7 +37,6 @@ if (! function_exists('blockera_core_config')) {
         // Cache config directory and files mapping.
         static $mapped_configs = [];
         $config_dir            = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
-        
         if (! isset($mapped_configs[ $config_dir ])) {
             $config_files                  = glob($config_dir . '/config/*.php');
             $config_keys                   = array_map(
@@ -138,7 +137,17 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
         }
 
         if (is_string($value)) {
-            return substr($value, -4) === 'func' ? substr($value, 0, -4) : $value;
+			// If the value ends with 'func', return the value without the 'func' suffix.
+			if ( 'func' === substr($value, -4) ) {
+				return substr($value, 0, -4);
+			}
+
+			// If the value is '0px', return '0'.
+			if ( '0px' === $value ) {
+				return '0';
+			}
+
+            return $value;
         }
 
         if (is_array($value) && ! empty($value['isValueAddon']) && ! empty($value['valueType'])) {
@@ -172,8 +181,23 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
                 }
             }
 
-            // todo validate that variable is currently available or not.
             if ('variable' === $value['valueType'] && isset($value['settings']['var'])) {
+				/**
+				 * If the value is not empty and is not the same as the variable, return the var with the value as fallback.
+				 */
+				if (
+				isset($value['settings']['value']) && 
+				'' !== $value['settings']['value'] && 
+				'var(' . $value['settings']['var'] . ')' !== $value['settings']['value']) {
+
+					// If the value already starts with var({$value['settings']['var']}, return it as is.
+					if (str_starts_with($value['settings']['value'], "var({$value['settings']['var']}")) {
+						return $value['settings']['value'];
+					}
+					
+					return "var({$value['settings']['var']}, {$value['settings']['value']})";
+				}
+
                 return 'var(' . $value['settings']['var'] . ')';
             }
         }
@@ -217,7 +241,14 @@ if (! function_exists('blockera_array_flat')) {
             return [];
         }
 
-        $result = array_merge(...array_values($nestedArray));
+        // Filter out non-array values before merging.
+        $arrayValues = array_filter($nestedArray, 'is_array');
+        
+        if (empty($arrayValues)) {
+            return [];
+        }
+
+        $result = array_merge(...array_values($arrayValues));
         
         // Handle nested arrays with same keys.
         foreach ($result as $key => $value) {
@@ -283,7 +314,6 @@ if (! function_exists('blockera_get_dist_assets')) {
     }
 }
 
-
 if (! function_exists('blockera_load_script_translations')) {
     /**
      * Load script translations.
@@ -339,16 +369,39 @@ if ( ! function_exists( 'blockera_add_inline_css' ) ) {
 			return;
 		}
 
+		// Normalize CSS: remove extra whitespace and format for readability.
+		$css = preg_replace('/\s+/', ' ', $css); // Replace multiple spaces with single space.
+		$css = preg_replace('/\s*{\s*/', ' {' . "\n\t", $css); // Format opening braces.
+		$css = preg_replace('/\s*}\s*/', "\n" . '}' . "\n\n", $css); // Format closing braces.
+		$css = preg_replace('/\s*;\s*/', ';' . "\n\t", $css); // Format semicolons.
+		$css = preg_replace('/\s*,\s*/', ', ', $css); // Format commas in selectors.
+		$css = preg_replace('/\t}/', '}', $css); // Remove tab before closing brace.
+		$css = trim($css); // Remove leading/trailing whitespace.
+
 		add_filter(
 			'blockera/front-page/print-inline-css-styles',
 			function ( string $older_css ) use ( $css ): string {
 
-				if (false !== strpos($older_css, $css)) {
+				// Prevent duplicate CSS rules.
+				if ( false !== strpos( $older_css, $css ) ) {
 					return $older_css;
 				}
 
-				return $older_css . $css;
+				// Append new CSS with proper formatting.
+				return trim($older_css) . "\n" . trim($css);
 			}
 		);
+	}
+}
+
+if (! function_exists('blockera_enqueue_global_styles')) {
+	/**
+	 * Enqueueing the blockera global styles.
+	 *
+	 * @return void
+	 */
+	function blockera_enqueue_global_styles(): void {
+
+		blockera_add_global_styles_for_blocks();
 	}
 }

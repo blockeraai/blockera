@@ -49,10 +49,12 @@ export type StateGraph = {
 	states: StateGraphStates,
 };
 
-export const getStatesGraphNodes = (): Array<StateGraph> => {
+export const getStatesGraphNodes = (
+	attributesRef?: Object
+): Array<StateGraph> => {
 	const { getSelectedBlock } = select('core/block-editor');
 
-	const block = getSelectedBlock();
+	const block = getSelectedBlock() || { attributes: attributesRef };
 
 	if (!block) {
 		return [];
@@ -144,13 +146,13 @@ export const getStatesGraphNodes = (): Array<StateGraph> => {
 
 			if (
 				isInnerBlock(currentBlock) &&
-				state.breakpoints[breakpoint.type]?.attributes &&
-				state.breakpoints[breakpoint.type]?.attributes
-					?.blockeraInnerBlocks[currentBlock]
+				state?.breakpoints?.[breakpoint.type]?.attributes &&
+				state?.breakpoints?.[breakpoint.type]?.attributes
+					?.blockeraInnerBlocks?.[currentBlock]
 			) {
 				const currentAttributes =
-					state.breakpoints[breakpoint.type]?.attributes
-						?.blockeraInnerBlocks[currentBlock]?.attributes;
+					state.breakpoints[breakpoint.type].attributes
+						.blockeraInnerBlocks[currentBlock]?.attributes;
 
 				// $FlowFixMe
 				states.push({
