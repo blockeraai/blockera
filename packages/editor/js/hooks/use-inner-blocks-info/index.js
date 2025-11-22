@@ -23,6 +23,7 @@ import type {
 } from '../../extensions/libs/block-card/inner-blocks/types';
 import { getBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock } from '../../extensions/components';
+import { useEditorStore } from '../use-editor-store';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 
 export const useInnerBlocksInfo = ({
@@ -34,6 +35,8 @@ export const useInnerBlocksInfo = ({
 	currentBreakpoint,
 	currentInnerBlockState,
 }: InnerBlocksInfoProps): InnerBlocksInfo => {
+	const { getState, getInnerState } = useEditorStore();
+
 	return useMemo(() => {
 		const blockeraInnerBlocks: InnerBlocks = prepareInnerBlockTypes(
 			additional?.blockeraInnerBlocks || {},
@@ -145,8 +148,21 @@ export const useInnerBlocksInfo = ({
 						currentBreakpoint
 					)
 				) {
+					const {
+						settings: { hasContent },
+					} = getState(currentInnerBlockState) ||
+						getInnerState(currentInnerBlockState) || {
+							settings: { hasContent: false },
+						};
+
 					return {
-						...blockRootAttributes,
+						...(!hasContent
+							? blockRootAttributes
+							: {
+									blockeraBlockStates:
+										blockRootAttributes.blockeraBlockStates ||
+										{},
+							  }),
 						...(prepare(
 							`blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
 							blockRootAttributes
