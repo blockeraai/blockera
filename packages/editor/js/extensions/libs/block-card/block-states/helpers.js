@@ -112,7 +112,10 @@ export function onChangeBlockStates(
 					settings: { supportsInnerBlocks: true },
 				};
 
-			if (false === supportsInnerBlocks) {
+			if (
+				false === supportsInnerBlocks &&
+				'function' === typeof setCurrentBlock
+			) {
 				setCurrentBlock('master');
 			}
 		};
