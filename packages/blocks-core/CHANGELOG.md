@@ -53,6 +53,7 @@
 - `Code` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Footnotes` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 - `Preformatted` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
+- `Read More` block: `strong`, `italic`, `kbd`, `span`, `code` and `mark` inner blocks added.
 
 
 ### Automated Tests
