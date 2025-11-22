@@ -1,0 +1,30 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"screenshot": false,
+	"html-search-replace": [
+		{
+			"search": "href=(['\"])[^'\"]+\\1",
+			"replace": "href=$1#link$1"
+		},
+		{
+			"search": "<a[^>]*>[^<]+</a>",
+			"replace": "<a href='#link'>Post title</a>"
+		},
+		{
+			"search": "datetime=\"[^\"]+\"",
+			"replace": "datetime=\"date\""
+		},
+		{
+			"search": "(<time[^>]*>)[^<]+(</time>)",
+			"replace": "$1Date$2"
+		},
+		{
+			"search": "<span class=(['\"])wp-block-rss__item-author\\1>[^<]+</span>",
+			"replace": "<span class=$1wp-block-rss__item-author$1>by Author</span>"
+		},
+		{
+			"search": "<div class=(['\"])wp-block-rss__item-excerpt\\1>[^<]+</div>",
+			"replace": "<div class=$1wp-block-rss__item-excerpt$1>This is the excerpt text.</div>"
+		}
+	]
+}
