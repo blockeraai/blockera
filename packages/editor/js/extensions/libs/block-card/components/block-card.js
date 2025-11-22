@@ -49,6 +49,7 @@ export function BlockCard({
 	currentBlock,
 	currentState,
 	setAttributes,
+	setCurrentTab,
 	availableStates,
 	currentInnerBlock,
 	currentBreakpoint,
@@ -73,6 +74,7 @@ export function BlockCard({
 	notice: MixedElement,
 	children?: MixedElement,
 	currentInnerBlock: InnerBlockModel,
+	setCurrentTab: (tab: string) => void,
 	currentBlock: 'master' | InnerBlockType | string,
 	currentState: TStates,
 	currentBreakpoint: TBreakpoint,
@@ -326,6 +328,7 @@ export function BlockCard({
 								setAttributes,
 								currentBlockStyleVariation,
 							}}
+							setCurrentTab={setCurrentTab}
 							blockConfig={additional}
 							onChange={handleOnChangeAttributes}
 							currentBlock={'master'}
