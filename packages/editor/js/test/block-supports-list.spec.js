@@ -18,7 +18,6 @@ import outline from '../schemas/block-supports/outline-block-supports-list.json'
 import position from '../schemas/block-supports/position-block-supports-list.json';
 import size from '../schemas/block-supports/size-block-supports-list.json';
 import spacing from '../schemas/block-supports/spacing-block-supports-list.json';
-import textShadow from '../schemas/block-supports/text-shadow-block-supports-list.json';
 import typography from '../schemas/block-supports/typography-block-supports-list.json';
 
 const ajv = new Ajv({ allowUnionTypes: true });
