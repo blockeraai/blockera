@@ -103,7 +103,7 @@ export function InnerBlockCard({
 				'block-card',
 				'block-card--inner-block'
 			)}
-			data-test={'blockera-block-card'}
+			data-test={'blockera-inner-block-card'}
 		>
 			<div className={extensionInnerClassNames('block-card__inner')}>
 				<BlockIcon icon={blockInformation?.icon} />

@@ -1,0 +1,196 @@
+.blockera-block.blockera-block-1.wp-block-post-terms {
+	background-color: #dbe8ff;
+	border: 1px solid #8db7ff;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1 .wp-block-post-terms__prefix {
+	background-color: #62db85;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 45px;
+	font-size: 14px;
+	font-weight: 700;
+	font-style: normal;
+	border: 2px solid #20a846;
+	display: inline-block;
+}
+
+.blockera-block.blockera-block-1 .wp-block-post-terms__suffix {
+	background-color: #62db85;
+	border: 2px solid #20a846;
+	border-radius: 50px;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 14px;
+	display: inline-block;
+}
+
+.blockera-block.blockera-block-1 a {
+	background-color: #a2c4ff;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 50px;
+	text-decoration: initial;
+	font-size: 14px;
+	font-weight: 700;
+	font-style: normal;
+	border: 2px solid #4c8eff;
+	display: inline-block;
+}
+
+.blockera-block.blockera-block-1 .wp-block-post-terms__separator {
+	background-color: #005eff;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border-radius: 50px;
+	display: inline-block;
+}
+
+.blockera-block.blockera-block-1 a:hover {
+	border: 2px solid #005eff;
+	background-color: #005eff;
+	color: #ffffff;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-terms {
+	display: flex;
+	flex-wrap: wrap !important;
+	row-gap: 20px;
+	column-gap: 10px;
+}
+
+
+}
+.blockera-block.blockera-block-2.wp-block-post-terms {
+	background-color: #b8f1de;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-2 .wp-block-post-terms__suffix {
+	display: none;
+}
+
+.blockera-block.blockera-block-2 .wp-block-post-terms__prefix {
+	display: none;
+}
+
+.blockera-block.blockera-block-2 a {
+	background-color: #56d7ac;
+	padding-top: 4px;
+	padding-right: 8px;
+	padding-bottom: 4px;
+	padding-left: 8px;
+}
+
+.blockera-block.blockera-block-2 .wp-block-post-terms__separator {
+	display: none;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-post-terms {
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+}
+
+.blockera-block.blockera-block-2 a {
+	align-self: stretch;
+}
+
+
+}
+.blockera-block.blockera-block-3.wp-block-post-terms {
+	background-color: #ffe5a8;
+	transition: all 500ms ease 0ms;
+	display: flex;
+	gap: 5px;
+	flex-wrap: wrap !important;
+	align-content: flex-start;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-3 .wp-block-post-terms__separator {
+	display: none;
+}
+
+.blockera-block.blockera-block-3 .wp-block-post-terms__prefix {
+	width: 100%;
+	background-color: #ddbe70;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-3 a {
+	background-color: #ffb005;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	transition: all 1000ms ease 0ms;
+}
+
+.blockera-block.blockera-block-3 .wp-block-post-terms__suffix {
+	display: none;
+}
+
+.blockera-block.blockera-block-3 a:hover {
+	color: #ffffff;
+	background-color: #9b6a00;
+}
+
+.blockera-block.blockera-block-3:hover .wp-block-post-terms__prefix {
+	border-radius: 60px;
+}
+.blockera-block.blockera-block-4.wp-block-post-terms {
+	background-color: #f9b8ff;
+	padding-top: 11px;
+	padding-right: 11px;
+	padding-bottom: 11px;
+	padding-left: 11px;
+}
+
+.blockera-block.blockera-block-4 .wp-block-post-terms__suffix {
+	display: none;
+}
+
+.blockera-block.blockera-block-4 .wp-block-post-terms__prefix {
+	display: none;
+}
+
+.blockera-block.blockera-block-4 a {
+	background-color: #ef5fff;
+}
+
+.blockera-block.blockera-block-4 a:hover {
+	background-color: #c624d7;
+}

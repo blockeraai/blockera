@@ -4,6 +4,7 @@
 import {
 	getValueAddonRealValue,
 	getBackgroundItemBGProperty,
+	getSortedRepeater,
 } from '@blockera/controls';
 
 /**
@@ -29,7 +30,7 @@ export function backgroundGenerator(id, props, options) {
 	let hasProps = true;
 
 	// Collect all properties
-	Object.entries(attributes?.blockeraBackground)?.map(([, item]) => {
+	getSortedRepeater(attributes?.blockeraBackground)?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}

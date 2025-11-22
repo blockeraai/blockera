@@ -62,8 +62,6 @@ const sections = sectionsContext
 			if (setupContext.keys().includes(setupKey)) {
 				const setupModule = setupContext(setupKey);
 				setupFn = setupModule.setup || setupModule.default;
-
-				console.log('setupFn', setupFn);
 			}
 		} catch (error) {
 			// Setup file doesn't exist or can't be loaded

@@ -9,8 +9,13 @@ import {
 } from '@wordpress/blocks';
 import { select } from '@wordpress/data';
 import type { MixedElement, ComponentType } from 'react';
-import { useEffect, createElement, useMemo } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
+import {
+	useMemo,
+	useEffect,
+	useCallback,
+	createElement,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -372,32 +377,33 @@ function mergeBlockSettings(
 		},
 		variations: getVariations(),
 		edit: (props) => {
-			const { attributes: _attributes, ...rest } = props;
-			// eslint-disable-next-line react-hooks/rules-of-hooks
-			const attributes = useMemo(() => {
-				const ignoredAttributes = [];
+			const { attributes, ...rest } = props;
+			const ignoredAttributes: () => Array<string> =
+				// eslint-disable-next-line react-hooks/rules-of-hooks
+				useCallback((): Array<string> => {
+					const ignoredAttributes: Array<string> = [];
 
-				for (const attribute in _attributes) {
-					if (
-						ignoredAttributes.includes(attribute) ||
-						!overrideAttributes.hasOwnProperty(attribute)
-					) {
-						continue;
+					for (const attribute in settings.attributes) {
+						if (
+							ignoredAttributes.includes(attribute) ||
+							!overrideAttributes.hasOwnProperty(attribute)
+						) {
+							continue;
+						}
+
+						// If the attribute is a rich text or has source, it is ignored.
+						// We should not changed them cross the block type.
+						if (
+							'rich-text' ===
+								overrideAttributes[attribute]?.type ||
+							overrideAttributes[attribute]?.source
+						) {
+							ignoredAttributes.push(attribute);
+						}
 					}
 
-					// If the attribute is a rich text or has source, it is ignored.
-					// We should not changed them cross the block type.
-					if (
-						'rich-text' === overrideAttributes[attribute]?.type ||
-						overrideAttributes[attribute]?.source
-					) {
-						ignoredAttributes.push(attribute);
-					}
-				}
-
-				return omit(_attributes, ignoredAttributes);
-				// eslint-disable-next-line react-hooks/exhaustive-deps
-			}, []);
+					return ignoredAttributes;
+				}, []);
 
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			const stableAdditional = useMemo(() => {
@@ -433,7 +439,7 @@ function mergeBlockSettings(
 						<Edit
 							{...rest}
 							baseContextValue={baseContextValue}
-							attributes={attributes}
+							attributes={omit(attributes, ignoredAttributes())}
 							settings={settings}
 							additional={stableAdditional}
 							isAvailableBlock={isAvailableBlock}

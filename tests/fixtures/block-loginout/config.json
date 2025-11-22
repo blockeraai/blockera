@@ -1,9 +1,0 @@
-{
-	"$schema": "../../fixtures.config.schema.json",
-	"html-search-replace": [
-		{
-			"search": "\\?p=\\d+\"",
-			"replace": "?p=page-id\""
-		}
-	]
-}

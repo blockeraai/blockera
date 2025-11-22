@@ -21,6 +21,9 @@ import {
 	getBlockClientId,
 	checkBlockCard,
 	getBlockInserter,
+	addBlockState,
+	checkSelectedInnerBlock,
+	setParentBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 /**
@@ -757,5 +760,41 @@ describe('Block States on inner blocks E2E tests', () => {
 				});
 			});
 		});
+	});
+
+	it('should set normal state and go to inner block panel while current state of master block is pseudo-element like "after" or "before"', () => {
+		initialSetting();
+
+		addBlockState('after');
+
+		setInnerBlock('elements/link');
+
+		checkCurrentState('normal');
+
+		checkSelectedInnerBlock('Links');
+
+		setParentBlock();
+
+		checkCurrentState('normal');
+	});
+
+	it('should set normal state while from current selected inner block navigate to master pseudo-element like "after" or "before"', () => {
+		initialSetting();
+
+		addBlockState('after');
+
+		setBlockState('Hover');
+
+		setInnerBlock('elements/link');
+
+		checkCurrentState('normal');
+
+		checkSelectedInnerBlock('Links');
+
+		setBlockState('After', 'master-block');
+
+		checkCurrentState('after');
+
+		checkSelectedInnerBlock('Links', false);
 	});
 });

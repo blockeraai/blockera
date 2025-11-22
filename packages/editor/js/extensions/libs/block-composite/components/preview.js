@@ -39,6 +39,9 @@ export const Preview = ({
 
 	// Inner Blocks props.
 	innerBlocksProps,
+
+	// External props.
+	setCurrentTab,
 }: TPreviewProps): MixedElement => {
 	const {
 		blocks,
@@ -73,6 +76,7 @@ export const Preview = ({
 		onChange,
 		currentBlock,
 		currentState,
+		setCurrentBlock,
 		availableStates,
 		deleteCacheData,
 		currentBreakpoint,
@@ -80,6 +84,7 @@ export const Preview = ({
 	});
 
 	const doingSwitchToInner = useCallback(() => {
+		setCurrentTab?.('style');
 		const { getState, getInnerState } = select('blockera/editor');
 		const {
 			settings: { supportsInnerBlocks },

@@ -1,0 +1,103 @@
+.blockera-block.blockera-block-1.wp-block-post-time-to-read {
+	background-color: #ffdede;
+	border: 1px solid #f11c1c;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+}
+
+.blockera-block.blockera-block-1.wp-block-post-time-to-read:hover {
+	background-color: #ffa6a6;
+}
+.blockera-block.blockera-block-2.wp-block-post-time-to-read {
+	background-color: #ffdede;
+	border: 1px solid #f11c1c;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+	text-align: center;
+}
+
+.blockera-block.blockera-block-2.wp-block-post-time-to-read:hover {
+	background-color: #ffa6a6;
+}
+.blockera-block.blockera-block-3.wp-block-post-time-to-read {
+	background-color: #daffaa;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-3.wp-block-post-time-to-read {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+}
+
+.blockera-block.blockera-block-3.wp-block-post-time-to-read::after {
+	background-color: #9cdb49;
+	content: "After";
+}
+
+.blockera-block.blockera-block-3.wp-block-post-time-to-read::before {
+	background-color: #78b529;
+	content: "before";
+}
+.blockera-block.blockera-block-4.wp-block-post-time-to-read {
+	background-color: #daffaa;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-4.wp-block-post-time-to-read {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+}
+
+.blockera-block.blockera-block-4.wp-block-post-time-to-read::after {
+	background-color: #9cdb49;
+	content: "After";
+}
+
+.blockera-block.blockera-block-4.wp-block-post-time-to-read::before {
+	background-color: #78b529;
+	content: "before";
+}
