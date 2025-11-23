@@ -11,7 +11,7 @@
 	color: #980000;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	color: #980000;
 }
 
@@ -35,7 +35,7 @@
 	font-size: 20px;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 	background-color: #00b4ba;
 	padding-top: 5px;
@@ -45,7 +45,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-2:hover a:not(.wp-element-button) {
+.blockera-block.blockera-block-2:hover :where(a:not(.wp-element-button)) {
 	background-color: #006568;
 }
 .blockera-block.blockera-block-3.wp-block-post-date {
@@ -55,7 +55,7 @@
 	justify-content: center !important;
 }
 
-.blockera-block.blockera-block-3 a:not(.wp-element-button) {
+.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
 	background-color: #0015ff;
 	color: #ffffff;
 	padding-top: 5px;

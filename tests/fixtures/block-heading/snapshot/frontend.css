@@ -36,7 +36,7 @@
 	background-color: #dfdfdf;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
 	color: #ce9000;
 	font-weight: 700;
 	font-style: normal;
@@ -90,14 +90,14 @@
 	color: #875100;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button):hover {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):hover {
 	color: #a37200;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button):focus {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):focus {
 	color: #825b00;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button):active {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):active {
 	color: #493500;
 }

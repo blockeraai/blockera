@@ -9,7 +9,7 @@
 	padding-left: 20px;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	background-color: #16d409;
 	padding-top: 5px;
 	padding-right: 9px;
@@ -32,15 +32,15 @@
 	box-shadow: 6px 6px 0 0 #002ceaab;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button):hover {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)):hover {
 	background-color: #10b704;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button):focus {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)):focus {
 	background-color: #0d9203;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button):active {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)):active {
 	background-color: #076a00;
 }
 

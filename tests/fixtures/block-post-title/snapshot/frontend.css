@@ -11,7 +11,7 @@
 	font-size: 20px;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	background-color: #ff3d3d;
 }
 

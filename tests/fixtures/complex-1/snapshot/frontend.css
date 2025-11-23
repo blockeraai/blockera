@@ -9,18 +9,18 @@
 	margin-block-start: 50px !important;
 }
 
-.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+.blockera-block.blockera-block--1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 	font-weight: 700;
 	font-style: normal;
 	color: #c91205;
 	font-size: 40px;
 }
 
-.blockera-block.blockera-block--1 p {
+.blockera-block.blockera-block--1 :where(p) {
 	color: #c79c00;
 }
 
-.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button {
+.blockera-block.blockera-block--1 :where(.wp-block-button > .wp-element-button) {
 	background-color: #cc0000;
 }
 
@@ -38,7 +38,7 @@
 	background-color: #39d92e;
 }
 
-.blockera-block.blockera-block--1 p::before {
+.blockera-block.blockera-block--1 :where(p)::before {
 	border-radius: 5px;
 	content: "This is:";
 	padding-top: 2px;
@@ -49,15 +49,15 @@
 	background-color: #c79c0042;
 }
 
-.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button:hover {
+.blockera-block.blockera-block--1 :where(.wp-block-button > .wp-element-button):hover {
 	background-color: #a30000;
 }
 
-.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button:focus {
+.blockera-block.blockera-block--1 :where(.wp-block-button > .wp-element-button):focus {
 	background-color: #8d0000;
 }
 
-.blockera-block.blockera-block--1 .wp-block-button > .wp-element-button:active {
+.blockera-block.blockera-block--1 :where(.wp-block-button > .wp-element-button):active {
 	background-color: #370000;
 }
 
@@ -69,16 +69,16 @@
 	background-color: #20b316;
 }
 
-.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading:hover {
+.blockera-block.blockera-block--1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading):hover {
 	color: #006eff;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+	.blockera-block.blockera-block--1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 	color: #34d200;
 }
 
-.blockera-block.blockera-block--1 :is(h1, h2, h3, h4, h5, h6).wp-block-heading:hover {
+.blockera-block.blockera-block--1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading):hover {
 	color: #1f7c00;
 }
 

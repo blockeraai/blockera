@@ -7,6 +7,6 @@
 
 return [
 	'blockera/core/paragraph' => [
-		'root' => 'p',
+		'root' => ':where(p)',
 	],
 ];
