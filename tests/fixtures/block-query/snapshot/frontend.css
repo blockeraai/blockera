@@ -51,3 +51,21 @@
 
 
 }
+
+.blockera-block.blockera-block-9.wp-block-group {
+	background-color: #f5dcdc;
+	padding-top: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
+}
+
+.blockera-block.blockera-block-10.wp-block-query-no-results {
+	background-color: #ffbfbf;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-10 .wp-block-paragraph {
+	background-color: #ff7a7a;
+}
