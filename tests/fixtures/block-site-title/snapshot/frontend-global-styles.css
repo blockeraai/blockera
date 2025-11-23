@@ -1,0 +1,4 @@
+:root :where(.wp-block-site-title){
+	font-weight: 700;
+	letter-spacing: -.5px;
+}

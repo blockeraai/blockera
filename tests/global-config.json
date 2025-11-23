@@ -2,8 +2,8 @@
 	"$schema": "./fixtures.config.schema.json",
 	"html-search-replace": [
 		{
-			"search": "http://localhost:\\d+/",
-			"replace": "https://blockera.ai/"
+			"search": "http://localhost:\\d+",
+			"replace": "https://blockera.ai"
 		},
 		{
 			"search": "wp-elements-[^\\s\"']+",
@@ -24,6 +24,10 @@
 		{
 			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"']*\\.png",
 			"replace": "uploads/featured-image.png"
+		},
+		{
+			"search": "uploads/\\d{4}/\\d{2}/site-logo-[^\"']*\\.png",
+			"replace": "uploads/site-logo.png"
 		},
 		{
 			"search": "srcset=(?:\"[^\"]*\"|'[^']*')",
