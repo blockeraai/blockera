@@ -78,9 +78,12 @@ class EditBlockHTML implements EditableBlockHTML {
             return $html;
         }
 
-        $original_html           = $blockElement->outerhtml;
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
-        $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+        
+		// Append icon to the block element if it has inner content.
+		if (! empty($block['innerContent'])) {
+			$blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+		}
 
 		try {
 			return $blockElement->parent()->outerhtml;
