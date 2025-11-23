@@ -1,0 +1,10 @@
+{
+	"post": {
+		"post_type": "post",
+		"post_title": "Test Post for Terms Query",
+		"post_status": "publish",
+		"post_date": "2024-12-01 12:00:00"
+	},
+	"categories": ["Term-1", "Term-2", "Term-3", "Term-4"],
+	"category_description": "This is the description."
+}

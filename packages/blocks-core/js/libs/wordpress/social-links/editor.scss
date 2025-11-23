@@ -1,0 +1,16 @@
+
+/* Fix the icon issue created by adding Blockera block icon while this block uses the main block inside block edit. */
+.wp-block-social-links .wp-social-link span:not(.screen-reader-text):is(.block-editor-block-icon) {
+	font-size: inherit;
+	margin-left: 0;
+	margin-right: 0;
+	width: initial;
+	height: initial;
+}
+
+.wp-block-social-links .wp-social-link span:not(.screen-reader-text):is(.block-editor-block-icon) svg {
+	max-height: initial;
+	max-width: initial;
+	min-height: initial;
+	min-width: initial;
+}

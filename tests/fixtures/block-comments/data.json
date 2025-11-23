@@ -1,0 +1,12 @@
+{
+	"post": {
+		"post_type": "post",
+		"post_title": "Test Post for Comments",
+		"post_status": "publish",
+		"post_date": "2024-12-01 12:00:00"
+	},
+	"comment": {
+		"comment_author": 1,
+		"comment_content": "This is comment text."
+	}
+}

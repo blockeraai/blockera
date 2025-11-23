@@ -21,7 +21,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
@@ -39,6 +39,11 @@ export const AdvancedSettingsExtension: ComponentType<
 	setSettings,
 }: TAdvancedSettingsProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('advancedSettingsConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShowAttributes = isShowField(
 		extensionConfig.blockeraAttributes,
 		values?.blockeraAttributes,

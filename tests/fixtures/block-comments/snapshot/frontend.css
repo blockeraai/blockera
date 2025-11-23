@@ -1,0 +1,106 @@
+.blockera-block.blockera-block-3.wp-block-comments {
+	background-color: #e6e6e6;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-5.wp-block-comment-template {
+	background-color: #ffe9e9;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	margin-bottom: 10px;
+}
+
+.blockera-block.blockera-block-6.wp-block-columns {
+	background-color: #ffc3c3;
+	border-radius: 10px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	margin-bottom: 10px;
+}
+
+.blockera-block.blockera-block-13.wp-block-comments-pagination {
+	background-color: #ffe5e5;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-13 .wp-block-comments-pagination-next {
+	background-color: #ffa9a9;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+.blockera-block.blockera-block-13 .wp-block-comments-pagination-numbers {
+	background-color: #ffb8b8;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+.blockera-block.blockera-block-13 .wp-block-comments-pagination-previous {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	background-color: #ffbdbd;
+}
+.blockera-block.blockera-block-1.wp-block-post-comments-count {
+	background-color: #ffe1e1;
+	transition: all 500ms ease 0ms;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-1.wp-block-post-comments-count::before {
+	background-color: #ffa4a4;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-post-comments-count::after {
+	background-color: #ff8484;
+	content: "After";
+}
+
+.blockera-block.blockera-block-1.wp-block-post-comments-count:hover {
+	background-color: #d6d6d6;
+}
+.blockera-block.blockera-block-2.wp-block-post-comments-link {
+	background-color: #fff1d0;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	text-align: center;
+}
+
+.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+	background-color: #ffadad;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-radius: 5px;
+}
+
+.blockera-block.blockera-block-2.wp-block-post-comments-link:hover {
+	background-color: #fce4b0;
+}

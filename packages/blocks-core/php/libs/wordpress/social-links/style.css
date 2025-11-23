@@ -2,3 +2,7 @@
 :where(.blockera-block.wp-block-social-links:is(.is-vertical,.is-horizontal):not(.is-layout-flex)) {
 	display: flex;
 }
+
+:where(.blockera-block.wp-block-social-links .wp-block-social-link-label) {
+	line-height: initial;
+}

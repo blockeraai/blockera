@@ -29,7 +29,7 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TTypographyProps } from './type/typography-props';
@@ -59,6 +59,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	attributes,
 }: TTypographyProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('typographyConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShowFontFamily = isShowField(
 		extensionConfig.blockeraFontFamily,
 		values?.blockeraFontFamily,

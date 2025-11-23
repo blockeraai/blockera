@@ -21,7 +21,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { EditorFeatureWrapper } from '../../../';
@@ -38,6 +38,11 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 	attributes,
 }: TFlexChildProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('flexChildConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShowFlexChildSizing = isShowField(
 		extensionConfig.blockeraFlexChildSizing,
 		values?.blockeraFlexChildSizing,

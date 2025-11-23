@@ -20,7 +20,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import { isActiveField } from '../../api/utils';
+import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
 import type { EntranceExtensionProps } from './types/props';
 
@@ -34,6 +34,10 @@ export const EntranceAnimationExtension: ComponentType<
 	const { initialOpen, onToggle } = useBlockSection(
 		'entranceAnimationConfig'
 	);
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
 
 	if (!isActiveField(extensionConfig.blockeraEntranceAnimation)) {
 		return <></>;

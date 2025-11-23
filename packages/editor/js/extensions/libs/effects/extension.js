@@ -27,7 +27,7 @@ import { experimental } from '@blockera/env';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TEffectsProps } from './types/effects-props';
 import { generateExtensionId } from '../utils';
@@ -54,6 +54,10 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	const { initialOpen, onToggle } = useBlockSection('effectsConfig');
 	const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 		useState(false);
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
 
 	const isShowOpacity = isShowField(
 		extensionConfig.blockeraOpacity,

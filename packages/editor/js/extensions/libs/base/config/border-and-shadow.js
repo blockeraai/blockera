@@ -44,6 +44,7 @@ const blockeraBorderRadius: FeatureConfig = {
 };
 
 export const borderAndShadowConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraBorder,
 	blockeraBorderRadius,

@@ -2,28 +2,40 @@
 	"$schema": "./fixtures.config.schema.json",
 	"html-search-replace": [
 		{
-			"search": "http://localhost:\\d+/",
-			"replace": "https://blockera.ai/"
+			"search": "http://localhost:\\d+",
+			"replace": "https://blockera.ai"
 		},
 		{
 			"search": "wp-elements-[^\\s\"']+",
 			"replace": "wp-elements-hash-id"
 		},
 		{
-			"search": "\\?page_id=\\d+[\"']",
-			"replace": "?page_id=page-id\""
+			"search": "\\?p=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?p=post-id"
 		},
 		{
-			"search": "\\?cat=\\d+[\"']",
-			"replace": "?cat=category-id\""
+			"search": "\\?page_id=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?page_id=page-id"
 		},
 		{
-			"search": "\\?p=\\d+[\"']",
-			"replace": "?p=post-id\""
+			"search": "(?<=[\\s\"'])post-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "post-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])page-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "page-id"
+		},
+		{
+			"search": "\\?cat=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?cat=category-id"
 		},
 		{
 			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"']*\\.png",
 			"replace": "uploads/featured-image.png"
+		},
+		{
+			"search": "uploads/\\d{4}/\\d{2}/site-logo-[^\"']*\\.png",
+			"replace": "uploads/site-logo.png"
 		},
 		{
 			"search": "srcset=(?:\"[^\"]*\"|'[^']*')",
@@ -38,12 +50,24 @@
 			"replace": "src='https://blockera.ai/avatar.png'"
 		},
 		{
+			"search": "data-postid=[\"']\\d+[\"']",
+			"replace": "data-postid=\"post-id\""
+		},
+		{
+			"search": "data-commentid=[\"']\\d+[\"']",
+			"replace": "data-commentid=\"comment-id\""
+		},
+		{
+			"search": "name=['\"]comment_post_ID['\"] value=['\"]\\d+['\"]",
+			"replace": "name='comment_post_ID' value='post-id'"
+		},
+		{
 			"search": "<time datetime=\"[^\"]+\">[^<]*</time>",
 			"replace": "<time datetime=\"MM DD, YYYY\">Month Day, Year</time>"
 		},
 		{
 			"search": "<time datetime=\"[^\"]+\"><a href=\"[^\"]+\">[^<]*</a></time>",
-			"replace": "<time datetime=\"MM DD, YYYY\"><a href=\"https://blockera.ai/?p=id\">Month Day, Year</a></time>"
+			"replace": "<time datetime=\"MM DD, YYYY\"><a href=\"https://blockera.ai/?p=post-id\">Month Day, Year</a></time>"
 		}
 	],
 	"wp-post": {

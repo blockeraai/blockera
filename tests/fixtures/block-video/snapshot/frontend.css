@@ -1,0 +1,44 @@
+
+.blockera-block.blockera-block-1.wp-block-video {
+	background-color: #ffd3d3;
+	border: 2px solid #ff9696;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-1 video {
+	aspect-ratio: 1;
+}
+
+.blockera-block.blockera-block-1 figcaption.wp-element-caption {
+	background-color: #ff3131;
+	padding-top: 6px;
+	padding-right: 10px;
+	padding-bottom: 6px;
+	padding-left: 10px;
+	margin-top: 20px;
+	margin-bottom: 0;
+	border-radius: 31px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1 video {
+	aspect-ratio: 16/9;
+	object-fit: cover;
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-video:hover {
+	background-color: #c9ffb3;
+	border: 2px solid #70cc4b;
+}
+
+.blockera-block.blockera-block-1:hover figcaption.wp-element-caption {
+	background-color: #007bff;
+}

@@ -28,10 +28,10 @@ return array_merge(
 					'root' => '.wp-block-social-link',
 				],
 				'blockera/elements/item-icons'      => [
-					'root' => '.wp-block-social-link svg',
+					'root' => ':where(svg)',
 				],
 				'blockera/elements/item-names'      => [
-					'root' => '.wp-block-social-link .wp-block-social-link-label',
+					'root' => '.wp-block-social-link :where(.wp-block-social-link-label)',
 				],
 			]
 		),

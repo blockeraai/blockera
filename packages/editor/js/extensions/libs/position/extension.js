@@ -21,7 +21,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
@@ -36,6 +36,11 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 	extensionProps,
 }: TPositionExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('positionConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShownPosition = isShowField(
 		extensionConfig.blockeraPosition,
 		values?.blockeraPosition,

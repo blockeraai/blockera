@@ -23,6 +23,7 @@ const blockeraAttributes: FeatureConfig = {
 };
 
 export const advancedSettingsConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraAttributes,
 };

@@ -565,8 +565,8 @@ final class StyleEngine {
 						array_keys($settings['attributes'] ?? [])
 					);
 				},
-				blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) ? $settings['blockeraInnerBlocks']['value'] ?? [] : $settings['blockeraInnerBlocks'] ?? [],
-				array_keys(blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) ? $settings['blockeraInnerBlocks']['value'] ?? [] : $settings['blockeraInnerBlocks'] ?? [])
+				$settings['blockeraInnerBlocks']['value'] ?? $settings['blockeraInnerBlocks'] ?? [],
+				array_keys($settings['blockeraInnerBlocks']['value'] ?? $settings['blockeraInnerBlocks'] ?? [])
 			);
 
 			$block_css = array_merge( $block_css, array_filter(blockera_array_flat($inner_blocks_css)) );

@@ -1,0 +1,3 @@
+:root :where(.wp-block-site-tagline){
+	font-size: var(--wp--preset--font-size--medium);
+}

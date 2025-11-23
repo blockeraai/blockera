@@ -1,0 +1,34 @@
+
+.blockera-block.blockera-block-1.wp-block-term-template {
+	background-color: #d9d9d9;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-2.wp-block-group {
+	background-color: #ffe0e0;
+	border-radius: 10px;
+	transition: all 500ms ease 0ms;
+	display: flex;
+	flex-wrap: nowrap !important;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-group {
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+
+}
+
+.blockera-block.blockera-block-2.wp-block-group:hover {
+	background-color: #997171;
+}

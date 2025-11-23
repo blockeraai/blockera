@@ -18,6 +18,7 @@ const blockeraConditions: FeatureConfig = {
 };
 
 export const conditionsConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraConditions,
 };

@@ -20,7 +20,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import { isActiveField } from '../../api/utils';
+import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
 import type { ConditionsExtensionProps } from './types/props';
 
@@ -30,6 +30,10 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> = ({
 	extensionConfig,
 }: ConditionsExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('conditionsConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
 
 	if (!isActiveField(extensionConfig.blockeraConditions)) {
 		return <></>;

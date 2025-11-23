@@ -18,6 +18,7 @@ const blockeraScrollAnimation: FeatureConfig = {
 };
 
 export const scrollAnimationConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraScrollAnimation,
 };
