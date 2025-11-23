@@ -1,0 +1,3 @@
+:where(.blockera-block.wp-block-video figcaption) {
+	transition: inherit;
+}
