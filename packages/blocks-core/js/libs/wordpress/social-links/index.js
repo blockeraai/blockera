@@ -51,4 +51,9 @@ export const SocialLinks: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	selectors: {
+		'blockera/elements/item-icons': {
+			root: '.block-editor-block-icon svg',
+		},
+	},
 };
