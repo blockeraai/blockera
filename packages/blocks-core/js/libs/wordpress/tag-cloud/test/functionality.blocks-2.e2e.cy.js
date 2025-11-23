@@ -24,7 +24,12 @@ describe('Tag Cloud Block', () => {
 		// Block supported is active
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
-		cy.checkBlockCardItems(['normal', 'hover', 'elements/tag-link']);
+		cy.checkBlockCardItems([
+			'normal',
+			'hover',
+			'elements/tag-link',
+			'elements/tag-link-count',
+		]);
 
 		//
 		// 1. Edit Block
