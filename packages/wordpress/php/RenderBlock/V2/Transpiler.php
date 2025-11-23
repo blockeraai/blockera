@@ -8,6 +8,8 @@ use Blockera\Bootstrap\Application;
 
 class Transpiler {
 
+	use \Blockera\WordPress\RenderBlock\Traits\Processor;
+
     /**
      * Hold the Application class instance.
      *
@@ -57,13 +59,6 @@ class Transpiler {
      */
     protected $style_engine;
 
-	/**
-	 * Global css props classes.
-	 *
-	 * @var array
-	 */
-	protected array $global_css_props_classes = [];
-
     /**
      * The Parser class constructor.
      *
@@ -74,17 +69,6 @@ class Transpiler {
         $this->app   = $app;
         $this->cache = $cache;
     }
-
-	/**
-	 * Set the global css props classes.
-	 *
-	 * @param array $global_css_props_classes The global css props classes.
-	 *
-	 * @return void
-	 */
-	public function setGlobalCssPropsClasses( array $global_css_props_classes): void {
-		$this->global_css_props_classes = $global_css_props_classes;
-	}
 
     /**
      * Clean up inline styles from parsed blocks and convert them to CSS classes.
@@ -300,30 +284,19 @@ class Transpiler {
 				return;
 			}
 
-			// Update classname based on global css props classes.
-			// Just for backward compatibility with WordPress original block output.
-			if ($style) {
-				foreach ($this->global_css_props_classes as $prop => $prop_class) {
-					if (str_contains($style, $prop)) {
-						$this->updateClassname($processor, $prop_class, $args['block']);
-					}
-				}
-			}
+			// Backward compatible with WordPress original block output.
+			$this->addCssPropsClasses($processor, $style ?? '', $args['block']);
 
 			// Update classname based on blockera class name.
 			// Add be-transpiled class to the block wrapper element.
 			$this->updateClassname($processor, $class ? $class : $args['blockera_class_name'], $args['block']);
 
-			if ($style) {
-				$declarations = explode(';', $style);
-				$root_class   = str_replace('.blockera-block.', '', $selector);
+			// Create css declarations.
+			$declarations = $this->createCssDeclarations($processor, $selector, $style ?? '');
+			if (! empty($declarations['properties'])) {
+				$inline_declarations[ $declarations['selector'] ] = $declarations['properties'];
 
-				if (! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) && ! str_contains($class, $root_class)) {
-					$inline_declarations[ $selector . ' .' . str_replace(' ', '.', $class) ] = $declarations;
-				} else {
-					$inline_declarations[ $selector ] = $declarations;
-				}
-
+				// Remove style attribute from the block wrapper element after processing.
 				$processor->remove_attribute('style');
 			}
         }
@@ -450,48 +423,6 @@ class Transpiler {
 		}
 
         $current[ $args['block_id'] ]['innerContent'][ $id ] = $updated_html;
-    }
-
-    /**
-     * Update classname for current tag.
-     *
-     * @param \WP_HTML_Tag_Processor $processor The HTML tag processor object.
-     * @param string                 $classname The classname to update.
-	 * @param array                  $block The block data.
-     *
-     * @return void
-     */
-    protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname, array $block): void {
-        $previous_class  = $processor->get_attribute('class');
-        $regexp          = blockera_get_unique_class_name_regex();
-		$final_classname = '';
-
-        if (! empty($previous_class)) {
-
-            if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
-
-                $final_classname = $classname . ' ' . $previous_class;
-            } else {
-
-				if (! preg_match($regexp, $classname) && ! str_contains($previous_class, $classname)) {
-
-					$final_classname = $classname . ' ' . $previous_class;
-				} else {
-					
-					$final_classname = $previous_class;
-				}
-			}
-        }
-
-		// Prevent double adding the be-transpiled class to block wrapper element.
-		// It should has not icon element.
-		if (! empty($final_classname) && ! str_contains($final_classname, 'be-transpiled') && ! blockera_block_has_icon($block)) {
-			$final_classname .= ' be-transpiled';
-		}
-
-		if (! empty($final_classname)) {
-			$processor->set_attribute('class', $final_classname);
-		}
     }
 
     /**
