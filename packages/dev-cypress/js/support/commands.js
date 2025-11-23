@@ -858,6 +858,17 @@ export const registerCommands = () => {
 		}
 	);
 
+	Cypress.Commands.add(
+		'checkBlockSections',
+		(expectedSections, check = 'exist') => {
+			expectedSections.forEach((section) => {
+				cy.get(
+					`.blockera-extension.blockera-extension-${section}`
+				).should(check);
+			});
+		}
+	);
+
 	Cypress.Commands.add('openGlobalStylesPanel', () => {
 		return cy
 			.get('button[aria-controls="edit-site:global-styles"]')
