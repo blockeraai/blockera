@@ -285,7 +285,8 @@ class Transpiler {
         // Inline styles stacks.
         $inline_styles       = [];
 		$inline_declarations = [];
-		$roo_selector        = blockera_get_normalized_selector($args['block']['attrs']['className'] ?? '');
+		$block_classname     = $args['block']['attrs']['className'] ?? $this->current_block['attrs']['className'] ?? '';
+		$roo_selector        = blockera_get_normalized_selector($block_classname);
 		$selector            = $roo_selector ? $roo_selector : $args['unique_class_name'];
 
         // Process in a single pass.
@@ -404,10 +405,13 @@ class Transpiler {
 				unset($styles[ $selector ]);
 			}
 
-			$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+			// Ensure that the root style is added to the styles property while $styles is not empty.
+			if (! empty($styles)) {
+				$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
 
-			if (! in_array($root_style, $this->styles, true)) {
-				$this->styles[] = $root_style;
+				if (! in_array($root_style, $this->styles, true)) {
+					$this->styles[] = $root_style;
+				}
 			}
 		}
 	}
