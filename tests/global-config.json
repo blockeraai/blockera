@@ -14,6 +14,14 @@
 			"replace": "?page_id=page-id\""
 		},
 		{
+			"search": "(?<=[\\s\"'])post-\\d+(?=[\\s\"']|$)",
+			"replace": "post-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])page-\\d+(?=[\\s\"']|$)",
+			"replace": "page-id"
+		},
+		{
 			"search": "\\?cat=\\d+[\"']",
 			"replace": "?cat=category-id\""
 		},
