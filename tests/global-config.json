@@ -2,8 +2,8 @@
 	"$schema": "./fixtures.config.schema.json",
 	"html-search-replace": [
 		{
-			"search": "http://localhost:\\d+/",
-			"replace": "https://blockera.ai/"
+			"search": "http://localhost:\\d+",
+			"replace": "https://blockera.ai"
 		},
 		{
 			"search": "wp-elements-[^\\s\"']+",
