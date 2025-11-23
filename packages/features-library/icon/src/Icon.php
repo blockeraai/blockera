@@ -7,10 +7,11 @@ use Blockera\Utils\Adapters\DomParser;
 use Blockera\Features\Core\Traits\Singleton;
 use Blockera\Features\Core\Traits\ApplicationTrait;
 use Blockera\Features\Core\Contracts\FeatureInterface;
+use Blockera\Features\Core\Traits\FeatureBlockStoreTrait;
 
 class Icon implements FeatureInterface {
 
-    use Singleton, ApplicationTrait;
+    use Singleton, ApplicationTrait, FeatureBlockStoreTrait;
 
 	/**
 	 * Store the configuration.
@@ -71,6 +72,10 @@ class Icon implements FeatureInterface {
     public function isEnabled(): bool {
         
 		return true;
+    }
+
+	public function isBlockSupported(): bool {
+		return isset($this->block, $this->block['attrs']['blockeraIcon']);
     }
 
 	/**

@@ -62,14 +62,14 @@ class EditBlockHTML implements EditableBlockHTML {
 			return $html;
 		}
 
+		$this->setContext('feature');
+
 		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
-			$this->setContext('feature');
 			$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
 			return $app->make(IconBlock::class)->render($html, $this, $data);
 		}
 
-		$this->setContext('feature');
 		$this->enqueueAssets($data['plugin_base_path'], $data['plugin_base_url'], $data['plugin_version']);
 
         $blockElement = $this->findBlockElement($data);
@@ -82,21 +82,12 @@ class EditBlockHTML implements EditableBlockHTML {
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
         $blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
 
-		$html = $this->normalizedHTML($html);
-		
-        return str_replace($this->normalizedHTML($original_html), $this->normalizedHTML($blockElement->outerhtml), $this->normalizedHTML($html));
+		try {
+			return $blockElement->parent()->outerhtml;
+		} catch (\Exception $e) {
+			return $blockElement->outerhtml;
+		}
     }
-
-	/**
-	 * Normalize the html.
-	 *
-	 * @param string $html The html to normalize.
-	 *
-	 * @return string The normalized html.
-	 */
-	protected function normalizedHTML( string $html): string {
-		return preg_replace('/\s*>/', '>', $html);
-	}
 
 	/**
 	 * Validate the block.

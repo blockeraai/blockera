@@ -32,6 +32,13 @@ interface FeatureInterface {
 	public function isEnabled(): bool;
 
 	/**
+	 * The isBlockSupported method.
+	 *
+	 * @return bool true if the block is supported, false otherwise.
+	 */
+	public function isBlockSupported(): bool;
+
+	/**
 	 * The html manipulate method.
 	 *
 	 * @param DomParser $dom_parser The dom parser to manipulate.
@@ -40,4 +47,20 @@ interface FeatureInterface {
 	 * @return string The manipulated html.
 	 */
 	public function htmlManipulate( DomParser $dom_parser, array $data): string;
+
+	/**
+	 * Set the block.
+	 *
+	 * @param array $block the block.
+	 *
+	 * @return void
+	 */
+	public function setBlock( array $block): void;
+
+	/**
+	 * Get the block.
+	 *
+	 * @return array the block.
+	 */
+	public function getBlock(): ?array;
 }

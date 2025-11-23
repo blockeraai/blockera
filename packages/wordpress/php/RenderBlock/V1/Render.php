@@ -118,8 +118,10 @@ class Render {
 
 		foreach ($features as $feature) {
 
+			$feature->setBlock($args['block']);
+
 			// Skip if feature is not enabled.
-			if (! $feature->isEnabled()) {
+			if (! $feature->isBlockSupported()) {
 				continue;
 			}
 
