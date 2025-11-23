@@ -7,6 +7,6 @@
 
 return [
 	'blockera/core/button' => [
-		'root' => '.wp-block-button > .wp-element-button',
+		'root' => ':where(.wp-block-button > .wp-element-button)',
 	],
 ];

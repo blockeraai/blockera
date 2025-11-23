@@ -18,12 +18,24 @@
 			"replace": "?page_id=page-id"
 		},
 		{
+			"search": "\\?attachment_id=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?attachment_id=attachment-id"
+		},
+		{
 			"search": "(?<=[\\s\"'])post-\\d+(?=[\\s\"'#&]|$)",
 			"replace": "post-id"
 		},
 		{
 			"search": "(?<=[\\s\"'])page-\\d+(?=[\\s\"'#&]|$)",
 			"replace": "page-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])wp-image-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "wp-image-id"
+		},
+		{
+			"search": "(?<=[\\s\"'])wp-block-gallery-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "wp-block-gallery-id"
 		},
 		{
 			"search": "\\?cat=\\d+(?=[\\s\"'#&]|$)",
@@ -48,6 +60,10 @@
 		{
 			"search": "src=[\"']https://secure\\.gravatar\\.com/avatar/[^\"']+[\"']",
 			"replace": "src='https://blockera.ai/avatar.png'"
+		},
+		{
+			"search": "data-id=[\"']\\d+[\"']",
+			"replace": "data-id=\"id\""
 		},
 		{
 			"search": "data-postid=[\"']\\d+[\"']",

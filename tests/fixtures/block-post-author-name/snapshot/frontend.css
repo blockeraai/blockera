@@ -8,7 +8,7 @@
 	color: #ff2e2e;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	color: #ff2e2e;
 }
 
@@ -29,7 +29,7 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
 	color: #aa0000;
 	display: inline-block;
 	padding-top: 5px;
@@ -43,7 +43,7 @@
 	transition: all 500ms ease 0ms;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button):hover {
+.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):hover {
 	font-size: 18px;
 	text-decoration: underline;
 }

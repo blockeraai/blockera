@@ -28,7 +28,7 @@
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-2 p {
+.blockera-block.blockera-block-2 :where(p) {
 	text-transform: lowercase;
 	font-weight: 800;
 	font-style: normal;
@@ -223,7 +223,7 @@ p.blockera-block.blockera-block-13 {
 	letter-spacing: 10px;
 }
 
-.blockera-block.blockera-block-14 a:not(.wp-element-button) {
+.blockera-block.blockera-block-14 :where(a:not(.wp-element-button)) {
 	color: #2ed445;
 }
 
@@ -247,7 +247,7 @@ p.blockera-block.blockera-block-15 {
 	padding-left: 20px;
 }
 
-.blockera-block.blockera-block-16 p {
+.blockera-block.blockera-block-16 :where(p) {
 	background-color: #213fbe;
 	font-size: 30px;
 	font-weight: 700;
@@ -285,7 +285,7 @@ p.blockera-block.blockera-block-17 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-18 p {
+.blockera-block.blockera-block-18 :where(p) {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }

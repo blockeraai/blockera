@@ -7,6 +7,8 @@
  * @package blockera/packages/blocks/js/wordpress/media-text
  */
 
+$sizeSelector = '.wp-block-media-text__media img';
+
 return array_merge(
 	$args,
 	[
@@ -15,7 +17,22 @@ return array_merge(
 			(array) array_merge(
 				[
 					'blockera/core/image' => [
-						'root' => '.wp-block-media-text__media > img',
+						'root' => '.wp-block-media-text__media',
+						'width' => $sizeSelector,
+						'blockeraWidth' => $sizeSelector,
+						'blockeraMinWidth' => $sizeSelector,
+						'blockeraMaxWidth' => $sizeSelector,
+						'blockeraHeight' => $sizeSelector,
+						'blockeraMinHeight' => $sizeSelector,
+						'blockeraMaxHeight' => $sizeSelector, 
+						'blockeraFit' => $sizeSelector,
+						'blockeraRatio' => $sizeSelector,
+						'blockeraBorder' => $sizeSelector,
+						'blockeraBorderRadius' => $sizeSelector,
+						'border' => $sizeSelector,
+						'shadow' => $sizeSelector,
+						'filter' => $sizeSelector,
+						'radius' => $sizeSelector,
 					],
 				],
 				blockera_load( 'inners.link', dirname( __DIR__ ) ),

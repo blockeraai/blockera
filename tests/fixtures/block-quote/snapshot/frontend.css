@@ -27,7 +27,7 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-1 p {
+.blockera-block.blockera-block-1 :where(p) {
 	background-color: #e8d192;
 }
 
@@ -55,7 +55,7 @@
 	background-color: #ff25ed;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	background-color: #00acff;
 }
 
@@ -67,30 +67,30 @@
 	background-color: #ffdcdc;
 }
 
-.blockera-block.blockera-block-2 p {
+.blockera-block.blockera-block-2 :where(p) {
 	background-color: #ffb2b2;
 }
 
-.blockera-block.blockera-block-2 h2:is(h2.wp-block-heading) {
+.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)) {
 	background-color: #5dff5d;
 }
 
-.blockera-block.blockera-block-2 p::before {
+.blockera-block.blockera-block-2 :where(p)::before {
 	background-color: #ff6868;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-2 p::after {
+.blockera-block.blockera-block-2 :where(p)::after {
 	background-color: #d43a3a;
 	content: "After";
 }
 
-.blockera-block.blockera-block-2 h2:is(h2.wp-block-heading)::before {
+.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading))::before {
 	background-color: #00c503;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-2 h2:is(h2.wp-block-heading)::after {
+.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading))::after {
 	background-color: #00c503;
 	content: "After";
 }

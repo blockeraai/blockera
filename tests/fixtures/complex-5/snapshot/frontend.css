@@ -57,7 +57,7 @@
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-5 a:not(.wp-element-button) {
+.blockera-block.blockera-block-5 :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
@@ -103,7 +103,7 @@ p.blockera-block.blockera-block-8 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-9 a:not(.wp-element-button) {
+.blockera-block.blockera-block-9 :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
@@ -111,11 +111,11 @@ p.blockera-block.blockera-block-8 {
 	background-color: #0d2285;
 }
 
-.blockera-block.blockera-block-9 :is(h1, h2, h3, h4, h5, h6).wp-block-heading {
+.blockera-block.blockera-block-9 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 	background-color: #051563;
 }
 
-.blockera-block.blockera-block-9 p {
+.blockera-block.blockera-block-9 :where(p) {
 	background-color: #051563;
 }
 

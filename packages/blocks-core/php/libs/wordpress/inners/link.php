@@ -7,7 +7,7 @@
 
 return [
 	'blockera/elements/link' => [
-		'root' => 'a:not(.wp-element-button)',
+		'root' => ':where(a:not(.wp-element-button))',
 	],
 ];
 

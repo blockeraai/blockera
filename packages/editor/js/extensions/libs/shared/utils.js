@@ -69,9 +69,10 @@ export function getParentFlexBlockInfo(block: {
 			!parentElement.classList.contains('is-root-container')
 		) {
 			const parentStyle = window.getComputedStyle(parentElement, null);
+			const displayValue = parentStyle.getPropertyValue('display');
 
 			parentFlexBlock =
-				parentStyle.getPropertyValue('display') === 'flex';
+				displayValue === 'flex' || displayValue === 'inline-flex';
 
 			if (parentFlexBlock) {
 				const parentDirection =
