@@ -24,7 +24,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TSizeProps } from './types/size-props';
@@ -42,6 +42,11 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 	setSettings,
 }: TSizeProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('sizeConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShowWidth = isShowField(
 		extensionConfig.blockeraWidth,
 		values?.blockeraWidth,

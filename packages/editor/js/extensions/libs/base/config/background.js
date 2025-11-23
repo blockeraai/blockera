@@ -78,6 +78,7 @@ const blockeraBackgroundClip: FeatureConfig = {
 };
 
 export const backgroundConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraBackground,
 	blockeraBackgroundColor,

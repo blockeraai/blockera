@@ -81,6 +81,7 @@ const blockeraBoxSizing: FeatureConfig = {
 };
 
 export const sizeConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraWidth,
 	blockeraMinWidth,

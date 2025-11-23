@@ -20,7 +20,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import { isActiveField } from '../../api/utils';
+import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
 import type { ClickAnimationExtensionProps } from './types/props';
 
@@ -32,6 +32,11 @@ export const ClickAnimationExtension: ComponentType<
 	extensionConfig,
 }: ClickAnimationExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('clickAnimationConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	if (!isActiveField(extensionConfig.blockeraClickAnimation)) {
 		return <></>;
 	}

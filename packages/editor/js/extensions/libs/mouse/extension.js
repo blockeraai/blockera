@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import {
@@ -41,6 +41,11 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 	setSettings,
 }: TMouseProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('mouseConfig');
+
+	if (!isActiveExtension(mouseConfig)) {
+		return <></>;
+	}
+
 	const isShowCursor = isShowField(
 		mouseConfig.blockeraCursor,
 		values?.cursor,

@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import { getBaseBreakpoint } from '../../../canvas-editor';
@@ -39,6 +39,10 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> = ({
 		getCurrentState = () => 'normal',
 		getBreakpoint = () => getBaseBreakpoint(),
 	} = useBlockContext();
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
 
 	const isShowCustomCSS = isShowField(
 		extensionConfig.blockeraCustomCSS,

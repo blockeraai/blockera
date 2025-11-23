@@ -24,7 +24,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { EditorFeatureWrapper } from '../../../';
@@ -41,6 +41,11 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 	setSettings,
 }: TBackgroundProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('backgroundConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const {
 		blockeraBackground,
 		blockeraBackgroundColor,

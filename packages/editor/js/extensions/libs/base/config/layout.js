@@ -48,6 +48,7 @@ const blockeraAlignContent: FeatureConfig = {
 };
 
 export const layoutConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraDisplay,
 	blockeraFlexLayout,

@@ -35,6 +35,7 @@ const blockeraFlexChildOrder: FeatureConfig = {
 };
 
 export const flexChildConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraFlexChildSizing,
 	blockeraFlexChildAlign,

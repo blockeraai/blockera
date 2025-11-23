@@ -35,6 +35,7 @@ const blockeraPointerEvents: FeatureConfig = {
 };
 
 export const mouseConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraCursor,
 	blockeraUserSelect,

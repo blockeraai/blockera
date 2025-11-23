@@ -21,7 +21,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import { Border, BorderRadius } from './components';
 import { generateExtensionId } from '../utils';
@@ -39,6 +39,11 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> = ({
 	setSettings,
 }: TBorderAndShadowProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('borderAndShadowConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShownBorder = isShowField(
 		extensionConfig.blockeraBorder,
 		values?.blockeraBorder,

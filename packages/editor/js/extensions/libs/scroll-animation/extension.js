@@ -20,7 +20,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { generateExtensionId } from '../utils';
-import { isActiveField } from '../../api/utils';
+import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
 import type { ScrollExtensionProps } from './types/props';
 
@@ -30,6 +30,10 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> = ({
 	extensionConfig,
 }: ScrollExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('scrollAnimationConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
 
 	if (!isActiveField(extensionConfig.blockeraScrollAnimation)) {
 		return <></>;

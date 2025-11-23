@@ -20,7 +20,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
@@ -35,6 +35,11 @@ export const SpacingExtension: ComponentType<TSpacingProps> = ({
 	attributes,
 }: TSpacingProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('spacingConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShowSpacing = isShowField(
 		extensionConfig.blockeraSpacing,
 		values.blockeraSpacing,

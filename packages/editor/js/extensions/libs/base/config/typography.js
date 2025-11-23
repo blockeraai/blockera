@@ -144,6 +144,7 @@ const blockeraTextWrap: FeatureConfig = {
 };
 
 export const typographyConfig = {
+	status: true,
 	blockeraFontFamily,
 	blockeraFontAppearance,
 	blockeraFontSize,

@@ -10,6 +10,7 @@ export type BlockSections = {
 };
 
 export type BlockSection = {
+	status: boolean,
 	initialOpen: boolean,
 	onToggle: (
 		isOpen: boolean,

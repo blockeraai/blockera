@@ -26,7 +26,7 @@ import { prepare } from '@blockera/data-editor';
  * Internal dependencies
  */
 import { Gap } from './components';
-import { isShowField } from '../../api/utils';
+import { isShowField, isActiveExtension } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TLayoutProps } from './types/layout-props';
 import { generateExtensionId } from '../utils';
@@ -43,6 +43,11 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 	setSettings,
 }: TLayoutProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('layoutConfig');
+
+	if (!isActiveExtension(extensionConfig)) {
+		return <></>;
+	}
+
 	const isShowDisplay = isShowField(
 		extensionConfig.blockeraDisplay,
 		values?.blockeraDisplay,

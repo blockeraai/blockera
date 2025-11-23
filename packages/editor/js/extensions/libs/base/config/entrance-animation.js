@@ -18,6 +18,7 @@ const blockeraEntranceAnimation: FeatureConfig = {
 };
 
 export const entranceAnimationConfig = {
+	status: true,
 	initialOpen: true,
 	blockeraEntranceAnimation,
 };
