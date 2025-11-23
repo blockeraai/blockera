@@ -75,9 +75,8 @@
 		}
 	},
 	"core/site-logo": {
-		"filter": {
-			"duotone": ".wp-block-site-logo img, .wp-block-site-logo .components-placeholder__illustration, .wp-block-site-logo .components-placeholder::before"
-		}
+		"filter": ".wp-block-site-logo :is(img)",
+		"width": ".wp-block-site-logo :is(img)"
 	},
 	"core/site-title": {
 		"htmlEditable": {
@@ -101,6 +100,15 @@
 		"filter": {
 			"duotone": ".wp-block-post-author .wp-block-post-author__avatar img"
 		}
+	},
+	"core/query-pagination-next": {
+		"root": ".wp-block-query-pagination-next"
+	},
+	"core/query-pagination-numbers": {
+		"root": ".wp-block-query-pagination-numbers"
+	},
+	"core/query-pagination-previous": {
+		"root": ".wp-block-query-pagination-previous"
 	},
 	"core/home-link": {
 		"htmlEditable": {
