@@ -1,0 +1,42 @@
+
+.blockera-block.blockera-block-1.wp-block-latest-comments {
+	background-color: #f5d5d5;
+	border: 2px solid #ff8787;
+	border-radius: 20px;
+	transition: all 500ms ease 0ms;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1 .wp-block-latest-comments__comment {
+	background-color: #bfefb4;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	border-radius: 20px;
+	border: 2px solid #85be79;
+	transition: all 500ms ease 0ms;
+}
+
+.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-avatar {
+	border-radius: 5px;
+	border: 2px solid #0000004d;
+	width: 40px;
+	height: 40px;
+}
+
+.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-author {
+	background-color: #4bfc3e;
+}
+
+.blockera-block.blockera-block-1.wp-block-latest-comments:hover {
+	background-color: #fabbbb;
+}
+
+.blockera-block.blockera-block-1:hover .wp-block-latest-comments__comment {
+	background-color: #80e869;
+	border: 2px solid #60af4e;
+}
