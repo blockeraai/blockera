@@ -1,0 +1,100 @@
+
+.blockera-block.blockera-block-1.wp-block-latest-posts {
+	background-color: #ffe9e9;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+	display: flex;
+	background-color: #ffa7a7;
+	border-radius: 5px;
+	font-size: 18px;
+	font-weight: 600;
+	font-style: normal;
+	text-decoration: initial;
+	transition: all 500ms ease 0ms;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: space-between !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::before {
+	box-sizing: border-box;
+	content: "Before";
+	background-color: #ce8e0d;
+	padding-right: 4px;
+	padding-left: 4px;
+	margin-top: 6px;
+	margin-right: 6px !important;
+	margin-bottom: 6px;
+	margin-left: 6px !important;
+	display: inline-block;
+	border-radius: 5px;
+	text-transform: uppercase;
+	font-size: 14px;
+	font-weight: 700;
+	font-style: normal;
+}
+
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::after {
+	box-sizing: border-box;
+	content: "After";
+	font-size: 14px;
+	font-weight: 700;
+	font-style: normal;
+	text-transform: uppercase;
+	background-color: #ce8e0d;
+	padding-right: 6px;
+	padding-left: 6px;
+	margin-top: 6px;
+	margin-right: 6px !important;
+	margin-bottom: 6px;
+	margin-left: 6px !important;
+	border-radius: 3px;
+	display: inline-block;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::after {
+	text-align: center;
+	content: "After";
+	flex-direction: column;
+	display: inline-block;
+	width: 100%;
+}
+
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::before {
+	text-align: center;
+	content: "Before";
+	background-color: #ce8e0d;
+	width: 100%;
+}
+
+.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+	flex-direction: column;
+	align-items: center !important;
+	justify-content: space-between !important;
+	background-color: #b6d2bc;
+}
+
+
+}
+
+.blockera-block.blockera-block-1:hover :where(a:not(.wp-element-button)) {
+	background-color: #ff7b7b;
+}
+
+.blockera-block.blockera-block-1:hover :where(a:not(.wp-element-button)):hover {
+	background-color: #f64f4f;
+}
