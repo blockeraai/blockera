@@ -97,6 +97,8 @@ export const MappedExtensions = ({
 		clientId: block.clientId,
 		blockName: block.blockName,
 		currentBlock: block.currentBlock,
+		currentState,
+		currentInnerBlockState,
 	});
 
 	switch (tab.name) {
