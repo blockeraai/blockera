@@ -18,13 +18,6 @@ class Transpiler {
     protected Application $app;
 
     /**
-     * Store styles.
-     *
-     * @var array
-     */
-    protected array $styles = [];
-
-    /**
      * Store parsed blocks.
      *
      * @var array
@@ -337,7 +330,7 @@ class Transpiler {
 
         } elseif (empty($computed_css_rules)) {
 
-			$this->force_add_inline_styles($inline_styles);
+			$this->addInlineStylesToStack($inline_styles);
 		}
 
 		$attributes = $args['block']['attrs'] ?? [];
@@ -350,44 +343,6 @@ class Transpiler {
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
     }
-
-	/**
-	 * Force add inline styles.
-	 *
-	 * @param array $inline_styles The inline styles.
-	 *
-	 * @return void
-	 */
-	protected function force_add_inline_styles( array $inline_styles): void {
-		
-		foreach ($inline_styles as $root_selector => $styles) {
-			$inners = array_filter(
-				$styles,
-				function ( $style) {
-					return is_array($style);
-				}
-			);
-
-			foreach ($inners as $selector => $declarations) {
-				$inner_style = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
-
-				if (! in_array($inner_style, $this->styles, true)) {
-					$this->styles[] = $inner_style;
-				}
-
-				unset($styles[ $selector ]);
-			}
-
-			// Ensure that the root style is added to the styles property while $styles is not empty.
-			if (! empty($styles)) {
-				$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
-
-				if (! in_array($root_style, $this->styles, true)) {
-					$this->styles[] = $root_style;
-				}
-			}
-		}
-	}
 
     /**
      * Update block content after processing.
