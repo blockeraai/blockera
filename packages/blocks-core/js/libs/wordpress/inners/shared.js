@@ -79,7 +79,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-1': {
 		name: 'core/heading',
-		label: __('H1', 'blockera'),
+		shortLabel: 'H1',
+		label: __('H1 Headings', 'blockera'),
 		description: __('All H1 heading tag elements.', 'blockera'),
 		icon: <Icon icon="block-heading-level-1" iconSize="20" />,
 		settings: {
@@ -99,7 +100,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-2': {
 		name: 'core/heading',
-		label: __('H2', 'blockera'),
+		shortLabel: 'H2',
+		label: __('H2 Headings', 'blockera'),
 		description: __('All H2 heading tag elements.', 'blockera'),
 		icon: <Icon icon="block-heading-level-2" iconSize="20" />,
 		settings: {
@@ -119,7 +121,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-3': {
 		name: 'core/heading',
-		label: __('H3', 'blockera'),
+		shortLabel: 'H3',
+		label: __('H3 Headings', 'blockera'),
 		description: __('All H3 heading tag elements.', 'blockera'),
 		icon: <Icon icon="block-heading-level-3" iconSize="20" />,
 		settings: {
@@ -139,7 +142,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-4': {
 		name: 'core/heading',
-		label: __('H4', 'blockera'),
+		shortLabel: 'H4',
+		label: __('H4 Headings', 'blockera'),
 		description: __('All H4 heading tag elements.', 'blockera'),
 		icon: <Icon icon="block-heading-level-4" iconSize="20" />,
 		settings: {
@@ -159,7 +163,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-5': {
 		name: 'core/heading',
-		label: __('H5', 'blockera'),
+		shortLabel: 'H5',
+		label: __('H5 Headings', 'blockera'),
 		description: __('All H5 heading tag elements.', 'blockera'),
 		icon: <Icon icon="block-heading-level-5" iconSize="20" />,
 		settings: {
@@ -179,7 +184,8 @@ const sharedInnerBlocks: InnerBlocks = {
 	// Functionality tests: ../column/test/block.cy.e2e.inner-blocks.js
 	'core/heading-6': {
 		name: 'core/heading',
-		label: __('H6', 'blockera'),
+		shortLabel: 'H6',
+		label: __('H6 Headings', 'blockera'),
 		description: __('All H6 heading tag elements.', 'blockera'),
 		icon: <Icon icon="block-heading-level-6" iconSize="20" />,
 		settings: {
@@ -254,6 +260,7 @@ const sharedInnerBlocks: InnerBlocks = {
 	},
 	'elements/kbd': {
 		name: 'elements/kbd',
+		shortLabel: 'KBD',
 		label: __('Keyboard Inputs', 'blockera'),
 		description: __('All keyboard input (kbd) tags.', 'blockera'),
 		icon: <Icon icon="button" library="wp" iconSize="20" />,

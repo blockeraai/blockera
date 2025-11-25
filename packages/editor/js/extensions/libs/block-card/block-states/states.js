@@ -448,6 +448,7 @@ const baseSharedBlockStates = {
 	},
 	'current-menu-parent': {
 		type: 'current-menu-parent',
+		shortLabel: 'Current Parent',
 		label: __('Current Page Parent', 'blockera'),
 		category: 'special',
 		tooltip: (
@@ -475,6 +476,7 @@ const baseSharedBlockStates = {
 	},
 	'current-menu-ancestor': {
 		type: 'current-menu-ancestor',
+		shortLabel: 'Current Ancestor',
 		label: __('Current Page Ancestor', 'blockera'),
 		category: 'special',
 		tooltip: (
