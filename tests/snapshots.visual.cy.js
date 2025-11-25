@@ -100,18 +100,18 @@ describe('Sections design with Style Engine', () => {
 			if (setupFn) {
 				// Run custom setup function
 				// if returns true it means we need to createPost
-				if (setupFn()) {
+				if (setupFn(sectionContent)) {
 					// Run default setup
 					cy.setScreenshotViewport('desktop');
 					createPost();
+					appendBlocks(sectionContent);
 				}
 			} else {
 				// Run default setup
 				cy.setScreenshotViewport('desktop');
 				createPost();
+				appendBlocks(sectionContent);
 			}
-
-			appendBlocks(sectionContent);
 
 			cy.prepareEditorForScreenshot();
 

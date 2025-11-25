@@ -1,14 +1,14 @@
 /**
  * Blockera dependencies
  */
-import { editPost } from '@blockera/dev-cypress/js/helpers';
+import { editPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
  */
 import data from './data.json';
 
-export default function setup() {
+export default function setup(sectionContent) {
 	// Step 1: Create all posts sequentially before running tests
 	// eslint-disable-next-line cypress/no-assigning-return-values
 	let postChain = (() => {
@@ -63,6 +63,7 @@ export default function setup() {
 		cy.setScreenshotViewport('desktop');
 
 		editPost({ postID: postId });
+		appendBlocks(sectionContent);
 	});
 
 	return false;
