@@ -1,5 +1,5 @@
 /* .blockera-is-icon-block is icon block. */
-.editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block, .wp-block-list, .wp-block-list-item, .wp-block-categories, .wp-block-page-list, .wp-block-tag-cloud) {
+.editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block, .wp-block-list, .wp-block-list-item, .wp-block-categories, .wp-block-page-list, .wp-block-tag-cloud, .wp-block-home-link, .wp-block-navigation-link, .wp-block-navigation-submenu) {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
@@ -34,6 +34,7 @@
 	min-height: 0;
 	min-width: var(--blockera--icon--size, 1.33em);
 	align-items: center;
+	transition: inherit;
 }
 
 .editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::before,
@@ -59,6 +60,7 @@
 	mask-repeat: no-repeat;
 	mask-size: cover !important;
 	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	transition: inherit;
 }
 
 .editor-styles-wrapper div [class*="blockera-has-icon-"] > .wp-block-navigation-item__content {
