@@ -17,7 +17,7 @@ return array_merge(
 					'root' => 'a:not(.wp-element-button)',
 				],
 				'blockera/elements/arrow' => [
-					'root' => '.wp-block-post-navigation-link__arrow-previous',
+					'root' => ':is(.wp-block-post-navigation-link__arrow-previous,.wp-block-post-navigation-link__arrow-next)',
 				],
 				'blockera/elements/bold' => [
 					'root' => ':is(strong,b)',
@@ -32,7 +32,7 @@ return array_merge(
 					'root' => 'code',
 				],
 				'blockera/elements/span' => [
-					'root' => 'span:not([data-rich-text-placeholder])',
+					'root' => 'span:not([data-rich-text-placeholder],.wp-block-post-navigation-link__arrow-previous,.wp-block-post-navigation-link__arrow-next)',
 				],
 				'blockera/elements/mark' => [
 					'root' => ':is(mark,mark[class])',
