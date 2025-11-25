@@ -21,8 +21,8 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-group {
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 }
 
 

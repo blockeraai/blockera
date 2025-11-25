@@ -103,8 +103,8 @@
 .blockera-block.blockera-block-5.wp-block-gallery {
 	background-color: #c9bcdb;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 	gap: 40px;
 }
 

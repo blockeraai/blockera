@@ -41,8 +41,8 @@
 .blockera-block.blockera-block-2.wp-block-social-links {
 	background-color: #ffd6d6;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }

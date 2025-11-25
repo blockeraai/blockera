@@ -70,8 +70,8 @@
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 	gap: 0;
 	padding-top: 20px;
 	padding-right: 20px;

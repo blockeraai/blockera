@@ -125,8 +125,8 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-post-terms {
 	flex-direction: column;
-	justify-content: center;
-	align-items: flex-start;
+	justify-content: center !important;
+	align-items: flex-start !important;
 }
 
 .blockera-block.blockera-block-2 a {

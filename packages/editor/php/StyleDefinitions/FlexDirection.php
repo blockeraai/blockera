@@ -49,12 +49,12 @@ class FlexDirection extends BaseStyleDefinition {
 		if (isset($item['alignItems']) && $item['alignItems']) {
 			$prop = $changeFlexInside ? 'justify-content' : 'align-items';
 
-			$this->setDeclaration($prop, $item['alignItems'] . ( $optimizeStyleGeneration && 'align-items' === $prop ? ' !important' : '' ));
+			$this->setDeclaration($prop, $item['alignItems'] . ( $optimizeStyleGeneration ? ' !important' : '' ));
 		}
 
 		if (isset($item['justifyContent']) && $item['justifyContent']) {
 			$prop = $changeFlexInside ? 'align-items' : 'justify-content';
-			$this->setDeclaration($prop, $item['justifyContent'] . ( $optimizeStyleGeneration && 'justify-content' === $prop ? ' !important' : '' ));
+			$this->setDeclaration($prop, $item['justifyContent'] . ( $optimizeStyleGeneration ? ' !important' : '' ));
 		}
 
 		$this->setCss($this->declarations);

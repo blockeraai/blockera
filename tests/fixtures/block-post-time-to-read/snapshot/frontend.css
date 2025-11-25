@@ -78,8 +78,8 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-post-time-to-read {
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 }
 
 
@@ -124,8 +124,8 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-4.wp-block-post-time-to-read {
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 }
 
 
