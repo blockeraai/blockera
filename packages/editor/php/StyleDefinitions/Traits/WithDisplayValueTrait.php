@@ -12,107 +12,64 @@ trait WithDisplayValueTrait {
 	 */
 	private function getDisplayValue( string $property = 'blockeraDisplay'): string {
 
-		//
 		// Get display value from current states and breakpoint.
-		//
-		if (isset($this->settings[ $property ]) ) {
-
-			if (is_string($this->settings[ $property ]) ) {
-				return $this->settings[ $property ];
-			}
-
-			if (! empty($this->settings[ $property ]['value'])) {
-				return $this->settings[ $property ]['value'];
-			} 
+		$value = $this->extractValueFromSource($this->settings, $property);
+		if ('' !== $value) {
+			return $value;
 		}
 
-		//
 		// Get display value from main attributes.
-		//
-		if (isset($this->block['attrs'][ $property ]) ) {
-
-			if (is_string(
-				$this->block['attrs'][ $property ]
-			) ) {
-				return $this->block['attrs'][ $property ];
-			}
-
-			if (! empty(
-				$this->block['attrs'][ $property ]
-				['value']
-			)) {
-				return $this->block['attrs'][ $property ]['value'];
-			}
+		$value = $this->extractValueFromSource($this->block['attrs'] ?? [], $property);
+		if ('' !== $value) {
+			return $value;
 		}
 
-		$current_settings = $this->getCurrentBreakpointSettings();
-
-		//
 		// Get display value from current breakpoint settings.
-		//
-		if (isset($current_settings[ $property ])) {
-
-			if (is_string(
-				$current_settings[ $property ]
-			) ) {
-				return $current_settings[ $property ];
-			}
-
-			if (! empty(
-				$current_settings[ $property ]
-				['value']
-			)) {
-				return $current_settings[ $property ]['value'];
-			}
+		$value = $this->extractValueFromSource($this->getCurrentBreakpointSettings(), $property);
+		if ('' !== $value) {
+			return $value;
 		}
 
-		$current_settings = $this->getCurrentInnerBlockSettings();
-
-		//
 		// Get display value from current inner block settings.
-		//
-		if (isset($current_settings[ $property ])) {
-
-			if (is_string(
-				$current_settings[ $property ]
-			) ) {
-				return $current_settings[ $property ];
-			}
-
-			if (! empty(
-				$current_settings[ $property ]
-				['value']
-			)) {
-				return $current_settings[ $property ]['value'];
-			}
+		$value = $this->extractValueFromSource($this->getCurrentInnerBlockSettings(), $property);
+		if ('' !== $value) {
+			return $value;
 		}
 
-		$current_settings = $this->getCurrentBreakpointSettings(true);
-
-		//
-		// Get display value from current breakpoint settings.
-		//
-		if (isset($current_settings[ $property ])) {
-
-			if (is_string(
-				$current_settings[ $property ]
-			) ) {
-				return $current_settings[ $property ];
-			}
-
-			if (! empty(
-				$current_settings[ $property ]
-				['value']
-			)) {
-				return $current_settings[ $property ]['value'];
-			}
+		// Get display value from current breakpoint settings (with fallback).
+		$value = $this->extractValueFromSource($this->getCurrentBreakpointSettings(true), $property);
+		if ('' !== $value) {
+			return $value;
 		}
 
-		//
 		// Get display value from default settings.
-		//
 		if (! empty($this->default_settings[ $property ]['default']['value'])) {
 			return $this->default_settings[ $property ]['default']['value'];
+		}
+
+		return '';
+	}
+
+	/**
+	 * Extract value from a source array for a given property
+	 *
+	 * @param array  $source Source array to check.
+	 * @param string $property Property name to check in source.
+	 * @return string Extracted value or empty string if not found.
+	 */
+	private function extractValueFromSource( array $source, string $property ): string {
+		if (! isset($source[ $property ])) {
+			return '';
+		}
+
+		$value = $source[ $property ];
+
+		if (is_string($value)) {
+			return $value;
+		}
+
+		if (! empty($value['value'])) {
+			return $value['value'];
 		}
 
 		return '';
