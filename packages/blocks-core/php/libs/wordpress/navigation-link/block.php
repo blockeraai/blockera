@@ -24,6 +24,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'root' => '.wp-block-navigation-link',
 				'blockera/states/current-menu-item' => [
 					'root' => '&.current-menu-item',
 				],
@@ -55,7 +56,7 @@ return array_merge(
 					'root' => 'code',
 				],
 				'blockera/elements/span' => [
-					'root' => 'span:not([data-rich-text-placeholder])',
+					'root' => 'span:not([data-rich-text-placeholder],.wp-block-navigation-item__label)',
 				],
 				'blockera/elements/mark' => [
 					'root' => ':is(mark,mark[class])',
