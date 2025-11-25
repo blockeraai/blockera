@@ -70,6 +70,14 @@
 			"replace": "data-id=\"id\""
 		},
 		{
+			"search": "id=[\"']modal-\\d+[\"']",
+			"replace": "id=\"modal-id\""
+		},
+		{
+			"search": "id=[\"']modal-\\d+-content[\"']",
+			"replace": "id=\"modal-id-content\""
+		},
+		{
 			"search": "data-postid=[\"']\\d+[\"']",
 			"replace": "data-postid=\"post-id\""
 		},
