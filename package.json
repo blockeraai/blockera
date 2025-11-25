@@ -242,6 +242,7 @@
 		"icons:indexing": "node bin/create-icon-search-index.js",
 		"env": "wp-env",
 		"env:stop": "npm run env stop",
+		"env:start:spx": "node .github/scripts/setup-wp-env.js && wp-env start --spx",
 		"env:start": "node .github/scripts/setup-wp-env.js && wp-env start",
 		"env:clean": "npm run env clean all",
 		"env:reset": "npm run env:start --update --xdebug",
