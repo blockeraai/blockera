@@ -34,7 +34,8 @@ $post_id = $this->factory()->post->create([
 ]);
 
 // Step 2: Create all comments
-foreach ($data['comments'] as $comment_data) {
+$comment_count = count($data['comments']);
+foreach ($data['comments'] as $index => $comment_data) {
 	$comment_author_id = $comment_data['comment_author'] ?? 1;
 	$comment_content = $comment_data['comment_content'] ?? 'This is comment text.';
 
@@ -44,6 +45,12 @@ foreach ($data['comments'] as $comment_data) {
 		throw new \Exception('User with ID ' . $comment_author_id . ' not found');
 	}
 
+	// Calculate comment date: most recent comment first, then subtract 5 seconds for each subsequent comment
+	// First comment (index 0) is the most recent (0 seconds ago), last comment is the oldest
+	$seconds_ago = $index * 5;
+	$comment_date = date('Y-m-d H:i:s', strtotime("-{$seconds_ago} seconds"));
+	$comment_date_gmt = gmdate('Y-m-d H:i:s', strtotime("-{$seconds_ago} seconds"));
+
 	$comment_id = $this->factory()->comment->create([
 		'comment_post_ID' => $post_id,
 		'comment_author' => $user->display_name,
@@ -52,6 +59,8 @@ foreach ($data['comments'] as $comment_data) {
 		'comment_content' => $comment_content,
 		'comment_approved' => 1,
 		'user_id' => $comment_author_id,
+		'comment_date' => $comment_date,
+		'comment_date_gmt' => $comment_date_gmt,
 	]);
 
 	if (!$comment_id) {

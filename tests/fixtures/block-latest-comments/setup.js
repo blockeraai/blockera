@@ -38,11 +38,20 @@ export default function setup() {
 				comment_content: commentContent,
 			} = firstComment;
 
+			// First comment (index 0) is the most recent (0 seconds ago)
+			const secondsAgo = 0;
+			const commentDate = new Date();
+			commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
+			const commentDateStr = commentDate
+				.toISOString()
+				.replace('T', ' ')
+				.substring(0, 19);
+
 			// Escape single quotes for shell when using single quotes
 			const escapedComment = commentContent.replace(/'/g, "'\\''");
 
 			return cy.wpCli(
-				`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1`,
+				`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1 --comment_date='${commentDateStr}'`,
 				false,
 				true
 			);
@@ -57,11 +66,20 @@ export default function setup() {
 					comment_content: commentContent,
 				} = commentData;
 
+				// Calculate seconds ago for this comment (5 seconds per index)
+				const secondsAgo = i * 5;
+				const commentDate = new Date();
+				commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
+				const commentDateStr = commentDate
+					.toISOString()
+					.replace('T', ' ')
+					.substring(0, 19);
+
 				// Escape single quotes for shell when using single quotes
 				const escapedComment = commentContent.replace(/'/g, "'\\''");
 
 				return cy.wpCli(
-					`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1`,
+					`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1 --comment_date='${commentDateStr}'`,
 					false,
 					true
 				);
