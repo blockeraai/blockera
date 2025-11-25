@@ -5,6 +5,13 @@ namespace Blockera\WordPress\RenderBlock\Traits;
 trait Processor {
 
 	/**
+     * Store styles.
+     *
+     * @var array
+     */
+    protected array $styles = [];
+
+	/**
 	 * Global css props classes.
 	 *
 	 * @var array
@@ -47,7 +54,19 @@ trait Processor {
 
 					$final_classname = $classname . ' ' . $previous_class;
 				} else {
-					
+
+					if (! str_contains($classname, 'be-transpiled') && preg_match($regexp, $previous_class) && preg_match($regexp, $classname)) {
+
+						$classname = preg_replace('/\./', ' ', $classname);
+
+						if (str_contains($previous_class, $classname)) {
+
+							if (! str_contains($previous_class, 'be-transpiled') && ! blockera_block_has_icon($block)) {
+								$previous_class = str_replace($classname, $classname . ' be-transpiled', $previous_class);
+							}
+						}
+					}
+
 					$final_classname = $previous_class;
 				}
 			}
@@ -106,13 +125,57 @@ trait Processor {
 
 			if (! empty(trim($class ?? '')) && ! preg_match('/wp-(block|element|elements)/i', $class) && ! str_contains($class, $root_class)) {
 				$properties = $declarations;
-				$class      = str_replace(' be-transpiled', '', $class);
-				$selector   = $selector . ' .' . preg_replace('/\s/', '.', $class);
+				// to shorten the selector, remove the be-transpiled class from the classname.
+				$class = str_replace(' be-transpiled', '', $class);
+				// concatenate the selector with the current tag classname to ensure that the specificity is high.
+				$selector = $selector . ' .' . preg_replace('/\s/', '.', $class);
 			} else {
 				$properties = $declarations;
 			}
 		}
 
 		return compact('properties', 'selector');
+	}
+
+	/**
+	 * Add inline styles to stack.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	protected function addInlineStylesToStack( array $inline_styles): void {
+		
+		if (empty($inline_styles)) {
+			return;
+		}
+		
+		foreach ($inline_styles as $root_selector => $styles) {
+			$inners = array_filter(
+				$styles,
+				function ( $style) {
+					return is_array($style);
+				}
+			);
+
+			foreach ($inners as $selector => $declarations) {
+				$inner_style = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
+
+				if (! in_array($inner_style, $this->styles, true)) {
+					$this->styles[] = $inner_style;
+				}
+
+				unset($styles[ $selector ]);
+			}
+
+			// Ensure that the root style is added to the styles property while $styles is not empty.
+			if (! empty($styles)) {
+				$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+
+				if (! in_array($root_style, $this->styles, true)) {
+					$this->styles[] = $root_style;
+				}
+			}
+		}
 	}
 }

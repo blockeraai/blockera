@@ -28,6 +28,12 @@ export const HomeLink: BlockType = {
 			label: __('Link', 'blockera'),
 			description: __('Hyperlink element.', 'blockera'),
 		},
+		'elements/bold': sharedInnerBlocks['elements/bold'],
+		'elements/italic': sharedInnerBlocks['elements/italic'],
+		'elements/kbd': sharedInnerBlocks['elements/kbd'],
+		'elements/code': sharedInnerBlocks['elements/code'],
+		'elements/span': sharedInnerBlocks['elements/span'],
+		'elements/mark': sharedInnerBlocks['elements/mark'],
 	},
 	availableBlockStates: {
 		...generalBlockStates,

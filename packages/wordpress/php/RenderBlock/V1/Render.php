@@ -6,6 +6,7 @@ use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Features\Core\FeaturesManager;
 use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
+use Blockera\WordPress\RenderBlock\Traits\Processor;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -15,7 +16,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class Render {
 
-	use AssetsLoaderTrait;
+	use AssetsLoaderTrait, Processor;
 
     /**
      * Hold application instance.
@@ -23,6 +24,13 @@ class Render {
      * @var Application
      */
     protected Application $app;
+
+	/**
+	 * Store the block array.
+	 *
+	 * @var array $block the block array.
+	 */
+	protected array $block;
 
 	/**
 	 * Cache status.
@@ -44,6 +52,13 @@ class Render {
 	 * @var bool $is_doing_transpile 
 	 */
 	protected bool $is_doing_transpile = false;
+
+	/**
+	 * Store inline styles collected from the block html.
+	 *
+	 * @var array $inline_styles the inline styles array.
+	 */
+	protected array $inline_styles = [];
 
 	/**
 	 * Store the args array.
@@ -168,6 +183,9 @@ class Render {
             return $html;
         }
 
+		// Store the block array.
+		$this->block = $block;
+
 		$extracted_name = explode('/', $block['blockName']);
 
 		$this->id = $extracted_name[1];
@@ -224,36 +242,54 @@ class Render {
             return $this->getUpdatedHTML($html, $cache_data['classname']);
         }
 
-        /**
+		// Represent html string.
+        $html = $this->getUpdatedHTML($html, $unique_class_name);
+
+		// Normalize inline styles while doing transpiling.
+		$inline_styles = $this->normalizeInlineStyles($unique_class_name);
+
+		/**
          * Get parser object.
          *
          * @var Parser $parser the instance of Parser class.
          */
         $parser = $this->app->make(Parser::class);
 		$parser->setSupports($supports);
+		
+		if ($this->is_doing_transpile) {
+			$parser->setInlineStyles($inline_styles);
+		}
 
         // Computation css rules for current block by server side style engine...
         $computed_css_rules = $parser->getCss(compact('block', 'unique_class_name'));
 
-		// If custom css is set, add it to the block css.
-		if (! empty($attributes['blockeraCustomCSS']['value'])) {
-			$computed_css_rules .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
-		}
-
-        // Print css into inline style on "wp_head" action occur.
-        blockera_add_inline_css($computed_css_rules);
-
-		// Represent html string.
-        $html = $this->getUpdatedHTML($html, $unique_class_name);
-
-        // Render block with features.
+		// Render block with features.
         $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
+		if (! empty($computed_css_rules)) {
+			$this->styles[] = $computed_css_rules;
+
+        }
+
+		if ($this->is_doing_transpile) {
+			$this->addInlineStylesToStack($inline_styles);
+		}
+
+		// If custom css is set, add it to the block css.
+		if (! empty($attributes['blockeraCustomCSS']['value'])) {
+			$this->styles[] .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+		}
+
+		$computed_css_rules = implode(PHP_EOL, array_unique($this->styles));
+
+		// Print css into inline style on "wp_head" action occur.
+        blockera_add_inline_css($computed_css_rules);
+		
         // Create new block cache data.
         $data = [
             'hash'      => $hash,
+            'classname' => $unique_class_name,
             'css'       => $computed_css_rules,
-            'classname' => $attributes['className'] ?? $blockera_class_name,
         ];
 
 		if ($this->cache_status) {
@@ -262,8 +298,39 @@ class Render {
 			blockera_set_block_cache($cache_key, $data);
 		}
 
+		// Resetting inline styles properties.
+		$this->resetInlineStyles();
+
         return $html;
     }
+
+	/**
+	 * Normalize inline styles.
+	 *
+	 * @param string $classname the block classname.
+	 *
+	 * @return array the normalized inline styles.
+	 */
+	protected function normalizeInlineStyles( string $classname): array {
+		$inline_styles = [];
+
+		if (! empty($this->inline_styles) && $this->is_doing_transpile) {
+
+			foreach ($this->inline_styles as $_selector => $declarations) {
+
+				foreach ($declarations as $declaration) {
+					if ($_selector === $classname) {
+						$inline_styles[ $classname ][] = $declaration;
+						continue;
+					}
+
+					$inline_styles[ $classname ][ $_selector ][] = $declaration;            
+				}
+			}
+		}
+
+		return $inline_styles;
+	}
 
     /**
      * Is need to update block content?
@@ -310,34 +377,36 @@ class Render {
 
         $processor = new \WP_HTML_Tag_Processor($html);
 
-        if ($processor->next_tag()) {
+		// Indicate if the first tag is processed.
+		$is_processed_first_tag = false;
 
-            // Regular Expression to detect blockera unique classname.
-            $regexp = $this->getUniqueClassnameRegex();
+        while ($processor->next_tag()) {
+			$style = $processor->get_attribute('style');
 
-            // Get tag previous classname value.
-            $previous_class = $processor->get_attribute('class');
+            if (! $is_processed_first_tag) {
+				$this->updateClassname($processor, $classname, $this->block);
 
-            if (! empty($previous_class)) {
-
-				if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
-
-					$final_classname = $classname . ' ' . $previous_class;
-				} else {
-
-					$final_classname = $previous_class;
-				}
-            }
-
-            if ($final_classname !== $classname) {
-
-				$processor->set_attribute('class', $final_classname);
+				// Set the is processed first tag flag to true.
+				$is_processed_first_tag = true;
 			}
 
 			// Remove style attribute if transpiling.
-			if ($this->is_doing_transpile) {
+			if ($this->is_doing_transpile && $style && ! $this->cache_status) {
+				// Create css declarations.
+				$declarations = $this->createCssDeclarations($processor, $classname, $style ?? '');
+				if (! empty($declarations['properties'])) {
+					$this->inline_styles[ $declarations['selector'] ] = $declarations['properties'];
+				}
 
+				// Remove style attribute.
 				$processor->remove_attribute('style');
+
+				// Skip updating classname while the first tag because it is already updated.
+				if (! $is_processed_first_tag) {
+				
+					// Update classname of current tag to add `be-transpiled` class.
+					$this->updateClassname($processor, $processor->get_attribute('class') ?? '', $this->block);
+				}
 			}
         }
 
@@ -374,4 +443,14 @@ class Render {
         return '/\b(blockera-block-\S+)\b/';
     }
 
+	/**
+	 * Reset inline styles properties.
+	 *
+	 * @return void
+	 */
+	protected function resetInlineStyles(): void {
+		
+		$this->styles        = [];
+		$this->inline_styles = [];
+	}
 }

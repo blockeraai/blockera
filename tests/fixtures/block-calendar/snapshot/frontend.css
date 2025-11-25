@@ -8,6 +8,10 @@
 	color: #009602;
 }
 
+.blockera-block.blockera-block-1 .wp-calendar-table.has-background {
+	background-color: #ececfc;
+}
+
 .blockera-block.blockera-block-1 caption {
 	background-color: #cecaff;
 	padding-top: 10px;
@@ -62,4 +66,8 @@
 
 .blockera-block.blockera-block-1 .wp-calendar-nav a:active {
 	background-color: #00067c;
+}
+
+.blockera-block.blockera-block-1 .wp-calendar-table.has-background {
+	background-color:#ececfc;
 }

@@ -1,0 +1,8 @@
+.wp-block-navigation .blockera-block.wp-block-navigation-submenu .wp-block-navigation__submenu-icon svg {
+	width: 100%;
+	height: auto;
+}
+
+.wp-block-navigation .blockera-block.wp-block-navigation-submenu :where(.wp-block-navigation-item) {
+	background-color: transparent;
+}

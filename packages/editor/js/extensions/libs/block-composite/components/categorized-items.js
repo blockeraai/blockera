@@ -150,6 +150,7 @@ export const CategorizedItems = ({
 							type,
 							icon,
 							label,
+							shortLabel = null,
 							settings,
 							description = '',
 							tooltip,
@@ -318,7 +319,7 @@ export const CategorizedItems = ({
 											'blockera-feature-label'
 										)}
 									>
-										{label}
+										{shortLabel || label}
 									</div>
 								</div>
 							</Tooltip>

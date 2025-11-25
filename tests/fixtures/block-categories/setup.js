@@ -1,14 +1,14 @@
 /**
  * Blockera dependencies
  */
-import { createPost } from '@blockera/dev-cypress/js/helpers';
+import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
 
 /**
  * Internal dependencies
  */
 import data from './data.json';
 
-export default function setup() {
+export default function setup(sectionContent) {
 	// Create categories sequentially
 	const categories = data.categories;
 
@@ -28,6 +28,7 @@ export default function setup() {
 		cy.setScreenshotViewport('desktop');
 
 		createPost();
+		appendBlocks(sectionContent);
 	});
 
 	return false;

@@ -212,11 +212,7 @@ class BlockeraTest extends AppTestCase {
 			$content = '';
 
 			foreach ($blocks as $block) {
-				if(!empty($block['innerContent'])){
-					continue;
-				}
-
-				$content .= render_block($block);
+				$content .= $this->renderBlock($block);
 			}
 		}
 		
@@ -225,6 +221,29 @@ class BlockeraTest extends AppTestCase {
 		$this->assertMatchesSnapshot($inline_css, new CssDriver());
 
 		wp_delete_post($post_id);
+	}
+
+	/**
+	 * Recursively render a block and its inner blocks.
+	 *
+	 * @param array $block The block to render.
+	 * 
+	 * @return string The rendered block content.
+	 */
+	private function renderBlock(array $block): string {
+		$content = '';
+
+		// Render the current block
+		$content .= render_block($block);
+
+		// Recursively render inner blocks if they exist
+		if (!empty($block['innerBlocks']) && is_array($block['innerBlocks'])) {
+			foreach ($block['innerBlocks'] as $inner_block) {
+				$content .= $this->renderBlock($inner_block);
+			}
+		}
+
+		return $content;
 	}
 
 	/**

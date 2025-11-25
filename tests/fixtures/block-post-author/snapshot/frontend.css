@@ -66,12 +66,23 @@
 .blockera-block.blockera-block-1:hover .wp-block-post-author__name {
 	background-color: #925f07;
 }
+
+.blockera-block.blockera-block-1 {
+	background-color:#f3d290;
+	border-color:#00000038;
+	border-radius:10px;
+	border-width:1px;
+	padding-top:20px;
+	padding-right:20px;
+	padding-bottom:20px;
+	padding-left:20px;
+}
 .blockera-block.blockera-block-2.wp-block-post-author {
 	background-color: #efefef;
 	border-radius: 10px;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 	gap: 20px;
 	padding-top: 30px;
 	padding-right: 20px;
@@ -119,6 +130,15 @@
 .blockera-block.blockera-block-2:hover .wp-block-post-author__avatar > img {
 	width: 120px;
 }
+
+.blockera-block.blockera-block-2 {
+	background-color:#efefef;
+	border-radius:10px;
+	padding-top:30px;
+	padding-right:20px;
+	padding-bottom:30px;
+	padding-left:20px;
+}
 .blockera-block.blockera-block-3.wp-block-post-author {
 	background-color: #ffecec;
 	flex-direction: row;
@@ -138,4 +158,12 @@
 
 .blockera-block.blockera-block-3 .wp-block-post-author__avatar > img {
 	width: 40px;
+}
+
+.blockera-block.blockera-block-3 {
+	background-color:#ffecec;
+	padding-top:20px;
+	padding-right:20px;
+	padding-bottom:20px;
+	padding-left:20px;
 }

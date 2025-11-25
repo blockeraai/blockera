@@ -217,8 +217,8 @@ p.blockera-block.blockera-block-12 {
 	background-color: #5577ff;
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
-	align-items: center;
+	justify-content: flex-end !important;
+	align-items: center !important;
 	gap: 10px;
 	padding-top: 20px;
 	padding-right: 20px;

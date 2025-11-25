@@ -1,0 +1,29 @@
+{
+	"posts": [
+		{
+			"post_type": "post",
+			"post_title": "The title of post 1",
+			"post_status": "publish"
+		},
+		{
+			"post_type": "post",
+			"post_title": "The title of post 2",
+			"post_status": "publish"
+		},
+		{
+			"post_type": "post",
+			"post_title": "The title of post 3",
+			"post_status": "publish"
+		},
+		{
+			"post_type": "post",
+			"post_title": "The title of post 4",
+			"post_status": "publish"
+		},
+		{
+			"post_type": "post",
+			"post_title": "The title of post 5",
+			"post_status": "publish"
+		}
+	]
+}

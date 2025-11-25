@@ -652,12 +652,13 @@ final class StyleEngine {
 			$is_wp_block_child_class = blockera_is_wp_block_child_class($this->definition->getSelector());
 
 			// Merge with existing rules, avoiding duplicates.
-			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {                
+			if (isset($css_rules[ $selector ]) && ! empty($prepared_styles) && ! $is_wp_block_child_class) {
 				$css_rules[ $selector ] = array_merge($css_rules[ $selector ], $prepared_styles);
 			}
 
 			if (! empty($prepared_child_styles)) {
-				$css_rules[ array_keys($filtered_child_declarations)[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ] ?? [], $prepared_child_styles);
+				$collected_selectors                  = array_values(array_filter(array_keys($filtered_child_declarations), 'is_string'));
+				$css_rules[ $collected_selectors[0] ] = array_merge($css_rules[ array_keys($filtered_child_declarations)[0] ] ?? [], $prepared_child_styles);
 			}
 		}
 

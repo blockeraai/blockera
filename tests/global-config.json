@@ -30,6 +30,10 @@
 			"replace": "page-id"
 		},
 		{
+			"search": "(?<=[\\s\"'])tag-link-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "tag-link-id"
+		},
+		{
 			"search": "(?<=[\\s\"'])wp-image-\\d+(?=[\\s\"'#&]|$)",
 			"replace": "wp-image-id"
 		},
@@ -66,6 +70,14 @@
 			"replace": "data-id=\"id\""
 		},
 		{
+			"search": "id=[\"']modal-\\d+[\"']",
+			"replace": "id=\"modal-id\""
+		},
+		{
+			"search": "id=[\"']modal-\\d+-content[\"']",
+			"replace": "id=\"modal-id-content\""
+		},
+		{
 			"search": "data-postid=[\"']\\d+[\"']",
 			"replace": "data-postid=\"post-id\""
 		},
@@ -74,16 +86,16 @@
 			"replace": "data-commentid=\"comment-id\""
 		},
 		{
+			"search": "#comment-\\d+(?=[\\s\"']|$)",
+			"replace": "#comment-id"
+		},
+		{
 			"search": "name=['\"]comment_post_ID['\"] value=['\"]\\d+['\"]",
 			"replace": "name='comment_post_ID' value='post-id'"
 		},
 		{
-			"search": "<time datetime=\"[^\"]+\">[^<]*</time>",
-			"replace": "<time datetime=\"MM DD, YYYY\">Month Day, Year</time>"
-		},
-		{
-			"search": "<time datetime=\"[^\"]+\"><a href=\"[^\"]+\">[^<]*</a></time>",
-			"replace": "<time datetime=\"MM DD, YYYY\"><a href=\"https://blockera.ai/?p=post-id\">Month Day, Year</a></time>"
+			"search": "<time datetime=\"[^\"]+\"( class=\"[^\"]+\")?>(<a[^>]*>)?[^<]*(</a>)?</time>",
+			"replace": "<time datetime=\"MM DD, YYYY\"$1>$2Month Day, Year$3</time>"
 		}
 	],
 	"wp-post": {

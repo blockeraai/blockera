@@ -27,6 +27,13 @@ class Parser {
 	 */
 	protected array $supports;
 
+	/**
+	 * Store the inline styles.
+	 *
+	 * @var array $inline_styles
+	 */
+	protected array $inline_styles;
+
     /**
      * The Parser class constructor.
      *
@@ -35,6 +42,18 @@ class Parser {
     public function __construct( Application $app) { 
         $this->app = $app;
     }
+
+	/**
+	 * Set the inline styles.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	public function setInlineStyles( array $inline_styles): void {
+
+		$this->inline_styles = $inline_styles;
+	}
 
 	/**
 	 * Set the supports.
@@ -75,6 +94,11 @@ class Parser {
          */
         $styleEngine = $this->app->make(StyleEngine::class, compact('block', 'fallbackSelector'));
 		$styleEngine->setSupports($this->supports);
+		
+		// Set inline styles if available.
+		if (! empty($this->inline_styles)) {
+			$styleEngine->setInlineStyles($this->inline_styles);
+		}
 
         return $styleEngine->getStylesheet();
     }

@@ -65,6 +65,20 @@ describe(
 			// Block supported is active
 			cy.get('.blockera-extension-block-card').should('be.visible');
 
+			cy.checkBlockStatesPickerItems([
+				'states/current-menu-item',
+				'states/active',
+				'states/visited',
+				'elements/link',
+				'elements/bold',
+				'elements/italic',
+				'elements/kbd',
+				'elements/code',
+				'elements/span',
+				'elements/mark',
+				'elements/icon',
+			]);
+
 			// switch to parent navigation button should be visible
 			cy.get('.blockera-extension-block-card.master-block-card').within(
 				() => {
@@ -75,7 +89,7 @@ describe(
 			);
 
 			// Icon extension is active
-			cy.getByDataTest('settings-tab').click();
+			cy.getByDataTest('settings-tab').click({ force: true });
 			cy.getByAriaLabel('Choose Icon…').should('be.visible');
 
 			// switch back to style tab

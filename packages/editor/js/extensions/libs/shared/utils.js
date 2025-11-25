@@ -15,10 +15,25 @@ import { getEditorDocumentElement } from '@blockera/utils';
  */
 import { prepareBlockCssSelector } from '../../../style-engine/get-compatible-block-css-selector';
 
+/**
+ * Gets the parent flex block information.
+ *
+ * @param {Object} block - The block object.
+ * @param {string} block.clientId - The client ID of the block.
+ * @param {string} block.blockName - The name of the block.
+ * @param {string} block.currentBlock - The current block.
+ * @param {string} block.currentState - The current state.
+ * @param {string} block.currentInnerBlockState - The current inner block state.
+ * @return {Object} The parent flex block information.
+ * @property {boolean} isParentFlexBlock - True if the parent block is a flex block, false otherwise.
+ * @property {string} parentFlexDirection - The direction of the parent flex block.
+ */
 export function getParentFlexBlockInfo(block: {
 	clientId: string,
 	blockName: string,
 	currentBlock: string,
+	currentState: string,
+	currentInnerBlockState: string,
 }): {
 	isParentFlexBlock: boolean,
 	parentFlexDirection: 'row' | 'column' | '',
@@ -29,11 +44,20 @@ export function getParentFlexBlockInfo(block: {
 	const currentBlockElement: ?HTMLElement =
 		getEditorDocumentElement()?.querySelector(`#block-${block.clientId}`);
 
+	function isPseudoElementState(state: string): boolean {
+		return ['before', 'after', 'marker', 'placeholder'].includes(state);
+	}
+
 	if (currentBlockElement) {
 		let parentElement;
 
 		if (block.currentBlock === 'master') {
-			parentElement = currentBlockElement?.parentElement;
+			// If the current state is a pseudo element state, use the current block element as parent element.
+			if (isPseudoElementState(block.currentState)) {
+				parentElement = currentBlockElement;
+			} else {
+				parentElement = currentBlockElement?.parentElement;
+			}
 		} else if (block.currentBlock !== 'master') {
 			const currentBlockType = getBlockType(block.blockName);
 
@@ -49,9 +73,16 @@ export function getParentFlexBlockInfo(block: {
 			// It can be different than the master block element.
 			if (currentInnerBlockSelector) {
 				try {
-					parentElement = currentBlockElement?.querySelector(
-						currentInnerBlockSelector
-					)?.parentElement;
+					// If the current inner block state is a pseudo element state, use the current inner block element as parent element.
+					if (isPseudoElementState(block.currentInnerBlockState)) {
+						parentElement = currentBlockElement?.querySelector(
+							currentInnerBlockSelector
+						);
+					} else {
+						parentElement = currentBlockElement?.querySelector(
+							currentInnerBlockSelector
+						)?.parentElement;
+					}
 				} catch (error) {
 					// Invalid selector, will fall back to master block element
 					parentElement = null;

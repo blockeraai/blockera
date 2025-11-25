@@ -15,4 +15,5 @@
 	align-self: center;
 	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
 	vertical-align: text-bottom;
+	transition: inherit;
 }

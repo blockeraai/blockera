@@ -111,7 +111,7 @@ export default function ItemHeader({
 						'blockera-inner-block-label'
 					)}
 				>
-					{item.label}
+					{item.shortLabel || item.label}
 				</span>
 
 				{children}

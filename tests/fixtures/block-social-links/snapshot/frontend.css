@@ -1,4 +1,3 @@
-
 .blockera-block.blockera-block-1.wp-block-social-links {
 	background-color: #c8ffb1;
 	border: 2px solid #00a80e;
@@ -42,8 +41,8 @@
 .blockera-block.blockera-block-2.wp-block-social-links {
 	background-color: #ffd6d6;
 	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	justify-content: center !important;
+	align-items: center !important;
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
@@ -69,4 +68,30 @@
 
 .blockera-block.blockera-block-2 .wp-block-social-link:hover {
 	background-color: #ff0000;
+}
+.blockera-block.blockera-block-rgl6bq .wp-block-social-link-label {
+	background-color: #00c020;
+}
+
+.blockera-block.blockera-block-rgl6bq svg {
+	background-color: #00c020;
+}
+.blockera-block.blockera-block-3 svg {
+	display: block;
+	background-color: #b11a1a;
+	background-size: auto;
+	background-position: 0 0;
+	background-repeat: repeat;
+	background-image: linear-gradient(143deg, #009efa 10%, #e52e00 90%);
+	background-attachment: scroll;
+	border-radius: 8px;
+}
+
+.blockera-block.blockera-block-3 .wp-block-social-link-label {
+	background-color: #ff1212;
+	color: #06ff51;
+}
+
+.blockera-block.blockera-block-3 {
+	background-color:#000000;
 }

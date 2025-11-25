@@ -108,7 +108,7 @@ export default function ItemHeader({
 					</span>
 				) : (
 					<span className={controlInnerClassNames('header-label')}>
-						{item.label}
+						{item.shortLabel || item.label}
 					</span>
 				)}
 
