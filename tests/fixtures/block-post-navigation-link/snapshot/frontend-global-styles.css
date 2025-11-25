@@ -1,0 +1,3 @@
+:root :where(.wp-block-post-navigation-link){
+	font-size: var(--wp--preset--font-size--medium);
+}
