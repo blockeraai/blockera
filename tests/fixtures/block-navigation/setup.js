@@ -26,8 +26,6 @@ export default function setup(sectionContent) {
 					);
 				}
 
-				console.log('navigationPostId', navigationPostId);
-
 				// Step 2: Create a regular post
 				cy.wpCli(
 					`wp post create --post_type=post --post_title='Test Design: block-navigation' --post_status=publish`
