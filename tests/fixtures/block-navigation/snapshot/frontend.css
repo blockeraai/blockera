@@ -1,0 +1,301 @@
+.blockera-block.blockera-block-1.wp-block-home-link {
+	background-color: #ffc9c9;
+	border: 1px solid #00000036;
+	border-radius: 5px;
+	transition: all 500ms ease 0ms;
+	padding-top: 2px;
+	padding-right: 5px;
+	padding-bottom: 2px;
+	padding-left: 5px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 16px;
+}
+
+.blockera-block.blockera-block-1.wp-block-home-link:hover {
+	background-color: #ff0000;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-1 {
+	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style:normal;
+	font-weight:600;
+}
+.blockera-block.blockera-block-2.wp-block-home-link {
+	background-color: #ffdeb6;
+	border: 1px solid #00000036;
+	border-radius: 5px;
+	transition: all 200ms ease 0ms;
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+	padding-left: 10px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 16px;
+}
+
+.blockera-block.blockera-block-2 .wp-block-navigation-item__content:hover {
+	text-decoration: initial;
+}
+
+.blockera-block.blockera-block-2.wp-block-home-link:hover {
+	background-color: #ffc37a;
+	color: #844800;
+}
+
+.blockera-block.blockera-block-2.current-menu-item {
+	background-color: #d9d9d9;
+}
+
+.blockera-block.blockera-block-2 {
+	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style:normal;
+	font-weight:600;
+}
+.blockera-block.blockera-block-3.wp-block-home-link {
+	background-color: #ffedc9;
+	border-radius: 10px;
+	width: 100%;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-3 :is(strong, b) {
+	background-color: #ff2a2a;
+}
+
+.blockera-block.blockera-block-3 :is(em, i) {
+	background-color: #17ffe0;
+}
+
+.blockera-block.blockera-block-3 kbd {
+	background-color: #4cff1b;
+}
+
+.blockera-block.blockera-block-3 code {
+	background-color: #5a70ff;
+}
+
+.blockera-block.blockera-block-3 span:not([data-rich-text-placeholder]) {
+	background-color: #c04aff;
+}
+
+.blockera-block.blockera-block-3 :is(mark, mark[class]) {
+	background-color: #6ea858;
+}
+.blockera-block.blockera-block-4.wp-block-navigation-link {
+	background-color: #eaeaea;
+	border: 1px solid #00000030;
+	border-radius: 30px;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 3px;
+	padding-right: 20px;
+	padding-bottom: 3px;
+	padding-left: 20px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 15px;
+}
+
+.blockera-block.blockera-block-4.wp-block-navigation-link:hover {
+	background-color: #060606;
+	color: #f6e9e9;
+}
+
+.blockera-block.blockera-block-4.wp-block-navigation-link::before {
+	color: #ff0000;
+	content: "→";
+}
+
+.blockera-block.blockera-block-4.wp-block-navigation-link::after {
+	color: #ff0000;
+	content: "←";
+}
+
+.blockera-block.blockera-block-4 {
+	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.098), 15px);
+	font-style:normal;
+	font-weight:700;
+}
+.blockera-block.blockera-block-5.wp-block-navigation-link {
+	border: 1px solid #d4d4d4;
+	border-radius: 5px;
+	transition: all 500ms ease 0ms;
+	padding-top: 1px;
+	padding-right: 10px;
+	padding-bottom: 1px;
+	padding-left: 10px;
+	font-weight: 600;
+	font-style: normal;
+	color: #ed0000;
+	text-transform: uppercase;
+}
+
+.blockera-block.blockera-block-5.wp-block-navigation-link .wp-block-navigation-item__content {
+	color: #ed0000;
+}
+
+.blockera-block.blockera-block-5.wp-block-navigation-link .wp-block-navigation-item__content:hover {
+	text-decoration: initial;
+}
+
+.blockera-block.blockera-block-5.wp-block-navigation-link:hover {
+	color: #ff0000;
+	border-radius: 15px;
+	background-color: #fedede;
+}
+
+.blockera-block.blockera-block-5 {
+	font-style:normal;
+	font-weight:600;
+	text-transform:uppercase;
+}
+.blockera-block.blockera-block-6.wp-block-navigation-link {
+	background-color: #bde8ff;
+	border: 1px solid #00000045;
+	border-radius: 10px;
+	transition: all 300ms ease 0ms;
+	padding-top: 4px;
+	padding-right: 15px;
+	padding-bottom: 4px;
+	padding-left: 15px;
+	font-weight: 700;
+	font-style: normal;
+	color: #00a6ff;
+	font-size: 16px;
+	text-transform: uppercase;
+}
+
+.blockera-block.blockera-block-6.wp-block-navigation-link .wp-block-navigation-item__content {
+	color: #00a6ff;
+}
+
+.blockera-block.blockera-block-6.wp-block-navigation-link .wp-block-navigation-item__content:hover {
+	color: #00a6ff;
+}
+
+.blockera-block.blockera-block-6.wp-block-navigation-link:hover {
+	color: #00527e;
+	background-color: #63c8ff;
+}
+
+.blockera-block.blockera-block-6.wp-block-navigation-link:hover .wp-block-navigation-item__content {
+	color: #00527e;
+}
+
+.blockera-block.blockera-block-6 {
+	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style:normal;
+	font-weight:700;
+	text-transform:uppercase;
+}
+.blockera-block.blockera-block-7.wp-block-navigation-link {
+	background-color: #fff89c;
+	width: 100%;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-7.wp-block-navigation-link :is(strong, b) {
+	background-color: #ff1b1b;
+}
+
+.blockera-block.blockera-block-7.wp-block-navigation-link :is(em, i) {
+	background-color: #a6c300;
+}
+
+.blockera-block.blockera-block-7.wp-block-navigation-link kbd {
+	background-color: #00ff37;
+}
+
+.blockera-block.blockera-block-7.wp-block-navigation-link code {
+	background-color: #82aeff;
+}
+
+.blockera-block.blockera-block-7.wp-block-navigation-link span:not([data-rich-text-placeholder], .wp-block-navigation-item__label) {
+	background-color: #36dfd1;
+}
+
+.blockera-block.blockera-block-7.wp-block-navigation-link :is(mark, mark[class]) {
+	background-color: #ff38eb;
+}
+.blockera-block.blockera-block-9.wp-block-navigation-link {
+	background-color: #a2fff4;
+	border: 2px solid #00c2ab;
+}
+
+.blockera-block.blockera-block-9.wp-block-navigation-link:hover {
+	background-color: #18f5db;
+	border: 2px solid #008071;
+}
+.blockera-block.blockera-block-10.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) {
+	background-color: #b6ffc0;
+	border-radius: 5px;
+	position: relative;
+	z-index: 10;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+.blockera-block.blockera-block-10.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) a.wp-block-navigation-item__content span.wp-block-navigation-item__label svg {
+	background-color: #fa3535;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-10.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) .wp-block-navigation__submenu-icon {
+	background-color: #18cc00;
+}
+
+.blockera-block.blockera-block-10.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) > .wp-block-navigation-item__content {
+	background-color: #3dff32;
+}
+
+.blockera-block.blockera-block-10 {
+	background-color:#b6ffc0;
+	background-color:#b6ffc0;
+}
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) {
+	background-color: #ffd6d6;
+	width: 100%;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) :is(strong, b) {
+	background-color: #d9d900;
+}
+
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) :is(em, i) {
+	background-color: #ff3e3e;
+}
+
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) kbd {
+	background-color: #72ff27;
+}
+
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) code {
+	background-color: #1b95ff;
+}
+
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) span:not([data-rich-text-placeholder], .wp-block-navigation-item__label, .wp-block-navigation__submenu-icon) {
+	background-color: #0060ff;
+	color: #f6eded;
+}
+
+.blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) :is(mark, mark[class]) {
+	background-color: #ff06c9;
+}
