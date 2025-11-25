@@ -84,6 +84,14 @@
 .blockera-block.blockera-block-1.wp-block-post-comments-count:hover {
 	background-color: #d6d6d6;
 }
+
+.blockera-block.blockera-block-1 {
+	background-color:#ffe1e1;
+	padding-top:10px;
+	padding-right:10px;
+	padding-bottom:10px;
+	padding-left:10px;
+}
 .blockera-block.blockera-block-2.wp-block-post-comments-link {
 	background-color: #fff1d0;
 	border-radius: 10px;
@@ -103,4 +111,13 @@
 
 .blockera-block.blockera-block-2.wp-block-post-comments-link:hover {
 	background-color: #fce4b0;
+}
+
+.blockera-block.blockera-block-2 {
+	background-color:#fff1d0;
+	border-radius:10px;
+	padding-top:10px;
+	padding-right:10px;
+	padding-bottom:10px;
+	padding-left:10px;
 }

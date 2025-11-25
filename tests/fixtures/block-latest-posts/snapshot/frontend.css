@@ -98,3 +98,8 @@
 .blockera-block.blockera-block-1:hover :where(a:not(.wp-element-button)):hover {
 	background-color: #f64f4f;
 }
+
+.blockera-block.blockera-block-1 {
+	background-color:#ffe9e9;
+	border-radius:10px;
+}
