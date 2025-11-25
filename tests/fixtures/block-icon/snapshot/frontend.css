@@ -1,0 +1,52 @@
+.blockera-block.blockera-block--1.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	width: 150px;
+}
+
+.blockera-block.blockera-block--1 {
+	width:150px
+}
+.blockera-block.blockera-block--2.wp-block-image {
+	background-color: #d8e0ff;
+}
+
+.blockera-block.blockera-block--2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	border-radius: 10px;
+	width: 100px;
+}
+
+.blockera-block.blockera-block--2 {
+	border-radius:10px
+}
+.blockera-block.blockera-block--3.wp-block-image {
+	background-color: #d8e0ff;
+}
+
+.blockera-block.blockera-block--3 .has-border-color {
+	border-color: #3b62ff;
+	border-width: 1px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block--3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	border: 1px solid #3b62ff;
+	border-radius: 10px;
+	width: 100px;
+}
+
+.blockera-block.blockera-block--3:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+	color: #0c58f1;
+}
+
+.blockera-block.blockera-block--3:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption:hover {
+	color: #00308f;
+}
+
+.blockera-block.blockera-block--3 .has-border-color {
+	border-color:#3b62ff;
+	border-width:1px;
+	border-radius:10px
+}
+
+.blockera-block.blockera-block--3 {
+	background-color:#d8e0ff
+}
