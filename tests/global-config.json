@@ -30,6 +30,10 @@
 			"replace": "page-id"
 		},
 		{
+			"search": "(?<=[\\s\"'])tag-link-\\d+(?=[\\s\"'#&]|$)",
+			"replace": "tag-link-id"
+		},
+		{
 			"search": "(?<=[\\s\"'])wp-image-\\d+(?=[\\s\"'#&]|$)",
 			"replace": "wp-image-id"
 		},
