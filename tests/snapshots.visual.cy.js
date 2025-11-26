@@ -2,6 +2,8 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
+	activateMuPlugin,
+	deactivateMuPlugin,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -95,6 +97,18 @@ describe('Sections design with Style Engine', () => {
 
 			// Collect all snapshot failures
 			const failures = [];
+
+			// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
+			const muPluginPath = `tests/fixtures/${section}/mu-plugin.php`;
+			cy.readFile(muPluginPath, { timeout: 100 }).then(
+				() => {
+					// File exists, activate it
+					activateMuPlugin(muPluginPath);
+				},
+				() => {
+					// File doesn't exist, which is fine - continue with test
+				}
+			);
 
 			// Check if custom setup.js exists for this test
 			if (setupFn) {
@@ -221,6 +235,17 @@ describe('Sections design with Style Engine', () => {
 					);
 				}
 			});
+
+			// Deactivate mu-plugin if it was activated
+			cy.readFile(muPluginPath, { timeout: 100 }).then(
+				() => {
+					// File exists, deactivate it
+					deactivateMuPlugin(muPluginPath);
+				},
+				() => {
+					// File doesn't exist, which is fine - nothing to deactivate
+				}
+			);
 		});
 	});
 });

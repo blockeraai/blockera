@@ -405,6 +405,60 @@ function blockera_test_apply_html_search_replace( string $content, array $search
 }
 
 /**
+ * Activate mu-plugin from test fixture folder if mu-plugin.php exists.
+ * Copies the mu-plugin.php file to wp-content/mu-plugins/ directory and includes it immediately.
+ * Note: We need to include it directly because WordPress mu-plugins are loaded early in bootstrap,
+ * so copying the file won't make WordPress auto-load it in the same request.
+ *
+ * @param string $design_name The design name (test fixture folder name).
+ *
+ * @return void
+ */
+function blockera_test_activate_mu_plugin( string $design_name): void {
+	$fixtures_path = dirname(__DIR__, 2) . '/fixtures/';
+	$mu_plugin_file = $fixtures_path . $design_name . '/mu-plugin.php';
+
+	if (!file_exists($mu_plugin_file)) {
+		return;
+	}
+
+	// Ensure mu-plugins directory exists
+	if (!file_exists(WPMU_PLUGIN_DIR)) {
+		wp_mkdir_p(WPMU_PLUGIN_DIR);
+	}
+
+	// Copy mu-plugin.php to mu-plugins directory with a unique name
+	$mu_plugin_name = 'blockera-test-' . $design_name . '.php';
+	$target_file = WPMU_PLUGIN_DIR . '/' . $mu_plugin_name;
+
+	$content = file_get_contents($mu_plugin_file);
+	if ($content !== false) {
+		file_put_contents($target_file, $content);
+		
+		// Include the mu-plugin file immediately so it executes in the current request
+		// WordPress mu-plugins are loaded early in bootstrap, so we need to manually include it
+		require_once $target_file;
+	}
+}
+
+/**
+ * Deactivate mu-plugin by removing it from wp-content/mu-plugins/ directory.
+ * Removes the mu-plugin file that was previously activated.
+ *
+ * @param string $design_name The design name (test fixture folder name).
+ *
+ * @return void
+ */
+function blockera_test_deactivate_mu_plugin( string $design_name): void {
+	$mu_plugin_name = 'blockera-test-' . $design_name . '.php';
+	$target_file = WPMU_PLUGIN_DIR . '/' . $mu_plugin_name;
+
+	if (file_exists($target_file)) {
+		unlink($target_file);
+	}
+}
+
+/**
  * Apply a single search-replace operation.
  *
  * @param string $content The content to process.
