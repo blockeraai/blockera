@@ -19,6 +19,13 @@
 	border: 7px solid #0fcdf3;
 }
 
+.blockera-block.blockera-block-1 {
+	border-color:#ff4343;
+	border-width:7px;
+	border-radius:10px;
+	background-color:#ffcccc
+}
+
 .blockera-block.blockera-block-2 .wp-block-embed__wrapper {
 	border: 10px solid #2ec211;
 	width: 400px;
@@ -65,6 +72,13 @@
 	border: 7px solid #0fcdf3;
 }
 
+.blockera-block.blockera-block-2 {
+	border-color:#2ec211;
+	border-width:10px;
+	padding-right:10px;
+	padding-left:60px
+}
+
 .blockera-block.blockera-block-3 .wp-block-embed__wrapper {
 	background-color: #d7d7d7;
 	border: 7px solid #808080;
@@ -98,4 +112,11 @@
 
 .blockera-block.blockera-block-3.wp-block-embed__wrapper:hover {
 	border: 7px solid #0fcdf3;
+}
+
+.blockera-block.blockera-block-3 {
+	border-color:#808080;
+	border-width:7px;
+	border-radius:10px;
+	background-color:#d7d7d7
 }

@@ -14,6 +14,10 @@ n p.blockera-block.blockera-block-2 {
 	font-size: 20px;
 }
 
+.blockera-block.blockera-block-2 {
+	font-size:20px
+}
+
 u0026 {
 	n color: var(--wp--preset--color--accent-3, #503AA8);
 	n

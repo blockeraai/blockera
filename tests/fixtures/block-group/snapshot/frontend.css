@@ -69,6 +69,11 @@
 
 }
 
+.blockera-block.blockera-block-1 {
+	background-color:#fffbcd;
+	margin-top:10px
+}
+
 .blockera-block.blockera-block-2.wp-block-group {
 	background-color: #faeaea;
 	display: flex;
@@ -205,12 +210,24 @@
 	content: "After";
 }
 
+.blockera-block.blockera-block-2 {
+	background-color:#faeaea;
+	padding-top:20px;
+	padding-right:20px;
+	padding-bottom:20px;
+	padding-left:20px
+}
+
 p.blockera-block.blockera-block-3 {
 	background-color: #00000024;
 }
 
 .blockera-block.blockera-block-3 .has-inline-color {
-	background-color: #dfdfdf;
+	background-color:#dfdfdf
+}
+
+.blockera-block.blockera-block-3 {
+	background-color:#00000024
 }
 
 .blockera-block.blockera-block-4.wp-block-group {
@@ -277,6 +294,17 @@ p.blockera-block.blockera-block-3 {
 .blockera-block.blockera-block-4.wp-block-group::after {
 	background-color: #7fa849;
 	content: "After";
+}
+
+.blockera-block.blockera-block-4 {
+	background-color:#deedc7;
+	padding-top:10px;
+	padding-right:10px;
+	padding-bottom:10px;
+	padding-left:10px;
+	font-size:16px;
+	font-style:normal;
+	font-weight:1000
 }
 
 .blockera-block.blockera-block-5 :where(a:not(.wp-element-button)) {

@@ -4,6 +4,10 @@ p.blockera-block.blockera-block--1 {
 	opacity: 50%;
 }
 
+.blockera-block.blockera-block--1 {
+	background-color:#fed7d7
+}
+
 p.blockera-block.blockera-block--2 {
 	background-color: #fed7d7;
 	transform: perspective(20px) translate3d(10px, 10px, 0);
@@ -13,9 +17,17 @@ p.blockera-block.blockera-block--2 {
 	perspective-origin: 50% 50%;
 }
 
+.blockera-block.blockera-block--2 {
+	background-color:#fed7d7
+}
+
 p.blockera-block.blockera-block--3 {
 	background-color: #fed7d7;
 	transform: translate3d(10px, 10px, 0);
+}
+
+.blockera-block.blockera-block--3 {
+	background-color:#fed7d7
 }
 
 p.blockera-block.blockera-block--4 {
@@ -23,14 +35,26 @@ p.blockera-block.blockera-block--4 {
 	transform: scale3d(90%, 90%, 50%);
 }
 
+.blockera-block.blockera-block--4 {
+	background-color:#fed7d7
+}
+
 p.blockera-block.blockera-block--5 {
 	background-color: #feb3b3;
 	transform: rotateX(10deg) rotateY(20deg) rotateZ(0deg);
 }
 
+.blockera-block.blockera-block--5 {
+	background-color:#feb3b3
+}
+
 p.blockera-block.blockera-block--6 {
 	background-color: #f88d8f;
 	transform: skew(10deg, 2deg);
+}
+
+.blockera-block.blockera-block--6 {
+	background-color:#f88d8f
 }
 
 p.blockera-block.blockera-block--7 {
@@ -41,9 +65,17 @@ p.blockera-block.blockera-block--7 {
 	width: 250px;
 }
 
+.blockera-block.blockera-block--7 {
+	background-color:#f88e8f
+}
+
 p.blockera-block.blockera-block--8 {
 	background-color: #fed7d7;
 	transition: all 100ms ease 0ms;
+}
+
+.blockera-block.blockera-block--8 {
+	background-color:#fed7d7
 }
 
 p.blockera-block.blockera-block--9 {
@@ -51,9 +83,17 @@ p.blockera-block.blockera-block--9 {
 	transition: all 100ms ease 0ms, opacity 300ms cubic-bezier(0.175, 0.885, 0.320, 1.275) 50ms, box-shadow 400ms cubic-bezier(0.680, -0.550, 0.265, 1.550) 10ms;
 }
 
+.blockera-block.blockera-block--9 {
+	background-color:#fed7d7
+}
+
 p.blockera-block.blockera-block--10 {
 	background-color: #fed7d7;
 	filter: blur(5px);
+}
+
+.blockera-block.blockera-block--10 {
+	background-color:#fed7d7
 }
 
 p.blockera-block.blockera-block--11 {
@@ -61,9 +101,17 @@ p.blockera-block.blockera-block--11 {
 	filter: blur(5px) drop-shadow(3px 3px 3px #f80000);
 }
 
+.blockera-block.blockera-block--11 {
+	background-color:#fed7d7
+}
+
 p.blockera-block.blockera-block--12 {
 	background-color: #fed7d7;
 	backdrop-filter: blur(5px);
+}
+
+.blockera-block.blockera-block--12 {
+	background-color:#fed7d7
 }
 
 p.blockera-block.blockera-block--13 {
@@ -71,9 +119,17 @@ p.blockera-block.blockera-block--13 {
 	backdrop-filter: blur(5px) drop-shadow(5px 5px 5px #ffa0a0);
 }
 
+.blockera-block.blockera-block--13 {
+	background-color:#fed7d7
+}
+
 p.blockera-block.blockera-block--14 {
 	background-color: #fed7d7;
 	mix-blend-mode: exclusion;
+}
+
+.blockera-block.blockera-block--14 {
+	background-color:#fed7d7
 }
 
 p.blockera-block.blockera-block--15 {

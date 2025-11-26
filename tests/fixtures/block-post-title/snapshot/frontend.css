@@ -11,10 +11,6 @@
 	font-size: 20px;
 }
 
-.blockera-block.blockera-block-1 .has-inline-color {
-	background-color: #dfdfdf;
-}
-
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	background-color: #ff3d3d;
 }
@@ -85,10 +81,6 @@
 }
 
 .blockera-block.blockera-block-2 .has-inline-color {
-	background-color: #dfdfdf;
-}
-
-.blockera-block.blockera-block-2 .has-inline-color {
 	background-color:#dfdfdf
 }
 
@@ -108,10 +100,6 @@
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
-}
-
-.blockera-block.blockera-block-3 .has-inline-color {
-	background-color: #dfdfdf;
 }
 
 .blockera-block.blockera-block-3.wp-block-post-title::before {

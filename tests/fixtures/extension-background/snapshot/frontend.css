@@ -3,6 +3,10 @@ p.blockera-block.blockera-block--1 {
 	background-color: #ffeded;
 }
 
+.blockera-block.blockera-block--1 {
+	background-color:#ffeded
+}
+
 p.blockera-block.blockera-block--2 {
 	background-image: url('https://placehold.co/400x400');
 	background-size: contain;
@@ -10,6 +14,10 @@ p.blockera-block.blockera-block--2 {
 	background-repeat: no-repeat;
 	background-attachment: scroll;
 	background-color: #ffedec;
+}
+
+.blockera-block.blockera-block--2 {
+	background-color:#ffedec
 }
 
 p.blockera-block.blockera-block--3 {
@@ -21,6 +29,11 @@ p.blockera-block.blockera-block--3 {
 	background-color: #ffedec;
 }
 
+.blockera-block.blockera-block--3 {
+	background:linear-gradient(90deg, #009efa 10%, #e52e00 90%);
+	background-color:#ffedec
+}
+
 p.blockera-block.blockera-block--4 {
 	background-size: auto;
 	background-position: 0 0;
@@ -28,6 +41,11 @@ p.blockera-block.blockera-block--4 {
 	background-image: linear-gradient(90deg, rgb(0, 158, 250) 35%, rgb(229, 46, 0) 51%);
 	background-attachment: scroll;
 	background-color: #ffedec;
+}
+
+.blockera-block.blockera-block--4 {
+	background:linear-gradient(90deg, rgb(0, 158, 250) 35%, rgb(229, 46, 0) 51%);
+	background-color:#ffedec
 }
 
 p.blockera-block.blockera-block--5 {
@@ -38,6 +56,10 @@ p.blockera-block.blockera-block--5 {
 	background-attachment: scroll;
 }
 
+.blockera-block.blockera-block--5 {
+	background:radial-gradient(rgb(0, 159, 251) 12%, rgb(229, 46, 0) 100%)
+}
+
 p.blockera-block.blockera-block--6 {
 	background-size: contain, auto;
 	background-position: 50% 50%, 0 0;
@@ -46,14 +68,26 @@ p.blockera-block.blockera-block--6 {
 	background-attachment: scroll, fixed;
 }
 
+.blockera-block.blockera-block--6 {
+	background:radial-gradient(rgb(0, 159, 251) 56%, rgb(229, 46, 0) 100%)
+}
+
 p.blockera-block.blockera-block--7 {
 	background-color: #c6ffbf;
+}
+
+.blockera-block.blockera-block--7 {
+	background-color:#c6ffbf
 }
 
 p.blockera-block.blockera-block--8 {
 	background-color: #c6ffbf;
 	background-clip: content-box;
 	-webkit-background-clip: content-box;
+}
+
+.blockera-block.blockera-block--8 {
+	background-color:#c6ffbf
 }
 
 p.blockera-block.blockera-block--9 {
@@ -63,8 +97,16 @@ p.blockera-block.blockera-block--9 {
 	-webkit-text-fill-color: transparent;
 }
 
+.blockera-block.blockera-block--9 {
+	background-color:#ff4949
+}
+
 p.blockera-block.blockera-block--10 {
 	background-color: #c6ffbe;
 	background-clip: inherit;
 	-webkit-background-clip: inherit;
+}
+
+.blockera-block.blockera-block--10 {
+	background-color:#c6ffbe
 }

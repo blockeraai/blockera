@@ -56,12 +56,20 @@
 	background-color: #d4590d;
 }
 
+.blockera-block.blockera-block-1 {
+	background-color:#615131
+}
+
 .blockera-block.blockera-block-2.wp-block-heading {
 	background-color: #88eaa2;
 }
 
 .blockera-block.blockera-block-2.wp-block-heading:hover {
 	background-color: #48c068;
+}
+
+.blockera-block.blockera-block-2 {
+	background-color:#88eaa2
 }
 
 p.blockera-block.blockera-block-3 {
@@ -76,4 +84,8 @@ p.blockera-block.blockera-block-4 {
 
 p.blockera-block.blockera-block-4:hover {
 	background-color: #45c739;
+}
+
+.blockera-block.blockera-block-4 {
+	background-color:#68be61
 }
