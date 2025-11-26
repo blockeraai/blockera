@@ -1,5 +1,5 @@
 {
-	"core": "https://wordpress.org/wordpress-6.9-beta3.zip",
+	"core": "https://wordpress.org/wordpress-6.9-RC2.zip",
 	"plugins": [
 		".",
 		"https://downloads.wordpress.org/plugin/woocommerce.latest-stable.zip"
