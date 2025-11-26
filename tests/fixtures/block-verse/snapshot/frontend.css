@@ -42,16 +42,16 @@
 }
 
 .blockera-block.blockera-block-1 .has-inline-color {
-	background-color:#dfdfdf
+	background-color: #dfdfdf
 }
 
 .blockera-block.blockera-block-1 {
-	border-color:#ff9292;
-	border-width:3px;
-	border-radius:10px;
-	background-color:#fadbdb;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	border-color: #ff9292;
+	border-width: 3px;
+	border-radius: 10px;
+	background-color: #fadbdb;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }

@@ -25,12 +25,12 @@
 }
 
 .blockera-block.blockera-block-2 {
-	border-radius:10px;
-	background-color:#ffe0e0;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px
+	border-radius: 10px;
+	background-color: #ffe0e0;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
 }
 .blockera-block.blockera-block-3.wp-block-term-name {
 	background-color: #ffb2b2;
@@ -109,14 +109,14 @@
 }
 
 .blockera-block.blockera-block-3 {
-	background-color:#ffb2b2;
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style:normal;
-	font-weight:700;
-	padding-top:0px;
-	padding-right:5px;
-	padding-bottom:0px;
-	padding-left:5px;
+	background-color: #ffb2b2;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 700;
+	padding-top: 0px;
+	padding-right: 5px;
+	padding-bottom: 0px;
+	padding-left: 5px;
 }
 .blockera-block.blockera-block-4.wp-block-term-description {
 	background-color: #b2ddab;
@@ -131,14 +131,14 @@
 }
 
 .blockera-block.blockera-block-4 {
-	background-color:#b2ddab;
-	font-size:14px;
-	font-style:normal;
-	font-weight:600;
-	padding-top:2px;
-	padding-right:10px;
-	padding-bottom:2px;
-	padding-left:10px;
+	background-color: #b2ddab;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+	padding-left: 10px;
 }
 .blockera-block.blockera-block-5.wp-block-term-count {
 	background-color: #78efff;
@@ -170,11 +170,11 @@
 }
 
 .blockera-block.blockera-block-5 {
-	background-color:#78efff;
-	font-size:14px;
-	font-style:normal;
-	font-weight:600;
-	border-radius:40px;
+	background-color: #78efff;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
+	border-radius: 40px;
 }
 .blockera-block.blockera-block-1.wp-block-term-template {
 	background-color: #d9d9d9;
@@ -185,9 +185,9 @@
 }
 
 .blockera-block.blockera-block-1 {
-	background-color:#d9d9d9;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px;
+	background-color: #d9d9d9;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
 }

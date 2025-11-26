@@ -18,14 +18,14 @@
 }
 
 .blockera-block.blockera-block-1 {
-	color:#c90a0a;
-	background-color:#ffd7d7;
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style:normal;
-	font-weight:600;
-	border-radius:10px;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px;
+	color: #c90a0a;
+	background-color: #ffd7d7;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 600;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }

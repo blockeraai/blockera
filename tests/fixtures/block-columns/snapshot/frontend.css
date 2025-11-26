@@ -71,11 +71,11 @@
 }
 
 .blockera-block.blockera-block-1 {
-	background-color:#ffdba9;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	background-color: #ffdba9;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }
 
 .blockera-block.blockera-block-2.wp-block-column {
@@ -97,12 +97,12 @@
 }
 
 .blockera-block.blockera-block-2 {
-	background-color:#aacc44;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px;
-	flex-basis:30%
+	background-color: #aacc44;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	flex-basis: 30%
 }
 
 p.blockera-block.blockera-block-4 {
@@ -110,11 +110,11 @@ p.blockera-block.blockera-block-4 {
 }
 
 .blockera-block.blockera-block-4 .has-inline-color {
-	background-color:#dfdfdf
+	background-color: #dfdfdf
 }
 
 .blockera-block.blockera-block-4 {
-	font-size:16px
+	font-size: 16px
 }
 
 .blockera-block.blockera-block-5.wp-block-column {
@@ -126,11 +126,11 @@ p.blockera-block.blockera-block-4 {
 }
 
 .blockera-block.blockera-block-5 {
-	background-color:#f47b7b;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	background-color: #f47b7b;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }
 
 .blockera-block.blockera-block-7.wp-block-columns {
@@ -173,17 +173,17 @@ p.blockera-block.blockera-block-4 {
 }
 
 .blockera-block.blockera-block-7 {
-	border-color:#00000033;
-	border-width:1px;
-	border-radius:10px;
-	background-color:#f0ffc6;
-	padding-top:30px;
-	padding-right:20px;
-	padding-bottom:30px;
-	padding-left:20px;
-	font-size:14px;
-	font-style:normal;
-	font-weight:600
+	border-color: #00000033;
+	border-width: 1px;
+	border-radius: 10px;
+	background-color: #f0ffc6;
+	padding-top: 30px;
+	padding-right: 20px;
+	padding-bottom: 30px;
+	padding-left: 20px;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600
 }
 
 .blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
@@ -231,7 +231,7 @@ p.blockera-block.blockera-block-9:hover {
 }
 
 .blockera-block.blockera-block-9 {
-	background-color:#81ffd3
+	background-color: #81ffd3
 }
 
 p.blockera-block.blockera-block-10 {
@@ -239,11 +239,11 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-10 .has-inline-color {
-	background-color:#dfdfdf
+	background-color: #dfdfdf
 }
 
 .blockera-block.blockera-block-10 {
-	font-size:14px
+	font-size: 14px
 }
 
 .blockera-block.blockera-block-11.wp-block-group {
@@ -264,11 +264,11 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-11 {
-	background-color:#d4d4d4;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px
+	background-color: #d4d4d4;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
 }
 
 .blockera-block.blockera-block-12.wp-block-columns {
@@ -294,13 +294,13 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-12 {
-	background-color:#e0f2ff;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px;
-	font-style:normal;
-	font-weight:600
+	background-color: #e0f2ff;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-style: normal;
+	font-weight: 600
 }
 
 .blockera-block.blockera-block-13.wp-block-column {
@@ -309,8 +309,8 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-13 {
-	background-color:#ffc5c5;
-	flex-basis:50%
+	background-color: #ffc5c5;
+	flex-basis: 50%
 }
 
 .blockera-block.blockera-block-14.wp-block-columns {
@@ -332,11 +332,11 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-14 {
-	background-color:#ffd3fa;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px
+	background-color: #ffd3fa;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
 }
 
 .blockera-block.blockera-block-15.wp-block-columns {
@@ -372,11 +372,11 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-15 {
-	background-color:#ffd3fa;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px
+	background-color: #ffd3fa;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
 }
 
 .blockera-block.blockera-block-16.wp-block-columns {
@@ -392,11 +392,11 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-16 {
-	background-color:#d2fff8;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	background-color: #d2fff8;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }
 
 .blockera-block.blockera-block-17.wp-block-column {
@@ -412,5 +412,5 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-17 {
-	flex-basis:150px
+	flex-basis: 150px
 }

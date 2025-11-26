@@ -7,10 +7,10 @@ p.blockera-block.blockera-block-1 {
 }
 
 .blockera-block.blockera-block-1 {
-	background-color:#ffe7e7;
-	font-size:calc(30px)func;
-	font-style:normal;
-	font-weight:1000
+	background-color: #ffe7e7;
+	font-size: calc(30px)func;
+	font-style: normal;
+	font-weight: 1000
 }
 
 p.blockera-block.blockera-block-2 {
@@ -20,9 +20,9 @@ p.blockera-block.blockera-block-2 {
 }
 
 .blockera-block.blockera-block-2 {
-	background-color:#ffe5e5;
-	margin-top:calc(100px)func;
-	padding-top:calc(100px)func
+	background-color: #ffe5e5;
+	margin-top: calc(100px)func;
+	padding-top: calc(100px)func
 }
 
 p.blockera-block.blockera-block-3 {
@@ -31,7 +31,7 @@ p.blockera-block.blockera-block-3 {
 }
 
 .blockera-block.blockera-block-3 {
-	background-color:#ffd3d3
+	background-color: #ffd3d3
 }
 
 p.blockera-block.blockera-block-4 {
@@ -39,12 +39,12 @@ p.blockera-block.blockera-block-4 {
 }
 
 .blockera-block.blockera-block-4 .has-inline-color {
-	background-color:#5577ff;
-	color:#ffffff
+	background-color: #5577ff;
+	color: #ffffff
 }
 
 .blockera-block.blockera-block-4 {
-	background-color:#d8e0ff
+	background-color: #d8e0ff
 }
 
 p.blockera-block.blockera-block-5 {
@@ -53,7 +53,7 @@ p.blockera-block.blockera-block-5 {
 }
 
 .blockera-block.blockera-block-5 .has-inline-color {
-	background-color:#FFEE58
+	background-color: #FFEE58
 }
 
 p.blockera-block.blockera-block-6 {
@@ -66,7 +66,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 .blockera-block.blockera-block-7 {
-	background-color:#d8e0ff
+	background-color: #d8e0ff
 }
 
 p.blockera-block.blockera-block-8 {
@@ -74,7 +74,7 @@ p.blockera-block.blockera-block-8 {
 }
 
 .blockera-block.blockera-block-8 {
-	background-color:#d8e0ff
+	background-color: #d8e0ff
 }
 
 p.blockera-block.blockera-block-9 {
@@ -82,7 +82,7 @@ p.blockera-block.blockera-block-9 {
 }
 
 .blockera-block.blockera-block-9 {
-	background-color:#d8e0ff
+	background-color: #d8e0ff
 }
 
 p.blockera-block.blockera-block-10 {
@@ -90,7 +90,7 @@ p.blockera-block.blockera-block-10 {
 }
 
 .blockera-block.blockera-block-10 {
-	background-color:#d8e0ff
+	background-color: #d8e0ff
 }
 
 p.blockera-block.blockera-block-11 {
@@ -104,8 +104,8 @@ p.blockera-block.blockera-block-11 {
 }
 
 .blockera-block.blockera-block-11 {
-	color:#ff8989;
-	background-color:#d8e0ff
+	color: #ff8989;
+	background-color: #d8e0ff
 }
 
 p.blockera-block.blockera-block-12 {
@@ -146,9 +146,9 @@ p.blockera-block.blockera-block-12::after {
 }
 
 .blockera-block.blockera-block-12 {
-	color:#3b14fe;
-	font-style:normal;
-	font-weight:600
+	color: #3b14fe;
+	font-style: normal;
+	font-weight: 600
 }
 
 p.blockera-block.blockera-block-13 {
@@ -181,7 +181,7 @@ p.blockera-block.blockera-block-13 {
 }
 
 .blockera-block.blockera-block-13 .has-inline-color {
-	background-color:#dfdfdf
+	background-color: #dfdfdf
 }
 
 p.blockera-block.blockera-block-14 {
@@ -189,9 +189,9 @@ p.blockera-block.blockera-block-14 {
 }
 
 .blockera-block.blockera-block-14 .has-inline-color {
-	background-color:#dfdfdf
+	background-color: #dfdfdf
 }
 
 .blockera-block.blockera-block-14 {
-	background-color:#f3f3f3
+	background-color: #f3f3f3
 }

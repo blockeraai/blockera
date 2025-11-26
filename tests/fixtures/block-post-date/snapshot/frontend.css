@@ -21,15 +21,15 @@
 }
 
 .blockera-block.blockera-block-1 {
-	color:#980000;
-	background-color:#fee4e4;
-	font-style:normal;
-	font-weight:700;
-	border-radius:5px;
-	padding-top:10px;
-	padding-right:10px;
-	padding-bottom:10px;
-	padding-left:10px;
+	color: #980000;
+	background-color: #fee4e4;
+	font-style: normal;
+	font-weight: 700;
+	border-radius: 5px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
 .blockera-block.blockera-block-2.wp-block-post-date {
 	background-color: #ced3ff;
@@ -62,15 +62,15 @@
 }
 
 .blockera-block.blockera-block-2 {
-	color:#2050ff;
-	background-color:#ced3ff;
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
-	font-style:normal;
-	font-weight:500;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px;
+	color: #2050ff;
+	background-color: #ced3ff;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
+	font-style: normal;
+	font-weight: 500;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
 }
 .blockera-block.blockera-block-3.wp-block-post-date {
 	display: flex;

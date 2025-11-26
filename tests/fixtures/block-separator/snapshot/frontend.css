@@ -4,8 +4,8 @@
 }
 
 .blockera-block.blockera-block-1 {
-	border-bottom-color:#ffc1c1;
-	border-bottom-width:2px
+	border-bottom-color: #ffc1c1;
+	border-bottom-width: 2px
 }
 
 .blockera-block.blockera-block-2.wp-block-separator {
@@ -18,9 +18,9 @@
 }
 
 .blockera-block.blockera-block-2 {
-	border-width:0px;
-	margin-right:auto;
-	margin-left:auto;
-	background-color:#97dd00;
-	color:#97dd00
+	border-width: 0px;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: #97dd00;
+	color: #97dd00
 }

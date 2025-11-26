@@ -14,14 +14,14 @@
 }
 
 .blockera-block.blockera-block-1 {
-	border-color:#6ab2ed;
-	border-width:2px;
-	border-radius:8px;
-	background-color:#c0e3ff;
-	padding-top:30px;
-	padding-right:30px;
-	padding-bottom:30px;
-	padding-left:30px
+	border-color: #6ab2ed;
+	border-width: 2px;
+	border-radius: 8px;
+	background-color: #c0e3ff;
+	padding-top: 30px;
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-left: 30px
 }
 
 .blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure {
@@ -34,7 +34,7 @@
 }
 
 .blockera-block.blockera-block-2 {
-	border-radius:0px
+	border-radius: 0px
 }
 
 .blockera-block.blockera-block-3 figcaption {
@@ -66,6 +66,6 @@
 }
 
 .blockera-block.blockera-block-4 {
-	border-radius:0px;
-	background-color:#85ead9
+	border-radius: 0px;
+	background-color: #85ead9
 }

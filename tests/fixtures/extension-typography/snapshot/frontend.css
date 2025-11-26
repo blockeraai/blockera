@@ -9,8 +9,8 @@ p.blockera-block.blockera-block--2 {
 }
 
 .blockera-block.blockera-block--2 {
-	font-style:normal;
-	font-weight:600
+	font-style: normal;
+	font-weight: 600
 }
 
 p.blockera-block.blockera-block--3 {
@@ -18,7 +18,7 @@ p.blockera-block.blockera-block--3 {
 }
 
 .blockera-block.blockera-block--3 {
-	font-size:20px
+	font-size: 20px
 }
 
 p.blockera-block.blockera-block--4 {
@@ -26,7 +26,7 @@ p.blockera-block.blockera-block--4 {
 }
 
 .blockera-block.blockera-block--4 {
-	line-height:2
+	line-height: 2
 }
 
 p.blockera-block.blockera-block--5 {
@@ -38,7 +38,7 @@ p.blockera-block.blockera-block--5 {
 }
 
 .blockera-block.blockera-block--5 {
-	color:#ff0000
+	color: #ff0000
 }
 
 p.blockera-block.blockera-block--6 {
@@ -58,7 +58,7 @@ p.blockera-block.blockera-block--9 {
 }
 
 .blockera-block.blockera-block--9 {
-	text-transform:uppercase
+	text-transform: uppercase
 }
 
 p.blockera-block.blockera-block--10 {
@@ -66,7 +66,7 @@ p.blockera-block.blockera-block--10 {
 }
 
 .blockera-block.blockera-block--10 {
-	text-decoration:overline
+	text-decoration: overline
 }
 
 p.blockera-block.blockera-block--11 {
@@ -79,7 +79,7 @@ p.blockera-block.blockera-block--12 {
 }
 
 .blockera-block.blockera-block--12 {
-	writing-mode:vertical-rl
+	writing-mode: vertical-rl
 }
 
 p.blockera-block.blockera-block--13 {
@@ -102,7 +102,7 @@ p.blockera-block.blockera-block--16 {
 }
 
 .blockera-block.blockera-block--16 {
-	letter-spacing:10px
+	letter-spacing: 10px
 }
 
 p.blockera-block.blockera-block--17 {

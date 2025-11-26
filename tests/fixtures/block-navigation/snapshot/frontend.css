@@ -18,9 +18,9 @@
 }
 
 .blockera-block.blockera-block-1 {
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
-	font-style:normal;
-	font-weight:600;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 600;
 }
 .blockera-block.blockera-block-2.wp-block-home-link {
 	background-color: #ffdeb6;
@@ -50,9 +50,9 @@
 }
 
 .blockera-block.blockera-block-2 {
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
-	font-style:normal;
-	font-weight:600;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 600;
 }
 .blockera-block.blockera-block-3.wp-block-home-link {
 	background-color: #ffedc9;
@@ -121,9 +121,9 @@
 }
 
 .blockera-block.blockera-block-4 {
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.098), 15px);
-	font-style:normal;
-	font-weight:700;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.098), 15px);
+	font-style: normal;
+	font-weight: 700;
 }
 .blockera-block.blockera-block-5.wp-block-navigation-link {
 	border: 1px solid #d4d4d4;
@@ -154,9 +154,9 @@
 }
 
 .blockera-block.blockera-block-5 {
-	font-style:normal;
-	font-weight:600;
-	text-transform:uppercase;
+	font-style: normal;
+	font-weight: 600;
+	text-transform: uppercase;
 }
 .blockera-block.blockera-block-6.wp-block-navigation-link {
 	background-color: #bde8ff;
@@ -192,10 +192,10 @@
 }
 
 .blockera-block.blockera-block-6 {
-	font-size:clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
-	font-style:normal;
-	font-weight:700;
-	text-transform:uppercase;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 700;
+	text-transform: uppercase;
 }
 .blockera-block.blockera-block-7.wp-block-navigation-link {
 	background-color: #fff89c;
@@ -263,8 +263,8 @@
 }
 
 .blockera-block.blockera-block-10 {
-	background-color:#b6ffc0;
-	background-color:#b6ffc0;
+	background-color: #b6ffc0;
+	background-color: #b6ffc0;
 }
 .blockera-block.blockera-block-11.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) {
 	background-color: #ffd6d6;

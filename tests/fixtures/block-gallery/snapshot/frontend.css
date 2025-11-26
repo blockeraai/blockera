@@ -45,11 +45,11 @@
 }
 
 .blockera-block.blockera-block-1 {
-	background-color:#bdf7ff;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	background-color: #bdf7ff;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }
 
 .blockera-block.blockera-block-2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
@@ -78,7 +78,7 @@
 }
 
 .blockera-block.blockera-block-2 .wp-image-815 {
-	border-radius:5px
+	border-radius: 5px
 }
 
 .blockera-block.blockera-block-3.wp-block-gallery {
@@ -96,7 +96,7 @@
 }
 
 .blockera-block.blockera-block-3 {
-	background-color:#e1ffdd
+	background-color: #e1ffdd
 }
 
 .blockera-block.blockera-block-4.wp-block-image {
@@ -136,7 +136,7 @@
 }
 
 .blockera-block.blockera-block-5 {
-	background-color:#c9bcdb
+	background-color: #c9bcdb
 }
 
 .blockera-block.blockera-block-6.wp-block-gallery {
@@ -187,12 +187,12 @@
 }
 
 .blockera-block.blockera-block-6 {
-	border-radius:15px;
-	background-color:#a7c1d7;
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	border-radius: 15px;
+	background-color: #a7c1d7;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }
 
 .blockera-block.blockera-block-7.wp-block-gallery {
@@ -209,11 +209,11 @@
 }
 
 .blockera-block.blockera-block-7 {
-	background:linear-gradient(90deg, rgb(228, 228, 228) 10%, rgb(255, 192, 177) 90%);
-	padding-top:20px;
-	padding-right:20px;
-	padding-bottom:20px;
-	padding-left:20px
+	background: linear-gradient(90deg, rgb(228, 228, 228) 10%, rgb(255, 192, 177) 90%);
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
 }
 
 .blockera-block.blockera-block-8.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {

@@ -57,13 +57,13 @@
 }
 
 .blockera-block.blockera-block-1 {
-	border-color:#89daf5;
-	border-width:1px;
-	border-radius:10px;
-	background-color:#d5f4fe;
-	padding-top:10px;
-	padding-bottom:10px;
-	padding-left:10px
+	border-color: #89daf5;
+	border-width: 1px;
+	border-radius: 10px;
+	background-color: #d5f4fe;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
 }
 
 .blockera-block.blockera-block-2.wp-block-file:focus-within {
