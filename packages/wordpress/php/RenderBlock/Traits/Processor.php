@@ -179,10 +179,13 @@ trait Processor {
 			);
 
 			foreach ($inners as $selector => $declarations) {
-				$inner_style = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
+				// Normalize declarations.
+				$declarations = preg_replace('/\:/', ': ', $declarations);
+				// Create css rule.
+				$css_rule = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
 
-				if (! in_array($inner_style, $this->styles, true)) {
-					$this->styles[] = $inner_style;
+				if (! in_array($css_rule, $this->styles, true)) {
+					$this->styles[] = $css_rule;
 				}
 
 				unset($styles[ $selector ]);
@@ -190,10 +193,13 @@ trait Processor {
 
 			// Ensure that the root style is added to the styles property while $styles is not empty.
 			if (! empty($styles)) {
-				$root_style = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+				// Normalize styles.
+				$styles = preg_replace('/\:/', ': ', $styles);
+				// Create css rule.
+				$css_rule = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
 
-				if (! in_array($root_style, $this->styles, true)) {
-					$this->styles[] = $root_style;	
+				if (! in_array($css_rule, $this->styles, true)) {
+					$this->styles[] = $css_rule;	
 				}
 			}
 		}
