@@ -222,6 +222,68 @@ if ( ! function_exists( 'blockera_get_unique_class_name_regex' ) ) {
 	}
 }
 
+if (! function_exists('blockera_get_wp_classname_details')) {
+
+	/**
+	 * Retrieve details of WordPress classname.
+	 * 
+	 * @param string $classname the search classname.
+	 *
+	 * @return array array. Array with "is_matched" and "matches" index on success retrieved data, empty array on otherwise!
+	 */
+	function blockera_get_wp_classname_details( string $classname): array {
+
+		if (empty(trim($classname))) {
+			return [];
+		}
+
+		$is_matched = (bool) preg_match(blockera_block_get_wp_classname_regex(), $classname, $matches);
+
+		return compact('is_matched', 'matches');
+	}
+}
+
+if (! function_exists('blockera_block_get_wp_classname_regex')) {
+
+	/**
+	 * Retrieve regex pattern to detect WordPress classname.
+	 * 
+	 * @return string the regular expression to detect WordPress classname.
+	 */
+	function blockera_block_get_wp_classname_regex(): string {
+
+		return '/wp-(block|element|elements)/i';
+	}
+}
+
+if (! function_exists('blockera_pick_specific_classname')) {
+
+	/**
+	 * Pick specific classname from the given classname.
+	 *
+	 * @param array $classnames the classnames.
+	 *
+	 * @return string the specific classname.
+	 */
+	function blockera_pick_specific_classname( array $classnames): string {
+
+		foreach ($classnames as $classname) {
+			// Priority 1: Look for blockera unique classes.
+			if (preg_match('/\b(blockera-block-\S+)\b/', $classname)) {
+				return $classname;
+			}
+
+			// Priority 2: Look for classes with numbers (likely unique identifiers).
+			if (preg_match('/\d+/', $classname)) {
+				return $classname;
+			}
+		}
+
+		// Fallback: Return first classname if no specific classname found.
+		return $classnames[0] ?? '';
+	}
+}
+
 if (! function_exists('blockera_block_is_dynamic')) {
 
 	/**
