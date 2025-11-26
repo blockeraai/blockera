@@ -219,7 +219,7 @@ class Transpiler {
 		if ($this->isValidBlock( $block ) && blockera_is_supported_block($block) || $is_allowed) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
-				if (empty($innerContent)) {
+				if (empty($innerContent) || ! $innerContent || empty(trim($innerContent))) {
 					continue;
 				}
 

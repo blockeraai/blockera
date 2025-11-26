@@ -198,6 +198,8 @@ class RenderContent {
 		$is_dynamic          = blockera_block_is_dynamic($block);
 		$is_static_with_icon = ! $is_dynamic && blockera_block_has_icon($block);
 
+		$allowed_to_render = ( ! empty($is_doing_shortcode) || $is_dynamic || $is_static_with_icon ) && ! str_contains($block_content, 'be-transpiled');
+
 		if (isset($block['blockName']) && 'core/block' === $block['blockName']) {
 
 			$this->supports = $supports;
@@ -214,7 +216,7 @@ class RenderContent {
 
 			return $this->cleanup($post, 'block_content');
 
-		} elseif (( ! empty($is_doing_shortcode) || $is_dynamic || $is_static_with_icon ) && ! str_contains($block_content, 'be-transpiled')) {
+		} elseif ($allowed_to_render || blockera_block_is_query($block['blockName'] ?? '')) {
 
 			$this->render_instance->setIsDoingTranspile(true);
 			// Disable cache for dynamic blocks.
