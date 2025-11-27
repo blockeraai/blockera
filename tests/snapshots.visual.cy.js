@@ -35,9 +35,9 @@ const sections = sectionsContext
 
 		const sectionId = matches[1];
 
-		if (sectionId !== 'block-query-title') {
-			return null;
-		}
+		// if (sectionId !== 'block-query-title') {
+		// 	return null;
+		// }
 
 		const sectionContent = sectionsContext(key);
 
