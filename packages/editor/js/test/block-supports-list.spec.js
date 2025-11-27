@@ -34,7 +34,6 @@ const ajv = new Ajv({ allowUnionTypes: true });
 	'position',
 	'size',
 	'spacing',
-	'textShadow',
 	'typography',
 ].forEach((support) => {
 	let supports;
@@ -74,9 +73,6 @@ const ajv = new Ajv({ allowUnionTypes: true });
 			break;
 		case 'spacing':
 			supports = spacing;
-			break;
-		case 'textShadow':
-			supports = textShadow;
 			break;
 		case 'typography':
 			supports = typography;
