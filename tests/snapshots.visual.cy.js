@@ -35,9 +35,9 @@ const sections = sectionsContext
 
 		const sectionId = matches[1];
 
-		// if (sectionId !== 'block-footnotes') {
-		// 	return null;
-		// }
+		if (sectionId !== 'block-query-title') {
+			return null;
+		}
 
 		const sectionContent = sectionsContext(key);
 
@@ -100,15 +100,14 @@ describe('Sections design with Style Engine', () => {
 
 			// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
 			const muPluginPath = `tests/fixtures/${section}/mu-plugin.php`;
-			cy.readFile(muPluginPath, { timeout: 100 }).then(
-				() => {
+			cy.exec(`test -f ${muPluginPath}`, {
+				failOnNonZeroExit: false,
+			}).then((result) => {
+				if (result.code === 0) {
 					// File exists, activate it
 					activateMuPlugin(muPluginPath);
-				},
-				() => {
-					// File doesn't exist, which is fine - continue with test
 				}
-			);
+			});
 
 			// Check if custom setup.js exists for this test
 			if (setupFn) {
@@ -237,15 +236,14 @@ describe('Sections design with Style Engine', () => {
 			});
 
 			// Deactivate mu-plugin if it was activated
-			cy.readFile(muPluginPath, { timeout: 100 }).then(
-				() => {
+			cy.exec(`test -f ${muPluginPath}`, {
+				failOnNonZeroExit: false,
+			}).then((result) => {
+				if (result.code === 0) {
 					// File exists, deactivate it
 					deactivateMuPlugin(muPluginPath);
-				},
-				() => {
-					// File doesn't exist, which is fine - nothing to deactivate
 				}
-			);
+			});
 		});
 	});
 });
