@@ -6,6 +6,10 @@
 			"replace": "https://blockera.ai"
 		},
 		{
+			"search": "https://site-blockera.test",
+			"replace": "https://blockera.ai"
+		},
+		{
 			"search": "wp-elements-[^\\s\"']+",
 			"replace": "wp-elements-hash-id"
 		},
