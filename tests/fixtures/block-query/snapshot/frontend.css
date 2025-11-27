@@ -23,6 +23,49 @@
 	padding-top: var(--wp--preset--spacing--60);
 	padding-bottom: var(--wp--preset--spacing--60)
 }
+
+.blockera-block.blockera-block-12.wp-block-group {
+	background-color: #fff1e4;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-12 {
+	background-color: #fff1e4;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
+}
+
+.blockera-block.blockera-block-14.wp-block-group {
+	background-color: #ffd2a9;
+	display: flex;
+	flex-wrap: nowrap !important;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-14 .wp-block-post-time-to-read {
+	background-color: #ffb672;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-14 {
+	background-color: #ffd2a9;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px
+}
 .blockera-block.blockera-block-1.wp-block-query-total {
 	background-color: #d4d4d4;
 	display: flex;
@@ -229,4 +272,44 @@
 
 .blockera-block.blockera-block-10 {
 	background-color: #ffbfbf;
+}
+.blockera-block.blockera-block-13.wp-block-post-title {
+	background-color: #ffd2aa;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-13 {
+	background-color: #ffd2aa;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+.blockera-block.blockera-block-15.wp-block-post-author-name {
+	background-color: #e49851;
+	border-radius: 40px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-15 {
+	background-color: #e49851;
+	border-radius: 40px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+.blockera-block.blockera-block-16.wp-block-post-content {
+	background-color: #ffb46e;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
