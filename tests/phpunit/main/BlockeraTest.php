@@ -175,6 +175,8 @@ class BlockeraTest extends AppTestCase {
 				$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
 			}
 
+			$content = "<link rel='stylesheet' href='./frontend-global-styles.css'>\n<link rel='stylesheet' href='./frontend.css'>\n\n" . $content;
+
 			// Check with snapshot content
 			$this->assertMatchesSnapshot($content, new HtmlDriver());
 
