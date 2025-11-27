@@ -566,8 +566,7 @@
                     "Blockera\\WordPress\\": "php/"
                 },
                 "files": [
-                    "php/functions.php",
-                    "php/RenderBlock/V2/functions.php"
+                    "php/functions.php"
                 ]
             },
             "autoload-dev": {
