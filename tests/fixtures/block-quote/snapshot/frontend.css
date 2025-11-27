@@ -59,8 +59,20 @@
 	background-color: #00acff;
 }
 
+.blockera-block.blockera-block-1 {
+	border-top-color: #e6a900;
+	border-top-width: 5px;
+	border-left-width: 0px;
+	background-color: #ffeebe;
+	padding-top: 31px;
+	padding-right: 31px;
+	padding-bottom: 31px;
+	padding-left: 31px;
+	font-size: 20px
+}
+
 .blockera-block.blockera-block-1 .has-inline-color {
-	background-color:#dfdfdf
+	background-color: #dfdfdf
 }
 
 .blockera-block.blockera-block-2.wp-block-quote {
@@ -107,4 +119,8 @@
 	display: block;
 	margin-top: 20px;
 	content: "After";
+}
+
+.blockera-block.blockera-block-2 {
+	background-color: #ffdcdc
 }

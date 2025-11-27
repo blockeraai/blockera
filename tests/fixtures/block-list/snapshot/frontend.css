@@ -27,6 +27,11 @@
 	color: #ffffff;
 }
 
+.blockera-block.blockera-block-4 {
+	color: #ffffff;
+	background-color: #eb8c50
+}
+
 .wp-block-list > li.blockera-block.blockera-block-5 {
 	background-color: #ffd3d3;
 	font-weight: 600;
@@ -36,6 +41,13 @@
 
 .wp-block-list > li.blockera-block.blockera-block-5 a:not(.wp-element-button) {
 	color: #c73535;
+}
+
+.blockera-block.blockera-block-5 {
+	color: #c73535;
+	background-color: #ffd3d3;
+	font-style: normal;
+	font-weight: 600
 }
 
 .wp-block-list > li.blockera-block.blockera-block-6 {
@@ -75,6 +87,19 @@
 	border-radius: 20px;
 }
 
+.blockera-block.blockera-block-6 {
+	border-radius: 10px;
+	color: #900000;
+	background-color: #ffdada;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-size: 18px;
+	font-style: normal;
+	font-weight: 600
+}
+
 .blockera-block.blockera-block-8.wp-block-list {
 	background-color: #edffcf;
 	transition: all 500ms ease 0ms;
@@ -95,6 +120,13 @@ ul.blockera-block.blockera-block-8:hover {
 	border: 2px solid #189d00;
 }
 
+.blockera-block.blockera-block-8 {
+	border-color: #26ff00;
+	border-width: 2px;
+	border-radius: 10px;
+	background-color: #edffcf
+}
+
 .wp-block-list > li.blockera-block.blockera-block-9 {
 	background-color: #0000002e;
 	order: 100;
@@ -106,4 +138,8 @@ ul.blockera-block.blockera-block-8:hover {
 }
 
 
+}
+
+.blockera-block.blockera-block-9 {
+	background-color: #0000002e
 }

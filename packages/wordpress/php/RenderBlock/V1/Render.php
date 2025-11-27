@@ -255,10 +255,6 @@ class Render {
          */
         $parser = $this->app->make(Parser::class);
 		$parser->setSupports($supports);
-		
-		if ($this->is_doing_transpile) {
-			$parser->setInlineStyles($inline_styles);
-		}
 
         // Computation css rules for current block by server side style engine...
         $computed_css_rules = $parser->getCss(compact('block', 'unique_class_name'));
@@ -266,12 +262,14 @@ class Render {
 		// Render block with features.
         $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
 
+		// Push to stack the generated styles by style engine for current processed block.
 		if (! empty($computed_css_rules)) {
 			$this->styles[] = $computed_css_rules;
 
         }
 
-		if ($this->is_doing_transpile) {
+		// Push to stack the inline styles for current processed block.
+		if ($this->is_doing_transpile && ! empty($inline_styles)) {
 			$this->addInlineStylesToStack($inline_styles);
 		}
 
@@ -280,6 +278,7 @@ class Render {
 			$this->styles[] .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
 		}
 
+		// Combine all styles to a single string.
 		$computed_css_rules = implode(PHP_EOL, array_unique($this->styles));
 
 		// Print css into inline style on "wp_head" action occur.
@@ -298,8 +297,8 @@ class Render {
 			blockera_set_block_cache($cache_key, $data);
 		}
 
-		// Resetting inline styles properties.
-		$this->resetInlineStyles();
+		// Resetting styles properties.
+		$this->resetStylesProperties();
 
         return $html;
     }
@@ -444,11 +443,11 @@ class Render {
     }
 
 	/**
-	 * Reset inline styles properties.
+	 * Reset styles properties.
 	 *
 	 * @return void
 	 */
-	protected function resetInlineStyles(): void {
+	protected function resetStylesProperties(): void {
 		
 		$this->styles        = [];
 		$this->inline_styles = [];

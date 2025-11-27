@@ -1,11 +1,14 @@
 {
-	"core": "https://wordpress.org/wordpress-6.9-beta2.zip",
+	"core": "https://wordpress.org/wordpress-6.9-RC2.zip",
 	"plugins": [
 		".",
+		"../blockera-pro",
 		"https://downloads.wordpress.org/plugin/svg-support.latest-stable.zip"
 	],
 	"config": {
-		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true
+		"BLOCKERA_TELEMETRY_OPT_IN_OFF": true,
+		"WP_DEBUG": true,
+		"SCRIPT_DEBUG": false
 	},
 	"lifecycleScripts": {
 		"afterStart": "wp-env run cli wp theme activate twentytwentyfive"

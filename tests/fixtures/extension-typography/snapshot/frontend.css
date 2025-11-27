@@ -8,12 +8,25 @@ p.blockera-block.blockera-block--2 {
 	font-style: normal;
 }
 
+.blockera-block.blockera-block--2 {
+	font-style: normal;
+	font-weight: 600
+}
+
 p.blockera-block.blockera-block--3 {
 	font-size: 20px;
 }
 
+.blockera-block.blockera-block--3 {
+	font-size: 20px
+}
+
 p.blockera-block.blockera-block--4 {
 	line-height: 2;
+}
+
+.blockera-block.blockera-block--4 {
+	line-height: 2
 }
 
 p.blockera-block.blockera-block--5 {
@@ -22,6 +35,10 @@ p.blockera-block.blockera-block--5 {
 
 .blockera-block.blockera-block--5 a:not(.wp-element-button) {
 	color: #ff0000;
+}
+
+.blockera-block.blockera-block--5 {
+	color: #ff0000
 }
 
 p.blockera-block.blockera-block--6 {
@@ -40,8 +57,16 @@ p.blockera-block.blockera-block--9 {
 	text-transform: uppercase;
 }
 
+.blockera-block.blockera-block--9 {
+	text-transform: uppercase
+}
+
 p.blockera-block.blockera-block--10 {
 	text-decoration: overline;
+}
+
+.blockera-block.blockera-block--10 {
+	text-decoration: overline
 }
 
 p.blockera-block.blockera-block--11 {
@@ -51,6 +76,10 @@ p.blockera-block.blockera-block--11 {
 p.blockera-block.blockera-block--12 {
 	writing-mode: vertical-lr;
 	text-orientation: mixed;
+}
+
+.blockera-block.blockera-block--12 {
+	writing-mode: vertical-rl
 }
 
 p.blockera-block.blockera-block--13 {
@@ -70,6 +99,10 @@ p.blockera-block.blockera-block--15 {
 
 p.blockera-block.blockera-block--16 {
 	letter-spacing: 10px;
+}
+
+.blockera-block.blockera-block--16 {
+	letter-spacing: 10px
 }
 
 p.blockera-block.blockera-block--17 {

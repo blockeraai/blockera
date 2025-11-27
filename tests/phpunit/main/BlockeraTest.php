@@ -113,6 +113,18 @@ class BlockeraTest extends AppTestCase {
         \WP_Mock::setUp();
     }
 
+	protected function tearDown(): void {
+		// Deactivate mu-plugin if it was activated during the test
+		if (!empty($this->design)) {
+			blockera_test_deactivate_mu_plugin($this->design);
+		}
+
+		// Cleanup WP_Mock
+		\WP_Mock::tearDown();
+
+		parent::tearDown();
+	}
+
 	/**
 	 * Test the frontend output of a design.
 	 *
@@ -134,6 +146,9 @@ class BlockeraTest extends AppTestCase {
 		}
 
 		$this->executeWpCliCommands($designName);
+
+		// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
+		blockera_test_activate_mu_plugin($designName);
 
 		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
@@ -159,6 +174,8 @@ class BlockeraTest extends AppTestCase {
 			if ($config && isset($config['html-search-replace']) && is_array($config['html-search-replace'])) {
 				$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
 			}
+
+			$content = "<link rel='stylesheet' href='./frontend-global-styles.css'>\n<link rel='stylesheet' href='./frontend.css'>\n\n" . $content;
 
 			// Check with snapshot content
 			$this->assertMatchesSnapshot($content, new HtmlDriver());
@@ -201,6 +218,9 @@ class BlockeraTest extends AppTestCase {
 		}
 
 		$this->executeWpCliCommands($designName);
+
+		// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
+		blockera_test_activate_mu_plugin($designName);
 
 		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
@@ -274,6 +294,9 @@ class BlockeraTest extends AppTestCase {
 		}
 
 		$this->executeWpCliCommands($designName);
+
+		// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
+		blockera_test_activate_mu_plugin($designName);
 
 		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));

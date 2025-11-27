@@ -9,19 +9,19 @@
 	margin-bottom: 24px;
 }
 
+.blockera-block.blockera-block-1 . {
+	border-radius: 20px;
+	aspect-ratio: 4/3;
+	object-fit: cover
+}
+
+.blockera-block.blockera-block-1 {
+	margin-bottom: 24px
+}
+
 .blockera-block.blockera-block-2.wp-block-image {
 	background-color: #ffc8c8;
 	overflow: visible;
-}
-
-.blockera-block.blockera-block-2 .has-border-color.wp-image-7139 {
-	border-color: #37e6d4;
-	border-style: dashed;
-	border-width: 5px;
-	border-radius: 25px;
-	aspect-ratio: 1;
-	width: 100px;
-	height: 100px;
 }
 
 .blockera-block.blockera-block-2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
@@ -50,6 +50,20 @@
 }
 
 
+}
+
+.blockera-block.blockera-block-2 .wp-image-7139 {
+	border-color: #37e6d4;
+	border-style: dashed;
+	border-width: 5px;
+	border-radius: 25px;
+	aspect-ratio: 1;
+	width: 100px;
+	height: 100px
+}
+
+.blockera-block.blockera-block-2 {
+	background-color: #ffc8c8
 }
 
 .blockera-block.blockera-block-3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
@@ -94,10 +108,25 @@
 	border: 2px solid #ff4c4c;
 }
 
+.blockera-block.blockera-block-3 . {
+	border-radius: 20px;
+	aspect-ratio: 4/3;
+	object-fit: cover;
+	width: 300px
+}
+
+.blockera-block.blockera-block-3 {
+	margin-bottom: 24px
+}
+
 p.blockera-block.blockera-block-4 {
 	background-color: #d8e0ff;
 }
 
 .blockera-block.blockera-block-4 .wp-image-30 {
-	width: 100px;
+	width: 100px
+}
+
+.blockera-block.blockera-block-4 {
+	background-color: #d8e0ff
 }

@@ -22,16 +22,20 @@
 	background-color: var(--wp--preset--color--accent-1, #FFEE58);
 }
 
+.blockera-block.blockera-block-1 {
+	text-transform: uppercase
+}
+
 .blockera-block.blockera-block-2.wp-block-button .wp-block-button__link {
 	background-color: #ffb8b8;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link {
-	background-color: #9f9f9f;
+.blockera-block.blockera-block-2 {
+	background-color: #ffb8b8
 }
 
-.blockera-block.blockera-block-3 .has-inline-color {
-	background-color: #dfdfdf;
+.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link {
+	background-color: #9f9f9f;
 }
 
 .blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(strong, b) {
@@ -82,6 +86,14 @@
 	background-color: #9d0059;
 }
 
+.blockera-block.blockera-block-3 .has-inline-color {
+	background-color: #dfdfdf
+}
+
+.blockera-block.blockera-block-3 {
+	background-color: #9f9f9f
+}
+
 .blockera-block.blockera-block-4.wp-block-buttons {
 	background-color: #c2edff;
 	border-radius: 10px;
@@ -126,6 +138,15 @@
 	background-color: #9ae1ff;
 }
 
+.blockera-block.blockera-block-4 {
+	border-radius: 10px;
+	background-color: #c2edff;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
+}
+
 .blockera-block.blockera-block-5 :where(.wp-block-button > .wp-element-button) {
 	background-color: #70ae6b;
 	font-size: 18px;
@@ -161,12 +182,24 @@
 	background-color: #940000;
 }
 
+.blockera-block.blockera-block-6 {
+	background-color: #ff3a3a
+}
+
 .blockera-block.blockera-block-7.wp-block-button .wp-block-button__link {
 	color: #47ff04;
 }
 
+.blockera-block.blockera-block-7 {
+	color: #47ff04
+}
+
 .blockera-block.blockera-block-8.wp-block-button .wp-block-button__link {
 	color: #b8a4ff;
+}
+
+.blockera-block.blockera-block-8 {
+	color: #b8a4ff
 }
 
 .blockera-block.blockera-block-12.wp-block-buttons::before {

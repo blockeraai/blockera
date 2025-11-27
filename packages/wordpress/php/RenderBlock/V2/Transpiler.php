@@ -219,7 +219,7 @@ class Transpiler {
 		if ($this->isValidBlock( $block ) && blockera_is_supported_block($block) || $is_allowed) {
 
 			foreach ($block['innerContent'] as $_key => $innerContent) {
-				if (empty($innerContent)) {
+				if (empty($innerContent) || ! $innerContent || empty(trim($innerContent))) {
 					continue;
 				}
 
@@ -315,21 +315,15 @@ class Transpiler {
             ]
         );
 		$this->style_engine->setSupports($args['supports']);
-        $this->style_engine->setInlineStyles($inline_styles);
         $computed_css_rules = $this->style_engine->getStylesheet();
 
-		$filtered_styles = array_filter(
-            $this->styles,
-            function( string $style) use ( $computed_css_rules): bool {
-				return str_contains($style, $computed_css_rules);
-			}
-        );
-
-        if (! empty($computed_css_rules) && empty($filtered_styles)) {
+		// Push to stack the generated styles by style engine for current processed block.
+        if (! empty($computed_css_rules)) {
 			$this->styles[] = $computed_css_rules;
-
-        } elseif (empty($computed_css_rules)) {
-
+        }
+		
+		// Push to stack the inline styles for current processed block.
+		if (! empty($inline_styles)) {
 			$this->addInlineStylesToStack($inline_styles);
 		}
 

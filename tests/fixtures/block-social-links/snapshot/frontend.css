@@ -38,6 +38,17 @@
 	background-color: #98ef73;
 }
 
+.blockera-block.blockera-block-1 {
+	border-color: #00a80e;
+	border-width: 2px;
+	border-radius: 10px;
+	background-color: #c8ffb1;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px
+}
+
 .blockera-block.blockera-block-2.wp-block-social-links {
 	background-color: #ffd6d6;
 	flex-direction: column;
@@ -69,6 +80,12 @@
 .blockera-block.blockera-block-2 .wp-block-social-link:hover {
 	background-color: #ff0000;
 }
+
+.blockera-block.blockera-block-2 {
+	background-color: #ffd6d6;
+	padding-top: 20px;
+	padding-bottom: 20px
+}
 .blockera-block.blockera-block-rgl6bq .wp-block-social-link-label {
 	background-color: #00c020;
 }
@@ -93,5 +110,5 @@
 }
 
 .blockera-block.blockera-block-3 {
-	background-color:#000000;
+	background-color: #000000;
 }
