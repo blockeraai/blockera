@@ -50,11 +50,11 @@
 			"replace": "?cat=category-id"
 		},
 		{
-			"search": "uploads/\\d{4}/\\d{2}/featured-image-[^\"']*\\.png",
+			"search": "uploads/\\d{4}/\\d{2}/featured-image-?[^\"']*\\.png",
 			"replace": "uploads/featured-image.png"
 		},
 		{
-			"search": "uploads/\\d{4}/\\d{2}/site-logo-[^\"']*\\.png",
+			"search": "uploads/\\d{4}/\\d{2}/site-logo-?[^\"']*\\.png",
 			"replace": "uploads/site-logo.png"
 		},
 		{
