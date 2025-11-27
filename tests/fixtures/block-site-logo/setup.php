@@ -47,8 +47,6 @@ if (!$upload['error']) {
 	require_once(ABSPATH . 'wp-admin/includes/image.php');
 	$attachment_id = wp_insert_attachment($attachment, $upload['file']);
 
-	// error_log(print_r($attachment_id, true));
-
 	if (!is_wp_error($attachment_id)) {
 		// Generate attachment metadata
 		$attachment_data = wp_generate_attachment_metadata($attachment_id, $upload['file']);
