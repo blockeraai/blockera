@@ -3,29 +3,27 @@
 }
 
 .blockera-block.blockera-block--1 img {
-	width: 150px
+	width: 150px;
 }
 .blockera-block.blockera-block--2.wp-block-image {
 	background-color: #d8e0ff;
 }
 
 .blockera-block.blockera-block--2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	background-color: #d8e0ff;
 	border-radius: 10px;
 	width: 100px;
 }
 
 .blockera-block.blockera-block--2 img {
-	border-radius: 10px
-}
-
-.blockera-block.blockera-block--2 {
-	background-color: #d8e0ff
+	border-radius: 10px;
 }
 .blockera-block.blockera-block--3.wp-block-image {
 	background-color: #d8e0ff;
 }
 
 .blockera-block.blockera-block--3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	background-color: #d8e0ff;
 	border: 1px solid #3b62ff;
 	border-radius: 10px;
 	width: 100px;
@@ -42,9 +40,5 @@
 .blockera-block.blockera-block--3 img.has-border-color {
 	border-color: #3b62ff;
 	border-width: 1px;
-	border-radius: 10px
-}
-
-.blockera-block.blockera-block--3 {
-	background-color: #d8e0ff
+	border-radius: 10px;
 }

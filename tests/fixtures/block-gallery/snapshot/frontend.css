@@ -44,14 +44,6 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 {
-	background-color: #bdf7ff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px
-}
-
 .blockera-block.blockera-block-2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 5px;
 }
@@ -78,7 +70,7 @@
 }
 
 .blockera-block.blockera-block-2 img.wp-image-815 {
-	border-radius: 5px
+	border-radius: 5px;
 }
 
 .blockera-block.blockera-block-3.wp-block-gallery {
@@ -93,10 +85,6 @@
 
 .blockera-block.blockera-block-3 figure.wp-block-image figcaption.wp-element-caption {
 	order: -1;
-}
-
-.blockera-block.blockera-block-3 {
-	background-color: #e1ffdd
 }
 
 .wp-block-gallery {
@@ -149,10 +137,6 @@ figure.wp-block-image figcaption.wp-element-caption {
 
 }
 
-.blockera-block.blockera-block-5 {
-	background-color: #c9bcdb
-}
-
 .wp-block-gallery {
 	background-color: #c9bcdb;
 	flex-direction: column;
@@ -177,15 +161,15 @@ figure.wp-block-image figcaption.wp-element-caption {
 }
 
 .blockera-block.blockera-block-6.wp-block-gallery {
-	background-color: #a7c1d7;
 	border-radius: 15px;
-	transition: all 500ms ease 0ms;
-	row-gap: 14px;
-	column-gap: 30px;
+	background-color: #a7c1d7;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+	transition: all 500ms ease 0ms;
+	row-gap: 14px;
+	column-gap: 30px;
 }
 
 .blockera-block.blockera-block-6 .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
@@ -221,15 +205,6 @@ figure.wp-block-image figcaption.wp-element-caption {
 
 .blockera-block.blockera-block-6:hover .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 20px;
-}
-
-.blockera-block.blockera-block-6 {
-	border-radius: 15px;
-	background-color: #a7c1d7;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px
 }
 
 .wp-block-gallery {
@@ -280,24 +255,17 @@ figure.wp-block-image figcaption.wp-element-caption {
 }
 
 .blockera-block.blockera-block-7.wp-block-gallery {
+	background: linear-gradient(90deg, rgb(228, 228, 228) 10%, rgb(255, 192, 177) 90%);
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
 	background-size: auto;
 	background-position: 0 0;
 	background-repeat: repeat;
 	background-image: linear-gradient(90deg, rgb(228, 228, 228) 10%, rgb(255, 192, 177) 90%);
 	background-attachment: scroll;
 	position: relative;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
-.blockera-block.blockera-block-7 {
-	background: linear-gradient(90deg, rgb(228, 228, 228) 10%, rgb(255, 192, 177) 90%);
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px
 }
 
 .wp-block-gallery {

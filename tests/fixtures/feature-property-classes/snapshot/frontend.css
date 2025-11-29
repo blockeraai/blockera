@@ -4,49 +4,23 @@
 	flex-basis: 100px !important;
 }
 
-.blockera-block.blockera-block--1 {
-	background-color: #fecbcb;
-	flex-basis: 100px
-}
-
 p.blockera-block.blockera-block--2 {
 	text-decoration: line-through;
 }
 
-.blockera-block.blockera-block--2 {
-	text-decoration: line-through
-}
-
 p.blockera-block.blockera-block--3 {
+	font-style: normal;
 	font-weight: 1000;
-	font-style: normal;
-}
-
-.blockera-block.blockera-block--3 {
-	font-style: normal;
-	font-weight: 1000
 }
 
 p.blockera-block.blockera-block--5 {
 	line-height: 2;
 }
 
-.blockera-block.blockera-block--5 {
-	line-height: 2
-}
-
 p.blockera-block.blockera-block--6 {
 	font-size: 30px;
 }
 
-.blockera-block.blockera-block--6 {
-	font-size: 30px
-}
-
 p.blockera-block.blockera-block--7 {
 	letter-spacing: 5px;
-}
-
-.blockera-block.blockera-block--7 {
-	letter-spacing: 5px
 }

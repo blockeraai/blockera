@@ -1,19 +1,5 @@
 
 .blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure {
-	background-color: #c0e3ff;
-	border: 2px solid #6ab2ed;
-	border-radius: 8px;
-	padding-top: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-left: 30px;
-}
-
-.blockera-block.blockera-block-1.wp-block-audio audio {
-	height: 120px;
-}
-
-.blockera-block.blockera-block-1 {
 	border-color: #6ab2ed;
 	border-width: 2px;
 	border-radius: 8px;
@@ -21,20 +7,30 @@
 	padding-top: 30px;
 	padding-right: 30px;
 	padding-bottom: 30px;
-	padding-left: 30px
+	padding-left: 30px;
+	border: 2px solid #6ab2ed;
+}
+
+.blockera-block.blockera-block-1.wp-block-audio audio {
+	border-color: #6ab2ed;
+	border-width: 2px;
+	border-radius: 8px;
+	background-color: #c0e3ff;
+	padding-top: 30px;
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-left: 30px;
+	height: 120px;
 }
 
 .blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure {
-	background-color: var(--wp--preset--color--accent-2, #F6CFF4);
 	border-radius: 0;
+	background-color: var(--wp--preset--color--accent-2, #F6CFF4);
 }
 
 .blockera-block.blockera-block-2.wp-block-audio audio {
+	border-radius: 0px;
 	height: 36px;
-}
-
-.blockera-block.blockera-block-2 {
-	border-radius: 0px
 }
 
 .blockera-block.blockera-block-3 figcaption {
@@ -45,11 +41,13 @@
 }
 
 .blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure {
-	background-color: #85ead9;
 	border-radius: 0;
+	background-color: #85ead9;
 }
 
 .blockera-block.blockera-block-4.wp-block-audio audio {
+	border-radius: 0px;
+	background-color: #85ead9;
 	box-shadow: 5px 5px 0 0 #47baa7;
 }
 
@@ -63,9 +61,4 @@
 	margin-left: auto !important;
 	border-radius: 6px;
 	text-align: center;
-}
-
-.blockera-block.blockera-block-4 {
-	border-radius: 0px;
-	background-color: #85ead9
 }
