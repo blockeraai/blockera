@@ -84,7 +84,7 @@ class Parser {
 
         [
             'block'             => $block,
-            'unique_class_name' => $fallbackSelector,
+            'unique_selector' => $fallbackSelector,
         ] = $params;
 
         /**

@@ -8,7 +8,7 @@ use Blockera\Bootstrap\Application;
 
 class Transpiler {
 
-	use \Blockera\WordPress\RenderBlock\Traits\Processor;
+	use \Blockera\WordPress\RenderBlock\Traits\Processor, \Blockera\WordPress\RenderBlock\Traits\ClassnameManagement;
 
     /**
      * Hold the Application class instance.
@@ -206,9 +206,9 @@ class Transpiler {
         $attributes = $block['attrs'] ?? [];
 
         // Pre-calculate common values.
-        $blockera_hash_id    = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
-        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
-        $unique_class_name   = blockera_get_normalized_selector($blockera_class_name);
+        $blockera_hash_id = blockera_get_small_random_hash($attributes['blockeraPropsId'] ?? '');
+        $unique_classname = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+        $unique_selector  = blockera_get_normalized_selector($unique_classname);
 
 		$is_inner      = ! empty($args['is_inner']);
 		$invalid_inner = empty($args['force_process']);
@@ -234,10 +234,9 @@ class Transpiler {
 						'block' => $block,
 						'block_id' => $key,
 						'supports' => $args['supports'],
+						'unique_selector' => $unique_selector,
+						'unique_classname' => $unique_classname,
 						'block_path' => $args['block_path'] ?? [],
-						'unique_class_name' => $unique_class_name,
-						'blockera_class_name' => $blockera_class_name,
-						'force-process' => $args['force-process'] ?? false,
 						'permitted_inner' => ! $invalid_inner && $is_inner,
 					]
 				);
@@ -262,17 +261,25 @@ class Transpiler {
         // Inline styles stacks.
         $inline_styles       = [];
 		$inline_declarations = [];
-		$block_classname     = $args['block']['attrs']['className'] ?? $this->current_block['attrs']['className'] ?? '';
-		$roo_selector        = blockera_get_normalized_selector($block_classname);
-		$selector            = $roo_selector ? $roo_selector : $args['unique_class_name'];
+		$block_classname     = $args['block']['attrs']['className'] ?? $this->current_block['attrs']['className'];
+
+		// Get base unique classname.
+		$base_unique_classname = $block_classname ?? $args['unique_classname'];
+		$selector 			   = blockera_get_normalized_selector($base_unique_classname);
+
+		$block      = $args['block'];
+		$attributes = $args['block']['attrs'] ?? [];
+
+		// Indicate if the first tag is processed.
+		$is_first_tag = true;
 
         // Process in a single pass.
         while ($processor->next_tag()) {
             $style = $processor->get_attribute('style');
             $class = $processor->get_attribute('class');
 
-			// Skip if the class contains 'be-transpiled', because it shows that the block is already transpiled.
-			if ($class && str_contains($class, 'be-transpiled') || ( ! $this->is_allowed_inner && ! $args['permitted_inner'] && $args['block'] !== $this->current_block )) {
+			// Skip if the class contains $transpile_classname, because it shows that the block is already transpiled.
+			if ($class && str_contains($class, $this->transpile_classname) || ( ! $this->is_allowed_inner && ! $args['permitted_inner'] && $args['block'] !== $this->current_block )) {
 
 				return;
 			}
@@ -280,9 +287,35 @@ class Transpiler {
 			// Backward compatible with WordPress original block output.
 			$this->addCssPropsClasses($processor, $style ?? '', $args['block']);
 
+			// Get fallback classname.
+			$fallback_classname = $class ? $class : $base_unique_classname;
+
+			// If the generated new unique classname for block.
+			if ($is_first_tag) {
+				// Get unique classname from fallback classname by using regex.
+				preg_match(blockera_get_unique_class_name_regex(), $fallback_classname, $matches);
+
+				// Ensure the classname is unique across all blocks.
+				$unique_classname = $this->ensureUniqueClassname(
+					$matches[0] ?? $fallback_classname,
+					$attributes['blockeraPropsId'] ?? $this->current_block['attrs']['blockeraPropsId'],
+					$block
+				);
+
+				if ($unique_classname !== $base_unique_classname && $unique_classname !== $class) {
+					// Turn on "force-update-classname" for wrapper element while self classname is duplicate!
+					$args['force_update_classname'] = true;
+					// Update selector.
+					$selector = blockera_get_normalized_selector($unique_classname);
+				}
+
+				// Set the is first tag flag to false.
+				$is_first_tag = false;
+			}
+
 			// Update classname based on blockera class name.
-			// Add be-transpiled class to the block wrapper element.
-			$this->updateClassname($processor, $class ? $class : $args['blockera_class_name'], $args['block']);
+			// Add $transpile_classname class to the block wrapper element.
+			$this->updateClassname($processor, $unique_classname ?? $fallback_classname, $args);
 
 			// Create css declarations.
 			$declarations = $this->createCssDeclarations($processor, $selector, $style ?? '');
@@ -292,6 +325,9 @@ class Transpiler {
 				// Remove style attribute from the block wrapper element after processing.
 				$processor->remove_attribute('style');
 			}
+
+			// Unset unique classname to avoid memory leak.
+			unset($unique_classname);
         }
 
 		foreach ($inline_declarations as $_selector => $declarations) {

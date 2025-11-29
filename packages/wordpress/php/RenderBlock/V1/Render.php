@@ -7,6 +7,7 @@ use Blockera\Exceptions\BaseException;
 use Blockera\Features\Core\FeaturesManager;
 use Blockera\Bootstrap\Traits\AssetsLoaderTrait;
 use Blockera\WordPress\RenderBlock\Traits\Processor;
+use Blockera\WordPress\RenderBlock\Traits\ClassnameManagement;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
@@ -16,7 +17,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class Render {
 
-	use AssetsLoaderTrait, Processor;
+	use AssetsLoaderTrait, Processor, ClassnameManagement;
 
     /**
      * Hold application instance.
@@ -38,13 +39,6 @@ class Render {
 	 * @var bool $cache_status true if cache is enabled, false otherwise.
 	 */
 	protected bool $cache_status = true;
-
-    /**
-     * Store all block classnames.
-     *
-     * @var array $classnames the classnames array stack.
-     */
-    protected array $classnames = [];
 
 	/**
 	 * Store the is doing transpiling flag property.
@@ -147,7 +141,7 @@ class Render {
 					'fallback' => false,
 					'block-type' => 'master',
 					'block-name' => $args['block']['blockName'],
-					'blockera-unique-selector' => $args['unique_class_name'],
+					'blockera-unique-selector' => $args['unique_selector'],
 				]
 			);
 
@@ -203,9 +197,6 @@ class Render {
 		// Get blockera block unique css classname.
         $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
 
-        // Pushing block classname into stack.
-        $this->setClassname($attributes['className'] ?? '');
-
         // Get block cache key.
         $cache_key = blockera_get_block_cache_key($block);
         // Prepare cache data.
@@ -213,7 +204,14 @@ class Render {
         // Get cache validate result.
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 		// Get normalized blockera block unique css classname.
-        $unique_class_name = blockera_get_normalized_selector($attributes['className'] ?? $blockera_class_name);
+        $base_unique_class_name = $attributes['className'] ?? $blockera_class_name;
+		// Ensure the classname is unique across all blocks.
+		$unique_class_name = $this->ensureUniqueClassname(
+			$base_unique_class_name,
+			$attributes['blockeraPropsId'],
+			$block
+		);
+		$unique_selector   = blockera_get_normalized_selector($unique_class_name);
 
         // Validate cache data.
         if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
@@ -222,7 +220,7 @@ class Render {
 
 			// If custom css is set, add it to the block css.
 			if (! empty($attributes['blockeraCustomCSS']['value'])) {
-				$css .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+				$css .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
 			}
 
             // Print css into inline style on "wp_head" action occur.
@@ -233,8 +231,8 @@ class Render {
                 $html,
                 [
 					'block' => $block,
-					'unique_class_name' => $unique_class_name,
 					'computed_css_rules' => $css,
+					'unique_selector' => $unique_selector,
 				]
             );
 
@@ -242,11 +240,13 @@ class Render {
             return $this->getUpdatedHTML($html, $cache_data['classname']);
         }
 
+		$args['force_update_classname'] = $unique_class_name !== $base_unique_class_name;
+
 		// Represent html string.
-        $html = $this->getUpdatedHTML($html, $unique_class_name);
+        $html = $this->getUpdatedHTML($html, $unique_class_name, $args);
 
 		// Normalize inline styles while doing transpiling.
-		$inline_styles = $this->normalizeInlineStyles($unique_class_name);
+		$inline_styles = $this->normalizeInlineStyles($unique_selector);
 
 		/**
          * Get parser object.
@@ -257,10 +257,10 @@ class Render {
 		$parser->setSupports($supports);
 
         // Computation css rules for current block by server side style engine...
-        $computed_css_rules = $parser->getCss(compact('block', 'unique_class_name'));
+        $computed_css_rules = $parser->getCss(compact('block', 'unique_selector'));
 
 		// Render block with features.
-        $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_class_name', 'computed_css_rules'));
+        $html = $this->renderBlockWithFeatures($html, compact('block', 'unique_selector', 'computed_css_rules'));
 
 		// Push to stack the generated styles by style engine for current processed block.
 		if (! empty($computed_css_rules)) {
@@ -275,7 +275,7 @@ class Render {
 
 		// If custom css is set, add it to the block css.
 		if (! empty($attributes['blockeraCustomCSS']['value'])) {
-			$this->styles[] .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_class_name, $attributes['blockeraCustomCSS']['value']);
+			$this->styles[] .= preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
 		}
 
 		// Combine all styles to a single string.
@@ -287,7 +287,7 @@ class Render {
         // Create new block cache data.
         $data = [
             'hash'      => $hash,
-            'classname' => $unique_class_name,
+            'classname' => $unique_selector,
             'css'       => $computed_css_rules,
         ];
 
@@ -332,48 +332,20 @@ class Render {
 	}
 
     /**
-     * Is need to update block content?
-     * The target of this method is prevented of avoid block unique classnames.
-     *
-	 * @param string $html the block html output.
-     * @param string $block_classname the block "className" attribute value.
-	 * 
-	 * @deprecated 1.12.3 Remove this method in the future.
-     *
-     * @return bool true on success, false on otherwise.
-     */
-    protected function needToUpdateHTML( string $html, string $block_classname): bool {
-
-        // Imagine the block classname and classnames property is empty, so we should update html output.
-        if (empty($block_classname) && empty($this->classnames)) {
-
-            return true;
-        }
-
-        // Try to detect blockera block unique classname and check it to sure not registered in classnames stack.
-        if (preg_match($this->getUniqueClassnameRegex(), $block_classname, $matches)) {
-
-			if (! str_contains($html, $matches[0])) {
-
-				return true;
-			}
-
-            return in_array($matches[0], $this->classnames, true);
-        }
-
-        return false;
-    }
-
-    /**
      * Returns the string representation of the HTML Tag Processor.
      *
      * @param string $html      the target html string.
      * @param string $classname the unique classname.
+	 * @param array  $args the arguments to update html.
      *
      * @return string the update html.
      */
-    protected function getUpdatedHTML( string $html, string $classname): string {
+    protected function getUpdatedHTML( string $html, string $classname, array $args): string {
 
+		if (! isset($args['force_update_classname'])) {
+			$args['force_update_classname'] = false;
+		}
+		
         $processor = new \WP_HTML_Tag_Processor($html);
 
 		// Indicate if the first tag is processed.
@@ -383,7 +355,8 @@ class Render {
 			$style = $processor->get_attribute('style');
 
             if (! $is_processed_first_tag) {
-				$this->updateClassname($processor, $classname, $this->block);
+				$args['block'] = $this->block;
+				$this->updateClassname($processor, $classname, $args);
 
 				// Set the is processed first tag flag to true.
 				$is_processed_first_tag = true;
@@ -392,54 +365,17 @@ class Render {
 			// Remove style attribute if transpiling.
 			if ($this->is_doing_transpile && $style && ! $this->cache_status) {
 				// Create css declarations.
-				$declarations = $this->createCssDeclarations($processor, $classname, $style ?? '');
+				$declarations = $this->createCssDeclarations($processor, blockera_get_normalized_selector($classname), $style ?? '');
 				if (! empty($declarations['properties'])) {
 					$this->inline_styles[ $declarations['selector'] ] = $declarations['properties'];
 				}
 
 				// Remove style attribute.
 				$processor->remove_attribute('style');
-
-				// Skip updating classname while the first tag because it is already updated.
-				if (! $is_processed_first_tag) {
-				
-					// Update classname of current tag to add `be-transpiled` class.
-					$this->updateClassname($processor, $processor->get_attribute('class') ?? '', $this->block);
-				}
 			}
         }
 
         return $processor->get_updated_html();
-    }
-
-    /**
-     * Push block classname into stack.
-     *
-     * @param string $classname the block "className" attribute value.
-     *
-     * @return void
-     */
-    protected function setClassname( string $classname): void {
-
-        if (empty($classname)) {
-
-            return;
-        }
-
-        if (preg_match($this->getUniqueClassnameRegex(), $classname, $matches)) {
-
-            $this->classnames[] = $matches[0];
-        }
-    }
-
-    /**
-     * Retrieve regex pattern to detect unique classname.
-     *
-     * @return string the regular expression to detect blockera unique classname.
-     */
-    protected function getUniqueClassnameRegex(): string {
-
-        return '/\b(blockera-block-\S+)\b/';
     }
 
 	/**

@@ -218,7 +218,7 @@ if ( ! function_exists( 'blockera_get_unique_class_name_regex' ) ) {
 	 */
 	function blockera_get_unique_class_name_regex(): string {
 
-		return '/\b(blockera-block-\S+)\b/';
+		return '/\bblockera-block\s+(blockera-block-[^\s]+)/';
 	}
 }
 
