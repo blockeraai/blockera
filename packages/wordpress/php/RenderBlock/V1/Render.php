@@ -41,20 +41,6 @@ class Render {
 	protected bool $cache_status = true;
 
 	/**
-	 * Store the is doing transpiling flag property.
-	 *
-	 * @var bool $is_doing_transpile 
-	 */
-	protected bool $is_doing_transpile = false;
-
-	/**
-	 * Store inline styles collected from the block html.
-	 *
-	 * @var array $inline_styles the inline styles array.
-	 */
-	protected array $inline_styles = [];
-
-	/**
 	 * Store the args array.
 	 *
 	 * @var array $args the args array.
@@ -255,6 +241,7 @@ class Render {
          */
         $parser = $this->app->make(Parser::class);
 		$parser->setSupports($supports);
+		$parser->setInlineStyles($inline_styles['root'] ?? []);
 
         // Computation css rules for current block by server side style engine...
         $computed_css_rules = $parser->getCss(compact('block', 'unique_selector'));
@@ -265,12 +252,11 @@ class Render {
 		// Push to stack the generated styles by style engine for current processed block.
 		if (! empty($computed_css_rules)) {
 			$this->styles[] = $computed_css_rules;
-
         }
 
 		// Push to stack the inline styles for current processed block.
-		if ($this->is_doing_transpile && ! empty($inline_styles)) {
-			$this->addInlineStylesToStack($inline_styles);
+		if ($this->is_doing_transpile && ! empty($inline_styles['child'])) {
+			$this->addInlineStylesToStack($inline_styles['child']);
 		}
 
 		// If custom css is set, add it to the block css.
@@ -302,34 +288,6 @@ class Render {
 
         return $html;
     }
-
-	/**
-	 * Normalize inline styles.
-	 *
-	 * @param string $classname the block classname.
-	 *
-	 * @return array the normalized inline styles.
-	 */
-	protected function normalizeInlineStyles( string $classname): array {
-		$inline_styles = [];
-
-		if (! empty($this->inline_styles) && $this->is_doing_transpile) {
-
-			foreach ($this->inline_styles as $_selector => $declarations) {
-
-				foreach ($declarations as $declaration) {
-					if ($_selector === $classname) {
-						$inline_styles[ $classname ][] = $declaration;
-						continue;
-					}
-
-					$inline_styles[ $classname ][ $_selector ][] = $declaration;            
-				}
-			}
-		}
-
-		return $inline_styles;
-	}
 
     /**
      * Returns the string representation of the HTML Tag Processor.

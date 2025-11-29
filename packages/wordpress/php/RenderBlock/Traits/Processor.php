@@ -5,6 +5,13 @@ namespace Blockera\WordPress\RenderBlock\Traits;
 trait Processor {
 
 	/**
+	 * Store the is doing transpiling flag property.
+	 *
+	 * @var bool $is_doing_transpile 
+	 */
+	protected bool $is_doing_transpile = false;
+
+	/**
 	 * The classname for the transpiled block.
 	 *
 	 * @var string
@@ -17,6 +24,50 @@ trait Processor {
      * @var array
      */
     protected array $styles = [];
+
+	/**
+	 * Store inline styles collected from the block html.
+	 *
+	 * @var array $inline_styles the inline styles array.
+	 */
+	protected array $inline_styles = [];
+
+	/**
+	 * Normalize inline styles.
+	 *
+	 * @param string $classname the block classname.
+	 *
+	 * @return array the normalized inline styles.
+	 */
+	protected function normalizeInlineStyles( string $classname): array {
+		$inline_styles = [];
+
+		if (! empty($this->inline_styles) && $this->is_doing_transpile) {
+
+			foreach ($this->inline_styles as $_selector => $declarations) {
+
+				foreach ($declarations as $declaration) {
+					if (empty(trim($declaration))) {
+						continue;
+					}
+
+					// Normalizing declaration.
+					$declaration = preg_replace('/\:/', ': ', trim($declaration));
+
+					// handle root element inline styles.
+					if ($_selector === $classname) {
+						$inline_styles['root'][ $classname ][] = $declaration;
+						continue;
+					}
+
+					// handle child elements inline styles.
+					$inline_styles['child'][ $_selector ][] = $declaration;
+				}
+			}
+		}
+
+		return $inline_styles;
+	}
 
 	/**
 	 * Convert inline styles to css declarations.
@@ -84,37 +135,18 @@ trait Processor {
 			return;
 		}
 
-		foreach ($inline_styles as $root_selector => $styles) {
-			$inners = array_filter(
-				$styles,
-				function ( $style) {
-					return is_array($style);
-				}
-			);
+		foreach ($inline_styles as $selector => $styles) {
+			$css = implode(';' . PHP_EOL, $styles);
 
-			foreach ($inners as $selector => $declarations) {
-				// Normalize declarations.
-				$declarations = preg_replace('/\:/', ': ', $declarations);
-				// Create css rule.
-				$css_rule = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
-
-				if (! in_array($css_rule, $this->styles, true)) {
-					$this->styles[] = $css_rule;
-				}
-
-				unset($styles[ $selector ]);
+			if (! str_ends_with($css, ';')) {
+				$css .= ';';
 			}
 
-			// Ensure that the root style is added to the styles property while $styles is not empty.
-			if (! empty($styles)) {
-				// Normalize styles.
-				$styles = preg_replace('/\:/', ': ', $styles);
-				// Create css rule.
-				$css_rule = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+			// Create css rule.
+			$css_rule = $selector . ' { ' . $css . ' }';
 
-				if (! in_array($css_rule, $this->styles, true)) {
-					$this->styles[] = $css_rule;	
-				}
+			if (! in_array($css_rule, $this->styles, true)) {
+				$this->styles[] = $css_rule;
 			}
 		}
 	}

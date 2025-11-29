@@ -78,7 +78,9 @@ class Transpiler {
      */
     public function cleanupInlineStyles( string $content, int $post_id = 0, array $supports = []): array {
 
-        $this->parsed_blocks = parse_blocks($content);
+		// Set the is doing transpiling flag to true.
+		$this->is_doing_transpile = true;
+        $this->parsed_blocks      = parse_blocks($content);
 		
 		$data = [ 
 			'parsed_blocks'        => [],
@@ -320,27 +322,18 @@ class Transpiler {
 			// Create css declarations.
 			$declarations = $this->createCssDeclarations($processor, $selector, $style ?? '');
 			if (! empty($declarations['properties'])) {
-				$inline_declarations[ $declarations['selector'] ] = $declarations['properties'];
-
-				// Remove style attribute from the block wrapper element after processing.
-				$processor->remove_attribute('style');
+				$this->inline_styles[ $declarations['selector'] ] = $declarations['properties'];
 			}
+			
+			// Remove style attribute from the block wrapper element after processing.
+			$processor->remove_attribute('style');
 
 			// Unset unique classname to avoid memory leak.
 			unset($unique_classname);
         }
 
-		foreach ($inline_declarations as $_selector => $declarations) {
-
-			foreach ($declarations as $declaration) {
-				if ($_selector === $selector) {
-					$inline_styles[ $selector ][] = $declaration;
-					continue;
-				}
-
-            	$inline_styles[ $selector ][ $_selector ][] = $declaration;            
-        	}
-		}
+		// Normalize inline styles while doing transpiling.
+		$inline_styles = $this->normalizeInlineStyles($selector);
 
         // Generate styles once.
         $this->style_engine = $this->app->make(
@@ -351,6 +344,7 @@ class Transpiler {
             ]
         );
 		$this->style_engine->setSupports($args['supports']);
+		$this->style_engine->setInlineStyles($inline_styles['root'] ?? []);
         $computed_css_rules = $this->style_engine->getStylesheet();
 
 		// Push to stack the generated styles by style engine for current processed block.
@@ -359,8 +353,8 @@ class Transpiler {
         }
 		
 		// Push to stack the inline styles for current processed block.
-		if (! empty($inline_styles)) {
-			$this->addInlineStylesToStack($inline_styles);
+		if (! empty($inline_styles['child'])) {
+			$this->addInlineStylesToStack($inline_styles['child']);
 		}
 
 		$attributes = $args['block']['attrs'] ?? [];
@@ -372,6 +366,9 @@ class Transpiler {
 
         // Update block content.
         $this->updateBlockContent($processor, $id, $args);
+
+		// Reset inline styles.
+		$this->inline_styles = [];
     }
 
     /**
@@ -419,6 +416,9 @@ class Transpiler {
         // Clear arrays.
         $this->styles        = [];
         $this->parsed_blocks = [];
+
+		// Set the is doing transpiling flag to false.
+		$this->is_doing_transpile = false;
 
         // Force garbage collection.
         gc_collect_cycles();
