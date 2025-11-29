@@ -266,21 +266,112 @@ if (! function_exists('blockera_pick_specific_classname')) {
 	 * @return string the specific classname.
 	 */
 	function blockera_pick_specific_classname( array $classnames): string {
+		$picked = [];
 
 		foreach ($classnames as $classname) {
+
 			// Priority 1: Look for blockera unique classes.
-			if (preg_match('/\b(blockera-block-\S+)\b/', $classname)) {
+			if (preg_match(blockera_get_unique_class_name_regex(), $classname)) {
 				return $classname;
 			}
 
 			// Priority 2: Look for classes with numbers (likely unique identifiers).
 			if (preg_match('/\d+/', $classname)) {
-				return $classname;
+				$picked[] = $classname;
+			}
+
+			// Return the picked classnames if more than one found.
+			if (count($picked) > 1) {
+				return implode(' ', $picked);
 			}
 		}
 
 		// Fallback: Return first classname if no specific classname found.
 		return $classnames[0] ?? '';
+	}
+}
+
+if ( ! function_exists( 'blockera_create_css_selector' ) ) {
+
+	/**
+	 * Create css selector.
+	 *
+	 * @param string $classname the target element picked classnames which separated by space.
+	 *
+	 * @return string the css selector.
+	 */
+	function blockera_create_css_selector( string $classname ): string {
+
+		// Handle empty classname.
+		if ( empty( trim( $classname ) ) ) {
+			return '';
+		}
+
+		// Check if classname contains pseudo-class functions like :is(), :where(), :not(), etc.
+		// These should be preserved as-is.
+		if ( preg_match( '/:(is|where|not|has|host|host-context|any)\(/', $classname ) ) {
+			// Split by space but preserve pseudo-class functions.
+			$parts = preg_split( '/\s+(?![^(]*\))/', $classname );
+
+			return trim(
+				implode(
+					'',
+					array_map(
+						function ( string $_selector ): string {
+							$_selector = trim( $_selector );
+							
+							if ( empty( $_selector ) ) {
+								return '';
+							}
+							
+							// If already starts with . or contains pseudo-class, return as-is.
+							if ( '.' === $_selector[0] || strpos( $_selector, ':' ) !== false ) {
+								return $_selector;
+							}
+							
+							return '.' . $_selector;
+						},
+						$parts
+					)
+				)
+			);
+		}
+
+		// Standard processing for simple selectors.
+		$selectors = explode( ' ', $classname );
+
+		return trim(
+			implode(
+				'',
+				array_map(
+					function ( string $_selector ): string {
+
+						$_selector = trim( $_selector );
+
+						if ( empty( $_selector ) ) {
+							return '';
+						}
+
+						// Already has a class prefix.
+						if ( '.' === $_selector[0] ) {
+							return $_selector;
+						}
+
+						// Contains pseudo-class or pseudo-element.
+						if ( strpos( $_selector, ':' ) !== false ) {
+							// Check if it needs a class prefix before the pseudo-class.
+							if ( preg_match( '/^([a-zA-Z0-9_-]+)(:.+)$/', $_selector, $matches ) ) {
+								return '.' . $matches[1] . $matches[2];
+							}
+							return $_selector;
+						}
+
+						return '.' . $_selector;
+					},
+					$selectors
+				)
+			)
+		);
 	}
 }
 

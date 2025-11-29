@@ -132,15 +132,18 @@ trait Processor {
 			$root_class    = str_replace('.blockera-block.', '', $selector);
 			$class_details = blockera_get_wp_classname_details($class);
 
+			// Customize selector based on current tag being processed.
+			$tag_name = $processor->get_tag();
+
+			$picked_classname = blockera_pick_specific_classname($classes);
+			$child_selector   = blockera_create_css_selector($picked_classname);
+
 			if (! str_contains($class, $root_class)) {
 				if (! ( $class_details['is_matched'] ?? false )) {
 					// First class as a selector.
-					$selector = $selector . ' .' . blockera_pick_specific_classname($classes);
+					$selector = $selector . ' ' . strtolower($tag_name) . $child_selector;
 				}
-			} else {
-				// Customize selector based on current tag being processed.
-				$tag_name = $processor->get_tag();
-				
+			} else {				
 				// Check if this is the first tag by checking if class contains the root class.
 				$is_first_tag = $class && str_contains($class, str_replace('.blockera-block.', '', $selector));
 				
@@ -148,8 +151,7 @@ trait Processor {
 				if (! $class && ! $is_first_tag && $tag_name) {
 					$selector = $selector . ' ' . strtolower($tag_name);
 				} elseif (! $is_first_tag && $tag_name) {
-
-					$selector = $selector . ' ' . blockera_pick_specific_classname($classes);
+					$selector = $selector . ' ' . strtolower($tag_name) . $child_selector;
 				}
 			}
 		}

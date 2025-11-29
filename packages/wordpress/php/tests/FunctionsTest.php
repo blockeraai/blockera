@@ -164,4 +164,18 @@ class FunctionsTest extends \WP_UnitTestCase {
 			[ '.wp-block-sample:any(.a, .b)', '.blockera-block .wp-block-sample:any(.a, .b)' ],
 		];
 	}
+
+	public function testCreateCssSelector() {
+		$selector = '.wp-block-sample:is(.a, .b)';
+		$result = blockera_create_css_selector($selector);
+		$this->assertEquals('.wp-block-sample:is(.a, .b)', $result);
+
+		$selector = 'wp-block-sample blockera-block';
+		$result = blockera_create_css_selector($selector);
+		$this->assertEquals('.wp-block-sample.blockera-block', $result);
+
+		$selector = '.wp-block-sample:is(.a, .b) blockera-block';
+		$result = blockera_create_css_selector($selector);
+		$this->assertEquals('.wp-block-sample:is(.a, .b).blockera-block', $result);
+	}
 }
