@@ -54,7 +54,7 @@
 	background-color: #ff0101;
 }
 
-.blockera-block.blockera-block-1 .has-inline-color {
+.blockera-block.blockera-block-1 mark.has-inline-color {
 	background-color: #dfdfdf
 }
 
@@ -114,7 +114,7 @@
 	box-shadow: 0 5px 5px 0 #000000ab;
 }
 
-.blockera-block.blockera-block-2 .has-inline-color {
+.blockera-block.blockera-block-2 mark.has-inline-color {
 	background-color: #dfdfdf
 }
 
@@ -146,7 +146,7 @@
 	display: none;
 }
 
-.blockera-block.blockera-block-3 .has-inline-color {
+.blockera-block.blockera-block-3 mark.has-inline-color {
 	background-color: #dfdfdf
 }
 

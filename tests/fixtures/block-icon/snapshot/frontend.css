@@ -2,7 +2,7 @@
 	width: 150px;
 }
 
-.blockera-block.blockera-block--1 . {
+.blockera-block.blockera-block--1 img {
 	width: 150px
 }
 .blockera-block.blockera-block--2.wp-block-image {
@@ -14,7 +14,7 @@
 	width: 100px;
 }
 
-.blockera-block.blockera-block--2 . {
+.blockera-block.blockera-block--2 img {
 	border-radius: 10px
 }
 
@@ -39,7 +39,7 @@
 	color: #00308f;
 }
 
-.blockera-block.blockera-block--3 .has-border-color {
+.blockera-block.blockera-block--3 img.has-border-color {
 	border-color: #3b62ff;
 	border-width: 1px;
 	border-radius: 10px

@@ -165,7 +165,7 @@ p.blockera-block.blockera-block-4 {
 	margin-bottom: 24px;
 }
 
-.blockera-block.blockera-block-7 .has-border-color {
+.blockera-block.blockera-block-7 img.has-border-color {
 	border-color: #0d2285;
 	border-width: 9px;
 	border-radius: 60px;
@@ -359,7 +359,7 @@ p.blockera-block.blockera-block-12 {
 	margin-bottom: 24px;
 }
 
-.blockera-block.blockera-block-14 . {
+.blockera-block.blockera-block-14 img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover

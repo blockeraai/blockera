@@ -51,7 +51,7 @@
 	background-color: #ff9191;
 }
 
-.blockera-block.blockera-block-1 .has-inline-color {
+.blockera-block.blockera-block-1 mark.has-inline-color {
 	background-color: #dfdfdf
 }
 
@@ -80,7 +80,7 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-2 .has-inline-color {
+.blockera-block.blockera-block-2 mark.has-inline-color {
 	background-color: #dfdfdf
 }
 
@@ -118,7 +118,7 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-3 .has-inline-color {
+.blockera-block.blockera-block-3 mark.has-inline-color {
 	background-color: #dfdfdf
 }
 

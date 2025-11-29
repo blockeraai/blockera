@@ -28,7 +28,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 .has-border-color {
+.blockera-block.blockera-block-1 img.has-border-color {
 	border-color: #ff0000;
 	border-radius: 50px;
 	border-width: 3px;
@@ -61,6 +61,6 @@
 
 }
 
-.blockera-block.blockera-block-2 .attachment-post-thumbnail {
+.blockera-block.blockera-block-2 img.attachment-post-thumbnail {
 	object-fit: cover;
 }
