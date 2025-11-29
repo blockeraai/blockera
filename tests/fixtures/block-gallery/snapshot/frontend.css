@@ -99,6 +99,20 @@
 	background-color: #e1ffdd
 }
 
+.wp-block-gallery {
+	background-color: #e1ffdd;
+	gap: 70px;
+}
+
+> figcaption {
+	background-color: #00000024;
+	order: -1;
+}
+
+figure.wp-block-image figcaption.wp-element-caption {
+	order: -1;
+}
+
 .blockera-block.blockera-block-4.wp-block-image {
 	order: 100;
 }
@@ -137,6 +151,29 @@
 
 .blockera-block.blockera-block-5 {
 	background-color: #c9bcdb
+}
+
+.wp-block-gallery {
+	background-color: #c9bcdb;
+	flex-direction: column;
+	justify-content: center !important;
+	align-items: center !important;
+	gap: 40px;
+}
+
+> figcaption {
+	font-weight: 700;
+	font-style: normal;
+}
+
+@media screen and (max-width: 478px) {
+	.wp-block-gallery {
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+
 }
 
 .blockera-block.blockera-block-6.wp-block-gallery {
@@ -195,6 +232,53 @@
 	padding-left: 20px
 }
 
+.wp-block-gallery {
+	background-color: #a7c1d7;
+	border-radius: 15px;
+	transition: all 500ms ease 0ms;
+	row-gap: 14px;
+	column-gap: 30px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	box-shadow: 7px 7px 0 0 #0000003b;
+	filter: blur(2px);
+}
+
+> figcaption {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	margin-top: 20px;
+	flex: 0 1 auto;
+	align-self: center;
+}
+
+> figcaption:hover {
+	background-color: #00000026;
+}
+
+@media screen and (max-width: 478px) {
+	> figcaption {
+	flex: 1 1 0%;
+}
+
+
+}
+
+.wp-block-gallery:hover {
+	background-color: #7dacd4;
+}
+
+:hover.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+	border-radius: 20px;
+}
+
 .blockera-block.blockera-block-7.wp-block-gallery {
 	background-size: auto;
 	background-position: 0 0;
@@ -214,6 +298,19 @@
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px
+}
+
+.wp-block-gallery {
+	background-size: auto;
+	background-position: 0 0;
+	background-repeat: repeat;
+	background-image: linear-gradient(90deg, rgb(228, 228, 228) 10%, rgb(255, 192, 177) 90%);
+	background-attachment: scroll;
+	position: relative;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
 }
 
 .blockera-block.blockera-block-8.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
