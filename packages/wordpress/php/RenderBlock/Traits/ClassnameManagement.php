@@ -84,7 +84,7 @@ trait ClassnameManagement {
 
 				// Detected duplicate classname, updating the classname.
 				if ($force_update_classname && ! str_contains($previous_class, $classname)) {
-					$final_classname = str_replace($prev_matches, $classname, $previous_class);
+					$final_classname = str_replace($prev_matches[0], $classname, $previous_class);
 				}
 			} elseif (! $next_is_blockera_class && ! str_contains($previous_class, $classname)) {
 					
@@ -101,7 +101,9 @@ trait ClassnameManagement {
 		// It should has not icon element.
 		if (! empty($final_classname) && ! str_contains($final_classname, $this->transpile_classname) && ! blockera_block_has_icon($block)) {
 			
-			if (isset($prev_matches[0])) {
+			if (isset($next_matches[0]) && str_contains($final_classname, $next_matches[0])) {
+				$final_classname = str_replace($next_matches[0], $next_matches[0] . ' ' . $this->transpile_classname, $final_classname);
+			} elseif (isset($prev_matches[0]) && str_contains($final_classname, $prev_matches[0])) {
 				$final_classname = str_replace($prev_matches[0], $prev_matches[0] . ' ' . $this->transpile_classname, $final_classname);
 			} else {
 				$final_classname .= ' ' . $this->transpile_classname;
