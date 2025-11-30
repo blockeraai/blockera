@@ -261,9 +261,10 @@ class Transpiler {
         $processor = new \WP_HTML_Tag_Processor($content);
 
         // Inline styles stacks.
-        $inline_styles       = [];
-		$inline_declarations = [];
-		$block_classname     = $args['block']['attrs']['className'] ?? $this->current_block['attrs']['className'];
+        $inline_styles = [];
+
+		// Get block classname.
+		$block_classname = $args['block']['attrs']['className'] ?? $this->current_block['attrs']['className'];
 
 		// Get base unique classname.
 		$base_unique_classname = $block_classname ?? $args['unique_classname'];
