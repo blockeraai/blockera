@@ -12,6 +12,13 @@ trait Processor {
 	protected bool $is_doing_transpile = false;
 
 	/**
+	 * Store the is doing transpiling loop flag property.
+	 *
+	 * @var bool $is_doing_transpile_loop
+	 */
+	protected bool $is_doing_transpile_loop = false;
+
+	/**
 	 * The classname for the transpiled block.
 	 *
 	 * @var string
@@ -31,6 +38,71 @@ trait Processor {
 	 * @var array $inline_styles the inline styles array.
 	 */
 	protected array $inline_styles = [];
+
+	/**
+	 * Setup the block in loop.
+	 *
+	 * @param array  $block The current block being rendered.
+	 * @param string $ref The reference function name.
+	 * @param int    $arg_num The argument number.
+	 * 
+	 * @return void
+	 */
+	protected function setupBlockInLoop( array $block, string $ref = 'render_block', int $arg_num = 0): void {
+		$in_loop = $this->inLoopBlock($block, $ref, $arg_num);
+
+		// Set the is doing transpiling loop flag.
+		$this->setIsDoingTranspileLoop($in_loop);
+	}
+
+	/**
+	 * Check if the current block is inside a loop.
+	 * Returns FALSE for the loop container blocks themselves.
+	 * Returns TRUE for inner blocks like core/term-name, core/post-title, etc.
+	 *
+	 * @param array  $block The current block being rendered.
+	 * @param string $ref The reference function name.
+	 * @param int    $arg_num The argument number.
+	 * 
+	 * @return bool True if block is inside loop block (excluding containers), false otherwise.
+	 */
+	protected function inLoopBlock( array $block, string $ref = 'render_block', int $arg_num = 0): bool {
+		$current_block_name = $block['blockName'] ?? '';
+		
+		// Loop container and template blocks (NOT considered "in loop").		
+		// Current block is a container/template - NOT in loop.
+		if (blockera_block_is_loop($current_block_name)) {
+			return false;
+		}
+		
+		// Check if this block has any loop container in its parent chain.
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 30);
+
+		foreach ($backtrace as $trace) {
+			if (isset($trace['function']) && $ref === $trace['function']) {
+				if (isset($trace['args'][ $arg_num ]['blockName'])) {
+					$parent_block_name = $trace['args'][ $arg_num ]['blockName'];
+					
+					if (blockera_block_is_loop($parent_block_name)) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	/**
+	 * Set the is doing transpiling loop flag property.
+	 *
+	 * @param bool $is_doing_transpile_loop The is doing transpiling loop flag.
+	 *
+	 * @return void
+	 */
+	public function setIsDoingTranspileLoop( bool $is_doing_transpile_loop): void {
+		$this->is_doing_transpile_loop = $is_doing_transpile_loop;
+	}
 
 	/**
 	 * Normalize inline styles.

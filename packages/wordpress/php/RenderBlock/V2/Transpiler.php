@@ -292,23 +292,29 @@ class Transpiler {
 			// Get fallback classname.
 			$fallback_classname = $class ? $class : $base_unique_classname;
 
+			// Handling block setup while exist inside in loop block as a inner block.
+			$this->setupBlockInLoop($block, 'processBlockContent', 1);
+
 			// If the generated new unique classname for block.
 			if ($is_first_tag) {
-				// Get unique classname from fallback classname by using regex.
-				preg_match(blockera_get_unique_class_name_regex(), $fallback_classname, $matches);
 
-				// Ensure the classname is unique across all blocks.
-				$unique_classname = $this->ensureUniqueClassname(
-					$matches[0] ?? $base_unique_classname,
-					$attributes['blockeraPropsId'] ?? $this->current_block['attrs']['blockeraPropsId'],
-					$block
-				);
-
-				if ($unique_classname !== $base_unique_classname && $unique_classname !== $class) {
-					// Turn on "force-update-classname" for wrapper element while self classname is duplicate!
-					$args['force_update_classname'] = true;
-					// Update selector.
-					$selector = blockera_get_normalized_selector($unique_classname);
+				if (! $this->is_doing_transpile_loop) {
+					// Get unique classname from fallback classname by using regex.
+					preg_match(blockera_get_unique_class_name_regex(), $fallback_classname, $matches);
+	
+					// Ensure the classname is unique across all blocks.
+					$unique_classname = $this->ensureUniqueClassname(
+						$matches[0] ?? $base_unique_classname,
+						$attributes['blockeraPropsId'] ?? $this->current_block['attrs']['blockeraPropsId'],
+						$block
+					);
+	
+					if ($unique_classname !== $base_unique_classname && $unique_classname !== $class) {
+						// Turn on "force-update-classname" for wrapper element while self classname is duplicate!
+						$args['force_update_classname'] = true;
+						// Update selector.
+						$selector = blockera_get_normalized_selector($unique_classname);
+					}
 				}
 
 				// Set the is first tag flag to false.

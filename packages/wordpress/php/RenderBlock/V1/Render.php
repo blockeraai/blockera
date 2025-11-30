@@ -166,6 +166,9 @@ class Render {
 		// Store the block array.
 		$this->block = $block;
 
+		// Handling block setup while exist inside in loop block as a inner block.
+		$this->setupBlockInLoop($block);
+
 		$extracted_name = explode('/', $block['blockName']);
 
 		$this->id = $extracted_name[1];
@@ -191,13 +194,19 @@ class Render {
         $cache_validate = ! empty($cache_data['css']) && ! empty($cache_data['hash']) && ! empty($cache_data['classname']);
 		// Get normalized blockera block unique css classname.
         $base_unique_class_name = $attributes['className'] ?? $blockera_class_name;
-		// Ensure the classname is unique across all blocks.
-		$unique_class_name = $this->ensureUniqueClassname(
-			$base_unique_class_name,
-			$attributes['blockeraPropsId'],
-			$block
-		);
-		$unique_selector   = blockera_get_normalized_selector($unique_class_name);
+		
+		if (! $this->is_doing_transpile_loop) {
+			// Ensure the classname is unique across all blocks.
+			$unique_class_name = $this->ensureUniqueClassname(
+				$base_unique_class_name,
+				$attributes['blockeraPropsId'],
+				$block
+			);
+			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
+		} else {
+			$unique_class_name = $base_unique_class_name;
+			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
+		}
 
         // Validate cache data.
         if ($cache_validate && $hash === $cache_data['hash'] && $this->cache_status) {
