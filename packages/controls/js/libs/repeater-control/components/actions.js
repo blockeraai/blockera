@@ -60,6 +60,110 @@ export default function RepeaterItemActions({
 		},
 	} = useControlContext();
 
+	function deleteFunction(event: MouseEvent) {
+		event.stopPropagation();
+
+		if (
+			!disableRegenerateId &&
+			isEnabledPromote(PromoComponent, repeaterItems)
+		) {
+			setCount(count + 1);
+			setDisableAddNewItem(true);
+
+			return;
+		}
+
+		if (!item.selectable || 'function' !== typeof onDelete) {
+			return removeRepeaterItem({
+				itemId,
+				onChange,
+				controlId,
+				repeaterId,
+				valueCleanup,
+				itemIdGenerator,
+				disableRegenerateId,
+			});
+		}
+
+		const value = onDelete(itemId, repeaterItems);
+
+		modifyControlValue({
+			controlId,
+			value,
+		});
+
+		repeaterOnChange(value, {
+			onChange,
+			valueCleanup,
+		});
+	}
+
+	function visibilityFunction(event: MouseEvent) {
+		event.stopPropagation();
+
+		if (!item?.isVisible) {
+			const visibleItems = [];
+
+			for (const repeaterItemId in repeaterItems) {
+				const repeaterItem = repeaterItems[repeaterItemId];
+				if (repeaterItem?.isVisible) {
+					visibleItems.push(repeaterItemId);
+				}
+			}
+
+			if (
+				visibleItems.length >= 1 &&
+				isEnabledPromote(PromoComponent, repeaterItems)
+			) {
+				return setCount(count + 1);
+			}
+		}
+
+		setVisibility(!isVisible);
+		const value = item?.selectable
+			? {
+					...item,
+					isVisible: !isVisible,
+					isSelected: false,
+			  }
+			: {
+					...item,
+					isVisible: !isVisible,
+			  };
+
+		changeRepeaterItem({
+			value,
+			itemId,
+			onChange,
+			controlId,
+			repeaterId,
+			valueCleanup,
+			disableRegenerateId,
+		});
+	}
+
+	function cloneFunction(event: MouseEvent) {
+		event.stopPropagation();
+
+		if (isEnabledPromote(PromoComponent, repeaterItems)) {
+			setCount(count + 1);
+			setDisableAddNewItem(true);
+
+			return;
+		}
+
+		cloneRepeaterItem({
+			itemId,
+			onChange,
+			controlId,
+			repeaterId,
+			value: item,
+			overrideItem,
+			valueCleanup,
+			itemIdGenerator,
+		});
+	}
+
 	return (
 		<>
 			{actionButtonVisibility && item?.visibilitySupport && (
@@ -84,53 +188,7 @@ export default function RepeaterItemActions({
 								<Icon icon="eye-hide" iconSize={22} />
 							)
 						}
-						onClick={(event) => {
-							event.stopPropagation();
-
-							if (!item?.isVisible) {
-								const visibleItems = [];
-
-								for (const repeaterItemId in repeaterItems) {
-									const repeaterItem =
-										repeaterItems[repeaterItemId];
-									if (repeaterItem?.isVisible) {
-										visibleItems.push(repeaterItemId);
-									}
-								}
-
-								if (
-									visibleItems.length >= 1 &&
-									isEnabledPromote(
-										PromoComponent,
-										repeaterItems
-									)
-								) {
-									return setCount(count + 1);
-								}
-							}
-
-							setVisibility(!isVisible);
-							const value = item?.selectable
-								? {
-										...item,
-										isVisible: !isVisible,
-										isSelected: false,
-								  }
-								: {
-										...item,
-										isVisible: !isVisible,
-								  };
-
-							changeRepeaterItem({
-								value,
-								itemId,
-								onChange,
-								controlId,
-								repeaterId,
-								valueCleanup,
-								disableRegenerateId,
-							});
-						}}
+						onClick={visibilityFunction}
 						aria-label={
 							isVisible
 								? sprintf(
@@ -163,32 +221,7 @@ export default function RepeaterItemActions({
 							className={controlInnerClassNames('btn-clone')}
 							noBorder={true}
 							icon={<Icon icon="clone" iconSize={20} />}
-							onClick={(event) => {
-								event.stopPropagation();
-
-								if (
-									isEnabledPromote(
-										PromoComponent,
-										repeaterItems
-									)
-								) {
-									setCount(count + 1);
-									setDisableAddNewItem(true);
-
-									return;
-								}
-
-								cloneRepeaterItem({
-									itemId,
-									onChange,
-									controlId,
-									repeaterId,
-									value: item,
-									overrideItem,
-									valueCleanup,
-									itemIdGenerator,
-								});
-							}}
+							onClick={cloneFunction}
 							aria-label={sprintf(
 								// translators: %s is the repeater item id. It's aria label for cloning repeater item
 								__('Clone %s', 'blockera'),
@@ -212,49 +245,7 @@ export default function RepeaterItemActions({
 							className={controlInnerClassNames('btn-delete')}
 							noBorder={true}
 							icon={<Icon icon="trash" iconSize={20} />}
-							onClick={(event) => {
-								event.stopPropagation();
-
-								if (
-									!disableRegenerateId &&
-									isEnabledPromote(
-										PromoComponent,
-										repeaterItems
-									)
-								) {
-									setCount(count + 1);
-									setDisableAddNewItem(true);
-
-									return;
-								}
-
-								if (
-									!item.selectable ||
-									'function' !== typeof onDelete
-								) {
-									return removeRepeaterItem({
-										itemId,
-										onChange,
-										controlId,
-										repeaterId,
-										valueCleanup,
-										itemIdGenerator,
-										disableRegenerateId,
-									});
-								}
-
-								const value = onDelete(itemId, repeaterItems);
-
-								modifyControlValue({
-									controlId,
-									value,
-								});
-
-								repeaterOnChange(value, {
-									onChange,
-									valueCleanup,
-								});
-							}}
+							onClick={deleteFunction}
 							aria-label={sprintf(
 								// translators: %s is the repeater item id. It's aria label for deleting repeater item
 								__('Delete %s', 'blockera'),
