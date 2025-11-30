@@ -218,7 +218,7 @@ if ( ! function_exists( 'blockera_get_unique_class_name_regex' ) ) {
 	 */
 	function blockera_get_unique_class_name_regex(): string {
 
-		return '/\bblockera-block\s+(blockera-block-[^\s]+)/';
+		return '/\b(blockera-block\s+blockera-block-[^\s]+)/';
 	}
 }
 
@@ -397,23 +397,38 @@ if (! function_exists('blockera_block_is_dynamic')) {
 	}
 }
 
-if (! function_exists('blockera_block_is_query')) {
+if (! function_exists('blockera_block_is_loop')) {
 	
 	/**
-	 * Check if the block is a query block.
+	 * Check if the block is a loop block.
 	 * 
 	 * @param string $block_name The name of the block.
 	 *
 	 * @return bool true on success, false otherwise.
 	 */
-	function blockera_block_is_query( string $block_name): bool {
+	function blockera_block_is_loop( string $block_name): bool {
 
 		if (empty($block_name)) {
 			return false;
 		}
 
 		$blocks = [
+			// WordPress core blocks.
+			'core/query',
+			'core/terms-query',
+			'core/post-template',
 			'core/term-template',
+			'core/gallery',
+			'core/comments',
+			'core/navigation',
+			// TODO: Add Woocommerce blocks.
+			'woocommerce/product-query',
+			'woocommerce/product-collection',
+			// Blocksy blocks.
+			'blocksy/query',
+			'blocksy/tax-query',
+			'blocksy/tax-template',
+			'blocksy/post-template',
 		];
 
 		return in_array($block_name, $blocks, true);
