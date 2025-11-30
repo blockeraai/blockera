@@ -220,6 +220,9 @@ class Transpiler {
 		// Process only valid, supported, and not dynamic blocks or one of items in parent block inners list.
 		if ($this->isValidBlock( $block ) && blockera_is_supported_block($block) || $is_allowed) {
 
+			// Indicate if the first tag is processed.
+			$is_first_tag = true;
+
 			foreach ($block['innerContent'] as $_key => $innerContent) {
 				if (empty($innerContent) || ! $innerContent || empty(trim($innerContent))) {
 					continue;
@@ -236,12 +239,16 @@ class Transpiler {
 						'block' => $block,
 						'block_id' => $key,
 						'supports' => $args['supports'],
+						'is_first_tag' => $is_first_tag,
 						'unique_selector' => $unique_selector,
 						'unique_classname' => $unique_classname,
 						'block_path' => $args['block_path'] ?? [],
 						'permitted_inner' => ! $invalid_inner && $is_inner,
 					]
 				);
+
+				// Reset the is first tag flag.
+				$is_first_tag = false;
 			}
 		}
 
@@ -273,9 +280,6 @@ class Transpiler {
 		$block      = $args['block'];
 		$attributes = $args['block']['attrs'] ?? [];
 
-		// Indicate if the first tag is processed.
-		$is_first_tag = true;
-
         // Process in a single pass.
         while ($processor->next_tag()) {
             $style = $processor->get_attribute('style');
@@ -297,7 +301,7 @@ class Transpiler {
 			$this->setupBlockInLoop($block, 'processBlockContent', 1);
 
 			// If the generated new unique classname for block.
-			if ($is_first_tag) {
+			if ($args['is_first_tag']) {
 
 				if (! $this->is_doing_transpile_loop) {
 					// Get unique classname from fallback classname by using regex.
@@ -319,7 +323,7 @@ class Transpiler {
 				}
 
 				// Set the is first tag flag to false.
-				$is_first_tag = false;
+				$args['is_first_tag'] = false;
 			}
 
 			// Update classname based on blockera class name.
