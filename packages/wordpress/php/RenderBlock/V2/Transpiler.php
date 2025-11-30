@@ -299,7 +299,7 @@ class Transpiler {
 
 				// Ensure the classname is unique across all blocks.
 				$unique_classname = $this->ensureUniqueClassname(
-					$matches[0] ?? $fallback_classname,
+					$matches[0] ?? $base_unique_classname,
 					$attributes['blockeraPropsId'] ?? $this->current_block['attrs']['blockeraPropsId'],
 					$block
 				);
