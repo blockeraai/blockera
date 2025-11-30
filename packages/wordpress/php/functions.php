@@ -418,9 +418,7 @@ if (! function_exists('blockera_block_is_loop')) {
 			'core/terms-query',
 			'core/post-template',
 			'core/term-template',
-			'core/gallery',
 			'core/comments',
-			'core/navigation',
 			// TODO: Add Woocommerce blocks.
 			'woocommerce/product-query',
 			'woocommerce/product-collection',
