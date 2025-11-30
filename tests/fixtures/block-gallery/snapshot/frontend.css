@@ -87,20 +87,6 @@
 	order: -1;
 }
 
-.wp-block-gallery {
-	background-color: #e1ffdd;
-	gap: 70px;
-}
-
-> figcaption {
-	background-color: #00000024;
-	order: -1;
-}
-
-figure.wp-block-image figcaption.wp-element-caption {
-	order: -1;
-}
-
 .blockera-block.blockera-block-4.wp-block-image {
 	order: 100;
 }
@@ -129,29 +115,6 @@ figure.wp-block-image figcaption.wp-element-caption {
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-5.wp-block-gallery {
-	flex-direction: row;
-	align-items: center !important;
-	justify-content: center !important;
-}
-
-
-}
-
-.wp-block-gallery {
-	background-color: #c9bcdb;
-	flex-direction: column;
-	justify-content: center !important;
-	align-items: center !important;
-	gap: 40px;
-}
-
-> figcaption {
-	font-weight: 700;
-	font-style: normal;
-}
-
-@media screen and (max-width: 478px) {
-	.wp-block-gallery {
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -207,7 +170,7 @@ figure.wp-block-image figcaption.wp-element-caption {
 	border-radius: 20px;
 }
 
-.wp-block-gallery {
+.blockera-block.blockera-block-6.wp-block-gallery {
 	background-color: #a7c1d7;
 	border-radius: 15px;
 	transition: all 500ms ease 0ms;
@@ -219,12 +182,12 @@ figure.wp-block-image figcaption.wp-element-caption {
 	padding-left: 20px;
 }
 
-.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+.blockera-block.blockera-block-6 .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	box-shadow: 7px 7px 0 0 #0000003b;
 	filter: blur(2px);
 }
 
-> figcaption {
+.blockera-block.blockera-block-6 > figcaption {
 	padding-top: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
@@ -234,23 +197,23 @@ figure.wp-block-image figcaption.wp-element-caption {
 	align-self: center;
 }
 
-> figcaption:hover {
+.blockera-block.blockera-block-6 > figcaption:hover {
 	background-color: #00000026;
 }
 
 @media screen and (max-width: 478px) {
-	> figcaption {
+	.blockera-block.blockera-block-6 > figcaption {
 	flex: 1 1 0%;
 }
 
 
 }
 
-.wp-block-gallery:hover {
+.blockera-block.blockera-block-6.wp-block-gallery:hover {
 	background-color: #7dacd4;
 }
 
-:hover.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+.blockera-block.blockera-block-6:hover .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 20px;
 }
 
@@ -268,7 +231,7 @@ figure.wp-block-image figcaption.wp-element-caption {
 	position: relative;
 }
 
-.wp-block-gallery {
+.blockera-block.blockera-block-7.wp-block-gallery {
 	background-size: auto;
 	background-position: 0 0;
 	background-repeat: repeat;
