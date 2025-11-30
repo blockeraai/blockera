@@ -335,6 +335,15 @@
 .blockera-block.blockera-block-17 a {
 	display: none;
 }
+.blockera-block.blockera-block-3.wp-block-comments {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #e6e6e6;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
 .blockera-block.blockera-block-8.wp-block-comment-author-name {
 	background-color: #ff3737;
 	font-weight: 500;
