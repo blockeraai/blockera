@@ -58,11 +58,6 @@ class EditBlockHTML implements EditableBlockHTML {
             'block'        => $block,
         ] = $data;
 
-		// Prevent processing empty html.
-		if (empty($html)) {
-			return $html;
-		}
-
 		if (! $this->isValidBlock($block, $html) && 'core/image' !== $block['blockName']) {
 			return $html;
 		}
@@ -84,7 +79,11 @@ class EditBlockHTML implements EditableBlockHTML {
         }
 
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
-		$blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+        
+		// Append icon to the block element if it has inner content.
+		if (! empty($block['innerContent'])) {
+			$blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
+		}
 
 		try {
 			return $blockElement->parent()->outerhtml;
