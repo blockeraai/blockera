@@ -76,7 +76,8 @@ trait Processor {
 		}
 		
 		// Check if this block has any loop container in its parent chain.
-		$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 30);
+		// phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 30);
 
 		foreach ($backtrace as $trace) {
 			if (isset($trace['function']) && $ref === $trace['function']) {
