@@ -24,6 +24,13 @@
 		font-size: 12px;
 
 		.blockera-control-action-buttons {
+
+			svg {
+				fill: currentcolor;
+			}
+		}
+
+		.blockera-control-action-buttons.type-inline {
 			z-index: 1;
 			display: flex;
 			align-items: center;
@@ -41,6 +48,25 @@
 
 				&:hover {
 					color: var(--blockera-controls-primary-color);
+				}
+			}
+		}
+
+		.blockera-control-action-buttons.type-menu {
+			z-index: 1;
+			display: flex;
+			align-items: center;
+			background: #ffffff;
+			gap: -1px;
+
+			.blockera-control-dropdown-menu {
+
+				.components-button.components-dropdown-menu__toggle {
+					min-width: auto;
+					padding: 0;
+					height: auto;
+					--wp-components-color-accent: var(--blockera-controls-primary-color);
+					color: currentColor;
 				}
 			}
 		}

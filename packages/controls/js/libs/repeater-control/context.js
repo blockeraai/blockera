@@ -22,6 +22,8 @@ const RepeaterContext = createContext({
 	actionButtonClone: true,
 	injectHeaderButtonsStart: '',
 	injectHeaderButtonsEnd: '',
+	actionButtonsType: 'inline',
+	actionMenuButtonLabel: null,
 	//
 	controlId: null,
 	repeaterId: null,

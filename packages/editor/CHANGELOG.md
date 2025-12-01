@@ -13,6 +13,7 @@
 - Add `&` support for targeting current block in custom CSS feature.
 - Compatibility for detecting variables from core blocks if the variable not found.
 - Improve to show `Flex Child` settings smartly for all blocks and inner blocks that have `flex` parent.
+- Improve the breakpoints management setting UX.
 
 
 ### Automated Tests

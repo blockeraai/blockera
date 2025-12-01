@@ -17,6 +17,7 @@ import {
 	useControlContext,
 	ControlContextProvider,
 } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -28,10 +29,12 @@ export default function ({
 	item,
 	itemId,
 	setOpen,
+	isOpen,
 }: {
 	item: Object,
 	itemId: string,
 	setOpen: (isOpen: boolean) => void,
+	isOpen: boolean,
 }): MixedElement {
 	const {
 		controlInfo: { name: controlId },
@@ -112,46 +115,50 @@ export default function ({
 				</span>
 			</span>
 
-			{itemId !== getBaseBreakpoint() && (
-				<span
-					className={controlInnerClassNames('header-values')}
-					style={{
-						gap: '10px',
-					}}
-				>
-					{itemId !== getBaseBreakpoint() && (
-						<ControlContextProvider
-							value={{
-								name: `toggle${itemId}`,
-								value: item.settings.picked,
-							}}
-						>
-							<ToggleControl
-								labelType={'self'}
-								id={`toggle${itemId}`}
-								defaultValue={item.settings.picked}
-								onChange={(picked: boolean): void => {
-									changeRepeaterItem({
-										controlId,
-										itemId,
-										onChange,
-										repeaterId,
-										valueCleanup,
-										value: {
-											...item,
-											status: picked,
-											settings: {
-												...item.settings,
-												picked,
-											},
+			<span
+				className={controlInnerClassNames('header-values')}
+				style={{
+					gap: '5px',
+				}}
+			>
+				{itemId !== getBaseBreakpoint() && (
+					<ControlContextProvider
+						value={{
+							name: `toggle${itemId}`,
+							value: item.settings.picked,
+						}}
+					>
+						<ToggleControl
+							labelType={'self'}
+							id={`toggle${itemId}`}
+							defaultValue={item.settings.picked}
+							onChange={(picked: boolean): void => {
+								changeRepeaterItem({
+									controlId,
+									itemId,
+									onChange,
+									repeaterId,
+									valueCleanup,
+									value: {
+										...item,
+										status: picked,
+										settings: {
+											...item.settings,
+											picked,
 										},
-									});
-								}}
-							/>
-						</ControlContextProvider>
-					)}
-				</span>
-			)}
+									},
+								});
+							}}
+						/>
+					</ControlContextProvider>
+				)}
+
+				{isOpen ? (
+					<Icon library="wp" icon="chevron-up" iconSize="20" />
+				) : (
+					<Icon library="wp" icon="chevron-down" iconSize="20" />
+				)}
+			</span>
 		</div>
 	);
 }

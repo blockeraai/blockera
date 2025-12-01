@@ -89,6 +89,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 					actionButtonDelete={true}
 					actionButtonClone={false}
 					actionButtonVisibility={false}
+					actionButtonsType="menu"
 					popoverTitleButtonsRight={PopoverTitleButtons}
 					addNewButtonDataTest={'add-new-block-state'}
 					PromoComponent={({
