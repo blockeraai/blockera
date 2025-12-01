@@ -104,6 +104,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 				icon={<Icon icon="inner-blocks" />}
 				actionButtonClone={false}
 				actionButtonVisibility={false}
+				actionButtonsType="menu"
 			/>
 		</ControlContextProvider>
 	);
