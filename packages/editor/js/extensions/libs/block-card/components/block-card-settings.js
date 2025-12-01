@@ -6,12 +6,18 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { check } from '@wordpress/icons';
 import type { MixedElement } from 'react';
-import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import { Flex, Tooltip, DynamicHtmlFormatter } from '@blockera/controls';
+import {
+	Flex,
+	Tooltip,
+	MenuItem,
+	MenuGroup,
+	DropdownMenu,
+	DynamicHtmlFormatter,
+} from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { classNames } from '@blockera/classnames';
 
@@ -110,7 +116,7 @@ export const BlockCardSettings = ({
 	}
 
 	return (
-		<div className={'blockera-dropdown-menu'}>
+		<div className={'blockera-dropdown-menu-wrapper'}>
 			{actionsMenu && (
 				<DropdownMenu
 					icon={<Icon icon="more-vertical" iconSize="24" />}
@@ -119,9 +125,6 @@ export const BlockCardSettings = ({
 						offset: 20,
 						focusOnMount: true,
 						placement: 'bottom-end',
-					}}
-					menuProps={{
-						className: 'blockera-dropdown-menu__menu',
 					}}
 				>
 					{({ onClose }) => {
@@ -132,20 +135,23 @@ export const BlockCardSettings = ({
 								>
 									<MenuItem
 										data-test={'advanced-mode-block'}
-										icon={isActive ? check : ''}
+										icon={isActive ? check : null}
 										onClick={() => {
 											setActive(!isActive);
 											onClose();
 										}}
 										className={classNames({
-											'blockera-block-menu-item': true,
-											'blockera-block-menu-item-selected':
+											'blockera-control-menu-item-selected':
 												isActive,
 										})}
 										style={{
 											'pointer-events': isActive
 												? 'none'
 												: 'all',
+											'--blockera-controls-primary-color':
+												'#0051e7',
+											'--wp-components-color-accent':
+												'#0051e7',
 										}}
 									>
 										<Flex alignItems="center" gap="10px">
@@ -160,14 +166,13 @@ export const BlockCardSettings = ({
 
 									<MenuItem
 										data-test={'basic-mode-block'}
-										icon={isActive ? '' : check}
+										icon={isActive ? null : check}
 										onClick={() => {
 											setActive(!isActive);
 											onClose();
 										}}
 										className={classNames({
-											'blockera-block-menu-item': true,
-											'blockera-block-menu-item-selected':
+											'blockera-control-menu-item-selected':
 												!isActive,
 										})}
 									>
@@ -188,7 +193,7 @@ export const BlockCardSettings = ({
 									>
 										<MenuItem
 											data-test={'Expand All'}
-											icon={expandAll ? check : ''}
+											icon={expandAll ? check : null}
 											onClick={() => {
 												if (focusMode) {
 													return;
@@ -201,8 +206,7 @@ export const BlockCardSettings = ({
 												});
 											}}
 											className={classNames({
-												'blockera-block-menu-item': true,
-												'blockera-block-menu-item-selected':
+												'blockera-control-menu-item-selected':
 													expandAll,
 												'blockera-not-allowed':
 													focusMode,
@@ -228,7 +232,7 @@ export const BlockCardSettings = ({
 
 										<MenuItem
 											data-test={'Collapse All'}
-											icon={collapseAll ? check : ''}
+											icon={collapseAll ? check : null}
 											onClick={() => {
 												if (focusMode) {
 													return;
@@ -242,8 +246,7 @@ export const BlockCardSettings = ({
 												});
 											}}
 											className={classNames({
-												'blockera-block-menu-item': true,
-												'blockera-block-menu-item-selected':
+												'blockera-control-menu-item-selected':
 													collapseAll,
 												'blockera-not-allowed':
 													focusMode,
@@ -269,7 +272,7 @@ export const BlockCardSettings = ({
 
 										<MenuItem
 											data-test={'Focus Mode'}
-											icon={focusMode ? check : ''}
+											icon={focusMode ? check : null}
 											onClick={() => {
 												if (focusMode) {
 													return updateBlockSections({
@@ -288,8 +291,7 @@ export const BlockCardSettings = ({
 												});
 											}}
 											className={classNames({
-												'blockera-block-menu-item': true,
-												'blockera-block-menu-item-selected':
+												'blockera-control-menu-item-selected':
 													focusMode,
 											})}
 										>
