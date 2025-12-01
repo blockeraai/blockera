@@ -90,6 +90,7 @@ export default function ItemHeader({
 			}
 			width="220px"
 			style={getTooltipStyle('inner-block')}
+			delay={1500}
 		>
 			<div
 				className={controlInnerClassNames(

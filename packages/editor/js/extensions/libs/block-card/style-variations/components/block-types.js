@@ -395,6 +395,7 @@ const BlockType = ({
 				</>
 			}
 			width="220px"
+			delay={1500}
 		>
 			<Flex
 				data-test={id}
