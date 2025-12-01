@@ -18,6 +18,10 @@
 			"replace": "?p=post-id"
 		},
 		{
+			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?m=yyyy-mm-dd"
+		},
+		{
 			"search": "\\?page_id=\\d+(?=[\\s\"'#&]|$)",
 			"replace": "?page_id=page-id"
 		},
