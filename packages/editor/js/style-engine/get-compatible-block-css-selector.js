@@ -143,11 +143,68 @@ export const getNormalizedSelector = (
 		getInnerState,
 		getMasterState,
 		fromInnerBlock = false,
-		customizedPseudoClasses,
+		customizedPseudoClasses = [],
 		currentStateHasSelectors,
 	} = options;
 	let { rootSelector } = options;
-	let parsedSelectors = selector.split(',');
+	const originalRootSelector = rootSelector;
+
+	// Helper function to split selectors by comma, respecting parentheses, brackets, and quotes
+	const splitSelectors = (selectorString: string): Array<string> => {
+		const selectors: Array<string> = [];
+		let current = '';
+		let depth = 0;
+		let inSingleQuote = false;
+		let inDoubleQuote = false;
+
+		for (let i = 0; i < selectorString.length; i++) {
+			const char = selectorString[i];
+			const prevChar = i > 0 ? selectorString[i - 1] : '';
+
+			// Handle quotes (but not escaped quotes)
+			if (char === "'" && prevChar !== '\\') {
+				inSingleQuote = !inSingleQuote;
+				current += char;
+			} else if (char === '"' && prevChar !== '\\') {
+				inDoubleQuote = !inDoubleQuote;
+				current += char;
+			} else if (
+				!inSingleQuote &&
+				!inDoubleQuote &&
+				(char === '(' || char === '[')
+			) {
+				depth++;
+				current += char;
+			} else if (
+				!inSingleQuote &&
+				!inDoubleQuote &&
+				(char === ')' || char === ']')
+			) {
+				depth--;
+				current += char;
+			} else if (
+				char === ',' &&
+				depth === 0 &&
+				!inSingleQuote &&
+				!inDoubleQuote
+			) {
+				// Only split on comma if we're at the top level
+				selectors.push(current.trim());
+				current = '';
+			} else {
+				current += char;
+			}
+		}
+
+		// Add the last selector
+		if (current.trim()) {
+			selectors.push(current.trim());
+		}
+
+		return selectors.length > 0 ? selectors : [selectorString];
+	};
+
+	let parsedSelectors = splitSelectors(selector);
 	// Check if selector starts with a pseudo-class (e.g., :hover, :focus, ::before)
 	const startsWithPseudoClass = /^::?[a-z-]+/.test(selector.trim());
 
@@ -379,7 +436,10 @@ export const getNormalizedSelector = (
 	// Handle multiple selectors.
 	return parsedSelectors
 		.map((selector) => {
-			const processedSelector = processAmpersand(selector);
+			// Reset isProcessedSelector and rootSelector for each selector
+			isProcessedSelector = false;
+			rootSelector = originalRootSelector;
+			const processedSelector = processAmpersand(selector.trim());
 			return customizedPseudoClasses.includes(state)
 				? processedSelector
 				: generateSelector(processedSelector);
