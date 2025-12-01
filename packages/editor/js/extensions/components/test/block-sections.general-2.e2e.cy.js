@@ -38,7 +38,7 @@ describe('Block Sections Manager Testing', () => {
 		cy.get('button[aria-label="Block Settings"]').click();
 		cy.getByDataTest('Focus Mode').should(
 			'have.class',
-			'blockera-block-menu-item-selected'
+			'blockera-control-menu-item-selected'
 		);
 	});
 
