@@ -76,7 +76,7 @@ https://www.youtube.com/watch?v=H_oJZ2Cv7a0
 		//
 		savePage();
 
-		cy.compareSnapshot({
+		cy.get('body').compareSnapshot({
 			name: 'test',
 			threshold: 0.02,
 		});
