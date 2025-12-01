@@ -27,7 +27,7 @@ export default function RepeaterItemActions({
 	itemId,
 	isVisible,
 	setVisibility,
-}: RepeaterItemActionsProps): MixedElement {
+}: RepeaterItemActionsProps): MixedElement | null {
 	const {
 		count,
 		setCount,
@@ -180,9 +180,26 @@ export default function RepeaterItemActions({
 		});
 	}
 
+	const showVisibility = actionButtonVisibility && item?.visibilitySupport;
+
+	const showClone =
+		actionButtonClone &&
+		item?.cloneable &&
+		(maxItems === -1 || itemsCount < maxItems);
+
+	const showDelete =
+		actionButtonDelete &&
+		item?.deletable &&
+		(minItems === 0 || itemsCount > minItems);
+
+	// If no buttons are shown, return null to avoid rendering empty container
+	if (!showVisibility && !showClone && !showDelete) {
+		return null;
+	}
+
 	return (
 		<>
-			{actionButtonVisibility && item?.visibilitySupport && (
+			{showVisibility && (
 				<>
 					{actionButtonsType === 'menu' ? (
 						<MenuItem
@@ -261,101 +278,88 @@ export default function RepeaterItemActions({
 				</>
 			)}
 
-			{actionButtonClone &&
-				item?.cloneable &&
-				(maxItems === -1 || itemsCount < maxItems) && (
-					<>
-						{actionButtonsType === 'menu' ? (
-							<MenuItem
-								onClick={cloneFunction}
+			{showClone && (
+				<>
+					{actionButtonsType === 'menu' ? (
+						<MenuItem
+							onClick={cloneFunction}
+							className={controlInnerClassNames('btn-clone')}
+						>
+							<Flex alignItems="center" gap="10px">
+								<Icon icon="clone" iconSize={20} />
+								{__('Clone (duplicate)', 'blockera')}
+							</Flex>
+						</MenuItem>
+					) : (
+						<Tooltip
+							text={__('Clone', 'blockera')}
+							style={{
+								'--tooltip-bg':
+									'var(--blockera-controls-primary-color)',
+							}}
+							delay={300}
+						>
+							<Button
 								className={controlInnerClassNames('btn-clone')}
-							>
-								<Flex alignItems="center" gap="10px">
-									<Icon icon="clone" iconSize={20} />
-									{__('Clone (duplicate)', 'blockera')}
-								</Flex>
-							</MenuItem>
-						) : (
-							<Tooltip
-								text={__('Clone', 'blockera')}
-								style={{
-									'--tooltip-bg':
-										'var(--blockera-controls-primary-color)',
-								}}
-								delay={300}
-							>
-								<Button
-									className={controlInnerClassNames(
-										'btn-clone'
-									)}
-									noBorder={true}
-									icon={<Icon icon="clone" iconSize={20} />}
-									onClick={cloneFunction}
-									aria-label={sprintf(
-										// translators: %s is the repeater item id. It's aria label for cloning repeater item
-										__('Clone %s', 'blockera'),
-										getArialLabelSuffix(itemId)
-									)}
-								/>
-							</Tooltip>
-						)}
-					</>
-				)}
+								noBorder={true}
+								icon={<Icon icon="clone" iconSize={20} />}
+								onClick={cloneFunction}
+								aria-label={sprintf(
+									// translators: %s is the repeater item id. It's aria label for cloning repeater item
+									__('Clone %s', 'blockera'),
+									getArialLabelSuffix(itemId)
+								)}
+							/>
+						</Tooltip>
+					)}
+				</>
+			)}
 
-			{actionButtonDelete &&
-				item?.deletable &&
-				(minItems === 0 || itemsCount > minItems) && (
-					<>
-						{actionButtonsType === 'menu' ? (
-							<MenuItem
+			{showDelete && (
+				<>
+					{actionButtonsType === 'menu' ? (
+						<MenuItem
+							onClick={deleteFunction}
+							className={classNames({
+								'blockera-block-menu-item': true,
+							})}
+							style={{
+								'--blockera-controls-primary-color': '#e20b0b',
+								'--wp-components-color-accent': '#e20b0b',
+							}}
+						>
+							<Flex alignItems="center" gap="10px">
+								<Icon library="ui" icon="trash" iconSize={20} />
+								{__('Delete', 'blockera')}
+							</Flex>
+						</MenuItem>
+					) : (
+						<Tooltip
+							text={__('Delete', 'blockera')}
+							style={{
+								'--tooltip-bg': '#e20b0b',
+							}}
+							delay={300}
+						>
+							<Button
+								className={controlInnerClassNames('btn-delete')}
+								noBorder={true}
+								icon={<Icon icon="trash" iconSize={20} />}
 								onClick={deleteFunction}
-								className={classNames({
-									'blockera-block-menu-item': true,
-								})}
+								aria-label={sprintf(
+									// translators: %s is the repeater item id. It's aria label for deleting repeater item
+									__('Delete %s', 'blockera'),
+									getArialLabelSuffix(itemId)
+								)}
 								style={{
 									'--blockera-controls-primary-color':
 										'#e20b0b',
-									'--wp-components-color-accent': '#e20b0b',
 								}}
-							>
-								<Flex alignItems="center" gap="10px">
-									<Icon
-										library="ui"
-										icon="trash"
-										iconSize={20}
-									/>
-									{__('Delete', 'blockera')}
-								</Flex>
-							</MenuItem>
-						) : (
-							<Tooltip
-								text={__('Delete', 'blockera')}
-								style={{
-									'--tooltip-bg': '#e20b0b',
-								}}
-								delay={300}
-							>
-								<Button
-									className={controlInnerClassNames(
-										'btn-delete'
-									)}
-									noBorder={true}
-									icon={<Icon icon="trash" iconSize={20} />}
-									onClick={deleteFunction}
-									aria-label={sprintf(
-										// translators: %s is the repeater item id. It's aria label for deleting repeater item
-										__('Delete %s', 'blockera'),
-										getArialLabelSuffix(itemId)
-									)}
-									style={{
-										'--blockera-controls-primary-color':
-											'#e20b0b',
-									}}
-								/>
-							</Tooltip>
-						)}
-					</>
-				)}
+							/>
+						</Tooltip>
+					)}
+				</>
+			)}
 		</>
 	);
 }
