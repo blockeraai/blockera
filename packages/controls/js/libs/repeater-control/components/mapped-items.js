@@ -22,6 +22,7 @@ const MappedItems = (): MixedElement => {
 		repeaterItems: items,
 		repeaterId,
 		defaultRepeaterItemValue,
+		actionButtonsType,
 	} = useContext(RepeaterContext);
 
 	// Sorting repeater items based on "order" property value of each item.
@@ -45,6 +46,7 @@ const MappedItems = (): MixedElement => {
 					...item,
 				},
 				itemId,
+				actionButtonsType,
 			}}
 			key={getUniqueId(itemId)}
 		/>

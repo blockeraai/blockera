@@ -19,7 +19,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, Popover } from '../';
+import { Button, Popover, DropdownMenu } from '../';
 import type { GroupControlProps } from './types';
 
 const GroupControl: ComponentType<any> = ({
@@ -40,6 +40,8 @@ const GroupControl: ComponentType<any> = ({
 	headerCloseIcon,
 	injectHeaderButtonsStart,
 	injectHeaderButtonsEnd,
+	actionButtonsType = 'inline',
+	actionMenuButtonLabel = __('More Options', 'blockera'),
 	//
 	children = 'Content...',
 	//
@@ -124,27 +126,76 @@ const GroupControl: ComponentType<any> = ({
 				data-cy="group-control-header"
 				onClick={handleOnClick}
 			>
-				<div className={controlInnerClassNames('action-buttons')}>
-					{injectHeaderButtonsStart}
+				<div
+					className={controlInnerClassNames(
+						'action-buttons',
+						'type-' + actionButtonsType
+					)}
+				>
+					{actionButtonsType === 'inline' && (
+						<>
+							{injectHeaderButtonsStart}
 
-					{headerOpenButton && (
-						<Button
-							className={controlInnerClassNames('btn-toggle')}
-							label={
-								isOpen
-									? __('Close Settings', 'blockera')
-									: __('Open Settings', 'blockera')
-							}
-							onClick={onClickCallback}
-							noBorder={true}
-						>
-							{isOpen
-								? getHeaderOpenIcon()
-								: getHeaderCloseIcon()}
-						</Button>
+							{headerOpenButton && (
+								<Button
+									className={controlInnerClassNames(
+										'btn-toggle'
+									)}
+									label={
+										isOpen
+											? __('Close Settings', 'blockera')
+											: __('Open Settings', 'blockera')
+									}
+									onClick={onClickCallback}
+									noBorder={true}
+								>
+									{isOpen
+										? getHeaderOpenIcon()
+										: getHeaderCloseIcon()}
+								</Button>
+							)}
+
+							{injectHeaderButtonsEnd}
+						</>
 					)}
 
-					{injectHeaderButtonsEnd}
+					{actionButtonsType === 'menu' && (
+						<>
+							<DropdownMenu
+								label={actionMenuButtonLabel}
+								icon={
+									<Icon icon="more-vertical" iconSize="18" />
+								}
+								popoverProps={{
+									offset: 20,
+									focusOnMount: true,
+									placement: 'bottom-end',
+								}}
+								menuProps={{
+									className:
+										controlInnerClassNames(
+											'group-item-menu'
+										),
+								}}
+								toggleProps={{
+									onClick: (e) => {
+										e.stopPropagation();
+										e.preventDefault();
+									},
+								}}
+							>
+								{() => {
+									return (
+										<>
+											{injectHeaderButtonsStart}
+
+											{injectHeaderButtonsEnd}
+										</>
+									);
+								}}
+							</DropdownMenu>
+						</>
+					)}
 				</div>
 
 				{header}

@@ -93,7 +93,7 @@
 
 		}
 
-		.blockera-control-action-buttons {
+		.blockera-control-action-buttons.type-inline {
 			position: absolute;
 			top: 0;
 			bottom: 0;
@@ -117,16 +117,60 @@
 				}
 			}
 		}
+
+		.blockera-control-action-buttons.type-menu {
+			display: flex;
+			align-items: center;
+			padding: 0;
+			order: 100;
+			margin: 0 calc(var(--repeater-item-height) * -0.35) 0 calc(var(--repeater-item-height) * -0.35);
+			background: transparent;
+
+			.blockera-control-dropdown-menu {
+
+				.components-button.components-dropdown-menu__toggle {
+					opacity: 0.5;
+
+					&:hover,
+					&.is-opened {
+						color: var(--blockera-controls-primary-color) !important;
+						opacity: 1 !important;
+					}
+				}
+			}
+		}
 	}
 
-	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty),
-	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) {
+	.blockera-control-repeater-item.is-inactive .blockera-control-group-header .blockera-control-action-buttons.type-menu {
+
+		.blockera-control-dropdown-menu {
+
+			.components-button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+		}
+	}
+
+	.blockera-control-group.is-open .blockera-control-action-buttons.type-menu:not(:empty),
+	.blockera-control-group.is-hovered .blockera-control-action-buttons.type-menu:not(:empty),
+	.blockera-control-group-header:hover .blockera-control-action-buttons.type-menu:not(:empty) {
+
+		.blockera-control-dropdown-menu {
+
+			.components-button.components-dropdown-menu__toggle {
+				opacity: 1;
+			}
+		}
+	}
+
+	.blockera-control-group.is-hovered .blockera-control-action-buttons.type-inline:not(:empty),
+	.blockera-control-group-header:hover .blockera-control-action-buttons.type-inline:not(:empty) {
 		opacity: 1;
 		visibility: visible;
 	}
 
-	.blockera-control-group.is-hovered .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values,
-	.blockera-control-group-header:hover .blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
+	.blockera-control-group.is-hovered .blockera-control-action-buttons.type-inline:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values,
+	.blockera-control-group-header:hover .blockera-control-action-buttons.type-inline:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
 		opacity: 0;
 		visibility: hidden;
 	}
