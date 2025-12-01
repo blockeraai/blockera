@@ -76,9 +76,9 @@ https://www.youtube.com/watch?v=H_oJZ2Cv7a0
 		//
 		savePage();
 
-		cy.get('body').compareSnapshot({
+		cy.compareSnapshot({
 			name: 'test',
-			threshold: 0.02,
+			testThreshold: 0.02,
 		});
 
 		// redirectToFrontPage();
