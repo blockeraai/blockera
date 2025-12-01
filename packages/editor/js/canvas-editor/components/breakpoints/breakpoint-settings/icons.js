@@ -9,8 +9,9 @@ import { __ } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import type { TSelectOptions } from '@blockera/controls/js/libs/select-control/types/control-types';
 
-export const iconsOptions = [
+export const iconsOptions: TSelectOptions = [
 	{
 		value: '',
 		label: __('Choose Icon', 'blockera'),
