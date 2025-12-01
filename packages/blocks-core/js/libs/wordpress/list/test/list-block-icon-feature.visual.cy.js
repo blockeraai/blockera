@@ -126,18 +126,13 @@ describe('List Block → Icon Feature', () => {
 		cy.getByAriaLabel('Select List').click();
 		cy.getByAriaLabel('Select Group').click();
 
-		// cy.getIframeBody()
-		// 	.find(`[data-type="core/group"]`)
-		// 	.first()
-		// 	.compareSnapshot({
-		// 		name: '1-editor',
-		// 		testThreshold: 0.02,
-		// 	});
-
-		cy.compareSnapshot({
-			name: '1-editor',
-			testThreshold: 0.02,
-		});
+		cy.getIframeBody()
+			.find(`[data-type="core/group"]`)
+			.first()
+			.compareSnapshot({
+				name: '1-editor',
+				testThreshold: 0.02,
+			});
 
 		//Check frontend
 		savePage();
