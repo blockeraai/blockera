@@ -232,7 +232,7 @@ class Render {
             );
 
             // Render block with features.
-            return $this->getUpdatedHTML($html, $cache_data['classname']);
+            return $this->getUpdatedHTML($html, $cache_data['classname'], []);
         }
 
 		$args['force_update_classname'] = $unique_class_name !== $base_unique_class_name;
