@@ -104,6 +104,8 @@ describe('Button Block', () => {
 			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
 
+		cy.wait(10);
+
 		// Check block
 		// Border should be added to inner element and not to button root tag
 		cy.getBlock('core/button')
