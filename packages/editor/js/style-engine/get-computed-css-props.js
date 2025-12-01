@@ -267,11 +267,11 @@ export const getComputedCssProps = ({
 								selectors: calculatedSelectors,
 								attributes: {
 									...defaultAttributes,
-									...breakpointItem?.attributes,
 									...(params?.attributes
 										?.blockeraInnerBlocks?.[blockType]
 										?.attributes || {}),
 									...restAttributes,
+									...breakpointItem?.attributes,
 									...(hasContent
 										? {
 												blockeraBlockStates: {
