@@ -184,8 +184,10 @@ export const getComputedCssProps = ({
 			attributes,
 			masterState,
 		}: Object) => {
-			for (const stateType in attributes?.blockeraBlockStates || {}) {
-				const stateItem = attributes?.blockeraBlockStates[stateType];
+			const { blockeraBlockStates = {}, ...restAttributes } = attributes;
+
+			for (const stateType in blockeraBlockStates) {
+				const stateItem = blockeraBlockStates[stateType];
 
 				if (!validateBlockStates(stateItem)) {
 					continue;
@@ -266,6 +268,10 @@ export const getComputedCssProps = ({
 								attributes: {
 									...defaultAttributes,
 									...breakpointItem?.attributes,
+									...(params?.attributes
+										?.blockeraInnerBlocks?.[blockType]
+										?.attributes || {}),
+									...restAttributes,
 									...(hasContent
 										? {
 												blockeraBlockStates: {
@@ -318,6 +324,9 @@ export const getComputedCssProps = ({
 							{},
 						attributes: {
 							...defaultAttributes,
+							...(params?.attributes?.blockeraInnerBlocks?.[
+								blockType
+							]?.attributes || {}),
 							...attributes,
 						},
 						currentBlock: blockType,
