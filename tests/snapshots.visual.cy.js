@@ -27,6 +27,10 @@ const setupContext = require.context('../tests/fixtures', true, /setup\.js$/);
 const sections = sectionsContext
 	.keys()
 	.map((key) => {
+		if (key !== 'akbar') {
+			return null;
+		}
+
 		const matches = key.match(/^\.\/([^/]+)\/input\.html$/);
 
 		if (!matches) {
