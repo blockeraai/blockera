@@ -273,7 +273,7 @@ trait ClassnameManagement {
 		$existing_props_id = self::$used_classnames_registry[ $classname ] ?? 'unknown';
 		$block_name        = $block['blockName'] ?? 'unknown';
 
-		// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		// phpcs:disable WordPress.PHP.DevelopmentFunctions.error_log_error_log @debug-ignore
 		error_log(
 			sprintf(
 				'[Blockera] Classname collision detected: "%s" - Block: %s, Current PropsId: %s, Existing PropsId: %s',
