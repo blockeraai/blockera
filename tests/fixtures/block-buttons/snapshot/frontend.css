@@ -300,6 +300,12 @@
 	font-weight: 800;
 	font-style: normal;
 	background-color: #2d9d00;
+	border-radius: 30px;
+	display: inline-block;
+	padding-top: 3px;
+	padding-right: 10px;
+	padding-bottom: 3px;
+	padding-left: 10px;
 	content: ":before";
 }
 
@@ -308,5 +314,12 @@
 	font-style: normal;
 	opacity: 60%;
 	background-color: #ff0202;
+	display: inline-block;
+	padding-top: 3px;
+	padding-right: 20px;
+	padding-bottom: 3px;
+	padding-left: 20px;
+	border-radius: 5px;
+	border: 2px solid #ffffff;
 	content: ":after";
 }
