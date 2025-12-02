@@ -246,25 +246,25 @@ describe('Border Radius → Functionality', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'border-top-left-radius',
 			'25px'
 		);
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'border-top-right-radius',
 			'35px'
 		);
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'border-bottom-left-radius',
 			'45px'
 		);
 
-		cy.get('.blockera-block').should(
+		cy.get('p.blockera-block').should(
 			'have.css',
 			'border-bottom-right-radius',
 			'55px'
