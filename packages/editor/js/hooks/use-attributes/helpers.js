@@ -57,6 +57,7 @@ export const memoizedRootBreakpoints: (
 		{
 			newValue,
 			attributeId,
+			currentState,
 			currentBlock,
 			effectiveItems,
 			currentBreakpoint,
@@ -130,9 +131,10 @@ export const memoizedRootBreakpoints: (
 				let content = '';
 				const stateItem = ((
 					(
-						(breakpoint?.attributes?.blockeraInnerBlocks || {})[
-							currentBlock
-						] || {}
+						(currentBlockAttributes?.blockeraBlockStates?.value?.[
+							currentState
+						]?.breakpoints?.[currentBreakpoint]?.attributes
+							?.blockeraInnerBlocks || {})[currentBlock] || {}
 					)?.attributes || {}
 				)?.blockeraBlockStates || {})[currentInnerBlockState];
 				const stateItemInBaseBreakpoint =
@@ -142,13 +144,18 @@ export const memoizedRootBreakpoints: (
 						currentInnerBlockState
 					];
 
-				if (hasContent && !stateItem?.hasOwnProperty('content')) {
+				if (hasContent && stateItem?.hasOwnProperty('content')) {
 					content =
 						stateItem?.content ||
 						stateItemInBaseBreakpoint?.content ||
 						'';
 				}
-
+				console.log(
+					stateItem,
+					stateItemInBaseBreakpoint,
+					content,
+					hasContent
+				);
 				return mergeObject(
 					breakpoint,
 					{
