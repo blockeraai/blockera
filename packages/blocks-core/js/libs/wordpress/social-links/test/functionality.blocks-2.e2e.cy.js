@@ -100,14 +100,14 @@ describe('Social Links Block', () => {
 		//
 		// 1.3.1. BG color
 		//
-		cy.setColorControlValue('BG Color', 'ff2020');
+		cy.setColorControlValue('BG Color', '730000');
 
 		cy.getBlock('core/social-links')
 			.first()
 			.within(() => {
-				cy.get('.wp-block-social-link svg')
+				cy.get('.wp-block-social-link .block-editor-block-icon svg')
 					.first()
-					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+					.should('have.css', 'background-color', 'rgb(115, 0, 0)');
 			});
 
 		//
@@ -121,14 +121,14 @@ describe('Social Links Block', () => {
 		//
 		// 1.4.1. BG color
 		//
-		cy.setColorControlValue('BG Color', 'ff2020');
+		cy.setColorControlValue('BG Color', '320000');
 
 		cy.getBlock('core/social-links')
 			.first()
 			.within(() => {
 				cy.get('.wp-block-social-link .wp-block-social-link-label')
 					.first()
-					.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+					.should('have.css', 'background-color', 'rgb(50, 0, 0)');
 			});
 
 		//
@@ -167,13 +167,13 @@ describe('Social Links Block', () => {
 			'.blockera-block.wp-block-social-links .wp-block-social-link svg'
 		)
 			.first()
-			.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+			.should('have.css', 'background-color', 'rgb(115, 0, 0)');
 
 		// elements/item-names
 		cy.get(
 			'.blockera-block.wp-block-social-links .wp-block-social-link .wp-block-social-link-label'
 		)
 			.first()
-			.should('have.css', 'background-color', 'rgb(255, 32, 32)');
+			.should('have.css', 'background-color', 'rgb(50, 0, 0)');
 	});
 });
