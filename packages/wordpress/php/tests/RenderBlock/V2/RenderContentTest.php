@@ -105,7 +105,7 @@ class RenderContentTest extends \Blockera\Dev\PHPUnit\AppTestCase
 		$supports = blockera_get_available_block_supports();
         $result = $this->renderContent->renderBlock($block['innerHTML'], $block, $supports);
 
-        $this->assertEquals('<h2 class="blockera-block blockera-block-test wp-block-heading be-transpiled">Test heading</h2>', $result);
+        $this->assertEquals('<h2 class="blockera-block blockera-block-test be-transpiled wp-block-heading">Test heading</h2>', $result);
     }
 
     public function testThePostsWithEmptyPosts(): void

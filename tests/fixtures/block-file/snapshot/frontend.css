@@ -1,12 +1,14 @@
 
 .blockera-block.blockera-block-1.wp-block-file {
-	background-color: #d5f4fe;
-	border: 1px solid #89daf5;
+	border-color: #89daf5;
+	border-width: 1px;
 	border-radius: 10px;
+	background-color: #d5f4fe;
 	padding-top: 20px;
-	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+	border: 1px solid #89daf5;
+	padding-right: 20px;
 }
 
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
@@ -54,16 +56,6 @@
 
 .blockera-block.blockera-block-1 .wp-element-button:active {
 	background-color: #680000;
-}
-
-.blockera-block.blockera-block-1 {
-	border-color: #89daf5;
-	border-width: 1px;
-	border-radius: 10px;
-	background-color: #d5f4fe;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px
 }
 
 .blockera-block.blockera-block-2.wp-block-file:focus-within {

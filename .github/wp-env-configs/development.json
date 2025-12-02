@@ -1,5 +1,5 @@
 {
-	"core": "https://wordpress.org/wordpress-6.9-RC2.zip",
+	"core": "https://wordpress.org/wordpress-6.9-RC3.zip",
 	"plugins": [
 		".",
 		"../blockera-pro",

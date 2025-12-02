@@ -61,6 +61,8 @@ export default function RepeaterControl(
 		actionButtonClone = true,
 		injectHeaderButtonsStart = '',
 		injectHeaderButtonsEnd = '',
+		actionButtonsType = 'inline',
+		actionMenuButtonLabel,
 		withoutAdvancedLabel = false,
 		isSupportInserter = false,
 		disableRegenerateId = true,
@@ -145,6 +147,8 @@ export default function RepeaterControl(
 		popoverTitle: popoverTitle || label || '',
 		popoverOffset,
 		popoverTitleButtonsRight,
+		actionButtonsType,
+		actionMenuButtonLabel,
 		//
 		labelPopoverTitle,
 		labelDescription,

@@ -6,12 +6,14 @@
 	padding-left: 10px;
 }
 
-.blockera-block.blockera-block-3 {
-	background-color: #e6e6e6;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px
+.blockera-block.blockera-block-6.wp-block-columns {
+	border-radius: 10px;
+	background-color: #ffc3c3;
+	margin-bottom: 10px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
 }
 
 .blockera-block.blockera-block-6.wp-block-columns {
@@ -23,28 +25,18 @@
 	padding-left: 20px;
 	margin-bottom: 10px;
 }
-
-.blockera-block.blockera-block-6 {
-	border-radius: 10px;
-	background-color: #ffc3c3;
-	margin-bottom: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px
-}
 .blockera-block.blockera-block-1.wp-block-post-comments-count {
 	background-color: #ffe1e1;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 	transition: all 500ms ease 0ms;
 	display: flex;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-1.wp-block-post-comments-count::before {
@@ -59,14 +51,6 @@
 
 .blockera-block.blockera-block-1.wp-block-post-comments-count:hover {
 	background-color: #d6d6d6;
-}
-
-.blockera-block.blockera-block-1 {
-	background-color: #ffe1e1;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 }
 .blockera-block.blockera-block-2.wp-block-post-comments-link {
 	background-color: #fff1d0;
@@ -88,15 +72,6 @@
 .blockera-block.blockera-block-2.wp-block-post-comments-link:hover {
 	background-color: #fce4b0;
 }
-
-.blockera-block.blockera-block-2 {
-	background-color: #fff1d0;
-	border-radius: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-}
 .blockera-block.blockera-block-4.wp-block-comments-title {
 	background-color: #eaffc7;
 	padding-top: 10px;
@@ -116,57 +91,31 @@
 .blockera-block.blockera-block-4.wp-block-comments-title:hover {
 	background-color: #dcffa4;
 }
-
-.blockera-block.blockera-block-4 {
-	background-color: #eaffc7;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-}
 .blockera-block.blockera-block-7.wp-block-avatar img {
 	border-radius: 80px;
 	box-shadow: 10px 10px 0 0 #00000030;
 	width: 60px;
 }
-
-.blockera-block.blockera-block-7 {
-	border-radius: 80px;
-}
 .blockera-block.blockera-block-8.wp-block-comment-author-name {
-	background-color: #ff3737;
-	font-weight: 500;
-	font-style: normal;
 	color: #ffffff;
+	background-color: #ff3737;
+	font-style: normal;
+	font-weight: 500;
 	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dlarge, 1.38rem);
 }
 
 .blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
-
-.blockera-block.blockera-block-8 {
-	color: #ffffff;
-	background-color: #ff3737;
-	font-style: normal;
-	font-weight: 500;
-}
 .blockera-block.blockera-block-9.wp-block-comment-date {
 	background-color: #edffb5;
-	font-weight: 500;
-	font-style: normal;
 	font-size: 18px;
+	font-style: normal;
+	font-weight: 500;
 }
 
 .blockera-block.blockera-block-9 :where(a:not(.wp-element-button)) {
 	text-decoration: initial;
-}
-
-.blockera-block.blockera-block-9 {
-	background-color: #edffb5;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style: normal;
-	font-weight: 500;
 }
 .blockera-block.blockera-block-10.wp-block-comment-edit-link {
 	background-color: #84f1b7;
@@ -176,16 +125,7 @@
 }
 .blockera-block.blockera-block-11.wp-block-comment-content {
 	background-color: #b2edc4;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	font-size: 18px;
-}
-
-.blockera-block.blockera-block-11 {
-	background-color: #b2edc4;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
@@ -193,20 +133,14 @@
 }
 .blockera-block.blockera-block-12.wp-block-comment-reply-link {
 	background-color: #65c1ff;
-	font-weight: 500;
 	font-style: normal;
+	font-weight: 500;
 	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dsmall, 0.875rem);
 }
 
 .blockera-block.blockera-block-12 :where(a:not(.wp-element-button)) {
 	text-decoration: initial;
 	text-transform: uppercase;
-}
-
-.blockera-block.blockera-block-12 {
-	background-color: #65c1ff;
-	font-style: normal;
-	font-weight: 500;
 }
 .blockera-block.blockera-block-14.wp-block-comments-pagination-previous {
 	background-color: #c4ebb6;
@@ -398,14 +332,55 @@
 	background-color: #80ccff;
 }
 
-.blockera-block.blockera-block-17 . {
+.blockera-block.blockera-block-17 a {
 	display: none;
 }
-
-.blockera-block.blockera-block-17 {
-	background-color: #dff2ff;
+.blockera-block.blockera-block-3.wp-block-comments {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	background-color: #e6e6e6;
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
+}
+.blockera-block.blockera-block-8.wp-block-comment-author-name {
+	background-color: #ff3737;
+	font-weight: 500;
+	font-style: normal;
+	color: #ffffff;
+	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dlarge, 1.38rem);
+}
+
+.blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
+	color: #ffffff;
+}
+.blockera-block.blockera-block-9.wp-block-comment-date {
+	background-color: #edffb5;
+	font-weight: 500;
+	font-style: normal;
+	font-size: 18px;
+}
+
+.blockera-block.blockera-block-9 :where(a:not(.wp-element-button)) {
+	text-decoration: initial;
+}
+.blockera-block.blockera-block-11.wp-block-comment-content {
+	background-color: #b2edc4;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-size: 18px;
+}
+.blockera-block.blockera-block-12.wp-block-comment-reply-link {
+	background-color: #65c1ff;
+	font-weight: 500;
+	font-style: normal;
+	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dsmall, 0.875rem);
+}
+
+.blockera-block.blockera-block-12 :where(a:not(.wp-element-button)) {
+	text-decoration: initial;
+	text-transform: uppercase;
 }

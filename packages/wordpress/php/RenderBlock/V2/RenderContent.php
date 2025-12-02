@@ -216,8 +216,9 @@ class RenderContent {
 
 			return $this->cleanup($post, 'block_content');
 
-		} elseif ($allowed_to_render || blockera_block_is_query($block['blockName'] ?? '')) {
+		} elseif ($allowed_to_render || blockera_block_is_loop($block['blockName'] ?? '')) {
 
+			// Set the is doing transpiling flag.
 			$this->render_instance->setIsDoingTranspile(true);
 			// Disable cache for dynamic blocks.
 			$this->render_instance->setCacheStatus(false);

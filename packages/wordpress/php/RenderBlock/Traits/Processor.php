@@ -5,6 +5,27 @@ namespace Blockera\WordPress\RenderBlock\Traits;
 trait Processor {
 
 	/**
+	 * Store the is doing transpiling flag property.
+	 *
+	 * @var bool $is_doing_transpile 
+	 */
+	protected bool $is_doing_transpile = false;
+
+	/**
+	 * Store the is doing transpiling loop flag property.
+	 *
+	 * @var bool $is_doing_transpile_loop
+	 */
+	protected bool $is_doing_transpile_loop = false;
+
+	/**
+	 * The classname for the transpiled block.
+	 *
+	 * @var string
+	 */
+	protected string $transpile_classname = 'be-transpiled';
+
+	/**
      * Store styles.
      *
      * @var array
@@ -12,98 +33,113 @@ trait Processor {
     protected array $styles = [];
 
 	/**
-	 * Global css props classes.
+	 * Store inline styles collected from the block html.
 	 *
-	 * @var array
+	 * @var array $inline_styles the inline styles array.
 	 */
-	protected array $global_css_props_classes = [];
+	protected array $inline_styles = [];
 
 	/**
-	 * Set the global css props classes.
+	 * Setup the block in loop.
 	 *
-	 * @param array $global_css_props_classes The global css props classes.
-	 *
+	 * @param array  $block The current block being rendered.
+	 * @param string $ref The reference function name.
+	 * @param int    $arg_num The argument number.
+	 * 
 	 * @return void
 	 */
-	public function setGlobalCssPropsClasses( array $global_css_props_classes): void {
-		$this->global_css_props_classes = $global_css_props_classes;
+	protected function setupBlockInLoop( array $block, string $ref = 'render_block', int $arg_num = 0): void {
+		$in_loop = $this->inLoopBlock($block, $ref, $arg_num);
+
+		// Set the is doing transpiling loop flag.
+		$this->setIsDoingTranspileLoop($in_loop);
 	}
 
 	/**
-     * Update classname for current tag.
-     *
-     * @param \WP_HTML_Tag_Processor $processor The HTML tag processor object.
-     * @param string                 $classname The classname to update.
-	 * @param array                  $block The block data.
-     *
-     * @return void
-     */
-    protected function updateClassname( \WP_HTML_Tag_Processor $processor, string $classname, array $block): void {
-        $previous_class  = $processor->get_attribute('class');
-        $regexp          = blockera_get_unique_class_name_regex();
-		$final_classname = '';
+	 * Check if the current block is inside a loop.
+	 * Returns FALSE for the loop container blocks themselves.
+	 * Returns TRUE for inner blocks like core/term-name, core/post-title, etc.
+	 *
+	 * @param array  $block The current block being rendered.
+	 * @param string $ref The reference function name.
+	 * @param int    $arg_num The argument number.
+	 * 
+	 * @return bool True if block is inside loop block (excluding containers), false otherwise.
+	 */
+	protected function inLoopBlock( array $block, string $ref = 'render_block', int $arg_num = 0): bool {
+		$current_block_name = $block['blockName'] ?? '';
+		
+		// Loop container and template blocks (NOT considered "in loop").		
+		// Current block is a container/template - NOT in loop.
+		if (blockera_block_is_loop($current_block_name)) {
+			return false;
+		}
+		
+		// Check if this block has any loop container in its parent chain.
+		// phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
+		$backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 30);
 
-        if (! empty($previous_class) && ! empty($classname)) {
-
-            if (preg_match($regexp, $classname, $matches) && ! preg_match($regexp, $previous_class)) {
-
-                $final_classname = $classname . ' ' . $previous_class;
-            } else {
-
-				if (! preg_match($regexp, $classname) && ! str_contains($previous_class, $classname)) {
-
-					$final_classname = $classname . ' ' . $previous_class;
-				} else {
-
-					if (! str_contains($classname, 'be-transpiled') && preg_match($regexp, $previous_class) && preg_match($regexp, $classname)) {
-
-						$classname = preg_replace('/\./', ' ', $classname);
-
-						if (str_contains($previous_class, $classname)) {
-
-							if (! str_contains($previous_class, 'be-transpiled') && ! blockera_block_has_icon($block)) {
-								$previous_class = str_replace($classname, $classname . ' be-transpiled', $previous_class);
-							}
-						}
+		foreach ($backtrace as $trace) {
+			if (isset($trace['function']) && $ref === $trace['function']) {
+				if (isset($trace['args'][ $arg_num ]['blockName'])) {
+					$parent_block_name = $trace['args'][ $arg_num ]['blockName'];
+					
+					if (blockera_block_is_loop($parent_block_name)) {
+						return true;
 					}
-
-					$final_classname = $previous_class;
 				}
 			}
-        }
-
-		// Prevent double adding the be-transpiled class to block wrapper element.
-		// It should has not icon element.
-		if (! empty($final_classname) && ! str_contains($final_classname, 'be-transpiled') && ! blockera_block_has_icon($block)) {
-			$final_classname .= ' be-transpiled';
 		}
-
-		if (! empty($final_classname)) {
-			$processor->set_attribute('class', $final_classname);
-		}
-    }
+		
+		return false;
+	}
 
 	/**
-	 * Add css props classes to the classname of current tag.
-	 * Update classname based on global css props classes.
-	 * Just for backward compatibility with WordPress original block output.
+	 * Set the is doing transpiling loop flag property.
 	 *
-	 * @param \WP_HTML_Tag_Processor $processor The HTML tag processor object.
-	 * @param string                 $style The style attribute value.
-	 * @param array                  $block The block data.
+	 * @param bool $is_doing_transpile_loop The is doing transpiling loop flag.
 	 *
 	 * @return void
 	 */
-	protected function addCssPropsClasses( \WP_HTML_Tag_Processor $processor, string $style, array $block): void {
-		if (! $style) {
-			return;
-		}
+	public function setIsDoingTranspileLoop( bool $is_doing_transpile_loop): void {
+		$this->is_doing_transpile_loop = $is_doing_transpile_loop;
+	}
 
-		foreach ($this->global_css_props_classes as $prop => $prop_class) {
-			if (str_contains($style, $prop)) {
-				$this->updateClassname($processor, $prop_class, $block);
+	/**
+	 * Normalize inline styles.
+	 *
+	 * @param string $classname the block classname.
+	 *
+	 * @return array the normalized inline styles.
+	 */
+	protected function normalizeInlineStyles( string $classname): array {
+		$inline_styles = [];
+
+		if (! empty($this->inline_styles) && $this->is_doing_transpile) {
+
+			foreach ($this->inline_styles as $_selector => $declarations) {
+
+				foreach ($declarations as $declaration) {
+					if (empty(trim($declaration))) {
+						continue;
+					}
+
+					// Normalizing declaration.
+					$declaration = preg_replace('/\:/', ': ', trim($declaration));
+
+					// handle root element inline styles.
+					if ($_selector === $classname) {
+						$inline_styles['root'][ $classname ][] = $declaration;
+						continue;
+					}
+
+					// handle child elements inline styles.
+					$inline_styles['child'][ $_selector ][] = $declaration;
+				}
 			}
 		}
+
+		return $inline_styles;
 	}
 
 	/**
@@ -123,7 +159,7 @@ trait Processor {
 		$classes = array_filter(
             $classes,
             function ( $class) {
-				return 'be-transpiled' !== $class;
+				return $this->transpile_classname !== $class;
 			}
         );
 
@@ -132,15 +168,18 @@ trait Processor {
 			$root_class    = str_replace('.blockera-block.', '', $selector);
 			$class_details = blockera_get_wp_classname_details($class);
 
+			// Customize selector based on current tag being processed.
+			$tag_name = $processor->get_tag();
+
+			$picked_classname = blockera_pick_specific_classname($classes);
+			$child_selector   = blockera_create_css_selector($picked_classname);
+
 			if (! str_contains($class, $root_class)) {
 				if (! ( $class_details['is_matched'] ?? false )) {
 					// First class as a selector.
-					$selector = $selector . ' .' . blockera_pick_specific_classname($classes);
+					$selector = $selector . ' ' . strtolower($tag_name) . $child_selector;
 				}
-			} else {
-				// Customize selector based on current tag being processed.
-				$tag_name = $processor->get_tag();
-				
+			} else {				
 				// Check if this is the first tag by checking if class contains the root class.
 				$is_first_tag = $class && str_contains($class, str_replace('.blockera-block.', '', $selector));
 				
@@ -148,8 +187,7 @@ trait Processor {
 				if (! $class && ! $is_first_tag && $tag_name) {
 					$selector = $selector . ' ' . strtolower($tag_name);
 				} elseif (! $is_first_tag && $tag_name) {
-
-					$selector = $selector . ' ' . blockera_pick_specific_classname($classes);
+					$selector = $selector . ' ' . strtolower($tag_name) . $child_selector;
 				}
 			}
 		}
@@ -170,37 +208,18 @@ trait Processor {
 			return;
 		}
 
-		foreach ($inline_styles as $root_selector => $styles) {
-			$inners = array_filter(
-				$styles,
-				function ( $style) {
-					return is_array($style);
-				}
-			);
+		foreach ($inline_styles as $selector => $styles) {
+			$css = implode(';' . PHP_EOL, $styles);
 
-			foreach ($inners as $selector => $declarations) {
-				// Normalize declarations.
-				$declarations = preg_replace('/\:/', ': ', $declarations);
-				// Create css rule.
-				$css_rule = $selector . ' { ' . implode(';' . PHP_EOL, $declarations) . ' }';
-
-				if (! in_array($css_rule, $this->styles, true)) {
-					$this->styles[] = $css_rule;
-				}
-
-				unset($styles[ $selector ]);
+			if (! str_ends_with($css, ';')) {
+				$css .= ';';
 			}
 
-			// Ensure that the root style is added to the styles property while $styles is not empty.
-			if (! empty($styles)) {
-				// Normalize styles.
-				$styles = preg_replace('/\:/', ': ', $styles);
-				// Create css rule.
-				$css_rule = $root_selector . ' { ' . implode(';' . PHP_EOL, $styles) . ' }';
+			// Create css rule.
+			$css_rule = $selector . ' { ' . $css . ' }';
 
-				if (! in_array($css_rule, $this->styles, true)) {
-					$this->styles[] = $css_rule;	
-				}
+			if (! in_array($css_rule, $this->styles, true)) {
+				$this->styles[] = $css_rule;
 			}
 		}
 	}

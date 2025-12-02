@@ -39,7 +39,23 @@ return array_merge(
 				'blockera/elements/img-tag' => [
 					'root' => '&.wp-block-image :is(img, svg)',
 				],
+				'htmlEditable' => [
+					'root' => '&.wp-block-image :is(img, svg)',
+				],
 			]
+		),
+		'supports' => array_merge(
+			$args['supports'] ?? [],
+			[
+				'blockFeatures' => [
+					'icon' => [
+						'status' => true,
+						'htmlEditable' => [
+							'status' => true,
+						],
+					],
+				],
+			],
 		),
 	]
 );

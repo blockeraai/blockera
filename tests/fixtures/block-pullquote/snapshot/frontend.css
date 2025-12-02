@@ -1,12 +1,14 @@
 
 .blockera-block.blockera-block-1.wp-block-pullquote {
-	background-color: #ffe6e6;
-	border: 2px solid #ff5151;
+	border-color: #ff5151;
+	border-width: 2px;
 	border-radius: 20px;
+	background-color: #ffe6e6;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+	border: 2px solid #ff5151;
 }
 
 .blockera-block.blockera-block-1 :where(p) {
@@ -28,26 +30,15 @@
 	border-radius: 60px;
 }
 
-.blockera-block.blockera-block-1 {
-	border-color: #ff5151;
-	border-width: 2px;
-	border-radius: 20px;
-	background-color: #ffe6e6;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px
-}
-
 .blockera-block.blockera-block-2.wp-block-pullquote {
 	background-color: #d0ffd0;
 	padding-top: 20px;
 	padding-right: 30px;
 	padding-bottom: 20px;
 	padding-left: 30px;
-	font-weight: 500;
-	font-style: normal;
 	font-size: 20px;
+	font-style: normal;
+	font-weight: 500;
 }
 
 .blockera-block.blockera-block-2 :where(p) {
@@ -69,15 +60,4 @@
 	background-color: #7fd07f;
 	display: block;
 	content: "After";
-}
-
-.blockera-block.blockera-block-2 {
-	background-color: #d0ffd0;
-	padding-top: 20px;
-	padding-right: 30px;
-	padding-bottom: 20px;
-	padding-left: 30px;
-	font-size: 20px;
-	font-style: normal;
-	font-weight: 500
 }

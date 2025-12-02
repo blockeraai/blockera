@@ -35,8 +35,8 @@
 	background-color: #b32e2e;
 }
 .blockera-block.blockera-block-2.wp-block-search {
-	background-color: #cde2ff;
 	border-radius: 10px;
+	background-color: #cde2ff;
 	transition: all 500ms ease 0ms;
 	display: flex;
 	flex-direction: row;
@@ -148,9 +148,4 @@
 }
 
 
-}
-
-.blockera-block.blockera-block-2 {
-	border-radius: 10px;
-	background-color: #cde2ff
 }

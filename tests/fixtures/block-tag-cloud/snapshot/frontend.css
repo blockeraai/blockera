@@ -1,11 +1,11 @@
 .blockera-block.blockera-block-1.wp-block-tag-cloud {
-	background-color: #ffdfdf;
+	font-style: normal;
+	font-weight: 500;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
-	font-weight: 500;
-	font-style: normal;
+	background-color: #ffdfdf;
 	font-size: 16px;
 }
 
@@ -44,36 +44,27 @@
 	background-color: #ffcdcd;
 }
 
-.blockera-block.blockera-block-1 .tag-link-26 {
+.blockera-block.blockera-block-1 a.tag-link-26.tag-link-position-1 {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-1 .tag-link-27 {
+.blockera-block.blockera-block-1 a.tag-link-27.tag-link-position-2 {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-1 .tag-link-28 {
+.blockera-block.blockera-block-1 a.tag-link-28.tag-link-position-3 {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-1 .tag-link-29 {
+.blockera-block.blockera-block-1 a.tag-link-29.tag-link-position-4 {
 	font-size: 8pt;
-}
-
-.blockera-block.blockera-block-1 {
-	font-style: normal;
-	font-weight: 500;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 }
 .blockera-block.blockera-block-2.wp-block-tag-cloud {
-	background-color: #96ac89;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+	background-color: #96ac89;
 }
 
 .blockera-block.blockera-block-2 .tag-link-count {
@@ -90,25 +81,18 @@
 	text-decoration: initial;
 }
 
-.blockera-block.blockera-block-2 .tag-link-26 {
+.blockera-block.blockera-block-2 a.tag-link-26.tag-link-position-1 {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-2 .tag-link-27 {
+.blockera-block.blockera-block-2 a.tag-link-27.tag-link-position-2 {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-2 .tag-link-28 {
+.blockera-block.blockera-block-2 a.tag-link-28.tag-link-position-3 {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-2 .tag-link-29 {
+.blockera-block.blockera-block-2 a.tag-link-29.tag-link-position-4 {
 	font-size: 8pt;
-}
-
-.blockera-block.blockera-block-2 {
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 }

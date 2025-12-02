@@ -1,12 +1,14 @@
 .blockera-block.blockera-block-1.wp-block-post-terms {
 	background-color: #dbe8ff;
-	border: 1px solid #8db7ff;
+	border-color: #8db7ff;
 	border-radius: 10px;
-	transition: all 500ms ease 0ms;
+	border-width: 1px;
 	padding-top: 10px;
 	padding-right: 20px;
 	padding-bottom: 10px;
 	padding-left: 20px;
+	border: 1px solid #8db7ff;
+	transition: all 500ms ease 0ms;
 }
 
 .blockera-block.blockera-block-1 .wp-block-post-terms__prefix {
@@ -78,28 +80,17 @@
 
 
 }
-
-.blockera-block.blockera-block-1 {
-	background-color: #dbe8ff;
-	border-color: #8db7ff;
-	border-radius: 10px;
-	border-width: 1px;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px
-}
 .blockera-block.blockera-block-2.wp-block-post-terms {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 	background-color: #b8f1de;
 	display: flex;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 20px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-2 .wp-block-post-terms__suffix {
@@ -135,24 +126,17 @@
 
 
 }
-
-.blockera-block.blockera-block-2 {
+.blockera-block.blockera-block-3.wp-block-post-terms {
+	background-color: #ffe5a8;
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
-	padding-left: 10px
-}
-.blockera-block.blockera-block-3.wp-block-post-terms {
-	background-color: #ffe5a8;
+	padding-left: 10px;
 	transition: all 500ms ease 0ms;
 	display: flex;
 	gap: 5px;
 	flex-wrap: wrap !important;
 	align-content: flex-start;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-3 .wp-block-post-terms__separator {
@@ -189,14 +173,6 @@
 .blockera-block.blockera-block-3:hover .wp-block-post-terms__prefix {
 	border-radius: 60px;
 }
-
-.blockera-block.blockera-block-3 {
-	background-color: #ffe5a8;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px
-}
 .blockera-block.blockera-block-4.wp-block-post-terms {
 	background-color: #f9b8ff;
 	padding-top: 11px;
@@ -219,12 +195,4 @@
 
 .blockera-block.blockera-block-4 a:hover {
 	background-color: #c624d7;
-}
-
-.blockera-block.blockera-block-4 {
-	background-color: #f9b8ff;
-	padding-top: 11px;
-	padding-right: 11px;
-	padding-bottom: 11px;
-	padding-left: 11px
 }

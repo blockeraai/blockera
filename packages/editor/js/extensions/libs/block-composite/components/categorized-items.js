@@ -279,6 +279,7 @@ export const CategorizedItems = ({
 								}
 								width="220px"
 								style={getTooltipStyle(itemType)}
+								delay={1500}
 							>
 								<div
 									aria-label={id}

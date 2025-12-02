@@ -69,7 +69,7 @@ export default function ({
 					</h4>
 					<p style={{ margin: '0' }}>
 						{__(
-							'This is your base breakpoint that defines the default styling for all screen sizes.',
+							'This is the base breakpoint that defines the default styling for all screen sizes.',
 							'blockera'
 						)}
 					</p>

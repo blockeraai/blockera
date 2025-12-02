@@ -18,6 +18,10 @@
 			"replace": "?p=post-id"
 		},
 		{
+			"search": "\\?m=\\d+(?=[\\s\"'#&]|$)",
+			"replace": "?m=year-month-day"
+		},
+		{
 			"search": "\\?page_id=\\d+(?=[\\s\"'#&]|$)",
 			"replace": "?page_id=page-id"
 		},
@@ -99,7 +103,11 @@
 		},
 		{
 			"search": "<time datetime=\"[^\"]+\"( class=\"[^\"]+\")?>(<a[^>]*>)?[^<]*(</a>)?</time>",
-			"replace": "<time datetime=\"MM DD, YYYY\"$1>$2Month Day, Year$3</time>"
+			"replace": "<time datetime=\"Month Day, Year\"$1>$2Month Day, Year$3</time>"
+		},
+		{
+			"search": ">(?:January|February|March|April|May|June|July|August|September|October|November|December) \\d{4}<",
+			"replace": ">Month Year<"
 		}
 	],
 	"wp-post": {

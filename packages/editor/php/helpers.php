@@ -527,14 +527,22 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 		}
 
 		$args['current_state_has_selectors'] = $current_state_has_selectors;
-		$has_fallback                        = ! empty( $args['fallback'] );
+
+		// Calculate the fallback status.
+		$has_fallback = ! empty( $args['fallback'] );
+		// Check if the feature id contains 'htmlEditable'.
+		$feature_is_html_editable = str_contains($feature_id, 'htmlEditable');
 
 		// Ensure the block type is not null and the block type name starts with 'core/'.
 		if (isset($cloned_block_type) && ( str_starts_with($block_type->name, 'core/') || isset($cloned_block_type->selectors['root']) )) {
 
-			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $has_fallback);
+			// By default, the fallback is calculated in $has_fallback variable while feature id does not 'htmlEditable'.
+			// Because the htmlEditable feature id is used to generate the html editable selector.
+			// And the html editable selector is not used to generate the css selector.
+			// So we need to disable the fallback for the html editable feature id.
+			$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, ! $feature_is_html_editable ? ! $has_fallback : false);
 
-			if (! $selector && $has_fallback) {
+			if (! $selector && $has_fallback && ! $feature_is_html_editable) {
 
 				if ( is_array($args['fallback']) ) {
 					// Try to get the first fallback that is not empty.
@@ -554,6 +562,11 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 					$selector = wp_get_block_css_selector($cloned_block_type, $feature_id, true);
 				}
 			}
+		}
+
+		// If the feature is "htmlEditable" and no selector is found, return an empty string.
+		if ($feature_is_html_editable && ! $selector) {
+			return '';
 		}
 
 		// Imagine the current block is master!

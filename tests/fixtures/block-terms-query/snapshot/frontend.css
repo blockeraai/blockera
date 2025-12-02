@@ -1,4 +1,30 @@
 .blockera-block.blockera-block-2.wp-block-group {
+	border-radius: 10px;
+	background-color: #ffe0e0;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	transition: all 500ms ease 0ms;
+	display: flex;
+	flex-wrap: nowrap !important;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-group {
+	flex-direction: column;
+	justify-content: center !important;
+	align-items: center !important;
+}
+
+
+}
+
+.blockera-block.blockera-block-2.wp-block-group:hover {
+	background-color: #997171;
+}
+
+.blockera-block.blockera-block-2.wp-block-group {
 	background-color: #ffe0e0;
 	border-radius: 10px;
 	transition: all 500ms ease 0ms;
@@ -23,15 +49,6 @@
 .blockera-block.blockera-block-2.wp-block-group:hover {
 	background-color: #997171;
 }
-
-.blockera-block.blockera-block-2 {
-	border-radius: 10px;
-	background-color: #ffe0e0;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px
-}
 .blockera-block.blockera-block-3.wp-block-term-name {
 	background-color: #ffb2b2;
 	padding-top: 0;
@@ -91,26 +108,7 @@
 }
 .blockera-block.blockera-block-3.wp-block-term-name {
 	background-color: #ffb2b2;
-	padding-top: 0;
-	padding-right: 5px;
-	padding-bottom: 0;
-	padding-left: 5px;
-	font-weight: 700;
-	font-style: normal;
 	font-size: 18px;
-}
-
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
-	text-decoration: initial;
-}
-
-.blockera-block.blockera-block-3.wp-block-term-name:hover {
-	background-color: #ff5c5c;
-}
-
-.blockera-block.blockera-block-3 {
-	background-color: #ffb2b2;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 700;
 	padding-top: 0px;
@@ -118,19 +116,15 @@
 	padding-bottom: 0px;
 	padding-left: 5px;
 }
-.blockera-block.blockera-block-4.wp-block-term-description {
-	background-color: #b2ddab;
-	flex: 1 1 0%;
-	padding-top: 2px;
-	padding-right: 10px;
-	padding-bottom: 2px;
-	padding-left: 10px;
-	font-weight: 600;
-	font-style: normal;
-	font-size: 14px;
+
+.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+	text-decoration: initial;
 }
 
-.blockera-block.blockera-block-4 {
+.blockera-block.blockera-block-3.wp-block-term-name:hover {
+	background-color: #ff5c5c;
+}
+.blockera-block.blockera-block-4.wp-block-term-description {
 	background-color: #b2ddab;
 	font-size: 14px;
 	font-style: normal;
@@ -139,9 +133,13 @@
 	padding-right: 10px;
 	padding-bottom: 2px;
 	padding-left: 10px;
+	flex: 1 1 0%;
 }
 .blockera-block.blockera-block-5.wp-block-term-count {
 	background-color: #78efff;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
 	border-radius: 40px;
 	display: flex;
 	flex-direction: row;
@@ -150,9 +148,6 @@
 	min-width: 30px;
 	height: 30px;
 	margin-left: auto !important;
-	font-weight: 600;
-	font-style: normal;
-	font-size: 14px;
 	text-align: center;
 }
 
@@ -168,23 +163,7 @@
 .blockera-block.blockera-block-5.wp-block-term-count:hover {
 	background-color: #06e2ff;
 }
-
-.blockera-block.blockera-block-5 {
-	background-color: #78efff;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 600;
-	border-radius: 40px;
-}
 .blockera-block.blockera-block-1.wp-block-term-template {
-	background-color: #d9d9d9;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
-.blockera-block.blockera-block-1 {
 	background-color: #d9d9d9;
 	padding-top: 20px;
 	padding-right: 20px;

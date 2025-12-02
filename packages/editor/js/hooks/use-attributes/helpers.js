@@ -57,10 +57,12 @@ export const memoizedRootBreakpoints: (
 		{
 			newValue,
 			attributeId,
+			currentState,
 			currentBlock,
 			effectiveItems,
 			currentBreakpoint,
 			defaultAttributes,
+			currentBlockAttributes,
 			currentInnerBlockState,
 		},
 		insideInnerBlock: boolean = false,
@@ -129,14 +131,24 @@ export const memoizedRootBreakpoints: (
 				let content = '';
 				const stateItem = ((
 					(
-						(breakpoint?.attributes?.blockeraInnerBlocks || {})[
-							currentBlock
-						] || {}
+						(currentBlockAttributes?.blockeraBlockStates?.value?.[
+							currentState
+						]?.breakpoints?.[currentBreakpoint]?.attributes
+							?.blockeraInnerBlocks || {})[currentBlock] || {}
 					)?.attributes || {}
 				)?.blockeraBlockStates || {})[currentInnerBlockState];
+				const stateItemInBaseBreakpoint =
+					currentBlockAttributes?.blockeraInnerBlocks?.value?.[
+						currentBlock
+					]?.attributes?.blockeraBlockStates?.[
+						currentInnerBlockState
+					];
 
-				if (hasContent && !stateItem?.hasOwnProperty('content')) {
-					content = stateItem?.content || '';
+				if (hasContent && stateItem?.hasOwnProperty('content')) {
+					content =
+						stateItem?.content ||
+						stateItemInBaseBreakpoint?.content ||
+						'';
 				}
 
 				return mergeObject(
@@ -274,6 +286,9 @@ export const memoizedBlockStates: (
 						'css-class': blockStates['custom-class']['css-class'],
 				  }
 				: {};
+
+		// pass currentBlockAttributes to the memoizedRootBreakpoints function.
+		action.currentBlockAttributes = currentBlockAttributes;
 
 		if (isInnerBlock(currentBlock) && !insideInnerBlock) {
 			return mergeObject(

@@ -44,6 +44,14 @@ final class StyleEngine {
 	protected array $settings = [];
 
 	/**
+	 * Store the inline styles.
+	 *
+	 * @var array $inline_styles
+	 */
+	protected array $inline_styles = [];
+
+
+	/**
 	 * Store fallback css selector.
 	 *
 	 * @var string $selector The css selector for target element.
@@ -183,6 +191,18 @@ final class StyleEngine {
 	public function setBreakpoint( string $breakpoint): void {
 	
 		$this->breakpoint = $breakpoint;
+	}
+
+	/**
+	 * Set inline styles.
+	 *
+	 * @param array $inline_styles The inline styles.
+	 *
+	 * @return void
+	 */
+	public function setInlineStyles( array $inline_styles): void {
+
+		$this->inline_styles = $inline_styles;
 	}
 
 	/**
@@ -584,6 +604,11 @@ final class StyleEngine {
 
 		$css_rules = $this->definition->getCssRules();
 
+		// Only process inline styles for normal state on base breakpoint.
+		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
+			$css_rules = $this->mergeInlineStyles($css_rules);
+		}
+
 		// Reset definition property.
 		$this->definition = null;
 
@@ -708,4 +733,65 @@ final class StyleEngine {
 		);
 	}
 
+	/**
+	 * Merge inline styles with generated CSS rules, avoiding duplicates.
+	 * 
+	 * @param array $css_rules The existing CSS rules.
+	 * @return array The merged CSS rules.
+	 */
+	protected function mergeInlineStyles( array $css_rules): array {
+		$definition_selector = $this->definition->getSelector();
+
+		// Early return if no definition selector.
+		if (empty($definition_selector)) {
+			return $css_rules;
+		}
+
+		// Get all inline styles that match the current definition's selector pattern.
+		$matching_styles = $this->getMatchingInlineStyles($definition_selector);
+
+		foreach ($matching_styles as $selector => $declarations) {
+			// Skip if declarations are empty.
+			if (empty($declarations)) {
+				continue;
+			}
+
+			// Convert declarations to property-value pairs array.
+			$prepared_styles = $this->prepareInlineStyles($declarations);
+
+			if (! isset($css_rules[ $definition_selector ])) {
+				// Set css rule for definition selector as a root collected inline styles.
+				$css_rules[ $definition_selector ] = $prepared_styles;
+			} else {
+				// Merge same declaration with the style engine generated declarations.
+				$css_rules[ $definition_selector ] = array_merge($prepared_styles, $css_rules[ $definition_selector ]);
+			}		
+		}
+
+		return $css_rules;
+	}
+
+	/**
+	 * Get inline styles that match the current definition's selector.
+	 * Retrieves inline styles that match the current definition's selector pattern.
+	 * This method filters the inline styles to find those that are relevant to the
+	 * current block definition by comparing selectors.
+	 * 
+	 * @param string $definition_selector The current definition's selector.
+	 * 
+	 * @return array Matching inline styles.
+	 */
+	protected function getMatchingInlineStyles( string $definition_selector): array {
+		$matching_styles = [];
+		$base_selector   = preg_replace('/^\w+\./i', '.', $definition_selector);
+
+		foreach ($this->inline_styles as $selector => $declarations) {
+			// If selector matches the base selector pattern, include it.
+			if (false !== strpos($selector, $base_selector) || false !== strpos($base_selector, $selector)) {
+				$matching_styles[ $selector ] = $declarations;
+			}
+		}
+
+		return $matching_styles;
+	}
 }

@@ -56,6 +56,7 @@ export default function ItemHeader({
 					text={item?.tooltip}
 					width="220px"
 					style={getTooltipStyle('state')}
+					delay={1500}
 				>
 					{children}
 				</Tooltip>

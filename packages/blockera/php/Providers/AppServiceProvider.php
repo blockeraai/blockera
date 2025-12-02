@@ -329,6 +329,11 @@ class AppServiceProvider extends ServiceProvider {
 
 		$supports = blockera_get_available_block_supports();
 
+		// Clear the classnames registry at the start of content rendering.
+		// This ensures each page/post render starts with a clean state.
+		Render::clearClassnamesRegistry();
+		Transpiler::clearClassnamesRegistry();
+
 		if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
 
 			add_action(
