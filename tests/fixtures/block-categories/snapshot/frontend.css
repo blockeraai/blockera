@@ -30,6 +30,27 @@
 	color: #ff0c0c;
 	background-color: #c4ffe3;
 }
+
+.blockera-block.blockera-block-1.wp-block-categories::before {
+	background-color: #55d99b;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-categories::after {
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	background-color: #2db877;
+	border-radius: 30px;
+	text-align: center;
+	color: #ffffff;
+	content: "After";
+}
 .blockera-block.blockera-block-2.wp-block-categories {
 	color: #0055ff;
 	font-size: 18px;
