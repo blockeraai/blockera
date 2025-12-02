@@ -1,18 +1,54 @@
 .blockera-block.blockera-block-1.wp-block-avatar {
-	border-radius: 30px;
+	border-color: #ff2323;
+	border-radius: 20px;
+	border-width: 5px;
 	background-color: #ffe5e5;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+	font-size: 18px;
 }
 
 .blockera-block.blockera-block-1.wp-block-avatar img {
-	border-radius: 30px;
-	width: 100%;
+	border-color: #ff2323;
+	border-radius: 20px;
+	border-width: 5px;
+	border: 5px solid #ff2323;
+	width: 120px;
 	min-width: 50px;
 	max-width: 200px !important;
 	height: auto;
+}
+
+.blockera-block.blockera-block-1.wp-block-avatar::before {
+	display: inline-block;
+	background-color: #ff4c4c;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-right: 20px !important;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-avatar img::before {
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-1.wp-block-avatar::after {
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	margin-left: 20px !important;
+	display: inline-block;
+	background-color: #f64343;
+	content: "After";
+}
+
+.blockera-block.blockera-block-1.wp-block-avatar img::after {
+	border-radius: 60px;
 }
 .blockera-block.blockera-block-2.wp-block-avatar img {
 	border-color: #009216;
@@ -33,7 +69,7 @@
 .blockera-block.blockera-block-4.wp-block-avatar img {
 	border-width: 4px;
 	border: 4px solid var(--wp--preset--color--accent-3, #503AA8);
-	box-shadow: 5px 5px 0 0 var(--wp--preset--color--accent-3, #503AA8);
+	box-shadow: 5px 5px 0 0 var(--wp--preset--color--accent-6, color-mix(in srgb, currentColor 20%, transparent));
 	width: 96px;
 }
 
