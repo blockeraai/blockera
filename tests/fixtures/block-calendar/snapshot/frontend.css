@@ -50,6 +50,8 @@
 .blockera-block.blockera-block-1 .wp-calendar-nav a {
 	color: #faf1f1;
 	background-color: #000bdb;
+	margin-top: 10px;
+	display: inline-block;
 }
 
 .blockera-block.blockera-block-1 .wp-calendar-nav a:hover {
@@ -62,6 +64,31 @@
 
 .blockera-block.blockera-block-1 .wp-calendar-nav a:active {
 	background-color: #00067c;
+}
+
+.blockera-block.blockera-block-1.wp-block-calendar::before {
+	background-color: #aba4ff;
+	color: #1c0adb;
+	padding-top: 2px;
+	padding-right: 20px;
+	padding-bottom: 2px;
+	padding-left: 20px;
+	margin-bottom: 20px;
+	display: inline-block;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-calendar::after {
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	margin-top: 30px;
+	display: inline-block;
+	background-color: #6355ff;
+	color: #ffffff;
+	border-radius: 30px;
+	content: "After";
 }
 
 .blockera-block.blockera-block-1 table.wp-calendar-table {
