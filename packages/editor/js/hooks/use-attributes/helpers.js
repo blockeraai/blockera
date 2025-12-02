@@ -150,12 +150,7 @@ export const memoizedRootBreakpoints: (
 						stateItemInBaseBreakpoint?.content ||
 						'';
 				}
-				console.log(
-					stateItem,
-					stateItemInBaseBreakpoint,
-					content,
-					hasContent
-				);
+
 				return mergeObject(
 					breakpoint,
 					{
