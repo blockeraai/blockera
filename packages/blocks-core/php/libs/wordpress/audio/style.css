@@ -6,6 +6,7 @@
 
 .blockera-block.wp-block-audio audio {
 	font-size: 0;
+	padding: initial !important;
 }
 
 .blockera-block.wp-block-audio audio::-webkit-media-controls-enclosure {

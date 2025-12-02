@@ -1,0 +1,7 @@
+.blockera-block.wp-block-avatar {
+	border-radius: initial !important;
+}
+
+.blockera-block.wp-block-avatar::before, .blockera-block.wp-block-avatar::after {
+	line-height: initial;
+}

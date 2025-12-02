@@ -13,6 +13,12 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				'blockera/states/before' => [
+					'root' => '.wp-block-audio::before',
+				],
+				'blockera/states/after' => [
+					'root' => '.wp-block-audio::after',
+				],
 				'blockera/elements/caption' => [
 					'root' => 'figcaption',
 				],

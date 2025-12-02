@@ -70,6 +70,51 @@
 	background-color: #fff200;
 }
 
+.blockera-block.blockera-block-1.wp-block-columns::before {
+	width: 40px;
+	writing-mode: vertical-lr;
+	text-orientation: upright;
+	background-color: #e6ad5d;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	border-radius: 30px;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-style: normal;
+	color: #895610;
+	font-size: 18px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::before > * {
+	margin-block-start: 0;
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::after {
+	background-color: #b77519;
+	writing-mode: vertical-lr;
+	text-orientation: mixed;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	text-transform: uppercase;
+	font-size: 20px;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 8px;
+	color: #ffffff;
+	border-radius: 10px;
+	border: 2px solid #683d00;
+	content: "After";
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::after > * {
+	margin-block-start: 0;
+}
+
 .blockera-block.blockera-block-1.wp-block-columns {
 	background-color: #ffdba9;
 	gap: 50px;
@@ -139,6 +184,51 @@
 
 .blockera-block.blockera-block-1 :is(mark, mark[class]) {
 	background-color: #fff200;
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::before {
+	width: 40px;
+	writing-mode: vertical-lr;
+	text-orientation: upright;
+	background-color: #e6ad5d;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	border-radius: 30px;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-style: normal;
+	color: #895610;
+	font-size: 18px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::before > * {
+	margin-block-start: 0;
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::after {
+	background-color: #b77519;
+	writing-mode: vertical-lr;
+	text-orientation: mixed;
+	display: flex;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	text-transform: uppercase;
+	font-size: 20px;
+	font-weight: 700;
+	font-style: normal;
+	letter-spacing: 8px;
+	color: #ffffff;
+	border-radius: 10px;
+	border: 2px solid #683d00;
+	content: "After";
+}
+
+.blockera-block.blockera-block-1.wp-block-columns::after > * {
+	margin-block-start: 0;
 }
 
 .blockera-block.blockera-block-2.wp-block-column {
@@ -271,6 +361,90 @@ p.blockera-block.blockera-block-4 {
 
 .blockera-block.blockera-block-7 :where(p):hover {
 	background-color: #ff7777;
+}
+
+.blockera-block.blockera-block-18.wp-block-column {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.blockera-block.blockera-block-18.wp-block-column.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}
+
+.blockera-block.blockera-block-18.wp-block-column::before {
+	background-color: #85a630;
+	border: 1px solid #628211;
+	display: block;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-bottom: 30px;
+	border-radius: 10px;
+	align-self: center;
+	text-align: center;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-18.wp-block-column::after {
+	background-color: #6c9010;
+	border: 2px solid #537107;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	display: inline-block;
+	border-radius: 50px;
+	align-self: stretch;
+	content: "After";
+}
+
+.blockera-block.blockera-block-18.wp-block-column {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-18.wp-block-column.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
+}
+
+.blockera-block.blockera-block-18.wp-block-column::before {
+	background-color: #85a630;
+	border: 1px solid #628211;
+	display: block;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-bottom: 30px;
+	border-radius: 10px;
+	align-self: center;
+	text-align: center;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-18.wp-block-column::after {
+	background-color: #6c9010;
+	border: 2px solid #537107;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	display: inline-block;
+	border-radius: 50px;
+	align-self: stretch;
+	content: "After";
 }
 
 .blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
