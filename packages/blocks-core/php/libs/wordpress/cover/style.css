@@ -1,0 +1,4 @@
+.blockera-block.wp-block-cover::before, 
+.blockera-block.wp-block-cover::after {
+	z-index: 1;
+}
