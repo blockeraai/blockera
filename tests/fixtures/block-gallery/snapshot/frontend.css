@@ -34,6 +34,7 @@
 	outline: 2px solid #797979;
 	outline-offset: 3px;
 	box-sizing: border-box;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
