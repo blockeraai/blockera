@@ -770,7 +770,7 @@ export function prepareBlockCssSelector(params: {
 
 		// Preparing selector with support identifier.
 		return (
-			getBlockCSSSelector(blockType, support) ||
+			getBlockCSSSelector(blockType, support, { fallback: true }) ||
 			fallbackSelector ||
 			selectors[support]?.root ||
 			selectors.root
