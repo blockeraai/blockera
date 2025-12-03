@@ -13,7 +13,10 @@ import type { StylesProps } from '../types';
 import { useBlocksStore } from '../../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
-import type { TSpacingDefaultProps, TCssProps } from './types/spacing-props';
+import type {
+	TSpacingDefaultPropsMinimized,
+	TCssProps,
+} from './types/spacing-props';
 import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
@@ -22,54 +25,60 @@ import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
 
 const supports = getBlockSupportCategory('spacing');
 
-function updateCssProps(spacingProps: TSpacingDefaultProps): TCssProps {
+function updateCssProps(
+	spacingProps: TSpacingDefaultPropsMinimized
+): TCssProps {
 	const properties: TCssProps = {};
 
 	if (isUndefined(spacingProps)) {
 		return properties;
 	}
 
-	if (!isUndefined(spacingProps.margin)) {
-		const marginTop = getValueAddonRealValue(spacingProps.margin.top);
+	if (!isUndefined(spacingProps?.margin)) {
+		const marginTop = getValueAddonRealValue(spacingProps?.margin?.top);
 		if (marginTop !== '') {
 			properties['margin-top'] = marginTop;
 		}
 
-		const marginRight = getValueAddonRealValue(spacingProps.margin.right);
+		const marginRight = getValueAddonRealValue(spacingProps?.margin?.right);
 		if (marginRight !== '') {
 			properties['margin-right'] = marginRight + ' !important';
 		}
 
-		const marginBottom = getValueAddonRealValue(spacingProps.margin.bottom);
+		const marginBottom = getValueAddonRealValue(
+			spacingProps?.margin?.bottom
+		);
 		if (marginBottom !== '') {
 			properties['margin-bottom'] = marginBottom;
 		}
 
-		const marginLeft = getValueAddonRealValue(spacingProps.margin.left);
+		const marginLeft = getValueAddonRealValue(spacingProps?.margin?.left);
 		if (marginLeft !== '') {
 			properties['margin-left'] = marginLeft + ' !important';
 		}
 	}
 
-	if (!isUndefined(spacingProps.padding)) {
-		const paddingTop = getValueAddonRealValue(spacingProps.padding.top);
+	if (!isUndefined(spacingProps?.padding)) {
+		const paddingTop = getValueAddonRealValue(spacingProps?.padding?.top);
 		if (paddingTop !== '') {
 			properties['padding-top'] = paddingTop;
 		}
 
-		const paddingRight = getValueAddonRealValue(spacingProps.padding.right);
+		const paddingRight = getValueAddonRealValue(
+			spacingProps?.padding?.right
+		);
 		if (paddingRight !== '') {
 			properties['padding-right'] = paddingRight;
 		}
 
 		const paddingBottom = getValueAddonRealValue(
-			spacingProps.padding.bottom
+			spacingProps?.padding?.bottom
 		);
 		if (paddingBottom !== '') {
 			properties['padding-bottom'] = paddingBottom;
 		}
 
-		const paddingLeft = getValueAddonRealValue(spacingProps.padding.left);
+		const paddingLeft = getValueAddonRealValue(spacingProps?.padding?.left);
 		if (paddingLeft !== '') {
 			properties['padding-left'] = paddingLeft;
 		}
@@ -92,7 +101,14 @@ export const SpacingStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
+	const { hasBlockSupport } = useBlocksStore();
+
 	const { blockeraSpacing } = config.spacingConfig;
+
+	if (!hasBlockSupport(blockName, 'spacing')) {
+		return [];
+	}
+
 	const blockProps = {
 		state,
 		clientId,
@@ -120,41 +136,79 @@ export const SpacingStyles = ({
 		},
 	};
 
-	const { hasBlockSupport } = useBlocksStore();
-
-	const fallbackProps = !hasBlockSupport(blockName, 'spacing')
-		? {}
-		: updateCssProps(_attributes?.style?.spacing);
-	const properties: TCssProps =
+	const isActive =
 		isActiveField(blockeraSpacing) &&
-		_attributes.blockeraSpacing !== attributes.blockeraSpacing.default
-			? updateCssProps(_attributes.blockeraSpacing)
-			: fallbackProps;
+		_attributes.blockeraSpacing !== attributes.blockeraSpacing.default;
 
-	const pickedSelector = getCompatibleBlockCssSelector({
-		...sharedParams,
-		query: 'blockeraSpacing',
-		support: 'blockeraSpacing',
-		fallbackSupportId: getBlockSupportFallback(supports, 'blockeraSpacing'),
+	if (!isActive) {
+		return [];
+	}
+
+	const paddingProperties: TCssProps = updateCssProps({
+		padding: _attributes.blockeraSpacing?.padding,
 	});
 
-	const styleGroup = [
-		{
-			selector: pickedSelector,
+	const marginProperties: TCssProps = updateCssProps({
+		margin: _attributes.blockeraSpacing?.margin,
+	});
+
+	const styleGroup = [];
+
+	if (Object.keys(marginProperties).length > 0) {
+		const marginPickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraMargin',
+			support: 'blockeraMargin',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraMargin'
+			),
+		});
+
+		styleGroup.push({
+			selector: marginPickedSelector,
 			declarations: computedCssDeclarations(
 				{
 					blockeraSpacing: [
 						{
 							...staticDefinitionParams,
-							properties,
+							properties: marginProperties,
 						},
 					],
 				},
 				blockProps,
-				pickedSelector
+				marginPickedSelector
 			),
-		},
-	];
+		});
+	}
+
+	if (Object.keys(paddingProperties).length > 0) {
+		const paddingPickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraPadding',
+			support: 'blockeraPadding',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraPadding'
+			),
+		});
+
+		styleGroup.push({
+			selector: paddingPickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraSpacing: [
+						{
+							...staticDefinitionParams,
+							properties: paddingProperties,
+						},
+					],
+				},
+				blockProps,
+				paddingPickedSelector
+			),
+		});
+	}
 
 	return styleGroup;
 };
