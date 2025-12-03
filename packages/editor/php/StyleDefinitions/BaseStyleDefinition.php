@@ -7,6 +7,13 @@ use Blockera\Editor\StyleDefinitions\Contracts\HasIgnoreChecks;
 
 abstract class BaseStyleDefinition {
 
+	/**
+	 * Store the style definition identifier.
+	 *
+	 * @var string $id The style definition identifier.
+	 */
+	protected string $id = '';
+
     /**
      * Store the block details includes all settings.
      *
@@ -137,6 +144,13 @@ abstract class BaseStyleDefinition {
     protected array $support = [];
 
 	/**
+	 * Store the support type.
+	 *
+	 * @var string $support_type the support type.
+	 */
+	protected string $support_type = 'single';
+
+	/**
 	 * Store the no checks flag.
 	 *
 	 * @var bool $no_checks the no checks flag.
@@ -155,6 +169,27 @@ abstract class BaseStyleDefinition {
     public function __construct( array $supports) { 
         $this->support = $supports;
     }
+
+	/**
+	 * Get the style definition identifier.
+	 *
+	 * @return string the style definition identifier.
+	 */
+	public function getId():string{
+
+		return $this->id;
+	}
+
+	/**
+	 * Set the style definition identifier.
+	 *
+	 * @param string $id the style definition identifier.
+	 *
+	 * @return void
+	 */
+	public function setId( string $id):void{
+		$this->id = $id;
+	}
 
 	/**
 	 * Set the no checks flag.
@@ -179,6 +214,16 @@ abstract class BaseStyleDefinition {
 
         $this->style_id = $id;
     }
+
+	/**
+	 * Get the style identifier.
+	 *
+	 * @return string the style identifier.
+	 */
+	public function getStyleId(): string {
+
+		return $this->style_id;
+	}
 
 	/**
 	 * Set the flag to determine if the style is a global style.
@@ -324,6 +369,28 @@ abstract class BaseStyleDefinition {
 
         $this->block = $block;
     }
+
+	/**
+	 * Sets the support type.
+	 *
+	 * @param string $support_type the support type.
+	 *
+	 * @return void
+	 */
+	public function setSupportType( string $support_type): void {
+
+		$this->support_type = $support_type;
+	}
+
+	/**
+	 * Get the support type.
+	 *
+	 * @return string the support type.
+	 */
+	public function getSupportType(): string {
+
+		return $this->support_type;
+	}
 
     /**
      * @return array
@@ -484,7 +551,7 @@ abstract class BaseStyleDefinition {
         array_map(
             function ( array $setting): void {
 
-                if (! $this->getSupports(false)[ $this->style_id ]) {
+                if (! $this->getSupport()) {
 
                     return;
                 }
@@ -595,6 +662,16 @@ abstract class BaseStyleDefinition {
         $this->settings = $settings;
     }
 
+	/**
+	 * Get the support.
+	 *
+	 * @return array the support.
+	 */
+	protected function getSupport():array{
+
+		return $this->getSupports(false)[ $this->getId() ] ?? $this->getSupports(false)[ $this->style_id ];
+	}
+
     /**
      * Get blockera support standard css property name.
      *
@@ -602,7 +679,7 @@ abstract class BaseStyleDefinition {
      */
     public function getSupportCssProperty(): ?string {
 
-        return $this->getSupports(false)[ $this->style_id ]['css-property'] ?? null;
+        return $this->getSupport()['css-property'] ?? null;
     }
 
     /**
