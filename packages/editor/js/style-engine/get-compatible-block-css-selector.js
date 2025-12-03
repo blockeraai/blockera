@@ -734,11 +734,21 @@ export function prepareBlockCssSelector(params: {
 
 		if (Array.isArray(fallbackSupportId)) {
 			const fallbacks = union(
-				fallbackSupportId.map((supportId) =>
-					getBlockCSSSelector(blockType, supportId || 'root', {
-						fallback: false,
-					})
-				)
+				fallbackSupportId.map((supportId) => {
+					const picked = getBlockCSSSelector(
+						blockType,
+						supportId || 'root',
+						{
+							fallback: false,
+						}
+					);
+
+					if ('object' === typeof picked) {
+						return union(Object.values(picked || {})).join(', ');
+					}
+
+					return picked;
+				})
 			);
 
 			fallbackSelector = fallbacks
@@ -770,7 +780,7 @@ export function prepareBlockCssSelector(params: {
 
 		// Preparing selector with support identifier.
 		return (
-			getBlockCSSSelector(blockType, support, { fallback: true }) ||
+			getBlockCSSSelector(blockType, support) ||
 			fallbackSelector ||
 			selectors[support]?.root ||
 			selectors.root
