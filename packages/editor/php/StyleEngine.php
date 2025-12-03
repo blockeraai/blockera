@@ -101,6 +101,13 @@ final class StyleEngine {
 	protected array $supports = [];
 
 	/**
+	 * Store the processed supports.
+	 *
+	 * @var array $processed_supports
+	 */
+	protected static array $processed_supports = [];
+
+	/**
 	 * Store the breakpoints.
 	 *
 	 * @var array $breakpoints
@@ -154,7 +161,12 @@ final class StyleEngine {
 	 */
 	public function setSupports( array $supports): void {
 
-		$this->supports = blockera_array_flat(array_column($supports, 'supports'));
+		foreach ($supports as $data) {
+			foreach ($data['supports'] as $key => $support) {
+				$this->supports[ $key ]         = $support;
+				$this->supports[ $key ]['type'] = $data['type'] ?? 'single';
+			}
+		}
 	}
 
 	/**
@@ -398,11 +410,40 @@ final class StyleEngine {
 	 * @return void
 	 */
 	protected function setDefinition( string $id): void {
-		
 		// Early returns for invalid conditions.
-		if (empty($this->supports) ||
-			! isset($this->supports[ $id ], $this->supports[ $id ]['definition'])) {
-			return;
+		if (empty($this->supports) || ! isset($this->supports[ $id ], $this->supports[ $id ]['definition'])) {
+
+			$items = ! empty(static::$processed_supports) ? static::$processed_supports : $this->supports;
+			$ids   = array_column($items, 'id');
+			$index = array_search($id, $ids, true);
+
+			if (! $index) {
+				return;
+			}
+
+			$id = $ids[ $index ];
+
+			try {
+				// Prepare all items while definition index equals with $id.
+				foreach ($items as $key => $support) {
+					if (isset($support['id']) && $support['id'] === $id) {
+						// Attempt to create new instance.
+						$this->definition = $this->app->make($support['definition'], [ 'supports' => $this->supports ]);
+						$this->definition->setSupportType($support['type'] ?? 'single');
+						$this->definition->setId($key);
+	
+						return;
+					}
+				}
+			} catch (\Exception $e) {
+				return;
+			}
+
+			if (! empty(static::$processed_supports) && ! $this->definition) {
+				static::$processed_supports = [];
+
+				return;
+			}
 		}
 
 		// Get definition class name.
@@ -609,6 +650,33 @@ final class StyleEngine {
 			$css_rules = $this->mergeInlineStyles($css_rules);
 		}
 
+		// This is a multiple support definition.
+		// So we need to generate the css rules for the next support.
+		if ('multiple' === $this->definition->getSupportType()) {
+			// Get the supports stack to filter out the current support.
+			$supports = ! empty(static::$processed_supports) ? static::$processed_supports : $this->supports;
+
+			// Filter out the current support from the supports stack.
+			// Filter out the previous processed supports.
+			static::$processed_supports = array_filter(
+                $supports,
+                function( $support) {
+					return $this->definition->getId() !== $support;
+				},
+                ARRAY_FILTER_USE_KEY
+            );
+
+			$this->definition = null;
+
+			// Set the next support definition.
+			$this->setDefinition($id);
+
+			// Generate the css rules for the next support.
+			if ($this->definition) {
+				$css_rules = array_merge($css_rules, $this->generateBlockCss($settings, $id));
+			}
+		}
+
 		// Reset definition property.
 		$this->definition = null;
 
@@ -677,7 +745,37 @@ final class StyleEngine {
 		$this->definition->setIsStyleVariation( $this->is_style_variation );
 		$this->definition->setBlockeraUniqueSelector( $this->selector );
 
-		return $this->definition->getCssRules();
+		$css_rules = $this->definition->getCssRules();
+
+		// This is a multiple support definition.
+		// So we need to generate the css rules for the next support.
+		if ('multiple' === $this->definition->getSupportType()) {
+			// Get the supports stack to filter out the current support.
+			$supports = ! empty(static::$processed_supports) ? static::$processed_supports : $this->supports;
+
+			// Filter out the current support from the supports stack.
+			// Filter out the previous processed supports.
+			static::$processed_supports = array_filter(
+                $supports,
+                function( $support) {
+					return $this->definition->getId() !== $support;
+				},
+                ARRAY_FILTER_USE_KEY
+            );
+
+			$this->definition = null;
+
+			// Set the next support definition.
+			$this->setDefinition($args['id']);
+
+			// Generate the css rules for the next support.
+			if ($this->definition) {
+				// Merge the css rules with the generated css rules for the next support.
+				$css_rules = array_merge($css_rules, $this->generateInnerBlockCss($settings, $blockType, $args));
+			}
+		}
+
+		return $css_rules;
 	}
 
 	/**
