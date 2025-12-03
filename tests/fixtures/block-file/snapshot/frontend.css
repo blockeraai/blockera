@@ -58,6 +58,109 @@
 	background-color: #680000;
 }
 
+.blockera-block.blockera-block-2.wp-block-file {
+	background-color: #fff0f0;
+}
+
+.blockera-block.blockera-block-2 .wp-element-button {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-left: 100px !important;
+}
+
 .blockera-block.blockera-block-2.wp-block-file:focus-within {
 	background-color: #fc9595;
+}
+
+.blockera-block.blockera-block-2.wp-block-file::before {
+	font-size: 17px !important;
+	font-weight: 600;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	background-color: #ffbaba;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2.wp-block-file::after {
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	color: #ffffff;
+	background-color: #ff4949;
+	flex: 1 1 0%;
+	content: "After";
+}
+
+.blockera-block.blockera-block-3.wp-block-file {
+	border-radius: 10px;
+	background-color: #ffecc7;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 30px;
+	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dsmall, 0.875rem) !important;
+}
+
+.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+	background-color: #e8be69;
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	text-transform: uppercase;
+	display: inline-block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+.blockera-block.blockera-block-3 .wp-element-button {
+	padding-top: 5px;
+	padding-right: 40px;
+	padding-bottom: 5px;
+	padding-left: 40px;
+	margin-left: 40px !important;
+	border-radius: 0;
+}
+
+.blockera-block.blockera-block-3.wp-block-file::before {
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	background-color: #e8be69;
+	text-transform: uppercase;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-3.wp-block-file::after {
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	color: #ffffff;
+	background-color: #c29336;
+	flex: 1 1 0%;
+	text-transform: uppercase;
+	content: "After";
 }
