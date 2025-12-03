@@ -528,14 +528,14 @@ abstract class BaseStyleDefinition {
         }
 
         // Skip processing for properties with default value.
-        if (isset($this->default_settings[ $this->style_id ]['default']['value']) && $value === $this->default_settings[ $this->style_id ]['default']['value']) {
+        if (isset($this->default_settings[ $this->getId() ]['default']['value']) && $value === $this->default_settings[ $this->getId() ]['default']['value']) {
 
             return;
         }
 
         if ($this instanceof CustomStyle) {
 
-            $settings = $this->getCustomSettings($this->settings, $this->style_id, $cssProperty);
+            $settings = $this->getCustomSettings($this->settings, $this->getId(), $cssProperty);
 
         } else {
 
@@ -556,7 +556,7 @@ abstract class BaseStyleDefinition {
                     return;
                 }
 
-                if ($this->availableInInnerBlock($this->style_id)) {
+                if ($this->availableInInnerBlock($this->getId())) {
 
 					$this->css($setting);
                 }
@@ -596,7 +596,7 @@ abstract class BaseStyleDefinition {
 
         } else {
 
-            $this->setSelector($this->style_id);
+            $this->setSelector($this->getId());
         }
 
         if (isset($this->css[ $this->getSelector() ])) {
@@ -671,7 +671,7 @@ abstract class BaseStyleDefinition {
 
 		$supports = $this->getSupports(false);
 
-		return $supports[ $this->getId() ] ?? $supports[ $this->style_id ];
+		return $supports[ $this->getId() ];
 	}
 
     /**
