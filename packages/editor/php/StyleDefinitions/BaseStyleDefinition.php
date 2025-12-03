@@ -669,7 +669,9 @@ abstract class BaseStyleDefinition {
 	 */
 	protected function getSupport():array{
 
-		return $this->getSupports(false)[ $this->getId() ] ?? $this->getSupports(false)[ $this->style_id ];
+		$supports = $this->getSupports(false);
+
+		return $supports[ $this->getId() ] ?? $supports[ $this->style_id ];
 	}
 
     /**
