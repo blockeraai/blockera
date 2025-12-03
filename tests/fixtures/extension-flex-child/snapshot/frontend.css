@@ -1,7 +1,7 @@
 
 .blockera-block.blockera-block--1.wp-block-group {
 	background-color: #e9ffe7;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -27,7 +27,7 @@ p.blockera-block.blockera-block--5 {
 
 .blockera-block.blockera-block--6.wp-block-group {
 	background-color: #e9ffe7;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -47,7 +47,7 @@ p.blockera-block.blockera-block--9 {
 
 .blockera-block.blockera-block--10.wp-block-group {
 	background-color: #e9ffe7;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	height: 500px;
 }

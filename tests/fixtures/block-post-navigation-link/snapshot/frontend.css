@@ -2,7 +2,7 @@
 	background-color: #ffeaea;
 	border: 1px solid #0000004a;
 	border-radius: 10px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -62,7 +62,7 @@
 	border: 1px solid #dfc7c7;
 	border-radius: 10px;
 	transition: all 500ms ease 0ms, box-shadow 700ms ease-out 300ms;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -101,7 +101,7 @@
 }
 .blockera-block.blockera-block-3.wp-block-post-navigation-link {
 	background-color: #e1e1e1;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;

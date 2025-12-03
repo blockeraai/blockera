@@ -52,7 +52,7 @@
 	background-color: #daddd3;
 	border-radius: 5px;
 	border: 1px solid #00000029;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 500;
 	font-style: normal;
 }

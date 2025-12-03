@@ -187,7 +187,7 @@
 
 .blockera-block.blockera-block--y0gsiw.wp-block-details::before {
 	background-color: #ff6666;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-weight: 600;
 	font-style: normal;
 	padding-top: 5px;
@@ -195,7 +195,7 @@
 	padding-bottom: 5px;
 	padding-left: 20px;
 	margin-bottom: 10px;
-	display: inline-block;
+	display: inline-block !important;
 	content: "Before";
 }
 
@@ -208,8 +208,8 @@
 	margin-right: 10px !important;
 	margin-bottom: 20px;
 	margin-left: 20px !important;
-	display: block;
-	font-size: 20px;
+	display: block !important;
+	font-size: 20px !important;
 	font-weight: 1000;
 	font-style: normal;
 	color: #ffffff;
@@ -225,7 +225,7 @@
 
 .blockera-block.blockera-blocku002du002dy0gsiw.wp-block-details::before {
 	background-color: #ff6666;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-weight: 600;
 	font-style: normal;
 	padding-top: 5px;
@@ -233,7 +233,7 @@
 	padding-bottom: 5px;
 	padding-left: 20px;
 	margin-bottom: 10px;
-	display: inline-block;
+	display: inline-block !important;
 	content: "Before";
 }
 
@@ -246,8 +246,8 @@
 	margin-right: 10px !important;
 	margin-bottom: 20px;
 	margin-left: 20px !important;
-	display: block;
-	font-size: 20px;
+	display: block !important;
+	font-size: 20px !important;
 	font-weight: 1000;
 	font-style: normal;
 	color: #ffffff;

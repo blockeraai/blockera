@@ -2,7 +2,7 @@
 .blockera-block.blockera-block-1.wp-block-latest-posts {
 	background-color: #ffe9e9;
 	border-radius: 10px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 15px;
 	padding-top: 20px;
@@ -12,10 +12,10 @@
 }
 
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
-	display: flex;
+	display: flex !important;
 	background-color: #ffa7a7;
 	border-radius: 5px;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-weight: 600;
 	font-style: normal;
 	text-decoration: initial;
@@ -39,10 +39,10 @@
 	margin-right: 6px !important;
 	margin-bottom: 6px;
 	margin-left: 6px !important;
-	display: inline-block;
+	display: inline-block !important;
 	border-radius: 5px;
 	text-transform: uppercase;
-	font-size: 14px;
+	font-size: 14px !important;
 	font-weight: 700;
 	font-style: normal;
 }
@@ -50,7 +50,7 @@
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::after {
 	box-sizing: border-box;
 	content: "After";
-	font-size: 14px;
+	font-size: 14px !important;
 	font-weight: 700;
 	font-style: normal;
 	text-transform: uppercase;
@@ -62,7 +62,7 @@
 	margin-bottom: 6px;
 	margin-left: 6px !important;
 	border-radius: 3px;
-	display: inline-block;
+	display: inline-block !important;
 }
 
 @media screen and (max-width: 478px) {
@@ -70,7 +70,7 @@
 	text-align: center;
 	content: "After";
 	flex-direction: column;
-	display: inline-block;
+	display: inline-block !important;
 	width: 100%;
 }
 

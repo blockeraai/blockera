@@ -6,7 +6,7 @@
 	background-color: #ffd0d0;
 	border-radius: 10px;
 	box-shadow: 10px 10px 0 0 #ff1010ab;
-	display: flex;
+	display: flex !important;
 }
 
 .blockera-block.blockera-block-1.wp-block-site-logo :is(img) {

@@ -37,7 +37,7 @@
 	border-width: 10px;
 	padding-right: 10px;
 	padding-left: 60px;
-	display: flex;
+	display: flex !important;
 	gap: 30px;
 }
 
@@ -59,7 +59,7 @@
 
 .blockera-block.blockera-block-2 figcaption {
 	height: 50px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -104,7 +104,7 @@
 	margin-right: auto !important;
 	margin-left: auto !important;
 	text-align: center;
-	display: inline-block;
+	display: inline-block !important;
 	border-radius: 5px;
 	font-weight: 700;
 	font-style: normal;

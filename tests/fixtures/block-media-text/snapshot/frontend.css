@@ -121,7 +121,7 @@
 .blockera-block.blockera-block-3.wp-block-heading {
 	border-radius: 50px;
 	background-color: #ffa6a6;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-style: normal;
 	font-weight: 700;
 }

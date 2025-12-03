@@ -2,6 +2,7 @@
 /**
  * Blockera dependencies
  */
+import { isEmptyObject } from '@blockera/utils';
 import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
 import { experimental } from '@blockera/env';
 
@@ -239,7 +240,7 @@ export const EffectsStyles = ({
 			)}`;
 		}
 
-		if (transformProperties) {
+		if (!isEmptyObject(transformProperties)) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTransform',

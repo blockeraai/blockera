@@ -12,7 +12,7 @@
 }
 
 .blockera-block.blockera-block-1 :where(p) {
-	font-size: 24px;
+	font-size: 24px !important;
 	font-weight: 700;
 	font-style: normal;
 	background-color: #ffabab;
@@ -21,7 +21,7 @@
 }
 
 .blockera-block.blockera-block-1 cite {
-	font-size: 18px;
+	font-size: 18px !important;
 	font-weight: 700;
 	font-style: normal;
 	background-color: #fc6262;
@@ -36,7 +36,7 @@
 	padding-right: 30px;
 	padding-bottom: 20px;
 	padding-left: 30px;
-	font-size: 20px;
+	font-size: 20px !important;
 	font-style: normal;
 	font-weight: 500;
 }
@@ -51,13 +51,13 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-pullquote::before {
-	display: block;
+	display: block !important;
 	background-color: #9ce29c;
 	content: "Before";
 }
 
 .blockera-block.blockera-block-2.wp-block-pullquote::after {
 	background-color: #7fd07f;
-	display: block;
+	display: block !important;
 	content: "After";
 }

@@ -34,7 +34,7 @@
 	padding-bottom: 5px;
 	padding-left: 5px;
 	border-radius: 40px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 700;
 	font-style: normal;
 }
@@ -79,7 +79,7 @@
 	padding-right: 31px;
 	padding-bottom: 31px;
 	padding-left: 31px;
-	font-size: 20px;
+	font-size: 20px !important;
 	text-align: center;
 }
 
@@ -94,7 +94,7 @@
 	padding-bottom: 5px;
 	padding-left: 5px;
 	border-radius: 40px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 700;
 	font-style: normal;
 }
@@ -169,14 +169,14 @@
 
 .blockera-block.blockera-block-2.wp-block-quote::before {
 	background-color: #ff8a8a;
-	display: block;
+	display: block !important;
 	margin-bottom: 20px;
 	content: "Before";
 }
 
 .blockera-block.blockera-block-2.wp-block-quote::after {
 	background-color: #ff3838;
-	display: block;
+	display: block !important;
 	margin-top: 20px;
 	content: "After";
 }

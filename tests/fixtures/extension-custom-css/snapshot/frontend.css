@@ -10,7 +10,7 @@ nnu0026:hover {
 }
 
 n p.blockera-block.blockera-block-2 {
-	font-size: 20px;
+	font-size: 20px !important;
 	font-family: var(--wp--preset--font-family--fira-code) !important;
 }
 

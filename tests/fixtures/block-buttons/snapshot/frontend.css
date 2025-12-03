@@ -21,7 +21,7 @@
 	font-weight: 700;
 	font-style: normal;
 	background-color: #00000036;
-	display: inline-block;
+	display: inline-block !important;
 	padding-right: 6px;
 	padding-left: 6px;
 }
@@ -34,7 +34,7 @@
 	padding-left: 5px;
 	border-radius: 20px;
 	width: 20px;
-	display: inline-block;
+	display: inline-block !important;
 }
 
 .blockera-block.blockera-block-1 :where(.wp-block-button > .wp-element-button):hover {
@@ -64,7 +64,7 @@
 	font-weight: 700;
 	font-style: normal;
 	background-color: #00000036;
-	display: inline-block;
+	display: inline-block !important;
 	padding-right: 6px;
 	padding-left: 6px;
 }
@@ -77,7 +77,7 @@
 	padding-left: 5px;
 	border-radius: 20px;
 	width: 20px;
-	display: inline-block;
+	display: inline-block !important;
 }
 
 .blockera-block.blockera-block-1 :where(.wp-block-button > .wp-element-button):hover {
@@ -164,7 +164,7 @@
 	padding-right: 20px;
 	padding-bottom: 10px;
 	padding-left: 20px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 900;
 	font-style: normal;
 	background-color: #4dacff;
@@ -208,7 +208,7 @@
 	padding-right: 20px;
 	padding-bottom: 10px;
 	padding-left: 20px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 900;
 	font-style: normal;
 	background-color: #4dacff;
@@ -235,7 +235,7 @@
 
 .blockera-block.blockera-block-5 :where(.wp-block-button > .wp-element-button) {
 	background-color: #70ae6b;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-weight: 800;
 	font-style: normal;
 	padding-top: 10px;
@@ -291,7 +291,7 @@
 }
 
 .blockera-block.blockera-block-13.wp-block-button .wp-block-button__link {
-	display: flex;
+	display: flex !important;
 	gap: 13px;
 }
 
@@ -301,7 +301,7 @@
 	font-style: normal;
 	background-color: #2d9d00;
 	border-radius: 30px;
-	display: inline-block;
+	display: inline-block !important;
 	padding-top: 3px;
 	padding-right: 10px;
 	padding-bottom: 3px;
@@ -314,7 +314,7 @@
 	font-style: normal;
 	opacity: 60%;
 	background-color: #ff0202;
-	display: inline-block;
+	display: inline-block !important;
 	padding-top: 3px;
 	padding-right: 20px;
 	padding-bottom: 3px;

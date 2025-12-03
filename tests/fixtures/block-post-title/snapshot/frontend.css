@@ -1,6 +1,6 @@
 .blockera-block.blockera-block-1.wp-block-post-title {
 	background-color: #ffdada;
-	font-size: 20px;
+	font-size: 20px !important;
 	font-style: normal;
 	font-weight: 700;
 	border-color: #ff4242;
@@ -82,7 +82,7 @@
 .blockera-block.blockera-block-3.wp-block-post-title::before {
 	background-color: #ff4e4e;
 	width: 100%;
-	display: inline-block;
+	display: inline-block !important;
 	margin-bottom: 10px;
 	content: "Before";
 }
@@ -90,7 +90,7 @@
 .blockera-block.blockera-block-3.wp-block-post-title::after {
 	background-color: #2cff7d;
 	margin-top: 20px;
-	display: inline-block;
+	display: inline-block !important;
 	width: 100%;
 	content: "After";
 }

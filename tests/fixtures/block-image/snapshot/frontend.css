@@ -71,7 +71,7 @@
 .blockera-block.blockera-block-3.wp-block-image {
 	margin-bottom: 24px;
 	transition: all 500ms ease 0ms;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -81,7 +81,7 @@
 	text-align: center;
 	font-weight: 700;
 	font-style: normal;
-	font-size: 18px;
+	font-size: 18px !important;
 	order: -1;
 }
 

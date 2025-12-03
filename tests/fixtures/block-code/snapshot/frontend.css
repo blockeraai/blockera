@@ -9,7 +9,7 @@
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 700;
 	border: 2px solid #90d74d;
@@ -36,7 +36,7 @@
 	padding-bottom: 5px;
 	padding-left: 10px;
 	margin-bottom: 10px;
-	display: inline-block;
+	display: inline-block !important;
 	border-radius: 5px;
 	position: absolute;
 	top: 20px;

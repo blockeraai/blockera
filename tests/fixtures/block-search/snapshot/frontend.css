@@ -4,7 +4,7 @@
 	text-align: center;
 	border-radius: 72px;
 	height: 40px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -38,7 +38,7 @@
 	border-radius: 10px;
 	background-color: #cde2ff;
 	transition: all 500ms ease 0ms;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: flex-start !important;
@@ -50,7 +50,7 @@
 }
 
 .blockera-block.blockera-block-2 .wp-block-search__label {
-	font-size: 18px;
+	font-size: 18px !important;
 	font-weight: 700;
 	font-style: normal;
 	background-color: #c5caff;

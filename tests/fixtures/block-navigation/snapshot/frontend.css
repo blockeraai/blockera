@@ -1,5 +1,5 @@
 .blockera-block.blockera-block-1.wp-block-home-link {
-	font-size: 16px;
+	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 600;
 	background-color: #ffc9c9;
@@ -17,7 +17,7 @@
 	color: #ffffff;
 }
 .blockera-block.blockera-block-2.wp-block-home-link {
-	font-size: 16px;
+	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 600;
 	background-color: #ffdeb6;
@@ -76,13 +76,13 @@
 	background-color: #6ea858;
 }
 .blockera-block.blockera-block-4.wp-block-navigation-link {
-	font-size: 15px;
+	font-size: 15px !important;
 	font-style: normal;
 	font-weight: 700;
 	background-color: #eaeaea;
 	border: 1px solid #00000030;
 	border-radius: 30px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;

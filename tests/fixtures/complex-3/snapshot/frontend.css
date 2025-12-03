@@ -5,13 +5,13 @@
 	padding-right: 6vw;
 	padding-bottom: 6vw;
 	padding-left: 6vw;
-	display: default;
+	display: default !important;
 	margin-block-start: 30px !important;
 }
 
 .blockera-block.blockera-block-1.wp-block-group {
 	background-color: #d8e0ff;
-	display: default;
+	display: default !important;
 	margin-block-start: 30px !important;
 	padding-top: 6vw;
 	padding-right: 6vw;
@@ -26,7 +26,7 @@
 	padding-bottom: 20px;
 	padding-left: 30px;
 	box-shadow: 15px 15px 0 0 #5577ff;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-end !important;
@@ -54,7 +54,7 @@
 .blockera-block.blockera-block-2.wp-block-group {
 	background-color: #95aaff;
 	box-shadow: 15px 15px 0 0 #5577ff;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-end !important;
@@ -90,7 +90,7 @@
 	padding-right: 0px;
 	padding-bottom: 0px;
 	padding-left: 0px;
-	font-size: 16px;
+	font-size: 16px !important;
 }
 
 p.blockera-block.blockera-block-4 {
@@ -113,7 +113,7 @@ p.blockera-block.blockera-block-4 {
 @media screen and (max-width: 478px) {
 	p.blockera-block.blockera-block-4 {
 	min-width: fit-content;
-	font-size: 1em;
+	font-size: 1em !important;
 }
 
 
@@ -133,7 +133,7 @@ p.blockera-block.blockera-block-5 {
 	padding-right: 0;
 	padding-bottom: 0;
 	padding-left: 0;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 3vw;
 	flex-wrap: nowrap !important;
@@ -145,7 +145,7 @@ p.blockera-block.blockera-block-5 {
 
 .blockera-block.blockera-block-6.wp-block-group {
 	background-color: #95aaff;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 3vw;
 	flex-wrap: nowrap !important;
@@ -165,7 +165,7 @@ p.blockera-block.blockera-block-5 {
 	background-color: #5577ff;
 	padding-bottom: 20px;
 	align-self: stretch;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: flex-start !important;
@@ -193,7 +193,7 @@ p.blockera-block.blockera-block-5 {
 	border-top-left-radius: 50px;
 	border-top-right-radius: 50px;
 	align-self: stretch;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: flex-start !important;
@@ -223,13 +223,13 @@ p.blockera-block.blockera-block-5 {
 	padding-right: 30px;
 	padding-bottom: 50px;
 	padding-left: 30px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
 .blockera-block.blockera-block-8.wp-block-group {
 	background-color: #213fbe;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	padding-top: 50px;
 	padding-right: 30px;
@@ -265,7 +265,7 @@ p.blockera-block.blockera-block-9 {
 	border-right: 10px solid #00946c;
 	border-bottom: 5px solid #4159c5;
 	border-left: 10px solid #940078;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -275,7 +275,7 @@ p.blockera-block.blockera-block-9 {
 	border-right: 10px solid #00946c;
 	border-bottom: 5px solid #4159c5;
 	border-left: 10px solid #940078;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	padding-top: 10px;
 	padding-right: 10px;
@@ -301,7 +301,7 @@ p.blockera-block.blockera-block-11 {
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: center !important;
@@ -311,7 +311,7 @@ p.blockera-block.blockera-block-11 {
 .blockera-block.blockera-block-12.wp-block-group {
 	background-color: #213fbe;
 	border-radius: 15px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: center !important;
@@ -350,7 +350,7 @@ p.blockera-block.blockera-block-13 {
 	text-decoration: line-through;
 	text-transform: uppercase;
 	flex-grow: 1;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-end !important;
@@ -363,7 +363,7 @@ p.blockera-block.blockera-block-13 {
 .blockera-block.blockera-block-14.wp-block-group {
 	background-color: #213fbe;
 	flex-grow: 1;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-end !important;
@@ -375,7 +375,7 @@ p.blockera-block.blockera-block-13 {
 	font-weight: 1000;
 	font-style: normal;
 	color: #2ed445;
-	font-size: 30px;
+	font-size: 30px !important;
 	line-height: 2.1;
 	text-decoration: line-through;
 	text-transform: uppercase;
@@ -402,13 +402,13 @@ p.blockera-block.blockera-block-15 {
 	padding-bottom: 20px;
 	padding-left: 20px;
 	align-self: stretch;
-	display: default;
+	display: default !important;
 	margin-block-start: 30px !important;
 }
 
 .blockera-block.blockera-block-16 :where(p) {
 	background-color: #213fbe;
-	font-size: 30px;
+	font-size: 30px !important;
 	font-weight: 700;
 	font-style: normal;
 	color: #ffffff;
@@ -423,7 +423,7 @@ p.blockera-block.blockera-block-15 {
 .blockera-block.blockera-block-16.wp-block-group {
 	background-color: #5577ff;
 	align-self: stretch;
-	display: default;
+	display: default !important;
 	margin-block-start: 30px !important;
 	padding-top: 20px;
 	padding-bottom: 20px;
@@ -432,7 +432,7 @@ p.blockera-block.blockera-block-15 {
 
 .blockera-block.blockera-block-16 :where(p) {
 	background-color: #213fbe;
-	font-size: 30px;
+	font-size: 30px !important;
 	font-weight: 700;
 	font-style: normal;
 	color: #ffffff;
@@ -455,7 +455,7 @@ p.blockera-block.blockera-block-17 {
 
 .blockera-block.blockera-block-18.wp-block-group {
 	background-color: #213fbe;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;

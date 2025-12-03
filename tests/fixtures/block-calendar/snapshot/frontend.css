@@ -51,7 +51,7 @@
 	color: #faf1f1;
 	background-color: #000bdb;
 	margin-top: 10px;
-	display: inline-block;
+	display: inline-block !important;
 }
 
 .blockera-block.blockera-block-1 .wp-calendar-nav a:hover {
@@ -74,7 +74,7 @@
 	padding-bottom: 2px;
 	padding-left: 20px;
 	margin-bottom: 20px;
-	display: inline-block;
+	display: inline-block !important;
 	content: "Before";
 }
 
@@ -84,7 +84,7 @@
 	padding-bottom: 5px;
 	padding-left: 20px;
 	margin-top: 30px;
-	display: inline-block;
+	display: inline-block !important;
 	background-color: #6355ff;
 	color: #ffffff;
 	border-radius: 30px;

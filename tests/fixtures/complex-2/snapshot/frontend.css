@@ -37,7 +37,7 @@
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
-	display: flex;
+	display: flex !important;
 	gap: 100px;
 	flex-wrap: nowrap !important;
 }
@@ -62,7 +62,7 @@
 .blockera-block.blockera-block-2.wp-block-group {
 	background-color: #95aaff;
 	border-radius: 10px;
-	display: flex;
+	display: flex !important;
 	gap: 100px;
 	flex-wrap: nowrap !important;
 	padding-top: 20px;
@@ -94,7 +94,7 @@
 	padding-right: 0px;
 	padding-bottom: 0px;
 	padding-left: 0px;
-	font-size: 30px;
+	font-size: 30px !important;
 	font-style: normal;
 	font-weight: 700;
 }
@@ -214,7 +214,7 @@ p.blockera-block.blockera-block-9 {
 	background-color: #203fbe;
 	margin-right: 60px;
 	margin-left: 60px;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
 }
 
 .blockera-block.blockera-block-9 a:not(.wp-element-button) {
@@ -296,7 +296,7 @@ p.blockera-block.blockera-block-12 {
 	padding-right: 0px;
 	padding-bottom: 46px;
 	padding-left: 0px;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
 }
 
 .blockera-block.blockera-block-12 a:not(.wp-element-button) {
@@ -318,7 +318,7 @@ p.blockera-block.blockera-block-12 {
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: flex-end !important;
 	align-items: center !important;
@@ -345,7 +345,7 @@ p.blockera-block.blockera-block-12 {
 
 .blockera-block.blockera-block-13.wp-block-column {
 	background-color: #5577ff;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: flex-end !important;
 	align-items: center !important;
@@ -396,7 +396,7 @@ p.blockera-block.blockera-block-12 {
 	background-color: #213fbe;
 	padding-top: 20px;
 	padding-bottom: 20px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
 }
@@ -407,7 +407,7 @@ p.blockera-block.blockera-block-12 {
 
 .blockera-block.blockera-block-15.wp-block-group {
 	background-color: #213fbe;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
 	padding-top: 20px;
@@ -443,7 +443,7 @@ p.blockera-block.blockera-block-17 {
 	padding-bottom: 0px;
 	padding-left: 0px;
 	align-self: stretch;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
 }
 
 .blockera-block.blockera-block-17 a:not(.wp-element-button) {

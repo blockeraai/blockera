@@ -30,6 +30,23 @@ export type TSpacingDefaultProps = {
 	paddingLock: BoxSpacingLock,
 };
 
+export type TSpacingDefaultPropsMinimized = {
+	margin?: {
+		top?: string,
+		right?: string,
+		bottom?: string,
+		left?: string,
+	},
+	marginLock?: BoxSpacingLock,
+	padding?: {
+		top?: string,
+		right?: string,
+		bottom?: string,
+		left?: string,
+	},
+	paddingLock?: BoxSpacingLock,
+};
+
 export type TCssProps = {
 	'margin-top'?: string,
 	'margin-right'?: string,

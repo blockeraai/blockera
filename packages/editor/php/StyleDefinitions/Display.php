@@ -4,6 +4,15 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class Display extends BaseStyleDefinition {
 
+	/**
+	 * Use important always (in v2 style engine).
+	 *
+	 * @return boolean
+	 */
+	protected function isImportant(): bool {
+		return true;
+	}
+
     protected function css( array $setting): array {
 
 		$declaration = [];

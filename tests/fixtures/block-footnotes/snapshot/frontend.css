@@ -20,7 +20,7 @@
 	border-radius: 36px;
 	text-decoration: initial;
 	color: #007b10;
-	font-size: 20px;
+	font-size: 20px !important;
 }
 
 .blockera-block.blockera-block-1 a:not(.wp-element-button):not(:last-child) {

@@ -170,7 +170,9 @@ export function setValueAddon(
 	setState(newValue);
 }
 
-export function getValueAddonRealValue(value: ValueAddon | string): any {
+export function getValueAddonRealValue(
+	value: ValueAddon | string | undefined
+): any {
 	if (value === undefined) {
 		return '';
 	}
