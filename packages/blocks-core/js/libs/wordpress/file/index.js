@@ -41,4 +41,16 @@ export const File: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	selectors: {
+		'blockera/states/before': {
+			root: ' .wp-block-file__content-wrapper::before',
+		},
+		'blockera/states/after': {
+			root: ' .wp-block-file__content-wrapper::after',
+		},
+		'blockera/core/button': {
+			margin: ' .wp-block-file__button-richtext-wrapper',
+		},
+		layout: ' .wp-block-file__content-wrapper',
+	},
 };
