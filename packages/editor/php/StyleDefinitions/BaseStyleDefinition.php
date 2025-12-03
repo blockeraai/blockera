@@ -527,12 +527,6 @@ abstract class BaseStyleDefinition {
             return;
         }
 
-        // Skip processing for properties with default value.
-        if (isset($this->default_settings[ $this->getId() ]['default']['value']) && $value === $this->default_settings[ $this->getId() ]['default']['value']) {
-
-            return;
-        }
-
         if ($this instanceof CustomStyle) {
 
             $settings = $this->getCustomSettings($this->settings, $this->getId(), $cssProperty);
