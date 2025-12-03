@@ -90,7 +90,7 @@
 }
 
 .blockera-block.blockera-block-2 :where(svg) {
-	display: none;
+	display: none !important;
 }
 
 .blockera-block.blockera-block-2 .wp-block-social-link {
@@ -103,7 +103,7 @@
 	padding-right: 9px;
 	padding-left: 9px;
 	border-radius: 13px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 700;
 	font-style: normal;
 }
@@ -122,7 +122,7 @@
 }
 
 .blockera-block.blockera-block-2 :where(svg) {
-	display: none;
+	display: none !important;
 }
 
 .blockera-block.blockera-block-2 .wp-block-social-link {
@@ -135,7 +135,7 @@
 	padding-right: 9px;
 	padding-left: 9px;
 	border-radius: 13px;
-	font-size: 16px;
+	font-size: 16px !important;
 	font-weight: 700;
 	font-style: normal;
 }
@@ -151,7 +151,7 @@
 	background-color: #00c020;
 }
 .blockera-block.blockera-block-3 svg {
-	display: block;
+	display: block !important;
 	background-color: #b11a1a;
 	background-size: auto;
 	background-position: 0 0;

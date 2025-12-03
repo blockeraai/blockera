@@ -45,7 +45,7 @@
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-style: normal;
 	font-weight: 600;
 }
@@ -93,7 +93,7 @@
 	font-weight: 600;
 	font-style: normal;
 	color: #900000;
-	font-size: 18px;
+	font-size: 18px !important;
 }
 
 .wp-block-list.blockera-block.blockera-block-6:not(.wp-block-list .wp-block-list) > li {
@@ -127,7 +127,7 @@
 	border-radius: 10px;
 	background-color: #edffcf;
 	transition: all 500ms ease 0ms;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -150,7 +150,7 @@ ul.blockera-block.blockera-block-8:hover {
 .blockera-block.blockera-block-8.wp-block-list {
 	background-color: #edffcf;
 	transition: all 500ms ease 0ms;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 

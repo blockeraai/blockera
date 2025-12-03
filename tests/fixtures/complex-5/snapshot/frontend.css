@@ -5,12 +5,12 @@
 	margin-bottom: 0;
 	padding-top: 60px;
 	padding-bottom: 60px;
-	display: default;
+	display: default !important;
 }
 
 .blockera-block.blockera-block-1.wp-block-group {
 	background-color: #d8e0ff;
-	display: default;
+	display: default !important;
 	padding-top: 60px;
 	padding-bottom: 60px;
 	margin-top: 0;
@@ -42,7 +42,7 @@
 	padding-top: 30px;
 	padding-bottom: 30px;
 	border-top: 1px solid #213fbe;
-	display: grid;
+	display: grid !important;
 	gap: 30px;
 }
 
@@ -65,7 +65,7 @@
 .blockera-block.blockera-block-4.wp-block-group {
 	background-color: #5577ff;
 	border-top: 1px solid #213fbe;
-	display: grid;
+	display: grid !important;
 	gap: 30px;
 	padding-top: 30px;
 	padding-bottom: 30px;
@@ -91,7 +91,7 @@
 .blockera-block.blockera-block-5.wp-block-group {
 	color: #ffffff;
 	background-color: #213fbe;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 }
 
@@ -101,7 +101,7 @@
 
 .blockera-block.blockera-block-5.wp-block-group {
 	background-color: #213fbe;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	color: #ffffff;
 }
@@ -118,7 +118,7 @@
 	padding-left: 0px;
 	font-style: normal;
 	font-weight: 700;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
 }
 
 .blockera-block.blockera-block-7.wp-block-heading {
@@ -129,7 +129,7 @@
 	padding-left: 0px;
 	font-style: normal;
 	font-weight: 700;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
 }
 
 p.blockera-block.blockera-block-8 {
@@ -138,13 +138,13 @@ p.blockera-block.blockera-block-8 {
 	padding-right: 0px;
 	padding-bottom: 0px;
 	padding-left: 0px;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
+	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
 }
 
 .blockera-block.blockera-block-9.wp-block-group {
 	color: #ffffff;
 	background-color: #213fbe;
-	display: grid;
+	display: grid !important;
 	gap: var(--wp--preset--spacing--40, 30px);
 }
 
@@ -194,7 +194,7 @@ p.blockera-block.blockera-block-8 {
 
 .blockera-block.blockera-block-9.wp-block-group {
 	background-color: #213fbe;
-	display: grid;
+	display: grid !important;
 	gap: var(--wp--preset--spacing--40, 30px);
 	color: #ffffff;
 }
@@ -248,7 +248,7 @@ p.blockera-block.blockera-block-8 {
 }
 
 .blockera-block.blockera-block-11.wp-block-group {
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 30px;
 }

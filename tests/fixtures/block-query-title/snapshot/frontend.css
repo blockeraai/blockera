@@ -14,7 +14,7 @@
 .blockera-block.blockera-block-2.wp-block-query-title {
 	background-color: #ceebbf;
 	border-radius: 70px;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -25,7 +25,7 @@
 	padding-left: 10px;
 	font-weight: 500;
 	font-style: normal;
-	font-size: 18px;
+	font-size: 18px !important;
 }
 
 .blockera-block.blockera-block-2.wp-block-query-title::before {

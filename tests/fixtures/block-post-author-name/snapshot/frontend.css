@@ -32,7 +32,7 @@
 
 .blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
 	color: #aa0000;
-	display: inline-block;
+	display: inline-block !important;
 	padding-top: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
@@ -40,12 +40,12 @@
 	text-decoration: initial;
 	background-color: #ffd4d4;
 	border-radius: 5px;
-	font-size: 16px;
+	font-size: 16px !important;
 	transition: all 500ms ease 0ms;
 }
 
 .blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):hover {
-	font-size: 18px;
+	font-size: 18px !important;
 	text-decoration: underline;
 }
 
@@ -61,7 +61,7 @@
 	margin-right: 10px !important;
 	background-color: #6da64c;
 	color: #ffffff;
-	display: flex;
+	display: flex !important;
 	content: "Before";
 }
 

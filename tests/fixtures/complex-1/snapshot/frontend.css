@@ -16,7 +16,7 @@
 	font-weight: 700;
 	font-style: normal;
 	color: #c91205;
-	font-size: 40px;
+	font-size: 40px !important;
 }
 
 .blockera-block.blockera-block--1 :where(p) {
@@ -34,7 +34,7 @@
 .blockera-block.blockera-block--1 .wp-block-list {
 	background-color: #ffb266;
 	color: #ff902e;
-	font-size: 15px;
+	font-size: 15px !important;
 }
 
 .blockera-block.blockera-block--1 .wp-block-code {
@@ -102,7 +102,7 @@
 	font-weight: 700;
 	font-style: normal;
 	color: #c91205;
-	font-size: 40px;
+	font-size: 40px !important;
 }
 
 .blockera-block.blockera-block--1 :where(p) {
@@ -120,7 +120,7 @@
 .blockera-block.blockera-block--1 .wp-block-list {
 	background-color: #ffb266;
 	color: #ff902e;
-	font-size: 15px;
+	font-size: 15px !important;
 }
 
 .blockera-block.blockera-block--1 .wp-block-code {

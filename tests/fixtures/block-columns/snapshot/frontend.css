@@ -12,7 +12,7 @@
 	background-color: #2c2cff;
 	color: #ffffff;
 	text-align: center;
-	font-size: 18px;
+	font-size: 18px !important;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	border-radius: 20px;
@@ -75,7 +75,7 @@
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 	background-color: #e6ad5d;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -84,24 +84,24 @@
 	font-weight: 700;
 	font-style: normal;
 	color: #895610;
-	font-size: 18px;
+	font-size: 18px !important;
 	content: "Before";
 }
 
 .blockera-block.blockera-block-1.wp-block-columns::before > * {
-	margin-block-start: 0;
+	margin-block-start: 0 !important;
 }
 
 .blockera-block.blockera-block-1.wp-block-columns::after {
 	background-color: #b77519;
 	writing-mode: vertical-lr;
 	text-orientation: mixed;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	text-transform: uppercase;
-	font-size: 20px;
+	font-size: 20px !important;
 	font-weight: 700;
 	font-style: normal;
 	letter-spacing: 8px;
@@ -112,7 +112,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-columns::after > * {
-	margin-block-start: 0;
+	margin-block-start: 0 !important;
 }
 
 .blockera-block.blockera-block-1.wp-block-columns {
@@ -128,7 +128,7 @@
 	background-color: #2c2cff;
 	color: #ffffff;
 	text-align: center;
-	font-size: 18px;
+	font-size: 18px !important;
 	padding-top: 10px;
 	padding-bottom: 10px;
 	border-radius: 20px;
@@ -191,7 +191,7 @@
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 	background-color: #e6ad5d;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -200,24 +200,24 @@
 	font-weight: 700;
 	font-style: normal;
 	color: #895610;
-	font-size: 18px;
+	font-size: 18px !important;
 	content: "Before";
 }
 
 .blockera-block.blockera-block-1.wp-block-columns::before > * {
-	margin-block-start: 0;
+	margin-block-start: 0 !important;
 }
 
 .blockera-block.blockera-block-1.wp-block-columns::after {
 	background-color: #b77519;
 	writing-mode: vertical-lr;
 	text-orientation: mixed;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	text-transform: uppercase;
-	font-size: 20px;
+	font-size: 20px !important;
 	font-weight: 700;
 	font-style: normal;
 	letter-spacing: 8px;
@@ -228,7 +228,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-columns::after > * {
-	margin-block-start: 0;
+	margin-block-start: 0 !important;
 }
 
 .blockera-block.blockera-block-2.wp-block-column {
@@ -268,7 +268,7 @@
 }
 
 p.blockera-block.blockera-block-4 {
-	font-size: 16px;
+	font-size: 16px !important;
 }
 
 .blockera-block.blockera-block-4 mark.has-inline-color {
@@ -292,7 +292,7 @@ p.blockera-block.blockera-block-4 {
 	padding-right: 20px;
 	padding-bottom: 30px;
 	padding-left: 20px;
-	font-size: 14px;
+	font-size: 14px !important;
 	font-style: normal;
 	font-weight: 600;
 	border: 1px solid #00000033;
@@ -335,7 +335,7 @@ p.blockera-block.blockera-block-4 {
 	padding-left: 20px;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 14px;
+	font-size: 14px !important;
 }
 
 .blockera-block.blockera-block-7 .wp-block-column {
@@ -368,7 +368,7 @@ p.blockera-block.blockera-block-4 {
 	padding-right: 10px;
 	padding-bottom: 5px;
 	padding-left: 10px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
 }
@@ -380,7 +380,7 @@ p.blockera-block.blockera-block-4 {
 .blockera-block.blockera-block-18.wp-block-column::before {
 	background-color: #85a630;
 	border: 1px solid #628211;
-	display: block;
+	display: block !important;
 	padding-top: 5px;
 	padding-right: 10px;
 	padding-bottom: 5px;
@@ -399,14 +399,14 @@ p.blockera-block.blockera-block-4 {
 	padding-right: 20px;
 	padding-bottom: 5px;
 	padding-left: 20px;
-	display: inline-block;
+	display: inline-block !important;
 	border-radius: 50px;
 	align-self: stretch;
 	content: "After";
 }
 
 .blockera-block.blockera-block-18.wp-block-column {
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
 	padding-top: 5px;
@@ -422,7 +422,7 @@ p.blockera-block.blockera-block-4 {
 .blockera-block.blockera-block-18.wp-block-column::before {
 	background-color: #85a630;
 	border: 1px solid #628211;
-	display: block;
+	display: block !important;
 	padding-top: 5px;
 	padding-right: 10px;
 	padding-bottom: 5px;
@@ -441,7 +441,7 @@ p.blockera-block.blockera-block-4 {
 	padding-right: 20px;
 	padding-bottom: 5px;
 	padding-left: 20px;
-	display: inline-block;
+	display: inline-block !important;
 	border-radius: 50px;
 	align-self: stretch;
 	content: "After";
@@ -492,7 +492,7 @@ p.blockera-block.blockera-block-9:hover {
 }
 
 p.blockera-block.blockera-block-10 {
-	font-size: 14px;
+	font-size: 14px !important;
 }
 
 .blockera-block.blockera-block-10 mark.has-inline-color {
@@ -525,7 +525,7 @@ p.blockera-block.blockera-block-10 {
 	font-style: normal;
 	font-weight: 600;
 	gap: 10px;
-	font-size: 16px;
+	font-size: 16px !important;
 }
 
 .blockera-block.blockera-block-12 .wp-block-column {
@@ -547,7 +547,7 @@ p.blockera-block.blockera-block-10 {
 	padding-left: 10px;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 16px;
+	font-size: 16px !important;
 }
 
 .blockera-block.blockera-block-12 .wp-block-column {
@@ -621,13 +621,13 @@ p.blockera-block.blockera-block-10 {
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-15.wp-block-columns {
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 10px;
 }
 
 .blockera-block.blockera-block-15.wp-block-columns > * {
-	margin-block-start: 0;
+	margin-block-start: 0 !important;
 }
 
 
@@ -653,13 +653,13 @@ p.blockera-block.blockera-block-10 {
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-15.wp-block-columns {
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 10px;
 }
 
 .blockera-block.blockera-block-15.wp-block-columns > * {
-	margin-block-start: 0;
+	margin-block-start: 0 !important;
 }
 
 

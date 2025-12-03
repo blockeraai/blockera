@@ -60,7 +60,7 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-column {
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -80,7 +80,7 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-column {
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
@@ -167,7 +167,7 @@
 	padding-right: 0px;
 	padding-bottom: 0px;
 	padding-left: 0px;
-	font-size: 2.15rem;
+	font-size: 2.15rem !important;
 	font-style: normal;
 	font-weight: 900;
 }
@@ -183,7 +183,7 @@ p.blockera-block.blockera-block-7 {
 	padding-right: 0px;
 	padding-bottom: 0px;
 	padding-left: 0px;
-	font-size: 18px;
+	font-size: 18px !important;
 	font-style: normal;
 	font-weight: 700;
 }
@@ -199,7 +199,7 @@ p.blockera-block.blockera-block-7 {
 	margin-left: -20px;
 	padding-top: 20px;
 	padding-bottom: 20px;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-end !important;
@@ -229,7 +229,7 @@ p.blockera-block.blockera-block-7 {
 
 .blockera-block.blockera-block-8.wp-block-group {
 	background-color: #213fbe;
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-end !important;
@@ -295,7 +295,7 @@ p.blockera-block.blockera-block-7 {
 	padding-bottom: 20px;
 	padding-left: 20px;
 	align-self: center;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: flex-end !important;
 	justify-content: flex-end !important;
@@ -315,7 +315,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 .blockera-block.blockera-block-10 :where(p) {
-	font-size: 15px;
+	font-size: 15px !important;
 	border: 1px solid #ffffff;
 	padding-top: 5px;
 	padding-right: 10px;
@@ -346,7 +346,7 @@ p.blockera-block.blockera-block-7 {
 .blockera-block.blockera-block-10.wp-block-group {
 	background-color: #021c99;
 	align-self: center;
-	display: flex;
+	display: flex !important;
 	flex-direction: row;
 	align-items: flex-end !important;
 	justify-content: flex-end !important;
@@ -370,7 +370,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 .blockera-block.blockera-block-10 :where(p) {
-	font-size: 15px;
+	font-size: 15px !important;
 	border: 1px solid #ffffff;
 	padding-top: 5px;
 	padding-right: 10px;

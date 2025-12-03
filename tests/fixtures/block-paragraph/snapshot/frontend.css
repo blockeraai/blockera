@@ -1,7 +1,7 @@
 
 p.blockera-block.blockera-block-1 {
 	background-color: #ffe7e7;
-	font-size: calc(30px);
+	font-size: calc(30px) !important;
 	font-style: normal;
 	font-weight: 1000;
 }
@@ -80,7 +80,7 @@ p.blockera-block.blockera-block-12 {
 p.blockera-block.blockera-block-12::before {
 	color: #8800ff;
 	background-color: #ebd0ff;
-	font-size: 18px;
+	font-size: 18px !important;
 	padding-top: 5px;
 	padding-right: 15px;
 	padding-bottom: 5px;
@@ -99,7 +99,7 @@ p.blockera-block.blockera-block-12::after {
 	padding-left: 10px;
 	margin-left: 20px !important;
 	border-radius: 60px;
-	font-size: 18px;
+	font-size: 18px !important;
 	content: "[:after]";
 }
 

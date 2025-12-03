@@ -49,7 +49,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-image {
-	display: flex;
+	display: flex !important;
 	flex-direction: column;
 	gap: 15px;
 }
@@ -255,5 +255,5 @@
 }
 
 .blockera-block.blockera-block-9.wp-block-image {
-	display: none;
+	display: none !important;
 }
