@@ -33,6 +33,11 @@
 	width: 100px;
 	outline: 2px solid #797979;
 	outline-offset: 3px;
+	box-sizing: border-box;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 30px;
 }
 
 .blockera-block.blockera-block-1 .wp-block-image {
@@ -42,6 +47,59 @@
 
 .blockera-block.blockera-block-1 .wp-block-image :is(img:not([src=""]), svg:not(:empty)):hover {
 	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-1 > figcaption::before {
+	border-radius: 40px;
+	content: "Before";
+	padding-top: 3px;
+	padding-right: 15px;
+	padding-bottom: 3px;
+	padding-left: 15px;
+	display: inline-block !important;
+	background-color: #17bed4;
+}
+
+.blockera-block.blockera-block-1 > figcaption::after {
+	border-radius: 30px;
+	content: "After";
+	background-color: #17bed4;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	display: inline-block !important;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1 > figcaption {
+	flex-direction: column;
+	justify-content: center !important;
+	align-items: center !important;
+	gap: 5px;
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-gallery::before {
+	background-color: #56ebff;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-gallery::after {
+	background-color: #09c7e1;
+	padding-top: 5px;
+	padding-right: 30px;
+	padding-bottom: 5px;
+	padding-left: 30px;
+	flex: 1 1 0%;
+	border-radius: 50px;
+	text-align: center;
+	font-size: 16px !important;
+	font-weight: 700;
+	font-style: normal;
+	content: "After";
 }
 
 .blockera-block.blockera-block-2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
