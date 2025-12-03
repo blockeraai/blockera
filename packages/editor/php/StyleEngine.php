@@ -452,6 +452,7 @@ final class StyleEngine {
 		// Attempt to create new instance.
 		try {
 			$this->definition = $this->app->make($definition, [ 'supports' => $this->supports ]);
+			$this->definition->setId($id);
 		} catch (\Exception $e) {
 			return;
 		}
