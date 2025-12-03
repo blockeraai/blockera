@@ -409,7 +409,7 @@ final class StyleEngine {
 	 *
 	 * @return void
 	 */
-	protected function setDefinition( string $id): void {
+	protected function setDefinition( string $id, $flag = false): void {
 		// Early returns for invalid conditions.
 		if (empty($this->supports) || ! isset($this->supports[ $id ], $this->supports[ $id ]['definition'])) {
 
@@ -418,6 +418,9 @@ final class StyleEngine {
 			$index = array_search($id, $ids, true);
 
 			if (! $index) {
+				$this->definition           = null;
+				static::$processed_supports = [];
+
 				return;
 			}
 
@@ -594,7 +597,7 @@ final class StyleEngine {
 								);
 							}
 
-							$this->setDefinition($id);
+							$this->setDefinition($id, true);
 
 							if (! $this->definition) {
 
@@ -602,7 +605,6 @@ final class StyleEngine {
 							}
 
 							return $this->generateInnerBlockCss(is_string($settings) ? [ 'value' => $settings ] : $settings, $blockType, compact('id'));
-
 						},
 						$settings['attributes'] ?? [],
 						array_keys($settings['attributes'] ?? [])
@@ -674,7 +676,7 @@ final class StyleEngine {
 
 			// Generate the css rules for the next support.
 			if ($this->definition) {
-				$css_rules = array_merge($css_rules, $this->generateBlockCss($settings, $id));
+				$css_rules = blockera_get_array_deep_merge($css_rules, $this->generateBlockCss($settings, $id));
 			}
 		}
 
@@ -772,7 +774,7 @@ final class StyleEngine {
 			// Generate the css rules for the next support.
 			if ($this->definition) {
 				// Merge the css rules with the generated css rules for the next support.
-				$css_rules = array_merge($css_rules, $this->generateInnerBlockCss($settings, $blockType, $args));
+				$css_rules = blockera_get_array_deep_merge($css_rules, $this->generateInnerBlockCss($settings, $blockType, $args));
 			}
 		}
 
