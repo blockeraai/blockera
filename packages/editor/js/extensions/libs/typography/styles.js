@@ -147,21 +147,22 @@ export function TypographyStyles({
 				properties['font-style'] = blockeraFontAppearance.style;
 			}
 
-			styleGroup.push({
-				selector: pickedSelector,
-				declarations: computedCssDeclarations(
-					{
-						blockeraFontAppearance: [
-							{
-								type: 'static',
-								properties,
-							},
-						],
-					},
-					blockProps,
-					pickedSelector
-				),
-			});
+			if (!isEmptyObject(properties))
+				styleGroup.push({
+					selector: pickedSelector,
+					declarations: computedCssDeclarations(
+						{
+							blockeraFontAppearance: [
+								{
+									type: 'static',
+									properties,
+								},
+							],
+						},
+						blockProps,
+						pickedSelector
+					),
+				});
 		}
 	}
 
@@ -645,22 +646,21 @@ export function TypographyStyles({
 				}
 			}
 
-			if (!isEmptyObject(properties))
-				styleGroup.push({
-					selector: pickedSelector,
-					declarations: computedCssDeclarations(
-						{
-							blockeraTextColumns: [
-								{
-									type: 'static',
-									properties,
-								},
-							],
-						},
-						blockProps,
-						pickedSelector
-					),
-				});
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraTextColumns: [
+							{
+								type: 'static',
+								properties,
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
 		}
 	}
 

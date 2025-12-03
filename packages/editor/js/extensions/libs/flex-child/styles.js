@@ -4,6 +4,7 @@
  * Blockera dependencies
  */
 import { getValueAddonRealValue } from '@blockera/controls';
+import { isEmptyObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -113,31 +114,33 @@ export const FlexChildStyles = ({
 				break;
 		}
 
-		const pickedSelector = getCompatibleBlockCssSelector({
-			...sharedParams,
-			query: 'blockeraFlexChildSizing',
-			support: 'blockeraFlexChildSizing',
-			fallbackSupportId: getBlockSupportFallback(
-				supports,
-				'blockeraFlexChildSizing'
-			),
-		});
+		if (!isEmptyObject(properties)) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFlexChildSizing',
+				support: 'blockeraFlexChildSizing',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexChildSizing'
+				),
+			});
 
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraFlexChildSizing: [
-						{
-							...staticDefinitionParams,
-							properties,
-						},
-					],
-				},
-				blockProps,
-				pickedSelector
-			),
-		});
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFlexChildSizing: [
+							{
+								...staticDefinitionParams,
+								properties,
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
 	}
 
 	if (
@@ -201,31 +204,33 @@ export const FlexChildStyles = ({
 				break;
 		}
 
-		const pickedSelector = getCompatibleBlockCssSelector({
-			...sharedParams,
-			query: 'blockeraFlexChildOrder',
-			support: 'blockeraFlexChildOrder',
-			fallbackSupportId: getBlockSupportFallback(
-				supports,
-				'blockeraFlexChildOrder'
-			),
-		});
+		if (!isEmptyObject(properties)) {
+			const pickedSelector = getCompatibleBlockCssSelector({
+				...sharedParams,
+				query: 'blockeraFlexChildOrder',
+				support: 'blockeraFlexChildOrder',
+				fallbackSupportId: getBlockSupportFallback(
+					supports,
+					'blockeraFlexChildOrder'
+				),
+			});
 
-		styleGroup.push({
-			selector: pickedSelector,
-			declarations: computedCssDeclarations(
-				{
-					blockeraFlexChildOrder: [
-						{
-							...staticDefinitionParams,
-							properties,
-						},
-					],
-				},
-				blockProps,
-				pickedSelector
-			),
-		});
+			styleGroup.push({
+				selector: pickedSelector,
+				declarations: computedCssDeclarations(
+					{
+						blockeraFlexChildOrder: [
+							{
+								...staticDefinitionParams,
+								properties,
+							},
+						],
+					},
+					blockProps,
+					pickedSelector
+				),
+			});
+		}
 	}
 
 	return styleGroup;
