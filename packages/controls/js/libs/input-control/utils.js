@@ -13,6 +13,7 @@ const specialUnits = [
 	'auto',
 	'initial',
 	'inherit',
+	'stretch',
 	'fit-content',
 	'max-content',
 	'min-content',
@@ -584,6 +585,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -680,6 +686,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -770,6 +781,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
 						{
 							value: 'fit-content',
 							label: 'Fit Content',

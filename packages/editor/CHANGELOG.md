@@ -15,6 +15,7 @@
 - Improve to show `Flex Child` settings smartly for all blocks and inner blocks that have `flex` parent.
 - Improve the breakpoints management setting UX.
 - Before and After: add support to CSS functions: `attr()`, `counter()`, `counters()` and `url()`
+- `Stretch` value type for size control like Width, Height... added.
 
 
 ### Automated Tests

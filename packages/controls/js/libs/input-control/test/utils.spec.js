@@ -452,6 +452,11 @@ describe('Util functions', () => {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -546,6 +551,11 @@ describe('Util functions', () => {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
@@ -642,6 +652,11 @@ describe('Util functions', () => {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -732,6 +747,11 @@ describe('Util functions', () => {
 					label: 'Special Values',
 					options: [
 						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
+						{
 							value: 'fit-content',
 							label: 'Fit Content',
 							format: 'number',
@@ -821,6 +841,11 @@ describe('Util functions', () => {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
@@ -916,6 +941,11 @@ describe('Util functions', () => {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'stretch',
+							label: 'Stretch',
+							format: 'number',
+						},
 						{
 							value: 'fit-content',
 							label: 'Fit Content',
