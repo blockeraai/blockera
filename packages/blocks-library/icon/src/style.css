@@ -1,5 +1,5 @@
 .wp-block-image.blockera-is-icon-block .wp-block-image__icon {
-	display: flex;
+	display: inline-flex;
 	align-items: center;
 }
 
