@@ -10,7 +10,6 @@ import { getValueAddonRealValue } from '@blockera/controls';
  * Internal dependencies
  */
 import type { StylesProps } from '../types';
-import { useBlocksStore } from '../../../hooks';
 import { isActiveField } from '../../api/utils';
 import type { CssRule } from '../../../style-engine/types';
 import type {
@@ -101,13 +100,7 @@ export const SpacingStyles = ({
 	attributes: currentBlockAttributes,
 	...props
 }: StylesProps): Array<CssRule> => {
-	const { hasBlockSupport } = useBlocksStore();
-
 	const { blockeraSpacing } = config.spacingConfig;
-
-	if (!hasBlockSupport(blockName, 'spacing')) {
-		return [];
-	}
 
 	const blockProps = {
 		state,
@@ -117,6 +110,15 @@ export const SpacingStyles = ({
 		attributes: currentBlockAttributes,
 	};
 	const { attributes: _attributes } = blockProps;
+
+	const isActive =
+		isActiveField(blockeraSpacing) &&
+		_attributes.blockeraSpacing !== attributes.blockeraSpacing.default;
+
+	if (!isActive) {
+		return [];
+	}
+
 	const sharedParams = {
 		...props,
 		state,
@@ -135,14 +137,6 @@ export const SpacingStyles = ({
 			important: true,
 		},
 	};
-
-	const isActive =
-		isActiveField(blockeraSpacing) &&
-		_attributes.blockeraSpacing !== attributes.blockeraSpacing.default;
-
-	if (!isActive) {
-		return [];
-	}
 
 	const paddingProperties: TCssProps = updateCssProps({
 		padding: _attributes.blockeraSpacing?.padding,
