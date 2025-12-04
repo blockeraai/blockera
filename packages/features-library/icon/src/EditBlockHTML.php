@@ -217,10 +217,6 @@ class EditBlockHTML implements EditableBlockHTML {
         // Handle icon position and gap.
 		$properties[ 'start' === $iconPosition ? 'margin-right' : 'margin-left' ] = $block['attrs']['blockeraIconGap']['value'] ?? '0.5em';
 
-        // Handle icon color.
-		$properties['fill']  = 'currentColor';
-		$properties['color'] = $block['attrs']['blockeraIconColor']['value'] ?? 'inherit';
-
 		// Handle icon rotate.
 		$rotate = $block['attrs']['blockeraIconRotate']['value'] ?? '';
 		if (! empty($rotate)) {

@@ -14,6 +14,7 @@
 	display: inline-block;
 	position: relative;
 	fill: var(--blockera--icon--color, currentColor);
+	color: var(--blockera--icon--color, inherit);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
 	margin: auto 0;
