@@ -1,0 +1,7 @@
+.blockera-block.wp-block-file :where(.wp-block-file__button-richtext-wrapper) {
+	display: inline-flex;
+}
+
+.blockera-block.wp-block-file :where(.wp-block-file__button-richtext-wrapper .wp-element-button) {
+	flex-grow: 1;
+}
