@@ -13,7 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockeraSpacing' => [
+				'spacing' => [
 					'root' => ' .wp-block-accordion-heading__toggle',
 				],
 				'blockera/elements/icon' => [
