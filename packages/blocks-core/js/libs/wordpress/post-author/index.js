@@ -48,8 +48,23 @@ export const PostAuthor: BlockType = {
 			name: 'elements/author',
 			type: 'author',
 			label: __('Author Name', 'blockera'),
+			shortLabel: __('Name', 'blockera'),
 			description: __('The post author name element.', 'blockera'),
 			icon: <Icon icon="block-post-author-name" iconSize="20" />,
+			settings: {
+				force: true,
+			},
+		},
+		'elements/biography': {
+			name: 'elements/biography',
+			type: 'biography',
+			label: __('Author Biography', 'blockera'),
+			shortLabel: __('Biography', 'blockera'),
+			description: __(
+				'The post author biography text element.',
+				'blockera'
+			),
+			icon: <Icon icon="paragraph" library="wp" iconSize="20" />,
 			settings: {
 				force: true,
 			},

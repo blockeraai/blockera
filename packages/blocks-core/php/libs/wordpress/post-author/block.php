@@ -37,6 +37,9 @@ return array_merge(
 					'blockera/elements/author' => [
 						'root' => '.wp-block-post-author__name',
 					],
+					'blockera/elements/biography' => [
+						'root' => '.wp-block-post-author__bio',
+					],
 				]
 			)
 		),

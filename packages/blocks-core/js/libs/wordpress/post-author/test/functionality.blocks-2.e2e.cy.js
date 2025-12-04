@@ -30,6 +30,7 @@ describe('Post Author Block', () => {
 			'elements/avatar',
 			'elements/byline',
 			'elements/author',
+			'elements/biography',
 		]);
 
 		//

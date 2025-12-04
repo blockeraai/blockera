@@ -4,6 +4,11 @@
 	justify-content: center;
 }
 
+.blockera-block.wp-block-post-author :where(.wp-block-post-author__content) {
+	display: flex;
+	flex-direction: column;
+}
+
 .blockera-block.wp-block-post-author :where(.wp-block-post-author__avatar img) {
 	height: auto;
 }
