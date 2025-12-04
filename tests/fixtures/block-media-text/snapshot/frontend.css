@@ -60,6 +60,33 @@
 	border-radius: 20px;
 }
 
+.blockera-block.blockera-block-1.wp-block-media-text::before {
+	display: block !important;
+	background-color: #00000047;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 5px;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-media-text::after {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	background-color: #00000047;
+	border-radius: 5px;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
+	content: "After";
+}
+
 .blockera-block.blockera-block-1.wp-block-media-text {
 	background-color: #f1e4b8;
 	border: 3px solid #e2c566;
@@ -116,6 +143,33 @@
 
 .blockera-block.blockera-block-1:hover .wp-block-media-text__media img {
 	border-radius: 20px;
+}
+
+.blockera-block.blockera-block-1.wp-block-media-text::before {
+	display: block !important;
+	background-color: #00000047;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 5px;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-media-text::after {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	background-color: #00000047;
+	border-radius: 5px;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
+	content: "After";
 }
 
 .blockera-block.blockera-block-3.wp-block-heading {
