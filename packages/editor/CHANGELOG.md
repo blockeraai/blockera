@@ -14,6 +14,7 @@
 - Compatibility for detecting variables from core blocks if the variable not found.
 - Improve to show `Flex Child` settings smartly for all blocks and inner blocks that have `flex` parent.
 - Improve the breakpoints management setting UX.
+- Before and After: add support to CSS functions: `attr()`, `counter()`, `counters()` and `url()`
 
 
 ### Automated Tests

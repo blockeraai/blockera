@@ -77,6 +77,46 @@ export const BlockStatesStyles = ({
 			),
 		});
 
+		let content = blockProps.attributes.blockeraBlockStates[state]?.content;
+
+		// Check if content includes CSS functions: attr(), counter(), counters(), url()
+		const hasCssFunction =
+			typeof content === 'string' &&
+			(content.includes('attr(') ||
+				content.includes('counter(') ||
+				content.includes('counters(') ||
+				content.includes('url('));
+
+		if (hasCssFunction) {
+			// Regex to match CSS functions, including nested ones like counter(attr(...))
+			// This matches the outermost function and its entire content
+			const cssFunctionRegex =
+				/^['"]?(attr|counter|counters|url)\([^)]*(?:\([^)]*\))*[^)]*\)['"]?$/;
+
+			if (cssFunctionRegex.test(content)) {
+				// If it's only a CSS function (possibly nested) with or without quotes, remove quotes.
+				content = content.replace(/^['"]?(.+?)['"]?$/, '$1');
+			} else {
+				// Replace each unquoted CSS function with "function(...)"
+				// This regex handles nested functions by matching balanced parentheses
+				content = content.replace(
+					/(attr|counter|counters|url)\((?:[^()]+|\([^()]*\))*\)/g,
+					(match) => {
+						// Already quoted?
+						if (/^".*"$/.test(match)) {
+							return match;
+						}
+
+						return `"${match}"`;
+					}
+				);
+
+				content = `"${content}"`;
+			}
+		} else {
+			content = `"${content}"`;
+		}
+
 		styleGroup.push({
 			selector: pickedSelector,
 			declarations: computedCssDeclarations(
@@ -85,7 +125,7 @@ export const BlockStatesStyles = ({
 						{
 							type: 'static',
 							properties: {
-								content: `"${blockProps.attributes.blockeraBlockStates[state]?.content}"`,
+								content,
 							},
 						},
 					],
