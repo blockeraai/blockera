@@ -1,0 +1,155 @@
+
+p.blockera-block.blockera-block-1::before {
+	content: "Before";
+}
+
+p.blockera-block.blockera-block-1::after {
+	content: "After";
+}
+
+p.blockera-block.blockera-block-2 {
+	background-color: #ededed;
+}
+
+p.blockera-block.blockera-block-2::before {
+	color: #ff0000;
+	margin-right: 20px !important;
+	content: "Before";
+}
+
+p.blockera-block.blockera-block-2::after {
+	color: #d500ff;
+	margin-left: 20px !important;
+	content: "After";
+}
+
+p.blockera-block.blockera-block-3 {
+	background-color: #fff1f1;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+}
+
+p.blockera-block.blockera-block-3::before {
+	background-color: #0000001c;
+	padding-top: 3px;
+	padding-right: 5px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	content: attr(id);
+}
+
+p.blockera-block.blockera-block-3::after {
+	background-color: #00000033;
+	padding-top: 3px;
+	padding-right: 5px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	content: attr(id);
+}
+
+p.blockera-block.blockera-block-4 {
+	background-color: #cafccd;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 20px;
+}
+
+p.blockera-block.blockera-block-4::before {
+	background-color: #0000001c;
+	padding-top: 3px;
+	padding-right: 5px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	content: "→#"attr(id)"←";
+}
+
+p.blockera-block.blockera-block-4::after {
+	background-color: #00000033;
+	padding-top: 3px;
+	padding-right: 5px;
+	padding-bottom: 3px;
+	padding-left: 5px;
+	content: "→#"attr(id)"← ";
+}
+
+.blockera-block.blockera-block-5.wp-block-group {
+	background-color: #e2e2e2;
+	padding-top: 20px;
+	padding-right: 19px;
+	padding-bottom: 20px;
+	padding-left: 19px;
+}
+
+.blockera-block.blockera-block-5 :where(p)::before {
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: 10px !important;
+	content: "Number "counter(item)"";
+	display: inline-block !important;
+	height: 30px;
+	background-color: #c2c2c2;
+	text-align: center;
+	font-size: 14px !important;
+	font-weight: 600;
+	font-style: normal;
+	line-height: 30px;
+	border-radius: 30px;
+}
+
+.blockera-block.blockera-block-5.wp-block-group::before {
+	background-color: #00000030;
+	font-size: 14px !important;
+	padding-top: 5px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	margin-bottom: 20px;
+	display: block !important;
+	border-radius: 40px;
+	font-weight: 600;
+	font-style: normal;
+	content: "Before #"attr(id)"";
+}
+
+.blockera-block.blockera-block-5.wp-block-group::after {
+	background-color: #00000030;
+	border-radius: 50px;
+	padding-top: 5px;
+	padding-right: 15px;
+	padding-bottom: 5px;
+	padding-left: 15px;
+	margin-top: 20px;
+	display: inline-block !important;
+	font-size: 14px !important;
+	font-weight: 600;
+	font-style: normal;
+	content: "After #"attr(id)"";
+}
+
+u0026 {
+	n counter-reset: item;
+	n
+}
+
+nnu0026 p {
+	n counter-increment: item;
+	n
+}
+
+n p.blockera-block.blockera-block-6::before {
+	background-color: #ffdcdc;
+	content: "Custom Number: "counter(item)" Here";
+}
