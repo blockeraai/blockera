@@ -28,6 +28,9 @@ return array_merge(
 				'blockera/core/button'          => [
 					'root' => '.login-submit .button.button-primary',
 				],
+				'blockera/elements/inputs-container' => [
+					'root' => ':is(.login-password, .login-username)',
+				],
 			]
 		),
 	]

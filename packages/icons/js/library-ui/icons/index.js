@@ -64,6 +64,7 @@ export { default as BlockListItemMarker } from './block-list-item-marker.svg';
 export { default as BlockListItem } from './block-list-item.svg';
 export { default as BlockLoginFormButton } from './block-login-form-button.svg';
 export { default as BlockLoginFormContainer } from './block-login-form-container.svg';
+export { default as BlockLoginFormInputsContainer } from './block-login-form-inputs-container.svg';
 export { default as BlockLoginFormInputs } from './block-login-form-inputs.svg';
 export { default as BlockLoginFormLabels } from './block-login-form-labels.svg';
 export { default as BlockLoginFormRemember } from './block-login-form-remember.svg';

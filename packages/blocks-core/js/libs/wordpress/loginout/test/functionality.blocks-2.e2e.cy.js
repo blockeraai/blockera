@@ -33,6 +33,15 @@ describe('Loginout Block', () => {
 			'core/button',
 		]);
 
+		cy.checkBlockStatesPickerItems([
+			'elements/form',
+			'elements/input-label',
+			'elements/input',
+			'elements/inputs-container',
+			'elements/remember',
+			'core/button',
+		]);
+
 		//
 		// 1. Edit Block
 		//
@@ -119,6 +128,18 @@ describe('Loginout Block', () => {
 		// while WP not shows form here, we can not assert functionality and not needed
 
 		//
+		// 1.6. elements/inputs-container inner block
+		//
+		setParentBlock();
+		setInnerBlock('elements/inputs-container');
+
+		cy.checkBlockCardItems(['normal', 'hover'], true);
+
+		cy.setColorControlValue('BG Color', '2ccb41');
+
+		// while WP not shows form here, we can not assert functionality and not needed
+
+		//
 		// 2. Check settings tab
 		//
 		setParentBlock();
@@ -177,6 +198,11 @@ describe('Loginout Block', () => {
 			cy.get('.login-submit .button.button-primary')
 				.first()
 				.should('have.css', 'background-color', 'rgb(255, 128, 128)');
+
+			// elements/inputs-container inner block
+			cy.get('.login-username, .login-password')
+				.first()
+				.should('have.css', 'background-color', 'rgb(44, 203, 65)');
 		});
 	});
 });

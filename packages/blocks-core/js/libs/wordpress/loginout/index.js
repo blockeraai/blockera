@@ -43,6 +43,17 @@ export const Loginout: BlockType = {
 				force: true,
 			},
 		},
+		'elements/inputs-container': {
+			name: 'elements/inputs-container',
+			label: __('Inputs Container', 'blockera'),
+			description: __(
+				'The login form inputs container element.',
+				'blockera'
+			),
+			icon: (
+				<Icon icon="block-login-form-inputs-container" iconSize="20" />
+			),
+		},
 		'elements/input': {
 			name: 'elements/input',
 			label: __('Input', 'blockera'),
