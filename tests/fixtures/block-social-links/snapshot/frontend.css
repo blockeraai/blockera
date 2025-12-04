@@ -16,6 +16,7 @@
 .blockera-block.blockera-block-1 .wp-block-social-link {
 	box-shadow: 6px 6px 0 0 #00000026;
 	transition: all 500ms ease 0ms;
+	display: flex !important;
 	gap: 20px;
 }
 
@@ -56,6 +57,7 @@
 .blockera-block.blockera-block-1 .wp-block-social-link {
 	box-shadow: 6px 6px 0 0 #00000026;
 	transition: all 500ms ease 0ms;
+	display: flex !important;
 	gap: 20px;
 }
 
