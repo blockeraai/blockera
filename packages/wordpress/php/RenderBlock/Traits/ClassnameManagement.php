@@ -79,7 +79,7 @@ trait ClassnameManagement {
 
             if ($next_is_blockera_class && ! $prev_is_blockera_class) {
 
-                $final_classname = $classname . ' ' . $previous_class;
+                $final_classname = $previous_class . ' ' . $classname;
             } elseif ($next_is_blockera_class && $prev_is_blockera_class) {
 
 				// Detected duplicate classname, updating the classname.
@@ -88,7 +88,7 @@ trait ClassnameManagement {
 				}
 			} elseif (! $next_is_blockera_class && ! str_contains($previous_class, $classname)) {
 					
-				$final_classname = $classname . ' ' . $previous_class;
+				$final_classname = $previous_class . ' ' . $classname;
 			}
 
 			if (empty($final_classname)) {
