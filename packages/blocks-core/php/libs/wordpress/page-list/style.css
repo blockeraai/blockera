@@ -1,16 +1,16 @@
 /* Icon style */
-.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] {
+:where(.blockera-block.wp-block-page-list[class*="blockera-has-icon-"]) {
 	padding-left: 10px;
 }
 
-.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] li {
+:where(.blockera-block.wp-block-page-list[class*="blockera-has-icon-"]) li {
 	position: relative;
 	gap: var(--blockera--icon--gap, 0.7em);
 	display: flex;
 	align-items: center;
 }
 
-.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] li::before {
+:where(.blockera-block.wp-block-page-list[class*="blockera-has-icon-"]) li::before {
 	content: '';
 	display: inline-block;
 	background-color: var(--blockera--icon--color, currentColor);
@@ -25,7 +25,7 @@
 }
 
 /* Hide the default marker */
-.blockera-block.wp-block-page-list[class*="blockera-has-icon-"] li::marker {
+:where(.blockera-block.wp-block-page-list[class*="blockera-has-icon-"]) li::marker {
 	content: '';
 	display: none;
 }
