@@ -1,0 +1,9 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "wp-block-file--media-[^\\s\"']+",
+			"replace": "wp-block-file--media-id"
+		}
+	]
+}
