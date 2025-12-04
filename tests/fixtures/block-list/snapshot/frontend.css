@@ -7,6 +7,14 @@
 	border-radius: 20px;
 }
 
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1 :where(li) {
+	border-radius: 5px;
+}
+
+
+}
+
 .wp-block-list > li.blockera-block.blockera-block-2 .wp-block-list {
 	margin-right: 5px !important;
 	margin-bottom: 5px;
@@ -24,6 +32,18 @@
 
 .wp-block-list > li.blockera-block.blockera-block-4 a:not(.wp-element-button) {
 	color: #ffffff;
+}
+
+@media screen and (max-width: 478px) {
+	.wp-block-list > li.blockera-block.blockera-block-4 {
+	background-color: #8cc764;
+	color: #193d00;
+	font-weight: 1000;
+	font-style: normal;
+	font-size: 15px !important;
+}
+
+
 }
 
 .wp-block-list > li.blockera-block.blockera-block-5 {
@@ -129,6 +149,7 @@
 	transition: all 500ms ease 0ms;
 	display: flex !important;
 	flex-direction: column;
+	gap: 10px;
 }
 
 ul.blockera-block.blockera-block-8 {
@@ -139,12 +160,88 @@ ul.blockera-block.blockera-block-8 {
 	border: 2px solid #26ff00;
 }
 
+.blockera-block.blockera-block-8 :where(li)::before {
+	display: inline-block !important;
+	content: "Before";
+	background-color: #00000026;
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+	padding-left: 10px;
+	font-size: 16px !important;
+}
+
+.blockera-block.blockera-block-8 :where(li)::after {
+	display: inline-block !important;
+	content: "After";
+	background-color: #00000021;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	font-size: 16px !important;
+	border-radius: 30px;
+}
+
 .blockera-block.blockera-block-8.wp-block-list:hover {
 	background-color: #b3d27e;
 }
 
 ul.blockera-block.blockera-block-8:hover {
 	border: 2px solid #189d00;
+}
+
+.blockera-block.blockera-block-8.wp-block-list::before {
+	background-color: #00000038;
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	content: "List Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-8.wp-block-list::before {
+	order: -1;
+	text-align: center;
+	content: "List Before";
+}
+
+ul.blockera-block.blockera-block-8::before {
+	border-radius: 30px;
+}
+
+
+}
+
+.blockera-block.blockera-block-8.wp-block-list::after {
+	order: 100;
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	background-color: #00000036;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-top: 10px;
+	content: "List After";
+}
+
+@media screen and (max-width: 478px) {
+	ul.blockera-block.blockera-block-8::after {
+	border-radius: 20px;
+}
+
+.blockera-block.blockera-block-8.wp-block-list::after {
+	text-align: center;
+	content: "List After";
+}
+
+
 }
 
 .blockera-block.blockera-block-8.wp-block-list {
@@ -152,11 +249,35 @@ ul.blockera-block.blockera-block-8:hover {
 	transition: all 500ms ease 0ms;
 	display: flex !important;
 	flex-direction: column;
+	gap: 10px;
 }
 
 ul.blockera-block.blockera-block-8 {
 	border: 2px solid #26ff00;
 	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-8 :where(li)::before {
+	display: inline-block !important;
+	content: "Before";
+	background-color: #00000026;
+	padding-top: 2px;
+	padding-right: 10px;
+	padding-bottom: 2px;
+	padding-left: 10px;
+	font-size: 16px !important;
+}
+
+.blockera-block.blockera-block-8 :where(li)::after {
+	display: inline-block !important;
+	content: "After";
+	background-color: #00000021;
+	padding-top: 5px;
+	padding-right: 20px;
+	padding-bottom: 5px;
+	padding-left: 20px;
+	font-size: 16px !important;
+	border-radius: 30px;
 }
 
 .blockera-block.blockera-block-8.wp-block-list:hover {
@@ -167,13 +288,76 @@ ul.blockera-block.blockera-block-8:hover {
 	border: 2px solid #189d00;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-9 {
+.blockera-block.blockera-block-8.wp-block-list::before {
+	background-color: #00000038;
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	content: "List Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-8.wp-block-list::before {
+	order: -1;
+	text-align: center;
+	content: "List Before";
+}
+
+ul.blockera-block.blockera-block-8::before {
+	border-radius: 30px;
+}
+
+
+}
+
+.blockera-block.blockera-block-8.wp-block-list::after {
+	order: 100;
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	background-color: #00000036;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-top: 10px;
+	content: "List After";
+}
+
+@media screen and (max-width: 478px) {
+	ul.blockera-block.blockera-block-8::after {
+	border-radius: 20px;
+}
+
+.blockera-block.blockera-block-8.wp-block-list::after {
+	text-align: center;
+	content: "List After";
+}
+
+
+}
+
+.wp-block-list > li.blockera-block.blockera-block-9::before {
+	background-color: #00000066;
+	content: "Before Overrided!";
+}
+
+.wp-block-list > li.blockera-block.blockera-block-9::after {
+	background-color: #00000059;
+	content: "After Overidded!";
+}
+
+.wp-block-list > li.blockera-block.blockera-block-10 {
 	background-color: #0000002e;
 	order: 100;
 }
 
 @media screen and (max-width: 478px) {
-	.wp-block-list > li.blockera-block.blockera-block-9 {
+	.wp-block-list > li.blockera-block.blockera-block-10 {
 	order: -1;
 }
 
@@ -186,6 +370,18 @@ ul.blockera-block.blockera-block-8:hover {
 
 .wp-block-list > li.blockera-block.blockera-block-4 a:not(.wp-element-button) {
 	color: #ffffff;
+}
+
+@media screen and (max-width: 478px) {
+	.wp-block-list > li.blockera-block.blockera-block-4 {
+	background-color: #8cc764;
+	color: #193d00;
+	font-weight: 1000;
+	font-style: normal;
+	font-size: 15px !important;
+}
+
+
 }
 .wp-block-list > li.blockera-block.blockera-block-5 {
 	background-color: #ffd3d3;
