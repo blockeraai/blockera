@@ -1,65 +1,113 @@
 
-p.blockera-block.blockera-block--1 {
+p.blockera-block.blockera-block-1 {
 	background-color: #dce9ff;
 	width: 100px;
 }
 
-p.blockera-block.blockera-block--2 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-2 {
+	background-color: #acc1ea;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+}
+
+p.blockera-block.blockera-block-3 {
+	background-color: #dbf6ff;
 	min-width: 30px;
 }
 
-p.blockera-block.blockera-block--3 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-4 {
+	background-color: #99cad9;
+	min-width: 100%;
+	min-width: -moz-available;
+	min-width: -webkit-fill-available;
+	min-width: stretch;
+}
+
+p.blockera-block.blockera-block-5 {
+	background-color: #f5dfc5;
 	max-width: 200px !important;
 }
 
-p.blockera-block.blockera-block--4 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-6 {
+	background-color: #d7b897;
+	max-width: 100%;
+	max-width: -moz-available !important;
+	max-width: -webkit-fill-available !important;
+	max-width: stretch !important;
+}
+
+p.blockera-block.blockera-block-7 {
+	background-color: #dbebc5;
 	height: 100px;
 }
 
-p.blockera-block.blockera-block--5 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-8 {
+	background-color: #b1c791;
+	height: 100%;
+	height: -moz-available;
+	height: -webkit-fill-available;
+	height: stretch;
+}
+
+p.blockera-block.blockera-block-9 {
+	background-color: #dbffe8;
 	min-height: 100px;
 }
 
-p.blockera-block.blockera-block--6 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-9 {
+	background-color: #9dd9b4;
+	min-height: 100%;
+	min-height: -moz-available;
+	min-height: -webkit-fill-available;
+	min-height: stretch;
+}
+
+p.blockera-block.blockera-block-10 {
+	background-color: #e3f8b7;
 	max-height: 20px;
 }
 
-p.blockera-block.blockera-block--7 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-11 {
+	background-color: #bdd48b;
+	max-height: 100%;
+	max-height: -moz-available;
+	max-height: -webkit-fill-available;
+	max-height: stretch;
+}
+
+p.blockera-block.blockera-block-12 {
+	background-color: #e4dbff;
 	overflow: hidden;
 }
 
-p.blockera-block.blockera-block--8 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-13 {
+	background-color: #b4a8df;
 	overflow: scroll;
 }
 
-p.blockera-block.blockera-block--9 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-14 {
+	background-color: #fedbff;
 	aspect-ratio: 3/2;
 }
 
-p.blockera-block.blockera-block--10 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-15 {
+	background-color: #eca9ef;
 	aspect-ratio: 5 / 1;
 }
 
-p.blockera-block.blockera-block--11 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-16 {
+	background-color: #ffd2e0;
 	object-fit: contain;
 }
 
-p.blockera-block.blockera-block--12 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-17 {
+	background-color: #e195af;
 	object-position: 100% 100%;
 }
 
-p.blockera-block.blockera-block--13 {
-	background-color: #dce9ff;
+p.blockera-block.blockera-block-18 {
+	background-color: #f8ccaa;
 	box-sizing: border-box;
 }
