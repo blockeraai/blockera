@@ -2,6 +2,7 @@
 .blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	margin-bottom: 24px;
 	border-radius: 20px;
+	width: 200px;
 	aspect-ratio: 4/3;
 	object-fit: cover;
 }
@@ -10,10 +11,81 @@
 	margin-bottom: 24px;
 }
 
+.blockera-block.blockera-block-1.wp-block-image :is(img, svg) {
+	margin-bottom: 0;
+	border: 3px solid #ff1515;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-image {
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center !important;
+	align-items: center !important;
+	gap: 20px;
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-image::before {
+	display: inline-block !important;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	background-color: #dddddd;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::before, svg:not(:empty))::before {
+	border-radius: 10px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::before, svg:not(:empty))::before {
+	border-radius: 40px;
+}
+
+.blockera-block.blockera-block-1.wp-block-image::before {
+	content: "Before";
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::after, svg:not(:empty))::after {
+	border-radius: 40px;
+}
+
+.blockera-block.blockera-block-1.wp-block-image::after {
+	background-color: #999999;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	display: inline-block !important;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-image::after {
+	align-self: stretch;
+	content: "After";
+}
+
+.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::after, svg:not(:empty))::after {
+	border-radius: 50px;
+}
+
+
+}
+
 .blockera-block.blockera-block-1 img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover;
+	width: 200px;
 }
 
 .blockera-block.blockera-block-2.wp-block-image {
