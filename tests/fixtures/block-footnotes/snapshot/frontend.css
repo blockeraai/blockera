@@ -9,6 +9,11 @@
 	padding-bottom: 20px;
 	padding-left: 50px;
 	border: 2px solid #ff2e2e;
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center !important;
+	align-items: flex-start !important;
+	gap: 30px;
 }
 
 .blockera-block.blockera-block-1 a:not(.wp-element-button):last-child {
@@ -17,6 +22,7 @@
 	padding-right: 4px;
 	padding-bottom: 0;
 	padding-left: 4px;
+	margin-left: 20px !important;
 	border-radius: 36px;
 	text-decoration: initial;
 	color: #007b10;
@@ -57,4 +63,40 @@
 
 .blockera-block.blockera-block-1.wp-block-footnotes:hover {
 	background-color: #ff9797;
+}
+
+.blockera-block.blockera-block-1:hover a:not(.wp-element-button):last-child {
+	background-color: #ff0202;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-1.wp-block-footnotes::before {
+	background-color: #ff7676;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 10px;
+	display: inline-block !important;
+	font-size: 16px !important;
+	font-weight: 1000;
+	font-style: normal;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-footnotes::after {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	font-size: 18px !important;
+	font-weight: 1000;
+	font-style: normal;
+	background-color: #d45959;
+	border-radius: 40px;
+	border: 2px solid #900404;
+	color: #ffffff;
+	align-self: stretch;
+	text-align: center;
+	content: "After";
 }
