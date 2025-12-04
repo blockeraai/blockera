@@ -63,6 +63,36 @@
 	color: #ffd500;
 }
 
+.blockera-block.blockera-block-1.wp-block-math::before {
+	display: block !important;
+	background-color: #00000038;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-1.wp-block-math::after {
+	background-color: #00000038;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	margin-top: 10px;
+	border-radius: 5px;
+	display: block !important;
+	content: "After";
+}
+
 .blockera-block.blockera-block-1 mtd {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
