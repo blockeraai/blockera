@@ -16,10 +16,13 @@
 	font-style: normal;
 	color: #ffffff;
 	background-color: #ff4c4c;
+	padding-top: 5px;
 	padding-right: 10px;
+	padding-bottom: 5px;
 	padding-left: 10px;
 	border-radius: 50px;
 	text-decoration: initial;
+	display: inline-block !important;
 }
 
 .blockera-block.blockera-block-1 :is(strong, b) {
@@ -52,6 +55,99 @@
 
 .blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link:hover {
 	background-color: #ff0101;
+}
+
+.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::before {
+	font-size: 14px !important;
+	content: "Before";
+	display: inline-block !important;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	background-color: #00000033;
+	border-radius: 5px;
+}
+
+.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::after {
+	font-size: 14px !important;
+	content: "After";
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	background-color: #00000030;
+	border-radius: 5px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-excerpt {
+	display: flex !important;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link {
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border-radius: 5px;
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-post-excerpt::before {
+	display: inline-block !important;
+	border-radius: 5px;
+	background-color: #0000002b;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-excerpt::before {
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	content: "Before";
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-post-excerpt::after {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	background-color: #00000036;
+	border-radius: 5px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-post-excerpt::after {
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	content: "After";
+}
+
+
 }
 
 .blockera-block.blockera-block-1 mark.has-inline-color {
