@@ -1,0 +1,7 @@
+.blockera-block.wp-block-post-featured-image {
+	box-sizing: border-box;
+}
+
+.blockera-block.wp-block-post-featured-image :where(img) {
+	transition: inherit;
+}

@@ -15,16 +15,6 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockeraWidth'             => $sizeSelector,
-				'blockeraMinWidth'          => $sizeSelector,
-				'blockeraMaxWidth'          => $sizeSelector,
-				'blockeraHeight'            => $sizeSelector,
-				'blockeraMinHeight'         => $sizeSelector,
-				'blockeraMaxHeight'         => $sizeSelector, 
-				'blockeraFit'               => $sizeSelector,
-				'blockeraRatio'             => $sizeSelector,
-				'blockeraBorder'            => $sizeSelector,
-				'blockeraBorderRadius'      => $sizeSelector,
 				'border'                    => $sizeSelector,
 				'shadow'                    => $sizeSelector,
 				'filter'                    => $sizeSelector,
