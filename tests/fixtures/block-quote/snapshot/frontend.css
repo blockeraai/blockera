@@ -141,35 +141,154 @@
 
 .blockera-block.blockera-block-2 :where(p) {
 	background-color: #ffb2b2;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)) {
 	background-color: #5dff5d;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-2 cite {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	background-color: #e88081;
+	font-size: 16px !important;
+	font-weight: 600;
+	font-style: normal;
 }
 
 .blockera-block.blockera-block-2 :where(p)::before {
-	background-color: #ff6868;
+	border-radius: 10px;
 	content: "Before";
+	background-color: #ff6868;
+	display: inline-block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 }
 
 .blockera-block.blockera-block-2 :where(p)::after {
-	background-color: #d43a3a;
+	border-radius: 10px;
 	content: "After";
+	background-color: #d43a3a;
+	display: inline-block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 }
 
 .blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading))::before {
-	background-color: #00c503;
+	border-radius: 10px;
 	content: "Before";
+	background-color: #00c503;
+	display: inline-block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 }
 
 .blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading))::after {
-	background-color: #00c503;
+	border-radius: 10px;
 	content: "After";
+	background-color: #00c503;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	display: inline-block !important;
+}
+
+.blockera-block.blockera-block-2 cite::before {
+	display: inline-block !important;
+	content: "Before";
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	background-color: #00000030;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 cite::after {
+	display: inline-block !important;
+	content: "After";
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	background-color: #00000040;
+	border-radius: 10px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-quote {
+	border-top: 10px solid #ff0000;
+	border-left: 0px solid;
+	padding-top: 30px;
+}
+
+.blockera-block.blockera-block-2 :where(p)::after {
+	content: "After";
+	display: flex !important;
+}
+
+.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)) {
+	display: flex !important;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 cite {
+	display: flex !important;
+	padding-top: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	padding-left: 15px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 :where(p) {
+	display: flex !important;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 cite.is-layout-constrained > * + * {
+	margin-block-start: 10px !important;
+}
+
+.blockera-block.blockera-block-2 :where(p).is-layout-constrained > * + * {
+	margin-block-start: 10px !important;
+}
+
+.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)).is-layout-constrained > * + * {
+	margin-block-start: 20px !important;
+}
+
+
 }
 
 .blockera-block.blockera-block-2.wp-block-quote::before {
 	background-color: #ff8a8a;
 	display: block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 	margin-bottom: 20px;
 	content: "Before";
 }
@@ -177,6 +296,10 @@
 .blockera-block.blockera-block-2.wp-block-quote::after {
 	background-color: #ff3838;
 	display: block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 	margin-top: 20px;
 	content: "After";
 }
