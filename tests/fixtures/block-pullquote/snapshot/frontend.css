@@ -33,31 +33,184 @@
 .blockera-block.blockera-block-2.wp-block-pullquote {
 	background-color: #d0ffd0;
 	padding-top: 20px;
-	padding-right: 30px;
+	padding-right: 20px;
 	padding-bottom: 20px;
-	padding-left: 30px;
+	padding-left: 20px;
 	font-size: 20px !important;
 	font-style: normal;
 	font-weight: 500;
+	display: flex !important;
+	flex-direction: row;
+	justify-content: center !important;
+	gap: 10px;
 }
 
 .blockera-block.blockera-block-2 :where(p) {
 	background-color: #6acb6a;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 	margin-bottom: 0;
 }
 
 .blockera-block.blockera-block-2 cite {
 	background-color: #4fb54f;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
+	gap: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-2 cite::before {
+	border-radius: 10px;
+	content: "Before";
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	background-color: #00000029;
+}
+
+.blockera-block.blockera-block-2 cite::after {
+	background-color: #0000003b;
+	content: "After";
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 :where(p)::before {
+	border-radius: 10px;
+	content: "Before";
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	background-color: #00000036;
+}
+
+.blockera-block.blockera-block-2 :where(p)::after {
+	border-radius: 10px;
+	content: "After";
+	background-color: #00000030;
+	display: inline-block !important;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-pullquote {
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: center !important;
+	border-radius: 20px;
+}
+
+.blockera-block.blockera-block-2 cite {
+	flex-direction: column;
+	justify-content: center !important;
+	align-items: center !important;
+	gap: 20px;
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 :where(p) {
+	display: flex !important;
+	flex-direction: column;
+	gap: 20px;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	margin-bottom: 10px;
+}
+
+.blockera-block.blockera-block-2 cite::before {
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-2 cite::after {
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	content: "After";
+}
+
+
 }
 
 .blockera-block.blockera-block-2.wp-block-pullquote::before {
 	display: block !important;
 	background-color: #9ce29c;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border-radius: 5px;
+	width: 200px;
 	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-pullquote::before {
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	content: "Before";
+}
+
+
 }
 
 .blockera-block.blockera-block-2.wp-block-pullquote::after {
 	background-color: #7fd07f;
 	display: block !important;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border-radius: 5px;
+	width: 200px;
 	content: "After";
 }
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-pullquote::after {
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	content: "After";
+}
+
+
+}
+
+u0026 blockquote {
+	ntwidth: -moz-available;
+	ntwidth: -webkit-fill-available;
+	ntwidth: stretch;
+	n
+}
+
+n
