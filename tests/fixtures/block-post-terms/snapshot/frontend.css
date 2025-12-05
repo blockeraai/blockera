@@ -76,6 +76,9 @@
 	flex-wrap: wrap !important;
 	row-gap: 20px;
 	column-gap: 10px;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: center !important;
 }
 
 
@@ -144,12 +147,16 @@
 }
 
 .blockera-block.blockera-block-3 .wp-block-post-terms__prefix {
-	width: 100%;
 	background-color: #ddbe70;
 	padding-top: 5px;
 	padding-right: 10px;
 	padding-bottom: 5px;
 	padding-left: 10px;
+	display: inline-block !important;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
 }
 
 .blockera-block.blockera-block-3 a {
@@ -158,7 +165,12 @@
 	padding-right: 10px;
 	padding-bottom: 5px;
 	padding-left: 10px;
-	transition: all 1000ms ease 0ms;
+	transition: all 500ms ease 0ms;
+	flex: 1 1 0%;
+	display: flex !important;
+	flex-direction: row;
+	align-items: center !important;
+	justify-content: space-between !important;
 }
 
 .blockera-block.blockera-block-3 .wp-block-post-terms__suffix {
@@ -166,12 +178,76 @@
 }
 
 .blockera-block.blockera-block-3 a:hover {
-	color: #ffffff;
+	border-radius: 40px;
 	background-color: #9b6a00;
+	color: #ffffff;
+}
+
+.blockera-block.blockera-block-3 a::before {
+	text-align: center;
+	content: "→";
+	display: inline-block !important;
+	padding-top: 2px;
+	padding-right: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	margin-right: 10px !important;
+	background-color: #0000002e;
+	border-radius: 40px;
+	width: 20px;
+	height: 20px;
+}
+
+.blockera-block.blockera-block-3 a::after {
+	border-radius: 40px;
+	content: "←";
+	padding-top: 2px;
+	padding-right: 2px;
+	padding-bottom: 2px;
+	padding-left: 2px;
+	margin-left: 10px !important;
+	text-align: center;
+	width: 20px;
+	height: 20px;
+	display: inline-block !important;
+	background-color: #0000003d;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-3.wp-block-post-terms {
+	flex-direction: column;
+}
+
+
 }
 
 .blockera-block.blockera-block-3:hover .wp-block-post-terms__prefix {
 	border-radius: 60px;
+}
+
+.blockera-block.blockera-block-3.wp-block-post-terms::before {
+	background-color: #0000003b;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	border-radius: 20px;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	content: "Before";
+}
+
+.blockera-block.blockera-block-3.wp-block-post-terms::after {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+	background-color: #0000003d;
+	border-radius: 20px;
+	flex: 1 1 0%;
+	content: "After";
 }
 .blockera-block.blockera-block-4.wp-block-post-terms {
 	background-color: #f9b8ff;
