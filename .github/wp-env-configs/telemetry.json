@@ -1,5 +1,5 @@
 {
-	"core": "https://wordpress.org/wordpress-6.9-RC3.zip",
+	"core": "https://wordpress.org/wordpress-latest.zip",
 	"plugins": ["."],
 	"config": {
 		"BLOCKERA_TELEMETRY_OPT_IN_OFF": false,
