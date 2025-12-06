@@ -58,6 +58,15 @@ export function getParentFlexBlockInfo(block: {
 			} else {
 				parentElement = currentBlockElement?.parentElement;
 			}
+
+			// If the parent element is a social link, use the parent element as parent element.
+			// This is a workaround to get the parent element of the special blocks like social link.
+			if (
+				parentElement &&
+				parentElement.classList.contains('wp-social-link')
+			) {
+				parentElement = parentElement.parentElement;
+			}
 		} else if (block.currentBlock !== 'master') {
 			const currentBlockType = getBlockType(block.blockName);
 
