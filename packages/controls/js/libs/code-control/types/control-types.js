@@ -63,4 +63,8 @@ export type CodeControlProps = {
 	 * @default 'block'
 	 */
 	suggestionsType?: 'block' | 'site',
+	/**
+	 * Text to show when the editor is loading
+	 */
+	loadingText?: string,
 };

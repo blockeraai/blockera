@@ -30,7 +30,7 @@ import {
  * Internal dependencies
  */
 import BaseControl from '../base-control';
-import { DynamicHtmlFormatter } from '../';
+import { DynamicHtmlFormatter, TextLoading } from '../';
 import { useControlContext } from '../../context';
 import type { CodeControlProps } from './types';
 
@@ -210,6 +210,7 @@ const CodeControl = ({
 	editable = true,
 	description = '',
 	suggestionsType = 'block',
+	loadingText,
 	//
 	id,
 	label = '',
@@ -305,6 +306,7 @@ const CodeControl = ({
 					height={height || 200}
 					defaultLanguage={lang}
 					defaultValue={value}
+					loading={<TextLoading text={loadingText} />}
 					onChange={(newValue) => {
 						setShowPlaceholder(newValue === '');
 
