@@ -4,6 +4,32 @@
 	width: 300px;
 }
 
-.blockera-block.blockera-block-2.wp-block-spacer {
-	height: 300px;
+u0026 {
+	n background-color: #ffb9b9;
+	n
 }
+
+nnu0026 .components-resizable-box__container {
+	n background-color: transparent;
+	n
+}
+
+n .blockera-block.blockera-block-2.wp-block-spacer {
+	height: 300px;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+}
+
+u0026 {
+	n background-color: #bcdd9a;
+	n
+}
+
+nnu0026 .components-resizable-box__container {
+	n background-color: transparent;
+	n
+}
+
+n
