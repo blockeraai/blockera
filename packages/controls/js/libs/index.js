@@ -10,7 +10,7 @@ export * from './tabs/types';
 export { default as Grid } from './grid';
 export { Button, Buttons } from './button';
 export { default as Modal } from './modal';
-export { LoadingComponent } from './loading';
+export { TextLoading } from './loading';
 export { default as Divider } from './divider';
 export { default as Popover } from './popover';
 export type { PopoverPlacement } from './popover/types';
