@@ -453,7 +453,7 @@ describe('Util functions', () => {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -553,7 +553,7 @@ describe('Util functions', () => {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -653,7 +653,7 @@ describe('Util functions', () => {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -748,7 +748,7 @@ describe('Util functions', () => {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -843,7 +843,7 @@ describe('Util functions', () => {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -943,7 +943,7 @@ describe('Util functions', () => {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{

@@ -586,7 +586,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -687,7 +687,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
@@ -783,7 +783,7 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 					options: [
 						{
 							value: 'stretch',
-							label: 'Stretch',
+							label: 'Fill Available Space',
 							format: 'number',
 						},
 						{
