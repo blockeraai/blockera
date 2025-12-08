@@ -148,12 +148,9 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(
 				SavePost::class,
-				function ( Application $app) use ( $html_processor, $plugin_args) {
-					$render_instance = new Render($app, $plugin_args);
-
-					$render_instance->setHtmlProcessor($html_processor);
+				function ( Application $app) {
 			
-					return new SavePost($app, $render_instance);
+					return new SavePost($app);
 				}
 			);
 
@@ -276,8 +273,8 @@ class AppServiceProvider extends ServiceProvider {
 
 		add_action(
             'save_post',
-            function( int $post_id, \WP_Post $post) use ( $supports): void {
-		    	$this->app->make(SavePost::class)->save($post_id, $post, $supports);
+            function( int $post_id, \WP_Post $post): void {
+		    	$this->app->make(SavePost::class)->save($post_id, $post);
 			},
             9e8,
             2
