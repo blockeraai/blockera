@@ -57,9 +57,19 @@ class HTMLProcessor {
 		$this->css_rules = [];
 		$cleaned_html    = $html;
 
-		// Extract inline styles from HTML.
+		/**
+		 * Extract inline styles from HTML.
+		 * 
+		 * Regex pattern breakdown:
+		 * - Group 1: ([a-zA-Z][a-zA-Z0-9]*) - Tag name (e.g., 'div', 'span')
+		 * - Group 2: ([^>]*?) - Attributes before style attribute (before_attrs)
+		 * - Group 3: ([^"\']+) - Style attribute value (style)
+		 * - Group 4: ([^>]*) - Attributes after style attribute (after_attrs)
+		 * 
+		 * Note: \b before 'style' ensures it's a separate word, not part of another attribute (e.g., 'displaystyle')
+		 */ 
 		preg_match_all(
-			'/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?)\s*style\s*=\s*["\']([^"\']+)["\']([^>]*)>/is',
+			'/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?)\bstyle\s*=\s*["\']([^"\']+)["\']([^>]*)>/is',
 			$html,
 			$matches,
 			PREG_SET_ORDER | PREG_OFFSET_CAPTURE
@@ -99,13 +109,14 @@ class HTMLProcessor {
 
 			$updated_attrs = $all_attrs;
 			if ( ! empty( $classes_to_add ) ) {
-				$updated_attrs = $this->addClassnamesToAttrs( $all_attrs, $classes_to_add );
+				$updated_attrs = $this->addClassnamesToAttrs( trim($all_attrs), $classes_to_add );
 			}
+			$updated_attrs = trim( $updated_attrs );
 
 			$new_tag = '<' . $tag_name;
 
-			if ( ! empty( trim( $updated_attrs ) ) ) {
-				$new_tag .= ' ' . trim( $updated_attrs );
+			if ( ! empty( $updated_attrs ) ) {
+				$new_tag .= ' ' . $updated_attrs;
 			}
 
 			$new_tag .= '>';
