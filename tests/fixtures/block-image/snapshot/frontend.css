@@ -1,6 +1,6 @@
 
 .blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
-	margin-bottom: 24px;
+	margin-bottom: 64px;
 	border-radius: 20px;
 	width: 200px;
 	aspect-ratio: 4/3;
@@ -8,11 +8,10 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-image {
-	margin-bottom: 24px;
+	margin-bottom: 64px;
 }
 
 .blockera-block.blockera-block-1.wp-block-image :is(img, svg) {
-	margin-bottom: 0;
 	border: 3px solid #ff1515;
 }
 
