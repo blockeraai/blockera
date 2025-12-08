@@ -453,7 +453,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 			'display' => 'has-display',
 		];
 
-		$result = $this->processor->cleanupHTML( $html, $global_css_props );
+		$result = $this->processor->cleanupHTML( $html, '',$global_css_props );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 		$this->assertStringContainsString( 'class="has-color has-display"', $result['html'] );
@@ -468,7 +468,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 			'width' => 'has-width',
 		];
 
-		$result = $this->processor->cleanupHTML( $html, $global_css_props );
+		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 		$this->assertStringContainsString( 'class="has-color"', $result['html'] );
@@ -483,7 +483,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 			'color' => 'has-color',
 		];
 
-		$result = $this->processor->cleanupHTML( $html, $global_css_props );
+		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 		$this->assertStringContainsString( 'class="existing-class has-color"', $result['html'] );
@@ -493,7 +493,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$html = '<div style="color: red;">Content</div>';
 
-		$result = $this->processor->cleanupHTML( $html, [] );
+		$result = $this->processor->cleanupHTML( $html, '', [] );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 		$this->assertStringNotContainsString( 'class=', $result['html'] );
@@ -508,7 +508,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 			'display' => 'has-display',
 		];
 
-		$result = $this->processor->cleanupHTML( $html, $global_css_props );
+		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
 		$this->assertStringContainsString( '<div class="has-color">', $result['html'] );
 		$this->assertStringContainsString( '<p class="has-display">', $result['html'] );
@@ -522,7 +522,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 			'color' => 'has-color',
 		];
 
-		$result = $this->processor->cleanupHTML( $html, $global_css_props );
+		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
 		$count = substr_count( $result['html'], 'has-color' );
 		$this->assertEquals( 1, $count );

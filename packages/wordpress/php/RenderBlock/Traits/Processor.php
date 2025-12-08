@@ -282,10 +282,10 @@ trait Processor {
 	 *
 	 * @return string The cleaned html.
 	 */
-	protected function cleanup( string $html, string $classname): string {
+	protected function cleanup( string $html, string $classname, string $unique_selector): string {
 		$html = $this->html_processor->updateWrapperClassname($html, $classname);
 
-		$cleanup_result = $this->html_processor->cleanupHTML($html, $this->global_css_props_classes);	
+		$cleanup_result = $this->html_processor->cleanupHTML($html, $unique_selector, $this->global_css_props_classes);	
 
 		// Replace html with the updated html.
 		$html = $cleanup_result['html'];

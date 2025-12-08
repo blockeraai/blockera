@@ -16,6 +16,13 @@ namespace Blockera\WordPress\RenderBlock;
 class HTMLProcessor {
 
 	/**
+	 * The root selector.
+	 *
+	 * @var string
+	 */
+	protected string $root_selector = '';
+
+	/**
 	 * Placeholder prefix for HTML variable replacement.
 	 *
 	 * @var string
@@ -41,11 +48,12 @@ class HTMLProcessor {
 	 * 3. Tag name only
 	 *
 	 * @param string $html The HTML content to process.
-	 * @param array  $global_css_props_classes The global CSS props classes.
+	 * @param string $root_selector The root selector. Optional.
+	 * @param array  $global_css_props_classes The global CSS props classes. Optional.
 	 *
 	 * @return array Array with 'html' (cleaned) and 'css' (generated rules).
 	 */
-	public function cleanupHTML( string $html, array $global_css_props_classes = [] ): array {
+	public function cleanupHTML( string $html, string $root_selector = '', array $global_css_props_classes = [] ): array {
 
 		if ( empty( $html ) ) {
 			return [
@@ -53,6 +61,9 @@ class HTMLProcessor {
 				'css'  => [],
 			];
 		}
+
+		// Set the root selector.
+		$this->root_selector = $root_selector;
 
 		$this->css_rules = [];
 		$cleaned_html    = $html;
@@ -513,7 +524,11 @@ class HTMLProcessor {
 				$concatenated_classes = '.' . implode( '.', $filtered_classes );
 
 				if ( $with_tagname ) {
-					return $tag_name . $concatenated_classes;
+					if (empty($this->root_selector)) {
+						return $tag_name . $concatenated_classes;
+					}
+
+					return $this->root_selector . ' ' . $tag_name . $concatenated_classes;
 				}
 
 				return $concatenated_classes;

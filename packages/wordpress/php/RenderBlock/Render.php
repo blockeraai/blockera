@@ -247,10 +247,10 @@ class Render {
 		$args['block'] = $this->block;
 
 		if (empty($this->block['innerBlocks'])) {
-			$html = $this->cleanup($html, $classname);
+			$html = $this->cleanup($html, $classname, $args['unique_selector']);
 		} else {
 			$html = $this->replaceHTML($html);
-			$html = $this->cleanup($html, $classname);
+			$html = $this->cleanup($html, $classname, $args['unique_selector']);
 			$html = $this->replacePlaceholders($html);
 
 			// Reset the processed html inside the parent block.
