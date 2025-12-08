@@ -623,7 +623,7 @@ class HTMLProcessor {
 
 		foreach ( $this->css_rules as $id => $css_rules ) {
 			foreach ($css_rules as $selector => $declarations) {
-				$declarations_str = implode( '; ', $declarations );
+				$declarations_str = trim(implode( '; ', $declarations ));
 
 				if ( 'root' === $id ) {
 					$parts = array_filter(array_map('trim', $declarations));
@@ -631,8 +631,15 @@ class HTMLProcessor {
 					$merged_declarations = [];
 
 					foreach ($parts as $part) {
-						list( $property, $value ) = array_filter(array_map( 'trim', explode( ':', $part) ));
+						$exploded = array_filter(array_map( 'trim', explode( ':', $part) ));
 					
+						if (2 > count($exploded)) {
+							$property = $exploded[0];
+							$value    = ' ';
+						} else {
+							list( $property, $value ) = $exploded;
+						}
+						
 						$merged_declarations = array_merge(
 							$merged_declarations,
 							[ $property => $value ]
