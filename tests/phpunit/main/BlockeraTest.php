@@ -236,8 +236,6 @@ class BlockeraTest extends AppTestCase {
 		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_content, $matches);
 		$inline_css = !empty($matches[1]) ? implode("\n", $matches[1]) : '';
 
-		$inline_css = apply_filters('blockera/front-page/print-inline-css-styles', '');
-
 		$this->assertMatchesSnapshot($inline_css, new CssDriver());
 
 		wp_delete_post($post_id);
