@@ -2,7 +2,7 @@
 .blockera-block.blockera-block-1.wp-block-verse {
 	border-color: #ff9292;
 	border-width: 3px;
-	border-radius: 10px;
+	border-radius: 50px;
 	background-color: #fadbdb;
 	padding-top: 20px;
 	padding-right: 20px;
@@ -39,8 +39,66 @@
 	background-color: #ff64ff;
 }
 
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-verse {
+	border-radius: 5px;
+}
+
+
+}
+
 .blockera-block.blockera-block-1.wp-block-verse:hover {
 	background-color: #ffa1a1;
+}
+
+.blockera-block.blockera-block-1.wp-block-verse::before {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	background-color: #0000003d;
+	border-radius: 50px;
+	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-verse::before {
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	content: "Before";
+}
+
+
+}
+
+.blockera-block.blockera-block-1.wp-block-verse::after {
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	display: inline-block !important;
+	background-color: #0000002e;
+	border-radius: 50px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-verse::after {
+	margin-top: 10px;
+	width: 100%;
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
+	border-radius: 5px;
+	content: "After";
+}
+
+
 }
 
 .blockera-block.blockera-block-1 mark.has-inline-color {
