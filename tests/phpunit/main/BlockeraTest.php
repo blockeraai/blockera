@@ -225,17 +225,17 @@ class BlockeraTest extends AppTestCase {
 		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
 
-		while(have_posts()) {
-			the_post();
-			
-			$blocks = parse_blocks(get_the_content());
-			$content = '';
+		do_blocks(get_post($post_id)->post_content);
 
-			foreach ($blocks as $block) {
-				$content .= $this->renderBlock($block);
-			}
-		}
+		// Capture wp_head output to extract inline styles
+		ob_start();
+		wp_head();
+		$head_content = ob_get_clean();
 		
+		// Extract inline styles from wp_head output
+		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_content, $matches);
+		$inline_css = !empty($matches[1]) ? implode("\n", $matches[1]) : '';
+
 		$inline_css = apply_filters('blockera/front-page/print-inline-css-styles', '');
 
 		$this->assertMatchesSnapshot($inline_css, new CssDriver());
