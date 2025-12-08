@@ -9,16 +9,20 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
-	ConditionalWrapper,
 	Flex,
-	PanelBodyControl,
-	ControlContextProvider,
-	InputControl,
-	ToggleSelectControl,
-	SelectControl,
+	isValid,
 	BaseControl,
+	InputControl,
+	SelectControl,
+	PanelBodyControl,
+	ConditionalWrapper,
+	ToggleSelectControl,
+	ControlContextProvider,
 } from '@blockera/controls';
-import { extensionClassNames } from '@blockera/classnames';
+import {
+	extensionClassNames,
+	controlInnerClassNames,
+} from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -31,6 +35,7 @@ import type { TSizeProps } from './types/size-props';
 import { ObjectFit, AspectRatio } from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { WidthFill } from './components/width-fill';
 
 export const SizeExtension: ComponentType<TSizeProps> = ({
 	block,
@@ -177,8 +182,20 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 								}}
 								controlAddonTypes={['variable']}
 								variableTypes={['width-size']}
+								className={controlInnerClassNames(
+									'width-input'
+								)}
 								{...extensionProps.blockeraWidth}
-							/>
+							>
+								{!isValid(values?.blockeraWidth) && (
+									<WidthFill
+										blockeraWidth={values?.blockeraWidth}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+									/>
+								)}
+							</InputControl>
 						</ControlContextProvider>
 					</EditorFeatureWrapper>
 
@@ -640,7 +657,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 								</p>
 							</>
 						}
-						columns="1fr 160px"
+						columns="1fr 159px"
 						isDeselectable={true}
 						options={[
 							{
