@@ -21,6 +21,7 @@
 
 .blockera-block.blockera-block--1 :where(p) {
 	color: #c79c00;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block--1 :where(.wp-block-button > .wp-element-button) {
@@ -33,12 +34,18 @@
 
 .blockera-block.blockera-block--1 .wp-block-list {
 	background-color: #ffb266;
-	color: #ff902e;
+	color: #984700;
 	font-size: 15px !important;
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	transition: all 500ms ease 0ms;
 }
 
 .blockera-block.blockera-block--1 .wp-block-code {
 	background-color: #39d92e;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block--1 :where(p)::before {
@@ -66,6 +73,11 @@
 
 .blockera-block.blockera-block--1 .wp-block-buttons {
 	background-color: #db9999;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block--1 .wp-block-code:hover {
@@ -74,6 +86,15 @@
 
 .blockera-block.blockera-block--1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading):hover {
 	color: #006eff;
+}
+
+.blockera-block.blockera-block--1 ul {
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block--1 .wp-block-list:hover {
+	background-color: #e69544;
+	color: #512600;
 }
 
 @media screen and (max-width: 478px) {
@@ -107,6 +128,7 @@
 
 .blockera-block.blockera-block--1 :where(p) {
 	color: #c79c00;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block--1 :where(.wp-block-button > .wp-element-button) {
@@ -119,12 +141,18 @@
 
 .blockera-block.blockera-block--1 .wp-block-list {
 	background-color: #ffb266;
-	color: #ff902e;
+	color: #984700;
 	font-size: 15px !important;
+	padding-top: 10px;
+	padding-right: 30px;
+	padding-bottom: 10px;
+	padding-left: 30px;
+	transition: all 500ms ease 0ms;
 }
 
 .blockera-block.blockera-block--1 .wp-block-code {
 	background-color: #39d92e;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block--1 :where(p)::before {
@@ -152,6 +180,11 @@
 
 .blockera-block.blockera-block--1 .wp-block-buttons {
 	background-color: #db9999;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block--1 .wp-block-code:hover {
@@ -160,6 +193,15 @@
 
 .blockera-block.blockera-block--1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading):hover {
 	color: #006eff;
+}
+
+.blockera-block.blockera-block--1 ul {
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block--1 .wp-block-list:hover {
+	background-color: #e69544;
+	color: #512600;
 }
 
 @media screen and (max-width: 478px) {
