@@ -405,3 +405,32 @@ if (! function_exists('blockera_enqueue_global_styles')) {
 		blockera_add_global_styles_for_blocks();
 	}
 }
+
+if (! function_exists('blockera_sort_css_by_block_number')) {
+	/**
+	 * Sort CSS array based on blockera-block-{number} in CSS strings.
+	 * It's used for development purposes to ensure the CSS is sorted by block number.
+	 *
+	 * @param array $css_array Array of CSS strings containing blockera-block-{number}.
+	 * @return array Sorted CSS array.
+	 */
+	function blockera_sort_css_by_block_number( array $css_array): array {
+		usort(
+            $css_array,
+            function( $a, $b) {
+				// Extract block number from first CSS string.
+				preg_match('/blockera-block-(\d+)/', $a, $matches_a);
+				$number_a = isset($matches_a[1]) ? (int) $matches_a[1] : PHP_INT_MAX;
+			
+				// Extract block number from second CSS string.
+				preg_match('/blockera-block-(\d+)/', $b, $matches_b);
+				$number_b = isset($matches_b[1]) ? (int) $matches_b[1] : PHP_INT_MAX;
+			
+				// Compare the numbers.
+				return $number_a <=> $number_b;
+			}
+        );
+		
+		return $css_array;
+	}
+}
