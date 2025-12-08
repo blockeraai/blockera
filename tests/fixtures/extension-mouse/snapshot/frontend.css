@@ -1,15 +1,15 @@
 
-p.blockera-block.blockera-block--1 {
+p.blockera-block.blockera-block-1 {
 	background-color: #bde1ff;
 	cursor: wait;
 }
 
-p.blockera-block.blockera-block--2 {
-	background-color: #bde1ff;
+p.blockera-block.blockera-block-2 {
+	background-color: #aceab3;
 	user-select: contain;
 }
 
-p.blockera-block.blockera-block--3 {
-	background-color: #bde1ff;
+p.blockera-block.blockera-block-3 {
+	background-color: #efcf9f;
 	pointer-events: none;
 }
