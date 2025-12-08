@@ -15,21 +15,18 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// Feature selectors.
 				'width'                     => $sizeSelector,
-				'blockeraWidth'             => $sizeSelector,
-				'blockeraMinWidth'          => $sizeSelector,
-				'blockeraMaxWidth'          => $sizeSelector,
-				'blockeraHeight'            => $sizeSelector,
-				'blockeraMinHeight'         => $sizeSelector,
-				'blockeraMaxHeight'         => $sizeSelector, 
-				'blockeraFit'               => $sizeSelector,
-				'blockeraRatio'             => $sizeSelector,
-				'blockeraBorder'            => $sizeSelector,
-				'blockeraBorderRadius'      => $sizeSelector,
+				'object-fit'               => $sizeSelector,
+				'box-sizing'                => $sizeSelector,
+				'blockeraRatio'             => [
+					'root' => $sizeSelector,
+				],
 				'border'                    => $sizeSelector,
 				'shadow'                    => $sizeSelector,
 				'filter'                    => $sizeSelector,
-				'radius'                    => $sizeSelector,
+				'border-radius'                    => $sizeSelector,
+				// Inner blocks selectors.
 				'blockera/elements/caption' => [
 					'root' => '&:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption',
 				],

@@ -61,26 +61,16 @@ export const Image: BlockType = {
 		},
 	},
 	selectors: {
-		blockeraWidth: {
-			root: imageSelector,
-		},
-		blockeraMinWidth: {
-			root: imageSelector,
-		},
-		blockeraMaxWidth: {
-			root: imageSelector,
-		},
-		blockeraHeight: {
-			root: imageSelector,
-		},
-		blockeraMinHeight: {
-			root: imageSelector,
-		},
-		blockeraMaxHeight: {
-			root: imageSelector,
-		},
+		width: imageSelector,
+		shadow: imageSelector,
+		border: imageSelector,
+		'border-radius': imageSelector,
+		filter: imageSelector,
+		shadow: imageSelector,
 		blockeraRatio: {
 			root: imageSelector,
 		},
+		'object-fit': imageSelector,
+		'box-sizing': imageSelector,
 	},
 };
