@@ -202,7 +202,6 @@ export default function InputControl({
 					drag={drag}
 					arrows={arrows}
 					size={size}
-					children={children}
 					onVariableShortcut={
 						variableTypes && variableTypes.length > 0
 							? () => {
@@ -297,7 +296,6 @@ export default function InputControl({
 							>
 								<ValueAddonPointer />
 							</NumberInput>
-							{children}
 						</div>
 					) : (
 						<div
@@ -320,11 +318,11 @@ export default function InputControl({
 							>
 								<ValueAddonPointer />
 							</OtherInput>
-							{children}
 						</div>
 					)}
 				</>
 			)}
+			{children}
 		</BaseControl>
 	);
 }

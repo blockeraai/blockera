@@ -13,6 +13,7 @@
 		padding-left: 8px;
 		padding-right: 5px;
 		display: block;
+		transition: var(--blockera-controls-transition);
 
 		&::placeholder {
 			color: var(--blockera-controls-placeholder-color);

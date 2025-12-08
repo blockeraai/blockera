@@ -81,6 +81,7 @@
 			padding: 0 26px 0 8px;
 			background-size: 13px 11px;
 			letter-spacing: 0;
+			transition: var(--blockera-controls-transition);
 
 			&:hover {
 				border-color: var(--blockera-controls-border-color-hover);
