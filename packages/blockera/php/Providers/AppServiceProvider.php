@@ -8,15 +8,10 @@ use Blockera\WordPress\Sender;
 use Blockera\Data\Cache\Cache;
 use Blockera\Data\Cache\Version;
 use Blockera\Bootstrap\Application;
-use Blockera\WordPress\RenderBlock\V1\{
-    Parser,
+use Blockera\WordPress\RenderBlock\{
+    HTMLProcessor,
     Render,
     SavePost,
-};
-use Blockera\WordPress\RenderBlock\V2\{
-    Transpiler,
-    RenderContent as V2RenderContent,
-    SavePost as V2SavePost,
 };
 use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
@@ -38,13 +33,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  * @package Blockera\Setup\Providers\AppServiceProvider
  */
 class AppServiceProvider extends ServiceProvider {
-
-	/**
-	 * Store the flag to determine if the posts are already processed.
-	 *
-	 * @var boolean $is_processed_posts the flag to indicate if the posts are already processed or not!
-	 */
-	protected $is_processed_posts = false;
 
     /**
      * Registering services classes.
@@ -101,34 +89,12 @@ class AppServiceProvider extends ServiceProvider {
 				}
             );
 
-			$cache_instance = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
-
 			$this->app->singleton(
                 Version::class,
                 function ( Application $app, array $params = []) {
 					return new Version($app, $params);
 				}
             );
-
-            if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
-
-				$this->app->singleton(
-					V2SavePost::class,
-					function ( Application $app) use ( $cache_instance) {
-
-						return new V2SavePost($app, $cache_instance);
-					}
-				);
-			} else {
-
-				$this->app->singleton(
-					SavePost::class,
-					function ( Application $app) use ( $plugin_args) {
-
-						return new SavePost($app, new Render($app, true, $plugin_args));
-					}
-				);
-			}
 
             $this->app->singleton(
                 VariableType::class,
@@ -178,59 +144,31 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-            if ( ( defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT ) || blockera_get_admin_options( [ 'earlyAccessLab', 'optimizeStyleGeneration' ] ) ) {
+			$html_processor = new HTMLProcessor();
 
-				$vendor_path = blockera_core_config('app.vendor_path');
-
-				$this->app->singleton(
-					Transpiler::class,
-					static function ( Application $app) use ( $cache_instance, $vendor_path) {
-
-						$transpiler_instance = new Transpiler($app, $cache_instance);
-						$transpiler_instance->setGlobalCssPropsClasses(include($vendor_path . 'blockera/wordpress/php/RenderBlock/V2/global-css-props-classes.php'));
-
-						return $transpiler_instance;
-					}
-				);
-
-				$this->app->singleton(
-					V2RenderContent::class,
-					static function ( Application $app) use ( $cache_instance, $vendor_path, $plugin_args): V2RenderContent {
-
-						$render_content_instance = new V2RenderContent(
-							$app,
-							$app->make(Transpiler::class),
-							[
-								'cache' => $cache_instance,
-								'plugin_args' => $plugin_args,
-								'render' => new Render($app, false, $plugin_args),
-							]
-						);
-
-						$render_content_instance->setIsMinifyInlineCss(! blockera_core_config('app.debug'));
-						$render_content_instance->setBlockStylesDirBasePath(blockera_core_config('app.dist_path'));
-
-						$file = $vendor_path . 'blockera/wordpress/php/RenderBlock/V2/block-global-styles-map.php';
-						$render_content_instance->setBlockGlobalStylesMap(include($file));
-
-						return $render_content_instance;
-					}
-				);
-			}
-			
 			$this->app->singleton(
-				Parser::class,
-				static function ( Application $app) {
+				SavePost::class,
+				function ( Application $app) use ( $html_processor, $plugin_args) {
+					$render_instance = new Render($app, $plugin_args);
 
-					return new Parser($app);
+					$render_instance->setHtmlProcessor($html_processor);
+			
+					return new SavePost($app, $render_instance);
 				}
 			);
 
 			$this->app->bind(
 				Render::class,
-				static function ( Application $app) use ( $plugin_args) : Render {
+				static function ( Application $app) use ( $html_processor, $plugin_args) : Render {
+					$render_instance = new Render($app, $plugin_args);
 
-					return new Render($app, true, $plugin_args);
+					$vendor_path              = blockera_core_config('app.vendor_path');
+					$global_css_props_classes = include($vendor_path . 'blockera/wordpress/php/RenderBlock/global-css-props-classes.php');
+
+					$render_instance->setHtmlProcessor($html_processor);
+					$render_instance->setGlobalCssPropsClasses($global_css_props_classes);
+
+					return $render_instance;
 				}
 			);
 
@@ -329,82 +267,51 @@ class AppServiceProvider extends ServiceProvider {
 
 		$supports = blockera_get_available_block_supports();
 
+		// Clear the generated css and processed html at the start of content rendering.
 		// Clear the classnames registry at the start of content rendering.
 		// This ensures each page/post render starts with a clean state.
+		Render::resetGeneratedCSS();
+		Render::resetProcessedHTML();
 		Render::clearClassnamesRegistry();
-		Transpiler::clearClassnamesRegistry();
 
-		if (blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ])) {
+		add_action(
+            'save_post',
+            function( int $post_id, \WP_Post $post) use ( $supports): void {
+		    	$this->app->make(SavePost::class)->save($post_id, $post, $supports);
+			},
+            9e8,
+            2
+        );
 
-			add_action(
-                'save_post',
-                function( int $post_id, \WP_Post $post) use ( $supports): void {
-					$this->app->make(V2SavePost::class)->save($post_id, $post, $supports);
-				},
-                9e8,
-                2
-            );
+		$render_instance = $this->app->make(Render::class);
 
-			// phpcs:disable
-        	// add_filter(
-            // 'rest_pre_insert_wp_template',
-            // function( \stdClass $prepared_post) use ( $supports): \stdClass {
-			// return $this->app->make(V2SavePost::class)->insertWPTemplate($prepared_post, $supports);
-			// },
-            // 10
-            // );
-			// phpcs:enable
+		add_filter(
+            'render_block',
+            function( string $html, array $block) use ( $supports, $render_instance): string {
+				return $render_instance->render( $html, $block, $supports );
+			},
+            10,
+            3
+        );
 
-			// Filtering get_posts query.
-			add_action(
-                'pre_get_posts',
-                function( \WP_Query $query) use ( $supports): void {
-					if (! $query->is_main_query()) {
-						return;
-					}
+		// Enqueue the generated CSS in the head to ensure it's printed before other styles.
+		add_action(
+            'wp_head',
+            function()use ( $render_instance):void {
+				$css = $render_instance->getGeneratedCSS();
 
-					if ($this->is_processed_posts && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT )) {
-						return;
-					}
+				// For development purposes, sort the CSS by block number.
+				if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT) {
+					$css = blockera_sort_css_by_block_number($css);
+				}
 
-					$this->is_processed_posts = true;
+				blockera_add_inline_css(implode(PHP_EOL, $css));
 
-					$this->app->make(V2RenderContent::class)->getPosts($query, $supports);
-				},
-				// Low priority to ensure that other plugins can override the query.
-				10e2,
-            );
-
-			// Filtering render block content if it name is exact "core/block" and has ref attribute.
-			add_filter(
-                'render_block',
-                function( string $block_content, array $block) use ( $supports): string {
-					return $this->app->make(V2RenderContent::class)->renderBlock($block_content, $block, $supports);
-				},
-                10,
-                2
-            );
-
-        } else {
-
-			add_action(
-                'save_post',
-                function( int $post_id, \WP_Post $post) use ( $supports): void {
-					$this->app->make(SavePost::class)->save($post_id, $post, $supports);
-				},
-                9e8,
-                2
-            );
-
-			add_filter(
-                'render_block',
-                function( string $html, array $block) use ( $supports): string {
-					return $this->app->make( Render::class)->render( $html, $block, $supports );
-				},
-                10,
-                3
-            );
-        }
+				$render_instance->resetGeneratedCSS();
+				$render_instance->resetProcessedHTML();
+				$render_instance->clearClassnamesRegistry();
+			}
+        );
     }
 
     /**

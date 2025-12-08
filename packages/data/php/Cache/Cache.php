@@ -107,7 +107,11 @@ class Cache {
      *
      * @return void
      */
-    public function deleteCache( string $key): void {
+    public function deleteCache( string $key, int $post_id = 0): void {
+		if (0 !== $post_id) {
+			delete_post_meta($post_id, $this->getCacheKey($key));
+		}
+
         delete_option($this->getCacheKey($key));
     }
 

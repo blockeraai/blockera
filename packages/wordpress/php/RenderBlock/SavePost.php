@@ -1,10 +1,9 @@
 <?php
 
-namespace Blockera\WordPress\RenderBlock\V1;
+namespace Blockera\WordPress\RenderBlock;
 
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
-use Blockera\Features\Core\FeaturesManager;
 use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
