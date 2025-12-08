@@ -280,6 +280,10 @@ p.blockera-block.blockera-block-5-2 {
 	align-self: stretch;
 }
 
+p.blockera-block.blockera-block-5-3 {
+	align-self: center;
+}
+
 .blockera-block.blockera-block-6.wp-block-group {
 	background-color: #bad2a1;
 	padding-top: 20px;
@@ -344,23 +348,37 @@ p.blockera-block.blockera-block-8 {
 
 p.blockera-block.blockera-block-9 {
 	flex: 1 1 0%;
+	align-self: stretch;
 }
 
 p.blockera-block.blockera-block-10 {
+	align-self: baseline;
+}
+
+p.blockera-block.blockera-block-11 {
 	background-color: #ffd8d8;
 	display: block !important;
 }
 
-p.blockera-block.blockera-block-11 {
+p.blockera-block.blockera-block-12 {
 	background-color: #bbe18a;
 	display: inline-block !important;
 }
 
-p.blockera-block.blockera-block-12 {
+p.blockera-block.blockera-block-13 {
 	background-color: #abeded;
 	display: inline !important;
 }
 
-p.blockera-block.blockera-block-13 {
+p.blockera-block.blockera-block-14 {
+	background-color: #e290ea;
 	display: none !important;
+}
+
+@media screen and (max-width: 478px) {
+	p.blockera-block.blockera-block-14 {
+	display: block !important;
+}
+
+
 }
