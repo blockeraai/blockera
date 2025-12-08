@@ -58,4 +58,15 @@ export const TagCloud: BlockType = {
 	edit: (props) => {
 		return <SharedBlockExtension {...props} />;
 	},
+	selectors: {
+		// in editor the main tag is inside following selector as block is rendering dynamically.
+		layout: ' .wp-block-tag-cloud',
+		// States selectors.
+		'blockera/states/before': {
+			root: ' .wp-block-tag-cloud::before',
+		},
+		'blockera/states/after': {
+			root: ' .wp-block-tag-cloud::after',
+		},
+	},
 };
