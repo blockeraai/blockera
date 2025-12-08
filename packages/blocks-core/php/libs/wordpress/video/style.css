@@ -1,3 +1,10 @@
 :where(.blockera-block.wp-block-video figcaption) {
 	transition: inherit;
 }
+
+:where(.blockera-block.wp-block-video video) {
+	padding: initial !important;
+	background-color: initial !important;
+	border-radius: initial !important;
+	border: initial !important;
+}
