@@ -47,9 +47,9 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 		// Kooler.
 		if (wp_is_block_theme()) {
-			add_action('wp_head', [ $this, 'printBlockeraGeneratedStyles' ]);
+			add_action('wp_head', [ $this, 'printBlockeraGeneratedStyles' ], 9e2);
 		} else {
-			add_action('wp_footer', [ $this, 'printBlockeraGeneratedStyles' ]); 
+			add_action('wp_footer', [ $this, 'printBlockeraGeneratedStyles' ], 9e2); 
 		}
 
 		add_filter( 'blockera/wordpress/' . $this->getId() . '/handle/inline-script', [ $this, 'getHandler' ] );
