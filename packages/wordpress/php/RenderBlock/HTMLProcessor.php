@@ -115,13 +115,13 @@ class HTMLProcessor {
 			];
 		}
 
+		// Get the wrapper tag markup.
+		$wrapper = $this->detectWrapperTag($html);
+
 		// Set the root selector.
 		$this->root_selector = $root_selector;
 
 		$this->css_rules = [];
-
-		// Get the wrapper tag of input html, to determine calculated selector is root or not.
-		$wrapper = $this->detectWrapperTag( $html );
 
 		/**
 		 * Extract inline styles from HTML.
@@ -152,26 +152,30 @@ class HTMLProcessor {
 		$has_global_css_classes = ! empty( $global_css_props_classes );
 		$cleaned_html           = $html;
 
+		$is_debug_mode = defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT;
+
 		// Process each element with inline styles if detected.
-		foreach ( $matches as $match ) {
-			$full_tag     = $match[0][0];
-			$full_tag_len = strlen( $full_tag );
-			$tag_name     = strtolower( $match[1][0] );
-			$before_attrs = $match[2][0];
-			$style        = $match[3][0];
-			$after_attrs  = $match[4][0];
-			$position     = $match[0][1] + $offset;
+		foreach ( $matches as $key => $match ) {
+			$full_tag           = $match[0][0];
+			$full_tag_len       = strlen( $full_tag );
+			$tag_name           = strtolower( $match[1][0] );
+			$before_attrs       = $match[2][0];
+			$style              = $match[3][0];
+			$after_attrs        = $match[4][0];
+			$position           = $match[0][1] + $offset;
+			$has_blockera_class = false !== strpos( $full_tag, 'blockera-block');
+			$is_wrapper         = ( $is_debug_mode || $has_blockera_class ) && 0 === $key && $full_tag === $wrapper;
 
 			// Optimize: Combine attrs in single operation.
 			$all_attrs = trim( $before_attrs . ' ' . $after_attrs );
 
-			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, $full_tag !== $wrapper );
+			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, ! $is_wrapper );
 
 			if ( ! empty( $selector ) && ! empty( $style ) ) {
-				$declarations = $this->parseStyleDeclarations( $style, $full_tag === $wrapper );
+				$declarations = $this->parseStyleDeclarations( $style, $is_wrapper );
 
 				if ( ! empty( $declarations ) ) {
-					$this->css_rules[ $full_tag === $wrapper ? 'root': 'child' ][ $selector ] = $declarations;
+					$this->css_rules[ $is_wrapper ? 'root': 'child' ][ $selector ] = $declarations;
 				}
 			}
 
