@@ -66,6 +66,30 @@ class HTMLProcessor {
 	];
 
 	/**
+	 * Detect the wrapper tag of input HTML without children.
+	 * Returns the tag name of the outermost element if it has no child elements.
+	 *
+	 * @param string $html The HTML content to analyze.
+	 *
+	 * @return string|null The wrapper tag name (uppercase) or null if not found or has children.
+	 */
+	protected function detectWrapperTag( string $html ): ?string {
+
+		$html = trim( $html );
+
+		if ( empty( $html ) ) {
+			return null;
+		}
+
+		// Match the opening tag with its name and attributes.
+		if ( ! preg_match( '/^<([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/i', $html, $opening_match ) ) {
+			return null;
+		}
+
+		return $opening_match[0];
+	}
+
+	/**
 	 * Cleanup HTML by removing inline styles and adding related css global properties classname to elements.
 	 * Convert inline styles to css rules.
 	 * Collect inline styles from HTML and generate CSS declarations.
@@ -95,6 +119,9 @@ class HTMLProcessor {
 		$this->root_selector = $root_selector;
 
 		$this->css_rules = [];
+
+		// Get the wrapper tag of input html, to determine calculated selector is root or not.
+		$wrapper = $this->detectWrapperTag( $html );
 
 		/**
 		 * Extract inline styles from HTML.
@@ -126,7 +153,7 @@ class HTMLProcessor {
 		$cleaned_html           = $html;
 
 		// Process each element with inline styles if detected.
-		foreach ( $matches as $key => $match ) {
+		foreach ( $matches as $match ) {
 			$full_tag     = $match[0][0];
 			$full_tag_len = strlen( $full_tag );
 			$tag_name     = strtolower( $match[1][0] );
@@ -138,13 +165,13 @@ class HTMLProcessor {
 			// Optimize: Combine attrs in single operation.
 			$all_attrs = trim( $before_attrs . ' ' . $after_attrs );
 
-			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, 0 !== $key );
+			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, $full_tag !== $wrapper );
 
 			if ( ! empty( $selector ) && ! empty( $style ) ) {
-				$declarations = $this->parseStyleDeclarations( $style, 0 === $key );
+				$declarations = $this->parseStyleDeclarations( $style, $full_tag === $wrapper );
 
 				if ( ! empty( $declarations ) ) {
-					$this->css_rules[ 0 === $key ? 'root': 'child' ][ $selector ] = $declarations;
+					$this->css_rules[ $full_tag === $wrapper ? 'root': 'child' ][ $selector ] = $declarations;
 				}
 			}
 
@@ -511,7 +538,13 @@ class HTMLProcessor {
 
 		// Optimize: Quick ID check.
 		if ( preg_match( '/id\s*=\s*["\']([^"\']+)["\']/', $attrs, $id_match ) ) {
-			return '#' . $id_match[1];
+			$target_selector = $tag_name . '#' . $id_match[1];
+
+			if ($with_tagname && ! empty($this->root_selector)) {
+				return  $this->root_selector . ' ' . $target_selector;
+			}
+
+			return $target_selector;
 		}
 
 		if ( preg_match( '/class\s*=\s*["\']([^"\']+)["\']/', $attrs, $class_match ) ) {
