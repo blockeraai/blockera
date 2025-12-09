@@ -37,6 +37,35 @@ class HTMLProcessor {
 	protected array $css_rules = [];
 
 	/**
+	 * Cache for compiled regex patterns.
+	 *
+	 * @var array
+	 */
+	protected static array $pattern_cache = [];
+
+	/**
+	 * Cache for self-closing tags lookup.
+	 *
+	 * @var array
+	 */
+	protected static array $self_closing_tags = [
+		'IMG'    => true,
+		'BR'     => true,
+		'HR'     => true,
+		'INPUT'  => true,
+		'META'   => true,
+		'LINK'   => true,
+		'AREA'   => true,
+		'BASE'   => true,
+		'COL'    => true,
+		'EMBED'  => true,
+		'PARAM'  => true,
+		'SOURCE' => true,
+		'TRACK'  => true,
+		'WBR'    => true,
+	];
+
+	/**
 	 * Cleanup HTML by removing inline styles and adding related css global properties classname to elements.
 	 * Convert inline styles to css rules.
 	 * Collect inline styles from HTML and generate CSS declarations.
@@ -66,7 +95,6 @@ class HTMLProcessor {
 		$this->root_selector = $root_selector;
 
 		$this->css_rules = [];
-		$cleaned_html    = $html;
 
 		/**
 		 * Extract inline styles from HTML.
@@ -86,18 +114,29 @@ class HTMLProcessor {
 			PREG_SET_ORDER | PREG_OFFSET_CAPTURE
 		);
 
-		$offset = 0;
+		if ( empty( $matches ) ) {
+			return [
+				'html' => $html,
+				'css'  => [],
+			];
+		}
+
+		$offset                 = 0;
+		$has_global_css_classes = ! empty( $global_css_props_classes );
+		$cleaned_html           = $html;
 
 		// Process each element with inline styles if detected.
 		foreach ( $matches as $key => $match ) {
 			$full_tag     = $match[0][0];
+			$full_tag_len = strlen( $full_tag );
 			$tag_name     = strtolower( $match[1][0] );
 			$before_attrs = $match[2][0];
 			$style        = $match[3][0];
 			$after_attrs  = $match[4][0];
 			$position     = $match[0][1] + $offset;
 
-			$all_attrs = $before_attrs . ' ' . $after_attrs;
+			// Optimize: Combine attrs in single operation.
+			$all_attrs = trim( $before_attrs . ' ' . $after_attrs );
 
 			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, 0 !== $key );
 
@@ -109,8 +148,9 @@ class HTMLProcessor {
 				}
 			}
 
+			// Optimize: Only process global CSS classes if needed.
 			$classes_to_add = [];
-			if ( ! empty( $global_css_props_classes ) ) {
+			if ( $has_global_css_classes ) {
 				foreach ( $global_css_props_classes as $prop => $prop_class ) {
 					if ( str_contains( $style, $prop ) ) {
 						$classes_to_add[] = $prop_class;
@@ -118,23 +158,22 @@ class HTMLProcessor {
 				}
 			}
 
-			$updated_attrs = $all_attrs;
-			if ( ! empty( $classes_to_add ) ) {
-				$updated_attrs = $this->addClassnamesToAttrs( trim($all_attrs), $classes_to_add );
-			}
-			$updated_attrs = trim( $updated_attrs );
-
+			// Build new tag.
 			$new_tag = '<' . $tag_name;
 
-			if ( ! empty( $updated_attrs ) ) {
-				$new_tag .= ' ' . $updated_attrs;
+			if ( ! empty( $classes_to_add ) ) {
+				$all_attrs = $this->addClassnamesToAttrs( $all_attrs, $classes_to_add );
+			}
+
+			if ( ! empty( $all_attrs ) ) {
+				$new_tag .= ' ' . $all_attrs;
 			}
 
 			$new_tag .= '>';
 
-			// Replace the original html with the cleaned html, to remove inline styles and update classnames.
-			$cleaned_html = substr_replace( $cleaned_html, $new_tag, $position, strlen( $full_tag ) );
-			$offset      += strlen( $new_tag ) - strlen( $full_tag );
+			// Replace the original html with the cleaned html.
+			$cleaned_html = substr_replace( $cleaned_html, $new_tag, $position, $full_tag_len );
+			$offset      += strlen( $new_tag ) - $full_tag_len;
 		}
 
 		return [
@@ -193,20 +232,27 @@ class HTMLProcessor {
 	 */
 	protected function addClassnameToWrapper( string $html, string $classname ): string {
 
-		if ( preg_match( '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*)>/is', $html, $match, PREG_OFFSET_CAPTURE ) ) {
-			$tag_name = $match[1][0];
-			$attrs    = $match[2][0];
-			$position = $match[0][1];
-			$full_tag = $match[0][0];
+		// Optimize: Try to match tag with attributes first (most common case).
+		if ( preg_match( '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*)>/s', $html, $match, PREG_OFFSET_CAPTURE ) ) {
+			$tag_name     = $match[1][0];
+			$attrs        = $match[2][0];
+			$position     = $match[0][1];
+			$full_tag     = $match[0][0];
+			$full_tag_len = strlen( $full_tag );
 
-			if ( preg_match( '/class\s*=\s*["\']([^"\']*)["\']/', $attrs, $class_match ) ) {
-				$existing_class = $class_match[1];
-				$classes        = array_filter( explode( ' ', $existing_class ) );
-
-				// If wrapper already has the same classname, return original HTML.
-				if ( in_array( $classname, $classes, true ) ) {
-					return $html;
+			// Optimize: Use single regex to find and capture class attribute.
+			if ( preg_match( '/class\s*=\s*["\']([^"\']*)["\']/', $attrs, $class_match, PREG_OFFSET_CAPTURE ) ) {
+				$existing_class = $class_match[1][0];
+				
+				// Optimize: Quick check if classname already exists.
+				if ( str_contains( $existing_class, $classname ) ) {
+					$classes = explode( ' ', $existing_class );
+					if ( in_array( $classname, $classes, true ) ) {
+						return $html;
+					}
 				}
+
+				$classes = array_filter( explode( ' ', $existing_class ) );
 
 				// Check if any class matches blockera_get_unique_class_name_regex() pattern.
 				$unique_class_pattern = blockera_get_unique_class_name_regex();
@@ -229,18 +275,22 @@ class HTMLProcessor {
 				$new_attrs = preg_replace(
 					'/class\s*=\s*["\'][^"\']*["\']/',
 					'class="' . $new_class . '"',
-					$attrs
+					$attrs,
+					1
 				);
 
 				$new_tag = '<' . $tag_name . ' ' . $new_attrs . '>';
 			} else {
-				$new_tag = '<' . $tag_name . ' class="' . $classname . '" ' . trim( $attrs ) . '>';
+				// No class attribute exists.
+				$attrs_trimmed = trim( $attrs );
+				$new_tag       = '<' . $tag_name . ' class="' . $classname . '"' . ( $attrs_trimmed ? ' ' . $attrs_trimmed : '' ) . '>';
 			}
 
-			return substr_replace( $html, $new_tag, $position, strlen( $full_tag ) );
+			return substr_replace( $html, $new_tag, $position, $full_tag_len );
 		}
 
-		if ( preg_match( '/<([a-zA-Z][a-zA-Z0-9]*)\s*>/is', $html, $match, PREG_OFFSET_CAPTURE ) ) {
+		// Optimize: Handle tag without attributes.
+		if ( preg_match( '/<([a-zA-Z][a-zA-Z0-9]*)\s*>/s', $html, $match, PREG_OFFSET_CAPTURE ) ) {
 			$tag_name = $match[1][0];
 			$position = $match[0][1];
 			$full_tag = $match[0][0];
@@ -278,38 +328,41 @@ class HTMLProcessor {
 		$offset = 0;
 
 		foreach ( $matches as $match ) {
-			$full_tag = $match[0][0];
-			$position = $match[0][1] + $offset;
-			$tag_name = $match[1][0];
-			$attrs    = isset( $match[2] ) ? $match[2][0] : '';
+			$full_tag     = $match[0][0];
+			$full_tag_len = strlen( $full_tag );
+			$position     = $match[0][1] + $offset;
+			$tag_name     = $match[1][0];
+			$attrs        = isset( $match[2] ) ? $match[2][0] : '';
 
 			if ( preg_match( '/class\s*=\s*["\']([^"\']*)["\']/', $attrs, $class_match ) ) {
 				$existing_class = $class_match[1];
-				$classes        = array_filter( explode( ' ', $existing_class ) );
-
-				if ( in_array( $classname, $classes, true ) ) {
-					continue;
+				
+				// Optimize: Quick check before array operation.
+				if ( str_contains( $existing_class, $classname ) ) {
+					$classes = explode( ' ', $existing_class );
+					if ( in_array( $classname, $classes, true ) ) {
+						continue;
+					}
 				}
 
+				$classes   = array_filter( explode( ' ', $existing_class ) );
 				$classes[] = $classname;
 				$new_class = implode( ' ', $classes );
 				$new_attrs = preg_replace(
 					'/class\s*=\s*["\'][^"\']*["\']/',
 					'class="' . $new_class . '"',
-					$attrs
+					$attrs,
+					1
 				);
 
 				$new_tag = '<' . $tag_name . ' ' . trim( $new_attrs ) . '>';
 			} else {
-				if ( ! empty( $attrs ) ) {
-					$new_tag = '<' . $tag_name . ' class="' . $classname . '" ' . trim( $attrs ) . '>';
-				} else {
-					$new_tag = '<' . $tag_name . ' class="' . $classname . '">';
-				}
+				$attrs_trimmed = trim( $attrs );
+				$new_tag       = '<' . $tag_name . ' class="' . $classname . '"' . ( $attrs_trimmed ? ' ' . $attrs_trimmed : '' ) . '>';
 			}
 
-			$html    = substr_replace( $html, $new_tag, $position, strlen( $full_tag ) );
-			$offset += strlen( $new_tag ) - strlen( $full_tag );
+			$html    = substr_replace( $html, $new_tag, $position, $full_tag_len );
+			$offset += strlen( $new_tag ) - $full_tag_len;
 		}
 
 		return $html;
@@ -326,17 +379,26 @@ class HTMLProcessor {
 
 		$selector = trim( $selector );
 
+		// Optimize: Cache compiled patterns.
+		if ( isset( self::$pattern_cache[ $selector ] ) ) {
+			return self::$pattern_cache[ $selector ];
+		}
+
+		$pattern = '';
+
 		if ( str_starts_with( $selector, '#' ) ) {
-			$id = substr( $selector, 1 );
-			return '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?id\s*=\s*["\']' . preg_quote( $id, '/' ) . '["\'][^>]*)>/is';
+			$id      = substr( $selector, 1 );
+			$pattern = '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?id\s*=\s*["\']' . preg_quote( $id, '/' ) . '["\'][^>]*)>/s';
+		} elseif ( str_starts_with( $selector, '.' ) ) {
+			$class   = substr( $selector, 1 );
+			$pattern = '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?class\s*=\s*["\'][^"\']*\b' . preg_quote( $class, '/' ) . '\b[^"\']*["\'][^>]*)>/s';
+		} else {
+			$pattern = '/<(' . preg_quote( $selector, '/' ) . ')(\s+[^>]*)?>/s';
 		}
 
-		if ( str_starts_with( $selector, '.' ) ) {
-			$class = substr( $selector, 1 );
-			return '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?class\s*=\s*["\'][^"\']*\b' . preg_quote( $class, '/' ) . '\b[^"\']*["\'][^>]*)>/is';
-		}
+		self::$pattern_cache[ $selector ] = $pattern;
 
-		return '/<(' . preg_quote( $selector, '/' ) . ')(\s+[^>]*)?>/is';
+		return $pattern;
 	}
 
 	/**
@@ -407,41 +469,35 @@ class HTMLProcessor {
 
 		$html = trim( $html );
 
-		if ( ! preg_match( '/<([a-zA-Z][a-zA-Z0-9]*)\s*[^>]*>/i', $html, $opening_match ) ) {
+		if ( ! preg_match( '/<([a-zA-Z][a-zA-Z0-9]*)\s*[^>]*>/', $html, $opening_match ) ) {
 			return false;
 		}
 
 		$tag_name = strtoupper( $opening_match[1] );
 
-		$self_closing_tags = [
-			'IMG',
-			'BR',
-			'HR',
-			'INPUT',
-			'META',
-			'LINK',
-			'AREA',
-			'BASE',
-			'COL',
-			'EMBED',
-			'PARAM',
-			'SOURCE',
-			'TRACK',
-			'WBR',
-		];
-
-		if ( in_array( $tag_name, $self_closing_tags, true ) ) {
+		// Optimize: Use hash lookup instead of in_array.
+		if ( isset( self::$self_closing_tags[ $tag_name ] ) ) {
 			return false;
 		}
 
-		$opening_pattern = '/<' . preg_quote( $tag_name, '/' ) . '(?:\s[^>]*)?\s*>/i';
-		$closing_pattern = '/<\/' . preg_quote( $tag_name, '/' ) . '\s*>/i';
+		// Optimize: Build patterns once per tag.
+		$cache_key = 'patterns_' . $tag_name;
+		
+		if ( ! isset( self::$pattern_cache[ $cache_key ] ) ) {
+			$quoted_tag                        = preg_quote( $tag_name, '/' );
+			self::$pattern_cache[ $cache_key ] = [
+				'opening' => '/<' . $quoted_tag . '(?:\s[^>]*)?\s*>/',
+				'closing' => '/<\/' . $quoted_tag . '\s*>/',
+			];
+		}
 
-		if ( ! preg_match( $opening_pattern, $html, $opening_matches, PREG_OFFSET_CAPTURE ) ) {
+		$patterns = self::$pattern_cache[ $cache_key ];
+
+		if ( ! preg_match( $patterns['opening'], $html, $opening_matches, PREG_OFFSET_CAPTURE ) ) {
 			return false;
 		}
 
-		if ( ! preg_match( $closing_pattern, $html, $closing_matches, PREG_OFFSET_CAPTURE ) ) {
+		if ( ! preg_match( $patterns['closing'], $html, $closing_matches, PREG_OFFSET_CAPTURE ) ) {
 			return false;
 		}
 
@@ -453,6 +509,12 @@ class HTMLProcessor {
 		}
 
 		$inner_content = substr( $html, $opening_end, $closing_start - $opening_end );
+
+		// Optimize: Quick check before trimming.
+		if ( empty( $inner_content ) ) {
+			return false;
+		}
+
 		$inner_content = trim( $inner_content );
 
 		if ( empty( $inner_content ) ) {
@@ -480,8 +542,11 @@ class HTMLProcessor {
 			$existing_class = $class_match[1];
 			$classes        = array_filter( explode( ' ', $existing_class ) );
 			
+			// Optimize: Use array_flip for O(1) lookup instead of in_array O(n).
+			$existing_lookup = array_flip( $classes );
+			
 			foreach ( $classnames as $classname ) {
-				if ( ! in_array( $classname, $classes, true ) ) {
+				if ( ! isset( $existing_lookup[ $classname ] ) ) {
 					$classes[] = $classname;
 				}
 			}
@@ -490,7 +555,8 @@ class HTMLProcessor {
 			$attrs     = preg_replace(
 				'/class\s*=\s*["\'][^"\']*["\']/',
 				'class="' . $new_class . '"',
-				$attrs
+				$attrs,
+				1
 			);
 		} else {
 			$new_class = implode( ' ', $classnames );
@@ -507,28 +573,27 @@ class HTMLProcessor {
 	 *
 	 * @param string $tag_name The HTML tag name.
 	 * @param string $attrs    The attributes string.
+	 * @param bool   $with_tagname Whether to include tag name in selector.
 	 *
 	 * @return string The generated CSS selector.
 	 */
 	protected function generateSelectorFromAttrs( string $tag_name, string $attrs, bool $with_tagname = false ): string {
 
+		// Optimize: Quick ID check.
 		if ( preg_match( '/id\s*=\s*["\']([^"\']+)["\']/', $attrs, $id_match ) ) {
 			return '#' . $id_match[1];
 		}
 
 		if ( preg_match( '/class\s*=\s*["\']([^"\']+)["\']/', $attrs, $class_match ) ) {
-			$classname        = $class_match[1];
-			$filtered_classes = $this->filterClassnames( $classname );
+			$filtered_classes = $this->filterClassnames( $class_match[1] );
 
 			if ( ! empty( $filtered_classes ) ) {
 				$concatenated_classes = '.' . implode( '.', $filtered_classes );
 
 				if ( $with_tagname ) {
-					if (empty($this->root_selector)) {
-						return $tag_name . $concatenated_classes;
-					}
-
-					return $this->root_selector . ' ' . $tag_name . $concatenated_classes;
+					return empty( $this->root_selector )
+						? $tag_name . $concatenated_classes
+						: $this->root_selector . ' ' . $tag_name . $concatenated_classes;
 				}
 
 				return $concatenated_classes;
@@ -700,4 +765,5 @@ class HTMLProcessor {
 		return $this->placeholder_prefix . '_' . $placeholder_id . '}}';
 	}
 }
+
 
