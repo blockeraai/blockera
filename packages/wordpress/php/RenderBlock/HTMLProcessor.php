@@ -655,10 +655,7 @@ class HTMLProcessor {
 							list( $property, $value ) = $exploded;
 						}
 						
-						$merged_declarations = array_merge(
-							$merged_declarations,
-							[ $property => $value ]
-						);
+						$merged_declarations[ $property ] = $value;
 					}
 
 					unset($this->css_rules[ $id ][ $selector ]);
