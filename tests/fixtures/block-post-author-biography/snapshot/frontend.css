@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-post-author-biography {
 	color: #c90a0a;
 	background-color: #ffd7d7;
@@ -15,6 +16,7 @@
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	color: #c90a0a;
 }
+
 .blockera-block.blockera-block-2.wp-block-post-author-biography {
 	background-color: #ebebeb;
 	font-size: 16px !important;

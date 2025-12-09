@@ -31,7 +31,7 @@ p.blockera-block.blockera-block-5 {
 	color: var(--wp--preset--color--base, #FFFFFF);
 }
 
-.blockera-block.blockera-block-5 mark.has-inline-color {
+.blockera-block.blockera-block-5 mark.has-inline-color.has-contrast-color {
 	background-color: #FFEE58;
 }
 

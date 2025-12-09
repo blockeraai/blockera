@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-post-title {
 	background-color: #ffdada;
 	font-size: 20px !important;
@@ -56,6 +57,7 @@
 .blockera-block.blockera-block-1 mark.has-inline-color {
 	background-color: #dfdfdf;
 }
+
 .blockera-block.blockera-block-2.wp-block-post-title {
 	background-color: #d0ffb3;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
@@ -71,6 +73,7 @@
 .blockera-block.blockera-block-2 mark.has-inline-color {
 	background-color: #dfdfdf;
 }
+
 .blockera-block.blockera-block-3.wp-block-post-title {
 	background-color: #ffcff8;
 	font-size: 18px !important;

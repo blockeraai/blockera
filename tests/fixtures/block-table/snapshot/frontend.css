@@ -17,7 +17,7 @@
 	width: 50%;
 }
 
-.blockera-block.blockera-block-1 table.has-background {
+.blockera-block.blockera-block-1 table.has-background.has-fixed-layout {
 	background-color: #ffe1e1;
 }
 

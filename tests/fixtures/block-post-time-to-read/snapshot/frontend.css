@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-post-time-to-read {
 	background-color: #ffdede;
 	font-size: 16px !important;
@@ -16,6 +17,7 @@
 .blockera-block.blockera-block-1.wp-block-post-time-to-read:hover {
 	background-color: #ffa6a6;
 }
+
 .blockera-block.blockera-block-2.wp-block-post-time-to-read {
 	background-color: #ffdede;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
@@ -35,6 +37,7 @@
 .blockera-block.blockera-block-2.wp-block-post-time-to-read:hover {
 	background-color: #ffa6a6;
 }
+
 .blockera-block.blockera-block-3.wp-block-post-time-to-read {
 	background-color: #daffaa;
 	font-size: 16px !important;
@@ -82,6 +85,7 @@
 	display: inline-block !important;
 	content: "before";
 }
+
 .blockera-block.blockera-block-4.wp-block-post-time-to-read {
 	background-color: #daffaa;
 	font-size: 16px !important;

@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-post-terms {
 	background-color: #dbe8ff;
 	border-color: #8db7ff;
@@ -83,6 +84,7 @@
 
 
 }
+
 .blockera-block.blockera-block-2.wp-block-post-terms {
 	padding-top: 10px;
 	padding-right: 10px;
@@ -129,6 +131,7 @@
 
 
 }
+
 .blockera-block.blockera-block-3.wp-block-post-terms {
 	background-color: #ffe5a8;
 	padding-top: 10px;
@@ -249,6 +252,7 @@
 	flex: 1 1 0%;
 	content: "After";
 }
+
 .blockera-block.blockera-block-4.wp-block-post-terms {
 	background-color: #f9b8ff;
 	padding-top: 11px;

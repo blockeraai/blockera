@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-page-list {
 	background-color: #ffeeee;
 	border-radius: 10px;
@@ -171,6 +172,7 @@
 	border-radius: 5px;
 	content: "After";
 }
+
 .blockera-block.blockera-block-2 :where(li) {
 	margin-bottom: 10px;
 }
@@ -188,6 +190,7 @@
 .blockera-block.blockera-block-2 :where(li.current-menu-item a):hover {
 	color: #f200ff;
 }
+
 .blockera-block.blockera-block-3 :where(li) {
 	padding-top: 5px;
 	padding-right: 12px;

@@ -91,6 +91,6 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-1 table.wp-calendar-table {
+.blockera-block.blockera-block-1 table#wp-calendar {
 	background-color: #ececfc;
 }

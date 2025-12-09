@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-post-featured-image {
 	aspect-ratio: 9/16;
 	width: 300px;
@@ -67,7 +68,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 img.has-border-color {
+.blockera-block.blockera-block-1 img.has-border-color.wp-post-image {
 	border-color: #ff0000;
 	border-radius: 50px;
 	border-width: 3px;
@@ -75,6 +76,7 @@
 	height: 100%;
 	object-fit: cover;
 }
+
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-post-featured-image img {
 	box-shadow: 10px 10px 0 0 #ff8d8dab;
@@ -91,6 +93,6 @@
 
 }
 
-.blockera-block.blockera-block-2 img.attachment-post-thumbnail {
+.blockera-block.blockera-block-2 img.attachment-post-thumbnail.size-post-thumbnail {
 	object-fit: cover;
 }

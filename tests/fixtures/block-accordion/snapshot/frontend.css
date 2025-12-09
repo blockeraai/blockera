@@ -140,17 +140,14 @@ p.blockera-block.blockera-block-7 {
 	color: #ff0202;
 }
 
-.blockera-block.blockera-block-9.wp-block-accordion-item {
-	background-color: #ffffff;
-	border-radius: 10px;
-	overflow: hidden;
-}
-
-.blockera-block.blockera-block-9 .wp-block-accordion-heading__toggle-icon {
-	color: #ff0202;
-}
-
 .blockera-block.blockera-block-10 .wp-block-accordion-heading__toggle {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-10 button.wp-block-accordion-heading__toggle {
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
@@ -166,24 +163,9 @@ p.blockera-block.blockera-block-7 {
 	padding-left: 20px;
 }
 
-.blockera-block.blockera-block-11.wp-block-accordion-panel {
-	background-color: #e8e8e8;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-	margin-top: 0;
-}
-
 .blockera-block.blockera-block-12.wp-block-accordion-item {
 	border-radius: 10px;
 	background-color: #ffffff;
-	overflow: hidden;
-}
-
-.blockera-block.blockera-block-12.wp-block-accordion-item {
-	background-color: #ffffff;
-	border-radius: 10px;
 	overflow: hidden;
 }
 
@@ -194,22 +176,20 @@ p.blockera-block.blockera-block-7 {
 	padding-left: 10px;
 }
 
-.blockera-block.blockera-block-14.wp-block-accordion-panel {
-	background-color: #e8e8e8;
-	margin-top: 0;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+.blockera-block.blockera-block-13 button.wp-block-accordion-heading__toggle {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-14.wp-block-accordion-panel {
 	background-color: #e8e8e8;
+	margin-top: 0;
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
-	margin-top: 0;
 }
 
 .blockera-block.blockera-block-15.wp-block-accordion-item {

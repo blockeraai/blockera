@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-site-tagline {
 	background-color: #ffe2e2;
 	border-color: #ff5757;
@@ -9,6 +10,7 @@
 	padding-left: 15px;
 	border: 2px solid #ff5757;
 }
+
 .blockera-block.blockera-block-2.wp-block-site-tagline {
 	background-color: #ceffce;
 	padding-top: 20px;
@@ -59,6 +61,7 @@
 	border-radius: 5px;
 	content: "After";
 }
+
 .blockera-block.blockera-block-3.wp-block-site-tagline {
 	background-color: #ccdeff;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);

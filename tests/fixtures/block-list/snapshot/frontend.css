@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1 :where(li) {
 	background-color: #d8e0ff;
 	padding-top: 5px;
@@ -78,46 +79,9 @@
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	font-size: 18px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 600;
-}
-
-.wp-block-list > li.blockera-block.blockera-block-6 .wp-block-list {
-	background-color: #d2daff;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 35px;
-	margin-top: 10px;
-	margin-right: 10px !important;
-	margin-bottom: 10px;
-	margin-left: 10px !important;
-	color: #003de4;
-}
-
-.wp-block-list > li.blockera-block.blockera-block-6 a:not(.wp-element-button) {
-	color: #900000;
-}
-
-.wp-block-list > li.blockera-block.blockera-block-6 ul {
-	border-radius: 20px;
-}
-
-.wp-block-list > li.blockera-block.blockera-block-6 {
-	background-color: #ffdada;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	font-weight: 600;
-	font-style: normal;
-	color: #900000;
-	font-size: 18px !important;
-}
-
-.wp-block-list.blockera-block.blockera-block-6:not(.wp-block-list .wp-block-list) > li {
-	border-radius: 10px;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-6 .wp-block-list {
@@ -158,103 +122,6 @@ ul.blockera-block.blockera-block-8 {
 	border-radius: 10px;
 	background-color: #edffcf;
 	border: 2px solid #26ff00;
-}
-
-.blockera-block.blockera-block-8 :where(li)::before {
-	display: inline-block !important;
-	content: "Before";
-	background-color: #00000026;
-	padding-top: 2px;
-	padding-right: 10px;
-	padding-bottom: 2px;
-	padding-left: 10px;
-	font-size: 16px !important;
-}
-
-.blockera-block.blockera-block-8 :where(li)::after {
-	display: inline-block !important;
-	content: "After";
-	background-color: #00000021;
-	padding-top: 5px;
-	padding-right: 20px;
-	padding-bottom: 5px;
-	padding-left: 20px;
-	font-size: 16px !important;
-	border-radius: 30px;
-}
-
-.blockera-block.blockera-block-8.wp-block-list:hover {
-	background-color: #b3d27e;
-}
-
-ul.blockera-block.blockera-block-8:hover {
-	border: 2px solid #189d00;
-}
-
-.blockera-block.blockera-block-8.wp-block-list::before {
-	background-color: #00000038;
-	font-size: 16px !important;
-	font-weight: 1000;
-	font-style: normal;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
-	content: "List Before";
-}
-
-@media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-8.wp-block-list::before {
-	order: -1;
-	text-align: center;
-	content: "List Before";
-}
-
-ul.blockera-block.blockera-block-8::before {
-	border-radius: 30px;
-}
-
-
-}
-
-.blockera-block.blockera-block-8.wp-block-list::after {
-	order: 100;
-	font-size: 16px !important;
-	font-weight: 1000;
-	font-style: normal;
-	background-color: #00000036;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
-	margin-top: 10px;
-	content: "List After";
-}
-
-@media screen and (max-width: 478px) {
-	ul.blockera-block.blockera-block-8::after {
-	border-radius: 20px;
-}
-
-.blockera-block.blockera-block-8.wp-block-list::after {
-	text-align: center;
-	content: "List After";
-}
-
-
-}
-
-.blockera-block.blockera-block-8.wp-block-list {
-	background-color: #edffcf;
-	transition: all 500ms ease 0ms;
-	display: flex !important;
-	flex-direction: column;
-	gap: 10px;
-}
-
-ul.blockera-block.blockera-block-8 {
-	border: 2px solid #26ff00;
-	border-radius: 10px;
 }
 
 .blockera-block.blockera-block-8 :where(li)::before {
@@ -362,34 +229,4 @@ ul.blockera-block.blockera-block-8::before {
 }
 
 
-}
-.wp-block-list > li.blockera-block.blockera-block-4 {
-	background-color: #eb8c50;
-	color: #ffffff;
-}
-
-.wp-block-list > li.blockera-block.blockera-block-4 a:not(.wp-element-button) {
-	color: #ffffff;
-}
-
-@media screen and (max-width: 478px) {
-	.wp-block-list > li.blockera-block.blockera-block-4 {
-	background-color: #8cc764;
-	color: #193d00;
-	font-weight: 1000;
-	font-style: normal;
-	font-size: 15px !important;
-}
-
-
-}
-.wp-block-list > li.blockera-block.blockera-block-5 {
-	background-color: #ffd3d3;
-	font-weight: 600;
-	font-style: normal;
-	color: #c73535;
-}
-
-.wp-block-list > li.blockera-block.blockera-block-5 a:not(.wp-element-button) {
-	color: #c73535;
 }

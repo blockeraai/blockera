@@ -1,10 +1,8 @@
 
 .blockera-block.blockera-block-1 .wp-block-embed__wrapper {
-	border-color: #ff4343;
-	border-width: 7px;
-	border-radius: 10px;
 	background-color: #ffcccc;
 	border: 7px solid #ff4343;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block-1 figcaption {
@@ -22,10 +20,6 @@
 }
 
 .blockera-block.blockera-block-2 .wp-block-embed__wrapper {
-	border-color: #2ec211;
-	border-width: 10px;
-	padding-right: 10px;
-	padding-left: 60px;
 	border: 10px solid #2ec211;
 	width: 400px;
 	aspect-ratio: 1;
@@ -33,12 +27,10 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-embed {
-	border-color: #2ec211;
-	border-width: 10px;
-	padding-right: 10px;
-	padding-left: 60px;
 	display: flex !important;
 	gap: 30px;
+	padding-right: 10px;
+	padding-left: 60px;
 }
 
 .blockera-block.blockera-block-2 figcaption {
@@ -74,11 +66,9 @@
 }
 
 .blockera-block.blockera-block-3 .wp-block-embed__wrapper {
-	border-color: #808080;
-	border-width: 7px;
-	border-radius: 10px;
 	background-color: #d7d7d7;
 	border: 7px solid #808080;
+	border-radius: 10px;
 	width: 400px;
 	height: 200px;
 	aspect-ratio: 4/3;
@@ -86,10 +76,6 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-embed {
-	border-color: #808080;
-	border-width: 7px;
-	border-radius: 10px;
-	background-color: #d7d7d7;
 	opacity: 50%;
 	position: relative;
 }

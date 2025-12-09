@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1.wp-block-post-author {
 	background-color: #f3d290;
 	border-color: #00000038;
@@ -76,6 +77,7 @@
 .blockera-block.blockera-block-1:hover .wp-block-post-author__name {
 	background-color: #925f07;
 }
+
 .blockera-block.blockera-block-2.wp-block-post-author {
 	background-color: #efefef;
 	border-radius: 10px;
@@ -228,6 +230,7 @@
 .blockera-block.blockera-block-2:hover .wp-block-post-author__avatar > img {
 	width: 120px;
 }
+
 .blockera-block.blockera-block-3.wp-block-post-author {
 	background-color: #ffecec;
 	font-size: 20px !important;

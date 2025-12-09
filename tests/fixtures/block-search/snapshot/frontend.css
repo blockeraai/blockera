@@ -1,3 +1,4 @@
+
 .blockera-block.blockera-block-1 .wp-block-search__label {
 	background-color: #fff1f1;
 	margin-bottom: 12px;
@@ -34,8 +35,8 @@
 .blockera-block.blockera-block-1 .wp-block-search__button:focus {
 	background-color: #b32e2e;
 }
+
 .blockera-block.blockera-block-2.wp-block-search {
-	border-radius: 10px;
 	background-color: #cde2ff;
 	transition: all 500ms ease 0ms;
 	display: flex !important;
@@ -51,7 +52,6 @@
 
 .blockera-block.blockera-block-2.wp-block-search, .blockera-block.blockera-block-2.wp-block-search :where(.wp-block-search__input, .wp-block-search__button) {
 	border-radius: 10px;
-	background-color: #cde2ff;
 }
 
 .blockera-block.blockera-block-2 .wp-block-search__label {
@@ -154,8 +154,17 @@
 
 
 }
-.blockera-block.blockera-block-3.wp-block-search {
+
+.blockera-block.blockera-block-2 input#wp-block-search__input-12 {
 	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-2 button.wp-block-search__button.has-background {
+	border-radius: 10px;
+	background-color: #cde2ff;
+}
+
+.blockera-block.blockera-block-3.wp-block-search {
 	background-color: #efccff;
 	padding-top: 20px;
 	padding-right: 20px;
@@ -165,7 +174,6 @@
 
 .blockera-block.blockera-block-3.wp-block-search, .blockera-block.blockera-block-3.wp-block-search :where(.wp-block-search__input, .wp-block-search__button) {
 	border-radius: 10px;
-	background-color: #efccff;
 }
 
 .blockera-block.blockera-block-3 .wp-block-search__button {
@@ -282,4 +290,13 @@
 
 .blockera-block.blockera-block-3.wp-block-search:hover, .blockera-block.blockera-block-3.wp-block-search :where(.wp-block-search__input:hover, .wp-block-search__button):hover {
 	border-radius: 20px;
+}
+
+.blockera-block.blockera-block-3 input#wp-block-search__input-13 {
+	border-radius: 10px;
+}
+
+.blockera-block.blockera-block-3 button.wp-block-search__button.has-background {
+	border-radius: 10px;
+	background-color: #efccff;
 }

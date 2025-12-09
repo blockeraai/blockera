@@ -42,7 +42,7 @@
 
 .blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure {
 	border-radius: 0;
-	font-size: 18px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 600;
 	background-color: var(--wp--preset--color--accent-2, #F6CFF4);
@@ -50,7 +50,7 @@
 
 .blockera-block.blockera-block-2.wp-block-audio audio {
 	border-radius: 0px;
-	font-size: 18px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 600;
 	height: 36px;

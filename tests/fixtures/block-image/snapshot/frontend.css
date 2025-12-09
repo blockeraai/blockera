@@ -80,7 +80,7 @@
 
 }
 
-.blockera-block.blockera-block-1 img {
+img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover;
@@ -121,7 +121,7 @@
 
 }
 
-.blockera-block.blockera-block-2 img.has-border-color {
+.blockera-block.blockera-block-2 img.wp-image-7139 {
 	border-color: #37e6d4;
 	border-style: dashed;
 	border-width: 5px;
@@ -174,7 +174,7 @@
 	border: 2px solid #ff4c4c;
 }
 
-.blockera-block.blockera-block-3 img {
+img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover;

@@ -7,14 +7,6 @@
 	padding-bottom: 60px;
 }
 
-.blockera-block.blockera-block-1.wp-block-group {
-	background-color: #d8e0ff;
-	padding-top: 60px;
-	padding-bottom: 60px;
-	margin-top: 0;
-	margin-bottom: 0;
-}
-
 .blockera-block.blockera-block-2.wp-block-columns {
 	background-color: #95aaff;
 	padding-top: 0;
@@ -22,23 +14,6 @@
 	padding-bottom: 0;
 	padding-left: 0;
 	gap: 50px;
-}
-
-@media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-2.wp-block-columns {
-	gap: 30px;
-}
-
-
-}
-
-.blockera-block.blockera-block-2.wp-block-columns {
-	background-color: #95aaff;
-	gap: 50px;
-	padding-top: 0;
-	padding-right: 0;
-	padding-bottom: 0;
-	padding-left: 0;
 }
 
 @media screen and (max-width: 478px) {
@@ -56,26 +31,6 @@
 	padding-bottom: 19px;
 	padding-left: 19px;
 	flex-basis: 40%;
-}
-
-@media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-3.wp-block-column {
-	display: flex !important;
-	flex-direction: row;
-	align-items: center !important;
-	justify-content: center !important;
-}
-
-
-}
-
-.blockera-block.blockera-block-3.wp-block-column {
-	background-color: #5577ff;
-	flex-basis: 40% !important;
-	padding-top: 19px;
-	padding-right: 19px;
-	padding-bottom: 19px;
-	padding-left: 19px;
 }
 
 @media screen and (max-width: 478px) {
@@ -114,7 +69,7 @@
 
 }
 
-.blockera-block.blockera-block-4 img {
+img {
 	border-radius: 30px;
 }
 
@@ -130,25 +85,6 @@
 	padding-top: 20px;
 	padding-bottom: 20px;
 	flex-basis: 60%;
-	margin-block-start: 50px !important;
-}
-
-@media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-5.wp-block-column.is-layout-constrained > * + * {
-	margin-block-start: 30px !important;
-}
-
-
-}
-
-.blockera-block.blockera-block-5.wp-block-column {
-	background-color: #5577ff;
-	flex-basis: 60% !important;
-	padding-top: 20px;
-	padding-bottom: 20px;
-}
-
-.blockera-block.blockera-block-5.wp-block-column.is-layout-constrained > * + * {
 	margin-block-start: 50px !important;
 }
 
@@ -227,48 +163,13 @@ p.blockera-block.blockera-block-7 {
 
 }
 
-.blockera-block.blockera-block-8.wp-block-group {
-	background-color: #213fbe;
-	display: flex !important;
-	flex-direction: column;
-	justify-content: center !important;
-	align-items: flex-end !important;
-	gap: 20px;
-	flex-wrap: wrap !important;
-	position: relative;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	margin-right: -20px !important;
-	margin-left: -20px !important;
-	color: #ffffff;
-}
-
-.blockera-block.blockera-block-8.wp-block-group.is-layout-constrained > * + * {
-	margin-block-start: 0 !important;
-}
-
-.blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
-	color: #ffffff;
-}
-
-@media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-8.wp-block-group {
-	padding-top: 20px;
-	padding-bottom: 20px;
-	margin-right: 50px !important;
-	margin-left: 50px !important;
-}
-
-
-}
-
 .blockera-block.blockera-block-9.wp-block-heading {
 	background-color: #021c99;
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	font-size: 1rem;
+	font-size: clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.196), 1rem);
 	font-style: normal;
 	font-weight: 600;
 	letter-spacing: 1px;
@@ -308,61 +209,6 @@ p.blockera-block.blockera-block-7 {
 	left: -50px;
 	width: 300px;
 	height: 330px;
-}
-
-.blockera-block.blockera-block-10.wp-block-group.is-layout-constrained > * + * {
-	margin-block-start: 0 !important;
-}
-
-.blockera-block.blockera-block-10 :where(p) {
-	font-size: 15px !important;
-	border: 1px solid #ffffff;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
-	border-radius: 100px;
-	background-color: #001165;
-}
-
-.blockera-block.blockera-block-10 :where(a:not(.wp-element-button)) {
-	text-decoration: initial;
-}
-
-@media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-10.wp-block-group {
-	position: relative;
-	bottom: -50px;
-	left: -20px;
-	flex-direction: row;
-	align-items: flex-start !important;
-	justify-content: flex-start !important;
-	align-content: flex-start;
-}
-
-
-}
-
-.blockera-block.blockera-block-10.wp-block-group {
-	background-color: #021c99;
-	align-self: center;
-	display: flex !important;
-	flex-direction: row;
-	align-items: flex-end !important;
-	justify-content: flex-end !important;
-	row-gap: 40px;
-	column-gap: 20px;
-	flex-wrap: wrap-reverse !important;
-	align-content: flex-start;
-	position: relative;
-	bottom: -50px;
-	left: -50px;
-	width: 300px;
-	height: 330px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 }
 
 .blockera-block.blockera-block-10.wp-block-group.is-layout-constrained > * + * {
