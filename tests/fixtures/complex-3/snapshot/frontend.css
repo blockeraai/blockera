@@ -78,6 +78,10 @@ p.blockera-block.blockera-block-5 {
 	box-sizing: border-box;
 }
 
+.blockera-block.blockera-block-5-1.wp-block-spacer {
+	height: 50px;
+}
+
 .blockera-block.blockera-block-6.wp-block-group {
 	background-color: #95aaff;
 	padding-top: 0;
@@ -315,8 +319,4 @@ p.blockera-block.blockera-block-20 {
 
 p.blockera-block.blockera-block-21 {
 	background-color: #5577ff;
-}
-
-.blockera-block.blockera-block--7z1k7x.wp-block-spacer {
-	height: 50px;
 }
