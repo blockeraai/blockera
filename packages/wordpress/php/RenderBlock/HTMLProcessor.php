@@ -141,7 +141,7 @@ class HTMLProcessor {
 			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, 0 !== $key );
 
 			if ( ! empty( $selector ) && ! empty( $style ) ) {
-				$declarations = $this->parseStyleDeclarations( $style );
+				$declarations = $this->parseStyleDeclarations( $style, 0 === $key );
 
 				if ( ! empty( $declarations ) ) {
 					$this->css_rules[ 0 === $key ? 'root': 'child' ][ $selector ] = $declarations;
