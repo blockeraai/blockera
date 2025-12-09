@@ -688,37 +688,6 @@ final class StyleEngine {
 	}
 
 	/**
-	 * Convert inline style declarations to property-value pairs.
-	 * 
-	 * @param array|string $declarations The style declarations.
-	 * @return array The prepared styles.
-	 */
-	protected function prepareInlineStyles( $declarations): array {
-		$prepared_styles = [];
-
-		// Handle string declarations.
-		if (is_string($declarations)) {
-			$parts = explode(':', $declarations);
-			if (count($parts) === 2) {
-				$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
-			}
-			return $prepared_styles;
-		}
-
-		// Handle array declarations.
-		foreach ($declarations as $declaration) {
-			if (is_string($declaration)) {
-				$parts = explode(':', $declaration);
-				if (count($parts) === 2) {
-					$prepared_styles[ trim($parts[0]) ] = trim($parts[1]);
-				}
-			}
-		}
-
-		return $prepared_styles;
-	}
-
-	/**
 	 * Preparing css styles of inner blocks for current received state.
 	 *
 	 * @param array  $settings the inner block settings of current received state.
@@ -858,15 +827,12 @@ final class StyleEngine {
 				continue;
 			}
 
-			// Convert declarations to property-value pairs array.
-			$prepared_styles = $this->prepareInlineStyles($declarations);
-
 			if (! isset($css_rules[ $definition_selector ])) {
 				// Set css rule for definition selector as a root collected inline styles.
-				$css_rules[ $definition_selector ] = $prepared_styles;
+				$css_rules[ $definition_selector ] = $declarations;
 			} else {
 				// Merge same declaration with the style engine generated declarations.
-				$css_rules[ $definition_selector ] = array_merge($prepared_styles, $css_rules[ $definition_selector ]);
+				$css_rules[ $definition_selector ] = array_merge($declarations, $css_rules[ $definition_selector ]);
 			}		
 		}
 
