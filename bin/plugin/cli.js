@@ -20,6 +20,7 @@ const releaseType = ['--releaseType <releaseType>', 'Release Type'];
 
 const { getReleaseChangelog } = require('./commands/changelog');
 const { updatePackagesChangelog } = require('./commands/packages');
+const { testImport } = require('./commands/testImport');
 
 program
 	.command('update-packages-changelog')
@@ -41,5 +42,16 @@ program
 	)
 	.description('Generates a changelog from merged Pull Requests')
 	.action(catchException(getReleaseChangelog));
+
+program
+	.command('test:snapshots:import')
+	.option(
+		'-d, --dry-run',
+		'Show what would be done without actually creating posts'
+	)
+	.description(
+		'Import all input.html files from tests/fixtures as WordPress posts'
+	)
+	.action(catchException(testImport));
 
 program.parse(process.argv);
