@@ -13,7 +13,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * Class Render filtering WordPress BlockType render process.
- * // TODO: after released the style engine v2, We should remove checks for cache_states and is_doing_transpile.
  *
  * @package Render
  */
