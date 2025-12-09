@@ -558,6 +558,9 @@ function blockera_test_normalize_css( string $css): string {
 	
 	// Clean up any trailing whitespace.
 	$css = trim($css);
+
+	// replace u002d with -
+	$css = str_replace('u002d', '-', $css);
 	
 	return $css;
 }
