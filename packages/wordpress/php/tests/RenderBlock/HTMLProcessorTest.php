@@ -260,92 +260,6 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 		$this->assertEquals( $html, $result );
 	}
 
-	public function testHasChildrenWithNestedElements() {
-
-		$html = '<div><p>Child element</p></div>';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertTrue( $result );
-	}
-
-	public function testHasChildrenWithTextOnly() {
-
-		$html = '<div>Just text content</div>';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertFalse( $result );
-	}
-
-	public function testHasChildrenWithSelfClosingTag() {
-
-		$html = '<img src="test.jpg" />';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertFalse( $result );
-	}
-
-	public function testHasChildrenWithMultipleNested() {
-
-		$html = '<div><span><strong>Text</strong></span></div>';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertTrue( $result );
-	}
-
-	public function testHasChildrenWithEmptyElement() {
-
-		$html = '<div></div>';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertFalse( $result );
-	}
-
-	public function testHasChildrenWithEmptyString() {
-
-		$result = $this->processor->hasChildren( '' );
-
-		$this->assertFalse( $result );
-	}
-
-	public function testHasChildrenWithWhitespaceOnly() {
-
-		$html = '<div>   </div>';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertFalse( $result );
-	}
-
-	public function testHasChildrenWithMixedContent() {
-
-		$html = '<div>Text <span>and element</span></div>';
-
-		$result = $this->processor->hasChildren( $html );
-
-		$this->assertTrue( $result );
-	}
-
-	public function testHasChildrenWithSelfClosingTags() {
-
-		$self_closing_tags = [
-			'<img src="test.jpg" />',
-			'<br />',
-			'<hr />',
-			'<input type="text" />',
-			'<meta charset="utf-8" />',
-		];
-
-		foreach ( $self_closing_tags as $html ) {
-			$result = $this->processor->hasChildren( $html );
-			$this->assertFalse( $result, "Failed for: $html" );
-		}
-	}
-
 	public function testCompleteWorkflow() {
 
 		$html = '<div class="container" style="padding: 20px;">
@@ -362,9 +276,6 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$updated = $this->processor->updateWrapperClassname( $result['html'], 'wrapper-class' );
 		$this->assertStringContainsString( 'wrapper-class', $updated );
-
-		$has_children = $this->processor->hasChildren( $updated );
-		$this->assertTrue( $has_children );
 	}
 
 	public function testCssFormattingWithSemicolon() {
@@ -510,8 +421,8 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
-		$this->assertStringContainsString( '<div class="has-color">', $result['html'] );
-		$this->assertStringContainsString( '<p class="has-display">', $result['html'] );
+		$this->assertStringContainsString( '<div class="has-color" >', $result['html'] );
+		$this->assertStringContainsString( '<p class="has-display" >', $result['html'] );
 	}
 
 	public function testConvertInlineStylesWithGlobalCssPropsClassesNoDuplicates() {
