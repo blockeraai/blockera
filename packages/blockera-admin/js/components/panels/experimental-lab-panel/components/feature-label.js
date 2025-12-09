@@ -25,6 +25,8 @@ const FeatureLabel = ({ status }: Props): React$Element<'span'> => {
 				return __('Pre Release Feature', 'blockera');
 			case 'stable':
 				return __('Stable Feature', 'blockera');
+			case 'released':
+				return '🎉 ' + __('Released Feature', 'blockera');
 			default:
 				return __('Experimental Feature', 'blockera');
 		}

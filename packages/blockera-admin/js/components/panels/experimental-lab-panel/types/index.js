@@ -1,3 +1,8 @@
 // @flow
 
-export type FeatureStatus = 'alpha' | 'beta' | 'pre-release' | 'stable';
+export type FeatureStatus =
+	| 'alpha'
+	| 'beta'
+	| 'pre-release'
+	| 'stable'
+	| 'released';

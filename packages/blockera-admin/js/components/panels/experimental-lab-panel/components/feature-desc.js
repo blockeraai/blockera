@@ -5,7 +5,7 @@
  */
 import { __ } from '@wordpress/i18n';
 
-type FeatureStatus = 'alpha' | 'beta' | 'pre-release' | 'stable';
+import type { FeatureStatus } from '../types';
 
 type Props = {
 	status: FeatureStatus,
@@ -32,6 +32,11 @@ const FeatureDesc = ({ status }: Props): React$Element<'p'> => {
 			case 'stable':
 				return __(
 					'Fully tested and ready for production feature. Enjoy!',
+					'blockera'
+				);
+			case 'released':
+				return __(
+					'Released feature. You can use it now in production!',
 					'blockera'
 				);
 			default:
