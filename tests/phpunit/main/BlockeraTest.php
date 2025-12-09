@@ -12,23 +12,86 @@ use Spatie\Snapshots\MatchesSnapshots;
 
 class BlockeraTest extends AppTestCase {
 
-	use MatchesSnapshots;
+	use MatchesSnapshots {
+        assertMatchesSnapshot as protected traitAssertMatchesSnapshot;
+    }
 
 	protected string $design;
 	protected Application $app;
 	protected bool $is_global_styles = false;
+	protected ?string $currentTestType = null;
 
-	protected function getSnapshotId(): string {
-
-		$id = $this->is_global_styles ? 'frontend-global-styles' : 'frontend';
-
-		if (1 === $this->snapshotIncrementor) {
-			return $id;
-		}
-
-		return $id . '__' . $this->snapshotIncrementor;
+	/**
+	 * Set the current test type.
+	 *
+	 * @param string|null $testType The test type to set.
+	 * @return void
+	 */
+	protected function setCurrentTestType(?string $testType): void {
+		$this->currentTestType = $testType;
 	}
 
+
+	/**
+	 * Get the current test type.
+	 *
+	 * @return string|null The current test type.
+	 */
+	protected function getCurrentTestType(): ?string {
+		return $this->currentTestType;
+	}
+
+
+	/**
+	 * Assert that the actual value matches the stored snapshot for the given test type.
+	 *
+	 * @param string $testType Type of snapshot test (e.g., 'frontend-html', 'frontend-css', etc.).
+	 * @param mixed  $actual   The value being compared to the snapshot.
+	 * @param mixed  $driver   Optional driver used for formatting/processing (e.g., HtmlDriver, CssDriver).
+	 *
+	 * @return void
+	 */
+	public function assertMatchesSnapshot(string $testType, $actual, $driver = null): void {
+
+		$this->setCurrentTestType($testType);
+
+		$this->traitAssertMatchesSnapshot($actual, $driver);
+    }
+
+
+	/**
+	 * Get the snapshot ID string based on the current test type and incrementor.
+	 *
+	 * @return string The snapshot identifier for the current test.
+	 */
+	protected function getSnapshotId(): string {
+
+		switch( $this->getCurrentTestType() ){
+			case 'frontend-css':
+				return 'frontend';
+			case 'frontend-html':
+				return 'frontend';
+			case 'frontend-global-styles':
+				return 'frontend-global-styles';
+			default:
+				return 'frontend';
+		}
+
+		// Backward for other types.
+		if (1 === $this->snapshotIncrementor) {
+			return 'frontend';
+		}
+
+		return 'frontend__' . $this->snapshotIncrementor;
+	}
+
+	
+	/**
+	 * Get the path to the snapshot directory for the current design.
+	 *
+	 *
+	 * @return string The absolute path to the snapshot directory.
+	 */
 	protected function getSnapshotDirectory(): string {
 
 		return dirname((new ReflectionClass($this))->getFileName(), 3).
@@ -126,15 +189,21 @@ class BlockeraTest extends AppTestCase {
 	}
 
 	/**
-	 * Test the frontend output of a design.
-	 *
+	 * Test the blocks rendering and styles of a design.
+	 * 
+	 * This test checks the following:
+	 * 1. Blocks rendering
+	 * 2. Inline style attributes
+	 * 3. Blocks generated styles
+	 * 4. Global styles
+	 * 
 	 * @param string $designName The design name.
 	 * 
 	 * @dataProvider designNameProvider
 	 *
 	 * @return void
 	 */
-	public function test_frontend_template(string $designName): void {
+	public function test_blocks_rendering_and_styles(string $designName): void {
 
 		$this->design = $designName;
 
@@ -152,94 +221,102 @@ class BlockeraTest extends AppTestCase {
 
 		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		$this->go_to(get_permalink($post_id));
+
+		/**
+		 * Test 1: Blocks rendering
+		 */
+		the_post();
+		
+		$blocks = parse_blocks(get_the_content());
+
+		$content = '';
+		foreach ($blocks as $block) {
+			$content .= render_block($block);
+		}
+
+		// Apply global html-search-replace first if configured.
+		$global_config = blockera_test_get_global_config();
+		if ($global_config && isset($global_config['html-search-replace']) && is_array($global_config['html-search-replace'])) {
+			$content = blockera_test_apply_html_search_replace($content, $global_config['html-search-replace']);
+		}
+
+		// Apply test-specific html-search-replace if configured.
+		$config = blockera_test_get_config($designName);
+		if ($config && isset($config['html-search-replace']) && is_array($config['html-search-replace'])) {
+			$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
+		}
+
+		// Add style loader to $content to make it easy to check in browser if needed.
+		$content = "<link rel='stylesheet' href='./frontend-global-styles.css'>\n<link rel='stylesheet' href='./frontend.css'>\n\n" . $content;
+
+		// Check with snapshot content
+		$this->assertMatchesSnapshot('frontend-html', $content, new HtmlDriver());
+
+		/**
+		 * Test 2: Inline style attributes
+		 */
+
+		// Check if inline style checks should be performed
+		// Test-specific config overrides global config
+		$should_check_inline_styles = true;
+		if ($config && isset($config['tags-inline-style-check'])) {
+			$should_check_inline_styles = (bool) $config['tags-inline-style-check'];
+		} elseif ($global_config && isset($global_config['tags-inline-style-check'])) {
+			$should_check_inline_styles = (bool) $global_config['tags-inline-style-check'];
+		}
+
+		if ($should_check_inline_styles) {
+			$this->checkInlineStyles($content, $designName);
+		}
+
+		/**
+		 * Test 3: Blocks generated styles
+		 */
+		ob_start();
+		wp_head();
+		wp_footer();
+		$content = ob_get_clean();
+
+					
+		// Extract inline styles from wp_head output
+		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $content, $matches);
+		$inline_css = !empty($matches[1]) ? implode("\n", $matches[1]) : '';
+
+		$this->assertMatchesSnapshot('frontend-css', $inline_css, new CssDriver());
+
+		/**
+		 * Test 4: Global styles
+		 */
+		$this->go_to(get_permalink($post_id));
+
+		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
+			return blockera_test_register_style_variations($this->design, $variations);
+		});
+
+		do_action('wp_enqueue_scripts');
+
+		$blocks = [];
 
 		while(have_posts()) {
 			the_post();
 			
-			$blocks = parse_blocks(get_the_content());
-			$content = '';
-
-			foreach ($blocks as $block) {
-				$content .= render_block($block);
-			}
-
-			// Apply global html-search-replace first if configured
-			$global_config = blockera_test_get_global_config();
-			if ($global_config && isset($global_config['html-search-replace']) && is_array($global_config['html-search-replace'])) {
-				$content = blockera_test_apply_html_search_replace($content, $global_config['html-search-replace']);
-			}
-
-			// Apply test-specific html-search-replace if configured
-			$config = blockera_test_get_config($designName);
-			if ($config && isset($config['html-search-replace']) && is_array($config['html-search-replace'])) {
-				$content = blockera_test_apply_html_search_replace($content, $config['html-search-replace']);
-			}
-
-			$content = "<link rel='stylesheet' href='./frontend-global-styles.css'>\n<link rel='stylesheet' href='./frontend.css'>\n\n" . $content;
-
-			// Check with snapshot content
-			$this->assertMatchesSnapshot($content, new HtmlDriver());
-
-			// Check if inline style checks should be performed
-			// Test-specific config overrides global config
-			$should_check_inline_styles = true;
-			if ($config && isset($config['tags-inline-style-check'])) {
-				$should_check_inline_styles = (bool) $config['tags-inline-style-check'];
-			} elseif ($global_config && isset($global_config['tags-inline-style-check'])) {
-				$should_check_inline_styles = (bool) $global_config['tags-inline-style-check'];
-			}
-
-			if ($should_check_inline_styles) {
-				$this->checkInlineStyles($content, $designName);
-			}
+			$blocks = array_column(parse_blocks(get_the_content()), 'blockName');
 		}
 
+		$global_styles = '';
+
+		foreach (array_filter(array_unique($blocks)) as $block) {
+			$cache_key  = 'wp_styles_for_blocks';
+			$cached     = get_transient($cache_key);
+
+			$global_styles .= $cached['blocks'][$block] ?? '';
+		}
+
+		$this->assertMatchesSnapshot('frontend-global-styles', blockera_test_normalize_css($global_styles), new CssDriver());
+
+		// Cleanup database
 		wp_delete_post($post_id);
     }
-
-	/**
-	 * Test the frontend styles of a design.
-	 *
-	 * @param string $designName The design name.
-	 * 
-	 * @dataProvider designNameProvider
-	 *
-	 * @return void
-	 */
-	public function test_frontend_styles(string $designName): void {
-		
-		$this->design = $designName;
-
-		try {
-			// Arrange
-			$post_content = blockera_test_get_design_input($designName);
-		} catch (\Exception $e) {
-			$this->fail($e->getMessage());
-		}
-
-		$this->executeWpCliCommands($designName);
-
-		// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
-		blockera_test_activate_mu_plugin($designName);
-
-		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
-		$this->go_to(get_permalink($post_id));
-
-		do_blocks(get_post($post_id)->post_content);
-
-		// Capture wp_head output to extract inline styles
-		ob_start();
-		wp_head();
-		$head_content = ob_get_clean();
-		
-		// Extract inline styles from wp_head output
-		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_content, $matches);
-		$inline_css = !empty($matches[1]) ? implode("\n", $matches[1]) : '';
-
-		$this->assertMatchesSnapshot($inline_css, new CssDriver());
-
-		wp_delete_post($post_id);
-	}
 
 	/**
 	 * Recursively render a block and its inner blocks.
@@ -262,63 +339,6 @@ class BlockeraTest extends AppTestCase {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Test the frontend global styles of a design.
-	 *
-	 * @param string $designName The design name.
-	 * 
-	 * @dataProvider designNameProvider
-	 *
-	 * @return void
-	 */
-	public function test_frontend_global_styles(string $designName): void {
-		
-		$this->design = $designName;
-		$this->is_global_styles = true;
-
-		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
-			return blockera_test_register_style_variations($this->design, $variations);
-		});
-
-		do_action('wp_enqueue_scripts');
-
-		try {
-			// Arrange
-			$post_content = blockera_test_get_design_input($designName);
-		} catch (\Exception $e) {
-			$this->fail($e->getMessage());
-		}
-
-		$this->executeWpCliCommands($designName);
-
-		// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
-		blockera_test_activate_mu_plugin($designName);
-
-		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
-		$this->go_to(get_permalink($post_id));
-
-		$blocks = [];
-
-		while(have_posts()) {
-			the_post();
-			
-			$blocks = array_column(parse_blocks(get_the_content()), 'blockName');
-		}
-
-		$global_styles = '';
-
-		foreach (array_filter(array_unique($blocks)) as $block) {
-			$cache_key  = 'wp_styles_for_blocks';
-			$cached     = get_transient($cache_key);
-
-			$global_styles .= $cached['blocks'][$block] ?? '';
-		}
-
-		$this->assertMatchesSnapshot(blockera_test_normalize_css($global_styles), new CssDriver());
-
-		wp_delete_post($post_id);
 	}
 
 	/**
