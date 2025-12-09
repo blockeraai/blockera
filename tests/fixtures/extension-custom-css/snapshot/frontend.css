@@ -1,4 +1,3 @@
-
 p.blockera-block.blockera-block-2 {
 	font-size: 20px !important;
 	font-family: var(--wp--preset--font-family--fira-code) !important;
@@ -6,17 +5,17 @@ p.blockera-block.blockera-block-2 {
 
 u0026 {
 	n color: var(--wp--preset--color--accent-3, #503AA8);
-	n
+	n;
 }
 
 n u0026 {
 	n color: red;
-	n
+	n;
 }
 
 nnu0026:hover {
 	n color: green;
-	n
+	n;
 }
 
 n

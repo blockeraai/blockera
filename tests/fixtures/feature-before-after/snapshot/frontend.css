@@ -1,4 +1,3 @@
-
 p.blockera-block.blockera-block-1::before {
 	content: "Before";
 }
@@ -141,12 +140,12 @@ p.blockera-block.blockera-block-4::after {
 
 u0026 {
 	n counter-reset: item;
-	n
+	n;
 }
 
 nnu0026 p {
 	n counter-increment: item;
-	n
+	n;
 }
 
 n p.blockera-block.blockera-block-6::before {

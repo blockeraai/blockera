@@ -1,4 +1,3 @@
-
 .blockera-block.blockera-block-1.wp-block-social-links {
 	border-color: #00a80e;
 	border-width: 2px;
@@ -43,30 +42,28 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1 li.wp-block-social-link .wp-block-social-link-anchor {
-	gap: 30px;
-}
+		gap: 30px;
+	}
 
-.blockera-block.blockera-block-1 :where(.wp-block-social-link .wp-block-social-link-label) {
-	flex: 1 1 0%;
-	padding-right: 4px;
-	padding-left: 4px;
-	margin-right: 0 !important;
-	margin-left: 0 !important;
-	border-radius: 5px;
-}
+	.blockera-block.blockera-block-1 :where(.wp-block-social-link .wp-block-social-link-label) {
+		flex: 1 1 0%;
+		padding-right: 4px;
+		padding-left: 4px;
+		margin-right: 0 !important;
+		margin-left: 0 !important;
+		border-radius: 5px;
+	}
 
-.blockera-block.blockera-block-1 :where(svg) {
-	border-radius: 5px;
-}
+	.blockera-block.blockera-block-1 :where(svg) {
+		border-radius: 5px;
+	}
 
-.blockera-block.blockera-block-1 li.wp-block-social-link {
-	flex: 1 1 0%;
-	margin-right: 0 !important;
-	margin-left: 0 !important;
-	border-radius: 5px;
-}
-
-
+	.blockera-block.blockera-block-1 li.wp-block-social-link {
+		flex: 1 1 0%;
+		margin-right: 0 !important;
+		margin-left: 0 !important;
+		border-radius: 5px;
+	};
 }
 
 .blockera-block.blockera-block-1.wp-block-social-links:hover {
@@ -86,11 +83,9 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-social-links::before {
-	border-radius: 5px;
-	content: "Before";
-}
-
-
+		border-radius: 5px;
+		content: "Before";
+	};
 }
 
 .blockera-block.blockera-block-1.wp-block-social-links::after {
@@ -106,12 +101,10 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-social-links::after {
-	border-radius: 5px;
-	flex: 1 1 0%;
-	content: "After";
-}
-
-
+		border-radius: 5px;
+		flex: 1 1 0%;
+		content: "After";
+	};
 }
 
 .blockera-block.blockera-block-2.wp-block-social-links {
@@ -178,10 +171,8 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-social-link {
-	order: -1;
-}
-
-
+		order: -1;
+	};
 }
 
 .blockera-block.blockera-block-3:hover .wp-block-social-link-label {

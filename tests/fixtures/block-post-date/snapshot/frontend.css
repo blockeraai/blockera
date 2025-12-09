@@ -1,4 +1,3 @@
-
 .blockera-block.blockera-block-1.wp-block-post-date {
 	color: #980000;
 	background-color: #fee4e4;
@@ -107,27 +106,25 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-post-date {
-	flex-direction: column;
-	justify-content: center !important;
-	align-items: flex-start !important;
-}
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: flex-start !important;
+	}
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
-	flex-direction: column;
-	justify-content: center !important;
-	align-items: center !important;
-	align-self: stretch;
-}
+	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		align-self: stretch;
+	}
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
-	width: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: stretch;
-	content: "Before Link";
-}
-
-
+	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		content: "Before Link";
+	};
 }
 
 .blockera-block.blockera-block-3.wp-block-post-date::before {
@@ -142,11 +139,9 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-post-date::before {
-	align-self: stretch;
-	content: "Before";
-}
-
-
+		align-self: stretch;
+		content: "Before";
+	};
 }
 
 .blockera-block.blockera-block-3.wp-block-post-date::after {
@@ -161,12 +156,10 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-post-date::after {
-	width: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: stretch;
-	content: "After";
-}
-
-
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		content: "After";
+	};
 }

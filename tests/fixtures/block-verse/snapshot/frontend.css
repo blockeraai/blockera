@@ -1,4 +1,3 @@
-
 .blockera-block.blockera-block-1.wp-block-verse {
 	border-color: #ff9292;
 	border-width: 3px;
@@ -41,10 +40,8 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-verse {
-	border-radius: 5px;
-}
-
-
+		border-radius: 5px;
+	};
 }
 
 .blockera-block.blockera-block-1.wp-block-verse:hover {
@@ -64,16 +61,14 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-verse::before {
-	width: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: stretch;
-	margin-bottom: 10px;
-	border-radius: 5px;
-	content: "Before";
-}
-
-
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		margin-bottom: 10px;
+		border-radius: 5px;
+		content: "Before";
+	};
 }
 
 .blockera-block.blockera-block-1.wp-block-verse::after {
@@ -89,16 +84,14 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-verse::after {
-	margin-top: 10px;
-	width: 100%;
-	width: -moz-available;
-	width: -webkit-fill-available;
-	width: stretch;
-	border-radius: 5px;
-	content: "After";
-}
-
-
+		margin-top: 10px;
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+		border-radius: 5px;
+		content: "After";
+	};
 }
 
 .blockera-block.blockera-block-1 mark.has-inline-color {
