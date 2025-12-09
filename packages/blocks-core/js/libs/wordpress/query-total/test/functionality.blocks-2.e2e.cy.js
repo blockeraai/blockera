@@ -9,7 +9,6 @@ import {
 	redirectToFrontPage,
 	openInnerBlocksExtension,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 
 /**
  * Internal dependencies
@@ -20,10 +19,6 @@ describe('Query Total Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	it('Functionality + inner blocks', () => {
 		appendBlocks(testContent);
@@ -70,15 +65,5 @@ describe('Query Total Block', () => {
 		cy.get('.blockera-block.wp-block-query-total')
 			.should('have.css', 'background-clip', 'padding-box')
 			.and('have.css', 'color', 'rgb(102, 102, 102)');
-
-		// Check if optimize style generation is enabled
-		// then style attribute should not be present
-		// this is a workaround to check if the feature is enabled and working
-		if (enabledOptimizeStyleGeneration) {
-			cy.get('.blockera-block.wp-block-query-total').should(
-				'not.have.attr',
-				'style'
-			);
-		}
 	});
 });

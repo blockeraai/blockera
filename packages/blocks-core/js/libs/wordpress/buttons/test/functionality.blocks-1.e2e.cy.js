@@ -10,16 +10,11 @@ import {
 	redirectToFrontPage,
 	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 
 describe('Buttons Block', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	it('Functionality + Inner blocks', () => {
 		appendBlocks(`<!-- wp:buttons -->

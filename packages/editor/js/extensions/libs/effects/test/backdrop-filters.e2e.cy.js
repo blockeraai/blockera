@@ -6,16 +6,11 @@ import {
 	getSelectedBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 
 describe('Backdrop Filters → Functionality', () => {
 	beforeEach(() => {
 		createPost();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	it('Should update filter correctly, when add one drop-shadow', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
@@ -95,9 +90,7 @@ describe('Backdrop Filters → Functionality', () => {
 			.invoke('text')
 			.should(
 				'include',
-				!enabledOptimizeStyleGeneration
-					? 'backdrop-filter: drop-shadow(50px 30px 40px #cccccc) !important;'
-					: 'backdrop-filter: drop-shadow(50px 30px 40px #cccccc)'
+				'backdrop-filter: drop-shadow(50px 30px 40px #cccccc)'
 			);
 	});
 

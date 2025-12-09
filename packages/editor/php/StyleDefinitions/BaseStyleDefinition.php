@@ -98,7 +98,7 @@ abstract class BaseStyleDefinition {
      * @var array
      */
     protected array $options = [
-        'is-important' => true,
+        'is-important' => false,
     ];
 
     /**
@@ -610,7 +610,7 @@ abstract class BaseStyleDefinition {
      */
     protected function isImportant(): bool {
 
-        return $this->options['is-important'] && ! blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+        return $this->options['is-important'];
     }
 
     /**

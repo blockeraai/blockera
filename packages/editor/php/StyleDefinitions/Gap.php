@@ -43,8 +43,7 @@ class Gap extends BaseStyleDefinition {
 				break;
 		}
 
-		$gap                     = $setting['gap'];
-		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+		$gap = $setting['gap'];
 
 		if ($gap['lock']) {
 
@@ -52,7 +51,7 @@ class Gap extends BaseStyleDefinition {
 
 			if ($gap['gap']) {
 
-				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['gap']) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' ));
+				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['gap']) . ( $selectorSuffix ? ' !important' : '' ));
 			}
 		} else {
 
@@ -60,13 +59,13 @@ class Gap extends BaseStyleDefinition {
 
 				$prop = $selectorSuffix ? 'margin-block-start' : 'row-gap';
 
-				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['rows']) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' ));
+				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['rows']) . ( $selectorSuffix ? ' !important' : '' ));
 			}
 
 			if ($gap['columns']) {
 				$prop = $selectorSuffix ? 'margin-block-start' : 'column-gap';
 
-				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['columns']) . ( $selectorSuffix && $optimizeStyleGeneration ? ' !important' : '' ));
+				$this->setDeclaration($prop, blockera_get_value_addon_real_value($gap['columns']) . ( $selectorSuffix ? ' !important' : '' ));
 			}
 		}
 
@@ -81,7 +80,7 @@ class Gap extends BaseStyleDefinition {
 
 			$this->setCss(
 				'' === $display ? $this->declarations : [
-					'margin-block-start' => '0' . ( $optimizeStyleGeneration ? ' !important' : '' ),
+					'margin-block-start' => '0 !important',
 				],
 				'margin-block-start',
 				'.is-layout-constrained > * + *'

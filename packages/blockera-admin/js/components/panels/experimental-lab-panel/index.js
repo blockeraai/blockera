@@ -5,16 +5,16 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useContext, useState } from '@wordpress/element';
+// import { useContext, useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { TabsContext, SettingsContext } from '@blockera/wordpress';
+// import { TabsContext, SettingsContext } from '@blockera/wordpress';
 import {
 	Flex,
-	ToggleControl,
-	ControlContextProvider,
+	// ToggleControl,
+	// ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 
@@ -25,35 +25,35 @@ import FeatureLabel from './components/feature-label';
 import FeatureDesc from './components/feature-desc';
 
 // here store fallback default values for tab general settings.
-const fallbackDefaultValue = {
-	earlyAccessLab: {
-		optimizeStyleGeneration: false,
-		optimizeStyleGenerationStatus: 'alpha',
-	},
-};
+// const fallbackDefaultValue = {
+// 	earlyAccessLab: {
+// 		optimizeStyleGeneration: false,
+// 		optimizeStyleGenerationStatus: 'alpha',
+// 	},
+// };
 
 export const ExperimentalLabPanel = (): MixedElement => {
-	const {
-		defaultSettings,
-		//  config
-	} = useContext(SettingsContext);
+	// const {
+	// 	defaultSettings,
+	// 	//  config
+	// } = useContext(SettingsContext);
 
-	const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
+	// const { settings, setSettings, setHasUpdates } = useContext(TabsContext);
 
-	const earlyAccessLabSettings =
-		settings?.earlyAccessLab ||
-		defaultSettings?.earlyAccessLab ||
-		fallbackDefaultValue;
+	// const earlyAccessLabSettings =
+	// 	settings?.earlyAccessLab ||
+	// 	defaultSettings?.earlyAccessLab ||
+	// 	fallbackDefaultValue;
 
-	const {
-		blockeraSettings: { earlyAccessLab: savedEarlyAccessLabSettings },
-	} = window;
+	// const {
+	// 	blockeraSettings: { earlyAccessLab: savedEarlyAccessLabSettings },
+	// } = window;
 
-	const [optimizeStyleGenerationStatus] = useState(
-		earlyAccessLabSettings?.optimizeStyleGenerationStatus !== undefined
-			? earlyAccessLabSettings.optimizeStyleGenerationStatus
-			: fallbackDefaultValue.earlyAccessLab.optimizeStyleGenerationStatus
-	);
+	// const [optimizeStyleGenerationStatus] = useState(
+	// 	earlyAccessLabSettings?.optimizeStyleGenerationStatus !== undefined
+	// 		? earlyAccessLabSettings.optimizeStyleGenerationStatus
+	// 		: fallbackDefaultValue.earlyAccessLab.optimizeStyleGenerationStatus
+	// );
 
 	return (
 		<Flex
@@ -72,7 +72,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					/>
 					{__('Optimized Style Generation', 'blockera')}
 
-					<FeatureLabel status={optimizeStyleGenerationStatus} />
+					<FeatureLabel status={'released'} />
 				</h3>
 
 				<p className={'blockera-settings-general section-desc'}>
@@ -91,7 +91,7 @@ export const ExperimentalLabPanel = (): MixedElement => {
 					</a>
 				</p>
 
-				<div className={'blockera-settings-general control-wrapper'}>
+				{/* <div className={'blockera-settings-general control-wrapper'}>
 					<ControlContextProvider
 						value={{
 							name: 'toggleCleanupStyles',
@@ -99,7 +99,6 @@ export const ExperimentalLabPanel = (): MixedElement => {
 						}}
 					>
 						<ToggleControl
-							// TODO: Convert to advanced labelType. to display for user is changed value or not!
 							labelType={'self'}
 							id={'toggleCleanupStyles'}
 							className={'blockera-settings-general control'}
@@ -141,9 +140,9 @@ export const ExperimentalLabPanel = (): MixedElement => {
 							}
 						/>
 					</ControlContextProvider>
-				</div>
+				</div> */}
 
-				<FeatureDesc status={optimizeStyleGenerationStatus} />
+				<FeatureDesc status={'released'} />
 			</Flex>
 		</Flex>
 	);

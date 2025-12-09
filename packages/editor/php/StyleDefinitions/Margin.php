@@ -42,11 +42,10 @@ class Margin extends BaseStyleDefinition {
 
 		$declaration = array_map(
 			static function ( string $item, string $property ): array {
-				$value                   = $item;
-				$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
+				$value = $item;
 
 				// Add !important only to margin-left and margin-right.
-				if ( $optimizeStyleGeneration && ( 'left' === $property || 'right' === $property ) ) {
+				if ( 'left' === $property || 'right' === $property ) {
 					$value .= ' !important';
 				}
 

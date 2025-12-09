@@ -9,7 +9,6 @@ import {
 	savePage,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
-import { experimental } from '@blockera/env';
 import { setDevice } from './helpers';
 
 describe('Style Engine Testing ...', () => {
@@ -25,10 +24,6 @@ describe('Style Engine Testing ...', () => {
 		// Select target block
 		cy.getBlock('core/paragraph').click();
 	});
-
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
 
 	describe('Responsive design', () => {
 		it('should generate css for desktop device', () => {
@@ -82,12 +77,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important'
-								: 'transition: all 500ms ease 0ms'
-						);
+						.should('include', 'transition: all 500ms ease 0ms');
 
 					cy.get('p.blockera-block').realHover();
 					cy.get('p.blockera-block')
@@ -99,12 +89,7 @@ describe('Style Engine Testing ...', () => {
 						.realMouseMove(250, 350);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important'
-								: 'transition: all 500ms ease 0ms'
-						);
+						.should('include', 'transition: all 500ms ease 0ms');
 				});
 
 				context('xl-desktop', () => {
@@ -118,12 +103,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important'
-								: 'transition: all 500ms ease 0ms'
-						);
+						.should('include', 'transition: all 500ms ease 0ms');
 
 					cy.get('p.blockera-block').realHover();
 					cy.get('p.blockera-block')
@@ -251,12 +231,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important;'
-								: 'transition: all 500ms ease 0ms;'
-						);
+						.should('include', 'transition: all 500ms ease 0ms;');
 				});
 
 				context('xl-desktop', () => {
@@ -386,12 +361,7 @@ describe('Style Engine Testing ...', () => {
 					);
 					cy.get('style#blockera-inline-css')
 						.invoke('text')
-						.should(
-							'include',
-							!enabledOptimizeStyleGeneration
-								? 'transition: all 500ms ease 0ms !important;'
-								: 'transition: all 500ms ease 0ms;'
-						);
+						.should('include', 'transition: all 500ms ease 0ms;');
 
 					cy.get('p.blockera-block').realHover();
 					cy.get('p.blockera-block')

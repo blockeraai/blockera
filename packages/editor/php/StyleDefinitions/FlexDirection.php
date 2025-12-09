@@ -44,17 +44,15 @@ class FlexDirection extends BaseStyleDefinition {
 			$changeFlexInside = true;
 		}
 
-		$optimizeStyleGeneration = blockera_get_admin_options([ 'earlyAccessLab', 'optimizeStyleGeneration' ]);
-
 		if (isset($item['alignItems']) && $item['alignItems']) {
 			$prop = $changeFlexInside ? 'justify-content' : 'align-items';
 
-			$this->setDeclaration($prop, $item['alignItems'] . ( $optimizeStyleGeneration ? ' !important' : '' ));
+			$this->setDeclaration($prop, $item['alignItems'] . ' !important');
 		}
 
 		if (isset($item['justifyContent']) && $item['justifyContent']) {
 			$prop = $changeFlexInside ? 'align-items' : 'justify-content';
-			$this->setDeclaration($prop, $item['justifyContent'] . ( $optimizeStyleGeneration ? ' !important' : '' ));
+			$this->setDeclaration($prop, $item['justifyContent'] . ' !important');
 		}
 
 		$this->setCss($this->declarations);

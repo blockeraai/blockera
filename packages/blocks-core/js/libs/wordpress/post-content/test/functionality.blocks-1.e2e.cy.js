@@ -22,10 +22,6 @@ describe('Post Content Block', () => {
 		});
 	});
 
-	const enabledOptimizeStyleGeneration = experimental().get(
-		'earlyAccessLab.optimizeStyleGeneration'
-	);
-
 	it('Functionality + Inner blocks (Post content inside a Group block)', () => {
 		// Close welcome guide if it exists
 		closeWelcomeGuide();
@@ -298,16 +294,6 @@ describe('Post Content Block', () => {
 			'background-clip',
 			'padding-box'
 		);
-
-		// Check if optimize style generation is enabled
-		// then style attribute should not be present
-		// this is a workaround to check if the feature is enabled and working
-		if (enabledOptimizeStyleGeneration) {
-			cy.get('.blockera-block.wp-block-post-content').should(
-				'not.have.attr',
-				'style'
-			);
-		}
 
 		//
 		// 2.2. Post Content Block → Link Inner blocks
