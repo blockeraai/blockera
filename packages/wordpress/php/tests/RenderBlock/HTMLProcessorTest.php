@@ -26,9 +26,9 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 
-		$this->assertStringContainsString( '#main-content', array_keys($result['css']['root'])[0] );
-		$this->assertStringContainsString( 'red', $result['css']['root']['#main-content']['color'] );
-		$this->assertStringContainsString( '16px', $result['css']['root']['#main-content']['font-size'] );
+		$this->assertStringContainsString( 'div#main-content', array_keys($result['css']['root'])[0] );
+		$this->assertStringContainsString( 'red', $result['css']['root']['div#main-content']['color'] );
+		$this->assertStringContainsString( '16px', $result['css']['root']['div#main-content']['font-size'] );
 	}
 
 	public function testCollectInlineStylesWithBlockeraClassname() {
@@ -67,7 +67,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 
-		$this->assertStringContainsString( '#wrapper', array_keys($result['css']['root'])[0] );
+		$this->assertStringContainsString( 'div#wrapper', array_keys($result['css']['root'])[0] );
 		$this->assertStringContainsString( 'p.blockera-block-xyz', array_keys($result['css']['child'])[0] );
 		$this->assertStringContainsString( 'span.item-123', array_keys($result['css']['child'])[1] );
 		$this->assertStringContainsString( ' { color: blue; }', $result['css']['child']['span.item-123'] );
@@ -271,7 +271,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
 		$this->assertStringContainsString( '.container', array_keys($result['css']['root'])[0] );
-		$this->assertStringContainsString( '#intro', array_keys($result['css']['child'])[0] );
+		$this->assertStringContainsString( 'p#intro', array_keys($result['css']['child'])[0] );
 		$this->assertStringContainsString( ' { color: blue; }', $result['css']['child']['span.blockera-block-xyz.456-item'] );
 
 		$updated = $this->processor->updateWrapperClassname( $result['html'], 'wrapper-class' );
@@ -342,7 +342,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$result = $this->processor->cleanupHTML( $html );
 
-		$this->assertStringContainsString( '#with-id', array_keys($result['css']['root'])[0] );
+		$this->assertStringContainsString( 'div#with-id', array_keys($result['css']['root'])[0] );
 		$this->assertStringNotContainsString( '.blockera-block-test', array_keys($result['css']['root'])[0] );
 	}
 
