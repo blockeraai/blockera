@@ -233,6 +233,7 @@
 		"test:unit:php": "npm-run-all test:unit:php:setup test:unit:php:base",
 		"test:snapshots:php": "npm-run-all test:unit:php:setup test:snapshots:php:base",
 		"test:unit:php:composer": "composer run-script test",
+		"test:snapshots:import": "node ./bin/plugin/cli.js test:snapshots:import",
 		"version": "grunt version && grunt update-pot",
 		"storybook:init": "npx storybook@latest init --type react",
 		"storybook:start": "storybook dev -p 6008",
