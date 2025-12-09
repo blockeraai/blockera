@@ -125,7 +125,7 @@
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 30px;
-	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dsmall, 0.875rem) !important;
+	font-size: var(--wp--preset--font-size--small, 0.875rem) !important;
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {

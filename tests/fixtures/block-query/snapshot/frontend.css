@@ -167,15 +167,15 @@
 .blockera-block.blockera-block-3.wp-block-group {
 	background-color: #fff0f0;
 	margin-bottom: 30px;
-	padding-top: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
-	padding-bottom: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
+	padding-top: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
 }
 
 .blockera-block.blockera-block-3.wp-block-group {
 	background-color: #fff0f0;
 	margin-bottom: 30px;
-	padding-top: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
-	padding-bottom: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
+	padding-top: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
 }
 
 .blockera-block.blockera-block-5.wp-block-query-pagination {
@@ -560,14 +560,14 @@
 
 .blockera-block.blockera-block-9.wp-block-group {
 	background-color: #f5dcdc;
-	padding-top: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
-	padding-bottom: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
+	padding-top: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
 }
 
 .blockera-block.blockera-block-9.wp-block-group {
 	background-color: #f5dcdc;
-	padding-top: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
-	padding-bottom: var(u002du002dwpu002du002dpresetu002du002dspacingu002du002d60, clamp(30px, 7vw, 70px));
+	padding-top: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
+	padding-bottom: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
 }
 
 .blockera-block.blockera-block-10.wp-block-query-no-results {

@@ -74,7 +74,7 @@
 }
 
 p.blockera-block.blockera-block-3 {
-	font-size: var(u002du002dwpu002du002dpresetu002du002dfont-sizeu002du002dlarge, 1.38rem) !important;
+	font-size: var(--wp--preset--font-size--large, 1.38rem) !important;
 	text-align: left;
 }
 
