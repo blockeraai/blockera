@@ -282,7 +282,7 @@ class BlockeraTest extends AppTestCase {
 		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $content, $matches);
 		$inline_css = !empty($matches[1]) ? implode("\n", $matches[1]) : '';
 
-		$this->assertMatchesSnapshot('frontend-css', $inline_css, new CssDriver());
+		$this->assertMatchesSnapshot('frontend-css', blockera_test_normalize_css($inline_css), new CssDriver());
 
 		/**
 		 * Test 4: Global styles
