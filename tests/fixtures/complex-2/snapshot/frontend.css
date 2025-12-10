@@ -166,7 +166,7 @@ p.blockera-block.blockera-block-9 {
 	margin-bottom: 24px;
 }
 
-img {
+.blockera-block.blockera-block-10 img {
 	aspect-ratio: 4/3;
 	object-fit: cover;
 }
@@ -256,7 +256,7 @@ p.blockera-block.blockera-block-12 {
 	margin-bottom: 24px;
 }
 
-img {
+.blockera-block.blockera-block-14 img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover;

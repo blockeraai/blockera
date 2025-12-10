@@ -2,7 +2,7 @@
 	width: 150px;
 }
 
-img {
+.blockera-block.blockera-block-1 img {
 	width: 150px;
 }
 
@@ -26,7 +26,7 @@ img {
 	content: "After";
 }
 
-img {
+.blockera-block.blockera-block-2 img {
 	border-radius: 10px;
 }
 
@@ -108,7 +108,7 @@ img {
 	};
 }
 
-img {
+.blockera-block.blockera-block-3 img {
 	border-radius: 10px;
 }
 
@@ -187,7 +187,7 @@ n .blockera-block.blockera-block-4.wp-block-image {
 	border-radius: 10px;
 }
 
-img {
+.blockera-block.blockera-block-5 img {
 	width: 100px;
 	height: auto;
 }

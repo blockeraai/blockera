@@ -73,7 +73,7 @@
 	};
 }
 
-img {
+.blockera-block.blockera-block-1 img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover;
@@ -163,7 +163,7 @@ img {
 	border: 2px solid #ff4c4c;
 }
 
-img {
+.blockera-block.blockera-block-3 img {
 	border-radius: 20px;
 	aspect-ratio: 4/3;
 	object-fit: cover;
