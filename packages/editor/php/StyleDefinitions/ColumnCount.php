@@ -7,40 +7,44 @@ use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 class ColumnCount extends BaseStyleDefinition {
 
     protected function css( array $setting): array {
-
-        $declaration = [];
-        $cssProperty = $setting['type'];
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'column-count' !== $cssProperty) {
-
-            return $declaration;
+        if (! isset($setting['type'])) {
+            return [];
         }
 
-        if (! empty($setting[ $cssProperty ]['columns'])) {
+        $cssProperty = $setting['type'];
+        if ('' === $cssProperty || 'column-count' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
+            return [];
+        }
 
-            $this->setDeclaration('column-count', 'none' === $setting[ $cssProperty ]['columns'] ? 'initial' : preg_replace('/\b-columns\b/i', '', $setting[ $cssProperty ]['columns']));
+        $cssPropData = $setting[ $cssProperty ];
+        if (! isset($cssPropData['columns']) || '' === $cssPropData['columns']) {
+            $this->setCss($this->declarations);
+            return $this->css;
+        }
 
-            if ('initial' !== $this->declarations['column-count']) {
-                if (! empty($setting[ $cssProperty ]['gap'])) {
-                    $this->setDeclaration('column-gap', $setting[ $cssProperty ]['gap']);
-                }
+        $columns                            = $cssPropData['columns'];
+        $columnCountValue                   = ( 'none' === $columns ) ? 'initial' : str_replace('-columns', '', $columns);
+        $this->declarations['column-count'] = $columnCountValue;
 
-                if (! empty($setting[ $cssProperty ]['divider']['width'])) {
+        if ('initial' !== $columnCountValue) {
+            if (isset($cssPropData['gap']) && '' !== $cssPropData['gap']) {
+                $this->declarations['column-gap'] = $cssPropData['gap'];
+            }
 
-                    $color = blockera_get_value_addon_real_value($setting[ $cssProperty ]['divider']['color']);
-
-                    if ($color) {
-                        $this->setDeclaration('column-rule-color', $color);
+            if (isset($cssPropData['divider']['width']) && '' !== $cssPropData['divider']['width']) {
+                $divider = $cssPropData['divider'];
+                if (isset($divider['color'])) {
+                    $color = blockera_get_value_addon_real_value($divider['color']);
+                    if ('' !== $color && false !== $color && null !== $color) {
+                        $this->declarations['column-rule-color'] = $color;
                     }
-
-                    $this->setDeclaration('column-rule-style', $setting[ $cssProperty ]['divider']['style'] ?? 'solid');
-                    $this->setDeclaration('column-rule-width', $setting[ $cssProperty ]['divider']['width']);
                 }
+                $this->declarations['column-rule-style'] = $divider['style'] ?? 'solid';
+                $this->declarations['column-rule-width'] = $divider['width'];
             }
         }
 
         $this->setCss($this->declarations);
-
         return $this->css;
     }
 }
