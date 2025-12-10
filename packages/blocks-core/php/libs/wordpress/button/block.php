@@ -13,6 +13,11 @@ return array_merge(
 		'selectors'  => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// Features selectors.
+				'flex-child' => [
+					'root' => '.wp-block-button',
+				],
+				// Inner blocks selectors.
 				'blockera/elements/bold' => [
 					'root' => ':is(strong,b)',
 				],
