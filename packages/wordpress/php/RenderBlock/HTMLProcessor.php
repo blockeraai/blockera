@@ -175,7 +175,7 @@ class HTMLProcessor {
 				$declarations = $this->parseStyleDeclarations( $style, $is_wrapper );
 
 				if ( ! empty( $declarations ) ) {
-					$this->css_rules[ $is_wrapper ? 'root': 'child' ][ $selector ] = $declarations;
+					$this->css_rules[ $is_wrapper ? 'root': 'child' ][ $selector ] = array_unique($declarations);
 				}
 			}
 
