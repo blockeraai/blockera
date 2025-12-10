@@ -818,10 +818,15 @@ final class StyleEngine {
 			return $css_rules;
 		}
 
-		// Get all inline styles that match the current definition's selector pattern.
-		$matching_styles = $this->getMatchingInlineStyles($definition_selector);
+		$base_selector = preg_replace('/^\w+\./i', '.', $definition_selector);
 
-		foreach ($matching_styles as $declarations) {
+		foreach ($this->inline_styles as $selector => $declarations) {
+			// If selector matches the base selector pattern, include it.
+			// If $selector is root selector, it should not contains space and should be equal to base selector.
+			if (str_contains($selector, ' ') || $selector !== $base_selector) {
+				continue;
+			}
+
 			// Skip if declarations are empty.
 			if (empty($declarations)) {
 				continue;
@@ -833,33 +838,9 @@ final class StyleEngine {
 			} else {
 				// Merge same declaration with the style engine generated declarations.
 				$css_rules[ $definition_selector ] = array_merge($declarations, $css_rules[ $definition_selector ]);
-			}		
-		}
-
-		return $css_rules;
-	}
-
-	/**
-	 * Get inline styles that match the current definition's selector.
-	 * Retrieves inline styles that match the current definition's selector pattern.
-	 * This method filters the inline styles to find those that are relevant to the
-	 * current block definition by comparing selectors.
-	 * 
-	 * @param string $definition_selector The current definition's selector.
-	 * 
-	 * @return array Matching inline styles.
-	 */
-	protected function getMatchingInlineStyles( string $definition_selector): array {
-		$matching_styles = [];
-		$base_selector   = preg_replace('/^\w+\./i', '.', $definition_selector);
-
-		foreach ($this->inline_styles as $selector => $declarations) {
-			// If selector matches the base selector pattern, include it.
-			if (false !== strpos($selector, $base_selector) || false !== strpos($base_selector, $selector)) {
-				$matching_styles[ $selector ] = $declarations;
 			}
 		}
 
-		return $matching_styles;
+		return $css_rules;
 	}
 }
