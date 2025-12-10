@@ -108,6 +108,42 @@ final class StyleEngine {
 	protected static array $processed_supports = [];
 
 	/**
+	 * Store the cleanup declarations map for properties.
+	 * 
+	 * This map is used to clean up properties were collected from inline styles.
+	 * For example, if the border property is set, the border-width, border-style, and border-color properties should be removed.
+	 *
+	 * @var array $properties_clean_map
+	 */
+	protected static array $properties_clean_map = [
+		'border' => [
+			'border-width', 
+			'border-style', 
+			'border-color', 
+		],
+		'border-bottom' => [ 
+			'border-bottom-width', 
+			'border-bottom-style', 
+			'border-bottom-color', 
+		],
+		'border-top' => [
+			'border-top-width', 
+			'border-top-style', 
+			'border-top-color', 
+		],
+		'border-left' => [ 
+			'border-left-width', 
+			'border-left-style', 
+			'border-left-color', 
+		],
+		'border-right' => [
+			'border-right-width', 
+			'border-right-style', 
+			'border-right-color',
+		],
+	];
+
+	/**
 	 * Store the breakpoints.
 	 *
 	 * @var array $breakpoints
@@ -852,8 +888,25 @@ final class StyleEngine {
 				// Set css rule for definition selector as a root collected inline styles.
 				$css_rules[ $definition_selector ] = $declarations;
 			} else {
+				// Cache reference to avoid repeated array access in loop to improve performance.
+				$existing_rules = &$css_rules[ $definition_selector ];
+
+				// Clean up individual properties when shorthand exists.
+				// Build removal array first, then remove all at once for better performance.
+				$properties_to_remove = [];
+				foreach (self::$properties_clean_map as $cleanProperty => $properties) {
+					if ( isset($existing_rules[ $cleanProperty ]) ) {
+						array_push($properties_to_remove, ...$properties);
+					}
+				}
+
+				if ( ! empty($properties_to_remove) ) {
+					// array_diff_key() with array_flip() removes all properties in one native PHP operation (C-level), which is faster than multiple unset() calls.
+					$declarations = array_diff_key($declarations, array_flip($properties_to_remove));
+				}
+
 				// Merge same declaration with the style engine generated declarations.
-				$css_rules[ $definition_selector ] = array_merge($declarations, $css_rules[ $definition_selector ]);
+				$css_rules[ $definition_selector ] = array_merge($declarations, $existing_rules);
 			}
 		}
 
