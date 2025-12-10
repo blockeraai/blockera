@@ -9,11 +9,25 @@
 
 .blockera-block.blockera-block-1.wp-block-avatar img {
 	border: 5px solid #ff2323;
-	border-radius: 20px;
+	border-radius: 50px;
 	width: 120px;
 	min-width: 50px;
 	max-width: 200px !important;
 	height: auto;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-avatar {
+		display: flex !important;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 30px;
+	}
+
+	.blockera-block.blockera-block-1.wp-block-avatar img {
+		border-radius: 10px;
+	};
 }
 
 .blockera-block.blockera-block-1.wp-block-avatar::before {
@@ -28,14 +42,26 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-avatar img::before {
-	border-radius: 10px;
+	border-radius: 50px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-avatar img::before {
+		border-radius: 10px;
+	}
+
+	.blockera-block.blockera-block-1.wp-block-avatar::before {
+		margin-right: 0 !important;
+		align-self: flex-end;
+		content: "Before";
+	};
 }
 
 .blockera-block.blockera-block-1.wp-block-avatar::after {
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
 	margin-left: 20px !important;
 	display: inline-block !important;
 	background-color: #f64343;
@@ -43,12 +69,24 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-avatar img::after {
-	border-radius: 60px;
+	border-radius: 50px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-avatar img::after {
+		border-radius: 10px;
+	}
+
+	.blockera-block.blockera-block-1.wp-block-avatar::after {
+		margin-left: 0 !important;
+		align-self: stretch;
+		content: "After";
+	};
 }
 
 .blockera-block.blockera-block-1 img.avatar-120 {
 	border-color: #ff2323;
-	border-radius: 20px;
+	border-radius: 50px;
 	border-width: 5px;
 }
 
@@ -57,6 +95,13 @@
 	border-radius: 0;
 	box-shadow: 10px 10px 10px 0 #000000ab;
 	width: 80px;
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-2.wp-block-avatar img {
+		border: 3px solid var(--wp--preset--color--accent-3, #503AA8);
+		border-radius: 20px;
+	};
 }
 
 .blockera-block.blockera-block-2 img.avatar-80 {
