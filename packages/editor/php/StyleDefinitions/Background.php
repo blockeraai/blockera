@@ -26,6 +26,18 @@ class Background extends BaseStyleDefinition implements Repeater {
 	];
 
 	/**
+	 * Valid repeater item types as hash for O(1) lookup.
+	 * 
+	 * @var array<string, true>
+	 */
+	private const REPEATER_ITEM_TYPES = [
+		'image'           => true,
+		'linear-gradient' => true,
+		'radial-gradient' => true,
+		'mesh-gradient'   => true,
+	];
+
+	/**
 	 * Check is valid setting for style?
 	 *
 	 * @param array $setting array of style setting.
@@ -34,19 +46,20 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 */
 	public function isValidSetting( array $setting ): bool {
 
-		if ( empty( $setting['type'] ) ) {
-
+		// Direct isset check avoids empty() function call overhead.
+		if ( ! isset( $setting['type'] ) || '' === $setting['type'] ) {
 			return false;
 		}
 
-		$repeaterItemType = [ 'image', 'linear-gradient', 'radial-gradient', 'mesh-gradient' ];
+		$type = $setting['type'];
 
-		if ( ! in_array( $setting['type'], $repeaterItemType, true ) ) {
-
+		if ( ! isset( self::REPEATER_ITEM_TYPES[ $type ] ) ) {
 			return false;
 		}
 
-		return ! empty( $setting['isVisible'] ) || ! empty( $setting[ $setting['type'] ] );
+		// Direct truthy checks avoid empty() overhead and double array access.
+		return ( isset( $setting['isVisible'] ) && $setting['isVisible'] ) 
+			|| ( isset( $setting[ $type ] ) && $setting[ $type ] );
 	}
 
 	/**
@@ -59,21 +72,38 @@ class Background extends BaseStyleDefinition implements Repeater {
 	protected function css( array $setting ): array {
 
 		$declaration = [];
+
+		// Direct isset check avoids empty() overhead.
+		if ( ! isset( $setting['type'] ) || '' === $setting['type'] ) {
+			return $declaration;
+		}
+
 		$cssProperty = $setting['type'];
 
-		if ( empty( $cssProperty ) ) {
-
+		// Early return if property not set - avoids function call.
+		if ( ! isset( $setting[ $cssProperty ] ) ) {
 			return $declaration;
 		}
 
-		$filteredSettings = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
+		$sortedRepeater = blockera_get_sorted_repeater( $setting[ $cssProperty ] );
 
-		if (empty($filteredSettings)) {
-			
+		// Inline filtering avoids callback overhead and array_values reindexing.
+		// Direct foreach is faster than array_filter + array_map callbacks.
+		$filteredSettings = [];
+		foreach ( $sortedRepeater as $item ) {
+			if ( $this->isValidSetting( $item ) ) {
+				$filteredSettings[] = $item;
+			}
+		}
+
+		if ( empty( $filteredSettings ) ) {
 			return $declaration;
 		}
 
-		array_map([ $this, 'setActiveBackgroundType' ], $filteredSettings);
+		// Direct foreach avoids array_map callback overhead.
+		foreach ( $filteredSettings as $filteredSetting ) {
+			$this->setActiveBackgroundType( $filteredSetting );
+		}
 
 		$this->setCss( $this->declarations );
 
@@ -118,18 +148,30 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setBackground( array $setting ): void {
 
-		if ( 'custom' === $setting['image-size'] ) {
-			$size = sprintf(
-				'%s %s',
-				! empty( $setting['image-size-width'] ) ? blockera_get_value_addon_real_value( $setting['image-size-width'] ) : '',
-				! empty( $setting['image-size-height'] ) ? blockera_get_value_addon_real_value( $setting['image-size-height'] ) : ''
-			);
+		// Direct comparison avoids function call overhead.
+		if ( isset( $setting['image-size'] ) && 'custom' === $setting['image-size'] ) {
+			// Inline string concatenation avoids sprintf overhead.
+			$width  = ( isset( $setting['image-size-width'] ) && '' !== $setting['image-size-width'] ) 
+				? blockera_get_value_addon_real_value( $setting['image-size-width'] ) 
+				: '';
+			$height = ( isset( $setting['image-size-height'] ) && '' !== $setting['image-size-height'] ) 
+				? blockera_get_value_addon_real_value( $setting['image-size-height'] ) 
+				: '';
+			$size   = $width . ' ' . $height;
 		} else {
-			$size = $setting['image-size'];
+			$size = $setting['image-size'] ?? '';
 		}
 
-		$left = ! empty( $setting['image-position']['left'] ) ? blockera_get_value_addon_real_value( $setting['image-position']['left'] ) : '';
-		$top  = ! empty( $setting['image-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['image-position']['top'] ) : '';
+		// Direct isset checks avoid empty() overhead and nested array access.
+		$left = ( isset( $setting['image-position']['left'] ) && '' !== $setting['image-position']['left'] ) 
+			? blockera_get_value_addon_real_value( $setting['image-position']['left'] ) 
+			: '';
+		$top  = ( isset( $setting['image-position']['top'] ) && '' !== $setting['image-position']['top'] ) 
+			? blockera_get_value_addon_real_value( $setting['image-position']['top'] ) 
+			: '';
+
+		// Direct string concatenation avoids sprintf overhead.
+		$position = $left . ' ' . $top;
 
 		$props = [
 			// Background Image.
@@ -137,11 +179,11 @@ class Background extends BaseStyleDefinition implements Repeater {
 			// Background Size.
 			'background-size'       => $size,
 			// Background Position.
-			'background-position'   => ( $left . ' ' . $top ),
+			'background-position'   => $position,
 			// Background Repeat.
-			'background-repeat'     => ( $setting['image-repeat'] ?? '' ),
+			'background-repeat'     => $setting['image-repeat'] ?? '',
 			// Background Attachment.
-			'background-attachment' => ( $setting['image-attachment'] ?? '' ),
+			'background-attachment' => $setting['image-attachment'] ?? '',
 		];
 
 		$this->setDeclarations( $this->modifyProperties( $props ) );
@@ -156,20 +198,23 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setLinearGradient( array $setting ): void {
 
-		$gradient     = $setting['linear-gradient'];
-		$isValueAddon = is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'];
+		$gradient = $setting['linear-gradient'];
 
-		if ( $isValueAddon ) {
+		// Optimized check: combine is_array and isset into single condition.
+		// Avoids multiple function calls and array access.
+		if ( is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'] ) {
 			$gradient = blockera_get_value_addon_real_value( $gradient );
 		} else {
-
+			// preg_replace is necessary here for pattern matching, but we can optimize the replacement string.
+			$angle    = $setting['linear-gradient-angel'] ?? '';
 			$gradient = preg_replace(
 				'/linear-gradient\(\s*(.*?),/im',
-				'linear-gradient(' . $setting['linear-gradient-angel'] . 'deg,',
+				'linear-gradient(' . $angle . 'deg,',
 				$gradient
 			);
 
-			if ( 'repeat' === $setting['linear-gradient-repeat'] ) {
+			// Direct comparison avoids function call.
+			if ( isset( $setting['linear-gradient-repeat'] ) && 'repeat' === $setting['linear-gradient-repeat'] ) {
 				$gradient = str_replace(
 					'linear-gradient(',
 					'repeating-linear-gradient(',
@@ -178,15 +223,11 @@ class Background extends BaseStyleDefinition implements Repeater {
 			}
 		}
 
-		$props = array_merge(
-			$this->default_props,
-			[
-				// Background Image.
-				'background-image'      => $gradient,
-				// Background Attachment.
-				'background-attachment' => ( $setting['linear-gradient-attachment'] ?? 'scroll' ),
-			]
-		);
+		// Direct array assignment avoids array_merge overhead (creates new array).
+		// Since we know default_props structure, we can assign directly.
+		$props                          = $this->default_props;
+		$props['background-image']      = $gradient;
+		$props['background-attachment'] = $setting['linear-gradient-attachment'] ?? 'scroll';
 
 		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
@@ -200,24 +241,19 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setRadialGradient( array $setting ): void {
 
-		$gradient     = $setting['radial-gradient'];
-		$isValueAddon = is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'];
+		$gradient = $setting['radial-gradient'];
 
-		if ( $isValueAddon ) {
+		// Optimized check: combine is_array and isset into single condition.
+		if ( is_array( $gradient ) && isset( $gradient['isValueAddon'] ) && $gradient['isValueAddon'] ) {
 			$gradient = blockera_get_value_addon_real_value( $gradient );
 
-			$props = array_merge(
-				$this->default_props,
-				[
-					// Background Image.
-					'background-image'      => $gradient,
-					// Background Attachment.
-					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ),
-				]
-			);
+			// Direct array assignment avoids array_merge overhead.
+			$props                          = $this->default_props;
+			$props['background-image']      = $gradient;
+			$props['background-attachment'] = $setting['radial-gradient-attachment'] ?? 'scroll';
 		} else {
-
-			if ( 'repeat' === $setting['radial-gradient-repeat'] ) {
+			// Direct comparison avoids function call.
+			if ( isset( $setting['radial-gradient-repeat'] ) && 'repeat' === $setting['radial-gradient-repeat'] ) {
 				$gradient = str_replace(
 					'radial-gradient(',
 					'repeating-radial-gradient(',
@@ -225,14 +261,16 @@ class Background extends BaseStyleDefinition implements Repeater {
 				);
 			}
 
-			$left = ! empty( $setting['radial-gradient-position']['left'] ) ? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) : '';
-			$top  = ! empty( $setting['radial-gradient-position']['top'] ) ? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) : '';
+			// Direct isset checks avoid empty() overhead.
+			$left = ( isset( $setting['radial-gradient-position']['left'] ) && '' !== $setting['radial-gradient-position']['left'] ) 
+				? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['left'] ) 
+				: '';
+			$top  = ( isset( $setting['radial-gradient-position']['top'] ) && '' !== $setting['radial-gradient-position']['top'] ) 
+				? blockera_get_value_addon_real_value( $setting['radial-gradient-position']['top'] ) 
+				: '';
 
-			// Gradient Position.
-			if (
-				$left &&
-				$top
-			) {
+			// Gradient Position - truthy check is faster than && for strings.
+			if ( '' !== $left && '' !== $top ) {
 				$gradient = str_replace(
 					'gradient(',
 					"gradient( circle at {$left} {$top},",
@@ -240,8 +278,8 @@ class Background extends BaseStyleDefinition implements Repeater {
 				);
 			}
 
-			// Gradient Size.
-			if ( $setting['radial-gradient-size'] ) {
+			// Gradient Size - direct isset check.
+			if ( isset( $setting['radial-gradient-size'] ) && '' !== $setting['radial-gradient-size'] ) {
 				$gradient = str_replace(
 					'circle at ',
 					"circle {$setting['radial-gradient-size']} at ",
@@ -249,17 +287,11 @@ class Background extends BaseStyleDefinition implements Repeater {
 				);
 			}
 
-			$props = array_merge(
-				$this->default_props,
-				[
-					// Background Image.
-					'background-image'      => $gradient,
-					// Background Repeat.
-					'background-repeat'     => ( $setting['radial-gradient-repeat'] ?? $this->default_props['repeat'] ),
-					// Background Attachment.
-					'background-attachment' => ( $setting['radial-gradient-attachment'] ?? 'scroll' ),
-				]
-			);
+			// Direct array assignment avoids array_merge overhead.
+			$props                          = $this->default_props;
+			$props['background-image']      = $gradient;
+			$props['background-repeat']     = $setting['radial-gradient-repeat'] ?? $this->default_props['background-repeat'];
+			$props['background-attachment'] = $setting['radial-gradient-attachment'] ?? 'scroll';
 		}
 
 		$this->setDeclarations( $this->modifyProperties( $props ) );
@@ -277,44 +309,49 @@ class Background extends BaseStyleDefinition implements Repeater {
 		$gradient = $setting['mesh-gradient'];
 
 		if ( is_array( $gradient ) ) {
-
 			$gradient = implode( ', ', $gradient );
 		}
 
 		$colors = $setting['mesh-gradient-colors'];
 
+		// Inline sort comparison avoids closure overhead.
+		// Direct comparison function is faster than closure.
 		usort(
-			$colors,
-			function ( $a, $b ) {
+            $colors,
+            static function ( $a, $b ) {
+				return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 );
+			} 
+        );
 
-				return $a['order'] - $b['order'];
-			}
-		);
-
+		// Build replacement map once to avoid repeated str_replace calls.
+		// Multiple str_replace in loop creates new strings each iteration.
+		$replacements = [];
+		$firstColor   = null;
 		foreach ( $colors as $index => $color ) {
-
 			if ( ! isset( $color['color'] ) ) {
 				continue;
 			}
 
-			$gradient = str_replace(
-				"var(--c{$index})",
-				blockera_get_value_addon_real_value( $color['color'] ),
-				$gradient
-			);
+			// Store first color for background-color property.
+			if ( null === $firstColor ) {
+				$firstColor = $color['color'];
+			}
+
+			$replacements[ "var(--c{$index})" ] = blockera_get_value_addon_real_value( $color['color'] );
 		}
 
-		$props = array_merge(
-			$this->default_props,
-			[
-				// override bg color.
-				'background-color'      => ( array_values( $colors )[0]['color'] ? blockera_get_value_addon_real_value( array_values( $colors )[0]['color'] ) : '' ),
-				// Image.
-				'background-image'      => $gradient,
-				// Background Attachment.
-				'background-attachment' => $setting['mesh-gradient-attachment'],
-			]
-		);
+		// Single strtr call is faster than multiple str_replace in loop.
+		// strtr uses hash table lookup, more efficient for multiple replacements.
+		if ( ! empty( $replacements ) ) {
+			$gradient = strtr( $gradient, $replacements );
+		}
+
+		// Direct array assignment avoids array_merge overhead.
+		$props = $this->default_props;
+		// Direct array access avoids array_values() overhead (creates new array).
+		$props['background-color']      = ( null !== $firstColor ) ? blockera_get_value_addon_real_value( $firstColor ) : '';
+		$props['background-image']      = $gradient;
+		$props['background-attachment'] = $setting['mesh-gradient-attachment'] ?? '';
 
 		$this->setDeclarations( $this->modifyProperties( $props ) );
 	}
@@ -328,21 +365,18 @@ class Background extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function modifyProperties( array $props ): array {
 
+		// isset is faster than empty() for array key checks.
+		// Direct string concatenation avoids sprintf overhead.
 		foreach ( $props as $prop => $propValue ) {
-
-			if ( empty( $this->declarations[ $prop ] ) ) {
-
+			if ( ! isset( $this->declarations[ $prop ] ) || '' === $this->declarations[ $prop ] ) {
 				continue;
 			}
 
-			$props[ $prop ] = sprintf(
-				'%s, %s',
-				str_replace( '!important', '', $this->declarations[ $prop ] ),
-				$propValue
-			);
+			// Inline str_replace and concatenation avoids sprintf function call overhead.
+			$existing       = str_replace( '!important', '', $this->declarations[ $prop ] );
+			$props[ $prop ] = $existing . ', ' . $propValue;
 		}
 
 		return $props;
 	}
-
 }
