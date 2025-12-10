@@ -9,7 +9,7 @@
 	aspect-ratio: 1;
 	min-height: unset;
 	border: 6px solid #ff6600;
-	width: 400px;
+	width: 500px;
 }
 
 .blockera-block.blockera-block-1 :where(p) {
@@ -37,6 +37,17 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-cover {
 		aspect-ratio: 4/3;
+		display: flex !important;
+		flex-direction: column;
+		gap: 30px;
+		width: 100%;
+		width: -moz-available;
+		width: -webkit-fill-available;
+		width: stretch;
+	}
+
+	.blockera-block.blockera-block-1.wp-block-cover.is-layout-constrained > * + * {
+		margin-block-start: 0 !important;
 	}
 
 	.blockera-block.blockera-block-1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
@@ -57,8 +68,39 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-cover::before {
-	background-color: #ff0909;
+	background-color: #00000063;
+	border-radius: 50px;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
 	content: "Before";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-cover::before {
+		align-self: stretch;
+		text-align: center;
+		border-radius: 10px;
+		content: "Before";
+	};
+}
+
+.blockera-block.blockera-block-1.wp-block-cover::after {
+	background-color: #00000080;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	border-radius: 50px;
+	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-1.wp-block-cover::after {
+		align-self: flex-start;
+		content: "After";
+	};
 }
 
 .blockera-block.blockera-block-1 :where(span.wp-block-cover__background.has-background-dim) {
@@ -114,6 +156,18 @@ p.blockera-block.blockera-block-4:hover {
 	content: "Before";
 }
 
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-5.wp-block-cover::before {
+		flex: 1 1 0%;
+		align-self: flex-start;
+		display: flex !important;
+		flex-direction: row;
+		align-items: center !important;
+		justify-content: center !important;
+		content: "Before";
+	};
+}
+
 .blockera-block.blockera-block-5.wp-block-cover::after {
 	color: #f61010;
 	background-color: #ffb3b3;
@@ -129,6 +183,14 @@ p.blockera-block.blockera-block-4:hover {
 	flex: 1 1 0%;
 	align-self: flex-end;
 	content: "After";
+}
+
+@media screen and (max-width: 478px) {
+	.blockera-block.blockera-block-5.wp-block-cover::after {
+		flex: 0 1 auto;
+		align-self: stretch;
+		content: "After";
+	};
 }
 
 .blockera-block.blockera-block-5 :where(span.wp-block-cover__background.has-background-dim) {
