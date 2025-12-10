@@ -169,8 +169,7 @@ class Render {
 			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
 		}
 
-		$args['unique_selector'] 		= $unique_selector;
-		$args['force_update_classname'] = $unique_class_name !== $base_unique_class_name;
+		$args['unique_selector'] = $unique_selector;
 
 		// Represent html string.
         $html = $this->getUpdatedHTML($html, $unique_class_name, $args);
