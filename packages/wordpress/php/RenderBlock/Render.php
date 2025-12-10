@@ -205,7 +205,9 @@ class Render {
 
 		$styles = $this->getStyles();
 
-		if (! empty($styles)) {
+		// We should ensure the generated css is unique.
+		// Because maybe this generated css related to the loop blocks and we should not print duplicate css for them.
+		if (! empty($styles) && ! in_array($styles, $this->getGeneratedCSS(), true)) {
 			$this->updateGeneratedCSS($styles);
 		}
 
