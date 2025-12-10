@@ -27,7 +27,7 @@
 	padding-right: 19px;
 	padding-bottom: 19px;
 	padding-left: 19px;
-	flex-basis: 40%;
+	flex-basis: 40% !important;
 }
 
 @media screen and (max-width: 478px) {
@@ -40,8 +40,6 @@
 }
 
 .blockera-block.blockera-block-4.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
-	margin-top: 50px;
-	margin-bottom: 30px;
 	border-radius: 30px;
 }
 
@@ -70,14 +68,10 @@
 	background-color: #5577ff;
 	padding-top: 20px;
 	padding-bottom: 20px;
-	flex-basis: 60%;
+	flex-basis: 60% !important;
 }
 
 .blockera-block.blockera-block-5.wp-block-column.is-layout-constrained > * + * {
-	background-color: #5577ff;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	flex-basis: 60%;
 	margin-block-start: 50px !important;
 }
 
@@ -90,10 +84,10 @@
 .blockera-block.blockera-block-6.wp-block-heading {
 	color: #ffffff;
 	background-color: #213fbe;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 	font-size: 2.15rem !important;
 	font-style: normal;
 	font-weight: 900;
@@ -106,10 +100,10 @@
 p.blockera-block.blockera-block-7 {
 	color: #ffffff;
 	background-color: #213fbe;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
 	font-size: 18px !important;
 	font-style: normal;
 	font-weight: 700;
@@ -122,8 +116,8 @@ p.blockera-block.blockera-block-7 {
 .blockera-block.blockera-block-8.wp-block-group {
 	color: #ffffff;
 	background-color: #213fbe;
-	margin-right: -20px;
-	margin-left: -20px;
+	margin-right: -20px !important;
+	margin-left: -20px !important;
 	padding-top: 20px;
 	padding-bottom: 20px;
 	display: flex !important;
@@ -158,7 +152,7 @@ p.blockera-block.blockera-block-7 {
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	font-size: clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.196), 1rem);
+	font-size: 1rem !important;
 	font-style: normal;
 	font-weight: 600;
 	letter-spacing: 1px;

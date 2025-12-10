@@ -15,9 +15,6 @@ p.blockera-block.blockera-block--3::before {
 }
 
 .blockera-block.blockera-block--1.wp-block-group.is-layout-constrained > * + * {
-	background-color: #ffdede;
-	padding-top: 30px;
-	padding-bottom: 30px;
 	margin-block-start: 50px !important;
 }
 

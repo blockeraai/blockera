@@ -1,7 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-site-title {
 	color: #ff0000;
 	background-color: #ffe5e5;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
+	font-size: 20px !important;
 	font-style: normal;
 	font-weight: 1000;
 	border-color: #ff0404;

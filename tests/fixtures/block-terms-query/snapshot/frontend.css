@@ -231,7 +231,7 @@
 
 .blockera-block.blockera-block-5.wp-block-term-count {
 	background-color: #78efff;
-	font-size: 14px;
+	font-size: 14px !important;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 40px;

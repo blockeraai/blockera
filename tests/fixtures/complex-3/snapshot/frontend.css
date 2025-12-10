@@ -53,11 +53,11 @@
 p.blockera-block.blockera-block-4 {
 	color: #000000;
 	background-color: #5577ff;
-	padding-top: 0px;
-	padding-right: 0px;
-	padding-bottom: 0px;
-	padding-left: 0px;
-	font-size: clamp(1.25em, 1.25rem + ((1vw - 0.2em) * 1.176), 2em);
+	padding-top: 0;
+	padding-right: 0;
+	padding-bottom: 0;
+	padding-left: 0;
+	font-size: 2em !important;
 	font-style: normal;
 	font-weight: 700;
 	letter-spacing: 0;
@@ -207,12 +207,12 @@ p.blockera-block.blockera-block-13 {
 .blockera-block.blockera-block-14.wp-block-group {
 	color: #2ed445;
 	background-color: #213fbe;
-	margin-right: 50px;
+	margin-right: 50px !important;
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 	padding-left: 10px;
-	font-size: clamp(18.959px, 1.185rem + ((1vw - 3.2px) * 1.082), 30px);
+	font-size: 30px !important;
 	font-style: normal;
 	font-weight: 1000;
 	letter-spacing: 10px;

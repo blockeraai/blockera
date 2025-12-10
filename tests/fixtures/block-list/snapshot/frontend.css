@@ -68,15 +68,6 @@
 
 .wp-block-list.blockera-block.blockera-block-6:not(.wp-block-list .wp-block-list) > li {
 	border-radius: 10px;
-	color: #900000;
-	background-color: #ffdada;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style: normal;
-	font-weight: 600;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-6 .wp-block-list {
@@ -112,11 +103,8 @@
 }
 
 ul.blockera-block.blockera-block-8 {
-	border-color: #26ff00;
-	border-width: 2px;
-	border-radius: 10px;
-	background-color: #edffcf;
 	border: 2px solid #26ff00;
+	border-radius: 10px;
 }
 
 .blockera-block.blockera-block-8 :where(li)::before {
