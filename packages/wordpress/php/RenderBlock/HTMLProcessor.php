@@ -530,7 +530,7 @@ class HTMLProcessor {
 	/**
 	 * Generate CSS selector from tag name and attributes.
 	 *
-	 * Priority: ID > Classname + Tag > Tag
+	 * Priority: Classname > ID > Tag
 	 *
 	 * @param string $tag_name The HTML tag name.
 	 * @param string $attrs    The attributes string.
@@ -540,17 +540,7 @@ class HTMLProcessor {
 	 */
 	protected function generateSelectorFromAttrs( string $tag_name, string $attrs, bool $with_tagname = false ): string {
 
-		// Optimize: Quick ID check.
-		if ( preg_match( '/id\s*=\s*["\']([^"\']+)["\']/', $attrs, $id_match ) ) {
-			$target_selector = $tag_name . '#' . $id_match[1];
-
-			if ($with_tagname && ! empty($this->root_selector)) {
-				return  $this->root_selector . ' ' . $target_selector;
-			}
-
-			return $target_selector;
-		}
-
+		// First check for class name (preferred over ID).
 		if ( preg_match( '/class\s*=\s*["\']([^"\']+)["\']/', $attrs, $class_match ) ) {
 			$filtered_classes = $this->filterClassnames( $class_match[1] );
 
@@ -565,6 +555,17 @@ class HTMLProcessor {
 
 				return $concatenated_classes;
 			}
+		}
+
+		// If no class name found, check for ID.
+		if ( preg_match( '/id\s*=\s*["\']([^"\']+)["\']/', $attrs, $id_match ) ) {
+			$target_selector = $tag_name . '#' . $id_match[1];
+
+			if ($with_tagname && ! empty($this->root_selector)) {
+				return  $this->root_selector . ' ' . $target_selector;
+			}
+
+			return $target_selector;
 		}
 
 		if ($with_tagname && ! empty($this->root_selector)) {
