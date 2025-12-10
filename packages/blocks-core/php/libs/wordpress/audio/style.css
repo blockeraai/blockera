@@ -7,8 +7,14 @@
 .blockera-block.wp-block-audio audio {
 	font-size: 0;
 	padding: initial !important;
+	transition: inherit;
 }
 
 .blockera-block.wp-block-audio audio::-webkit-media-controls-enclosure {
 	max-height: inherit !important;
+}
+
+.blockera-block.wp-block-audio audio::-webkit-media-controls-enclosure,
+.blockera-block.wp-block-audio audio::-webkit-media-controls {
+	transition: inherit;
 }

@@ -13,15 +13,7 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'blockera/states/before' => [
-					'root' => '.wp-block-audio::before',
-				],
-				'blockera/states/after' => [
-					'root' => '.wp-block-audio::after',
-				],
-				'blockera/elements/caption' => [
-					'root' => 'figcaption',
-				],
+				// Features selectors.
 				'spacing' => [
 					'root' => '.wp-block-audio audio::-webkit-media-controls-enclosure',
 				],
@@ -30,6 +22,9 @@ return array_merge(
 				],
 				'border' => [
 					'root' => '.wp-block-audio audio::-webkit-media-controls-enclosure',
+				],
+				'blockeraBorderRadius' => [
+					'root' => '.wp-block-audio audio::-webkit-media-controls-enclosure,.wp-block-audio audio',
 				],
 				'shadow' => [
 					'root' => '.wp-block-audio audio',
@@ -42,6 +37,17 @@ return array_merge(
 				],
 				'blockeraBackgroundClip' => [
 					'root' => '.wp-block-audio',
+				],
+				// States selectors.
+				'blockera/states/before' => [
+					'root' => '.wp-block-audio::before',
+				],
+				'blockera/states/after' => [
+					'root' => '.wp-block-audio::after',
+				],
+				// Inner blocks selectors.
+				'blockera/elements/caption' => [
+					'root' => 'figcaption',
 				],
 			]
 		),
