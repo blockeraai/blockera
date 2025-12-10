@@ -8,24 +8,28 @@ class ChildPerspective extends BaseStyleDefinition {
 
     protected function css( array $setting): array {
 
-        $declaration = [];
+        if (! isset($setting['type'])) {
+            return [];
+        }
+
         $cssProperty = $setting['type'];
 
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'child-perspective' !== $cssProperty) {
-
-            return $declaration;
+        if ('child-perspective' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
+            return [];
         }
 
-        $childPerspective = blockera_get_value_addon_real_value($setting[ $cssProperty ]);
+        $settingValue = $setting[ $cssProperty ];
 
-        if (! empty($childPerspective)) {
-            $this->setDeclaration(
-                'perspective',
-                '0px' !== $childPerspective ? $childPerspective : 'none'
-            );
+        if ('' === $settingValue || null === $settingValue) {
+            return [];
         }
 
-        $this->setCss($this->declarations);
+        $childPerspective = blockera_get_value_addon_real_value($settingValue);
+
+        if ('' !== $childPerspective && null !== $childPerspective) {
+            $this->declarations['perspective'] = '0px' !== $childPerspective ? $childPerspective : 'none';
+            $this->setCss($this->declarations);
+        }
 
         return $this->css;
     }
