@@ -6,29 +6,54 @@ use Blockera\Editor\StyleDefinitions\BaseStyleDefinition;
 
 class BorderRadius extends BaseStyleDefinition {
 
+	/**
+	 * Generate CSS declarations for border-radius.
+	 * Optimized for minimal function calls and array access overhead.
+	 */
     protected function css( array $setting): array {
-        
-		$declaration = [];
-		$cssProperty = $setting['type'];
-
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'border-radius' !== $cssProperty ) {
-
-			return $declaration;
+		$cssProperty = $setting['type'] ?? null;
+		
+		if ( 'border-radius' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
+			return [];
 		}
 
 		$border_radius_config = $this->getStyleEngineConfig('blockeraBorderRadius');
-		$value                = $setting[ $cssProperty ];
+		
+		$value       = $setting[ $cssProperty ];
+		$declaration = [];
+		$valueType   = $value['type'] ?? null;
 
-		if (! empty($value['type']) && 'all' === $value['type']) {
-
-			$declaration[ $border_radius_config['all'] ] = ! empty($value['all']) ? blockera_get_value_addon_real_value($value['all']) : '';
-
+		if ( 'all' === $valueType ) {
+			$configAll                 = $border_radius_config['all'];
+			$allValue                  = $value['all'] ?? null;
+			$declaration[ $configAll ] = ! empty( $allValue )
+				? blockera_get_value_addon_real_value($allValue)
+				: '';
 		} else {
+			$configTopLeft     = $border_radius_config['topLeft'];
+			$configTopRight    = $border_radius_config['topRight'];
+			$configBottomRight = $border_radius_config['bottomRight'];
+			$configBottomLeft  = $border_radius_config['bottomLeft'];
 
-			$declaration[ $border_radius_config['topLeft'] ]     = ! empty($value['topLeft']) ? blockera_get_value_addon_real_value($value['topLeft']) : '';
-			$declaration[ $border_radius_config['topRight'] ]    = ! empty($value['topRight']) ? blockera_get_value_addon_real_value($value['topRight']) : '';
-			$declaration[ $border_radius_config['bottomRight'] ] = ! empty($value['bottomRight']) ? blockera_get_value_addon_real_value($value['bottomRight']) : '';
-			$declaration[ $border_radius_config['bottomLeft'] ]  = ! empty($value['bottomLeft']) ? blockera_get_value_addon_real_value($value['bottomLeft']) : '';
+			$topLeftValue                  = $value['topLeft'] ?? null;
+			$declaration[ $configTopLeft ] = ! empty( $topLeftValue )
+				? blockera_get_value_addon_real_value($topLeftValue)
+				: '';
+			
+			$topRightValue                  = $value['topRight'] ?? null;
+			$declaration[ $configTopRight ] = ! empty( $topRightValue )
+				? blockera_get_value_addon_real_value($topRightValue)
+				: '';
+			
+			$bottomRightValue                  = $value['bottomRight'] ?? null;
+			$declaration[ $configBottomRight ] = ! empty( $bottomRightValue )
+				? blockera_get_value_addon_real_value($bottomRightValue)
+				: '';
+			
+			$bottomLeftValue                  = $value['bottomLeft'] ?? null;
+			$declaration[ $configBottomLeft ] = ! empty( $bottomLeftValue )
+				? blockera_get_value_addon_real_value($bottomLeftValue)
+				: '';
 		}
 
 		$this->setCss( $declaration );
