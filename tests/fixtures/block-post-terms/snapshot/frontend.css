@@ -1,20 +1,14 @@
 .blockera-block.blockera-block-1.wp-block-post-terms {
 	background-color: #dbe8ff;
 	border-radius: 10px;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
 	border: 1px solid #8db7ff;
 	transition: all 500ms ease 0ms;
+	padding: 10px 20px 10px 20px;
 }
 
 .blockera-block.blockera-block-1 .wp-block-post-terms__prefix {
 	background-color: #62db85;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 45px;
 	font-size: 14px !important;
 	font-weight: 700;
@@ -27,10 +21,7 @@
 	background-color: #62db85;
 	border: 2px solid #20a846;
 	border-radius: 50px;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	font-weight: 700;
 	font-style: normal;
 	font-size: 14px !important;
@@ -39,10 +30,7 @@
 
 .blockera-block.blockera-block-1 a {
 	background-color: #a2c4ff;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 50px;
 	text-decoration: initial;
 	font-size: 14px !important;
@@ -54,10 +42,7 @@
 
 .blockera-block.blockera-block-1 .wp-block-post-terms__separator {
 	background-color: #005eff;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	border-radius: 50px;
 	display: inline-block !important;
 }
@@ -81,16 +66,13 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-post-terms {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	background-color: #b8f1de;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 20px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-2 .wp-block-post-terms__suffix {
@@ -103,10 +85,7 @@
 
 .blockera-block.blockera-block-2 a {
 	background-color: #56d7ac;
-	padding-top: 4px;
-	padding-right: 8px;
-	padding-bottom: 4px;
-	padding-left: 8px;
+	padding: 4px 8px 4px 8px;
 }
 
 .blockera-block.blockera-block-2 .wp-block-post-terms__separator {
@@ -127,15 +106,12 @@
 
 .blockera-block.blockera-block-3.wp-block-post-terms {
 	background-color: #ffe5a8;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	transition: all 500ms ease 0ms;
 	display: flex !important;
 	gap: 5px;
 	flex-wrap: wrap !important;
 	align-content: flex-start;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-3 .wp-block-post-terms__separator {
@@ -144,10 +120,7 @@
 
 .blockera-block.blockera-block-3 .wp-block-post-terms__prefix {
 	background-color: #ddbe70;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	width: 100%;
 	width: -moz-available;
@@ -157,10 +130,7 @@
 
 .blockera-block.blockera-block-3 a {
 	background-color: #ffb005;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	transition: all 500ms ease 0ms;
 	flex: 1 1 0%;
 	display: flex !important;
@@ -183,10 +153,7 @@
 	text-align: center;
 	content: "→";
 	display: inline-block !important;
-	padding-top: 2px;
-	padding-right: 2px;
-	padding-bottom: 2px;
-	padding-left: 2px;
+	padding: 2px 2px 2px 2px;
 	margin-right: 10px !important;
 	background-color: #0000002e;
 	border-radius: 40px;
@@ -197,10 +164,7 @@
 .blockera-block.blockera-block-3 a::after {
 	border-radius: 40px;
 	content: "←";
-	padding-top: 2px;
-	padding-right: 2px;
-	padding-bottom: 2px;
-	padding-left: 2px;
+	padding: 2px 2px 2px 2px;
 	margin-left: 10px !important;
 	text-align: center;
 	width: 20px;
@@ -221,10 +185,7 @@
 
 .blockera-block.blockera-block-3.wp-block-post-terms::before {
 	background-color: #0000003b;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	border-radius: 20px;
 	width: 100%;
 	width: -moz-available;
@@ -234,10 +195,7 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-post-terms::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	background-color: #0000003d;
 	border-radius: 20px;
 	flex: 1 1 0%;
@@ -246,10 +204,7 @@
 
 .blockera-block.blockera-block-4.wp-block-post-terms {
 	background-color: #f9b8ff;
-	padding-top: 11px;
-	padding-right: 11px;
-	padding-bottom: 11px;
-	padding-left: 11px;
+	padding: 11px 11px 11px 11px;
 }
 
 .blockera-block.blockera-block-4 .wp-block-post-terms__suffix {

@@ -7,10 +7,7 @@
 }
 
 .blockera-block.blockera-block-1 :where(.wp-block-button > .wp-element-button) {
-	padding-top: 10px;
-	padding-right: 30px;
-	padding-bottom: 10px;
-	padding-left: 30px;
+	padding: 10px 30px 10px 30px;
 	background-color: #95aaff;
 	color: #0023b1;
 	border: 2px solid var(--wp--preset--color--accent-1, #FFEE58);
@@ -129,22 +126,16 @@
 .blockera-block.blockera-block-4.wp-block-buttons {
 	border-radius: 100px;
 	background-color: #c2edff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	transition: all 500ms ease 0ms;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-4 :where(.wp-block-button > .wp-element-button) {
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	font-size: 16px !important;
 	font-weight: 900;
 	font-style: normal;
@@ -190,10 +181,7 @@
 	font-size: 18px !important;
 	font-weight: 800;
 	font-style: normal;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	border-radius: 0;
 	box-shadow: 3px 3px 0 0 #468943, 6px 6px 0 0 #3a7936;
 	transition: all 200ms ease 0ms;
@@ -266,10 +254,7 @@
 	background-color: #2d9d00;
 	border-radius: 30px;
 	display: inline-block !important;
-	padding-top: 3px;
-	padding-right: 10px;
-	padding-bottom: 3px;
-	padding-left: 10px;
+	padding: 3px 10px 3px 10px;
 	content: ":before";
 }
 
@@ -279,10 +264,7 @@
 	opacity: 60%;
 	background-color: #ff0202;
 	display: inline-block !important;
-	padding-top: 3px;
-	padding-right: 20px;
-	padding-bottom: 3px;
-	padding-left: 20px;
+	padding: 3px 20px 3px 20px;
 	border-radius: 5px;
 	border: 2px solid #ffffff;
 	content: ":after";

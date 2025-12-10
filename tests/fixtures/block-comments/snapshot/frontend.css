@@ -1,15 +1,12 @@
 .blockera-block.blockera-block-1.wp-block-post-comments-count {
 	background-color: #ffe1e1;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	transition: all 500ms ease 0ms;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-1.wp-block-post-comments-count::before {
@@ -29,10 +26,7 @@
 .blockera-block.blockera-block-2.wp-block-post-comments-link {
 	background-color: #fff1d0;
 	border-radius: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	text-align: center;
 }
 
@@ -49,18 +43,12 @@
 
 .blockera-block.blockera-block-3.wp-block-comments {
 	background-color: #e6e6e6;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-3.wp-block-comments::before {
 	background-color: #b7b7b7;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	border-radius: 10px;
 	font-size: 18px !important;
@@ -86,10 +74,7 @@
 
 .blockera-block.blockera-block-4.wp-block-comments-title {
 	background-color: #eaffc7;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 @media screen and (max-width: 478px) {
@@ -104,30 +89,21 @@
 
 .blockera-block.blockera-block-5.wp-block-comment-template {
 	background-color: #ffe9e9;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 	margin-bottom: 10px;
 }
 
 .blockera-block.blockera-block-5.wp-block-comment-template {
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	margin-bottom: 10px;
 	background-color: #ffe9e9;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-6.wp-block-columns {
 	border-radius: 10px;
 	background-color: #ffc3c3;
 	margin-bottom: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-6 :where(div.wp-block-column.is-layout-flow) {
@@ -175,10 +151,7 @@
 .blockera-block.blockera-block-11.wp-block-comment-content {
 	background-color: #b2edc4;
 	font-size: 18px !important;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-12.wp-block-comment-reply-link {
@@ -195,26 +168,17 @@
 
 .blockera-block.blockera-block-17.wp-block-post-comments-form {
 	background-color: #dff2ff;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-17 .comment-form {
 	background-color: #bce2fa;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	border-radius: 10px;
 }
 
 .blockera-block.blockera-block-17 .comment-reply-title {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	margin-bottom: 20px;
 	background-color: #a9ddff;
 	text-align: center;
@@ -248,10 +212,7 @@
 .blockera-block.blockera-block-17 :is(.wp-block-button > .wp-element-button, button[type="submit"]) {
 	background-color: #04609d;
 	border-radius: 0;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	display: block !important;
 	width: 100%;
 }

@@ -33,10 +33,7 @@
 
 .blockera-block.blockera-block-2.wp-block-table .wp-element-caption {
 	background-color: #FFC7C7;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 10px;
 }
 
@@ -89,10 +86,7 @@
 .blockera-block.blockera-block-2.wp-block-table > table .blockera-block.blockera-block-2.wp-block-table:::after::after {
 	display: inline-block !important;
 	content: "After Caption";
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #0000003d;
 	border-radius: 10px;
 }
@@ -102,10 +96,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-table::before {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	background-color: #0000002e;
 	border-radius: 5px;
@@ -113,10 +104,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-table::after {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #0000003b;
 	display: inline-block !important;
 	border-radius: 10px;

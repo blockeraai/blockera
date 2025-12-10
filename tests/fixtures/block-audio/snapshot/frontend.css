@@ -1,10 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure {
 	background-color: #c0e3ff;
 	border: 2px solid #6ab2ed;
-	padding-top: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-left: 30px;
+	padding: 30px 30px 30px 30px;
 }
 
 .blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-1.wp-block-audio audio {
@@ -29,10 +26,7 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure {
-		padding-top: 20px;
-		padding-right: 20px;
-		padding-bottom: 20px;
-		padding-left: 20px;
+		padding: 20px 20px 20px 20px;
 	}
 
 	.blockera-block.blockera-block-1.wp-block-audio audio {
@@ -81,10 +75,7 @@
 .blockera-block.blockera-block-2.wp-block-audio::before {
 	display: inline-block !important;
 	background-color: #eb93ea;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-bottom: 10px;
 	border-radius: 10px;
 	content: "Before";
@@ -92,10 +83,7 @@
 
 .blockera-block.blockera-block-2.wp-block-audio::after {
 	background-color: #eb93ea;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-top: 10px;
 	border-radius: 60px;
 	display: inline-block !important;
@@ -107,10 +95,7 @@
 	color: #520000;
 	font-weight: 700;
 	font-style: normal;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure {

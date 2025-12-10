@@ -5,10 +5,7 @@
 }
 
 .blockera-block.blockera-block-1 :where(.wp-block-accordion-heading) {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 20px;
+	padding: 5px 10px 5px 20px;
 	font-size: 18px !important;
 	font-weight: 700;
 	font-style: normal;
@@ -123,10 +120,7 @@ p.blockera-block.blockera-block-7 {
 
 .blockera-block.blockera-block-8.wp-block-accordion {
 	background-color: #ffe6e6;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-9.wp-block-accordion-item {
@@ -140,10 +134,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 .blockera-block.blockera-block-10 .wp-block-accordion-heading__toggle {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-10 :where(button.wp-block-accordion-heading__toggle) {
@@ -156,10 +147,7 @@ p.blockera-block.blockera-block-7 {
 .blockera-block.blockera-block-11.wp-block-accordion-panel {
 	background-color: #e8e8e8;
 	margin-top: 0;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-12.wp-block-accordion-item {
@@ -169,10 +157,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 .blockera-block.blockera-block-13 .wp-block-accordion-heading__toggle {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-13 :where(button.wp-block-accordion-heading__toggle) {
@@ -185,18 +170,12 @@ p.blockera-block.blockera-block-7 {
 .blockera-block.blockera-block-14.wp-block-accordion-panel {
 	background-color: #e8e8e8;
 	margin-top: 0;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-15.wp-block-accordion-item {
 	background-color: #d2e7ff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-16 p {
@@ -231,10 +210,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 p.blockera-block.blockera-block-17 {
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-17 :where(mark.has-inline-color) {

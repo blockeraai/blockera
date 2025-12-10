@@ -1,9 +1,6 @@
 .blockera-block.blockera-block-1.wp-block-avatar {
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	background-color: #ffe5e5;
+	padding: 20px 20px 20px 20px;
 	font-size: 18px !important;
 }
 
@@ -33,10 +30,7 @@
 .blockera-block.blockera-block-1.wp-block-avatar::before {
 	display: inline-block !important;
 	background-color: #ff4c4c;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-right: 20px !important;
 	content: "Before";
 }
@@ -58,10 +52,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-avatar::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	margin-left: 20px !important;
 	display: inline-block !important;
 	background-color: #f64343;

@@ -1,11 +1,8 @@
 .blockera-block.blockera-block-1.wp-block-read-more {
 	background-color: #ffdada;
 	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	border: 2px solid #ff1818;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-1 :is(strong, b) {
@@ -42,11 +39,8 @@
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	display: block !important;
+	padding: 10px 10px 10px 10px;
 }
 
 @media screen and (max-width: 478px) {
@@ -61,10 +55,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-read-more::before {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	display: inline-block !important;
 	background-color: #0000003b;
 	border-radius: 10px;
@@ -79,10 +70,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-read-more::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	display: inline-block !important;
 	background-color: #00000052;
 	border-radius: 10px;

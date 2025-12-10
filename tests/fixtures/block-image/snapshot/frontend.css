@@ -25,10 +25,7 @@
 
 .blockera-block.blockera-block-1.wp-block-image::before {
 	display: inline-block !important;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	background-color: #dddddd;
 	content: "Before";
 }
@@ -53,10 +50,7 @@
 
 .blockera-block.blockera-block-1.wp-block-image::after {
 	background-color: #999999;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	display: inline-block !important;
 	content: "After";
 }

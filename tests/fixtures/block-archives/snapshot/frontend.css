@@ -1,12 +1,9 @@
 .blockera-block.blockera-block-1.wp-block-archives {
 	background-color: #c5eba7;
 	border-radius: 20px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 40px;
 	margin-bottom: 60px;
 	border: 2px solid #46a300;
+	padding: 20px 20px 20px 40px;
 }
 
 .blockera-block.blockera-block-1.wp-block-archives:hover {
@@ -19,23 +16,17 @@
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 50px;
-	padding-top: 20px;
-	padding-right: 60px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	margin-top: 20px;
 	display: flex !important;
 	flex-direction: column;
 	gap: 10px;
+	padding: 20px 60px 20px 20px;
 }
 
 .blockera-block.blockera-block-2 a {
 	background-color: #00000038;
 	display: flex !important;
-	padding-top: 5px;
-	padding-right: 20px;
-	padding-bottom: 5px;
-	padding-left: 20px;
+	padding: 5px 20px 5px 20px;
 	border-radius: 50px;
 	flex: 1 1 0%;
 	flex-direction: row;
@@ -46,10 +37,7 @@
 
 .blockera-block.blockera-block-2 li {
 	background-color: #0000002e;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	border-radius: 50px;
 	display: flex !important;
 	gap: 10px;
@@ -66,10 +54,7 @@
 .blockera-block.blockera-block-2 li::before {
 	align-self: center;
 	content: "Before";
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #00000030;
 	border-radius: 50px;
 }
@@ -77,10 +62,7 @@
 .blockera-block.blockera-block-2 li::after {
 	align-self: center;
 	content: "After";
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #0000002b;
 	border-radius: 50px;
 }
@@ -92,10 +74,7 @@
 .blockera-block.blockera-block-2 a::before {
 	border-radius: 50px;
 	content: "Before";
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #00000036;
 	display: inline-block !important;
 }
@@ -104,19 +83,13 @@
 	border-radius: 50px;
 	content: "After";
 	background-color: #0000003d;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 }
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-archives {
 		border-radius: 10px;
-		padding-top: 20px;
-		padding-right: 20px;
-		padding-bottom: 20px;
-		padding-left: 20px;
+		padding: 20px 20px 20px 20px;
 		gap: 20px;
 	}
 
@@ -127,10 +100,7 @@
 		align-self: stretch;
 		border-radius: 10px;
 		gap: 10px;
-		padding-top: 20px;
-		padding-right: 20px;
-		padding-bottom: 20px;
-		padding-left: 20px;
+		padding: 20px 20px 20px 20px;
 	}
 
 	.blockera-block.blockera-block-2 li {
@@ -177,10 +147,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-archives::before {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #0000003b;
 	border-radius: 40px;
 	content: "Before";
@@ -194,10 +161,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-archives::after {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #00000033;
 	border-radius: 50px;
 	display: inline-block !important;
@@ -213,10 +177,7 @@
 
 .blockera-block.blockera-block-3.wp-block-archives {
 	background-color: #a7ebe9;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-3 a {

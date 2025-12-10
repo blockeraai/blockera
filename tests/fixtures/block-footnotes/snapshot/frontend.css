@@ -1,24 +1,18 @@
 .blockera-block.blockera-block-1.wp-block-footnotes {
 	background-color: #ffcccc;
 	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 50px;
-	padding-bottom: 20px;
-	padding-left: 50px;
 	border: 2px solid #ff2e2e;
 	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: flex-start !important;
 	gap: 30px;
+	padding: 20px 50px 20px 50px;
 }
 
 .blockera-block.blockera-block-1 a:not(.wp-element-button):last-child {
 	background-color: #5fff75;
-	padding-top: 0;
-	padding-right: 4px;
-	padding-bottom: 0;
-	padding-left: 4px;
+	padding: 0 4px 0 4px;
 	margin-left: 20px !important;
 	border-radius: 36px;
 	text-decoration: initial;
@@ -69,10 +63,7 @@
 
 .blockera-block.blockera-block-1.wp-block-footnotes::before {
 	background-color: #ff7676;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 10px;
 	display: inline-block !important;
 	font-size: 16px !important;
@@ -82,10 +73,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-footnotes::after {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	font-size: 18px !important;
 	font-weight: 1000;
 	font-style: normal;

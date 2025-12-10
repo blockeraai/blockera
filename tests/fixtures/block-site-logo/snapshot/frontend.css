@@ -1,12 +1,9 @@
 .blockera-block.blockera-block-1.wp-block-site-logo {
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	background-color: #ffd0d0;
 	border-radius: 10px;
 	box-shadow: 10px 10px 0 0 #ff1010ab;
 	display: flex !important;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-1.wp-block-site-logo :is(img) {

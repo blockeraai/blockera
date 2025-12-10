@@ -1,20 +1,14 @@
 .blockera-block.blockera-block-1.wp-block-tag-cloud {
 	font-style: normal;
 	font-weight: 500;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	background-color: #ffdfdf;
+	padding: 20px 20px 20px 20px;
 	font-size: 16px !important;
 }
 
 .blockera-block.blockera-block-1 a.tag-cloud-link {
 	background-color: #dd854a;
-	padding-top: 3px;
-	padding-right: 6px;
-	padding-bottom: 3px;
-	padding-left: 10px;
+	padding: 3px 6px 3px 10px;
 	border-radius: 40px;
 }
 
@@ -22,10 +16,7 @@
 	background-color: #00000038;
 	border-radius: 50px;
 	font-size: 60% !important;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 }
 
 .blockera-block.blockera-block-1 a.tag-cloud-link:hover {
@@ -35,10 +26,7 @@
 .blockera-block.blockera-block-1 a.tag-cloud-link::before {
 	font-size: 70% !important;
 	content: "→";
-	padding-top: 3px;
-	padding-right: 3px;
-	padding-bottom: 3px;
-	padding-left: 3px;
+	padding: 3px 3px 3px 3px;
 	background-color: #0000004a;
 	border-radius: 50px;
 }
@@ -46,10 +34,7 @@
 .blockera-block.blockera-block-1 a.tag-cloud-link::after {
 	font-size: 70% !important;
 	content: "←";
-	padding-top: 3px;
-	padding-right: 3px;
-	padding-bottom: 3px;
-	padding-left: 3px;
+	padding: 3px 3px 3px 3px;
 	background-color: #00000033;
 	border-radius: 50px;
 }
@@ -72,10 +57,7 @@
 
 	.blockera-block.blockera-block-1 .tag-link-count {
 		border-radius: 5px;
-		padding-top: 5px;
-		padding-right: 5px;
-		padding-bottom: 5px;
-		padding-left: 5px;
+		padding: 5px 5px 5px 5px;
 		margin-left: auto !important;
 	}
 
@@ -87,10 +69,7 @@
 
 .blockera-block.blockera-block-1.wp-block-tag-cloud::before {
 	background-color: #ff8787;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-bottom: 20px;
 	border-radius: 50px;
 	content: "Before";
@@ -106,10 +85,7 @@
 
 .blockera-block.blockera-block-1.wp-block-tag-cloud::after {
 	background-color: #ff8383;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-top: 20px;
 	border-radius: 50px;
 	content: "After";
@@ -144,11 +120,8 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-tag-cloud {
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	background-color: #96ac89;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-2 .tag-link-count {

@@ -1,32 +1,23 @@
 .blockera-block.blockera-block-1.wp-block-cover {
 	border-radius: 20px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	aspect-ratio: 1;
 	min-height: unset;
 	border: 6px solid #ff6600;
 	width: 500px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-1 :where(p) {
 	background-color: #db6821;
 	border-radius: 10px;
 	width: 80%;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	transition: all 500ms ease 0ms;
 }
 
 .blockera-block.blockera-block-1 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 	background-color: #c24a00;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	border-radius: 10px;
 	width: 80%;
 	transition: all 500ms ease 0ms;
@@ -68,10 +59,7 @@
 .blockera-block.blockera-block-1.wp-block-cover::before {
 	background-color: #00000063;
 	border-radius: 50px;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	content: "Before";
 }
 
@@ -86,10 +74,7 @@
 
 .blockera-block.blockera-block-1.wp-block-cover::after {
 	background-color: #00000080;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 50px;
 	content: "After";
 }
@@ -142,10 +127,7 @@ p.blockera-block.blockera-block-4:hover {
 
 .blockera-block.blockera-block-5.wp-block-cover::before {
 	background-color: #bcbcbc;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	border-radius: 10px;
 	font-size: 16px !important;
 	font-weight: 800;
@@ -172,10 +154,7 @@ p.blockera-block.blockera-block-4:hover {
 	font-weight: 800;
 	font-style: normal;
 	font-size: 16px !important;
-	padding-top: 5px;
-	padding-right: 30px;
-	padding-bottom: 5px;
-	padding-left: 30px;
+	padding: 5px 30px 5px 30px;
 	border-radius: 40px;
 	border: 2px solid #159b00;
 	flex: 1 1 0%;

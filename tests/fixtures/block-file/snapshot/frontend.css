@@ -1,19 +1,13 @@
 .blockera-block.blockera-block-1.wp-block-file {
 	border-radius: 10px;
 	background-color: #d5f4fe;
-	padding-top: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	border: 1px solid #89daf5;
-	padding-right: 20px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
 	background-color: #16d409;
-	padding-top: 5px;
-	padding-right: 9px;
-	padding-bottom: 5px;
-	padding-left: 9px;
+	padding: 5px 9px 5px 9px;
 	border-radius: 5px;
 	font-weight: 700;
 	font-style: normal;
@@ -22,10 +16,7 @@
 
 .blockera-block.blockera-block-1 .wp-element-button {
 	background-color: #ff4747;
-	padding-top: 8px;
-	padding-right: 10px;
-	padding-bottom: 8px;
-	padding-left: 10px;
+	padding: 8px 10px 8px 10px;
 	border-radius: 5px;
 	font-size: 16px !important;
 	box-shadow: 6px 6px 0 0 #002ceaab;
@@ -60,10 +51,7 @@
 }
 
 .blockera-block.blockera-block-2 .wp-element-button {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-left: 100px !important;
 }
 
@@ -75,10 +63,7 @@
 	font-size: 17px !important;
 	font-weight: 600;
 	font-style: normal;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #ffbaba;
 	content: "Before";
 }
@@ -94,10 +79,7 @@
 	font-size: 16px !important;
 	font-weight: 1000;
 	font-style: normal;
-	padding-top: 5px;
-	padding-right: 20px;
-	padding-bottom: 5px;
-	padding-left: 20px;
+	padding: 5px 20px 5px 20px;
 	color: #ffffff;
 	background-color: #ff4949;
 	flex: 1 1 0%;
@@ -114,15 +96,12 @@
 .blockera-block.blockera-block-3.wp-block-file {
 	border-radius: 10px;
 	background-color: #ffecc7;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 30px;
+	padding: 10px 10px 10px 10px;
 	font-size: var(--wp--preset--font-size--small, 0.875rem) !important;
 }
 
@@ -133,17 +112,11 @@
 	font-style: normal;
 	text-transform: uppercase;
 	display: inline-block !important;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 }
 
 .blockera-block.blockera-block-3 .wp-element-button {
-	padding-top: 5px;
-	padding-right: 40px;
-	padding-bottom: 5px;
-	padding-left: 40px;
+	padding: 5px 40px 5px 40px;
 	margin-left: 40px !important;
 	border-radius: 0;
 	background-color: #bc8b2a;
@@ -171,10 +144,7 @@
 	}
 
 	.blockera-block.blockera-block-3 .wp-element-button {
-		padding-top: 5px;
-		padding-right: 40px;
-		padding-bottom: 5px;
-		padding-left: 40px;
+		padding: 5px 40px 5px 40px;
 		margin-left: 0 !important;
 		text-align: center;
 	};
@@ -184,10 +154,7 @@
 	font-size: 16px !important;
 	font-weight: 1000;
 	font-style: normal;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #e8cb90;
 	text-transform: uppercase;
 	content: "Before";
@@ -197,10 +164,7 @@
 	font-size: 16px !important;
 	font-weight: 1000;
 	font-style: normal;
-	padding-top: 5px;
-	padding-right: 20px;
-	padding-bottom: 5px;
-	padding-left: 20px;
+	padding: 5px 20px 5px 20px;
 	color: #ffffff;
 	background-color: #dfae4e;
 	flex: 1 1 0%;
@@ -211,11 +175,8 @@
 .blockera-block.blockera-block-4.wp-block-file {
 	border-radius: 10px;
 	background-color: #e7e7fe;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	display: flex !important;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-4 :where(a:not(.wp-element-button)) {
@@ -234,10 +195,7 @@
 
 .blockera-block.blockera-block-4 .wp-element-button {
 	background-color: #4b4eff;
-	padding-top: 10px;
-	padding-right: 30px;
-	padding-bottom: 10px;
-	padding-left: 30px;
+	padding: 10px 30px 10px 30px;
 	border-radius: 10px;
 }
 
@@ -254,10 +212,7 @@
 	}
 
 	.blockera-block.blockera-block-4 :where(a:not(.wp-element-button)) {
-		padding-top: 10px;
-		padding-right: 20px;
-		padding-bottom: 10px;
-		padding-left: 20px;
+		padding: 10px 20px 10px 20px;
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
 		border-bottom-right-radius: 0;
@@ -268,10 +223,7 @@
 		flex-direction: row;
 		align-items: center !important;
 		justify-content: center !important;
-		padding-top: 10px;
-		padding-right: 30px;
-		padding-bottom: 10px;
-		padding-left: 30px;
+		padding: 10px 30px 10px 30px;
 		margin-left: 0 !important;
 		border-top-left-radius: 0;
 		border-top-right-radius: 0;

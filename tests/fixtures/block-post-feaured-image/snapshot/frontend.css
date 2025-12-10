@@ -1,13 +1,10 @@
 .blockera-block.blockera-block-1.wp-block-post-featured-image {
 	aspect-ratio: 9/16;
 	width: 300px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	background-color: #ffd7d7;
 	transition: all 500ms ease 0ms;
 	object-fit: cover;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-1.wp-block-post-featured-image img {
@@ -32,10 +29,7 @@
 .blockera-block.blockera-block-1.wp-block-post-featured-image::before {
 	font-size: 16px !important;
 	background-color: #00000038;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	display: inline-block !important;
 	content: "Before";
 }
@@ -45,10 +39,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-post-featured-image::after {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	background-color: #00000033;
 	display: inline-block !important;
 	font-size: 16px !important;

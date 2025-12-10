@@ -1,10 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-group {
 	background-color: #fffbcd;
 	margin-top: 10px;
-	padding-top: 15px;
-	padding-right: 15px;
-	padding-bottom: 15px;
-	padding-left: 15px;
+	padding: 15px 15px 15px 15px;
 }
 
 .blockera-block.blockera-block-1.wp-block-group.is-layout-constrained > * + * {
@@ -65,12 +62,9 @@
 
 .blockera-block.blockera-block-2.wp-block-group {
 	background-color: #faeaea;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	display: flex !important;
 	flex-direction: column;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-2 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
@@ -209,10 +203,6 @@ p.blockera-block.blockera-block-3 {
 
 .blockera-block.blockera-block-4.wp-block-group {
 	background-color: #deedc7;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 1000;
@@ -222,6 +212,7 @@ p.blockera-block.blockera-block-3 {
 	justify-content: center !important;
 	flex-wrap: nowrap !important;
 	height: 100px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-4 :where(p) {

@@ -1,11 +1,8 @@
 .blockera-block.blockera-block-1.wp-block-verse {
 	border-radius: 50px;
 	background-color: #fadbdb;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	border: 3px solid #ff9292;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
@@ -47,10 +44,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-verse::before {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	background-color: #0000003d;
 	border-radius: 50px;
@@ -70,10 +64,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-verse::after {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	background-color: #0000002e;
 	border-radius: 50px;

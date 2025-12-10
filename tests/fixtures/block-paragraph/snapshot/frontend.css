@@ -80,10 +80,7 @@ p.blockera-block.blockera-block-12::before {
 	color: #8800ff;
 	background-color: #ebd0ff;
 	font-size: 18px !important;
-	padding-top: 5px;
-	padding-right: 15px;
-	padding-bottom: 5px;
-	padding-left: 15px;
+	padding: 5px 15px 5px 15px;
 	margin-right: 20px !important;
 	border-radius: 38px;
 	content: "[:Before]";
@@ -92,10 +89,7 @@ p.blockera-block.blockera-block-12::before {
 p.blockera-block.blockera-block-12::after {
 	color: #009f6a;
 	background-color: #9ee8cd;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-left: 20px !important;
 	border-radius: 60px;
 	font-size: 18px !important;

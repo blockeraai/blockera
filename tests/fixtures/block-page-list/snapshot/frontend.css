@@ -1,13 +1,10 @@
 .blockera-block.blockera-block-1.wp-block-page-list {
 	background-color: #ffeeee;
 	border-radius: 10px;
-	padding-top: 30px;
-	padding-right: 40px;
-	padding-bottom: 30px;
-	padding-left: 40px;
 	display: flex !important;
 	flex-direction: column;
 	gap: 10px;
+	padding: 30px 40px 30px 40px;
 }
 
 .blockera-block.blockera-block-1 :where(a) {
@@ -24,10 +21,7 @@
 
 .blockera-block.blockera-block-1 :where(li) {
 	background-color: #e5c9c9;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	margin-bottom: 10px;
 	margin-left: 30px !important;
 	border-radius: 5px;
@@ -52,20 +46,14 @@
 	content: "Before";
 	background-color: #00000021;
 	display: inline-block !important;
-	padding-top: 2px;
-	padding-right: 10px;
-	padding-bottom: 2px;
-	padding-left: 10px;
+	padding: 2px 10px 2px 10px;
 }
 
 .blockera-block.blockera-block-1 :where(a)::after {
 	border-radius: 5px;
 	content: "After";
 	background-color: #00000042;
-	padding-top: 2px;
-	padding-right: 10px;
-	padding-bottom: 2px;
-	padding-left: 10px;
+	padding: 2px 10px 2px 10px;
 }
 
 .blockera-block.blockera-block-1 :where(li.current-menu-item a):hover {
@@ -79,10 +67,7 @@
 .blockera-block.blockera-block-1 :where(li)::before {
 	transform: translate3d(0, -50%, 0) rotateX(0deg) rotateY(0deg) rotateZ(45deg);
 	content: " ";
-	padding-top: 0;
-	padding-right: 0;
-	padding-bottom: 0;
-	padding-left: 0;
+	padding: 0 0 0 0;
 	display: block !important;
 	background-color: #00000042;
 	border-radius: 0;
@@ -101,10 +86,7 @@
 	font-style: normal;
 	content: "After";
 	font-size: 16px !important;
-	padding-top: 2px;
-	padding-right: 10px;
-	padding-bottom: 2px;
-	padding-left: 10px;
+	padding: 2px 10px 2px 10px;
 	display: block !important;
 	background-color: #00000042;
 	border-radius: 5px;
@@ -146,10 +128,7 @@
 .blockera-block.blockera-block-1.wp-block-page-list::before {
 	background-color: #ffc5c5;
 	display: block !important;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 5px;
 	font-size: 16px !important;
 	font-weight: 600;
@@ -158,10 +137,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-page-list::after {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #ffc5c5;
 	font-size: 16px !important;
 	font-weight: 600;
@@ -189,10 +165,7 @@
 }
 
 .blockera-block.blockera-block-3 :where(li) {
-	padding-top: 5px;
-	padding-right: 12px;
-	padding-bottom: 5px;
-	padding-left: 12px;
+	padding: 5px 12px 5px 12px;
 	margin-bottom: 10px;
 	background-color: #daddd3;
 	border-radius: 5px;

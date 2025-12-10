@@ -1,11 +1,8 @@
 .blockera-block.blockera-block-1.wp-block-query-title {
 	background-color: #ffe5e5;
 	border-radius: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	border: 1px solid #0000001f;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-1.wp-block-query-title:hover {
@@ -18,15 +15,12 @@
 	font-style: normal;
 	font-weight: 500;
 	border-radius: 70px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 @media screen and (max-width: 478px) {
@@ -35,10 +29,7 @@
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 20px;
-		padding-top: 35px;
-		padding-right: 35px;
-		padding-bottom: 35px;
-		padding-left: 35px;
+		padding: 35px 35px 35px 35px;
 	};
 }
 
@@ -46,10 +37,7 @@
 	font-weight: 1000;
 	font-style: normal;
 	background-color: #47ac15;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	border-radius: 50px;
 	border: 1px solid #00000030;
 	color: #f6f1f1;
@@ -66,10 +54,7 @@
 .blockera-block.blockera-block-2.wp-block-query-title::after {
 	font-weight: 1000;
 	font-style: normal;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	background-color: #33820b;
 	color: #ffffff;
 	border-radius: 30px;

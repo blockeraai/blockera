@@ -4,11 +4,8 @@
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	box-shadow: 10px 10px 0 0 #c97474ab;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link {
@@ -16,10 +13,7 @@
 	font-style: normal;
 	color: #ffffff;
 	background-color: #ff4c4c;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 50px;
 	text-decoration: initial;
 	display: inline-block !important;
@@ -61,10 +55,7 @@
 	font-size: 14px !important;
 	content: "Before";
 	display: inline-block !important;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	background-color: #00000033;
 	border-radius: 5px;
 }
@@ -72,10 +63,7 @@
 .blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::after {
 	font-size: 14px !important;
 	content: "After";
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	background-color: #00000030;
 	border-radius: 5px;
@@ -94,10 +82,7 @@
 		align-items: center !important;
 		justify-content: center !important;
 		gap: 10px;
-		padding-top: 10px;
-		padding-right: 10px;
-		padding-bottom: 10px;
-		padding-left: 10px;
+		padding: 10px 10px 10px 10px;
 		border-radius: 5px;
 	};
 }
@@ -106,10 +91,7 @@
 	display: inline-block !important;
 	border-radius: 5px;
 	background-color: #0000002b;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	content: "Before";
 }
 
@@ -124,10 +106,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-post-excerpt::after {
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	background-color: #00000036;
 	border-radius: 5px;
@@ -154,15 +133,12 @@
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
 	align-items: center !important;
 	gap: 0;
+	padding: 20px 20px 20px 20px;
 	text-align: center;
 }
 
@@ -203,10 +179,7 @@
 	font-style: normal;
 	font-weight: 500;
 	border-radius: 10px;
-	padding-top: 15px;
-	padding-right: 15px;
-	padding-bottom: 15px;
-	padding-left: 15px;
+	padding: 15px 15px 15px 15px;
 	text-align: center;
 }
 

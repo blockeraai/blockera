@@ -1,27 +1,18 @@
 .blockera-block.blockera-block-1.wp-block-loginout {
 	background-color: #e6d7d7;
 	border-radius: 10px;
-	padding-top: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-left: 30px;
+	padding: 30px 30px 30px 30px;
 }
 
 .blockera-block.blockera-block-1 form {
 	background-color: #bea4a4;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-1 :is(.login-password, .login-username) label {
 	color: #ac2626;
 	background-color: #00000029;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	display: block !important;
 	width: 100%;
 	width: -moz-available;
@@ -36,10 +27,7 @@
 	display: inline-block !important;
 	border: 1px solid #b50000;
 	border-radius: 8px;
-	padding-top: 8px;
-	padding-right: 12px;
-	padding-bottom: 8px;
-	padding-left: 12px;
+	padding: 8px 12px 8px 12px;
 	width: 100%;
 	width: -moz-available;
 	width: -webkit-fill-available;
@@ -51,10 +39,7 @@
 	background-color: #00000030;
 	display: block !important;
 	border-radius: 5px;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 }
 
 .blockera-block.blockera-block-1 .login-submit .button.button-primary {
@@ -83,20 +68,14 @@
 	border-radius: 5px;
 	content: "Container Before";
 	background-color: #00000030;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	display: block !important;
 }
 
 .blockera-block.blockera-block-1 form::after {
 	display: block !important;
 	content: "Container After";
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	border-radius: 5px;
 	background-color: #00000036;
 }
@@ -113,10 +92,7 @@
 .blockera-block.blockera-block-1.wp-block-loginout::before {
 	display: block !important;
 	background-color: #00000021;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-bottom: 10px;
 	border-radius: 5px;
 	content: "Before";
@@ -126,10 +102,7 @@
 	border-radius: 5px;
 	display: block !important;
 	background-color: #00000026;
-	padding-top: 5px;
-	padding-right: 10px;
-	padding-bottom: 5px;
-	padding-left: 10px;
+	padding: 5px 10px 5px 10px;
 	margin-top: 10px;
 	content: "After";
 }

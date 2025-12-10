@@ -5,11 +5,8 @@
 	font-style: normal;
 	font-weight: 1000;
 	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	border: 2px solid #ff0404;
+	padding: 20px 20px 20px 20px;
 	text-align: center;
 }
 
@@ -22,12 +19,9 @@
 
 .blockera-block.blockera-block-2.wp-block-site-title {
 	background-color: #cee6bf;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	box-shadow: 3px 3px 0 0 #85b16b;
 	transition: all 500ms ease 0ms;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-2.wp-block-site-title:hover {
@@ -39,23 +33,17 @@
 .blockera-block.blockera-block-3.wp-block-site-title {
 	background-color: #d8cfff;
 	font-size: 18px !important;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: flex-start !important;
 	gap: 40px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
 	background-color: #00000073;
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	border-radius: 5px;
 	color: #ffffff;
 	flex: 1 1 0%;
@@ -66,10 +54,7 @@
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	content: "Before";
 	background-color: #0000003b;
 	border-radius: 5px;
@@ -77,10 +62,7 @@
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	content: "After";
 	background-color: #0000004d;
 	display: inline-block !important;
@@ -93,10 +75,7 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-site-title {
-		padding-top: 20px;
-		padding-right: 20px;
-		padding-bottom: 20px;
-		padding-left: 20px;
+		padding: 20px 20px 20px 20px;
 		border-radius: 10px;
 		flex-direction: column;
 		justify-content: center !important;
@@ -110,10 +89,7 @@
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 10px;
-		padding-top: 10px;
-		padding-right: 10px;
-		padding-bottom: 10px;
-		padding-left: 10px;
+		padding: 10px 10px 10px 10px;
 	}
 
 	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::after {
@@ -130,10 +106,7 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-site-title::before {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	background-color: #00000021;
 	border-radius: 5px;
 	content: "Before";
@@ -147,10 +120,7 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-site-title::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
+	padding: 5px 5px 5px 5px;
 	background-color: #00000033;
 	border-radius: 5px;
 	content: "After";

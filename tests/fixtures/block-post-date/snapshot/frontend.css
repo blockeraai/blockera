@@ -4,11 +4,8 @@
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 5px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 	transition: all 500ms ease 0ms;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
@@ -26,23 +23,17 @@
 	font-size: 20px !important;
 	font-style: normal;
 	font-weight: 500;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 	background-color: #00b4ba;
-	padding-top: 5px;
-	padding-right: 15px;
-	padding-bottom: 5px;
-	padding-left: 15px;
+	padding: 5px 15px 5px 15px;
 	border-radius: 50px;
 }
 
@@ -56,24 +47,18 @@
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: flex-start !important;
 	gap: 10px;
+	padding: 20px 20px 20px 20px;
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
 	color: #ffffff;
 	content: "Before Link";
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	background-color: #00000047;
 	border-radius: 5px;
 }
@@ -83,18 +68,12 @@
 	content: "After Link";
 	background-color: #00000054;
 	color: #ffffff;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
 	background-color: #00000038;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	border-radius: 5px;
 	display: flex !important;
 	flex-direction: row;
@@ -128,10 +107,7 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-post-date::before {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	background-color: #00000024;
 	border-radius: 5px;
 	content: "Before";
@@ -145,10 +121,7 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-post-date::after {
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	border-radius: 5px;
 	background-color: #0000003b;
 	content: "After";

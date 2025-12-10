@@ -6,10 +6,7 @@
 
 .blockera-block.blockera-block-1 figcaption {
 	background-color: #68ffe1;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	margin-top: 19px;
 	text-align: center;
 }
@@ -79,10 +76,7 @@
 
 .blockera-block.blockera-block-3 figcaption {
 	background-color: #68ffe1;
-	padding-top: 10px;
-	padding-right: 20px;
-	padding-bottom: 10px;
-	padding-left: 20px;
+	padding: 10px 20px 10px 20px;
 	margin-top: 19px;
 	margin-right: auto !important;
 	margin-left: auto !important;

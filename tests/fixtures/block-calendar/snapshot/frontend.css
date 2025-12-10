@@ -1,18 +1,12 @@
 .blockera-block.blockera-block-1.wp-block-calendar {
 	background-color: #ececfc;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+	padding: 20px 20px 20px 20px;
 	color: #009602;
 }
 
 .blockera-block.blockera-block-1 caption {
 	background-color: #cecaff;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+	padding: 10px 10px 10px 10px;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
 	font-weight: 700;
@@ -68,20 +62,14 @@
 .blockera-block.blockera-block-1.wp-block-calendar::before {
 	background-color: #aba4ff;
 	color: #1c0adb;
-	padding-top: 2px;
-	padding-right: 20px;
-	padding-bottom: 2px;
-	padding-left: 20px;
+	padding: 2px 20px 2px 20px;
 	margin-bottom: 20px;
 	display: inline-block !important;
 	content: "Before";
 }
 
 .blockera-block.blockera-block-1.wp-block-calendar::after {
-	padding-top: 5px;
-	padding-right: 20px;
-	padding-bottom: 5px;
-	padding-left: 20px;
+	padding: 5px 20px 5px 20px;
 	margin-top: 30px;
 	display: inline-block !important;
 	background-color: #6355ff;
