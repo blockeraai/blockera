@@ -550,7 +550,7 @@ class HTMLProcessor {
 				if ( $with_tagname ) {
 					return empty( $this->root_selector )
 						? $tag_name . $concatenated_classes
-						: $this->root_selector . ' ' . $tag_name . $concatenated_classes;
+						: $this->root_selector . ' :where(' . $tag_name . $concatenated_classes . ')';
 				}
 
 				return $concatenated_classes;
@@ -562,14 +562,14 @@ class HTMLProcessor {
 			$target_selector = $tag_name . '#' . $id_match[1];
 
 			if ($with_tagname && ! empty($this->root_selector)) {
-				return  $this->root_selector . ' ' . $target_selector;
+				return  $this->root_selector . ' :where(' . $target_selector . ')';
 			}
 
 			return $target_selector;
 		}
 
 		if ($with_tagname && ! empty($this->root_selector)) {
-			return $this->root_selector . ' ' . $tag_name;
+			return $this->root_selector . ' :where(' . $tag_name . ')';
 		}
 
 		return $tag_name;
