@@ -6,33 +6,36 @@ class AspectRatio extends BaseStyleDefinition {
 
     protected function css( array $setting): array {
      
-		$declaration = [];
-		$cssProperty = $setting['type'];
-
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'aspect-ratio' !== $cssProperty ) {
-
-			return $declaration;
+		$cssProperty = $setting['type'] ?? '';
+		
+		if ( 'aspect-ratio' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
+			return [];
 		}
 		
-		// Backward compatibility for aspect-ratio value, because aspect-ratio changed from value to val in the new version.
-		$value = $setting[ $cssProperty ]['val'] ?? $setting[ $cssProperty ]['value'];
-
-		if ('custom' === $value) {
-
-			$this->setDeclaration(
-                $cssProperty,
-                sprintf(
-                    '%1$s%2$s%3$s',
-                    $setting[ $cssProperty ]['width'],
-                    ! empty($setting[ $cssProperty ]['width']) && ! empty($setting[ $cssProperty ]['height']) ? ' / ' : '',
-                    $setting[ $cssProperty ]['height']
-                )
-            );
-
-		} else {
-
-			$this->setDeclaration($cssProperty, $value);
+		$aspectRatioData = $setting[ $cssProperty ];
+		
+		// Backward compatibility: use null coalescing.
+		$value = $aspectRatioData['val'] ?? $aspectRatioData['value'] ?? null;
+		
+		// Early return if no value.
+		if ( null === $value ) {
+			return [];
 		}
+
+		// Fast path for non-custom values.
+		if ( 'custom' !== $value ) {
+			$this->declarations[ $cssProperty ] = $value;
+			$this->setCss( $this->declarations );
+			return $this->css;
+		}
+
+		// Custom value path.
+		$width  = $aspectRatioData['width'] ?? '';
+		$height = $aspectRatioData['height'] ?? '';
+		
+		$cssValue = implode( ' / ', [ $width, $height ] );
+		
+		$this->declarations[ $cssProperty ] = $cssValue;
 
 		$this->setCss( $this->declarations );
 
