@@ -60,32 +60,6 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-2 {
-	background-color: #e4e4e4;
-}
-
-.blockera-block.blockera-block-2::before {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	background-color: #0000003d;
-	display: inline-block !important;
-	border-radius: 10px;
-	content: "Before";
-}
-
-.blockera-block.blockera-block-2::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	background-color: #00000030;
-	display: inline-block !important;
-	border-radius: 10px;
-	content: "After";
-}
-
 .blockera-block.blockera-block-2.wp-block-post-template {
 	background-color: #e4e4e4;
 }
@@ -102,32 +76,6 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-post-template::after {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	background-color: #00000030;
-	display: inline-block !important;
-	border-radius: 10px;
-	content: "After";
-}
-
-.blockera-block.blockera-block-2 {
-	background-color: #e4e4e4;
-}
-
-.blockera-block.blockera-block-2::before {
-	padding-top: 5px;
-	padding-right: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	background-color: #0000003d;
-	display: inline-block !important;
-	border-radius: 10px;
-	content: "Before";
-}
-
-.blockera-block.blockera-block-2::after {
 	padding-top: 5px;
 	padding-right: 5px;
 	padding-bottom: 5px;
@@ -684,27 +632,6 @@
 		align-self: flex-end;
 		content: "After";
 	};
-}
-
-.blockera-block.blockera-block-11 {
-	background-color: #c0e8ff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
-.blockera-block.blockera-block-11 {
-	background-color: #fe4444;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	text-align: center;
-	color: #ffffff;
-	text-transform: uppercase;
-	border-radius: 40px;
-	font-size: 14px !important;
 }
 
 .blockera-block.blockera-block-11.wp-block-post-template {
@@ -716,27 +643,6 @@
 }
 
 .blockera-block.blockera-block-11 .wp-block-heading {
-	background-color: #fe4444;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	text-align: center;
-	color: #ffffff;
-	text-transform: uppercase;
-	border-radius: 40px;
-	font-size: 14px !important;
-}
-
-.blockera-block.blockera-block-11 {
-	background-color: #c0e8ff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
-.blockera-block.blockera-block-11 {
 	background-color: #fe4444;
 	padding-top: 10px;
 	padding-right: 10px;
