@@ -51,7 +51,7 @@
 	background-color: #ff9191;
 }
 
-.blockera-block.blockera-block-1 mark.has-inline-color {
+.blockera-block.blockera-block-1 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 
@@ -67,7 +67,7 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-2 mark.has-inline-color {
+.blockera-block.blockera-block-2 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 
@@ -141,6 +141,6 @@
 	};
 }
 
-.blockera-block.blockera-block-3 mark.has-inline-color {
+.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

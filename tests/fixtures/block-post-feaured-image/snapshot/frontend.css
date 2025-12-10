@@ -59,7 +59,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 img.has-border-color.wp-post-image {
+.blockera-block.blockera-block-1 :where(img.has-border-color.wp-post-image) {
 	border-color: #ff0000;
 	border-radius: 50px;
 	border-width: 3px;
@@ -82,6 +82,6 @@
 	};
 }
 
-.blockera-block.blockera-block-2 img.attachment-post-thumbnail.size-post-thumbnail {
+.blockera-block.blockera-block-2 :where(img.attachment-post-thumbnail.size-post-thumbnail) {
 	object-fit: cover;
 }

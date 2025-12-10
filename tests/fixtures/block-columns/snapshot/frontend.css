@@ -134,7 +134,7 @@ p.blockera-block.blockera-block-4 {
 	font-size: 16px !important;
 }
 
-.blockera-block.blockera-block-4 mark.has-inline-color {
+.blockera-block.blockera-block-4 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 
@@ -233,7 +233,7 @@ p.blockera-block.blockera-block-10 {
 	font-size: 14px !important;
 }
 
-.blockera-block.blockera-block-10 mark.has-inline-color {
+.blockera-block.blockera-block-10 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 

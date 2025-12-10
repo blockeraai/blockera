@@ -60,7 +60,7 @@
 	};
 }
 
-.blockera-block.blockera-block-4 img {
+.blockera-block.blockera-block-4 :where(img) {
 	border-radius: 30px;
 }
 

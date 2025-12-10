@@ -20,7 +20,7 @@ p.blockera-block.blockera-block-4 {
 	background-color: #d8e0ff;
 }
 
-.blockera-block.blockera-block-4 mark.has-inline-color {
+.blockera-block.blockera-block-4 :where(mark.has-inline-color) {
 	background-color: #5577ff;
 	color: #ffffff;
 }
@@ -30,7 +30,7 @@ p.blockera-block.blockera-block-5 {
 	color: var(--wp--preset--color--base, #FFFFFF);
 }
 
-.blockera-block.blockera-block-5 mark.has-inline-color.has-contrast-color {
+.blockera-block.blockera-block-5 :where(mark.has-inline-color.has-contrast-color) {
 	background-color: #FFEE58;
 }
 
@@ -131,7 +131,7 @@ p.blockera-block.blockera-block-13 {
 	color: #6cff6c;
 }
 
-.blockera-block.blockera-block-13 mark.has-inline-color {
+.blockera-block.blockera-block-13 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 
@@ -139,6 +139,6 @@ p.blockera-block.blockera-block-14 {
 	background-color: #f3f3f3;
 }
 
-.blockera-block.blockera-block-14 mark.has-inline-color {
+.blockera-block.blockera-block-14 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

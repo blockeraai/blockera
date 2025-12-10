@@ -144,11 +144,11 @@
 	background-color: #ff0000;
 }
 
-.blockera-block.blockera-block-2 li.wp-social-link.wp-social-link-wordpress {
+.blockera-block.blockera-block-2 :where(li.wp-social-link.wp-social-link-wordpress) {
 	background-color: #000000;
 }
 
-.blockera-block.blockera-block-2 li.wp-social-link.wp-social-link-whatsapp {
+.blockera-block.blockera-block-2 :where(li.wp-social-link.wp-social-link-whatsapp) {
 	background-color: #000000;
 }
 

@@ -150,11 +150,11 @@
 	};
 }
 
-.blockera-block.blockera-block-2 input.wp-block-search__input {
+.blockera-block.blockera-block-2 :where(input.wp-block-search__input) {
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-2 button.wp-block-search__button.has-background {
+.blockera-block.blockera-block-2 :where(button.wp-block-search__button.has-background) {
 	border-radius: 10px;
 	background-color: #cde2ff;
 }
@@ -281,11 +281,11 @@
 	border-radius: 20px;
 }
 
-.blockera-block.blockera-block-3 input.wp-block-search__input {
+.blockera-block.blockera-block-3 :where(input.wp-block-search__input) {
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-3 button.wp-block-search__button.has-background {
+.blockera-block.blockera-block-3 :where(button.wp-block-search__button.has-background) {
 	border-radius: 10px;
 	background-color: #efccff;
 }

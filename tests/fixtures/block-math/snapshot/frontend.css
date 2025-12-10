@@ -92,7 +92,7 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-1 mtd {
+.blockera-block.blockera-block-1 :where(mtd) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }

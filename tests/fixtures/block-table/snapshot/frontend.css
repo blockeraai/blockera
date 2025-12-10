@@ -16,7 +16,7 @@
 	width: 50%;
 }
 
-.blockera-block.blockera-block-1 table.has-background.has-fixed-layout {
+.blockera-block.blockera-block-1 :where(table.has-background.has-fixed-layout) {
 	background-color: #ffe1e1;
 }
 
@@ -123,10 +123,10 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-2 table.has-background {
+.blockera-block.blockera-block-2 :where(table.has-background) {
 	background-color: #ffd7d7;
 }
 
-.blockera-block.blockera-block-2 mark.has-inline-color {
+.blockera-block.blockera-block-2 :where(mark.has-inline-color) {
 	color: #ffcaca;
 }

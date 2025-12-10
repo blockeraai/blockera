@@ -141,7 +141,7 @@ p.blockera-block.blockera-block-8 {
 	};
 }
 
-.blockera-block.blockera-block-9 h3.wp-block-heading.has-medium-font-size {
+.blockera-block.blockera-block-9 :where(h3.wp-block-heading.has-medium-font-size) {
 	font-style: normal;
 	font-weight: 700;
 }
@@ -150,7 +150,7 @@ p.blockera-block.blockera-block-8 {
 	margin-block-start: 60px !important;
 }
 
-.blockera-block.blockera-block-10 h3.wp-block-heading.has-medium-font-size {
+.blockera-block.blockera-block-10 :where(h3.wp-block-heading.has-medium-font-size) {
 	font-style: normal;
 	font-weight: 700;
 }
@@ -165,7 +165,7 @@ p.blockera-block.blockera-block-8 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-11 h3.wp-block-heading.has-medium-font-size {
+.blockera-block.blockera-block-11 :where(h3.wp-block-heading.has-medium-font-size) {
 	font-style: normal;
 	font-weight: 700;
 }

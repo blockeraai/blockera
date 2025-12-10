@@ -90,6 +90,6 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-1 table.wp-calendar-table.has-background {
+.blockera-block.blockera-block-1 :where(table.wp-calendar-table.has-background) {
 	background-color: #ececfc;
 }
