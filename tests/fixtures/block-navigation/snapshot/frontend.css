@@ -279,7 +279,6 @@
 
 .blockera-block.blockera-block-8 ul.blockera-block.blockera-block-8 {
 	background-color: #ffcece;
-	background-color: #ffcece;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
 	font-weight: 600;
@@ -330,7 +329,6 @@
 }
 
 .blockera-block.blockera-block-10 ul.blockera-block.blockera-block-10 {
-	background-color: #b6ffc0;
 	background-color: #b6ffc0;
 }
 
