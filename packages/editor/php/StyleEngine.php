@@ -116,6 +116,7 @@ final class StyleEngine {
 	 * @var array $properties_clean_map
 	 */
 	protected static array $properties_clean_map = [
+		// border properties.
 		'border' => [
 			'border-width', 
 			'border-style', 
@@ -145,6 +146,13 @@ final class StyleEngine {
 		// we need to remove it to prevent future issues and duplicate declarations.
 		'background-image' => [
 			'background',
+		],
+		// padding properties.
+		'padding' => [
+			'padding-top',
+			'padding-right',
+			'padding-bottom',
+			'padding-left',
 		],
 	];
 

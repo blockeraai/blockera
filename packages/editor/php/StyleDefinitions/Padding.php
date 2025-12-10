@@ -13,48 +13,60 @@ class Padding extends BaseStyleDefinition {
 	 */
 	protected function css( array $setting ): array {
 
-		$declaration = [];
+		// Early return if type is not set or empty.
+		if ( ! isset( $setting['type'] ) || '' === $setting['type'] ) {
+			return [];
+		}
+
 		$cssProperty = $setting['type'];
 
-		if ( empty( $cssProperty ) ) {
-
-			return $declaration;
+		// Early return if padding data is not available.
+		if ( ! isset( $setting[ $cssProperty ]['padding'] ) ) {
+			return [];
 		}
 
-		$padding = [];
+		$padding = &$setting[ $cssProperty ]['padding'];
 
-		if ( isset( $setting[ $cssProperty ]['padding'] ) ) {
-			$padding = $setting[ $cssProperty ]['padding'];
+		// Early return if padding is not an array.
+		if ( ! is_array( $padding ) ) {
+			return [];
 		}
 
-		if ( empty( $padding ) ) {
+		// Process padding values directly (top, right, bottom, left).
+		$top    = isset( $padding['top'] ) ? blockera_get_value_addon_real_value( $padding['top'] ) : '';
+		$right  = isset( $padding['right'] ) ? blockera_get_value_addon_real_value( $padding['right'] ) : '';
+		$bottom = isset( $padding['bottom'] ) ? blockera_get_value_addon_real_value( $padding['bottom'] ) : '';
+		$left   = isset( $padding['left'] ) ? blockera_get_value_addon_real_value( $padding['left'] ) : '';
 
-			return $declaration;
+		// Check if all four sides are present and non-empty.
+		if ( '' !== $top && '' !== $right && '' !== $bottom && '' !== $left ) {
+			// All four values present - use shorthand.
+			$this->setCss( [ 'padding' => $top . ' ' . $right . ' ' . $bottom . ' ' . $left ] );
+		} else {
+			// Partial values - use individual properties (only non-empty).
+			$declaration = [];
+
+			if ( '' !== $top ) {
+				$declaration['padding-top'] = $top;
+			}
+
+			if ( '' !== $right ) {
+				$declaration['padding-right'] = $right;
+			}
+
+			if ( '' !== $bottom ) {
+				$declaration['padding-bottom'] = $bottom;
+			}
+
+			if ( '' !== $left ) {
+				$declaration['padding-left'] = $left;
+			}
+
+			if ( [] !== $declaration ) {
+				$this->setCss( $declaration );
+			}
 		}
-
-		if ( is_array( $padding ) ) {
-
-			$padding = array_filter(
-				array_map( 'blockera_get_value_addon_real_value', $padding ),
-				[ $this, 'filteredItems' ]
-			);
-		}
-
-		$declaration = array_map(
-			static function ( string $item, string $property ): array {
-				return [ "padding-{$property}" => $item ];
-			},
-			$padding,
-			array_keys( $padding )
-		);
-
-		$this->setCss( blockera_array_flat($declaration) );
 
 		return $this->css;
-	}
-
-	private function filteredItems( string $item ): bool {
-
-		return '' !== $item;
 	}
 }
