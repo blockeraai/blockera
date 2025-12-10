@@ -19,7 +19,7 @@
 .blockera-block.blockera-block-2.wp-block-post-author-name {
 	color: #ce7e06;
 	background-color: #d7c8a0;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-size: 18px !important;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;

@@ -57,7 +57,7 @@
 
 .blockera-block.blockera-block-2.wp-block-post-title {
 	background-color: #d0ffb3;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
+	font-size: 20px !important;
 	font-style: normal;
 	font-weight: 500;
 	padding-top: 20px;

@@ -8,8 +8,6 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-group.is-layout-constrained > * + * {
-	background-color: #fffbcd;
-	margin-top: 10px;
 	margin-block-start: 10px !important;
 }
 

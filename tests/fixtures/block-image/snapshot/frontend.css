@@ -1,5 +1,4 @@
 .blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
-	margin-bottom: 64px;
 	border-radius: 20px;
 	width: 200px;
 	aspect-ratio: 4/3;
@@ -86,7 +85,6 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
-	background-color: #ffc8c8;
 	border: 5px dashed #37e6d4;
 	border-radius: 25px;
 	box-shadow: 10px 50px 30px 40px #c5eef0ab;
@@ -123,7 +121,6 @@
 }
 
 .blockera-block.blockera-block-3.wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
-	margin-bottom: 24px;
 	border-radius: 20px;
 	width: 300px;
 	aspect-ratio: 4/3;

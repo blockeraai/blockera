@@ -140,7 +140,7 @@
 }
 
 .blockera-block.blockera-block-6.wp-block-navigation-link {
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 700;
 	text-transform: uppercase;

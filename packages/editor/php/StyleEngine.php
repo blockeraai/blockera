@@ -611,7 +611,30 @@ final class StyleEngine {
 			$block_css = array_merge( $block_css, array_filter(blockera_array_flat($inner_blocks_css)) );
 		}
 
-		return $this->normalizeCssRules(blockera_convert_css_declarations_to_css_valid_rules(blockera_combine_css($block_css)));
+		$block_css = blockera_combine_css($block_css);
+
+		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
+			$selectors           = blockera_get_block_type_property($this->block['blockName'], 'selectors');
+			$block_root_selector = blockera_get_compatible_block_css_selector(
+				$selectors,
+				'root',
+				[
+					'fallback'                 => 'root',
+					'block-type'               => 'master',
+					'inner-pseudo-class'       => 'normal',
+					'blockera-unique-selector' => $this->selector,
+					'breakpoint'               => $this->breakpoint,
+					'pseudo-class'             => $this->pseudo_state,
+					'block-settings'           => $this->block['attrs'],
+					'block-name'               => $this->block['blockName'],
+					'root'                     => $selectors['root'] ?? null,
+				]
+			);
+
+			$block_css = $this->mergeInlineStyles($block_css, $block_root_selector);
+		}
+
+		return $this->normalizeCssRules(blockera_convert_css_declarations_to_css_valid_rules($block_css));
 	}
 
 	/**
@@ -647,9 +670,6 @@ final class StyleEngine {
 			$css_rules = blockera_get_array_deep_merge($previous_css_rules, $this->definition->getCssRules());
 		}
 
-		// Store the definition selector.
-		$definition_selector = $this->definition->getSelector();
-
 		// This is a multiple support definition.
 		// So we need to generate the css rules for the next support.
 		if ('multiple' === $this->definition->getSupportType()) {
@@ -675,10 +695,6 @@ final class StyleEngine {
 			if ($this->definition) {
 				$css_rules = $this->generateBlockCss($settings, $id, $css_rules);
 			}
-		}
-
-		if (blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && ! empty($this->inline_styles)) {
-			$css_rules = $this->mergeInlineStyles($css_rules, $definition_selector);
 		}
 		
 		// Reset definition property.
@@ -818,10 +834,15 @@ final class StyleEngine {
 			return $css_rules;
 		}
 
-		// Get all inline styles that match the current definition's selector pattern.
-		$matching_styles = $this->getMatchingInlineStyles($definition_selector);
+		$base_selector = preg_replace('/^\w+\./i', '.', $definition_selector);
 
-		foreach ($matching_styles as $declarations) {
+		foreach ($this->inline_styles as $selector => $declarations) {
+			// If selector matches the base selector pattern, include it.
+			// If $selector is root selector, it should not contains space and ends with base selector.
+			if (str_contains($selector, ' ') || ! str_contains($base_selector, $selector)) {
+				continue;
+			}
+
 			// Skip if declarations are empty.
 			if (empty($declarations)) {
 				continue;
@@ -833,33 +854,9 @@ final class StyleEngine {
 			} else {
 				// Merge same declaration with the style engine generated declarations.
 				$css_rules[ $definition_selector ] = array_merge($declarations, $css_rules[ $definition_selector ]);
-			}		
-		}
-
-		return $css_rules;
-	}
-
-	/**
-	 * Get inline styles that match the current definition's selector.
-	 * Retrieves inline styles that match the current definition's selector pattern.
-	 * This method filters the inline styles to find those that are relevant to the
-	 * current block definition by comparing selectors.
-	 * 
-	 * @param string $definition_selector The current definition's selector.
-	 * 
-	 * @return array Matching inline styles.
-	 */
-	protected function getMatchingInlineStyles( string $definition_selector): array {
-		$matching_styles = [];
-		$base_selector   = preg_replace('/^\w+\./i', '.', $definition_selector);
-
-		foreach ($this->inline_styles as $selector => $declarations) {
-			// If selector matches the base selector pattern, include it.
-			if (false !== strpos($selector, $base_selector) || false !== strpos($base_selector, $selector)) {
-				$matching_styles[ $selector ] = $declarations;
 			}
 		}
 
-		return $matching_styles;
+		return $css_rules;
 	}
 }

@@ -169,6 +169,10 @@
 	margin-left: 20px !important;
 }
 
+.blockera-block.blockera-block-3.wp-block-social-link {
+	background-color: #000000;
+}
+
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-social-link {
 		order: -1;

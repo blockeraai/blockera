@@ -19,7 +19,7 @@
 
 .blockera-block.blockera-block-2.wp-block-post-time-to-read {
 	background-color: #ffdede;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 700;
 	border-color: #f11c1c;
