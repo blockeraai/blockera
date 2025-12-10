@@ -18,72 +18,64 @@ class Border extends BaseStyleDefinition {
 	 */
 	protected function css( array $setting ): array {
 
-		$declaration = [];
-		$cssProperty = $setting['type'];
-
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'border' !== $cssProperty ) {
-
-			return $declaration;
+		// Early return optimization: check type first (most common failure case).
+		$cssProperty = $setting['type'] ?? null;
+		if ( 'border' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) ) {
+			return [];
 		}
 
 		$value = $setting[ $cssProperty ];
 
-		if (count($value) < 3) {
+		if ( ! isset($value['type']) ) {
+			return [];
+		}
 
-			if ('' !== $value['all']['width']) {
-				$declaration['border'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['all']['width'],
-						! empty($value['all']['style']) ? $value['all']['style'] : 'solid',
-						! empty($value['all']['color']) ? blockera_get_value_addon_real_value($value['all']['color']) : '',
-					)
-				);
+		$declaration = [];
+
+		if ( 'all' === $value['type'] ) {
+			// Cache array access to avoid repeated lookups.
+			$all   = &$value['all'];
+			$width = isset( $all['width'] ) ? $all['width'] : '';
+
+			// Early return if no width.
+			if ( '' === $width ) {
+				$this->setCss( $declaration );
+				return $this->css;
 			}
+
+			$style = isset( $all['style'] ) && '' !== $all['style'] ? $all['style'] : 'solid';
+
+			$color = isset( $all['color'] ) && '' !== $all['color'] 
+				? blockera_get_value_addon_real_value( $all['color'] ) 
+				: '';
+
+			$declaration['border'] = implode( ' ', [ $width, $style, $color ] );
 		} else {
+			// Process individual sides only if they have $width set.
+			$sides    = [ 'top', 'right', 'bottom', 'left' ];
+			$prefixes = [ 'border-top', 'border-right', 'border-bottom', 'border-left' ];
 
-			if ('' !== $value['top']['width']) {
-				$declaration['border-top'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['top']['width'],
-						! empty($value['top']['style']) ? $value['top']['style'] : 'solid',
-						! empty($value['top']['color']) ? blockera_get_value_addon_real_value($value['top']['color']) : '',
-					)
-				);
-			}
+			for ( $i = 0, $len = 4; $i < $len; ++$i ) {
+				$side = $sides[ $i ];
+				if ( ! isset( $value[ $side ]['width'] ) ) {
+					continue;
+				}
 
-			if ('' !== $value['right']['width']) {
-				$declaration['border-right'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['right']['width'],
-						! empty($value['right']['style']) ? $value['right']['style'] : 'solid',
-						! empty($value['right']['color']) ? blockera_get_value_addon_real_value($value['right']['color']) : '',
-					)
-				);
-			}
+				$sideData = &$value[ $side ];
+				$width    = $sideData['width'];
 
-			if ('' !== $value['bottom']['width']) {
-				$declaration['border-bottom'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['bottom']['width'],
-						! empty($value['bottom']['style']) ? $value['bottom']['style'] : 'solid',
-						! empty($value['bottom']['color']) ? blockera_get_value_addon_real_value($value['bottom']['color']) : '',
-					)
-				);
-			}
+				// Skip empty width.
+				if ( '' === $width ) {
+					continue;
+				}
 
-			if ('' !== $value['left']['width']) {
-				$declaration['border-left'] = trim(
-					sprintf(
-						'%s %s %s',
-						$value['left']['width'],
-						! empty($value['left']['style']) ? $value['left']['style'] : 'solid',
-						! empty($value['left']['color']) ? blockera_get_value_addon_real_value($value['left']['color']) : '',
-					)
-				);
+				$style = isset( $sideData['style'] ) && '' !== $sideData['style'] ? $sideData['style'] : 'solid';
+				
+				$color = isset( $sideData['color'] ) && '' !== $sideData['color'] 
+					? blockera_get_value_addon_real_value( $sideData['color'] ) 
+					: '';
+
+				$declaration[ $prefixes[ $i ] ] = implode( ' ', [ $width, $style, $color ] );
 			}
 		}
 
