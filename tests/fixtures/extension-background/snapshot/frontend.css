@@ -13,7 +13,6 @@ p.blockera-block.blockera-block-2 {
 
 p.blockera-block.blockera-block-3 {
 	color: #c00000;
-	background: linear-gradient(90deg, #009efa 10%, #e52e00 90%);
 	background-color: #ffedec;
 	letter-spacing: 6px;
 	background-image: url('https://placehold.co/400x400'), url('https://placehold.co/400x400');
@@ -30,7 +29,6 @@ p.blockera-block.blockera-block-3 {
 }
 
 p.blockera-block.blockera-block-4 {
-	background: linear-gradient(90deg, rgb(0, 158, 250) 35%, rgb(229, 46, 0) 51%);
 	background-color: #ffedec;
 	background-size: auto;
 	background-position: 0 0;
@@ -40,7 +38,6 @@ p.blockera-block.blockera-block-4 {
 }
 
 p.blockera-block.blockera-block-5 {
-	background: radial-gradient(rgb(0, 159, 251) 12%, rgb(229, 46, 0) 100%);
 	background-size: auto;
 	background-position: 0 0;
 	background-repeat: repeat;
@@ -49,7 +46,6 @@ p.blockera-block.blockera-block-5 {
 }
 
 p.blockera-block.blockera-block-6 {
-	background: radial-gradient(rgb(0, 159, 251) 56%, rgb(229, 46, 0) 100%);
 	background-size: contain, auto;
 	background-position: 50% 50%, 0 0;
 	background-repeat: no-repeat, repeat;

@@ -141,6 +141,11 @@ final class StyleEngine {
 			'border-right-style', 
 			'border-right-color',
 		],
+		// Blockera uses background-image but WP uses the background property.
+		// we need to remove it to prevent future issues and duplicate declarations.
+		'background-image' => [
+			'background',
+		],
 	];
 
 	/**
