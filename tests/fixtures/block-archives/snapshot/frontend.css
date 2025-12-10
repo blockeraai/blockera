@@ -16,7 +16,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-archives {
-	background-color: #a7ebe9;
+	background-color: #b6d5ff;
 	font-size: 16px !important;
 	font-style: normal;
 	font-weight: 700;
@@ -123,15 +123,15 @@
 	}
 
 	.blockera-block.blockera-block-2 a {
-		flex-direction: row;
-		align-items: center !important;
+		flex-direction: column;
 		justify-content: center !important;
+		align-items: center !important;
 		align-self: stretch;
 		border-radius: 10px;
-		gap: 20px;
-		padding-top: 10px;
+		gap: 10px;
+		padding-top: 20px;
 		padding-right: 20px;
-		padding-bottom: 10px;
+		padding-bottom: 20px;
 		padding-left: 20px;
 	}
 
