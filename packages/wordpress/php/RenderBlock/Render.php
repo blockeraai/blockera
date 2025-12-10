@@ -125,7 +125,7 @@ class Render {
     public function render( string $html, array $block, array $supports): string {
 
         // Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block) || is_admin()) {
+        if (! blockera_is_supported_block($block) || is_admin() || 'core/null' === $block['blockName']) {
             return $html;
         }
 
