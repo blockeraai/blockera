@@ -150,7 +150,7 @@
 	};
 }
 
-.blockera-block.blockera-block-2 input#wp-block-search__input-17 {
+.blockera-block.blockera-block-2 input.wp-block-search__input {
 	border-radius: 10px;
 }
 
@@ -281,7 +281,7 @@
 	border-radius: 20px;
 }
 
-.blockera-block.blockera-block-3 input#wp-block-search__input-18 {
+.blockera-block.blockera-block-3 input.wp-block-search__input {
 	border-radius: 10px;
 }
 

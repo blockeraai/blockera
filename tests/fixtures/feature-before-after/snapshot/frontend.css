@@ -24,15 +24,15 @@ p.blockera-block.blockera-block-2::after {
 
 p.blockera-block.blockera-block-3 {
 	background-color: #fff1f1;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 20px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 }
 
 p.blockera-block.blockera-block-3::before {
@@ -55,15 +55,15 @@ p.blockera-block.blockera-block-3::after {
 
 p.blockera-block.blockera-block-4 {
 	background-color: #cafccd;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
 	justify-content: center !important;
 	gap: 20px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
 }
 
 p.blockera-block.blockera-block-4::before {
