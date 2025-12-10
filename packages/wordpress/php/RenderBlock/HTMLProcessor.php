@@ -567,6 +567,10 @@ class HTMLProcessor {
 			}
 		}
 
+		if ($with_tagname && ! empty($this->root_selector)) {
+			return $this->root_selector . ' ' . $tag_name;
+		}
+
 		return $tag_name;
 	}
 
