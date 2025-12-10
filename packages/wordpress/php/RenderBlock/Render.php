@@ -124,13 +124,18 @@ class Render {
      */
     public function render( string $html, array $block, array $supports): string {
 
-        // Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block) || is_admin() || 'core/null' === $block['blockName']) {
+		// Skip rendering if the request is a AJAX request or a REST request.
+		if (wp_doing_ajax() || blockera_is_skip_request()) {
+			return $html;
+		}
+
+		// Check block to is support by Blockera?
+        if (! blockera_is_supported_block($block) || is_admin()) {
             return $html;
         }
 
-		// Skip rendering if the request is a AJAX request or a REST request.
-		if (wp_doing_ajax() || blockera_is_skip_request()) {
+		// Skip rendering if the html is empty or the block is a "core/null" block.
+		if (empty(trim($html)) || 'core/null' === $block['blockName']) {
 			return $html;
 		}
 
