@@ -838,8 +838,8 @@ final class StyleEngine {
 
 		foreach ($this->inline_styles as $selector => $declarations) {
 			// If selector matches the base selector pattern, include it.
-			// If $selector is root selector, it should not contains space and should be equal to base selector.
-			if (str_contains($selector, ' ') || str_ends_with($selector, $base_selector)) {
+			// If $selector is root selector, it should not contains space and ends with base selector.
+			if (str_contains($selector, ' ') || ! str_contains($base_selector, $selector)) {
 				continue;
 			}
 
