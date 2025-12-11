@@ -13,56 +13,49 @@ class Margin extends BaseStyleDefinition {
 	 */
 	protected function css( array $setting ): array {
 
-		$declaration = [];
+		if ( ! isset( $setting['type'] ) || '' === $setting['type'] ) {
+			return [];
+		}
+
 		$cssProperty = $setting['type'];
 
-		if ( empty( $cssProperty ) ) {
-
-			return $declaration;
+		if ( ! isset( $setting[ $cssProperty ]['margin'] ) ) {
+			return [];
 		}
 
-		$margin = [];
+		$margin = $setting[ $cssProperty ]['margin'];
 
-		if ( isset( $setting[ $cssProperty ]['margin'] ) ) {
-			$margin = $setting[ $cssProperty ]['margin'];
+		if ( ! is_array( $margin ) || 0 === count( $margin ) ) {
+			return [];
 		}
 
-		if ( empty( $margin ) ) {
+		$declaration = [];
+		$marginKeys  = array_keys( $margin );
+		$marginCount = count( $marginKeys );
 
-			return $declaration;
+		for ( $i = 0; $i < $marginCount; ++$i ) {
+			$key  = $marginKeys[ $i ];
+			$item = blockera_get_value_addon_real_value( $margin[ $key ] );
+
+			if ( '' === $item ) {
+				continue;
+			}
+
+			// Add !important only to margin-left and margin-right.
+			if ( 'left' === $key || 'right' === $key ) {
+				$item .= ' !important';
+			}
+
+			$declaration[] = [ "margin-{$key}" => $item ];
 		}
 
-		if ( is_array( $margin ) ) {
-
-			$margin = array_filter(
-				array_map( 'blockera_get_value_addon_real_value', $margin ),
-				[ $this, 'filteredItems' ]
-			);
+		if ( 0 === count( $declaration ) ) {
+			return [];
 		}
 
-		$declaration = array_map(
-			static function ( string $item, string $property ): array {
-				$value = $item;
-
-				// Add !important only to margin-left and margin-right.
-				if ( 'left' === $property || 'right' === $property ) {
-					$value .= ' !important';
-				}
-
-				return [ "margin-{$property}" => $value ];
-			},
-			$margin,
-			array_keys( $margin )
-		);
-
-		$this->setCss( blockera_array_flat($declaration) );
+		$this->setCss( blockera_array_flat( $declaration ) );
 
 		return $this->css;
-	}
-
-	private function filteredItems( string $item ): bool {
-
-		return '' !== $item;
 	}
 
 }
