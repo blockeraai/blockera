@@ -111,7 +111,7 @@
 	content: "before";
 	background-color: #0000003b;
 	display: block !important;
-	font-size: 16px !important;
+	font-size: 16px;
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 10px;
 }
@@ -121,7 +121,7 @@
 	content: "After";
 	background-color: #0000003b;
 	display: block !important;
-	font-size: 16px !important;
+	font-size: 16px;
 	padding: 10px 10px 10px 10px;
 	margin-top: 10px;
 }
@@ -161,7 +161,7 @@
 	padding: 5px 10px 5px 10px;
 	border-radius: 60px;
 	text-align: center;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 1000;
 	font-style: normal;
 	display: block !important;

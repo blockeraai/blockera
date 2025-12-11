@@ -1,6 +1,6 @@
 .blockera-block.blockera-block-1.wp-block-post-excerpt {
 	background-color: #ffd7d7;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
@@ -52,7 +52,7 @@
 }
 
 .blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::before {
-	font-size: 14px !important;
+	font-size: 14px;
 	content: "Before";
 	display: inline-block !important;
 	padding: 5px 10px 5px 10px;
@@ -61,7 +61,7 @@
 }
 
 .blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::after {
-	font-size: 14px !important;
+	font-size: 14px;
 	content: "After";
 	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
@@ -129,7 +129,7 @@
 
 .blockera-block.blockera-block-2.wp-block-post-excerpt {
 	background-color: #c7cdff;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
@@ -175,7 +175,7 @@
 
 .blockera-block.blockera-block-3.wp-block-post-excerpt {
 	background-color: #ecb9ff;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 500;
 	border-radius: 10px;

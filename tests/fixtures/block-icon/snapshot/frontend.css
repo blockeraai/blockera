@@ -56,7 +56,7 @@
 	padding: 5px 20px 5px 20px;
 	font-weight: 600;
 	font-style: normal;
-	font-size: 18px !important;
+	font-size: 18px;
 	align-self: stretch;
 	content: "Before";
 }
@@ -79,7 +79,7 @@
 .blockera-block.blockera-block-3.wp-block-image::after {
 	background-color: #6bd264;
 	padding: 10px 20px 10px 20px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 1000;
 	font-style: normal;
 	align-self: stretch;

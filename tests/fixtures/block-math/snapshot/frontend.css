@@ -62,7 +62,7 @@
 .blockera-block.blockera-block-1.wp-block-math::before {
 	display: block !important;
 	background-color: #00000038;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	padding: 5px 10px 5px 10px;
@@ -73,7 +73,7 @@
 
 .blockera-block.blockera-block-1.wp-block-math::after {
 	background-color: #00000038;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	padding: 5px 10px 5px 10px;

@@ -6,7 +6,7 @@
 }
 
 .blockera-block.blockera-block-1 :where(p) {
-	font-size: 24px !important;
+	font-size: 24px;
 	font-weight: 700;
 	font-style: normal;
 	background-color: #ffabab;
@@ -15,7 +15,7 @@
 }
 
 .blockera-block.blockera-block-1 cite {
-	font-size: 18px !important;
+	font-size: 18px;
 	font-weight: 700;
 	font-style: normal;
 	background-color: #fc6262;
@@ -26,7 +26,7 @@
 
 .blockera-block.blockera-block-2.wp-block-pullquote {
 	background-color: #d0ffd0;
-	font-size: 20px !important;
+	font-size: 20px;
 	font-style: normal;
 	font-weight: 500;
 	display: flex !important;

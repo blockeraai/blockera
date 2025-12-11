@@ -78,7 +78,7 @@
 .blockera-block.blockera-block-6.wp-block-heading {
 	color: #ffffff;
 	background-color: #213fbe;
-	font-size: 2.15rem !important;
+	font-size: 2.15rem;
 	font-style: normal;
 	font-weight: 900;
 	padding: 0 0 0 0;
@@ -91,7 +91,7 @@
 p.blockera-block.blockera-block-7 {
 	color: #ffffff;
 	background-color: #213fbe;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
 	padding: 0 0 0 0;
@@ -136,7 +136,7 @@ p.blockera-block.blockera-block-7 {
 
 .blockera-block.blockera-block-9.wp-block-heading {
 	background-color: #021c99;
-	font-size: 1rem !important;
+	font-size: 1rem;
 	font-style: normal;
 	font-weight: 600;
 	letter-spacing: 1px;
@@ -176,7 +176,7 @@ p.blockera-block.blockera-block-7 {
 }
 
 .blockera-block.blockera-block-10 :where(p) {
-	font-size: 15px !important;
+	font-size: 15px;
 	border: 1px solid #ffffff;
 	padding: 5px 10px 5px 10px;
 	border-radius: 100px;

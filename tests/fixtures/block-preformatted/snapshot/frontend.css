@@ -1,7 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-preformatted {
 	border-radius: 10px;
 	background-color: #ffdfdf;
-	font-size: 18px !important;
+	font-size: 18px;
 	border: 2px solid #ff3737;
 	transition: all 500ms ease 0ms;
 	padding: 20px 20px 20px 20px;
@@ -57,7 +57,7 @@
 
 .blockera-block.blockera-block-3.wp-block-preformatted {
 	background-color: #d1f5ff;
-	font-size: 16px !important;
+	font-size: 16px;
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;

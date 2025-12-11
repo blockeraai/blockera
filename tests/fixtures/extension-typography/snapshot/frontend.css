@@ -1,5 +1,5 @@
 p.blockera-block.blockera-block--1 {
-	font-family: var(--wp--preset--font-family--fira-code) !important;
+	font-family: var(--wp--preset--font-family--fira-code);
 }
 
 p.blockera-block.blockera-block--2 {
@@ -8,7 +8,7 @@ p.blockera-block.blockera-block--2 {
 }
 
 p.blockera-block.blockera-block--3 {
-	font-size: 20px !important;
+	font-size: 20px;
 }
 
 p.blockera-block.blockera-block--4 {

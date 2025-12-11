@@ -66,7 +66,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-social-links::before {
-	font-size: 16px !important;
+	font-size: 16px;
 	padding: 5px 10px 5px 10px;
 	background-color: #0000003b;
 	border-radius: 50px;
@@ -81,7 +81,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-social-links::after {
-	font-size: 16px !important;
+	font-size: 16px;
 	background-color: #00000042;
 	padding: 5px 20px 5px 20px;
 	border-radius: 50px;
@@ -124,7 +124,7 @@
 	margin-right: 0 !important;
 	margin-left: 0 !important;
 	border-radius: 13px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 700;
 	font-style: normal;
 }

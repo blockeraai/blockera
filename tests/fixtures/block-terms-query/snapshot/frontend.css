@@ -76,7 +76,7 @@
 
 .blockera-block.blockera-block-3.wp-block-term-name {
 	background-color: #ffb2b2;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 50px;
@@ -139,7 +139,7 @@
 
 .blockera-block.blockera-block-4.wp-block-term-description {
 	background-color: #b2ddab;
-	font-size: 14px !important;
+	font-size: 14px;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 50px;
@@ -192,7 +192,7 @@
 
 .blockera-block.blockera-block-5.wp-block-term-count {
 	background-color: #78efff;
-	font-size: 14px !important;
+	font-size: 14px;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 40px;

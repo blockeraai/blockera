@@ -37,7 +37,7 @@
 
 .blockera-block.blockera-block-3.wp-block-heading {
 	background-color: #5577ff;
-	font-size: 30px !important;
+	font-size: 30px;
 	font-style: normal;
 	font-weight: 700;
 	padding: 0 0 0 0;
@@ -115,7 +115,7 @@ p.blockera-block.blockera-block-9 {
 	background-color: #203fbe;
 	margin-right: 60px !important;
 	margin-left: 60px !important;
-	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 .blockera-block.blockera-block-9 a:not(.wp-element-button) {
@@ -172,7 +172,7 @@ p.blockera-block.blockera-block-12 {
 	color: #fcfcfc;
 	background-color: #213fbe;
 	padding: 10px 0 46px 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 .blockera-block.blockera-block-12 a:not(.wp-element-button) {
@@ -257,7 +257,7 @@ p.blockera-block.blockera-block-17 {
 	background-color: #0d2285;
 	align-self: stretch;
 	padding: 0 0 0 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 .blockera-block.blockera-block-17 a:not(.wp-element-button) {

@@ -99,7 +99,7 @@
 }
 
 p.blockera-block.blockera-block-3 {
-	font-size: var(--wp--preset--font-size--large, 1.38rem) !important;
+	font-size: var(--wp--preset--font-size--large, 1.38rem);
 	text-align: left;
 }
 
@@ -129,7 +129,7 @@ p.blockera-block.blockera-block-4:hover {
 	background-color: #bcbcbc;
 	padding: 10px 20px 10px 20px;
 	border-radius: 10px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 800;
 	font-style: normal;
 	color: #000000;
@@ -153,7 +153,7 @@ p.blockera-block.blockera-block-4:hover {
 	background-color: #ffb3b3;
 	font-weight: 800;
 	font-style: normal;
-	font-size: 16px !important;
+	font-size: 16px;
 	padding: 5px 30px 5px 30px;
 	border-radius: 40px;
 	border: 2px solid #159b00;

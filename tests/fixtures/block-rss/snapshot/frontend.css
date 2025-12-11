@@ -24,7 +24,7 @@
 	align-items: center !important;
 	justify-content: flex-start !important;
 	gap: 20px;
-	font-size: 16px !important;
+	font-size: 16px;
 }
 
 .blockera-block.blockera-block-1 .wp-block-rss__item-author {
@@ -35,13 +35,13 @@
 	align-items: center !important;
 	justify-content: flex-start !important;
 	gap: 10px;
-	font-size: 16px !important;
+	font-size: 16px;
 }
 
 .blockera-block.blockera-block-1 .wp-block-rss__item-excerpt {
 	background-color: #d90707;
 	padding: 10px 10px 10px 10px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	display: flex !important;
@@ -179,7 +179,7 @@
 	margin-bottom: 20px;
 	display: inline-block !important;
 	background-color: #0000001f;
-	font-size: 16px !important;
+	font-size: 16px;
 	border-radius: 10px;
 	content: "Before";
 }
@@ -190,6 +190,6 @@
 	display: inline-block !important;
 	background-color: #00000038;
 	border-radius: 10px;
-	font-size: 16px !important;
+	font-size: 16px;
 	content: "After";
 }

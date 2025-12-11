@@ -27,7 +27,7 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-post-featured-image::before {
-	font-size: 16px !important;
+	font-size: 16px;
 	background-color: #00000038;
 	padding: 10px 10px 10px 10px;
 	display: inline-block !important;
@@ -42,7 +42,7 @@
 	padding: 10px 10px 10px 10px;
 	background-color: #00000033;
 	display: inline-block !important;
-	font-size: 16px !important;
+	font-size: 16px;
 	content: "After";
 }
 

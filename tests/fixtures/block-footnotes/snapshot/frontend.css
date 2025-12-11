@@ -17,7 +17,7 @@
 	border-radius: 36px;
 	text-decoration: initial;
 	color: #007b10;
-	font-size: 20px !important;
+	font-size: 20px;
 }
 
 .blockera-block.blockera-block-1 a:not(.wp-element-button):not(:last-child) {
@@ -66,7 +66,7 @@
 	padding: 5px 10px 5px 10px;
 	border-radius: 10px;
 	display: inline-block !important;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 1000;
 	font-style: normal;
 	content: "Before";
@@ -74,7 +74,7 @@
 
 .blockera-block.blockera-block-1.wp-block-footnotes::after {
 	padding: 5px 10px 5px 10px;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-weight: 1000;
 	font-style: normal;
 	background-color: #d45959;

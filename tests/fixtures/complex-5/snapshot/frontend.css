@@ -13,7 +13,7 @@
 
 .blockera-block.blockera-block-3.wp-block-heading {
 	background-color: #5577ff;
-	font-size: 2rem !important;
+	font-size: 2rem;
 	font-style: normal;
 	font-weight: 800;
 	padding: 0 0 0 0;
@@ -60,7 +60,7 @@
 	font-style: normal;
 	font-weight: 700;
 	padding: 0 0 0 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 .blockera-block.blockera-block-7.wp-block-heading {
@@ -68,13 +68,13 @@
 	font-style: normal;
 	font-weight: 700;
 	padding: 0 0 0 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 p.blockera-block.blockera-block-8 {
 	background-color: #0d2385;
 	padding: 0 0 0 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem) !important;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 .blockera-block.blockera-block-9.wp-block-group {

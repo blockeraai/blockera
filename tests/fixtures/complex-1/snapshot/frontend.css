@@ -22,7 +22,7 @@ p.blockera-block.blockera-block--3::before {
 	font-weight: 700;
 	font-style: normal;
 	color: #c91205;
-	font-size: 40px !important;
+	font-size: 40px;
 }
 
 .blockera-block.blockera-block--1 :where(p) {
@@ -41,7 +41,7 @@ p.blockera-block.blockera-block--3::before {
 .blockera-block.blockera-block--1 .wp-block-list {
 	background-color: #ffb266;
 	color: #984700;
-	font-size: 15px !important;
+	font-size: 15px;
 	padding: 10px 30px 10px 30px;
 	transition: all 500ms ease 0ms;
 }

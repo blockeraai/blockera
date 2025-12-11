@@ -1,6 +1,6 @@
 :root :where(p.is-style-akbar) {
 	line-height: 1.2;
-	font-size: 20px !important;
+	font-size: 20px;
 	background-color: #eeeeee;
 }
 

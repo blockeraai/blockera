@@ -34,14 +34,14 @@
 .blockera-block.blockera-block-3.wp-block-heading {
 	color: #000000;
 	background-color: #5577ff;
-	font-size: 16px !important;
+	font-size: 16px;
 	padding: 0 0 0 0;
 }
 
 p.blockera-block.blockera-block-4 {
 	color: #000000;
 	background-color: #5577ff;
-	font-size: 2em !important;
+	font-size: 2em;
 	font-style: normal;
 	font-weight: 700;
 	letter-spacing: 0;
@@ -55,7 +55,7 @@ p.blockera-block.blockera-block-4 {
 @media screen and (max-width: 478px) {
 	p.blockera-block.blockera-block-4 {
 		min-width: fit-content;
-		font-size: 1em !important;
+		font-size: 1em;
 	};
 }
 
@@ -173,7 +173,7 @@ p.blockera-block.blockera-block-13 {
 	color: #2ed445;
 	background-color: #213fbe;
 	margin-right: 50px !important;
-	font-size: 30px !important;
+	font-size: 30px;
 	font-style: normal;
 	font-weight: 1000;
 	letter-spacing: 10px;
@@ -214,7 +214,7 @@ p.blockera-block.blockera-block-15 {
 
 .blockera-block.blockera-block-16 :where(p) {
 	background-color: #213fbe;
-	font-size: 30px !important;
+	font-size: 30px;
 	font-weight: 700;
 	font-style: normal;
 	color: #ffffff;

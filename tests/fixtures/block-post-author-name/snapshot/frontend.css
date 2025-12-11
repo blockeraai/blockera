@@ -16,7 +16,7 @@
 .blockera-block.blockera-block-2.wp-block-post-author-name {
 	color: #ce7e06;
 	background-color: #d7c8a0;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;
@@ -34,7 +34,7 @@
 	text-decoration: initial;
 	background-color: #0000008a;
 	border-radius: 5px;
-	font-size: 16px !important;
+	font-size: 16px;
 	transition: all 500ms ease 0ms;
 	flex: 1 1 0%;
 	flex-direction: row;
@@ -44,7 +44,7 @@
 }
 
 .blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):hover {
-	font-size: 18px !important;
+	font-size: 18px;
 	text-decoration: underline;
 }
 
@@ -52,7 +52,7 @@
 	flex: 1 1 0%;
 	content: "Before";
 	padding: 5px 10px 5px 10px;
-	font-size: 14px !important;
+	font-size: 14px;
 	background-color: #00000082;
 	border-radius: 5px;
 }
@@ -60,7 +60,7 @@
 .blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::after {
 	flex: 1 1 0%;
 	content: "After";
-	font-size: 14px !important;
+	font-size: 14px;
 	background-color: #00000073;
 	padding: 5px 10px 5px 10px;
 	border-radius: 5px;

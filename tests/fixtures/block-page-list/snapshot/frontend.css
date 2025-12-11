@@ -9,7 +9,7 @@
 
 .blockera-block.blockera-block-1 :where(a) {
 	color: #a10000;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	display: flex !important;
@@ -71,7 +71,7 @@
 	display: block !important;
 	background-color: #00000042;
 	border-radius: 0;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	width: 8px;
@@ -85,7 +85,7 @@
 	font-weight: 600;
 	font-style: normal;
 	content: "After";
-	font-size: 16px !important;
+	font-size: 16px;
 	padding: 2px 10px 2px 10px;
 	display: block !important;
 	background-color: #00000042;
@@ -130,7 +130,7 @@
 	display: block !important;
 	padding: 5px 10px 5px 10px;
 	border-radius: 5px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	content: "Before";
@@ -139,7 +139,7 @@
 .blockera-block.blockera-block-1.wp-block-page-list::after {
 	padding: 5px 10px 5px 10px;
 	background-color: #ffc5c5;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	border-radius: 5px;
@@ -170,7 +170,7 @@
 	background-color: #daddd3;
 	border-radius: 5px;
 	border: 1px solid #00000029;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 500;
 	font-style: normal;
 }

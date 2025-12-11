@@ -50,7 +50,7 @@
 	background-color: #00000047;
 	padding: 5px 10px 5px 10px;
 	border-radius: 5px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	content: "Before";
@@ -60,7 +60,7 @@
 	padding: 5px 10px 5px 10px;
 	background-color: #00000047;
 	border-radius: 5px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 600;
 	font-style: normal;
 	content: "After";
@@ -69,7 +69,7 @@
 .blockera-block.blockera-block-3.wp-block-heading {
 	border-radius: 50px;
 	background-color: #ffa6a6;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
 }

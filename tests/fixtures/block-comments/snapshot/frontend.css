@@ -51,7 +51,7 @@
 	padding: 5px 10px 5px 10px;
 	display: inline-block !important;
 	border-radius: 10px;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-weight: 1000;
 	font-style: normal;
 	content: "Before";
@@ -66,7 +66,7 @@
 	padding-top: 10px;
 	padding-bottom: 10px;
 	margin-top: 20px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 700;
 	font-style: normal;
 	content: "After";
@@ -130,7 +130,7 @@
 	background-color: #ff3737;
 	font-style: normal;
 	font-weight: 500;
-	font-size: var(--wp--preset--font-size--large, 1.38rem) !important;
+	font-size: var(--wp--preset--font-size--large, 1.38rem);
 }
 
 .blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
@@ -139,7 +139,7 @@
 
 .blockera-block.blockera-block-9.wp-block-comment-date {
 	background-color: #edffb5;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 500;
 }
@@ -150,7 +150,7 @@
 
 .blockera-block.blockera-block-11.wp-block-comment-content {
 	background-color: #b2edc4;
-	font-size: 18px !important;
+	font-size: 18px;
 	padding: 10px 10px 10px 10px;
 }
 
@@ -158,7 +158,7 @@
 	background-color: #65c1ff;
 	font-style: normal;
 	font-weight: 500;
-	font-size: var(--wp--preset--font-size--small, 0.875rem) !important;
+	font-size: var(--wp--preset--font-size--small, 0.875rem);
 }
 
 .blockera-block.blockera-block-12 :where(a:not(.wp-element-button)) {
@@ -182,7 +182,7 @@
 	margin-bottom: 20px;
 	background-color: #a9ddff;
 	text-align: center;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 700;
 	font-style: normal;
 	text-transform: uppercase;

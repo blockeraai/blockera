@@ -80,7 +80,7 @@ p.blockera-block.blockera-block-4::after {
 	height: 30px;
 	background-color: #c2c2c2;
 	text-align: center;
-	font-size: 14px !important;
+	font-size: 14px;
 	font-weight: 600;
 	font-style: normal;
 	line-height: 30px;
@@ -89,7 +89,7 @@ p.blockera-block.blockera-block-4::after {
 
 .blockera-block.blockera-block-5.wp-block-group::before {
 	background-color: #00000030;
-	font-size: 14px !important;
+	font-size: 14px;
 	padding: 5px 15px 5px 15px;
 	margin-bottom: 20px;
 	display: block !important;
@@ -105,7 +105,7 @@ p.blockera-block.blockera-block-4::after {
 	padding: 5px 15px 5px 15px;
 	margin-top: 20px;
 	display: inline-block !important;
-	font-size: 14px !important;
+	font-size: 14px;
 	font-weight: 600;
 	font-style: normal;
 	content: "After #"attr(id)"";

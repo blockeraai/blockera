@@ -1,6 +1,6 @@
 .blockera-block.blockera-block-1.wp-block-post-title {
 	background-color: #ffdada;
-	font-size: 20px !important;
+	font-size: 20px;
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 10px;
@@ -52,7 +52,7 @@
 
 .blockera-block.blockera-block-2.wp-block-post-title {
 	background-color: #d0ffb3;
-	font-size: 20px !important;
+	font-size: 20px;
 	font-style: normal;
 	font-weight: 500;
 	padding: 20px 20px 20px 20px;
@@ -65,7 +65,7 @@
 
 .blockera-block.blockera-block-3.wp-block-post-title {
 	background-color: #ffcff8;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 600;
 	padding: 20px 20px 20px 20px;

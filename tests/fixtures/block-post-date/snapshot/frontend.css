@@ -20,7 +20,7 @@
 .blockera-block.blockera-block-2.wp-block-post-date {
 	color: #2050ff;
 	background-color: #ced3ff;
-	font-size: 20px !important;
+	font-size: 20px;
 	font-style: normal;
 	font-weight: 500;
 	display: flex !important;
@@ -43,7 +43,7 @@
 
 .blockera-block.blockera-block-3.wp-block-post-date {
 	background-color: #c9e5ff;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 600;
 	border-radius: 10px;

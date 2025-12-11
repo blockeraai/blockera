@@ -6,7 +6,7 @@
 
 .blockera-block.blockera-block-1 :where(.wp-block-accordion-heading) {
 	padding: 5px 10px 5px 20px;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-weight: 700;
 	font-style: normal;
 	color: #5f0000;
@@ -18,7 +18,7 @@
 	padding-bottom: 20px;
 	padding-left: 20px;
 	margin-top: 5px;
-	font-size: 18px !important;
+	font-size: 18px;
 	color: #a40000;
 	font-weight: 500;
 	font-style: normal;
@@ -28,7 +28,7 @@
 	background-color: #ff3535;
 	border-radius: 60px;
 	color: #ffffff;
-	font-size: 22px !important;
+	font-size: 22px;
 	height: 1.3em;
 	width: 1.3em;
 	border: 1px solid #0000003b;
@@ -180,7 +180,7 @@ p.blockera-block.blockera-block-7 {
 
 .blockera-block.blockera-block-16 p {
 	background-color: #ffd7d7;
-	font-size: 20px !important;
+	font-size: 20px;
 }
 
 .blockera-block.blockera-block-16 :is(strong, b) {

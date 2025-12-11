@@ -1,6 +1,6 @@
 .blockera-block.blockera-block-1.wp-block-post-time-to-read {
 	background-color: #ffdede;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 10px;
@@ -14,7 +14,7 @@
 
 .blockera-block.blockera-block-2.wp-block-post-time-to-read {
 	background-color: #ffdede;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 10px;
@@ -29,7 +29,7 @@
 
 .blockera-block.blockera-block-3.wp-block-post-time-to-read {
 	background-color: #daffaa;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	display: flex !important;
@@ -66,7 +66,7 @@
 
 .blockera-block.blockera-block-4.wp-block-post-time-to-read {
 	background-color: #daffaa;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	display: flex !important;

@@ -1,6 +1,6 @@
 .blockera-block.blockera-block-1.wp-block-categories {
 	background-color: #c4ffe3;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	border-radius: 50px;
@@ -139,7 +139,7 @@
 
 .blockera-block.blockera-block-2.wp-block-categories {
 	color: #0055ff;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
 	display: flex !important;
@@ -155,7 +155,7 @@
 
 .blockera-block.blockera-block-3.wp-block-categories {
 	color: #0055ff;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
 	display: flex !important;

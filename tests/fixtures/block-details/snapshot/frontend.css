@@ -86,7 +86,7 @@
 
 .blockera-block.blockera-block-4.wp-block-details::before {
 	background-color: #ff6666;
-	font-size: 18px !important;
+	font-size: 18px;
 	font-weight: 600;
 	font-style: normal;
 	padding: 5px 20px 5px 20px;
@@ -102,7 +102,7 @@
 	margin-bottom: 20px;
 	margin-left: 20px !important;
 	display: block !important;
-	font-size: 20px !important;
+	font-size: 20px;
 	font-weight: 1000;
 	font-style: normal;
 	color: #ffffff;

@@ -51,7 +51,7 @@
 }
 
 .blockera-block.blockera-block-2 .wp-block-search__label {
-	font-size: 18px !important;
+	font-size: 18px;
 	font-weight: 700;
 	font-style: normal;
 	background-color: #c5caff;

@@ -1,5 +1,5 @@
 .blockera-block.blockera-block-1.wp-block-home-link {
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 600;
 	background-color: #ffc9c9;
@@ -15,7 +15,7 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-home-link {
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 600;
 	background-color: #ffdeb6;
@@ -70,7 +70,7 @@
 }
 
 .blockera-block.blockera-block-4.wp-block-navigation-link {
-	font-size: 15px !important;
+	font-size: 15px;
 	font-style: normal;
 	font-weight: 700;
 	background-color: #eaeaea;
@@ -125,7 +125,7 @@
 }
 
 .blockera-block.blockera-block-6.wp-block-navigation-link {
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	text-transform: uppercase;
@@ -185,7 +185,7 @@
 }
 
 .blockera-block.blockera-block-8.wp-block-navigation-submenu:is(li, [data-type="core/navigation-submenu"]) {
-	font-size: 16px !important;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 600;
 	background-color: #ffcece;
@@ -215,7 +215,7 @@
 	background-color: #ffefef;
 	transform: translate3d(0, 2px, 0);
 	padding: 5px 5px 5px 5px;
-	font-size: 16px !important;
+	font-size: 16px;
 	font-weight: 700;
 	font-style: italic;
 	display: flex !important;
