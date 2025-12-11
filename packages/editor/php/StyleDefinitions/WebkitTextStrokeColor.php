@@ -6,24 +6,34 @@ class WebkitTextStrokeColor extends BaseStyleDefinition {
 
     protected function css( array $setting): array {
 
-        $declaration = [];
-        $cssProperty = $setting['type'];
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || '-webkit-text-stroke-color' !== $cssProperty) {
-
-            return $declaration;
+        if (! isset($setting['type'])) {
+            return [];
         }
 
-        $color = blockera_get_value_addon_real_value($setting[ $cssProperty ]['color']);
+        $cssProperty = $setting['type'];
 
-        if (! empty($color)) {
+        if ('' === $cssProperty || '-webkit-text-stroke-color' !== $cssProperty || ! isset($setting[ $cssProperty ])) {
+            return [];
+        }
 
-            $this->setDeclaration('-webkit-text-stroke-color', $color);
+        $strokeData = $setting[ $cssProperty ];
 
-            if (! empty($setting[ $cssProperty ]['width'])) {
+        if (! isset($strokeData['color'])) {
+            $this->setCss($this->declarations);
+            return $this->css;
+        }
 
-                $this->setDeclaration('-webkit-text-stroke-width', $setting[ $cssProperty ]['width']);
-            }
+        $color = blockera_get_value_addon_real_value($strokeData['color']);
+
+        if (empty($color)) {
+            $this->setCss($this->declarations);
+            return $this->css;
+        }
+
+        $this->setDeclaration('-webkit-text-stroke-color', $color);
+
+        if (isset($strokeData['width']) && ! empty($strokeData['width'])) {
+            $this->setDeclaration('-webkit-text-stroke-width', $strokeData['width']);
         }
 
         $this->setCss($this->declarations);
