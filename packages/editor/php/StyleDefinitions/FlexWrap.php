@@ -6,24 +6,32 @@ class FlexWrap extends BaseStyleDefinition {
 
 	protected function css( array $setting): array {
 
-        $declaration = [];
-        $cssProperty = $setting['type'];
+		if (! isset($setting['type'])) {
+			return [];
+		}
 
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'flex-wrap' !== $cssProperty) {
+		$cssProperty = $setting['type'];
 
-            return $declaration;
-		}		
-		
-		// Backward compatibility for flex-wrap value, because flex-wrap changed from value to val in the new version.
+		if (( 'flex-wrap' !== $cssProperty ) || ! isset($setting[ $cssProperty ])) {
+			return [];
+		}
+
+		if (! isset($setting['flex-wrap'])) {
+			return [];
+		}
+
 		$flexWrap = $setting['flex-wrap'];
 
-		if (! empty($flexWrap['value']) || ! empty($flexWrap['val'])) {
-
-			$this->setDeclaration($cssProperty, ( $flexWrap['value'] ?? $flexWrap['val'] ) . ( $flexWrap['reverse'] && 'wrap' === ( $flexWrap['value'] ?? $flexWrap['val'] ) ? '-reverse' : '' ) . ' !important');
+		if (empty($flexWrap['value']) && empty($flexWrap['val'])) {
+			return [];
 		}
+
+		$value                              = $flexWrap['value'] ?? $flexWrap['val'];
+		$suffix                             = ( isset($flexWrap['reverse']) && $flexWrap['reverse'] && 'wrap' === $value ) ? '-reverse' : '';
+		$this->declarations[ $cssProperty ] = $value . $suffix . ' !important';
 
 		$this->setCss($this->declarations);
 
-        return $this->css;
-    }
+		return $this->css;
+	}
 }
