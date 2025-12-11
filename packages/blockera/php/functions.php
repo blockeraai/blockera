@@ -130,76 +130,108 @@ if (! function_exists('blockera_get_value_addon_real_value')) {
      * @return mixed
      */
     function blockera_get_value_addon_real_value( $value) { 
-        global $blockeraApp;
-
         if (is_numeric($value)) {
             return $value;
         }
 
         if (is_string($value)) {
-			// If the value ends with 'func', return the value without the 'func' suffix.
-			if ( 'func' === substr($value, -4) ) {
+			$len = strlen($value);
+			if (4 <= $len && 'func' === substr($value, -4)) {
 				return substr($value, 0, -4);
 			}
 
-			// If the value is '0px', return '0'.
-			if ( '0px' === $value ) {
+			if ('0px' === $value) {
 				return '0';
 			}
 
             return $value;
         }
 
-        if (is_array($value) && ! empty($value['isValueAddon']) && ! empty($value['valueType'])) {
+        if (! is_array($value)) {
+            return $value;
+        }
 
-            if ('dynamic-value' === $value['valueType'] && blockera_get_experimental([ 'data', 'dynamicValue' ])) {
+        if (! isset($value['isValueAddon']) || ! $value['isValueAddon'] || ! isset($value['valueType']) || '' === $value['valueType']) {
+            return $value;
+        }
 
-                $valueAddons = $blockeraApp->getRegisteredValueAddons($value['valueType']);
+        $valueType = $value['valueType'];
 
-                if (empty($valueAddons)) {
+        if ('variable' === $valueType) {
 
-                    return '';
-                }
+            $settings = $value['settings'];
 
-                $groupName = $value['settings']['group'];
+            if (! isset($settings['var'])) {
+                return $value;
+            }
 
-                $groupItems = $valueAddons[ $groupName ]['items'];
+            $var    = $settings['var'];
+            $varStr = 'var(' . $var . ')';
 
-                foreach ($groupItems as $name => $item) {
+            if (isset($settings['value'])) {
 
-                    if ($name !== $value['name']) {
+                $settingsValue = $settings['value'];
 
-                        continue;
+                if ('' !== $settingsValue && $varStr !== $settingsValue) {
+
+                    $prefix = "var({$var}";
+
+                    if (str_starts_with($settingsValue, $prefix)) {
+                        return $settingsValue;
                     }
 
-                    $callback = $item['properties']['callback'];
-
-                    if (is_callable($callback)) {
-
-                        return $callback($item['instance']);
-                    }
+                    return $prefix . ', ' . $settingsValue . ')';
                 }
             }
 
-            if ('variable' === $value['valueType'] && isset($value['settings']['var'])) {
-				/**
-				 * If the value is not empty and is not the same as the variable, return the var with the value as fallback.
-				 */
-				if (
-				isset($value['settings']['value']) && 
-				'' !== $value['settings']['value'] && 
-				'var(' . $value['settings']['var'] . ')' !== $value['settings']['value']) {
+            return $varStr;
+        }
 
-					// If the value already starts with var({$value['settings']['var']}, return it as is.
-					if (str_starts_with($value['settings']['value'], "var({$value['settings']['var']}")) {
-						return $value['settings']['value'];
-					}
-					
-					return "var({$value['settings']['var']}, {$value['settings']['value']})";
-				}
+        static $dynamicValueEnabled = null;
+        if (null === $dynamicValueEnabled) {
+            $dynamicValueEnabled = blockera_get_experimental([ 'data', 'dynamicValue' ]);
+        }
 
-                return 'var(' . $value['settings']['var'] . ')';
+        if ('dynamic-value' === $valueType && $dynamicValueEnabled) {
+            global $blockeraApp;
+            $valueAddons = $blockeraApp->getRegisteredValueAddons($valueType);
+
+            if (empty($valueAddons)) {
+                return '';
             }
+
+            $settings = $value['settings'];
+
+            if (! isset($settings['group'])) {
+                return '';
+            }
+
+            $groupName = $settings['group'];
+
+            if (! isset($valueAddons[ $groupName ]['items'])) {
+                return '';
+            }
+
+            $groupItems = $valueAddons[ $groupName ]['items'];
+            $targetName = $value['name'];
+
+            foreach ($groupItems as $name => $item) {
+                if ($name !== $targetName) {
+                    continue;
+                }
+
+                if (! isset($item['properties']['callback'])) {
+                    break;
+                }
+
+                $callback = $item['properties']['callback'];
+
+                if (is_callable($callback)) {
+                    return $callback($item['instance']);
+                }
+                break;
+            }
+            return '';
         }
 
         return $value;
