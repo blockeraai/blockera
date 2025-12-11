@@ -103,10 +103,15 @@ p.blockera-block.blockera-block-16 {
 
 p.blockera-block.blockera-block-17 {
 	background-color: #e195af;
-	object-position: 100% 100%;
+	object-position: 0% 50%;
 }
 
 p.blockera-block.blockera-block-18 {
+	background-color: #d2668c;
+	object-position: 33% 66%;
+}
+
+p.blockera-block.blockera-block-19 {
 	background-color: #f8ccaa;
 	box-sizing: border-box;
 }
