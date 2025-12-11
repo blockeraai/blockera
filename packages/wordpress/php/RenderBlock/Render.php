@@ -154,12 +154,19 @@ class Render {
 
         // Extract block attributes.
         $attributes = $block['attrs'];
-        // Generate blockera hash identify with "blockeraPropsId" attribute value.
-        $blockera_hash_id = blockera_get_small_random_hash($attributes['blockeraPropsId']);
-		// Get blockera block unique css classname.
-        $blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
-		// Get normalized blockera block unique css classname.
-        $base_unique_class_name = $attributes['className'] ?? $blockera_class_name;
+
+		if ( ! empty($attributes['className']) ) {
+			$base_unique_class_name = $attributes['className'];
+		} else {
+			// Generate blockera hash identify with "blockeraPropsId" attribute value.
+			$blockera_hash_id = blockera_get_small_random_hash($attributes['blockeraPropsId']);
+
+			// Get blockera block unique css classname.
+			$blockera_class_name = sprintf('blockera-block blockera-block-%s', $blockera_hash_id);
+
+			// Get normalized blockera block unique css classname.
+			$base_unique_class_name = $blockera_class_name;
+		}
 
 		if (! $this->is_doing_transpile_loop) {
 			// Ensure the classname is unique across all blocks.
