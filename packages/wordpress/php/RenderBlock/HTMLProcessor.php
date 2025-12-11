@@ -179,9 +179,11 @@ class HTMLProcessor {
 				}
 			}
 
-			// Optimize: Only process global CSS classes if needed.
 			$classes_to_add = [];
-			if ( $has_global_css_classes ) {
+
+			// Add properties classes to the element if it has blockera class and global css classes.
+			// It prevents adding properties classes to other elements.
+			if ( $has_global_css_classes && $has_blockera_class ) {
 				foreach ( $global_css_props_classes as $prop => $prop_class ) {
 					if ( str_contains( $style, $prop ) ) {
 						$classes_to_add[] = $prop_class;
