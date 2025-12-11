@@ -119,6 +119,16 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 		return <></>;
 	}
 
+	const isShowFitPosition = isShowField(
+		{
+			show: false,
+			force: false,
+			status: true,
+		},
+		values?.blockeraFitPosition,
+		attributes?.blockeraFitPosition?.default
+	);
+
 	return (
 		<PanelBodyControl
 			onToggle={onToggle}
@@ -728,7 +738,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 			</EditorFeatureWrapper>
 
 			<EditorFeatureWrapper
-				isActive={isShowFit}
+				isActive={isShowFit || isShowFitPosition}
 				config={extensionConfig.blockeraFit}
 			>
 				<ControlContextProvider
