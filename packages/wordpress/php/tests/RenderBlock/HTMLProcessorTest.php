@@ -336,13 +336,23 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 		$this->assertStringNotContainsString( ' ;', $result['css']['root']['div']['margin'] );
 	}
 
-	public function testClassnamePriorityOverTag() {
+	public function testClassnamePriorityOverID() {
 
 		$html = '<div id="with-id" class="blockera-block-test" style="color: red;">Content</div>';
 
 		$result = $this->processor->cleanupHTML( $html );
 
-		$this->assertStringContainsString( 'div#with-id', array_keys($result['css']['root'])[0] );
+		$this->assertStringContainsString( '.blockera-block-test', array_keys($result['css']['root'])[0] );
+		$this->assertStringNotContainsString( '#with-id', array_keys($result['css']['root'])[0] );
+	}
+
+	public function testUseIdIfClassnameNotFound() {
+
+		$html = '<div id="with-id" style="color: red;">Content</div>';
+
+		$result = $this->processor->cleanupHTML( $html );
+
+		$this->assertStringContainsString( '#with-id', array_keys($result['css']['root'])[0] );
 		$this->assertStringNotContainsString( '.blockera-block-test', array_keys($result['css']['root'])[0] );
 	}
 
