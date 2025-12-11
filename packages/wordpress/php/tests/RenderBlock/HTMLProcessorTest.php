@@ -367,7 +367,7 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 	public function testConvertInlineStylesWithGlobalCssPropsClasses() {
 
-		$html = '<div style="color: red; display: flex;">Content</div>';
+		$html = '<div class="blockera-block-1" style="color: red; display: flex;">Content</div>';
 
 		$global_css_props = [
 			'color'   => 'has-color',
@@ -377,12 +377,12 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 		$result = $this->processor->cleanupHTML( $html, '',$global_css_props );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
-		$this->assertStringContainsString( 'class="has-color has-display"', $result['html'] );
+		$this->assertStringContainsString( 'class="blockera-block-1 has-color has-display"', $result['html'] );
 	}
 
 	public function testConvertInlineStylesWithGlobalCssPropsClassesPartialMatch() {
 
-		$html = '<div style="color: red; margin: 10px;">Content</div>';
+		$html = '<div class="blockera-block-1" style="color: red; margin: 10px;">Content</div>';
 
 		$global_css_props = [
 			'color' => 'has-color',
@@ -392,13 +392,13 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
-		$this->assertStringContainsString( 'class="has-color"', $result['html'] );
+		$this->assertStringContainsString( 'class="blockera-block-1 has-color"', $result['html'] );
 		$this->assertStringNotContainsString( 'has-width', $result['html'] );
 	}
 
 	public function testConvertInlineStylesWithGlobalCssPropsClassesAndExistingClass() {
 
-		$html = '<div class="existing-class" style="color: red;">Content</div>';
+		$html = '<div class="blockera-block-1 existing-class" style="color: red;">Content</div>';
 
 		$global_css_props = [
 			'color' => 'has-color',
@@ -407,22 +407,22 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
-		$this->assertStringContainsString( 'class="existing-class has-color"', $result['html'] );
+		$this->assertStringContainsString( 'class="blockera-block-1 existing-class has-color"', $result['html'] );
 	}
 
 	public function testConvertInlineStylesWithEmptyGlobalCssPropsClasses() {
 
-		$html = '<div style="color: red;">Content</div>';
+		$html = '<div class="blockera-block-1" style="color: red;">Content</div>';
 
 		$result = $this->processor->cleanupHTML( $html, '', [] );
 
 		$this->assertStringNotContainsString( 'style=', $result['html'] );
-		$this->assertStringNotContainsString( 'class=', $result['html'] );
+		$this->assertStringContainsString( 'class="blockera-block-1"', $result['html'] );
 	}
 
 	public function testConvertInlineStylesWithGlobalCssPropsClassesMultipleElements() {
 
-		$html = '<div style="color: red;"><p style="display: block;">Text</p></div>';
+		$html = '<div class="blockera-block-1" style="color: red;"><p style="display: block;">Text</p></div>';
 
 		$global_css_props = [
 			'color'   => 'has-color',
@@ -431,13 +431,13 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
 
-		$this->assertStringContainsString( '<div class="has-color" >', $result['html'] );
-		$this->assertStringContainsString( '<p class="has-display" >', $result['html'] );
+		$this->assertStringContainsString( '<div class="blockera-block-1 has-color">', $result['html'] );
+		$this->assertStringContainsString( '<p>', $result['html'] );
 	}
 
 	public function testConvertInlineStylesWithGlobalCssPropsClassesNoDuplicates() {
 
-		$html = '<div class="has-color" style="color: red;">Content</div>';
+		$html = '<div class="blockera-block-1 has-color" style="color: red;">Content</div>';
 
 		$global_css_props = [
 			'color' => 'has-color',
@@ -447,6 +447,20 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$count = substr_count( $result['html'], 'has-color' );
 		$this->assertEquals( 1, $count );
+	}
+
+	public function testConvertInlineStylesWithGlobalCssPropsClassesNoDuplicatesAndNoBlockeraClass() {
+
+		$html = '<div class="has-color" style="color: red; display: block;">Content</div>';
+
+		$global_css_props = [
+			'color' => 'has-color',
+		];
+
+		$result = $this->processor->cleanupHTML( $html, '', $global_css_props );
+
+		$this->assertStringNotContainsString( 'style=', $result['html'] );
+		$this->assertStringContainsString( 'class="has-color"', $result['html'] );
 	}
 
 	public function testAddClassnameToWrapper() {
