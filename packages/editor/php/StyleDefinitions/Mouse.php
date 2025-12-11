@@ -4,19 +4,25 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class Mouse extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
+	protected function css( array $setting): array {
 
-        $cssProperty = $setting['type'];
+		if (! isset($setting['type'])) {
+			return [];
+		}
 
-        if (empty($cssProperty)) {
+		$cssProperty = $setting['type'];
 
-            return [];
-        }
+		if ('' === $cssProperty) {
+			return [];
+		}
 
-        $this->setDeclaration($cssProperty, $setting[ $cssProperty ]);
+		if (! isset($setting[ $cssProperty ])) {
+			return [];
+		}
 
-        $this->setCss($this->declarations);
+		$this->setDeclaration($cssProperty, $setting[ $cssProperty ]);
+		$this->setCss($this->declarations);
 
-        return $this->css;
-    }
+		return $this->css;
+	}
 }
