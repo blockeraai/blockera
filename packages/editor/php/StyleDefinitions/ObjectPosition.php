@@ -4,27 +4,28 @@ namespace Blockera\Editor\StyleDefinitions;
 
 class ObjectPosition extends BaseStyleDefinition {
 
-    protected function css( array $setting): array {
-     
-		$declaration = [];
-		$cssProperty = $setting['type'];
+	/**
+	 * Generate CSS declarations for object-position property.
+	 *
+	 * @param array $setting The block setting.
+	 *
+	 * @return array Retrieve array of collection of css selectors and css declarations.
+	 */
+	protected function css( array $setting): array {
+		$cssProperty = $setting['type'] ?? '';
 
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'object-position' !== $cssProperty ) {
-
-			return $declaration;
+		if ( 'object-position' !== $cssProperty ) {
+			return [];
 		}
-				
-		$this->setDeclaration(
-            $cssProperty,
-            sprintf(
-                '%1$s %2$s',
-                $setting[ $cssProperty ]['top'],
-                $setting[ $cssProperty ]['left']
-            )
-        );
 
+		$positionData = $setting[ $cssProperty ] ?? null;
+		if ( null === $positionData || ! isset( $positionData['top'], $positionData['left'] ) ) {
+			return [];
+		}
+
+		$this->declarations[ $cssProperty ] = $positionData['top'] . ' ' . $positionData['left'];
 		$this->setCss( $this->declarations );
 
 		return $this->css;
-    }
+	}
 }
