@@ -15,23 +15,49 @@ class Outline extends BaseStyleDefinition implements Repeater {
      */
     protected function css( array $setting): array {
 
+        if ( ! isset( $setting['type'] ) || 'outline' !== $setting['type'] ) {
+            return [];
+        }
+
         $cssProperty = $setting['type'];
 
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || 'outline' !== $cssProperty) {
-
+        if ( ! isset( $setting[ $cssProperty ] ) || '' === $setting[ $cssProperty ] ) {
             return [];
         }
 
-        $filteredOutlines = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
+        $sortedOutlines = blockera_get_sorted_repeater( $setting[ $cssProperty ] );
 
-        if (empty($filteredOutlines)) {
-
+        if ( ! is_array( $sortedOutlines ) ) {
             return [];
         }
 
-        $this->setOutline($filteredOutlines[0]);
+        $count      = count( $sortedOutlines );
+        $firstValid = null;
 
-        $this->setCss($this->declarations);
+        for ( $i = 0; $i < $count; $i++ ) {
+            if ( isset( $sortedOutlines[ $i ]['isVisible'] ) && '' !== $sortedOutlines[ $i ]['isVisible'] ) {
+                $firstValid = $sortedOutlines[ $i ];
+                break;
+            }
+        }
+
+        if ( null === $firstValid || ! isset( $firstValid['border'] ) ) {
+            return [];
+        }
+
+        $border       = $firstValid['border'];
+        $width        = $border['width'] ?? '';
+        $style        = $border['style'] ?? '';
+        $color        = isset( $border['color'] ) && '' !== $border['color'] ? blockera_get_value_addon_real_value( $border['color'] ) : '';
+        $outlineValue = $width . ' ' . $style . ' ' . $color;
+
+        $this->declarations['outline'] = $outlineValue;
+
+        if ( isset( $firstValid['offset'] ) && '' !== $firstValid['offset'] ) {
+            $this->declarations['outline-offset'] = blockera_get_value_addon_real_value( $firstValid['offset'] );
+        }
+
+        $this->setCss( $this->declarations );
 
         return $this->css;
     }
@@ -45,28 +71,6 @@ class Outline extends BaseStyleDefinition implements Repeater {
      */
     public function isValidSetting( array $setting): bool {
 
-        return ! empty($setting['isVisible']);
-    }
-
-    /**
-     * Setup outline style properties into stack properties.
-     *
-     * @param array $setting the outline setting.
-     *
-     * @return void
-     */
-    protected function setOutline( array $setting): void {
-
-        $this->setDeclaration(
-            'outline',
-            sprintf(
-                '%s %s %s',
-                $setting['border']['width'],
-                $setting['border']['style'],
-                ! empty($setting['border']['color']) ? blockera_get_value_addon_real_value($setting['border']['color']) : '',
-            )
-        );
-
-        $this->setDeclaration('outline-offset', ! empty($setting['offset']) ? blockera_get_value_addon_real_value($setting['offset']) : '');
+        return isset( $setting['isVisible'] ) && '' !== $setting['isVisible'];
     }
 }
