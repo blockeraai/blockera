@@ -9,15 +9,6 @@ class FontSize extends BaseStyleDefinition implements StandardDefinition {
 
     use SimpleDefinitionTrait;
 
-	/**
-	 * Use important always (in v2 style engine).
-	 *
-	 * @return boolean
-	 */
-	protected function isImportant(): bool {
-		return true;
-	}
-
     public function getCssProperty(): string {
 
         return 'font-size';
