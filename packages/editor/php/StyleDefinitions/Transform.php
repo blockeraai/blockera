@@ -6,37 +6,51 @@ use Blockera\Editor\StyleDefinitions\Contracts\Repeater;
 
 class Transform extends BaseStyleDefinition implements Repeater {
 
-    protected function css( array $setting): array {
+	private const REPEATER_ITEM_TYPES = [
+		'move' => true,
+		'scale' => true,
+		'rotate' => true,
+		'skew' => true,
+	];
+
+	protected function css( array $setting): array {
 
 		$declaration = [];
-		$cssProperty = $setting['type'];
+		$cssProperty = $setting['type'] ?? '';
 
-		if ( empty( $cssProperty ) || empty( $setting[ $cssProperty ] ) || 'transform' !== $cssProperty ) {
+		if ( '' === $cssProperty || 'transform' !== $cssProperty || ! isset( $setting[ $cssProperty ] ) || empty( $setting[ $cssProperty ] ) ) {
 
 			return $declaration;
 		}
 
-		$filteredTransforms = array_values(array_filter(blockera_get_sorted_repeater($setting[ $cssProperty ]), [ $this, 'isValidSetting' ]));
+		$sortedTransforms   = blockera_get_sorted_repeater($setting[ $cssProperty ]);
+		$filteredTransforms = [];
 
-		if (! empty($filteredTransforms)) {
+		foreach ( $sortedTransforms as $item ) {
+			if ( $this->isValidSetting( $item ) ) {
+				$filteredTransforms[] = $item;
+			}
+		}
 
-			array_map([ $this, 'setTransform' ], $filteredTransforms);
+		$count = count( $filteredTransforms );
+		if ( 0 !== $count ) {
+			for ( $i = 0; $i < $count; ++$i ) {
+				$this->setTransform( $filteredTransforms[ $i ] );
+			}
 		}
 
 		$currentSettings = $this->getCurrentBreakpointSettings();
+		$transformValue  = $this->declarations['transform'] ?? '';
 
-		if ( ! empty( $this->declarations['transform'] ) && isset( $currentSettings['blockeraTransformSelfPerspective'] )) {
+		if ( '' !== $transformValue && isset( $currentSettings['blockeraTransformSelfPerspective'] ) ) {
 
-			$perspective = blockera_get_value_addon_real_value( $currentSettings['blockeraTransformSelfPerspective']['value'] ?? $currentSettings['blockeraTransformSelfPerspective'] );
+			$perspectiveData = $currentSettings['blockeraTransformSelfPerspective'];
+			$perspective     = blockera_get_value_addon_real_value( $perspectiveData['value'] ?? $perspectiveData );
 
-			if ( ! empty( $perspective ) ) {
+			if ( '' !== $perspective ) {
 				$this->setDeclaration(
 					'transform',
-					sprintf(
-						'perspective(%s) %s',
-						$perspective,
-						$this->declarations['transform']
-					)
+					'perspective(' . $perspective . ') ' . $transformValue
 				);
 			}
 		}
@@ -55,19 +69,19 @@ class Transform extends BaseStyleDefinition implements Repeater {
 	 */
 	public function isValidSetting( array $setting): bool {
 
-		if ( empty( $setting['type'] ) ) {
+		$type = $setting['type'] ?? '';
+
+		if ( '' === $type ) {
 
 			return false;
 		}
 
-		$repeaterItemType = [ 'move', 'scale', 'rotate', 'skew' ];
-
-		if ( ! in_array( $setting['type'], $repeaterItemType, true ) ) {
+		if ( ! isset( self::REPEATER_ITEM_TYPES[ $type ] ) ) {
 
 			return false;
 		}
 		
-		return ! empty( $setting['isVisible'] );
+		return isset( $setting['isVisible'] ) && $setting['isVisible'];
 	}
 
 	/**
@@ -79,56 +93,40 @@ class Transform extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setTransform( array $setting ): void {
 
+		$type      = $setting['type'] ?? '';
 		$transform = '';
 
-		switch ( $setting['type'] ) {
+		switch ( $type ) {
 			case 'move':
-				$transform = sprintf(
-					'translate3d(%s, %s, %s)',
-					blockera_get_value_addon_real_value( $setting['move-x'] ),
-					blockera_get_value_addon_real_value( $setting['move-y'] ),
-					blockera_get_value_addon_real_value( $setting['move-z'] ),
-				);
+				$transform = 'translate3d('
+					. blockera_get_value_addon_real_value( $setting['move-x'] ?? '' ) . ', '
+					. blockera_get_value_addon_real_value( $setting['move-y'] ?? '' ) . ', '
+					. blockera_get_value_addon_real_value( $setting['move-z'] ?? '' ) . ')';
 				break;
 
 			case 'scale':
-				$scale = blockera_get_value_addon_real_value( $setting['scale'] );
-
-				$transform = sprintf(
-					'scale3d(%s, %s, 50%%)',
-					$scale,
-					$scale,
-				);
+				$scale     = blockera_get_value_addon_real_value( $setting['scale'] ?? '' );
+				$transform = 'scale3d(' . $scale . ', ' . $scale . ', 50%)';
 				break;
 
 			case 'rotate':
-				$transform = sprintf(
-					'rotateX(%s) rotateY(%s) rotateZ(%s)',
-					blockera_get_value_addon_real_value( $setting['rotate-x'] ),
-					blockera_get_value_addon_real_value( $setting['rotate-y'] ),
-					blockera_get_value_addon_real_value( $setting['rotate-z'] ),
-				);
+				$transform = 'rotateX(' . blockera_get_value_addon_real_value( $setting['rotate-x'] ?? '' ) . ') '
+					. 'rotateY(' . blockera_get_value_addon_real_value( $setting['rotate-y'] ?? '' ) . ') '
+					. 'rotateZ(' . blockera_get_value_addon_real_value( $setting['rotate-z'] ?? '' ) . ')';
 				break;
 
 			case 'skew':
-				$transform = sprintf(
-					'skew(%s, %s)',
-					blockera_get_value_addon_real_value( $setting['skew-x'] ),
-					blockera_get_value_addon_real_value( $setting['skew-y'] ),
-				);
+				$transform = 'skew('
+					. blockera_get_value_addon_real_value( $setting['skew-x'] ?? '' ) . ', '
+					. blockera_get_value_addon_real_value( $setting['skew-y'] ?? '' ) . ')';
 				break;
 		}
 
-		if ( $transform ) {
-			if ( ! empty( $this->declarations['transform'] ) ) {
-				$this->setDeclaration(
-					'transform',
-					sprintf(
-						'%s %s',
-						$this->declarations['transform'],
-						$transform
-					)
-				);
+		if ( '' !== $transform ) {
+			$existingTransform = $this->declarations['transform'] ?? '';
+			
+			if ( '' !== $existingTransform ) {
+				$this->setDeclaration( 'transform', $existingTransform . ' ' . $transform );
 			} else {
 				$this->setDeclaration( 'transform', $transform );
 			}
