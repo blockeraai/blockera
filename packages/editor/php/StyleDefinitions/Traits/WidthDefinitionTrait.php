@@ -4,30 +4,35 @@ namespace Blockera\Editor\StyleDefinitions\Traits;
 trait WidthDefinitionTrait {
 
 	protected function css( array $setting): array {
-
-        $declaration  = [];
-        $cssProperty  = $setting['type'];
-		$key          = $this->getCssProperty();
-		$is_important = $this->isImportant() ? ' !important' : '';
-
-        if (empty($cssProperty) || empty($setting[ $cssProperty ]) || $key !== $cssProperty) {
-
-            return $declaration;
+		if ( ! isset( $setting['type'] ) ) {
+			return [];
 		}
 
-		$value = blockera_get_value_addon_real_value($setting[ $cssProperty ]);
+		$cssProperty = $setting['type'];
+		if ( '' === $cssProperty ) {
+			return [];
+		}
+
+		$key = $this->getCssProperty();
+		if ( $key !== $cssProperty ) {
+			return [];
+		}
+
+		if ( ! isset( $setting[ $cssProperty ] ) || '' === $setting[ $cssProperty ] ) {
+			return [];
+		}
+
+		$value = blockera_get_value_addon_real_value( $setting[ $cssProperty ] );
 
 		if ( 'stretch' === $value ) {
-			$key = "{$key}: 100%; {$key}: -moz-available{$is_important};{$key}: -webkit-fill-available{$is_important};{$key}";
+			$isImportant     = $this->isImportant();
+			$importantSuffix = $isImportant ? ' !important' : '';
+			$key             = $key . ': 100%; ' . $key . ': -moz-available' . $importantSuffix . ';' . $key . ': -webkit-fill-available' . $importantSuffix . ';' . $key;
 		}
 
-		$this->setDeclaration(
-			$key, 
-			$value
-		);
+		$this->setDeclaration( $key, $value );
+		$this->setCss( $this->declarations );
 
-		$this->setCss($this->declarations);
-
-        return $this->css;
-    }
+		return $this->css;
+	}
 }
