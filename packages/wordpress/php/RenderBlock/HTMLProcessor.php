@@ -142,6 +142,10 @@ class HTMLProcessor {
 		);
 
 		if ( empty( $matches ) ) {
+
+			// Remove WP has-*- classes from elements that have blockera-block-* classes.
+			$html = $this->removeHasClassesFromBlockeraBlocks( $html );
+
 			return [
 				'html' => $html,
 				'css'  => [],
@@ -208,6 +212,9 @@ class HTMLProcessor {
 			$cleaned_html = substr_replace( $cleaned_html, $new_tag, $position, $full_tag_len );
 			$offset      += strlen( $new_tag ) - $full_tag_len;
 		}
+
+		// Remove WP has-* classes from elements that have blockera-block-* classes.
+		$cleaned_html = $this->removeHasClassesFromBlockeraBlocks( $cleaned_html );
 
 		return [
 			'html' => $cleaned_html,
@@ -527,6 +534,53 @@ class HTMLProcessor {
 		}
 
 		return $attrs;
+	}
+
+
+	/**
+	 * Remove has-* classes from elements that have blockera-block-* classes.
+	 * Uses regex with lookahead for efficient single-pass processing.
+	 *
+	 * @param string $html The HTML content to process.
+	 *
+	 * @return string The HTML with has-* classes removed from blockera-block elements.
+	 */
+	protected function removeHasClassesFromBlockeraBlocks( string $html ): string {
+
+		if ( empty( $html ) ) {
+			return $html;
+		}
+
+		/**
+		 * Single regex pattern to match class attributes that contain blockera-block-* and at least one removable class.
+		 * Uses positive lookahead to check conditions before matching the class value.
+		 * Pattern breakdown:
+		 * - (<[^>]*?\bclass\s*=\s*["\']) - Captures the opening tag and class attribute start.
+		 * - (?=[^"\']*blockera-block-[^"\']*) - Positive lookahead: class must contain blockera-block-*.
+		 * - (?=[^"\']*(?:has-[^"\']*-font-family|...)) - Positive lookahead: class must contain at least one removable class.
+		 * - ([^"\']*) - Captures the actual class value.
+		 * - (["\']) - Captures the closing quote.
+		 */
+		$pattern = '/(<[^>]*?\bclass\s*=\s*["\'])(?=[^"\']*blockera-block-[^"\']*)(?=[^"\']*(?:has-[^"\']*-font-family|has-[^"\']*-font-size|has-[^"\']*-color))([^"\']*)(["\'])/i';
+
+		// Single regex pattern to remove all matching classes: matches class with word boundaries and optional whitespace.
+		$remove_pattern = '/\s*\b(?:has-[a-zA-Z0-9-]+-font-family|has-[a-zA-Z0-9-]+-font-size|has-(?!text-|link-|border-)[a-zA-Z0-9-]+-color)\b\s*/';
+
+		return preg_replace_callback(
+			$pattern,
+			function ( $matches ) use ( $remove_pattern ) {
+				$quote_start = $matches[1];
+				$class_value = $matches[2];
+				$quote_end   = $matches[3];
+
+				// Single regex replace: remove all matching classes and clean up multiple spaces.
+				$new_class_value = preg_replace( $remove_pattern, ' ', $class_value );
+				$new_class_value = preg_replace( '/\s+/', ' ', trim( $new_class_value ) );
+
+				return $quote_start . $new_class_value . $quote_end;
+			},
+			$html
+		);
 	}
 
 	/**

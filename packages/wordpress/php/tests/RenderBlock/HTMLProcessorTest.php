@@ -580,5 +580,141 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 
 		$this->assertStringContainsString( 'class="first second third"', $result );
 	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksRemovesFontFamily() {
+
+		$html = '<div class="blockera-block-123 has-arial-font-family other-class">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		$this->assertStringContainsString( 'blockera-block-123', $result );
+		$this->assertStringContainsString( 'other-class', $result );
+		$this->assertStringNotContainsString( 'has-arial-font-family', $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksRemovesFontSize() {
+
+		$html = '<div class="blockera-block-456 has-large-font-size test-class">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		$this->assertStringContainsString( 'blockera-block-456', $result );
+		$this->assertStringContainsString( 'test-class', $result );
+		$this->assertStringNotContainsString( 'has-large-font-size', $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksRemovesColorButPreservesTextAndLinkColor() {
+
+		$html = '<div class="blockera-block-789 has-background-color has-text-color has-link-color has-primary-color">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		$this->assertStringContainsString( 'blockera-block-789', $result );
+		$this->assertStringContainsString( 'has-text-color', $result );
+		$this->assertStringContainsString( 'has-link-color', $result );
+		$this->assertStringNotContainsString( 'has-background-color', $result );
+		$this->assertStringNotContainsString( 'has-primary-color', $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksPreservesBorderColor() {
+
+		$html = '<div class="blockera-block-abc has-border-color has-border-top-color">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		$this->assertStringContainsString( 'blockera-block-abc', $result );
+		$this->assertStringContainsString( 'has-border-color', $result );
+		$this->assertStringContainsString( 'has-border-top-color', $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksRemovesMultipleClasses() {
+
+		$html = '<div class="blockera-block-xyz has-arial-font-family has-medium-font-size has-accent-color other-class">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		$this->assertStringContainsString( 'blockera-block-xyz', $result );
+		$this->assertStringContainsString( 'other-class', $result );
+		$this->assertStringNotContainsString( 'has-arial-font-family', $result );
+		$this->assertStringNotContainsString( 'has-medium-font-size', $result );
+		$this->assertStringNotContainsString( 'has-accent-color', $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksDoesNotAffectElementsWithoutBlockeraBlock() {
+
+		$html = '<div class="has-arial-font-family has-large-font-size has-primary-color">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		// Should remain unchanged since element doesn't have blockera-block-* class
+		$this->assertEquals( $html, $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksHandlesEmptyHtml() {
+
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, '' );
+		
+		$this->assertEquals( '', $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksHandlesBlockeraBlockWithoutHasClasses() {
+
+		$html = '<div class="blockera-block-123 other-class">Content</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		// Should remain unchanged since element has no removable has-* classes
+		$this->assertEquals( $html, $result );
+	}
+
+	public function testRemoveHasClassesFromBlockeraBlocksHandlesMultipleElements() {
+
+		$html = '<div class="blockera-block-1 has-arial-font-family">First</div><div class="blockera-block-2 has-large-font-size">Second</div>';
+		
+		$reflection = new \ReflectionClass( $this->processor );
+		$method = $reflection->getMethod( 'removeHasClassesFromBlockeraBlocks' );
+		$method->setAccessible( true );
+		
+		$result = $method->invoke( $this->processor, $html );
+		
+		$this->assertStringContainsString( 'blockera-block-1', $result );
+		$this->assertStringContainsString( 'blockera-block-2', $result );
+		$this->assertStringNotContainsString( 'has-arial-font-family', $result );
+		$this->assertStringNotContainsString( 'has-large-font-size', $result );
+	}
+
+
 }
 
