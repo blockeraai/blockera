@@ -142,6 +142,7 @@
 	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
+	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m14.5%206.5-1%201%203.7%203.7H4v1.6h13.2l-3.7%203.7%201%201%205.6-5.5z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	display: flex !important;
 	flex-direction: column;
 	gap: 16px;
@@ -158,6 +159,11 @@
 	font-size: 18px;
 	font-style: normal;
 	font-weight: 700;
+	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m14.5%206.5-1%201%203.7%203.7H4v1.6h13.2l-3.7%203.7%201%201%205.6-5.5z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
+	--blockera--icon--gap: 40px;
+	--blockera--icon--size: 30px;
+	--blockera--icon--color: #00b8eb;
+	--blockera--icon--rotate: 90deg;
 	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
