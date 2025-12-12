@@ -169,6 +169,8 @@ class BlockeraTest extends AppTestCase {
     protected function setUp(): void {
         parent::setUp();
 
+		blockera_load('vendor.blockera.feature-icon.src.hooks', dirname(__DIR__, 3));
+
 		$this->app = Blockera::getInstance();
 		$this->app->bootstrap();
 
