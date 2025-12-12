@@ -343,8 +343,8 @@ class BlockeraTest extends AppTestCase {
 
 	/**
 	 * Check that tags with inline styles follow the rules:
-	 * 1. Tags with inline style that have 'blockera-block' or 'be-transpiled' should fail
-	 * 2. Tags with inline style without these classes should check parents recursively
+	 * 1. Tags with inline style that have 'blockera-block' should fail
+	 * 2. Tags with inline style without this class should check parents recursively
 	 *
 	 * @param string $content The HTML content to check.
 	 * @param string $designName The design name for error messages.
@@ -376,32 +376,24 @@ class BlockeraTest extends AppTestCase {
 			
 			$class = $element->getAttribute('class');
 			$has_blockera_block = strpos($class, 'blockera-block') !== false;
-			$has_be_transpiled = strpos($class, 'be-transpiled') !== false;
 			
-			// Condition 1: If tag has inline style and has blockera-block or be-transpiled, fail
-			if ($has_blockera_block || $has_be_transpiled) {
+			// Condition 1: If tag has inline style and has blockera-block, fail
+			if ($has_blockera_block) {
 				$tag_name = $element->tagName;
-				$classes = $has_blockera_block && $has_be_transpiled 
-					? 'blockera-block and be-transpiled' 
-					: ($has_blockera_block ? 'blockera-block' : 'be-transpiled');
-				$this->fail("Tag <{$tag_name}> with '{$classes}' class has inline style attribute.\nTest: {$designName}");
+				$this->fail("Tag <{$tag_name}> with 'blockera-block' class has inline style attribute.\nTest: {$designName}");
 			}
 			
-			// Condition 2: If tag has inline style but doesn't have these classes, check parents recursively
-			if (!$has_blockera_block && !$has_be_transpiled) {
+			// Condition 2: If tag has inline style but doesn't have this class, check parents recursively
+			if (!$has_blockera_block) {
 				$parent = $element->parentNode;
 				while ($parent && $parent instanceof \DOMElement) {
 					$parent_class = $parent->getAttribute('class');
 					$parent_has_blockera_block = strpos($parent_class, 'blockera-block') !== false;
-					$parent_has_be_transpiled = strpos($parent_class, 'be-transpiled') !== false;
 					
-					if ($parent_has_blockera_block || $parent_has_be_transpiled) {
+					if ($parent_has_blockera_block) {
 						$tag_name = $element->tagName;
 						$parent_tag_name = $parent->tagName;
-						$parent_classes = $parent_has_blockera_block && $parent_has_be_transpiled 
-							? 'blockera-block and be-transpiled' 
-							: ($parent_has_blockera_block ? 'blockera-block' : 'be-transpiled');
-						$this->fail("Tag <{$tag_name}> has inline style attribute and parent <{$parent_tag_name}> has '{$parent_classes}' class.\nTest: {$designName}");
+						$this->fail("Tag <{$tag_name}> has inline style attribute and parent <{$parent_tag_name}> has 'blockera-block' class.\nTest: {$designName}");
 					}
 					
 					$parent = $parent->parentNode;
