@@ -77,7 +77,7 @@
 		"blockeraTransformSelfPerspective": {
 			"status": true,
 			"id": "blockeraTransformSelfPerspective",
-			"definition": "SelfPerspective",
+			"definition": "Transform",
 			"css-property": "self-perspective",
 			"fallback": ["self-perspective", "effects"],
 			"description": "Support for \"blockeraTransformSelfPerspective\" value."
