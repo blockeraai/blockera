@@ -715,6 +715,189 @@ class HTMLProcessorTest extends \WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'has-large-font-size', $result );
 	}
 
+	public function testParseStyleDeclarationsWithEmptyStyle() {
+
+		$result = HTMLProcessor::parseStyleDeclarations( '' );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'declarations', $result );
+		$this->assertArrayHasKey( 'styles', $result );
+		$this->assertEmpty( $result['declarations'] );
+		$this->assertIsArray( $result['styles'] );
+		$this->assertEmpty( $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithWhitespaceOnly() {
+
+		$result = HTMLProcessor::parseStyleDeclarations( '   ' );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'declarations', $result );
+		$this->assertArrayHasKey( 'styles', $result );
+		$this->assertEmpty( $result['declarations'] );
+		$this->assertEmpty( $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithBasicFlagTrue() {
+
+		$style = 'color: red; margin: 10px; padding: 5px';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, true );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'declarations', $result );
+		$this->assertArrayHasKey( 'styles', $result );
+		$this->assertIsArray( $result['declarations'] );
+		$this->assertCount( 3, $result['declarations'] );
+		$this->assertEquals( 'color: red', $result['declarations'][0] );
+		$this->assertEquals( ' margin: 10px', $result['declarations'][1] );
+		$this->assertEquals( ' padding: 5px', $result['declarations'][2] );
+		$this->assertEquals( '', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithBasicFlagFalse() {
+
+		$style = 'color: red; margin: 10px; padding: 5px';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertArrayHasKey( 'declarations', $result );
+		$this->assertArrayHasKey( 'styles', $result );
+		$this->assertIsArray( $result['declarations'] );
+		$this->assertCount( 3, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertContains( 'margin: 10px', $result['declarations'] );
+		$this->assertContains( 'padding: 5px', $result['declarations'] );
+		$this->assertEquals( '', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithDisplayNone() {
+
+		$style = 'display: none';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertEmpty( $result['declarations'] );
+		$this->assertEquals( 'display: none;', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithDisplayNoneAndOtherStyles() {
+
+		$style = 'color: red; display: none; margin: 10px';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertContains( 'margin: 10px', $result['declarations'] );
+		$this->assertEquals( 'display: none;', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithDisplayNoneAtStart() {
+
+		$style = 'display: none; color: red; margin: 10px';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertContains( 'margin: 10px', $result['declarations'] );
+		$this->assertEquals( 'display: none;', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithDisplayNoneAtEnd() {
+
+		$style = 'color: red; margin: 10px; display: none';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertContains( 'margin: 10px', $result['declarations'] );
+		$this->assertEquals( 'display: none;', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithDisplayNoneCaseInsensitive() {
+
+		$style = 'DISPLAY: NONE; color: red';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		// Note: The current implementation is case-sensitive, so DISPLAY: NONE won't be detected as special
+		// This test documents current behavior - if case-insensitive matching is added, update this test
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'DISPLAY: NONE', $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertEquals( '', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithDisplayBlock() {
+
+		$style = 'display: block; color: red';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'display: block', $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertEquals( '', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithMalformedDeclarations() {
+
+		$style = 'color: red;; margin: ; padding: 10px; :invalid;';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertContains( 'padding: 10px', $result['declarations'] );
+		$this->assertEquals( '', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithWhitespaceInDeclarations() {
+
+		$style = '  color  :  red  ;  margin  :  10px  ';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertContains( 'margin: 10px', $result['declarations'] );
+		$this->assertEquals( '', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithOnlyDisplayNone() {
+
+		$style = 'display: none';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertEmpty( $result['declarations'] );
+		$this->assertEquals( 'display: none;', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithMultipleDisplayNone() {
+
+		$style = 'display: none; color: red; display: none';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 1, $result['declarations'] );
+		$this->assertContains( 'color: red', $result['declarations'] );
+		$this->assertEquals( 'display: none;display: none;', $result['styles'] );
+	}
+
+	public function testParseStyleDeclarationsWithComplexStyles() {
+
+		$style = 'background: linear-gradient(to right, red, blue); display: none; border-radius: 5px';
+		$result = HTMLProcessor::parseStyleDeclarations( $style, false );
+
+		$this->assertIsArray( $result );
+		$this->assertCount( 2, $result['declarations'] );
+		$this->assertContains( 'background: linear-gradient(to right, red, blue)', $result['declarations'] );
+		$this->assertContains( 'border-radius: 5px', $result['declarations'] );
+		$this->assertEquals( 'display: none;', $result['styles'] );
+	}
 
 }
 
