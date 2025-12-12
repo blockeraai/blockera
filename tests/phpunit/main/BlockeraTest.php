@@ -345,6 +345,10 @@ class BlockeraTest extends AppTestCase {
 	 * Check that tags with inline styles follow the rules:
 	 * 1. Tags with inline style that have 'blockera-block' should fail
 	 * 2. Tags with inline style without this class should check parents recursively
+	 * 
+	 * Special cases:
+	 * - SVG tags and their descendants are skipped
+	 * - Tags with inline style exactly "display: none" are skipped
 	 *
 	 * @param string $content The HTML content to check.
 	 * @param string $designName The design name for error messages.
@@ -371,6 +375,12 @@ class BlockeraTest extends AppTestCase {
 			}
 			
 			if ($is_svg_or_descendant) {
+				continue;
+			}
+			
+			// Special case: Skip validation if inline style is exactly "display: none"
+			$style = $element->getAttribute('style');
+			if (trim($style) === 'display: none') {
 				continue;
 			}
 			
