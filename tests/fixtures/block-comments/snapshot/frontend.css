@@ -258,7 +258,3 @@
 .blockera-block.blockera-block-17 .comment-reply-title:hover {
 	background-color: #80ccff;
 }
-
-.blockera-block.blockera-block-17 :where(a#cancel-comment-reply-link) {
-	display: none;
-}
