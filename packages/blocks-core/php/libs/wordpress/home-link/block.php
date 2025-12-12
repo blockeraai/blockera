@@ -24,9 +24,11 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// States selectors.
 				'blockera/states/current-menu-item' => [
 					'root' => '&.current-menu-item',
 				], 
+				// Inner blocks selectors.
 				'blockera/elements/link' => [
 					'root' => '.wp-block-navigation-item__content',
 				],
