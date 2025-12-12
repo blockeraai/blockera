@@ -123,8 +123,12 @@ export const NavigationSubmenu: BlockType = {
 		return <SharedBlockExtension {...props} />;
 	},
 	selectors: {
+		root: '.wp-block-navigation-submenu:is(li,[data-type="core/navigation-submenu"])',
 		'blockera/elements/icon': {
 			root: ' a.wp-block-navigation-item__content .wp-block-navigation-item__label:before,.wp-block-navigation-item__content .wp-block-navigation-item__label:after',
+		},
+		'blockera/elements/submenu-items': {
+			root: '.wp-block-navigation-item',
 		},
 	},
 };
