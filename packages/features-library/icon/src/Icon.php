@@ -50,9 +50,16 @@ class Icon implements FeatureInterface {
     }
 
     public function boot(): void {
-
+		/*
+		 * Filter the block supports.
+		 *
+		 * @param array $supports The block supports.
+		 * @param Application $app The application container object.
+		 *
+		 * @return array The filtered block supports.
+		 */
 		add_filter(
-            'blockera.render.block.supports',
+            'blockera.block.supports',
             function( $supports, $app) {
 				ob_start();
 

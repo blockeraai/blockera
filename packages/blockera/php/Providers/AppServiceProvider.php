@@ -261,8 +261,19 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     protected function setupRenderBlocks(): void {
-
-		$supports = blockera_get_available_block_supports();
+		/*
+		 * Filter the block supports.
+		 *
+		 * @param array $supports The block supports.
+		 * @param Application $app The application container object.
+		 *
+		 * @return array The filtered block supports.
+		 */
+		$supports = apply_filters(
+			'blockera.block.supports',
+			blockera_get_available_block_supports(),
+			$this->app
+		);
 
 		// Clear the generated css and processed html at the start of content rendering.
 		// Clear the classnames registry at the start of content rendering.
