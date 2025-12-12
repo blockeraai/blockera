@@ -21,10 +21,10 @@ return array_merge(
 						'root' => '.comment-form',
 					],
 					'blockera/elements/notes'          => [
-						'root' => '.comment-notes',
+						'root' => ':is(.comment-notes,p.logged-in-as)',
 					],
 					'blockera/elements/input-label'    => [
-						'root' => 'label',
+						'root' => 'p:not(.comment-form-cookies-consent) label',
 					],
 					'blockera/elements/input'          => [
 						'root' => 'input:is([type="text"],[type="url"],[type="email"],[name="url"],[name="email"])',
