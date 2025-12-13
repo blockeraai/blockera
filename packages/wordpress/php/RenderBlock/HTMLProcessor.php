@@ -175,28 +175,38 @@ class HTMLProcessor {
 
 			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, ! $is_wrapper );
 
-			if ( ! empty( $selector ) && ! empty( $style ) ) {
-				$declarations = $this->parseStyleDeclarations( $style, $is_wrapper );
-
-				if ( ! empty( $declarations ) ) {
-					$this->css_rules[ $is_wrapper ? 'root': 'child' ][ $selector ] = array_unique($declarations);
-				}
-			}
-
 			$classes_to_add = [];
 
-			// Add properties classes to the element if it has blockera class and global css classes.
-			// It prevents adding properties classes to other elements.
-			if ( $has_global_css_classes && $has_blockera_class ) {
-				foreach ( $global_css_props_classes as $prop => $prop_class ) {
-					if ( str_contains( $style, $prop ) ) {
-						$classes_to_add[] = $prop_class;
+			if ( ! empty( $style ) ) {
+
+				// Add properties classes to the element if it has blockera class and global css classes.
+				// It prevents adding properties classes to other elements.
+				if ( $has_global_css_classes && $has_blockera_class ) {
+					foreach ( $global_css_props_classes as $prop => $prop_class ) {
+						if ( str_contains( $style, $prop ) ) {
+							$classes_to_add[] = $prop_class;
+						}
+					}
+				}
+
+				if ( ! empty( $selector ) ) {
+					$parsed       = $this->parseStyleDeclarations( $style, $is_wrapper );
+					$declarations = $parsed['declarations'];
+					$style        = $parsed['styles'];
+
+					if ( ! empty( $declarations ) ) {
+						$this->css_rules[ $is_wrapper ? 'root': 'child' ][ $selector ] = array_unique($declarations);
 					}
 				}
 			}
 
 			// Build new tag.
 			$new_tag = '<' . $tag_name;
+
+			// add style attribute if there was style that should not be removed.
+			if ( ! empty( $style ) ) {
+				$all_attrs = trim( $before_attrs . ' style="' . rtrim($style, ';') . '" ' . $after_attrs );
+			}
 
 			if ( ! empty( $classes_to_add ) ) {
 				$all_attrs = $this->addClassnamesToAttrs( $all_attrs, $classes_to_add );
@@ -679,43 +689,87 @@ class HTMLProcessor {
 	 * @param string $style The style attribute value.
 	 * @param bool   $basic_flag The basic flag. If true, only convert parse declarations to array.
 	 *
-	 * @return array Array of CSS declarations.
+	 * @return array Array with 'declarations' (regular CSS declarations) and 'styles' (special style declarations like display: none).
 	 */
 	public static function parseStyleDeclarations( string $style, bool $basic_flag = true ): array {
 
-		$declarations = [];
-		$style        = trim( $style );
+		$style = trim( $style );
 
-		if ( empty( $style ) ) {
-			return $declarations;
+		if ( '' === $style ) {
+			return [
+				'declarations'  => [],
+				'styles' => [],
+			];
 		}
 
 		$parts = explode( ';', $style );
 
-		// If basic flag is true, return the parts array.
-		if ( $basic_flag ) {
-			return $parts;
+		// If basic flag is true, return the parts array in declarations.
+		if ( true === $basic_flag ) {
+			return [
+				'declarations'   => $parts,
+				'styles' => '',
+			];
 		}
 
-		foreach ( $parts as $part ) {
-			$part = trim( $part );
+		$declarations   = [];
+		$special_styles = '';
+		$count          = count( $parts );
 
-			if ( empty( $part ) ) {
+		for ( $i = 0; $i < $count; ++$i ) {
+			$part = trim( $parts[ $i ] );
+
+			if ( '' === $part ) {
 				continue;
 			}
 
-			if ( ! str_contains( $part, ':' ) ) {
+			$colon_pos = strpos( $part, ':' );
+
+			if ( false === $colon_pos ) {
 				continue;
 			}
 
-			list( $property, $value ) = array_map( 'trim', explode( ':', $part, 2 ) );
+			$property = trim( substr( $part, 0, $colon_pos ) );
+			$value    = trim( substr( $part, $colon_pos + 1 ) );
 
-			if ( ! empty( $property ) && ! empty( $value ) ) {
-				$declarations[] = $property . ': ' . $value;
+			if ( '' === $property || '' === $value ) {
+				continue;
+			}
+
+			$declaration = $property . ': ' . $value;
+
+			// Check if this is a special style (e.g., display: none).
+			if ( self::isSpecialStyle( $property, $value ) ) {
+				$special_styles .= $declaration . ';';
+			} else {
+				$declarations[] = $declaration;
 			}
 		}
 
-		return $declarations;
+		return [
+			'declarations'   => $declarations,
+			'styles' => $special_styles,
+		];
+	}
+
+	/**
+	 * Check if a style property and value combination is a special style.
+	 *
+	 * @param string $property The CSS property name.
+	 * @param string $value    The CSS property value.
+	 *
+	 * @return bool True if it's a special style, false otherwise.
+	 */
+	protected static function isSpecialStyle( string $property, string $value ): bool {
+
+		// Check for display: none.
+		if ( 'display' === $property && 'none' === $value ) {
+			return true;
+		}
+
+		// Add more special style checks here as needed.
+
+		return false;
 	}
 
 	/**

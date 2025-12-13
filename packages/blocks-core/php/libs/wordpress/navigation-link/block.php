@@ -24,7 +24,9 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
-				'root' => '.wp-block-navigation-link',
+				// Double class used to improve specificity to override inner blocks selector of submenu block.
+				'root' => '.wp-block-navigation-link:is(li.wp-block-navigation-link)',
+				// States selectors.
 				'blockera/states/current-menu-item' => [
 					'root' => '&.current-menu-item',
 				],
@@ -34,6 +36,7 @@ return array_merge(
 				'blockera/states/current-menu-ancestor' => [
 					'root' => '&.current-menu-ancestor',
 				],
+				// Inner blocks selectors.
 				'blockera/elements/link' => [
 					'root' => '.wp-block-navigation-item__content',
 				],
