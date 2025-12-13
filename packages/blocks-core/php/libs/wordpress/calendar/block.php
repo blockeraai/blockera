@@ -13,6 +13,14 @@ return array_merge(
 		'selectors' => array_merge(
 			$args['selectors'] ?? [],
 			[
+				// States selectors.
+				'blockera/states/before' => [
+					'root' => '.wp-block-calendar::before',
+				],
+				'blockera/states/after' => [
+					'root' => '.wp-block-calendar::after',
+				],
+				// Inner blocks selectors.
 				'blockera/elements/link' => [
 					'root' => '&& a',
 				],
