@@ -164,11 +164,8 @@
 	};
 }
 
-u0026 blockquote {
-	ntwidth: -moz-available;
-	ntwidth: -webkit-fill-available;
-	ntwidth: stretch;
-	n;
+.blockera-block.blockera-block-2 blockquote {
+	width: -moz-available;
+	width: -webkit-fill-available;
+	width: stretch;
 }
-
-n

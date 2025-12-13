@@ -1,21 +1,16 @@
+.blockera-block.blockera-block-1 {
+	color: red;
+}
+
+.blockera-block.blockera-block-1:hover {
+	color: green;
+}
+
 p.blockera-block.blockera-block-2 {
 	font-size: 20px;
 	font-family: var(--wp--preset--font-family--fira-code);
 }
 
-u0026 {
-	n color: var(--wp--preset--color--accent-3, #503AA8);
-	n;
+.blockera-block.blockera-block-2 {
+	color: var(--wp--preset--color--accent-3, #503AA8);
 }
-
-n u0026 {
-	n color: red;
-	n;
-}
-
-nnu0026:hover {
-	n color: green;
-	n;
-}
-
-n

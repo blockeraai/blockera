@@ -87,3 +87,7 @@
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
+
+.blockera-block.blockera-block-1.wp-block-math :where(mo) {
+	math-depth: 0;
+}

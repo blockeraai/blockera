@@ -116,5 +116,6 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-table :where(mark.has-inline-color) {
+	background-color: rgba(0, 0, 0, 0);
 	color: #ffcaca;
 }

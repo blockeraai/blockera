@@ -111,17 +111,15 @@ p.blockera-block.blockera-block-4::after {
 	content: "After #"attr(id)"";
 }
 
-u0026 {
-	n counter-reset: item;
-	n;
+.blockera-block.blockera-block-5 {
+	counter-reset: item;
 }
 
-nnu0026 p {
-	n counter-increment: item;
-	n;
+.blockera-block.blockera-block-5 p {
+	counter-increment: item;
 }
 
-n p.blockera-block.blockera-block-6::before {
+p.blockera-block.blockera-block-6::before {
 	background-color: #ffdcdc;
 	content: "Custom Number: "counter(item)" Here";
 }

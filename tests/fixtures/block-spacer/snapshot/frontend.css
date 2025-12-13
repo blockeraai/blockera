@@ -3,17 +3,15 @@
 	width: 300px;
 }
 
-u0026 {
-	n background-color: #ffb9b9;
-	n;
+.blockera-block.blockera-block-1 {
+	background-color: #ffb9b9;
 }
 
-nnu0026 .components-resizable-box__container {
-	n background-color: transparent;
-	n;
+.blockera-block.blockera-block-1 .components-resizable-box__container {
+	background-color: transparent;
 }
 
-n .blockera-block.blockera-block-2.wp-block-spacer {
+.blockera-block.blockera-block-2.wp-block-spacer {
 	height: 300px;
 	width: 100%;
 	width: -moz-available;
@@ -21,14 +19,10 @@ n .blockera-block.blockera-block-2.wp-block-spacer {
 	width: stretch;
 }
 
-u0026 {
-	n background-color: #bcdd9a;
-	n;
+.blockera-block.blockera-block-2 {
+	background-color: #bcdd9a;
 }
 
-nnu0026 .components-resizable-box__container {
-	n background-color: transparent;
-	n;
+.blockera-block.blockera-block-2 .components-resizable-box__container {
+	background-color: transparent;
 }
-
-n
