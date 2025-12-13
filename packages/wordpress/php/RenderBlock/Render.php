@@ -212,7 +212,7 @@ class Render {
 		if (! empty($attributes['blockeraCustomCSS']['value'])) {
 			// Replace the "block placeholder", "&" and "\\\\u0026" with the unique selector.
 			// because the custom css maybe contains the block placeholder, "&" and "\\\\u0026" to indicate the block element selector.
-			$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i', '/\\\\u0026/' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
+			$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
 		}
 
 		$styles = $this->getStyles();
