@@ -209,7 +209,19 @@ export const getComputedCssProps = ({
 					selectors[blockType] ||
 					{};
 
-				if (
+				if (!isNormalState(stateType) && hasContent) {
+					calculatedSelectors =
+						selectors?.[
+							appendBlockeraPrefix(`states/${stateType}`)
+						] ||
+						(selectors.hasOwnProperty('root')
+							? { root: selectors.root }
+							: {}) ||
+						{};
+					currentStateHasSelectors = Boolean(
+						selectors?.[appendBlockeraPrefix(`states/${stateType}`)]
+					);
+				} else if (
 					!isNormalState(stateType) &&
 					selectors[appendBlockeraPrefix(`states/${stateType}`)]
 				) {
@@ -378,7 +390,28 @@ export const getComputedCssProps = ({
 		let calculatedSelectors = calculatedProps.selectors;
 		let currentStateHasSelectors = false;
 
-		if (
+		const {
+			settings: { hasContent },
+		} = getState(state) ||
+			getInnerState(state) || {
+				settings: { hasContent: false },
+			};
+
+		if (!isNormalState(state) && hasContent) {
+			calculatedSelectors =
+				calculatedProps.selectors?.[
+					appendBlockeraPrefix(`states/${state}`)
+				] ||
+				(calculatedProps.selectors.hasOwnProperty('root')
+					? { root: calculatedProps.selectors.root }
+					: {}) ||
+				{};
+			currentStateHasSelectors = Boolean(
+				calculatedProps.selectors?.[
+					appendBlockeraPrefix(`states/${state}`)
+				]
+			);
+		} else if (
 			!isNormalState(state) &&
 			calculatedProps.selectors[appendBlockeraPrefix(`states/${state}`)]
 		) {
@@ -390,13 +423,6 @@ export const getComputedCssProps = ({
 		}
 
 		if (validateBlockStates(stateItem)) {
-			const {
-				settings: { hasContent },
-			} = getState(state) ||
-				getInnerState(state) || {
-					settings: { hasContent: false },
-				};
-
 			if (
 				hasContent &&
 				!Object.keys(stateItem?.breakpoints || {})?.length &&
