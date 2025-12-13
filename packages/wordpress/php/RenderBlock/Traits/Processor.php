@@ -283,8 +283,19 @@ trait Processor {
 	 * @return string The cleaned html.
 	 */
 	protected function cleanup( string $html, string $classname, string $unique_selector): string {
-		$html = $this->html_processor->updateWrapperClassname($html, $classname);
+		$selector = blockera_get_compatible_block_css_selector(
+			blockera_get_block_type_property($this->block['blockName'], 'selectors'),
+			'root',
+			[
+				'fallback' => true,
+				'block-type' => 'master',
+				'block-name' => $this->block['blockName'],
+				'blockera-unique-selector' => $unique_selector,
+			]
+		);
+		$html     = $this->html_processor->updateWrapperClassname($html, $classname);
 
+		$this->html_processor->setRootSelector($selector);
 		$cleanup_result = $this->html_processor->cleanupHTML($html, $unique_selector, $this->global_css_props_classes);	
 
 		// Replace html with the updated html.

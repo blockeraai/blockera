@@ -66,6 +66,16 @@ class HTMLProcessor {
 	];
 
 	/**
+	 * Sets the root selector property.
+	 *
+	 * @param string $selector
+	 * @return void
+	 */
+	public function setRootSelector( string $selector) {
+		$this->root_selector = $selector;
+	}
+
+	/**
 	 * Detect the wrapper tag of input HTML without children.
 	 * Returns the tag name of the outermost element if it has no child elements.
 	 *
@@ -101,12 +111,11 @@ class HTMLProcessor {
 	 * 3. Tag name only
 	 *
 	 * @param string $html The HTML content to process.
-	 * @param string $root_selector The root selector. Optional.
 	 * @param array  $global_css_props_classes The global CSS props classes. Optional.
 	 *
 	 * @return array Array with 'html' (cleaned) and 'css' (generated rules).
 	 */
-	public function cleanupHTML( string $html, string $root_selector = '', array $global_css_props_classes = [] ): array {
+	public function cleanupHTML( string $html, array $global_css_props_classes = [] ): array {
 
 		if ( empty( $html ) ) {
 			return [
@@ -117,9 +126,6 @@ class HTMLProcessor {
 
 		// Get the wrapper tag markup.
 		$wrapper = $this->detectWrapperTag($html);
-
-		// Set the root selector.
-		$this->root_selector = $root_selector;
 
 		$this->css_rules = [];
 
