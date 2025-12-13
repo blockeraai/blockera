@@ -81,12 +81,14 @@ class EditBlockHTML implements EditableBlockHTML {
 		// Get the root element from the DOM.
         $rootElement = $this->dom->find('*', 0);
 
+		// Clean up the block element html before appending anything.
         $blockElement->innerhtml = $this->cleanupBlockElementHTML($blockElement->innerhtml);
 		// Append icon to the block element if it has inner content.
 		$blockElement->innerhtml = $this->appendIcon($html, $blockElement, $block);
 
 		try {
-			return $rootElement->outerhtml;
+			// Clean up the block element html after appending icon.
+			return $this->cleanupBlockElementHTML($rootElement->outerhtml);
 		} catch (\Exception $e) {
 			// If traversal fails, return the current element's outer HTML.
 			return $blockElement->outerhtml;
