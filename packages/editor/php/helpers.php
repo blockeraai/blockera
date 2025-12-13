@@ -521,8 +521,16 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 				$selector_id = blockera_append_selector_prefix( 'states/' . $args['pseudo-class'] );
 
-				$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
-				$current_state_has_selectors  = isset($selectors[ $selector_id ]);
+				// Hard code for before and after pseudo classes.
+				// If the pseudo class is before or after, and not set the specific selector config for them.
+				// We should set the selectors to the root because them are not supported specific selector config per feature id.
+				if (in_array($args['pseudo-class'], [ 'before', 'after' ], true)) {
+					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? ( isset($selectors['root']) ? [ 'root' => $selectors['root'] ] : [] );
+				} else {
+					$cloned_block_type->selectors = $selectors[ $selector_id ] ?? $selectors;
+				}
+
+				$current_state_has_selectors = isset($selectors[ $selector_id ]);
 			}
 		}
 
