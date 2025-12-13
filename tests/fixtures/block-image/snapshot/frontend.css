@@ -27,28 +27,19 @@
 	display: inline-block !important;
 	padding: 10px 10px 10px 10px;
 	background-color: #dddddd;
+	border-radius: 10px;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::before, svg:not(:empty))::before {
-	border-radius: 10px;
-}
-
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::before, svg:not(:empty))::before {
-		border-radius: 40px;
-	}
-
 	.blockera-block.blockera-block-1.wp-block-image::before {
+		border-radius: 40px;
 		content: "Before";
 	};
 }
 
-.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::after, svg:not(:empty))::after {
-	border-radius: 40px;
-}
-
 .blockera-block.blockera-block-1.wp-block-image::after {
+	border-radius: 40px;
 	background-color: #999999;
 	padding: 10px 10px 10px 10px;
 	display: inline-block !important;
@@ -58,11 +49,8 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-image::after {
 		align-self: stretch;
-		content: "After";
-	}
-
-	.blockera-block.blockera-block-1.wp-block-image :is(img:not([src=""])::after, svg:not(:empty))::after {
 		border-radius: 50px;
+		content: "After";
 	};
 }
 

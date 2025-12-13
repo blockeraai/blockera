@@ -34,42 +34,30 @@
 	font-size: 16px;
 	background-color: #00000038;
 	padding: 10px 10px 10px 10px;
+	border-radius: 50px;
 	display: inline-block !important;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-1.wp-block-post-featured-image img::before {
-	border-radius: 50px;
-}
-
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1.wp-block-post-featured-image img::before {
-		border-radius: 10px;
-	}
-
 	.blockera-block.blockera-block-1.wp-block-post-featured-image::before {
+		border-radius: 10px;
 		content: "Before";
 	};
 }
 
 .blockera-block.blockera-block-1.wp-block-post-featured-image::after {
 	padding: 10px 10px 10px 10px;
+	border-radius: 50px;
 	background-color: #00000033;
 	display: inline-block !important;
 	font-size: 16px;
 	content: "After";
 }
 
-.blockera-block.blockera-block-1.wp-block-post-featured-image img::after {
-	border-radius: 50px;
-}
-
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1.wp-block-post-featured-image img::after {
-		border-radius: 10px;
-	}
-
 	.blockera-block.blockera-block-1.wp-block-post-featured-image::after {
+		border-radius: 10px;
 		content: "After";
 	};
 }

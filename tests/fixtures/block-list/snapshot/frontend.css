@@ -162,12 +162,9 @@ ul.blockera-block.blockera-block-8:hover {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-8.wp-block-list::before {
 		order: -1;
+		border-radius: 30px;
 		text-align: center;
 		content: "List Before";
-	}
-
-	ul.blockera-block.blockera-block-8::before {
-		border-radius: 30px;
 	};
 }
 
@@ -183,11 +180,8 @@ ul.blockera-block.blockera-block-8:hover {
 }
 
 @media screen and (max-width: 478px) {
-	ul.blockera-block.blockera-block-8::after {
-		border-radius: 20px;
-	}
-
 	.blockera-block.blockera-block-8.wp-block-list::after {
+		border-radius: 20px;
 		text-align: center;
 		content: "List After";
 	};
