@@ -18,6 +18,7 @@ class BlockeraTest extends AppTestCase {
 
 	protected string $design;
 	protected Application $app;
+	protected ?string $post_content = null;
 	protected bool $is_global_styles = false;
 	protected ?string $currentTestType = null;
 
@@ -139,6 +140,7 @@ class BlockeraTest extends AppTestCase {
 			
 			// If setup.php set $post_id, return it
 			if (isset($post_id) && is_int($post_id) && $post_id > 0) {
+				$this->post_content = $post_content;
 				return $post_id;
 			}
 		}
@@ -228,13 +230,12 @@ class BlockeraTest extends AppTestCase {
 		 * Test 1: Blocks rendering
 		 */
 		the_post();
+		// if the design has setup.php, use the post content set in setup.php file.
+		$content = $this->post_content ?? $post_content;
 		
-		$blocks = parse_blocks(get_the_content());
-
-		$content = '';
-		foreach ($blocks as $block) {
-			$content .= render_block($block);
-		}
+		// Simulate the real WordPress flow by using do_blocks() instead of manually parsing and rendering
+		// This ensures we're testing the actual WordPress block rendering pipeline.
+		$content = do_blocks($content);
 
 		// Apply global html-search-replace first if configured.
 		$global_config = blockera_test_get_global_config();
