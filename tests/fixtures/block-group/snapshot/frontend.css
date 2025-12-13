@@ -197,7 +197,7 @@ p.blockera-block.blockera-block-3 {
 	background-color: #00000024;
 }
 
-.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
+p.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 
@@ -288,6 +288,6 @@ p.blockera-block.blockera-block-3 {
 	background-color: #20d4df;
 }
 
-.blockera-block.blockera-block-5 :where(mark.has-inline-color) {
+.blockera-block.blockera-block-5.wp-block-group :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

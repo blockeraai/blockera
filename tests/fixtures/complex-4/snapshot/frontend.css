@@ -54,7 +54,7 @@
 	};
 }
 
-.blockera-block.blockera-block-4 :where(img) {
+.blockera-block.blockera-block-4.wp-block-image :where(img) {
 	border-radius: 30px;
 }
 

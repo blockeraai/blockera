@@ -52,7 +52,7 @@
 	background-color: #00acff;
 }
 
-.blockera-block.blockera-block-1 :where(mark.has-inline-color) {
+.blockera-block.blockera-block-1.wp-block-quote :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 

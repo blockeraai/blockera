@@ -386,7 +386,7 @@
 	};
 }
 
-.blockera-block.blockera-block-6 :where(div.wp-block-group.is-layout-flex) {
+.blockera-block.blockera-block-6.wp-block-columns :where(div.wp-block-group.is-layout-flex) {
 	margin-top: 0px;
 	margin-bottom: 0px;
 }
@@ -397,7 +397,7 @@
 	width: 60px;
 }
 
-.blockera-block.blockera-block-7 :where(img.avatar-60) {
+.blockera-block.blockera-block-7.wp-block-avatar :where(img.avatar-60) {
 	border-radius: 80px;
 }
 

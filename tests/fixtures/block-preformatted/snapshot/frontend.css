@@ -39,7 +39,7 @@
 	background-color: #ffadad;
 }
 
-.blockera-block.blockera-block-1 :where(mark.has-inline-color) {
+.blockera-block.blockera-block-1.wp-block-preformatted :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 

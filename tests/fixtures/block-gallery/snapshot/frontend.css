@@ -110,7 +110,7 @@
 	opacity: 100%;
 }
 
-.blockera-block.blockera-block-2 :where(img.wp-image-815) {
+.blockera-block.blockera-block-2.wp-block-image :where(img.wp-image-815) {
 	border-radius: 5px;
 }
 

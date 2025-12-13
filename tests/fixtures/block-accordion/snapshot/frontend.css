@@ -137,7 +137,7 @@ p.blockera-block.blockera-block-7 {
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-10 :where(button.wp-block-accordion-heading__toggle) {
+.blockera-block.blockera-block-10.wp-block-accordion-heading :where(button.wp-block-accordion-heading__toggle) {
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
@@ -160,7 +160,7 @@ p.blockera-block.blockera-block-7 {
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-13 :where(button.wp-block-accordion-heading__toggle) {
+.blockera-block.blockera-block-13.wp-block-accordion-heading :where(button.wp-block-accordion-heading__toggle) {
 	padding-top: 10px;
 	padding-right: 10px;
 	padding-bottom: 10px;
@@ -213,6 +213,6 @@ p.blockera-block.blockera-block-17 {
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-17 :where(mark.has-inline-color) {
+p.blockera-block.blockera-block-17 :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

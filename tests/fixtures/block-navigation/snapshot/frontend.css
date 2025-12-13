@@ -255,7 +255,7 @@
 	background-color: #656565;
 }
 
-.blockera-block.blockera-block-8 :where(ul.blockera-block.blockera-block-8) {
+.blockera-block.blockera-block-8.wp-block-navigation-submenu:is(li) :where(ul.blockera-block.blockera-block-8) {
 	background-color: #ffcece;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
@@ -296,6 +296,6 @@
 	background-color: #3dff32;
 }
 
-.blockera-block.blockera-block-10 :where(ul.blockera-block.blockera-block-10) {
+.blockera-block.blockera-block-10.wp-block-navigation-submenu:is(li) :where(ul.blockera-block.blockera-block-10) {
 	background-color: #b6ffc0;
 }

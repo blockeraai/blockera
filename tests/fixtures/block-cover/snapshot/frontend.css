@@ -86,7 +86,7 @@
 	};
 }
 
-.blockera-block.blockera-block-1 :where(span.wp-block-cover__background.has-background-dim) {
+.blockera-block.blockera-block-1.wp-block-cover :where(span.wp-block-cover__background.has-background-dim) {
 	background-color: #615131;
 }
 
@@ -170,6 +170,6 @@ p.blockera-block.blockera-block-4:hover {
 	};
 }
 
-.blockera-block.blockera-block-5 :where(span.wp-block-cover__background.has-background-dim) {
+.blockera-block.blockera-block-5.wp-block-cover :where(span.wp-block-cover__background.has-background-dim) {
 	background-color: #615131;
 }

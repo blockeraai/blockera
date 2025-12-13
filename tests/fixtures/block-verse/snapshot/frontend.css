@@ -83,6 +83,6 @@
 	};
 }
 
-.blockera-block.blockera-block-1 :where(mark.has-inline-color) {
+.blockera-block.blockera-block-1.wp-block-verse :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

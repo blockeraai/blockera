@@ -129,6 +129,6 @@
 	color: #493500;
 }
 
-.blockera-block.blockera-block-2 :where(mark.has-inline-color) {
+.blockera-block.blockera-block-2.wp-block-heading :where(mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

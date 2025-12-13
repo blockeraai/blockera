@@ -103,19 +103,19 @@
 	background-color: #ffcdcd;
 }
 
-.blockera-block.blockera-block-1 :where(a.tag-link-10.tag-link-position-1) {
+.blockera-block.blockera-block-1.wp-block-tag-cloud :where(a.tag-link-10.tag-link-position-1) {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-1 :where(a.tag-link-11.tag-link-position-2) {
+.blockera-block.blockera-block-1.wp-block-tag-cloud :where(a.tag-link-11.tag-link-position-2) {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-1 :where(a.tag-link-12.tag-link-position-3) {
+.blockera-block.blockera-block-1.wp-block-tag-cloud :where(a.tag-link-12.tag-link-position-3) {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-1 :where(a.tag-link-13.tag-link-position-4) {
+.blockera-block.blockera-block-1.wp-block-tag-cloud :where(a.tag-link-13.tag-link-position-4) {
 	font-size: 8pt;
 }
 
@@ -138,18 +138,18 @@
 	text-decoration: initial;
 }
 
-.blockera-block.blockera-block-2 :where(a.tag-link-10.tag-link-position-1) {
+.blockera-block.blockera-block-2.wp-block-tag-cloud :where(a.tag-link-10.tag-link-position-1) {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-2 :where(a.tag-link-11.tag-link-position-2) {
+.blockera-block.blockera-block-2.wp-block-tag-cloud :where(a.tag-link-11.tag-link-position-2) {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-2 :where(a.tag-link-12.tag-link-position-3) {
+.blockera-block.blockera-block-2.wp-block-tag-cloud :where(a.tag-link-12.tag-link-position-3) {
 	font-size: 8pt;
 }
 
-.blockera-block.blockera-block-2 :where(a.tag-link-13.tag-link-position-4) {
+.blockera-block.blockera-block-2.wp-block-tag-cloud :where(a.tag-link-13.tag-link-position-4) {
 	font-size: 8pt;
 }
