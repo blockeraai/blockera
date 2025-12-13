@@ -76,6 +76,27 @@ class HTMLProcessor {
 	}
 
 	/**
+	 * Extract the root selector from the self::$root_selector unnormalized.
+	 *
+	 * @return string The extracted root selector.
+	 */
+	protected function extractRootSelector(): string {
+		$extract_root = explode('>', $this->root_selector);
+			
+		if (1 < count($extract_root)) {
+			$root_selector = trim($extract_root[0]);
+		} else {
+			$extract_root = explode(' ', $this->root_selector);
+			
+			if (1 < count($extract_root)) {
+				$root_selector = trim($extract_root[0]);
+			}
+		}
+
+		return $root_selector;
+	}
+	
+	/**
 	 * Detect the wrapper tag of input HTML without children.
 	 * Returns the tag name of the outermost element if it has no child elements.
 	 *
@@ -612,6 +633,14 @@ class HTMLProcessor {
 	 */
 	protected function generateSelectorFromAttrs( string $tag_name, string $attrs, bool $with_tagname = false ): string {
 
+		$root_selector = $this->root_selector;
+
+		// if the generating selector with tag name and root selector contains child.
+		// in this case we should extract root and use it.
+		if ($with_tagname && preg_match('/>|\s/', $this->root_selector)) {
+			$root_selector = $this->extractRootSelector();
+		}
+
 		// First check for class name (preferred over ID).
 		if ( preg_match( '/class\s*=\s*["\']([^"\']+)["\']/', $attrs, $class_match ) ) {
 			$filtered_classes = $this->filterClassnames( $class_match[1] );
@@ -620,9 +649,9 @@ class HTMLProcessor {
 				$concatenated_classes = '.' . implode( '.', $filtered_classes );
 
 				if ( $with_tagname ) {
-					return empty( $this->root_selector )
+					return empty( $root_selector )
 						? $tag_name . $concatenated_classes
-						: $this->root_selector . ' :where(' . $tag_name . $concatenated_classes . ')';
+						: $root_selector . ' :where(' . $tag_name . $concatenated_classes . ')';
 				}
 
 				return $concatenated_classes;
@@ -633,15 +662,15 @@ class HTMLProcessor {
 		if ( preg_match( '/id\s*=\s*["\']([^"\']+)["\']/', $attrs, $id_match ) ) {
 			$target_selector = $tag_name . '#' . $id_match[1];
 
-			if ($with_tagname && ! empty($this->root_selector)) {
-				return  $this->root_selector . ' :where(' . $target_selector . ')';
+			if ($with_tagname && ! empty($root_selector)) {
+				return  $root_selector . ' :where(' . $target_selector . ')';
 			}
 
 			return $target_selector;
 		}
 
-		if ($with_tagname && ! empty($this->root_selector)) {
-			return $this->root_selector . ' :where(' . $tag_name . ')';
+		if ($with_tagname && ! empty($root_selector)) {
+			return $root_selector . ' :where(' . $tag_name . ')';
 		}
 
 		return $tag_name;
