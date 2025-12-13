@@ -296,7 +296,7 @@ trait Processor {
 		$html     = $this->html_processor->updateWrapperClassname($html, $classname);
 
 		$this->html_processor->setRootSelector($selector);
-		$cleanup_result = $this->html_processor->cleanupHTML($html, $unique_selector, $this->global_css_props_classes);	
+		$cleanup_result = $this->html_processor->cleanupHTML($html, $this->global_css_props_classes);	
 
 		// Replace html with the updated html.
 		$html = $cleanup_result['html'];
