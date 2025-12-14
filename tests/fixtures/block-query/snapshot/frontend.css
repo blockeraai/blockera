@@ -61,7 +61,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-10 .wp-block-paragraph {
+.blockera-block.blockera-block-10 :is(.wp-block-paragraph, p) {
 	background-color: #ff7a7a;
 }
 
