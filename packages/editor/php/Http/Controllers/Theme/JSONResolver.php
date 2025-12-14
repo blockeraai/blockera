@@ -474,38 +474,65 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return array
 	 */
 	public static function get_style_variations( $scope = 'theme' ) {
-		$variation_files    = array();
-		$variations         = array();
-		$base_directory     = get_stylesheet_directory() . '/styles';
-		$template_directory = get_template_directory() . '/styles';
+		static $cache = array();
+		if ( isset( $cache[ $scope ] ) ) {
+			return $cache[ $scope ];
+		}
+
+		$variation_files = array();
+		$variations      = array();
+		$base_directory  = get_stylesheet_directory() . '/styles';
+
 		if ( is_dir( $base_directory ) ) {
 			$variation_files = static::recursively_iterate_json( $base_directory );
 		}
+
+		$template_directory = get_template_directory() . '/styles';
+
 		if ( is_dir( $template_directory ) && $template_directory !== $base_directory ) {
 			$variation_files_parent = static::recursively_iterate_json( $template_directory );
 			// If the child and parent variation file basename are the same, only include the child theme's.
-			foreach ( $variation_files_parent as $parent_path => $parent ) {
+			if ( ! empty( $variation_files ) ) {
+				$child_basenames = array();
 				foreach ( $variation_files as $child_path => $child ) {
-					if ( basename( $parent_path ) === basename( $child_path ) ) {
+					$child_basenames[ basename( $child_path ) ] = true;
+				}
+				foreach ( $variation_files_parent as $parent_path => $parent ) {
+					if ( isset( $child_basenames[ basename( $parent_path ) ] ) ) {
 						unset( $variation_files_parent[ $parent_path ] );
 					}
 				}
 			}
-			$variation_files = array_merge( $variation_files, $variation_files_parent );
+			$variation_files += $variation_files_parent;
 		}
+
+		if ( empty( $variation_files ) ) {
+			$result          = apply_filters( 'blockera/json/resolver/get_style_variations', $variations );
+			$cache[ $scope ] = $result;
+			return $result;
+		}
+
 		ksort( $variation_files );
+		$text_domain = wp_get_theme()->get( 'TextDomain' );
+
 		foreach ( $variation_files as $path => $file ) {
 			$decoded_file = self::read_json_file( $path );
-			if ( is_array( $decoded_file ) && static::style_variation_has_scope( $decoded_file, $scope ) ) {
-				$translated = static::translate( $decoded_file, wp_get_theme()->get( 'TextDomain' ) );
-				$variation  = ( new JSON( $translated ) )->get_raw_data();
-				if ( empty( $variation['title'] ) ) {
-					$variation['title'] = basename( $path, '.json' );
-				}
-				$variations[] = $variation;
+			if ( ! is_array( $decoded_file ) || ! static::style_variation_has_scope( $decoded_file, $scope ) ) {
+				continue;
 			}
+			$translated = static::translate( $decoded_file, $text_domain );
+			$variation  = ( new JSON( $translated ) )->get_raw_data();
+			if ( ! isset( $variation['title'] ) || '' === $variation['title'] ) {
+				$variation['title'] = basename( $path, '.json' );
+			}
+			$variations[] = $variation;
 		}
-		return apply_filters('blockera/json/resolver/get_style_variations', $variations);
+
+		$result = apply_filters( 'blockera/json/resolver/get_style_variations', $variations );
+		
+		$cache[ $scope ] = $result;
+
+		return $result;
 	}
 
 	/**
