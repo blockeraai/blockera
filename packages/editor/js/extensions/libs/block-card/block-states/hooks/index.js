@@ -345,17 +345,44 @@ export const useBlockStates = ({
 	);
 
 	const onReset = useCallback(
-		(
-			itemId: TStates,
-			items: {
+		(itemId: TStates): Object => {
+			const filteredStates: {
 				[key: TStates]: Object,
+			} = attributes?.blockeraBlockStates || {};
+
+			for (const key in attributes?.blockeraBlockStates) {
+				const breakpoints =
+					attributes?.blockeraBlockStates[key].breakpoints;
+
+				for (const breakpoint in breakpoints) {
+					if (key === itemId) {
+						filteredStates[key].breakpoints[breakpoint] = {
+							attributes: {},
+						};
+						filteredStates[key].content = '';
+					}
+				}
 			}
-		): Object => {
-			console.log('onReset block state', itemId, items);
-			return items;
+
+			onChange('blockeraBlockStates', filteredStates, {
+				ref: {
+					current: {
+						path: isInnerBlock(currentBlock)
+							? `blockeraInnerBlocks.value[${currentBlock}].attributes.blockeraBlockStates`
+							: `blockeraBlockStates`,
+						reset: false,
+						defaultValue: {},
+						action: 'normal',
+					},
+				},
+				stateReadyToReset: itemId,
+				resetStateAllValues: true,
+			});
+
+			return filteredStates;
 		},
 		// eslint-disable-next-line
-		[clonedSavedStates]
+		[attributes?.blockeraBlockStates]
 	);
 
 	/**

@@ -98,9 +98,13 @@ export const useAttributes = (
 	);
 	const handleOnChangeAttributes: THandleOnChangeAttributes = useCallback(
 		(attributeId, newValue, options = {}): void => {
-			const { ref, effectiveItems = {} } = options;
+			const {
+				ref,
+				effectiveItems = {},
+				resetStateAllValues = false,
+				stateReadyToReset = 'normal',
+			} = options;
 			const attributes = getAttributes();
-
 			// attributes => immutable - mean just read-only!
 			// _attributes => mutable - mean readable and writable constant!
 			let _attributes = { ...attributes };
@@ -224,7 +228,9 @@ export const useAttributes = (
 				blockVariations,
 				currentBreakpoint,
 				defaultAttributes,
+				stateReadyToReset,
 				blockeraInnerBlocks,
+				resetStateAllValues,
 				activeBlockVariation,
 				currentInnerBlockState,
 				attributeIsBlockStates,

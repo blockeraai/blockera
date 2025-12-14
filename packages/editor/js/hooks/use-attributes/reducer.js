@@ -16,6 +16,7 @@ import { isEquals, isObject, mergeObject } from '@blockera/utils';
  */
 import {
 	resetAllStates,
+	stateResettingValues,
 	memoizedBlockStates,
 	prepCustomCssClasses,
 	resetCurrentState,
@@ -41,6 +42,8 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		blockVariations,
 		defaultAttributes,
 		currentBreakpoint,
+		stateReadyToReset,
+		resetStateAllValues,
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,
@@ -100,6 +103,12 @@ const reducer = (state: Object = {}, action: Object): Object => {
 							.className
 					);
 				}
+
+				state = stateResettingValues(state, {
+					currentBlock,
+					stateReadyToReset,
+					resetStateAllValues,
+				});
 
 				return applyFilters(
 					'blockera.blockEdit.setAttributes',

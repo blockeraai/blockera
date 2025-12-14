@@ -864,3 +864,64 @@ export const resetCurrentState = (_state: Object, action: Object): Object => {
 		args
 	);
 };
+
+export const stateResettingValues = (
+	state: Object,
+	{ currentBlock, stateReadyToReset, resetStateAllValues }: Object
+): Object => {
+	if (resetStateAllValues) {
+		for (const key in state.blockeraBlockStates?.value || {}) {
+			const blockState = state.blockeraBlockStates?.value[key];
+
+			for (const breakpoint in blockState?.breakpoints || {}) {
+				const inners =
+					blockState.breakpoints[breakpoint]?.attributes
+						?.blockeraInnerBlocks || {};
+
+				for (const innerBlock in inners) {
+					// Skip resetting for other inner blocks.
+					if (currentBlock !== innerBlock) {
+						continue;
+					}
+
+					const innerStates =
+						inners[innerBlock]?.attributes?.blockeraBlockStates ||
+						{};
+
+					for (const innerState in innerStates) {
+						if (stateReadyToReset !== innerState) {
+							continue;
+						}
+
+						if (
+							innerStates[innerState]?.hasOwnProperty('content')
+						) {
+							state.blockeraBlockStates.value[key].breakpoints[
+								breakpoint
+							].attributes.blockeraInnerBlocks[
+								innerBlock
+							].attributes.blockeraBlockStates[
+								innerState
+							].content = '';
+						}
+
+						const innerBreakpoints =
+							innerStates[innerState]?.breakpoints || {};
+
+						for (const innerBreakpoint in innerBreakpoints) {
+							state.blockeraBlockStates.value[key].breakpoints[
+								breakpoint
+							].attributes.blockeraInnerBlocks[
+								innerBlock
+							].attributes.blockeraBlockStates[
+								innerState
+							].breakpoints[innerBreakpoint].attributes = {};
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return state;
+};

@@ -12,5 +12,7 @@ export type THandleOnChangeAttributes = (
 	options: {
 		ref?: ControlContextRef,
 		effectiveItems?: Object,
+		stateReadyToReset?: string,
+		resetStateAllValues?: boolean,
 	}
 ) => void;

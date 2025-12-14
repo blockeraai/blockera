@@ -50,6 +50,7 @@ export const Preview = ({
 		getBlockInners,
 		setCurrentBlock,
 		setBlockClientInners,
+		onReset: onInnerBlocksReset,
 		contextValue: innerBlocksContextValue,
 	} = useInnerBlocks({
 		block,
@@ -61,6 +62,7 @@ export const Preview = ({
 	});
 	const {
 		states,
+		onReset,
 		onDelete,
 		overrideItem,
 		defaultStates,
@@ -116,11 +118,18 @@ export const Preview = ({
 
 			handleOnChange(newStates);
 		}
-	}, [states, handleOnChange, currentState, currentInnerBlockState]);
+	}, [
+		states,
+		currentState,
+		setCurrentTab,
+		handleOnChange,
+		currentInnerBlockState,
+	]);
 
 	return (
 		<StatesManager
 			states={states}
+			onReset={onReset}
 			onDelete={onDelete}
 			overrideItem={overrideItem}
 			defaultStates={defaultStates}
@@ -169,6 +178,7 @@ export const Preview = ({
 						doingSwitchToInner,
 						setBlockClientInners,
 						currentInnerBlockState,
+						onReset: onInnerBlocksReset,
 						contextValue: innerBlocksContextValue,
 					}}
 					block={block}
