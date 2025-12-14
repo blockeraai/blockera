@@ -16,10 +16,11 @@ import { isEquals, isObject, mergeObject } from '@blockera/utils';
  */
 import {
 	resetAllStates,
-	stateResettingValues,
+	resetCurrentState,
 	memoizedBlockStates,
 	prepCustomCssClasses,
-	resetCurrentState,
+	stateResettingValues,
+	stateResettingInnerBlockValues,
 } from './helpers';
 import { isBaseBreakpoint } from '../../canvas-editor';
 import { isInnerBlock } from '../../extensions/components';
@@ -46,7 +47,9 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		resetStateAllValues,
 		activeBlockVariation,
 		currentInnerBlockState,
+		innerBlockReadyToReset,
 		getActiveBlockVariation,
+		resetInnerBlockAllValues,
 	} = action;
 
 	const hookParams = [
@@ -78,6 +81,27 @@ const reducer = (state: Object = {}, action: Object): Object => {
 	];
 	const { getState, getInnerState } = select('blockera/editor');
 
+	// resetting block state all values.
+	state = stateResettingValues(state, {
+		currentBlock,
+		stateReadyToReset,
+		resetStateAllValues,
+	});
+
+	// resetting inner block all values.
+	if (resetInnerBlockAllValues) {
+		state = stateResettingInnerBlockValues(state, {
+			currentBlock,
+			innerBlockReadyToReset,
+		});
+
+		return applyFilters(
+			'blockera.blockEdit.setAttributes',
+			mergeObject(state),
+			...hookParams
+		);
+	}
+
 	switch (type) {
 		case 'UPDATE_NORMAL_STATE':
 			// By default is undefined.
@@ -103,12 +127,6 @@ const reducer = (state: Object = {}, action: Object): Object => {
 							.className
 					);
 				}
-
-				state = stateResettingValues(state, {
-					currentBlock,
-					stateReadyToReset,
-					resetStateAllValues,
-				});
 
 				return applyFilters(
 					'blockera.blockEdit.setAttributes',

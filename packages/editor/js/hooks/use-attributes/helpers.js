@@ -925,3 +925,39 @@ export const stateResettingValues = (
 
 	return state;
 };
+
+export const stateResettingInnerBlockValues = (
+	state: Object,
+	{ innerBlockReadyToReset }: Object
+): Object => {
+	for (const key in state.blockeraBlockStates?.value || {}) {
+		const blockState = state.blockeraBlockStates?.value[key];
+
+		for (const breakpoint in blockState?.breakpoints || {}) {
+			const inners =
+				blockState.breakpoints[breakpoint]?.attributes
+					?.blockeraInnerBlocks || {};
+
+			for (const innerBlock in inners) {
+				// Skip resetting for other inner blocks.
+				if (innerBlockReadyToReset !== innerBlock) {
+					continue;
+				}
+
+				if (!inners[innerBlock]?.hasOwnProperty('attributes')) {
+					continue;
+				}
+
+				state.blockeraBlockStates.value[key].breakpoints[
+					breakpoint
+				].attributes.blockeraInnerBlocks[innerBlock].attributes = {};
+			}
+		}
+	}
+
+	if (state.blockeraInnerBlocks.value?.[innerBlockReadyToReset]?.attributes) {
+		state.blockeraInnerBlocks.value[innerBlockReadyToReset].attributes = {};
+	}
+
+	return state;
+};

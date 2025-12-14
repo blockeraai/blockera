@@ -103,6 +103,8 @@ export const useAttributes = (
 				effectiveItems = {},
 				resetStateAllValues = false,
 				stateReadyToReset = 'normal',
+				resetInnerBlockAllValues = false,
+				innerBlockReadyToReset = 'master',
 			} = options;
 			const attributes = getAttributes();
 			// attributes => immutable - mean just read-only!
@@ -234,7 +236,9 @@ export const useAttributes = (
 				activeBlockVariation,
 				currentInnerBlockState,
 				attributeIsBlockStates,
+				innerBlockReadyToReset,
 				getActiveBlockVariation,
+				resetInnerBlockAllValues,
 				ref: { ...ref?.current },
 			});
 
