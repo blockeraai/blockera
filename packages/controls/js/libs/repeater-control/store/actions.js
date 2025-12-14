@@ -117,4 +117,23 @@ export function cloneRepeaterItem({
 	};
 }
 
+export function resetRepeaterItem({
+	itemId,
+	defaultValue,
+	onChange,
+	controlId,
+	valueCleanup,
+	repeaterId = null,
+}) {
+	return {
+		itemId,
+		defaultValue: defaultValue ?? {},
+		onChange,
+		controlId,
+		repeaterId,
+		valueCleanup,
+		type: 'RESET_REPEATER_ITEM',
+	};
+}
+
 export * from '../../../store/actions';

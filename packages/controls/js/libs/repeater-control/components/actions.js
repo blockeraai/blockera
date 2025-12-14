@@ -34,6 +34,7 @@ export default function RepeaterItemActions({
 		maxItems,
 		minItems,
 		onDelete,
+		onReset,
 		onChange,
 		controlId,
 		repeaterId,
@@ -43,6 +44,7 @@ export default function RepeaterItemActions({
 		PromoComponent,
 		itemIdGenerator,
 		actionButtonClone,
+		actionButtonReset,
 		actionButtonDelete,
 		disableRegenerateId,
 		setDisableAddNewItem,
@@ -57,6 +59,7 @@ export default function RepeaterItemActions({
 			changeRepeaterItem,
 			cloneRepeaterItem,
 			removeRepeaterItem,
+			resetRepeaterItem,
 			modifyControlValue,
 		},
 	} = useControlContext();
@@ -72,6 +75,35 @@ export default function RepeaterItemActions({
 
 		// $FlowFixMe
 		event.currentTarget?.dispatchEvent(escEvent);
+	}
+
+	function resetFunction(event: MouseEvent) {
+		event.stopPropagation();
+		closeMenu(event);
+
+		if (!item.selectable || 'function' !== typeof onReset) {
+			return resetRepeaterItem({
+				itemId,
+				onChange,
+				controlId,
+				repeaterId,
+				valueCleanup,
+				itemIdGenerator,
+				disableRegenerateId,
+			});
+		}
+
+		const value = onReset(itemId, repeaterItems);
+
+		modifyControlValue({
+			controlId,
+			value,
+		});
+
+		repeaterOnChange(value, {
+			onChange,
+			valueCleanup,
+		});
 	}
 
 	function deleteFunction(event: MouseEvent) {
@@ -192,8 +224,10 @@ export default function RepeaterItemActions({
 		item?.deletable &&
 		(minItems === 0 || itemsCount > minItems);
 
+	const showReset = actionButtonReset;
+
 	// If no buttons are shown, return null to avoid rendering empty container
-	if (!showVisibility && !showClone && !showDelete) {
+	if (!showVisibility && !showClone && !showDelete && !showReset) {
 		return null;
 	}
 
@@ -309,6 +343,50 @@ export default function RepeaterItemActions({
 									__('Clone %s', 'blockera'),
 									getArialLabelSuffix(itemId)
 								)}
+							/>
+						</Tooltip>
+					)}
+				</>
+			)}
+
+			{showReset && (
+				<>
+					{actionButtonsType === 'menu' ? (
+						<MenuItem
+							onClick={resetFunction}
+							className={classNames('blockera-block-menu-item')}
+							style={{
+								'--blockera-controls-primary-color': '#e20b0b',
+								'--wp-components-color-accent': '#e20b0b',
+							}}
+						>
+							<Flex alignItems="center" gap="10px">
+								<Icon icon="undo" iconSize={20} />
+								{__('Reset', 'blockera')}
+							</Flex>
+						</MenuItem>
+					) : (
+						<Tooltip
+							text={__('Reset', 'blockera')}
+							style={{
+								'--tooltip-bg': '#e20b0b',
+							}}
+							delay={300}
+						>
+							<Button
+								className={controlInnerClassNames('btn-delete')}
+								noBorder={true}
+								icon={<Icon icon="undo" iconSize={20} />}
+								onClick={resetFunction}
+								aria-label={sprintf(
+									// translators: %s is the repeater item id. It's aria label for deleting repeater item
+									__('Reset %s', 'blockera'),
+									getArialLabelSuffix(itemId)
+								)}
+								style={{
+									'--blockera-controls-primary-color':
+										'#e20b0b',
+								}}
 							/>
 						</Tooltip>
 					)}

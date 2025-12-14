@@ -142,6 +142,12 @@ export type RepeaterControlProps = {
 	 */
 	actionButtonClone?: boolean,
 	/**
+	 * Specifies reset control should be shown for repeater items.
+	 *
+	 * @default false
+	 */
+	actionButtonReset?: boolean,
+	/**
 	 * A placeholder that you can use inject items at the beginning of header buttons.
 	 */
 	injectHeaderButtonsStart?: MixedElement | null | string,
@@ -177,9 +183,13 @@ export type RepeaterControlProps = {
 		defaultRepeaterItemValue: Object
 	) => Object,
 	/**
-	 * The handle on delete recieved from outside.
+	 * The handle on delete received from outside.
 	 */
 	onDelete?: (itemId: string, items: Object) => Object,
+	/**
+	 * The handle on reset item received from outside.
+	 */
+	onReset?: (itemId: string, items: Object) => Object,
 	/**
 	 * The override repeater item before modify current item.
 	 */
