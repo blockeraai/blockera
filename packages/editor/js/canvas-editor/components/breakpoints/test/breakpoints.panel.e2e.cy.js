@@ -1,7 +1,11 @@
 /**
  * Blockera dependencies
  */
-import { goTo, createPost } from '@blockera/dev-cypress/js/helpers';
+import {
+	goTo,
+	createPost,
+	setDeviceType,
+} from '@blockera/dev-cypress/js/helpers';
 
 describe('Breakpoints Functionalities', () => {
 	beforeEach(() => {
@@ -35,6 +39,7 @@ describe('Breakpoints Functionalities', () => {
 
 		cy.get('@update').then(() => {
 			cy.get('@update').click();
+			// eslint-disable-next-line
 			cy.wait(2000);
 		});
 		createPost();
@@ -71,6 +76,7 @@ describe('Breakpoints Functionalities', () => {
 
 		cy.get('@update').then(() => {
 			cy.get('@update').click();
+			// eslint-disable-next-line
 			cy.wait(2000);
 		});
 
@@ -96,6 +102,7 @@ describe('Breakpoints Functionalities', () => {
 
 		cy.get('@update').then(() => {
 			cy.get('@update').click();
+			// eslint-disable-next-line
 			cy.wait(2000);
 		});
 	});
@@ -134,6 +141,169 @@ describe('Breakpoints Functionalities', () => {
 			.within(() => {
 				cy.getByAriaLabel('add-card Icon').should('be.visible');
 				cy.getByAriaLabel('add-card Icon').click();
+			});
+	});
+});
+
+describe('Breakpoints Editor Mode Subscription', () => {
+	beforeEach(() => {
+		createPost();
+
+		// Wait for editor to be fully loaded
+		cy.get('.edit-post-visual-editor').should('exist');
+		cy.getByAriaLabel('Breakpoints').eq(0).should('be.visible');
+	});
+
+	const activatedClassName = 'is-active-breakpoint';
+
+	it('should switch to base breakpoint when entering code editor mode', () => {
+		// First, switch to tablet breakpoint
+		setDeviceType('Tablet');
+
+		// Verify tablet breakpoint is active
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Tablet').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+
+		// Switch to code editor
+		cy.get('[aria-label="Options"]').first().click();
+		cy.get('span').contains('Code editor').click();
+
+		// Verify code editor is visible
+		cy.get('.editor-post-text-editor').should('be.visible');
+
+		// Switch back to visual editor
+		cy.get('button').contains('Exit code editor').click();
+
+		// Verify breakpoint panel is visible again
+		cy.getByAriaLabel('Breakpoints').eq(0).should('be.visible');
+
+		// Verify tablet breakpoint is still active (restored)
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Tablet').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+	});
+
+	it('should restore previously selected device type when returning from code editor', () => {
+		// Switch to mobile breakpoint
+		setDeviceType('Mobile Portrait');
+
+		// Verify mobile breakpoint is active
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Mobile Portrait').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+
+		// Switch to code editor
+		cy.get('[aria-label="Options"]').first().click();
+		cy.get('span').contains('Code editor').click();
+
+		// Verify code editor is visible
+		cy.get('.editor-post-text-editor').should('be.visible');
+
+		// Switch back to visual editor
+		cy.get('button').contains('Exit code editor').click();
+
+		// Verify breakpoint panel is visible again
+		cy.getByAriaLabel('Breakpoints').eq(0).should('be.visible');
+
+		// Verify mobile breakpoint is restored
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Mobile Portrait').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+	});
+
+	it('should remain on base breakpoint if already on base when switching editor modes', () => {
+		// Ensure we're on base breakpoint (Desktop)
+		setDeviceType('Desktop');
+
+		// Verify desktop breakpoint is active
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Desktop').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+
+		// Switch to code editor
+		cy.get('[aria-label="Options"]').first().click();
+		cy.get('span').contains('Code editor').click();
+
+		// Verify code editor is visible
+		cy.get('.editor-post-text-editor').should('be.visible');
+
+		// Switch back to visual editor
+		cy.get('button').contains('Exit code editor').click();
+
+		// Verify desktop breakpoint is still active
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Desktop').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+	});
+
+	it('should handle multiple editor mode switches with different breakpoints', () => {
+		// First cycle: Switch to tablet
+		setDeviceType('Tablet');
+
+		// Switch to code editor and back
+		cy.get('[aria-label="Options"]').first().click();
+		cy.get('span').contains('Code editor').click();
+		cy.get('.editor-post-text-editor').should('be.visible');
+		cy.get('button').contains('Exit code editor').click();
+
+		// Verify tablet is restored
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Tablet').should(
+					'have.class',
+					activatedClassName
+				);
+			});
+
+		// Second cycle: Change to mobile
+		setDeviceType('Mobile Portrait');
+
+		// Switch to code editor and back again
+		cy.get('[aria-label="Options"]').first().click();
+		cy.get('span').contains('Code editor').click();
+		cy.get('.editor-post-text-editor').should('be.visible');
+		cy.get('button').contains('Exit code editor').click();
+
+		// Verify mobile is restored
+		cy.getByAriaLabel('Breakpoints')
+			.first()
+			.within(() => {
+				cy.getByAriaLabel('Mobile Portrait').should(
+					'have.class',
+					activatedClassName
+				);
 			});
 	});
 });
