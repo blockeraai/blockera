@@ -217,11 +217,20 @@ export const getComputedCssProps = ({
 						(calculatedSelectors.hasOwnProperty('root')
 							? { root: calculatedSelectors.root }
 							: {}) ||
+						selectors?.[
+							appendBlockeraPrefix(`states/${stateType}`)
+						] ||
+						(selectors.hasOwnProperty('root')
+							? { root: selectors.root }
+							: {}) ||
 						{};
 					currentStateHasSelectors = Boolean(
 						calculatedSelectors?.[
 							appendBlockeraPrefix(`states/${stateType}`)
-						]
+						] ||
+							selectors[
+								appendBlockeraPrefix(`states/${stateType}`)
+							]
 					);
 				} else if (
 					!isNormalState(stateType) &&
@@ -230,7 +239,8 @@ export const getComputedCssProps = ({
 					calculatedSelectors =
 						calculatedSelectors[
 							appendBlockeraPrefix(`states/${stateType}`)
-						];
+						] ||
+						selectors[appendBlockeraPrefix(`states/${stateType}`)];
 					currentStateHasSelectors = true;
 				}
 
