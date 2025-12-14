@@ -360,7 +360,11 @@ export default function RepeaterItemActions({
 								'--wp-components-color-accent': '#e20b0b',
 							}}
 						>
-							<Flex alignItems="center" gap="10px">
+							<Flex
+								alignItems="center"
+								gap="10px"
+								data-test="reset-button"
+							>
 								<Icon icon="undo" iconSize={20} />
 								{__('Reset', 'blockera')}
 							</Flex>
