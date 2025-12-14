@@ -584,6 +584,14 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			$selector = blockera_get_master_block_state_selector( $selector ?? $args['blockera-unique-selector'] ?? '', $args );
 
 		} else {
+			// We should create selector by :is() pseudo class.
+			// if the selector id starts with 'blockera/core/' and the selector is not set in the parent block type selectors.
+			// This is a special case for the core/paragraph block which is a required tag name as a fallback selector in pseudo class.
+			if ( isset($selector_id) && str_starts_with($selector_id, 'blockera/core/') && ! isset($block_type->selectors[ $selector_id ])) {
+				if ('core/paragraph' === $args['block-type']) {
+					$selector = sprintf(':is(%s, p)', $selector);
+				}
+			}
 
 			// Re-Generate picked css selector to handle current inner block state!
 			$selector = blockera_get_inner_block_state_selector( $selector ?? '', $args );
