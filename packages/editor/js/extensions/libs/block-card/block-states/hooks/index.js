@@ -18,7 +18,11 @@ import { isEmpty, getSortedObject, mergeObject } from '@blockera/utils';
  */
 import { generateExtensionId } from '../../../utils';
 import { getBaseBreakpoint } from '../../../../../canvas-editor';
-import { isNormalState, isInnerBlock } from '../../../../components';
+import {
+	isInnerBlock,
+	isNormalState,
+	useBlockContext,
+} from '../../../../components';
 import type {
 	TStates,
 	StateTypes,
@@ -45,7 +49,17 @@ export const useBlockStates = ({
 	currentBreakpoint,
 	currentInnerBlockState,
 }: StatesManagerHookProps): Object => {
+	const { getAttributes } = useBlockContext();
+	const blockAttributes = getAttributes();
 	let states = { ...(attributes?.blockeraBlockStates || {}) };
+
+	if (isInnerBlock(currentBlock)) {
+		states = {
+			...(blockAttributes?.blockeraInnerBlocks?.[currentBlock]?.attributes
+				?.blockeraBlockStates || {}),
+			...states,
+		};
+	}
 	const {
 		changeExtensionCurrentBlockState: setCurrentState,
 		changeExtensionInnerBlockState: setInnerBlockState,
