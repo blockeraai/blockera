@@ -47,8 +47,16 @@ if ( ! function_exists( 'blockera_get_shared_block_attributes' ) ) {
 	 * @return array the shared block attributes.
 	 */
 	function blockera_get_shared_block_attributes(): array {
+		// Cache the shared block attributes because we don't need to load it again and again.
+		static $cached_attributes = null;
 
-		return blockera_load( 'shared.attributes', __DIR__ );
+		if ( null !== $cached_attributes ) {
+			return $cached_attributes;
+		}
+
+		$cached_attributes = blockera_load( 'shared.attributes', __DIR__ );
+
+		return $cached_attributes;
 	}
 }
 
