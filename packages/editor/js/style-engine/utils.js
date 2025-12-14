@@ -10,7 +10,7 @@ import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/
 /**
  * Internal dependencies
  */
-import CssGenerators from './css-generator';
+import CssGenerator from './css-generator';
 import type {
 	CssRule,
 	StaticStyle,
@@ -81,7 +81,7 @@ export const computedCssDeclarations = (
 					return;
 				}
 
-				const cssGenerator = new CssGenerators(
+				const cssGenerator = new CssGenerator(
 					styleKey,
 					definition,
 					blockProps,
