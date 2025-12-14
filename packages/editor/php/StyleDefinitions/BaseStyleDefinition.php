@@ -797,6 +797,20 @@ abstract class BaseStyleDefinition {
 	 * @return array
 	 */
 	protected function getCurrentInnerBlockSettings(): array {
+		
+		if (! blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint)) {
+
+			$states = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];
+
+			if (empty($states)) {
+
+				return [];
+			}
+
+			$breakpoint = $states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+
+			return $breakpoint['blockeraInnerBlocks'][ $this->block_type ]['attributes'] ?? [];
+		}
 
 		if (empty($this->block['attrs']['blockeraInnerBlocks']['value'][ $this->block_type ])) {
 
