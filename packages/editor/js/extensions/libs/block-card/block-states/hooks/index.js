@@ -343,6 +343,21 @@ export const useBlockStates = ({
 		// eslint-disable-next-line
 		[clonedSavedStates]
 	);
+
+	const onReset = useCallback(
+		(
+			itemId: TStates,
+			items: {
+				[key: TStates]: Object,
+			}
+		): Object => {
+			console.log('onReset block state', itemId, items);
+			return items;
+		},
+		// eslint-disable-next-line
+		[clonedSavedStates]
+	);
+
 	/**
 	 * Retrieve dynamic default value for repeater items.
 	 *
@@ -431,6 +446,7 @@ export const useBlockStates = ({
 	return {
 		id,
 		states,
+		onReset,
 		onDelete,
 		contextValue,
 		valueCleanup,

@@ -88,6 +88,7 @@ export type StatesManagerProps = {
 	deleteCacheData: Object,
 	defaultRepeaterItemValue: Object,
 	onDelete: (index: number) => void,
+	onReset: (index: number) => void,
 	InserterComponent: ComponentType<any>,
 	overrideItem: (index: number) => void,
 	// currentBlock: 'master' | InnerBlockType,

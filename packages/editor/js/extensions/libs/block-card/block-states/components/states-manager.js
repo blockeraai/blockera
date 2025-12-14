@@ -31,6 +31,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 	states,
 	children,
 	onDelete,
+	onReset,
 	maxItems,
 	contextValue,
 	overrideItem,
@@ -57,6 +58,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 				<RepeaterControl
 					{...{
 						onDelete,
+						onReset,
 						maxItems,
 						mode: 'nothing',
 						id: 'block-states',
@@ -89,6 +91,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 					actionButtonDelete={true}
 					actionButtonClone={false}
 					actionButtonVisibility={false}
+					actionButtonReset={true}
 					actionButtonsType="menu"
 					popoverTitleButtonsRight={PopoverTitleButtons}
 					addNewButtonDataTest={'add-new-block-state'}
