@@ -266,15 +266,12 @@ class CompatibilityCheck {
 	 * @return bool true if plugin is installed, false otherwise.
 	 */
 	protected function isPluginInstalled(): bool {
-		
-		if (! function_exists('get_plugins')) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
 
-		$all_plugins = get_plugins();
-		$plugin_base = $this->compatible_with_slug . '/' . $this->compatible_with_slug . '.php';
-		
-		$this->is_installed_third_party_plugin = array_key_exists($plugin_base, $all_plugins);
+		$plugin_slug = $this->compatible_with_slug;
+
+		$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_slug . '.php';
+
+		$this->is_installed_third_party_plugin = file_exists( $plugin_file );
 
 		return $this->is_installed_third_party_plugin;
 	}

@@ -155,9 +155,9 @@ class Utils {
 	 */
 	public static function isPluginInstalled( string $plugin_slug ): bool {
 
-		$installed_plugins = get_plugins();
+		$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug . '/' . $plugin_slug . '.php';
 
-		return isset( $installed_plugins[ $plugin_slug . '/' . $plugin_slug . '.php' ] );
+		return file_exists( $plugin_file );
 	}
 
 	/**
