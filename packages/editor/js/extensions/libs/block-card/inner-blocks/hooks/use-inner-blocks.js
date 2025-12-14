@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import { useCallback } from '@wordpress/element';
 import { useSelect, dispatch } from '@wordpress/data';
 
 /**
@@ -22,6 +23,7 @@ export const useInnerBlocks = ({
 	block,
 	values,
 	maxItems,
+	onChange,
 	innerBlocks,
 	currentBlock,
 }: {
@@ -88,6 +90,28 @@ export const useInnerBlocks = ({
 		};
 	}
 
+	const onReset = useCallback(
+		(itemId, items) => {
+			onChange('blockeraInnerBlocks', items, {
+				ref: {
+					current: {
+						path: isInnerBlock(currentBlock)
+							? 'blockeraInnerBlocks.value'
+							: currentBlock,
+						action: 'normal',
+						reset: false,
+					},
+				},
+				resetInnerBlockAllValues: true,
+				innerBlockReadyToReset: itemId,
+			});
+
+			return items;
+		},
+		// eslint-disable-next-line
+		[currentBlock]
+	);
+
 	// cache length to not calculate it multiple times
 	const innerBlocksLength = Object.keys(innerBlocks).length;
 
@@ -110,6 +134,7 @@ export const useInnerBlocks = ({
 
 	return {
 		blocks,
+		onReset,
 		elements,
 		contextValue,
 		getBlockInners,

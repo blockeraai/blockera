@@ -52,6 +52,7 @@ export type InnerBlocksProps = {
 		...TBlockProps,
 		attributes?: Object,
 	},
+	onReset: (itemId: string, items: InnerBlocks) => InnerBlocks,
 	onChange: THandleOnChangeAttributes,
 	maxItems: number,
 	contextValue: Object,

@@ -26,6 +26,7 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 	const {
 		block,
 		values,
+		onReset,
 		onChange,
 		maxItems,
 		contextValue,
@@ -44,16 +45,13 @@ export const InnerBlocksExtension: ComponentType<InnerBlocksProps> = (
 		>
 			<RepeaterControl
 				{...{
+					onReset,
 					maxItems,
 					mode: 'nothing',
 					selectable: true,
 					id: 'inner-blocks',
 					actionButtonAdd: false,
 					actionButtonReset: true,
-					onReset: (itemId, items) => {
-						console.log('onReset inner block', itemId, items);
-						return items;
-					},
 					onDelete: (itemId, items) => {
 						delete values[itemId];
 						delete items[itemId];

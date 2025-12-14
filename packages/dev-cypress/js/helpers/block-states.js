@@ -42,6 +42,44 @@ export function setBlockState(state, blockType) {
 	}
 }
 
+export function resetBlockState(state, blockType) {
+	if (blockType === 'master-block') {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.first()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.parent()
+					.parent()
+					.within(() => {
+						cy.getByAriaLabel('More Options').click({
+							force: true,
+						});
+					});
+			});
+	} else {
+		cy.getByAriaLabel('Blockera Block State Container')
+			.last()
+			.within(() => {
+				cy.getByDataCy('group-control-header')
+					.contains(state)
+					.parent()
+					.parent()
+					.within(() => {
+						cy.getByAriaLabel('More Options').click({
+							force: true,
+						});
+					});
+			});
+	}
+
+	cy.get('.components-popover__content')
+		.last()
+		.within(() => {
+			cy.getByDataTest('reset-button').click({ force: true });
+		});
+}
+
 export const checkCurrentState = (id) => {
 	cy.getByDataTest('blockera-block-state-container')
 		.last()
