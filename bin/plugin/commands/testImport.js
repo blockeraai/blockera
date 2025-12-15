@@ -37,14 +37,11 @@ async function testImport() {
 	// Get WordPress site URL
 	try {
 		const projectRoot = path.resolve(__dirname, '../../..');
-		const urlOutput = execSync(
-			'wp-env run tests-cli wp option get siteurl',
-			{
-				cwd: projectRoot,
-				encoding: 'utf8',
-				stdio: ['pipe', 'pipe', 'pipe'],
-			}
-		);
+		const urlOutput = execSync('wp-env run cli wp option get siteurl', {
+			cwd: projectRoot,
+			encoding: 'utf8',
+			stdio: ['pipe', 'pipe', 'pipe'],
+		});
 		// Extract URL from wp-env output (may include extra messages)
 		const urlMatch = urlOutput.match(/https?:\/\/[^\s]+/);
 		siteUrl = urlMatch ? urlMatch[0].trim() : urlOutput.trim();
@@ -57,17 +54,64 @@ async function testImport() {
 		log(formats.warning('🚫 Could not retrieve site URL for edit links'));
 	}
 
-	// Set edit_post_per_page option to 999 if not in dry-run mode
+	// Clear all existing posts before importing
 	try {
 		const projectRoot = path.resolve(__dirname, '../../..');
-		execSync(
-			'wp-env run tests-cli wp option update edit_post_per_page 999',
+		log('🗑️  Clearing all existing posts...');
+		const deleteOutput = execSync(
+			'wp-env run cli wp post list --format=ids --post_type=post',
 			{
 				cwd: projectRoot,
 				encoding: 'utf8',
 				stdio: ['pipe', 'pipe', 'pipe'],
 			}
 		);
+		// Extract numeric IDs from output (handle both space and newline separated, and wp-env wrapper text)
+		const cleanOutput = deleteOutput.trim();
+		// Match all numeric IDs (handle space-separated, newline-separated, or mixed)
+		const idMatches = cleanOutput.match(/\b\d+\b/g);
+		const ids = idMatches
+			? idMatches.filter((id) => {
+					const num = parseInt(id, 10);
+					// Filter out numbers that are too large to be post IDs (like timestamps)
+					return num > 0 && num < 1000000;
+			  })
+			: [];
+
+		if (ids.length > 0) {
+			execSync(`wp-env run cli wp post delete ${ids.join(' ')} --force`, {
+				cwd: projectRoot,
+				encoding: 'utf8',
+				stdio: ['pipe', 'pipe', 'pipe'],
+			});
+			log(formats.success(`✅ Deleted ${ids.length} existing post(s)`));
+		} else {
+			log('ℹ️  No existing posts to delete');
+		}
+	} catch (error) {
+		// If the command fails, it might mean there are no posts, so check the error
+		if (
+			error.message.includes('No posts found') ||
+			error.stdout?.includes('No posts found')
+		) {
+			log('ℹ️  No existing posts to delete');
+		} else {
+			log(
+				formats.warning(
+					'🚫 Could not clear existing posts: ' + error.message
+				)
+			);
+		}
+	}
+
+	// Set edit_post_per_page option to 999 if not in dry-run mode
+	try {
+		const projectRoot = path.resolve(__dirname, '../../..');
+		execSync('wp-env run cli wp option update edit_post_per_page 999', {
+			cwd: projectRoot,
+			encoding: 'utf8',
+			stdio: ['pipe', 'pipe', 'pipe'],
+		});
 		log(
 			formats.success(
 				`🔍 Edit posts: ${siteUrl}/wp-admin/edit.php?mode=list&orderby=title&order=asc`
@@ -146,7 +190,7 @@ async function testImport() {
 				try {
 					// Use spawn instead of execSync to allow animation during execution
 					// Build the command as a string to properly handle the PHP code
-					const command = `wp-env run tests-cli wp eval '${escapedPhpCode}'`;
+					const command = `wp-env run cli wp eval '${escapedPhpCode}'`;
 					const child = spawn(command, [], {
 						cwd: projectRoot,
 						shell: true,
