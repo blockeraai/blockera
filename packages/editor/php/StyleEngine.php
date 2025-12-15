@@ -543,15 +543,15 @@ final class StyleEngine {
 	 */
 	protected function prepareStateStyles( array $settings ): array {
 
-		$block_css = array_filter(
-			array_map(
-				function ( $settings, string $id): array {
-					return $this->generateCss($settings, $id);
-				},
-				$settings,
-				array_keys($settings)
-			)
-		);
+		// Replace array_map with foreach to avoid closure overhead (eliminates function call overhead per iteration).
+		// Direct iteration is faster than array_map with closures due to reduced opcode dispatch and zval operations.
+		$block_css = [];
+		foreach ($settings as $id => $setting_value) {
+			$css_result = $this->generateCss($setting_value, $id);
+			if (! empty($css_result)) {
+				$block_css[] = $css_result;
+			}
+		}
 
 		if (isset($settings['blockeraInnerBlocks'])) {
 			

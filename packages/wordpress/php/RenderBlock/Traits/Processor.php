@@ -263,13 +263,18 @@ trait Processor {
 			return;
 		}
 
+		// Use isset lookup with array_flip for O(1) instead of in_array O(n) (eliminates linear search overhead).
+		// This converts O(n*m) to O(n+m) where n=styles count, m=inline_styles count.
+		$styles_lookup = array_flip($this->styles);
+
 		foreach ($inline_styles as $selector => $declarations) {
 
 			// Create css rule.
 			$css_rule = $selector . $declarations;
 
-			if (! in_array($css_rule, $this->styles, true)) {
-				$this->styles[] = $css_rule;
+			if (! isset($styles_lookup[ $css_rule ])) {
+				$styles_lookup[ $css_rule ] = true;
+				$this->styles[]             = $css_rule;
 			}
 		}
 	}

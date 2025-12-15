@@ -208,7 +208,10 @@ abstract class Application {
      * @return void
      */
     public function registerConfiguredProviders() { 
-        array_map([ $this, 'registerProviders' ], $this->service_providers, array_keys($this->service_providers));
+		foreach ($this->service_providers as $name => $serviceProvider) {
+			$providerClass = is_string($serviceProvider) ? $serviceProvider : get_class($serviceProvider);
+			$this->registerProviders( $providerClass, $name);
+        }
     }
 
     /**
@@ -217,13 +220,9 @@ abstract class Application {
      * @return void
      */
     public function bootstrap() { 
-        array_map(
-            static function ( ServiceProvider $service_provider) {
-
-                $service_provider->boot();
-            },
-            $this->service_providers
-        );
+        foreach ($this->service_providers as $service_provider) {
+            $service_provider->boot();
+        }
     }
 
     /**

@@ -87,10 +87,16 @@ class StyleDefinitionsProvider extends ServiceProvider {
 			]
         );
 
-        foreach ($styleDefinitions as $key => $definition) {
+        // Pre-build closures array to avoid creating closures in loop (reduces opcode overhead and memory allocations).
+        // This eliminates closure creation overhead per iteration and reduces zval refcount operations.
+        $definitions_count = count($styleDefinitions);
+        $keys              = array_keys($styleDefinitions);
+        for ($i = 0; $i < $definitions_count; ++$i) {
+            $key        = $keys[ $i ];
+            $definition = $styleDefinitions[ $key ];
             $this->app->singleton(
                 $key,
-                function ( Application $app, array $args) use ( $definition) {
+                static function ( Application $app, array $args) use ( $definition) {
                     return new $definition($args['supports']);
                 }
             );

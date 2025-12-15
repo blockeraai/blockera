@@ -690,29 +690,43 @@ class HTMLProcessor {
 	 */
 	protected function filterClassnames( string $classname ): array {
 
-		$classes  = array_filter( explode( ' ', $classname ) );
-		$filtered = [];
+		$classes        = array_filter( explode( ' ', $classname ) );
+		$filtered       = [];
+		$filtered_count = 0;
+		$max_count      = 2;
+
+		// Use isset lookup instead of in_array for O(1) instead of O(n) (eliminates linear search overhead).
+		$filtered_lookup = [];
 
 		foreach ( $classes as $class ) {
-			// when we have 2 classnames, we should break the loop.
-			if ( count( $filtered ) >= 2 ) {
+			// Early break when we have 2 classnames (reduces unnecessary iterations).
+			if ( $filtered_count >= $max_count ) {
 				break;
 			}
 
 			// if classname starts with "blockera-block-*", we should return it immediately.
 			if ( str_contains( $class, 'blockera-block' ) ) {
-				$filtered[] = $class;
+				$filtered[]                = $class;
+				$filtered_lookup[ $class ] = true;
+				++$filtered_count;
+				// Early break if we already have max count after adding blockera class.
+				if ( $filtered_count >= $max_count ) {
+					break;
+				}
+				continue;
 			}
 			
 			// if classname contains numbers, we should add it to the filtered array.
-			if ( preg_match( '/\d/', $class ) && ! in_array( $class, $filtered, true ) ) {
-				$filtered[] = $class;
+			if ( preg_match( '/\d/', $class ) && ! isset( $filtered_lookup[ $class ] ) ) {
+				$filtered[]                = $class;
+				$filtered_lookup[ $class ] = true;
+				++$filtered_count;
 			}
 		}
 
 		if ( empty( $filtered ) && ! empty( $classes ) ) {
 			// If no blockera or numeric classes found, use first available classes.
-			$filtered = array_slice( $classes, 0, 2 );
+			$filtered = array_slice( $classes, 0, $max_count );
 		}
 
 		return $filtered;
@@ -771,13 +785,12 @@ class HTMLProcessor {
 				continue;
 			}
 
-			$declaration = $property . ': ' . $value;
-
 			// Check if this is a special style (e.g., display: none).
 			if ( self::isSpecialStyle( $property, $value ) ) {
-				$special_styles .= $declaration . ';';
+				// Optimize: Direct string concatenation instead of building declaration first (reduces temporary string allocations).
+				$special_styles .= $property . ': ' . $value . ';';
 			} else {
-				$declarations[] = $declaration;
+				$declarations[] = $property . ': ' . $value;
 			}
 		}
 
@@ -820,33 +833,52 @@ class HTMLProcessor {
 
 		foreach ( $this->css_rules as $id => $css_rules ) {
 			foreach ($css_rules as $selector => $declarations) {
-				$declarations_str = trim(implode( '; ', $declarations ));
-
 				if ( 'root' === $id ) {
-					$parts = array_filter(array_map('trim', $declarations));
-
+					// Optimize: Pre-allocate array and use direct iteration instead of array_map/array_filter chains.
+					// This reduces intermediate array allocations and function call overhead.
 					$merged_declarations = [];
-
-					foreach ($parts as $part) {
-						$exploded = array_filter(array_map( 'trim', explode( ':', $part) ));
+					$declarations_count  = count($declarations);
 					
-						if (2 > count($exploded)) {
-							$property = $exploded[0];
-							$value    = ' ';
-						} else {
-							list( $property, $value ) = $exploded;
+					for ($i = 0; $i < $declarations_count; ++$i) {
+						$part = trim($declarations[ $i ]);
+						if ('' === $part) {
+							continue;
 						}
 						
+						$colon_pos = strpos($part, ':');
+						if (false === $colon_pos) {
+							$merged_declarations[ $part ] = ' ';
+							continue;
+						}
+						
+						$property                         = trim(substr($part, 0, $colon_pos));
+						$value                            = trim(substr($part, $colon_pos + 1));
 						$merged_declarations[ $property ] = $value;
 					}
 
-					unset($this->css_rules[ $id ][ $selector ]);
 					$this->css_rules[ $id ][ $selector ] = $merged_declarations;
-
 					continue;
 				}
 
-				if ( ! str_ends_with( $declarations_str, ';' ) ) {
+				// Optimize: Use direct string operations instead of implode when possible (reduces array operations).
+				if (empty($declarations)) {
+					$this->css_rules[ $id ][ $selector ] = ' { }';
+					continue;
+				}
+				
+				// Use foreach to handle both numeric and associative arrays (avoids undefined array key errors).
+				$declarations_str = '';
+				$first            = true;
+				foreach ($declarations as $declaration) {
+					if (! $first) {
+						$declarations_str .= '; ';
+					}
+					$declarations_str .= trim($declaration);
+					$first             = false;
+				}
+				
+				$declarations_str_len = strlen($declarations_str);
+				if (0 === $declarations_str_len || ';' !== $declarations_str[ $declarations_str_len - 1 ]) {
 					$declarations_str .= ';';
 				}
 
