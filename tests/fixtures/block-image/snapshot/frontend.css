@@ -137,7 +137,7 @@
 	};
 }
 
-.blockera-block.blockera-block-3.wp-block-image :is(img:not([src=""]):hover, svg:not(:empty)):hover {
+.blockera-block.blockera-block-3.wp-block-image:hover :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 100px;
 	border: 2px solid #ff4c4c;
 }

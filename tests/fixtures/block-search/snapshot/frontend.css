@@ -247,7 +247,7 @@
 	};
 }
 
-.blockera-block.blockera-block-3.wp-block-search:hover, .blockera-block.blockera-block-3.wp-block-search :where(.wp-block-search__input:hover, .wp-block-search__button):hover {
+.blockera-block.blockera-block-3.wp-block-search:hover, .blockera-block.blockera-block-3.wp-block-search:hover :where(.wp-block-search__input, .wp-block-search__button) {
 	border-radius: 20px;
 }
 
