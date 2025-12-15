@@ -237,6 +237,29 @@ if ( ! function_exists( 'blockera_get_master_block_state_selector' ) ) {
 					', ',
 					array_map(
 						static function ( string $item ) use ( $pseudo_class, $args ): string {
+							// Imagine the item is a pseudo-class function like :is(), :where(), :not(), etc.
+							// We should not add blockera pseudo classes suffix to the item at the end of string.
+							// It should add as a suffix to the root selector.
+							if (preg_match(blockera_regex_pseudo_class_functions_pattern(false), $item)) {
+
+								if (! empty($args['current_state_has_selectors'])) {
+									return $item;
+								}
+
+								$extract = explode(' ', $item);
+
+								if (1 < count($extract)) {
+									$extract[0] = blockera_set_selector_pseudo_class($extract[0], $pseudo_class);
+
+									return implode(' ', $extract);
+								}
+
+								return $item;
+							}
+
+							if (str_ends_with($item, ')')) {
+								return $item;
+							}
 
 							return ! empty($args['current_state_has_selectors']) ? $item : blockera_set_selector_pseudo_class( $item, $pseudo_class );
 						},
