@@ -749,26 +749,27 @@ abstract class BaseStyleDefinition {
 
 		if ($is_inner_block) {
 
+			// Try prepare from current inner block state.
 			$settings = $this->getCurrentInnerBlockSettings();
 
-			if (empty($settings['blockeraBlockStates']['value'])) {
+			$block_states = $settings['blockeraBlockStates']['value'] ?? [];
+			
+			if (! empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
 
-				return $settings;
+				return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
 			}
+
+			// Try prepare from master current state as a fallback way.
+			$settings = $this->getCurrentInnerBlockSettings(true);
 
 			$block_states = $settings['blockeraBlockStates']['value'] ?? [];
+			
+			if (! empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
 
-			if (empty($block_states[ $this->pseudo_state ])) {
-
-				return [];
+				return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
 			}
 
-			if (empty($block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ])) {
-
-				return [];
-			}
-
-			return $block_states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
+			return $settings;
 		}
 
 		if (empty($this->block['attrs']['blockeraBlockStates']['value'])) {
@@ -793,20 +794,16 @@ abstract class BaseStyleDefinition {
 
 	/**
 	 * Get current inner block settings.
+	 * 
+	 * @param bool $from_master_state flag to determine if the current settings are from master state. Default is false.
 	 *
 	 * @return array
 	 */
-	protected function getCurrentInnerBlockSettings(): array {
+	protected function getCurrentInnerBlockSettings( bool $from_master_state = false): array {
 		
-		if (! blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint)) {
+		if (! blockera_is_normal_on_base_breakpoint($this->pseudo_state, $this->breakpoint) && $from_master_state) {
 
-			$states = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];
-
-			if (empty($states)) {
-
-				return [];
-			}
-
+			$states     = $this->block['attrs']['blockeraBlockStates']['value'] ?? [];
 			$breakpoint = $states[ $this->pseudo_state ]['breakpoints'][ $this->breakpoint ]['attributes'] ?? [];
 
 			return $breakpoint['blockeraInnerBlocks'][ $this->block_type ]['attributes'] ?? [];
