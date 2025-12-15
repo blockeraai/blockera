@@ -525,7 +525,8 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 				if (! empty($args['inner-pseudo-class']) && ! blockera_is_normal_on_base_breakpoint($args['inner-pseudo-class'], $args['breakpoint'])) {
 
 					// The inner block type selectors reference.
-					if (isset($selectors[ $block_selector_id ])) {
+					// Only set the selectors if the pseudo class is valid.
+					if (isset($selectors[ $block_selector_id ]) && blockera_is_valid_css_pseudo_class($args['inner-pseudo-class'])) {
 						$selectors = $selectors[ $block_selector_id ];
 					}
 
@@ -644,6 +645,107 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
 			]
 		);
+	}
+}
+
+if ( ! function_exists( 'blockera_is_valid_css_pseudo_class' ) ) {
+	/**
+	 * Check if the pseudo class is valid.
+	 *
+	 * @param string $pseudo_class The pseudo class to check.
+	 *
+	 * @return bool true on success, false on otherwise!
+	 */
+	function blockera_is_valid_css_pseudo_class( string $pseudo_class ): bool {
+
+		$valid_pseudo_classes = [
+			// Pseudo-elements.
+			'before',
+			'after',
+			'first-letter',
+			'first-line',
+			'selection',
+			'backdrop',
+			'placeholder',
+			'marker',
+			'spelling-error',
+			'grammar-error',
+			'file-selector-button',
+			// Pseudo-classes.
+			'hover',
+			'active',
+			'focus',
+			'focus-visible',
+			'focus-within',
+			'visited',
+			'link',
+			'target',
+			'target-within',
+			'scope',
+			'current',
+			'past',
+			'future',
+			'playing',
+			'paused',
+			'seeking',
+			'buffering',
+			'stalled',
+			'muted',
+			'volume-locked',
+			'autofill',
+			'enabled',
+			'disabled',
+			'read-only',
+			'read-write',
+			'placeholder-shown',
+			'default',
+			'checked',
+			'indeterminate',
+			'blank',
+			'valid',
+			'invalid',
+			'in-range',
+			'out-of-range',
+			'required',
+			'optional',
+			'user-valid',
+			'user-invalid',
+			'root',
+			'empty',
+			'first-child',
+			'last-child',
+			'only-child',
+			'first-of-type',
+			'last-of-type',
+			'only-of-type',
+			'nth-child',
+			'nth-last-child',
+			'nth-of-type',
+			'nth-last-of-type',
+			'nth-col',
+			'nth-last-col',
+			'is',
+			'not',
+			'where',
+			'has',
+			'dir',
+			'lang',
+			'any-link',
+			'local-link',
+			'target-within',
+			'scope',
+			'host',
+			'host-context',
+			'fullscreen',
+			'modal',
+			'picture-in-picture',
+			'popover-open',
+			'defined',
+			'left',
+			'right',
+		];
+
+		return in_array( $pseudo_class, $valid_pseudo_classes, true );
 	}
 }
 
