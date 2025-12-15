@@ -134,37 +134,46 @@
 	}
 
 	.blockera-block.blockera-block-2 :where(p)::after {
+		flex-direction: column;
 		content: "After";
 		display: flex !important;
 	}
 
 	.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)) {
 		display: flex !important;
+		flex-direction: column;
 		padding: 20px 20px 20px 20px;
+		gap: 20px;
 		border-radius: 10px;
 	}
 
 	.blockera-block.blockera-block-2 cite {
 		display: flex !important;
+		flex-direction: column;
+		justify-content: center !important;
+		align-items: center !important;
+		gap: 10px;
 		padding: 15px 15px 15px 15px;
 		border-radius: 10px;
 	}
 
 	.blockera-block.blockera-block-2 :where(p) {
 		display: flex !important;
+		flex-direction: column;
+		gap: 10px;
 		border-radius: 10px;
 	}
 
 	.blockera-block.blockera-block-2 cite.is-layout-constrained > * + * {
-		margin-block-start: 10px !important;
+		margin-block-start: 0 !important;
 	}
 
 	.blockera-block.blockera-block-2 :where(p).is-layout-constrained > * + * {
-		margin-block-start: 10px !important;
+		margin-block-start: 0 !important;
 	}
 
 	.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)).is-layout-constrained > * + * {
-		margin-block-start: 20px !important;
+		margin-block-start: 0 !important;
 	};
 }
 

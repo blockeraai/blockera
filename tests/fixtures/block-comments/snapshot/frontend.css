@@ -982,6 +982,9 @@
 	.blockera-block.blockera-block-17 .comment-reply-title {
 		border-radius: 10px;
 		display: flex !important;
+		flex-direction: row;
+		align-items: center !important;
+		justify-content: center !important;
 		gap: 10px;
 	}
 
