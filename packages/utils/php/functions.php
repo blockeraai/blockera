@@ -108,11 +108,19 @@ if (! function_exists('blockera_regex_pseudo_class_functions_pattern')) {
 	 * Get the regex pattern for pseudo-class functions.
 	 * Like :is(), :where(), :not(), etc.
 	 * These functions can contain multiple selectors separated by commas.
+	 * 
+	 * @param bool $close_parenthesis_flag flag to close the parenthesis.
+	 * @example blockera_regex_pseudo_class_functions_pattern(true) => '/:(\w+(?:-\w+|))\s*\([^)]+\)/'
+	 * @example blockera_regex_pseudo_class_functions_pattern(false) => '/:(\w+(?:-\w+|))\s*\(/'
 	 *
 	 * @return string the regex pattern.
 	 */
-	function blockera_regex_pseudo_class_functions_pattern(): string {
+	function blockera_regex_pseudo_class_functions_pattern( bool $close_parenthesis_flag = true): string {
 			
-		return '/:(\w+(?:-\w+|))\s*\([^)]+\)/';
+		if ($close_parenthesis_flag) {
+			return '/:(\w+(?:-\w+|))\s*\([^)]+\)/';
+		}
+		
+		return '/:(\w+(?:-\w+|))\s*\(/';
 	}
 }
