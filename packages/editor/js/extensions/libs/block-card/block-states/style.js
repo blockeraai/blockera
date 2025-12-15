@@ -55,8 +55,9 @@ export const BlockStatesStyles = ({
 
 	if (
 		isActiveField(contentField) &&
-		null !== blockProps.attributes.blockeraBlockStates[state]?.content &&
-		undefined !== blockProps.attributes.blockeraBlockStates[state]?.content
+		null !== blockProps.attributes?.blockeraBlockStates?.[state]?.content &&
+		undefined !==
+			blockProps.attributes?.blockeraBlockStates?.[state]?.content
 	) {
 		if (
 			!supports?.blockeraContentPseudoElement?.hasDefaultValueInStates.includes(
