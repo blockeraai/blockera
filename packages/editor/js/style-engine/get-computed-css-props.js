@@ -210,6 +210,11 @@ export const getComputedCssProps = ({
 					{};
 
 				if (!isNormalState(stateType) && hasContent) {
+					currentStateHasSelectors = Boolean(
+						calculatedSelectors?.[
+							appendBlockeraPrefix(`states/${stateType}`)
+						] || false
+					);
 					calculatedSelectors =
 						calculatedSelectors?.[
 							appendBlockeraPrefix(`states/${stateType}`)
@@ -224,14 +229,6 @@ export const getComputedCssProps = ({
 							? { root: selectors.root }
 							: {}) ||
 						{};
-					currentStateHasSelectors = Boolean(
-						calculatedSelectors?.[
-							appendBlockeraPrefix(`states/${stateType}`)
-						] ||
-							selectors[
-								appendBlockeraPrefix(`states/${stateType}`)
-							]
-					);
 				} else if (
 					!isNormalState(stateType) &&
 					selectors[appendBlockeraPrefix(`states/${stateType}`)]
