@@ -50,12 +50,9 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		}
 
 		// Preparing wp_global_styles post content to access complete (blockera user data) data.
-		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
-		if (! empty($global_styles_post['post_content'])) {
-			$blockera_user_data = json_decode($global_styles_post['post_content'], true);
-			unset($blockera_user_data['isGlobalStylesUserThemeJSON']);
-
-			$tree->merge(new JSON($blockera_user_data, 'custom'));
+		$user_data = blockera_get_user_styles_data();
+		if (! empty($user_data)) {
+			$tree->merge(new JSON($user_data, 'custom'));
 		}
 
 		foreach ($block_nodes as $metadata) {
@@ -126,5 +123,33 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		if ($update_cache) {
 			set_transient($cache_key, $cached);
 		}
+	}
+}
+
+if (! function_exists('blockera_get_user_styles_data')) {
+	/**
+	 * Gets the user styles data.
+	 *
+	 * @return array The user styles data or an empty array if no data is found.
+	 */
+	function blockera_get_user_styles_data(): array {
+		static $user_data = [];
+
+		if (! empty($user_data)) {
+			return $user_data;
+		}
+
+		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+
+		// Validate the global styles post content.
+		if (empty($global_styles_post['post_content']) || ! str_contains($global_styles_post['post_content'], 'blockera')) {
+			return [];
+		}
+
+		$user_data = json_decode($global_styles_post['post_content'], true);
+
+		unset($user_data['isGlobalStylesUserThemeJSON']);
+
+		return $user_data;
 	}
 }

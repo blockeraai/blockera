@@ -1,6 +1,7 @@
 <?php
 
 use Blockera\Http\Routes;
+use Blockera\Editor\Http\Controllers\Theme\JSON;
 
 if (! function_exists('blockera_register_block_style_variations_from_theme_json_partials')) {
 	/**
@@ -133,11 +134,14 @@ if (! function_exists('blockera_editor_wp_theme_json_data_user')) {
      * @return array The filtered data.
      */
 	function blockera_editor_wp_theme_json_data_user( WP_Theme_JSON_Data $data) {
+		$user_data = blockera_get_user_styles_data();
 
-		Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
-		Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_user_data = $data;
+		// Skip if no user data is found.
+		if (empty($user_data)) {
+			return $data;
+		}
 
-		return Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_user_data();
+		return new JSON($user_data, 'custom');
 	}
 }
 
