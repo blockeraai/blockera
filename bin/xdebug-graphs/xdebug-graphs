@@ -62,14 +62,26 @@ self_percent_re = re.compile(r'^\s*\(?\s*\d+(?:\.\d+)?%\s*\)?\s*$')
 calls_re = re.compile(r'^\s*(\d+)\s*([x×])\s*$', re.I)
 
 plugins_strip_re = re.compile(r'.*?/wp-content/plugins/')
+blockera_func_re = re.compile(r'\bblockera_\w+(?:\(\))?', re.I)
 
 def shorten_paths(text):
     return plugins_strip_re.sub('/', text)
 
+def contains_blockera(text):
+    """Check if text contains blockera-related content"""
+    if not text:
+        return False
+    text = text.replace('\\\\', '\\')
+    if path_frag in text or '/blockera/' in text or ns_prefix in text:
+        return True
+    # Check for WordPress-style functions starting with blockera_
+    if blockera_func_re.search(text):
+        return True
+    return False
+
 def should_highlight(attrs):
     for _, raw in attr_text_re.findall(attrs):
-        raw = raw.replace('\\\\', '\\')
-        if path_frag in raw or '/blockera/' in raw or ns_prefix in raw:
+        if contains_blockera(raw):
             return True
     return False
 
@@ -114,9 +126,14 @@ with open(dot_path, 'r', errors='ignore') as f:
             continue
 
         node_id, attrs = m.groups()
+        
+        # Check both node_id and original attrs for blockera functions (before rewriting)
+        should_hl = should_highlight(attrs) or contains_blockera(node_id)
+        
         attrs = rewrite_attrs(attrs)
 
-        if should_highlight(attrs):
+        # Apply highlighting if needed
+        if should_hl:
             attrs = ensure(attrs, 'shape', 'box')
             attrs = ensure(attrs, 'style', 'filled')
             attrs = ensure(attrs, 'fillcolor', color)
