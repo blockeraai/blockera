@@ -763,24 +763,24 @@ if ( ! function_exists( 'blockera_append_css_selector_suffix' ) ) {
 	 */
 	function blockera_append_css_selector_suffix( string $selector, string $suffix ): string {
 
-		if ( empty( trim( $selector ) ) || empty( trim( $suffix ) ) ) {
+		$selector_trimmed = trim( $selector );
+        $suffix_trimmed   = trim( $suffix );
 
-			return $selector;
-		}
+        if ( '' === $selector_trimmed || '' === $suffix_trimmed ) {
 
-		$selectors = explode( ',', $selector );
+            return $selector;
+        }
 
-		return implode(
-			', ',
-			array_map(
-				function ( string $item ) use ( $suffix ): string {
+        $selectors = explode( ',', $selector_trimmed );
+        $result    = [];
 
-					return trim( $item ) . $suffix;
-				},
-				$selectors
-			)
-		);
-	}
+        foreach ( $selectors as $item ) {
+
+            $result[] = trim( $item ) . $suffix_trimmed;
+        }
+
+        return implode( ', ', $result );
+    }
 }
 
 if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
