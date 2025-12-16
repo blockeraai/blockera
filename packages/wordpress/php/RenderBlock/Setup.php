@@ -91,7 +91,7 @@ class Setup {
      * @return array the registered block arguments.
      */
     public function registerBlock( array $args, string $block_type): array {
-        if (empty($this->available_blocks) || ! in_array($block_type, $this->available_blocks, true)) {
+        if (! isset($this->available_blocks[ $block_type ])) {
             return $args;
         }
 

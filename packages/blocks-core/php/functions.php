@@ -24,16 +24,10 @@ if ( ! function_exists( 'blockera_get_available_blocks' ) ) {
 				continue;
 			}
 
-			$available_blocks = array_merge(
-				$available_blocks,
-				array_map(
-					function ( array $support ): string {
-
-						return $support['name'];
-					},
-					$config['supported']
-				)
-			);
+			// Build associative array with block names as keys for O(1) lookup performance.
+			foreach ( $config['supported'] as $support ) {
+				$available_blocks[ $support['name'] ] = true;
+			}
 		}
 
 		return $available_blocks;
