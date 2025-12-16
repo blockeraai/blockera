@@ -1,5 +1,8 @@
 <?php
 
+use Blockera\Editor\Http\Controllers\Theme\JSON;
+use Blockera\Editor\Http\Controllers\Theme\JSONResolver;
+
 if (! function_exists('blockera_add_global_styles_for_blocks')) {
 	/**
      * Adds global style rules to the inline style for each block.
@@ -12,16 +15,16 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 	function blockera_add_global_styles_for_blocks() {
 		global $wp_styles;
 
-		$tree = new \Blockera\Editor\Http\Controllers\Theme\JSON();
+		$tree = new JSON();
 		$tree->setSupports(blockera_get_available_block_supports());
-		$merged_data = \Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_merged_data();
+		$merged_data = JSONResolver::get_merged_data();
 
 		if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {
 			return;
 		}
 
 		$tree->merge($merged_data);
-		$tree = \Blockera\Editor\Http\Controllers\Theme\JSONResolver::resolve_theme_file_uris($tree);
+		$tree = JSONResolver::resolve_theme_file_uris($tree);
 
 		$block_nodes = $tree->get_blockera_styles_block_nodes();
 
@@ -45,6 +48,13 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 				$update_cache = true;
 			}
 		}
+
+		// Preparing wp_global_styles post content to access complete (blockera user data) data.
+		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+		$blockera_user_data = json_decode($global_styles_post['post_content'], true);
+		unset($blockera_user_data['isGlobalStylesUserThemeJSON']);
+
+		$tree->merge(new JSON($blockera_user_data, 'custom'));
 
 		foreach ($block_nodes as $metadata) {
 
