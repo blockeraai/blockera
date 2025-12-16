@@ -63,6 +63,16 @@ if (! function_exists('blockera_register_block_style_variations_from_theme_json_
 							'label' => $ref_value['label'],
                         )
 					);
+				} elseif (! empty($cached_variations)) {
+					foreach ($cached_variations as $value) {
+						register_block_style(
+							$block_type,
+							array(
+								'name'  => $value['name'],
+								'label' => $value['label'],
+							)
+						);
+					}
 				}
 			}
 		}
