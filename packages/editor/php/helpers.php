@@ -1154,11 +1154,17 @@ if (! function_exists('blockera_get_available_block_supports')) {
 	 * @return array the block supports.
 	 */
 	function blockera_get_available_block_supports(): array {
+		// Static cache to avoid repeated file I/O and JSON parsing within the same request.
+		static $cached_supports = null;
+
+		if ( null !== $cached_supports ) {
+			return $cached_supports;
+		}
+
 		$supports = [];
 		$files    = glob( blockera_core_config( 'app.vendor_path' ) . 'blockera/editor/js/schemas/block-supports/*-block-supports-list.json' );
 
-		foreach ($files as $support_file) {
-
+		foreach ( $files as $support_file ) {			
 			ob_start();
 
 			require $support_file;
@@ -1172,6 +1178,8 @@ if (! function_exists('blockera_get_available_block_supports')) {
 
 			$supports[ $support['title'] ] = $support;
 		}
+
+		$cached_supports = $supports;
 
 		return $supports;
 	}
