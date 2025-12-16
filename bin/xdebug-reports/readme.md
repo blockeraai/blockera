@@ -13,6 +13,11 @@ chmod +x ~/bin/xdebug-reports
 
 ### 4️⃣ Ensure ~/bin is in PATH
 
+**_Note:_** You can create a symbolic version of file to keep later edits:
+rm -f /Users/{username}/bin/xdebug-reports
+ln -s /Users/{username}/Sites/site-blockera/wp-content/plugins/blockera/bin/xdebug-reports/xdebug-reports /Users/{username}/bin/xdebug-reports
+chmod +x /Users/{username}/Sites/site-blockera/wp-content/plugins/blockera/bin/xdebug-reports/xdebug-reports
+
 Add once to ~/.zshrc:
 export PATH="$HOME/bin:$PATH"
 

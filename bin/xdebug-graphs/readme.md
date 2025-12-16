@@ -11,6 +11,11 @@ Copy the xdebug-graph file to editor and save it.
 
 chmod +x ~/bin/xdebug-graphs
 
+**_Note:_** You can create a symbolic version of file to keep later edits:
+rm -f /Users/aliaghdam/bin/xdebug-graphs 
+ln -s /Users/aliaghdam/Sites/site-blockera/wp-content/plugins/blockera/bin/xdebug-graphs/xdebug-graphs /Users/aliaghdam/bin/xdebug-graphs
+chmod +x /Users/aliaghdam/Sites/site-blockera/wp-content/plugins/blockera/bin/xdebug-graphs/xdebug-graphs
+
 ### 4️⃣ Ensure ~/bin is in PATH
 
 Add once to ~/.zshrc:
