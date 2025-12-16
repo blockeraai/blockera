@@ -1086,39 +1086,50 @@ if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 if ( ! function_exists( 'blockera_get_base_breakpoint' ) ) {
 
 	/**
-	 * Get blockera base breakpoint from config.
+	 * Get blockera base breakpoint from entities or config.
 	 *
+	 * Optimized to use in-memory entities first to avoid database reads.
+	 * Falls back to config if entities are not available.
+	 * 
 	 * FIXME: refactor this function to solve base breakpoint with read of database.
 	 *
 	 * @return string the base breakpoint name.
 	 */
 	function blockera_get_base_breakpoint(): string {
 
-		$breakpoints = blockera_core_config( 'breakpoints' );
-		$base        = $breakpoints['base'];
+		// Static cache to avoid repeated processing.
+		static $cached_base_breakpoint = null;
 
-		if ( ! is_string( $base ) ) {
+		if ( null !== $cached_base_breakpoint ) {
 
-			return $base;
+			return $cached_base_breakpoint;
 		}
 
-		$prepared_breakpoints = array_filter(
-			$breakpoints['list'],
-			function ( array $breakpoint ): bool {
+		$base_breakpoint = null;
+		$breakpoints     = blockera_core_config( 'breakpoints' );
 
-				return ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] );
+		if ( ! empty( $breakpoints['base'] ) && is_string( $breakpoints['base'] ) ) {
+
+			// Fast path: base is directly specified as string.
+			$base_breakpoint = $breakpoints['base'];
+
+		} elseif ( ! empty( $breakpoints['list'] ) && is_array( $breakpoints['list'] ) ) {
+
+			// Search through list for base breakpoint.
+			foreach ( $breakpoints['list'] as $breakpoint ) {
+
+				if ( ! empty( $breakpoint['base'] ) && ! empty( $breakpoint['status'] ) && ! empty( $breakpoint['type'] ) ) {
+
+					$base_breakpoint = $breakpoint['type'];
+					break;
+				}
 			}
-		);
-
-		$base = array_shift( $prepared_breakpoints );
-
-		if ( empty( $prepared_breakpoints ) || ! $base || empty( $base['type'] ) ) {
-
-			// fallback breakpoint.
-			return 'desktop';
 		}
 
-		return $base['type'];
+		// Fallback to default if not found.
+		$cached_base_breakpoint = $base_breakpoint ? $base_breakpoint : 'desktop';
+
+		return $cached_base_breakpoint;
 	}
 }
 
