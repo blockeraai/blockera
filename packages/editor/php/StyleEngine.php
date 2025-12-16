@@ -732,13 +732,11 @@ final class StyleEngine {
 
 			// Filter out the current support from the supports stack.
 			// Filter out the previous processed supports.
-			static::$processed_supports = array_filter(
-                $supports,
-                function( $support) {
-					return $this->definition->getId() !== $support;
-				},
-                ARRAY_FILTER_USE_KEY
-            );
+			static::$processed_supports = $supports;
+			$definition_id              = $this->definition->getId();
+			if (isset(static::$processed_supports[ $definition_id ])) {
+				unset(static::$processed_supports[ $definition_id ]);
+			}
 
 			$this->definition = null;
 
@@ -798,13 +796,11 @@ final class StyleEngine {
 
 			// Filter out the current support from the supports stack.
 			// Filter out the previous processed supports.
-			static::$processed_supports = array_filter(
-                $supports,
-                function( $support) {
-					return $this->definition->getId() !== $support;
-				},
-                ARRAY_FILTER_USE_KEY
-            );
+			static::$processed_supports = $supports;
+			$definition_id              = $this->definition->getId();
+			if (isset(static::$processed_supports[ $definition_id ])) {
+				unset(static::$processed_supports[ $definition_id ]);
+			}
 
 			$this->definition = null;
 
