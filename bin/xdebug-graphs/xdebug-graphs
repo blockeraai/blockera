@@ -55,6 +55,7 @@ import sys, re
 dot_path, path_frag, ns_prefix, color, text_color = sys.argv[1:]
 
 node_re = re.compile(r'^(\s*[^ \t\[]+)\s+\[(.*)\];\s*$')
+edge_re = re.compile(r'^(\s*[^ \t\[]+)\s+->\s+([^ \t\[]+)(?:\s+\[(.*)\])?\s*;\s*$')
 attr_text_re = re.compile(r'(label|tooltip)="([^"]*)"')
 
 percent_re = re.compile(r'^\s*\d+(?:\.\d+)?%\s*$')
@@ -86,9 +87,30 @@ def should_highlight(attrs):
     return False
 
 def ensure(attrs, key, value):
-    if re.search(rf'(^|,)\s*{re.escape(key)}\s*=', attrs):
-        return attrs
-    return attrs + f', {key}="{value}"'
+    # Check if attribute exists
+    pattern = rf'(^|,)\s*{re.escape(key)}\s*="[^"]*"'
+    if re.search(pattern, attrs):
+        # Replace existing value
+        result = re.sub(pattern, rf'\1{key}="{value}"', attrs)
+        # Clean up any double commas
+        result = re.sub(r',\s*,', ',', result)
+        return result
+    # Add new attribute
+    if attrs.strip():
+        return attrs + f', {key}="{value}"'
+    return f'{key}="{value}"'
+
+def force_set_color(attrs, color):
+    """Force set color attribute, removing any existing color"""
+    # Remove any existing color attribute
+    attrs = re.sub(r'(^|,)\s*color\s*="[^"]*"', '', attrs)
+    # Clean up any double commas or leading/trailing commas
+    attrs = re.sub(r',\s*,', ',', attrs)
+    attrs = attrs.strip().strip(',').strip()
+    # Add the new color
+    if attrs:
+        return attrs + f', color="{color}"'
+    return f'color="{color}"'
 
 def rewrite_label(label):
     lines = label.split('\\n')
@@ -117,31 +139,104 @@ def rewrite_attrs(attrs):
         return f'{key}="{text}"'
     return attr_text_re.sub(repl, attrs)
 
-out = []
+# First pass: identify blockera nodes
+blockera_nodes = set()
 with open(dot_path, 'r', errors='ignore') as f:
     for line in f:
         m = node_re.match(line)
-        if not m:
-            out.append(line)
+        if m:
+            node_id, attrs = m.groups()
+            node_id_raw = node_id.strip()
+            node_id_clean = node_id_raw.strip('"')
+            if should_highlight(attrs) or contains_blockera(node_id_clean):
+                # Store the exact node_id as it appears (with any quotes)
+                blockera_nodes.add(node_id_raw)
+                # Also store cleaned version for matching
+                blockera_nodes.add(node_id_clean)
+                # Store quoted version if not already quoted
+                if '"' not in node_id_raw:
+                    blockera_nodes.add(f'"{node_id_clean}"')
+                elif node_id_raw.startswith('"') and node_id_raw.endswith('"'):
+                    blockera_nodes.add(node_id_clean)
+
+# Second pass: process nodes and edges
+out = []
+with open(dot_path, 'r', errors='ignore') as f:
+    for line in f:
+        # Check for edge definition
+        edge_m = edge_re.match(line)
+        if edge_m:
+            source_node, target_node, attrs = edge_m.groups()
+            source_raw = source_node.strip()
+            source_clean = source_raw.strip('"')
+            
+            # Check if source is a blockera node (try multiple formats)
+            is_blockera_source = (
+                source_raw in blockera_nodes or 
+                source_clean in blockera_nodes or
+                (source_raw.startswith('"') and source_raw.endswith('"') and source_clean in blockera_nodes) or
+                (not source_raw.startswith('"') and f'"{source_clean}"' in blockera_nodes)
+            )
+            
+            if is_blockera_source:
+                if attrs is None:
+                    attrs = ''
+                # Make edge color 20% transparent (80% opacity = 0xCC in hex)
+                # Convert color from #RRGGBB to #RRGGBBAA format
+                transparent_color = color + 'CC'  # 20% transparent = 80% opacity
+                attrs = force_set_color(attrs, transparent_color)
+                # Set label color to be fully opaque (normal)
+                attrs = ensure(attrs, 'labelfontcolor', color)
+                attrs = ensure(attrs, 'fontcolor', color)
+                attrs = ensure(attrs, 'penwidth', '3')
+                # Remove any existing <b> tags from label first
+                label_pattern = r'label="([^"]*)"'
+                match = re.search(label_pattern, attrs)
+                if match:
+                    label_text = match.group(1)
+                    # Remove all <b> tags
+                    label_text = re.sub(r'</?b>', '', label_text)
+                    label_text = re.sub(r'&lt;/?b&gt;', '', label_text)
+                    attrs = re.sub(label_pattern, f'label="{label_text}"', attrs)
+                # Use font attributes to make label bold
+                attrs = ensure(attrs, 'labelfontweight', 'bold')
+                attrs = ensure(attrs, 'fontweight', 'bold')
+                # Try using a bold font name (PostScript style)
+                attrs = ensure(attrs, 'labelfontname', 'Helvetica-Bold')
+                attrs = ensure(attrs, 'fontname', 'Helvetica-Bold')
+                out.append(f"{source_node} -> {target_node} [{attrs}];\n")
+            else:
+                if attrs:
+                    out.append(f"{source_node} -> {target_node} [{attrs}];\n")
+                else:
+                    out.append(f"{source_node} -> {target_node};\n")
             continue
-
-        node_id, attrs = m.groups()
         
-        # Check both node_id and original attrs for blockera functions (before rewriting)
-        should_hl = should_highlight(attrs) or contains_blockera(node_id)
+        # Check for node definition
+        node_m = node_re.match(line)
+        if node_m:
+            node_id, attrs = node_m.groups()
+            node_id_clean = node_id.strip().strip('"')
+            
+            # Check both node_id and original attrs for blockera functions (before rewriting)
+            should_hl = should_highlight(attrs) or contains_blockera(node_id_clean)
+            
+            attrs = rewrite_attrs(attrs)
+
+            # Apply highlighting if needed
+            if should_hl:
+                attrs = ensure(attrs, 'shape', 'box')
+                attrs = ensure(attrs, 'style', 'filled')
+                attrs = ensure(attrs, 'fillcolor', color)
+                attrs = force_set_color(attrs, color)  # Border color - force set
+                attrs = ensure(attrs, 'fontcolor', text_color)
+                attrs = ensure(attrs, 'penwidth', '2')  # Border width
+
+            out.append(f"{node_id} [{attrs}];\n")
+            continue
         
-        attrs = rewrite_attrs(attrs)
-
-        # Apply highlighting if needed
-        if should_hl:
-            attrs = ensure(attrs, 'shape', 'box')
-            attrs = ensure(attrs, 'style', 'filled')
-            attrs = ensure(attrs, 'fillcolor', color)
-            attrs = ensure(attrs, 'color', color)
-            attrs = ensure(attrs, 'fontcolor', text_color)
-            attrs = ensure(attrs, 'penwidth', '2')
-
-        out.append(f"{node_id} [{attrs}];\n")
+        # Not a node or edge, keep as-is
+        out.append(line)
 
 with open(dot_path, 'w') as f:
     f.writelines(out)
