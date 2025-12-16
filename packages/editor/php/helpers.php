@@ -1236,19 +1236,14 @@ if ( ! function_exists( 'blockera_get_sanitize_block_attributes' ) ) {
 	 */
 	function blockera_get_sanitize_block_attributes( array $attributes ): array {
 
-		return array_map(
-			static function ( $attribute ) {
+		$result = [];
 
-				if ( is_array( $attribute ) && isset( $attribute['value'] ) ) {
-
-					return $attribute['value'];
-				}
-
-				return $attribute;
-
-			},
-			$attributes
-		);
+		foreach ( $attributes as $key => $attribute ) {
+			// Maintain exact behavior: check is_array() first, then isset() for 'value' key.
+			$result[ $key ] = ( is_array( $attribute ) && isset( $attribute['value'] ) ) ? $attribute['value'] : $attribute;
+		}
+		
+		return $result;
 	}
 }
 
