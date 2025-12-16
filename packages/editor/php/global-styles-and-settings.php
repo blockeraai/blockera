@@ -51,10 +51,12 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 
 		// Preparing wp_global_styles post content to access complete (blockera user data) data.
 		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
-		$blockera_user_data = json_decode($global_styles_post['post_content'], true);
-		unset($blockera_user_data['isGlobalStylesUserThemeJSON']);
+		if (! empty($global_styles_post['post_content'])) {
+			$blockera_user_data = json_decode($global_styles_post['post_content'], true);
+			unset($blockera_user_data['isGlobalStylesUserThemeJSON']);
 
-		$tree->merge(new JSON($blockera_user_data, 'custom'));
+			$tree->merge(new JSON($blockera_user_data, 'custom'));
+		}
 
 		foreach ($block_nodes as $metadata) {
 
