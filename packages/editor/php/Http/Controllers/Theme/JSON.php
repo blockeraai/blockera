@@ -279,13 +279,6 @@ class JSON extends \WP_Theme_JSON {
 			$block_rules .= $style_engine->getStylesheet();
 		}
 
-		/**
-		 * If the Blockera style engine is used, add the computed CSS rules to the block rules.
-		 */
-		if (isset($computed_css_rules)) {
-			$block_rules .= $computed_css_rules;
-		}
-
         return $block_rules;
     }
 
