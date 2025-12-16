@@ -188,6 +188,15 @@ if (! function_exists('blockera_get_valid_supports')) {
      * @return array the filtered the valid supports.
      */
 	function blockera_get_valid_supports( array $default_supports): array {
+		static $cache = [];
+		
+		// Generate cache key from serialized input array.
+		// Since $default_supports is typically static, this will cache effectively.
+		$cache_key = md5(serialize($default_supports));
+		
+		if (isset($cache[ $cache_key ])) {
+			return $cache[ $cache_key ];
+		}
 
 		$with_blockera_supports = $default_supports;
 
@@ -204,6 +213,7 @@ if (! function_exists('blockera_get_valid_supports')) {
 			'blocks' => null,
 		];
 
+		$cache[ $cache_key ] = $with_blockera_supports;
 		return $with_blockera_supports;
 	}
 }
