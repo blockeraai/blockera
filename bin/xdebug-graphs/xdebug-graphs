@@ -1,0 +1,138 @@
+#!/usr/bin/env zsh
+
+# -------------------------
+# USAGE:
+#   xdebug-graphs               → uses current directory
+#   xdebug-graphs /path/to/dir  → uses provided directory
+# -------------------------
+
+BASE_DIR="${1:-$PWD}"
+
+PATH_FRAGMENT="/wp-content/plugins/blockera"
+NAMESPACE_PREFIX="Blockera\\"
+
+BLOCKERA_COLOR="#0146eb"
+TEXT_COLOR="#ffffff"
+
+# Safety check
+if [[ ! -d "$BASE_DIR" ]]; then
+  echo "❌ Directory not found: $BASE_DIR"
+  exit 1
+fi
+
+echo "📊 Using BASE_DIR: $BASE_DIR"
+
+SUFFIXES=(small medium full)
+NODE_THS=(0.50 0.25 0.01)
+EDGE_THS=(0.20 0.10 0.01)
+
+for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
+  [[ "$FILE" == *.pdf || "$FILE" == *.svg || "$FILE" == *.png || "$FILE" == *.dot ]] && continue
+
+  for i in {1..3}; do
+    SUFFIX="${SUFFIXES[$i]}"
+    NODE_T="${NODE_THS[$i]}"
+    EDGE_T="${EDGE_THS[$i]}"
+
+    PDF="${FILE}-${SUFFIX}.pdf"
+    DOT="${FILE}-${SUFFIX}.dot"
+
+    if [[ -f "$PDF" ]]; then
+      echo "✓ Exists: $(basename "$PDF")"
+      continue
+    fi
+
+    echo "→ Generating: $(basename "$PDF")"
+
+    python3 -m gprof2dot -f callgrind \
+      --node-thres "$NODE_T" \
+      --edge-thres "$EDGE_T" \
+      "$FILE" > "$DOT" || continue
+
+    python3 - "$DOT" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$TEXT_COLOR" <<'PY'
+import sys, re
+
+dot_path, path_frag, ns_prefix, color, text_color = sys.argv[1:]
+
+node_re = re.compile(r'^(\s*[^ \t\[]+)\s+\[(.*)\];\s*$')
+attr_text_re = re.compile(r'(label|tooltip)="([^"]*)"')
+
+percent_re = re.compile(r'^\s*\d+(?:\.\d+)?%\s*$')
+self_percent_re = re.compile(r'^\s*\(?\s*\d+(?:\.\d+)?%\s*\)?\s*$')
+calls_re = re.compile(r'^\s*(\d+)\s*([x×])\s*$', re.I)
+
+plugins_strip_re = re.compile(r'.*?/wp-content/plugins/')
+
+def shorten_paths(text):
+    return plugins_strip_re.sub('/', text)
+
+def should_highlight(attrs):
+    for _, raw in attr_text_re.findall(attrs):
+        raw = raw.replace('\\\\', '\\')
+        if path_frag in raw or '/blockera/' in raw or ns_prefix in raw:
+            return True
+    return False
+
+def ensure(attrs, key, value):
+    if re.search(rf'(^|,)\s*{re.escape(key)}\s*=', attrs):
+        return attrs
+    return attrs + f', {key}="{value}"'
+
+def rewrite_label(label):
+    lines = label.split('\\n')
+
+    if len(lines) >= 2 and percent_re.match(lines[1]) and not lines[1].startswith("Inc:"):
+        lines[1] = "Inc: " + lines[1].strip()
+
+    if len(lines) >= 3 and self_percent_re.match(lines[2]) and not lines[2].startswith("Self:"):
+        lines[2] = "Self: " + lines[2].replace('(', '').replace(')', '').strip()
+
+    for i, s in enumerate(lines):
+        if s.lstrip().startswith("Calls:"):
+            break
+        if calls_re.match(s):
+            lines[i] = "Calls: " + s.strip()
+            break
+
+    return "\\n".join(lines)
+
+def rewrite_attrs(attrs):
+    def repl(m):
+        key, text = m.groups()
+        text = shorten_paths(text)
+        if key == "label":
+            text = rewrite_label(text)
+        return f'{key}="{text}"'
+    return attr_text_re.sub(repl, attrs)
+
+out = []
+with open(dot_path, 'r', errors='ignore') as f:
+    for line in f:
+        m = node_re.match(line)
+        if not m:
+            out.append(line)
+            continue
+
+        node_id, attrs = m.groups()
+        attrs = rewrite_attrs(attrs)
+
+        if should_highlight(attrs):
+            attrs = ensure(attrs, 'shape', 'box')
+            attrs = ensure(attrs, 'style', 'filled')
+            attrs = ensure(attrs, 'fillcolor', color)
+            attrs = ensure(attrs, 'color', color)
+            attrs = ensure(attrs, 'fontcolor', text_color)
+            attrs = ensure(attrs, 'penwidth', '2')
+
+        out.append(f"{node_id} [{attrs}];\n")
+
+with open(dot_path, 'w') as f:
+    f.writelines(out)
+PY
+
+    dot -Tpdf -o "$PDF" "$DOT"
+    rm -f "$DOT"
+  done
+done
+
+echo "✅ Done"
