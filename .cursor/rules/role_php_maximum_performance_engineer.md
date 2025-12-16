@@ -34,7 +34,7 @@ When I give you WordPress plugin PHP files/snippets:
 
 -   Prefer **less work** over clever syntax.
 -   Prefer **one pass** over two passes.
--   Prefer **built-in functions** over PHP-level loops when it reduces overhead.
+-   **ALWAYS prefer `foreach` over `array_map()`/`array_filter()` in hot paths.** `foreach` is a language construct with minimal overhead, while callback-based builtins (`array_map`, `array_filter`, `usort`) invoke PHP callbacks per element—this adds significant call overhead. Only use built-in functions when they avoid per-element PHP callbacks and reduce total work (e.g., `array_column`, `implode`, `str_replace`).
 -   Avoid allocations/copies: fewer arrays, fewer strings, fewer intermediate values.
 -   Avoid dynamic features in hot paths: magic methods, reflection, heavy abstraction.
 
@@ -58,7 +58,6 @@ if (isset($set[$needle])) {
 ```
 
 -   **Notes:** `array_fill_keys()` handles duplicates. Normalize key types (string/int) consistently.
--   **Notes:** if the array a simple value only array, the change it to a associative array and use `isset` for O(1).
 
 ### 2) Key existence: `isset()` vs `array_key_exists()` (correct + fast)
 
@@ -118,9 +117,9 @@ foreach ($items as $item) {
 
 ### 6) Combine map/filter/reduce into one pass in hot paths
 
--   **Use when:** Large arrays and multiple transformations.
+-   **Use when:** Large arrays + multiple transformations (common in WP: attrs normalization, settings maps, query results).
 -   **Why it’s faster:** Avoids allocating intermediate arrays and repeated iteration.
--   **Preferred pattern:**
+-   **Preferred pattern (one pass):**
 
 ```php
 $out = [];
@@ -130,7 +129,18 @@ foreach ($in as $x) {
 }
 ```
 
--   **Notes:** Builtins are fine for small arrays; optimize only when the profiler points here.
+-   **Notes:**
+    -   **ALWAYS use `foreach` instead of `array_map()`/`array_filter()` in hot paths.** `foreach` is a language construct (minimal overhead), while `array_map()`/`array_filter()` invoke a PHP callback for _every element_ (significant call overhead). This is especially critical in WordPress contexts like block rendering, admin list tables, REST responses, and query result processing.
+    -   If you can safely **modify in place**, `foreach` (or an indexed `for`) avoids creating a new array:
+
+```php
+foreach ($arr as $k => $v) {
+    $arr[$k] = transform($v);
+}
+```
+
+-   Avoid `foreach ($arr as &$v)` unless you really need it; if you do, always `unset($v)` after to prevent reference bugs.
+-   **Default to `foreach` for array transformations.** Only use `array_map()`/`array_filter()` if profiling shows the path is cold AND readability significantly benefits. In WordPress plugin code, most array processing happens in hot paths (rendering, queries, filters), so `foreach` should be the default choice.
 
 ### 7) Avoid `array_merge()` in loops
 
@@ -1406,18 +1416,38 @@ $out = implode(',', $parts);
 
 -   **Notes:** Build `$parts` efficiently (avoid `array_merge` in loops).
 
-### 97) Avoid `array_map`/`array_filter` when it creates large temporaries
+### 97) **ALWAYS prefer `foreach` over `array_map()` / `array_filter()` in hot paths** (CRITICAL RULE)
 
--   **Use when:** Big arrays and memory pressure.
--   **Why it’s faster:** One loop can avoid intermediates.
--   **Preferred pattern:**
+-   **Use when:** **Any array transformation in WordPress plugin code**—blocks render, admin list rendering, REST responses, query processing, filter/action callbacks, or any code that runs per-request/per-item.
+-   **Why it's faster:** `foreach` is a language construct with minimal overhead. Callback-based builtins (`array_map`, `array_filter`) trigger a PHP function call per element, adding significant overhead. A tight `foreach` does the same work with **zero callback overhead** and often fewer allocations.
+-   **Default rule:** Use `foreach` by default. Only consider `array_map()`/`array_filter()` if profiling proves the path is cold AND readability is significantly better (rare in WordPress contexts).
+-   **Preferred patterns:**
 
 ```php
+// Map (build new array)
 $out = [];
-foreach ($in as $x) { if ($x) $out[] = f($x); }
+foreach ($in as $k => $v) {
+    $out[$k] = transform($v);
+}
+
+// Filter (build new array)
+$out = [];
+foreach ($in as $k => $v) {
+    if (!keep($v)) continue;
+    $out[$k] = $v;
+}
+
+// In-place transform (when safe)
+foreach ($arr as $k => $v) {
+    $arr[$k] = transform($v);
+}
 ```
 
--   **Notes:** Builtins are OK for small arrays or when readability dominates.
+-   **Notes:**
+    -   **This is a default rule, not an optimization suggestion.** In WordPress plugin code, most array processing happens in hot paths, so `foreach` should be your first choice, not `array_map()`.
+    -   `array_map()` returns a new array; when you pass multiple arrays, results may be reindexed—watch key behavior.
+    -   If you only need a **simple extract** with no callback, prefer C-level helpers like `array_column()` (no PHP callback overhead).
+    -   If you're currently using `array_map()`/`array_filter()`, refactor to `foreach` immediately—the performance win is significant and the code remains readable.
 
 ### 98) Prefer `array_fill_keys()` over `array_flip()` when duplicates exist
 
