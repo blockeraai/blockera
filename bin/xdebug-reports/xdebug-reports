@@ -1,0 +1,535 @@
+#!/usr/bin/env zsh
+set -euo pipefail
+
+# Usage:
+#   xdebug-report [profiles_dir] [out_dir]
+#
+# Defaults:
+#   profiles_dir = current directory
+#   out_dir      = profiles_dir
+
+BASE_DIR="${1:-$PWD}"
+OUT_DIR="${2:-$BASE_DIR}"
+
+PATH_FRAGMENT="wp-content/plugins/blockera"
+NAMESPACE_PREFIX="Blockera\\"
+
+mkdir -p "$OUT_DIR"
+
+process_one() {
+  local FILE="$1"
+  local BASENAME REPORT
+
+  BASENAME="$(basename "$FILE")"
+  REPORT="$OUT_DIR/${BASENAME}.report.json"
+
+  if [[ -f "$REPORT" ]]; then
+    echo "✓ Exists, skipping: $(basename "$REPORT")"
+    return
+  fi
+
+  if ! head -n 30 "$FILE" | grep -Eq '^(version:|cmd:|events:|fl=|fn=)'; then
+    echo "↷ Skipping non-cachegrind: $(basename "$FILE")"
+    return
+  fi
+
+  echo "→ Generating: $(basename "$REPORT")"
+
+  python3 - "$FILE" "$REPORT" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" <<'PY'
+import sys, re, json, datetime
+from collections import defaultdict
+from typing import Optional, Tuple, Dict
+
+cg_path, out_path, path_frag, ns_prefix = sys.argv[1:]
+
+# ===================== PARSE STATE =====================
+fl = None
+fn = None
+
+func_file: Dict[str, str] = {}
+self_cost = defaultdict(int)      # fn -> exclusive time (µs)
+edge_cost = defaultdict(int)      # (caller, callee) -> time (µs)
+edge_calls = defaultdict(int)     # (caller, callee) -> calls
+
+outgoing_calls = defaultdict(int)
+outgoing_cost = defaultdict(int)
+
+pending = None
+events = None
+
+events_re = re.compile(r'^events:\s+(.*)$')
+numline = re.compile(r'^\d+\s+(\d+)(?:\s+\d+)?$')
+
+# ===================== NORMALIZATION / SANITIZATION =====================
+PLUGINS_PREFIX_RE = re.compile(r'^.*?/wp-content/plugins')
+EMBEDDED_PLUGINS_RE = re.compile(r'(::|/).*?/wp-content/plugins')
+INTERNAL_NODE_RE = re.compile(r'^\(\d+\)$')
+LEADING_ID_RE = re.compile(r'^\(?\d+\)?\s+')
+LEADING_SLASH_ID_RE = re.compile(r'^/\(\d+\)\s+')
+EXTRACT_BLOCKERA_PATH_RE = re.compile(r'(/blockera/[^:\s]+)')
+
+def norm(s: str) -> str:
+    return s.replace('\\\\\\\\', '\\\\').replace('\\\\', '\\')
+
+def strip_leading_id_prefix(s: str) -> str:
+    s = LEADING_SLASH_ID_RE.sub('/', s)
+    s = LEADING_ID_RE.sub('', s)
+    return s
+
+def internal_label(s: str) -> str:
+    # s is like "(2262)"
+    return f"internal:{s.strip()}"
+
+def is_internal_node(s: Optional[str]) -> bool:
+    if not s:
+        return False
+    t = norm(s).strip()
+    t = strip_leading_id_prefix(t)
+    return bool(INTERNAL_NODE_RE.match(t))
+
+def sanitize_path(s: Optional[str]) -> Optional[str]:
+    if not s:
+        return None
+    s = norm(s).strip()
+    s = strip_leading_id_prefix(s)
+
+    # If it is a pure internal node "(1234)" make it readable
+    if INTERNAL_NODE_RE.match(s):
+        return internal_label(s)
+
+    # sanitize embedded "...::/abs/.../wp-content/plugins/..."
+    s = EMBEDDED_PLUGINS_RE.sub(r'\1', s)
+    s = s.replace('wp-content/plugins', '')
+    s = PLUGINS_PREFIX_RE.sub('', s)
+
+    s = strip_leading_id_prefix(s)
+
+    if not s.startswith('/'):
+        s = '/' + s
+    while '//' in s:
+        s = s.replace('//', '/')
+
+    # If sanitization ended up producing "/(1234)" or similar
+    if s.startswith('/(') and s.endswith(')') and INTERNAL_NODE_RE.match(s[1:]):
+        return internal_label(s[1:])
+
+    return s
+
+def extract_blockera_file(s: Optional[str]) -> Optional[str]:
+    if not s:
+        return None
+    m = EXTRACT_BLOCKERA_PATH_RE.search(norm(s))
+    return m.group(1) if m else None
+
+def resolve_file(func: str) -> Tuple[Optional[str], str]:
+    fl_raw = func_file.get(func)
+    if fl_raw and not is_internal_node(fl_raw):
+        return sanitize_path(fl_raw), "func_file"
+    extracted = extract_blockera_file(func)
+    if extracted:
+        return extracted, "function_string"
+    return None, "unknown"
+
+def blockera_match(s: Optional[str]) -> bool:
+    if not s:
+        return False
+    s = norm(s)
+    san = sanitize_path(s) or ""
+    extracted = extract_blockera_file(s) or ""
+    return (
+        path_frag in s
+        or ns_prefix in s
+        or "Blockera\\" in s
+        or "/blockera/" in san
+        or extracted.startswith("/blockera/")
+    )
+
+def fmt_time(us: float) -> str:
+    if us >= 1_000_000:
+        return f"{us/1_000_000:.3f}s"
+    if us >= 1_000:
+        return f"{us/1_000:.3f}ms"
+    return f"{us:.0f}µs"
+
+# ===================== PARSE CACHEGRIND =====================
+with open(cg_path, "r", errors="ignore") as f:
+    for raw in f:
+        line = raw.rstrip("\n")
+
+        m = events_re.match(line)
+        if m and not events:
+            events = m.group(1).strip()
+            continue
+
+        if line.startswith("fl="):
+            fl = line[3:]
+            continue
+
+        if line.startswith("fn="):
+            fn = line[3:]
+            if fl:
+                func_file[fn] = fl
+            pending = None
+            continue
+
+        if line.startswith("cfn=") and fn:
+            pending = (fn, line[4:])
+            continue
+
+        if line.startswith("calls=") and pending:
+            try:
+                n = int(line.split("=", 1)[1].split()[0])
+            except Exception:
+                n = 0
+            edge_calls[pending] += n
+            outgoing_calls[pending[0]] += n
+            continue
+
+        m = numline.match(line)
+        if m and fn:
+            cost = int(m.group(1))
+            if pending:
+                edge_cost[pending] += cost
+                outgoing_cost[pending[0]] += cost
+            else:
+                self_cost[fn] += cost
+
+all_funcs = set(self_cost) | set(func_file) | set(outgoing_calls)
+inclusive_cost = {f: self_cost.get(f, 0) + outgoing_cost.get(f, 0) for f in all_funcs}
+blockera_funcs = {f for f in all_funcs if blockera_match(f) or blockera_match(func_file.get(f))}
+
+# ===================== BUILDERS =====================
+def maybe_add_file_source(obj: dict, source: str):
+    # requirement: remove "file_source": "unknown"
+    if source != "unknown":
+        obj["file_source"] = source
+
+# ===================== ORIGINAL SECTIONS (KEEP) =====================
+
+# top_blockera_functions (NO function_raw)
+top_blockera_functions = []
+for f in blockera_funcs:
+    incl = inclusive_cost.get(f, 0)
+    excl = self_cost.get(f, 0)
+    file_path, file_source = resolve_file(f)
+
+    item = {
+        "function": sanitize_path(f),
+        "file": file_path,
+        "exclusive_us": excl,
+        "inclusive_us": incl,
+        "exclusive": fmt_time(excl),
+        "inclusive": fmt_time(incl),
+        "calls_out": outgoing_calls.get(f, 0),
+        "exclusive_ratio": (excl / incl) if incl else None
+    }
+    maybe_add_file_source(item, file_source)
+    top_blockera_functions.append(item)
+
+top_blockera_functions.sort(key=lambda x: x["inclusive_us"], reverse=True)
+top_blockera_functions = top_blockera_functions[:150]
+
+# hot_loops (callee readable + remove requested fields)
+hot_loops = []
+for (caller, callee), cost in edge_cost.items():
+    calls = edge_calls.get((caller, callee), 0)
+    if calls <= 0:
+        continue
+
+    caller_int = is_internal_node(caller)
+    callee_int = is_internal_node(callee)
+    if caller_int and callee_int:
+        continue
+
+    caller_blk = blockera_match(caller) or blockera_match(func_file.get(caller))
+    callee_blk = blockera_match(callee) or blockera_match(func_file.get(callee))
+    if not (caller_blk or callee_blk):
+        continue
+
+    if calls < 20 and cost < 2000:
+        continue
+
+    caller_file, _caller_file_source = resolve_file(caller)
+    callee_file, _callee_file_source = resolve_file(callee)
+
+    hot_loops.append({
+        "caller": sanitize_path(caller),
+        "callee": sanitize_path(callee),   # will be "internal:(xxxx)" if internal
+        "calls": calls,
+        "total_us": cost,
+        "avg_us_per_call": (cost / calls) if calls else None,
+        "total": fmt_time(cost),
+        "avg_per_call": f"{fmt_time(cost / calls)}/call" if calls else None,
+        "caller_file": caller_file,
+        "callee_file": callee_file,
+        "caller_is_blockera": bool(caller_blk),
+        "callee_is_blockera": bool(callee_blk),
+        "caller_is_internal": caller_int,
+        "callee_is_internal": callee_int
+    })
+
+hot_loops.sort(key=lambda x: (x["total_us"], x["calls"]), reverse=True)
+hot_loops = hot_loops[:300]
+
+# cache_candidates (NO function_raw)
+cache_candidates = []
+for f in blockera_funcs:
+    incl = inclusive_cost.get(f, 0)
+    excl = self_cost.get(f, 0)
+    if incl <= 0:
+        continue
+    ratio = excl / incl
+    if incl >= 5000 and ratio <= 0.25:
+        file_path, file_source = resolve_file(f)
+        item = {
+            "function": sanitize_path(f),
+            "file": file_path,
+            "inclusive_us": incl,
+            "exclusive_us": excl,
+            "inclusive": fmt_time(incl),
+            "exclusive": fmt_time(excl),
+            "exclusive_ratio": ratio,
+            "calls_out": outgoing_calls.get(f, 0)
+        }
+        maybe_add_file_source(item, file_source)
+        cache_candidates.append(item)
+
+cache_candidates.sort(key=lambda x: x["inclusive_us"], reverse=True)
+cache_candidates = cache_candidates[:150]
+
+# ===================== NEW SECTIONS =====================
+
+# 1) top_blockera_files (aggregate from top_blockera_functions)
+file_agg = defaultdict(lambda: {"inclusive_us": 0, "exclusive_us": 0, "functions": 0})
+for item in top_blockera_functions:
+    fp = item.get("file")
+    if not fp:
+        continue
+    file_agg[fp]["inclusive_us"] += item["inclusive_us"]
+    file_agg[fp]["exclusive_us"] += item["exclusive_us"]
+    file_agg[fp]["functions"] += 1
+
+top_blockera_files = []
+for fp, d in file_agg.items():
+    top_blockera_files.append({
+        "file": fp,
+        "inclusive_us": d["inclusive_us"],
+        "exclusive_us": d["exclusive_us"],
+        "inclusive": fmt_time(d["inclusive_us"]),
+        "exclusive": fmt_time(d["exclusive_us"]),
+        "functions_count": d["functions"]
+    })
+
+top_blockera_files.sort(key=lambda x: x["inclusive_us"], reverse=True)
+top_blockera_files = top_blockera_files[:120]
+
+# 4) hook_activity (Blockera -> WP hook engine edges)
+HOOK_MATCH = (
+    "do_action", "apply_filters",
+    "WP_Hook->apply_filters", "WP_Hook->do_action",
+)
+
+hook_edges = []
+for (caller, callee), cost in edge_cost.items():
+    calls = edge_calls.get((caller, callee), 0)
+    if calls <= 0:
+        continue
+
+    caller_blk = blockera_match(caller) or blockera_match(func_file.get(caller))
+    if not caller_blk:
+        continue
+
+    callee_s = norm(callee)
+    if not any(h in callee_s for h in HOOK_MATCH):
+        continue
+
+    caller_file, _ = resolve_file(caller)
+    callee_file, _ = resolve_file(callee)
+
+    hook_edges.append({
+        "blockera_caller": sanitize_path(caller),
+        "hook_callee": sanitize_path(callee),
+        "blockera_caller_file": caller_file,
+        "hook_callee_file": callee_file,
+        "calls": calls,
+        "total_us": cost,
+        "avg_us_per_call": cost / calls,
+        "total": fmt_time(cost),
+        "avg_per_call": f"{fmt_time(cost / calls)}/call",
+    })
+
+hook_edges.sort(key=lambda x: (x["total_us"], x["calls"]), reverse=True)
+hook_activity = hook_edges[:200]
+
+# 6) autoload_hotspots
+AUTOLOAD_MATCH = ("require::", "include::", "Composer\\Autoload\\ClassLoader")
+
+autoload_items = []
+for f in all_funcs:
+    fs = norm(f)
+    if not any(p in fs for p in AUTOLOAD_MATCH):
+        continue
+    if not blockera_match(fs) and "/blockera/" not in (sanitize_path(fs) or ""):
+        continue
+    incl = inclusive_cost.get(f, 0)
+    if incl <= 0:
+        continue
+    file_path, file_source = resolve_file(f)
+    item = {
+        "function": sanitize_path(f),
+        "file": file_path,
+        "inclusive_us": incl,
+        "inclusive": fmt_time(incl),
+        "calls_out": outgoing_calls.get(f, 0)
+    }
+    maybe_add_file_source(item, file_source)
+    autoload_items.append(item)
+
+autoload_items.sort(key=lambda x: x["inclusive_us"], reverse=True)
+autoload_hotspots = autoload_items[:150]
+
+# 10) hot_call_chains (mini-traces)
+EDGE_MIN_CALLS = 5
+EDGE_MIN_TOTAL_US = 2000
+
+adj = defaultdict(list)
+for (caller, callee), cost in edge_cost.items():
+    calls = edge_calls.get((caller, callee), 0)
+    if calls < EDGE_MIN_CALLS or cost < EDGE_MIN_TOTAL_US:
+        continue
+    caller_blk = blockera_match(caller) or blockera_match(func_file.get(caller))
+    callee_blk = blockera_match(callee) or blockera_match(func_file.get(callee))
+    if not (caller_blk or callee_blk):
+        continue
+    adj[caller].append((callee, cost, calls))
+
+for k in list(adj.keys()):
+    adj[k].sort(key=lambda t: (t[1], t[2]), reverse=True)
+
+start_edges = []
+for (caller, callee), cost in edge_cost.items():
+    calls = edge_calls.get((caller, callee), 0)
+    if calls < EDGE_MIN_CALLS or cost < EDGE_MIN_TOTAL_US:
+        continue
+    caller_blk = blockera_match(caller) or blockera_match(func_file.get(caller))
+    callee_blk = blockera_match(callee) or blockera_match(func_file.get(callee))
+    if not (caller_blk or callee_blk):
+        continue
+    start_edges.append((caller, callee, cost, calls))
+
+start_edges.sort(key=lambda t: (t[2], t[3]), reverse=True)
+start_edges = start_edges[:80]
+
+def build_chain(start_caller: str, start_callee: str, max_len: int = 6):
+    chain = []
+    seen = set()
+    cur_caller = start_caller
+    cur_callee = start_callee
+
+    for _ in range(max_len):
+        edge_key = (cur_caller, cur_callee)
+        if edge_key in seen:
+            break
+        seen.add(edge_key)
+
+        cost = edge_cost.get(edge_key, 0)
+        calls = edge_calls.get(edge_key, 0)
+
+        chain.append({
+            "caller": sanitize_path(cur_caller),
+            "callee": sanitize_path(cur_callee),
+            "caller_file": resolve_file(cur_caller)[0],
+            "callee_file": resolve_file(cur_callee)[0],
+            "calls": calls,
+            "total_us": cost,
+            "total": fmt_time(cost),
+        })
+
+        nxt_list = adj.get(cur_callee)
+        if not nxt_list:
+            break
+        nxt_callee, _, _ = nxt_list[0]
+        cur_caller, cur_callee = cur_callee, nxt_callee
+
+    return chain
+
+hot_call_chains = []
+for caller, callee, _, _ in start_edges:
+    chain = build_chain(caller, callee, max_len=6)
+    if len(chain) >= 2:
+        hot_call_chains.append({
+            "chain_total_us": sum(x["total_us"] for x in chain),
+            "chain_total": fmt_time(sum(x["total_us"] for x in chain)),
+            "steps": chain
+        })
+
+hot_call_chains.sort(key=lambda x: x["chain_total_us"], reverse=True)
+hot_call_chains = hot_call_chains[:60]
+
+# ===================== LLM GUIDE =====================
+llm_guide = {
+  "what_this_is": (
+    "A structured performance report generated from an Xdebug cachegrind file. "
+    "It ranks Blockera hotspots and includes evidence (files, functions, edges)."
+  ),
+  "units": {
+    "exclusive_us": "Self time inside the function body (microseconds).",
+    "inclusive_us": "Self time + time spent in callees initiated by this function (microseconds).",
+    "human_readable": "Fields like '12.345ms' or '0.123s' are for readability; use *_us for ranking."
+  },
+  "how_to_read_sections": {
+    "top_blockera_files": "Pick top 3–10 files by inclusive_us to choose WHERE to work.",
+    "top_blockera_functions": "Pick top functions for WHAT to change; use exclusive_ratio to decide caching vs CPU optimization.",
+    "hot_loops": "Repeated caller→callee edges; good for memoization, hoisting invariants, batching, reducing repeated work.",
+    "cache_candidates": "Delegators (low exclusive_ratio, high inclusive_us); cache outputs or expensive downstream results.",
+    "hook_activity": "Where Blockera triggers WordPress hook engine (do_action/apply_filters/WP_Hook...).",
+    "autoload_hotspots": "require/include/composer-loader work attributable to Blockera paths.",
+    "hot_call_chains": "Short 2–6-step mini-traces built from high-cost edges to provide execution context without full graphs."
+  }
+}
+
+# ===================== OUTPUT =====================
+report = {
+    "meta": {
+        "generated_at": datetime.datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "input_file": cg_path,
+        "events": events,
+        "report_type": "xdebug-cachegrind",
+        "units": "µs / ms / s"
+    },
+    "llm_guide": llm_guide,
+    "summary": {
+        "blockera_functions_detected": len(blockera_funcs),
+        "top_blockera_files_count": len(top_blockera_files),
+        "top_blockera_functions_count": len(top_blockera_functions),
+        "hot_loops_count": len(hot_loops),
+        "cache_candidates_count": len(cache_candidates),
+        "hook_activity_count": len(hook_activity),
+        "autoload_hotspots_count": len(autoload_hotspots),
+        "hot_call_chains_count": len(hot_call_chains)
+    },
+
+    # Original sections (kept)
+    "top_blockera_functions": top_blockera_functions,
+    "hot_loops": hot_loops,
+    "cache_candidates": cache_candidates,
+
+    # New sections (added)
+    "top_blockera_files": top_blockera_files,
+    "hook_activity": hook_activity,
+    "autoload_hotspots": autoload_hotspots,
+    "hot_call_chains": hot_call_chains
+}
+
+with open(out_path, "w") as f:
+    json.dump(report, f, indent=2, ensure_ascii=False)
+
+print(f"Wrote: {out_path}")
+PY
+}
+
+# Process all cachegrind files (latest -> oldest)
+for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
+  [[ "$FILE" == *.report.json ]] && continue
+  process_one "$FILE"
+done
