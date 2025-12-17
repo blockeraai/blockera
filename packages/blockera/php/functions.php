@@ -19,36 +19,83 @@ if (! function_exists('blockera_core_config')) {
      * @return mixed config value.
      */
     function blockera_core_config( string $key, array $args = []) {
+        // Early return for empty key (fast path).
         if (! $key) {
             return false;
         }
 
-        // Create cache key based on input parameters.
-        $cache_key           = md5($key . serialize($args));
+		/**
+		 * Optimize cache key generation.
+		 * - For empty args (most common case), use key directly (fastest path)
+		 * - For non-empty args, build string manually (faster than md5+serialize)
+		 * This avoids expensive serialize() calls while maintaining uniqueness.
+		 */
         static $config_cache = [];
+        
+        if (empty($args)) {
+            $cache_key = $key;
+        } else {
+            // Build cache key manually: faster than serialize for simple arrays.
+            // Most common case is ['root' => ...], so optimize for that.
+            if (count($args) === 1 && isset($args['root'])) {
+                $cache_key = $key . '|root:' . $args['root'];
+            } else {
+                // For multiple args, build string (still faster than serialize).
+                ksort($args);
+                $parts = [];
+                foreach ($args as $k => $v) {
+                    $parts[] = $k . ':' . ( is_string($v) ? $v : serialize($v) );
+                }
+                $cache_key = $key . '|' . implode('&', $parts);
+            }
+        }
 
-        // Return cached result if available.
+        // Return cached result if available (hot path - most common scenario).
         if (isset($config_cache[ $cache_key ])) {
             return $config_cache[ $cache_key ];
         }
 
+        // Split key once and reuse.
         $keyNodes = explode('.', $key);
+        $keyCount = count($keyNodes);
+        
+        if (0 === $keyCount) {
+            return false;
+        }
 
         // Cache config directory and files mapping.
         static $mapped_configs = [];
         $config_dir            = ! empty($args['root']) && file_exists($args['root']) ? $args['root'] : BLOCKERA_SB_PATH;
+        
         if (! isset($mapped_configs[ $config_dir ])) {
-            $config_files                  = glob($config_dir . '/config/*.php');
-            $config_keys                   = array_map(
-                function ( string $file): string {
-                    return Utils::camelCase(str_replace('.php', '', basename($file)));
-                },
-                $config_files
-            );
-            $mapped_configs[ $config_dir ] = array_combine($config_keys, $config_files);
+            $config_files = glob($config_dir . '/config/*.php');
+            if (false === $config_files) {
+                $config_files = [];
+            }
+            
+            // Optimize camelCase conversion: inline the logic to avoid function call overhead.
+            // Utils::camelCase does: lcfirst(pascalCase(str_replace('.php', '', basename($file)))).
+            // We inline this for better performance (avoids multiple function calls).
+            $mapped = [];
+            foreach ($config_files as $file) {
+                $basename = basename($file, '.php');
+                // Inline camelCase: split by '-', capitalize each part, join, lowercase first char.
+                $parts = explode('-', $basename);
+                $camel = '';
+                $first = true;
+                foreach ($parts as $part) {
+                    if ('' !== $part) {
+                        $camel .= $first ? strtolower($part) : ucfirst($part);
+                        $first  = false;
+                    }
+                }
+                $mapped[ $camel ] = $file;
+            }
+            $mapped_configs[ $config_dir ] = $mapped;
         }
 
-        $firstNode = array_shift($keyNodes);
+        // Use direct array access instead of array_shift (avoids array modification overhead).
+        $firstNode = $keyNodes[0];
 
         if (! isset($mapped_configs[ $config_dir ][ $firstNode ])) {
             $config_cache[ $cache_key ] = false;
@@ -57,7 +104,10 @@ if (! function_exists('blockera_core_config')) {
 
         $config = require $mapped_configs[ $config_dir ][ $firstNode ];
 
-        foreach ($keyNodes as $node) {
+        // Iterate from index 1 (skip first node already processed).
+        // Use for loop instead of foreach for slightly better performance.
+        for ($i = 1; $i < $keyCount; $i++) {
+            $node = $keyNodes[ $i ];
             if (! isset($config[ $node ])) {
                 break;
             }
