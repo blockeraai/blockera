@@ -15,66 +15,90 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 	function blockera_add_global_styles_for_blocks() {
 		global $wp_styles;
 
-		$tree = new JSON();
-		$tree->setSupports(blockera_get_available_block_supports());
-		$merged_data = JSONResolver::get_merged_data();
-
-		if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {
-			return;
-		}
-
-		$tree->merge($merged_data);
-		$tree = JSONResolver::resolve_theme_file_uris($tree);
-
-		$block_nodes = $tree->get_styles_block_nodes();
-
 		$can_use_cached = ! wp_is_development_mode('theme');
 		$update_cache   = false;
+		$cached         = null;
+		$cache_key      = 'blockera_styles_for_blocks';
 
+		// Build cache hash from version-based keys (much cheaper than hashing entire tree data).
 		if ($can_use_cached) {
-			// Hash the merged WP_Theme_JSON data to bust cache on settings or styles change.
-			$cache_hash = md5(wp_json_encode($tree->get_raw_data()));
-			$cache_key  = 'wp_styles_for_blocks';
+			$cache_hash = blockera_get_global_styles_cache_hash();
 			$cached     = get_transient($cache_key);
 
-			// Reset the cached data if there is no value or if the hash has changed.
-			if (! is_array($cached) || $cached['hash'] !== $cache_hash) {
-				$cached = array(
-					'hash'   => $cache_hash,
-					'blocks' => array(),
-				);
-
-				// Update the cache if the hash has changed.
+			// Check if we have a fully valid cache with all data.
+			if (
+				is_array($cached) &&
+				isset($cached['hash'], $cached['tree'], $cached['block_nodes']) &&
+				$cached['hash'] === $cache_hash
+			) {
+				// Restore cached tree and block nodes - skip expensive JSON operations.
+				$tree        = $cached['tree'];
+				$block_nodes = $cached['block_nodes'];
+			} else {
+				// Cache miss or hash changed - need to rebuild.
+				$cached       = null;
 				$update_cache = true;
 			}
 		}
 
-		// Preparing wp_global_styles post content to access complete (blockera user data) data.
-		$user_data = blockera_get_user_styles_data();
-		if (! empty($user_data)) {
-			$tree->merge(new JSON($user_data, 'custom'));
+		// Build tree only if not restored from cache.
+		if (! isset($tree)) {
+			$tree = new JSON();
+			$tree->setSupports(blockera_get_available_block_supports());
+			$merged_data = JSONResolver::get_merged_data();
+
+			if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {
+				return;
+			}
+
+			$tree->merge($merged_data);
+			$tree = JSONResolver::resolve_theme_file_uris($tree);
+
+			// Preparing wp_global_styles post content to access complete (blockera user data) data.
+			$user_data = blockera_get_user_styles_data();
+			if (! empty($user_data)) {
+				$tree->merge(new JSON($user_data, 'custom'));
+			}
+
+			$block_nodes = $tree->get_styles_block_nodes();
+
+			// Prepare cache structure for storing.
+			if ($can_use_cached && $update_cache) {
+				$cached = array(
+					'hash'        => $cache_hash,
+					'tree'        => $tree,
+					'block_nodes' => $block_nodes,
+					'blocks'      => array(),
+				);
+			}
+		}
+
+		// Cache styles queue lookup for O(1) checks instead of repeated in_array().
+		$styles_queue_set = null;
+		if (wp_should_load_block_assets_on_demand()) {
+			$styles_queue_set = array_fill_keys($wp_styles->queue, true);
 		}
 
 		foreach ($block_nodes as $metadata) {
+			$block_css = null;
 
-			if ($can_use_cached) {
+			if ($can_use_cached && null !== $cached) {
 				// Use the block name as the key for cached CSS data. Otherwise, use a hash of the metadata.
-				$cache_node_key = isset($metadata['name']) ? $metadata['name'] : md5(wp_json_encode($metadata));
+				$cache_node_key = $metadata['name'] ?? md5(wp_json_encode($metadata));
 
 				if (isset($cached['blocks'][ $cache_node_key ])) {
 					$block_css = $cached['blocks'][ $cache_node_key ];
 				} else {
 					$block_css                           = $tree->get_styles_for_block($metadata);
 					$cached['blocks'][ $cache_node_key ] = $block_css;
-
-					// Update the cache if the cache contents have changed.
-					$update_cache = true;
+					$update_cache                        = true;
 				}
 			} else {
 				$block_css = $tree->get_styles_for_block($metadata);
 			}
 
-			if (! wp_should_load_block_assets_on_demand()) {
+			// Fast path: no on-demand loading - add all styles directly.
+			if (null === $styles_queue_set) {
 				wp_add_inline_style('global-styles', $block_css);
 				continue;
 			}
@@ -93,24 +117,20 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 			 */
 			if (isset($metadata['name'])) {
 				if (str_starts_with($metadata['name'], 'core/')) {
-					$block_name   = str_replace('core/', '', $metadata['name']);
-					$block_handle = 'wp-block-' . $block_name;
-					if (in_array($block_handle, $wp_styles->queue, true)) {
+					$block_handle = 'wp-block-' . substr($metadata['name'], 5);
+					if (isset($styles_queue_set[ $block_handle ])) {
 						wp_add_inline_style($stylesheet_handle, $block_css);
 					}
 				} else {
 					wp_add_inline_style($stylesheet_handle, $block_css);
 				}
-			}
-
-			// The likes of block element styles from theme.json do not have  $metadata['name'] set.
-			if (! isset($metadata['name']) && ! empty($metadata['path'])) {
+			} elseif (! empty($metadata['path'])) {
+				// The likes of block element styles from theme.json do not have $metadata['name'] set.
 				$block_name = wp_get_block_name_from_theme_json_path($metadata['path']);
 				if ($block_name) {
 					if (str_starts_with($block_name, 'core/')) {
-						$block_name   = str_replace('core/', '', $block_name);
-						$block_handle = 'wp-block-' . $block_name;
-						if (in_array($block_handle, $wp_styles->queue, true)) {
+						$block_handle = 'wp-block-' . substr($block_name, 5);
+						if (isset($styles_queue_set[ $block_handle ])) {
 							wp_add_inline_style($stylesheet_handle, $block_css);
 						}
 					} else {
@@ -120,9 +140,92 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 			}
 		}
 
-		if ($update_cache) {
-			set_transient($cache_key, $cached);
+		if ($update_cache && null !== $cached) {
+			set_transient($cache_key, $cached, DAY_IN_SECONDS);
 		}
+	}
+}
+
+if (! function_exists('blockera_get_global_styles_cache_hash')) {
+	/**
+	 * Generates a cache hash based on Blockera version, theme version, and theme.json file modification time.
+	 *
+	 * This is much cheaper than hashing the entire tree data, as it only requires
+	 * reading version strings and a single filemtime() call.
+	 *
+	 * @return string The cache hash.
+	 */
+	function blockera_get_global_styles_cache_hash(): string {
+		static $hash = null;
+
+		if (null !== $hash) {
+			return $hash;
+		}
+
+		$wp_theme        = wp_get_theme();
+		$theme_version   = $wp_theme->get('Version');
+		$theme_json_file = $wp_theme->get_file_path('theme.json');
+
+		// Get theme.json modification time (returns false if file doesn't exist).
+		$theme_json_mtime = file_exists($theme_json_file) ? (string) filemtime($theme_json_file) : '0';
+
+		// Include parent theme version and theme.json mtime if applicable.
+		$parent_theme = $wp_theme->parent();
+		$parent_info  = '';
+		if ($parent_theme) {
+			$parent_version    = $parent_theme->get('Version');
+			$parent_theme_json = $parent_theme->get_file_path('theme.json');
+			$parent_json_mtime = file_exists($parent_theme_json) ? (string) filemtime($parent_theme_json) : '0';
+			$parent_info       = '|p:' . $parent_version . ':' . $parent_json_mtime;
+		}
+
+		// Get the block theme all json files exists inside /styles directory modification time.
+		$styles_directory = get_template_directory() . '/styles';
+		$styles_files     = glob($styles_directory . '/*.json');
+		$styles_mtime     = '0';
+		foreach ($styles_files as $file) {
+			$styles_mtime = (string) filemtime($file);
+		}
+
+		// Include user global styles post modified time for user customizations.
+		$user_styles_mtime = blockera_get_user_styles_modified_time();
+
+		// Build hash from: blockera version | theme version | (all) theme.json mtime(s) | parent info | user styles mtime.
+		$hash = md5(
+			BLOCKERA_SB_VERSION . '|' .
+			$theme_version . '|' .
+			$theme_json_mtime .
+			$styles_mtime .
+			$parent_info . '|' .
+			$user_styles_mtime
+		);
+
+		return $hash;
+	}
+}
+
+if (! function_exists('blockera_get_user_styles_modified_time')) {
+	/**
+	 * Gets the modification time of the user global styles post.
+	 *
+	 * @return string The post modified timestamp or '0' if not found.
+	 */
+	function blockera_get_user_styles_modified_time(): string {
+		static $mtime = null;
+
+		if (null !== $mtime) {
+			return $mtime;
+		}
+
+		$global_styles_post = JSONResolver::get_user_data_from_wp_global_styles(wp_get_theme());
+
+		if (! empty($global_styles_post['post_modified'])) {
+			$mtime = $global_styles_post['post_modified'];
+		} else {
+			$mtime = '0';
+		}
+
+		return $mtime;
 	}
 }
 
