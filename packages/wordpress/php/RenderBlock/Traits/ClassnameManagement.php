@@ -77,26 +77,14 @@ trait ClassnameManagement {
 				return $base_classname;
 			}
 
-			// Collision detected! Generate a new unique classname.
-			$counter       = 1;
-			$unique_suffix = '';
-			$new_classname = $base_classname;
+			// Collision detected! Generate a new unique classname using random hash.
+			$unique_suffix = '-' . blockera_get_small_random_hash();
+			$new_classname = $base_classname . $unique_suffix;
 
-			// Keep trying until we find an unused classname.
-			while (isset(self::$used_classnames_registry[ $new_classname ])) {
-
-				// Create a unique suffix using counter and block name.
-				$unique_suffix = '-' . $counter . '-' . substr(md5($blockera_props_id . $counter), 0, 6);
+			// In the extremely unlikely case of another collision, generate one more time.
+			if (isset(self::$used_classnames_registry[ $new_classname ])) {
+				$unique_suffix = '-' . blockera_get_small_random_hash();
 				$new_classname = $base_classname . $unique_suffix;
-				$counter++;
-
-				// Safety check to prevent infinite loop (very unlikely).
-				if ($counter > 1000) {
-					// Fallback to timestamp + random.
-					$unique_suffix = '-' . time() . '-' . wp_rand(1000, 9999);
-					$new_classname = $base_classname . $unique_suffix;
-					break;
-				}
 			}
 
 			// Register the new unique classname.
