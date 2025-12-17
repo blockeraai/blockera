@@ -118,6 +118,10 @@ if (! function_exists('blockera_editor_hooks')) {
      * @return void
      */
 	function blockera_editor_hooks(): void {
+		// Skip if not an admin request. because we need to below filters only in admin requests.
+		if (! blockera_is_admin_request(false)) {
+			return;
+		}
 	
 		add_filter('wp_theme_json_data_user', 'blockera_editor_wp_theme_json_data_user', 9e2);
 		add_filter('wp_theme_json_data_theme', 'blockera_editor_wp_theme_json_data_theme', 9e2);
