@@ -240,17 +240,18 @@ class JSON extends \WP_Theme_JSON {
 		$block_rules = '';
 
 		// 1. Generate css rules for the block style variations.
-        if (! empty($block_metadata['variations'])) {
-            foreach ($block_metadata['variations'] as $style_variation) {
-                $style_variation_node           = _wp_array_get($this->theme_json, $style_variation['path'], array());
-                $clean_style_variation_selector = trim($style_variation['selector']);
+        if (! empty($node['variations'])) {
+            foreach ($node['variations'] as $key => $style_variation) {
+				// Create a selector based on the block main selector and the style variation key.
+				$selector 						= "{$block_metadata['selector']}.is-style-{$key}";
+                $clean_style_variation_selector = trim($selector);
 
 				$style_engine = Blockera::getInstance()->make(
 					StyleEngine::class,
 					[
 						'block' => [
 							'blockName' => $block_metadata['name'],
-							'attrs' => $style_variation_node,
+							'attrs' => $style_variation,
 						],
 						'fallbackSelector' => ":root :where($clean_style_variation_selector)",
 						'isGlobalStyle' => true,
@@ -280,43 +281,5 @@ class JSON extends \WP_Theme_JSON {
 		}
 
         return $block_rules;
-    }
-
-	/**
-     * Returns a filtered declarations array if there is a separator block with only a background
-     * style defined in theme.json by adding a color attribute to reflect the changes in the front.
-     *
-     * @since 6.1.1
-     *
-     * @param array $declarations List of declarations.
-     * @return array $declarations List of declarations filtered.
-     */
-    private static function update_separator_declarations( $declarations) {
-        $background_color     = '';
-        $border_color_matches = false;
-        $text_color_matches   = false;
-
-        foreach ($declarations as $declaration) {
-            if ('background-color' === $declaration['name'] && ! $background_color && isset($declaration['value'])) {
-                $background_color = $declaration['value'];
-            } elseif ('border-color' === $declaration['name']) {
-                $border_color_matches = true;
-            } elseif ('color' === $declaration['name']) {
-                $text_color_matches = true;
-            }
-
-            if ($background_color && $border_color_matches && $text_color_matches) {
-                break;
-            }
-        }
-
-        if ($background_color && ! $border_color_matches && ! $text_color_matches) {
-            $declarations[] = array(
-                'name'  => 'color',
-                'value' => $background_color,
-            );
-        }
-
-        return $declarations;
     }
 }
