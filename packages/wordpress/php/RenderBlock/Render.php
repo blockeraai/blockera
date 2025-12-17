@@ -75,8 +75,13 @@ class Render {
 		// Get all registered features.
 		$features = $fm->getRegisteredFeatures();
 
-		// Get dom parser.
-		$dom_parser = $fm->getApp()->dom_parser::str_get_html($html);
+		/**
+		 * Dom parser instance.
+		 * Create dom parser instance only once when the first feature is processed.
+		 * 
+		 * @var DomParser $dom_parser
+		 */
+		$dom_parser = null;
 
 		foreach ($features as $feature) {
 
@@ -97,9 +102,13 @@ class Render {
 					'blockera-unique-selector' => $args['unique_selector'],
 				]
 			);
-
+		
 			if (empty($selector)) {
 				continue;
+			}
+
+			if (empty($dom_parser)) {
+				$dom_parser = $fm->getApp()->dom_parser::str_get_html($html);
 			}
 
 			$args['dom']          = $dom_parser;
