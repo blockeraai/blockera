@@ -246,17 +246,33 @@ class Render {
      */
     protected function getUpdatedHTML( string $html, string $classname, array $args): string {
 
-		$classes = explode(' ', $classname);
+		// Optimize: Fast path - if no space, skip filtering (single classname, most common case).
+		// This avoids explode(), array_filter(), and closure overhead for the most frequent scenario.
+		if (strpos($classname, ' ') !== false) {
+			// Multiple classes exist - filter out 'blockera-block-*' classes.
+			// Use explode but manual loop instead of array_filter + closure (avoids closure overhead).
+			$classes     = explode(' ', $classname);
+			$class_count = count($classes);
+			$found       = false;
 
-		if (count($classes) > 1) {
-			$filtered_classes = array_filter(
-                $classes,
-                function( string $class): bool {
-					return ! str_starts_with($class, 'blockera-block-');
+			// Manual loop is faster than array_filter with closure
+            // Find first class that doesn't start with 'blockera-block-'.
+			// Prefix 'blockera-block-' is 15 characters, so use substr for faster comparison.
+			for ($i = 0; $i < $class_count; $i++) {
+                $class = $classes[ $i ];
+                // Use substr + strlen check instead of str_starts_with for better performance.
+				// Check if class does NOT start with 'blockera-block-' (15 chars).
+				if (strlen($class) < 15 || substr($class, 0, 15) !== 'blockera-block-') {
+					$classname = $class;
+					$found     = true;
+					break;
 				}
-            );
-
-			$classname = $filtered_classes[0] ?? $classes[0];
+			}
+			
+            // Fallback: if no matching class found (all start with 'blockera-block-'), use first class.
+            if ( ! $found) {
+				$classname = $classes[0];
+			}
 		}
 		
 		$args['block'] = $this->block;
