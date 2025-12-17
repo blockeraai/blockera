@@ -24,16 +24,21 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-// loading autoloader.
-require __DIR__ . '/vendor/autoload.php';
-
 // Register into shared autoload coordinator.
 require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
 
 // Register into shared autoload coordinator.
 \Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
 \Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+
+// loading autoloader.
+require __DIR__ . '/vendor/autoload.php';
 ### END AUTO-GENERATED AUTOLOADER
+
+// Invalidate package manifest cache on plugin activation, deactivation, and upgrade.
+add_action('activated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+add_action('deactivated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+add_action('upgrader_process_complete', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
 
 if (file_exists(__DIR__ . '/.env')) {
 
