@@ -513,7 +513,17 @@ abstract class BaseStyleDefinition {
             $value = $value['value'];
         }
 
-        $cssProperty = $this->getSupportCssProperty();
+        $supports = $this->getSupports(false);
+        $id       = $this->getId();
+        
+        $support = isset($supports[ $id ]) ? $supports[ $id ] : null;
+        
+        if (! $support) {
+
+            return;
+        }
+
+        $cssProperty = $support['css-property'] ?? null;
 
         // Skip if no CSS property is defined.
         if (! $cssProperty) {
@@ -522,14 +532,16 @@ abstract class BaseStyleDefinition {
         }
 
         // Skip processing mask and divider properties if they are not enabled in experimental features.
-        if (in_array($cssProperty, [ 'divider', 'mask' ], true) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
+        if (( 'divider' === $cssProperty || 'mask' === $cssProperty ) && ! blockera_get_experimental([ 'editor', 'extensions', 'effectsExtension', $cssProperty ])) {
 
             return;
         }
 
+        $is_available = $this->availableInInnerBlock($id);
+
         if ($this instanceof CustomStyle) {
 
-            $settings = $this->getCustomSettings($this->settings, $this->getId(), $cssProperty);
+            $settings = $this->getCustomSettings($this->settings, $id, $cssProperty);
 
         } else {
 
@@ -542,21 +554,12 @@ abstract class BaseStyleDefinition {
             ];
         }
 
-        array_map(
-            function ( array $setting): void {
+        if ($support && $is_available) {
+            foreach ($settings as $setting) {
 
-                if (! $this->getSupport()) {
-
-                    return;
-                }
-
-                if ($this->availableInInnerBlock($this->getId())) {
-
-					$this->css($setting);
-                }
-            },
-            $settings
-        );
+				$this->css($setting);
+            }
+        }
     }
 
     /**
