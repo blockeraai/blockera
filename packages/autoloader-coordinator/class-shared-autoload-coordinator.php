@@ -94,7 +94,7 @@ if (! \class_exists(Coordinator::class)) {
             $this->bootstrapped = true;
 
             // Run as early as possible once plugins are loaded, after both autoloaders are registered.
-            \add_action('init', [ $this, 'maybeCoordinate' ], 1);
+            \add_action('after_setup_theme', [ $this, 'maybeCoordinate' ], 0);
         }
 
 		/**
