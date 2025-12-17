@@ -11,7 +11,8 @@ BASE_DIR="${1:-$PWD}"
 PATH_FRAGMENT="/wp-content/plugins/blockera"
 NAMESPACE_PREFIX="Blockera\\"
 
-BLOCKERA_COLOR="#0146eb"
+BLOCKERA_COLOR="#0047eb"
+TOP5_COLOR="#004dff"
 TEXT_COLOR="#ffffff"
 
 # Safety check
@@ -49,10 +50,10 @@ for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
       --edge-thres "$EDGE_T" \
       "$FILE" > "$DOT" || continue
 
-    python3 - "$DOT" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$TEXT_COLOR" <<'PY'
+    python3 - "$DOT" "$PATH_FRAGMENT" "$NAMESPACE_PREFIX" "$BLOCKERA_COLOR" "$TOP5_COLOR" "$TEXT_COLOR" <<'PY'
 import sys, re
 
-dot_path, path_frag, ns_prefix, color, text_color = sys.argv[1:]
+dot_path, path_frag, ns_prefix, color, top5_color, text_color = sys.argv[1:]
 
 node_re = re.compile(r'^(\s*[^ \t\[]+)\s+\[(.*)\];\s*$')
 edge_re = re.compile(r'^(\s*[^ \t\[]+)\s+->\s+([^ \t\[]+)(?:\s+\[(.*)\])?\s*;\s*$')
@@ -139,8 +140,33 @@ def rewrite_attrs(attrs):
         return f'{key}="{text}"'
     return attr_text_re.sub(repl, attrs)
 
-# First pass: identify blockera nodes
+def extract_include_time(attrs):
+    """Extract include time percentage from label attributes"""
+    for key, raw in attr_text_re.findall(attrs):
+        if key == "label":
+            # Look for "Inc: X%" pattern or just "X%" on second line
+            lines = raw.split('\\n')
+            # Try to match "Inc: X%" format (after rewrite_label)
+            for line in lines:
+                inc_match = re.search(r'Inc:\s*(\d+(?:\.\d+)?)%', line, re.I)
+                if inc_match:
+                    return float(inc_match.group(1))
+            # Try to match just percentage on second line (before rewrite_label)
+            # The second line is typically the include time percentage
+            if len(lines) >= 2:
+                second_line = lines[1].strip()
+                if percent_re.match(second_line):
+                    return float(second_line.rstrip('%'))
+            # Fallback: look for any percentage value in the label
+            for line in lines:
+                percent_match = re.search(r'(\d+(?:\.\d+)?)%', line)
+                if percent_match:
+                    return float(percent_match.group(1))
+    return 0.0
+
+# First pass: identify blockera nodes and collect include times
 blockera_nodes = set()
+blockera_node_times = {}  # node_id -> include_time
 with open(dot_path, 'r', errors='ignore') as f:
     for line in f:
         m = node_re.match(line)
@@ -158,6 +184,35 @@ with open(dot_path, 'r', errors='ignore') as f:
                     blockera_nodes.add(f'"{node_id_clean}"')
                 elif node_id_raw.startswith('"') and node_id_raw.endswith('"'):
                     blockera_nodes.add(node_id_clean)
+                
+                # Extract include time for this node
+                include_time = extract_include_time(attrs)
+                # Store time for all node_id variations
+                blockera_node_times[node_id_raw] = include_time
+                blockera_node_times[node_id_clean] = include_time
+                if '"' not in node_id_raw:
+                    blockera_node_times[f'"{node_id_clean}"'] = include_time
+                elif node_id_raw.startswith('"') and node_id_raw.endswith('"'):
+                    blockera_node_times[node_id_clean] = include_time
+
+# Identify top 5 blockera nodes by include time
+top5_nodes = set()
+if blockera_node_times:
+    # Deduplicate nodes by their cleaned ID (same node might appear with/without quotes)
+    unique_node_times = {}
+    for node_id, include_time in blockera_node_times.items():
+        node_clean = node_id.strip('"')
+        # Keep the maximum include time for each unique node
+        if node_clean not in unique_node_times or include_time > unique_node_times[node_clean]:
+            unique_node_times[node_clean] = include_time
+    
+    # Sort unique nodes by include time (descending) and get top 5
+    sorted_nodes = sorted(unique_node_times.items(), key=lambda x: x[1], reverse=True)
+    top5_items = sorted_nodes[:5]
+    for node_clean, _ in top5_items:
+        # Add all variations for matching
+        top5_nodes.add(node_clean)
+        top5_nodes.add(f'"{node_clean}"')
 
 # Second pass: process nodes and edges
 out = []
@@ -181,13 +236,24 @@ with open(dot_path, 'r', errors='ignore') as f:
             if is_blockera_source:
                 if attrs is None:
                     attrs = ''
+                
+                # Check if source is a top 5 node
+                is_top5_source = (
+                    source_raw in top5_nodes or
+                    source_clean in top5_nodes or
+                    (source_raw.startswith('"') and source_raw.endswith('"') and source_clean in top5_nodes) or
+                    (not source_raw.startswith('"') and f'"{source_clean}"' in top5_nodes)
+                )
+                
+                edge_color = top5_color if is_top5_source else color
+                
                 # Make edge color 20% transparent (80% opacity = 0xCC in hex)
                 # Convert color from #RRGGBB to #RRGGBBAA format
-                transparent_color = color + 'CC'  # 20% transparent = 80% opacity
+                transparent_color = edge_color + 'CC'  # 20% transparent = 80% opacity
                 attrs = force_set_color(attrs, transparent_color)
                 # Set label color to be fully opaque (normal)
-                attrs = ensure(attrs, 'labelfontcolor', color)
-                attrs = ensure(attrs, 'fontcolor', color)
+                attrs = ensure(attrs, 'labelfontcolor', edge_color)
+                attrs = ensure(attrs, 'fontcolor', edge_color)
                 attrs = ensure(attrs, 'penwidth', '3')
                 # Remove any existing <b> tags from label first
                 label_pattern = r'label="([^"]*)"'
@@ -225,12 +291,25 @@ with open(dot_path, 'r', errors='ignore') as f:
 
             # Apply highlighting if needed
             if should_hl:
+                # Check if this is a top 5 node
+                is_top5 = (
+                    node_id.strip() in top5_nodes or
+                    node_id_clean in top5_nodes or
+                    (node_id.strip().startswith('"') and node_id.strip().endswith('"') and node_id_clean in top5_nodes) or
+                    (not node_id.strip().startswith('"') and f'"{node_id_clean}"' in top5_nodes)
+                )
+                
+                node_color = top5_color if is_top5 else color
+                border_color = '#ef0000' if is_top5 else node_color
+                
                 attrs = ensure(attrs, 'shape', 'box')
                 attrs = ensure(attrs, 'style', 'filled')
-                attrs = ensure(attrs, 'fillcolor', color)
-                attrs = force_set_color(attrs, color)  # Border color - force set
+                attrs = ensure(attrs, 'fillcolor', node_color)
+                attrs = force_set_color(attrs, border_color)  # Border color - red for top 5, same as fill for others
                 attrs = ensure(attrs, 'fontcolor', text_color)
-                attrs = ensure(attrs, 'penwidth', '2')  # Border width
+                # Border width: 6 for top 5 nodes, 2 for others
+                border_width = '6' if is_top5 else '2'
+                attrs = ensure(attrs, 'penwidth', border_width)
 
             out.append(f"{node_id} [{attrs}];\n")
             continue
