@@ -7,6 +7,20 @@ use Blockera\Utils\Utils;
 class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 	/**
+	 * Cached result for theme data with supports merged.
+	 *
+	 * @var JSON|null
+	 */
+	private static $theme_with_supports = null;
+
+	/**
+	 * Cached theme support data array to avoid repeated calculations.
+	 *
+	 * @var array|null
+	 */
+	private static $cached_theme_support_data = null;
+
+	/**
 	 * Store the default WordPress provided data for users.
 	 *
 	 * @var \WP_Theme_JSON_Data $default_user_data the provided default user data by WordPress.
@@ -294,11 +308,20 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			_deprecated_argument( __METHOD__, '5.9.0' );
 		}
 
-		$options = wp_parse_args( $options, array( 'with_supports' => true ) );
+		// Fast path: check with_supports option inline to avoid wp_parse_args overhead.
+		$with_supports = ! isset( $options['with_supports'] ) || $options['with_supports'];
 
-		if ( null === static::$theme || ! static::has_same_registered_blocks( 'theme' ) ) {
+		// Check if we have valid cached data.
+		$has_same_blocks = static::has_same_registered_blocks( 'theme' );
+
+		if ( null === static::$theme || ! $has_same_blocks ) {
+			// Invalidate with_supports cache when theme cache is invalidated.
+			static::$theme_with_supports       = null;
+			static::$cached_theme_support_data = null;
+
 			$wp_theme        = wp_get_theme();
 			$theme_json_file = $wp_theme->get_file_path( 'theme.json' );
+
 			if ( is_readable( $theme_json_file ) ) {
 				$theme_json_data = static::read_json_file( $theme_json_file );
 				$theme_json_data = static::translate( $theme_json_data, $wp_theme->get( 'TextDomain' ) );
@@ -330,39 +353,35 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			$theme_json_data = static::inject_variations_from_block_style_variation_files( $theme_json_data, $variations );
 			$theme_json_data = static::inject_variations_from_block_styles_registry( $theme_json_data );
 
-			$theme_json = new JSONData( $theme_json_data, 'theme' );
+			// Directly create JSON object - JSONData wrapper adds unnecessary overhead.
+			static::$theme = new JSON( $theme_json_data, 'theme' );
 
-			/*
-			 * Backward compatibility for extenders returning a JSONData
-			 * compatible class that is not a JSONData object.
-			 */
-			if ( $theme_json instanceof JSONData ) {
-				static::$theme = $theme_json->get_theme_json();
-			} else {
-				$config        = $theme_json->get_data();
-				static::$theme = new JSON( $config );
-			}
-
-			if ( $wp_theme->parent() ) {
+			$parent_theme = $wp_theme->parent();
+			if ( $parent_theme ) {
 				// Get parent theme.json.
-				$parent_theme_json_file = $wp_theme->parent()->get_file_path( 'theme.json' );
+				$parent_theme_json_file = $parent_theme->get_file_path( 'theme.json' );
 				if ( $theme_json_file !== $parent_theme_json_file && is_readable( $parent_theme_json_file ) ) {
 					$parent_theme_json_data = static::read_json_file( $parent_theme_json_file );
-					$parent_theme_json_data = static::translate( $parent_theme_json_data, $wp_theme->parent()->get( 'TextDomain' ) );
-					$parent_theme           = new JSON( $parent_theme_json_data );
+					$parent_theme_json_data = static::translate( $parent_theme_json_data, $parent_theme->get( 'TextDomain' ) );
+					$parent_theme_json      = new JSON( $parent_theme_json_data );
 
 					/*
 					 * Merge the child theme.json into the parent theme.json.
 					 * The child theme takes precedence over the parent.
 					 */
-					$parent_theme->merge( static::$theme );
-					static::$theme = $parent_theme;
+					$parent_theme_json->merge( static::$theme );
+					static::$theme = $parent_theme_json;
 				}
 			}
 		}
 
-		if ( ! $options['with_supports'] ) {
+		if ( ! $with_supports ) {
 			return static::$theme;
+		}
+
+		// Return cached with_supports result if available.
+		if ( null !== static::$theme_with_supports ) {
+			return static::$theme_with_supports;
 		}
 
 		/*
@@ -371,7 +390,34 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		 * So we take theme supports, transform it to theme.json shape
 		 * and merge the static::$theme upon that.
 		 */
+		$theme_support_data = static::get_theme_support_data();
+
+		$with_theme_supports = new JSON( $theme_support_data );
+		$with_theme_supports->merge( static::$theme );
+
+		// Cache the result for subsequent calls.
+		static::$theme_with_supports = $with_theme_supports;
+
+		return static::$theme_with_supports;
+	}
+
+	/**
+	 * Get theme support data with caching.
+	 *
+	 * Builds the theme support data array once per request and caches it.
+	 * This avoids repeated calls to get_classic_theme_supports_block_editor_settings(),
+	 * wp_theme_has_theme_json(), and current_theme_supports().
+	 *
+	 * @return array The theme support data.
+	 */
+	private static function get_theme_support_data(): array {
+		if ( null !== static::$cached_theme_support_data ) {
+			return static::$cached_theme_support_data;
+		}
+
 		$theme_support_data = JSON::get_from_editor_settings( get_classic_theme_supports_block_editor_settings() );
+
+		// Cache wp_theme_has_theme_json() result - it's expensive.
 		if ( ! wp_theme_has_theme_json() ) {
 			/*
 			 * Unlike block themes, classic themes without a theme.json disable
@@ -379,17 +425,23 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			 * behavior can be overridden by using the corresponding default
 			 * preset theme support.
 			 */
-			$theme_support_data['settings']['color']['defaultPalette']        =
-				! isset( $theme_support_data['settings']['color']['palette'] ) ||
+
+			// Cache settings reference to avoid repeated array access.
+			$color_settings      = &$theme_support_data['settings']['color'];
+			$typography_settings = &$theme_support_data['settings']['typography'];
+			$spacing_settings    = &$theme_support_data['settings']['spacing'];
+
+			$color_settings['defaultPalette']        =
+				! isset( $color_settings['palette'] ) ||
 				current_theme_supports( 'default-color-palette' );
-			$theme_support_data['settings']['color']['defaultGradients']      =
-				! isset( $theme_support_data['settings']['color']['gradients'] ) ||
+			$color_settings['defaultGradients']      =
+				! isset( $color_settings['gradients'] ) ||
 				current_theme_supports( 'default-gradient-presets' );
-			$theme_support_data['settings']['typography']['defaultFontSizes'] =
-				! isset( $theme_support_data['settings']['typography']['fontSizes'] ) ||
+			$typography_settings['defaultFontSizes'] =
+				! isset( $typography_settings['fontSizes'] ) ||
 				current_theme_supports( 'default-font-sizes' );
-			$theme_support_data['settings']['spacing']['defaultSpacingSizes'] =
-				! isset( $theme_support_data['settings']['spacing']['spacingSizes'] ) ||
+			$spacing_settings['defaultSpacingSizes'] =
+				! isset( $spacing_settings['spacingSizes'] ) ||
 				current_theme_supports( 'default-spacing-sizes' );
 
 			/*
@@ -402,15 +454,16 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 			// Allow themes to enable link color setting via theme_support.
 			if ( current_theme_supports( 'link-color' ) ) {
-				$theme_support_data['settings']['color']['link'] = true;
+				$color_settings['link'] = true;
 			}
 
 			// Allow themes to enable all border settings via theme_support.
 			if ( current_theme_supports( 'border' ) ) {
-				$theme_support_data['settings']['border']['color']  = true;
-				$theme_support_data['settings']['border']['radius'] = true;
-				$theme_support_data['settings']['border']['style']  = true;
-				$theme_support_data['settings']['border']['width']  = true;
+				$border_settings           = &$theme_support_data['settings']['border'];
+				$border_settings['color']  = true;
+				$border_settings['radius'] = true;
+				$border_settings['style']  = true;
+				$border_settings['width']  = true;
 			}
 
 			// Allow themes to enable appearance tools via theme_support.
@@ -418,9 +471,10 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 				$theme_support_data['settings']['appearanceTools'] = true;
 			}
 		}
-		$with_theme_supports = new JSON( $theme_support_data );
-		$with_theme_supports->merge( static::$theme );
-		return $with_theme_supports;
+
+		static::$cached_theme_support_data = $theme_support_data;
+
+		return static::$cached_theme_support_data;
 	}
 
 	/**
@@ -433,41 +487,57 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	public static function get_block_data() {
 		$registry = \WP_Block_Type_Registry::get_instance();
 		$blocks   = $registry->get_all_registered();
+		$hash     = md5(serialize($blocks));
 
-		if ( null !== static::$blocks && static::has_same_registered_blocks( 'blocks' ) ) {
+		$transient_key = 'blockera_resolver_get_block_data_' . $hash;
+		$transient     = get_transient( $transient_key );
+
+		$has_same_registered_blocks = static::has_same_registered_blocks( 'blocks' );
+
+		if ( $transient && ( null === static::$blocks || ! $has_same_registered_blocks ) ) {
+			return $transient;
+		}
+
+		// Check cache FIRST before any expensive operations.
+		if ( null !== static::$blocks && $has_same_registered_blocks ) {
 			return static::$blocks;
 		}
 
-		$config = array( 'version' => JSON::LATEST_SCHEMA );
+		// Pre-allocate styles blocks array for better memory efficiency.
+		$styles_blocks = array();
+
 		foreach ( $blocks as $block_name => $block_type ) {
-			if ( isset( $block_type->supports['__experimentalStyle'] ) ) {
-				$config['styles']['blocks'][ $block_name ] = static::remove_json_comments( $block_type->supports['__experimentalStyle'] );
+			$supports = $block_type->supports;
+
+			// Check __experimentalStyle with direct isset for speed.
+			if ( isset( $supports['__experimentalStyle'] ) ) {
+				$styles_blocks[ $block_name ] = static::remove_json_comments( $supports['__experimentalStyle'] );
 			}
 
+			// Check blockGap with cached supports reference.
 			if (
-				isset( $block_type->supports['spacing']['blockGap']['__experimentalDefault'] ) &&
-				! isset( $config['styles']['blocks'][ $block_name ]['spacing']['blockGap'] )
+				isset( $supports['spacing']['blockGap']['__experimentalDefault'] ) &&
+				! isset( $styles_blocks[ $block_name ]['spacing']['blockGap'] )
 			) {
 				/*
 				 * Ensure an empty placeholder value exists for the block, if it provides a default blockGap value.
 				 * The real blockGap value to be used will be determined when the styles are rendered for output.
 				 */
-				$config['styles']['blocks'][ $block_name ]['spacing']['blockGap'] = null;
+				$styles_blocks[ $block_name ]['spacing']['blockGap'] = null;
 			}
 		}
 
-		$theme_json = new JSONData( $config, 'blocks' );
-
-		/*
-		 * Backward compatibility for extenders returning a WP_Theme_JSON_Data
-		 * compatible class that is not a WP_Theme_JSON_Data object.
-		 */
-		if ( $theme_json instanceof JSONData ) {
-			static::$blocks = $theme_json->get_theme_json();
-		} else {
-			$config         = $theme_json->get_data();
-			static::$blocks = new JSON( $config, 'blocks' );
+		// Build config only if we have styles.
+		$config = array( 'version' => JSON::LATEST_SCHEMA );
+		if ( ! empty( $styles_blocks ) ) {
+			$config['styles']['blocks'] = $styles_blocks;
 		}
+
+		// Create JSON directly - skip JSONData wrapper overhead.
+		static::$blocks = new JSON( $config, 'blocks' );
+
+		// Cache the blocks data in a transient for performance.
+		set_transient( $transient_key, static::$blocks, HOUR_IN_SECONDS );
 
 		return static::$blocks;
 	}
@@ -807,9 +877,10 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			\WP_Theme_JSON_Resolver_Gutenberg::clean_cached_data();
 		}
 
-		// TODO: Clearing the cache should clear this too.
-		// Does this clear the Gutenberg equivalent?
-		static::$theme_json_file_cache = array();
+		// Clear local caches.
+		static::$theme_json_file_cache     = array();
+		static::$theme_with_supports       = null;
+		static::$cached_theme_support_data = null;
 	}
 
 	/**

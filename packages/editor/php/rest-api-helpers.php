@@ -154,9 +154,14 @@ if (! function_exists('blockera_editor_wp_theme_json_data_theme')) {
      * @return JSON|WP_Theme_JSON the filtered data.
      */
 	function blockera_editor_wp_theme_json_data_theme( WP_Theme_JSON_Data $data ) {
+		// Use static flag to prevent redundant cache clearing on repeated filter calls.
+		static $initialized = false;
 
-		Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
-		Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_theme_data = $data;
+		if ( ! $initialized ) {
+			Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
+			Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_theme_data = $data;
+			$initialized = true;
+		}
 
 		return Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_theme_data();
 	}
@@ -171,9 +176,14 @@ if (! function_exists('blockera_editor_wp_theme_json_data_blocks')) {
      * @return JSON|WP_Theme_JSON the filtered data.
      */
 	function blockera_editor_wp_theme_json_data_blocks( WP_Theme_JSON_Data $data ) {
+		// Use static flag to prevent redundant cache clearing on repeated filter calls.
+		static $initialized = false;
 
-		Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
-		Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_blocks_data = $data;
+		if ( ! $initialized ) {
+			Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
+			Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_blocks_data = $data;
+			$initialized = true;
+		}
 
 		return Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_block_data();
 	}
