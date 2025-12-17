@@ -91,12 +91,19 @@ if (! function_exists('blockera_is_admin_request')) {
 	
 	/**
 	 * Check if the request is an admin request.
+	 * 
+	 * @param bool $include_admin_page flag to include the admin page. Default is true.
 	 *
 	 * @return bool true on success, false otherwise.
 	 */
-	function blockera_is_admin_request(): bool {
+	function blockera_is_admin_request( bool $include_admin_page = true): bool {
 
 		$admin_page = '/wp-admin/admin.php?page=blockera-settings';
+
+		// If not include the admin page, return the is_admin() function result.
+		if (! $include_admin_page) {
+			return is_admin();
+		}
 
 		return is_admin() || str_starts_with($_SERVER['REQUEST_URI'] ?? '', $admin_page);
 	}
