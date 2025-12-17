@@ -22,14 +22,14 @@ fi
 
 echo "📊 Using BASE_DIR: $BASE_DIR"
 
-SUFFIXES=(small medium full)
-NODE_THS=(0.50 0.25 0.01)
-EDGE_THS=(0.20 0.10 0.01)
+SUFFIXES=(extra-small small medium full)
+NODE_THS=(5 2 0.25 0.01)
+EDGE_THS=(3 1 0.10 0.01)
 
 for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
   [[ "$FILE" == *.pdf || "$FILE" == *.svg || "$FILE" == *.png || "$FILE" == *.dot ]] && continue
 
-  for i in {1..3}; do
+  for i in {1..4}; do
     SUFFIX="${SUFFIXES[$i]}"
     NODE_T="${NODE_THS[$i]}"
     EDGE_T="${EDGE_THS[$i]}"
