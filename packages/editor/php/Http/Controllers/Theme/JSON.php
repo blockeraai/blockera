@@ -236,10 +236,26 @@ class JSON extends \WP_Theme_JSON {
      */
     public function get_styles_for_block( $block_metadata) {
         $node        = _wp_array_get($this->theme_json, $block_metadata['path'], array());
-        $selector    = $block_metadata['selector'];
 		$block_rules = '';
 
-		// 1. Generate css rules for the block style variations.
+		// 1. Generate css rules for the block root customization.
+		if (isset($block_metadata['name'])) {
+			$style_engine = Blockera::getInstance()->make(
+				StyleEngine::class,
+				[
+					'block' => [
+						'blockName' => $block_metadata['name'],
+						'attrs' => array_diff_key($node, array_flip([ 'variations' ])),
+					],
+					'fallbackSelector' => $block_metadata['selector'],
+					'isGlobalStyle' => true,
+				]
+			);
+			$style_engine->setSupports(static::$supports);
+			$block_rules .= $style_engine->getStylesheet();
+		}
+
+		// 2. Generate css rules for the block style variations.
         if (! empty($node['variations'])) {
             foreach ($node['variations'] as $key => $style_variation) {
 				// Create a selector based on the block main selector and the style variation key.
@@ -262,23 +278,6 @@ class JSON extends \WP_Theme_JSON {
 				$block_rules .= $style_engine->getStylesheet();
             }
         }
-
-		// 2. Generate css rules for the block root customization.
-		if (isset($block_metadata['name'])) {
-			$style_engine = Blockera::getInstance()->make(
-				StyleEngine::class,
-				[
-					'block' => [
-						'blockName' => $block_metadata['name'],
-						'attrs' => array_diff_key($node, array_flip([ 'variations' ])),
-					],
-					'fallbackSelector' => $selector,
-					'isGlobalStyle' => true,
-				]
-			);
-			$style_engine->setSupports(static::$supports);
-			$block_rules .= $style_engine->getStylesheet();
-		}
 
         return $block_rules;
     }
