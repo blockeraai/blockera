@@ -137,51 +137,63 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	private static function register_block_style( array $blocks, array $cache = [] ): void {
 
+		// Cache registry instance outside loops to avoid repeated get_instance() calls.
+		$registry  = \WP_Block_Styles_Registry::get_instance();
+		$has_cache = ! empty( $cache );
+
 		foreach ( $blocks as $block_name => $block_data ) {
-			if ( isset( $block_data['variations'] ) ) {
-				foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
-					if (! \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name) && ! empty($cache)) {
-						if (isset($cache[ $block_name ]['variations'][ $variation_name ]) ) {
-							$data = $cache[ $block_name ]['variations'][ $variation_name ];
-							$name = $data['refId'] ?? $data['name'];
+			if ( ! isset( $block_data['variations'] ) ) {
+				continue;
+			}
 
-							if ($name === $variation_name) {
-								$variation = [
-									'name' => $name,
-									'label' => $data['label'],
-								];
+			// Cache block-level data lookup.
+			$cache_block = $has_cache && isset( $cache[ $block_name ]['variations'] ) 
+				? $cache[ $block_name ]['variations'] 
+				: null;
 
-								if (isset($cache[ $block_name ]['variations'][ $variation_name ]['isDefault'])) {
-									$variation['isDefault'] = true;
-								}
+			foreach ( $block_data['variations'] as $variation_name => $variation_data ) {
+				$is_registered = $registry->get_registered( $block_name, $variation_name );
 
-								register_block_style($block_name, $variation);
+				if ( ! $is_registered && null !== $cache_block ) {
+					if ( isset( $cache_block[ $variation_name ] ) ) {
+						$data = $cache_block[ $variation_name ];
+						$name = $data['refId'] ?? $data['name'];
 
-								continue;
-							}
-						}
-					} else {
-						$variation = [
-							'name' => $variation_name,
-							'label' => $variation_data['label'] ?? Utils::pascalCaseWithSpace($variation_name),
-						];
+						if ( $name === $variation_name ) {
+							$variation = [
+								'name'  => $name,
+								'label' => $data['label'],
+							];
 
-						if (isset($variation_data['isDefault'])) {
-							$variation['is_default'] = true;
-						}
-
-						if (\WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_name)) {
-							if (! isset($variation_data['name'])) {
-								continue;
+							if ( isset( $data['isDefault'] ) ) {
+								$variation['isDefault'] = true;
 							}
 
-							if ($variation_name === $variation_data['name'] && \WP_Block_Styles_Registry::get_instance()->get_registered($block_name, $variation_data['name'])) {
-								continue;
-							}
+							register_block_style( $block_name, $variation );
+							continue;
 						}
-
-						register_block_style($block_name, $variation);
 					}
+				} else {
+					$variation = [
+						'name'  => $variation_name,
+						'label' => $variation_data['label'] ?? Utils::pascalCaseWithSpace( $variation_name ),
+					];
+
+					if ( isset( $variation_data['isDefault'] ) ) {
+						$variation['is_default'] = true;
+					}
+
+					if ( $is_registered ) {
+						if ( ! isset( $variation_data['name'] ) ) {
+							continue;
+						}
+
+						if ( $variation_name === $variation_data['name'] && $registry->get_registered( $block_name, $variation_data['name'] ) ) {
+							continue;
+						}
+					}
+
+					register_block_style( $block_name, $variation );
 				}
 			}
 		}
@@ -474,13 +486,74 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return array
 	 */
 	public static function get_style_variations( $scope = 'theme' ) {
+		// Request-level memoization - fastest cache pattern.
 		static $cache = array();
 		if ( isset( $cache[ $scope ] ) ) {
 			return $cache[ $scope ];
 		}
 
+		// Cache directory iteration results to avoid repeated filesystem operations.
+		static $variation_files_cache = null;
+		if ( null === $variation_files_cache ) {
+			$variation_files_cache = static::get_variation_files();
+		}
+
+		// Early return for empty variation files - skip unnecessary work.
+		if ( empty( $variation_files_cache ) ) {
+			$cache[ $scope ] = array();
+			return $cache[ $scope ];
+		}
+
+		$variations = array();
+		// Cache theme text domain once outside loop.
+		$text_domain = wp_get_theme()->get( 'TextDomain' );
+		// Inline scope check for 'block' to avoid repeated method calls.
+		$is_block_scope = 'block' === $scope;
+
+		foreach ( $variation_files_cache as $path => $file ) {
+			$decoded_file = self::read_json_file( $path );
+
+			// Early continue with inlined scope check - avoid method call overhead.
+			if ( ! is_array( $decoded_file ) ) {
+				continue;
+			}
+
+			// Inline scope validation to reduce method call overhead in hot path.
+			$has_block_types = isset( $decoded_file['blockTypes'] );
+			if ( $is_block_scope ? ! $has_block_types : $has_block_types ) {
+				continue;
+			}
+
+			$translated = static::translate( $decoded_file, $text_domain );
+			// Avoid creating JSON object just to call get_raw_data() - translate already returns array.
+			$variation = ( new JSON( $translated ) )->get_raw_data();
+
+			if ( empty( $variation['title'] ) ) {
+				$variation['title'] = basename( $path, '.json' );
+			}
+
+			$variations[] = $variation;
+		}
+
+		/**
+		 * Filters the style variations.
+		 *
+		 * @param array $variations The style variations.
+		 */
+		$cache[ $scope ] = apply_filters( 'blockera/json/resolver/get_style_variations', $variations );
+
+		return $cache[ $scope ];
+	}
+
+	/**
+	 * Get all variation files from theme directories.
+	 *
+	 * Caches filesystem iteration results to avoid repeated directory traversal.
+	 *
+	 * @return array Sorted array of variation file paths.
+	 */
+	private static function get_variation_files(): array {
 		$variation_files = array();
-		$variations      = array();
 		$base_directory  = get_stylesheet_directory() . '/styles';
 
 		if ( is_dir( $base_directory ) ) {
@@ -491,8 +564,10 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 		if ( is_dir( $template_directory ) && $template_directory !== $base_directory ) {
 			$variation_files_parent = static::recursively_iterate_json( $template_directory );
+
 			// If the child and parent variation file basename are the same, only include the child theme's.
-			if ( ! empty( $variation_files ) ) {
+			if ( ! empty( $variation_files ) && ! empty( $variation_files_parent ) ) {
+				// Build lookup hash once for O(1) checks.
 				$child_basenames = array();
 				foreach ( $variation_files as $child_path => $child ) {
 					$child_basenames[ basename( $child_path ) ] = true;
@@ -503,36 +578,15 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 					}
 				}
 			}
+
 			$variation_files += $variation_files_parent;
 		}
 
-		if ( empty( $variation_files ) ) {
-			$result          = apply_filters( 'blockera/json/resolver/get_style_variations', $variations );
-			$cache[ $scope ] = $result;
-			return $result;
+		if ( ! empty( $variation_files ) ) {
+			ksort( $variation_files );
 		}
 
-		ksort( $variation_files );
-		$text_domain = wp_get_theme()->get( 'TextDomain' );
-
-		foreach ( $variation_files as $path => $file ) {
-			$decoded_file = self::read_json_file( $path );
-			if ( ! is_array( $decoded_file ) || ! static::style_variation_has_scope( $decoded_file, $scope ) ) {
-				continue;
-			}
-			$translated = static::translate( $decoded_file, $text_domain );
-			$variation  = ( new JSON( $translated ) )->get_raw_data();
-			if ( ! isset( $variation['title'] ) || '' === $variation['title'] ) {
-				$variation['title'] = basename( $path, '.json' );
-			}
-			$variations[] = $variation;
-		}
-
-		$result = apply_filters( 'blockera/json/resolver/get_style_variations', $variations );
-		
-		$cache[ $scope ] = $result;
-
-		return $result;
+		return $variation_files;
 	}
 
 	/**
@@ -607,28 +661,36 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			return $data;
 		}
 
+		// Cache top-level variations lookup once.
+		$top_level_variations = $data['styles']['variations'] ?? array();
+		$data_blocks          = $data['styles']['blocks'] ?? array();
+
 		foreach ( $variations as $variation ) {
 			if ( empty( $variation['styles'] ) || empty( $variation['blockTypes'] ) ) {
 				continue;
 			}
 
 			$variation_name = $variation['slug'] ?? _wp_to_kebab_case( $variation['title'] );
+			$base_styles    = $variation['styles'];
+
+			// Check top-level override once per variation.
+			$top_level_data = $top_level_variations[ $variation_name ] ?? null;
 
 			foreach ( $variation['blockTypes'] as $block_type ) {
+				$styles = $base_styles;
+
 				// First, override partial styles with any top-level styles.
-				$top_level_data = $data['styles']['variations'][ $variation_name ] ?? array();
-				if ( ! empty( $top_level_data ) ) {
-					$variation['styles'] = array_replace_recursive( $variation['styles'], $top_level_data );
+				if ( null !== $top_level_data ) {
+					$styles = array_replace_recursive( $styles, $top_level_data );
 				}
 
 				// Then, override styles so far with any block-level styles.
-				$block_level_data = $data['styles']['blocks'][ $block_type ]['variations'][ $variation_name ] ?? array();
-				if ( ! empty( $block_level_data ) ) {
-					$variation['styles'] = array_replace_recursive( $variation['styles'], $block_level_data );
+				if ( isset( $data_blocks[ $block_type ]['variations'][ $variation_name ] ) ) {
+					$styles = array_replace_recursive( $styles, $data_blocks[ $block_type ]['variations'][ $variation_name ] );
 				}
 
 				$path = array( 'styles', 'blocks', $block_type, 'variations', $variation_name );
-				_wp_array_set( $data, $path, $variation['styles'] );
+				_wp_array_set( $data, $path, $styles );
 			}
 		}
 
@@ -647,26 +709,37 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		$registry = \WP_Block_Styles_Registry::get_instance();
 		$styles   = $registry->get_all_registered();
 
+		if ( empty( $styles ) ) {
+			return $data;
+		}
+
+		// Cache top-level variations lookup once.
+		$top_level_variations = $data['styles']['variations'] ?? array();
+		$data_blocks          = $data['styles']['blocks'] ?? array();
+
 		foreach ( $styles as $block_type => $variations ) {
+			// Cache block-level data lookup.
+			$block_variations = $data_blocks[ $block_type ]['variations'] ?? array();
+
 			foreach ( $variations as $variation_name => $variation ) {
 				if ( empty( $variation['style_data'] ) ) {
 					continue;
 				}
 
+				$style_data = $variation['style_data'];
+
 				// First, override registry styles with any top-level styles.
-				$top_level_data = $data['styles']['variations'][ $variation_name ] ?? array();
-				if ( ! empty( $top_level_data ) ) {
-					$variation['style_data'] = array_replace_recursive( $variation['style_data'], $top_level_data );
+				if ( isset( $top_level_variations[ $variation_name ] ) ) {
+					$style_data = array_replace_recursive( $style_data, $top_level_variations[ $variation_name ] );
 				}
 
 				// Then, override styles so far with any block-level styles.
-				$block_level_data = $data['styles']['blocks'][ $block_type ]['variations'][ $variation_name ] ?? array();
-				if ( ! empty( $block_level_data ) ) {
-					$variation['style_data'] = array_replace_recursive( $variation['style_data'], $block_level_data );
+				if ( isset( $block_variations[ $variation_name ] ) ) {
+					$style_data = array_replace_recursive( $style_data, $block_variations[ $variation_name ] );
 				}
 
 				$path = array( 'styles', 'blocks', $block_type, 'variations', $variation_name );
-				_wp_array_set( $data, $path, $variation['style_data'] );
+				_wp_array_set( $data, $path, $style_data );
 			}
 		}
 
