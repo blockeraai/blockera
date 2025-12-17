@@ -4,144 +4,91 @@ namespace Blockera\WordPress\Tests;
 
 class FunctionsTest extends \WP_UnitTestCase {
 
-	// Mock function for blockera_convert_to_unique_hash
-	protected function blockera_convert_to_unique_hash( string $input ): string {
+	/**
+	 * Test if the function returns a string.
+	 */
+	public function testGetSmallRandomHashReturnsString() {
 
-		// For testing purposes, assume this function returns the same value as input.
-		return $input;
+		$result = blockera_get_small_random_hash();
+
+		$this->assertIsString( $result, 'The function should return a string.' );
 	}
 
 	/**
-	 * @dataProvider hashDataProvider
+	 * Test if the result matches base-36 format (a-z0-9).
 	 */
-	public function testGetSmallRandomHash( $input, $expectedRegex ) {
+	public function testGetSmallRandomHashFormat() {
 
-		// Mock the blockera_convert_to_unique_hash function
-		$big_hash = $this->blockera_convert_to_unique_hash( $input );
-
-		// Call the function
-		$result = blockera_get_small_random_hash( $big_hash );
-
-		// Check if result is a string
-		$this->assertIsString( $result );
+		$result = blockera_get_small_random_hash();
 
 		// Check if the result matches the expected regex for a base-36 string
-		$this->assertMatchesRegularExpression( $expectedRegex, $result );
-	}
-
-	public function hashDataProvider() {
-
-		return [
-			// Case: simple alphanumeric string
-			[ "hello", '/^[a-z0-9]+$/' ],
-
-			// Case: numbers
-			[ "12345", '/^[a-z0-9]+$/' ],
-
-			// Case: special characters
-			[ "hello!@#", '/^[a-z0-9]+$/' ],
-
-			// Case: empty string
-			[ "", '/^[a-z0-9]+$/' ],
-
-			// Case: long string
-			[ str_repeat( "a", 1000 ), '/^[a-z0-9]+$/' ],
-		];
-	}
-
-	public function testHashIsConsistent() {
-
-		$input    = "consistent_test";
-		$big_hash = $this->blockera_convert_to_unique_hash( $input );
-
-		// Get the hash multiple times and assert that the result is the same
-		$hash1 = blockera_get_small_random_hash( $big_hash );
-		$hash2 = blockera_get_small_random_hash( $big_hash );
-
-		$this->assertNotSame( $hash1, $hash2 );
-	}
-
-	public function testDifferentInputsProduceDifferentHashes() {
-
-		$input1 = "input_one";
-		$input2 = "input_two";
-
-		$big_hash1 = $this->blockera_convert_to_unique_hash( $input1 );
-		$big_hash2 = $this->blockera_convert_to_unique_hash( $input2 );
-
-		$hash1 = blockera_get_small_random_hash( $big_hash1 );
-		$hash2 = blockera_get_small_random_hash( $big_hash2 );
-
-		// Ensure that different inputs produce different hashes
-		$this->assertNotSame( $hash1, $hash2 );
+		$this->assertMatchesRegularExpression( '/^[a-z0-9]+$/', $result, 'The result should be a base-36 string (lowercase letters and numbers only).' );
 	}
 
 	/**
-	 * Test if the function returns a string
+	 * Test if the result length is approximately 9-10 characters.
 	 */
-	public function testReturnsString()
-	{
-		$hash = 'exampleHash';
-		$result = blockera_convert_to_unique_hash($hash);
+	public function testGetSmallRandomHashLength() {
 
-		// Assert that the result is a string
-		$this->assertIsString($result, 'The function should return a string.');
+		$result = blockera_get_small_random_hash();
+		$length = strlen( $result );
+
+		// The function generates approximately 9-10 character base-36 strings
+		$this->assertGreaterThanOrEqual( 8, $length, 'The result should be at least 8 characters long.' );
+		$this->assertLessThanOrEqual( 11, $length, 'The result should be at most 11 characters long.' );
 	}
 
 	/**
-	 * Test if the returned hash is 64 characters long (as SHA-256 hashes are)
+	 * Test if multiple calls return different (unique) hashes.
 	 */
-	public function testHashLength()
-	{
-		$hash = 'exampleHash';
-		$result = blockera_convert_to_unique_hash($hash);
+	public function testGetSmallRandomHashUniqueness() {
 
-		// Assert that the result has 64 characters (SHA-256 produces 64-character hexadecimal strings)
-		$this->assertEquals(64, strlen($result), 'The hash should be 64 characters long.');
+		// Get the hash multiple times - each call should be unique
+		$hash1 = blockera_get_small_random_hash();
+		$hash2 = blockera_get_small_random_hash();
+		$hash3 = blockera_get_small_random_hash();
+
+		$this->assertNotSame( $hash1, $hash2, 'Each call should return a different hash.' );
+		$this->assertNotSame( $hash2, $hash3, 'Each call should return a different hash.' );
+		$this->assertNotSame( $hash1, $hash3, 'Each call should return a different hash.' );
 	}
 
 	/**
-	 * Test if multiple calls with the same input return different hashes
+	 * Test randomness by comparing a large number of hashes.
 	 */
-	public function testUniquenessWithSameInput()
-	{
-		$hash = 'exampleHash';
-		$result1 = blockera_convert_to_unique_hash($hash);
-		$result2 = blockera_convert_to_unique_hash($hash);
+	public function testGetSmallRandomHashMultipleRandomHashes() {
 
-		// Assert that the two results are not the same
-		$this->assertNotEquals($result1, $result2, 'The hashes should be unique even with the same input.');
-	}
-
-	/**
-	 * Test if different inputs return different hashes
-	 */
-	public function testDifferentHashesForDifferentInputs()
-	{
-		$hash1 = 'exampleHash1';
-		$hash2 = 'exampleHash2';
-		$result1 = blockera_convert_to_unique_hash($hash1);
-		$result2 = blockera_convert_to_unique_hash($hash2);
-
-		// Assert that the two results are not the same
-		$this->assertNotEquals($result1, $result2, 'The hashes should be different for different inputs.');
-	}
-
-	/**
-	 * Test randomness by comparing a large number of hashes
-	 */
-	public function testMultipleRandomHashes()
-	{
-		$hash = 'exampleHash';
 		$hashes = [];
 
-		for ($i = 0; $i < 1000; $i++) {
-			$hashes[] = blockera_convert_to_unique_hash($hash);
+		// Generate 1000 hashes
+		for ( $i = 0; $i < 1000; $i++ ) {
+			$hashes[] = blockera_get_small_random_hash();
 		}
 
 		// Check if all hashes are unique by comparing the count of unique values
-		$uniqueHashes = array_unique($hashes);
-		$this->assertCount(1000, $uniqueHashes, 'All generated hashes should be unique.');
+		$uniqueHashes = array_unique( $hashes );
+		$this->assertCount( 1000, $uniqueHashes, 'All generated hashes should be unique.' );
+	}
+
+	/**
+	 * Test that the function can be called multiple times without errors.
+	 */
+	public function testGetSmallRandomHashMultipleCalls() {
+
+		$results = [];
+
+		// Call the function multiple times
+		for ( $i = 0; $i < 100; $i++ ) {
+			$result = blockera_get_small_random_hash();
+			$results[] = $result;
+
+			// Each result should be a valid base-36 string
+			$this->assertMatchesRegularExpression( '/^[a-z0-9]+$/', $result );
+		}
+
+		// All results should be unique (or at least mostly unique)
+		$uniqueResults = array_unique( $results );
+		$this->assertGreaterThan( 95, count( $uniqueResults ), 'At least 95% of results should be unique.' );
 	}
 
 	/**

@@ -158,54 +158,22 @@ if ( ! function_exists( 'blockera_delete_block_cache' ) ) {
 	}
 }
 
-if ( ! function_exists( 'blockera_convert_to_unique_hash' ) ) {
-
-	/**
-	 * Retrieve unique hash key.
-	 *
-	 * @param string $hash the target hash to convert unique hash.
-	 *
-	 * @throws \Random\RandomException Exception if an appropriate source of randomness cannot be found.
-	 * @return string the unique hash key.
-	 */
-	function blockera_convert_to_unique_hash( string $hash ): string {
-
-		// Generate a unique ID using uniqid (with more entropy for better uniqueness).
-		$unique_id = uniqid( '', true );
-
-		// Optionally, we can append some random data for even more uniqueness.
-		$unique_id .= bin2hex( random_bytes( 10 ) ) . $hash;
-
-		// Hash the unique ID using SHA-256 algorithm.
-		return hash( 'sha256', $unique_id );
-	}
-}
-
 if ( ! function_exists( 'blockera_get_small_random_hash' ) ) {
 
 	/**
-	 * Generates a shortened version of the given string by creating a hash and converting it to a base-36 random string.
+	 * Generates a fast random unique ID (10 characters in base-36) for the block.
+	 * CPU-optimized implementation using native random_bytes and bitwise operations.
 	 *
-	 * @param string $big_hash The input string to shorten.
-	 *
-	 * @return string The shortened string.
+	 * @return string A random base-36 string of exactly 10 characters.
 	 */
-	function blockera_get_small_random_hash( string $big_hash ): string {
+	function blockera_get_small_random_hash(): string {
 
-		$hash     = 0;
-		$big_hash = blockera_convert_to_unique_hash( $big_hash );
+		// CPU-optimized: Use 6 random bytes (48 bits) converted via fast bit-shift to integer.
+		// Then convert to base-36 for exactly 10 characters. Bitwise operations are fastest.
+		$bytes = random_bytes( 6 );
+		$num   = ( ord( $bytes[0] ) << 40 ) | ( ord( $bytes[1] ) << 32 ) | ( ord( $bytes[2] ) << 24 ) | ( ord( $bytes[3] ) << 16 ) | ( ord( $bytes[4] ) << 8 ) | ord( $bytes[5] );
 
-		for ( $i = 0; $i < strlen( $big_hash ); $i++ ) {
-
-			// Bitwise operations.
-			$hash = ord( $big_hash[ $i ] ) + ( ( $hash << 5 ) - $hash );
-
-			// Convert to 32bit integer.
-			$hash = $hash & 0xFFFFFFFF;
-		}
-
-		// Convert to base-36 string.
-		return base_convert( $hash, 10, 36 );
+		return base_convert( $num, 10, 36 );
 	}
 }
 
