@@ -26,7 +26,7 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		$tree->merge($merged_data);
 		$tree = JSONResolver::resolve_theme_file_uris($tree);
 
-		$block_nodes = $tree->get_blockera_styles_block_nodes();
+		$block_nodes = $tree->get_styles_block_nodes();
 
 		$can_use_cached = ! wp_is_development_mode('theme');
 		$update_cache   = false;
