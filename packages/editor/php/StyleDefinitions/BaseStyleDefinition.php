@@ -573,14 +573,14 @@ abstract class BaseStyleDefinition {
         }
 
         if ($this->isImportant()) {
-
-            $declaration = array_map(
-                function ( string $declaration_item): string {
-
-                    return $declaration_item . $this->getImportant();
-                },
-                array_filter($declaration, 'is_string')
-            );
+            $important_suffix = $this->getImportant();
+            foreach ($declaration as $key => $value) {
+                if (is_string($value)) {
+                    $declaration[ $key ] = $value . $important_suffix;
+                } else {
+                    unset($declaration[ $key ]);
+                }
+            }
         }
 
         if (! empty($selectorSuffix) && ! empty($customSupportId)) {
@@ -593,14 +593,16 @@ abstract class BaseStyleDefinition {
             $this->setSelector($this->getId());
         }
 
-        if (isset($this->css[ $this->getSelector() ])) {
+        $selector = $this->selector;
 
-            $this->css[ $this->getSelector() ] = array_merge($this->css[ $this->getSelector() ], $declaration);
+        if (isset($this->css[ $selector ])) {
+
+            $this->css[ $selector ] = array_merge($this->css[ $selector ], $declaration);
 
             return;
         }
 
-        $this->css[ $this->getSelector() ] = $declaration;
+        $this->css[ $selector ] = $declaration;
     }
 
     /**
