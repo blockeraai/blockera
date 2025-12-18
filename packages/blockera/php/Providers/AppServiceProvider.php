@@ -350,17 +350,18 @@ class AppServiceProvider extends ServiceProvider {
 							return $posts;
 						}
 
+						// Instantiate services once for all posts.
 						$cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
 						$save_post = $this->app->make(SavePost::class);
 
 						return array_map(
 							function ( \WP_Post $post) use ( $cache, $save_post): \WP_Post {
-								// Skip if post_content is empty.
+								// Early exit: Skip if post_content is empty.
 								if (empty($post->post_content)) {
 									return $post;
 								}
 
-								// Check if post_content contains block comments.
+								// Early exit: Skip if post_content doesn't contain block comments.
 								if (strpos($post->post_content, '<!-- wp:') === false) {
 									return $post;
 								}
@@ -368,22 +369,25 @@ class AppServiceProvider extends ServiceProvider {
 								// Get cached post_content.
 								$cached_data = $cache->getCache( (string) $post->ID, 'post_content');
 
-								// TODO: remove this after testing!!!.
-								$cached_data = null;
+								// If cache exists, validate it before processing.
+								if (! empty($cached_data) && isset($cached_data['hash']) && isset($cached_data['content'])) {
+									// Calculate hash only when cache exists to validate it.
+									$current_hash = md5($post->post_content);
 
-								// Calculate current post_content hash.
-								$current_hash = md5($post->post_content);
-
-								// If cache exists and hash matches, use cached content.
-								if (! empty($cached_data) && isset($cached_data['hash']) && $cached_data['hash'] === $current_hash && isset($cached_data['content'])) {
-									$post->post_content = $cached_data['content'];
-									return $post;
+									// If hash matches, use cached content (fast path).
+									if ($cached_data['hash'] === $current_hash) {
+										$post->post_content = $cached_data['content'];
+										return $post;
+									}
 								}
 
 								// Cache missing or invalid - process post_content.
 								$result = $save_post->processPostContentForStyles($post->post_content);
 
 								if (! empty($result) && isset($result['content'])) {
+									// Calculate hash only when we need to cache.
+									$current_hash = md5($post->post_content);
+
 									// Store processed content in cache.
 									$cache->setCache(
                                         $post->ID,
