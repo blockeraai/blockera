@@ -81,19 +81,26 @@ class HTMLProcessor {
 	 * @return string The extracted root selector.
 	 */
 	protected function extractRootSelector(): string {
-		$extract_root = explode('>', $this->root_selector);
-			
-		if (1 < count($extract_root)) {
-			$root_selector = trim($extract_root[0]);
-		} else {
-			$extract_root = explode(' ', $this->root_selector);
-			
-			if (1 < count($extract_root)) {
-				$root_selector = trim($extract_root[0]);
-			}
+		if ('' === $this->root_selector) {
+			return '';
 		}
-
-		return $root_selector;
+		
+		// Check for '>' first (child combinator has higher priority).
+		$pos = strpos($this->root_selector, '>');
+		if (false !== $pos) {
+			// Extract first part before '>'.
+			return trim(substr($this->root_selector, 0, $pos));
+		}
+		
+		// Check for space (descendant combinator).
+		$pos = strpos($this->root_selector, ' ');
+		if (false !== $pos) {
+			// Extract first part before ' '.
+			return trim(substr($this->root_selector, 0, $pos));
+		}
+		
+		// No split needed - return trimmed original.
+		return trim($this->root_selector);
 	}
 	
 	/**
@@ -112,8 +119,16 @@ class HTMLProcessor {
 			return null;
 		}
 
+		/**
+		 * Static compiled regex pattern - compiled once, reused across all calls.
+		 * This avoids regex compilation overhead on every function call.
+		 * Removed capturing group since we only need full match ($opening_match[0]).
+		 * Pattern: < + tag name (letter + letters/numbers) + word boundary + attributes + >
+		 */ 
+		static $pattern = '/^<[a-zA-Z][a-zA-Z0-9]*\b[^>]*>/i';
+
 		// Match the opening tag with its name and attributes.
-		if ( ! preg_match( '/^<([a-zA-Z][a-zA-Z0-9]*)\b[^>]*>/i', $html, $opening_match ) ) {
+		if ( ! preg_match( $pattern, $html, $opening_match ) ) {
 			return null;
 		}
 
@@ -144,9 +159,6 @@ class HTMLProcessor {
 				'css'  => '',
 			];
 		}
-
-		// Get the wrapper tag markup.
-		$wrapper = $this->detectWrapperTag($html);
 
 		$this->css_rules = [];
 
@@ -179,6 +191,7 @@ class HTMLProcessor {
 			];
 		}
 
+		$wrapper                = $this->detectWrapperTag($html);
 		$offset                 = 0;
 		$has_global_css_classes = ! empty( $global_css_props_classes );
 		$cleaned_html           = $html;
@@ -206,9 +219,9 @@ class HTMLProcessor {
 
 			if ( ! empty( $style ) ) {
 
-				// Add properties classes to the element if it has blockera class and global css classes.
+				// Add properties classes to the element if it is main wrapper tag.
 				// It prevents adding properties classes to other elements.
-				if ( $has_global_css_classes && $has_blockera_class ) {
+				if ( $has_global_css_classes && $is_wrapper ) {
 					foreach ( $global_css_props_classes as $prop => $prop_class ) {
 						if ( str_contains( $style, $prop ) ) {
 							$classes_to_add[] = $prop_class;
@@ -651,7 +664,8 @@ class HTMLProcessor {
 
 		// if the generating selector with tag name and root selector contains child.
 		// in this case we should extract root and use it.
-		if ($with_tagname && preg_match('/>|\s/', $this->root_selector)) {
+		// Optimize: Use strpos instead of preg_match for simple character checks (faster, less memory).
+		if ($with_tagname && '' !== $root_selector && ( false !== strpos($root_selector, '>') || false !== strpos($root_selector, ' ') )) {
 			$root_selector = $this->extractRootSelector();
 		}
 
@@ -663,9 +677,11 @@ class HTMLProcessor {
 				$concatenated_classes = '.' . implode( '.', $filtered_classes );
 
 				if ( $with_tagname ) {
-					return empty( $root_selector )
-						? $tag_name . $concatenated_classes
-						: $root_selector . ' :where(' . $tag_name . $concatenated_classes . ')';
+					// Optimize: Direct string comparison is faster than empty() for strings.
+					if ( '' === $root_selector ) {
+						return $tag_name . $concatenated_classes;
+					}
+					return $root_selector . ' :where(' . $tag_name . $concatenated_classes . ')';
 				}
 
 				return $concatenated_classes;
@@ -676,14 +692,14 @@ class HTMLProcessor {
 		if ( preg_match( '/id\s*=\s*["\']([^"\']+)["\']/', $attrs, $id_match ) ) {
 			$target_selector = $tag_name . '#' . $id_match[1];
 
-			if ($with_tagname && ! empty($root_selector)) {
-				return  $root_selector . ' :where(' . $target_selector . ')';
+			if ($with_tagname && '' !== $root_selector) {
+				return $root_selector . ' :where(' . $target_selector . ')';
 			}
 
 			return $target_selector;
 		}
 
-		if ($with_tagname && ! empty($root_selector)) {
+		if ($with_tagname && '' !== $root_selector) {
 			return $root_selector . ' :where(' . $tag_name . ')';
 		}
 
@@ -785,12 +801,10 @@ class HTMLProcessor {
 
 		$style = '';
 		
-		foreach ( $this->css_rules as $id => $css_rules ) {
-			$style .= implode(PHP_EOL, $css_rules);
+		foreach ( $this->css_rules as $css_rules ) {
+			$style .= implode( PHP_EOL, $css_rules );
 		}
 
 		return $style;
 	}
 }
-
-
