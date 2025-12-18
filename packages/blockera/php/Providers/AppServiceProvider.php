@@ -328,93 +328,86 @@ class AppServiceProvider extends ServiceProvider {
 			}
         );
 
-		// Filtering get_posts query to use cached post content.
-		add_action(
-            'pre_get_posts',
-            function( \WP_Query $query) use ( $supports): void {
-				if (! $query->is_main_query()) {
-					return;
+		// Hook into the_posts filter to process posts.
+		add_filter(
+			'the_posts',
+			function( array $posts): array {
+				if (empty($posts)) {
+					return $posts;
 				}
 
-				if ($this->is_processed_posts && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT )) {
-					return;
+				// Instantiate services once for all posts.
+				$cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+				$save_post = $this->app->make(SavePost::class);
+				$cache_key = $cache->getCacheKey('post_content');
+
+				// Filter posts that need processing (have content and block comments).
+				$posts_to_process = [];
+				$post_ids         = [];
+				foreach ($posts as $index => $post) {
+					// Skip if post_content is empty or doesn't contain block comments.
+					if (! empty($post->post_content) && strpos($post->post_content, '<!-- wp:') !== false) {
+						$posts_to_process[ $index ] = $post;
+						$post_ids[]                 = $post->ID;
+					}
 				}
 
-				$this->is_processed_posts = true;
+				// Early exit if no posts need processing.
+				if (empty($posts_to_process)) {
+					return $posts;
+				}
 
-				// Hook into the_posts filter to process posts.
-				add_filter(
-					'the_posts',
-					function( array $posts) use ( $supports): array {
-						if (empty($posts)) {
-							return $posts;
+				// Batch prime meta cache for all post IDs to avoid N+1 queries.
+				// This loads all post meta in a single query instead of one per post.
+				\update_meta_cache('post', $post_ids);
+
+				// Process each post that needs it.
+				foreach ($posts_to_process as $index => $post) {
+					// Get cached post_content (now from primed cache).
+					$cached_data = \get_post_meta($post->ID, $cache_key, true);
+
+					// // TODO: remove this after testing!!!.
+					$cached_data = null;
+
+					// If cache exists and is valid, use it.
+					if (! empty($cached_data) && isset($cached_data['hash'], $cached_data['content'])) {
+						// Calculate hash only when cache exists to validate it.
+						$current_hash = md5($post->post_content);
+
+						// If hash matches, use cached content (fast path).
+						if ($cached_data['hash'] === $current_hash) {
+							$posts[ $index ]->post_content = $cached_data['content'];
+							continue;
 						}
+					}
 
-						// Instantiate services once for all posts.
-						$cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
-						$save_post = $this->app->make(SavePost::class);
+					// Cache missing or invalid - process post_content.
+					$result = $save_post->processPostContentForStyles($post->post_content);
 
-						return array_map(
-							function ( \WP_Post $post) use ( $cache, $save_post): \WP_Post {
-								// Early exit: Skip if post_content is empty.
-								if (empty($post->post_content)) {
-									return $post;
-								}
+					if (! empty($result) && isset($result['content'])) {
+						// Calculate hash only when we need to cache.
+						$current_hash = md5($post->post_content);
 
-								// Early exit: Skip if post_content doesn't contain block comments.
-								if (strpos($post->post_content, '<!-- wp:') === false) {
-									return $post;
-								}
-
-								// Get cached post_content.
-								$cached_data = $cache->getCache( (string) $post->ID, 'post_content');
-
-								// If cache exists, validate it before processing.
-								if (! empty($cached_data) && isset($cached_data['hash']) && isset($cached_data['content'])) {
-									// Calculate hash only when cache exists to validate it.
-									$current_hash = md5($post->post_content);
-
-									// If hash matches, use cached content (fast path).
-									if ($cached_data['hash'] === $current_hash) {
-										$post->post_content = $cached_data['content'];
-										return $post;
-									}
-								}
-
-								// Cache missing or invalid - process post_content.
-								$result = $save_post->processPostContentForStyles($post->post_content);
-
-								if (! empty($result) && isset($result['content'])) {
-									// Calculate hash only when we need to cache.
-									$current_hash = md5($post->post_content);
-
-									// Store processed content in cache.
-									$cache->setCache(
-                                        $post->ID,
-                                        'post_content',
-                                        [
-											'hash' => $current_hash,
-											'content' => $result['content'],
-										]
-                                    );
-
-									// Replace post_content with processed content.
-									$post->post_content = $result['content'];
-								}
-
-								return $post;
-							},
-							$posts
+						// Store processed content in cache.
+						$cache->setCache(
+							$post->ID,
+							'post_content',
+							[
+								'hash'    => $current_hash,
+								'content' => $result['content'],
+							]
 						);
-					},
-					10,
-					1
-				);
+
+						// Replace post_content with processed content.
+						$posts[ $index ]->post_content = $result['content'];
+					}
+				}
+
+				return $posts;
 			},
-			// Low priority to ensure that other plugins can override the query.
 			10e2,
-            1
-        );
+			1
+		);
     }
 
     /**
