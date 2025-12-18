@@ -141,7 +141,7 @@ class HTMLProcessor {
 		if ( empty( $html ) ) {
 			return [
 				'html' => $html,
-				'css'  => [],
+				'css'  => '',
 			];
 		}
 
@@ -175,7 +175,7 @@ class HTMLProcessor {
 
 			return [
 				'html' => $html,
-				'css'  => [],
+				'css'  => '',
 			];
 		}
 
@@ -216,21 +216,35 @@ class HTMLProcessor {
 					}
 				}
 
-				if ( ! empty( $selector ) ) {
-					$parsed       = $this->parseStyleDeclarations( $style, $is_wrapper );
-					$declarations = $parsed['declarations'];
-					$style        = $parsed['styles'];
+				/**
+				 * Compute special styles from style attribute value.
+				 * and remove specials from style attribute value.
+				 * to make sure it will be added to element if it is not empty.
+				 * 
+				 * Special styles are styles that we should nor remove as it can break the JS code. 
+				 * for example there is a display:none; on the cancel reply link in comments form block
+				 * and for showing it the inline styles will be removed to show it! 
+				 * If we convert it to css rules it will not be shown!
+				 */
+				[
+					'style' => $style, // specials are removed.
+					'special_styles' => $special_styles,
+				] = $this->computeSpecialStyles( $style );
 
-					if ( ! empty( $declarations ) ) {
-						$this->css_rules[ $is_wrapper ? 'root': 'child' ][ $selector ] = array_unique($declarations);
-					}
+				if ( ! empty( $selector ) ) {
+					// replace !important style to reduce it's specificity.
+					$this->css_rules[ $is_wrapper ? 'root': 'child' ][] = $selector . ' { ' . str_replace(' !important', '', $style) . ' }';
 				}
+
+				// Add special styles to the style attribute.
+				// to make sure it will be added to element if it is not empty.
+				$style = $special_styles;
 			}
 
 			// Build new tag.
 			$new_tag = '<' . $tag_name;
 
-			// add style attribute if there was style that should not be removed.
+			// Add style attribute if there was style that should not be removed (specials).
 			if ( ! empty( $style ) ) {
 				$all_attrs = trim( $before_attrs . ' style="' . rtrim($style, ';') . '" ' . $after_attrs );
 			}
@@ -733,160 +747,49 @@ class HTMLProcessor {
 	}
 
 	/**
-	 * Parse style attribute value into declarations array.
+	 * Compute special styles from style attribute value.
 	 *
 	 * @param string $style The style attribute value.
-	 * @param bool   $basic_flag The basic flag. If true, only convert parse declarations to array.
 	 *
-	 * @return array Array with 'declarations' (regular CSS declarations) and 'styles' (special style declarations like display: none).
+	 * @return array The computed special styles.
 	 */
-	public static function parseStyleDeclarations( string $style, bool $basic_flag = true ): array {
+	protected static function computeSpecialStyles( string $style): array {
 
-		$style = trim( $style );
-
-		if ( '' === $style ) {
-			return [
-				'declarations'  => [],
-				'styles' => [],
-			];
-		}
-
-		$parts = explode( ';', $style );
-
-		// If basic flag is true, return the parts array in declarations.
-		if ( true === $basic_flag ) {
-			return [
-				'declarations'   => $parts,
-				'styles' => '',
-			];
-		}
-
-		$declarations   = [];
-		$special_styles = '';
-		$count          = count( $parts );
-
-		for ( $i = 0; $i < $count; ++$i ) {
-			$part = trim( $parts[ $i ] );
-
-			if ( '' === $part ) {
-				continue;
-			}
-
-			$colon_pos = strpos( $part, ':' );
-
-			if ( false === $colon_pos ) {
-				continue;
-			}
-
-			$property = trim( substr( $part, 0, $colon_pos ) );
-			$value    = trim( substr( $part, $colon_pos + 1 ) );
-
-			if ( '' === $property || '' === $value ) {
-				continue;
-			}
-
-			// Check if this is a special style (e.g., display: none).
-			if ( self::isSpecialStyle( $property, $value ) ) {
-				// Optimize: Direct string concatenation instead of building declaration first (reduces temporary string allocations).
-				$special_styles .= $property . ': ' . $value . ';';
-			} else {
-				$declarations[] = $property . ': ' . $value;
-			}
-		}
-
-		return [
-			'declarations'   => $declarations,
-			'styles' => $special_styles,
+		$output = [
+			'style' => $style,
+			'special_styles' => '',
 		];
-	}
 
-	/**
-	 * Check if a style property and value combination is a special style.
-	 *
-	 * @param string $property The CSS property name.
-	 * @param string $value    The CSS property value.
-	 *
-	 * @return bool True if it's a special style, false otherwise.
-	 */
-	protected static function isSpecialStyle( string $property, string $value ): bool {
-
-		// Check for display: none.
-		if ( 'display' === $property && 'none' === $value ) {
-			return true;
+		/**
+		 * Match display:none with optional whitespace, optional !important, and semicolon
+		 * Pattern: display (optional whitespace) : (optional whitespace) none (optional whitespace) (optional !important) (optional whitespace) ;
+		 */
+		if ( preg_match( '/\bdisplay\s*:\s*none\s*(!important)?\s*;/i', $style, $matches ) ) {
+			$output['special_styles'] = $matches[0];
+			$output['style']          = preg_replace( '/\bdisplay\s*:\s*none\s*(!important)?\s*;/i', '', $style );
 		}
 
-		// Add more special style checks here as needed.
-
-		return false;
+		return $output;
 	}
 
 	/**
 	 * Format collected CSS rules into a CSS string.
 	 *
-	 * @return array The formatted CSS rules.
+	 * @return string The formatted CSS rules.
 	 */
-	protected function formatCssRules(): array {
+	protected function formatCssRules(): string {
 
 		if ( empty( $this->css_rules ) ) {
-			return [];
+			return '';
 		}
 
+		$style = '';
+		
 		foreach ( $this->css_rules as $id => $css_rules ) {
-			foreach ($css_rules as $selector => $declarations) {
-				if ( 'root' === $id ) {
-					// Optimize: Pre-allocate array and use direct iteration instead of array_map/array_filter chains.
-					// This reduces intermediate array allocations and function call overhead.
-					$merged_declarations = [];
-					$declarations_count  = count($declarations);
-					
-					for ($i = 0; $i < $declarations_count; ++$i) {
-						$part = trim($declarations[ $i ]);
-						if ('' === $part) {
-							continue;
-						}
-						
-						$colon_pos = strpos($part, ':');
-						if (false === $colon_pos) {
-							$merged_declarations[ $part ] = ' ';
-							continue;
-						}
-						
-						$property                         = trim(substr($part, 0, $colon_pos));
-						$value                            = trim(substr($part, $colon_pos + 1));
-						$merged_declarations[ $property ] = $value;
-					}
-
-					$this->css_rules[ $id ][ $selector ] = $merged_declarations;
-					continue;
-				}
-
-				// Optimize: Use direct string operations instead of implode when possible (reduces array operations).
-				if (empty($declarations)) {
-					$this->css_rules[ $id ][ $selector ] = ' { }';
-					continue;
-				}
-				
-				// Use foreach to handle both numeric and associative arrays (avoids undefined array key errors).
-				$declarations_str = '';
-				$first            = true;
-				foreach ($declarations as $declaration) {
-					if (! $first) {
-						$declarations_str .= '; ';
-					}
-					$declarations_str .= trim($declaration);
-					$first             = false;
-				}
-				
-				$declarations_str_len = strlen($declarations_str);
-				if (0 === $declarations_str_len || ';' !== $declarations_str[ $declarations_str_len - 1 ]) {
-					$declarations_str .= ';';
-				}
-
-				$this->css_rules[ $id ][ $selector ] = ' { ' . $declarations_str . ' }';
-			}
+			$style .= implode(PHP_EOL, $css_rules);
 		}
 
-		return $this->css_rules;
+		return $style;
 	}
 
 	/**
