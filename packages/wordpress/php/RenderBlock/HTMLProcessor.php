@@ -510,11 +510,11 @@ class HTMLProcessor {
 			];
 		}
 
-		if ( empty( $placeholder_id ) ) {
-			$placeholder_id = $this->generatePlaceholderId();
+		if ( '' === $placeholder_id ) {
+			$placeholder_id = blockera_get_small_random_hash();
 		}
 
-		$placeholder   = $this->formatPlaceholder( $placeholder_id );
+		$placeholder   = $this->placeholder_prefix . '_' . $placeholder_id . '}}';
 		$modified_html = str_replace( $target_html, $placeholder, $html );
 
 		return [
@@ -790,28 +790,6 @@ class HTMLProcessor {
 		}
 
 		return $style;
-	}
-
-	/**
-	 * Generate a unique placeholder ID.
-	 *
-	 * @return string The generated placeholder ID.
-	 */
-	protected function generatePlaceholderId(): string {
-
-		return uniqid( '', true );
-	}
-
-	/**
-	 * Format placeholder with ID.
-	 *
-	 * @param string $placeholder_id The placeholder ID.
-	 *
-	 * @return string The formatted placeholder.
-	 */
-	protected function formatPlaceholder( string $placeholder_id ): string {
-
-		return $this->placeholder_prefix . '_' . $placeholder_id . '}}';
 	}
 }
 
