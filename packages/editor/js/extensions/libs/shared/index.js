@@ -11,7 +11,6 @@ import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { Icon } from '@blockera/icons';
 import { Tabs } from '@blockera/controls';
 import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
@@ -109,25 +108,19 @@ const getTabs = (
 					{
 						name: 'settings',
 						title: __('General', 'blockera'),
-						tooltip: __('General Block Settings', 'blockera'),
 						className: 'settings-tab',
-						icon: <Icon icon="gear" iconSize="20" />,
 					},
 			  ]
 			: []),
 		{
 			name: 'style',
 			title: __('Styles', 'blockera'),
-			tooltip: __('Block Design & Style Settings', 'blockera'),
 			className: 'style-tab',
-			icon: <Icon library="wp" icon="styles" iconSize="20" />,
 		},
 		{
 			name: 'interactions',
 			title: __('Animations', 'blockera'),
-			tooltip: __('Block Interactions and Animations', 'blockera'),
 			className: 'interactions-tab',
-			icon: <Icon icon="animations" iconSize="20" />,
 		},
 	];
 };

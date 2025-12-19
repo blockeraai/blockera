@@ -22,6 +22,15 @@ body {
 	--blockera-controls-transition: all 0.1s linear 0s;
 	--blockera-controls-input-height: 30px;
 	--blockera-controls-border-radius: 2px;
+	//
+	--blockera-panel-tabs-height: 44px;
+	--blockera-panel-tabs-bg-color: #f6f6f6;
+	--blockera-panel-tabs-tab-bg-color: #f0f0f0;
+	--blockera-panel-tabs-tab-active-bg-color: #ffffff;
+	--blockera-panel-tabs-tab-border-color: #dddddd;
+	--blockera-panel-tabs-tab-active-indicator-height: 2px;
+	//
+	--blockera-iframe-box-shadow: 0 10px 20px 0 #00000024;
 }
 
 .blockera-control {
