@@ -226,7 +226,7 @@ class Render {
 		} elseif (! isset($attributes['blockeraComputedCss'])) {
 
 			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-16' === $unique_selector ) {
+			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
 				dump('Missing blockeraComputedCss');
 				dump('render $unique_selector', $unique_selector);
 			}
@@ -244,7 +244,7 @@ class Render {
 			$computed_css_rules = $styleEngine->getStylesheet();
 
 			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-16' === $unique_selector ) {
+			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
 				dump('render $computed_css_rules', $computed_css_rules);
 			}
 

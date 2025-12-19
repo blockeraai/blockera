@@ -244,7 +244,7 @@ class SavePost {
 			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
 
 			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-16' === $unique_selector ) {
+			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
 				dump('save post $unique_selector', $unique_selector);
 			}
 
@@ -268,8 +268,8 @@ class SavePost {
 				}
 			}
 
-			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-16' === $unique_selector ) {
+			// // TODO: remove this after testing!!!.
+			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
 				dump('save post $computed_css_rules', $computed_css_rules);
 			}
 
