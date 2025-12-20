@@ -1,5 +1,5 @@
-// Import style from php file to keep only one style for both editor and front end 
-@import '../../../../php/libs/wordpress/list-item/style.css';
+// Import style from php file to keep only one style for both editor and front end
+@import "../../../../php/libs/wordpress/list-item/style.css";
 
 .blockera-block.wp-block-list-item :where([role="textbox"]) {
 	display: inline-flex;

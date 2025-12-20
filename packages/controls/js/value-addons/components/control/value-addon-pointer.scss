@@ -1,4 +1,3 @@
-
 body {
 	--blockera-value-addon-var-color: #009e10;
 	--blockera-value-addon-var-border-color: #75bf7c;
@@ -25,13 +24,14 @@ body {
 	text-align: left;
 
 	&.active-addon-pointers {
-
-		.blockera-control-value-addon-pointer:not(.open-value-addon):not(.active-value-addon) {
+		.blockera-control-value-addon-pointer:not(.open-value-addon):not(
+				.active-value-addon
+			) {
 			width: 0;
 			height: 0;
 			visibility: hidden;
 			transition: all 1.15s ease;
- 		}
+		}
 	}
 
 	.blockera-control-value-addon-pointer {
@@ -71,7 +71,6 @@ body {
 			}
 
 			&:hover {
-
 				.blockera-control-dv-pointer-icon,
 				.blockera-control-var-pointer-icon {
 					display: none;
@@ -84,9 +83,7 @@ body {
 		}
 
 		&.active-value-addon {
-
 			&:hover {
-
 				.blockera-control-remove-icon {
 					--blockera-value-addon-var-color: #e20b0b;
 				}
@@ -98,7 +95,6 @@ body {
 		}
 
 		&.var-pointer {
-
 			svg {
 				background-color: var(--blockera-value-addon-var-color);
 				outline: 10px solid #ffffff;
@@ -114,15 +110,14 @@ body {
 
 			&:hover,
 			&.open-value-addon {
-
 				.blockera-control-var-pointer-icon {
-					animation: variable-pointer-rotate 2s linear infinite normal forwards;
+					animation: variable-pointer-rotate 2s linear infinite normal
+						forwards;
 				}
 			}
 		}
 
 		&.dv-pointer {
-
 			svg {
 				background-color: var(--blockera-value-addon-dv-color);
 				outline: 10px solid #ffffff;
@@ -134,7 +129,6 @@ body {
 
 			&:hover,
 			&.open-value-addon {
-
 				svg .dv-pointer-1 {
 					animation: dv-pointer-shaking-1 0.8s infinite;
 					transition: all 0.15s linear;
@@ -147,16 +141,18 @@ body {
 			}
 		}
 
-
 		&.is-value-addon-deleted {
-			--blockera-value-addon-dv-color: var(--blockera-value-addon-deleted-color);
-			--blockera-value-addon-var-color: var(--blockera-value-addon-deleted-color);
+			--blockera-value-addon-dv-color: var(
+				--blockera-value-addon-deleted-color
+			);
+			--blockera-value-addon-var-color: var(
+				--blockera-value-addon-deleted-color
+			);
 		}
 	}
 }
 
 @keyframes dv-pointer-shaking-1 {
-
 	0% {
 		transform: translateY(0);
 	}
@@ -171,7 +167,6 @@ body {
 }
 
 @keyframes dv-pointer-shaking-2 {
-
 	0% {
 		transform: translateY(0);
 	}
@@ -186,7 +181,6 @@ body {
 }
 
 @keyframes variable-pointer-rotate {
-
 	0% {
 		transform: rotate(0deg);
 	}
@@ -201,7 +195,6 @@ body {
 }
 
 .blockera-field {
-
 	& > .blockera-field.blockera-field-control {
 		position: relative;
 	}
@@ -211,9 +204,7 @@ body {
 		position: relative;
 
 		&:hover {
-
 			& > .blockera-field.blockera-field-control {
-
 				.blockera-control-value-addon-pointer {
 					transform: scale(1);
 
@@ -234,12 +225,9 @@ body {
 		}
 
 		& > .blockera-field.blockera-field-control {
-
 			.blockera-control-value-addon-pointer {
-
 				&.open-value-addon,
 				&.active-value-addon {
-
 					svg {
 						outline: 2px solid #ffffff;
 					}
@@ -250,15 +238,15 @@ body {
 }
 
 .blockera-control {
-
 	&.blockera-value-addon-support-dynamic-value,
 	&.blockera-value-addon-support-variable {
 		position: relative;
 		z-index: 11;
 
 		&:hover {
-
-			& > .blockera-control.blockera-control-value-addon-pointers .blockera-control-value-addon-pointer {
+			&
+				> .blockera-control.blockera-control-value-addon-pointers
+				.blockera-control-value-addon-pointer {
 				transform: scale(1);
 
 				&:nth-child(1) {
@@ -272,11 +260,11 @@ body {
 			}
 		}
 
-		& > .blockera-control.blockera-control-value-addon-pointers .blockera-control-value-addon-pointer {
-
+		&
+			> .blockera-control.blockera-control-value-addon-pointers
+			.blockera-control-value-addon-pointer {
 			&.open-value-addon,
 			&.active-value-addon {
-
 				svg {
 					outline: 2px solid #ffffff;
 				}

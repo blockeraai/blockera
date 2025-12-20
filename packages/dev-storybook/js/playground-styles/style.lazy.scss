@@ -1,4 +1,4 @@
-@use 'sass:math';
+@use "sass:math";
 
 @import "~@wordpress/base-styles/colors";
 @import "~@wordpress/base-styles/variables";
@@ -108,7 +108,7 @@
 	align-items: center;
 	border-bottom: 1px solid #eee;
 	padding-bottom: 10px;
-	span{
+	span {
 		margin-left: auto;
 		font-size: 12px;
 		font-weight: 500;

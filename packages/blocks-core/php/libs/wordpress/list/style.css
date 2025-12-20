@@ -17,7 +17,7 @@
 }
 
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] li::before {
-	content: '';
+	content: "";
 	display: inline-block;
 	background-color: var(--blockera--icon--color, currentColor);
 	mask: var(--blockera--icon--url) no-repeat center;
@@ -26,12 +26,14 @@
 	-webkit-mask-size: contain;
 	width: var(--blockera--icon--size, 1em);
 	height: var(--blockera--icon--size, 1em);
-	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg))
+		scaleX(var(--blockera--icon--flip-horizontal, 1))
+		scaleY(var(--blockera--icon--flip-vertical, 1));
 	align-self: center;
 }
 
 /* Hide the default marker */
 .blockera-block.wp-block-list[class*="blockera-has-icon-"] li::marker {
-	content: '';
+	content: "";
 	display: none;
 }

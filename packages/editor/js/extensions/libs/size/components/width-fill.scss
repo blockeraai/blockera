@@ -54,7 +54,6 @@
 			}
 
 			&.right {
-
 				&::before {
 					right: 0;
 					bottom: 0;
@@ -69,7 +68,6 @@
 			}
 
 			&.left {
-
 				&::before {
 					left: 0;
 					bottom: 0;
@@ -93,7 +91,6 @@
 	}
 
 	&:hover {
-
 		.blockera-control-width-fill__indicator {
 			width: 24px;
 			opacity: 0.4;
@@ -129,7 +126,6 @@
 				}
 
 				&.right {
-
 					&::before {
 						right: -1px;
 						bottom: -2px;
@@ -144,7 +140,6 @@
 				}
 
 				&.left {
-
 					&::before {
 						left: -1px;
 						bottom: -2px;
@@ -163,7 +158,6 @@
 }
 
 .blockera-control-input.blockera-control-unit-special.blockera-control-unit-stretch.blockera-control-width-input {
-
 	select {
 		color: transparent;
 	}

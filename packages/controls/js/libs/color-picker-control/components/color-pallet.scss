@@ -1,5 +1,4 @@
 .blockera-control-color-pallet {
-
 	&.hidden {
 		display: hidden;
 	}
@@ -48,7 +47,6 @@
 			}
 
 			& > .components-flex:nth-child(2) {
-
 				& > .components-base-control:first-child:last-child {
 					width: 110px;
 					position: absolute;
@@ -71,17 +69,23 @@
 
 				&:focus-within:hover,
 				&:focus-within {
-
 					.components-input-control__backdrop {
-						border-color: var(--blockera-controls-primary-color) !important;
-						box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
+						border-color: var(
+							--blockera-controls-primary-color
+						) !important;
+						box-shadow: 0 0 0 1px
+							var(--blockera-controls-primary-color) !important;
 					}
 				}
 			}
 
 			.components-button {
-				width: calc(var(--blockera-controls-input-height) + 2px) !important;
-				height: calc(var(--blockera-controls-input-height) + 2px) !important;
+				width: calc(
+					var(--blockera-controls-input-height) + 2px
+				) !important;
+				height: calc(
+					var(--blockera-controls-input-height) + 2px
+				) !important;
 				border: 1px solid var(--blockera-controls-border-color);
 				padding: 5px !important;
 
@@ -95,10 +99,11 @@
 			}
 
 			.components-input-control__container {
-
 				input {
 					height: calc(var(--blockera-controls-input-height) + 2px);
-					min-height: calc(var(--blockera-controls-input-height) + 2px);
+					min-height: calc(
+						var(--blockera-controls-input-height) + 2px
+					);
 				}
 
 				input:not(:focus) + .components-input-control__backdrop {
@@ -106,14 +111,17 @@
 				}
 
 				input:focus + .components-input-control__backdrop {
-					border-color: var(--blockera-controls-primary-color) !important;
+					border-color: var(
+						--blockera-controls-primary-color
+					) !important;
 					box-shadow: 0 0 0 1px var(--blockera-controls-primary-color) !important;
 				}
 
 				.components-input-control__prefix {
-
 					.components-truncate {
-						color: var(--blockera-controls-primary-color) !important;
+						color: var(
+							--blockera-controls-primary-color
+						) !important;
 					}
 				}
 			}

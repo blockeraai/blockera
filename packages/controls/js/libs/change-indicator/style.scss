@@ -12,7 +12,8 @@
 		background: #ffffff;
 		border-radius: 50%;
 		z-index: 1;
-		outline: var(--indicator-outline-size) solid var(--indicator-outline-color);
+		outline: var(--indicator-outline-size) solid
+			var(--indicator-outline-color);
 		position: relative;
 
 		&::before {
@@ -38,12 +39,13 @@
 }
 
 @keyframes blockera-change-indicator-pulse-animation {
-
 	0% {
-		box-shadow: 0 0 0 0 color-mix(in srgb, var(--indicator-color), transparent 0%);
+		box-shadow: 0 0 0 0
+			color-mix(in srgb, var(--indicator-color), transparent 0%);
 	}
 
 	100% {
-		box-shadow: 0 0 0 var(--indicator-size) color-mix(in srgb, var(--indicator-color), transparent 100%);
+		box-shadow: 0 0 0 var(--indicator-size)
+			color-mix(in srgb, var(--indicator-color), transparent 100%);
 	}
 }

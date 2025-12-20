@@ -1,19 +1,46 @@
 /* Following styles leverage :where so that typography block support styles and
 global styles apply when necessary. */
-:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"] .wp-block-latest-comments__comment)),
-:where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height) .wp-block-latest-comments__comment) {
+:where(
+		.blockera-block.wp-block-latest-comments:not(
+				[style*="line-height"] .wp-block-latest-comments__comment
+			)
+	),
+:where(
+		.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height)
+			.wp-block-latest-comments__comment
+	) {
 	line-height: 1.1;
 }
 
-:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"] .wp-block-latest-comments__comment-excerpt p)),
-:where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height .wp-block-latest-comments__comment-excerpt p)) {
+:where(
+		.blockera-block.wp-block-latest-comments:not(
+				[style*="line-height"]
+					.wp-block-latest-comments__comment-excerpt
+					p
+			)
+	),
+:where(
+		.blockera-block.wp-block-latest-comments:not(
+				.blockera-has-line-height
+					.wp-block-latest-comments__comment-excerpt
+					p
+			)
+	) {
 	line-height: 1.8;
 }
 
-.has-dates:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"])),
-.has-dates:where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height)),
-.has-excerpts:where(.blockera-block.wp-block-latest-comments:not([style*="line-height"])),
-.has-excerpts:where(.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height)) {
+.has-dates:where(
+		.blockera-block.wp-block-latest-comments:not([style*="line-height"])
+	),
+.has-dates:where(
+		.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height)
+	),
+.has-excerpts:where(
+		.blockera-block.wp-block-latest-comments:not([style*="line-height"])
+	),
+.has-excerpts:where(
+		.blockera-block.wp-block-latest-comments:not(.blockera-has-line-height)
+	) {
 	line-height: 1.5;
 }
 

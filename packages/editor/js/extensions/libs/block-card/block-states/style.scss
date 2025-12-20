@@ -4,9 +4,9 @@
 }
 
 .blockera-control.blockera-control-block-states-repeater {
-    display: block;
+	display: block;
 	font-size: 0;
-    position: relative;
+	position: relative;
 	--repeater-gap: 5px;
 	--repeater-item-height: 26px;
 
@@ -20,13 +20,11 @@
 		padding-bottom: var(--repeater-gap);
 
 		.blockera-control-btn-add {
-
 			svg {
 				transition: var(--blockera-controls-transition);
 			}
 
 			&.is-focus {
-
 				svg {
 					transform: rotate(-45deg);
 				}
@@ -55,7 +53,9 @@
 		}
 
 		&:not([data-id="normal"]) {
-			--blockera-controls-primary-color: var(--blockera-controls-states-color);
+			--blockera-controls-primary-color: var(
+				--blockera-controls-states-color
+			);
 		}
 	}
 
@@ -70,20 +70,30 @@
 	}
 
 	.blockera-control-group.mode-nothing:hover:not(.is-selected-item) {
-		background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
+		background: color-mix(
+			in srgb,
+			var(--blockera-controls-primary-color) 4%,
+			#ffffff 100%
+		);
 		border-color: var(--blockera-controls-primary-color);
-		color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
+		color: color-mix(
+			in srgb,
+			var(--blockera-controls-primary-color) 100%,
+			#000000 20%
+		);
 
 		.blockera-control-header-label {
-			color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 20%);
+			color: color-mix(
+				in srgb,
+				var(--blockera-controls-primary-color) 100%,
+				#000000 20%
+			);
 		}
 	}
 }
 
 .blockera-control-repeater-group-header {
-
 	.blockera-control-content-editable {
-
 		input {
 			border-left: none;
 			border-right: none;

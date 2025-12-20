@@ -2,7 +2,6 @@
 	--repeater-item-height: 38px;
 
 	.blockera-control-group-header {
-
 		.blockera-control-header-label {
 			display: flex;
 			gap: 15px;
@@ -18,13 +17,14 @@
 		}
 
 		&:hover {
-
 			.blockera-control-action-buttons:not(:empty) {
 				position: absolute;
 				right: 70px;
 			}
 
-			.blockera-control-action-buttons:not(:empty) + .blockera-control-repeater-group-header .blockera-control-header-values {
+			.blockera-control-action-buttons:not(:empty)
+				+ .blockera-control-repeater-group-header
+				.blockera-control-header-values {
 				opacity: 1 !important;
 				visibility: visible !important;
 			}
@@ -66,14 +66,12 @@
 	}
 
 	&.breakpoint-icon-device-2xl-desktop {
-
 		.blockera-component-custom-breakpoint-item {
 			left: -3px;
 		}
 	}
 
 	&.breakpoint-icon-device-xl-desktop {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -5px;
 		}
@@ -88,7 +86,6 @@
 	}
 
 	&.breakpoint-icon-device-l-desktop {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -3px;
 		}
@@ -103,7 +100,6 @@
 	}
 
 	&.breakpoint-icon-device-desktop {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -3px;
 		}
@@ -118,7 +114,6 @@
 	}
 
 	&.breakpoint-icon-device-tablet {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -1px;
 		}
@@ -133,7 +128,6 @@
 	}
 
 	&.breakpoint-icon-device-mobile {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -1px;
 		}
@@ -148,7 +142,6 @@
 	}
 
 	&.breakpoint-icon-device-mobile-landscape {
-
 		.blockera-component-base-breakpoint-icon {
 			left: -3px;
 		}

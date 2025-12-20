@@ -7,7 +7,7 @@
 	& > section {
 		background-color: #f6f6f6;
 		border-radius: 5px;
-   }
+	}
 
 	.blockera-control-code-control__description {
 		display: flex;
@@ -53,7 +53,7 @@
 		outline: 0;
 
 		&.focused {
-    		box-shadow: 0 0 0 2px var(--blockera-controls-primary-color);
+			box-shadow: 0 0 0 2px var(--blockera-controls-primary-color);
 		}
 
 		.overflow-guard {
@@ -64,9 +64,7 @@
 
 .blockera-block-inspector-controls-wrapper,
 .block-editor-block-inspector {
-
 	.blockera-control.blockera-control-code {
-
 		.monaco-editor .suggest-widget {
 			width: 248px !important;
 			transform: translateX(202px) !important;

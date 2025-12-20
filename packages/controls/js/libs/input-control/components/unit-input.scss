@@ -1,7 +1,5 @@
 .blockera-control-input {
-
 	&:not(.blockera-control-unit-special) {
-
 		.blockera-control-unit-select {
 			appearance: none;
 			border: none;
@@ -65,7 +63,6 @@
 	}
 
 	&.blockera-control-unit-special {
-
 		.blockera-control-unit-select {
 			display: block;
 			width: 100%;
@@ -103,7 +100,6 @@
 	}
 
 	&.blockera-control-unit-func {
-
 		.blockera-control-input-tag {
 			padding-right: 65px;
 			white-space: nowrap;
@@ -148,7 +144,6 @@
 	}
 
 	&.is-focused {
-
 		.input-tag-placeholder {
 			color: var(--blockera-controls-primary-color);
 		}

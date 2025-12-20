@@ -1,5 +1,17 @@
 /* .blockera-is-icon-block is icon block. */
-.editor-styles-wrapper div [class*="blockera-has-icon"]:not(.blockera-is-icon-block, .wp-block-list, .wp-block-list-item, .wp-block-categories, .wp-block-page-list, .wp-block-tag-cloud, .wp-block-home-link, .wp-block-navigation-link, .wp-block-navigation-submenu) {
+.editor-styles-wrapper
+	div
+	[class*="blockera-has-icon"]:not(
+		.blockera-is-icon-block,
+		.wp-block-list,
+		.wp-block-list-item,
+		.wp-block-categories,
+		.wp-block-page-list,
+		.wp-block-tag-cloud,
+		.wp-block-home-link,
+		.wp-block-navigation-link,
+		.wp-block-navigation-submenu
+	) {
 	background: transparent !important;
 	float: none !important;
 	padding: 0 !important;
@@ -9,11 +21,20 @@
 	box-shadow: none !important;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-"].wp-block-button [data-rich-text-placeholder] {
+.editor-styles-wrapper
+	div
+	[class*="blockera-has-icon-"].wp-block-button
+	[data-rich-text-placeholder] {
 	display: none;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-"]:not(.wp-block-list-item) > div[role="textbox"]:not(.wp-block-button__link,figcaption):first-of-type {
+.editor-styles-wrapper
+	div
+	[class*="blockera-has-icon-"]:not(.wp-block-list-item)
+	> div[role="textbox"]:not(
+		.wp-block-button__link,
+		figcaption
+	):first-of-type {
 	border-radius: inherit !important;
 	border-width: var(--blockera--icon--border-width, 0) !important;
 	border-style: var(--blockera--icon--border-style, solid) !important;
@@ -25,8 +46,15 @@
 	padding: var(--blockera--icon--padding, 0);
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-"]:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type,
-.editor-styles-wrapper div [class*="blockera-has-icon-"]:not(.wp-block-list-item) > div[role="textbox"]:first-of-type {
+.editor-styles-wrapper
+	div
+	[class*="blockera-has-icon-"]:not(.wp-block-list-item)
+	> a
+	> div[role="textbox"]:first-of-type,
+.editor-styles-wrapper
+	div
+	[class*="blockera-has-icon-"]:not(.wp-block-list-item)
+	> div[role="textbox"]:first-of-type {
 	display: inline-flex;
 	position: relative;
 	width: auto !important;
@@ -37,10 +65,24 @@
 	transition: inherit;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::before,
-.editor-styles-wrapper div .blockera-has-icon-end:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::after,
-.editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > div[role="textbox"]:first-of-type::before,
-.editor-styles-wrapper div .blockera-has-icon-end:not(.wp-block-list-item) > div[role="textbox"]:first-of-type::after {
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-start:not(.wp-block-list-item)
+	> a
+	> div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-end:not(.wp-block-list-item)
+	> a
+	> div[role="textbox"]:first-of-type::after,
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-start:not(.wp-block-list-item)
+	> div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-end:not(.wp-block-list-item)
+	> div[role="textbox"]:first-of-type::after {
 	content: "";
 	display: inline-block;
 	position: relative;
@@ -59,27 +101,54 @@
 	mask-position: center;
 	mask-repeat: no-repeat;
 	mask-size: cover !important;
-	transform: rotate(var(--blockera--icon--rotate, 0deg)) scaleX(var(--blockera--icon--flip-horizontal, 1)) scaleY(var(--blockera--icon--flip-vertical, 1));
+	transform: rotate(var(--blockera--icon--rotate, 0deg))
+		scaleX(var(--blockera--icon--flip-horizontal, 1))
+		scaleY(var(--blockera--icon--flip-vertical, 1));
 	transition: inherit;
 }
 
-.editor-styles-wrapper div [class*="blockera-has-icon-"] > .wp-block-navigation-item__content {
+.editor-styles-wrapper
+	div
+	[class*="blockera-has-icon-"]
+	> .wp-block-navigation-item__content {
 	display: flex;
 	align-items: center;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > a.wp-block-navigation-item__content > div[role="textbox"]:first-of-type::before,
-.editor-styles-wrapper div .blockera-has-icon-end:not(.wp-block-list-item) > a.wp-block-navigation-item__content > div[role="textbox"]:first-of-type::after {
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-start:not(.wp-block-list-item)
+	> a.wp-block-navigation-item__content
+	> div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-end:not(.wp-block-list-item)
+	> a.wp-block-navigation-item__content
+	> div[role="textbox"]:first-of-type::after {
 	vertical-align: text-bottom;
 }
 
-.editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::before,
-.editor-styles-wrapper div .blockera-has-icon-start:not(.wp-block-list-item) > div[role="textbox"]:first-of-type::before {
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-start:not(.wp-block-list-item)
+	> a
+	> div[role="textbox"]:first-of-type::before,
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-start:not(.wp-block-list-item)
+	> div[role="textbox"]:first-of-type::before {
 	margin-right: var(--blockera--icon--gap, 0.5em);
 }
 
-.editor-styles-wrapper div .blockera-has-icon-end:not(.wp-block-list-item) > a > div[role="textbox"]:first-of-type::after,
-.editor-styles-wrapper div .blockera-has-icon-end:not(.wp-block-list-item) > div[role="textbox"]:first-of-type::after {
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-end:not(.wp-block-list-item)
+	> a
+	> div[role="textbox"]:first-of-type::after,
+.editor-styles-wrapper
+	div
+	.blockera-has-icon-end:not(.wp-block-list-item)
+	> div[role="textbox"]:first-of-type::after {
 	margin-left: var(--blockera--icon--gap, 0.5em);
 	--blockera--icon--order: 100;
 }

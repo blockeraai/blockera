@@ -53,7 +53,9 @@
 
 		&.is-value-addon-side {
 			cursor: pointer;
-			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+			--blockera-controls-primary-color: var(
+				--blockera-value-addon-var-color
+			);
 			stroke: var(--blockera-value-addon-var-border-color);
 			stroke-width: 1px;
 			fill: var(--blockera-value-addon-var-bg-color);
@@ -61,21 +63,27 @@
 
 		&.selected-side.is-value-addon-side,
 		&.selected-side-value-addon {
-			--blockera-controls-primary-color: var(--blockera-value-addon-var-color);
+			--blockera-controls-primary-color: var(
+				--blockera-value-addon-var-color
+			);
 			stroke: var(--blockera-controls-primary-color) !important;
 			stroke-width: 2px !important;
 			fill: var(--blockera-value-addon-var-bg-color) !important;
 		}
 
 		&.is-value-addon-deleted {
-			--blockera-controls-primary-color: var(--blockera-value-addon-deleted-color);
+			--blockera-controls-primary-color: var(
+				--blockera-value-addon-deleted-color
+			);
 			stroke: var(--blockera-value-addon-deleted-border-color);
 			stroke-width: 1px;
 			fill: var(--blockera-value-addon-deleted-bg-color);
 
 			&.selected-side.is-value-addon-side,
 			&.selected-side-value-addon {
-				--blockera-controls-primary-color: var(--blockera-value-addon-deleted-color);
+				--blockera-controls-primary-color: var(
+					--blockera-value-addon-deleted-color
+				);
 				stroke: var(--blockera-controls-primary-color) !important;
 				stroke-width: 2px !important;
 				fill: var(--blockera-value-addon-deleted-bg-color) !important;
@@ -118,7 +126,9 @@
 				}
 			}
 
-			&:hover:not(.changed-in-other-state):not(.changed-in-normal-state):not(.changed-in-secondary-state) {
+			&:hover:not(.changed-in-other-state):not(
+					.changed-in-normal-state
+				):not(.changed-in-secondary-state) {
 				background: #ffffff;
 				border: 1px solid var(--blockera-controls-border-color);
 				cursor: pointer !important;
@@ -139,7 +149,6 @@
 		}
 
 		.blockera-control-value-addon-pointers {
-
 			.blockera-control-value-addon-pointer {
 				transform: scale(0);
 				transition: all 0.15s cubic-bezier(1, 0.76, 0, 0.89);
@@ -147,9 +156,7 @@
 		}
 
 		&.label-hover {
-
 			.blockera-control.blockera-control-value-addon-pointers {
-
 				svg {
 					fill: #ffffff;
 					outline: none;
@@ -163,9 +170,7 @@
 		}
 
 		.blockera-control.blockera-control-value-addon-pointers {
-
 			&.active-addon-pointers {
-
 				svg {
 					outline: none;
 					width: 14px;
@@ -176,7 +181,6 @@
 
 		&.side-horizontal.side-margin-left,
 		&.side-horizontal.side-padding-left {
-
 			.blockera-control-label {
 				position: static;
 			}
@@ -193,7 +197,6 @@
 
 		&.side-horizontal.side-margin-right,
 		&.side-horizontal.side-padding-right {
-
 			.blockera-control-label {
 				position: static;
 			}
@@ -210,7 +213,6 @@
 
 		&.side-horizontal.side-margin-right,
 		&.side-horizontal.side-margin-left {
-
 			i {
 				top: 56px;
 			}
@@ -329,11 +331,8 @@
 	}
 
 	&.margin-lock-all {
-
 		.blockera-control-label-side {
-
 			&.side-margin-top {
-
 				.blockera-control-value-addon-pointers {
 					top: 3px;
 					left: 3px;
@@ -343,11 +342,8 @@
 	}
 
 	&.padding-lock-all {
-
 		.blockera-control-label-side {
-
 			&.side-padding-top {
-
 				.blockera-control-value-addon-pointers {
 					top: 2px;
 					left: 0;
@@ -408,7 +404,6 @@
 		z-index: 1;
 
 		.components-input-control__container {
-
 			& > button {
 				padding-right: 0 !important;
 				padding-left: 0 !important;
@@ -464,6 +459,8 @@
 	}
 
 	.blockera-component-button.auto-btn {
-		height: calc(var(--blockera-controls-input-height) * 2 + 8px) !important;
+		height: calc(
+			var(--blockera-controls-input-height) * 2 + 8px
+		) !important;
 	}
 }

@@ -7,8 +7,8 @@
 	border: none;
 	border-bottom: 1px solid transparent;
 	margin-bottom: -1px;
-    height: 100%;
-    max-height: 100%;
+	height: 100%;
+	max-height: 100%;
 	background-color: #ffffff;
 	transition: max-height 0.2s ease, box-shadow 0.075s ease;
 
@@ -23,18 +23,19 @@
 	}
 
 	.blockera-control-block-states-repeater {
-
 		.blockera-control-repeater-items-container {
-    		padding-bottom: 5px;
+			padding-bottom: 5px;
 
 			.blockera-control-repeater-item:not(:first-child) {
-				--blockera-controls-primary-color: var(--blockera-controls-states-color);
+				--blockera-controls-primary-color: var(
+					--blockera-controls-states-color
+				);
 			}
 		}
 	}
 
 	.blockera-extension-block-card__inner,
-	 .blockera-extension-block-card__style-variation {
+	.blockera-extension-block-card__style-variation {
 		align-items: flex-start;
 		display: flex;
 		flex-grow: 1;
@@ -74,12 +75,11 @@
 			align-items: center;
 			min-height: 24px;
 			row-gap: 8px;
-    		column-gap: 2px;
+			column-gap: 2px;
 			padding-right: 45px;
 			flex-wrap: wrap;
 
 			.blockera-extension-block-card__title__input {
-
 				span {
 					max-width: 158px;
 					white-space: nowrap;
@@ -105,8 +105,17 @@
 				&.inside-block-inspector span:hover,
 				&.inside-block-inspector span:focus,
 				&.inside-block-inspector.is-edited span {
-					background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%) !important;
-					box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 40%, #ffffff 100%) !important;
+					background: color-mix(
+						in srgb,
+						var(--blockera-controls-primary-color) 4%,
+						#ffffff 100%
+					) !important;
+					box-shadow: 0 0 0 1px
+						color-mix(
+							in srgb,
+							var(--blockera-controls-primary-color) 40%,
+							#ffffff 100%
+						) !important;
 					color: var(--blockera-controls-primary-color) !important;
 				}
 
@@ -151,11 +160,28 @@
 				}
 			}
 
-			.blockera-extension-block-card__title__item.item-state:not(.item-state-normal) {
-				--blockera-controls-primary-color: var(--blockera-controls-states-color);
-				background: color-mix(in srgb, var(--blockera-controls-primary-color) 4%, #ffffff 100%);
-				color: color-mix(in srgb, var(--blockera-controls-primary-color) 100%, #000000 4%);
-				box-shadow: 0 0 0 1px color-mix(in srgb, var(--blockera-controls-primary-color) 50%, #ffffff);
+			.blockera-extension-block-card__title__item.item-state:not(
+					.item-state-normal
+				) {
+				--blockera-controls-primary-color: var(
+					--blockera-controls-states-color
+				);
+				background: color-mix(
+					in srgb,
+					var(--blockera-controls-primary-color) 4%,
+					#ffffff 100%
+				);
+				color: color-mix(
+					in srgb,
+					var(--blockera-controls-primary-color) 100%,
+					#000000 4%
+				);
+				box-shadow: 0 0 0 1px
+					color-mix(
+						in srgb,
+						var(--blockera-controls-primary-color) 50%,
+						#ffffff
+					);
 			}
 
 			.blockera-extension-block-card__settings {
@@ -243,7 +269,8 @@
 		}
 	}
 
-	.blockera-control-style-variations-button + .blockera-block-variation-transforms {
+	.blockera-control-style-variations-button
+		+ .blockera-block-variation-transforms {
 		margin-left: initial;
 	}
 
@@ -289,7 +316,6 @@
 }
 
 .blockera-extension.blockera-extension-block-card.master-block-card {
-
 	// remove the 3 px margin left space because of the input padding
 
 	.blockera-extension-block-card__title__input {
@@ -304,15 +330,12 @@
 // Blockera is active
 
 .block-editor-block-card + [data-test="blockera-availability"] {
-
 	[role="tablist"] {
 		--indicator-width: 140;
 	}
 }
 
-
 .block-editor-block-card {
-
 	// Fix for block card icon in Block Inspector
 	// It happens because we add extra icon inside it
 

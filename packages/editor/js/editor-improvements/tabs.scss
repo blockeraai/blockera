@@ -1,8 +1,7 @@
-
 // Global styles panel header
-
 .components-panel__header.interface-complementary-area-header {
-	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color), inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
+	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+		inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
 	background-color: var(--blockera-panel-tabs-bg-color);
 	border: none;
 	height: var(--blockera-panel-tabs-height) !important;
@@ -30,7 +29,8 @@ button.edit-site-editor-canvas-container__close-button {
 .edit-site-style-book__tablist-container,
 .block-editor-tabbed-sidebar__tablist-and-close-button,
 .components-panel__header.editor-sidebar__panel-tabs {
-	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color), inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
+	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+		inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
 	background-color: var(--blockera-panel-tabs-bg-color);
 	border: none;
 	height: var(--blockera-panel-tabs-height) !important;
@@ -77,7 +77,8 @@ button.edit-site-editor-canvas-container__close-button {
 		top: 0;
 		height: 0;
 		z-index: 2;
-		border-bottom: var(--blockera-panel-tabs-tab-active-indicator-height) solid var(--blockera-controls-primary-color);
+		border-bottom: var(--blockera-panel-tabs-tab-active-indicator-height)
+			solid var(--blockera-controls-primary-color);
 	}
 
 	.block-editor-tabbed-sidebar__close-button {
@@ -86,10 +87,8 @@ button.edit-site-editor-canvas-container__close-button {
 }
 
 .editor-editor-interface {
-
 	// remove shadow from skeleton header to prevent
 	// the .interface-interface-skeleton__content overlap (causes darker color).
-
 	.interface-interface-skeleton__header {
 		box-shadow: none;
 	}

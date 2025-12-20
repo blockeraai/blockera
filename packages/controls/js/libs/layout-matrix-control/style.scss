@@ -1,5 +1,4 @@
 .blockera-control-layout-matrix {
-
 	.blockera-control-layout-matrix__grid {
 		border: 1px solid var(--blockera-controls-border-color);
 		border-radius: var(--blockera-controls-border-radius);
@@ -51,7 +50,6 @@
 			}
 
 			&.matrix-item-selected {
-
 				.matrix-item-icon-selected {
 					display: flex;
 					color: var(--blockera-controls-primary-color);
@@ -59,14 +57,12 @@
 			}
 
 			&.matrix-item-normal {
-
 				.matrix-item-icon-normal {
 					display: flex;
 					opacity: 20%;
 				}
 
 				&:hover {
-
 					.matrix-item-icon-normal {
 						display: none;
 					}
@@ -100,7 +96,6 @@
 	}
 
 	.blockera-control-select.custom {
-
 		[role="listbox"] {
 			width: 150px;
 			right: 120px;
@@ -119,7 +114,6 @@
 		}
 
 		&:not(.selected-item-empty) {
-
 			button {
 				color: var(--blockera-controls-primary-color);
 			}
@@ -127,9 +121,7 @@
 	}
 
 	&.layout-matrix__align-items-:not(.layout-matrix__justify-content-) {
-
 		.blockera-control-select.custom.layout-matrix__justify-content {
-
 			.components-custom-select-control__button {
 				color: var(--blockera-controls-primary-color);
 			}
@@ -137,9 +129,7 @@
 	}
 
 	&.layout-matrix__justify-content-:not(.layout-matrix__align-items-) {
-
 		.blockera-control-select.custom.layout-matrix__align-items {
-
 			.components-custom-select-control__button {
 				color: var(--blockera-controls-primary-color);
 			}
@@ -147,16 +137,13 @@
 	}
 
 	.item-icon {
-
 		svg {
 			transition: var(--blockera-controls-transition);
 		}
 	}
 
 	&.layout-matrix__direction-row {
-
 		.blockera-control-layout-matrix__grid {
-
 			&.layout-matrix__grid-type-space-between {
 				gap: 4px;
 				grid-auto-flow: column;
@@ -184,9 +171,7 @@
 	}
 
 	&.layout-matrix__direction-column {
-
 		.blockera-control-layout-matrix__grid {
-
 			&.layout-matrix__grid-type-space-between {
 				gap: 4px;
 				grid-auto-flow: row;
@@ -227,9 +212,7 @@
 		// Rotate stretch icon when align items is stretch and direction is column
 
 		.blockera-control-select.custom.layout-matrix__align-items {
-
 			.item-icon {
-
 				svg[data-test="layout-matrix-align-stretch"] {
 					transform: rotate(90deg);
 				}
@@ -238,11 +221,8 @@
 	}
 
 	&.layout-matrix__justify-content-space-between.layout-matrix__direction-column {
-
 		.blockera-control-select.custom.layout-matrix__align-items {
-
 			.item-icon {
-
 				svg {
 					transform: rotate(-90deg);
 				}
@@ -251,11 +231,8 @@
 	}
 
 	&.layout-matrix__align-items-stretch.layout-matrix__direction-column {
-
 		.blockera-control-select.custom.layout-matrix__justify-content {
-
 			.item-icon {
-
 				svg {
 					transform: rotate(90deg);
 				}

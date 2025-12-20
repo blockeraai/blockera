@@ -1,7 +1,11 @@
 body {
 	--blockera-controls-variations-color: #1ca120;
 	--blockera-controls-variations-color-bk: hsl(122, 70%, 37%);
-	--blockera-controls-variations-color-darker-20: color-mix(in srgb, var(--blockera-controls-variations-color-bk) 100%, #000000 5%);
+	--blockera-controls-variations-color-darker-20: color-mix(
+		in srgb,
+		var(--blockera-controls-variations-color-bk) 100%,
+		#000000 5%
+	);
 }
 
 .components-button.blockera-component-button.is-tertiary.blockera-control-style-variations-button {
@@ -17,7 +21,7 @@ body {
 	font-size: 12px;
 
 	box-shadow: inset 0 0 0 1px var(--border-color) !important;
-    outline: 1px solid transparent !important;
+	outline: 1px solid transparent !important;
 
 	&.is-variation-deleted {
 		--border-color: #e20b0b !important;
@@ -60,7 +64,6 @@ body {
 	}
 
 	&.is-variation-default {
-
 		&:not(.is-variation-picker-open, .is-variation-deleted):hover {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
 
@@ -70,7 +73,9 @@ body {
 		}
 
 		&:focus {
-			--primary-color: var(--blockera-controls-variations-color-darker-20);
+			--primary-color: var(
+				--blockera-controls-variations-color-darker-20
+			);
 			--border-color: var(--primary-color);
 			box-shadow: inset 0 0 0 1px var(--border-color) !important;
 
@@ -81,7 +86,9 @@ body {
 
 		&.is-variation-picker-open:focus,
 		&.is-variation-picker-open:not(:disabled) {
-			--primary-color: var(--blockera-controls-variations-color-darker-20);
+			--primary-color: var(
+				--blockera-controls-variations-color-darker-20
+			);
 			--border-color: var(--primary-color);
 			box-shadow: inset 0 0 0 1px var(--border-color) !important;
 			outline: 1px solid var(--border-color) !important;
@@ -105,10 +112,20 @@ body {
 			color: var(--secondary-color);
 		}
 
-		&:focus:not(:disabled, .is-variation-picker-open, .is-variation-deleted),
-		&:hover:not(:disabled, .is-variation-picker-open, .is-variation-deleted) {
+		&:focus:not(
+				:disabled,
+				.is-variation-picker-open,
+				.is-variation-deleted
+			),
+		&:hover:not(
+				:disabled,
+				.is-variation-picker-open,
+				.is-variation-deleted
+			) {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
-			--primary-color: var(--blockera-controls-variations-color-darker-20);
+			--primary-color: var(
+				--blockera-controls-variations-color-darker-20
+			);
 
 			svg {
 				opacity: 1;
@@ -116,7 +133,9 @@ body {
 		}
 
 		&.is-variation-picker-open:not(:disabled) {
-			--primary-color: var(--blockera-controls-variations-color-darker-20);
+			--primary-color: var(
+				--blockera-controls-variations-color-darker-20
+			);
 			box-shadow: inset 0 0 0 1px var(--border-color) !important;
 			outline: 1px solid var(--border-color) !important;
 
@@ -129,11 +148,13 @@ body {
 
 .components-popover.blockera-component-popover.variations-picker-popover {
 	--popover-width: 260px;
-    --popover-border-color: #bdbdbd;
-    --popover-border-width: 1px;
-    --popover-height: auto;
-    --popover-radius: 3px;
-	--blockera-controls-primary-color: var(--blockera-controls-variations-color);
+	--popover-border-color: #bdbdbd;
+	--popover-border-width: 1px;
+	--popover-height: auto;
+	--popover-radius: 3px;
+	--blockera-controls-primary-color: var(
+		--blockera-controls-variations-color
+	);
 
 	.components-popover__content {
 		border-radius: var(--popover-radius);
@@ -141,7 +162,8 @@ body {
 		margin-left: -5px;
 
 		.blockera-component-popover-body {
-			padding: calc(var(--popover-padding) * 1.15) var(--popover-padding) 0 var(--popover-padding);
+			padding: calc(var(--popover-padding) * 1.15) var(--popover-padding)
+				0 var(--popover-padding);
 
 			& > :last-child {
 				padding-bottom: calc(var(--popover-padding) * 1.2);
@@ -151,7 +173,6 @@ body {
 }
 
 .blockera-style-variations-animated {
-
 	&,
 	.the-layer-3,
 	.the-layer-2-bg,
@@ -173,7 +194,6 @@ body {
 
 	&.is-animated,
 	&:hover {
-
 		.the-layer-1 {
 			transform: none;
 		}

@@ -1,6 +1,6 @@
 .blockera-component-feature-wrapper {
 	--locked-color: #e86400;
-    --locked-bg-color: color-mix(in srgb, var(--locked-color) 15%, #ffffff);
+	--locked-bg-color: color-mix(in srgb, var(--locked-color) 15%, #ffffff);
 	--locked-radius: 2px;
 	--locked-size: 24px;
 	--locked-transition: 0.1s ease-in-out;
@@ -26,17 +26,23 @@
 		right: -1px;
 		color: var(--locked-color);
 		display: flex;
-	    justify-content: end;
+		justify-content: end;
 		align-items: center;
 		gap: 0;
 		z-index: 10;
-		min-height: var(--repeater-item-height, var(--blockera-controls-input-height));
+		min-height: var(
+			--repeater-item-height,
+			var(--blockera-controls-input-height)
+		);
 		padding: 0 2px 0 0;
 		top: 0;
 
 		.blockera-component-feature-wrapper__notice__icons {
 			border-radius: 100px;
-			transition: fill var(--locked-transition), background var(--locked-transition), color var(--locked-transition), border-radius var(--locked-transition);
+			transition: fill var(--locked-transition),
+				background var(--locked-transition),
+				color var(--locked-transition),
+				border-radius var(--locked-transition);
 			background: var(--locked-bg-color);
 			color: var(--locked-color);
 			position: absolute;
@@ -132,14 +138,11 @@
 	}
 
 	&.show-text-on-hover:hover {
-
 		.blockera-component-feature-wrapper__notice {
-
 			.blockera-component-feature-wrapper__notice__icons {
 				border-radius: 0 100px 100px 0;
 
 				&.icons-2 {
-
 					.blockera-component-feature-wrapper__notice__icon {
 						display: none;
 					}
@@ -158,9 +161,7 @@
 	}
 
 	&.show-text-always {
-
 		.blockera-component-feature-wrapper__notice {
-
 			.blockera-component-feature-wrapper__notice__icons {
 				border-radius: 0 100px 100px 0;
 			}
@@ -172,14 +173,11 @@
 		}
 
 		&:hover {
-
 			.blockera-component-feature-wrapper__notice {
-
 				.blockera-component-feature-wrapper__notice__icons {
 					border-radius: 0 100px 100px 0;
 
 					&.icons-2 {
-
 						.blockera-component-feature-wrapper__notice__icon {
 							display: none;
 						}
@@ -204,7 +202,6 @@
 
 		&.show-text-always:hover,
 		&.show-text-on-hover:hover {
-
 			.blockera-component-feature-wrapper__notice {
 				--locked-bg-color: #ff0c0c;
 				--locked-color: #ffffff;
@@ -212,7 +209,6 @@
 		}
 
 		&.show-text-always {
-
 			.blockera-component-feature-wrapper__notice {
 				--locked-color: #e20b0b;
 				--locked-bg-color: #ffdcdc;

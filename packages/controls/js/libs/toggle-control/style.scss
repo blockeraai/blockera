@@ -3,7 +3,6 @@
 }
 
 .blockera-field-toggle {
-
 	.blockera-control.blockera-control-toggle {
 		display: flex;
 		min-height: var(--blockera-controls-input-height);
@@ -19,7 +18,6 @@
 	--wp-components-color-accent: var(--blockera-controls-primary-color);
 
 	&.size-small {
-
 		input[type="checkbox"],
 		input[type="radio"] {
 			width: 24px;

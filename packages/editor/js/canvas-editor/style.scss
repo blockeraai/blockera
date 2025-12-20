@@ -1,5 +1,4 @@
 .blockera-editor {
-
 	.editor-header__settings > a[aria-label="View Page"], // WP < 6.6.2
 	.editor-header__settings > a[target="_blank"]:first-child,
 	.editor-header__settings > .editor-preview-dropdown {
@@ -19,7 +18,6 @@
 }
 
 .editor-header__center {
-
 	&.is-collapsed {
 		display: flex !important;
 
@@ -30,14 +28,15 @@
 }
 
 @media (min-width: 782px) {
-
-	.editor-header:has(>.editor-header__center) {
-		grid-template: auto / 60px minmax(min-content, 2fr) 3fr minmax(min-content, 2fr) 60px;
+	.editor-header:has(> .editor-header__center) {
+		grid-template: auto / 60px minmax(min-content, 2fr) 3fr minmax(
+				min-content,
+				2fr
+			) 60px;
 	}
 }
 
 .blockera-control-breakpoints-popover {
-
 	.components-popover__content {
 		min-width: 320px !important;
 	}
@@ -100,13 +99,16 @@
 	> button,
 	> a {
 		padding: 0;
-    	height: 26px !important;
+		height: 26px !important;
 		justify-content: center;
 		color: var(--wp-components-color-foreground, #1e1e1e) !important;
 		background: none !important;
 
 		&:hover {
-			color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9)) !important;
+			color: var(
+				--wp-components-color-accent,
+				var(--wp-admin-theme-color, #3858e9)
+			) !important;
 			background: none !important;
 		}
 	}
@@ -119,8 +121,8 @@
 // Compatible with WordPress 6.5.2 - 6.6.1 versions.
 
 .editor-header__center,
- .edit-post-header__center,
- .edit-site-header-edit-mode__center {
+.edit-post-header__center,
+.edit-site-header-edit-mode__center {
 	gap: 10px;
 	align-items: center;
 
@@ -130,11 +132,10 @@
 }
 
 @media (min-width: 960px) {
-
 	.blockera-canvas-breakpoints,
-    .editor-document-bar {
+	.editor-document-bar {
 		width: min(100%, 300px) !important;
-    }
+	}
 }
 
 .blockera-control-breakpoints-popover.blockera-component-popover {

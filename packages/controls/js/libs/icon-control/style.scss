@@ -1,5 +1,11 @@
 .blockera-control-icon {
-	background: repeating-conic-gradient(#eaeaea 0%, #eaeaea 25%, transparent 0%, transparent 50%) 50% center/10px 10px;
+	background: repeating-conic-gradient(
+			#eaeaea 0%,
+			#eaeaea 25%,
+			transparent 0%,
+			transparent 50%
+		)
+		50% center/10px 10px;
 	border-color: var(--blockera-controls-border-color);
 	border-style: solid;
 	border-width: 1px;
@@ -54,11 +60,11 @@
 				padding: 0;
 
 				&.btn-icon-library {
-					border-right: 1px solid var(--blockera-controls-border-color) !important;
+					border-right: 1px solid
+						var(--blockera-controls-border-color) !important;
 				}
 			}
 		}
-
 
 		.blockera-component-button.btn-delete {
 			position: absolute;
@@ -78,7 +84,6 @@
 		}
 
 		&:hover {
-
 			.blockera-control-action-btns {
 				opacity: 1;
 				visibility: visible;
@@ -96,9 +101,7 @@
 	}
 
 	&.icon-custom {
-
 		.blockera-control-icon-preview {
-
 			&::before {
 				content: "";
 				display: block;
@@ -115,7 +118,6 @@
 			}
 
 			&:hover {
-
 				&::before {
 					opacity: 0.15;
 					visibility: visible;
@@ -139,7 +141,8 @@
 
 	.blockera-component-button.btn-choose-icon {
 		background: #ffffff !important;
-		box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color), 0 4px 7px var(--blockera-controls-border-color-hover);
+		box-shadow: inset 0 0 0 1px var(--blockera-controls-border-color),
+			0 4px 7px var(--blockera-controls-border-color-hover);
 		border-radius: 3px;
 		font-size: 12px;
 		padding: 4px 10px;

@@ -11,7 +11,6 @@
 }
 
 .blockera-block-menu-item {
-
 	span.components-menu-item__item {
 		display: block;
 	}
@@ -49,7 +48,6 @@
 // Block inserter
 
 .block-editor-inserter__panel-content {
-
 	--blockera-block-icon-opacity: 0.2;
 	--blockera-block-icon-opacity-hover: 0.8;
 	--blockera-block-icon-opacity-strong: 0.5;
@@ -62,7 +60,9 @@
 	}
 
 	.editor-block-list-item-image\/blockera\/icon {
-		--blockera-block-icon-opacity: var(--blockera-block-icon-opacity-strong);
+		--blockera-block-icon-opacity: var(
+			--blockera-block-icon-opacity-strong
+		);
 
 		.blockera-block-icon {
 			fill: var(--blockera-controls-primary-color) !important;
@@ -78,7 +78,6 @@
 	}
 
 	.block-editor-block-types-list__list-item:hover {
-
 		.blockera-block-icon.blockera-cube-icon {
 			opacity: 0;
 		}
@@ -127,7 +126,6 @@
 }
 
 .block-editor-block-switcher__container {
-
 	.components-menu-item__button {
 		position: relative;
 
@@ -137,7 +135,7 @@
 			--icon-size: 20px;
 			top: 50%;
 			margin-top: -10px;
-    		right: 5px;
+			right: 5px;
 			background: #ffffff;
 			border-radius: 50%;
 			border: 2px solid #ffffff;
@@ -152,7 +150,6 @@
 		}
 
 		&:hover {
-
 			.blockera-block-icon.blockera-cube-icon {
 				opacity: 0;
 			}
@@ -165,12 +162,16 @@
 }
 
 .blockera-block-inspector-controls-wrapper + .block-editor-block-card,
-.blockera-block-inspector-controls-wrapper ~ .block-editor-block-variation-transforms {
+.blockera-block-inspector-controls-wrapper
+	~ .block-editor-block-variation-transforms {
 	display: none !important;
 }
 
 // hide justification control inside layout constrained (Group Block)
 
-.block-editor-block-inspector .block-editor-hooks__layout-constrained .block-editor-hooks__layout-constrained-helptext + .components-base-control {
+.block-editor-block-inspector
+	.block-editor-hooks__layout-constrained
+	.block-editor-hooks__layout-constrained-helptext
+	+ .components-base-control {
 	display: none;
 }

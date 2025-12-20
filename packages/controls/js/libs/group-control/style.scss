@@ -24,7 +24,6 @@
 		font-size: 12px;
 
 		.blockera-control-action-buttons {
-
 			svg {
 				fill: currentcolor;
 			}
@@ -60,12 +59,13 @@
 			gap: -1px;
 
 			.blockera-control-dropdown-menu {
-
 				.components-button.components-dropdown-menu__toggle {
 					min-width: auto;
 					padding: 0;
 					height: auto;
-					--wp-components-color-accent: var(--blockera-controls-primary-color);
+					--wp-components-color-accent: var(
+						--blockera-controls-primary-color
+					);
 					color: currentColor;
 				}
 			}
@@ -78,7 +78,6 @@
 }
 
 .blockera-control-group.mode-accordion {
-
 	&.is-open.toggle-open-border {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
@@ -92,7 +91,6 @@
 }
 
 .blockera-control-group.mode-popover {
-
 	&.is-open {
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
@@ -100,7 +98,6 @@
 }
 
 .blockera-control-group.mode-nothing {
-
 	&.is-selected-item {
 		border-color: var(--blockera-controls-primary-color);
 

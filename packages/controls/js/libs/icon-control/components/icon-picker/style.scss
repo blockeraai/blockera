@@ -53,7 +53,6 @@
 	}
 
 	&.is-rendered {
-
 		.blockera-control-library-body {
 			display: grid;
 			grid-template-columns: repeat(7, 38px);
@@ -65,7 +64,8 @@
 			position: relative;
 
 			.blockera-component-feature-wrapper,
-			.blockera-component-feature-wrapper + .blockera-component-feature-wrapper {
+			.blockera-component-feature-wrapper
+				+ .blockera-component-feature-wrapper {
 				margin-top: 0 !important;
 			}
 		}
@@ -76,7 +76,6 @@
 		}
 
 		.blockera-control-icon-wrapper {
-
 			.blockera-component-feature-wrapper__notice {
 				--locked-size: 15px;
 
@@ -121,7 +120,11 @@
 		}
 
 		.blockera-control-library-header__count {
-			background: color-mix(in srgb, var(--blockera-controls-primary-color) 30%, #ffffff 100%);
+			background: color-mix(
+				in srgb,
+				var(--blockera-controls-primary-color) 30%,
+				#ffffff 100%
+			);
 			color: var(--blockera-controls-primary-color);
 		}
 	}
@@ -145,7 +148,6 @@
 }
 
 @keyframes spin {
-
 	from {
 		transform: rotate(0deg);
 	}
@@ -156,7 +158,6 @@
 }
 
 .blockera-control-icon-search {
-
 	.blockera-control-icon-library {
 		margin-top: 25px;
 	}

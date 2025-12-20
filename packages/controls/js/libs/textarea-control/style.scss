@@ -1,5 +1,4 @@
 textarea.blockera-control-textarea {
-
 	outline: none;
 	font-size: 12px;
 	padding: 5px 8px;
@@ -11,49 +10,34 @@ textarea.blockera-control-textarea {
 	background-color: #ffffff;
 
 	&:hover {
-
 		border-color: var(--blockera-controls-border-color-hover);
-
 	}
 
 	&:focus {
-
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-
 	}
 
 	&:disabled {
-
 		pointer-events: none;
 		user-select: none;
-
 	}
 
 	&::placeholder {
-
 		color: var(--blockera-controls-placeholder-color);
 		opacity: 1;
-
 	}
 
 	&::-ms-input-placeholder {
-
 		color: var(--blockera-controls-placeholder-color);
-
 	}
 
 	&.is-hovered:not(:hover, :focus, .is-focused) {
-
 		border-color: var(--blockera-controls-border-color-hover);
-
 	}
 
 	&.is-focused {
-
 		border-color: var(--blockera-controls-primary-color);
 		box-shadow: 0 0 0 1px var(--blockera-controls-primary-color);
-
 	}
-
 }

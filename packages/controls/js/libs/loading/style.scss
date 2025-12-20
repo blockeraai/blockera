@@ -19,24 +19,25 @@
 		gap: 0;
 
 		span {
-
 			&:nth-child(1) {
-				animation: blockera-text-loading-dot1 var(--blockera-loading-time) ease infinite;
+				animation: blockera-text-loading-dot1
+					var(--blockera-loading-time) ease infinite;
 			}
 
 			&:nth-child(2) {
-				animation: blockera-text-loading-dot2 var(--blockera-loading-time) ease infinite;
+				animation: blockera-text-loading-dot2
+					var(--blockera-loading-time) ease infinite;
 			}
 
 			&:nth-child(3) {
-				animation: blockera-text-loading-dot3 var(--blockera-loading-time) ease infinite;
+				animation: blockera-text-loading-dot3
+					var(--blockera-loading-time) ease infinite;
 			}
 		}
 	}
 }
 
 @keyframes blockera-text-loading-dot1 {
-
 	0%,
 	100% {
 		transform: translateY(0);
@@ -52,7 +53,6 @@
 }
 
 @keyframes blockera-text-loading-dot2 {
-
 	0%,
 	18%,
 	100% {
@@ -69,7 +69,6 @@
 }
 
 @keyframes blockera-text-loading-dot3 {
-
 	0%,
 	36%,
 	100% {

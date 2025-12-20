@@ -1,10 +1,10 @@
 .blockera-control-search {
 	--search-control-height: 34px;
-    --search-control-padding: 12px;
-    border-radius: 2px !important;
-    box-shadow: 0 0 0 1px var(--blockera-controls-border-color) !important;
-    overflow: hidden;
-    margin-bottom: 0 !important;
+	--search-control-padding: 12px;
+	border-radius: 2px !important;
+	box-shadow: 0 0 0 1px var(--blockera-controls-border-color) !important;
+	overflow: hidden;
+	margin-bottom: 0 !important;
 
 	.components-input-control__backdrop {
 		display: none !important;
@@ -15,14 +15,12 @@
 	}
 
 	.components-search-control__icon {
-
 		button {
 			margin-right: -6px;
 		}
 	}
 
 	.components-input-control__container {
-
 		.components-input-control__prefix {
 			order: 100;
 			padding-inline-start: 0;
@@ -33,7 +31,9 @@
 	.components-input-control__input {
 		height: var(--search-control-height) !important;
 		min-height: var(--search-control-height) !important;
-		padding: var(--search-control-padding) calc(var(--search-control-padding) * 2) var(--search-control-padding) var(--search-control-padding) !important;
+		padding: var(--search-control-padding)
+			calc(var(--search-control-padding) * 2)
+			var(--search-control-padding) var(--search-control-padding) !important;
 		background: transparent !important;
 		box-shadow: none !important;
 		margin: 0 !important;
@@ -55,6 +55,8 @@
 	}
 
 	&:not(:focus-within) {
-	    --wp-components-color-background: var(--blockera-controls-fill-color) !important;
+		--wp-components-color-background: var(
+			--blockera-controls-fill-color
+		) !important;
 	}
 }

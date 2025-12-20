@@ -1,3 +1,4 @@
-.blockera-block.wp-block-accordion-item :where(.wp-block-accordion-heading > button) {
+.blockera-block.wp-block-accordion-item
+	:where(.wp-block-accordion-heading > button) {
 	overflow: visible;
 }

@@ -1,5 +1,9 @@
 /* Fix not adding display: flex to gallery block (0.0.0 specificity). */
-:where(.blockera-block.wp-block-gallery:is(.is-vertical,.is-horizontal):not(.is-layout-flex)) {
+:where(
+		.blockera-block.wp-block-gallery:is(.is-vertical, .is-horizontal):not(
+				.is-layout-flex
+			)
+	) {
 	display: flex;
 }
 
@@ -13,7 +17,11 @@
 :where(.blockera-block.wp-block-gallery .wp-block-image) {
 	transition: inherit;
 }
-:where(.blockera-block.wp-block-gallery .wp-block-image :is(img:not([src=""]), svg:not(:empty), a)) {
+:where(
+		.blockera-block.wp-block-gallery
+			.wp-block-image
+			:is(img:not([src=""]), svg:not(:empty), a)
+	) {
 	transition: inherit;
 }
 :where(.blockera-block.wp-block-gallery .wp-block-image figcaption) {
