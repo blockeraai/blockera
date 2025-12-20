@@ -7,5 +7,32 @@
 			"addWords": true,
 			"scope": "folder"
 		}
-	}
+	},
+	"css.validate": false,
+	"scss.validate": false,
+	"less.validate": false,
+	"stylelint.enable": true,
+	"stylelint.validate": ["css", "scss", "less"],
+	"stylelint.configFile": ".stylelintrc.js",
+	"stylelint.snippet": ["css", "scss", "less"],
+	"files.associations": {
+		"*.scss": "scss"
+	},
+	"editor.formatOnSave": true,
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[scss]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[less]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"prettier.enable": true,
+	"prettier.configPath": ".prettierrc.js",
+	"prettier.requireConfig": true
 }
