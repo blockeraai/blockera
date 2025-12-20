@@ -9,6 +9,7 @@
 - Tooltip control design improvement.
 - Features Labels: design improved.
 - Flex Layout Control: improve design and tooltips to show corresponding CSS values on hover.
+- Tabs Control: improved performance when switching between tabs for a smoother experience.
 
 ### Bug Fixes
 - Fixed an issue where icons weren't updating properly when changed.
