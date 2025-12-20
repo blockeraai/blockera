@@ -222,7 +222,9 @@ class SavePost {
 
 			// Create block array structure.
 			$block = [
-				'blockName' => $block_name,
+				// WordPress by default uses 'core/' namespace for self blocks, and while we extracting it from post content we don't have the namespace, so we add it here.
+				// It should be contains the namespace to preparing block from \WP_Block_Registry::$registered_block_types stack.
+				'blockName' => ! str_contains($block_name, '/') ? 'core/' . $block_name : $block_name,
 				'attrs' => $attributes,
 			];
 
