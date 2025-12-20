@@ -681,10 +681,10 @@ class HTMLProcessor {
 					if ( '' === $root_selector ) {
 						return $tag_name . $concatenated_classes;
 					}
-					return $root_selector . ' :where(' . $tag_name . $concatenated_classes . ')';
+					return ':where(' . $root_selector . ' ' . $tag_name . $concatenated_classes . ')';
 				}
 
-				return $concatenated_classes;
+				return ':where(' . $concatenated_classes . ')';
 			}
 		}
 
@@ -693,17 +693,17 @@ class HTMLProcessor {
 			$target_selector = $tag_name . '#' . $id_match[1];
 
 			if ($with_tagname && '' !== $root_selector) {
-				return $root_selector . ' :where(' . $target_selector . ')';
+				return ':where(' . $root_selector . ' ' . $target_selector . ')';
 			}
 
-			return $target_selector;
+			return ':where(' . $target_selector . ')';
 		}
 
 		if ($with_tagname && '' !== $root_selector) {
-			return $root_selector . ' :where(' . $tag_name . ')';
+			return ':where(' . $root_selector . ' ' . $tag_name . ')';
 		}
 
-		return $tag_name;
+		return ':where(' . $tag_name . ')';
 	}
 
 	/**
