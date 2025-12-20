@@ -189,9 +189,6 @@ class Render {
 		// Represent html string.
         $html = $this->getUpdatedHTML($html, $unique_class_name, $args);
 
-		// TODO: remove this after testing!!!.
-		unset($attributes['blockeraComputedCss']);
-
 		// Check if blockeraComputedCss exists - if so, use cached CSS instead of generating from attributes.
 		if (isset($attributes['blockeraComputedCss']) && ! empty($attributes['blockeraComputedCss'])) {
 			// Decode base64-encoded CSS.
@@ -225,12 +222,6 @@ class Render {
 			}
 		} elseif (! isset($attributes['blockeraComputedCss'])) {
 
-			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
-				dump('Missing blockeraComputedCss');
-				dump('render $unique_selector', $unique_selector);
-			}
-
 			// Generate css by style engine (original behavior).
 			$styleEngine = $this->app->make(
 				StyleEngine::class,
@@ -242,11 +233,6 @@ class Render {
 			$styleEngine->setSupports($supports);
 			$styleEngine->setInlineStyles($this->inline_styles['root'] ?? []);
 			$computed_css_rules = $styleEngine->getStylesheet();
-
-			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
-				dump('render $computed_css_rules', $computed_css_rules);
-			}
 
 			// Push to stack the generated styles by style engine for current processed block.
 			if (! empty($computed_css_rules)) {

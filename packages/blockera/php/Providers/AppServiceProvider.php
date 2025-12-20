@@ -366,9 +366,6 @@ class AppServiceProvider extends ServiceProvider {
 					// Get cached post_content (now from primed cache).
 					$cached_data = \get_post_meta($post->ID, $cache_key, true);
 
-					// // TODO: remove this after testing!!!.
-					$cached_data = null;
-
 					// If cache exists and is valid, use it.
 					if (! empty($cached_data) && isset($cached_data['hash'], $cached_data['content'])) {
 						// Calculate hash only when cache exists to validate it.

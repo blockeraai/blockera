@@ -245,11 +245,6 @@ class SavePost {
 			$unique_class_name = $base_unique_class_name;
 			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
 
-			// TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
-				dump('save post $unique_selector', $unique_selector);
-			}
-
 			// Create StyleEngine instance.
 			$styleEngine = $this->app->make(
 				StyleEngine::class,
@@ -268,11 +263,6 @@ class SavePost {
 				if (! empty($custom_css)) {
 					$computed_css_rules .= PHP_EOL . $custom_css;
 				}
-			}
-
-			// // TODO: remove this after testing!!!.
-			if ( '.blockera-block.blockera-block-10' === $unique_selector ) {
-				dump('save post $computed_css_rules', $computed_css_rules);
 			}
 
 			// Base64 encode the CSS to prevent issues with special characters and newlines in JSON.
