@@ -189,33 +189,67 @@ class Render {
 		// Represent html string.
         $html = $this->getUpdatedHTML($html, $unique_class_name, $args);
 
-		// Generate css by style engine.
-        $styleEngine = $this->app->make(
-            StyleEngine::class,
-            [
-				'block' => $block,
-				'fallbackSelector' => $unique_selector,
-			]
-        );
-		$styleEngine->setSupports($supports);
-		$styleEngine->setInlineStyles($this->inline_styles['root'] ?? []);
-        $computed_css_rules = $styleEngine->getStylesheet();
+		// Check if blockeraComputedCss exists - if so, use cached CSS instead of generating from attributes.
+		if (isset($attributes['blockeraComputedCss']) && ! empty($attributes['blockeraComputedCss'])) {
+			// Decode base64-encoded CSS.
+			$computed_css_rules = base64_decode($attributes['blockeraComputedCss'], true);
+			
+			// Fallback: if base64_decode fails (for backward compatibility with non-encoded CSS).
+			if (false === $computed_css_rules) {
+				$computed_css_rules = $attributes['blockeraComputedCss'];
+			}
 
-		// Push to stack the generated styles by style engine for current processed block.
-		if (! empty($computed_css_rules)) {
-			$this->styles[] = $computed_css_rules;
-        }
+			// If classname was changed by ensureUniqueClassname, we need to update the selector in cached CSS.
+			// The cached CSS was generated with the base classname, but we're now using a unique classname.
+			if (! empty($computed_css_rules) && $unique_class_name !== $base_unique_class_name) {
+				// Get the old selector (based on base classname used during save) and new selector (current unique classname).
+				$old_base_selector = blockera_get_normalized_selector($base_unique_class_name);
+				$new_selector      = blockera_get_normalized_selector($unique_class_name);
+				
+				// Replace all occurrences of the old base selector with the new unique selector in the CSS.
+				// This ensures the CSS rules match the current unique classname.
+				$computed_css_rules = str_replace($old_base_selector, $new_selector, $computed_css_rules);
+			}
 
-		// Push to stack the inline styles for current processed block.
-		if (! empty($this->inline_styles['child'])) {
-			$this->addInlineStylesToStack($this->inline_styles['child']);
-		}
+			// Push to stack the cached styles for current processed block.
+			if (! empty($computed_css_rules)) {
+				$this->styles[] = $computed_css_rules;
+			}
 
-		// If custom css is set, add it to the block css.
-		if (! empty($attributes['blockeraCustomCSS']['value'])) {
-			// Replace the "block placeholder", "&" and "\\\\u0026" with the unique selector.
-			// because the custom css maybe contains the block placeholder, "&" and "\\\\u0026" to indicate the block element selector.
-			$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
+			// Push to stack the inline styles for current processed block.
+			if (! empty($this->inline_styles)) {
+				$this->styles[] = $this->inline_styles;
+			}
+		} elseif (! isset($attributes['blockeraComputedCss'])) {
+
+			// Generate css by style engine (original behavior).
+			$styleEngine = $this->app->make(
+				StyleEngine::class,
+				[
+					'block' => $block,
+					'fallbackSelector' => $unique_selector,
+				]
+			);
+			$styleEngine->setSupports($supports);
+			$styleEngine->setInlineStyles($this->inline_styles['root'] ?? []);
+			$computed_css_rules = $styleEngine->getStylesheet();
+
+			// Push to stack the generated styles by style engine for current processed block.
+			if (! empty($computed_css_rules)) {
+				$this->styles[] = $computed_css_rules;
+			}
+
+			// Push to stack the inline styles for current processed block.
+			if (! empty($this->inline_styles)) {
+				$this->styles[] = $this->inline_styles;
+			}
+
+			// If custom css is set, add it to the block css.
+			if (! empty($attributes['blockeraCustomCSS']['value'])) {
+				// Replace the "block placeholder", "&" and "\\\\u0026" with the unique selector.
+				// because the custom css maybe contains the block placeholder, "&" and "\\\\u0026" to indicate the block element selector.
+				$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
+			}
 		}
 
 		$styles = $this->getStyles();
@@ -246,7 +280,7 @@ class Render {
      */
     protected function getUpdatedHTML( string $html, string $classname, array $args): string {
 
-		// Optimize: Fast path - if no space, skip filtering (single classname, most common case).
+		// Optimize: Fast path - if no space, skip filtering (single classname, most common case)
 		// This avoids explode(), array_filter(), and closure overhead for the most frequent scenario.
 		if (strpos($classname, ' ') !== false) {
 			// Multiple classes exist - filter out 'blockera-block-*' classes.
@@ -256,7 +290,7 @@ class Render {
 			$found       = false;
 
 			// Manual loop is faster than array_filter with closure
-            // Find first class that doesn't start with 'blockera-block-'.
+            // Find first class that doesn't start with 'blockera-block-'
 			// Prefix 'blockera-block-' is 15 characters, so use substr for faster comparison.
 			for ($i = 0; $i < $class_count; $i++) {
                 $class = $classes[ $i ];
@@ -326,6 +360,45 @@ class Render {
 	public function resetStylesProperties(): void {
 		
 		$this->styles        = [];
-		$this->inline_styles = [];
+		$this->inline_styles = '';
+	}
+
+	/**
+	 * Convert inline styles array to CSS string.
+	 * Fast implementation without StyleEngine overhead.
+	 *
+	 * @param array $inline_styles The inline styles array in format: [selector => [property => value, ...], ...].
+	 *
+	 * @return string The generated CSS string.
+	 */
+	protected function convertInlineStylesToCSS( array $inline_styles): string {
+		if (empty($inline_styles)) {
+			return '';
+		}
+
+		$css_rules = [];
+
+		foreach ($inline_styles as $selector => $properties) {
+			if (empty($properties) || ! is_array($properties)) {
+				continue;
+			}
+
+			// Build CSS declarations.
+			$declarations = [];
+			foreach ($properties as $property => $value) {
+				// Skip empty values.
+				if ('' === $value || null === $value) {
+					continue;
+				}
+				$declarations[] = $property . ': ' . $value;
+			}
+
+			// Only add rule if there are declarations.
+			if (! empty($declarations)) {
+				$css_rules[] = $selector . ' {' . PHP_EOL . "\t" . implode(';' . PHP_EOL . "\t", $declarations) . ';' . PHP_EOL . '}';
+			}
+		}
+
+		return implode(PHP_EOL, $css_rules);
 	}
 }

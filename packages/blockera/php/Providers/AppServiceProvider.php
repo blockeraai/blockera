@@ -34,6 +34,13 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class AppServiceProvider extends ServiceProvider {
 
+	/**
+	 * Flag to track if posts have been processed to prevent multiple executions.
+	 *
+	 * @var bool
+	 */
+	protected bool $is_processed_posts = false;
+
     /**
      * Registering services classes.
      *
@@ -320,6 +327,84 @@ class AppServiceProvider extends ServiceProvider {
 				$render_instance->clearClassnamesRegistry();
 			}
         );
+
+		// Hook into the_posts filter to process posts.
+		add_filter(
+			'the_posts',
+			function( array $posts): array {
+				if (empty($posts)) {
+					return $posts;
+				}
+
+				// Instantiate services once for all posts.
+				$cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+				$save_post = $this->app->make(SavePost::class);
+				$cache_key = $cache->getCacheKey('post_content');
+
+				// Filter posts that need processing (have content and block comments).
+				$posts_to_process = [];
+				$post_ids         = [];
+				foreach ($posts as $index => $post) {
+					// Skip if post_content is empty or doesn't contain block comments.
+					if (! empty($post->post_content) && strpos($post->post_content, '<!-- wp:') !== false) {
+						$posts_to_process[ $index ] = $post;
+						$post_ids[]                 = $post->ID;
+					}
+				}
+
+				// Early exit if no posts need processing.
+				if (empty($posts_to_process)) {
+					return $posts;
+				}
+
+				// Batch prime meta cache for all post IDs to avoid N+1 queries.
+				// This loads all post meta in a single query instead of one per post.
+				\update_meta_cache('post', $post_ids);
+
+				// Process each post that needs it.
+				foreach ($posts_to_process as $index => $post) {
+					// Get cached post_content (now from primed cache).
+					$cached_data = \get_post_meta($post->ID, $cache_key, true);
+
+					// If cache exists and is valid, use it.
+					if (! empty($cached_data) && isset($cached_data['hash'], $cached_data['content'])) {
+						// Calculate hash only when cache exists to validate it.
+						$current_hash = md5($post->post_content);
+
+						// If hash matches, use cached content (fast path).
+						if ($cached_data['hash'] === $current_hash) {
+							$posts[ $index ]->post_content = $cached_data['content'];
+							continue;
+						}
+					}
+
+					// Cache missing or invalid - process post_content.
+					$result = $save_post->processPostContentForStyles($post->post_content);
+
+					if (! empty($result) && isset($result['content'])) {
+						// Calculate hash only when we need to cache.
+						$current_hash = md5($post->post_content);
+
+						// Store processed content in cache.
+						$cache->setCache(
+							$post->ID,
+							'post_content',
+							[
+								'hash'    => $current_hash,
+								'content' => $result['content'],
+							]
+						);
+
+						// Replace post_content with processed content.
+						$posts[ $index ]->post_content = $result['content'];
+					}
+				}
+
+				return $posts;
+			},
+			10e2,
+			1
+		);
     }
 
     /**

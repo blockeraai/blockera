@@ -58,9 +58,9 @@ trait Processor {
 	/**
 	 * Store inline styles collected from the block html.
 	 *
-	 * @var array $inline_styles the inline styles array.
+	 * @var string $inline_styles the inline styles string.
 	 */
-	protected array $inline_styles = [];
+	protected string $inline_styles = '';
 
 	/**
 	 * Set the HTML processor object.
@@ -198,88 +198,6 @@ trait Processor {
 	}
 
 	/**
-	 * Convert inline styles to css declarations.
-	 *
-	 * @param \WP_HTML_Tag_Processor $processor The HTML tag processor object.
-	 * @param string                 $selector The selector.
-	 * @param string                 $style The style attribute value.
-	 *
-	 * @return array The css declarations.
-	 */
-	protected function createCssDeclarations( \WP_HTML_Tag_Processor $processor, string $selector, string $style): array {
-		$properties = '';
-		$class      = $processor->get_attribute('class') ?? '';
-
-		$classes = explode(' ', $class);
-		$classes = array_filter(
-            $classes,
-            function ( $class) {
-				return $this->transpile_classname !== $class;
-			}
-        );
-
-		if ($style) {
-			$properties    = explode(';', $style);
-			$root_class    = str_replace('.blockera-block.', '', $selector);
-			$class_details = blockera_get_wp_classname_details($class);
-
-			// Customize selector based on current tag being processed.
-			$tag_name = $processor->get_tag();
-
-			$picked_classname = blockera_pick_specific_classname($classes);
-			$child_selector   = blockera_create_css_selector($picked_classname);
-
-			if (! str_contains($class, $root_class)) {
-				if (! ( $class_details['is_matched'] ?? false )) {
-					// First class as a selector.
-					$selector = $selector . ' ' . strtolower($tag_name) . $child_selector;
-				}
-			} else {				
-				// Check if this is the first tag by checking if class contains the root class.
-				$is_first_tag = $class && str_contains($class, str_replace('.blockera-block.', '', $selector));
-				
-				// If not the first tag, append tag name or classname to selector for specificity.
-				if (! $class && ! $is_first_tag && $tag_name) {
-					$selector = $selector . ' ' . strtolower($tag_name);
-				} elseif (! $is_first_tag && $tag_name) {
-					$selector = $selector . ' ' . strtolower($tag_name) . $child_selector;
-				}
-			}
-		}
-
-		return compact('properties', 'selector');
-	}
-
-	/**
-	 * Add inline styles to stack.
-	 *
-	 * @param array $inline_styles The inline styles.
-	 *
-	 * @return void
-	 */
-	protected function addInlineStylesToStack( array $inline_styles): void {
-		
-		if (empty($inline_styles)) {
-			return;
-		}
-
-		// Use isset lookup with array_flip for O(1) instead of in_array O(n) (eliminates linear search overhead).
-		// This converts O(n*m) to O(n+m) where n=styles count, m=inline_styles count.
-		$styles_lookup = array_flip($this->styles);
-
-		foreach ($inline_styles as $selector => $declarations) {
-
-			// Create css rule.
-			$css_rule = $selector . $declarations;
-
-			if (! isset($styles_lookup[ $css_rule ])) {
-				$styles_lookup[ $css_rule ] = true;
-				$this->styles[]             = $css_rule;
-			}
-		}
-	}
-
-	/**
 	 * Cleanup the html and inline styles.
 	 *
 	 * @param string $html The html to cleanup.
@@ -288,26 +206,18 @@ trait Processor {
 	 * @return string The cleaned html.
 	 */
 	protected function cleanup( string $html, string $classname, string $unique_selector): string {
-		$selector = blockera_get_compatible_block_css_selector(
-			blockera_get_block_type_property($this->block['blockName'], 'selectors'),
-			'root',
-			[
-				'fallback' => true,
-				'block-type' => 'master',
-				'block-name' => $this->block['blockName'],
-				'blockera-unique-selector' => $unique_selector,
-			]
-		);
+		// TODO: wrap the selector with :where() to ensure it has highest specificity than Blockera styles.
+		$selector = $unique_selector;
 		$html     = $this->html_processor->updateWrapperClassname($html, $classname);
 
 		$this->html_processor->setRootSelector($selector);
-		$cleanup_result = $this->html_processor->cleanupHTML($html, $this->global_css_props_classes);	
+		
+		[
+			'html' => $html, // Replace html with the updated html.
+			'css' => $css,
+		] = $this->html_processor->cleanupHTML($html, $this->global_css_props_classes);	
 
-		// Replace html with the updated html.
-		$html = $cleanup_result['html'];
-
-		// Store the inline styles.
-		$this->inline_styles = $cleanup_result['css'];
+		$this->inline_styles = $css;
 
 		return $html;
 	}
