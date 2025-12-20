@@ -7,3 +7,4 @@ vendor
 wordpress*
 *.js
 node_modules
+tests/**/*.css

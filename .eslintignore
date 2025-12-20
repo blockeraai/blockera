@@ -15,3 +15,4 @@ wordpress*
 **/stories/*
 /bin/plugin/**
 /bin/*.js
+tests/**/input.html
