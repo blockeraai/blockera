@@ -10,6 +10,7 @@ import {
 import { isEquals, isNumber } from '@blockera/utils';
 import { boxPositionControlDefaultValue } from '@blockera/controls/js/libs/box-spacing-control/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import { isSpecialUnit } from '@blockera/controls';
 
 export function spacingFromWPCompatibility({
 	attributes,
@@ -228,8 +229,8 @@ export function spacingToWPCompatibility({
 export function convertToValue(spacing: string | Object): string {
 	spacing = generateAttributeVarStringFromVA(spacing);
 
-	// css func not supported
-	if (spacing.endsWith('css')) {
+	// Advanced css functions not supported by core.
+	if (isSpecialUnit(spacing)) {
 		spacing = '';
 	}
 
