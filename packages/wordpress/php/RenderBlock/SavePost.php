@@ -282,6 +282,17 @@ class SavePost {
 			$processed_content = substr_replace($processed_content, $new_block_comment, $match_offset, strlen($full_match));
 		}
 
+		/**
+		 * Cleanup HTML by removing inline styles.
+		 * 
+		 * This inline styles are added by block editor but Blockera adds them.
+		 * By removing it we reduce the later clean process and also reduce the CSS size.
+		 * 
+		 * @see HTMLProcessor::cleanupBlockeraBlocksInlineStyles()
+		 */
+		$html_processor    = $this->app->make(HTMLProcessor::class);
+		$processed_content = $html_processor->cleanupBlockeraBlocksInlineStyles($processed_content);
+
 		return [
 			'content' => $processed_content,
 		];

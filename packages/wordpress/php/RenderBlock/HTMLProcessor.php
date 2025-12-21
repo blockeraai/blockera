@@ -66,6 +66,83 @@ class HTMLProcessor {
 	];
 
 	/**
+	 * List of CSS properties to remove from block wrapper inline styles.
+	 * 
+	 * This list should be generated dynamically by using following script in Blockera main repository:
+	 * ".patch/block_wrapper_properties_to_remove.js"
+	 *
+	 * @var array
+	 */
+	protected static array $block_wrapper_properties_to_remove = [
+		'align-items',
+		'align-self',
+		'aspect-ratio',
+		'background',
+		'background-color',
+		'border',
+		'border-bottom-color',
+		'border-bottom-left-radius',
+		'border-bottom-right-radius',
+		'border-bottom-style',
+		'border-bottom-width',
+		'border-color',
+		'border-left-color',
+		'border-left-width',
+		'border-radius',
+		'border-right-color',
+		'border-right-width',
+		'border-style',
+		'border-top-color',
+		'border-top-left-radius',
+		'border-top-right-radius',
+		'border-top-style',
+		'border-top-width',
+		'border-width',
+		'box-shadow',
+		'color',
+		'display',
+		'flex',
+		'flex-basis',
+		'flex-direction',
+		'font-size',
+		'font-style',
+		'font-weight',
+		'gap',
+		'height',
+		'justify-content',
+		'letter-spacing',
+		'line-height',
+		'margin-bottom',
+		'margin-left',
+		'margin-right',
+		'margin-top',
+		'min-height',
+		'min-width',
+		'object-fit',
+		'overflow',
+		'padding',
+		'padding-bottom',
+		'padding-left',
+		'padding-right',
+		'padding-top',
+		'position',
+		'text-align',
+		'text-decoration',
+		'text-transform',
+		'transition',
+		'width',
+		'word-spacing',
+		'writing-mode',
+	];
+
+	/**
+	 * Cached property pattern for style cleanup.
+	 *
+	 * @var string|null
+	 */
+	protected static ?string $style_property_pattern = null;
+
+	/**
 	 * Sets the root selector property.
 	 *
 	 * @param string $selector
@@ -87,16 +164,16 @@ class HTMLProcessor {
 		
 		// Check for '>' first (child combinator has higher priority).
 		$pos = strpos($this->root_selector, '>');
-		if (false !== $pos) {
+		if ( false !== $pos ) {
 			// Extract first part before '>'.
-			return trim(substr($this->root_selector, 0, $pos));
+			return trim( substr( $this->root_selector, 0, $pos ) );
 		}
 		
 		// Check for space (descendant combinator).
 		$pos = strpos($this->root_selector, ' ');
-		if (false !== $pos) {
+		if ( false !== $pos ) {
 			// Extract first part before ' '.
-			return trim(substr($this->root_selector, 0, $pos));
+			return trim( substr( $this->root_selector, 0, $pos ) );
 		}
 		
 		// No split needed - return trimmed original.
@@ -209,12 +286,10 @@ class HTMLProcessor {
 			$position           = $match[0][1] + $offset;
 			$has_blockera_class = false !== strpos( $full_tag, 'blockera-block');
 			$is_wrapper         = ( $is_debug_mode || $has_blockera_class ) && 0 === $key && $full_tag === $wrapper;
+			$selector           = null;
 
 			// Optimize: Combine attrs in single operation.
-			$all_attrs = trim( $before_attrs . ' ' . $after_attrs );
-
-			$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, ! $is_wrapper );
-
+			$all_attrs      = trim( $before_attrs . ' ' . $after_attrs );
 			$classes_to_add = [];
 
 			if ( ! empty( $style ) ) {
@@ -247,7 +322,9 @@ class HTMLProcessor {
 					'special_styles' => $special_styles,
 				] = $this->computeSpecialStyles( $style );
 
-				if ( ! empty( $selector ) ) {
+				if ( ! empty( $style ) ) {
+					$selector = $this->generateSelectorFromAttrs( $tag_name, $all_attrs, ! $is_wrapper );
+
 					// replace !important style to reduce it's specificity.
 					$this->css_rules[ $is_wrapper ? 'root': 'child' ][] = $selector . ' { ' . str_replace(' !important', '', $style) . ' }';
 				}
@@ -287,6 +364,250 @@ class HTMLProcessor {
 			'html' => $cleaned_html,
 			'css'  => $this->formatCssRules(),
 		];
+	}
+
+
+	/**
+	 * Cleanup blockera blocks inline styles.
+	 * The inline styles are added by block editor but Blockera adds them.
+	 * By removing it we reduce the later clean process and also reduce the CSS size.
+	 * 
+	 * This is of properties that should be removed is self::$block_wrapper_properties_to_remove property.
+	 * 
+	 * @param string $html The HTML content to process.
+	 * 
+	 * @return string The cleaned HTML content.
+	 */
+	public function cleanupBlockeraBlocksInlineStyles( string $html ): string {
+
+		/**
+		 * 1. All Blockera Blocks
+		 * 
+		 * General cleanup: Remove specific CSS properties from inline styles
+		 * for elements with "blockera-block-" class.
+		 * 
+		 * This regex:
+		 * 1. Matches tags with "blockera-block-" class that have inline styles
+		 * 2. Removes specified CSS properties from the style attribute
+		 * 3. Removes the style attribute entirely if it becomes empty
+		 * 
+		 * Properties removed: font-size, line-height, letter-spacing, text-transform, 
+		 * text-align, font-style, font-weight, font-family
+		 */
+		$result = preg_replace_callback(
+            '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?\bclass\s*=\s*["\'][^"\']*blockera-block-[^"\']*["\'][^>]*)>/is',
+            function( $matches ) {
+                return $this->cleanupStyleAttribute( $matches[1], $matches[2], $matches[0] );
+            },
+            $html
+		);
+
+		// Handle null return from preg_replace_callback (error case).
+		if ( null === $result ) {
+			return $html;
+		}
+
+		$html = $result;
+
+		/**
+		 * 2. Button Block
+		 * 
+		 * Cleanup: Remove specific CSS properties from inline styles
+		 * for <a> tags inside elements with both "blockera-block" and "wp-block-button" classes.
+		 * 
+		 * This regex:
+		 * 1. Matches parent tags with both "blockera-block" and "wp-block-button" classes
+		 * 2. Captures the entire element content (from opening to closing tag)
+		 * 3. Finds <a> tags inside and removes specified CSS properties from their style attributes
+		 * 4. Removes the style attribute entirely if it becomes empty
+		 */
+		$result = preg_replace_callback(
+            '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?\bclass\s*=\s*["\'](?=[^"\']*blockera-block)(?=[^"\']*wp-block-button)[^"\']*["\'][^>]*)>((?:[^<]|<(?!\/\1>))*)<\/\1>/is',
+            function( $matches ) {
+                $tag_name  = $matches[1];
+                $all_attrs = $matches[2];
+                $content   = $matches[3];
+                
+                // Clean up <a> tags inside the content.
+                $cleaned_content = preg_replace_callback(
+                    '/<a\s+([^>]*)>/is',
+                    function( $a_matches ) {
+                        return $this->cleanupStyleAttribute( 'a', $a_matches[1], $a_matches[0] );
+                    },
+                    $content
+                );
+                
+                // Handle null return from nested preg_replace_callback.
+                if ( null === $cleaned_content ) {
+                    $cleaned_content = $content;
+                }
+                
+                return '<' . $tag_name . ( ! empty( $all_attrs ) ? ' ' . $all_attrs : '' ) . '>' . $cleaned_content . '</' . $tag_name . '>';
+            },
+            $html
+		);
+
+		// Handle null return from preg_replace_callback (error case).
+		if ( null === $result ) {
+			$result = $html;
+		}
+
+		$html = $result;
+
+		/**
+		 * 3. Accordion Heading Block
+		 * 
+		 * Cleanup: Remove specific CSS properties from inline styles
+		 * for elements with "wp-block-accordion-heading__toggle" class inside elements
+		 * with both "blockera-block" and "wp-block-accordion-heading" classes.
+		 * 
+		 * This regex:
+		 * 1. Matches parent tags with both "blockera-block" and "wp-block-accordion-heading" classes
+		 * 2. Captures the entire element content (from opening to closing tag)
+		 * 3. Finds elements with "wp-block-accordion-heading__toggle" class inside and removes specified CSS properties from their style attributes
+		 * 4. Removes the style attribute entirely if it becomes empty
+		 */
+		$result = preg_replace_callback(
+            '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?\bclass\s*=\s*["\'](?=[^"\']*blockera-block)(?=[^"\']*wp-block-accordion-heading)[^"\']*["\'][^>]*)>((?:[^<]|<(?!\/\1>))*)<\/\1>/is',
+            function( $matches ) {
+                $tag_name  = $matches[1];
+                $all_attrs = $matches[2];
+                $content   = $matches[3];
+                
+                // Clean up elements with wp-block-accordion-heading__toggle class inside the content.
+                $cleaned_content = preg_replace_callback(
+                    '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?\bclass\s*=\s*["\'][^"\']*wp-block-accordion-heading__toggle[^"\']*["\'][^>]*)>/is',
+                    function( $toggle_matches ) {
+                        return $this->cleanupStyleAttribute( $toggle_matches[1], $toggle_matches[2], $toggle_matches[0] );
+                    },
+                    $content
+                );
+                
+                // Handle null return from nested preg_replace_callback.
+                if ( null === $cleaned_content ) {
+                    $cleaned_content = $content;
+                }
+                
+                return '<' . $tag_name . ( ! empty( $all_attrs ) ? ' ' . $all_attrs : '' ) . '>' . $cleaned_content . '</' . $tag_name . '>';
+            },
+            $html
+		);
+
+		// Handle null return from preg_replace_callback (error case).
+		if ( null === $result ) {
+			$result = $html;
+		}
+
+		$html = $result;
+
+		/**
+		 * 4. Image Block
+		 * 
+		 * Cleanup: Remove specific CSS properties from inline styles
+		 * for <img> tags inside elements with both "blockera-block" and "wp-block-image" classes.
+		 * 
+		 * This regex:
+		 * 1. Matches parent tags with both "blockera-block" and "wp-block-image" classes
+		 * 2. Captures the entire element content (from opening to closing tag)
+		 * 3. Finds <img> tags inside and removes specified CSS properties from their style attributes
+		 * 4. Removes the style attribute entirely if it becomes empty
+		 */
+		$result = preg_replace_callback(
+            '/<([a-zA-Z][a-zA-Z0-9]*)\s+([^>]*?\bclass\s*=\s*["\'](?=[^"\']*blockera-block)(?=[^"\']*wp-block-image)[^"\']*["\'][^>]*)>((?:[^<]|<(?!\/\1>))*)<\/\1>/is',
+            function( $matches ) {
+                $tag_name  = $matches[1];
+                $all_attrs = $matches[2];
+                $content   = $matches[3];
+                
+                // Clean up <img /> tags inside the content (img tags are always self-closing, including multiline).
+                $cleaned_content = preg_replace_callback(
+                    '/<img\s+([^>]*?)\s*\/\s*>/is',
+                    function( $img_matches ) {
+                        $attrs    = trim( $img_matches[1] );
+                        $original = $img_matches[0];
+
+                        $cleaned = $this->cleanupStyleAttribute( 'img', $attrs, $original );
+                        
+                        // Ensure self-closing format is preserved (img tags are always self-closing).
+                        if ( ! str_ends_with( $cleaned, '/>' ) ) {
+                            $cleaned = rtrim( $cleaned, '>' ) . ' />';
+                        }
+
+                        return $cleaned;
+                    },
+                    $content
+                );
+                
+                // Handle null return from nested preg_replace_callback.
+                if ( null === $cleaned_content ) {
+                    $cleaned_content = $content;
+                }
+                
+                return '<' . $tag_name . ( ! empty( $all_attrs ) ? ' ' . $all_attrs : '' ) . '>' . $cleaned_content . '</' . $tag_name . '>';
+            },
+            $html
+		);
+
+		// Handle null return from preg_replace_callback (error case).
+		if ( null === $result ) {
+			return $html;
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Clean up style attribute by removing specified CSS properties.
+	 * 
+	 * This used to cleanup blockera blocks inline styles. 
+	 * The cleanupBlockeraBlocksInlineStyles() method.
+	 * 
+	 * Optimized version that uses cached patterns and efficient string operations.
+	 * 
+	 * @param string $tag_name The HTML tag name.
+	 * @param string $all_attrs The attributes string.
+	 * @param string $original_match The original matched string to return if no style attribute exists.
+	 * 
+	 * @return string The cleaned up tag with modified or removed style attribute.
+	 */
+	protected function cleanupStyleAttribute( string $tag_name, string $all_attrs, string $original_match ): string {
+        // Quick check: if 'style' keyword not found, return early.
+		if ( false === strpos( $all_attrs, 'style' ) ) {
+			return $original_match;
+		}
+
+        // Extract style attribute value using regex (needed for proper parsing).
+		if ( ! preg_match( '/\bstyle\s*=\s*["\']([^"\']+)["\']/', $all_attrs, $style_matches ) ) {
+			return $original_match;
+		}
+
+		$style_value = $style_matches[1];
+		
+        // Build and cache property pattern (only once).
+		if ( null === self::$style_property_pattern ) {
+			self::$style_property_pattern = '\b(?:' . implode( '|', array_map( 'preg_quote', self::$block_wrapper_properties_to_remove ) ) . ')\s*:\s*[^;]+;?';
+		}
+
+        // Remove properties in one pass.
+		$style_value = preg_replace( '/' . self::$style_property_pattern . '/i', '', $style_value );
+		
+        // Clean up: normalize semicolons and trim (combine operations).
+		$style_value = trim( preg_replace( '/\s*;\s*/', ';', $style_value ), '; ' );
+		
+        // Replace or remove style attribute.
+		if ( empty( $style_value ) ) {
+			// Remove style attribute: find and remove the entire attribute.
+			$all_attrs = preg_replace( '/\s*\bstyle\s*=\s*["\'][^"\']*["\']/', '', $all_attrs );
+		} else {
+			// Replace style value: use captured groups for efficient replacement.
+			$all_attrs = preg_replace( '/(\bstyle\s*=\s*["\'])[^"\']*(["\'])/', '$1' . $style_value . '$2', $all_attrs, 1 );
+		}
+		
+        // Normalize whitespace in one pass.
+		$all_attrs = preg_replace( '/\s+/', ' ', trim( $all_attrs ) );
+		
+        // Build result efficiently.
+		return '<' . $tag_name . ( $all_attrs ? ' ' . $all_attrs : '' ) . '>';
 	}
 
 	/**
@@ -772,7 +1093,7 @@ class HTMLProcessor {
 	 *
 	 * @return array The computed special styles.
 	 */
-	protected static function computeSpecialStyles( string $style): array {
+	protected static function computeSpecialStyles( string $style ): array {
 
 		$output = [
 			'style' => $style,
