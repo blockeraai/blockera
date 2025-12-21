@@ -22,6 +22,7 @@ const specialUnits = [
 	'revert',
 	'content',
 	'none',
+	'func',
 ];
 
 // Function to get a unit object based on a specific value
