@@ -34,6 +34,11 @@ export function lineHeightToWPCompatibility({
 		};
 	}
 
+	// Advanced css functions and units not supported by core.
+	if (newValue.endsWith('func')) {
+		newValue = undefined;
+	}
+
 	return {
 		style: {
 			typography: {
