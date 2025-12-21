@@ -81,26 +81,50 @@ export function positionToWPCompatibility({
 		};
 	}
 
+	let top = '';
+	if (newValue?.position?.top) {
+		top = generateAttributeVarStringFromVA(newValue?.position?.top);
+
+		if (top.endsWith('func')) {
+			top = '';
+		}
+	}
+
+	let right = '';
+	if (newValue?.position?.right) {
+		right = generateAttributeVarStringFromVA(newValue?.position?.right);
+
+		if (right.endsWith('func')) {
+			right = '';
+		}
+	}
+
+	let bottom = '';
+	if (newValue?.position?.bottom) {
+		bottom = generateAttributeVarStringFromVA(newValue?.position?.bottom);
+
+		if (bottom.endsWith('func')) {
+			bottom = '';
+		}
+	}
+
+	let left = '';
+	if (newValue?.position?.left) {
+		left = generateAttributeVarStringFromVA(newValue?.position?.left);
+
+		if (left.endsWith('func')) {
+			left = '';
+		}
+	}
+
 	return {
 		style: {
 			position: {
 				type: newValue.type,
-				top: newValue?.position?.top
-					? generateAttributeVarStringFromVA(newValue?.position?.top)
-					: '',
-				right: newValue?.position?.right
-					? generateAttributeVarStringFromVA(
-							newValue?.position?.right
-					  )
-					: '',
-				bottom: newValue?.position?.bottom
-					? generateAttributeVarStringFromVA(
-							newValue?.position?.bottom
-					  )
-					: '',
-				left: newValue?.position?.left
-					? generateAttributeVarStringFromVA(newValue?.position?.left)
-					: '',
+				top,
+				right,
+				bottom,
+				left,
 			},
 		},
 	};
