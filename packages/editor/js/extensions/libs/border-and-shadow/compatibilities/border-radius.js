@@ -91,6 +91,15 @@ export function borderRadiusToWPCompatibility({
 				},
 			};
 		}
+
+		// Advanced css functions not supported by core.
+		return {
+			style: {
+				border: {
+					radius: undefined,
+				},
+			},
+		};
 	} else if (newValue.type === 'custom') {
 		if (
 			newValue?.topLeft === '' &&
@@ -119,26 +128,40 @@ export function borderRadiusToWPCompatibility({
 			bottomRight: undefined,
 		};
 
-		if (newValue.topLeft !== '' && !newValue.topLeft.endsWith('func')) {
-			corners.topLeft = newValue.topLeft;
+		if (newValue.topLeft !== '') {
+			// Advanced css functions not supported by core.
+			if (!newValue.topLeft.endsWith('func')) {
+				corners.topLeft = newValue.topLeft;
+			} else {
+				corners.topLeft = undefined;
+			}
 		}
 
-		if (newValue.topRight !== '' && !newValue.topRight.endsWith('func')) {
-			corners.topRight = newValue.topRight;
+		if (newValue.topRight !== '') {
+			// Advanced css functions not supported by core.
+			if (!newValue.topRight.endsWith('func')) {
+				corners.topRight = newValue.topRight;
+			} else {
+				corners.topRight = undefined;
+			}
 		}
 
-		if (
-			newValue.bottomLeft !== '' &&
-			!newValue.bottomLeft.endsWith('func')
-		) {
-			corners.bottomLeft = newValue.bottomLeft;
+		if (newValue.bottomLeft !== '') {
+			// Advanced css functions not supported by core.
+			if (!newValue.bottomLeft.endsWith('func')) {
+				corners.bottomLeft = newValue.bottomLeft;
+			} else {
+				corners.bottomLeft = undefined;
+			}
 		}
 
-		if (
-			newValue.bottomRight !== '' &&
-			!newValue.bottomRight.endsWith('func')
-		) {
-			corners.bottomRight = newValue.bottomRight;
+		if (newValue.bottomRight !== '') {
+			// Advanced css functions not supported by core.
+			if (!newValue.bottomRight.endsWith('func')) {
+				corners.bottomRight = newValue.bottomRight;
+			} else {
+				corners.bottomRight = undefined;
+			}
 		}
 
 		return {
