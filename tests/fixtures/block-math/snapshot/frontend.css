@@ -83,11 +83,80 @@
 	content: "After";
 }
 
-.blockera-block.blockera-block-1.wp-block-math :where(mtd) {
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 0pt;
+	padding-right: 0pt;
+}
+
+:where(.blockera-block.blockera-block-1 mo) {
+	math-depth: 0;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
 
-.blockera-block.blockera-block-1.wp-block-math :where(mo) {
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+:where(.blockera-block.blockera-block-1 mtd) {
+	padding-left: 5.9776pt;
+	padding-right: 0pt;
+}
+
+:where(.blockera-block.blockera-block-1 mo) {
 	math-depth: 0;
 }

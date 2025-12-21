@@ -2,24 +2,32 @@ p.blockera-block.blockera-block-1 {
 	background-color: #ffeded;
 }
 
+:where(.blockera-block.blockera-block-1) {
+	background-color: #ffeded;
+}
+
 p.blockera-block.blockera-block-2 {
-	background-color: #ffedec;
 	background-image: url('https://placehold.co/400x400');
 	background-size: contain;
 	background-position: 0% 50%;
 	background-repeat: no-repeat;
 	background-attachment: scroll;
+	background-color: #ffedec;
+}
+
+:where(.blockera-block.blockera-block-2) {
+	background-color: #ffedec;
 }
 
 p.blockera-block.blockera-block-3 {
-	color: #c00000;
-	background-color: #ffedec;
-	letter-spacing: 6px;
 	background-image: url('https://placehold.co/400x400'), url('https://placehold.co/400x400');
 	background-size: contain, cover;
 	background-position: 50% 50%, 50% 50%;
 	background-repeat: no-repeat, repeat;
 	background-attachment: scroll, scroll;
+	background-color: #ffedec;
+	color: #c00000;
+	letter-spacing: 6px;
 	-webkit-text-stroke-color: #840000;
 	-webkit-text-stroke-width: 2px;
 }
@@ -28,13 +36,25 @@ p.blockera-block.blockera-block-3 {
 	color: #c00000;
 }
 
-p.blockera-block.blockera-block-4 {
+:where(.blockera-block.blockera-block-3) {
+	color: #c00000;
+	background: linear-gradient(90deg, #009efa 10%, #e52e00 90%);
 	background-color: #ffedec;
+	letter-spacing: 6px;
+}
+
+p.blockera-block.blockera-block-4 {
 	background-size: auto;
 	background-position: 0 0;
 	background-repeat: repeat;
 	background-image: linear-gradient(90deg, rgb(0, 158, 250) 35%, rgb(229, 46, 0) 51%);
 	background-attachment: scroll;
+	background-color: #ffedec;
+}
+
+:where(.blockera-block.blockera-block-4) {
+	background: linear-gradient(90deg, rgb(0, 158, 250) 35%, rgb(229, 46, 0) 51%);
+	background-color: #ffedec;
 }
 
 p.blockera-block.blockera-block-5 {
@@ -45,6 +65,10 @@ p.blockera-block.blockera-block-5 {
 	background-attachment: scroll;
 }
 
+:where(.blockera-block.blockera-block-5) {
+	background: radial-gradient(rgb(0, 159, 251) 12%, rgb(229, 46, 0) 100%);
+}
+
 p.blockera-block.blockera-block-6 {
 	background-size: contain, auto;
 	background-position: 50% 50%, 0 0;
@@ -53,7 +77,15 @@ p.blockera-block.blockera-block-6 {
 	background-attachment: scroll, fixed;
 }
 
+:where(.blockera-block.blockera-block-6) {
+	background: radial-gradient(rgb(0, 159, 251) 56%, rgb(229, 46, 0) 100%);
+}
+
 p.blockera-block.blockera-block-7 {
+	background-color: #c6ffbf;
+}
+
+:where(.blockera-block.blockera-block-7) {
 	background-color: #c6ffbf;
 }
 
@@ -63,6 +95,10 @@ p.blockera-block.blockera-block-8 {
 	-webkit-background-clip: content-box;
 }
 
+:where(.blockera-block.blockera-block-8) {
+	background-color: #c6ffbf;
+}
+
 p.blockera-block.blockera-block-9 {
 	background-color: #ff4949;
 	background-clip: text;
@@ -70,8 +106,16 @@ p.blockera-block.blockera-block-9 {
 	-webkit-text-fill-color: transparent;
 }
 
+:where(.blockera-block.blockera-block-9) {
+	background-color: #ff4949;
+}
+
 p.blockera-block.blockera-block-10 {
 	background-color: #c6ffbe;
 	background-clip: inherit;
 	-webkit-background-clip: inherit;
+}
+
+:where(.blockera-block.blockera-block-10) {
+	background-color: #c6ffbe;
 }

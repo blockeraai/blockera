@@ -63,7 +63,14 @@
 	};
 }
 
-.blockera-block.blockera-block-1.wp-block-avatar :where(img.avatar-120) {
+:where(.blockera-block.blockera-block-1) {
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+:where(.blockera-block.blockera-block-1 img.avatar-120) {
 	border-color: #ff2323;
 	border-radius: 50px;
 	border-width: 5px;
@@ -83,7 +90,7 @@
 	};
 }
 
-.blockera-block.blockera-block-2.wp-block-avatar :where(img.avatar-80) {
+:where(.blockera-block.blockera-block-2 img.avatar-80) {
 	border-color: #009216;
 	border-radius: 0px;
 	border-width: 3px;
@@ -96,7 +103,7 @@
 	width: 80px;
 }
 
-.blockera-block.blockera-block-3.wp-block-avatar :where(img.avatar-80) {
+:where(.blockera-block.blockera-block-3 img.avatar-80) {
 	border-color: #2358e8ab;
 	border-radius: 70px;
 	border-width: 3px;
@@ -112,6 +119,6 @@
 	transform: rotateX(-36deg) rotateY(-43deg) rotateZ(5deg);
 }
 
-.blockera-block.blockera-block-4.wp-block-avatar :where(img.avatar-96.has-accent-3-border-color) {
+:where(.blockera-block.blockera-block-4 img.avatar-96.has-accent-3-border-color) {
 	border-width: 4px;
 }

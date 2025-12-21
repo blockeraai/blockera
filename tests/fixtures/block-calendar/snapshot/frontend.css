@@ -105,6 +105,6 @@
 	};
 }
 
-.blockera-block.blockera-block-1.wp-block-calendar :where(table.wp-calendar-table.has-background) {
+:where(.blockera-block.blockera-block-1 table.wp-calendar-table.has-background) {
 	background-color: #ececfc;
 }

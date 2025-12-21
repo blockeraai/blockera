@@ -16,12 +16,11 @@
 	width: 50%;
 }
 
-.blockera-block.blockera-block-1.wp-block-table :where(table.has-background.has-fixed-layout) {
+:where(.blockera-block.blockera-block-1 table.has-background.has-fixed-layout) {
 	background-color: #ffe1e1;
 }
 
 .blockera-block.blockera-block-2.wp-block-table > table {
-	padding-top: 50px;
 	background-color: #ffd7d7;
 	background-clip: padding-box;
 	-webkit-background-clip: padding-box;
@@ -139,11 +138,15 @@
 	};
 }
 
-.blockera-block.blockera-block-2.wp-block-table :where(table.has-background) {
+:where(.blockera-block.blockera-block-2) {
+	padding-top: 50px;
+}
+
+:where(.blockera-block.blockera-block-2 table.has-background) {
 	background-color: #ffd7d7;
 }
 
-.blockera-block.blockera-block-2.wp-block-table :where(mark.has-inline-color) {
+:where(.blockera-block.blockera-block-2 mark.has-inline-color) {
 	background-color: rgba(0, 0, 0, 0);
 	color: #ffcaca;
 }

@@ -1,7 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-footnotes {
 	background-color: #ffcccc;
-	border-radius: 10px;
 	border: 2px solid #ff2e2e;
+	border-radius: 10px;
 	display: flex !important;
 	flex-direction: column;
 	justify-content: center !important;
@@ -84,4 +84,15 @@
 	align-self: stretch;
 	text-align: center;
 	content: "After";
+}
+
+:where(.blockera-block.blockera-block-1) {
+	background-color: #ffcccc;
+	border-color: #ff2e2e;
+	border-radius: 10px;
+	border-width: 2px;
+	padding-top: 20px;
+	padding-right: 50px;
+	padding-bottom: 20px;
+	padding-left: 50px;
 }

@@ -26,10 +26,22 @@ p.blockera-block.blockera-block-5 {
 	margin-top: var(--wp--preset--spacing--spacing-not-found-1, 10px);
 }
 
+:where(.blockera-block.blockera-block-5) {
+	margin-top: var(--wp--preset--spacing--spacing-not-found-1);
+}
+
 p.blockera-block.blockera-block-6 {
 	margin-top: var(--wp--preset--spacing--spacing-not-found-2);
 }
 
+:where(.blockera-block.blockera-block-6) {
+	margin-top: var(--wp--preset--spacing--spacing-not-found-2);
+}
+
 p.blockera-block.blockera-block-7 {
+	margin-top: var(--wp--preset--spacing--spacing-not-found-3);
+}
+
+:where(.blockera-block.blockera-block-7) {
 	margin-top: var(--wp--preset--spacing--spacing-not-found-3);
 }

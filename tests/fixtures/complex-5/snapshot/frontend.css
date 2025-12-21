@@ -1,33 +1,56 @@
 .blockera-block.blockera-block-1.wp-block-group {
 	background-color: #d8e0ff;
-	margin-top: 0;
-	margin-bottom: 0;
+	display: default !important;
 	padding-top: 60px;
 	padding-bottom: 60px;
-	display: default !important;
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+:where(.blockera-block.blockera-block-1) {
+	background-color: #d8e0ff;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 60px;
+	padding-bottom: 60px;
 }
 
 .blockera-block.blockera-block-2.wp-block-group {
 	background-color: #95aaff;
 }
 
+:where(.blockera-block.blockera-block-2) {
+	background-color: #95aaff;
+}
+
 .blockera-block.blockera-block-3.wp-block-heading {
 	background-color: #5577ff;
+	padding: 0 0 0 0;
+	font-weight: 800;
+	font-style: normal;
 	font-size: 2rem;
+	text-align: left;
+}
+
+:where(.blockera-block.blockera-block-3) {
+	background-color: #5577ff;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	font-size: clamp(1.25rem, 1.25rem + ((1vw - 0.2rem) * 1.176), 2rem);
 	font-style: normal;
 	font-weight: 800;
-	padding: 0 0 0 0;
-	text-align: left;
 }
 
 .blockera-block.blockera-block-4.wp-block-group {
 	background-color: #5577ff;
-	margin-top: 60px;
-	padding-top: 30px;
-	padding-bottom: 30px;
 	border-top: 1px solid #213fbe;
 	display: grid !important;
 	gap: 30px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	margin-top: 60px;
 }
 
 .blockera-block.blockera-block-4.wp-block-group.is-layout-constrained > * + * {
@@ -44,31 +67,66 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-4) {
+	border-top-color: #213fbe;
+	border-top-style: solid;
+	border-top-width: 1px;
+	background-color: #5577ff;
+	margin-top: 60px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+}
+
 .blockera-block.blockera-block-5.wp-block-group {
-	color: #ffffff;
 	background-color: #213fbe;
 	display: flex !important;
 	flex-direction: column;
+	color: #ffffff;
 }
 
 .blockera-block.blockera-block-5 :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
+:where(.blockera-block.blockera-block-5) {
+	color: #ffffff;
+	background-color: #213fbe;
+}
+
 .blockera-block.blockera-block-6.wp-block-heading {
 	background-color: #0d2385;
+	padding: 0 0 0 0;
+	font-weight: 700;
+	font-style: normal;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
+}
+
+:where(.blockera-block.blockera-block-6) {
+	background-color: #0d2385;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
 	font-style: normal;
 	font-weight: 700;
-	padding: 0 0 0 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 .blockera-block.blockera-block-7.wp-block-heading {
 	background-color: #0d2385;
+	padding: 0 0 0 0;
+	font-weight: 700;
+	font-style: normal;
+	font-size: var(--wp--preset--font-size--medium, 1rem);
+}
+
+:where(.blockera-block.blockera-block-7) {
+	background-color: #0d2385;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
 	font-style: normal;
 	font-weight: 700;
-	padding: 0 0 0 0;
-	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
 p.blockera-block.blockera-block-8 {
@@ -77,11 +135,19 @@ p.blockera-block.blockera-block-8 {
 	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
+:where(.blockera-block.blockera-block-8) {
+	background-color: #0d2385;
+	padding-top: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+
 .blockera-block.blockera-block-9.wp-block-group {
-	color: #ffffff;
 	background-color: #213fbe;
 	display: grid !important;
 	gap: var(--wp--preset--spacing--40, 30px);
+	color: #ffffff;
 }
 
 .blockera-block.blockera-block-9.wp-block-group.is-layout-constrained > * + * {
@@ -123,7 +189,17 @@ p.blockera-block.blockera-block-8 {
 	};
 }
 
-.blockera-block.blockera-block-9.wp-block-group :where(h3.wp-block-heading.has-medium-font-size) {
+:where(.blockera-block.blockera-block-9) {
+	color: #ffffff;
+	background-color: #213fbe;
+}
+
+:where(.blockera-block.blockera-block-9 h3.wp-block-heading.has-medium-font-size) {
+	font-style: normal;
+	font-weight: 700;
+}
+
+:where(.blockera-block.blockera-block-9 h3.wp-block-heading.has-medium-font-size) {
 	font-style: normal;
 	font-weight: 700;
 }
@@ -132,7 +208,7 @@ p.blockera-block.blockera-block-8 {
 	margin-block-start: 60px !important;
 }
 
-.blockera-block.blockera-block-10.wp-block-group :where(h3.wp-block-heading.has-medium-font-size) {
+:where(.blockera-block.blockera-block-10 h3.wp-block-heading.has-medium-font-size) {
 	font-style: normal;
 	font-weight: 700;
 }
@@ -147,7 +223,7 @@ p.blockera-block.blockera-block-8 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-11.wp-block-group :where(h3.wp-block-heading.has-medium-font-size) {
+:where(.blockera-block.blockera-block-11 h3.wp-block-heading.has-medium-font-size) {
 	font-style: normal;
 	font-weight: 700;
 }

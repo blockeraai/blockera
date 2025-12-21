@@ -47,12 +47,26 @@ p.blockera-block.blockera-block-4 {
 	font-family: var(--wp--preset--font-family--fira-code);
 }
 
+:where(.blockera-block.blockera-block-4) {
+	background-color: #00000017;
+}
+
 p.blockera-block.blockera-block-5 {
+	font-weight: 700;
+	font-style: normal;
+}
+
+:where(.blockera-block.blockera-block-5) {
 	font-style: normal;
 	font-weight: 700;
 }
 
 p.blockera-block.blockera-block-6 {
+	font-weight: 700;
+	font-style: italic;
+}
+
+:where(.blockera-block.blockera-block-6) {
 	font-style: italic;
 	font-weight: 700;
 }
@@ -61,12 +75,24 @@ p.blockera-block.blockera-block-7 {
 	font-size: 20px;
 }
 
+:where(.blockera-block.blockera-block-7) {
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
+}
+
 p.blockera-block.blockera-block-8 {
 	font-size: 1.2rem;
 }
 
+:where(.blockera-block.blockera-block-8) {
+	font-size: clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.51), 1.2rem);
+}
+
 p.blockera-block.blockera-block-9 {
 	font-size: calc(18px);
+}
+
+:where(.blockera-block.blockera-block-9) {
+	font-size: calc(18px)func;
 }
 
 p.blockera-block.blockera-block-10 {
@@ -77,7 +103,15 @@ p.blockera-block.blockera-block-11 {
 	line-height: 2;
 }
 
+:where(.blockera-block.blockera-block-11) {
+	line-height: 2;
+}
+
 p.blockera-block.blockera-block-12 {
+	line-height: 20px;
+}
+
+:where(.blockera-block.blockera-block-12) {
 	line-height: 20px;
 }
 
@@ -85,11 +119,19 @@ p.blockera-block.blockera-block-13 {
 	line-height: calc(20px);
 }
 
+:where(.blockera-block.blockera-block-13) {
+	line-height: calc(20px)func;
+}
+
 p.blockera-block.blockera-block-14 {
 	color: #ff0000;
 }
 
 .blockera-block.blockera-block-14 a:not(.wp-element-button) {
+	color: #ff0000;
+}
+
+:where(.blockera-block.blockera-block-14) {
 	color: #ff0000;
 }
 
@@ -129,7 +171,15 @@ p.blockera-block.blockera-block-22 {
 	text-transform: uppercase;
 }
 
+:where(.blockera-block.blockera-block-22) {
+	text-transform: uppercase;
+}
+
 p.blockera-block.blockera-block-23 {
+	text-transform: lowercase;
+}
+
+:where(.blockera-block.blockera-block-23) {
 	text-transform: lowercase;
 }
 
@@ -137,11 +187,23 @@ p.blockera-block.blockera-block-24 {
 	text-decoration: overline;
 }
 
+:where(.blockera-block.blockera-block-24) {
+	text-decoration: overline;
+}
+
 p.blockera-block.blockera-block-25 {
 	text-decoration: underline;
 }
 
+:where(.blockera-block.blockera-block-25) {
+	text-decoration: underline;
+}
+
 p.blockera-block.blockera-block-26 {
+	text-decoration: line-through;
+}
+
+:where(.blockera-block.blockera-block-26) {
 	text-decoration: line-through;
 }
 
@@ -156,6 +218,10 @@ p.blockera-block.blockera-block-28 {
 p.blockera-block.blockera-block-29 {
 	writing-mode: vertical-lr;
 	text-orientation: mixed;
+}
+
+:where(.blockera-block.blockera-block-29) {
+	writing-mode: vertical-rl;
 }
 
 p.blockera-block.blockera-block-30 {
@@ -174,6 +240,10 @@ p.blockera-block.blockera-block-32 {
 }
 
 p.blockera-block.blockera-block-33 {
+	letter-spacing: 10px;
+}
+
+:where(.blockera-block.blockera-block-33) {
 	letter-spacing: 10px;
 }
 

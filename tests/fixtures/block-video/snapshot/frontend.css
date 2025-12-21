@@ -1,7 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-video {
-	border-radius: 10px;
 	background-color: #ffd3d3;
 	border: 2px solid #ff9696;
+	border-radius: 10px;
 	transition: all 500ms ease 0ms;
 	padding: 10px 10px 10px 10px;
 }
@@ -80,4 +80,15 @@
 		border-radius: 5px;
 		content: "After";
 	};
+}
+
+:where(.blockera-block.blockera-block-1) {
+	border-color: #ff9696;
+	border-width: 2px;
+	border-radius: 10px;
+	background-color: #ffd3d3;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }

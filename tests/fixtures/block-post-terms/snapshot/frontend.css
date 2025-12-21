@@ -1,7 +1,7 @@
 .blockera-block.blockera-block-1.wp-block-post-terms {
 	background-color: #dbe8ff;
-	border-radius: 10px;
 	border: 1px solid #8db7ff;
+	border-radius: 10px;
 	transition: all 500ms ease 0ms;
 	padding: 10px 20px 10px 20px;
 }
@@ -65,6 +65,17 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-1) {
+	background-color: #dbe8ff;
+	border-color: #8db7ff;
+	border-radius: 10px;
+	border-width: 1px;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+}
+
 .blockera-block.blockera-block-2.wp-block-post-terms {
 	background-color: #b8f1de;
 	display: flex !important;
@@ -102,6 +113,13 @@
 	.blockera-block.blockera-block-2 a {
 		align-self: stretch;
 	};
+}
+
+:where(.blockera-block.blockera-block-2) {
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-3.wp-block-post-terms {
@@ -202,6 +220,14 @@
 	content: "After";
 }
 
+:where(.blockera-block.blockera-block-3) {
+	background-color: #ffe5a8;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
 .blockera-block.blockera-block-4.wp-block-post-terms {
 	background-color: #f9b8ff;
 	padding: 11px 11px 11px 11px;
@@ -221,4 +247,12 @@
 
 .blockera-block.blockera-block-4 a:hover {
 	background-color: #c624d7;
+}
+
+:where(.blockera-block.blockera-block-4) {
+	background-color: #f9b8ff;
+	padding-top: 11px;
+	padding-right: 11px;
+	padding-bottom: 11px;
+	padding-left: 11px;
 }

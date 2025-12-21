@@ -22,6 +22,10 @@ p.blockera-block.blockera-block-2::after {
 	content: "After";
 }
 
+:where(.blockera-block.blockera-block-2) {
+	background-color: #ededed;
+}
+
 p.blockera-block.blockera-block-3 {
 	background-color: #fff1f1;
 	display: flex !important;
@@ -44,6 +48,14 @@ p.blockera-block.blockera-block-3::after {
 	content: attr(id);
 }
 
+:where(.blockera-block.blockera-block-3) {
+	background-color: #fff1f1;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
 p.blockera-block.blockera-block-4 {
 	background-color: #cafccd;
 	display: flex !important;
@@ -64,6 +76,14 @@ p.blockera-block.blockera-block-4::after {
 	background-color: #00000033;
 	padding: 3px 5px 3px 5px;
 	content: "→#"attr(id)"← ";
+}
+
+:where(.blockera-block.blockera-block-4) {
+	background-color: #cafccd;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
 }
 
 .blockera-block.blockera-block-5.wp-block-group {
@@ -109,6 +129,14 @@ p.blockera-block.blockera-block-4::after {
 	font-weight: 600;
 	font-style: normal;
 	content: "After #"attr(id)"";
+}
+
+:where(.blockera-block.blockera-block-5) {
+	background-color: #e2e2e2;
+	padding-top: 20px;
+	padding-right: 19px;
+	padding-bottom: 20px;
+	padding-left: 19px;
 }
 
 .blockera-block.blockera-block-5 {

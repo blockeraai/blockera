@@ -146,6 +146,15 @@
 	content: "After";
 }
 
+:where(.blockera-block.blockera-block-1) {
+	background-color: #ffeeee;
+	border-radius: 10px;
+	padding-top: 30px;
+	padding-right: 40px;
+	padding-bottom: 30px;
+	padding-left: 40px;
+}
+
 .blockera-block.blockera-block-2.wp-block-page-list {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%28255%2C%20163%2C%20163%29%3B%20fill%3A%20rgb%28255%2C%20163%2C%20163%29%3B%20width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M6%205V18.5911L12%2013.8473L18%2018.5911V5H6Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--color: #ffa3a3;

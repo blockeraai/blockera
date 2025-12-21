@@ -1,6 +1,5 @@
 .blockera-block.blockera-block-1.wp-block-group {
 	background-color: #fffbcd;
-	margin-top: 10px;
 	padding: 15px 15px 15px 15px;
 }
 
@@ -58,6 +57,11 @@
 		margin-top: 0;
 		content: "After";
 	};
+}
+
+:where(.blockera-block.blockera-block-1) {
+	background-color: #fffbcd;
+	margin-top: 10px;
 }
 
 .blockera-block.blockera-block-2.wp-block-group {
@@ -193,19 +197,28 @@
 	content: "After";
 }
 
+:where(.blockera-block.blockera-block-2) {
+	background-color: #faeaea;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
 p.blockera-block.blockera-block-3 {
 	background-color: #00000024;
 }
 
-p.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
+:where(.blockera-block.blockera-block-3) {
+	background-color: #00000024;
+}
+
+:where(.blockera-block.blockera-block-3 mark.has-inline-color) {
 	background-color: #dfdfdf;
 }
 
 .blockera-block.blockera-block-4.wp-block-group {
 	background-color: #deedc7;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 1000;
 	display: flex !important;
 	flex-direction: row;
 	align-items: flex-end !important;
@@ -213,6 +226,9 @@ p.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
 	flex-wrap: nowrap !important;
 	height: 100px;
 	padding: 10px 10px 10px 10px;
+	font-weight: 1000;
+	font-style: normal;
+	font-size: 16px;
 }
 
 .blockera-block.blockera-block-4 :where(p) {
@@ -260,6 +276,17 @@ p.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
 	content: "After";
 }
 
+:where(.blockera-block.blockera-block-4) {
+	background-color: #deedc7;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+	font-style: normal;
+	font-weight: 1000;
+}
+
 .blockera-block.blockera-block-5 :where(a:not(.wp-element-button)) {
 	background-color: #ffb8b8;
 }
@@ -288,6 +315,6 @@ p.blockera-block.blockera-block-3 :where(mark.has-inline-color) {
 	background-color: #20d4df;
 }
 
-.blockera-block.blockera-block-5.wp-block-group :where(mark.has-inline-color) {
+:where(.blockera-block.blockera-block-5 mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

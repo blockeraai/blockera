@@ -34,12 +34,12 @@
 }
 
 .wp-block-list > li.blockera-block.blockera-block-4 {
-	color: #ffffff;
 	background-color: #eb8c50;
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%20d%3D%22M12%2018.5a6.5%206.5%200%201%201%200-13%206.5%206.5%200%200%201%200%2013ZM4%2012a8%208%200%201%201%2016%200%208%208%200%200%201-16%200Zm8%204a4%204%200%200%200%204-4H8a4%204%200%200%200%204%204Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--gap: 100px;
 	--blockera--icon--size: 50px;
 	--blockera--icon--color: #853300;
+	color: #ffffff;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-4 a:not(.wp-element-button) {
@@ -59,28 +59,39 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-4) {
+	color: #ffffff;
+	background-color: #eb8c50;
+}
+
 .wp-block-list > li.blockera-block.blockera-block-5 {
-	color: #c73535;
 	background-color: #ffd3d3;
-	font-style: normal;
-	font-weight: 600;
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%287%2C%20195%2C%200%29%3B%20fill%3A%20rgb%287%2C%20195%2C%200%29%3B%20width%3A%2042px%3B%20height%3A%2042px%3B%22%3E%3Cpath%20d%3D%22M12%2013.06l3.712%203.713%201.061-1.06L13.061%2012l3.712-3.712-1.06-1.06L12%2010.938%208.288%207.227l-1.061%201.06L10.939%2012l-3.712%203.712%201.06%201.061L12%2013.061z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--size: 42px;
 	--blockera--icon--color: #d70000;
+	font-weight: 600;
+	font-style: normal;
+	color: #c73535;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-5 a:not(.wp-element-button) {
 	color: #c73535;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-6 {
-	border-radius: 10px;
-	color: #900000;
-	background-color: #ffdada;
-	font-size: 18px;
+:where(.blockera-block.blockera-block-5) {
+	color: #c73535;
+	background-color: #ffd3d3;
 	font-style: normal;
 	font-weight: 600;
+}
+
+.wp-block-list > li.blockera-block.blockera-block-6 {
+	background-color: #ffdada;
 	padding: 10px 10px 10px 10px;
+	font-weight: 600;
+	font-style: normal;
+	color: #900000;
+	font-size: 18px;
 }
 
 .wp-block-list.blockera-block.blockera-block-6:not(.wp-block-list .wp-block-list) > li {
@@ -105,14 +116,24 @@
 	border-radius: 20px;
 }
 
+:where(.blockera-block.blockera-block-6) {
+	border-radius: 10px;
+	color: #900000;
+	background-color: #ffdada;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 600;
+}
+
 .wp-block-list > li.blockera-block.blockera-block-7 {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m13.06%2012%206.47-6.47-1.06-1.06L12%2010.94%205.53%204.47%204.47%205.53%2010.94%2012l-6.47%206.47%201.06%201.06L12%2013.06l6.47%206.47%201.06-1.06L13.06%2012Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 }
 
 .blockera-block.blockera-block-8.wp-block-list {
-	border-color: #26ff00;
-	border-width: 2px;
-	border-radius: 10px;
 	background-color: #edffcf;
 	transition: all 500ms ease 0ms;
 	display: flex !important;
@@ -187,6 +208,13 @@ ul.blockera-block.blockera-block-8:hover {
 	};
 }
 
+:where(.blockera-block.blockera-block-8) {
+	border-color: #26ff00;
+	border-width: 2px;
+	border-radius: 10px;
+	background-color: #edffcf;
+}
+
 .wp-block-list > li.blockera-block.blockera-block-9::before {
 	background-color: #00000066;
 	content: "Before Overrided!";
@@ -206,4 +234,8 @@ ul.blockera-block.blockera-block-8:hover {
 	.wp-block-list > li.blockera-block.blockera-block-10 {
 		order: -1;
 	};
+}
+
+:where(.blockera-block.blockera-block-10) {
+	background-color: #0000002e;
 }

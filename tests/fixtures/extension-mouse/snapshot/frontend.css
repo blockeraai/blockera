@@ -3,12 +3,24 @@ p.blockera-block.blockera-block-1 {
 	cursor: wait;
 }
 
+:where(.blockera-block.blockera-block-1) {
+	background-color: #bde1ff;
+}
+
 p.blockera-block.blockera-block-2 {
 	background-color: #aceab3;
 	user-select: contain;
 }
 
+:where(.blockera-block.blockera-block-2) {
+	background-color: #aceab3;
+}
+
 p.blockera-block.blockera-block-3 {
 	background-color: #efcf9f;
 	pointer-events: none;
+}
+
+:where(.blockera-block.blockera-block-3) {
+	background-color: #efcf9f;
 }

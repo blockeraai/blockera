@@ -7,8 +7,12 @@
 }
 
 p.blockera-block.blockera-block-2 {
-	font-size: 20px;
 	font-family: var(--wp--preset--font-family--fira-code);
+	font-size: 20px;
+}
+
+:where(.blockera-block.blockera-block-2) {
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
 }
 
 .blockera-block.blockera-block-2 {

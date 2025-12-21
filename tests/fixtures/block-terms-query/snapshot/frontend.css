@@ -51,9 +51,18 @@
 	};
 }
 
-.blockera-block.blockera-block-2.wp-block-group {
+:where(.blockera-block.blockera-block-1) {
+	background-color: #d9d9d9;
 	border-radius: 50px;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block.blockera-block-2.wp-block-group {
 	background-color: #ffe0e0;
+	border-radius: 50px;
 	transition: all 500ms ease 0ms;
 	display: flex !important;
 	flex-wrap: nowrap !important;
@@ -74,13 +83,22 @@
 	background-color: #997171;
 }
 
+:where(.blockera-block.blockera-block-2) {
+	border-radius: 50px;
+	background-color: #ffe0e0;
+	padding-top: 10px;
+	padding-right: 20px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+}
+
 .blockera-block.blockera-block-3.wp-block-term-name {
 	background-color: #ffb2b2;
-	font-size: 18px;
-	font-style: normal;
-	font-weight: 700;
 	border-radius: 50px;
 	padding: 5px 10px 5px 10px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 18px;
 }
 
 .blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
@@ -137,14 +155,26 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-3) {
+	background-color: #ffb2b2;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 700;
+	border-radius: 50px;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+}
+
 .blockera-block.blockera-block-4.wp-block-term-description {
 	background-color: #b2ddab;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 600;
 	border-radius: 50px;
 	flex: 1 1 0%;
 	padding: 5px 10px 5px 10px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 14px;
 }
 
 @media screen and (max-width: 478px) {
@@ -190,14 +220,26 @@
 	};
 }
 
-.blockera-block.blockera-block-5.wp-block-term-count {
-	background-color: #78efff;
+:where(.blockera-block.blockera-block-4) {
+	background-color: #b2ddab;
 	font-size: 14px;
 	font-style: normal;
 	font-weight: 600;
+	border-radius: 50px;
+	padding-top: 5px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-5.wp-block-term-count {
+	background-color: #78efff;
 	border-radius: 40px;
 	min-width: 30px;
 	height: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 14px;
 	text-align: center;
 }
 
@@ -251,4 +293,12 @@
 		border-radius: 5px;
 		content: "←";
 	};
+}
+
+:where(.blockera-block.blockera-block-5) {
+	background-color: #78efff;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
+	border-radius: 40px;
 }

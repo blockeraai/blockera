@@ -9,14 +9,6 @@
 }
 
 .blockera-block.blockera-block-1.wp-block-audio {
-	border-color: #6ab2ed;
-	border-width: 2px;
-	border-radius: 8px;
-	background-color: #c0e3ff;
-	padding-top: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-left: 30px;
 	transition: all 500ms ease 0ms;
 }
 
@@ -53,6 +45,17 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-1) {
+	border-color: #6ab2ed;
+	border-width: 2px;
+	border-radius: 8px;
+	background-color: #c0e3ff;
+	padding-top: 30px;
+	padding-right: 30px;
+	padding-bottom: 30px;
+	padding-left: 30px;
+}
+
 .blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure {
 	background-color: var(--wp--preset--color--accent-2, #F6CFF4);
 }
@@ -66,10 +69,9 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-audio {
-	border-radius: 0px;
-	font-size: 18px;
-	font-style: normal;
 	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
 }
 
 @media screen and (max-width: 478px) {
@@ -123,6 +125,13 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-2) {
+	border-radius: 0px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 600;
+}
+
 .blockera-block.blockera-block-3 figcaption {
 	background-color: #dee4e6;
 	color: #520000;
@@ -144,8 +153,6 @@
 }
 
 .blockera-block.blockera-block-4.wp-block-audio {
-	border-radius: 0px;
-	background-color: #85ead9;
 	transition: all 500ms ease 0ms;
 }
 
@@ -188,4 +195,9 @@
 	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure:hover {
 		background-color: #5adfc9;
 	};
+}
+
+:where(.blockera-block.blockera-block-4) {
+	border-radius: 0px;
+	background-color: #85ead9;
 }

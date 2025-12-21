@@ -1,6 +1,10 @@
 .blockera-block.blockera-block-1.wp-block-spacer {
-	height: 120px;
 	width: 300px;
+	height: 120px;
+}
+
+:where(.blockera-block.blockera-block-1) {
+	height: 120px;
 }
 
 .blockera-block.blockera-block-1 {
@@ -12,11 +16,15 @@
 }
 
 .blockera-block.blockera-block-2.wp-block-spacer {
-	height: 300px;
 	width: 100%;
 	width: -moz-available;
 	width: -webkit-fill-available;
 	width: stretch;
+	height: 300px;
+}
+
+:where(.blockera-block.blockera-block-2) {
+	height: 300px;
 }
 
 .blockera-block.blockera-block-2 {

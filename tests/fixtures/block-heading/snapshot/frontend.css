@@ -1,12 +1,12 @@
 .blockera-block.blockera-block-1.wp-block-heading {
-	border-radius: 60px;
 	background-color: #d5f5ff;
-	font-style: normal;
-	font-weight: 700;
-	text-transform: uppercase;
 	border: 2px solid #00000033;
+	border-radius: 60px;
 	transition: all 500ms ease 0ms;
 	padding: 20px 20px 20px 20px;
+	font-weight: 700;
+	font-style: normal;
+	text-transform: uppercase;
 }
 
 @media screen and (max-width: 478px) {
@@ -56,10 +56,24 @@
 	};
 }
 
+:where(.blockera-block.blockera-block-1) {
+	border-color: #00000033;
+	border-width: 2px;
+	border-radius: 60px;
+	background-color: #d5f5ff;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	font-style: normal;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
 .blockera-block.blockera-block-2.wp-block-heading {
+	background-color: #fff8e7;
 	border-radius: 20px;
 	color: #009f08;
-	background-color: #fff8e7;
 	line-height: 1.6em;
 }
 
@@ -129,6 +143,13 @@
 	color: #493500;
 }
 
-.blockera-block.blockera-block-2.wp-block-heading :where(mark.has-inline-color) {
+:where(.blockera-block.blockera-block-2) {
+	border-radius: 20px;
+	color: #009f08;
+	background-color: #fff8e7;
+	line-height: 1.6em;
+}
+
+:where(.blockera-block.blockera-block-2 mark.has-inline-color) {
 	background-color: #dfdfdf;
 }

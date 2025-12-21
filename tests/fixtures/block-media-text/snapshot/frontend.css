@@ -1,6 +1,5 @@
 .blockera-block.blockera-block-1.wp-block-media-text {
 	background-color: #f1e4b8;
-	grid-template-columns: 43% auto;
 	border: 3px solid #e2c566;
 	border-radius: 10px;
 	transition: all 500ms ease 0ms;
@@ -66,14 +65,33 @@
 	content: "After";
 }
 
+:where(.blockera-block.blockera-block-1) {
+	border-color: #e2c566;
+	border-width: 3px;
+	background-color: #f1e4b8;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	grid-template-columns: 43% auto;
+}
+
 .blockera-block.blockera-block-3.wp-block-heading {
-	border-radius: 50px;
 	background-color: #ffa6a6;
-	font-size: 18px;
-	font-style: normal;
+	border-radius: 50px;
 	font-weight: 700;
+	font-style: normal;
+	font-size: 18px;
 }
 
 .blockera-block.blockera-block-3.wp-block-heading:hover {
 	background-color: #ed6a6a;
+}
+
+:where(.blockera-block.blockera-block-3) {
+	border-radius: 50px;
+	background-color: #ffa6a6;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 700;
 }

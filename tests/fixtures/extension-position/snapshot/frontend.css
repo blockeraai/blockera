@@ -4,10 +4,18 @@ p.blockera-block.blockera-block--1 {
 	top: 0;
 }
 
+:where(.blockera-block.blockera-block--1) {
+	background-color: #fed7d7;
+}
+
 p.blockera-block.blockera-block--2 {
 	background-color: #fed7d7;
 	position: relative;
 	right: 0;
+}
+
+:where(.blockera-block.blockera-block--2) {
+	background-color: #fed7d7;
 }
 
 p.blockera-block.blockera-block--3 {
@@ -16,10 +24,18 @@ p.blockera-block.blockera-block--3 {
 	bottom: 0;
 }
 
+:where(.blockera-block.blockera-block--3) {
+	background-color: #fed7d7;
+}
+
 p.blockera-block.blockera-block--4 {
 	background-color: #fed7d7;
 	position: relative;
 	left: 0;
+}
+
+:where(.blockera-block.blockera-block--4) {
+	background-color: #fed7d7;
 }
 
 p.blockera-block.blockera-block--5 {
@@ -31,10 +47,18 @@ p.blockera-block.blockera-block--5 {
 	left: 0;
 }
 
+:where(.blockera-block.blockera-block--5) {
+	background-color: #ff9696;
+}
+
 p.blockera-block.blockera-block--6 {
 	background-color: #ffbfbf;
 	position: absolute;
 	top: 0;
+}
+
+:where(.blockera-block.blockera-block--6) {
+	background-color: #ffbfbf;
 }
 
 p.blockera-block.blockera-block--7 {
@@ -43,10 +67,18 @@ p.blockera-block.blockera-block--7 {
 	right: 0;
 }
 
+:where(.blockera-block.blockera-block--7) {
+	background-color: #ffbfbf;
+}
+
 p.blockera-block.blockera-block--8 {
 	background-color: #ff7171;
 	position: absolute;
 	bottom: 0;
+}
+
+:where(.blockera-block.blockera-block--8) {
+	background-color: #ff7171;
 }
 
 p.blockera-block.blockera-block--9 {
@@ -55,7 +87,15 @@ p.blockera-block.blockera-block--9 {
 	left: 0;
 }
 
+:where(.blockera-block.blockera-block--9) {
+	background-color: #ff9696;
+}
+
 p.blockera-block.blockera-block--10 {
+	background-color: #fed7d7;
+}
+
+:where(.blockera-block.blockera-block--10) {
 	background-color: #fed7d7;
 }
 
@@ -64,4 +104,8 @@ p.blockera-block.blockera-block--11 {
 	position: relative;
 	top: 0;
 	z-index: 20;
+}
+
+:where(.blockera-block.blockera-block--11) {
+	background-color: #ff9696;
 }

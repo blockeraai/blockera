@@ -1,13 +1,13 @@
 .blockera-block.blockera-block-1.wp-block-categories {
 	background-color: #c4ffe3;
-	font-size: 16px;
-	font-style: normal;
-	font-weight: 700;
 	border-radius: 50px;
 	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
 	padding: 40px 40px 40px 40px;
+	font-weight: 700;
+	font-style: normal;
+	font-size: 16px;
 }
 
 .blockera-block.blockera-block-1 li.cat-item {
@@ -137,15 +137,27 @@
 	};
 }
 
-.blockera-block.blockera-block-2.wp-block-categories {
-	color: #0055ff;
-	font-size: 18px;
+:where(.blockera-block.blockera-block-1) {
+	background-color: #c4ffe3;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
 	font-weight: 700;
+	border-radius: 50px;
+	padding-top: 40px;
+	padding-right: 40px;
+	padding-bottom: 40px;
+	padding-left: 40px;
+}
+
+.blockera-block.blockera-block-2.wp-block-categories {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m14.5%206.5-1%201%203.7%203.7H4v1.6h13.2l-3.7%203.7%201%201%205.6-5.5z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	display: flex !important;
 	flex-direction: column;
 	gap: 16px;
+	font-weight: 700;
+	font-style: normal;
+	color: #0055ff;
+	font-size: 18px;
 }
 
 .blockera-block.blockera-block-2 li.cat-item {
@@ -154,11 +166,14 @@
 	padding: 5px 10px 5px 10px;
 }
 
-.blockera-block.blockera-block-3.wp-block-categories {
+:where(.blockera-block.blockera-block-2) {
 	color: #0055ff;
-	font-size: 18px;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 700;
+}
+
+.blockera-block.blockera-block-3.wp-block-categories {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22m14.5%206.5-1%201%203.7%203.7H4v1.6h13.2l-3.7%203.7%201%201%205.6-5.5z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--gap: 40px;
 	--blockera--icon--size: 30px;
@@ -167,10 +182,21 @@
 	display: flex !important;
 	flex-direction: column;
 	gap: 20px;
+	font-weight: 700;
+	font-style: normal;
+	color: #0055ff;
+	font-size: 18px;
 }
 
 .blockera-block.blockera-block-3 li.cat-item {
 	background-color: #dbecff;
 	border-radius: 27px;
 	padding: 5px 10px 5px 10px;
+}
+
+:where(.blockera-block.blockera-block-3) {
+	color: #0055ff;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
+	font-style: normal;
+	font-weight: 700;
 }
