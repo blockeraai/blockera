@@ -1,3 +1,20 @@
 {
-	"recommendations": ["esbenp.prettier-vscode", "stylelint.vscode-stylelint"]
+	"recommendations": [
+		"valeryanm.vscode-phpsab",
+		"sheeraz.phpcs",
+		"swordev.phpstan",
+		"dbaeumer.vscode-eslint",
+		"esbenp.prettier-vscode",
+		"flowtype.flow-for-vscode",
+		"stylelint.vscode-stylelint",
+		"editorconfig.editorconfig",
+		"streetsidesoftware.code-spell-checker",
+		"cypress-io.cypress",
+		"orta.vscode-jest",
+		"formulahendry.auto-rename-tag",
+		"wordpress.wordpress",
+		"christian-kohler.path-intellisense",
+		"christian-kohler.npm-intellisense",
+		"PKief.material-icon-theme"
+	]
 }
