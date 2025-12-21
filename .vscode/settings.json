@@ -34,5 +34,40 @@
 	},
 	"prettier.enable": true,
 	"prettier.configPath": ".prettierrc.js",
-	"prettier.requireConfig": true
+	"prettier.requireConfig": true,
+	"[php]": {
+		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "valeryanm.vscode-phpsab",
+		"editor.codeActionsOnSave": {
+			"source.fixAll": "never"
+		}
+	},
+	"phpsab.executablePath": "${workspaceFolder}/vendor/bin/phpcbf",
+	"phpsab.standard": "${workspaceFolder}/phpcs.xml",
+	"phpsab.autoConfigSearch": false,
+	"phpsab.enable": true,
+	"phpsab.snifferEnable": true,
+	"phpsab.snifferExecutablePath": "${workspaceFolder}/vendor/bin/phpcs",
+	"phpsab.snifferStandard": "${workspaceFolder}/phpcs.xml",
+	"phpsab.snifferAutoConfigSearch": false,
+	"phpsab.onsave": true,
+	"phpcs.enable": true,
+	"phpcs.executablePath": "${workspaceFolder}/vendor/bin/phpcs",
+	"phpcs.standard": "${workspaceFolder}/phpcs.xml",
+	"phpcs.autoConfigSearch": false,
+	"phpcs.showSources": true,
+	"phpcs.showWarnings": true,
+	"phpcs.composerJsonPath": "${workspaceFolder}/composer.json",
+	"phpstan.enabled": true,
+	"phpstan.configFile": "${workspaceFolder}/phpstan.neon",
+	"phpstan.executablePath": "${workspaceFolder}/vendor/bin/phpstan",
+	"phpstan.analyseOnSave": true,
+	"phpstan.analyseOnType": false,
+	"phpstan.showStatusBar": true,
+	"phpstan.clearCacheOnSave": false,
+	"phpstan.memoryLimit": "2G",
+	"phpstan.level": 5,
+	"phpstan.paths": ["packages"],
+	"phpstan.errorFormatter": "table",
+	"phpstan.fullMessage": true
 }

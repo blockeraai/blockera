@@ -1,0 +1,18 @@
+parameters:
+	level: 5
+	paths:
+		- packages
+	excludePaths:
+		analyse:
+			- packages/*/tests
+			- packages/*/vendor
+			- packages/*/js
+			- packages/dev-phpunit
+			- packages/bootstrap
+			- vendor
+			- node_modules
+			- dist
+			- tests
+	bootstrapFiles:
+		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+

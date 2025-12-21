@@ -1,0 +1,100 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Format PHP with PHPCBF",
+			"type": "shell",
+			"command": "${workspaceFolder}/vendor/bin/phpcbf",
+			"args": ["--standard=${workspaceFolder}/phpcs.xml", "${file}"],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"reveal": "silent",
+				"panel": "shared"
+			}
+		},
+		{
+			"label": "Lint PHP with PHPCS",
+			"type": "shell",
+			"command": "${workspaceFolder}/vendor/bin/phpcs",
+			"args": ["--standard=${workspaceFolder}/phpcs.xml", "${file}"],
+			"problemMatcher": {
+				"owner": "phpcs",
+				"fileLocation": ["relative", "${workspaceFolder}"],
+				"pattern": {
+					"regexp": "^(.+):(\\d+):(\\d+):\\s+(ERROR|WARNING)\\s+-\\s+(.+)$",
+					"file": 1,
+					"line": 2,
+					"column": 3,
+					"severity": 4,
+					"message": 5
+				}
+			},
+			"group": "test"
+		},
+		{
+			"label": "Analyze PHP with PHPStan",
+			"type": "shell",
+			"command": "${workspaceFolder}/vendor/bin/phpstan",
+			"args": [
+				"analyse",
+				"--configuration=${workspaceFolder}/phpstan.neon",
+				"--error-format=json",
+				"${file}"
+			],
+			"problemMatcher": {
+				"owner": "phpstan",
+				"fileLocation": ["relative", "${workspaceFolder}"],
+				"pattern": [
+					{
+						"regexp": "^\\{\"totals\":\\{.*\\},\"files\":\\{(.*)\\}\\}$",
+						"file": 1
+					},
+					{
+						"regexp": "\"(?<file>[^\"]+)\":\\{\"errors\":\\d+,\"messages\":\\[(.*)\\]\\}",
+						"file": 1
+					},
+					{
+						"regexp": "\\{\"message\":\"(?<message>[^\"]+)\",\"line\":(?<line>\\d+),\"ignorable\":.*\\}",
+						"line": 2,
+						"message": 1
+					}
+				]
+			},
+			"group": "test"
+		},
+		{
+			"label": "Analyze All PHP with PHPStan",
+			"type": "shell",
+			"command": "${workspaceFolder}/vendor/bin/phpstan",
+			"args": [
+				"analyse",
+				"--configuration=${workspaceFolder}/phpstan.neon",
+				"--error-format=json"
+			],
+			"problemMatcher": {
+				"owner": "phpstan",
+				"fileLocation": ["relative", "${workspaceFolder}"],
+				"pattern": [
+					{
+						"regexp": "^\\{\"totals\":\\{.*\\},\"files\":\\{(.*)\\}\\}$",
+						"file": 1
+					},
+					{
+						"regexp": "\"(?<file>[^\"]+)\":\\{\"errors\":\\d+,\"messages\":\\[(.*)\\]\\}",
+						"file": 1
+					},
+					{
+						"regexp": "\\{\"message\":\"(?<message>[^\"]+)\",\"line\":(?<line>\\d+),\"ignorable\":.*\\}",
+						"line": 2,
+						"message": 1
+					}
+				]
+			},
+			"group": "test"
+		}
+	]
+}
