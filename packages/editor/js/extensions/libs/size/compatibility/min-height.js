@@ -53,8 +53,7 @@ export function minHeightToWPCompatibility({
 				newValue === '' ||
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
-				!isString(newValue) ||
-				newValue.endsWith('func')
+				!isString(newValue)
 			) {
 				return {
 					minHeight: undefined,
