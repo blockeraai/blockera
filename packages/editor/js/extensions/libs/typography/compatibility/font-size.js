@@ -72,6 +72,11 @@ export function fontSizeToWPCompatibility({
 		};
 	}
 
+	// Advanced css functions not supported by core.
+	if (newValue.endsWith('func')) {
+		newValue = undefined;
+	}
+
 	return {
 		fontSize: undefined,
 		style: {
