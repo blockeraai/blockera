@@ -219,6 +219,9 @@ class HTMLProcessor {
 
 			if ( ! empty( $style ) ) {
 
+				// style formatting.
+				$style = str_replace(':', ': ', $style);
+
 				// Add properties classes to the element if it is main wrapper tag.
 				// It prevents adding properties classes to other elements.
 				if ( $has_global_css_classes && $is_wrapper ) {
