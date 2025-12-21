@@ -1,5 +1,10 @@
 // @flow
 
+/**
+ * Blockera dependencies
+ */
+import { isSpecialUnit } from '@blockera/controls';
+
 export function letterSpacingFromWPCompatibility({
 	attributes,
 }: {
@@ -32,6 +37,11 @@ export function letterSpacingToWPCompatibility({
 				},
 			},
 		};
+	}
+
+	// Advanced css functions and units not supported by core.
+	if (isSpecialUnit(newValue)) {
+		newValue = undefined;
 	}
 
 	return {
