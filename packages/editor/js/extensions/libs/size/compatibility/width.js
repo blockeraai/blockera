@@ -233,8 +233,7 @@ export function widthToWPCompatibility({
 				newValue === '' ||
 				isUndefined(newValue) ||
 				isSpecialUnit(newValue) ||
-				!isString(newValue) ||
-				newValue.endsWith('func')
+				!isString(newValue)
 			) {
 				return {
 					width: undefined,
