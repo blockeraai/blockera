@@ -288,10 +288,10 @@ class SavePost {
 		 * This inline styles are added by block editor but Blockera adds them.
 		 * By removing it we reduce the later clean process and also reduce the CSS size.
 		 * 
-		 * @see HTMLProcessor::cleanupBlockeraBlocksInlineStyles()
+		 * @see ContentCleanup::cleanupBlockeraBlocksInlineStyles()
 		 */
-		$html_processor    = $this->app->make(HTMLProcessor::class);
-		$processed_content = $html_processor->cleanupBlockeraBlocksInlineStyles($processed_content);
+		$content_cleanup   = $this->app->make(ContentCleanup::class);
+		$processed_content = $content_cleanup->cleanupBlockeraBlocksInlineStyles($processed_content);
 
 		return [
 			'content' => $processed_content,

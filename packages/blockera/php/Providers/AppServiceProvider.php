@@ -9,9 +9,9 @@ use Blockera\Data\Cache\Cache;
 use Blockera\Data\Cache\Version;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\{
-    HTMLProcessor,
     Render,
     SavePost,
+    ContentCleanup,
 };
 use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
@@ -151,8 +151,6 @@ class AppServiceProvider extends ServiceProvider {
                 }
             );
 
-			$html_processor = new HTMLProcessor();
-
 			$this->app->singleton(
 				SavePost::class,
 				function ( Application $app) {
@@ -163,13 +161,12 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->bind(
 				Render::class,
-				static function ( Application $app) use ( $html_processor, $plugin_args) : Render {
+				static function ( Application $app) use ( $plugin_args) : Render {
 					$render_instance = new Render($app, $plugin_args);
 
 					$vendor_path              = blockera_core_config('app.vendor_path');
 					$global_css_props_classes = include($vendor_path . 'blockera/wordpress/php/RenderBlock/global-css-props-classes.php');
 
-					$render_instance->setHtmlProcessor($html_processor);
 					$render_instance->setGlobalCssPropsClasses($global_css_props_classes);
 
 					return $render_instance;
@@ -177,6 +174,8 @@ class AppServiceProvider extends ServiceProvider {
 			);
 
             $this->app->singleton(Sender::class);
+
+            $this->app->singleton(ContentCleanup::class);
 
         } catch (BaseException $handler) {
 
@@ -303,6 +302,24 @@ class AppServiceProvider extends ServiceProvider {
 		add_filter(
             'render_block',
             function( string $html, array $block) use ( $supports, $render_instance): string {
+
+				// Skip rendering if the request is a AJAX request or a REST request.
+				if (wp_doing_ajax() || blockera_is_skip_request() || is_admin()) {
+					return $html;
+				}
+
+				// Skip rendering if the html is empty or the block is a "core/null" block.
+				if (empty(trim($html)) || 'core/null' === $block['blockName']) {
+					return $html;
+				}
+
+                // Only cleanup the core/template-part blocks(headers, footers, etc.).
+                if ( isset( $block['blockName'] ) && 'core/template-part' === $block['blockName'] ) {
+					// Clean html content. It includes all inner blocks.
+					// This achieves cleaning the html only once.
+					$html = $render_instance->processContentCleanup( $html );
+                }
+
 				return $render_instance->render( $html, $block, $supports );
 			},
             10,
@@ -329,6 +346,8 @@ class AppServiceProvider extends ServiceProvider {
         );
 
 		// Hook into the_posts filter to process posts.
+		// Cache the post content to avoid multiple processing.
+		// Create blocks computed css to avoid multiple processing.
 		add_filter(
 			'the_posts',
 			function( array $posts): array {
@@ -405,6 +424,21 @@ class AppServiceProvider extends ServiceProvider {
 			10e2,
 			1
 		);
+
+		// Process the content to cleanup the inline styles and convert them to CSS rules.
+		// Do the cleanup only once for the whole content.
+		add_filter(
+            'the_content',
+            function( string $content) use ( $render_instance): string {
+				// Avoid admin/editor contexts.
+				if ( is_admin() || blockera_is_skip_request() ) {
+					return $content;
+				}
+
+				return $render_instance->processContentCleanup( $content );
+			},
+            9999
+        );
     }
 
     /**

@@ -133,20 +133,10 @@ class Render {
      */
     public function render( string $html, array $block, array $supports): string {
 
-		// Skip rendering if the request is a AJAX request or a REST request.
-		if (wp_doing_ajax() || blockera_is_skip_request()) {
-			return $html;
-		}
-
 		// Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block) || is_admin()) {
+        if (! blockera_is_supported_block($block)) {
             return $html;
         }
-
-		// Skip rendering if the html is empty or the block is a "core/null" block.
-		if (empty(trim($html)) || 'core/null' === $block['blockName']) {
-			return $html;
-		}
 
 		// Store the block array.
 		$this->block = $block;
@@ -157,9 +147,9 @@ class Render {
 		$extracted_name = explode('/', $block['blockName']);
 
 		$this->id = $extracted_name[1];
-		$this->setContext('blocks-core');
-		$this->setSubContext(blockera_get_block_library_name( $extracted_name[0] ));
-		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
+
+		// Enqueue block assets.
+		$this->enqueueBlockAssets($block);
 
         // Extract block attributes.
         $attributes = $block['attrs'];
@@ -186,8 +176,14 @@ class Render {
 
 		$args['unique_selector'] = $unique_selector;
 
-		// Represent html string.
-        $html = $this->getUpdatedHTML($html, $unique_class_name, $args);
+		// Fire up all features to manipulate the html.
+		$html = $this->getFeaturesHTML(
+            $html,
+            [
+				'block' => $this->block,
+				'unique_selector' => $args['unique_selector'],
+			]
+		);
 
 		// Check if blockeraComputedCss exists - if so, use cached CSS instead of generating from attributes.
 		if (isset($attributes['blockeraComputedCss']) && ! empty($attributes['blockeraComputedCss'])) {
@@ -263,76 +259,6 @@ class Render {
 		// Resetting styles properties.
 		$this->resetStylesProperties();
 
-		// Enqueue block assets.
-		$this->enqueueBlockAssets($block);
-
-        return $html;
-    }
-
-    /**
-     * Returns the string representation of the HTML Tag Processor.
-     *
-     * @param string $html      the target html string.
-     * @param string $classname the unique classname.
-	 * @param array  $args the arguments to update html.
-     *
-     * @return string the update html.
-     */
-    protected function getUpdatedHTML( string $html, string $classname, array $args): string {
-
-		// Optimize: Fast path - if no space, skip filtering (single classname, most common case)
-		// This avoids explode(), array_filter(), and closure overhead for the most frequent scenario.
-		if (strpos($classname, ' ') !== false) {
-			// Multiple classes exist - filter out 'blockera-block-*' classes.
-			// Use explode but manual loop instead of array_filter + closure (avoids closure overhead).
-			$classes     = explode(' ', $classname);
-			$class_count = count($classes);
-			$found       = false;
-
-			// Manual loop is faster than array_filter with closure
-            // Find first class that doesn't start with 'blockera-block-'
-			// Prefix 'blockera-block-' is 15 characters, so use substr for faster comparison.
-			for ($i = 0; $i < $class_count; $i++) {
-                $class = $classes[ $i ];
-                // Use substr + strlen check instead of str_starts_with for better performance.
-				// Check if class does NOT start with 'blockera-block-' (15 chars).
-				if (strlen($class) < 15 || substr($class, 0, 15) !== 'blockera-block-') {
-					$classname = $class;
-					$found     = true;
-					break;
-				}
-			}
-			
-            // Fallback: if no matching class found (all start with 'blockera-block-'), use first class.
-            if ( ! $found) {
-				$classname = $classes[0];
-			}
-		}
-		
-		$args['block'] = $this->block;
-
-		if (empty($this->block['innerBlocks'])) {
-			$html = $this->cleanup($html, $classname, $args['unique_selector']);
-		} else {
-			$html = $this->replaceHTML($html);
-			$html = $this->cleanup($html, $classname, $args['unique_selector']);
-			$html = $this->replacePlaceholders($html);
-
-			// Reset the processed html inside the parent block.
-			$this->resetProcessedHTML();
-		}
-
-		$html = $this->getFeaturesHTML(
-            $html,
-            [
-				'block' => $this->block,
-				'unique_selector' => $args['unique_selector'],
-			]
-		);
-
-		$this->updateProcessedHTML($html);
-		
-		// Render block with features.
         return $html;
     }
 
@@ -364,41 +290,32 @@ class Render {
 	}
 
 	/**
-	 * Convert inline styles array to CSS string.
-	 * Fast implementation without StyleEngine overhead.
+	 * Process content cleanup: extract inline styles and convert them to CSS rules.
 	 *
-	 * @param array $inline_styles The inline styles array in format: [selector => [property => value, ...], ...].
+	 * @param string $content The HTML content to process.
 	 *
-	 * @return string The generated CSS string.
+	 * @return string The processed content with inline styles removed.
 	 */
-	protected function convertInlineStylesToCSS( array $inline_styles): string {
-		if (empty($inline_styles)) {
-			return '';
+	public function processContentCleanup( string $content): string {
+
+		// Ensure blocks are rendered (content usually already is, but this is safe).
+		if ( has_blocks( $content ) ) {
+			$content = do_blocks( $content );
 		}
 
-		$css_rules = [];
+		// Extract inline styles and convert them to CSS rules.
+		$content_cleanup = $this->app->make(ContentCleanup::class);
+		$result          = $content_cleanup->process( $content );
 
-		foreach ($inline_styles as $selector => $properties) {
-			if (empty($properties) || ! is_array($properties)) {
-				continue;
-			}
+		$content = $result['content'];
+		$style   = $result['style'];
 
-			// Build CSS declarations.
-			$declarations = [];
-			foreach ($properties as $property => $value) {
-				// Skip empty values.
-				if ('' === $value || null === $value) {
-					continue;
-				}
-				$declarations[] = $property . ': ' . $value;
-			}
-
-			// Only add rule if there are declarations.
-			if (! empty($declarations)) {
-				$css_rules[] = $selector . ' {' . PHP_EOL . "\t" . implode(';' . PHP_EOL . "\t", $declarations) . ';' . PHP_EOL . '}';
-			}
+		if (! empty($style)) {
+			// Add inline styles to the generated css to ensure it's printed with other styles .
+			$this->updateGeneratedCSS($style);
 		}
 
-		return implode(PHP_EOL, $css_rules);
+		return $content;
 	}
+
 }

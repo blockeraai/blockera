@@ -109,7 +109,7 @@ trait Processor {
 	 *
 	 * @return void
 	 */
-	protected function updateGeneratedCSS( string $css): void {
+	public function updateGeneratedCSS( string $css): void {
 		self::$generated_css[] = $css;
 	}
 
