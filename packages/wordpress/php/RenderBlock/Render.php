@@ -25,7 +25,7 @@ class Render {
      *
      * @var Application
      */
-    protected Application $app;
+	protected Application $app;
 
 	/**
 	 * Store the block array.
@@ -54,10 +54,10 @@ class Render {
      * @param Application $app the app instance.
 	 * @param array       $args the arguments to render block.
      */
-    public function __construct( Application $app, array $args = []) { 
-        $this->app  = $app;
+	public function __construct( Application $app, array $args = []) { 
+		$this->app  = $app;
 		$this->args = $args;
-    }	
+	}	
 
     /**
      * Render block icon element.
@@ -68,7 +68,7 @@ class Render {
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string The block html include icon element if icon is existing.
      */
-    protected function getFeaturesHTML( string $html, array $args): string {
+	protected function getFeaturesHTML( string $html, array $args): string {
 
 		$fm = $this->app->make(FeaturesManager::class);
 
@@ -93,14 +93,14 @@ class Render {
 			}
 
 			$selector = blockera_get_compatible_block_css_selector(
-				blockera_get_block_type_property($args['block']['blockName'], 'selectors'),
-				'htmlEditable.root',
-				[
+                blockera_get_block_type_property($args['block']['blockName'], 'selectors'),
+                'htmlEditable.root',
+                [
 					'fallback' => false,
 					'block-type' => 'master',
 					'block-name' => $args['block']['blockName'],
 					'blockera-unique-selector' => $args['unique_selector'],
-				]
+                ]
 			);
 		
 			if (empty($selector)) {
@@ -119,7 +119,7 @@ class Render {
 		}
 
 		return $html;
-    }
+	}
 
     /**
      * Block parser to customize HTML template!
@@ -131,12 +131,12 @@ class Render {
      * @throws BindingResolutionException|BaseException Exception for binding parser service into app container problems.
      * @return string block HTML.
      */
-    public function render( string $html, array $block, array $supports): string {
+	public function render( string $html, array $block, array $supports): string {
 
 		// Check block to is support by Blockera?
-        if (! blockera_is_supported_block($block)) {
-            return $html;
-        }
+		if (! blockera_is_supported_block($block)) {
+			return $html;
+		}
 
 		// Store the block array.
 		$this->block = $block;
@@ -145,30 +145,41 @@ class Render {
 
 		$this->id = $extracted_name[1];
 
-        // Extract block attributes.
-        $attributes = $block['attrs'];
+		$attributes              = $block['attrs'];
+		$should_update_classname = false;
+		$base_unique_class_name  = '';
 
-		if ( ! empty($attributes['className']) ) {
-			$base_unique_class_name = $attributes['className'];
-		} else {
-			// Generate the blockera block unique css classname.
-			$base_unique_class_name = 'blockera-block blockera-block-%s' . blockera_get_small_random_hash($attributes['blockeraPropsId']);
+		if (preg_match(blockera_get_unique_class_name_regex(), $attributes['className'], $matches)) {
+			$base_unique_class_name = $matches[0];
+		}
+		
+		// Generate the blockera block unique css classname.
+		if ( ! $base_unique_class_name ) {
+			$base_unique_class_name = 'blockera-block blockera-block-' . blockera_get_small_random_hash();
 		}
 
+		// Ensure the classname is unique across all blocks if not inside query loop.
 		if (! QueryLoopContext::isInside()) {
-			// Ensure the classname is unique across all blocks.
-			$unique_class_name = $this->ensureUniqueClassname(
-				$base_unique_class_name,
-				$attributes['blockeraPropsId'],
-				$block
-			);
-			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
+			[
+				'classname' => $unique_class_name,
+				'updated' => $should_update_classname,
+				'computed_css' => $computed_css,
+			]                = $this->computeFinalCSS($base_unique_class_name, $block);
+			$unique_selector = blockera_get_normalized_selector($unique_class_name);
 		} else {
 			$unique_class_name = $base_unique_class_name;
 			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
+			$computed_css      = isset($attributes['blockeraComputedCss']) ? base64_decode($attributes['blockeraComputedCss'], true) : '';
 		}
 
 		$args['unique_selector'] = $unique_selector;
+
+		// Update the html with the new classname if the classname is updated.
+		if ($should_update_classname) {
+			$old_class_name = str_replace('.', '', trim($base_unique_class_name, '.'));
+			$new_class_name = str_replace('.', '', trim($unique_class_name, '.'));
+			$html           = str_replace($old_class_name, $new_class_name, $html);
+		}
 
 		// Fire up all features to manipulate the html.
 		$html = $this->getFeaturesHTML(
@@ -180,66 +191,8 @@ class Render {
 		);
 
 		// Check if blockeraComputedCss exists - if so, use cached CSS instead of generating from attributes.
-		if (isset($attributes['blockeraComputedCss']) && ! empty($attributes['blockeraComputedCss'])) {
-			// Decode base64-encoded CSS.
-			$computed_css_rules = base64_decode($attributes['blockeraComputedCss'], true);
-			
-			// Fallback: if base64_decode fails (for backward compatibility with non-encoded CSS).
-			if (false === $computed_css_rules) {
-				$computed_css_rules = $attributes['blockeraComputedCss'];
-			}
-
-			// If classname was changed by ensureUniqueClassname, we need to update the selector in cached CSS.
-			// The cached CSS was generated with the base classname, but we're now using a unique classname.
-			if (! empty($computed_css_rules) && $unique_class_name !== $base_unique_class_name) {
-				// Get the old selector (based on base classname used during save) and new selector (current unique classname).
-				$old_base_selector = blockera_get_normalized_selector($base_unique_class_name);
-				$new_selector      = blockera_get_normalized_selector($unique_class_name);
-				
-				// Replace all occurrences of the old base selector with the new unique selector in the CSS.
-				// This ensures the CSS rules match the current unique classname.
-				$computed_css_rules = str_replace($old_base_selector, $new_selector, $computed_css_rules);
-			}
-
-			// Push to stack the cached styles for current processed block.
-			if (! empty($computed_css_rules)) {
-				$this->styles[] = $computed_css_rules;
-			}
-
-			// Push to stack the inline styles for current processed block.
-			if (! empty($this->inline_styles)) {
-				$this->styles[] = $this->inline_styles;
-			}
-		} elseif (! isset($attributes['blockeraComputedCss'])) {
-
-			// Generate css by style engine (original behavior).
-			$styleEngine = $this->app->make(
-				StyleEngine::class,
-				[
-					'block' => $block,
-					'fallbackSelector' => $unique_selector,
-				]
-			);
-			$styleEngine->setSupports($supports);
-			$styleEngine->setInlineStyles($this->inline_styles['root'] ?? []);
-			$computed_css_rules = $styleEngine->getStylesheet();
-
-			// Push to stack the generated styles by style engine for current processed block.
-			if (! empty($computed_css_rules)) {
-				$this->styles[] = $computed_css_rules;
-			}
-
-			// Push to stack the inline styles for current processed block.
-			if (! empty($this->inline_styles)) {
-				$this->styles[] = $this->inline_styles;
-			}
-
-			// If custom css is set, add it to the block css.
-			if (! empty($attributes['blockeraCustomCSS']['value'])) {
-				// Replace the "block placeholder", "&" and "\\\\u0026" with the unique selector.
-				// because the custom css maybe contains the block placeholder, "&" and "\\\\u0026" to indicate the block element selector.
-				$this->styles[] = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
-			}
+		if ( ! empty($computed_css)) {
+			$this->styles[] = $computed_css;
 		}
 
 		$styles = $this->getStyles();

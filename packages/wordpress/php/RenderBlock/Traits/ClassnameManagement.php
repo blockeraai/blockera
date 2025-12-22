@@ -56,47 +56,117 @@ trait ClassnameManagement {
 	}
 
 	/**
-	 * Generate a unique classname ensuring no collision with other blocks.
+	 * Compute final CSS with unique classname ensuring no collision with other blocks.
 	 * This method checks against the global registry and generates a new hash if collision detected.
 	 *
 	 * @param string $base_classname The base classname (e.g., 'blockera-block-abc123').
-	 * @param string $blockera_props_id The blockeraPropsId attribute value.
 	 * @param array  $block The block array containing block data.
 	 *
-	 * @return string The unique classname guaranteed to be unique across all blocks.
+	 * @return array The output array containing the unique classname and if it was updated.
+	 * 
+	 * @example
+	 * [
+	 *     'classname' => 'blockera-block-abc123',
+	 *     'updated' => true,
+	 *     'computed_css' => 'p.blockera-block-abc123 { color: red; }',
+	 * ]
 	 */
-	protected function ensureUniqueClassname( string $base_classname, string $blockera_props_id, array $block): string {
+	protected function computeFinalCSS( string $base_classname, array $block): array {
 
-		// Check if the base classname is already used by another block.
-		if (isset(self::$used_classnames_registry[ $base_classname ])) {
+		// Initialize output structure - always return this format.
+		$output = [
+			'classname' => $base_classname,
+			'updated' => false,
+			'computed_css' => '',
+		];
 
-			// Check if it's the same block (by blockeraPropsId).
-			if (self::$used_classnames_registry[ $base_classname ] === $blockera_props_id) {
+		// Early exit if blockeraComputedCss is not set.
+		if ( ! isset($block['attrs']['blockeraComputedCss']) ) {
+			return $output;
+		}
 
-				// Same block, return the existing classname.
-				return $base_classname;
+		// Decode the computed CSS from base64.
+		$computed_css           = base64_decode($block['attrs']['blockeraComputedCss'], true);
+		$output['computed_css'] = $computed_css;
+
+		// Normalize CSS for hashing by replacing classname with placeholder.
+		// This ensures blocks with same styles but different classnames hash to the same value.
+		$normalized_base_for_hash = str_replace(' ', '.', $base_classname);
+		$normalized_css_for_hash  = preg_replace(
+			'/' . preg_quote('.' . $normalized_base_for_hash, '/') . '/',
+			'__BLOCKERA_CLASSNAME_PLACEHOLDER__',
+			$computed_css
+		);
+
+		// Calculate hash of the normalized CSS to identify unique CSS content.
+		// This hash ignores the classname, so blocks with same styles hash the same.
+		$css_hash = md5($normalized_css_for_hash);
+
+		// Check if this CSS hash is already registered with a classname.
+		if ( isset(self::$used_classnames_registry[ $css_hash ]) ) {
+			$registered_classname = self::$used_classnames_registry[ $css_hash ];
+
+			// If the registered classname matches our base classname, reuse it.
+			// This means same block with same CSS - no need to update.
+			if ( $registered_classname === $base_classname ) {
+				return $output;
 			}
 
-			// Collision detected! Generate a new unique classname using random hash.
+			// Same CSS content but different base classname.
+			// Reuse the existing unique classname that was already created for this CSS.
+			// This prevents duplicate CSS when multiple blocks have the same computed CSS.
+			$output['classname'] = $registered_classname;
+			$output['updated']   = true;
+
+			// Update the computed CSS to use the registered classname instead of base classname.
+			$normalized_base        = str_replace(' ', '.', $base_classname);
+			$normalized_registered  = str_replace(' ', '.', $registered_classname);
+			$output['computed_css'] = str_replace('.' . $normalized_base, '.' . $normalized_registered, $computed_css);
+
+			return $output;
+		}
+
+		// CSS hash is not registered. Check if base_classname is already used with different CSS.
+		if ( isset(self::$used_classnames_registry[ $base_classname ]) ) {
+			$registered_hash = self::$used_classnames_registry[ $base_classname ];
+
+			// If the registered hash matches our CSS hash, reuse the classname.
+			if ( $registered_hash === $css_hash ) {
+				return $output;
+			}
+
+			// Collision: Same base classname but different CSS content.
+			// Generate a new unique classname with random suffix.
 			$unique_suffix = '-' . blockera_get_small_random_hash();
 			$new_classname = $base_classname . $unique_suffix;
 
-			// In the extremely unlikely case of another collision, generate one more time.
-			if (isset(self::$used_classnames_registry[ $new_classname ])) {
+			// Ensure the new classname doesn't collide.
+			while ( isset(self::$used_classnames_registry[ $new_classname ]) ) {
 				$unique_suffix = '-' . blockera_get_small_random_hash();
 				$new_classname = $base_classname . $unique_suffix;
 			}
 
-			// Register the new unique classname.
-			self::$used_classnames_registry[ $new_classname ] = $blockera_props_id;
+			// Update the computed CSS to use the new classname.
+			$normalized_base        = str_replace(' ', '.', $base_classname);
+			$normalized_new         = str_replace(' ', '.', $new_classname);
+			$output['computed_css'] = str_replace('.' . $normalized_base, '.' . $normalized_new, $computed_css);
 
-			return $new_classname;
+			// Register the new unique classname with the normalized CSS hash.
+			// Use the same normalized hash so blocks with same styles hash the same.
+			self::$used_classnames_registry[ $css_hash ]      = $new_classname;
+			self::$used_classnames_registry[ $new_classname ] = $css_hash;
+
+			$output['classname'] = $new_classname;
+			$output['updated']   = true;
+
+			return $output;
 		}
 
-		// No collision, register and return the base classname.
-		self::$used_classnames_registry[ $base_classname ] = $blockera_props_id;
+		// No collision detected. Register and return the base classname.
+		self::$used_classnames_registry[ $css_hash ]       = $base_classname;
+		self::$used_classnames_registry[ $base_classname ] = $css_hash;
 
-		return $base_classname;
+		return $output;
 	}
 
 	/**
