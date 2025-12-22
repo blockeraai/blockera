@@ -364,15 +364,27 @@ class AppServiceProvider extends ServiceProvider {
 				$save_post = $this->app->make(SavePost::class);
 				$cache_key = $cache->getCacheKey('post_content');
 
+				// Exception post types that we should not process their content.
+				$exception_post_types = [
+					'wp_global_styles' => true,
+				];
+
 				// Filter posts that need processing (have content and block comments).
 				$posts_to_process = [];
 				$post_ids         = [];
 				foreach ($posts as $index => $post) {
-					// Skip if post_content is empty or doesn't contain block comments.
-					if (! empty($post->post_content) && strpos($post->post_content, '<!-- wp:') !== false) {
-						$posts_to_process[ $index ] = $post;
-						$post_ids[]                 = $post->ID;
+					// Skip if post type is in the exception list.
+					if (isset($exception_post_types[ $post->post_type ])) {
+						continue;
 					}
+
+					// Skip if post_content doesn't contain Blockera blocks.
+					if (! blockera_contains_blockera_block($post->post_content)) {
+						continue;
+					}
+
+					$posts_to_process[ $index ] = $post;
+					$post_ids[]                 = $post->ID;
 				}
 
 				// Early exit if no posts need processing.

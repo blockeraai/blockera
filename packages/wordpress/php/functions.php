@@ -364,3 +364,31 @@ if (! function_exists('blockera_block_is_dynamic')) {
 		return $registered_block->is_dynamic();
 	}
 }
+
+
+if (! function_exists('blockera_contains_blockera_block')) {
+	/**
+	 * Check if post content contains Blockera blocks.
+	 *
+	 * @param string $post_content The post content to check.
+	 * @return bool True if post content contains Blockera blocks, false otherwise.
+	 */
+	function blockera_contains_blockera_block( string $post_content): bool {
+		// Skip if post_content is empty.
+		if (empty($post_content)) {
+			return false;
+		}
+
+		// Check if post_content contains block comments.
+		if (strpos($post_content, '<!-- wp:') === false) {
+			return false;
+		}
+
+		// Check if post_content contains any Blockera block.
+		if (strpos($post_content, 'blockeraPropsId') === false) {
+			return false;
+		}
+
+		return true;
+	}
+}

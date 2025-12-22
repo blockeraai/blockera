@@ -117,13 +117,7 @@ class SavePost {
 	 * @return array|null Array with 'content' key containing processed post_content, or null if processing failed.
 	 */
 	public function processPostContentForStyles( string $post_content): ?array {
-		// Skip if post_content is empty.
-		if (empty($post_content)) {
-			return null;
-		}
-
-		// Check if post_content contains block comments.
-		if (strpos($post_content, '<!-- wp:') === false) {
+		if (! blockera_contains_blockera_block($post_content)) {
 			return null;
 		}
 
