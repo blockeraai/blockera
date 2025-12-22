@@ -12,6 +12,7 @@ use Blockera\WordPress\RenderBlock\{
     Render,
     SavePost,
     ContentCleanup,
+    QueryLoopContext,
 };
 use Blockera\Icons\IconsManager;
 use Blockera\Editor\StyleEngine;
@@ -288,6 +289,9 @@ class AppServiceProvider extends ServiceProvider {
 		Render::resetProcessedHTML();
 		Render::clearClassnamesRegistry();
 
+		// Register Query Loop context hooks.
+		QueryLoopContext::register();
+ 
 		add_action(
             'save_post',
             function( int $post_id, \WP_Post $post): void {

@@ -364,39 +364,3 @@ if (! function_exists('blockera_block_is_dynamic')) {
 		return $registered_block->is_dynamic();
 	}
 }
-
-if (! function_exists('blockera_block_is_loop')) {
-	
-	/**
-	 * Check if the block is a loop block.
-	 * 
-	 * @param string $block_name The name of the block.
-	 *
-	 * @return bool true on success, false otherwise.
-	 */
-	function blockera_block_is_loop( string $block_name): bool {
-
-		if (empty($block_name)) {
-			return false;
-		}
-
-		$blocks = [
-			// WordPress core blocks.
-			'core/query',
-			'core/terms-query',
-			'core/post-template',
-			'core/term-template',
-			'core/comments',
-			// TODO: Add Woocommerce blocks.
-			'woocommerce/product-query',
-			'woocommerce/product-collection',
-			// Blocksy blocks.
-			'blocksy/query',
-			'blocksy/tax-query',
-			'blocksy/tax-template',
-			'blocksy/post-template',
-		];
-
-		return in_array($block_name, $blocks, true);
-	}
-}
