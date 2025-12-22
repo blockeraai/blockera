@@ -2,11 +2,27 @@
 
 # -------------------------
 # USAGE:
-#   xdebug-graphs               → uses current directory
-#   xdebug-graphs /path/to/dir  → uses provided directory
+#   xdebug-graphs                           → uses current directory, all types
+#   xdebug-graphs /path/to/dir              → uses provided directory, all types
+#   xdebug-graphs --types extra-small,small → uses current directory, specified types
+#   xdebug-graphs /path/to/dir --types extra-small,small → uses provided directory, specified types
 # -------------------------
 
-BASE_DIR="${1:-$PWD}"
+# Parse arguments
+BASE_DIR="$PWD"
+TYPES_ARG=""
+expect_types=false
+
+for arg in "$@"; do
+  if [[ "$arg" == --types ]]; then
+    expect_types=true
+  elif [[ "$expect_types" == true ]]; then
+    TYPES_ARG="$arg"
+    expect_types=false
+  elif [[ "$arg" != --* ]]; then
+    BASE_DIR="$arg"
+  fi
+done
 
 PATH_FRAGMENT="/wp-content/plugins/blockera"
 NAMESPACE_PREFIX="Blockera\\"
@@ -23,14 +39,55 @@ fi
 
 echo "📊 Using BASE_DIR: $BASE_DIR"
 
-SUFFIXES=(extra-small small medium full)
-NODE_THS=(5 2 0.25 0.01)
-EDGE_THS=(3 1 0.10 0.01)
+# Define all available types
+ALL_SUFFIXES=(extra-small small medium full)
+ALL_NODE_THS=(5 2 0.25 0.01)
+ALL_EDGE_THS=(3 1 0.10 0.01)
+
+# Filter types if --types argument is provided
+if [[ -n "$TYPES_ARG" ]]; then
+  # Split comma-separated types
+  IFS=',' read -rA REQUESTED_TYPES <<< "$TYPES_ARG"
+  
+  SUFFIXES=()
+  NODE_THS=()
+  EDGE_THS=()
+  
+  for requested_type in "${REQUESTED_TYPES[@]}"; do
+    requested_type=$(echo "$requested_type" | xargs)  # trim whitespace
+    found=false
+    for ((i=1; i<=${#ALL_SUFFIXES[@]}; i++)); do
+      if [[ "${ALL_SUFFIXES[$i]}" == "$requested_type" ]]; then
+        SUFFIXES+=("${ALL_SUFFIXES[$i]}")
+        NODE_THS+=("${ALL_NODE_THS[$i]}")
+        EDGE_THS+=("${ALL_EDGE_THS[$i]}")
+        found=true
+        break
+      fi
+    done
+    if [[ "$found" == false ]]; then
+      echo "⚠️  Warning: Unknown type '$requested_type'. Available types: ${ALL_SUFFIXES[*]}"
+    fi
+  done
+  
+  if [[ ${#SUFFIXES[@]} -eq 0 ]]; then
+    echo "❌ No valid types specified. Available types: ${ALL_SUFFIXES[*]}"
+    exit 1
+  fi
+  
+  echo "📋 Generating types: ${SUFFIXES[*]}"
+else
+  # Use all default types
+  SUFFIXES=("${ALL_SUFFIXES[@]}")
+  NODE_THS=("${ALL_NODE_THS[@]}")
+  EDGE_THS=("${ALL_EDGE_THS[@]}")
+  echo "📋 Generating all types: ${SUFFIXES[*]}"
+fi
 
 for FILE in "$BASE_DIR"/cachegrind.*(N-.om); do
   [[ "$FILE" == *.pdf || "$FILE" == *.svg || "$FILE" == *.png || "$FILE" == *.dot ]] && continue
 
-  for i in {1..4}; do
+  for ((i=1; i<=${#SUFFIXES[@]}; i++)); do
     SUFFIX="${SUFFIXES[$i]}"
     NODE_T="${NODE_THS[$i]}"
     EDGE_T="${EDGE_THS[$i]}"
