@@ -87,8 +87,15 @@ if (! function_exists('blockera_is_frontend_request')) {
 	 * @return bool true on success, false otherwise.
 	 */
 	function blockera_is_frontend_request(): bool {
+		static $cached_result = null;
 
-		return ! is_admin() && ! wp_is_json_request();
+		if ( null !== $cached_result ) {
+			return $cached_result;
+		}
+
+		$cached_result = ! blockera_is_admin() && ! wp_is_json_request();
+
+		return $cached_result;
 	}
 }
 
