@@ -59,6 +59,26 @@ if (! function_exists('blockera_is_skip_request')) {
 	}
 }
 
+if (! function_exists('blockera_is_admin')) {
+
+	/**
+	 * Check if the request is an admin request.
+	 *
+	 * @return bool true on success, false otherwise.
+	 */
+	function blockera_is_admin(): bool {
+		static $cached_result = null;
+
+		if ( null !== $cached_result ) {
+			return $cached_result;
+		}
+
+		$cached_result = is_admin();
+
+		return $cached_result;
+	}
+}
+
 if (! function_exists('blockera_is_frontend_request')) {
 	
 	/**
@@ -100,12 +120,12 @@ if (! function_exists('blockera_is_admin_request')) {
 
 		$admin_page = '/wp-admin/admin.php?page=blockera-settings';
 
-		// If not include the admin page, return the is_admin() function result.
+		// If not include the admin page, return the blockera_is_admin() function result.
 		if (! $include_admin_page) {
-			return is_admin();
+			return blockera_is_admin();
 		}
 
-		return is_admin() || str_starts_with($_SERVER['REQUEST_URI'] ?? '', $admin_page);
+		return blockera_is_admin() || str_starts_with($_SERVER['REQUEST_URI'] ?? '', $admin_page);
 	}
 }
 

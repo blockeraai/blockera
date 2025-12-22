@@ -242,7 +242,7 @@ class CompatibilityCheck {
 				}
 
 				// Schedule one-time redirect to compatibility page.
-				if (is_admin() && current_user_can('update_plugins')) {
+				if (blockera_is_admin() && current_user_can('update_plugins')) {
 					if (! get_transient($this->cache_key)) {
 						set_transient($this->cache_key, 1, 60);
 					}

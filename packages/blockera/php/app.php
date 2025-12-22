@@ -39,7 +39,7 @@ if ($blockera_cache !== false) {
 }
 
 // Conditional loading based on context.
-if (is_admin()) {
+if (blockera_is_admin()) {
     blockera_load('editor.php.hooks', $external_dir);
     blockera_load('blockera-admin.php.hooks', $external_dir);
     blockera_load('wordpress.php.Admin.Menu.hooks', $external_dir);

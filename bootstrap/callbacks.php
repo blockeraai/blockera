@@ -40,7 +40,7 @@ function blockera_redirect_to_dashboard_page(): void {
 
         delete_option($option);
 
-        if (is_admin() && current_user_can('activate_plugins')) {
+        if (blockera_is_admin() && current_user_can('activate_plugins')) {
 
             // Redirect to plugin dashboard or settings page.
             wp_redirect(admin_url('admin.php?page=' . blockera_core_config('app.dashboard_page')));

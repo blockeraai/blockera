@@ -118,7 +118,7 @@ class AssetsLoader {
 	public function enqueue(bool $is_admin = true): void
 	{
 		// Return early if we're trying to load admin assets on the frontend.
-		if ($is_admin && ! is_admin()) {
+		if ($is_admin && ! blockera_is_admin()) {
 
 			return;
 		}
