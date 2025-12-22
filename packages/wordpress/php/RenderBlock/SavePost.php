@@ -227,15 +227,9 @@ class SavePost {
 				continue;
 			}
 
-			// Generate unique classname and selector (simple base classname, no ensureUniqueClassname).
-			if (! empty($attributes['className'])) {
-				$base_unique_class_name = $attributes['className'];
-			} else {
-				// Generate the blockera block unique css classname.
-				$hash_suffix            = blockera_get_small_random_hash();
-				$base_unique_class_name = 'blockera-block blockera-block-' . $hash_suffix;
-			}
-
+			// Generate unique classname and selector (simple base classname, no computeFinalCSS).
+			$base_unique_class_name = $attributes['className'];
+			
 			$unique_class_name = $base_unique_class_name;
 			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
 
