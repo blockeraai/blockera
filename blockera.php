@@ -24,24 +24,40 @@ if (! defined('ABSPATH')) {
 }
 
 ### BEGIN AUTO-GENERATED AUTOLOADER
-// Register into shared autoload coordinator.
-require_once __DIR__ . '/packages/autoloader-coordinator/class-shared-autoload-coordinator.php';
+// the fallback way to load the composer default autoloader.
+if (! is_plugin_active('blockera-pro/blockera-pro.php')) {
+	require_once __DIR__ . '/vendor/autoload.php';
+} else {
+	// the shared autoloader way to load the composer customized autoloader.
+	add_filter(
+        'blockera/autoloader-coordinator/plugins/dependencies',
+        function ( array $plugins): array {
+			$plugins['blockera'] = [
+				'dir' => __DIR__,
+				'priority' => 10,
+				'default' => true,
+			];
 
-// Register into shared autoload coordinator.
-\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin('blockera', __DIR__);
-\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+			return $plugins;
+		}
+    );
 
-// loading autoloader.
-require __DIR__ . '/vendor/autoload.php';
+	// Register into shared autoload coordinator.
+	// This replaces vendor/autoload.php by loading directly from Composer-generated static files.
+	require_once __DIR__ . '/packages/autoloader-coordinator/loader.php';
+
+	// Register into shared autoload coordinator and bootstrap autoloading.
+	\Blockera\SharedAutoload\Coordinator::getInstance()->registerPlugin();
+	\Blockera\SharedAutoload\Coordinator::getInstance()->bootstrap();
+
+	// Invalidate package manifest cache on plugin activation, deactivation, and upgrade.
+	add_action('activated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+	add_action('deactivated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+	add_action('upgrader_process_complete', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
+}
 ### END AUTO-GENERATED AUTOLOADER
 
-// Invalidate package manifest cache on plugin activation, deactivation, and upgrade.
-add_action('activated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
-add_action('deactivated_plugin', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
-add_action('upgrader_process_complete', [ \Blockera\SharedAutoload\Coordinator::getInstance(), 'invalidatePackageManifest' ]);
-
 if (file_exists(__DIR__ . '/.env')) {
-
     // Env Loading ...
     $blockera_dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $blockera_dotenv->safeLoad();
