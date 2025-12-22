@@ -89,8 +89,6 @@ if (! \class_exists(Coordinator::class)) {
 				];
 			}
 
-            // Invalidate cached plugin roots.
-            $this->normalized_plugin_roots = null;
 			// Invalidate autoload manifest.
 			$this->autoload_manifest = null;
         }
@@ -679,7 +677,7 @@ if (! \class_exists(Coordinator::class)) {
 		 */
 		public function invalidatePackageManifest(): void {
 			delete_transient('blockera_pkg_manifest');
-			delete_transient('blockera_pkg_manifest_v2');
+			delete_transient('blockera_pkgs_files');
 		}
 
         /**
