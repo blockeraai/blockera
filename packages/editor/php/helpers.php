@@ -1052,34 +1052,34 @@ if ( ! function_exists( 'blockera_get_normalized_selector' ) ) {
 	 * @return string the normalized css selector.
 	 */
 	function blockera_get_normalized_selector( string $selector ): string {
-
 		$selectors = explode( ' ', $selector );
-
-		return trim(
-			implode(
-				'',
-				array_map(
-					function ( string $_selector ): string {
-
-						// ignore external selectors.
-						if ( false === strpos( $_selector, 'blockera-block' ) ) {
-
-							return '';
-						}
-
-						$_selector = trim( $_selector );
-
-						if ( ! empty( $_selector ) && '.' === $_selector[0] ) {
-
-							return $_selector;
-						}
-
-						return '.' . $_selector;
-					},
-					$selectors
-				)
-			)
-		);
+		$result    = '';
+		$count     = count( $selectors );
+		
+		for ( $i = 0; $i < $count; $i++ ) {
+			$_selector = $selectors[ $i ];
+			
+			// Ignore external selectors (early exit for performance).
+			if ( false === strpos( $_selector, 'blockera-block' ) ) {
+				continue;
+			}
+			
+			$_selector = trim( $_selector );
+			
+			// Empty after trim, skip.
+			if ( '' === $_selector ) {
+				continue;
+			}
+			
+			// Add dot prefix if not present.
+			if ( '.' !== $_selector[0] ) {
+				$result .= '.' . $_selector;
+			} else {
+				$result .= $_selector;
+			}
+		}
+		
+		return $result;
 	}
 }
 
