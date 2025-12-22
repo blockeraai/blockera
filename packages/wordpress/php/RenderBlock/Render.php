@@ -148,9 +148,6 @@ class Render {
 
 		$this->id = $extracted_name[1];
 
-		// Enqueue block assets.
-		$this->enqueueBlockAssets($block);
-
         // Extract block attributes.
         $attributes = $block['attrs'];
 
@@ -256,6 +253,9 @@ class Render {
 			$this->updateGeneratedCSS($styles);
 		}
 
+		// Enqueue block assets.
+		$this->enqueueBlockAssets( $extracted_name[0], $this->id );
+
 		// Resetting styles properties.
 		$this->resetStylesProperties();
 
@@ -265,16 +265,13 @@ class Render {
 	/**
 	 * Enqueue block assets.
 	 *
-	 * @param array $block The block array.
+	 * @param string $block_library_prefix The block library prefix (core, woocommerce, third-party, etc.).
 	 *
 	 * @return void
 	 */
-	protected function enqueueBlockAssets( array $block): void {
-		$extracted_name = explode('/', $block['blockName']);
-
-		$this->id = $extracted_name[1];
+	protected function enqueueBlockAssets( string $block_library_prefix ): void {
 		$this->setContext('blocks-core');
-		$this->setSubContext(blockera_get_block_library_name( $extracted_name[0] ));
+		$this->setSubContext(blockera_get_block_library_name( $block_library_prefix ));
 		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
 	}
 
