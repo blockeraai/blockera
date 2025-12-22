@@ -75,10 +75,10 @@ export const useAttributes = (
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }) => {
 	const getAttributesWithIds = useCallback(
-		(state: Object, identifier: string): Object => {
+		(state: Object, identifier: string, force: boolean = false): Object => {
 			const d = new Date();
 
-			if (state[identifier]) {
+			if (state[identifier] && !force) {
 				return state;
 			}
 
@@ -138,7 +138,11 @@ export const useAttributes = (
 			if (!_attributes?.blockeraPropsId) {
 				_attributes = {
 					..._attributes,
-					blockeraPropsId: clientId,
+					blockeraPropsId: getAttributesWithIds(
+						_attributes,
+						'blockeraPropsId',
+						true
+					),
 				};
 			}
 			// Sets "blockeraCompatId" if it is empty.
