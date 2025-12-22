@@ -141,9 +141,6 @@ class Render {
 		// Store the block array.
 		$this->block = $block;
 
-		// Handling block setup while exist inside in loop block as a inner block.
-		$this->setupBlockInLoop($block);
-
 		$extracted_name = explode('/', $block['blockName']);
 
 		$this->id = $extracted_name[1];
@@ -158,7 +155,7 @@ class Render {
 			$base_unique_class_name = 'blockera-block blockera-block-%s' . blockera_get_small_random_hash($attributes['blockeraPropsId']);
 		}
 
-		if (! $this->is_doing_transpile_loop) {
+		if (! QueryLoopContext::isInside()) {
 			// Ensure the classname is unique across all blocks.
 			$unique_class_name = $this->ensureUniqueClassname(
 				$base_unique_class_name,
