@@ -48,6 +48,33 @@ class Blockera extends Application implements ContainerInterface, ApplicationCac
 	public DomParser $dom_parser;
 
 	/**
+	 * The block supports.
+	 *
+	 * @var array
+	 */
+	protected array $block_supports = [];
+
+	/**
+	 * Get the block supports.
+	 *
+	 * @return array
+	 */
+	public function getBlockSupports(): array {
+		return $this->block_supports;
+	}
+
+	/**
+	 * Set the block supports.
+	 *
+	 * @param array $block_supports the block supports.
+	 *
+	 * @return void
+	 */
+	public function setBlockSupports( array $block_supports ): void {
+		$this->block_supports = $block_supports;
+	}
+	
+	/**
 	 * Blockera constructor.
 	 */
 	protected function __construct() {

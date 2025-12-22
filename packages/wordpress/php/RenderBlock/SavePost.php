@@ -2,9 +2,10 @@
 
 namespace Blockera\WordPress\RenderBlock;
 
-use Blockera\Bootstrap\Application;
-use Blockera\Editor\StyleEngine;
+use Blockera\Setup\Blockera;
 use Blockera\Data\Cache\Cache;
+use Blockera\Editor\StyleEngine;
+use Blockera\Bootstrap\Application;
 
 /**
  * Class SavePost to cache styles for current post published.
@@ -16,7 +17,7 @@ class SavePost {
     /**
      * Store instance of app container.
      *
-     * @var Application
+     * @var Application|Blockera
      */
     protected Application $app;
 
@@ -127,7 +128,6 @@ class SavePost {
 		$pattern = '#<!--\s*wp:([\w\/-]+)(\s+.*?)?(/)?-->#s';
 		
 		$processed_content = $post_content;
-		$supports          = blockera_get_available_block_supports();
 
 		// Find all block comments.
 		preg_match_all($pattern, $processed_content, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
@@ -247,7 +247,7 @@ class SavePost {
 					'fallbackSelector' => $unique_selector,
 				]
 			);
-			$styleEngine->setSupports($supports);
+			$styleEngine->setSupports($this->app->getBlockSupports());
 			$computed_css_rules = $styleEngine->getStylesheet();
 
 			// Add blockeraCustomCSS if present.

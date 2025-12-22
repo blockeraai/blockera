@@ -268,18 +268,21 @@ class AppServiceProvider extends ServiceProvider {
      * @return void
      */
     protected function setupRenderBlocks(): void {
-		/*
+		/**
 		 * Filter the block supports.
 		 *
 		 * @param array $supports The block supports.
 		 * @param Application $app The application container object.
 		 *
-		 * @return array The filtered block supports.
+		 * @var Blockera $blockera
 		 */
-		$supports = apply_filters(
-			'blockera.block.supports',
-			blockera_get_available_block_supports(),
-			$this->app
+		$blockera = $this->app;
+		$blockera->setBlockSupports(
+			apply_filters(
+				'blockera.block.supports',
+				blockera_get_available_block_supports(),
+				$this->app
+			)
 		);
 
 		// Clear the generated css and processed html at the start of content rendering.
@@ -305,7 +308,7 @@ class AppServiceProvider extends ServiceProvider {
 
 		add_filter(
             'render_block',
-            function( string $html, array $block) use ( $supports, $render_instance): string {
+            function( string $html, array $block) use ( $blockera, $render_instance): string {
 
 				// Skip rendering if the request is a AJAX request or a REST request.
 				if (wp_doing_ajax() || blockera_is_skip_request() || is_admin()) {
@@ -324,7 +327,7 @@ class AppServiceProvider extends ServiceProvider {
 					$html = $render_instance->processContentCleanup( $html );
                 }
 
-				return $render_instance->render( $html, $block, $supports );
+				return $render_instance->render( $html, $block, $blockera->getBlockSupports() );
 			},
             10,
             3
