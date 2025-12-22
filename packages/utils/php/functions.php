@@ -54,8 +54,15 @@ if (! function_exists('blockera_is_skip_request')) {
 	 * @return bool
 	 */
 	function blockera_is_skip_request(): bool {
+		static $cached_result = null;
 
-		return ( defined('REST_REQUEST') && REST_REQUEST ) || ( isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] );
+		if ( null !== $cached_result ) {
+			return $cached_result;
+		}
+
+		$cached_result = ( defined('REST_REQUEST') && REST_REQUEST ) || wp_is_json_request() || ( isset($_SERVER['REQUEST_METHOD']) && 'POST' === $_SERVER['REQUEST_METHOD'] );
+
+		return $cached_result;
 	}
 }
 
