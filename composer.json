@@ -118,8 +118,7 @@
 		"blockera/http": "*",
 		"blockera/telemetry": "*",
 		"vlucas/phpdotenv": "^5.5@dev",
-		"voku/simple_html_dom": "dev-master",
-		"10up/wp_mock": "dev-trunk"
+		"voku/simple_html_dom": "dev-master"
 	},
 	"require-dev": {
 		"blockera/dev-phpunit": "*",
@@ -137,7 +136,8 @@
 		"symfony/var-dumper": "5.4.x-dev",
 		"spatie/phpunit-snapshot-assertions": "v4.x-dev",
 		"phpstan/phpstan": "2.1.x-dev",
-		"php-stubs/wordpress-stubs": "dev-master"
+		"php-stubs/wordpress-stubs": "dev-master",
+		"10up/wp_mock": "dev-trunk"
 	},
 	"config": {
 		"process-timeout": 0,
