@@ -16,11 +16,11 @@ if (! blockera_is_frontend_request() && ! blockera_is_editor_request() && ! bloc
     return;
 }
 
-global $blockera, $blockera_cache_key, $blockera_cache_group;
+global $blockera, $blockera_cache_key, $blockera_cache_group, $blockera_block_supports;
 
 $external_dir = blockera_core_config('app.vendor_path') . 'blockera/';
 
-blockera_load('feature-icon.src.hooks', $external_dir);
+blockera_add_icon_style_definitions();
 
 // Add blockera object cache to non persistent group to compatible with third party cache plugins.
 $blockera_cache_group = 'plugins';
@@ -47,6 +47,8 @@ if (blockera_is_admin()) {
 
 blockera_load('telemetry.php.hooks', $external_dir);
 
+// Set the block supports.
+$blockera->setBlockSupports($blockera_block_supports);
 // Initialize core components with optimized bootstrap.
 $blockera->bootstrap();
 
