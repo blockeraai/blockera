@@ -277,13 +277,6 @@ class AppServiceProvider extends ServiceProvider {
 		 * @var Blockera $blockera
 		 */
 		$blockera = $this->app;
-		$blockera->setBlockSupports(
-            apply_filters(
-                'blockera.block.supports',
-                blockera_get_available_block_supports(),
-                $this->app
-            )
-		);
 
 		// Clear the generated css and processed html at the start of content rendering.
 		// Clear the classnames registry at the start of content rendering.

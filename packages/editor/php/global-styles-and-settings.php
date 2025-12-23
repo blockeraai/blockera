@@ -13,9 +13,9 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
      * @global WP_Styles $wp_styles
      */
 	function blockera_add_global_styles_for_blocks() {
-		global $wp_styles;
+		global $wp_styles, $blockera_mode;
 
-		$can_use_cached = ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT;
+		$can_use_cached = ! $blockera_mode && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT );
 		$update_cache   = false;
 		$cached         = null;
 		$cache_key      = 'blockera_styles_for_blocks';
@@ -43,8 +43,7 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 
 		// Build tree only if not restored from cache.
 		if (! isset($tree)) {
-			$tree = new JSON();
-			$tree->setSupports(blockera_get_available_block_supports());
+			$tree        = new JSON();
 			$merged_data = JSONResolver::get_merged_data();
 
 			if (! method_exists($merged_data, 'get_raw_data') || ! method_exists($tree, 'get_raw_data')) {

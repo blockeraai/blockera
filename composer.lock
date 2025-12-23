@@ -280,7 +280,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/features-library/icon",
-                "reference": "177581761f9f368620feddb2e1d9aac654d072b2"
+                "reference": "faad6b37fea397a2a34b1bb988f32ef3ec5274f2"
             },
             "type": "library",
             "autoload": {
@@ -288,7 +288,8 @@
                     "Blockera\\Feature\\Icon\\": "src/"
                 },
                 "files": [
-                    "src/functions.php"
+                    "src/functions.php",
+                    "src/hooks.php"
                 ]
             },
             "autoload-dev": {
@@ -3238,8 +3239,8 @@
             "version": "2.1.x-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/48e7d3e89a0a31aba19bdfbc1e06334a359e6707",
-                "reference": "48e7d3e89a0a31aba19bdfbc1e06334a359e6707",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b3e2ae930510f1492012245ccc83cc68ce4c128d",
+                "reference": "b3e2ae930510f1492012245ccc83cc68ce4c128d",
                 "shasum": ""
             },
             "require": {
@@ -3285,7 +3286,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-22T17:44:14+00:00"
+            "time": "2025-12-23T13:50:54+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

@@ -1181,7 +1181,7 @@ if (! function_exists('blockera_get_available_block_supports')) {
 
 		$cached_supports = $supports;
 
-		return $supports;
+		return blockera_add_icon_block_supports($supports);
 	}
 }
 

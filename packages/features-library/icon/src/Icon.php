@@ -50,29 +50,6 @@ class Icon implements FeatureInterface {
     }
 
     public function boot(): void {
-		/*
-		 * Filter the block supports.
-		 *
-		 * @param array $supports The block supports.
-		 * @param Application $app The application container object.
-		 *
-		 * @return array The filtered block supports.
-		 */
-		add_filter(
-            'blockera.block.supports',
-            function( $supports, $app) {
-				ob_start();
-
-				include __DIR__ . '/icon-block-supports-list.json';
-			
-				$supports['icon'] = json_decode(ob_get_clean(), true);
-
-				return $supports;
-			},
-            10,
-            2
-        );
-
         $this->edit_block_html = new EditBlockHTML( $this->config['blocks'] ?? [] );
     }
 

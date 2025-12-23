@@ -91,7 +91,7 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 }
 ### END AUTO-GENERATED DEFINES
 
-global $blockera_env_mode, $blockera_mode;
+global $blockera_env_mode, $blockera_mode, $blockera_block_supports;
 
 $blockera_env_mode = 'development' === ( $_ENV['APP_MODE'] ?? 'production' );
 $blockera_mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $blockera_env_mode;
@@ -124,6 +124,20 @@ function blockera_load_compatibility_check(): void{
 
 	$blockera_is_compatible_with_pro = $blockera_compat_free_with_pro->load();
 }
+
+/**
+ * Filter the block supports.
+ *
+ * @hook  'blockera.block.supports'
+ * @since 1.12.2
+ * @param array $block_supports The block supports.
+ * 
+ * @return array The filtered block supports.
+ */
+$blockera_block_supports = apply_filters(
+	'blockera.block.supports',
+	blockera_get_available_block_supports()
+);
 
 // Initialize hooks on Front Controller.
 blockera_load('bootstrap.hooks', __DIR__);

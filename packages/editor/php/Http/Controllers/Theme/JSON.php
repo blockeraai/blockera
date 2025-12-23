@@ -22,6 +22,10 @@ class JSON extends \WP_Theme_JSON {
 	 */
 	public function __construct( array $data = array(), string $origin = 'theme') {
 		parent::__construct($data, $origin);
+
+		global $blockera_block_supports;
+
+		$this->setSupports($blockera_block_supports);
 	}
 
 	/**

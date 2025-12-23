@@ -10,4 +10,9 @@ define('BLOCKERA_SB_TESTING', true);
 
 switch_theme('twentytwentyfive');
 
+blockera_add_icon_style_definitions();
+
+global $blockera_block_supports;
+$blockera_block_supports = blockera_get_available_block_supports();
+
 require_once BLOCKERA_SB_PATH . 'bootstrap/hooks.php';
