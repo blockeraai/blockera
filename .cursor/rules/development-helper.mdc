@@ -12,11 +12,11 @@ We keep two local source trees because WordPress bundles compiled editor assets:
 
 ## Source directories (must be used)
 - **Uncompiled Block Editor (Gutenberg) source**
-  - `./block-editor-source-code/`
+  - `./source-code-block-editor/`
   - Contains the real React/JS/TS/CSS sources (preferred for editor features).
 
 - **WordPress core source**
-  - `./wordpress-source-code/`
+  - `./source-code-wordpress/`
   - Contains PHP core and server-side behavior; also includes compiled editor artifacts that MUST NOT be used as the primary reference for editor internals.
 
 ---
@@ -24,7 +24,7 @@ We keep two local source trees because WordPress bundles compiled editor assets:
 ## The routing rule (never break this)
 When researching or implementing:
 
-### A) If the task is Block Editor / Gutenberg front-end related → use `block-editor-source-code/` FIRST
+### A) If the task is Block Editor / Gutenberg front-end related → use `source-code-block-editor/` FIRST
 Includes anything involving:
 - React components, hooks, SlotFill, commands/command palette, keyboard shortcuts
 - `@wordpress/*` packages, data stores, entities, editor UI, iframe/canvas
@@ -33,7 +33,7 @@ Includes anything involving:
 
 **Do NOT** use compiled WP editor bundles as your reference when the uncompiled source exists.
 
-### B) If the task is PHP / WordPress core behavior / server-side rendering → use `wordpress-source-code/` FIRST
+### B) If the task is PHP / WordPress core behavior / server-side rendering → use `source-code-wordpress/` FIRST
 Includes anything involving:
 - PHP hooks/filters, block rendering on the server, REST API endpoints
 - Theme.json, global styles resolver, templates, query loop rendering
@@ -47,8 +47,8 @@ If you must bridge editor ↔ server behavior, consult **both** directories.
 ## Required workflow for every request
 ### 1) Classify + route
 Start by stating which bucket the task is in:
-- “Editor JS/React (Gutenberg)” → search `block-editor-source-code/`
-- “Core PHP/server-side” → search `wordpress-source-code/`
+- “Editor JS/React (Gutenberg)” → search `source-code-block-editor/`
+- “Core PHP/server-side” → search `source-code-wordpress/`
 - “Mixed/bridge” → search both, starting with the most relevant one
 
 ### 2) Search locally before writing code
@@ -64,8 +64,8 @@ In your answer, always include:
 - The key symbols used (function/class/component/store name)
 
 Example:
-- `block-editor-source-code/packages/editor/src/components/...`
-- `wordpress-source-code/wp-includes/blocks.php`
+- `source-code-block-editor/packages/editor/src/components/...`
+- `source-code-wordpress/wp-includes/blocks.php`
 
 ### 4) Prefer extension points, minimize patching
 - Prefer public extension points and documented APIs first.
@@ -77,10 +77,10 @@ Example:
 ## Rules about compiled editor code inside WordPress
 - Treat WordPress’s bundled editor JS as **compiled output**.
 - Only consult it when:
-  1) You cannot find the behavior in `block-editor-source-code/`, OR
+  1) You cannot find the behavior in `source-code-block-editor/`, OR
   2) You are verifying packaging/integration details (handles, script loading, dependencies).
 
-Never base a design on minified/compiled bundles if the source exists in `block-editor-source-code/`.
+Never base a design on minified/compiled bundles if the source exists in `source-code-block-editor/`.
 
 ---
 

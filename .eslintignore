@@ -11,8 +11,8 @@ node_modules/*
 vendor/*
 assets/*
 wordpress*
-block-editor-source-code
-wordpress-source-code
+source-code-block-editor
+source-code-wordpress
 **/test/*
 **/stories/*
 /bin/plugin/**

@@ -13,8 +13,8 @@ parameters:
 			- node_modules
 			- dist
 			- tests
-			- block-editor-source-code
-			- wordpress-source-code
+			- source-code-block-editor
+			- source-code-wordpress
 	bootstrapFiles:
 		- vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
 
