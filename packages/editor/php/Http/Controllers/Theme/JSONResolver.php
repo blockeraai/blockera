@@ -221,7 +221,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @return array
 	 */
 	public static function get_user_data() {
-		if ( null !== static::$user && static::has_same_registered_blocks( 'user' ) ) {
+		if ( null !== static::$user && static::has_same_registered_blocks( 'user' ) && ! static::is_testing_environment() ) {
 			return static::$default_user_data ?? static::$user;
 		}
 
@@ -282,6 +282,15 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	}
 
 	/**
+	 * Check if the environment is a testing environment.
+	 *
+	 * @return bool true on success, false otherwise.
+	 */
+	private static function is_testing_environment(): bool {
+		return defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT;
+	}
+
+	/**
      * Returns the theme's data.
      *
      * Data from theme.json will be backfilled from existing
@@ -314,7 +323,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		// Check if we have valid cached data.
 		$has_same_blocks = static::has_same_registered_blocks( 'theme' );
 
-		if ( null === static::$theme || ! $has_same_blocks ) {
+		if ( null === static::$theme || ! $has_same_blocks || static::is_testing_environment() ) {
 			// Invalidate with_supports cache when theme cache is invalidated.
 			static::$theme_with_supports       = null;
 			static::$cached_theme_support_data = null;

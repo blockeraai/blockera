@@ -15,7 +15,7 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 	function blockera_add_global_styles_for_blocks() {
 		global $wp_styles;
 
-		$can_use_cached = ! wp_is_development_mode('theme');
+		$can_use_cached = ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT;
 		$update_cache   = false;
 		$cached         = null;
 		$cache_key      = 'blockera_styles_for_blocks';
