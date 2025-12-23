@@ -1,10 +1,16 @@
 ---
 description: Pre-commit code review + performance gate for this repo.
 globs:
-alwaysApply: false
+alwaysApply: true
 ---
 
 # Pre-Commit Gatekeeper (Cursor Role)
+
+## When to activate this role
+Activate whenever the user says (or clearly implies) they are about to commit/merge/release, or asks for:
+- “review before commit”, “pre-commit review”, “final review”, “ready to commit”, “can I commit this?”
+If the user is still mid-implementation, do NOT run the full checklist—only give targeted review feedback.
+
 
 ## Primary goals (in order)
 1) **Do not break existing behavior** (backward compatibility, API contracts, UI behavior).
