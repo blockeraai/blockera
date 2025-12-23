@@ -35,13 +35,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
  */
 class AppServiceProvider extends ServiceProvider {
 
-	/**
-	 * Flag to track if posts have been processed to prevent multiple executions.
-	 *
-	 * @var bool
-	 */
-	protected bool $is_processed_posts = false;
-
     /**
      * Registering services classes.
      *
@@ -287,169 +280,182 @@ class AppServiceProvider extends ServiceProvider {
 
 		// Register Query Loop context hooks.
 		QueryLoopContext::register();
- 
-		add_action(
-            'save_post',
-            function( int $post_id, \WP_Post $post): void {
-                $this->app->make(SavePost::class)->save($post_id, $post);
-            },
-            9e8,
-            2
-		);
 
-		$render_instance = $this->app->make(Render::class);
+		// save_post hook - always needed.
+		add_action('save_post', [ $this, 'handleSavePost' ], 9e8, 2);
 
-		// Avoid admin/editor contexts.
-		if ( ! blockera_is_admin() && ! blockera_is_skip_request() ) {
-			add_filter(
-                'render_block',
-                function( string $html, array $block) use ( $blockera, $render_instance): string {
-                    // Skip rendering if the html is empty or the block is a "core/null" block.
-                    if (empty(trim($html)) || 'core/null' === $block['blockName']) {
-                        return $html;
-                    }
-
-                    // Only cleanup the core/template-part blocks(headers, footers, etc.).
-                    if ( isset( $block['blockName'] ) && 'core/template-part' === $block['blockName'] ) {
-                        // Clean html content. It includes all inner blocks.
-                        // This achieves cleaning the html only once.
-                        $html = $render_instance->processContentCleanup( $html );
-                    }
-
-                    return $render_instance->render( $html, $block, $blockera->getBlockSupports() );
-                },
-                10,
-                3
-			);
+		// Skip admin/editor/REST/AJAX contexts for frontend hooks.
+		if (blockera_is_admin() || blockera_is_skip_request()) {
+			return;
 		}
 
-		// Enqueue the generated CSS in the head to ensure it's printed before other styles.
-		add_action(
-            'wp_head',
-            function()use ( $render_instance):void {
-                $css = $render_instance->getGeneratedCSS();
+		// Only instantiate Render for frontend requests.
+		$render_instance = $this->app->make(Render::class);
 
-                // For development purposes, sort the CSS by block number.
+		// render_block filter.
+		add_filter(
+			'render_block',
+			static function( string $html, array $block) use ( $blockera, $render_instance): string {
+				// Fast empty check without full trim.
+				if ('' === ltrim($html) || 'core/null' === $block['blockName']) {
+					return $html;
+				}
+
+                // Only cleanup the core/template-part blocks(headers, footers, etc.).
+                if ( isset( $block['blockName'] ) && 'core/template-part' === $block['blockName'] ) {
+                    // Clean html content. It includes all inner blocks.
+                    // This achieves cleaning the html only once.
+                    $html = $render_instance->processContentCleanup( $html );
+                }
+
+				return $render_instance->render($html, $block, $blockera->getBlockSupports());
+			},
+			10,
+			2
+		);
+
+		// wp_head - CSS output (now inside context guard).
+		add_action(
+			'wp_head',
+			function() use ( $render_instance): void {
+				$css = $render_instance->getGeneratedCSS();
+
+				// For development purposes, sort the CSS by block number.
                 if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT) {
                     $css = blockera_sort_css_by_block_number($css);
                 }
 
-                blockera_add_inline_css(implode(PHP_EOL, $css));
+				blockera_add_inline_css(implode(PHP_EOL, $css));
 
-                $render_instance->resetGeneratedCSS();
-                $render_instance->resetProcessedHTML();
-                $render_instance->clearClassnamesRegistry();
-            }
+				$render_instance->resetGeneratedCSS();
+				$render_instance->resetProcessedHTML();
+				$render_instance->clearClassnamesRegistry();
+			}
 		);
 
-		// Avoid admin/editor contexts.
-		if ( ! blockera_is_admin() && ! blockera_is_skip_request() ) {
-			// Hook into the_posts filter to process posts.
-			// Cache the post content to avoid multiple processing.
-			// Create blocks computed css to avoid multiple processing.
-			add_filter(
-                'the_posts',
-                function( array $posts): array {
-                    if (empty($posts)) {
-                        return $posts;
-                    }
+		// the_posts filter with main query check.
+		// Hook into the_posts filter to process posts.
+		// Cache the post content to avoid multiple processing.
+		// Create blocks computed css to avoid multiple processing.
+		add_filter(
+			'the_posts',
+			[ $this, 'handleThePosts' ],
+			10e2,
+			2
+		);
 
-                    // Instantiate services once for all posts.
-                    $cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
-                    $save_post = $this->app->make(SavePost::class);
-                    $cache_key = $cache->getCacheKey('post_content');
+		// Process the content to cleanup the inline styles and convert them to CSS rules.
+		// Do the cleanup only once for the whole content.
+		add_filter(
+            'the_content',
+            function( string $content) use ( $render_instance): string {
+                return $render_instance->processContentCleanup( $content );
+            },
+            9999
+		);
+	}
 
-                    // Exception post types that we should not process their content.
-                    $exception_post_types = [
-                        'wp_global_styles' => true,
-                    ];
-
-                    // Filter posts that need processing (have content and block comments).
-                    $posts_to_process = [];
-                    $post_ids         = [];
-                    foreach ($posts as $index => $post) {
-                        // Skip if post type is in the exception list.
-                        if (isset($exception_post_types[ $post->post_type ])) {
-                            continue;
-                        }
-
-                        // Skip if post_content doesn't contain Blockera blocks.
-                        if (! blockera_contains_blockera_block($post->post_content)) {
-                            continue;
-                        }
-
-                        $posts_to_process[ $index ] = $post;
-                        $post_ids[]                 = $post->ID;
-                    }
-
-                    // Early exit if no posts need processing.
-                    if (empty($posts_to_process)) {
-                        return $posts;
-                    }
-
-                    // Batch prime meta cache for all post IDs to avoid N+1 queries.
-                    // This loads all post meta in a single query instead of one per post.
-                    \update_meta_cache('post', $post_ids);
-
-                    // Process each post that needs it.
-                    foreach ($posts_to_process as $index => $post) {
-                        // Get cached post_content (now from primed cache).
-                        $cached_data = \get_post_meta($post->ID, $cache_key, true);
-
-                        // If cache exists and is valid, use it.
-                        if (! empty($cached_data) && isset($cached_data['hash'], $cached_data['content'])) {
-                            // Calculate hash only when cache exists to validate it.
-                            $current_hash = md5($post->post_content);
-
-                            // If hash matches, use cached content (fast path).
-                            if ($cached_data['hash'] === $current_hash) {
-                                $posts[ $index ]->post_content = $cached_data['content'];
-                                continue;
-                            }
-                        }
-
-                        // Cache missing or invalid - process post_content.
-                        $result = $save_post->processPostContentForStyles($post->post_content);
-
-                        if (! empty($result) && isset($result['content'])) {
-                            // Calculate hash only when we need to cache.
-                            $current_hash = md5($post->post_content);
-
-                            // Store processed content in cache.
-                            $cache->setCache(
-                                $post->ID,
-                                'post_content',
-                                [
-                                    'hash'    => $current_hash,
-                                    'content' => $result['content'],
-                                ]
-                            );
-
-                            // Replace post_content with processed content.
-                            $posts[ $index ]->post_content = $result['content'];
-                        }
-                    }
-
-                    return $posts;
-                },
-                10e2,
-                1
-			);
+	/**
+	 * Handle the_posts filter to process posts.
+	 *
+	 * @param array     $posts The posts.
+	 * @param \WP_Query $query The query object.
+	 *
+	 * @return array The posts.
+	 */
+	public function handleThePosts( array $posts, \WP_Query $query): array {
+				// Skip non-main queries (widgets, sidebars, custom queries).
+		if (! $query->is_main_query() || empty($posts)) {
+			return $posts;
 		}
 
-		// Avoid admin/editor contexts.
-		if ( ! blockera_is_admin() && ! blockera_is_skip_request() ) {
-			// Process the content to cleanup the inline styles and convert them to CSS rules.
-			// Do the cleanup only once for the whole content.
-			add_filter(
-                'the_content',
-                function( string $content) use ( $render_instance): string {
-                    return $render_instance->processContentCleanup( $content );
-                },
-                9999
-			);
+        // Instantiate services once for all posts.
+        $cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+        $save_post = $this->app->make(SavePost::class);
+        $cache_key = $cache->getCacheKey('post_content');
+
+        // Exception post types that we should not process their content.
+        $exception_post_types = [
+            'wp_global_styles' => true,
+        ];
+
+		$posts_to_process = [];
+		$post_ids         = [];
+
+        // Process only the posts that are not in the exception post types.
+        // And contain Blockera blocks.
+		foreach ($posts as $index => $post) {
+			if (isset($exception_post_types[ $post->post_type ])) {
+				continue;
+			}
+			if (! blockera_contains_blockera_block($post->post_content)) {
+				continue;
+			}
+			$posts_to_process[ $index ] = $post;
+			$post_ids[]                 = $post->ID;
 		}
-    }
+
+		if (empty($posts_to_process)) {
+			return $posts;
+		}
+
+        // Batch prime meta cache for all post IDs to avoid N+1 queries.
+        // This loads all post meta in a single query instead of one per post.
+        \update_meta_cache('post', $post_ids);
+
+		foreach ($posts_to_process as $index => $post) {
+			// Compute hash once per iteration.
+			$current_hash = md5($post->post_content);
+			// Get the cached data for the post.
+			$cached_data = \get_post_meta($post->ID, $cache_key, true);
+
+			if (! empty($cached_data) 
+				&& isset($cached_data['hash'], $cached_data['content'])
+				&& $cached_data['hash'] === $current_hash
+			) {
+				$posts[ $index ]->post_content = $cached_data['content'];
+				continue;
+			}
+
+            // Cache missing or invalid - process post_content.
+            $result = $save_post->processPostContentForStyles($post->post_content);
+
+            if (! empty($result) && isset($result['content'])) {
+                // Calculate hash only when we need to cache.
+                $current_hash = md5($post->post_content);
+
+                // Store processed content in cache.
+                $cache->setCache(
+                    $post->ID,
+                    'post_content',
+                    [
+                        'hash'    => $current_hash,
+                        'content' => $result['content'],
+                    ]
+                );
+
+                // Replace post_content with processed content.
+                $posts[ $index ]->post_content = $result['content'];
+            }
+        }
+
+		return $posts;
+	}
+
+	/**
+	 * Handle save_post action to process and cache block styles.
+	 *
+	 * @hooked save_post
+	 *
+	 * @param int      $post_id The post ID.
+	 * @param \WP_Post $post    The post object.
+	 *
+	 * @return void
+	 */
+	public function handleSavePost( int $post_id, \WP_Post $post ): void {
+
+		$this->app->make( SavePost::class )->save( $post_id, $post );
+	}
 
     /**
      * Loading text domain.
