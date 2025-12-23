@@ -4,7 +4,6 @@ namespace Blockera\Tests;
 
 use ReflectionClass;
 use Blockera\Setup\Blockera;
-use Blockera\Bootstrap\Application;
 use Blockera\Dev\PhpUnit\CssDriver;
 use Blockera\Dev\PhpUnit\HtmlDriver;
 use Blockera\Dev\PHPUnit\AppTestCase;
@@ -17,7 +16,7 @@ class BlockeraTest extends AppTestCase {
     }
 
 	protected string $design;
-	protected Application $app;
+	protected Blockera $app;
 	protected ?string $post_content = null;
 	protected bool $is_global_styles = false;
 	protected ?string $currentTestType = null;
@@ -171,9 +170,10 @@ class BlockeraTest extends AppTestCase {
     protected function setUp(): void {
         parent::setUp();
 
-		blockera_load('vendor.blockera.feature-icon.src.hooks', dirname(__DIR__, 3));
+		global $blockera_block_supports;
 
 		$this->app = Blockera::getInstance();
+		$this->app->setBlockSupports($blockera_block_supports);
 		$this->app->bootstrap();
 
         // Setup WP_Mock
