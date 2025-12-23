@@ -224,18 +224,45 @@ class BlockeraTest extends AppTestCase {
 		blockera_test_activate_mu_plugin($designName);
 
 		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
+		
+		// Register style variations filter before querying
+		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
+			return blockera_test_register_style_variations($this->design, $variations);
+		});
+
+		// Simulate WordPress request lifecycle: query posts to trigger the_posts filter
 		$this->go_to(get_permalink($post_id));
+		
+		// Use the main query populated by go_to(); fallback to a direct query if needed.
+		global $wp_query, $post;
+		if (!($wp_query instanceof \WP_Query) || !$wp_query->have_posts()) {
+			$wp_query = new \WP_Query([
+				'p' => $post_id,
+				'post_type' => get_post_type($post_id),
+			]);
+		}
+		
+		// Trigger the_posts filter by accessing posts (this is when Blockera processes blocks)
+		// Set up the global $post object for the_content filter
+		if ($wp_query->have_posts()) {
+			$wp_query->the_post();
+			// Ensure global $post is set (the_post() should do this, but be explicit)
+			$post = $wp_query->post;
+		}
 
 		/**
 		 * Test 1: Blocks rendering
 		 */
-		the_post();
+		// Use the_content filter to get rendered content (simulates real WordPress flow)
 		// if the design has setup.php, use the post content set in setup.php file.
-		$content = $this->post_content ?? $post_content;
+		$raw_content = $this->post_content ?? (string) get_post_field('post_content', $post_id);
+		if ($raw_content === '') {
+			$raw_content = $post_content;
+		}
 		
-		// Simulate the real WordPress flow by using do_blocks() instead of manually parsing and rendering
-		// This ensures we're testing the actual WordPress block rendering pipeline.
-		$content = do_blocks($content);
+		// Apply the_content filter which triggers render_block filter
+		// This simulates WordPress's normal content rendering pipeline
+		$content = apply_filters('the_content', $raw_content);
 
 		// Apply global html-search-replace first if configured.
 		$global_config = blockera_test_get_global_config();
@@ -253,7 +280,7 @@ class BlockeraTest extends AppTestCase {
 		$content = "<link rel='stylesheet' href='./frontend-global-styles.css'>\n<link rel='stylesheet' href='./frontend.css'>\n\n" . $content;
 
 		// Check with snapshot content
-		$this->assertMatchesSnapshot('frontend-html', $content, new HtmlDriver());
+		$this->assertMatchesSnapshot('frontend-html', html_entity_decode($content), new HtmlDriver());
 
 		/**
 		 * Test 2: Inline style attributes
@@ -275,14 +302,19 @@ class BlockeraTest extends AppTestCase {
 		/**
 		 * Test 3: Blocks generated styles
 		 */
+		// Simulate WordPress request lifecycle:
+		// 1. wp_enqueue_scripts must be called first (triggers blockera_enqueue_global_styles)
+		do_action('wp_enqueue_scripts');
+		
+		// 2. wp_head calls wp_print_styles which outputs all enqueued styles including:
+		//    - blockera-inline-css (from EditorAssetsProvider::printBlockeraGeneratedStyles)
+		//    - global-styles-inline-css (from wp_add_inline_style('global-styles', ...))
 		ob_start();
-		wp_head();
-		wp_footer();
-		$content = ob_get_clean();
+		do_action('wp_head');
+		$head_output = ob_get_clean();
 
-					
-		// Extract inline styles from wp_head output
-		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $content, $matches);
+		// Extract blockera inline styles from wp_head output
+		preg_match_all('/<style[^>]*id=["\']blockera-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_output, $matches);
 		$inline_css = !empty($matches[1]) ? implode("\n", $matches[1]) : '';
 
 		$this->assertMatchesSnapshot('frontend-css', blockera_test_normalize_css($inline_css), new CssDriver());
@@ -290,34 +322,31 @@ class BlockeraTest extends AppTestCase {
 		/**
 		 * Test 4: Global styles
 		 */
-		$this->go_to(get_permalink($post_id));
-
-		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
-			return blockera_test_register_style_variations($this->design, $variations);
-		});
-
-		do_action('wp_enqueue_scripts');
-
-		$blocks = [];
-
-		while(have_posts()) {
-			the_post();
-			
-			$blocks = array_column(parse_blocks(get_the_content()), 'blockName');
+		// Extract global styles from wp_head output
+		// Global styles are added as inline styles to the 'global-styles' handle via wp_add_inline_style()
+		$global_styles = '';
+		if (preg_match_all('/<style[^>]*id=["\']global-styles-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_output, $style_matches)) {
+			$global_styles = implode("\n", $style_matches[1]);
 		}
 
-		$global_styles = '';
-
-		foreach (array_filter(array_unique($blocks)) as $block) {
-			$cache_key  = 'wp_styles_for_blocks';
-			$cached     = get_transient($cache_key);
-
-			$global_styles .= $cached['blocks'][$block] ?? '';
+		// Also check wp_footer output for classic themes with assets on demand
+		ob_start();
+		do_action('wp_footer');
+		$footer_output = ob_get_clean();
+		
+		// Extract global styles from footer if present (for classic themes)
+		if (preg_match_all('/<style[^>]*id=["\']global-styles-inline-css["\'][^>]*>(.*?)<\/style>/s', $footer_output, $footer_style_matches)) {
+			$footer_global_styles = implode("\n", $footer_style_matches[1]);
+			if (!empty($footer_global_styles)) {
+				$global_styles = $global_styles ? $global_styles . "\n" . $footer_global_styles : $footer_global_styles;
+			}
 		}
 
 		$this->assertMatchesSnapshot('frontend-global-styles', blockera_test_normalize_css($global_styles), new CssDriver());
 
 		// Cleanup database
+		wp_reset_postdata();
+		wp_reset_query();
 		wp_delete_post($post_id);
     }
 
@@ -366,6 +395,10 @@ class BlockeraTest extends AppTestCase {
 		$elements_with_style = $xpath->query('//*[@style]');
 		
 		foreach ($elements_with_style as $element) {
+			/** @var \DOMElement $element */
+			if (!$element instanceof \DOMElement) {
+				continue;
+			}
 			// Skip SVG tags and their descendants (exception)
 			$is_svg_or_descendant = false;
 			$current = $element;
@@ -400,6 +433,7 @@ class BlockeraTest extends AppTestCase {
 			if (!$has_blockera_block) {
 				$parent = $element->parentNode;
 				while ($parent && $parent instanceof \DOMElement) {
+					/** @var \DOMElement $parent */
 					$parent_class = $parent->getAttribute('class');
 					$parent_has_blockera_block = strpos($parent_class, 'blockera-block') !== false;
 					
