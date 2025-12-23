@@ -5,6 +5,8 @@ dist
 test
 vendor
 wordpress*
+block-editor-source-code
+wordpress-source-code
 *.js
 node_modules
 tests/**/*.css

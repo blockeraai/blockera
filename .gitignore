@@ -91,3 +91,7 @@ Scratch
 
 # .github some subdirectories
 .github/wp-env-configs/development.json
+
+# development helper folders
+block-editor-source-code/
+wordpress-source-code/

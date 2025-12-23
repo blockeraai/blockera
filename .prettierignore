@@ -2,6 +2,8 @@
 dist
 example
 vendor
+block-editor-source-code
+wordpress-source-code
 
 # Ignore test fixtures
 tests/**/input.html

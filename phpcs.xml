@@ -114,6 +114,8 @@
 
     <!-- Exclude third party libraries -->
     <exclude-pattern>./vendor/*</exclude-pattern>
+    <exclude-pattern>./block-editor-source-code/*</exclude-pattern>
+    <exclude-pattern>./wordpress-source-code/*</exclude-pattern>
 
     <rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
         <exclude-pattern>*</exclude-pattern>
