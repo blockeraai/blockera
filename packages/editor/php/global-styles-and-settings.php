@@ -18,12 +18,14 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		$can_use_cached = ! $blockera_mode && ( ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT );
 		$update_cache   = false;
 		$cached         = null;
-		$cache_key      = 'blockera_styles_for_blocks';
+		$cache_key      = 'styles_for_blocks';
+
+		$cache_instance = blockera_get_cache();
 
 		// Build cache hash from version-based keys (much cheaper than hashing entire tree data).
 		if ($can_use_cached) {
 			$cache_hash = blockera_get_global_styles_cache_hash();
-			$cached     = get_transient($cache_key);
+			$cached     = $cache_instance->getTransientCache($cache_key);
 
 			// Check if we have a fully valid cache with all data.
 			if (
@@ -140,7 +142,7 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 		}
 
 		if ($update_cache && null !== $cached) {
-			set_transient($cache_key, $cached, DAY_IN_SECONDS);
+			$cache_instance->setTransientCache($cache_key, $cached, DAY_IN_SECONDS);
 		}
 	}
 }

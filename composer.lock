@@ -172,13 +172,16 @@
             "dist": {
                 "type": "path",
                 "url": "packages/data",
-                "reference": "fe8ab2b95f5b0d30a04bbf06b95c14bc987fc462"
+                "reference": "88f236ce6c61d25f11d550062763530d62df52cb"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
                     "Blockera\\Data\\": "php/"
-                }
+                },
+                "files": [
+                    "php/functions.php"
+                ]
             },
             "description": "Core Data is a data module intended to simplify access and manipulation to core WordPress and entities.",
             "transport-options": {
@@ -3239,8 +3242,8 @@
             "version": "2.1.x-dev",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b3e2ae930510f1492012245ccc83cc68ce4c128d",
-                "reference": "b3e2ae930510f1492012245ccc83cc68ce4c128d",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b5c378e5d5cdd75320603f6bb413c34ba85bfb91",
+                "reference": "b5c378e5d5cdd75320603f6bb413c34ba85bfb91",
                 "shasum": ""
             },
             "require": {
@@ -3286,7 +3289,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-23T13:50:54+00:00"
+            "time": "2025-12-23T20:20:14+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -8889,12 +8892,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-cli/wp-cli.git",
-                "reference": "bbd173f9d0923024f7b1124f0f262139fba11dd6"
+                "reference": "bc27abfbb08c10fe83ec633b5f613b455e270aad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/bbd173f9d0923024f7b1124f0f262139fba11dd6",
-                "reference": "bbd173f9d0923024f7b1124f0f262139fba11dd6",
+                "url": "https://api.github.com/repos/wp-cli/wp-cli/zipball/bc27abfbb08c10fe83ec633b5f613b455e270aad",
+                "reference": "bc27abfbb08c10fe83ec633b5f613b455e270aad",
                 "shasum": ""
             },
             "require": {
@@ -8952,7 +8955,7 @@
                 "issues": "https://github.com/wp-cli/wp-cli/issues",
                 "source": "https://github.com/wp-cli/wp-cli"
             },
-            "time": "2025-12-20T21:58:35+00:00"
+            "time": "2025-12-23T03:38:09+00:00"
         },
         {
             "name": "wp-cli/wp-cli-bundle",
