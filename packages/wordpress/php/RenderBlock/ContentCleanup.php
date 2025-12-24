@@ -35,6 +35,14 @@ class ContentCleanup {
 	protected array $parent_index = [];
 
 	/**
+	 * Counter for generating unique child class names per parent.
+	 * Key is parent class name, value is the current counter.
+	 *
+	 * @var array<string, int>
+	 */
+	protected array $parent_child_counters = [];
+
+	/**
 	 * List of CSS properties to remove from block wrapper inline styles.
 	 * 
 	 * This list should be generated dynamically by using following script in Blockera main repository:
@@ -135,8 +143,9 @@ class ContentCleanup {
 			];
 		}
 
-		$this->css_rules    = [];
-		$this->parent_index = [];
+		$this->css_rules             = [];
+		$this->parent_index          = [];
+		$this->parent_child_counters = [];
 
 		// Build parent index once for efficient lookups.
 		$this->buildParentIndex( $content );
@@ -348,10 +357,20 @@ class ContentCleanup {
 				}
 			}
 
-			// If child has no classes, generate a new unique class for it.
+			// If child has no classes, generate a unique class using parent class + counter.
 			$unique_class = null;
 			if ( empty( $child_selector ) ) {
-				$unique_class   = 'blockera-block-' . blockera_get_small_random_hash();
+				$parent_class = $parent_data['class'];
+
+				// Initialize counter for this parent if not exists.
+				if ( ! isset( $this->parent_child_counters[ $parent_class ] ) ) {
+					$this->parent_child_counters[ $parent_class ] = 0;
+				}
+
+				// Increment counter and generate unique class.
+				$this->parent_child_counters[ $parent_class ]++;
+				$counter        = $this->parent_child_counters[ $parent_class ];
+				$unique_class   = $parent_class . '-child-' . $counter;
 				$child_selector = '.' . $unique_class;
 			}
 
