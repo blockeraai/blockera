@@ -7,6 +7,7 @@ use Blockera\Setup\Blockera;
 use Blockera\Dev\PhpUnit\CssDriver;
 use Blockera\Dev\PhpUnit\HtmlDriver;
 use Blockera\Dev\PHPUnit\AppTestCase;
+use Blockera\Editor\Http\Controllers\Theme\JSONResolver;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class BlockeraTest extends AppTestCase {
@@ -17,6 +18,7 @@ class BlockeraTest extends AppTestCase {
 
 	protected string $design;
 	protected Blockera $app;
+	protected int $post_id = 0;
 	protected ?string $post_content = null;
 	protected bool $is_global_styles = false;
 	protected ?string $currentTestType = null;
@@ -186,6 +188,22 @@ class BlockeraTest extends AppTestCase {
 			blockera_test_deactivate_mu_plugin($this->design);
 		}
 
+		// Delete test post and reset property.
+		wp_delete_post($this->post_id);
+		$this->post_id = 0;
+		
+		
+		// Reset test state properties
+		$this->design = '';
+		$this->post_content = null;
+		$this->is_global_styles = false;
+		$this->currentTestType = null;
+
+		// Reset global WordPress state
+		wp_reset_postdata();
+		wp_reset_query();
+		JSONResolver::clean_cached_data();
+
 		// Cleanup WP_Mock
 		\WP_Mock::tearDown();
 
@@ -223,7 +241,7 @@ class BlockeraTest extends AppTestCase {
 		// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
 		blockera_test_activate_mu_plugin($designName);
 
-		$post_id = $this->createTestPostWithSnapshot($designName, $post_content);
+		$this->post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		
 		// Register style variations filter before querying
 		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
@@ -231,14 +249,14 @@ class BlockeraTest extends AppTestCase {
 		});
 
 		// Simulate WordPress request lifecycle: query posts to trigger the_posts filter
-		$this->go_to(get_permalink($post_id));
+		$this->go_to(get_permalink($this->post_id));
 		
 		// Use the main query populated by go_to(); fallback to a direct query if needed.
 		global $wp_query, $post;
 		if (!($wp_query instanceof \WP_Query) || !$wp_query->have_posts()) {
 			$wp_query = new \WP_Query([
-				'p' => $post_id,
-				'post_type' => get_post_type($post_id),
+				'p' => $this->post_id,
+				'post_type' => get_post_type($this->post_id),
 			]);
 		}
 		
@@ -255,7 +273,7 @@ class BlockeraTest extends AppTestCase {
 		 */
 		// Use the_content filter to get rendered content (simulates real WordPress flow)
 		// if the design has setup.php, use the post content set in setup.php file.
-		$raw_content = $this->post_content ?? (string) get_post_field('post_content', $post_id);
+		$raw_content = $this->post_content ?? (string) get_post_field('post_content', $this->post_id);
 		if ($raw_content === '') {
 			$raw_content = $post_content;
 		}
@@ -302,13 +320,6 @@ class BlockeraTest extends AppTestCase {
 		/**
 		 * Test 3: Blocks generated styles
 		 */
-		// Simulate WordPress request lifecycle:
-		// 1. wp_enqueue_scripts must be called first (triggers blockera_enqueue_global_styles)
-		do_action('wp_enqueue_scripts');
-		
-		// 2. wp_head calls wp_print_styles which outputs all enqueued styles including:
-		//    - blockera-inline-css (from EditorAssetsProvider::printBlockeraGeneratedStyles)
-		//    - global-styles-inline-css (from wp_add_inline_style('global-styles', ...))
 		ob_start();
 		do_action('wp_head');
 		$head_output = ob_get_clean();
@@ -343,11 +354,6 @@ class BlockeraTest extends AppTestCase {
 		}
 
 		$this->assertMatchesSnapshot('frontend-global-styles', blockera_test_normalize_css($global_styles), new CssDriver());
-
-		// Cleanup database
-		wp_reset_postdata();
-		wp_reset_query();
-		wp_delete_post($post_id);
     }
 
 	/**
