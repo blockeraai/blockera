@@ -222,7 +222,9 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 */
 	public static function get_user_data() {
 		if ( null !== static::$user && static::has_same_registered_blocks( 'user' ) && ! static::is_testing_environment() ) {
-			return static::$default_user_data ?? static::$user;
+			if (1 !== count(static::$user->get_data())) {
+				return static::$default_user_data ?? static::$user;
+			}
 		}
 
 		$config   = array();
