@@ -2,7 +2,6 @@
 
 namespace Blockera\Http;
 
-use Blockera\Data\Cache\Cache;
 use Blockera\WordPress\Sender;
 use Blockera\Bootstrap\Application;
 use Illuminate\Contracts\Container\BindingResolutionException;
@@ -85,7 +84,7 @@ class Routes {
 			return;
 		}
 
-		$controller->setCacheInstance( self::$app->make( Cache::class, [ 'product_id' => 'blockera' ] ) );
+		$controller->setCacheInstance( static::$app->make('CacheSystem') );
 
 		$isRegister = register_rest_route(
 			$controller->getNameSpace() . self::$version,

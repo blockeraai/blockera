@@ -2,11 +2,9 @@
 
 namespace Blockera\Setup\Providers;
 
-use Blockera\Telemetry\Config;
 use Blockera\Setup\Blockera;
+use Blockera\Telemetry\Config;
 use Blockera\WordPress\Sender;
-use Blockera\Data\Cache\Cache;
-use Blockera\Data\Cache\Version;
 use Blockera\Bootstrap\Application;
 use Blockera\WordPress\RenderBlock\{
     Render,
@@ -81,21 +79,11 @@ class AppServiceProvider extends ServiceProvider {
 			$this->app->singleton(IconsManager::class);
 
 			$this->app->singleton(
-				Cache::class,
-				function ( Application $app, array $params = []) {
-					if (empty($params)) {
-						return null;
-					}
-					return new Cache($app, $params);
+                'CacheSystem',
+                function() {
+					return blockera_get_cache();
 				}
-			);
-
-			$this->app->singleton(
-				Version::class,
-				function ( Application $app, array $params = []) {
-					return new Version($app, $params);
-				}
-			);
+            );
 
 			$this->app->singleton(
 				VariableType::class,
@@ -234,22 +222,14 @@ class AppServiceProvider extends ServiceProvider {
 
 	/**
 	 * Initializing cache mechanism.
-	 * 
+	 *
 	 * @return void
 	 */
-	private function initCache(): void{
+	private function initCache(): void {
+		$is_cache_valid = blockera_init_cache();
 
-		$cache = $this->app->make(Version::class, [ 'product_id' => 'blockera' ]);
-
-		$validate_cache = $cache->validate(BLOCKERA_SB_VERSION);
-
-		if (! $validate_cache) {
-			$cache->clear();
-			$validate_cache = $cache->store(BLOCKERA_SB_VERSION);
-		}
-
-		if ($this->app instanceof Blockera) {
-			$this->app->setIsValidateCache($validate_cache);
+		if ( $this->app instanceof Blockera ) {
+			$this->app->setIsValidateCache( $is_cache_valid );
 		}
 	}
 
@@ -363,9 +343,9 @@ class AppServiceProvider extends ServiceProvider {
 	 *
 	 * @return array The posts.
 	 */
-	public function handleThePosts( array $posts, \WP_Query $query): array {
-				// Skip non-main queries (widgets, sidebars, custom queries).
-		if (! $query->is_main_query() || empty($posts)) {
+	public function handleThePosts( array $posts, \WP_Query $query ): array {
+		// Skip non-main queries (widgets, sidebars, custom queries).
+		if ( ! $query->is_main_query() || empty( $posts ) ) {
 			return $posts;
 		}
 
@@ -394,10 +374,10 @@ class AppServiceProvider extends ServiceProvider {
 			return $posts;
 		}
 
-		// Instantiate services once for all posts.
-        $cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
-        $save_post = $this->app->make(SavePost::class);
-        $cache_key = $cache->getCacheKey('post_content');
+		// Use helper function for cache instance (no container overhead).
+		$cache     = $this->app->make('CacheSystem');
+		$save_post = $this->app->make( SavePost::class );
+		$cache_key = $cache->getCacheKey( 'post_content' );
 
         // Batch prime meta cache for all post IDs to avoid N+1 queries.
         // This loads all post meta in a single query instead of one per post.
@@ -417,27 +397,27 @@ class AppServiceProvider extends ServiceProvider {
 				continue;
 			}
 
-            // Cache missing or invalid - process post_content.
-            $result = $save_post->processPostContentForStyles($post->post_content);
+			// Cache missing or invalid - process post_content.
+			$result = $save_post->processPostContentForStyles( $post->post_content );
 
-            if (! empty($result) && isset($result['content'])) {
-                // Calculate hash only when we need to cache.
-                $current_hash = md5($post->post_content);
+			if ( ! empty( $result ) && isset( $result['content'] ) ) {
+				// Calculate hash only when we need to cache.
+				$current_hash = md5( $post->post_content );
 
-                // Store processed content in cache.
-                $cache->setCache(
-                    $post->ID,
-                    'post_content',
-                    [
-                        'hash'    => $current_hash,
-                        'content' => $result['content'],
-                    ]
-                );
+				// Store processed content in cache using the new meta cache method.
+				$cache->setMetaCache(
+					$post->ID,
+					'post_content',
+					[
+						'hash'    => $current_hash,
+						'content' => $result['content'],
+					]
+				);
 
-                // Replace post_content with processed content.
-                $posts[ $index ]->post_content = $result['content'];
-            }
-        }
+				// Replace post_content with processed content.
+				$posts[ $index ]->post_content = $result['content'];
+			}
+		}
 
 		return $posts;
 	}

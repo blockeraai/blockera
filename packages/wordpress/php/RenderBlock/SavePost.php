@@ -3,7 +3,6 @@
 namespace Blockera\WordPress\RenderBlock;
 
 use Blockera\Setup\Blockera;
-use Blockera\Data\Cache\Cache;
 use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\Application;
 
@@ -98,16 +97,16 @@ class SavePost {
 		// Calculate hash of original post_content for cache validation.
 		$hash = md5($post->post_content);
 
-		// Store processed content in cache.
-		$cache = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
-		$cache->setCache(
-            $postId,
-            'post_content',
-            [
-				'hash' => $hash,
+		// Store processed content in cache using helper function.
+		$cache = $this->app->make('CacheSystem');
+		$cache->setMetaCache(
+			$postId,
+			'post_content',
+			[
+				'hash'    => $hash,
 				'content' => $result['content'],
 			]
-        );
+		);
 	}
 
 	/**

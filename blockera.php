@@ -139,6 +139,41 @@ $blockera_block_supports = apply_filters(
 	blockera_get_available_block_supports()
 );
 
+/**
+ * Initialize cache mechanism and handle version-based cache invalidation.
+ *
+ * This function checks if the plugin version has changed and invalidates
+ * the cache accordingly. It uses the Version class to manage versioning.
+ *
+ * @since 1.12.3
+ *
+ * @return bool True if cache is valid, false if cache was invalidated.
+ */
+function blockera_init_cache(): bool {
+	// Use the new invalidateIfVersionChanged method which handles everything.
+	$was_invalidated = blockera_get_cache()->invalidateIfVersionChanged( BLOCKERA_SB_VERSION );
+
+	// Return true if cache is valid (not invalidated), false if invalidated.
+	return ! $was_invalidated;
+}
+
+/**
+ * Get the Blockera version cache instance.
+ *
+ * @since 1.12.3
+ *
+ * @return \Blockera\Data\Cache\Version The version cache instance.
+ */
+function blockera_get_cache(): \Blockera\Data\Cache\Version {
+	static $version_cache = null;
+
+	if ( null === $version_cache ) {
+		$version_cache = new \Blockera\Data\Cache\Version( [ 'product_id' => 'blockera' ] );
+	}
+
+	return $version_cache;
+}
+
 // Initialize hooks on Front Controller.
 blockera_load('bootstrap.hooks', __DIR__);
 
