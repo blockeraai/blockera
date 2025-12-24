@@ -283,6 +283,9 @@ class JSON extends \WP_Theme_JSON {
             }
         }
 
+		// 3. Merge the block rules with the parent block rules.
+		$block_rules = parent::get_styles_for_block($block_metadata) . $block_rules;
+
         return $block_rules;
     }
 }
