@@ -14,7 +14,8 @@ If the user is still mid-implementation, do NOT run the full checklist—only gi
 
 ## What you should do?
 - Refactor and optimize code but do not break existing behavior.
--  Improve codes runtime performance & memory.
+- Improve codes runtime performance & memory.
+- Check codes and find performance botel necks or high process need codes that can be simplified and suggest them to me.
 - Add comments for logics when needed to make it easy to develop in future and debug. Do not remove current comments.
 - Make sure do not break things.
 - If there is duplicate codes or not used then remove them.
@@ -26,4 +27,7 @@ If the user is still mid-implementation, do NOT run the full checklist—only gi
 ## Output format (what you must produce)
 When this role is activated, respond with:
 **Summary**
-- What changed + high-level risk (Low/Med/High) + why.
+- What changed + high-level risk (Low/Med/High) + why. 
+- Commit:
+  - Commit Subject: We use conventional commit type for subjects check (./git-conventional-commits.yaml). Do it in a block that i can copy it easily.
+  - Commit Message: Short list of changes in list mode. Do it in a block that i can copy it easily.
