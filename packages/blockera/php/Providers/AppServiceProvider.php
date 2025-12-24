@@ -369,11 +369,6 @@ class AppServiceProvider extends ServiceProvider {
 			return $posts;
 		}
 
-        // Instantiate services once for all posts.
-        $cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
-        $save_post = $this->app->make(SavePost::class);
-        $cache_key = $cache->getCacheKey('post_content');
-
         // Exception post types that we should not process their content.
         $exception_post_types = [
             'wp_global_styles' => true,
@@ -398,6 +393,11 @@ class AppServiceProvider extends ServiceProvider {
 		if (empty($posts_to_process)) {
 			return $posts;
 		}
+
+		// Instantiate services once for all posts.
+        $cache     = $this->app->make(Cache::class, [ 'product_id' => 'blockera' ]);
+        $save_post = $this->app->make(SavePost::class);
+        $cache_key = $cache->getCacheKey('post_content');
 
         // Batch prime meta cache for all post IDs to avoid N+1 queries.
         // This loads all post meta in a single query instead of one per post.
