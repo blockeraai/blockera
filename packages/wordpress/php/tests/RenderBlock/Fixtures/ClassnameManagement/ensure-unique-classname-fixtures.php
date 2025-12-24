@@ -51,14 +51,14 @@ return [
 	// This fixture requires setup: first register the same base classname with different CSS
 	[
 		'scenario'                    => 'collision_different_css',
-		'description'                 => 'Same base classname with different CSS should create unique classname',
+		'description'                 => 'Same base classname with different CSS should create unique classname with counter -1',
 		'setup_base_classname'        => 'blockera-block blockera-block-2',
 		'setup_computed_css'          => 'p.blockera-block.blockera-block-2 { background-color: #75a3ff; }',
 		'base_classname'              => 'blockera-block blockera-block-2',
 		'computed_css'                => 'p.blockera-block.blockera-block-2 { background-color: #ff0000; }',
-		'expected_classname_pattern'  => '/^blockera-block blockera-block-2-[a-z0-9]+$/',
+		'expected_classname'           => 'blockera-block blockera-block-2-1',
 		'expected_updated'             => true,
-		'expected_computed_css_pattern' => '/p\.blockera-block\.blockera-block-2-[a-z0-9]+ \{ background-color: #ff0000; \}/',
+		'expected_computed_css'        => 'p.blockera-block.blockera-block-2-1 { background-color: #ff0000; }',
 	],
 
 	// #5 - Multiple blocks with same CSS
@@ -113,28 +113,28 @@ return [
 	// This fixture requires setup: first register the same base classname with different CSS
 	[
 		'scenario'                    => 'different_css_same_base_variant2',
-		'description'                 => 'Same base classname with different CSS (blue) should create unique classname',
+		'description'                 => 'Same base classname with different CSS (blue) should create unique classname with counter -1',
 		'setup_base_classname'        => 'blockera-block blockera-block-4',
 		'setup_computed_css'          => 'p.blockera-block.blockera-block-4 { color: red; }',
 		'base_classname'              => 'blockera-block blockera-block-4',
 		'computed_css'                => 'p.blockera-block.blockera-block-4 { color: blue; }',
-		'expected_classname_pattern'  => '/^blockera-block blockera-block-4-[a-z0-9]+$/',
+		'expected_classname'          => 'blockera-block blockera-block-4-1',
 		'expected_updated'            => true,
-		'expected_computed_css_pattern' => '/p\.blockera-block\.blockera-block-4-[a-z0-9]+ \{ color: blue; \}/',
+		'expected_computed_css'        => 'p.blockera-block.blockera-block-4-1 { color: blue; }',
 	],
 
 	// #10 - Different CSS content but same base classname (third variant)
 	// This fixture requires setup: first register the same base classname with different CSS
 	[
 		'scenario'                    => 'different_css_same_base_variant3',
-		'description'                 => 'Same base classname with different CSS (green) should create unique classname',
+		'description'                 => 'Same base classname with different CSS (green) should create unique classname with counter -1',
 		'setup_base_classname'        => 'blockera-block blockera-block-4',
 		'setup_computed_css'          => 'p.blockera-block.blockera-block-4 { color: red; }',
 		'base_classname'              => 'blockera-block blockera-block-4',
 		'computed_css'                => 'p.blockera-block.blockera-block-4 { color: green; }',
-		'expected_classname_pattern'  => '/^blockera-block blockera-block-4-[a-z0-9]+$/',
+		'expected_classname'          => 'blockera-block blockera-block-4-1',
 		'expected_updated'            => true,
-		'expected_computed_css_pattern' => '/p\.blockera-block\.blockera-block-4-[a-z0-9]+ \{ color: green; \}/',
+		'expected_computed_css'        => 'p.blockera-block.blockera-block-4-1 { color: green; }',
 	],
 
 	// #11 - Edge case - empty CSS

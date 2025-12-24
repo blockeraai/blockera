@@ -170,7 +170,7 @@ async function testImport() {
 
 				// Use wp-cli eval to read file and create the post
 				// This avoids command-line length limits for large content
-				const phpCode = `$title = '${escapedTitle}'; $content = file_get_contents('${escapedPath}'); $post_id = wp_insert_post(array('post_title' => $title, 'post_content' => $content, 'post_status' => 'publish', 'post_type' => 'post')); echo is_wp_error($post_id) ? $post_id->get_error_message() : $post_id;`;
+				const phpCode = `$title = '${escapedTitle}'; $content = file_get_contents('${escapedPath}'); $post_id = wp_insert_post(array('post_title' => $title, 'post_content' => $content, 'post_status' => 'publish', 'post_type' => 'post', 'post_author' => 1)); echo is_wp_error($post_id) ? $post_id->get_error_message() : $post_id;`;
 
 				// Escape single quotes for shell
 				const escapedPhpCode = phpCode.replace(/'/g, "'\\''");

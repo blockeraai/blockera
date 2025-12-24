@@ -182,10 +182,10 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$result = $this->cleanup->process( $html );
 
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
-		// Should use parent selector + child selector.
-		$this->assertStringContainsString( ':where(.blockera-block-parent', $result['style'] );
-		// Child should get unique class.
-		$this->assertMatchesRegularExpression( '/class="blockera-block-[a-z0-9]+"/', $result['content'] );
+		// Should use parent selector + child selector with counter-based naming.
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		// Child should get class based on parent class + counter.
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
 	}
 
 	public function testProcessPriority3ParentWpBlockWithoutBlockeraBlock(): void {
@@ -206,8 +206,9 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$result = $this->cleanup->process( $html );
 
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
-		// Should use blockera-block-* class from parent.
-		$this->assertStringContainsString( ':where(.blockera-block-xyz', $result['style'] );
+		// Should use blockera-block-* class from parent with counter-based child class.
+		$this->assertStringContainsString( ':where(.blockera-block-xyz .blockera-block-xyz-child-1)', $result['style'] );
+		$this->assertStringContainsString( 'class="blockera-block-xyz-child-1"', $result['content'] );
 	}
 
 	public function testProcessChildWithClassesPrioritizesWpAndNumbers(): void {
@@ -231,9 +232,9 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$result = $this->cleanup->process( $html );
 
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
-		// Should generate unique class for child.
-		$this->assertMatchesRegularExpression( '/class="blockera-block-[a-z0-9]+"/', $result['content'] );
-		$this->assertMatchesRegularExpression( '/:where\(\.blockera-block-parent \.blockera-block-[a-z0-9]+\)/', $result['style'] );
+		// Should generate class using parent class + counter format.
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
 	}
 
 	public function testProcessMultipleElements(): void {
@@ -301,7 +302,150 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		// Check that the style contains only the expected selector, not a generated one.
 		$this->assertMatchesRegularExpression( '/:where\(\.blockera-block-abc\)/', $result['style'] );
 		// Should not generate new class since we use Priority 1.
-		$this->assertDoesNotMatchRegularExpression( '/class="blockera-block-abc wp-block-button blockera-block-[a-z0-9]+"/', $result['content'] );
+		$this->assertDoesNotMatchRegularExpression( '/class="blockera-block-abc wp-block-button blockera-block-abc-child-\d+"/', $result['content'] );
+	}
+
+	/**
+	 * Test that counter increments for multiple children under the same parent.
+	 * Note: elements are processed in reverse order, so last element gets child-1.
+	 */
+	public function testProcessChildCounterIncrementsForSameParent(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<span style="color: red;">Child 1</span>
+			<span style="color: green;">Child 2</span>
+			<span style="color: blue;">Child 3</span>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// All children should have counter-based classes (reverse order: child3=1, child2=2, child1=3).
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-2"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-3"', $result['content'] );
+
+		// All styles should be extracted.
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-2)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-3)', $result['style'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringContainsString( 'color: green', $result['style'] );
+		$this->assertStringContainsString( 'color: blue', $result['style'] );
+	}
+
+	/**
+	 * Test that counter is independent per parent class.
+	 * Note: elements are processed in reverse order within each parent.
+	 */
+	public function testProcessChildCounterResetsForDifferentParents(): void {
+
+		$html = '<div class="blockera-block-first">
+			<span style="color: red;">First Parent Child 1</span>
+			<span style="color: green;">First Parent Child 2</span>
+		</div>
+		<div class="blockera-block-second">
+			<span style="color: blue;">Second Parent Child 1</span>
+			<span style="color: yellow;">Second Parent Child 2</span>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Both parents' children should have counter-based classes.
+		$this->assertStringContainsString( 'class="blockera-block-first-child-1"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-first-child-2"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-second-child-1"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-second-child-2"', $result['content'] );
+
+		// Verify styles use correct selectors.
+		$this->assertStringContainsString( ':where(.blockera-block-first .blockera-block-first-child-1)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-first .blockera-block-first-child-2)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-second .blockera-block-second-child-1)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-second .blockera-block-second-child-2)', $result['style'] );
+	}
+
+	/**
+	 * Test that counter is independent per parent in nested structures.
+	 * Note: elements are processed in reverse order within each parent.
+	 */
+	public function testProcessChildCounterInNestedParents(): void {
+
+		$html = '<div class="blockera-block-outer">
+			<span style="margin: 10px;">Outer Child 1</span>
+			<div class="blockera-block-inner">
+				<span style="padding: 5px;">Inner Child 1</span>
+				<span style="padding: 10px;">Inner Child 2</span>
+			</div>
+			<span style="margin: 20px;">Outer Child 2</span>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Outer parent's children should use outer parent's class + counter.
+		// Note: "Outer Child 2" appears after "Outer Child 1" but is processed first due to reverse order.
+		$this->assertStringContainsString( 'class="blockera-block-outer-child-1"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-outer-child-2"', $result['content'] );
+
+		// Inner parent's children should use inner parent's class + counter (independent).
+		$this->assertStringContainsString( 'class="blockera-block-inner-child-1"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-inner-child-2"', $result['content'] );
+
+		// Verify styles use correct selectors.
+		$this->assertStringContainsString( ':where(.blockera-block-outer .blockera-block-outer-child-1)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-outer .blockera-block-outer-child-2)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-inner .blockera-block-inner-child-1)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-inner .blockera-block-inner-child-2)', $result['style'] );
+	}
+
+	/**
+	 * Test that children with existing classes don't get counter-based classes.
+	 * Note: elements are processed in reverse order.
+	 */
+	public function testProcessChildWithExistingClassesDontGetCounterClass(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<span style="color: red;">No class child</span>
+			<span class="existing-class-123" style="color: green;">Has class child</span>
+			<span style="color: blue;">Another no class child</span>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// First and third children (no classes) should get counter-based classes.
+		// Due to reverse processing: "Another no class child" gets child-1, "No class child" gets child-2.
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-2"', $result['content'] );
+
+		// Second child (has class) should keep its existing class.
+		$this->assertStringContainsString( 'class="existing-class-123"', $result['content'] );
+		// Second child should NOT get a counter-based class.
+		$this->assertStringNotContainsString( 'class="existing-class-123 blockera-block-parent-child', $result['content'] );
+
+		// Verify styles for counter-based classes.
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-2)', $result['style'] );
+		// Verify style for existing class uses the existing class.
+		$this->assertStringContainsString( '.existing-class-123', $result['style'] );
+	}
+
+	/**
+	 * Test that counter resets between process() calls.
+	 */
+	public function testProcessCounterResetsOnNewProcessCall(): void {
+
+		// First process call.
+		$html1 = '<div class="blockera-block-parent">
+			<span style="color: red;">Child 1</span>
+		</div>';
+		$result1 = $this->cleanup->process( $html1 );
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result1['content'] );
+
+		// Second process call - counter should reset.
+		$html2 = '<div class="blockera-block-parent">
+			<span style="color: blue;">Another Child</span>
+		</div>';
+		$result2 = $this->cleanup->process( $html2 );
+		// Counter should reset, so this child should also be child-1.
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result2['content'] );
 	}
 }
 

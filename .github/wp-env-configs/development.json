@@ -11,6 +11,6 @@
 		"SCRIPT_DEBUG": false
 	},
 	"lifecycleScripts": {
-		"afterStart": "wp-env run cli wp theme activate twentytwentyfive"
+		"afterStart": "wp-env run cli -- wp theme activate twentytwentyfive && wp-env run cli -- wp option update blogname 'Blockera Test' && wp-env run cli -- wp user update 1 --display_name='Blockera Author' --user_email='hello@blockera.ai' --user_url='https://blockera.ai' --description='We shape the future of how block editor can change the web!'"
 	}
 }

@@ -510,6 +510,39 @@ function blockera_test_normalize_css( string $css): string {
 	// Remove multiple spaces and normalize whitespace.
 	$css = preg_replace('/\s+/', ' ', $css);
 	
+	// Add newlines after commas in multi-selector rules (not inside parentheses like :is(), :where(), etc.).
+	if (preg_match_all('/,\s+(?=[.#\[:*a-zA-Z])/', $css, $matches, PREG_OFFSET_CAPTURE)) {
+		$result = '';
+		$last_pos = 0;
+		
+		foreach ($matches[0] as $match) {
+			$match_str = $match[0];
+			$match_pos = $match[1];
+			
+			// Add everything before this match.
+			$result .= substr($css, $last_pos, $match_pos - $last_pos);
+			
+			// Check if inside parentheses by counting open/close parens.
+			$before = substr($css, 0, $match_pos);
+			$open_parens = substr_count($before, '(');
+			$close_parens = substr_count($before, ')');
+			
+			if ($open_parens > $close_parens) {
+				// Inside parentheses, keep original.
+				$result .= $match_str;
+			} else {
+				// Not inside parentheses, add newline.
+				$result .= ",\n";
+			}
+			
+			$last_pos = $match_pos + strlen($match_str);
+		}
+		
+		// Add remaining content.
+		$result .= substr($css, $last_pos);
+		$css = $result;
+	}
+	
 	// Add newlines after opening braces.
 	$css = preg_replace('/\{/', "{\n", $css);
 	
