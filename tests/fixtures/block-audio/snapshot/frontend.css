@@ -4,7 +4,8 @@
 	padding: 30px 30px 30px 30px;
 }
 
-.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-1.wp-block-audio audio {
+.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure,
+.blockera-block.blockera-block-1.wp-block-audio audio {
 	border-radius: 8px;
 }
 
@@ -25,7 +26,8 @@
 		height: 80px;
 	}
 
-	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-1.wp-block-audio audio {
+	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure,
+	.blockera-block.blockera-block-1.wp-block-audio audio {
 		border-radius: 50px;
 	};
 }
@@ -35,32 +37,24 @@
 	border: 2px solid #0064b7;
 }
 
-.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover, .blockera-block.blockera-block-1.wp-block-audio audio:hover {
+.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover,
+.blockera-block.blockera-block-1.wp-block-audio audio:hover {
 	border-radius: 100px;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover, .blockera-block.blockera-block-1.wp-block-audio audio:hover {
+	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover,
+	.blockera-block.blockera-block-1.wp-block-audio audio:hover {
 		border-radius: 10px;
 	};
-}
-
-:where(.blockera-block.blockera-block-1) {
-	border-color: #6ab2ed;
-	border-width: 2px;
-	border-radius: 8px;
-	background-color: #c0e3ff;
-	padding-top: 30px;
-	padding-right: 30px;
-	padding-bottom: 30px;
-	padding-left: 30px;
 }
 
 .blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure {
 	background-color: var(--wp--preset--color--accent-2, #F6CFF4);
 }
 
-.blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-2.wp-block-audio audio {
+.blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure,
+.blockera-block.blockera-block-2.wp-block-audio audio {
 	border-radius: 0;
 }
 
@@ -87,7 +81,8 @@
 		height: 66px;
 	}
 
-	.blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-2.wp-block-audio audio {
+	.blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure,
+	.blockera-block.blockera-block-2.wp-block-audio audio {
 		border-radius: 10px;
 	};
 }
@@ -125,13 +120,6 @@
 	};
 }
 
-:where(.blockera-block.blockera-block-2) {
-	border-radius: 0px;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style: normal;
-	font-weight: 600;
-}
-
 .blockera-block.blockera-block-3 figcaption {
 	background-color: #dee4e6;
 	color: #520000;
@@ -144,7 +132,8 @@
 	background-color: #85ead9;
 }
 
-.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-4.wp-block-audio audio {
+.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure,
+.blockera-block.blockera-block-4.wp-block-audio audio {
 	border-radius: 0;
 }
 
@@ -174,7 +163,8 @@
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure, .blockera-block.blockera-block-4.wp-block-audio audio {
+	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure,
+	.blockera-block.blockera-block-4.wp-block-audio audio {
 		border-radius: 10px;
 	}
 
@@ -195,9 +185,4 @@
 	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure:hover {
 		background-color: #5adfc9;
 	};
-}
-
-:where(.blockera-block.blockera-block-4) {
-	border-radius: 0px;
-	background-color: #85ead9;
 }
