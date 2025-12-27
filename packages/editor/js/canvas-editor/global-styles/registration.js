@@ -388,7 +388,7 @@ export const registration = ({
 			: localBlockTypeGlobalStyles;
 		const memoizedBlockTypeGlobalStyles = omitWithPattern(
 			blockTypeGlobalStyles || {},
-			/^(?!blockera).*/i
+			/^(?=blockera).*/i
 		);
 		const blockeraBlockTypeGlobalStyles = useMemo(
 			() =>
