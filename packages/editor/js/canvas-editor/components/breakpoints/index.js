@@ -17,7 +17,6 @@ import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { Preview } from '../preview';
 import PickedBreakpoints from './picked-breakpoints';
 import type { BreakpointsComponentProps } from './types';
 import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
@@ -216,8 +215,6 @@ export const CanvasEditor = ({
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
 				</Flex>
-
-				<Preview />
 			</ControlContextProvider>
 		</>
 	);
