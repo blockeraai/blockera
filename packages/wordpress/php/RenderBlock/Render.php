@@ -176,9 +176,8 @@ class Render {
 
 		// Update the html with the new classname if the classname is updated.
 		if ($should_update_classname) {
-			$old_class_name = str_replace('.', '', trim($base_unique_class_name, '.'));
-			$new_class_name = str_replace('.', '', trim($unique_class_name, '.'));
-			$html           = str_replace($old_class_name, $new_class_name, $html);
+			$html                   = str_replace($base_unique_class_name, $unique_class_name, $html);
+			$base_unique_class_name = $unique_class_name;
 		}
 
 		// Fire up all features to manipulate the html.
@@ -187,7 +186,7 @@ class Render {
             [
 				'block' => $this->block,
 				'unique_selector' => $args['unique_selector'],
-			]
+            ]
 		);
 
 		// Check if blockeraComputedCss exists - if so, use cached CSS instead of generating from attributes.
@@ -196,6 +195,24 @@ class Render {
 		}
 
 		$styles = $this->getStyles();
+
+		/**
+		 * Add properties classes to the elements.
+		 * 
+		 * Like blockera-has-font-weight, blockera-has-font-size, etc.
+		 */
+		$classes_to_add = [];
+		foreach ( $this->global_css_props_classes as $prop => $prop_class ) {
+			if ( str_contains( $styles, $prop ) ) {
+				$classes_to_add[] = $prop_class;
+			}
+		}
+
+		if ( ! empty( $classes_to_add ) ) {
+			// Build replacement string efficiently: single concatenation, then trim once.
+			$new_class_name = trim( $base_unique_class_name . ' ' . implode( ' ', $classes_to_add ), ' ' );
+			$html           = str_replace( $base_unique_class_name, $new_class_name, $html );
+		}
 
 		// We should ensure the generated css is unique.
 		// Because maybe this generated css related to the loop blocks and we should not print duplicate css for them.
