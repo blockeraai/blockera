@@ -54,28 +54,15 @@ export default function ({
 		output: 'icons',
 		setActiveBreakpoint,
 		currentActiveBreakpoint,
-	}); // calculate the gap based on the number of breakpoints
-
-	// Calculate gap based on number of breakpoints
-	const getGap = () => {
-		if (breakpoints.length >= 7) {
-			return '5px';
-		}
-
-		if (breakpoints.length >= 5) {
-			return '8px';
-		}
-
-		return '12px';
-	};
+	});
 
 	return (
 		<Flex
 			className={controlInnerClassNames('blockera-breakpoints')}
-			justifyContent={'space-between'}
+			justifyContent={'center'}
 			alignItems="center"
 			aria-label={__('Breakpoints', 'blockera')}
-			gap={getGap()}
+			gap="8px"
 		>
 			{breakpoints}
 		</Flex>
