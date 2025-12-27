@@ -447,5 +447,322 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		// Counter should reset, so this child should also be child-1.
 		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result2['content'] );
 	}
+
+	/**
+	 * Test that has-*-font-family classes are removed from blockera-block-* elements.
+	 */
+	public function testRemoveHasFontFamilyClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-abc123 has-custom-font-family">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc123', $result['content'] );
+	}
+
+	/**
+	 * Test that has-*-font-size classes are removed from blockera-block-* elements.
+	 */
+	public function testRemoveHasFontSizeClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-xyz has-large-font-size">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-large-font-size', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-xyz', $result['content'] );
+	}
+
+	/**
+	 * Test that has-*-color classes are removed from blockera-block-* elements.
+	 */
+	public function testRemoveHasColorClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-test has-primary-color">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-test', $result['content'] );
+	}
+
+	/**
+	 * Test that has-text-* classes are NOT removed from blockera-block-* elements.
+	 */
+	public function testKeepHasTextColorClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-abc has-text-primary">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'has-text-primary', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+	}
+
+	/**
+	 * Test that has-link-* classes are NOT removed from blockera-block-* elements.
+	 */
+	public function testKeepHasLinkColorClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-xyz has-link-primary">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'has-link-primary', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-xyz', $result['content'] );
+	}
+
+	/**
+	 * Test that has-border-* classes are NOT removed from blockera-block-* elements.
+	 */
+	public function testKeepHasBorderColorClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-test has-border-primary">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'has-border-primary', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-test', $result['content'] );
+	}
+
+	/**
+	 * Test that multiple removable classes are all removed from blockera-block-* elements.
+	 */
+	public function testRemoveMultipleHasClassesFromBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-abc has-custom-font-family has-large-font-size has-primary-color">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-large-font-size', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+	}
+
+	/**
+	 * Test that removable classes are removed but non-removable has-* classes are kept.
+	 */
+	public function testRemoveHasClassesButKeepNonRemovableHasClasses(): void {
+
+		$html = '<div class="blockera-block-xyz has-custom-font-family has-text-primary has-link-secondary has-border-accent has-primary-color">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Removable classes should be removed.
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		// Non-removable classes should be kept.
+		$this->assertStringContainsString( 'has-text-primary', $result['content'] );
+		$this->assertStringContainsString( 'has-link-secondary', $result['content'] );
+		$this->assertStringContainsString( 'has-border-accent', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-xyz', $result['content'] );
+	}
+
+	/**
+	 * Test that elements without blockera-block-* classes are not modified.
+	 */
+	public function testDoNotRemoveHasClassesFromNonBlockeraBlocks(): void {
+
+		$html = '<div class="wp-block-button has-custom-font-family has-primary-color">Button</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Classes should remain because element doesn't have blockera-block-*.
+		$this->assertStringContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'wp-block-button', $result['content'] );
+	}
+
+	/**
+	 * Test that elements with blockera-block-* but no removable classes are not modified.
+	 */
+	public function testDoNotModifyBlockeraBlocksWithoutRemovableClasses(): void {
+
+		$html = '<div class="blockera-block-abc custom-class other-class">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Should remain unchanged.
+		$this->assertEquals( $html, $result['content'] );
+	}
+
+	/**
+	 * Test that multiple elements are processed independently.
+	 */
+	public function testRemoveHasClassesFromMultipleBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-first has-custom-font-family">First</div>
+			<div class="blockera-block-second has-large-font-size">Second</div>
+			<div class="wp-block-button has-primary-color">Third</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// First element: removable class removed.
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-first', $result['content'] );
+		// Second element: removable class removed.
+		$this->assertStringNotContainsString( 'has-large-font-size', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-second', $result['content'] );
+		// Third element: not modified (no blockera-block-*).
+		$this->assertStringContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'wp-block-button', $result['content'] );
+	}
+
+	/**
+	 * Test that class attribute with single quotes is handled correctly.
+	 */
+	public function testRemoveHasClassesWithSingleQuotes(): void {
+
+		$html = "<div class='blockera-block-abc has-custom-font-family has-primary-color'>Content</div>";
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+	}
+
+	/**
+	 * Test that multiple spaces between classes are normalized.
+	 */
+	public function testNormalizeSpacesWhenRemovingHasClasses(): void {
+
+		$html = '<div class="blockera-block-abc   has-custom-font-family    has-primary-color">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		// Should have normalized spaces (single space between remaining classes).
+		$this->assertStringNotContainsString( '  ', $result['content'] ); // No double spaces.
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+	}
+
+	/**
+	 * Test that empty class attribute after removal is handled correctly.
+	 */
+	public function testHandleEmptyClassAfterRemoval(): void {
+
+		$html = '<div class="blockera-block-abc has-custom-font-family">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Should still have blockera-block-abc class.
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+	}
+
+	/**
+	 * Test that has-* classes with complex names (numbers, hyphens) are handled correctly.
+	 */
+	public function testRemoveHasClassesWithComplexNames(): void {
+
+		$html = '<div class="blockera-block-abc has-custom-123-font-family has-large-456-font-size has-primary-789-color">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-123-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-large-456-font-size', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-789-color', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+	}
+
+	/**
+	 * Test that has-* classes are removed even when element has inline styles.
+	 */
+	public function testRemoveHasClassesWithInlineStyles(): void {
+
+		$html = '<div class="blockera-block-abc has-custom-font-family has-primary-color" style="color: red; margin: 10px;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Has classes should be removed.
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		// Blockera class should remain.
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+		// Inline style should be removed and converted to CSS.
+		$this->assertStringNotContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringContainsString( 'margin: 10px', $result['style'] );
+	}
+
+	/**
+	 * Test that nested blockera-block elements are processed independently.
+	 */
+	public function testRemoveHasClassesFromNestedBlockeraBlocks(): void {
+
+		$html = '<div class="blockera-block-parent has-custom-font-family">
+			<div class="blockera-block-child has-large-font-size">Child</div>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Parent: removable class removed.
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-parent', $result['content'] );
+		// Child: removable class removed.
+		$this->assertStringNotContainsString( 'has-large-font-size', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-child', $result['content'] );
+	}
+
+	/**
+	 * Test that has-* classes at the beginning of class attribute are removed correctly.
+	 */
+	public function testRemoveHasClassesAtBeginningOfClassAttribute(): void {
+
+		$html = '<div class="has-custom-font-family blockera-block-abc other-class">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+		$this->assertStringContainsString( 'other-class', $result['content'] );
+	}
+
+	/**
+	 * Test that has-* classes at the end of class attribute are removed correctly.
+	 */
+	public function testRemoveHasClassesAtEndOfClassAttribute(): void {
+
+		$html = '<div class="blockera-block-abc other-class has-primary-color">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+		$this->assertStringContainsString( 'other-class', $result['content'] );
+	}
+
+	/**
+	 * Test that has-* classes in the middle of class attribute are removed correctly.
+	 */
+	public function testRemoveHasClassesInMiddleOfClassAttribute(): void {
+
+		$html = '<div class="blockera-block-abc has-custom-font-family other-class has-primary-color another-class">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'has-custom-font-family', $result['content'] );
+		$this->assertStringNotContainsString( 'has-primary-color', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-abc', $result['content'] );
+		$this->assertStringContainsString( 'other-class', $result['content'] );
+		$this->assertStringContainsString( 'another-class', $result['content'] );
+	}
+
+	/**
+	 * Test that empty content returns empty string.
+	 */
+	public function testRemoveHasClassesWithEmptyContent(): void {
+
+		$html = '';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertEquals( '', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
 }
 

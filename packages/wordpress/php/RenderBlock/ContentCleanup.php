@@ -130,7 +130,7 @@ class ContentCleanup {
 
 		if ( empty( $content ) ) {
 			return [
-				'content' => $content,
+				'content' => $this->removeHasClassesFromBlockeraBlocks($content),
 				'style'   => '',
 			];
 		}
@@ -138,7 +138,7 @@ class ContentCleanup {
 		// Quick check: if 'style' keyword not found, return early.
 		if ( false === strpos( $content, 'style=' ) ) {
 			return [
-				'content' => $content,
+				'content' => $this->removeHasClassesFromBlockeraBlocks($content),
 				'style'   => '',
 			];
 		}
@@ -155,7 +155,7 @@ class ContentCleanup {
 
 		if ( empty( $matches ) ) {
 			return [
-				'content' => $content,
+				'content' => $this->removeHasClassesFromBlockeraBlocks($content),
 				'style'   => '',
 			];
 		}
@@ -215,7 +215,7 @@ class ContentCleanup {
 		$css_content = $this->buildStyleContent();
 
 		return [
-			'content' => $processed_content,
+			'content' => $this->removeHasClassesFromBlockeraBlocks($processed_content),
 			'style'   => $css_content,
 		];
 	}
@@ -1043,4 +1043,76 @@ class ContentCleanup {
 		return '<' . $tag_name . ( $all_attrs ? ' ' . $all_attrs : '' ) . '>';
 	}
 
+
+	/**
+	 * Remove has-* classes from elements that have blockera-block-* classes.
+	 * Uses regex with lookahead for efficient single-pass processing.
+	 *
+	 * @param string $html The HTML content to process.
+	 *
+	 * @return string The HTML with has-* classes removed from blockera-block elements.
+	 */
+	protected function removeHasClassesFromBlockeraBlocks( string $html ): string {
+
+		if ( empty( $html ) ) {
+			return $html;
+		}
+
+		// Early return: quick string checks to avoid expensive regex when there's nothing to process.
+		// Must have both blockera-block-* and has-* patterns to proceed.
+		if ( strpos( $html, 'blockera-block-' ) === false || strpos( $html, 'has-' ) === false ) {
+			return $html;
+		}
+
+		// Quick heuristic check for removable patterns (font-family, font-size, or color).
+		// Full validation happens in regex, but this avoids regex when clearly no matches.
+		if ( strpos( $html, '-font-family' ) === false && strpos( $html, '-font-size' ) === false && strpos( $html, '-color' ) === false ) {
+			return $html;
+		}
+
+		// Cache compiled regex patterns to avoid recompilation on every call.
+		$cache_key = 'remove_has_classes';
+		if ( ! isset( self::$pattern_cache[ $cache_key ] ) ) {
+			/**
+			 * Single regex pattern to match class attributes that contain blockera-block-* and at least one removable class.
+			 * Uses positive lookahead to check conditions before matching the class value.
+			 * Pattern breakdown:
+			 * - (<[^>]*?\bclass\s*=\s*["\']) - Captures the opening tag and class attribute start.
+			 * - (?=[^"\']*blockera-block-[^"\']*) - Positive lookahead: class must contain blockera-block-*.
+			 * - (?=[^"\']*(?:has-[^"\']*-font-family|...)) - Positive lookahead: class must contain at least one removable class.
+			 * - ([^"\']*) - Captures the actual class value.
+			 * - (["\']) - Captures the closing quote.
+			 */
+			$match_pattern = '/(<[^>]*?\bclass\s*=\s*["\'])(?=[^"\']*blockera-block-[^"\']*)(?=[^"\']*(?:has-[^"\']*-font-family|has-[^"\']*-font-size|has-[^"\']*-color))([^"\']*)(["\'])/i';
+
+			// Single regex pattern to remove all matching classes: matches class with word boundaries and optional whitespace.
+			$remove_pattern = '/\s*\b(?:has-[a-zA-Z0-9-]+-font-family|has-[a-zA-Z0-9-]+-font-size|has-(?!text-|link-|border-)[a-zA-Z0-9-]+-color)\b\s*/';
+
+			self::$pattern_cache[ $cache_key ] = [
+				'match'  => $match_pattern,
+				'remove' => $remove_pattern,
+			];
+		}
+
+		$patterns = self::$pattern_cache[ $cache_key ];
+
+		// Use static closure to avoid capturing $this and reduce overhead.
+		return preg_replace_callback(
+			$patterns['match'],
+			static function ( $matches ) use ( $patterns ) {
+				$quote_start = $matches[1];
+				$class_value = $matches[2];
+				$quote_end   = $matches[3];
+
+				// Single regex replace: remove all matching classes and clean up multiple spaces in one pass.
+				// Replace with single space, then normalize whitespace.
+				$new_class_value = preg_replace( $patterns['remove'], ' ', $class_value );
+				// Normalize whitespace: collapse multiple spaces and trim.
+				$new_class_value = preg_replace( '/\s+/', ' ', trim( $new_class_value ) );
+
+				return $quote_start . $new_class_value . $quote_end;
+			},
+			$html
+		);
+	}
 }
