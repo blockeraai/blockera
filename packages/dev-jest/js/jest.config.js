@@ -9,6 +9,11 @@ module.exports = {
 		),
 	],
 	modulePathIgnorePatterns: [],
+	testPathIgnorePatterns: [
+		'/node_modules/',
+		'/source-code-block-editor/',
+		'/source-code-wordpress/',
+	],
 	testMatch: ['**/test/**/*.spec.js', '**/tests/**/*.spec.js'],
 	transformIgnorePatterns: ['/node_modules/(?!parsel-js).+\\.js$'],
 	transform: {
