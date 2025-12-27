@@ -5,9 +5,10 @@
  */
 import type { MixedElement } from 'react';
 import { applyFilters } from '@wordpress/hooks';
-import { useEffect } from '@wordpress/element';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { getPlugin, registerPlugin } from '@wordpress/plugins';
+import { Fill } from '@wordpress/components';
+import { Component } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -15,12 +16,8 @@ import { getPlugin, registerPlugin } from '@wordpress/plugins';
 import { STORE_NAME } from '../store';
 import { getTargets } from './helpers';
 import { registration } from './global-styles';
-import { CanvasEditorApplication } from './index';
-import { IntersectionObserverRenderer } from './intersection-observer-renderer';
+import { CanvasEditor } from './components';
 import type { BreakpointTypes } from '../extensions/libs/block-card/block-states/types';
-
-// Cache for checking if the component is already rendered.
-const cache: Map<string, boolean> = new Map();
 
 export const bootstrapCanvasEditor = (): void | Object => {
 	const allowedUsers = applyFilters(
@@ -37,34 +34,37 @@ export const bootstrapCanvasEditor = (): void | Object => {
 	const { blockeraCurrentPostType } = window;
 
 	const needToShowCanvasEditor = () => {
-		// While the not changed, the block is available.
+		// If no restrictions, block is available
 		if (!allowedUsers.length && !allowedPostTypes.length) {
 			return true;
 		}
 
-		// If the block is not supported with restricted visibility by post type, it is not available.
-		if (
-			!allowedUsers.length &&
-			allowedPostTypes.length &&
-			blockeraCurrentPostType
-		) {
-			return allowedPostTypes.includes(blockeraCurrentPostType);
+		// Build user roles set for O(1) lookups (performance optimization)
+		const userRolesSet = new Set(currentUser.roles);
+
+		// Check user role match (if user restrictions exist)
+		let hasAllowedUser = true;
+		if (allowedUsers.length) {
+			hasAllowedUser = false;
+			// Use for...of instead of filter to avoid intermediate array allocation
+			for (const role of allowedUsers) {
+				if (userRolesSet.has(role)) {
+					hasAllowedUser = true;
+					break;
+				}
+			}
 		}
 
-		// If the block is not supported with restricted visibility by user roles, it is not available.
-		if (!allowedPostTypes.length && allowedUsers.length) {
-			return allowedUsers.filter((role) =>
-				currentUser.roles.includes(role)
-			).length;
+		// Check post type match (if post type restrictions exist)
+		let hasAllowedPostType = true;
+		if (allowedPostTypes.length && blockeraCurrentPostType) {
+			hasAllowedPostType = allowedPostTypes.includes(
+				blockeraCurrentPostType
+			);
 		}
 
-		// If the block is not supported with restricted visibility by user roles, and post type, it is not available.
-		return !blockeraCurrentPostType
-			? allowedUsers.filter((role) => currentUser.roles.includes(role))
-					.length
-			: allowedUsers.filter((role) => currentUser.roles.includes(role))
-					.length &&
-					allowedPostTypes.includes(blockeraCurrentPostType);
+		// Both conditions must be met if both restrictions exist
+		return hasAllowedUser && hasAllowedPostType;
 	};
 
 	if (!needToShowCanvasEditor()) {
@@ -73,60 +73,80 @@ export const bootstrapCanvasEditor = (): void | Object => {
 
 	const { getEntity } = select('blockera/data') || {};
 
-	const observerPlugin = 'blockera-canvas-editor-observer';
+	const canvasEditorPlugin = 'blockera-canvas-editor';
 
 	const { version } = getEntity('wp');
-	const { header, globalStylesPanel } = getTargets(version);
+	const { globalStylesPanel } = getTargets(version);
 
-	const registry = () => {
-		registerPlugin(observerPlugin, {
+	// Register the plugin if it doesn't exist
+	if (!getPlugin(canvasEditorPlugin)) {
+		registerPlugin(canvasEditorPlugin, {
 			render() {
-				const componentSelector = '.blockera-canvas-breakpoints';
 				// eslint-disable-next-line react-hooks/rules-of-hooks
 				const { editorMode } = useSelect((select) => {
 					const { getEditorMode } = select('core/editor');
-					const editorMode = getEditorMode();
-
-					return { editorMode };
+					return { editorMode: getEditorMode() };
 				});
 
-				// eslint-disable-next-line react-hooks/rules-of-hooks
-				useEffect(() => {
-					if ('visual' !== editorMode) {
-						return;
+				// Only render in visual editor mode
+				if ('visual' !== editorMode) {
+					return <></>;
+				}
+
+				// Error boundary to catch CanvasEditor rendering errors
+				class ErrorBoundary extends Component<
+					Object,
+					{ hasError: boolean, error: ?Error }
+				> {
+					constructor(props: Object) {
+						super(props);
+						this.state = { hasError: false, error: null };
 					}
 
-					if (
-						!document.querySelector(componentSelector) &&
-						!cache.get(componentSelector)
-					) {
-						cache.set(componentSelector, true);
-
-						new IntersectionObserverRenderer(
-							header,
-							(): MixedElement => (
-								<CanvasEditorApplication
-									target={document.querySelector(header)}
-								/>
-							),
-							{
-								componentSelector,
-							}
-						);
+					static getDerivedStateFromError(error: Error): {
+						hasError: boolean,
+						error: Error,
+					} {
+						return { hasError: true, error };
 					}
-					// eslint-disable-next-line react-hooks/exhaustive-deps
-				}, [editorMode]);
 
-				return <></>;
+					componentDidCatch(error: Error, errorInfo: Object): void {
+						// Log error for debugging
+						if (typeof console !== 'undefined' && console.error) {
+							console.error(
+								'CanvasEditor error:',
+								error,
+								errorInfo
+							);
+						}
+					}
+
+					render(): MixedElement {
+						if (this.state.hasError) {
+							return (
+								<div style={{ color: 'red', padding: '10px' }}>
+									Error:{' '}
+									{this.state.error?.message ||
+										'Unknown error'}
+								</div>
+							);
+						}
+						return this.props.children;
+					}
+				}
+
+				return (
+					<Fill name="blockera/editor-header-settings">
+						<ErrorBoundary>
+							<CanvasEditor className="blockera-canvas-breakpoints" />
+						</ErrorBoundary>
+					</Fill>
+				);
 			},
 		});
-
-		registration(globalStylesPanel);
-	};
-
-	if (!getPlugin(observerPlugin)) {
-		return registry();
 	}
+
+	registration(globalStylesPanel);
 };
 
 export function unstableBootstrapServerSideBreakpointDefinitions(definitions: {

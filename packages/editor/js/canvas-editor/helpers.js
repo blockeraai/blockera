@@ -3,7 +3,6 @@
 /**
  * Blockera dependencies
  */
-import { isLoadedSiteEditor } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,10 +31,8 @@ export const getTargets = (version: string): GetTarget => {
 	};
 
 	const targets: {
-		header: string,
 		globalStylesPanel: Object,
 	} = {
-		header: '.editor-header__center',
 		globalStylesPanel,
 	};
 
@@ -50,9 +47,6 @@ export const getTargets = (version: string): GetTarget => {
 
 	// For less than WordPress 6.6.1 versions.
 	return {
-		header: isLoadedSiteEditor()
-			? '.edit-site-header-edit-mode__center'
-			: '.edit-post-header__center',
 		globalStylesPanel,
 	};
 };
