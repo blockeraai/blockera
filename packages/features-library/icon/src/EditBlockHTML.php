@@ -409,7 +409,7 @@ class EditBlockHTML implements EditableBlockHTML {
 				if (preg_match('/\bstyle\s*=\s*["\']([^"\']*)["\']/i', $attributes, $styleMatch)) {
 					// Style attribute exists, append new style to existing one.
 					$existingStyle = $styleMatch[1];
-					$updatedStyle  = $existingStyle . '; ' . $newStyle;
+					$updatedStyle  = rtrim($existingStyle, '; ') . '; ' . $newStyle;
                 
 					// Replace the existing style attribute.
 					return preg_replace(
