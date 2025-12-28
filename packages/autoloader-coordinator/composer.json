@@ -1,0 +1,31 @@
+{
+    "name": "blockera/autoloader-coordinator",
+    "description": "Coordinates autoloading across WordPress plugins to resolve version conflicts and optimize shared package loading.",
+    "type": "library",
+    "version": "1.0.0",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Blockera",
+            "email": "support@blockera.ai"
+        }
+    ],
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Blockera\\SharedAutoload\\": "./"
+        },
+        "files": [
+            "loader.php"
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
+
