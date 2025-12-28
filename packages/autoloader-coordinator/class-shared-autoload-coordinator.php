@@ -54,7 +54,7 @@ if (! \class_exists(Coordinator::class)) {
 		/**
 		 * Cached autoload manifest (PSR-4, classmap, files) per plugin.
          *
-		 * @var array<string,array{psr4:array,classmap:array,files:array}>|null
+		 * @var array<string,array{psr4:array,classmap:array,files:array,vendor_dir:string}>|null
 		 */
 		private $autoload_manifest = null;
 
@@ -113,9 +113,12 @@ if (! \class_exists(Coordinator::class)) {
             }
             $this->bootstrapped = true;
 
-			$key                   = array_keys($this->plugins)[ array_search(true, array_column($this->plugins, 'default'), true) ];
-			$default_ref           = $this->plugins[ $key ]['slug'];
-			$this->coordinator_ref = $_ENV['AUTOLOADER_COORDINATOR_REF'] ?? $default_ref ?? 'blockera';
+			// Find default plugin reference.
+			$defaultKey            = array_search(true, array_column($this->plugins, 'default'), true);
+			$default_ref           = ( false !== $defaultKey && isset($this->plugins[ $defaultKey ]) ) 
+				? $this->plugins[ $defaultKey ]['slug'] 
+				: 'blockera';
+			$this->coordinator_ref = $_ENV['AUTOLOADER_COORDINATOR_REF'] ?? $default_ref;
 
 			// Sort plugins by priority.
             usort(
@@ -224,6 +227,7 @@ if (! \class_exists(Coordinator::class)) {
 
 			// Load classmap.
 			$classmapFile = $composerDir . '/autoload_classmap.php';
+			$classmap     = null;
 			if (is_file($classmapFile)) {
 				$classmap = $this->loadAutoloadFile($classmapFile, $vendorDir, dirname($vendorDir));
 				if (is_array($classmap)) {
@@ -231,18 +235,21 @@ if (! \class_exists(Coordinator::class)) {
 				}
 			}
 
-			// Store manifest for later file inclusion.
+			// Store manifest for later file inclusion and classmap coordination.
 			$filesFile = $composerDir . '/autoload_files.php';
+			$files     = null;
 			if (is_file($filesFile)) {
 				$files = $this->loadAutoloadFile($filesFile, $vendorDir, dirname($vendorDir));
-				if (null === $this->autoload_manifest) {
-					$this->autoload_manifest = [];
-				}
-				$this->autoload_manifest[ $slug ] = [
-					'files' => is_array($files) ? $files : [],
-					'vendor_dir' => $vendorDir,
-				];
 			}
+			
+			if (null === $this->autoload_manifest) {
+				$this->autoload_manifest = [];
+			}
+			$this->autoload_manifest[ $slug ] = [
+				'files' => is_array($files) ? $files : [],
+				'classmap' => is_array($classmap) ? $classmap : [],
+				'vendor_dir' => $vendorDir,
+			];
 		}
 
 		/**
@@ -333,7 +340,7 @@ if (! \class_exists(Coordinator::class)) {
 		}
 
 		/**
-		 * Apply version-based priority to PSR-4 mappings.
+		 * Apply version-based priority to PSR-4 mappings and classmaps.
 		 * Ensures higher version packages take precedence.
 		 *
 		 * @param array<string,array{version:string,plugin:string,vendor_dir:string}> $packageVersions Package versions.
@@ -360,6 +367,9 @@ if (! \class_exists(Coordinator::class)) {
 				}
 			}
 
+			// Build deduplicated classmap with version priority.
+			$deduplicatedClassmap = $this->buildDeduplicatedClassmap($packageVersions, $preferredPlugin);
+
 			// Create a new ClassLoader with prioritized mappings.
 			$firstPlugin = reset($this->plugins);
 			$newLoader   = new ClassLoader($firstPlugin['vendor_dir']);
@@ -374,10 +384,9 @@ if (! \class_exists(Coordinator::class)) {
 				}
 			}
 
-			// Transfer classmap.
-			$classmap = $this->class_loader->getClassMap();
-			if (! empty($classmap)) {
-				$newLoader->addClassMap($classmap);
+			// Add deduplicated classmap.
+			if (! empty($deduplicatedClassmap)) {
+				$newLoader->addClassMap($deduplicatedClassmap);
 			}
 
 			// Unregister old loader and register new one.
@@ -388,6 +397,7 @@ if (! \class_exists(Coordinator::class)) {
 
 		/**
 		 * Select the best path for a PSR-4 prefix based on version.
+		 * Optimized with request-level realpath caching to reduce filesystem calls.
 		 *
 		 * @param string                                                              $prefix PSR-4 prefix.
 		 * @param array                                                               $paths Available paths.
@@ -400,26 +410,53 @@ if (! \class_exists(Coordinator::class)) {
 				return $paths;
 			}
 
+			// Request-level cache for realpath() calls to reduce filesystem overhead.
+			static $realpathCache = [];
+
 			// Find which package this prefix belongs to.
 			$bestPath    = null;
 			$bestVersion = '0.0.0';
 
+			// Cache preferred plugin real path if needed.
+			$preferredRealDir = null;
+			if (null !== $preferredPlugin && isset($this->plugins[ $preferredPlugin ])) {
+				$preferredDir = $this->plugins[ $preferredPlugin ]['plugin_dir'] . '/';
+				if (! isset($realpathCache[ $preferredDir ])) {
+					$realpathCache[ $preferredDir ] = realpath($preferredDir);
+				}
+				$preferredRealDir = ( false !== $realpathCache[ $preferredDir ] ) 
+					? $realpathCache[ $preferredDir ] . '/' 
+					: $preferredDir;
+			}
+
 			foreach ($paths as $path) {
 				$pathStr = (string) $path;
+				// Resolve symlinks to real path for comparison (cached).
+				if (! isset($realpathCache[ $pathStr ])) {
+					$realpathCache[ $pathStr ] = realpath($pathStr);
+				}
+				if (false !== $realpathCache[ $pathStr ]) {
+					$pathStr = $realpathCache[ $pathStr ];
+				}
 
 				// Check if this path belongs to the preferred plugin.
-				if (null !== $preferredPlugin && isset($this->plugins[ $preferredPlugin ])) {
-					$preferredDir = $this->plugins[ $preferredPlugin ]['plugin_dir'] . '/';
-					if (0 === strpos($pathStr, $preferredDir)) {
-						return [ $path ];
-					}
+				if (null !== $preferredRealDir && 0 === strpos($pathStr, $preferredRealDir)) {
+					return [ $path ];
 				}
 
 				// Find version from package manifest.
 				foreach ($packageVersions as $packageName => $meta) {
 					if (isset($meta['vendor_dir'])) {
 						$vendorPrefix = $meta['vendor_dir'] . '/';
-						if (0 === strpos($pathStr, $vendorPrefix)) {
+						// Cache vendor prefix realpath.
+						if (! isset($realpathCache[ $vendorPrefix ])) {
+							$realpathCache[ $vendorPrefix ] = realpath($vendorPrefix);
+						}
+						$vendorRealPrefix = ( false !== $realpathCache[ $vendorPrefix ] ) 
+							? $realpathCache[ $vendorPrefix ] . '/' 
+							: $vendorPrefix;
+						
+						if (0 === strpos($pathStr, $vendorRealPrefix)) {
 							if (version_compare($meta['version'], $bestVersion) > 0) {
 								$bestVersion = $meta['version'];
 								$bestPath    = $path;
@@ -431,6 +468,169 @@ if (! \class_exists(Coordinator::class)) {
 			}
 
 			return null !== $bestPath ? [ $bestPath ] : [ $paths[0] ];
+		}
+
+		/**
+		 * Build deduplicated classmap with version-based priority.
+		 * Handles symlinked packages by resolving real paths.
+		 * Uses request-level memoization and transient cache for performance.
+		 * 
+		 * Performance notes:
+		 * - realpath() calls are cached per request to reduce filesystem overhead
+		 * - Package detection uses memoization (via detectPackageFromPath)
+		 * - Full deduplication result is cached in transients (1 hour TTL)
+		 *
+		 * @param array<string,array{version:string,plugin:string,vendor_dir:string}> $packageVersions Package versions.
+		 * @param string|null                                                         $preferredPlugin Preferred plugin slug if set.
+		 * @return array<string,string> Deduplicated classmap (class => file path).
+		 */
+		private function buildDeduplicatedClassmap( array $packageVersions, ?string $preferredPlugin): array {
+			if (null === $this->autoload_manifest) {
+				return [];
+			}
+
+			// Generate cache key based on configuration.
+			// Include coordinator_ref, preferred plugin, and plugin keys for uniqueness.
+			$cacheKeySuffix = md5(
+				( $this->coordinator_ref ?? '' ) . '|' . 
+				( $preferredPlugin ?? '' ) . '|' . 
+				serialize(array_keys($this->plugins)) . '|' .
+				serialize(array_column($this->autoload_manifest, 'vendor_dir'))
+			);
+			$transientKey   = 'blockera_classmap_' . $cacheKeySuffix;
+
+			// Request-level cache.
+			static $memo = [];
+			if (isset($memo[ $transientKey ])) {
+				return $memo[ $transientKey ];
+			}
+
+			// Try transient cache.
+			$deduplicated = get_transient($transientKey);
+
+			if (is_array($deduplicated)) {
+				$memo[ $transientKey ] = $deduplicated;
+				return $deduplicated;
+			}
+
+			// Request-level cache for realpath() calls to reduce filesystem overhead.
+			static $realpathCache = [];
+
+			// Cache preferred plugin real path if needed (calculated once per method call).
+			$preferredDirForComparison = null;
+			if (null !== $preferredPlugin && isset($this->plugins[ $preferredPlugin ])) {
+				$preferredDir = $this->plugins[ $preferredPlugin ]['plugin_dir'] . '/';
+				if (! isset($realpathCache[ $preferredDir ])) {
+					$realpathCache[ $preferredDir ] = realpath($preferredDir);
+				}
+				$preferredDirForComparison = ( false !== $realpathCache[ $preferredDir ] ) 
+					? $realpathCache[ $preferredDir ] . '/' 
+					: $preferredDir;
+			}
+
+			// Collect all classmap entries with their package info.
+			$classmapEntries = [];
+			foreach ($this->autoload_manifest as $slug => $manifest) {
+				if (! isset($manifest['classmap']) || ! is_array($manifest['classmap'])) {
+					continue;
+				}
+
+				foreach ($manifest['classmap'] as $className => $filePath) {
+					// Resolve symlinks to real path for comparison (cached).
+					if (! isset($realpathCache[ $filePath ])) {
+						$realpathCache[ $filePath ] = realpath($filePath);
+					}
+					$pathForComparison = ( false !== $realpathCache[ $filePath ] ) 
+						? $realpathCache[ $filePath ] 
+						: $filePath;
+
+					// Detect package for this class file (uses internal memoization).
+					$packageInfo = $this->detectPackageFromPath($filePath);
+					$packageName = $packageInfo['name'] ?? 'unknown';
+					$version     = $packageInfo['version'] ?? '0.0.0';
+
+					// Check if this is a Blockera package.
+					$isBlockeraPackage = 0 === stripos($packageName, 'blockera/');
+
+					if (! isset($classmapEntries[ $className ])) {
+						$classmapEntries[ $className ] = [];
+					}
+
+					$classmapEntries[ $className ][] = [
+						'file' => $filePath,
+						'real_path' => $pathForComparison,
+						'package' => $packageName,
+						'version' => $version,
+						'plugin' => $slug,
+						'is_blockera' => $isBlockeraPackage,
+					];
+				}
+			}
+
+			// Deduplicate: select best version for each class.
+			$deduplicated = [];
+			foreach ($classmapEntries as $className => $entries) {
+				// If only one entry, use it.
+				if (count($entries) === 1) {
+					$deduplicated[ $className ] = $entries[0]['file'];
+					continue;
+				}
+
+				// For Blockera packages, use version-based selection.
+				$blockeraEntries = array_filter(
+                    $entries,
+                    static function( $entry) {
+						return $entry['is_blockera'];
+					}
+                );
+
+				if (! empty($blockeraEntries)) {
+					// Prefer preferred plugin if set.
+					if (null !== $preferredDirForComparison) {
+						foreach ($blockeraEntries as $entry) {
+							if (0 === strpos($entry['real_path'], $preferredDirForComparison)) {
+								$deduplicated[ $className ] = $entry['file'];
+								continue 2;
+							}
+						}
+					}
+
+					// Select best version.
+					$bestEntry   = null;
+					$bestVersion = '0.0.0';
+					foreach ($blockeraEntries as $entry) {
+						if (version_compare($entry['version'], $bestVersion) > 0) {
+							$bestVersion = $entry['version'];
+							$bestEntry   = $entry;
+						}
+					}
+
+					if (null !== $bestEntry) {
+						$deduplicated[ $className ] = $bestEntry['file'];
+						continue;
+					}
+				}
+
+				// For non-Blockera packages or if no Blockera entries, use first entry.
+				// Also handle case where same file appears multiple times (symlinks).
+				$uniquePaths = [];
+				foreach ($entries as $entry) {
+					$pathKey = $entry['real_path'];
+					if (! isset($uniquePaths[ $pathKey ])) {
+						$uniquePaths[ $pathKey ] = $entry;
+					}
+				}
+
+				// Use first unique path.
+				$firstEntry                 = reset($uniquePaths);
+				$deduplicated[ $className ] = $firstEntry['file'];
+			}
+
+			// Cache the result.
+			set_transient($transientKey, $deduplicated, HOUR_IN_SECONDS);
+			$memo[ $transientKey ] = $deduplicated;
+
+			return $deduplicated;
 		}
 
 		/**
@@ -678,6 +878,22 @@ if (! \class_exists(Coordinator::class)) {
 		public function invalidatePackageManifest(): void {
 			delete_transient('blockera_pkg_manifest');
 			delete_transient('blockera_pkgs_files');
+			
+			// Invalidate all classmap caches by pattern.
+			// WordPress doesn't support wildcard deletion, so we use direct database query.
+			// The cache will rebuild on next request with current configuration.
+			global $wpdb;
+			$transientPattern = $wpdb->esc_like('_transient_blockera_classmap_') . '%';
+			$timeoutPattern   = $wpdb->esc_like('_transient_timeout_blockera_classmap_') . '%';
+			
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->query(
+				$wpdb->prepare(
+					"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+					$transientPattern,
+					$timeoutPattern
+				)
+			);
 		}
 
         /**
