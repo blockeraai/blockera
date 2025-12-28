@@ -569,7 +569,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	public static function get_style_variations( $scope = 'theme' ) {
 		// Request-level memoization - fastest cache pattern.
 		static $cache = array();
-		if ( isset( $cache[ $scope ] ) ) {
+		if ( isset( $cache[ $scope ] ) && ! defined('BLOCKERA_DEVELOPMENT') || ! BLOCKERA_DEVELOPMENT ) {
 			return $cache[ $scope ];
 		}
 
