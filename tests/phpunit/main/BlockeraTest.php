@@ -182,31 +182,149 @@ class BlockeraTest extends AppTestCase {
         \WP_Mock::setUp();
     }
 
+	/**
+	 * Clean up all global styles generated from previous tests.
+	 *
+	 * @return void
+	 */
+	protected function cleanupGlobalStyles(): void {
+		// Clear Blockera-specific caches first
+		if (class_exists('\Blockera\Editor\Http\Controllers\Theme\JSONResolver')) {
+			JSONResolver::clean_cached_data();
+		}
+
+		// Clear WordPress theme JSON resolver cache
+		if (class_exists('\WP_Theme_JSON_Resolver')) {
+			\WP_Theme_JSON_Resolver::clean_cached_data();
+		}
+
+		// Clear inline styles from the 'global-styles' handle
+		global $wp_styles;
+		if (isset($wp_styles) && $wp_styles instanceof \WP_Styles) {
+			// Remove inline styles from global-styles handle
+			// Inline styles are stored in extra['after'] or extra['before']
+			if (isset($wp_styles->registered['global-styles'])) {
+				$wp_styles->registered['global-styles']->extra = [];
+			}
+			// Also check if inline styles are stored directly in wp_styles->add_inline_style data
+			if (isset($wp_styles->registered['global-styles-inline-css'])) {
+				$wp_styles->registered['global-styles-inline-css']->extra = [];
+			}
+			// Clear any queued inline styles
+			if (isset($wp_styles->queue)) {
+				$wp_styles->queue = array_values(array_diff($wp_styles->queue, ['global-styles', 'global-styles-inline-css']));
+			}
+			// Clear done list to allow re-enqueuing
+			if (isset($wp_styles->done)) {
+				$wp_styles->done = array_values(array_diff($wp_styles->done, ['global-styles', 'global-styles-inline-css']));
+			}
+			// Clear enqueued list
+			if (isset($wp_styles->enqueued)) {
+				$wp_styles->enqueued = array_values(array_diff($wp_styles->enqueued, ['global-styles', 'global-styles-inline-css']));
+			}
+		}
+
+		// Clear any cached global stylesheet data
+		// Use call_user_func to avoid linter issues with WordPress functions
+		if (function_exists('wp_cache_delete')) {
+			call_user_func('wp_cache_delete', 'wp_get_global_stylesheet', 'theme_json');
+			call_user_func('wp_cache_delete', 'wp_get_global_stylesheet_for_rendering', 'theme_json');
+		}
+	}
+
 	protected function tearDown(): void {
+		// Note: Output buffer cleanup is handled by PHPUnit and WP_UnitTestCase
+		// We don't need to manually clean buffers here as it can interfere with
+		// PHPUnit's own buffer management and cause "risky test" warnings
+
 		// Deactivate mu-plugin if it was activated during the test
 		if (!empty($this->design)) {
 			blockera_test_deactivate_mu_plugin($this->design);
 		}
 
-		// Delete test post and reset property.
-		wp_delete_post($this->post_id);
+		// Store post ID before resetting
+		$post_id_to_delete = $this->post_id;
 		$this->post_id = 0;
-		
-		
+
 		// Reset test state properties
 		$this->design = '';
 		$this->post_content = null;
 		$this->is_global_styles = false;
 		$this->currentTestType = null;
 
-		// Reset global WordPress state
-		wp_reset_postdata();
-		wp_reset_query();
+		// Reset WordPress query state completely
+		global $wp_query, $wp_the_query, $post, $wpdb;
+		
+		// Reset main query objects
+		if (isset($wp_query) && $wp_query instanceof \WP_Query) {
+			$wp_query->reset_postdata();
+			$wp_query->reset_query();
+		}
+		if (isset($wp_the_query) && $wp_the_query instanceof \WP_Query && $wp_the_query !== $wp_query) {
+			$wp_the_query->reset_postdata();
+			$wp_the_query->reset_query();
+		}
+			
+		// Reset query-related globals (these functions handle most cleanup)
+		if (function_exists('wp_reset_postdata')) {
+			wp_reset_postdata();
+		}
+		if (function_exists('wp_reset_query')) {
+			wp_reset_query();
+		}
+		
+		// Clear WordPress query cache (prevent query result leakage)
+		if (isset($wpdb) && is_object($wpdb)) {
+			$wpdb->last_query = '';
+			$wpdb->last_result = [];
+			$wpdb->col_info = null;
+			$wpdb->last_error = '';
+		}
+
+		// Clear meta and term caches for test post (if it existed)
+		// Clean cache before deleting post
+		if ($post_id_to_delete > 0) {
+			if (function_exists('clean_post_cache')) {
+				clean_post_cache($post_id_to_delete);
+			}
+		}
+		// Note: clean_term_cache requires non-empty term IDs array to avoid SQL errors
+		// Skip term cache cleanup if no specific terms to clean
+		// if (function_exists('clean_term_cache') && !empty($term_ids)) {
+		//     clean_term_cache($term_ids, '', false);
+		// }
+		if (function_exists('clean_user_cache')) {
+			clean_user_cache(0);
+		}
+
+		// Delete test post after cache cleanup
+		if ($post_id_to_delete > 0 && function_exists('wp_delete_post')) {
+			wp_delete_post($post_id_to_delete, true);
+		}
+
 		JSONResolver::clean_cached_data();
+
+		remove_filter('blockera/json/resolver/get_style_variations', [$this, 'registerDesignStyleVariations']);
+		// Remove filters added during test (tests_add_filter adds temporary filters)
+		// WP_UnitTestCase should handle this, but we ensure test-specific filters are removed
+		global $wp_filter;
+		if (isset($wp_filter) && is_array($wp_filter) && isset($wp_filter['blockera/json/resolver/get_style_variations'])) {
+			unset($wp_filter['blockera/json/resolver/get_style_variations']);
+		}
+
+		// Dequeue all scripts and styles (but keep registered ones for other tests)
+		global $wp_styles;
+		if (isset($wp_styles) && $wp_styles instanceof \WP_Styles) {
+			$wp_styles->done = [];
+		}
+
+		// Clean up global styles from previous tests before starting new test
+		$this->cleanupGlobalStyles();
 
 		// Cleanup WP_Mock
 		\WP_Mock::tearDown();
 
+		// Call parent tearDown last (WP_UnitTestCase does comprehensive cleanup)
 		parent::tearDown();
 	}
 
@@ -244,9 +362,7 @@ class BlockeraTest extends AppTestCase {
 		$this->post_id = $this->createTestPostWithSnapshot($designName, $post_content);
 		
 		// Register style variations filter before querying
-		tests_add_filter('blockera/json/resolver/get_style_variations', function (array $variations): array {
-			return blockera_test_register_style_variations($this->design, $variations);
-		});
+		tests_add_filter('blockera/json/resolver/get_style_variations', [$this, 'registerDesignStyleVariations']);
 
 		// Simulate WordPress request lifecycle: query posts to trigger the_posts filter
 		$this->go_to(get_permalink($this->post_id));
@@ -355,6 +471,16 @@ class BlockeraTest extends AppTestCase {
 
 		$this->assertMatchesSnapshot('frontend-global-styles', blockera_test_normalize_css($global_styles), new CssDriver());
     }
+
+	/**
+	 * Register style variations for the design.
+	 *
+	 * @param array $variations The style variations.
+	 * @return array The registered style variations.
+	 */
+	public function registerDesignStyleVariations(array $variations): array {
+		return blockera_test_register_style_variations($this->design, $variations);
+	}
 
 	/**
 	 * Recursively render a block and its inner blocks.
