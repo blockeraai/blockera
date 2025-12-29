@@ -732,6 +732,7 @@ export function prepareBlockCssSelector(params: {
 	if (!selector) {
 		let fallbackSelector;
 
+		// Create fallback selector from fallback support id as an array.
 		if (Array.isArray(fallbackSupportId)) {
 			const fallbacks = union(
 				fallbackSupportId.map((supportId) => {
@@ -754,7 +755,10 @@ export function prepareBlockCssSelector(params: {
 			fallbackSelector = fallbacks
 				.filter((selector: any): boolean => !isEmpty(selector))
 				.join(', ');
-		} else {
+		}
+
+		// Create fallback selector from fallback support ID as a string (used as the last resort fallback).
+		if (!fallbackSelector) {
 			fallbackSelector = getBlockCSSSelector(
 				blockType,
 				fallbackSupportId || 'root',
