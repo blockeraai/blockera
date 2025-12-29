@@ -136,7 +136,7 @@ export const bootstrapCanvasEditor = (): void | Object => {
 				}
 
 				return (
-					<Fill name="blockera/editor-header-settings">
+					<Fill name="blockera/slots/editor-header-settings">
 						<ErrorBoundary>
 							<CanvasEditor className="blockera-canvas-breakpoints" />
 						</ErrorBoundary>
