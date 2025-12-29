@@ -129,9 +129,9 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @param array $decoded_data The decoded data.
 	 * @return void
 	 */
-	private static function register_block_style_variations_from_user_data( $decoded_data ): void {
+	public static function register_block_style_variations_from_user_data( $decoded_data ): void {
 
-		$post_id            = \WP_Theme_JSON_Resolver::get_user_global_styles_post_id();
+		$post_id            = static::get_user_global_styles_post_id();
 		$blockera_meta_data = get_post_meta($post_id, 'blockeraGlobalStylesMetaData', true);
 
 		// Register the block style from the user data.

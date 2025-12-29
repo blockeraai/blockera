@@ -240,6 +240,9 @@ if (! function_exists('blockera_get_user_styles_data')) {
 		static $user_data = [];
 
 		if (! empty($user_data)) {
+			// Register the block style from the user data.
+			JSONResolver::register_block_style_variations_from_user_data( $user_data );
+
 			return $user_data;
 		}
 
@@ -253,6 +256,9 @@ if (! function_exists('blockera_get_user_styles_data')) {
 		$user_data = json_decode($global_styles_post['post_content'], true);
 
 		unset($user_data['isGlobalStylesUserThemeJSON']);
+
+		// Register the block style from the user data.
+		JSONResolver::register_block_style_variations_from_user_data( $user_data );
 
 		return $user_data;
 	}
