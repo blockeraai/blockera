@@ -15,10 +15,8 @@ import { useState, useMemo, useEffect, createPortal } from '@wordpress/element';
 import App from './app';
 import { useBackButton } from './hooks';
 import { STORE_NAME } from '../../../store';
-import { unsubscribe } from './subscribe-unsubscribe';
+import { subscribeToBlockSelection } from './subscribe-unsubscribe';
 import bootstrapScripts from '../../../extensions/scripts';
-
-unsubscribe();
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
@@ -50,6 +48,14 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockStyle,
 		setSelectedBlockStyleVariation,
 	});
+
+	// Subscribe to block selection changes when panel is open
+	// This enables automatic panel switching when clicking blocks in the editor
+	useEffect(() => {
+		const unsubscribe = subscribeToBlockSelection();
+		// Cleanup subscription on unmount
+		return unsubscribe;
+	}, []);
 
 	const memoizedSelectedBlock = useMemo(() => {
 		// Prevent of expensive calculation if selected block is already set.
