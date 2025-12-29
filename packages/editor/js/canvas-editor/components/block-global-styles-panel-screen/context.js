@@ -157,7 +157,7 @@ export const GlobalStylesPanelContextProvider = ({
 		);
 	}
 	const prefix = prefixParts.join('.');
-	const [style, rootStyle, setStyle] = useGlobalStyle(prefix, name, 'user', {
+	const [style, rootStyle, setStyle] = useGlobalStyle(prefix, name, 'all', {
 		shouldDecodeEncode: false,
 		defaultStylesValue,
 	});
