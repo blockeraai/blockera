@@ -3,7 +3,13 @@
 /**
  * External dependencies
  */
-import { useState, useEffect, createRoot } from '@wordpress/element';
+import {
+	useState,
+	useRef,
+	useMemo,
+	useLayoutEffect,
+	createRoot,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -16,40 +22,116 @@ import { omitWithPattern } from '@blockera/utils';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
 
+/**
+ * Generates a stable ID for block preview styles based on block name and variation.
+ * Replaces Math.random() to prevent unnecessary recalculations.
+ */
+const generateStableId = (blockName: string, variation: string): string => {
+	const base = blockName.replace('/', '-');
+	return variation ? `${base}-${variation}` : base;
+};
+
+/**
+ * Extracts CSS text from rendered style elements within a container.
+ * Queries style elements directly instead of using MutationObserver.
+ */
+const extractStylesFromContainer = (container: HTMLElement): string => {
+	const styleElements = container.querySelectorAll('style');
+	const styles: string[] = [];
+
+	for (let i = 0; i < styleElements.length; i++) {
+		const styleEl = styleElements[i];
+		if (styleEl.textContent) {
+			styles.push(styleEl.textContent);
+		}
+	}
+
+	return styles.join('\n');
+};
+
 export const useBlockPreviewStyles = (
 	blockType: Object,
 	variation: string,
 	styles: Object = {}
 ): string => {
 	const [additionalStyles, setAdditionalStyles] = useState('');
-	const omittedStyles = omitWithPattern(styles, /^(?!blockera).*/i);
-	const blockeraBlockTypeGlobalStyles = sanitizeBlockAttributes({
-		...omittedStyles,
-		blockeraBlockStates: {
-			value: {
-				...(omittedStyles?.blockeraBlockStates?.value || {}),
-				normal: {
-					breakpoints: {},
-					isVisible: true,
+
+	// Stable container ID per hook instance
+	const containerIdRef = useRef<string | null>(null);
+	const containerRef = useRef<HTMLElement | null>(null);
+	const rootRef = useRef<any | null>(null);
+	const isMountedRef = useRef<boolean>(true);
+
+	// Initialize container ID once
+	if (!containerIdRef.current) {
+		containerIdRef.current = `blockera-global-styles-preview-${generateStableId(
+			blockType?.name || '',
+			variation
+		)}`;
+	}
+
+	// Memoize omitted styles to prevent unnecessary recalculations
+	const omittedStyles = useMemo(
+		() => omitWithPattern(styles, /^(?!blockera).*/i),
+		[styles]
+	);
+
+	// Memoize blockeraBlockTypeGlobalStyles with stable ID
+	const blockeraBlockTypeGlobalStyles = useMemo(() => {
+		const stableId = generateStableId(blockType?.name || '', variation);
+
+		return sanitizeBlockAttributes({
+			...omittedStyles,
+			blockeraBlockStates: {
+				value: {
+					...(omittedStyles?.blockeraBlockStates?.value || {}),
+					normal: {
+						breakpoints: {},
+						isVisible: true,
+					},
 				},
 			},
-		},
-		blockeraPropsId: Math.random().toString(36).substring(2, 15),
-	});
+			blockeraPropsId: stableId,
+		});
+	}, [omittedStyles, blockType?.name, variation]);
 
-	useEffect(() => {
-		const tempElementId = 'blockera-global-styles-preview-panel';
-		const prevTempElement = document.querySelector(`#${tempElementId}`);
+	// Track last extracted styles to prevent unnecessary state updates
+	const lastStylesRef = useRef<string>('');
 
-		if (prevTempElement) {
-			document.body?.removeChild(prevTempElement);
+	// Use useLayoutEffect for synchronous DOM updates
+	useLayoutEffect(() => {
+		isMountedRef.current = true;
+
+		// Get or create container element (reuse across renders)
+		let container = containerRef.current;
+
+		if (!container) {
+			// Check for existing container from previous instance
+			const existing = document.getElementById(
+				containerIdRef.current || ''
+			);
+			if (existing) {
+				container = existing;
+			} else {
+				container = document.createElement('div');
+				container.id = containerIdRef.current || '';
+				container.style.position = 'absolute';
+				container.style.left = '-9999px';
+				container.style.visibility = 'hidden';
+				container.style.pointerEvents = 'none';
+				if (document.body) {
+					document.body.appendChild(container);
+				}
+			}
+			containerRef.current = container;
 		}
 
-		// Create temporary container for styles
-		const tempElement = document.createElement('div');
-		tempElement.id = tempElementId;
-		document.body?.appendChild(tempElement);
-		const root = createRoot(tempElement);
+		// Create React root once, reuse across renders
+		if (!rootRef.current) {
+			rootRef.current = createRoot(container);
+		}
+
+		const root = rootRef.current;
 
 		// Render global styles
 		root.render(
@@ -64,31 +146,55 @@ export const useBlockPreviewStyles = (
 			/>
 		);
 
-		const observer = new MutationObserver(() => {
-			// Only update if styles have changed
-			if (additionalStyles !== tempElement.textContent) {
-				setAdditionalStyles(tempElement.textContent);
-
-				tempElement.remove();
+		// Extract styles after React has flushed updates
+		// Use requestAnimationFrame to ensure DOM is updated
+		const rafId = requestAnimationFrame(() => {
+			if (!isMountedRef.current || !container) {
+				return;
 			}
-		});
 
-		// Observe changes to the temp element
-		observer.observe(tempElement, {
-			childList: true,
-			subtree: true,
-			characterData: true,
+			const extractedStyles = extractStylesFromContainer(container);
+
+			// Only update state if styles actually changed
+			if (extractedStyles !== lastStylesRef.current) {
+				lastStylesRef.current = extractedStyles;
+				setAdditionalStyles(extractedStyles);
+			}
 		});
 
 		return () => {
-			observer.disconnect();
-			root.unmount();
-			if (document.getElementById(tempElementId)) {
-				document.getElementById(tempElementId)?.remove();
+			cancelAnimationFrame(rafId);
+		};
+	}, [blockType, variation, blockeraBlockTypeGlobalStyles]);
+
+	// Cleanup on unmount
+	useLayoutEffect(() => {
+		return () => {
+			isMountedRef.current = false;
+
+			// Unmount React root
+			if (rootRef.current) {
+				try {
+					rootRef.current.unmount();
+				} catch (e) {
+					// Ignore unmount errors (root may already be unmounted)
+				}
+				rootRef.current = null;
+			}
+
+			// Remove container element
+			if (containerRef.current && containerRef.current.parentNode) {
+				try {
+					containerRef.current.parentNode.removeChild(
+						containerRef.current
+					);
+				} catch (e) {
+					// Ignore removal errors (element may already be removed)
+				}
+				containerRef.current = null;
 			}
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockType, variation, blockeraBlockTypeGlobalStyles]); // Remove additionalStyles dependency to prevent loops
+	}, []);
 
 	return additionalStyles;
 };
