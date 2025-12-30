@@ -528,12 +528,15 @@ async function editPage(page) {
  * @return {Promise<void>}
  */
 async function clearBlocks(page) {
-	const data = await getWPDataObject(page);
-	await page.evaluate((dataObj) => {
-		const blocks = dataObj.select('core/block-editor').getBlocks();
-		const clientIds = blocks.map((block) => block.clientId);
-		dataObj.dispatch('core/block-editor').removeBlocks(clientIds);
-	}, data);
+	// Access wp.data directly inside evaluate to avoid serialization issues
+	await page.evaluate(() => {
+		if (window.wp && window.wp.data) {
+			const dataObj = window.wp.data;
+			const blocks = dataObj.select('core/block-editor').getBlocks();
+			const clientIds = blocks.map((block) => block.clientId);
+			dataObj.dispatch('core/block-editor').removeBlocks(clientIds);
+		}
+	});
 }
 
 /**
