@@ -2,6 +2,7 @@
 !.*
 /node_modules/*
 /packages/dev-cypress/*
+/packages/dev-playwright/*
 /packages/freemius-sdk/*
 /.patch/*
 /.storybook/*
