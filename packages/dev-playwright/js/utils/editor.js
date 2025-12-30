@@ -211,10 +211,12 @@ async function getBlockClientId(page) {
  * @return {Promise<void>}
  */
 async function disableGutenbergFeatures(page) {
-	const data = await getWPDataObject(page);
-	await page.evaluate((dataObj) => {
-		dataObj.dispatch('core/editor').disablePublishSidebar();
-	}, data);
+	// Access wp.data directly inside evaluate to avoid serialization issues
+	await page.evaluate(() => {
+		if (window.wp && window.wp.data) {
+			window.wp.data.dispatch('core/editor').disablePublishSidebar();
+		}
+	});
 }
 
 /**
