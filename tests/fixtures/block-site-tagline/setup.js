@@ -1,22 +1,35 @@
 /**
- * Blockera dependencies
+ * Blockera dependencies - Playwright version
  */
-import { createPost } from '@blockera/dev-cypress/js/helpers';
+const { createPost } = require('@blockera/dev-playwright/js/utils/helpers');
+const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
 
-export default function setup() {
+/**
+ * Setup function for block-site-tagline test
+ * Sets site tagline option and creates a post
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} sectionContent - The section content HTML (not used).
+ * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
+ */
+async function setup(page, sectionContent) {
 	const taglineText = 'This is site tagline text';
 
 	// Set the blogdescription option (site tagline)
 	// Use wpCli with skipEscaping=true and single quotes
-	cy.wpCli(
+	await wpCli(
+		page,
 		`wp option update blogdescription '${taglineText}'`,
 		false,
 		true
-	).then(() => {
-		// Edit the post (site tagline block doesn't require a specific post)
-		cy.setScreenshotViewport('desktop');
-		createPost();
-	});
+	);
+
+	// Edit the post (site tagline block doesn't require a specific post)
+	await setScreenshotViewport(page, 'desktop');
+	await createPost(page);
 
 	return false;
 }
+
+module.exports = { setup };
+module.exports.default = setup;

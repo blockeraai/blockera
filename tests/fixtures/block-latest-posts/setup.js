@@ -1,70 +1,61 @@
 /**
- * Blockera dependencies
+ * Blockera dependencies - Playwright version
  */
-import { editPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
+const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
+const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
+const fs = require('fs');
+const path = require('path');
 
 /**
- * Internal dependencies
+ * Setup function for block-latest-posts test
+ * Creates posts and edits the last one
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} sectionContent - The section content HTML.
+ * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
-import data from './data.json';
+async function setup(page, sectionContent) {
+	const dataPath = path.join(__dirname, 'data.json');
+	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-export default function setup(sectionContent) {
 	// Step 1: Create all posts sequentially before running tests
-	// eslint-disable-next-line cypress/no-assigning-return-values
-	let postChain = (() => {
-		const firstPost = data.posts[0];
+	let lastPostId = null;
+	
+	for (let i = 0; i < data.posts.length; i++) {
+		const postData = data.posts[i];
 		const {
 			post_type: postType,
 			post_title: postTitle,
 			post_status: postStatus,
-		} = firstPost;
+		} = postData;
 
 		// Escape single quotes for shell when using single quotes
 		const escapedTitle = postTitle.replace(/'/g, "'\\''");
 
-		return cy.wpCli(
+		const result = await wpCli(
+			page,
 			`wp post create --post_type=${postType} --post_title='${escapedTitle}' --post_status=${postStatus}`
 		);
-	})();
 
-	// Create remaining posts sequentially
-	for (let i = 1; i < data.posts.length; i++) {
-		postChain = postChain.then(() => {
-			const postData = data.posts[i];
-			const {
-				post_type: postType,
-				post_title: postTitle,
-				post_status: postStatus,
-			} = postData;
-
-			// Escape single quotes for shell when using single quotes
-			const escapedTitle = postTitle.replace(/'/g, "'\\''");
-
-			return cy.wpCli(
-				`wp post create --post_type=${postType} --post_title='${escapedTitle}' --post_status=${postStatus}`
-			);
-		});
-	}
-
-	// Step 2: After all posts are created, edit the last post
-	postChain.then((result) => {
 		// Extract post ID from stdout message like "Success: Created post 22."
 		const match = result.stdout.match(/post (\d+)/);
-		const postId = match ? parseInt(match[1], 10) : NaN;
+		lastPostId = match ? parseInt(match[1], 10) : null;
 
-		if (isNaN(postId)) {
+		if (!lastPostId) {
 			throw new Error(
 				`Failed to get post ID from output: ${result.stdout}`
 			);
 		}
+	}
 
-		// Step 3: Edit the last post
-		// Run default setup
-		cy.setScreenshotViewport('desktop');
-
-		editPost({ postID: postId });
-		appendBlocks(sectionContent);
-	});
+	// Step 2: Edit the last post
+	await setScreenshotViewport(page, 'desktop');
+	await editPost(page, { postID: lastPostId });
+	await appendBlocks(page, sectionContent);
 
 	return false;
 }
+
+module.exports = { setup };
+module.exports.default = setup;

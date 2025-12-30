@@ -1,35 +1,42 @@
 /**
- * Blockera dependencies
+ * Blockera dependencies - Playwright version
  */
-import { createPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
+const { createPost, appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
+const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
+const fs = require('fs');
+const path = require('path');
 
 /**
- * Internal dependencies
+ * Setup function for block-categories test
+ * Creates categories, then creates a post
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} sectionContent - The section content HTML.
+ * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
-import data from './data.json';
+async function setup(page, sectionContent) {
+	const dataPath = path.join(__dirname, 'data.json');
+	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-export default function setup(sectionContent) {
 	// Create categories sequentially
 	const categories = data.categories;
 
-	// eslint-disable-next-line cypress/no-assigning-return-values
-	let categoryChain = cy.wpCli(
-		`term create category '${categories[0]}' || true`
-	);
-
-	for (let i = 1; i < categories.length; i++) {
-		categoryChain = categoryChain.then(() => {
-			return cy.wpCli(`term create category '${categories[i]}' || true`);
-		});
+	for (let i = 0; i < categories.length; i++) {
+		await wpCli(
+			page,
+			`term create category '${categories[i]}' || true`,
+			true, // ignoreFailures
+			false
+		);
 	}
 
-	categoryChain.then(() => {
-		// Run default setup
-		cy.setScreenshotViewport('desktop');
-
-		createPost();
-		appendBlocks(sectionContent);
-	});
+	// Run default setup
+	await setScreenshotViewport(page, 'desktop');
+	await createPost(page);
+	await appendBlocks(page, sectionContent);
 
 	return false;
 }
+
+module.exports = { setup };
+module.exports.default = setup;

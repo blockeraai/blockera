@@ -1,14 +1,24 @@
 /**
- * Blockera dependencies
+ * Blockera dependencies - Playwright version
  */
-import { editPost, appendBlocks } from '@blockera/dev-cypress/js/helpers';
+const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
+const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
+const fs = require('fs');
+const path = require('path');
 
 /**
- * Internal dependencies
+ * Setup function for block-latest-comments test
+ * Creates a post with comments and edits it
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} sectionContent - The section content HTML.
+ * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
-import data from './data.json';
+async function setup(page, sectionContent) {
+	const dataPath = path.join(__dirname, 'data.json');
+	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-export default function setup(sectionContent) {
 	// Step 1: Create a post and get its ID
 	const {
 		post_type: postType,
@@ -16,85 +26,57 @@ export default function setup(sectionContent) {
 		post_status: postStatus,
 	} = data.post;
 
-	cy.wpCli(
+	const result = await wpCli(
+		page,
 		`wp post create --post_type=${postType} --post_title='${postTitle}' --post_status=${postStatus}`
-	).then((result) => {
-		// Extract post ID from stdout message like "Success: Created post 22."
-		const match = result.stdout.match(/post (\d+)/);
-		const postId = match ? parseInt(match[1], 10) : NaN;
+	);
 
-		if (isNaN(postId)) {
-			throw new Error(
-				`Failed to get post ID from output: ${result.stdout}`
-			);
-		}
+	// Extract post ID from stdout message like "Success: Created post 22."
+	const match = result.stdout.match(/post (\d+)/);
+	const postId = match ? parseInt(match[1], 10) : null;
 
-		// Step 2: Create all comments sequentially
-		// eslint-disable-next-line cypress/no-assigning-return-values
-		let commentChain = (() => {
-			const firstComment = data.comments[0];
-			const {
-				comment_author: commentAuthor,
-				comment_content: commentContent,
-			} = firstComment;
+	if (!postId) {
+		throw new Error(
+			`Failed to get post ID from output: ${result.stdout}`
+		);
+	}
 
-			// First comment (index 0) is the most recent (0 seconds ago)
-			const secondsAgo = 0;
-			const commentDate = new Date();
-			commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
-			const commentDateStr = commentDate
-				.toISOString()
-				.replace('T', ' ')
-				.substring(0, 19);
+	// Step 2: Create all comments sequentially with dates
+	for (let i = 0; i < data.comments.length; i++) {
+		const commentData = data.comments[i];
+		const {
+			comment_author: commentAuthor,
+			comment_content: commentContent,
+		} = commentData;
 
-			// Escape single quotes for shell when using single quotes
-			const escapedComment = commentContent.replace(/'/g, "'\\''");
+		// Calculate seconds ago for this comment (5 seconds per index)
+		// First comment (index 0) is the most recent (0 seconds ago)
+		const secondsAgo = i * 5;
+		const commentDate = new Date();
+		commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
+		const commentDateStr = commentDate
+			.toISOString()
+			.replace('T', ' ')
+			.substring(0, 19);
 
-			return cy.wpCli(
-				`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1 --comment_date='${commentDateStr}'`,
-				false,
-				true
-			);
-		})();
+		// Escape single quotes for shell when using single quotes
+		const escapedComment = commentContent.replace(/'/g, "'\\''");
 
-		// Create remaining comments sequentially
-		for (let i = 1; i < data.comments.length; i++) {
-			commentChain = commentChain.then(() => {
-				const commentData = data.comments[i];
-				const {
-					comment_author: commentAuthor,
-					comment_content: commentContent,
-				} = commentData;
+		await wpCli(
+			page,
+			`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1 --comment_date='${commentDateStr}'`,
+			false,
+			true
+		);
+	}
 
-				// Calculate seconds ago for this comment (5 seconds per index)
-				const secondsAgo = i * 5;
-				const commentDate = new Date();
-				commentDate.setSeconds(commentDate.getSeconds() - secondsAgo);
-				const commentDateStr = commentDate
-					.toISOString()
-					.replace('T', ' ')
-					.substring(0, 19);
-
-				// Escape single quotes for shell when using single quotes
-				const escapedComment = commentContent.replace(/'/g, "'\\''");
-
-				return cy.wpCli(
-					`wp comment create --post_id=${postId} --user_id=${commentAuthor} --comment_content='${escapedComment}' --comment_approved=1 --comment_date='${commentDateStr}'`,
-					false,
-					true
-				);
-			});
-		}
-
-		// Step 3: After all comments are created, edit the post
-		commentChain.then(() => {
-			// Run default setup
-			cy.setScreenshotViewport('desktop');
-
-			editPost({ postID: postId });
-			appendBlocks(sectionContent);
-		});
-	});
+	// Step 3: After all comments are created, edit the post
+	await setScreenshotViewport(page, 'desktop');
+	await editPost(page, { postID: postId });
+	await appendBlocks(page, sectionContent);
 
 	return false;
 }
+
+module.exports = { setup };
+module.exports.default = setup;

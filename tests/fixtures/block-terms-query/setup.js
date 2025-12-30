@@ -1,66 +1,72 @@
 /**
- * Blockera dependencies
+ * Blockera dependencies - Playwright version
  */
-import { editPost } from '@blockera/dev-cypress/js/helpers';
+const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
+const fs = require('fs');
+const path = require('path');
 
 /**
- * Internal dependencies
+ * Setup function for block-terms-query test
+ * Creates categories and a post, then edits the post
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} sectionContent - The section content HTML (not used).
+ * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
-import data from './data.json';
+async function setup(page, sectionContent) {
+	const dataPath = path.join(__dirname, 'data.json');
+	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
-export default function setup() {
 	const categoryDescription =
 		data.category_description || 'This is the description.';
 
 	// Step 1: Create categories sequentially with descriptions
-	// eslint-disable-next-line cypress/no-assigning-return-values
-	let categoryChain = cy.wpCli(
-		`term create category '${data.categories[0]}' --description='${categoryDescription}' || true`
-	);
-
-	for (let i = 1; i < data.categories.length; i++) {
-		categoryChain = categoryChain.then(() => {
-			return cy.wpCli(
-				`term create category '${data.categories[i]}' --description='${categoryDescription}' || true`
-			);
-		});
+	for (let i = 0; i < data.categories.length; i++) {
+		await wpCli(
+			page,
+			`term create category '${data.categories[i]}' --description='${categoryDescription}' || true`,
+			true, // ignoreFailures
+			false
+		);
 	}
 
-	categoryChain.then(() => {
-		// Step 2: After all categories are created, create a post
-		const {
-			post_type: postType,
-			post_title: postTitle,
-			post_status: postStatus,
-			post_date: postDate,
-		} = data.post;
+	// Step 2: After all categories are created, create a post
+	const {
+		post_type: postType,
+		post_title: postTitle,
+		post_status: postStatus,
+		post_date: postDate,
+	} = data.post;
 
-		cy.wpCli(
-			`wp post create --post_type=${postType} --post_title='${postTitle}' --post_status=${postStatus} --post_date='${postDate}'`
-		).then((result) => {
-			// Extract post ID from stdout message like "Success: Created post 22."
-			const match = result.stdout.match(/post (\d+)/);
-			const postId = match ? parseInt(match[1], 10) : NaN;
+	const result = await wpCli(
+		page,
+		`wp post create --post_type=${postType} --post_title='${postTitle}' --post_status=${postStatus} --post_date='${postDate}'`
+	);
 
-			if (isNaN(postId)) {
-				throw new Error(
-					`Failed to get post ID from output: ${result.stdout}`
-				);
-			}
+	// Extract post ID from stdout message like "Success: Created post 22."
+	const match = result.stdout.match(/post (\d+)/);
+	const postId = match ? parseInt(match[1], 10) : null;
 
-			// Step 3: Assign categories to the post
-			const categoryNames = data.categories.join(' ');
-			cy.wpCli(
-				`wp post term set ${postId} category ${categoryNames}`
-			).then(() => {
-				// Step 4: Edit the post
-				// Run default setup
-				cy.setScreenshotViewport('desktop');
+	if (!postId) {
+		throw new Error(
+			`Failed to get post ID from output: ${result.stdout}`
+		);
+	}
 
-				editPost({ postID: postId });
-			});
-		});
-	});
+	// Step 3: Assign categories to the post
+	const categoryNames = data.categories.join(' ');
+	await wpCli(
+		page,
+		`wp post term set ${postId} category ${categoryNames}`
+	);
+
+	// Step 4: Edit the post
+	await setScreenshotViewport(page, 'desktop');
+	await editPost(page, { postID: postId });
 
 	return false;
 }
+
+module.exports = { setup };
+module.exports.default = setup;
