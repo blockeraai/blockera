@@ -840,23 +840,75 @@ async function prepareFrontendForScreenshot(page) {
 }
 
 /**
+ * Set editor viewport for screenshot.
+ * Calculates the viewport height based on the editor container height.
+ * Sets the viewport size to the calculated height.
+ * Waits for the viewport to be set.
+ * By dong this so we can capture the full editor content in the screenshot.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {Object} config - Additional config.
+ * @return {Promise<void>}
+ */
+async function setEditorViewportForScreenshot(page, config = {}) {
+	let width = 1600;
+	let height = 5000;
+	let containerHeight = null;
+
+	const iframeBody = await getIframeBody(page);
+	const editorContainer = iframeBody.locator('.is-root-container');
+
+	// Get the element's scrollHeight to determine viewport height
+	containerHeight = await editorContainer.evaluate((el) => {
+		// Get the maximum height needed to show the full element
+		const elementHeight = Math.max(
+			el.scrollHeight,
+			el.offsetHeight,
+			el.getBoundingClientRect().height
+		);
+		// Also consider document height in case element extends beyond viewport
+		const docHeight = Math.max(
+			document.documentElement.scrollHeight,
+			document.body.scrollHeight,
+			document.documentElement.offsetHeight,
+			document.body.offsetHeight
+		);
+		return Math.max(elementHeight, docHeight);
+	});
+
+	// Set viewport height based on container height + 500px
+	height = containerHeight + 500;
+
+	const finalWidth = config?.width || width;
+	const finalHeight = config?.height || height;
+
+	await page.setViewportSize({
+		width: finalWidth,
+		height: finalHeight,
+	});
+
+	if (config?.wait) {
+		await page.waitForTimeout(config.wait);
+	}
+}
+
+/**
  * Set screenshot viewport.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} size - Viewport size ('desktop' or 'mobile').
  * @param {Object} config - Additional config.
+ * @param {import('@playwright/test').Locator} config.editorContainer - Optional editor container locator to adjust iframe height.
  * @return {Promise<void>}
  */
-async function setScreenshotViewport(page, size = 'desktop', config = {}) {
-	let width = '';
-	let height = '';
+async function setFrontendViewportForScreenshot(page, size = 'desktop', config = {}) {
+	let width = 1600;
+	let height = 5000;
 
 	if (size === 'desktop') {
 		width = 1600;
-		height = 2000;
 	} else if (size === 'mobile') {
 		width = 450;
-		height = 2000;
 	}
 
 	const finalWidth = config?.width || width;
@@ -913,5 +965,6 @@ module.exports = {
 	addNewTransition,
 	prepareEditorForScreenshot,
 	prepareFrontendForScreenshot,
-	setScreenshotViewport,
+	setEditorViewportForScreenshot,
+	setFrontendViewportForScreenshot,
 };

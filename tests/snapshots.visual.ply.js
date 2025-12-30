@@ -16,12 +16,14 @@ const {
 const {
 	test,
 	expect,
-	setScreenshotViewport,
 	prepareEditorForScreenshot,
 	prepareFrontendForScreenshot,
+	setEditorViewportForScreenshot,
+	setFrontendViewportForScreenshot,
 	wpCli,
 } = require('@blockera/dev-playwright/js/support/commands');
 const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const { setDeviceType } = require('@blockera/dev-playwright/js/utils/responsive');
 
 /**
  * Load all test fixtures from tests/fixtures directory
@@ -104,6 +106,13 @@ const failures = [];
  * Helper function to take a screenshot and compare it with expected snapshot
  * Saves screenshots to custom location: tests/fixtures/{section}/snapshot/
  * Uses Playwright's toHaveScreenshot for comparison, then moves screenshots to custom location
+ *
+ * @param {import('@playwright/test').Locator} locator - The locator for the element to screenshot.
+ * @param {string} snapshotName - Name of the snapshot file.
+ * @param {string} snapshotDir - Directory path where snapshots are stored.
+ * @param {import('@playwright/test').TestInfo} testInfo - Playwright test info object.
+ * @param {number} threshold - Screenshot comparison threshold (0-1). Default: 0.02.
+ * @return {Promise<void>}
  */
 async function compareScreenshot(
 	locator,
@@ -243,18 +252,14 @@ test.describe('Sections design with Style Engine', () => {
 						const result = await setupFn(page, sectionContent);
 						if (result === true) {
 							// Run default setup
-							await setScreenshotViewport(page, 'desktop');
 							await createPost(page);
 							await appendBlocks(page, sectionContent);
 						}
 					} else {
 						// Run default setup
-						await setScreenshotViewport(page, 'desktop');
 						await createPost(page);
 						await appendBlocks(page, sectionContent);
 					}
-
-					await prepareEditorForScreenshot(page);
 
 					// wait to make sure images loaded and content is ready
 					await page.waitForTimeout(1000);
@@ -263,7 +268,9 @@ test.describe('Sections design with Style Engine', () => {
 					const iframeBody = await getIframeBody(page);
 					const editorContainer =
 						iframeBody.locator('.is-root-container');
-					await editorContainer.scrollIntoViewIfNeeded();
+
+					// Set viewport and adjust iframe height for full element capture
+					await setEditorViewportForScreenshot(page);
 
 					try {
 						await compareScreenshot(
@@ -280,11 +287,12 @@ test.describe('Sections design with Style Engine', () => {
 						});
 					}
 
-					await setScreenshotViewport(page, 'mobile');
+					await setDeviceType(page, 'Mobile Portrait');
+					
+					// Set viewport and adjust iframe height for full element capture (mobile)
+					await setEditorViewportForScreenshot(page);
 
 					// Editor Mobile Snapshot
-					await editorContainer.scrollIntoViewIfNeeded();
-
 					try {
 						await compareScreenshot(
 							editorContainer,
@@ -300,8 +308,6 @@ test.describe('Sections design with Style Engine', () => {
 						});
 					}
 
-					await prepareEditorForScreenshot(page, true);
-
 					// Check frontend
 					await savePage(page);
 					await redirectToFrontPage(page);
@@ -310,7 +316,7 @@ test.describe('Sections design with Style Engine', () => {
 					// wait to make sure images loaded and content is ready
 					await page.waitForTimeout(500);
 
-					await setScreenshotViewport(page, 'desktop');
+					await setFrontendViewportForScreenshot(page, 'desktop');
 
 					// Frontend Desktop Snapshot
 					const entryContent = page.locator('.entry-content').first();
@@ -331,7 +337,7 @@ test.describe('Sections design with Style Engine', () => {
 						});
 					}
 
-					await setScreenshotViewport(page, 'mobile');
+					await setFrontendViewportForScreenshot(page, 'mobile');
 
 					// Frontend Mobile Snapshot
 					await entryContent.scrollIntoViewIfNeeded();
