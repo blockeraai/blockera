@@ -237,7 +237,9 @@ function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
 			timeout: 20000,
 		})
 		.first();
-	return element.locator(`..`).locator(`[data-cy=${parentsDataCy}]`);
+	return element
+		.locator(`xpath=ancestor::*[@data-cy="${parentsDataCy}"]`)
+		.first();
 }
 
 /**
