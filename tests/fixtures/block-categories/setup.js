@@ -2,7 +2,7 @@
  * Blockera dependencies - Playwright version
  */
 const { createPost, appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
-const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
+const { wpCli, setEditorViewportForScreenshot } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
@@ -31,9 +31,9 @@ async function setup(page, sectionContent) {
 	}
 
 	// Run default setup
-	await setScreenshotViewport(page, 'desktop');
 	await createPost(page);
 	await appendBlocks(page, sectionContent);
+	await setEditorViewportForScreenshot(page);
 
 	return false;
 }

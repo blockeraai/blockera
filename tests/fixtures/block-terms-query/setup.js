@@ -1,8 +1,9 @@
 /**
  * Blockera dependencies - Playwright version
  */
+const { createPost, appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
 const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
-const { wpCli, setScreenshotViewport } = require('@blockera/dev-playwright/js/support/commands');
+const { wpCli, setEditorViewportForScreenshot } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
@@ -62,8 +63,9 @@ async function setup(page, sectionContent) {
 	);
 
 	// Step 4: Edit the post
-	await setScreenshotViewport(page, 'desktop');
 	await editPost(page, { postID: postId });
+	await appendBlocks(page, sectionContent);
+	await setEditorViewportForScreenshot(page);
 
 	return false;
 }
