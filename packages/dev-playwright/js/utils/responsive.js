@@ -22,11 +22,36 @@ async function wait(time = 300) {
 async function setDeviceType(page, deviceType) {
 	await wait(300);
 
-	const breakpoints = page.locator('[aria-label="Breakpoints"]').first();
+	// Find the canvas editor container, then find the breakpoints element inside it
+	const canvasEditor = page
+		.locator('[data-test="blockera-canvas-editor"]')
+		.first();
 
-	await breakpoints.locator(`[aria-label="${deviceType}"]`).click({
+	// Wait for the canvas editor container to be visible
+	await canvasEditor.waitFor({ state: 'visible', timeout: 10000 });
+
+	// Find the breakpoints container inside the canvas editor
+	const breakpointsContainer = canvasEditor
+		.locator('[aria-label="Breakpoints"]')
+		.first();
+
+	// Wait for the breakpoints container to be visible
+	await breakpointsContainer.waitFor({ state: 'visible', timeout: 10000 });
+
+	// Find the device button inside the breakpoints container
+	const deviceButton = breakpointsContainer
+		.locator(`[aria-label="${deviceType}"]`)
+		.first();
+
+	// Wait for the device button to be visible
+	await deviceButton.waitFor({ state: 'visible', timeout: 10000 });
+
+	await deviceButton.click({
 		force: true,
 	});
+
+	// Wait a bit after clicking to ensure the change is applied
+	await wait(300);
 }
 
 module.exports = {
