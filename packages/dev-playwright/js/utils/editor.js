@@ -465,9 +465,7 @@ async function appendBlocks(page, blocksCode) {
  * @return {Promise<void>}
  */
 async function redirectToFrontPage(page) {
-	const previewLink = page.locator(
-		'.blockera-control-canvas-editor-preview-link a, a.components-button.components-snackbar__action.is-link'
-	);
+	const previewLink = page.locator('.blockera-preview-button-wrapper a');
 	const href = await previewLink.getAttribute('href');
 	if (href) {
 		await page.goto(href);
