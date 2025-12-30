@@ -750,7 +750,14 @@ async function addNewTransition(page) {
  */
 async function prepareEditorForScreenshot(page, reset = false) {
 	if (!reset) {
-		await page.locator('[aria-label="Close Settings"]').click();
+		// Check if the close settings button exists before clicking
+		const closeSettingsButton = page.locator(
+			'.editor-sidebar [aria-label="Close Settings"]'
+		);
+		const closeSettingsButtonCount = await closeSettingsButton.count();
+		if (closeSettingsButtonCount > 0) {
+			await closeSettingsButton.click();
+		}
 
 		await page.evaluate(() => {
 			const skeleton = document.querySelector(
