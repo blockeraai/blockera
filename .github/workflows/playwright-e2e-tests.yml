@@ -1,0 +1,179 @@
+name: Playwright E2E Tests
+
+on:
+    pull_request:
+        types: [opened, synchronize, ready_for_review]
+    workflow_dispatch:
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+    group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+    cancel-in-progress: true
+
+jobs:
+    detect_categories:
+        name: Detecting Playwright E2E Test Categories
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        outputs:
+            categories: ${{ steps.set_categories.outputs.categories }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: List test categories
+              id: set_categories
+              run: |
+                  categories=$(node .github/scripts/list-playwright-test-categories.js)
+                  categories_json=$(echo $categories | jq -c '.')
+                  echo "categories=$categories_json" >> $GITHUB_OUTPUT
+
+            - name: Print categories output
+              run: |
+                  echo "Detected categories: ${{ steps.set_categories.outputs.categories }}"
+
+    playwright_e2e_tests:
+        name: Test
+        needs: detect_categories
+        runs-on: ubuntu-latest
+        timeout-minutes: 60
+        if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        strategy:
+            fail-fast: false
+            matrix:
+                category: ${{ fromJson(needs.detect_categories.outputs.categories) }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js and install dependencies
+              uses: ./.github/setup-node
+
+            - name: Install Playwright dependencies
+              run: |
+                  npx playwright install chromium --with-deps
+
+            - name: Install Composer Packages
+              run: composer install --no-dev -o --apcu-autoloader -a
+
+            - name: Create required environment files
+              run: |
+                  # Set the base configuration file
+                  WP_ENV_CONFIG=".github/wp-env-configs/base.json"
+
+                  # Check if a specific configuration exists for the category
+                  if [ -f ".github/wp-env-configs/${{ matrix.category }}.json" ]; then
+                    WP_ENV_CONFIG=".github/wp-env-configs/${{ matrix.category }}.json"
+                  fi
+
+                  # Copy the selected configuration to .wp-env.json
+                  cp "$WP_ENV_CONFIG" .wp-env.json
+                  cat .wp-env.json
+
+                  # Create .env file
+                  touch .env
+                  echo APP_MODE=production >> .env
+                  echo DB=wp_tests >> .env
+                  cat .env
+
+            - name: Start WordPress Environment
+              run: npm run env:start
+
+            - name: Check WordPress Version
+              run: |
+                  echo "Checking WordPress version..."
+                  WP_VERSION=$(npx wp-env run cli wp core version)
+                  echo "WordPress version: $WP_VERSION"
+
+            - name: Build wp-env app
+              run: npm run build
+
+            - name: Debug Matrix Category
+              run: |
+                  echo "Running category: ${{ matrix.category }}"
+
+            - name: Run Playwright E2E Tests
+              run: |
+                  # Determine test pattern based on category
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    # Run tests matching the category pattern
+                    # e.g., tests/e2e/specs/**/*.blocks-1.spec.js
+                    test_patterns=()
+                    
+                    # Check tests/e2e/specs directory
+                    if find tests/e2e/specs -type f -name "*.${{ matrix.category }}.spec.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("tests/e2e/specs/**/*.${{ matrix.category }}.spec.js")
+                    fi
+                    
+                    # Check packages directory
+                    if find packages -type f -name "*.${{ matrix.category }}.spec.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("packages/**/*.${{ matrix.category }}.spec.js")
+                    fi
+                  else
+                    # Run general tests (files without category in name)
+                    # Find files that match *.spec.js but not *.*.spec.js
+                    test_patterns=()
+                    
+                    if find tests/e2e/specs -type f -name "*.spec.js" ! -name "*.*.spec.js" 2>/dev/null | grep -q .; then
+                      # Use a more specific pattern to exclude categorized tests
+                      test_patterns+=("tests/e2e/specs/**/!(*.*).spec.js")
+                    fi
+                    
+                    if find packages -type f -name "*.spec.js" ! -name "*.*.spec.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("packages/**/!(*.*).spec.js")
+                    fi
+                  fi
+
+                  if [ ${#test_patterns[@]} -eq 0 ]; then
+                    echo "No tests found for category: ${{ matrix.category }}"
+                    exit 0
+                  fi
+
+                  echo "Running tests for category: ${{ matrix.category }}"
+                  echo "Test patterns: ${test_patterns[*]}"
+
+                  # Run Playwright tests with each pattern using the npm script
+                  test_exit_code=0
+                  for pattern in "${test_patterns[@]}"; do
+                    echo "Running tests matching: $pattern"
+                    if ! npm run test:e2e:base -- "$pattern"; then
+                      test_exit_code=1
+                    fi
+                  done
+
+                  # Exit with the appropriate exit code
+                  exit $test_exit_code
+
+            - name: Archive debug artifacts (screenshots, traces)
+              uses: actions/upload-artifact@v4
+              if: ${{ !cancelled() }}
+              with:
+                  name: playwright-artifacts--${{ matrix.category }}
+                  path: |
+                      artifacts/test-results
+                      playwright-report
+                  if-no-files-found: ignore
+                  retention-days: 7
+
+            - name: Stop WordPress Environment
+              run: npm run env:stop
+
+    merge-artifacts:
+        name: Merge Artifacts
+        if: ${{ !cancelled() }}
+        needs: [playwright_e2e_tests]
+        runs-on: ubuntu-latest
+        permissions: {}
+        steps:
+            - name: Merge failures artifacts
+              uses: actions/upload-artifact/merge@v4
+              # Don't fail the job if there aren't any artifacts to merge.
+              continue-on-error: true
+              with:
+                  name: playwright-artifacts
+                  # Retain the merged artifacts in case of a rerun.
+                  pattern: playwright-artifacts*
+                  delete-merged: true
