@@ -27,20 +27,20 @@ const getFiles = (dir, pattern) => {
 const main = () => {
 	const categories = new Set();
 
-	const categorizedFiles = getFiles('packages', /\.(.*?)\.e2e\.ply\.js/);
+	const categorizedFiles = getFiles('packages', /\.(.*?)\.ply\.js/);
 	categorizedFiles.forEach((file) => {
-		const match = file.match(/\.(.*?)\.e2e\.ply\.js/);
+		const match = file.match(/\.(.*?)\.ply\.js/);
 		if (match && match[1]) {
 			categories.add(match[1]);
 		}
 	});
 
-	const generalFiles = getFiles('packages', /\/[\w-]+\.e2e\.ply\.js/);
+	const generalFiles = getFiles('packages', /\/[\w-]+\.ply\.js/);
 	if (generalFiles.length) {
 		categories.add('general-1');
 	}
 
-	const baseFiles = getFiles('tests', /\/[\w-]+\.e2e\.ply\.js/);
+	const baseFiles = getFiles('tests', /\/[\w-]+\.ply\.js/);
 	if (baseFiles.length) {
 		categories.add('general-1');
 	}
