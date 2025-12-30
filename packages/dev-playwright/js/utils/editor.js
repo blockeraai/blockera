@@ -414,7 +414,16 @@ async function addNewGroupToPost(page) {
  * @return {Promise<void>}
  */
 async function savePage(page) {
-	await page.locator('.editor-post-publish-button').click();
+	const publishButton = page.locator(
+		'.editor-header__settings .editor-post-publish-button'
+	);
+	const isDisabled = await publishButton.isDisabled();
+	if (isDisabled) {
+		// Post is already saved, no need to do anything
+		return;
+	}
+
+	await publishButton.click();
 
 	const snackbarSaveButton = page.locator(
 		'.entities-saved-states__panel .editor-entities-saved-states__save-button'
