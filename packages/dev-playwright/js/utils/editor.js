@@ -813,6 +813,92 @@ async function getBlockeraStylesWrapper(page) {
 async function waitForAssertValue(time = 300) {
 	return new Promise((resolve) => setTimeout(resolve, time));
 }
+/**
+ * Activate mu-plugin by copying it to wp-content/mu-plugins/ directory.
+ * This function accepts a full path to the mu-plugin.php file and copies it to the mu-plugins directory.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} muPluginPath - Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [targetName] - Optional target filename. If not provided, generates from path.
+ * @param {string} [pluginName='blockera'] - Plugin name to use in paths. Defaults to 'blockera'.
+ * @return {Promise<void>}
+ */
+async function activateMuPlugin(
+	page,
+	muPluginPath,
+	targetName = null,
+	pluginName = 'blockera'
+) {
+	// Import wpCli here to avoid circular dependency with commands.js
+	const { wpCli } = require('../support/commands');
+
+	// Generate target filename if not provided
+	// Extract a unique name from the path (e.g., "block-query-title" from "tests/fixtures/block-query-title/mu-plugin.php")
+	const pathParts = muPluginPath.split('/');
+	if (!targetName) {
+		const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
+		targetName = `${pluginName}-test-${folderName}.php`;
+	}
+
+	// Build PHP code to copy mu-plugin to mu-plugins directory
+	// Use wp eval to execute PHP code directly without creating temp files
+	const phpCode = `if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); } $sourceFile = ABSPATH . 'wp-content/plugins/${pluginName}/${muPluginPath}'; $targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($sourceFile)) { $content = file_get_contents($sourceFile); file_put_contents($targetFile, $content); }`;
+
+	// Escape single quotes for shell: ' becomes '\''
+	// Use single quotes in shell command to preserve $ signs in PHP
+	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
+
+	// Execute PHP code directly using wp eval
+	// Use ignoreFailures=true to prevent test failure if file doesn't exist
+	await wpCli(
+		page,
+		`wp eval '${escapedPhpCode}'`,
+		true, // ignoreFailures = true - don't fail if file doesn't exist
+		true // skipEscaping = true - we've already escaped
+	);
+}
+
+/**
+ * Deactivate mu-plugin by removing it from wp-content/mu-plugins/ directory.
+ * This function removes the mu-plugin file that was previously activated.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} muPluginPath - Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [targetName] - Optional target filename. If not provided, generates from path (must match activateMuPlugin).
+ * @param {string} [pluginName='blockera'] - Plugin name to use in paths. Defaults to 'blockera'. Must match the value used in activateMuPlugin.
+ * @return {Promise<void>}
+ */
+async function deactivateMuPlugin(
+	page,
+	muPluginPath,
+	targetName = null,
+	pluginName = 'blockera'
+) {
+	// Import wpCli here to avoid circular dependency with commands.js
+	const { wpCli } = require('../support/commands');
+
+	// Generate target filename if not provided (must match activateMuPlugin logic)
+	const pathParts = muPluginPath.split('/');
+	if (!targetName) {
+		const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
+		targetName = `${pluginName}-test-${folderName}.php`;
+	}
+
+	// Build PHP code to remove mu-plugin from mu-plugins directory
+	const phpCode = `$targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; if (file_exists($targetFile)) { unlink($targetFile); }`;
+
+	// Escape single quotes for shell: ' becomes '\''
+	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
+
+	// Execute PHP code directly using wp eval
+	// Use ignoreFailures=true to prevent test failure if file doesn't exist
+	await wpCli(
+		page,
+		`wp eval '${escapedPhpCode}'`,
+		true, // ignoreFailures = true - don't fail if file doesn't exist
+		true // skipEscaping = true - we've already escaped
+	);
+}
 
 module.exports = {
 	getIframeBody,
@@ -849,5 +935,7 @@ module.exports = {
 	closeWelcomeGuide,
 	openDocumentSettingsSidebar,
 	getBlockeraStylesWrapper,
+	activateMuPlugin,
+	deactivateMuPlugin,
 	waitForAssertValue,
 };
