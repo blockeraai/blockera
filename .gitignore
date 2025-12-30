@@ -77,6 +77,13 @@ packages/dev-cypress/js/downloads
 # Cypress videos
 packages/dev-cypress/js/videos
 
+# Playwright artifacts
+artifacts/
+test-results/
+playwright-report/
+playwright/.cache/
+playwright.env.json
+
 # includes directory
 inc
 cypress.env.json
