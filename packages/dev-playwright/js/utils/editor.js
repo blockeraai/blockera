@@ -755,22 +755,35 @@ async function closeWelcomeGuide(page) {
  * @return {Promise<void>}
  */
 async function openDocumentSettingsSidebar(page, tab = 'Block') {
-	const settingsButton = page.locator('button[aria-label="Settings"]');
+	const settingsButton = page.locator(
+		'.editor-header__settings button[aria-label="Settings"]'
+	);
+
+	// Use getByRole for more specific tab selection
+	const tabButton = page.getByRole('tab', { name: tab, exact: true });
 
 	const isPressed = await settingsButton.getAttribute('aria-pressed');
 	if (isPressed === 'true') {
+		// Check if the current tab element exists before trying to read it
 		const currentTab = page.locator(
-			`.edit-post-sidebar__panel-tab[aria-selected="true"]`
+			`.editor-header__settings [role="tab"][aria-selected="true"]`
 		);
-		const currentTabText = await currentTab.textContent();
-		if (currentTabText?.trim() !== tab) {
-			await page.locator(`button:has-text("${tab}")`).click();
+		const tabCount = await currentTab.count();
+
+		if (tabCount > 0) {
+			const currentTabText = await currentTab.textContent();
+			if (currentTabText?.trim() !== tab) {
+				await tabButton.click();
+			}
+			// If no tab is selected, just click the desired tab
+			await tabButton.click();
+			return;
 		}
 		return;
 	}
 
 	await settingsButton.click();
-	await page.locator(`button:has-text("${tab}")`).click();
+	await tabButton.click();
 }
 
 /**
