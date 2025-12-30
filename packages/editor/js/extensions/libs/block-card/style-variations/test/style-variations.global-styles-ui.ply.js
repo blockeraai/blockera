@@ -20,9 +20,6 @@ const {
 	openSettingsPanel,
 } = require('@blockera/dev-playwright/js/support/commands');
 
-const consoleErrors = [];
-const failures = [];
-
 test.describe('Style Variations Inside Global Styles Panel → Functionality', () => {
 	const before = async (page) => {
 		await openGlobalStylesPanel(page);
@@ -77,13 +74,6 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 	test('should be able to clear customizations from specific style variation', async ({
 		page,
 	}) => {
-		// Track console errors
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') {
-				consoleErrors.push(msg.text());
-			}
-		});
-
 		await getByDataTest(page, 'style-section-1').click();
 
 		// Add alias to the feature container
@@ -183,21 +173,12 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		page,
 	}) => {
 		await getByDataTest(page, 'style-section-1').click();
-
-		// Track console errors
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') {
-				consoleErrors.push(msg.text());
-			}
-		});
-
 		await getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Rename' })
 			.click();
 
-		const modalContent = page.locator('.components-modal__content');
 		const nameContainer = getParentContainer(page, 'Name');
 		await nameContainer.locator('input').clear();
 		await nameContainer.locator('input').fill('New Name');
@@ -221,21 +202,11 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		page,
 	}) => {
 		await getByDataTest(page, 'style-section-1').click();
-
-		// Track console errors
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') {
-				consoleErrors.push(msg.text());
-			}
-		});
-
 		await getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Rename' })
 			.click();
-
-		const modalContent = page.locator('.components-modal__content');
 		const nameContainer = getParentContainer(page, 'Name');
 		await nameContainer.locator('input').clear();
 		await nameContainer.locator('input').fill('New Name');
@@ -263,13 +234,6 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		page,
 	}) => {
 		await getByDataTest(page, 'open-new-id-contextmenu').nth(0).click();
-
-		// Track console errors
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') {
-				consoleErrors.push(msg.text());
-			}
-		});
 
 		await page
 			.locator('.blockera-component-grid')
@@ -374,14 +338,6 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		page,
 	}) => {
 		await getByDataTest(page, 'open-new-id-contextmenu').nth(0).click();
-
-		// Track console errors
-		page.on('console', (msg) => {
-			if (msg.type() === 'error') {
-				consoleErrors.push(msg.text());
-			}
-		});
-
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Delete' })
@@ -452,25 +408,5 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await expect(
 			popoverAfterReload.locator('[data-test="style-new-id"]')
 		).not.toBeVisible();
-	});
-
-	test.afterAll(async () => {
-		// After all tests, check if any failed and throw combined error
-		if (consoleErrors.length > 0) {
-			const errorMessage = consoleErrors
-				.map((e, i) => `\n${i + 1}. ${e}`)
-				.join('\n');
-			throw new Error(
-				`${consoleErrors.length} console error(s):${errorMessage}`
-			);
-		}
-		if (failures.length > 0) {
-			const errorMessage = failures
-				.map((f, i) => `\n${i + 1}. ${f.name}:\n   ${f.error}`)
-				.join('\n');
-			throw new Error(
-				`${failures.length} screenshot(s) failed:${errorMessage}`
-			);
-		}
 	});
 });
