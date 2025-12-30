@@ -13,7 +13,6 @@ const {
 const {
 	test,
 	expect,
-	beforeEachActions,
 	getByDataTest,
 	getParentContainer,
 	getBlock,
@@ -35,8 +34,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await page.locator('button[id="/blocks/core%2Fgroup"]').click();
 	};
 
-	beforeEachActions(async ({ page, admin }) => {
-		console.log(admin);
+	test.beforeEach(async ({ page, admin }) => {
 		await openSiteEditor(page, admin);
 
 		await before(page);

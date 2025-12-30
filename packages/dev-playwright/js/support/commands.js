@@ -18,6 +18,18 @@ const { openBoxSpacingSide } = require('../utils/controls-box-spacing');
 const { openBoxPositionSide } = require('../utils/controls-box-position');
 const { getIframeBody, getBlockeraStylesWrapper } = require('../utils/editor');
 
+test.beforeEach(async ({ page }) => {
+	// Run these tests as if in a desktop browser with a 720p monitor
+	await page.setViewportSize({ width: 1280, height: 720 });
+
+	// Login if not already logged in
+	// Note: In Playwright, authentication is typically handled via storageState
+	// But we can also manually login if needed
+	if (!process.env.isLogin) {
+		await loginToSite(page);
+	}
+});
+
 /**
  * Blockera delay expected time constant.
  */
@@ -92,28 +104,6 @@ async function addNewUser(page, user, pass, role) {
 	await page
 		.locator('input[value="Add New User"], input[value="Add User"]')
 		.click();
-}
-
-/**
- * Before each test hook.
- * Sets up viewport and handles login.
- *
- * @param {Function} callback - Callback function to execute before each test.
- */
-function beforeEachActions(callback) {
-	test.beforeEach(async ({ page }) => {
-		// Run these tests as if in a desktop browser with a 720p monitor
-		await page.setViewportSize({ width: 1280, height: 720 });
-
-		// Login if not already logged in
-		// Note: In Playwright, authentication is typically handled via storageState
-		// But we can also manually login if needed
-		if (!process.env.isLogin) {
-			await loginToSite(page);
-		}
-	});
-
-	test.beforeEach(callback);
 }
 
 /**
@@ -876,7 +866,6 @@ async function setScreenshotViewport(page, size = 'desktop', config = {}) {
 module.exports = {
 	test,
 	expect,
-	beforeEachActions,
 	addNewUser,
 	logout,
 	waitForAssertValue,
