@@ -18,9 +18,9 @@ import { isEquals, mergeObject, omitWithPattern } from '@blockera/utils';
  * Internal dependencies
  */
 import { sanitizeBlockAttributes } from '../../../extensions/hooks/utils';
-import { useGlobalStylesContext } from '../../components/block-global-styles-panel-screen/global-styles-provider';
-import { GlobalStylesRenderer } from '../../../extensions/components/global-styles-renderer';
 import { IntersectionObserverRenderer } from '../../intersection-observer-renderer';
+import { GlobalStylesRenderer } from '../../../extensions/components/global-styles-renderer';
+import { useGlobalStylesContext } from '../../components/block-global-styles-panel-screen/global-styles-provider';
 
 // Constants for style rendering
 const staticKeys = ['blockeraBlockStates', 'blockeraPropsId'];
@@ -123,7 +123,7 @@ const GlobalBlockStylesRenderer = memo((blockType: Object) => {
 	const blockTypeGlobalStyles = !Object.keys(localBlockTypeGlobalStyles)
 		.length
 		? mergeObject(wpBlockTypeGlobalStyles, localBlockTypeGlobalStyles)
-		: localBlockTypeGlobalStyles;
+		: wpBlockTypeGlobalStyles;
 
 	// Filter out blockera-specific styles for WordPress compatibility
 	const memoizedBlockTypeGlobalStyles = omitWithPattern(
