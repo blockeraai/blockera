@@ -1,4 +1,9 @@
 const { defineConfig } = require('cypress');
+const fs = require('fs');
+const path = require('path');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 let env = {
 	wpUsername: 'admin',
@@ -16,23 +21,16 @@ let env = {
 };
 
 // This is a workaround for localization of the cypress env file.
-try {
-	env = require('./cypress.env.json');
-} catch (error) {
-	/* @debug-ignore */
-	console.log(error);
-}
-
-// This is a workaround for pull request cypress env file.
-try {
-	env = {
-		...env,
-		...require('./.pr-cypress.env.json'),
-	};
-} catch (error) {
-	/* @debug-ignore */
-	console.log(error);
-}
+env = {
+	...env,
+	...(fs.existsSync(path.resolve(__dirname, 'cypress.env.json'))
+		? require('./cypress.env.json')
+		: {}),
+	...(fs.existsSync(path.resolve(__dirname, '.pr-cypress.env.json'))
+		? require('./.pr-cypress.env.json')
+		: {}),
+	...process.env,
+};
 
 const setupNodeEvents = (on, config) => {
 	require('./packages/dev-cypress/js/plugins/index.js')(on, config);

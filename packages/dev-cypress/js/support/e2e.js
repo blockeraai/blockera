@@ -36,7 +36,8 @@ Cypress.Commands.add('login', (user = '', pass = '') => {
 	});
 });
 
-const BLOCKERA_DELAY_EXPECTED_TIME = 300;
+const BLOCKERA_DELAY_EXPECTED_TIME =
+	Cypress.env()?.APP_MODE === 'development' ? 100 : 1000;
 
 Cypress.Commands.add(
 	'waitForAssertValue',

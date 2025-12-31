@@ -58,6 +58,9 @@ import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
 
+const BLOCKERA_DELAY_EXPECTED_TIME =
+	process.env.APP_MODE === 'development' ? 100 : 1000;
+
 export const BlockBase: ComponentType<any> = (
 	_props: Object
 ): Element<any> | null => {
@@ -240,7 +243,7 @@ export const BlockBase: ComponentType<any> = (
 		setState(value);
 	};
 
-	// Update the parent state after 1 second to avoid unnecessary re-renders.
+	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
@@ -261,7 +264,7 @@ export const BlockBase: ComponentType<any> = (
 			) {
 				setBlockAttributes(attributes);
 			}
-		}, 1000); // Update the parent state after 1 second to avoid unnecessary re-renders.
+		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
 		return () => clearTimeout(timeoutId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
