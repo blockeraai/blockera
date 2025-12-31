@@ -6,6 +6,7 @@ use ReflectionClass;
 use Blockera\Setup\Blockera;
 use Blockera\Dev\PhpUnit\CssDriver;
 use Blockera\Dev\PhpUnit\HtmlDriver;
+use Blockera\Dev\PhpUnit\JsonDriver;
 use Blockera\Dev\PHPUnit\AppTestCase;
 use Blockera\Editor\Http\Controllers\Theme\JSONResolver;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -75,6 +76,10 @@ class BlockeraTest extends AppTestCase {
 				return 'frontend';
 			case 'frontend-global-styles':
 				return 'frontend-global-styles';
+			case 'frontend-style-variation-styles':
+				return 'frontend-style-variation-styles';
+			case 'frontend-block-styles':
+				return 'frontend-block-styles';
 			default:
 				return 'frontend';
 		}
@@ -206,21 +211,25 @@ class BlockeraTest extends AppTestCase {
 			if (isset($wp_styles->registered['global-styles'])) {
 				$wp_styles->registered['global-styles']->extra = [];
 			}
+
 			// Also check if inline styles are stored directly in wp_styles->add_inline_style data
 			if (isset($wp_styles->registered['global-styles-inline-css'])) {
 				$wp_styles->registered['global-styles-inline-css']->extra = [];
 			}
+
 			// Clear any queued inline styles
 			if (isset($wp_styles->queue)) {
-				$wp_styles->queue = array_values(array_diff($wp_styles->queue, ['global-styles', 'global-styles-inline-css']));
+				$wp_styles->queue = [];
 			}
+
 			// Clear done list to allow re-enqueuing
 			if (isset($wp_styles->done)) {
-				$wp_styles->done = array_values(array_diff($wp_styles->done, ['global-styles', 'global-styles-inline-css']));
+				$wp_styles->done = [];
 			}
+
 			// Clear enqueued list
 			if (isset($wp_styles->enqueued)) {
-				$wp_styles->enqueued = array_values(array_diff($wp_styles->enqueued, ['global-styles', 'global-styles-inline-css']));
+				$wp_styles->enqueued = [];
 			}
 		}
 
@@ -448,28 +457,42 @@ class BlockeraTest extends AppTestCase {
 
 		/**
 		 * Test 4: Global styles
+		 * 
+		 * Extract global styles from wp_head output
+		 * Global styles are added as inline styles to the 'global-styles' handle via wp_add_inline_style()
 		 */
-		// Extract global styles from wp_head output
-		// Global styles are added as inline styles to the 'global-styles' handle via wp_add_inline_style()
 		$global_styles = '';
 		if (preg_match_all('/<style[^>]*id=["\']global-styles-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_output, $style_matches)) {
 			$global_styles = implode("\n", $style_matches[1]);
 		}
 
-		// Also check wp_footer output for classic themes with assets on demand
-		ob_start();
-		do_action('wp_footer');
-		$footer_output = ob_get_clean();
-		
-		// Extract global styles from footer if present (for classic themes)
-		if (preg_match_all('/<style[^>]*id=["\']global-styles-inline-css["\'][^>]*>(.*?)<\/style>/s', $footer_output, $footer_style_matches)) {
-			$footer_global_styles = implode("\n", $footer_style_matches[1]);
-			if (!empty($footer_global_styles)) {
-				$global_styles = $global_styles ? $global_styles . "\n" . $footer_global_styles : $footer_global_styles;
-			}
+		$this->assertMatchesSnapshot('frontend-global-styles', blockera_test_normalize_css($global_styles), new CssDriver());
+
+		/**
+		 * Test 5: Style variation styles generated based of current used blocks.
+		 * 
+		 * Extract style variation styles from wp_head output
+		 * Style variation styles are added as inline styles to the 'block-style-variation-styles' handle via wp_add_inline_style()
+		 */
+		$style_variation_styles = '';
+		if (preg_match_all('/<style[^>]*id=["\']block-style-variation-styles-inline-css["\'][^>]*>(.*?)<\/style>/s', $head_output, $style_matches)) {
+			$style_variation_styles = implode("\n", $style_matches[1]);
 		}
 
-		$this->assertMatchesSnapshot('frontend-global-styles', blockera_test_normalize_css($global_styles), new CssDriver());
+		$this->assertMatchesSnapshot('frontend-style-variation-styles', blockera_test_normalize_css($style_variation_styles), new CssDriver());
+
+		/**
+		 * Test 6: Collect all wp-block-*-inline-css style tag IDs
+		 * 
+		 * Extract all style tag IDs matching wp-block-*-inline-css pattern from wp_head output
+		 * and save them as a JSON array in the order they appear
+		 */
+		$block_style_ids = [];
+		if (preg_match_all('/<style[^>]*id=["\'](wp-block-[^"\']+-inline-css)["\'][^>]*>/i', $head_output, $id_matches)) {
+			$block_style_ids = $id_matches[1];
+		}
+
+		$this->assertMatchesSnapshot('frontend-block-styles', $block_style_ids, new JsonDriver());
     }
 
 	/**
