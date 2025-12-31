@@ -1,7 +1,28 @@
 p.blockera-block.blockera-block--1 {
 	background-color: #ffd7d7;
+	padding: 20px 20px 20px 20px;
+	font-size: 16px;
 }
 
 p.blockera-block.blockera-block--2 {
 	background-color: #e8ffcb;
+	padding: 20px 20px 20px 20px;
+	font-size: 16px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	font-size: 20px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 20px !important;
+}
+
+:where(.blockera-block-wrapper .blockera-block-wrapper-child-1) {
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
+}
+
+:where(.blockera-block-wrapper .has-background) {
+	background-color: #b6fd9f;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 }
