@@ -2,11 +2,16 @@
 	background-color: transparent !important;
 	border: none !important;
 	padding: 0 !important;
+
+	/* Fix 1:1 design comparison issue between editor and frontend. */
+	font-size: 0;
 }
 
 .blockera-block.wp-block-audio audio {
-	font-size: 0;
 	padding: initial !important;
+
+	/* Fix 1:1 design comparison issue between editor and frontend. */
+	font-size: 0;
 }
 
 .blockera-block.wp-block-audio audio::-webkit-media-controls-enclosure {
