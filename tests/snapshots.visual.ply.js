@@ -136,61 +136,49 @@ async function compareScreenshot(
 	const browserSnapshotName = snapshotName.replace('.png', browserSuffix);
 	const browserSnapshotPath = path.join(defaultSnapshotsDir, browserSnapshotName);
 	
-	// Always ensure a snapshot file exists in __snapshots__ before calling toHaveScreenshot
-	// This prevents Playwright from logging "snapshot doesn't exist" errors
-	if (fs.existsSync(snapshotPath)) {
-		// Copy the expected snapshot from custom location to __snapshots__ for comparison
+	// Check if snapshot exists in custom location (not first run)
+	const snapshotExists = fs.existsSync(snapshotPath);
+	
+	if (snapshotExists) {
+		// Snapshot exists: copy from custom location to __snapshots__ for comparison
 		fs.copyFileSync(snapshotPath, browserSnapshotPath);
-	} else if (!fs.existsSync(browserSnapshotPath)) {
-		// On first run, take a screenshot and save it to __snapshots__ first
-		// This prevents the "snapshot doesn't exist" error message
-		// We'll take the screenshot now so Playwright can compare/update it
-		const tempScreenshot = await locator.screenshot();
-		fs.writeFileSync(browserSnapshotPath, tempScreenshot);
 	}
 	
 	// Use Playwright's toHaveScreenshot for comparison
-	// It will compare/update the snapshot in __snapshots__
-	// Since we've ensured the file exists, Playwright won't log the "doesn't exist" error
-	await expect(locator).toHaveScreenshot(snapshotName, {
-		threshold,
-	});
-	
-	// After Playwright saves/updates the screenshot, move it to our custom location
-	// Wait a bit to ensure file is written
-	await new Promise((resolve) => setTimeout(resolve, 100));
-	
-	// Check if Playwright created/updated the snapshot in __snapshots__
-	if (fs.existsSync(browserSnapshotPath)) {
-		// Move to custom location (remove browser suffix)
-		fs.copyFileSync(browserSnapshotPath, snapshotPath);
-		fs.unlinkSync(browserSnapshotPath);
-	} else {
-		// Fallback: check other possible browser names
-		const possibleNames = [
-			snapshotName.replace('.png', '-chromium.png'),
-			snapshotName.replace('.png', '-firefox.png'),
-			snapshotName.replace('.png', '-webkit.png'),
-			snapshotName, // Fallback without suffix
-		];
+	try {
+		await expect(locator).toHaveScreenshot(snapshotName, {
+			threshold,
+		});
 		
-		let moved = false;
-		for (const name of possibleNames) {
-			const defaultPath = path.join(defaultSnapshotsDir, name);
-			if (fs.existsSync(defaultPath)) {
-				// Move to custom location (remove browser suffix)
-				fs.copyFileSync(defaultPath, snapshotPath);
-				fs.unlinkSync(defaultPath);
-				moved = true;
-				break;
+		// Comparison succeeded: copy from __snapshots__ to custom location and clean up
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		
+		if (fs.existsSync(browserSnapshotPath)) {
+			// Copy to custom location (remove browser suffix)
+			fs.copyFileSync(browserSnapshotPath, snapshotPath);
+			fs.unlinkSync(browserSnapshotPath);
+		}
+	} catch (error) {
+		// Comparison failed: copy actual screenshot to both locations
+		await new Promise((resolve) => setTimeout(resolve, 100));
+		
+		const actualScreenshotName = snapshotName.replace('.png', '-actual.png');
+		const actualScreenshotPath = testInfo.outputDir
+			? path.join(testInfo.outputDir, actualScreenshotName)
+			: null;
+		
+		if (actualScreenshotPath && fs.existsSync(actualScreenshotPath)) {
+			// Copy the actual screenshot to custom location
+			fs.copyFileSync(actualScreenshotPath, snapshotPath);
+			
+			// Also ensure it exists in __snapshots__ (keep copy there)
+			if (!fs.existsSync(browserSnapshotPath)) {
+				fs.copyFileSync(actualScreenshotPath, browserSnapshotPath);
 			}
 		}
 		
-		// If still no file found, take screenshot manually and save to custom location
-		if (!moved) {
-			const screenshotBuffer = await locator.screenshot();
-			fs.writeFileSync(snapshotPath, screenshotBuffer);
-		}
+		// Re-throw the error so the test still fails
+		throw error;
 	}
 }
 
@@ -270,7 +258,7 @@ test.describe('Sections design with Style Engine', () => {
 						iframeBody.locator('.is-root-container');
 
 					// Set viewport and adjust iframe height for full element capture
-					await setEditorViewportForScreenshot(page);
+					await setEditorViewportForScreenshot(page, 'desktop');
 
 					try {
 						await compareScreenshot(
@@ -290,7 +278,7 @@ test.describe('Sections design with Style Engine', () => {
 					await setDeviceType(page, 'Mobile Portrait');
 					
 					// Set viewport and adjust iframe height for full element capture (mobile)
-					await setEditorViewportForScreenshot(page);
+					await setEditorViewportForScreenshot(page, 'mobile');
 
 					// Editor Mobile Snapshot
 					try {

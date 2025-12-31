@@ -850,10 +850,16 @@ async function prepareFrontendForScreenshot(page) {
  * @param {Object} config - Additional config.
  * @return {Promise<void>}
  */
-async function setEditorViewportForScreenshot(page, config = {}) {
+async function setEditorViewportForScreenshot(page, size = 'desktop', config = {}) {
 	let width = 1600;
 	let height = 5000;
 	let containerHeight = null;
+
+	if (size === 'desktop') {
+		width = 1600;
+	} else if (size === 'mobile') {
+		width = 450;
+	}
 
 	const iframeBody = await getIframeBody(page);
 	const editorContainer = iframeBody.locator('.is-root-container');
@@ -883,9 +889,48 @@ async function setEditorViewportForScreenshot(page, config = {}) {
 	const finalHeight = config?.height || height;
 
 	await page.setViewportSize({
-		width: finalWidth,
+		width: 1600,
 		height: finalHeight,
 	});
+
+	// Set iframe width to the final width
+	await iframeBody.evaluate((el, width) => {
+		el.style.width = width + 'px';
+	}, finalWidth);
+
+	// Set editor container padding to 20px 0
+	await editorContainer.evaluate((el, width) => {
+		el.style.marginTop = '30px';
+		el.style.paddingTop = '20px';
+		el.style.paddingBottom = '20px';
+		el.style.boxSizing = 'border-box';
+	}, finalWidth);
+
+	// Add style to iframe to ensure design is sync and spaces are static
+	await iframeBody.evaluate(() => {
+		const style = document.createElement('style');
+		style.innerHTML = `
+			:root :where(.is-layout-constrained) > * {
+				margin-block-start: 1.2rem;
+				margin-block-end: 0;
+			}
+		`;
+		document.head.appendChild(style);
+	});
+
+	// Close settings panel
+	const settingsButton = await page.locator('.editor-header__settings button[aria-label="Settings"]');
+	await settingsButton.click();
+
+	// Close Secondary sidebar (if open)
+	// Check for buttons that would close the secondary sidebar
+	const hideSecondarySidebarButton = page.locator(
+		'.editor-header__toolbar button[aria-label="Hide secondary sidebar"]'
+	);
+	const hideButtonCount = await hideSecondarySidebarButton.count();
+	if (hideButtonCount > 0) {
+		await hideSecondarySidebarButton.first().click();
+	}
 
 	if (config?.wait) {
 		await page.waitForTimeout(config.wait);
@@ -917,6 +962,27 @@ async function setFrontendViewportForScreenshot(page, size = 'desktop', config =
 	await page.setViewportSize({
 		width: finalWidth,
 		height: finalHeight,
+	});
+
+	const entryContent = page.locator('.entry-content').first();
+	await entryContent.evaluate((el, width) => {
+		el.style.marginTop = '30px';
+		el.style.width = width + 'px';
+		el.style.paddingTop = '20px';
+		el.style.paddingBottom = '20px';
+		el.style.boxSizing = 'border-box';
+	}, finalWidth);
+
+	// Add extra CSS to make sure spaces are always static to not affect the screenshot comparison.
+	await page.evaluate(() => {
+		const style = document.createElement('style');
+		style.textContent = `
+			:root :where(.is-layout-constrained) > * {
+				margin-block-start: 20px;
+				margin-block-end: 0;
+			}
+		`;
+		document.head.appendChild(style);
 	});
 
 	if (config?.wait) {
