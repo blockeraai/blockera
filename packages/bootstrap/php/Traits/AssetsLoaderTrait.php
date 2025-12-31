@@ -14,9 +14,9 @@ trait AssetsLoaderTrait {
 	/**
 	 * Store the sub context.
 	 *
-	 * @var string $sub_context the sub context.
+	 * @var string|null $sub_context the sub context.
 	 */
-	protected string $sub_context;
+	protected ?string $sub_context = null;
 
 	/**
 	 * Set the context.
