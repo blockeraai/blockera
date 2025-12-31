@@ -136,15 +136,17 @@ class Block implements BlockInterface {
 				}
 
 				if (! empty($transform)) {
-					$transform = 'transform:' . $transform . ';';
+					$transform .= 'transform:' . $transform . ';';
 					$svg->setAttribute('style', $transform);
 				} else {
 					$svg->removeAttribute('style');
-				}
-
-				$svg->setAttribute('focusable', 'false');
-				$svg->setAttribute('aria-hidden', 'true');
+				}				
+			} else {
+				$svg->removeAttribute('style');
 			}
+
+			$svg->setAttribute('focusable', 'false');
+			$svg->setAttribute('aria-hidden', 'true');
 		}
 
 		return $dom->outerhtml;
