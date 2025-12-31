@@ -16,13 +16,12 @@ import {
 	useCallback,
 	// StrictMode,
 } from '@wordpress/element';
-import isShallowEqual from '@wordpress/is-shallow-equal';
 
 /**
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
-import { cloneObject, mergeObject } from '@blockera/utils';
+import { cloneObject, mergeObject, isEquals } from '@blockera/utils';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 
 /**
@@ -210,63 +209,75 @@ export const BlockBase: ComponentType<any> = (
 		]
 	);
 
-	const [state, setState] = useState(blockAttributes);
-	const attributesRef = useRef(blockAttributes);
-
-	const setAttributes = (value: any) => {
-		attributesRef.current = value;
-		setState(value);
-	};
-
-	useEffect(() => {
-		if (
-			'function' === typeof handleOnChangeStyleInLocalState &&
-			!isShallowEqual(blockAttributes, state) &&
-			isShallowEqual(state, attributesRef.current) &&
-			false === insideBlockInspector
-		) {
-			handleOnChangeStyleInLocalState(state);
-		}
-
-		const timeoutId = setTimeout(() => {
-			if (
-				!isShallowEqual(blockAttributes, state) &&
-				isShallowEqual(state, attributesRef.current)
-			) {
-				setBlockAttributes(state);
-			}
-		}, 100);
-
-		return () => clearTimeout(timeoutId);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [state, attributesRef]);
-
-	const attributes = useMemo(
+	const compatibleAttributes = useMemo(
 		() =>
 			getCompatibleAttributes({
 				args,
 				isActive,
 				availableAttributes,
-				attributes: cloneObject(state),
+				attributes: cloneObject(blockAttributes),
 				defaultAttributes: originDefaultAttributes,
 			}),
-		[args, isActive, availableAttributes, state, originDefaultAttributes]
+		[
+			args,
+			isActive,
+			availableAttributes,
+			blockAttributes,
+			originDefaultAttributes,
+		]
 	);
 
+	const attributesRef = useRef(compatibleAttributes);
+	const [attributes, setState] = useState(compatibleAttributes);
+
+	/**
+	 * Set the attributes state and the attributes ref.
+	 *
+	 * @param {Object} value the compatible attributes arrived from the handleOnChangeAttributes function.
+	 */
+	const setAttributes = (value: any) => {
+		attributesRef.current = value;
+		setState(value);
+	};
+
+	// Update the parent state after 1 second to avoid unnecessary re-renders.
 	useEffect(() => {
-		if (!isShallowEqual(blockAttributes, state)) {
-			setAttributes(
-				getCompatibleAttributes({
-					args,
-					isActive,
-					availableAttributes,
-					attributes: cloneObject(blockAttributes),
-					defaultAttributes: originDefaultAttributes,
-				})
-			);
+		if (
+			'function' === typeof handleOnChangeStyleInLocalState &&
+			!isEquals(blockAttributes, attributes) &&
+			isEquals(attributes, attributesRef.current) &&
+			false === insideBlockInspector
+		) {
+			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
+			handleOnChangeStyleInLocalState(attributes);
+		}
+
+		const timeoutId = setTimeout(() => {
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (
+				!isEquals(blockAttributes, attributes) &&
+				isEquals(attributes, attributesRef.current)
+			) {
+				setBlockAttributes(attributes);
+			}
+		}, 1000); // Update the parent state after 1 second to avoid unnecessary re-renders.
+
+		return () => clearTimeout(timeoutId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [attributes, attributesRef]);
+
+	useEffect(() => {
+		// Compare the compatible attributes with the attributes and the attributes ref.
+		// If they are not equal, set the attributes to the compatible attributes.
+		if (
+			!isEquals(compatibleAttributes, attributes) &&
+			!isEquals(compatibleAttributes, attributesRef.current)
+		) {
+			setAttributes(compatibleAttributes);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockAttributes]);
+	}, [compatibleAttributes]);
 
 	const { className } = attributes;
 
