@@ -136,14 +136,11 @@ export const useAttributes = (
 
 			// Sets "blockeraPropsId" if it is empty.
 			if (!_attributes?.blockeraPropsId) {
-				_attributes = {
-					..._attributes,
-					blockeraPropsId: getAttributesWithIds(
-						_attributes,
-						'blockeraPropsId',
-						true
-					),
-				};
+				_attributes = getAttributesWithIds(
+					_attributes,
+					'blockeraPropsId',
+					true
+				);
 			}
 			// Sets "blockeraCompatId" if it is empty.
 			if (!_attributes?.blockeraCompatId) {
