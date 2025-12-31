@@ -62,10 +62,8 @@ class EditBlockHTML implements EditableBlockHTML {
 			return $html;
 		}
 
-		$this->setContext('feature');
-
 		// Enqueue the feature assets.
-		$this->enqueueAssets($data['plugin_base_path']);
+		$this->enqueueAssets($data['plugin_base_path'], 'feature');
 
 		if (str_contains($block['attrs']['className'] ?? '', 'blockera-is-icon-block')) {
 			return $app->make(IconBlock::class)->render($html, $this, $data);

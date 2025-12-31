@@ -89,9 +89,8 @@ class Block implements BlockInterface {
 			return $html;
 		}
 
-		$this->setContext('block');
 		// Enqueue the block assets.
-		$this->enqueueAssets($this->args['plugin_base_path']);
+		$this->enqueueAssets($this->args['plugin_base_path'], 'block');
 
 		$value = $block['attrs']['blockeraIcon']['value'] ?? $this->fallback_value;
 
@@ -137,17 +136,15 @@ class Block implements BlockInterface {
 				}
 
 				if (! empty($transform)) {
-					$transform .= 'transform:' . $transform . ';';
+					$transform = 'transform:' . $transform . ';';
 					$svg->setAttribute('style', $transform);
 				} else {
 					$svg->removeAttribute('style');
-				}				
-			} else {
-				$svg->removeAttribute('style');
-			}
+				}
 
-			$svg->setAttribute('focusable', 'false');
-			$svg->setAttribute('aria-hidden', 'true');
+				$svg->setAttribute('focusable', 'false');
+				$svg->setAttribute('aria-hidden', 'true');
+			}
 		}
 
 		return $dom->outerhtml;

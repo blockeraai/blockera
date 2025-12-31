@@ -5,56 +5,44 @@ namespace Blockera\Bootstrap\Traits;
 trait AssetsLoaderTrait {
 
 	/**
-	 * Store the context.
+	 * Store the asset context for backward compatibility.
 	 *
-	 * @var string $context the context.
+	 * @var string|null $asset_context the asset context.
 	 */
-	protected string $context;
+	protected $asset_context = null;
 
 	/**
-	 * Store the sub context.
+	 * Set the asset context (for backward compatibility with interfaces).
 	 *
-	 * @var string $sub_context the sub context.
-	 */
-	protected string $sub_context;
-
-	/**
-	 * Set the context.
-	 *
-	 * @param string $context the context.
+	 * @param string $context the asset context.
 	 * 
 	 * @return void
 	 */
 	public function setContext( string $context): void {
-
-		$this->context = $context;
+		$this->asset_context = $context;
 	}
 
 	/**
-	 * Set the sub context.
+	 * Enqueue assets for the given context.
 	 *
-	 * @param string $sub_context the sub context.
-	 *
-	 * @return void
-	 */
-	public function setSubContext( string $sub_context): void {
-
-		$this->sub_context = $sub_context;
-	}
-
-	/**
-	 * Enqueue the block assets.
-	 *
-	 * @param string $base_path The base path of the plugin.
+	 * @param string      $base_path The base path of the plugin.
+	 * @param string|null $asset_context The asset context (e.g., 'block', 'feature', 'blocks-core'). If null, uses stored context.
+	 * @param string|null $library_name The library name (e.g., 'wordpress', 'woocommerce'). Used only for 'blocks-core' context.
 	 *
 	 * @return void
 	 */
-	public function enqueueAssets( string $base_path): void {
-
+	public function enqueueAssets( string $base_path, $asset_context = null, $library_name = null): void {
 		static $cache = [];
 
+		// Use provided context or fall back to stored context.
+		$context = $asset_context ?? $this->asset_context;
+
+		if (empty($context)) {
+			return;
+		}
+
 		$id = $this->getId();
-		$cache_key = $this->context . '|' . ($this->sub_context ?? '') . '|' . $id;
+		$cache_key = $context . '|' . ($library_name ?? '') . '|' . $id;
 
 		if (isset($cache[$cache_key])) {
 			return;
@@ -62,29 +50,25 @@ trait AssetsLoaderTrait {
 
 		$subdirectory = '/src/';
 
-		switch ($this->context) {
+		switch ($context) {
 			case 'blocks-core':
-				$subdirectory = '/php/libs/' . $this->sub_context . '/';
-				$context_path = $base_path . $this->context . $subdirectory . $id . '/';
+				if (empty($library_name)) {
+					return;
+				}
+				$subdirectory = '/php/libs/' . $library_name . '/';
+				$context_path = $base_path . $context . $subdirectory . $id . '/';
 				break;
 
 			default:
 				$subdirectory = '/src/';
-				$context_path = $base_path . $this->context . '-' . $id . '/' . $subdirectory;
+				$context_path = $base_path . $context . '-' . $id . '/' . $subdirectory;
 		}
 
 		$css_file_path = $context_path . 'style.css';
 		$js_file_path  = $context_path . 'script.js';
 
-		switch($this->sub_context) {
-			case 'wordpress':
-				$handle = 'wp-block-' . $id;
-				break;
-
-			default:
-				$handle = 'blockera-block-'. $id;
-				break;
-		}
+		// Determine handle.
+		$handle = 'blockera-block' . '-' . $id;
 		
 		// Check if the CSS and JS files exist.
 		$css_exists = file_exists($css_file_path);
@@ -112,12 +96,11 @@ trait AssetsLoaderTrait {
 	}
 
 	/**
-	 * Get the block id.
+	 * Get the block/feature id.
 	 *
-	 * @return string the block id.
+	 * @return string the block/feature id.
 	 */
 	public function getId(): string {
-
 		return $this->id;
 	}
 }

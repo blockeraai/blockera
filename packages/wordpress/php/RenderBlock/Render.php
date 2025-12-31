@@ -226,7 +226,7 @@ class Render {
 		}
 
 		// Enqueue block assets.
-		$this->enqueueBlockAssets( $extracted_name[0], $this->id );
+		$this->enqueueBlockAssets( $extracted_name[0] );
 
 		// Resetting styles properties.
 		$this->resetStylesProperties();
@@ -242,9 +242,8 @@ class Render {
 	 * @return void
 	 */
 	protected function enqueueBlockAssets( string $block_library_prefix ): void {
-		$this->setContext('blocks-core');
-		$this->setSubContext(blockera_get_block_library_name( $block_library_prefix ));
-		$this->enqueueAssets($this->args['plugin_base_path']);
+		$library_name = blockera_get_block_library_name( $block_library_prefix );
+		$this->enqueueAssets($this->args['plugin_base_path'], 'blocks-core', $library_name);
 	}
 
 	/**
