@@ -209,9 +209,14 @@ class Render {
 		}
 
 		if ( ! empty( $classes_to_add ) ) {
-			// Build replacement string efficiently: single concatenation, then trim once.
-			$new_class_name = trim( $base_unique_class_name . ' ' . implode( ' ', $classes_to_add ), ' ' );
-			$html           = str_replace( $base_unique_class_name, $new_class_name, $html );
+			// Build replacement string efficiently: avoid trim() overhead by building directly.
+			// Since $classes_to_add is non-empty, we always have a space separator.
+			$new_class_name = $base_unique_class_name . ' ' . implode( ' ', $classes_to_add );
+
+			// Use regex to replace only when $base_unique_class_name is followed by " or ' or space.
+			// Cache preg_quote result and use simpler pattern for better performance.
+			$escaped = preg_quote($base_unique_class_name, '/');
+			$html    = preg_replace('/' . $escaped . '(?=["\'\s])/', $new_class_name, $html);
 		}
 
 		// We should ensure the generated css is unique.
