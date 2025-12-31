@@ -90,11 +90,8 @@ class Block implements BlockInterface {
 		}
 
 		$this->setContext('block');
-		$this->enqueueAssets(
-			$this->args['plugin_base_path'],
-			$this->args['plugin_base_url'],
-			$this->args['plugin_version']
-		);
+		// Enqueue the block assets.
+		$this->enqueueAssets($this->args['plugin_base_path']);
 
 		$value = $block['attrs']['blockeraIcon']['value'] ?? $this->fallback_value;
 

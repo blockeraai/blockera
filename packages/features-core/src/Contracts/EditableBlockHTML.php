@@ -34,10 +34,8 @@ interface EditableBlockHTML {
 	 * Enqueue the feature assets.
 	 * 
 	 * @param string $base_path The base path of the plugin.
-	 * @param string $base_url The base url of the plugin.
-	 * @param string $version The version of the plugin.
 	 *
 	 * @return void
 	 */
-	public function enqueueAssets( string $base_path, string $base_url, string $version): void;
+	public function enqueueAssets( string $base_path): void;
 }

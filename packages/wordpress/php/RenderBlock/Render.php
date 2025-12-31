@@ -244,7 +244,7 @@ class Render {
 	protected function enqueueBlockAssets( string $block_library_prefix ): void {
 		$this->setContext('blocks-core');
 		$this->setSubContext(blockera_get_block_library_name( $block_library_prefix ));
-		$this->enqueueAssets($this->args['plugin_base_path'], $this->args['plugin_base_url'], $this->args['plugin_version']);
+		$this->enqueueAssets($this->args['plugin_base_path']);
 	}
 
 	/**

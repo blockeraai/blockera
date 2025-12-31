@@ -46,12 +46,10 @@ trait AssetsLoaderTrait {
 	 * Enqueue the block assets.
 	 *
 	 * @param string $base_path The base path of the plugin.
-	 * @param string $base_url The base url of the plugin.
-	 * @param string $version The version of the plugin.
 	 *
 	 * @return void
 	 */
-	public function enqueueAssets( string $base_path, string $base_url, string $version): void {
+	public function enqueueAssets( string $base_path): void {
 
 		static $cache = [];
 
@@ -68,26 +66,46 @@ trait AssetsLoaderTrait {
 			case 'blocks-core':
 				$subdirectory = '/php/libs/' . $this->sub_context . '/';
 				$context_path = $base_path . $this->context . $subdirectory . $id . '/';
-				$context_url  = $base_url . $this->context . $subdirectory . $id . '/';
 				break;
 
 			default:
 				$subdirectory = '/src/';
 				$context_path = $base_path . $this->context . '-' . $id . '/' . $subdirectory;
-				$context_url  = $base_url . $this->context . '-' . $id . '/' . $subdirectory;
 		}
 
 		$css_file_path = $context_path . 'style.css';
 		$js_file_path  = $context_path . 'script.js';
-		$style_handle = 'blockera-' . $this->context . '-' . $id . '-style';
-		$script_handle = 'blockera-' . $this->context . '-' . $id . '-script';
 
-		if (file_exists($css_file_path)) {
-			wp_enqueue_style($style_handle, $context_url . 'style.css', [], $version);
+		switch($this->sub_context) {
+			case 'wordpress':
+				$handle = 'wp-block-' . $id;
+				break;
+
+			default:
+				$handle = 'blockera-block-'. $id;
+				break;
 		}
+		
+		// Check if the CSS and JS files exist.
+		$css_exists = file_exists($css_file_path);
+		$js_exists  = file_exists($js_file_path);
 
-		if (file_exists($js_file_path)) {
-			wp_enqueue_script($script_handle, $context_url . 'script.js', [], $version, ['in_footer' => true]);
+		if ($css_exists || $js_exists) {
+			$filesystem = blockera_get_filesystem();
+
+			// Adding inline styles to the stylesheet.
+			if ($css_exists) {
+				wp_register_style($handle, false);
+				wp_add_inline_style($handle, $filesystem->get_contents($css_file_path));
+				wp_enqueue_style($handle);
+			}
+
+			// Adding inline scripts to the script.
+			if ($js_exists) {
+				wp_register_script($handle, false);
+				wp_add_inline_script($handle, $filesystem->get_contents($js_file_path));
+				wp_enqueue_script($handle);
+			}
 		}
 
 		$cache[$cache_key] = true;
