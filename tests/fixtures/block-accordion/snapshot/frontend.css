@@ -210,6 +210,6 @@ p.blockera-block.blockera-block-17 {
 	padding: 20px 20px 20px 20px;
 }
 
-:where(.blockera-block-17 .has-inline-color) {
+.blockera-block-17 :where(.blockera-block-17-child-1) {
 	background-color: #dfdfdf;
 }
