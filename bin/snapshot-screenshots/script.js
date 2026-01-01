@@ -52,6 +52,8 @@ let failingTests = 0;
 let missingTests = 0;
 // Threshold for comparison (default 3% = 0.03)
 let comparisonThreshold = 0.03;
+// Current filter state
+let currentFilter = 'all';
 // Store comparison results for re-evaluation when threshold changes
 const comparisonResults = new Map();
 // Store image dimensions for dimension comparison
@@ -302,6 +304,71 @@ function updateTestSectionStatus(
 		section.classList.remove('test-failed');
 		section.classList.remove('test-missing');
 	}
+
+	// Apply current filter after status update
+	applyFilter();
+}
+
+// Function to set the active filter
+function setFilter(filter) {
+	currentFilter = filter;
+
+	// Update button states
+	document.querySelectorAll('.filter-btn').forEach((btn) => {
+		if (btn.dataset.filter === filter) {
+			btn.classList.add('active');
+		} else {
+			btn.classList.remove('active');
+		}
+	});
+
+	// Apply the filter
+	applyFilter();
+}
+
+// Attach filter button event listeners
+function attachFilterHandlers() {
+	document.querySelectorAll('.filter-btn').forEach((btn) => {
+		btn.addEventListener('click', function () {
+			setFilter(this.dataset.filter);
+		});
+	});
+}
+
+// Function to apply the current filter to test sections
+function applyFilter() {
+	const testSections = document.querySelectorAll('.test-section');
+
+	testSections.forEach((section) => {
+		const isPassed = section.classList.contains('test-passed');
+		const isFailed = section.classList.contains('test-failed');
+		const isMissing = section.classList.contains('test-missing');
+
+		let shouldShow = false;
+
+		switch (currentFilter) {
+			case 'all':
+				shouldShow = true;
+				break;
+			case 'passing':
+				shouldShow = isPassed;
+				break;
+			case 'failing':
+				shouldShow = isFailed;
+				break;
+			case 'missing':
+				shouldShow = isMissing;
+				break;
+			default:
+				shouldShow = true;
+		}
+
+		if (shouldShow) {
+			section.style.display = '';
+		} else {
+			section.style.display = 'none';
+		}
+	});
 }
 
 // Function to check and update row label dimensions
@@ -572,6 +639,9 @@ async function processComparisons() {
 
 	// Ensure threshold handler is attached after comparisons complete
 	attachThresholdHandler();
+
+	// Apply current filter after all comparisons complete
+	applyFilter();
 }
 
 async function processComparison(test, type) {
@@ -1313,6 +1383,9 @@ async function reevaluateComparisons() {
 	document.getElementById('stat-failing').textContent = failingTests;
 	document.getElementById('stat-missing').textContent = missingTests;
 	updateNavigationButtons();
+
+	// Apply current filter after re-evaluation
+	applyFilter();
 }
 
 // Threshold input change handler
@@ -1351,6 +1424,13 @@ if (!attachThresholdHandler()) {
 			attachThresholdHandler();
 		}, 100);
 	}
+}
+
+// Attach filter handlers
+if (document.readyState === 'loading') {
+	document.addEventListener('DOMContentLoaded', attachFilterHandlers);
+} else {
+	attachFilterHandlers();
 }
 
 // Start processing when page loads

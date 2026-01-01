@@ -14,11 +14,12 @@ body {
 .header {
     background: #fff;
     border-bottom: 1px solid #c3c4c7;
-    padding: 20px 0;
+    border-top: 5px solid #2171b1;
+    padding: 30px 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {
@@ -74,6 +75,53 @@ body {
     color: #dba617;
 }
 
+.filter-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.filter-label {
+    font-size: 13px;
+    color: #646970;
+    font-weight: 500;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 5px;
+}
+
+.filter-btn {
+    padding: 6px 12px;
+    background: #fff;
+    color: #646970;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.filter-btn:hover {
+    background: #f0f0f1;
+    border-color: #8c8f94;
+}
+
+.filter-btn.active {
+    background: #2271b1;
+    color: #fff;
+    border-color: #2271b1;
+}
+
+.filter-btn.active:hover {
+    background: #135e96;
+    border-color: #135e96;
+}
+
 .threshold-control {
     display: flex;
     align-items: center;
@@ -101,32 +149,6 @@ body {
     outline: none;
     border-color: #2271b1;
     box-shadow: 0 0 0 1px #2271b1;
-}
-
-.nav-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.nav-btn {
-    padding: 8px 16px;
-    background: #2271b1;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.2s;
-}
-
-.nav-btn:hover:not(:disabled) {
-    background: #135e96;
-}
-
-.nav-btn:disabled {
-    background: #c3c4c7;
-    cursor: not-allowed;
-    opacity: 0.6;
 }
 
 .progress-indicator {
@@ -158,6 +180,7 @@ body {
     margin-bottom: 30px;
     padding: 20px;
     scroll-margin-top: 100px;
+	transition: all 0.3s ease;
 }
 
 .test-section.highlighted {
@@ -223,12 +246,8 @@ body {
 .test-section.test-passed {
 	background: #effff6;
     border-color: #01a32a;
-	opacity: 0.4;
 }
 
-.test-section.test-passed:hover {
-	opacity: 1;
-}
 
 .test-section.test-failed {
 	background: #fef7f7;
@@ -722,14 +741,5 @@ body {
     .stats-container {
         flex-direction: column;
         align-items: flex-start;
-    }
-    
-    .nav-buttons {
-        margin-left: 0;
-        width: 100%;
-    }
-    
-    .nav-btn {
-        flex: 1;
     }
 }

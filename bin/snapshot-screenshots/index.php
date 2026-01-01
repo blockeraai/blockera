@@ -142,13 +142,18 @@ $tests_json = json_encode($tests, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | 
                     <span class="stat-label">Missing</span>
                     <span class="stat-value missing" id="stat-missing">0</span>
                 </div>
+                <div class="filter-control">
+                    <label class="filter-label">Filter:</label>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="failing">Failing</button>
+                        <button class="filter-btn" data-filter="passing">Passing</button>
+                        <button class="filter-btn" data-filter="missing">Missing</button>
+                    </div>
+                </div>
                 <div class="threshold-control">
                     <label for="threshold-input" class="threshold-label">Threshold (%):</label>
                     <input type="number" id="threshold-input" class="threshold-input" value="3" min="0" max="100" step="0.1">
-                </div>
-                <div class="nav-buttons">
-                    <button class="nav-btn" id="btn-prev" onclick="navigateToFailing(-1)">← Previous Failing</button>
-                    <button class="nav-btn" id="btn-next" onclick="navigateToFailing(1)">Next Failing →</button>
                 </div>
             </div>
         </div>
