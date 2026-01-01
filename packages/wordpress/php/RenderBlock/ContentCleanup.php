@@ -113,6 +113,30 @@ class ContentCleanup {
 	];
 
 	/**
+	 * List of CSS properties and values to preserve in inline styles.
+	 * 
+	 * Properties listed here will remain in the style attribute instead of being
+	 * extracted to external CSS. This is useful for properties that need to remain
+	 * inline for functionality (e.g., display: none for hidden elements).
+	 * 
+	 * Format: ['property-name' => 'value']
+	 * 
+	 * @var array<string, string>
+	 */
+	protected static array $preserved_inline_properties = [
+		'display' => 'none',
+	];
+
+	/**
+	 * Cached regex pattern for extracting preserved properties from style values.
+	 * 
+	 * Built once from $preserved_inline_properties array and cached for performance.
+	 * 
+	 * @var string|null
+	 */
+	protected static ?string $preserved_properties_pattern = null;
+
+	/**
 	 * Cached property pattern for style cleanup.
 	 *
 	 * @var string|null
@@ -182,8 +206,13 @@ class ContentCleanup {
 				continue;
 			}
 
-			// Extract and remove inline style from element.
-			$updated_tag = $this->extractAndRemoveStyle( $tag_name, $before_attrs, $after_attrs, $full_tag );
+			// Extract preserved properties (e.g., display: none) from style value.
+			$extracted            = $this->extractPreservedProperties( $style_value );
+			$preserved_properties = $extracted['preserved'];
+			$remaining_style      = $extracted['remaining'];
+
+			// Extract and remove inline style from element, preserving specified properties.
+			$updated_tag = $this->extractAndRemoveStyle( $tag_name, $before_attrs, $after_attrs, $full_tag, $preserved_properties );
 
 			// If a new class needs to be added, add it to the tag.
 			if ( ! empty( $selector_data['new_class'] ) ) {
@@ -202,13 +231,32 @@ class ContentCleanup {
 
 			$processed_content = substr_replace( $processed_content, $updated_tag, $position, $replace_length );
 
-			// Store CSS rule (even for empty style values).
+			// Store CSS rule.
+			// Use remaining styles (preserved properties excluded) for CSS output.
 			// Normalize style value: remove extra spaces around colons and semicolons.
-			$normalized_style  = $this->normalizeStyleValue( $style_value );
-			$this->css_rules[] = [
-				'selector' => $selector_data['selector'],
-				'styles'   => $normalized_style,
-			];
+			$normalized_style = $this->normalizeStyleValue( $remaining_style );
+			
+			// Determine if we should add CSS rule:
+			// - If original style was empty (style=""), create empty CSS rule (;).
+			// - If remaining styles are empty after extracting preserved properties, skip CSS rule.
+			// - Otherwise, add CSS rule with normalized styles.
+			$original_was_empty = empty( trim( $style_value ) );
+			$remaining_is_empty = empty( $normalized_style );
+			
+			if ( $original_was_empty ) {
+				// Original style was empty - create empty CSS rule to match old behavior.
+				$this->css_rules[] = [
+					'selector' => $selector_data['selector'],
+					'styles'   => ';',
+				];
+			} elseif ( ! $remaining_is_empty ) {
+				// Remaining styles exist after extracting preserved properties - add CSS rule.
+				$this->css_rules[] = [
+					'selector' => $selector_data['selector'],
+					'styles'   => $normalized_style,
+				];
+			}
+			// If original had styles but remaining is empty (all were preserved), skip CSS rule.
 		}
 
 		// Build CSS content without <style> tags.
@@ -674,10 +722,11 @@ class ContentCleanup {
 	 * @param string $before_attrs Attributes before style attribute.
 	 * @param string $after_attrs Attributes after style attribute.
 	 * @param string $original_tag The original full tag.
+	 * @param string $preserved_properties Optional. Preserved properties to keep in style attribute (e.g., "display: none").
 	 *
-	 * @return string The updated tag without style attribute.
+	 * @return string The updated tag without style attribute (or with preserved properties if provided).
 	 */
-	protected function extractAndRemoveStyle( string $tag_name, string $before_attrs, string $after_attrs, string $original_tag ): string {
+	protected function extractAndRemoveStyle( string $tag_name, string $before_attrs, string $after_attrs, string $original_tag, string $preserved_properties = '' ): string {
 
 		// Remove any '>' characters that might have been incorrectly captured in attributes.
 		// The '>' should only appear as the tag closer, not in attributes.
@@ -701,6 +750,12 @@ class ContentCleanup {
 		if ( ! empty( $all_attrs ) ) {
 			$new_tag .= ' ' . $all_attrs;
 		}
+
+		// If preserved properties exist, add them back as style attribute.
+		if ( ! empty( $preserved_properties ) ) {
+			$new_tag .= ' style="' . esc_attr( $preserved_properties ) . '"';
+		}
+
 		$new_tag .= '>';
 
 		return $new_tag;
@@ -763,6 +818,89 @@ class ContentCleanup {
 		$normalized = preg_replace( '/;\s*$/', ';', $normalized );
 
 		return $normalized;
+	}
+
+	/**
+	 * Extract preserved properties from style value and return remaining styles.
+	 * 
+	 * Preserved properties (e.g., display: none) are kept in inline styles,
+	 * while other properties are extracted to external CSS.
+	 * 
+	 * Uses cached regex pattern for performance. Pattern is built once from
+	 * $preserved_inline_properties array and reused.
+	 * 
+	 * @param string $style_value The style value to process.
+	 * 
+	 * @return array Array with 'preserved' (string) and 'remaining' (string) keys.
+	 */
+	protected function extractPreservedProperties( string $style_value ): array {
+
+		// Early return if empty.
+		if ( empty( trim( $style_value ) ) ) {
+			return [
+				'preserved' => '',
+				'remaining' => '',
+			];
+		}
+
+		// Build and cache regex pattern once (lazy initialization).
+		if ( null === self::$preserved_properties_pattern ) {
+			$properties = [];
+			$values     = [];
+
+			foreach ( self::$preserved_inline_properties as $prop => $val ) {
+				// Escape special regex characters in property and value names.
+				$properties[] = preg_quote( $prop, '/' );
+				$values[]     = preg_quote( $val, '/' );
+			}
+
+			// Build alternation patterns: (prop1|prop2|...) and (val1|val2|...).
+			$prop_pattern = implode( '|', $properties );
+			$val_pattern  = implode( '|', $values );
+
+			// Pattern matches: property:value with optional !important and semicolon.
+			// Case-insensitive, handles spacing variations.
+			self::$preserved_properties_pattern = '/\b(' . $prop_pattern . ')\s*:\s*(' . $val_pattern . ')(\s*!important)?\s*;?/i';
+		}
+
+		// Extract all preserved properties in one pass.
+		$preserved_parts = [];
+		$remaining       = $style_value;
+
+		// Find all matches and collect preserved properties.
+		if ( preg_match_all( self::$preserved_properties_pattern, $style_value, $matches, PREG_SET_ORDER ) ) {
+			foreach ( $matches as $match ) {
+				$prop_name  = $match[1];
+				$prop_value = $match[2];
+				$important  = isset( $match[3] ) && ! empty( trim( $match[3] ) ) ? ' !important' : '';
+
+				// Normalize: single space, proper format.
+				$normalized = strtolower( $prop_name ) . ': ' . strtolower( $prop_value ) . $important;
+
+				// Store preserved property (avoid duplicates).
+				$preserved_key = $normalized;
+				if ( ! isset( $preserved_parts[ $preserved_key ] ) ) {
+					$preserved_parts[ $preserved_key ] = $normalized;
+				}
+			}
+
+			// Remove all preserved properties from remaining string in one pass.
+			$remaining = preg_replace( self::$preserved_properties_pattern, '', $style_value );
+		}
+
+		// Normalize remaining styles: clean up extra semicolons and whitespace.
+		$remaining = trim( $remaining );
+		$remaining = preg_replace( '/\s*;\s*/', '; ', $remaining );
+		$remaining = preg_replace( '/\s+/', ' ', $remaining );
+		$remaining = trim( $remaining, '; ' );
+
+		// Combine preserved properties into single string.
+		$preserved = ! empty( $preserved_parts ) ? implode( '; ', $preserved_parts ) : '';
+
+		return [
+			'preserved' => $preserved,
+			'remaining' => $remaining,
+		];
 	}
 
 	/**

@@ -764,5 +764,258 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertEquals( '', $result['content'] );
 		$this->assertEquals( '', $result['style'] );
 	}
+
+	/**
+	 * Test that display: none alone is preserved in tag and not extracted to CSS.
+	 */
+	public function testPreserveDisplayNoneAlone(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// display: none should remain in tag.
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Should not be in CSS output.
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+		// CSS should be empty since only display: none was present.
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test that display: none with other properties preserves display: none and extracts others to CSS.
+	 */
+	public function testPreserveDisplayNoneWithOtherProperties(): void {
+
+		$html = '<div class="blockera-block-abc123" style="color: red; display: none; margin: 10px;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// display: none should remain in tag.
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Other properties should be in CSS.
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringContainsString( 'margin: 10px', $result['style'] );
+		// display: none should NOT be in CSS.
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test that display: none at beginning of style string is preserved.
+	 */
+	public function testPreserveDisplayNoneAtBeginning(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none; color: red;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test that display: none at end of style string is preserved.
+	 */
+	public function testPreserveDisplayNoneAtEnd(): void {
+
+		$html = '<div class="blockera-block-abc123" style="color: red; display: none;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test that display: none in middle of style string is preserved.
+	 */
+	public function testPreserveDisplayNoneInMiddle(): void {
+
+		$html = '<div class="blockera-block-abc123" style="color: red; display: none; margin: 10px;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringContainsString( 'margin: 10px', $result['style'] );
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test case-insensitive matching: Display: None.
+	 */
+	public function testPreserveDisplayNoneCaseInsensitive(): void {
+
+		$html = '<div class="blockera-block-abc123" style="Display: None;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test case-insensitive matching: DISPLAY: NONE.
+	 */
+	public function testPreserveDisplayNoneUppercase(): void {
+
+		$html = '<div class="blockera-block-abc123" style="DISPLAY: NONE;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test spacing variation: display:none (no spaces).
+	 */
+	public function testPreserveDisplayNoneNoSpaces(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display:none;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test spacing variation: display:  none (extra spaces).
+	 */
+	public function testPreserveDisplayNoneExtraSpaces(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display:  none;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test with semicolon: display: none;.
+	 */
+	public function testPreserveDisplayNoneWithSemicolon(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test with !important: display: none !important.
+	 */
+	public function testPreserveDisplayNoneWithImportant(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none !important;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none !important"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test display: none !important with other properties.
+	 */
+	public function testPreserveDisplayNoneImportantWithOtherProperties(): void {
+
+		$html = '<div class="blockera-block-abc123" style="color: red; display: none !important; margin: 10px;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none !important"', $result['content'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringContainsString( 'margin: 10px', $result['style'] );
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test Priority 1 (blockera-block-*): display: none preservation.
+	 */
+	public function testPreserveDisplayNonePriority1BlockeraBlock(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none; color: red;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertStringContainsString( ':where(.blockera-block-abc123)', $result['style'] );
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test Priority 3 (parent blockera-block): display: none preservation for children.
+	 */
+	public function testPreserveDisplayNonePriority3ParentBlockeraBlock(): void {
+
+		$html = '<div class="blockera-block-parent"><span style="display: none; color: green;">Child</span></div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Child should have display: none preserved.
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Child should get counter-based class.
+		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
+		// Other properties should be in CSS.
+		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( 'color: green', $result['style'] );
+		// display: none should NOT be in CSS.
+		$this->assertStringNotContainsString( 'display: none', $result['style'] );
+	}
+
+	/**
+	 * Test edge case: display: none with only whitespace in style attribute.
+	 */
+	public function testPreserveDisplayNoneWithWhitespaceOnly(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none;   ">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test that display: none is preserved even when wp-block-* should skip (Priority 2).
+	 * Note: wp-block-* without blockera-block-* skips processing, so display: none should remain.
+	 */
+	public function testPreserveDisplayNoneWithWpBlockSkip(): void {
+
+		$html = '<div class="wp-block-button" style="display: none; color: blue;">Button</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Should skip processing - inline style should remain (including display: none).
+		$this->assertStringContainsString( 'style="display: none; color: blue;"', $result['content'] );
+		// Should not generate any CSS.
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test multiple display: none occurrences (should be deduplicated).
+	 */
+	public function testPreserveDisplayNoneMultipleOccurrences(): void {
+
+		$html = '<div class="blockera-block-abc123" style="display: none; color: red; display: none;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Should have only one display: none in preserved style.
+		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Should not have duplicate display: none.
+		$style_count = substr_count( $result['content'], 'display: none' );
+		$this->assertEquals( 1, $style_count, 'display: none should appear only once' );
+		// Other properties should be in CSS.
+		$this->assertStringContainsString( 'color: red', $result['style'] );
+	}
 }
 
