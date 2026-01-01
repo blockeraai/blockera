@@ -1,8 +1,11 @@
 [
 	"wp-block-accordion-heading-inline-css",
+	"blockera-block-accordion-heading-inline-css",
 	"wp-block-paragraph-inline-css",
 	"wp-block-accordion-panel-inline-css",
 	"wp-block-accordion-item-inline-css",
+	"blockera-block-accordion-item-inline-css",
 	"wp-block-accordion-inline-css",
+	"blockera-block-accordion-inline-css",
 	"wp-block-library-inline-css"
 ]
