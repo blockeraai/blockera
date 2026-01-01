@@ -71,6 +71,7 @@ function loadFixtures() {
 
 		// Try to load setup.js for this section
 		let setupFn = null;
+		let frontendSetupFn = null;
 		const setupPath = path.join(sectionDir, 'setup.js');
 		if (fs.existsSync(setupPath)) {
 			try {
@@ -79,10 +80,12 @@ function loadFixtures() {
 				// Load setup function (now converted to CommonJS/Playwright)
 				const setupModule = require(setupPath);
 				setupFn = setupModule.setup || setupModule.default;
+				frontendSetupFn = setupModule.frontendSetup || setupModule.frontendSetupFn;
 			} catch (error) {
 				// Setup file exists but can't be loaded
 				console.warn(`Failed to load setup.js for ${sectionId}:`, error.message);
 				setupFn = null;
+				frontendSetupFn = null;
 			}
 		}
 
@@ -92,7 +95,7 @@ function loadFixtures() {
 		const shouldScreenshot = !config || config.screenshot !== false;
 
 		if (shouldScreenshot) {
-			sections[sectionId] = { setupFn, sectionContent };
+			sections[sectionId] = { setupFn, frontendSetupFn, sectionContent };
 		}
 	}
 
@@ -183,10 +186,11 @@ async function compareScreenshot(
 }
 
 test.describe('Sections design with Style Engine', () => {
-	for (const section of Object.keys(sections)) {
+		for (const section of Object.keys(sections)) {
 		const sectionData = sections[section];
 		const sectionContent = sectionData.sectionContent || '';
 		const setupFn = sectionData?.setupFn;
+		const frontendSetupFn = sectionData?.frontendSetupFn;
 
 		// Configure snapshot directory for this specific test
 		const snapshotDir = path.resolve(
@@ -300,6 +304,11 @@ test.describe('Sections design with Style Engine', () => {
 					await savePage(page);
 					await redirectToFrontPage(page);
 					await prepareFrontendForScreenshot(page);
+
+					// Run frontend setup if it exists
+					if (frontendSetupFn) {
+						await frontendSetupFn(page);
+					}
 
 					// wait to make sure images loaded and content is ready
 					await page.waitForTimeout(500);
