@@ -19,7 +19,6 @@
 	color: var(--blockera--icon--color, inherit);
 	width: var(--blockera--icon--size, 1.33em);
 	height: var(--blockera--icon--size, 1.33em);
-	margin: auto 0;
 	vertical-align: middle;
 	align-self: center;
 	transform: rotate(var(--blockera--icon--rotate, 0deg))
