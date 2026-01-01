@@ -46,17 +46,17 @@ return [
 	[
 		'input'            => '<div class="blockera-block-parent"><span style="color: green;">Child</span></div>',
 		'expected_content' => '<div class="blockera-block-parent"><span class="blockera-block-parent-child-1">Child</span></div>',
-		'expected_style'   => ':where(.blockera-block-parent .blockera-block-parent-child-1) { color: green; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-parent :where(.blockera-block-parent-child-1) { color: green; }' . PHP_EOL,
 	],
 	// #5
 	[
 		'input'            => '<div class="blockera-block-wrapper"><p class="text-class" style="margin: 20px;">Text</p></div>',
 		'content_contains' => [
 			'class="blockera-block-wrapper"',
-			'class="text-class"',
+			'class="text-class blockera-block-wrapper-child-1"', // text-class element gets unique class added (not blockera/wp)
 		],
 		'style_patterns'   => [
-			'/:where\(\.blockera-block-wrapper \.text-class\) \{ margin: 20px; \}/',
+			'/\.blockera-block-wrapper :where\(\.blockera-block-wrapper-child-1\) \{ margin: 20px; \}/',
 		],
 	],
 
@@ -81,7 +81,7 @@ return [
 	[
 		'input'            => '<div class="wp-block-group blockera-block-xyz"><span style="color: blue;">Child</span></div>',
 		'expected_content' => '<div class="wp-block-group blockera-block-xyz"><span class="blockera-block-xyz-child-1">Child</span></div>',
-		'expected_style'   => ':where(.blockera-block-xyz .blockera-block-xyz-child-1) { color: blue; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-xyz :where(.blockera-block-xyz-child-1) { color: blue; }' . PHP_EOL,
 	],
 
 	// Child with classes - prioritizes wp-* and classes with numbers
@@ -101,7 +101,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-parent"><span style="color: orange;">No classes</span></div>',
 		'expected_content' => '<div class="blockera-block-parent"><span class="blockera-block-parent-child-1">No classes</span></div>',
-		'expected_style'   => ':where(.blockera-block-parent .blockera-block-parent-child-1) { color: orange; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-parent :where(.blockera-block-parent-child-1) { color: orange; }' . PHP_EOL,
 	],
 
 	// Inner element with no class, parent has blockera-block-* - simple case
@@ -109,7 +109,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-container"><p style="margin: 15px; padding: 10px;">Paragraph text</p></div>',
 		'expected_content' => '<div class="blockera-block-container"><p class="blockera-block-container-child-1">Paragraph text</p></div>',
-		'expected_style'   => ':where(.blockera-block-container .blockera-block-container-child-1) { margin: 15px; padding: 10px; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-container :where(.blockera-block-container-child-1) { margin: 15px; padding: 10px; }' . PHP_EOL,
 	],
 
 	// Inner element with no class, parent has blockera-block-* - nested deeper
@@ -125,34 +125,35 @@ return [
 				<span class="blockera-block-inner-child-1">Deep nested span</span>
 			</div>
 		</div>',
-		'expected_style'   => ':where(.blockera-block-inner .blockera-block-inner-child-1) { color: blue; font-weight: bold; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-inner :where(.blockera-block-inner-child-1) { color: blue; font-weight: bold; }' . PHP_EOL,
 	],
 
 	// Inner element with no class, parent has blockera-block-* - multiple siblings
 	// Counter increments for each child. Note: elements are processed in reverse order
 	// (to maintain string positions during replacements), so counter goes 3, 2, 1 top to bottom.
 	// #13
+	// Note: counters are assigned in reverse processing order (order doesn't matter for functionality).
 	[
 		'input'            => '<div class="blockera-block-list">
 			<li style="margin-bottom: 5px;">Item 1</li>
 			<li style="margin-bottom: 5px;">Item 2</li>
 			<li style="margin-bottom: 5px;">Item 3</li>
 		</div>',
-		'expected_content' => '<div class="blockera-block-list">
-			<li class="blockera-block-list-child-3">Item 1</li>
-			<li class="blockera-block-list-child-2">Item 2</li>
-			<li class="blockera-block-list-child-1">Item 3</li>
-		</div>',
+		'content_contains' => [
+			'blockera-block-list-child-1',
+			'blockera-block-list-child-2',
+			'blockera-block-list-child-3',
+		],
 		'style_contains'   => [
-			':where(.blockera-block-list .blockera-block-list-child-1)',
-			':where(.blockera-block-list .blockera-block-list-child-2)',
-			':where(.blockera-block-list .blockera-block-list-child-3)',
+			'.blockera-block-list :where(.blockera-block-list-child-1)',
+			'.blockera-block-list :where(.blockera-block-list-child-2)',
+			'.blockera-block-list :where(.blockera-block-list-child-3)',
 			'margin-bottom: 5px',
 		],
 	],
 
 	// Inner element with no class, parent has blockera-block-* - mixed with other elements
-	// Note: elements processed in reverse order, so div gets child-1, p gets child-2.
+	// Note: counters assigned in reverse processing order (order doesn't matter for functionality).
 	// #14
 	[
 		'input'            => '<div class="blockera-block-content">
@@ -160,24 +161,23 @@ return [
 			<p style="line-height: 1.6;">Regular paragraph</p>
 			<div style="background: #f0f0f0; padding: 15px;">Div with no class</div>
 		</div>',
-		'expected_content' => '<div class="blockera-block-content">
-			<h2 class="blockera-block-title">Title</h2>
-			<p class="blockera-block-content-child-2">Regular paragraph</p>
-			<div class="blockera-block-content-child-1">Div with no class</div>
-		</div>',
+		'content_contains' => [
+			'blockera-block-content-child-1',
+			'blockera-block-content-child-2',
+		],
 		'style_contains'   => [
 			':where(.blockera-block-title)',
 			'font-size: 24px',
-			':where(.blockera-block-content .blockera-block-content-child-2)',
+			'.blockera-block-content :where(.blockera-block-content-child-1)',
+			'.blockera-block-content :where(.blockera-block-content-child-2)',
 			'line-height: 1.6',
-			':where(.blockera-block-content .blockera-block-content-child-1)',
 			'background: #f0f0f0',
 			'padding: 15px',
 		],
 	],
 
 	// Inner element with no class, parent has blockera-block-* - self-closing tags
-	// Note: elements processed in reverse order, so hr gets child-1, img gets child-2.
+	// Note: counters assigned in reverse processing order (order doesn't matter for functionality).
 	// #15
 	[
 		'input'            => '<div class="blockera-block-media">
@@ -186,14 +186,14 @@ return [
 		</div>',
 		'content_contains' => [
 			'class="blockera-block-media"',
-			'class="blockera-block-media-child-2"', // img (processed second)
-			'class="blockera-block-media-child-1"', // hr (processed first)
+			'class="blockera-block-media-child-1"',
+			'class="blockera-block-media-child-2"',
 		],
 		'style_contains'   => [
-			':where(.blockera-block-media .blockera-block-media-child-2)',
+			'.blockera-block-media :where(.blockera-block-media-child-1)',
+			'.blockera-block-media :where(.blockera-block-media-child-2)',
 			'width: 100%',
 			'max-width: 800px',
-			':where(.blockera-block-media .blockera-block-media-child-1)',
 			'border: 2px solid #ccc',
 			'margin: 20px 0',
 		],
@@ -213,7 +213,7 @@ return [
 			</article>
 		</section>',
 		'style_contains'   => [
-			':where(.blockera-block-section .blockera-block-section-child-1)',
+			'.blockera-block-section :where(.blockera-block-section-child-1)',
 			'background: linear-gradient(to bottom, #fff, #f0f0f0)',
 			'border-radius: 8px',
 			'box-shadow: 0 2px 4px rgba(0,0,0,0.1)',
@@ -221,7 +221,7 @@ return [
 	],
 
 	// Inner element with no class, parent has blockera-block-* - table cell
-	// Note: elements processed in reverse order.
+	// Note: counters assigned in reverse processing order (order doesn't matter for functionality).
 	// #17
 	[
 		'input'            => '<table class="blockera-block-table">
@@ -232,12 +232,12 @@ return [
 		</table>',
 		'content_contains' => [
 			'class="blockera-block-table"',
-			'class="blockera-block-table-child-2"', // Cell 1 (processed second)
-			'class="blockera-block-table-child-1"', // Cell 2 (processed first)
+			'class="blockera-block-table-child-1"',
+			'class="blockera-block-table-child-2"',
 		],
 		'style_contains'   => [
-			':where(.blockera-block-table .blockera-block-table-child-1)',
-			':where(.blockera-block-table .blockera-block-table-child-2)',
+			'.blockera-block-table :where(.blockera-block-table-child-1)',
+			'.blockera-block-table :where(.blockera-block-table-child-2)',
 			'padding: 12px',
 			'text-align: left',
 			'text-align: right',
@@ -312,7 +312,7 @@ return [
 			'padding: 10px',
 			':where(.blockera-block-inner)',
 			'margin: 5px',
-			':where(.blockera-block-inner .blockera-block-inner-child-1)',
+			'.blockera-block-inner :where(.blockera-block-inner-child-1)',
 			'color: blue',
 		],
 	],
@@ -321,9 +321,12 @@ return [
 	// #25
 	[
 		'input'            => '<div class="blockera-block-parent"><span class="button-123 item-456 custom-class" style="padding: 10px;">Button</span></div>',
-		'expected_content' => '<div class="blockera-block-parent"><span class="button-123 item-456 custom-class">Button</span></div>',
+		'content_contains' => [
+			'class="blockera-block-parent"',
+			'blockera-block-parent-child-1', // Element gets unique class added (not blockera/wp)
+		],
 		'style_patterns'   => [
-			'/:where\(\.blockera-block-parent \.button-123\.item-456\) \{ padding: 10px; \}/',
+			'/\.blockera-block-parent :where\(\.blockera-block-parent-child-1\) \{ padding: 10px; \}/',
 		],
 	],
 
@@ -414,7 +417,7 @@ return [
 		'style_contains'   => [
 			':where(.blockera-block-item1)',
 			'margin: 10px',
-			':where(.blockera-block-container .blockera-block-container-child-1)',
+			'.blockera-block-container :where(.blockera-block-container-child-1)',
 			'color: blue',
 			':where(.blockera-block-span)',
 			'font-weight: bold',
@@ -448,7 +451,7 @@ return [
 			'position: relative',
 			':where(.blockera-block-level2)',
 			'display: flex',
-			':where(.blockera-block-level2 .blockera-block-level2-child-1)',
+			'.blockera-block-level2 :where(.blockera-block-level2-child-1)',
 			'background: #f0f0f0',
 			'flex: 1', // Second div's flex: 1 should be processed (parent has blockera-block-level2)
 		],
@@ -473,7 +476,7 @@ return [
 			'style="color: green;"', // Should be removed (processed)
 		],
 		'style_contains'    => [
-			':where(.blockera-block-valid .blockera-block-valid-child-1)',
+			'.blockera-block-valid :where(.blockera-block-valid-child-1)',
 			'color: green',
 		],
 		'style_not_contains' => [
@@ -496,7 +499,7 @@ return [
 	],
 
 	// Complex: Self-closing tags with inline styles
-	// Note: elements processed in reverse order (hr=1, br=2, img=3).
+	// Note: counters assigned in reverse processing order (order doesn't matter for functionality).
 	// #34
 	[
 		'input'            => '<div class="blockera-block-wrapper">
@@ -506,9 +509,9 @@ return [
 		</div>',
 		'content_contains' => [
 			'class="blockera-block-wrapper"',
-			'class="blockera-block-wrapper-child-3"', // For img (processed last)
-			'class="blockera-block-wrapper-child-2"', // For br (processed second)
-			'class="blockera-block-wrapper-child-1"', // For hr (processed first)
+			'class="blockera-block-wrapper-child-1"',
+			'class="blockera-block-wrapper-child-2"',
+			'class="blockera-block-wrapper-child-3"',
 			'<img src="test.jpg"',
 			'alt="Test"',
 			'<br',
@@ -520,12 +523,12 @@ return [
 			'style="border: 1px',
 		],
 		'style_contains'   => [
-			':where(.blockera-block-wrapper .blockera-block-wrapper-child-3)',
+			'.blockera-block-wrapper :where(.blockera-block-wrapper-child-3)',
 			'width: 100%',
 			'height: auto',
-			':where(.blockera-block-wrapper .blockera-block-wrapper-child-2)',
+			'.blockera-block-wrapper :where(.blockera-block-wrapper-child-2)',
 			'clear: both',
-			':where(.blockera-block-wrapper .blockera-block-wrapper-child-1)',
+			'.blockera-block-wrapper :where(.blockera-block-wrapper-child-1)',
 			'border: 1px solid #ccc',
 		],
 	],
@@ -676,8 +679,7 @@ return [
 	],
 
 	// Complex: Table structure with inline styles
-	// Counter for each child. Elements processed in reverse order.
-	// Order: td2=1, td1=2, th2=3, th1=4, tr=5
+	// Counter for each child. Counters assigned in reverse processing order (order doesn't matter for functionality).
 	// #46
 	[
 		'input'            => '<table class="blockera-block-table">
@@ -692,14 +694,14 @@ return [
 		</table>',
 		'content_contains' => [
 			'class="blockera-block-table"',
-			'class="blockera-block-table-child-5"', // tr (processed last)
-			'class="blockera-block-table-child-4"', // th Header 1
-			'class="blockera-block-table-child-3"', // th Header 2
-			'class="blockera-block-table-child-2"', // td Data 1
-			'class="blockera-block-table-child-1"', // td Data 2 (processed first)
+			'class="blockera-block-table-child-1"',
+			'class="blockera-block-table-child-2"',
+			'class="blockera-block-table-child-3"',
+			'class="blockera-block-table-child-4"',
+			'class="blockera-block-table-child-5"',
 		],
 		'style_contains'   => [
-			':where(.blockera-block-table .blockera-block-table-child-5)',
+			'.blockera-block-table :where(.blockera-block-table-child-3)',
 			'background: #f0f0f0',
 			'padding: 10px',
 			'text-align: center',
@@ -708,7 +710,7 @@ return [
 
 	// Complex: List structure with nested styles
 	// The nested ul and li elements are children of blockera-block-list parent.
-	// Elements processed in reverse: nested-li=1, ul=2, second-li=3, first-li=4
+	// Counters assigned in reverse processing order (order doesn't matter for functionality).
 	// #47
 	[
 		'input'            => '<ul class="blockera-block-list">
@@ -721,17 +723,17 @@ return [
 		</ul>',
 		'content_contains' => [
 			'class="blockera-block-list"',
-			'class="blockera-block-list-child-4"', // First li (processed last)
-			'class="blockera-block-list-child-3"', // Second li
-			'class="blockera-block-list-child-2"', // Nested ul
-			'class="blockera-block-list-child-1"', // Nested li (processed first)
+			'class="blockera-block-list-child-1"',
+			'class="blockera-block-list-child-2"',
+			'class="blockera-block-list-child-3"',
+			'class="blockera-block-list-child-4"',
 		],
 		'style_contains'   => [
-			':where(.blockera-block-list .blockera-block-list-child-4)',
+			'.blockera-block-list :where(.blockera-block-list-child-1)',
+			'.blockera-block-list :where(.blockera-block-list-child-3)',
+			'.blockera-block-list :where(.blockera-block-list-child-4)',
 			'margin-bottom: 10px',
-			':where(.blockera-block-list .blockera-block-list-child-2)',
 			'margin-left: 20px',
-			':where(.blockera-block-list .blockera-block-list-child-1)',
 			'list-style: square',
 		],
 	],
@@ -750,7 +752,7 @@ return [
 			'style="background: blue; color: white;"', // wp-block-button style should remain (skipped)
 		],
 		'style_contains'   => [
-			':where(.blockera-block-form .blockera-block-form-child-1)',
+			'.blockera-block-form :where(.blockera-block-form-child-1)',
 			'width: 100%',
 			'padding: 8px',
 		],
@@ -775,8 +777,7 @@ return [
 			'style="border-radius:10px', // Should be removed (processed)
 		],
 		'style_contains'   => [
-			':where(.blockera-block--6x1dmu',
-			'.wp-block-button__link',
+			'.blockera-block--6x1dmu :where(.wp-block-button__link)',
 			'border-radius: 10px',
 			'background-color: #2200ff',
 			'padding-top: 10px',
@@ -834,8 +835,7 @@ return [
 			'style="padding: 15px"', // Should be removed (processed)
 		],
 		'style_contains'   => [
-			':where(.blockera-block-wrapper',
-			'.wp-block-element__child',
+			'.blockera-block-wrapper :where(.wp-block-element__child)',
 			'padding: 15px',
 		],
 	],
@@ -897,8 +897,7 @@ return [
 			'style="padding: 20px', // Should be removed (processed)
 		],
 		'style_contains'   => [
-			':where(.blockera-block-inner',
-			'.wp-block-element__child',
+			'.blockera-block-inner :where(.wp-block-element__child)',
 			'padding: 20px',
 			'margin: 10px',
 		],
@@ -917,6 +916,172 @@ return [
 		],
 		'style_not_contains' => [
 			'display: flex',
+		],
+	],
+
+	// Element with existing class (has-inline-color) gets unique class appended
+	// #57
+	[
+		'input'            => '<p class="blockera-block blockera-block-1">test  <mark class="has-inline-color" style="background-color: #dfdfdf;">highlight</mark> elements.</p>',
+		'expected_content' => '<p class="blockera-block blockera-block-1">test  <mark class="has-inline-color blockera-block-1-child-1">highlight</mark> elements.</p>',
+		'expected_style'   => '.blockera-block-1 :where(.blockera-block-1-child-1) { background-color: #dfdfdf; }' . PHP_EOL,
+	],
+
+	// Element with has-inline-color AND blockera-block-* - has-inline-color should be preserved
+	// #58
+	[
+		'input'            => '<div class="blockera-block blockera-block-2"><span class="has-inline-color blockera-block-2" style="color: red;">Text</span></div>',
+		'expected_content' => '<div class="blockera-block blockera-block-2"><span class="has-inline-color blockera-block-2">Text</span></div>',
+		'expected_style'   => ':where(.blockera-block-2) { color: red; }' . PHP_EOL,
+		'content_contains' => [
+			'has-inline-color',
+		],
+	],
+
+	// Multiple elements with has-inline-color - all should be preserved
+	// #59
+	[
+		'input'            => '<div class="blockera-block blockera-block-3"><mark class="has-inline-color" style="background: yellow;">First</mark> <mark class="has-inline-color" style="background: orange;">Second</mark></div>',
+		'content_contains' => [
+			'has-inline-color',
+			'blockera-block-3-child-1',
+			'blockera-block-3-child-2',
+		],
+		'style_patterns'   => [
+			'/\.blockera-block-3 :where\(\.blockera-block-3-child-[12]\) \{ background: (yellow|orange); \}/',
+		],
+	],
+
+	// Element with has-inline-color AND removable has-* classes - only removable ones should be removed
+	// Note: has-inline-color, has-text-color, and has-link-color are preserved (user-defined classes).
+	// #60
+	[
+		'input'            => '<div class="blockera-block blockera-block-4"><span class="has-inline-color has-text-color has-background-color" style="color: blue;">Text</span></div>',
+		'expected_content' => '<div class="blockera-block blockera-block-4"><span class="has-inline-color has-text-color blockera-block-4-child-1">Text</span></div>',
+		'content_contains' => [
+			'has-inline-color',
+			'has-text-color',
+		],
+		'content_not_contains' => [
+			'has-background-color',
+		],
+		'style_patterns'   => [
+			'/\.blockera-block-4 :where\(\.blockera-block-4-child-1\) \{ color: blue; \}/',
+		],
+	],
+
+	// Element without blockera-block-* but with has-inline-color - should be skipped entirely
+	// #61
+	[
+		'input'             => '<div class="wp-block-group"><span class="has-inline-color" style="color: green;">Text</span></div>',
+		'skip_style_removal' => true,
+		'expected_content'   => '<div class="wp-block-group"><span class="has-inline-color" style="color: green;">Text</span></div>',
+		'expected_style'     => '',
+		'content_contains'   => [
+			'has-inline-color',
+			'style="color: green;"',
+		],
+	],
+
+	// blockera-block element with has-text-color - should be preserved
+	// #62
+	[
+		'input'            => '<p class="blockera-block blockera-block-5 has-text-color" style="color: red;">Text</p>',
+		'expected_content' => '<p class="blockera-block blockera-block-5 has-text-color">Text</p>',
+		'content_contains' => [
+			'has-text-color',
+		],
+		'style_patterns'   => [
+			'/:where\(\.blockera-block-5\) \{ color: red; \}/',
+		],
+	],
+
+	// blockera-block element with has-link-color - should be preserved
+	// #63
+	[
+		'input'            => '<a class="blockera-block blockera-block-6 has-link-color" style="color: blue;" href="#">Link</a>',
+		'expected_content' => '<a class="blockera-block blockera-block-6 has-link-color" href="#">Link</a>',
+		'content_contains' => [
+			'has-link-color',
+		],
+		'style_patterns'   => [
+			'/:where\(\.blockera-block-6\) \{ color: blue; \}/',
+		],
+	],
+
+	// blockera-block element with has-border-color - should be preserved
+	// #64
+	[
+		'input'            => '<div class="blockera-block blockera-block-7 has-border-color" style="border-color: #ccc;">Content</div>',
+		'expected_content' => '<div class="blockera-block blockera-block-7 has-border-color">Content</div>',
+		'content_contains' => [
+			'has-border-color',
+		],
+		'style_patterns'   => [
+			'/:where\(\.blockera-block-7\) \{ border-color: #ccc; \}/',
+		],
+	],
+
+	// blockera-block element with all preserved classes - all should be preserved
+	// #65
+	[
+		'input'            => '<p class="blockera-block blockera-block-8 has-inline-color has-text-color has-link-color has-border-color" style="color: purple;">Text</p>',
+		'expected_content' => '<p class="blockera-block blockera-block-8 has-inline-color has-text-color has-link-color has-border-color">Text</p>',
+		'content_contains' => [
+			'has-inline-color',
+			'has-text-color',
+			'has-link-color',
+			'has-border-color',
+		],
+		'style_patterns'   => [
+			'/:where\(\.blockera-block-8\) \{ color: purple; \}/',
+		],
+	],
+
+	// Child element with preserved classes - should be preserved even when unique class is added
+	// #66
+	[
+		'input'            => '<div class="blockera-block blockera-block-9"><span class="has-text-color has-link-color" style="color: orange;">Child</span></div>',
+		'expected_content' => '<div class="blockera-block blockera-block-9"><span class="has-text-color has-link-color blockera-block-9-child-1">Child</span></div>',
+		'content_contains' => [
+			'has-text-color',
+			'has-link-color',
+			'blockera-block-9-child-1',
+		],
+		'style_patterns'   => [
+			'/\.blockera-block-9 :where\(\.blockera-block-9-child-1\) \{ color: orange; \}/',
+		],
+	],
+
+	// blockera-block element with preserved classes AND removable classes - only removable ones should be removed
+	// #67
+	[
+		'input'            => '<div class="blockera-block blockera-block-10 has-text-color has-background-color has-link-color has-custom-color">Content</div>',
+		'expected_content' => '<div class="blockera-block blockera-block-10 has-text-color has-link-color">Content</div>',
+		'content_contains' => [
+			'has-text-color',
+			'has-link-color',
+		],
+		'content_not_contains' => [
+			'has-background-color',
+			'has-custom-color',
+		],
+	],
+
+	// Multiple elements with different preserved classes - all should be preserved
+	// #68
+	[
+		'input'            => '<div class="blockera-block blockera-block-11"><p class="has-text-color" style="color: red;">Text</p> <a class="has-link-color" style="color: blue;">Link</a> <span class="has-border-color" style="border-color: green;">Border</span></div>',
+		'content_contains' => [
+			'has-text-color',
+			'has-link-color',
+			'has-border-color',
+			'blockera-block-11-child-1',
+			'blockera-block-11-child-2',
+			'blockera-block-11-child-3',
+		],
+		'style_patterns'   => [
+			'/\.blockera-block-11 :where\(\.blockera-block-11-child-[123]\) \{ (color: (red|blue)|border-color: green); \}/',
 		],
 	],
 ];

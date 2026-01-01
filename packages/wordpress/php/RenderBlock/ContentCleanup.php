@@ -213,7 +213,8 @@ class ContentCleanup {
 
 			// Normalize remaining style to check if it's empty.
 			$normalized_remaining = $this->normalizeStyleValue( $remaining_style );
-			$original_was_empty   = empty( trim( $style_value ) );
+			$trimmed_style_value  = trim( $style_value );
+			$original_was_empty   = empty( $trimmed_style_value );
 
 			// Special case: If only preserved properties exist (no remaining styles),
 			// skip processing entirely - keep inline style as-is, don't add class, don't create CSS rule.
@@ -222,12 +223,37 @@ class ContentCleanup {
 				continue;
 			}
 
+			// Extract original class value before processing (to ensure we preserve it).
+			// Priority: child_class_value (already extracted) > full_tag.
+			$original_class_value = $child_class_value;
+			if ( empty( $original_class_value ) ) {
+				$original_class_value = $this->extractClassAttribute( $full_tag );
+			}
+
 			// Extract and remove inline style from element, preserving specified properties.
 			$updated_tag = $this->extractAndRemoveStyle( $tag_name, $before_attrs, $after_attrs, $full_tag, $preserved_properties );
 
+			// If original_class_value is still empty, check if extractAndRemoveStyle preserved a class.
+			if ( empty( $original_class_value ) ) {
+				$preserved_class = $this->extractClassAttribute( $updated_tag );
+				if ( ! empty( $preserved_class ) ) {
+					$original_class_value = $preserved_class;
+				}
+			}
+
 			// If a new class needs to be added, add it to the tag.
 			if ( ! empty( $selector_data['new_class'] ) ) {
-				$updated_tag = $this->addClassToTag( $updated_tag, $selector_data['new_class'] );
+				if ( ! empty( $original_class_value ) ) {
+					// Combine original and new classes.
+					$all_classes = trim( $original_class_value . ' ' . $selector_data['new_class'] );
+					// Remove existing class attribute, normalize whitespace, and add new class in optimized sequence.
+					$updated_tag = preg_replace( '/\s*\bclass\s*=\s*["\'][^"\']*["\']/', '', $updated_tag );
+					$updated_tag = trim( preg_replace( '/\s+/', ' ', $updated_tag ) );
+					$updated_tag = preg_replace( '/\s*>/', ' class="' . esc_attr( $all_classes ) . '">', $updated_tag, 1 );
+				} else {
+					// No original class - just add new class.
+					$updated_tag = $this->addClassToTag( $updated_tag, $selector_data['new_class'] );
+				}
 			}
 
 			// Replace the tag in content.
@@ -401,19 +427,38 @@ class ContentCleanup {
 			// Build child selector from first 2 classes (prioritizing wp-* or classes with numbers).
 			// If child has wp-block-* with underscore, use that class in the selector.
 			$child_selector = '';
+			$unique_class   = null;
 			if ( ! empty( $child_class_value ) ) {
 				$wp_block_class_with_underscore = $this->findWpBlockClass( $child_class_value );
 				if ( ! empty( $wp_block_class_with_underscore ) && strpos( $wp_block_class_with_underscore, '_' ) !== false ) {
 					// Use the wp-block-* class with underscore as the child selector.
 					$child_selector = '.' . $wp_block_class_with_underscore;
 				} else {
-					// Build child selector from first 2 classes (prioritizing wp-* or classes with numbers).
-					$child_selector = $this->buildChildSelector( $child_class_value );
+					// Check if child has neither blockera-block-* nor wp-block-* classes.
+					$blockera_class = $this->findBlockeraBlockClass( $child_class_value );
+					$wp_block_class = $this->findWpBlockClass( $child_class_value );
+					
+					// If element has neither blockera-block-* nor wp-block-* classes, always generate unique class.
+					if ( empty( $blockera_class ) && empty( $wp_block_class ) ) {
+						$parent_class = $parent_data['class'];
+
+						// Initialize counter for this parent if not exists.
+						if ( ! isset( $this->parent_child_counters[ $parent_class ] ) ) {
+							$this->parent_child_counters[ $parent_class ] = 0;
+						}
+						// Increment counter and generate unique class.
+						$this->parent_child_counters[ $parent_class ]++;
+						$counter        = $this->parent_child_counters[ $parent_class ];
+						$unique_class   = $parent_class . '-child-' . $counter;
+						$child_selector = '.' . $unique_class;
+					} else {
+						// Build child selector from first 2 classes (prioritizing wp-* or classes with numbers).
+						$child_selector = $this->buildChildSelector( $child_class_value );
+					}
 				}
 			}
 
 			// If child has no classes, generate a unique class using parent class + counter.
-			$unique_class = null;
 			if ( empty( $child_selector ) ) {
 				$parent_class = $parent_data['class'];
 
@@ -421,7 +466,6 @@ class ContentCleanup {
 				if ( ! isset( $this->parent_child_counters[ $parent_class ] ) ) {
 					$this->parent_child_counters[ $parent_class ] = 0;
 				}
-
 				// Increment counter and generate unique class.
 				$this->parent_child_counters[ $parent_class ]++;
 				$counter        = $this->parent_child_counters[ $parent_class ];
@@ -435,7 +479,7 @@ class ContentCleanup {
 				'selector' => $combined_selector,
 			];
 
-			// If we generated a unique class for the child (only when it had no classes), add it to the result.
+			// If we generated a unique class for the child, add it to the result.
 			if ( null !== $unique_class ) {
 				$result['new_class'] = $unique_class;
 			}
@@ -462,7 +506,8 @@ class ContentCleanup {
 			return '';
 		}
 
-		return trim( $matches[1] );
+		$result = trim( $matches[1] );
+		return $result;
 	}
 
 	/**
@@ -780,13 +825,13 @@ class ContentCleanup {
 
 		// Check if tag already has class attribute.
 		if ( preg_match( '/\bclass\s*=\s*["\']([^"\']+)["\']/', $tag, $matches ) ) {
-			// Add new class to existing classes.
+			// Append new class to existing classes.
 			$existing_classes = $matches[1];
-			$new_classes      = $existing_classes . ' ' . $new_class;
+			$new_classes      = trim( $existing_classes . ' ' . $new_class );
 			$tag              = preg_replace( '/(\bclass\s*=\s*["\'])([^"\']+)(["\'])/', '$1' . $new_classes . '$3', $tag, 1 );
 		} else {
-			// Add new class attribute before closing >.
-			$tag = preg_replace( '/>/', ' class="' . $new_class . '">', $tag, 1 );
+			// Add new class attribute before closing >, consuming any leading whitespace.
+			$tag = preg_replace( '/\s*>/', ' class="' . esc_attr( $new_class ) . '">', $tag, 1 );
 		}
 
 		return $tag;
@@ -937,7 +982,18 @@ class ContentCleanup {
 			}
 
 			// Wrap selector in :where() for zero specificity.
-			$wrapped_selector = ':where(' . $selector . ')';
+			// If selector has whitespace (child selector), wrap only the part after first space.
+			// Otherwise, wrap the entire selector.
+			$space_pos = strpos( $selector, ' ' );
+			if ( false !== $space_pos ) {
+				// Child selector: wrap only the part after first space.
+				$parent_part      = substr( $selector, 0, $space_pos );
+				$child_part       = substr( $selector, $space_pos + 1 );
+				$wrapped_selector = $parent_part . ' :where(' . $child_part . ')';
+			} else {
+				// Single selector: wrap entire selector.
+				$wrapped_selector = ':where(' . $selector . ')';
+			}
 
 			$css_content .= $wrapped_selector . ' { ' . $styles . ' }' . PHP_EOL;
 		}
@@ -1231,7 +1287,8 @@ class ContentCleanup {
 			$match_pattern = '/(<[^>]*?\bclass\s*=\s*["\'])(?=[^"\']*blockera-block-[^"\']*)(?=[^"\']*(?:has-[^"\']*-font-family|has-[^"\']*-font-size|has-[^"\']*-color))([^"\']*)(["\'])/i';
 
 			// Single regex pattern to remove all matching classes: matches class with word boundaries and optional whitespace.
-			$remove_pattern = '/\s*\b(?:has-[a-zA-Z0-9-]+-font-family|has-[a-zA-Z0-9-]+-font-size|has-(?!text-|link-|border-)[a-zA-Z0-9-]+-color)\b\s*/';
+			// Exclude has-inline-color, has-text-color, has-link-color, and has-border-color from removal (these are user-defined classes).
+			$remove_pattern = '/\s*\b(?:has-[a-zA-Z0-9-]+-font-family|has-[a-zA-Z0-9-]+-font-size|has-(?!inline-|text-|link-|border-)[a-zA-Z0-9-]+-color)\b\s*/';
 
 			self::$pattern_cache[ $cache_key ] = [
 				'match'  => $match_pattern,
@@ -1250,10 +1307,10 @@ class ContentCleanup {
 				$quote_end   = $matches[3];
 
 				// Single regex replace: remove all matching classes and clean up multiple spaces in one pass.
-				// Replace with single space, then normalize whitespace.
+				// Replace matching classes with single space, then normalize whitespace.
 				$new_class_value = preg_replace( $patterns['remove'], ' ', $class_value );
-				// Normalize whitespace: collapse multiple spaces and trim.
-				$new_class_value = preg_replace( '/\s+/', ' ', trim( $new_class_value ) );
+				// Normalize whitespace: collapse multiple spaces and trim in one pass.
+				$new_class_value = trim( preg_replace( '/\s+/', ' ', $new_class_value ) );
 
 				return $quote_start . $new_class_value . $quote_end;
 			},

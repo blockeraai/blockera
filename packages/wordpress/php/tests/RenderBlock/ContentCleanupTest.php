@@ -183,7 +183,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
 		// Should use parent selector + child selector with counter-based naming.
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
 		// Child should get class based on parent class + counter.
 		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
 	}
@@ -207,7 +207,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
 		// Should use blockera-block-* class from parent with counter-based child class.
-		$this->assertStringContainsString( ':where(.blockera-block-xyz .blockera-block-xyz-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-xyz :where(.blockera-block-xyz-child-1)', $result['style'] );
 		$this->assertStringContainsString( 'class="blockera-block-xyz-child-1"', $result['content'] );
 	}
 
@@ -219,10 +219,17 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
 		// Since child doesn't have blockera-block-* or wp-block-*, Priority 3 applies.
-		// Should use parent + child classes (prioritizing classes with numbers: button-123).
-		$this->assertStringContainsString( ':where(.blockera-block-parent', $result['style'] );
-		$this->assertStringContainsString( '.button-123', $result['style'] );
+		// Should generate unique class instead of using existing classes.
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
 		$this->assertStringContainsString( 'color: purple', $result['style'] );
+		// Element should get unique class added (appended to existing classes).
+		// Verify all original classes are preserved.
+		$this->assertStringContainsString( 'custom-class', $result['content'] );
+		$this->assertStringContainsString( 'button-123', $result['content'] );
+		$this->assertStringContainsString( 'other-class', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-parent-child-1', $result['content'] );
+		// Verify all classes are in the same class attribute.
+		$this->assertMatchesRegularExpression( '/class="[^"]*custom-class[^"]*button-123[^"]*other-class[^"]*blockera-block-parent-child-1[^"]*"/', $result['content'] );
 	}
 
 	public function testProcessChildWithNoClassesGeneratesUniqueClass(): void {
@@ -234,7 +241,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'style=', $result['content'] );
 		// Should generate class using parent class + counter format.
 		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
 	}
 
 	public function testProcessMultipleElements(): void {
@@ -325,9 +332,9 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertStringContainsString( 'class="blockera-block-parent-child-3"', $result['content'] );
 
 		// All styles should be extracted.
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-2)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-3)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-2)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-3)', $result['style'] );
 		$this->assertStringContainsString( 'color: red', $result['style'] );
 		$this->assertStringContainsString( 'color: green', $result['style'] );
 		$this->assertStringContainsString( 'color: blue', $result['style'] );
@@ -357,10 +364,10 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertStringContainsString( 'class="blockera-block-second-child-2"', $result['content'] );
 
 		// Verify styles use correct selectors.
-		$this->assertStringContainsString( ':where(.blockera-block-first .blockera-block-first-child-1)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-first .blockera-block-first-child-2)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-second .blockera-block-second-child-1)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-second .blockera-block-second-child-2)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-first :where(.blockera-block-first-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-first :where(.blockera-block-first-child-2)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-second :where(.blockera-block-second-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-second :where(.blockera-block-second-child-2)', $result['style'] );
 	}
 
 	/**
@@ -390,17 +397,17 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertStringContainsString( 'class="blockera-block-inner-child-2"', $result['content'] );
 
 		// Verify styles use correct selectors.
-		$this->assertStringContainsString( ':where(.blockera-block-outer .blockera-block-outer-child-1)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-outer .blockera-block-outer-child-2)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-inner .blockera-block-inner-child-1)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-inner .blockera-block-inner-child-2)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-outer :where(.blockera-block-outer-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-outer :where(.blockera-block-outer-child-2)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-inner :where(.blockera-block-inner-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-inner :where(.blockera-block-inner-child-2)', $result['style'] );
 	}
 
 	/**
-	 * Test that children with existing classes don't get counter-based classes.
+	 * Test that children with existing classes (that aren't blockera-block-* or wp-block-*) get counter-based classes.
 	 * Note: elements are processed in reverse order.
 	 */
-	public function testProcessChildWithExistingClassesDontGetCounterClass(): void {
+	public function testProcessChildWithExistingClassesGetsCounterClass(): void {
 
 		$html = '<div class="blockera-block-parent">
 			<span style="color: red;">No class child</span>
@@ -412,19 +419,20 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		// First and third children (no classes) should get counter-based classes.
 		// Due to reverse processing: "Another no class child" gets child-1, "No class child" gets child-2.
-		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
-		$this->assertStringContainsString( 'class="blockera-block-parent-child-2"', $result['content'] );
+		$this->assertMatchesRegularExpression( '/class="[^"]*blockera-block-parent-child-1[^"]*"/', $result['content'] );
+		$this->assertMatchesRegularExpression( '/class="[^"]*blockera-block-parent-child-2[^"]*"/', $result['content'] );
 
-		// Second child (has class) should keep its existing class.
-		$this->assertStringContainsString( 'class="existing-class-123"', $result['content'] );
-		// Second child should NOT get a counter-based class.
-		$this->assertStringNotContainsString( 'class="existing-class-123 blockera-block-parent-child', $result['content'] );
+		// Second child (has class but not blockera-block-* or wp-block-*) should keep its existing class and get counter-based class appended.
+		$this->assertStringContainsString( 'existing-class-123', $result['content'] );
+		// Second child should get a counter-based class appended to existing class.
+		$this->assertMatchesRegularExpression( '/class="[^"]*existing-class-123[^"]*blockera-block-parent-child-[0-9]+[^"]*"/', $result['content'] );
 
 		// Verify styles for counter-based classes.
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-2)', $result['style'] );
-		// Verify style for existing class uses the existing class.
-		$this->assertStringContainsString( '.existing-class-123', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-2)', $result['style'] );
+		// Verify style for second child uses the counter-based class, not the existing class.
+		$this->assertMatchesRegularExpression( '/\.blockera-block-parent :where\(\.blockera-block-parent-child-[0-9]+\)/', $result['style'] );
+		$this->assertStringNotContainsString( '.existing-class-123', $result['style'] );
 	}
 
 	/**
@@ -1012,7 +1020,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		// Child should get counter-based class (because there are other properties).
 		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
 		// Other properties should be in CSS.
-		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
 		$this->assertStringContainsString( 'color: green', $result['style'] );
 		// display: none should NOT be in CSS.
 		$this->assertStringNotContainsString( 'display: none', $result['style'] );
@@ -1038,7 +1046,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		// No CSS should be generated.
 		$this->assertEquals( '', $result['style'] );
 		// Verify no CSS rule was created.
-		$this->assertStringNotContainsString( ':where(.blockera-block-parent', $result['style'] );
+		$this->assertStringNotContainsString( '.blockera-block-parent :where(', $result['style'] );
 	}
 
 	/**
@@ -1094,6 +1102,109 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertEquals( 1, $style_count, 'display: none should appear only once' );
 		// Other properties should be in CSS.
 		$this->assertStringContainsString( 'color: red', $result['style'] );
+	}
+
+	/**
+	 * Test that single selector (no whitespace) wraps entire selector in :where().
+	 */
+	public function testBuildStyleContentWrapsSingleSelector(): void {
+
+		$html = '<div class="blockera-block-parent" style="color: red;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Single selector should wrap entire selector.
+		$this->assertStringContainsString( ':where(.blockera-block-parent)', $result['style'] );
+		$this->assertStringNotContainsString( '.blockera-block-parent :where(', $result['style'] );
+	}
+
+	/**
+	 * Test that child selector (with whitespace) wraps only child part in :where().
+	 */
+	public function testBuildStyleContentWrapsChildSelectorOnly(): void {
+
+		$html = '<div class="blockera-block-parent"><span style="color: green;">Child</span></div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Child selector should wrap only child part, not parent.
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringNotContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+	}
+
+	/**
+	 * Test that selector with multiple spaces wraps only part after first space.
+	 */
+	public function testBuildStyleContentHandlesMultipleSpaces(): void {
+
+		$html = '<div class="blockera-block-parent"><div class="blockera-block-middle"><span style="color: blue;">Deep</span></div></div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Should wrap only the part after first space (child selector).
+		// The selector will be something like ".blockera-block-middle .blockera-block-middle-child-1"
+		// So it should become ".blockera-block-middle :where(.blockera-block-middle-child-1)"
+		$this->assertStringContainsString( '.blockera-block-middle :where(', $result['style'] );
+		$this->assertStringNotContainsString( ':where(.blockera-block-middle ', $result['style'] );
+	}
+
+	/**
+	 * Test that complex nested structure wraps correctly.
+	 */
+	public function testBuildStyleContentHandlesComplexNestedStructure(): void {
+
+		$html = '<div class="blockera-block-outer" style="padding: 10px;">
+			<div class="blockera-block-inner" style="margin: 5px;">
+				<span style="color: blue;">Deep nested</span>
+			</div>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Outer element (single selector) should wrap entire selector.
+		$this->assertStringContainsString( ':where(.blockera-block-outer)', $result['style'] );
+		// Inner element (single selector) should wrap entire selector.
+		$this->assertStringContainsString( ':where(.blockera-block-inner)', $result['style'] );
+		// Child span (child selector) should wrap only child part.
+		$this->assertStringContainsString( '.blockera-block-inner :where(.blockera-block-inner-child-1)', $result['style'] );
+	}
+
+	/**
+	 * Test that multiple single selectors are wrapped correctly.
+	 */
+	public function testBuildStyleContentWrapsMultipleSingleSelectors(): void {
+
+		$html = '<div class="blockera-block-first" style="color: red;">First</div>
+			<div class="blockera-block-second" style="color: blue;">Second</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Both single selectors should wrap entire selector.
+		$this->assertStringContainsString( ':where(.blockera-block-first)', $result['style'] );
+		$this->assertStringContainsString( ':where(.blockera-block-second)', $result['style'] );
+		// Should not have child selector wrapping.
+		$this->assertStringNotContainsString( '.blockera-block-first :where(', $result['style'] );
+		$this->assertStringNotContainsString( '.blockera-block-second :where(', $result['style'] );
+	}
+
+	/**
+	 * Test that multiple child selectors are wrapped correctly.
+	 */
+	public function testBuildStyleContentWrapsMultipleChildSelectors(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<span style="color: red;">Child 1</span>
+			<span style="color: green;">Child 2</span>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Both child selectors should wrap only child part.
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-2)', $result['style'] );
+		// Should not wrap entire selector.
+		$this->assertStringNotContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
+		$this->assertStringNotContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-2)', $result['style'] );
 	}
 }
 
