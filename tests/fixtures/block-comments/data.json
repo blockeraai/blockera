@@ -29,6 +29,30 @@
 		{
 			"comment_author": 1,
 			"comment_content": "This is the sixth comment text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is the seventh comment text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is the eighth comment text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is the ninth comment text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is the tenth comment text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is the eleventh comment text."
+		},
+		{
+			"comment_author": 1,
+			"comment_content": "This is the twelve comment text."
 		}
 	]
 }
