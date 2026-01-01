@@ -850,7 +850,11 @@ async function prepareFrontendForScreenshot(page) {
  * @param {Object} config - Additional config.
  * @return {Promise<void>}
  */
-async function setEditorViewportForScreenshot(page, size = 'desktop', config = {}) {
+async function setEditorViewportForScreenshot(
+	page,
+	size = 'desktop',
+	config = {}
+) {
 	let width = 1600;
 	let height = 5000;
 	let containerHeight = null;
@@ -900,9 +904,6 @@ async function setEditorViewportForScreenshot(page, size = 'desktop', config = {
 
 	// Set editor container padding to 20px 0
 	await editorContainer.evaluate((el, width) => {
-		el.style.marginTop = '30px';
-		el.style.paddingTop = '20px';
-		el.style.paddingBottom = '20px';
 		el.style.boxSizing = 'border-box';
 	}, finalWidth);
 
@@ -910,8 +911,22 @@ async function setEditorViewportForScreenshot(page, size = 'desktop', config = {
 	await iframeBody.evaluate(() => {
 		const style = document.createElement('style');
 		style.innerHTML = `
+			.is-root-container.has-global-padding {
+				font-size: 18px !important;
+				line-height: 0;
+				letter-spacing: 0 !important;
+				padding: 30px !important;
+				margin-top: 30px !important;
+				margin-bottom: 30px !important;
+				box-sizing: border-box !important;
+			}
+
+			.is-root-container.has-global-padding > * {
+				line-height: normal !important;
+			}
+			
 			:root :where(.is-layout-constrained) > * {
-				margin-block-start: 1.2rem;
+				margin-block-start: 20px;
 				margin-block-end: 0;
 			}
 		`;
@@ -919,7 +934,9 @@ async function setEditorViewportForScreenshot(page, size = 'desktop', config = {
 	});
 
 	// Close settings panel
-	const settingsButton = await page.locator('.editor-header__settings button[aria-label="Settings"]');
+	const settingsButton = await page.locator(
+		'.editor-header__settings button[aria-label="Settings"]'
+	);
 	await settingsButton.click();
 
 	// Close Secondary sidebar (if open)
@@ -946,7 +963,11 @@ async function setEditorViewportForScreenshot(page, size = 'desktop', config = {
  * @param {import('@playwright/test').Locator} config.editorContainer - Optional editor container locator to adjust iframe height.
  * @return {Promise<void>}
  */
-async function setFrontendViewportForScreenshot(page, size = 'desktop', config = {}) {
+async function setFrontendViewportForScreenshot(
+	page,
+	size = 'desktop',
+	config = {}
+) {
 	let width = 1600;
 	let height = 5000;
 
@@ -966,17 +987,26 @@ async function setFrontendViewportForScreenshot(page, size = 'desktop', config =
 
 	const entryContent = page.locator('.entry-content').first();
 	await entryContent.evaluate((el, width) => {
-		el.style.marginTop = '30px';
 		el.style.width = width + 'px';
-		el.style.paddingTop = '20px';
-		el.style.paddingBottom = '20px';
-		el.style.boxSizing = 'border-box';
 	}, finalWidth);
 
 	// Add extra CSS to make sure spaces are always static to not affect the screenshot comparison.
 	await page.evaluate(() => {
 		const style = document.createElement('style');
 		style.textContent = `
+			.entry-content.has-global-padding {
+				font-size: 18px !important;
+				line-height: 0;
+				letter-spacing: 0 !important;
+				box-sizing: border-box !important;
+				padding: 30px !important;
+				margin: 30px -30px !important;
+			}
+
+			.entry-content.has-global-padding > * {
+				line-height: normal;
+			}
+
 			:root :where(.is-layout-constrained) > * {
 				margin-block-start: 20px;
 				margin-block-end: 0;
