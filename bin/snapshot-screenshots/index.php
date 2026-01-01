@@ -173,6 +173,26 @@ $tests_json = json_encode($tests, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | 
         // Test data from PHP
         const tests = <?php echo $tests_json; ?>;
     </script>
-    <script src="script.js"></script>
+    <script>
+        // Load Resemble.js and then load our script
+        (function() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/resemblejs@5.0.0/resemble.min.js';
+            script.onload = function() {
+                // Resemble.js is loaded, now load our script
+                const ourScript = document.createElement('script');
+                ourScript.src = 'script.js';
+                document.body.appendChild(ourScript);
+            };
+            script.onerror = function() {
+                console.error('Failed to load Resemble.js from CDN');
+                // Still load our script so it can show an error
+                const ourScript = document.createElement('script');
+                ourScript.src = 'script.js';
+                document.body.appendChild(ourScript);
+            };
+            document.body.appendChild(script);
+        })();
+    </script>
 </body>
 </html>

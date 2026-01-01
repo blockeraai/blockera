@@ -1,73 +1,44 @@
-// Fallback pixel comparison function (used if pixelmatch fails to load)
-function fallbackPixelmatch(
-	imgData1,
-	imgData2,
-	output,
-	width,
-	height,
-	options = {}
-) {
-	const threshold = options.threshold || 0.1;
-	let diffCount = 0;
+// Resemble.js loading state
+let resembleLoaded = false;
 
-	for (let y = 0; y < height; y++) {
-		for (let x = 0; x < width; x++) {
-			const pos = (y * width + x) * 4;
-			const r1 = imgData1[pos];
-			const g1 = imgData1[pos + 1];
-			const b1 = imgData1[pos + 2];
-			const a1 = imgData1[pos + 3];
-			const r2 = imgData2[pos];
-			const g2 = imgData2[pos + 1];
-			const b2 = imgData2[pos + 2];
-			const a2 = imgData2[pos + 3];
+const loadResemble = () => {
+	return new Promise((resolve, reject) => {
+		// Check if Resemble.js is already loaded (check both window.resemble and global resemble)
+		const isResembleLoaded =
+			typeof resemble !== 'undefined' ||
+			(typeof window !== 'undefined' &&
+				typeof window.resemble !== 'undefined');
+		if (isResembleLoaded) {
+			resembleLoaded = true;
+			resolve();
+			return;
+		}
 
-			// Use Euclidean distance in RGB space for better color difference detection
-			// This is more sensitive to color differences than sum of absolute differences
-			const dr = r1 - r2;
-			const dg = g1 - g2;
-			const db = b1 - b2;
-			const da = a1 - a2;
-
-			// Calculate Euclidean distance
-			const colorDistance = Math.sqrt(dr * dr + dg * dg + db * db);
-			// Normalize to 0-1 range (max distance is sqrt(255^2 * 3) ≈ 441.67)
-			const normalizedDiff = colorDistance / 441.67;
-
-			// Also check alpha channel difference
-			const alphaDiff = Math.abs(da) / 255;
-
-			// Consider pixel different if color or alpha difference exceeds threshold
-			if (normalizedDiff > threshold || alphaDiff > threshold) {
-				diffCount++;
-				const diffColor = options.diffColor || [255, 0, 0];
-				const diffColorAlt = options.diffColorAlt || [0, 0, 255];
-				// Alternate between diffColor and diffColorAlt for visual variety
-				const useAlt = (x + y) % 2 === 0;
-				output[pos] = useAlt ? diffColorAlt[0] : diffColor[0]; // R
-				output[pos + 1] = useAlt ? diffColorAlt[1] : diffColor[1]; // G
-				output[pos + 2] = useAlt ? diffColorAlt[2] : diffColor[2]; // B
-				output[pos + 3] = 255; // A
-			} else {
-				output[pos] = imgData1[pos];
-				output[pos + 1] = imgData1[pos + 1];
-				output[pos + 2] = imgData1[pos + 2];
-				output[pos + 3] = Math.floor(
-					imgData1[pos + 3] * (options.alpha || 0.3)
+		// Wait for Resemble.js to load (with timeout)
+		// Since script.js is loaded after Resemble.js via onload, it should be available
+		// But we'll wait a bit to be safe in case of timing issues
+		let attempts = 0;
+		const maxAttempts = 100; // 10 seconds max wait
+		const checkInterval = setInterval(() => {
+			attempts++;
+			if (
+				typeof resemble !== 'undefined' ||
+				(typeof window !== 'undefined' &&
+					typeof window.resemble !== 'undefined')
+			) {
+				clearInterval(checkInterval);
+				resembleLoaded = true;
+				resolve();
+			} else if (attempts >= maxAttempts) {
+				clearInterval(checkInterval);
+				reject(
+					new Error(
+						'Resemble.js failed to load. Please check your internet connection and try refreshing the page.'
+					)
 				);
 			}
-		}
-	}
-
-	return diffCount;
-}
-
-// Use our fallback implementation (reliable and no external dependencies)
-let pixelmatchLoaded = true;
-let pixelmatchFn = fallbackPixelmatch;
-
-const loadPixelmatch = () => {
-	return Promise.resolve(); // Already loaded
+		}, 100);
+	});
 };
 
 // State
@@ -288,78 +259,100 @@ function checkAndUpdateRowLabelDimensions(testId, imageType) {
 	}
 }
 
-// Comparison function using pixelmatch
-async function compareImages(img1, img2, width, height, options = {}) {
+// Comparison function using Resemble.js
+async function compareImages(img1, img2, width, height) {
 	return new Promise((resolve) => {
 		try {
-			// Use the loaded pixelmatch function (or fallback)
-			if (!pixelmatchLoaded) {
-				// Wait a bit for it to load
-				setTimeout(() => {
-					if (!pixelmatchLoaded) {
-						pixelmatchFn = fallbackPixelmatch;
-						pixelmatchLoaded = true;
-					}
-				}, 100);
+			// Get Resemble.js API reference
+			let resembleApi = null;
+			if (typeof resemble !== 'undefined') {
+				resembleApi = resemble;
+			} else if (
+				typeof window !== 'undefined' &&
+				typeof window.resemble !== 'undefined'
+			) {
+				resembleApi = window.resemble;
 			}
 
+			if (!resembleLoaded || !resembleApi) {
+				resolve({
+					identical: false,
+					error: 'Resemble.js not loaded',
+				});
+				return;
+			}
+
+			// Convert images to data URLs for Resemble.js
 			const canvas1 = document.createElement('canvas');
 			const canvas2 = document.createElement('canvas');
-			const canvasDiff = document.createElement('canvas');
-
-			canvas1.width = width;
-			canvas1.height = height;
-			canvas2.width = width;
-			canvas2.height = height;
-			canvasDiff.width = width;
-			canvasDiff.height = height;
+			canvas1.width = img1.naturalWidth;
+			canvas1.height = img1.naturalHeight;
+			canvas2.width = img2.naturalWidth;
+			canvas2.height = img2.naturalHeight;
 
 			const ctx1 = canvas1.getContext('2d');
 			const ctx2 = canvas2.getContext('2d');
-			const ctxDiff = canvasDiff.getContext('2d');
+			ctx1.drawImage(img1, 0, 0);
+			ctx2.drawImage(img2, 0, 0);
 
-			// Clear canvas and ensure images are positioned at top-left (0,0)
-			ctx1.clearRect(0, 0, width, height);
-			ctx2.clearRect(0, 0, width, height);
+			const img1DataUrl = canvas1.toDataURL('image/png');
+			const img2DataUrl = canvas2.toDataURL('image/png');
 
-			// Draw images at top-left corner (0,0) - no centering
-			ctx1.drawImage(img1, 0, 0, img1.naturalWidth, img1.naturalHeight);
-			ctx2.drawImage(img2, 0, 0, img2.naturalWidth, img2.naturalHeight);
-
-			const imgData1 = ctx1.getImageData(0, 0, width, height);
-			const imgData2 = ctx2.getImageData(0, 0, width, height);
-			const diffData = ctxDiff.createImageData(width, height);
-
-			const defaultOptions = {
-				threshold: 0.01, // Lower threshold for more sensitive color detection (1% instead of 10%)
-				alpha: 0.3,
-				diffColor: [255, 0, 0],
-				diffColorAlt: [0, 0, 255],
-			};
-
-			const mergedOptions = { ...defaultOptions, ...options };
-
-			const diff = pixelmatchFn(
-				imgData1.data,
-				imgData2.data,
-				diffData.data,
-				width,
-				height,
-				mergedOptions
-			);
-
-			ctxDiff.putImageData(diffData, 0, 0);
-
-			// Calculate difference percentage
-			const totalPixels = width * height;
-			const diffPercentage = totalPixels > 0 ? diff / totalPixels : 0;
-
-			resolve({
-				identical: diff === 0,
-				diffCount: diff,
-				diffPercentage,
-				diffImage: canvasDiff.toDataURL(),
+			// Configure Resemble.js output settings
+			resembleApi.outputSettings({
+				errorType: 'movementDifferenceIntensity',
+				transparency: 0.3,
+				largeImageThreshold: 0, // Disable threshold to process all images
+				useCrossOrigin: false,
 			});
+
+			// Create comparison with Resemble.js
+			resembleApi(img1DataUrl)
+				.compareTo(img2DataUrl)
+				.scaleToSameSize()
+				.ignoreLess()
+				.onComplete(function (data) {
+					try {
+						// Resemble.js returns mismatch percentage (0-100)
+						const diffPercentage = data.misMatchPercentage / 100;
+
+						// Get the diff image data URL
+						const diffImageDataUrl = data.getImageDataUrl();
+
+						// Create a canvas from the diff image to ensure consistent dimensions
+						const diffImg = new Image();
+						diffImg.onload = function () {
+							const diffCanvas = document.createElement('canvas');
+							diffCanvas.width = width;
+							diffCanvas.height = height;
+							const diffCtx = diffCanvas.getContext('2d');
+							diffCtx.drawImage(diffImg, 0, 0, width, height);
+
+							resolve({
+								identical: data.misMatchPercentage === 0,
+								diffCount: Math.floor(
+									(data.misMatchPercentage / 100) *
+										width *
+										height
+								),
+								diffPercentage,
+								diffImage: diffCanvas.toDataURL(),
+							});
+						};
+						diffImg.onerror = function () {
+							resolve({
+								identical: false,
+								error: 'Failed to load diff image',
+							});
+						};
+						diffImg.src = diffImageDataUrl;
+					} catch (error) {
+						resolve({
+							identical: false,
+							error: error.message,
+						});
+					}
+				});
 		} catch (error) {
 			resolve({
 				identical: false,
@@ -444,6 +437,9 @@ async function processComparisons() {
 
 	progressIndicator.classList.remove('active');
 	updateNavigationButtons();
+
+	// Ensure threshold handler is attached after comparisons complete
+	attachThresholdHandler();
 }
 
 async function processComparison(test, type) {
@@ -887,120 +883,6 @@ function renderAllComparisonModes() {
 	overlaySection.appendChild(overlayContainer);
 	container.appendChild(overlaySection);
 
-	// Generate additional difference images with different configurations
-	const diffEditorImg = new Image();
-	const diffFrontendImg = new Image();
-
-	// Store reference to first difference section for insertion
-	const firstDiffSection = differenceSection;
-
-	// Track if we've already generated the additional differences
-	let differencesGenerated = false;
-
-	const generateAdditionalDifferences = async function () {
-		if (differencesGenerated) return;
-		if (!diffEditorImg.complete || !diffFrontendImg.complete) return;
-
-		differencesGenerated = true;
-
-		const width = Math.max(
-			diffEditorImg.naturalWidth,
-			diffFrontendImg.naturalWidth
-		);
-		const height = Math.max(
-			diffEditorImg.naturalHeight,
-			diffFrontendImg.naturalHeight
-		);
-
-		// Difference mode 2: More sensitive (lower threshold, higher alpha)
-		const diffResult2 = await compareImages(
-			diffEditorImg,
-			diffFrontendImg,
-			width,
-			height,
-			{
-				threshold: 0.05,
-				alpha: 0.5,
-				diffColor: [255, 255, 0],
-				diffColorAlt: [255, 0, 255],
-			}
-		);
-
-		if (diffResult2.diffImage) {
-			const differenceSection2 = document.createElement('div');
-			differenceSection2.className = 'comparison-mode-section';
-			const differenceTitle2 = document.createElement('div');
-			differenceTitle2.className = 'comparison-mode-title';
-			differenceTitle2.textContent =
-				'Difference (Sensitive - Threshold: 0.05, Alpha: 0.5)';
-			const differenceContainer2 = document.createElement('div');
-			differenceContainer2.className = 'comparison-difference';
-			const diffImg2 = document.createElement('img');
-			diffImg2.className = 'lightbox-image';
-			diffImg2.src = diffResult2.diffImage;
-			diffImg2.alt = 'Difference (Sensitive)';
-			differenceContainer2.appendChild(diffImg2);
-			differenceSection2.appendChild(differenceTitle2);
-			differenceSection2.appendChild(differenceContainer2);
-			// Insert after first difference section
-			firstDiffSection.insertAdjacentElement(
-				'afterend',
-				differenceSection2
-			);
-		}
-
-		// Difference mode 3: Less sensitive (higher threshold, lower alpha)
-		const diffResult3 = await compareImages(
-			diffEditorImg,
-			diffFrontendImg,
-			width,
-			height,
-			{
-				threshold: 0.2,
-				alpha: 0.2,
-				diffColor: [0, 255, 0],
-				diffColorAlt: [0, 255, 255],
-			}
-		);
-
-		if (diffResult3.diffImage) {
-			const differenceSection3 = document.createElement('div');
-			differenceSection3.className = 'comparison-mode-section';
-			const differenceTitle3 = document.createElement('div');
-			differenceTitle3.className = 'comparison-mode-title';
-			differenceTitle3.textContent =
-				'Difference (Strict - Threshold: 0.2, Alpha: 0.2)';
-			const differenceContainer3 = document.createElement('div');
-			differenceContainer3.className = 'comparison-difference';
-			const diffImg3 = document.createElement('img');
-			diffImg3.className = 'lightbox-image';
-			diffImg3.src = diffResult3.diffImage;
-			diffImg3.alt = 'Difference (Strict)';
-			differenceContainer3.appendChild(diffImg3);
-			differenceSection3.appendChild(differenceTitle3);
-			differenceSection3.appendChild(differenceContainer3);
-			// Insert after second difference section (or first if second doesn't exist)
-			const secondDiffSection = firstDiffSection.nextElementSibling;
-			if (secondDiffSection) {
-				secondDiffSection.insertAdjacentElement(
-					'afterend',
-					differenceSection3
-				);
-			} else {
-				firstDiffSection.insertAdjacentElement(
-					'afterend',
-					differenceSection3
-				);
-			}
-		}
-	};
-
-	diffEditorImg.onload = generateAdditionalDifferences;
-	diffFrontendImg.onload = generateAdditionalDifferences;
-
-	diffEditorImg.src = lightboxState.editorImageSrc;
-	diffFrontendImg.src = lightboxState.frontendImageSrc;
-
 	// Blink/Toggle mode
 	const blinkSection = document.createElement('div');
 	blinkSection.className = 'comparison-mode-section';
@@ -1090,13 +972,25 @@ document.addEventListener('keydown', function (e) {
 
 // Function to re-evaluate all comparisons with new threshold
 async function reevaluateComparisons() {
-	comparisonThreshold =
-		parseFloat(document.getElementById('threshold-input').value) / 100;
+	const thresholdInput = document.getElementById('threshold-input');
+	if (!thresholdInput) {
+		console.error('Threshold input not found');
+		return;
+	}
+
+	comparisonThreshold = parseFloat(thresholdInput.value) / 100;
+
+	console.log(
+		'Re-evaluating comparisons with threshold:',
+		comparisonThreshold
+	);
 
 	// Reset counters
 	passingTests = 0;
 	failingTests = 0;
 	failingTestIds.length = 0;
+
+	console.log('Stored comparison results:', comparisonResults.size);
 
 	// Re-evaluate all stored comparison results
 	for (const [, data] of comparisonResults.entries()) {
@@ -1126,11 +1020,14 @@ async function reevaluateComparisons() {
 			}
 		}
 
+		// Check if images exist
+		const editorExists = test.images[editorType]?.exists;
+		const frontendExists = test.images[frontendType]?.exists;
+
 		if (result.error) {
 			diffContainer.innerHTML = `<div class="diff-error">Error: ${result.error}</div>`;
 			diffContainer.dataset.failed = 'true';
 			row.dataset.failed = 'true';
-			failingTests++;
 			// Update diff label classes
 			if (diffLabel) {
 				diffLabel.classList.remove('passing');
@@ -1205,44 +1102,26 @@ async function reevaluateComparisons() {
 				diffLabel.classList.add('failing');
 			}
 		}
-	}
 
-	// Recalculate statistics
-	for (let testIndex = 0; testIndex < tests.length; testIndex++) {
-		const test = tests[testIndex];
-		const section = document.getElementById(`test-${test.id}`);
-		const desktopFailed =
-			section.querySelector('.desktop-row .diff-container').dataset
-				.failed === 'true';
-		const mobileFailed =
-			section.querySelector('.mobile-row .diff-container').dataset
-				.failed === 'true';
-
-		const editorDesktopExists = test.images['editor-desktop']?.exists;
-		const editorMobileExists = test.images['editor-mobile']?.exists;
-		const frontendDesktopExists = test.images['frontend-desktop']?.exists;
-		const frontendMobileExists = test.images['frontend-mobile']?.exists;
-
-		// Count passing tests
-		if (!desktopFailed && editorDesktopExists && frontendDesktopExists) {
-			passingTests++;
-		}
-		if (!mobileFailed && editorMobileExists && frontendMobileExists) {
-			passingTests++;
-		}
-
-		// Count failing tests
-		if (desktopFailed) {
-			failingTests++;
-		}
-		if (mobileFailed) {
-			failingTests++;
+		// Count passing/failing tests (only if images exist)
+		if (editorExists && frontendExists) {
+			if (diffContainer.dataset.failed === 'false') {
+				passingTests++;
+			} else {
+				failingTests++;
+			}
 		}
 
 		// Track test cases with failures for navigation
-		if (desktopFailed || mobileFailed) {
+		if (diffContainer.dataset.failed === 'true') {
 			if (!failingTestIds.includes(test.id)) {
 				failingTestIds.push(test.id);
+			}
+		} else {
+			// Remove from failing list if it's now passing
+			const index = failingTestIds.indexOf(test.id);
+			if (index > -1) {
+				failingTestIds.splice(index, 1);
 			}
 		}
 	}
@@ -1254,7 +1133,14 @@ async function reevaluateComparisons() {
 }
 
 // Threshold input change handler
-document.addEventListener('DOMContentLoaded', function () {
+// Use a flag to prevent duplicate listeners
+let thresholdHandlerAttached = false;
+
+function attachThresholdHandler() {
+	if (thresholdHandlerAttached) {
+		return true;
+	}
+
 	const thresholdInput = document.getElementById('threshold-input');
 	if (thresholdInput) {
 		let thresholdTimeout;
@@ -1265,16 +1151,32 @@ document.addEventListener('DOMContentLoaded', function () {
 				reevaluateComparisons();
 			}, 500);
 		});
+		thresholdHandlerAttached = true;
+		return true;
 	}
-});
+	return false;
+}
+
+// Try to attach immediately
+if (!attachThresholdHandler()) {
+	// If element doesn't exist yet, wait for DOMContentLoaded
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', attachThresholdHandler);
+	} else {
+		// DOM already loaded, try again after a short delay
+		setTimeout(() => {
+			attachThresholdHandler();
+		}, 100);
+	}
+}
 
 // Start processing when page loads
 window.addEventListener('load', async () => {
-	// Load pixelmatch first
+	// Load Resemble.js first
 	try {
-		await loadPixelmatch();
+		await loadResemble();
 	} catch (error) {
-		console.error('Failed to load pixelmatch:', error);
+		console.error('Failed to load Resemble.js:', error);
 	}
 
 	setTimeout(() => {
