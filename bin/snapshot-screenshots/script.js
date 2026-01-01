@@ -49,6 +49,7 @@ const failingTestIds = [];
 const totalTests = tests.length * 2;
 let passingTests = 0;
 let failingTests = 0;
+let missingTests = 0;
 // Threshold for comparison (default 3% = 0.03)
 let comparisonThreshold = 0.03;
 // Store comparison results for re-evaluation when threshold changes
@@ -194,6 +195,114 @@ tests.forEach((test) => {
 		}
 	});
 });
+
+// Function to update test section status (checkmark and background)
+function updateTestSectionStatus(
+	testId,
+	desktopFailed,
+	mobileFailed,
+	editorDesktopExists,
+	frontendDesktopExists,
+	editorMobileExists,
+	frontendMobileExists
+) {
+	const section = document.getElementById(`test-${testId}`);
+	if (!section) return;
+
+	const testHeader = section.querySelector('.test-header');
+	if (!testHeader) return;
+
+	// Check if images are missing
+	const hasMissingImages =
+		!editorDesktopExists ||
+		!frontendDesktopExists ||
+		!editorMobileExists ||
+		!frontendMobileExists;
+
+	// Check if both desktop and mobile passed (only if images exist)
+	const desktopPassed =
+		!desktopFailed && editorDesktopExists && frontendDesktopExists;
+	const mobilePassed =
+		!mobileFailed && editorMobileExists && frontendMobileExists;
+	const bothPassed = desktopPassed && mobilePassed;
+
+	// Check if comparison failed (images exist but comparison failed)
+	const eitherFailed =
+		(desktopFailed && editorDesktopExists && frontendDesktopExists) ||
+		(mobileFailed && editorMobileExists && frontendMobileExists);
+
+	// Add or remove checkmark/X icon/Missing icon
+	let checkmark = testHeader.querySelector('.test-header-checkmark');
+	let xmark = testHeader.querySelector('.test-header-xmark');
+	let missingIcon = testHeader.querySelector('.test-header-missing');
+
+	if (bothPassed) {
+		// Both passed: show checkmark, remove other icons
+		if (!checkmark) {
+			checkmark = document.createElement('div');
+			checkmark.className = 'test-header-checkmark';
+			checkmark.textContent = '✓';
+			testHeader.appendChild(checkmark);
+		}
+		if (xmark) {
+			xmark.remove();
+		}
+		if (missingIcon) {
+			missingIcon.remove();
+		}
+		section.classList.add('test-passed');
+		section.classList.remove('test-failed');
+		section.classList.remove('test-missing');
+	} else if (hasMissingImages) {
+		// Images missing: show missing icon, remove other icons
+		if (!missingIcon) {
+			missingIcon = document.createElement('div');
+			missingIcon.className = 'test-header-missing';
+			missingIcon.textContent = '⚠';
+			testHeader.appendChild(missingIcon);
+		}
+		if (checkmark) {
+			checkmark.remove();
+		}
+		if (xmark) {
+			xmark.remove();
+		}
+		section.classList.add('test-missing');
+		section.classList.remove('test-passed');
+		section.classList.remove('test-failed');
+	} else if (eitherFailed) {
+		// Comparison failed: show X icon, remove other icons
+		if (!xmark) {
+			xmark = document.createElement('div');
+			xmark.className = 'test-header-xmark';
+			xmark.textContent = '✕';
+			testHeader.appendChild(xmark);
+		}
+		if (checkmark) {
+			checkmark.remove();
+		}
+		if (missingIcon) {
+			missingIcon.remove();
+		}
+		section.classList.add('test-failed');
+		section.classList.remove('test-passed');
+		section.classList.remove('test-missing');
+	} else {
+		// Neither condition met (shouldn't happen in practice)
+		if (checkmark) {
+			checkmark.remove();
+		}
+		if (xmark) {
+			xmark.remove();
+		}
+		if (missingIcon) {
+			missingIcon.remove();
+		}
+		section.classList.remove('test-passed');
+		section.classList.remove('test-failed');
+		section.classList.remove('test-missing');
+	}
+}
 
 // Function to check and update row label dimensions
 function checkAndUpdateRowLabelDimensions(testId, imageType) {
@@ -413,23 +522,46 @@ async function processComparisons() {
 			passingTests++; // 1 test passes
 		}
 
-		// Count failing tests
+		// Count failing tests (only if images exist - missing images are not counted as failures)
 		// Each failed comparison is 1 failing test
-		if (desktopFailed) {
+		if (desktopFailed && editorDesktopExists && frontendDesktopExists) {
 			failingTests++; // 1 test fails
 		}
-		if (mobileFailed) {
+		if (mobileFailed && editorMobileExists && frontendMobileExists) {
 			failingTests++; // 1 test fails
 		}
 
-		// Track test cases with failures for navigation
-		if (desktopFailed || mobileFailed) {
+		// Count missing tests (when images don't exist)
+		if (!editorDesktopExists || !frontendDesktopExists) {
+			missingTests++; // 1 test is missing
+		}
+		if (!editorMobileExists || !frontendMobileExists) {
+			missingTests++; // 1 test is missing
+		}
+
+		// Track test cases with failures for navigation (only actual failures, not missing)
+		if (
+			(desktopFailed && editorDesktopExists && frontendDesktopExists) ||
+			(mobileFailed && editorMobileExists && frontendMobileExists)
+		) {
 			failingTestIds.push(test.id);
 		}
+
+		// Update test section status (checkmark and background)
+		updateTestSectionStatus(
+			test.id,
+			desktopFailed,
+			mobileFailed,
+			editorDesktopExists,
+			frontendDesktopExists,
+			editorMobileExists,
+			frontendMobileExists
+		);
 
 		// Update statistics
 		document.getElementById('stat-passing').textContent = passingTests;
 		document.getElementById('stat-failing').textContent = failingTests;
+		document.getElementById('stat-missing').textContent = missingTests;
 
 		// Yield to browser
 		await new Promise((resolve) => setTimeout(resolve, 0));
@@ -988,6 +1120,7 @@ async function reevaluateComparisons() {
 	// Reset counters
 	passingTests = 0;
 	failingTests = 0;
+	missingTests = 0;
 	failingTestIds.length = 0;
 
 	console.log('Stored comparison results:', comparisonResults.size);
@@ -1103,32 +1236,82 @@ async function reevaluateComparisons() {
 			}
 		}
 
-		// Count passing/failing tests (only if images exist)
+		// Count passing/failing tests (only if images exist - missing images are not counted)
 		if (editorExists && frontendExists) {
 			if (diffContainer.dataset.failed === 'false') {
 				passingTests++;
 			} else {
+				// Only count as failure if images exist (not missing)
 				failingTests++;
 			}
 		}
 
-		// Track test cases with failures for navigation
-		if (diffContainer.dataset.failed === 'true') {
+		// Track test cases with failures for navigation (only actual failures, not missing)
+		if (
+			diffContainer.dataset.failed === 'true' &&
+			editorExists &&
+			frontendExists
+		) {
 			if (!failingTestIds.includes(test.id)) {
 				failingTestIds.push(test.id);
 			}
 		} else {
-			// Remove from failing list if it's now passing
+			// Remove from failing list if it's now passing or missing
 			const index = failingTestIds.indexOf(test.id);
 			if (index > -1) {
 				failingTestIds.splice(index, 1);
 			}
+		}
+
+		// Update test section status after re-evaluation
+		const section = document.getElementById(`test-${test.id}`);
+		if (section) {
+			const desktopContainer = section.querySelector(
+				'.desktop-row .diff-container'
+			);
+			const mobileContainer = section.querySelector(
+				'.mobile-row .diff-container'
+			);
+			const desktopFailed = desktopContainer?.dataset.failed === 'true';
+			const mobileFailed = mobileContainer?.dataset.failed === 'true';
+			const editorDesktopExists = test.images['editor-desktop']?.exists;
+			const frontendDesktopExists =
+				test.images['frontend-desktop']?.exists;
+			const editorMobileExists = test.images['editor-mobile']?.exists;
+			const frontendMobileExists = test.images['frontend-mobile']?.exists;
+			updateTestSectionStatus(
+				test.id,
+				desktopFailed,
+				mobileFailed,
+				editorDesktopExists,
+				frontendDesktopExists,
+				editorMobileExists,
+				frontendMobileExists
+			);
+		}
+	}
+
+	// Count missing tests (check all tests, not just stored comparisons)
+	for (let testIndex = 0; testIndex < tests.length; testIndex++) {
+		const test = tests[testIndex];
+		const editorDesktopExists = test.images['editor-desktop']?.exists;
+		const frontendDesktopExists = test.images['frontend-desktop']?.exists;
+		const editorMobileExists = test.images['editor-mobile']?.exists;
+		const frontendMobileExists = test.images['frontend-mobile']?.exists;
+
+		// Count missing tests (when images don't exist)
+		if (!editorDesktopExists || !frontendDesktopExists) {
+			missingTests++; // 1 test is missing
+		}
+		if (!editorMobileExists || !frontendMobileExists) {
+			missingTests++; // 1 test is missing
 		}
 	}
 
 	// Update statistics
 	document.getElementById('stat-passing').textContent = passingTests;
 	document.getElementById('stat-failing').textContent = failingTests;
+	document.getElementById('stat-missing').textContent = missingTests;
 	updateNavigationButtons();
 }
 

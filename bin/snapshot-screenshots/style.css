@@ -70,6 +70,10 @@ body {
     color: #d63638;
 }
 
+.stat-value.missing {
+    color: #dba617;
+}
+
 .threshold-control {
     display: flex;
     align-items: center;
@@ -168,7 +172,72 @@ body {
     color: #2271b1;
     margin-bottom: 20px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #f0f0f1;
+    border-bottom: 2px solid #00000017;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.test-header-checkmark {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #00a32a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.test-header-xmark {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #d63638;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.test-header-missing {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #dba617;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.test-section.test-passed {
+	background: #effff6;
+    border-color: #01a32a;
+	opacity: 0.4;
+}
+
+.test-section.test-passed:hover {
+	opacity: 1;
+}
+
+.test-section.test-failed {
+	background: #fef7f7;
+    border-color: #d63638;
+}
+
+.test-section.test-missing {
+	background: #fffbf0;
+    border-color: #dba617;
 }
 
 .test-row {

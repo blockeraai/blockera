@@ -138,6 +138,10 @@ $tests_json = json_encode($tests, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | 
                     <span class="stat-label">Failing</span>
                     <span class="stat-value failing" id="stat-failing">0</span>
                 </div>
+                <div class="stat">
+                    <span class="stat-label">Missing</span>
+                    <span class="stat-value missing" id="stat-missing">0</span>
+                </div>
                 <div class="threshold-control">
                     <label for="threshold-input" class="threshold-label">Threshold (%):</label>
                     <input type="number" id="threshold-input" class="threshold-input" value="3" min="0" max="100" step="0.1">
