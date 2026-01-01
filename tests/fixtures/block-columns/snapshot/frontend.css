@@ -209,11 +209,11 @@ p.blockera-block.blockera-block-10 {
 	font-size: 14px;
 }
 
-:where(.blockera-block-10 .has-inline-color) {
+.blockera-block-10 :where(.blockera-block-10-child-1) {
 	background-color: #dfdfdf;
 }
 
-:where(.blockera-block-4 .has-inline-color) {
+.blockera-block-4 :where(.blockera-block-4-child-1) {
 	background-color: #dfdfdf;
 }
 
