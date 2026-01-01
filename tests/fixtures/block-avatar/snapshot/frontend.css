@@ -94,23 +94,23 @@
 	transform: rotateX(-36deg) rotateY(-43deg) rotateZ(5deg);
 }
 
-:where(.blockera-block-4 .wp-block-avatar__image) {
+.blockera-block-4 :where(.wp-block-avatar__image) {
 	border-width: 4px;
 }
 
-:where(.blockera-block-3 .wp-block-avatar__image) {
+.blockera-block-3 :where(.wp-block-avatar__image) {
 	border-color: #2358e8ab;
 	border-radius: 70px;
 	border-width: 3px;
 }
 
-:where(.blockera-block-2 .wp-block-avatar__image) {
+.blockera-block-2 :where(.wp-block-avatar__image) {
 	border-color: #009216;
 	border-radius: 0px;
 	border-width: 3px;
 }
 
-:where(.blockera-block-1 .wp-block-avatar__image) {
+.blockera-block-1 :where(.wp-block-avatar__image) {
 	border-color: #ff2323;
 	border-radius: 50px;
 	border-width: 5px;
