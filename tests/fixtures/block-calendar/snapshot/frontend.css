@@ -104,7 +104,3 @@
 		content: "After";
 	};
 }
-
-:where(.blockera-block.blockera-block-1 table.wp-calendar-table.has-background) {
-	background-color: #ececfc;
-}
