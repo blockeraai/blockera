@@ -211,6 +211,17 @@ class ContentCleanup {
 			$preserved_properties = $extracted['preserved'];
 			$remaining_style      = $extracted['remaining'];
 
+			// Normalize remaining style to check if it's empty.
+			$normalized_remaining = $this->normalizeStyleValue( $remaining_style );
+			$original_was_empty   = empty( trim( $style_value ) );
+
+			// Special case: If only preserved properties exist (no remaining styles),
+			// skip processing entirely - keep inline style as-is, don't add class, don't create CSS rule.
+			if ( ! empty( $preserved_properties ) && empty( $normalized_remaining ) && ! $original_was_empty ) {
+				// Skip processing - leave the tag unchanged (inline style remains, no class added).
+				continue;
+			}
+
 			// Extract and remove inline style from element, preserving specified properties.
 			$updated_tag = $this->extractAndRemoveStyle( $tag_name, $before_attrs, $after_attrs, $full_tag, $preserved_properties );
 
@@ -233,15 +244,11 @@ class ContentCleanup {
 
 			// Store CSS rule.
 			// Use remaining styles (preserved properties excluded) for CSS output.
-			// Normalize style value: remove extra spaces around colons and semicolons.
-			$normalized_style = $this->normalizeStyleValue( $remaining_style );
-			
 			// Determine if we should add CSS rule:
 			// - If original style was empty (style=""), create empty CSS rule (;).
 			// - If remaining styles are empty after extracting preserved properties, skip CSS rule.
 			// - Otherwise, add CSS rule with normalized styles.
-			$original_was_empty = empty( trim( $style_value ) );
-			$remaining_is_empty = empty( $normalized_style );
+			$remaining_is_empty = empty( $normalized_remaining );
 			
 			if ( $original_was_empty ) {
 				// Original style was empty - create empty CSS rule to match old behavior.
@@ -253,7 +260,7 @@ class ContentCleanup {
 				// Remaining styles exist after extracting preserved properties - add CSS rule.
 				$this->css_rules[] = [
 					'selector' => $selector_data['selector'],
-					'styles'   => $normalized_style,
+					'styles'   => $normalized_remaining,
 				];
 			}
 			// If original had styles but remaining is empty (all were preserved), skip CSS rule.

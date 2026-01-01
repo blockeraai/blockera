@@ -767,6 +767,8 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 	/**
 	 * Test that display: none alone is preserved in tag and not extracted to CSS.
+	 * Special case: When only preserved properties exist, tag should remain unchanged
+	 * (no class added, inline style remains).
 	 */
 	public function testPreserveDisplayNoneAlone(): void {
 
@@ -774,12 +776,21 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
+		// Verify tag was not modified - should match input exactly when only preserved properties exist.
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		
+		// Additional verifications:
 		// display: none should remain in tag.
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display: none', $result['content'] );
+		// Tag should remain exactly as input (no additional classes added).
+		$this->assertStringContainsString( 'class="blockera-block-abc123"', $result['content'] );
 		// Should not be in CSS output.
 		$this->assertStringNotContainsString( 'display: none', $result['style'] );
 		// CSS should be empty since only display: none was present.
 		$this->assertEquals( '', $result['style'] );
+		// Verify no CSS rule was created for this element.
+		$this->assertStringNotContainsString( ':where(.blockera-block-abc123)', $result['style'] );
 	}
 
 	/**
@@ -845,6 +856,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 	/**
 	 * Test case-insensitive matching: Display: None.
+	 * When only preserved properties exist, tag remains unchanged (original case preserved).
 	 */
 	public function testPreserveDisplayNoneCaseInsensitive(): void {
 
@@ -852,12 +864,18 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist (original case preserved).
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists (case-insensitive matching works, but output preserves original case).
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'Display: None', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
 	}
 
 	/**
 	 * Test case-insensitive matching: DISPLAY: NONE.
+	 * When only preserved properties exist, tag remains unchanged (original case preserved).
 	 */
 	public function testPreserveDisplayNoneUppercase(): void {
 
@@ -865,12 +883,18 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist (original case preserved).
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists (case-insensitive matching works, but output preserves original case).
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'DISPLAY: NONE', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
 	}
 
 	/**
 	 * Test spacing variation: display:none (no spaces).
+	 * When only preserved properties exist, tag remains unchanged (original spacing preserved).
 	 */
 	public function testPreserveDisplayNoneNoSpaces(): void {
 
@@ -878,12 +902,18 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist (original spacing preserved).
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists.
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display:none', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
 	}
 
 	/**
 	 * Test spacing variation: display:  none (extra spaces).
+	 * When only preserved properties exist, tag remains unchanged (original spacing preserved).
 	 */
 	public function testPreserveDisplayNoneExtraSpaces(): void {
 
@@ -891,12 +921,18 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist (original spacing preserved).
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists.
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display:  none', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
 	}
 
 	/**
 	 * Test with semicolon: display: none;.
+	 * When only preserved properties exist, tag remains unchanged.
 	 */
 	public function testPreserveDisplayNoneWithSemicolon(): void {
 
@@ -904,12 +940,18 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist.
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists.
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display: none', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
 	}
 
 	/**
 	 * Test with !important: display: none !important.
+	 * When only preserved properties exist, tag remains unchanged.
 	 */
 	public function testPreserveDisplayNoneWithImportant(): void {
 
@@ -917,7 +959,12 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none !important"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist.
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists.
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display: none !important', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
 	}
 
@@ -962,7 +1009,7 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		// Child should have display: none preserved.
 		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
-		// Child should get counter-based class.
+		// Child should get counter-based class (because there are other properties).
 		$this->assertStringContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
 		// Other properties should be in CSS.
 		$this->assertStringContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
@@ -972,7 +1019,31 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 	}
 
 	/**
+	 * Test Priority 3 (parent blockera-block): display: none alone for children.
+	 * Special case: When only preserved properties exist, child should not get class.
+	 */
+	public function testPreserveDisplayNonePriority3ChildOnlyPreserved(): void {
+
+		$html = '<div class="blockera-block-parent"><span style="display: none;">Child</span></div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Tag should remain unchanged when only preserved properties exist.
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Child should have display: none preserved (tag not modified).
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display: none', $result['content'] );
+		// Child should NOT get counter-based class (no processing occurred).
+		$this->assertStringNotContainsString( 'class="blockera-block-parent-child-1"', $result['content'] );
+		// No CSS should be generated.
+		$this->assertEquals( '', $result['style'] );
+		// Verify no CSS rule was created.
+		$this->assertStringNotContainsString( ':where(.blockera-block-parent', $result['style'] );
+	}
+
+	/**
 	 * Test edge case: display: none with only whitespace in style attribute.
+	 * When only preserved properties exist, tag remains unchanged (whitespace preserved).
 	 */
 	public function testPreserveDisplayNoneWithWhitespaceOnly(): void {
 
@@ -980,8 +1051,15 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 
 		$result = $this->cleanup->process( $html );
 
-		$this->assertStringContainsString( 'style="display: none"', $result['content'] );
+		// Tag should remain unchanged when only preserved properties exist (whitespace preserved).
+		$this->assertEquals( $html, $result['content'], 'Tag should remain unchanged when only preserved properties exist' );
+		// Verify style attribute exists with original formatting.
+		$this->assertStringContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'display: none', $result['content'] );
+		// CSS should be empty.
 		$this->assertEquals( '', $result['style'] );
+		// Verify no CSS rule was created.
+		$this->assertStringNotContainsString( ':where(.blockera-block-abc123)', $result['style'] );
 	}
 
 	/**
