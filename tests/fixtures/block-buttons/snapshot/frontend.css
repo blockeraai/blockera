@@ -100,17 +100,17 @@
 	justify-content: center !important;
 }
 
-:where(.blockera-block-3 .has-inline-color) {
+.blockera-block-3 :where(.blockera-block-3-child-1) {
 	background-color: #dfdfdf;
 }
 
-:where(.blockera-block-10 .blockera-block-10-child-1) {
+.blockera-block-10 :where(.blockera-block-10-child-1) {
 	width: 1.33em;
 	height: 1.33em;
 	margin-right: 0.5em;
 }
 
-:where(.blockera-block-9 .blockera-block-9-child-1) {
+.blockera-block-9 :where(.blockera-block-9-child-1) {
 	color: rgb(255, 40, 40);
 	fill: rgb(255, 40, 40);
 	width: 1em;
@@ -122,13 +122,13 @@
 	--blockera--icon--flip-vertical: -1;
 }
 
-:where(.blockera-block-8 .blockera-block-8-child-1) {
+.blockera-block-8 :where(.blockera-block-8-child-1) {
 	width: 30px;
 	height: 30px;
 	margin-right: 0.5em;
 }
 
-:where(.blockera-block-7 .blockera-block-7-child-1) {
+.blockera-block-7 :where(.blockera-block-7-child-1) {
 	width: 1.33em;
 	height: 1.33em;
 	margin-left: 0.5em;
