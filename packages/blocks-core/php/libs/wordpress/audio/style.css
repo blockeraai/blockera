@@ -23,3 +23,12 @@
 .blockera-block.wp-block-audio :is(audio, .wp-element-caption) {
 	transition: inherit;
 }
+
+/* Fix 1:1 design comparison issue between editor and frontend. */
+.blockera-block.wp-block-audio {
+	line-height: 0;
+}
+.blockera-block.wp-block-audio:before,
+.blockera-block.wp-block-audio:after {
+	line-height: normal;
+}
