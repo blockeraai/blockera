@@ -38,15 +38,7 @@
 	background-color: var(--wp--preset--color--accent-1, #FFEE58);
 }
 
-:where(.blockera-block.blockera-block-1) {
-	text-transform: uppercase;
-}
-
 .blockera-block.blockera-block-2.wp-block-button .wp-block-button__link {
-	background-color: #ffb8b8;
-}
-
-:where(.blockera-block.blockera-block-2 a.wp-block-button__link.has-background) {
 	background-color: #ffb8b8;
 }
 
@@ -102,12 +94,44 @@
 	background-color: #9d0059;
 }
 
-:where(.blockera-block.blockera-block-3 a.wp-block-button__link.has-background) {
-	background-color: #9f9f9f;
+.blockera-block.blockera-block-3-parent.wp-block-buttons {
+	flex-direction: row;
+	align-items: flex-start !important;
+	justify-content: center !important;
 }
 
-:where(.blockera-block.blockera-block-3 mark.has-inline-color) {
+:where(.blockera-block-3 .has-inline-color) {
 	background-color: #dfdfdf;
+}
+
+:where(.blockera-block-10 .blockera-block-10-child-1) {
+	width: 1.33em;
+	height: 1.33em;
+	margin-right: 0.5em;
+}
+
+:where(.blockera-block-9 .blockera-block-9-child-1) {
+	color: rgb(255, 40, 40);
+	fill: rgb(255, 40, 40);
+	width: 1em;
+	height: 1em;
+	width: 26px;
+	height: 26px;
+	margin-right: 20px;
+	--blockera--icon--flip-horizontal: -1;
+	--blockera--icon--flip-vertical: -1;
+}
+
+:where(.blockera-block-8 .blockera-block-8-child-1) {
+	width: 30px;
+	height: 30px;
+	margin-right: 0.5em;
+}
+
+:where(.blockera-block-7 .blockera-block-7-child-1) {
+	width: 1.33em;
+	height: 1.33em;
+	margin-left: 0.5em;
 }
 
 @media screen and (max-width: 478px) {
@@ -180,15 +204,6 @@
 	background-color: #9ae1ff;
 }
 
-:where(.blockera-block.blockera-block-4) {
-	border-radius: 100px;
-	background-color: #c2edff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
 .blockera-block.blockera-block-5 :where(.wp-block-button > .wp-element-button) {
 	background-color: #70ae6b;
 	font-size: 18px;
@@ -221,16 +236,8 @@
 	background-color: #940000;
 }
 
-:where(.blockera-block.blockera-block-6 a.wp-block-button__link.has-background) {
-	background-color: #ff3a3a;
-}
-
 .blockera-block.blockera-block-7.wp-block-button .wp-block-button__link {
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M10.7%209.6c.3-.2.8-.4%201.3-.4s1%20.2%201.3.4c.3.2.4.5.4.6%200%20.4.3.8.8.8s.8-.3.8-.8c0-.8-.5-1.4-1.1-1.9-.4-.3-.9-.5-1.4-.6v-.3c0-.4-.3-.8-.8-.8s-.8.3-.8.8v.3c-.5%200-1%20.3-1.4.6-.6.4-1.1%201.1-1.1%201.9s.5%201.4%201.1%201.9c.6.4%201.4.6%202.2.6h.2c.5%200%20.9.2%201.1.4.3.2.4.5.4.6s0%20.4-.4.6c-.3.2-.8.4-1.3.4s-1-.2-1.3-.4c-.3-.2-.4-.5-.4-.6%200-.4-.3-.8-.8-.8s-.8.3-.8.8c0%20.8.5%201.4%201.1%201.9.4.3.9.5%201.4.6v.3c0%20.4.3.8.8.8s.8-.3.8-.8v-.3c.5%200%201-.3%201.4-.6.6-.4%201.1-1.1%201.1-1.9s-.5-1.4-1.1-1.9c-.5-.4-1.2-.6-1.9-.6H12c-.6%200-1-.2-1.3-.4-.3-.2-.4-.5-.4-.6s0-.4.4-.6ZM12%204c-4.4%200-8%203.6-8%208s3.6%208%208%208%208-3.6%208-8-3.6-8-8-8Zm0%2014.5c-3.6%200-6.5-2.9-6.5-6.5S8.4%205.5%2012%205.5s6.5%202.9%206.5%206.5-2.9%206.5-6.5%206.5Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
-	color: #47ff04;
-}
-
-:where(.blockera-block.blockera-block-7 a.wp-block-button__link.has-text-color) {
 	color: #47ff04;
 }
 
@@ -238,10 +245,6 @@
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M12.5939%2021C14.1472%2021%2016.1269%2020.5701%2017.0711%2020.1975L16.6447%2018.879C16.0964%2019.051%2014.3299%2019.6242%2012.6548%2019.6242C7.4467%2019.6242%204.67513%2016.8726%204.67513%2012C4.67513%207.21338%207.50762%204.34713%2012.2893%204.34713C17.132%204.34713%2019.4162%207.55732%2019.4162%2010.7675C19.4162%2014.035%2019.0508%2015.4968%2017.4975%2015.4968C16.5838%2015.4968%2016.0964%2014.7803%2016.0964%2013.9777V7.5H14.4822V8.30255H14.3909C14.1777%207.67198%2012.9898%207.12739%2011.467%207.2707C9.18274%207.5%207.4467%209.27707%207.4467%2011.8567C7.4467%2014.5796%208.81726%2016.672%2011.467%2016.758C13.203%2016.8153%2014.1168%2016.0127%2014.4822%2015.1815H14.5736C14.7563%2016.414%2016.401%2016.8439%2017.467%2016.8439C20.6954%2016.8439%2021%2013.5764%2021%2010.7962C21%206.86943%2018.0761%203%2012.3807%203C6.50254%203%203%206.3535%203%2011.9427C3%2017.7325%206.38071%2021%2012.5939%2021ZM11.7107%2015.2962C9.73096%2015.2962%209.03046%2013.6051%209.03046%2011.7707C9.03046%2010.1083%2010.0355%208.67516%2011.7716%208.67516C13.599%208.67516%2014.5736%209.36306%2014.5736%2011.7707C14.5736%2014.1497%2013.7513%2015.2962%2011.7107%2015.2962Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 	--blockera--icon--size: 30px;
 	--blockera--icon--color: #a3ffab;
-	color: #b8a4ff;
-}
-
-:where(.blockera-block.blockera-block-8 a.wp-block-button__link.has-text-color) {
 	color: #b8a4ff;
 }
 
@@ -298,4 +301,16 @@
 	border-radius: 5px;
 	border: 2px solid #ffffff;
 	content: ":after";
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
