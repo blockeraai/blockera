@@ -20,14 +20,6 @@
 	background-color: #ffa2a2;
 }
 
-:where(.blockera-block.blockera-block-1) {
-	border-radius: 10px;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
 .blockera-block.blockera-block-2.wp-block-details {
 	background-color: #c4f6ff;
 	border-radius: 10px;
@@ -58,15 +50,6 @@
 	color: #f9f9ff;
 }
 
-:where(.blockera-block.blockera-block-2) {
-	border-radius: 10px;
-	background-color: #c4f6ff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
 .blockera-block.blockera-block-3.wp-block-details {
 	background-color: #c4f6ff;
 	border-radius: 10px;
@@ -95,15 +78,6 @@
 
 .blockera-block.blockera-block-3:open summary::marker {
 	color: #f9f9ff;
-}
-
-:where(.blockera-block.blockera-block-3) {
-	border-radius: 10px;
-	background-color: #c4f6ff;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
 }
 
 .blockera-block.blockera-block-4.wp-block-details {
@@ -138,6 +112,14 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-4) {
-	background-color: #ffd7d7;
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }

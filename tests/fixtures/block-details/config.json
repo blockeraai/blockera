@@ -1,0 +1,13 @@
+{
+	"$schema": "../../fixtures.config.schema.json",
+	"html-search-replace": [
+		{
+			"search": "(<iframe[^>]*)title=[\"'][^\"']+[\"']",
+			"replace": "$1title=\"Video Title\""
+		},
+		{
+			"search": "(<iframe[^>]*)src=[\"'][^\"']+[\"']",
+			"replace": "$1src=\"https://example.com/video\""
+		}
+	]
+}
