@@ -7,6 +7,9 @@ const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
+// Store postId for frontendSetup to use
+let storedPostId = null;
+
 /**
  * Setup function for block-comments test
  * Creates a post with comments and edits it
@@ -47,6 +50,9 @@ async function setup(page, sectionContent) {
 			`Failed to get post ID from output: ${result.stdout}`
 		);
 	}
+
+	// Store postId for frontendSetup to use
+	storedPostId = postId;
 
 	// Verify post was created successfully
 	const verifyPostResult = await wpCli(
@@ -196,5 +202,52 @@ async function setup(page, sectionContent) {
 	return false;
 }
 
-module.exports = { setup };
+/**
+ * Frontend setup function for block-comments test
+ * Navigates to page 2 of comments pagination
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @return {Promise<void>}
+ */
+async function frontendSetup(page) {
+	if (!storedPostId) {
+		throw new Error(
+			'Post ID not available. Make sure setup() was called before frontendSetup().'
+		);
+	}
+
+	// Get the current URL
+	const currentUrl = page.url();
+	const url = new URL(currentUrl);
+
+	// Check if we're already on the post page (has post ID in path or query)
+	// If not, we need to navigate to the post first
+	// Try to get post permalink via wpCli
+	const permalinkResult = await wpCli(
+		page,
+		`wp post get ${storedPostId} --field=url`,
+		false,
+		false
+	);
+
+	if (!permalinkResult.stdout || !permalinkResult.stdout.trim()) {
+		throw new Error(
+			`Failed to get permalink for post ${storedPostId}`
+		);
+	}
+
+	const postUrl = permalinkResult.stdout.trim();
+	const postUrlObj = new URL(postUrl);
+
+	// Add cpage=3 query parameter for comments pagination
+	postUrlObj.searchParams.set('cpage', '3');
+
+	// Navigate to the post URL with comments page 3
+	await page.goto(postUrlObj.toString(), { waitUntil: 'networkidle' });
+
+	// Wait a bit for comments to load
+	await page.waitForTimeout(500);
+}
+
+module.exports = { setup, frontendSetup };
 module.exports.default = setup;
