@@ -2,7 +2,7 @@
  * Blockera dependencies - Playwright version
  */
 const { createPost, appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
-const { wpCli, setEditorViewportForScreenshot } = require('@blockera/dev-playwright/js/support/commands');
+const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 
 /**
  * Setup function for block-site-logo test
@@ -45,7 +45,6 @@ async function setup(page, sectionContent) {
 	// Step 3: Edit the post (site logo block doesn't require a specific post)
 	await createPost(page);
 	await appendBlocks(page, sectionContent);
-	await setEditorViewportForScreenshot(page);
 
 	return false;
 }

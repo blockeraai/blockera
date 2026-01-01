@@ -3,7 +3,7 @@
  */
 const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
 const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
-const { wpCli, setEditorViewportForScreenshot } = require('@blockera/dev-playwright/js/support/commands');
+const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
@@ -66,7 +66,6 @@ async function setup(page, sectionContent) {
 	// Step 4: Edit the post
 	await editPost(page, { postID: postId });
 	await appendBlocks(page, updatedContent);
-	await setEditorViewportForScreenshot(page);
 	
 	// Wait for navigation to be ready
 	await page.waitForTimeout(5000);
