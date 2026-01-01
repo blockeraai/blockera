@@ -1206,5 +1206,160 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertStringNotContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-1)', $result['style'] );
 		$this->assertStringNotContainsString( ':where(.blockera-block-parent .blockera-block-parent-child-2)', $result['style'] );
 	}
+
+	/**
+	 * Test that child element with wp-block-cover__background class is skipped.
+	 */
+	public function testSkipChildElementWithWpBlockCoverBackground(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<div class="wp-block-cover__background" style="color: red; margin: 10px;">Background</div>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Child element with excluded class should be skipped - inline style should remain.
+		$this->assertStringContainsString( 'style="color: red; margin: 10px;"', $result['content'] );
+		// Should not generate any CSS for the skipped element.
+		$this->assertStringNotContainsString( 'color: red', $result['style'] );
+		$this->assertStringNotContainsString( 'margin: 10px', $result['style'] );
+		// Should not add any class to the skipped element.
+		$this->assertStringNotContainsString( 'blockera-block-parent-child-', $result['content'] );
+	}
+
+	/**
+	 * Test that root block with wp-block-cover__background class is still processed.
+	 */
+	public function testProcessRootBlockWithWpBlockCoverBackground(): void {
+
+		$html = '<div class="blockera-block-abc123 wp-block-cover__background" style="color: blue; padding: 20px;">Content</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Root block with excluded class should still be processed (has blockera-block-*).
+		$this->assertStringNotContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( ':where(.blockera-block-abc123)', $result['style'] );
+		$this->assertStringContainsString( 'color: blue', $result['style'] );
+		$this->assertStringContainsString( 'padding: 20px', $result['style'] );
+	}
+
+	/**
+	 * Test that child element with wp-block-cover__background and other classes is skipped.
+	 */
+	public function testSkipChildElementWithWpBlockCoverBackgroundAndOtherClasses(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<div class="wp-block-cover__background custom-class other-class" style="color: green; font-size: 16px;">Background</div>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Child element with excluded class should be skipped - inline style should remain.
+		$this->assertStringContainsString( 'style="color: green; font-size: 16px;"', $result['content'] );
+		// Should not generate any CSS for the skipped element.
+		$this->assertStringNotContainsString( 'color: green', $result['style'] );
+		$this->assertStringNotContainsString( 'font-size: 16px', $result['style'] );
+		// Should not add any class to the skipped element.
+		$this->assertStringNotContainsString( 'blockera-block-parent-child-', $result['content'] );
+		// Original classes should remain.
+		$this->assertStringContainsString( 'wp-block-cover__background', $result['content'] );
+		$this->assertStringContainsString( 'custom-class', $result['content'] );
+		$this->assertStringContainsString( 'other-class', $result['content'] );
+	}
+
+	/**
+	 * Test that child element with wp-block-cover__background but no parent is skipped.
+	 */
+	public function testSkipChildElementWithWpBlockCoverBackgroundNoParent(): void {
+
+		$html = '<div class="wp-block-cover__background" style="color: orange;">No parent</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Element with excluded class but no parent should be skipped - inline style should remain.
+		$this->assertStringContainsString( 'style="color: orange;"', $result['content'] );
+		// Should not generate any CSS.
+		$this->assertEquals( '', $result['style'] );
+	}
+
+	/**
+	 * Test that multiple child elements with excluded class are all skipped.
+	 */
+	public function testSkipMultipleChildElementsWithExcludedClass(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<div class="wp-block-cover__background" style="color: red;">Background 1</div>
+			<span style="color: blue;">Normal child</span>
+			<div class="wp-block-cover__background" style="color: green;">Background 2</div>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Both excluded elements should be skipped - inline styles should remain.
+		$this->assertStringContainsString( 'style="color: red;"', $result['content'] );
+		$this->assertStringContainsString( 'style="color: green;"', $result['content'] );
+		// Normal child should be processed.
+		$this->assertStringNotContainsString( 'style="color: blue;"', $result['content'] );
+		// CSS should only contain styles for the normal child.
+		$this->assertStringContainsString( 'color: blue', $result['style'] );
+		$this->assertStringNotContainsString( 'color: red', $result['style'] );
+		$this->assertStringNotContainsString( 'color: green', $result['style'] );
+		// Normal child should get a counter-based class.
+		$this->assertStringContainsString( 'blockera-block-parent-child-1', $result['content'] );
+		// Excluded elements should not get counter-based classes.
+		$this->assertStringNotContainsString( 'blockera-block-parent-child-2', $result['content'] );
+		$this->assertStringNotContainsString( 'blockera-block-parent-child-3', $result['content'] );
+	}
+
+	/**
+	 * Test that element with excluded class but also blockera-block-* is NOT skipped (root block).
+	 */
+	public function testSkipChildElementWithExcludedClassButHasBlockeraBlock(): void {
+
+		$html = '<div class="blockera-block-xyz wp-block-cover__background" style="color: purple; margin: 15px;">Root block</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Root block with excluded class should still be processed (has blockera-block-*).
+		$this->assertStringNotContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( ':where(.blockera-block-xyz)', $result['style'] );
+		$this->assertStringContainsString( 'color: purple', $result['style'] );
+		$this->assertStringContainsString( 'margin: 15px', $result['style'] );
+	}
+
+	/**
+	 * Test that child element with wp-block-* class with underscore and excluded class is skipped.
+	 */
+	public function testSkipChildElementWithWpBlockUnderscoreAndExcludedClass(): void {
+
+		$html = '<div class="blockera-block-parent">
+			<div class="wp-block-cover__background wp-block-cover__some-other" style="color: yellow;">Child</div>
+		</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Child element with wp-block-* with underscore and excluded class should be skipped.
+		$this->assertStringContainsString( 'style="color: yellow;"', $result['content'] );
+		// Should not generate any CSS.
+		$this->assertStringNotContainsString( 'color: yellow', $result['style'] );
+		// Should not add any class to the skipped element.
+		$this->assertStringNotContainsString( 'blockera-block-parent-child-', $result['content'] );
+	}
+
+	/**
+	 * Test that root block with wp-block-* without underscore and excluded class is still processed.
+	 */
+	public function testProcessRootBlockWithWpBlockNoUnderscoreAndExcludedClass(): void {
+
+		$html = '<div class="wp-block-button wp-block-cover__background" style="color: cyan;">Button</div>';
+
+		$result = $this->cleanup->process( $html );
+
+		// Root block (wp-block-* without underscore) with excluded class should be skipped
+		// because wp-block-* without underscore and without blockera-block-* is skipped anyway.
+		$this->assertStringContainsString( 'style="color: cyan;"', $result['content'] );
+		// Should not generate any CSS (because wp-block-* without blockera-block-* is skipped).
+		$this->assertEquals( '', $result['style'] );
+	}
 }
 

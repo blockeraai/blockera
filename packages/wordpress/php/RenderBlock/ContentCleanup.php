@@ -43,6 +43,18 @@ class ContentCleanup {
 	protected array $parent_child_counters = [];
 
 	/**
+	 * List of CSS classes that should be excluded from processing when found on child elements.
+	 * 
+	 * Child elements (Priority 3) with these classes will be skipped during style extraction.
+	 * Root blocks (Priority 1/2) with these classes will still be processed.
+	 *
+	 * @var array<string>
+	 */
+	protected static array $excluded_child_classes = [
+		'wp-block-cover__background',
+	];
+
+	/**
 	 * List of CSS properties to remove from block wrapper inline styles.
 	 * 
 	 * This list should be generated dynamically by using following script in Blockera main repository:
@@ -199,7 +211,13 @@ class ContentCleanup {
 			// Determine selector based on priority logic.
 			$all_attrs_combined = $before_attrs . ' ' . $after_attrs;
 			$child_class_value  = $this->extractClassAttribute( $all_attrs_combined );
-			$selector_data      = $this->determineSelector( $processed_content, $position, $before_attrs, $after_attrs, $child_class_value );
+			
+			// Skip child elements with excluded classes (e.g., wp-block-cover__background).
+			if ( $this->shouldSkipChildElement( $child_class_value ) ) {
+				continue;
+			}
+			
+			$selector_data = $this->determineSelector( $processed_content, $position, $before_attrs, $after_attrs, $child_class_value );
 
 			// Skip processing if selector is empty (e.g., parent is wp-block-* without blockera-block-*).
 			if ( empty( $selector_data['selector'] ) ) {
@@ -508,6 +526,54 @@ class ContentCleanup {
 
 		$result = trim( $matches[1] );
 		return $result;
+	}
+
+	/**
+	 * Check if a child element should be skipped based on excluded classes.
+	 * 
+	 * Child elements (Priority 3) with excluded classes are skipped.
+	 * Root blocks (Priority 1/2) with excluded classes are still processed.
+	 *
+	 * @param string $class_value The class attribute value.
+	 *
+	 * @return bool True if element should be skipped, false otherwise.
+	 */
+	protected function shouldSkipChildElement( string $class_value ): bool {
+
+		if ( empty( $class_value ) ) {
+			return false;
+		}
+
+		// Check if any excluded class is present (fast string check).
+		$has_excluded_class = false;
+		foreach ( self::$excluded_child_classes as $excluded_class ) {
+			if ( strpos( $class_value, $excluded_class ) !== false ) {
+				$has_excluded_class = true;
+				break;
+			}
+		}
+
+		if ( ! $has_excluded_class ) {
+			return false;
+		}
+
+		// Verify element is NOT a root block.
+		// Priority 1: Check for blockera-block-* class (root block).
+		$blockera_class = $this->findBlockeraBlockClass( $class_value );
+		if ( ! empty( $blockera_class ) ) {
+			// Root block - do not skip.
+			return false;
+		}
+
+		// Priority 2: Check for wp-block-* class without underscore (root block).
+		$wp_block_class = $this->findWpBlockClass( $class_value );
+		if ( ! empty( $wp_block_class ) && strpos( $wp_block_class, '_' ) === false ) {
+			// Root block - do not skip.
+			return false;
+		}
+
+		// Element has excluded class and is a child element (Priority 3) - skip it.
+		return true;
 	}
 
 	/**
