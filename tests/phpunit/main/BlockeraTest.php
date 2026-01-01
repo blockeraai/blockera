@@ -488,7 +488,7 @@ class BlockeraTest extends AppTestCase {
 		 * and save them as a JSON array in the order they appear
 		 */
 		$block_style_ids = [];
-		if (preg_match_all('/<style[^>]*id=["\'](wp-block-[^"\']+-inline-css)["\'][^>]*>/i', $head_output, $id_matches)) {
+		if (preg_match_all('/<style[^>]*id=["\']((?:wp-block-|blockera-block-)[^"\']+-inline-css)["\'][^>]*>/i', $head_output, $id_matches)) {
 			$block_style_ids = $id_matches[1];
 		}
 
