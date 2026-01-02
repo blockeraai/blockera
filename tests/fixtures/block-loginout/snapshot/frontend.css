@@ -107,7 +107,7 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-1) {
+:where(.blockera-block-1) {
 	background-color: #e6d7d7;
 	border-radius: 10px;
 	padding-top: 30px;
