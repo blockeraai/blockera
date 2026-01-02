@@ -3,6 +3,8 @@
 	border-top: 5px solid #e6a900;
 	border-left: 0px solid;
 	padding: 31px 31px 31px 31px;
+	font-weight: 600;
+	font-style: normal;
 	font-size: 20px;
 	text-align: center;
 }
@@ -52,19 +54,7 @@
 	background-color: #00acff;
 }
 
-:where(.blockera-block.blockera-block-1) {
-	border-top-color: #e6a900;
-	border-top-width: 5px;
-	border-left-width: 0px;
-	background-color: #ffeebe;
-	padding-top: 31px;
-	padding-right: 31px;
-	padding-bottom: 31px;
-	padding-left: 31px;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
-}
-
-:where(.blockera-block.blockera-block-1 mark.has-inline-color) {
+.blockera-block-1 :where(.blockera-block-1-child-1) {
 	background-color: #dfdfdf;
 }
 
@@ -205,6 +195,18 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-2) {
-	background-color: #ffdcdc;
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 2;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
