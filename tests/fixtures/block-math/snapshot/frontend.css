@@ -83,80 +83,72 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
-	padding-left: 0pt;
-	padding-right: 0pt;
-}
-
-:where(.blockera-block.blockera-block-1 mo) {
-	math-depth: 0;
-}
-
-:where(.blockera-block.blockera-block-1 mtd) {
-	padding-left: 0pt;
-	padding-right: 5.9776pt;
-}
-
-:where(.blockera-block.blockera-block-1 mtd) {
-	padding-left: 5.9776pt;
-	padding-right: 5.9776pt;
-}
-
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-1) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-2) {
 	padding-left: 0pt;
 	padding-right: 5.9776pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
-	padding-left: 5.9776pt;
-	padding-right: 5.9776pt;
-}
-
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-3) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-4) {
 	padding-left: 0pt;
 	padding-right: 5.9776pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
-	padding-left: 5.9776pt;
-	padding-right: 5.9776pt;
-}
-
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-5) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-6) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-7) {
 	padding-left: 0pt;
 	padding-right: 5.9776pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-8) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-9) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-10) {
 	padding-left: 0pt;
 	padding-right: 5.9776pt;
 }
 
-:where(.blockera-block.blockera-block-1 mtd) {
+.blockera-block-1 :where(.blockera-block-1-child-11) {
 	padding-left: 5.9776pt;
 	padding-right: 0pt;
 }
 
-:where(.blockera-block.blockera-block-1 mo) {
-	math-depth: 0;
+.blockera-block-1 :where(.blockera-block-1-child-12) {
+	padding-left: 5.9776pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-13) {
+	padding-left: 0pt;
+	padding-right: 5.9776pt;
+}
+
+.blockera-block-1 :where(.blockera-block-1-child-14) {
+	padding-left: 0pt;
+	padding-right: 0pt;
 }
