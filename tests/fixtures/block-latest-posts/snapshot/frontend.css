@@ -1,9 +1,9 @@
-:where(.blockera-block-1) {
+.blockera-block-1 {
 	background-color: #ffe9e9;
 	border-radius: 10px;
 }
 
-:where(.blockera-block-wrapper) {
+.blockera-block-wrapper {
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	line-height: 1.5;
 }
