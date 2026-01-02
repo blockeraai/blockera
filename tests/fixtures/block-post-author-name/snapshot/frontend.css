@@ -13,22 +13,16 @@
 	background-color: #f8a3a3;
 }
 
-:where(.blockera-block.blockera-block-1) {
-	color: #ff2e2e;
-	background-color: #ffe1e1;
-	border-radius: 10px;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-}
-
 .blockera-block.blockera-block-2.wp-block-post-author-name {
 	background-color: #d7c8a0;
 	border-radius: 10px;
 	transition: all 500ms ease 0ms;
 	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
 	gap: 10px;
+	height: 200px;
 	padding: 20px 20px 20px 20px;
 	font-weight: 600;
 	font-style: normal;
@@ -79,9 +73,9 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-post-author-name {
 		flex-direction: column;
+		align-items: stretch !important;
+		justify-content: center !important;
 		padding: 20px 20px 20px 20px;
-		flex-wrap: wrap !important;
-		align-content: flex-start;
 		background-color: #e6c66f;
 	}
 
@@ -118,7 +112,6 @@
 
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-post-author-name::before {
-		order: 100;
 		width: 100%;
 		width: -moz-available;
 		width: -webkit-fill-available;
@@ -140,12 +133,11 @@
 	.blockera-block.blockera-block-2.wp-block-post-author-name::after {
 		box-sizing: border-box;
 		width: 50%;
-		order: 100;
 		content: "After";
 	};
 }
 
-:where(.blockera-block.blockera-block-2) {
+.blockera-block-2 {
 	color: #ce7e06;
 	background-color: #d7c8a0;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
@@ -156,4 +148,28 @@
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
+}
+
+.blockera-block-1 {
+	color: #ff2e2e;
+	background-color: #ffe1e1;
+	border-radius: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-size: 18px;
+	line-height: 1;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
