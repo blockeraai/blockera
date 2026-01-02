@@ -116,7 +116,7 @@
 	border-width: 5px;
 }
 
-:where(.blockera-block-1) {
+.blockera-block-1 {
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
