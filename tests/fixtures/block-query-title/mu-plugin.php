@@ -17,7 +17,7 @@ add_filter(
 		global $wp_query;
 		
 		// Temporarily set search query var to make is_search() return true.
-		$wp_query->set( 's', 'test search' );
+		$wp_query->set( 's', 'search term' );
 		$wp_query->is_search = true;
 
 		return $pre_render;
@@ -31,7 +31,7 @@ add_filter(
 add_filter(
 	'get_search_query',
 	function() {
-		return 'test search';
+		return 'search term';
 	},
 	10,
 	1
