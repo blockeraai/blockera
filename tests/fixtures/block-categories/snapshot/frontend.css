@@ -187,21 +187,21 @@
 	text-decoration: initial;
 }
 
-:where(.blockera-block-3) {
+.blockera-block-3 {
 	color: #0055ff;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 700;
 }
 
-:where(.blockera-block-2) {
+.blockera-block-2 {
 	color: #0055ff;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 700;
 }
 
-:where(.blockera-block-1) {
+.blockera-block-1 {
 	background-color: #c4ffe3;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
