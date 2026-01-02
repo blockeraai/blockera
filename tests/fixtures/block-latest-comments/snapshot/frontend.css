@@ -1,4 +1,4 @@
-:where(.blockera-block-1) {
+.blockera-block-1 {
 	padding-top: 20px;
 	padding-right: 20px;
 	padding-bottom: 20px;
@@ -8,7 +8,7 @@
 	margin-left: 0px;
 }
 
-:where(.blockera-block-wrapper) {
+.blockera-block-wrapper {
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	line-height: 1.5;
 }
