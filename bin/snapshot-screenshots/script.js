@@ -1,6 +1,19 @@
 // Resemble.js loading state
 let resembleLoaded = false;
 
+// Helper function to append cache-busting parameter to image URLs
+// Skips cache-busting for data URLs (they already contain the image data)
+function addCacheBuster(url) {
+	// Data URLs don't need cache busting
+	if (url.startsWith('data:')) {
+		return url;
+	}
+	const separator = url.includes('?') ? '&' : '?';
+	const timestamp = Date.now();
+	const random = Math.random().toString(36).substring(7);
+	return url + separator + 't=' + timestamp + '&r=' + random;
+}
+
 const loadResemble = () => {
 	return new Promise((resolve, reject) => {
 		// Check if Resemble.js is already loaded (check both window.resemble and global resemble)
@@ -73,7 +86,14 @@ tests.forEach((test, index) => {
 	section.dataset.testIndex = index;
 
 	section.innerHTML = `
-        <div class="test-header">${test.id}</div>
+        <div class="test-header">
+            <span>${test.id}</span>
+            <div class="test-header-actions">
+                <button class="test-retry-btn" data-test-id="${test.id}" title="Retry test">
+                    Retry
+                </button>
+            </div>
+        </div>
         <div class="row-label">Desktop</div>
         <div class="test-row desktop-row" data-test-id="${test.id}" data-type="desktop">
             <div class="image-wrapper">
@@ -121,6 +141,280 @@ tests.forEach((test, index) => {
 	container.appendChild(section);
 });
 
+// Attach retry button handlers
+function attachRetryHandlers() {
+	document.querySelectorAll('.test-retry-btn').forEach((btn) => {
+		btn.addEventListener('click', async function () {
+			const testId = this.dataset.testId;
+			await retryTest(testId);
+		});
+	});
+}
+
+// Retry a specific test - reload images and re-run comparisons
+async function retryTest(testId) {
+	const test = tests.find((t) => t.id === testId);
+	if (!test) {
+		console.error('Test not found:', testId);
+		return;
+	}
+
+	const section = document.getElementById(`test-${test.id}`);
+	if (!section) {
+		console.error('Test section not found:', testId);
+		return;
+	}
+
+	const retryBtn = section.querySelector('.test-retry-btn');
+	if (!retryBtn) {
+		return;
+	}
+
+	// Disable button and show loading state
+	retryBtn.disabled = true;
+	retryBtn.classList.add('retrying');
+	const originalHTML = retryBtn.innerHTML;
+	retryBtn.textContent = 'Retrying...';
+
+	// Get current test status to subtract from statistics
+	const desktopContainer = section.querySelector(
+		'.desktop-row .diff-container'
+	);
+	const mobileContainer = section.querySelector(
+		'.mobile-row .diff-container'
+	);
+	const desktopFailed = desktopContainer?.dataset.failed === 'true';
+	const mobileFailed = mobileContainer?.dataset.failed === 'true';
+
+	const editorDesktopExists = test.images['editor-desktop']?.exists;
+	const editorMobileExists = test.images['editor-mobile']?.exists;
+	const frontendDesktopExists = test.images['frontend-desktop']?.exists;
+	const frontendMobileExists = test.images['frontend-mobile']?.exists;
+
+	// Subtract old counts from statistics
+	if (!desktopFailed && editorDesktopExists && frontendDesktopExists) {
+		passingTests = Math.max(0, passingTests - 1);
+	}
+	if (!mobileFailed && editorMobileExists && frontendMobileExists) {
+		passingTests = Math.max(0, passingTests - 1);
+	}
+	if (desktopFailed && editorDesktopExists && frontendDesktopExists) {
+		failingTests = Math.max(0, failingTests - 1);
+	}
+	if (mobileFailed && editorMobileExists && frontendMobileExists) {
+		failingTests = Math.max(0, failingTests - 1);
+	}
+	if (!editorDesktopExists || !frontendDesktopExists) {
+		missingTests = Math.max(0, missingTests - 1);
+	}
+	if (!editorMobileExists || !frontendMobileExists) {
+		missingTests = Math.max(0, missingTests - 1);
+	}
+
+	// Remove from failing test IDs if it was there
+	const failingIndex = failingTestIds.indexOf(test.id);
+	if (failingIndex > -1) {
+		failingTestIds.splice(failingIndex, 1);
+	}
+
+	// Clear old comparison results
+	comparisonResults.delete(`${test.id}-desktop`);
+	comparisonResults.delete(`${test.id}-mobile`);
+
+	// Clear image dimensions
+	imageDimensions.delete(`${test.id}-editor-desktop`);
+	imageDimensions.delete(`${test.id}-frontend-desktop`);
+	imageDimensions.delete(`${test.id}-editor-mobile`);
+	imageDimensions.delete(`${test.id}-frontend-mobile`);
+
+	// Reset diff containers to loading state
+	const desktopDiffContainer = section.querySelector(
+		'.desktop-row .diff-container'
+	);
+	const mobileDiffContainer = section.querySelector(
+		'.mobile-row .diff-container'
+	);
+	if (desktopDiffContainer) {
+		desktopDiffContainer.innerHTML =
+			'<div class="diff-placeholder">Loading...</div>';
+		desktopDiffContainer.dataset.failed = '';
+	}
+	if (mobileDiffContainer) {
+		mobileDiffContainer.innerHTML =
+			'<div class="diff-placeholder">Loading...</div>';
+		mobileDiffContainer.dataset.failed = '';
+	}
+
+	// Reset diff labels
+	const desktopDiffLabel = section.querySelector('.desktop-row .diff-label');
+	const mobileDiffLabel = section.querySelector('.mobile-row .diff-label');
+	if (desktopDiffLabel) {
+		desktopDiffLabel.innerHTML =
+			'Difference<span class="dimensions"></span>';
+		desktopDiffLabel.classList.remove('passing', 'failing');
+	}
+	if (mobileDiffLabel) {
+		mobileDiffLabel.innerHTML =
+			'Difference<span class="dimensions"></span>';
+		mobileDiffLabel.classList.remove('passing', 'failing');
+	}
+
+	// Reset row failed state
+	const desktopRow = section.querySelector('.desktop-row');
+	const mobileRow = section.querySelector('.mobile-row');
+	if (desktopRow) {
+		desktopRow.dataset.failed = '';
+	}
+	if (mobileRow) {
+		mobileRow.dataset.failed = '';
+	}
+
+	// Reload images with cache-busting and wait for them to fully load
+	const imageTypes = [
+		'editor-desktop',
+		'frontend-desktop',
+		'editor-mobile',
+		'frontend-mobile',
+	];
+	const imageLoadPromises = [];
+
+	for (const imageType of imageTypes) {
+		const imageData = test.images[imageType];
+		const container = section.querySelector(
+			`.image-container[data-image-type="${imageType}"]`
+		);
+		const placeholder = container?.querySelector('.image-placeholder');
+		const label = section.querySelector(
+			`.image-label[data-label-type="${imageType}"]`
+		);
+		const dimensionsSpan = label?.querySelector('.dimensions');
+
+		if (!imageData.exists || !container || !placeholder) {
+			continue;
+		}
+
+		// Clear existing image
+		placeholder.innerHTML = '';
+		container.classList.remove('missing');
+
+		// Load new image with cache-busting
+		const img = document.createElement('img');
+		img.src = addCacheBuster(imageData.url);
+		img.alt = imageData.filename;
+
+		// Create promise for this image load
+		const imageLoadPromise = new Promise((resolve, reject) => {
+			img.onerror = function () {
+				container.classList.add('missing');
+				if (dimensionsSpan) {
+					dimensionsSpan.textContent = '';
+				}
+				placeholder.innerHTML = `
+					<div class="missing-image">
+						<div class="missing-image-icon">❌</div>
+						<div class="missing-image-text">Failed to Load</div>
+						<div style="font-size: 12px; margin-top: 5px; opacity: 0.7;">${imageData.filename}</div>
+					</div>
+				`;
+				reject(new Error(`Failed to load ${imageType}`));
+			};
+			img.onload = function () {
+				placeholder.innerHTML = '';
+				placeholder.appendChild(img);
+				if (dimensionsSpan) {
+					dimensionsSpan.textContent = `(${img.naturalWidth} × ${img.naturalHeight})`;
+				}
+				const dimensionKey = `${test.id}-${imageType}`;
+				imageDimensions.set(dimensionKey, {
+					width: img.naturalWidth,
+					height: img.naturalHeight,
+				});
+				checkAndUpdateRowLabelDimensions(test.id, imageType);
+				img.addEventListener('click', function () {
+					openLightbox(
+						img.src,
+						`${imageType.replace('-', ' ')} - ${test.id}`
+					);
+				});
+				resolve(img);
+			};
+		});
+
+		imageLoadPromises.push(imageLoadPromise);
+		placeholder.appendChild(img);
+	}
+
+	// Wait for all images to fully load before proceeding with comparisons
+	try {
+		await Promise.all(imageLoadPromises);
+	} catch (error) {
+		// Some images failed to load, but continue with comparisons for the ones that loaded
+		console.warn('Some images failed to load during retry:', error);
+	}
+
+	// Re-run comparisons using the newly loaded images
+	await processComparison(test, 'desktop');
+	await new Promise((resolve) => setTimeout(resolve, 0));
+	await processComparison(test, 'mobile');
+
+	// Update statistics with new results
+	const newDesktopFailed = desktopDiffContainer?.dataset.failed === 'true';
+	const newMobileFailed = mobileDiffContainer?.dataset.failed === 'true';
+
+	if (!newDesktopFailed && editorDesktopExists && frontendDesktopExists) {
+		passingTests++;
+	}
+	if (!newMobileFailed && editorMobileExists && frontendMobileExists) {
+		passingTests++;
+	}
+	if (newDesktopFailed && editorDesktopExists && frontendDesktopExists) {
+		failingTests++;
+	}
+	if (newMobileFailed && editorMobileExists && frontendMobileExists) {
+		failingTests++;
+	}
+	if (!editorDesktopExists || !frontendDesktopExists) {
+		missingTests++;
+	}
+	if (!editorMobileExists || !frontendMobileExists) {
+		missingTests++;
+	}
+
+	// Update failing test IDs
+	if (
+		(newDesktopFailed && editorDesktopExists && frontendDesktopExists) ||
+		(newMobileFailed && editorMobileExists && frontendMobileExists)
+	) {
+		if (!failingTestIds.includes(test.id)) {
+			failingTestIds.push(test.id);
+		}
+	}
+
+	// Update test section status
+	updateTestSectionStatus(
+		test.id,
+		newDesktopFailed,
+		newMobileFailed,
+		editorDesktopExists,
+		frontendDesktopExists,
+		editorMobileExists,
+		frontendMobileExists
+	);
+
+	// Update statistics display
+	document.getElementById('stat-passing').textContent = passingTests;
+	document.getElementById('stat-failing').textContent = failingTests;
+	document.getElementById('stat-missing').textContent = missingTests;
+
+	// Update navigation buttons
+	updateNavigationButtons();
+
+	// Re-enable button
+	retryBtn.disabled = false;
+	retryBtn.classList.remove('retrying');
+	retryBtn.innerHTML = originalHTML;
+}
+
 // Load images and render placeholders
 tests.forEach((test) => {
 	[
@@ -155,7 +449,8 @@ tests.forEach((test) => {
             `;
 		} else {
 			const img = document.createElement('img');
-			img.src = imageData.url;
+			// Append cache-busting parameter to prevent browser caching
+			img.src = addCacheBuster(imageData.url);
 			img.alt = imageData.filename;
 			img.onerror = function () {
 				container.classList.add('missing');
@@ -198,6 +493,9 @@ tests.forEach((test) => {
 	});
 });
 
+// Attach retry handlers after images are loaded
+attachRetryHandlers();
+
 // Function to update test section status (checkmark and background)
 function updateTestSectionStatus(
 	testId,
@@ -233,10 +531,44 @@ function updateTestSectionStatus(
 		(desktopFailed && editorDesktopExists && frontendDesktopExists) ||
 		(mobileFailed && editorMobileExists && frontendMobileExists);
 
+	// Get or create actions container
+	let actionsContainer = testHeader.querySelector('.test-header-actions');
+	if (!actionsContainer) {
+		actionsContainer = document.createElement('div');
+		actionsContainer.className = 'test-header-actions';
+		// Find retry button - it should already be in a test-header-actions container
+		const retryBtn = testHeader.querySelector('.test-retry-btn');
+		if (
+			retryBtn &&
+			retryBtn.parentNode &&
+			retryBtn.parentNode.classList.contains('test-header-actions')
+		) {
+			// Retry button is already in an actions container, use that
+			actionsContainer = retryBtn.parentNode;
+		} else {
+			// Create new container and append to header
+			testHeader.appendChild(actionsContainer);
+			// Move retry button if it exists
+			if (retryBtn && retryBtn.parentNode) {
+				actionsContainer.appendChild(retryBtn);
+			}
+		}
+	}
+
+	// Move any existing status icons to actions container if they're not already there
+	const existingStatusIcons = testHeader.querySelectorAll(
+		'.test-header-checkmark, .test-header-xmark, .test-header-missing'
+	);
+	existingStatusIcons.forEach((icon) => {
+		if (icon.parentNode !== actionsContainer) {
+			actionsContainer.appendChild(icon);
+		}
+	});
+
 	// Add or remove checkmark/X icon/Missing icon
-	let checkmark = testHeader.querySelector('.test-header-checkmark');
-	let xmark = testHeader.querySelector('.test-header-xmark');
-	let missingIcon = testHeader.querySelector('.test-header-missing');
+	let checkmark = actionsContainer.querySelector('.test-header-checkmark');
+	let xmark = actionsContainer.querySelector('.test-header-xmark');
+	let missingIcon = actionsContainer.querySelector('.test-header-missing');
 
 	if (bothPassed) {
 		// Both passed: show checkmark, remove other icons
@@ -244,7 +576,7 @@ function updateTestSectionStatus(
 			checkmark = document.createElement('div');
 			checkmark.className = 'test-header-checkmark';
 			checkmark.textContent = '✓';
-			testHeader.appendChild(checkmark);
+			actionsContainer.appendChild(checkmark);
 		}
 		if (xmark) {
 			xmark.remove();
@@ -261,7 +593,7 @@ function updateTestSectionStatus(
 			missingIcon = document.createElement('div');
 			missingIcon.className = 'test-header-missing';
 			missingIcon.textContent = '⚠';
-			testHeader.appendChild(missingIcon);
+			actionsContainer.appendChild(missingIcon);
 		}
 		if (checkmark) {
 			checkmark.remove();
@@ -278,7 +610,7 @@ function updateTestSectionStatus(
 			xmark = document.createElement('div');
 			xmark.className = 'test-header-xmark';
 			xmark.textContent = '✕';
-			testHeader.appendChild(xmark);
+			actionsContainer.appendChild(xmark);
 		}
 		if (checkmark) {
 			checkmark.remove();
@@ -674,24 +1006,51 @@ async function processComparison(test, type) {
 		return;
 	}
 
-	// Load images
-	const editorImg = new Image();
-	const frontendImg = new Image();
+	// Check if images are already loaded in the DOM (e.g., from retry)
+	const existingEditorImg = document.querySelector(
+		`#test-${test.id} .image-container[data-image-type="${editorType}"] img`
+	);
+	const existingFrontendImg = document.querySelector(
+		`#test-${test.id} .image-container[data-image-type="${frontendType}"] img`
+	);
 
-	const imagesLoaded = Promise.all([
-		new Promise((resolve, reject) => {
-			editorImg.onload = resolve;
-			editorImg.onerror = () =>
-				reject(new Error('Editor image failed to load'));
-			editorImg.src = editorData.url;
-		}),
-		new Promise((resolve, reject) => {
-			frontendImg.onload = resolve;
-			frontendImg.onerror = () =>
-				reject(new Error('Frontend image failed to load'));
-			frontendImg.src = frontendData.url;
-		}),
-	]);
+	let editorImg, frontendImg;
+	let imagesLoaded;
+
+	// If images are already loaded in DOM and complete, use them
+	if (
+		existingEditorImg &&
+		existingEditorImg.complete &&
+		existingEditorImg.naturalWidth > 0 &&
+		existingFrontendImg &&
+		existingFrontendImg.complete &&
+		existingFrontendImg.naturalWidth > 0
+	) {
+		editorImg = existingEditorImg;
+		frontendImg = existingFrontendImg;
+		imagesLoaded = Promise.resolve();
+	} else {
+		// Load images fresh with cache-busting
+		editorImg = new Image();
+		frontendImg = new Image();
+
+		imagesLoaded = Promise.all([
+			new Promise((resolve, reject) => {
+				editorImg.onload = resolve;
+				editorImg.onerror = () =>
+					reject(new Error('Editor image failed to load'));
+				// Append cache-busting parameter to prevent browser caching
+				editorImg.src = addCacheBuster(editorData.url);
+			}),
+			new Promise((resolve, reject) => {
+				frontendImg.onload = resolve;
+				frontendImg.onerror = () =>
+					reject(new Error('Frontend image failed to load'));
+				// Append cache-busting parameter to prevent browser caching
+				frontendImg.src = addCacheBuster(frontendData.url);
+			}),
+		]);
+	}
 
 	try {
 		await imagesLoaded;
@@ -844,6 +1203,11 @@ function updateNavigationButtons() {
 	const prevBtn = document.getElementById('btn-prev');
 	const nextBtn = document.getElementById('btn-next');
 
+	// Return early if buttons don't exist
+	if (!prevBtn || !nextBtn) {
+		return;
+	}
+
 	if (failingTestIds.length === 0) {
 		prevBtn.disabled = true;
 		nextBtn.disabled = true;
@@ -931,7 +1295,8 @@ function openLightbox(imageSrc, caption, editorSrc = null, frontendSrc = null) {
 		container.className = '';
 		const img = document.createElement('img');
 		img.className = 'lightbox-image';
-		img.src = imageSrc;
+		// Append cache-busting parameter to prevent browser caching
+		img.src = addCacheBuster(imageSrc);
 		img.alt = caption;
 		container.appendChild(img);
 	}
@@ -972,10 +1337,11 @@ function renderAllComparisonModes() {
 	const sideBySideContainer = document.createElement('div');
 	sideBySideContainer.className = 'comparison-side-by-side';
 	const editorImg = document.createElement('img');
-	editorImg.src = lightboxState.editorImageSrc;
+	// Append cache-busting parameter to prevent browser caching
+	editorImg.src = addCacheBuster(lightboxState.editorImageSrc);
 	editorImg.alt = 'Editor';
 	const frontendImg = document.createElement('img');
-	frontendImg.src = lightboxState.frontendImageSrc;
+	frontendImg.src = addCacheBuster(lightboxState.frontendImageSrc);
 	frontendImg.alt = 'Frontend';
 	sideBySideContainer.appendChild(editorImg);
 	sideBySideContainer.appendChild(frontendImg);
@@ -994,12 +1360,13 @@ function renderAllComparisonModes() {
 
 	const baseImg = document.createElement('img');
 	baseImg.className = 'base-image';
-	baseImg.src = lightboxState.editorImageSrc;
+	// Append cache-busting parameter to prevent browser caching
+	baseImg.src = addCacheBuster(lightboxState.editorImageSrc);
 	baseImg.alt = 'Editor';
 
 	const overlayImg = document.createElement('img');
 	overlayImg.className = 'overlay-image';
-	overlayImg.src = lightboxState.frontendImageSrc;
+	overlayImg.src = addCacheBuster(lightboxState.frontendImageSrc);
 	overlayImg.alt = 'Frontend';
 
 	// Ensure overlay image matches base image dimensions exactly
@@ -1095,12 +1462,13 @@ function renderAllComparisonModes() {
 	blinkContainer.className = 'comparison-blink';
 
 	const blinkBaseImg = document.createElement('img');
-	blinkBaseImg.src = lightboxState.editorImageSrc;
+	// Append cache-busting parameter to prevent browser caching
+	blinkBaseImg.src = addCacheBuster(lightboxState.editorImageSrc);
 	blinkBaseImg.alt = 'Editor';
 
 	const blinkOverlayImg = document.createElement('img');
 	blinkOverlayImg.className = 'blink-image';
-	blinkOverlayImg.src = lightboxState.frontendImageSrc;
+	blinkOverlayImg.src = addCacheBuster(lightboxState.frontendImageSrc);
 	blinkOverlayImg.alt = 'Frontend';
 
 	// Ensure both images have same dimensions
