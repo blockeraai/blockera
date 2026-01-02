@@ -7,10 +7,6 @@
 	width: 150px;
 }
 
-:where(.blockera-block.blockera-block-1 img) {
-	width: 150px;
-}
-
 .blockera-block.blockera-block-2.wp-block-image {
 	background-color: #d8e0ff;
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%2811%2C%2088%2C%20241%29%3B%20fill%3A%20rgb%2811%2C%2088%2C%20241%29%3B%20width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M17.7%204.3c-1.2%200-2.8%200-3.8%201-.6.6-.9%201.5-.9%202.6V14c-.6-.6-1.5-1-2.5-1C8.6%2013%207%2014.6%207%2016.5S8.6%2020%2010.5%2020c1.5%200%202.8-1%203.3-2.3.5-.8.7-1.8.7-2.5V7.9c0-.7.2-1.2.5-1.6.6-.6%201.8-.6%202.8-.6h.3V4.3h-.4z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
@@ -24,20 +20,16 @@
 
 .blockera-block.blockera-block-2.wp-block-image::before {
 	background-color: #a8b7f3;
+	display: inline-block !important;
+	padding: 5px 10px 5px 10px;
 	content: "Before";
 }
 
 .blockera-block.blockera-block-2.wp-block-image::after {
 	background-color: #a8b7f3;
+	display: inline-block !important;
+	padding: 5px 10px 5px 10px;
 	content: "After";
-}
-
-:where(.blockera-block.blockera-block-2) {
-	background-color: #d8e0ff;
-}
-
-:where(.blockera-block.blockera-block-2 img) {
-	border-radius: 10px;
 }
 
 .blockera-block.blockera-block-3.wp-block-image {
@@ -107,19 +99,12 @@
 	};
 }
 
-:where(.blockera-block.blockera-block-3) {
-	background-color: #c7f3c4;
+u0026 {
+	n width: fit-content;
+	n;
 }
 
-:where(.blockera-block.blockera-block-3 img) {
-	border-radius: 10px;
-}
-
-.blockera-block.blockera-block-3 {
-	width: fit-content;
-}
-
-.blockera-block.blockera-block-4.wp-block-image {
+n .blockera-block.blockera-block-4.wp-block-image {
 	background-color: #d8e0ff;
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M4%2020h8v-1.5H4V20zM18.9%203.5c-.6-.6-1.5-.6-2.1%200l-7.2%207.2c-.4-.1-.7%200-1.1.1-.5.2-1.5.7-1.9%202.2-.4%201.7-.8%202.2-1.1%202.7-.1.1-.2.3-.3.4l-.6%201.1H6c2%200%203.4-.4%204.7-1.4.8-.6%201.2-1.4%201.3-2.3%200-.3%200-.5-.1-.7L19%205.7c.5-.6.5-1.6-.1-2.2zM9.7%2014.7c-.7.5-1.5.8-2.4%201%20.2-.5.5-1.2.8-2.3.2-.6.4-1%20.8-1.1.5-.1%201%20.1%201.3.3.2.2.3.5.2.8%200%20.3-.1.9-.7%201.3z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
 }
@@ -151,15 +136,6 @@
 	};
 }
 
-:where(.blockera-block.blockera-block-4) {
-	background-color: #d8e0ff;
-}
-
-:where(.blockera-block.blockera-block-4 img.has-border-color) {
-	border-color: #3b62ff;
-	border-width: 1px;
-}
-
 .blockera-block.blockera-block-5.wp-block-image {
 	background-color: #c3c3c3;
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20viewBox%3D%220%200%2024%2024%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22width%3A%201em%3B%20height%3A%201em%3B%22%3E%3Cpath%20d%3D%22M12.5939%2021C14.1472%2021%2016.1269%2020.5701%2017.0711%2020.1975L16.6447%2018.879C16.0964%2019.051%2014.3299%2019.6242%2012.6548%2019.6242C7.4467%2019.6242%204.67513%2016.8726%204.67513%2012C4.67513%207.21338%207.50762%204.34713%2012.2893%204.34713C17.132%204.34713%2019.4162%207.55732%2019.4162%2010.7675C19.4162%2014.035%2019.0508%2015.4968%2017.4975%2015.4968C16.5838%2015.4968%2016.0964%2014.7803%2016.0964%2013.9777V7.5H14.4822V8.30255H14.3909C14.1777%207.67198%2012.9898%207.12739%2011.467%207.2707C9.18274%207.5%207.4467%209.27707%207.4467%2011.8567C7.4467%2014.5796%208.81726%2016.672%2011.467%2016.758C13.203%2016.8153%2014.1168%2016.0127%2014.4822%2015.1815H14.5736C14.7563%2016.414%2016.401%2016.8439%2017.467%2016.8439C20.6954%2016.8439%2021%2013.5764%2021%2010.7962C21%206.86943%2018.0761%203%2012.3807%203C6.50254%203%203%206.3535%203%2011.9427C3%2017.7325%206.38071%2021%2012.5939%2021ZM11.7107%2015.2962C9.73096%2015.2962%209.03046%2013.6051%209.03046%2011.7707C9.03046%2010.1083%2010.0355%208.67516%2011.7716%208.67516C13.599%208.67516%2014.5736%209.36306%2014.5736%2011.7707C14.5736%2014.1497%2013.7513%2015.2962%2011.7107%2015.2962Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
@@ -176,22 +152,28 @@
 	background-color: #ffdfdf;
 	padding: 3px 10px 3px 10px;
 	border-radius: 10px;
-	content: "#"attr(id)"";
+	font-size: 20px;
+	line-height: 24px;
+	font-weight: 1000;
+	font-style: normal;
+	content: "At Symbol";
 }
 
-:where(.blockera-block.blockera-block-5) {
-	background-color: #c3c3c3;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
+u0026 {
+	n border-radius: 10px;
+	n;
 }
 
-:where(.blockera-block.blockera-block-5 img) {
-	width: 100px;
-	height: auto;
+n .blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	justify-content: flex-start !important;
+	align-items: center !important;
+	gap: 30px;
+	font-size: 20px;
+	line-height: 1;
 }
 
-.blockera-block.blockera-block-5 {
-	border-radius: 10px;
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
