@@ -59,11 +59,6 @@
 	};
 }
 
-:where(.blockera-block.blockera-block-4) {
-	color: #ffffff;
-	background-color: #eb8c50;
-}
-
 .wp-block-list > li.blockera-block.blockera-block-5 {
 	background-color: #ffd3d3;
 	--blockera--icon--url: url("data:image/svg+xml, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20width%3D%2224%22%20height%3D%2224%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%20style%3D%22color%3A%20rgb%287%2C%20195%2C%200%29%3B%20fill%3A%20rgb%287%2C%20195%2C%200%29%3B%20width%3A%2042px%3B%20height%3A%2042px%3B%22%3E%3Cpath%20d%3D%22M12%2013.06l3.712%203.713%201.061-1.06L13.061%2012l3.712-3.712-1.06-1.06L12%2010.938%208.288%207.227l-1.061%201.06L10.939%2012l-3.712%203.712%201.06%201.061L12%2013.061z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
@@ -76,13 +71,6 @@
 
 .wp-block-list > li.blockera-block.blockera-block-5 a:not(.wp-element-button) {
 	color: #c73535;
-}
-
-:where(.blockera-block.blockera-block-5) {
-	color: #c73535;
-	background-color: #ffd3d3;
-	font-style: normal;
-	font-weight: 600;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-6 {
@@ -114,19 +102,6 @@
 
 .wp-block-list > li.blockera-block.blockera-block-6 ul {
 	border-radius: 20px;
-}
-
-:where(.blockera-block.blockera-block-6) {
-	border-radius: 10px;
-	color: #900000;
-	background-color: #ffdada;
-	padding-top: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;
-	padding-left: 10px;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style: normal;
-	font-weight: 600;
 }
 
 .wp-block-list > li.blockera-block.blockera-block-7 {
@@ -208,13 +183,6 @@ ul.blockera-block.blockera-block-8:hover {
 	};
 }
 
-:where(.blockera-block.blockera-block-8) {
-	border-color: #26ff00;
-	border-width: 2px;
-	border-radius: 10px;
-	background-color: #edffcf;
-}
-
 .wp-block-list > li.blockera-block.blockera-block-9::before {
 	background-color: #00000066;
 	content: "Before Overrided!";
@@ -236,6 +204,18 @@ ul.blockera-block.blockera-block-8:hover {
 	};
 }
 
-:where(.blockera-block.blockera-block-10) {
-	background-color: #0000002e;
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
