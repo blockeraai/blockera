@@ -193,7 +193,7 @@
 	};
 }
 
-:where(.blockera-block-3) {
+.blockera-block-3 {
 	background-color: #a7ebe9;
 	padding-top: 20px;
 	padding-right: 20px;
@@ -201,7 +201,7 @@
 	padding-left: 20px;
 }
 
-:where(.blockera-block-2) {
+.blockera-block-2 {
 	background-color: #b6d5ff;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.196), 16px);
 	font-style: normal;
@@ -214,7 +214,7 @@
 	margin-top: 20px;
 }
 
-:where(.blockera-block-1) {
+.blockera-block-1 {
 	background-color: #c5eba7;
 	border-color: #46a300;
 	border-radius: 20px;
