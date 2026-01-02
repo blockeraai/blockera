@@ -1049,7 +1049,7 @@ class ContentCleanup {
 
 			// Wrap selector in :where() for zero specificity.
 			// If selector has whitespace (child selector), wrap only the part after first space.
-			// Otherwise, wrap the entire selector.
+			// Single selectors are not wrapped.
 			$space_pos = strpos( $selector, ' ' );
 			if ( false !== $space_pos ) {
 				// Child selector: wrap only the part after first space.
@@ -1057,8 +1057,8 @@ class ContentCleanup {
 				$child_part       = substr( $selector, $space_pos + 1 );
 				$wrapped_selector = $parent_part . ' :where(' . $child_part . ')';
 			} else {
-				// Single selector: wrap entire selector.
-				$wrapped_selector = ':where(' . $selector . ')';
+				// Single selector: use as-is without wrapping.
+				$wrapped_selector = $selector;
 			}
 
 			$css_content .= $wrapped_selector . ' { ' . $styles . ' }' . PHP_EOL;

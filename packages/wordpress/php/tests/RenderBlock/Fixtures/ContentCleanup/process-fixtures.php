@@ -16,13 +16,13 @@ return [
 	[
 		'input'            => '<div class="blockera-block-abc123" style="color: red; margin: 10px;">Content</div>',
 		'expected_content' => '<div class="blockera-block-abc123">Content</div>',
-		'expected_style'   => ':where(.blockera-block-abc123) { color: red; margin: 10px; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-abc123 { color: red; margin: 10px; }' . PHP_EOL,
 	],
 	// #1
 	[
 		'input'            => '<p class="blockera-block-xyz text-content" style="padding: 5px;">Hello</p>',
 		'expected_content' => '<p class="blockera-block-xyz text-content">Hello</p>',
-		'expected_style'   => ':where(.blockera-block-xyz) { padding: 5px; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-xyz { padding: 5px; }' . PHP_EOL,
 	],
 
 	// Priority 2: wp-block-* class (should skip - no blockera-block-* class)
@@ -166,7 +166,7 @@ return [
 			'blockera-block-content-child-2',
 		],
 		'style_contains'   => [
-			':where(.blockera-block-title)',
+			'.blockera-block-title',
 			'font-size: 24px',
 			'.blockera-block-content :where(.blockera-block-content-child-1)',
 			'.blockera-block-content :where(.blockera-block-content-child-2)',
@@ -258,9 +258,9 @@ return [
 			'style="margin: 10px"', // Should be removed (processed)
 		],
 		'style_contains'    => [
-			':where(.blockera-block-1)',
+			'.blockera-block-1',
 			'padding: 20px',
-			':where(.blockera-block-2)',
+			'.blockera-block-2',
 			'margin: 10px',
 		],
 		'style_not_contains' => [
@@ -285,13 +285,13 @@ return [
 	[
 		'input'            => '<div class="blockera-block-test" style="color: red">No semicolon</div>',
 		'expected_content' => '<div class="blockera-block-test">No semicolon</div>',
-		'expected_style'   => ':where(.blockera-block-test) { color: red; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-test { color: red; }' . PHP_EOL,
 	],
 	// #22
 	[
 		'input'            => '<div class="blockera-block-test" style="color: red;">With semicolon</div>',
 		'expected_content' => '<div class="blockera-block-test">With semicolon</div>',
-		'expected_style'   => ':where(.blockera-block-test) { color: red; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-test { color: red; }' . PHP_EOL,
 	],
 
 	// Priority precedence: blockera-block takes precedence over wp-block
@@ -299,7 +299,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-abc wp-block-button" style="color: green;">Content</div>',
 		'expected_content' => '<div class="blockera-block-abc wp-block-button">Content</div>',
-		'expected_style'   => ':where(.blockera-block-abc) { color: green; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-abc { color: green; }' . PHP_EOL,
 	],
 
 	// Complex nested structure
@@ -308,9 +308,9 @@ return [
 		'input'            => '<div class="blockera-block-outer" style="padding: 10px;"><div class="blockera-block-inner" style="margin: 5px;"><span style="color: blue;">Deep nested</span></div></div>',
 		'expected_content' => '<div class="blockera-block-outer"><div class="blockera-block-inner"><span class="blockera-block-inner-child-1">Deep nested</span></div></div>',
 		'style_contains'   => [
-			':where(.blockera-block-outer)',
+			'.blockera-block-outer',
 			'padding: 10px',
-			':where(.blockera-block-inner)',
+			'.blockera-block-inner',
 			'margin: 5px',
 			'.blockera-block-inner :where(.blockera-block-inner-child-1)',
 			'color: blue',
@@ -347,7 +347,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-test" style="">Content</div>',
 		'expected_content' => '<div class="blockera-block-test">Content</div>',
-		'expected_style'   => ':where(.blockera-block-test) { ; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-test { ; }' . PHP_EOL,
 	],
 
 	// Multiple inline style elements in sequence
@@ -356,9 +356,9 @@ return [
 		'input'            => '<div class="blockera-block-1" style="margin: 10px;"></div><div class="blockera-block-2" style="padding: 20px;"></div>',
 		'expected_content' => '<div class="blockera-block-1"></div><div class="blockera-block-2"></div>',
 		'style_contains'   => [
-			':where(.blockera-block-1)',
+			'.blockera-block-1',
 			'margin: 10px',
-			':where(.blockera-block-2)',
+			'.blockera-block-2',
 			'padding: 20px',
 		],
 	],
@@ -385,7 +385,7 @@ return [
 			'style="background: yellow;"', // wp-block-column is parent of span, so span style should remain (skipped)
 		],
 		'style_contains'   => [
-			':where(.blockera-block-text)',
+			'.blockera-block-text',
 			'color: #333',
 			'font-size: 16px',
 		],
@@ -415,11 +415,11 @@ return [
 			'style="padding: 15px;"', // wp-block-group style should remain (skipped)
 		],
 		'style_contains'   => [
-			':where(.blockera-block-item1)',
+			'.blockera-block-item1',
 			'margin: 10px',
 			'.blockera-block-container :where(.blockera-block-container-child-1)',
 			'color: blue',
-			':where(.blockera-block-span)',
+			'.blockera-block-span',
 			'font-weight: bold',
 		],
 		'style_not_contains' => [
@@ -447,9 +447,9 @@ return [
 			'class="blockera-block-level2-child-1"', // Second div gets counter-based class
 		],
 		'style_contains'   => [
-			':where(.blockera-block-level1)',
+			'.blockera-block-level1',
 			'position: relative',
-			':where(.blockera-block-level2)',
+			'.blockera-block-level2',
 			'display: flex',
 			'.blockera-block-level2 :where(.blockera-block-level2-child-1)',
 			'background: #f0f0f0',
@@ -539,7 +539,7 @@ return [
 		'input'            => '<div class="blockera-block-gradient" style="background: linear-gradient(45deg, red, blue); transform: rotate(10deg);">Complex Styles</div>',
 		'expected_content' => '<div class="blockera-block-gradient">Complex Styles</div>',
 		'style_contains'   => [
-			':where(.blockera-block-gradient)',
+			'.blockera-block-gradient',
 			'background: linear-gradient(45deg, red, blue)',
 			'transform: rotate(10deg)',
 		],
@@ -550,7 +550,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-base blockera-block-variant blockera-block-modifier" style="color: purple;">Multiple Blockera Classes</div>',
 		'expected_content' => '<div class="blockera-block-base blockera-block-variant blockera-block-modifier">Multiple Blockera Classes</div>',
-		'expected_style'   => ':where(.blockera-block-base) { color: purple; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-base { color: purple; }' . PHP_EOL,
 	],
 
 	// Complex: Child elements with both blockera-block and wp-block
@@ -562,7 +562,7 @@ return [
 		'expected_content' => '<div class="blockera-block-container">
 			<div class="blockera-block-child wp-block-group">Uses Priority 1</div>
 		</div>',
-		'expected_style'   => ':where(.blockera-block-child) { display: grid; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-child { display: grid; }' . PHP_EOL,
 	],
 
 	// Complex: Sequential processing of multiple independent elements
@@ -579,12 +579,12 @@ return [
 			<footer class="blockera-block-footer">Footer</footer>
 		</section>',
 		'style_contains'   => [
-			':where(.blockera-block-header)',
+			'.blockera-block-header',
 			'background: #000',
 			'color: #fff',
-			':where(.blockera-block-main)',
+			'.blockera-block-main',
 			'padding: 20px',
-			':where(.blockera-block-footer)',
+			'.blockera-block-footer',
 			'margin-top: 40px',
 		],
 	],
@@ -624,9 +624,9 @@ return [
 			'style="background: yellow;"', // Should be removed
 		],
 		'style_contains'    => [
-			':where(.blockera-block-processed)',
+			'.blockera-block-processed',
 			'color: red',
-			':where(.blockera-block-another)',
+			'.blockera-block-another',
 			'background: yellow',
 		],
 		'style_not_contains' => [
@@ -639,7 +639,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-very-long-class-name-that-should-work" style="width: 100%; max-width: 1200px;">Long Class Name</div>',
 		'expected_content' => '<div class="blockera-block-very-long-class-name-that-should-work">Long Class Name</div>',
-		'expected_style'   => ':where(.blockera-block-very-long-class-name-that-should-work) { width: 100%; max-width: 1200px; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-very-long-class-name-that-should-work { width: 100%; max-width: 1200px; }' . PHP_EOL,
 	],
 
 	// Complex: Mixed quote types in attributes
@@ -647,7 +647,7 @@ return [
 	[
 		'input'            => '<div class=\'blockera-block-test\' style="color: red;">Single Quotes Class</div>',
 		'expected_content' => '<div class=\'blockera-block-test\'>Single Quotes Class</div>',
-		'expected_style'   => ':where(.blockera-block-test) { color: red; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-test { color: red; }' . PHP_EOL,
 	],
 
 	// Complex: Style attribute with special characters
@@ -656,7 +656,7 @@ return [
 		'input'            => '<div class="blockera-block-special" style="content: &quot;Hello&quot;; font-family: \'Arial\', sans-serif;">Special Chars</div>',
 		'expected_content' => '<div class="blockera-block-special">Special Chars</div>',
 		'style_contains'   => [
-			':where(.blockera-block-special)',
+			'.blockera-block-special',
 			'content: &quot; Hello&quot; ;',
 			"font-family: 'Arial', sans-serif",
 		],
@@ -667,7 +667,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-spacing" style="  color  :  red  ;  margin  :  10px  ;  ">Extra Spaces</div>',
 		'expected_content' => '<div class="blockera-block-spacing">Extra Spaces</div>',
-		'expected_style'   => ':where(.blockera-block-spacing) { color: red; margin: 10px; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-spacing { color: red; margin: 10px; }' . PHP_EOL,
 	],
 
 	// Complex: Empty elements with styles
@@ -675,7 +675,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block-empty" style="min-height: 100px;"></div>',
 		'expected_content' => '<div class="blockera-block-empty"></div>',
-		'expected_style'   => ':where(.blockera-block-empty) { min-height: 100px; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-empty { min-height: 100px; }' . PHP_EOL,
 	],
 
 	// Complex: Table structure with inline styles
@@ -932,7 +932,7 @@ return [
 	[
 		'input'            => '<div class="blockera-block blockera-block-2"><span class="has-inline-color blockera-block-2" style="color: red;">Text</span></div>',
 		'expected_content' => '<div class="blockera-block blockera-block-2"><span class="has-inline-color blockera-block-2">Text</span></div>',
-		'expected_style'   => ':where(.blockera-block-2) { color: red; }' . PHP_EOL,
+		'expected_style'   => '.blockera-block-2 { color: red; }' . PHP_EOL,
 		'content_contains' => [
 			'has-inline-color',
 		],
@@ -992,7 +992,7 @@ return [
 			'has-text-color',
 		],
 		'style_patterns'   => [
-			'/:where\(\.blockera-block-5\) \{ color: red; \}/',
+			'/\.blockera-block-5 \{ color: red; \}/',
 		],
 	],
 
@@ -1005,7 +1005,7 @@ return [
 			'has-link-color',
 		],
 		'style_patterns'   => [
-			'/:where\(\.blockera-block-6\) \{ color: blue; \}/',
+			'/\.blockera-block-6 \{ color: blue; \}/',
 		],
 	],
 
@@ -1018,7 +1018,7 @@ return [
 			'has-border-color',
 		],
 		'style_patterns'   => [
-			'/:where\(\.blockera-block-7\) \{ border-color: #ccc; \}/',
+			'/\.blockera-block-7 \{ border-color: #ccc; \}/',
 		],
 	],
 
@@ -1034,7 +1034,7 @@ return [
 			'has-border-color',
 		],
 		'style_patterns'   => [
-			'/:where\(\.blockera-block-8\) \{ color: purple; \}/',
+			'/\.blockera-block-8 \{ color: purple; \}/',
 		],
 	],
 
