@@ -2,5 +2,5 @@
 @import "../../../../php/libs/wordpress/list/style.css";
 
 .blockera-block.wp-block-list :where([role="textbox"]) {
-	display: inline-flex;
+	display: inline;
 }
