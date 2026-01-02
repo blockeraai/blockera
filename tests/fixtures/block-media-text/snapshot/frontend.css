@@ -66,7 +66,7 @@
 }
 
 .blockera-block-1 {
-	grid-template-columns: 43% auto;
+	grid-template-columns: 44% auto;
 }
 
 .blockera-block.blockera-block-3.wp-block-heading {
@@ -79,4 +79,18 @@
 
 .blockera-block.blockera-block-3.wp-block-heading:hover {
 	background-color: #ed6a6a;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
