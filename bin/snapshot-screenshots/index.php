@@ -8,6 +8,11 @@
  * Only works in development mode.
  */
 
+// Prevent browser caching of this page
+header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
+header('Pragma: no-cache');
+header('Expires: 0');
+
  include_once '../../../../../wp-load.php';
 
 // Only allow in development
