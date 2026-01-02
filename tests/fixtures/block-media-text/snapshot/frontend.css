@@ -65,14 +65,7 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-1) {
-	border-color: #e2c566;
-	border-width: 3px;
-	background-color: #f1e4b8;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
+.blockera-block-1 {
 	grid-template-columns: 43% auto;
 }
 
@@ -86,12 +79,4 @@
 
 .blockera-block.blockera-block-3.wp-block-heading:hover {
 	background-color: #ed6a6a;
-}
-
-:where(.blockera-block.blockera-block-3) {
-	border-radius: 50px;
-	background-color: #ffa6a6;
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
-	font-style: normal;
-	font-weight: 700;
 }
