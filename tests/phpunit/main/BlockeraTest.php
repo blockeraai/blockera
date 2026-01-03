@@ -210,9 +210,8 @@ class BlockeraTest extends AppTestCase {
 				$wp_styles->registered['global-styles']->extra = [];
 			}
 
-			// Also check if inline styles are stored directly in wp_styles->add_inline_style data
-			if (isset($wp_styles->registered['global-styles-inline-css'])) {
-				$wp_styles->registered['global-styles-inline-css']->extra = [];
+			if (isset($wp_styles->registered['block-style-variation-styles'])) {
+				$wp_styles->registered['block-style-variation-styles']->extra = [];
 			}
 
 			// Clear any queued inline styles
