@@ -5,17 +5,6 @@
 	padding: 15px 15px 15px 15px;
 }
 
-:where(.blockera-block.blockera-block-1) {
-	background-color: #ffe2e2;
-	border-color: #ff5757;
-	border-radius: 10px;
-	border-width: 2px;
-	padding-top: 15px;
-	padding-right: 15px;
-	padding-bottom: 15px;
-	padding-left: 15px;
-}
-
 .blockera-block.blockera-block-2.wp-block-site-tagline {
 	background-color: #ceffce;
 	transition: all 500ms ease 0ms;
@@ -53,14 +42,6 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-2) {
-	background-color: #ceffce;
-	padding-top: 20px;
-	padding-right: 20px;
-	padding-bottom: 20px;
-	padding-left: 20px;
-}
-
 .blockera-block.blockera-block-3.wp-block-site-tagline {
 	background-color: #ccdeff;
 	font-weight: 1000;
@@ -69,9 +50,28 @@
 	text-align: center;
 }
 
-:where(.blockera-block.blockera-block-3) {
+.blockera-block-3 {
 	background-color: #ccdeff;
 	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.392), 18px);
 	font-style: normal;
 	font-weight: 1000;
+}
+
+.blockera-block-2 {
+	background-color: #ceffce;
+	padding-top: 20px;
+	padding-right: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+}
+
+.blockera-block-1 {
+	background-color: #ffe2e2;
+	border-color: #ff5757;
+	border-radius: 10px;
+	border-width: 2px;
+	padding-top: 15px;
+	padding-right: 15px;
+	padding-bottom: 15px;
+	padding-left: 15px;
 }
