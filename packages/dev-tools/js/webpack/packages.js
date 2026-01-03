@@ -86,6 +86,13 @@ module.exports = (env, argv) => {
 		},
 		module: {
 			rules: [
+				// Handle CSS files with ?raw query parameter (import as raw string)
+				// This must come BEFORE the default CSS rules
+				{
+					test: /\.css$/i,
+					resourceQuery: /raw/,
+					type: 'asset/source',
+				},
 				...defaultConfig.module.rules,
 				{
 					test: /\.lazy\.scss$/,
@@ -115,6 +122,14 @@ module.exports = (env, argv) => {
 				'process.env': JSON.stringify(process.env),
 			}),
 		].filter(Boolean),
+		resolve: {
+			...defaultConfig.resolve,
+			extensions: [
+				'.tsx',
+				'.ts',
+				...(defaultConfig.resolve?.extensions || ['.jsx', '.js', '.json']),
+			],
+		},
 		optimization: {
 			minimize: isProduction,
 			minimizer: [

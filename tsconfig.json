@@ -1,0 +1,64 @@
+{
+	"compilerOptions": {
+		// Strict Type Checking
+		"strict": true,
+		"noImplicitAny": false,
+		"strictNullChecks": false,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"strictPropertyInitialization": false,
+		"noImplicitThis": true,
+		"useUnknownInCatchVariables": false,
+		"alwaysStrict": true,
+
+		// Additional Strict Checks (relaxed for WordPress compatibility)
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"noImplicitReturns": false,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": false,
+
+		// Module Resolution
+		"target": "ES2021",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+
+		// JSX Support - Use react-jsx with React import source
+		"jsx": "react-jsx",
+		"jsxImportSource": "react",
+
+		// Output Settings
+		"noEmit": true,
+		"skipLibCheck": true,
+
+		// Type Definitions
+		"typeRoots": [
+			"./node_modules/@types",
+			"./types"
+		],
+
+		// Base URL for imports
+		"baseUrl": ".",
+
+		// Include DOM types
+		"lib": ["ES2021", "DOM", "DOM.Iterable"]
+	},
+	"include": [
+		"packages/**/js/**/*.ts",
+		"packages/**/js/**/*.tsx",
+		"types/**/*.d.ts"
+	],
+	"exclude": [
+		"node_modules",
+		"build",
+		"source-code-block-editor",
+		"source-code-wordpress"
+	]
+}
+

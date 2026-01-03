@@ -35,6 +35,14 @@ import {
 	bootstrapCanvasEditor,
 	bootstrapBlockAppSettings,
 	blockeraExtensionsBootstrap,
+	bootstrapEditor,
+	bootstrapTabs,
+	bootstrapPreviewMode,
+	bootstrapZoom,
+	bootstrapShortcuts,
+	bootstrapScrollbar,
+	bootstrapSlots,
+	bootstrapCommandBar,
 } from '@blockera/editor';
 import blockeraEditorPackageInfo from '@blockera/editor/package.json';
 import {
@@ -104,6 +112,30 @@ addFilter('blockera.bootstrapper', 'blockera.bootstrap', () => {
 
 			// Bootstrap breakpoints.
 			bootstrapBreakpoints();
+
+			// Bootstrap editor modules (sidebars, persistence)
+			bootstrapEditor();
+
+			// Bootstrap tabs module
+			bootstrapTabs();
+
+			// Bootstrap preview mode
+			bootstrapPreviewMode();
+
+			// Bootstrap zoom controls
+			bootstrapZoom();
+
+			// Bootstrap keyboard shortcuts extension
+			bootstrapShortcuts();
+
+			// Bootstrap scrollbar utilities
+			bootstrapScrollbar();
+
+			// Bootstrap slots system
+			bootstrapSlots();
+
+			// Bootstrap command bar (export-only, no-op but included for consistency)
+			bootstrapCommandBar();
 
 			applyFilters('blockera.after.bootstrap', noop)();
 		});

@@ -1,0 +1,270 @@
+/**
+ * Combined Sidebar Styles
+ *
+ * Styles for the custom combined sidebar that displays both inserter and list view.
+ */
+
+.interface-interface-skeleton__secondary-sidebar-blockera {
+	/* CSS variables use body-level variables as fallback */
+	--sidebar-width: var(--blockera-secondary-sidebar-width, 350px);
+	--sidebar-width-raw: var(--blockera-secondary-sidebar-width, 350px);
+	--sidebar-pattern-inserter-width: 280px;
+}
+
+/* Container for the combined sidebar - always visible, no animation */
+.interface-interface-skeleton__secondary-sidebar-blockera {
+	flex-shrink: 0;
+	display: flex;
+	overflow: hidden; /* Clip the animated content */
+	background: #f0f0f0;
+
+	/* On desktop (medium and up), position relatively */
+	@media (min-width: 782px) {
+		/* stylelint-disable-next-line declaration-no-important -- Needed to override WordPress core styles */
+		position: relative !important;
+		box-shadow: 1px 0 0 0 rgba(0, 0, 0, 0.133);
+		outline: 1px solid transparent; /* For Windows 10 High Contrast mode */
+		z-index: 1;
+	}
+}
+
+/* SecondarySidebar content wrapper - animates margin-left */
+.blockera-secondary-sidebar-content {
+	width: var(--sidebar-width);
+	position: relative; /* Enable absolute positioning for resize handle */
+
+	/* Smooth slide animation - content slides in/out */
+	transition: all 0.350s cubic-bezier(0.6, 0, 0.4, 1);
+
+	/* Disable transitions while resizing - must override existing transition */
+	/* stylelint-disable-next-line declaration-no-important */
+	&.is-resizing {
+		transition: none !important;
+	}
+}
+
+/* Visible state: margin-left 0 */
+.blockera-secondary-sidebar-content.is-visible {
+	margin-left: 0;
+}
+
+/* Hidden state: margin-left negative width (slides off-screen to the left) */
+.blockera-secondary-sidebar-content.is-hidden {
+	margin-left: calc(var(--sidebar-width) * -1);
+}
+
+/* Inner sidebar content - no animation, just follows container */
+.blockera-combined-sidebar {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	width: var(--sidebar-width); /* Standard sidebar width */
+	position: relative; /* Enable absolute positioning for resize handle */
+	--list-view-height: 50%; /* Default height, overridden by store value */
+}
+
+/* The columns order in the editor interface */
+.editor-editor-interface .interface-interface-skeleton__secondary-sidebar-blockera {
+	order: 0;
+}
+
+.editor-editor-interface .interface-interface-skeleton__content {
+	order: 1;
+}
+
+.editor-editor-interface .interface-interface-skeleton__sidebar {
+	order: 2;
+}
+
+/* Hide the default inserter and outline toggle buttons */
+.components-toolbar-button.editor-document-tools__inserter-toggle,
+.components-toolbar-button.editor-document-tools__document-overview-toggle {
+	display: none !important;
+}
+
+/* Main combined sidebar wrapper styles are now defined above with slide animation */
+
+/* Inserter section - top half */
+
+.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__main-area {
+	position: static;
+}
+
+.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__menu {
+	position: static;
+}
+
+.interface-interface-skeleton__secondary-sidebar-blockera:has(.block-editor-inserter__category-panel) {
+	--sidebar-width: calc(var(--sidebar-width-raw) + var(--sidebar-pattern-inserter-width));
+}
+
+@media (min-width: 782px) {
+	.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__menu.show-panel {
+		width: var(--sidebar-width-raw);
+	}
+}
+
+@media (min-width: 782px) {
+	.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__category-panel {
+		background: #f0f0f0;
+		border-left: 1px solid #ddd;
+		border-top: 1px solid #ddd;
+		left: var(--sidebar-width-raw);
+		padding: 0;
+		position: absolute;
+		top: 0;
+		width: 280px;
+		bottom: 0;
+		height: auto;
+	}
+}
+
+@media (min-width: 782px) {
+	.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__main-area .block-editor-tabbed-sidebar {
+		width: var(--sidebar-width-raw);
+	}
+}
+
+.blockera-combined-sidebar__inserter {
+	flex: 0 0 calc(100% - var(--list-view-height));
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	width: var(--sidebar-width-raw);
+	background: #fff;
+	border-bottom: 1px solid #ddd;
+}
+
+.blockera-combined-sidebar__inserter .editor-inserter-sidebar__content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+/* List view section - bottom half */
+
+.interface-interface-skeleton__secondary-sidebar-blockera .blockera-combined-sidebar__list-view {
+	--sidebar-width: var(--sidebar-width-raw);
+	width: var(--sidebar-width);
+	background: #fff;
+}
+
+.blockera-combined-sidebar__list-view {
+	flex: 0 0 var(--list-view-height);
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	position: relative; /* Enable absolute positioning for resize handle */
+}
+
+.blockera-combined-sidebar__list-view .editor-list-view-sidebar {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Custom tabbed sidebar styles */
+.blockera-tabbed-sidebar {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.blockera-tabbed-sidebar__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	border-bottom: 1px solid #ddd;
+	flex-shrink: 0;
+	background: var(--blockera-panel-tabs-bg-color);
+}
+
+.blockera-tabbed-sidebar__tabs {
+	display: flex;
+	gap: 4px;
+	flex: 1;
+}
+
+.blockera-tabbed-sidebar__tab {
+	flex: 1;
+}
+
+.blockera-tabbed-sidebar__content {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 781px) {
+	.interface-interface-skeleton__secondary-sidebar-blockera {
+		/* On mobile, use full viewport width */
+		width: 100vw;
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		z-index: 999999;
+	}
+
+	.interface-interface-skeleton__secondary-sidebar-blockera.is-hidden {
+		transform: translateX(-100%);
+		margin-left: -100vw; /* Shift container off-screen to the left on mobile */
+	}
+
+	.interface-interface-skeleton__secondary-sidebar-blockera.is-visible {
+		transform: translateX(0);
+		margin-left: 0; /* Normal position on mobile */
+	}
+
+	.blockera-combined-sidebar {
+		width: 100vw; /* Full width on mobile */
+	}
+}
+
+/* Ensure the inserter and list view components render correctly */
+.blockera-combined-sidebar__inserter .editor-inserter-sidebar {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.blockera-combined-sidebar__list-view .editor-list-view-sidebar__list-view-container {
+	height: 100%;
+	overflow: auto;
+}
+
+.blockera-combined-sidebar__list-view .editor-list-view-sidebar__list-view-panel-content {
+	height: 100%;
+	overflow: auto;
+}
+
+.blockera-list-view-controls {
+	display: flex;
+	gap: 8px;
+
+	.components-button {
+		color: var(--blockera-controls-border-color) !important;
+	}
+
+	.components-button[disabled] {
+		opacity: 0.4;
+	}
+
+	.components-button:hover:not([disabled]) {
+		color: var(--blockera-controls-primary-color) !important;
+	}
+
+	.components-button:focus:not([disabled]) {
+		color: var(--blockera-controls-primary-color) !important;
+	}
+
+	svg {
+		width: 22px;
+		height: 22px;
+	}
+}
