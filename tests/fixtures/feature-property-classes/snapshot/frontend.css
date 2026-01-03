@@ -3,16 +3,7 @@
 	flex-basis: 100px !important;
 }
 
-:where(.blockera-block.blockera-block--1) {
-	background-color: #fecbcb;
-	flex-basis: 100px;
-}
-
 p.blockera-block.blockera-block--2 {
-	text-decoration: line-through;
-}
-
-:where(.blockera-block.blockera-block--2) {
 	text-decoration: line-through;
 }
 
@@ -21,16 +12,7 @@ p.blockera-block.blockera-block--3 {
 	font-style: normal;
 }
 
-:where(.blockera-block.blockera-block--3) {
-	font-style: normal;
-	font-weight: 1000;
-}
-
 p.blockera-block.blockera-block--5 {
-	line-height: 2;
-}
-
-:where(.blockera-block.blockera-block--5) {
 	line-height: 2;
 }
 
@@ -38,14 +20,22 @@ p.blockera-block.blockera-block--6 {
 	font-size: 30px;
 }
 
-:where(.blockera-block.blockera-block--6) {
-	font-size: clamp(18.959px, 1.185rem + ((1vw - 3.2px) * 1.082), 30px);
-}
-
 p.blockera-block.blockera-block--7 {
 	letter-spacing: 5px;
 }
 
-:where(.blockera-block.blockera-block--7) {
-	letter-spacing: 5px;
+.blockera-block.blockera-block-u1bhkh.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 3px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 2;
+}
+
+.blockera-block.blockera-block-u1bhkh.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
