@@ -146,7 +146,7 @@
 	content: "After";
 }
 
-:where(.blockera-block.blockera-block-1) {
+.blockera-block-1 {
 	background-color: #ffeeee;
 	border-radius: 10px;
 	padding-top: 30px;
@@ -213,4 +213,15 @@
 
 .blockera-block.blockera-block-3 :where(li.current-menu-item a):hover {
 	color: #f200ff;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	font-weight: 800;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 1.5;
 }
