@@ -1,20 +1,35 @@
-.blockera-block.blockera-block-1 {
-	color: red;
-}
-
-.blockera-block.blockera-block-1:hover {
-	color: green;
-}
-
 p.blockera-block.blockera-block-2 {
 	font-family: var(--wp--preset--font-family--fira-code);
 	font-size: 20px;
 }
 
-:where(.blockera-block.blockera-block-2) {
-	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
+u0026 {
+	n color: var(--wp--preset--color--accent-3, #503AA8);
+	n;
 }
 
-.blockera-block.blockera-block-2 {
-	color: var(--wp--preset--color--accent-3, #503AA8);
+n u0026 {
+	n color: red;
+	n;
+}
+
+nnu0026:hover {
+	n color: green;
+	n;
+}
+
+n .blockera-block.blockera-block-wrapper.wp-block-group {
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 1.6;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
