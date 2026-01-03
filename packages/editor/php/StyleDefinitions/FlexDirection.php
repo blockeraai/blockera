@@ -15,6 +15,7 @@ class FlexDirection extends BaseStyleDefinition {
 		}
 
 		$cssProperty = $setting['type'];
+
 		if ('' === $cssProperty || 'flex-direction' !== $cssProperty) {
 			return [];
 		}
@@ -28,7 +29,12 @@ class FlexDirection extends BaseStyleDefinition {
 			return [];
 		}
 
-		if ('flex' !== $this->getDisplayValue()) {
+		$display_list = [
+			'flex' => true,
+			'grid' => true,
+		];
+
+		if (! isset($display_list[ $this->getDisplayValue() ])) {
 			return [];
 		}
 
