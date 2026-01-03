@@ -125,7 +125,7 @@ p.blockera-block.blockera-block-8 {
 
 	.blockera-block.blockera-block-9.wp-block-group {
 		gap: var(--wp--preset--spacing--30, 20px);
-		height: 500px;
+		height: 550px;
 	}
 
 	.blockera-block.blockera-block-9 .wp-block-group.is-layout-constrained > * + * {
