@@ -26,8 +26,8 @@ async function setup(page, sectionContent) {
 	for (let i = 0; i < data.categories.length; i++) {
 		await wpCli(
 			page,
-			`term create category '${data.categories[i]}' --description='${categoryDescription}' || true`,
-			true, // ignoreFailures
+			`wp term create category '${data.categories[i]}' --description='${categoryDescription}'`,
+			true, // ignoreFailures - handles cases where term already exists
 			false
 		);
 	}
