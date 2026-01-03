@@ -4,18 +4,10 @@ p.blockera-block.blockera-block--1 {
 	top: 0;
 }
 
-:where(.blockera-block.blockera-block--1) {
-	background-color: #fed7d7;
-}
-
 p.blockera-block.blockera-block--2 {
 	background-color: #fed7d7;
 	position: relative;
 	right: 0;
-}
-
-:where(.blockera-block.blockera-block--2) {
-	background-color: #fed7d7;
 }
 
 p.blockera-block.blockera-block--3 {
@@ -24,18 +16,10 @@ p.blockera-block.blockera-block--3 {
 	bottom: 0;
 }
 
-:where(.blockera-block.blockera-block--3) {
-	background-color: #fed7d7;
-}
-
 p.blockera-block.blockera-block--4 {
 	background-color: #fed7d7;
 	position: relative;
 	left: 0;
-}
-
-:where(.blockera-block.blockera-block--4) {
-	background-color: #fed7d7;
 }
 
 p.blockera-block.blockera-block--5 {
@@ -47,55 +31,38 @@ p.blockera-block.blockera-block--5 {
 	left: 0;
 }
 
-:where(.blockera-block.blockera-block--5) {
-	background-color: #ff9696;
-}
-
 p.blockera-block.blockera-block--6 {
-	background-color: #ffbfbf;
+	background-color: #c55959;
 	position: absolute;
-	top: 0;
-}
-
-:where(.blockera-block.blockera-block--6) {
-	background-color: #ffbfbf;
+	top: 10px;
+	left: 210px;
 }
 
 p.blockera-block.blockera-block--7 {
-	background-color: #ffbfbf;
+	background-color: #821515;
 	position: absolute;
-	right: 0;
-}
-
-:where(.blockera-block.blockera-block--7) {
-	background-color: #ffbfbf;
+	top: 80px;
+	right: 20px;
+	color: #ffffff;
 }
 
 p.blockera-block.blockera-block--8 {
-	background-color: #ff7171;
+	background-color: #9d1313;
 	position: absolute;
 	bottom: 0;
-}
-
-:where(.blockera-block.blockera-block--8) {
-	background-color: #ff7171;
+	left: 200px;
+	z-index: 21;
+	color: #fafafa;
 }
 
 p.blockera-block.blockera-block--9 {
 	background-color: #ff9696;
 	position: absolute;
-	left: 0;
-}
-
-:where(.blockera-block.blockera-block--9) {
-	background-color: #ff9696;
+	top: 80px;
+	left: 10px;
 }
 
 p.blockera-block.blockera-block--10 {
-	background-color: #fed7d7;
-}
-
-:where(.blockera-block.blockera-block--10) {
 	background-color: #fed7d7;
 }
 
@@ -106,6 +73,21 @@ p.blockera-block.blockera-block--11 {
 	z-index: 20;
 }
 
-:where(.blockera-block.blockera-block--11) {
-	background-color: #ff9696;
+.blockera-block.blockera-block-wrapper.wp-block-group {
+	background-color: #323232;
+	display: flex !important;
+	flex-direction: column;
+	align-items: stretch !important;
+	justify-content: flex-start !important;
+	gap: 30px;
+	position: relative;
+	padding: 30px 30px 30px 30px;
+	font-weight: 600;
+	font-style: normal;
+	font-size: 18px;
+	line-height: 1.6;
+}
+
+.blockera-block.blockera-block-wrapper.wp-block-group.is-layout-constrained > * + * {
+	margin-block-start: 0 !important;
 }
