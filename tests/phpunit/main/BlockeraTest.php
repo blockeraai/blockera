@@ -20,7 +20,6 @@ class BlockeraTest extends AppTestCase {
 	protected string $design;
 	protected Blockera $app;
 	protected int $post_id = 0;
-	protected ?string $post_content = null;
 	protected bool $is_global_styles = false;
 	protected ?string $currentTestType = null;
 
@@ -146,7 +145,6 @@ class BlockeraTest extends AppTestCase {
 			
 			// If setup.php set $post_id, return it
 			if (isset($post_id) && is_int($post_id) && $post_id > 0) {
-				$this->post_content = $post_content;
 				return $post_id;
 			}
 		}
@@ -257,7 +255,6 @@ class BlockeraTest extends AppTestCase {
 
 		// Reset test state properties
 		$this->design = '';
-		$this->post_content = null;
 		$this->is_global_styles = false;
 		$this->currentTestType = null;
 
@@ -330,6 +327,9 @@ class BlockeraTest extends AppTestCase {
 		// Clean up global styles from previous tests before starting new test
 		$this->cleanupGlobalStyles();
 
+		// Clear all caches.
+		blockera_get_cache()->clear();
+
 		// Cleanup WP_Mock
 		\WP_Mock::tearDown();
 
@@ -398,7 +398,7 @@ class BlockeraTest extends AppTestCase {
 		 */
 		// Use the_content filter to get rendered content (simulates real WordPress flow)
 		// if the design has setup.php, use the post content set in setup.php file.
-		$raw_content = $this->post_content ?? (string) get_post_field('post_content', $this->post_id);
+		$raw_content = (string) get_post_field('post_content', $this->post_id);
 		if ($raw_content === '') {
 			$raw_content = $post_content;
 		}
