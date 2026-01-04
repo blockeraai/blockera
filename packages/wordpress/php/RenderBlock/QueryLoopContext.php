@@ -80,7 +80,7 @@ class QueryLoopContext {
 	 *
 	 * @return void
 	 */
-	public static function exit( array $parsed_block, ?\WP_Block $parent_block = null ): void {
+	public static function leave( array $parsed_block, ?\WP_Block $parent_block = null ): void {
 		// Pop frame from stack (O(1) operation).
 		// array_pop() returns null if stack is empty, which is safe to ignore.
 		array_pop(self::$stack);
@@ -199,7 +199,7 @@ class QueryLoopContext {
 				// This runs at priority 999, after all other render_block filters.
 				// Only check if we're inside a loop (early exit optimization).
 				if (self::isInside() && self::isQueryLoopBlock($block['blockName'] ?? null)) {
-					self::exit($block, $instance);
+					self::leave($block, $instance);
 				}
 
 				return $html;
