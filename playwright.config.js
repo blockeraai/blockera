@@ -16,7 +16,7 @@ const config = defineConfig({
 	reporter: process.env.CI
 		? [
 				['github'],
-				['./packages/dev-playwright/js/config/flaky-tests-reporter.ts'],
+				['./packages/dev-playwright/js/config/flaky-tests-report.ts'],
 		  ]
 		: 'list',
 	workers: 1,
