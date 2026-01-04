@@ -30,6 +30,10 @@ jobs:
                       if echo "$line" | grep -qE "(^|[^a-zA-Z_])function\s+exit\("; then
                         continue
                       fi
+                      # Skip if the line itself is a comment (PHP: //, #, /*, */, or * at start)
+                      if echo "$line" | grep -qE "^\s*(//|#|/\*|\*/|\*)"; then
+                        continue
+                      fi
                       # Check for @debug-ignore in previous comment lines (up to 10 lines back)
                       has_ignore=false
                       start_line=$((line_number > 10 ? line_number - 10 : 1))
@@ -63,6 +67,10 @@ jobs:
                     if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
+                      # Skip if the line itself is a comment (JS/TS: //, /*, */, or * at start for JSDoc)
+                      if echo "$line" | grep -qE "^\s*(//|/\*|\*/|\*)"; then
+                        continue
+                      fi
                       # Check for @debug-ignore in previous comment lines (up to 10 lines back)
                       has_ignore=false
                       start_line=$((line_number > 10 ? line_number - 10 : 1))
@@ -96,6 +104,10 @@ jobs:
                     if [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
+                      # Skip if the line itself is a comment (JS/TS: //, /*, */, or * at start for JSDoc)
+                      if echo "$line" | grep -qE "^\s*(//|/\*|\*/|\*)"; then
+                        continue
+                      fi
                       # Check for @debug-ignore in previous comment lines (up to 10 lines back)
                       has_ignore=false
                       start_line=$((line_number > 10 ? line_number - 10 : 1))
