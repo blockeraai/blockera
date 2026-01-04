@@ -468,7 +468,9 @@ async function savePage(page) {
  * @return {Promise<void>}
  */
 async function appendBlocks(page, blocksCode) {
-	await page.locator('[aria-label="Options"]').first().click();
+	const optionsButton = page.locator('[aria-label="Options"]').first();
+	await optionsButton.waitFor({ state: 'visible', timeout: 10000 });
+	await optionsButton.click();
 	await page.locator('span:has-text("Code editor")').click();
 
 	const textEditor = page.locator('.editor-post-text-editor');
