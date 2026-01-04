@@ -9,13 +9,16 @@ const { expect } = require('@playwright/test');
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} containerClass - Container class selector.
- * @return {Promise<import('@playwright/test').FrameLocator>} The iframe body locator.
+ * @return {import('@playwright/test').FrameLocator} The iframe body locator.
  */
-async function getIframeBody(page, containerClass = '') {
+function getIframeBody(page, containerClass = '') {
+	if (!page) {
+		throw new Error('getIframeBody: page parameter is required');
+	}
+
 	if (containerClass) {
-		const iframe = page
-			.locator(`${containerClass} iframe`)
-			.frameLocator('iframe');
+		// Use frameLocator directly on page with the full selector
+		const iframe = page.frameLocator(`${containerClass} iframe`);
 		return iframe.locator('body');
 	}
 	const iframe = page.frameLocator('iframe[name="editor-canvas"]');
@@ -228,7 +231,7 @@ async function disableGutenbergFeatures(page) {
  */
 async function getBlockInserter(page, selector = false) {
 	if (selector) {
-		const iframeBody = await getIframeBody(page);
+		const iframeBody = getIframeBody(page);
 		return iframeBody.locator(selector);
 	}
 	return page.locator(
@@ -697,7 +700,7 @@ async function openMoreFeaturesControl(page, label) {
  * @return {Promise<void>}
  */
 async function deSelectBlock(page) {
-	const iframeBody = await getIframeBody(page);
+	const iframeBody = getIframeBody(page);
 	await iframeBody.locator('h1').click();
 }
 
@@ -711,7 +714,7 @@ async function deSelectBlock(page) {
 async function reSelectBlock(page, blockType = 'core/paragraph') {
 	await deSelectBlock(page);
 
-	const iframeBody = await getIframeBody(page);
+	const iframeBody = getIframeBody(page);
 	await iframeBody
 		.locator(`[data-type="${blockType}"]`)
 		.first()

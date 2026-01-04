@@ -225,6 +225,8 @@ async function cssVar(page, cssVarName, selector = null) {
 
 /**
  * Get parent container element.
+ * Finds the closest ancestor element with the specified data-cy attribute.
+ * This is equivalent to Cypress's .closest() method.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} ariaLabel - Aria label.
@@ -232,14 +234,18 @@ async function cssVar(page, cssVarName, selector = null) {
  * @return {import('@playwright/test').Locator} Parent container locator.
  */
 function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
-	const element = page
+	const ariaLabelElement = page
 		.locator(`[aria-label="${ariaLabel}"]`, {
 			timeout: 20000,
 		})
 		.first();
-	return element
-		.locator(`xpath=ancestor::*[@data-cy="${parentsDataCy}"]`)
-		.first();
+
+	// Use XPath to find the closest ancestor (equivalent to Cypress's .closest())
+	// ancestor::* returns ancestors in reverse document order (closest first)
+	// [1] selects the first one, which is the closest ancestor
+	return ariaLabelElement.locator(
+		`xpath=ancestor::*[@data-cy="${parentsDataCy}"][1]`
+	);
 }
 
 /**
@@ -466,10 +472,10 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
  */
 async function setColorControlValue(page, label, value) {
 	const container = getParentContainer(page, label);
-	await container.locator('[data-cy="color-btn"]').click({ force: true });
+	await container.locator('[data-cy="color-btn"]').click();
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
-	await popover.locator('input[maxlength="9"]').clear({ force: true });
+	await popover.locator('input[maxlength="9"]').clear();
 	await popover.locator('input[maxlength="9"]').fill(value + ' ');
 
 	const closeButton = popover.locator('[aria-label="Close"]');
@@ -865,7 +871,7 @@ async function setEditorViewportForScreenshot(
 		width = 450;
 	}
 
-	const iframeBody = await getIframeBody(page);
+	const iframeBody = getIframeBody(page);
 	const editorContainer = iframeBody.locator('.is-root-container');
 
 	// Get the element's scrollHeight to determine viewport height
