@@ -1048,22 +1048,16 @@ async function compareScreenshot(
 	threshold = 0.02
 ) {
 	const snapshotPath = path.join(snapshotDir, snapshotName);
-	const defaultSnapshotsDir = path.join(__dirname, '__snapshots__');
 
-	// Ensure __snapshots__ directory exists
-	if (!fs.existsSync(defaultSnapshotsDir)) {
-		fs.mkdirSync(defaultSnapshotsDir, { recursive: true });
+	// Use testInfo.snapshotPath() to get the actual path where Playwright will write snapshots
+	// This respects any custom snapshotPath override set in the test
+	const browserSnapshotPath = testInfo.snapshotPath(snapshotName);
+
+	// Ensure the directory exists
+	const browserSnapshotDir = path.dirname(browserSnapshotPath);
+	if (!fs.existsSync(browserSnapshotDir)) {
+		fs.mkdirSync(browserSnapshotDir, { recursive: true });
 	}
-
-	// Determine which browser we're using to set the correct suffix
-	// Playwright adds browser suffix (e.g., -chromium.png) to snapshot names
-	const browserName = testInfo.project?.name || 'chromium'; // Default to chromium
-	const browserSuffix = `-${browserName}.png`;
-	const browserSnapshotName = snapshotName.replace('.png', browserSuffix);
-	const browserSnapshotPath = path.join(
-		defaultSnapshotsDir,
-		browserSnapshotName
-	);
 
 	// Check if snapshot exists in custom location (not first run)
 	const snapshotExists = fs.existsSync(snapshotPath);
