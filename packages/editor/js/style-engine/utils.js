@@ -234,7 +234,12 @@ export const replaceVariablesValue = (params: {
 	}
 
 	// Normalizing class name to be used as a css selector ...
-	const _class = `.${className?.replace(/\s/g, '.') || `#block-${clientId}`}`;
+	let _class = className?.replace(/\s/g, '.') || '';
+	if (_class) {
+		_class = `.${_class}`;
+	} else {
+		_class = `#block-${clientId}`;
+	}
 
 	selector = selector
 		.replace(/{{UNIQUE_CLASSNAME}}/g, _class)
