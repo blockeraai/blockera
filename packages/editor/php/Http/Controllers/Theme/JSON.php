@@ -273,7 +273,7 @@ class JSON extends \WP_Theme_JSON {
 							'blockName' => $block_metadata['name'],
 							'attrs' => $style_variation,
 						],
-						'fallbackSelector' => ":root :where($clean_style_variation_selector)",
+						'fallbackSelector' => $clean_style_variation_selector,
 						'isGlobalStyle' => true,
 					]
 				);
