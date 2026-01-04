@@ -81,7 +81,7 @@ test.describe('Button Block → Icon Feature', () => {
 
 		const popover1 = page.locator('[data-wp-component="Popover"]').last();
 		await popover1.locator('[aria-label="add-card Icon"]').click();
-		await page.waitForTimeout(300);
+		await page.waitForTimeout(1000);
 
 		//
 		// 1.2. Right icon
@@ -94,7 +94,7 @@ test.describe('Button Block → Icon Feature', () => {
 		await getByAriaLabel(page, 'Choose Icon…').click();
 		const popover2 = page.locator('[data-wp-component="Popover"]').last();
 		await popover2.locator('[aria-label="add-submenu Icon"]').click();
-		await page.waitForTimeout(300);
+		await page.waitForTimeout(1000);
 
 		// set end icon
 		await getByAriaLabel(page, 'End').click();
@@ -121,7 +121,7 @@ test.describe('Button Block → Icon Feature', () => {
 		await getByAriaLabel(page, 'Choose Icon…').click();
 		const popover3 = page.locator('[data-wp-component="Popover"]').last();
 		await popover3.locator('[aria-label="block-meta Icon"]').click();
-		await page.waitForTimeout(300);
+		await page.waitForTimeout(1000);
 
 		// switch by advanced icon settings button from extension
 		await getByAriaLabel(page, 'Advanced Icon Settings').click();

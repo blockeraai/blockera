@@ -62,7 +62,7 @@ async function getWindowProperty(page, path) {
  * @return {Promise<any>} The WordPress data object.
  */
 async function getWPDataObject(page) {
-	await page.waitForTimeout(300);
+	await page.waitForTimeout(1000);
 	return await getWindowProperty(page, 'wp.data');
 }
 

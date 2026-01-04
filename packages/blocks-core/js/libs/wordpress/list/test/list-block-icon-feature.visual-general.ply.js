@@ -83,7 +83,7 @@ test.describe('List Block → Icon Feature', () => {
 
 		const popover1 = page.locator('[data-wp-component="Popover"]').last();
 		await popover1.locator('[aria-label="add-card Icon"]').click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(1000);
 
 		// set color
 		await setColorControlValue(page, 'Color', '666666');
@@ -115,7 +115,7 @@ test.describe('List Block → Icon Feature', () => {
 		await getByAriaLabel(page, 'Choose Icon…').click();
 		const popover2 = page.locator('[data-wp-component="Popover"]').last();
 		await popover2.locator('[aria-label="add-submenu Icon"]').click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(1000);
 
 		// set gap
 		const gapContainer = getParentContainer(page, 'Gap');
@@ -139,7 +139,7 @@ test.describe('List Block → Icon Feature', () => {
 		await getByAriaLabel(page, 'Choose Icon…').click();
 		const popover3 = page.locator('[data-wp-component="Popover"]').last();
 		await popover3.locator('[aria-label="block-meta Icon"]').click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(1000);
 
 		// switch by advanced icon settings button from extension
 		await getByAriaLabel(page, 'Advanced Icon Settings').click();

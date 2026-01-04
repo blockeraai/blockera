@@ -64,7 +64,7 @@ async function openBoxSpacingSide(page, side, element = 'label') {
 		);
 
 		await shapeSide.hover({ force: true });
-		await page.waitForTimeout(300);
+		await page.waitForTimeout(1000);
 		await shapeSide.click({ force: true });
 	}
 }
