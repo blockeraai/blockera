@@ -11,7 +11,6 @@
  */
 import fs from 'fs';
 import type { Reporter, TestCase, TestResult } from '@playwright/test/reporter';
-import filenamify from 'filenamify';
 
 type FormattedTestResult = Omit<TestResult, 'steps'>;
 
@@ -20,6 +19,15 @@ function formatTestResult(testResult: TestResult): FormattedTestResult {
 	const result = { ...testResult, steps: undefined };
 	delete result.steps;
 	return result;
+}
+
+// Simple filename sanitization function (replaces invalid filename characters)
+function sanitizeFilename(filename: string): string {
+	return filename
+		.replace(/[<>:"/\\|?*\x00-\x1F]/g, '-')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-')
+		.replace(/^-+|-+$/g, '');
 }
 
 class FlakyTestsReporter implements Reporter {
@@ -56,7 +64,7 @@ class FlakyTestsReporter implements Reporter {
 			}
 			case 'flaky': {
 				fs.writeFileSync(
-					`flaky-tests/${filenamify(testTitle)}.json`,
+					`flaky-tests/${sanitizeFilename(testTitle)}.json`,
 					JSON.stringify({
 						version: 1,
 						runner: '@playwright/test',
