@@ -315,9 +315,11 @@ async function addBlockToPost(page, blockName, options = {}) {
 
 	await openBlockInserter(page, blockInserterSelector);
 
-	const searchInput = page.locator(
-		'.block-editor-inserter__search-input, input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
-	);
+	const searchInput = page
+		.locator(
+			'.block-editor-inserter__search-input, input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
+		)
+		.last();
 	await searchInput.fill(blockSearchName);
 
 	if (!blockInserterSelector) {
@@ -341,24 +343,17 @@ async function addBlockToPost(page, blockName, options = {}) {
 		timeout: 5000,
 	});
 
-	const isInserterOpen = await page
-		.locator('button[class*="__inserter-toggle"].is-pressed')
-		.count();
-	if (isInserterOpen > 0) {
-		await page
-			.locator('button[class*="__inserter-toggle"].is-pressed')
-			.click();
-	}
+	await openBlockInserter(page, blockInserterSelector);
 
 	await openDocumentSettingsSidebar(page, 'Block');
 
 	if (blockType) {
-		await page
+		await getIframeBody(page)
 			.locator(`[data-type="${blockCategory}/${blockType}"]`)
 			.last()
 			.click();
 	} else {
-		await page
+		await getIframeBody(page)
 			.locator(`[data-type="${blockCategory}/${blockID}"]`)
 			.last()
 			.click();
