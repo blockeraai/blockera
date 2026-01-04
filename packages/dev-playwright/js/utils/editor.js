@@ -223,20 +223,33 @@ async function disableGutenbergFeatures(page) {
 }
 
 /**
- * Get block inserter button.
+ * Open block inserter button.
+ * If a custom selector is provided, clicks on that selector in the iframe.
+ * Otherwise, checks if the secondary sidebar toggle exists and clicks it if present.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
- * @param {string|boolean} selector - Optional selector for inserter.
- * @return {Promise<import('@playwright/test').Locator>} The inserter locator.
+ * @param {string|boolean} selector - Optional selector for inserter in iframe.
+ * @return {Promise<void>}
  */
-async function getBlockInserter(page, selector = false) {
+async function openBlockInserter(page, selector = false) {
 	if (selector) {
 		const iframeBody = getIframeBody(page);
-		return iframeBody.locator(selector);
+		const inserter = iframeBody.locator(selector);
+		const count = await inserter.count();
+		if (count > 0) {
+			await inserter.click();
+		}
+		return;
 	}
-	return page.locator(
-		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header [aria-label="Block Inserter"], .edit-site-header [aria-label="Block Inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle.is-primary[aria-pressed="false"]'
+
+	// Check if secondary sidebar toggle exists and click it if present
+	const sidebarToggle = page.locator(
+		'.edit-post-header [aria-label="Show secondary sidebar"]'
 	);
+	const count = await sidebarToggle.count();
+	if (count > 0) {
+		await sidebarToggle.click();
+	}
 }
 
 /**
@@ -288,8 +301,7 @@ async function addBlockToPost(page, blockName, options = {}) {
 		await clearBlocks(page);
 	}
 
-	const inserter = await getBlockInserter(page, blockInserterSelector);
-	await inserter.click();
+	await openBlockInserter(page, blockInserterSelector);
 
 	const searchInput = page.locator(
 		'.block-editor-inserter__search-input, input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
@@ -915,7 +927,7 @@ module.exports = {
 	getBlockeraEntity,
 	getBlockClientId,
 	disableGutenbergFeatures,
-	getBlockInserter,
+	openBlockInserter,
 	addBlockToPost,
 	addNewGroupToPost,
 	savePage,
