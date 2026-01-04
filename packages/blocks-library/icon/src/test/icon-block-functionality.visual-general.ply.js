@@ -106,6 +106,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 		await page.waitForTimeout(1000);
 
 		await setColorControlValue(page, 'Color', '0C3EF1');
+		await page.waitForTimeout(1000);
 
 		/**
 		 * 3. Select icon and use rotation button
@@ -133,12 +134,14 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 		await getByAriaLabel(page, 'Rotate').click({ force: true });
 		await getByAriaLabel(page, 'Flip Horizontal').click({ force: true });
 		await getByAriaLabel(page, 'Flip Vertical').click({ force: true });
+		await page.waitForTimeout(1000);
 
 		await getByDataTest(page, 'style-tab').click();
 
 		const widthContainer = getParentContainer(page, 'Width');
 		await widthContainer.locator('input').clear({ force: true });
 		await widthContainer.locator('input').fill('150');
+		await page.waitForTimeout(1000);
 
 		/**
 		 * 3. customize img/svg inner block
@@ -175,6 +178,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 			.locator('input[type="text"]')
 			.clear({ force: true });
 		await radiusContainer.locator('input[type="text"]').fill('25');
+		await page.waitForTimeout(1000);
 
 		//
 		// 3.1. img/svg tag inner block
@@ -187,6 +191,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 		// 3.1.1. BG color
 		//
 		await setColorControlValue(page, 'BG Color', '59ff00');
+		await page.waitForTimeout(1000);
 
 		//
 		// 4. Check settings tab

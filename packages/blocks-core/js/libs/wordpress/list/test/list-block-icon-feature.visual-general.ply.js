@@ -87,6 +87,7 @@ test.describe('List Block → Icon Feature', () => {
 
 		// set color
 		await setColorControlValue(page, 'Color', '666666');
+		await page.waitForTimeout(1000);
 
 		// switch by advanced icon settings button from extension
 		await getByAriaLabel(page, 'Advanced Icon Settings').click();
@@ -127,6 +128,7 @@ test.describe('List Block → Icon Feature', () => {
 
 		// set color
 		await setColorControlValue(page, 'Color', 'FF6060');
+		await page.waitForTimeout(1000);
 
 		//
 		// 1.3. List item icon
@@ -160,6 +162,7 @@ test.describe('List Block → Icon Feature', () => {
 		await getByDataTest(page, 'style-tab').click();
 
 		await setColorControlValue(page, 'BG Color', '0065FE');
+		await page.waitForTimeout(1000);
 
 		//
 		// 1.4. Check visual
