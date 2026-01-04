@@ -224,9 +224,12 @@ export const getNormalizedSelector = (
 
 	// Replace '&' with the rootSelector and trim unnecessary spaces
 	const processAmpersand = (selector: string): string => {
-		// Handle selectors starting with {{BLOCK_ID}}&
-		if (/^{{BLOCK_ID}}&/.test(selector)) {
-			return selector.replace(/^{{BLOCK_ID}}&/, '{{BLOCK_ID}}');
+		// Handle selectors starting with {{UNIQUE_CLASSNAME}}&
+		if (/^{{UNIQUE_CLASSNAME}}&/.test(selector)) {
+			return selector.replace(
+				/^{{UNIQUE_CLASSNAME}}&/,
+				'{{UNIQUE_CLASSNAME}}'
+			);
 		}
 
 		// Handle selectors starting with &&
@@ -472,7 +475,7 @@ export const getCompatibleBlockCssSelector = ({
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
-	let rootSelector = '{{BLOCK_ID}}';
+	let rootSelector = '{{UNIQUE_CLASSNAME}}';
 
 	// If current block is inner block, we should append the root selector to the root body for specificity reasons.
 	if (isInnerBlock(currentBlock)) {
@@ -703,7 +706,7 @@ export const getCompatibleBlockCssSelector = ({
 		register(rootSelector);
 	}
 
-	// Replace: {{BLOCK_ID}} and {{className}} with values on prepared block selector.
+	// Replace: {{UNIQUE_CLASSNAME}} and {{className}} with values on prepared block selector.
 	return replaceVariablesValue({
 		state,
 		clientId,
