@@ -15,6 +15,7 @@ const config = defineConfig({
 	testMatch: '**/*.ply.js',
 	reporter: process.env.CI
 		? [
+				['list'],
 				['github'],
 				['./packages/dev-playwright/js/config/flaky-tests-report.ts'],
 		  ]
