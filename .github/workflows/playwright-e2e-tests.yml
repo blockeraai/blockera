@@ -155,10 +155,12 @@ jobs:
                   echo "Test patterns: ${test_patterns[*]}"
 
                   # Run Playwright tests with each pattern using the npm script
+                  # Pass patterns as file arguments to Playwright (not as grep patterns)
                   test_exit_code=0
                   for pattern in "${test_patterns[@]}"; do
                     echo "Running tests matching: $pattern"
-                    if ! npm run test:e2e:base -- "$pattern"; then
+                    # Use npx playwright test directly with the glob pattern as a file argument
+                    if ! npx playwright test --config playwright.config.js "$pattern"; then
                       test_exit_code=1
                     fi
                   done
