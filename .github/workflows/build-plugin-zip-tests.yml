@@ -18,6 +18,9 @@ jobs:
         name: Building and Run E2E Tests (PHP ${{ matrix.php }})
         runs-on: ubuntu-latest
         if: ${{ github.repository == 'blockeraai/blockera' || github.event_name == 'pull_request' }}
+        env:
+            # Set wp-env home to workspace-local path for caching (shared across nested directories)
+            WP_ENV_HOME: ${{ github.workspace }}/.cache/wp-env
         strategy:
             fail-fast: true
             matrix:
@@ -73,6 +76,14 @@ jobs:
                   cp ./cypress.config.js ./build/blockera
                   cp -r ./packages/dev-cypress ./build/blockera/packages
                   find ./packages/ -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/blockera/tests \;
+
+            - name: Cache wp-env home
+              uses: actions/cache@v4
+              with:
+                  path: .cache/wp-env
+                  key: wp-env-${{ runner.os }}-${{ hashFiles('.github/wp-env-configs/**/*.json', 'package-lock.json') }}-php${{ matrix.php }}
+                  restore-keys: |
+                      wp-env-${{ runner.os }}-
 
             - name: Setup and Run E2E tests on Blockera build
               run: |
