@@ -24,6 +24,12 @@ jobs:
                     if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
+                      # Skip if this is a function definition (not a function call)
+                      # Check if line contains "function" followed by "exit(" which indicates a method definition
+                      # This matches common patterns: "function exit(", "public function exit(", "static function exit(", etc.
+                      if echo "$line" | grep -qE "(^|[^a-zA-Z_])function\s+exit\("; then
+                        continue
+                      fi
                       if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
                         echo "⚠️ Found PHP debugging code:"
                         echo "📁 File: $file:$line_number"
