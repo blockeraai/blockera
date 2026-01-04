@@ -22,7 +22,6 @@ const {
 	getBlock,
 	getParentContainer,
 	setColorControlValue,
-	compareScreenshot,
 } = require('@blockera/dev-playwright/js/support/commands');
 const { deSelectBlock } = require('@blockera/dev-playwright/js/utils/editor');
 
@@ -155,12 +154,11 @@ test.describe('Button Block → Icon Feature', () => {
 
 		// Editor Snapshot
 		try {
-			await compareScreenshot(
-				editorContainer,
+			await expect(editorContainer).toHaveScreenshot(
 				'button-block-editor.png',
-				snapshotDir,
-				testInfo,
-				0.02
+				{
+					threshold: 0.02,
+				}
 			);
 		} catch (error) {
 			failures.push({
@@ -185,12 +183,11 @@ test.describe('Button Block → Icon Feature', () => {
 
 		// Frontend Snapshot
 		try {
-			await compareScreenshot(
-				entryContent,
+			await expect(entryContent).toHaveScreenshot(
 				'button-block-frontend.png',
-				snapshotDir,
-				testInfo,
-				0.02
+				{
+					threshold: 0.02,
+				}
 			);
 		} catch (error) {
 			failures.push({
