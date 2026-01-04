@@ -154,16 +154,41 @@ jobs:
                   echo "Running tests for category: ${{ matrix.category }}"
                   echo "Test patterns: ${test_patterns[*]}"
 
-                  # Run Playwright tests with each pattern using the npm script
-                  # Pass patterns as file arguments to Playwright (not as grep patterns)
-                  test_exit_code=0
+                  # Expand glob patterns to actual file paths to avoid regex conversion issues
+                  test_files=()
                   for pattern in "${test_patterns[@]}"; do
-                    echo "Running tests matching: $pattern"
-                    # Use npx playwright test directly with the glob pattern as a file argument
-                    if ! npx playwright test --config playwright.config.js "$pattern"; then
-                      test_exit_code=1
+                    # Convert glob pattern to find command
+                    # Replace ** with find's recursive search
+                    if [[ "$pattern" == *"**"* ]]; then
+                      # Extract base directory and filename pattern
+                      # Pattern format: tests/**/*.visual.ply.js
+                      base_dir=$(echo "$pattern" | sed -E 's|/\*\*.*||')
+                      file_pattern=$(echo "$pattern" | sed -E 's|.*\*\*/||')
+                      # Find matching files recursively
+                      while IFS= read -r -d '' file; do
+                        test_files+=("$file")
+                      done < <(find "$base_dir" -type f -name "$file_pattern" -print0 2>/dev/null)
+                    else
+                      # For non-glob patterns, check if file exists
+                      if [ -f "$pattern" ]; then
+                        test_files+=("$pattern")
+                      fi
                     fi
                   done
+
+                  if [ ${#test_files[@]} -eq 0 ]; then
+                    echo "No test files found for category: ${{ matrix.category }}"
+                    exit 0
+                  fi
+
+                  echo "Found ${#test_files[@]} test file(s)"
+
+                  # Run Playwright tests with actual file paths
+                  test_exit_code=0
+                  # Pass all files at once to Playwright
+                  if ! npx playwright test --config playwright.config.js "${test_files[@]}"; then
+                    test_exit_code=1
+                  fi
 
                   # Exit with the appropriate exit code
                   exit $test_exit_code
