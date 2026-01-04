@@ -7,8 +7,6 @@ import { registerPlugin } from '@wordpress/plugins';
  * Internal dependencies
  */
 import ZoomControl from './components/ZoomControl';
-import './styles.css';
-import '../style.css'; // Shared styles for all plugins
 
 /**
  * Blockera Zoom Plugin

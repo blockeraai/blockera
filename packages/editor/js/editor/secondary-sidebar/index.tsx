@@ -13,7 +13,6 @@ import { store as blockeraEditorStore } from '../store-persistence';
 import { ResizeHandle } from '../shared/ResizeHandle';
 import SecondarySidebar from './components/SecondarySidebar';
 import ToggleButton from './components/ToggleButton';
-import './style.css';
 
 /**
  * Component that injects the combined sidebar into the editor interface using slots.

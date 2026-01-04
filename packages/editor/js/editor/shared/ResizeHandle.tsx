@@ -5,11 +5,6 @@ import { __ } from '@wordpress/i18n';
 import { useEffect, useRef, useState, useCallback, createPortal } from '@wordpress/element';
 
 /**
- * Internal dependencies
- */
-import './ResizeHandle.css';
-
-/**
  * Props for the ResizeHandle component.
  */
 type ResizeHandleProps = {

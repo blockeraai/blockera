@@ -18,7 +18,6 @@ import PreviewButton from './components/PreviewButton';
 import PreviewOverlay from './components/PreviewOverlay';
 import { useCurrentEntity } from '../hooks';
 import { usePrefetchPreview } from './hooks/usePrefetchPreview';
-import './styles.css';
 
 /**
  * BlockeraPreview component - Main container for the preview feature.

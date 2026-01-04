@@ -7,7 +7,6 @@ import { registerPlugin } from '@wordpress/plugins';
  * Internal dependencies
  */
 import { BlockeraSlots } from './index';
-import './style.css';
 
 /**
  * Register the slots system as a WordPress plugin.

@@ -10,7 +10,6 @@ import { store as interfaceStore } from '@wordpress/interface';
  */
 import { store as blockeraEditorStore } from '../store-persistence';
 import { ResizeHandle } from '../shared/ResizeHandle';
-import './style.css';
 
 /**
  * Component that watches the primary sidebar (right panel) state and sets CSS variable

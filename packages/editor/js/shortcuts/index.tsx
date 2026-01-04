@@ -7,7 +7,6 @@ import { registerPlugin } from '@wordpress/plugins';
  * Internal dependencies
  */
 import KeyboardShortcutsExtension from './components/KeyboardShortcutsExtension';
-import './style.css';
 
 // Register the plugin to extend keyboard shortcuts help modal
 registerPlugin('blockera-keyboard-shortcuts-extension', {

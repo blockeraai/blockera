@@ -5,11 +5,6 @@ import { __ } from '@wordpress/i18n';
 import type { ReactNode } from 'react';
 
 /**
- * Internal dependencies
- */
-import './style.css';
-
-/**
  * Props for PreviewHeader component.
  */
 export interface PreviewHeaderProps {

@@ -8,14 +8,6 @@ import { registerPlugin } from '@wordpress/plugins';
  */
 import { default as BlockEditorScrollbars } from './BlockEditorScrollbars';
 
-/**
- * Scrollbar utilities and hooks for applying OverlayScrollbars.
- */
-import './style.css';
-
-// Import OverlayScrollbars CSS
-import 'overlayscrollbars/styles/overlayscrollbars.css';
-
 registerPlugin('blockera-scrollbar', {
 	render: () => (
 		<>
