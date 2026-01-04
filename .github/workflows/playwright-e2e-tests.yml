@@ -103,14 +103,24 @@ jobs:
                     # e.g., tests/e2e/specs/**/*.blocks-1.spec.js
                     test_patterns=()
                     
-                    # Check tests/e2e/specs directory
+                    # Check tests/e2e/specs directory for .spec.js files
                     if find tests/e2e/specs -type f -name "*.${{ matrix.category }}.spec.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("tests/e2e/specs/**/*.${{ matrix.category }}.spec.js")
                     fi
                     
-                    # Check packages directory
+                    # Check tests directory for .ply.js files
+                    if find tests -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("tests/**/*.${{ matrix.category }}.ply.js")
+                    fi
+                    
+                    # Check packages directory for .spec.js files
                     if find packages -type f -name "*.${{ matrix.category }}.spec.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("packages/**/*.${{ matrix.category }}.spec.js")
+                    fi
+                    
+                    # Check packages directory for .ply.js files
+                    if find packages -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("packages/**/*.${{ matrix.category }}.ply.js")
                     fi
                   else
                     # Run general tests (files without category in name)
@@ -124,6 +134,15 @@ jobs:
                     
                     if find packages -type f -name "*.spec.js" ! -name "*.*.spec.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("packages/**/!(*.*).spec.js")
+                    fi
+                    
+                    # Check for general .ply.js files (without category)
+                    if find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("tests/**/!(*.*).ply.js")
+                    fi
+                    
+                    if find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" 2>/dev/null | grep -q .; then
+                      test_patterns+=("packages/**/!(*.*).ply.js")
                     fi
                   fi
 
