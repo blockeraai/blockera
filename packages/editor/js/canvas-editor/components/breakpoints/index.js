@@ -20,7 +20,8 @@ import { isEquals, getIframe, getIframeTag } from '@blockera/utils';
 import PickedBreakpoints from './picked-breakpoints';
 import type { BreakpointsComponentProps } from './types';
 import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
-import { useStoreSelectors, useStoreDispatchers } from '../../../hooks';
+import { useStoreSelectors } from '../../../hooks/use-store-selectors';
+import { useStoreDispatchers } from '../../../hooks/use-store-dispatchers';
 import { subscribeToEditorModeChanges } from './editor-mode-subscription';
 
 export const CanvasEditor = ({
