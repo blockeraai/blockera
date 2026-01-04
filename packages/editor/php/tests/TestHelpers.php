@@ -438,7 +438,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		];
 
 		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
-		$this->assertEquals( '.container:active .element:hover', $result );
+		$this->assertEquals( 'html:root body :where(.container):active .element:hover', $result );
 	}
 
 	public function testCssSelectorFormatWithoutPseudoClasses() {
@@ -447,7 +447,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args            = [];
 
 		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
-		$this->assertEquals( '.container .element', $result );
+		$this->assertEquals( 'html:root body :where(.container) .element', $result );
 	}
 
 	public function testCssSelectorFormatWithAmpersandInPickedSelector() {
@@ -458,7 +458,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		];
 
 		$result = blockera_get_css_selector_format( '.container', $picked_selector, $args );
-		$this->assertEquals( '.container.element:hover', $result );
+		$this->assertEquals( 'html:root body :where(.container).element:hover', $result );
 	}
 
 	public function testCssSelectorFormatFallbackWhenParentRootMissing() {
@@ -467,7 +467,7 @@ class TestHelpers extends \WP_UnitTestCase {
 		$args            = [];
 
 		$result = blockera_get_css_selector_format( '.fallback', $picked_selector, $args );
-		$this->assertEquals( '.fallback .element', $result );
+		$this->assertEquals( 'html:root body :where(.fallback) .element', $result );
 	}
 
 	public function testCssSelectorFormatEmptySelectors() {
@@ -498,9 +498,9 @@ class TestHelpers extends \WP_UnitTestCase {
     public function testBasicSelectorFormatting() {
         $cases = [
             // [root, picked, args, expected]
-            ['.block', '.item', [], '.block .item'],
+            ['.block', '.item', [], 'html:root body :where(.block) .item'],
             ['', '.item', [], '.item'],
-            ['.block', '.item, .other', [], '.block .item, .block .other'],
+            ['.block', '.item, .other', [], 'html:root body :where(.block) .item, html:root body :where(.block) .other'],
         ];
 
         foreach ($cases as [$root, $picked, $args, $expected]) {
@@ -519,25 +519,25 @@ class TestHelpers extends \WP_UnitTestCase {
                 '.block', 
                 '.item', 
                 ['pseudo_class' => 'hover'], 
-                '.block .item:hover'
+                'html:root body :where(.block) .item:hover'
             ],
             [
                 '.block', 
                 '.blockera__item, .blockera__other', 
                 ['pseudo_class' => 'active'], 
-                '.block .blockera__item:active, .block .blockera__other:active'
+                'html:root body :where(.block) .blockera__item:active, html:root body :where(.block) .blockera__other:active'
             ],
 			[
 				'.block',
 				'&:before',
 				['pseudo_class' => 'hover'],
-				'.block:hover::before'
+				'html:root body :where(.block):hover::before'
 			],
 			[
 				'.block',
 				'.blockera-icon:before',
 				['pseudo_class' => 'hover'],
-				'.block .blockera-icon:hover::before'
+				'html:root body :where(.block) .blockera-icon:hover::before'
 			]
         ];
 
@@ -557,19 +557,19 @@ class TestHelpers extends \WP_UnitTestCase {
                 '.block', 
                 '.item', 
                 ['parent_pseudo_class' => 'hover'], 
-                '.block:hover .item'
+                'html:root body :where(.block):hover .item'
             ],
             [
                 '.block', 
                 '.blockera-item', 
                 ['parent_pseudo_class' => 'focus'], 
-                '.block:focus .blockera-item'
+                'html:root body :where(.block):focus .blockera-item'
             ],
             [
                 '.block', 
                 '.blockera__item, .blockera__other', 
                 ['parent_pseudo_class' => 'active'], 
-                '.block:active .blockera__item, .block:active .blockera__other'
+                'html:root body :where(.block):active .blockera__item, html:root body :where(.block):active .blockera__other'
             ],
         ];
 
@@ -592,7 +592,7 @@ class TestHelpers extends \WP_UnitTestCase {
                     'pseudo_class' => 'focus',
                     'parent_pseudo_class' => 'hover'
                 ], 
-                '.block:hover .item:focus'
+                'html:root body :where(.block):hover .item:focus'
             ],
             [
                 '.block', 
@@ -601,7 +601,7 @@ class TestHelpers extends \WP_UnitTestCase {
                     'pseudo_class' => 'active',
                     'parent_pseudo_class' => 'focus'
                 ], 
-                '.block:focus .blockera-item:active'
+                'html:root body :where(.block):focus .blockera-item:active'
             ],
         ];
 
@@ -621,37 +621,37 @@ class TestHelpers extends \WP_UnitTestCase {
                 '.block-class .child', 
                 '&& item', 
                 [], 
-                '.block-class item'
+                'html:root body :where(.block-class) item'
             ],
             [
                 '.block-class.modifier .child', 
                 '&& .item', 
                 [], 
-                '.block-class.modifier .item'
+                'html:root body :where(.block-class.modifier) .item'
             ],
             [
-                '.block-class .sub-class', 
+                '.block-class .sub-class',
                 '&&:first-child', 
                 [], 
-                '.block-class:first-child'
+                'html:root body :where(.block-class):first-child'
             ],
             [
                 '.block-class .items', 
                 '&&.active, .normal', 
                 [], 
-                '.block-class.active, .block-class .items .normal'
+                'html:root body :where(.block-class).active, html:root body :where(.block-class .items) .normal'
             ],
             [
                 '.complex-class.with-modifier .child', 
                 '&& .item', 
                 ['pseudo_class' => 'hover'], 
-                '.complex-class.with-modifier .item:hover'
+                'html:root body :where(.complex-class.with-modifier) .item:hover'
             ],
             [
                 '.parent-block .child-block', 
                 '&& > .item, .other-item', 
                 [], 
-                '.parent-block > .item, .parent-block .child-block .other-item'
+                'html:root body :where(.parent-block) > .item, html:root body :where(.parent-block .child-block) .other-item'
             ],
         ];
 
@@ -660,4 +660,25 @@ class TestHelpers extends \WP_UnitTestCase {
             $this->assertEquals($expected, $result, "Failed formatting with && pattern for root: $root, picked: $picked");
         }
     }
+
+	/**
+	 * @dataProvider dataProviderGetCssSelectorFormat
+	 */
+	public function testGetCssSelectorFormat(string $picked_selector, string $expected)	{
+		$root_selector = '.blockera-block';
+		$args = [];
+		$result = blockera_get_css_selector_format($root_selector, $picked_selector, $args);
+		$this->assertEquals($expected, $result);
+	}
+
+	public function dataProviderGetCssSelectorFormat() {
+		return [
+			[ '.wp-block-sample:is(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:is(.a, .b)' ],
+			[ '.wp-block-sample:not(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:not(.a, .b)' ],
+			[ '.wp-block-sample:has(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:has(.a, .b)' ],
+			[ '.wp-block-sample:host(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:host(.a, .b)' ],
+			[ '.wp-block-sample:host-context(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:host-context(.a, .b)' ],
+			[ '.wp-block-sample:any(.a, .b)', 'html:root body :where(.blockera-block) .wp-block-sample:any(.a, .b)' ],
+		];
+	}
 }
