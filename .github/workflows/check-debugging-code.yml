@@ -30,7 +30,23 @@ jobs:
                       if echo "$line" | grep -qE "(^|[^a-zA-Z_])function\s+exit\("; then
                         continue
                       fi
-                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                      # Check for @debug-ignore in previous comment lines (up to 10 lines back)
+                      has_ignore=false
+                      start_line=$((line_number > 10 ? line_number - 10 : 1))
+                      for ((i=line_number; i>=start_line; i--)); do
+                        prev_line=$(sed -n "${i}p" "$file")
+                        # Check if line is a comment line (PHP: // or #)
+                        if echo "$prev_line" | grep -qE "^\s*(//|#)"; then
+                          if echo "$prev_line" | grep -q "@debug-ignore"; then
+                            has_ignore=true
+                            break
+                          fi
+                        # If we hit a non-comment, non-empty line, stop looking (unless it's the current line)
+                        elif [ "$i" -ne "$line_number" ] && ! echo "$prev_line" | grep -qE "^\s*$"; then
+                          break
+                        fi
+                      done
+                      if [ "$has_ignore" = false ]; then
                         echo "⚠️ Found PHP debugging code:"
                         echo "📁 File: $file:$line_number"
                         echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -47,7 +63,23 @@ jobs:
                     if [[ "$file" == *"test/"* ]] || [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
-                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                      # Check for @debug-ignore in previous comment lines (up to 10 lines back)
+                      has_ignore=false
+                      start_line=$((line_number > 10 ? line_number - 10 : 1))
+                      for ((i=line_number; i>=start_line; i--)); do
+                        prev_line=$(sed -n "${i}p" "$file")
+                        # Check if line is a comment line (JS/TS: //)
+                        if echo "$prev_line" | grep -qE "^\s*//"; then
+                          if echo "$prev_line" | grep -q "@debug-ignore"; then
+                            has_ignore=true
+                            break
+                          fi
+                        # If we hit a non-comment, non-empty line, stop looking (unless it's the current line)
+                        elif [ "$i" -ne "$line_number" ] && ! echo "$prev_line" | grep -qE "^\s*$"; then
+                          break
+                        fi
+                      done
+                      if [ "$has_ignore" = false ]; then
                         echo "⚠️ Found JavaScript debugging code:"
                         echo "📁 File: $file:$line_number"
                         echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -64,7 +96,23 @@ jobs:
                     if [[ "$file" == *".github/"* ]] || [[ "$file" == *"bin/"* ]]; then continue; fi
                     
                     while IFS=: read -r line_number line; do
-                      if ! grep -A1 -B2 -n "$line" "$file" | grep -q "@debug-ignore"; then
+                      # Check for @debug-ignore in previous comment lines (up to 10 lines back)
+                      has_ignore=false
+                      start_line=$((line_number > 10 ? line_number - 10 : 1))
+                      for ((i=line_number; i>=start_line; i--)); do
+                        prev_line=$(sed -n "${i}p" "$file")
+                        # Check if line is a comment line (JS/TS: //)
+                        if echo "$prev_line" | grep -qE "^\s*//"; then
+                          if echo "$prev_line" | grep -q "@debug-ignore"; then
+                            has_ignore=true
+                            break
+                          fi
+                        # If we hit a non-comment, non-empty line, stop looking (unless it's the current line)
+                        elif [ "$i" -ne "$line_number" ] && ! echo "$prev_line" | grep -qE "^\s*$"; then
+                          break
+                        fi
+                      done
+                      if [ "$has_ignore" = false ]; then
                         echo "⚠️ Found test skip/only:"
                         echo "📁 File: $file:$line_number"
                         echo "📝 Code: $(echo "$line" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
