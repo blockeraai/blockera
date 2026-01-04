@@ -69,5 +69,8 @@
 	"phpstan.level": 5,
 	"phpstan.paths": ["packages"],
 	"phpstan.errorFormatter": "table",
-	"phpstan.fullMessage": true
+	"phpstan.fullMessage": true,
+	"[html]": {
+		"editor.defaultFormatter": "vscode.html-language-features"
+	}
 }
