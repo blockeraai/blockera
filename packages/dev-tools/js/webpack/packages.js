@@ -127,7 +127,11 @@ module.exports = (env, argv) => {
 			extensions: [
 				'.tsx',
 				'.ts',
-				...(defaultConfig.resolve?.extensions || ['.jsx', '.js', '.json']),
+				...(defaultConfig.resolve?.extensions || [
+					'.jsx',
+					'.js',
+					'.json',
+				]),
 			],
 		},
 		optimization: {
