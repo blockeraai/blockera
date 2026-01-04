@@ -40,8 +40,16 @@ const main = () => {
 		categories.add('general-1');
 	}
 
-	const baseFiles = getFiles('tests', /\/[\w-]+\.ply\.js/);
-	if (baseFiles.length) {
+	const baseCategorizedFiles = getFiles('tests', /\.(.*?)\.ply\.js/);
+	baseCategorizedFiles.forEach((file) => {
+		const match = file.match(/\.(.*?)\.ply\.js/);
+		if (match && match[1]) {
+			categories.add(match[1]);
+		}
+	});
+
+	const generalBaseFiles = getFiles('tests', /\/[\w-]+\.ply\.js/);
+	if (generalBaseFiles.length) {
 		categories.add('general-1');
 	}
 
