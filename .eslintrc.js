@@ -132,6 +132,12 @@ module.exports = {
 				],
 			},
 		},
+		{
+			files: ['**/*.ts', '**/*.tsx'],
+			rules: {
+				'ft-flow/no-types-missing-file-annotation': 'off',
+			},
+		},
 	],
 	env: {
 		jest: true,
