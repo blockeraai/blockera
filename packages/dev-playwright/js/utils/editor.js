@@ -725,7 +725,9 @@ async function openMoreFeaturesControl(page, label) {
  */
 async function deSelectBlock(page) {
 	const iframeBody = getIframeBody(page);
-	await iframeBody.locator('h1').click();
+	const h1 = iframeBody.locator('h1');
+	await h1.hover();
+	await h1.click();
 }
 
 /**
