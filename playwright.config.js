@@ -15,8 +15,9 @@ const config = defineConfig({
 	testMatch: '**/*.ply.js',
 	reporter: process.env.CI
 		? [
-				['list'],
-				['github'],
+				['list'], // Shows test names and progress in real-time
+				['github'], // GitHub Actions integration
+				['html', { outputFolder: 'playwright-report', open: 'never' }], // HTML report
 				['./packages/dev-playwright/js/config/flaky-tests-report.ts'],
 		  ]
 		: 'list',
