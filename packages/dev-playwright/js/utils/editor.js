@@ -5,6 +5,18 @@
 const { expect } = require('@playwright/test');
 
 /**
+ * Escape CSS identifier (class name, id, etc.)
+ * Simple implementation that escapes special characters
+ *
+ * @param {string} str - String to escape.
+ * @return {string} Escaped string.
+ */
+function escapeCSS(str) {
+	// Escape special characters in CSS identifiers
+	return str.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, '\\$&');
+}
+
+/**
  * Get iframe body element from editor canvas.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -316,11 +328,11 @@ async function addBlockToPost(page, blockName, options = {}) {
 
 	let targetClassName = '';
 	if (blockType) {
-		targetClassName = `.editor-block-list-item-${CSS.escape(
+		targetClassName = `.editor-block-list-item-${escapeCSS(
 			`${blockType}/${blockID}`
 		)}`;
 	} else {
-		targetClassName = `.editor-block-list-item-${CSS.escape(blockID)}`;
+		targetClassName = `.editor-block-list-item-${escapeCSS(blockID)}`;
 	}
 
 	await page.locator(targetClassName).first().click({ force: true });
