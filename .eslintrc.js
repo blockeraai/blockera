@@ -57,7 +57,15 @@ module.exports = {
 		'import/extensions': ['.js', '.jsx', '.txt', '.html'],
 		'import/resolver': {
 			node: {
-				extensions: ['.js', '.jsx', '.json', '.txt', '.html'],
+				extensions: [
+					'.ts',
+					'.tsx',
+					'.js',
+					'.jsx',
+					'.json',
+					'.txt',
+					'.html',
+				],
 			},
 		},
 	},
