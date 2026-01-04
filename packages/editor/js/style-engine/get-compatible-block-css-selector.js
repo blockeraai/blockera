@@ -447,6 +447,13 @@ export const getNormalizedSelector = (
 		.join(', ');
 };
 
+export const getSelectorWithRootBody = (
+	selector: string,
+	withHTML: boolean = true
+): string => {
+	return `${withHTML ? 'html:root' : ':root'} body :where(${selector})`;
+};
+
 export const getCompatibleBlockCssSelector = ({
 	state,
 	query,
@@ -465,7 +472,12 @@ export const getCompatibleBlockCssSelector = ({
 	isGlobalStylesWrapper = false,
 	currentStateHasSelectors = false,
 }: NormalizedSelectorProps): string => {
-	const rootSelector = '{{BLOCK_ID}}';
+	let rootSelector = '{{BLOCK_ID}}';
+
+	// If current block is inner block, we should append the root selector to the root body for specificity reasons.
+	if (isInnerBlock(currentBlock)) {
+		rootSelector = getSelectorWithRootBody(rootSelector);
+	}
 
 	const selectors: {
 		[key: TStates]: {
@@ -663,9 +675,15 @@ export const getCompatibleBlockCssSelector = ({
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
 					if ('default' === styleVariationName) {
-						return `:root :where(${generatedSelector})`;
+						return getSelectorWithRootBody(
+							generatedSelector,
+							false
+						);
 					}
-					return `:root :where(${generatedSelector}.is-style-${styleVariationName})`;
+					return getSelectorWithRootBody(
+						`${generatedSelector}.is-style-${styleVariationName}`,
+						false
+					);
 				},
 			});
 		} else if (isGlobalStylesWrapper) {
@@ -673,7 +691,7 @@ export const getCompatibleBlockCssSelector = ({
 			register(selector, {
 				from: 'edit-site/global-styles',
 				getSelectorBasedOnContext: (generatedSelector: string) => {
-					return `:root :where(${generatedSelector})`;
+					return getSelectorWithRootBody(generatedSelector, false);
 				},
 			});
 		} else if (isInnerBlock(currentBlock)) {
