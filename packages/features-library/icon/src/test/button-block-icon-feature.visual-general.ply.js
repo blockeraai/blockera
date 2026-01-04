@@ -109,6 +109,7 @@ test.describe('Button Block → Icon Feature', () => {
 
 		// set color
 		await setColorControlValue(page, 'Color', '666666');
+		await page.waitForTimeout(1000);
 
 		//
 		// 1.3. Icon inner block
@@ -134,6 +135,7 @@ test.describe('Button Block → Icon Feature', () => {
 
 		await getByDataTest(page, 'style-tab').click();
 		await setColorControlValue(page, 'BG Color', '0065FE');
+		await page.waitForTimeout(1000);
 
 		//
 		// 1.4. Visual Test
