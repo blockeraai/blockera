@@ -103,7 +103,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 
 		const popover1 = page.locator('[data-wp-component="Popover"]').last();
 		await popover1.locator('[aria-label="add-card Icon"]').click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(300);
 
 		await setColorControlValue(page, 'Color', '0C3EF1');
 
@@ -126,7 +126,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 
 		const popover2 = page.locator('[data-wp-component="Popover"]').last();
 		await popover2.locator('[aria-label="at-symbol Icon"]').click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(300);
 
 		await setColorControlValue(page, 'Color', 'C22A2A');
 
@@ -159,7 +159,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 
 		const popover3 = page.locator('[data-wp-component="Popover"]').last();
 		await popover3.locator('[aria-label="audio Icon"]').click();
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(300);
 
 		await getByDataTest(page, 'style-tab').click();
 
