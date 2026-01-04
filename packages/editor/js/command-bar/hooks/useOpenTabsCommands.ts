@@ -76,6 +76,7 @@ function getOpenTabsCommandsLoader(
 							tabActions.switchDocument(tab.type, tab.id);
 							close?.();
 						} catch (error) {
+							// @debug-ignore
 							// eslint-disable-next-line no-console
 							console.error(`Failed to switch to tab ${tab.key}:`, error);
 							close?.();

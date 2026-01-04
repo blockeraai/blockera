@@ -83,6 +83,7 @@ function loadFixtures() {
 				frontendSetupFn = setupModule.frontendSetup || setupModule.frontendSetupFn;
 			} catch (error) {
 				// Setup file exists but can't be loaded
+				// @debug-ignore
 				console.warn(`Failed to load setup.js for ${sectionId}:`, error.message);
 				setupFn = null;
 				frontendSetupFn = null;

@@ -61,6 +61,7 @@ export default function GenericSlot({
 		}
 
 		if (!slotConfig) {
+			// @debug-ignore
 			console.warn(`[Blockera Slots] Slot configuration not found for: ${slotId}`);
 			onSlotCreatedRef.current?.(false);
 			return;

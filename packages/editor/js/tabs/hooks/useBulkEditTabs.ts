@@ -118,6 +118,7 @@ export function useBulkEditTabs(
 					} catch (error) {
 						// Silently skip posts that can't be loaded
 						// (e.g., deleted, permission denied, etc.)
+						// @debug-ignore
 						// eslint-disable-next-line no-console
 						console.warn(
 							`Blockera Tabs: Could not open post ${postId} in bulk edit:`,

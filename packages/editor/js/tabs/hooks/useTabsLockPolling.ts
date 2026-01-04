@@ -204,6 +204,7 @@ export function useTabsLockPolling({
 			// Silently fail - will retry on next poll interval
 			// Log in development for debugging
 			if (process.env.NODE_ENV === 'development') {
+				// @debug-ignore
 				// eslint-disable-next-line no-console
 				console.error('Blockera Tabs: Failed to refresh post locks', error);
 			}
@@ -328,6 +329,7 @@ export function useTabsLockPolling({
 				return result.success === true;
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
+					// @debug-ignore
 					// eslint-disable-next-line no-console
 					console.error('Blockera Tabs: Failed to take over post lock', error);
 				}
@@ -379,6 +381,7 @@ export function useTabsLockPolling({
 				return null;
 			} catch (error) {
 				if (process.env.NODE_ENV === 'development') {
+					// @debug-ignore
 					// eslint-disable-next-line no-console
 					console.error('Blockera Tabs: Failed to check single post lock', error);
 				}

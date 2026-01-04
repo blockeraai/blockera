@@ -112,7 +112,9 @@ export const bootstrapCanvasEditor = (): void | Object => {
 
 					componentDidCatch(error: Error, errorInfo: Object): void {
 						// Log error for debugging
+						// @debug-ignore
 						if (typeof console !== 'undefined' && console.error) {
+							// @debug-ignore
 							console.error(
 								'CanvasEditor error:',
 								error,

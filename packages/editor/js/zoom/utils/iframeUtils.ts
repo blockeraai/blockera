@@ -361,6 +361,7 @@ export function injectZoomHeaderStyles(iframeDoc: Document): void {
 		: '';
 
 	if (!stylesContent) {
+		// @debug-ignore
 		// eslint-disable-next-line no-console
 		console.warn('Blockera Zoom: Header styles not loaded. CSS import may have failed.', {
 			headerStylesType: typeof headerStyles,

@@ -119,6 +119,7 @@ function getCreateEntityCommandsLoader(
 
 							close?.();
 						} catch (error) {
+							// @debug-ignore
 							// eslint-disable-next-line no-console
 							console.error('Failed to create new post:', error);
 							close?.();
@@ -164,6 +165,7 @@ function getCreateEntityCommandsLoader(
 
 							close?.();
 						} catch (error) {
+							// @debug-ignore
 							// eslint-disable-next-line no-console
 							console.error('Failed to create new page:', error);
 							close?.();

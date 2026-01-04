@@ -434,6 +434,7 @@ export default function PreviewOverlay({
 		} catch {
 			// Cross-origin iframe - can't access content
 			// This is expected in some configurations and is handled gracefully
+			// @debug-ignore
 			// eslint-disable-next-line no-console
 			console.info(
 				'Blockera Preview: Unable to block navigation in cross-origin iframe'
