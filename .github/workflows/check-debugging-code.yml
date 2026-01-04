@@ -39,8 +39,8 @@ jobs:
                       start_line=$((line_number > 10 ? line_number - 10 : 1))
                       for ((i=line_number; i>=start_line; i--)); do
                         prev_line=$(sed -n "${i}p" "$file")
-                        # Check if line is a comment line (PHP: // or #)
-                        if echo "$prev_line" | grep -qE "^\s*(//|#)"; then
+                        # Check if line is a comment line (PHP: //, #, or /* */ block comments)
+                        if echo "$prev_line" | grep -qE "^\s*(//|#|/\*.*\*/)"; then
                           if echo "$prev_line" | grep -q "@debug-ignore"; then
                             has_ignore=true
                             break
@@ -76,8 +76,8 @@ jobs:
                       start_line=$((line_number > 10 ? line_number - 10 : 1))
                       for ((i=line_number; i>=start_line; i--)); do
                         prev_line=$(sed -n "${i}p" "$file")
-                        # Check if line is a comment line (JS/TS: //)
-                        if echo "$prev_line" | grep -qE "^\s*//"; then
+                        # Check if line is a comment line (JS/TS: // or /* */ block comments)
+                        if echo "$prev_line" | grep -qE "^\s*(//|/\*.*\*/)"; then
                           if echo "$prev_line" | grep -q "@debug-ignore"; then
                             has_ignore=true
                             break
@@ -113,8 +113,8 @@ jobs:
                       start_line=$((line_number > 10 ? line_number - 10 : 1))
                       for ((i=line_number; i>=start_line; i--)); do
                         prev_line=$(sed -n "${i}p" "$file")
-                        # Check if line is a comment line (JS/TS: //)
-                        if echo "$prev_line" | grep -qE "^\s*//"; then
+                        # Check if line is a comment line (JS/TS: // or /* */ block comments)
+                        if echo "$prev_line" | grep -qE "^\s*(//|/\*.*\*/)"; then
                           if echo "$prev_line" | grep -q "@debug-ignore"; then
                             has_ignore=true
                             break
