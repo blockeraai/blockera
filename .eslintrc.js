@@ -81,6 +81,7 @@ module.exports = {
 		'@wordpress/no-base-control-with-label-without-id': 'off',
 		'jsdoc/check-line-alignment': 'off',
 		'jsdoc/require-param': 'off',
+		'jsdoc/require-param-type': 'off',
 		'jsdoc/check-param-names': 'off',
 		'no-shadow': 'off',
 		'no-console': 'off',
