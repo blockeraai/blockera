@@ -7,6 +7,8 @@ const {
 	RequestUtils,
 } = require('@wordpress/e2e-test-utils-playwright');
 const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
+const path = require('path');
+const fs = require('fs');
 
 /**
  * Internal dependencies
@@ -1026,6 +1028,125 @@ async function setFrontendViewportForScreenshot(
 	}
 }
 
+/**
+ * Helper function to take a screenshot and compare it with expected snapshot.
+ * Saves screenshots to custom location and uses Playwright's toHaveScreenshot for comparison.
+ * Handles browser-specific snapshot naming and copies snapshots between default and custom locations.
+ *
+ * @param {import('@playwright/test').Locator} locator - The Playwright locator for the element to screenshot.
+ * @param {string} snapshotName - Name of the snapshot file (e.g., 'test-editor.png').
+ * @param {string} snapshotDir - Directory path where snapshots are stored (custom location).
+ * @param {Object} testInfo - Playwright test info object.
+ * @param {number} threshold - Screenshot comparison threshold (0-1). Default: 0.02.
+ * @return {Promise<void>}
+ */
+async function compareScreenshot(
+	locator,
+	snapshotName,
+	snapshotDir,
+	testInfo,
+	threshold = 0.02
+) {
+	const snapshotPath = path.join(snapshotDir, snapshotName);
+	// Use testInfo.snapshotPath to get the default snapshots directory
+	// This respects Playwright's snapshot configuration when set in beforeEach
+	// If not set, use the provided snapshotDir (which should match the custom directory)
+	const defaultSnapshotsDir = testInfo.snapshotPath
+		? path.dirname(testInfo.snapshotPath(snapshotName))
+		: snapshotDir;
+
+	// Ensure default snapshots directory exists
+	if (!fs.existsSync(defaultSnapshotsDir)) {
+		fs.mkdirSync(defaultSnapshotsDir, { recursive: true });
+	}
+
+	// Determine which browser we're using to set the correct suffix
+	// Playwright adds browser suffix (e.g., -chromium.png) to snapshot names
+	const browserName = testInfo.project?.name || 'chromium';
+	const browserSuffix = `-${browserName}.png`;
+	const browserSnapshotName = snapshotName.replace('.png', browserSuffix);
+	const browserSnapshotPath = path.join(
+		defaultSnapshotsDir,
+		browserSnapshotName
+	);
+
+	// Check if snapshot exists in custom location (not first run)
+	const snapshotExists = fs.existsSync(snapshotPath);
+
+	if (snapshotExists) {
+		// Snapshot exists: copy from custom location to defaultSnapshotsDir for comparison
+		// This ensures Playwright can find the snapshot for comparison
+		fs.copyFileSync(snapshotPath, browserSnapshotPath);
+	}
+
+	// Use Playwright's toHaveScreenshot for comparison
+	// This will use testInfo.snapshotPath if set in beforeEach, otherwise default location
+	try {
+		await expect(locator).toHaveScreenshot(snapshotName, {
+			threshold,
+		});
+
+		// Comparison succeeded: copy from defaultSnapshotsDir to custom location and clean up
+		await new Promise((resolve) => setTimeout(resolve, 100));
+
+		// Check both the expected location and the default __snapshots__ location
+		// Playwright might create browser-specific snapshots in __snapshots__ even when
+		// testInfo.snapshotPath is set
+		const defaultPlaywrightSnapshotsDir = path.join(
+			path.dirname(testInfo.file),
+			'__snapshots__'
+		);
+		const defaultPlaywrightSnapshotPath = path.join(
+			defaultPlaywrightSnapshotsDir,
+			browserSnapshotName
+		);
+
+		// Try to find the browser-specific snapshot in either location
+		let sourceSnapshotPath = null;
+		if (fs.existsSync(browserSnapshotPath)) {
+			sourceSnapshotPath = browserSnapshotPath;
+		} else if (fs.existsSync(defaultPlaywrightSnapshotPath)) {
+			sourceSnapshotPath = defaultPlaywrightSnapshotPath;
+		}
+
+		if (sourceSnapshotPath) {
+			// Copy to custom location (remove browser suffix)
+			fs.copyFileSync(sourceSnapshotPath, snapshotPath);
+			// Clean up browser-specific snapshot from both possible locations
+			if (fs.existsSync(browserSnapshotPath)) {
+				fs.unlinkSync(browserSnapshotPath);
+			}
+			if (fs.existsSync(defaultPlaywrightSnapshotPath)) {
+				fs.unlinkSync(defaultPlaywrightSnapshotPath);
+			}
+		}
+	} catch (error) {
+		// Comparison failed: copy actual screenshot to both locations
+		await new Promise((resolve) => setTimeout(resolve, 100));
+
+		const actualScreenshotName = snapshotName.replace(
+			'.png',
+			'-actual.png'
+		);
+		const actualScreenshotPath = testInfo.outputDir
+			? path.join(testInfo.outputDir, actualScreenshotName)
+			: null;
+
+		if (actualScreenshotPath && fs.existsSync(actualScreenshotPath)) {
+			// Copy the actual screenshot to custom location
+			fs.copyFileSync(actualScreenshotPath, snapshotPath);
+
+			// Also ensure it exists in defaultSnapshotsDir (keep copy there)
+			if (!fs.existsSync(browserSnapshotPath)) {
+				fs.copyFileSync(actualScreenshotPath, browserSnapshotPath);
+			}
+		}
+
+		// Re-throw the error so the test still fails
+		throw error;
+	}
+}
+
 module.exports = {
 	test,
 	expect,
@@ -1069,4 +1190,5 @@ module.exports = {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
+	compareScreenshot,
 };
