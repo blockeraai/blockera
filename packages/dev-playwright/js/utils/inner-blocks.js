@@ -123,13 +123,13 @@ async function openInserter(page) {
 		.last();
 
 	await statesContainer
-		.locator('[data-testid="add-new-block-state"]')
+		.locator('[data-test="add-new-block-state"]')
 		.click({ force: true });
 
 	const popover = page.locator('.blockera-component-popover');
 	if ((await popover.count()) === 0) {
 		await statesContainer
-			.locator('[data-testid="add-new-block-state"]')
+			.locator('[data-test="add-new-block-state"]')
 			.click({ force: true });
 	}
 }
