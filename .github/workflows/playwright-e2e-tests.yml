@@ -155,6 +155,7 @@ jobs:
                   path: |
                       artifacts/test-results
                       playwright-report
+                      **/__snapshots__
                   if-no-files-found: ignore
                   retention-days: 7
 
