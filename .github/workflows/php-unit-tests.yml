@@ -63,6 +63,8 @@ jobs:
         #                      wordpress: ${{ needs.compute-previous-wordpress-version.outputs.previous-wordpress-version }}
 
         env:
+            # Set wp-env home to workspace-local path for caching
+            WP_ENV_HOME: ${{ github.workspace }}/.cache/wp-env
             WP_ENV_PHP_VERSION: ${{ matrix.php }}
             WP_ENV_CORE: ${{ matrix.wordpress == '' && 'WordPress/WordPress' || format( 'https://wordpress.org/wordpress-{0}.zip', matrix.wordpress ) }}
 
@@ -108,6 +110,14 @@ jobs:
                   echo APP_MODE=production >> .env
                   echo DB=wp_tests >> .env
                   cat .env
+
+            - name: Cache wp-env home
+              uses: actions/cache@v4
+              with:
+                  path: .cache/wp-env
+                  key: wp-env-${{ runner.os }}-${{ hashFiles('.github/wp-env-configs/**/*.json', 'package-lock.json') }}-php${{ matrix.php }}
+                  restore-keys: |
+                      wp-env-${{ runner.os }}-
 
             - name: Start WordPress Environment
               run: npm run env:start
