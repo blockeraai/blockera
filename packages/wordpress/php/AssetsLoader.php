@@ -139,8 +139,6 @@ class AssetsLoader {
 						[],
 						$asset['version']
 					);
-
-					return;
 				}
 
 				if ( ! $asset['script'] ) {
