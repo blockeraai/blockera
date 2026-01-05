@@ -373,7 +373,7 @@ export function useTemplatePreviewUrl(
 								per_page: 1,
 								orderby: 'count',
 								order: 'desc' as const,
-						  };
+							};
 
 					const categories = coreSelect.getEntityRecords(
 						'taxonomy',
@@ -403,7 +403,7 @@ export function useTemplatePreviewUrl(
 								per_page: 1,
 								orderby: 'count',
 								order: 'desc' as const,
-						  };
+							};
 
 					const tags = coreSelect.getEntityRecords(
 						'taxonomy',
@@ -431,13 +431,13 @@ export function useTemplatePreviewUrl(
 								slug: parsedSlug.entitySlug,
 								per_page: 1,
 								who: 'authors',
-						  }
+							}
 						: {
 								per_page: 1,
 								orderby: 'registered_date',
 								order: 'desc' as const,
 								who: 'authors',
-						  };
+							};
 
 					const authors = coreSelect.getEntityRecords(
 						'root',
@@ -474,7 +474,7 @@ export function useTemplatePreviewUrl(
 								per_page: 1,
 								orderby: 'count',
 								order: 'desc' as const,
-						  };
+							};
 
 					const terms = coreSelect.getEntityRecords(
 						'taxonomy',

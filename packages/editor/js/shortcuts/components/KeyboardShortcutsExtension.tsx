@@ -249,9 +249,13 @@ export default function KeyboardShortcutsExtension(): React.ReactNode {
 			return indexA - indexB;
 		}
 		// Only A is in the sort order: A comes first
-		if (indexA !== -1) return -1;
+		if (indexA !== -1) {
+			return -1;
+		}
 		// Only B is in the sort order: B comes first
-		if (indexB !== -1) return 1;
+		if (indexB !== -1) {
+			return 1;
+		}
 		// Neither is in the sort order: sort alphabetically (both come after sorted ones)
 		return a.localeCompare(b);
 	});

@@ -112,7 +112,6 @@ export default function TabContextMenu({
 	position,
 	editorUrl,
 	viewUrl,
-	isDirty,
 	tabs = [],
 	getIsDirty,
 	onCloseTab,

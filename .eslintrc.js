@@ -112,6 +112,12 @@ module.exports = {
 				allowedTextDomain: ['blockera'],
 			},
 		],
+		// Disable import/named to avoid TypeScript resolver issues
+		// TypeScript and Flow handle type checking, so this rule is redundant
+		'import/named': 'off',
+		'import/namespace': 'off',
+		'import/default': 'off',
+		'import/no-named-as-default-member': 'off',
 	},
 	overrides: [
 		{
@@ -139,8 +145,27 @@ module.exports = {
 					jsx: true,
 				},
 			},
+			settings: {
+				'import/resolver': {
+					node: {
+						extensions: [
+							'.ts',
+							'.tsx',
+							'.js',
+							'.jsx',
+							'.json',
+							'.txt',
+							'.html',
+						],
+					},
+				},
+			},
 			rules: {
 				'ft-flow/no-types-missing-file-annotation': 'off',
+				'import/named': 'off',
+				'import/namespace': 'off',
+				'import/default': 'off',
+				'import/no-named-as-default-member': 'off',
 			},
 		},
 	],

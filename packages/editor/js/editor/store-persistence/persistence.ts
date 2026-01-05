@@ -80,19 +80,16 @@ function debounceAsync<T extends (...args: any[]) => Promise<any>>(
  * @param options Configuration options.
  * @param options.preloadedData          Any persisted data that should be preloaded.
  * @param options.localStorageRestoreKey The key to use for localStorage backup.
- * @param options.metaKey                The user meta key to use (default: 'blockera_editor_persistence').
  * @param options.requestDebounceMS      Debounce time in milliseconds (default: 2500ms).
  * @return A persistence layer for WordPress user meta.
  */
 export function createPersistenceLayer<T extends Record<string, any>>({
 	preloadedData,
 	localStorageRestoreKey = 'BLOCKERA_EDITOR_PERSISTENCE_RESTORE',
-	metaKey = 'blockera_editor_persistence',
 	requestDebounceMS = 2500,
 }: {
 	preloadedData?: T;
 	localStorageRestoreKey?: string;
-	metaKey?: string;
 	requestDebounceMS?: number;
 } = {}): PersistenceLayer<T> {
 	let cache: T | undefined;

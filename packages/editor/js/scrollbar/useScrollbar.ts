@@ -119,9 +119,8 @@ export function useScrollbar<T extends HTMLElement>(
 			try {
 				// Import the library dynamically
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const overlayScrollbarsModule = await import(
-					'overlayscrollbars'
-				);
+				const overlayScrollbarsModule =
+					await import('overlayscrollbars');
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
 				OverlayScrollbarsClass =
 					overlayScrollbarsModule.OverlayScrollbars as any;

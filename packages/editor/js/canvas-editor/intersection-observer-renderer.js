@@ -135,7 +135,9 @@ export class IntersectionObserverRenderer {
 	}
 
 	renderComponent() {
-		if (this.isRendered) return;
+		if (this.isRendered) {
+			return;
+		}
 
 		const targetElement = document.querySelector(this.targetSelector);
 

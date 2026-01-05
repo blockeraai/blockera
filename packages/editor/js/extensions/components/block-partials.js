@@ -38,7 +38,9 @@ export const BlockPartials = memo(({ clientId, isActive }) => {
 		const stickyWrapper = stickyWrapperRef.current;
 		const sentinel = sentinelRef.current;
 
-		if (!stickyWrapper || !sentinel) return;
+		if (!stickyWrapper || !sentinel) {
+			return;
+		}
 
 		const observer = new IntersectionObserver(
 			([entry]) => {

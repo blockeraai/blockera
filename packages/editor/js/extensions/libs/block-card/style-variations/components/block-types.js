@@ -61,7 +61,7 @@ export const BlockTypes = ({
 					item !== null &&
 					item !== undefined &&
 					item.attributes.hasOwnProperty('blockeraPropsId')
-		  )
+			)
 		: items;
 	const enabledItems = validItems
 		.filter((item) => blockHasStyle(item.name, style.name))
@@ -90,7 +90,7 @@ export const BlockTypes = ({
 							]?.disabledIn;
 
 						return !disabledIn?.includes(blockType);
-				  }) || []
+					}) || []
 				: enabledItems,
 			primitiveItems: validItems.sort((a, b) => {
 				const aHasStyle = blockHasStyle(a.name, style.name) ? 1 : 0;
@@ -434,7 +434,7 @@ const BlockType = ({
 									items: blocksState.items.includes(name)
 										? blocksState.items.filter(
 												(item) => item !== name
-										  )
+											)
 										: [...blocksState.items, name],
 								});
 								setGlobalData(

@@ -253,7 +253,14 @@ export const IconExtension: ComponentType<{
 				});
 			}
 		},
-		[icon, blockName, renderIcon, encodeIcon, handleOnChangeAttributes]
+		[
+			icon,
+			blockName,
+			renderIcon,
+			encodeIcon,
+			handleOnChangeAttributes,
+			iconColor,
+		]
 	);
 
 	// Icon is not available in inner blocks.
@@ -670,7 +677,7 @@ export const IconExtension: ComponentType<{
 														'blockera'
 													),
 													iconRotate
-											  )
+												)
 											: __('Rotate', 'blockera')
 									}
 									size="extra-small"
@@ -687,7 +694,7 @@ export const IconExtension: ComponentType<{
 															? 0
 															: iconRotate,
 														90
-												  )
+													)
 												: 90;
 
 										if (

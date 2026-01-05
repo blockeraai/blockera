@@ -1460,7 +1460,10 @@ export default function LayoutMatrixControl({
 											}}
 										>
 											<b>
-												{__('Dense mode:', 'blockera')}{' '}
+												{__(
+													'Dense mode:',
+													'blockera'
+												)}{' '}
 											</b>
 											{__(
 												'fills empty spaces with items that fit, potentially changing their visual order.',

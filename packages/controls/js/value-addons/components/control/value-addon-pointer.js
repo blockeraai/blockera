@@ -194,7 +194,9 @@ export default function ({
 						controlProps.handleOnClickRemove(e);
 					} else {
 						controlProps.setOpen('dv-picker');
-						if (pickerProps.onShown) pickerProps.onShown();
+						if (pickerProps.onShown) {
+							pickerProps.onShown();
+						}
 					}
 
 					e.stopPropagation();
@@ -205,7 +207,9 @@ export default function ({
 						controlProps.handleOnClickRemove(e);
 					} else {
 						controlProps.setOpen('var-picker');
-						if (pickerProps.onShown) pickerProps.onShown();
+						if (pickerProps.onShown) {
+							pickerProps.onShown();
+						}
 					}
 
 					e.stopPropagation();

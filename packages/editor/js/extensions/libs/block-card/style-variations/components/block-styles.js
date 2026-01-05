@@ -358,7 +358,7 @@ function BlockStyles({
 							<p>
 								<DynamicHtmlFormatter
 									text={sprintf(
-										/* translators: $1%s is a CSS selector, $2%s is ID. */
+										/* translators: %s: The name of the missing style variation */
 										__(
 											'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
 											'blockera'
@@ -376,7 +376,7 @@ function BlockStyles({
 							<p>
 								<DynamicHtmlFormatter
 									text={sprintf(
-										/* translators: $1%s is a CSS selector, $2%s is ID. */
+										/* translators: %s: The name of the currently active style */
 										__(
 											'This block is currently using the “%s” style instead.',
 											'blockera'

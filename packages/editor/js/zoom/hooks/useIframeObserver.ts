@@ -4,7 +4,6 @@
  */
 
 import { useEffect, useRef, useState, useCallback } from '@wordpress/element';
-import { IFRAME_SELECTOR } from '../utils/constants';
 import {
 	getEditorCanvasIframe,
 	getIframeDocument,

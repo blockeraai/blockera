@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved, import/no-duplicates */
 /**
  * WordPress dependencies
  */
@@ -7,8 +8,8 @@ import { IFRAME_SELECTOR } from './constants';
 
 // Import header styles as raw text for iframe injection
 // Note: The ?raw suffix tells webpack to import this as a raw string
-// eslint-disable-next-line import/no-unresolved
 import headerStylesRaw from '../../preview-mode/header/style.css?raw';
+/* eslint-enable import/no-unresolved, import/no-duplicates */
 
 // Store the imported styles (webpack will bundle this as a string)
 // asset/source type returns the file content directly as a string

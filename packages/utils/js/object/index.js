@@ -118,7 +118,9 @@ export function mergeObject(
 		) {
 			result[key] = source[key];
 		} else if (isObject(source[key])) {
-			if (!result[key] || !isObject(result[key])) result[key] = {};
+			if (!result[key] || !isObject(result[key])) {
+				result[key] = {};
+			}
 			result[key] = mergeObject(result[key], source[key], args); // Merge recursively
 		} else {
 			if (undefined === source[key] && deletedProps.includes(key)) {
@@ -154,8 +156,9 @@ export function mergeObjects(
 		if (isObject(_source)) {
 			Object.keys(_source).forEach((key) => {
 				if (isObject(_source[key])) {
-					if (!result[key] || !isObject(result[key]))
+					if (!result[key] || !isObject(result[key])) {
 						result[key] = {};
+					}
 					result[key] = mergeObjects(result[key], _source[key]); // Merge recursively
 				} else {
 					result[key] = _source[key];

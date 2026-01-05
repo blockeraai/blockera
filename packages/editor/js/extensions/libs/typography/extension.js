@@ -627,7 +627,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 															</h3>
 															<p>
 																{__(
-																	' Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
+																	'Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
 																	'blockera'
 																)}
 															</p>

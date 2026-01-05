@@ -137,7 +137,7 @@ export function useSwitchDocument(): (
 						targetContext === 'post'
 							? urlObj.searchParams.get('post')
 							: urlObj.searchParams.get('postType') &&
-							  urlObj.searchParams.get('postId');
+								urlObj.searchParams.get('postId');
 
 					if (shouldCheck) {
 						setTimeout(() => {

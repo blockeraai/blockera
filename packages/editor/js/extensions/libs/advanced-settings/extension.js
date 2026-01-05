@@ -28,7 +28,7 @@ import { useBlockSection } from '../../components';
 import type { TAdvancedSettingsProps } from './types/advanced-props';
 
 export const AdvancedSettingsExtension: ComponentType<
-	TAdvancedSettingsProps
+	TAdvancedSettingsProps,
 > = ({
 	block,
 	extensionConfig,

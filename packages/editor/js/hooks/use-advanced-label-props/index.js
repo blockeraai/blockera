@@ -413,7 +413,7 @@ export const useAdvancedLabelProps = (
 				)?.filter(
 					([stateType, state]: [
 						TStates | string,
-						Object
+						Object,
 					]): boolean => {
 						const breakpointTypes = Object.keys(state.breakpoints);
 
@@ -466,8 +466,9 @@ export const useAdvancedLabelProps = (
 				breakpoint: BreakpointTypes,
 				stateType: TStates
 			) => {
-				if (isUndefined(breakpoint))
+				if (isUndefined(breakpoint)) {
 					return isChanged && _isNormalState(stateType);
+				}
 
 				const stateValue =
 					currentBreakpoint === baseBreakpoint && isNormalState

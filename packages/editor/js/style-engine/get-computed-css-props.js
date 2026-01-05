@@ -297,7 +297,7 @@ export const getComputedCssProps = ({
 													blockType
 												]?.attributes || {}),
 												...restAttributes,
-										  }
+											}
 										: {}),
 									...breakpointItem?.attributes,
 									...(hasContent
@@ -309,7 +309,7 @@ export const getComputedCssProps = ({
 															'',
 													},
 												},
-										  }
+											}
 										: {}),
 								},
 								currentBlock: blockType,
@@ -497,7 +497,7 @@ export const getComputedCssProps = ({
 														'',
 												},
 											},
-									  }
+										}
 									: {}),
 							},
 							currentBlock: 'master',

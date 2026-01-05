@@ -17,7 +17,6 @@ import {
 	SITE_EDITOR_POST_TYPES,
 	HOME_URL_TEMPLATES,
 	type ParsedTemplateSlug,
-	type TemplateSlugType,
 } from './constants';
 
 /**

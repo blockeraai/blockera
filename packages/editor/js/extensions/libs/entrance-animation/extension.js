@@ -25,7 +25,7 @@ import { useBlockSection } from '../../components';
 import type { EntranceExtensionProps } from './types/props';
 
 export const EntranceAnimationExtension: ComponentType<
-	EntranceExtensionProps
+	EntranceExtensionProps,
 > = ({
 	values: {},
 	block,

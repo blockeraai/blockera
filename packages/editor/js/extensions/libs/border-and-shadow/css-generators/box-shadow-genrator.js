@@ -43,7 +43,7 @@ export function BoxShadowGenerator(id, props, options) {
 			? {
 					'box-shadow':
 						properties['box-shadow'].join(', ') + ' !important',
-			  }
+				}
 			: {};
 
 	return createCssDeclarations({

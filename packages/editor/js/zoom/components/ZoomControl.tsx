@@ -179,7 +179,7 @@ export default function ZoomControl({
 	});
 
 	// Manage iframe height based on content
-	const { contentHeight } = useIframeHeight({
+	useIframeHeight({
 		zoomPercent,
 		onHeightChange: handleHeightChange,
 		enabled: true,

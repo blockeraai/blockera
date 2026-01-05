@@ -84,11 +84,11 @@ export default function CloseTabConfirmDialog({
 									'blockera'
 								),
 								tabCount
-						  )
+							)
 						: __(
 								'This tab has unsaved changes. Save before closing?',
 								'blockera'
-						  )}
+							)}
 				</p>
 
 				{showTabsList && tabs.length > 0 && (

@@ -112,7 +112,9 @@ export default function ({
 					isCurrent && 'is-active-item'
 				)}
 				onClick={() => {
-					if (status === 'active') onClick(data);
+					if (status === 'active') {
+						onClick(data);
+					}
 				}}
 				data-cy={'va-item-' + data.id}
 				{...props}

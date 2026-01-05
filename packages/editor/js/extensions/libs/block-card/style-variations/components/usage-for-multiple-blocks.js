@@ -43,8 +43,8 @@ export const UsageForMultipleBlocksModal = ({
 			className={componentInnerClassNames('style-variation-modal')}
 			headerIcon={<Icon icon="block-types" iconSize="34" />}
 			headerTitle={sprintf(
-				/* translators: $1%s is a style name. */
-				__('Use “%1$s” for Multiple Blocks', 'blockera'),
+				/* translators: %1$s: The style name. */
+				__('Use "%1$s" for Multiple Blocks', 'blockera'),
 				style.label
 			)}
 			isDismissible={true}

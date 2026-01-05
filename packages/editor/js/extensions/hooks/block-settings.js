@@ -361,7 +361,7 @@ function mergeBlockSettings(
 		? mergeObject(
 				sanitizeDefaultAttributes(blockeraOverrideBlockAttributes),
 				sanitizeDefaultAttributes(settings.attributes)
-		  )
+			)
 		: sanitizeDefaultAttributes(settings.attributes);
 
 	return {
@@ -474,7 +474,7 @@ function mergeBlockSettings(
 						},
 					},
 					...(settings?.deprecated || []),
-			  ].filter(isObject),
+				].filter(isObject),
 		icon: !isAvailableBlock() ? (
 			settings?.icon
 		) : (

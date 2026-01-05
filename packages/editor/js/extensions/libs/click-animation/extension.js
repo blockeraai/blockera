@@ -25,7 +25,7 @@ import { useBlockSection } from '../../components';
 import type { ClickAnimationExtensionProps } from './types/props';
 
 export const ClickAnimationExtension: ComponentType<
-	ClickAnimationExtensionProps
+	ClickAnimationExtensionProps,
 > = ({
 	values: {},
 	block,

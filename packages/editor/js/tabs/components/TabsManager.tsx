@@ -7,8 +7,6 @@ import {
 	useCallback,
 	createPortal,
 	useRef,
-	useMemo,
-	startTransition,
 } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
@@ -102,7 +100,6 @@ export default function TabsManager(): React.ReactElement | null {
 		togglePinTab,
 		setTabs,
 		setTabCustomTitle,
-		updateTabTitle,
 		reorderTabs,
 	} = useTabs({
 		persistenceEnabled: isPersistenceEnabled,
@@ -142,6 +139,7 @@ export default function TabsManager(): React.ReactElement | null {
 	 * - Post ID changes (tab switches)
 	 * - Autosave restore notice changes (user restored/dismissed backup)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [tabsWithAutosave, setTabsWithAutosave] = useState<Set<string>>(
 		new Set()
 	);
@@ -1256,7 +1254,6 @@ export default function TabsManager(): React.ReactElement | null {
 								}
 								recentlyClosedTabs={recentlyClosedTabs}
 								onReopenTab={handleReopenTab}
-								onUpdateTabTitle={updateTabTitle}
 								onUpdateClosedTab={updateClosedTab}
 								onRemoveClosedTab={removeClosedTab}
 								onReorderTabs={handleReorderTabs}

@@ -96,7 +96,7 @@ export const bootstrapCanvasEditor = (): void | Object => {
 				// Error boundary to catch CanvasEditor rendering errors
 				class ErrorBoundary extends Component<
 					Object,
-					{ hasError: boolean, error: ?Error }
+					{ hasError: boolean, error: ?Error },
 				> {
 					constructor(props: Object) {
 						super(props);

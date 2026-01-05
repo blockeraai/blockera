@@ -131,10 +131,10 @@ export default function ToggleSelectControl({
 							{...(isDeselectable
 								? {
 										'aria-pressed': value === item.value,
-								  }
+									}
 								: {
 										'aria-checked': value === item.value,
-								  })}
+									})}
 						>
 							{!isUndefined(item.icon) ? (
 								<span className="toggle-select-option-icon">

@@ -14,17 +14,16 @@ import Tab, { type TabComponentProps } from './Tab';
 /**
  * SortableTab component props.
  */
-export interface SortableTabProps
-	extends Omit<
-		TabComponentProps,
-		| 'onDragStart'
-		| 'onDrag'
-		| 'onDragEnd'
-		| 'isDragging'
-		| 'style'
-		| 'canDrag'
-		| 'hasUnsavedChanges'
-	> {
+export interface SortableTabProps extends Omit<
+	TabComponentProps,
+	| 'onDragStart'
+	| 'onDrag'
+	| 'onDragEnd'
+	| 'isDragging'
+	| 'style'
+	| 'canDrag'
+	| 'hasUnsavedChanges'
+> {
 	/** Tab ID for sortable (must be unique). */
 	id: string;
 	/** Whether this tab can be dragged. */
@@ -69,7 +68,7 @@ const SortableTab = memo(function SortableTab({
 					scaleY: 1,
 				}),
 				transition,
-		  }
+			}
 		: undefined;
 
 	// Wrap Tab in a div that receives the transform

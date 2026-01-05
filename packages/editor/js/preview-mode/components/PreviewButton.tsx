@@ -132,7 +132,7 @@ export default function PreviewButton({
 							event.preventDefault();
 							onClick(event);
 						}}
-						onMouseEnter={(event) => {
+						onMouseEnter={() => {
 							setIsHovered(true);
 							onMouseEnter?.();
 						}}

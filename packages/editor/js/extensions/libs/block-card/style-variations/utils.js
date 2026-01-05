@@ -131,8 +131,12 @@ export function getRenderedStyles(
 		})
 		.filter(Boolean);
 	styles = [...(styles || [])].sort((a, b) => {
-		if (a?.isDefault) return -1;
-		if (b?.isDefault) return 1;
+		if (a?.isDefault) {
+			return -1;
+		}
+		if (b?.isDefault) {
+			return 1;
+		}
 		return 0;
 	});
 
@@ -242,7 +246,7 @@ export function useStylesForBlocks({
 							label: isDeletedStyle,
 							isDefault: false,
 							isDeleted: true,
-					  }
+						}
 					: activeStyle,
 				newStyle
 			);

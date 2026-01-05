@@ -6,12 +6,7 @@ import {
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { useDispatch, useSelect } from '@wordpress/data';
-import {
-	ESCAPE,
-	displayShortcut,
-	isAppleOS,
-	rawShortcut,
-} from '@wordpress/keycodes';
+import { ESCAPE, displayShortcut, rawShortcut } from '@wordpress/keycodes';
 import { store as editorStore } from '@wordpress/editor';
 import {
 	useFocusOnMount,
@@ -197,7 +192,9 @@ export default function ListViewPanel() {
 	// Handle expand all by clicking all collapsed items recursively (deep expansion)
 	const handleExpandAll = useCallback(() => {
 		// Only work when list view tab is active
-		if (tab !== 'list-view' || !listViewContentRef.current) return;
+		if (tab !== 'list-view' || !listViewContentRef.current) {
+			return;
+		}
 
 		// Recursive function to expand all nested levels
 		// Uses setTimeout to allow DOM updates between iterations
@@ -234,7 +231,9 @@ export default function ListViewPanel() {
 	// Handle collapse all others (Alt+L behavior) - fires the Alt+L shortcut
 	const handleCollapseAllOthers = useCallback(() => {
 		// Only work when list view tab is active
-		if (tab !== 'list-view' || !listViewContentRef.current) return;
+		if (tab !== 'list-view' || !listViewContentRef.current) {
+			return;
+		}
 
 		// Check if there's a selected block
 		const currentSelectedBlockId =
@@ -285,7 +284,9 @@ export default function ListViewPanel() {
 	// Handle collapse all by clicking all expanded items (expander buttons with aria-expanded="true")
 	const handleCollapseAll = useCallback(() => {
 		// Only work when list view tab is active
-		if (tab !== 'list-view' || !listViewContentRef.current) return;
+		if (tab !== 'list-view' || !listViewContentRef.current) {
+			return;
+		}
 
 		// Deselect the active block if any is selected
 		const currentSelectedBlockId =

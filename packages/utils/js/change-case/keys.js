@@ -67,7 +67,9 @@ function changeKeysFactory(
 		depth: number = 1,
 		options?: Options
 	): mixed {
-		if (depth === 0 || !isObject(object)) return object;
+		if (depth === 0 || !isObject(object)) {
+			return object;
+		}
 		if (Array.isArray(object)) {
 			return object.map((item) => changeKeys(item, depth - 1, options));
 		}

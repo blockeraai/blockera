@@ -320,11 +320,6 @@ export default function ToolbarContextMenu({
 		onClose();
 	};
 
-	const handleReopenTab = (tabKey: string, onClose: () => void): void => {
-		onReopenTab(tabKey);
-		onClose();
-	};
-
 	return (
 		<DropdownMenu
 			icon={<Icon icon={moreVertical} size={24} />}

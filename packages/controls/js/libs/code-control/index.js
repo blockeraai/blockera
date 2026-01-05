@@ -266,7 +266,7 @@ const CodeControl = ({
 					<p>
 						<DynamicHtmlFormatter
 							text={sprintf(
-								/* translators: $1%s is a CSS selector, $2%s is ID. */
+								/* translators: %1$s: CSS selector placeholder, %2$s: Block class selector */
 								__(
 									'Use %1$s or %2$s to target current block.',
 									'blockera'

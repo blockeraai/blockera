@@ -77,7 +77,9 @@ export const BlockGlobalStylesPanelScreen = ({
 					}
 					if (block.innerBlocks?.length) {
 						const found = findInInnerBlocks(block.innerBlocks);
-						if (found) return found;
+						if (found) {
+							return found;
+						}
 					}
 				}
 				return null;

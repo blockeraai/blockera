@@ -91,20 +91,22 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	);
 
 	let isShowMask = false;
-	if (experimental().get('editor.extensions.effectsExtension.mask'))
+	if (experimental().get('editor.extensions.effectsExtension.mask')) {
 		isShowMask = isShowField(
 			extensionConfig.blockeraMask,
 			values?.blockeraMask,
 			attributes.blockeraMask.default
 		);
+	}
 
 	let isShowDivider = false;
-	if (experimental().get('editor.extensions.effectsExtension.divider'))
+	if (experimental().get('editor.extensions.effectsExtension.divider')) {
 		isShowDivider = isShowField(
 			extensionConfig.blockeraDivider,
 			values?.blockeraDivider,
 			attributes.blockeraDivider.default
 		);
+	}
 
 	// Extension is not active
 	if (

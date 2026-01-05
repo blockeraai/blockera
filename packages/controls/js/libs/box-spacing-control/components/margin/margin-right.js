@@ -107,7 +107,9 @@ export function MarginRight({
 		setValue: onDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
-			if (!openPopover) setFocusSide('');
+			if (!openPopover) {
+				setFocusSide('');
+			}
 			setLabelClassName('');
 		},
 		threshold: 0,
@@ -183,7 +185,7 @@ export function MarginRight({
 								onDragStart(event);
 								setFocusSide(sideId);
 							},
-					  }
+						}
 					: {})}
 				onMouseEnter={() => {
 					if (!openPopover && !valueAddonControlProps.isOpen) {

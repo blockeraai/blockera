@@ -110,7 +110,7 @@ const getTabs = (
 						title: __('General', 'blockera'),
 						className: 'settings-tab',
 					},
-			  ]
+				]
 			: []),
 		{
 			name: 'style',

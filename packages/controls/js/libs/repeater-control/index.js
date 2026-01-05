@@ -496,7 +496,7 @@ export default function RepeaterControl(
 													isFunction(valueCleanup)
 														? valueCleanup(
 																defaultValue
-														  )
+															)
 														: defaultValue
 												}
 											/>

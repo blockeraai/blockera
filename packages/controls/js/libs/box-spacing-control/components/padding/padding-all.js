@@ -107,7 +107,9 @@ export function PaddingAll({
 		movement: 'vertical',
 		min: 0,
 		onEnd: () => {
-			if (!openPopover) setFocusSide('');
+			if (!openPopover) {
+				setFocusSide('');
+			}
 			setLabelClassName('');
 		},
 		threshold: 0,
@@ -167,7 +169,7 @@ export function PaddingAll({
 								onDragStart(event);
 								setFocusSide(sideId);
 							},
-					  }
+						}
 					: {})}
 				onMouseEnter={() => {
 					if (!openPopover && !valueAddonControlProps.isOpen) {

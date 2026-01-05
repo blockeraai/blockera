@@ -43,10 +43,12 @@ interface UseIframeHeightOptions {
  * @return Height management utilities.
  */
 export function useIframeHeight({
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by interface but not used internally
 	zoomPercent,
 	onHeightChange,
 	enabled = true,
 	initialHeight,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by interface but not used internally
 	onSetInitialHeight,
 }: UseIframeHeightOptions): UseIframeHeightReturn {
 	const [contentHeight, setContentHeight] = useState<number | null>(null);

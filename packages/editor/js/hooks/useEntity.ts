@@ -230,7 +230,7 @@ export function useEntity(
 							title ??
 							(typeof postTitle === 'string'
 								? postTitle
-								: postTitle?.rendered ?? null);
+								: (postTitle?.rendered ?? null));
 						status = status ?? currentPost.status ?? null;
 						slug = slug ?? currentPost.slug ?? null;
 						link = link ?? currentPost.link ?? null;
@@ -257,7 +257,7 @@ export function useEntity(
 								title ??
 								(typeof recordTitle === 'string'
 									? recordTitle
-									: recordTitle.rendered ?? '');
+									: (recordTitle.rendered ?? ''));
 						}
 						status = status ?? editedRecord.status ?? null;
 						slug = slug ?? editedRecord.slug ?? null;
@@ -279,7 +279,7 @@ export function useEntity(
 								title =
 									typeof recordTitle === 'string'
 										? recordTitle
-										: recordTitle.rendered ?? '';
+										: (recordTitle.rendered ?? '');
 							}
 							status = status ?? savedRecord.status ?? null;
 							slug = slug ?? savedRecord.slug ?? null;

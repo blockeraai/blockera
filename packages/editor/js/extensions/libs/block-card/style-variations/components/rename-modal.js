@@ -102,7 +102,7 @@ export const RenameModal = ({
 									}}
 								>
 									{__(
-										'Use a-z, 0-9, and hyphens only.',
+										'Use a–z, 0–9, and hyphens only.',
 										'blockera'
 									)}
 								</p>

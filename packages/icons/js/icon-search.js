@@ -52,8 +52,9 @@ export function iconSearch({
 		const finalResult = {};
 
 		const iconRegistration = (foundItem: Object) => {
-			if (foundItem?.item?.iconName)
+			if (foundItem?.item?.iconName) {
 				finalResult[foundItem.item.iconName] = foundItem.item;
+			}
 		};
 
 		result.forEach(iconRegistration);

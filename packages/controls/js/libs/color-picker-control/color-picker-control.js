@@ -97,7 +97,9 @@ export default function ColorPickerControl({
 	}
 
 	function showEyeDropperNotice() {
-		if (eyeDropper) return null;
+		if (eyeDropper) {
+			return null;
+		}
 
 		return (
 			<div style={{ paddingBottom: '15px' }}>

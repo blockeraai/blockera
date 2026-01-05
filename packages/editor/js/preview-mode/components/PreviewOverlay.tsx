@@ -12,7 +12,7 @@ import {
 // eslint-disable-next-line import/named
 import { ProgressBar, Button, Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Icon, lock, link, unlock, closeSmall } from '@wordpress/icons';
+import { Icon, lock, link, unlock } from '@wordpress/icons';
 import type { ReactNode, CSSProperties } from 'react';
 
 /**
@@ -964,7 +964,7 @@ export default function PreviewOverlay({
 							? {
 									height: `${previewIframeHeight}px`,
 									overflow: 'hidden',
-							  }
+								}
 							: undefined
 					}
 				/>

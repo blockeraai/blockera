@@ -40,11 +40,7 @@ import { displayShortcut } from '@wordpress/keycodes';
  */
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
-import {
-	useScrollbar,
-	type OverlayScrollbarsOptions,
-	defaultScrollbarOptions,
-} from '../../scrollbar';
+import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
 import type { Tab as TabType, LockUser, RecentlyClosedTab } from '../types';
 
 /**
@@ -107,8 +103,6 @@ export interface TabsBarProps {
 	recentlyClosedTabs: RecentlyClosedTab[];
 	/** Handler for reopening a tab. */
 	onReopenTab: (tabKey: string) => void;
-	/** Handler for updating tab title. */
-	onUpdateTabTitle: (tabKey: string, title: string) => void;
 	/** Handler for updating closed tab. */
 	onUpdateClosedTab: (
 		tabKey: string,
@@ -159,7 +153,6 @@ const TabsBar = memo(function TabsBar({
 	onToggleIconOnlyPinnedTabs,
 	recentlyClosedTabs,
 	onReopenTab,
-	onUpdateTabTitle,
 	onUpdateClosedTab,
 	onRemoveClosedTab,
 	onReorderTabs,

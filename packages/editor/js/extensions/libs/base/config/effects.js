@@ -86,7 +86,7 @@ const blockeraBlendMode: FeatureConfig = {
 
 let blockeraDivider: FeatureConfig | false = false;
 
-if (experimental().get('editor.extensions.effectsExtension.divider'))
+if (experimental().get('editor.extensions.effectsExtension.divider')) {
 	blockeraDivider = {
 		show: true,
 		force: false,
@@ -94,10 +94,11 @@ if (experimental().get('editor.extensions.effectsExtension.divider'))
 		label: __('Shape Dividers', 'blockera'),
 		onStates: false,
 	};
+}
 
 let blockeraMask: FeatureConfig | false = false;
 
-if (experimental().get('editor.extensions.effectsExtension.mask'))
+if (experimental().get('editor.extensions.effectsExtension.mask')) {
 	blockeraMask = {
 		show: true,
 		force: false,
@@ -105,6 +106,7 @@ if (experimental().get('editor.extensions.effectsExtension.mask'))
 		label: __('Image Mask', 'blockera'),
 		onStates: false,
 	};
+}
 
 export const effectsConfig = {
 	status: true,

@@ -53,7 +53,9 @@ export const getSmallestBreakpoint: (breakpoints?: {
 		getBreakpoints: defaultBreakpoints,
 	};
 
-	if (isUndefined(breakpoints)) breakpoints = getBreakpoints();
+	if (isUndefined(breakpoints)) {
+		breakpoints = getBreakpoints();
+	}
 
 	let minBreakpoint = Infinity;
 
@@ -104,7 +106,9 @@ export const getLargestBreakpoint: (breakpoints?: {
 		getBreakpoints: defaultBreakpoints,
 	};
 
-	if (isUndefined(breakpoints)) breakpoints = getBreakpoints();
+	if (isUndefined(breakpoints)) {
+		breakpoints = getBreakpoints();
+	}
 
 	let maxBreakpoint = -Infinity;
 
@@ -161,7 +165,7 @@ export const getBreakpointLongDescription = (
 
 	if (isBaseBreakpoint(breakpoint)) {
 		return sprintf(
-			// translators: it's the aria label for repeater item
+			// translators: %s: The breakpoint label name
 			__(
 				"%s styles apply at all breakpoints, unless they're edited at a larger or smaller breakpoint.",
 				'blockera'
@@ -316,7 +320,9 @@ export function getSortedBreakpoints(
 
 	// Helper function to extract numeric value from px string
 	const extractNumericValue = (value: string): number => {
-		if (!value || value.includes('func')) return -1;
+		if (!value || value.includes('func')) {
+			return -1;
+		}
 		return parseInt(value.replace('px', ''), 10) || 0;
 	};
 

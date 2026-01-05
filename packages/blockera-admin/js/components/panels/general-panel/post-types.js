@@ -116,7 +116,7 @@ export const PostTypes = ({
 										).map(
 											([id, checked]: [
 												string,
-												boolean
+												boolean,
 											]): [string, boolean] => {
 												return [id, checked];
 											}

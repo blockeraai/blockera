@@ -86,7 +86,6 @@ export function useZoom(): UseZoomReturn {
 		const wasZoomed =
 			previousZoomRef.current !== null &&
 			previousZoomRef.current !== DEFAULT_ZOOM;
-		const isTransitioningFrom100 = !wasZoomed && isZoomed;
 		const isTransitioningTo100 = wasZoomed && !isZoomed;
 		const isZoomChanging =
 			previousZoomRef.current === null ||
@@ -141,7 +140,7 @@ export function useZoom(): UseZoomReturn {
 					? parseInt(
 							currentIframeHeightStyle.replace('px', ''),
 							10
-					  ) || 0
+						) || 0
 					: 0,
 				currentIframeHeightAttr
 					? parseInt(currentIframeHeightAttr.replace('px', ''), 10) ||

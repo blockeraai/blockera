@@ -55,9 +55,11 @@ export default function GroupControl({
 			return headerOpenIcon;
 		}
 
-		if (mode === 'accordion')
+		if (mode === 'accordion') {
 			return <Icon library="wp" icon="chevron-up" iconSize="20" />;
-		else if (mode === 'popover') return <Icon icon="gear" iconSize="18" />;
+		} else if (mode === 'popover') {
+			return <Icon icon="gear" iconSize="18" />;
+		}
 
 		return '';
 	};
@@ -67,9 +69,11 @@ export default function GroupControl({
 			return headerCloseIcon;
 		}
 
-		if (mode === 'accordion')
+		if (mode === 'accordion') {
 			return <Icon library="wp" icon="chevron-down" iconSize="20" />;
-		else if (mode === 'popover') return <Icon icon="gear" iconSize="18" />;
+		} else if (mode === 'popover') {
+			return <Icon icon="gear" iconSize="18" />;
+		}
 
 		return '';
 	};
@@ -147,11 +151,11 @@ export default function GroupControl({
 												? __(
 														'Close Settings',
 														'blockera'
-												  )
+													)
 												: __(
 														'Open Settings',
 														'blockera'
-												  )
+													)
 										}
 										onClick={onClickCallback}
 										noBorder={true}

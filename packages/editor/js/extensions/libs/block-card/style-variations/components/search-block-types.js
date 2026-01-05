@@ -46,9 +46,9 @@ export const SearchBlockTypes = ({
 				</p>
 				<p style={{ margin: '0', color: '#707070' }}>
 					{sprintf(
-						/* translators: $1%s is a style name. */
+						/* translators: %1$s: The style name. */
 						__(
-							'The selected blocks will share the same design and updates applied to “%1$s”.',
+							'The selected blocks will share the same design and updates applied to "%1$s".',
 							'blockera'
 						),
 						style.label

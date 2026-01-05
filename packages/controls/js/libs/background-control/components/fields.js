@@ -577,7 +577,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								<>
 									<p>
 										{__(
-											'Linear Gradient creates a smooth transition between multiple colors in a straight line. ',
+											'Linear Gradient creates a smooth transition between multiple colors in a straight line.',
 											'blockera'
 										)}
 									</p>
@@ -1253,7 +1253,7 @@ const Fields: FieldItem = memo<FieldItem>(
 											? 'transparent'
 											: item['mesh-gradient-colors'][
 													'--c0'
-											  ].color,
+												].color,
 										backgroundImage: item['mesh-gradient'],
 										...Object.assign(
 											// $FlowFixMe

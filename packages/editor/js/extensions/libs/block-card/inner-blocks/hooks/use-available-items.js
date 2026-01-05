@@ -101,7 +101,7 @@ export const useAvailableItems = ({
 			: {
 					forcesItems: forces,
 					customizedInnerBlocks: innerBlocks,
-			  };
+				};
 
 		// Appending forces into repeater state.
 		if (forces.length) {

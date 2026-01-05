@@ -6,7 +6,7 @@ import { useEffect, useRef, useCallback } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import type { Tab, LockUser } from '../types';
+import type { Tab } from '../types';
 import type { LockInfo } from './useTabsLockState';
 
 /**

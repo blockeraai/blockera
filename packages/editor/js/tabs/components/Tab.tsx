@@ -161,9 +161,6 @@ const Tab = memo(
 			onCloseOthers,
 			onCloseToRight,
 			onCloseSaved,
-			onView,
-			onCopyViewLink,
-			onCopyEditorLink,
 			onTogglePin,
 			onRename,
 			onClearRename,
@@ -335,7 +332,7 @@ const Tab = memo(
 					onDoubleClick={handleDoubleClick}
 				>
 					<Button
-						onClick={(e) => {
+						onClick={() => {
 							// Prevent click if currently dragging
 							if (!isDragging) {
 								onClick();
@@ -352,7 +349,7 @@ const Tab = memo(
 												dragListeners.onPointerDown as any
 											)(e);
 										}
-								  }
+									}
 								: undefined
 						}
 						tabIndex={0}

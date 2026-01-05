@@ -71,7 +71,7 @@ export const useCalculateCurrentAttributes = ({
 					: {
 							blockeraBlockStates:
 								attributes.blockeraBlockStates || {},
-					  }),
+						}),
 				...(prepare(
 					`blockeraBlockStates[${currentState}].breakpoints[${currentBreakpoint}].attributes`,
 					attributes

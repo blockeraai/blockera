@@ -76,7 +76,7 @@ export default function LinkControl({
 					value.nofollow ||
 					value.label ||
 					value.attributes?.length
-			  )
+				)
 	);
 
 	const labelProps = {

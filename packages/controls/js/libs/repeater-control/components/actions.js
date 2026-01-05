@@ -172,11 +172,11 @@ export default function RepeaterItemActions({
 					...item,
 					isVisible: !isVisible,
 					isSelected: false,
-			  }
+				}
 			: {
 					...item,
 					isVisible: !isVisible,
-			  };
+				};
 
 		changeRepeaterItem({
 			value,
@@ -247,13 +247,13 @@ export default function RepeaterItemActions({
 												'#e20b0b',
 											'--wp-components-color-accent':
 												'#e20b0b',
-									  }
+										}
 									: {
 											'--blockera-controls-primary-color':
 												'#e20b0b',
 											'--wp-components-color-accent':
 												'#e20b0b',
-									  }
+										}
 							}
 						>
 							<Flex alignItems="center" gap="10px">
@@ -299,12 +299,12 @@ export default function RepeaterItemActions({
 												// translators: %s is the repeater item id. It's aria label for disabling repeater item
 												__('Disable %s', 'blockera'),
 												getArialLabelSuffix(itemId)
-										  )
+											)
 										: sprintf(
 												// translators: %s is the repeater item id. It's aria label for enabling repeater item
 												__('Enable %s', 'blockera'),
 												getArialLabelSuffix(itemId)
-										  )
+											)
 								}
 							/>
 						</Tooltip>

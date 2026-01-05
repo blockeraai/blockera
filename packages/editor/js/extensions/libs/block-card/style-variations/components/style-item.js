@@ -358,9 +358,9 @@ export const StyleItem = ({
 											<Tooltip
 												key={`${block}-${index}`}
 												text={sprintf(
-													/* translators: $1%s is a block title. */
+													/* translators: %1$s: The block title. */
 													__(
-														'This style variation is used in the “%1$s” block',
+														'This style variation is used in the "%1$s" block',
 														'blockera'
 													),
 													title
@@ -395,11 +395,11 @@ export const StyleItem = ({
 										? __(
 												'Style variation added or customized by Blockera',
 												'blockera'
-										  )
+											)
 										: __(
 												'Style variation from theme or block editor',
 												'blockera'
-										  )
+											)
 								}
 							>
 								<Icon

@@ -97,7 +97,9 @@ export function StyleVariationBlockCard({
 
 	const updateGlobalStyles = useCallback(
 		(newTitle: string, isConfirmedChange: boolean = false) => {
-			if (!hasUserEdited) return;
+			if (!hasUserEdited) {
+				return;
+			}
 
 			const { blockeraMetaData = blockeraGlobalStylesMetaData } =
 				globalStyles;
@@ -190,7 +192,9 @@ export function StyleVariationBlockCard({
 	}, [currentBlockStyleVariation.name]);
 
 	useEffect(() => {
-		if (hasUserEdited) return;
+		if (hasUserEdited) {
+			return;
+		}
 
 		if (
 			(!title && initializeTitle) ||
@@ -201,7 +205,9 @@ export function StyleVariationBlockCard({
 	}, [title, hasUserEdited, initializeTitle]);
 
 	useEffect(() => {
-		if (!title || !initializeTitle || title === initializeTitle) return;
+		if (!title || !initializeTitle || title === initializeTitle) {
+			return;
+		}
 
 		const timeoutId = setTimeout(
 			() => updateGlobalStyles(title),
@@ -220,7 +226,9 @@ export function StyleVariationBlockCard({
 				currentBlockStyleVariation?.name
 			]?.label;
 
-		if (currentLabel === newTitle) return;
+		if (currentLabel === newTitle) {
+			return;
+		}
 
 		setHasUserEdited(true);
 		setTitle(newTitle);
