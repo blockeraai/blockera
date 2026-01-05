@@ -385,9 +385,7 @@ export function redirectToFrontPage() {
 		win.stop();
 	});
 
-	cy.get(
-		'.blockera-control-canvas-editor-preview-link a, a.components-button.components-snackbar__action.is-link'
-	)
+	cy.get('.blockera-preview-button-wrapper a')
 		.invoke('attr', 'href')
 		.then((href) => {
 			cy.visit(href);
