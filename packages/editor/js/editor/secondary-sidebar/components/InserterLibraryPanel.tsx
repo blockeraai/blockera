@@ -25,63 +25,67 @@ export default function InserterLibraryPanel() {
 
 	const { toggleSecondarySidebar } = useDispatch(blockeraEditorStore);
 
-
 	// Inserter sidebar logic
 	const {
 		blockSectionRootClientId,
 		inserterSidebarToggleRef,
 		inserter,
 		showMostUsedBlocks,
-	} = useSelect(
-		(select) => {
-			const editorSelect = select(editorStore) as any;
-			const blockEditorSelect = select(blockEditorStore) as any;
-			const preferencesSelect = select(preferencesStore);
+	} = useSelect((select) => {
+		const editorSelect = select(editorStore) as any;
+		const blockEditorSelect = select(blockEditorStore) as any;
+		const preferencesSelect = select(preferencesStore);
 
-			const getInserterSidebarToggleRef = () => {
-				return editorSelect.getInserterSidebarToggleRef?.() || { current: null };
-			};
+		const getInserterSidebarToggleRef = () => {
+			return (
+				editorSelect.getInserterSidebarToggleRef?.() || {
+					current: null,
+				}
+			);
+		};
 
-			const getInserter = () => {
-				return editorSelect.getInserter?.() || {
-					onSelect: () => { },
+		const getInserter = () => {
+			return (
+				editorSelect.getInserter?.() || {
+					onSelect: () => {},
 					tab: undefined,
 					category: undefined,
 					filterValue: undefined,
-				};
-			};
-
-			const getBlockRootClientId = () => {
-				return blockEditorSelect.getBlockRootClientId?.() || null;
-			};
-
-			const isZoomOut = () => {
-				return blockEditorSelect.isZoomOut?.() || false;
-			};
-
-			const getSectionRootClientId = () => {
-				return blockEditorSelect.getSectionRootClientId?.() || null;
-			};
-
-			const getBlockSectionRootClientId = () => {
-				if (isZoomOut()) {
-					const sectionRootClientId = getSectionRootClientId();
-					if (sectionRootClientId) {
-						return sectionRootClientId;
-					}
 				}
-				return getBlockRootClientId();
-			};
+			);
+		};
 
-			return {
-				inserterSidebarToggleRef: getInserterSidebarToggleRef(),
-				inserter: getInserter(),
-				showMostUsedBlocks: (preferencesSelect as any).get('core', 'mostUsedBlocks') || false,
-				blockSectionRootClientId: getBlockSectionRootClientId(),
-			};
-		},
-		[]
-	);
+		const getBlockRootClientId = () => {
+			return blockEditorSelect.getBlockRootClientId?.() || null;
+		};
+
+		const isZoomOut = () => {
+			return blockEditorSelect.isZoomOut?.() || false;
+		};
+
+		const getSectionRootClientId = () => {
+			return blockEditorSelect.getSectionRootClientId?.() || null;
+		};
+
+		const getBlockSectionRootClientId = () => {
+			if (isZoomOut()) {
+				const sectionRootClientId = getSectionRootClientId();
+				if (sectionRootClientId) {
+					return sectionRootClientId;
+				}
+			}
+			return getBlockRootClientId();
+		};
+
+		return {
+			inserterSidebarToggleRef: getInserterSidebarToggleRef(),
+			inserter: getInserter(),
+			showMostUsedBlocks:
+				(preferencesSelect as any).get('core', 'mostUsedBlocks') ||
+				false,
+			blockSectionRootClientId: getBlockSectionRootClientId(),
+		};
+	}, []);
 
 	const { setIsInserterOpened } = useDispatch(editorStore) as any;
 	const libraryRef = useRef<HTMLDivElement>(null);

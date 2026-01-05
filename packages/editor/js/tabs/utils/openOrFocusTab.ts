@@ -34,7 +34,7 @@ export interface OpenOrFocusTabParams {
  * Utility function to open or focus a tab in Blockera Tabs
  *
  * @param params - Parameters object
- * @returns Promise that resolves when tab is opened and activated
+ * @return Promise that resolves when tab is opened and activated
  */
 export async function openOrFocusTab({
 	postType,
@@ -65,4 +65,3 @@ export async function openOrFocusTab({
 	// Switch to the new tab
 	switchDocument(postType, postId);
 }
-

@@ -4,7 +4,9 @@
  * @param {Object} state Store state.
  * @return {boolean} Whether the secondary sidebar is visible.
  */
-export function isSecondarySidebarVisible(state: { secondarySidebarVisible: boolean }) {
+export function isSecondarySidebarVisible(state: {
+	secondarySidebarVisible: boolean;
+}) {
 	return state.secondarySidebarVisible;
 }
 
@@ -24,7 +26,9 @@ export function getPrimarySidebarWidth(state: { primarySidebarWidth: string }) {
  * @param {Object} state Store state.
  * @return {string} The secondary sidebar width (e.g., '350px').
  */
-export function getSecondarySidebarWidth(state: { secondarySidebarWidth: string }) {
+export function getSecondarySidebarWidth(state: {
+	secondarySidebarWidth: string;
+}) {
 	return state.secondarySidebarWidth;
 }
 

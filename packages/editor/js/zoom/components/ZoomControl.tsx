@@ -3,7 +3,13 @@
  */
 
 import { useState, useEffect, useRef, useCallback } from '@wordpress/element';
-import { DropdownMenu, MenuGroup, MenuItem, Icon, Fill } from '@wordpress/components';
+import {
+	DropdownMenu,
+	MenuGroup,
+	MenuItem,
+	Icon,
+	Fill,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { displayShortcutList } from '@wordpress/keycodes';
 import type { ReactNode, ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
@@ -13,10 +19,7 @@ import { useZoom } from '../hooks/useZoom';
 import { useZoomKeyboard } from '../hooks/useZoomKeyboard';
 import { useIframeObserver } from '../hooks/useIframeObserver';
 import { useIframeHeight } from '../hooks/useIframeHeight';
-import {
-	getEditorCanvasIframe,
-	getIframeDocument,
-} from '../utils/iframeUtils';
+import { getEditorCanvasIframe, getIframeDocument } from '../utils/iframeUtils';
 import {
 	DEFAULT_ZOOM,
 	MIN_ZOOM,
@@ -42,9 +45,12 @@ function applyIframeHeight(
 
 	// If we have an initial height and the received height is smaller, use initial height
 	// This prevents the iframe from shrinking below the initial height set before zoom
-	const effectiveHeight = initialHeight !== null && initialHeight !== undefined && initialHeight > height
-		? initialHeight
-		: height;
+	const effectiveHeight =
+		initialHeight !== null &&
+		initialHeight !== undefined &&
+		initialHeight > height
+			? initialHeight
+			: height;
 
 	// If zoom is at 100%, remove height constraint and let WordPress handle it
 	if (zoomPercent === DEFAULT_ZOOM) {
@@ -99,17 +105,27 @@ function applyIframeHeight(
  * Provides zoom controls and manages iframe zoom state.
  *
  * @param props - Component props.
- * @returns The zoom control portal or null if container not found.
+ * @return The zoom control portal or null if container not found.
  */
 export default function ZoomControl({
 	className = '',
 }: ZoomControlProps): ReactNode {
-	const { zoomPercent, setZoomPercent, resetZoom, zoomIn, zoomOut, zoomToFit, zoomTo50, initialHeight } =
-		useZoom();
+	const {
+		zoomPercent,
+		setZoomPercent,
+		resetZoom,
+		zoomIn,
+		zoomOut,
+		zoomToFit,
+		zoomTo50,
+		initialHeight,
+	} = useZoom();
 
 	// Keep ref in sync with zoomPercent for use in callbacks
 	const zoomPercentRef = useRef(zoomPercent);
-	const [currentInitialHeight, setCurrentInitialHeight] = useState<number | null>(null);
+	const [currentInitialHeight, setCurrentInitialHeight] = useState<
+		number | null
+	>(null);
 
 	useEffect(() => {
 		zoomPercentRef.current = zoomPercent;
@@ -117,7 +133,11 @@ export default function ZoomControl({
 
 	// Update initial height when zoom hook provides it
 	useEffect(() => {
-		setCurrentInitialHeight(initialHeight !== null && initialHeight !== undefined ? initialHeight : null);
+		setCurrentInitialHeight(
+			initialHeight !== null && initialHeight !== undefined
+				? initialHeight
+				: null
+		);
 	}, [initialHeight]);
 
 	// Setup keyboard shortcuts
@@ -140,7 +160,11 @@ export default function ZoomControl({
 	const handleHeightChange = useCallback(
 		(height: number) => {
 			// onHeightChange already receives the effective height (with initial height protection applied)
-			applyIframeHeight(height, zoomPercentRef.current, currentInitialHeight);
+			applyIframeHeight(
+				height,
+				zoomPercentRef.current,
+				currentInitialHeight
+			);
 		},
 		[currentInitialHeight]
 	);
@@ -164,7 +188,9 @@ export default function ZoomControl({
 	});
 
 	// State for manual zoom input
-	const [manualZoomValue, setManualZoomValue] = useState<string>(String(Math.round(zoomPercent)));
+	const [manualZoomValue, setManualZoomValue] = useState<string>(
+		String(Math.round(zoomPercent))
+	);
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	// Update manual zoom value when zoomPercent changes externally
@@ -179,25 +205,31 @@ export default function ZoomControl({
 	};
 
 	// Handle manual zoom input change
-	const handleManualZoomChange = useCallback((event: ChangeEvent<HTMLInputElement>): void => {
-		setManualZoomValue(event.target.value);
-	}, []);
+	const handleManualZoomChange = useCallback(
+		(event: ChangeEvent<HTMLInputElement>): void => {
+			setManualZoomValue(event.target.value);
+		},
+		[]
+	);
 
 	// Handle manual zoom input submit
-	const handleManualZoomSubmit = useCallback((event?: KeyboardEvent<HTMLInputElement> | MouseEvent): void => {
-		if (event) {
-			event.preventDefault();
-			event.stopPropagation();
-		}
+	const handleManualZoomSubmit = useCallback(
+		(event?: KeyboardEvent<HTMLInputElement> | MouseEvent): void => {
+			if (event) {
+				event.preventDefault();
+				event.stopPropagation();
+			}
 
-		const value = parseInt(manualZoomValue, 10);
-		if (!isNaN(value) && value >= MIN_ZOOM && value <= MAX_ZOOM) {
-			setZoomPercent(value);
-		} else {
-			// Reset to current zoom if invalid
-			setManualZoomValue(String(Math.round(zoomPercent)));
-		}
-	}, [manualZoomValue, setZoomPercent, zoomPercent]);
+			const value = parseInt(manualZoomValue, 10);
+			if (!isNaN(value) && value >= MIN_ZOOM && value <= MAX_ZOOM) {
+				setZoomPercent(value);
+			} else {
+				// Reset to current zoom if invalid
+				setManualZoomValue(String(Math.round(zoomPercent)));
+			}
+		},
+		[manualZoomValue, setZoomPercent, zoomPercent]
+	);
 
 	// Handle blur on input - apply zoom if valid
 	const handleManualZoomBlur = useCallback((): void => {
@@ -209,9 +241,13 @@ export default function ZoomControl({
 			<div className="blockera-zoom-control-wrapper">
 				<DropdownMenu
 					icon={null}
-					label={__('Zoom', 'blockera-tabs')}
+					label={__('Zoom', 'blockera')}
 					toggleProps={{
-						className: className + ` ${zoomPercent !== DEFAULT_ZOOM ? 'is-zoomed' : ''}`,
+						className:
+							className +
+							` ${
+								zoomPercent !== DEFAULT_ZOOM ? 'is-zoomed' : ''
+							}`,
 						size: 'compact' as const,
 						children: (
 							<>
@@ -238,7 +274,7 @@ export default function ZoomControl({
 											color: 'var(--wp-components-color-foreground, #1e1e1e)',
 										}}
 									>
-										{__('Zoom level', 'blockera-tabs')}
+										{__('Zoom level', 'blockera')}
 									</label>
 									<input
 										ref={inputRef}
@@ -253,7 +289,11 @@ export default function ZoomControl({
 												handleManualZoomSubmit(e);
 												onClose();
 											} else if (e.key === 'Escape') {
-												setManualZoomValue(String(Math.round(zoomPercent)));
+												setManualZoomValue(
+													String(
+														Math.round(zoomPercent)
+													)
+												);
 												onClose();
 											}
 										}}
@@ -276,7 +316,7 @@ export default function ZoomControl({
 									}}
 									shortcut={formatShortcut('primary', '=')}
 								>
-									{__('Zoom in', 'blockera-tabs')}
+									{__('Zoom in', 'blockera')}
 								</MenuItem>
 								<MenuItem
 									onClick={() => {
@@ -285,7 +325,7 @@ export default function ZoomControl({
 									}}
 									shortcut={formatShortcut('primary', '-')}
 								>
-									{__('Zoom out', 'blockera-tabs')}
+									{__('Zoom out', 'blockera')}
 								</MenuItem>
 								<MenuItem
 									onClick={() => {
@@ -294,7 +334,7 @@ export default function ZoomControl({
 									}}
 									shortcut={formatShortcut('shift', '1')}
 								>
-									{__('Zoom to fit', 'blockera-tabs')}
+									{__('Zoom to fit', 'blockera')}
 								</MenuItem>
 								<MenuItem
 									onClick={() => {
@@ -302,7 +342,7 @@ export default function ZoomControl({
 										onClose();
 									}}
 								>
-									{__('Zoom to 50%', 'blockera-tabs')}
+									{__('Zoom to 50%', 'blockera')}
 								</MenuItem>
 								<MenuItem
 									onClick={() => {
@@ -311,7 +351,7 @@ export default function ZoomControl({
 									}}
 									shortcut={formatShortcut('primary', '0')}
 								>
-									{__('Zoom to 100%', 'blockera-tabs')}
+									{__('Zoom to 100%', 'blockera')}
 								</MenuItem>
 							</MenuGroup>
 						</>

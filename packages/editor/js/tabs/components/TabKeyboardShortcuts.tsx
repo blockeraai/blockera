@@ -3,7 +3,7 @@
  */
 import { useEffect, useCallback, useRef } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	useShortcut,
 	store as keyboardShortcutsStore,
@@ -89,7 +89,7 @@ export default function TabKeyboardShortcuts({
 		registerShortcut({
 			name: 'blockera/tabs/open-add-tab',
 			category: 'blockera',
-			description: __('Add new tab.', 'blockera-tabs'),
+			description: __('Add new tab.', 'blockera'),
 			keyCombination: {
 				modifier: 'ctrl',
 				character: 't',
@@ -100,7 +100,7 @@ export default function TabKeyboardShortcuts({
 		registerShortcut({
 			name: 'blockera/tabs/close-active-tab',
 			category: 'blockera',
-			description: __('Close the active tab.', 'blockera-tabs'),
+			description: __('Close the active tab.', 'blockera'),
 			keyCombination: {
 				modifier: 'ctrl',
 				character: 'w',
@@ -111,7 +111,7 @@ export default function TabKeyboardShortcuts({
 		registerShortcut({
 			name: 'blockera/tabs/reopen-last-closed',
 			category: 'blockera',
-			description: __('Reopen the last closed tab.', 'blockera-tabs'),
+			description: __('Reopen the last closed tab.', 'blockera'),
 			keyCombination: {
 				modifier: 'ctrlShift',
 				character: 't',
@@ -123,9 +123,10 @@ export default function TabKeyboardShortcuts({
 			registerShortcut({
 				name: `blockera/tabs/switch-to-tab-${i}`,
 				category: 'blockera',
-				description: __(
-					`Switch to tab ${i}.`,
-					'blockera-tabs'
+				description: sprintf(
+					/* translators: %d: Tab number (1-9) */
+					__('Switch to tab %d.', 'blockera'),
+					i
 				),
 				keyCombination: {
 					modifier: 'ctrl',
@@ -136,59 +137,47 @@ export default function TabKeyboardShortcuts({
 	}, [registerShortcut]);
 
 	// Handler: Open command bar (Ctrl+T)
-	const handleOpenAddTab = useCallback(
-		(event: KeyboardEvent) => {
-			event.preventDefault();
-			openAddTabCommandBarRef.current();
-		},
-		[]
-	);
+	const handleOpenAddTab = useCallback((event: KeyboardEvent) => {
+		event.preventDefault();
+		openAddTabCommandBarRef.current();
+	}, []);
 
 	// Handler: Reopen last closed tab (Ctrl+Shift+T)
-	const handleReopenLastClosed = useCallback(
-		async (event: KeyboardEvent) => {
-			event.preventDefault();
-			const closedTabs = recentlyClosedTabsRef.current;
-			if (closedTabs.length > 0) {
-				// Get the most recently closed tab (first in array)
-				const lastClosedTab = closedTabs[0];
-				await onReopenTabRef.current(lastClosedTab.key);
-			}
-		},
-		[]
-	);
+	const handleReopenLastClosed = useCallback(async (event: KeyboardEvent) => {
+		event.preventDefault();
+		const closedTabs = recentlyClosedTabsRef.current;
+		if (closedTabs.length > 0) {
+			// Get the most recently closed tab (first in array)
+			const lastClosedTab = closedTabs[0];
+			await onReopenTabRef.current(lastClosedTab.key);
+		}
+	}, []);
 
 	// Handler: Switch to tab by number (Ctrl+1-9)
-	const createSwitchToTabHandler = useCallback(
-		(index: number) => {
-			return (event: KeyboardEvent) => {
-				event.preventDefault();
-				const currentTabs = tabsRef.current;
-				const sortedTabs = sortTabsByPinned(currentTabs);
-				// Index is 1-based (1-9), convert to 0-based array index
-				const tabIndex = index - 1;
-				if (tabIndex >= 0 && tabIndex < sortedTabs.length) {
-					const targetTab = sortedTabs[tabIndex];
-					if (targetTab.key !== activeTabKeyRef.current) {
-						onTabClickRef.current(targetTab.key);
-					}
+	const createSwitchToTabHandler = useCallback((index: number) => {
+		return (event: KeyboardEvent) => {
+			event.preventDefault();
+			const currentTabs = tabsRef.current;
+			const sortedTabs = sortTabsByPinned(currentTabs);
+			// Index is 1-based (1-9), convert to 0-based array index
+			const tabIndex = index - 1;
+			if (tabIndex >= 0 && tabIndex < sortedTabs.length) {
+				const targetTab = sortedTabs[tabIndex];
+				if (targetTab.key !== activeTabKeyRef.current) {
+					onTabClickRef.current(targetTab.key);
 				}
-			};
-		},
-		[]
-	);
+			}
+		};
+	}, []);
 
 	// Handler: Close active tab (Ctrl+W)
-	const handleCloseActiveTab = useCallback(
-		(event: KeyboardEvent) => {
-			event.preventDefault();
-			const currentActiveKey = activeTabKeyRef.current;
-			if (currentActiveKey) {
-				onTabCloseRef.current(currentActiveKey);
-			}
-		},
-		[]
-	);
+	const handleCloseActiveTab = useCallback((event: KeyboardEvent) => {
+		event.preventDefault();
+		const currentActiveKey = activeTabKeyRef.current;
+		if (currentActiveKey) {
+			onTabCloseRef.current(currentActiveKey);
+		}
+	}, []);
 
 	// Bind all shortcuts
 	useShortcut('blockera/tabs/open-add-tab', handleOpenAddTab);

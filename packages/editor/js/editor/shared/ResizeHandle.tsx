@@ -2,7 +2,13 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useEffect, useRef, useState, useCallback, createPortal } from '@wordpress/element';
+import {
+	useEffect,
+	useRef,
+	useState,
+	useCallback,
+	createPortal,
+} from '@wordpress/element';
 
 /**
  * Props for the ResizeHandle component.
@@ -84,14 +90,19 @@ export const ResizeHandle = ({
 		const findContainer = () => {
 			if (side === 'left') {
 				// Primary sidebar (right side of screen, resizable from left)
-				return document.querySelector('.interface-interface-skeleton__sidebar') as HTMLElement | null;
+				return document.querySelector(
+					'.interface-interface-skeleton__sidebar'
+				) as HTMLElement | null;
 			} else if (side === 'right') {
 				// Secondary sidebar (left side of screen, resizable from right)
-				return document.querySelector('.blockera-secondary-sidebar-content') as HTMLElement | null;
-			} else {
-				// Top: List view panel for vertical resizing (handle positioned on top of it)
-				return document.querySelector('.blockera-combined-sidebar__list-view') as HTMLElement | null;
+				return document.querySelector(
+					'.blockera-secondary-sidebar-content'
+				) as HTMLElement | null;
 			}
+			// Top: List view panel for vertical resizing (handle positioned on top of it)
+			return document.querySelector(
+				'.blockera-combined-sidebar__list-view'
+			) as HTMLElement | null;
 		};
 
 		const foundContainer = findContainer();
@@ -154,7 +165,9 @@ export const ResizeHandle = ({
 
 			// Prevent text selection during drag
 			document.body.style.userSelect = 'none';
-			document.body.style.cursor = isVertical ? 'row-resize' : 'col-resize';
+			document.body.style.cursor = isVertical
+				? 'row-resize'
+				: 'col-resize';
 
 			setIsDragging(true);
 			setShowHandle(true);
@@ -166,10 +179,14 @@ export const ResizeHandle = ({
 				container.classList.add('is-resizing');
 				// Also disable transitions on nested elements for primary sidebar
 				if (side === 'left') {
-					const fillElement = container.querySelector('.interface-complementary-area__fill') as HTMLElement | null;
+					const fillElement = container.querySelector(
+						'.interface-complementary-area__fill'
+					) as HTMLElement | null;
 					if (fillElement) {
 						fillElement.classList.add('is-resizing');
-						const areaElement = fillElement.querySelector('.interface-complementary-area') as HTMLElement | null;
+						const areaElement = fillElement.querySelector(
+							'.interface-complementary-area'
+						) as HTMLElement | null;
 						if (areaElement) {
 							areaElement.classList.add('is-resizing');
 						}
@@ -183,21 +200,29 @@ export const ResizeHandle = ({
 				// Vertical resize: get height percentage
 				const heightPercentage = (() => {
 					// Get the combined sidebar container for height calculation
-					const combinedSidebar = container.closest('.blockera-combined-sidebar') as HTMLElement | null;
+					const combinedSidebar = container.closest(
+						'.blockera-combined-sidebar'
+					) as HTMLElement | null;
 					if (!combinedSidebar) {
 						return 50; // Default 50%
 					}
 
 					// Try to get from CSS variable first
-					const cssVar = window.getComputedStyle(combinedSidebar).getPropertyValue('--list-view-height');
+					const cssVar = window
+						.getComputedStyle(combinedSidebar)
+						.getPropertyValue('--list-view-height');
 					if (cssVar) {
 						return parseFloat(cssVar);
 					}
 
 					// Fallback: calculate from list view element height
-					const containerHeight = combinedSidebar.getBoundingClientRect().height;
-					const listViewHeight = container.getBoundingClientRect().height;
-					return containerHeight > 0 ? (listViewHeight / containerHeight) * 100 : 50;
+					const containerHeight =
+						combinedSidebar.getBoundingClientRect().height;
+					const listViewHeight =
+						container.getBoundingClientRect().height;
+					return containerHeight > 0
+						? (listViewHeight / containerHeight) * 100
+						: 50;
 				})();
 				startHeightRef.current = heightPercentage;
 			} else {
@@ -205,17 +230,20 @@ export const ResizeHandle = ({
 				const currentWidth = (() => {
 					if (side === 'left') {
 						// Primary sidebar: get from --sidebar-width-raw or computed width
-						const rawWidth = container.style.getPropertyValue('--sidebar-width-raw');
+						const rawWidth = container.style.getPropertyValue(
+							'--sidebar-width-raw'
+						);
 						if (rawWidth) {
 							return parseFloat(rawWidth);
 						}
-						const computed = window.getComputedStyle(container).getPropertyValue('--sidebar-width');
+						const computed = window
+							.getComputedStyle(container)
+							.getPropertyValue('--sidebar-width');
 						return parseFloat(computed) || 300;
-					} else {
-						// Secondary sidebar: get from CSS variable or computed width
-						const computed = window.getComputedStyle(container).width;
-						return parseFloat(computed) || 350;
 					}
+					// Secondary sidebar: get from CSS variable or computed width
+					const computed = window.getComputedStyle(container).width;
+					return parseFloat(computed) || 350;
 				})();
 				startWidthRef.current = currentWidth;
 			}
@@ -224,7 +252,8 @@ export const ResizeHandle = ({
 			onResizeStart?.();
 
 			// Wrap handleMouseUp to pass the event (defined before handleMouseUp)
-			let wrappedHandleMouseUp: ((event: MouseEvent) => void) | null = null;
+			let wrappedHandleMouseUp: ((event: MouseEvent) => void) | null =
+				null;
 
 			// Add global mouse event listeners
 			const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -246,12 +275,15 @@ export const ResizeHandle = ({
 					if (isVertical) {
 						// Vertical resize: calculate percentage based on mouse Y position
 						// Need to get the combined sidebar container for height calculation
-						const combinedSidebar = container.closest('.blockera-combined-sidebar') as HTMLElement | null;
+						const combinedSidebar = container.closest(
+							'.blockera-combined-sidebar'
+						) as HTMLElement | null;
 						if (!combinedSidebar) {
 							return;
 						}
 
-						const containerRect = combinedSidebar.getBoundingClientRect();
+						const containerRect =
+							combinedSidebar.getBoundingClientRect();
 						const containerHeight = containerRect.height;
 						if (containerHeight <= 0) {
 							return;
@@ -260,20 +292,30 @@ export const ResizeHandle = ({
 						// Calculate percentage based on mouse Y position relative to container
 						// Dragging handle UP (toward top, smaller Y) should INCREASE list view height
 						// Dragging handle DOWN (toward bottom, larger Y) should DECREASE list view height
-						const mouseYRelative = moveEvent.clientY - containerRect.top;
+						const mouseYRelative =
+							moveEvent.clientY - containerRect.top;
 						// Invert: map mouse position to height percentage
 						// When mouse is at top (0), list view should be max percentage
 						// When mouse is at bottom (containerHeight), list view should be min percentage
-						const normalizedPosition = mouseYRelative / containerHeight; // 0 at top, 1 at bottom
-						let newHeightPercentage = maxWidth - (normalizedPosition * (maxWidth - minWidth));
+						const normalizedPosition =
+							mouseYRelative / containerHeight; // 0 at top, 1 at bottom
+						let newHeightPercentage =
+							maxWidth -
+							normalizedPosition * (maxWidth - minWidth);
 
 						// Apply min/max constraints (as percentages)
 						const beforeConstraint = newHeightPercentage;
-						newHeightPercentage = Math.max(minWidth, Math.min(maxWidth, newHeightPercentage));
+						newHeightPercentage = Math.max(
+							minWidth,
+							Math.min(maxWidth, newHeightPercentage)
+						);
 
 						// Check if constraint was applied (we hit a limit)
 						// Use Math.abs to handle floating point precision issues
-						setIsAtLimit(Math.abs(beforeConstraint - newHeightPercentage) > 0.01);
+						setIsAtLimit(
+							Math.abs(beforeConstraint - newHeightPercentage) >
+								0.01
+						);
 
 						// Update height via callback (will update store and CSS variables)
 						const heightString = `${newHeightPercentage}%`;
@@ -293,11 +335,16 @@ export const ResizeHandle = ({
 
 						// Apply min/max constraints
 						const beforeConstraint = newWidth;
-						newWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+						newWidth = Math.max(
+							minWidth,
+							Math.min(maxWidth, newWidth)
+						);
 
 						// Check if constraint was applied (we hit a limit)
 						// Use Math.abs to handle floating point precision issues
-						setIsAtLimit(Math.abs(beforeConstraint - newWidth) > 0.01);
+						setIsAtLimit(
+							Math.abs(beforeConstraint - newWidth) > 0.01
+						);
 
 						// Update width via callback (will update store and CSS variables)
 						const widthString = `${newWidth}px`;
@@ -322,10 +369,14 @@ export const ResizeHandle = ({
 					container.classList.remove('is-resizing');
 					// Also re-enable transitions on nested elements for primary sidebar
 					if (side === 'left') {
-						const fillElement = container.querySelector('.interface-complementary-area__fill') as HTMLElement | null;
+						const fillElement = container.querySelector(
+							'.interface-complementary-area__fill'
+						) as HTMLElement | null;
 						if (fillElement) {
 							fillElement.classList.remove('is-resizing');
-							const areaElement = fillElement.querySelector('.interface-complementary-area') as HTMLElement | null;
+							const areaElement = fillElement.querySelector(
+								'.interface-complementary-area'
+							) as HTMLElement | null;
 							if (areaElement) {
 								areaElement.classList.remove('is-resizing');
 							}
@@ -339,7 +390,8 @@ export const ResizeHandle = ({
 				// Check if mouse is still over the handle element
 				// If not, hide the handle immediately
 				if (handleRef.current && upEvent) {
-					const handleRect = handleRef.current.getBoundingClientRect();
+					const handleRect =
+						handleRef.current.getBoundingClientRect();
 					const isMouseOverHandle =
 						upEvent.clientX >= handleRect.left &&
 						upEvent.clientX <= handleRect.right &&
@@ -363,7 +415,10 @@ export const ResizeHandle = ({
 				// Remove global listeners
 				document.removeEventListener('mousemove', handleMouseMove);
 				if (wrappedHandleMouseUp) {
-					document.removeEventListener('mouseup', wrappedHandleMouseUp);
+					document.removeEventListener(
+						'mouseup',
+						wrappedHandleMouseUp
+					);
 				}
 			};
 
@@ -376,7 +431,17 @@ export const ResizeHandle = ({
 			document.addEventListener('mousemove', handleMouseMove);
 			document.addEventListener('mouseup', wrappedHandleMouseUp);
 		},
-		[isVisible, side, minWidth, maxWidth, onResize, onResizeStart, onResizeEnd, container, isVertical]
+		[
+			isVisible,
+			side,
+			minWidth,
+			maxWidth,
+			onResize,
+			onResizeStart,
+			onResizeEnd,
+			container,
+			isVertical,
+		]
 	);
 
 	// Cleanup: hide handle and clear timeout when sidebar closes or component unmounts
@@ -393,10 +458,14 @@ export const ResizeHandle = ({
 			if (container) {
 				container.classList.remove('is-resizing');
 				if (side === 'left') {
-					const fillElement = container.querySelector('.interface-complementary-area__fill') as HTMLElement | null;
+					const fillElement = container.querySelector(
+						'.interface-complementary-area__fill'
+					) as HTMLElement | null;
 					if (fillElement) {
 						fillElement.classList.remove('is-resizing');
-						const areaElement = fillElement.querySelector('.interface-complementary-area') as HTMLElement | null;
+						const areaElement = fillElement.querySelector(
+							'.interface-complementary-area'
+						) as HTMLElement | null;
 						if (areaElement) {
 							areaElement.classList.remove('is-resizing');
 						}
@@ -422,10 +491,14 @@ export const ResizeHandle = ({
 			if (container) {
 				container.classList.remove('is-resizing');
 				if (side === 'left') {
-					const fillElement = container.querySelector('.interface-complementary-area__fill') as HTMLElement | null;
+					const fillElement = container.querySelector(
+						'.interface-complementary-area__fill'
+					) as HTMLElement | null;
 					if (fillElement) {
 						fillElement.classList.remove('is-resizing');
-						const areaElement = fillElement.querySelector('.interface-complementary-area') as HTMLElement | null;
+						const areaElement = fillElement.querySelector(
+							'.interface-complementary-area'
+						) as HTMLElement | null;
 						if (areaElement) {
 							areaElement.classList.remove('is-resizing');
 						}
@@ -444,13 +517,15 @@ export const ResizeHandle = ({
 	const handleElement = (
 		<div
 			ref={handleRef}
-			className={`blockera-sidebar-resize-handle blockera-sidebar-resize-handle--${side} ${showHandle || isDragging ? 'is-visible' : ''} ${isAtLimit ? 'is-at-limit' : ''}`}
+			className={`blockera-sidebar-resize-handle blockera-sidebar-resize-handle--${side} ${
+				showHandle || isDragging ? 'is-visible' : ''
+			} ${isAtLimit ? 'is-at-limit' : ''}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			onMouseDown={handleMouseDown}
-			aria-label={__('Resize sidebar', 'blockera-tabs')}
-			role="separator"
-			aria-orientation={isVertical ? 'horizontal' : 'vertical'}
+			aria-label={__('Resize sidebar', 'blockera')}
+			role="button"
+			tabIndex={0}
 		/>
 	);
 

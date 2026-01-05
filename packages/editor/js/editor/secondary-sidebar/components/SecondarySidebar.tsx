@@ -17,22 +17,16 @@ import ListViewPanel from './ListViewPanel';
  */
 export default function SecondarySidebar() {
 	// Get list view height from store
-	const listViewHeight = useSelect(
-		(select) => {
-			const storeSelect = select(blockeraEditorStore) as any;
-			return storeSelect.getListViewHeight();
-		},
-		[]
-	);
+	const listViewHeight = useSelect((select) => {
+		const storeSelect = select(blockeraEditorStore) as any;
+		return storeSelect.getListViewHeight();
+	}, []);
 
 	// Get sidebar visibility state from store
-	const isSidebarVisible = useSelect(
-		(select) => {
-			const storeSelect = select(blockeraEditorStore) as any;
-			return storeSelect.isSecondarySidebarVisible();
-		},
-		[]
-	);
+	const isSidebarVisible = useSelect((select) => {
+		const storeSelect = select(blockeraEditorStore) as any;
+		return storeSelect.isSecondarySidebarVisible();
+	}, []);
 
 	// Get dispatch function for updating list view height
 	const { setListViewHeight } = useDispatch(blockeraEditorStore) as {
@@ -46,7 +40,9 @@ export default function SecondarySidebar() {
 		}
 
 		// Find the combined sidebar container
-		const container = document.querySelector('.blockera-combined-sidebar') as HTMLElement | null;
+		const container = document.querySelector(
+			'.blockera-combined-sidebar'
+		) as HTMLElement | null;
 		if (container) {
 			container.style.setProperty('--list-view-height', listViewHeight);
 		}

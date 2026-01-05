@@ -9,6 +9,7 @@ import {
 	useMemo,
 	createPortal,
 } from '@wordpress/element';
+// eslint-disable-next-line import/named
 import { ProgressBar, Button, Tooltip } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { Icon, lock, link, unlock, closeSmall } from '@wordpress/icons';
@@ -28,14 +29,22 @@ import {
 	MIN_IFRAME_HEIGHT,
 	MAX_REASONABLE_HEIGHT,
 } from '../../zoom/utils/constants';
-import { injectHeightMonitoringScript, getIframeDocument } from '../../zoom/utils/iframeUtils';
+import {
+	injectHeightMonitoringScript,
+	getIframeDocument,
+} from '../../zoom/utils/iframeUtils';
 
 /**
  * Custom reload icon SVG element.
  * A circular arrow indicating refresh/reload action.
  */
 const reloadIcon = (
-	<svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="18"
+		height="18"
+		viewBox="0 0 24 24"
+		xmlns="http://www.w3.org/2000/svg"
+	>
 		<path d="M17.334 3.2124C17.5369 3.19772 17.7503 3.24893 17.9199 3.37744C18.0926 3.50831 18.211 3.71255 18.2305 3.97998L18.4736 7.25732L18.4766 7.34326C18.4739 7.77203 18.1435 8.14556 17.6846 8.17529L17.6836 8.17431L14.4004 8.41845C14.1336 8.43777 13.9149 8.34984 13.7607 8.19775C13.6097 8.04839 13.5283 7.84489 13.5137 7.64208C13.4991 7.43918 13.5501 7.22572 13.6787 7.05615C13.8097 6.88358 14.0139 6.76601 14.2812 6.74658L15.6494 6.64404C11.4574 3.75754 5.52871 6.72049 5.52832 11.9907C5.52832 17.7385 12.5106 20.6327 16.5762 16.5669C17.7476 15.3954 18.4707 13.7778 18.4707 11.9907C18.4708 11.7227 18.5744 11.5107 18.7373 11.3677C18.8974 11.2272 19.1068 11.1597 19.3105 11.1597C19.5143 11.1597 19.7237 11.2272 19.8838 11.3677C20.0466 11.5107 20.1503 11.7228 20.1504 11.9907C20.1504 16.4919 16.5002 20.1411 12 20.1411C7.49879 20.1411 3.84961 16.4909 3.84961 11.9907C3.85 5.35868 11.3296 1.58562 16.6465 5.2954L16.5576 4.09912C16.5383 3.83255 16.6263 3.61448 16.7783 3.46044C16.9277 3.30919 17.131 3.22711 17.334 3.2124Z" />
 	</svg>
 );
@@ -57,7 +66,7 @@ export interface PreviewOverlayProps {
  * Handles loading state, dynamic breakpoint sizing, navigation blocking, and ESC key close.
  *
  * @param props - Component props.
- * @returns The overlay portal or null if container not found.
+ * @return The overlay portal or null if container not found.
  */
 
 export default function PreviewOverlay({
@@ -76,9 +85,13 @@ export default function PreviewOverlay({
 	const iframeRef = useRef<HTMLIFrameElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const reloadBtnRef = useRef<HTMLButtonElement>(null);
-	const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(
+		null
+	);
 	// Track current zoom percentage for preview iframe
-	const [zoomPercent, setZoomPercent] = useState<number>(() => loadZoomFromStorage());
+	const [zoomPercent, setZoomPercent] = useState<number>(() =>
+		loadZoomFromStorage()
+	);
 	// Ref to track zoom for polling (avoids stale closure)
 	const zoomPercentRef = useRef(zoomPercent);
 
@@ -87,14 +100,20 @@ export default function PreviewOverlay({
 	const isSpinningRef = useRef(true);
 
 	// Store reference to beforeunload handler so we can remove it before reloading
-	const beforeUnloadHandlerRef = useRef<((event: BeforeUnloadEvent) => void) | null>(null);
+	const beforeUnloadHandlerRef = useRef<
+		((event: BeforeUnloadEvent) => void) | null
+	>(null);
 
 	// Store reference to keyboard handler for attaching to iframe on each load
-	const keyboardHandlerRef = useRef<((event: KeyboardEvent) => void) | null>(null);
+	const keyboardHandlerRef = useRef<((event: KeyboardEvent) => void) | null>(
+		null
+	);
 
 	// Track preview iframe height for scrollbar management
 	const previewHeightRef = useRef<number | null>(null);
-	const [previewIframeHeight, setPreviewIframeHeight] = useState<number | null>(null);
+	const [previewIframeHeight, setPreviewIframeHeight] = useState<
+		number | null
+	>(null);
 	const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
 	// Get current breakpoint data from Blockera stores
@@ -153,7 +172,10 @@ export default function PreviewOverlay({
 		try {
 			// Remove beforeunload handler before reloading to prevent dialog
 			if (beforeUnloadHandlerRef.current) {
-				iframeWindow.removeEventListener('beforeunload', beforeUnloadHandlerRef.current);
+				iframeWindow.removeEventListener(
+					'beforeunload',
+					beforeUnloadHandlerRef.current
+				);
 				beforeUnloadHandlerRef.current = null;
 			}
 
@@ -220,7 +242,8 @@ export default function PreviewOverlay({
 	// Prevent Command+K (Cmd+K / Ctrl+K) from opening command bar when preview mode is open
 	useEffect(() => {
 		const handleCommandK = (event: KeyboardEvent): void => {
-			const isCommandK = event.key === 'k' && (event.metaKey || event.ctrlKey);
+			const isCommandK =
+				event.key === 'k' && (event.metaKey || event.ctrlKey);
 
 			if (isCommandK) {
 				event.preventDefault();
@@ -271,7 +294,7 @@ export default function PreviewOverlay({
 			clearInterval(progressIntervalRef.current);
 		}
 
-		let startTime = Date.now();
+		const startTime = Date.now();
 		let animationId: number;
 
 		const updateProgress = () => {
@@ -300,8 +323,10 @@ export default function PreviewOverlay({
 			'click',
 			(event: Event) => {
 				const target = event.target as HTMLElement;
-				const link = target.closest('a') as HTMLAnchorElement | null;
-				if (link?.href) {
+				const anchorLink = target.closest(
+					'a'
+				) as HTMLAnchorElement | null;
+				if (anchorLink?.href) {
 					event.preventDefault();
 					event.stopPropagation();
 				}
@@ -385,27 +410,30 @@ export default function PreviewOverlay({
 	 * Handle height messages from preview iframe.
 	 * Debounces updates to prevent rapid-fire changes.
 	 */
-	const handlePreviewHeightMessage = useCallback((event: MessageEvent): void => {
-		// Security: In production, you might want to check event.origin
-		// For now, allowing all origins since it's same-origin within wp-admin
-		const data = event.data;
-		if (!data || data.type !== 'IFRAME_HEIGHT') {
-			return;
-		}
-
-		const height = Number(data.height) || 0;
-		if (height > 0) {
-			// Clear any pending update
-			if (debounceTimeoutRef.current) {
-				clearTimeout(debounceTimeoutRef.current);
+	const handlePreviewHeightMessage = useCallback(
+		(event: MessageEvent): void => {
+			// Security: In production, you might want to check event.origin
+			// For now, allowing all origins since it's same-origin within wp-admin
+			const data = event.data;
+			if (!data || data.type !== 'IFRAME_HEIGHT') {
+				return;
 			}
 
-			// Debounce height updates to prevent rapid-fire changes
-			debounceTimeoutRef.current = setTimeout(() => {
-				applyPreviewIframeHeight(height);
-			}, 100);
-		}
-	}, [applyPreviewIframeHeight]);
+			const height = Number(data.height) || 0;
+			if (height > 0) {
+				// Clear any pending update
+				if (debounceTimeoutRef.current) {
+					clearTimeout(debounceTimeoutRef.current);
+				}
+
+				// Debounce height updates to prevent rapid-fire changes
+				debounceTimeoutRef.current = setTimeout(() => {
+					applyPreviewIframeHeight(height);
+				}, 100);
+			}
+		},
+		[applyPreviewIframeHeight]
+	);
 
 	// Setup iframe event handlers and navigation blocking
 	const setupIframeHandlers = useCallback((): void => {
@@ -420,7 +448,11 @@ export default function PreviewOverlay({
 
 				// Attach keyboard handler to iframe to capture Cmd/Ctrl+R when iframe has focus
 				if (keyboardHandlerRef.current) {
-					iframeDoc.addEventListener('keydown', keyboardHandlerRef.current, true);
+					iframeDoc.addEventListener(
+						'keydown',
+						keyboardHandlerRef.current,
+						true
+					);
 				}
 
 				// Block navigation
@@ -451,8 +483,8 @@ export default function PreviewOverlay({
 	 * @param zoom - Zoom percentage (10-200).
 	 */
 	const applyPreviewZoom = useCallback((zoom: number): void => {
-		const container = containerRef.current;
-		if (!container) {
+		const zoomContainer = containerRef.current;
+		if (!zoomContainer) {
 			return;
 		}
 
@@ -462,16 +494,24 @@ export default function PreviewOverlay({
 		// Use requestAnimationFrame to ensure DOM is ready and transitions work smoothly
 		requestAnimationFrame(() => {
 			if (isZoomed) {
-				container.classList.add(ZOOMED_OUT_CLASS);
-				container.style.setProperty(ZOOM_CSS_VAR, scale.toString());
+				zoomContainer.classList.add(ZOOMED_OUT_CLASS);
+				zoomContainer.style.setProperty(ZOOM_CSS_VAR, scale.toString());
 				// Apply transform with !important to override any conflicting styles
-				container.style.setProperty('transform', `scale(${scale})`, 'important');
-				container.style.setProperty('transform-origin', 'top center', 'important');
+				zoomContainer.style.setProperty(
+					'transform',
+					`scale(${scale})`,
+					'important'
+				);
+				zoomContainer.style.setProperty(
+					'transform-origin',
+					'top center',
+					'important'
+				);
 			} else {
-				container.classList.remove(ZOOMED_OUT_CLASS);
-				container.style.removeProperty(ZOOM_CSS_VAR);
-				container.style.removeProperty('transform');
-				container.style.removeProperty('transform-origin');
+				zoomContainer.classList.remove(ZOOMED_OUT_CLASS);
+				zoomContainer.style.removeProperty(ZOOM_CSS_VAR);
+				zoomContainer.style.removeProperty('transform');
+				zoomContainer.style.removeProperty('transform-origin');
 			}
 		});
 	}, []);
@@ -489,13 +529,13 @@ export default function PreviewOverlay({
 
 		let timeoutId: ReturnType<typeof setTimeout> | null = null;
 		let rafId: number | null = null;
-		let container: HTMLDivElement | null = null;
+		let animationContainer: HTMLDivElement | null = null;
 		let handleAnimationEnd: ((event: AnimationEvent) => void) | null = null;
 
 		// Wait for container to be available
 		const checkContainer = (): void => {
-			container = containerRef.current;
-			if (!container) {
+			animationContainer = containerRef.current;
+			if (!animationContainer) {
 				// Container not ready yet, try again on next frame
 				rafId = requestAnimationFrame(checkContainer);
 				return;
@@ -523,9 +563,15 @@ export default function PreviewOverlay({
 				}
 			}, animationDuration + 100); // Add buffer for safety
 
-			container.addEventListener('animationend', handleAnimationEnd);
+			animationContainer.addEventListener(
+				'animationend',
+				handleAnimationEnd
+			);
 			// Also listen for webkitAnimationEnd for Safari compatibility
-			container.addEventListener('webkitAnimationEnd', handleAnimationEnd as EventListener);
+			animationContainer.addEventListener(
+				'webkitAnimationEnd',
+				handleAnimationEnd as EventListener
+			);
 		};
 
 		checkContainer();
@@ -537,9 +583,15 @@ export default function PreviewOverlay({
 			if (timeoutId !== null) {
 				clearTimeout(timeoutId);
 			}
-			if (container && handleAnimationEnd) {
-				container.removeEventListener('animationend', handleAnimationEnd);
-				container.removeEventListener('webkitAnimationEnd', handleAnimationEnd as EventListener);
+			if (animationContainer && handleAnimationEnd) {
+				animationContainer.removeEventListener(
+					'animationend',
+					handleAnimationEnd
+				);
+				animationContainer.removeEventListener(
+					'webkitAnimationEnd',
+					handleAnimationEnd as EventListener
+				);
 			}
 		};
 	}, [isOpening, isClosing]);
@@ -555,9 +607,9 @@ export default function PreviewOverlay({
 	// This prevents the iframe from appearing small during loading
 	useEffect(() => {
 		const iframe = iframeRef.current;
-		const container = containerRef.current;
+		const heightContainer = containerRef.current;
 
-		if (!iframe || !container || previewHeightRef.current !== null) {
+		if (!iframe || !heightContainer || previewHeightRef.current !== null) {
 			// Already set or elements not ready
 			return;
 		}
@@ -572,12 +624,21 @@ export default function PreviewOverlay({
 			const overlayTop = 64; // top: 64px from CSS
 			const overlayPadding = 80; // 40px top + 40px bottom
 			const containerPadding = 16; // 8px top + 8px bottom (inside container)
-			const availableHeight = viewportHeight - overlayTop - overlayPadding - headerHeight - containerPadding;
+			const availableHeight =
+				viewportHeight -
+				overlayTop -
+				overlayPadding -
+				headerHeight -
+				containerPadding;
 
 			if (availableHeight > 0) {
 				// Set initial height to fill available viewport space immediately
 				// This will be overridden when actual content height arrives
-				iframe.style.setProperty('height', `${availableHeight}px`, 'important');
+				iframe.style.setProperty(
+					'height',
+					`${availableHeight}px`,
+					'important'
+				);
 				iframe.style.setProperty('overflow', 'hidden', 'important');
 				iframe.setAttribute('scrolling', 'no');
 				previewHeightRef.current = availableHeight;
@@ -647,18 +708,23 @@ export default function PreviewOverlay({
 		// Set initial height to fill container while waiting for actual content height
 		// Only set if not already set by the early useEffect
 		const iframe = iframeRef.current;
-		const container = containerRef.current;
-		if (iframe && container && previewHeightRef.current === null) {
+		const loadContainer = containerRef.current;
+		if (iframe && loadContainer && previewHeightRef.current === null) {
 			// Calculate available height in container (container height minus header and padding)
-			const containerRect = container.getBoundingClientRect();
+			const containerRect = loadContainer.getBoundingClientRect();
 			const headerHeight = 26; // --header-height CSS variable
 			const containerPadding = 16; // 8px top + 8px bottom
-			const availableHeight = containerRect.height - headerHeight - containerPadding;
+			const availableHeight =
+				containerRect.height - headerHeight - containerPadding;
 
 			if (availableHeight > 0) {
 				// Set initial height to fill available space
 				// This will be overridden when actual content height arrives
-				iframe.style.setProperty('height', `${availableHeight}px`, 'important');
+				iframe.style.setProperty(
+					'height',
+					`${availableHeight}px`,
+					'important'
+				);
 				iframe.style.setProperty('overflow', 'hidden', 'important');
 				iframe.setAttribute('scrolling', 'no');
 				previewHeightRef.current = availableHeight;
@@ -684,9 +750,15 @@ export default function PreviewOverlay({
 					// Animation completed a full cycle (back to 0deg), now stop
 					isSpinningRef.current = false;
 					setIsReloading(false);
-					svgElement.removeEventListener('animationiteration', handleAnimationIteration);
+					svgElement.removeEventListener(
+						'animationiteration',
+						handleAnimationIteration
+					);
 				};
-				svgElement.addEventListener('animationiteration', handleAnimationIteration);
+				svgElement.addEventListener(
+					'animationiteration',
+					handleAnimationIteration
+				);
 			} else {
 				// Fallback: if we can't find SVG, just stop immediately
 				isSpinningRef.current = false;
@@ -707,14 +779,19 @@ export default function PreviewOverlay({
 	}, [handleIframeLoadComplete]);
 
 	// Memoized computed values for performance
-	const { iframeClassName, iframeContainerStyles, overlayClassName, containerClassName } = useMemo(() => {
+	const {
+		iframeClassName,
+		iframeContainerStyles,
+		overlayClassName,
+		containerClassName,
+	} = useMemo(() => {
 		// Iframe class name
 		const iframeClasses = [
 			'blockera-preview-overlay__iframe',
 			`breakpoint-${breakpointType}`,
 			isLoading
 				? 'blockera-preview-overlay__iframe--loading'
-				: 'blockera-preview-overlay__iframe--loaded'
+				: 'blockera-preview-overlay__iframe--loaded',
 		];
 
 		// Iframe container styles
@@ -727,10 +804,13 @@ export default function PreviewOverlay({
 		}
 
 		// Container class name
-		const containerClasses = ['blockera-preview-overlay__iframe-container',
+		const containerClasses = [
+			'blockera-preview-overlay__iframe-container',
 			`breakpoint-${breakpointType}`,
 			// Add breakpoint-small class if maxWidth is not 100% and less than 500px
-			(maxWidth !== '100%' && parseInt(maxWidth, 10) < 500 ? 'breakpoint-small' : '')
+			maxWidth !== '100%' && parseInt(maxWidth, 10) < 500
+				? 'breakpoint-small'
+				: '',
 		];
 
 		if (isOpening) {
@@ -745,7 +825,7 @@ export default function PreviewOverlay({
 			iframeClassName: iframeClasses.join(' '),
 			iframeContainerStyles: containerStyles,
 			overlayClassName: overlayClasses.join(' '),
-			containerClassName: containerClasses.join(' ')
+			containerClassName: containerClasses.join(' '),
 		};
 	}, [breakpointType, isLoading, maxWidth, isClosing, isOpening]);
 
@@ -759,9 +839,8 @@ export default function PreviewOverlay({
 			className={overlayClassName}
 			role="dialog"
 			aria-modal="true"
-			aria-label={__('Preview', 'blockera-tabs')}
+			aria-label={__('Preview', 'blockera')}
 		>
-
 			{/* Iframe container with dynamic breakpoint sizing */}
 			<div
 				ref={containerRef}
@@ -770,15 +849,16 @@ export default function PreviewOverlay({
 			>
 				{/* Header bar with URL info and action buttons */}
 				<PreviewHeader
-					className={`blockera-preview-overlay__header ${breakpointType === 'small' ? 'breakpoint-small' : ''}`}
+					className={`blockera-preview-overlay__header ${
+						breakpointType === 'small' ? 'breakpoint-small' : ''
+					}`}
 					urlBarContent={
 						<>
 							{/* Lock icon: green for https, red for http */}
 							<span
-								className={`blockera-preview-overlay__lock-icon ${isSecure
-									? 'is-secure'
-									: 'is-insecure'
-									}`}
+								className={`blockera-preview-overlay__lock-icon ${
+									isSecure ? 'is-secure' : 'is-insecure'
+								}`}
 							>
 								<Icon icon={isSecure ? lock : unlock} />
 							</span>
@@ -790,29 +870,39 @@ export default function PreviewOverlay({
 								rel="noopener noreferrer"
 								className="blockera-preview-overlay__url"
 								data-protocol={isSecure ? 'https' : 'http'}
-								dangerouslySetInnerHTML={{ __html: processedUrl }}
+								dangerouslySetInnerHTML={{
+									__html: processedUrl,
+								}}
 							/>
 
 							{/* External link button to open URL in new tab */}
-							<Tooltip text={__('Open in new tab', 'blockera-tabs')}>
+							<Tooltip text={__('Open in new tab', 'blockera')}>
 								<Button
 									icon={link}
 									className="blockera-preview-overlay__external-link"
 									onClick={handleOpenInNewTab}
-									aria-label={__('Open in new tab', 'blockera-tabs')}
+									aria-label={__(
+										'Open in new tab',
+										'blockera'
+									)}
 								/>
 							</Tooltip>
 						</>
 					}
 					actions={
 						<>
-							<Tooltip text={__('Reload', 'blockera-tabs')}>
+							<Tooltip text={__('Reload', 'blockera')}>
 								<Button
 									ref={reloadBtnRef}
 									icon={reloadIcon}
 									onClick={handleReload}
-									className={`blockera-preview-overlay__action-btn action-btn-reload${isReloading ? ' is-spinning' : ''}`}
-									aria-label={__('Reload preview', 'blockera-tabs')}
+									className={`blockera-preview-overlay__action-btn action-btn-reload${
+										isReloading ? ' is-spinning' : ''
+									}`}
+									aria-label={__(
+										'Reload preview',
+										'blockera'
+									)}
 								/>
 							</Tooltip>
 						</>
@@ -820,10 +910,12 @@ export default function PreviewOverlay({
 					onClose={handleClose}
 				/>
 
-				<div className={`blockera-preview-overlay__loading ${isLoading ? 'is-loading' : 'is-loaded'}`}>
-					{isLoading && (
-						<ProgressBar value={loadProgress} />
-					)}
+				<div
+					className={`blockera-preview-overlay__loading ${
+						isLoading ? 'is-loading' : 'is-loaded'
+					}`}
+				>
+					{isLoading && <ProgressBar value={loadProgress} />}
 				</div>
 
 				<iframe
@@ -837,11 +929,24 @@ export default function PreviewOverlay({
 								const overlayTop = 64;
 								const overlayPadding = 80;
 								const containerPadding = 16;
-								const availableHeight = viewportHeight - overlayTop - overlayPadding - headerHeight - containerPadding;
+								const availableHeight =
+									viewportHeight -
+									overlayTop -
+									overlayPadding -
+									headerHeight -
+									containerPadding;
 
 								if (availableHeight > 0) {
-									el.style.setProperty('height', `${availableHeight}px`, 'important');
-									el.style.setProperty('overflow', 'hidden', 'important');
+									el.style.setProperty(
+										'height',
+										`${availableHeight}px`,
+										'important'
+									);
+									el.style.setProperty(
+										'overflow',
+										'hidden',
+										'important'
+									);
 									el.setAttribute('scrolling', 'no');
 									previewHeightRef.current = availableHeight;
 									setPreviewIframeHeight(availableHeight);
@@ -851,14 +956,20 @@ export default function PreviewOverlay({
 						iframeRef.current = el;
 					}}
 					src={iframeUrl}
-					title={__('Preview', 'blockera-tabs')}
+					title={__('Preview', 'blockera')}
 					className={iframeClassName}
 					onLoad={handleIframeLoad}
-					style={previewIframeHeight ? { height: `${previewIframeHeight}px`, overflow: 'hidden' } : undefined}
+					style={
+						previewIframeHeight
+							? {
+									height: `${previewIframeHeight}px`,
+									overflow: 'hidden',
+							  }
+							: undefined
+					}
 				/>
 			</div>
 		</div>,
 		container
 	);
 }
-

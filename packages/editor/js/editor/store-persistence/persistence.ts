@@ -26,7 +26,7 @@ function debounceAsync<T extends (...args: any[]) => Promise<any>>(
 	let timeoutId: ReturnType<typeof setTimeout> | null = null;
 	let activePromise: Promise<any> | null = null;
 
-	return (async function debounced(...args: Parameters<T>) {
+	return async function debounced(...args: Parameters<T>) {
 		// Leading edge: if no promise or timeout in progress, call immediately
 		if (!activePromise && !timeoutId) {
 			return new Promise((resolve, reject) => {
@@ -70,7 +70,7 @@ function debounceAsync<T extends (...args: any[]) => Promise<any>>(
 					});
 			}, delayMS);
 		});
-	}) as T;
+	} as T;
 }
 
 /**
@@ -100,7 +100,9 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 	const localStorage = window.localStorage;
 
 	// Get user ID from window (injected by PHP) to make localStorage user-specific
-	const userId = (window as any).blockeraEditorPersistenceUserId as number | undefined;
+	const userId = (window as any).blockeraEditorPersistenceUserId as
+		| number
+		| undefined;
 	const userSpecificKey = userId
 		? `${localStorageRestoreKey}_${userId}`
 		: localStorageRestoreKey;
@@ -116,9 +118,9 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 
 		try {
 			// Fetch persistence data from custom REST API endpoint
-			const serverData = await apiFetch({
+			const serverData = (await apiFetch({
 				path: '/blockera/v1/editor-persistence',
-			}) as T | null;
+			})) as T | null;
 			const localData = JSON.parse(
 				localStorage.getItem(userSpecificKey) || 'null'
 			);
@@ -126,11 +128,16 @@ export function createPersistenceLayer<T extends Record<string, any>>({
 			// Compare timestamps to determine which data is more recent
 			// Compare server data, preloaded data, and localStorage data
 			const serverTimestamp = Date.parse(serverData?._modified) || 0;
-			const preloadedTimestamp = Date.parse(preloadedData?._modified) || 0;
+			const preloadedTimestamp =
+				Date.parse(preloadedData?._modified) || 0;
 			const localTimestamp = Date.parse(localData?._modified) || 0;
 
 			// Find the most recent data source
-			const maxTimestamp = Math.max(serverTimestamp, preloadedTimestamp, localTimestamp);
+			const maxTimestamp = Math.max(
+				serverTimestamp,
+				preloadedTimestamp,
+				localTimestamp
+			);
 
 			// Prefer server data if it exists and is most recent
 			// Otherwise prefer preloaded data if it's most recent

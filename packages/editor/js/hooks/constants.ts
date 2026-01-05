@@ -84,4 +84,3 @@ export type TemplateSlugType =
 	| 'header' // header template part
 	| 'footer' // footer template part
 	| 'unknown'; // fallback for unrecognized templates
-

@@ -12,7 +12,7 @@ export interface ParsedUrl {
  * Parse WordPress admin URL to extract post type and post ID
  *
  * @param url - WordPress admin URL
- * @returns Object with type and id, or null if parsing fails
+ * @return Object with type and id, or null if parsing fails
  */
 export function parseUrl(url: string | null | undefined): ParsedUrl | null {
 	if (!url || typeof url !== 'string') {
@@ -61,7 +61,9 @@ export function parseUrl(url: string | null | undefined): ParsedUrl | null {
 					const idPart = pathParts.slice(1).join('/');
 					return {
 						type: type ?? '',
-						id: /^\d+$/.test(idPart) ? parseInt(idPart, 10) : idPart,
+						id: /^\d+$/.test(idPart)
+							? parseInt(idPart, 10)
+							: idPart,
 					};
 				}
 			}
@@ -91,7 +93,7 @@ export function parseUrl(url: string | null | undefined): ParsedUrl | null {
  * Handles paths like "/page/123" or "/wp_template/theme//template-name"
  *
  * @param path - Site editor path (e.g., "/page/123?canvas=edit")
- * @returns Object with type and id, or null if parsing fails
+ * @return Object with type and id, or null if parsing fails
  */
 export function parseSiteEditorPath(
 	path: string | null | undefined
@@ -120,4 +122,3 @@ export function parseSiteEditorPath(
 		return null;
 	}
 }
-

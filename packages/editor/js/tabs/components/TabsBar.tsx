@@ -24,7 +24,14 @@ import type { Modifier } from '@dnd-kit/core';
  */
 import { Button, Tooltip } from '@wordpress/components';
 import { plus } from '@wordpress/icons';
-import { useRef, useEffect, useLayoutEffect, useCallback, memo, useMemo } from '@wordpress/element';
+import {
+	useRef,
+	useEffect,
+	useLayoutEffect,
+	useCallback,
+	memo,
+	useMemo,
+} from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { displayShortcut } from '@wordpress/keycodes';
 
@@ -33,7 +40,11 @@ import { displayShortcut } from '@wordpress/keycodes';
  */
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
-import { useScrollbar, type OverlayScrollbarsOptions, defaultScrollbarOptions } from '../../scrollbar';
+import {
+	useScrollbar,
+	type OverlayScrollbarsOptions,
+	defaultScrollbarOptions,
+} from '../../scrollbar';
 import type { Tab as TabType, LockUser, RecentlyClosedTab } from '../types';
 
 /**
@@ -99,7 +110,14 @@ export interface TabsBarProps {
 	/** Handler for updating tab title. */
 	onUpdateTabTitle: (tabKey: string, title: string) => void;
 	/** Handler for updating closed tab. */
-	onUpdateClosedTab: (tabKey: string, updates: { title?: string; status?: string | null; slug?: string | null }) => void;
+	onUpdateClosedTab: (
+		tabKey: string,
+		updates: {
+			title?: string;
+			status?: string | null;
+			slug?: string | null;
+		}
+	) => void;
 	/** Handler for removing closed tab. */
 	onRemoveClosedTab: (tabKey: string) => void;
 	/** Handler for reordering tabs. Receives new pinned and unpinned arrays. */
@@ -157,7 +175,10 @@ const TabsBar = memo(function TabsBar({
 	 * - isDraggingActiveTabRef: Tracks if the active tab is currently being dragged
 	 *   Prevents animation after drag since indicator is already attached to the tab
 	 */
-	const previousActiveTabPositionRef = useRef<{ left: number; width: number } | null>(null);
+	const previousActiveTabPositionRef = useRef<{
+		left: number;
+		width: number;
+	} | null>(null);
 	const previousActiveTabKeyRef = useRef<string | null>(null);
 	const isDraggingActiveTabRef = useRef<boolean>(false);
 
@@ -173,23 +194,23 @@ const TabsBar = memo(function TabsBar({
 	}, [pinnedTabs, unpinnedTabs]);
 
 	// Memoize scrollbar options to prevent recreation on every render
-	const scrollbarOptions = useMemo(() => ({
-		...defaultScrollbarOptions,
-		scrollbars: {
-			...defaultScrollbarOptions.scrollbars,
-			theme: 'os-theme-dark blockera-tabs',
-		},
-		overflow: {
-			x: 'scroll' as const,
-			y: 'hidden' as const,
-		},
-	}), []);
+	const scrollbarOptions = useMemo(
+		() => ({
+			...defaultScrollbarOptions,
+			scrollbars: {
+				...defaultScrollbarOptions.scrollbars,
+				theme: 'os-theme-dark blockera-tabs',
+			},
+			overflow: {
+				x: 'scroll' as const,
+				y: 'hidden' as const,
+			},
+		}),
+		[]
+	);
 
 	// Apply OverlayScrollbars to tabs container
-	useScrollbar(
-		tabsBarRef,
-		scrollbarOptions,
-	);
+	useScrollbar(tabsBarRef, scrollbarOptions);
 
 	// Check if a tab can be dragged (needs 2+ tabs in its group)
 	const canDragTab = useCallback(
@@ -226,14 +247,17 @@ const TabsBar = memo(function TabsBar({
 	 * Helper function to calculate tab position relative to container
 	 * Memoized to avoid recreating on every render
 	 */
-	const calculateTabPosition = useCallback((tabElement: HTMLElement, container: HTMLDivElement) => {
-		const containerRect = container.getBoundingClientRect();
-		const tabRect = tabElement.getBoundingClientRect();
-		return {
-			left: tabRect.left - containerRect.left + container.scrollLeft,
-			width: tabRect.width,
-		};
-	}, []);
+	const calculateTabPosition = useCallback(
+		(tabElement: HTMLElement, container: HTMLDivElement) => {
+			const containerRect = container.getBoundingClientRect();
+			const tabRect = tabElement.getBoundingClientRect();
+			return {
+				left: tabRect.left - containerRect.left + container.scrollLeft,
+				width: tabRect.width,
+			};
+		},
+		[]
+	);
 
 	/**
 	 * Animates the indicator from old tab position to new tab position
@@ -248,7 +272,12 @@ const TabsBar = memo(function TabsBar({
 	 * This creates a smooth visual transition that appears to move from one tab to another
 	 */
 	const animateIndicator = useCallback(
-		(fromLeft: number, fromWidth: number, toLeft: number, toWidth: number) => {
+		(
+			fromLeft: number,
+			fromWidth: number,
+			toLeft: number,
+			toWidth: number
+		) => {
 			const container = tabsContainerRef.current;
 			if (!container) {
 				return;
@@ -272,20 +301,30 @@ const TabsBar = memo(function TabsBar({
 
 				// Force reflow to ensure initial position is painted before animating
 				// This prevents the browser from skipping the transition
-				// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+				// eslint-disable-next-line no-unused-expressions
 				tabsContainerRef.current.offsetHeight;
 
 				// Step 4: Re-enable transition and animate to target position
 				// The browser will now smoothly transition from old to new position
-				tabsContainerRef.current.style.removeProperty('--indicator-transition');
-				tabsContainerRef.current.style.setProperty('--active-tab-left', `${toLeft}px`);
-				tabsContainerRef.current.style.setProperty('--active-tab-width', `${toWidth}px`);
+				tabsContainerRef.current.style.removeProperty(
+					'--indicator-transition'
+				);
+				tabsContainerRef.current.style.setProperty(
+					'--active-tab-left',
+					`${toLeft}px`
+				);
+				tabsContainerRef.current.style.setProperty(
+					'--active-tab-width',
+					`${toWidth}px`
+				);
 
 				// Step 5: After animation completes, switch back to tab indicator
 				const transitionDuration = 300; // Match CSS transition duration (0.3s)
 				setTimeout(() => {
 					if (tabsContainerRef.current) {
-						tabsContainerRef.current.classList.remove('is-animating-indicator');
+						tabsContainerRef.current.classList.remove(
+							'is-animating-indicator'
+						);
 						// Tab indicator will now be visible again (attached to active tab)
 					}
 				}, transitionDuration);
@@ -327,20 +366,32 @@ const TabsBar = memo(function TabsBar({
 				const targetTabKey = over.id as string;
 
 				// Find which group (pinned/unpinned) contains the dragged tab
-				const draggedIndexInPinned = pinnedTabs.findIndex((t) => t.key === draggedTabKey);
-				const draggedIndexInUnpinned = unpinnedTabs.findIndex((t) => t.key === draggedTabKey);
+				const draggedIndexInPinned = pinnedTabs.findIndex(
+					(t) => t.key === draggedTabKey
+				);
+				const draggedIndexInUnpinned = unpinnedTabs.findIndex(
+					(t) => t.key === draggedTabKey
+				);
 
 				// Determine source group and index
 				const isPinned = draggedIndexInPinned !== -1;
 				const sourceGroup = isPinned ? pinnedTabs : unpinnedTabs;
-				const draggedIndex = isPinned ? draggedIndexInPinned : draggedIndexInUnpinned;
+				const draggedIndex = isPinned
+					? draggedIndexInPinned
+					: draggedIndexInUnpinned;
 
 				// Find target index in the same group
-				const targetIndex = sourceGroup.findIndex((t) => t.key === targetTabKey);
+				const targetIndex = sourceGroup.findIndex(
+					(t) => t.key === targetTabKey
+				);
 
 				if (draggedIndex !== -1 && targetIndex !== -1) {
 					// Reorder using arrayMove (handles the array manipulation)
-					const reorderedGroup = arrayMove(sourceGroup, draggedIndex, targetIndex);
+					const reorderedGroup = arrayMove(
+						sourceGroup,
+						draggedIndex,
+						targetIndex
+					);
 
 					// Update via callback (triggers React re-render)
 					if (isPinned) {
@@ -354,7 +405,11 @@ const TabsBar = memo(function TabsBar({
 			// If active tab was dragged, update its position ref after DOM updates
 			// This prevents the tab-switch useEffect from triggering animation
 			// The indicator is already attached to the tab and in the correct position
-			if (wasActiveTabDragged && tabsContainerRef.current && activeTabKey) {
+			if (
+				wasActiveTabDragged &&
+				tabsContainerRef.current &&
+				activeTabKey
+			) {
 				// Use double RAF to ensure DOM has fully updated after reordering
 				requestAnimationFrame(() => {
 					requestAnimationFrame(() => {
@@ -370,10 +425,11 @@ const TabsBar = memo(function TabsBar({
 
 						if (activeTabElement) {
 							// Update position ref to current position (no animation needed)
-							previousActiveTabPositionRef.current = calculateTabPosition(
-								activeTabElement,
-								container
-							);
+							previousActiveTabPositionRef.current =
+								calculateTabPosition(
+									activeTabElement,
+									container
+								);
 						}
 						// Reset drag tracking after updating position
 						isDraggingActiveTabRef.current = false;
@@ -384,7 +440,13 @@ const TabsBar = memo(function TabsBar({
 				isDraggingActiveTabRef.current = false;
 			}
 		},
-		[pinnedTabs, unpinnedTabs, onReorderTabs, activeTabKey, calculateTabPosition]
+		[
+			pinnedTabs,
+			unpinnedTabs,
+			onReorderTabs,
+			activeTabKey,
+			calculateTabPosition,
+		]
 	);
 
 	/**
@@ -419,7 +481,8 @@ const TabsBar = memo(function TabsBar({
 		}
 
 		const oldActiveTabKey = previousActiveTabKeyRef.current;
-		const isTabSwitching = oldActiveTabKey !== null && oldActiveTabKey !== activeTabKey;
+		const isTabSwitching =
+			oldActiveTabKey !== null && oldActiveTabKey !== activeTabKey;
 
 		if (isTabSwitching && oldActiveTabKey && activeTabKey) {
 			// Tab is switching: capture OLD tab's position BEFORE it loses .is-active
@@ -628,7 +691,9 @@ const TabsBar = memo(function TabsBar({
 		// Add event listeners
 		// Note: scroll events on elements don't support passive option in all browsers
 		container.addEventListener('scroll', handleScrollOrResize);
-		window.addEventListener('resize', handleScrollOrResize, { passive: true });
+		window.addEventListener('resize', handleScrollOrResize, {
+			passive: true,
+		});
 
 		return () => {
 			container.removeEventListener('scroll', handleScrollOrResize);
@@ -638,8 +703,14 @@ const TabsBar = memo(function TabsBar({
 
 	// Memoize tab IDs for sortable contexts to prevent unnecessary re-renders
 	// Only recreate when tab keys or order actually changes
-	const pinnedTabIds = useMemo(() => pinnedTabs.map((tab) => tab.key), [pinnedTabs]);
-	const unpinnedTabIds = useMemo(() => unpinnedTabs.map((tab) => tab.key), [unpinnedTabs]);
+	const pinnedTabIds = useMemo(
+		() => pinnedTabs.map((tab) => tab.key),
+		[pinnedTabs]
+	);
+	const unpinnedTabIds = useMemo(
+		() => unpinnedTabs.map((tab) => tab.key),
+		[unpinnedTabs]
+	);
 
 	return (
 		<>
@@ -655,7 +726,6 @@ const TabsBar = memo(function TabsBar({
 						className="blockera-tabs-bar-tabs"
 						ref={tabsContainerRef}
 					>
-
 						{/* Pinned tabs sortable context */}
 						{pinnedTabs.length > 0 && (
 							<SortableContext
@@ -677,17 +747,29 @@ const TabsBar = memo(function TabsBar({
 											getIsDirty={getIsDirty}
 											onClick={() => onTabClick(tab.key)}
 											onClose={() => onTabClose(tab.key)}
-											onCloseOthers={() => onCloseOthers(tab.key)}
-											onCloseToRight={() => onCloseToRight(tab.key)}
+											onCloseOthers={() =>
+												onCloseOthers(tab.key)
+											}
+											onCloseToRight={() =>
+												onCloseToRight(tab.key)
+											}
 											onCloseSaved={onCloseSaved}
 											onView={onView}
 											onCopyViewLink={onCopyViewLink}
 											onCopyEditorLink={onCopyEditorLink}
-											onTogglePin={() => onTogglePin(tab.key)}
+											onTogglePin={() =>
+												onTogglePin(tab.key)
+											}
 											onRename={() => onRename(tab.key)}
-											onClearRename={() => onClearRename(tab.key)}
-											isTabIconsEnabled={isTabIconsEnabled}
-											isIconOnlyPinnedTabsEnabled={isIconOnlyPinnedTabsEnabled}
+											onClearRename={() =>
+												onClearRename(tab.key)
+											}
+											isTabIconsEnabled={
+												isTabIconsEnabled
+											}
+											isIconOnlyPinnedTabsEnabled={
+												isIconOnlyPinnedTabsEnabled
+											}
 										/>
 									))}
 								</div>
@@ -715,17 +797,29 @@ const TabsBar = memo(function TabsBar({
 											getIsDirty={getIsDirty}
 											onClick={() => onTabClick(tab.key)}
 											onClose={() => onTabClose(tab.key)}
-											onCloseOthers={() => onCloseOthers(tab.key)}
-											onCloseToRight={() => onCloseToRight(tab.key)}
+											onCloseOthers={() =>
+												onCloseOthers(tab.key)
+											}
+											onCloseToRight={() =>
+												onCloseToRight(tab.key)
+											}
 											onCloseSaved={onCloseSaved}
 											onView={onView}
 											onCopyViewLink={onCopyViewLink}
 											onCopyEditorLink={onCopyEditorLink}
-											onTogglePin={() => onTogglePin(tab.key)}
+											onTogglePin={() =>
+												onTogglePin(tab.key)
+											}
 											onRename={() => onRename(tab.key)}
-											onClearRename={() => onClearRename(tab.key)}
-											isTabIconsEnabled={isTabIconsEnabled}
-											isIconOnlyPinnedTabsEnabled={isIconOnlyPinnedTabsEnabled}
+											onClearRename={() =>
+												onClearRename(tab.key)
+											}
+											isTabIconsEnabled={
+												isTabIconsEnabled
+											}
+											isIconOnlyPinnedTabsEnabled={
+												isIconOnlyPinnedTabsEnabled
+											}
 										/>
 									))}
 								</div>
@@ -734,15 +828,17 @@ const TabsBar = memo(function TabsBar({
 					</div>
 				</DndContext>
 
-
 				<div className="blockera-tabs-bar-actions">
-					<Tooltip text={__('Add new tab', 'blockera-tabs')} shortcut={displayShortcut.ctrl('t')}>
+					<Tooltip
+						text={__('Add new tab', 'blockera')}
+						shortcut={displayShortcut.ctrl('t')}
+					>
 						<Button
 							icon={plus}
 							onClick={onAddClick}
 							variant="tertiary"
 							size="compact"
-							aria-label={__('Add new tab', 'blockera-tabs')}
+							aria-label={__('Add new tab', 'blockera')}
 						/>
 					</Tooltip>
 				</div>
@@ -750,13 +846,16 @@ const TabsBar = memo(function TabsBar({
 
 			<div className="blockera-tabs-bar-settings">
 				<div className="blockera-tabs-bar-actions">
-					<Tooltip text={__('Add new tab', 'blockera-tabs')} shortcut={displayShortcut.ctrl('t')}>
+					<Tooltip
+						text={__('Add new tab', 'blockera')}
+						shortcut={displayShortcut.ctrl('t')}
+					>
 						<Button
 							icon={plus}
 							onClick={onAddClick}
 							variant="tertiary"
 							size="compact"
-							aria-label={__('Add new tab', 'blockera-tabs')}
+							aria-label={__('Add new tab', 'blockera')}
 						/>
 					</Tooltip>
 				</div>

@@ -23,7 +23,7 @@ export interface PreviewHeaderProps {
  * Used in both preview overlay and zoom mode.
  *
  * @param props - Component props.
- * @returns The header component.
+ * @return The header component.
  */
 export default function PreviewHeader({
 	urlBarContent,
@@ -39,7 +39,7 @@ export default function PreviewHeader({
 					type="button"
 					className="blockera-preview-header__close-dot"
 					onClick={onClose}
-					aria-label={__('Close', 'blockera-tabs')}
+					aria-label={__('Close', 'blockera')}
 				/>
 				<span />
 				<span />
@@ -51,9 +51,7 @@ export default function PreviewHeader({
 			</div>
 
 			{/* Right section: Action buttons and Close button */}
-			<div className="blockera-preview-header__actions">
-				{actions}
-			</div>
+			<div className="blockera-preview-header__actions">{actions}</div>
 		</div>
 	);
 }

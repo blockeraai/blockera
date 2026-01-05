@@ -18,7 +18,7 @@ const POST_TYPES = ['post', 'page', 'wp_template', 'wp_template_part'] as const;
  * Gutenberg uses format: "postType-postId" (e.g., "page-123", "wp_template-theme//name")
  *
  * @param commandName - Command name from Gutenberg
- * @returns Object with type and id, or null if parsing fails
+ * @return Object with type and id, or null if parsing fails
  */
 export function parseCommandName(
 	commandName: string | null | undefined
@@ -42,4 +42,3 @@ export function parseCommandName(
 
 	return null;
 }
-

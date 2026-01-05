@@ -9,7 +9,7 @@ import type { ZoomPercent } from '../types';
  * Load zoom percentage from localStorage.
  * Returns default zoom if no valid value is stored.
  *
- * @returns The zoom percentage from storage, or default if not found/invalid.
+ * @return The zoom percentage from storage, or default if not found/invalid.
  */
 export function loadZoomFromStorage(): ZoomPercent {
 	try {
@@ -19,11 +19,7 @@ export function loadZoomFromStorage(): ZoomPercent {
 			const zoom = parseInt(stored, 10);
 
 			// Validate zoom is within acceptable range
-			if (
-				!isNaN(zoom) &&
-				zoom >= MIN_ZOOM &&
-				zoom <= MAX_ZOOM
-			) {
+			if (!isNaN(zoom) && zoom >= MIN_ZOOM && zoom <= MAX_ZOOM) {
 				return zoom;
 			}
 		}

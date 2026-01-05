@@ -1,9 +1,8 @@
 /**
  * WordPress dependencies
  */
-import { DropdownMenu, MenuGroup, MenuItem } from '@wordpress/components';
+import { DropdownMenu, MenuGroup, MenuItem, Icon } from '@wordpress/components';
 import { moreVertical, check } from '@wordpress/icons';
-import { Icon } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { memo, useRef, useEffect } from '@wordpress/element';
 
@@ -39,7 +38,14 @@ export interface ToolbarContextMenuProps {
 	/** Handler for reopening a closed tab. */
 	onReopenTab: (tabKey: string) => Promise<void> | void;
 	/** Handler to update a closed tab's data when entity changes. */
-	onUpdateClosedTab?: (tabKey: string, updates: { title?: string; status?: string | null; slug?: string | null }) => void;
+	onUpdateClosedTab?: (
+		tabKey: string,
+		updates: {
+			title?: string;
+			status?: string | null;
+			slug?: string | null;
+		}
+	) => void;
 	/** Handler to remove a closed tab when entity is deleted. */
 	onRemoveClosedTab?: (tabKey: string) => void;
 }
@@ -55,7 +61,14 @@ interface RecentlyClosedTabItemProps {
 	/** Handler to close the dropdown. */
 	onClose: () => void;
 	/** Handler to update storage when entity data changes. */
-	onUpdateClosedTab?: (tabKey: string, updates: { title?: string; status?: string | null; slug?: string | null }) => void;
+	onUpdateClosedTab?: (
+		tabKey: string,
+		updates: {
+			title?: string;
+			status?: string | null;
+			slug?: string | null;
+		}
+	) => void;
 	/** Handler to remove a tab when entity is deleted. */
 	onRemoveClosedTab?: (tabKey: string) => void;
 }
@@ -94,7 +107,11 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 	const slug = entity.slug || tab.slug;
 
 	// Ref to track previous values and avoid duplicate updates
-	const prevValuesRef = useRef({ title: tab.title, status: tab.status, slug: tab.slug });
+	const prevValuesRef = useRef({
+		title: tab.title,
+		status: tab.status,
+		slug: tab.slug,
+	});
 
 	// Remove from storage if entity is deleted
 	useEffect(() => {
@@ -111,7 +128,11 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 			return;
 		}
 
-		const updates: { title?: string; status?: string | null; slug?: string | null } = {};
+		const updates: {
+			title?: string;
+			status?: string | null;
+			slug?: string | null;
+		} = {};
 		let hasChanges = false;
 
 		// Check if entity title is available and different from stored
@@ -135,12 +156,30 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 		// Only update if there are actual changes and values are different from last update
 		if (hasChanges) {
 			const prev = prevValuesRef.current;
-			if (updates.title !== prev.title || updates.status !== prev.status || updates.slug !== prev.slug) {
-				prevValuesRef.current = { title: updates.title ?? tab.title, status: updates.status ?? tab.status, slug: updates.slug ?? tab.slug };
+			if (
+				updates.title !== prev.title ||
+				updates.status !== prev.status ||
+				updates.slug !== prev.slug
+			) {
+				prevValuesRef.current = {
+					title: updates.title ?? tab.title,
+					status: updates.status ?? tab.status,
+					slug: updates.slug ?? tab.slug,
+				};
 				onUpdateClosedTab(tab.key, updates);
 			}
 		}
-	}, [isDeleted, entity.title, entity.status, entity.slug, tab.key, tab.title, tab.status, tab.slug, onUpdateClosedTab]);
+	}, [
+		isDeleted,
+		entity.title,
+		entity.status,
+		entity.slug,
+		tab.key,
+		tab.title,
+		tab.status,
+		tab.slug,
+		onUpdateClosedTab,
+	]);
 
 	// Don't render if entity is deleted
 	if (isDeleted) {
@@ -149,7 +188,7 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 
 	const tabIcon = getTabIcon({
 		postType: tab.type,
-		slug: slug,
+		slug,
 	});
 
 	// Show status badge if not published
@@ -177,7 +216,9 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 	return (
 		<MenuItem
 			onClick={handleClick}
-			className={`blockera-tabs-toolbar-menu-item__closed-tab ${status ? 'status-' + status : ''}`}
+			className={`blockera-tabs-toolbar-menu-item__closed-tab ${
+				status ? 'status-' + status : ''
+			}`}
 			suffix={
 				tab.closedAt ? (
 					<span className="blockera-tabs-closed-time">
@@ -193,7 +234,9 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 			/>
 			<span className="blockera-tabs-closed-tab-title">{title}</span>
 			{showStatus && (
-				<span className="blockera-tabs-closed-tab-status">{status}</span>
+				<span className="blockera-tabs-closed-tab-status">
+					{status}
+				</span>
 			)}
 		</MenuItem>
 	);
@@ -203,33 +246,35 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
  * Format time difference in short format (e.g., "2m ago", "1h ago")
  *
  * @param timestamp - Timestamp in milliseconds or ISO date string
- * @returns Formatted time difference
+ * @return Formatted time difference
  */
 function shortTimeDiff(timestamp: number | string): string {
 	const date =
-		typeof timestamp === 'number' ? timestamp : new Date(timestamp).getTime();
+		typeof timestamp === 'number'
+			? timestamp
+			: new Date(timestamp).getTime();
 	const diffMs = Date.now() - date;
 	const diffSeconds = Math.floor(diffMs / 1000);
 
 	if (diffSeconds < 60) {
-		return __('now', 'blockera-tabs');
+		return __('now', 'blockera');
 	}
 
 	const diffMinutes = Math.floor(diffSeconds / 60);
 	if (diffMinutes < 60) {
 		/* translators: %d: number of minutes */
-		return sprintf(__('%dm ago', 'blockera-tabs'), diffMinutes);
+		return sprintf(__('%dm ago', 'blockera'), diffMinutes);
 	}
 
 	const diffHours = Math.floor(diffMinutes / 60);
 	if (diffHours < 24) {
 		/* translators: %d: number of hours */
-		return sprintf(__('%dh ago', 'blockera-tabs'), diffHours);
+		return sprintf(__('%dh ago', 'blockera'), diffHours);
 	}
 
 	const diffDays = Math.floor(diffHours / 24);
 	/* translators: %d: number of days */
-	return sprintf(__('%dd ago', 'blockera-tabs'), diffDays);
+	return sprintf(__('%dd ago', 'blockera'), diffDays);
 }
 
 /**
@@ -258,7 +303,9 @@ export default function ToolbarContextMenu({
 		onClose();
 	};
 
-	const handleToggleRecentlyClosedPersistence = (onClose: () => void): void => {
+	const handleToggleRecentlyClosedPersistence = (
+		onClose: () => void
+	): void => {
 		onToggleRecentlyClosedPersistence();
 		onClose();
 	};
@@ -281,7 +328,7 @@ export default function ToolbarContextMenu({
 	return (
 		<DropdownMenu
 			icon={<Icon icon={moreVertical} size={24} />}
-			label={__('Tabs options', 'blockera-tabs')}
+			label={__('Tabs options', 'blockera')}
 			className="blockera-tabs-toolbar-menu"
 			popoverProps={{
 				className: 'blockera-tabs-toolbar-menu-popover',
@@ -290,22 +337,26 @@ export default function ToolbarContextMenu({
 		>
 			{({ onClose }) => (
 				<>
-					<MenuGroup label={__('Tabs History Settings', 'blockera-tabs')}>
+					<MenuGroup label={__('Tabs History Settings', 'blockera')}>
 						<MenuItem
 							icon={isPersistenceEnabled ? check : undefined}
 							onClick={() => handleTogglePersistence(onClose)}
 							role="menuitemcheckbox"
 							info={__(
 								'Your open tabs stay available after refreshing the editor.',
-								'blockera-tabs'
+								'blockera'
 							)}
-							className={isPersistenceEnabled ? 'is-active-item' : ''}
+							className={
+								isPersistenceEnabled ? 'is-active-item' : ''
+							}
 						>
-							{__('Keep tabs open after refresh', 'blockera-tabs')}
+							{__('Keep tabs open after refresh', 'blockera')}
 						</MenuItem>
 						<MenuItem
 							icon={
-								isRecentlyClosedPersistenceEnabled ? check : undefined
+								isRecentlyClosedPersistenceEnabled
+									? check
+									: undefined
 							}
 							onClick={() =>
 								handleToggleRecentlyClosedPersistence(onClose)
@@ -313,7 +364,7 @@ export default function ToolbarContextMenu({
 							role="menuitemcheckbox"
 							info={__(
 								'Keep up to 20 closed tabs so you can reopen them anytime.',
-								'blockera-tabs'
+								'blockera'
 							)}
 							className={
 								isRecentlyClosedPersistenceEnabled
@@ -321,44 +372,54 @@ export default function ToolbarContextMenu({
 									: ''
 							}
 						>
-							{__('Remember recently closed tabs', 'blockera-tabs')}
+							{__('Remember recently closed tabs', 'blockera')}
 						</MenuItem>
 					</MenuGroup>
 
-					<MenuGroup label={__('Tabs Display Settings', 'blockera-tabs')}>
+					<MenuGroup label={__('Tabs Display Settings', 'blockera')}>
 						<MenuItem
 							icon={isTabIconsEnabled ? check : undefined}
 							onClick={() => handleToggleTabIcons(onClose)}
 							role="menuitemcheckbox"
 							info={__(
 								'Show an icon next to each tab title to help identify tab types.',
-								'blockera-tabs'
+								'blockera'
 							)}
-							className={isTabIconsEnabled ? 'is-active-item' : ''}
+							className={
+								isTabIconsEnabled ? 'is-active-item' : ''
+							}
 						>
-							{__('Show tab icons', 'blockera-tabs')}
+							{__('Show tab icons', 'blockera')}
 						</MenuItem>
 						<MenuItem
-							icon={isIconOnlyPinnedTabsEnabled ? check : undefined}
-							onClick={() => handleToggleIconOnlyPinnedTabs(onClose)}
+							icon={
+								isIconOnlyPinnedTabsEnabled ? check : undefined
+							}
+							onClick={() =>
+								handleToggleIconOnlyPinnedTabs(onClose)
+							}
 							role="menuitemcheckbox"
 							info={__(
 								'Show only the icon for pinned tabs, hiding the title.',
-								'blockera-tabs'
+								'blockera'
 							)}
-							className={isIconOnlyPinnedTabsEnabled ? 'is-active-item' : ''}
+							className={
+								isIconOnlyPinnedTabsEnabled
+									? 'is-active-item'
+									: ''
+							}
 						>
-							{__('Icon-only pinned tabs', 'blockera-tabs')}
+							{__('Icon-only pinned tabs', 'blockera')}
 						</MenuItem>
 					</MenuGroup>
 
 					<MenuGroup
-						label={__('Recently Closed Tabs', 'blockera-tabs')}
+						label={__('Recently Closed Tabs', 'blockera')}
 						className="blockera-tabs-toolbar-menu-group__closed-tabs"
 					>
 						{recentlyClosedTabs.length === 0 ? (
 							<MenuItem disabled>
-								{__('No recently closed tabs', 'blockera-tabs')}
+								{__('No recently closed tabs', 'blockera')}
 							</MenuItem>
 						) : (
 							recentlyClosedTabs.map((tab) => (
@@ -378,4 +439,3 @@ export default function ToolbarContextMenu({
 		</DropdownMenu>
 	);
 }
-

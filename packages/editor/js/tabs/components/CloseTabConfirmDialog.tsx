@@ -65,8 +65,8 @@ export default function CloseTabConfirmDialog({
 
 	// Modal title: singular when closing active tab, plural otherwise
 	const modalTitle = isClosingActiveTab
-		? __('Unsaved Tab', 'blockera-tabs')
-		: __('Unsaved Tabs', 'blockera-tabs');
+		? __('Unsaved Tab', 'blockera')
+		: __('Unsaved Tabs', 'blockera');
 
 	return (
 		<Modal
@@ -78,17 +78,17 @@ export default function CloseTabConfirmDialog({
 				<p>
 					{isMultiple
 						? sprintf(
-							/* translators: %d: number of tabs */
-							__(
-								'%d tabs have unsaved changes. Save before closing?',
-								'blockera-tabs'
-							),
-							tabCount
-						)
+								/* translators: %d: number of tabs */
+								__(
+									'%d tabs have unsaved changes. Save before closing?',
+									'blockera'
+								),
+								tabCount
+						  )
 						: __(
-							'This tab has unsaved changes. Save before closing?',
-							'blockera-tabs'
-						)}
+								'This tab has unsaved changes. Save before closing?',
+								'blockera'
+						  )}
 				</p>
 
 				{showTabsList && tabs.length > 0 && (
@@ -96,7 +96,7 @@ export default function CloseTabConfirmDialog({
 						{tabs.map((tab) => {
 							const title = getTabTitle
 								? getTabTitle(tab)
-								: tab.title || __('Untitled', 'blockera-tabs');
+								: tab.title || __('Untitled', 'blockera');
 							return (
 								<div
 									key={tab.key}
@@ -114,7 +114,7 @@ export default function CloseTabConfirmDialog({
 											disabled={isSaving}
 											className="blockera-tabs-close-confirm-review-button"
 										>
-											{__('Review tab', 'blockera-tabs')}
+											{__('Review tab', 'blockera')}
 										</Button>
 									)}
 								</div>
@@ -132,8 +132,8 @@ export default function CloseTabConfirmDialog({
 					disabled={isSaving}
 				>
 					{isMultiple
-						? __('Save All & Close', 'blockera-tabs')
-						: __('Save & Close', 'blockera-tabs')}
+						? __('Save All & Close', 'blockera')
+						: __('Save & Close', 'blockera')}
 				</Button>
 
 				<Button
@@ -143,15 +143,18 @@ export default function CloseTabConfirmDialog({
 					disabled={isSaving}
 				>
 					{isMultiple
-						? __('Close All Without Saving', 'blockera-tabs')
-						: __('Close Without Saving', 'blockera-tabs')}
+						? __('Close All Without Saving', 'blockera')
+						: __('Close Without Saving', 'blockera')}
 				</Button>
 
-				<Button variant="secondary" onClick={onClose} disabled={isSaving}>
-					{__('Cancel', 'blockera-tabs')}
+				<Button
+					variant="secondary"
+					onClick={onClose}
+					disabled={isSaving}
+				>
+					{__('Cancel', 'blockera')}
 				</Button>
 			</div>
 		</Modal>
 	);
 }
-

@@ -4,13 +4,20 @@
  * Shortcuts appear in the keyboard shortcuts help modal.
  */
 
+/**
+ * WordPress dependencies
+ */
 import { useEffect, useRef } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
-import { useShortcut } from '@wordpress/keyboard-shortcuts';
-import { __ } from '@wordpress/i18n';
 import {
+	useShortcut,
 	store as keyboardShortcutsStore,
 } from '@wordpress/keyboard-shortcuts';
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Internal dependencies
+ */
 import { ZOOM_STEP, DEFAULT_ZOOM } from '../utils/constants';
 import type { UseZoomKeyboardOptions } from '../types';
 
@@ -62,7 +69,7 @@ export function useZoomKeyboard({
 		registerShortcut({
 			name: 'blockera/zoom/zoom-in',
 			category: 'blockera',
-			description: __('Zoom in.', 'blockera-tabs'),
+			description: __('Zoom in.', 'blockera'),
 			keyCombination: {
 				modifier: 'primary',
 				character: '=',
@@ -72,7 +79,7 @@ export function useZoomKeyboard({
 		registerShortcut({
 			name: 'blockera/zoom/zoom-out',
 			category: 'blockera',
-			description: __('Zoom out.', 'blockera-tabs'),
+			description: __('Zoom out.', 'blockera'),
 			keyCombination: {
 				modifier: 'primary',
 				character: '-',
@@ -82,7 +89,7 @@ export function useZoomKeyboard({
 		registerShortcut({
 			name: 'blockera/zoom/reset',
 			category: 'blockera',
-			description: __('Reset zoom to 100%.', 'blockera-tabs'),
+			description: __('Reset zoom to 100%.', 'blockera'),
 			keyCombination: {
 				modifier: 'primary',
 				character: '0',
@@ -92,7 +99,7 @@ export function useZoomKeyboard({
 		registerShortcut({
 			name: 'blockera/zoom/zoom-to-fit',
 			category: 'blockera',
-			description: __('Zoom to fit.', 'blockera-tabs'),
+			description: __('Zoom to fit.', 'blockera'),
 			keyCombination: {
 				modifier: 'shift',
 				character: '1',
@@ -128,7 +135,8 @@ export function useZoomKeyboard({
 			// Check for zoom to fit: Shift + 1 (without Cmd/Ctrl/Alt)
 			// Handle this before checking for other modifier keys
 			// Check both key and code to handle different keyboard layouts
-			const isOne = event.key === '1' ||
+			const isOne =
+				event.key === '1' ||
 				event.key === 'Digit1' ||
 				event.code === 'Digit1' ||
 				event.code === 'Numpad1';
@@ -196,10 +204,14 @@ export function useZoomKeyboard({
 	// Note: WordPress shortcuts API may not handle Shift-only modifiers well,
 	// so we rely on the direct event listener above for actual handling
 	// This registration is mainly for display in the shortcuts help modal
-	useShortcut('blockera/zoom/zoom-to-fit', (event) => {
-		event.preventDefault();
-		if (onZoomToFitRef.current) {
-			onZoomToFitRef.current();
-		}
-	}, { bindGlobal: true });
+	useShortcut(
+		'blockera/zoom/zoom-to-fit',
+		(event) => {
+			event.preventDefault();
+			if (onZoomToFitRef.current) {
+				onZoomToFitRef.current();
+			}
+		},
+		{ bindGlobal: true }
+	);
 }

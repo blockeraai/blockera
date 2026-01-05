@@ -18,7 +18,7 @@ import type { SlotProps } from '../types';
  * Uses MutationObserver to wait for the container to appear if not immediately available.
  *
  * @param props - Component props.
- * @returns The Slot component rendered in the container, or null if container not found.
+ * @return The Slot component rendered in the container, or null if container not found.
  */
 export default function GenericSlot({
 	slotId,
@@ -43,6 +43,7 @@ export default function GenericSlot({
 			}
 			return slotConfig.isActive(select);
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[slotConfig?.isActive]
 	) as boolean;
 
@@ -62,7 +63,9 @@ export default function GenericSlot({
 
 		if (!slotConfig) {
 			// @debug-ignore
-			console.warn(`[Blockera Slots] Slot configuration not found for: ${slotId}`);
+			console.warn(
+				`[Blockera Slots] Slot configuration not found for: ${slotId}`
+			);
 			onSlotCreatedRef.current?.(false);
 			return;
 		}
@@ -76,7 +79,10 @@ export default function GenericSlot({
 		 * Returns an object with the container element and the found selector element.
 		 * For fallback selectors that target child elements, uses the parent as container.
 		 */
-		const findContainer = (): { container: HTMLElement; foundElement: HTMLElement } | null => {
+		const findContainer = (): {
+			container: HTMLElement;
+			foundElement: HTMLElement;
+		} | null => {
 			for (let i = 0; i < slotConfig.selectors.length; i++) {
 				const selector = slotConfig.selectors[i];
 				const element = document.querySelector(selector);
@@ -114,56 +120,73 @@ export default function GenericSlot({
 			const configClassName = slotConfig.className || autoClassName;
 
 			// Check if root already exists (try both config className and auto-generated)
-			let root = parentContainer.querySelector(`.${configClassName}`) as HTMLElement | null;
+			let root = parentContainer.querySelector(
+				`.${configClassName}`
+			) as HTMLElement | null;
 			if (!root && slotConfig.className) {
 				// Also check for auto-generated class name in case it was created before
-				root = parentContainer.querySelector(`.${autoClassName}`) as HTMLElement | null;
+				root = parentContainer.querySelector(
+					`.${autoClassName}`
+				) as HTMLElement | null;
 			}
 
 			if (!root) {
 				root = document.createElement('div');
 				// Use config className if provided, otherwise use auto-generated
 				// Also append prop className if provided (for additional classes)
-				root.className = `${configClassName}${className ? ` ${className}` : ''}`;
+				root.className = `${configClassName}${
+					className ? ` ${className}` : ''
+				}`;
 
 				const placement = slotConfig.placement || 'start';
 
 				// If placementSelector is provided, find that element inside the container
 				if (slotConfig.placementSelector) {
-					const placementElement = parentContainer.querySelector(slotConfig.placementSelector);
+					const placementElement = parentContainer.querySelector(
+						slotConfig.placementSelector
+					);
 					if (placementElement instanceof HTMLElement) {
 						if (placement === 'before') {
-							placementElement.parentNode?.insertBefore(root, placementElement);
+							placementElement.parentNode?.insertBefore(
+								root,
+								placementElement
+							);
 						} else if (placement === 'after') {
-							placementElement.parentNode?.insertBefore(root, placementElement.nextSibling);
+							placementElement.parentNode?.insertBefore(
+								root,
+								placementElement.nextSibling
+							);
 						} else if (placement === 'end') {
 							parentContainer.append(root);
 						} else {
 							// 'start' or default
 							parentContainer.prepend(root);
 						}
-					} else {
-						// Fallback: if placementSelector not found, use default behavior
-						if (placement === 'end') {
-							parentContainer.append(root);
-						} else {
-							parentContainer.prepend(root);
-						}
-					}
-				} else {
-					// No placementSelector: use placement relative to container or found element
-					if (placement === 'before') {
-						// Insert before the found selector element itself
-						foundElement.parentNode?.insertBefore(root, foundElement);
-					} else if (placement === 'after') {
-						// Insert after the found selector element itself
-						foundElement.parentNode?.insertBefore(root, foundElement.nextSibling);
 					} else if (placement === 'end') {
+						// Fallback: if placementSelector not found, use default behavior
 						parentContainer.append(root);
 					} else {
-						// 'start' or default
+						// Fallback: if placementSelector not found, use default behavior
 						parentContainer.prepend(root);
 					}
+				} else if (placement === 'before') {
+					// No placementSelector: use placement relative to container or found element
+					// Insert before the found selector element itself
+					foundElement.parentNode?.insertBefore(root, foundElement);
+				} else if (placement === 'after') {
+					// No placementSelector: use placement relative to container or found element
+					// Insert after the found selector element itself
+					foundElement.parentNode?.insertBefore(
+						root,
+						foundElement.nextSibling
+					);
+				} else if (placement === 'end') {
+					// No placementSelector: use placement relative to container or found element
+					parentContainer.append(root);
+				} else {
+					// No placementSelector: use placement relative to container or found element
+					// 'start' or default
+					parentContainer.prepend(root);
 				}
 			}
 
@@ -181,7 +204,10 @@ export default function GenericSlot({
 
 				if (shouldCreateContainer) {
 					// Create a container element as before
-					const root = setupRootContainer(result.container, result.foundElement);
+					const root = setupRootContainer(
+						result.container,
+						result.foundElement
+					);
 					if (!root) {
 						return false;
 					}
@@ -245,8 +271,5 @@ export default function GenericSlot({
 	// Render Slot inside the container using portal
 	// WordPress SlotFill maintains registration order, so fills will render
 	// in the order they were registered (controlled by component mount order)
-	return createPortal(
-		<Slot name={slotId} />,
-		container
-	);
+	return createPortal(<Slot name={slotId} />, container);
 }

@@ -60,7 +60,7 @@ export interface UseTabsLockStateReturn {
  * }
  * ```
  *
- * @returns Lock state management functions and current states
+ * @return Lock state management functions and current states
  */
 export function useTabsLockState(): UseTabsLockStateReturn {
 	// Map of tabKey -> { isLocked: boolean, user: { id, name, avatar } | null }
@@ -79,7 +79,7 @@ export function useTabsLockState(): UseTabsLockStateReturn {
 	 * The function reference never changes, preventing unnecessary re-renders when lockStates updates.
 	 *
 	 * @param tabKey - Tab key (e.g., "post-123")
-	 * @returns True if locked by another user
+	 * @return True if locked by another user
 	 */
 	const isTabLocked = useCallback((tabKey: string): boolean => {
 		const state = lockStatesRef.current[tabKey];
@@ -93,7 +93,7 @@ export function useTabsLockState(): UseTabsLockStateReturn {
 	 * The function reference never changes, preventing unnecessary re-renders when lockStates updates.
 	 *
 	 * @param tabKey - Tab key
-	 * @returns User object { id, name, avatar } or null if not locked
+	 * @return User object { id, name, avatar } or null if not locked
 	 */
 	const getLockUser = useCallback((tabKey: string): LockUser | null => {
 		const state = lockStatesRef.current[tabKey];
@@ -110,15 +110,18 @@ export function useTabsLockState(): UseTabsLockStateReturn {
 	 * @param tabKey - Tab key (e.g., "post-123")
 	 * @param lockInfo - Lock info { isLocked: boolean, user: Object|null }
 	 */
-	const setLockState = useCallback((tabKey: string, lockInfo: LockInfo): void => {
-		setLockStates((prev) => ({
-			...prev,
-			[tabKey]: {
-				isLocked: lockInfo.isLocked,
-				lockUser: lockInfo.user ?? null,
-			},
-		}));
-	}, []);
+	const setLockState = useCallback(
+		(tabKey: string, lockInfo: LockInfo): void => {
+			setLockStates((prev) => ({
+				...prev,
+				[tabKey]: {
+					isLocked: lockInfo.isLocked,
+					lockUser: lockInfo.user ?? null,
+				},
+			}));
+		},
+		[]
+	);
 
 	/**
 	 * Clear lock state for a specific tab
@@ -193,4 +196,3 @@ export function useTabsLockState(): UseTabsLockStateReturn {
 		updateBulkLockStates,
 	};
 }
-

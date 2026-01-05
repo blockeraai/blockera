@@ -13,7 +13,7 @@
  *
  * @param postId - The post ID
  * @param isPostNew - Whether the post is new (auto-draft)
- * @returns The sessionStorage key
+ * @return The sessionStorage key
  */
 function getAutosaveKey(postId: string | number, isPostNew: boolean): string {
 	return `wp-autosave-block-editor-post-${isPostNew ? 'auto-draft' : postId}`;
@@ -24,7 +24,7 @@ function getAutosaveKey(postId: string | number, isPostNew: boolean): string {
  *
  * @param postId - The post ID
  * @param isPostNew - Whether the post is new (auto-draft)
- * @returns True if local autosave exists
+ * @return True if local autosave exists
  */
 export function hasLocalAutosave(
 	postId: string | number,
@@ -45,7 +45,7 @@ export function hasLocalAutosave(
  *
  * @param postId - The post ID
  * @param isPostNew - Whether the post is new (auto-draft)
- * @returns Parsed autosave data or null
+ * @return Parsed autosave data or null
  */
 export function getLocalAutosave(
 	postId: string | number,
@@ -62,4 +62,3 @@ export function getLocalAutosave(
 		return null;
 	}
 }
-

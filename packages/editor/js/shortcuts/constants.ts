@@ -8,11 +8,11 @@ import { __ } from '@wordpress/i18n';
  * If a sub-category is not defined here, its ID will be used as the label.
  */
 export const subCategoryLabels: Record<string, string> = {
-	'general': __('Blockera general shortcuts', 'blockera-tabs'),
-	'tabs': __('Tabs shortcuts', 'blockera-tabs'),
-	'preview-mode': __('Preview mode shortcuts', 'blockera-tabs'),
-	'zoom': __('Zoom shortcuts', 'blockera-tabs'),
-	'list-view': __('List view shortcuts', 'blockera-tabs'),
+	general: __('Blockera general shortcuts', 'blockera'),
+	tabs: __('Tabs shortcuts', 'blockera'),
+	'preview-mode': __('Preview mode shortcuts', 'blockera'),
+	zoom: __('Zoom shortcuts', 'blockera'),
+	'list-view': __('List view shortcuts', 'blockera'),
 };
 
 /**

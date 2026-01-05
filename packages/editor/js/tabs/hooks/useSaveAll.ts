@@ -30,27 +30,45 @@ export interface UseSaveAllReturn {
 /**
  * Hook to save all dirty entities
  *
- * @returns Object with saveAll function and isSaving state
+ * @return Object with saveAll function and isSaving state
  */
 export function useSaveAll(): UseSaveAllReturn {
 	const [isSaving, setIsSaving] = useState(false);
 
 	const dirtyRecords = useSelect((select) => {
-		return (select(coreStore) as { __experimentalGetDirtyEntityRecords: () => DirtyRecord[] }).__experimentalGetDirtyEntityRecords();
+		return (
+			select(coreStore) as {
+				__experimentalGetDirtyEntityRecords: () => DirtyRecord[];
+			}
+		).__experimentalGetDirtyEntityRecords();
 	}, []);
 
 	const { saveEntityRecord } = useDispatch(coreStore) as {
-		saveEntityRecord: (kind: string, name: string, key: number | string) => Promise<void>;
+		saveEntityRecord: (
+			kind: string,
+			name: string,
+			key: number | string
+		) => Promise<void>;
 	};
 	const { savePost } = useDispatch(editorStore) as {
 		savePost: () => Promise<void>;
 	};
 	const currentPostId = useSelect(
-		(select) => (select(editorStore) as { getCurrentPostId: () => number | undefined }).getCurrentPostId(),
+		(select) =>
+			(
+				select(editorStore) as {
+					getCurrentPostId: () => number | undefined;
+				}
+			).getCurrentPostId(),
 		[]
 	);
 	const currentPostType = useSelect(
-		(select) => (select(editorStore) as { getCurrentPostType: () => string | undefined }).getCurrentPostType(),
+		(select) =>
+			(
+				select(editorStore) as {
+					getCurrentPostType: () => string | undefined;
+				}
+			).getCurrentPostType(),
 		[]
 	);
 
@@ -66,7 +84,11 @@ export function useSaveAll(): UseSaveAllReturn {
 				const { kind, name, key } = record;
 
 				// If it's the current post, use savePost action
-				if (kind === 'postType' && name === currentPostType && key === currentPostId) {
+				if (
+					kind === 'postType' &&
+					name === currentPostType &&
+					key === currentPostId
+				) {
 					await savePost();
 				} else if (kind === 'postType') {
 					// Save other post type entities
@@ -88,4 +110,3 @@ export function useSaveAll(): UseSaveAllReturn {
 		hasDirtyRecords: Boolean(dirtyRecords && dirtyRecords.length > 0),
 	};
 }
-

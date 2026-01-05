@@ -63,12 +63,18 @@ export function useElementsScrollbar(
 	targets: BlockEditorScrollbarTarget[],
 	enabled: boolean = true
 ): void {
-	const instancesRef = useRef<Map<Element, OverlayScrollbarsComponent>>(new Map());
+	const instancesRef = useRef<Map<Element, OverlayScrollbarsComponent>>(
+		new Map()
+	);
 	const observerRef = useRef<MutationObserver | null>(null);
 	const initializedElementsRef = useRef<WeakSet<Element>>(new WeakSet());
-	const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	);
 	const rafRef = useRef<number | null>(null);
-	const libraryPromiseRef = useRef<Promise<typeof import('overlayscrollbars')> | null>(null);
+	const libraryPromiseRef = useRef<Promise<
+		typeof import('overlayscrollbars')
+	> | null>(null);
 
 	// Memoize targets key more efficiently - only stringify selectors
 	const targetsKey = useMemo(() => {
@@ -83,13 +89,25 @@ export function useElementsScrollbar(
 
 		const instances = instancesRef.current;
 		const initializedElements = initializedElementsRef.current;
-		let OverlayScrollbarsClass: ((element: HTMLElement | { target: HTMLElement; elements: { viewport: HTMLElement } }, options?: unknown) => OverlayScrollbarsComponent) | null = null;
+		let OverlayScrollbarsClass:
+			| ((
+					element:
+						| HTMLElement
+						| {
+								target: HTMLElement;
+								elements: { viewport: HTMLElement };
+						  },
+					options?: unknown
+			  ) => OverlayScrollbarsComponent)
+			| null = null;
 
 		/**
 		 * Lazy load OverlayScrollbars library with caching.
 		 * Reuses the same promise to avoid multiple concurrent imports.
 		 */
-		const loadLibrary = async (): Promise<typeof OverlayScrollbarsClass> => {
+		const loadLibrary = async (): Promise<
+			typeof OverlayScrollbarsClass
+		> => {
 			if (!libraryPromiseRef.current) {
 				libraryPromiseRef.current = import('overlayscrollbars');
 			}
@@ -107,7 +125,10 @@ export function useElementsScrollbar(
 			options?: OverlayScrollbarsOptions
 		): Promise<void> => {
 			// Early return if already initialized or not an HTMLElement
-			if (initializedElements.has(element) || !(element instanceof HTMLElement)) {
+			if (
+				initializedElements.has(element) ||
+				!(element instanceof HTMLElement)
+			) {
 				return;
 			}
 
@@ -172,7 +193,10 @@ export function useElementsScrollbar(
 				rafRef.current = null;
 
 				// Process all targets in a single batch
-				const elementsToInit: Array<{ element: Element; options?: OverlayScrollbarsOptions }> = [];
+				const elementsToInit: Array<{
+					element: Element;
+					options?: OverlayScrollbarsOptions;
+				}> = [];
 
 				for (const target of targets) {
 					// Skip if target has observe: false (though currently not used)
@@ -181,11 +205,16 @@ export function useElementsScrollbar(
 					}
 
 					try {
-						const elements = document.querySelectorAll(target.selector);
+						const elements = document.querySelectorAll(
+							target.selector
+						);
 						for (const element of elements) {
 							// Only add if not already initialized
 							if (!initializedElements.has(element)) {
-								elementsToInit.push({ element, options: target.options });
+								elementsToInit.push({
+									element,
+									options: target.options,
+								});
 							}
 						}
 					} catch {
@@ -195,7 +224,11 @@ export function useElementsScrollbar(
 
 				// Initialize all found elements (async, but non-blocking)
 				if (elementsToInit.length > 0) {
-					void Promise.all(elementsToInit.map(({ element, options }) => initializeElement(element, options)));
+					void Promise.all(
+						elementsToInit.map(({ element, options }) =>
+							initializeElement(element, options)
+						)
+					);
 				}
 			});
 		};
@@ -244,9 +277,10 @@ export function useElementsScrollbar(
 
 		// Initial processing after a short delay to ensure DOM is ready
 		// Use requestIdleCallback if available, otherwise setTimeout
-		const initialDelay = typeof requestIdleCallback !== 'undefined'
-			? requestIdleCallback
-			: (callback: () => void) => setTimeout(callback, 0);
+		const initialDelay =
+			typeof requestIdleCallback !== 'undefined'
+				? requestIdleCallback
+				: (callback: () => void) => setTimeout(callback, 0);
 
 		initialDelay(() => {
 			processTargets();

@@ -18,15 +18,19 @@ export type StoreState = {
  * Defaults are injected by PHP via window.blockeraEditorPersistenceDefaults.
  */
 function getDefaults(): StoreState {
-	const defaults = (window as any).blockeraEditorPersistenceDefaults as StoreState | undefined;
+	const defaults = (window as any).blockeraEditorPersistenceDefaults as
+		| StoreState
+		| undefined;
 
 	// Use PHP defaults if available, otherwise fallback to hardcoded defaults
-	return defaults || {
-		secondarySidebarVisible: true,
-		primarySidebarWidth: '300px',
-		secondarySidebarWidth: '350px',
-		listViewHeight: '50%',
-	};
+	return (
+		defaults || {
+			secondarySidebarVisible: true,
+			primarySidebarWidth: '300px',
+			secondarySidebarWidth: '350px',
+			listViewHeight: '50%',
+		}
+	);
 }
 
 /**
@@ -38,16 +42,18 @@ function getInitialState(): StoreState {
 
 	// Check for preloaded data synchronously
 	const preloadedData = (window as any).blockeraEditorPersistenceData as
-		| StoreState & { _modified?: string }
+		| (StoreState & { _modified?: string })
 		| undefined;
 
 	// Also check localStorage as fallback (in case preloaded data is stale)
 	// Use user-specific key to avoid conflicts when multiple users share the same browser
-	const userId = (window as any).blockeraEditorPersistenceUserId as number | undefined;
+	const userId = (window as any).blockeraEditorPersistenceUserId as
+		| number
+		| undefined;
 	const localStorageKey = userId
 		? `BLOCKERA_EDITOR_PERSISTENCE_RESTORE_${userId}`
 		: 'BLOCKERA_EDITOR_PERSISTENCE_RESTORE';
-	let localData: StoreState & { _modified?: string } | null = null;
+	let localData: (StoreState & { _modified?: string }) | null = null;
 	try {
 		const stored = localStorage.getItem(localStorageKey);
 		if (stored) {
@@ -58,12 +64,20 @@ function getInitialState(): StoreState {
 	}
 
 	// Compare timestamps to determine which is more recent
-	const preloadedTimestamp = preloadedData?._modified ? Date.parse(preloadedData._modified) : 0;
-	const localTimestamp = localData?._modified ? Date.parse(localData._modified) : 0;
+	const preloadedTimestamp = preloadedData?._modified
+		? Date.parse(preloadedData._modified)
+		: 0;
+	const localTimestamp = localData?._modified
+		? Date.parse(localData._modified)
+		: 0;
 
 	// Prefer the most recent data source
-	let selectedData: StoreState & { _modified?: string } | undefined;
-	if (localTimestamp > preloadedTimestamp && localData && Object.keys(localData).length > 0) {
+	let selectedData: (StoreState & { _modified?: string }) | undefined;
+	if (
+		localTimestamp > preloadedTimestamp &&
+		localData &&
+		Object.keys(localData).length > 0
+	) {
 		selectedData = localData;
 	} else if (preloadedData && Object.keys(preloadedData).length > 0) {
 		selectedData = preloadedData;
@@ -98,7 +112,11 @@ type StoreAction =
 	| { type: 'SET_PRIMARY_SIDEBAR_WIDTH'; width: string }
 	| { type: 'SET_SECONDARY_SIDEBAR_WIDTH'; width: string }
 	| { type: 'SET_LIST_VIEW_HEIGHT'; height: string }
-	| { type: 'SET_PERSISTENCE_LAYER'; persistenceLayer: PersistenceLayer<StoreState>; persistedData: StoreState & { _modified?: string } };
+	| {
+			type: 'SET_PERSISTENCE_LAYER';
+			persistenceLayer: PersistenceLayer<StoreState>;
+			persistedData: StoreState & { _modified?: string };
+	  };
 
 /**
  * Base reducer for the editor store.
@@ -115,7 +133,8 @@ function baseReducer(
 		case 'SET_SECONDARY_SIDEBAR_VISIBLE':
 			return {
 				...state,
-				secondarySidebarVisible: action.visible !== undefined ? action.visible : true,
+				secondarySidebarVisible:
+					action.visible !== undefined ? action.visible : true,
 			};
 		case 'TOGGLE_SECONDARY_SIDEBAR':
 			return {
@@ -161,7 +180,9 @@ let persistenceLayer: PersistenceLayer<StoreState> | null = null;
 /**
  * Sets the persistence layer (called during initialization).
  */
-export function setPersistenceLayerReference(layer: PersistenceLayer<StoreState> | null): void {
+export function setPersistenceLayerReference(
+	layer: PersistenceLayer<StoreState> | null
+): void {
 	persistenceLayer = layer;
 }
 
@@ -175,7 +196,6 @@ export function setPersistenceLayerReference(layer: PersistenceLayer<StoreState>
 function withPersistenceLayer(
 	reducer: typeof baseReducer
 ): (state: StoreState | undefined, action: StoreAction) => StoreState {
-
 	return (state: StoreState | undefined, action: StoreAction): StoreState => {
 		// Always read from module-level variable (not closure variable)
 		// Read fresh value each time (don't cache in closure)

@@ -67,7 +67,7 @@ export interface TabContextMenuProps {
  * Copy text to clipboard with fallback
  *
  * @param text - Text to copy
- * @returns True if successful
+ * @return True if successful
  */
 async function copyToClipboard(text: string): Promise<boolean> {
 	if (!text) {
@@ -140,7 +140,8 @@ export default function TabContextMenu({
 	const sortedTabs = sortTabsByPinned(tabs);
 	const targetIndex = sortedTabs.findIndex((t) => t.key === tab?.key);
 	// Check if there are any unpinned (closable) tabs to the right
-	const tabsToRight = targetIndex !== -1 ? sortedTabs.slice(targetIndex + 1) : [];
+	const tabsToRight =
+		targetIndex !== -1 ? sortedTabs.slice(targetIndex + 1) : [];
 	const hasTabsToRight = tabsToRight.some((t) => !t.isPinned);
 
 	// Calculate if there are other tabs (excluding pinned tabs and current tab)
@@ -216,7 +217,9 @@ export default function TabContextMenu({
 		}, 0);
 	};
 
-	const handleCopyEditorLink = async (e?: React.MouseEvent): Promise<void> => {
+	const handleCopyEditorLink = async (
+		e?: React.MouseEvent
+	): Promise<void> => {
 		e?.preventDefault?.();
 		e?.stopPropagation?.();
 		if (editorUrl) {
@@ -260,7 +263,9 @@ export default function TabContextMenu({
 	};
 
 	// Check if tab is renamed
-	const isRenamed = Boolean(tab?.customTitle && tab.customTitle.trim() !== '');
+	const isRenamed = Boolean(
+		tab?.customTitle && tab.customTitle.trim() !== ''
+	);
 
 	// Determine anchor - use element reference if available, otherwise undefined
 	const anchor = position?.element;
@@ -277,7 +282,7 @@ export default function TabContextMenu({
 				<MenuItem
 					onClick={handleClose}
 					disabled={!canClose}
-					shortcut={canClose ? undefined : isPinned ? 'Pinned' : undefined}
+					shortcut={!canClose && isPinned ? 'Pinned' : undefined}
 					tabIndex={canClose ? undefined : -1}
 				>
 					Close
@@ -355,4 +360,3 @@ export default function TabContextMenu({
 		</Popover>
 	);
 }
-

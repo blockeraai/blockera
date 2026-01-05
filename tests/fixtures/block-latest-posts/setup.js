@@ -1,12 +1,15 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const {
+	editPost,
+} = require('@blockera/dev-playwright/js/utils/site-navigation');
 const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-latest-posts test
  * Creates posts and edits the last one
@@ -15,13 +18,14 @@ const path = require('path');
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	const dataPath = path.join(__dirname, 'data.json');
 	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 
 	// Step 1: Create all posts sequentially before running tests
 	let lastPostId = null;
-	
+
 	for (let i = 0; i < data.posts.length; i++) {
 		const postData = data.posts[i];
 		const {

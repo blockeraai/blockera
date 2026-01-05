@@ -21,7 +21,7 @@ export { default as Slot } from './components/Slot';
  * Register this with WordPress plugins API.
  * Automatically creates slots for all entries in SLOTS_CONFIG.
  *
- * @returns The slot components wrapped in provider.
+ * @return The slot components wrapped in provider.
  */
 export function BlockeraSlots(): ReactNode {
 	return (

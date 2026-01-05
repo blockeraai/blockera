@@ -29,7 +29,13 @@
  * WordPress dependencies
  */
 import { useSelect, useDispatch, resolveSelect } from '@wordpress/data';
-import { useCallback, useMemo, useRef, useEffect, useState } from '@wordpress/element';
+import {
+	useCallback,
+	useMemo,
+	useRef,
+	useEffect,
+	useState,
+} from '@wordpress/element';
 import { store as coreStore } from '@wordpress/core-data';
 import { store as editorStore } from '@wordpress/editor';
 import type { Post, PostStatus, PostTypeConfig } from '@wordpress/core-data';
@@ -51,7 +57,6 @@ interface EntityRecordWithTitle {
 	link?: string;
 	[key: string]: unknown;
 }
-
 
 /**
  * Return type for useEntity hook.
@@ -83,7 +88,8 @@ export interface UseEntityReturn {
 	isSiteEditorType: boolean;
 	/** Admin URL to edit this entity. */
 	editorUrl: string | null;
-	/** Frontend URL to view/preview this entity.
+	/**
+	 * Frontend URL to view/preview this entity.
 	 * - Regular posts/pages: uses the entity's permalink
 	 * - wp_template: generates appropriate URL based on template slug (e.g., search, 404, category)
 	 * - Other site editor types (parts, nav, blocks): null (not directly previewable)
@@ -106,13 +112,12 @@ export interface UseEntityReturn {
  *
  * @param postType - Post type (e.g., 'post', 'page', 'wp_template').
  * @param postId - Post ID.
- * @returns Flat object with entity data, state flags, URLs, and actions.
+ * @return Flat object with entity data, state flags, URLs, and actions.
  */
 export function useEntity(
 	postType: string | null | undefined,
 	postId: string | number | null | undefined
 ): UseEntityReturn {
-
 	/*
 	 * Main selector for all entity data.
 	 *
@@ -178,7 +183,10 @@ export function useEntity(
 
 			// Get resolution state
 			const selectorArgs = ['postType', postType, postId] as const;
-			const isLoading = coreSelect.isResolving('getEntityRecord', selectorArgs);
+			const isLoading = coreSelect.isResolving(
+				'getEntityRecord',
+				selectorArgs
+			);
 			const hasResolved = coreSelect.hasFinishedResolution(
 				'getEntityRecord',
 				selectorArgs
@@ -194,17 +202,35 @@ export function useEntity(
 			// If this is the current document, get data from editor store first
 			// (includes real-time unsaved changes)
 			if (isCurrentDocument) {
-				title = editorSelect.getEditedPostAttribute('title') as string | undefined ?? null;
-				status = editorSelect.getEditedPostAttribute('status') as string | undefined ?? null;
-				slug = editorSelect.getEditedPostAttribute('slug') as string | undefined ?? null;
-				link = editorSelect.getCurrentPostAttribute('link') as string | undefined ?? null;
+				title =
+					(editorSelect.getEditedPostAttribute('title') as
+						| string
+						| undefined) ?? null;
+				status =
+					(editorSelect.getEditedPostAttribute('status') as
+						| string
+						| undefined) ?? null;
+				slug =
+					(editorSelect.getEditedPostAttribute('slug') as
+						| string
+						| undefined) ?? null;
+				link =
+					(editorSelect.getCurrentPostAttribute('link') as
+						| string
+						| undefined) ?? null;
 
 				// Fallback to current post object
 				if (!title || !status || !slug) {
-					const currentPost = editorSelect.getCurrentPost() as EntityRecordWithTitle | undefined;
+					const currentPost = editorSelect.getCurrentPost() as
+						| EntityRecordWithTitle
+						| undefined;
 					if (currentPost) {
 						const postTitle = currentPost.title;
-						title = title ?? (typeof postTitle === 'string' ? postTitle : postTitle?.rendered ?? null);
+						title =
+							title ??
+							(typeof postTitle === 'string'
+								? postTitle
+								: postTitle?.rendered ?? null);
 						status = status ?? currentPost.status ?? null;
 						slug = slug ?? currentPost.slug ?? null;
 						link = link ?? currentPost.link ?? null;
@@ -271,7 +297,9 @@ export function useEntity(
 			let isViewable = false;
 
 			// Check if post type is viewable
-			const postTypeObj = coreSelect.getPostType(postType) as PostTypeConfig | undefined;
+			const postTypeObj = coreSelect.getPostType(postType) as
+				| PostTypeConfig
+				| undefined;
 			isViewable = postTypeObj?.viewable ?? false;
 
 			// For wp_template, consider it "viewable" for preview purposes
@@ -333,6 +361,7 @@ export function useEntity(
 	const recordId = rawEntityData.record?.id ?? null;
 
 	// Update stable entity data only when meaningful values change
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		const prev = previousEntityDataStableRef.current;
 		const curr = rawEntityData;
@@ -446,7 +475,7 @@ export function useEntity(
 	 * If not dirty, returns the current viewUrl directly.
 	 * Only works for the current document.
 	 *
-	 * @returns The view/preview URL, or null if not available.
+	 * @return The view/preview URL, or null if not available.
 	 */
 	const getPreviewUrl = useCallback(async (): Promise<string | null> => {
 		// For site editor templates, __unstableSaveForPreview doesn't work
@@ -472,7 +501,7 @@ export function useEntity(
 	 * Prefetch this entity to ensure it's loaded.
 	 * Returns a promise that resolves with the entity record when loaded.
 	 *
-	 * @returns Promise resolving to entity record or null.
+	 * @return Promise resolving to entity record or null.
 	 */
 	const prefetchEntity = useCallback(async (): Promise<Post | null> => {
 		if (!postType || !postId) {
@@ -545,4 +574,3 @@ export function useEntity(
 		]
 	);
 }
-

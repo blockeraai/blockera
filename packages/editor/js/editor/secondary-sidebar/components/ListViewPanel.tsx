@@ -6,21 +6,37 @@ import {
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { ESCAPE, displayShortcut, isAppleOS, rawShortcut } from '@wordpress/keycodes';
+import {
+	ESCAPE,
+	displayShortcut,
+	isAppleOS,
+	rawShortcut,
+} from '@wordpress/keycodes';
 import { store as editorStore } from '@wordpress/editor';
-import { useFocusOnMount, useMergeRefs, useKeyboardShortcut } from '@wordpress/compose';
+import {
+	useFocusOnMount,
+	useMergeRefs,
+	useKeyboardShortcut,
+} from '@wordpress/compose';
 import { focus } from '@wordpress/dom';
 import { __, _x } from '@wordpress/i18n';
-import { useShortcut, store as keyboardShortcutsStore } from '@wordpress/keyboard-shortcuts';
+import {
+	useShortcut,
+	store as keyboardShortcutsStore,
+} from '@wordpress/keyboard-shortcuts';
 import { Button, __experimentalText as Text } from '@wordpress/components';
 import { useCallback, useRef, useState, useEffect } from '@wordpress/element';
-
 
 /**
  * Expand all icon SVG component.
  */
 const ExpandAllIcon = () => (
-	<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		xmlns="http://www.w3.org/2000/svg"
+	>
 		<path d="M17 15.0714L12 19L7 15.0714L7.81818 14L12 17.2143L16.0909 14L17 15.0714Z" />
 		<path d="M7 8.92857L12 5L17 8.92857L16.1818 10L12 6.78571L7.90909 10L7 8.92857Z" />
 	</svg>
@@ -30,7 +46,12 @@ const ExpandAllIcon = () => (
  * Collapse all icon SVG component.
  */
 const CollapseAllIcon = () => (
-	<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		xmlns="http://www.w3.org/2000/svg"
+	>
 		<path d="M7 16.9286L12 13L17 16.9286L16.1818 18L12 14.7857L7.90909 18L7 16.9286Z" />
 		<path d="M17 7.07143L12 11L7 7.07143L7.81818 6L12 9.21429L16.0909 6L17 7.07143Z" />
 	</svg>
@@ -40,7 +61,12 @@ const CollapseAllIcon = () => (
  * Collapse all others icon SVG component.
  */
 const CollapseAllOthersIcon = () => (
-	<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		width="24"
+		height="24"
+		viewBox="0 0 24 24"
+		xmlns="http://www.w3.org/2000/svg"
+	>
 		<path d="M7 18.9286L12 15L17 18.9286L16.1818 20L12 16.7857L7.90909 20L7 18.9286Z" />
 		<path d="M17 5.07143L12 9L7 5.07143L7.81818 4L12 7.21429L16.0909 4L17 5.07143Z" />
 		<path d="M7 11.3499L11.9805 11.35L17 11.3499L17 12.6497L11.9805 12.6499L7 12.6497L7 11.3499Z" />
@@ -58,7 +84,7 @@ function ListViewOutline() {
 		<div className="editor-list-view-sidebar__outline">
 			{/* Placeholder for outline content - can be enhanced later */}
 			<div>
-				<Text>{__('Document Outline')}</Text>
+				<Text>{__('Document Outline', 'blockera')}</Text>
 			</div>
 		</div>
 	);
@@ -68,52 +94,47 @@ function ListViewOutline() {
  * List view panel component that displays tabs for list view and outline.
  */
 export default function ListViewPanel() {
-	// Early return if public API is not available (must be before hooks)
-	if (!ListView) {
-		return null;
-	}
-
+	// All hooks must be called before any conditional returns
 	// List view sidebar logic
 	const { setIsListViewOpened } = useDispatch(editorStore) as any;
 	const { registerShortcut } = useDispatch(keyboardShortcutsStore);
 	const { clearSelectedBlock } = useDispatch(blockEditorStore);
 
 	// Get selected block ID reactively
-	const selectedBlockId = useSelect(
-		(select) => {
-			const blockEditorSelect = select(blockEditorStore) as any;
-			return blockEditorSelect.getSelectedBlockClientId?.() || null;
-		},
-		[]
-	);
+	const selectedBlockId = useSelect((select) => {
+		const blockEditorSelect = select(blockEditorStore) as any;
+		return blockEditorSelect.getSelectedBlockClientId?.() || null;
+	}, []);
 
 	// Get block navigation selectors
-	const blockEditorSelectors = useSelect(
-		(select) => {
-			const blockEditorSelect = select(blockEditorStore) as any;
+	const blockEditorSelectors = useSelect((select) => {
+		const blockEditorSelect = select(blockEditorStore) as any;
 
-			return {
-				getSelectedBlockClientId: () => blockEditorSelect.getSelectedBlockClientId?.() || null,
-				getPreviousBlockClientId: (clientId: string) => blockEditorSelect.getPreviousBlockClientId?.(clientId) || null,
-				getNextBlockClientId: (clientId: string) => blockEditorSelect.getNextBlockClientId?.(clientId) || null,
-				getBlockParents: (clientId: string, ascending: boolean = false) => blockEditorSelect.getBlockParents?.(clientId, ascending) || [],
-				getBlock: (clientId: string) => blockEditorSelect.getBlock?.(clientId) || null,
-				getBlocks: (rootClientId: string | null) => blockEditorSelect.getBlocks?.(rootClientId) || [],
-			};
-		},
-		[]
-	);
+		return {
+			getSelectedBlockClientId: () =>
+				blockEditorSelect.getSelectedBlockClientId?.() || null,
+			getPreviousBlockClientId: (clientId: string) =>
+				blockEditorSelect.getPreviousBlockClientId?.(clientId) || null,
+			getNextBlockClientId: (clientId: string) =>
+				blockEditorSelect.getNextBlockClientId?.(clientId) || null,
+			getBlockParents: (clientId: string, ascending: boolean = false) =>
+				blockEditorSelect.getBlockParents?.(clientId, ascending) || [],
+			getBlock: (clientId: string) =>
+				blockEditorSelect.getBlock?.(clientId) || null,
+			getBlocks: (rootClientId: string | null) =>
+				blockEditorSelect.getBlocks?.(rootClientId) || [],
+		};
+	}, []);
 
-	const getListViewToggleRef = useSelect(
-		(select) => {
-			const editorSelect = select(editorStore) as any;
-			return editorSelect.getListViewToggleRef?.() || { current: null };
-		},
-		[]
-	);
+	const getListViewToggleRef = useSelect((select) => {
+		const editorSelect = select(editorStore) as any;
+		return editorSelect.getListViewToggleRef?.() || { current: null };
+	}, []);
 
 	const focusOnMountRef = useFocusOnMount('firstElement');
-	const [dropZoneElement, setDropZoneElement] = useState<HTMLElement | null>(null);
+	const [dropZoneElement, setDropZoneElement] = useState<HTMLElement | null>(
+		null
+	);
 	const [tab, setTab] = useState('list-view');
 
 	const sidebarRef = useRef<HTMLDivElement>(null);
@@ -186,9 +207,10 @@ export default function ListViewPanel() {
 				return;
 			}
 
-			const collapsedExpanders = listViewContentRef.current.querySelectorAll(
-				'a[aria-expanded="false"] > [data-testid="list-view-expander"]'
-			) as NodeListOf<HTMLButtonElement>;
+			const collapsedExpanders =
+				listViewContentRef.current.querySelectorAll(
+					'a[aria-expanded="false"] > [data-testid="list-view-expander"]'
+				) as NodeListOf<HTMLButtonElement>;
 
 			if (collapsedExpanders.length === 0) {
 				// No more collapsed items, we're done
@@ -215,9 +237,10 @@ export default function ListViewPanel() {
 		if (tab !== 'list-view' || !listViewContentRef.current) return;
 
 		// Check if there's a selected block
-		const selectedBlockId = blockEditorSelectors.getSelectedBlockClientId();
+		const currentSelectedBlockId =
+			blockEditorSelectors.getSelectedBlockClientId();
 
-		if (selectedBlockId) {
+		if (currentSelectedBlockId) {
 			// Trigger the "Collapse all other items" behavior
 			// by simulating the Alt+L keyboard event on the selected block's row.
 			// The list view's onKeyDown handler uses isMatch to detect this shortcut and will:
@@ -233,7 +256,7 @@ export default function ListViewPanel() {
 				// The onKeyDown handler is attached to individual ListViewLeaf components (TreeGridRow)
 				// We need to find the row that corresponds to the selected block
 				const selectedRow = listViewContentRef.current?.querySelector(
-					`[data-block="${selectedBlockId}"]`
+					`[data-block="${currentSelectedBlockId}"]`
 				) as HTMLElement | null;
 
 				// Use the selected row if found, otherwise use the tree grid
@@ -265,8 +288,9 @@ export default function ListViewPanel() {
 		if (tab !== 'list-view' || !listViewContentRef.current) return;
 
 		// Deselect the active block if any is selected
-		const selectedBlockId = blockEditorSelectors.getSelectedBlockClientId();
-		if (selectedBlockId) {
+		const currentSelectedBlockId =
+			blockEditorSelectors.getSelectedBlockClientId();
+		if (currentSelectedBlockId) {
 			clearSelectedBlock();
 		}
 
@@ -276,9 +300,11 @@ export default function ListViewPanel() {
 		) as NodeListOf<HTMLButtonElement>;
 
 		// Click in reverse order to avoid issues with DOM changes during collapse
-		Array.from(expandedExpanders).reverse().forEach((button) => {
-			button.click();
-		});
+		Array.from(expandedExpanders)
+			.reverse()
+			.forEach((button) => {
+				button.click();
+			});
 	}, [tab, blockEditorSelectors, clearSelectedBlock]);
 
 	// Register keyboard shortcuts in the shortcuts store so they appear in the shortcuts modal
@@ -287,7 +313,7 @@ export default function ListViewPanel() {
 		registerShortcut({
 			name: 'blockera/list-view/expand-all',
 			category: 'blockera',
-			description: __('Expand all blocks in the list view.'),
+			description: __('Expand all blocks in the list view.', 'blockera'),
 			keyCombination: {
 				modifier: 'primaryAlt',
 				character: ']',
@@ -298,7 +324,10 @@ export default function ListViewPanel() {
 		registerShortcut({
 			name: 'blockera/list-view/collapse-all',
 			category: 'blockera',
-			description: __('Collapse all blocks in the list view.'),
+			description: __(
+				'Collapse all blocks in the list view.',
+				'blockera'
+			),
 			keyCombination: {
 				modifier: 'primaryAlt',
 				character: '[',
@@ -309,13 +338,15 @@ export default function ListViewPanel() {
 		registerShortcut({
 			name: 'blockera/list-view/collapse-all-others',
 			category: 'blockera',
-			description: __('Collapse all other blocks in the list view.'),
+			description: __(
+				'Collapse all other blocks in the list view.',
+				'blockera'
+			),
 			keyCombination: {
 				modifier: 'alt',
 				character: 'l',
 			},
 		});
-
 	}, [registerShortcut]);
 
 	// Use keyboard shortcuts for actual functionality
@@ -329,6 +360,11 @@ export default function ListViewPanel() {
 		bindGlobal: true,
 	});
 
+	// Early return if public API is not available (after all hooks)
+	if (!ListView) {
+		return null;
+	}
+
 	return (
 		<div
 			className="blockera-combined-sidebar__list-view"
@@ -341,10 +377,12 @@ export default function ListViewPanel() {
 						<Button
 							isPressed={tab === 'list-view'}
 							onClick={() => setTab('list-view')}
-							variant={tab === 'list-view' ? 'primary' : 'tertiary'}
+							variant={
+								tab === 'list-view' ? 'primary' : 'tertiary'
+							}
 							className="blockera-tabbed-sidebar__tab"
 						>
-							{_x('List View', 'Post overview')}
+							{_x('List View', 'Post overview', 'blockera')}
 						</Button>
 						<Button
 							isPressed={tab === 'outline'}
@@ -352,7 +390,7 @@ export default function ListViewPanel() {
 							variant={tab === 'outline' ? 'primary' : 'tertiary'}
 							className="blockera-tabbed-sidebar__tab"
 						>
-							{_x('Outline', 'Post overview')}
+							{_x('Outline', 'Post overview', 'blockera')}
 						</Button>
 					</div>
 
@@ -363,7 +401,14 @@ export default function ListViewPanel() {
 								size="small"
 								onClick={handleCollapseAllOthers}
 								icon={CollapseAllOthersIcon}
-								label={__('Collapse all others open items but keep current block expanded') + ' ' + displayShortcut.alt('l')}
+								label={
+									__(
+										'Collapse all others open items but keep current block expanded',
+										'blockera'
+									) +
+									' ' +
+									displayShortcut.alt('l')
+								}
 								disabled={!selectedBlockId}
 							/>
 
@@ -372,7 +417,11 @@ export default function ListViewPanel() {
 								size="small"
 								onClick={handleCollapseAll}
 								icon={CollapseAllIcon}
-								label={__('Collapse all') + ' ' + displayShortcut.primaryAlt('[')}
+								label={
+									__('Collapse all', 'blockera') +
+									' ' +
+									displayShortcut.primaryAlt('[')
+								}
 							/>
 
 							<Button
@@ -380,7 +429,11 @@ export default function ListViewPanel() {
 								size="small"
 								onClick={handleExpandAll}
 								icon={ExpandAllIcon}
-								label={__('Expand all') + ' ' + displayShortcut.primaryAlt(']')}
+								label={
+									__('Expand all', 'blockera') +
+									' ' +
+									displayShortcut.primaryAlt(']')
+								}
 							/>
 						</div>
 					)}
@@ -388,7 +441,10 @@ export default function ListViewPanel() {
 
 				<div className="blockera-tabbed-sidebar__content">
 					{tab === 'list-view' && (
-						<div className="editor-list-view-sidebar__list-view-container" ref={listViewContainerRef}>
+						<div
+							className="editor-list-view-sidebar__list-view-container"
+							ref={listViewContainerRef}
+						>
 							<div
 								className="editor-list-view-sidebar__list-view-panel-content"
 								ref={listViewContentRef}

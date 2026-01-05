@@ -1,9 +1,13 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { createPost, appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
+const {
+	createPost,
+	appendBlocks,
+} = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-site-logo test
  * Uploads logo image and sets it as custom logo
@@ -12,6 +16,7 @@ const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
  * @param {string} sectionContent - The section content HTML (not used).
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	// Get the path to the logo image
 	// wpCli runs from WordPress root inside Docker container
@@ -32,9 +37,7 @@ async function setup(page, sectionContent) {
 	const attachmentId = result.stdout.trim();
 
 	if (!attachmentId || isNaN(parseInt(attachmentId, 10))) {
-		throw new Error(
-			`Failed to upload logo image. Output: ${attachmentId}`
-		);
+		throw new Error(`Failed to upload logo image. Output: ${attachmentId}`);
 	}
 
 	// Step 2: Set the attachment as custom logo

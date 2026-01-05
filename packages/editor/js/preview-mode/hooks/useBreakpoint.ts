@@ -46,14 +46,20 @@ interface BlockeraEditorSelect {
  * Hook to subscribe to the current breakpoint from Blockera's data stores.
  * Automatically re-renders the component when the breakpoint changes in the editor.
  *
- * @returns The current breakpoint data.
+ * @return The current breakpoint data.
  */
 export function useBreakpoint(): UseBreakpointReturn {
 	return useSelect((select) => {
-		const extensionsSelect = select('blockera/extensions') as BlockeraExtensionsSelect | undefined;
-		const editorSelect = select('blockera/editor') as BlockeraEditorSelect | undefined;
+		const extensionsSelect = select('blockera/extensions') as
+			| BlockeraExtensionsSelect
+			| undefined;
+		const editorSelect = select('blockera/editor') as
+			| BlockeraEditorSelect
+			| undefined;
 
-		const breakpointId = extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ?? 'desktop';
+		const breakpointId =
+			extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ??
+			'desktop';
 		const breakpoints = editorSelect?.getBreakpoints?.() ?? {};
 		const breakpointInfo: BreakpointInfo = breakpoints[breakpointId] ?? {};
 
@@ -74,4 +80,3 @@ export function useBreakpoint(): UseBreakpointReturn {
 		};
 	}, []);
 }
-

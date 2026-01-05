@@ -37,27 +37,42 @@ interface EditorSettings {
  * which happens when getDefaultRenderingMode returns undefined (while waiting for post type
  * resolution).
  *
- * @returns Function to switch to a document: (postType, postId) => void
+ * @return Function to switch to a document: (postType, postId) => void
  */
 export function useSwitchDocument(): (
 	postType: string,
 	postId: string | number
 ) => Promise<void> {
 	const onNavigateToEntityRecord = useSelect((select) => {
-		const editorSettings = (select(editorStore) as { getEditorSettings: () => EditorSettings }).getEditorSettings();
+		const editorSettings = (
+			select(editorStore) as { getEditorSettings: () => EditorSettings }
+		).getEditorSettings();
 		return editorSettings?.onNavigateToEntityRecord;
 	}, []);
 
 	const currentPostType = useSelect(
-		(select) => (select(editorStore) as { getCurrentPostType: () => string | undefined }).getCurrentPostType(),
+		(select) =>
+			(
+				select(editorStore) as {
+					getCurrentPostType: () => string | undefined;
+				}
+			).getCurrentPostType(),
 		[]
 	);
 
 	// Check if post type config is already resolved
 	const hasPostTypeResolved = useSelect(
-		(select) => (postType: string): boolean => {
-			return (select(coreStore) as { hasFinishedResolution: (selector: string, args: string[]) => boolean }).hasFinishedResolution('getPostType', [postType]);
-		},
+		(select) =>
+			(postType: string): boolean => {
+				return (
+					select(coreStore) as {
+						hasFinishedResolution: (
+							selector: string,
+							args: string[]
+						) => boolean;
+					}
+				).hasFinishedResolution('getPostType', [postType]);
+			},
 		[]
 	);
 
@@ -73,7 +88,9 @@ export function useSwitchDocument(): (
 			// This is critical to prevent editor unmount/remount when getDefaultRenderingMode
 			// returns undefined while waiting for post type resolution
 			try {
-				const resolved = resolveSelect(coreStore) as { getPostType: (postType: string) => Promise<unknown> };
+				const resolved = resolveSelect(coreStore) as {
+					getPostType: (postType: string) => Promise<unknown>;
+				};
 				await resolved.getPostType(postType);
 			} catch {
 				// Silently fail - post type might not exist
@@ -120,7 +137,7 @@ export function useSwitchDocument(): (
 						targetContext === 'post'
 							? urlObj.searchParams.get('post')
 							: urlObj.searchParams.get('postType') &&
-								urlObj.searchParams.get('postId');
+							  urlObj.searchParams.get('postId');
 
 					if (shouldCheck) {
 						setTimeout(() => {
@@ -130,19 +147,26 @@ export function useSwitchDocument(): (
 							// Check if URL contains the expected parameters
 							let urlMatches = false;
 							if (targetContext === 'post') {
-								const expectedPostId = urlObj.searchParams.get('post');
+								const expectedPostId =
+									urlObj.searchParams.get('post');
 								const currentPostId =
 									currentUrlObjAfter.searchParams.get('post');
 								urlMatches =
 									currentUrl.includes('post.php') &&
 									currentPostId === expectedPostId;
 							} else {
-								const expectedPostType = urlObj.searchParams.get('postType');
-								const expectedPostIdParam = urlObj.searchParams.get('postId');
+								const expectedPostType =
+									urlObj.searchParams.get('postType');
+								const expectedPostIdParam =
+									urlObj.searchParams.get('postId');
 								const currentPostTypeParam =
-									currentUrlObjAfter.searchParams.get('postType');
+									currentUrlObjAfter.searchParams.get(
+										'postType'
+									);
 								const currentPostIdParam =
-									currentUrlObjAfter.searchParams.get('postId');
+									currentUrlObjAfter.searchParams.get(
+										'postId'
+									);
 								urlMatches =
 									currentUrl.includes('site-editor.php') &&
 									currentPostTypeParam === expectedPostType &&
@@ -169,4 +193,3 @@ export function useSwitchDocument(): (
 		window.location.assign(editorUrl);
 	};
 }
-

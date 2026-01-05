@@ -1,12 +1,15 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const {
+	editPost,
+} = require('@blockera/dev-playwright/js/utils/site-navigation');
 const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-footnotes test
  * Creates a post with footnotes meta and edits it
@@ -15,6 +18,7 @@ const path = require('path');
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	const dataPath = path.join(__dirname, 'data.json');
 	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
@@ -37,9 +41,7 @@ async function setup(page, sectionContent) {
 	const postId = match ? parseInt(match[1], 10) : null;
 
 	if (!postId) {
-		throw new Error(
-			`Failed to get post ID from output: ${result.stdout}`
-		);
+		throw new Error(`Failed to get post ID from output: ${result.stdout}`);
 	}
 
 	// Step 2: Add custom field (meta) to the post

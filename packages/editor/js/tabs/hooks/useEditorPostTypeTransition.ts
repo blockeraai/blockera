@@ -33,10 +33,18 @@ export function useEditorPostTypeTransition(
 	};
 	const { setIsListViewOpened, editPost } = useDispatch(editorStore) as {
 		setIsListViewOpened: (isOpen: boolean) => void;
-		editPost: (edits: Record<string, unknown>, options?: { undoIgnore?: boolean }) => void;
+		editPost: (
+			edits: Record<string, unknown>,
+			options?: { undoIgnore?: boolean }
+		) => void;
 	};
 	const isEditorReady = useSelect(
-		(select) => (select(editorStore) as { __unstableIsEditorReady: () => boolean }).__unstableIsEditorReady(),
+		(select) =>
+			(
+				select(editorStore) as {
+					__unstableIsEditorReady: () => boolean;
+				}
+			).__unstableIsEditorReady(),
 		[]
 	);
 
@@ -97,4 +105,3 @@ export function useEditorPostTypeTransition(
 		editPost,
 	]);
 }
-

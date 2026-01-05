@@ -19,8 +19,12 @@ import ToggleButton from './components/ToggleButton';
  * Uses the slot system to render the sidebar content and controls visibility through CSS.
  */
 export default function SecondarySidebarInjector() {
-	const { setIsInserterOpened, setIsListViewOpened } = useDispatch(editorStore) as any;
-	const { toggleSecondarySidebar, setSecondarySidebarWidth } = useDispatch(blockeraEditorStore) as {
+	const { setIsInserterOpened, setIsListViewOpened } = useDispatch(
+		editorStore
+	) as any;
+	const { toggleSecondarySidebar, setSecondarySidebarWidth } = useDispatch(
+		blockeraEditorStore
+	) as {
 		toggleSecondarySidebar: () => void;
 		setSecondarySidebarWidth: (width: string) => void;
 	};
@@ -28,27 +32,23 @@ export default function SecondarySidebarInjector() {
 	// Cache DOM element references to avoid repeated queries
 	const sidebarContentRef = useRef<HTMLDivElement | null>(null);
 	const defaultSidebarRef = useRef<HTMLElement | null>(null);
-	const closeAnimationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const closeAnimationTimeoutRef = useRef<ReturnType<
+		typeof setTimeout
+	> | null>(null);
 	const isInitialMountRef = useRef(true); // Track if this is the first render/page load
 	const wasContentRenderedRef = useRef(false); // Track if content was ever rendered
 
 	// Get sidebar visibility state from store
-	const isSidebarVisible = useSelect(
-		(select) => {
-			const storeSelect = select(blockeraEditorStore) as any;
-			return storeSelect.isSecondarySidebarVisible();
-		},
-		[]
-	);
+	const isSidebarVisible = useSelect((select) => {
+		const storeSelect = select(blockeraEditorStore) as any;
+		return storeSelect.isSecondarySidebarVisible();
+	}, []);
 
 	// Get secondary sidebar width from store
-	const secondarySidebarWidth = useSelect(
-		(select) => {
-			const storeSelect = select(blockeraEditorStore) as any;
-			return storeSelect.getSecondarySidebarWidth();
-		},
-		[]
-	);
+	const secondarySidebarWidth = useSelect((select) => {
+		const storeSelect = select(blockeraEditorStore) as any;
+		return storeSelect.getSecondarySidebarWidth();
+	}, []);
 
 	// Track initial sidebar state (for determining if we should animate on first open)
 	const initialSidebarVisibleRef = useRef<boolean | null>(null);
@@ -63,7 +63,8 @@ export default function SecondarySidebarInjector() {
 	// Track if SecondarySidebar content should be rendered in DOM
 	// When opening: render immediately to allow animation
 	// When closing: keep rendered until animation completes, then remove
-	const [shouldRenderContent, setShouldRenderContent] = useState(isSidebarVisible);
+	const [shouldRenderContent, setShouldRenderContent] =
+		useState(isSidebarVisible);
 
 	// Track if content was just rendered (for toggle animation)
 	const [isContentJustRendered, setIsContentJustRendered] = useState(false);
@@ -86,7 +87,12 @@ export default function SecondarySidebarInjector() {
 		if (isListViewOpened) {
 			setIsListViewOpened?.(false);
 		}
-	}, [isInserterOpened, isListViewOpened, setIsInserterOpened, setIsListViewOpened]);
+	}, [
+		isInserterOpened,
+		isListViewOpened,
+		setIsInserterOpened,
+		setIsListViewOpened,
+	]);
 
 	// Update CSS variables on body whenever width changes
 	// Body always exists, so this is simple and reliable
@@ -96,7 +102,10 @@ export default function SecondarySidebarInjector() {
 		}
 
 		// Set CSS variable on body (always exists, variables inherit to all children)
-		document.body.style.setProperty('--blockera-secondary-sidebar-width', secondarySidebarWidth);
+		document.body.style.setProperty(
+			'--blockera-secondary-sidebar-width',
+			secondarySidebarWidth
+		);
 	}, [secondarySidebarWidth]);
 
 	// Apply visibility classes to SecondarySidebar content based on state
@@ -144,7 +153,10 @@ export default function SecondarySidebarInjector() {
 
 		// Set CSS variable on body during initialization (body always exists)
 		if (secondarySidebarWidth) {
-			document.body.style.setProperty('--blockera-secondary-sidebar-width', secondarySidebarWidth);
+			document.body.style.setProperty(
+				'--blockera-secondary-sidebar-width',
+				secondarySidebarWidth
+			);
 		}
 
 		// Add class to body for CSS rules (only once)
@@ -191,19 +203,17 @@ export default function SecondarySidebarInjector() {
 			if (!isInitialMount) {
 				wasContentRenderedRef.current = true;
 			}
-		} else {
+		} else if (sidebarContentRef.current) {
 			// Closing: start close animation, then remove content from DOM after animation completes
 			// Visibility classes are applied by the separate effect to trigger animation
-			if (sidebarContentRef.current) {
-				// Wait for animation to complete (1000ms) before removing from DOM
-				closeAnimationTimeoutRef.current = setTimeout(() => {
-					setShouldRenderContent(false);
-					closeAnimationTimeoutRef.current = null;
-				}, 350); // Match CSS transition duration
-			} else {
-				// If content not found, remove immediately
+			// Wait for animation to complete (1000ms) before removing from DOM
+			closeAnimationTimeoutRef.current = setTimeout(() => {
 				setShouldRenderContent(false);
-			}
+				closeAnimationTimeoutRef.current = null;
+			}, 350); // Match CSS transition duration
+		} else {
+			// If content not found, remove immediately
+			setShouldRenderContent(false);
 		}
 
 		// Cleanup: clear timeout on unmount or state change
@@ -224,7 +234,10 @@ export default function SecondarySidebarInjector() {
 		<>
 			{/* Toggle button in header toolbar */}
 			<Fill name="blockera/slots/editor-header-toolbar">
-				<ToggleButton isVisible={isSidebarVisible} onToggle={toggleSecondarySidebar} />
+				<ToggleButton
+					isVisible={isSidebarVisible}
+					onToggle={toggleSecondarySidebar}
+				/>
 			</Fill>
 
 			<Fill name="blockera/slots/editor-secondary-sidebar">
@@ -238,25 +251,35 @@ export default function SecondarySidebarInjector() {
 
 							// Handle toggle open animation when content is mounted
 							// Animate if: (not initial mount OR initial mount but sidebar was closed initially) AND content was just rendered
-							const shouldAnimate = isContentJustRendered && (
-								!isInitialMountRef.current ||
-								(isInitialMountRef.current && !initialSidebarVisibleRef.current)
-							);
+							const shouldAnimate =
+								isContentJustRendered &&
+								(!isInitialMountRef.current ||
+									(isInitialMountRef.current &&
+										!initialSidebarVisibleRef.current));
 							if (el && isSidebarVisible && shouldAnimate) {
 								// Content was just rendered for toggle open - trigger animation
 								requestAnimationFrame(() => {
 									requestAnimationFrame(() => {
 										if (sidebarContentRef.current === el) {
-											sidebarContentRef.current.classList.remove('is-hidden');
-											sidebarContentRef.current.classList.add('is-visible');
+											sidebarContentRef.current.classList.remove(
+												'is-hidden'
+											);
+											sidebarContentRef.current.classList.add(
+												'is-visible'
+											);
 											setIsContentJustRendered(false);
 										}
 									});
 								});
 							}
 						}}
-						className={`blockera-secondary-sidebar-content ${isInitialMountRef.current && isSidebarVisible && initialSidebarVisibleRef.current ? 'is-visible' : 'is-hidden'
-							}`}
+						className={`blockera-secondary-sidebar-content ${
+							isInitialMountRef.current &&
+							isSidebarVisible &&
+							initialSidebarVisibleRef.current
+								? 'is-visible'
+								: 'is-hidden'
+						}`}
 					>
 						{/* Resize handle - only show when sidebar is visible */}
 						{isSidebarVisible && (

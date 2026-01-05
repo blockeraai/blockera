@@ -15,7 +15,11 @@ export {
 	HIDE_ADMIN_BAR_ARG,
 	TEMPLATE_POST_TYPE,
 } from './constants';
-export type { SiteEditorPostType, ParsedTemplateSlug, TemplateSlugType } from './constants';
+export type {
+	SiteEditorPostType,
+	ParsedTemplateSlug,
+	TemplateSlugType,
+} from './constants';
 
 // ============================================================================
 // Pure utility functions (not hooks)
@@ -60,4 +64,3 @@ export {
 export { useDisplayBlockControls } from './use-display-block-controls';
 export { useCalculateCurrentAttributes } from './use-calculate-current-attributes';
 export { useBlockPreviewStyles } from './use-block-preview-styles';
-

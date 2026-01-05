@@ -35,14 +35,25 @@ interface ToggleButtonProps {
 /**
  * Toggle button component for showing/hiding the secondary sidebar.
  */
-export default function ToggleButton({ isVisible, onToggle }: ToggleButtonProps) {
+export default function ToggleButton({
+	isVisible,
+	onToggle,
+}: ToggleButtonProps) {
 	return (
 		<Button
 			icon={<SecondarySidebarIcon />}
 			onClick={onToggle}
 			isPressed={isVisible}
-			label={isVisible ? __('Hide secondary sidebar') : __('Show secondary sidebar')}
-			aria-label={isVisible ? __('Hide secondary sidebar') : __('Show secondary sidebar')}
+			label={
+				isVisible
+					? __('Hide secondary sidebar', 'blockera')
+					: __('Show secondary sidebar', 'blockera')
+			}
+			aria-label={
+				isVisible
+					? __('Hide secondary sidebar', 'blockera')
+					: __('Show secondary sidebar', 'blockera')
+			}
 			className="blockera-secondary-sidebar-toggle"
 			size="compact"
 		/>

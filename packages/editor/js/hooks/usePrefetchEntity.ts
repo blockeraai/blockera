@@ -42,7 +42,7 @@ export type PrefetchEntityFunction = (
  * this hook returns a function that can prefetch ANY entity by passing
  * postType and postId as arguments.
  *
- * @returns Function (postType, postId) => Promise<Post | null>
+ * @return Function (postType, postId) => Promise<Post | null>
  */
 export function usePrefetchEntity(): PrefetchEntityFunction {
 	/**
@@ -53,7 +53,7 @@ export function usePrefetchEntity(): PrefetchEntityFunction {
 	 *
 	 * @param postType - Post type (e.g., 'post', 'page', 'wp_template').
 	 * @param postId - Post ID.
-	 * @returns Promise resolving to entity record or null.
+	 * @return Promise resolving to entity record or null.
 	 */
 	const prefetchEntity = useCallback(
 		async (
@@ -86,4 +86,3 @@ export function usePrefetchEntity(): PrefetchEntityFunction {
 
 	return prefetchEntity;
 }
-

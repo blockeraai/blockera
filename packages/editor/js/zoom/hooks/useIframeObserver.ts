@@ -21,16 +21,14 @@ import type {
  * Detects iframe load events, watches for replacement, and injects height monitoring script.
  *
  * @param options - Hook options.
- * @returns Current iframe and document references.
+ * @return Current iframe and document references.
  */
 export function useIframeObserver({
 	onIframeLoad,
 	onIframeReplace,
 }: UseIframeObserverOptions = {}): UseIframeObserverReturn {
 	const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null);
-	const [iframeDocument, setIframeDocument] = useState<Document | null>(
-		null
-	);
+	const [iframeDocument, setIframeDocument] = useState<Document | null>(null);
 
 	const currentIframeRef = useRef<HTMLIFrameElement | null>(null);
 	const loadHandlerRef = useRef<EventListener | null>(null);

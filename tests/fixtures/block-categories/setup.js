@@ -1,11 +1,15 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { createPost, appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
+const {
+	createPost,
+	appendBlocks,
+} = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-categories test
  * Creates categories, then creates a post
@@ -14,6 +18,7 @@ const path = require('path');
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	const dataPath = path.join(__dirname, 'data.json');
 	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));

@@ -20,9 +20,12 @@ import {
  *
  * @param key - Storage key
  * @param defaultValue - Default value if not stored (default: true)
- * @returns Stored value or default
+ * @return Stored value or default
  */
-function loadPersistenceFromStorage(key: string, defaultValue: boolean = true): boolean {
+function loadPersistenceFromStorage(
+	key: string,
+	defaultValue: boolean = true
+): boolean {
 	try {
 		const stored = localStorage.getItem(key);
 		if (stored !== null) {
@@ -90,26 +93,29 @@ export interface UseTabsPersistenceReturn {
  * and persist across page refreshes.
  * Default: both enabled
  *
- * @returns Persistence state and management functions
+ * @return Persistence state and management functions
  */
 export function useTabsPersistence(): UseTabsPersistenceReturn {
 	const [isPersistenceEnabled, setIsPersistenceEnabled] = useState(() => {
 		return loadPersistenceFromStorage(PERSISTENCE_STORAGE_KEY);
 	});
 
-	const [isRecentlyClosedPersistenceEnabled, setIsRecentlyClosedPersistenceEnabled] =
-		useState(() => {
-			return loadPersistenceFromStorage(RECENTLY_CLOSED_PERSISTENCE_KEY);
-		});
+	const [
+		isRecentlyClosedPersistenceEnabled,
+		setIsRecentlyClosedPersistenceEnabled,
+	] = useState(() => {
+		return loadPersistenceFromStorage(RECENTLY_CLOSED_PERSISTENCE_KEY);
+	});
 
 	const [isTabIconsEnabled, setIsTabIconsEnabled] = useState(() => {
 		return loadPersistenceFromStorage(TAB_ICONS_ENABLED_KEY);
 	});
 
 	// Icon-only pinned tabs: disabled by default
-	const [isIconOnlyPinnedTabsEnabled, setIsIconOnlyPinnedTabsEnabled] = useState(() => {
-		return loadPersistenceFromStorage(ICON_ONLY_PINNED_TABS_KEY, false);
-	});
+	const [isIconOnlyPinnedTabsEnabled, setIsIconOnlyPinnedTabsEnabled] =
+		useState(() => {
+			return loadPersistenceFromStorage(ICON_ONLY_PINNED_TABS_KEY, false);
+		});
 
 	/**
 	 * Toggle tabs persistence setting
@@ -181,4 +187,3 @@ export function useTabsPersistence(): UseTabsPersistenceReturn {
 		toggleIconOnlyPinnedTabs,
 	};
 }
-

@@ -18,17 +18,18 @@ interface FocusPostTitleOptions {
  * This function fails silently if the title element is not found.
  *
  * @param options - Options object
- * @returns Whether focusing was successful
+ * @return Whether focusing was successful
  */
-export async function focusPostTitle(
-	{ maxWait = 2000, interval = 100 }: FocusPostTitleOptions = {}
-): Promise<boolean> {
+export async function focusPostTitle({
+	maxWait = 2000,
+	interval = 100,
+}: FocusPostTitleOptions = {}): Promise<boolean> {
 	const startTime = Date.now();
 
 	/**
 	 * Find the post title element by checking both iframe and main document.
 	 *
-	 * @returns The title element, or null if not found
+	 * @return The title element, or null if not found
 	 */
 	const findTitleElement = (): Element | null => {
 		// The post title element has class "editor-post-title" and role="textbox"
@@ -64,7 +65,7 @@ export async function focusPostTitle(
 	 * Focus on the title element and move cursor to the end.
 	 *
 	 * @param titleElement - The title element to focus
-	 * @returns Whether the operation was successful
+	 * @return Whether the operation was successful
 	 */
 	const focusAndMoveCursorToEnd = (titleElement: Element): boolean => {
 		try {
@@ -138,4 +139,3 @@ export async function focusPostTitle(
 		checkForTitle();
 	});
 }
-

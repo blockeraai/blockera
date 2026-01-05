@@ -10,7 +10,6 @@ import './store-persistence'; // Initialize the store
 import SecondarySidebarInjector from './secondary-sidebar';
 import PrimarySidebarController from './primary-sidebar';
 
-
 /**
  * Plugin configurations for the editor package.
  * Add new plugin configurations here as the package grows.

@@ -16,7 +16,7 @@ const listeners = new Set<CommandBarModeListener>();
 /**
  * Check if we're in command bar mode (add tab mode)
  *
- * @returns True if in command bar mode
+ * @return True if in command bar mode
  */
 export function getIsCommandBarMode(): boolean {
 	return isCommandBarMode;
@@ -38,7 +38,7 @@ export function setCommandBarMode(value: boolean): void {
  * Subscribe to command bar mode changes
  *
  * @param listener - Callback function called when mode changes
- * @returns Unsubscribe function
+ * @return Unsubscribe function
  */
 export function subscribeToCommandBarMode(
 	listener: CommandBarModeListener
@@ -48,4 +48,3 @@ export function subscribeToCommandBarMode(
 		listeners.delete(listener);
 	};
 }
-

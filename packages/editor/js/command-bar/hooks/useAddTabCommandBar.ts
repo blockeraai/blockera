@@ -26,13 +26,16 @@ const ADD_TAB_MODE_CLASS = 'blockera-tabs-add-tab-mode';
  * Gutenberg's command palette currently hardcodes its default placeholder internally, so
  * we override it in a tightly scoped way only for "add tab mode".
  */
-const ADD_TAB_MODE_PLACEHOLDER = __('Search for posts, pages, templates...');
+const ADD_TAB_MODE_PLACEHOLDER = __(
+	'Search for posts, pages, templates…',
+	'blockera'
+);
 
 /**
  * Exception command patterns that should be visible in add tab mode
  * Matching is case-insensitive and uses "contains" logic
  */
-const EXCEPTION_COMMAND_PATTERNS: readonly string[] = [
+const EXCEPTION_COMMAND_PATTERNS = [
 	'back', // Back navigation commands
 	'new post', // Create post commands
 	'new page', // Create page commands
@@ -42,7 +45,7 @@ const EXCEPTION_COMMAND_PATTERNS: readonly string[] = [
  * Check if a command value matches any exception pattern
  *
  * @param value - The data-value attribute of the command item
- * @returns True if the command should be shown as exception
+ * @return True if the command should be shown as exception
  */
 function isExceptionCommand(value: string | null): boolean {
 	if (!value) {
@@ -62,7 +65,7 @@ function isExceptionCommand(value: string | null): boolean {
  * Check if a command should be visible in add tab mode
  *
  * @param value - The data-value attribute of the command item
- * @returns True if the command should be visible
+ * @return True if the command should be visible
  */
 function shouldShowInAddTabMode(value: string | null): boolean {
 	if (!value) {
@@ -132,7 +135,7 @@ function getVisibleItems(): Element[] {
  * Find the next/previous visible item from current selection
  *
  * @param direction - Navigation direction ('up' or 'down')
- * @returns The next visible item or null
+ * @return The next visible item or null
  */
 function findNextVisibleItem(direction: 'up' | 'down'): Element | null {
 	const visibleItems = getVisibleItems();
@@ -161,8 +164,9 @@ function findNextVisibleItem(direction: 'up' | 'down'): Element | null {
 	}
 	// direction === 'up'
 	return (
-		visibleItems[(currentIndex - 1 + visibleItems.length) % visibleItems.length] ??
-		null
+		visibleItems[
+			(currentIndex - 1 + visibleItems.length) % visibleItems.length
+		] ?? null
 	);
 }
 
@@ -229,12 +233,13 @@ export interface UseAddTabCommandBarReturn {
  * 3. Uses MutationObserver to mark commands as they render
  * 4. When command bar closes, removes the class and exits mode
  *
- * @returns Object with openAddTabCommandBar function
+ * @return Object with openAddTabCommandBar function
  */
 export function useAddTabCommandBar(): UseAddTabCommandBarReturn {
 	const { open } = useDispatch(commandsStore) as { open: () => void };
 	const isOpen = useSelect(
-		(select) => (select(commandsStore) as { isOpen: () => boolean }).isOpen(),
+		(select) =>
+			(select(commandsStore) as { isOpen: () => boolean }).isOpen(),
 		[]
 	);
 	const [isInAddTabMode, setIsInAddTabMode] = useState(getIsCommandBarMode());
@@ -323,7 +328,9 @@ export function useAddTabCommandBar(): UseAddTabCommandBarReturn {
 
 		// Setup function to initialize observer and keyboard handler
 		const setup = (): void => {
-			const commandMenu = document.querySelector('.commands-command-menu');
+			const commandMenu = document.querySelector(
+				'.commands-command-menu'
+			);
 			if (!commandMenu) {
 				// Retry if menu not yet rendered
 				requestAnimationFrame(setup);
@@ -401,4 +408,3 @@ export function useAddTabCommandBar(): UseAddTabCommandBarReturn {
 
 	return { openAddTabCommandBar, isInAddTabMode };
 }
-

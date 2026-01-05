@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import {__, sprintf} from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
@@ -13,9 +13,15 @@ import { subCategoryLabels } from './constants';
  * Returns the mapped label if available, otherwise returns the ID formatted as a label.
  *
  * @param subCategoryId - The sub-category ID (e.g., 'tabs', 'preview-mode').
- * @returns The display label for the sub-category.
+ * @return The display label for the sub-category.
  */
 export function getSubCategoryLabel(subCategoryId: string): string {
-	return subCategoryLabels[subCategoryId] ||
-	sprintf(__('%s shortcuts', 'blockera-tabs'), subCategoryId.replace('-', ' '));
+	return (
+		subCategoryLabels[subCategoryId] ||
+		sprintf(
+			/* translators: %s is the sub-category ID. */
+			__('%s shortcuts', 'blockera'),
+			subCategoryId.replace('-', ' ')
+		)
+	);
 }

@@ -14,7 +14,10 @@ import type { Post } from '@wordpress/core-data';
  */
 import { isEditorPage } from '../../utils/isEditorPage';
 import { TAB_COMMAND_MARKER } from '../utils/wrapCommandLoaderHook';
-import type { Command, CommandLoaderResult } from '../utils/wrapCommandLoaderHook';
+import type {
+	Command,
+	CommandLoaderResult,
+} from '../utils/wrapCommandLoaderHook';
 import { focusPostTitle } from '../../utils/focusPostTitle';
 
 // Use entity-edit context to show commands by default in the contextual group
@@ -32,10 +35,7 @@ interface CreateEntityTabActions {
 		title?: string | null
 	) => Promise<void>;
 	switchDocument: (postType: string, postId: number) => void;
-	prefetchEntity: (
-		postType: string,
-		postId: number
-	) => Promise<unknown>;
+	prefetchEntity: (postType: string, postId: number) => Promise<unknown>;
 }
 
 /**
@@ -43,7 +43,7 @@ interface CreateEntityTabActions {
  * Context-based loader - commands show by default when context is active
  *
  * @param tabActions - Tab action functions
- * @returns The command loader hook
+ * @return The command loader hook
  */
 function getCreateEntityCommandsLoader(
 	tabActions: CreateEntityTabActions
@@ -61,7 +61,14 @@ function getCreateEntityCommandsLoader(
 		// Check user permissions
 		const canCreatePost = useSelect(
 			(select) =>
-				(select(coreStore) as { canUser: (action: string, resource: { kind: string; name: string }) => boolean | undefined }).canUser('create', {
+				(
+					select(coreStore) as {
+						canUser: (
+							action: string,
+							resource: { kind: string; name: string }
+						) => boolean | undefined;
+					}
+				).canUser('create', {
 					kind: 'postType',
 					name: 'post',
 				}),
@@ -70,7 +77,14 @@ function getCreateEntityCommandsLoader(
 
 		const canCreatePage = useSelect(
 			(select) =>
-				(select(coreStore) as { canUser: (action: string, resource: { kind: string; name: string }) => boolean | undefined }).canUser('create', {
+				(
+					select(coreStore) as {
+						canUser: (
+							action: string,
+							resource: { kind: string; name: string }
+						) => boolean | undefined;
+					}
+				).canUser('create', {
 					kind: 'postType',
 					name: 'page',
 				}),
@@ -86,8 +100,11 @@ function getCreateEntityCommandsLoader(
 			if (canCreatePost !== false) {
 				result.push({
 					name: 'blockera-tabs/create-new-post',
-					label: __('Add new post'),
-					searchLabel: __('Create new post') + ' ' + TAB_COMMAND_MARKER,
+					label: __('Add new post', 'blockera'),
+					searchLabel:
+						__('Create new post', 'blockera') +
+						' ' +
+						TAB_COMMAND_MARKER,
 					icon: post,
 					callback: async ({ close }) => {
 						if (!isEditorPage()) {
@@ -100,7 +117,7 @@ function getCreateEntityCommandsLoader(
 								'postType',
 								'post',
 								{
-									title: __('Draft Post'),
+									title: __('Draft Post', 'blockera'),
 									status: 'draft',
 									content:
 										'<!-- wp:paragraph -->\n<p>Hello world!</p>\n<!-- /wp:paragraph -->',
@@ -109,9 +126,19 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPost?.id) {
-								await tabActions.addTab('post', newPost.id as number, __('New post'));
-								await tabActions.prefetchEntity('post', newPost.id as number);
-								tabActions.switchDocument('post', newPost.id as number);
+								await tabActions.addTab(
+									'post',
+									newPost.id as number,
+									__('New post', 'blockera')
+								);
+								await tabActions.prefetchEntity(
+									'post',
+									newPost.id as number
+								);
+								tabActions.switchDocument(
+									'post',
+									newPost.id as number
+								);
 
 								// Focus on the title and move cursor to end
 								await focusPostTitle();
@@ -132,8 +159,11 @@ function getCreateEntityCommandsLoader(
 			if (canCreatePage !== false) {
 				result.push({
 					name: 'blockera-tabs/create-new-page',
-					label: __('Add new page'),
-					searchLabel: __('Create new page') + ' ' + TAB_COMMAND_MARKER,
+					label: __('Add new page', 'blockera'),
+					searchLabel:
+						__('Create new page', 'blockera') +
+						' ' +
+						TAB_COMMAND_MARKER,
 					icon: page,
 					callback: async ({ close }) => {
 						if (!isEditorPage()) {
@@ -146,7 +176,7 @@ function getCreateEntityCommandsLoader(
 								'postType',
 								'page',
 								{
-									title: __('Draft Page'),
+									title: __('Draft Page', 'blockera'),
 									status: 'draft',
 									content:
 										'<!-- wp:paragraph -->\n<p>Hello world!</p>\n<!-- /wp:paragraph -->',
@@ -155,9 +185,19 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPage?.id) {
-								await tabActions.addTab('page', newPage.id as number, __('New page'));
-								await tabActions.prefetchEntity('page', newPage.id as number);
-								tabActions.switchDocument('page', newPage.id as number);
+								await tabActions.addTab(
+									'page',
+									newPage.id as number,
+									__('New page', 'blockera')
+								);
+								await tabActions.prefetchEntity(
+									'page',
+									newPage.id as number
+								);
+								tabActions.switchDocument(
+									'page',
+									newPage.id as number
+								);
 
 								// Focus on the title and move cursor to end
 								await focusPostTitle();
@@ -236,4 +276,3 @@ export function useCreateEntityCommands({
 		context: ENTITY_EDIT_CONTEXT,
 	});
 }
-

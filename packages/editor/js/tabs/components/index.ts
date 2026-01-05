@@ -24,4 +24,3 @@ export { default as CloseTabConfirmDialog } from './CloseTabConfirmDialog';
 export type { CloseTabConfirmDialogProps } from './CloseTabConfirmDialog';
 
 export { default as TabsManager } from './TabsManager';
-

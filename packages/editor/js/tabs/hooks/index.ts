@@ -30,4 +30,3 @@ export type {
 	UseTabsLockPollingParams,
 	UseTabsLockPollingReturn,
 } from './useTabsLockPolling';
-
