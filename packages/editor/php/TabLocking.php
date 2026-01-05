@@ -52,6 +52,7 @@ class TabLocking {
 		}
 
 		$this->register_hooks();
+		$this->enqueue_scripts();
 	}
 
 	/**
@@ -62,6 +63,42 @@ class TabLocking {
 		add_action( 'wp_ajax_blockera_tabs_check_post_locks', array( $this, 'check_post_locks' ) );
 		add_action( 'wp_ajax_blockera_tabs_takeover_post_lock', array( $this, 'takeover_post_lock' ) );
 		add_action( 'wp_ajax_blockera_tabs_refresh_post_locks', array( $this, 'refresh_post_locks' ) );
+	}
+
+	/**
+	 * Enqueue script data for tab locking.
+	 *
+	 * Localizes AJAX URL and nonces for JavaScript use.
+	 * Only runs in block editor context.
+	 *
+	 * @return void
+	 */
+	private function enqueue_scripts() {
+		// Only enqueue in block editor context.
+		add_action(
+			'enqueue_block_editor_assets',
+			function () {
+				// Generate nonces for AJAX requests.
+				$check_nonce    = wp_create_nonce( self::NONCE_CHECK );
+				$takeover_nonce = wp_create_nonce( self::NONCE_TAKEOVER );
+
+				// Localize script data.
+				wp_add_inline_script(
+					'wp-blocks',
+					sprintf(
+						'window.blockeraTabsLock = %s;',
+						wp_json_encode(
+							array(
+								'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+								'checkNonce'   => $check_nonce,
+								'takeoverNonce' => $takeover_nonce,
+							)
+						)
+					)
+				);
+			},
+			1
+		);
 	}
 
 	/**
