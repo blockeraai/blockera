@@ -15,7 +15,9 @@
 	fill: currentColor;
 }
 
-.blockera-preview-button-wrapper .components-button svg:not(.blockera-preview-icon) {
+.blockera-preview-button-wrapper
+	.components-button
+	svg:not(.blockera-preview-icon) {
 	width: 22px;
 	height: 22px;
 	fill: currentColor;
@@ -56,13 +58,14 @@
 		border-radius: 8px;
 		transition: width 0.3s ease;
 		position: relative;
-		box-shadow: 0 10px 20px 0px #0000003d;
+		box-shadow: 0 10px 20px 0 #0000003d;
 		border: 1px solid #c3c3c3;
 	}
 
 	/* Entrance animation: slide up from bottom with fade in - only when opening */
 	.blockera-preview-overlay__iframe-container.is-opening {
-		animation: blockera-preview-slide-up var(--animation-duration) ease-out both;
+		animation: blockera-preview-slide-up var(--animation-duration) ease-out
+			both;
 	}
 }
 
@@ -71,8 +74,10 @@
 	animation: blockera-overlay-fade-out var(--animation-duration) ease-in both;
 }
 
-.blockera-preview-overlay .blockera-preview-overlay__iframe-container.is-closing {
-	animation: blockera-preview-slide-down var(--animation-duration) ease-in both;
+.blockera-preview-overlay
+	.blockera-preview-overlay__iframe-container.is-closing {
+	animation: blockera-preview-slide-down var(--animation-duration) ease-in
+		both;
 }
 
 /* Loading container */
@@ -87,10 +92,13 @@
 	align-items: center;
 	justify-content: center;
 	z-index: 1;
-	background: #fff;
+	background: #ffffff;
 }
 
-.blockera-preview-overlay .blockera-preview-overlay__loading > div:first-child > div:first-child {
+.blockera-preview-overlay
+	.blockera-preview-overlay__loading
+	> div:first-child
+	> div:first-child {
 	background: var(--blockera-controls-primary-color);
 }
 
@@ -101,7 +109,7 @@
 
 	/* Initial height fills container - will be overridden by JavaScript with actual content height */
 	transition: opacity 0.4s ease;
-	background: #fff;
+	background: #ffffff;
 }
 
 /* Smooth transition for zoom changes (respects reduced motion preference) */
@@ -113,12 +121,14 @@
 }
 
 /* Hide iframe while loading */
-.blockera-preview-overlay .blockera-preview-overlay__iframe.blockera-preview-overlay__iframe--loading {
+.blockera-preview-overlay
+	.blockera-preview-overlay__iframe.blockera-preview-overlay__iframe--loading {
 	opacity: 0;
 	z-index: 0;
 }
 
-.blockera-preview-overlay .blockera-preview-overlay__iframe.blockera-preview-overlay__iframe--loaded {
+.blockera-preview-overlay
+	.blockera-preview-overlay__iframe.blockera-preview-overlay__iframe--loaded {
 	opacity: 1;
 	z-index: 2;
 }
@@ -220,16 +230,19 @@
 	outline-offset: 1px;
 }
 
-
 /* Reload button spinning animation */
-.blockera-preview-overlay .blockera-preview-overlay__action-btn.action-btn-reload svg {
+.blockera-preview-overlay
+	.blockera-preview-overlay__action-btn.action-btn-reload
+	svg {
 	width: 18px;
 	height: 18px;
 	transition: transform 0.15s ease;
 }
 
 /* Reload icon continuous spin animation while loading */
-.blockera-preview-overlay .blockera-preview-overlay__action-btn.action-btn-reload.is-spinning svg {
+.blockera-preview-overlay
+	.blockera-preview-overlay__action-btn.action-btn-reload.is-spinning
+	svg {
 	animation: blockera-reload-spin 0.8s linear infinite;
 }
 
@@ -297,16 +310,22 @@
 body.blockera-preview-mode-open .editor-header.edit-post-header {
 	& > .editor-header__settings > *,
 	& > .editor-header__center > *,
-	& > .editor-header__toolbar > *{
+	& > .editor-header__toolbar > * {
 		opacity: 0.4;
 		pointer-events: none;
 	}
 }
 
 /* Ensure exceptions and all their descendants remain fully functional */
-body.blockera-preview-mode-open .editor-header.edit-post-header .blockera-elements-editor-header-settings,
-body.blockera-preview-mode-open .editor-header.edit-post-header .blockera-canvas-breakpoints,
-body.blockera-preview-mode-open .editor-header.edit-post-header .editor-header__back-button {
+body.blockera-preview-mode-open
+	.editor-header.edit-post-header
+	.blockera-elements-editor-header-settings,
+body.blockera-preview-mode-open
+	.editor-header.edit-post-header
+	.blockera-canvas-breakpoints,
+body.blockera-preview-mode-open
+	.editor-header.edit-post-header
+	.editor-header__back-button {
 	opacity: 1 !important;
 	pointer-events: auto !important;
 }

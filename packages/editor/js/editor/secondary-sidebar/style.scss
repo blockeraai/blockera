@@ -4,19 +4,17 @@
  * Styles for the custom combined sidebar that displays both inserter and list view.
  */
 
-.interface-interface-skeleton__secondary-sidebar-blockera {
-	/* CSS variables use body-level variables as fallback */
-	--sidebar-width: var(--blockera-secondary-sidebar-width, 350px);
-	--sidebar-width-raw: var(--blockera-secondary-sidebar-width, 350px);
-	--sidebar-pattern-inserter-width: 280px;
-}
-
 /* Container for the combined sidebar - always visible, no animation */
 .interface-interface-skeleton__secondary-sidebar-blockera {
 	flex-shrink: 0;
 	display: flex;
 	overflow: hidden; /* Clip the animated content */
 	background: #f0f0f0;
+
+	/* CSS variables use body-level variables as fallback */
+	--sidebar-width: var(--blockera-secondary-sidebar-width, 350px);
+	--sidebar-width-raw: var(--blockera-secondary-sidebar-width, 350px);
+	--sidebar-pattern-inserter-width: 280px;
 
 	/* On desktop (medium and up), position relatively */
 	@media (min-width: 782px) {
@@ -34,7 +32,7 @@
 	position: relative; /* Enable absolute positioning for resize handle */
 
 	/* Smooth slide animation - content slides in/out */
-	transition: all 0.350s cubic-bezier(0.6, 0, 0.4, 1);
+	transition: all 0.35s cubic-bezier(0.6, 0, 0.4, 1);
 
 	/* Disable transitions while resizing - must override existing transition */
 	/* stylelint-disable-next-line declaration-no-important */
@@ -64,7 +62,8 @@
 }
 
 /* The columns order in the editor interface */
-.editor-editor-interface .interface-interface-skeleton__secondary-sidebar-blockera {
+.editor-editor-interface
+	.interface-interface-skeleton__secondary-sidebar-blockera {
 	order: 0;
 }
 
@@ -86,29 +85,37 @@
 
 /* Inserter section - top half */
 
-.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__main-area {
+.interface-interface-skeleton__secondary-sidebar-blockera
+	.block-editor-inserter__main-area {
 	position: static;
 }
 
-.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__menu {
+.interface-interface-skeleton__secondary-sidebar-blockera
+	.block-editor-inserter__menu {
 	position: static;
 }
 
-.interface-interface-skeleton__secondary-sidebar-blockera:has(.block-editor-inserter__category-panel) {
-	--sidebar-width: calc(var(--sidebar-width-raw) + var(--sidebar-pattern-inserter-width));
+.interface-interface-skeleton__secondary-sidebar-blockera:has(
+		.block-editor-inserter__category-panel
+	) {
+	--sidebar-width: calc(
+		var(--sidebar-width-raw) + var(--sidebar-pattern-inserter-width)
+	);
 }
 
 @media (min-width: 782px) {
-	.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__menu.show-panel {
+	.interface-interface-skeleton__secondary-sidebar-blockera
+		.block-editor-inserter__menu.show-panel {
 		width: var(--sidebar-width-raw);
 	}
 }
 
 @media (min-width: 782px) {
-	.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__category-panel {
+	.interface-interface-skeleton__secondary-sidebar-blockera
+		.block-editor-inserter__category-panel {
 		background: #f0f0f0;
-		border-left: 1px solid #ddd;
-		border-top: 1px solid #ddd;
+		border-left: 1px solid #dddddd;
+		border-top: 1px solid #dddddd;
 		left: var(--sidebar-width-raw);
 		padding: 0;
 		position: absolute;
@@ -120,7 +127,9 @@
 }
 
 @media (min-width: 782px) {
-	.interface-interface-skeleton__secondary-sidebar-blockera .block-editor-inserter__main-area .block-editor-tabbed-sidebar {
+	.interface-interface-skeleton__secondary-sidebar-blockera
+		.block-editor-inserter__main-area
+		.block-editor-tabbed-sidebar {
 		width: var(--sidebar-width-raw);
 	}
 }
@@ -131,8 +140,8 @@
 	display: flex;
 	flex-direction: column;
 	width: var(--sidebar-width-raw);
-	background: #fff;
-	border-bottom: 1px solid #ddd;
+	background: #ffffff;
+	border-bottom: 1px solid #dddddd;
 }
 
 .blockera-combined-sidebar__inserter .editor-inserter-sidebar__content {
@@ -144,10 +153,11 @@
 
 /* List view section - bottom half */
 
-.interface-interface-skeleton__secondary-sidebar-blockera .blockera-combined-sidebar__list-view {
+.interface-interface-skeleton__secondary-sidebar-blockera
+	.blockera-combined-sidebar__list-view {
 	--sidebar-width: var(--sidebar-width-raw);
 	width: var(--sidebar-width);
-	background: #fff;
+	background: #ffffff;
 }
 
 .blockera-combined-sidebar__list-view {
@@ -176,7 +186,7 @@
 	align-items: center;
 	justify-content: space-between;
 	padding: 8px 12px;
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #dddddd;
 	flex-shrink: 0;
 	background: var(--blockera-panel-tabs-bg-color);
 }
@@ -233,12 +243,14 @@
 	flex-direction: column;
 }
 
-.blockera-combined-sidebar__list-view .editor-list-view-sidebar__list-view-container {
+.blockera-combined-sidebar__list-view
+	.editor-list-view-sidebar__list-view-container {
 	height: 100%;
 	overflow: auto;
 }
 
-.blockera-combined-sidebar__list-view .editor-list-view-sidebar__list-view-panel-content {
+.blockera-combined-sidebar__list-view
+	.editor-list-view-sidebar__list-view-panel-content {
 	height: 100%;
 	overflow: auto;
 }
