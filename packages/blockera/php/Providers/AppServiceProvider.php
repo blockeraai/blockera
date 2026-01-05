@@ -25,6 +25,10 @@ use Blockera\Data\ValueAddon\ValueAddonRegistry;
 use Blockera\Data\ValueAddon\Variable\VariableType;
 use Blockera\Data\ValueAddon\DynamicValue\DynamicValueType;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Blockera\Editor\PreviewButton;
+use Blockera\Editor\TabLocking;
+use Blockera\Editor\BulkActions;
+use Blockera\Editor\EditorPersistenceStore;
 
 /**
  * Class AppServiceProvider for providing all application services.
@@ -159,6 +163,14 @@ class AppServiceProvider extends ServiceProvider {
 
 			$this->app->singleton(ContentCleanup::class);
 
+			$this->app->singleton(PreviewButton::class);
+
+			$this->app->singleton(TabLocking::class);
+
+			$this->app->singleton(BulkActions::class);
+
+			$this->app->singleton(EditorPersistenceStore::class);
+
 		} catch (BaseException $handler) {
 
 			throw new BaseException(esc_html('Binding ' . StyleEngine::class . " Failure! \n" . $handler->getMessage()));
@@ -197,6 +209,14 @@ class AppServiceProvider extends ServiceProvider {
 		Config::setHookPrefix( blockera_core_config( 'telemetry.hook_prefix' ) );
 
 		$this->app->make(Compatibility::class);
+
+		$this->app->make(PreviewButton::class);
+
+		$this->app->make(TabLocking::class);
+
+		$this->app->make(BulkActions::class);
+
+		$this->app->make(EditorPersistenceStore::class);
 
 		$dynamicValueRegistry = $this->app->make(ValueAddonRegistry::class, [ DynamicValueType::class ]);
 		$variableRegistry     = $this->app->make(ValueAddonRegistry::class, [ VariableType::class ]);
