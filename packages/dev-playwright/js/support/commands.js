@@ -1028,86 +1028,6 @@ async function setFrontendViewportForScreenshot(
 	}
 }
 
-/**
- * Helper function to take a screenshot and compare it with expected snapshot
- * Saves screenshots to custom location: tests/fixtures/{section}/snapshot/
- * Uses Playwright's toHaveScreenshot for comparison, then moves screenshots to custom location
- *
- * @param {Object} locator - The Playwright locator for the element to screenshot.
- * @param {string} snapshotName - Name of the snapshot file.
- * @param {string} snapshotDir - Directory path where snapshots are stored.
- * @param {Object} testInfo - Playwright test info object.
- * @param {number} threshold - Screenshot comparison threshold (0-1). Default: 0.02.
- * @return {Promise<void>}
- */
-async function compareScreenshot(
-	locator,
-	snapshotName,
-	snapshotDir,
-	testInfo,
-	threshold = 0.02
-) {
-	const snapshotPath = path.join(snapshotDir, snapshotName);
-
-	// Use testInfo.snapshotPath() to get the actual path where Playwright will write snapshots
-	// This respects any custom snapshotPath override set in the test
-	const browserSnapshotPath = testInfo.snapshotPath(snapshotName);
-
-	// Ensure the directory exists
-	const browserSnapshotDir = path.dirname(browserSnapshotPath);
-	if (!fs.existsSync(browserSnapshotDir)) {
-		fs.mkdirSync(browserSnapshotDir, { recursive: true });
-	}
-
-	// Check if snapshot exists in custom location (not first run)
-	const snapshotExists = fs.existsSync(snapshotPath);
-
-	if (snapshotExists) {
-		// Snapshot exists: copy from custom location to __snapshots__ for comparison
-		fs.copyFileSync(snapshotPath, browserSnapshotPath);
-	}
-
-	// Use Playwright's toHaveScreenshot for comparison
-	try {
-		await expect(locator).toHaveScreenshot(snapshotName, {
-			threshold,
-		});
-
-		// Comparison succeeded: copy from __snapshots__ to custom location and clean up
-		await new Promise((resolve) => setTimeout(resolve, 100));
-
-		if (fs.existsSync(browserSnapshotPath)) {
-			// Copy to custom location (remove browser suffix)
-			fs.copyFileSync(browserSnapshotPath, snapshotPath);
-			fs.unlinkSync(browserSnapshotPath);
-		}
-	} catch (error) {
-		// Comparison failed: copy actual screenshot to both locations
-		await new Promise((resolve) => setTimeout(resolve, 100));
-
-		const actualScreenshotName = snapshotName.replace(
-			'.png',
-			'-actual.png'
-		);
-		const actualScreenshotPath = testInfo.outputDir
-			? path.join(testInfo.outputDir, actualScreenshotName)
-			: null;
-
-		if (actualScreenshotPath && fs.existsSync(actualScreenshotPath)) {
-			// Copy the actual screenshot to custom location
-			fs.copyFileSync(actualScreenshotPath, snapshotPath);
-
-			// Also ensure it exists in __snapshots__ (keep copy there)
-			if (!fs.existsSync(browserSnapshotPath)) {
-				fs.copyFileSync(actualScreenshotPath, browserSnapshotPath);
-			}
-		}
-
-		// Re-throw the error so the test still fails
-		throw error;
-	}
-}
-
 module.exports = {
 	test,
 	expect,
@@ -1151,5 +1071,4 @@ module.exports = {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
-	compareScreenshot,
 };

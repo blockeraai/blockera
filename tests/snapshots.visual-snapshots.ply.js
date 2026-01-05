@@ -18,7 +18,6 @@ const {
 	prepareFrontendForScreenshot,
 	setEditorViewportForScreenshot,
 	setFrontendViewportForScreenshot,
-	compareScreenshot,
 } = require('@blockera/dev-playwright/js/support/commands');
 const {
 	setDeviceType,
@@ -109,181 +108,149 @@ function loadFixtures() {
 const sections = loadFixtures();
 const failures = [];
 
-test.describe('Sections design with Style Engine', () => {
+test.describe('Sections Visual Snapshots', () => {
 	for (const section of Object.keys(sections)) {
 		const sectionData = sections[section];
 		const sectionContent = sectionData.sectionContent || '';
 		const setupFn = sectionData?.setupFn;
 		const frontendSetupFn = sectionData?.frontendSetupFn;
 
-		// Configure snapshot directory for this specific test
-		const snapshotDir = path.resolve(
-			__dirname,
-			'fixtures',
-			section,
-			'snapshot'
-		);
-		if (!fs.existsSync(snapshotDir)) {
-			fs.mkdirSync(snapshotDir, { recursive: true });
-		}
+		test(`Snapshot: ${section}`, async ({ page }) => {
+			if (!sectionContent) {
+				return;
+			}
 
-		// Create a separate describe block for each test to configure snapshot path
-		test.describe(section, () => {
-			// Override snapshotPath in beforeEach to ensure it's set before test runs
-			test.beforeEach(({}, testInfo) => {
-				// Override snapshotPath function to use custom directory
-				// This must be done before any toHaveScreenshot calls
-				testInfo.snapshotPath = (snapshotName) => {
-					// Return absolute path to the custom snapshot directory
-					return path.resolve(snapshotDir, snapshotName);
-				};
-			});
+			// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
+			const muPluginPath = `tests/fixtures/${section}/mu-plugin.php`;
+			const muPluginFullPath = path.join(__dirname, '..', muPluginPath);
+			let muPluginActivated = false;
 
-			test(section, async ({ page }, testInfo) => {
-				if (!sectionContent) {
-					return;
-				}
+			if (fs.existsSync(muPluginFullPath)) {
+				// File exists, activate it
+				await activateMuPlugin(page, muPluginPath);
+				muPluginActivated = true;
+			}
 
-				// Activate mu-plugin if mu-plugin.php exists in the test fixture folder
-				const muPluginPath = `tests/fixtures/${section}/mu-plugin.php`;
-				const muPluginFullPath = path.join(
-					__dirname,
-					'..',
-					muPluginPath
-				);
-				let muPluginActivated = false;
-
-				if (fs.existsSync(muPluginFullPath)) {
-					// File exists, activate it
-					await activateMuPlugin(page, muPluginPath);
-					muPluginActivated = true;
-				}
-
-				try {
-					// Check if custom setup.js exists for this test
-					if (setupFn) {
-						// Run custom setup function (now converted to Playwright)
-						// Setup functions return false if they handle setup themselves
-						// or true if default setup should run
-						const result = await setupFn(page, sectionContent);
-						if (result === true) {
-							// Run default setup
-							await createPost(page);
-							await appendBlocks(page, sectionContent);
-						}
-					} else {
+			try {
+				// Check if custom setup.js exists for this test
+				if (setupFn) {
+					// Run custom setup function (now converted to Playwright)
+					// Setup functions return false if they handle setup themselves
+					// or true if default setup should run
+					const result = await setupFn(page, sectionContent);
+					if (result === true) {
 						// Run default setup
 						await createPost(page);
 						await appendBlocks(page, sectionContent);
 					}
-
-					// wait to make sure images loaded and content is ready
-					await page.waitForTimeout(1000);
-
-					// Editor Desktop Snapshot
-					const iframeBody = await getIframeBody(page);
-					const editorContainer =
-						iframeBody.locator('.is-root-container');
-
-					// Set viewport and adjust iframe height for full element capture
-					await setEditorViewportForScreenshot(page, 'desktop');
-
-					try {
-						await compareScreenshot(
-							editorContainer,
-							`test-${section}-editor-desktop.png`,
-							snapshotDir,
-							testInfo,
-							0.02
-						);
-					} catch (error) {
-						failures.push({
-							name: `test-${section}-editor-desktop`,
-							error: error.message,
-						});
-					}
-
-					await setDeviceType(page, 'Mobile Portrait');
-
-					// Set viewport and adjust iframe height for full element capture (mobile)
-					await setEditorViewportForScreenshot(page, 'mobile');
-
-					// Editor Mobile Snapshot
-					try {
-						await compareScreenshot(
-							editorContainer,
-							`test-${section}-editor-mobile.png`,
-							snapshotDir,
-							testInfo,
-							0.02
-						);
-					} catch (error) {
-						failures.push({
-							name: `test-${section}-editor-mobile`,
-							error: error.message,
-						});
-					}
-
-					// Check frontend
-					await savePage(page);
-					await redirectToFrontPage(page);
-					await prepareFrontendForScreenshot(page);
-
-					// Run frontend setup if it exists
-					if (frontendSetupFn) {
-						await frontendSetupFn(page);
-					}
-
-					// wait to make sure images loaded and content is ready
-					await page.waitForTimeout(500);
-
-					await setFrontendViewportForScreenshot(page, 'desktop');
-
-					// Frontend Desktop Snapshot
-					const entryContent = page.locator('.entry-content').first();
-					await entryContent.scrollIntoViewIfNeeded();
-
-					try {
-						await compareScreenshot(
-							entryContent,
-							`test-${section}-frontend-desktop.png`,
-							snapshotDir,
-							testInfo,
-							0.02
-						);
-					} catch (error) {
-						failures.push({
-							name: `test-${section}-frontend-desktop`,
-							error: error.message,
-						});
-					}
-
-					await setFrontendViewportForScreenshot(page, 'mobile');
-
-					// Frontend Mobile Snapshot
-					await entryContent.scrollIntoViewIfNeeded();
-
-					try {
-						await compareScreenshot(
-							entryContent,
-							`test-${section}-frontend-mobile.png`,
-							snapshotDir,
-							testInfo,
-							0.02
-						);
-					} catch (error) {
-						failures.push({
-							name: `test-${section}-frontend-mobile`,
-							error: error.message,
-						});
-					}
-				} finally {
-					// Deactivate mu-plugin if it was activated
-					if (muPluginActivated) {
-						await deactivateMuPlugin(page, muPluginPath);
-					}
+				} else {
+					// Run default setup
+					await createPost(page);
+					await appendBlocks(page, sectionContent);
 				}
-			});
+
+				// wait to make sure images loaded and content is ready
+				await page.waitForTimeout(1000);
+
+				// Editor Desktop Snapshot
+				const iframeBody = await getIframeBody(page);
+				const editorContainer =
+					iframeBody.locator('.is-root-container');
+
+				// Set viewport and adjust iframe height for full element capture
+				await setEditorViewportForScreenshot(page, 'desktop');
+
+				try {
+					await expect(editorContainer).toHaveScreenshot(
+						`test-${section}-editor-desktop.png`,
+						{
+							threshold: 0.02,
+						}
+					);
+				} catch (error) {
+					failures.push({
+						name: `test-${section}-editor-desktop`,
+						error: error.message,
+					});
+				}
+
+				await setDeviceType(page, 'Mobile Portrait');
+
+				// Set viewport and adjust iframe height for full element capture (mobile)
+				await setEditorViewportForScreenshot(page, 'mobile');
+
+				// Editor Mobile Snapshot
+				try {
+					await expect(editorContainer).toHaveScreenshot(
+						`test-${section}-editor-mobile.png`,
+						{
+							threshold: 0.02,
+						}
+					);
+				} catch (error) {
+					failures.push({
+						name: `test-${section}-editor-mobile`,
+						error: error.message,
+					});
+				}
+
+				// Check frontend
+				await savePage(page);
+				await redirectToFrontPage(page);
+				await prepareFrontendForScreenshot(page);
+
+				// Run frontend setup if it exists
+				if (frontendSetupFn) {
+					await frontendSetupFn(page);
+				}
+
+				// wait to make sure images loaded and content is ready
+				await page.waitForTimeout(500);
+
+				await setFrontendViewportForScreenshot(page, 'desktop');
+
+				// Frontend Desktop Snapshot
+				const entryContent = page.locator('.entry-content').first();
+				await entryContent.scrollIntoViewIfNeeded();
+
+				try {
+					await expect(entryContent).toHaveScreenshot(
+						`test-${section}-frontend-desktop.png`,
+						{
+							threshold: 0.02,
+						}
+					);
+				} catch (error) {
+					failures.push({
+						name: `test-${section}-frontend-desktop`,
+						error: error.message,
+					});
+				}
+
+				await setFrontendViewportForScreenshot(page, 'mobile');
+
+				// Frontend Mobile Snapshot
+				await entryContent.scrollIntoViewIfNeeded();
+
+				try {
+					await expect(entryContent).toHaveScreenshot(
+						`test-${section}-frontend-mobile.png`,
+						{
+							threshold: 0.02,
+						}
+					);
+				} catch (error) {
+					failures.push({
+						name: `test-${section}-frontend-mobile`,
+						error: error.message,
+					});
+				}
+			} finally {
+				// Deactivate mu-plugin if it was activated
+				if (muPluginActivated) {
+					await deactivateMuPlugin(page, muPluginPath);
+				}
+			}
 		});
 	}
 
