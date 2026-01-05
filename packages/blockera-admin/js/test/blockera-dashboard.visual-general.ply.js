@@ -2,31 +2,13 @@
  * Visual snapshot test for Blockera Dashboard
  * Playwright e2e test
  */
-const path = require('path');
-const fs = require('fs');
 const { goTo } = require('@blockera/dev-playwright/js/utils/helpers');
-const {
-	test,
-	compareScreenshot,
-} = require('@blockera/dev-playwright/js/support/commands');
+const { test } = require('@blockera/dev-playwright/js/support/commands');
 
 const failures = [];
 
-test.describe('Visual Regression Test', () => {
-	// Configure snapshot directory for this test
-	const snapshotDir = path.resolve(__dirname, 'snapshots');
-	if (!fs.existsSync(snapshotDir)) {
-		fs.mkdirSync(snapshotDir, { recursive: true });
-	}
-
-	test.beforeEach(({}, testInfo) => {
-		// Override snapshotPath function to use custom directory
-		testInfo.snapshotPath = (snapshotName) => {
-			return path.resolve(snapshotDir, snapshotName);
-		};
-	});
-
-	test('screenshot dashboard', async ({ page }, testInfo) => {
+test.describe('Blockera Dashboard → Visual Test', () => {
+	test('screenshot dashboard', async ({ page }) => {
 		await goTo(
 			page,
 			'/wp-admin/admin.php?page=blockera-settings-dashboard'
@@ -61,13 +43,9 @@ test.describe('Visual Regression Test', () => {
 		});
 
 		try {
-			await compareScreenshot(
-				body,
-				'dashboard.png',
-				snapshotDir,
-				testInfo,
-				0.02
-			);
+			await expect(entryContent).toHaveScreenshot(`dashboard.png`, {
+				threshold: 0.02,
+			});
 		} catch (error) {
 			failures.push({
 				name: 'dashboard',
