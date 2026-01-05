@@ -1,13 +1,10 @@
 const postcssScss = require('postcss-scss');
 const wpConfig = require('@wordpress/stylelint-config');
-const prettierConfig = require('stylelint-config-prettier');
 
 module.exports = {
 	...wpConfig,
-	...prettierConfig,
 	rules: {
 		...(wpConfig.rules || {}),
-		...(prettierConfig.rules || {}),
 		'string-quotes': 'double',
 		'function-url-quotes': 'always',
 		'no-descending-specificity': null,
@@ -20,7 +17,6 @@ module.exports = {
 	},
 	ignoreFiles: [
 		...(wpConfig.ignoreFiles || []),
-		...(prettierConfig.ignoreFiles || []),
 		'coverage/**/*.css',
 		'packages/dev-cypress/**/*.css',
 		'packages/dev-cypress/**/*.scss',

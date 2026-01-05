@@ -3,10 +3,9 @@ module.exports = {
 	rootDir: '../../../',
 	preset: '@wordpress/jest-preset-default',
 	collectCoverageFrom: ['<rootDir>/packages/**/*.js'],
+	setupFiles: ['<rootDir>/packages/dev-jest/js/setup-text-encoding.js'],
 	setupFilesAfterEnv: [
-		require.resolve(
-			'@wordpress/jest-preset-default/scripts/setup-globals.js'
-		),
+		require.resolve('@wordpress/jest-preset-default/scripts/setup-globals.js'),
 	],
 	modulePathIgnorePatterns: [],
 	testPathIgnorePatterns: [
@@ -15,7 +14,7 @@ module.exports = {
 		'/source-code-wordpress/',
 	],
 	testMatch: ['**/test/**/*.spec.js', '**/tests/**/*.spec.js'],
-	transformIgnorePatterns: ['/node_modules/(?!parsel-js).+\\.js$'],
+	transformIgnorePatterns: ['/node_modules/(?!parsel-js|client-zip).+\\.js$'],
 	transform: {
 		'\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
 			'<rootDir>/packages/dev-jest/js/assets-transformer.js',

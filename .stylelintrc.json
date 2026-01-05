@@ -1,6 +1,6 @@
 {
 	"customSyntax": "postcss-scss",
-	"extends": ["@wordpress/stylelint-config", "stylelint-config-prettier"],
+	"extends": ["@wordpress/stylelint-config"],
 	"rules": {
 		"string-quotes": "double",
 		"function-url-quotes": "always",

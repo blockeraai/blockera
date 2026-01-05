@@ -8,6 +8,8 @@ module.exports = {
 			filename,
 			presets: ['@babel/preset-env', '@babel/preset-react'],
 		});
-		return code;
+		return {
+			code,
+		};
 	},
 };
