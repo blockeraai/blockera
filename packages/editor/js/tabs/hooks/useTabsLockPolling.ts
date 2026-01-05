@@ -19,24 +19,6 @@ import type { LockInfo } from './useTabsLockState';
 const POLL_INTERVAL = 30000;
 
 /**
- * Lock settings from PHP.
- */
-interface BlockeraTabsLock {
-	ajaxUrl: string;
-	checkNonce: string;
-	takeoverNonce: string;
-}
-
-/**
- * Extended window interface for lock globals.
- */
-declare global {
-	interface Window {
-		blockeraTabsLock?: BlockeraTabsLock;
-	}
-}
-
-/**
  * Server response for lock refresh.
  * Keys can be numeric post IDs or string template identifiers (e.g., "theme//slug").
  */
@@ -97,7 +79,7 @@ export interface UseTabsLockPollingReturn {
  * - Debounces concurrent requests with isPollingRef
  *
  * @param params - Hook parameters
- * @returns Lock management functions
+ * @return Lock management functions
  */
 export function useTabsLockPolling({
 	tabs,
@@ -182,7 +164,10 @@ export function useTabsLockPolling({
 
 			if (result.success && result.data?.locks) {
 				// Update lock states in the state store
-				updateBulkLockStatesRef.current?.(result.data.locks, currentTabs);
+				updateBulkLockStatesRef.current?.(
+					result.data.locks,
+					currentTabs
+				);
 
 				// Check if the currently active tab was taken over
 				const currentActiveKey = activeTabKeyRef.current;
@@ -195,7 +180,10 @@ export function useTabsLockPolling({
 						const lockInfo = result.data.locks[activeTab.id];
 						if (lockInfo?.isLocked) {
 							// Active tab was taken over - trigger modal
-							onActiveTabLockedRef.current(currentActiveKey, lockInfo);
+							onActiveTabLockedRef.current(
+								currentActiveKey,
+								lockInfo
+							);
 						}
 					}
 				}
@@ -206,7 +194,10 @@ export function useTabsLockPolling({
 			if (process.env.NODE_ENV === 'development') {
 				// @debug-ignore
 				// eslint-disable-next-line no-console
-				console.error('Blockera Tabs: Failed to refresh post locks', error);
+				console.error(
+					'Blockera Tabs: Failed to refresh post locks',
+					error
+				);
 			}
 		} finally {
 			isPollingRef.current = false;
@@ -222,10 +213,13 @@ export function useTabsLockPolling({
 		// Clear any existing interval to prevent duplicates
 		if (intervalRef.current) {
 			clearInterval(intervalRef.current);
+			intervalRef.current = null;
 		}
 
-		// Only poll if there are tabs
-		if (tabsRef.current.length === 0) {
+		// Use the ref which should be updated by the effect above
+		// But also check if tabs exist - if ref isn't updated yet, skip this cycle
+		const currentTabs = tabsRef.current;
+		if (!currentTabs || currentTabs.length === 0) {
 			return;
 		}
 
@@ -272,7 +266,10 @@ export function useTabsLockPolling({
 		document.addEventListener('visibilitychange', handleVisibilityChange);
 
 		return () => {
-			document.removeEventListener('visibilitychange', handleVisibilityChange);
+			document.removeEventListener(
+				'visibilitychange',
+				handleVisibilityChange
+			);
 		};
 	}, [refreshLockStates]);
 
@@ -281,8 +278,15 @@ export function useTabsLockPolling({
 	 *
 	 * Starts polling when first tab is added.
 	 * Stops polling when all tabs are closed.
+	 *
+	 * IMPORTANT: We update tabsRef.current synchronously here to ensure it's
+	 * available when startPolling() reads it. This handles the case where
+	 * multiple effects run in the same batch.
 	 */
 	useEffect(() => {
+		// Update ref synchronously before checking
+		tabsRef.current = tabs;
+
 		if (tabs.length >= 1) {
 			startPolling();
 		} else {
@@ -293,7 +297,7 @@ export function useTabsLockPolling({
 		return () => {
 			stopPolling();
 		};
-	}, [tabs.length, startPolling, stopPolling]);
+	}, [tabs, startPolling, stopPolling]);
 
 	/**
 	 * Acquire or take over a post lock
@@ -303,7 +307,7 @@ export function useTabsLockPolling({
 	 * 2. Clicking "Take Over" in the lock modal
 	 *
 	 * @param postId - Post ID to acquire lock for
-	 * @returns True if lock was successfully acquired
+	 * @return True if lock was successfully acquired
 	 */
 	const takeoverLock = useCallback(
 		async (postId: string | number): Promise<boolean> => {
@@ -331,7 +335,10 @@ export function useTabsLockPolling({
 				if (process.env.NODE_ENV === 'development') {
 					// @debug-ignore
 					// eslint-disable-next-line no-console
-					console.error('Blockera Tabs: Failed to take over post lock', error);
+					console.error(
+						'Blockera Tabs: Failed to take over post lock',
+						error
+					);
 				}
 				return false;
 			}
@@ -346,7 +353,7 @@ export function useTabsLockPolling({
 	 * before the next polling cycle.
 	 *
 	 * @param postId - Post ID to check
-	 * @returns Lock info { isLocked, user } or null on error
+	 * @return Lock info { isLocked, user } or null on error
 	 */
 	const checkSingleLock = useCallback(
 		async (postId: string | number): Promise<LockInfo | null> => {
@@ -383,7 +390,10 @@ export function useTabsLockPolling({
 				if (process.env.NODE_ENV === 'development') {
 					// @debug-ignore
 					// eslint-disable-next-line no-console
-					console.error('Blockera Tabs: Failed to check single post lock', error);
+					console.error(
+						'Blockera Tabs: Failed to check single post lock',
+						error
+					);
 				}
 				return null;
 			}
@@ -398,3 +408,5 @@ export function useTabsLockPolling({
 	};
 }
 
+// Ensure this file is treated as a module for TypeScript global augmentation
+export {};
