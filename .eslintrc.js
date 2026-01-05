@@ -70,12 +70,9 @@ module.exports = {
 		},
 	},
 	rules: {
-		'prettier/prettier': [
-			'error',
-			{
-				endOfLine: 'auto',
-			},
-		],
+		// Let prettier/prettier auto-discover .prettierrc.js
+		// This ensures ESLint uses the same config as the editor's Prettier extension
+		'prettier/prettier': 'error',
 		'ft-flow/space-after-type-colon': 'off',
 		'@wordpress/i18n-no-collapsible-whitespace': 'off',
 		'import/no-extraneous-dependencies': 'off',
@@ -134,6 +131,14 @@ module.exports = {
 		},
 		{
 			files: ['**/*.ts', '**/*.tsx'],
+			parser: '@typescript-eslint/parser',
+			parserOptions: {
+				ecmaVersion: 2021,
+				sourceType: 'module',
+				ecmaFeatures: {
+					jsx: true,
+				},
+			},
 			rules: {
 				'ft-flow/no-types-missing-file-annotation': 'off',
 			},
