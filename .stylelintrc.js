@@ -5,11 +5,9 @@ module.exports = {
 	...wpConfig,
 	rules: {
 		...(wpConfig.rules || {}),
-		'string-quotes': 'double',
 		'function-url-quotes': 'always',
 		'no-descending-specificity': null,
 		'selector-class-pattern': null,
-		indentation: null,
 		'color-hex-length': 'long',
 		'comment-empty-line-before': null,
 		'value-keyword-case': null,
