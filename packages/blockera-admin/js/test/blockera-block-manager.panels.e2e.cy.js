@@ -4,7 +4,7 @@ import {
 } from '@blockera/dev-cypress/js/helpers/site-navigation';
 import {
 	appendBlocks,
-	getBlockInserter,
+	openBlockInserter,
 } from '@blockera/dev-cypress/js/helpers/editor';
 import { resetPanelSettings } from '@blockera/dev-cypress/js/helpers';
 
@@ -41,7 +41,7 @@ describe('Block Manager Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background').should('not.exist');
 
 			// open inserter panel
-			getBlockInserter().click();
+			openBlockInserter();
 
 			const selector = `.editor-block-list-item-${CSS.escape(
 				`paragraph/paragraph`
@@ -83,7 +83,7 @@ describe('Block Manager Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background');
 
 			// open inserter panel
-			getBlockInserter().click();
+			openBlockInserter();
 
 			const selector = `.editor-block-list-item-${CSS.escape(
 				`paragraph/paragraph`

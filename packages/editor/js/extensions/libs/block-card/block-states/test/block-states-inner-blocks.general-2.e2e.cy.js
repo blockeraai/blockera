@@ -20,7 +20,7 @@ import {
 	createPost,
 	getBlockClientId,
 	checkBlockCard,
-	getBlockInserter,
+	openBlockInserter,
 	addBlockState,
 	resetBlockState,
 	checkSelectedInnerBlock,
@@ -716,8 +716,9 @@ describe('Block States on inner blocks E2E tests', () => {
 				beforeEach(() => {
 					// unfocus block
 					cy.getIframeBody().find('[aria-label="Add title"]').click();
+
 					// add new block
-					getBlockInserter().click();
+					openBlockInserter();
 
 					cy.get('.block-editor-inserter__panel-content').within(
 						() => {

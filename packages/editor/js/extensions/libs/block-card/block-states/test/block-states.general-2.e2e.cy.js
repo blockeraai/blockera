@@ -19,7 +19,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	getBlockClientId,
-	getBlockInserter,
+	openBlockInserter,
 	checkCurrentState,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
@@ -987,8 +987,9 @@ describe('Block State E2E Test', () => {
 				beforeEach(() => {
 					// unfocus block
 					cy.getIframeBody().find('[aria-label="Add title"]').click();
+
 					// add new block
-					getBlockInserter().click();
+					openBlockInserter();
 
 					cy.get('.block-editor-inserter__panel-content').within(
 						() => {
