@@ -262,6 +262,8 @@ export const getComputedCssProps = ({
 											content: stateItem?.content || '',
 										},
 									},
+									className:
+										params?.attributes?.className || '',
 								},
 							},
 							disabledStyles,
@@ -311,6 +313,8 @@ export const getComputedCssProps = ({
 												},
 										  }
 										: {}),
+									className:
+										params?.attributes?.className || '',
 								},
 								currentBlock: blockType,
 								device: breakpointType,
@@ -356,6 +360,7 @@ export const getComputedCssProps = ({
 								blockType
 							]?.attributes || {}),
 							...attributes,
+							className: params?.attributes?.className || '',
 						},
 						currentBlock: blockType,
 						device,

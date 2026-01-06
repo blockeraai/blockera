@@ -9,8 +9,7 @@ import { useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { classNames } from '@blockera/classnames';
-import { getSmallHash, mergeObject } from '@blockera/utils';
+import { mergeObject } from '@blockera/utils';
 import { getIconAttributes } from '@blockera/feature-icon';
 
 /**
@@ -35,7 +34,6 @@ export const useAttributes = (
 	{
 		blockId,
 		clientId,
-		className,
 		innerBlocks,
 		currentBlock,
 		currentState,
@@ -53,7 +51,6 @@ export const useAttributes = (
 	}: {
 		blockId: string,
 		clientId: string,
-		className: string,
 		innerBlocks: Object,
 		currentState: TStates,
 		blockVariations: Object,
@@ -148,23 +145,6 @@ export const useAttributes = (
 					_attributes,
 					'blockeraCompatId'
 				);
-			}
-
-			const indexOfBlockeraSelector =
-				attributes?.className?.indexOf('blockera-block');
-
-			// Sets "className" attribute value is existing on block attributes to merge with default value.
-			if (
-				-1 === indexOfBlockeraSelector ||
-				'undefined' === typeof indexOfBlockeraSelector
-			) {
-				_attributes = {
-					..._attributes,
-					className: classNames(className, attributes.className, {
-						'blockera-block': true,
-						[`blockera-block-${getSmallHash(clientId)}`]: true,
-					}),
-				};
 			}
 
 			if (getIconAttributes().includes(attributeId)) {

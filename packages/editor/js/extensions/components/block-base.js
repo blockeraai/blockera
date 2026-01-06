@@ -21,7 +21,13 @@ import {
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
-import { cloneObject, mergeObject, isEquals } from '@blockera/utils';
+import {
+	isEquals,
+	cloneObject,
+	mergeObject,
+	getSmallHash,
+} from '@blockera/utils';
+import { classNames } from '@blockera/classnames';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 
 /**
@@ -60,6 +66,73 @@ import { useGlobalStylesPanelContext } from '../../canvas-editor/components/bloc
 
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;
+
+// Set to store registered class names.
+const REGISTERED_CLASSNAMES = new Set<string>();
+
+/**
+ * Register a class name to be used in the block.
+ *
+ * @param {string} className - The class name to register.
+ */
+export const registerClassName = (className: string): void => {
+	REGISTERED_CLASSNAMES.add(className);
+};
+
+/**
+ * Generate a unique class name for a block instance.
+ * Handles collisions by detecting existing numbered classnames and appending
+ * a counter based on the highest number found.
+ *
+ * @param {string} clientId - The client ID to generate the unique class name from.
+ * @return {string} A unique class name that hasn't been registered yet.
+ */
+const generateUniqueClassName = (clientId: string): string => {
+	const baseHash = getSmallHash(clientId);
+	const baseClassName = `blockera-block-${baseHash}`;
+
+	// Check if base classname is available (no counter needed).
+	if (!REGISTERED_CLASSNAMES.has(baseClassName)) {
+		registerClassName(baseClassName);
+		return baseClassName;
+	}
+
+	// Base classname exists, find the highest counter number used.
+	// Pattern: blockera-block-{baseHash}-{number}
+	const pattern = new RegExp(
+		`^blockera-block-${baseHash.replace(
+			/[.*+?^${}()|[\]\\]/g,
+			'\\$&'
+		)}-(\\d+)$`
+	);
+	let maxCounter = 0;
+
+	// Scan all registered classnames to find the highest counter for this baseHash.
+	REGISTERED_CLASSNAMES.forEach((registeredClassName) => {
+		const match = registeredClassName.match(pattern);
+		if (match) {
+			const counter = parseInt(match[1], 10);
+			if (counter > maxCounter) {
+				maxCounter = counter;
+			}
+		}
+	});
+
+	// Generate unique classname with counter starting from maxCounter + 1.
+	let counter = maxCounter + 1;
+	let uniqueClassName = `blockera-block-${baseHash}-${counter}`;
+
+	// Double-check for collisions (shouldn't happen, but safety check).
+	while (REGISTERED_CLASSNAMES.has(uniqueClassName)) {
+		counter++;
+		uniqueClassName = `blockera-block-${baseHash}-${counter}`;
+	}
+
+	// Register the class name to prevent future collisions.
+	registerClassName(uniqueClassName);
+
+	return uniqueClassName;
+};
 
 export const BlockBase: ComponentType<any> = (
 	_props: Object
@@ -212,26 +285,72 @@ export const BlockBase: ComponentType<any> = (
 		]
 	);
 
-	const compatibleAttributes = useMemo(
-		() =>
-			getCompatibleAttributes({
-				args,
-				isActive,
-				availableAttributes,
-				attributes: cloneObject(blockAttributes),
-				defaultAttributes: originDefaultAttributes,
-			}),
-		[
+	// Store the unique classname for this block instance.
+	// Generate it once on mount using useMemo (runs during render, memoized by clientId).
+	const uniqueClassName = useMemo(() => {
+		return generateUniqueClassName(clientId);
+	}, [clientId]);
+
+	// Cleanup: unregister the classname when component unmounts.
+	useEffect(() => {
+		return () => {
+			if (uniqueClassName) {
+				REGISTERED_CLASSNAMES.delete(uniqueClassName);
+			}
+		};
+	}, [clientId, uniqueClassName]);
+
+	const compatibleAttributes = useMemo(() => {
+		let compatibleAttributes = getCompatibleAttributes({
 			args,
 			isActive,
 			availableAttributes,
-			blockAttributes,
-			originDefaultAttributes,
-		]
-	);
+			attributes: cloneObject(blockAttributes),
+			defaultAttributes: originDefaultAttributes,
+		});
+
+		// Check if a blockera-block classname already exists in the className.
+		const classNameStr = compatibleAttributes?.className || '';
+		const hasBlockeraBlockClass = classNameStr.includes('blockera-block-');
+
+		// If no blockera-block classname exists, add the unique one.
+		if (!hasBlockeraBlockClass) {
+			compatibleAttributes = {
+				...compatibleAttributes,
+				className: classNames(classNameStr, {
+					'blockera-block': true,
+					[uniqueClassName]: true,
+				}),
+			};
+		} else {
+			// Ensure the unique classname is included in the className string.
+			const classNameParts = classNameStr.split(/\s+/);
+			const regexPattern = /blockera-block-\w+/gi;
+			if (classNameParts.some((part) => regexPattern.test(part))) {
+				compatibleAttributes = {
+					...compatibleAttributes,
+					className: classNameStr.replace(
+						regexPattern,
+						uniqueClassName
+					),
+				};
+			}
+		}
+
+		return compatibleAttributes;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		args,
+		isActive,
+		blockAttributes,
+		availableAttributes,
+		originDefaultAttributes,
+		uniqueClassName,
+	]);
 
 	const attributesRef = useRef(compatibleAttributes);
 	const [attributes, setState] = useState(compatibleAttributes);
+	const { className } = attributes;
 
 	/**
 	 * Set the attributes state and the attributes ref.
@@ -282,8 +401,6 @@ export const BlockBase: ComponentType<any> = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [compatibleAttributes]);
 
-	const { className } = attributes;
-
 	const sanitizedAttributes = useMemo(
 		() => sanitizeBlockAttributes(cloneObject(attributes)),
 		[attributes]
@@ -311,7 +428,6 @@ export const BlockBase: ComponentType<any> = (
 
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
 		clientId,
-		className,
 		blockId: name,
 		isNormalState,
 		currentBlock,
