@@ -243,6 +243,17 @@ export const BlockBase: ComponentType<any> = (
 		setState(value);
 	};
 
+	const updateParentState = () => {
+		// Compare the block attributes with the attributes and the attributes ref.
+		// If they are not equal, set the attributes to the block attributes.
+		if (
+			!isEquals(blockAttributes, attributes) &&
+			isEquals(attributes, attributesRef.current)
+		) {
+			setBlockAttributes(attributes);
+		}
+	};
+
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
 		if (
@@ -255,16 +266,17 @@ export const BlockBase: ComponentType<any> = (
 			handleOnChangeStyleInLocalState(attributes);
 		}
 
-		const timeoutId = setTimeout(() => {
-			// Compare the block attributes with the attributes and the attributes ref.
-			// If they are not equal, set the attributes to the block attributes.
-			if (
-				!isEquals(blockAttributes, attributes) &&
-				isEquals(attributes, attributesRef.current)
-			) {
-				setBlockAttributes(attributes);
-			}
-		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
+		// If inside the block inspector, update the parent state immediately.
+		if (insideBlockInspector) {
+			updateParentState();
+
+			return;
+		}
+
+		const timeoutId = setTimeout(
+			updateParentState,
+			BLOCKERA_DELAY_EXPECTED_TIME
+		); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
 		return () => clearTimeout(timeoutId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
