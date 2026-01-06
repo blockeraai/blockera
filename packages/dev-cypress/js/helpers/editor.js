@@ -179,6 +179,18 @@ export function openBlockInserter(selector = false) {
 	});
 }
 
+export function closeBlockInserter() {
+	return cy.get('body').then(($body) => {
+		const secondarySidebar = $body.find(
+			'[aria-label="Hide secondary sidebar"]'
+		);
+		if (secondarySidebar.length > 0) {
+			return cy.get('[aria-label="Hide secondary sidebar"]').click();
+		}
+		return cy;
+	});
+}
+
 /**
  * From inside the WordPress editor open the blockera Gutenberg editor panel
  *
