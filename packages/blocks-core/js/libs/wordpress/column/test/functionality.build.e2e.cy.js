@@ -8,6 +8,7 @@ import {
 	setParentBlock,
 	setInnerBlock,
 	redirectToFrontPage,
+	closeBlockInserter,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Column Block', () => {
@@ -389,6 +390,8 @@ describe('Column Block', () => {
 <!-- /wp:column --></div>
 <!-- /wp:columns -->`);
 
+		closeBlockInserter();
+
 		// Select target block
 		cy.getBlock('core/paragraph').first().click();
 
@@ -416,7 +419,7 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		const expectedCSS =
-			'.blockera-block.wp-block-column[style*=flex-basis]{flex-grow:0';
+			'.blockera-block.wp-block-column[style*="flex-basis"]{flex-grow:0;';
 
 		//Check block
 		cy.get('link[id^="@blockera/blocks-core-styles-"]')
@@ -446,19 +449,16 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		//Check block
-		cy.get('link[id="blockera-blocks-core-column-style-css"]')
+		cy.get('style[id="blockera-block-column-inline-css"]')
 			.should('exist')
-			.then(($link) => {
-				// Fetch the CSS file content
-				cy.request($link.attr('href')).then((response) => {
-					const styleContent = response.body;
+			.then(($style) => {
+				const styleContent = $style.text();
 
-					cy.normalizeCSSContent(styleContent).then(
-						(normalizedContent) => {
-							expect(normalizedContent).to.include(expectedCSS);
-						}
-					);
-				});
+				cy.normalizeCSSContent(styleContent).then(
+					(normalizedContent) => {
+						expect(normalizedContent).to.include(expectedCSS);
+					}
+				);
 			});
 	});
 });
