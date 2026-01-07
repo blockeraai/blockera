@@ -16,6 +16,7 @@ const {
 	getByDataTest,
 	getParentContainer,
 	getBlock,
+	getByDataCy,
 	openGlobalStylesPanel,
 	openSettingsPanel,
 } = require('@blockera/dev-playwright/js/support/commands');
@@ -80,11 +81,20 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		const bgColorContainer = getParentContainer(page, 'BG Color');
 
 		// Act: clicking on color button
-		await bgColorContainer
-			.locator('[data-cy="value-addon-btn-open"]')
-			.click({
-				force: true,
-			});
+		const colorBtn = bgColorContainer.locator('[data-cy="color-btn"]');
+		if ((await colorBtn.count()) > 0) {
+			await bgColorContainer
+				.locator('[data-cy="value-addon-btn-open"]')
+				.click({
+					force: true,
+				});
+		} else {
+			await bgColorContainer
+				.locator('[data-cy="value-addon-btn"]')
+				.click({
+					force: true,
+				});
+		}
 
 		// Select variable
 		await page
