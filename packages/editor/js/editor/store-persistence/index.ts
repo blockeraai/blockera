@@ -34,15 +34,19 @@ register(store);
  * Defaults are injected by PHP via window.blockeraEditorPersistenceDefaults.
  */
 function getDefaults(): StoreState {
-	const defaults = (window as any).blockeraEditorPersistenceDefaults as StoreState | undefined;
+	const defaults = (window as any).blockeraEditorPersistenceDefaults as
+		| StoreState
+		| undefined;
 
 	// Use PHP defaults if available, otherwise fallback to hardcoded defaults
-	return defaults || {
-		secondarySidebarVisible: true,
-		primarySidebarWidth: '300px',
-		secondarySidebarWidth: '350px',
-		listViewHeight: '50%',
-	};
+	return (
+		defaults || {
+			secondarySidebarVisible: true,
+			primarySidebarWidth: '300px',
+			secondarySidebarWidth: '350px',
+			listViewHeight: '50%',
+		}
+	);
 }
 
 /**
@@ -87,16 +91,24 @@ async function initializePersistence() {
 	// This way, the initial state setting won't trigger a save
 	// Always update state with merged values (persisted values override defaults)
 	if (typeof mergedState.secondarySidebarVisible === 'boolean') {
-		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarVisible(mergedState.secondarySidebarVisible);
+		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarVisible(
+			mergedState.secondarySidebarVisible
+		);
 	}
 	if (typeof mergedState.primarySidebarWidth === 'string') {
-		(dispatch(STORE_NAME) as typeof actions).setPrimarySidebarWidth(mergedState.primarySidebarWidth);
+		(dispatch(STORE_NAME) as typeof actions).setPrimarySidebarWidth(
+			mergedState.primarySidebarWidth
+		);
 	}
 	if (typeof mergedState.secondarySidebarWidth === 'string') {
-		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarWidth(mergedState.secondarySidebarWidth);
+		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarWidth(
+			mergedState.secondarySidebarWidth
+		);
 	}
 	if (typeof mergedState.listViewHeight === 'string') {
-		(dispatch(STORE_NAME) as typeof actions).setListViewHeight(mergedState.listViewHeight);
+		(dispatch(STORE_NAME) as typeof actions).setListViewHeight(
+			mergedState.listViewHeight
+		);
 	}
 
 	// NOW enable persistence - all subsequent actions will be saved

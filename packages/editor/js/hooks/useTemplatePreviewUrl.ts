@@ -79,7 +79,7 @@ export interface UseTemplatePreviewUrlReturn {
  *
  * @param postType - The post type (should be 'wp_template' for templates).
  * @param templateSlug - The template slug (e.g., 'single-post', 'category').
- * @returns Object with previewUrl, isLoading state, and parsed slug info.
+ * @return Object with previewUrl, isLoading state, and parsed slug info.
  */
 export function useTemplatePreviewUrl(
 	postType: string | null | undefined,
@@ -124,10 +124,10 @@ export function useTemplatePreviewUrl(
 			const siteName = siteData?.name ?? '';
 
 			// Check if site data is still loading
-			const isSiteDataLoading = coreSelect.isResolving('getEntityRecord', [
-				'root',
-				'__unstableBase',
-			]);
+			const isSiteDataLoading = coreSelect.isResolving(
+				'getEntityRecord',
+				['root', '__unstableBase']
+			);
 
 			if (!homeUrl) {
 				return { previewUrl: null, isLoading: isSiteDataLoading };
@@ -152,7 +152,8 @@ export function useTemplatePreviewUrl(
 
 				// 404 template uses a non-existent path
 				case '404': {
-					const notFoundPath = '/this-is-a-404-page-' + Date.now() + '/';
+					const notFoundPath =
+						'/this-is-a-404-page-' + Date.now() + '/';
 					return {
 						previewUrl: homeUrl.replace(/\/$/, '') + notFoundPath,
 						isLoading: false,
@@ -163,7 +164,11 @@ export function useTemplatePreviewUrl(
 				case 'date': {
 					const currentYear = new Date().getFullYear();
 					return {
-						previewUrl: homeUrl.replace(/\/$/, '') + '/' + currentYear + '/',
+						previewUrl:
+							homeUrl.replace(/\/$/, '') +
+							'/' +
+							currentYear +
+							'/',
 						isLoading: false,
 					};
 				}
@@ -172,9 +177,10 @@ export function useTemplatePreviewUrl(
 				case 'privacy-policy': {
 					// WordPress stores privacy policy page ID in site settings
 					// For now, use a fallback approach with ?page_id
-					const siteSettings = coreSelect.getEntityRecord('root', 'site') as
-						| { page_for_privacy_policy?: number }
-						| undefined;
+					const siteSettings = coreSelect.getEntityRecord(
+						'root',
+						'site'
+					) as { page_for_privacy_policy?: number } | undefined;
 					if (siteSettings?.page_for_privacy_policy) {
 						const privacyPage = coreSelect.getEntityRecord(
 							'postType',
@@ -182,7 +188,10 @@ export function useTemplatePreviewUrl(
 							siteSettings.page_for_privacy_policy
 						) as EntityWithLink | undefined;
 						if (privacyPage?.link) {
-							return { previewUrl: privacyPage.link, isLoading: false };
+							return {
+								previewUrl: privacyPage.link,
+								isLoading: false,
+							};
 						}
 					}
 					// Fallback to home URL if no privacy page set
@@ -205,31 +214,53 @@ export function useTemplatePreviewUrl(
 							}
 						) as EntityWithLink[] | null;
 
-						const isPostsLoading = coreSelect.isResolving('getEntityRecords', [
-							'postType',
-							targetPostType,
-							{ slug: parsedSlug.entitySlug, status: 'publish', per_page: 1 },
-						]);
+						const isPostsLoading = coreSelect.isResolving(
+							'getEntityRecords',
+							[
+								'postType',
+								targetPostType,
+								{
+									slug: parsedSlug.entitySlug,
+									status: 'publish',
+									per_page: 1,
+								},
+							]
+						);
 
 						if (posts?.[0]?.link) {
-							return { previewUrl: posts[0].link, isLoading: false };
+							return {
+								previewUrl: posts[0].link,
+								isLoading: false,
+							};
 						}
 						return { previewUrl: null, isLoading: isPostsLoading };
 					}
 
 					// Get latest edited published post of this type
-					const posts = coreSelect.getEntityRecords('postType', targetPostType, {
-						status: 'publish',
-						per_page: 1,
-						orderby: 'modified',
-						order: 'desc',
-					}) as EntityWithLink[] | null;
-
-					const isPostsLoading = coreSelect.isResolving('getEntityRecords', [
+					const posts = coreSelect.getEntityRecords(
 						'postType',
 						targetPostType,
-						{ status: 'publish', per_page: 1, orderby: 'modified', order: 'desc' },
-					]);
+						{
+							status: 'publish',
+							per_page: 1,
+							orderby: 'modified',
+							order: 'desc',
+						}
+					) as EntityWithLink[] | null;
+
+					const isPostsLoading = coreSelect.isResolving(
+						'getEntityRecords',
+						[
+							'postType',
+							targetPostType,
+							{
+								status: 'publish',
+								per_page: 1,
+								orderby: 'modified',
+								order: 'desc',
+							},
+						]
+					);
 
 					if (posts?.[0]?.link) {
 						return { previewUrl: posts[0].link, isLoading: false };
@@ -241,37 +272,63 @@ export function useTemplatePreviewUrl(
 				case 'page': {
 					// If we have a specific page slug, try to find it
 					if (parsedSlug.entitySlug) {
-						const pages = coreSelect.getEntityRecords('postType', 'page', {
-							slug: parsedSlug.entitySlug,
-							status: 'publish',
-							per_page: 1,
-						}) as EntityWithLink[] | null;
-
-						const isPagesLoading = coreSelect.isResolving('getEntityRecords', [
+						const pages = coreSelect.getEntityRecords(
 							'postType',
 							'page',
-							{ slug: parsedSlug.entitySlug, status: 'publish', per_page: 1 },
-						]);
+							{
+								slug: parsedSlug.entitySlug,
+								status: 'publish',
+								per_page: 1,
+							}
+						) as EntityWithLink[] | null;
+
+						const isPagesLoading = coreSelect.isResolving(
+							'getEntityRecords',
+							[
+								'postType',
+								'page',
+								{
+									slug: parsedSlug.entitySlug,
+									status: 'publish',
+									per_page: 1,
+								},
+							]
+						);
 
 						if (pages?.[0]?.link) {
-							return { previewUrl: pages[0].link, isLoading: false };
+							return {
+								previewUrl: pages[0].link,
+								isLoading: false,
+							};
 						}
 						return { previewUrl: null, isLoading: isPagesLoading };
 					}
 
 					// Get latest edited published page
-					const pages = coreSelect.getEntityRecords('postType', 'page', {
-						status: 'publish',
-						per_page: 1,
-						orderby: 'modified',
-						order: 'desc',
-					}) as EntityWithLink[] | null;
-
-					const isPagesLoading = coreSelect.isResolving('getEntityRecords', [
+					const pages = coreSelect.getEntityRecords(
 						'postType',
 						'page',
-						{ status: 'publish', per_page: 1, orderby: 'modified', order: 'desc' },
-					]);
+						{
+							status: 'publish',
+							per_page: 1,
+							orderby: 'modified',
+							order: 'desc',
+						}
+					) as EntityWithLink[] | null;
+
+					const isPagesLoading = coreSelect.isResolving(
+						'getEntityRecords',
+						[
+							'postType',
+							'page',
+							{
+								status: 'publish',
+								per_page: 1,
+								orderby: 'modified',
+								order: 'desc',
+							},
+						]
+					);
 
 					if (pages?.[0]?.link) {
 						return { previewUrl: pages[0].link, isLoading: false };
@@ -295,7 +352,10 @@ export function useTemplatePreviewUrl(
 									: postTypeObj.slug;
 							return {
 								previewUrl:
-									homeUrl.replace(/\/$/, '') + '/' + archiveSlug + '/',
+									homeUrl.replace(/\/$/, '') +
+									'/' +
+									archiveSlug +
+									'/',
 								isLoading: false,
 							};
 						}
@@ -309,7 +369,11 @@ export function useTemplatePreviewUrl(
 				case 'category': {
 					const queryArgs = parsedSlug.entitySlug
 						? { slug: parsedSlug.entitySlug, per_page: 1 }
-						: { per_page: 1, orderby: 'count', order: 'desc' as const };
+						: {
+								per_page: 1,
+								orderby: 'count',
+								order: 'desc' as const,
+							};
 
 					const categories = coreSelect.getEntityRecords(
 						'taxonomy',
@@ -323,7 +387,10 @@ export function useTemplatePreviewUrl(
 					);
 
 					if (categories?.[0]?.link) {
-						return { previewUrl: categories[0].link, isLoading: false };
+						return {
+							previewUrl: categories[0].link,
+							isLoading: false,
+						};
 					}
 					return { previewUrl: null, isLoading: isCategoriesLoading };
 				}
@@ -332,7 +399,11 @@ export function useTemplatePreviewUrl(
 				case 'tag': {
 					const queryArgs = parsedSlug.entitySlug
 						? { slug: parsedSlug.entitySlug, per_page: 1 }
-						: { per_page: 1, orderby: 'count', order: 'desc' as const };
+						: {
+								per_page: 1,
+								orderby: 'count',
+								order: 'desc' as const,
+							};
 
 					const tags = coreSelect.getEntityRecords(
 						'taxonomy',
@@ -340,11 +411,10 @@ export function useTemplatePreviewUrl(
 						queryArgs
 					) as EntityWithLink[] | null;
 
-					const isTagsLoading = coreSelect.isResolving('getEntityRecords', [
-						'taxonomy',
-						'post_tag',
-						queryArgs,
-					]);
+					const isTagsLoading = coreSelect.isResolving(
+						'getEntityRecords',
+						['taxonomy', 'post_tag', queryArgs]
+					);
 
 					if (tags?.[0]?.link) {
 						return { previewUrl: tags[0].link, isLoading: false };
@@ -357,7 +427,11 @@ export function useTemplatePreviewUrl(
 				// registered_date, slug, include_slugs, email, url (not post_count)
 				case 'author': {
 					const queryArgs = parsedSlug.entitySlug
-						? { slug: parsedSlug.entitySlug, per_page: 1, who: 'authors' }
+						? {
+								slug: parsedSlug.entitySlug,
+								per_page: 1,
+								who: 'authors',
+							}
 						: {
 								per_page: 1,
 								orderby: 'registered_date',
@@ -371,14 +445,16 @@ export function useTemplatePreviewUrl(
 						queryArgs
 					) as EntityWithLink[] | null;
 
-					const isAuthorsLoading = coreSelect.isResolving('getEntityRecords', [
-						'root',
-						'user',
-						queryArgs,
-					]);
+					const isAuthorsLoading = coreSelect.isResolving(
+						'getEntityRecords',
+						['root', 'user', queryArgs]
+					);
 
 					if (authors?.[0]?.link) {
-						return { previewUrl: authors[0].link, isLoading: false };
+						return {
+							previewUrl: authors[0].link,
+							isLoading: false,
+						};
 					}
 					return { previewUrl: null, isLoading: isAuthorsLoading };
 				}
@@ -394,7 +470,11 @@ export function useTemplatePreviewUrl(
 
 					const queryArgs = parsedSlug.entitySlug
 						? { slug: parsedSlug.entitySlug, per_page: 1 }
-						: { per_page: 1, orderby: 'count', order: 'desc' as const };
+						: {
+								per_page: 1,
+								orderby: 'count',
+								order: 'desc' as const,
+							};
 
 					const terms = coreSelect.getEntityRecords(
 						'taxonomy',
@@ -402,11 +482,10 @@ export function useTemplatePreviewUrl(
 						queryArgs
 					) as EntityWithLink[] | null;
 
-					const isTermsLoading = coreSelect.isResolving('getEntityRecords', [
-						'taxonomy',
-						taxonomySlug,
-						queryArgs,
-					]);
+					const isTermsLoading = coreSelect.isResolving(
+						'getEntityRecords',
+						['taxonomy', taxonomySlug, queryArgs]
+					);
 
 					if (terms?.[0]?.link) {
 						return { previewUrl: terms[0].link, isLoading: false };
@@ -432,14 +511,25 @@ export function useTemplatePreviewUrl(
 						[
 							'postType',
 							'attachment',
-							{ status: 'inherit', per_page: 1, orderby: 'modified', order: 'desc' },
+							{
+								status: 'inherit',
+								per_page: 1,
+								orderby: 'modified',
+								order: 'desc',
+							},
 						]
 					);
 
 					if (attachments?.[0]?.link) {
-						return { previewUrl: attachments[0].link, isLoading: false };
+						return {
+							previewUrl: attachments[0].link,
+							isLoading: false,
+						};
 					}
-					return { previewUrl: null, isLoading: isAttachmentsLoading };
+					return {
+						previewUrl: null,
+						isLoading: isAttachmentsLoading,
+					};
 				}
 
 				// Unknown template types - fallback to home URL
@@ -457,4 +547,3 @@ export function useTemplatePreviewUrl(
 		parsedSlug,
 	};
 }
-

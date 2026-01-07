@@ -47,7 +47,7 @@ interface UsePrefetchPreviewReturn {
  * Build the prefetch URL with the hide admin bar parameter.
  *
  * @param baseUrl - The base view URL.
- * @returns The URL with HIDE_ADMIN_BAR_ARG appended.
+ * @return The URL with HIDE_ADMIN_BAR_ARG appended.
  */
 const buildPrefetchUrl = (baseUrl: string): string => {
 	try {
@@ -64,7 +64,7 @@ const buildPrefetchUrl = (baseUrl: string): string => {
  * Create and inject a prefetch link element into the document head.
  *
  * @param url - The URL to prefetch.
- * @returns The created link element (for cleanup if needed).
+ * @return The created link element (for cleanup if needed).
  */
 const injectPrefetchLink = (url: string): HTMLLinkElement => {
 	const link = document.createElement('link');
@@ -91,7 +91,7 @@ const removePrefetchLink = (link: HTMLLinkElement): void => {
  * Hook to prefetch the preview URL on hover.
  *
  * @param props - Hook props containing viewUrl, dirty state, and validation.
- * @returns Object with handleMouseEnter function.
+ * @return Object with handleMouseEnter function.
  */
 export function usePrefetchPreview({
 	viewUrl,
@@ -167,4 +167,3 @@ export function usePrefetchPreview({
 		handleMouseEnter,
 	};
 }
-

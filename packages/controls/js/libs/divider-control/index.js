@@ -52,7 +52,9 @@ export default function DividerControl({
 	const { repeaterId } = useContext(RepeaterContext);
 
 	useEffect(() => {
-		if (value.length < 2) return;
+		if (value.length < 2) {
+			return;
+		}
 		if (value.length === 2 && value[0].position === 'top') {
 			changeRepeaterItem({
 				controlId,

@@ -8,7 +8,10 @@ import type { Tab } from '../types';
 /**
  * Type for dirty state check function.
  */
-export type GetIsDirtyFn = (postType: string, postId: string | number) => boolean;
+export type GetIsDirtyFn = (
+	postType: string,
+	postId: string | number
+) => boolean;
 
 /**
  * Sort tabs with pinned tabs first, then unpinned tabs
@@ -16,7 +19,7 @@ export type GetIsDirtyFn = (postType: string, postId: string | number) => boolea
  * Respects custom order field if available, otherwise maintains array order
  *
  * @param tabs - Array of tab objects
- * @returns New sorted array of tabs
+ * @return New sorted array of tabs
  */
 export function sortTabsByPinned(tabs: Tab[]): Tab[] {
 	return [...tabs].sort((a, b) => {
@@ -60,7 +63,7 @@ export function sortTabsByPinned(tabs: Tab[]): Tab[] {
  *
  * @param tabs - Array of tab objects
  * @param key - Tab key to close
- * @returns New array of tabs with the specified tab removed (if not pinned)
+ * @return New array of tabs with the specified tab removed (if not pinned)
  */
 export function closeTab(tabs: Tab[], key: string): Tab[] {
 	const tab = tabs.find((t) => t.key === key);
@@ -76,7 +79,7 @@ export function closeTab(tabs: Tab[], key: string): Tab[] {
  *
  * @param tabs - Array of tab objects
  * @param targetKey - Key of the tab to keep open
- * @returns New array of tabs with unpinned tabs removed (except target)
+ * @return New array of tabs with unpinned tabs removed (except target)
  */
 export function closeOthers(tabs: Tab[], targetKey: string): Tab[] {
 	return tabs.filter((tab) => {
@@ -100,7 +103,7 @@ export function closeOthers(tabs: Tab[], targetKey: string): Tab[] {
  *
  * @param tabs - Array of tab objects
  * @param targetKey - Key of the reference tab
- * @returns New array of tabs with unpinned tabs to the right removed
+ * @return New array of tabs with unpinned tabs to the right removed
  */
 export function closeToRight(tabs: Tab[], targetKey: string): Tab[] {
 	// Sort tabs: pinned first, then unpinned
@@ -135,7 +138,7 @@ export function closeToRight(tabs: Tab[], targetKey: string): Tab[] {
  *
  * @param tabs - Array of tab objects
  * @param getIsDirty - Function to check if a tab is dirty: (postType, postId) => boolean
- * @returns New array of tabs with non-dirty, non-pinned tabs removed
+ * @return New array of tabs with non-dirty, non-pinned tabs removed
  */
 export function closeSaved(tabs: Tab[], getIsDirty: GetIsDirtyFn): Tab[] {
 	return tabs.filter((tab) => {
@@ -151,4 +154,3 @@ export function closeSaved(tabs: Tab[], getIsDirty: GetIsDirtyFn): Tab[] {
 		return false;
 	});
 }
-

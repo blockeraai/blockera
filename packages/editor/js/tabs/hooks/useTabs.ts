@@ -1,7 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { useState, useCallback, useEffect, useRef, useMemo } from '@wordpress/element';
+import {
+	useState,
+	useCallback,
+	useEffect,
+	useRef,
+	useMemo,
+} from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
@@ -9,7 +15,13 @@ import { store as coreStore } from '@wordpress/core-data';
  * Internal dependencies
  */
 import { TABS_STORAGE_KEY } from '../utils/storageKeys';
-import type { Tab, UseTabsOptions, UseTabsReturn, WorkspaceTabs, TabsStorage } from '../types';
+import type {
+	Tab,
+	UseTabsOptions,
+	UseTabsReturn,
+	WorkspaceTabs,
+	TabsStorage,
+} from '../types';
 
 /**
  * Main workspace ID constant.
@@ -20,7 +32,7 @@ export const MAIN_WORKSPACE_ID = 'main';
 /**
  * Load tabs from localStorage
  *
- * @returns WorkspaceTabs object with pinned and unpinned tabs
+ * @return WorkspaceTabs object with pinned and unpinned tabs
  */
 function loadTabsFromStorage(): WorkspaceTabs {
 	try {
@@ -29,13 +41,25 @@ function loadTabsFromStorage(): WorkspaceTabs {
 			const parsed = JSON.parse(stored);
 
 			// Workspace structure: { "main": { "pinned-tabs": [], "tabs": [] } }
-			if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+			if (
+				parsed &&
+				typeof parsed === 'object' &&
+				!Array.isArray(parsed)
+			) {
 				if (parsed[MAIN_WORKSPACE_ID]) {
-					const workspaceTabs = parsed[MAIN_WORKSPACE_ID] as WorkspaceTabs;
+					const workspaceTabs = parsed[
+						MAIN_WORKSPACE_ID
+					] as WorkspaceTabs;
 					// Ensure arrays exist
 					return {
-						'pinned-tabs': Array.isArray(workspaceTabs['pinned-tabs']) ? workspaceTabs['pinned-tabs'] : [],
-						tabs: Array.isArray(workspaceTabs.tabs) ? workspaceTabs.tabs : [],
+						'pinned-tabs': Array.isArray(
+							workspaceTabs['pinned-tabs']
+						)
+							? workspaceTabs['pinned-tabs']
+							: [],
+						tabs: Array.isArray(workspaceTabs.tabs)
+							? workspaceTabs.tabs
+							: [],
 					};
 				}
 			}
@@ -70,7 +94,7 @@ function saveTabsToStorage(workspaceTabs: WorkspaceTabs): void {
  * (for backward compatibility with existing code)
  *
  * @param workspaceTabs - WorkspaceTabs object
- * @returns Combined array with pinned tabs first
+ * @return Combined array with pinned tabs first
  */
 function combineTabs(workspaceTabs: WorkspaceTabs): Tab[] {
 	return [...workspaceTabs['pinned-tabs'], ...workspaceTabs.tabs];
@@ -99,9 +123,11 @@ export function getWorkspaceTabs(workspaceTabs: WorkspaceTabs): WorkspaceTabs {
  * Hook to manage tabs state
  *
  * @param options - Options object
- * @returns Tabs state and management functions
+ * @return Tabs state and management functions
  */
-export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): UseTabsReturn {
+export function useTabs({
+	persistenceEnabled = true,
+}: UseTabsOptions = {}): UseTabsReturn {
 	// Initialize from localStorage on mount - use new structure internally
 	const [workspaceTabs, setWorkspaceTabs] = useState<WorkspaceTabs>(() => {
 		return loadTabsFromStorage();
@@ -129,7 +155,22 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 	const tabs = useMemo(() => combineTabs(workspaceTabs), [workspaceTabs]);
 
 	const getEntityRecord = useSelect(
-		(select) => (select(coreStore) as { getEntityRecord: (kind: string, name: string, id: string | number) => { slug?: string; status?: string; title?: string | { rendered?: string } } | undefined }).getEntityRecord,
+		(select) =>
+			(
+				select(coreStore) as {
+					getEntityRecord: (
+						kind: string,
+						name: string,
+						id: string | number
+					) =>
+						| {
+								slug?: string;
+								status?: string;
+								title?: string | { rendered?: string };
+						  }
+						| undefined;
+				}
+			).getEntityRecord,
 		[]
 	);
 
@@ -178,7 +219,9 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 				const record = getEntityRecord('postType', postType, postId);
 				if (record?.title) {
 					const title = record.title;
-					return typeof title === 'string' ? title : title.rendered || null;
+					return typeof title === 'string'
+						? title
+						: title.rendered || null;
 				}
 			} catch {
 				// Entity not loaded yet
@@ -232,7 +275,10 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 			// Check if tab already exists using functional update to avoid stale closure
 			setWorkspaceTabs((prev) => {
 				// Check if tab exists in either array
-				if (prev['pinned-tabs'].find((tab) => tab.key === key) || prev.tabs.find((tab) => tab.key === key)) {
+				if (
+					prev['pinned-tabs'].find((tab) => tab.key === key) ||
+					prev.tabs.find((tab) => tab.key === key)
+				) {
 					return prev; // Tab already exists, return unchanged
 				}
 				// Add to unpinned tabs
@@ -270,8 +316,12 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 	 */
 	const updateTabTitle = useCallback((key: string, title: string): void => {
 		setWorkspaceTabs((prev) => ({
-			'pinned-tabs': prev['pinned-tabs'].map((tab) => (tab.key === key ? { ...tab, title } : tab)),
-			tabs: prev.tabs.map((tab) => (tab.key === key ? { ...tab, title } : tab)),
+			'pinned-tabs': prev['pinned-tabs'].map((tab) =>
+				tab.key === key ? { ...tab, title } : tab
+			),
+			tabs: prev.tabs.map((tab) =>
+				tab.key === key ? { ...tab, title } : tab
+			),
 		}));
 	}, []);
 
@@ -296,7 +346,10 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 			}
 
 			return {
-				'pinned-tabs': [...prev['pinned-tabs'], { ...tabToPin, isPinned: true }],
+				'pinned-tabs': [
+					...prev['pinned-tabs'],
+					{ ...tabToPin, isPinned: true },
+				],
 				tabs: prev.tabs.filter((tab) => tab.key !== key),
 			};
 		});
@@ -309,13 +362,17 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 	const unpinTab = useCallback((key: string): void => {
 		setWorkspaceTabs((prev) => {
 			// Find tab in pinned array
-			const tabToUnpin = prev['pinned-tabs'].find((tab) => tab.key === key);
+			const tabToUnpin = prev['pinned-tabs'].find(
+				(tab) => tab.key === key
+			);
 			if (!tabToUnpin) {
 				return prev; // Tab not found or already unpinned
 			}
 
 			return {
-				'pinned-tabs': prev['pinned-tabs'].filter((tab) => tab.key !== key),
+				'pinned-tabs': prev['pinned-tabs'].filter(
+					(tab) => tab.key !== key
+				),
 				tabs: [{ ...tabToUnpin, isPinned: false }, ...prev.tabs],
 			};
 		});
@@ -327,11 +384,15 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 	const togglePinTab = useCallback((key: string): void => {
 		setWorkspaceTabs((prev) => {
 			// Check if tab is in pinned array
-			const pinnedTab = prev['pinned-tabs'].find((tab) => tab.key === key);
+			const pinnedTab = prev['pinned-tabs'].find(
+				(tab) => tab.key === key
+			);
 			if (pinnedTab) {
 				// Unpin: move from pinned to unpinned (at the beginning)
 				return {
-					'pinned-tabs': prev['pinned-tabs'].filter((tab) => tab.key !== key),
+					'pinned-tabs': prev['pinned-tabs'].filter(
+						(tab) => tab.key !== key
+					),
 					tabs: [{ ...pinnedTab, isPinned: false }, ...prev.tabs],
 				};
 			}
@@ -341,7 +402,10 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 			if (unpinnedTab) {
 				// Pin: move from unpinned to pinned
 				return {
-					'pinned-tabs': [...prev['pinned-tabs'], { ...unpinnedTab, isPinned: true }],
+					'pinned-tabs': [
+						...prev['pinned-tabs'],
+						{ ...unpinnedTab, isPinned: true },
+					],
 					tabs: prev.tabs.filter((tab) => tab.key !== key),
 				};
 			}
@@ -360,7 +424,10 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 		(newTabs: Tab[] | ((prev: Tab[]) => Tab[])): void => {
 			setWorkspaceTabs((prev) => {
 				const currentCombined = combineTabs(prev);
-				const updatedCombined = typeof newTabs === 'function' ? newTabs(currentCombined) : newTabs;
+				const updatedCombined =
+					typeof newTabs === 'function'
+						? newTabs(currentCombined)
+						: newTabs;
 
 				// Split into pinned and unpinned
 				const pinned: Tab[] = [];
@@ -394,14 +461,20 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 		(key: string, customTitle: string | null): void => {
 			setWorkspaceTabs((prev) => {
 				const updatedCustomTitle =
-					customTitle && customTitle.trim() !== '' ? customTitle.trim() : null;
+					customTitle && customTitle.trim() !== ''
+						? customTitle.trim()
+						: null;
 
 				return {
 					'pinned-tabs': prev['pinned-tabs'].map((tab) =>
-						tab.key === key ? { ...tab, customTitle: updatedCustomTitle } : tab
+						tab.key === key
+							? { ...tab, customTitle: updatedCustomTitle }
+							: tab
 					),
 					tabs: prev.tabs.map((tab) =>
-						tab.key === key ? { ...tab, customTitle: updatedCustomTitle } : tab
+						tab.key === key
+							? { ...tab, customTitle: updatedCustomTitle }
+							: tab
 					),
 				};
 			});
@@ -416,12 +489,15 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 	 * @param pinnedTabs - New order for pinned tabs
 	 * @param unpinnedTabs - New order for unpinned tabs
 	 */
-	const reorderTabs = useCallback((pinnedTabs: Tab[], unpinnedTabs: Tab[]): void => {
-		setWorkspaceTabs({
-			'pinned-tabs': pinnedTabs,
-			tabs: unpinnedTabs,
-		});
-	}, []);
+	const reorderTabs = useCallback(
+		(pinnedTabs: Tab[], unpinnedTabs: Tab[]): void => {
+			setWorkspaceTabs({
+				'pinned-tabs': pinnedTabs,
+				tabs: unpinnedTabs,
+			});
+		},
+		[]
+	);
 
 	return {
 		tabs, // Combined array for backward compatibility
@@ -439,4 +515,3 @@ export function useTabs({ persistenceEnabled = true }: UseTabsOptions = {}): Use
 		reorderTabs,
 	};
 }
-

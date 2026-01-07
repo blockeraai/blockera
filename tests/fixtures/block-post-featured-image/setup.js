@@ -1,11 +1,13 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const {
+	editPost,
+} = require('@blockera/dev-playwright/js/utils/site-navigation');
 const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
-const path = require('path');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-post-featured-image test
  * Creates a post, uploads featured image, sets it as thumbnail, and edits the post
@@ -14,6 +16,7 @@ const path = require('path');
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	// Get the path to the featured image
 	// wpCli runs from WordPress root inside Docker container
@@ -31,9 +34,7 @@ async function setup(page, sectionContent) {
 	const postId = match ? parseInt(match[1], 10) : null;
 
 	if (!postId) {
-		throw new Error(
-			`Failed to get post ID from output: ${result.stdout}`
-		);
+		throw new Error(`Failed to get post ID from output: ${result.stdout}`);
 	}
 
 	// Step 2: Upload the image and get attachment ID

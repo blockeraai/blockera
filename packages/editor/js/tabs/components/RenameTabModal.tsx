@@ -69,24 +69,23 @@ export default function RenameTabModal({
 	};
 
 	// Get the actual post title for display
-	const actualTitle =
-		entityTitle || tab.title || __('Untitled', 'blockera-tabs');
+	const actualTitle = entityTitle || tab.title || __('Untitled', 'blockera');
 
 	return (
 		<Modal
-			title={__('Rename Tab', 'blockera-tabs')}
+			title={__('Rename Tab', 'blockera')}
 			onRequestClose={handleClose}
 			className="blockera-tabs-rename-modal"
 		>
 			<div className="blockera-tabs-rename-modal-content">
 				<TextControl
-					label={__('Custom Tab Name', 'blockera-tabs')}
+					label={__('Custom Tab Name', 'blockera')}
 					value={customTitle}
 					onChange={setCustomTitle}
 					placeholder={actualTitle}
 					help={__(
 						'Leave empty to use the actual post title.',
-						'blockera-tabs'
+						'blockera'
 					)}
 				/>
 			</div>
@@ -99,20 +98,19 @@ export default function RenameTabModal({
 						onClick={handleRemoveRename}
 						style={{ marginRight: 'auto' }}
 					>
-						{__('Remove rename', 'blockera-tabs')}
+						{__('Remove rename', 'blockera')}
 					</Button>
 				)}
 
 				<div className="blockera-tabs-rename-modal-actions-right">
 					<Button variant="secondary" onClick={handleClose}>
-						{__('Cancel', 'blockera-tabs')}
+						{__('Cancel', 'blockera')}
 					</Button>
 					<Button variant="primary" onClick={handleSave}>
-						{__('Save', 'blockera-tabs')}
+						{__('Save', 'blockera')}
 					</Button>
 				</div>
 			</div>
 		</Modal>
 	);
 }
-

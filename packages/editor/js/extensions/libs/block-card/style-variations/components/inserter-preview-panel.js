@@ -43,7 +43,7 @@ function InserterPreviewPanel({ item }: { item: Object }): MixedElement {
 												...initialAttributes,
 											},
 											innerBlocks: example.innerBlocks,
-									  })
+										})
 									: createBlock(name, initialAttributes)
 							}
 							viewportWidth={example?.viewportWidth ?? 500}

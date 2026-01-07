@@ -3,7 +3,7 @@
  *
  * This is used to ensure customizations only run in editor contexts.
  *
- * @returns True if on block editor or site editor page
+ * @return True if on block editor or site editor page
  */
 export function isEditorPage(): boolean {
 	if (typeof window === 'undefined') {
@@ -30,4 +30,3 @@ export function isEditorPage(): boolean {
 
 	return false;
 }
-

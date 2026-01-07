@@ -150,7 +150,9 @@ export const UnforwardedPanelBody = (
 
 const PanelBodyTitle: ComponentType<any> = forwardRef(
 	({ isOpened, icon, title, accordion, ...props }: Object, ref: Object) => {
-		if (!title) return null;
+		if (!title) {
+			return null;
+		}
 
 		return (
 			<h2

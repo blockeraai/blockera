@@ -30,25 +30,21 @@ export default function PrimarySidebarController() {
 
 	// Watch the active complementary area from the interface store
 	// This tracks both edit-post/document and edit-site/global-styles sidebars
-	const activeComplementaryArea = useSelect(
-		(select) => {
-			const interfaceSelect = select(interfaceStore) as {
-				getActiveComplementaryArea: (scope: string) => string | null | undefined;
-			};
+	const activeComplementaryArea = useSelect((select) => {
+		const interfaceSelect = select(interfaceStore) as {
+			getActiveComplementaryArea: (
+				scope: string
+			) => string | null | undefined;
+		};
 
-			return interfaceSelect.getActiveComplementaryArea('core');
-		},
-		[]
-	);
+		return interfaceSelect.getActiveComplementaryArea('core');
+	}, []);
 
 	// Get primary sidebar width from store
-	const primarySidebarWidth = useSelect(
-		(select) => {
-			const storeSelect = select(blockeraEditorStore) as any;
-			return storeSelect.getPrimarySidebarWidth();
-		},
-		[]
-	);
+	const primarySidebarWidth = useSelect((select) => {
+		const storeSelect = select(blockeraEditorStore) as any;
+		return storeSelect.getPrimarySidebarWidth();
+	}, []);
 
 	// Update CSS variables on body whenever width changes
 	// Body always exists, so this is simple and reliable
@@ -58,7 +54,10 @@ export default function PrimarySidebarController() {
 		}
 
 		// Set CSS variable on body (always exists, variables inherit to all children)
-		document.body.style.setProperty('--blockera-primary-sidebar-width', primarySidebarWidth);
+		document.body.style.setProperty(
+			'--blockera-primary-sidebar-width',
+			primarySidebarWidth
+		);
 	}, [primarySidebarWidth]);
 
 	// Check if the active sidebar is one of the primary sidebars we track
@@ -72,8 +71,9 @@ export default function PrimarySidebarController() {
 	useEffect(() => {
 		const findContainer = () => {
 			if (!sidebarContainerRef.current) {
-				sidebarContainerRef.current =
-					document.querySelector('.interface-interface-skeleton__sidebar') as HTMLElement | null;
+				sidebarContainerRef.current = document.querySelector(
+					'.interface-interface-skeleton__sidebar'
+				) as HTMLElement | null;
 			}
 			return sidebarContainerRef.current;
 		};
@@ -93,8 +93,9 @@ export default function PrimarySidebarController() {
 	useEffect(() => {
 		// Try to find container if not already found (might be added to DOM later)
 		if (!sidebarContainerRef.current) {
-			sidebarContainerRef.current =
-				document.querySelector('.interface-interface-skeleton__sidebar') as HTMLElement | null;
+			sidebarContainerRef.current = document.querySelector(
+				'.interface-interface-skeleton__sidebar'
+			) as HTMLElement | null;
 		}
 
 		if (!sidebarContainerRef.current) {
@@ -104,7 +105,9 @@ export default function PrimarySidebarController() {
 		// On mount: set --sidebar-width from store
 		if (isInitialMountRef.current) {
 			sidebarContainerRef.current.style.removeProperty('--sidebar-width');
-			sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
+			sidebarContainerRef.current.style.removeProperty(
+				'--sidebar-width-raw'
+			);
 			previousSidebarRef.current = activeComplementaryArea;
 			isInitialMountRef.current = false;
 			return;
@@ -126,8 +129,13 @@ export default function PrimarySidebarController() {
 
 		// Case 2: Closing sidebar (was open, now closed) - set width to 0
 		if (wasPrimarySidebarOpen && !isPrimarySidebarOpen) {
-			sidebarContainerRef.current.style.setProperty('--sidebar-width', '0');
-			sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
+			sidebarContainerRef.current.style.setProperty(
+				'--sidebar-width',
+				'0'
+			);
+			sidebarContainerRef.current.style.removeProperty(
+				'--sidebar-width-raw'
+			);
 			previousSidebarRef.current = activeComplementaryArea;
 			return;
 		}
@@ -136,62 +144,102 @@ export default function PrimarySidebarController() {
 		if (!wasPrimarySidebarOpen && isPrimarySidebarOpen) {
 			// Ensure starting point is 0 for smooth animation
 			// Use requestAnimationFrame to ensure browser can animate the transition
-			const beforeComputed = window.getComputedStyle(sidebarContainerRef.current).getPropertyValue('--sidebar-width');
-			const fillElement = sidebarContainerRef.current?.querySelector('.interface-complementary-area__fill') as HTMLElement | null;
+			const beforeComputed = window
+				.getComputedStyle(sidebarContainerRef.current)
+				.getPropertyValue('--sidebar-width');
+			const fillElement = sidebarContainerRef.current?.querySelector(
+				'.interface-complementary-area__fill'
+			) as HTMLElement | null;
 
 			// For site editor, ensure the fill element exists and has transition before animating
 			// The fill element might not exist immediately when opening in site editor
 			if (!fillElement) {
 				// Wait for the fill element to be available
 				requestAnimationFrame(() => {
-					const delayedFillElement = sidebarContainerRef.current?.querySelector('.interface-complementary-area__fill') as HTMLElement | null;
+					const delayedFillElement =
+						sidebarContainerRef.current?.querySelector(
+							'.interface-complementary-area__fill'
+						) as HTMLElement | null;
 					if (delayedFillElement && sidebarContainerRef.current) {
 						// Force reflow to ensure 0 width is applied before transitioning to store width
-						if (beforeComputed !== '0px' && beforeComputed !== '0') {
-							sidebarContainerRef.current.style.setProperty('--sidebar-width', '0');
-							sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
-							sidebarContainerRef.current.offsetHeight;
+						if (
+							beforeComputed !== '0px' &&
+							beforeComputed !== '0'
+						) {
+							sidebarContainerRef.current.style.setProperty(
+								'--sidebar-width',
+								'0'
+							);
+							sidebarContainerRef.current.style.removeProperty(
+								'--sidebar-width-raw'
+							);
+							// Force reflow by reading offsetHeight
+							void sidebarContainerRef.current.offsetHeight;
 						}
 						// Use requestAnimationFrame to ensure smooth transition
 						requestAnimationFrame(() => {
 							if (sidebarContainerRef.current) {
-								sidebarContainerRef.current.style.removeProperty('--sidebar-width');
-								sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
+								sidebarContainerRef.current.style.removeProperty(
+									'--sidebar-width'
+								);
+								sidebarContainerRef.current.style.removeProperty(
+									'--sidebar-width-raw'
+								);
 							}
 						});
-					} else {
+					} else if (sidebarContainerRef.current) {
 						// Fallback: set directly if fill element still doesn't exist
-						if (sidebarContainerRef.current) {
-							if (beforeComputed !== '0px' && beforeComputed !== '0') {
-								sidebarContainerRef.current.style.setProperty('--sidebar-width', '0');
-								sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
-								sidebarContainerRef.current.offsetHeight;
-							}
-							requestAnimationFrame(() => {
-								if (sidebarContainerRef.current) {
-									sidebarContainerRef.current.style.removeProperty('--sidebar-width');
-									sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
-								}
-							});
+						if (
+							beforeComputed !== '0px' &&
+							beforeComputed !== '0'
+						) {
+							sidebarContainerRef.current.style.setProperty(
+								'--sidebar-width',
+								'0'
+							);
+							sidebarContainerRef.current.style.removeProperty(
+								'--sidebar-width-raw'
+							);
+							// Force reflow by reading offsetHeight
+							void sidebarContainerRef.current.offsetHeight;
 						}
+						requestAnimationFrame(() => {
+							if (sidebarContainerRef.current) {
+								sidebarContainerRef.current.style.removeProperty(
+									'--sidebar-width'
+								);
+								sidebarContainerRef.current.style.removeProperty(
+									'--sidebar-width-raw'
+								);
+							}
+						});
 					}
 				});
 			} else {
 				// Fill element exists, proceed with normal animation
 				// Force reflow to ensure 0 width is applied before transitioning to store width
 				if (beforeComputed !== '0px' && beforeComputed !== '0') {
-					sidebarContainerRef.current.style.setProperty('--sidebar-width', '0');
-					sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
-					// Force reflow
-					sidebarContainerRef.current.offsetHeight;
+					sidebarContainerRef.current.style.setProperty(
+						'--sidebar-width',
+						'0'
+					);
+					sidebarContainerRef.current.style.removeProperty(
+						'--sidebar-width-raw'
+					);
+					// Force reflow by reading offsetHeight
+					void sidebarContainerRef.current.offsetHeight;
 				}
 
 				// Use requestAnimationFrame to ensure smooth transition
 				requestAnimationFrame(() => {
 					requestAnimationFrame(() => {
 						if (sidebarContainerRef.current) {
-							sidebarContainerRef.current.style.removeProperty('--sidebar-width');
-							sidebarContainerRef.current.style.removeProperty('--sidebar-width-raw');
+							sidebarContainerRef.current.style.removeProperty(
+								'--sidebar-width'
+							);
+							sidebarContainerRef.current.style.removeProperty(
+								'--sidebar-width-raw'
+							);
 						}
 					});
 				});

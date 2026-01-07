@@ -31,7 +31,10 @@ declare module '@wordpress/element' {
 	export const StrictMode: typeof import('react').StrictMode;
 	export const createPortal: typeof import('react-dom').createPortal;
 	export const createRoot: typeof import('react-dom/client').createRoot;
-	export const render: (element: ReactNode, container: Element | null) => void;
+	export const render: (
+		element: ReactNode,
+		container: Element | null
+	) => void;
 	export const unmountComponentAtNode: (container: Element) => boolean;
 	export const flushSync: typeof import('react-dom').flushSync;
 
@@ -65,17 +68,23 @@ declare module '@wordpress/data' {
 		deps?: readonly unknown[]
 	): T;
 
-	export function useDispatch<T = Record<string, (...args: unknown[]) => unknown>>(
-		storeNameOrDescriptor?: string | StoreDescriptor<T>
-	): T;
+	export function useDispatch<
+		T = Record<string, (...args: unknown[]) => unknown>
+	>(storeNameOrDescriptor?: string | StoreDescriptor<T>): T;
 
 	export function useRegistry(): DataRegistry;
 
-	export function select<T>(storeNameOrDescriptor: string | StoreDescriptor<T>): T;
-	export function dispatch<T>(storeNameOrDescriptor: string | StoreDescriptor<T>): T;
+	export function select<T>(
+		storeNameOrDescriptor: string | StoreDescriptor<T>
+	): T;
+	export function dispatch<T>(
+		storeNameOrDescriptor: string | StoreDescriptor<T>
+	): T;
 	export function subscribe(listener: () => void): () => void;
 
-	export function resolveSelect<T>(storeNameOrDescriptor: string | StoreDescriptor<T>): {
+	export function resolveSelect<T>(
+		storeNameOrDescriptor: string | StoreDescriptor<T>
+	): {
 		[K in keyof T]: T[K] extends (...args: infer A) => infer R
 			? (...args: A) => Promise<Awaited<R>>
 			: T[K];
@@ -86,7 +95,10 @@ declare module '@wordpress/data' {
 		options: {
 			reducer: (state: unknown, action: unknown) => unknown;
 			actions?: Record<string, (...args: unknown[]) => unknown>;
-			selectors?: Record<string, (state: unknown, ...args: unknown[]) => unknown>;
+			selectors?: Record<
+				string,
+				(state: unknown, ...args: unknown[]) => unknown
+			>;
 			resolvers?: Record<string, (...args: unknown[]) => unknown>;
 			controls?: Record<string, (action: unknown) => unknown>;
 		}
@@ -98,7 +110,10 @@ declare module '@wordpress/data' {
 		options: {
 			reducer: (state: unknown, action: unknown) => unknown;
 			actions?: Record<string, (...args: unknown[]) => unknown>;
-			selectors?: Record<string, (state: unknown, ...args: unknown[]) => unknown>;
+			selectors?: Record<
+				string,
+				(state: unknown, ...args: unknown[]) => unknown
+			>;
 			resolvers?: Record<string, (...args: unknown[]) => unknown>;
 			controls?: Record<string, (action: unknown) => unknown>;
 		}
@@ -203,8 +218,16 @@ declare module '@wordpress/core-data' {
 		getPostTypes(query?: Record<string, unknown>): PostTypeConfig[] | null;
 		getPostType(slug: string): PostTypeConfig | undefined;
 
-		canUser(action: string, resource: string, id?: number | string): boolean | undefined;
-		canUserEditEntityRecord(kind: string, name: string, recordId: number | string): boolean | undefined;
+		canUser(
+			action: string,
+			resource: string,
+			id?: number | string
+		): boolean | undefined;
+		canUserEditEntityRecord(
+			kind: string,
+			name: string,
+			recordId: number | string
+		): boolean | undefined;
 	}
 
 	export interface PostTypeConfig {
@@ -271,8 +294,12 @@ declare module '@wordpress/editor' {
 		getCurrentPostId(): number | undefined;
 		getCurrentPostType(): PostType | undefined;
 		getCurrentPost(): Post | undefined;
-		getEditedPostAttribute<K extends keyof Post>(attributeName: K): Post[K] | undefined;
-		getCurrentPostAttribute<K extends keyof Post>(attributeName: K): Post[K] | undefined;
+		getEditedPostAttribute<K extends keyof Post>(
+			attributeName: K
+		): Post[K] | undefined;
+		getCurrentPostAttribute<K extends keyof Post>(
+			attributeName: K
+		): Post[K] | undefined;
 		isEditedPostDirty(): boolean;
 		isEditedPostNew(): boolean;
 		isEditedPostSaveable(): boolean;
@@ -283,7 +310,9 @@ declare module '@wordpress/editor' {
 		getEditedPostContent(): string;
 		getEditedPostVisibility(): 'public' | 'private' | 'password';
 		getPermalink(): string | undefined;
-		getPermalinkParts(): { prefix: string; postName: string; suffix: string } | undefined;
+		getPermalinkParts():
+			| { prefix: string; postName: string; suffix: string }
+			| undefined;
 		isPostSavingLocked(): boolean;
 		isPostAutosavingLocked(): boolean;
 		isPostLockTakeover(): boolean;
@@ -421,7 +450,10 @@ declare module '@wordpress/plugins' {
 		scope?: string;
 	}
 
-	export function registerPlugin(name: string, settings: Omit<PluginSettings, 'name'>): void;
+	export function registerPlugin(
+		name: string,
+		settings: Omit<PluginSettings, 'name'>
+	): void;
 	export function unregisterPlugin(name: string): void;
 	export function getPlugin(name: string): PluginSettings | undefined;
 	export function getPlugins(scope?: string): PluginSettings[];
@@ -479,7 +511,13 @@ declare module '@wordpress/components' {
 		'aria-label'?: string;
 		'aria-pressed'?: boolean;
 		'aria-expanded'?: boolean;
-		'aria-haspopup'?: boolean | 'dialog' | 'menu' | 'listbox' | 'tree' | 'grid';
+		'aria-haspopup'?:
+			| boolean
+			| 'dialog'
+			| 'menu'
+			| 'listbox'
+			| 'tree'
+			| 'grid';
 		[key: string]: unknown;
 	}
 
@@ -657,7 +695,14 @@ declare module '@wordpress/components' {
 		label?: ReactNode;
 		onChange: (value: string) => void;
 		placeholder?: string;
-		type?: 'text' | 'email' | 'number' | 'password' | 'tel' | 'url' | 'search';
+		type?:
+			| 'text'
+			| 'email'
+			| 'number'
+			| 'password'
+			| 'tel'
+			| 'url'
+			| 'search';
 		value: string;
 		autoComplete?: string;
 		autoFocus?: boolean;
@@ -691,7 +736,9 @@ declare module '@wordpress/components' {
 		as?: keyof JSX.IntrinsicElements | ComponentType;
 		children?: ReactNode;
 		className?: string;
-		direction?: CSSProperties['flexDirection'] | CSSProperties['flexDirection'][];
+		direction?:
+			| CSSProperties['flexDirection']
+			| CSSProperties['flexDirection'][];
 		expanded?: boolean;
 		gap?: number | string;
 		justify?: CSSProperties['justifyContent'];
@@ -845,7 +892,10 @@ declare module '@wordpress/icons' {
 // ============================================================================
 
 declare module '@wordpress/url' {
-	export function addQueryArgs(url: string, args?: Record<string, unknown>): string;
+	export function addQueryArgs(
+		url: string,
+		args?: Record<string, unknown>
+	): string;
 	export function getQueryArg(url: string, arg: string): string | undefined;
 	export function getQueryArgs(url: string): Record<string, string>;
 	export function hasQueryArg(url: string, arg: string): boolean;
@@ -867,7 +917,10 @@ declare module '@wordpress/url' {
 	export function prependHTTPS(url: string): string;
 	export function safeDecodeURI(uri: string): string;
 	export function safeDecodeURIComponent(uriComponent: string): string;
-	export function filterURLForDisplay(url: string, maxLength?: number): string;
+	export function filterURLForDisplay(
+		url: string,
+		maxLength?: number
+	): string;
 	export function cleanForSlug(input: string): string;
 	export function buildQueryString(data: Record<string, unknown>): string;
 }
@@ -879,7 +932,12 @@ declare module '@wordpress/url' {
 declare module '@wordpress/i18n' {
 	export function __(text: string, domain?: string): string;
 	export function _x(text: string, context: string, domain?: string): string;
-	export function _n(single: string, plural: string, number: number, domain?: string): string;
+	export function _n(
+		single: string,
+		plural: string,
+		number: number,
+		domain?: string
+	): string;
 	export function _nx(
 		single: string,
 		plural: string,
@@ -887,8 +945,14 @@ declare module '@wordpress/i18n' {
 		context: string,
 		domain?: string
 	): string;
-	export function sprintf(format: string, ...args: (string | number)[]): string;
-	export function setLocaleData(data: Record<string, unknown>, domain?: string): void;
+	export function sprintf(
+		format: string,
+		...args: (string | number)[]
+	): string;
+	export function setLocaleData(
+		data: Record<string, unknown>,
+		domain?: string
+	): void;
 	export function getLocaleData(domain?: string): Record<string, unknown>;
 	export function subscribe(callback: () => void): () => void;
 	export function hasTranslation(
@@ -896,7 +960,10 @@ declare module '@wordpress/i18n' {
 		context?: string,
 		domain?: string
 	): boolean;
-	export function resetLocaleData(data?: Record<string, unknown>, domain?: string): void;
+	export function resetLocaleData(
+		data?: Record<string, unknown>,
+		domain?: string
+	): void;
 	export function isRTL(): boolean;
 }
 
@@ -913,16 +980,23 @@ declare module '@wordpress/api-fetch' {
 	}
 
 	export interface ApiFetchMiddleware {
-		(options: ApiFetchOptions, next: (options: ApiFetchOptions) => Promise<unknown>): Promise<unknown>;
+		(
+			options: ApiFetchOptions,
+			next: (options: ApiFetchOptions) => Promise<unknown>
+		): Promise<unknown>;
 	}
 
 	function apiFetch<T = unknown>(options: ApiFetchOptions): Promise<T>;
 
 	namespace apiFetch {
 		function use(middleware: ApiFetchMiddleware): void;
-		function setFetchHandler(handler: (options: ApiFetchOptions) => Promise<unknown>): void;
+		function setFetchHandler(
+			handler: (options: ApiFetchOptions) => Promise<unknown>
+		): void;
 		function createNonceMiddleware(nonce: string): ApiFetchMiddleware;
-		function createPreloadingMiddleware(preloadedData: Record<string, unknown>): ApiFetchMiddleware;
+		function createPreloadingMiddleware(
+			preloadedData: Record<string, unknown>
+		): ApiFetchMiddleware;
 		function createRootURLMiddleware(rootURL: string): ApiFetchMiddleware;
 		const fetchAllMiddleware: ApiFetchMiddleware;
 		const mediaUploadMiddleware: ApiFetchMiddleware;
@@ -944,7 +1018,9 @@ declare module '@wordpress/block-editor' {
 		getBlocks(): Block[];
 		getBlock(clientId: string): Block | null;
 		getBlockName(clientId: string): string | undefined;
-		getBlockAttributes(clientId: string): Record<string, unknown> | undefined;
+		getBlockAttributes(
+			clientId: string
+		): Record<string, unknown> | undefined;
 		getSelectedBlock(): Block | null;
 		getSelectedBlockClientId(): string | null;
 		getBlockRootClientId(clientId: string): string | null;
@@ -952,7 +1028,10 @@ declare module '@wordpress/block-editor' {
 		getBlockIndex(clientId: string): number;
 		getBlockCount(rootClientId?: string | null): number;
 		getBlockOrder(rootClientId?: string | null): string[];
-		getBlockInsertionPoint(): { rootClientId: string | undefined; index: number };
+		getBlockInsertionPoint(): {
+			rootClientId: string | undefined;
+			index: number;
+		};
 		isBlockSelected(clientId: string): boolean;
 		hasSelectedBlock(): boolean;
 		hasSelectedInnerBlock(clientId: string, deep?: boolean): boolean;
@@ -967,13 +1046,34 @@ declare module '@wordpress/block-editor' {
 	}
 
 	export interface BlockEditorActions {
-		insertBlock(block: Block, index?: number, rootClientId?: string, updateSelection?: boolean): void;
-		insertBlocks(blocks: Block[], index?: number, rootClientId?: string, updateSelection?: boolean): void;
+		insertBlock(
+			block: Block,
+			index?: number,
+			rootClientId?: string,
+			updateSelection?: boolean
+		): void;
+		insertBlocks(
+			blocks: Block[],
+			index?: number,
+			rootClientId?: string,
+			updateSelection?: boolean
+		): void;
 		updateBlock(clientId: string, updates: Partial<Block>): void;
-		updateBlockAttributes(clientId: string, attributes: Record<string, unknown>): void;
-		moveBlockToPosition(clientId: string, fromRootClientId: string, toRootClientId: string, index: number): void;
+		updateBlockAttributes(
+			clientId: string,
+			attributes: Record<string, unknown>
+		): void;
+		moveBlockToPosition(
+			clientId: string,
+			fromRootClientId: string,
+			toRootClientId: string,
+			index: number
+		): void;
 		moveBlocksUp(clientIds: string | string[], rootClientId?: string): void;
-		moveBlocksDown(clientIds: string | string[], rootClientId?: string): void;
+		moveBlocksDown(
+			clientIds: string | string[],
+			rootClientId?: string
+		): void;
 		removeBlock(clientId: string, selectPrevious?: boolean): void;
 		removeBlocks(clientIds: string[], selectPrevious?: boolean): void;
 		replaceBlock(clientId: string, block: Block | Block[]): void;
@@ -991,7 +1091,9 @@ declare module '@wordpress/block-editor' {
 		updateSettings(settings: Record<string, unknown>): void;
 	}
 
-	export const store: StoreDescriptor<BlockEditorSelectors & BlockEditorActions>;
+	export const store: StoreDescriptor<
+		BlockEditorSelectors & BlockEditorActions
+	>;
 
 	// Components
 	export const BlockControls: ComponentType<{
@@ -1036,8 +1138,13 @@ declare module '@wordpress/block-editor' {
 		fallback?: ReactNode;
 	}>;
 
-	export const useBlockProps: (props?: Record<string, unknown>) => Record<string, unknown>;
-	export const useInnerBlocksProps: (props?: Record<string, unknown>, options?: Record<string, unknown>) => Record<string, unknown>;
+	export const useBlockProps: (
+		props?: Record<string, unknown>
+	) => Record<string, unknown>;
+	export const useInnerBlocksProps: (
+		props?: Record<string, unknown>,
+		options?: Record<string, unknown>
+	) => Record<string, unknown>;
 }
 
 // ============================================================================
@@ -1094,6 +1201,13 @@ declare global {
 			userId: number;
 			[key: string]: unknown;
 		};
+		blockeraTabsLock?: {
+			ajaxUrl: string;
+			checkNonce: string;
+			takeoverNonce: string;
+		};
+		blockeraTabsBulkEditIds?: string;
+		blockeraTabsBulkEditPostType?: string;
 	}
 }
 
@@ -1113,4 +1227,3 @@ declare module '*.css' {
 }
 
 export {};
-

@@ -119,7 +119,9 @@ export default function RangeControl({
 						return false;
 					}
 
-					if ('undefined' !== typeof onChange) onChange(newValue);
+					if ('undefined' !== typeof onChange) {
+						onChange(newValue);
+					}
 				}}
 				className={controlClassNames(
 					'range',

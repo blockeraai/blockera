@@ -1,7 +1,9 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const {
+	editPost,
+} = require('@blockera/dev-playwright/js/utils/site-navigation');
 const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
@@ -10,6 +12,7 @@ const path = require('path');
 // Store postId for frontendSetup to use
 let storedPostId = null;
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-comments test
  * Creates a post with comments and edits it
@@ -18,6 +21,7 @@ let storedPostId = null;
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	const dataPath = path.join(__dirname, 'data.json');
 	const data = JSON.parse(fs.readFileSync(dataPath, 'utf8'));
@@ -46,9 +50,7 @@ async function setup(page, sectionContent) {
 	const postId = match ? parseInt(match[1], 10) : null;
 
 	if (!postId) {
-		throw new Error(
-			`Failed to get post ID from output: ${result.stdout}`
-		);
+		throw new Error(`Failed to get post ID from output: ${result.stdout}`);
 	}
 
 	// Store postId for frontendSetup to use
@@ -77,18 +79,8 @@ async function setup(page, sectionContent) {
 	);
 
 	// Configure WordPress to paginate comments with 2 comments per page
-	await wpCli(
-		page,
-		`wp option update page_comments 1`,
-		false,
-		false
-	);
-	await wpCli(
-		page,
-		`wp option update comments_per_page 2`,
-		false,
-		false
-	);
+	await wpCli(page, `wp option update page_comments 1`, false, false);
+	await wpCli(page, `wp option update comments_per_page 2`, false, false);
 
 	// Step 2: Create comments for the post
 	const commentsToCreate = data.comments;
@@ -124,7 +116,9 @@ async function setup(page, sectionContent) {
 		// Use WordPress PHP API directly via wp eval to bypass shell quoting issues
 		// This is the same approach used in bin/plugin/commands/testImport.js for creating posts
 		// It avoids all command-line parsing issues by executing PHP directly
-		const escapedContent = commentContent.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+		const escapedContent = commentContent
+			.replace(/\\/g, '\\\\')
+			.replace(/'/g, "\\'");
 		const phpCode = `$comment_id = wp_insert_comment(array('comment_post_ID' => ${numericPostId}, 'user_id' => ${commentAuthor}, 'comment_content' => '${escapedContent}', 'comment_approved' => 1)); echo is_wp_error($comment_id) ? 'Error: ' . $comment_id->get_error_message() : 'Success: Created comment ' . $comment_id . '.';`;
 		const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
 		const commentCommand = `wp eval '${escapedPhpCode}'`;
@@ -138,10 +132,18 @@ async function setup(page, sectionContent) {
 			);
 
 			// Check stdout for success message
-			if (!commentResult.stdout || !commentResult.stdout.includes('Success')) {
-				const errorMsg = commentResult.stderr || commentResult.stdout || 'Unknown error';
+			if (
+				!commentResult.stdout ||
+				!commentResult.stdout.includes('Success')
+			) {
+				const errorMsg =
+					commentResult.stderr ||
+					commentResult.stdout ||
+					'Unknown error';
 				throw new Error(
-					`Comment creation did not succeed. stdout: "${commentResult.stdout || '(empty)'}", stderr: "${errorMsg}"`
+					`Comment creation did not succeed. stdout: "${
+						commentResult.stdout || '(empty)'
+					}", stderr: "${errorMsg}"`
 				);
 			}
 
@@ -150,15 +152,15 @@ async function setup(page, sectionContent) {
 			if (commentMatch) {
 				const commentId = parseInt(commentMatch[1], 10);
 				createdCommentIds.push(commentId);
-			} else {
+			} else if (commentResult.stdout.includes('Success')) {
 				// If we can't extract ID but command succeeded, count it as created
-				if (commentResult.stdout.includes('Success')) {
-					createdCommentIds.push(null); // Placeholder to track count
-				}
+				createdCommentIds.push(null); // Placeholder to track count
 			}
 		} catch (error) {
 			throw new Error(
-				`Failed to create comment ${i + 1} (${commentContent}): ${error.message}`
+				`Failed to create comment ${i + 1} (${commentContent}): ${
+					error.message
+				}`
 			);
 		}
 	}
@@ -202,6 +204,7 @@ async function setup(page, sectionContent) {
 	return false;
 }
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Frontend setup function for block-comments test
  * Navigates to page 2 of comments pagination
@@ -209,16 +212,13 @@ async function setup(page, sectionContent) {
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
  */
+/* eslint-enable jsdoc/valid-types */
 async function frontendSetup(page) {
 	if (!storedPostId) {
 		throw new Error(
 			'Post ID not available. Make sure setup() was called before frontendSetup().'
 		);
 	}
-
-	// Get the current URL
-	const currentUrl = page.url();
-	const url = new URL(currentUrl);
 
 	// Check if we're already on the post page (has post ID in path or query)
 	// If not, we need to navigate to the post first
@@ -231,9 +231,7 @@ async function frontendSetup(page) {
 	);
 
 	if (!permalinkResult.stdout || !permalinkResult.stdout.trim()) {
-		throw new Error(
-			`Failed to get permalink for post ${storedPostId}`
-		);
+		throw new Error(`Failed to get permalink for post ${storedPostId}`);
 	}
 
 	const postUrl = permalinkResult.stdout.trim();

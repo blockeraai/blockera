@@ -13,7 +13,10 @@ import {
 	createWrappedHook,
 	NAVIGATION_LOADER_NAMES,
 } from '../utils/wrapCommandLoaderHook';
-import type { CommandLoaderHook, TabActions } from '../utils/wrapCommandLoaderHook';
+import type {
+	CommandLoaderHook,
+	TabActions,
+} from '../utils/wrapCommandLoaderHook';
 import { isEditorPage } from '../../utils/isEditorPage';
 import type { Tab } from '../../tabs/types';
 
@@ -88,7 +91,12 @@ export function useCommandBarIntegration({
 	const tabActionsRef = useRef<TabActions | null>(null);
 	tabActionsRef.current = {
 		openOrFocusTab: (params) =>
-			openOrFocusTab({ ...params, addTab, switchDocument, prefetchEntity }),
+			openOrFocusTab({
+				...params,
+				addTab,
+				switchDocument,
+				prefetchEntity,
+			}),
 	};
 
 	// Wrap a single loader
@@ -103,12 +111,16 @@ export function useCommandBarIntegration({
 			originalHooksRef.current.set(loaderName, originalHook);
 			const wrappedHook = createWrappedHook(
 				originalHook,
-				tabActionsRef.current!,
+				tabActionsRef.current as TabActions,
 				tabs
 			);
 
 			unregisterCommandLoader(loaderName);
-			registerCommandLoader({ name: loaderName, hook: wrappedHook, context });
+			registerCommandLoader({
+				name: loaderName,
+				hook: wrappedHook,
+				context,
+			});
 			wrappedLoadersRef.current.add(loaderName);
 
 			return true;
@@ -118,7 +130,13 @@ export function useCommandBarIntegration({
 
 	// Find and wrap all navigation loaders
 	const wrapNavigationLoaders = useCallback((): boolean => {
-		const select = (window as { wp?: { data?: { select: (store: string) => CommandsStoreSelect } } }).wp?.data?.select('core/commands');
+		const select = (
+			window as {
+				wp?: {
+					data?: { select: (store: string) => CommandsStoreSelect };
+				};
+			}
+		).wp?.data?.select('core/commands');
 		if (!select) {
 			return false;
 		}
@@ -154,7 +172,8 @@ export function useCommandBarIntegration({
 
 			// Stop if all loaders wrapped or timeout reached
 			const allWrapped =
-				wrappedLoadersRef.current.size >= NAVIGATION_LOADER_NAMES.length;
+				wrappedLoadersRef.current.size >=
+				NAVIGATION_LOADER_NAMES.length;
 			const timedOut = Date.now() - startTime > LOADER_WAIT_TIMEOUT;
 
 			if (allWrapped || timedOut) {
@@ -182,7 +201,7 @@ export function useCommandBarIntegration({
 
 			const wrappedHook = createWrappedHook(
 				originalHook,
-				tabActionsRef.current!,
+				tabActionsRef.current as TabActions,
 				tabs
 			);
 			unregisterCommandLoader(loaderName);
@@ -190,4 +209,3 @@ export function useCommandBarIntegration({
 		});
 	}, [tabs, registerCommandLoader, unregisterCommandLoader]);
 }
-

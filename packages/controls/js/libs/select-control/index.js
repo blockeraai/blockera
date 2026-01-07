@@ -61,7 +61,9 @@ const SelectControl = ({
 		defaultValue,
 	});
 
-	if (type === 'custom') options = prepareSelectCustomOptions(options);
+	if (type === 'custom') {
+		options = prepareSelectCustomOptions(options);
+	}
 
 	const labelProps = {
 		value,

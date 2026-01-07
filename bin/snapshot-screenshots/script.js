@@ -507,10 +507,14 @@ function updateTestSectionStatus(
 	frontendMobileExists
 ) {
 	const section = document.getElementById(`test-${testId}`);
-	if (!section) return;
+	if (!section) {
+		return;
+	}
 
 	const testHeader = section.querySelector('.test-header');
-	if (!testHeader) return;
+	if (!testHeader) {
+		return;
+	}
 
 	// Check if images are missing
 	const hasMissingImages =
@@ -1419,7 +1423,9 @@ function renderAllComparisonModes() {
 	});
 
 	document.addEventListener('mousemove', (e) => {
-		if (!isDragging) return;
+		if (!isDragging) {
+			return;
+		}
 		// Use base image dimensions instead of container
 		const baseRect = baseImg.getBoundingClientRect();
 		const containerRect = overlayContainer.getBoundingClientRect();

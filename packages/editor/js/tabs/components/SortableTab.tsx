@@ -14,7 +14,16 @@ import Tab, { type TabComponentProps } from './Tab';
 /**
  * SortableTab component props.
  */
-export interface SortableTabProps extends Omit<TabComponentProps, 'onDragStart' | 'onDrag' | 'onDragEnd' | 'isDragging' | 'style' | 'canDrag' | 'hasUnsavedChanges'> {
+export interface SortableTabProps extends Omit<
+	TabComponentProps,
+	| 'onDragStart'
+	| 'onDrag'
+	| 'onDragEnd'
+	| 'isDragging'
+	| 'style'
+	| 'canDrag'
+	| 'hasUnsavedChanges'
+> {
 	/** Tab ID for sortable (must be unique). */
 	id: string;
 	/** Whether this tab can be dragged. */
@@ -46,19 +55,20 @@ const SortableTab = memo(function SortableTab({
 
 	// Calculate hasUnsavedChanges using useEntity hook
 	const entity = useEntity(tab.type, tab.id);
-	const hasUnsavedChanges = entity.dirty || (getIsDirty ? getIsDirty(tab.type, tab.id) : false);
+	const hasUnsavedChanges =
+		entity.dirty || (getIsDirty ? getIsDirty(tab.type, tab.id) : false);
 
 	// Wrapper style - applies transform to wrapper, not the tab itself
 	// This preserves the tab's natural width/height
 	const wrapperStyle: React.CSSProperties | undefined = transform
 		? {
-			transform: CSS.Transform.toString({
-				...transform,
-				scaleX: 1, // Prevent stretching
-				scaleY: 1,
-			}),
-			transition,
-		}
+				transform: CSS.Transform.toString({
+					...transform,
+					scaleX: 1, // Prevent stretching
+					scaleY: 1,
+				}),
+				transition,
+			}
 		: undefined;
 
 	// Wrap Tab in a div that receives the transform
@@ -66,7 +76,11 @@ const SortableTab = memo(function SortableTab({
 	return (
 		<div
 			ref={setNodeRef}
-			className={isDragging ? 'blockera-tabs-sortable-wrapper-dragging' : undefined}
+			className={
+				isDragging
+					? 'blockera-tabs-sortable-wrapper-dragging'
+					: undefined
+			}
 			style={{
 				...wrapperStyle,
 			}}
@@ -88,4 +102,3 @@ const SortableTab = memo(function SortableTab({
 });
 
 export default SortableTab;
-

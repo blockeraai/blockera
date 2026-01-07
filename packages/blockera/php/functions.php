@@ -6,7 +6,6 @@
  */
 
 use Blockera\Utils\Env;
-use Blockera\Utils\Utils;
 
 if (! function_exists('blockera_core_config')) {
 
@@ -513,7 +512,7 @@ if (! function_exists('blockera_enqueue_global_styles')) {
 		*/
 		add_filter( 'wp_theme_json_get_style_nodes', 'wp_filter_out_block_nodes' );
 
-		$stylesheet = wp_get_global_stylesheet();
+		$stylesheet = blockera_get_global_stylesheet();
 
 		if ( $is_block_theme ) {
 			/*
@@ -545,7 +544,7 @@ if (! function_exists('blockera_enqueue_global_styles')) {
 			$stylesheet .= $custom_css;
 
 			// Add the global styles custom CSS at the end.
-			$stylesheet .= wp_get_global_stylesheet( array( 'custom-css' ) );
+			$stylesheet .= blockera_get_global_stylesheet( array( 'custom-css' ) );
 		}
 
 		if ( empty( $stylesheet ) ) {
@@ -555,6 +554,8 @@ if (! function_exists('blockera_enqueue_global_styles')) {
 		wp_register_style( 'global-styles', false );
 		wp_add_inline_style( 'global-styles', $stylesheet );
 		wp_enqueue_style( 'global-styles' );
+
+		wp_add_global_styles_for_blocks();
 		
 		blockera_add_global_styles_for_blocks();
 	}

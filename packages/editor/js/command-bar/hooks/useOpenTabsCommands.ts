@@ -8,7 +8,10 @@ import { useCommandLoader } from '@wordpress/commands';
  * Internal dependencies
  */
 import { TAB_COMMAND_MARKER } from '../utils/wrapCommandLoaderHook';
-import type { Command, CommandLoaderResult } from '../utils/wrapCommandLoaderHook';
+import type {
+	Command,
+	CommandLoaderResult,
+} from '../utils/wrapCommandLoaderHook';
 import type { Tab } from '../../tabs/types';
 import { getTabIcon } from '../../tabs/utils/getTabIcon';
 import { isEditorPage } from '../../utils/isEditorPage';
@@ -35,7 +38,7 @@ interface OpenTabsTabActions {
  *
  * @param tabs - Array of open tabs
  * @param tabActions - Tab action functions
- * @returns The command loader hook
+ * @return The command loader hook
  */
 function getOpenTabsCommandsLoader(
 	tabs: Tab[],
@@ -78,7 +81,10 @@ function getOpenTabsCommandsLoader(
 						} catch (error) {
 							// @debug-ignore
 							// eslint-disable-next-line no-console
-							console.error(`Failed to switch to tab ${tab.key}:`, error);
+							console.error(
+								`Failed to switch to tab ${tab.key}:`,
+								error
+							);
 							close?.();
 						}
 					},

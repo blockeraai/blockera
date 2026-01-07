@@ -189,7 +189,7 @@ export const OtherNavigation = ({
 								<p>
 									<DynamicHtmlFormatter
 										text={sprintf(
-											/* translators: $1%s is a CSS selector, $2%s is ID. */
+											/* translators: %1$s: CSS selector placeholder for body element, %2$s: CSS selector placeholder for group block */
 											__(
 												'Use %1$s to target the body element or %2$s to target the group block.',
 												'blockera'

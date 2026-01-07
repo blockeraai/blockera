@@ -199,7 +199,9 @@ export const FlexChildStyles = ({
 					_attributes.blockeraFlexChildOrderCustom
 				);
 
-				if (order) properties.order = order;
+				if (order) {
+					properties.order = order;
+				}
 
 				break;
 		}

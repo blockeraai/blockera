@@ -198,10 +198,11 @@ export function backgroundGenerator(id, props, options) {
 		'background-attachment': attachment.join(', ') + ' !important',
 	};
 
-	if (properties['background-color'])
+	if (properties['background-color']) {
 		toReturnProperties['background-color'] =
 			getValueAddonRealValue(properties['background-color']) +
 			' !important';
+	}
 
 	return createCssDeclarations({
 		options,

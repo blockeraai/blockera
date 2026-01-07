@@ -54,11 +54,19 @@ export type OverlayScrollbarsOptions = {
 	};
 	callbacks?: {
 		onInitialized?: (instance: OverlayScrollbarsComponent) => void;
-		onInitializationWithdrawn?: (instance: OverlayScrollbarsComponent) => void;
+		onInitializationWithdrawn?: (
+			instance: OverlayScrollbarsComponent
+		) => void;
 		onDestroyed?: (instance: OverlayScrollbarsComponent) => void;
-		onScrollStart?: (instance: OverlayScrollbarsComponent, event: Event) => void;
+		onScrollStart?: (
+			instance: OverlayScrollbarsComponent,
+			event: Event
+		) => void;
 		onScroll?: (instance: OverlayScrollbarsComponent, event: Event) => void;
-		onScrollStop?: (instance: OverlayScrollbarsComponent, event: Event) => void;
+		onScrollStop?: (
+			instance: OverlayScrollbarsComponent,
+			event: Event
+		) => void;
 		onUpdated?: (instance: OverlayScrollbarsComponent) => void;
 	};
 };
@@ -72,7 +80,7 @@ export type OverlayScrollbarsOptions = {
  * @param ref - React ref to the element that should have custom scrollbars
  * @param options - OverlayScrollbars configuration options
  * @param deps - Optional dependency array to trigger scrollbar recalculation when content changes
- * @returns The OverlayScrollbars instance, or null if not initialized
+ * @return The OverlayScrollbars instance, or null if not initialized
  *
  * @example
  * ```tsx
@@ -100,15 +108,22 @@ export function useScrollbar<T extends HTMLElement>(
 
 		// Dynamically import OverlayScrollbars to avoid SSR issues
 		// and to ensure it's only loaded when needed
-		let OverlayScrollbarsClass: ((element: HTMLElement, options?: unknown) => OverlayScrollbarsComponent) | null = null;
+		let OverlayScrollbarsClass:
+			| ((
+					element: HTMLElement,
+					options?: unknown
+			  ) => OverlayScrollbarsComponent)
+			| null = null;
 
 		const initialize = async (): Promise<void> => {
 			try {
 				// Import the library dynamically
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const overlayScrollbarsModule = await import('overlayscrollbars');
+				const overlayScrollbarsModule =
+					await import('overlayscrollbars');
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-				OverlayScrollbarsClass = overlayScrollbarsModule.OverlayScrollbars as any;
+				OverlayScrollbarsClass =
+					overlayScrollbarsModule.OverlayScrollbars as any;
 
 				// Initialize if element still exists and not already initialized
 				if (element && OverlayScrollbarsClass && !instanceRef.current) {

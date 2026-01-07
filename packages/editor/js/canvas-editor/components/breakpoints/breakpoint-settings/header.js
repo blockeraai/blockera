@@ -47,7 +47,7 @@ export default function ({
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
 			aria-label={sprintf(
-				// translators: it's the aria label for repeater item
+				// translators: %s: The breakpoint item ID
 				__('Item %s', 'blockera'),
 				itemId
 			)}

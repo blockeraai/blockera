@@ -147,7 +147,7 @@ export function TypographyStyles({
 				properties['font-style'] = blockeraFontAppearance.style;
 			}
 
-			if (!isEmptyObject(properties))
+			if (!isEmptyObject(properties)) {
 				styleGroup.push({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
@@ -163,6 +163,7 @@ export function TypographyStyles({
 						pickedSelector
 					),
 				});
+			}
 		}
 	}
 
@@ -569,7 +570,7 @@ export function TypographyStyles({
 					properties['text-orientation'] = 'mixed' + ' !important';
 			}
 
-			if (!isEmptyObject(properties))
+			if (!isEmptyObject(properties)) {
 				styleGroup.push({
 					selector: pickedSelector,
 					declarations: computedCssDeclarations(
@@ -585,6 +586,7 @@ export function TypographyStyles({
 						pickedSelector
 					),
 				});
+			}
 		}
 	}
 

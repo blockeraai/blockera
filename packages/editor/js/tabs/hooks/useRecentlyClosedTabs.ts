@@ -8,7 +8,11 @@ import { useState, useCallback, useEffect, useRef } from '@wordpress/element';
  */
 import { RECENTLY_CLOSED_STORAGE_KEY } from '../utils/storageKeys';
 import { MAIN_WORKSPACE_ID } from './useTabs';
-import type { Tab, RecentlyClosedTab, RecentlyClosedTabsStorage } from '../types';
+import type {
+	Tab,
+	RecentlyClosedTab,
+	RecentlyClosedTabsStorage,
+} from '../types';
 
 /**
  * Maximum number of recently closed tabs to store
@@ -18,7 +22,7 @@ const MAX_RECENTLY_CLOSED_TABS = 20;
 /**
  * Load recently closed tabs from localStorage
  *
- * @returns Array of recently closed tabs for the main workspace or empty array
+ * @return Array of recently closed tabs for the main workspace or empty array
  */
 function loadFromStorage(): RecentlyClosedTab[] {
 	try {
@@ -27,11 +31,19 @@ function loadFromStorage(): RecentlyClosedTab[] {
 			const parsed = JSON.parse(stored);
 
 			// Workspace structure: { "main": [...] }
-			if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+			if (
+				parsed &&
+				typeof parsed === 'object' &&
+				!Array.isArray(parsed)
+			) {
 				if (parsed[MAIN_WORKSPACE_ID]) {
-					const workspaceTabs = parsed[MAIN_WORKSPACE_ID] as RecentlyClosedTab[];
+					const workspaceTabs = parsed[
+						MAIN_WORKSPACE_ID
+					] as RecentlyClosedTab[];
 					// Ensure it's an array and limit to max tabs
-					return Array.isArray(workspaceTabs) ? workspaceTabs.slice(0, MAX_RECENTLY_CLOSED_TABS) : [];
+					return Array.isArray(workspaceTabs)
+						? workspaceTabs.slice(0, MAX_RECENTLY_CLOSED_TABS)
+						: [];
 				}
 			}
 		}
@@ -53,14 +65,19 @@ function saveToStorage(tabs: RecentlyClosedTab[]): void;
  * @param storage - Storage object with workspace structure
  */
 function saveToStorage(storage: RecentlyClosedTabsStorage): void;
-function saveToStorage(tabsOrStorage: RecentlyClosedTab[] | RecentlyClosedTabsStorage): void {
+function saveToStorage(
+	tabsOrStorage: RecentlyClosedTab[] | RecentlyClosedTabsStorage
+): void {
 	try {
 		let storage: RecentlyClosedTabsStorage;
 
 		// Handle both function overloads
 		if (Array.isArray(tabsOrStorage)) {
 			// Array of tabs: create workspace structure
-			const limitedTabs = tabsOrStorage.slice(0, MAX_RECENTLY_CLOSED_TABS);
+			const limitedTabs = tabsOrStorage.slice(
+				0,
+				MAX_RECENTLY_CLOSED_TABS
+			);
 			storage = {
 				[MAIN_WORKSPACE_ID]: limitedTabs,
 			};
@@ -68,11 +85,16 @@ function saveToStorage(tabsOrStorage: RecentlyClosedTab[] | RecentlyClosedTabsSt
 			// Already a storage object: limit tabs in main workspace
 			storage = {
 				...tabsOrStorage,
-				[MAIN_WORKSPACE_ID]: (tabsOrStorage[MAIN_WORKSPACE_ID] || []).slice(0, MAX_RECENTLY_CLOSED_TABS),
+				[MAIN_WORKSPACE_ID]: (
+					tabsOrStorage[MAIN_WORKSPACE_ID] || []
+				).slice(0, MAX_RECENTLY_CLOSED_TABS),
 			};
 		}
 
-		localStorage.setItem(RECENTLY_CLOSED_STORAGE_KEY, JSON.stringify(storage));
+		localStorage.setItem(
+			RECENTLY_CLOSED_STORAGE_KEY,
+			JSON.stringify(storage)
+		);
 	} catch {
 		// localStorage might be full or disabled, ignore
 	}
@@ -112,7 +134,10 @@ export interface UseRecentlyClosedTabsReturn {
 	/** Clear all recently closed tabs. */
 	clearRecentlyClosedTabs: () => void;
 	/** Update a closed tab's data (title, status, slug) when entity changes. */
-	updateClosedTab: (tabKey: string, updates: Partial<Pick<Tab, 'title' | 'status' | 'slug'>>) => void;
+	updateClosedTab: (
+		tabKey: string,
+		updates: Partial<Pick<Tab, 'title' | 'status' | 'slug'>>
+	) => void;
 }
 
 /**
@@ -123,13 +148,15 @@ export interface UseRecentlyClosedTabsReturn {
  * Limited to 20 tabs maximum.
  *
  * @param options - Options object
- * @returns Recently closed tabs state and management functions
+ * @return Recently closed tabs state and management functions
  */
 export function useRecentlyClosedTabs({
 	persistenceEnabled = true,
 }: UseRecentlyClosedTabsOptions = {}): UseRecentlyClosedTabsReturn {
 	// Initialize from localStorage if persistence is enabled
-	const [recentlyClosedTabs, setRecentlyClosedTabs] = useState<RecentlyClosedTab[]>(() => {
+	const [recentlyClosedTabs, setRecentlyClosedTabs] = useState<
+		RecentlyClosedTab[]
+	>(() => {
 		if (persistenceEnabled) {
 			return loadFromStorage();
 		}
@@ -177,7 +204,10 @@ export function useRecentlyClosedTabs({
 			// Remove if already exists (prevent duplicates)
 			const filtered = prev.filter((t) => t.key !== tab.key);
 			// Add to beginning (most recent first) and limit to max
-			const updated = [tabWithTimestamp, ...filtered].slice(0, MAX_RECENTLY_CLOSED_TABS);
+			const updated = [tabWithTimestamp, ...filtered].slice(
+				0,
+				MAX_RECENTLY_CLOSED_TABS
+			);
 
 			// Save to localStorage immediately if persistence is enabled
 			// saveToStorage accepts array and converts to workspace structure
@@ -196,19 +226,26 @@ export function useRecentlyClosedTabs({
 	 * Uses a ref to access current state synchronously, then updates state.
 	 *
 	 * @param tabKey - Key of the tab to reopen
-	 * @returns The tab object, or null if not found
+	 * @return The tab object, or null if not found
 	 */
-	const reopenTab = useCallback((tabKey: string): RecentlyClosedTab | null => {
-		// Find the tab synchronously using the ref
-		const foundTab = recentlyClosedTabsRef.current.find((t) => t.key === tabKey) ?? null;
+	const reopenTab = useCallback(
+		(tabKey: string): RecentlyClosedTab | null => {
+			// Find the tab synchronously using the ref
+			const foundTab =
+				recentlyClosedTabsRef.current.find((t) => t.key === tabKey) ??
+				null;
 
-		if (foundTab) {
-			// Remove the tab from state
-			setRecentlyClosedTabs((prev) => prev.filter((t) => t.key !== tabKey));
-		}
+			if (foundTab) {
+				// Remove the tab from state
+				setRecentlyClosedTabs((prev) =>
+					prev.filter((t) => t.key !== tabKey)
+				);
+			}
 
-		return foundTab;
-	}, []);
+			return foundTab;
+		},
+		[]
+	);
 
 	/**
 	 * Remove a tab from the recently closed list by key
@@ -244,7 +281,10 @@ export function useRecentlyClosedTabs({
 	 * @param updates - Partial updates (title, status, slug)
 	 */
 	const updateClosedTab = useCallback(
-		(tabKey: string, updates: Partial<Pick<Tab, 'title' | 'status' | 'slug'>>): void => {
+		(
+			tabKey: string,
+			updates: Partial<Pick<Tab, 'title' | 'status' | 'slug'>>
+		): void => {
 			setRecentlyClosedTabs((prev) => {
 				const tabIndex = prev.findIndex((t) => t.key === tabKey);
 				if (tabIndex === -1) {
@@ -254,8 +294,10 @@ export function useRecentlyClosedTabs({
 				const tab = prev[tabIndex];
 				// Only update if there are actual changes
 				const hasChanges =
-					(updates.title !== undefined && updates.title !== tab.title) ||
-					(updates.status !== undefined && updates.status !== tab.status) ||
+					(updates.title !== undefined &&
+						updates.title !== tab.title) ||
+					(updates.status !== undefined &&
+						updates.status !== tab.status) ||
 					(updates.slug !== undefined && updates.slug !== tab.slug);
 
 				if (!hasChanges) {
@@ -287,4 +329,3 @@ export function useRecentlyClosedTabs({
 		updateClosedTab,
 	};
 }
-

@@ -352,7 +352,7 @@ export const useBlockStyleItem = ({
 								([key]) => key !== currentStyleName
 							)
 						),
-				  }
+					}
 				: {}),
 		});
 

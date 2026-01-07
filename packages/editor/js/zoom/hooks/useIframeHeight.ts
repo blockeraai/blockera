@@ -3,7 +3,13 @@
  * Handles postMessage from iframe, ResizeObserver fallback, and prevents feedback loops.
  */
 
-import { useEffect, useLayoutEffect, useRef, useCallback, useState } from '@wordpress/element';
+import {
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useCallback,
+	useState,
+} from '@wordpress/element';
 import {
 	HEIGHT_UPDATE_DEBOUNCE,
 	HEIGHT_CHANGE_THRESHOLD,
@@ -34,13 +40,15 @@ interface UseIframeHeightOptions {
  * and debounces updates to prevent feedback loops.
  *
  * @param options - Hook options.
- * @returns Height management utilities.
+ * @return Height management utilities.
  */
 export function useIframeHeight({
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by interface but not used internally
 	zoomPercent,
 	onHeightChange,
 	enabled = true,
 	initialHeight,
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars -- Required by interface but not used internally
 	onSetInitialHeight,
 }: UseIframeHeightOptions): UseIframeHeightReturn {
 	const [contentHeight, setContentHeight] = useState<number | null>(null);
@@ -56,7 +64,10 @@ export function useIframeHeight({
 	// Use useLayoutEffect to update before paint, ensuring postMessage handlers see updated value immediately
 	// This prevents race conditions where postMessage arrives before ref is updated
 	useLayoutEffect(() => {
-		const normalizedValue = initialHeight !== null && initialHeight !== undefined ? initialHeight : null;
+		const normalizedValue =
+			initialHeight !== null && initialHeight !== undefined
+				? initialHeight
+				: null;
 		initialHeightRef.current = normalizedValue;
 	}, [initialHeight]);
 
@@ -235,7 +246,9 @@ export function useIframeHeight({
 		);
 
 		// Also check editor wrapper
-		const editorWrapper = iframeDoc.querySelector('.editor-styles-wrapper') as HTMLElement | null;
+		const editorWrapper = iframeDoc.querySelector(
+			'.editor-styles-wrapper'
+		) as HTMLElement | null;
 		if (editorWrapper) {
 			const wrapperHeight = Math.max(
 				editorWrapper.scrollHeight || 0,

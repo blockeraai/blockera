@@ -38,7 +38,9 @@ export function extractCssVarValue(value: string): string {
 
 		for (let i = 4; i < subStr.length; i++) {
 			// Start after 'var('
-			if (subStr[i] === '(') openParens++;
+			if (subStr[i] === '(') {
+				openParens++;
+			}
 			if (subStr[i] === ')') {
 				openParens--;
 				if (openParens === 0) {
@@ -48,7 +50,9 @@ export function extractCssVarValue(value: string): string {
 			}
 		}
 
-		if (closeIndex === -1) break;
+		if (closeIndex === -1) {
+			break;
+		}
 
 		const varFunction = subStr.slice(0, closeIndex + 1);
 

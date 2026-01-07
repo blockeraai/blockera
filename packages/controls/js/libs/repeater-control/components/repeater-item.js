@@ -201,8 +201,9 @@ const RepeaterItem = ({
 									'repeater-group-header'
 								)}
 								onClick={(event) => {
-									if (isOpenPopoverEvent(event))
+									if (isOpenPopoverEvent(event)) {
 										setOpen(!isOpen);
+									}
 									changeRepeaterItem({
 										itemId,
 										value: {

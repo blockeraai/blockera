@@ -221,7 +221,9 @@ export function isLoadedPostEditor(): boolean {
  * @return {boolean} - true if localhost, false otherwise
  */
 export function isLocalhost(domain: string): boolean {
-	if (!domain) return false;
+	if (!domain) {
+		return false;
+	}
 
 	// Create URL object if full URL is provided
 	try {

@@ -17,7 +17,6 @@ import {
 	SITE_EDITOR_POST_TYPES,
 	HOME_URL_TEMPLATES,
 	type ParsedTemplateSlug,
-	type TemplateSlugType,
 } from './constants';
 
 /**
@@ -25,9 +24,11 @@ import {
  * Site Editor types are edited in site-editor.php instead of post.php.
  *
  * @param postType - The post type to check.
- * @returns True if the post type is a Site Editor type.
+ * @return True if the post type is a Site Editor type.
  */
-export function isSiteEditorPostType(postType: string | null | undefined): boolean {
+export function isSiteEditorPostType(
+	postType: string | null | undefined
+): boolean {
 	if (!postType) {
 		return false;
 	}
@@ -38,7 +39,7 @@ export function isSiteEditorPostType(postType: string | null | undefined): boole
  * Get the WordPress admin base URL.
  * Extracts the admin path from the current browser location.
  *
- * @returns Admin base URL (e.g., https://example.com/wp-admin)
+ * @return Admin base URL (e.g., https://example.com/wp-admin)
  */
 export function getAdminBaseUrl(): string {
 	const currentUrl = window.location;
@@ -60,7 +61,7 @@ export function getAdminBaseUrl(): string {
  *
  * @param postType - Post type (e.g., 'post', 'page', 'wp_template').
  * @param postId - Post ID.
- * @returns Full editor URL.
+ * @return Full editor URL.
  */
 export function getEditorUrl(
 	postType: string,
@@ -93,7 +94,7 @@ export function getEditorUrl(
  * Check if a URL is valid (http or https protocol).
  *
  * @param url - The URL to validate.
- * @returns True if the URL is valid, false otherwise.
+ * @return True if the URL is valid, false otherwise.
  */
 export function isValidUrl(url: string | null | undefined): boolean {
 	if (!url || typeof url !== 'string') {
@@ -113,7 +114,7 @@ export function isValidUrl(url: string | null | undefined): boolean {
  *
  * @param url - The base URL.
  * @param params - Object of key-value pairs to append as query parameters.
- * @returns The URL with appended query parameters.
+ * @return The URL with appended query parameters.
  */
 export function appendQueryParams(
 	url: string | null | undefined,
@@ -143,7 +144,7 @@ export function appendQueryParams(
  * - Author: author, author-{slug}
  *
  * @param templateSlug - The template slug to parse (e.g., 'single-post', 'category-news').
- * @returns Parsed template information with type and entity identifiers.
+ * @return Parsed template information with type and entity identifiers.
  */
 export function parseTemplateSlug(
 	templateSlug: string | null | undefined
@@ -155,7 +156,9 @@ export function parseTemplateSlug(
 	const slug = templateSlug.toLowerCase().trim();
 
 	// Check for home/front-page templates first (most common)
-	if (HOME_URL_TEMPLATES.includes(slug as (typeof HOME_URL_TEMPLATES)[number])) {
+	if (
+		HOME_URL_TEMPLATES.includes(slug as (typeof HOME_URL_TEMPLATES)[number])
+	) {
 		return {
 			type: 'home',
 			originalSlug: templateSlug,
@@ -321,4 +324,3 @@ export function parseTemplateSlug(
 		originalSlug: templateSlug,
 	};
 }
-

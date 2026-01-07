@@ -40,7 +40,7 @@ interface EntityRecordWithContent {
  * requires the post type configuration to be resolved.
  *
  * @param tabs - Array of tab objects with type property
- * @returns Promise that resolves when all post types are prefetched
+ * @return Promise that resolves when all post types are prefetched
  */
 async function prefetchPostTypeConfigs(tabs: Tab[]): Promise<void> {
 	// Get unique post types from tabs
@@ -51,7 +51,9 @@ async function prefetchPostTypeConfigs(tabs: Tab[]): Promise<void> {
 	const prefetchPromises = uniquePostTypes.map(async (postType) => {
 		try {
 			// resolveSelect triggers the resolution if not already cached
-			const resolved = resolveSelect(coreStore) as { getPostType: (postType: string) => Promise<unknown> };
+			const resolved = resolveSelect(coreStore) as {
+				getPostType: (postType: string) => Promise<unknown>;
+			};
 			await resolved.getPostType(postType);
 		} catch {
 			// Silently fail - post type might not exist or be accessible
@@ -65,21 +67,33 @@ async function prefetchPostTypeConfigs(tabs: Tab[]): Promise<void> {
  * Pre-fetch a single entity record and its images
  *
  * @param tab - Tab object with type and id properties
- * @returns Promise that resolves when the entity is fetched (or fails silently)
+ * @return Promise that resolves when the entity is fetched (or fails silently)
  */
 async function prefetchEntity(tab: Tab): Promise<void> {
 	try {
 		// resolveSelect will automatically fetch the entity if it's not in the store
 		// If it's already loaded, it will return immediately without a network request
-		const resolved = resolveSelect(coreStore) as { getEntityRecord: (kind: string, name: string, id: string | number) => Promise<EntityRecordWithContent | undefined> };
-		const entity = await resolved.getEntityRecord('postType', tab.type, tab.id);
+		const resolved = resolveSelect(coreStore) as {
+			getEntityRecord: (
+				kind: string,
+				name: string,
+				id: string | number
+			) => Promise<EntityRecordWithContent | undefined>;
+		};
+		const entity = await resolved.getEntityRecord(
+			'postType',
+			tab.type,
+			tab.id
+		);
 
 		// After entity is fetched, extract and prefetch images asynchronously
 		// This runs in the background and doesn't block entity prefetching
 		if (entity?.content?.raw) {
 			try {
 				// Extract image URLs directly from raw content using regex (fast and simple)
-				const imageUrls = extractImageUrlsFromBlocks(entity.content.raw);
+				const imageUrls = extractImageUrlsFromBlocks(
+					entity.content.raw
+				);
 
 				// Prefetch images asynchronously (fire-and-forget pattern)
 				// This doesn't block and runs in the background
@@ -174,7 +188,8 @@ export function usePrefetchTabEntities(
 		const tabsToPrefetch = tabs.filter((tab) => {
 			// Skip the current tab - it's already loaded
 			return !(
-				tab.type === currentPostType && String(tab.id) === String(currentPostId)
+				tab.type === currentPostType &&
+				String(tab.id) === String(currentPostId)
 			);
 		});
 
@@ -215,4 +230,3 @@ export function usePrefetchTabEntities(
 		});
 	}, [tabs, currentPostType, currentPostId]);
 }
-

@@ -52,7 +52,7 @@ export const DeleteModal = ({
 					<p style={{ margin: '0', color: '#1e1e1e' }}>
 						<DynamicHtmlFormatter
 							text={sprintf(
-								/* translators: $1%s is a CSS selector, $2%s is ID. */
+								/* translators: %s: The style variation name. */
 								__(
 									'Are you sure you want to delete %s?',
 									'blockera'

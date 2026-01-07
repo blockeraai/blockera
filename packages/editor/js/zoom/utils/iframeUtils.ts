@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved, import/no-duplicates */
 /**
  * WordPress dependencies
  */
@@ -8,16 +9,18 @@ import { IFRAME_SELECTOR } from './constants';
 // Import header styles as raw text for iframe injection
 // Note: The ?raw suffix tells webpack to import this as a raw string
 import headerStylesRaw from '../../preview-mode/header/style.css?raw';
+/* eslint-enable import/no-unresolved, import/no-duplicates */
 
 // Store the imported styles (webpack will bundle this as a string)
 // asset/source type returns the file content directly as a string
-const headerStyles: string = (typeof headerStylesRaw === 'string' ? headerStylesRaw : '') || '';
+const headerStyles: string =
+	(typeof headerStylesRaw === 'string' ? headerStylesRaw : '') || '';
 
 /**
  * Get the editor canvas iframe element.
  * Works in both Post Editor and Site Editor.
  *
- * @returns The iframe element or null if not found.
+ * @return The iframe element or null if not found.
  */
 export function getEditorCanvasIframe(): HTMLIFrameElement | null {
 	return document.querySelector(IFRAME_SELECTOR);
@@ -28,7 +31,7 @@ export function getEditorCanvasIframe(): HTMLIFrameElement | null {
  * Safely handles cross-origin restrictions.
  *
  * @param iframe - The iframe element to access.
- * @returns The iframe document or null if not accessible.
+ * @return The iframe document or null if not accessible.
  */
 export function getIframeDocument(
 	iframe: HTMLIFrameElement | null
@@ -40,11 +43,7 @@ export function getIframeDocument(
 	try {
 		// Try multiple methods to access iframe document
 		// This handles different browser implementations
-		return (
-			iframe.contentDocument ||
-			iframe.contentWindow?.document ||
-			null
-		);
+		return iframe.contentDocument || iframe.contentWindow?.document || null;
 	} catch {
 		// Cross-origin iframe or other access error
 		// Return null to indicate document is not accessible
@@ -56,7 +55,7 @@ export function getIframeDocument(
  * Get the visual editor container element.
  * Works in both Post Editor and Site Editor.
  *
- * @returns The visual editor container or null if not found.
+ * @return The visual editor container or null if not found.
  */
 export function getVisualEditorContainer(): HTMLElement | null {
 	return (
@@ -70,7 +69,7 @@ export function getVisualEditorContainer(): HTMLElement | null {
  * Uses multiple methods to get the most accurate height.
  *
  * @param iframeDoc - The iframe document.
- * @returns The calculated content height, or 0 if unable to calculate.
+ * @return The calculated content height, or 0 if unable to calculate.
  */
 export function calculateContentHeight(iframeDoc: Document): number {
 	if (!iframeDoc || !iframeDoc.body) {
@@ -78,8 +77,12 @@ export function calculateContentHeight(iframeDoc: Document): number {
 	}
 
 	// Try to get height from editor wrapper (most accurate for block editor)
-	const editorWrapper = iframeDoc.querySelector('.editor-styles-wrapper') as HTMLElement | null;
-	const postContent = iframeDoc.querySelector('.wp-block-post-content') as HTMLElement | null;
+	const editorWrapper = iframeDoc.querySelector(
+		'.editor-styles-wrapper'
+	) as HTMLElement | null;
+	const postContent = iframeDoc.querySelector(
+		'.wp-block-post-content'
+	) as HTMLElement | null;
 
 	let height = 0;
 
@@ -356,17 +359,21 @@ export function injectZoomHeaderStyles(iframeDoc: Document): void {
 	style.setAttribute('data-blockera-zoom-header-styles', 'true');
 
 	// Use imported styles, or fallback to empty string if import failed
-	const stylesContent = typeof headerStyles === 'string' && headerStyles.trim()
-		? headerStyles
-		: '';
+	const stylesContent =
+		typeof headerStyles === 'string' && headerStyles.trim()
+			? headerStyles
+			: '';
 
 	if (!stylesContent) {
 		// @debug-ignore
 		// eslint-disable-next-line no-console
-		console.warn('Blockera Zoom: Header styles not loaded. CSS import may have failed.', {
-			headerStylesType: typeof headerStyles,
-			headerStylesLength: headerStyles?.length || 0,
-		});
+		console.warn(
+			'Blockera Zoom: Header styles not loaded. CSS import may have failed.',
+			{
+				headerStylesType: typeof headerStyles,
+				headerStylesLength: headerStyles?.length || 0,
+			}
+		);
 		// Don't return - inject empty styles to avoid breaking the header structure
 		// The header will still render but without custom styles
 	}
@@ -400,7 +407,10 @@ export function removeZoomHeaderStyles(iframeDoc: Document): void {
  * @param iframeDoc - The iframe document to inject header into.
  * @param zoomPercent - Current zoom percentage to display.
  */
-export function injectZoomHeader(iframeDoc: Document, zoomPercent: number): void {
+export function injectZoomHeader(
+	iframeDoc: Document,
+	zoomPercent: number
+): void {
 	if (!iframeDoc || !iframeDoc.body) {
 		return;
 	}
@@ -411,7 +421,9 @@ export function injectZoomHeader(iframeDoc: Document, zoomPercent: number): void
 	);
 	if (existingHeader) {
 		// Update zoom percentage if header already exists
-		const zoomElement = existingHeader.querySelector('.blockera-preview-header__url-bar-content strong');
+		const zoomElement = existingHeader.querySelector(
+			'.blockera-preview-header__url-bar-content strong'
+		);
 		if (zoomElement) {
 			zoomElement.textContent = `${zoomPercent}%`;
 		}
@@ -456,7 +468,9 @@ export function injectZoomHeader(iframeDoc: Document, zoomPercent: number): void
 
 	const urlBarContent = iframeDoc.createElement('div');
 	urlBarContent.className = 'blockera-preview-header__url-bar-content';
-	urlBarContent.innerHTML = __('Zoom View', 'blockera-tabs') + `<span>·</span><strong>${zoomPercent}%</strong>`;
+	urlBarContent.innerHTML =
+		__('Zoom View', 'blockera') +
+		`<span>·</span><strong>${zoomPercent}%</strong>`;
 
 	urlBar.appendChild(urlBarContent);
 
@@ -465,9 +479,13 @@ export function injectZoomHeader(iframeDoc: Document, zoomPercent: number): void
 	actions.className = 'blockera-preview-header__actions';
 
 	const closeButton = iframeDoc.createElement('span');
-	closeButton.className = 'components-button blockera-preview-header__action-btn blockera-preview-header__action-btn--close has-icon';
-	closeButton.innerHTML = __('Reset Zoom', 'blockera-tabs');
-	closeButton.setAttribute('aria-label', __('Reset zoom to 100%', 'blockera-tabs'));
+	closeButton.className =
+		'components-button blockera-preview-header__action-btn blockera-preview-header__action-btn--close has-icon';
+	closeButton.innerHTML = __('Reset Zoom', 'blockera');
+	closeButton.setAttribute(
+		'aria-label',
+		__('Reset zoom to 100%', 'blockera')
+	);
 
 	closeButton.addEventListener('click', () => {
 		if (iframeDoc.defaultView && iframeDoc.defaultView.parent) {
@@ -503,7 +521,9 @@ export function removeZoomHeader(iframeDoc: Document): void {
 	}
 
 	// Remove header element
-	const header = iframeDoc.querySelector('.blockera-preview-header[data-blockera-zoom-header]');
+	const header = iframeDoc.querySelector(
+		'.blockera-preview-header[data-blockera-zoom-header]'
+	);
 	if (header) {
 		header.remove();
 	}

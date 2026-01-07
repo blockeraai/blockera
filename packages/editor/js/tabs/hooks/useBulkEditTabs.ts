@@ -4,16 +4,6 @@
 import { useEffect, useRef } from '@wordpress/element';
 
 /**
- * Extended window interface for bulk edit globals.
- */
-declare global {
-	interface Window {
-		blockeraTabsBulkEditIds?: string;
-		blockeraTabsBulkEditPostType?: string;
-	}
-}
-
-/**
  * Hook to detect bulk_edit_ids URL parameter and open posts as tabs
  *
  * @param addTab - Function to add a tab
@@ -50,12 +40,18 @@ export function useBulkEditTabs(
 		// Try sessionStorage first (captured by inline script before editor loads)
 		if (typeof Storage !== 'undefined') {
 			try {
-				bulkEditIds = sessionStorage.getItem('blockera_tabs_bulk_edit_ids');
-				storedPostType = sessionStorage.getItem('blockera_tabs_bulk_edit_post_type');
+				bulkEditIds = sessionStorage.getItem(
+					'blockera_tabs_bulk_edit_ids'
+				);
+				storedPostType = sessionStorage.getItem(
+					'blockera_tabs_bulk_edit_post_type'
+				);
 				// Clear from sessionStorage after reading
 				if (bulkEditIds) {
 					sessionStorage.removeItem('blockera_tabs_bulk_edit_ids');
-					sessionStorage.removeItem('blockera_tabs_bulk_edit_post_type');
+					sessionStorage.removeItem(
+						'blockera_tabs_bulk_edit_post_type'
+					);
 				}
 			} catch {
 				// sessionStorage might be disabled
@@ -138,4 +134,3 @@ export function useBulkEditTabs(
 		}, 100);
 	}, [addTab, prefetchEntity, postType]);
 }
-

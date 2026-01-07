@@ -162,7 +162,7 @@ export const useInnerBlocksInfo = ({
 									blockeraBlockStates:
 										blockRootAttributes.blockeraBlockStates ||
 										{},
-							  }),
+								}),
 						...(prepare(
 							`blockeraBlockStates[${currentInnerBlockState}].breakpoints[${currentBreakpoint}].attributes`,
 							blockRootAttributes

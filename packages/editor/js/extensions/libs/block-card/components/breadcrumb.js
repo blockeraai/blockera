@@ -130,19 +130,21 @@ export function Breadcrumb({
 				definition={
 					activeBlock
 						? statesDefinition[activeInnerBlockState] ||
-						  (availableStates &&
-						  availableStates.hasOwnProperty(activeInnerBlockState)
+							(availableStates &&
+							availableStates.hasOwnProperty(
+								activeInnerBlockState
+							)
 								? availableStates[activeInnerBlockState]
 								: blockeraUnsavedData?.states[
 										activeInnerBlockState
-								  ])
+									])
 						: statesDefinition[masterActiveState] ||
-						  (availableStates &&
-						  availableStates.hasOwnProperty(masterActiveState)
+							(availableStates &&
+							availableStates.hasOwnProperty(masterActiveState)
 								? availableStates[masterActiveState]
 								: blockeraUnsavedData?.states[
 										masterActiveState
-								  ])
+									])
 				}
 			/>
 

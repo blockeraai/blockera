@@ -5,17 +5,32 @@
 const { expect } = require('@playwright/test');
 
 /**
+ * Escape CSS identifier (class name, id, etc.)
+ * Simple implementation that escapes special characters
+ *
+ * @param {string} str - String to escape.
+ * @return {string} Escaped string.
+ */
+function escapeCSS(str) {
+	// Escape special characters in CSS identifiers
+	return str.replace(/[!"#$%&'()*+,.\/:;<=>?@[\\\]^`{|}~]/g, '\\$&');
+}
+
+/**
  * Get iframe body element from editor canvas.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} containerClass - Container class selector.
- * @return {Promise<import('@playwright/test').FrameLocator>} The iframe body locator.
+ * @return {import('@playwright/test').FrameLocator} The iframe body locator.
  */
-async function getIframeBody(page, containerClass = '') {
+function getIframeBody(page, containerClass = '') {
+	if (!page) {
+		throw new Error('getIframeBody: page parameter is required');
+	}
+
 	if (containerClass) {
-		const iframe = page
-			.locator(`${containerClass} iframe`)
-			.frameLocator('iframe');
+		// Use frameLocator directly on page with the full selector
+		const iframe = page.frameLocator(`${containerClass} iframe`);
 		return iframe.locator('body');
 	}
 	const iframe = page.frameLocator('iframe[name="editor-canvas"]');
@@ -47,7 +62,7 @@ async function getWindowProperty(page, path) {
  * @return {Promise<any>} The WordPress data object.
  */
 async function getWPDataObject(page) {
-	await page.waitForTimeout(300);
+	await page.waitForTimeout(1000);
 	return await getWindowProperty(page, 'wp.data');
 }
 
@@ -220,20 +235,33 @@ async function disableGutenbergFeatures(page) {
 }
 
 /**
- * Get block inserter button.
+ * Open block inserter button.
+ * If a custom selector is provided, clicks on that selector in the iframe.
+ * Otherwise, checks if the secondary sidebar toggle exists and clicks it if present.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
- * @param {string|boolean} selector - Optional selector for inserter.
- * @return {Promise<import('@playwright/test').Locator>} The inserter locator.
+ * @param {string|boolean} selector - Optional selector for inserter in iframe.
+ * @return {Promise<void>}
  */
-async function getBlockInserter(page, selector = false) {
+async function openBlockInserter(page, selector = false) {
 	if (selector) {
-		const iframeBody = await getIframeBody(page);
-		return iframeBody.locator(selector);
+		const iframeBody = getIframeBody(page);
+		const inserter = iframeBody.locator(selector);
+		const count = await inserter.count();
+		if (count > 0) {
+			await inserter.click();
+		}
+		return;
 	}
-	return page.locator(
-		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header [aria-label="Block Inserter"], .edit-site-header [aria-label="Block Inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle.is-primary[aria-pressed="false"]'
+
+	// Check if secondary sidebar toggle exists and click it if present
+	const sidebarToggle = page.locator(
+		'.edit-post-header [aria-label="Show secondary sidebar"]'
 	);
+	const count = await sidebarToggle.count();
+	if (count > 0) {
+		await sidebarToggle.click();
+	}
 }
 
 /**
@@ -285,12 +313,13 @@ async function addBlockToPost(page, blockName, options = {}) {
 		await clearBlocks(page);
 	}
 
-	const inserter = await getBlockInserter(page, blockInserterSelector);
-	await inserter.click();
+	await openBlockInserter(page, blockInserterSelector);
 
-	const searchInput = page.locator(
-		'.block-editor-inserter__search-input, input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
-	);
+	const searchInput = page
+		.locator(
+			'.block-editor-inserter__search-input, input.block-editor-inserter__search, .components-search-control__input, input[placeholder="Search"]'
+		)
+		.last();
 	await searchInput.fill(blockSearchName);
 
 	if (!blockInserterSelector) {
@@ -301,11 +330,11 @@ async function addBlockToPost(page, blockName, options = {}) {
 
 	let targetClassName = '';
 	if (blockType) {
-		targetClassName = `.editor-block-list-item-${CSS.escape(
+		targetClassName = `.editor-block-list-item-${escapeCSS(
 			`${blockType}/${blockID}`
 		)}`;
 	} else {
-		targetClassName = `.editor-block-list-item-${CSS.escape(blockID)}`;
+		targetClassName = `.editor-block-list-item-${escapeCSS(blockID)}`;
 	}
 
 	await page.locator(targetClassName).first().click({ force: true });
@@ -314,24 +343,17 @@ async function addBlockToPost(page, blockName, options = {}) {
 		timeout: 5000,
 	});
 
-	const isInserterOpen = await page
-		.locator('button[class*="__inserter-toggle"].is-pressed')
-		.count();
-	if (isInserterOpen > 0) {
-		await page
-			.locator('button[class*="__inserter-toggle"].is-pressed')
-			.click();
-	}
+	await openBlockInserter(page, blockInserterSelector);
 
 	await openDocumentSettingsSidebar(page, 'Block');
 
 	if (blockType) {
-		await page
+		await getIframeBody(page)
 			.locator(`[data-type="${blockCategory}/${blockType}"]`)
 			.last()
 			.click();
 	} else {
-		await page
+		await getIframeBody(page)
 			.locator(`[data-type="${blockCategory}/${blockID}"]`)
 			.last()
 			.click();
@@ -446,7 +468,9 @@ async function savePage(page) {
  * @return {Promise<void>}
  */
 async function appendBlocks(page, blocksCode) {
-	await page.locator('[aria-label="Options"]').first().click();
+	const optionsButton = page.locator('[aria-label="Options"]').first();
+	await optionsButton.waitFor({ state: 'visible', timeout: 10000 });
+	await optionsButton.click();
 	await page.locator('span:has-text("Code editor")').click();
 
 	const textEditor = page.locator('.editor-post-text-editor');
@@ -697,8 +721,10 @@ async function openMoreFeaturesControl(page, label) {
  * @return {Promise<void>}
  */
 async function deSelectBlock(page) {
-	const iframeBody = await getIframeBody(page);
-	await iframeBody.locator('h1').click();
+	const iframeBody = getIframeBody(page);
+	const h1 = iframeBody.locator('h1');
+	await h1.hover();
+	await h1.click();
 }
 
 /**
@@ -711,7 +737,7 @@ async function deSelectBlock(page) {
 async function reSelectBlock(page, blockType = 'core/paragraph') {
 	await deSelectBlock(page);
 
-	const iframeBody = await getIframeBody(page);
+	const iframeBody = getIframeBody(page);
 	await iframeBody
 		.locator(`[data-type="${blockType}"]`)
 		.first()
@@ -912,7 +938,7 @@ module.exports = {
 	getBlockeraEntity,
 	getBlockClientId,
 	disableGutenbergFeatures,
-	getBlockInserter,
+	openBlockInserter,
 	addBlockToPost,
 	addNewGroupToPost,
 	savePage,

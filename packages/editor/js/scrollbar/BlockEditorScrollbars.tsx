@@ -17,7 +17,8 @@ const defaultBlockEditorScrollbarTargets: BlockEditorScrollbarTarget[] = [
 	},
 	// Global styles sidebar
 	{
-		selector: '.interface-complementary-area.edit-site-global-styles-sidebar',
+		selector:
+			'.interface-complementary-area.edit-site-global-styles-sidebar',
 		options: defaultScrollbarOptions,
 	},
 ];

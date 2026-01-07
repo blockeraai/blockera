@@ -231,13 +231,12 @@ export const EffectsStyles = ({
 				blockProps.attributes.blockeraTransformChildOrigin
 			)
 		) {
-			transformProperties[
-				'perspective-origin'
-			] = `${getValueAddonRealValue(
-				blockProps.attributes.blockeraTransformChildOrigin?.top
-			)} ${getValueAddonRealValue(
-				blockProps.attributes.blockeraTransformChildOrigin?.left
-			)}`;
+			transformProperties['perspective-origin'] =
+				`${getValueAddonRealValue(
+					blockProps.attributes.blockeraTransformChildOrigin?.top
+				)} ${getValueAddonRealValue(
+					blockProps.attributes.blockeraTransformChildOrigin?.left
+				)}`;
 		}
 
 		if (!isEmptyObject(transformProperties)) {

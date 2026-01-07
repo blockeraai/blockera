@@ -7,8 +7,6 @@ import {
 	useCallback,
 	createPortal,
 	useRef,
-	useMemo,
-	startTransition,
 } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
@@ -83,10 +81,15 @@ export default function TabsManager(): React.ReactElement | null {
 	} = useTabsPersistence();
 
 	// Recently closed tabs (persisted to localStorage if enabled)
-	const { recentlyClosedTabs, addClosedTab, reopenTab, removeClosedTab, updateClosedTab } =
-		useRecentlyClosedTabs({
-			persistenceEnabled: isRecentlyClosedPersistenceEnabled,
-		});
+	const {
+		recentlyClosedTabs,
+		addClosedTab,
+		reopenTab,
+		removeClosedTab,
+		updateClosedTab,
+	} = useRecentlyClosedTabs({
+		persistenceEnabled: isRecentlyClosedPersistenceEnabled,
+	});
 
 	const {
 		tabs,
@@ -97,12 +100,10 @@ export default function TabsManager(): React.ReactElement | null {
 		togglePinTab,
 		setTabs,
 		setTabCustomTitle,
-		updateTabTitle,
 		reorderTabs,
 	} = useTabs({
 		persistenceEnabled: isPersistenceEnabled,
 	});
-
 
 	const switchDocument = useSwitchDocument();
 	const [showRenameModal, setShowRenameModal] = useState(false);
@@ -138,6 +139,7 @@ export default function TabsManager(): React.ReactElement | null {
 	 * - Post ID changes (tab switches)
 	 * - Autosave restore notice changes (user restored/dismissed backup)
 	 */
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const [tabsWithAutosave, setTabsWithAutosave] = useState<Set<string>>(
 		new Set()
 	);
@@ -219,14 +221,20 @@ export default function TabsManager(): React.ReactElement | null {
 	);
 	const currentPostId = useSelect(
 		(select) =>
-			(select(editorStore) as { getCurrentPostId: () => number | undefined })
-				.getCurrentPostId(),
+			(
+				select(editorStore) as {
+					getCurrentPostId: () => number | undefined;
+				}
+			).getCurrentPostId(),
 		[]
 	);
 	const currentPostType = useSelect(
 		(select) =>
-			(select(editorStore) as { getCurrentPostType: () => string | undefined })
-				.getCurrentPostType(),
+			(
+				select(editorStore) as {
+					getCurrentPostType: () => string | undefined;
+				}
+			).getCurrentPostType(),
 		[]
 	);
 
@@ -237,7 +245,9 @@ export default function TabsManager(): React.ReactElement | null {
 	 */
 	const isEditorPostLocked = useSelect(
 		(select) =>
-			(select(editorStore) as { isPostLocked: () => boolean }).isPostLocked(),
+			(
+				select(editorStore) as { isPostLocked: () => boolean }
+			).isPostLocked(),
 		[]
 	);
 
@@ -248,30 +258,32 @@ export default function TabsManager(): React.ReactElement | null {
 	 * When this notice is dismissed (user clicks Restore or dismisses),
 	 * we need to re-check autosave status for all tabs.
 	 */
-	const hasAutosaveRestoreNotice = useSelect(
-		(select) => {
-			const notices = (
-				select(noticesStore) as {
-					getNotices: () => Array<{ id: string }>;
-				}
-			).getNotices();
-			return notices.some((notice) => notice.id === 'wpEditorAutosaveRestore');
-		},
-		[]
-	);
+	const hasAutosaveRestoreNotice = useSelect((select) => {
+		const notices = (
+			select(noticesStore) as {
+				getNotices: () => Array<{ id: string }>;
+			}
+		).getNotices();
+		return notices.some(
+			(notice) => notice.id === 'wpEditorAutosaveRestore'
+		);
+	}, []);
 
 	// Helper function to check if a tab is dirty
 	const getIsDirty = useCallback(
 		(tabPostType: string, tabPostId: string | number): boolean => {
 			try {
-				return hasEditsForEntityRecord('postType', tabPostType, tabPostId);
+				return hasEditsForEntityRecord(
+					'postType',
+					tabPostType,
+					tabPostId
+				);
 			} catch {
 				return false;
 			}
 		},
 		[hasEditsForEntityRecord]
 	);
-
 
 	/*
 	 * Get current document title from useCurrentEntity hook.
@@ -304,14 +316,13 @@ export default function TabsManager(): React.ReactElement | null {
 
 			return sprintf(
 				/* translators: %1$s: post type, %2$s: post ID */
-				__('%1$s #%2$s', 'blockera-tabs'),
+				__('%1$s #%2$s', 'blockera'),
 				tab.type,
 				String(tab.id)
 			);
 		},
 		[activeTabKey, currentDocumentTitle]
 	);
-
 
 	/*
 	 * Callback: Active Tab Locked by Another User
@@ -543,7 +554,6 @@ export default function TabsManager(): React.ReactElement | null {
 		[] // Empty deps - all values accessed via refs
 	);
 
-
 	// Helper function to clear entity edits from the store
 	const clearEntityEdits = useCallback(
 		(tabPostType: string, tabPostId: string | number): void => {
@@ -553,7 +563,11 @@ export default function TabsManager(): React.ReactElement | null {
 					tabPostType,
 					tabPostId
 				);
-				const rawRecord = getRawEntityRecord('postType', tabPostType, tabPostId);
+				const rawRecord = getRawEntityRecord(
+					'postType',
+					tabPostType,
+					tabPostId
+				);
 
 				if (!editedRecord || !rawRecord) {
 					return;
@@ -567,9 +581,15 @@ export default function TabsManager(): React.ReactElement | null {
 				});
 
 				if (Object.keys(editsToClear).length > 0) {
-					editEntityRecord('postType', tabPostType, tabPostId, editsToClear, {
-						undoIgnore: true,
-					});
+					editEntityRecord(
+						'postType',
+						tabPostType,
+						tabPostId,
+						editsToClear,
+						{
+							undoIgnore: true,
+						}
+					);
 				}
 			} catch {
 				// Entity might not be loaded
@@ -602,11 +622,15 @@ export default function TabsManager(): React.ReactElement | null {
 					// Get sorted tabs to determine left/right position
 					// Match the display order: pinned tabs first, then unpinned tabs
 					const sortedTabs = [...pinnedTabs, ...unpinnedTabs];
-					const closedTabIndex = sortedTabs.findIndex((t) => t.key === key);
-					const remainingTabs = sortedTabs.filter((t) => t.key !== key);
+					const closedTabIndex = sortedTabs.findIndex(
+						(t) => t.key === key
+					);
+					const remainingTabs = sortedTabs.filter(
+						(t) => t.key !== key
+					);
 
 					if (remainingTabs.length > 0) {
-						let nextTab: Tab | undefined = undefined;
+						let nextTab: Tab | undefined;
 
 						// If there's a tab to the left, activate that one
 						if (closedTabIndex > 0) {
@@ -658,9 +682,14 @@ export default function TabsManager(): React.ReactElement | null {
 
 			if (action === 'toRight') {
 				const sortedTabs = sortTabsByPinned(tabs);
-				const targetIndex = sortedTabs.findIndex((t) => t.key === targetKey);
+				const targetIndex = sortedTabs.findIndex(
+					(t) => t.key === targetKey
+				);
 
-				if (targetIndex === -1 || targetIndex === sortedTabs.length - 1) {
+				if (
+					targetIndex === -1 ||
+					targetIndex === sortedTabs.length - 1
+				) {
 					return [];
 				}
 
@@ -720,7 +749,9 @@ export default function TabsManager(): React.ReactElement | null {
 			const updatedTabs = closeOthers(tabs, targetKey);
 			setTabs(updatedTabs);
 
-			const wasActiveClosed = !updatedTabs.find((t) => t.key === activeTabKey);
+			const wasActiveClosed = !updatedTabs.find(
+				(t) => t.key === activeTabKey
+			);
 			if (wasActiveClosed) {
 				const targetTab = updatedTabs.find((t) => t.key === targetKey);
 				if (targetTab) {
@@ -761,7 +792,9 @@ export default function TabsManager(): React.ReactElement | null {
 		(targetKey: string): void => {
 			const sortedTabs = sortTabsByPinned(tabs);
 
-			const targetIndex = sortedTabs.findIndex((t) => t.key === targetKey);
+			const targetIndex = sortedTabs.findIndex(
+				(t) => t.key === targetKey
+			);
 			if (targetIndex !== -1 && targetIndex < sortedTabs.length - 1) {
 				const tabsToRight = sortedTabs.slice(targetIndex + 1);
 				const tabsToClose = tabsToRight.filter((tab) => !tab.isPinned);
@@ -777,7 +810,9 @@ export default function TabsManager(): React.ReactElement | null {
 			const updatedTabs = closeToRight(tabs, targetKey);
 			setTabs(updatedTabs);
 
-			const wasActiveClosed = !updatedTabs.find((t) => t.key === activeTabKey);
+			const wasActiveClosed = !updatedTabs.find(
+				(t) => t.key === activeTabKey
+			);
 			if (wasActiveClosed) {
 				const targetTab = updatedTabs.find((t) => t.key === targetKey);
 				if (targetTab) {
@@ -828,7 +863,9 @@ export default function TabsManager(): React.ReactElement | null {
 		const updatedTabs = closeSaved(tabs, getIsDirty);
 		setTabs(updatedTabs);
 
-		const wasActiveClosed = !updatedTabs.find((t) => t.key === activeTabKey);
+		const wasActiveClosed = !updatedTabs.find(
+			(t) => t.key === activeTabKey
+		);
 		if (wasActiveClosed && updatedTabs.length > 0) {
 			const nextTab = updatedTabs[0];
 			void switchDocument(nextTab.type, nextTab.id);
@@ -910,7 +947,13 @@ export default function TabsManager(): React.ReactElement | null {
 					await prefetchEntity(tab.type, tab.id);
 
 					// Add tab (handles duplicate check internally)
-					await addTab(tab.type, tab.id, tab.title, tab.slug, tab.status);
+					await addTab(
+						tab.type,
+						tab.id,
+						tab.title,
+						tab.slug,
+						tab.status
+					);
 
 					// Switch to the reopened tab
 					switchDocument(tab.type, tab.id);
@@ -959,12 +1002,14 @@ export default function TabsManager(): React.ReactElement | null {
 
 			const remainingTabs = tabs.filter((t) => t.key !== lockedTabKey);
 			if (remainingTabs.length > 0) {
-				let nextTab: Tab | undefined = undefined;
+				let nextTab: Tab | undefined;
 				if (
 					previousTabKey &&
 					remainingTabs.find((t) => t.key === previousTabKey)
 				) {
-					nextTab = remainingTabs.find((t) => t.key === previousTabKey);
+					nextTab = remainingTabs.find(
+						(t) => t.key === previousTabKey
+					);
 				} else {
 					nextTab = remainingTabs[remainingTabs.length - 1];
 				}
@@ -1088,7 +1133,9 @@ export default function TabsManager(): React.ReactElement | null {
 
 	useEffect(() => {
 		const findContainer = (): HTMLElement | null => {
-			return document.querySelector('.interface-interface-skeleton__content') as HTMLElement | null;
+			return document.querySelector(
+				'.interface-interface-skeleton__content'
+			) as HTMLElement | null;
 		};
 
 		const setupTabsContainer = (parent: HTMLElement): void => {
@@ -1194,14 +1241,19 @@ export default function TabsManager(): React.ReactElement | null {
 								isRecentlyClosedPersistenceEnabled={
 									isRecentlyClosedPersistenceEnabled
 								}
-								onToggleRecentlyClosedPersistence={toggleRecentlyClosedPersistence}
+								onToggleRecentlyClosedPersistence={
+									toggleRecentlyClosedPersistence
+								}
 								isTabIconsEnabled={isTabIconsEnabled}
 								onToggleTabIcons={toggleTabIcons}
-								isIconOnlyPinnedTabsEnabled={isIconOnlyPinnedTabsEnabled}
-								onToggleIconOnlyPinnedTabs={toggleIconOnlyPinnedTabs}
+								isIconOnlyPinnedTabsEnabled={
+									isIconOnlyPinnedTabsEnabled
+								}
+								onToggleIconOnlyPinnedTabs={
+									toggleIconOnlyPinnedTabs
+								}
 								recentlyClosedTabs={recentlyClosedTabs}
 								onReopenTab={handleReopenTab}
-								onUpdateTabTitle={updateTabTitle}
 								onUpdateClosedTab={updateClosedTab}
 								onRemoveClosedTab={removeClosedTab}
 								onReorderTabs={handleReorderTabs}
@@ -1226,12 +1278,20 @@ export default function TabsManager(): React.ReactElement | null {
 									setRenameTabKey(null);
 								}}
 								onSave={handleSaveRename}
-								tab={tabs.find((tab) => tab.key === renameTabKey) ?? null}
+								tab={
+									tabs.find(
+										(tab) => tab.key === renameTabKey
+									) ?? null
+								}
 							/>
 
 							<TabLockedModal
 								isOpen={showLockedModal}
-								lockUser={lockedTabKey ? getLockUser(lockedTabKey) : null}
+								lockUser={
+									lockedTabKey
+										? getLockUser(lockedTabKey)
+										: null
+								}
 								onTakeOver={handleLockTakeOver}
 								onCloseTab={handleLockCloseTab}
 							/>
@@ -1243,4 +1303,3 @@ export default function TabsManager(): React.ReactElement | null {
 		</CommandBarIntegration>
 	);
 }
-

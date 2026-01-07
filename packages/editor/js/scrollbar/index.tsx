@@ -18,7 +18,10 @@ registerPlugin('blockera-scrollbar', {
 });
 
 export { useScrollbar, type OverlayScrollbarsOptions } from './useScrollbar';
-export { useElementsScrollbar, type BlockEditorScrollbarTarget } from './useElementsScrollbar';
+export {
+	useElementsScrollbar,
+	type BlockEditorScrollbarTarget,
+} from './useElementsScrollbar';
 export { default as BlockEditorScrollbars } from './BlockEditorScrollbars';
 export { defaultScrollbarOptions } from './constants';
 

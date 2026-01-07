@@ -143,7 +143,7 @@ export const useBlockStates = ({
 			const memoizedInitialValue = memoize(
 				([itemId, state]: [
 					TStates,
-					{ ...StateTypes, isSelected: boolean }
+					{ ...StateTypes, isSelected: boolean },
 				]): void => {
 					const activeInnerBlockState = getActiveInnerState(
 						block.clientId,
@@ -265,7 +265,7 @@ export const useBlockStates = ({
 			Object.entries(items).forEach(
 				([_itemId, _item]: [
 					TStates,
-					{ ...StateTypes, isSelected: boolean }
+					{ ...StateTypes, isSelected: boolean },
 				]): void => {
 					// Skip the deleted item.
 					if (_itemId === itemId) {

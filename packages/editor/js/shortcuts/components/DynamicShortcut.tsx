@@ -29,9 +29,13 @@ function DynamicShortcut({ name, slotId }: DynamicShortcutProps) {
 	const { keyCombination, description, aliases } = useSelect(
 		(select) => {
 			const storeSelect = select(keyboardShortcutsStore) as {
-				getShortcutKeyCombination: (name: string) => { modifier?: string; character: string } | null;
+				getShortcutKeyCombination: (
+					name: string
+				) => { modifier?: string; character: string } | null;
 				getShortcutDescription: (name: string) => string | undefined;
-				getShortcutAliases: (name: string) => Array<{ modifier?: string; character: string }>;
+				getShortcutAliases: (
+					name: string
+				) => Array<{ modifier?: string; character: string }>;
 			};
 
 			const combo = storeSelect.getShortcutKeyCombination(name);

@@ -2,7 +2,14 @@
  * Core hook for managing zoom state and applying zoom transforms.
  */
 
+/**
+ * WordPress dependencies
+ */
 import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
+
+/**
+ * Internal dependencies
+ */
 import {
 	MIN_ZOOM,
 	MAX_ZOOM,
@@ -11,6 +18,8 @@ import {
 	ZOOM_CSS_VAR,
 	ZOOMED_OUT_CLASS,
 	SCALE_CONTAINER_ZOOMED_CLASS,
+	MIN_IFRAME_HEIGHT,
+	MAX_REASONABLE_HEIGHT,
 } from '../utils/constants';
 import { loadZoomFromStorage, saveZoomToStorage } from '../utils/storage';
 import {
@@ -22,17 +31,13 @@ import {
 	injectZoomHeader,
 	removeZoomHeader,
 } from '../utils/iframeUtils';
-import {
-	MIN_IFRAME_HEIGHT,
-	MAX_REASONABLE_HEIGHT,
-} from '../utils/constants';
 import type { UseZoomReturn, ZoomPercent } from '../types';
 
 /**
  * Clamp zoom value to valid range.
  *
  * @param zoom - The zoom value to clamp.
- * @returns The clamped zoom value.
+ * @return The clamped zoom value.
  */
 function clampZoom(zoom: number): ZoomPercent {
 	return Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom)) as ZoomPercent;
@@ -42,7 +47,7 @@ function clampZoom(zoom: number): ZoomPercent {
  * Hook for managing zoom state and applying zoom transforms to iframe.
  * Handles persistence, CSS transforms, and coordinates with height management.
  *
- * @returns Zoom state and control functions.
+ * @return Zoom state and control functions.
  */
 export function useZoom(): UseZoomReturn {
 	// Load initial zoom from storage
@@ -57,7 +62,9 @@ export function useZoom(): UseZoomReturn {
 
 	// Expose initialHeight reactively using state
 	// Must be declared before applyZoom so setInitialHeightState is in scope
-	const [initialHeightState, setInitialHeightState] = useState<number | null>(null);
+	const [initialHeightState, setInitialHeightState] = useState<number | null>(
+		null
+	);
 
 	useEffect(() => {
 		zoomPercentRef.current = zoomPercent;
@@ -74,18 +81,22 @@ export function useZoom(): UseZoomReturn {
 			return;
 		}
 
-		const iframeDoc = getIframeDocument(iframe);
 		const scale = zoom / 100;
 		const isZoomed = zoom !== DEFAULT_ZOOM;
-		const wasZoomed = previousZoomRef.current !== null && previousZoomRef.current !== DEFAULT_ZOOM;
-		const isTransitioningFrom100 = !wasZoomed && isZoomed;
+		const wasZoomed =
+			previousZoomRef.current !== null &&
+			previousZoomRef.current !== DEFAULT_ZOOM;
 		const isTransitioningTo100 = wasZoomed && !isZoomed;
-		const isZoomChanging = previousZoomRef.current === null || previousZoomRef.current !== zoom;
+		const isZoomChanging =
+			previousZoomRef.current === null ||
+			previousZoomRef.current !== zoom;
 
 		// If not zoomed and not transitioning to 100%, don't apply zoom!!!
-		if( !isZoomed && !isTransitioningTo100){
+		if (!isZoomed && !isTransitioningTo100) {
 			return;
 		}
+
+		const iframeDoc = getIframeDocument(iframe);
 
 		// Find the scale container element (used by WordPress core)
 		const scaleContainer = document.querySelector(
@@ -112,7 +123,8 @@ export function useZoom(): UseZoomReturn {
 		if (isZoomChanging && !isTransitioningTo100 && iframeDoc) {
 			// Get the ACTUAL current iframe height (what's currently rendered)
 			// This is more accurate than calculating from content, as it reflects the real rendered size
-			const currentIframeHeight = iframe.offsetHeight || iframe.clientHeight || 0;
+			const currentIframeHeight =
+				iframe.offsetHeight || iframe.clientHeight || 0;
 			const currentIframeHeightStyle = iframe.style.height;
 			const currentIframeHeightAttr = iframe.getAttribute('height');
 
@@ -121,11 +133,19 @@ export function useZoom(): UseZoomReturn {
 
 			// Use the larger of: actual iframe height, calculated content height, or style/attr height
 			// This ensures we don't shrink the iframe when zooming
-			let currentHeight = Math.max(
+			const currentHeight = Math.max(
 				currentIframeHeight,
 				calculatedContentHeight,
-				currentIframeHeightStyle ? parseInt(currentIframeHeightStyle.replace('px', ''), 10) || 0 : 0,
-				currentIframeHeightAttr ? parseInt(currentIframeHeightAttr.replace('px', ''), 10) || 0 : 0
+				currentIframeHeightStyle
+					? parseInt(
+							currentIframeHeightStyle.replace('px', ''),
+							10
+						) || 0
+					: 0,
+				currentIframeHeightAttr
+					? parseInt(currentIframeHeightAttr.replace('px', ''), 10) ||
+							0
+					: 0
 			);
 
 			if (currentHeight > 0 && currentHeight <= MAX_REASONABLE_HEIGHT) {
@@ -146,7 +166,11 @@ export function useZoom(): UseZoomReturn {
 
 				// Lock the height BEFORE applying zoom transform
 				// This ensures smooth transition without height jumps
-				iframe.style.setProperty('height', `${finalHeight}px`, 'important');
+				iframe.style.setProperty(
+					'height',
+					`${finalHeight}px`,
+					'important'
+				);
 				iframe.setAttribute('scrolling', 'no');
 				iframe.style.setProperty('overflow', 'hidden', 'important');
 
@@ -159,17 +183,24 @@ export function useZoom(): UseZoomReturn {
 							iframe.classList.add(ZOOMED_OUT_CLASS);
 
 							if (scaleContainer) {
-								scaleContainer.classList.add(SCALE_CONTAINER_ZOOMED_CLASS);
+								scaleContainer.classList.add(
+									SCALE_CONTAINER_ZOOMED_CLASS
+								);
 							}
 
 							// Set CSS variable for zoom scale
-							iframe.style.setProperty(ZOOM_CSS_VAR, scale.toString());
+							iframe.style.setProperty(
+								ZOOM_CSS_VAR,
+								scale.toString()
+							);
 						} else {
 							// Removing zoom
 							iframe.classList.remove(ZOOMED_OUT_CLASS);
 
 							if (scaleContainer) {
-								scaleContainer.classList.remove(SCALE_CONTAINER_ZOOMED_CLASS);
+								scaleContainer.classList.remove(
+									SCALE_CONTAINER_ZOOMED_CLASS
+								);
 							}
 
 							// Remove CSS variable
@@ -183,8 +214,16 @@ export function useZoom(): UseZoomReturn {
 
 								// Ensure overflow is set to auto to allow scrolling
 								requestAnimationFrame(() => {
-									if (!iframe.classList.contains(ZOOMED_OUT_CLASS)) {
-										iframe.style.setProperty('overflow', 'auto', 'important');
+									if (
+										!iframe.classList.contains(
+											ZOOMED_OUT_CLASS
+										)
+									) {
+										iframe.style.setProperty(
+											'overflow',
+											'auto',
+											'important'
+										);
 									}
 								});
 							}
@@ -196,49 +235,52 @@ export function useZoom(): UseZoomReturn {
 				setTimeout(() => {
 					if (iframeDoc.defaultView) {
 						iframeDoc.defaultView.postMessage(
-							{ type: 'BLOCKERA_ZOOM_PAUSE_UPDATES', pause: false },
+							{
+								type: 'BLOCKERA_ZOOM_PAUSE_UPDATES',
+								pause: false,
+							},
 							'*'
 						);
 					}
 				}, 1000);
 
-			// Update previous zoom ref and return early
-			// The zoom transform will be applied in the requestAnimationFrame callback
-			previousZoomRef.current = zoom;
-			return;
-		}
-	}
-
-	// Apply zoom classes and styles (for cases where height wasn't locked above)
-	if (isZoomed) {
-		iframe.classList.add(ZOOMED_OUT_CLASS);
-
-		if (scaleContainer) {
-			scaleContainer.classList.add(SCALE_CONTAINER_ZOOMED_CLASS);
+				// Update previous zoom ref and return early
+				// The zoom transform will be applied in the requestAnimationFrame callback
+				previousZoomRef.current = zoom;
+				return;
+			}
 		}
 
-		iframe.style.setProperty(ZOOM_CSS_VAR, scale.toString());
-	} else {
-		iframe.classList.remove(ZOOMED_OUT_CLASS);
+		// Apply zoom classes and styles (for cases where height wasn't locked above)
+		if (isZoomed) {
+			iframe.classList.add(ZOOMED_OUT_CLASS);
 
-		if (scaleContainer) {
-			scaleContainer.classList.remove(SCALE_CONTAINER_ZOOMED_CLASS);
+			if (scaleContainer) {
+				scaleContainer.classList.add(SCALE_CONTAINER_ZOOMED_CLASS);
+			}
+
+			iframe.style.setProperty(ZOOM_CSS_VAR, scale.toString());
+		} else {
+			iframe.classList.remove(ZOOMED_OUT_CLASS);
+
+			if (scaleContainer) {
+				scaleContainer.classList.remove(SCALE_CONTAINER_ZOOMED_CLASS);
+			}
+
+			iframe.style.removeProperty(ZOOM_CSS_VAR);
+
+			// If transitioning back to 100%, remove height constraint and reset initial height
+			if (isTransitioningTo100) {
+				iframe.style.removeProperty('height');
+				iframe.style.removeProperty('overflow');
+				iframe.removeAttribute('scrolling');
+				initialHeightRef.current = null;
+				setInitialHeightState(null);
+			}
 		}
 
-		iframe.style.removeProperty(ZOOM_CSS_VAR);
-
-		// If transitioning back to 100%, remove height constraint and reset initial height
-		if (isTransitioningTo100) {
-			iframe.style.removeProperty('height');
-			iframe.style.removeProperty('overflow');
-			iframe.removeAttribute('scrolling');
-			initialHeightRef.current = null;
-			setInitialHeightState(null);
-		}
-	}
-
-	// Update previous zoom ref for next transition detection
-	previousZoomRef.current = zoom;
+		// Update previous zoom ref for next transition detection
+		previousZoomRef.current = zoom;
 	}, []);
 
 	/**
@@ -311,13 +353,17 @@ export function useZoom(): UseZoomReturn {
 
 		// Calculate available viewport space from window dimensions
 		// Subtract header height and padding
-		const viewportWidth = window.innerWidth - (padding * 2);
-		const viewportHeight = window.innerHeight - headerHeight - (padding * 2);
+		const viewportWidth = window.innerWidth - padding * 2;
+		const viewportHeight = window.innerHeight - headerHeight - padding * 2;
 
 		// Get content bounds: measure the content wrapper in UN-SCALED coordinates
 		// Prefer .editor-styles-wrapper or .is-root-container as the stable root element
-		const editorWrapper = iframeDoc.querySelector('.editor-styles-wrapper') as HTMLElement;
-		const rootContainer = iframeDoc.querySelector('.is-root-container') as HTMLElement;
+		const editorWrapper = iframeDoc.querySelector(
+			'.editor-styles-wrapper'
+		) as HTMLElement;
+		const rootContainer = iframeDoc.querySelector(
+			'.is-root-container'
+		) as HTMLElement;
 		const contentWrapper = editorWrapper || rootContainer || iframeDoc.body;
 
 		// Get current zoom scale to convert scaled measurements to unscaled
@@ -346,7 +392,11 @@ export function useZoom(): UseZoomReturn {
 			// Method 2: If scrollWidth/Height don't work, use getBoundingClientRect and divide by scale
 			if (contentWidth <= 0 || contentHeight <= 0) {
 				const wrapperRect = contentWrapper.getBoundingClientRect();
-				if (wrapperRect.width > 0 && wrapperRect.height > 0 && currentScale > 0) {
+				if (
+					wrapperRect.width > 0 &&
+					wrapperRect.height > 0 &&
+					currentScale > 0
+				) {
 					contentWidth = wrapperRect.width / currentScale;
 					contentHeight = wrapperRect.height / currentScale;
 				}
@@ -387,17 +437,19 @@ export function useZoom(): UseZoomReturn {
 				if (visualEditorContainer) {
 					// Calculate how much we need to scroll to center the content
 					// If scaled content is larger than viewport, center it; otherwise scroll to top
-					const targetScrollLeft = scaledContentWidth > containerRect.width
-						? (scaledContentWidth - containerRect.width) / 2
-						: 0;
-					const targetScrollTop = scaledContentHeight > containerRect.height
-						? (scaledContentHeight - containerRect.height) / 2
-						: 0;
+					const targetScrollLeft =
+						scaledContentWidth > containerRect.width
+							? (scaledContentWidth - containerRect.width) / 2
+							: 0;
+					const targetScrollTop =
+						scaledContentHeight > containerRect.height
+							? (scaledContentHeight - containerRect.height) / 2
+							: 0;
 
 					visualEditorContainer.scrollTo({
 						left: Math.max(0, targetScrollLeft),
 						top: Math.max(0, targetScrollTop),
-						behavior: 'smooth'
+						behavior: 'smooth',
 					});
 				}
 			});

@@ -52,11 +52,11 @@ export function PopoverTitleButtons({
 									...item,
 									isVisible: !isVisible,
 									isSelected: false,
-							  }
+								}
 							: {
 									...item,
 									isVisible: !isVisible,
-							  };
+								};
 
 						changeRepeaterItem({
 							controlId,

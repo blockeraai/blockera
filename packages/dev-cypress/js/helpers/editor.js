@@ -164,13 +164,31 @@ export function disableGutenbergFeatures() {
 	});
 }
 
-export function getBlockInserter(selector = false) {
+export function openBlockInserter(selector = false) {
 	if (selector) {
-		return cy.getIframeBody().find(selector);
+		return cy.getIframeBody().find(selector).click();
 	}
-	return cy.get(
-		'.edit-post-header [aria-label="Toggle block inserter"], .edit-site-header [aria-label="Toggle block inserter"], .edit-post-header [aria-label="Block Inserter"], .edit-site-header [aria-label="Block Inserter"], .edit-post-header-toolbar__inserter-toggle[aria-pressed="false"], .editor-document-tools__inserter-toggle is-primary[aria-pressed="false"]'
-	);
+	return cy.get('body').then(($body) => {
+		const secondarySidebar = $body.find(
+			'[aria-label="Show secondary sidebar"]'
+		);
+		if (secondarySidebar.length > 0) {
+			return cy.get('[aria-label="Show secondary sidebar"]').click();
+		}
+		return cy;
+	});
+}
+
+export function closeBlockInserter() {
+	return cy.get('body').then(($body) => {
+		const secondarySidebar = $body.find(
+			'[aria-label="Hide secondary sidebar"]'
+		);
+		if (secondarySidebar.length > 0) {
+			return cy.get('[aria-label="Hide secondary sidebar"]').click();
+		}
+		return cy;
+	});
 }
 
 /**
@@ -224,7 +242,7 @@ export function addBlockToPost(
 		clearBlocks();
 	}
 
-	getBlockInserter(blockInserterSelector).click();
+	openBlockInserter(blockInserterSelector);
 
 	// eslint-disable-next-line
 	cy.get(
@@ -379,9 +397,7 @@ export function redirectToFrontPage() {
 		win.stop();
 	});
 
-	cy.get(
-		'.blockera-control-canvas-editor-preview-link a, a.components-button.components-snackbar__action.is-link'
-	)
+	cy.get('.blockera-preview-button-wrapper a')
 		.invoke('attr', 'href')
 		.then((href) => {
 			cy.visit(href);

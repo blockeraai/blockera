@@ -11,7 +11,7 @@ export type EditorContext = 'site' | 'post';
 /**
  * Get the current editor context based on the current URL
  *
- * @returns 'site' for site editor, 'post' for post editor, or null if unknown
+ * @return 'site' for site editor, 'post' for post editor, or null if unknown
  */
 export function getCurrentEditorContext(): EditorContext | null {
 	const pathname = window.location.pathname;
@@ -31,7 +31,7 @@ export function getCurrentEditorContext(): EditorContext | null {
  * Determine which editor context a post type belongs to
  *
  * @param postType - Post type to check
- * @returns 'site' for site editor types, 'post' for others
+ * @return 'site' for site editor types, 'post' for others
  */
 export function getEditorContextForPostType(postType: string): EditorContext {
 	return isSiteEditorPostType(postType) ? 'site' : 'post';
@@ -42,7 +42,7 @@ export function getEditorContextForPostType(postType: string): EditorContext {
  *
  * @param fromPostType - Source post type
  * @param toPostType - Target post type
- * @returns True if navigation would cross editor boundaries
+ * @return True if navigation would cross editor boundaries
  */
 export function isCrossBoundaryNavigation(
 	fromPostType: string,
@@ -52,4 +52,3 @@ export function isCrossBoundaryNavigation(
 	const toContext = getEditorContextForPostType(toPostType);
 	return fromContext !== toContext;
 }
-

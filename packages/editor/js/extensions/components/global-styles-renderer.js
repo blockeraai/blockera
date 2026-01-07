@@ -66,7 +66,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 										default:
 											return null;
 									}
-							  })(),
+								})(),
 				};
 			}
 

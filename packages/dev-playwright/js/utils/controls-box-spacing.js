@@ -7,7 +7,7 @@
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} side - Side name (e.g., 'top', 'right', 'bottom', 'left').
- * @param {string} value - Value to set.
+ * @param {string|number} value - Value to set (will be converted to string).
  * @return {Promise<void>}
  */
 async function setBoxSpacingSide(page, side, value) {
@@ -17,7 +17,10 @@ async function setBoxSpacingSide(page, side, value) {
 
 	await popover.locator('input[type=text]').clear({ force: true });
 	await popover.locator('input[type=text]').clear({ force: true });
-	await popover.locator('input[type=text]').fill(value, { force: true });
+	// Convert value to string for fill() method
+	await popover
+		.locator('input[type=text]')
+		.fill(String(value), { force: true });
 }
 
 /**
@@ -61,7 +64,7 @@ async function openBoxSpacingSide(page, side, element = 'label') {
 		);
 
 		await shapeSide.hover({ force: true });
-		await page.waitForTimeout(100);
+		await page.waitForTimeout(1000);
 		await shapeSide.click({ force: true });
 	}
 }

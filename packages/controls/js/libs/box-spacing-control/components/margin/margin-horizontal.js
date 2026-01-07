@@ -107,7 +107,9 @@ export function MarginHorizontal({
 		setValue: onDragSetValue,
 		movement: 'vertical',
 		onEnd: () => {
-			if (!openPopover) setFocusSide('');
+			if (!openPopover) {
+				setFocusSide('');
+			}
 			setLabelClassName('');
 		},
 		threshold: 0,
@@ -193,7 +195,7 @@ export function MarginHorizontal({
 										onDragStart(event);
 										setFocusSide(sideId);
 									},
-							  }
+								}
 							: {})}
 						onMouseEnter={() => {
 							if (

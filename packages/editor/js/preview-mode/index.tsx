@@ -23,14 +23,20 @@ import { usePrefetchPreview } from './hooks/usePrefetchPreview';
  * BlockeraPreview component - Main container for the preview feature.
  * Manages the overlay state and coordinates between button and overlay.
  *
- * @returns The preview button and overlay components.
+ * @return The preview button and overlay components.
  */
 function BlockeraPreview(): ReactElement {
 	const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 	const [isClosing, setIsClosing] = useState(false);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-	const { isSaveable, isViewable, hasValidViewUrl, getPreviewUrl, viewUrl, dirty } =
-		useCurrentEntity();
+	const {
+		isSaveable,
+		isViewable,
+		hasValidViewUrl,
+		getPreviewUrl,
+		viewUrl,
+		dirty,
+	} = useCurrentEntity();
 
 	const { registerShortcut } = useDispatch(keyboardShortcutsStore);
 
@@ -53,7 +59,7 @@ function BlockeraPreview(): ReactElement {
 		registerShortcut({
 			name: 'blockera/preview-mode/toggle',
 			category: 'blockera',
-			description: __('Toggle preview mode.', 'blockera-tabs'),
+			description: __('Toggle preview mode.', 'blockera'),
 			keyCombination: {
 				modifier: 'primary',
 				character: 'p',
@@ -64,7 +70,7 @@ function BlockeraPreview(): ReactElement {
 		registerShortcut({
 			name: 'blockera/preview-mode/open-new-tab',
 			category: 'blockera',
-			description: __('Open preview in a new tab.', 'blockera-tabs'),
+			description: __('Open preview in a new tab.', 'blockera'),
 			keyCombination: {
 				modifier: 'primaryShift',
 				character: 'p',
@@ -167,7 +173,6 @@ function BlockeraPreview(): ReactElement {
 			if (isOverlayOpen) {
 				// Use the same close animation as the overlay's close button
 				handleClose();
-				return;
 			} else {
 				// Get fresh preview URL (saves post if needed)
 				const url = await getPreviewUrl();
@@ -196,7 +201,11 @@ function BlockeraPreview(): ReactElement {
 				href={viewUrl}
 			/>
 			{isOverlayOpen && previewUrl && (
-				<PreviewOverlay url={previewUrl} onClose={handleClose} isClosing={isClosing} />
+				<PreviewOverlay
+					url={previewUrl}
+					onClose={handleClose}
+					isClosing={isClosing}
+				/>
 			)}
 		</>
 	);
@@ -210,4 +219,3 @@ registerPlugin('blockera-preview', {
 
 // Export bootstrap function
 export { bootstrapPreviewMode } from './bootstrap';
-

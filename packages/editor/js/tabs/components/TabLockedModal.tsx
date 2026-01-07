@@ -58,7 +58,7 @@ function TabLockedModalComponent({
 	}
 
 	// Extract user info with fallbacks
-	const userName = lockUser?.name || __('Another user', 'blockera-tabs');
+	const userName = lockUser?.name || __('Another user', 'blockera');
 	const userAvatar = lockUser?.avatar;
 
 	/**
@@ -79,9 +79,9 @@ function TabLockedModalComponent({
 
 	return (
 		<Modal
-			title={__('This tab is being edited', 'blockera-tabs')}
+			title={__('This tab is being edited', 'blockera')}
 			// Empty handler required by Modal component, but modal is not dismissible
-			onRequestClose={() => { }}
+			onRequestClose={() => {}}
 			// Prevent accidental dismissal - user must choose an action
 			shouldCloseOnClickOutside={false}
 			shouldCloseOnEsc={false}
@@ -94,7 +94,7 @@ function TabLockedModalComponent({
 				{userAvatar && (
 					<img
 						src={userAvatar}
-						alt={__('Avatar', 'blockera-tabs')}
+						alt={__('Avatar', 'blockera')}
 						className="blockera-tabs-locked-modal__avatar"
 						width={64}
 						height={64}
@@ -105,14 +105,14 @@ function TabLockedModalComponent({
 					{/* Main message with user name highlighted */}
 					<p>
 						<strong>{userName}</strong>{' '}
-						{__('is currently editing this post.', 'blockera-tabs')}
+						{__('is currently editing this post.', 'blockera')}
 					</p>
 
 					{/* Explanation of consequences */}
 					<p>
 						{__(
 							'You can take over editing, which will prevent them from saving their changes, or close this tab.',
-							'blockera-tabs'
+							'blockera'
 						)}
 					</p>
 
@@ -127,7 +127,7 @@ function TabLockedModalComponent({
 							onClick={onCloseTab}
 							disabled={isTakingOver}
 						>
-							{__('Close Tab', 'blockera-tabs')}
+							{__('Close Tab', 'blockera')}
 						</Button>
 						<Button
 							variant="primary"
@@ -136,8 +136,8 @@ function TabLockedModalComponent({
 							disabled={isTakingOver}
 						>
 							{isTakingOver
-								? __('Taking over…', 'blockera-tabs')
-								: __('Take Over', 'blockera-tabs')}
+								? __('Taking over…', 'blockera')
+								: __('Take Over', 'blockera')}
 						</Button>
 					</HStack>
 				</div>
@@ -149,4 +149,3 @@ function TabLockedModalComponent({
 // Memoize to prevent unnecessary re-renders when parent state changes
 const TabLockedModal = memo(TabLockedModalComponent);
 export default TabLockedModal;
-

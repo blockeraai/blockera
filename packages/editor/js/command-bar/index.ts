@@ -49,4 +49,3 @@ export type { ParsedCommandName } from './utils/parseCommandName';
 
 // Export bootstrap function
 export { bootstrapCommandBar } from './bootstrap';
-

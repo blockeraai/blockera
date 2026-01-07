@@ -18,7 +18,10 @@ interface KeyCombinationProps {
 /**
  * Renders a keyboard key combination.
  */
-function KeyCombination({ keyCombination, forceAriaLabel }: KeyCombinationProps) {
+function KeyCombination({
+	keyCombination,
+	forceAriaLabel,
+}: KeyCombinationProps) {
 	const shortcut = keyCombination.modifier
 		? displayShortcutList[keyCombination.modifier](keyCombination.character)
 		: keyCombination.character;
@@ -45,17 +48,17 @@ function KeyCombination({ keyCombination, forceAriaLabel }: KeyCombinationProps)
 
 					if (character === 'Arrowleft') {
 						character = '←';
-						extraClass = 'shortcut-key-large'
+						extraClass = 'shortcut-key-large';
 					}
 
 					if (character === 'Arrowup') {
 						character = '↑';
-						extraClass = 'shortcut-key-large'
+						extraClass = 'shortcut-key-large';
 					}
 
 					if (character === 'Arrowdown') {
 						character = '↓';
-						extraClass = 'shortcut-key-large'
+						extraClass = 'shortcut-key-large';
 					}
 
 					return (

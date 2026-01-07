@@ -20,7 +20,7 @@ import { displayShortcutList, shortcutAriaLabel } from '@wordpress/keycodes';
  * Shortcuts are registered with format: blockera/sub-category-id/shortcut-id
  *
  * @param shortcuts - Array of shortcut names.
- * @returns Object mapping sub-category IDs to arrays of shortcut names.
+ * @return Object mapping sub-category IDs to arrays of shortcut names.
  */
 function groupShortcutsBySubCategory(
 	shortcuts: string[]
@@ -50,7 +50,9 @@ function groupShortcutsBySubCategory(
 function CombinedTabNumberShortcut({ shortcuts }: { shortcuts: string[] }) {
 	const firstKeyCombination = useSelect(
 		(select: any) => {
-			const { getShortcutKeyCombination } = select(keyboardShortcutsStore);
+			const { getShortcutKeyCombination } = select(
+				keyboardShortcutsStore
+			);
 			return getShortcutKeyCombination(shortcuts[0]);
 		},
 		[shortcuts]
@@ -76,10 +78,7 @@ function CombinedTabNumberShortcut({ shortcuts }: { shortcuts: string[] }) {
 	// Format: 1, 2, ... and 9
 	const numbersToShow =
 		tabNumbers.length > 4
-			? [
-				tabNumbers[0],
-				tabNumbers[tabNumbers.length - 1],
-			]
+			? [tabNumbers[0], tabNumbers[tabNumbers.length - 1]]
 			: tabNumbers;
 
 	// Helper function to render a single key combination
@@ -119,19 +118,18 @@ function CombinedTabNumberShortcut({ shortcuts }: { shortcuts: string[] }) {
 	return (
 		<li className="editor-keyboard-shortcut-help-modal__shortcut">
 			<div className="editor-keyboard-shortcut-help-modal__shortcut-description">
-				{__('Switch to tab by tab number.', 'blockera-tabs')}
+				{__('Switch to tab by tab number.', 'blockera')}
 			</div>
 			<div className="editor-keyboard-shortcut-help-modal__shortcut-term blockera-keyboard-shortcuts-extension__tab-number-shortcuts">
 				{numbersToShow.map((num, index) => {
 					const showEllipsisBefore =
-						tabNumbers.length > 3 && index === numbersToShow.length - 1;
+						tabNumbers.length > 3 &&
+						index === numbersToShow.length - 1;
 
 					return (
 						<Fragment key={num}>
 							{showEllipsisBefore && (
-								<span>...{' '}
-									{__('and', 'blockera-tabs')}
-								</span>
+								<span>... {__('and', 'blockera')}</span>
 							)}
 							{renderKeyCombination(num)}
 						</Fragment>
@@ -155,10 +153,7 @@ function ShortcutList({ shortcuts }: { shortcuts: string[] }) {
 	);
 
 	return (
-		<ul
-			className="editor-keyboard-shortcut-help-modal__shortcut-list"
-			role="list"
-		>
+		<ul className="editor-keyboard-shortcut-help-modal__shortcut-list">
 			{/* Render other shortcuts first */}
 			{otherShortcuts.map((shortcutName, index) => (
 				<li
@@ -233,12 +228,9 @@ function ShortcutSection({
  */
 export default function KeyboardShortcutsExtension(): React.ReactNode {
 	// Get all shortcuts from the blockera category
-	const blockeraShortcuts = useSelect(
-		(select: any) => {
-			return select(keyboardShortcutsStore).getCategoryShortcuts('blockera');
-		},
-		[]
-	) as string[];
+	const blockeraShortcuts = useSelect((select: any) => {
+		return select(keyboardShortcutsStore).getCategoryShortcuts('blockera');
+	}, []) as string[];
 
 	// Group shortcuts by sub-category
 	const shortcutsBySubCategory = useMemo(() => {
@@ -257,9 +249,13 @@ export default function KeyboardShortcutsExtension(): React.ReactNode {
 			return indexA - indexB;
 		}
 		// Only A is in the sort order: A comes first
-		if (indexA !== -1) return -1;
+		if (indexA !== -1) {
+			return -1;
+		}
 		// Only B is in the sort order: B comes first
-		if (indexB !== -1) return 1;
+		if (indexB !== -1) {
+			return 1;
+		}
 		// Neither is in the sort order: sort alphabetically (both come after sorted ones)
 		return a.localeCompare(b);
 	});

@@ -32,7 +32,11 @@ import {
 /**
  * Internal dependencies
  */
-import { isSiteEditorPostType, parseTemplateSlug, TEMPLATE_POST_TYPE } from '../../hooks';
+import {
+	isSiteEditorPostType,
+	parseTemplateSlug,
+	TEMPLATE_POST_TYPE,
+} from '../../hooks';
 
 export interface GetTabIconArgs {
 	postType: string | null | undefined;
@@ -92,21 +96,19 @@ export function getTabIcon({ postType, slug }: GetTabIconArgs): IconType {
 		// Other site-editor post types.
 		switch (postType) {
 			case 'wp_template_part':
-
 				// Use prefix matching: originalSlug may start with values like 'header', 'footer', etc.
 				if (typeof parsed?.originalSlug === 'string') {
-					const slug = parsed.originalSlug;
-					if (slug.startsWith('header')) {
+					const templatePartSlug = parsed.originalSlug;
+					if (templatePartSlug.startsWith('header')) {
 						return header;
-					} else if (slug.startsWith('footer')) {
+					} else if (templatePartSlug.startsWith('footer')) {
 						return footer;
-					} else if (slug.startsWith('sidebar')) {
+					} else if (templatePartSlug.startsWith('sidebar')) {
 						return sidebar;
 					}
 				}
 
 				return layout;
-
 
 			case 'wp_block':
 				return symbol;
@@ -127,5 +129,3 @@ export function getTabIcon({ postType, slug }: GetTabIconArgs): IconType {
 			return page;
 	}
 }
-
-

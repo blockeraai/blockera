@@ -30,8 +30,11 @@ export function useValue({
 	// don't fire change for value at first time!
 	useLateEffect(() => {
 		if (isFunction(onChange)) {
-			if (isFunction(valueCleanup)) onChange(valueCleanup(value));
-			else onChange(value);
+			if (isFunction(valueCleanup)) {
+				onChange(valueCleanup(value));
+			} else {
+				onChange(value);
+			}
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,8 +71,9 @@ export function useValue({
 			return defaultValue;
 		}
 		if (mergeInitialAndDefault) {
-			if (isObject(initialValue) && isObject(defaultValue))
+			if (isObject(initialValue) && isObject(defaultValue)) {
 				return { ...defaultValue, ...initialValue };
+			}
 
 			// merge default value to object elements inside initialValue
 			// used for repeaters

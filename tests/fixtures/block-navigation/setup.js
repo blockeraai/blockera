@@ -1,12 +1,15 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { editPost } = require('@blockera/dev-playwright/js/utils/site-navigation');
+const {
+	editPost,
+} = require('@blockera/dev-playwright/js/utils/site-navigation');
 const { appendBlocks } = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 const fs = require('fs');
 const path = require('path');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-navigation test
  * Creates navigation post and regular post, then edits the regular post
@@ -15,6 +18,7 @@ const path = require('path');
  * @param {string} sectionContent - The section content HTML.
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	// Step 1: Read navigation.html content
 	const navigationPath = path.join(__dirname, 'navigation.html');
@@ -66,7 +70,7 @@ async function setup(page, sectionContent) {
 	// Step 4: Edit the post
 	await editPost(page, { postID: postId });
 	await appendBlocks(page, updatedContent);
-	
+
 	// Wait for navigation to be ready
 	await page.waitForTimeout(5000);
 

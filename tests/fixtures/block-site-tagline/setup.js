@@ -1,9 +1,13 @@
 /**
  * Blockera dependencies - Playwright version
  */
-const { createPost, appendBlocks} = require('@blockera/dev-playwright/js/utils/helpers');
+const {
+	createPost,
+	appendBlocks,
+} = require('@blockera/dev-playwright/js/utils/helpers');
 const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
 
+/* eslint-disable jsdoc/valid-types */
 /**
  * Setup function for block-site-tagline test
  * Sets site tagline option and creates a post
@@ -12,6 +16,7 @@ const { wpCli } = require('@blockera/dev-playwright/js/support/commands');
  * @param {string} sectionContent - The section content HTML (not used).
  * @return {Promise<boolean>} Returns false to indicate custom setup is handled.
  */
+/* eslint-enable jsdoc/valid-types */
 async function setup(page, sectionContent) {
 	const taglineText = 'This is site tagline text';
 

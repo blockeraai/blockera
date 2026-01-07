@@ -58,18 +58,12 @@ export type InnerBlocksProps = {
 	contextValue: Object,
 	doingSwitchToInner: () => void,
 	setCurrentBlock: (block: InnerBlockType) => void,
-	setBlockClientInners: ({
-		clientId: string,
-		inners: InnerBlocks,
-	}) => void,
+	setBlockClientInners: ({ clientId: string, inners: InnerBlocks }) => void,
 };
 
 export type MemoizedInnerBlocks = {
 	clientId: string,
-	setBlockClientInners: ({
-		clientId: string,
-		inners: InnerBlocks,
-	}) => void,
+	setBlockClientInners: ({ clientId: string, inners: InnerBlocks }) => void,
 	controlValue: InnerBlocks,
 	reservedInnerBlocks: InnerBlocks,
 	getBlockInners: (clientId: string) => InnerBlocks,
@@ -78,10 +72,7 @@ export type MemoizedInnerBlocks = {
 export type AvailableItems = {
 	clientId: string,
 	maxItems?: number | void,
-	setBlockClientInners: ({
-		clientId: string,
-		inners: InnerBlocks,
-	}) => void,
+	setBlockClientInners: ({ clientId: string, inners: InnerBlocks }) => void,
 	reservedInnerBlocks: InnerBlocks,
 	memoizedInnerBlocks: InnerBlocks,
 	getBlockInners: (clientId: string) => InnerBlocks,

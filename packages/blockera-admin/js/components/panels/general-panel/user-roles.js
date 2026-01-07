@@ -114,7 +114,7 @@ export const UserRoles = ({
 										).map(
 											([id, checked]: [
 												string,
-												boolean
+												boolean,
 											]): [string, boolean] => {
 												return [id, checked];
 											}

@@ -40,7 +40,9 @@ export interface CommandLoaderParams {
 /**
  * Original command loader hook function type.
  */
-export type CommandLoaderHook = (params: CommandLoaderParams) => CommandLoaderResult;
+export type CommandLoaderHook = (
+	params: CommandLoaderParams
+) => CommandLoaderResult;
 
 /**
  * Tab actions interface for opening/focusing tabs.
@@ -56,7 +58,7 @@ export interface TabActions {
 /**
  * Navigation loaders that should be wrapped to intercept entity navigation
  */
-export const NAVIGATION_LOADER_NAMES: readonly string[] = [
+export const NAVIGATION_LOADER_NAMES = [
 	'core/edit-site/navigate-pages',
 	'core/edit-site/navigate-posts',
 	'core/edit-site/navigate-templates',
@@ -75,7 +77,7 @@ export const TAB_COMMAND_MARKER = '⌘TAB' as const;
  * @param originalHook - The original command loader hook function
  * @param tabActions - Object containing tab action functions
  * @param tabs - Current tabs array
- * @returns Wrapped hook function
+ * @return Wrapped hook function
  */
 export function createWrappedHook(
 	originalHook: CommandLoaderHook,
@@ -89,13 +91,14 @@ export function createWrappedHook(
 		useEffect(() => {
 			document.documentElement.style.setProperty(
 				'--blockera-tab-indicator-text',
-				`"${__('Opens in Tab')}"`
+				`"${__('Opens in Tab', 'blockera')}"`
 			);
 		}, []);
 
 		// Call the original hook to get commands
 		const result = originalHook(params);
-		const { commands: originalCommands = [], isLoading = false } = result ?? {};
+		const { commands: originalCommands = [], isLoading = false } =
+			result ?? {};
 
 		// Wrap each command's callback to intercept navigation
 		const wrappedCommands = useMemo(() => {
@@ -109,7 +112,9 @@ export function createWrappedHook(
 
 				// Add marker to searchLabel so CSS can target via [data-value$="⌘TAB"]
 				const markedSearchLabel =
-					(command.searchLabel ?? command.label) + ' ' + TAB_COMMAND_MARKER;
+					(command.searchLabel ?? command.label) +
+					' ' +
+					TAB_COMMAND_MARKER;
 
 				return {
 					...command,
@@ -131,4 +136,3 @@ export function createWrappedHook(
 		return { commands: wrappedCommands, isLoading };
 	};
 }
-

@@ -20,6 +20,9 @@
 	},
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
 	"[css]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true
@@ -35,6 +38,10 @@
 	"prettier.enable": true,
 	"prettier.configPath": ".prettierrc.js",
 	"prettier.requireConfig": true,
+	"prettier.documentSelectors": [
+		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml}"
+	],
+	"prettier.useEditorConfig": false,
 	"[php]": {
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "valeryanm.vscode-phpsab",
@@ -72,5 +79,62 @@
 	"phpstan.fullMessage": true,
 	"[html]": {
 		"editor.defaultFormatter": "vscode.html-language-features"
+	},
+	"eslint.enable": true,
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+	"eslint.options": {
+		"configFile": "${workspaceFolder}/.eslintrc.js"
+	},
+	"eslint.workingDirectories": ["${workspaceFolder}"],
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		}
+	},
+	"[javascriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		}
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		},
+		"typescript.format.enable": false
+	},
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.fixAll.eslint": "explicit"
+		},
+		"typescript.format.enable": false
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[yaml]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
+	},
+	"[yml]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
 	}
 }

@@ -19,7 +19,7 @@ const config = defineConfig({
 				['github'], // GitHub Actions integration
 				['html', { outputFolder: 'playwright-report', open: 'never' }], // HTML report
 				['./packages/dev-playwright/js/config/flaky-tests-report.ts'],
-		  ]
+			]
 		: 'list',
 	workers: 1,
 	globalSetup: fileURLToPath(

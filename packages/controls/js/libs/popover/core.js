@@ -59,7 +59,9 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 			const internalRef = useRef();
 			const popoverRef = ref || internalRef;
 
-			useEffect(() => popoverRef.current?.focus(), []);
+			useEffect(() => {
+				popoverRef.current?.focus();
+			}, [ref]);
 
 			function popoverOnFocusOutside(e: MouseEvent) {
 				const excludeClasses = [

@@ -9,12 +9,16 @@
  * Uses regex for fast, simple extraction.
  *
  * @param rawContent - Raw content string to search for image URLs
- * @returns Array of unique image URLs found in content
+ * @return Array of unique image URLs found in content
  */
 export function extractImageUrlsFromBlocks(
 	rawContent: string | null | undefined
 ): string[] {
-	if (!rawContent || typeof rawContent !== 'string' || rawContent.trim() === '') {
+	if (
+		!rawContent ||
+		typeof rawContent !== 'string' ||
+		rawContent.trim() === ''
+	) {
 		return [];
 	}
 
@@ -97,4 +101,3 @@ export function extractImageUrlsFromBlocks(
 	// Convert Set to Array
 	return Array.from(imageUrls);
 }
-

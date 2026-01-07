@@ -51,7 +51,7 @@ export default function ({
 						: {
 								...gap,
 								gap: newValue,
-						  },
+							},
 					{}
 				),
 		});
@@ -142,7 +142,7 @@ export default function ({
 											...newValue,
 											gap: '',
 											lock: true,
-									  }
+										}
 									: newValue;
 
 								handleOnChangeAttributes(
@@ -152,7 +152,7 @@ export default function ({
 										: {
 												...gap,
 												rows: newValue,
-										  },
+											},
 									{ ref }
 								);
 							}}
@@ -188,7 +188,7 @@ export default function ({
 											...newValue,
 											gap: '',
 											lock: true,
-									  }
+										}
 									: newValue;
 
 								handleOnChangeAttributes(
@@ -198,7 +198,7 @@ export default function ({
 										: {
 												...gap,
 												columns: newValue,
-										  },
+											},
 									{ ref }
 								);
 							}}

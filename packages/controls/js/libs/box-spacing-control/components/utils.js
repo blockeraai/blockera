@@ -24,19 +24,21 @@ export function getSideSelectOptions(disable: string): Array<TNativeOption> {
 		},
 	];
 
-	if (disable !== 'horizontal' && disable !== 'all')
+	if (disable !== 'horizontal' && disable !== 'all') {
 		options.push({
 			label: __('Lock Horizontally', 'blockera'),
 			value: 'horizontal',
 			icon: <Icon icon="side-lock-horizontal" iconSize="18" />,
 		});
+	}
 
-	if (disable !== 'vertical' && disable !== 'all')
+	if (disable !== 'vertical' && disable !== 'all') {
 		options.push({
 			label: __('Lock Vertically', 'blockera'),
 			value: 'vertical',
 			icon: <Icon icon="side-lock-vertical" iconSize="18" />,
 		});
+	}
 
 	if (disable === 'none') {
 		options.push({

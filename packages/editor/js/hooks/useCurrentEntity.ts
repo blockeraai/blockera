@@ -32,7 +32,7 @@ import type { UseEntityReturn } from './useEntity';
 /**
  * Hook to get comprehensive entity data for the current editor document.
  *
- * @returns Same return shape as useEntity.
+ * @return Same return shape as useEntity.
  */
 export function useCurrentEntity(): UseEntityReturn {
 	// Get current document identifiers from editor store.
@@ -40,18 +40,23 @@ export function useCurrentEntity(): UseEntityReturn {
 	// references on every store update, which would cause unnecessary re-renders.
 	const postId = useSelect(
 		(select) =>
-			(select(editorStore) as { getCurrentPostId: () => string | number | undefined })
-				.getCurrentPostId(),
+			(
+				select(editorStore) as {
+					getCurrentPostId: () => string | number | undefined;
+				}
+			).getCurrentPostId(),
 		[]
 	);
 	const postType = useSelect(
 		(select) =>
-			(select(editorStore) as { getCurrentPostType: () => string | undefined })
-				.getCurrentPostType(),
+			(
+				select(editorStore) as {
+					getCurrentPostType: () => string | undefined;
+				}
+			).getCurrentPostType(),
 		[]
 	);
 
 	// Use the main useEntity hook with current document identifiers
 	return useEntity(postType, postId);
 }
-

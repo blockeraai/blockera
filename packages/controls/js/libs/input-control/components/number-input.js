@@ -152,7 +152,7 @@ export function NumberInput({
 	const { onDragStart, onDragEnd } = useDragValue({
 		value: isString(value)
 			? //$FlowFixMe
-			  value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
+				value.replace(float ? /[^-\.0-9]/g : /[^-0-9]/g, '')
 			: +value,
 		setValue: (newValue) => {
 			setValue(newValue);
@@ -169,7 +169,7 @@ export function NumberInput({
 						onDragStart(event);
 					},
 					onMouseUp: onDragEnd,
-			  }
+				}
 			: {};
 	};
 

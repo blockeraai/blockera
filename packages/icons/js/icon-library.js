@@ -206,7 +206,11 @@ export function getIconLibrarySearchData(
 ): Array<any> {
 	const searchData: Array<any> = [];
 
-	if (library === 'all' || library === 'all2' || isValidIconLibrary(library))
+	if (
+		library === 'all' ||
+		library === 'all2' ||
+		isValidIconLibrary(library)
+	) {
 		switch (library) {
 			case 'all':
 				searchLibraries.forEach((library) => {
@@ -236,6 +240,7 @@ export function getIconLibrarySearchData(
 				);
 				break;
 		}
+	}
 
 	return searchData;
 }

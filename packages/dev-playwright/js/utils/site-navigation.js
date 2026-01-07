@@ -111,7 +111,9 @@ async function openSiteEditor(page) {
  * @return {Promise<void>}
  */
 async function setAbsoluteBlockToolbar(page) {
-	await page.locator('[aria-label="Options"]').first().click();
+	const optionsButton = page.locator('[aria-label="Options"]').first();
+	await optionsButton.waitFor({ state: 'visible', timeout: 10000 });
+	await optionsButton.click();
 
 	const selector =
 		'div[aria-labelledby="components-menu-group-label-0"] button:first-child';
@@ -124,7 +126,10 @@ async function setAbsoluteBlockToolbar(page) {
 		}
 	}
 
-	await page.locator('[aria-label="Options"]').first().click();
+	// Wait for the Options button to be visible again before clicking to close
+	const optionsButtonClose = page.locator('[aria-label="Options"]').first();
+	await optionsButtonClose.waitFor({ state: 'visible', timeout: 10000 });
+	await optionsButtonClose.click();
 }
 
 /**

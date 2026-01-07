@@ -68,7 +68,7 @@ export default function ItemHeader({
 					isOpenPopoverEvent(event) && setOpen(!isOpen)
 				}
 				aria-label={sprintf(
-					// translators: it's the aria label for repeater item
+					// translators: %s: The state item ID
 					__('Item %s', 'blockera'),
 					itemId
 				)}

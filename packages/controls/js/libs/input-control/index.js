@@ -208,7 +208,7 @@ export default function InputControl({
 									valueAddonControlProps.setOpen(
 										'var-picker'
 									);
-							  }
+								}
 							: undefined
 					}
 					onChange={(newValue: ContextUnitInput): void => {

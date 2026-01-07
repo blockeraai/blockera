@@ -15,7 +15,7 @@ const BATCH_DELAY_MS = 150;
  * Uses Image preloading (primary) and link prefetch (secondary) for maximum compatibility
  *
  * @param url - Image URL to prefetch
- * @returns Promise that resolves when prefetch is initiated
+ * @return Promise that resolves when prefetch is initiated
  */
 function prefetchSingleImage(url: string): Promise<void> {
 	return new Promise((resolve) => {
@@ -106,7 +106,7 @@ function prefetchSingleImage(url: string): Promise<void> {
  * Yield to browser using requestIdleCallback or setTimeout
  *
  * @param callback - Callback to execute after yielding
- * @returns Promise that resolves after yielding
+ * @return Promise that resolves after yielding
  */
 function yieldToBrowser(callback: () => void): Promise<void> {
 	return new Promise((resolve) => {
@@ -135,7 +135,7 @@ function yieldToBrowser(callback: () => void): Promise<void> {
  * This ensures the browser can process other tasks and UI remains responsive
  *
  * @param imageUrls - Array of image URLs to prefetch
- * @returns Promise that resolves when all images are queued for prefetching
+ * @return Promise that resolves when all images are queued for prefetching
  */
 async function prefetchImagesInBatches(imageUrls: string[]): Promise<void> {
 	if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
@@ -179,7 +179,6 @@ async function prefetchImagesInBatches(imageUrls: string[]): Promise<void> {
  * with UI rendering or user interactions.
  *
  * @param imageUrls - Array of image URLs to prefetch
- * @returns Returns immediately (fire-and-forget pattern)
  */
 export function prefetchImages(imageUrls: string[]): void {
 	if (!imageUrls || !Array.isArray(imageUrls) || imageUrls.length === 0) {
@@ -205,4 +204,3 @@ export function prefetchImages(imageUrls: string[]): void {
 		});
 	});
 }
-

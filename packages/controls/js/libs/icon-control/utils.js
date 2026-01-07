@@ -83,7 +83,7 @@ export function getLibraryIcons({
 			iconLibraryIcons[iconKey]
 		);
 
-		if (isValidIcon(icon, iconKey))
+		if (isValidIcon(icon, iconKey)) {
 			iconsStack.push(
 				<ConditionalWrapper
 					key={`${iconKey}-${icon.iconName}`}
@@ -137,6 +137,7 @@ export function getLibraryIcons({
 					</span>
 				</ConditionalWrapper>
 			);
+		}
 	}
 
 	return iconsStack;

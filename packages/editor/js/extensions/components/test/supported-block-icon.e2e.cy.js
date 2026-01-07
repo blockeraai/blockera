@@ -2,7 +2,7 @@ import { createPost } from '@blockera/dev-cypress/js/helpers/site-navigation';
 import {
 	addBlockToPost,
 	appendBlocks,
-	getBlockInserter,
+	openBlockInserter,
 } from '@blockera/dev-cypress/js/helpers/editor';
 
 describe('Supported Block Indicator Icon', () => {
@@ -11,7 +11,7 @@ describe('Supported Block Indicator Icon', () => {
 	});
 
 	it('Show supported block icon on block inserter (Paragraph Block)', () => {
-		getBlockInserter().click();
+		openBlockInserter();
 
 		const selector = `.editor-block-list-item-${CSS.escape(
 			`paragraph/paragraph`

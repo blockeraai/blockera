@@ -57,11 +57,11 @@ export default function ({
 										? {
 												marginRight: '-5px',
 												fill: 'currentColor',
-										  }
+											}
 										: {
 												marginLeft: '-5px',
 												fill: 'currentColor',
-										  }
+											}
 								}
 							/>
 							{__('Base Breakpoint', 'blockera')}
@@ -139,7 +139,7 @@ export default function ({
 						textAlign: 'right',
 					}}
 				>
-					{__('ID: ', 'blockera')}
+					{__('ID:', 'blockera')}
 
 					<i
 						style={{

@@ -49,7 +49,7 @@ export interface CommandBarIntegrationProps {
  * Command Bar Integration Component
  *
  * @param props - Component props
- * @returns Rendered children with openAddTabCommandBar function
+ * @return Rendered children with openAddTabCommandBar function
  */
 export default function CommandBarIntegration({
 	addTab,
@@ -71,9 +71,19 @@ export default function CommandBarIntegration({
 
 	// Register "Create new post/page" commands for add tab mode
 	useCreateEntityCommands({
-		addTab: addTab as (postType: string, postId: number, title?: string | null) => Promise<void>,
-		switchDocument: switchDocument as (postType: string, postId: number) => void,
-		prefetchEntity: prefetchEntity as (postType: string, postId: number) => Promise<unknown>,
+		addTab: addTab as (
+			postType: string,
+			postId: number,
+			title?: string | null
+		) => Promise<void>,
+		switchDocument: switchDocument as (
+			postType: string,
+			postId: number
+		) => void,
+		prefetchEntity: prefetchEntity as (
+			postType: string,
+			postId: number
+		) => Promise<unknown>,
 	});
 
 	// Register commands for all open tabs
@@ -86,4 +96,3 @@ export default function CommandBarIntegration({
 	// Render children with openAddTabCommandBar function
 	return children({ openAddTabCommandBar });
 }
-
