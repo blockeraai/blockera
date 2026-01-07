@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\Editor\Http\Controllers\Theme;
+namespace Blockera\Setup\Compatibility;
 
 /**
  * Class to provide access to update a theme.json structure.

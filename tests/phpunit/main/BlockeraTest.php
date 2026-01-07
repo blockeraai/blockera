@@ -8,8 +8,8 @@ use Blockera\Dev\PhpUnit\CssDriver;
 use Blockera\Dev\PhpUnit\HtmlDriver;
 use Blockera\Dev\PhpUnit\JsonDriver;
 use Blockera\Dev\PHPUnit\AppTestCase;
-use Blockera\Editor\Http\Controllers\Theme\JSONResolver;
 use Spatie\Snapshots\MatchesSnapshots;
+use Blockera\Setup\Compatibility\JSONResolver;
 
 class BlockeraTest extends AppTestCase {
 
@@ -192,7 +192,7 @@ class BlockeraTest extends AppTestCase {
 	 */
 	protected function cleanupGlobalStyles(): void {
 		// Clear Blockera-specific caches first
-		if (class_exists('\Blockera\Editor\Http\Controllers\Theme\JSONResolver')) {
+		if (class_exists('\Blockera\Setup\Compatibility\JSONResolver')) {
 			JSONResolver::clean_cached_data();
 		}
 

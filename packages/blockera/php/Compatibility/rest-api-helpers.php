@@ -1,84 +1,7 @@
 <?php
 
 use Blockera\Http\Routes;
-use Blockera\Editor\Http\Controllers\Theme\JSON;
-
-if (! function_exists('blockera_register_block_style_variations_from_theme_json_partials')) {
-	/**
-     * Registers block style variations read in from theme.json partials.
-     *
-     * @access private
-     *
-     * @param array $variations Shared block style variations.
-     */
-	function blockera_register_block_style_variations_from_theme_json_partials( $variations ): void {
-
-		if ( empty( $variations ) ) {
-			return;
-		}
-
-		$post_id            = WP_Theme_JSON_Resolver::get_user_global_styles_post_id();
-		$blockera_meta_data = get_post_meta($post_id, 'blockeraGlobalStylesMetaData', true);
-
-		$registry = WP_Block_Styles_Registry::get_instance();
-
-		foreach ( $variations as $variation ) {
-			if ( empty( $variation['blockTypes'] ) || empty( $variation['styles'] ) ) {
-				continue;
-			}
-
-			$variation_name  = $variation['slug'] ?? _wp_to_kebab_case( $variation['title'] );
-			$variation_label = $variation['title'] ?? $variation_name;
-
-			foreach ( $variation['blockTypes'] as $block_type ) {
-				$registered_styles = $registry->get_registered_styles_for_block( $block_type );
-
-				$cached_variations = $blockera_meta_data['blocks'][ $block_type ]['variations'] ?? [];
-				$refs              = array_column($cached_variations, 'refId');
-
-				// Register block style variation if it hasn't already been registered.
-				if ( ! array_key_exists( $variation_name, $registered_styles ) ) {
-					register_block_style(
-                        $block_type,
-                        array(
-							'name'  => $variation_name,
-							'label' => $variation_label,
-                        )
-					);
-				} elseif (in_array($variation_name, $refs, true)) {
-					unregister_block_style(
-                        $block_type,
-                        $variation_name
-					);
-
-					$index                    = array_search($variation_name, $refs, true);
-					$cached_variations_values = array_values($cached_variations);
-					$cached_variations_keys   = array_keys($cached_variations);
-					$ref_value                = $cached_variations_values[ $index ];
-					$ref_key                  = $cached_variations_keys[ $index ];
-
-					register_block_style(
-                        $block_type,
-                        array(
-							'name'  => $ref_key,
-							'label' => $ref_value['label'],
-                        )
-					);
-				} elseif (! empty($cached_variations)) {
-					foreach ($cached_variations as $value) {
-						register_block_style(
-							$block_type,
-							array(
-								'name'  => $value['name'],
-								'label' => $value['label'],
-							)
-						);
-					}
-				}
-			}
-		}
-	}
-}
+use Blockera\Setup\Compatibility\JSON;
 
 if (! function_exists('blockera_register_wp_global_styles_post_type_args')) {
 	/**
@@ -90,7 +13,7 @@ if (! function_exists('blockera_register_wp_global_styles_post_type_args')) {
      */
 	function blockera_register_wp_global_styles_post_type_args( $args ): array {
 
-		$args['rest_controller_class'] = '\Blockera\Editor\Http\Controllers\Theme\GlobalStylesController';
+		$args['rest_controller_class'] = '\Blockera\Setup\Http\Controllers\Theme\GlobalStylesController';
 
 		return $args;
 	}
@@ -107,7 +30,7 @@ if (! function_exists('blockera_editor_register_routes')) {
 	function blockera_editor_register_routes( Routes $routes ): void {
 
 		// Consolidated the WordPress, Activated Theme (theme.json), and User Global Styles data.
-		$routes->get('theme-json', [ Blockera\Editor\Http\Controllers\Theme\JSONController::class, 'response' ]);
+		$routes->get('theme-json', [ Blockera\Setup\Compatibility\JSONController::class, 'response' ]);
 	}
 }
 
@@ -162,12 +85,12 @@ if (! function_exists('blockera_editor_wp_theme_json_data_theme')) {
 		static $initialized = false;
 
 		if ( ! $initialized ) {
-			Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
-			Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_theme_data = $data;
+			Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
+			Blockera\Setup\Compatibility\JSONResolver::$default_theme_data = $data;
 			$initialized = true;
 		}
 
-		return Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_theme_data();
+		return Blockera\Setup\Compatibility\JSONResolver::get_theme_data();
 	}
 }
 
@@ -184,12 +107,12 @@ if (! function_exists('blockera_editor_wp_theme_json_data_blocks')) {
 		static $initialized = false;
 
 		if ( ! $initialized ) {
-			Blockera\Editor\Http\Controllers\Theme\JSONResolver::clean_cached_data();
-			Blockera\Editor\Http\Controllers\Theme\JSONResolver::$default_blocks_data = $data;
+			Blockera\Setup\Compatibility\JSONResolver::clean_cached_data();
+			Blockera\Setup\Compatibility\JSONResolver::$default_blocks_data = $data;
 			$initialized = true;
 		}
 
-		return Blockera\Editor\Http\Controllers\Theme\JSONResolver::get_block_data();
+		return Blockera\Setup\Compatibility\JSONResolver::get_block_data();
 	}
 }
 

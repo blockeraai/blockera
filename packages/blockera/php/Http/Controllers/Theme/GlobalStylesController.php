@@ -1,6 +1,9 @@
 <?php
 
-namespace Blockera\Editor\Http\Controllers\Theme;
+namespace Blockera\Setup\Http\Controllers\Theme;
+
+use Blockera\Setup\Compatibility\JSON;
+use Blockera\Setup\Compatibility\JSONResolver;
 
 /**
  * Base Global Styles REST API Controller.

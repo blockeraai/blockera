@@ -1,6 +1,6 @@
 <?php
 
-namespace Blockera\Editor\Http\Controllers\Theme;
+namespace Blockera\Setup\Compatibility;
 
 use Blockera\Utils\Utils;
 
@@ -486,6 +486,42 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$cached_theme_support_data = $theme_support_data;
 
 		return static::$cached_theme_support_data;
+	}
+
+	/**
+	 * Returns the merged data from core, blocks, theme, and user.
+	 *
+	 * Overrides parent to ensure Blockera's JSON class is returned.
+	 *
+	 * @since 6.1.0
+	 *
+	 * @param string $origin Optional. The origin of the data. Default 'custom'.
+	 * @return JSON Entity that holds merged data.
+	 */
+	public static function get_merged_data( $origin = 'custom' ) {
+		if ( is_array( $origin ) ) {
+			_deprecated_argument( __FUNCTION__, '5.9.0' );
+		}
+
+		$result = new JSON();
+		$result->merge( static::get_core_data() );
+		if ( 'default' === $origin ) {
+			return $result;
+		}
+
+		$result->merge( static::get_block_data() );
+		if ( 'blocks' === $origin ) {
+			return $result;
+		}
+
+		$result->merge( static::get_theme_data() );
+		if ( 'theme' === $origin ) {
+			return $result;
+		}
+
+		$result->merge( static::get_user_data() );
+
+		return $result;
 	}
 
 	/**
