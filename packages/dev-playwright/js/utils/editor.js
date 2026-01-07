@@ -118,13 +118,12 @@ async function getSelectedBlock(page, field = '') {
  * @return {Promise<any>} The block styles.
  */
 async function getSelectedBlockStyle(page, name, variation = 'default') {
-	const data = await getWPDataObject(page);
 	return await page.evaluate(
-		({ dataObj, blockName, blockVariation }) => {
-			const { getBlockStyles } = dataObj.select('blockera/editor');
+		async ({ blockName, blockVariation }) => {
+			const { getBlockStyles } = window.wp.data.select('blockera/editor');
 			return getBlockStyles(blockName, blockVariation);
 		},
-		{ dataObj: data, blockName: name, blockVariation: variation }
+		{ blockName: name, blockVariation: variation }
 	);
 }
 
@@ -137,9 +136,9 @@ async function getSelectedBlockStyle(page, name, variation = 'default') {
  * @return {Promise<any>} The global styles record or property.
  */
 async function getEditedGlobalStylesRecord(page, prop, innerField) {
-	const data = await getWPDataObject(page);
 	return await page.evaluate(
-		({ dataObj, propName, innerFieldName }) => {
+		async ({ propName, innerFieldName }) => {
+			const dataObj = window.wp.data;
 			const { __experimentalGetCurrentGlobalStylesId } =
 				dataObj.select('core');
 			const { getEditedEntityRecord } = dataObj.select('core');
@@ -159,7 +158,7 @@ async function getEditedGlobalStylesRecord(page, prop, innerField) {
 
 			return record;
 		},
-		{ dataObj: data, propName: prop, innerFieldName: innerField }
+		{ propName: prop, innerFieldName: innerField }
 	);
 }
 
