@@ -272,7 +272,7 @@ class JSON extends \WP_Theme_JSON {
 							'blockName' => $block_metadata['name'],
 							'attrs' => $style_variation_node,
 						],
-						'fallbackSelector' => ":root :where($clean_style_variation_selector)",
+						'fallbackSelector' => $clean_style_variation_selector,
 						'isGlobalStyle' => true,
 					]
 				);
@@ -285,33 +285,33 @@ class JSON extends \WP_Theme_JSON {
         return $block_rules;
     }
 
-		/**
-         * Returns the stylesheet that results of processing
-         * the theme.json structure this object represents.
-         *
-         * @since 5.8.0
-         * @since 5.9.0 Removed the `$type` parameter, added the `$types` and `$origins` parameters.
-         * @since 6.3.0 Add fallback layout styles for Post Template when block gap support isn't available.
-         * @since 6.6.0 Added boolean `skip_root_layout_styles` and `include_block_style_variations` options
-         *              to control styles output as desired.
-         *
-         * @param string[] $types   Types of styles to load. Will load all by default. It accepts:
-         *                          - `variables`: only the CSS Custom Properties for presets & custom ones.
-         *                          - `styles`: only the styles section in theme.json.
-         *                          - `presets`: only the classes for the presets.
-         *                          - `base-layout-styles`: only the base layout styles.
-         *                          - `custom-css`: only the custom CSS.
-         * @param string[] $origins A list of origins to include. By default it includes VALID_ORIGINS.
-         * @param array    $options {
-         *     Optional. An array of options for now used for internal purposes only (may change without notice).
-         *
-         *     @type string $scope                           Makes sure all style are scoped to a given selector
-         *     @type string $root_selector                   Overwrites and forces a given selector to be used on the root node
-         *     @type bool   $skip_root_layout_styles         Omits root layout styles from the generated stylesheet. Default false.
-         *     @type bool   $include_block_style_variations  Includes styles for block style variations in the generated stylesheet. Default false.
-         * }
-         * @return string The resulting stylesheet.
-         */
+	/**
+     * Returns the stylesheet that results of processing
+     * the theme.json structure this object represents.
+     *
+     * @since 5.8.0
+     * @since 5.9.0 Removed the `$type` parameter, added the `$types` and `$origins` parameters.
+     * @since 6.3.0 Add fallback layout styles for Post Template when block gap support isn't available.
+     * @since 6.6.0 Added boolean `skip_root_layout_styles` and `include_block_style_variations` options
+     *              to control styles output as desired.
+     *
+     * @param string[] $types   Types of styles to load. Will load all by default. It accepts:
+     *                          - `variables`: only the CSS Custom Properties for presets & custom ones.
+     *                          - `styles`: only the styles section in theme.json.
+     *                          - `presets`: only the classes for the presets.
+     *                          - `base-layout-styles`: only the base layout styles.
+     *                          - `custom-css`: only the custom CSS.
+     * @param string[] $origins A list of origins to include. By default it includes VALID_ORIGINS.
+     * @param array    $options {
+     *     Optional. An array of options for now used for internal purposes only (may change without notice).
+     *
+     *     @type string $scope                           Makes sure all style are scoped to a given selector
+     *     @type string $root_selector                   Overwrites and forces a given selector to be used on the root node
+     *     @type bool   $skip_root_layout_styles         Omits root layout styles from the generated stylesheet. Default false.
+     *     @type bool   $include_block_style_variations  Includes styles for block style variations in the generated stylesheet. Default false.
+     * }
+     * @return string The resulting stylesheet.
+     */
 	public function get_stylesheet( $types = array( 'variables', 'styles', 'presets' ), $origins = null, $options = array() ) {
 		if ( null === $origins ) {
 			$origins = static::VALID_ORIGINS;
