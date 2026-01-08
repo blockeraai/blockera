@@ -272,7 +272,11 @@ export const useBlockStyleItem = ({
 			},
 		});
 
-		setGlobalBlockStyles(blockName, currentBlockStyleVariation.name, {});
+		setGlobalBlockStyles(
+			blockName,
+			currentBlockStyleVariation?.name || 'default',
+			{}
+		);
 
 		setIsOpenContextMenu(false);
 	};
@@ -352,7 +356,7 @@ export const useBlockStyleItem = ({
 								([key]) => key !== currentStyleName
 							)
 						),
-					}
+				  }
 				: {}),
 		});
 
