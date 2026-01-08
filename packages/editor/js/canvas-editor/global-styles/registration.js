@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { dispatch, select } from '@wordpress/data';
+import { dispatch, select, subscribe } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -19,6 +19,75 @@ import {
 	registerGlobalStylesOutputPlugin,
 } from './plugins';
 import { mergeBaseAndUserConfigs } from '../components/block-global-styles-panel-screen/global-styles-provider';
+
+/**
+ * Initializes global styles once the data is available.
+ * Subscribes to store changes and sets global styles when ready.
+ */
+const initializeGlobalStyles = (): void => {
+	// Core store select function.
+	const coreStore = select('core');
+	// Blockera editor store dispatch function.
+	const { setGlobalStyles } = dispatch('blockera/editor');
+
+	// Track if we've already initialized
+	let initialized = false;
+
+	const tryInitialize = () => {
+		if (initialized) {
+			return true;
+		}
+
+		// Get global styles ID first
+		const globalStylesId =
+			coreStore.__experimentalGetCurrentGlobalStylesId();
+
+		// If no ID yet, data isn't ready
+		if (!globalStylesId) {
+			return false;
+		}
+
+		// Get user global styles from core store.
+		const userConfig = coreStore.getEditedEntityRecord(
+			'root',
+			'globalStyles',
+			globalStylesId
+		);
+
+		// Check if userConfig is valid (not false/empty)
+		if (!userConfig || !userConfig.styles) {
+			return false;
+		}
+
+		// Get base global styles from core store.
+		const baseConfig =
+			coreStore.__experimentalGetCurrentThemeBaseGlobalStyles();
+
+		// Merging base and user configurations.
+		const globalStyles = mergeBaseAndUserConfigs(
+			'object' === typeof baseConfig ? baseConfig : {},
+			'object' === typeof userConfig ? userConfig : {}
+		);
+
+		// Setting global styles to the store.
+		setGlobalStyles(globalStyles.styles);
+
+		initialized = true;
+		return true;
+	};
+
+	// Try to initialize immediately
+	if (tryInitialize()) {
+		return;
+	}
+
+	// Subscribe to store changes and wait for data to be ready
+	const unsubscribe: () => void = subscribe(() => {
+		if (tryInitialize()) {
+			unsubscribe();
+		}
+	});
+};
 
 /**
  * Main registration function for global styles system.
@@ -60,20 +129,8 @@ export const registration = ({
 		blockScreenListItem
 	);
 
-	const coreStore = select('core');
-	const baseConfig =
-		coreStore.__experimentalGetCurrentThemeBaseGlobalStyles();
-	const userConfig = coreStore.getEditedEntityRecord(
-		'root',
-		'globalStyles',
-		coreStore.__experimentalGetCurrentGlobalStylesId()
-	);
-
-	const globalStyles = mergeBaseAndUserConfigs(baseConfig, userConfig);
-
-	const { setGlobalStyles } = dispatch('blockera/editor');
-
-	setGlobalStyles(globalStyles.styles);
+	// Initialize global styles (handles async data loading)
+	initializeGlobalStyles();
 
 	registerGlobalStylesOutputPlugin();
 };
