@@ -99,7 +99,6 @@ export const StylesWrapper = ({
 	const [entry, setEntry] = useState<HTMLElement | null>(null);
 
 	// Memoize the observer callback to prevent unnecessary re-renders
-	// Uses ref-like pattern to avoid unnecessary state updates if entry already matches
 	const handleIntersection = useCallback(
 		(entries: Array<IntersectionObserverEntry>) => {
 			const target = entries[0]?.target;
@@ -115,11 +114,23 @@ export const StylesWrapper = ({
 		[slotName]
 	);
 
-	// Memoize iframe body element to avoid repeated queries
-	const iframeBodyElement = useMemo(
-		(): HTMLElement | void => getIframeTag('body'),
-		[]
-	);
+	// Function to initialize wrapper element - can be called multiple times
+	const initializeWrapper = useCallback(() => {
+		const target = getTargetContainer();
+		if (target) {
+			const wrapper = getOrCreateWrapperElement(target, slotName);
+			if (wrapper) {
+				setEntry(wrapper);
+				return true;
+			}
+		}
+		return false;
+	}, [slotName]);
+
+	// Get iframe body element dynamically (not memoized to allow retries)
+	const getIframeBodyElement = useCallback((): HTMLElement | void => {
+		return getIframeTag('body');
+	}, []);
 
 	// Memoize observer configuration to prevent recreation on every render
 	// Use document.body directly instead of querySelector for better performance
@@ -131,22 +142,76 @@ export const StylesWrapper = ({
 					threshold: 1.0,
 				},
 				callback: handleIntersection,
-				target: iframeBodyElement,
+				target: getIframeBodyElement(),
 			},
 		],
-		[handleIntersection, iframeBodyElement]
+		[handleIntersection, getIframeBodyElement]
 	);
 
-	// Initialize wrapper element on mount if target is already available
+	// Initialize wrapper element on mount and retry if target is not available
 	useEffect(() => {
-		const target = getTargetContainer();
-		if (target) {
-			const wrapper = getOrCreateWrapperElement(target, slotName);
-			if (wrapper) {
-				setEntry(wrapper);
-			}
+		// Try immediate initialization
+		if (initializeWrapper()) {
+			return;
 		}
-	}, [slotName]);
+
+		// If target is not available, set up retry mechanism
+		// Use requestAnimationFrame for first few attempts (fast retry)
+		let rafAttempts = 0;
+		const maxRafAttempts = 10; // ~160ms at 60fps
+		let rafId: AnimationFrameID | null = null;
+		let intervalId: IntervalID | null = null;
+		let timeoutId: TimeoutID | null = null;
+
+		const tryWithRaf = (): void => {
+			// Try to initialize wrapper
+			if (initializeWrapper()) {
+				// Success! No need to retry
+				return;
+			}
+
+			// If max RAF attempts reached, switch to interval-based retry
+			if (rafAttempts >= maxRafAttempts) {
+				// Use interval for slower retry (every 100ms)
+				intervalId = setInterval(() => {
+					if (initializeWrapper()) {
+						if (intervalId) {
+							clearInterval(intervalId);
+							intervalId = null;
+						}
+					}
+				}, 100);
+
+				// Cleanup interval after 5 seconds (50 attempts)
+				timeoutId = setTimeout(() => {
+					if (intervalId) {
+						clearInterval(intervalId);
+						intervalId = null;
+					}
+				}, 5000);
+
+				return;
+			}
+
+			// Continue with RAF retry
+			rafAttempts++;
+			rafId = requestAnimationFrame(tryWithRaf);
+		};
+
+		rafId = requestAnimationFrame(tryWithRaf);
+
+		return () => {
+			if (rafId !== null) {
+				cancelAnimationFrame(rafId);
+			}
+			if (intervalId !== null) {
+				clearInterval(intervalId);
+			}
+			if (timeoutId !== null) {
+				clearTimeout(timeoutId);
+			}
+		};
+	}, [slotName, initializeWrapper]);
 
 	return (
 		<Observer ancestors={observerConfig}>

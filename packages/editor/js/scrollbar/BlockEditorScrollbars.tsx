@@ -11,16 +11,16 @@ import { defaultScrollbarOptions } from './constants';
  */
 const defaultBlockEditorScrollbarTargets: BlockEditorScrollbarTarget[] = [
 	// Right side bar for block editor
-	{
-		selector: '.interface-complementary-area.editor-sidebar',
-		options: defaultScrollbarOptions,
-	},
+	// {
+	// 	selector: '.interface-complementary-area.editor-sidebar',
+	// 	options: defaultScrollbarOptions,
+	// },
 	// Global styles sidebar
-	{
-		selector:
-			'.interface-complementary-area.edit-site-global-styles-sidebar',
-		options: defaultScrollbarOptions,
-	},
+	// {
+	// 	selector:
+	// 		'.interface-complementary-area.edit-site-global-styles-sidebar',
+	// 	options: defaultScrollbarOptions,
+	// },
 ];
 
 /**
