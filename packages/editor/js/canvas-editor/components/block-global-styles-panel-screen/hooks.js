@@ -149,7 +149,7 @@ export function useGlobalStyle(
 								blockName,
 								path,
 								newValue
-							)
+						  )
 						: newValue
 				)
 			);

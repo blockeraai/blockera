@@ -179,7 +179,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 											]?.variations || {}),
 											[action.variation]: action.styles,
 										},
-									}),
+								  }),
 						},
 					},
 				},
@@ -215,7 +215,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 					[action.variationName]: action.single
 						? state?.styleVariationBlocks?.[
 								action.variationName
-							]?.filter((block) => block !== action.blockName)
+						  ]?.filter((block) => block !== action.blockName)
 						: [],
 				},
 			};
