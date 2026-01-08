@@ -253,7 +253,7 @@ export const GlobalStylesPanelContextProvider = ({
 				name,
 				currentBlockStyleVariation?.isDefault
 					? 'default'
-					: currentBlockStyleVariation?.name,
+					: currentBlockStyleVariation?.name || 'default',
 				cleanedStyle
 			);
 		},
