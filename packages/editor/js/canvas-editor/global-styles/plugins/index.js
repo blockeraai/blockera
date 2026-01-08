@@ -11,4 +11,4 @@ export { registerAdditionalCssContextmenuObserverPlugin } from './additional-css
 export { registerSidebarListenersPlugin } from './sidebar-listeners-plugin';
 export { registerStyleBookListenersPlugin } from './style-book-listeners-plugin';
 export { registerPanelScreenPlugin } from './panel-screen-plugin';
-export { registerGlobalStylesOutputPlugin } from './global-styles-output-plugin';
+export { registerGlobalStylesOutputPlugin } from './global-styles';

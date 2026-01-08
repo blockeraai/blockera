@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { dispatch } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -18,6 +18,7 @@ import {
 	registerPanelScreenPlugin,
 	registerGlobalStylesOutputPlugin,
 } from './plugins';
+import { mergeBaseAndUserConfigs } from '../components/block-global-styles-panel-screen/global-styles-provider';
 
 /**
  * Main registration function for global styles system.
@@ -58,5 +59,21 @@ export const registration = ({
 		globalStylesScreen,
 		blockScreenListItem
 	);
+
+	const coreStore = select('core');
+	const baseConfig =
+		coreStore.__experimentalGetCurrentThemeBaseGlobalStyles();
+	const userConfig = coreStore.getEditedEntityRecord(
+		'root',
+		'globalStyles',
+		coreStore.__experimentalGetCurrentGlobalStylesId()
+	);
+
+	const globalStyles = mergeBaseAndUserConfigs(baseConfig, userConfig);
+
+	const { setGlobalStyles } = dispatch('blockera/editor');
+
+	setGlobalStyles(globalStyles.styles);
+
 	registerGlobalStylesOutputPlugin();
 };

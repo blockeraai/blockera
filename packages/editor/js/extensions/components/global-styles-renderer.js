@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { useSelect } from '@wordpress/data';
 import { type MixedElement, type ComponentType } from 'react';
 import { Fill } from '@wordpress/components';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,7 +12,7 @@ import { memo, useState, useMemo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { omitWithPattern } from '@blockera/utils';
+import { omitWithPattern, isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -32,12 +32,14 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			styleVariationName,
 			renderInPortal = true,
 			isStyleVariation = false,
-			blockeraBlockTypeGlobalStyles,
+			sanitizedBlockGlobalStyles,
 			attributes: defaultAttributes,
 		} = blockType;
 		const [notice, setNotice] = useState(null);
 		const [isReportingErrorCompleted, setIsReportingErrorCompleted] =
 			useState(false);
+
+		// Memoize default styles processing
 		const defaultStyles = useMemo(() => {
 			const processedAttributes: {
 				[key: string]: { type: string, default: any },
@@ -66,7 +68,7 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 										default:
 											return null;
 									}
-								})(),
+							  })(),
 				};
 			}
 
@@ -78,34 +80,75 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 			);
 		}, [defaultAttributes]);
 
-		const { getDeviceType } = select('blockera/editor');
+		// Use useSelect hook instead of direct select() to prevent re-renders
+		const activeDeviceType = useSelect((select) => {
+			const { getDeviceType } = select('blockera/editor');
+			return getDeviceType();
+		}, []);
 
-		const currentAttributes = {
-			...prepareBlockeraDefaultAttributesValues(defaultStyles),
-			...blockeraBlockTypeGlobalStyles,
-		};
+		// Memoize client ID to avoid repeated string operations
+		const clientId = useMemo(() => name.replace('/', '-'), [name]);
 
-		const blockStyleProps = {
-			supports,
-			selectors,
-			customCss: '',
-			additional: {},
-			blockName: name,
-			isStyleVariation,
-			inlineStyles: [],
-			styleVariationName,
-			isGlobalStylesWrapper: true,
-			defaultAttributes: defaultStyles,
-			clientId: name.replace('/', '-'),
-			activeDeviceType: getDeviceType(),
-			attributes: currentAttributes,
-			currentAttributes,
-		};
+		// Memoize prepared default attributes values
+		const preparedDefaultValues = useMemo(
+			() => prepareBlockeraDefaultAttributesValues(defaultStyles),
+			[defaultStyles]
+		);
 
-		if (
-			!defaultAttributes.hasOwnProperty('blockeraPropsId') ||
-			!Object.keys(blockeraBlockTypeGlobalStyles).length
-		) {
+		// Memoize current attributes to prevent unnecessary re-renders
+		const currentAttributes = useMemo(
+			() => ({
+				...preparedDefaultValues,
+				...sanitizedBlockGlobalStyles,
+			}),
+			[preparedDefaultValues, sanitizedBlockGlobalStyles]
+		);
+
+		// Memoize block style props to prevent unnecessary re-renders
+		const blockStyleProps = useMemo(
+			() => ({
+				supports,
+				selectors,
+				customCss: '',
+				additional: {},
+				blockName: name,
+				isStyleVariation,
+				inlineStyles: [],
+				styleVariationName,
+				isGlobalStylesWrapper: true,
+				defaultAttributes: defaultStyles,
+				clientId,
+				activeDeviceType,
+				attributes: currentAttributes,
+				currentAttributes,
+			}),
+			[
+				supports,
+				selectors,
+				name,
+				isStyleVariation,
+				styleVariationName,
+				defaultStyles,
+				clientId,
+				activeDeviceType,
+				currentAttributes,
+			]
+		);
+
+		// Memoize fill name to avoid repeated string concatenation
+		const fillName = useMemo(
+			() => 'blockera-global-styles-wrapper-' + name,
+			[name]
+		);
+
+		// Early return if no styles to render
+		const hasBlockeraPropsId =
+			defaultAttributes.hasOwnProperty('blockeraPropsId');
+		const hasSanitizedStyles =
+			sanitizedBlockGlobalStyles &&
+			Object.keys(sanitizedBlockGlobalStyles).length > 0;
+
+		if (!hasBlockeraPropsId || !hasSanitizedStyles) {
 			return <></>;
 		}
 
@@ -122,14 +165,14 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 							isReportingErrorCompleted,
 							setIsReportingErrorCompleted,
 							fallbackComponent: BlockStyle,
-							clientId: name.replace('/', '-'),
+							clientId,
 						}}
 					/>
 				)}
 			>
 				{renderInPortal ? (
 					<StylesWrapper clientId={name} isGlobalStylesWrapper={true}>
-						<Fill name={'blockera-global-styles-wrapper-' + name}>
+						<Fill name={fillName}>
 							<BlockStyle {...blockStyleProps} />
 						</Fill>
 					</StylesWrapper>
@@ -137,6 +180,22 @@ export const GlobalStylesRenderer: ComponentType<any> = memo(
 					<BlockStyle {...blockStyleProps} />
 				)}
 			</ErrorBoundary>
+		);
+	},
+	(prevProps, nextProps) => {
+		// Custom comparison function to prevent unnecessary re-renders
+		return (
+			prevProps.name === nextProps.name &&
+			prevProps.styleVariationName === nextProps.styleVariationName &&
+			prevProps.isStyleVariation === nextProps.isStyleVariation &&
+			prevProps.renderInPortal === nextProps.renderInPortal &&
+			isEquals(
+				prevProps.sanitizedBlockGlobalStyles,
+				nextProps.sanitizedBlockGlobalStyles
+			) &&
+			isEquals(prevProps.supports, nextProps.supports) &&
+			isEquals(prevProps.selectors, nextProps.selectors) &&
+			isEquals(prevProps.attributes, nextProps.attributes)
 		);
 	}
 );
