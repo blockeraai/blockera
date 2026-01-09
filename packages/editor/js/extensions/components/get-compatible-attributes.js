@@ -47,7 +47,7 @@ export const getCompatibleAttributes = ({
 			? mergeObject(
 					{ ...attributes },
 					prepareBlockeraDefaultAttributesValues(defaultAttributes)
-				)
+			  )
 			: { ...attributes },
 		args
 	);
