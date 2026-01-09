@@ -9,13 +9,13 @@ import { useMemo, useCallback } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { omit } from '@blockera/utils';
+import { omit, setImmutably } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { useGlobalStylesContext } from './global-styles-provider';
-import { getValueFromObjectPath, setImmutably } from './utils';
+import { getValueFromObjectPath } from './utils';
 
 export const useBackButton = ({
 	selectedBlockStyle,
