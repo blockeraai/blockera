@@ -163,13 +163,15 @@ export const useBlockPreviewStyles = (
 				return;
 			}
 
-			const extractedStyles = extractStylesFromContainer(container);
+			setTimeout(() => {
+				const extractedStyles = extractStylesFromContainer(container);
 
-			// Only update state if styles actually changed
-			if (extractedStyles !== lastStylesRef.current) {
-				lastStylesRef.current = extractedStyles;
-				setAdditionalStyles(extractedStyles);
-			}
+				// Only update state if styles actually changed
+				if (extractedStyles !== lastStylesRef.current) {
+					lastStylesRef.current = extractedStyles;
+					setAdditionalStyles(extractedStyles);
+				}
+			}, 400);
 		});
 
 		return () => {
