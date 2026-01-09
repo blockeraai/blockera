@@ -217,6 +217,7 @@
 		"format": "wp-scripts format",
 		"lint:js": "wp-scripts lint-js",
 		"lint:css": "wp-scripts lint-style packages/**/*.scss",
+		"lint:css:fix": "npm run lint:css -- --fix",
 		"lint:php": "composer run lint",
 		"update:changelogs": "node ./bin/plugin/cli.js update-packages-changelog",
 		"other:changelog": "node ./bin/plugin/cli.js changelog",
