@@ -4,7 +4,6 @@
  * External dependencies
  */
 import type { ComponentType } from 'react';
-import { useSelect } from '@wordpress/data';
 import { useMemo, memo } from '@wordpress/element';
 
 /**
@@ -15,9 +14,9 @@ import { omitWithPattern, mergeObject, isEquals } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { generateStableBlockeraPropsId } from './utils';
 import { staticKeys, defaultBlockStates } from './constants';
 import { sanitizeBlockAttributes } from '../../../../extensions/hooks/utils';
-import { mergeBlockGlobalStyles, generateStableBlockeraPropsId } from './utils';
 import { StyleVariationStylesRenderer } from './style-variation-styles-renderer';
 import { GlobalStylesRenderer } from '../../../../extensions/components/global-styles-renderer';
 
@@ -27,37 +26,14 @@ import { GlobalStylesRenderer } from '../../../../extensions/components/global-s
  * Follows Gutenberg patterns for global styles handling.
  */
 export const StyleDefaultRenderer: ComponentType<Object> = memo(
-	({ blockType }: { blockType: Object }) => {
+	({
+		styles: blockGlobalStyles,
+		blockType,
+	}: {
+		styles: Object,
+		blockType: Object,
+	}) => {
 		const { name } = blockType;
-
-		// Select base global styles from core store
-		// This follows Gutenberg's pattern for accessing base theme styles
-		const baseGlobalStyles = useSelect(
-			(select) => {
-				const base =
-					select(
-						'core'
-					).__experimentalGetCurrentThemeBaseGlobalStyles();
-
-				return base?.styles?.blocks?.[name] || {};
-			},
-			[name]
-		);
-
-		// Select user global styles from blockera/editor store
-		const userGlobalStyles = useSelect(
-			(select) => {
-				const { getBlockStyles } = select('blockera/editor');
-
-				return getBlockStyles(name, 'default') || {};
-			},
-			[name]
-		);
-
-		// Merge base and user styles following Gutenberg patterns
-		const blockGlobalStyles = useMemo(() => {
-			return mergeBlockGlobalStyles(baseGlobalStyles, userGlobalStyles);
-		}, [baseGlobalStyles, userGlobalStyles]);
 
 		// Memoize filtered WordPress-compatible styles (exclude blockera for WordPress)
 		const validBlockGlobalStyles = useMemo(
@@ -89,11 +65,6 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 		const variations = useMemo(() => {
 			return blockGlobalStyles?.variations || {};
 		}, [blockGlobalStyles]);
-
-		// Memoize base variation styles for each variation
-		const baseVariations = useMemo(() => {
-			return baseGlobalStyles?.variations || {};
-		}, [baseGlobalStyles]);
 
 		const variationEntries = useMemo(
 			() => Object.entries(variations),
@@ -138,8 +109,6 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 							variationName,
 							variationGlobalStyles:
 								variations[variationName] || {},
-							baseVariationStyles:
-								baseVariations[variationName] || {},
 						}}
 						key={`${name}-${variationName}-${variationIndex}`}
 					/>
