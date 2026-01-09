@@ -195,11 +195,6 @@ export const GlobalStylesPanelContextProvider = ({
 		[name]
 	);
 
-	const cleanupStyles = useCallback(
-		(styles) => cleanupStylesHelper(styles, defaultStyles),
-		[defaultStyles]
-	);
-
 	const childrenComponent = useMemo(
 		() => (
 			<SlotFillProvider>
@@ -221,43 +216,39 @@ export const GlobalStylesPanelContextProvider = ({
 		[clientId]
 	);
 
-	const normalizedNewStyle = useCallback(
-		(newStyle: Object): Object => {
-			if (newStyle?.style) {
-				newStyle = {
-					...newStyle,
-					...newStyle.style,
-				};
-
-				delete newStyle.style;
-			}
-
-			return cleanupStyles(newStyle);
-		},
-		[cleanupStyles]
-	);
-
 	const handleOnChangeStyle = useCallback(
 		(newStyle: Object) => {
-			const cleanedStyle = normalizedNewStyle(newStyle);
+			const compatibleStyles = newStyle?.style || {};
 
-			setStyle(cleanedStyle);
+			delete newStyle?.style;
+
+			setStyle(
+				cleanupStylesHelper(
+					mergeObject(compatibleStyles, newStyle),
+					defaultStyles
+				)
+			);
 		},
-		[normalizedNewStyle, setStyle]
+		[setStyle, defaultStyles]
 	);
 	const handleOnChangeStyleInLocalState = useCallback(
 		(newStyle: Object): void => {
-			const cleanedStyle = normalizedNewStyle(newStyle);
+			const compatibleStyles = newStyle?.style || {};
+
+			delete newStyle?.style;
 
 			setBlockStyles(
 				name,
 				currentBlockStyleVariation?.isDefault
 					? 'default'
 					: currentBlockStyleVariation?.name || 'default',
-				cleanedStyle
+				cleanupStylesHelper(
+					mergeObject(compatibleStyles, newStyle),
+					defaultStyles
+				)
 			);
 		},
-		[name, setBlockStyles, normalizedNewStyle, currentBlockStyleVariation]
+		[name, setBlockStyles, currentBlockStyleVariation, defaultStyles]
 	);
 
 	const memoizedBlockBaseProps = useMemo(
