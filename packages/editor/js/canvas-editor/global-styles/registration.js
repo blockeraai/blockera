@@ -70,7 +70,7 @@ const initializeGlobalStyles = (): void => {
 		);
 
 		// Setting global styles to the store.
-		setGlobalStyles(globalStyles.styles);
+		setGlobalStyles(globalStyles);
 
 		initialized = true;
 		return true;

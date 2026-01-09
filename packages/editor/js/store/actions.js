@@ -184,6 +184,17 @@ export const setBlockStyles = (
 	};
 };
 
+export const clearAllCustomizations = (
+	blockName: string,
+	variation: string
+): Object => {
+	return {
+		blockName,
+		variation,
+		type: 'CLEAR_ALL_CUSTOMIZATIONS',
+	};
+};
+
 export const setSelectedBlockStyleVariation = (
 	selectedBlockStyleVariation: Object
 ): Object => {

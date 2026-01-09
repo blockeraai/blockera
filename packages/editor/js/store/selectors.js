@@ -326,7 +326,7 @@ export const getSelectedBlockStyle = ({
  */
 export const getBlockStyles = (
 	{
-		globalStyles,
+		globalStyles: { userStyles },
 	}: {
 		globalStyles: Object,
 	},
@@ -334,11 +334,11 @@ export const getBlockStyles = (
 	variation: string
 ): Object => {
 	if ('default' === variation) {
-		return globalStyles?.styles?.blocks?.[blockName] || {};
+		return userStyles?.styles?.blocks?.[blockName] || {};
 	}
 
 	return (
-		globalStyles?.styles?.blocks?.[blockName]?.variations?.[variation] || {}
+		userStyles?.styles?.blocks?.[blockName]?.variations?.[variation] || {}
 	);
 };
 
@@ -367,13 +367,13 @@ export const getSelectedBlockRef = ({
  */
 export const getBlockStyleVariations = (
 	{
-		globalStyles,
+		globalStyles: { userStyles },
 	}: {
 		globalStyles: Object,
 	},
 	blockName: string
 ): Object => {
-	return globalStyles?.styles?.blocks?.[blockName]?.variations || {};
+	return userStyles?.styles?.blocks?.[blockName]?.variations || {};
 };
 
 /**
@@ -387,7 +387,7 @@ export const getBlockStyleVariations = (
  */
 export const getBlockStyleVariation = (
 	{
-		globalStyles,
+		globalStyles: { userStyles },
 	}: {
 		globalStyles: Object,
 	},
@@ -395,9 +395,8 @@ export const getBlockStyleVariation = (
 	variationName: string
 ): Object => {
 	return (
-		globalStyles?.styles?.blocks?.[blockName]?.variations?.[
-			variationName
-		] || null
+		userStyles?.styles?.blocks?.[blockName]?.variations?.[variationName] ||
+		null
 	);
 };
 

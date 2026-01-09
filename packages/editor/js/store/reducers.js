@@ -157,33 +157,94 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 		case 'SET_GLOBAL_STYLES':
 			state = {
 				...state,
-				styles: action.styles,
+				userStyles: action.styles,
 			};
 			break;
 		case 'SET_BLOCK_STYLES':
 			state = {
 				...state,
-				styles: {
-					...(state?.styles || {}),
-					blocks: {
-						...(state?.styles?.blocks || {}),
-						[action.blockName]: {
-							...(state?.styles?.blocks?.[action.blockName] ||
-								{}),
-							...('default' === action.variation
-								? action.styles
-								: {
-										variations: {
-											...(state?.styles?.blocks?.[
-												action.blockName
-											]?.variations || {}),
-											[action.variation]: action.styles,
-										},
-								  }),
+				userStyles: {
+					...(state?.userStyles || {}),
+					styles: {
+						...(state?.userStyles?.styles || {}),
+						blocks: {
+							...(state?.userStyles?.styles?.blocks || {}),
+							[action.blockName]: {
+								...('default' === action.variation
+									? {
+											...action.styles,
+											variations:
+												action?.styles?.variations ||
+												state?.userStyles?.styles
+													?.blocks?.[action.blockName]
+													?.variations ||
+												{},
+									  }
+									: {
+											...(state?.userStyles?.styles
+												?.blocks?.[action.blockName] ||
+												{}),
+											variations: {
+												...(state?.userStyles?.styles
+													?.blocks?.[action.blockName]
+													?.variations || {}),
+												[action.variation]:
+													action.styles,
+											},
+									  }),
+							},
 						},
 					},
 				},
 			};
+			break;
+		case 'CLEAR_ALL_CUSTOMIZATIONS':
+			const currentBlock = state?.userStyles?.blocks?.[action.blockName];
+			const currentVariations = currentBlock?.variations || {};
+
+			if ('default' === action.variation) {
+				// Clear all properties except variations
+				state = {
+					...state,
+					userStyles: {
+						...(state?.userStyles || {}),
+						styles: {
+							...(state?.userStyles?.styles || {}),
+							blocks: {
+								...(state?.userStyles?.styles?.blocks || {}),
+								...(Object.keys(currentVariations).length
+									? {
+											[action.blockName]: {
+												variations: currentVariations,
+											},
+									  }
+									: {}),
+							},
+						},
+					},
+				};
+			} else {
+				// Remove the specific variation, keep root and other variations
+				const updatedVariations = { ...currentVariations };
+				delete updatedVariations[action.variation];
+
+				state = {
+					...state,
+					userStyles: {
+						...(state?.userStyles || {}),
+						styles: {
+							...(state?.userStyles?.styles || {}),
+							blocks: {
+								...(state?.userStyles?.styles?.blocks || {}),
+								[action.blockName]: {
+									...(currentBlock || {}),
+									variations: updatedVariations,
+								},
+							},
+						},
+					},
+				};
+			}
 			break;
 		case 'SET_SELECTED_BLOCK_STYLE_VARIATION':
 			state = {
