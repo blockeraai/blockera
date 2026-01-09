@@ -14,8 +14,8 @@ import { omit, setImmutably } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { getValueFromObjectPath } from '../utils';
 import { useGlobalStylesContext } from './global-styles-provider';
-import { getValueFromObjectPath } from './utils';
 
 export const useBackButton = ({
 	selectedBlockStyle,

@@ -8,7 +8,7 @@ import { useMemo, memo } from '@wordpress/element';
  * Internal dependencies
  */
 import InserterPreviewPanel from './inserter-preview-panel';
-import { replaceActiveStyle } from '../utils';
+import { replaceActiveStyle } from './utils';
 
 // It's a clone of '@wordpress/block-editor/js/components/block-styles/preview-panel'
 const BlockStylesPreviewPanel = ({

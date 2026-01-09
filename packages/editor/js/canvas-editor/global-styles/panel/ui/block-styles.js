@@ -35,11 +35,11 @@ import { isString } from '@blockera/utils';
  * Internal dependencies
  */
 import { StyleItem } from './style-item';
-import { useBlockContext } from '../../../../components';
 import { AddNewStyleButton } from './add-new-style-button';
 import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
-import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useBlockContext } from '../../../../extensions/components';
+import { useGlobalStylesPanelContext } from '../context';
 
 // Block Styles component for the Settings Sidebar.
 function BlockStyles({

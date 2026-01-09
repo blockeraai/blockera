@@ -24,11 +24,11 @@ import { classNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { getDefaultStyle } from '../utils';
+import { getDefaultStyle } from './utils';
 import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
-import { useUserCan } from '../../../../../hooks/use-user-can';
-import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useUserCan } from '../../../../hooks/use-user-can';
+import { useGlobalStylesPanelContext } from '../context';
 
 export const StyleItem = ({
 	style,
@@ -395,11 +395,11 @@ export const StyleItem = ({
 										? __(
 												'Style variation added or customized by Blockera',
 												'blockera'
-											)
+										  )
 										: __(
 												'Style variation from theme or block editor',
 												'blockera'
-											)
+										  )
 								}
 							>
 								<Icon

@@ -8,17 +8,17 @@ import { dispatch, select, subscribe } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import { registerBlockStylesFromMetaData } from './block-styles-registry';
 import {
 	registerNavigationPlugin,
-	registerPanelActivatorObserverPlugin,
-	registerAdditionalCssContextmenuObserverPlugin,
+	registerPanelScreenPlugin,
 	registerSidebarListenersPlugin,
 	registerStyleBookListenersPlugin,
-	registerPanelScreenPlugin,
 	registerGlobalStylesOutputPlugin,
+	registerPanelActivatorObserverPlugin,
+	registerAdditionalCssContextmenuObserverPlugin,
 } from './plugins';
-import { mergeBaseAndUserConfigs } from '../components/block-global-styles-panel-screen/global-styles-provider';
+import { registerBlockStylesFromMetaData } from './block-styles-registry';
+import { mergeBaseAndUserConfigs } from './panel/context/global-styles-provider';
 
 /**
  * Initializes global styles once the data is available.

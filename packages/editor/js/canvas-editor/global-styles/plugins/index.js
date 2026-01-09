@@ -5,7 +5,7 @@
  * Centralized export point for all global styles plugins
  */
 
-export { registerNavigationPlugin } from './navigation-plugin';
+export { registerNavigationPlugin } from './navigation';
 export { registerPanelActivatorObserverPlugin } from './panel-activator-observer-plugin';
 export { registerAdditionalCssContextmenuObserverPlugin } from './additional-css-contextmenu-observer-plugin';
 export { registerSidebarListenersPlugin } from './sidebar-listeners-plugin';

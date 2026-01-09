@@ -113,15 +113,15 @@ body {
 		}
 
 		&:focus:not(
-				:disabled,
-				.is-variation-picker-open,
-				.is-variation-deleted
-			),
+		:disabled,
+		.is-variation-picker-open,
+		.is-variation-deleted
+	),
 		&:hover:not(
-				:disabled,
-				.is-variation-picker-open,
-				.is-variation-deleted
-			) {
+		:disabled,
+		.is-variation-picker-open,
+		.is-variation-deleted
+	) {
 			--border-color: var(--blockera-controls-variations-color-darker-20);
 			--primary-color: var(
 				--blockera-controls-variations-color-darker-20

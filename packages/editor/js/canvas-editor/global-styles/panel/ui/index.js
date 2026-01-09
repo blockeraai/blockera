@@ -18,16 +18,19 @@ import { Button, Flex, ChangeIndicator } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import BlockStyles from './components/block-styles';
-import { isInnerBlock } from '../../../components';
-import type { InnerBlockType } from '../inner-blocks/types';
+import BlockStyles from './block-styles';
+import { useGlobalStylesPanelContext } from '../context';
 import { isBaseBreakpoint } from '../../../../canvas-editor';
 import { useStylesForBlocks, getDefaultStyle } from './utils';
-import type { TBreakpoint, TStates } from '../block-states/types';
-import { useBlockContext } from '../../../components/block-context';
-import { prepareBlockeraDefaultAttributesValues } from '../../../components/utils';
+import { isInnerBlock } from '../../../../extensions/components';
+import type {
+	TStates,
+	TBreakpoint,
+} from '../../../../extensions/libs/block-card/block-states/types';
+import { useBlockContext } from '../../../../extensions/components/block-context';
+import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
+import type { InnerBlockType } from '../../../../extensions/libs/block-card/inner-blocks/types';
 import { getBlockeraGlobalStylesMetaData } from '../../../../canvas-editor/global-styles/helpers';
-import { useGlobalStylesPanelContext } from '../../../../canvas-editor/components/block-global-styles-panel-screen/context';
 
 type TBlockStyleVariations = {
 	clientId: string,

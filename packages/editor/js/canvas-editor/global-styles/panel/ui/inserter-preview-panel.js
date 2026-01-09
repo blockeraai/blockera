@@ -15,7 +15,7 @@ import type { MixedElement } from 'react';
 /**
  * Internal dependencies
  */
-import { useBlockPreviewStyles } from '../../../../../hooks';
+import { useBlockPreviewStyles } from '../../../../hooks/use-block-preview-styles';
 
 // It's a clone of '@wordpress/block-editor/js/components/inserter/preview-panel'
 function InserterPreviewPanel({ item }: { item: Object }): MixedElement {
@@ -43,7 +43,7 @@ function InserterPreviewPanel({ item }: { item: Object }): MixedElement {
 												...initialAttributes,
 											},
 											innerBlocks: example.innerBlocks,
-										})
+									  })
 									: createBlock(name, initialAttributes)
 							}
 							viewportWidth={example?.viewportWidth ?? 500}

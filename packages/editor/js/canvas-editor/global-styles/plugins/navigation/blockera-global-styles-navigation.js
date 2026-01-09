@@ -20,10 +20,10 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { OtherNavigation } from './navigation/other-navigation';
-import { GeneralNavigation } from './navigation/general-navigation';
-import { GlobalStylesNavigation } from './navigation/global-styles-navigation';
-import { DesignSystemNavigation } from './navigation/design-system-navigation';
+import { OtherNavigation } from './other-navigation';
+import { GeneralNavigation } from './general-navigation';
+import { GlobalStylesNavigation } from './global-styles-navigation';
+import { DesignSystemNavigation } from './design-system-navigation';
 
 export const BlockeraGlobalStylesNavigation = (): MixedElement => {
 	const [backButton, setBackButton] = useState(null);

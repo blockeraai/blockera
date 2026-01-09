@@ -13,10 +13,10 @@ import { useState, useMemo, useEffect, createPortal } from '@wordpress/element';
  * Internal dependencies
  */
 import App from './app';
-import { useBackButton } from './hooks';
 import { STORE_NAME } from '../../../store';
-import { subscribeToBlockSelection } from './subscribe-unsubscribe';
+import { useBackButton } from './context/hooks';
 import bootstrapScripts from '../../../extensions/scripts';
+import { subscribeToBlockSelection } from './subscribe-unsubscribe';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
@@ -155,4 +155,4 @@ export const BlockGlobalStylesPanelScreen = ({
 	);
 };
 
-export * from './blockera-global-styles-navigation';
+export * from '../plugins/navigation/blockera-global-styles-navigation';

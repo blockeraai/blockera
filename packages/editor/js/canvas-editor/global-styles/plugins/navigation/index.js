@@ -3,14 +3,14 @@
 /**
  * External dependencies
  */
-import { useEffect, createPortal } from '@wordpress/element';
 import { registerPlugin } from '@wordpress/plugins';
+import { useEffect, createPortal } from '@wordpress/element';
 
 /**
  * Internal dependencies
  */
-import { BlockeraGlobalStylesNavigation } from '../../components';
-import { IntersectionObserverRenderer } from '../../intersection-observer-renderer';
+import { BlockeraGlobalStylesNavigation } from '../../../components';
+import { IntersectionObserverRenderer } from '../../../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Global Styles Navigation

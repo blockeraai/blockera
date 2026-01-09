@@ -17,12 +17,12 @@ import { mergeObject, kebabCase } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getDefaultStyle } from '../../utils';
+import { getDefaultStyle } from '../utils';
 import { getCalculatedNewStyle } from './helpers';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
-} from '../../../../../global-styles/helpers';
+} from '../../../helpers';
 
 export const useBlockStyleItem = ({
 	styles,

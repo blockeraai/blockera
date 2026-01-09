@@ -18,7 +18,7 @@ import { prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { cleanEmptyObject } from './utils';
+import { cleanEmptyObject } from '../utils';
 
 /**
  * Merge the base and user configs.

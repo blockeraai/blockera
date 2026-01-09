@@ -22,7 +22,7 @@ import { getCalculatedNewStyle } from './helpers';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
-} from '../../../../../global-styles/helpers';
+} from '../../../../helpers';
 
 export const useBlockStyleItem = ({
 	styles,

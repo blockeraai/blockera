@@ -62,7 +62,7 @@ import {
 } from '../libs/block-card/block-states/states';
 import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
-import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useGlobalStylesPanelContext } from '../../canvas-editor/global-styles/panel/context';
 
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;

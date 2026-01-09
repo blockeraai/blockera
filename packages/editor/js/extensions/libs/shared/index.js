@@ -26,7 +26,7 @@ import { MappedExtensions } from './mapped-extensions';
 import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
-import { useGlobalStylesPanelContext } from '../../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useGlobalStylesPanelContext } from '../../../canvas-editor/global-styles/panel/context';
 
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 
@@ -110,7 +110,7 @@ const getTabs = (
 						title: __('General', 'blockera'),
 						className: 'settings-tab',
 					},
-				]
+			  ]
 			: []),
 		{
 			name: 'style',

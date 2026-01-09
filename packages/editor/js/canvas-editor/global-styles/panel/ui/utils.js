@@ -23,7 +23,7 @@ import { isString } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getBlockeraGlobalStylesMetaData } from '../../../../canvas-editor/global-styles/helpers';
+import { getBlockeraGlobalStylesMetaData } from '../../helpers';
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/utils'
@@ -246,7 +246,7 @@ export function useStylesForBlocks({
 							label: isDeletedStyle,
 							isDefault: false,
 							isDeleted: true,
-						}
+					  }
 					: activeStyle,
 				newStyle
 			);

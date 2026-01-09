@@ -42,7 +42,7 @@ import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../../../canvas-editor/global-styles/helpers';
-import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
+import BlockPreviewPanel from '../../../../canvas-editor/global-styles/panel/block-preview-panel';
 
 const DEBOUNCE_DELAY = 1000;
 

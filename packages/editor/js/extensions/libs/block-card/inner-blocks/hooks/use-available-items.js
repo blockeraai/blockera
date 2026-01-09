@@ -21,7 +21,7 @@ import type {
 	InnerBlockType,
 	InnerBlockModel,
 } from '../types';
-import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/global-styles/panel/context';
 
 export const useAvailableItems = ({
 	clientId,
@@ -101,7 +101,7 @@ export const useAvailableItems = ({
 			: {
 					forcesItems: forces,
 					customizedInnerBlocks: innerBlocks,
-				};
+			  };
 
 		// Appending forces into repeater state.
 		if (forces.length) {

@@ -22,7 +22,7 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import { BlockTypes } from './block-types';
-import { search } from '../../../block-composite/search-items';
+import { search } from '../../../../extensions/libs/block-composite/search-items';
 
 export const SearchBlockTypes = ({
 	style,

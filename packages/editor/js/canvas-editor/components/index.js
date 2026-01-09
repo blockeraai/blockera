@@ -1,4 +1,4 @@
 // @flow
 
 export * from './breakpoints';
-export * from './block-global-styles-panel-screen';
+export * from '../global-styles/panel';

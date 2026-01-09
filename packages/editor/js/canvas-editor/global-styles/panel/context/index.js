@@ -26,13 +26,13 @@ import { isEmpty, isEquals, mergeObject } from '@blockera/utils';
 import {
 	EditorFeatureWrapper,
 	EditorAdvancedLabelControl,
-} from '../../../components';
+} from '../../../../components';
 import { useGlobalStyle } from './hooks';
-import { BlockPortals } from '../../../extensions/components';
-import { STORE_NAME } from '../../../extensions/store/constants';
-import { STORE_NAME as EDITOR_STORE_NAME } from '../../../store/constants';
-import { sanitizeDefaultAttributes } from '../../../extensions/hooks/utils';
-import { prepareBlockeraDefaultAttributesValues } from '../../../extensions/components/utils';
+import { BlockPortals } from '../../../../extensions/components';
+import { STORE_NAME } from '../../../../extensions/store/constants';
+import { STORE_NAME as EDITOR_STORE_NAME } from '../../../../store/constants';
+import { sanitizeDefaultAttributes } from '../../../../extensions/hooks/utils';
+import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
 
 // Helper functions
 const getBlockAttributes = (name: string): Object => {
