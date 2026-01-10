@@ -13,12 +13,11 @@ const {
 const {
 	test,
 	expect,
-	getByDataTest,
-	getParentContainer,
 	getBlock,
-	getByDataCy,
-	openGlobalStylesPanel,
+	getByDataTest,
 	openSettingsPanel,
+	getParentContainer,
+	openGlobalStylesPanel,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Style Variations Inside Global Styles Panel → Functionality', () => {
