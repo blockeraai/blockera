@@ -134,7 +134,10 @@ class JSON extends \WP_Theme_JSON {
                 is_array($input['styles']['blocks'][ $block ]['variations']) &&
                 isset($valid_variations[ $block ])
             ) {
-                $style_variation_names = array_intersect(
+				// Important tips:
+				// 1. WP_Theme_JSON class used of array_intersect to validate variations based on available items from static config.
+				// 2. Blockera\Setup\Compatibility\JSON class which override step 1 functionality to support of dynamic items which provided from user config in editor.
+                $style_variation_names = array_merge(
                     array_keys($input['styles']['blocks'][ $block ]['variations']),
                     $valid_variations[ $block ]
                 );
