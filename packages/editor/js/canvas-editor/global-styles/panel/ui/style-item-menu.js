@@ -84,7 +84,7 @@ export const StyleItemMenu = ({
 }): MixedElement => {
 	return (
 		<>
-			{isOpenRenameModal && (
+			{isOpenRenameModal && !style?.isDefault && (
 				<RenameModal
 					style={style}
 					buttonText={buttonText}
@@ -153,23 +153,25 @@ export const StyleItemMenu = ({
 							{__('Clear all customizations', 'blockera')}
 						</Button>
 
-						<Button
-							variant="link"
-							contentAlign="left"
-							className={controlInnerClassNames('menu-item')}
-							onClick={() => {
-								setCurrentBlockStyleVariation(style);
+						{!style?.isDefault && (
+							<Button
+								variant="link"
+								contentAlign="left"
+								className={controlInnerClassNames('menu-item')}
+								onClick={() => {
+									setCurrentBlockStyleVariation(style);
 
-								if (isOpenRenameModal) {
-									return setIsOpenRenameModal(false);
-								}
+									if (isOpenRenameModal) {
+										return setIsOpenRenameModal(false);
+									}
 
-								setIsOpenRenameModal(true);
-							}}
-						>
-							<Icon icon="pen" iconSize="24" />
-							{__('Rename', 'blockera')}
-						</Button>
+									setIsOpenRenameModal(true);
+								}}
+							>
+								<Icon icon="pen" iconSize="24" />
+								{__('Rename', 'blockera')}
+							</Button>
+						)}
 
 						<Button
 							variant="link"
