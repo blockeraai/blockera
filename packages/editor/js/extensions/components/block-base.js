@@ -343,13 +343,13 @@ export const BlockBase: ComponentType<any> = (
 		args,
 		isActive,
 		blockAttributes,
+		uniqueClassName,
 		availableAttributes,
 		originDefaultAttributes,
-		uniqueClassName,
 	]);
 
-	const attributesRef = useRef(compatibleAttributes);
 	const [attributes, setState] = useState(compatibleAttributes);
+	const compatibleAttributesRef = useRef(null);
 	const { className } = attributes;
 
 	/**
@@ -358,27 +358,14 @@ export const BlockBase: ComponentType<any> = (
 	 * @param {Object} value the compatible attributes arrived from the handleOnChangeAttributes function.
 	 */
 	const setAttributes = (value: any) => {
-		attributesRef.current = value;
 		setState(value);
-	};
-
-	const updateParentState = () => {
-		// Compare the block attributes with the attributes and the attributes ref.
-		// If they are not equal, set the attributes to the block attributes.
-		if (
-			!isEquals(blockAttributes, attributes) &&
-			isEquals(attributes, attributesRef.current)
-		) {
-			setBlockAttributes(attributes);
-		}
 	};
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
-			!isEquals(blockAttributes, attributes) &&
-			isEquals(attributes, attributesRef.current) &&
+			!isEquals(compatibleAttributes, attributes) &&
 			false === insideBlockInspector
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
@@ -387,26 +374,43 @@ export const BlockBase: ComponentType<any> = (
 
 		// If inside the block inspector, update the parent state immediately.
 		if (insideBlockInspector) {
-			updateParentState();
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
+
+				// Updating attributes reference...
+				compatibleAttributesRef.current = attributes;
+			}
 
 			return;
 		}
 
-		const timeoutId = setTimeout(
-			updateParentState,
-			BLOCKERA_DELAY_EXPECTED_TIME
-		); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
+		const timeoutId = setTimeout(() => {
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
+
+				// Updating attributes reference...
+				compatibleAttributesRef.current = attributes;
+			}
+		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
 		return () => clearTimeout(timeoutId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [attributes, attributesRef]);
+	}, [attributes]);
 
 	useEffect(() => {
 		// Compare the compatible attributes with the attributes and the attributes ref.
 		// If they are not equal, set the attributes to the compatible attributes.
 		if (
-			!isEquals(compatibleAttributes, attributes) &&
-			!isEquals(compatibleAttributes, attributesRef.current)
+			(!isEquals(attributes, compatibleAttributes) &&
+				isEquals(
+					compatibleAttributesRef.current,
+					compatibleAttributes
+				)) ||
+			!compatibleAttributesRef.current
 		) {
 			setAttributes(compatibleAttributes);
 		}
