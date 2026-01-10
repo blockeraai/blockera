@@ -554,8 +554,6 @@ if (! function_exists('blockera_enqueue_global_styles')) {
 		wp_register_style( 'global-styles', false );
 		wp_add_inline_style( 'global-styles', $stylesheet );
 		wp_enqueue_style( 'global-styles' );
-
-		wp_add_global_styles_for_blocks();
 		
 		blockera_add_global_styles_for_blocks();
 	}
