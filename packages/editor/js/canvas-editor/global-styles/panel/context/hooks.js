@@ -140,75 +140,71 @@ export function useGlobalStyle(
 	const setStyle = useCallback(
 		(newValue) => {
 			setUserConfig((currentConfig) =>
-				setImmutably(
-					currentConfig,
-					finalPath.split('.'),
-					shouldDecodeEncode
-						? getPresetVariableFromValue(
-								mergedConfig.settings,
-								blockName,
-								path,
-								newValue
-						  )
-						: newValue
-				)
+				setImmutably(currentConfig, finalPath.split('.'), newValue)
 			);
 		},
-		[
-			finalPath,
-			shouldDecodeEncode,
-			mergedConfig,
-			blockName,
-			path,
-			setUserConfig,
-		]
+		[finalPath, setUserConfig]
 	);
 
-	let rawResult, result;
-	switch (source) {
-		case 'all':
-			rawResult = getValueFromObjectPath(mergedConfig, finalPath);
-			result = shouldDecodeEncode
-				? getValueFromVariable(mergedConfig, blockName, rawResult)
-				: rawResult;
-			break;
-		case 'user':
-			rawResult = getValueFromObjectPath(userConfig, finalPath);
-			result = shouldDecodeEncode
-				? getValueFromVariable(mergedConfig, blockName, rawResult)
-				: rawResult;
-			break;
-		case 'base':
-			rawResult = getValueFromObjectPath(baseConfig, finalPath);
-			result = shouldDecodeEncode
-				? getValueFromVariable(baseConfig, blockName, rawResult)
-				: rawResult;
-			break;
-		default:
-			throw 'Unsupported source';
-	}
+	const { style, blockRootStyleWithoutVariation } = useMemo(() => {
+		let rawResult, result;
+		switch (source) {
+			case 'all':
+				rawResult = getValueFromObjectPath(mergedConfig, finalPath);
+				result = shouldDecodeEncode
+					? getValueFromVariable(mergedConfig, blockName, rawResult)
+					: rawResult;
+				break;
+			case 'user':
+				rawResult = getValueFromObjectPath(userConfig, finalPath);
+				result = shouldDecodeEncode
+					? getValueFromVariable(mergedConfig, blockName, rawResult)
+					: rawResult;
+				break;
+			case 'base':
+				rawResult = getValueFromObjectPath(baseConfig, finalPath);
+				result = shouldDecodeEncode
+					? getValueFromVariable(baseConfig, blockName, rawResult)
+					: rawResult;
+				break;
+			default:
+				throw 'Unsupported source';
+		}
 
-	let blockRootStyleWithoutVariation = {};
+		let blockRootStyleWithoutVariation = {};
 
-	if (blockName) {
-		rawResult = getValueFromObjectPath(
-			mergedConfig,
-			finalPath.replace(appendedPath, '')
-		);
-		blockRootStyleWithoutVariation = omit(
-			shouldDecodeEncode
-				? getValueFromVariable(mergedConfig, blockName, rawResult) || {}
-				: rawResult || {},
-			['variations']
-		);
-	}
+		if (blockName) {
+			rawResult = getValueFromObjectPath(
+				mergedConfig,
+				finalPath.replace(appendedPath, '')
+			);
+			blockRootStyleWithoutVariation = omit(
+				shouldDecodeEncode
+					? getValueFromVariable(
+							mergedConfig,
+							blockName,
+							rawResult
+					  ) || {}
+					: rawResult || {},
+				['variations']
+			);
+		}
 
-	return [
-		useMemo(
-			() => ({ ...defaultStylesValue, ...result }),
-			[result, defaultStylesValue]
-		),
-		blockRootStyleWithoutVariation,
-		setStyle,
-	];
+		return {
+			style: { ...defaultStylesValue, ...result },
+			blockRootStyleWithoutVariation,
+		};
+	}, [
+		source,
+		finalPath,
+		blockName,
+		baseConfig,
+		userConfig,
+		appendedPath,
+		mergedConfig,
+		defaultStylesValue,
+		shouldDecodeEncode,
+	]);
+
+	return [style, blockRootStyleWithoutVariation, setStyle];
 }
