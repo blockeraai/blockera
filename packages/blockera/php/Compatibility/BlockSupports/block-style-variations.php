@@ -100,7 +100,7 @@ if (! function_exists('blockera_render_block_style_variation_support_styles')) {
 	 */
 	function blockera_render_block_style_variation_support_styles( $parsed_block ) {
 		$classes    = $parsed_block['attrs']['className'] ?? null;
-		$variations = wp_get_block_style_variation_name_from_class( $classes );
+		$variations = blockera_get_block_style_variation_name_from_class( $classes );
 
 		if ( ! $variations ) {
 			return $parsed_block;
@@ -211,5 +211,41 @@ if (! function_exists('blockera_render_block_style_variation_support_styles')) {
 		_wp_array_set( $parsed_block, array( 'attrs', 'className' ), $updated_class_name );
 
 		return $parsed_block;
+	}
+}
+
+if (! function_exists('blockera_get_block_style_variation_name_from_class')) {
+	/**
+	 * Determines the block style variation names within a CSS class string.
+	 *
+	 * @since 6.6.0
+	 *
+	 * @param string $class_string CSS class string to look for a variation in.
+	 *
+	 * @return array|null The block style variation name if found.
+	 */
+	function blockera_get_block_style_variation_name_from_class( $class_string ) {
+		if ( ! is_string( $class_string ) ) {
+			return null;
+		}
+
+		// WordPress exclude all style variations if has includes "default" string inside name. 
+		$wp_regex_pattern = '/\bis-style-(?!default)(\S+)\b/';
+		// Exclude other instances of default style variation to support duplicate option for default style variation.
+		$blockera_regex_pattern = '/\bis-style-default-(\S+)\b/';
+
+		preg_match_all( $wp_regex_pattern, $class_string, $matches );
+		preg_match_all( $blockera_regex_pattern, $class_string, $_matches );
+
+		// Override wp_get_block_style_variation_name_from_class() output value.
+		if (isset($_matches[1]) && ! empty($_matches[1])) {
+			$result = [];
+			foreach ($_matches[1] as $item) {
+				$result[] = 'default-' . $item;
+			}
+			return $result;
+		}
+
+		return $matches[1] ?? null;
 	}
 }
