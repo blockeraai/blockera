@@ -303,3 +303,16 @@ function useGenericPreviewBlock(block: Object, type: Object) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [type?.example ? block?.name : block, type]);
 }
+
+/**
+ * Generate unique hash for style variation based on base64 algorithm for encoding string.
+ *
+ * @return {string} generated unique hash for style variation.
+ */
+export function generateUniqueStyleVariationHash(): string {
+	const encoder: Object = new TextEncoder().encode(
+		`style-${Math.floor(Math.random() * 900) + 100}`
+	);
+
+	return encoder.toBase64();
+}

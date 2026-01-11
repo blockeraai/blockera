@@ -34,6 +34,19 @@ import {
 	setBlockeraGlobalStylesMetaData,
 } from '../../helpers';
 
+const registerBlockStyleVariation = (
+	blockName: string,
+	style: Object
+): void => {
+	setTimeout(() => registerBlockStyle(blockName, style.name), 5);
+};
+const unregisterBlockStyleVariation = (
+	blockName: string,
+	style: Object
+): void => {
+	setTimeout(() => unregisterBlockStyle(blockName, style.name), 10);
+};
+
 export const BlockTypes = ({
 	items,
 	style,
@@ -82,16 +95,21 @@ export const BlockTypes = ({
 	}, [globalStyles, style]);
 	const initBlocksState = useMemo(
 		() => ({
-			items: savedEnabledItems
-				? savedEnabledItems?.filter((blockType) => {
-						const disabledIn =
-							globalStyles?.blockeraMetaData?.variations?.[
-								style.name
-							]?.disabledIn;
+			items:
+				savedEnabledItems &&
+				Array.isArray(savedEnabledItems) &&
+				savedEnabledItems.length > 0
+					? [
+							...enabledItems,
+							...(savedEnabledItems?.filter((blockType) => {
+								const disabledIn =
+									globalStyles?.blockeraMetaData
+										?.variations?.[style.name]?.disabledIn;
 
-						return !disabledIn?.includes(blockType);
-				  }) || []
-				: enabledItems,
+								return !disabledIn?.includes(blockType);
+							}) || []),
+					  ]
+					: enabledItems,
 			primitiveItems: validItems.sort((a, b) => {
 				const aHasStyle = blockHasStyle(a.name, style.name) ? 1 : 0;
 				const bHasStyle = blockHasStyle(b.name, style.name) ? 1 : 0;
@@ -99,9 +117,16 @@ export const BlockTypes = ({
 				return bHasStyle - aHasStyle; // Sort enabled items first
 			}),
 		}),
-		[validItems, globalStyles, style, enabledItems, savedEnabledItems]
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[]
 	);
 	const [blocksState, setBlocksState] = useState(initBlocksState);
+	const [state, setState] = useState({
+		enabledIn: [],
+		disabledIn: [],
+		blockType: null,
+		newGlobalStyles: globalStyles,
+	});
 	const [isModified, setIsModified] = useState(false);
 
 	useEffect(() => {
@@ -133,7 +158,6 @@ export const BlockTypes = ({
 				disabledIn = allBlockTypes;
 				enabledIn = [];
 				setAction('disable-all');
-				deleteStyleVariationBlocks(style.name, false);
 			} else if ('enable-all' === action) {
 				disabledIn = [];
 				enabledIn = allBlockTypes;
@@ -151,8 +175,6 @@ export const BlockTypes = ({
 						blockType,
 					]),
 				];
-				setStyleVariationBlocks(style.name, enabledIn);
-				registerBlockStyle(blockType, style);
 				setAction('single-enable');
 			} else if ('single-disable' === action) {
 				disabledIn = [
@@ -167,8 +189,6 @@ export const BlockTypes = ({
 					globalStyles?.blockeraMetaData?.variations?.[
 						style.name
 					]?.enabledIn?.filter((type) => type !== blockType) || [];
-				deleteStyleVariationBlocks(style.name, true, blockType);
-				unregisterBlockStyle(blockType, style.name);
 				setAction('single-disable');
 			}
 
@@ -196,50 +216,62 @@ export const BlockTypes = ({
 
 			setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
 
-			setGlobalStyles(newGlobalStyles);
+			setState({
+				enabledIn,
+				disabledIn,
+				blockType,
+				newGlobalStyles,
+			});
 
 			setIsModified(true);
 		},
-		[
-			style,
-			setAction,
-			validItems,
-			globalStyles,
-			setGlobalStyles,
-			setStyleVariationBlocks,
-			deleteStyleVariationBlocks,
-		]
+		[style, setAction, validItems, globalStyles, setState]
 	);
 
 	const handleOnSave = useCallback(() => {
 		if ('disable-all' === action) {
-			validItems.forEach((blockType) =>
-				unregisterBlockStyle(blockType.name, style.name)
-			);
+			deleteStyleVariationBlocks(style.name, false);
+			validItems.map((item) => {
+				// Compatible with WordPress core/blocks store api.
+				unregisterBlockStyleVariation(item.name, style);
 
+				return item.name;
+			});
 			handleOnUsageForMultipleBlocks(style, 'delete');
 		} else if ('enable-all' === action) {
-			validItems.forEach((blockType) => {
-				registerBlockStyle(blockType.name, style);
-			});
 			setStyleVariationBlocks(
 				style.name,
-				validItems.map((blockType) => blockType.name)
+				validItems.map((item) => {
+					// Compatible with WordPress core/blocks store api.
+					registerBlockStyleVariation(item.name, style);
+
+					return item.name;
+				})
 			);
 			handleOnUsageForMultipleBlocks(style, 'add');
 		} else if ('single-enable' === action) {
 			handleOnUsageForMultipleBlocks(style, 'add');
+			setStyleVariationBlocks(style.name, state.enabledIn);
+			registerBlockStyle(state.blockType, style);
 		} else if ('single-disable' === action) {
 			handleOnUsageForMultipleBlocks(style, 'delete');
+			deleteStyleVariationBlocks(style.name, true, state.blockType);
+			unregisterBlockStyle(state.blockType, style.name);
 		}
 
+		setGlobalStyles(state.newGlobalStyles);
+
+		// Clear action state.
 		setAction(null);
 	}, [
+		state,
 		style,
 		action,
 		setAction,
 		validItems,
+		setGlobalStyles,
 		setStyleVariationBlocks,
+		deleteStyleVariationBlocks,
 		handleOnUsageForMultipleBlocks,
 	]);
 

@@ -26,6 +26,7 @@ import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../helpers';
+import { generateUniqueStyleVariationHash } from './utils';
 
 const PromoteGlobalStylesPremiumFeature = ({
 	items,
@@ -62,6 +63,7 @@ export const AddNewStyleButton = ({
 	setStyles,
 	blockName,
 	setCounter,
+	counterMap,
 	blockStyles,
 	setBlockStyles,
 	design = 'no-label',
@@ -73,6 +75,7 @@ export const AddNewStyleButton = ({
 	counter: number,
 	styles?: Object,
 	blockName: string,
+	counterMap: Object,
 	design?: 'no-label' | 'with-label',
 	blockStyles: Array<Object>,
 	setStyles?: (styles: Object) => void,
@@ -95,25 +98,16 @@ export const AddNewStyleButton = ({
 		postId
 	);
 
-	const {
-		styles: {
-			blocks: { [blockName]: { variations } = { variations: {} } },
-		},
-	} = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
-
 	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 	const addNew = useCallback(() => {
-		setCounter(counter + 1);
+		const newCounter = counter + 1;
+		counterMap[blockName] = newCounter;
+		setCounter(newCounter);
 
-		const staticStylesCount = Object.keys(variations).length;
-		const dynamicStylesCount = blockStyles.length;
-
+		// Validate limitation for adding new style variation.
 		if (
 			-1 !== MAX_ITEMS_FOR_PROMOTION &&
-			(counter >= MAX_ITEMS_FOR_PROMOTION ||
-				(staticStylesCount < dynamicStylesCount &&
-					dynamicStylesCount - staticStylesCount >=
-						MAX_ITEMS_FOR_PROMOTION))
+			counter >= MAX_ITEMS_FOR_PROMOTION
 		) {
 			return setIsPromotionPopoverOpen(true);
 		}
@@ -143,7 +137,8 @@ export const AddNewStyleButton = ({
 			number++;
 		}
 
-		const name = `style-${number}`;
+		// Generate unique Id for new style variation name.
+		const name = `style-${generateUniqueStyleVariationHash()}`;
 		const styleLabel = __('Style', 'blockera') + ' ' + number;
 		const newStyle = {
 			name,
