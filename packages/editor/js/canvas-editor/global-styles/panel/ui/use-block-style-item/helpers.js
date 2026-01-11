@@ -23,7 +23,7 @@ export const getCalculatedNewStyle = ({
 	// Base label for new style.
 	const baseLabel =
 		action === 'duplicate' && currentStyle.label
-			? currentStyle.label.replace(/\(Copy(\s\d+|)\)$/, '')
+			? currentStyle.label.replace(/\s\(Copy(\s\d+|)\)$/, '')
 			: __('Style', 'blockera');
 
 	// Find first available number by checking existing style names.
