@@ -84,6 +84,28 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 	return cleanStyles;
 };
 
+/**
+ * Normalizing style for any variations of block.
+ *
+ * @param {Object} newStyle the new style to normalizing.
+ * @param {Object} defaultStyles the default styles properties to using inside cleanup process.
+ *
+ * @return {Object} normalized style as a object.
+ */
+export const getNormalizedStyle = (
+	newStyle: Object,
+	defaultStyles: Object
+): Object => {
+	const compatibleStyles = newStyle?.style || {};
+
+	delete newStyle?.style;
+
+	return cleanupStylesHelper(
+		mergeObject(compatibleStyles, newStyle),
+		defaultStyles
+	);
+};
+
 export const GlobalStylesPanelContext: Object = createContext({
 	currentBlockStyleVariation: {
 		name: '',
@@ -157,10 +179,15 @@ export const GlobalStylesPanelContextProvider = ({
 		);
 	}
 	const prefix = prefixParts.join('.');
-	const [style, rootStyle, setStyle] = useGlobalStyle(prefix, name, 'all', {
-		shouldDecodeEncode: false,
-		defaultStylesValue,
-	});
+	const [style, rootStyle, setStyle, userConfig] = useGlobalStyle(
+		prefix,
+		name,
+		'all',
+		{
+			shouldDecodeEncode: false,
+			defaultStylesValue,
+		}
+	);
 
 	const getStyle = useCallback(
 		() => ({
@@ -218,34 +245,18 @@ export const GlobalStylesPanelContextProvider = ({
 
 	const handleOnChangeStyle = useCallback(
 		(newStyle: Object) => {
-			const compatibleStyles = newStyle?.style || {};
-
-			delete newStyle?.style;
-
-			setStyle(
-				cleanupStylesHelper(
-					mergeObject(compatibleStyles, newStyle),
-					defaultStyles
-				)
-			);
+			setStyle(getNormalizedStyle(newStyle, defaultStyles));
 		},
 		[setStyle, defaultStyles]
 	);
 	const handleOnChangeStyleInLocalState = useCallback(
 		(newStyle: Object): void => {
-			const compatibleStyles = newStyle?.style || {};
-
-			delete newStyle?.style;
-
 			setBlockStyles(
 				name,
 				currentBlockStyleVariation?.isDefault
 					? 'default'
 					: currentBlockStyleVariation?.name || 'default',
-				cleanupStylesHelper(
-					mergeObject(compatibleStyles, newStyle),
-					defaultStyles
-				)
+				getNormalizedStyle(newStyle, defaultStyles)
 			);
 		},
 		[name, setBlockStyles, currentBlockStyleVariation, defaultStyles]
@@ -280,8 +291,11 @@ export const GlobalStylesPanelContextProvider = ({
 				style,
 				getStyle,
 				setStyle,
+				userConfig,
+				defaultStyles,
 				baseContextValue,
 				childrenComponent,
+				getNormalizedStyle,
 				memoizedBlockBaseProps,
 				getStyleVariationBlocks,
 				setStyleVariationBlocks,
@@ -301,6 +315,7 @@ type UseGlobalStylesPanelContextReturnType = {
 		name: string,
 		label: string,
 	},
+	userConfig: Object,
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
 	baseContextValue: Object,
@@ -324,7 +339,9 @@ type UseGlobalStylesPanelContextReturnType = {
 	selectedBlockClientId: string,
 	updateEditorSettings: (Object) => void,
 	getEditorSettings: () => Object,
+	defaultStyles: Object,
 	handleOnChangeStyleInLocalState: (newStyle: Object) => void,
+	getNormalizedStyle: (newStyle: Object, defaultStyles: Object) => Object,
 };
 
 export const useGlobalStylesPanelContext =

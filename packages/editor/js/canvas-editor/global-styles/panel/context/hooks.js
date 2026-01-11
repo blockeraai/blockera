@@ -124,7 +124,7 @@ export function useGlobalStyle(
 		shouldDecodeEncode = true,
 		defaultStylesValue = {},
 	}: { shouldDecodeEncode: boolean, defaultStylesValue: Object }
-): [any, any, (newValue: any) => void] {
+): [any, any, (newValue: any) => void, Object] {
 	const {
 		merged: mergedConfig,
 		base: baseConfig,
@@ -206,5 +206,5 @@ export function useGlobalStyle(
 		shouldDecodeEncode,
 	]);
 
-	return [style, blockRootStyleWithoutVariation, setStyle];
+	return [style, blockRootStyleWithoutVariation, setStyle, userConfig];
 }
