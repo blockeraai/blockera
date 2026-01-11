@@ -357,7 +357,7 @@ export const StyleItem = ({
 								{activeInBlocks
 									.slice(0, 3)
 									.map((block, index) => {
-										const { icon, title } =
+										const { icon = null, title } =
 											getBlockType(block);
 
 										return (
