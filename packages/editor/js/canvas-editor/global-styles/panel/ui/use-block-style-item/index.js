@@ -28,10 +28,13 @@ export const useBlockStyleItem = ({
 	styles,
 	blockName,
 	setStyles,
+	userConfig,
 	blockStyles,
 	cachedStyle,
+	defaultStyles,
 	setBlockStyles,
 	setCachedStyle,
+	getNormalizedStyle,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
 	deleteStyleVariationBlocks,
@@ -40,7 +43,9 @@ export const useBlockStyleItem = ({
 }: {
 	styles: Object,
 	blockName: string,
+	userConfig: Object,
 	cachedStyle: Object,
+	defaultStyles: Object,
 	blockStyles: Array<Object>,
 	currentBlockStyleVariation: Object,
 	setStyles: (styles: Object) => void,
@@ -54,6 +59,7 @@ export const useBlockStyleItem = ({
 		single: boolean,
 		blockName?: string
 	) => void,
+	getNormalizedStyle: (newStyle: Object, defaultStyles: Object) => Object,
 }): ({
 	isConfirmedChangeID: boolean,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
@@ -225,18 +231,8 @@ export const useBlockStyleItem = ({
 			// Register the new block style
 			registerBlockStyle(blockName, duplicateStyle);
 
-			// Update styles context with new variation
-			setStyles({
-				...styles,
-				variations: {
-					...(styles.variations || {}),
-					[duplicateStyle.name]: currentStyle,
-				},
-			});
-
-			// TODO: Uncomment this when we will have a way to set the current block style variation while duplicating.
-			// setCurrentBlockStyleVariation(duplicateStyle);
-			// setCurrentActiveStyle(duplicateStyle);
+			setCurrentBlockStyleVariation(duplicateStyle);
+			setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 
@@ -256,10 +252,22 @@ export const useBlockStyleItem = ({
 			setBlockeraGlobalStylesMetaData(blockeraMetaData);
 
 			setGlobalStyles(
-				mergeObject(globalStyles, {
+				mergeObject(userConfig.styles, {
 					blockeraMetaData,
+					blocks: {
+						[blockName]: {
+							variations: {
+								[duplicateStyle.name]: getNormalizedStyle(
+									styles,
+									defaultStyles
+								),
+							},
+						},
+					},
 				})
 			);
+
+			setIsOpenContextMenu(false);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[styles, blockStyles]

@@ -60,6 +60,9 @@ export const StyleItem = ({
 	setCurrentPreviewStyle: (style: Object) => void,
 }): MixedElement => {
 	const {
+		userConfig,
+		defaultStyles,
+		getNormalizedStyle,
 		getStyle = () => ({}),
 		getStyleVariationBlocks,
 		deleteStyleVariationBlocks,
@@ -133,10 +136,13 @@ export const StyleItem = ({
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		blockName,
+		userConfig,
 		blockStyles,
 		cachedStyle,
+		defaultStyles,
 		setBlockStyles,
 		setCachedStyle,
+		getNormalizedStyle,
 		styles: getStyle(),
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
