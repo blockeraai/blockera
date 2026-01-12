@@ -183,7 +183,7 @@ export const GlobalStylesPanelContextProvider = ({
 		);
 	}
 	const prefix = prefixParts.join('.');
-	const [style, rootStyle, setStyle, userConfig] = useGlobalStyle(
+	const [style, rootStyle, setStyle, userConfig, baseConfig] = useGlobalStyle(
 		prefix,
 		name,
 		'all',
@@ -295,6 +295,7 @@ export const GlobalStylesPanelContextProvider = ({
 				style,
 				getStyle,
 				setStyle,
+				baseConfig,
 				userConfig,
 				defaultStyles,
 				baseContextValue,
@@ -320,6 +321,7 @@ type UseGlobalStylesPanelContextReturnType = {
 		label: string,
 	},
 	userConfig: Object,
+	baseConfig: Object,
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
 	baseContextValue: Object,

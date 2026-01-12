@@ -35,11 +35,12 @@ import { isString } from '@blockera/utils';
  * Internal dependencies
  */
 import { StyleItem } from './style-item';
+import { useGlobalStylesPanelContext } from '../context';
 import { AddNewStyleButton } from './add-new-style-button';
+import { useBlockStylesCounter } from './use-block-styles-counter';
+import { useBlockContext } from '../../../../extensions/components';
 import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
-import { useBlockContext } from '../../../../extensions/components';
-import { useGlobalStylesPanelContext } from '../context';
 
 // Mapped block dynamic style variations counter for limitation reasons.
 const blockDynamicStylesCount: Object = {};
@@ -69,22 +70,27 @@ function BlockStyles({
 		isDeletedStyle: string | false,
 	},
 }): MixedElement | null {
+	const {
+		userConfig,
+		baseConfig,
+		style: editorStyles,
+		setStyle: setStyles,
+		setCurrentBlockStyleVariation,
+	} = useGlobalStylesPanelContext();
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
-	const [counter, setCounter] = useState(
-		blockDynamicStylesCount?.[blockName] || 0
-	);
+	const [counter, setCounter] = useBlockStylesCounter({
+		blockName,
+		baseConfig,
+		userConfig,
+		blockDynamicStylesCount,
+	});
 	const [blockStyles, setBlockStyles] = useState(styles.stylesToRender);
 	const [hoveredStyle, setHoveredStyle] = useState(null);
 	const [showPreview, setShowPreview] = useState(false);
 	const hoveredStyleRef = useRef(null);
 	const hasShownPreviewRef = useRef(false);
 	const isMobileViewport = useViewportMatch('medium', '<');
-	const {
-		style: editorStyles,
-		setStyle: setStyles,
-		setCurrentBlockStyleVariation,
-	} = useGlobalStylesPanelContext();
 
 	const {
 		onSelect,
