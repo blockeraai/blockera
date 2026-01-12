@@ -206,11 +206,13 @@ export const setSelectedBlockStyleVariation = (
 
 export const setStyleVariationBlocks = (
 	variationName: string,
-	blocks: Array<string>
+	blocks: Array<string>,
+	type: 'auto' | 'manual' = 'auto'
 ): Object => {
 	return {
 		variationName,
 		blocks,
+		setterType: type,
 		type: 'SET_STYLE_VARIATION_BLOCKS',
 	};
 };
@@ -218,11 +220,13 @@ export const setStyleVariationBlocks = (
 export const deleteStyleVariationBlocks = (
 	variationName: string,
 	single: boolean = true,
-	blockName: string
+	blockName: string,
+	disabledIn: Array<string> = []
 ): Object => {
 	return {
 		single,
 		blockName,
+		disabledIn,
 		variationName,
 		type: 'DELETE_STYLE_VARIATION_BLOCKS',
 	};

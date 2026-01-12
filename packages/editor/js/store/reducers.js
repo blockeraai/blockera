@@ -257,18 +257,35 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 				...state,
 				styleVariationBlocks: {
 					...(state?.styleVariationBlocks || {}),
-					[action.variationName]: [
-						...new Set([
-							...(state?.styleVariationBlocks?.[
-								action.variationName
-							] || []),
-							...action.blocks,
-						]),
-					],
+					[action.variationName]:
+						'auto' === action?.setterType
+							? [
+									...new Set([
+										...(state?.styleVariationBlocks?.[
+											action.variationName
+										] || []),
+										...action.blocks,
+									]),
+							  ]
+							: action.blocks,
 				},
 			};
 			break;
 		case 'DELETE_STYLE_VARIATION_BLOCKS':
+			let filteredBlocks: Array<string> = [];
+
+			if (
+				action.disabledIn.length &&
+				state?.styleVariationBlocks?.[action.variationName]
+			) {
+				filteredBlocks = state.styleVariationBlocks?.[
+					action.variationName
+				].filter(
+					(block: string): boolean =>
+						!action.disabledIn.includes(block)
+				);
+			}
+
 			state = {
 				...state,
 				styleVariationBlocks: {
@@ -277,7 +294,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 						? state?.styleVariationBlocks?.[
 								action.variationName
 						  ]?.filter((block) => block !== action.blockName)
-						: [],
+						: filteredBlocks,
 				},
 			};
 			break;
