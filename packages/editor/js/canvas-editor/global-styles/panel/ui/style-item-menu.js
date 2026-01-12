@@ -173,23 +173,25 @@ export const StyleItemMenu = ({
 							</Button>
 						)}
 
-						<Button
-							variant="link"
-							contentAlign="left"
-							className={controlInnerClassNames('menu-item')}
-							onClick={() => {
-								if (isOpenRenameModal) {
-									return setIsOpenUsageForMultipleBlocks(
-										false
-									);
-								}
+						{!style?.isDefault && (
+							<Button
+								variant="link"
+								contentAlign="left"
+								className={controlInnerClassNames('menu-item')}
+								onClick={() => {
+									if (isOpenRenameModal) {
+										return setIsOpenUsageForMultipleBlocks(
+											false
+										);
+									}
 
-								setIsOpenUsageForMultipleBlocks(true);
-							}}
-						>
-							<Icon icon="block-types" iconSize="24" />
-							{__('Use for multiple blocks', 'blockera')}
-						</Button>
+									setIsOpenUsageForMultipleBlocks(true);
+								}}
+							>
+								<Icon icon="block-types" iconSize="24" />
+								{__('Use for multiple blocks', 'blockera')}
+							</Button>
+						)}
 
 						<Grid
 							gridTemplateColumns="24px 1fr"
