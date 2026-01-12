@@ -96,6 +96,10 @@ export const getNormalizedStyle = (
 	newStyle: Object,
 	defaultStyles: Object
 ): Object => {
+	if (!Object.keys(newStyle).length) {
+		return newStyle;
+	}
+
 	const compatibleStyles = newStyle?.style || {};
 
 	delete newStyle?.style;

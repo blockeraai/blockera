@@ -7,13 +7,18 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
-import { Icon as WordPressIconComponent, Fill } from '@wordpress/components';
+import {
+	Fill,
+	Animate,
+	Icon as WordPressIconComponent,
+} from '@wordpress/components';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
+import { Icon } from '@blockera/icons';
 import { isString, mergeObject, isEquals } from '@blockera/utils';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import {
@@ -28,24 +33,12 @@ import {
 /**
  * Internal dependencies
  */
-import { blockHasStyle } from './use-block-style-item/helpers';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../helpers';
-
-const registerBlockStyleVariation = (
-	blockName: string,
-	style: Object
-): void => {
-	setTimeout(() => registerBlockStyle(blockName, style.name), 5);
-};
-const unregisterBlockStyleVariation = (
-	blockName: string,
-	style: Object
-): void => {
-	setTimeout(() => unregisterBlockStyle(blockName, style.name), 10);
-};
+import { blockHasStyle } from './use-block-style-item/helpers';
+import { getNormalizedStyle, useGlobalStylesPanelContext } from '../context';
 
 export const BlockTypes = ({
 	items,
@@ -63,6 +56,11 @@ export const BlockTypes = ({
 	) => void,
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
 }): MixedElement => {
+	const {
+		defaultStyles,
+		style: currentStyleValue,
+		currentBlockStyleVariation,
+	} = useGlobalStylesPanelContext();
 	const itemsCount = Array.isArray(items)
 		? items.length
 		: Object.keys(items || {}).length;
@@ -88,6 +86,7 @@ export const BlockTypes = ({
 		'styles',
 		postId
 	);
+	const [isSaving, setIsSaving] = useState(false);
 	const [action, setAction] = useState(null);
 	const savedEnabledItems = useMemo(() => {
 		return globalStyles?.blockeraMetaData?.variations?.[style.name]
@@ -153,6 +152,7 @@ export const BlockTypes = ({
 				(acc, blockType) => [...acc, blockType.name],
 				[]
 			);
+			let blocks: { [key: string]: any } = {};
 
 			if ('disable-all' === action) {
 				disabledIn = allBlockTypes;
@@ -161,6 +161,28 @@ export const BlockTypes = ({
 			} else if ('enable-all' === action) {
 				disabledIn = [];
 				enabledIn = allBlockTypes;
+				blocks = {
+					...Object.fromEntries(
+						allBlockTypes.map((block: Object) => [
+							block,
+							{
+								variations: {
+									[style.name]: currentBlockStyleVariation
+										? getNormalizedStyle(
+												currentStyleValue,
+												defaultStyles
+										  )
+										: getNormalizedStyle(
+												currentStyleValue?.variations?.[
+													style.name
+												] || {},
+												defaultStyles
+										  ),
+								},
+							},
+						])
+					),
+				};
 				setAction('enable-all');
 			} else if ('single-enable' === action) {
 				disabledIn =
@@ -175,6 +197,23 @@ export const BlockTypes = ({
 						blockType,
 					]),
 				];
+				blocks = {
+					[blockType]: {
+						variations: {
+							[style.name]: currentBlockStyleVariation
+								? getNormalizedStyle(
+										currentStyleValue,
+										defaultStyles
+								  )
+								: getNormalizedStyle(
+										currentStyleValue?.variations?.[
+											style.name
+										] || {},
+										defaultStyles
+								  ),
+						},
+					},
+				};
 				setAction('single-enable');
 			} else if ('single-disable' === action) {
 				disabledIn = [
@@ -211,6 +250,7 @@ export const BlockTypes = ({
 							},
 						},
 					},
+					blocks,
 				}
 			);
 
@@ -225,7 +265,15 @@ export const BlockTypes = ({
 
 			setIsModified(true);
 		},
-		[style, setAction, validItems, globalStyles, setState]
+		[
+			style,
+			setState,
+			setAction,
+			validItems,
+			globalStyles,
+			currentStyleValue,
+			currentBlockStyleVariation,
+		]
 	);
 
 	const handleOnSave = useCallback(() => {
@@ -233,7 +281,7 @@ export const BlockTypes = ({
 			deleteStyleVariationBlocks(style.name, false);
 			validItems.map((item) => {
 				// Compatible with WordPress core/blocks store api.
-				unregisterBlockStyleVariation(item.name, style);
+				unregisterBlockStyle(item.name, style.name);
 
 				return item.name;
 			});
@@ -243,7 +291,7 @@ export const BlockTypes = ({
 				style.name,
 				validItems.map((item) => {
 					// Compatible with WordPress core/blocks store api.
-					registerBlockStyleVariation(item.name, style);
+					registerBlockStyle(item.name, style);
 
 					return item.name;
 				})
@@ -260,14 +308,10 @@ export const BlockTypes = ({
 		}
 
 		setGlobalStyles(state.newGlobalStyles);
-
-		// Clear action state.
-		setAction(null);
 	}, [
 		state,
 		style,
 		action,
-		setAction,
 		validItems,
 		setGlobalStyles,
 		setStyleVariationBlocks,
@@ -283,20 +327,52 @@ export const BlockTypes = ({
 		<>
 			<Fill name="usage-for-multiple-blocks-save-cancel-actions">
 				<Flex justifyContent="space-between">
-					<Button
-						data-test="save-usage-for-multiple-blocks-button"
-						disabled={
-							!isModified &&
-							isEquals(blocksState, initBlocksState)
-						}
-						variant="primary"
-						onClick={() => {
-							handleOnSave();
-							setIsOpenUsageForMultipleBlocks(false);
-						}}
-					>
-						{__('Save', 'blockera')}
-					</Button>
+					{!isSaving && (
+						<Button
+							data-test="save-usage-for-multiple-blocks-button"
+							disabled={
+								!isModified &&
+								isEquals(blocksState, initBlocksState)
+							}
+							variant="primary"
+							onClick={() => {
+								setIsSaving(true);
+								setTimeout(() => {
+									handleOnSave();
+									// Clear action state.
+									setAction(null);
+									setIsOpenUsageForMultipleBlocks(false);
+								}, 10);
+							}}
+						>
+							{__('Save', 'blockera')}
+						</Button>
+					)}
+					{isSaving && (
+						<Button variant="primary">
+							<Animate type="loading">
+								{({ className: animateClassName }) => (
+									<Flex
+										className={classNames(
+											'message',
+											animateClassName
+										)}
+										direction="row"
+										gap={5}
+										alignItems="center"
+										style={{
+											fontSize: '14px',
+											marginRight: '5px',
+										}}
+									>
+										<Icon icon={'cloud'} library="wp" />
+
+										{__('Saving…', 'blockera')}
+									</Flex>
+								)}
+							</Animate>
+						</Button>
+					)}
 
 					<Button
 						data-test="cancel-usage-for-multiple-blocks-button"
