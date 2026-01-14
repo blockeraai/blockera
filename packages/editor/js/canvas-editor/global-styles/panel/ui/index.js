@@ -54,6 +54,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const [isHovered, setIsHovered] = useState(false);
 
+	const [event, setEvent] = useState('click');
 	const onSwitch = useCallback(() => {}, []);
 	const {
 		onSelect,
@@ -63,12 +64,20 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		className: previewClassName,
 		isDeletedStyle,
 	} = useStylesForBlocks({
+		event,
 		clientId,
 		blockName,
 		onSwitch,
 	});
 
-	const [currentActiveStyle, setCurrentActiveStyle] = useState(activeStyle);
+	const [currentActiveStyle, _setCurrentActiveStyle] = useState(activeStyle);
+	const setCurrentActiveStyle = useCallback(
+		(style: Object, event?: 'click' | 'detach' = 'click') => {
+			setEvent(event);
+			_setCurrentActiveStyle(style);
+		},
+		[]
+	);
 	const [currentPreviewStyle, setCurrentPreviewStyle] = useState(null);
 
 	useEffect(() => {
@@ -85,7 +94,12 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 		) {
 			setCurrentActiveStyle(currentBlockStyleVariation);
 		}
-	}, [currentBlockStyleVariation, currentActiveStyle, stylesToRender]);
+	}, [
+		stylesToRender,
+		currentActiveStyle,
+		setCurrentActiveStyle,
+		currentBlockStyleVariation,
+	]);
 
 	// Update cached style when active style changes
 	useLateEffect(() => {

@@ -12,7 +12,7 @@ import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 /**
  * Blockera dependencies
  */
-import { mergeObject, kebabCase } from '@blockera/utils';
+import { mergeObject, kebabCase, cloneObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -23,6 +23,8 @@ import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../../helpers';
+import { getAttributesWithIds } from '../../../../../hooks/use-attributes';
+import { generateUniqueClassName } from '../../../../../extensions/components/block-base';
 
 export const useBlockStyleItem = ({
 	styles,
@@ -50,7 +52,7 @@ export const useBlockStyleItem = ({
 	currentBlockStyleVariation: Object,
 	setStyles: (styles: Object) => void,
 	setCachedStyle: (style: Object) => void,
-	setCurrentActiveStyle: (style: Object) => void,
+	setCurrentActiveStyle: (style: Object, event?: 'click' | 'detach') => void,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
@@ -274,11 +276,44 @@ export const useBlockStyleItem = ({
 	);
 
 	const handleOnClearAllCustomizations = (currentStyle: Object) => {
-		setStyles({
-			variations: {
-				[currentStyle.name]: {},
-			},
-		});
+		const newGlobalStyles = cloneObject(globalStyles);
+
+		if (!currentStyle?.isDefault) {
+			if (
+				newGlobalStyles?.blocks?.[blockName]?.variations?.[
+					currentStyle.name
+				]
+			) {
+				if (
+					1 ===
+					Object.keys(
+						newGlobalStyles?.blocks?.[blockName]?.variations
+					).length
+				) {
+					delete newGlobalStyles?.blocks?.[blockName]?.variations;
+					if (
+						!Object.keys(newGlobalStyles?.blocks?.[blockName])
+							.length
+					) {
+						delete newGlobalStyles?.blocks?.[blockName];
+					}
+				} else {
+					delete newGlobalStyles?.blocks?.[blockName]?.variations?.[
+						currentStyle.name
+					];
+				}
+			}
+		} else if (
+			Object.keys(newGlobalStyles?.blocks?.[blockName]?.variations).length
+		) {
+			newGlobalStyles.blocks[blockName] = {
+				variations: newGlobalStyles?.blocks?.[blockName]?.variations,
+			};
+		} else {
+			delete newGlobalStyles?.blocks?.[blockName];
+		}
+
+		setGlobalStyles(newGlobalStyles);
 
 		setGlobalBlockStyles(
 			blockName,
@@ -391,23 +426,31 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnDetachStyle = (currentStyle: Object) => {
-		setCurrentActiveStyle(getDefaultStyle(blockStyles));
+		setCurrentActiveStyle(getDefaultStyle(blockStyles), 'detach');
 
 		const { getSelectedBlock } = select(blockEditorStore);
 		const { updateBlockAttributes } = dispatch(blockEditorStore);
 
 		const selectedBlock = getSelectedBlock();
 
-		updateBlockAttributes(
-			selectedBlock.clientId,
+		const className = generateUniqueClassName(selectedBlock.clientId);
+
+		const newAttributes = mergeObject(
 			mergeObject(
-				mergeObject(
-					selectedBlock.attributes,
-					base.styles.blocks[blockName].variations[currentStyle.name]
-				),
-				globalStyles.blocks[blockName].variations[currentStyle.name]
-			)
+				selectedBlock.attributes,
+				base.styles.blocks[blockName].variations[currentStyle.name]
+			),
+			globalStyles.blocks[blockName].variations[currentStyle.name]
 		);
+
+		newAttributes.blockeraPropsId = getAttributesWithIds(
+			newAttributes,
+			'blockeraPropsId',
+			true
+		);
+		newAttributes.className = `blockera-block ` + className;
+
+		updateBlockAttributes(selectedBlock.clientId, newAttributes);
 	};
 
 	return {

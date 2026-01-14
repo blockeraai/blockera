@@ -63,12 +63,18 @@ export function getActiveStyle(
 export function replaceActiveStyle(
 	className: string,
 	activeStyle: Object,
-	newStyle: Object
+	newStyle: Object,
+	event: 'click' | 'detach'
 ): string {
 	const list = new TokenList(className);
 
 	if (activeStyle) {
 		list.remove('is-style-' + activeStyle.name);
+	}
+
+	// We should not add style variation classname when occurred `detach` event.
+	if ('detach' === event) {
+		return list.value;
 	}
 
 	list.add('is-style-' + newStyle.name);
@@ -182,6 +188,7 @@ export function getDefaultStyle(styles: Array<Object>): Object {
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/use-styles-for-block'
  */
 export function useStylesForBlocks({
+	event,
 	clientId,
 	onSwitch,
 	blockName,
@@ -189,6 +196,7 @@ export function useStylesForBlocks({
 	clientId: string,
 	blockName: string,
 	onSwitch: () => void,
+	event: 'click' | 'detach',
 }): Object {
 	const selector = (select: any) => {
 		const { getBlock } = select(blockEditorStore);
@@ -248,7 +256,8 @@ export function useStylesForBlocks({
 							isDeleted: true,
 					  }
 					: activeStyle,
-				newStyle
+				newStyle,
+				event
 			);
 			updateBlockAttributes(clientId, {
 				className: styleClassName,
@@ -256,6 +265,7 @@ export function useStylesForBlocks({
 			onSwitch();
 		},
 		[
+			event,
 			clientId,
 			onSwitch,
 			className,
