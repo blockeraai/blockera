@@ -23,7 +23,6 @@ import { BackgroundExtension } from '../background';
 import { BorderAndShadowExtension } from '../border-and-shadow';
 import { EffectsExtension } from '../effects';
 import { TypographyExtension } from '../typography';
-import { SpacingExtension } from '../spacing';
 import { PositionExtension } from '../position';
 import { SizeExtension } from '../size';
 import { LayoutExtension } from '../layout';
@@ -74,7 +73,6 @@ export const MappedExtensions = ({
 		sizeConfig,
 		layoutConfig,
 		statesConfig,
-		spacingConfig,
 		effectsConfig,
 		positionConfig,
 		flexChildConfig,
@@ -246,6 +244,7 @@ export const MappedExtensions = ({
 							}}
 						/>
 					</SlotFillProvider>
+
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
 							<ErrorBoundaryFallback
@@ -296,28 +295,121 @@ export const MappedExtensions = ({
 								}
 								from={'extension'}
 								error={error}
-								configId={'spacingConfig'}
-								title={__('Spacing', 'blockera')}
-								icon={<Icon icon={'extension-spacing'} />}
+								configId={'layoutConfig'}
+								title={__('Layout', 'blockera')}
+								icon={<Icon icon="extension-layout" />}
 							/>
 						)}
 					>
-						<SpacingExtension
+						<LayoutExtension
 							block={block}
-							extensionConfig={spacingConfig}
+							extensionConfig={layoutConfig}
+							extensionProps={{
+								blockeraDisplay: {},
+								blockeraFlexLayout: {},
+								blockeraGap: {},
+								blockeraFlexWrap: {},
+								blockeraSpacing: {},
+							}}
 							values={{
+								blockeraDisplay:
+									currentStateAttributes.blockeraDisplay,
+								blockeraFlexLayout:
+									currentStateAttributes.blockeraFlexLayout,
+								blockeraGap: currentStateAttributes.blockeraGap,
+								blockeraFlexWrap:
+									currentStateAttributes.blockeraFlexWrap,
+								blockeraAlignContent:
+									currentStateAttributes.blockeraAlignContent,
 								blockeraSpacing:
 									currentStateAttributes.blockeraSpacing,
 							}}
 							attributes={{
+								blockeraDisplay: attributes.blockeraDisplay,
+								blockeraFlexLayout:
+									attributes.blockeraFlexLayout,
+								blockeraGap: attributes.blockeraGap,
+								blockeraFlexWrap: attributes.blockeraFlexWrap,
+								blockeraAlignContent:
+									attributes.blockeraAlignContent,
 								blockeraSpacing: attributes.blockeraSpacing,
 							}}
-							extensionProps={{
-								blockeraSpacing: {},
-							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 					</ErrorBoundary>
+
+					{isParentFlexBlock && (
+						<ErrorBoundary
+							fallbackRender={({ error }) => (
+								<ErrorBoundaryFallback
+									isReportingErrorCompleted={
+										isReportingErrorCompleted
+									}
+									setIsReportingErrorCompleted={
+										setIsReportingErrorCompleted
+									}
+									from={'extension'}
+									error={error}
+									configId={'flexChildConfig'}
+									title={__('Flex Child', 'blockera')}
+									icon={<Icon icon="extension-flex-child" />}
+								/>
+							)}
+						>
+							<FlexChildExtension
+								block={block}
+								extensionConfig={flexChildConfig}
+								values={{
+									blockeraFlexChildAlign:
+										currentStateAttributes.blockeraFlexChildAlign,
+									blockeraFlexChildSizing:
+										currentStateAttributes.blockeraFlexChildSizing,
+									blockeraFlexChildGrow:
+										currentStateAttributes.blockeraFlexChildGrow,
+									blockeraFlexChildShrink:
+										currentStateAttributes.blockeraFlexChildShrink,
+									blockeraFlexChildBasis:
+										currentStateAttributes.blockeraFlexChildBasis,
+									blockeraFlexChildOrder:
+										currentStateAttributes.blockeraFlexChildOrder,
+									blockeraFlexChildOrderCustom:
+										currentStateAttributes.blockeraFlexChildOrderCustom,
+									blockeraFlexDirection: parentFlexDirection,
+								}}
+								attributes={{
+									blockeraFlexChildSizing:
+										attributes.blockeraFlexChildSizing,
+									blockeraFlexChildGrow:
+										attributes.blockeraFlexChildGrow,
+									blockeraFlexChildShrink:
+										attributes.blockeraFlexChildShrink,
+									blockeraFlexChildBasis:
+										attributes.blockeraFlexChildBasis,
+									blockeraFlexChildAlign:
+										attributes.blockeraFlexChildAlign,
+									blockeraFlexChildOrder:
+										attributes.blockeraFlexChildOrder,
+									blockeraFlexChildOrderCustom:
+										attributes.blockeraFlexChildOrderCustom,
+								}}
+								extensionProps={{
+									blockeraFlexChildSizing: {},
+									blockeraFlexChildGrow: {},
+									blockeraFlexChildShrink: {},
+									blockeraFlexChildBasis: {},
+									blockeraFlexChildAlign: {},
+									blockeraFlexChildOrder: {},
+									blockeraFlexChildOrderCustom: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+						</ErrorBoundary>
+					)}
+
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
 							<ErrorBoundaryFallback
@@ -554,130 +646,6 @@ export const MappedExtensions = ({
 							}}
 						/>
 					</SlotFillProvider>
-
-					{isParentFlexBlock && (
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'flexChildConfig'}
-									title={__('Flex Child', 'blockera')}
-									icon={<Icon icon="extension-flex-child" />}
-								/>
-							)}
-						>
-							<FlexChildExtension
-								block={block}
-								extensionConfig={flexChildConfig}
-								values={{
-									blockeraFlexChildAlign:
-										currentStateAttributes.blockeraFlexChildAlign,
-									blockeraFlexChildSizing:
-										currentStateAttributes.blockeraFlexChildSizing,
-									blockeraFlexChildGrow:
-										currentStateAttributes.blockeraFlexChildGrow,
-									blockeraFlexChildShrink:
-										currentStateAttributes.blockeraFlexChildShrink,
-									blockeraFlexChildBasis:
-										currentStateAttributes.blockeraFlexChildBasis,
-									blockeraFlexChildOrder:
-										currentStateAttributes.blockeraFlexChildOrder,
-									blockeraFlexChildOrderCustom:
-										currentStateAttributes.blockeraFlexChildOrderCustom,
-									blockeraFlexDirection: parentFlexDirection,
-								}}
-								attributes={{
-									blockeraFlexChildSizing:
-										attributes.blockeraFlexChildSizing,
-									blockeraFlexChildGrow:
-										attributes.blockeraFlexChildGrow,
-									blockeraFlexChildShrink:
-										attributes.blockeraFlexChildShrink,
-									blockeraFlexChildBasis:
-										attributes.blockeraFlexChildBasis,
-									blockeraFlexChildAlign:
-										attributes.blockeraFlexChildAlign,
-									blockeraFlexChildOrder:
-										attributes.blockeraFlexChildOrder,
-									blockeraFlexChildOrderCustom:
-										attributes.blockeraFlexChildOrderCustom,
-								}}
-								extensionProps={{
-									blockeraFlexChildSizing: {},
-									blockeraFlexChildGrow: {},
-									blockeraFlexChildShrink: {},
-									blockeraFlexChildBasis: {},
-									blockeraFlexChildAlign: {},
-									blockeraFlexChildOrder: {},
-									blockeraFlexChildOrderCustom: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-					)}
-
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
-								configId={'layoutConfig'}
-								title={__('Layout', 'blockera')}
-								icon={<Icon icon="extension-layout" />}
-							/>
-						)}
-					>
-						<LayoutExtension
-							block={block}
-							extensionConfig={layoutConfig}
-							extensionProps={{
-								blockeraDisplay: {},
-								blockeraFlexLayout: {},
-								blockeraGap: {},
-								blockeraFlexWrap: {},
-								blockeraAlignContent: {},
-							}}
-							values={{
-								blockeraDisplay:
-									currentStateAttributes.blockeraDisplay,
-								blockeraFlexLayout:
-									currentStateAttributes.blockeraFlexLayout,
-								blockeraGap: currentStateAttributes.blockeraGap,
-								blockeraFlexWrap:
-									currentStateAttributes.blockeraFlexWrap,
-								blockeraAlignContent:
-									currentStateAttributes.blockeraAlignContent,
-							}}
-							attributes={{
-								blockeraDisplay: attributes.blockeraDisplay,
-								blockeraFlexLayout:
-									attributes.blockeraFlexLayout,
-								blockeraGap: attributes.blockeraGap,
-								blockeraFlexWrap: attributes.blockeraFlexWrap,
-								blockeraAlignContent:
-									attributes.blockeraAlignContent,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
-					</ErrorBoundary>
 
 					<ErrorBoundary
 						fallbackRender={({ error }) => (

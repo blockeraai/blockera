@@ -5,7 +5,6 @@ export { LayoutStyles, LayoutExtension } from './layout';
 export { FlexChildStyles, FlexChildExtension } from './flex-child';
 export { SizeStyles, SizeExtension } from './size';
 export { PositionStyles, PositionExtension } from './position';
-export { SpacingStyles, SpacingExtension } from './spacing';
 export { BackgroundStyles, BackgroundExtension } from './background';
 export {
 	BorderAndShadowStyles,
