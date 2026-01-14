@@ -29,6 +29,30 @@ import type {
 } from '../../extensions/libs/block-card/block-states/types';
 import type { InnerBlockType } from '../../extensions/libs/block-card/inner-blocks/types';
 
+export const getAttributesWithIds = (
+	state: Object,
+	identifier: string,
+	force: boolean = false
+): Object => {
+	const d = new Date();
+
+	if (state[identifier] && !force) {
+		return state;
+	}
+
+	return {
+		...state,
+		[identifier]:
+			'' +
+			d.getMonth() +
+			d.getDate() +
+			d.getHours() +
+			d.getMinutes() +
+			d.getSeconds() +
+			d.getMilliseconds(),
+	};
+};
+
 export const useAttributes = (
 	setAttributes: (attributes: Object) => void,
 	{
@@ -71,28 +95,6 @@ export const useAttributes = (
 	getAttributesWithIds: (state: Object, identifier: string) => Object,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 }) => {
-	const getAttributesWithIds = useCallback(
-		(state: Object, identifier: string, force: boolean = false): Object => {
-			const d = new Date();
-
-			if (state[identifier] && !force) {
-				return state;
-			}
-
-			return {
-				...state,
-				[identifier]:
-					'' +
-					d.getMonth() +
-					d.getDate() +
-					d.getHours() +
-					d.getMinutes() +
-					d.getSeconds() +
-					d.getMilliseconds(),
-			};
-		},
-		[]
-	);
 	const handleOnChangeAttributes: THandleOnChangeAttributes = useCallback(
 		(attributeId, newValue, options = {}): void => {
 			const {
