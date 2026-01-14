@@ -176,7 +176,7 @@ export const Blending = ({
 						</p>
 					</>
 				}
-				columns="1fr 160px"
+				columns="1fr 2.5fr"
 				options={blendModeFieldOptions()}
 				onChange={(newValue, ref) =>
 					handleOnChangeAttributes('blockeraBlendMode', newValue, {

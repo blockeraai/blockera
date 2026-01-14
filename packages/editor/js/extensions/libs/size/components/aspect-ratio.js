@@ -65,7 +65,7 @@ export const AspectRatio: ComponentType<any> = ({
 
 	return (
 		<BaseControl
-			columns="1fr 160px"
+			columns="1fr 2.5fr"
 			controlName="toggle-select"
 			label={__('Aspect Ratio', 'blockera')}
 			labelDescription={

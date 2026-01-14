@@ -5,14 +5,20 @@
 
 	.blockera-control-border-header {
 		display: grid;
-		gap: 0;
+		gap: 8px;
 		align-items: center;
 		justify-content: flex-end;
-		grid-template-columns: 1fr 160px;
+		grid-template-columns: 1fr 2.5fr;
 
 		.blockera-control-border {
-			width: 122px !important;
-			max-width: 122px !important;
+			width: 100% !important;
+			width: -moz-available !important;
+			width: -webkit-fill-available !important;
+			width: stretch !important;
+			max-width: 100% !important;
+			max-width: -moz-available !important;
+			max-width: -webkit-fill-available !important;
+			max-width: stretch !important;
 		}
 	}
 
@@ -33,7 +39,7 @@
 	.blockera-control-border-corners-preview {
 		height: 90px;
 		position: relative;
-		width: 158px;
+		width: calc(100% - 104px);
 		margin: 15px auto;
 		overflow: hidden;
 

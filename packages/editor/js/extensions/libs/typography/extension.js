@@ -238,7 +238,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 				}}
 			/>
 
-			<BaseControl columns="1fr 160px" label={__('Font', 'blockera')}>
+			<BaseControl columns="1fr 2.5fr" label={__('Font', 'blockera')}>
 				<Grid
 					alignItems="center"
 					gridTemplateColumns="1fr 1fr"
@@ -340,7 +340,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									</p>
 								</>
 							}
-							columns="1fr 160px"
+							columns="1fr 2.5fr"
 							defaultValue={attributes.blockeraFontColor.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
@@ -823,7 +823,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 										</Grid>
 									</>
 								}
-								columns="1fr 150px"
+								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __(
@@ -914,7 +914,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 						<BaseControl
 							controlName="spacing"
 							label={__('Spacing', 'blockera')}
-							columns="1fr 150px"
+							columns="1fr 2.5fr"
 						>
 							<EditorFeatureWrapper
 								isActive={isShowLetterSpacing}
@@ -1140,7 +1140,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 										</p>
 									</>
 								}
-								columns="1fr 150px"
+								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __('Default', 'blockera'),
@@ -1280,7 +1280,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 										</p>
 									</>
 								}
-								columns="1fr 150px"
+								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __('Normal', 'blockera'),

@@ -1185,6 +1185,7 @@ export default function LayoutMatrixControl({
 						className={controlInnerClassNames(
 							'layout-matrix__controls'
 						)}
+						grow={1}
 					>
 						{isDirectionActive && (
 							<ToggleSelectControl
@@ -1222,7 +1223,7 @@ export default function LayoutMatrixControl({
 							/>
 						)}
 
-						<Flex direction="row" justifyContent="space-between">
+						<Flex direction="row" justifyContent="flex-start">
 							<Tooltip
 								text={(() => {
 									let label = '';

@@ -119,8 +119,8 @@ export default function BorderRadiusControl({
 				)}
 
 				<Grid
-					gridTemplateColumns="122px 30px"
-					gap="6px"
+					gridTemplateColumns="1fr 30px"
+					gap="8px"
 					justifyItems="end"
 					justifyContent="end"
 				>
