@@ -406,7 +406,7 @@ export const BlockBase: ComponentType<any> = (
 		// If they are not equal, set the attributes to the compatible attributes.
 		if (
 			(!isEquals(attributes, compatibleAttributes) &&
-				isEquals(
+				!isEquals(
 					compatibleAttributesRef.current,
 					compatibleAttributes
 				)) ||
