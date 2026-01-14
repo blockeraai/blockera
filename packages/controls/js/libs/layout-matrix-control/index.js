@@ -1194,23 +1194,13 @@ export default function LayoutMatrixControl({
 								options={[
 									{
 										label: __('Row', 'blockera'),
+										'aria-label': 'flex-direction: row',
 										value: 'row',
-										icon: (
-											<Icon
-												icon="flex-direction-row"
-												iconSize="18"
-											/>
-										),
 									},
 									{
 										label: __('Column', 'blockera'),
+										'aria-label': 'flex-direction: column',
 										value: 'column',
-										icon: (
-											<Icon
-												icon="flex-direction-column"
-												iconSize="18"
-											/>
-										),
 									},
 								]}
 								defaultValue={direction}
