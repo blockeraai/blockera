@@ -87,7 +87,7 @@ export const registerClassName = (className: string): void => {
  * @param {string} clientId - The client ID to generate the unique class name from.
  * @return {string} A unique class name that hasn't been registered yet.
  */
-const generateUniqueClassName = (clientId: string): string => {
+export const generateUniqueClassName = (clientId: string): string => {
 	const baseHash = getSmallHash(clientId);
 	const baseClassName = `blockera-block-${baseHash}`;
 
