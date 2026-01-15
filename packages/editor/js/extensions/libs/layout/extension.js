@@ -745,6 +745,14 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 				isActive={isShowSpacing}
 				config={extensionConfig.blockeraSpacing}
 			>
+				<div
+					style={{
+						height: '1px',
+						margin: '15px 0',
+						background: '#eaeaea',
+					}}
+				></div>
+
 				<ControlContextProvider
 					value={{
 						name: generateExtensionId(block, 'spacing'),

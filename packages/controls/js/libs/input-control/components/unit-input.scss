@@ -13,12 +13,14 @@
 			font-size: 11px;
 			color: var(--blockera-controls-primary-color);
 			font-weight: 500;
-			padding: 0 5px 0 0;
+			padding: 0;
 			text-align: center;
 			height: 28px;
 			line-height: 28px;
 			border-radius: 0 2px 2px 0;
-			transition: box-shadow 0.1s linear, border 0.1s linear;
+			transition:
+				box-shadow 0.1s linear,
+				border 0.1s linear;
 			margin: 0;
 
 			&:not(:disabled) {
