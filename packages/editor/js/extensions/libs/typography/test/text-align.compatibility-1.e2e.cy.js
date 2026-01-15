@@ -2,11 +2,10 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
-	openMoreFeaturesControl,
 	createPost,
+	appendBlocks,
+	getWPDataObject,
+	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Align → WP Compatibility', () => {
@@ -24,9 +23,6 @@ describe('Text Align → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('core/paragraph').click();
-
-			// Open more settings
-			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Text Align').as('container');
 
@@ -173,9 +169,6 @@ describe('Text Align → WP Compatibility', () => {
 
 			// Select target block
 			cy.getBlock('core/heading').click();
-
-			// Open more settings
-			openMoreFeaturesControl('More typography settings');
 
 			cy.getParentContainer('Text Align').as('container');
 

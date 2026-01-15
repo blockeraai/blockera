@@ -136,7 +136,7 @@ export const TextColumns = ({
 								<Icon
 									library="wp"
 									icon="close-small"
-									iconSize={16}
+									iconSize="18"
 								/>
 							),
 						},
