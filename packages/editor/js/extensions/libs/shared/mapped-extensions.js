@@ -560,6 +560,7 @@ export const MappedExtensions = ({
 								blockeraBackground: {},
 								blockeraBackgroundColor: {},
 								blockeraBackgroundClip: {},
+								blockeraBlendMode: {},
 							}}
 							values={{
 								blockeraBackground:
@@ -568,6 +569,8 @@ export const MappedExtensions = ({
 									currentStateAttributes?.blockeraBackgroundColor,
 								blockeraBackgroundClip:
 									currentStateAttributes?.blockeraBackgroundClip,
+								blockeraBlendMode:
+									currentStateAttributes.blockeraBlendMode,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							attributes={{
@@ -577,6 +580,7 @@ export const MappedExtensions = ({
 									attributes.blockeraBackgroundColor,
 								blockeraBackgroundClip:
 									attributes.blockeraBackgroundClip,
+								blockeraBlendMode: attributes.blockeraBlendMode,
 							}}
 						/>
 					</ErrorBoundary>
@@ -795,7 +799,6 @@ export const MappedExtensions = ({
 								blockeraTransition: {},
 								blockeraFilter: {},
 								blockeraBackdropFilter: {},
-								blockeraBlendMode: {},
 								blockeraDivider: {},
 								blockeraMask: {},
 							}}
@@ -820,8 +823,6 @@ export const MappedExtensions = ({
 									currentStateAttributes.blockeraFilter,
 								blockeraBackdropFilter:
 									currentStateAttributes.blockeraBackdropFilter,
-								blockeraBlendMode:
-									currentStateAttributes.blockeraBlendMode,
 								blockeraDivider:
 									currentStateAttributes.blockeraDivider,
 								blockeraMask:
@@ -845,7 +846,6 @@ export const MappedExtensions = ({
 								blockeraFilter: attributes.blockeraFilter,
 								blockeraBackdropFilter:
 									attributes.blockeraBackdropFilter,
-								blockeraBlendMode: attributes.blockeraBlendMode,
 								blockeraDivider: attributes.blockeraDivider,
 								blockeraMask: attributes.blockeraMask,
 							}}

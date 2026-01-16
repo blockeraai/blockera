@@ -13,7 +13,10 @@ describe('Blend Mode → Functionality', () => {
 		cy.getBlock('default').type('This is test paragraph', { delay: 0 });
 		cy.getByDataTest('style-tab').click();
 
-		cy.activateMoreSettingsItem('More Effect Settings', 'Blending Mode');
+		cy.activateMoreSettingsItem(
+			'More Background Settings',
+			'Blending Mode'
+		);
 
 		cy.getParentContainer('Blending').as('container');
 	});
@@ -39,7 +42,6 @@ describe('Blend Mode → Functionality', () => {
 
 		// Check frontend
 		savePage();
-
 		redirectToFrontPage();
 
 		cy.get('.blockera-block').should(

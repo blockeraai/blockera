@@ -77,10 +77,18 @@ const blockeraBackgroundClip: FeatureConfig = {
 	},
 };
 
+const blockeraBlendMode: FeatureConfig = {
+	show: false,
+	force: false,
+	status: true,
+	label: __('Blending Mode', 'blockera'),
+};
+
 export const backgroundConfig = {
 	status: true,
 	initialOpen: true,
 	blockeraBackground,
 	blockeraBackgroundColor,
 	blockeraBackgroundClip,
+	blockeraBlendMode,
 };

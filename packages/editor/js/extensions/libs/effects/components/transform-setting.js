@@ -41,7 +41,6 @@ export const TransformSettings = ({
 		blockeraTransform: Array<Object>,
 		blockeraTransition: Array<Object>,
 		blockeraFilter: Array<Object>,
-		blockeraBlendMode: string,
 		blockeraBackdropFilter: Array<Object>,
 		blockeraTransformSelfPerspective: string,
 		blockeraTransformSelfOrigin: {

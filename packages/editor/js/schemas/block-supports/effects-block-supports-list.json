@@ -18,14 +18,6 @@
 			"fallback": ["transition", "effects"],
 			"description": "Support for \"blockeraTransition\" value."
 		},
-		"blockeraBlendMode": {
-			"status": true,
-			"id": "blockeraBlendMode",
-			"definition": "MixBlendMode",
-			"css-property": "mix-blend-mode",
-			"fallback": ["mix-blend-mode", "effects"],
-			"description": "Support for \"blockeraBlendMode\" value."
-		},
 		"blockeraBackdropFilter": {
 			"status": true,
 			"id": "blockeraBackdropFilter",

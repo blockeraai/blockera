@@ -36,7 +36,6 @@ import { Opacity } from './components/opacity';
 import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
-import { Blending } from './components/blending';
 import { ExtensionSettings } from '../settings';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
@@ -84,11 +83,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		values?.blockeraBackdropFilter,
 		attributes.blockeraBackdropFilter.default
 	);
-	const isShowBlendMode = isShowField(
-		extensionConfig.blockeraBlendMode,
-		values?.blockeraBlendMode,
-		attributes.blockeraBlendMode.default
-	);
 
 	let isShowMask = false;
 	if (experimental().get('editor.extensions.effectsExtension.mask')) {
@@ -116,8 +110,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		!isShowFilter &&
 		!isShowMask &&
 		!isShowBackdropFilter &&
-		!isShowDivider &&
-		!isShowBlendMode
+		!isShowDivider
 	) {
 		return <></>;
 	}
@@ -281,19 +274,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 					handleOnChangeAttributes={handleOnChangeAttributes}
 					defaultValue={attributes.blockeraMask.default}
 					{...extensionProps.blockeraMask}
-				/>
-			</EditorFeatureWrapper>
-
-			<EditorFeatureWrapper
-				isActive={isShowBlendMode}
-				config={extensionConfig.blockeraBlendMode}
-			>
-				<Blending
-					blendMode={values.blockeraBlendMode}
-					block={block}
-					handleOnChangeAttributes={handleOnChangeAttributes}
-					defaultValue={attributes.blockeraBlendMode.default}
-					{...extensionProps.blockeraBlendMode}
 				/>
 			</EditorFeatureWrapper>
 		</PanelBodyControl>
