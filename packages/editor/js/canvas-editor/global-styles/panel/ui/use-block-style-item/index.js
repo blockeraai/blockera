@@ -12,17 +12,19 @@ import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 /**
  * Blockera dependencies
  */
-import { mergeObject, kebabCase, cloneObject } from '@blockera/utils';
+import { omit, mergeObject, kebabCase, cloneObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { getDefaultStyle } from '../utils';
-import { getCalculatedNewStyle } from './helpers';
+import { getCalculatedNewStyle, isRootStyle } from './helpers';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../../helpers';
+import { getNormalizedStyle } from '../../context';
+import { type T_SET_CURRENT_ACTIVE_STYLE } from '../types';
 import { getAttributesWithIds } from '../../../../../hooks/use-attributes';
 import { generateUniqueClassName } from '../../../../../extensions/components/block-base';
 
@@ -36,7 +38,6 @@ export const useBlockStyleItem = ({
 	defaultStyles,
 	setBlockStyles,
 	setCachedStyle,
-	getNormalizedStyle,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
 	deleteStyleVariationBlocks,
@@ -52,7 +53,7 @@ export const useBlockStyleItem = ({
 	currentBlockStyleVariation: Object,
 	setStyles: (styles: Object) => void,
 	setCachedStyle: (style: Object) => void,
-	setCurrentActiveStyle: (style: Object, event?: 'click' | 'detach') => void,
+	setCurrentActiveStyle: T_SET_CURRENT_ACTIVE_STYLE,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
@@ -61,7 +62,6 @@ export const useBlockStyleItem = ({
 		single: boolean,
 		blockName?: string
 	) => void,
-	getNormalizedStyle: (newStyle: Object, defaultStyles: Object) => Object,
 }): ({
 	isConfirmedChangeID: boolean,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
@@ -73,7 +73,10 @@ export const useBlockStyleItem = ({
 	handleOnDuplicate: (currentStyle: Object) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
 	handleOnUsageForMultipleBlocks: (currentStyle: Object) => void,
-	handleOnSaveCustomizations: (currentStyle: Object) => void,
+	handleOnSaveCustomizations: (
+		currentStyle: Object,
+		defaultStyles?: Object
+	) => void,
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
 }) => {
@@ -406,23 +409,76 @@ export const useBlockStyleItem = ({
 		setCurrentBlockStyleVariation(undefined);
 	};
 
-	const handleOnSaveCustomizations = (currentStyle: Object) => {
+	/**
+	 * Save all user customization into the current selected block style variation.
+	 * It's working on selected block settings to assign this settings,
+	 * as a global style for this block based on selected style variation.
+	 *
+	 * @param {Object} currentStyle the current style variation as object includes name, label, icon, ...
+	 *
+	 * @return {void}
+	 */
+	const handleOnSaveCustomizations = (
+		currentStyle: Object,
+		_defaultStyles: Object
+	): void => {
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
 
-		const styleAttributes = selectedBlock.attributes;
+		let styleAttributes = selectedBlock.attributes;
 
-		setGlobalStyles(
-			mergeObject(globalStyles, {
+		const ignoredAttributes: Array<string> = [];
+
+		for (const attribute in styleAttributes) {
+			if (ignoredAttributes.includes(attribute)) {
+				continue;
+			}
+
+			if (!attribute.startsWith('blockera')) {
+				ignoredAttributes.push(attribute);
+			}
+		}
+
+		styleAttributes = omit(styleAttributes, ignoredAttributes);
+
+		// Normalizing style attributes...
+		const currentStyleValue = getNormalizedStyle(
+			styleAttributes,
+			_defaultStyles
+		);
+
+		// Skip while not exists any changesets.
+		if (!Object.keys(currentStyleValue).length) {
+			return;
+		}
+
+		const { updateBlockAttributes } = dispatch(blockEditorStore);
+
+		// Cloned globalStyles object.
+		let _globalStyles = cloneObject(globalStyles);
+
+		if (isRootStyle(currentStyle)) {
+			_globalStyles = mergeObject(_globalStyles, {
+				blocks: {
+					[blockName]: currentStyleValue,
+				},
+			});
+		} else {
+			_globalStyles = mergeObject(_globalStyles, {
 				blocks: {
 					[blockName]: {
 						variations: {
-							[currentStyle.name]: styleAttributes,
+							[currentStyle.name]: currentStyleValue,
 						},
 					},
 				},
-			})
-		);
+			});
+		}
+
+		setGlobalStyles(_globalStyles);
+
+		updateBlockAttributes(_defaultStyles);
+		setCurrentActiveStyle(currentStyle, 'save-customizations');
 	};
 
 	const handleOnDetachStyle = (currentStyle: Object) => {

@@ -90,3 +90,11 @@ export const blockHasStyle = (blockName: string, style: string): boolean => {
 
 	return blockStyles.some((blockStyle) => blockStyle.name === style);
 };
+
+export const isRootStyle = (currentStyle: Object): boolean => {
+	return (
+		!currentStyle?.name ||
+		('default' === currentStyle.name &&
+			'wordpress' === currentStyle?.icon?.name)
+	);
+};

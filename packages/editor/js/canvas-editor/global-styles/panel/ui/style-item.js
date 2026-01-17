@@ -25,6 +25,7 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { getDefaultStyle } from './utils';
+import { type T_STYLE_ITEM_PROPS } from './types';
 import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useUserCan } from '../../../../hooks/use-user-can';
@@ -38,33 +39,19 @@ export const StyleItem = ({
 	setCounter,
 	activeStyle,
 	blockStyles,
+	setChangesets,
 	hasChangesets,
 	setBlockStyles,
 	styleItemHandler,
 	onSelectStylePreview,
 	setCurrentActiveStyle,
 	setCurrentPreviewStyle,
+	originDefaultAttributes,
 	inGlobalStylesPanel = false,
-}: {
-	style: Object,
-	counter: number,
-	blockName: string,
-	counterMap: Object,
-	activeStyle: Object,
-	hasChangesets?: boolean,
-	blockStyles: Array<Object>,
-	inGlobalStylesPanel: boolean,
-	setCounter: (counter: number) => void,
-	styleItemHandler: (style: Object) => void,
-	onSelectStylePreview: (style: Object) => void,
-	setCurrentActiveStyle: (style: Object) => void,
-	setBlockStyles: (styles: Array<Object>) => void,
-	setCurrentPreviewStyle: (style: Object) => void,
-}): MixedElement => {
+}: T_STYLE_ITEM_PROPS): MixedElement => {
 	const {
 		userConfig,
 		defaultStyles,
-		getNormalizedStyle,
 		getStyle = () => ({}),
 		getStyleVariationBlocks,
 		deleteStyleVariationBlocks,
@@ -144,7 +131,6 @@ export const StyleItem = ({
 		defaultStyles,
 		setBlockStyles,
 		setCachedStyle,
-		getNormalizedStyle,
 		styles: getStyle(),
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
@@ -488,7 +474,16 @@ export const StyleItem = ({
 							'action-disabled': false,
 						})}
 						variant="tertiary"
-						onClick={() => handleOnSaveCustomizations(style)}
+						onClick={() => {
+							handleOnSaveCustomizations(
+								style,
+								originDefaultAttributes
+							);
+
+							if ('function' === typeof setChangesets) {
+								setChangesets(false);
+							}
+						}}
 						size="input"
 						data-test={'save-customizations'}
 						style={{

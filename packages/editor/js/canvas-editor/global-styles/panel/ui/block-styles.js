@@ -35,6 +35,7 @@ import { isString } from '@blockera/utils';
  * Internal dependencies
  */
 import { StyleItem } from './style-item';
+import { type T_BLOCK_STYLES_PROPS } from './types';
 import { useGlobalStylesPanelContext } from '../context';
 import { AddNewStyleButton } from './add-new-style-button';
 import { useBlockStylesCounter } from './use-block-styles-counter';
@@ -51,25 +52,10 @@ function BlockStyles({
 	blockName,
 	isNotActive,
 	hasChangesets,
+	setChangesets,
+	originDefaultAttributes,
 	context = 'inspector-controls',
-}: {
-	hasChangesets?: boolean,
-	blockName: string,
-	isNotActive?: boolean,
-	context?: 'global-styles-panel' | 'inspector-controls',
-	styles: {
-		onSelect: (style: string) => void,
-		stylesToRender: Array<Object>,
-		activeStyle: Object,
-		genericPreviewBlock: Object,
-		setCurrentActiveStyle: (style: Object) => void,
-		setCurrentPreviewStyle: (style: Object) => void,
-		previewClassName: string,
-		popoverAnchor: Object,
-		setIsOpen: (isOpen: boolean) => void,
-		isDeletedStyle: string | false,
-	},
-}): MixedElement | null {
+}: T_BLOCK_STYLES_PROPS): MixedElement | null {
 	const {
 		userConfig,
 		baseConfig,
@@ -94,15 +80,15 @@ function BlockStyles({
 
 	const {
 		onSelect,
-		stylesToRender,
+		setIsOpen,
 		activeStyle,
+		popoverAnchor,
+		isDeletedStyle,
+		stylesToRender,
+		previewClassName,
 		genericPreviewBlock,
 		setCurrentActiveStyle,
 		setCurrentPreviewStyle,
-		previewClassName,
-		popoverAnchor,
-		setIsOpen,
-		isDeletedStyle,
 	} = styles;
 
 	// Update ref whenever hoveredStyle changes
@@ -301,6 +287,10 @@ function BlockStyles({
 											setCounter={setCounter}
 											key={style.name}
 											style={style}
+											originDefaultAttributes={
+												originDefaultAttributes
+											}
+											setChangesets={setChangesets}
 											hasChangesets={hasChangesets}
 											activeStyle={activeStyle}
 											setCurrentActiveStyle={
