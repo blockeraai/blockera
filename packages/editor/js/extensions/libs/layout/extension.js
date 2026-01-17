@@ -76,10 +76,11 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 	);
 
 	if (
-		// Flex Layout fields.
-		!isShowDisplay ||
-		(!isShowFlexLayout && !isShowGap && !isShowFlexWrap) ||
-		// Spacing fields.
+		!isShowDisplay &&
+		!isShowSpacing &&
+		!isShowFlexLayout &&
+		!isShowGap &&
+		!isShowFlexWrap &&
 		!isShowSpacing
 	) {
 		return <></>;
