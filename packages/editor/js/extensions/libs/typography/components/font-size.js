@@ -41,7 +41,7 @@ export const FontSize = ({
 			}}
 		>
 			<InputControl
-				label={__('Size', 'blockera')}
+				label={__('Font Size', 'blockera')}
 				labelDescription={
 					<>
 						<p>
