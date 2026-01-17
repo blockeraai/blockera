@@ -91,9 +91,9 @@ async function getBlockType(page, blockType) {
  * @return {Promise<any>} The selected block or field value.
  */
 async function getSelectedBlock(page, field = '') {
-	const data = await getWPDataObject(page);
 	return await page.evaluate(
-		({ dataObj, fieldName }) => {
+		async ({ fieldName }) => {
+			const dataObj = window.wp.data;
 			const selectedBlock = dataObj
 				.select('core/block-editor')
 				.getSelectedBlock();
@@ -105,7 +105,7 @@ async function getSelectedBlock(page, field = '') {
 			}
 			return selectedBlock.attributes[fieldName];
 		},
-		{ dataObj: data, fieldName: field }
+		{ fieldName: field }
 	);
 }
 
@@ -925,11 +925,31 @@ async function deactivateMuPlugin(
 	);
 }
 
+/**
+ * Duplicate selected block.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @return {Promise<void>}
+ */
+async function doBlockToolbarContextMenuOption(page, option = 'Copy') {
+	const optionsButton = page
+		.locator('.block-editor-block-toolbar [aria-label="Options"]')
+		.first();
+	await optionsButton.waitFor({ state: 'visible', timeout: 10000 });
+	await optionsButton.click();
+
+	const selector = '.components-popover button:has-text("' + option + '")';
+	const element = page.locator(selector);
+
+	await element.click();
+}
+
 module.exports = {
 	getIframeBody,
 	getWindowProperty,
 	getWPDataObject,
 	getBlockType,
+	doBlockToolbarContextMenuOption,
 	getSelectedBlock,
 	getSelectedBlockStyle,
 	getEditedGlobalStylesRecord,
