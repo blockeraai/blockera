@@ -25,7 +25,7 @@ describe('Font Family → WP Compatibility', () => {
 			// Select target block
 			cy.getBlock('core/paragraph').click();
 
-			cy.getParentContainer('Family').as('container');
+			cy.getParentContainer('Font Family').as('container');
 
 			cy.addNewTransition();
 
