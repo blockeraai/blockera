@@ -321,7 +321,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 									</p>
 									<p>
 										{__(
-											'You have the ability to configure the flex direction as either horizontal or vertical, and you can also select how items are aligned along these axes.',
+											'You have the ability to configure the flex direction as either row or column, and you can also select how items are aligned along these axes.',
 											'blockera'
 										)}
 									</p>
