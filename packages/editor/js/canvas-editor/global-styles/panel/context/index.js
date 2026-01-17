@@ -35,7 +35,7 @@ import { sanitizeDefaultAttributes } from '../../../../extensions/hooks/utils';
 import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
 
 // Helper functions
-const getBlockAttributes = (name: string): Object => {
+export const getBlockAttributes = (name: string): Object => {
 	const {
 		getBlockExtensionBy,
 		getBlockTypeAttributes,
@@ -58,7 +58,12 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 
 	for (const key in styles) {
 		if (
-			['blockeraPropsId', 'blockeraCompatId', 'className'].includes(key)
+			[
+				'className',
+				'blockeraPropsId',
+				'blockeraCompatId',
+				'blockeraCurrentDevice',
+			].includes(key)
 		) {
 			continue;
 		}
@@ -68,15 +73,47 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 			continue;
 		}
 
-		if (
-			!defaultStyles[key]?.hasOwnProperty('default') &&
-			styles[key]?.value
-		) {
-			cleanStyles[key] = styles[key];
+		// Process all keys if has not default property.
+		if (!defaultStyles[key]?.hasOwnProperty('default')) {
+			if (!styles[key]?.hasOwnProperty('value')) {
+				cleanStyles[key] = {
+					value: styles[key],
+				};
+			} else {
+				cleanStyles[key] = styles[key];
+			}
+
 			continue;
 		}
 
-		if (!isEquals(defaultStyles[key]?.default, styles[key]?.value)) {
+		// Process all keys which has default property.
+		if (
+			!styles[key]?.hasOwnProperty('value') &&
+			!defaultStyles[key]?.default?.hasOwnProperty('value') &&
+			!isEquals(defaultStyles[key]?.default, styles[key])
+		) {
+			cleanStyles[key] = {
+				value: styles[key],
+			};
+		} else if (
+			!styles[key]?.hasOwnProperty('value') &&
+			defaultStyles[key]?.default?.hasOwnProperty('value') &&
+			!isEquals(defaultStyles[key]?.default?.value, styles[key])
+		) {
+			cleanStyles[key] = {
+				value: styles[key],
+			};
+		} else if (
+			styles[key]?.hasOwnProperty('value') &&
+			!defaultStyles[key]?.default?.hasOwnProperty('value') &&
+			!isEquals(defaultStyles[key]?.default, styles[key]?.value)
+		) {
+			cleanStyles[key] = styles[key];
+		} else if (
+			styles[key]?.hasOwnProperty('value') &&
+			defaultStyles[key]?.default?.hasOwnProperty('value') &&
+			!isEquals(defaultStyles[key]?.default?.value, styles[key]?.value)
+		) {
 			cleanStyles[key] = styles[key];
 		}
 	}
