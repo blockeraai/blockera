@@ -45,6 +45,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		currentBreakpoint,
 		stateReadyToReset,
 		resetStateAllValues,
+		insideBlockInspector,
 		activeBlockVariation,
 		currentInnerBlockState,
 		innerBlockReadyToReset,
@@ -77,6 +78,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				currentState,
 				currentBreakpoint
 			),
+			insideBlockInspector,
 		},
 	];
 	const { getState, getInnerState } = select('blockera/editor');
@@ -142,7 +144,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 												? {
 														className:
 															mergedCssClasses,
-													}
+												  }
 												: {}),
 											[attributeId]: isEqualsWithDefault
 												? undefined
@@ -195,7 +197,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					[attributeId]: attributeId.startsWith('blockera')
 						? {
 								value: newValue,
-							}
+						  }
 						: newValue,
 				},
 				...hookParams
