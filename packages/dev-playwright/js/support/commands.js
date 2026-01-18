@@ -502,6 +502,47 @@ async function clearColorControlValue(page, label) {
 }
 
 /**
+ * Click value addon button to open popover.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {import('@playwright/test').Locator} container - Container locator (optional).
+ * @return {Promise<void>}
+ */
+async function clickValueAddonButton(page, container = null) {
+	const targetContainer = container || page;
+	await targetContainer.locator('[data-cy="value-addon-btn"]').click({
+		force: true,
+	});
+}
+
+/**
+ * Select value addon item from popover.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} itemID - Item ID to select.
+ * @return {Promise<void>}
+ */
+async function selectValueAddonItem(page, itemID) {
+	await page.locator(`[data-cy="va-item-${itemID}"]`).click({
+		force: true,
+	});
+}
+
+/**
+ * Remove value addon.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {import('@playwright/test').Locator} container - Container locator (optional).
+ * @return {Promise<void>}
+ */
+async function removeValueAddon(page, container = null) {
+	const targetContainer = container || page;
+	await targetContainer.locator('[data-cy="value-addon-btn-remove"]').click({
+		force: true,
+	});
+}
+
+/**
  * Set block variation.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -977,7 +1018,7 @@ async function setFrontendViewportForScreenshot(
 	config = {}
 ) {
 	let width = 1600;
-	let height = 5000;
+	const height = 5000;
 
 	if (size === 'desktop') {
 		width = 1600;
@@ -1055,6 +1096,9 @@ module.exports = {
 	checkInputFieldValue,
 	setColorControlValue,
 	clearColorControlValue,
+	clickValueAddonButton,
+	selectValueAddonItem,
+	removeValueAddon,
 	setBlockVariation,
 	checkActiveBlockVariation,
 	openRepeaterItem,
