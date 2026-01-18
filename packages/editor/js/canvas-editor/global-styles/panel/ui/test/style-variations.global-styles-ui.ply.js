@@ -271,12 +271,13 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 
 		await getByDataTest(page, 'style-new-id').click();
 
-		const data = await getWPDataObject(page);
-		const selectedVariation = await page.evaluate((dataObj) => {
+		const selectedVariation = await page.evaluate(() => {
+			const dataObj = window.wp.data;
+
 			return dataObj
 				.select('blockera/editor')
 				.getSelectedBlockStyleVariation();
-		}, data);
+		});
 
 		expect(selectedVariation).toBeUndefined();
 
@@ -297,11 +298,13 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			popover.locator('[data-test="style-new-id"]')
 		).not.toHaveClass(/is-enabled/);
 
-		const selectedVariationInPopover = await page.evaluate((dataObj) => {
+		const selectedVariationInPopover = await page.evaluate(() => {
+			const dataObj = window.wp.data;
+
 			return dataObj
 				.select('blockera/editor')
 				.getSelectedBlockStyleVariation();
-		}, data);
+		});
 
 		expect(selectedVariationInPopover).toBeUndefined();
 
@@ -311,12 +314,13 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await before(page);
 		await getByDataTest(page, 'style-new-id').click();
 
-		const dataAfterReload = await getWPDataObject(page);
-		const selectedVariationAfterReload = await page.evaluate((dataObj) => {
+		const selectedVariationAfterReload = await page.evaluate(() => {
+			const dataObj = window.wp.data;
+
 			return dataObj
 				.select('blockera/editor')
 				.getSelectedBlockStyleVariation();
-		}, dataAfterReload);
+		});
 
 		expect(selectedVariationAfterReload).toBeUndefined();
 
@@ -338,12 +342,13 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		).not.toHaveClass(/is-enabled/);
 
 		const selectedVariationInPopoverAfterReload = await page.evaluate(
-			(dataObj) => {
+			() => {
+				const dataObj = window.wp.data;
+
 				return dataObj
 					.select('blockera/editor')
 					.getSelectedBlockStyleVariation();
-			},
-			dataAfterReload
+			}
 		);
 
 		expect(selectedVariationInPopoverAfterReload).toBeUndefined();
@@ -373,13 +378,14 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 
 		await expect(getByDataTest(page, 'style-new-id')).not.toBeVisible();
 
-		const data = await getWPDataObject(page);
-		const blockStyles = await page.evaluate((dataObj) => {
+		const blockStyles = await page.evaluate(() => {
+			const dataObj = window.wp.data;
+
 			return (
 				dataObj.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0
 			);
-		}, data);
+		});
 
 		expect(blockStyles).toBe(4);
 
@@ -406,13 +412,14 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await before(page);
 		await expect(getByDataTest(page, 'style-new-id')).not.toBeVisible();
 
-		const dataAfterReload = await getWPDataObject(page);
-		const blockStylesAfterReload = await page.evaluate((dataObj) => {
+		const blockStylesAfterReload = await page.evaluate(() => {
+			const dataObj = window.wp.data;
+
 			return (
 				dataObj.select('core/blocks').getBlockStyles('core/group')
 					?.length || 0
 			);
-		}, dataAfterReload);
+		});
 
 		expect(blockStylesAfterReload).toBe(3);
 
