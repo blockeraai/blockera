@@ -2,12 +2,12 @@
  * Blockera dependencies
  */
 import {
-	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
 	createPost,
-	openBoxSpacingSide,
+	appendBlocks,
+	getWPDataObject,
+	getSelectedBlock,
 	setBoxSpacingSide,
+	openBoxSpacingSide,
 	clearBoxSpacingSide,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -73,6 +73,28 @@ describe('Box Spacing → WP Compatibility', () => {
 			// Test 2: Blockera value to WP data
 			//
 
+			// const side = 'padding-top';
+
+			// const sideType = side.includes('padding') ? 'padding' : 'margin';
+
+			// const lockButton = Cypress.$(
+			// 	// `.blockera-field-box-spacing-${sideType} button[data-test="${sideType}-lock"]`
+			// 	`.blockera-extension.blockera-extension-block-card`
+			// );
+
+			// console.log(
+			// 	'query',
+			// 	`.blockera-field-box-spacing-${sideType} button[data-test="${sideType}-lock"]`
+			// );
+
+			// console.log('lockButton', lockButton);
+
+			// console.log(
+			// 	'lockButton class',
+			// 	lockButton.hasClass('is-toggle-btn')
+			// );
+
+			// return;
 			// change padding
 			setBoxSpacingSide('margin-top', '50');
 			setBoxSpacingSide('margin-right', '100');
@@ -470,78 +492,15 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 			// Test 2: Blockera value to WP data
 			//
+			setBoxSpacingSide('margin-top', '40', true);
+			setBoxSpacingSide('margin-right', '50', true);
+			setBoxSpacingSide('margin-bottom', '60', true);
+			setBoxSpacingSide('margin-left', '70', true);
 
-			// change top margin
-			openBoxSpacingSide('margin-top');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('40');
-				});
-
-			// change right margin
-			openBoxSpacingSide('margin-right');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('50');
-				});
-
-			// change bottom margin
-			openBoxSpacingSide('margin-bottom');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('60');
-				});
-
-			// change left margin
-			openBoxSpacingSide('margin-left');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('70');
-				});
-
-			// change top padding
-			openBoxSpacingSide('padding-top');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('40');
-				});
-
-			// change right padding
-			openBoxSpacingSide('padding-right');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('50');
-				});
-
-			// change bottom padding
-			openBoxSpacingSide('padding-bottom');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('60');
-				});
-
-			// change left padding
-			openBoxSpacingSide('padding-left');
-			cy.get('[data-wp-component="Popover"]')
-				.last()
-				.within(() => {
-					cy.clickValueAddonButton();
-					cy.selectValueAddonItem('70');
-				});
+			setBoxSpacingSide('padding-top', '40', true);
+			setBoxSpacingSide('padding-right', '50', true);
+			setBoxSpacingSide('padding-bottom', '60', true);
+			setBoxSpacingSide('padding-left', '70', true);
 
 			// Assert Blockera value
 			getWPDataObject().then((data) => {
@@ -703,21 +662,17 @@ describe('Box Spacing → WP Compatibility', () => {
 			// Test 3: Clear Blockera value and check WP data
 			//
 
-			// change top margin
-			[
-				'margin-top',
-				'margin-right',
-				'margin-bottom',
-				'margin-left',
-				'padding-top',
-				'padding-right',
-				'padding-bottom',
-				'padding-left',
-			].forEach((side) => {
-				cy.get(`[data-cy="box-spacing-${side}"]`).within(() => {
-					cy.removeValueAddon();
-				});
-			});
+			// clear margin
+			clearBoxSpacingSide('margin-top', true);
+			clearBoxSpacingSide('margin-right', true);
+			clearBoxSpacingSide('margin-bottom', true);
+			clearBoxSpacingSide('margin-left', true);
+
+			// clear padding
+			clearBoxSpacingSide('padding-top', true);
+			clearBoxSpacingSide('padding-right', true);
+			clearBoxSpacingSide('padding-bottom', true);
+			clearBoxSpacingSide('padding-left', true);
 
 			// WP data should be removed too
 			getWPDataObject().then((data) => {
@@ -862,59 +817,35 @@ describe('Box Spacing → WP Compatibility', () => {
 			//
 
 			// change top margin
-			cy.get(`[data-cy="box-spacing-margin-top"]`).within(() => {
-				cy.removeValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('margin-top', true);
 			setBoxSpacingSide('margin-top', '50');
 
 			// change right margin
-			cy.get(`[data-cy="box-spacing-margin-right"]`).within(() => {
-				cy.openValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('margin-right', true);
 			cy.selectValueAddonItem('40');
 
-			// // change bottom margin
-			cy.get(`[data-cy="box-spacing-margin-bottom"]`).within(() => {
-				cy.removeValueAddon();
-			});
-			cy.wait(50);
+			// change bottom margin
+			clearBoxSpacingSide('margin-bottom', true);
 			setBoxSpacingSide('margin-bottom', '60');
 
 			// // change left margin
-			cy.get(`[data-cy="box-spacing-margin-left"]`).within(() => {
-				cy.openValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('margin-left', true);
 			cy.selectValueAddonItem('50');
 
 			// change top padding
-			cy.get(`[data-cy="box-spacing-padding-top"]`).within(() => {
-				cy.openValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('padding-top', true);
 			cy.selectValueAddonItem('50');
 
 			// change right padding
-			cy.get(`[data-cy="box-spacing-padding-right"]`).within(() => {
-				cy.removeValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('padding-right', true);
 			setBoxSpacingSide('padding-right', '40');
 
 			// change bottom padding
-			cy.get(`[data-cy="box-spacing-padding-bottom"]`).within(() => {
-				cy.openValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('padding-bottom', true);
 			cy.selectValueAddonItem('60');
 
 			// change left padding
-			cy.get(`[data-cy="box-spacing-padding-left"]`).within(() => {
-				cy.removeValueAddon();
-			});
-			cy.wait(50);
+			clearBoxSpacingSide('padding-left', true);
 			setBoxSpacingSide('padding-left', '50');
 
 			// Assert Blockera value
@@ -1019,22 +950,14 @@ describe('Box Spacing → WP Compatibility', () => {
 
 			// clear margin
 			clearBoxSpacingSide('margin-top');
-			cy.get(`[data-cy="box-spacing-margin-right"]`).within(() => {
-				cy.removeValueAddon();
-			});
+			clearBoxSpacingSide('margin-right', true);
 			clearBoxSpacingSide('margin-bottom');
-			cy.get(`[data-cy="box-spacing-margin-left"]`).within(() => {
-				cy.removeValueAddon();
-			});
+			clearBoxSpacingSide('margin-left', true);
 
 			// clear padding
-			cy.get(`[data-cy="box-spacing-padding-top"]`).within(() => {
-				cy.removeValueAddon();
-			});
+			clearBoxSpacingSide('padding-top', true);
 			clearBoxSpacingSide('padding-right');
-			cy.get(`[data-cy="box-spacing-padding-bottom"]`).within(() => {
-				cy.removeValueAddon();
-			});
+			clearBoxSpacingSide('padding-bottom', true);
 			clearBoxSpacingSide('padding-left');
 
 			// WP data should be removed too
@@ -1207,10 +1130,19 @@ describe('Box Spacing → WP Compatibility', () => {
 			// Test 2: Check interface for showing deleted value addon
 			//
 
-			cy.get('.blockera-control-box-spacing-container').within(() => {
-				cy.get('[data-test="value-addon-deleted"]')
-					.should('exist')
-					.eq(7);
+			[
+				'margin-top',
+				'margin-right',
+				'margin-bottom',
+				'margin-left',
+				'padding-top',
+				'padding-right',
+				'padding-bottom',
+				'padding-left',
+			].forEach((side) => {
+				cy.get(`.blockera-control.spacing-` + side).within(() => {
+					cy.get('[data-test="value-addon-deleted"]').should('exist');
+				});
 			});
 
 			//
@@ -1228,9 +1160,7 @@ describe('Box Spacing → WP Compatibility', () => {
 				'padding-bottom',
 				'padding-left',
 			].forEach((side) => {
-				cy.get(`[data-cy="box-spacing-${side}"]`).within(() => {
-					cy.removeValueAddon();
-				});
+				clearBoxSpacingSide(side, true);
 			});
 
 			// WP data should be removed too

@@ -16,7 +16,7 @@ describe('Font Family → Functionality', () => {
 	});
 
 	it('simple font family', () => {
-		cy.getParentContainer('Family').as('container');
+		cy.getParentContainer('Font Family').as('container');
 
 		cy.get('@container').within(() => {
 			cy.get('select').select('fira-code');

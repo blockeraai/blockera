@@ -113,7 +113,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 							}}
 						>
 							<InputControl
-								columns="1fr 160px"
+								columns="1fr 2.5fr"
 								label={__('z-index', 'blockera')}
 								labelDescription={
 									<>

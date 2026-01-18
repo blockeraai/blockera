@@ -119,7 +119,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 					}}
 				>
 					<ToggleSelectControl
-						columns="1fr 2.65fr"
+						columns="1fr 2.5fr"
 						label={__('Self Size', 'blockera')}
 						options={[
 							{
@@ -658,7 +658,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 					}}
 				>
 					<ToggleSelectControl
-						columns="1fr 2.65fr"
+						columns="1fr 2.5fr"
 						label={__('Self Align', 'blockera')}
 						options={[
 							{
@@ -827,7 +827,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 					}}
 				>
 					<ToggleSelectControl
-						columns="1fr 2.65fr"
+						columns="1fr 2.5fr"
 						label={__('Self Order', 'blockera')}
 						options={[
 							{

@@ -33,6 +33,10 @@ import {
 	gapFromWPCompatibility,
 	gapToWPCompatibility,
 } from './compatibility/gap';
+import {
+	spacingFromWPCompatibility,
+	spacingToWPCompatibility,
+} from './compatibility/spacing';
 
 import type { BlockDetail } from '../block-card/block-states/types';
 import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
@@ -98,6 +102,13 @@ export const bootstrap = (): void => {
 				attributes,
 			});
 
+			//
+			// Spacing compatibility (padding and margin)
+			//
+			attributes = spacingFromWPCompatibility({
+				attributes,
+			});
+
 			return attributes;
 		}
 	);
@@ -135,6 +146,15 @@ export const bootstrap = (): void => {
 			}
 
 			switch (featureId) {
+				case 'blockeraSpacing':
+					return mergeObject(
+						nextState,
+						spacingToWPCompatibility({
+							newValue,
+							ref,
+						})
+					);
+
 				case 'blockeraDisplay':
 					return mergeObject(
 						nextState,

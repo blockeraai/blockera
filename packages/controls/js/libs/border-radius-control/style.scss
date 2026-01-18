@@ -5,13 +5,16 @@
 
 	.blockera-control-border-header {
 		display: grid;
-		gap: 0;
+		gap: 8px;
 		align-items: center;
 		justify-content: flex-end;
-		grid-template-columns: 1fr 160px;
+		grid-template-columns: 1fr 2.5fr;
 
 		.blockera-control-input {
-			width: 122px;
+			width: 100% !important;
+			width: -moz-available !important;
+			width: -webkit-fill-available !important;
+			width: stretch !important;
 		}
 	}
 

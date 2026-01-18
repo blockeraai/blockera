@@ -104,7 +104,7 @@ export const Blending = ({
 								'blockera'
 							)}
 						</p>
-						<h3>{__('Soft Light', 'blockera')}</h3>
+						<h3>{__('Hard Light', 'blockera')}</h3>
 						<p>
 							{__(
 								'Similar to "Overlay", but with the base and blend colors swapped.',
@@ -176,7 +176,7 @@ export const Blending = ({
 						</p>
 					</>
 				}
-				columns="1fr 160px"
+				columns="1fr 2.5fr"
 				options={blendModeFieldOptions()}
 				onChange={(newValue, ref) =>
 					handleOnChangeAttributes('blockeraBlendMode', newValue, {

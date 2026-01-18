@@ -77,13 +77,6 @@ const blockeraBackdropFilter: FeatureConfig = {
 	label: __('Backdrop Filters', 'blockera'),
 };
 
-const blockeraBlendMode: FeatureConfig = {
-	show: false,
-	force: false,
-	status: true,
-	label: __('Blending Mode', 'blockera'),
-};
-
 let blockeraDivider: FeatureConfig | false = false;
 
 if (experimental().get('editor.extensions.effectsExtension.divider')) {
@@ -121,5 +114,4 @@ export const effectsConfig = {
 	blockeraBackdropFilter,
 	blockeraDivider,
 	blockeraMask,
-	blockeraBlendMode,
 };

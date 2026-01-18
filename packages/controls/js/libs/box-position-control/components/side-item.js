@@ -26,7 +26,7 @@ import { SideShape } from './side-shape';
 import { SidePopover } from './side-popover';
 import type { ValueAddon } from '../../../value-addons';
 import type { Side, SideProps, SideReturn } from '../types';
-import { fixLabelText } from '../../box-spacing-control/utils';
+import { fixLabelText } from '../utils';
 
 export function SideItem({
 	side,

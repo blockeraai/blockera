@@ -30,6 +30,7 @@ import { ExtensionSettings } from '../settings';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
 import type { TBackgroundProps } from './types/background-props';
+import { Blending } from './components/blending';
 
 export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 	block,
@@ -67,8 +68,18 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 		values.blockeraBackgroundClip,
 		attributes.blockeraBackgroundClip.default
 	);
+	const isShowBlendMode = isShowField(
+		extensionConfig.blockeraBlendMode,
+		values?.blockeraBlendMode,
+		attributes.blockeraBlendMode.default
+	);
 
-	if (!isShowBackground && !isShowBackgroundColor && !isShowBackgroundClip) {
+	if (
+		!isShowBackground &&
+		!isShowBackgroundColor &&
+		!isShowBackgroundClip &&
+		!isShowBlendMode
+	) {
 		return <></>;
 	}
 
@@ -149,7 +160,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 								</p>
 							</>
 						}
-						columns="1fr 160px"
+						columns="1fr 2.5fr"
 						onChange={(newValue, ref) =>
 							handleOnChangeAttributes(
 								'blockeraBackgroundColor',
@@ -247,7 +258,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 								</p>
 							</>
 						}
-						columns="1fr 160px"
+						columns="1fr 2.5fr"
 						options={blockeraBackgroundClip?.config?.options}
 						type="custom"
 						onChange={(newValue, ref) =>
@@ -275,6 +286,19 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 							</NoticeControl>
 						)}
 				</ControlContextProvider>
+			</EditorFeatureWrapper>
+
+			<EditorFeatureWrapper
+				isActive={isShowBlendMode}
+				config={extensionConfig.blockeraBlendMode}
+			>
+				<Blending
+					blendMode={values.blockeraBlendMode}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					defaultValue={attributes.blockeraBlendMode.default}
+					{...extensionProps.blockeraBlendMode}
+				/>
 			</EditorFeatureWrapper>
 		</PanelBodyControl>
 	);

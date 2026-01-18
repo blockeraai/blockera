@@ -83,7 +83,7 @@ export const TextStroke = ({
 					</p>
 				</>
 			}
-			columns="1fr 150px"
+			columns="1fr 2.5fr"
 			{...labelProps}
 		>
 			<ColorControl

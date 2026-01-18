@@ -40,7 +40,7 @@ export const Border = ({
 		>
 			<BoxBorderControl
 				columns="columns-1"
-				label={__('Border Line', 'blockera')}
+				label={__('Border', 'blockera')}
 				labelDescription={
 					<>
 						<p>

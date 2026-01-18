@@ -86,10 +86,10 @@ export default function ({
 				</>
 			}
 			id={'gap'}
-			columns="1fr 161px"
+			columns="1fr 2.5fr"
 			{...labelProps}
 		>
-			<Grid gap="10px" gridTemplateColumns="120px 30px">
+			<Grid gap="10px" gridTemplateColumns="1fr 30px">
 				{gap?.lock ? (
 					isActiveField(field) && (
 						<InputControl
@@ -213,7 +213,6 @@ export default function ({
 					showTooltip={true}
 					tooltipPosition="top"
 					label={__('Custom Row & Column Gap', 'blockera')}
-					size="small"
 					onClick={() => {
 						if (gap?.lock) {
 							handleOnChangeAttributes(
@@ -244,12 +243,17 @@ export default function ({
 							);
 						}
 					}}
+					size="extra-small"
 					style={{
-						color: gap?.lock
-							? 'var(--blockera-controls-color)'
-							: 'var(--blockera-controls-primary-color)',
-						padding: '6px 3px',
+						padding: '4px',
+						width: 'var(--blockera-controls-input-height)',
+						height: 'var(--blockera-controls-input-height)',
 					}}
+					className={
+						!gap?.lock
+							? 'is-toggle-btn is-toggled'
+							: 'is-toggle-btn'
+					}
 				>
 					{gap?.lock ? (
 						<Icon icon="lock" iconSize="18" />

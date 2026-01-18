@@ -13,7 +13,8 @@
 		padding: 0 3px;
 		background: transparent;
 		border: none;
-		font-size: 12px;
+		font-size: 11px;
+		font-weight: 500;
 		height: calc(
 			var(--blockera-controls-input-height) - var(--padding) * 2 - 2px
 		); // 2px is the border

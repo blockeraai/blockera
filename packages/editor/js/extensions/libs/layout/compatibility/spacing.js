@@ -8,7 +8,7 @@ import {
 	generateAttributeVarStringFromVA,
 } from '@blockera/data';
 import { isEquals, isNumber } from '@blockera/utils';
-import { boxPositionControlDefaultValue } from '@blockera/controls/js/libs/box-spacing-control/utils';
+import { boxSpacingControlDefaultValue } from '@blockera/controls/js/libs/box-spacing-control/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 import { isSpecialUnit } from '@blockera/controls';
 
@@ -24,7 +24,7 @@ export function spacingFromWPCompatibility({
 		// Blockera have not custom spacing
 		isEquals(
 			attributes?.blockeraSpacing?.value,
-			boxPositionControlDefaultValue
+			boxSpacingControlDefaultValue
 		)
 	) {
 		// padding top
@@ -133,7 +133,7 @@ export function spacingToWPCompatibility({
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
-		isEquals(newValue, boxPositionControlDefaultValue)
+		isEquals(newValue, boxSpacingControlDefaultValue)
 	) {
 		return {
 			style: {

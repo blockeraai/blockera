@@ -302,7 +302,7 @@ const CodeControl = ({
 		<BaseControl columns={columns} controlName={field} {...labelProps}>
 			<div className={controlClassNames('code', className)}>
 				<Editor
-					width={width || 248}
+					width={width || '100%'}
 					height={height || 200}
 					defaultLanguage={lang}
 					defaultValue={value}

@@ -32,19 +32,17 @@ const blockeraGap: FeatureConfig = {
 };
 
 const blockeraFlexWrap: FeatureConfig = {
-	show: true,
+	show: false,
 	force: false,
 	status: true,
 	label: __('Flex Children Wrap', 'blockera'),
 };
 
-const blockeraAlignContent: FeatureConfig = {
+const blockeraSpacing: FeatureConfig = {
 	show: true,
 	force: false,
 	status: true,
-	showInSettings: false,
-	onNative: true,
-	label: __('Children Align Content', 'blockera'),
+	label: __('Padding & Margin', 'blockera'),
 };
 
 export const layoutConfig = {
@@ -54,5 +52,5 @@ export const layoutConfig = {
 	blockeraFlexLayout,
 	blockeraGap,
 	blockeraFlexWrap,
-	blockeraAlignContent,
+	blockeraSpacing,
 };
