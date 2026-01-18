@@ -1,5 +1,8 @@
 ## Unreleased
 
+## Improvements
+- Enhanced gradient variable support to recognize CSS variable formats (e.g., `var(--wp--preset--gradient--accent-1-to-accent-2)`) in addition to the existing attribute format, improving compatibility with WordPress theme gradient presets.
+
 ## 1.1.0 (2025-03-15)
 
 ### New Features
