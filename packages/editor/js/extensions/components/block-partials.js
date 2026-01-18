@@ -44,6 +44,15 @@ export const BlockPartials = memo(({ clientId, isActive }) => {
 
 		const observer = new IntersectionObserver(
 			([entry]) => {
+				const wrapper = stickyWrapper.closest(
+					'.edit-site-global-styles-sidebar__navigator-provider'
+				);
+
+				// Global styles sidebar wrapper should be styling with position absolute to sticky support while user scrolling.
+				if (wrapper) {
+					wrapper.style.position = 'absolute';
+				}
+
 				// Add `is-stuck-monitoring` to prevent `is-stuck` atr first time
 				if (stickyWrapper.classList.contains('is-stuck-monitoring')) {
 					// Add `is-stuck` only when the sentinel is out of view (element has become sticky)
