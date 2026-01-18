@@ -43,8 +43,9 @@ export function backgroundColorFromWPCompatibility({
 	}
 	// color.background is not variable
 	else if (!insideBlockInspector && attributes?.color?.background) {
+		const bg = attributes?.color?.background;
 		attributes.blockeraBackgroundColor = {
-			value: attributes?.color?.background,
+			value: bg.startsWith('var') ? getColorVAFromVarString(bg) : bg,
 		};
 	}
 
