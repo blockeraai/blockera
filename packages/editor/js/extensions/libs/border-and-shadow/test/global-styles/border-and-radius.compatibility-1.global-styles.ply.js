@@ -23,9 +23,9 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 	// Mu-plugin paths are relative to plugin root
 	const muPluginPaths = {
 		'Compacted borders':
-			'packages/editor/js/extensions/libs/border-and-shadow/test/border-and-radius-setup-1.php',
+			'packages/editor/js/extensions/libs/border-and-shadow/test/global-styles/fixtures/border-and-radius-setup-1.php',
 		'Custom side borders':
-			'packages/editor/js/extensions/libs/border-and-shadow/test/border-and-radius-setup-2.php',
+			'packages/editor/js/extensions/libs/border-and-shadow/test/global-styles/fixtures/border-and-radius-setup-2.php',
 		// Add more test titles and their mu-plugin paths here
 	};
 
