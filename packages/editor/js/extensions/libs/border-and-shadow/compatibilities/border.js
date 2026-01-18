@@ -9,10 +9,15 @@ import { isEquals } from '@blockera/utils';
 
 export function borderFromWPCompatibility({
 	attributes,
+	insideBlockInspector,
 }: {
 	attributes: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderEmpty(attributes?.blockeraBorder?.value)) {
+		const border = insideBlockInspector
+			? attributes?.style?.border
+			: attributes?.border;
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor) {
@@ -34,8 +39,8 @@ export function borderFromWPCompatibility({
 			}
 		}
 		// does not use var color and is custom border
-		else if (attributes?.style?.border?.top) {
-			const border = {
+		else if (border?.top) {
+			const borderData = {
 				type: 'custom',
 				all: {
 					width: '',
@@ -43,50 +48,54 @@ export function borderFromWPCompatibility({
 					color: '',
 				},
 				top: {
-					width: attributes?.style?.border?.top?.width ?? '',
-					color: attributes?.style?.border?.top?.color ?? '',
-					style: attributes?.style?.border?.top?.style ?? 'solid',
+					width: border?.top?.width ?? '',
+					color: border?.top?.color ?? '',
+					style: border?.top?.style ?? 'solid',
 				},
 				right: {
-					width: attributes?.style?.border?.right?.width ?? '',
-					color: attributes?.style?.border?.right?.color ?? '',
-					style: attributes?.style?.border?.right?.style ?? 'solid',
+					width: border?.right?.width ?? '',
+					color: border?.right?.color ?? '',
+					style: border?.right?.style ?? 'solid',
 				},
 				bottom: {
-					width: attributes?.style?.border?.bottom?.width ?? '',
-					color: attributes?.style?.border?.bottom?.color ?? '',
-					style: attributes?.style?.border?.bottom?.style ?? 'solid',
+					width: border?.bottom?.width ?? '',
+					color: border?.bottom?.color ?? '',
+					style: border?.bottom?.style ?? 'solid',
 				},
 				left: {
-					width: attributes?.style?.border?.left?.width ?? '',
-					color: attributes?.style?.border?.left?.color ?? '',
-					style: attributes?.style?.border?.left?.style ?? 'solid',
+					width: border?.left?.width ?? '',
+					color: border?.left?.color ?? '',
+					style: border?.left?.style ?? 'solid',
 				},
 			};
 
 			// convert to var
-			border.top.color = getColorVAFromVarString(border.top.color);
-			border.right.color = getColorVAFromVarString(border.right.color);
-			border.bottom.color = getColorVAFromVarString(border.bottom.color);
-			border.left.color = getColorVAFromVarString(border.left.color);
+			borderData.top.color = getColorVAFromVarString(
+				borderData.top.color
+			);
+			borderData.right.color = getColorVAFromVarString(
+				borderData.right.color
+			);
+			borderData.bottom.color = getColorVAFromVarString(
+				borderData.bottom.color
+			);
+			borderData.left.color = getColorVAFromVarString(
+				borderData.left.color
+			);
 
 			attributes.blockeraBorder = {
-				value: border,
+				value: borderData,
 			};
 		}
 		// is all and does not use var color
-		else if (
-			attributes?.style?.border?.width ||
-			attributes?.style?.border?.style ||
-			attributes?.style?.border?.color
-		) {
+		else if (border?.width || border?.style || border?.color) {
 			attributes.blockeraBorder = {
 				value: {
 					type: 'all',
 					all: {
-						width: attributes?.style?.border?.width ?? '',
-						style: attributes?.style?.border?.style ?? 'solid',
-						color: attributes?.style?.border?.color ?? '',
+						width: border?.width ?? '',
+						style: border?.style ?? 'solid',
+						color: border?.color ?? '',
 					},
 				},
 			};
@@ -99,42 +108,56 @@ export function borderFromWPCompatibility({
 export function borderToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
+		const borderData: Object = {
+			color: undefined,
+			width: undefined,
+			style: undefined,
+			top: undefined,
+			right: undefined,
+			bottom: undefined,
+			left: undefined,
+		};
+
 		return {
-			borderColor: undefined,
-			style: {
-				border: {
-					color: undefined,
-					width: undefined,
-					style: undefined,
-					top: undefined,
-					right: undefined,
-					bottom: undefined,
-					left: undefined,
-				},
-			},
+			...(insideBlockInspector
+				? {
+						borderColor: undefined,
+						style: {
+							border: borderData,
+						},
+				  }
+				: { border: borderData }),
 		};
 	}
 
 	if (newValue.type === 'all') {
 		if (isValid(newValue?.all?.color)) {
+			const borderData: Object = {
+				color: undefined,
+				width: newValue?.all?.width,
+				style: newValue?.all?.style ? newValue?.all?.style : '',
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			};
+
 			return {
-				borderColor: newValue?.all?.color?.settings?.id,
-				style: {
-					border: {
-						color: undefined,
-						width: newValue?.all?.width,
-						style: newValue?.all?.style ? newValue?.all?.style : '',
-						top: undefined,
-						right: undefined,
-						bottom: undefined,
-						left: undefined,
-					},
-				},
+				...(insideBlockInspector
+					? {
+							borderColor: newValue?.all?.color?.settings?.id,
+							style: {
+								border: borderData,
+							},
+					  }
+					: { border: borderData }),
 			};
 		}
 
@@ -158,22 +181,41 @@ export function borderToWPCompatibility({
 				},
 			})
 		) {
-			const newBorder = {
-				borderColor: undefined,
-				style: {
-					border: {
-						color: undefined,
-						width: undefined,
-						style: undefined,
-						top: undefined,
-						right: undefined,
-						bottom: undefined,
-						left: undefined,
-					},
-				},
+			const borderData: Object = {
+				color: undefined,
+				width: undefined,
+				style: undefined,
+				top: undefined,
+				right: undefined,
+				bottom: undefined,
+				left: undefined,
+			};
+			const newBorder: Object = {
+				...(insideBlockInspector
+					? {
+							borderColor: undefined,
+							style: {
+								border: borderData,
+							},
+					  }
+					: { border: borderData }),
 			};
 
 			return newBorder;
+		}
+
+		if (!insideBlockInspector) {
+			return {
+				border: {
+					color: newValue?.all?.color,
+					width: newValue?.all?.width,
+					style: newValue?.all?.style ? newValue?.all?.style : '',
+					top: undefined,
+					right: undefined,
+					bottom: undefined,
+					left: undefined,
+				},
+			};
 		}
 
 		return {
@@ -223,7 +265,7 @@ export function borderToWPCompatibility({
 				},
 			})
 		) {
-			const newBorder = {
+			let newBorder: Object = {
 				style: {
 					border: {
 						color: undefined,
@@ -237,67 +279,99 @@ export function borderToWPCompatibility({
 				},
 			};
 
+			if (!insideBlockInspector) {
+				newBorder = {
+					border: {
+						color: undefined,
+						width: undefined,
+						style: undefined,
+						top: undefined,
+						right: undefined,
+						bottom: undefined,
+						left: undefined,
+					},
+				};
+			}
+
 			return newBorder;
 		}
 
-		const border = {
-			style: {
-				border: {
-					color: undefined,
-					width: undefined,
-					style: undefined,
-					top: {
-						width: newValue?.top?.width,
-						style: newValue?.top?.style ? newValue?.top?.style : '',
-						color: newValue?.top?.color,
-					},
-					right: {
-						width: newValue?.right?.width,
-						style: newValue?.right?.style
-							? newValue?.right?.style
-							: '',
-						color: newValue?.right?.color,
-					},
-					bottom: {
-						width: newValue?.bottom?.width,
-						style: newValue?.bottom?.style
-							? newValue?.bottom?.style
-							: '',
-						color: newValue?.bottom?.color,
-					},
-					left: {
-						width: newValue?.left?.width,
-						style: newValue?.left?.style
-							? newValue?.left?.style
-							: '',
-						color: newValue?.left?.color,
-					},
-				},
+		const borderData = {
+			color: undefined,
+			width: undefined,
+			style: undefined,
+			top: {
+				width: newValue?.top?.width,
+				style: newValue?.top?.style ? newValue?.top?.style : '',
+				color: newValue?.top?.color,
+			},
+			right: {
+				width: newValue?.right?.width,
+				style: newValue?.right?.style ? newValue?.right?.style : '',
+				color: newValue?.right?.color,
+			},
+			bottom: {
+				width: newValue?.bottom?.width,
+				style: newValue?.bottom?.style ? newValue?.bottom?.style : '',
+				color: newValue?.bottom?.color,
+			},
+			left: {
+				width: newValue?.left?.width,
+				style: newValue?.left?.style ? newValue?.left?.style : '',
+				color: newValue?.left?.color,
 			},
 		};
 
-		if (isValid(border.style.border.top.color)) {
+		const border: Object = {
+			...(insideBlockInspector
+				? {
+						style: {
+							border: borderData,
+						},
+				  }
+				: { border: borderData }),
+		};
+
+		if (insideBlockInspector && isValid(border.style.border.top.color)) {
 			border.style.border.top.color =
 				'var:preset|color|' +
 				border.style.border.top.color?.settings?.id;
+		} else if (!insideBlockInspector && isValid(border.border.top.color)) {
+			border.border.top.color =
+				'var:preset|color|' + border.border.top.color?.settings?.id;
 		}
 
-		if (isValid(border.style.border.right.color)) {
+		if (insideBlockInspector && isValid(border.style.border.right.color)) {
 			border.style.border.right.color =
 				'var:preset|color|' +
 				border.style.border.right.color?.settings?.id;
+		} else if (
+			!insideBlockInspector &&
+			isValid(border.border.right.color)
+		) {
+			border.border.right.color =
+				'var:preset|color|' + border.border.right.color?.settings?.id;
 		}
 
-		if (isValid(border.style.border.bottom.color)) {
+		if (insideBlockInspector && isValid(border.style.border.bottom.color)) {
 			border.style.border.bottom.color =
 				'var:preset|color|' +
 				border.style.border.bottom.color?.settings?.id;
+		} else if (
+			!insideBlockInspector &&
+			isValid(border.border.bottom.color)
+		) {
+			border.border.bottom.color =
+				'var:preset|color|' + border.border.bottom.color?.settings?.id;
 		}
 
-		if (isValid(border.style.border.left.color)) {
+		if (insideBlockInspector && isValid(border.style.border.left.color)) {
 			border.style.border.left.color =
 				'var:preset|color|' +
 				border.style.border.left.color?.settings?.id;
+		} else if (!insideBlockInspector && isValid(border.border.left.color)) {
+			border.border.left.color =
+				'var:preset|color|' + border.border.left.color?.settings?.id;
 		}
 
 		return border;

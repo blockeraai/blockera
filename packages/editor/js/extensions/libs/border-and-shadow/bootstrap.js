@@ -36,10 +36,12 @@ export const bootstrap = (): void => {
 
 			attributes = borderFromWPCompatibility({
 				attributes,
+				insideBlockInspector: blockDetail.insideBlockInspector,
 			});
 
 			attributes = borderRadiusFromWPCompatibility({
 				attributes,
+				insideBlockInspector: blockDetail.insideBlockInspector,
 			});
 
 			return attributes;
@@ -82,6 +84,8 @@ export const bootstrap = (): void => {
 						borderToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
 						})
 					);
 
@@ -91,6 +95,8 @@ export const bootstrap = (): void => {
 						borderRadiusToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
 						})
 					);
 			}

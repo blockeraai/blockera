@@ -8,31 +8,35 @@ import { isObject, isString } from '@blockera/utils';
 
 export function borderRadiusFromWPCompatibility({
 	attributes,
+	insideBlockInspector,
 }: {
 	attributes: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius?.value)) {
-		if (attributes?.style?.border?.radius) {
-			if (isString(attributes?.style?.border?.radius)) {
+		const borderRadius = insideBlockInspector
+			? attributes?.style?.border?.radius
+			: attributes?.border?.radius;
+
+		if (borderRadius) {
+			if (isString(borderRadius)) {
 				attributes.blockeraBorderRadius = {
 					value: {
 						type: 'all',
-						all: attributes?.style?.border?.radius,
+						all: borderRadius,
 					},
 				};
-			} else if (isObject(attributes?.style?.border?.radius)) {
+			} else if (isObject(borderRadius)) {
 				const corners: {
 					topLeft?: string,
 					topRight?: string,
 					bottomLeft?: string,
 					bottomRight?: string,
 				} = {
-					topLeft: attributes?.style?.border?.radius?.topLeft ?? '',
-					topRight: attributes?.style?.border?.radius?.topRight ?? '',
-					bottomLeft:
-						attributes?.style?.border?.radius?.bottomLeft ?? '',
-					bottomRight:
-						attributes?.style?.border?.radius?.bottomRight ?? '',
+					topLeft: borderRadius?.topLeft ?? '',
+					topRight: borderRadius?.topRight ?? '',
+					bottomLeft: borderRadius?.bottomLeft ?? '',
+					bottomRight: borderRadius?.bottomRight ?? '',
 				};
 
 				const areCordersEqual = Object.values(corners).every(
@@ -67,11 +71,21 @@ export function borderRadiusFromWPCompatibility({
 export function borderRadiusToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
+		if (!insideBlockInspector) {
+			return {
+				border: {
+					radius: undefined,
+				},
+			};
+		}
+
 		return {
 			style: {
 				border: {
@@ -83,11 +97,27 @@ export function borderRadiusToWPCompatibility({
 
 	if (newValue.type === 'all') {
 		if (!newValue?.all.endsWith('func')) {
+			if (!insideBlockInspector) {
+				return {
+					border: {
+						radius: newValue?.all,
+					},
+				};
+			}
+
 			return {
 				style: {
 					border: {
 						radius: newValue?.all,
 					},
+				},
+			};
+		}
+
+		if (!insideBlockInspector) {
+			return {
+				border: {
+					radius: undefined,
 				},
 			};
 		}
@@ -107,6 +137,14 @@ export function borderRadiusToWPCompatibility({
 			newValue?.bottomLeft === '' &&
 			newValue?.bottomRight === ''
 		) {
+			if (!insideBlockInspector) {
+				return {
+					border: {
+						radius: undefined,
+					},
+				};
+			}
+
 			return {
 				style: {
 					border: {
@@ -162,6 +200,14 @@ export function borderRadiusToWPCompatibility({
 			} else {
 				corners.bottomRight = undefined;
 			}
+		}
+
+		if (!insideBlockInspector) {
+			return {
+				border: {
+					radius: corners,
+				},
+			};
 		}
 
 		return {
