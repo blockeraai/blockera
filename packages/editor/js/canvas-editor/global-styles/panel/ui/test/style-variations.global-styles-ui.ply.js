@@ -47,7 +47,9 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			.click();
 		await expect(getByDataTest(page, 'style-default-copy')).toBeVisible();
 
-		await getByDataTest(page, 'open-default-copy-contextmenu').click();
+		await getByDataTest(page, 'open-default-copy-contextmenu')
+			.nth(1)
+			.click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Duplicate' })

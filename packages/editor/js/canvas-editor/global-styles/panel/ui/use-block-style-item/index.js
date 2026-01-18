@@ -281,7 +281,7 @@ export const useBlockStyleItem = ({
 	const handleOnClearAllCustomizations = (currentStyle: Object) => {
 		const newGlobalStyles = cloneObject(globalStyles);
 
-		if (!currentStyle?.isDefault) {
+		if (!isRootStyle(currentStyle)) {
 			if (
 				newGlobalStyles?.blocks?.[blockName]?.variations?.[
 					currentStyle.name
@@ -299,6 +299,9 @@ export const useBlockStyleItem = ({
 							.length
 					) {
 						delete newGlobalStyles?.blocks?.[blockName];
+						if (!Object.keys(newGlobalStyles?.blocks).length) {
+							delete newGlobalStyles?.blocks;
+						}
 					}
 				} else {
 					delete newGlobalStyles?.blocks?.[blockName]?.variations?.[
@@ -314,6 +317,9 @@ export const useBlockStyleItem = ({
 			};
 		} else {
 			delete newGlobalStyles?.blocks?.[blockName];
+			if (!Object.keys(newGlobalStyles?.blocks).length) {
+				delete newGlobalStyles?.blocks;
+			}
 		}
 
 		setGlobalStyles(newGlobalStyles);
