@@ -32,6 +32,9 @@ export const registerPanelActivatorObserverPlugin = (screen: string): void => {
 				setSelectedBlockStyle,
 				setStyleVariationBlocks,
 			} = dispatch('blockera/editor');
+			const { changeExtensionCurrentBlock } = dispatch(
+				'blockera/extensions'
+			);
 
 			// eslint-disable-next-line react-hooks/rules-of-hooks
 			useEffect(() => {
@@ -45,11 +48,20 @@ export const registerPanelActivatorObserverPlugin = (screen: string): void => {
 						const globalStylesButton = document.querySelector(
 							'button[aria-controls="edit-site:global-styles"]'
 						);
+						const postDocumentButton = document.querySelector(
+							'button[aria-controls="edit-post:document"]'
+						);
 
 						if (globalStylesButton) {
 							globalStylesButton.addEventListener('click', () => {
 								setSelectedBlockStyle('');
 								setSelectedBlockRef(undefined);
+							});
+						}
+
+						if (postDocumentButton) {
+							postDocumentButton.addEventListener('click', () => {
+								changeExtensionCurrentBlock('master');
 							});
 						}
 
