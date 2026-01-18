@@ -85,7 +85,8 @@ export const StyleItem = ({
 		if (!isEquals(cachedStyle, initializedCachedStyle)) {
 			setCachedStyle(initializedCachedStyle);
 		}
-	}, [cachedStyle, initializedCachedStyle]);
+		//eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [initializedCachedStyle]);
 
 	const buttonText = useMemo(() => {
 		return (
