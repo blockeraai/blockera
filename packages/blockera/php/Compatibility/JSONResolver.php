@@ -239,7 +239,14 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			if ( JSON_ERROR_NONE !== $json_decoding_error ) {
 				wp_trigger_error( __METHOD__, 'Error when decoding a theme.json schema for user data. ' . json_last_error_msg() );
 
-				$theme_json = new JSONData( $config, 'custom' );
+				/**
+				 * Filters the data provided by the user for global styles & settings.
+				 *
+				 * @since 6.1.0
+				 *
+				 * @param JSON $theme_json Class to access and update the underlying data.
+				 */
+				$theme_json = new JSON( apply_filters( 'blockera_theme_json_data_user', $config ), 'custom' );
 
 				/*
 				 * Backward compatibility for extenders returning a JSONData
@@ -364,8 +371,15 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			$theme_json_data = static::inject_variations_from_block_style_variation_files( $theme_json_data, $variations );
 			$theme_json_data = static::inject_variations_from_block_styles_registry( $theme_json_data );
 
-			// Directly create JSON object - JSONData wrapper adds unnecessary overhead.
-			static::$theme = new JSON( $theme_json_data, 'theme' );
+			/**
+			 * Filters the data provided by the theme for global styles and settings.
+			 * Directly create JSON object - JSONData wrapper adds unnecessary overhead.
+			 *
+			 * @since 6.1.0
+			 *
+			 * @param WP_Theme_JSON_Data $theme_json Class to access and update the underlying data.
+			 */
+			static::$theme = new JSON( apply_filters('blockera_theme_json_data_theme', $theme_json_data), 'theme' );
 
 			$parent_theme = $wp_theme->parent();
 			if ( $parent_theme ) {
@@ -580,8 +594,15 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			$config['styles']['blocks'] = $styles_blocks;
 		}
 
-		// Create JSON directly - skip JSONData wrapper overhead.
-		static::$blocks = new JSON( $config, 'blocks' );
+		/**
+		 * Filters the data provided by the blocks for global styles & settings.
+		 * Create JSON directly - skip JSONData wrapper overhead.
+		 *
+		 * @since 6.1.0
+		 *
+		 * @param JSON $theme_json Class to access and update the underlying data.
+		 */
+		static::$blocks = new JSON( apply_filters( 'blockera_theme_json_data_blocks', $config ), 'blocks' );
 
 		// Cache the blocks data in a transient for performance.
 		set_transient( $transient_key, static::$blocks, HOUR_IN_SECONDS );
