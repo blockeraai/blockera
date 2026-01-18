@@ -253,6 +253,7 @@ export const BlockBase: ComponentType<any> = (
 		() => ({
 			blockId: name,
 			blockClientId: clientId,
+			insideBlockInspector,
 			isMasterNormalState: masterIsNormalState(),
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
@@ -278,6 +279,7 @@ export const BlockBase: ComponentType<any> = (
 			currentBreakpoint,
 			masterIsNormalState,
 			activeBlockVariation,
+			insideBlockInspector,
 			currentInnerBlockState,
 			getActiveBlockVariation,
 			originDefaultAttributes,
