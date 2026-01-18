@@ -15,10 +15,7 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 /**
  * Internal dependencies
  */
-import {
-	generateVariableString,
-	generateVariableStringFromAttributeVarString,
-} from './utils';
+import { generateVariableString, parseVarString } from './utils';
 import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 
@@ -86,27 +83,7 @@ export const getGradientVAFromVarString: (
 	value: string
 ): ValueAddon | string {
 	if (isString(value)) {
-		let id: string | null = null;
-		let varString: string | null = null;
-
-		// Handle var: pattern (e.g., "var:preset|gradient|accent-1-to-accent-2")
-		if (value.startsWith('var:')) {
-			id = value.split('|')[2];
-			varString = generateVariableStringFromAttributeVarString(value);
-		}
-		// Handle CSS var() pattern (e.g., "var(--wp--preset--gradient--accent-1-to-accent-2)")
-		else if (value.startsWith('var(--wp--preset--gradient--')) {
-			// Extract the ID from the CSS variable name
-			// Pattern: var(--wp--preset--gradient--{id}) or var(--wp--preset--gradient--{id}
-			// Handles cases with or without closing parenthesis
-			const match = value.match(
-				/^var\(--wp--preset--gradient--([^,)]+)(?:[,)]|$)/
-			);
-			if (match && match[1]) {
-				id = match[1];
-				varString = `--wp--preset--gradient--${id}`;
-			}
-		}
+		const { id, varString } = parseVarString(value, 'gradient');
 
 		if (id) {
 			let variable = getLinearGradientVAFromIdString(id);

@@ -9,17 +9,14 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isUndefined, isString } from '@blockera/utils';
+import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
  * Internal dependencies
  */
-import {
-	generateVariableString,
-	generateVariableStringFromAttributeVarString,
-	getBlockEditorSettings,
-} from './index';
+import { generateVariableString, getBlockEditorSettings } from './index';
+import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getSpacings: () => Array<VariableItem> = memoize(
@@ -114,30 +111,32 @@ export const getSpacingVAFromIdString: (value: string) => ValueAddon | string =
 
 export const getSpacingVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
-		if (isString(value) && value.startsWith('var:')) {
-			const varId = value.split('|')[2];
-			const spacingVA = getSpacingVAFromIdString(varId);
+		if (isString(value)) {
+			const { id, varString } = parseVarString(value, 'spacing');
 
-			// same value means the variable not found but should be returned as not found
-			if (spacingVA === varId) {
-				const varString =
-					generateVariableStringFromAttributeVarString(value);
+			if (id) {
+				const spacingVA = getSpacingVAFromIdString(id);
 
-				return {
-					settings: {
-						name: varId,
-						id: value,
-						value: `var(${varString})`,
-						type: 'spacing',
-						var: varString,
-					},
-					name: varId,
-					isValueAddon: true,
-					valueType: 'variable',
-				};
+				if (isObject(spacingVA)) {
+					return spacingVA;
+				}
+
+				// same value means the variable not found but should be returned as not found
+				if (spacingVA === id && varString) {
+					return {
+						settings: {
+							name: id,
+							id: value,
+							value: `var(${varString})`,
+							type: 'spacing',
+							var: varString,
+						},
+						name: id,
+						isValueAddon: true,
+						valueType: 'variable',
+					};
+				}
 			}
-
-			return spacingVA;
 		}
 
 		return value;

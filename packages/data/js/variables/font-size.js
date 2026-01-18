@@ -9,17 +9,14 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
-import { isBlockTheme, isUndefined, isString } from '@blockera/utils';
+import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
-import {
-	generateVariableString,
-	getBlockEditorSettings,
-	generateVariableStringFromAttributeVarString,
-} from './index';
+import { generateVariableString, getBlockEditorSettings } from './index';
+import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getFontSizes: () => Array<VariableItem> = memoize(
@@ -106,31 +103,33 @@ export const getFontSizeVAFromVarString: (
 ) => ValueAddon | string = memoize(function (
 	value: string
 ): ValueAddon | string {
-	if (isString(value) && value.startsWith('var:')) {
-		const varId = value.split('|')[2];
-		const fontSizeVA = getFontSizeVAFromIdString(varId);
+	if (isString(value)) {
+		const { id, varString } = parseVarString(value, 'font-size');
 
-		// same value means the variable not found but should be returned as not found
-		if (fontSizeVA === varId) {
-			const varString =
-				generateVariableStringFromAttributeVarString(value);
+		if (id) {
+			const fontSizeVA = getFontSizeVAFromIdString(id);
 
-			return {
-				settings: {
-					name: varId,
-					id: value,
-					value: `var(${varString})`,
-					type: 'font-size',
-					var: varString,
-					fluid: null,
-				},
-				name: varId,
-				isValueAddon: true,
-				valueType: 'variable',
-			};
+			if (isObject(fontSizeVA)) {
+				return fontSizeVA;
+			}
+
+			// same value means the variable not found but should be returned as not found
+			if (fontSizeVA === id && varString) {
+				return {
+					settings: {
+						name: id,
+						id: value,
+						value: `var(${varString})`,
+						type: 'font-size',
+						var: varString,
+						fluid: null,
+					},
+					name: id,
+					isValueAddon: true,
+					valueType: 'variable',
+				};
+			}
 		}
-
-		return fontSizeVA;
 	}
 
 	return value;

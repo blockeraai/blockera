@@ -8,18 +8,15 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isString, isUndefined } from '@blockera/utils';
+import { isBlockTheme, isString, isUndefined, isObject } from '@blockera/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
-import {
-	generateVariableString,
-	getBlockEditorSettings,
-	generateVariableStringFromAttributeVarString,
-} from './index';
+import { generateVariableString, getBlockEditorSettings } from './index';
+import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
 export const getColors: () => Array<VariableItem> = memoize(
@@ -149,30 +146,32 @@ export const getColorVAFromIdString: (value: string) => ValueAddon | string =
 
 export const getColorVAFromVarString: (value: string) => ValueAddon | string =
 	memoize(function (value: string): ValueAddon | string {
-		if (isString(value) && value.startsWith('var:')) {
-			const varId = value.split('|')[2];
-			const colorVA = getColorVAFromIdString(varId);
+		if (isString(value)) {
+			const { id, varString } = parseVarString(value, 'color');
 
-			// same value means the variable not found but should be returned as not found
-			if (colorVA === varId) {
-				const varString =
-					generateVariableStringFromAttributeVarString(value);
+			if (id) {
+				const colorVA = getColorVAFromIdString(id);
 
-				return {
-					settings: {
-						name: varId,
-						id: value,
-						value: `var(${varString})`,
-						type: 'color',
-						var: varString,
-					},
-					name: varId,
-					isValueAddon: true,
-					valueType: 'variable',
-				};
+				if (isObject(colorVA)) {
+					return colorVA;
+				}
+
+				// same value means the variable not found but should be returned as not found
+				if (colorVA === id && varString) {
+					return {
+						settings: {
+							name: id,
+							id: value,
+							value: `var(${varString})`,
+							type: 'color',
+							var: varString,
+						},
+						name: id,
+						isValueAddon: true,
+						valueType: 'variable',
+					};
+				}
 			}
-
-			return colorVA;
 		}
 
 		return value;
