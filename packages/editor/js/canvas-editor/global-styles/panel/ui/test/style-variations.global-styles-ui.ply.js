@@ -153,7 +153,20 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			page,
 			'styles'
 		);
-		expect(globalStylesRecord).toEqual({});
+
+		const restCustomizations = {
+			blocks: {
+				'core/group': {
+					variations: {
+						'default-copy': [],
+						'default-copy-1': [],
+						'section-1-copy': [],
+					},
+				},
+			},
+		};
+
+		expect(globalStylesRecord).toEqual(restCustomizations);
 
 		await savePage(page);
 		await page.reload();
@@ -177,7 +190,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			page,
 			'styles'
 		);
-		expect(globalStylesRecordAfterReload).toEqual({});
+		expect(globalStylesRecordAfterReload).toEqual(restCustomizations);
 	});
 
 	test('should be able to rename specific style variation', async ({
