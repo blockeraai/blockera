@@ -8,9 +8,11 @@ import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
 
 export function backgroundFromWPCompatibility({
 	attributes,
+	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockId?: string,
+	insideBlockInspector: boolean,
 }): Object {
 	if (!isEmptyObject(attributes?.blockeraBackground?.value)) {
 		return attributes;
@@ -89,17 +91,27 @@ export function backgroundFromWPCompatibility({
 
 	// gradient attribute in root always is variable
 	// it should be changed to a Value Addon (variable)
-	if (attributes?.gradient !== undefined) {
-		gradient = getGradientVAFromVarString(
-			`var:preset|gradient|${attributes?.gradient}`
-		);
+	if (
+		attributes?.gradient !== undefined ||
+		attributes?.color?.gradient !== undefined
+	) {
+		if (insideBlockInspector) {
+			gradient = getGradientVAFromVarString(
+				`var:preset|gradient|${attributes?.gradient}`
+			);
+		} else {
+			gradient = getGradientVAFromVarString(attributes?.color?.gradient);
+		}
 
 		if (isValid(gradient)) {
 			gradientType = getGradientType(gradient);
 		}
 	}
 	// style.color.background is not variable
-	else if (attributes?.style?.color?.gradient !== undefined) {
+	else if (
+		insideBlockInspector &&
+		attributes?.style?.color?.gradient !== undefined
+	) {
 		gradient = attributes?.style?.color?.gradient;
 		gradientType = getGradientType(attributes?.style?.color?.gradient);
 	}
