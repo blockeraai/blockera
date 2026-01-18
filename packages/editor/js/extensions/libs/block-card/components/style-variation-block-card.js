@@ -365,6 +365,7 @@ export function StyleVariationBlockCard({
 							setAttributes,
 							currentBlockStyleVariation,
 						}}
+						insideBlockInspector={false}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}
 						currentBlock={currentBlock}

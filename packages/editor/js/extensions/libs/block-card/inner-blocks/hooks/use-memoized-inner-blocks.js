@@ -22,8 +22,10 @@ export const useMemoizedInnerBlocks = ({
 	clientId,
 	controlValue,
 	getBlockInners,
+	getBlockExtensionBy,
 	reservedInnerBlocks,
 	setBlockClientInners,
+	insideBlockInspector = true,
 }: MemoizedInnerBlocks): InnerBlocks => {
 	// External selectors. to access registered block types on WordPress blocks store api.
 	const { getBlockType } = select('core/blocks');
@@ -60,8 +62,17 @@ export const useMemoizedInnerBlocks = ({
 
 		// Previous inner blocks stack.
 		const inners = getBlockInners(clientId);
+		let fallbackInners = {};
 
-		const mergedStackWithStoreInners = mergeObject(inners, stack);
+		// If not running inside block inspector we should create fallback inner blocks object.
+		if (!Object.keys(inners).length && !insideBlockInspector) {
+			fallbackInners = getBlockExtensionBy(
+				'targetBlock',
+				clientId.replace('core-', 'core/')
+			)?.blockeraInnerBlocks;
+		}
+
+		let mergedStackWithStoreInners = mergeObject(inners, stack);
 
 		if (!isEquals(inners, mergedStackWithStoreInners)) {
 			setBlockClientInners({
@@ -72,6 +83,16 @@ export const useMemoizedInnerBlocks = ({
 					10
 				),
 			});
+		}
+
+		// If not running inside block inspector we should provided fallback inner blocks,
+		// because in this case not available selected block and client id.
+		if (
+			!insideBlockInspector &&
+			!Object.keys(inners).length &&
+			!Object.keys(mergedStackWithStoreInners).length
+		) {
+			mergedStackWithStoreInners = mergeObject(fallbackInners, stack);
 		}
 
 		return mergedStackWithStoreInners;
