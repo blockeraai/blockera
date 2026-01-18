@@ -59,6 +59,7 @@ export function StyleVariationBlockCard({
 	currentBreakpoint,
 	availableStates,
 	additional,
+	currentInnerBlock,
 	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
@@ -243,7 +244,10 @@ export function StyleVariationBlockCard({
 		<div
 			className={extensionClassNames(
 				'block-card',
-				'block-card--style-variation'
+				'block-card--style-variation',
+				{
+					'inner-block-is-selected': currentInnerBlock !== null,
+				}
 			)}
 			data-test={'blockera-style-variation-block-card'}
 		>

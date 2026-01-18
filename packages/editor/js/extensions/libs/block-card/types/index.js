@@ -33,6 +33,7 @@ export type TStyleVariationBlockCardProps = {
 	additional: Object,
 	availableStates: Object,
 	children?: MixedElement,
+	currentInnerBlock: 'master' | InnerBlockType | string,
 	currentBlockStyleVariation?: {
 		name: string,
 		label: string,

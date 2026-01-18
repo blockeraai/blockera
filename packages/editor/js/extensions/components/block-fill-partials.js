@@ -115,6 +115,37 @@ export const BlockFillPartials: ComponentType<any> = ({
 							}
 						/>
 
+						{Boolean(currentBlockStyleVariation?.name) && (
+							<StyleVariationBlockCard
+								insideBlockInspector={insideBlockInspector}
+								isActive={isActive}
+								clientId={clientId}
+								blockName={blockProps.name}
+								handleOnClick={updateBlockEditorSettings}
+								currentBlock={currentBlock}
+								currentState={currentState}
+								availableStates={availableInnerStates}
+								currentBreakpoint={currentBreakpoint}
+								currentInnerBlock={currentInnerBlock}
+								currentInnerBlockState={currentInnerBlockState}
+								currentStateAttributes={
+									blockProps.currentStateAttributes
+								}
+								additional={blockProps.additional}
+								supports={blockProps.supports}
+								setAttributes={blockProps.setAttributes}
+								handleOnChangeAttributes={
+									blockProps.handleOnChangeAttributes
+								}
+								setCurrentBlockStyleVariation={
+									setCurrentBlockStyleVariation
+								}
+								currentBlockStyleVariation={
+									currentBlockStyleVariation
+								}
+							/>
+						)}
+
 						{isInnerBlock(currentBlock) && (
 							<InnerBlockCard
 								insideBlockInspector={insideBlockInspector}
@@ -137,36 +168,6 @@ export const BlockFillPartials: ComponentType<any> = ({
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
 									blockProps.handleOnChangeAttributes
-								}
-							/>
-						)}
-
-						{Boolean(currentBlockStyleVariation?.name) && (
-							<StyleVariationBlockCard
-								insideBlockInspector={insideBlockInspector}
-								isActive={isActive}
-								clientId={clientId}
-								blockName={blockProps.name}
-								handleOnClick={updateBlockEditorSettings}
-								currentBlock={currentBlock}
-								currentState={currentState}
-								availableStates={availableInnerStates}
-								currentBreakpoint={currentBreakpoint}
-								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={
-									blockProps.currentStateAttributes
-								}
-								additional={blockProps.additional}
-								supports={blockProps.supports}
-								setAttributes={blockProps.setAttributes}
-								handleOnChangeAttributes={
-									blockProps.handleOnChangeAttributes
-								}
-								setCurrentBlockStyleVariation={
-									setCurrentBlockStyleVariation
-								}
-								currentBlockStyleVariation={
-									currentBlockStyleVariation
 								}
 							/>
 						)}

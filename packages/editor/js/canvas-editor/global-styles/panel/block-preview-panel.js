@@ -144,7 +144,7 @@ const BlockPreviewPanel = ({
 	}
 
 	return (
-		<Spacer marginX={4} marginBottom={4}>
+		<Spacer marginX={4}>
 			<div
 				className="edit-site-global-styles__block-preview-panel"
 				style={{

@@ -249,6 +249,11 @@
 
 	&.block-card--inner-block {
 		--blockera-controls-primary-color: #cc0000;
+		z-index: 2;
+
+		&.separator-shadow {
+			box-shadow: 0 -1px 0 #cbcbcb, 0 -11px 11px -6px rgba(0, 0, 0, 0.16);
+		}
 
 		.blockera-extension-block-card__title,
 		.blockera-component-block-icon {
@@ -316,6 +321,7 @@
 }
 
 .blockera-extension.blockera-extension-block-card.master-block-card {
+	z-index: 0;
 	// remove the 3 px margin left space because of the input padding
 
 	.blockera-extension-block-card__title__input {
