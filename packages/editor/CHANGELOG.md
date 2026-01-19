@@ -17,6 +17,7 @@
 - Before and After: add support to CSS functions: `attr()`, `counter()`, `counters()` and `url()`
 - `Stretch` value type for size control like Width, Height... added.
 - Typography feature now supports WordPress global styles interface, allowing typography settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
+- Size feature now supports WordPress global styles interface, allowing width, height, min-height, and aspect-ratio settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 
 ### Automated Tests
 - Automated test to check `font color` WP data compatibility if variables not found. 
@@ -35,6 +36,10 @@
 - Automated test to check `text decoration` WP data compatibility in global styles context.
 - Automated test to check `text orientation` WP data compatibility in global styles context (horizontal and vertical values).
 - Automated test to check `text transform` WP data compatibility in global styles context.
+- Automated test to check `min height` WP data compatibility in global styles context.
+- Automated test to check `aspect ratio` WP data compatibility in global styles context.
+- Automated test to check `width` WP data compatibility in global styles context.
+- Automated test to check `height` WP data compatibility in global styles context.
 
 ## 2.0.1 (2025-07-22)
 
