@@ -404,6 +404,12 @@ export const BlockBase: ComponentType<any> = (
 	}, [attributes]);
 
 	useEffect(() => {
+		// If the current block is an inner block, don't update the attributes.
+		// Because the inner block attributes are updated by the parent block.
+		if (isInnerBlock(currentBlock)) {
+			return;
+		}
+
 		// Compare the compatible attributes with the attributes and the attributes ref.
 		// If they are not equal, set the attributes to the compatible attributes.
 		if (
