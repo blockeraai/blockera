@@ -16,16 +16,23 @@ export function elementNormalBackgroundColorFromWPCompatibility({
 	innerBlock,
 	attributes,
 	dataCompatibilityElement,
+	insideBlockInspector,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	dataCompatibilityElement: string,
+	insideBlockInspector: boolean,
 }): Object {
 	if (
-		attributes.style.elements[dataCompatibilityElement]?.color?.background
+		attributes?.style?.elements?.[dataCompatibilityElement]?.color
+			?.background ||
+		attributes?.elements?.[dataCompatibilityElement]?.color?.background
 	) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[dataCompatibilityElement].color.background
+			insideBlockInspector
+				? attributes.style.elements[dataCompatibilityElement].color
+						.background
+				: attributes.elements[dataCompatibilityElement].color.background
 		);
 
 		if (color) {
@@ -51,11 +58,13 @@ export function elementNormalBackgroundColorToWPCompatibility({
 	newValue,
 	ref,
 	getAttributes,
+	insideBlockInspector,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
 	getAttributes: () => Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
@@ -69,30 +78,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 			attributes?.blockeraInnerBlocks[element]?.attributes
 				?.blockeraBackground
 		) {
-			return mergeObject(
-				{
-					style: {
-						elements: {
-							[element]: {
-								color: {
-									background: undefined,
-								},
-							},
-						},
-					},
-				},
-				elementNormalBackgroundToWPCompatibility({
-					element,
-					newValue:
-						attributes?.blockeraInnerBlocks[element]?.attributes
-							?.blockeraBackground,
-					ref: {},
-				})
-			);
-		}
-
-		return {
-			style: {
+			const elements = {
 				elements: {
 					[element]: {
 						color: {
@@ -100,35 +86,91 @@ export function elementNormalBackgroundColorToWPCompatibility({
 						},
 					},
 				},
+			};
+
+			return mergeObject(
+				{
+					...(insideBlockInspector
+						? {
+								style: {
+									elements,
+								},
+						  }
+						: elements),
+				},
+				elementNormalBackgroundToWPCompatibility({
+					element,
+					newValue:
+						attributes?.blockeraInnerBlocks[element]?.attributes
+							?.blockeraBackground,
+					ref: {},
+					insideBlockInspector,
+				})
+			);
+		}
+
+		const elements = {
+			elements: {
+				[element]: {
+					color: {
+						background: undefined,
+					},
+				},
 			},
+		};
+
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+				  }
+				: elements),
 		};
 	}
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return {
-			style: {
-				elements: {
-					[element]: {
-						color: {
-							background:
-								'var:preset|color|' + newValue?.settings?.id,
-						},
+		const elements = {
+			elements: {
+				[element]: {
+					color: {
+						background:
+							'var:preset|color|' + newValue?.settings?.id,
 					},
 				},
 			},
 		};
+
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+				  }
+				: elements),
+		};
 	}
 
-	return {
-		style: {
-			elements: {
-				[element]: {
-					color: {
-						background: newValue,
-					},
+	const elements = {
+		elements: {
+			[element]: {
+				color: {
+					background: newValue,
 				},
 			},
 		},
+	};
+
+	return {
+		...(insideBlockInspector
+			? {
+					style: {
+						elements,
+					},
+			  }
+			: elements),
 	};
 }

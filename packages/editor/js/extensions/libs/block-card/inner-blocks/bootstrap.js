@@ -44,7 +44,8 @@ export const bootstrap = (): void => {
 			}
 
 			if (
-				isUndefined(attributes?.style?.elements) ||
+				(isUndefined(attributes?.style?.elements) &&
+					isUndefined(attributes?.elements)) ||
 				isUndefined(innerBlocks)
 			) {
 				return attributes;
@@ -56,7 +57,8 @@ export const bootstrap = (): void => {
 						?.dataCompatibilityElement || innerBlock;
 
 				if (
-					!attributes?.style?.elements[dataCompatibilityElement] ||
+					(!attributes?.style?.elements?.[dataCompatibilityElement] &&
+						!attributes?.elements?.[dataCompatibilityElement]) ||
 					isUndefined(
 						innerBlocks[innerBlock]?.settings?.dataCompatibility
 					) ||
@@ -83,6 +85,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
+								insideBlockInspector:
+									blockDetail.insideBlockInspector,
 							});
 
 						if (newAttributes) {
@@ -110,6 +114,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
+								insideBlockInspector:
+									blockDetail.insideBlockInspector,
 							});
 
 						if (newAttributes) {
@@ -141,6 +147,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
+								insideBlockInspector:
+									blockDetail.insideBlockInspector,
 							});
 
 						if (bgAttributes) {
@@ -168,6 +176,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
+								insideBlockInspector:
+									blockDetail.insideBlockInspector,
 							});
 
 						if (bgAttributes) {
@@ -254,6 +264,7 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
+						insideBlockInspector: blockDetail.insideBlockInspector,
 					})
 				);
 			}
@@ -274,6 +285,7 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
+						insideBlockInspector: blockDetail.insideBlockInspector,
 					})
 				);
 			}
@@ -295,6 +307,7 @@ export const bootstrap = (): void => {
 						newValue,
 						ref,
 						getAttributes,
+						insideBlockInspector: blockDetail.insideBlockInspector,
 					})
 				);
 			}
@@ -325,6 +338,7 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
+						insideBlockInspector: blockDetail.insideBlockInspector,
 					})
 				);
 			}
