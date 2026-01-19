@@ -2,15 +2,22 @@
 
 export function lineHeightFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object | false {
+	// Check block-level style (insideBlockInspector) or global style context
+	const lineHeight = insideBlockInspector
+		? attributes?.style?.typography?.lineHeight
+		: attributes?.typography?.lineHeight;
+
 	if (
 		attributes?.blockeraLineHeight?.value === '' &&
-		attributes?.style?.typography?.lineHeight !== undefined
+		lineHeight !== undefined
 	) {
 		attributes.blockeraLineHeight = {
-			value: attributes?.style?.typography?.lineHeight,
+			value: lineHeight,
 		};
 	}
 
@@ -20,18 +27,26 @@ export function lineHeightFromWPCompatibility({
 export function lineHeightToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return {
-			style: {
-				typography: {
-					lineHeight: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					style: {
+						typography: {
+							lineHeight: undefined,
+						},
+					},
+			  }
+			: {
+					typography: {
+						lineHeight: undefined,
+					},
+			  };
 	}
 
 	// Advanced css functions and units not supported by core.
@@ -39,11 +54,17 @@ export function lineHeightToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return {
-		style: {
-			typography: {
-				lineHeight: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				style: {
+					typography: {
+						lineHeight: newValue,
+					},
+				},
+		  }
+		: {
+				typography: {
+					lineHeight: newValue,
+				},
+		  };
 }

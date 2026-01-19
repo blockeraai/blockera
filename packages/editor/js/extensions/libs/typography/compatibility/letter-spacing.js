@@ -7,15 +7,22 @@ import { isSpecialUnit } from '@blockera/controls';
 
 export function letterSpacingFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	const letterSpacing = insideBlockInspector
+		? attributes?.style?.typography?.letterSpacing
+		: attributes?.typography?.letterSpacing;
+
 	if (
 		attributes?.blockeraLetterSpacing?.value === '' &&
-		attributes?.style?.typography?.letterSpacing !== undefined
+		letterSpacing !== undefined
 	) {
 		attributes.blockeraLetterSpacing = {
-			value: attributes?.style?.typography?.letterSpacing,
+			value: letterSpacing,
 		};
 	}
 
@@ -25,18 +32,26 @@ export function letterSpacingFromWPCompatibility({
 export function letterSpacingToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return {
-			style: {
-				typography: {
-					letterSpacing: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					style: {
+						typography: {
+							letterSpacing: undefined,
+						},
+					},
+			  }
+			: {
+					typography: {
+						letterSpacing: undefined,
+					},
+			  };
 	}
 
 	// Advanced css functions and units not supported by core.
@@ -44,11 +59,17 @@ export function letterSpacingToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return {
-		style: {
-			typography: {
-				letterSpacing: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				style: {
+					typography: {
+						letterSpacing: newValue,
+					},
+				},
+		  }
+		: {
+				typography: {
+					letterSpacing: newValue,
+				},
+		  };
 }

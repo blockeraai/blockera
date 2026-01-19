@@ -2,15 +2,22 @@
 
 export function fontStyleFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	const fontStyle = insideBlockInspector
+		? attributes?.style?.typography?.fontStyle
+		: attributes?.typography?.fontStyle;
+
 	if (
 		attributes?.blockeraFontStyle?.value === '' &&
-		attributes?.style?.typography?.fontStyle !== undefined
+		fontStyle !== undefined
 	) {
 		attributes.blockeraFontStyle = {
-			value: attributes?.style?.typography?.fontStyle,
+			value: fontStyle,
 		};
 	}
 
@@ -20,29 +27,43 @@ export function fontStyleFromWPCompatibility({
 export function fontStyleToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if (
 		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['normal', 'italic'].indexOf(newValue) === -1
 	) {
-		return {
-			style: {
-				typography: {
-					fontStyle: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					style: {
+						typography: {
+							fontStyle: undefined,
+						},
+					},
+			  }
+			: {
+					typography: {
+						fontStyle: undefined,
+					},
+			  };
 	}
 
-	return {
-		style: {
-			typography: {
-				fontStyle: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				style: {
+					typography: {
+						fontStyle: newValue,
+					},
+				},
+		  }
+		: {
+				typography: {
+					fontStyle: newValue,
+				},
+		  };
 }

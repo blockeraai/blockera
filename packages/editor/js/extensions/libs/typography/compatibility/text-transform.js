@@ -2,15 +2,22 @@
 
 export function textTransformFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	const textTransform = insideBlockInspector
+		? attributes?.style?.typography?.textTransform
+		: attributes?.typography?.textTransform;
+
 	if (
 		attributes?.blockeraTextTransform?.value === '' &&
-		attributes?.style?.typography?.textTransform !== undefined
+		textTransform !== undefined
 	) {
 		attributes.blockeraTextTransform = {
-			value: attributes?.style?.typography?.textTransform,
+			value: textTransform,
 		};
 	}
 
@@ -20,25 +27,39 @@ export function textTransformFromWPCompatibility({
 export function textTransformToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return {
-			style: {
-				typography: {
-					textTransform: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					style: {
+						typography: {
+							textTransform: undefined,
+						},
+					},
+			  }
+			: {
+					typography: {
+						textTransform: undefined,
+					},
+			  };
 	}
 
-	return {
-		style: {
-			typography: {
-				textTransform: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				style: {
+					typography: {
+						textTransform: newValue,
+					},
+				},
+		  }
+		: {
+				typography: {
+					textTransform: newValue,
+				},
+		  };
 }
