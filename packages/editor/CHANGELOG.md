@@ -20,6 +20,7 @@
 - Size feature now supports WordPress global styles interface, allowing width, height, min-height, and aspect-ratio settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Layout feature now supports WordPress global styles interface, allowing spacing (padding/margin) and gap settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Background feature now supports WordPress global styles interface, allowing background color, background image, background gradients, background size, background repeat, and background position settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
+- Border and Shadow feature now supports WordPress global styles interface, allowing border, border radius, and shadow settings to work correctly in both block inspector and global styles contexts. Shadow compatibility includes support for WordPress shadow presets (var:preset|shadow|slug format) with automatic resolution to CSS values, ensuring compatibility with WordPress 6.7 theme.json schema.
 
 ### Automated Tests
 - Automated test to check `font color` WP data compatibility if variables not found. 
@@ -48,6 +49,8 @@
 - Automated test to check `background size` WP data compatibility in global styles context.
 - Automated test to check `background repeat` WP data compatibility in global styles context.
 - Automated test to check `background position` WP data compatibility in global styles context.
+- Automated test to check `shadow` WP data compatibility in block-level context (CSS values and preset references).
+- Automated test to check `shadow` WP data compatibility in global styles context (CSS values and preset references).
 
 ## 2.0.1 (2025-07-22)
 
