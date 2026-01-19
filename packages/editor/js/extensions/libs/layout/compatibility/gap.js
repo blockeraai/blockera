@@ -137,15 +137,21 @@ export function convertToValue(
 
 export function gapFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
-	if (
-		isEquals(attributes?.blockeraGap?.value, defaultGap) &&
-		attributes?.style?.spacing?.blockGap
-	) {
+	// Check block-level style (insideBlockInspector) or global style context
+	// Block inspector: attributes.style.spacing.blockGap
+	// Global styles: attributes.spacing.blockGap
+	const blockGap = insideBlockInspector
+		? attributes?.style?.spacing?.blockGap
+		: attributes?.spacing?.blockGap;
+
+	if (isEquals(attributes?.blockeraGap?.value, defaultGap) && blockGap) {
 		attributes.blockeraGap = {
-			value: convertFromValue(attributes?.style?.spacing?.blockGap),
+			value: convertFromValue(blockGap),
 		};
 	}
 
@@ -157,20 +163,26 @@ export function gapToWPCompatibility({
 	ref,
 	defaultValue,
 	blockId,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	defaultValue: Object,
 	blockId: string,
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
-		return {
-			style: {
-				spacing: {
-					blockGap: undefined,
-				},
+		const gapData = {
+			spacing: {
+				blockGap: undefined,
 			},
 		};
+
+		return insideBlockInspector
+			? {
+					style: gapData,
+			  }
+			: gapData;
 	}
 
 	const blockWPGapDataType = getBlockGapWPDataType(blockId);
@@ -178,13 +190,17 @@ export function gapToWPCompatibility({
 	if (blockWPGapDataType) {
 		const spacing = convertToValue(newValue, blockWPGapDataType);
 
-		return {
-			style: {
-				spacing: {
-					blockGap: isEmpty(spacing) ? undefined : spacing,
-				},
+		const gapData = {
+			spacing: {
+				blockGap: isEmpty(spacing) ? undefined : spacing,
 			},
 		};
+
+		return insideBlockInspector
+			? {
+					style: gapData,
+			  }
+			: gapData;
 	}
 
 	return {};

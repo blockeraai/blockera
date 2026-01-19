@@ -14,13 +14,21 @@ import { isSpecialUnit } from '@blockera/controls';
 
 export function spacingFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	// Block inspector: attributes.style.spacing.*
+	// Global styles: attributes.spacing.*
+	const spacing = insideBlockInspector
+		? attributes?.style?.spacing
+		: attributes?.spacing;
+
 	if (
 		// WP have spacing value
-		(attributes?.style?.spacing?.padding !== undefined ||
-			attributes?.style?.spacing?.margin !== undefined) &&
+		(spacing?.padding !== undefined || spacing?.margin !== undefined) &&
 		// Blockera have not custom spacing
 		isEquals(
 			attributes?.blockeraSpacing?.value,
@@ -29,66 +37,50 @@ export function spacingFromWPCompatibility({
 	) {
 		// padding top
 		let paddingTop: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.padding?.top) {
-			paddingTop = convertFromValue(
-				attributes?.style?.spacing?.padding?.top
-			);
+		if (spacing?.padding?.top) {
+			paddingTop = convertFromValue(spacing?.padding?.top);
 		}
 
 		// padding right
 		let paddingRight: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.padding?.right) {
-			paddingRight = convertFromValue(
-				attributes?.style?.spacing?.padding?.right
-			);
+		if (spacing?.padding?.right) {
+			paddingRight = convertFromValue(spacing?.padding?.right);
 		}
 
-		// padding right
+		// padding bottom
 		let paddingBottom: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.padding?.bottom) {
-			paddingBottom = convertFromValue(
-				attributes?.style?.spacing?.padding?.bottom
-			);
+		if (spacing?.padding?.bottom) {
+			paddingBottom = convertFromValue(spacing?.padding?.bottom);
 		}
 
-		// padding right
+		// padding left
 		let paddingLeft: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.padding?.left) {
-			paddingLeft = convertFromValue(
-				attributes?.style?.spacing?.padding?.left
-			);
+		if (spacing?.padding?.left) {
+			paddingLeft = convertFromValue(spacing?.padding?.left);
 		}
 
 		// margin top
 		let marginTop: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.margin?.top) {
-			marginTop = convertFromValue(
-				attributes?.style?.spacing?.margin?.top
-			);
+		if (spacing?.margin?.top) {
+			marginTop = convertFromValue(spacing?.margin?.top);
 		}
 
 		// margin right
 		let marginRight: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.margin?.right) {
-			marginRight = convertFromValue(
-				attributes?.style?.spacing?.margin?.right
-			);
+		if (spacing?.margin?.right) {
+			marginRight = convertFromValue(spacing?.margin?.right);
 		}
 
-		// margin right
+		// margin bottom
 		let marginBottom: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.margin?.bottom) {
-			marginBottom = convertFromValue(
-				attributes?.style?.spacing?.margin?.bottom
-			);
+		if (spacing?.margin?.bottom) {
+			marginBottom = convertFromValue(spacing?.margin?.bottom);
 		}
 
-		// padding right
+		// margin left
 		let marginLeft: ValueAddon | string = '';
-		if (attributes?.style?.spacing?.margin?.left) {
-			marginLeft = convertFromValue(
-				attributes?.style?.spacing?.margin?.left
-			);
+		if (spacing?.margin?.left) {
+			marginLeft = convertFromValue(spacing?.margin?.left);
 		}
 
 		attributes.blockeraSpacing = {
@@ -127,22 +119,28 @@ export function convertFromValue(spacing: string | Object): string {
 export function spacingToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
 		isEquals(newValue, boxSpacingControlDefaultValue)
 	) {
-		return {
-			style: {
-				spacing: {
-					padding: undefined,
-					margin: undefined,
-				},
+		const spacingData = {
+			spacing: {
+				padding: undefined,
+				margin: undefined,
 			},
 		};
+
+		return insideBlockInspector
+			? {
+					style: spacingData,
+			  }
+			: spacingData;
 	}
 
 	const newSpacing: {
@@ -219,10 +217,16 @@ export function spacingToWPCompatibility({
 		newSpacing.padding = undefined;
 	}
 
+	if (insideBlockInspector) {
+		return {
+			style: {
+				spacing: newSpacing,
+			},
+		};
+	}
+
 	return {
-		style: {
-			spacing: newSpacing,
-		},
+		spacing: newSpacing,
 	};
 }
 

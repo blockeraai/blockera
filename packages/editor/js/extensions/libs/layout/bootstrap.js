@@ -46,8 +46,12 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.layoutExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, blockAttributes, activeBlockVariation } =
-				blockDetail;
+			const {
+				blockId,
+				blockAttributes,
+				activeBlockVariation,
+				insideBlockInspector,
+			} = blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
@@ -100,6 +104,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = gapFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -107,6 +112,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = spacingFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			return attributes;
@@ -138,8 +144,12 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId, blockAttributes, activeBlockVariation } =
-				blockDetail;
+			const {
+				blockId,
+				blockAttributes,
+				activeBlockVariation,
+				insideBlockInspector,
+			} = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
@@ -152,6 +162,7 @@ export const bootstrap = (): void => {
 						spacingToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -195,6 +206,7 @@ export const bootstrap = (): void => {
 							ref,
 							defaultValue: blockAttributes?.blockeraGap?.default,
 							blockId,
+							insideBlockInspector,
 						})
 					);
 			}
