@@ -232,7 +232,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 											>
 												<InputControl
 													label={__(
-														'Min',
+														'Min Width',
 														'blockera'
 													)}
 													labelPopoverTitle={__(
@@ -262,7 +262,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 													columns={
 														isShowMaxWidth
 															? 'columns-1'
-															: 'columns-2'
+															: '1.75fr 2fr'
 													}
 													className={
 														isShowMaxWidth &&
@@ -316,7 +316,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 											>
 												<InputControl
 													label={__(
-														'Max',
+														'Max Width',
 														'blockera'
 													)}
 													labelPopoverTitle={__(
@@ -346,7 +346,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 													columns={
 														isShowMinWidth
 															? 'columns-1'
-															: 'columns-2'
+															: '1.75fr 2fr'
 													}
 													className={
 														isShowMinWidth &&
@@ -467,7 +467,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 															.default
 													}
 													label={__(
-														'Min',
+														'Min Height',
 														'blockera'
 													)}
 													labelPopoverTitle={__(
@@ -497,7 +497,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 													columns={
 														isShowMaxHeight
 															? 'columns-1'
-															: 'columns-2'
+															: '1.75fr 2fr'
 													}
 													className={
 														isShowMaxHeight &&
@@ -546,7 +546,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 											>
 												<InputControl
 													label={__(
-														'Max',
+														'Max Height',
 														'blockera'
 													)}
 													labelPopoverTitle={__(
@@ -576,7 +576,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 													columns={
 														isShowMinHeight
 															? 'columns-1'
-															: 'columns-2'
+															: '1.75fr 2fr'
 													}
 													className={
 														isShowMinHeight &&

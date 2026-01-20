@@ -21,7 +21,7 @@ describe('Max Width → Functionality', () => {
 		// activate min width
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Width');
 
-		cy.getParentContainer('Max').within(() => {
+		cy.getParentContainer('Max Width').within(() => {
 			cy.get('input').type(200);
 		});
 
@@ -48,7 +48,7 @@ describe('Max Width → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Width');
 
 		// open value addon
-		cy.getParentContainer('Max').within(() => {
+		cy.getParentContainer('Max Width').within(() => {
 			cy.openValueAddon();
 		});
 
