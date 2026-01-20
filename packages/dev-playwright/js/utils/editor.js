@@ -944,7 +944,32 @@ async function doBlockToolbarContextMenuOption(page, option = 'Copy') {
 	await element.click();
 }
 
+/**
+ * Delete repeater item.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} itemId - Item ID.
+ * @param {string} label - Delete button label.
+ * @return {Promise<void>}
+ */
+async function deleteRepeaterItem(page, { container, itemId, label }) {
+	// Ensure item is expanded before accessing delete button
+	// The delete button is only visible when the item is expanded
+	// Click on the item to ensure it's expanded
+	const item = container.locator(`[data-id="${itemId}"]`);
+	await item.click({ force: true });
+	await page.waitForTimeout(200);
+
+	// Wait for delete button to be visible and clickable
+	const deleteButton = item.locator(`[aria-label="${label}"]`);
+	await deleteButton.waitFor({ state: 'visible', timeout: 5000 });
+
+	// clear item
+	await deleteButton.click({ force: true });
+}
+
 module.exports = {
+	deleteRepeaterItem,
 	getIframeBody,
 	getWindowProperty,
 	getWPDataObject,
