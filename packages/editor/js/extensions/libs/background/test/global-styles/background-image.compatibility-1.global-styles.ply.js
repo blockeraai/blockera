@@ -7,6 +7,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	deleteRepeaterItem,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -163,10 +164,11 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				// clear gradient
-				await bgContainer
-					.locator('[aria-label="Delete linear gradient 0"]')
-					.click({ force: true });
+				await deleteRepeaterItem(page, {
+					container: bgContainer,
+					itemId: 'linear-gradient-0',
+					label: 'Delete linear gradient 0',
+				});
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -287,10 +289,11 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				// clear gradient
-				await bgContainer
-					.locator('[aria-label="Delete linear gradient 0"]')
-					.click({ force: true });
+				await deleteRepeaterItem(page, {
+					container: bgContainer,
+					itemId: 'linear-gradient-0',
+					label: 'Delete linear gradient 0',
+				});
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -368,12 +371,23 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				// Test 2: Check interface for showing deleted value addon
 				//
 
+				// Click on gradient item to open popover
 				await bgContainer
 					.locator('[data-id="linear-gradient-0"]')
 					.click();
 
+				// Wait for popover to be visible
+				const bgPopover = page
+					.locator(
+						'.components-popover.blockera-control-background-popover'
+					)
+					.last();
+				await bgPopover.waitFor({ state: 'visible' });
+				await page.waitForTimeout(300);
+
+				// Check for deleted value addon indicator inside the popover
 				await expect(
-					bgContainer.locator('[data-test="value-addon-deleted"]')
+					bgPopover.locator('[data-test="value-addon-deleted"]')
 				).toBeVisible();
 			});
 		});
@@ -459,10 +473,11 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				// clear gradient
-				await bgContainer
-					.locator('[aria-label="Delete radial gradient 0"]')
-					.click({ force: true });
+				await deleteRepeaterItem(page, {
+					container: bgContainer,
+					itemId: 'radial-gradient-0',
+					label: 'Delete radial gradient 0',
+				});
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -561,14 +576,15 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				// clear image
-				await bgContainer
-					.locator('[aria-label="Delete image 0"]')
-					.click({ force: true });
+				await deleteRepeaterItem(page, {
+					container: bgContainer,
+					itemId: 'image-0',
+					label: 'Delete image 0',
+				});
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
-					page,
+					bgContainer,
 					'styles',
 					'blocks'
 				);
