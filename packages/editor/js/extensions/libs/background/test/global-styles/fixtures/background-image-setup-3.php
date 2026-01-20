@@ -21,11 +21,17 @@ add_filter('blockera_theme_json_data_theme', function($theme_json) {
 		$data['styles']['blocks']['core/paragraph'] = [];
 	}
 	
+	// Ensure color structure exists
+	if (!isset($data['styles']['blocks']['core/paragraph']['color'])) {
+		$data['styles']['blocks']['core/paragraph']['color'] = [];
+	}
+	
 	// Add linear gradient configuration based on WordPress valid schema
-	// Using gradient for preset gradient variables (theme gradient slugs)
+	// For global styles, gradients are stored under color.gradient
+	// Using var:preset|gradient|slug format for preset references
 	// This uses an unknown gradient slug that doesn't exist in the presets to test
 	// handling of deleted/missing gradient presets
-	$data['styles']['blocks']['core/paragraph']['gradient'] = 'unknown';
+	$data['styles']['blocks']['core/paragraph']['color']['gradient'] = 'var:preset|gradient|unknown';
 	
 	// Update the theme.json data
 	return $data;

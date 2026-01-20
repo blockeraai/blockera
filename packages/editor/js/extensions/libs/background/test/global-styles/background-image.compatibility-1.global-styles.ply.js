@@ -110,15 +110,17 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				const blockeraBackground1 = root?.blockeraBackground;
 
 				expect({
-					'linear-gradient-0': {
-						isVisible: true,
-						type: 'linear-gradient',
-						'linear-gradient':
-							'linear-gradient(135deg,rgb(135,254,56) 1%,rgb(255,147,147) 97%)',
-						'linear-gradient-angel': '135',
-						'linear-gradient-repeat': 'no-repeat',
-						'linear-gradient-attachment': 'scroll',
-						order: 1,
+					value: {
+						'linear-gradient-0': {
+							isVisible: true,
+							type: 'linear-gradient',
+							'linear-gradient':
+								'linear-gradient(135deg,rgb(135,254,56) 1%,rgb(255,147,147) 97%)',
+							'linear-gradient-angel': '135',
+							'linear-gradient-repeat': 'no-repeat',
+							'linear-gradient-attachment': 'scroll',
+							order: 1,
+						},
 					},
 				}).toEqual(blockeraBackground1);
 
@@ -208,35 +210,39 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				const blockeraBackground1 = root?.blockeraBackground;
-				const gradient1 = root?.gradient;
+				const gradient1 = root?.color?.gradient;
 
 				expect({
-					'linear-gradient-0': {
-						type: 'linear-gradient',
-						'linear-gradient': {
-							settings: {
-								name: 'Vivid cyan blue to vivid purple',
-								id: 'vivid-cyan-blue-to-vivid-purple',
-								value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)',
-								reference: {
-									type: 'theme',
-									theme: 'Twenty Twenty-Five',
+					value: {
+						'linear-gradient-0': {
+							type: 'linear-gradient',
+							'linear-gradient': {
+								settings: {
+									name: 'Vivid cyan blue to vivid purple',
+									id: 'vivid-cyan-blue-to-vivid-purple',
+									value: 'linear-gradient(135deg,rgb(6,147,227) 0%,rgb(155,81,224) 100%)',
+									reference: {
+										type: 'theme',
+										theme: 'Twenty Twenty-Five',
+									},
+									type: 'linear-gradient',
+									var: '--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple',
 								},
-								type: 'linear-gradient',
-								var: '--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple',
+								name: 'Vivid cyan blue to vivid purple',
+								isValueAddon: true,
+								valueType: 'variable',
 							},
-							name: 'Vivid cyan blue to vivid purple',
-							isValueAddon: true,
-							valueType: 'variable',
+							'linear-gradient-angel': '',
+							'linear-gradient-repeat': 'no-repeat',
+							'linear-gradient-attachment': 'scroll',
+							isVisible: true,
+							order: 1,
 						},
-						'linear-gradient-angel': '',
-						'linear-gradient-repeat': 'no-repeat',
-						'linear-gradient-attachment': 'scroll',
-						isVisible: true,
-						order: 1,
 					},
 				}).toEqual(blockeraBackground1);
-				expect('vivid-cyan-blue-to-vivid-purple').toEqual(gradient1);
+				expect(
+					'var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple)'
+				).toEqual(gradient1);
 
 				//
 				// Test 2: Blockera value to WP data
@@ -271,11 +277,11 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				);
 
 				const root2 = globalStylesRecord2?.['core/paragraph'];
-				const gradient2 = root2?.gradient;
+				const gradient2 = root2?.color?.gradient;
 
-				expect('light-green-cyan-to-vivid-green-cyan').toEqual(
-					gradient2
-				);
+				expect(
+					'var:preset|gradient|light-green-cyan-to-vivid-green-cyan'
+				).toEqual(gradient2);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
@@ -294,7 +300,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				);
 
 				const root3 = globalStylesRecord3?.['core/paragraph'];
-				const gradient3 = root3?.gradient;
+				const gradient3 = root3?.color?.gradient;
 
 				expect(undefined).toEqual(gradient3);
 			});
@@ -328,31 +334,35 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 
 				// WP data should come to Blockera
 				const blockeraBackground1 = root?.blockeraBackground;
-				const gradient1 = root?.gradient;
+				const gradient1 = root?.color?.gradient;
 
 				expect({
-					'linear-gradient-0': {
-						type: 'linear-gradient',
-						'linear-gradient': {
-							settings: {
+					value: {
+						'linear-gradient-0': {
+							type: 'linear-gradient',
+							'linear-gradient': {
+								settings: {
+									name: 'unknown',
+									id: 'var(--wp--preset--gradient--unknown)',
+									value: 'var(--wp--preset--gradient--unknown)',
+									type: 'linear-gradient',
+									var: '--wp--preset--gradient--unknown',
+								},
 								name: 'unknown',
-								id: 'var:preset|gradient|unknown',
-								value: 'var(--wp--preset--gradient--unknown)',
-								type: 'linear-gradient',
-								var: '--wp--preset--gradient--unknown',
+								isValueAddon: true,
+								valueType: 'variable',
 							},
-							name: 'unknown',
-							isValueAddon: true,
-							valueType: 'variable',
+							'linear-gradient-angel': '',
+							'linear-gradient-repeat': 'no-repeat',
+							'linear-gradient-attachment': 'scroll',
+							isVisible: true,
+							order: 1,
 						},
-						'linear-gradient-angel': '',
-						'linear-gradient-repeat': 'no-repeat',
-						'linear-gradient-attachment': 'scroll',
-						isVisible: true,
-						order: 1,
 					},
 				}).toEqual(blockeraBackground1);
-				expect('unknown').toEqual(gradient1);
+				expect('var(--wp--preset--gradient--unknown)').toEqual(
+					gradient1
+				);
 
 				//
 				// Test 2: Check interface for showing deleted value addon
@@ -400,19 +410,21 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				const blockeraBackground1 = root?.blockeraBackground;
 
 				expect({
-					'radial-gradient-0': {
-						isVisible: true,
-						type: 'radial-gradient',
-						'radial-gradient':
-							'radial-gradient(rgb(194,169,144) 27%,rgb(254,95,95) 92%)',
-						'radial-gradient-position': {
-							top: '50%',
-							left: '50%',
+					value: {
+						'radial-gradient-0': {
+							isVisible: true,
+							type: 'radial-gradient',
+							'radial-gradient':
+								'radial-gradient(rgb(194,169,144) 27%,rgb(254,95,95) 92%)',
+							'radial-gradient-position': {
+								top: '50%',
+								left: '50%',
+							},
+							'radial-gradient-size': 'farthest-corner',
+							'radial-gradient-repeat': 'no-repeat',
+							'radial-gradient-attachment': 'scroll',
+							order: 1,
 						},
-						'radial-gradient-size': 'farthest-corner',
-						'radial-gradient-repeat': 'no-repeat',
-						'radial-gradient-attachment': 'scroll',
-						order: 1,
 					},
 				}).toEqual(blockeraBackground1);
 
@@ -498,20 +510,22 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				const blockeraBackground1 = root?.blockeraBackground;
 
 				expect({
-					'image-0': {
-						isVisible: true,
-						type: 'image',
-						image: 'https://placehold.co/600x400',
-						'image-size': 'custom',
-						'image-size-width': 'auto',
-						'image-size-height': 'auto',
-						'image-position': {
-							top: '50%',
-							left: '50%',
+					value: {
+						'image-0': {
+							isVisible: true,
+							type: 'image',
+							image: 'https://placehold.co/600x400',
+							'image-size': 'custom',
+							'image-size-width': 'auto',
+							'image-size-height': 'auto',
+							'image-position': {
+								top: '50%',
+								left: '50%',
+							},
+							'image-repeat': 'repeat',
+							'image-attachment': 'scroll',
+							order: 0,
 						},
-						'image-repeat': 'repeat',
-						'image-attachment': 'scroll',
-						order: 0,
 					},
 				}).toEqual(blockeraBackground1);
 

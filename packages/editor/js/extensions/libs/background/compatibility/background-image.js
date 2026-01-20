@@ -105,9 +105,7 @@ export function backgroundFromWPCompatibility({
 			gradient = getGradientVAFromVarString(attributes?.color?.gradient);
 		}
 
-		if (isValid(gradient)) {
-			gradientType = getGradientType(gradient);
-		}
+		gradientType = getGradientType(gradient);
 	}
 	// style.color.background is not variable
 	else if (
