@@ -417,7 +417,8 @@ export const BlockBase: ComponentType<any> = (
 				!isEquals(
 					compatibleAttributesRef.current,
 					compatibleAttributes
-				)) ||
+				) &&
+				!isEquals(attributes, compatibleAttributesRef.current)) ||
 			!compatibleAttributesRef.current
 		) {
 			setAttributes(compatibleAttributes);
