@@ -15,7 +15,7 @@ const blockeraBoxShadow: FeatureConfig = {
 	force: false,
 	status: true,
 	cssGenerators: {},
-	label: __('Box Shadow', 'blockera'),
+	label: __('Box Shadows', 'blockera'),
 };
 
 const blockeraOutline: FeatureConfig = {
