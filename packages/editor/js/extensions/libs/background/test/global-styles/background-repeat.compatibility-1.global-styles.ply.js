@@ -8,6 +8,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	deleteRepeaterItem,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -99,20 +100,22 @@ test.describe('Background Repeat → WP Compatibility (Global Styles)', () => {
 				const blockeraBackground1 = root?.blockeraBackground;
 
 				expect({
-					'image-0': {
-						isVisible: true,
-						type: 'image',
-						image: 'https://placehold.co/600x400',
-						'image-size': 'custom',
-						'image-size-width': 'auto',
-						'image-size-height': 'auto',
-						'image-position': {
-							top: '50%',
-							left: '50%',
+					value: {
+						'image-0': {
+							isVisible: true,
+							type: 'image',
+							image: 'https://placehold.co/600x400',
+							'image-size': 'custom',
+							'image-size-width': 'auto',
+							'image-size-height': 'auto',
+							'image-position': {
+								top: '50%',
+								left: '50%',
+							},
+							'image-repeat': 'no-repeat',
+							'image-attachment': 'scroll',
+							order: 0,
 						},
-						'image-repeat': 'no-repeat',
-						'image-attachment': 'scroll',
-						order: 0,
 					},
 				}).toEqual(blockeraBackground1);
 
@@ -138,16 +141,18 @@ test.describe('Background Repeat → WP Compatibility (Global Styles)', () => {
 				const root2 = globalStylesRecord2?.['core/group'];
 				const backgroundRepeat2 = root2?.background?.backgroundRepeat;
 
-				expect(undefined).toEqual(backgroundRepeat2);
+				expect('no-repeat').toEqual(backgroundRepeat2);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
 				//
 
 				// clear image
-				await bgContainer
-					.locator('[aria-label="Delete image 0"]')
-					.click({ force: true });
+				await deleteRepeaterItem(page, {
+					container: bgContainer,
+					itemId: 'image-0',
+					label: 'Delete image 0',
+				});
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -161,7 +166,7 @@ test.describe('Background Repeat → WP Compatibility (Global Styles)', () => {
 				const blockeraBackground3 = root3?.blockeraBackground;
 
 				expect(undefined).toEqual(backgroundRepeat3);
-				expect({}).toEqual(blockeraBackground3);
+				expect(undefined).toEqual(blockeraBackground3);
 			});
 		});
 	});
