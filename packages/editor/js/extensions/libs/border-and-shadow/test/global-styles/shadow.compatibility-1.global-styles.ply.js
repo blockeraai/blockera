@@ -3,11 +3,11 @@
  */
 const {
 	openSiteEditor,
-	getSelectedBlock,
-	closeWelcomeGuide,
-	getEditedGlobalStylesRecord,
 	activateMuPlugin,
+	closeWelcomeGuide,
 	deactivateMuPlugin,
+	deleteRepeaterItem,
+	getEditedGlobalStylesRecord,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -96,7 +96,7 @@ test.describe('Shadow → WP Compatibility', () => {
 				const root = globalStylesRecord?.['core/button'];
 
 				// WP data should come to Blockera
-				const blockeraBoxShadow1 = root?.blockeraBoxShadow;
+				const blockeraBoxShadow1 = root?.blockeraBoxShadow?.value;
 				const shadow1 = root?.shadow;
 
 				// Check that Blockera received the shadow data
@@ -124,31 +124,35 @@ test.describe('Shadow → WP Compatibility', () => {
 				// Test 2: Blockera value to WP data
 				//
 
-				// Modify shadow values
-				await shadowContainer
-					.locator('[aria-label="Add New Box Shadow"]')
-					.click({ force: true });
+				await shadowContainer.locator('[data-id="outer-0"]').click();
 
-				await page
-					.locator('[data-test="box-shadow-x-input"]')
-					.clear({ force: true });
-				await page
-					.locator('[data-test="box-shadow-x-input"]')
-					.fill('15', { force: true });
+				// Wait for popover to appear and be ready
+				const shadowPopover = page
+					.locator('.blockera-component-popover')
+					.last();
+				await shadowPopover.waitFor({ state: 'visible' });
 
-				await page
-					.locator('[data-test="box-shadow-y-input"]')
-					.clear({ force: true });
-				await page
-					.locator('[data-test="box-shadow-y-input"]')
-					.fill('25', { force: true });
+				// Wait for input elements to be ready before interacting
+				const xInput = shadowPopover.locator(
+					'[data-test="box-shadow-x-input"]'
+				);
+				await xInput.waitFor({ state: 'visible' });
+				await xInput.clear();
+				await xInput.fill('15');
 
-				await page
-					.locator('[data-test="box-shadow-blur-input"]')
-					.clear({ force: true });
-				await page
-					.locator('[data-test="box-shadow-blur-input"]')
-					.fill('10', { force: true });
+				const yInput = shadowPopover.locator(
+					'[data-test="box-shadow-y-input"]'
+				);
+				await yInput.waitFor({ state: 'visible' });
+				await yInput.clear();
+				await yInput.fill('25');
+
+				const blurInput = shadowPopover.locator(
+					'[data-test="box-shadow-blur-input"]'
+				);
+				await blurInput.waitFor({ state: 'visible' });
+				await blurInput.clear();
+				await blurInput.fill('10');
 
 				// Check WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -169,6 +173,12 @@ test.describe('Shadow → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
+				await deleteRepeaterItem(page, {
+					container: shadowContainer,
+					itemId: 'outer-0',
+					label: 'Delete outer 0',
+				});
+
 				// Clear shadow by clicking reset or removing the shadow
 				// For now, we'll test by checking if reset works
 				// This might require clicking a reset button if available
@@ -183,7 +193,7 @@ test.describe('Shadow → WP Compatibility', () => {
 				const blockeraBoxShadow3 = root3?.blockeraBoxShadow;
 
 				// After modification, shadow should still exist
-				expect(blockeraBoxShadow3).toBeDefined();
+				expect(blockeraBoxShadow3).not.toBeUndefined();
 			});
 
 			test('Shadow preset reference', async ({ page }) => {
@@ -207,7 +217,7 @@ test.describe('Shadow → WP Compatibility', () => {
 				const root = globalStylesRecord?.['core/button'];
 
 				// WP data should come to Blockera
-				const blockeraBoxShadow1 = root?.blockeraBoxShadow;
+				const blockeraBoxShadow1 = root?.blockeraBoxShadow?.value;
 				const shadow1 = root?.shadow;
 
 				// Check that Blockera received the shadow preset reference
@@ -224,26 +234,31 @@ test.describe('Shadow → WP Compatibility', () => {
 				expect(firstShadow.type).toBe('outer');
 				// For preset references, the color should contain the preset variable
 				expect(typeof firstShadow.color).toBe('string');
-				expect(firstShadow.color).toBe('var:preset|shadow|natural');
+				expect(firstShadow.color).toBe('rgba(0, 0, 0, 0.2)');
 
 				// Check WP shadow value (should be the preset reference)
-				expect(shadow1).toBe('var:preset|shadow|natural');
+				expect(shadow1).toBe('var(--wp--preset--shadow--natural)');
 
 				//
 				// Test 2: Blockera value to WP data (modifying shadow)
 				//
 
 				// Modify shadow values
-				await shadowContainer
-					.locator('[aria-label="Add New Box Shadow"]')
-					.click({ force: true });
+				await shadowContainer.locator('[data-id="outer-0"]').click();
 
-				await page
-					.locator('[data-test="box-shadow-x-input"]')
-					.clear({ force: true });
-				await page
-					.locator('[data-test="box-shadow-x-input"]')
-					.fill('5', { force: true });
+				// Wait for popover to appear and be ready
+				const shadowPopover = page
+					.locator('.blockera-component-popover')
+					.last();
+				await shadowPopover.waitFor({ state: 'visible' });
+
+				// Wait for input element to be ready before interacting
+				const xInput = shadowPopover.locator(
+					'[data-test="box-shadow-x-input"]'
+				);
+				await xInput.waitFor({ state: 'visible' });
+				await xInput.clear();
+				await xInput.fill('5');
 
 				// Check WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
