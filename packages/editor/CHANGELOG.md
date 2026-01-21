@@ -22,6 +22,9 @@
 - Background feature now supports WordPress global styles interface, allowing background color, background image, background gradients, background size, background repeat, and background position settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Border and Shadow feature now supports WordPress global styles interface, allowing border, border radius, and shadow settings to work correctly in both block inspector and global styles contexts. Shadow compatibility includes support for WordPress shadow presets (var:preset|shadow|slug format) with automatic resolution to CSS values, ensuring compatibility with WordPress 6.7 theme.json schema.
 
+### Bug Fixes
+- Cursor feature: Fix pointer option icon and improve auto icon.
+
 ### Automated Tests
 - Automated test to check `font color` WP data compatibility if variables not found. 
 - Automated test to check `background color` WP data compatibility if variables not found. 
