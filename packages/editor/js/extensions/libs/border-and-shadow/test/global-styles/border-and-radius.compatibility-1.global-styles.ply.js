@@ -172,10 +172,6 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 					color: '#ff4848',
 					width: '20px',
 					style: 'solid',
-					top: undefined,
-					right: undefined,
-					bottom: undefined,
-					left: undefined,
 				}).toEqual(border2);
 
 				//
@@ -212,25 +208,8 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				const blockeraBorder3 = root3?.blockeraBorder?.value;
 				const border3 = root3?.border;
 
-				expect({
-					type: 'all',
-					all: {
-						width: '',
-						style: '',
-						color: '',
-					},
-				}).toEqual(blockeraBorder3);
-
-				expect({
-					radius: undefined,
-					color: undefined,
-					style: undefined,
-					width: undefined,
-					top: undefined,
-					right: undefined,
-					bottom: undefined,
-					left: undefined,
-				}).toEqual(border3);
+				expect(undefined).toEqual(blockeraBorder3);
+				expect(undefined).toEqual(border3);
 			});
 
 			test('Custom side borders', async ({ page }) => {
@@ -408,9 +387,6 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				}).toEqual(blockeraBorderRadius2);
 
 				expect({
-					width: undefined,
-					color: undefined,
-					style: undefined,
 					radius: {
 						topLeft: '50px',
 						topRight: '60px',
@@ -474,6 +450,8 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 
 				const root3 = globalStylesRecord3?.['core/button'];
 				const blockeraBorder3 = root3?.blockeraBorder?.value;
+				const blockeraBorderRadius3 =
+					root3?.blockeraBorderRadius?.value;
 				const border3 = root3?.border;
 
 				expect({
@@ -506,15 +484,15 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				}).toEqual(blockeraBorder3);
 
 				expect({
-					color: undefined,
-					style: undefined,
-					width: undefined,
-					radius: undefined,
-					top: undefined,
-					right: undefined,
-					bottom: undefined,
-					left: undefined,
-				}).toEqual(border3);
+					all: '',
+					topLeft: '',
+					topRight: '',
+					bottomLeft: '',
+					bottomRight: '',
+					type: 'custom',
+				}).toEqual(blockeraBorderRadius3);
+
+				expect(undefined).toEqual(border3);
 			});
 		});
 	});

@@ -91,7 +91,7 @@ export function backgroundColorToWPCompatibility({
 			  }
 			: {
 					color: {
-						background: newValue?.settings?.id,
+						background: `var:preset|color|${newValue?.settings?.id}`,
 					},
 			  };
 	}
