@@ -8,6 +8,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	deleteRepeaterItem,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -99,20 +100,22 @@ test.describe('Background Position → WP Compatibility (Global Styles)', () => 
 				const blockeraBackground1 = root?.blockeraBackground;
 
 				expect({
-					'image-0': {
-						isVisible: true,
-						type: 'image',
-						image: 'https://placehold.co/600x400',
-						'image-size': 'custom',
-						'image-size-width': 'auto',
-						'image-size-height': 'auto',
-						'image-position': {
-							top: '20%',
-							left: '30%',
+					value: {
+						'image-0': {
+							isVisible: true,
+							type: 'image',
+							image: 'https://placehold.co/600x400',
+							'image-size': 'custom',
+							'image-size-width': 'auto',
+							'image-size-height': 'auto',
+							'image-position': {
+								top: '20%',
+								left: '30%',
+							},
+							'image-repeat': 'repeat',
+							'image-attachment': 'scroll',
+							order: 0,
 						},
-						'image-repeat': 'repeat',
-						'image-attachment': 'scroll',
-						order: 0,
 					},
 				}).toEqual(blockeraBackground1);
 
@@ -162,9 +165,11 @@ test.describe('Background Position → WP Compatibility (Global Styles)', () => 
 				//
 
 				// clear image
-				await bgContainer
-					.locator('[aria-label="Delete image 0"]')
-					.click({ force: true });
+				await deleteRepeaterItem(page, {
+					container: bgContainer,
+					itemId: 'image-0',
+					label: 'Delete image 0',
+				});
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -179,7 +184,7 @@ test.describe('Background Position → WP Compatibility (Global Styles)', () => 
 				const blockeraBackground3 = root3?.blockeraBackground;
 
 				expect(undefined).toEqual(backgroundPosition3);
-				expect({}).toEqual(blockeraBackground3);
+				expect(undefined).toEqual(blockeraBackground3);
 			});
 		});
 	});
