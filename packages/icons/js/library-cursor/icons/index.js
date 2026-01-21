@@ -1,4 +1,5 @@
 export { default as Alias } from './alias.svg';
+export { default as Auto } from './auto.svg';
 export { default as Cell } from './cell.svg';
 export { default as ColResize } from './col-resize.svg';
 export { default as ContextMenu } from './context-menu.svg';
