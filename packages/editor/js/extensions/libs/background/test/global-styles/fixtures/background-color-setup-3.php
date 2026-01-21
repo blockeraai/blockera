@@ -22,11 +22,17 @@ add_filter('blockera_theme_json_data_theme', function($theme_json) {
 		$data['styles']['blocks']['core/paragraph'] = [];
 	}
 	
+	// Ensure color structure exists
+	if (!isset($data['styles']['blocks']['core/paragraph']['color'])) {
+		$data['styles']['blocks']['core/paragraph']['color'] = [];
+	}
+	
 	// Add background color configuration based on WordPress valid schema
-	// Using backgroundColor for preset color variables (theme color slugs)
+	// For global styles, background colors are stored under color.background
+	// Using var:preset|color|slug format for preset references
 	// This uses an unknown color slug that doesn't exist in the palette to test
 	// handling of deleted/missing color presets
-	$data['styles']['blocks']['core/paragraph']['backgroundColor'] = 'unknown';
+	$data['styles']['blocks']['core/paragraph']['color']['background'] = 'var:preset|color|unknown';
 	
 	// Update the theme.json data
 	return $data;

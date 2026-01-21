@@ -3,7 +3,6 @@
  */
 const {
 	openSiteEditor,
-	getSelectedBlock,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
@@ -143,7 +142,7 @@ test.describe('Background Color → WP Compatibility', () => {
 					root3?.blockeraBackgroundColor?.value;
 
 				expect(undefined).toEqual(styleColorBackground3);
-				expect('').toEqual(blockeraBackgroundColor3);
+				expect(undefined).toEqual(blockeraBackgroundColor3);
 			});
 		});
 
@@ -169,8 +168,8 @@ test.describe('Background Color → WP Compatibility', () => {
 				const root = globalStylesRecord?.['core/paragraph'];
 
 				// WP data should come to Blockera
-				// WordPress converts styles.color.background CSS variable (from theme.json schema)
-				// to backgroundColor slug in editor state for convenience
+				// For global styles, WordPress stores background color in color.background
+				// Format can be CSS color string or CSS variable reference
 				const blockeraBackgroundColor1 =
 					root?.blockeraBackgroundColor?.value;
 				const backgroundColor1 = root?.color?.background;
@@ -191,8 +190,8 @@ test.describe('Background Color → WP Compatibility', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				}).toEqual(blockeraBackgroundColor1);
-				// WordPress stores preset colors as backgroundColor slug in editor state
-				// (converted from styles.color.background CSS variable in theme.json)
+				// WordPress stores preset colors in color.background as CSS variable
+				// (from theme.json styles.color.background)
 				expect('var(--wp--preset--color--accent-3)').toEqual(
 					backgroundColor1
 				);
@@ -203,6 +202,20 @@ test.describe('Background Color → WP Compatibility', () => {
 
 				// open color popover
 				await clickValueAddonButton(page, bgColorContainer);
+
+				// Wait for variables popover to be visible and items to load
+				const variablesPopover = page
+					.locator(
+						'.components-popover.blockera-control-popover-variables'
+					)
+					.last();
+				await variablesPopover.waitFor({ state: 'visible' });
+
+				// Wait for the specific item to be available
+				await variablesPopover
+					.locator('[data-cy="va-item-contrast"]')
+					.waitFor({ state: 'visible' });
+				await page.waitForTimeout(300);
 
 				// change variable
 				await selectValueAddonItem(page, 'contrast');
@@ -215,10 +228,11 @@ test.describe('Background Color → WP Compatibility', () => {
 				);
 
 				const root2 = globalStylesRecord2?.['core/paragraph'];
-				const backgroundColor2 = root2?.backgroundColor;
+				const backgroundColor2 = root2?.color?.background;
 
-				// WordPress stores preset colors as backgroundColor slug in editor state
-				expect('contrast').toEqual(backgroundColor2);
+				// WordPress stores preset colors in color.background using var:preset|color|slug format
+				// (compatibility code writes var:preset|color|${slug} to match theme.json schema)
+				expect('var:preset|color|contrast').toEqual(backgroundColor2);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
@@ -235,12 +249,12 @@ test.describe('Background Color → WP Compatibility', () => {
 				);
 
 				const root3 = globalStylesRecord3?.['core/paragraph'];
-				const backgroundColor3 = root3?.backgroundColor;
+				const backgroundColor3 = root3?.color?.background;
 				const blockeraBackgroundColor3 =
 					root3?.blockeraBackgroundColor?.value;
 
 				expect(undefined).toEqual(backgroundColor3);
-				expect('').toEqual(blockeraBackgroundColor3);
+				expect(undefined).toEqual(blockeraBackgroundColor3);
 			});
 		});
 
@@ -272,7 +286,7 @@ test.describe('Background Color → WP Compatibility', () => {
 				expect({
 					settings: {
 						name: 'unknown',
-						id: 'var:preset|color|unknown',
+						id: 'var(--wp--preset--color--unknown)',
 						value: 'var(--wp--preset--color--unknown)',
 						type: 'color',
 						var: '--wp--preset--color--unknown',
@@ -314,7 +328,7 @@ test.describe('Background Color → WP Compatibility', () => {
 					root3?.blockeraBackgroundColor?.value;
 
 				expect(undefined).toEqual(backgroundColor3);
-				expect('').toEqual(blockeraBackgroundColor3);
+				expect(undefined).toEqual(blockeraBackgroundColor3);
 			});
 		});
 	});
