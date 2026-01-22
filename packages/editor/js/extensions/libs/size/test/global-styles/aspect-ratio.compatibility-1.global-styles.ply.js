@@ -144,11 +144,7 @@ test.describe('Aspect Ratio → WP Compatibility (Global Styles)', () => {
 				const blockeraRatio3 = root3?.blockeraRatio?.value;
 
 				expect(undefined).toEqual(dimensionsAspectRatio3);
-				expect({
-					val: '',
-					width: '',
-					height: '',
-				}).toEqual(blockeraRatio3);
+				expect(undefined).toEqual(blockeraRatio3);
 			});
 		});
 	});
