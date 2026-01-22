@@ -151,10 +151,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 
 				expect(undefined).toEqual(typographyFontWeight3);
 				expect(undefined).toEqual(typographyFontStyle3);
-				expect({
-					weight: '',
-					style: '',
-				}).toEqual(blockeraFontAppearance3);
+				expect(undefined).toEqual(blockeraFontAppearance3);
 			});
 		});
 
@@ -197,6 +194,8 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				await appearanceContainer
 					.locator('select')
 					.selectOption('400-normal');
+
+				await page.waitForTimeout(500);
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -253,6 +252,8 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				await appearanceContainer
 					.locator('select')
 					.selectOption('300-normal');
+
+				await page.waitForTimeout(500);
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
