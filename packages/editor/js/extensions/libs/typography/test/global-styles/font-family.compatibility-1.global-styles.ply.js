@@ -16,8 +16,6 @@ const {
 	addNewTransition,
 	getParentContainer,
 	openGlobalStylesPanel,
-	setFontFamilyControlValue,
-	clearFontFamilyControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Font Family → WP Compatibility (Global Styles)', () => {
@@ -100,12 +98,16 @@ test.describe('Font Family → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
-				// set font family
-				await setFontFamilyControlValue(
+				const fontFamilyContainer = await getParentContainer(
 					page,
-					'Font Family',
-					'Arial, sans-serif'
+					'Font Family'
 				);
+
+				// set font family
+				await fontFamilyContainer
+					.locator('select')
+					.first()
+					.selectOption('fira-code');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -117,14 +119,17 @@ test.describe('Font Family → WP Compatibility (Global Styles)', () => {
 				const root2 = globalStylesRecord2?.['core/paragraph'];
 				const typographyFontFamily = root2?.typography?.fontFamily;
 
-				expect('Arial, sans-serif').toEqual(typographyFontFamily);
+				expect('fira-code').toEqual(typographyFontFamily);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
 				//
 
 				// clear font family
-				await clearFontFamilyControlValue(page, 'Font Family');
+				await fontFamilyContainer
+					.locator('select')
+					.first()
+					.selectOption('');
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -138,7 +143,7 @@ test.describe('Font Family → WP Compatibility (Global Styles)', () => {
 				const blockeraFontFamily3 = root3?.blockeraFontFamily?.value;
 
 				expect(undefined).toEqual(typographyFontFamily3);
-				expect('').toEqual(blockeraFontFamily3);
+				expect(undefined).toEqual(blockeraFontFamily3);
 			});
 		});
 	});
