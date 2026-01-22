@@ -51,13 +51,11 @@ export const bootstrap = (): void => {
 			attributes = widthFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
 			});
 
 			attributes = heightFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector,
 			});
 
 			attributes = minHeightFromWPCompatibility({
@@ -120,7 +118,6 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
 						})
 					);
 
@@ -131,7 +128,6 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
-							insideBlockInspector,
 						})
 					);
 

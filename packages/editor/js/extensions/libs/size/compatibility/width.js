@@ -6,11 +6,9 @@ import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 export function widthFromWPCompatibility({
 	attributes,
 	blockId,
-	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId?: string,
-	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		// extra attr for unit
@@ -68,21 +66,10 @@ export function widthFromWPCompatibility({
 		// Blocks that support global styles dimensions.width
 		case 'core/column':
 		case 'core/image':
-			// Check block-level attribute (insideBlockInspector) or global style context
 			// Block inspector: attributes.width
-			if (insideBlockInspector && attributes?.width !== undefined) {
+			if (attributes?.width !== undefined) {
 				attributes.blockeraWidth = {
 					value: attributes?.width,
-				};
-			}
-
-			// Global styles: attributes.dimensions.width
-			if (
-				!insideBlockInspector &&
-				attributes?.dimensions?.width !== undefined
-			) {
-				attributes.blockeraWidth = {
-					value: attributes?.dimensions?.width,
 				};
 			}
 
@@ -107,12 +94,10 @@ export function widthToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
-	insideBlockInspector = true,
 }: {
 	newValue: string,
 	ref?: Object,
 	blockId: string,
-	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		// A number attribute for width and another for unit!
@@ -219,15 +204,9 @@ export function widthToWPCompatibility({
 		// Blocks that support global styles dimensions.width
 		case 'core/column':
 			if ('reset' === ref?.current?.action) {
-				return insideBlockInspector
-					? {
-							width: undefined,
-					  }
-					: {
-							dimensions: {
-								width: undefined,
-							},
-					  };
+				return {
+					width: undefined,
+				};
 			}
 
 			if (
@@ -236,39 +215,21 @@ export function widthToWPCompatibility({
 				isSpecialUnit(newValue) ||
 				!isString(newValue)
 			) {
-				return insideBlockInspector
-					? {
-							width: undefined,
-					  }
-					: {
-							dimensions: {
-								width: undefined,
-							},
-					  };
+				return {
+					width: undefined,
+				};
 			}
 
-			return insideBlockInspector
-				? {
-						width: newValue,
-				  }
-				: {
-						dimensions: {
-							width: newValue,
-						},
-				  };
+			return {
+				width: newValue,
+			};
 
 		// A number attribute for width without unit (px is unit)
 		case 'core/image':
 			if ('reset' === ref?.current?.action) {
-				return insideBlockInspector
-					? {
-							width: undefined,
-					  }
-					: {
-							dimensions: {
-								width: undefined,
-							},
-					  };
+				return {
+					width: undefined,
+				};
 			}
 
 			if (
@@ -278,26 +239,14 @@ export function widthToWPCompatibility({
 				!isString(newValue) ||
 				!newValue.endsWith('px') // only px units
 			) {
-				return insideBlockInspector
-					? {
-							width: undefined,
-					  }
-					: {
-							dimensions: {
-								width: undefined,
-							},
-					  };
+				return {
+					width: undefined,
+				};
 			}
 
-			return insideBlockInspector
-				? {
-						width: newValue,
-				  }
-				: {
-						dimensions: {
-							width: newValue,
-						},
-				  };
+			return {
+				width: newValue,
+			};
 
 		/**
 		 * all unit types are valid except special ones
