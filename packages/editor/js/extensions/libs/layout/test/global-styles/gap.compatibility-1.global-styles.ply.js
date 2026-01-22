@@ -14,9 +14,8 @@ const {
 	expect,
 	getByDataTest,
 	addNewTransition,
+	getParentContainer,
 	openGlobalStylesPanel,
-	setSizeControlValue,
-	clearSizeControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Gap → WP Compatibility (Global Styles)', () => {
@@ -104,8 +103,12 @@ test.describe('Gap → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const gapContainer = await getParentContainer(page, 'Gap');
+
 				// set gap
-				await setSizeControlValue(page, 'Gap', '40px');
+				await gapContainer.locator('input').first().fill('40px');
+
+				await page.waitForTimeout(500);
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -116,7 +119,14 @@ test.describe('Gap → WP Compatibility (Global Styles)', () => {
 
 				const root2 = globalStylesRecord2?.['core/group'];
 				const spacingBlockGap = root2?.spacing?.blockGap;
+				const blockeraGap2 = root2?.blockeraGap?.value;
 
+				expect({
+					lock: true,
+					gap: '40px',
+					columns: '',
+					rows: '',
+				}).toEqual(blockeraGap2);
 				expect('40px').toEqual(spacingBlockGap);
 
 				//
@@ -124,7 +134,9 @@ test.describe('Gap → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear gap
-				await clearSizeControlValue(page, 'Gap');
+				await gapContainer.locator('input').first().clear();
+
+				await page.waitForTimeout(500);
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -138,12 +150,7 @@ test.describe('Gap → WP Compatibility (Global Styles)', () => {
 				const blockeraGap3 = root3?.blockeraGap?.value;
 
 				expect(undefined).toEqual(spacingBlockGap3);
-				expect({
-					lock: true,
-					gap: '',
-					columns: '',
-					rows: '',
-				}).toEqual(blockeraGap3);
+				expect(undefined).toEqual(blockeraGap3);
 			});
 		});
 	});
