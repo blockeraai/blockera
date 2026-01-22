@@ -510,9 +510,8 @@ async function clearColorControlValue(page, label) {
  */
 async function clickValueAddonButton(page, container = null) {
 	const targetContainer = container || page;
-	await targetContainer.locator('[data-cy="value-addon-btn"]').click({
-		force: true,
-	});
+	const button = targetContainer.locator('[data-cy="value-addon-btn"]');
+	await button.dispatchEvent('click');
 }
 
 /**
@@ -523,9 +522,8 @@ async function clickValueAddonButton(page, container = null) {
  * @return {Promise<void>}
  */
 async function selectValueAddonItem(page, itemID) {
-	await page.locator(`[data-cy="va-item-${itemID}"]`).click({
-		force: true,
-	});
+	// Click on value addon with item ID.
+	await page.locator(`[data-cy="va-item-${itemID}"]`).dispatchEvent('click');
 }
 
 /**
