@@ -19,7 +19,7 @@ add_filter('blockera_theme_json_data_theme', function($theme_json) {
 	
 	// Add font size configuration based on WordPress valid schema
 	// Using fontSize attribute for preset font size values (unknown variable)
-	$data['styles']['blocks']['core/paragraph']['fontSize'] = 'unknown';
+	$data['styles']['blocks']['core/paragraph']['fontSize'] = 'var:preset|font-size|unknown';
 	
 	// Update the theme.json data
 	return $data;
