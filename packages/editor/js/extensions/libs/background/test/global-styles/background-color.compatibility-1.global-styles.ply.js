@@ -203,20 +203,6 @@ test.describe('Background Color → WP Compatibility', () => {
 				// open color popover
 				await clickValueAddonButton(page, bgColorContainer);
 
-				// Wait for variables popover to be visible and items to load
-				const variablesPopover = page
-					.locator(
-						'.components-popover.blockera-control-popover-variables'
-					)
-					.last();
-				await variablesPopover.waitFor({ state: 'visible' });
-
-				// Wait for the specific item to be available
-				await variablesPopover
-					.locator('[data-cy="va-item-contrast"]')
-					.waitFor({ state: 'visible' });
-				await page.waitForTimeout(300);
-
 				// change variable
 				await selectValueAddonItem(page, 'contrast');
 
