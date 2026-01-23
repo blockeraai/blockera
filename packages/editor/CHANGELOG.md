@@ -22,6 +22,7 @@
 - Layout feature now supports WordPress global styles interface, allowing spacing (padding/margin) and gap settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Background feature now supports WordPress global styles interface, allowing background color, background image, background gradients, background size, background repeat, and background position settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Border and Shadow feature now supports WordPress global styles interface, allowing border, border radius, and shadow settings to work correctly in both block inspector and global styles contexts. Shadow compatibility includes support for WordPress shadow presets (var:preset|shadow|slug format) with automatic resolution to CSS values, ensuring compatibility with WordPress 6.7 theme.json schema.
+- Text Orientation Feature: improve label for options.
 
 ### Bug Fixes
 - Cursor feature: Fix pointer option icon and improve auto icon.
