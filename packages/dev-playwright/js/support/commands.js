@@ -535,9 +535,9 @@ async function selectValueAddonItem(page, itemID) {
  */
 async function removeValueAddon(page, container = null) {
 	const targetContainer = container || page;
-	await targetContainer.locator('[data-cy="value-addon-btn-remove"]').click({
-		force: true,
-	});
+	await targetContainer
+		.locator('[data-cy="value-addon-btn-remove"]')
+		.dispatchEvent('click');
 }
 
 /**
