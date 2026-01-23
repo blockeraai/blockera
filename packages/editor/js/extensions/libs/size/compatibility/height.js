@@ -9,11 +9,9 @@ import { isSpecialUnit } from '@blockera/controls';
 export function heightFromWPCompatibility({
 	attributes,
 	blockId,
-	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId?: string,
-	insideBlockInspector?: boolean,
 }): Object {
 	if (attributes?.blockeraHeight?.value !== '') {
 		return attributes;
@@ -22,21 +20,10 @@ export function heightFromWPCompatibility({
 	switch (blockId) {
 		// Blocks that support global styles dimensions.height
 		case 'core/image':
-			// Check block-level attribute (insideBlockInspector) or global style context
-			// Block inspector: attributes.height
-			if (insideBlockInspector && attributes?.height !== undefined) {
+			// Check block-level attribute
+			if (attributes?.height !== undefined) {
 				attributes.blockeraHeight = {
 					value: attributes?.height,
-				};
-			}
-
-			// Global styles: attributes.dimensions.height
-			if (
-				!insideBlockInspector &&
-				attributes?.dimensions?.height !== undefined
-			) {
-				attributes.blockeraHeight = {
-					value: attributes?.dimensions?.height,
 				};
 			}
 
@@ -60,26 +47,18 @@ export function heightToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
-	insideBlockInspector = true,
 }: {
 	newValue: string,
 	ref?: Object,
 	blockId: string,
-	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		// Blocks that support global styles dimensions.height
 		case 'core/image':
 			if ('reset' === ref?.current?.action) {
-				return insideBlockInspector
-					? {
-							height: undefined,
-					  }
-					: {
-							dimensions: {
-								height: undefined,
-							},
-					  };
+				return {
+					height: undefined,
+				};
 			}
 
 			if (
@@ -89,26 +68,14 @@ export function heightToWPCompatibility({
 				!isString(newValue) ||
 				!newValue.endsWith('px') // only px units
 			) {
-				return insideBlockInspector
-					? {
-							height: undefined,
-					  }
-					: {
-							dimensions: {
-								height: undefined,
-							},
-					  };
+				return {
+					height: undefined,
+				};
 			}
 
-			return insideBlockInspector
-				? {
-						height: newValue,
-				  }
-				: {
-						dimensions: {
-							height: newValue,
-						},
-				  };
+			return {
+				height: newValue,
+			};
 
 		// A string attribute for width with unit
 		case 'core/spacer':

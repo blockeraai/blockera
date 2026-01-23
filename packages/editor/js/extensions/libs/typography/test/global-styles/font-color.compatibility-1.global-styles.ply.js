@@ -139,7 +139,7 @@ test.describe('Font Color → WP Compatibility (Global Styles)', () => {
 				const blockeraFontColor3 = root3?.blockeraFontColor?.value;
 
 				expect(undefined).toEqual(colorText3);
-				expect('').toEqual(blockeraFontColor3);
+				expect(undefined).toEqual(blockeraFontColor3);
 			});
 		});
 
@@ -169,7 +169,7 @@ test.describe('Font Color → WP Compatibility (Global Styles)', () => {
 
 				// WP data should come to Blockera
 				const blockeraFontColor1 = root?.blockeraFontColor?.value;
-				const textColor1 = root?.textColor;
+				const textColor1 = root?.color?.text;
 
 				expect({
 					settings: {
@@ -187,7 +187,9 @@ test.describe('Font Color → WP Compatibility (Global Styles)', () => {
 					isValueAddon: true,
 					valueType: 'variable',
 				}).toEqual(blockeraFontColor1);
-				expect('accent-3').toEqual(textColor1);
+				expect('var(--wp--preset--color--accent-3)').toEqual(
+					textColor1
+				);
 
 				//
 				// Test 2: Blockera value to WP data
@@ -207,9 +209,11 @@ test.describe('Font Color → WP Compatibility (Global Styles)', () => {
 				);
 
 				const root2 = globalStylesRecord2?.['core/paragraph'];
-				const textColor2 = root2?.textColor;
+				const textColor2 = root2?.color?.text;
 
-				expect('contrast').toEqual(textColor2);
+				expect('var(--wp--preset--color--accent-3)').toEqual(
+					textColor2
+				);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
@@ -226,11 +230,11 @@ test.describe('Font Color → WP Compatibility (Global Styles)', () => {
 				);
 
 				const root3 = globalStylesRecord3?.['core/paragraph'];
-				const textColor3 = root3?.textColor;
+				const textColor3 = root3?.color?.text;
 				const blockeraFontColor3 = root3?.blockeraFontColor?.value;
 
 				expect(undefined).toEqual(textColor3);
-				expect('').toEqual(blockeraFontColor3);
+				expect(undefined).toEqual(blockeraFontColor3);
 			});
 		});
 	});

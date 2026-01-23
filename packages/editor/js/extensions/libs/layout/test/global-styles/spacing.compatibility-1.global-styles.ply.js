@@ -111,21 +111,15 @@ test.describe('Spacing → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
-				// Get spacing container
-				const spacingContainer = getParentContainer(page, 'Spacing');
+				// Get layout container
+				const paddingContainer = getParentContainer(page, 'Padding');
 
-				// Open padding top side
-				await spacingContainer
-					.locator('[data-cy="box-spacing-label-padding-top"]')
-					.click();
+				const paddingTopInput = await paddingContainer.locator(
+					'[data-test="padding-top"]'
+				);
+				await paddingTopInput.first().fill('25px');
 
-				// Set padding top value
-				const paddingTopInput = page
-					.locator('[data-wp-component="Popover"]')
-					.last()
-					.locator('input[type="text"]');
-				await paddingTopInput.fill('25px');
-				await paddingTopInput.press('Enter');
+				await page.waitForTimeout(500);
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -143,11 +137,10 @@ test.describe('Spacing → WP Compatibility (Global Styles)', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				// Clear padding top
-				await spacingContainer
-					.locator('[data-cy="box-spacing-label-padding-top"]')
-					.locator('button[data-test="remove-value-addon"]')
-					.click();
+				// Clear padding top value
+				await paddingTopInput.first().clear();
+
+				await page.waitForTimeout(500);
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -160,10 +153,9 @@ test.describe('Spacing → WP Compatibility (Global Styles)', () => {
 				const spacingPaddingTop3 = root3?.spacing?.padding?.top;
 				const blockeraSpacing3 = root3?.blockeraSpacing?.value;
 
-				expect(undefined).toEqual(spacingPaddingTop3);
+				expect('').toEqual(spacingPaddingTop3);
 				expect({
 					padding: {
-						top: '',
 						right: '30px',
 						bottom: '40px',
 						left: '50px',

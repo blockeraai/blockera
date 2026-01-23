@@ -14,9 +14,8 @@ const {
 	expect,
 	getByDataTest,
 	addNewTransition,
+	getParentContainer,
 	openGlobalStylesPanel,
-	setSizeControlValue,
-	clearSizeControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Min Height → WP Compatibility (Global Styles)', () => {
@@ -99,8 +98,15 @@ test.describe('Min Height → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const minHeightContainer = await getParentContainer(
+					page,
+					'Min Height'
+				);
+
 				// set min height
-				await setSizeControlValue(page, 'Min', '400px');
+				await minHeightContainer.locator('input').first().fill('400px');
+
+				await page.waitForTimeout(500);
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -119,7 +125,9 @@ test.describe('Min Height → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear min height
-				await clearSizeControlValue(page, 'Min');
+				await minHeightContainer.locator('input').first().clear();
+
+				await page.waitForTimeout(500);
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -133,7 +141,7 @@ test.describe('Min Height → WP Compatibility (Global Styles)', () => {
 				const blockeraMinHeight3 = root3?.blockeraMinHeight?.value;
 
 				expect(undefined).toEqual(dimensionsMinHeight3);
-				expect('').toEqual(blockeraMinHeight3);
+				expect(undefined).toEqual(blockeraMinHeight3);
 			});
 		});
 	});

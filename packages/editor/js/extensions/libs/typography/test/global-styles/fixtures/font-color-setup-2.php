@@ -18,8 +18,8 @@ add_filter('blockera_theme_json_data_theme', function($theme_json) {
 	}
 	
 	// Add font color configuration based on WordPress valid schema
-	// Using textColor attribute for preset color values
-	$data['styles']['blocks']['core/paragraph']['textColor'] = 'accent-3';
+	// Using color.text attribute for preset color values
+	$data['styles']['blocks']['core/paragraph']['color']['text'] = 'var:preset|color|accent-3';
 	
 	// Update the theme.json data
 	return $data;

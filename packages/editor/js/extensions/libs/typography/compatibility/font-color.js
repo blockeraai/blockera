@@ -39,9 +39,11 @@ export function fontColorFromWPCompatibility({
 	if (attributes?.blockeraFontColor?.value === '') {
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.textColor) {
+		if (attributes?.textColor || attributes?.color?.text) {
 			const color = getColorVAFromVarString(
-				`var:preset|color|${attributes?.textColor}`
+				insideBlockInspector
+					? `var:preset|color|${attributes?.textColor}`
+					: attributes?.color?.text
 			);
 
 			if (color) {

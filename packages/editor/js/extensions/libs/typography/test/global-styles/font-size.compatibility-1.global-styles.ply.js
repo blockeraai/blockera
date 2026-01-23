@@ -107,8 +107,13 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const fontSizeContainer = await getParentContainer(
+					page,
+					'Font Size'
+				);
+
 				// set font size
-				await setSizeControlValue(page, 'Font Size', '18px');
+				await fontSizeContainer.locator('input').first().fill('18');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -127,7 +132,7 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear font size
-				await clearSizeControlValue(page, 'Font Size');
+				await fontSizeContainer.locator('input').clear();
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -141,7 +146,7 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				const blockeraFontSize3 = root3?.blockeraFontSize?.value;
 
 				expect(undefined).toEqual(typographyFontSize3);
-				expect('').toEqual(blockeraFontSize3);
+				expect(undefined).toEqual(blockeraFontSize3);
 			});
 		});
 
@@ -168,25 +173,31 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 
 				// WP data should come to Blockera
 				const blockeraFontSize1 = root?.blockeraFontSize?.value;
-				const fontSize1 = root?.fontSize;
+				const fontSize1 = root?.typography?.fontSize;
 
 				expect({
 					settings: {
 						name: 'Large',
 						id: 'large',
-						value: '36px',
+						value: '1.38rem',
+						fluid: {
+							max: '1.375rem',
+							min: '1.125rem',
+						},
 						reference: {
 							type: 'theme',
 							theme: 'Twenty Twenty-Five',
 						},
-						type: 'fontSize',
+						type: 'font-size',
 						var: '--wp--preset--font-size--large',
 					},
 					name: 'Large',
 					isValueAddon: true,
 					valueType: 'variable',
 				}).toEqual(blockeraFontSize1);
-				expect('large').toEqual(fontSize1);
+				expect('var(--wp--preset--font-size--large)').toEqual(
+					fontSize1
+				);
 
 				//
 				// Test 2: Blockera value to WP data
@@ -206,9 +217,11 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				);
 
 				const root2 = globalStylesRecord2?.['core/paragraph'];
-				const fontSize2 = root2?.fontSize;
+				const fontSize2 = root2?.typography?.fontSize;
 
-				expect('medium').toEqual(fontSize2);
+				expect('var(--wp--preset--font-size--medium)').toEqual(
+					fontSize2
+				);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
@@ -225,11 +238,11 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				);
 
 				const root3 = globalStylesRecord3?.['core/paragraph'];
-				const fontSize3 = root3?.fontSize;
+				const fontSize3 = root3?.typography?.fontSize;
 				const blockeraFontSize3 = root3?.blockeraFontSize?.value;
 
 				expect(undefined).toEqual(fontSize3);
-				expect('').toEqual(blockeraFontSize3);
+				expect(undefined).toEqual(blockeraFontSize3);
 			});
 		});
 
@@ -255,21 +268,23 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 
 				// WP data should come to Blockera
 				const blockeraFontSize1 = root?.blockeraFontSize?.value;
-				const fontSize1 = root?.fontSize;
+				const fontSize1 = root?.typography?.fontSize;
 
 				expect({
 					settings: {
 						name: 'unknown',
 						id: 'var:preset|font-size|unknown',
 						value: 'var(--wp--preset--font-size--unknown)',
-						type: 'fontSize',
+						type: 'font-size',
 						var: '--wp--preset--font-size--unknown',
 					},
 					name: 'unknown',
 					isValueAddon: true,
 					valueType: 'variable',
 				}).toEqual(blockeraFontSize1);
-				expect('unknown').toEqual(fontSize1);
+				expect('var(--wp--preset--font-size--unknown)').toEqual(
+					fontSize1
+				);
 
 				//
 				// Test 2: Check interface for showing deleted value addon
@@ -295,11 +310,11 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				);
 
 				const root3 = globalStylesRecord3?.['core/paragraph'];
-				const fontSize3 = root3?.fontSize;
+				const fontSize3 = root3?.typography?.fontSize;
 				const blockeraFontSize3 = root3?.blockeraFontSize?.value;
 
 				expect(undefined).toEqual(fontSize3);
-				expect('').toEqual(blockeraFontSize3);
+				expect(undefined).toEqual(blockeraFontSize3);
 			});
 		});
 	});

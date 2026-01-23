@@ -17,9 +17,11 @@ export function fontSizeFromWPCompatibility({
 		// fontSize attribute in root always is variable
 		// medium → var(--wp--preset--font-size--medium)
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.fontSize) {
+		if (attributes?.fontSize || attributes?.typography?.fontSize) {
 			const fontSizeVar = getFontSizeVAFromVarString(
-				`var:preset|font-size|${attributes?.fontSize}`
+				insideBlockInspector
+					? `var:preset|font-size|${attributes?.fontSize}`
+					: attributes?.typography?.fontSize
 			);
 
 			if (fontSizeVar) {

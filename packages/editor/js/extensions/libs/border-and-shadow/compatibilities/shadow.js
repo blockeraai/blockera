@@ -153,14 +153,35 @@ function parseBoxShadow(shadowValue: string): ?{
 	const x = parts[startIndex] || '0px';
 	const y = parts[startIndex + 1] || '0px';
 	const blur = parts[startIndex + 2] || '0px';
-	const spread =
-		parts.length > startIndex + 3 ? parts[startIndex + 3] : '0px';
 
-	// Color might be multiple parts (e.g., "rgba(0, 0, 0, 0.1)")
-	// Find where color starts (usually after spread, or if spread is missing, after blur)
-	const colorStartIndex = startIndex + 3;
+	// Determine spread and color positions
+	// Spread is optional, so we need to check if the next part is a color or a spread value
+	let spread = '0px';
+	let colorStartIndex = startIndex + 3;
+
+	if (parts.length > startIndex + 3) {
+		// Check if the 4th part (after blur) looks like a color
+		// Colors start with #, rgb(, rgba(, hsl(, hsla(, or color names
+		const potentialColorStart = parts[startIndex + 3];
+		const isColorStart =
+			/^(#[0-9a-fA-F]{3,8}|rgb\(|rgba\(|hsl\(|hsla\(|[a-zA-Z]+)/.test(
+				potentialColorStart
+			);
+
+		if (isColorStart) {
+			// The 4th part is a color, so there's no spread value
+			spread = '0px';
+			colorStartIndex = startIndex + 3;
+		} else {
+			// The 4th part is likely the spread value
+			spread = parts[startIndex + 3];
+			colorStartIndex = startIndex + 4;
+		}
+	}
+
+	// Extract color if present
 	if (parts.length > colorStartIndex) {
-		// Check if the next part looks like a color (starts with #, rgb, rgba, hsl, hsla, or color name)
+		// Check if the remaining parts form a color
 		const potentialColor = parts.slice(colorStartIndex).join(' ');
 		const colorMatch = potentialColor.match(
 			/^(#[0-9a-fA-F]{3,8}|rgb\(|rgba\(|hsl\(|hsla\(|[a-zA-Z]+)/
