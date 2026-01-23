@@ -16,8 +16,6 @@ const {
 	addNewTransition,
 	getParentContainer,
 	openGlobalStylesPanel,
-	setSizeControlValue,
-	clearSizeControlValue,
 	clickValueAddonButton,
 	selectValueAddonItem,
 	removeValueAddon,
@@ -273,7 +271,8 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				expect({
 					settings: {
 						name: 'unknown',
-						id: 'var:preset|font-size|unknown',
+						fluid: null,
+						id: 'var(--wp--preset--font-size--unknown)',
 						value: 'var(--wp--preset--font-size--unknown)',
 						type: 'font-size',
 						var: '--wp--preset--font-size--unknown',
@@ -295,6 +294,8 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 						'[data-test="value-addon-deleted"]'
 					)
 				).toBeVisible();
+
+				await clickValueAddonButton(page, fontSizeContainer);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
