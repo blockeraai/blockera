@@ -151,7 +151,12 @@ export default function BoxSpacingControl({
 											)}
 											data-test="padding-top-bottom"
 											columns="columns-1"
-											label={'↑↓'}
+											label={
+												<Icon
+													icon="padding-vertical"
+													iconSize="18"
+												/>
+											}
 											labelPopoverTitle={__(
 												'Top & Bottom Padding',
 												'blockera'
@@ -197,7 +202,12 @@ export default function BoxSpacingControl({
 											data-test="padding-left-right"
 											columns="columns-1"
 											unitType={'padding'}
-											label={'←→'}
+											label={
+												<Icon
+													icon="padding-horizontal"
+													iconSize="18"
+												/>
+											}
 											labelPopoverTitle={__(
 												'Left & Right Padding',
 												'blockera'
@@ -468,7 +478,12 @@ export default function BoxSpacingControl({
 											data-test="margin-top-bottom"
 											columns="columns-1"
 											unitType={'margin'}
-											label={'↑↓'}
+											label={
+												<Icon
+													icon="margin-vertical"
+													iconSize="18"
+												/>
+											}
 											labelPopoverTitle={__(
 												'Top & Bottom Margin',
 												'blockera'
@@ -510,7 +525,12 @@ export default function BoxSpacingControl({
 											data-test="margin-left-right"
 											columns="columns-1"
 											unitType={'margin'}
-											label={'←→'}
+											label={
+												<Icon
+													icon="margin-horizontal"
+													iconSize="18"
+												/>
+											}
 											labelPopoverTitle={__(
 												'Left & Right Margin',
 												'blockera'
