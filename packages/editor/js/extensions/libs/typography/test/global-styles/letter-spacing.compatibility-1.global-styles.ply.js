@@ -8,6 +8,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	openMoreFeaturesControl,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -16,8 +17,6 @@ const {
 	addNewTransition,
 	getParentContainer,
 	openGlobalStylesPanel,
-	setSizeControlValue,
-	clearSizeControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
@@ -79,6 +78,9 @@ test.describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 
 				await addNewTransition(page);
 
+				// Open more settings
+				await openMoreFeaturesControl(page, 'More typography settings');
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -101,8 +103,13 @@ test.describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const letterSpacingContainer = await getParentContainer(
+					page,
+					'Letters'
+				);
+
 				// set letter spacing
-				await setSizeControlValue(page, 'Letters', '3px');
+				await letterSpacingContainer.locator('input').first().fill('3');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -122,7 +129,10 @@ test.describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear letter spacing
-				await clearSizeControlValue(page, 'Letters');
+				await letterSpacingContainer
+					.locator('input')
+					.first()
+					.clear({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -138,7 +148,7 @@ test.describe('Letter Spacing → WP Compatibility (Global Styles)', () => {
 					root3?.blockeraLetterSpacing?.value;
 
 				expect(undefined).toEqual(typographyLetterSpacing3);
-				expect('').toEqual(blockeraLetterSpacing3);
+				expect(undefined).toEqual(blockeraLetterSpacing3);
 			});
 		});
 	});
