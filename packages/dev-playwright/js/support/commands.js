@@ -235,8 +235,12 @@ async function cssVar(page, cssVarName, selector = null) {
  * @param {string} parentsDataCy - Parent data-cy value (default: 'base-control').
  * @return {import('@playwright/test').Locator} Parent container locator.
  */
-function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
-	const ariaLabelElement = page
+async function getParentContainer(
+	page,
+	ariaLabel,
+	parentsDataCy = 'base-control'
+) {
+	const ariaLabelElement = await page
 		.locator(`[aria-label="${ariaLabel}"]`, {
 			timeout: 20000,
 		})
@@ -245,7 +249,7 @@ function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
 	// Use XPath to find the closest ancestor (equivalent to Cypress's .closest())
 	// ancestor::* returns ancestors in reverse document order (closest first)
 	// [1] selects the first one, which is the closest ancestor
-	return ariaLabelElement.locator(
+	return await ariaLabelElement.locator(
 		`xpath=ancestor::*[@data-cy="${parentsDataCy}"][1]`
 	);
 }
@@ -785,7 +789,7 @@ async function openSettingsPanel(page) {
  * @return {Promise<void>}
  */
 async function addNewTransition(page) {
-	const container = getParentContainer(page, 'Transitions');
+	const container = await getParentContainer(page, 'Transitions');
 	await container.locator('[aria-label="Add New Transition"]').click();
 }
 /**
