@@ -111,9 +111,8 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 
 				// set capitalize
 				await capitalizeContainer
-					.locator('button[data-value="capitalize"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="Capitalize"]')
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -130,9 +129,8 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 
 				// set lowercase
 				await capitalizeContainer
-					.locator('button[data-value="lowercase"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="Lowercase"]')
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -149,7 +147,7 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 
 				// set initial
 				await capitalizeContainer
-					.locator('button[data-value="initial"]')
+					.locator('button[aria-label="None"]')
 					.click();
 
 				// Blockera value should be moved to WP data
@@ -171,9 +169,8 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 
 				// clear value (click initial again to reset)
 				await capitalizeContainer
-					.locator('button[data-value="initial"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="None"]')
+					.dispatchEvent('click');
 
 				// WP data should be removed too
 				const globalStylesRecord5 = await getEditedGlobalStylesRecord(
