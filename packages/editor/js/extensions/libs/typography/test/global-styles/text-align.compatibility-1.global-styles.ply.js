@@ -16,8 +16,6 @@ const {
 	addNewTransition,
 	getParentContainer,
 	openGlobalStylesPanel,
-	setTextAlignControlValue,
-	clearTextAlignControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Text Align → WP Compatibility (Global Styles)', () => {
@@ -100,8 +98,16 @@ test.describe('Text Align → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const textAlignContainer = await getParentContainer(
+					page,
+					'Text Align'
+				);
+
 				// set text align
-				await setTextAlignControlValue(page, 'Text Align', 'right');
+				await textAlignContainer
+					.locator('button[data-value="right"]')
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -120,7 +126,10 @@ test.describe('Text Align → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear text align
-				await clearTextAlignControlValue(page, 'Text Align');
+				await textAlignContainer
+					.locator('button[data-value="right"]')
+					.first()
+					.click({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -134,7 +143,7 @@ test.describe('Text Align → WP Compatibility (Global Styles)', () => {
 				const blockeraTextAlign3 = root3?.blockeraTextAlign?.value;
 
 				expect(undefined).toEqual(typographyTextAlign3);
-				expect('').toEqual(blockeraTextAlign3);
+				expect(undefined).toEqual(blockeraTextAlign3);
 			});
 		});
 	});

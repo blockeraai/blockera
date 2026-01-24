@@ -153,7 +153,10 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const fontSizeContainer = getParentContainer(page, 'Font Size');
+				const fontSizeContainer = await getParentContainer(
+					page,
+					'Font Size'
+				);
 
 				await addNewTransition(page);
 
@@ -250,7 +253,10 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 
 				await addNewTransition(page);
 
-				const fontSizeContainer = getParentContainer(page, 'Font Size');
+				const fontSizeContainer = await getParentContainer(
+					page,
+					'Font Size'
+				);
 
 				//
 				// Test 1: WP data to Blockera

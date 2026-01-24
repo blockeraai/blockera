@@ -16,8 +16,6 @@ const {
 	addNewTransition,
 	getParentContainer,
 	openGlobalStylesPanel,
-	setSizeControlValue,
-	clearSizeControlValue,
 } = require('@blockera/dev-playwright/js/support/commands');
 
 test.describe('Line Height → WP Compatibility (Global Styles)', () => {
@@ -100,8 +98,15 @@ test.describe('Line Height → WP Compatibility (Global Styles)', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const lineHeightContainer = await getParentContainer(
+					page,
+					'Line Height'
+				);
+
 				// set line height
-				await setSizeControlValue(page, 'Line Height', '2.5');
+				await lineHeightContainer.locator('input').first().fill('2.5');
+
+				await page.waitForTimeout(500);
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -120,7 +125,10 @@ test.describe('Line Height → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear line height
-				await clearSizeControlValue(page, 'Line Height');
+				await lineHeightContainer
+					.locator('input')
+					.first()
+					.clear({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -134,7 +142,7 @@ test.describe('Line Height → WP Compatibility (Global Styles)', () => {
 				const blockeraLineHeight3 = root3?.blockeraLineHeight?.value;
 
 				expect(undefined).toEqual(typographyLineHeight3);
-				expect('').toEqual(blockeraLineHeight3);
+				expect(undefined).toEqual(blockeraLineHeight3);
 			});
 		});
 	});

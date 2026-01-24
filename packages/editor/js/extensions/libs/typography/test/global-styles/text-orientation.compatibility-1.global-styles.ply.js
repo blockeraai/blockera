@@ -8,6 +8,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	openMoreFeaturesControl,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -79,6 +80,9 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 
 				await addNewTransition(page);
 
+				// Open more settings
+				await openMoreFeaturesControl(page, 'More typography settings');
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -102,7 +106,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				//
 
 				// Get orientation container
-				const orientationContainer = getParentContainer(
+				const orientationContainer = await getParentContainer(
 					page,
 					'Orientation'
 				);
@@ -110,7 +114,8 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// set style-1 (vertical-rl)
 				await orientationContainer
 					.locator('button[data-value="style-1"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -127,7 +132,8 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// set initial (horizontal-tb)
 				await orientationContainer
 					.locator('button[data-value="initial"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -148,7 +154,8 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// clear value (click initial again to reset)
 				await orientationContainer
 					.locator('button[data-value="initial"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord4 = await getEditedGlobalStylesRecord(
@@ -163,7 +170,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					root4?.blockeraTextOrientation?.value;
 
 				expect(undefined).toEqual(typographyWritingMode4);
-				expect('').toEqual(blockeraTextOrientation4);
+				expect(undefined).toEqual(blockeraTextOrientation4);
 			});
 		});
 
@@ -172,6 +179,9 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				await addNewTransition(page);
+
+				// Open more settings
+				await openMoreFeaturesControl(page, 'More typography settings');
 
 				//
 				// Test 1: WP data to Blockera
@@ -196,7 +206,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				//
 
 				// Get orientation container
-				const orientationContainer = getParentContainer(
+				const orientationContainer = await getParentContainer(
 					page,
 					'Orientation'
 				);
@@ -204,7 +214,8 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// set initial (horizontal-tb)
 				await orientationContainer
 					.locator('button[data-value="initial"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -225,7 +236,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// clear value (click style-1 again to reset)
 				await orientationContainer
 					.locator('button[data-value="style-1"]')
-					.click();
+					.click({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -240,7 +251,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 					root3?.blockeraTextOrientation?.value;
 
 				expect(undefined).toEqual(typographyWritingMode3);
-				expect('').toEqual(blockeraTextOrientation3);
+				expect(undefined).toEqual(blockeraTextOrientation3);
 			});
 		});
 	});

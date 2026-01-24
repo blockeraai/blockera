@@ -8,6 +8,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	openMoreFeaturesControl,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -77,6 +78,9 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 
 				await addNewTransition(page);
 
+				// Open more settings
+				await openMoreFeaturesControl(page, 'More typography settings');
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -100,7 +104,7 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 				//
 
 				// Get capitalize container
-				const capitalizeContainer = getParentContainer(
+				const capitalizeContainer = await getParentContainer(
 					page,
 					'Capitalize'
 				);
@@ -108,7 +112,8 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 				// set capitalize
 				await capitalizeContainer
 					.locator('button[data-value="capitalize"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -126,7 +131,8 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 				// set lowercase
 				await capitalizeContainer
 					.locator('button[data-value="lowercase"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -166,7 +172,8 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 				// clear value (click initial again to reset)
 				await capitalizeContainer
 					.locator('button[data-value="initial"]')
-					.click();
+					.first()
+					.click({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord5 = await getEditedGlobalStylesRecord(
@@ -182,7 +189,7 @@ test.describe('Text Transform → WP Compatibility (Global Styles)', () => {
 					root5?.blockeraTextTransform?.value;
 
 				expect(undefined).toEqual(typographyTextTransform5);
-				expect('').toEqual(blockeraTextTransform5);
+				expect(undefined).toEqual(blockeraTextTransform5);
 			});
 		});
 	});

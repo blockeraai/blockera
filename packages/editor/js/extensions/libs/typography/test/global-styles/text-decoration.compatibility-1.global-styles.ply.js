@@ -8,6 +8,7 @@ const {
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	openMoreFeaturesControl,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
@@ -77,6 +78,9 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 
 				await addNewTransition(page);
 
+				// Open more settings
+				await openMoreFeaturesControl(page, 'More typography settings');
+
 				//
 				// Test 1: WP data to Blockera
 				//
@@ -100,15 +104,16 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 				//
 
 				// Get decoration container
-				const decorationContainer = getParentContainer(
+				const decorationContainer = await getParentContainer(
 					page,
 					'Decoration'
 				);
 
 				// set line-through
 				await decorationContainer
-					.locator('button[aria-label="Line Through"]')
-					.click();
+					.locator('button[data-value="line-through"]')
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -125,8 +130,9 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 
 				// set overline
 				await decorationContainer
-					.locator('button[aria-label="Overline"]')
-					.click();
+					.locator('button[data-value="overline"]')
+					.first()
+					.click({ force: true });
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -147,8 +153,9 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 
 				// clear value (click None)
 				await decorationContainer
-					.locator('button[aria-label="None"]')
-					.click();
+					.locator('button[data-value="none"]')
+					.first()
+					.click({ force: true });
 
 				// WP data should be removed too
 				const globalStylesRecord4 = await getEditedGlobalStylesRecord(
@@ -164,7 +171,7 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 					root4?.blockeraTextDecoration?.value;
 
 				expect(undefined).toEqual(typographyTextDecoration4);
-				expect('').toEqual(blockeraTextDecoration4);
+				expect(undefined).toEqual(blockeraTextDecoration4);
 			});
 		});
 	});
