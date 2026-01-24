@@ -16,11 +16,13 @@
 - Improve the breakpoints management setting UX.
 - Before and After: add support to CSS functions: `attr()`, `counter()`, `counters()` and `url()`
 - `Stretch` value type for size control like Width, Height... added.
+- Effects Extension: Added change indicator to Transform Settings button to visually indicate when any transform settings modified.
 - Typography feature now supports WordPress global styles interface, allowing typography settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Size feature now supports WordPress global styles interface, allowing width, height, min-height, and aspect-ratio settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Layout feature now supports WordPress global styles interface, allowing spacing (padding/margin) and gap settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Background feature now supports WordPress global styles interface, allowing background color, background image, background gradients, background size, background repeat, and background position settings to work correctly in both block inspector and global styles contexts. This ensures compatibility with WordPress 6.7 theme.json schema.
 - Border and Shadow feature now supports WordPress global styles interface, allowing border, border radius, and shadow settings to work correctly in both block inspector and global styles contexts. Shadow compatibility includes support for WordPress shadow presets (var:preset|shadow|slug format) with automatic resolution to CSS values, ensuring compatibility with WordPress 6.7 theme.json schema.
+- Text Orientation Feature: improve label for options.
 
 ### Bug Fixes
 - Cursor feature: Fix pointer option icon and improve auto icon.

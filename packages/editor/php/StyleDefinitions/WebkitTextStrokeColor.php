@@ -31,9 +31,11 @@ class WebkitTextStrokeColor extends BaseStyleDefinition {
         }
 
         $this->setDeclaration('-webkit-text-stroke-color', $color);
+        $this->setDeclaration('text-stroke-color', $color);
 
         if (isset($strokeData['width']) && ! empty($strokeData['width'])) {
             $this->setDeclaration('-webkit-text-stroke-width', $strokeData['width']);
+            $this->setDeclaration('text-stroke-width', $strokeData['width']);
         }
 
         $this->setCss($this->declarations);

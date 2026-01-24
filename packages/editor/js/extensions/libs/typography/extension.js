@@ -10,6 +10,7 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	Grid,
+	Flex,
 	MoreFeatures,
 	BaseControl,
 	ColorControl,
@@ -659,10 +660,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 												'blockera'
 											)}
 										</p>
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -672,6 +670,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-1"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical LR Mixed',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -679,12 +681,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -694,6 +693,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-2"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical RL Mixed',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -701,12 +704,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -716,6 +716,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-3"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical LR Upright',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -723,12 +727,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -738,6 +739,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-4"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical RL Upright',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -745,12 +750,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '2px',
@@ -761,6 +763,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="close-small"
 													iconSize="18"
 												/>
+												{__(
+													'No text orientation',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -768,14 +774,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 									</>
 								}
 								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __(
-											'Text will display vertically from left to right with a mixed orientation',
+											'Vertical LR Mixed',
 											'blockera'
 										),
 										value: 'style-1',
@@ -788,7 +794,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									},
 									{
 										label: __(
-											'Text will display vertically from right to left with a mixed orientation',
+											'Vertical RL Mixed',
 											'blockera'
 										),
 										value: 'style-2',
@@ -801,7 +807,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									},
 									{
 										label: __(
-											'Text will appear vertically from left to right with an upright orientation',
+											'Vertical LR Upright',
 											'blockera'
 										),
 										value: 'style-3',
@@ -814,7 +820,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									},
 									{
 										label: __(
-											'Text will appear vertically from right to left with an upright orientation',
+											'Vertical RL Upright',
 											'blockera'
 										),
 										value: 'style-4',
