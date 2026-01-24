@@ -114,8 +114,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// set style-1 (vertical-rl)
 				await orientationContainer
 					.locator('button[data-value="style-1"]')
-					.first()
-					.click({ force: true });
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -132,8 +131,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// set initial (horizontal-tb)
 				await orientationContainer
 					.locator('button[data-value="initial"]')
-					.first()
-					.click({ force: true });
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -169,8 +167,8 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				const blockeraTextOrientation4 =
 					root4?.blockeraTextOrientation?.value;
 
-				expect(undefined).toEqual(typographyWritingMode4);
-				expect(undefined).toEqual(blockeraTextOrientation4);
+				expect('horizontal-tb').toEqual(typographyWritingMode4);
+				expect('initial').toEqual(blockeraTextOrientation4);
 			});
 		});
 
@@ -214,8 +212,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// set initial (horizontal-tb)
 				await orientationContainer
 					.locator('button[data-value="initial"]')
-					.first()
-					.click({ force: true });
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -236,7 +233,7 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				// clear value (click style-1 again to reset)
 				await orientationContainer
 					.locator('button[data-value="style-1"]')
-					.click({ force: true });
+					.dispatchEvent('click');
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -250,8 +247,8 @@ test.describe('Text Orientation → WP Compatibility (Global Styles)', () => {
 				const blockeraTextOrientation3 =
 					root3?.blockeraTextOrientation?.value;
 
-				expect(undefined).toEqual(typographyWritingMode3);
-				expect(undefined).toEqual(blockeraTextOrientation3);
+				expect('vertical-rl').toEqual(typographyWritingMode3);
+				expect('style-1').toEqual(blockeraTextOrientation3);
 			});
 		});
 	});
