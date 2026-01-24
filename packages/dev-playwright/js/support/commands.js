@@ -235,23 +235,14 @@ async function cssVar(page, cssVarName, selector = null) {
  * @param {string} parentsDataCy - Parent data-cy value (default: 'base-control').
  * @return {import('@playwright/test').Locator} Parent container locator.
  */
-async function getParentContainer(
-	page,
-	ariaLabel,
-	parentsDataCy = 'base-control'
-) {
-	const ariaLabelElement = await page
-		.locator(`[aria-label="${ariaLabel}"]`, {
-			timeout: 20000,
-		})
+function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
+	// Build a CSS selector that finds the data-cy container that has an aria-label descendant
+	// This approach finds the parent container directly without needing async/await
+	return page
+		.locator(
+			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`
+		)
 		.first();
-
-	// Use XPath to find the closest ancestor (equivalent to Cypress's .closest())
-	// ancestor::* returns ancestors in reverse document order (closest first)
-	// [1] selects the first one, which is the closest ancestor
-	return await ariaLabelElement.locator(
-		`xpath=ancestor::*[@data-cy="${parentsDataCy}"][1]`
-	);
 }
 
 /**
