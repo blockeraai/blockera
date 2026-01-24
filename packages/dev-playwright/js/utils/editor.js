@@ -703,7 +703,7 @@ async function openHeadingToolbarAndSelect(page, headingLevel) {
  * @return {Promise<void>}
  */
 async function openMoreFeaturesControl(page, label) {
-	const control = page.locator(
+	const control = await page.locator(
 		`.blockera-component-more-features > button[aria-label="${label}"]`
 	);
 	const parent = control.locator('..');
