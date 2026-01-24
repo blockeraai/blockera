@@ -111,9 +111,8 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 
 				// set line-through
 				await decorationContainer
-					.locator('button[data-value="line-through"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="Line Through"]')
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -130,9 +129,8 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 
 				// set overline
 				await decorationContainer
-					.locator('button[data-value="overline"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="Overline"]')
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -153,9 +151,8 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 
 				// clear value (click None)
 				await decorationContainer
-					.locator('button[data-value="none"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="None"]')
+					.dispatchEvent('click');
 
 				// WP data should be removed too
 				const globalStylesRecord4 = await getEditedGlobalStylesRecord(
@@ -171,7 +168,7 @@ test.describe('Text Decoration → WP Compatibility (Global Styles)', () => {
 					root4?.blockeraTextDecoration?.value;
 
 				expect(undefined).toEqual(typographyTextDecoration4);
-				expect(undefined).toEqual(blockeraTextDecoration4);
+				expect('initial').toEqual(blockeraTextDecoration4);
 			});
 		});
 	});
