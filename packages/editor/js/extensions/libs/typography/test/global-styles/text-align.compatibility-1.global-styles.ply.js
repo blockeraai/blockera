@@ -105,9 +105,8 @@ test.describe('Text Align → WP Compatibility (Global Styles)', () => {
 
 				// set text align
 				await textAlignContainer
-					.locator('button[data-value="right"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="Right"]')
+					.dispatchEvent('click');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -127,9 +126,8 @@ test.describe('Text Align → WP Compatibility (Global Styles)', () => {
 
 				// clear text align
 				await textAlignContainer
-					.locator('button[data-value="right"]')
-					.first()
-					.click({ force: true });
+					.locator('button[aria-label="Right"]')
+					.dispatchEvent('click');
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
