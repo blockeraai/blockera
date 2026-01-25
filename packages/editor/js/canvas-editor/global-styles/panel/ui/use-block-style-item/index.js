@@ -3,9 +3,10 @@
 /**
  * External dependencies
  */
-import { select, dispatch } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 import { useEntityProp } from '@wordpress/core-data';
 import { useCallback, useState } from '@wordpress/element';
+import { select, dispatch, useDispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 
@@ -23,10 +24,18 @@ import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
 } from '../../../helpers';
+import { isBaseBreakpoint } from '../../../../';
 import { getNormalizedStyle } from '../../context';
 import { type T_SET_CURRENT_ACTIVE_STYLE } from '../types';
 import { getAttributesWithIds } from '../../../../../hooks/use-attributes';
+import { useBlockContext } from '../../../../../extensions/components/block-context';
+import { blockeraExtensionsBootstrap } from '../../../../../extensions/libs/bootstrap';
 import { generateUniqueClassName } from '../../../../../extensions/components/block-base';
+import { isNormalStateOnBaseBreakpoint } from '../../../../../extensions/libs/block-card/block-states/helpers';
+import {
+	isInnerBlock,
+	prepareBlockeraDefaultAttributesValues,
+} from '../../../../../extensions/components/utils';
 
 export const useBlockStyleItem = ({
 	styles,
@@ -90,8 +99,12 @@ export const useBlockStyleItem = ({
 		'styles',
 		postId
 	);
+	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
 	const [isConfirmedChangeID, setIsConfirmedChangeID] = useState(false);
+
+	const blockContextValue = useBlockContext();
+	const { setAttributes, getAttributes } = blockContextValue;
 
 	const handleOnRename = useCallback(
 		(
@@ -448,17 +461,67 @@ export const useBlockStyleItem = ({
 		styleAttributes = omit(styleAttributes, ignoredAttributes);
 
 		// Normalizing style attributes...
-		const currentStyleValue = getNormalizedStyle(
+		let currentStyleValue = getNormalizedStyle(
 			styleAttributes,
 			_defaultStyles
 		);
+
+		// Run wp compatibility.
+		blockeraExtensionsBootstrap();
+
+		for (const key in currentStyleValue) {
+			currentStyleValue = {
+				...currentStyleValue,
+				...applyFilters(
+					'blockera.blockEdit.setAttributes',
+					getNormalizedStyle(styleAttributes, _defaultStyles),
+					key,
+					currentStyleValue[key]?.value || currentStyleValue[key],
+					{
+						action: 'normal',
+						reset: false,
+					},
+					getAttributes,
+					{
+						blockId: blockName,
+						clientId: selectedBlock.clientId,
+						innerBlocks: blockContextValue.additional.innerBlocks,
+						currentBlock: blockContextValue.currentBlock,
+						blockVariations: blockContextValue.blockVariations,
+						defaultAttributes: blockContextValue.defaultAttributes,
+						currentState: isInnerBlock(
+							blockContextValue.currentBlock
+						)
+							? blockContextValue.currentInnerBlockState
+							: blockContextValue.currentState,
+						currentBreakpoint: blockContextValue.currentBreakpoint,
+						activeBlockVariation:
+							blockContextValue.activeBlockVariation,
+						getActiveBlockVariation:
+							blockContextValue.getActiveBlockVariation,
+						currentInnerBlockState:
+							blockContextValue.currentInnerBlockState,
+						isNormalState: blockContextValue.isNormalState,
+						isMasterBlock: !isInnerBlock(
+							blockContextValue.currentBlock
+						),
+						isBaseBreakpoint: isBaseBreakpoint(
+							blockContextValue.currentBreakpoint
+						),
+						isMasterNormalState: isNormalStateOnBaseBreakpoint(
+							blockContextValue.currentState,
+							blockContextValue.currentBreakpoint
+						),
+						insideBlockInspector: false,
+					}
+				),
+			};
+		}
 
 		// Skip while not exists any changesets.
 		if (!Object.keys(currentStyleValue).length) {
 			return;
 		}
-
-		const { updateBlockAttributes } = dispatch(blockEditorStore);
 
 		// Cloned globalStyles object.
 		let _globalStyles = cloneObject(globalStyles);
@@ -483,7 +546,18 @@ export const useBlockStyleItem = ({
 
 		setGlobalStyles(_globalStyles);
 
-		updateBlockAttributes(_defaultStyles);
+		const defaultValue =
+			prepareBlockeraDefaultAttributesValues(_defaultStyles);
+
+		setAttributes({
+			effectiveItems: {
+				...defaultValue,
+				className: `is-style-${currentStyle.name}`,
+				blockeraPropsId: selectedBlock.attributes.blockeraPropsId,
+				blockeraCompatId: selectedBlock.attributes.blockeraCompatId,
+			},
+		});
+
 		setCurrentActiveStyle(currentStyle, 'save-customizations');
 	};
 
@@ -491,7 +565,6 @@ export const useBlockStyleItem = ({
 		setCurrentActiveStyle(getDefaultStyle(blockStyles), 'detach');
 
 		const { getSelectedBlock } = select(blockEditorStore);
-		const { updateBlockAttributes } = dispatch(blockEditorStore);
 
 		const selectedBlock = getSelectedBlock();
 
