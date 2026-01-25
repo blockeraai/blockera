@@ -84,7 +84,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 	const [currentActiveStyle, _setCurrentActiveStyle] = useState(activeStyle);
 	const callbackActivatorStyle: T_SET_CURRENT_ACTIVE_STYLE = (
 		style,
-		event
+		event = 'click'
 	) => {
 		setEvent(event);
 		_setCurrentActiveStyle(style);
@@ -301,11 +301,11 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
-		if (initializedValue !== hasChangesets) {
+		if (initializedValue !== hasChangesets && 'click' === event) {
 			setChangesets(initializedValue);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [initializedValue, currentActiveStyle]);
+	}, [initializedValue, currentActiveStyle, event]);
 
 	return (
 		<>
