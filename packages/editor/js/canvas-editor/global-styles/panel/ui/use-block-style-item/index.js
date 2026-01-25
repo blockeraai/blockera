@@ -472,6 +472,10 @@ export const useBlockStyleItem = ({
 		for (const key in currentStyleValue) {
 			currentStyleValue = {
 				...currentStyleValue,
+				/**
+				 * Filterable style value for wp compatibility reasons.
+				 * running just for setAttributes functionalities.
+				 */
 				...applyFilters(
 					'blockera.blockEdit.setAttributes',
 					getNormalizedStyle(styleAttributes, _defaultStyles),
