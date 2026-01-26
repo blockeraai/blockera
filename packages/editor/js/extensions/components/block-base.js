@@ -41,11 +41,10 @@ import {
 	useInnerBlocksInfo,
 	useCalculateCurrentAttributes,
 } from '../../hooks';
-import { SideEffect } from '../libs/base';
-// import { BlockPortals } from './block-portals';
-import { BlockPartials } from './block-partials';
 import { isInnerBlock } from './utils';
-import { isBaseBreakpoint } from '../../canvas-editor';
+import { isBaseBreakpoint } from '../..';
+import { SideEffect } from '../libs/base';
+import { BlockPartials } from './block-partials';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
@@ -62,7 +61,7 @@ import {
 } from '../libs/block-card/block-states/states';
 import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
-import { useGlobalStylesPanelContext } from '../../canvas-editor/global-styles/panel/context';
+import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;

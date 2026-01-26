@@ -21,7 +21,7 @@ import type {
 	TStates,
 	TBreakpoint,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
 import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
 
@@ -284,7 +284,7 @@ export const memoizedBlockStates: (
 			(receivedState || currentState) === 'custom-class'
 				? {
 						'css-class': blockStates['custom-class']['css-class'],
-					}
+				  }
 				: {};
 
 		// pass currentBlockAttributes to the memoizedRootBreakpoints function.
@@ -567,7 +567,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 						? prepare(
 								ref.path.replace(absolutePathPattern, ''),
 								ref.defaultValue
-							) || ref.defaultValue
+						  ) || ref.defaultValue
 						: ref.defaultValue
 				);
 
@@ -617,7 +617,7 @@ export const resetAllStates = (state: Object, action: Object): Object => {
 		...(isInnerBlock(currentBlock)
 			? {
 					blockeraInnerBlocks,
-				}
+			  }
 			: {}),
 	};
 };

@@ -26,7 +26,7 @@ import {
 	getStatesGraphNodes,
 	type StateGraphItem,
 } from './selector';
-import { getBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint } from '../..';
 import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
@@ -114,7 +114,7 @@ export const getStatesGraph = ({
 											? prepare(
 													path,
 													state.attributes[controlId]
-												)
+											  )
 											: preparedValueWithPath;
 								} else {
 									value = state.attributes[controlId];

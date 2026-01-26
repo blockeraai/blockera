@@ -20,8 +20,10 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
-import { default as BreakpointsSettings } from '@blockera/editor/js/canvas-editor/components/breakpoints/breakpoint-settings';
-import { getSortedBreakpoints } from '@blockera/editor/js/canvas-editor/components/breakpoints/helpers';
+import {
+	BreakpointsSettings,
+	getSortedBreakpoints,
+} from '@blockera/editor/js/editor/header-ui';
 
 /**
  * Internal dependencies

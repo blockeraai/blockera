@@ -13,7 +13,7 @@ import { isEquals, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../canvas-editor';
+import { getBaseBreakpoint } from '../editor/header-ui';
 
 export const breakpoints = (state: Object = [], action: Object): Object => {
 	switch (action?.type) {

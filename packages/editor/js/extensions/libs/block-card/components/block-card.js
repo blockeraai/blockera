@@ -30,10 +30,10 @@ import { Icon } from '@blockera/icons';
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import { EditableBlockName } from './editable-block-name';
-import { BlockStyleVariations } from '../../../../canvas-editor/global-styles/panel/ui';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
+import { BlockStyleVariations } from '../../../../editor/global-styles/panel/ui';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
 import { BlockCardSettings } from './block-card-settings';
 

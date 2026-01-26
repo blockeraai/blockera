@@ -24,7 +24,7 @@ import {
 	StyleVariationBlockCard,
 } from '../libs/block-card';
 import StateContainer from './state-container';
-import { useGlobalStylesPanelContext } from '../../canvas-editor/global-styles/panel/context';
+import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 
 const excludedControls = ['canvas-editor'];
 

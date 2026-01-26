@@ -41,8 +41,8 @@ import { Preview as BlockCompositePreview } from '../../block-composite';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
-} from '../../../../canvas-editor/global-styles/helpers';
-import BlockPreviewPanel from '../../../../canvas-editor/global-styles/panel/block-preview-panel';
+} from '../../../../editor/global-styles/helpers';
+import BlockPreviewPanel from '../../../../editor/global-styles/panel/block-preview-panel';
 
 const DEBOUNCE_DELAY = 1000;
 

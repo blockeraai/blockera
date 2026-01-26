@@ -26,7 +26,7 @@ import { MappedExtensions } from './mapped-extensions';
 import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
-import { useGlobalStylesPanelContext } from '../../../canvas-editor/global-styles/panel/context';
+import { useGlobalStylesPanelContext } from '../../../editor/global-styles/panel/context';
 
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
 

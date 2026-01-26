@@ -21,7 +21,7 @@ import type {
 	InnerBlockType,
 	InnerBlockModel,
 } from '../types';
-import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/global-styles/panel/context';
+import { useGlobalStylesPanelContext } from '../../../../../editor/global-styles/panel/context';
 
 export const useAvailableItems = ({
 	clientId,

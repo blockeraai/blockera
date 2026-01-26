@@ -22,7 +22,7 @@ import {
 	stateResettingValues,
 	stateResettingInnerBlockValues,
 } from './helpers';
-import { isBaseBreakpoint } from '../../canvas-editor';
+import { isBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock } from '../../extensions/components';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 

@@ -14,7 +14,7 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from '../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../canvas-editor';
+import { getBaseBreakpoint } from '../editor/header-ui';
 
 /**
  * Get breakpoints.

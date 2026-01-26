@@ -30,9 +30,9 @@ import { Icon } from '@blockera/icons';
  */
 import { StatesGraph } from './states-graph';
 import { useBlockContext } from '../../extensions';
-import { useAdvancedLabelProps } from '../../hooks';
 import type { AdvancedLabelControlProps } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
+import { useAdvancedLabelProps } from '../../hooks/use-advanced-label-props';
 
 export const EditorAdvancedLabelControl = ({
 	path = null,
@@ -155,7 +155,7 @@ export const EditorAdvancedLabelControl = ({
 									} else {
 										setOpenModal(true);
 									}
-								}
+							  }
 					}
 					style={{
 						cursor: 'pointer',
@@ -190,7 +190,7 @@ export const EditorAdvancedLabelControl = ({
 											? 'RESET_TO_DEFAULT'
 											: 'RESET_TO_NORMAL',
 									});
-								}
+							  }
 							: null
 					}
 				/>

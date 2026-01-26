@@ -17,7 +17,7 @@ import { isEmpty, getSortedObject, mergeObject } from '@blockera/utils';
  * Internal dependencies
  */
 import { generateExtensionId } from '../../../utils';
-import { getBaseBreakpoint } from '../../../../../canvas-editor';
+import { getBaseBreakpoint } from '../../../../../editor/header-ui';
 import {
 	isInnerBlock,
 	isNormalState,

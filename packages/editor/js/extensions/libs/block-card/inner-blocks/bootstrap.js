@@ -29,7 +29,7 @@ import {
 	elementNormalBackgroundFromWPCompatibility,
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
-import { getBaseBreakpoint } from '../../../../canvas-editor';
+import { getBaseBreakpoint } from '../../../../editor/header-ui';
 import { isBlockNotOriginalState, isResetRef } from '../../utils';
 
 export const bootstrap = (): void => {

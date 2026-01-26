@@ -28,7 +28,7 @@ export const UserRoles = ({
 	setHasUpdates,
 	generalSettings,
 	savedGeneralSettings,
-}: BlockVisibilityProps) => {
+}: BlockVisibilityProps): MixedElement => {
 	return (
 		<Flex direction={'column'} className={'blockera-settings-section'}>
 			<h3 className={'blockera-settings-general section-title'}>
@@ -114,7 +114,7 @@ export const UserRoles = ({
 										).map(
 											([id, checked]: [
 												string,
-												boolean,
+												boolean
 											]): [string, boolean] => {
 												return [id, checked];
 											}
