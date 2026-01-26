@@ -14,8 +14,8 @@ import { omit, setImmutably } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { getValueFromObjectPath } from '../utils';
 import { useGlobalStylesContext } from './global-styles-provider';
+import { getValueFromObjectPath, getValueFromVariable } from '../utils';
 
 export const useBackButton = ({
 	selectedBlockStyle,
@@ -24,9 +24,9 @@ export const useBackButton = ({
 	setSelectedBlockStyleVariation,
 }: {
 	selectedBlockStyle: string,
-	setSelectedBlockRef: (blockRef: string) => void,
-	setSelectedBlockStyle: (blockName: string) => void,
-	setSelectedBlockStyleVariation: (blockName: string) => void,
+	setSelectedBlockRef: (blockRef: string | void) => void,
+	setSelectedBlockStyle: (blockName: string | void) => void,
+	setSelectedBlockStyleVariation: (blockName: string | void) => void,
 }) => {
 	const backElement = document.querySelector('.components-heading');
 
@@ -56,7 +56,11 @@ export const useBackButton = ({
 	}
 };
 
-export function useGlobalSetting(propertyPath, blockName, source = 'all') {
+export function useGlobalSetting(
+	propertyPath: string,
+	blockName: string,
+	source: string = 'all'
+): Array<any> {
 	const { setUserConfig, ...configs } = useGlobalStylesContext();
 	const appendedBlockPath = blockName ? '.blocks.' + blockName : '';
 	const appendedPropertyPath = propertyPath ? '.' + propertyPath : '';
@@ -78,7 +82,8 @@ export function useGlobalSetting(propertyPath, blockName, source = 'all') {
 		}
 
 		let result = {};
-
+		// FIXME
+		const VALID_SETTINGS: Array<any> = [];
 		VALID_SETTINGS.forEach((setting) => {
 			const value =
 				getValueFromObjectPath(
@@ -99,7 +104,7 @@ export function useGlobalSetting(propertyPath, blockName, source = 'all') {
 		appendedBlockPath,
 	]);
 
-	const setSetting = (newValue) => {
+	const setSetting = (newValue: Object): void => {
 		setUserConfig((currentConfig) =>
 			setImmutably(currentConfig, contextualPath.split('.'), newValue)
 		);
@@ -191,7 +196,10 @@ export function useGlobalStyle(
 		}
 
 		return {
-			style: { ...defaultStylesValue, ...result },
+			style: {
+				...defaultStylesValue,
+				...('string' === typeof result ? {} : result),
+			},
 			blockRootStyleWithoutVariation,
 		};
 	}, [
