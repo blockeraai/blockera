@@ -13,8 +13,8 @@ import { useState, useMemo, useEffect, createPortal } from '@wordpress/element';
  * Internal dependencies
  */
 import App from './app';
-import { STORE_NAME } from '../../../store';
 import { useBackButton } from './context/hooks';
+import { STORE_NAME } from '../../../store/constants';
 import bootstrapScripts from '../../../extensions/scripts';
 import { subscribeToBlockSelection } from './subscribe-unsubscribe';
 

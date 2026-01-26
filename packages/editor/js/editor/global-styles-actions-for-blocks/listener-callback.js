@@ -8,7 +8,7 @@ import { dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../../store';
+import { STORE_NAME } from '../../store/constants';
 
 export const sharedListenerCallback = (blockName: string): void => {
 	const { setSelectedBlockStyle, setSelectedBlockRef } = dispatch(STORE_NAME);

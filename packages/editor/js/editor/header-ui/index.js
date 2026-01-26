@@ -4,18 +4,16 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { applyFilters } from '@wordpress/hooks';
-import { select, useSelect, dispatch } from '@wordpress/data';
-import { getPlugin, registerPlugin } from '@wordpress/plugins';
 import { Fill } from '@wordpress/components';
 import { Component } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
+import { useSelect, dispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../../store';
-
 import { BreakpointsUI } from './components';
+import { STORE_NAME } from '../../store/constants';
 import type { BreakpointTypes } from '../../extensions/libs/block-card/block-states/types';
 
 export default function HeaderUI(): MixedElement {
