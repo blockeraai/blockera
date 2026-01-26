@@ -4,9 +4,9 @@
  * External dependencies
  */
 import { applyFilters } from '@wordpress/hooks';
+import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { useCallback, useState } from '@wordpress/element';
-import { select, dispatch, useDispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 
@@ -99,12 +99,11 @@ export const useBlockStyleItem = ({
 		'styles',
 		postId
 	);
-	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
 	const [isConfirmedChangeID, setIsConfirmedChangeID] = useState(false);
 
 	const blockContextValue = useBlockContext();
-	const { setAttributes, getAttributes } = blockContextValue;
+	const { handleOnChangeAttributes, getAttributes } = blockContextValue;
 
 	const handleOnRename = useCallback(
 		(
@@ -553,10 +552,9 @@ export const useBlockStyleItem = ({
 		const defaultValue =
 			prepareBlockeraDefaultAttributesValues(_defaultStyles);
 
-		setAttributes({
+		handleOnChangeAttributes('className', `is-style-${currentStyle.name}`, {
 			effectiveItems: {
 				...defaultValue,
-				className: `is-style-${currentStyle.name}`,
 				blockeraPropsId: selectedBlock.attributes.blockeraPropsId,
 				blockeraCompatId: selectedBlock.attributes.blockeraCompatId,
 			},
@@ -577,19 +575,26 @@ export const useBlockStyleItem = ({
 		const newAttributes = mergeObject(
 			mergeObject(
 				selectedBlock.attributes,
-				base.styles.blocks[blockName].variations[currentStyle.name]
+				isRootStyle(currentStyle)
+					? base?.styles?.blocks?.[blockName] || {}
+					: base?.styles?.blocks?.[blockName]?.variations?.[
+							currentStyle.name
+					  ] || {}
 			),
-			globalStyles.blocks[blockName].variations[currentStyle.name]
+			isRootStyle(currentStyle)
+				? globalStyles?.blocks?.[blockName] || {}
+				: globalStyles?.blocks?.[blockName]?.variations?.[
+						currentStyle.name
+				  ] || {}
 		);
 
-		newAttributes.blockeraPropsId = getAttributesWithIds(
-			newAttributes,
-			'blockeraPropsId',
-			true
-		);
-		newAttributes.className = `blockera-block ` + className;
-
-		updateBlockAttributes(selectedBlock.clientId, newAttributes);
+		handleOnChangeAttributes('className', `blockera-block ${className}`, {
+			effectiveItems: getAttributesWithIds(
+				newAttributes,
+				'blockeraPropsId',
+				true
+			),
+		});
 	};
 
 	return {
