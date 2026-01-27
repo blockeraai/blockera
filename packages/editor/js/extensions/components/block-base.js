@@ -302,53 +302,23 @@ export const BlockBase: ComponentType<any> = (
 		};
 	}, [clientId, uniqueClassName]);
 
-	const compatibleAttributes = useMemo(() => {
-		let compatibleAttributes = getCompatibleAttributes({
+	const compatibleAttributes = useMemo(
+		() =>
+			getCompatibleAttributes({
+				args,
+				isActive,
+				availableAttributes,
+				attributes: cloneObject(blockAttributes),
+				defaultAttributes: originDefaultAttributes,
+			}),
+		[
 			args,
 			isActive,
+			blockAttributes,
 			availableAttributes,
-			attributes: cloneObject(blockAttributes),
-			defaultAttributes: originDefaultAttributes,
-		});
-
-		// Check if a blockera-block classname already exists in the className.
-		const classNameStr = compatibleAttributes?.className || '';
-		const hasBlockeraBlockClass = classNameStr.includes('blockera-block-');
-
-		// If no blockera-block classname exists, add the unique one.
-		if (!hasBlockeraBlockClass) {
-			compatibleAttributes = {
-				...compatibleAttributes,
-				className: classNames(classNameStr, {
-					'blockera-block': true,
-					[uniqueClassName]: true,
-				}),
-			};
-		} else {
-			// Ensure the unique classname is included in the className string.
-			const classNameParts = classNameStr.split(/\s+/);
-			const regexPattern = /blockera-block-\w+/gi;
-			if (classNameParts.some((part) => regexPattern.test(part))) {
-				compatibleAttributes = {
-					...compatibleAttributes,
-					className: classNameStr.replace(
-						regexPattern,
-						uniqueClassName
-					),
-				};
-			}
-		}
-
-		return compatibleAttributes;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [
-		args,
-		isActive,
-		blockAttributes,
-		uniqueClassName,
-		availableAttributes,
-		originDefaultAttributes,
-	]);
+			originDefaultAttributes,
+		]
+	);
 
 	const [attributes, setState] = useState(compatibleAttributes);
 	const compatibleAttributesRef = useRef(null);
@@ -378,8 +348,55 @@ export const BlockBase: ComponentType<any> = (
 		setState(value);
 	};
 
+	// It is used to update the classname when the block is created.
+	useEffect(() => {
+		// Check if a blockera-block classname already exists in the className.
+		const classNameStr = blockAttributes?.className || '';
+		const hasBlockeraBlockClass = classNameStr.includes('blockera-block-');
+
+		// If no blockera-block classname exists, add the unique one.
+		if (!hasBlockeraBlockClass) {
+			setBlockAttributes({
+				...blockAttributes,
+				className: classNames(classNameStr, {
+					'blockera-block': true,
+					[uniqueClassName]: true,
+				}),
+			});
+		} else {
+			// Ensure the unique classname is included in the className string.
+			const classNameParts = classNameStr.split(/\s+/);
+			const regexPattern = /blockera-block-\w+/gi;
+			if (
+				classNameParts.some((part) => {
+					const isRegistered = REGISTERED_CLASSNAMES.has(part);
+
+					if (isRegistered) {
+						REGISTERED_CLASSNAMES.delete(part);
+					}
+
+					return regexPattern.test(part) && isRegistered;
+				})
+			) {
+				setBlockAttributes({
+					...blockAttributes,
+					className: classNameStr.replace(
+						regexPattern,
+						uniqueClassName
+					),
+				});
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
+		// Skip the effect if the block is not a blockera block.
+		if (!attributes?.blockeraPropsId) {
+			return;
+		}
+
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
 			!isEquals(compatibleAttributes, attributes) &&
