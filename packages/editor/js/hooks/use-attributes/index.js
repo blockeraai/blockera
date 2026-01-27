@@ -54,7 +54,10 @@ export const getAttributesWithIds = (
 };
 
 export const useAttributes = (
-	setAttributes: (attributes: Object) => void,
+	setAttributes: (
+		attributes: Object,
+		shouldUpdateClassName?: boolean
+	) => void,
 	{
 		blockId,
 		clientId,
@@ -63,6 +66,7 @@ export const useAttributes = (
 		currentState,
 		isNormalState,
 		getAttributes,
+		setChangesets,
 		blockVariations,
 		currentBreakpoint,
 		defaultAttributes,
@@ -89,6 +93,7 @@ export const useAttributes = (
 		currentInnerBlockState: TStates,
 		masterIsNormalState: () => boolean,
 		getAttributes: (key?: string) => any,
+		setChangesets: (changes: boolean) => void,
 		currentBlock: string | 'master' | InnerBlockType,
 		getActiveBlockVariation: (name: string, attributes: Object) => boolean,
 	}
@@ -103,6 +108,7 @@ export const useAttributes = (
 				effectiveItems = {},
 				resetStateAllValues = false,
 				stateReadyToReset = 'normal',
+				shouldUpdateClassName = true,
 				resetInnerBlockAllValues = false,
 				innerBlockReadyToReset = 'master',
 			} = options;
@@ -229,6 +235,7 @@ export const useAttributes = (
 
 			// Assume reference current action is 'reset_all_states'
 			if (ref?.current?.reset) {
+				setChangesets(true);
 				return setAttributes(
 					reducer(
 						_attributes,
@@ -242,7 +249,11 @@ export const useAttributes = (
 			// attribute is "blockeraBlockStates"
 			// action = UPDATE_NORMAL_STATE
 			if (masterIsNormalState() && isNormalState()) {
-				return setAttributes(reducer(_attributes, updateNormalState()));
+				setChangesets(true);
+				return setAttributes(
+					reducer(_attributes, updateNormalState()),
+					shouldUpdateClassName
+				);
 			}
 
 			// Assume current block is one of inner blocks.

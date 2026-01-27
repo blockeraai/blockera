@@ -64,3 +64,4 @@ export {
 export { useDisplayBlockControls } from './use-display-block-controls';
 export { useCalculateCurrentAttributes } from './use-calculate-current-attributes';
 export { useBlockPreviewStyles } from './use-block-preview-styles';
+export { useBlockStyleVariations } from './use-block-style-variations';

@@ -45,6 +45,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 	insideBlockInspector,
 	currentInnerBlockState,
 	updateBlockEditorSettings,
+	blockStyleVariationsProps,
 }): Element<any> => {
 	const { currentBlockStyleVariation, setCurrentBlockStyleVariation } =
 		useGlobalStylesPanelContext();
@@ -88,6 +89,9 @@ export const BlockFillPartials: ComponentType<any> = ({
 							isActive={isActive}
 							setActive={setActive}
 							notice={notice}
+							blockStyleVariationsProps={
+								blockStyleVariationsProps
+							}
 							setCurrentTab={blockProps.setCurrentTab}
 							insideBlockInspector={insideBlockInspector}
 							clientId={clientId}
@@ -188,6 +192,9 @@ export const BlockFillPartials: ComponentType<any> = ({
 							currentInnerBlock={currentInnerBlock}
 							currentBlock={currentBlock}
 							currentState={currentState}
+							blockStyleVariationsProps={
+								blockStyleVariationsProps
+							}
 							currentBreakpoint={currentBreakpoint}
 							currentInnerBlockState={currentInnerBlockState}
 							currentStateAttributes={blockProps.attributes}

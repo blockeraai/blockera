@@ -39,6 +39,7 @@ import {
 	// useIconEffect,
 	useAttributes,
 	useInnerBlocksInfo,
+	useBlockStyleVariations,
 	useCalculateCurrentAttributes,
 } from '../../hooks';
 import { isInnerBlock } from './utils';
@@ -358,7 +359,22 @@ export const BlockBase: ComponentType<any> = (
 	 *
 	 * @param {Object} value the compatible attributes arrived from the handleOnChangeAttributes function.
 	 */
-	const setAttributes = (value: any) => {
+	const setAttributes = (
+		value: any,
+		shouldUpdateClassName: boolean = true
+	) => {
+		// We should update classname with unique generate classname while customizing style variation.
+		if (
+			shouldUpdateClassName &&
+			/^is-style-.*/g.test(value?.className) &&
+			!/\s/g.test(value?.className || '')
+		) {
+			value.className = classNames(value.className, {
+				'blockera-block': true,
+				[uniqueClassName]: true,
+			});
+		}
+
 		setState(value);
 	};
 
@@ -450,6 +466,13 @@ export const BlockBase: ComponentType<any> = (
 		return sanitizedAttributes;
 	};
 
+	const blockStyleVariationsProps = useBlockStyleVariations({
+		clientId,
+		blockName: name,
+		storedAttributes: attributes,
+		defaultAttributes: availableAttributes,
+	});
+
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
 		clientId,
 		blockId: name,
@@ -468,6 +491,7 @@ export const BlockBase: ComponentType<any> = (
 		getActiveBlockVariation,
 		getAttributes: () => attributes,
 		innerBlocks: additional?.blockeraInnerBlocks,
+		setChangesets: blockStyleVariationsProps.setChangesets,
 	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
@@ -637,6 +661,7 @@ export const BlockBase: ComponentType<any> = (
 								availableInnerStates,
 								insideBlockInspector,
 								currentInnerBlockState,
+								blockStyleVariationsProps,
 								updateBlockEditorSettings,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.

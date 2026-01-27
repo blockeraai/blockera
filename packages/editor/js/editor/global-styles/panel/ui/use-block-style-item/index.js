@@ -553,11 +553,8 @@ export const useBlockStyleItem = ({
 			prepareBlockeraDefaultAttributesValues(_defaultStyles);
 
 		handleOnChangeAttributes('className', `is-style-${currentStyle.name}`, {
-			effectiveItems: {
-				...defaultValue,
-				blockeraPropsId: selectedBlock.attributes.blockeraPropsId,
-				blockeraCompatId: selectedBlock.attributes.blockeraCompatId,
-			},
+			effectiveItems: defaultValue,
+			shouldUpdateClassName: false,
 		});
 
 		setCurrentActiveStyle(currentStyle, 'save-customizations');

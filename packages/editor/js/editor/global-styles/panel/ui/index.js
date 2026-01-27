@@ -2,21 +2,11 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
-import { useSelect } from '@wordpress/data';
-import { detailedDiff } from 'deep-object-diff';
 import type { ComponentType, MixedElement } from 'react';
-import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import {
-	omit,
-	mergeObject,
-	useLateEffect,
-	omitWithPattern,
-} from '@blockera/utils';
 import { Icon } from '@blockera/icons';
 import { controlInnerClassNames } from '@blockera/classnames';
 import { Button, Flex, ChangeIndicator } from '@blockera/controls';
@@ -26,22 +16,12 @@ import { Button, Flex, ChangeIndicator } from '@blockera/controls';
  */
 import BlockStyles from './block-styles';
 import { isBaseBreakpoint } from '../../../../';
-import { useGlobalStyle } from '../context/hooks';
-import { type T_SET_CURRENT_ACTIVE_STYLE } from './types';
-import { useStylesForBlocks, getDefaultStyle } from './utils';
 import { isInnerBlock } from '../../../../extensions/components';
 import type {
 	TStates,
 	TBreakpoint,
 } from '../../../../extensions/libs/block-card/block-states/types';
-import {
-	getNormalizedStyle,
-	getBlockAttributes,
-	useGlobalStylesPanelContext,
-} from '../context';
-import { getBlockeraGlobalStylesMetaData } from '../../helpers';
 import type { InnerBlockType } from '../../../../extensions/libs/block-card/inner-blocks/types';
-import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
 
 type TBlockStyleVariations = {
 	clientId: string,
@@ -50,127 +30,59 @@ type TBlockStyleVariations = {
 	currentBreakpoint: TBreakpoint,
 	currentBlock: 'master' | InnerBlockType | string,
 	context?: 'inspector-controls' | 'global-styles-panel',
+	isOpen: boolean,
+	setIsOpen: (open: boolean) => void,
+	buttonText: string,
+	hasChangesets: boolean,
+	popoverAnchor: boolean,
+	setChangesets: (changes: boolean) => void,
+	memoizedStyles: Object,
+	setPopoverAnchor: (val: boolean) => void,
+	originDefaultAttributes: Object,
+	currentBlockStyleVariation: Object,
+	event: string,
+	setEvent: (e: string) => void,
+	onSelect: () => void,
+	activeStyle: Object,
+	isDeletedStyle: boolean,
+	stylesToRender: Object,
+	previewClassName: string,
+	genericPreviewBlock: Object,
+	currentActiveStyle: Object,
+	setCurrentActiveStyle: (s: Object) => void,
+	isHovered: boolean,
+	setIsHovered: (hovered: boolean) => void,
+	currentPreviewStyle: Object,
+	setCurrentPreviewStyle: (style: Object) => void,
+	blockeraGlobalStylesMetaData: Object,
 };
 
 export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
-	clientId,
 	blockName,
 	currentBlock,
 	currentState,
 	currentBreakpoint,
 	context = 'inspector-controls',
+	isOpen,
+	setIsOpen,
+	buttonText,
+	hasChangesets,
+	popoverAnchor,
+	setChangesets,
+	memoizedStyles,
+	setPopoverAnchor,
+	originDefaultAttributes,
+	onSelect,
+	isDeletedStyle,
+	stylesToRender,
+	previewClassName,
+	genericPreviewBlock,
+	currentActiveStyle,
+	setCurrentActiveStyle,
+	isHovered,
+	setIsHovered,
+	setCurrentPreviewStyle,
 }: TBlockStyleVariations): MixedElement => {
-	const { currentBlockStyleVariation } = useGlobalStylesPanelContext();
-	const [popoverAnchor, setPopoverAnchor] = useState(null);
-	const [isOpen, setIsOpen] = useState(false);
-	const [isHovered, setIsHovered] = useState(false);
-
-	const [event, setEvent] = useState('click');
-	const onSwitch = useCallback(() => {}, []);
-	const {
-		onSelect,
-		activeStyle,
-		isDeletedStyle,
-		stylesToRender,
-		genericPreviewBlock,
-		className: previewClassName,
-	} = useStylesForBlocks({
-		event,
-		clientId,
-		blockName,
-		onSwitch,
-	});
-
-	const [currentActiveStyle, _setCurrentActiveStyle] = useState(activeStyle);
-	const callbackActivatorStyle: T_SET_CURRENT_ACTIVE_STYLE = (
-		style,
-		event
-	) => {
-		setEvent(event);
-		_setCurrentActiveStyle(style);
-	};
-	const setCurrentActiveStyle = useCallback(callbackActivatorStyle, []);
-	const [currentPreviewStyle, setCurrentPreviewStyle] = useState(null);
-
-	useEffect(() => {
-		if (
-			undefined === currentBlockStyleVariation &&
-			!currentActiveStyle.isDefault
-		) {
-			setCurrentActiveStyle(getDefaultStyle(stylesToRender));
-		}
-
-		if (
-			currentBlockStyleVariation?.name &&
-			currentBlockStyleVariation?.name !== currentActiveStyle.name
-		) {
-			setCurrentActiveStyle(currentBlockStyleVariation);
-		}
-	}, [
-		stylesToRender,
-		currentActiveStyle,
-		setCurrentActiveStyle,
-		currentBlockStyleVariation,
-	]);
-
-	// Update cached style when active style changes
-	useLateEffect(() => {
-		// change back to old style
-		if (
-			currentPreviewStyle === null &&
-			activeStyle?.name !== currentActiveStyle?.name
-		) {
-			onSelect(currentActiveStyle);
-		}
-	}, [currentPreviewStyle]);
-
-	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
-
-	const buttonText = useMemo(() => {
-		if (isDeletedStyle) {
-			return __('Missing Style Variation', 'blockera');
-		}
-
-		return (
-			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
-				currentActiveStyle?.name
-			]?.label ||
-			currentActiveStyle.label ||
-			currentActiveStyle.name ||
-			__('Default', 'blockera')
-		);
-	}, [
-		blockeraGlobalStylesMetaData,
-		blockName,
-		currentActiveStyle,
-		isDeletedStyle,
-	]);
-
-	const memoizedStyles = useMemo(
-		() => ({
-			onSelect,
-			stylesToRender,
-			genericPreviewBlock,
-			activeStyle: currentActiveStyle,
-			setCurrentActiveStyle,
-			setCurrentPreviewStyle,
-			previewClassName,
-			popoverAnchor,
-			setIsOpen,
-		}),
-		[
-			onSelect,
-			stylesToRender,
-			genericPreviewBlock,
-			currentActiveStyle,
-			setCurrentActiveStyle,
-			setCurrentPreviewStyle,
-			previewClassName,
-			popoverAnchor,
-			setIsOpen,
-		]
-	);
-
 	if (
 		!stylesToRender ||
 		stylesToRender.length === 0 ||
@@ -198,114 +110,6 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 			/>
 		);
 	}
-
-	// Preparing block stored and default attributes.
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const { storedAttributes, defaultAttributes } = useSelect(
-		(select) => {
-			const { getSelectedBlock } = select('core/block-editor');
-			const { getBlockType } = select('core/blocks');
-			const selectedBlock = getSelectedBlock();
-			const blockType = getBlockType(blockName);
-
-			const ignoredAttributes: Array<string> = [];
-
-			for (const attribute in selectedBlock?.attributes) {
-				if (ignoredAttributes.includes(attribute)) {
-					continue;
-				}
-
-				if (!attribute.startsWith('blockera')) {
-					ignoredAttributes.push(attribute);
-				}
-			}
-
-			const storedAttributes = omit(
-				selectedBlock?.attributes,
-				ignoredAttributes
-			);
-			const defaultAttributes = omit(
-				blockType?.attributes,
-				ignoredAttributes
-			);
-
-			return {
-				storedAttributes,
-				defaultAttributes,
-			};
-		},
-		[blockName]
-	);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const { blockeraOverrideBlockAttributes } = useMemo(
-		() => getBlockAttributes(blockName),
-		[blockName]
-	);
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const originDefaultAttributes = useMemo(() => {
-		return mergeObject(blockeraOverrideBlockAttributes, defaultAttributes);
-	}, [defaultAttributes, blockeraOverrideBlockAttributes]);
-	// Preparing default attributes values for usage in global styles context.
-	const defaultStylesValue = prepareBlockeraDefaultAttributesValues(
-		originDefaultAttributes
-	);
-	let prefixParts: Array<string> = [];
-	if (
-		currentBlockStyleVariation &&
-		!currentBlockStyleVariation?.isDefault &&
-		currentBlockStyleVariation?.name
-	) {
-		prefixParts = ['variations', currentBlockStyleVariation.name].concat(
-			prefixParts
-		);
-	}
-	const prefix = prefixParts.join('.');
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [style] = useGlobalStyle(prefix, blockName, 'all', {
-		shouldDecodeEncode: false,
-		defaultStylesValue,
-	});
-	const _style = style;
-	if (_style?.variations) {
-		delete _style?.variations;
-	}
-
-	// Normalizing and cleanup block stored attributes.
-	const normalizedAttributes = getNormalizedStyle(
-		storedAttributes,
-		defaultStylesValue
-	);
-
-	const { updated } = Object.keys(normalizedAttributes).length
-		? detailedDiff(
-				!Object.keys(_style).length
-					? defaultStylesValue
-					: mergeObject(defaultStylesValue, _style),
-				normalizedAttributes
-		  )
-		: { updated: {} };
-
-	const initializedValue =
-		Object.keys(
-			omitWithPattern(
-				omit(updated, [
-					'blockeraPropsId',
-					'blockeraCompatId',
-					'blockeraCurrentDevice',
-				]),
-				/!^blockera/i
-			)
-		).length > 0;
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	const [hasChangesets, setChangesets] = useState(initializedValue);
-
-	// eslint-disable-next-line react-hooks/rules-of-hooks
-	useEffect(() => {
-		if (initializedValue !== hasChangesets) {
-			setChangesets(initializedValue);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [initializedValue, currentActiveStyle]);
 
 	return (
 		<>
