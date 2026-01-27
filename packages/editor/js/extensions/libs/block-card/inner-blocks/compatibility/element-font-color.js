@@ -29,8 +29,9 @@ export function elementNormalFontColorFromWPCompatibility({
 	) {
 		const color = getColorVAFromVarString(
 			insideBlockInspector
-				? attributes.style.elements[dataCompatibilityElement].color.text
-				: attributes.elements[dataCompatibilityElement].color.text
+				? attributes?.style?.elements?.[dataCompatibilityElement]?.color
+						?.text
+				: attributes?.elements?.[dataCompatibilityElement]?.color?.text
 		);
 
 		if (color) {
