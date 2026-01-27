@@ -44,7 +44,7 @@ type TBlockStyleVariations = {
 	setEvent: (e: string) => void,
 	onSelect: () => void,
 	activeStyle: Object,
-	isDeletedStyle: boolean,
+	isDeletedStyle: string,
 	stylesToRender: Object,
 	previewClassName: string,
 	genericPreviewBlock: Object,

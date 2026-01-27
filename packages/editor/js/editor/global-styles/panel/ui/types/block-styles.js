@@ -7,7 +7,7 @@ export type T_BLOCK_STYLES_PROPS = {
 	hasChangesets?: boolean,
 	isNotActive?: boolean,
 	originDefaultAttributes?: Object,
-	setChangesets?: (hasChangesets?: boolean) => void,
+	setChangesets?: (hasChangesets: boolean) => void,
 	context?: 'global-styles-panel' | 'inspector-controls',
 	styles: {
 		onSelect: (style: string) => void,
