@@ -25,6 +25,11 @@ export const More = ({
 	return (
 		<Button
 			label={label}
+			data-test={
+				'string' === typeof label
+					? label.toLowerCase().replace(/\s/g, '-')
+					: 'more-settings'
+			}
 			showTooltip={true}
 			className={className || 'blockera-extension-settings-button'}
 			isFocus={isOpen || false}
@@ -38,7 +43,7 @@ export const More = ({
 
 								onClick();
 							},
-						}),
+					  }),
 			}}
 		>
 			<Icon icon="more-vertical" iconSize="24" />
