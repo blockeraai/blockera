@@ -263,7 +263,7 @@ describe('Style Engine Testing ...', () => {
 			});
 		});
 
-		it.only('should generate css for desktop and tablet device on normal and hover states', () => {
+		it('should generate css for desktop and tablet device on normal and hover states', () => {
 			context('desktop', () => {
 				context(
 					'sets background-color and transition on normal',
