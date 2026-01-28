@@ -350,14 +350,15 @@ export const BlockBase: ComponentType<any> = (
 
 	// It is used to update the classname when the block is created.
 	useEffect(() => {
-		// If the block does not have a blockeraPropsId, don't update the classname.
-		if (!blockAttributes?.blockeraPropsId) {
-			return;
-		}
-
 		// Check if a blockera-block classname already exists in the className.
 		const classNameStr = blockAttributes?.className || '';
 		const hasBlockeraBlockClass = classNameStr.includes('blockera-block-');
+
+		// Skip updating the className if the block already has a blockera-block class but no blockeraPropsId.
+		// This prevents overwriting existing blockera classes on blocks that weren't created with Blockera.
+		if (!blockAttributes?.blockeraPropsId && hasBlockeraBlockClass) {
+			return;
+		}
 
 		// If no blockera-block classname exists, add the unique one.
 		if (!hasBlockeraBlockClass) {
