@@ -342,7 +342,7 @@ describe('Style Engine Testing ...', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(23, 227, 23)'
 					);
 				});
 			});
