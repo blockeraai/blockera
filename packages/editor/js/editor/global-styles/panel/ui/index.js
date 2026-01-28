@@ -128,6 +128,7 @@ export const BlockStyleVariations: ComponentType<TBlockStyleVariations> = ({
 						setIsOpen(false);
 						setIsHovered(false);
 					} else {
+						// $FlowFixMe
 						setPopoverAnchor(event.currentTarget); // the <button> element itself
 						setIsOpen(true);
 					}
