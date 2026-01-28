@@ -397,8 +397,11 @@ export const BlockBase: ComponentType<any> = (
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
-		// Skip the effect if the block is not a blockera block.
-		if (!attributes?.blockeraPropsId) {
+		// Skip the effect if the block is not a blockera block and not has metadata.
+		if (
+			!attributes?.blockeraPropsId &&
+			!attributes.hasOwnProperty('metadata')
+		) {
 			return;
 		}
 
