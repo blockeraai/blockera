@@ -736,6 +736,7 @@ export const BlockBase: ComponentType<any> = (
 							insideBlockInspector,
 							currentInnerBlockState,
 							updateBlockEditorSettings,
+							blockStyleVariationsProps,
 							blockProps: {
 								// Sending props like exactly "edit" function props of WordPress Block.
 								// Because needs total block props in outside overriding component like "blockera" in overriding process.
