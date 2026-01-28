@@ -293,6 +293,17 @@ export const BlockBase: ComponentType<any> = (
 		return generateUniqueClassName(clientId);
 	}, [clientId]);
 
+	// Track if this is the first calculation to ensure unique classname on mount
+	const isFirstCalculationRef = useRef(true);
+	const previousClientIdRef = useRef(clientId);
+	const compatibleAttributesRef = useRef(null);
+
+	// Reset first calculation flag when clientId changes (e.g., block copied)
+	if (previousClientIdRef.current !== clientId) {
+		isFirstCalculationRef.current = true;
+		previousClientIdRef.current = clientId;
+	}
+
 	// Cleanup: unregister the classname when component unmounts.
 	useEffect(() => {
 		return () => {
@@ -302,26 +313,138 @@ export const BlockBase: ComponentType<any> = (
 		};
 	}, [clientId, uniqueClassName]);
 
-	const compatibleAttributes = useMemo(
-		() =>
-			getCompatibleAttributes({
-				args,
-				isActive,
-				availableAttributes,
-				attributes: cloneObject(blockAttributes),
-				defaultAttributes: originDefaultAttributes,
-			}),
-		[
+	const compatibleAttributes = useMemo(() => {
+		// Run compatibility filters...
+		const compatibleAttributes = getCompatibleAttributes({
 			args,
 			isActive,
-			blockAttributes,
 			availableAttributes,
-			originDefaultAttributes,
-		]
-	);
+			attributes: cloneObject(blockAttributes),
+			defaultAttributes: originDefaultAttributes,
+		});
+
+		const classNameStr = compatibleAttributes?.className || '';
+		const regexPattern = /blockera-block-\w+/gi;
+		const isFirstCalculation = isFirstCalculationRef.current;
+
+		// On first calculation (mount), ensure unique classname is properly set
+		if (isFirstCalculation) {
+			isFirstCalculationRef.current = false;
+
+			// Extract existing blockera-block classnames from className
+			const classNameParts = classNameStr.split(/\s+/).filter(Boolean);
+			const existingBlockeraClasses: string[] = [];
+			const otherClasses: string[] = [];
+
+			classNameParts.forEach((part) => {
+				if (regexPattern.test(part)) {
+					existingBlockeraClasses.push(part);
+				} else {
+					otherClasses.push(part);
+				}
+			});
+
+			// Unregister any existing blockera-block classnames that don't match our unique one
+			// This handles the case when a block is copied and has old classnames
+			existingBlockeraClasses.forEach((existingClass) => {
+				if (
+					existingClass !== uniqueClassName &&
+					REGISTERED_CLASSNAMES.has(existingClass)
+				) {
+					// Only unregister if it's not the unique classname for this block
+					REGISTERED_CLASSNAMES.delete(existingClass);
+				}
+			});
+
+			// Ensure the unique classname is registered
+			if (!REGISTERED_CLASSNAMES.has(uniqueClassName)) {
+				REGISTERED_CLASSNAMES.add(uniqueClassName);
+			}
+
+			// Build the new className with unique classname and other classes
+			const newClassName = classNames(otherClasses, {
+				'blockera-block': true,
+				[uniqueClassName]: true,
+			});
+
+			return {
+				...compatibleAttributes,
+				className: newClassName,
+			};
+		}
+
+		// For subsequent calculations, validate and maintain the unique classname
+		const hasBlockeraBlockClass = classNameStr.includes('blockera-block-');
+		const classNameParts = classNameStr.split(/\s+/).filter(Boolean);
+		let hasValidUniqueClassname = false;
+		let hasInvalidBlockeraClass = false;
+
+		classNameParts.forEach((part) => {
+			const isBlockeraUniqueClassname = regexPattern.test(part);
+			const isRegistered = REGISTERED_CLASSNAMES.has(part);
+
+			if (isBlockeraUniqueClassname) {
+				if (part === uniqueClassName && isRegistered) {
+					hasValidUniqueClassname = true;
+				} else if (part !== uniqueClassName) {
+					hasInvalidBlockeraClass = true;
+				}
+			}
+		});
+
+		// Skip updating the className if the block already has a blockera-block class but no blockeraPropsId.
+		// This prevents overwriting existing blockera classes on blocks that weren't created with Blockera.
+		if (!blockAttributes?.blockeraPropsId && hasBlockeraBlockClass) {
+			if (hasValidUniqueClassname && !hasInvalidBlockeraClass) {
+				return compatibleAttributes;
+			}
+		}
+
+		// If no valid unique classname exists, ensure it's added
+		if (!hasValidUniqueClassname) {
+			// Remove any invalid blockera-block classnames
+			const cleanedClassName = classNameStr
+				.replace(regexPattern, '')
+				.trim();
+			const newClassName = classNames(cleanedClassName, {
+				'blockera-block': true,
+				[uniqueClassName]: true,
+			});
+
+			// Ensure the unique classname is registered
+			if (!REGISTERED_CLASSNAMES.has(uniqueClassName)) {
+				REGISTERED_CLASSNAMES.add(uniqueClassName);
+			}
+
+			return {
+				...compatibleAttributes,
+				className: newClassName,
+			};
+		}
+
+		// If invalid blockera classes exist, replace them with the unique one
+		if (hasInvalidBlockeraClass) {
+			const newClassName = classNameStr.replace(
+				regexPattern,
+				uniqueClassName
+			);
+			return {
+				...compatibleAttributes,
+				className: newClassName,
+			};
+		}
+
+		return compatibleAttributes;
+	}, [
+		args,
+		isActive,
+		blockAttributes,
+		uniqueClassName,
+		availableAttributes,
+		originDefaultAttributes,
+	]);
 
 	const [attributes, setState] = useState(compatibleAttributes);
-	const compatibleAttributesRef = useRef(null);
 	const { className } = attributes;
 
 	/**
@@ -347,54 +470,6 @@ export const BlockBase: ComponentType<any> = (
 
 		setState(value);
 	};
-
-	// It is used to update the classname when the block is created.
-	useEffect(() => {
-		// Check if a blockera-block classname already exists in the className.
-		const classNameStr = blockAttributes?.className || '';
-		const hasBlockeraBlockClass = classNameStr.includes('blockera-block-');
-
-		// Skip updating the className if the block already has a blockera-block class but no blockeraPropsId.
-		// This prevents overwriting existing blockera classes on blocks that weren't created with Blockera.
-		if (!blockAttributes?.blockeraPropsId && hasBlockeraBlockClass) {
-			return;
-		}
-
-		// If no blockera-block classname exists, add the unique one.
-		if (!hasBlockeraBlockClass) {
-			setBlockAttributes({
-				...blockAttributes,
-				className: classNames(classNameStr, {
-					'blockera-block': true,
-					[uniqueClassName]: true,
-				}),
-			});
-		} else {
-			// Ensure the unique classname is included in the className string.
-			const classNameParts = classNameStr.split(/\s+/);
-			const regexPattern = /blockera-block-\w+/gi;
-			if (
-				classNameParts.some((part) => {
-					const isRegistered = REGISTERED_CLASSNAMES.has(part);
-
-					if (isRegistered) {
-						REGISTERED_CLASSNAMES.delete(part);
-					}
-
-					return regexPattern.test(part) && isRegistered;
-				})
-			) {
-				setBlockAttributes({
-					...blockAttributes,
-					className: classNameStr.replace(
-						regexPattern,
-						uniqueClassName
-					),
-				});
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
