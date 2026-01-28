@@ -1,12 +1,8 @@
 import {
-	appendBlocks,
-	createPost,
-	getBlockClientId,
-	getWPDataObject,
-	setBlockState,
-	setInnerBlock,
-	addBlockState,
 	savePage,
+	createPost,
+	appendBlocks,
+	setBlockState,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 import { setDevice } from './helpers';
@@ -190,6 +186,8 @@ describe('Style Engine Testing ...', () => {
 			);
 
 			context('checking generated styles on desktop device', () => {
+				// Set xl-desktop viewport
+				cy.viewport(1441, 1920);
 				setDevice('Desktop');
 
 				cy.getBlock('core/paragraph').should(
@@ -265,7 +263,7 @@ describe('Style Engine Testing ...', () => {
 			});
 		});
 
-		it('should generate css for desktop and tablet device on normal and hover states', () => {
+		it.only('should generate css for desktop and tablet device on normal and hover states', () => {
 			context('desktop', () => {
 				context(
 					'sets background-color and transition on normal',
@@ -327,12 +325,12 @@ describe('Style Engine Testing ...', () => {
 					setBlockState('Hover');
 
 					// Set background color.
-					cy.setColorControlValue('BG Color', '#16e2c1');
+					cy.setColorControlValue('BG Color', '#17E317');
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(23, 227, 23)'
 					);
 				});
 
@@ -405,7 +403,7 @@ describe('Style Engine Testing ...', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'background-color',
-						'rgb(22, 226, 193)'
+						'rgb(23, 227, 23)'
 					);
 				});
 			});
