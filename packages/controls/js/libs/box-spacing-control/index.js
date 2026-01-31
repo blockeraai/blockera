@@ -314,7 +314,11 @@ export default function BoxSpacingControl({
 									});
 								}}
 							>
-								<Icon icon="border" iconSize="14" />
+								{paddingLock === 'simple' ? (
+									<Icon icon="lock" iconSize="24" />
+								) : (
+									<Icon icon="unlock" iconSize="24" />
+								)}
 							</Button>
 						</Grid>
 					</div>
@@ -637,7 +641,11 @@ export default function BoxSpacingControl({
 									});
 								}}
 							>
-								<Icon icon="border" iconSize="14" />
+								{marginLock === 'simple' ? (
+									<Icon icon="lock" iconSize="24" />
+								) : (
+									<Icon icon="unlock" iconSize="24" />
+								)}
 							</Button>
 						</Grid>
 					</div>

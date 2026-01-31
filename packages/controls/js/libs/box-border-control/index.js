@@ -228,7 +228,11 @@ export default function BoxBorderControl({
 								}
 							}}
 						>
-							<Icon icon="border" iconSize="14" />
+							{value.type === 'all' ? (
+								<Icon icon="lock" iconSize="24" />
+							) : (
+								<Icon icon="unlock" iconSize="24" />
+							)}
 						</Button>
 					</Grid>
 				</div>

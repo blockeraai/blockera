@@ -46,6 +46,7 @@ const SelectControl = ({
 	field = 'select',
 	//
 	className,
+	style = {},
 	...props
 }: TSelectControlProps): MixedElement => {
 	const {
@@ -86,6 +87,7 @@ const SelectControl = ({
 			columns={columns}
 			controlName={field}
 			className={className}
+			style={style}
 			{...labelProps}
 		>
 			{type === 'native' && (
