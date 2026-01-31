@@ -288,6 +288,7 @@ export default function SecondarySidebarInjector() {
 								isVisible={isSidebarVisible}
 								minWidth={280}
 								maxWidth={600}
+								defaultValue="350px"
 								onResize={handleResize}
 							/>
 						)}

@@ -264,6 +264,7 @@ export default function PrimarySidebarController() {
 					isVisible={isPrimarySidebarOpen}
 					minWidth={280}
 					maxWidth={600}
+					defaultValue="300px"
 					onResize={handleResize}
 				/>
 			)}
