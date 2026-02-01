@@ -94,6 +94,10 @@ export default function GlobalStylesActionsForBlocks(): MixedElement {
 					if (blockElement) {
 						blockElement.addEventListener('click', () => {
 							document.body?.classList?.add(className);
+							document.body?.setAttribute(
+								'data-test',
+								'activated-blockera-global-styles-panel'
+							);
 							sharedListenerCallback(blockType.name);
 						});
 					}

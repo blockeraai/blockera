@@ -36,6 +36,7 @@ export const AddBlockTypeIcons = ({
 		return createPortal(
 			<span
 				className="blockera-block-icon-wrapper"
+				data-test={`block-icon-${blockType.name.replace('/', '-')}`}
 				key={index + '-block-icon'}
 			>
 				<BlockIcon name={blockType.name} />
