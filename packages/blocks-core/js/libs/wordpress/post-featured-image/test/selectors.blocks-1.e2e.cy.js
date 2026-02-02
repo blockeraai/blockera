@@ -5,7 +5,6 @@ import {
 	savePage,
 	createPost,
 	appendBlocks,
-	setInnerBlock,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -41,7 +40,7 @@ describe('Featured Image Block → Selectors test', () => {
 		//
 		// Border
 		//
-		cy.getParentContainer('Border Line').as('borderContainer');
+		cy.getParentContainer('Border').as('borderContainer');
 		cy.get('@borderContainer').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
