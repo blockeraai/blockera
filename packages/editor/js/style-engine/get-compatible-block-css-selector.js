@@ -236,7 +236,10 @@ export const getNormalizedSelector = (
 		if (selector.trim().startsWith('&&')) {
 			isProcessedSelector = true;
 			// Extract the first part of the root selector (everything before the first space)
-			const rootFirstPart = rootSelector.split(' ')[0];
+			const rootFirstPart = getSelectorWithRootBody(
+				getExtractedSelectorFromRootBody(rootSelector).split(' ')[0]
+			);
+
 			return `${rootFirstPart}${selector.trim().substring(2)}`;
 		}
 
@@ -455,6 +458,10 @@ export const getSelectorWithRootBody = (
 	withHTML: boolean = true
 ): string => {
 	return `${withHTML ? 'html:root' : ':root'} body :where(${selector})`;
+};
+
+export const getExtractedSelectorFromRootBody = (selector: string): string => {
+	return selector.replace(/^html:root body :where\((.*)\)$/, '$1');
 };
 
 export const getCompatibleBlockCssSelector = ({
