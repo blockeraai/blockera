@@ -125,14 +125,29 @@ export const getRegisteredClassNames = (clientId: string): Set<string> => {
  * a counter based on the highest number found.
  *
  * @param {string} clientId - The client ID to generate the unique class name from.
+ * @param {string} className - The default class name for block.
+ *
  * @return {string} A unique class name that hasn't been registered yet.
  */
-export const generateUniqueClassName = (clientId: string): string => {
-	const baseHash = getSmallHash(clientId);
-	const baseClassName = `blockera-block-${baseHash}`;
+export const generateUniqueClassName = (
+	clientId: string,
+	className: string
+): string => {
+	let _className = '';
+	const matchBaseClass = className?.match(regexPattern);
+	if (matchBaseClass) {
+		_className = matchBaseClass[0];
+	}
+	const baseHash = _className
+		? _className.match(/blockera-block-(\w+)/)?.[1] ||
+		  getSmallHash(clientId)
+		: getSmallHash(clientId);
+	const baseClassName = _className
+		? _className
+		: `blockera-block-${baseHash}`;
 
 	// Check if base classname is available (no counter needed).
-	if (!REGISTERED_CLASSNAMES.has(baseClassName)) {
+	if (!isClassNameDuplicate(clientId, baseClassName)) {
 		registerClassName(clientId, baseClassName);
 		return baseClassName;
 	}
@@ -148,15 +163,17 @@ export const generateUniqueClassName = (clientId: string): string => {
 	let maxCounter = 0;
 
 	// Scan all registered classnames to find the highest counter for this baseHash.
-	REGISTERED_CLASSNAMES.forEach((registeredClassName) => {
-		// $FlowFixMe
-		const match = registeredClassName.match(pattern);
-		if (match) {
-			const counter = parseInt(match[1], 10);
-			if (counter > maxCounter) {
-				maxCounter = counter;
+	REGISTERED_CLASSNAMES.forEach((registeredClassNames) => {
+		registeredClassNames.forEach((registeredClassName) => {
+			// $FlowFixMe
+			const match = registeredClassName.match(pattern);
+			if (match) {
+				const counter = parseInt(match[1], 10);
+				if (counter > maxCounter) {
+					maxCounter = counter;
+				}
 			}
-		}
+		});
 	});
 
 	// Generate unique classname with counter starting from maxCounter + 1.
@@ -176,7 +193,7 @@ export const generateUniqueClassName = (clientId: string): string => {
 };
 
 // blockera block classname pattern.
-const regexPattern = /blockera-block--?\w+/gi;
+const regexPattern = /blockera-block-[\w-]+/i;
 
 export const BlockBase: ComponentType<any> = (
 	_props: Object
@@ -334,8 +351,8 @@ export const BlockBase: ComponentType<any> = (
 	// Store the unique classname for this block instance.
 	// Generate it once on mount using useMemo (runs during render, memoized by clientId).
 	const uniqueClassName = useMemo(() => {
-		return generateUniqueClassName(clientId);
-	}, [clientId]);
+		return generateUniqueClassName(clientId, blockAttributes?.className);
+	}, [clientId, blockAttributes?.className]);
 
 	// Track if this is the first calculation to ensure unique classname on mount
 	const isFirstCalculationRef = useRef(true);
