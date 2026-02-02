@@ -85,7 +85,7 @@ describe('Button Block', () => {
 		//
 		// 1.2. Border Line
 		//
-		cy.getParentContainer('Border Line').within(() => {
+		cy.getParentContainer('Border').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(5, {
 				force: true,
@@ -99,7 +99,7 @@ describe('Button Block', () => {
 			cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
 		});
 
-		cy.getParentContainer('Border Line').within(() => {
+		cy.getParentContainer('Border').within(() => {
 			cy.get('[aria-haspopup="listbox"]').click();
 			cy.get('div[aria-selected="false"]').eq(1).click();
 		});
