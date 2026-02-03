@@ -204,7 +204,7 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 					: getActiveMasterState(
 							clientId,
 							getExtensionCurrentBlock()
-						);
+					  );
 				const controlName = controlInfo.name.replace(
 					currentState,
 					state
