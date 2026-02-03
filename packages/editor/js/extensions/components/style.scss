@@ -163,15 +163,27 @@
 
 .blockera-block-inspector-controls-wrapper + .block-editor-block-card,
 .blockera-block-inspector-controls-wrapper
-	~ .block-editor-block-variation-transforms {
+~ .block-editor-block-variation-transforms {
 	display: none !important;
 }
 
 // hide justification control inside layout constrained (Group Block)
 
 .block-editor-block-inspector
-	.block-editor-hooks__layout-constrained
-	.block-editor-hooks__layout-constrained-helptext
-	+ .components-base-control {
+.block-editor-hooks__layout-constrained
+.block-editor-hooks__layout-constrained-helptext
++ .components-base-control {
 	display: none;
+}
+
+.search-features {
+
+	.components-input-control__container {
+		background-color: #ffffff;
+	}
+
+	input:focus {
+		outline: none !important;
+		border: none !important;
+	}
 }

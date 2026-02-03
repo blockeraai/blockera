@@ -27,6 +27,7 @@ import { Border, BorderRadius } from './components';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TBorderAndShadowProps } from './types/border-and-shadow-props';
 
 export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> = ({
@@ -39,6 +40,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> = ({
 	setSettings,
 }: TBorderAndShadowProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('borderAndShadowConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -78,6 +80,7 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> = ({
 	return (
 		<PanelBodyControl
 			onToggle={onToggle}
+			noWrapper={activeSearchMode}
 			title={__('Border And Shadow', 'blockera')}
 			initialOpen={initialOpen}
 			icon={<Icon icon="extension-border" />}

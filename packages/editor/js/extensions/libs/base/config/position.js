@@ -15,6 +15,7 @@ const blockeraPosition: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Position', 'blockera'),
+	keywords: ['position', 'absolute', 'relative', 'fixed', 'sticky'],
 };
 
 const blockeraZIndex: FeatureConfig = {
@@ -22,6 +23,7 @@ const blockeraZIndex: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Z-Index', 'blockera'),
+	keywords: ['z-index', 'zindex', 'layer', 'stack', 'order'],
 };
 
 export const positionConfig = {

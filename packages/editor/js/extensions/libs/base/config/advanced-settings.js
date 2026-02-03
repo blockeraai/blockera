@@ -20,6 +20,7 @@ const blockeraAttributes: FeatureConfig = {
 	onStates: ['normal'],
 	onBreakpoints: [getBaseBreakpoint()],
 	onInnerBlocks: false,
+	keywords: ['attributes', 'html', 'custom', 'data', 'attr'],
 };
 
 export const advancedSettingsConfig = {

@@ -26,6 +26,7 @@ import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TFlexChildProps } from './types/flex-child-props';
 
 export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
@@ -38,6 +39,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 	attributes,
 }: TFlexChildProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('flexChildConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -96,6 +98,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 			onToggle={onToggle}
 			title={__('Flex Child', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-flex-child" />}
 			className={extensionClassNames('flex-child')}
 		>
