@@ -17,6 +17,7 @@ const blockeraIcon: FeatureConfig = {
 	label: __('Icon', 'blockera'),
 	onStates: false,
 	onBreakpoints: false,
+	keywords: ['icon', 'svg', 'image'],
 };
 
 const blockeraIconPosition: FeatureConfig = {
@@ -26,6 +27,7 @@ const blockeraIconPosition: FeatureConfig = {
 	label: __('Icon Position', 'blockera'),
 	onStates: false,
 	onBreakpoints: false,
+	keywords: ['icon', 'position', 'alignment'],
 };
 
 const blockeraIconGap: FeatureConfig = {
@@ -33,6 +35,7 @@ const blockeraIconGap: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Icon Gap', 'blockera'),
+	keywords: ['icon', 'gap', 'spacing'],
 };
 
 const blockeraIconSize: FeatureConfig = {
@@ -40,6 +43,7 @@ const blockeraIconSize: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Icon Size', 'blockera'),
+	keywords: ['icon', 'size', 'font-size'],
 };
 
 const blockeraIconColor: FeatureConfig = {
@@ -47,6 +51,7 @@ const blockeraIconColor: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Icon Color', 'blockera'),
+	keywords: ['icon', 'color', 'text-color'],
 };
 
 const blockeraIconRotate: FeatureConfig = {
@@ -54,6 +59,7 @@ const blockeraIconRotate: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Icon Rotate', 'blockera'),
+	keywords: ['icon', 'rotate', 'rotation'],
 };
 
 const blockeraIconFlipHorizontal: FeatureConfig = {
@@ -61,6 +67,7 @@ const blockeraIconFlipHorizontal: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Icon Flip Horizontal', 'blockera'),
+	keywords: ['icon', 'flip', 'horizontal'],
 };
 
 const blockeraIconFlipVertical: FeatureConfig = {
@@ -68,6 +75,7 @@ const blockeraIconFlipVertical: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Icon Flip Vertical', 'blockera'),
+	keywords: ['icon', 'flip', 'vertical'],
 };
 
 const blockeraIconLink: FeatureConfig = {
@@ -75,6 +83,7 @@ const blockeraIconLink: FeatureConfig = {
 	force: true,
 	status: false,
 	label: __('Icon Link', 'blockera'),
+	keywords: ['icon', 'link', 'url'],
 };
 
 export const iconConfig = {
