@@ -28,7 +28,6 @@ import { extensionClassNames } from '@blockera/classnames';
 import { isShowField } from '@blockera/editor/js/extensions/api/utils';
 import { isEquals, addAngle, isEmpty, isUndefined } from '@blockera/utils';
 import { generateExtensionId } from '@blockera/editor/js/extensions/libs/utils';
-import { useFeatureSearch } from '@blockera/editor/js/extensions/components/feature-search-context';
 import { default as EditorFeatureWrapper } from '@blockera/editor/js/components/editor-feature-wrapper';
 
 /**
@@ -77,12 +76,12 @@ export const IconExtension: ComponentType<{
 	},
 	attributes,
 	useBlockSection,
+	activeSearchMode = false,
 }: TIconProps): MixedElement => {
 	const { changeExtensionCurrentBlock: setCurrentBlock } =
 		dispatch('blockera/extensions') || {};
 	const { initialOpen, onToggle } = useBlockSection('iconConfig');
 	const blockName = block.activeBlockVariation?.name || block?.blockName;
-	const { activeSearchMode } = useFeatureSearch();
 
 	const encodeIcon = useCallback(
 		(iconHTML: string, { hasInlineStyle = false, color } = {}) => {

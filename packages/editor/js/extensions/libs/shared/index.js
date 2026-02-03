@@ -276,7 +276,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
 
 	const [settings, setSettings] = useState(supports);
-	const { searchQuery } = useFeatureSearch();
+	const { searchQuery, activeSearchMode } = useFeatureSearch();
 	// Filter settings based on search query
 	const filteredSettings = useMemo(
 		() => filterSettingsBySearch(cloneObject(settings), searchQuery),
@@ -368,6 +368,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			currentInnerBlockState={currentInnerBlockState}
 			isReportingErrorCompleted={isReportingErrorCompleted}
 			setIsReportingErrorCompleted={setIsReportingErrorCompleted}
+			activeSearchMode={activeSearchMode}
 		/>
 	);
 
