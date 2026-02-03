@@ -12,6 +12,7 @@ export type TExtensionSlotFillProps = {
 	attributes: Object,
 	blockFeatures: Object,
 	useBlockSection: Object,
+	activeSearchMode: boolean,
 	currentStateAttributes: Object,
 	handleOnChangeSettings: (newSupports: Object, name: string) => void,
 	handleOnChangeAttributes: (attributes: Object, ref: Object) => void,
