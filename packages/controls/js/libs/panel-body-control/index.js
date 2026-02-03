@@ -29,6 +29,7 @@ const PanelBodyControl: ComponentType<PanelBodyControlProps> = forwardRef(
 	(
 		{
 			title,
+			noWrapper = false,
 			initialOpen = true,
 			isChanged = false,
 			isChangedOnStates = false,
@@ -43,6 +44,18 @@ const PanelBodyControl: ComponentType<PanelBodyControlProps> = forwardRef(
 		}: PanelBodyControlProps,
 		ref: Object
 	): MixedElement => {
+		if (noWrapper) {
+			return (
+				<div
+					className={controlClassNames('panel-body', {
+						className: true,
+						'is-opened': true,
+					})}
+				>
+					{children}
+				</div>
+			);
+		}
 		return (
 			<PanelBody
 				title={

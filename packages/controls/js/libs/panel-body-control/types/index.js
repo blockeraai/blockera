@@ -10,6 +10,12 @@ export type PanelBodyControlProps = {
 	 */
 	title: string | Node,
 	/**
+	 * No wrapper?
+	 *
+	 * @default false
+	 */
+	noWrapper?: boolean,
+	/**
 	 * Default open or close status for panel body
 	 */
 	initialOpen?: boolean,
