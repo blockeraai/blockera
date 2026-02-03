@@ -78,13 +78,15 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 			icon={<Icon icon="extension-mouse" />}
 			className={extensionClassNames('mouse')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Mouse Settings', 'blockera')}
-				features={mouseConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'mouseConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Mouse Settings', 'blockera')}
+					features={mouseConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'mouseConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowCursor}

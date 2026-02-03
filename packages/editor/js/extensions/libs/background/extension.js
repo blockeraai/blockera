@@ -94,13 +94,15 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 			className={extensionClassNames('background')}
 			onToggle={onToggle}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Background Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'backgroundConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Background Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'backgroundConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowBackground}

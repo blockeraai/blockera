@@ -198,13 +198,15 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 			icon={<Icon icon="extension-effects" />}
 			className={extensionClassNames('effects')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Effect Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'effectsConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Effect Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'effectsConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowOpacity}

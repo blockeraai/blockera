@@ -139,13 +139,15 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 			icon={<Icon icon="extension-size" />}
 			className={extensionClassNames('size')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Size Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'sizeConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Size Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'sizeConfig');
+					}}
+				/>
+			)}
 
 			{(isShowWidth || isShowMinWidth || isShowMaxWidth) && (
 				<BaseControl columns="columns-1">

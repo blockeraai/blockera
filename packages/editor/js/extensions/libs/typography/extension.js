@@ -235,13 +235,15 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 			icon={<Icon icon="extension-typography" />}
 			className={extensionClassNames('typography')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Typography Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'typographyConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Typography Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'typographyConfig');
+					}}
+				/>
+			)}
 
 			<BaseControl columns="1fr 2.5fr" label={__('Font', 'blockera')}>
 				<Grid

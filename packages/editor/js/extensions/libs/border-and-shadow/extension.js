@@ -86,13 +86,15 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> = ({
 			icon={<Icon icon="extension-border" />}
 			className={extensionClassNames('border-and-shadow')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Border Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'borderAndShadowConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Border Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'borderAndShadowConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShownBorder}

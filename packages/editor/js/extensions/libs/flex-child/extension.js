@@ -102,12 +102,14 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 			icon={<Icon icon="extension-flex-child" />}
 			className={extensionClassNames('flex-child')}
 		>
-			<ExtensionSettings
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'flexChildConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'flexChildConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowFlexChildSizing}

@@ -128,13 +128,15 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 			icon={<Icon icon="extension-layout" />}
 			className={extensionClassNames('layout')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Layout Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'layoutConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Layout Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'layoutConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowDisplay}
