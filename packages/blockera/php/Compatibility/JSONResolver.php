@@ -48,16 +48,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	 * @param array  $extra_theme_data Any theme json extra data to be included in the export.
 	 *  All options include user settings.
 	 *  'current' will include settings from the currently installed theme but NOT from the parent theme.
-	 *  'all' will include settings from the current theme as well as the parent theme (if it has one)
+	 *  'all' will include settings from the current theme as well as the parent theme (if it has one).
 	 *  'variation' will include just the user custom styles and settings.
 	 */
 	public static function export_theme_data( $content, $extra_theme_data = null ) {
 		$current_theme = wp_get_theme();
-		if ( class_exists( 'WP_Theme_JSON_Gutenberg' ) ) {
-			$theme = new \WP_Theme_JSON_Gutenberg();
-		} else {
-			$theme = new \WP_Theme_JSON();
-		}
+		$theme         = new JSON();
 
 		if ( 'all' === $content && $current_theme->parent() ) {
 			// Get parent theme.json.
@@ -70,11 +66,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 				$schema = $parent_theme_json_data['$schema'];
 			}
 
-			if ( class_exists( 'WP_Theme_JSON_Gutenberg' ) ) {
-				$parent_theme = new \WP_Theme_JSON_Gutenberg( $parent_theme_json_data );
-			} else {
-				$parent_theme = new \WP_Theme_JSON( $parent_theme_json_data );
-			}
+			$parent_theme = new JSON($parent_theme_json_data);
 			$theme->merge( $parent_theme );
 		}
 
@@ -87,11 +79,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 				$schema = $theme_json_data['$schema'];
 			}
 
-			if ( class_exists( 'WP_Theme_JSON_Gutenberg' ) ) {
-				$theme_theme = new \WP_Theme_JSON_Gutenberg( $theme_json_data );
-			} else {
-				$theme_theme = new \WP_Theme_JSON( $theme_json_data );
-			}
+			$theme_theme = new JSON($theme_json_data);
 			$theme->merge( $theme_theme );
 		}
 
@@ -100,11 +88,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 
 		// Merge the extra theme data received as a parameter.
 		if ( ! empty( $extra_theme_data ) ) {
-			if ( class_exists( 'WP_Theme_JSON_Gutenberg' ) ) {
-				$extra_data = new \WP_Theme_JSON_Gutenberg( $extra_theme_data );
-			} else {
-				$extra_data = new \WP_Theme_JSON( $extra_theme_data );
-			}
+			$extra_data = new JSON($extra_theme_data);
 			$theme->merge( $extra_data );
 		}
 

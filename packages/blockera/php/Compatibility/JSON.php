@@ -446,7 +446,7 @@ class JSON extends \WP_Theme_JSON {
 	/**
 	 * Given a styles array, it extracts the style properties
 	 * and adds them to the $declarations array following the format:
-	 *
+	 *phpcs:disable
 	 *     array(
 	 *       'name'  => 'property_name',
 	 *       'value' => 'property_value',
@@ -458,7 +458,7 @@ class JSON extends \WP_Theme_JSON {
 	 * @since 6.5.0 Output a `min-height: unset` rule when `aspect-ratio` is set.
 	 * @since 6.6.0 Pass current theme JSON settings to blockera_get_typography_font_size_value(), and process background properties.
 	 * @since 6.7.0 `ref` resolution of background properties, and assigning custom default values.
-	 *
+	 *phpcs:enable
 	 * @param array   $styles Styles to process.
 	 * @param array   $settings Theme settings.
 	 * @param array   $properties Properties metadata.
@@ -581,5 +581,78 @@ class JSON extends \WP_Theme_JSON {
 		}
 
 		return $declarations;
+	}
+
+	/**
+	 * Add theme JSON variation to local theme directory.
+	 *
+	 * Creates a style variation file in the theme's styles directory.
+	 *
+	 * @param string $export_type The export type (not used, kept for compatibility).
+	 * @param array  $theme       Theme data including name and slug.
+	 * @param bool   $save_fonts  Whether to save font assets to theme.
+	 * @return array|\WP_Error The variation data on success, WP_Error on failure.
+	 */
+	public static function add_theme_json_variation_to_local( $export_type, $theme, $save_fonts = false ) {
+		$variation_path = get_stylesheet_directory() . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR;
+
+		if ( ! file_exists( $variation_path ) ) {
+			wp_mkdir_p( $variation_path );
+		}
+
+		if ( file_exists( $variation_path . $theme['slug'] . '.json' ) ) {
+			return new \WP_Error( 'variation_already_exists', __( 'Variation already exists.', 'blockera' ) );
+		}
+
+		// Get user data using JSONResolver.
+		$user_data = JSONResolver::get_user_data();
+		
+		// Create a new JSON instance (use Blockera's JSON class).
+		$theme_json = new JSON();
+		
+		// Merge user data.
+		if ( $user_data instanceof JSON || $user_data instanceof \WP_Theme_JSON ) {
+			$theme_json->merge( $user_data );
+		}
+		
+		$variation          = $theme_json->get_data();
+		$variation['title'] = $theme['name'];
+
+		// Handle font saving if requested.
+		if (
+			$save_fonts &&
+			isset( $variation['settings']['typography']['fontFamilies'] )
+		) {
+			$font_families = $variation['settings']['typography']['fontFamilies'];
+			// Copy the font assets to the theme assets folder using CBT class.
+			// (CBT-specific functionality, so we use their class).
+			if ( class_exists( '\CBT_Theme_Fonts' ) ) {
+				$copied_font_families = \CBT_Theme_Fonts::copy_font_assets_to_theme( $font_families );
+				// Update the variation theme json with the font families with the new paths.
+				$variation['settings']['typography']['fontFamilies'] = $copied_font_families;
+			}
+		}
+
+		// Write the variation file using JSONResolver's stringify method.
+		file_put_contents(
+			$variation_path . $theme['slug'] . '.json',
+			JSONResolver::stringify( $variation )
+		);
+
+		return $variation;
+	}
+
+	/**
+	 * Add the theme JSON to the local theme directory.
+	 *
+	 * @param string $export_type The export type.
+	 * 
+	 * @return void
+	 */
+	public static function add_theme_json_to_local( $export_type ) {
+		file_put_contents(
+			get_stylesheet_directory() . '/theme.json',
+			JSONResolver::export_theme_data( $export_type )
+		);
 	}
 }
