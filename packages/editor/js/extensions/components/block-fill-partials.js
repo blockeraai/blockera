@@ -3,7 +3,6 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import memoize from 'fast-memoize';
 import { select } from '@wordpress/data';
 import { Fill } from '@wordpress/components';
@@ -13,11 +12,7 @@ import { useEffect, useState, useMemo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import {
-	SearchControl,
-	unregisterControl,
-	ControlContextProvider,
-} from '@blockera/controls';
+import { unregisterControl } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -29,7 +24,6 @@ import {
 } from '../libs/block-card';
 import { isInnerBlock } from './utils';
 import StateContainer from './state-container';
-import { generateExtensionId } from '../libs/utils';
 import { FeatureSearchContextProvider } from './feature-search-context';
 import { filterSettingsBySearch } from '../libs/base/utils/search-features';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
@@ -216,34 +210,6 @@ export const BlockFillPartials: ComponentType<any> = ({
 								}
 							/>
 						)}
-						{Boolean(currentBlockStyleVariation?.name) && (
-							<ControlContextProvider
-								value={{
-									name: generateExtensionId(
-										{
-											blockName: blockProps.name,
-											clientId: blockProps.clientId,
-											currentBlockStyleVariation,
-											attributes: {},
-											setAttributes: () => {},
-											supports: {},
-										},
-										'search'
-									),
-									value: searchQuery,
-									blockName: blockProps.name,
-								}}
-							>
-								<SearchControl
-									className="search-features"
-									onChange={setSearchQuery}
-									placeholder={__(
-										'Search Features…',
-										'blockera'
-									)}
-								/>
-							</ControlContextProvider>
-						)}
 					</StateContainer>
 				)}
 
@@ -307,30 +273,6 @@ export const BlockFillPartials: ComponentType<any> = ({
 								}
 							/>
 						)}
-
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(
-									{
-										blockName: blockProps.name,
-										clientId: blockProps.clientId,
-										currentBlockStyleVariation,
-										attributes: {},
-										setAttributes: () => {},
-										supports: {},
-									},
-									'search'
-								),
-								value: searchQuery,
-								blockName: blockProps.name,
-							}}
-						>
-							<SearchControl
-								className="search-features"
-								onChange={setSearchQuery}
-								placeholder={__('Search Features…', 'blockera')}
-							/>
-						</ControlContextProvider>
 					</>
 				)}
 			</Fill>
