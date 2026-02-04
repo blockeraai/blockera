@@ -4,6 +4,7 @@ namespace Blockera\Setup\Compatibility\Plugins\CBT;
 
 use Blockera\Setup\Compatibility\JSON;
 use Blockera\Setup\Compatibility\JSONResolver;
+use Blockera\Setup\Compatibility\Plugins\CBT\ThemeZip;
 use Blockera\Setup\Compatibility\Plugins\CBT\ThemeStyles;
 use Blockera\Setup\Compatibility\Plugins\CBT\ThemeCreate;
 use Blockera\Setup\Compatibility\Plugins\CBT\ThemeTemplates;
@@ -177,22 +178,29 @@ class RestAPIController {
 
 		// Create ZIP file in the temporary directory.
 		$filename = tempnam( get_temp_dir(), $theme_slug );
-		$zip      = \CBT_Theme_Zip::create_zip( $filename, $theme_slug );
+		$zip      = ThemeZip::create_zip( $filename, $theme_slug );
 
-		$zip = \CBT_Theme_Zip::copy_theme_to_zip( $zip, null, null );
+		if ( is_wp_error( $zip ) ) {
+			return $zip;
+		}
+
+		$zip = ThemeZip::copy_theme_to_zip( $zip, null, null );
 
 		if ( is_child_theme() ) {
 			wp_cache_flush();
-			$zip        = \CBT_Theme_Zip::add_templates_to_zip( $zip, 'current' );
+			$zip        = ThemeZip::add_templates_to_zip( $zip, 'current' );
 			$theme_json = JSONResolver::export_theme_data( 'current' );
 		} else {
-			$zip        = \CBT_Theme_Zip::add_templates_to_zip( $zip, 'all' );
+			$zip        = ThemeZip::add_templates_to_zip( $zip, 'all' );
 			$theme_json = JSONResolver::export_theme_data( 'all' );
 		}
 
-		$theme_json = \CBT_Theme_Zip::add_activated_fonts_to_zip( $zip, $theme_json );
+		$theme_json = ThemeZip::add_activated_fonts_to_zip( $zip, $theme_json );
 
-		$zip = \CBT_Theme_Zip::add_theme_json_to_zip( $zip, $theme_json );
+		// Add block style variation files for variations defined in theme.json but missing from filesystem.
+		$zip = ThemeZip::add_block_style_variations_to_zip( $zip, $theme_json );
+
+		$zip = ThemeZip::add_theme_json_to_zip( $zip, $theme_json );
 
 		$zip->close();
 
