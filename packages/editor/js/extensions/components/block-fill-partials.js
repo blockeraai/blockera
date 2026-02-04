@@ -216,29 +216,34 @@ export const BlockFillPartials: ComponentType<any> = ({
 								}
 							/>
 						)}
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(
-									{
-										blockName: blockProps.name,
-										clientId: blockProps.clientId,
-										currentBlockStyleVariation,
-										attributes: {},
-										setAttributes: () => {},
-										supports: {},
-									},
-									'search'
-								),
-								value: searchQuery,
-								blockName: blockProps.name,
-							}}
-						>
-							<SearchControl
-								className="search-features"
-								onChange={setSearchQuery}
-								placeholder={__('Search Features…', 'blockera')}
-							/>
-						</ControlContextProvider>
+						{Boolean(currentBlockStyleVariation?.name) && (
+							<ControlContextProvider
+								value={{
+									name: generateExtensionId(
+										{
+											blockName: blockProps.name,
+											clientId: blockProps.clientId,
+											currentBlockStyleVariation,
+											attributes: {},
+											setAttributes: () => {},
+											supports: {},
+										},
+										'search'
+									),
+									value: searchQuery,
+									blockName: blockProps.name,
+								}}
+							>
+								<SearchControl
+									className="search-features"
+									onChange={setSearchQuery}
+									placeholder={__(
+										'Search Features…',
+										'blockera'
+									)}
+								/>
+							</ControlContextProvider>
+						)}
 					</StateContainer>
 				)}
 
