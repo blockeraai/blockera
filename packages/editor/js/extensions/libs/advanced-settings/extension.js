@@ -25,10 +25,11 @@ import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TAdvancedSettingsProps } from './types/advanced-props';
 
 export const AdvancedSettingsExtension: ComponentType<
-	TAdvancedSettingsProps,
+	TAdvancedSettingsProps
 > = ({
 	block,
 	extensionConfig,
@@ -39,6 +40,7 @@ export const AdvancedSettingsExtension: ComponentType<
 	setSettings,
 }: TAdvancedSettingsProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('advancedSettingsConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -59,6 +61,7 @@ export const AdvancedSettingsExtension: ComponentType<
 			onToggle={onToggle}
 			title={__('Advanced', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-advanced" />}
 			className={extensionClassNames('advanced-settings')}
 		>

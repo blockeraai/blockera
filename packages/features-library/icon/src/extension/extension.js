@@ -76,6 +76,7 @@ export const IconExtension: ComponentType<{
 	},
 	attributes,
 	useBlockSection,
+	activeSearchMode = false,
 }: TIconProps): MixedElement => {
 	const { changeExtensionCurrentBlock: setCurrentBlock } =
 		dispatch('blockera/extensions') || {};
@@ -334,6 +335,7 @@ export const IconExtension: ComponentType<{
 			onToggle={onToggle}
 			title={__('Icon', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-icon" />}
 			className={extensionClassNames('icon')}
 		>
@@ -677,7 +679,7 @@ export const IconExtension: ComponentType<{
 														'blockera'
 													),
 													iconRotate
-												)
+											  )
 											: __('Rotate', 'blockera')
 									}
 									size="extra-small"
@@ -694,7 +696,7 @@ export const IconExtension: ComponentType<{
 															? 0
 															: iconRotate,
 														90
-													)
+												  )
 												: 90;
 
 										if (

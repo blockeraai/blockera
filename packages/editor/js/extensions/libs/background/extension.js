@@ -29,6 +29,7 @@ import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TBackgroundProps } from './types/background-props';
 import { Blending } from './components/blending';
 
@@ -42,6 +43,7 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 	setSettings,
 }: TBackgroundProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('backgroundConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -87,17 +89,20 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 		<PanelBodyControl
 			title={__('Background', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-background" />}
 			className={extensionClassNames('background')}
 			onToggle={onToggle}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Background Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'backgroundConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Background Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'backgroundConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowBackground}

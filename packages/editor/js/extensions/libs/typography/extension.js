@@ -46,6 +46,7 @@ import {
 } from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 
 export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	block,
@@ -59,6 +60,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	attributes,
 }: TTypographyProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('typographyConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -229,16 +231,19 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 			onToggle={onToggle}
 			title={__('Typography', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-typography" />}
 			className={extensionClassNames('typography')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Typography Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'typographyConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Typography Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'typographyConfig');
+					}}
+				/>
+			)}
 
 			<BaseControl columns="1fr 2.5fr" label={__('Font', 'blockera')}>
 				<Grid

@@ -6,7 +6,6 @@
 import { select } from '@wordpress/data';
 import { type MixedElement } from 'react';
 import { useEffect } from '@wordpress/element';
-import { registerPlugin } from '@wordpress/plugins';
 
 /**
  * Internal dependencies
@@ -22,7 +21,6 @@ import { IntersectionObserverRenderer } from '../global-styles/intersection-obse
  */
 export default function AdditionalCssContextmenuObserver(): MixedElement {
 	const { getEntity } = select('blockera/data') || {};
-	const canvasEditorPlugin = 'blockera-canvas-editor';
 
 	const { version } = getEntity('wp');
 	const { globalStylesPanel } = getTargets(version);

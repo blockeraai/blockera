@@ -34,6 +34,7 @@ import type { TSizeProps } from './types/size-props';
 import { ObjectFit, AspectRatio } from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import { WidthFill } from './components/width-fill';
 
 export const SizeExtension: ComponentType<TSizeProps> = ({
@@ -46,6 +47,7 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 	setSettings,
 }: TSizeProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('sizeConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -133,16 +135,19 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 			onToggle={onToggle}
 			title={__('Size', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-size" />}
 			className={extensionClassNames('size')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Size Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'sizeConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Size Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'sizeConfig');
+					}}
+				/>
+			)}
 
 			{(isShowWidth || isShowMinWidth || isShowMaxWidth) && (
 				<BaseControl columns="columns-1">

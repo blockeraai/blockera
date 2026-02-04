@@ -22,6 +22,7 @@ import { Icon } from '@blockera/icons';
 import { generateExtensionId } from '../utils';
 import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { ScrollExtensionProps } from './types/props';
 
 export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> = ({
@@ -30,6 +31,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> = ({
 	extensionConfig,
 }: ScrollExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('scrollAnimationConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -44,6 +46,7 @@ export const ScrollAnimationExtension: ComponentType<ScrollExtensionProps> = ({
 			onToggle={onToggle}
 			title={__('On Scroll', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-scroll-animation" />}
 			className={extensionClassNames('scroll-animation')}
 		>

@@ -33,6 +33,7 @@ import type { TLayoutProps } from './types/layout-props';
 import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 
 export const LayoutExtension: ComponentType<TLayoutProps> = ({
 	block,
@@ -44,6 +45,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 	setSettings,
 }: TLayoutProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('layoutConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -122,16 +124,19 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 			onToggle={onToggle}
 			title={__('Layout', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-layout" />}
 			className={extensionClassNames('layout')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Layout Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'layoutConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Layout Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'layoutConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowDisplay}

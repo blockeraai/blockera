@@ -22,16 +22,18 @@ import { Icon } from '@blockera/icons';
 import { generateExtensionId } from '../utils';
 import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { ClickAnimationExtensionProps } from './types/props';
 
 export const ClickAnimationExtension: ComponentType<
-	ClickAnimationExtensionProps,
+	ClickAnimationExtensionProps
 > = ({
 	values: {},
 	block,
 	extensionConfig,
 }: ClickAnimationExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('clickAnimationConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -46,6 +48,7 @@ export const ClickAnimationExtension: ComponentType<
 			onToggle={onToggle}
 			title={__('Animations', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-click-animation" />}
 			className={extensionClassNames('click-animation')}
 		>

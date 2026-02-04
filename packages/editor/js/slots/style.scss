@@ -3,7 +3,8 @@
 .editor-header__settings .components-button.editor-zoom-out-toggle:not(.is-pressed):not(:focus),
 .interface-pinned-items .components-button[aria-controls="edit-site:global-styles"]:not(.is-pressed):not(:focus),
 .interface-pinned-items .components-button[aria-controls="edit-post:block"]:not(.is-pressed):not(:focus),
-.interface-pinned-items .components-button[aria-controls="edit-post:document"]:not(.is-pressed):not(:focus) {
+.interface-pinned-items .components-button[aria-controls="edit-post:document"]:not(.is-pressed):not(:focus),
+.interface-pinned-items .components-button[aria-controls="cbt-plugin-sidebar:create-block-theme-sidebar"]:not(.is-pressed):not(:focus) {
 	border: 1px solid var(--blockera-controls-border-color-soft);
 }
 

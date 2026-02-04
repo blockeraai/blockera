@@ -29,6 +29,7 @@ import {
 } from './utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TMouseProps } from './types/mouse-props';
 
 export const MouseExtension: ComponentType<TMouseProps> = ({
@@ -41,6 +42,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 	setSettings,
 }: TMouseProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('mouseConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(mouseConfig)) {
 		return <></>;
@@ -72,16 +74,19 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 			onToggle={onToggle}
 			title={__('Mouse', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-mouse" />}
 			className={extensionClassNames('mouse')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Mouse Settings', 'blockera')}
-				features={mouseConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'mouseConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Mouse Settings', 'blockera')}
+					features={mouseConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'mouseConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowCursor}

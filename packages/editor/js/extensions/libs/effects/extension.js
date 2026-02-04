@@ -41,6 +41,7 @@ import { ExtensionSettings } from '../settings';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	values,
@@ -52,6 +53,7 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	attributes,
 }: TEffectsProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('effectsConfig');
+	const { activeSearchMode } = useFeatureSearch();
 	const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 		useState(false);
 
@@ -192,16 +194,19 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 			onToggle={onToggle}
 			title={__('Effects', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-effects" />}
 			className={extensionClassNames('effects')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Effect Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'effectsConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Effect Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'effectsConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowOpacity}

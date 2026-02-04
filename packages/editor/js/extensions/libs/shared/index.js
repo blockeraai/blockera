@@ -12,8 +12,8 @@ import { useMemo, useState, useEffect, useCallback } from '@wordpress/element';
  * Blockera dependencies
  */
 import { Tabs } from '@blockera/controls';
-import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 import { getItem, setItem, updateItem, freshItem } from '@blockera/storage';
+import { isEquals, isObject, cloneObject, mergeObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -26,6 +26,8 @@ import { MappedExtensions } from './mapped-extensions';
 import { useDisplayBlockControls } from '../../../hooks';
 import { getNormalizedCacheVersion } from '../../helpers';
 import StateContainer from '../../components/state-container';
+import { filterSettingsBySearch } from '../base/utils/search-features';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import { useGlobalStylesPanelContext } from '../../../editor/global-styles/panel/context';
 
 const cacheKeyPrefix = 'BLOCKERA_EDITOR_SUPPORTS';
@@ -274,6 +276,12 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 	}, [props.name, cacheData, extensions, _extensionsWithoutLabel]);
 
 	const [settings, setSettings] = useState(supports);
+	const { searchQuery, activeSearchMode } = useFeatureSearch();
+	// Filter settings based on search query
+	const filteredSettings = useMemo(
+		() => filterSettingsBySearch(cloneObject(settings), searchQuery),
+		[settings, searchQuery]
+	);
 
 	// Get next settings after switch between blocks.
 	useEffect(() => {
@@ -349,7 +357,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 		<MappedExtensions
 			tab={tab}
 			block={block}
-			settings={settings}
+			settings={filteredSettings}
 			attributes={attributes}
 			additional={additional}
 			currentStateAttributes={currentStateAttributes}
@@ -360,6 +368,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			currentInnerBlockState={currentInnerBlockState}
 			isReportingErrorCompleted={isReportingErrorCompleted}
 			setIsReportingErrorCompleted={setIsReportingErrorCompleted}
+			activeSearchMode={activeSearchMode}
 		/>
 	);
 

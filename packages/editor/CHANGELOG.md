@@ -2,6 +2,7 @@
 
 ### New Features
 - Added support for WordPress block theme developers to include Blockera features in their theme.json files, making it easier to customize and configure themes with Blockera's capabilities.
+- Added search functionality for block features: You can now quickly find any feature by typing in the search box. Simply type what you're looking for, and the list will automatically filter to show matching features, making it much easier to find the settings you need.
 
 ### Improvements
 - Improved block features organization for better code structure and easier maintenance.

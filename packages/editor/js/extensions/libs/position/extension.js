@@ -25,6 +25,7 @@ import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TPositionExtensionProps } from './types/position-extension-props';
 
 export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
@@ -36,6 +37,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 	extensionProps,
 }: TPositionExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('positionConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -62,6 +64,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 			onToggle={onToggle}
 			title={__('Position', 'blockera')}
 			initialOpen={initialOpen}
+			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-position" />}
 			className={extensionClassNames('position')}
 		>

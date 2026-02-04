@@ -486,7 +486,7 @@ describe('Spacing Extension', () => {
 		});
 	});
 
-	it.only('simple lock + check reselect then unlock', () => {
+	it('simple lock + check reselect then unlock', () => {
 		//
 		// Test 1: Default lock state
 		//

@@ -16,9 +16,9 @@ describe('Range Control label testing (Opacity)', () => {
 	});
 
 	const setOpacityValue = (value) => {
-		cy.getParentContainer('Opacity').within(() =>
-			cy.get('input[type="range"]').setSliderValue(value)
-		);
+		cy.getParentContainer('Opacity').within(() => {
+			cy.get('input[type="text"]').type(value, { delay: 0 });
+		});
 	};
 
 	const checkOpacityValue = (value) => {

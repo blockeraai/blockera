@@ -65,7 +65,8 @@ export default function PrimarySidebarController() {
 	const isPrimarySidebarOpen =
 		activeComplementaryArea === 'edit-post/document' ||
 		activeComplementaryArea === 'edit-post/block' ||
-		activeComplementaryArea === 'edit-site/global-styles';
+		activeComplementaryArea === 'edit-site/global-styles' ||
+		activeComplementaryArea === 'cbt-plugin-sidebar/create-block-theme-sidebar';
 
 	// Initialize sidebar container reference (runs once, retries if not found)
 	useEffect(() => {
@@ -118,7 +119,8 @@ export default function PrimarySidebarController() {
 		const wasPrimarySidebarOpen =
 			previousSidebar === 'edit-post/document' ||
 			previousSidebar === 'edit-post/block' ||
-			previousSidebar === 'edit-site/global-styles';
+			previousSidebar === 'edit-site/global-styles' ||
+			previousSidebar === 'cbt-plugin-sidebar/create-block-theme-sidebar';
 
 		// Case 1: Changing sidebar (was one open, now another open) - do nothing
 		if (wasPrimarySidebarOpen && isPrimarySidebarOpen) {

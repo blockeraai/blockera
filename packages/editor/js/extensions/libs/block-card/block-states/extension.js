@@ -68,13 +68,15 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = ({
 			icon={<Icon icon="extension-size" />}
 			className={extensionClassNames('state-options')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More State Options', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'statesConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More State Options', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'statesConfig');
+					}}
+				/>
+			)}
 
 			<BaseControl columns="columns-1">
 				<EditorFeatureWrapper
@@ -152,7 +154,7 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = ({
 												? {
 														breakpoints: {},
 														isVisible: true,
-													}
+												  }
 												: {}),
 										},
 									}),
