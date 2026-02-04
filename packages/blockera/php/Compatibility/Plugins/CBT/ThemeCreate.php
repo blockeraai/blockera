@@ -68,7 +68,7 @@ class ThemeCreate {
 		} else {
 			// Try to copy from CBT plugin assets if available.
 			$source = '';
-			if ( defined( 'CBT_PLUGIN_DIR' ) ) {
+			if ( defined( 'WP_PLUGIN_DIR' ) ) {
 				$source = WP_PLUGIN_DIR . 'create-block-theme/assets/boilerplate/screenshot.png';
 			} elseif ( class_exists( '\CBT_Theme_Create' ) ) {
 				// Fallback: try to get from CBT plugin directory.
