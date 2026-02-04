@@ -1,4 +1,13 @@
 <?php
+/**
+ * The callbacks file contains callback functions for WordPress hooks.
+ *
+ * @package Blockera/bootstrap
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Add the 6 days schedule on stack.

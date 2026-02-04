@@ -1,4 +1,13 @@
 <?php
+/**
+ * The hooks file contains WordPress hook registrations.
+ *
+ * @package Blockera/bootstrap
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 use Blockera\WordPress\RenderBlock\Setup;
 use Blockera\Setup\Compatibility\BlockSupports\BlockeraDuotone;
