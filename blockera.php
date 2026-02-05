@@ -4,7 +4,7 @@
  * Plugin URI: https://blockera.ai/products/site-builder/
  * Description: Blockera Site Builder is transforming the block editor into a powerful page builder by adding responsive blocks, block states, and more.
  * Requires at least: 6.6
- * Tested up to: 6.8
+ * Tested up to: 6.9
  * Requires PHP: 7.4
  * Requires at least blockera-pro: 1.1.1
  * Author: Blockera AI

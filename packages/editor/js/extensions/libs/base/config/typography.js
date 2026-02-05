@@ -48,7 +48,7 @@ const blockeraFontColor: FeatureConfig = {
 	status: true,
 	onNativeOnInnerBlocks: false,
 	label: __('Text Color', 'blockera'),
-	keywords: ['text', 'color', 'font', 'color', 'text color'],
+	keywords: ['text', 'color', 'font', 'color', 'text color', 'font color'],
 };
 
 const blockeraTextShadow: FeatureConfig = {
