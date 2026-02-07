@@ -39,7 +39,7 @@ const blockeraLineHeight: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Line Height', 'blockera'),
-	keywords: ['line', 'height', 'leading', 'spacing', 'typography'],
+	keywords: ['line', 'height', 'typography'],
 };
 
 const blockeraFontColor: FeatureConfig = {
@@ -48,7 +48,7 @@ const blockeraFontColor: FeatureConfig = {
 	status: true,
 	onNativeOnInnerBlocks: false,
 	label: __('Text Color', 'blockera'),
-	keywords: ['text', 'color', 'font', 'color', 'text color', 'font color'],
+	keywords: ['text', 'color', 'colour', 'font', 'text color', 'font color'],
 };
 
 const blockeraTextShadow: FeatureConfig = {
@@ -88,7 +88,14 @@ const blockeraTextDecoration: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Decoration', 'blockera'),
-	keywords: ['text', 'decoration', 'underline', 'line-through', 'none'],
+	keywords: [
+		'text',
+		'decoration',
+		'underline',
+		'line-through',
+		'overline',
+		'none',
+	],
 };
 
 const blockeraDirection: FeatureConfig = {
@@ -104,7 +111,7 @@ const blockeraLetterSpacing: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Letter Spacing', 'blockera'),
-	keywords: ['letter', 'spacing', 'tracking', 'kerning', 'typography'],
+	keywords: ['letter', 'spacing', 'typography'],
 };
 
 const blockeraWordSpacing: FeatureConfig = {
@@ -112,8 +119,8 @@ const blockeraWordSpacing: FeatureConfig = {
 	force: false,
 	status: true,
 	onNative: true,
-	label: __('Word Spacing', 'blockera'),
-	keywords: ['word', 'spacing', 'typography'],
+	label: __('Words Spacing', 'blockera'),
+	keywords: ['words', 'spacing', 'typography'],
 };
 
 const blockeraTextIndent: FeatureConfig = {
@@ -130,7 +137,7 @@ const blockeraTextOrientation: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Text Orientation', 'blockera'),
-	keywords: ['text', 'orientation', 'vertical', 'upright', 'sideways'],
+	keywords: ['text', 'orientation', 'vertical', 'upright'],
 };
 
 const blockeraTextColumns: FeatureConfig = {
@@ -139,7 +146,7 @@ const blockeraTextColumns: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Columns', 'blockera'),
-	keywords: ['text', 'columns', 'column', 'multi-column'],
+	keywords: ['text', 'columns', 'column'],
 };
 
 const blockeraTextStroke: FeatureConfig = {
@@ -148,6 +155,7 @@ const blockeraTextStroke: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Stroke', 'blockera'),
+	keywords: ['text', 'stroke', 'outline', 'typography'],
 };
 
 const blockeraWordBreak: FeatureConfig = {
@@ -165,7 +173,15 @@ const blockeraTextWrap: FeatureConfig = {
 	status: true,
 	onNative: true,
 	label: __('Text Wrap', 'blockera'),
-	keywords: ['text', 'wrap', 'word', 'break', 'overflow'],
+	keywords: [
+		'text',
+		'wrap',
+		'word',
+		'break',
+		'overflow',
+		'pretty',
+		'balance',
+	],
 };
 
 export const typographyConfig = {

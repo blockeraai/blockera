@@ -21,6 +21,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 	NoticeControl,
+	ConditionalWrapper,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { isEquals } from '@blockera/utils';
@@ -231,7 +232,6 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 			onToggle={onToggle}
 			title={__('Typography', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-typography" />}
 			className={extensionClassNames('typography')}
 		>
@@ -245,12 +245,28 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 				/>
 			)}
 
-			<BaseControl columns="1fr 2.5fr" label={__('Font', 'blockera')}>
-				<Grid
-					alignItems="center"
-					gridTemplateColumns="1fr 1fr"
-					rowGap="10px"
-					columnGap="8px"
+			<ConditionalWrapper
+				condition={!activeSearchMode}
+				wrapper={(children) => (
+					<BaseControl
+						columns="1fr 2.5fr"
+						label={__('Font', 'blockera')}
+					>
+						<Grid
+							alignItems="center"
+							gridTemplateColumns="1fr 1fr"
+							rowGap="10px"
+							columnGap="8px"
+						>
+							{children}
+						</Grid>
+					</BaseControl>
+				)}
+				elseWrapper={(children) => <>{children}</>}
+			>
+				<EditorFeatureWrapper
+					isActive={isShowFontAppearance}
+					config={extensionConfig.blockeraFontAppearance}
 				>
 					<EditorFeatureWrapper
 						isActive={isShowFontFamily}
@@ -261,66 +277,81 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 							onChange={handleOnChangeAttributes}
 							value={values.blockeraFontFamily}
 							defaultValue={attributes.blockeraFontFamily.default}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
+							columns={
+								activeSearchMode ? '1fr 2.5fr' : 'columns-1'
+							}
+							className={
+								activeSearchMode
+									? ''
+									: 'control-first label-center small-gap'
+							}
+							style={
+								activeSearchMode ? undefined : { margin: '0px' }
+							}
 							{...extensionProps.blockeraFontFamily}
 						/>
 					</EditorFeatureWrapper>
 
-					<EditorFeatureWrapper
-						isActive={isShowFontAppearance}
-						config={extensionConfig.blockeraFontAppearance}
-					>
-						<FontAppearance
-							block={block}
-							onChange={handleOnChangeAttributes}
-							value={values.blockeraFontAppearance}
-							defaultValue={
-								attributes.blockeraFontAppearance.default
-							}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							{...extensionProps.blockeraFontAppearance}
-						/>
-					</EditorFeatureWrapper>
+					<FontAppearance
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontAppearance}
+						defaultValue={attributes.blockeraFontAppearance.default}
+						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						className={
+							activeSearchMode
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={activeSearchMode ? undefined : { margin: '0px' }}
+						activeSearchMode={activeSearchMode}
+						{...extensionProps.blockeraFontAppearance}
+					/>
+				</EditorFeatureWrapper>
 
-					<EditorFeatureWrapper
-						isActive={isShowFontSize}
-						config={extensionConfig.blockeraFontSize}
-					>
-						<FontSize
-							block={block}
-							onChange={handleOnChangeAttributes}
-							value={values.blockeraFontSize}
-							defaultValue={attributes.blockeraFontSize.default}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							size="small"
-							{...extensionProps.blockeraFontSize}
-						/>
-					</EditorFeatureWrapper>
+				<EditorFeatureWrapper
+					isActive={isShowFontSize}
+					config={extensionConfig.blockeraFontSize}
+				>
+					<FontSize
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontSize}
+						defaultValue={attributes.blockeraFontSize.default}
+						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						className={
+							activeSearchMode
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={activeSearchMode ? undefined : { margin: '0px' }}
+						size={activeSearchMode ? 'normal' : 'small'}
+						{...extensionProps.blockeraFontSize}
+					/>
+				</EditorFeatureWrapper>
 
-					<EditorFeatureWrapper
-						isActive={isShowLineHeight}
-						config={extensionConfig.blockeraLineHeight}
-					>
-						<LineHeight
-							block={block}
-							value={values.blockeraLineHeight}
-							onChange={handleOnChangeAttributes}
-							defaultValue={attributes.blockeraLineHeight.default}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							size="small"
-							{...extensionProps.blockeraLineHeight}
-						/>
-					</EditorFeatureWrapper>
-				</Grid>
-			</BaseControl>
+				<EditorFeatureWrapper
+					isActive={isShowLineHeight}
+					config={extensionConfig.blockeraLineHeight}
+				>
+					<LineHeight
+						block={block}
+						value={values.blockeraLineHeight}
+						onChange={handleOnChangeAttributes}
+						defaultValue={attributes.blockeraLineHeight.default}
+						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						className={
+							activeSearchMode
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={activeSearchMode ? undefined : { margin: '0px' }}
+						size={activeSearchMode ? 'normal' : 'small'}
+						activeSearchMode={activeSearchMode}
+						{...extensionProps.blockeraLineHeight}
+					/>
+				</EditorFeatureWrapper>
+			</ConditionalWrapper>
 
 			<EditorFeatureWrapper
 				isActive={isShowFontColor}
@@ -469,12 +500,23 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
 
-			{isShowAdvanced && (
-				<MoreFeatures
-					ariaLabel={__('More typography settings', 'blockera')}
-					isOpen={false}
-					isChanged={isAdvancedEdited}
-					isAnimated={true}
+			{(isShowAdvanced || activeSearchMode) && (
+				<ConditionalWrapper
+					condition={!activeSearchMode}
+					wrapper={(children) => (
+						<MoreFeatures
+							ariaLabel={__(
+								'More typography settings',
+								'blockera'
+							)}
+							isOpen={false}
+							isChanged={isAdvancedEdited}
+							isAnimated={true}
+						>
+							{children}
+						</MoreFeatures>
+					)}
+					elseWrapper={(children) => <>{children}</>}
 				>
 					<EditorFeatureWrapper
 						isActive={isShowTextShadow}
@@ -870,10 +912,18 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 					{(isShowLetterSpacing ||
 						isShowWordSpacing ||
 						isShowTextIndent) && (
-						<BaseControl
-							controlName="spacing"
-							label={__('Spacing', 'blockera')}
-							columns="1fr 2.5fr"
+						<ConditionalWrapper
+							condition={!activeSearchMode}
+							wrapper={(children) => (
+								<BaseControl
+									controlName="spacing"
+									label={__('Spacing', 'blockera')}
+									columns="1fr 2.5fr"
+								>
+									{children}
+								</BaseControl>
+							)}
+							elseWrapper={(children) => <>{children}</>}
 						>
 							<EditorFeatureWrapper
 								isActive={isShowLetterSpacing}
@@ -886,6 +936,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									defaultValue={
 										attributes.blockeraLetterSpacing.default
 									}
+									activeSearchMode={activeSearchMode}
 									{...extensionProps.blockeraLetterSpacing}
 								/>
 							</EditorFeatureWrapper>
@@ -906,8 +957,19 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									}}
 								>
 									<InputControl
-										columns="2fr 2fr"
-										label={__('Words', 'blockera')}
+										columns={
+											activeSearchMode
+												? '1fr 2.5fr'
+												: '2fr 2fr'
+										}
+										label={
+											activeSearchMode
+												? __(
+														'Words Spacing',
+														'blockera'
+													)
+												: __('Words', 'blockera')
+										}
 										labelPopoverTitle={__(
 											'Words Spacing',
 											'blockera'
@@ -956,7 +1018,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									}}
 								>
 									<InputControl
-										columns="2fr 2fr"
+										columns={
+											activeSearchMode
+												? '1fr 2.5fr'
+												: '2fr 2fr'
+										}
 										label={__('Text Indent', 'blockera')}
 										labelDescription={
 											<>
@@ -985,7 +1051,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									/>
 								</ControlContextProvider>
 							</EditorFeatureWrapper>
-						</BaseControl>
+						</ConditionalWrapper>
 					)}
 
 					<EditorFeatureWrapper
@@ -1312,7 +1378,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 							/>
 						</ControlContextProvider>
 					</EditorFeatureWrapper>
-				</MoreFeatures>
+				</ConditionalWrapper>
 			)}
 		</PanelBodyControl>
 	);

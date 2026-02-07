@@ -6,12 +6,17 @@ import { __ } from '@wordpress/i18n';
 import { Fragment, type MixedElement } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Slot, SlotFillProvider } from '@wordpress/components';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { type TTabProps } from '@blockera/controls';
+import {
+	type TTabProps,
+	SearchControl,
+	ControlContextProvider,
+} from '@blockera/controls';
 import { ExtensionSlotFill } from '@blockera/features-core';
 
 /**
@@ -37,6 +42,9 @@ import { ClickAnimationExtension } from '../click-animation';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { useBlockSection } from '../../components';
 import { getParentFlexBlockInfo } from './utils';
+import { generateExtensionId } from '../utils';
+import { useFeatureSearch } from '../../components/feature-search-context';
+import { filterSettingsBySearch } from '../base/utils/search-features';
 
 export const MappedExtensions = ({
 	tab,
@@ -69,6 +77,25 @@ export const MappedExtensions = ({
 	isReportingErrorCompleted: boolean,
 	setIsReportingErrorCompleted: Function,
 }): Array<MixedElement> => {
+	const { searchQuery, setSearchQuery } = useFeatureSearch();
+
+	// Filter additional settings based on search query
+	const filteredAdditional = useMemo(() => {
+		if (!searchQuery || !searchQuery.trim() || !additional?.settings) {
+			return additional;
+		}
+
+		const filteredSettings = filterSettingsBySearch(
+			additional.settings || {},
+			searchQuery
+		);
+
+		return {
+			...additional,
+			settings: filteredSettings,
+		};
+	}, [searchQuery, additional]);
+
 	const activePanel: Array<MixedElement> = [];
 	const {
 		mouseConfig,
@@ -241,8 +268,11 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
-								activeSearchMode,
-								blockFeatures: additional.blockFeatures,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
@@ -250,6 +280,33 @@ export const MappedExtensions = ({
 							}}
 						/>
 					</SlotFillProvider>
+
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(
+								{
+									blockName: block.blockName,
+									clientId: block.clientId,
+									currentBlockStyleVariation:
+										block.currentBlockStyleVariation,
+									attributes: {},
+									setAttributes: () => {},
+									supports: {},
+								},
+								'search'
+							),
+							value: searchQuery,
+							blockName: block.blockName,
+						}}
+					>
+						<div style={{ padding: '16px' }}>
+							<SearchControl
+								className="search-features"
+								onChange={setSearchQuery}
+								placeholder={__('Search Features…', 'blockera')}
+							/>
+						</div>
+					</ControlContextProvider>
 
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
@@ -648,8 +705,11 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
-								activeSearchMode,
-								blockFeatures: additional.blockFeatures,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
@@ -905,8 +965,11 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
-								activeSearchMode,
-								blockFeatures: additional.blockFeatures,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,

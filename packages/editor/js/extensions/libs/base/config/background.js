@@ -20,7 +20,7 @@ const blockeraBackground: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Image & Gradient', 'blockera'),
-	keywords: ['background', 'image', 'gradient', 'picture', 'photo'],
+	keywords: ['background', 'image', 'gradient', 'picture', 'photo', 'mesh'],
 };
 
 const blockeraBackgroundColor: FeatureConfig = {
@@ -29,7 +29,7 @@ const blockeraBackgroundColor: FeatureConfig = {
 	status: true,
 	onNativeOnInnerBlocks: false,
 	label: __('Background Color', 'blockera'),
-	keywords: ['background', 'color', 'bg', 'fill'],
+	keywords: ['background', 'color', 'colour', 'bg', 'fill'],
 };
 
 const blockeraBackgroundClip: FeatureConfig = {

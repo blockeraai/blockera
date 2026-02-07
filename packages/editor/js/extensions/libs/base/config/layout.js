@@ -47,7 +47,16 @@ const blockeraSpacing: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Padding & Margin', 'blockera'),
-	keywords: ['padding', 'margin', 'spacing', 'gap'],
+	keywords: [
+		'padding',
+		'margin',
+		'spacing',
+		'gap',
+		'top',
+		'bottom',
+		'left',
+		'right',
+	],
 };
 
 export const layoutConfig = {

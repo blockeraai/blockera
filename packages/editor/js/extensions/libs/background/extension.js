@@ -89,7 +89,6 @@ export const BackgroundExtension: ComponentType<TBackgroundProps> = ({
 		<PanelBodyControl
 			title={__('Background', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-background" />}
 			className={extensionClassNames('background')}
 			onToggle={onToggle}

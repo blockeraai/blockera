@@ -64,6 +64,7 @@ export default function SecondarySidebar() {
 					isVisible={isSidebarVisible}
 					minWidth={20}
 					maxWidth={80}
+					defaultValue="50%"
 					onResize={handleResize}
 				/>
 			)}

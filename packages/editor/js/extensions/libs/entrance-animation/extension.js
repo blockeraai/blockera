@@ -22,11 +22,10 @@ import { Icon } from '@blockera/icons';
 import { generateExtensionId } from '../utils';
 import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
-import { useFeatureSearch } from '../../components/feature-search-context';
 import type { EntranceExtensionProps } from './types/props';
 
 export const EntranceAnimationExtension: ComponentType<
-	EntranceExtensionProps
+	EntranceExtensionProps,
 > = ({
 	values: {},
 	block,
@@ -35,7 +34,6 @@ export const EntranceAnimationExtension: ComponentType<
 	const { initialOpen, onToggle } = useBlockSection(
 		'entranceAnimationConfig'
 	);
-	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -50,7 +48,6 @@ export const EntranceAnimationExtension: ComponentType<
 			onToggle={onToggle}
 			title={__('On Entrance', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-entrance-animation" />}
 			className={extensionClassNames('entrance-animation')}
 		>
