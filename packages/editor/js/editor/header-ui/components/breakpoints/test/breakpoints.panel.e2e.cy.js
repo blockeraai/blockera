@@ -44,6 +44,17 @@ describe('Breakpoints Functionalities', () => {
 		});
 		createPost();
 
+		// Exit code editor if it's currently active
+		cy.get('body').then(($body) => {
+			if (
+				$body.find(
+					'.editor-text-editor .editor-text-editor__toolbar button'
+				).length > 0
+			) {
+				cy.get('button').contains('Exit code editor').click();
+			}
+		});
+
 		cy.getByAriaLabel('Breakpoints').eq(0).should('be.visible');
 		cy.getByAriaLabel('Breakpoints')
 			.eq(0)
@@ -148,6 +159,17 @@ describe('Breakpoints Functionalities', () => {
 describe('Breakpoints Editor Mode Subscription', () => {
 	beforeEach(() => {
 		createPost();
+
+		// Exit code editor if it's currently active
+		cy.get('body').then(($body) => {
+			if (
+				$body.find(
+					'.editor-text-editor .editor-text-editor__toolbar button'
+				).length > 0
+			) {
+				cy.get('button').contains('Exit code editor').click();
+			}
+		});
 
 		// Wait for editor to be fully loaded
 		cy.get('.edit-post-visual-editor').should('exist');
