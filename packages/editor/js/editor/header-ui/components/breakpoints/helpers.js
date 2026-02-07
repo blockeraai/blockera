@@ -307,7 +307,7 @@ export function prepValueForHeader(value: any): string {
 }
 
 export function getSortedBreakpoints(
-	breakpoints: BreakpointTypes[],
+	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
 	{
 		BreakpointIcon,
 		output = 'icons',

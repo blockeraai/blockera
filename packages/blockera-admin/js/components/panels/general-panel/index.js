@@ -24,6 +24,7 @@ import {
 	BreakpointsSettings,
 	getSortedBreakpoints,
 } from '@blockera/editor/js/editor/header-ui';
+import type { BreakpointTypes } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 
 /**
  * Internal dependencies
@@ -103,21 +104,23 @@ export const GeneralPanel = (): MixedElement => {
 		return defaultSettings?.general?.breakpoints || {};
 	}, [defaultSettings?.general?.breakpoints]);
 
-	const memoizedCallback = useCallback((newValue) => {
+	const memoizedCallback = useCallback((newValue: Object) => {
 		newValue = getSortedBreakpoints(newValue, {
 			output: 'object',
 		});
 
 		newValue = Object.fromEntries(
-			Object.entries(newValue).map(([key, breakpoint]) => {
-				return [
-					key,
-					{
-						...breakpoint,
-						...('' === breakpoint.type ? { type: key } : {}),
-					},
-				];
-			})
+			Object.entries(newValue).map(
+				([key, breakpoint]: [string, BreakpointTypes | Object]) => {
+					return [
+						key,
+						{
+							...breakpoint,
+							...('' === breakpoint.type ? { type: key } : {}),
+						},
+					];
+				}
+			)
 		);
 		const {
 			added: savedAdded,

@@ -9,6 +9,10 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import { InputControl, ControlContextProvider } from '@blockera/controls';
+
+/**
+ * Internal dependencies
+ */
 import { EditorFeatureWrapper } from '../../../../';
 import { generateExtensionId } from '../../utils';
 import type { THandleOnChangeAttributes } from '../../types';
