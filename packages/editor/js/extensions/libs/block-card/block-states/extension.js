@@ -154,7 +154,7 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = ({
 												? {
 														breakpoints: {},
 														isVisible: true,
-												  }
+													}
 												: {}),
 										},
 									}),

@@ -139,7 +139,7 @@ export function spacingToWPCompatibility({
 		return insideBlockInspector
 			? {
 					style: spacingData,
-			  }
+				}
 			: spacingData;
 	}
 

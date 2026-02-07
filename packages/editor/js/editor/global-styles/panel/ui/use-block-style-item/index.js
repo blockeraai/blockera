@@ -420,7 +420,7 @@ export const useBlockStyleItem = ({
 								([key]) => key !== currentStyleName
 							)
 						),
-				  }
+					}
 				: {}),
 		});
 
@@ -576,13 +576,13 @@ export const useBlockStyleItem = ({
 					? base?.styles?.blocks?.[blockName] || {}
 					: base?.styles?.blocks?.[blockName]?.variations?.[
 							currentStyle.name
-					  ] || {}
+						] || {}
 			),
 			isRootStyle(currentStyle)
 				? globalStyles?.blocks?.[blockName] || {}
 				: globalStyles?.blocks?.[blockName]?.variations?.[
 						currentStyle.name
-				  ] || {}
+					] || {}
 		);
 
 		handleOnChangeAttributes('className', `blockera-block ${className}`, {

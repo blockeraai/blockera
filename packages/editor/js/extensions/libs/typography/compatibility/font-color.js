@@ -177,12 +177,12 @@ export function fontColorToWPCompatibility({
 							text: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					color: {
 						text: undefined,
 					},
-			  };
+				};
 	}
 
 	// is valid font-color variable
@@ -209,7 +209,7 @@ export function fontColorToWPCompatibility({
 								},
 							},
 						},
-				  }
+					}
 				: {
 						elements: {
 							link: {
@@ -220,7 +220,7 @@ export function fontColorToWPCompatibility({
 								},
 							},
 						},
-				  };
+					};
 		}
 
 		return insideBlockInspector
@@ -231,12 +231,12 @@ export function fontColorToWPCompatibility({
 							text: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					color: {
 						text: undefined,
 					},
-			  };
+				};
 	}
 
 	// Check if link and font color are equal
@@ -263,7 +263,7 @@ export function fontColorToWPCompatibility({
 							},
 						},
 					},
-			  }
+				}
 			: {
 					color: {
 						text: newValue,
@@ -275,7 +275,7 @@ export function fontColorToWPCompatibility({
 							},
 						},
 					},
-			  };
+				};
 	}
 
 	// simple color
@@ -287,10 +287,10 @@ export function fontColorToWPCompatibility({
 						text: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				color: {
 					text: newValue,
 				},
-		  };
+			};
 }

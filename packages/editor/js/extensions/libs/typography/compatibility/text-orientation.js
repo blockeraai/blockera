@@ -47,12 +47,12 @@ export function textOrientationToWPCompatibility({
 							writingMode: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						writingMode: undefined,
 					},
-			  };
+				};
 	}
 
 	let writingModeValue;
@@ -72,12 +72,12 @@ export function textOrientationToWPCompatibility({
 							writingMode: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						writingMode: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
@@ -87,10 +87,10 @@ export function textOrientationToWPCompatibility({
 						writingMode: writingModeValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					writingMode: writingModeValue,
 				},
-		  };
+			};
 }

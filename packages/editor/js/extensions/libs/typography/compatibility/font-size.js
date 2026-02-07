@@ -68,12 +68,12 @@ export function fontSizeToWPCompatibility({
 							fontSize: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						fontSize: undefined,
 					},
-			  };
+				};
 	}
 
 	// is valid font-size variable
@@ -86,12 +86,12 @@ export function fontSizeToWPCompatibility({
 							fontSize: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						fontSize: undefined,
 					},
-			  };
+				};
 	}
 
 	// Advanced css functions not supported by core.
@@ -107,10 +107,10 @@ export function fontSizeToWPCompatibility({
 						fontSize: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					fontSize: newValue,
 				},
-		  };
+			};
 }

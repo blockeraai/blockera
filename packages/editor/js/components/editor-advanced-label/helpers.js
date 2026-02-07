@@ -114,7 +114,7 @@ export const getStatesGraph = ({
 											? prepare(
 													path,
 													state.attributes[controlId]
-											  )
+												)
 											: preparedValueWithPath;
 								} else {
 									value = state.attributes[controlId];

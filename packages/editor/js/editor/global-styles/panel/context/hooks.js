@@ -189,7 +189,7 @@ export function useGlobalStyle(
 							mergedConfig,
 							blockName,
 							rawResult
-					  ) || {}
+						) || {}
 					: rawResult || {},
 				['variations']
 			);

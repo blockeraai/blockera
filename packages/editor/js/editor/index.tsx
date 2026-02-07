@@ -17,7 +17,9 @@ import PrimarySidebarController from './primary-sidebar';
 import SecondarySidebarInjector from './secondary-sidebar';
 import GlobalStylesActionsForBlock from './global-styles-actions-for-blocks';
 import AdditionalCssContextmenuObserver from './additional-css-contextmenu-observer';
-import GlobalStyles, { registration as globalStylesRegistration } from './global-styles';
+import GlobalStyles, {
+	registration as globalStylesRegistration,
+} from './global-styles';
 
 export const getSetupHeaderRequirements = () => {
 	const allowedUsers = applyFilters(
@@ -38,9 +40,14 @@ export const getSetupHeaderRequirements = () => {
 		allowedPostTypes,
 		blockeraCurrentPostType: window?.blockeraCurrentPostType,
 	};
-}
+};
 
-const needToShowCanvasEditor = ({allowedUsers, allowedPostTypes, currentUser, blockeraCurrentPostType}) => {
+const needToShowCanvasEditor = ({
+	allowedUsers,
+	allowedPostTypes,
+	currentUser,
+	blockeraCurrentPostType,
+}) => {
 	// If no restrictions, block is available
 	if (!allowedUsers.length && !allowedPostTypes.length) {
 		return true;
@@ -65,9 +72,7 @@ const needToShowCanvasEditor = ({allowedUsers, allowedPostTypes, currentUser, bl
 	// Check post type match (if post type restrictions exist)
 	let hasAllowedPostType = true;
 	if (allowedPostTypes.length && blockeraCurrentPostType) {
-		hasAllowedPostType = allowedPostTypes.includes(
-			blockeraCurrentPostType
-		);
+		hasAllowedPostType = allowedPostTypes.includes(blockeraCurrentPostType);
 	}
 
 	// Both conditions must be met if both restrictions exist
@@ -128,7 +133,7 @@ const editorPlugins = [
 		name: 'blockera-blocks-ui',
 		render: BlocksUI,
 		icon: null,
-	}
+	},
 ];
 
 /**
@@ -136,11 +141,14 @@ const editorPlugins = [
  */
 editorPlugins.forEach((plugin) => {
 	// Skip registration and rendering blockera header ui components while not needs to that.
-	if ('blockera-header-ui' === plugin.name && !needToShowCanvasEditor(getSetupHeaderRequirements())){
+	if (
+		'blockera-header-ui' === plugin.name &&
+		!needToShowCanvasEditor(getSetupHeaderRequirements())
+	) {
 		return;
 	}
 
-	if ('blockera-global-styles-panel' === plugin.name){
+	if ('blockera-global-styles-panel' === plugin.name) {
 		globalStylesRegistration();
 	}
 

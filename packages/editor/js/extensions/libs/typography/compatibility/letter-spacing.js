@@ -46,12 +46,12 @@ export function letterSpacingToWPCompatibility({
 							letterSpacing: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						letterSpacing: undefined,
 					},
-			  };
+				};
 	}
 
 	// Advanced css functions and units not supported by core.
@@ -66,10 +66,10 @@ export function letterSpacingToWPCompatibility({
 						letterSpacing: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					letterSpacing: newValue,
 				},
-		  };
+			};
 }

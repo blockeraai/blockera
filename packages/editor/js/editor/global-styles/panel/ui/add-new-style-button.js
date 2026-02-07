@@ -173,7 +173,7 @@ export const AddNewStyleButton = ({
 				...(!globalStyles?.blockeraMetaData
 					? {
 							blockeraMetaData: getBlockeraGlobalStylesMetaData(),
-					  }
+						}
 					: {}),
 			},
 			{
@@ -224,11 +224,11 @@ export const AddNewStyleButton = ({
 								height: '24px',
 								padding: 0,
 								marginLeft: 'auto',
-						  }
+							}
 						: {
 								padding: '0px 10px 0 4px',
 								gap: '2px',
-						  }
+							}
 				}
 				data-test={'add-new-block-style-variation'}
 			>

@@ -155,7 +155,7 @@ export const EditorAdvancedLabelControl = ({
 									} else {
 										setOpenModal(true);
 									}
-							  }
+								}
 					}
 					style={{
 						cursor: 'pointer',
@@ -190,7 +190,7 @@ export const EditorAdvancedLabelControl = ({
 											? 'RESET_TO_DEFAULT'
 											: 'RESET_TO_NORMAL',
 									});
-							  }
+								}
 							: null
 					}
 				/>

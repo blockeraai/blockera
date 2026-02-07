@@ -43,7 +43,7 @@ export const More = ({
 
 								onClick();
 							},
-					  }),
+						}),
 			}}
 		>
 			<Icon icon="more-vertical" iconSize="24" />

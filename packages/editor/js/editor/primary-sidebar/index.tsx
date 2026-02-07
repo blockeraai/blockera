@@ -66,7 +66,8 @@ export default function PrimarySidebarController() {
 		activeComplementaryArea === 'edit-post/document' ||
 		activeComplementaryArea === 'edit-post/block' ||
 		activeComplementaryArea === 'edit-site/global-styles' ||
-		activeComplementaryArea === 'cbt-plugin-sidebar/create-block-theme-sidebar';
+		activeComplementaryArea ===
+			'cbt-plugin-sidebar/create-block-theme-sidebar';
 
 	// Initialize sidebar container reference (runs once, retries if not found)
 	useEffect(() => {

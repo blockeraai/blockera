@@ -41,12 +41,12 @@ export function textTransformToWPCompatibility({
 							textTransform: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						textTransform: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
@@ -56,10 +56,10 @@ export function textTransformToWPCompatibility({
 						textTransform: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					textTransform: newValue,
 				},
-		  };
+			};
 }

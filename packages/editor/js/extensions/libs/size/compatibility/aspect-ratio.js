@@ -90,10 +90,10 @@ export function ratioToWPCompatibility({
 				return insideBlockInspector
 					? {
 							style: { dimensions: { aspectRatio: undefined } },
-					  }
+						}
 					: {
 							dimensions: { aspectRatio: undefined },
-					  };
+						};
 			}
 
 			if (
@@ -106,10 +106,10 @@ export function ratioToWPCompatibility({
 				return insideBlockInspector
 					? {
 							style: { dimensions: { aspectRatio: undefined } },
-					  }
+						}
 					: {
 							dimensions: { aspectRatio: undefined },
-					  };
+						};
 			}
 
 			const _convertedRatio = convertAspectRatioValueToWP(newValue);
@@ -118,19 +118,19 @@ export function ratioToWPCompatibility({
 				return insideBlockInspector
 					? {
 							style: { dimensions: { aspectRatio: undefined } },
-					  }
+						}
 					: {
 							dimensions: { aspectRatio: undefined },
-					  };
+						};
 			}
 
 			return insideBlockInspector
 				? {
 						style: { dimensions: { aspectRatio: _convertedRatio } },
-				  }
+					}
 				: {
 						dimensions: { aspectRatio: _convertedRatio },
-				  };
+					};
 
 		case 'core/post-featured-image':
 		case 'core/image':

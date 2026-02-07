@@ -61,13 +61,13 @@ export function fontAppearanceToWPCompatibility({
 							fontStyle: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						fontWeight: undefined,
 						fontStyle: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
@@ -78,11 +78,11 @@ export function fontAppearanceToWPCompatibility({
 						fontStyle: newValue?.style ?? 'normal',
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					fontWeight: newValue?.weight ?? '100',
 					fontStyle: newValue?.style ?? 'normal',
 				},
-		  };
+			};
 }

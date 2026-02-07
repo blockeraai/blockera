@@ -65,12 +65,12 @@ export function minHeightToWPCompatibility({
 					? {
 							minHeight: undefined,
 							minHeightUnit: undefined,
-					  }
+						}
 					: {
 							dimensions: {
 								minHeight: undefined,
 							},
-					  };
+						};
 			}
 
 			if (
@@ -83,12 +83,12 @@ export function minHeightToWPCompatibility({
 					? {
 							minHeight: undefined,
 							minHeightUnit: undefined,
-					  }
+						}
 					: {
 							dimensions: {
 								minHeight: undefined,
 							},
-					  };
+						};
 			}
 
 			if (insideBlockInspector) {

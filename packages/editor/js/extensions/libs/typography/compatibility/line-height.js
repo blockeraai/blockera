@@ -41,12 +41,12 @@ export function lineHeightToWPCompatibility({
 							lineHeight: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						lineHeight: undefined,
 					},
-			  };
+				};
 	}
 
 	// Advanced css functions and units not supported by core.
@@ -61,10 +61,10 @@ export function lineHeightToWPCompatibility({
 						lineHeight: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					lineHeight: newValue,
 				},
-		  };
+			};
 }

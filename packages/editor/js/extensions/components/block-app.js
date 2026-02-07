@@ -101,7 +101,7 @@ export const useBlockSection = (sectionId: string): BlockSection => {
 									initialOpen: isOpen,
 								},
 							},
-					  },
+						},
 			};
 
 			if (

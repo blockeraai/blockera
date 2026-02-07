@@ -157,7 +157,7 @@ export function elementNormalBackgroundToWPCompatibility({
 						style: {
 							elements,
 						},
-				  }
+					}
 				: elements),
 		};
 	}
@@ -205,7 +205,7 @@ export function elementNormalBackgroundToWPCompatibility({
 										style: {
 											elements,
 										},
-								  }
+									}
 								: elements),
 						});
 					} else {
@@ -240,7 +240,7 @@ export function elementNormalBackgroundToWPCompatibility({
 									style: {
 										elements,
 									},
-							  }
+								}
 							: elements),
 					});
 				}

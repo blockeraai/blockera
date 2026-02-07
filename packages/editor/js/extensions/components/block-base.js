@@ -140,7 +140,7 @@ export const generateUniqueClassName = (
 	}
 	const baseHash = _className
 		? _className.match(/blockera-block-(\w+)/)?.[1] ||
-		  getSmallHash(clientId)
+			getSmallHash(clientId)
 		: getSmallHash(clientId);
 	const baseClassName = _className
 		? _className

@@ -179,7 +179,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 													?.blocks?.[action.blockName]
 													?.variations ||
 												{},
-									  }
+										}
 									: {
 											...(state?.userStyles?.styles
 												?.blocks?.[action.blockName] ||
@@ -191,7 +191,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 												[action.variation]:
 													action.styles,
 											},
-									  }),
+										}),
 							},
 						},
 					},
@@ -217,7 +217,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 											[action.blockName]: {
 												variations: currentVariations,
 											},
-									  }
+										}
 									: {}),
 							},
 						},
@@ -266,7 +266,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 										] || []),
 										...action.blocks,
 									]),
-							  ]
+								]
 							: action.blocks,
 				},
 			};
@@ -293,7 +293,7 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 					[action.variationName]: action.single
 						? state?.styleVariationBlocks?.[
 								action.variationName
-						  ]?.filter((block) => block !== action.blockName)
+							]?.filter((block) => block !== action.blockName)
 						: filteredBlocks,
 				},
 			};

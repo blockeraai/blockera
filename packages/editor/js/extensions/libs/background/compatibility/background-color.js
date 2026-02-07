@@ -70,12 +70,12 @@ export function backgroundColorToWPCompatibility({
 							background: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					color: {
 						background: undefined,
 					},
-			  };
+				};
 	}
 
 	// is valid background color variable
@@ -88,12 +88,12 @@ export function backgroundColorToWPCompatibility({
 							background: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					color: {
 						background: `var:preset|color|${newValue?.settings?.id}`,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
@@ -104,10 +104,10 @@ export function backgroundColorToWPCompatibility({
 						background: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				color: {
 					background: newValue,
 				},
-		  };
+			};
 }

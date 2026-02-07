@@ -132,7 +132,7 @@ export function borderToWPCompatibility({
 						style: {
 							border: borderData,
 						},
-				  }
+					}
 				: { border: borderData }),
 		};
 	}
@@ -156,7 +156,7 @@ export function borderToWPCompatibility({
 							style: {
 								border: borderData,
 							},
-					  }
+						}
 					: { border: borderData }),
 			};
 		}
@@ -197,7 +197,7 @@ export function borderToWPCompatibility({
 							style: {
 								border: borderData,
 							},
-					  }
+						}
 					: { border: borderData }),
 			};
 
@@ -328,7 +328,7 @@ export function borderToWPCompatibility({
 						style: {
 							border: borderData,
 						},
-				  }
+					}
 				: { border: borderData }),
 		};
 

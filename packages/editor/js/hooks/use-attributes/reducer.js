@@ -144,7 +144,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 												? {
 														className:
 															mergedCssClasses,
-												  }
+													}
 												: {}),
 											[attributeId]: isEqualsWithDefault
 												? undefined
@@ -197,7 +197,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					[attributeId]: attributeId.startsWith('blockera')
 						? {
 								value: newValue,
-						  }
+							}
 						: newValue,
 				},
 				...hookParams

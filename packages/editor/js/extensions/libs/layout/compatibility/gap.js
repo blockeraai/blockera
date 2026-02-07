@@ -181,7 +181,7 @@ export function gapToWPCompatibility({
 		return insideBlockInspector
 			? {
 					style: gapData,
-			  }
+				}
 			: gapData;
 	}
 
@@ -199,7 +199,7 @@ export function gapToWPCompatibility({
 		return insideBlockInspector
 			? {
 					style: gapData,
-			  }
+				}
 			: gapData;
 	}
 

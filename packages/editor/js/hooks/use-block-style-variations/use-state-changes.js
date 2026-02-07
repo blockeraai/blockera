@@ -75,7 +75,7 @@ export const useStateChanges = ({
 					? defaultStylesValue
 					: mergeObject(defaultStylesValue, _style),
 				normalizedAttributes
-		  )
+			)
 		: { updated: {} };
 
 	const initializedValue =

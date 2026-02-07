@@ -254,7 +254,7 @@ export function useStylesForBlocks({
 							label: isDeletedStyle,
 							isDefault: false,
 							isDeleted: true,
-					  }
+						}
 					: activeStyle,
 				newStyle,
 				event

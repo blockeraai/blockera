@@ -390,11 +390,11 @@ export const StyleItem = ({
 										? __(
 												'Style variation added or customized by Blockera',
 												'blockera'
-										  )
+											)
 										: __(
 												'Style variation from theme or block editor',
 												'blockera'
-										  )
+											)
 								}
 							>
 								<Icon

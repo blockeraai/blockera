@@ -45,12 +45,12 @@ export function fontStyleToWPCompatibility({
 							fontStyle: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						fontStyle: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
@@ -60,10 +60,10 @@ export function fontStyleToWPCompatibility({
 						fontStyle: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					fontStyle: newValue,
 				},
-		  };
+			};
 }

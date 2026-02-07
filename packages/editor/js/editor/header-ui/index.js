@@ -31,7 +31,7 @@ export default function HeaderUI(): MixedElement {
 	// Error boundary to catch CanvasEditor rendering errors
 	class ErrorBoundary extends Component<
 		Object,
-		{ hasError: boolean, error: ?Error }
+		{ hasError: boolean, error: ?Error },
 	> {
 		constructor(props: Object) {
 			super(props);

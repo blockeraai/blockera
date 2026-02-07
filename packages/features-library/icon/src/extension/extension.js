@@ -679,7 +679,7 @@ export const IconExtension: ComponentType<{
 														'blockera'
 													),
 													iconRotate
-											  )
+												)
 											: __('Rotate', 'blockera')
 									}
 									size="extra-small"
@@ -696,7 +696,7 @@ export const IconExtension: ComponentType<{
 															? 0
 															: iconRotate,
 														90
-												  )
+													)
 												: 90;
 
 										if (

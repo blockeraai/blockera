@@ -37,21 +37,21 @@ export function fontFamilyToWPCompatibility({
 		return insideBlockInspector
 			? {
 					fontFamily: undefined,
-			  }
+				}
 			: {
 					typography: {
 						fontFamily: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
 		? {
 				fontFamily: newValue,
-		  }
+			}
 		: {
 				typography: {
 					fontFamily: newValue,
 				},
-		  };
+			};
 }

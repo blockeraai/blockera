@@ -271,7 +271,7 @@ export function backgroundToWPCompatibility({
 					insideBlockInspector
 						? {
 								style: bgImageData,
-						  }
+							}
 						: bgImageData
 				);
 
@@ -328,7 +328,7 @@ export function backgroundToWPCompatibility({
 						insideBlockInspector
 							? {
 									style: gradientData,
-							  }
+								}
 							: gradientData
 					);
 				}

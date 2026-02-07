@@ -363,10 +363,10 @@ export function shadowToWPCompatibility({
 					style: {
 						shadow: undefined,
 					},
-			  }
+				}
 			: {
 					shadow: undefined,
-			  };
+				};
 	}
 
 	// Get sorted shadows from Blockera repeater format
@@ -378,10 +378,10 @@ export function shadowToWPCompatibility({
 					style: {
 						shadow: undefined,
 					},
-			  }
+				}
 			: {
 					shadow: undefined,
-			  };
+				};
 	}
 
 	// WordPress only supports a single shadow, so we take the first visible one
@@ -395,10 +395,10 @@ export function shadowToWPCompatibility({
 					style: {
 						shadow: undefined,
 					},
-			  }
+				}
 			: {
 					shadow: undefined,
-			  };
+				};
 	}
 
 	const [, shadowItem] = firstVisibleShadow;
@@ -454,8 +454,8 @@ export function shadowToWPCompatibility({
 				style: {
 					shadow: shadowValue,
 				},
-		  }
+			}
 		: {
 				shadow: shadowValue,
-		  };
+			};
 }

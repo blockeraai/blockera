@@ -45,12 +45,12 @@ export function textDecorationToWPCompatibility({
 							textDecoration: undefined,
 						},
 					},
-			  }
+				}
 			: {
 					typography: {
 						textDecoration: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
@@ -60,10 +60,10 @@ export function textDecorationToWPCompatibility({
 						textDecoration: newValue,
 					},
 				},
-		  }
+			}
 		: {
 				typography: {
 					textDecoration: newValue,
 				},
-		  };
+			};
 }

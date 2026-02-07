@@ -413,7 +413,7 @@ export const useAdvancedLabelProps = (
 				)?.filter(
 					([stateType, state]: [
 						TStates | string,
-						Object
+						Object,
 					]): boolean => {
 						const breakpointTypes = Object.keys(state.breakpoints);
 

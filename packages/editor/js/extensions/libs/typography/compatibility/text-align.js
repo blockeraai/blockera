@@ -60,21 +60,21 @@ export function textAlignToWPCompatibility({
 		return insideBlockInspector
 			? {
 					[wpAlignAttrId]: undefined,
-			  }
+				}
 			: {
 					typography: {
 						textAlign: undefined,
 					},
-			  };
+				};
 	}
 
 	return insideBlockInspector
 		? {
 				[wpAlignAttrId]: newValue,
-		  }
+			}
 		: {
 				typography: {
 					textAlign: newValue,
 				},
-		  };
+			};
 }
