@@ -38,6 +38,7 @@ const blockeraTransformSelfPerspective: FeatureConfig = {
 	label: __('Self Perspective', 'blockera'),
 	showInSettings: false,
 	onNative: true,
+	keywords: ['transform', 'self', 'perspective', '3d'],
 };
 
 const blockeraBackfaceVisibility: FeatureConfig = {

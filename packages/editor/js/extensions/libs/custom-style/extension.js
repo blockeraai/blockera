@@ -25,7 +25,6 @@ import { EditorFeatureWrapper } from '../../../';
 import { getBaseBreakpoint } from '../../../editor/header-ui';
 import type { CustomStyleExtensionProps } from './types/props';
 import { useBlockContext, useBlockSection } from '../../components';
-import { useFeatureSearch } from '../../components/feature-search-context';
 
 export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> = ({
 	block,
@@ -36,7 +35,6 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> = ({
 	handleOnChangeAttributes,
 }: CustomStyleExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('customStyleConfig');
-	const { activeSearchMode } = useFeatureSearch();
 	const {
 		getCurrentState = () => 'normal',
 		getBreakpoint = () => getBaseBreakpoint(),
@@ -65,7 +63,6 @@ export const CustomStyleExtension: ComponentType<CustomStyleExtensionProps> = ({
 			onToggle={onToggle}
 			title={__('Custom CSS', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-custom-style" />}
 			className={extensionClassNames('custom-style')}
 			isChanged={

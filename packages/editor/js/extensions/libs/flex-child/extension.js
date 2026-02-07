@@ -98,7 +98,6 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 			onToggle={onToggle}
 			title={__('Flex Child', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-flex-child" />}
 			className={extensionClassNames('flex-child')}
 		>

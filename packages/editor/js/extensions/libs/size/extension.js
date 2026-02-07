@@ -10,18 +10,13 @@ import type { MixedElement, ComponentType } from 'react';
  */
 import {
 	Flex,
-	isValid,
 	BaseControl,
-	InputControl,
 	SelectControl,
 	PanelBodyControl,
 	ToggleSelectControl,
 	ControlContextProvider,
 } from '@blockera/controls';
-import {
-	extensionClassNames,
-	controlInnerClassNames,
-} from '@blockera/classnames';
+import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
 
 /**
@@ -31,11 +26,19 @@ import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TSizeProps } from './types/size-props';
-import { ObjectFit, AspectRatio } from './components';
+import {
+	ObjectFit,
+	AspectRatio,
+	Width,
+	MinWidth,
+	MaxWidth,
+	Height,
+	MinHeight,
+	MaxHeight,
+} from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
 import { useFeatureSearch } from '../../components/feature-search-context';
-import { WidthFill } from './components/width-fill';
 
 export const SizeExtension: ComponentType<TSizeProps> = ({
 	block,
@@ -135,7 +138,6 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 			onToggle={onToggle}
 			title={__('Size', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-size" />}
 			className={extensionClassNames('size')}
 		>
@@ -149,478 +151,174 @@ export const SizeExtension: ComponentType<TSizeProps> = ({
 				/>
 			)}
 
-			{(isShowWidth || isShowMinWidth || isShowMaxWidth) && (
-				<BaseControl columns="columns-1">
-					<EditorFeatureWrapper
-						isActive={isShowWidth}
-						config={extensionConfig.blockeraWidth}
-					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'width'),
-								value: values?.blockeraWidth,
-								attribute: 'blockeraWidth',
-								blockName: block.blockName,
-							}}
+			{!activeSearchMode &&
+				(isShowWidth || isShowMinWidth || isShowMaxWidth) && (
+					<BaseControl columns="columns-1">
+						<Width
+							block={block}
+							extensionConfig={extensionConfig}
+							values={values}
+							attributes={attributes}
+							extensionProps={extensionProps}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							isActive={isShowWidth}
+							showMinMax={isShowMinWidth || isShowMaxWidth}
 						>
-							<InputControl
-								label={__('Width', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Provides the ability to define the horizontal space of the block, crucial for layout precision and design consistency.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'Ideal for responsive design, it ensures block adapt smoothly to different screen sizes, enhancing user experience and interface scalability.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								aria-label={__('Input Width', 'blockera')}
-								columns="1fr 2.5fr"
-								placeholder="Auto"
-								unitType="width"
-								min={0}
-								defaultValue={attributes.blockeraWidth.default}
-								onChange={(newValue, ref) => {
-									handleOnChangeAttributes(
-										'blockeraWidth',
-										newValue,
-										{ ref }
-									);
-								}}
-								controlAddonTypes={['variable']}
-								variableTypes={['width-size', 'spacing']}
-								className={controlInnerClassNames(
-									'width-input'
-								)}
-								{...extensionProps.blockeraWidth}
-							>
-								{!isValid(values?.blockeraWidth) && (
-									<WidthFill
-										blockeraWidth={values?.blockeraWidth}
+							{isShowMinWidth || isShowMaxWidth ? (
+								<Flex
+									style={{
+										width: '100%',
+										alignSelf: 'flex-end',
+									}}
+								>
+									<MinWidth
+										block={block}
+										extensionConfig={extensionConfig}
+										values={values}
+										attributes={attributes}
+										extensionProps={extensionProps}
 										handleOnChangeAttributes={
 											handleOnChangeAttributes
 										}
+										isActive={isShowMinWidth}
+										isNested={true}
+										showMaxWidth={isShowMaxWidth}
 									/>
-								)}
+									<MaxWidth
+										block={block}
+										extensionConfig={extensionConfig}
+										values={values}
+										attributes={attributes}
+										extensionProps={extensionProps}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										isActive={isShowMaxWidth}
+										isNested={true}
+										showMinWidth={isShowMinWidth}
+									/>
+								</Flex>
+							) : null}
+						</Width>
+					</BaseControl>
+				)}
 
-								{(isShowMinWidth || isShowMaxWidth) && (
-									<Flex
-										style={{
-											width: '100%',
-											alignSelf: 'flex-end',
-										}}
-									>
-										<EditorFeatureWrapper
-											isActive={isShowMinWidth}
-											config={
-												extensionConfig.blockeraMinWidth
-											}
-										>
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'minWidth'
-													),
-													value: values.blockeraMinWidth,
-													attribute:
-														'blockeraMinWidth',
-													blockName: block.blockName,
-												}}
-											>
-												<InputControl
-													label={__(
-														'Min Width',
-														'blockera'
-													)}
-													labelPopoverTitle={__(
-														'Min Width',
-														'blockera'
-													)}
-													labelDescription={
-														<>
-															<p>
-																{__(
-																	"Min-Width ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
-																	'blockera'
-																)}
-															</p>
-															<p>
-																{__(
-																	'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
-																	'blockera'
-																)}
-															</p>
-														</>
-													}
-													aria-label={__(
-														'Min Width',
-														'blockera'
-													)}
-													columns={
-														isShowMaxWidth
-															? 'columns-1'
-															: '1.75fr 2fr'
-													}
-													className={
-														isShowMaxWidth &&
-														'control-first label-center small-gap'
-													}
-													placeholder="Auto"
-													unitType="min-width"
-													min={0}
-													size="small"
-													defaultValue={
-														attributes
-															.blockeraMinWidth
-															.default
-													}
-													onChange={(newValue, ref) =>
-														handleOnChangeAttributes(
-															'blockeraMinWidth',
-															newValue,
-															{ ref }
-														)
-													}
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={[
-														'width-size',
-														'spacing',
-													]}
-													{...extensionProps.blockeraMinWidth}
-												/>
-											</ControlContextProvider>
-										</EditorFeatureWrapper>
+			{activeSearchMode && (
+				<>
+					<Width
+						block={block}
+						extensionConfig={extensionConfig}
+						values={values}
+						attributes={attributes}
+						extensionProps={extensionProps}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						isActive={isShowWidth}
+					/>
 
-										<EditorFeatureWrapper
-											isActive={isShowMaxWidth}
-											config={
-												extensionConfig.blockeraMaxWidth
-											}
-										>
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'maxWidth'
-													),
-													value: values.blockeraMaxWidth,
-													attribute:
-														'blockeraMaxWidth',
-													blockName: block.blockName,
-												}}
-											>
-												<InputControl
-													label={__(
-														'Max Width',
-														'blockera'
-													)}
-													labelPopoverTitle={__(
-														'Max Width',
-														'blockera'
-													)}
-													labelDescription={
-														<>
-															<p>
-																{__(
-																	'Max-Width restricts the maximum width of block, ensuring it doesn’t exceed a specified width, crucial for maintaining design coherence.',
-																	'blockera'
-																)}
-															</p>
-															<p>
-																{__(
-																	'This feature is essential in responsive design, preventing block from stretching too wide on larger screens, thus preserving readability and layout aesthetics.',
-																	'blockera'
-																)}
-															</p>
-														</>
-													}
-													aria-label={__(
-														'Max Width',
-														'blockera'
-													)}
-													columns={
-														isShowMinWidth
-															? 'columns-1'
-															: '1.75fr 2fr'
-													}
-													className={
-														isShowMinWidth &&
-														'control-first label-center small-gap'
-													}
-													placeholder="Auto"
-													unitType="max-width"
-													min={0}
-													size="small"
-													defaultValue={
-														attributes
-															.blockeraMaxWidth
-															.default
-													}
-													onChange={(newValue, ref) =>
-														handleOnChangeAttributes(
-															'blockeraMaxWidth',
-															newValue,
-															{ ref }
-														)
-													}
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={[
-														'width-size',
-														'spacing',
-													]}
-													{...extensionProps.blockeraMaxWidth}
-												/>
-											</ControlContextProvider>
-										</EditorFeatureWrapper>
-									</Flex>
-								)}
-							</InputControl>
-						</ControlContextProvider>
-					</EditorFeatureWrapper>
-				</BaseControl>
-			)}
+					<MinWidth
+						block={block}
+						extensionConfig={extensionConfig}
+						values={values}
+						attributes={attributes}
+						extensionProps={extensionProps}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						isActive={isShowMinWidth}
+					/>
 
-			{(isShowHeight || isShowMinHeight || isShowMaxHeight) && (
-				<BaseControl columns="columns-1">
-					<EditorFeatureWrapper
+					<MaxWidth
+						block={block}
+						extensionConfig={extensionConfig}
+						values={values}
+						attributes={attributes}
+						extensionProps={extensionProps}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						isActive={isShowMaxWidth}
+					/>
+
+					<Height
+						block={block}
+						extensionConfig={extensionConfig}
+						values={values}
+						attributes={attributes}
+						extensionProps={extensionProps}
+						handleOnChangeAttributes={handleOnChangeAttributes}
 						isActive={isShowHeight}
-						config={extensionConfig.blockeraHeight}
-					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'height'),
-								value: values.blockeraHeight,
-								attribute: 'blockeraHeight',
-								blockName: block.blockName,
-							}}
-						>
-							<InputControl
-								label={__('Height', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Provides the ability to define the vertical space of the block, crucial for layout precision and design consistency.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'This feature is key for achieving uniformity and balance in your layout, especially useful for aligning blocks vertically and creating cohesive visual structures.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								columns="1fr 2.5fr"
-								placeholder="Auto"
-								unitType="height"
-								min={0}
-								defaultValue={attributes.blockeraHeight.default}
-								onChange={(newValue, ref) => {
-									handleOnChangeAttributes(
-										'blockeraHeight',
-										newValue,
-										{ ref }
-									);
-								}}
-								controlAddonTypes={['variable']}
-								variableTypes={['width-size', 'spacing']}
-								{...extensionProps.blockeraHeight}
-							>
-								{(isShowMinHeight || isShowMaxHeight) && (
-									<Flex
-										style={{
-											width: '100%',
-											alignSelf: 'flex-end',
-										}}
-									>
-										<EditorFeatureWrapper
-											isActive={isShowMinHeight}
-											config={
-												extensionConfig.blockeraMinHeight
-											}
-										>
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'minHeight'
-													),
-													value: values.blockeraMinHeight,
-													attribute:
-														'blockeraMinHeight',
-													blockName: block.blockName,
-												}}
-											>
-												<InputControl
-													defaultValue={
-														attributes
-															.blockeraMinHeight
-															.default
-													}
-													label={__(
-														'Min Height',
-														'blockera'
-													)}
-													labelPopoverTitle={__(
-														'Min Height',
-														'blockera'
-													)}
-													labelDescription={
-														<>
-															<p>
-																{__(
-																	"Min-Height ensures block don't shrink below a set value, crucial for maintaining content integrity and layout consistency on smaller screens.",
-																	'blockera'
-																)}
-															</p>
-															<p>
-																{__(
-																	'Ideal for preventing layout breakage on mobile devices, this feature helps in creating responsive designs that adapt while retaining legibility and structure.',
-																	'blockera'
-																)}
-															</p>
-														</>
-													}
-													aria-label={__(
-														'Min Height',
-														'blockera'
-													)}
-													columns={
-														isShowMaxHeight
-															? 'columns-1'
-															: '1.75fr 2fr'
-													}
-													className={
-														isShowMaxHeight &&
-														'control-first label-center small-gap'
-													}
-													placeholder="Auto"
-													unitType="min-height"
-													min={0}
-													size="small"
-													onChange={(newValue, ref) =>
-														handleOnChangeAttributes(
-															'blockeraMinHeight',
-															newValue,
-															{ ref }
-														)
-													}
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={[
-														'width-size',
-														'spacing',
-													]}
-													{...extensionProps.blockeraMinHeight}
-												/>
-											</ControlContextProvider>
-										</EditorFeatureWrapper>
+					/>
 
-										<EditorFeatureWrapper
-											isActive={isShowMaxHeight}
-											config={
-												extensionConfig.blockeraMaxHeight
-											}
-										>
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'maxHeight'
-													),
-													value: values.blockeraMaxHeight,
-													attribute:
-														'blockeraMaxHeight',
-													blockName: block.blockName,
-												}}
-											>
-												<InputControl
-													label={__(
-														'Max Height',
-														'blockera'
-													)}
-													labelPopoverTitle={__(
-														'Max Height',
-														'blockera'
-													)}
-													labelDescription={
-														<>
-															<p>
-																{__(
-																	'Max-height restricts the maximum height of block, ensuring it doesn’t exceed a specified height, crucial for maintaining design coherence.',
-																	'blockera'
-																)}
-															</p>
-															<p>
-																{__(
-																	'This feature is essential in responsive design, preventing block from stretching too taller on larger screens, thus preserving readability and layout aesthetics.',
-																	'blockera'
-																)}
-															</p>
-														</>
-													}
-													aria-label={__(
-														'Max Height',
-														'blockera'
-													)}
-													columns={
-														isShowMinHeight
-															? 'columns-1'
-															: '1.75fr 2fr'
-													}
-													className={
-														isShowMinHeight &&
-														'control-first label-center small-gap'
-													}
-													placeholder="Auto"
-													unitType="max-height"
-													min={0}
-													size="small"
-													defaultValue={
-														attributes
-															.blockeraMaxHeight
-															.default
-													}
-													onChange={(newValue, ref) =>
-														handleOnChangeAttributes(
-															'blockeraMaxHeight',
-															newValue,
-															{ ref }
-														)
-													}
-													controlAddonTypes={[
-														'variable',
-													]}
-													variableTypes={[
-														'width-size',
-														'spacing',
-													]}
-													{...extensionProps.blockeraMaxHeight}
-												/>
-											</ControlContextProvider>
-										</EditorFeatureWrapper>
-									</Flex>
-								)}
-							</InputControl>
-						</ControlContextProvider>
-					</EditorFeatureWrapper>
-				</BaseControl>
+					<MinHeight
+						block={block}
+						extensionConfig={extensionConfig}
+						values={values}
+						attributes={attributes}
+						extensionProps={extensionProps}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						isActive={isShowMinHeight}
+					/>
+
+					<MaxHeight
+						block={block}
+						extensionConfig={extensionConfig}
+						values={values}
+						attributes={attributes}
+						extensionProps={extensionProps}
+						handleOnChangeAttributes={handleOnChangeAttributes}
+						isActive={isShowMaxHeight}
+					/>
+				</>
 			)}
+
+			{!activeSearchMode &&
+				(isShowHeight || isShowMinHeight || isShowMaxHeight) && (
+					<BaseControl columns="columns-1">
+						<Height
+							block={block}
+							extensionConfig={extensionConfig}
+							values={values}
+							attributes={attributes}
+							extensionProps={extensionProps}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							isActive={isShowHeight}
+							showMinMax={isShowMinHeight || isShowMaxHeight}
+						>
+							{isShowMinHeight || isShowMaxHeight ? (
+								<Flex
+									style={{
+										width: '100%',
+										alignSelf: 'flex-end',
+									}}
+								>
+									<MinHeight
+										block={block}
+										extensionConfig={extensionConfig}
+										values={values}
+										attributes={attributes}
+										extensionProps={extensionProps}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										isActive={isShowMinHeight}
+										isNested={true}
+										showMaxHeight={isShowMaxHeight}
+									/>
+
+									<MaxHeight
+										block={block}
+										extensionConfig={extensionConfig}
+										values={values}
+										attributes={attributes}
+										extensionProps={extensionProps}
+										handleOnChangeAttributes={
+											handleOnChangeAttributes
+										}
+										isActive={isShowMaxHeight}
+										isNested={true}
+										showMinHeight={isShowMinHeight}
+									/>
+								</Flex>
+							) : null}
+						</Height>
+					</BaseControl>
+				)}
 
 			<EditorFeatureWrapper
 				isActive={isShowOverflow}
