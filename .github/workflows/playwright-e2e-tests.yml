@@ -117,70 +117,61 @@ jobs:
                     if find packages -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
                       test_patterns+=("packages/**/*.${{ matrix.category }}.ply.js")
                     fi
-                    
-                    # Check packages directory for .ply.js files
-                    if find packages -type f -name "*.${{ matrix.category }}.ply.js" 2>/dev/null | grep -q .; then
-                      test_patterns+=("packages/**/*.${{ matrix.category }}.ply.js")
-                    fi
                   else
                     # Run general tests (files without category in name)
                     # Find files that match *.ply.js but not *.*.ply.js
-                    test_patterns=()
+                    # Directly collect file paths instead of using glob patterns
+                    test_files=()
                     
-                    if find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" 2>/dev/null | grep -q .; then
-                      # Use a more specific pattern to exclude categorized tests
-                      test_patterns+=("tests/e2e/specs/**/!(*.*).ply.js")
-                    fi
+                    # Find general files in tests/e2e/specs directory
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests/e2e/specs -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
                     
-                    if find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" 2>/dev/null | grep -q .; then
-                      test_patterns+=("packages/**/!(*.*).ply.js")
-                    fi
+                    # Find general files in packages directory
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" -print0 2>/dev/null)
                     
-                    # Check for general .ply.js files (without category)
-                    if find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" 2>/dev/null | grep -q .; then
-                      test_patterns+=("tests/**/!(*.*).ply.js")
-                    fi
-                    
-                    if find packages -type f -name "*.ply.js" ! -name "*.*.ply.js" 2>/dev/null | grep -q .; then
-                      test_patterns+=("packages/**/!(*.*).ply.js")
-                    fi
+                    # Find general files in tests directory (excluding tests/e2e/specs to avoid duplicates)
+                    while IFS= read -r -d '' file; do
+                      test_files+=("$file")
+                    done < <(find tests -type f -name "*.ply.js" ! -name "*.*.ply.js" ! -path "tests/e2e/specs/*" -print0 2>/dev/null)
                   fi
 
-                  if [ ${#test_patterns[@]} -eq 0 ]; then
-                    echo "No tests found for category: ${{ matrix.category }}"
-                    exit 0
-                  fi
-
-                  echo "Running tests for category: ${{ matrix.category }}"
-                  echo "Test patterns: ${test_patterns[*]}"
-
-                  # Expand glob patterns to actual file paths to avoid regex conversion issues
-                  test_files=()
-                  for pattern in "${test_patterns[@]}"; do
-                    # Convert glob pattern to find command
-                    # Replace ** with find's recursive search
-                    if [[ "$pattern" == *"**"* ]]; then
-                      # Extract base directory and filename pattern
-                      # Pattern format: tests/**/*.visual.ply.js
-                      base_dir=$(echo "$pattern" | sed -E 's|/\*\*.*||')
-                      file_pattern=$(echo "$pattern" | sed -E 's|.*\*\*/||')
-                      # Find matching files recursively
-                      while IFS= read -r -d '' file; do
-                        test_files+=("$file")
-                      done < <(find "$base_dir" -type f -name "$file_pattern" -print0 2>/dev/null)
-                    else
-                      # For non-glob patterns, check if file exists
-                      if [ -f "$pattern" ]; then
-                        test_files+=("$pattern")
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    # Expand glob patterns to actual file paths to avoid regex conversion issues
+                    test_files=()
+                    for pattern in "${test_patterns[@]}"; do
+                      # Convert glob pattern to find command
+                      # Replace ** with find's recursive search
+                      if [[ "$pattern" == *"**"* ]]; then
+                        # Extract base directory and filename pattern
+                        # Pattern format: tests/**/*.visual.ply.js
+                        base_dir=$(echo "$pattern" | sed -E 's|/\*\*.*||')
+                        file_pattern=$(echo "$pattern" | sed -E 's|.*\*\*/||')
+                        # Find matching files recursively
+                        while IFS= read -r -d '' file; do
+                          test_files+=("$file")
+                        done < <(find "$base_dir" -type f -name "$file_pattern" -print0 2>/dev/null)
+                      else
+                        # For non-glob patterns, check if file exists
+                        if [ -f "$pattern" ]; then
+                          test_files+=("$pattern")
+                        fi
                       fi
-                    fi
-                  done
+                    done
+                  fi
 
                   if [ ${#test_files[@]} -eq 0 ]; then
                     echo "No test files found for category: ${{ matrix.category }}"
                     exit 0
                   fi
 
+                  echo "Running tests for category: ${{ matrix.category }}"
+                  if [ "${{ matrix.category }}" != "general-1" ]; then
+                    echo "Test patterns: ${test_patterns[*]}"
+                  fi
                   echo "Found ${#test_files[@]} test file(s)"
 
                   # Run Playwright tests with actual file paths
