@@ -15,7 +15,12 @@ export type BlockVisibilityProps = {
 	settings: Object,
 	setSettings: Function,
 	setHasUpdates: Function,
-	generalSettings: Object,
+	generalSettings: {
+		disableRestrictBlockVisibility: boolean,
+		disableRestrictBlockVisibilityByPostType: boolean,
+		allowedUserRoles: { [key: string]: boolean },
+		allowedPostTypes: { [key: string]: boolean },
+	},
 	savedGeneralSettings: Object,
 };
 
