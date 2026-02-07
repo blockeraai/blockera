@@ -31,11 +31,12 @@ export default function ({
 	updateBlock,
 	updaterDeviceIndicator,
 }: PickedBreakpointsComponentProps): MixedElement {
-	const { setCurrentBreakpoint } = useExtensionsStore();
+	const { setCurrentBreakpoint, currentBreakpoint } = useExtensionsStore();
 	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } = items;
 	const baseBreakpoint = getBaseBreakpoint();
-	const [currentActiveBreakpoint, setActiveBreakpoint] =
-		useState(baseBreakpoint);
+	const [currentActiveBreakpoint, setActiveBreakpoint] = useState(
+		currentBreakpoint || baseBreakpoint
+	);
 
 	useEffect(() => {
 		updaterDeviceIndicator(setActiveBreakpoint);
