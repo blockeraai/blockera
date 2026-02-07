@@ -875,7 +875,7 @@ async function activateMuPlugin(
 
 	// Execute PHP code directly using wp eval
 	// Use ignoreFailures=true to prevent test failure if file doesn't exist
-	await wpCli(
+	return await wpCli(
 		page,
 		`wp eval '${escapedPhpCode}'`,
 		true, // ignoreFailures = true - don't fail if file doesn't exist
