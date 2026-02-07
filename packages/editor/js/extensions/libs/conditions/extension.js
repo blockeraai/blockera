@@ -22,7 +22,6 @@ import { Icon } from '@blockera/icons';
 import { generateExtensionId } from '../utils';
 import { isActiveField, isActiveExtension } from '../../api/utils';
 import { useBlockSection } from '../../components';
-import { useFeatureSearch } from '../../components/feature-search-context';
 import type { ConditionsExtensionProps } from './types/props';
 
 export const ConditionsExtension: ComponentType<ConditionsExtensionProps> = ({
@@ -31,7 +30,6 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> = ({
 	extensionConfig,
 }: ConditionsExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('conditionsConfig');
-	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -46,7 +44,6 @@ export const ConditionsExtension: ComponentType<ConditionsExtensionProps> = ({
 			onToggle={onToggle}
 			title={__('Conditions', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-conditions" />}
 			className={extensionClassNames('conditions')}
 		>

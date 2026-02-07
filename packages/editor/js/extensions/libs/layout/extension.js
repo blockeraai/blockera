@@ -124,7 +124,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 			onToggle={onToggle}
 			title={__('Layout', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-layout" />}
 			className={extensionClassNames('layout')}
 		>
@@ -751,13 +750,15 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 				isActive={isShowSpacing}
 				config={extensionConfig.blockeraSpacing}
 			>
-				<div
-					style={{
-						height: '1px',
-						margin: '15px 0',
-						background: '#eaeaea',
-					}}
-				></div>
+				{!activeSearchMode && (
+					<div
+						style={{
+							height: '1px',
+							margin: '15px 0',
+							background: '#eaeaea',
+						}}
+					></div>
+				)}
 
 				<ControlContextProvider
 					value={{

@@ -26,12 +26,14 @@ export const FontAppearance = ({
 	value,
 	onChange,
 	defaultValue,
+	activeSearchMode,
 	...props
 }: {
 	block: TBlockProps,
 	value: Object | void,
 	defaultValue?: string,
 	onChange: THandleOnChangeAttributes,
+	activeSearchMode: boolean,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -43,9 +45,13 @@ export const FontAppearance = ({
 			}}
 		>
 			<SelectControl
-				label={__('Appearance', 'blockera')}
+				label={
+					activeSearchMode
+						? __('Font Appearance', 'blockera')
+						: __('Appearance', 'blockera')
+				}
 				labelProps={{
-					iconPosition: 'start',
+					iconPosition: activeSearchMode ? 'end' : 'start',
 				}}
 				labelDescription={
 					<>

@@ -74,7 +74,6 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 			onToggle={onToggle}
 			title={__('Mouse', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-mouse" />}
 			className={extensionClassNames('mouse')}
 		>

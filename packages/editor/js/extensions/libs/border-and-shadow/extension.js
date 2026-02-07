@@ -80,7 +80,6 @@ export const BorderAndShadowExtension: ComponentType<TBorderAndShadowProps> = ({
 	return (
 		<PanelBodyControl
 			onToggle={onToggle}
-			noWrapper={activeSearchMode}
 			title={__('Border And Shadow', 'blockera')}
 			initialOpen={initialOpen}
 			icon={<Icon icon="extension-border" />}

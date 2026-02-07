@@ -71,7 +71,7 @@ const blockeraRatio: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Aspect Ratio', 'blockera'),
-	keywords: ['aspect', 'ratio', 'proportion', '16:9', '4:3'],
+	keywords: ['aspect', 'ratio', '16:9', '4:3'],
 };
 
 const blockeraFit: FeatureConfig = {
@@ -87,7 +87,7 @@ const blockeraBoxSizing: FeatureConfig = {
 	force: false,
 	status: true,
 	label: __('Box Sizing', 'blockera'),
-	keywords: ['box-sizing', 'border-box', 'content-box'],
+	keywords: ['box', 'sizing', 'border box', 'content box', 'size'],
 };
 
 export const sizeConfig = {

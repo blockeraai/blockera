@@ -113,19 +113,15 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		return false;
 	}, [
 		values?.blockeraTransformSelfPerspective,
-		values?.blockeraTransformSelfOrigin?.top,
-		values?.blockeraTransformSelfOrigin?.left,
+		values?.blockeraTransformSelfOrigin,
 		values?.blockeraBackfaceVisibility,
 		values?.blockeraTransformChildPerspective,
-		values?.blockeraTransformChildOrigin?.top,
-		values?.blockeraTransformChildOrigin?.left,
+		values?.blockeraTransformChildOrigin,
 		attributes.blockeraTransformSelfPerspective?.default,
-		attributes.blockeraTransformSelfOrigin?.default?.top,
-		attributes.blockeraTransformSelfOrigin?.default?.left,
+		attributes.blockeraTransformSelfOrigin?.default,
 		attributes.blockeraBackfaceVisibility?.default,
 		attributes.blockeraTransformChildPerspective?.default,
-		attributes.blockeraTransformChildOrigin?.default?.top,
-		attributes.blockeraTransformChildOrigin?.default?.left,
+		attributes.blockeraTransformChildOrigin?.default,
 	]);
 
 	if (!isActiveExtension(extensionConfig)) {
@@ -176,6 +172,24 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		);
 	}
 
+	const isShowSelfPerspective = isShowField(
+		extensionConfig.blockeraTransformSelfPerspective,
+		values?.blockeraTransformSelfPerspective,
+		attributes.blockeraTransformSelfPerspective.default
+	);
+
+	const isShowBackfaceVisibility = isShowField(
+		extensionConfig.blockeraBackfaceVisibility,
+		values?.blockeraBackfaceVisibility,
+		attributes.blockeraBackfaceVisibility.default
+	);
+
+	const isShowChildPerspective = isShowField(
+		extensionConfig.blockeraTransformChildPerspective,
+		values?.blockeraTransformChildPerspective,
+		attributes.blockeraTransformChildPerspective.default
+	);
+
 	// Extension is not active
 	if (
 		!isShowOpacity &&
@@ -184,7 +198,10 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		!isShowFilter &&
 		!isShowMask &&
 		!isShowBackdropFilter &&
-		!isShowDivider
+		!isShowDivider &&
+		!isShowSelfPerspective &&
+		!isShowBackfaceVisibility &&
+		!isShowChildPerspective
 	) {
 		return <></>;
 	}
@@ -194,7 +211,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 			onToggle={onToggle}
 			title={__('Effects', 'blockera')}
 			initialOpen={initialOpen}
-			noWrapper={activeSearchMode}
 			icon={<Icon icon="extension-effects" />}
 			className={extensionClassNames('effects')}
 		>
@@ -302,6 +318,20 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 					</BaseControl>
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
+
+			{activeSearchMode && (
+				<TransformSettings
+					setIsTransformSettingsVisible={
+						setIsTransformSettingsVisible
+					}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					values={values}
+					attributes={attributes}
+					extensionConfig={extensionConfig}
+					insidePopover={false}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowTransition}
