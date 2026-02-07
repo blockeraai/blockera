@@ -3,7 +3,7 @@
  */
 import { useElementsScrollbar } from './useElementsScrollbar';
 import type { BlockEditorScrollbarTarget } from './useElementsScrollbar';
-import { defaultScrollbarOptions } from './constants';
+// import { defaultScrollbarOptions } from './constants';
 
 /**
  * Default block editor scrollbar targets.
