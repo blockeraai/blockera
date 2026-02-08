@@ -131,6 +131,11 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 		// Create root selector.
 		$root = ! isset($args['root']) || empty($args['root']) ? $args['blockera-unique-selector'] : $args['root'];
 
+		// If the selector starts with a space, we should add the blockera unique selector to the selector.
+		if (str_starts_with($root, ' ')) {
+			$root = $args['blockera-unique-selector'] . $root;
+		}
+
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
 
@@ -340,7 +345,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			$root_parts      = explode( ' ', $root );
 			$root_first_part = $root_parts[0];
 		}
-		
+
 		$formatted_selectors = [];
 		$selectors           = [ $picked_selector ];
 
@@ -842,8 +847,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$selector = substr( $selector, 1 );
 		}
 
-		// If root is the same as selector or selector starts with root, we should remove the root.
-		if ($root === $selector || str_starts_with($selector, $root)) {
+		// If root is the same as selector or selector contains root string, we should remove the root.
+		if ($root === $selector || str_contains($selector, $root)) {
 
 			$root = '';
 		}
