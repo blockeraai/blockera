@@ -22,6 +22,7 @@ import {
  */
 import { useBlockFeatures } from '@blockera/features-core';
 import {
+	omit,
 	isEquals,
 	cloneObject,
 	mergeObject,
@@ -509,29 +510,36 @@ export const BlockBase: ComponentType<any> = (
 		// Skip the effect if the block is not a blockera block and not has metadata.
 		if (
 			!attributes?.blockeraPropsId &&
-			!attributes.hasOwnProperty('metadata')
+			!attributes.hasOwnProperty('metadata') &&
+			// This is temporary action for indicate this changeset arrived from save customizations.
+			// We will use this action to avoid unnecessary re-renders.
+			// This is a temporary solution and will be removed in the future.
+			'blockera-save-customizations' !== attributes?.action
 		) {
 			return;
 		}
 
+		// Remove the action invalid attribute from the attributes.
+		const cleanupAttributes = omit(cloneObject(attributes), 'action');
+
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
-			!isEquals(compatibleAttributes, attributes) &&
+			!isEquals(compatibleAttributes, cleanupAttributes) &&
 			false === insideBlockInspector
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
-			handleOnChangeStyleInLocalState(attributes);
+			handleOnChangeStyleInLocalState(cleanupAttributes);
 		}
 
 		// If inside the block inspector, update the parent state immediately.
 		if (insideBlockInspector) {
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
-			if (!isEquals(compatibleAttributes, attributes)) {
-				setBlockAttributes(attributes);
+			if (!isEquals(compatibleAttributes, cleanupAttributes)) {
+				setBlockAttributes(cleanupAttributes);
 
 				// Updating attributes reference...
-				compatibleAttributesRef.current = attributes;
+				compatibleAttributesRef.current = cleanupAttributes;
 			}
 
 			return;
@@ -540,11 +548,11 @@ export const BlockBase: ComponentType<any> = (
 		const timeoutId = setTimeout(() => {
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
-			if (!isEquals(compatibleAttributes, attributes)) {
-				setBlockAttributes(attributes);
+			if (!isEquals(compatibleAttributes, cleanupAttributes)) {
+				setBlockAttributes(cleanupAttributes);
 
 				// Updating attributes reference...
-				compatibleAttributesRef.current = attributes;
+				compatibleAttributesRef.current = cleanupAttributes;
 			}
 		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
