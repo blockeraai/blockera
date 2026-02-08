@@ -1,4 +1,4 @@
-=== Blockera Site Builder - Responsive Blocks, Block States, and everything Gutenberg is missing ===
+=== Blockera Site Builder – Responsive blocks, block states, and more... ===
 Contributors: blockeraai, aliaghdam, rezaelahidev
 Tags: responsive blocks, block states, responsive controls, gutenberg blocks, page builder
 Requires at least: ### AUTO-GENERATED
