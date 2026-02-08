@@ -114,11 +114,14 @@ if (! \class_exists(Coordinator::class)) {
             $this->bootstrapped = true;
 
 			// Find default plugin reference.
-			$defaultKey            = array_search(true, array_column($this->plugins, 'default'), true);
-			$default_ref           = ( false !== $defaultKey && isset($this->plugins[ $defaultKey ]) ) 
+			$defaultKey  = array_search(true, array_column($this->plugins, 'default'), true);
+			$default_ref = ( false !== $defaultKey && isset($this->plugins[ $defaultKey ]) ) 
 				? $this->plugins[ $defaultKey ]['slug'] 
 				: 'blockera';
-			$this->coordinator_ref = $_ENV['AUTOLOADER_COORDINATOR_REF'] ?? $default_ref;
+			// Get the coordinator reference from the environment variable.
+			$env_ref = isset($_ENV['AUTOLOADER_COORDINATOR_REF']) ? sanitize_text_field($_ENV['AUTOLOADER_COORDINATOR_REF']) : null;
+			// Set the coordinator reference.
+			$this->coordinator_ref = $env_ref ?? $default_ref;
 
 			// Sort plugins by priority.
             usort(
@@ -732,14 +735,14 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
-			if (isset($GLOBALS['__composer_autoload_files'][ $identifier ])) {
+			if (isset($GLOBALS['__blockera_autoload_files'][ $identifier ])) {
 				$this->included_files[ $identifier ] = true;
 				return;
 			}
 
 			if (is_file($file)) {
 				$this->included_files[ $identifier ]                 = true;
-				$GLOBALS['__composer_autoload_files'][ $identifier ] = true;
+				$GLOBALS['__blockera_autoload_files'][ $identifier ] = true;
 				require $file;
 			}
 		}
