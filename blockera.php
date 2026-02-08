@@ -93,8 +93,13 @@ if (! defined('BLOCKERA_SB_VERSION')) {
 
 global $blockera_env_mode, $blockera_mode, $blockera_block_supports;
 
-$blockera_env_mode = 'development' === ( $_ENV['APP_MODE'] ?? 'production' );
-$blockera_mode     = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $blockera_env_mode;
+// Get the app mode from the environment variable.
+$env_app_mode = isset($_ENV['APP_MODE']) ? sanitize_text_field($_ENV['APP_MODE']) : 'production';
+
+// Set the blockera environment mode.
+$blockera_env_mode = 'development' === $env_app_mode;
+// Set the blockera mode.
+$blockera_mode = defined('BLOCKERA_SB_MODE') && 'development' === BLOCKERA_SB_MODE && $blockera_env_mode;
 
 global $blockera_compat_free_with_pro;
 
