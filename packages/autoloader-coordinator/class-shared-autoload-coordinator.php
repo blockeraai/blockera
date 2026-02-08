@@ -735,14 +735,14 @@ if (! \class_exists(Coordinator::class)) {
 				return;
 			}
 
-			if (isset($GLOBALS['__blockera_autoload_files'][ $identifier ])) {
+			if (isset($GLOBALS['blockera_autoload_files'][ $identifier ])) {
 				$this->included_files[ $identifier ] = true;
 				return;
 			}
 
 			if (is_file($file)) {
-				$this->included_files[ $identifier ]                 = true;
-				$GLOBALS['__blockera_autoload_files'][ $identifier ] = true;
+				$this->included_files[ $identifier ]               = true;
+				$GLOBALS['blockera_autoload_files'][ $identifier ] = true;
 				require $file;
 			}
 		}
