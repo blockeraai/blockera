@@ -40,10 +40,11 @@ export const BlockStyle = ({
 	return (
 		<>
 			{'undefined' !== typeof customCss &&
+			customCss.length &&
 			/#block*(?:-.*)\n\s+\}/gm.test(customCss) ? (
-				''
-			) : (
 				<style id={props.clientId}>{customCss}</style>
+			) : (
+				<></>
 			)}
 			<StateStyle
 				{...{
