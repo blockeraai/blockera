@@ -494,6 +494,9 @@ async function clearColorControlValue(page, label) {
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
 	await popover.locator('[aria-label="Reset Color (Clear)"]').click();
+
+	// After clearing the color, wait for 50ms to ensure the color is cleared.
+	await page.waitForTimeout(50);
 }
 
 /**
