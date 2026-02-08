@@ -32,6 +32,7 @@ export const Preview = ({
 	currentState,
 	availableStates,
 	currentBreakpoint,
+	insideBlockInspector = true,
 	currentInnerBlockState,
 
 	// States Manager props.
@@ -56,10 +57,12 @@ export const Preview = ({
 		block,
 		onChange,
 		currentBlock,
+		insideBlockInspector,
 		maxItems: blockConfig?.maxInnerBlocks,
 		values: innerBlocksProps?.values || {},
 		innerBlocks: innerBlocksProps?.innerBlocks || {},
 	});
+
 	const {
 		states,
 		onReset,

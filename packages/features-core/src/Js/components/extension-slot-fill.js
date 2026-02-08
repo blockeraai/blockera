@@ -146,6 +146,7 @@ export const ExtensionSlotFill = (
 					return (
 						<Fill name={slotName} key={`${id}-${index}`}>
 							<Component
+								activeSearchMode={props.activeSearchMode}
 								{...extensionProps}
 								key={`${id}-${index}`}
 							/>

@@ -119,8 +119,8 @@ export default function BorderRadiusControl({
 				)}
 
 				<Grid
-					gridTemplateColumns="122px 30px"
-					gap="6px"
+					gridTemplateColumns="1fr 30px"
+					gap="8px"
 					justifyItems="end"
 					justifyContent="end"
 				>
@@ -200,7 +200,11 @@ export default function BorderRadiusControl({
 							}
 						}}
 					>
-						<Icon icon="border-radius" iconSize="14" />
+						{value.type === 'all' ? (
+							<Icon icon="lock" iconSize="24" />
+						) : (
+							<Icon icon="unlock" iconSize="24" />
+						)}
 					</Button>
 				</Grid>
 			</div>

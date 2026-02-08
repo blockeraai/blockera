@@ -2,13 +2,12 @@
  * Blockera dependencies
  */
 import {
+	createPost,
 	appendBlocks,
-	getSelectedBlock,
-	getWPDataObject,
 	setInnerBlock,
 	setBlockState,
-	addBlockState,
-	createPost,
+	getWPDataObject,
+	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Group Block → Link Inner Block → WP Data Compatibility', () => {

@@ -14,7 +14,7 @@ describe('Border Radius → Functionality', () => {
 		cy.getByDataTest('style-tab').click();
 
 		// assign border to have visual of border-radius
-		cy.getParentContainer('Border Line').within(() => {
+		cy.getParentContainer('Border').within(() => {
 			cy.getByDataTest('border-control-width').clear();
 			cy.getByDataTest('border-control-width').type(2, {
 				force: true,

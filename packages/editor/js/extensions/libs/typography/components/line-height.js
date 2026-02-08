@@ -23,6 +23,7 @@ export const LineHeight = ({
 	onChange,
 	defaultValue,
 	size,
+	activeSearchMode,
 	...props
 }: {
 	block: TBlockProps,
@@ -30,6 +31,7 @@ export const LineHeight = ({
 	defaultValue: string | void,
 	onChange: THandleOnChangeAttributes,
 	size?: ControlSize,
+	activeSearchMode: boolean,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -59,9 +61,9 @@ export const LineHeight = ({
 					</>
 				}
 				labelProps={{
-					iconPosition: 'start',
+					iconPosition: activeSearchMode ? 'end' : 'start',
 				}}
-				columns="columns-2"
+				columns={activeSearchMode ? '1fr 2.5fr' : '2-columns'}
 				unitType="line-height"
 				min={0}
 				defaultValue={defaultValue}

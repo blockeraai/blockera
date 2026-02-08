@@ -1185,6 +1185,7 @@ export default function LayoutMatrixControl({
 						className={controlInnerClassNames(
 							'layout-matrix__controls'
 						)}
+						grow={1}
 					>
 						{isDirectionActive && (
 							<ToggleSelectControl
@@ -1193,23 +1194,13 @@ export default function LayoutMatrixControl({
 								options={[
 									{
 										label: __('Row', 'blockera'),
+										'aria-label': 'flex-direction: row',
 										value: 'row',
-										icon: (
-											<Icon
-												icon="flex-direction-row"
-												iconSize="18"
-											/>
-										),
 									},
 									{
 										label: __('Column', 'blockera'),
+										'aria-label': 'flex-direction: column',
 										value: 'column',
-										icon: (
-											<Icon
-												icon="flex-direction-column"
-												iconSize="18"
-											/>
-										),
 									},
 								]}
 								defaultValue={direction}
@@ -1222,7 +1213,7 @@ export default function LayoutMatrixControl({
 							/>
 						)}
 
-						<Flex direction="row" justifyContent="space-between">
+						<Flex direction="row" justifyContent="flex-start">
 							<Tooltip
 								text={(() => {
 									let label = '';

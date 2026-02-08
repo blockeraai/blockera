@@ -6,6 +6,7 @@ import {
 	getWPDataObject,
 	getSelectedBlock,
 	redirectToFrontPage,
+	openMoreFeaturesControl,
 } from '@blockera/dev-cypress/js/helpers';
 
 describe('Text Shadows → Functionality', () => {
@@ -18,6 +19,9 @@ describe('Text Shadows → Functionality', () => {
 			delay: 0,
 		});
 		cy.getByDataTest('style-tab').click();
+
+		// Open more settings
+		openMoreFeaturesControl('More typography settings');
 
 		/* One Text Shadow */
 		cy.getParentContainer('Text Shadows').within(() => {

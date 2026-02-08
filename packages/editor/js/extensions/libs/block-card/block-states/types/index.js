@@ -38,6 +38,7 @@ export type BlockDetail = {
 	isNormalState: boolean,
 	isMasterBlock: boolean,
 	isBaseBreakpoint: boolean,
+	insideBlockInspector: boolean,
 	currentBlock: 'master' | string,
 	currentState: TStates,
 	blockAttributes: Object,

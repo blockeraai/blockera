@@ -18,6 +18,8 @@ describe('Flex Wrap → Functionality', () => {
 	});
 
 	it('functionality of flex-wrap', () => {
+		cy.openFeatureMoreSettings('more-layout-settings');
+		cy.selectFeature('Flex Children Wrap');
 		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});

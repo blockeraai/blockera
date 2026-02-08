@@ -7,7 +7,6 @@ import {
 	appendBlocks,
 	setInnerBlock,
 	setParentBlock,
-	setBoxSpacingSide,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 

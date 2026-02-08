@@ -71,20 +71,27 @@ export const useBlockPreviewStyles = (
 	}
 
 	// Memoize omitted styles to prevent unnecessary recalculations
-	const omittedStyles = useMemo(
+	const validBlockGlobalStyles = useMemo(
 		() => omitWithPattern(styles, /^(?!blockera).*/i),
 		[styles]
 	);
 
-	// Memoize blockeraBlockTypeGlobalStyles with stable ID
-	const blockeraBlockTypeGlobalStyles = useMemo(() => {
-		const stableId = generateStableId(blockType?.name || '', variation);
+	// Memoize stable ID to prevent recalculation
+	const stableId = useMemo(
+		() => generateStableId(blockType?.name || '', variation),
+		[blockType?.name, variation]
+	);
+
+	// Memoize sanitizedBlockGlobalStyles with stable ID
+	const sanitizedBlockGlobalStyles = useMemo(() => {
+		const blockStatesValue =
+			validBlockGlobalStyles?.blockeraBlockStates?.value || {};
 
 		return sanitizeBlockAttributes({
-			...omittedStyles,
+			...validBlockGlobalStyles,
 			blockeraBlockStates: {
 				value: {
-					...(omittedStyles?.blockeraBlockStates?.value || {}),
+					...blockStatesValue,
 					normal: {
 						breakpoints: {},
 						isVisible: true,
@@ -93,10 +100,13 @@ export const useBlockPreviewStyles = (
 			},
 			blockeraPropsId: stableId,
 		});
-	}, [omittedStyles, blockType?.name, variation]);
+	}, [validBlockGlobalStyles, stableId]);
 
 	// Track last extracted styles to prevent unnecessary state updates
 	const lastStylesRef = useRef<string>('');
+
+	// Memoize block type name to prevent unnecessary re-renders
+	const blockTypeName = blockType?.name;
 
 	// Use useLayoutEffect for synchronous DOM updates
 	useLayoutEffect(() => {
@@ -141,7 +151,7 @@ export const useBlockPreviewStyles = (
 					renderInPortal: false,
 					styleVariationName: variation,
 					isStyleVariation: Boolean(variation),
-					blockeraBlockTypeGlobalStyles,
+					sanitizedBlockGlobalStyles,
 				}}
 			/>
 		);
@@ -153,19 +163,22 @@ export const useBlockPreviewStyles = (
 				return;
 			}
 
-			const extractedStyles = extractStylesFromContainer(container);
+			setTimeout(() => {
+				const extractedStyles = extractStylesFromContainer(container);
 
-			// Only update state if styles actually changed
-			if (extractedStyles !== lastStylesRef.current) {
-				lastStylesRef.current = extractedStyles;
-				setAdditionalStyles(extractedStyles);
-			}
+				// Only update state if styles actually changed
+				if (extractedStyles !== lastStylesRef.current) {
+					lastStylesRef.current = extractedStyles;
+					setAdditionalStyles(extractedStyles);
+				}
+			}, 400);
 		});
 
 		return () => {
 			cancelAnimationFrame(rafId);
 		};
-	}, [blockType, variation, blockeraBlockTypeGlobalStyles]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [blockTypeName, variation, sanitizedBlockGlobalStyles]);
 
 	// Cleanup on unmount
 	useLayoutEffect(() => {

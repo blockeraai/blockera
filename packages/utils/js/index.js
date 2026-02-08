@@ -9,6 +9,7 @@ export * from './editor';
 export * from './portal';
 export * from './object';
 export * from './string';
+export * from './general';
 export * from './matchers';
 export * from './use-value';
 export * from './var-export';

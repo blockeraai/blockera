@@ -306,11 +306,6 @@ abstract class BaseStyleDefinition {
         $fallback  = $this->getFallbackSupport($support);
         $selectors = blockera_get_block_type_property($this->block['blockName'], 'selectors');
 
-		if ($this->is_style_variation) {
-			$this->selector = $this->blockera_unique_selector;
-			return;
-		}
-
 		$prepared_selector = blockera_get_compatible_block_css_selector(
             $selectors,
             $support,
@@ -324,12 +319,9 @@ abstract class BaseStyleDefinition {
                 'root'                     => $selectors['root'] ?? null,
                 'blockera-unique-selector' => $this->blockera_unique_selector,
                 'breakpoint'               => $this->breakpoint,
+				'is-global-style'          => $this->is_global_style,
             ]
 		);
-
-		if ($this->is_global_style) {
-			$prepared_selector = ":root :where($prepared_selector)";
-		}
 
 		$this->selector = $prepared_selector;
     }

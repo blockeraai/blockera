@@ -21,7 +21,7 @@ describe('Min Height → Functionality', () => {
 		// activate min height
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Height').within(() => {
 			cy.get('input').type(10);
 		});
 
@@ -48,7 +48,7 @@ describe('Min Height → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
 		// open value addon
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Height').within(() => {
 			cy.openValueAddon();
 		});
 

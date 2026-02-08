@@ -20,7 +20,9 @@
 	opacity: 0.5;
 
 	.blockera-control-width-fill__indicator {
-		transition: all 0.5s ease, color 0.8s ease;
+		transition:
+			all 0.5s ease,
+			color 0.8s ease;
 		position: relative;
 		display: flex;
 		white-space: nowrap;
@@ -102,7 +104,7 @@
 		right: 24px;
 
 		.blockera-control-width-fill__indicator {
-			width: 106px;
+			width: calc(var(--parent-width, 106px) - 54px);
 			opacity: 0.6;
 		}
 	}
@@ -161,4 +163,8 @@
 	select {
 		color: transparent;
 	}
+}
+
+.blockera-control-unit-func + .blockera-control-width-fill {
+	display: none;
 }

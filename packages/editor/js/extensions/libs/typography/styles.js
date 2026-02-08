@@ -669,7 +669,9 @@ export function TypographyStyles({
 	if (isActiveField(blockeraTextStroke)) {
 		const blockeraTextStroke = blockProps.attributes.blockeraTextStroke;
 
-		if (blockeraTextStroke !== attributes.blockeraTextStroke.default) {
+		if (
+			!isEquals(blockeraTextStroke, attributes.blockeraTextStroke.default)
+		) {
 			const pickedSelector = getCompatibleBlockCssSelector({
 				...sharedParams,
 				query: 'blockeraTextStroke',
@@ -694,6 +696,10 @@ export function TypographyStyles({
 									type: 'static',
 									properties: {
 										'-webkit-text-stroke':
+											blockeraTextStroke?.width +
+											' ' +
+											textStrokeColor,
+										'text-stroke':
 											blockeraTextStroke?.width +
 											' ' +
 											textStrokeColor,

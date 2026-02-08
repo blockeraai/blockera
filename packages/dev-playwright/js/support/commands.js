@@ -236,18 +236,13 @@ async function cssVar(page, cssVarName, selector = null) {
  * @return {import('@playwright/test').Locator} Parent container locator.
  */
 function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
-	const ariaLabelElement = page
-		.locator(`[aria-label="${ariaLabel}"]`, {
-			timeout: 20000,
-		})
+	// Build a CSS selector that finds the data-cy container that has an aria-label descendant
+	// This approach finds the parent container directly without needing async/await
+	return page
+		.locator(
+			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`
+		)
 		.first();
-
-	// Use XPath to find the closest ancestor (equivalent to Cypress's .closest())
-	// ancestor::* returns ancestors in reverse document order (closest first)
-	// [1] selects the first one, which is the closest ancestor
-	return ariaLabelElement.locator(
-		`xpath=ancestor::*[@data-cy="${parentsDataCy}"][1]`
-	);
 }
 
 /**
@@ -502,6 +497,45 @@ async function clearColorControlValue(page, label) {
 }
 
 /**
+ * Click value addon button to open popover.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {import('@playwright/test').Locator} container - Container locator (optional).
+ * @return {Promise<void>}
+ */
+async function clickValueAddonButton(page, container = null) {
+	const targetContainer = container || page;
+	const button = targetContainer.locator('[data-cy="value-addon-btn"]');
+	await button.dispatchEvent('click');
+}
+
+/**
+ * Select value addon item from popover.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} itemID - Item ID to select.
+ * @return {Promise<void>}
+ */
+async function selectValueAddonItem(page, itemID) {
+	// Click on value addon with item ID.
+	await page.locator(`[data-cy="va-item-${itemID}"]`).dispatchEvent('click');
+}
+
+/**
+ * Remove value addon.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {import('@playwright/test').Locator} container - Container locator (optional).
+ * @return {Promise<void>}
+ */
+async function removeValueAddon(page, container = null) {
+	const targetContainer = container || page;
+	await targetContainer
+		.locator('[data-cy="value-addon-btn-remove"]')
+		.dispatchEvent('click');
+}
+
+/**
  * Set block variation.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -746,7 +780,7 @@ async function openSettingsPanel(page) {
  * @return {Promise<void>}
  */
 async function addNewTransition(page) {
-	const container = getParentContainer(page, 'Transitions');
+	const container = await getParentContainer(page, 'Transitions');
 	await container.locator('[aria-label="Add New Transition"]').click();
 }
 /**
@@ -977,7 +1011,7 @@ async function setFrontendViewportForScreenshot(
 	config = {}
 ) {
 	let width = 1600;
-	let height = 5000;
+	const height = 5000;
 
 	if (size === 'desktop') {
 		width = 1600;
@@ -1055,6 +1089,9 @@ module.exports = {
 	checkInputFieldValue,
 	setColorControlValue,
 	clearColorControlValue,
+	clickValueAddonButton,
+	selectValueAddonItem,
+	removeValueAddon,
 	setBlockVariation,
 	checkActiveBlockVariation,
 	openRepeaterItem,

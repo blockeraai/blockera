@@ -113,6 +113,7 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 	 */
 	function blockera_get_inner_block_state_selector( string $selector, array $args = [] ): string {
 
+		$is_global_style             = $args['is-global-style'] ?? false;
 		$master_block_state          = $args['pseudo-class'] ?? 'normal';
 		$pseudo_class                = $args['inner-pseudo-class'] ?? 'normal';
 		$current_state_has_selectors = $args['current_state_has_selectors'] ?? false;
@@ -126,6 +127,14 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 			],
 			true
 		) ? '' : $master_block_state;
+
+		// Create root selector.
+		$root = ! isset($args['root']) || empty($args['root']) ? $args['blockera-unique-selector'] : $args['root'];
+
+		// If the selector starts with a space, we should add the blockera unique selector to the selector.
+		if (str_starts_with($root, ' ')) {
+			$root = $args['blockera-unique-selector'] . $root;
+		}
 
 		// Overriding selectors based on supported pseudo-class in css. Supported pseudo-classes with css: hover, active, visited, before, after.
 		if ( $pseudo_class && 'normal' !== $pseudo_class ) {
@@ -146,12 +155,12 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 				return implode(
 					', ',
 					array_map(
-						static function ( string $item ) use ( $args, $parent_pseudo_class, $pseudo_class, $current_state_has_selectors ): string {
+						static function ( string $item ) use ( $root, $args, $parent_pseudo_class, $is_global_style, $pseudo_class, $current_state_has_selectors ): string {
 
 							return blockera_get_css_selector_format(
-								$args['root'] ?? $args['blockera-unique-selector'] ?? '',
+								$root,
 								trim( $item ),
-								compact( 'pseudo_class', 'parent_pseudo_class', 'current_state_has_selectors' )
+								compact( 'pseudo_class', 'parent_pseudo_class', 'is_global_style', 'current_state_has_selectors' )
 							);
 						},
 						$parsedValue
@@ -162,26 +171,25 @@ if ( ! function_exists( 'blockera_get_inner_block_state_selector' ) ) {
 
 				// Add pseudo custom css class as suffix into selectors value for current key.
 				return blockera_get_css_selector_format(
-					$args['root'] ?? $args['blockera-unique-selector'] ?? '',
+					$root,
 					$selector,
-					compact( 'pseudo_class', 'parent_pseudo_class', 'current_state_has_selectors' )
+					compact( 'pseudo_class', 'parent_pseudo_class', 'is_global_style', 'current_state_has_selectors' )
 				);
 			}
 		}
 
 		// inner block in normal state.
 		if ( $master_block_state ) {
-
 			// Add pseudo custom css class as suffix into selectors value for current key.
 			return blockera_get_css_selector_format(
-				$args['root'] ?? $args['blockera-unique-selector'] ?? '',
+				$root,
 				$selector,
-				compact( 'parent_pseudo_class', 'current_state_has_selectors' )
+				compact( 'parent_pseudo_class', 'is_global_style', 'current_state_has_selectors' )
 			);
 		}
 
 		return trim(
-			sprintf( '%s %s', trim( $args['root'] ?? $args['blockera-unique-selector'] ?? '', ), $selector )
+			sprintf( '%s %s', trim( $root ), $selector )
 		);
 	}
 }
@@ -324,6 +332,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 	function blockera_get_css_selector_format( string $root, string $picked_selector, array $args ): string {
 
 		$pseudo_class                = $args['pseudo_class'] ?? '';
+		$is_global_style             = $args['is_global_style'] ?? false;
 		$parent_pseudo_class         = $args['parent_pseudo_class'] ?? '';
 		$current_state_has_selectors = $args['current_state_has_selectors'] ?? false;
 		// Pre-calculate reused values.
@@ -336,7 +345,7 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 			$root_parts      = explode( ' ', $root );
 			$root_first_part = $root_parts[0];
 		}
-		
+
 		$formatted_selectors = [];
 		$selectors           = [ $picked_selector ];
 
@@ -354,7 +363,18 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 
 			// Handle && pattern.
 			if ( str_starts_with( $selector, '&&' ) ) {
-				$new_selector    = $root_first_part . $new_selector;
+
+				if (! empty(trim($root))) {
+					// Set specificities for root selector.
+					if ($is_global_style) {
+						$new_selector = ":root body :where($root_first_part)$new_selector";
+					} else {
+						$new_selector = "html:root body :where($root_first_part)$new_selector";
+					}
+				} else {
+					$new_selector = $new_selector;
+				}
+
 				$merged_selector = $new_selector . 
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol($pseudo_class) . $pseudo_class : '' );
 
@@ -363,10 +383,22 @@ if ( ! function_exists( 'blockera_get_css_selector_format' ) ) {
 				$merged_selector = $new_selector .
 					( $has_pseudo && ! $current_state_has_selectors ? blockera_get_state_symbol( $pseudo_class ) . $pseudo_class : '' );
 
-				$origin_selector = $root . 
-					( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
-					( $needs_space ? ' ' : '' ) .
-					$merged_selector;
+				if (! empty($root)) {
+					// Set specificities for root selector.
+					if ($is_global_style) {
+						$origin_selector = ":root body :where($root)" . 
+						( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
+						( $needs_space ? ' ' : '' ) .
+						$merged_selector;
+					} else {
+						$origin_selector = "html:root body :where($root)" . 
+						( $has_parent_pseudo ? blockera_get_state_symbol( $parent_pseudo_class ) . $parent_pseudo_class : '' ) .
+						( $needs_space ? ' ' : '' ) .
+						$merged_selector;
+					}
+				} else {
+					$origin_selector = ( $needs_space ? ' ' : '' ) . $merged_selector;
+				}
 
 				$formatted_selectors[] = blockera_create_standard_selector($new_selector, $pseudo_class, compact('merged_selector', 'origin_selector', 'has_pseudo'));
 			}
@@ -614,7 +646,6 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 
 			// Re-Generate picked css selector to handle current block state!
 			$selector = blockera_get_master_block_state_selector( $selector ?? $args['blockera-unique-selector'] ?? '', $args );
-
 		} else {
 			// We should create selector by :is() pseudo class.
 			// if the selector id starts with 'blockera/core/' and the selector is not set in the parent block type selectors.
@@ -636,12 +667,20 @@ if ( ! function_exists( 'blockera_get_compatible_block_css_selector' ) ) {
 			return ! empty( $selector ) ? $selector : $args['blockera-unique-selector'];
 		}
 
+		$root = $args['blockera-unique-selector'];
+
+		// If the style is global style for block, we should append the selector to the root body for specificity reasons.
+		if (isset($args['is-global-style']) && $args['is-global-style']) {
+			$root = ":root body :where($root)";
+		}
+
 		return blockera_append_root_block_css_selector(
 			$selector,
-			$args['blockera-unique-selector'],
+			$root,
 			[
 				'root'=> $args['root'] ?? '',
 				'block-type' => $args['block-type'],
+				'is-global-style' => $args['is-global-style'] ?? false,
 				'block-name' => str_replace( '/', '-', str_replace( 'core/', '', $args['block-name'] ) ),
 			]
 		);
@@ -808,8 +847,8 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$selector = substr( $selector, 1 );
 		}
 
-		// If root is the same as selector or selector starts with root, we should remove the root.
-		if ($root === $selector || str_starts_with($selector, $root)) {
+		// If root is the same as selector or selector contains root string, we should remove the root.
+		if ($root === $selector || str_contains($selector, $root)) {
 
 			$root = '';
 		}
@@ -861,6 +900,12 @@ if ( ! function_exists( 'blockera_append_root_block_css_selector' ) ) {
 			$base   = $parts[0];
 			$pseudo = isset($parts[1]) ? ( strpos($selector, '::') !== false ? '::' : ':' ) . $parts[1] : '';
 
+			// If the style is global style for block, we should append the selector to the root body for specificity reasons.
+			if (isset($args['is-global-style']) && $args['is-global-style']) {
+				return "{$root}{$pseudo}";
+			}
+			
+			// Return selector with root for block level style.
 			return "{$base}{$root}{$pseudo}";
 		}
 

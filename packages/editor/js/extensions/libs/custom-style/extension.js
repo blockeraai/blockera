@@ -22,7 +22,7 @@ import { Icon } from '@blockera/icons';
 import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
-import { getBaseBreakpoint } from '../../../canvas-editor';
+import { getBaseBreakpoint } from '../../../editor/header-ui';
 import type { CustomStyleExtensionProps } from './types/props';
 import { useBlockContext, useBlockSection } from '../../components';
 

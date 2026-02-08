@@ -21,7 +21,7 @@ describe('Max Height → Functionality', () => {
 		// activate max height
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Height');
 
-		cy.getParentContainer('Max').within(() => {
+		cy.getParentContainer('Max Height').within(() => {
 			cy.get('input').type(200);
 		});
 
@@ -48,7 +48,7 @@ describe('Max Height → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Max Height');
 
 		// open value addon
-		cy.getParentContainer('Max').within(() => {
+		cy.getParentContainer('Max Height').within(() => {
 			cy.openValueAddon();
 		});
 

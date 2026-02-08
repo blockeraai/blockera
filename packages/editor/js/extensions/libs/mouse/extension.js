@@ -29,6 +29,7 @@ import {
 } from './utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TMouseProps } from './types/mouse-props';
 
 export const MouseExtension: ComponentType<TMouseProps> = ({
@@ -41,6 +42,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 	setSettings,
 }: TMouseProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('mouseConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(mouseConfig)) {
 		return <></>;
@@ -75,13 +77,15 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 			icon={<Icon icon="extension-mouse" />}
 			className={extensionClassNames('mouse')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Mouse Settings', 'blockera')}
-				features={mouseConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'mouseConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Mouse Settings', 'blockera')}
+					features={mouseConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'mouseConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowCursor}
@@ -113,7 +117,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 								</p>
 							</>
 						}
-						columns="1fr 160px"
+						columns="1fr 2.5fr"
 						options={cursorFieldOptions()}
 						type="custom"
 						customMenuPosition="top"
@@ -166,7 +170,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 								</p>
 							</>
 						}
-						columns="1fr 160px"
+						columns="1fr 2.5fr"
 						options={userSelectOptions()}
 						type="native"
 						defaultValue={attributes.blockeraUserSelect.default}
@@ -218,7 +222,7 @@ export const MouseExtension: ComponentType<TMouseProps> = ({
 								</p>
 							</>
 						}
-						columns="1fr 160px"
+						columns="1fr 2.5fr"
 						options={pointerEventsOptions()}
 						type="native"
 						defaultValue={attributes.blockeraPointerEvents.default}

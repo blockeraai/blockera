@@ -39,7 +39,7 @@ export const FontFamily = ({
 			}}
 		>
 			<SelectControl
-				label={__('Family', 'blockera')}
+				label={__('Font Family', 'blockera')}
 				labelDescription={
 					<>
 						<p>

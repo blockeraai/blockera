@@ -6,12 +6,17 @@ import { __ } from '@wordpress/i18n';
 import { Fragment, type MixedElement } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Slot, SlotFillProvider } from '@wordpress/components';
+import { useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { type TTabProps } from '@blockera/controls';
+import {
+	type TTabProps,
+	SearchControl,
+	ControlContextProvider,
+} from '@blockera/controls';
 import { ExtensionSlotFill } from '@blockera/features-core';
 
 /**
@@ -23,7 +28,6 @@ import { BackgroundExtension } from '../background';
 import { BorderAndShadowExtension } from '../border-and-shadow';
 import { EffectsExtension } from '../effects';
 import { TypographyExtension } from '../typography';
-import { SpacingExtension } from '../spacing';
 import { PositionExtension } from '../position';
 import { SizeExtension } from '../size';
 import { LayoutExtension } from '../layout';
@@ -38,6 +42,9 @@ import { ClickAnimationExtension } from '../click-animation';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { useBlockSection } from '../../components';
 import { getParentFlexBlockInfo } from './utils';
+import { generateExtensionId } from '../utils';
+import { useFeatureSearch } from '../../components/feature-search-context';
+import { filterSettingsBySearch } from '../base/utils/search-features';
 
 export const MappedExtensions = ({
 	tab,
@@ -50,6 +57,7 @@ export const MappedExtensions = ({
 	handleOnChangeAttributes,
 	currentBlock,
 	currentState,
+	activeSearchMode,
 	currentInnerBlockState,
 	isReportingErrorCompleted,
 	setIsReportingErrorCompleted,
@@ -64,17 +72,36 @@ export const MappedExtensions = ({
 	handleOnChangeAttributes: Function,
 	currentBlock: string,
 	currentState: string,
+	activeSearchMode: boolean,
 	currentInnerBlockState: string,
 	isReportingErrorCompleted: boolean,
 	setIsReportingErrorCompleted: Function,
 }): Array<MixedElement> => {
+	const { searchQuery, setSearchQuery } = useFeatureSearch();
+
+	// Filter additional settings based on search query
+	const filteredAdditional = useMemo(() => {
+		if (!searchQuery || !searchQuery.trim() || !additional?.settings) {
+			return additional;
+		}
+
+		const filteredSettings = filterSettingsBySearch(
+			additional.settings || {},
+			searchQuery
+		);
+
+		return {
+			...additional,
+			settings: filteredSettings,
+		};
+	}, [searchQuery, additional]);
+
 	const activePanel: Array<MixedElement> = [];
 	const {
 		mouseConfig,
 		sizeConfig,
 		layoutConfig,
 		statesConfig,
-		spacingConfig,
 		effectsConfig,
 		positionConfig,
 		flexChildConfig,
@@ -113,6 +140,7 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
+								activeSearchMode,
 								blockFeatures: additional.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
@@ -161,6 +189,7 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
+								activeSearchMode,
 								blockFeatures: additional.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
@@ -215,6 +244,7 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
+								activeSearchMode,
 								blockFeatures: additional.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
@@ -238,7 +268,11 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
-								blockFeatures: additional.blockFeatures,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
@@ -246,6 +280,34 @@ export const MappedExtensions = ({
 							}}
 						/>
 					</SlotFillProvider>
+
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(
+								{
+									blockName: block.blockName,
+									clientId: block.clientId,
+									currentBlockStyleVariation:
+										block.currentBlockStyleVariation,
+									attributes: {},
+									setAttributes: () => {},
+									supports: {},
+								},
+								'search'
+							),
+							value: searchQuery,
+							blockName: block.blockName,
+						}}
+					>
+						<div style={{ padding: '16px' }}>
+							<SearchControl
+								className="search-features"
+								onChange={setSearchQuery}
+								placeholder={__('Search Features…', 'blockera')}
+							/>
+						</div>
+					</ControlContextProvider>
+
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
 							<ErrorBoundaryFallback
@@ -296,28 +358,121 @@ export const MappedExtensions = ({
 								}
 								from={'extension'}
 								error={error}
-								configId={'spacingConfig'}
-								title={__('Spacing', 'blockera')}
-								icon={<Icon icon={'extension-spacing'} />}
+								configId={'layoutConfig'}
+								title={__('Layout', 'blockera')}
+								icon={<Icon icon="extension-layout" />}
 							/>
 						)}
 					>
-						<SpacingExtension
+						<LayoutExtension
 							block={block}
-							extensionConfig={spacingConfig}
+							extensionConfig={layoutConfig}
+							extensionProps={{
+								blockeraDisplay: {},
+								blockeraFlexLayout: {},
+								blockeraGap: {},
+								blockeraFlexWrap: {},
+								blockeraSpacing: {},
+							}}
 							values={{
+								blockeraDisplay:
+									currentStateAttributes.blockeraDisplay,
+								blockeraFlexLayout:
+									currentStateAttributes.blockeraFlexLayout,
+								blockeraGap: currentStateAttributes.blockeraGap,
+								blockeraFlexWrap:
+									currentStateAttributes.blockeraFlexWrap,
+								blockeraAlignContent:
+									currentStateAttributes.blockeraAlignContent,
 								blockeraSpacing:
 									currentStateAttributes.blockeraSpacing,
 							}}
 							attributes={{
+								blockeraDisplay: attributes.blockeraDisplay,
+								blockeraFlexLayout:
+									attributes.blockeraFlexLayout,
+								blockeraGap: attributes.blockeraGap,
+								blockeraFlexWrap: attributes.blockeraFlexWrap,
+								blockeraAlignContent:
+									attributes.blockeraAlignContent,
 								blockeraSpacing: attributes.blockeraSpacing,
 							}}
-							extensionProps={{
-								blockeraSpacing: {},
-							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
 						/>
 					</ErrorBoundary>
+
+					{isParentFlexBlock && (
+						<ErrorBoundary
+							fallbackRender={({ error }) => (
+								<ErrorBoundaryFallback
+									isReportingErrorCompleted={
+										isReportingErrorCompleted
+									}
+									setIsReportingErrorCompleted={
+										setIsReportingErrorCompleted
+									}
+									from={'extension'}
+									error={error}
+									configId={'flexChildConfig'}
+									title={__('Flex Child', 'blockera')}
+									icon={<Icon icon="extension-flex-child" />}
+								/>
+							)}
+						>
+							<FlexChildExtension
+								block={block}
+								extensionConfig={flexChildConfig}
+								values={{
+									blockeraFlexChildAlign:
+										currentStateAttributes.blockeraFlexChildAlign,
+									blockeraFlexChildSizing:
+										currentStateAttributes.blockeraFlexChildSizing,
+									blockeraFlexChildGrow:
+										currentStateAttributes.blockeraFlexChildGrow,
+									blockeraFlexChildShrink:
+										currentStateAttributes.blockeraFlexChildShrink,
+									blockeraFlexChildBasis:
+										currentStateAttributes.blockeraFlexChildBasis,
+									blockeraFlexChildOrder:
+										currentStateAttributes.blockeraFlexChildOrder,
+									blockeraFlexChildOrderCustom:
+										currentStateAttributes.blockeraFlexChildOrderCustom,
+									blockeraFlexDirection: parentFlexDirection,
+								}}
+								attributes={{
+									blockeraFlexChildSizing:
+										attributes.blockeraFlexChildSizing,
+									blockeraFlexChildGrow:
+										attributes.blockeraFlexChildGrow,
+									blockeraFlexChildShrink:
+										attributes.blockeraFlexChildShrink,
+									blockeraFlexChildBasis:
+										attributes.blockeraFlexChildBasis,
+									blockeraFlexChildAlign:
+										attributes.blockeraFlexChildAlign,
+									blockeraFlexChildOrder:
+										attributes.blockeraFlexChildOrder,
+									blockeraFlexChildOrderCustom:
+										attributes.blockeraFlexChildOrderCustom,
+								}}
+								extensionProps={{
+									blockeraFlexChildSizing: {},
+									blockeraFlexChildGrow: {},
+									blockeraFlexChildShrink: {},
+									blockeraFlexChildBasis: {},
+									blockeraFlexChildAlign: {},
+									blockeraFlexChildOrder: {},
+									blockeraFlexChildOrderCustom: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+						</ErrorBoundary>
+					)}
+
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
 							<ErrorBoundaryFallback
@@ -468,6 +623,7 @@ export const MappedExtensions = ({
 								blockeraBackground: {},
 								blockeraBackgroundColor: {},
 								blockeraBackgroundClip: {},
+								blockeraBlendMode: {},
 							}}
 							values={{
 								blockeraBackground:
@@ -476,6 +632,8 @@ export const MappedExtensions = ({
 									currentStateAttributes?.blockeraBackgroundColor,
 								blockeraBackgroundClip:
 									currentStateAttributes?.blockeraBackgroundClip,
+								blockeraBlendMode:
+									currentStateAttributes.blockeraBlendMode,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							attributes={{
@@ -485,6 +643,7 @@ export const MappedExtensions = ({
 									attributes.blockeraBackgroundColor,
 								blockeraBackgroundClip:
 									attributes.blockeraBackgroundClip,
+								blockeraBlendMode: attributes.blockeraBlendMode,
 							}}
 						/>
 					</ErrorBoundary>
@@ -546,7 +705,11 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
-								blockFeatures: additional.blockFeatures,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
@@ -554,130 +717,6 @@ export const MappedExtensions = ({
 							}}
 						/>
 					</SlotFillProvider>
-
-					{isParentFlexBlock && (
-						<ErrorBoundary
-							fallbackRender={({ error }) => (
-								<ErrorBoundaryFallback
-									isReportingErrorCompleted={
-										isReportingErrorCompleted
-									}
-									setIsReportingErrorCompleted={
-										setIsReportingErrorCompleted
-									}
-									from={'extension'}
-									error={error}
-									configId={'flexChildConfig'}
-									title={__('Flex Child', 'blockera')}
-									icon={<Icon icon="extension-flex-child" />}
-								/>
-							)}
-						>
-							<FlexChildExtension
-								block={block}
-								extensionConfig={flexChildConfig}
-								values={{
-									blockeraFlexChildAlign:
-										currentStateAttributes.blockeraFlexChildAlign,
-									blockeraFlexChildSizing:
-										currentStateAttributes.blockeraFlexChildSizing,
-									blockeraFlexChildGrow:
-										currentStateAttributes.blockeraFlexChildGrow,
-									blockeraFlexChildShrink:
-										currentStateAttributes.blockeraFlexChildShrink,
-									blockeraFlexChildBasis:
-										currentStateAttributes.blockeraFlexChildBasis,
-									blockeraFlexChildOrder:
-										currentStateAttributes.blockeraFlexChildOrder,
-									blockeraFlexChildOrderCustom:
-										currentStateAttributes.blockeraFlexChildOrderCustom,
-									blockeraFlexDirection: parentFlexDirection,
-								}}
-								attributes={{
-									blockeraFlexChildSizing:
-										attributes.blockeraFlexChildSizing,
-									blockeraFlexChildGrow:
-										attributes.blockeraFlexChildGrow,
-									blockeraFlexChildShrink:
-										attributes.blockeraFlexChildShrink,
-									blockeraFlexChildBasis:
-										attributes.blockeraFlexChildBasis,
-									blockeraFlexChildAlign:
-										attributes.blockeraFlexChildAlign,
-									blockeraFlexChildOrder:
-										attributes.blockeraFlexChildOrder,
-									blockeraFlexChildOrderCustom:
-										attributes.blockeraFlexChildOrderCustom,
-								}}
-								extensionProps={{
-									blockeraFlexChildSizing: {},
-									blockeraFlexChildGrow: {},
-									blockeraFlexChildShrink: {},
-									blockeraFlexChildBasis: {},
-									blockeraFlexChildAlign: {},
-									blockeraFlexChildOrder: {},
-									blockeraFlexChildOrderCustom: {},
-								}}
-								handleOnChangeAttributes={
-									handleOnChangeAttributes
-								}
-								setSettings={handleOnChangeSettings}
-							/>
-						</ErrorBoundary>
-					)}
-
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
-								configId={'layoutConfig'}
-								title={__('Layout', 'blockera')}
-								icon={<Icon icon="extension-layout" />}
-							/>
-						)}
-					>
-						<LayoutExtension
-							block={block}
-							extensionConfig={layoutConfig}
-							extensionProps={{
-								blockeraDisplay: {},
-								blockeraFlexLayout: {},
-								blockeraGap: {},
-								blockeraFlexWrap: {},
-								blockeraAlignContent: {},
-							}}
-							values={{
-								blockeraDisplay:
-									currentStateAttributes.blockeraDisplay,
-								blockeraFlexLayout:
-									currentStateAttributes.blockeraFlexLayout,
-								blockeraGap: currentStateAttributes.blockeraGap,
-								blockeraFlexWrap:
-									currentStateAttributes.blockeraFlexWrap,
-								blockeraAlignContent:
-									currentStateAttributes.blockeraAlignContent,
-							}}
-							attributes={{
-								blockeraDisplay: attributes.blockeraDisplay,
-								blockeraFlexLayout:
-									attributes.blockeraFlexLayout,
-								blockeraGap: attributes.blockeraGap,
-								blockeraFlexWrap: attributes.blockeraFlexWrap,
-								blockeraAlignContent:
-									attributes.blockeraAlignContent,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
-					</ErrorBoundary>
 
 					<ErrorBoundary
 						fallbackRender={({ error }) => (
@@ -827,7 +866,6 @@ export const MappedExtensions = ({
 								blockeraTransition: {},
 								blockeraFilter: {},
 								blockeraBackdropFilter: {},
-								blockeraBlendMode: {},
 								blockeraDivider: {},
 								blockeraMask: {},
 							}}
@@ -852,8 +890,6 @@ export const MappedExtensions = ({
 									currentStateAttributes.blockeraFilter,
 								blockeraBackdropFilter:
 									currentStateAttributes.blockeraBackdropFilter,
-								blockeraBlendMode:
-									currentStateAttributes.blockeraBlendMode,
 								blockeraDivider:
 									currentStateAttributes.blockeraDivider,
 								blockeraMask:
@@ -877,7 +913,6 @@ export const MappedExtensions = ({
 								blockeraFilter: attributes.blockeraFilter,
 								blockeraBackdropFilter:
 									attributes.blockeraBackdropFilter,
-								blockeraBlendMode: attributes.blockeraBlendMode,
 								blockeraDivider: attributes.blockeraDivider,
 								blockeraMask: attributes.blockeraMask,
 							}}
@@ -930,7 +965,11 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
-								blockFeatures: additional.blockFeatures,
+								activeSearchMode: Boolean(
+									searchQuery && searchQuery.trim()
+								),
+								blockFeatures:
+									filteredAdditional?.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
 								handleOnChangeAttributes,
@@ -954,6 +993,7 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
+								activeSearchMode,
 								blockFeatures: additional.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
@@ -1039,6 +1079,7 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
+								activeSearchMode,
 								blockFeatures: additional.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,
@@ -1127,6 +1168,7 @@ export const MappedExtensions = ({
 								settings,
 								attributes,
 								useBlockSection,
+								activeSearchMode,
 								blockFeatures: additional.blockFeatures,
 								currentStateAttributes,
 								handleOnChangeSettings,

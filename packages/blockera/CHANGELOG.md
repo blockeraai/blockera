@@ -1,9 +1,19 @@
 ## Unreleased
 
 ### New Features
+- Added full compatibility with the Create Block Theme plugin, allowing you to create and export custom themes while keeping all your Blockera styling intact.
+- Improved how Blockera works with theme creation tools, ensuring your custom designs are properly saved when creating child themes, cloning themes, or starting fresh with blank themes.
+- Enhanced theme style variations support, making it easier to create and save different style options for your theme directly from the editor.
 - Added a new system to manage plugin features that works seamlessly between your website (server) and browser (client), making the plugin more flexible and easier to customize.
 - Improved plugin stability and performance by ensuring only one instance of core functionality runs at a time, preventing potential conflicts and reducing memory usage.
 - Enhanced WordPress's built-in design tools by adding support for global styles and theme customization, making it easier to style your entire website consistently with just a few clicks.
+
+### Improvements
+- Improved how theme data is exported to ensure better compatibility with other plugins and tools.
+- Enhanced the connection between Blockera and the Create Block Theme plugin for smoother theme creation.
+- Streamlined the theme export process to work more reliably across different setups.
+- Improved how style variations are created and saved when using theme creation tools.
+- Added automatic detection and setup for compatible plugins to ensure they work together seamlessly.
 
 ## 1.3.3 (2025-07-16)
 

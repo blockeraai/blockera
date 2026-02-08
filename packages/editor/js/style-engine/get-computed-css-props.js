@@ -32,7 +32,7 @@ import type {
 	TStates,
 } from '../extensions/libs/block-card/block-states/types';
 import { appendBlockeraPrefix } from './utils';
-import { getBaseBreakpoint, isBaseBreakpoint } from '../canvas-editor';
+import { getBaseBreakpoint, isBaseBreakpoint } from '../editor/header-ui';
 import { isBlock } from '../extensions/libs/block-card/inner-blocks/utils';
 import type { InnerBlockType } from '../extensions/libs/block-card/inner-blocks/types';
 import background from '../schemas/block-supports/background-block-supports-list.json';
@@ -262,6 +262,8 @@ export const getComputedCssProps = ({
 											content: stateItem?.content || '',
 										},
 									},
+									className:
+										params?.attributes?.className || '',
 								},
 							},
 							disabledStyles,
@@ -311,6 +313,8 @@ export const getComputedCssProps = ({
 												},
 											}
 										: {}),
+									className:
+										params?.attributes?.className || '',
 								},
 								currentBlock: blockType,
 								device: breakpointType,
@@ -356,6 +360,7 @@ export const getComputedCssProps = ({
 								blockType
 							]?.attributes || {}),
 							...attributes,
+							className: params?.attributes?.className || '',
 						},
 						currentBlock: blockType,
 						device,

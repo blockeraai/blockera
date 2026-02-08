@@ -25,6 +25,7 @@ import { isShowField, isActiveExtension } from '../../api/utils';
 import { generateExtensionId } from '../utils';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TPositionExtensionProps } from './types/position-extension-props';
 
 export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
@@ -36,6 +37,7 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 	extensionProps,
 }: TPositionExtensionProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('positionConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -47,15 +49,15 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 		attributes.blockeraPosition.default
 	);
 
-	if (!isShownPosition) {
-		return <></>;
-	}
-
 	const isShownZIndex = isShowField(
 		extensionConfig.blockeraZIndex,
 		values?.blockeraZIndex,
 		attributes.blockeraZIndex.default
 	);
+
+	if (!isShownPosition && !isShownZIndex) {
+		return <></>;
+	}
 
 	return (
 		<PanelBodyControl
@@ -97,56 +99,57 @@ export const PositionExtension: ComponentType<TPositionExtensionProps> = ({
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
 
-			{values?.blockeraPosition?.type !== '' &&
+			{((values?.blockeraPosition?.type !== '' &&
 				values?.blockeraPosition?.type !== undefined &&
-				values?.blockeraPosition?.type !== 'static' && (
-					<EditorFeatureWrapper
-						isActive={isShownZIndex}
-						config={extensionConfig.blockeraZIndex}
+				values?.blockeraPosition?.type !== 'static') ||
+				activeSearchMode) && (
+				<EditorFeatureWrapper
+					isActive={isShownZIndex}
+					config={extensionConfig.blockeraZIndex}
+				>
+					<ControlContextProvider
+						value={{
+							name: generateExtensionId(block, 'z-index'),
+							value: values.blockeraZIndex,
+							attribute: 'blockeraZIndex',
+							blockName: block.blockName,
+						}}
 					>
-						<ControlContextProvider
-							value={{
-								name: generateExtensionId(block, 'z-index'),
-								value: values.blockeraZIndex,
-								attribute: 'blockeraZIndex',
-								blockName: block.blockName,
-							}}
-						>
-							<InputControl
-								columns="1fr 160px"
-								label={__('z-index', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								type="number"
-								unitType="z-index"
-								arrows={true}
-								defaultValue={attributes.blockeraZIndex.default}
-								onChange={(newValue, ref) =>
-									handleOnChangeAttributes(
-										'blockeraZIndex',
-										newValue,
-										{ ref }
-									)
-								}
-								{...extensionProps.blockeraZIndex}
-							/>
-						</ControlContextProvider>
-					</EditorFeatureWrapper>
-				)}
+						<InputControl
+							columns="1fr 2.5fr"
+							label={__('z-index', 'blockera')}
+							labelDescription={
+								<>
+									<p>
+										{__(
+											'Control the stacking order of blocks with z-index, a CSS property that manages the layering and overlap of components on your website.',
+											'blockera'
+										)}
+									</p>
+									<p>
+										{__(
+											'z-index is crucial for creating visually appealing layouts, especially in complex designs, allowing you to prioritize content visibility and interaction.',
+											'blockera'
+										)}
+									</p>
+								</>
+							}
+							type="number"
+							unitType="z-index"
+							arrows={true}
+							defaultValue={attributes.blockeraZIndex.default}
+							onChange={(newValue, ref) =>
+								handleOnChangeAttributes(
+									'blockeraZIndex',
+									newValue,
+									{ ref }
+								)
+							}
+							{...extensionProps.blockeraZIndex}
+						/>
+					</ControlContextProvider>
+				</EditorFeatureWrapper>
+			)}
 		</PanelBodyControl>
 	);
 };

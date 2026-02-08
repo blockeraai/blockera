@@ -35,7 +35,7 @@ import type {
 	TStates,
 	BreakpointTypes,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import unAvailableAttributes from './unavailable-attributes';
 import { useExtensionsStore } from '../use-extensions-store';
 

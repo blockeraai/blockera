@@ -39,11 +39,13 @@ export const bootstrap = (): void => {
 			attributes = backgroundFromWPCompatibility({
 				attributes,
 				blockId,
+				insideBlockInspector: blockDetail.insideBlockInspector,
 			});
 
 			attributes = backgroundColorFromWPCompatibility({
 				attributes,
 				blockAttributes,
+				insideBlockInspector: blockDetail.insideBlockInspector,
 			});
 
 			return attributes;
@@ -86,6 +88,8 @@ export const bootstrap = (): void => {
 						backgroundToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
 						})
 					);
 
@@ -95,6 +99,8 @@ export const bootstrap = (): void => {
 						backgroundColorToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
 						})
 					);
 			}

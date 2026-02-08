@@ -8,16 +8,20 @@ import { getFontSizeVAFromVarString } from '@blockera/data';
 
 export function fontSizeFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if (attributes?.blockeraFontSize?.value === '') {
 		// fontSize attribute in root always is variable
 		// medium → var(--wp--preset--font-size--medium)
 		// it should be changed to a Value Addon (variable)
-		if (attributes?.fontSize) {
+		if (attributes?.fontSize || attributes?.typography?.fontSize) {
 			const fontSizeVar = getFontSizeVAFromVarString(
-				`var:preset|font-size|${attributes?.fontSize}`
+				insideBlockInspector
+					? `var:preset|font-size|${attributes?.fontSize}`
+					: attributes?.typography?.fontSize
 			);
 
 			if (fontSizeVar) {
@@ -29,10 +33,14 @@ export function fontSizeFromWPCompatibility({
 			}
 		}
 
-		// font size is not variable
-		if (attributes?.style?.typography?.fontSize) {
+		// Check block-level style (insideBlockInspector) or global style context
+		const fontSize = insideBlockInspector
+			? attributes?.style?.typography?.fontSize
+			: attributes?.typography?.fontSize;
+
+		if (fontSize) {
 			attributes.blockeraFontSize = {
-				value: attributes?.style?.typography?.fontSize,
+				value: fontSize,
 			};
 
 			return attributes;
@@ -45,31 +53,45 @@ export function fontSizeFromWPCompatibility({
 export function fontSizeToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return {
-			fontSize: undefined,
-			style: {
-				typography: {
+		return insideBlockInspector
+			? {
 					fontSize: undefined,
-				},
-			},
-		};
+					style: {
+						typography: {
+							fontSize: undefined,
+						},
+					},
+				}
+			: {
+					typography: {
+						fontSize: undefined,
+					},
+				};
 	}
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return {
-			fontSize: newValue?.settings?.id,
-			style: {
-				typography: {
-					fontSize: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					fontSize: newValue?.settings?.id,
+					style: {
+						typography: {
+							fontSize: undefined,
+						},
+					},
+				}
+			: {
+					typography: {
+						fontSize: undefined,
+					},
+				};
 	}
 
 	// Advanced css functions not supported by core.
@@ -77,12 +99,18 @@ export function fontSizeToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return {
-		fontSize: undefined,
-		style: {
-			typography: {
-				fontSize: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				fontSize: undefined,
+				style: {
+					typography: {
+						fontSize: newValue,
+					},
+				},
+			}
+		: {
+				typography: {
+					fontSize: newValue,
+				},
+			};
 }

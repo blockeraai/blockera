@@ -20,7 +20,7 @@ return [
 		'blockType' => 'blockera/elements/link',
 		'featureId'  => 'blockera/elements/link',
 		'fallbackId' => '',
-		'expected'   => '.blockera-block.blockera-block--phggmy a:not(.wp-element-button)',
+		'expected'   => 'html:root body :where(.blockera-block.blockera-block--phggmy) a:not(.wp-element-button)',
 	],
 	// It should retrieve root selector of "blockera/elements/link" of "core/sample" block but rewrite root selector with blockera unique selector for block type.
 	[

@@ -494,7 +494,7 @@ describe('Columns Block', () => {
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
-				cy.getByAriaLabel('Column').click();
+				cy.getByAriaLabel('flex-direction: column').click();
 			});
 
 		cy.getBlock('core/columns').should(

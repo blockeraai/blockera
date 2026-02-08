@@ -7,7 +7,14 @@
 			"Blockera\\Setup\\": "php/"
 		},
 		"files": [
-			"php/functions.php"
+			"php/functions.php",
+			"php/Compatibility/rest-api-helpers.php",
+			"php/Compatibility/block-template-utils.php",
+			"php/Compatibility/Blocks/template-part.php",
+			"php/Compatibility/BlockSupports/layout.php",
+			"php/Compatibility/BlockSupports/typography.php",
+			"php/Compatibility/global-styles-and-settings.php",
+			"php/Compatibility/BlockSupports/block-style-variations.php"
 		]
 	},
 	"autoload-dev": {

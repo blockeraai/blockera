@@ -15,7 +15,7 @@ import { useMedia } from '../hooks';
  */
 import { Style } from './style';
 import type { MediaQueryProps } from './types';
-import { isBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
+import { isBaseBreakpoint } from '../../editor/header-ui';
 
 export const MediaQuery = ({
 	clientId,

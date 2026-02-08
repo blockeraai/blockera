@@ -10,9 +10,11 @@ import { getColorVAFromVarString } from '@blockera/data';
 export function backgroundColorFromWPCompatibility({
 	attributes,
 	blockAttributes,
+	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockAttributes: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if (
 		!isEquals(
@@ -32,10 +34,18 @@ export function backgroundColorFromWPCompatibility({
 			),
 		};
 	}
+
 	// style.color.background is not variable
-	else if (attributes?.style?.color?.background) {
+	else if (insideBlockInspector && attributes?.style?.color?.background) {
 		attributes.blockeraBackgroundColor = {
 			value: attributes?.style?.color?.background,
+		};
+	}
+	// color.background is not variable
+	else if (!insideBlockInspector && attributes?.color?.background) {
+		const bg = attributes?.color?.background;
+		attributes.blockeraBackgroundColor = {
+			value: bg.startsWith('var') ? getColorVAFromVarString(bg) : bg,
 		};
 	}
 
@@ -45,39 +55,59 @@ export function backgroundColorFromWPCompatibility({
 export function backgroundColorToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return {
-			backgroundColor: undefined,
-			style: {
-				color: {
-					background: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					backgroundColor: undefined,
+					style: {
+						color: {
+							background: undefined,
+						},
+					},
+				}
+			: {
+					color: {
+						background: undefined,
+					},
+				};
 	}
 
-	// is valid font-size variable
+	// is valid background color variable
 	if (isValid(newValue)) {
-		return {
-			backgroundColor: newValue?.settings?.id,
-			style: {
-				color: {
-					background: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					backgroundColor: newValue?.settings?.id,
+					style: {
+						color: {
+							background: undefined,
+						},
+					},
+				}
+			: {
+					color: {
+						background: `var:preset|color|${newValue?.settings?.id}`,
+					},
+				};
 	}
 
-	return {
-		backgroundColor: undefined,
-		style: {
-			color: {
-				background: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				backgroundColor: undefined,
+				style: {
+					color: {
+						background: newValue,
+					},
+				},
+			}
+		: {
+				color: {
+					background: newValue,
+				},
+			};
 }

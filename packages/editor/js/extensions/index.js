@@ -9,8 +9,8 @@ import { select } from '@wordpress/data';
  * Blockera dependencies
  */
 import {
+	setupCanvasSettings,
 	store as editorStore,
-	registerCanvasEditorSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
 } from '../';
 
@@ -54,7 +54,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		unstableBootstrapBlockStatesDefinitions,
 	};
 
-	registerCanvasEditorSettings({
+	setupCanvasSettings({
 		zoom: '100%',
 		width: '100%',
 		height: '100%',

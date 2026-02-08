@@ -21,7 +21,7 @@ import type {
 	TStates,
 	TBreakpoint,
 } from '../../extensions/libs/block-card/block-states/types';
-import { getBaseBreakpoint } from '../../canvas-editor';
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock, isNormalState } from '../../extensions/components';
 import { blockStatesValueCleanup } from '../../extensions/libs/block-card/block-states/helpers';
 
@@ -219,7 +219,8 @@ export const memoizedRootBreakpoints: (
 				attributes: {
 					...effectiveItems,
 					[attributeId]:
-						isEqualsWithDefault || ref?.reset
+						(isEqualsWithDefault && isNormalState(currentState)) ||
+						ref?.reset
 							? undefined
 							: newValue,
 				},

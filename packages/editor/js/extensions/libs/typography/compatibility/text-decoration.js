@@ -2,15 +2,22 @@
 
 export function textDecorationFromWPCompatibility({
 	attributes,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	const textDecoration = insideBlockInspector
+		? attributes?.style?.typography?.textDecoration
+		: attributes?.typography?.textDecoration;
+
 	if (
 		attributes?.blockeraTextDecoration?.value === '' &&
-		attributes?.style?.typography?.textDecoration !== undefined
+		textDecoration !== undefined
 	) {
 		attributes.blockeraTextDecoration = {
-			value: attributes?.style?.typography?.textDecoration,
+			value: textDecoration,
 		};
 	}
 
@@ -20,29 +27,43 @@ export function textDecorationFromWPCompatibility({
 export function textDecorationToWPCompatibility({
 	newValue,
 	ref,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector?: boolean,
 }): Object {
 	if (
 		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['underline', 'line-through', 'overline'].indexOf(newValue) === -1
 	) {
-		return {
-			style: {
-				typography: {
-					textDecoration: undefined,
-				},
-			},
-		};
+		return insideBlockInspector
+			? {
+					style: {
+						typography: {
+							textDecoration: undefined,
+						},
+					},
+				}
+			: {
+					typography: {
+						textDecoration: undefined,
+					},
+				};
 	}
 
-	return {
-		style: {
-			typography: {
-				textDecoration: newValue,
-			},
-		},
-	};
+	return insideBlockInspector
+		? {
+				style: {
+					typography: {
+						textDecoration: newValue,
+					},
+				},
+			}
+		: {
+				typography: {
+					textDecoration: newValue,
+				},
+			};
 }

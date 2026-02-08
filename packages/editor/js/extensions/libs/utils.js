@@ -15,9 +15,9 @@ import type { ControlContextRefCurrent } from '@blockera/controls';
  * Internal dependencies
  */
 import type { TBlockProps } from './types';
+import { getBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock, isNormalState } from '../components/utils';
 import type { BlockDetail } from './block-card/block-states/types';
-import { getBaseBreakpoint } from '../../canvas-editor/components/breakpoints/helpers';
 
 // import { detailedDiff } from 'deep-object-diff';
 

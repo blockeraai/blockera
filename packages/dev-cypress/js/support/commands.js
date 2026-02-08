@@ -965,4 +965,16 @@ export const registerCommands = () => {
 			}
 		}
 	);
+
+	Cypress.Commands.add('openFeatureMoreSettings', (dataTest) => {
+		cy.getByDataTest(dataTest).click();
+	});
+
+	Cypress.Commands.add('selectFeature', (featureLabel) => {
+		cy.get('.blockera-component-popover-body')
+			.last()
+			.within(() => {
+				cy.get('button').contains(featureLabel).click();
+			});
+	});
 };

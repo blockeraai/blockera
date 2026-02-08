@@ -160,6 +160,7 @@ export default function InputControl({
 				controlName={field}
 				className={className}
 				{...labelProps}
+				{...props}
 			>
 				<div
 					className={controlClassNames(
@@ -171,8 +172,9 @@ export default function InputControl({
 					)}
 				>
 					<ValueAddonControl />
-					{children}
 				</div>
+
+				{children}
 			</BaseControl>
 		);
 	}

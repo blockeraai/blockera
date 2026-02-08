@@ -9,8 +9,8 @@ import type { MixedElement, ComponentType } from 'react';
  * Blockera dependencies
  */
 import {
-	Flex,
 	Grid,
+	Flex,
 	MoreFeatures,
 	BaseControl,
 	ColorControl,
@@ -21,6 +21,7 @@ import {
 	ToggleSelectControl,
 	ControlContextProvider,
 	NoticeControl,
+	ConditionalWrapper,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
 import { isEquals } from '@blockera/utils';
@@ -46,6 +47,7 @@ import {
 } from './components';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 
 export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	block,
@@ -59,6 +61,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	attributes,
 }: TTypographyProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('typographyConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -179,7 +182,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	}
 
 	const isShowAdvanced =
-		isShowTextAlign ||
+		isShowTextShadow ||
 		isShowTextDecoration ||
 		isShowTextTransform ||
 		isShowDirection ||
@@ -195,8 +198,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 	let isAdvancedEdited = false;
 	if (isShowAdvanced) {
 		isAdvancedEdited =
-			values?.blockeraTextAlign !==
-				attributes.blockeraTextAlign.default ||
+			!isEquals(
+				values?.blockeraTextShadow,
+				attributes.blockeraTextShadow.default
+			) ||
 			values?.blockeraTextDecoration !==
 				attributes.blockeraTextDecoration.default ||
 			values?.blockeraTextTransform !==
@@ -230,20 +235,38 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 			icon={<Icon icon="extension-typography" />}
 			className={extensionClassNames('typography')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Typography Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'typographyConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Typography Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'typographyConfig');
+					}}
+				/>
+			)}
 
-			<BaseControl columns="1fr 160px" label={__('Font', 'blockera')}>
-				<Grid
-					alignItems="center"
-					gridTemplateColumns="1fr 1fr"
-					rowGap="10px"
-					columnGap="8px"
+			<ConditionalWrapper
+				condition={!activeSearchMode}
+				wrapper={(children) => (
+					<BaseControl
+						columns="1fr 2.5fr"
+						label={__('Font', 'blockera')}
+					>
+						<Grid
+							alignItems="center"
+							gridTemplateColumns="1fr 1fr"
+							rowGap="10px"
+							columnGap="8px"
+						>
+							{children}
+						</Grid>
+					</BaseControl>
+				)}
+				elseWrapper={(children) => <>{children}</>}
+			>
+				<EditorFeatureWrapper
+					isActive={isShowFontAppearance}
+					config={extensionConfig.blockeraFontAppearance}
 				>
 					<EditorFeatureWrapper
 						isActive={isShowFontFamily}
@@ -254,66 +277,81 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 							onChange={handleOnChangeAttributes}
 							value={values.blockeraFontFamily}
 							defaultValue={attributes.blockeraFontFamily.default}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
+							columns={
+								activeSearchMode ? '1fr 2.5fr' : 'columns-1'
+							}
+							className={
+								activeSearchMode
+									? ''
+									: 'control-first label-center small-gap'
+							}
+							style={
+								activeSearchMode ? undefined : { margin: '0px' }
+							}
 							{...extensionProps.blockeraFontFamily}
 						/>
 					</EditorFeatureWrapper>
 
-					<EditorFeatureWrapper
-						isActive={isShowFontAppearance}
-						config={extensionConfig.blockeraFontAppearance}
-					>
-						<FontAppearance
-							block={block}
-							onChange={handleOnChangeAttributes}
-							value={values.blockeraFontAppearance}
-							defaultValue={
-								attributes.blockeraFontAppearance.default
-							}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							{...extensionProps.blockeraFontAppearance}
-						/>
-					</EditorFeatureWrapper>
+					<FontAppearance
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontAppearance}
+						defaultValue={attributes.blockeraFontAppearance.default}
+						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						className={
+							activeSearchMode
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={activeSearchMode ? undefined : { margin: '0px' }}
+						activeSearchMode={activeSearchMode}
+						{...extensionProps.blockeraFontAppearance}
+					/>
+				</EditorFeatureWrapper>
 
-					<EditorFeatureWrapper
-						isActive={isShowFontSize}
-						config={extensionConfig.blockeraFontSize}
-					>
-						<FontSize
-							block={block}
-							onChange={handleOnChangeAttributes}
-							value={values.blockeraFontSize}
-							defaultValue={attributes.blockeraFontSize.default}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							size="small"
-							{...extensionProps.blockeraFontSize}
-						/>
-					</EditorFeatureWrapper>
+				<EditorFeatureWrapper
+					isActive={isShowFontSize}
+					config={extensionConfig.blockeraFontSize}
+				>
+					<FontSize
+						block={block}
+						onChange={handleOnChangeAttributes}
+						value={values.blockeraFontSize}
+						defaultValue={attributes.blockeraFontSize.default}
+						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						className={
+							activeSearchMode
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={activeSearchMode ? undefined : { margin: '0px' }}
+						size={activeSearchMode ? 'normal' : 'small'}
+						{...extensionProps.blockeraFontSize}
+					/>
+				</EditorFeatureWrapper>
 
-					<EditorFeatureWrapper
-						isActive={isShowLineHeight}
-						config={extensionConfig.blockeraLineHeight}
-					>
-						<LineHeight
-							block={block}
-							value={values.blockeraLineHeight}
-							onChange={handleOnChangeAttributes}
-							defaultValue={attributes.blockeraLineHeight.default}
-							columns="columns-1"
-							className="control-first label-center small-gap"
-							style={{ margin: '0px' }}
-							size="small"
-							{...extensionProps.blockeraLineHeight}
-						/>
-					</EditorFeatureWrapper>
-				</Grid>
-			</BaseControl>
+				<EditorFeatureWrapper
+					isActive={isShowLineHeight}
+					config={extensionConfig.blockeraLineHeight}
+				>
+					<LineHeight
+						block={block}
+						value={values.blockeraLineHeight}
+						onChange={handleOnChangeAttributes}
+						defaultValue={attributes.blockeraLineHeight.default}
+						columns={activeSearchMode ? '1fr 2.5fr' : 'columns-1'}
+						className={
+							activeSearchMode
+								? ''
+								: 'control-first label-center small-gap'
+						}
+						style={activeSearchMode ? undefined : { margin: '0px' }}
+						size={activeSearchMode ? 'normal' : 'small'}
+						activeSearchMode={activeSearchMode}
+						{...extensionProps.blockeraLineHeight}
+					/>
+				</EditorFeatureWrapper>
+			</ConditionalWrapper>
 
 			<EditorFeatureWrapper
 				isActive={isShowFontColor}
@@ -340,7 +378,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									</p>
 								</>
 							}
-							columns="1fr 160px"
+							columns="1fr 2.5fr"
 							defaultValue={attributes.blockeraFontColor.default}
 							onChange={(newValue, ref) =>
 								handleOnChangeAttributes(
@@ -371,320 +409,278 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 			</EditorFeatureWrapper>
 
 			<EditorFeatureWrapper
-				isActive={isShowTextShadow}
-				config={extensionConfig.blockeraTextShadow}
+				isActive={isShowTextAlign}
+				config={extensionConfig.blockeraTextAlign}
 			>
 				<ControlContextProvider
 					value={{
-						name: generateExtensionId(block, 'text-shadow'),
-						value: values.blockeraTextShadow,
-						attribute: 'blockeraTextShadow',
+						name: generateExtensionId(block, 'text-align'),
+						value: values.blockeraTextAlign,
+						attribute: 'blockeraTextAlign',
 						blockName: block.blockName,
 					}}
-					storeName={'blockera/controls/repeater'}
 				>
-					<BaseControl controlName="text-shadow" columns="columns-1">
-						<TextShadowControl
-							label={__('Text Shadows', 'blockera')}
-							onChange={(newValue, ref) =>
-								handleOnChangeAttributes(
-									'blockeraTextShadow',
-									newValue,
-									{ ref }
-								)
-							}
-							defaultValue={attributes.blockeraTextShadow.default}
-							{...extensionProps.blockeraTextShadow}
-						/>
-					</BaseControl>
+					<ToggleSelectControl
+						columns="1fr 2.5fr"
+						label={__('Text Align', 'blockera')}
+						labelDescription={
+							<>
+								<p>
+									{__(
+										'It sets the horizontal alignment of text within the block, offering alignment options like left, right, center, and justify.',
+										'blockera'
+									)}
+								</p>
+							</>
+						}
+						options={[
+							{
+								label: __('Left', 'blockera'),
+								value: 'left',
+								icon: (
+									<Icon
+										icon="text-align-left"
+										iconSize="18"
+									/>
+								),
+							},
+							{
+								label: __('Center', 'blockera'),
+								value: 'center',
+								icon: (
+									<Icon
+										icon="text-align-center"
+										iconSize="18"
+									/>
+								),
+							},
+							{
+								label: __('Right', 'blockera'),
+								value: 'right',
+								icon: (
+									<Icon
+										icon="text-align-right"
+										iconSize="18"
+									/>
+								),
+							},
+							{
+								label: __('Justify', 'blockera'),
+								value: 'justify',
+								icon: (
+									<Icon
+										icon="text-align-justify"
+										iconSize="18"
+									/>
+								),
+							},
+							{
+								label: __('None', 'blockera'),
+								value: 'initial',
+								icon: (
+									<Icon
+										library="wp"
+										icon="close-small"
+										iconSize="18"
+									/>
+								),
+							},
+						]}
+						isDeselectable={true}
+						defaultValue={attributes.blockeraTextAlign.default}
+						onChange={(newValue, ref) =>
+							handleOnChangeAttributes(
+								'blockeraTextAlign',
+								newValue,
+								{ ref }
+							)
+						}
+						{...extensionProps.blockeraTextAlign}
+					/>
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
 
-			{isShowAdvanced && (
-				<MoreFeatures
-					ariaLabel={__('More typography settings', 'blockera')}
-					isOpen={false}
-					isChanged={isAdvancedEdited}
-					isAnimated={true}
-				>
-					{(isShowTextAlign ||
-						isShowTextDecoration ||
-						isShowTextTransform ||
-						isShowDirection) && (
-						<BaseControl controlName="style" columns="columns-1">
-							<EditorFeatureWrapper
-								isActive={isShowTextAlign}
-								config={extensionConfig.blockeraTextAlign}
-							>
-								<ControlContextProvider
-									value={{
-										name: generateExtensionId(
-											block,
-											'text-align'
-										),
-										value: values.blockeraTextAlign,
-										attribute: 'blockeraTextAlign',
-										blockName: block.blockName,
-									}}
-								>
-									<ToggleSelectControl
-										columns="columns-1"
-										className="control-first label-center small-gap"
-										label={__('Text Align', 'blockera')}
-										labelDescription={
-											<>
-												<p>
-													{__(
-														'It sets the horizontal alignment of text within the block, offering alignment options like left, right, center, and justify.',
-														'blockera'
-													)}
-												</p>
-											</>
-										}
-										options={[
-											{
-												label: __('Left', 'blockera'),
-												value: 'left',
-												icon: (
-													<Icon
-														icon="text-align-left"
-														iconSize="18"
-													/>
-												),
-											},
-											{
-												label: __('Center', 'blockera'),
-												value: 'center',
-												icon: (
-													<Icon
-														icon="text-align-center"
-														iconSize="18"
-													/>
-												),
-											},
-											{
-												label: __('Right', 'blockera'),
-												value: 'right',
-												icon: (
-													<Icon
-														icon="text-align-right"
-														iconSize="18"
-													/>
-												),
-											},
-											{
-												label: __(
-													'Justify',
-													'blockera'
-												),
-												value: 'justify',
-												icon: (
-													<Icon
-														icon="text-align-justify"
-														iconSize="18"
-													/>
-												),
-											},
-											{
-												label: __('None', 'blockera'),
-												value: 'initial',
-												icon: (
-													<Icon
-														library="wp"
-														icon="close-small"
-														iconSize="18"
-													/>
-												),
-											},
-										]}
-										isDeselectable={true}
-										defaultValue={
-											attributes.blockeraTextAlign.default
-										}
-										onChange={(newValue, ref) =>
-											handleOnChangeAttributes(
-												'blockeraTextAlign',
-												newValue,
-												{ ref }
-											)
-										}
-										{...extensionProps.blockeraTextAlign}
-									/>
-								</ControlContextProvider>
-							</EditorFeatureWrapper>
-
-							{isShowTextTransform && (
-								<EditorFeatureWrapper
-									isActive={isShowTextTransform}
-									config={
-										extensionConfig.blockeraTextTransform
-									}
-								>
-									<TextTransform
-										block={block}
-										value={values.blockeraTextTransform}
-										defaultValue={
-											attributes.blockeraTextTransform
-												.default
-										}
-										onChange={handleOnChangeAttributes}
-										{...extensionProps.blockeraTextTransform}
-									/>
-								</EditorFeatureWrapper>
+			{(isShowAdvanced || activeSearchMode) && (
+				<ConditionalWrapper
+					condition={!activeSearchMode}
+					wrapper={(children) => (
+						<MoreFeatures
+							ariaLabel={__(
+								'More typography settings',
+								'blockera'
 							)}
-
-							{(isShowTextDecoration || isShowDirection) && (
-								<Flex direction="row" gap="10px">
-									<div style={{ width: '70%' }}>
-										<EditorFeatureWrapper
-											isActive={isShowTextDecoration}
-											config={
-												extensionConfig.blockeraTextDecoration
-											}
-										>
-											<TextDecoration
-												block={block}
-												value={
-													values.blockeraTextDecoration
-												}
-												defaultValue={
-													attributes
-														.blockeraTextDecoration
-														.default
-												}
-												onChange={
-													handleOnChangeAttributes
-												}
-												{...extensionProps.blockeraTextDecoration}
-											/>
-										</EditorFeatureWrapper>
-									</div>
-
-									<div style={{ width: '40%' }}>
-										<EditorFeatureWrapper
-											isActive={isShowDirection}
-											config={
-												extensionConfig.blockeraDirection
-											}
-										>
-											<ControlContextProvider
-												value={{
-													name: generateExtensionId(
-														block,
-														'direction'
-													),
-													value: values.blockeraDirection,
-													attribute:
-														'blockeraDirection',
-													blockName: block.blockName,
-												}}
-											>
-												<ToggleSelectControl
-													label={__(
-														'Direction',
-														'blockera'
-													)}
-													labelPopoverTitle={__(
-														'Text Direction',
-														'blockera'
-													)}
-													labelProps={{
-														iconPosition: 'start',
-													}}
-													labelDescription={
-														<>
-															<p>
-																{__(
-																	'It sets the text direction and layout directionality of block.',
-																	'blockera'
-																)}
-															</p>
-															<h3>
-																<Icon
-																	icon="direction-ltr"
-																	iconSize="18"
-																/>
-																{__(
-																	'Left To Right (LTR)',
-																	'blockera'
-																)}
-															</h3>
-															<p>
-																{__(
-																	'Sets the direction of text from left to right, used for languages written in this manner.',
-																	'blockera'
-																)}
-															</p>
-															<h3>
-																<Icon
-																	icon="direction-rtl"
-																	iconSize="18"
-																/>
-																{__(
-																	'Right To Left (RTL)',
-																	'blockera'
-																)}
-															</h3>
-															<p>
-																{__(
-																	'Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
-																	'blockera'
-																)}
-															</p>
-														</>
-													}
-													columns="columns-1"
-													className="control-first label-center small-gap"
-													options={[
-														{
-															label: __(
-																'Left to Right',
-																'blockera'
-															),
-															value: 'ltr',
-															icon: (
-																<Icon
-																	icon="direction-ltr"
-																	iconSize="18"
-																/>
-															),
-														},
-														{
-															label: __(
-																'Right to Left',
-																'blockera'
-															),
-															value: 'rtl',
-															icon: (
-																<Icon
-																	icon="direction-rtl"
-																	iconSize="18"
-																/>
-															),
-														},
-													]}
-													isDeselectable={true}
-													defaultValue={
-														attributes
-															.blockeraDirection
-															.default
-													}
-													onChange={(newValue, ref) =>
-														handleOnChangeAttributes(
-															'blockeraDirection',
-															newValue,
-															{ ref }
-														)
-													}
-													{...extensionProps.blockeraDirection}
-												/>
-											</ControlContextProvider>
-										</EditorFeatureWrapper>
-									</div>
-								</Flex>
-							)}
-						</BaseControl>
+							isOpen={false}
+							isChanged={isAdvancedEdited}
+							isAnimated={true}
+						>
+							{children}
+						</MoreFeatures>
 					)}
+					elseWrapper={(children) => <>{children}</>}
+				>
+					<EditorFeatureWrapper
+						isActive={isShowTextShadow}
+						config={extensionConfig.blockeraTextShadow}
+					>
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'text-shadow'),
+								value: values.blockeraTextShadow,
+								attribute: 'blockeraTextShadow',
+								blockName: block.blockName,
+							}}
+							storeName={'blockera/controls/repeater'}
+						>
+							<BaseControl
+								controlName="text-shadow"
+								columns="columns-1"
+							>
+								<TextShadowControl
+									label={__('Text Shadows', 'blockera')}
+									onChange={(newValue, ref) =>
+										handleOnChangeAttributes(
+											'blockeraTextShadow',
+											newValue,
+											{ ref }
+										)
+									}
+									defaultValue={
+										attributes.blockeraTextShadow.default
+									}
+									{...extensionProps.blockeraTextShadow}
+								/>
+							</BaseControl>
+						</ControlContextProvider>
+					</EditorFeatureWrapper>
+
+					<EditorFeatureWrapper
+						isActive={isShowTextTransform}
+						config={extensionConfig.blockeraTextTransform}
+					>
+						<TextTransform
+							block={block}
+							value={values.blockeraTextTransform}
+							defaultValue={
+								attributes.blockeraTextTransform.default
+							}
+							onChange={handleOnChangeAttributes}
+							{...extensionProps.blockeraTextTransform}
+						/>
+					</EditorFeatureWrapper>
+
+					<EditorFeatureWrapper
+						isActive={isShowTextDecoration}
+						config={extensionConfig.blockeraTextDecoration}
+					>
+						<TextDecoration
+							block={block}
+							value={values.blockeraTextDecoration}
+							defaultValue={
+								attributes.blockeraTextDecoration.default
+							}
+							onChange={handleOnChangeAttributes}
+							{...extensionProps.blockeraTextDecoration}
+						/>
+					</EditorFeatureWrapper>
+
+					<EditorFeatureWrapper
+						isActive={isShowDirection}
+						config={extensionConfig.blockeraDirection}
+					>
+						<ControlContextProvider
+							value={{
+								name: generateExtensionId(block, 'direction'),
+								value: values.blockeraDirection,
+								attribute: 'blockeraDirection',
+								blockName: block.blockName,
+							}}
+						>
+							<ToggleSelectControl
+								label={__('Direction', 'blockera')}
+								labelPopoverTitle={__(
+									'Text Direction',
+									'blockera'
+								)}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'It sets the text direction and layout directionality of block.',
+												'blockera'
+											)}
+										</p>
+										<h3>
+											<Icon
+												icon="direction-ltr"
+												iconSize="18"
+											/>
+											{__(
+												'Left To Right (LTR)',
+												'blockera'
+											)}
+										</h3>
+										<p>
+											{__(
+												'Sets the direction of text from left to right, used for languages written in this manner.',
+												'blockera'
+											)}
+										</p>
+										<h3>
+											<Icon
+												icon="direction-rtl"
+												iconSize="18"
+											/>
+											{__(
+												'Right To Left (RTL)',
+												'blockera'
+											)}
+										</h3>
+										<p>
+											{__(
+												'Sets the direction from right to left, essential for languages such as Arabic, Farsi and Hebrew.',
+												'blockera'
+											)}
+										</p>
+									</>
+								}
+								columns="1fr 2.5fr"
+								options={[
+									{
+										label: __('Left to Right', 'blockera'),
+										value: 'ltr',
+										icon: (
+											<Icon
+												icon="direction-ltr"
+												iconSize="18"
+											/>
+										),
+									},
+									{
+										label: __('Right to Left', 'blockera'),
+										value: 'rtl',
+										icon: (
+											<Icon
+												icon="direction-rtl"
+												iconSize="18"
+											/>
+										),
+									},
+								]}
+								isDeselectable={true}
+								defaultValue={
+									attributes.blockeraDirection.default
+								}
+								onChange={(newValue, ref) =>
+									handleOnChangeAttributes(
+										'blockeraDirection',
+										newValue,
+										{ ref }
+									)
+								}
+								{...extensionProps.blockeraDirection}
+							/>
+						</ControlContextProvider>
+					</EditorFeatureWrapper>
 
 					<EditorFeatureWrapper
 						isActive={isShowTextOrientation}
@@ -711,10 +707,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 												'blockera'
 											)}
 										</p>
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -724,6 +717,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-1"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical LR Mixed',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -731,12 +728,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -746,6 +740,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-2"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical RL Mixed',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -753,12 +751,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -768,6 +763,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-3"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical LR Upright',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -775,12 +774,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '5px',
@@ -790,6 +786,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="text-orientation-style-4"
 													iconSize="18"
 												/>
+												{__(
+													'Vertical RL Upright',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -797,12 +797,9 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 
-										<Grid
-											gap="10px"
-											gridTemplateColumns="20px 1fr"
-										>
+										<Flex gap="10px" direction="column">
 											<h3
 												style={{
 													paddingTop: '2px',
@@ -813,6 +810,10 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													icon="close-small"
 													iconSize="18"
 												/>
+												{__(
+													'No text orientation',
+													'blockera'
+												)}
 											</h3>
 											<p>
 												{__(
@@ -820,14 +821,14 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 													'blockera'
 												)}
 											</p>
-										</Grid>
+										</Flex>
 									</>
 								}
-								columns="1fr 150px"
+								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __(
-											'Text will display vertically from left to right with a mixed orientation',
+											'Vertical LR Mixed',
 											'blockera'
 										),
 										value: 'style-1',
@@ -840,7 +841,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									},
 									{
 										label: __(
-											'Text will display vertically from right to left with a mixed orientation',
+											'Vertical RL Mixed',
 											'blockera'
 										),
 										value: 'style-2',
@@ -853,7 +854,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									},
 									{
 										label: __(
-											'Text will appear vertically from left to right with an upright orientation',
+											'Vertical LR Upright',
 											'blockera'
 										),
 										value: 'style-3',
@@ -866,7 +867,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									},
 									{
 										label: __(
-											'Text will appear vertically from right to left with an upright orientation',
+											'Vertical RL Upright',
 											'blockera'
 										),
 										value: 'style-4',
@@ -911,10 +912,18 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 					{(isShowLetterSpacing ||
 						isShowWordSpacing ||
 						isShowTextIndent) && (
-						<BaseControl
-							controlName="spacing"
-							label={__('Spacing', 'blockera')}
-							columns="1fr 150px"
+						<ConditionalWrapper
+							condition={!activeSearchMode}
+							wrapper={(children) => (
+								<BaseControl
+									controlName="spacing"
+									label={__('Spacing', 'blockera')}
+									columns="1fr 2.5fr"
+								>
+									{children}
+								</BaseControl>
+							)}
+							elseWrapper={(children) => <>{children}</>}
 						>
 							<EditorFeatureWrapper
 								isActive={isShowLetterSpacing}
@@ -927,6 +936,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									defaultValue={
 										attributes.blockeraLetterSpacing.default
 									}
+									activeSearchMode={activeSearchMode}
 									{...extensionProps.blockeraLetterSpacing}
 								/>
 							</EditorFeatureWrapper>
@@ -947,8 +957,19 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									}}
 								>
 									<InputControl
-										columns="2fr 2fr"
-										label={__('Words', 'blockera')}
+										columns={
+											activeSearchMode
+												? '1fr 2.5fr'
+												: '2fr 2fr'
+										}
+										label={
+											activeSearchMode
+												? __(
+														'Words Spacing',
+														'blockera'
+													)
+												: __('Words', 'blockera')
+										}
 										labelPopoverTitle={__(
 											'Words Spacing',
 											'blockera'
@@ -997,7 +1018,11 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									}}
 								>
 									<InputControl
-										columns="2fr 2fr"
+										columns={
+											activeSearchMode
+												? '1fr 2.5fr'
+												: '2fr 2fr'
+										}
 										label={__('Text Indent', 'blockera')}
 										labelDescription={
 											<>
@@ -1026,7 +1051,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 									/>
 								</ControlContextProvider>
 							</EditorFeatureWrapper>
-						</BaseControl>
+						</ConditionalWrapper>
 					)}
 
 					<EditorFeatureWrapper
@@ -1140,7 +1165,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 										</p>
 									</>
 								}
-								columns="1fr 150px"
+								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __('Default', 'blockera'),
@@ -1280,7 +1305,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 										</p>
 									</>
 								}
-								columns="1fr 150px"
+								columns="1fr 2.5fr"
 								options={[
 									{
 										label: __('Normal', 'blockera'),
@@ -1353,7 +1378,7 @@ export const TypographyExtension: ComponentType<TTypographyProps> = ({
 							/>
 						</ControlContextProvider>
 					</EditorFeatureWrapper>
-				</MoreFeatures>
+				</ConditionalWrapper>
 			)}
 		</PanelBodyControl>
 	);

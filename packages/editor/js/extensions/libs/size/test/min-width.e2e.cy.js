@@ -21,7 +21,7 @@ describe('Min Width → Functionality', () => {
 		// activate min width
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
 
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.get('input').type(10);
 		});
 
@@ -48,7 +48,7 @@ describe('Min Width → Functionality', () => {
 		cy.activateMoreSettingsItem('More Size Settings', 'Min Width');
 
 		// open value addon
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.openValueAddon();
 		});
 

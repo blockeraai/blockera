@@ -207,7 +207,7 @@ export function getVars(queries: string): Array<string> {
 /**
  * Replacing variable values on block selector.
  *
- * @param {Object} params the parameters to replace variables (Like: {{BLOCK_ID}}, {{className}}) of block selector.
+ * @param {Object} params the parameters to replace variables (Like: {{UNIQUE_CLASSNAME}}, {{className}}) of block selector.
  * @return {string|string} the block selector with variable values.
  */
 export const replaceVariablesValue = (params: {
@@ -233,12 +233,17 @@ export const replaceVariablesValue = (params: {
 		return '';
 	}
 
-	if (className) {
-		selector = selector.replace(/{{className}}/g, `.${className}`);
+	// Normalizing class name to be used as a css selector ...
+	let _class = className?.replace(/\s/g, '.') || '';
+	if (_class) {
+		_class = `.${_class}`;
+	} else {
+		_class = `#block-${clientId}`;
 	}
-	if (clientId) {
-		selector = selector.replace(/{{BLOCK_ID}}/g, `#block-${clientId}`);
-	}
+
+	selector = selector
+		.replace(/{{UNIQUE_CLASSNAME}}/g, _class)
+		.replace(/{{className}}/g, _class);
 
 	return selector;
 };

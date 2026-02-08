@@ -26,6 +26,7 @@ import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { EditorFeatureWrapper } from '../../../';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 import type { TFlexChildProps } from './types/flex-child-props';
 
 export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
@@ -38,6 +39,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 	attributes,
 }: TFlexChildProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('flexChildConfig');
+	const { activeSearchMode } = useFeatureSearch();
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -99,12 +101,14 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 			icon={<Icon icon="extension-flex-child" />}
 			className={extensionClassNames('flex-child')}
 		>
-			<ExtensionSettings
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'flexChildConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'flexChildConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowFlexChildSizing}
@@ -119,7 +123,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 					}}
 				>
 					<ToggleSelectControl
-						columns="1fr 2.65fr"
+						columns="1fr 2.5fr"
 						label={__('Self Size', 'blockera')}
 						options={[
 							{
@@ -658,7 +662,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 					}}
 				>
 					<ToggleSelectControl
-						columns="1fr 2.65fr"
+						columns="1fr 2.5fr"
 						label={__('Self Align', 'blockera')}
 						options={[
 							{
@@ -827,7 +831,7 @@ export const FlexChildExtension: ComponentType<TFlexChildProps> = ({
 					}}
 				>
 					<ToggleSelectControl
-						columns="1fr 2.65fr"
+						columns="1fr 2.5fr"
 						label={__('Self Order', 'blockera')}
 						options={[
 							{

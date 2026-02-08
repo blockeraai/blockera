@@ -19,6 +19,7 @@ const blockeraCustomCSS: FeatureConfig = {
 	onStates: false,
 	onInnerBlocks: false,
 	onBreakpoints: false,
+	keywords: ['css', 'custom', 'code', 'style', 'stylesheet'],
 };
 
 export const customStyleConfig = {

@@ -22,7 +22,7 @@ import {
 	stateResettingValues,
 	stateResettingInnerBlockValues,
 } from './helpers';
-import { isBaseBreakpoint } from '../../canvas-editor';
+import { isBaseBreakpoint } from '../../editor/header-ui';
 import { isInnerBlock } from '../../extensions/components';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 
@@ -45,6 +45,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 		currentBreakpoint,
 		stateReadyToReset,
 		resetStateAllValues,
+		insideBlockInspector,
 		activeBlockVariation,
 		currentInnerBlockState,
 		innerBlockReadyToReset,
@@ -77,6 +78,7 @@ const reducer = (state: Object = {}, action: Object): Object => {
 				currentState,
 				currentBreakpoint
 			),
+			insideBlockInspector,
 		},
 	];
 	const { getState, getInnerState } = select('blockera/editor');

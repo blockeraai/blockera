@@ -107,3 +107,46 @@ export function generateAttributeVarStringFromVA(
 	//$FlowFixMe
 	return valueAddon;
 }
+
+/**
+ * Parses a variable string (either var: or var() format) and extracts the ID and variable string.
+ *
+ * @param {string} value - The variable string to parse (e.g., "var:preset|color|accent-1" or "var(--wp--preset--color--accent-1)")
+ * @param {string} type - The variable type (e.g., "color" or "gradient")
+ * @return {{ id: string | null, varString: string | null }} An object containing the extracted ID and variable string, or null values if not found
+ */
+export function parseVarString(
+	value: string,
+	type: string
+): { id: string | null, varString: string | null } {
+	if (!isString(value)) {
+		return { id: null, varString: null };
+	}
+
+	let id: string | null = null;
+	let varString: string | null = null;
+
+	// Handle var: pattern (e.g., "var:preset|color|accent-1" or "var:preset|gradient|accent-1-to-accent-2")
+	if (value.startsWith('var:')) {
+		const parts = value.split('|');
+		if (parts.length >= 3) {
+			id = parts[2];
+			varString = generateVariableStringFromAttributeVarString(value);
+		}
+	}
+	// Handle CSS var() pattern (e.g., "var(--wp--preset--color--accent-1)" or "var(--wp--preset--gradient--accent-1-to-accent-2)")
+	else if (value.startsWith(`var(--wp--preset--${type}--`)) {
+		// Extract the ID from the CSS variable name
+		// Pattern: var(--wp--preset--{type}--{id}) or var(--wp--preset--{type}--{id}
+		// Handles cases with or without closing parenthesis
+		const match = value.match(
+			new RegExp(`^var\\(--wp--preset--${type}--([^,)]+)(?:[,)]|$)`)
+		);
+		if (match && match[1]) {
+			id = match[1];
+			varString = `--wp--preset--${type}--${id}`;
+		}
+	}
+
+	return { id, varString };
+}

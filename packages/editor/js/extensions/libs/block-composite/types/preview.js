@@ -14,6 +14,7 @@ export type TPreviewProps = {
 	onChange: THandleOnChangeAttributes,
 	currentBlock: string,
 	currentState: Object,
+	insideBlockInspector?: boolean,
 	availableStates: Object,
 	currentBreakpoint: string,
 	setCurrentTab?: (tab: string) => void,

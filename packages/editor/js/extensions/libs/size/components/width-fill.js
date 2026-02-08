@@ -4,7 +4,12 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import type { MixedElement, ComponentType } from 'react';
+import {
+	useEffect,
+	useRef,
+	type MixedElement,
+	type ComponentType,
+} from 'react';
 
 /**
  * Blockera dependencies
@@ -20,6 +25,46 @@ export const WidthFill: ComponentType<{
 		ref: Object
 	) => void,
 }> = ({ blockeraWidth, handleOnChangeAttributes }): MixedElement => {
+	const elementRef = useRef<?HTMLElement>(null);
+
+	useEffect(() => {
+		if (!elementRef.current) {
+			return;
+		}
+
+		const parent = elementRef.current.parentElement;
+		if (!parent) {
+			return;
+		}
+
+		const updateWidth = () => {
+			if (!elementRef.current || !parent) {
+				return;
+			}
+
+			const width = parent.getBoundingClientRect().width;
+
+			// Set CSS variable on the width-fill element
+			if (elementRef.current) {
+				elementRef.current.style.setProperty(
+					'--parent-width',
+					`${width}px`
+				);
+			}
+		};
+
+		// Initial update
+		updateWidth();
+
+		// Update on resize
+		const resizeObserver = new ResizeObserver(updateWidth);
+		resizeObserver.observe(parent);
+
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, []);
+
 	return (
 		<Tooltip
 			text={
@@ -37,6 +82,7 @@ export const WidthFill: ComponentType<{
 			style={{ '--tooltip-padding': '12px' }}
 		>
 			<span
+				ref={elementRef}
 				className={controlInnerClassNames(
 					'width-fill',
 					blockeraWidth === 'stretch' && 'filled'

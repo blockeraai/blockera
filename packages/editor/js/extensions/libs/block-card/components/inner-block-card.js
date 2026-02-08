@@ -101,7 +101,10 @@ export function InnerBlockCard({
 		<div
 			className={extensionClassNames(
 				'block-card',
-				'block-card--inner-block'
+				'block-card--inner-block',
+				{
+					'separator-shadow': !insideBlockInspector,
+				}
 			)}
 			data-test={'blockera-inner-block-card'}
 		>

@@ -18,9 +18,11 @@ export const coreWPAspectRatioValues = [
 export function ratioFromWPCompatibility({
 	attributes,
 	blockId,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId?: string,
+	insideBlockInspector?: boolean,
 }): Object {
 	// Backward Compatibility to support blockeraRatio value structure.
 	if (
@@ -50,10 +52,13 @@ export function ratioFromWPCompatibility({
 			return attributes;
 
 		case 'core/cover':
-			if (!isUndefined(attributes?.style?.dimensions?.aspectRatio)) {
-				const _ratio = detectWPAspectRatioValue(
-					attributes.style.dimensions.aspectRatio
-				);
+			// Check block-level style (insideBlockInspector) or global style context
+			const aspectRatio = insideBlockInspector
+				? attributes?.style?.dimensions?.aspectRatio
+				: attributes?.dimensions?.aspectRatio;
+
+			if (!isUndefined(aspectRatio)) {
+				const _ratio = detectWPAspectRatioValue(aspectRatio);
 
 				if (_ratio?.val) {
 					attributes.blockeraRatio = {
@@ -72,17 +77,23 @@ export function ratioToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	blockId: string,
+	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		case 'core/cover':
 			if ('reset' === ref?.current?.action) {
-				return {
-					style: { dimensions: { aspectRatio: undefined } },
-				};
+				return insideBlockInspector
+					? {
+							style: { dimensions: { aspectRatio: undefined } },
+						}
+					: {
+							dimensions: { aspectRatio: undefined },
+						};
 			}
 
 			if (
@@ -92,22 +103,34 @@ export function ratioToWPCompatibility({
 				(newValue?.hasOwnProperty('value') && newValue?.value === '') ||
 				newValue?.val === ''
 			) {
-				return {
-					style: { dimensions: { aspectRatio: undefined } },
-				};
+				return insideBlockInspector
+					? {
+							style: { dimensions: { aspectRatio: undefined } },
+						}
+					: {
+							dimensions: { aspectRatio: undefined },
+						};
 			}
 
 			const _convertedRatio = convertAspectRatioValueToWP(newValue);
 
 			if (!_convertedRatio) {
-				return {
-					style: { dimensions: { aspectRatio: undefined } },
-				};
+				return insideBlockInspector
+					? {
+							style: { dimensions: { aspectRatio: undefined } },
+						}
+					: {
+							dimensions: { aspectRatio: undefined },
+						};
 			}
 
-			return {
-				style: { dimensions: { aspectRatio: _convertedRatio } },
-			};
+			return insideBlockInspector
+				? {
+						style: { dimensions: { aspectRatio: _convertedRatio } },
+					}
+				: {
+						dimensions: { aspectRatio: _convertedRatio },
+					};
 
 		case 'core/post-featured-image':
 		case 'core/image':

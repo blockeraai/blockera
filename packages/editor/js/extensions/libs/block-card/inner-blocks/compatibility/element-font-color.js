@@ -10,20 +10,28 @@ import { getColorVAFromVarString } from '@blockera/data';
 /**
  * Internal dependencies
  */
-import { getBaseBreakpoint } from '../../../../../canvas-editor';
+import { getBaseBreakpoint } from '../../../../../editor/header-ui';
 
 export function elementNormalFontColorFromWPCompatibility({
 	innerBlock,
 	attributes,
+	insideBlockInspector,
 	dataCompatibilityElement,
 }: {
 	innerBlock: string,
 	attributes: Object,
+	insideBlockInspector: boolean,
 	dataCompatibilityElement: string,
 }): Object {
-	if (attributes.style.elements[dataCompatibilityElement]?.color?.text) {
+	if (
+		attributes?.style?.elements?.[dataCompatibilityElement]?.color?.text ||
+		attributes?.elements?.[dataCompatibilityElement]?.color?.text
+	) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[dataCompatibilityElement].color.text
+			insideBlockInspector
+				? attributes?.style?.elements?.[dataCompatibilityElement]?.color
+						?.text
+				: attributes?.elements?.[dataCompatibilityElement]?.color?.text
 		);
 
 		if (color) {
@@ -47,19 +55,26 @@ export function elementNormalFontColorFromWPCompatibility({
 export function elementHoverFontColorFromWPCompatibility({
 	innerBlock,
 	attributes,
+	insideBlockInspector,
 	dataCompatibilityElement,
 }: {
 	innerBlock: string,
 	attributes: Object,
+	insideBlockInspector: boolean,
 	dataCompatibilityElement: string,
 }): Object {
 	if (
-		attributes.style.elements[dataCompatibilityElement][':hover']?.color
+		attributes?.style?.elements?.[dataCompatibilityElement]?.[':hover']
+			?.color?.text ||
+		attributes?.elements?.[dataCompatibilityElement]?.[':hover']?.color
 			?.text
 	) {
 		const color = getColorVAFromVarString(
-			attributes.style.elements[dataCompatibilityElement][':hover'].color
-				.text
+			insideBlockInspector
+				? attributes.style.elements[dataCompatibilityElement][':hover']
+						.color.text
+				: attributes.elements[dataCompatibilityElement][':hover'].color
+						.text
 		);
 
 		if (color) {
@@ -96,54 +111,80 @@ export function elementNormalFontColorToWPCompatibility({
 	element,
 	newValue,
 	ref,
+	insideBlockInspector,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
 		isUndefined(newValue)
 	) {
-		return {
-			style: {
-				elements: {
-					[element]: {
-						color: {
-							text: undefined,
-						},
+		const elements = {
+			elements: {
+				[element]: {
+					color: {
+						text: undefined,
 					},
 				},
 			},
+		};
+
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+					}
+				: elements),
 		};
 	}
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return {
-			style: {
-				elements: {
-					[element]: {
-						color: {
-							text: 'var:preset|color|' + newValue?.settings?.id,
-						},
+		const elements = {
+			elements: {
+				[element]: {
+					color: {
+						text: 'var:preset|color|' + newValue?.settings?.id,
 					},
 				},
 			},
 		};
+
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+					}
+				: elements),
+		};
 	}
 
-	return {
-		style: {
-			elements: {
-				[element]: {
-					color: {
-						text: newValue,
-					},
+	const elements = {
+		elements: {
+			[element]: {
+				color: {
+					text: newValue,
 				},
 			},
 		},
+	};
+
+	return {
+		...(insideBlockInspector
+			? {
+					style: {
+						elements,
+					},
+				}
+			: elements),
 	};
 }
 
@@ -151,61 +192,85 @@ export function elementHoverFontColorToWPCompatibility({
 	element,
 	newValue,
 	ref,
+	insideBlockInspector,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
 		isUndefined(newValue)
 	) {
-		return {
-			style: {
-				elements: {
-					[element]: {
-						':hover': {
-							color: {
-								text: undefined,
-							},
+		const elements = {
+			elements: {
+				[element]: {
+					':hover': {
+						color: {
+							text: undefined,
 						},
 					},
 				},
 			},
+		};
+
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+					}
+				: elements),
 		};
 	}
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return {
-			style: {
-				elements: {
-					[element]: {
-						':hover': {
-							color: {
-								text:
-									'var:preset|color|' +
-									newValue?.settings?.id,
-							},
+		const elements = {
+			elements: {
+				[element]: {
+					':hover': {
+						color: {
+							text: 'var:preset|color|' + newValue?.settings?.id,
 						},
 					},
 				},
 			},
 		};
+
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+					}
+				: elements),
+		};
 	}
 
-	return {
-		style: {
-			elements: {
-				[element]: {
-					':hover': {
-						color: {
-							text: newValue,
-						},
+	const elements = {
+		elements: {
+			[element]: {
+				':hover': {
+					color: {
+						text: newValue,
 					},
 				},
 			},
 		},
+	};
+
+	return {
+		...(insideBlockInspector
+			? {
+					style: {
+						elements,
+					},
+				}
+			: elements),
 	};
 }

@@ -3,7 +3,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, useMemo } from '@wordpress/element';
 import type { MixedElement, ComponentType } from 'react';
 
 /**
@@ -15,6 +15,7 @@ import {
 	TransformControl,
 	PanelBodyControl,
 	ControlContextProvider,
+	ChangeIndicator,
 } from '@blockera/controls';
 import { isInteger } from '@blockera/utils';
 import {
@@ -36,11 +37,11 @@ import { Opacity } from './components/opacity';
 import { Transition } from './components/transition';
 import { Filter } from './components/filter';
 import { BackdropFilter } from './components/backdrop-filter';
-import { Blending } from './components/blending';
 import { ExtensionSettings } from '../settings';
 import { Divider } from './components/divider';
 import { Mask } from './components/mask';
 import { useBlockSection } from '../../components';
+import { useFeatureSearch } from '../../components/feature-search-context';
 
 export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	values,
@@ -52,8 +53,76 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 	attributes,
 }: TEffectsProps): MixedElement => {
 	const { initialOpen, onToggle } = useBlockSection('effectsConfig');
+	const { activeSearchMode } = useFeatureSearch();
 	const [isTransformSettingsVisible, setIsTransformSettingsVisible] =
 		useState(false);
+
+	/**
+	 * Check if any transform settings feature has a value different from default
+	 * Memoized to avoid recalculating on every render
+	 */
+	const hasTransformSettingsChanges = useMemo(() => {
+		// Check blockeraTransformSelfPerspective
+		if (
+			values?.blockeraTransformSelfPerspective !==
+			attributes.blockeraTransformSelfPerspective?.default
+		) {
+			return true;
+		}
+
+		// Check blockeraTransformSelfOrigin (object comparison)
+		const selfOrigin = values?.blockeraTransformSelfOrigin;
+		const selfOriginDefault =
+			attributes.blockeraTransformSelfOrigin?.default || {};
+		if (
+			selfOrigin &&
+			(selfOrigin.top !== selfOriginDefault.top ||
+				selfOrigin.left !== selfOriginDefault.left)
+		) {
+			return true;
+		}
+
+		// Check blockeraBackfaceVisibility
+		if (
+			values?.blockeraBackfaceVisibility !==
+			attributes.blockeraBackfaceVisibility?.default
+		) {
+			return true;
+		}
+
+		// Check blockeraTransformChildPerspective
+		if (
+			values?.blockeraTransformChildPerspective !==
+			attributes.blockeraTransformChildPerspective?.default
+		) {
+			return true;
+		}
+
+		// Check blockeraTransformChildOrigin (object comparison)
+		const childOrigin = values?.blockeraTransformChildOrigin;
+		const childOriginDefault =
+			attributes.blockeraTransformChildOrigin?.default || {};
+		if (
+			childOrigin &&
+			(childOrigin.top !== childOriginDefault.top ||
+				childOrigin.left !== childOriginDefault.left)
+		) {
+			return true;
+		}
+
+		return false;
+	}, [
+		values?.blockeraTransformSelfPerspective,
+		values?.blockeraTransformSelfOrigin,
+		values?.blockeraBackfaceVisibility,
+		values?.blockeraTransformChildPerspective,
+		values?.blockeraTransformChildOrigin,
+		attributes.blockeraTransformSelfPerspective?.default,
+		attributes.blockeraTransformSelfOrigin?.default,
+		attributes.blockeraBackfaceVisibility?.default,
+		attributes.blockeraTransformChildPerspective?.default,
+		attributes.blockeraTransformChildOrigin?.default,
+	]);
 
 	if (!isActiveExtension(extensionConfig)) {
 		return <></>;
@@ -84,11 +153,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		values?.blockeraBackdropFilter,
 		attributes.blockeraBackdropFilter.default
 	);
-	const isShowBlendMode = isShowField(
-		extensionConfig.blockeraBlendMode,
-		values?.blockeraBlendMode,
-		attributes.blockeraBlendMode.default
-	);
 
 	let isShowMask = false;
 	if (experimental().get('editor.extensions.effectsExtension.mask')) {
@@ -108,6 +172,24 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		);
 	}
 
+	const isShowSelfPerspective = isShowField(
+		extensionConfig.blockeraTransformSelfPerspective,
+		values?.blockeraTransformSelfPerspective,
+		attributes.blockeraTransformSelfPerspective.default
+	);
+
+	const isShowBackfaceVisibility = isShowField(
+		extensionConfig.blockeraBackfaceVisibility,
+		values?.blockeraBackfaceVisibility,
+		attributes.blockeraBackfaceVisibility.default
+	);
+
+	const isShowChildPerspective = isShowField(
+		extensionConfig.blockeraTransformChildPerspective,
+		values?.blockeraTransformChildPerspective,
+		attributes.blockeraTransformChildPerspective.default
+	);
+
 	// Extension is not active
 	if (
 		!isShowOpacity &&
@@ -117,7 +199,9 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 		!isShowMask &&
 		!isShowBackdropFilter &&
 		!isShowDivider &&
-		!isShowBlendMode
+		!isShowSelfPerspective &&
+		!isShowBackfaceVisibility &&
+		!isShowChildPerspective
 	) {
 		return <></>;
 	}
@@ -130,13 +214,15 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 			icon={<Icon icon="extension-effects" />}
 			className={extensionClassNames('effects')}
 		>
-			<ExtensionSettings
-				buttonLabel={__('More Effect Settings', 'blockera')}
-				features={extensionConfig}
-				update={(newSettings) => {
-					setSettings(newSettings, 'effectsConfig');
-				}}
-			/>
+			{!activeSearchMode && (
+				<ExtensionSettings
+					buttonLabel={__('More Effect Settings', 'blockera')}
+					features={extensionConfig}
+					update={(newSettings) => {
+						setSettings(newSettings, 'effectsConfig');
+					}}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowOpacity}
@@ -208,8 +294,22 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 											!isTransformSettingsVisible
 										)
 									}
+									style={{
+										position: 'relative',
+									}}
 								>
 									<Icon icon="three-d" iconSize="20" />
+									{hasTransformSettingsChanges && (
+										<ChangeIndicator
+											isChanged={true}
+											isAnimated={true}
+											style={{
+												position: 'absolute',
+												top: '-2px',
+												left: '-2px',
+											}}
+										/>
+									)}
 								</Button>
 							}
 							defaultValue={attributes.blockeraTransform.default}
@@ -218,6 +318,20 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 					</BaseControl>
 				</ControlContextProvider>
 			</EditorFeatureWrapper>
+
+			{activeSearchMode && (
+				<TransformSettings
+					setIsTransformSettingsVisible={
+						setIsTransformSettingsVisible
+					}
+					block={block}
+					handleOnChangeAttributes={handleOnChangeAttributes}
+					values={values}
+					attributes={attributes}
+					extensionConfig={extensionConfig}
+					insidePopover={false}
+				/>
+			)}
 
 			<EditorFeatureWrapper
 				isActive={isShowTransition}
@@ -281,19 +395,6 @@ export const EffectsExtension: ComponentType<TEffectsProps> = ({
 					handleOnChangeAttributes={handleOnChangeAttributes}
 					defaultValue={attributes.blockeraMask.default}
 					{...extensionProps.blockeraMask}
-				/>
-			</EditorFeatureWrapper>
-
-			<EditorFeatureWrapper
-				isActive={isShowBlendMode}
-				config={extensionConfig.blockeraBlendMode}
-			>
-				<Blending
-					blendMode={values.blockeraBlendMode}
-					block={block}
-					handleOnChangeAttributes={handleOnChangeAttributes}
-					defaultValue={attributes.blockeraBlendMode.default}
-					{...extensionProps.blockeraBlendMode}
 				/>
 			</EditorFeatureWrapper>
 		</PanelBodyControl>

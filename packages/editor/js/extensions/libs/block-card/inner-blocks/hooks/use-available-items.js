@@ -21,7 +21,7 @@ import type {
 	InnerBlockType,
 	InnerBlockModel,
 } from '../types';
-import { useGlobalStylesPanelContext } from '../../../../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useGlobalStylesPanelContext } from '../../../../../editor/global-styles/panel/context';
 
 export const useAvailableItems = ({
 	clientId,
@@ -29,6 +29,7 @@ export const useAvailableItems = ({
 	getBlockInners,
 	reservedInnerBlocks,
 	memoizedInnerBlocks,
+	insideBlockInspector = true,
 	setBlockClientInners,
 }: AvailableItems): { blocks: InnerBlocks, elements: InnerBlocks } => {
 	// External selectors. to access registered block types on WordPress blocks store api.
@@ -36,9 +37,16 @@ export const useAvailableItems = ({
 	const { getAllowedBlocks, getSelectedBlock } = select('core/block-editor');
 	const { selectedBlockClientId } = useGlobalStylesPanelContext();
 
-	const allowedBlockTypes = getAllowedBlocks(
-		selectedBlockClientId || clientId
-	);
+	let allowedBlockTypes = getAllowedBlocks(selectedBlockClientId || clientId);
+	// We should use of memoizedInnerBlocks if not empty while run this hook outside of block inspector.
+	// For global styles reasons.
+	if (
+		!allowedBlockTypes.length &&
+		!insideBlockInspector &&
+		Object.keys(memoizedInnerBlocks).length
+	) {
+		allowedBlockTypes = Object.values(memoizedInnerBlocks);
+	}
 	const { innerBlocks, attributes } = getSelectedBlock() || {
 		innerBlocks: [],
 		attributes: {},
@@ -77,6 +85,7 @@ export const useAvailableItems = ({
 
 				// Skip customized or registered inner blocks.
 				if (
+					blockType &&
 					!memoizedInnerBlocks[blockType?.name] &&
 					!forces.find(isRegistered) &&
 					!blocks.find(isRegistered)

@@ -25,7 +25,7 @@ describe('Font Size → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// add alias to the feature container
-			cy.getParentContainer('Size').as('container');
+			cy.getParentContainer('Font Size').as('container');
 
 			cy.addNewTransition();
 
@@ -98,7 +98,7 @@ describe('Font Size → WP Compatibility', () => {
 			cy.getBlock('core/paragraph').click();
 
 			// add alias to the feature container
-			cy.getParentContainer('Size').as('container');
+			cy.getParentContainer('Font Size').as('container');
 
 			cy.addNewTransition();
 
@@ -243,7 +243,7 @@ describe('Font Size → WP Compatibility', () => {
 			//
 			// Test 2: Check interface for showing deleted value addon
 			//
-			cy.getParentContainer('Size').within(() => {
+			cy.getParentContainer('Font Size').within(() => {
 				cy.get('[data-test="value-addon-deleted"]').should('exist');
 			});
 		});

@@ -22,6 +22,10 @@ import {
 	borderRadiusFromWPCompatibility,
 	borderRadiusToWPCompatibility,
 } from './compatibilities/border-radius';
+import {
+	shadowFromWPCompatibility,
+	shadowToWPCompatibility,
+} from './compatibilities/shadow';
 import type { BlockDetail } from '../block-card/block-states/types';
 import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
 
@@ -36,10 +40,17 @@ export const bootstrap = (): void => {
 
 			attributes = borderFromWPCompatibility({
 				attributes,
+				insideBlockInspector: blockDetail.insideBlockInspector,
 			});
 
 			attributes = borderRadiusFromWPCompatibility({
 				attributes,
+				insideBlockInspector: blockDetail.insideBlockInspector,
+			});
+
+			attributes = shadowFromWPCompatibility({
+				attributes,
+				insideBlockInspector: blockDetail.insideBlockInspector,
 			});
 
 			return attributes;
@@ -82,6 +93,8 @@ export const bootstrap = (): void => {
 						borderToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
 						})
 					);
 
@@ -91,6 +104,19 @@ export const bootstrap = (): void => {
 						borderRadiusToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
+						})
+					);
+
+				case 'blockeraBoxShadow':
+					return mergeObject(
+						nextState,
+						shadowToWPCompatibility({
+							newValue,
+							ref,
+							insideBlockInspector:
+								blockDetail.insideBlockInspector,
 						})
 					);
 			}

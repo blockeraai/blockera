@@ -62,7 +62,7 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId } = blockDetail;
+			const { blockId, insideBlockInspector } = blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
@@ -73,6 +73,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontFamilyFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -80,6 +81,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontSizeFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -87,6 +89,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = lineHeightFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -95,6 +98,7 @@ export const bootstrap = (): void => {
 			attributes = textAlignFromWPCompatibility({
 				attributes,
 				blockId,
+				insideBlockInspector,
 			});
 
 			//
@@ -102,6 +106,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = textDecorationFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -109,6 +114,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontAppearanceFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -116,6 +122,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = textTransformFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -123,6 +130,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = letterSpacingFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -130,6 +138,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = textOrientationFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			//
@@ -137,6 +146,7 @@ export const bootstrap = (): void => {
 			//
 			attributes = fontColorFromWPCompatibility({
 				attributes,
+				insideBlockInspector,
 			});
 
 			return attributes;
@@ -173,6 +183,8 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
+			const { insideBlockInspector } = blockDetail;
+
 			switch (featureId) {
 				case 'blockeraFontFamily':
 					return mergeObject(
@@ -180,6 +192,7 @@ export const bootstrap = (): void => {
 						fontFamilyToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -189,6 +202,7 @@ export const bootstrap = (): void => {
 						fontAppearanceToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -198,6 +212,7 @@ export const bootstrap = (): void => {
 						fontSizeToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -207,6 +222,7 @@ export const bootstrap = (): void => {
 						lineHeightToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -217,6 +233,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							blockId,
+							insideBlockInspector,
 						})
 					);
 
@@ -226,6 +243,7 @@ export const bootstrap = (): void => {
 						textDecorationToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -235,6 +253,7 @@ export const bootstrap = (): void => {
 						textTransformToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -244,6 +263,7 @@ export const bootstrap = (): void => {
 						letterSpacingToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -253,6 +273,7 @@ export const bootstrap = (): void => {
 						textOrientationToWPCompatibility({
 							newValue,
 							ref,
+							insideBlockInspector,
 						})
 					);
 
@@ -264,6 +285,7 @@ export const bootstrap = (): void => {
 							ref,
 							getAttributes,
 							blockDetail,
+							insideBlockInspector,
 						})
 					);
 			}

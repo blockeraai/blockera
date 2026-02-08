@@ -1,0 +1,71 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import { __ } from '@wordpress/i18n';
+import type { MixedElement } from 'react';
+import { useState, useEffect } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/controls';
+import { controlInnerClassNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { BreakpointIcon } from './breakpoint-icon';
+import type { PickedBreakpointsComponentProps } from './types';
+import type {
+	TBreakpoint,
+	BreakpointTypes,
+} from '../../../../extensions/libs/block-card/block-states/types';
+import { getBaseBreakpoint, getSortedBreakpoints } from './helpers';
+import { useExtensionsStore } from '../../../../hooks/use-extensions-store';
+
+export default function ({
+	items,
+	onClick,
+	updateBlock,
+	updaterDeviceIndicator,
+}: PickedBreakpointsComponentProps): MixedElement {
+	const { setCurrentBreakpoint, currentBreakpoint } = useExtensionsStore();
+	const availableBreakpoints: { [key: TBreakpoint]: BreakpointTypes } = items;
+	const baseBreakpoint = getBaseBreakpoint();
+	const [currentActiveBreakpoint, setActiveBreakpoint] = useState(
+		currentBreakpoint || baseBreakpoint
+	);
+
+	useEffect(() => {
+		updaterDeviceIndicator(setActiveBreakpoint);
+		// eslint-disable-next-line
+	}, []);
+
+	useEffect(() => {
+		updateBlock(currentActiveBreakpoint);
+		setCurrentBreakpoint(currentActiveBreakpoint);
+		// eslint-disable-next-line
+	}, [currentActiveBreakpoint]);
+
+	const breakpoints = getSortedBreakpoints(availableBreakpoints, {
+		onClick,
+		BreakpointIcon,
+		output: 'icons',
+		setActiveBreakpoint,
+		currentActiveBreakpoint,
+	});
+
+	return (
+		<Flex
+			className={controlInnerClassNames('blockera-breakpoints')}
+			justifyContent={'center'}
+			alignItems="center"
+			aria-label={__('Breakpoints', 'blockera')}
+			gap="8px"
+		>
+			{breakpoints}
+		</Flex>
+	);
+}

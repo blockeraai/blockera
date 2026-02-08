@@ -30,10 +30,10 @@ import { Icon } from '@blockera/icons';
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
 import { EditableBlockName } from './editable-block-name';
-import { BlockStyleVariations } from '../style-variations';
 import type { TBreakpoint, TStates } from '../block-states/types';
 import { Preview as BlockCompositePreview } from '../../block-composite';
 import type { InnerBlockType, InnerBlockModel } from '../inner-blocks/types';
+import { BlockStyleVariations } from '../../../../editor/global-styles/panel/ui';
 import { default as BlockVariationTransforms } from '../block-variation-transforms';
 import { BlockCardSettings } from './block-card-settings';
 
@@ -58,6 +58,7 @@ export function BlockCard({
 	currentStateAttributes,
 	currentInnerBlockState,
 	handleOnChangeAttributes,
+	blockStyleVariationsProps,
 	currentBlockStyleVariation,
 	activeBlockVariation = '',
 }: {
@@ -92,6 +93,7 @@ export function BlockCard({
 	},
 	innerBlocks: { [key: 'master' | InnerBlockType | string]: InnerBlockModel },
 	activeBlockVariation: string,
+	blockStyleVariationsProps: Object,
 }): MixedElement {
 	const {
 		icon: blockIcon,
@@ -287,6 +289,7 @@ export function BlockCard({
 						)}
 					>
 						<BlockStyleVariations
+							{...blockStyleVariationsProps}
 							clientId={clientId}
 							blockName={blockName}
 							currentBlock={currentBlock}

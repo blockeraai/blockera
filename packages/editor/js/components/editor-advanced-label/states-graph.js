@@ -21,7 +21,7 @@ import type {
 	TBreakpoint,
 	TStates,
 } from '../../extensions/libs/block-card/block-states/types';
-import { BreakpointIcon } from '../../canvas-editor/components/breakpoints/breakpoint-icon';
+import { BreakpointIcon } from '../../editor/header-ui/components/breakpoints/breakpoint-icon';
 
 export const StatesGraph = ({
 	onClick,

@@ -33,6 +33,10 @@ type ResizeHandleProps = {
 	 */
 	maxWidth: number;
 	/**
+	 * Default value to reset to on double-click (e.g., '300px' or '50%').
+	 */
+	defaultValue: string;
+	/**
 	 * Callback called during resize with the new value (as string, e.g., '300px' or '50%').
 	 */
 	onResize: (value: string) => void;
@@ -58,6 +62,7 @@ export const ResizeHandle = ({
 	isVisible,
 	minWidth,
 	maxWidth,
+	defaultValue,
 	onResize,
 	onResizeStart,
 	onResizeEnd,
@@ -152,6 +157,22 @@ export const ResizeHandle = ({
 			setShowHandle(false);
 		}
 	}, [isDragging]);
+
+	// Handle double-click to reset to default value
+	const handleDoubleClick = useCallback(
+		(e: React.MouseEvent<HTMLDivElement>) => {
+			if (!isVisible || isDragging) {
+				return;
+			}
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			// Reset to default value
+			onResize(defaultValue);
+		},
+		[isVisible, isDragging, defaultValue, onResize]
+	);
 
 	// Handle drag start
 	const handleMouseDown = useCallback(
@@ -523,6 +544,7 @@ export const ResizeHandle = ({
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			onMouseDown={handleMouseDown}
+			onDoubleClick={handleDoubleClick}
 			aria-label={__('Resize sidebar', 'blockera')}
 			role="button"
 			tabIndex={0}

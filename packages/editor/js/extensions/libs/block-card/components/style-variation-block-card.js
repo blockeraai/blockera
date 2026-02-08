@@ -41,8 +41,8 @@ import { Preview as BlockCompositePreview } from '../../block-composite';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
-} from '../../../../canvas-editor/global-styles/helpers';
-import BlockPreviewPanel from '../../../../canvas-editor/components/block-global-styles-panel-screen/block-preview-panel';
+} from '../../../../editor/global-styles/helpers';
+import BlockPreviewPanel from '../../../../editor/global-styles/panel/block-preview-panel';
 
 const DEBOUNCE_DELAY = 1000;
 
@@ -59,6 +59,7 @@ export function StyleVariationBlockCard({
 	currentBreakpoint,
 	availableStates,
 	additional,
+	currentInnerBlock,
 	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
@@ -243,7 +244,10 @@ export function StyleVariationBlockCard({
 		<div
 			className={extensionClassNames(
 				'block-card',
-				'block-card--style-variation'
+				'block-card--style-variation',
+				{
+					'inner-block-is-selected': currentInnerBlock !== null,
+				}
 			)}
 			data-test={'blockera-style-variation-block-card'}
 		>
@@ -365,6 +369,7 @@ export function StyleVariationBlockCard({
 							setAttributes,
 							currentBlockStyleVariation,
 						}}
+						insideBlockInspector={false}
 						availableStates={availableStates}
 						onChange={handleOnChangeAttributes}
 						currentBlock={currentBlock}

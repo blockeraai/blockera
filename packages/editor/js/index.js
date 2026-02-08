@@ -4,15 +4,12 @@ export * from './components';
 export * from './extensions';
 export { Observer } from './observer';
 export {
-	CanvasEditor,
 	isBaseBreakpoint,
 	getBaseBreakpoint,
 	BreakpointsSettings,
-	bootstrapBreakpoints,
-	bootstrapCanvasEditor,
-	registerCanvasEditorSettings,
+	setupCanvasSettings,
 	unstableBootstrapServerSideBreakpointDefinitions,
-} from './canvas-editor';
+} from './editor';
 
 // Command Bar (export-only, no auto-registration)
 export * from './command-bar';

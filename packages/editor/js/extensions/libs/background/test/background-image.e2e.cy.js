@@ -167,7 +167,7 @@ describe('Background Image → Functionality', () => {
 					cy.get('button[data-value="no-repeat"]').click();
 				});
 
-				cy.getParentContainer('Effect').within(() => {
+				cy.getParentContainer('Scroll Attachment').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -273,7 +273,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Effect').within(() => {
+				cy.getParentContainer('Scroll Attachment').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -466,7 +466,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Effect').within(() => {
+				cy.getParentContainer('Scroll Attachment').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();
@@ -603,7 +603,7 @@ describe('Background Image → Functionality', () => {
 				});
 
 				// set effect
-				cy.getParentContainer('Effect').within(() => {
+				cy.getParentContainer('Scroll Attachment').within(() => {
 					cy.get('button')
 						.contains('button', /parallax/i)
 						.click();

@@ -38,6 +38,11 @@
 		}
 	}
 
+	svg:not(.blockera-control-help-icon, .blockera-control-reset-icon) {
+		fill: currentColor;
+		fill: color-mix(in srgb, currentColor 100%, #000000 15%);
+	}
+
 	&.label-icon-end {
 		.blockera-control-help-icon,
 		.blockera-control-reset-icon {
@@ -72,7 +77,8 @@
 
 	&:hover:not(.show-help) {
 		.blockera-control-help-icon {
-			animation: blockera-label-control-animation-bounce 0.1s 1,
+			animation:
+				blockera-label-control-animation-bounce 0.1s 1,
 				blockera-label-control-animation 0.8s infinite;
 			animation-delay: 400ms, 700ms;
 			animation-fill-mode: forwards, forwards;

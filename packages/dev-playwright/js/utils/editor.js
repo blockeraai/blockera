@@ -91,9 +91,9 @@ async function getBlockType(page, blockType) {
  * @return {Promise<any>} The selected block or field value.
  */
 async function getSelectedBlock(page, field = '') {
-	const data = await getWPDataObject(page);
 	return await page.evaluate(
-		({ dataObj, fieldName }) => {
+		async ({ fieldName }) => {
+			const dataObj = window.wp.data;
 			const selectedBlock = dataObj
 				.select('core/block-editor')
 				.getSelectedBlock();
@@ -105,7 +105,7 @@ async function getSelectedBlock(page, field = '') {
 			}
 			return selectedBlock.attributes[fieldName];
 		},
-		{ dataObj: data, fieldName: field }
+		{ fieldName: field }
 	);
 }
 
@@ -118,13 +118,12 @@ async function getSelectedBlock(page, field = '') {
  * @return {Promise<any>} The block styles.
  */
 async function getSelectedBlockStyle(page, name, variation = 'default') {
-	const data = await getWPDataObject(page);
 	return await page.evaluate(
-		({ dataObj, blockName, blockVariation }) => {
-			const { getBlockStyles } = dataObj.select('blockera/editor');
+		async ({ blockName, blockVariation }) => {
+			const { getBlockStyles } = window.wp.data.select('blockera/editor');
 			return getBlockStyles(blockName, blockVariation);
 		},
-		{ dataObj: data, blockName: name, blockVariation: variation }
+		{ blockName: name, blockVariation: variation }
 	);
 }
 
@@ -137,9 +136,9 @@ async function getSelectedBlockStyle(page, name, variation = 'default') {
  * @return {Promise<any>} The global styles record or property.
  */
 async function getEditedGlobalStylesRecord(page, prop, innerField) {
-	const data = await getWPDataObject(page);
 	return await page.evaluate(
-		({ dataObj, propName, innerFieldName }) => {
+		async ({ propName, innerFieldName }) => {
+			const dataObj = window.wp.data;
 			const { __experimentalGetCurrentGlobalStylesId } =
 				dataObj.select('core');
 			const { getEditedEntityRecord } = dataObj.select('core');
@@ -159,7 +158,7 @@ async function getEditedGlobalStylesRecord(page, prop, innerField) {
 
 			return record;
 		},
-		{ dataObj: data, propName: prop, innerFieldName: innerField }
+		{ propName: prop, innerFieldName: innerField }
 	);
 }
 
@@ -704,7 +703,7 @@ async function openHeadingToolbarAndSelect(page, headingLevel) {
  * @return {Promise<void>}
  */
 async function openMoreFeaturesControl(page, label) {
-	const control = page.locator(
+	const control = await page.locator(
 		`.blockera-component-more-features > button[aria-label="${label}"]`
 	);
 	const parent = control.locator('..');
@@ -876,7 +875,7 @@ async function activateMuPlugin(
 
 	// Execute PHP code directly using wp eval
 	// Use ignoreFailures=true to prevent test failure if file doesn't exist
-	await wpCli(
+	return await wpCli(
 		page,
 		`wp eval '${escapedPhpCode}'`,
 		true, // ignoreFailures = true - don't fail if file doesn't exist
@@ -926,11 +925,56 @@ async function deactivateMuPlugin(
 	);
 }
 
+/**
+ * Duplicate selected block.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @return {Promise<void>}
+ */
+async function doBlockToolbarContextMenuOption(page, option = 'Copy') {
+	const optionsButton = page
+		.locator('.block-editor-block-toolbar [aria-label="Options"]')
+		.first();
+	await optionsButton.waitFor({ state: 'visible', timeout: 10000 });
+	await optionsButton.click();
+
+	const selector = '.components-popover button:has-text("' + option + '")';
+	const element = page.locator(selector);
+
+	await element.click();
+}
+
+/**
+ * Delete repeater item.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} itemId - Item ID.
+ * @param {string} label - Delete button label.
+ * @return {Promise<void>}
+ */
+async function deleteRepeaterItem(page, { container, itemId, label }) {
+	// Ensure item is expanded before accessing delete button
+	// The delete button is only visible when the item is expanded
+	// Click on the item to ensure it's expanded
+	const item = container.locator(`[data-id="${itemId}"]`);
+	await item.click({ force: true });
+	await page.waitForTimeout(200);
+
+	// Wait for delete button to be visible and clickable
+	const deleteButton = item.locator(`[aria-label="${label}"]`);
+	await deleteButton.waitFor({ state: 'visible', timeout: 5000 });
+
+	// clear item
+	await deleteButton.click({ force: true });
+}
+
 module.exports = {
+	deleteRepeaterItem,
 	getIframeBody,
 	getWindowProperty,
 	getWPDataObject,
 	getBlockType,
+	doBlockToolbarContextMenuOption,
 	getSelectedBlock,
 	getSelectedBlockStyle,
 	getEditedGlobalStylesRecord,

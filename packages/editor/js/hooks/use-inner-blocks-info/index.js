@@ -14,16 +14,16 @@ import { prepare } from '@blockera/data-editor';
 /**
  * Internal dependencies
  */
-import { prepareInnerBlockTypes } from '../../extensions/libs/block-card/inner-blocks';
-import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
+import { useEditorStore } from '../use-editor-store';
+import { getBaseBreakpoint } from '../../editor/header-ui';
+import { isInnerBlock } from '../../extensions/components';
 import type {
 	InnerBlocks,
 	InnerBlockType,
 	InnerBlockModel,
 } from '../../extensions/libs/block-card/inner-blocks/types';
-import { getBaseBreakpoint } from '../../canvas-editor';
-import { isInnerBlock } from '../../extensions/components';
-import { useEditorStore } from '../use-editor-store';
+import type { InnerBlocksInfoProps, InnerBlocksInfo } from './types';
+import { prepareInnerBlockTypes } from '../../extensions/libs/block-card/inner-blocks';
 import { isNormalStateOnBaseBreakpoint } from '../../extensions/libs/block-card/block-states/helpers';
 
 export const useInnerBlocksInfo = ({
@@ -200,10 +200,12 @@ export const useInnerBlocksInfo = ({
 			blockeraInnerBlocks: getBlockeraInnerBlocks(blockeraInnerBlocks),
 		};
 	}, [
+		getState,
 		additional,
 		attributes,
 		currentBlock,
 		currentState,
+		getInnerState,
 		currentBreakpoint,
 		defaultAttributes,
 		currentInnerBlockState,

@@ -32,7 +32,7 @@ describe('Min Height → WP Compatibility', () => {
 			).click();
 
 			// add alias to the feature container
-			cy.getParentContainer('Min').as('container');
+			cy.getParentContainer('Min Height').as('container');
 
 			cy.addNewTransition();
 
@@ -110,7 +110,7 @@ describe('Min Height → WP Compatibility', () => {
 			cy.activateMoreSettingsItem('More Size Settings', 'Min Height');
 
 			// add alias to the feature container
-			cy.get('[aria-label="Min"]')
+			cy.get('[aria-label="Min Height"]')
 				.closest('[data-cy="base-control"]')
 				.as('container');
 

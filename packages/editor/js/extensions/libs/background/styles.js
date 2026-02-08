@@ -38,6 +38,7 @@ export const BackgroundStyles = ({
 		blockeraBackground,
 		blockeraBackgroundColor,
 		blockeraBackgroundClip,
+		blockeraBlendMode,
 	} = config.backgroundConfig;
 	const blockProps = {
 		state,
@@ -157,6 +158,41 @@ export const BackgroundStyles = ({
 						{
 							type: 'function',
 							function: backgroundClipGenerator,
+						},
+					],
+				},
+				blockProps,
+				pickedSelector
+			),
+		});
+	}
+
+	if (
+		isActiveField(blockeraBlendMode) &&
+		blockProps.attributes.blockeraBlendMode !==
+			attributes.blockeraBlendMode.default
+	) {
+		const pickedSelector = getCompatibleBlockCssSelector({
+			...sharedParams,
+			query: 'blockeraBlendMode',
+			support: 'blockeraBlendMode',
+			fallbackSupportId: getBlockSupportFallback(
+				supports,
+				'blockeraBlendMode'
+			),
+		});
+
+		styleGroup.push({
+			selector: pickedSelector,
+			declarations: computedCssDeclarations(
+				{
+					blockeraBlendMode: [
+						{
+							type: 'static',
+							properties: {
+								'mix-blend-mode':
+									blockProps.attributes.blockeraBlendMode,
+							},
 						},
 					],
 				},

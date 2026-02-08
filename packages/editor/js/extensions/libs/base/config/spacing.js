@@ -15,6 +15,7 @@ const blockeraSpacing: FeatureConfig = {
 	force: true,
 	status: true,
 	label: __('Spacing', 'blockera'),
+	keywords: ['spacing', 'margin', 'padding', 'gap'],
 };
 
 export const spacingConfig = {

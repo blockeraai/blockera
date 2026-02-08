@@ -21,7 +21,13 @@ import {
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
-import { cloneObject, mergeObject, isEquals } from '@blockera/utils';
+import {
+	isEquals,
+	cloneObject,
+	mergeObject,
+	getSmallHash,
+} from '@blockera/utils';
+import { classNames } from '@blockera/classnames';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 
 /**
@@ -33,13 +39,13 @@ import {
 	// useIconEffect,
 	useAttributes,
 	useInnerBlocksInfo,
+	useBlockStyleVariations,
 	useCalculateCurrentAttributes,
 } from '../../hooks';
-import { SideEffect } from '../libs/base';
-// import { BlockPortals } from './block-portals';
-import { BlockPartials } from './block-partials';
 import { isInnerBlock } from './utils';
-import { isBaseBreakpoint } from '../../canvas-editor';
+import { isBaseBreakpoint } from '../..';
+import { SideEffect } from '../libs/base';
+import { BlockPartials } from './block-partials';
 import { sanitizeBlockAttributes } from '../hooks/utils';
 import { BlockFillPartials } from './block-fill-partials';
 import type { UpdateBlockEditorSettings } from '../libs/types';
@@ -56,10 +62,138 @@ import {
 } from '../libs/block-card/block-states/states';
 import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
-import { useGlobalStylesPanelContext } from '../../canvas-editor/components/block-global-styles-panel-screen/context';
+import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;
+
+// Map to store registered class names by clientId.
+// Structure: Map<clientId, Set<classNames>>
+const REGISTERED_CLASSNAMES = new Map<string, Set<string>>();
+
+/**
+ * Register a class name to be used in the block.
+ *
+ * @param {string} clientId - The client ID of the block.
+ * @param {string} className - The class name to register.
+ */
+export const registerClassName = (
+	clientId: string,
+	className: string
+): void => {
+	if (!REGISTERED_CLASSNAMES.has(clientId)) {
+		REGISTERED_CLASSNAMES.set(clientId, new Set());
+	}
+	REGISTERED_CLASSNAMES.get(clientId)?.add(className);
+};
+
+/**
+ * Check if a class name is already registered for a different clientId.
+ *
+ * @param {string} clientId - The client ID of the block.
+ * @param {string} className - The class name to check.
+ * @return {boolean} True if the class name is registered for a different clientId.
+ */
+export const isClassNameDuplicate = (
+	clientId: string,
+	className: string
+): boolean => {
+	for (const [
+		registeredClientId,
+		classNames,
+	] of REGISTERED_CLASSNAMES.entries()) {
+		if (registeredClientId !== clientId && classNames.has(className)) {
+			return true;
+		}
+	}
+	return false;
+};
+
+/**
+ * Get all registered class names for a specific clientId.
+ *
+ * @param {string} clientId - The client ID of the block.
+ * @return {Set<string>} Set of registered class names for the clientId.
+ */
+export const getRegisteredClassNames = (clientId: string): Set<string> => {
+	return REGISTERED_CLASSNAMES.get(clientId) || new Set();
+};
+
+/**
+ * Generate a unique class name for a block instance.
+ * Handles collisions by detecting existing numbered classnames and appending
+ * a counter based on the highest number found.
+ *
+ * @param {string} clientId - The client ID to generate the unique class name from.
+ * @param {string} className - The default class name for block.
+ *
+ * @return {string} A unique class name that hasn't been registered yet.
+ */
+export const generateUniqueClassName = (
+	clientId: string,
+	className: string
+): string => {
+	let _className = '';
+	const matchBaseClass = className?.match(regexPattern);
+	if (matchBaseClass) {
+		_className = matchBaseClass[0];
+	}
+	const baseHash = _className
+		? _className.match(/blockera-block-(\w+)/)?.[1] ||
+			getSmallHash(clientId)
+		: getSmallHash(clientId);
+	const baseClassName = _className
+		? _className
+		: `blockera-block-${baseHash}`;
+
+	// Check if base classname is available (no counter needed).
+	if (!isClassNameDuplicate(clientId, baseClassName)) {
+		registerClassName(clientId, baseClassName);
+		return baseClassName;
+	}
+
+	// Base classname exists, find the highest counter number used.
+	// Pattern: blockera-block-{baseHash}-{number}
+	const pattern = new RegExp(
+		`^blockera-block-${baseHash.replace(
+			/[.*+?^${}()|[\]\\]/g,
+			'\\$&'
+		)}-(\\d+)$`
+	);
+	let maxCounter = 0;
+
+	// Scan all registered classnames to find the highest counter for this baseHash.
+	REGISTERED_CLASSNAMES.forEach((registeredClassNames) => {
+		registeredClassNames.forEach((registeredClassName) => {
+			// $FlowFixMe
+			const match = registeredClassName.match(pattern);
+			if (match) {
+				const counter = parseInt(match[1], 10);
+				if (counter > maxCounter) {
+					maxCounter = counter;
+				}
+			}
+		});
+	});
+
+	// Generate unique classname with counter starting from maxCounter + 1.
+	let counter = maxCounter + 1;
+	let uniqueClassName = `blockera-block-${baseHash}-${counter}`;
+
+	// Double-check for collisions (shouldn't happen, but safety check).
+	while (REGISTERED_CLASSNAMES.has(uniqueClassName)) {
+		counter++;
+		uniqueClassName = `blockera-block-${baseHash}-${counter}`;
+	}
+
+	// Register the class name to prevent future collisions.
+	registerClassName(clientId, uniqueClassName);
+
+	return uniqueClassName;
+};
+
+// blockera block classname pattern.
+const regexPattern = /blockera-block-[\w-]+/i;
 
 export const BlockBase: ComponentType<any> = (
 	_props: Object
@@ -180,6 +314,7 @@ export const BlockBase: ComponentType<any> = (
 		() => ({
 			blockId: name,
 			blockClientId: clientId,
+			insideBlockInspector,
 			isMasterNormalState: masterIsNormalState(),
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
@@ -205,6 +340,7 @@ export const BlockBase: ComponentType<any> = (
 			currentBreakpoint,
 			masterIsNormalState,
 			activeBlockVariation,
+			insideBlockInspector,
 			currentInnerBlockState,
 			getActiveBlockVariation,
 			originDefaultAttributes,
@@ -212,54 +348,175 @@ export const BlockBase: ComponentType<any> = (
 		]
 	);
 
-	const compatibleAttributes = useMemo(
-		() =>
-			getCompatibleAttributes({
-				args,
-				isActive,
-				availableAttributes,
-				attributes: cloneObject(blockAttributes),
-				defaultAttributes: originDefaultAttributes,
-			}),
-		[
+	// Store the unique classname for this block instance.
+	// Generate it once on mount using useMemo (runs during render, memoized by clientId).
+	const uniqueClassName = useMemo(() => {
+		return generateUniqueClassName(clientId, blockAttributes?.className);
+	}, [clientId, blockAttributes?.className]);
+
+	// Track if this is the first calculation to ensure unique classname on mount
+	const isFirstCalculationRef = useRef(true);
+	const previousClientIdRef = useRef(clientId);
+	const compatibleAttributesRef = useRef(null);
+
+	// Reset first calculation flag when clientId changes (e.g., block copied)
+	if (previousClientIdRef.current !== clientId) {
+		isFirstCalculationRef.current = true;
+		previousClientIdRef.current = clientId;
+	}
+
+	// Cleanup: unregister the classname when component unmounts.
+	useEffect(() => {
+		return () => {
+			if (uniqueClassName) {
+				REGISTERED_CLASSNAMES.delete(uniqueClassName);
+			}
+		};
+	}, [clientId, uniqueClassName]);
+
+	const compatibleAttributes = useMemo(() => {
+		// Run compatibility filters...
+		const compatibleAttributes = getCompatibleAttributes({
 			args,
 			isActive,
 			availableAttributes,
-			blockAttributes,
-			originDefaultAttributes,
-		]
-	);
+			attributes: cloneObject(blockAttributes),
+			defaultAttributes: originDefaultAttributes,
+		});
 
-	const attributesRef = useRef(compatibleAttributes);
+		const classNameStr = compatibleAttributes?.className || '';
+		const isFirstCalculation = isFirstCalculationRef.current;
+
+		// On first calculation (mount), ensure unique classname is properly set
+		if (isFirstCalculation) {
+			// Update the first calculation flag to false before the calculation.
+			isFirstCalculationRef.current = false;
+
+			// Extract existing blockera-block classnames from className
+			const classNameParts = classNameStr.split(/\s+/).filter(Boolean);
+			let generatedClassname = '';
+
+			classNameParts.forEach((part) => {
+				if (regexPattern.test(part)) {
+					if (REGISTERED_CLASSNAMES.has(part)) {
+						// Only unregister if it's not the unique classname for this block.
+						REGISTERED_CLASSNAMES.delete(part);
+						generatedClassname += !generatedClassname
+							? uniqueClassName
+							: ` ${uniqueClassName}`;
+					} else {
+						// Add the classname to the new classname if it's not registered.
+						generatedClassname += !generatedClassname
+							? part
+							: ` ${part}`;
+					}
+				} else {
+					// Add the classname to the new classname if it's not a blockera-block classname.
+					generatedClassname += !generatedClassname
+						? part
+						: ` ${part}`;
+				}
+			});
+
+			// If block default classname is empty.
+			if (!generatedClassname) {
+				return {
+					...compatibleAttributes,
+					className: classNames('blockera-block', {
+						[uniqueClassName]: true,
+					}),
+				};
+			}
+
+			return {
+				...compatibleAttributes,
+				// Build the new className with unique classname and other classes
+				className:
+					-1 === generatedClassname.indexOf('blockera-block ')
+						? `blockera-block ${generatedClassname}`
+						: generatedClassname,
+			};
+		} else if (!classNameStr.match(regexPattern)?.[0]) {
+			return {
+				...compatibleAttributes,
+				className: classNameStr
+					? `${classNameStr} blockera-block ${uniqueClassName}`
+					: `blockera-block ${uniqueClassName}`,
+			};
+		}
+
+		return compatibleAttributes;
+	}, [
+		args,
+		isActive,
+		blockAttributes,
+		uniqueClassName,
+		availableAttributes,
+		originDefaultAttributes,
+	]);
+
 	const [attributes, setState] = useState(compatibleAttributes);
+	const { className } = attributes;
 
 	/**
 	 * Set the attributes state and the attributes ref.
 	 *
 	 * @param {Object} value the compatible attributes arrived from the handleOnChangeAttributes function.
+	 * @param {boolean} shouldUpdateClassName whether to update the classname. useful when save all customizing style variation.
+	 *
+	 * @return {void}
 	 */
-	const setAttributes = (value: any) => {
-		attributesRef.current = value;
-		setState(value);
-	};
+	const setAttributes = (
+		value: any,
+		shouldUpdateClassName: boolean = true
+	) => {
+		const match = regexPattern.exec(value.className);
 
-	const updateParentState = () => {
-		// Compare the block attributes with the attributes and the attributes ref.
-		// If they are not equal, set the attributes to the block attributes.
+		// We should update classname with unique generate classname while customizing style variation.
 		if (
-			!isEquals(blockAttributes, attributes) &&
-			isEquals(attributes, attributesRef.current)
+			shouldUpdateClassName &&
+			/^is-style-.*/g.test(value?.className) &&
+			!/\s/g.test(value?.className || '')
 		) {
-			setBlockAttributes(attributes);
+			value.className = classNames(value.className, {
+				'blockera-block': true,
+				[uniqueClassName]: true,
+			});
+			registerClassName(clientId, uniqueClassName);
+		} else if (
+			shouldUpdateClassName &&
+			match &&
+			isClassNameDuplicate(clientId, match[0])
+		) {
+			const prevClassName = value.className
+				.replace(regexPattern, '')
+				.replace(/\bblockera-block\b/gi, '');
+			value.className = classNames(prevClassName.trim(), {
+				'blockera-block': true,
+				[uniqueClassName]: true,
+			});
+
+			registerClassName(clientId, uniqueClassName);
+		} else if (match && shouldUpdateClassName) {
+			registerClassName(clientId, match[0]);
 		}
+
+		setState(value);
 	};
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
+		// Skip the effect if the block is not a blockera block and not has metadata.
+		if (
+			!attributes?.blockeraPropsId &&
+			!attributes.hasOwnProperty('metadata')
+		) {
+			return;
+		}
+
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
-			!isEquals(blockAttributes, attributes) &&
-			isEquals(attributes, attributesRef.current) &&
+			!isEquals(compatibleAttributes, attributes) &&
 			false === insideBlockInspector
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
@@ -268,33 +525,55 @@ export const BlockBase: ComponentType<any> = (
 
 		// If inside the block inspector, update the parent state immediately.
 		if (insideBlockInspector) {
-			updateParentState();
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
+
+				// Updating attributes reference...
+				compatibleAttributesRef.current = attributes;
+			}
 
 			return;
 		}
 
-		const timeoutId = setTimeout(
-			updateParentState,
-			BLOCKERA_DELAY_EXPECTED_TIME
-		); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
+		const timeoutId = setTimeout(() => {
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
+
+				// Updating attributes reference...
+				compatibleAttributesRef.current = attributes;
+			}
+		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
 		return () => clearTimeout(timeoutId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [attributes, attributesRef]);
+	}, [attributes]);
 
 	useEffect(() => {
+		// If the current block is an inner block, don't update the attributes.
+		// Because the inner block attributes are updated by the parent block.
+		if (isInnerBlock(currentBlock)) {
+			return;
+		}
+
 		// Compare the compatible attributes with the attributes and the attributes ref.
 		// If they are not equal, set the attributes to the compatible attributes.
 		if (
-			!isEquals(compatibleAttributes, attributes) &&
-			!isEquals(compatibleAttributes, attributesRef.current)
+			(!isEquals(attributes, compatibleAttributes) &&
+				!isEquals(
+					compatibleAttributesRef.current,
+					compatibleAttributes
+				) &&
+				!isEquals(attributes, compatibleAttributesRef.current)) ||
+			!compatibleAttributesRef.current
 		) {
-			setAttributes(compatibleAttributes);
+			setAttributes(compatibleAttributes, true);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [compatibleAttributes]);
-
-	const { className } = attributes;
 
 	const sanitizedAttributes = useMemo(
 		() => sanitizeBlockAttributes(cloneObject(attributes)),
@@ -321,9 +600,15 @@ export const BlockBase: ComponentType<any> = (
 		return sanitizedAttributes;
 	};
 
+	const blockStyleVariationsProps = useBlockStyleVariations({
+		clientId,
+		blockName: name,
+		storedAttributes: attributes,
+		defaultAttributes: availableAttributes,
+	});
+
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {
 		clientId,
-		className,
 		blockId: name,
 		isNormalState,
 		currentBlock,
@@ -340,6 +625,7 @@ export const BlockBase: ComponentType<any> = (
 		getActiveBlockVariation,
 		getAttributes: () => attributes,
 		innerBlocks: additional?.blockeraInnerBlocks,
+		setChangesets: blockStyleVariationsProps.setChangesets,
 	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
@@ -451,18 +737,22 @@ export const BlockBase: ComponentType<any> = (
 					storeName: 'blockera/controls',
 				},
 				currentTab,
+				additional,
 				currentBlock,
 				currentState,
 				setCurrentTab,
 				isNormalState,
 				setAttributes,
 				getAttributes,
+				blockVariations,
 				currentBreakpoint,
 				defaultAttributes,
 				currentInnerBlock,
 				masterIsNormalState,
 				blockeraInnerBlocks,
+				activeBlockVariation,
 				currentInnerBlockState,
+				getActiveBlockVariation,
 				handleOnChangeAttributes,
 				updateBlockEditorSettings,
 				BlockComponent: () => children,
@@ -505,6 +795,7 @@ export const BlockBase: ComponentType<any> = (
 								availableInnerStates,
 								insideBlockInspector,
 								currentInnerBlockState,
+								blockStyleVariationsProps,
 								updateBlockEditorSettings,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.
@@ -557,6 +848,7 @@ export const BlockBase: ComponentType<any> = (
 							insideBlockInspector,
 							currentInnerBlockState,
 							updateBlockEditorSettings,
+							blockStyleVariationsProps,
 							blockProps: {
 								// Sending props like exactly "edit" function props of WordPress Block.
 								// Because needs total block props in outside overriding component like "blockera" in overriding process.

@@ -99,7 +99,7 @@ export const TextColumns = ({
 						</p>
 					</>
 				}
-				columns="1fr 150px"
+				columns="1fr 2.5fr"
 				className={
 					display === 'flex' ? 'blockera-control-is-not-active' : ''
 				}
@@ -136,7 +136,7 @@ export const TextColumns = ({
 								<Icon
 									library="wp"
 									icon="close-small"
-									iconSize={16}
+									iconSize="18"
 								/>
 							),
 						},

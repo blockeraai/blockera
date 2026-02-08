@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 import type { FeatureConfig } from '../types';
-import { getBaseBreakpoint } from '../../../../canvas-editor/components/breakpoints/helpers';
+import { getBaseBreakpoint } from '../../../../editor/header-ui';
 
 const blockeraAttributes: FeatureConfig = {
 	show: true,
@@ -20,6 +20,7 @@ const blockeraAttributes: FeatureConfig = {
 	onStates: ['normal'],
 	onBreakpoints: [getBaseBreakpoint()],
 	onInnerBlocks: false,
+	keywords: ['attributes', 'html', 'custom', 'data', 'attr'],
 };
 
 export const advancedSettingsConfig = {

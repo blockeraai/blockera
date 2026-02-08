@@ -10,12 +10,18 @@ export function elementNormalBackgroundFromWPCompatibility({
 	innerBlock,
 	attributes,
 	dataCompatibilityElement,
+	insideBlockInspector,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	dataCompatibilityElement: string,
+	insideBlockInspector: boolean,
 }): Object {
-	if (!attributes.style.elements[dataCompatibilityElement]?.color?.gradient) {
+	if (
+		!attributes?.style?.elements?.[dataCompatibilityElement]?.color
+			?.gradient &&
+		!attributes?.elements?.[dataCompatibilityElement]?.color?.gradient
+	) {
 		return false;
 	}
 
@@ -26,23 +32,34 @@ export function elementNormalBackgroundFromWPCompatibility({
 	let gradientType: string = '';
 
 	if (
-		attributes.style.elements[
+		attributes?.style?.elements[
 			dataCompatibilityElement
-		]?.color?.gradient.startsWith('var:')
+		]?.color?.gradient.startsWith('var:') ||
+		attributes?.elements?.[
+			dataCompatibilityElement
+		]?.color?.gradient.startsWith('var(')
 	) {
 		gradient = getGradientVAFromVarString(
-			attributes.style.elements[dataCompatibilityElement]?.color?.gradient
+			insideBlockInspector
+				? attributes.style.elements[dataCompatibilityElement]?.color
+						?.gradient
+				: attributes.elements[dataCompatibilityElement]?.color?.gradient
 		);
 
 		if (isValid(gradient)) {
 			gradientType = getGradientType(gradient);
 		}
 	} else {
-		gradient =
-			attributes.style.elements[dataCompatibilityElement]?.color
-				?.gradient;
+		gradient = insideBlockInspector
+			? attributes.style.elements[dataCompatibilityElement]?.color
+					?.gradient
+			: attributes.elements[dataCompatibilityElement]?.color?.gradient
+					?.gradient;
 		gradientType = getGradientType(
-			attributes.style.elements[dataCompatibilityElement]?.color?.gradient
+			insideBlockInspector
+				? attributes.style.elements[dataCompatibilityElement]?.color
+						?.gradient
+				: attributes.elements[dataCompatibilityElement]?.color?.gradient
 		);
 	}
 
@@ -117,22 +134,31 @@ export function elementNormalBackgroundToWPCompatibility({
 	element,
 	newValue,
 	ref,
+	insideBlockInspector,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
+	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
-		return {
-			style: {
-				elements: {
-					[element]: {
-						color: {
-							gradient: undefined,
-						},
+		const elements = {
+			elements: {
+				[element]: {
+					color: {
+						gradient: undefined,
 					},
 				},
 			},
+		};
+		return {
+			...(insideBlockInspector
+				? {
+						style: {
+							elements,
+						},
+					}
+				: elements),
 		};
 	}
 
@@ -162,18 +188,25 @@ export function elementNormalBackgroundToWPCompatibility({
 					gradient = item[item?.type]?.settings?.id;
 
 					if (gradient !== undefined) {
-						result = mergeObject(result, {
-							style: {
-								elements: {
-									[element]: {
-										color: {
-											gradient:
-												'var:preset|gradient|' +
-												gradient,
-										},
+						const elements = {
+							elements: {
+								[element]: {
+									color: {
+										gradient:
+											'var:preset|gradient|' + gradient,
 									},
 								},
 							},
+						};
+
+						result = mergeObject(result, {
+							...(insideBlockInspector
+								? {
+										style: {
+											elements,
+										},
+									}
+								: elements),
 						});
 					} else {
 						break;
@@ -191,16 +224,24 @@ export function elementNormalBackgroundToWPCompatibility({
 						);
 					}
 
-					result = mergeObject(result, {
-						style: {
-							elements: {
-								[element]: {
-									color: {
-										gradient,
-									},
+					const elements = {
+						elements: {
+							[element]: {
+								color: {
+									gradient,
 								},
 							},
 						},
+					};
+
+					result = mergeObject(result, {
+						...(insideBlockInspector
+							? {
+									style: {
+										elements,
+									},
+								}
+							: elements),
 					});
 				}
 

@@ -13,8 +13,8 @@ import { getSortedObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { STORE_NAME } from '../../../../store';
 import type { StateTypes, TStates } from './types';
+import { STORE_NAME } from '../../../../store/constants';
 
 export function unstableBootstrapBlockStatesDefinitions(definitions: {
 	[key: TStates]: StateTypes,
