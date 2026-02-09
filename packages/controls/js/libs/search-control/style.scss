@@ -3,6 +3,7 @@
 	--search-control-padding: 12px;
 	--search-control-icon-size: 22px;
 	border-radius: 2px !important;
+	--wp-admin-theme-color: var(--blockera-controls-primary-color);
 
 	.components-input-control__input {
 		height: var(--search-control-height) !important;
