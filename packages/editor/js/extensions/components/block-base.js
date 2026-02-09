@@ -22,7 +22,6 @@ import {
  */
 import { useBlockFeatures } from '@blockera/features-core';
 import {
-	omit,
 	isEquals,
 	cloneObject,
 	mergeObject,
@@ -474,7 +473,13 @@ export const BlockBase: ComponentType<any> = (
 	 */
 	const setAttributes = (
 		value: any,
-		shouldUpdateClassName: boolean = true
+		{
+			ref,
+			shouldUpdateClassName = true,
+		}: {
+			ref: Object,
+			shouldUpdateClassName: boolean,
+		}
 	) => {
 		const match = regexPattern.exec(value.className);
 
@@ -507,19 +512,20 @@ export const BlockBase: ComponentType<any> = (
 			registerClassName(clientId, match[0]);
 		}
 
+		if (
+			!['save-customizations', 'detach-style'].includes(
+				ref?.current?.action
+			)
+		) {
+			// Reset the editor selected block event to undefined.
+			dispatch('blockera/editor').setEditorSelectedBlockEvent(undefined);
+		}
+
 		setState(value);
 	};
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
-		let resetEventTimeoutId;
-		if (editorSelectedBlockEvent) {
-			resetEventTimeoutId = setTimeout(() => {
-				dispatch('blockera/editor').setEditorSelectedBlockEvent(
-					undefined
-				);
-			}, 2000); // after 2 seconds, reset the editor selected block event.
-		}
 		// Skip the effect if the block is not a blockera block and not has metadata.
 		if (
 			!attributes?.blockeraPropsId &&
@@ -528,62 +534,44 @@ export const BlockBase: ComponentType<any> = (
 				editorSelectedBlockEvent
 			)
 		) {
-			return () => {
-				if (resetEventTimeoutId) {
-					clearTimeout(resetEventTimeoutId);
-				}
-			};
+			return;
 		}
-
-		// Remove the action invalid attribute from the attributes.
-		const cleanupAttributes = omit(cloneObject(attributes), 'action');
 
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
-			!isEquals(compatibleAttributes, cleanupAttributes) &&
+			!isEquals(compatibleAttributes, attributes) &&
 			false === insideBlockInspector
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
-			handleOnChangeStyleInLocalState(cleanupAttributes);
+			handleOnChangeStyleInLocalState(attributes);
 		}
 
 		// If inside the block inspector, update the parent state immediately.
 		if (insideBlockInspector) {
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
-			if (!isEquals(compatibleAttributes, cleanupAttributes)) {
-				setBlockAttributes(cleanupAttributes);
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
 
 				// Updating attributes reference...
-				compatibleAttributesRef.current = cleanupAttributes;
+				compatibleAttributesRef.current = attributes;
 			}
 
-			return () => {
-				if (resetEventTimeoutId) {
-					clearTimeout(resetEventTimeoutId);
-				}
-			};
+			return;
 		}
 
 		const timeoutId = setTimeout(() => {
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
-			if (!isEquals(compatibleAttributes, cleanupAttributes)) {
-				setBlockAttributes(cleanupAttributes);
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
 
 				// Updating attributes reference...
-				compatibleAttributesRef.current = cleanupAttributes;
+				compatibleAttributesRef.current = attributes;
 			}
 		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
-		return () => {
-			if (timeoutId) {
-				clearTimeout(timeoutId);
-			}
-			if (resetEventTimeoutId) {
-				clearTimeout(resetEventTimeoutId);
-			}
-		};
+		return () => clearTimeout(timeoutId);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [attributes]);
 

@@ -87,8 +87,10 @@ export const useBlockStyleItem = ({
 	handleOnEnable: (status: boolean, currentStyle: Object) => void,
 	handleOnClearAllCustomizations: (currentStyle: Object) => void,
 }) => {
-	const { setBlockStyles: setGlobalBlockStyles } =
-		dispatch('blockera/editor');
+	const {
+		setBlockStyles: setGlobalBlockStyles,
+		setEditorSelectedBlockEvent,
+	} = dispatch('blockera/editor');
 	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
@@ -546,18 +548,20 @@ export const useBlockStyleItem = ({
 		}
 
 		setGlobalStyles(_globalStyles);
-
 		const defaultValue =
 			prepareBlockeraDefaultAttributesValues(_defaultStyles);
-		// This is temporary action for indicate this changeset arrived from save customizations.
-		// We will use this action to avoid unnecessary re-renders.
-		// This is a temporary solution and will be removed in the future.
-		// TODO: Refactor with global state management and Remove the action property from defaultValue because it is not a valid attribute cross block types.
-		defaultValue.action = 'blockera-save-customizations';
+
+		// Set the editor selected block event to save customizations.
+		setEditorSelectedBlockEvent('save-customizations');
 
 		handleOnChangeAttributes('className', `is-style-${currentStyle.name}`, {
 			effectiveItems: defaultValue,
 			shouldUpdateClassName: false,
+			ref: {
+				current: {
+					action: 'save-customizations',
+				},
+			},
 		});
 
 		setCurrentActiveStyle(currentStyle, 'save-customizations');
@@ -590,6 +594,9 @@ export const useBlockStyleItem = ({
 						currentStyle.name
 					] || {}
 		);
+
+		// Set the editor selected block event to detach style.
+		setEditorSelectedBlockEvent('detach-style');
 
 		handleOnChangeAttributes('className', `blockera-block ${className}`, {
 			effectiveItems: getAttributesWithIds(
