@@ -96,8 +96,8 @@
 }
 
 .interface-interface-skeleton__secondary-sidebar-blockera:has(
-		.block-editor-inserter__category-panel
-	) {
+	.block-editor-inserter__category-panel
+) {
 	--sidebar-width: calc(
 		var(--sidebar-width-raw) + var(--sidebar-pattern-inserter-width)
 	);
@@ -131,6 +131,14 @@
 		.block-editor-inserter__main-area
 		.block-editor-tabbed-sidebar {
 		width: var(--sidebar-width-raw);
+	}
+
+	.interface-interface-skeleton__actions {
+		width: calc(var(--blockera-primary-sidebar-width) + 1px);
+
+		.entities-saved-states__panel-header {
+			box-shadow: -1px 0 0 0 rgba(0, 0, 0, 0.133);
+		}
 	}
 }
 

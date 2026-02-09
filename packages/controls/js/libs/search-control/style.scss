@@ -1,0 +1,23 @@
+.blockera-control-search {
+	--search-control-height: 36px;
+	--search-control-padding: 12px;
+	--search-control-icon-size: 22px;
+	border-radius: 2px !important;
+	--wp-admin-theme-color: var(--blockera-controls-primary-color);
+
+	.components-input-control__input {
+		height: var(--search-control-height) !important;
+		min-height: var(--search-control-height) !important;
+		padding: var(--search-control-padding)
+			calc(var(--search-control-padding) * 2)
+			var(--search-control-padding)
+			calc(var(--search-control-padding) * 0.5) !important;
+	}
+
+	.components-input-control__prefix {
+		svg {
+			width: var(--search-control-icon-size);
+			height: var(--search-control-icon-size);
+		}
+	}
+}
