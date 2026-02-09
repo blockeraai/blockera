@@ -572,7 +572,10 @@ export const useBlockStyleItem = ({
 
 		const selectedBlock = getSelectedBlock();
 
-		const className = generateUniqueClassName(selectedBlock.clientId);
+		const className = generateUniqueClassName(
+			selectedBlock.clientId,
+			selectedBlock?.attributes?.className || ''
+		);
 
 		const newAttributes = mergeObject(
 			mergeObject(

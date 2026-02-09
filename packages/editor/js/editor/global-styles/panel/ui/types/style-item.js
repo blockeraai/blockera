@@ -20,6 +20,6 @@ export type T_STYLE_ITEM_PROPS = {
 	onSelectStylePreview: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
-	setChangesets?: (hasChangesets?: boolean) => void,
+	setChangesets?: (hasChangesets: boolean) => void,
 	setCurrentActiveStyle: T_SET_CURRENT_ACTIVE_STYLE,
 };
