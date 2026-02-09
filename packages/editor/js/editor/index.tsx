@@ -38,7 +38,7 @@ export const getSetupHeaderRequirements = () => {
 		currentUser,
 		allowedUsers,
 		allowedPostTypes,
-		blockeraCurrentPostType: window?.blockeraCurrentPostType,
+		blockeraCurrentPostType: (window as any)?.blockeraCurrentPostType,
 	};
 };
 
@@ -136,27 +136,29 @@ const editorPlugins = [
 	},
 ];
 
-/**
- * Register all editor plugins.
- */
-editorPlugins.forEach((plugin) => {
-	// Skip registration and rendering blockera header ui components while not needs to that.
-	if (
-		'blockera-header-ui' === plugin.name &&
-		!needToShowCanvasEditor(getSetupHeaderRequirements())
-	) {
-		return;
-	}
+export const registerBlockeraEditorInternalPlugins = () => {
+	/**
+	 * Register all editor plugins.
+	 */
+	editorPlugins.forEach((plugin) => {
+		// Skip registration and rendering blockera header ui components while not needs to that.
+		if (
+			'blockera-header-ui' === plugin.name &&
+			!needToShowCanvasEditor(getSetupHeaderRequirements())
+		) {
+			return;
+		}
 
-	if ('blockera-global-styles-panel' === plugin.name) {
-		globalStylesRegistration();
-	}
+		if ('blockera-global-styles-panel' === plugin.name) {
+			globalStylesRegistration();
+		}
 
-	registerPlugin(plugin.name, {
-		render: plugin.render,
-		icon: plugin.icon,
+		registerPlugin(plugin.name, {
+			render: plugin.render,
+			icon: plugin.icon,
+		});
 	});
-});
+};
 
 // Export bootstrap function
 export { bootstrapEditor } from './bootstrap';

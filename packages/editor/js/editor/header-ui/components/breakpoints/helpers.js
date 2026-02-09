@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { select } from '@wordpress/data';
+import type { ComponentType } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { default as memoize } from 'fast-memoize';
 
@@ -28,7 +29,7 @@ import { default as defaultBreakpoints } from '../../../../extensions/libs/block
  * @param {TBreakpoint} breakPoint The breakpoint to check.
  * @return {boolean} true on success, false on otherwise.
  */
-export const isBaseBreakpoint = (breakPoint: TBreakpoint): boolean =>
+export const isBaseBreakpoint = (breakPoint: TBreakpoint | string): boolean =>
 	getBaseBreakpoint() === breakPoint;
 
 /**
@@ -45,7 +46,7 @@ export const getBaseBreakpoint = (): TBreakpoint => 'desktop';
  * @return {string} the breakpoint identifier.
  */
 export const getSmallestBreakpoint: (breakpoints?: {
-	[key: TBreakpoint]: BreakpointTypes,
+	[key: TBreakpoint | string]: BreakpointTypes,
 }) => TBreakpoint = memoize(function (breakpoints?: {
 	[key: TBreakpoint]: BreakpointTypes,
 }): TBreakpoint {
@@ -98,7 +99,7 @@ export const getSmallestBreakpoint: (breakpoints?: {
  * @return {string} the breakpoint ID.
  */
 export const getLargestBreakpoint: (breakpoints?: {
-	[key: TBreakpoint]: BreakpointTypes,
+	[key: TBreakpoint | string]: BreakpointTypes,
 }) => TBreakpoint = memoize(function (breakpoints?: {
 	[key: TBreakpoint]: BreakpointTypes,
 }): TBreakpoint {
@@ -152,8 +153,8 @@ export const getLargestBreakpoint: (breakpoints?: {
  * @return {string} the tooltip description
  */
 export const getBreakpointLongDescription = (
-	breakpoint: TBreakpoint,
-	breakpoints?: { [key: TBreakpoint]: BreakpointTypes }
+	breakpoint: TBreakpoint | string,
+	breakpoints?: { [key: TBreakpoint | string]: BreakpointTypes }
 ): string => {
 	const { getBreakpoints } = select('blockera/editor') || {
 		getBreakpoints: defaultBreakpoints,
@@ -246,8 +247,8 @@ export const getBreakpointLongDescription = (
  * @return {string} the tooltip description
  */
 export const getBreakpointShortDescription = (
-	breakpoint: TBreakpoint,
-	breakpoints?: { [key: TBreakpoint]: BreakpointTypes }
+	breakpoint: TBreakpoint | string,
+	breakpoints?: { [key: TBreakpoint | string]: BreakpointTypes }
 ): string => {
 	const { getBreakpoints } = select('blockera/editor') || {
 		getBreakpoints: defaultBreakpoints,
@@ -307,16 +308,22 @@ export function prepValueForHeader(value: any): string {
 }
 
 export function getSortedBreakpoints(
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
+	breakpoints: { [key: TBreakpoint | string]: BreakpointTypes },
 	{
 		BreakpointIcon,
 		output = 'icons',
 		onClick = () => {},
 		setActiveBreakpoint,
 		currentActiveBreakpoint,
+	}: {
+		output: 'icons' | 'objects',
+		BreakpointIcon: ComponentType<any>,
+		currentActiveBreakpoint: TBreakpoint,
+		onClick: (breakpoint: TBreakpoint | string) => void,
+		setActiveBreakpoint: (breakpoint: TBreakpoint | string) => void,
 	}
-) {
-	const newBreakpointsList = [];
+): Array<ComponentType<any>> {
+	const newBreakpointsList: Array<any> = [];
 
 	// Helper function to extract numeric value from px string
 	const extractNumericValue = (value: string): number => {
@@ -369,13 +376,13 @@ export function getSortedBreakpoints(
 
 	if ('icons' === output) {
 		breakpointsEntries = breakpointsEntries.filter(
-			([, item]: [TBreakpoint, BreakpointTypes]) => item.status
+			([, item]: [TBreakpoint | string, BreakpointTypes]) => item.status
 		);
 	}
 
 	// Convert to array and sort
 	const sortedBreakpoints = breakpointsEntries
-		.map(([itemId, item]: [TBreakpoint, BreakpointTypes]) => {
+		.map(([itemId, item]: [TBreakpoint | string, BreakpointTypes]) => {
 			const sortInfo = getBreakpointSortInfo(item);
 			return {
 				itemId,
@@ -408,6 +415,7 @@ export function getSortedBreakpoints(
 						min: item.settings.min || '',
 						max: item.settings.max || '',
 					}}
+					// $FlowFixMe
 					isDefault={item.isDefault}
 					onClick={(event) => {
 						event.stopPropagation();
@@ -420,7 +428,7 @@ export function getSortedBreakpoints(
 				/>
 			);
 		} else {
-			newBreakpointsList[itemId] = item;
+			newBreakpointsList.push(item);
 		}
 	});
 

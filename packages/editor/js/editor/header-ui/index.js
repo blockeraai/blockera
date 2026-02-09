@@ -29,7 +29,10 @@ export default function HeaderUI(): MixedElement {
 	return (
 		<Fill name="blockera/slots/editor-header-settings">
 			<ErrorBoundary>
-				<BreakpointsUI className="blockera-canvas-breakpoints" />
+				<BreakpointsUI
+					editorMode={editorMode}
+					className="blockera-canvas-breakpoints"
+				/>
 			</ErrorBoundary>
 		</Fill>
 	);

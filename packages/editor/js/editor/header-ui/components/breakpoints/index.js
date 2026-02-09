@@ -4,8 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { select, dispatch, useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
+import { dispatch, useSelect, useDispatch } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -23,12 +23,17 @@ import { isBaseBreakpoint, getBaseBreakpoint } from './helpers';
 import { subscribeToEditorModeChanges } from './editor-mode-subscription';
 import { useStoreSelectors } from '../../../../hooks/use-store-selectors';
 import { useStoreDispatchers } from '../../../../hooks/use-store-dispatchers';
+import type {
+	TBreakpoint,
+	BreakpointTypes,
+} from '../../../../extensions/libs/block-card/block-states/types';
 
 export const BreakpointsUI = ({
 	className,
+	editorMode,
 }: BreakpointsComponentProps): MixedElement => {
 	const { getDeviceType, getBreakpoints, getBreakpoint, getCanvasSettings } =
-		select('blockera/editor');
+		useSelect((select) => select('blockera/editor'), []);
 	const {
 		setDeviceType,
 		setCanvasSettings,
@@ -46,10 +51,6 @@ export const BreakpointsUI = ({
 	const {
 		blockEditor: { updateBlockAttributes },
 	} = useStoreDispatchers();
-	const editorMode = useSelect(
-		(_select) => _select('core/editor').getEditorMode(),
-		[]
-	);
 
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
@@ -93,6 +94,7 @@ export const BreakpointsUI = ({
 						editorWrapper.style.margin = '';
 						editorWrapper.style.transform = '';
 						editorWrapper.classList.remove('preview-margin');
+						// $FlowFixMe
 						editorWrapper.parentElement.style.background = '';
 
 						if (iframe) {
@@ -185,6 +187,28 @@ export const BreakpointsUI = ({
 		updateSelectedBlock(device);
 	};
 
+	const baseBreakpoint = getBaseBreakpoint();
+	let breakpoints = getBreakpoints();
+
+	const availableBreakpoints = (() => {
+		if (!breakpoints || typeof breakpoints !== 'object') {
+			breakpoints = getBreakpoints();
+		}
+
+		const result: { [key: TBreakpoint | string]: BreakpointTypes } = {};
+
+		for (const key in breakpoints) {
+			if (
+				key === baseBreakpoint ||
+				(breakpoints[key]?.settings?.picked && breakpoints[key]?.status)
+			) {
+				result[key] = breakpoints[key];
+			}
+		}
+
+		return result;
+	})();
+
 	return (
 		<>
 			<ControlContextProvider
@@ -203,15 +227,8 @@ export const BreakpointsUI = ({
 					justifyContent={'center'}
 				>
 					<PickedBreakpoints
-						items={Object.fromEntries(
-							Object.entries(getBreakpoints()).filter(
-								([key]) =>
-									(getBreakpoints()[key].settings.picked &&
-										getBreakpoints()[key].status) ||
-									key === getBaseBreakpoint()
-							)
-						)}
 						onClick={handleOnClick}
+						items={availableBreakpoints}
 						updateBlock={updateSelectedBlock}
 						updaterDeviceIndicator={updaterDeviceIndicator}
 					/>
