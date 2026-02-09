@@ -231,3 +231,10 @@ export const deleteStyleVariationBlocks = (
 		type: 'DELETE_STYLE_VARIATION_BLOCKS',
 	};
 };
+
+export const setEditorSelectedBlockEvent = (event: string): Object => {
+	return {
+		event,
+		type: 'SET_EDITOR_SELECTED_BLOCK_EVENT',
+	};
+};
