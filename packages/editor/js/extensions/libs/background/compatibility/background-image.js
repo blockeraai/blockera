@@ -8,10 +8,12 @@ import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
 
 export function backgroundFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockId?: string,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if (!isEmptyObject(attributes?.blockeraBackground?.value)) {
@@ -23,9 +25,10 @@ export function backgroundFromWPCompatibility({
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.background.backgroundImage.*
 	// Global styles: attributes.background.backgroundImage.*
-	const bgImageSource = insideBlockInspector
-		? attributes?.style?.background
-		: attributes?.background;
+	const bgImageSource =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.background
+			: attributes?.background;
 
 	if (bgImageSource?.backgroundImage?.url !== undefined) {
 		const bgImage = {
@@ -97,7 +100,7 @@ export function backgroundFromWPCompatibility({
 		attributes?.gradient !== undefined ||
 		attributes?.color?.gradient !== undefined
 	) {
-		if (insideBlockInspector) {
+		if (insideBlockInspector && runSelectedBlockEvent) {
 			gradient = getGradientVAFromVarString(
 				`var:preset|gradient|${attributes?.gradient}`
 			);
@@ -110,6 +113,7 @@ export function backgroundFromWPCompatibility({
 	// style.color.background is not variable
 	else if (
 		insideBlockInspector &&
+		runSelectedBlockEvent &&
 		attributes?.style?.color?.gradient !== undefined
 	) {
 		gradient = attributes?.style?.color?.gradient;
@@ -170,14 +174,16 @@ export function backgroundFromWPCompatibility({
 export function backgroundToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
-		if (insideBlockInspector) {
+		if (insideBlockInspector && runSelectedBlockEvent) {
 			return {
 				style: {
 					background: {
@@ -268,7 +274,7 @@ export function backgroundToWPCompatibility({
 
 				result = mergeObject(
 					result,
-					insideBlockInspector
+					insideBlockInspector && runSelectedBlockEvent
 						? {
 								style: bgImageData,
 							}
@@ -290,7 +296,7 @@ export function backgroundToWPCompatibility({
 					gradient = item[item?.type]?.settings?.id;
 
 					if (gradient !== undefined) {
-						if (insideBlockInspector) {
+						if (insideBlockInspector && runSelectedBlockEvent) {
 							result = mergeObject(result, {
 								gradient,
 							});
@@ -325,7 +331,7 @@ export function backgroundToWPCompatibility({
 
 					result = mergeObject(
 						result,
-						insideBlockInspector
+						insideBlockInspector && runSelectedBlockEvent
 							? {
 									style: gradientData,
 								}

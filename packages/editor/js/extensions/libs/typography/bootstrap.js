@@ -62,11 +62,17 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, insideBlockInspector } = blockDetail;
+			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
 
 			//
 			// Font Family
@@ -74,6 +80,7 @@ export const bootstrap = (): void => {
 			attributes = fontFamilyFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -82,6 +89,7 @@ export const bootstrap = (): void => {
 			attributes = fontSizeFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -90,6 +98,7 @@ export const bootstrap = (): void => {
 			attributes = lineHeightFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -99,6 +108,7 @@ export const bootstrap = (): void => {
 				attributes,
 				blockId,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -107,6 +117,7 @@ export const bootstrap = (): void => {
 			attributes = textDecorationFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -115,6 +126,7 @@ export const bootstrap = (): void => {
 			attributes = fontAppearanceFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -123,6 +135,7 @@ export const bootstrap = (): void => {
 			attributes = textTransformFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -131,6 +144,7 @@ export const bootstrap = (): void => {
 			attributes = letterSpacingFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -139,6 +153,7 @@ export const bootstrap = (): void => {
 			attributes = textOrientationFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -147,6 +162,7 @@ export const bootstrap = (): void => {
 			attributes = fontColorFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -177,13 +193,17 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId } = blockDetail;
+			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
 
-			const { insideBlockInspector } = blockDetail;
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
 
 			switch (featureId) {
 				case 'blockeraFontFamily':
@@ -193,6 +213,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -203,6 +224,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -213,6 +235,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -223,6 +246,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -234,6 +258,7 @@ export const bootstrap = (): void => {
 							ref,
 							blockId,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -244,6 +269,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -254,6 +280,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -264,6 +291,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -274,6 +302,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -286,6 +315,7 @@ export const bootstrap = (): void => {
 							getAttributes,
 							blockDetail,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 			}

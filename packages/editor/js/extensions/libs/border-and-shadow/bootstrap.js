@@ -38,19 +38,30 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
+			const { insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
+
 			attributes = borderFromWPCompatibility({
 				attributes,
-				insideBlockInspector: blockDetail.insideBlockInspector,
+				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			attributes = borderRadiusFromWPCompatibility({
 				attributes,
-				insideBlockInspector: blockDetail.insideBlockInspector,
+				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			attributes = shadowFromWPCompatibility({
 				attributes,
-				insideBlockInspector: blockDetail.insideBlockInspector,
+				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -86,6 +97,14 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
+			const { insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
+
 			switch (featureId) {
 				case 'blockeraBorder':
 					return mergeObject(
@@ -93,8 +112,8 @@ export const bootstrap = (): void => {
 						borderToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector:
-								blockDetail.insideBlockInspector,
+							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -104,8 +123,8 @@ export const bootstrap = (): void => {
 						borderRadiusToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector:
-								blockDetail.insideBlockInspector,
+							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -115,8 +134,8 @@ export const bootstrap = (): void => {
 						shadowToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector:
-								blockDetail.insideBlockInspector,
+							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 			}

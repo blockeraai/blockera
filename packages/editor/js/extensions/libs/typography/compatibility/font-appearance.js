@@ -6,18 +6,22 @@ import { isEquals } from '@blockera/utils';
 
 export function fontAppearanceFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const fontWeight = insideBlockInspector
-		? attributes?.style?.typography?.fontWeight
-		: attributes?.typography?.fontWeight;
-	const fontStyle = insideBlockInspector
-		? attributes?.style?.typography?.fontStyle
-		: attributes?.typography?.fontStyle;
+	const fontWeight =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.fontWeight
+			: attributes?.typography?.fontWeight;
+	const fontStyle =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.fontStyle
+			: attributes?.typography?.fontStyle;
 
 	if (
 		isEquals(attributes?.blockeraFontAppearance?.value, {
@@ -40,11 +44,13 @@ export function fontAppearanceFromWPCompatibility({
 export function fontAppearanceToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if (
 		isEquals(newValue, {
@@ -53,7 +59,7 @@ export function fontAppearanceToWPCompatibility({
 		}) ||
 		'reset' === ref?.current?.action
 	) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -70,7 +76,7 @@ export function fontAppearanceToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					typography: {

@@ -8,14 +8,17 @@ import { isSpecialUnit } from '@blockera/controls';
 export function letterSpacingFromWPCompatibility({
 	attributes,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const letterSpacing = insideBlockInspector
-		? attributes?.style?.typography?.letterSpacing
-		: attributes?.typography?.letterSpacing;
+	const letterSpacing =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.letterSpacing
+			: attributes?.typography?.letterSpacing;
 
 	if (
 		attributes?.blockeraLetterSpacing?.value === '' &&
@@ -33,13 +36,15 @@ export function letterSpacingToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -59,7 +64,7 @@ export function letterSpacingToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					typography: {

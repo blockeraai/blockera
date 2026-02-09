@@ -8,15 +8,18 @@ import { isObject, isString } from '@blockera/utils';
 
 export function borderRadiusFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius?.value)) {
-		const borderRadius = insideBlockInspector
-			? attributes?.style?.border?.radius
-			: attributes?.border?.radius;
+		const borderRadius =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.border?.radius
+				: attributes?.border?.radius;
 
 		if (borderRadius) {
 			if (isString(borderRadius)) {
@@ -71,14 +74,16 @@ export function borderRadiusFromWPCompatibility({
 export function borderRadiusToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		if (!insideBlockInspector) {
+		if (!insideBlockInspector || !runSelectedBlockEvent) {
 			return {
 				border: {
 					radius: undefined,
@@ -97,7 +102,7 @@ export function borderRadiusToWPCompatibility({
 
 	if (newValue.type === 'all') {
 		if (!newValue?.all.endsWith('func')) {
-			if (!insideBlockInspector) {
+			if (!insideBlockInspector || !runSelectedBlockEvent) {
 				return {
 					border: {
 						radius: newValue?.all,
@@ -114,7 +119,7 @@ export function borderRadiusToWPCompatibility({
 			};
 		}
 
-		if (!insideBlockInspector) {
+		if (!insideBlockInspector || !runSelectedBlockEvent) {
 			return {
 				border: {
 					radius: undefined,
@@ -137,7 +142,7 @@ export function borderRadiusToWPCompatibility({
 			newValue?.bottomLeft === '' &&
 			newValue?.bottomRight === ''
 		) {
-			if (!insideBlockInspector) {
+			if (!insideBlockInspector || !runSelectedBlockEvent) {
 				return {
 					border: {
 						radius: undefined,
@@ -202,7 +207,7 @@ export function borderRadiusToWPCompatibility({
 			}
 		}
 
-		if (!insideBlockInspector) {
+		if (!insideBlockInspector || !runSelectedBlockEvent) {
 			return {
 				border: {
 					radius: corners,

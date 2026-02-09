@@ -9,15 +9,18 @@ import { isEquals } from '@blockera/utils';
 
 export function borderFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderEmpty(attributes?.blockeraBorder?.value)) {
-		const border = insideBlockInspector
-			? attributes?.style?.border
-			: attributes?.border;
+		const border =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.border
+				: attributes?.border;
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor) {
@@ -108,10 +111,12 @@ export function borderFromWPCompatibility({
 export function borderToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
@@ -126,7 +131,7 @@ export function borderToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(insideBlockInspector && runSelectedBlockEvent
 				? {
 						borderColor: undefined,
 						style: {
@@ -150,7 +155,7 @@ export function borderToWPCompatibility({
 			};
 
 			return {
-				...(insideBlockInspector
+				...(insideBlockInspector && runSelectedBlockEvent
 					? {
 							borderColor: newValue?.all?.color?.settings?.id,
 							style: {
@@ -191,7 +196,7 @@ export function borderToWPCompatibility({
 				left: undefined,
 			};
 			const newBorder: Object = {
-				...(insideBlockInspector
+				...(insideBlockInspector && runSelectedBlockEvent
 					? {
 							borderColor: undefined,
 							style: {
@@ -204,7 +209,7 @@ export function borderToWPCompatibility({
 			return newBorder;
 		}
 
-		if (!insideBlockInspector) {
+		if (!insideBlockInspector || !runSelectedBlockEvent) {
 			return {
 				border: {
 					color: newValue?.all?.color,
@@ -323,7 +328,7 @@ export function borderToWPCompatibility({
 		};
 
 		const border: Object = {
-			...(insideBlockInspector
+			...(insideBlockInspector && runSelectedBlockEvent
 				? {
 						style: {
 							border: borderData,
@@ -332,44 +337,66 @@ export function borderToWPCompatibility({
 				: { border: borderData }),
 		};
 
-		if (insideBlockInspector && isValid(border.style.border.top.color)) {
+		if (
+			insideBlockInspector &&
+			runSelectedBlockEvent &&
+			isValid(border.style.border.top.color)
+		) {
 			border.style.border.top.color =
 				'var:preset|color|' +
 				border.style.border.top.color?.settings?.id;
-		} else if (!insideBlockInspector && isValid(border.border.top.color)) {
+		} else if (
+			(!insideBlockInspector || !runSelectedBlockEvent) &&
+			isValid(border.border.top.color)
+		) {
 			border.border.top.color =
 				'var:preset|color|' + border.border.top.color?.settings?.id;
 		}
 
-		if (insideBlockInspector && isValid(border.style.border.right.color)) {
+		if (
+			insideBlockInspector &&
+			runSelectedBlockEvent &&
+			isValid(border.style.border.right.color)
+		) {
 			border.style.border.right.color =
 				'var:preset|color|' +
 				border.style.border.right.color?.settings?.id;
 		} else if (
-			!insideBlockInspector &&
+			(!insideBlockInspector || !runSelectedBlockEvent) &&
 			isValid(border.border.right.color)
 		) {
 			border.border.right.color =
 				'var:preset|color|' + border.border.right.color?.settings?.id;
 		}
 
-		if (insideBlockInspector && isValid(border.style.border.bottom.color)) {
+		if (
+			insideBlockInspector &&
+			runSelectedBlockEvent &&
+			isValid(border.style.border.bottom.color)
+		) {
 			border.style.border.bottom.color =
 				'var:preset|color|' +
 				border.style.border.bottom.color?.settings?.id;
 		} else if (
-			!insideBlockInspector &&
+			(!insideBlockInspector || !runSelectedBlockEvent) &&
 			isValid(border.border.bottom.color)
 		) {
 			border.border.bottom.color =
 				'var:preset|color|' + border.border.bottom.color?.settings?.id;
 		}
 
-		if (insideBlockInspector && isValid(border.style.border.left.color)) {
+		if (
+			insideBlockInspector &&
+			runSelectedBlockEvent &&
+			isValid(border.style.border.left.color)
+		) {
 			border.style.border.left.color =
 				'var:preset|color|' +
 				border.style.border.left.color?.settings?.id;
-		} else if (!insideBlockInspector && isValid(border.border.left.color)) {
+		} else if (
+			(!insideBlockInspector || !runSelectedBlockEvent) &&
+			isValid(border.border.left.color)
+		) {
 			border.border.left.color =
 				'var:preset|color|' + border.border.left.color?.settings?.id;
 		}

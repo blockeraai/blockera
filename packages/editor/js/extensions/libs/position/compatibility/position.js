@@ -12,42 +12,50 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 export function positionFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
+	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
+	insideBlockInspector?: boolean,
 }): Object {
+	// Check block-level style (insideBlockInspector) or global style context
+	// Block inspector: attributes.style.position.*
+	// Global styles: attributes.position.*
+	const positionData =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.position
+			: attributes?.position;
+
 	if (
 		// Blockera don't have position
 		attributes?.blockeraPosition?.value?.type === 'static' &&
 		// WP  do have position
-		attributes?.style?.position?.type
+		positionData?.type
 	) {
 		let top: ValueAddon | string = '';
-		if (attributes?.style?.position?.top) {
-			top = getSpacingVAFromVarString(attributes?.style?.position?.top);
+		if (positionData?.top) {
+			top = getSpacingVAFromVarString(positionData?.top);
 		}
 
 		let right: ValueAddon | string = '';
-		if (attributes?.style?.position?.right) {
-			right = getSpacingVAFromVarString(
-				attributes?.style?.position?.right
-			);
+		if (positionData?.right) {
+			right = getSpacingVAFromVarString(positionData?.right);
 		}
 
 		let bottom: ValueAddon | string = '';
-		if (attributes?.style?.position?.bottom) {
-			bottom = getSpacingVAFromVarString(
-				attributes?.style?.position?.bottom
-			);
+		if (positionData?.bottom) {
+			bottom = getSpacingVAFromVarString(positionData?.bottom);
 		}
 
 		let left: ValueAddon | string = '';
-		if (attributes?.style?.position?.left) {
-			left = getSpacingVAFromVarString(attributes?.style?.position?.left);
+		if (positionData?.left) {
+			left = getSpacingVAFromVarString(positionData?.left);
 		}
 
 		attributes.blockeraPosition = {
 			value: {
-				type: attributes?.style?.position?.type || '',
+				type: positionData?.type || '',
 				position: {
 					top,
 					right,
@@ -64,9 +72,13 @@ export function positionFromWPCompatibility({
 export function positionToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
+	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
+	insideBlockInspector?: boolean,
 }): Object {
 	if (
 		'reset' === ref?.current?.action ||
@@ -74,11 +86,15 @@ export function positionToWPCompatibility({
 		isUndefined(newValue) ||
 		newValue.type === 'static'
 	) {
-		return {
-			style: {
-				position: undefined,
-			},
-		};
+		return insideBlockInspector && runSelectedBlockEvent
+			? {
+					style: {
+						position: undefined,
+					},
+				}
+			: {
+					position: undefined,
+				};
 	}
 
 	let top = '';
@@ -117,15 +133,21 @@ export function positionToWPCompatibility({
 		}
 	}
 
-	return {
-		style: {
-			position: {
-				type: newValue.type,
-				top,
-				right,
-				bottom,
-				left,
-			},
-		},
+	const positionData = {
+		type: newValue.type,
+		top,
+		right,
+		bottom,
+		left,
 	};
+
+	return insideBlockInspector && runSelectedBlockEvent
+		? {
+				style: {
+					position: positionData,
+				},
+			}
+		: {
+				position: positionData,
+			};
 }
