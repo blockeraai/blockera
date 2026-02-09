@@ -57,8 +57,8 @@ export const getBreakpoint = (
 export const getAvailableBreakpoints = ({
 	breakpoints,
 }: {
-	breakpoints: { [key: TBreakpoint]: BreakpointTypes },
-}): Array<TBreakpoint> => {
+	breakpoints: { [key: TBreakpoint | string]: BreakpointTypes },
+}): Array<TBreakpoint | string> => {
 	const availableBreakpoints = [];
 
 	for (const key in breakpoints) {

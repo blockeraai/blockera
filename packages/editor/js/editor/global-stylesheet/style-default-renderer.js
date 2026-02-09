@@ -14,7 +14,10 @@ import { omitWithPattern, mergeObject, isEquals } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { generateStableBlockeraPropsId } from './utils';
+import {
+	isDefaultStylesSettings,
+	generateStableBlockeraPropsId,
+} from './utils';
 import { staticKeys, defaultBlockStates } from './constants';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { StyleVariationStylesRenderer } from './style-variation-styles-renderer';
@@ -97,11 +100,12 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 
 		return (
 			<>
-				{hasSanitizedStyles && (
-					<GlobalStylesRenderer
-						{...{ ...blockType, sanitizedBlockGlobalStyles }}
-					/>
-				)}
+				{hasSanitizedStyles &&
+					!isDefaultStylesSettings(sanitizedBlockGlobalStyles) && (
+						<GlobalStylesRenderer
+							{...{ ...blockType, sanitizedBlockGlobalStyles }}
+						/>
+					)}
 				{variationEntries.map(([variationName], variationIndex) => (
 					<StyleVariationStylesRenderer
 						{...{

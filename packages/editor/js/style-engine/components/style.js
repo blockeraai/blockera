@@ -12,5 +12,9 @@ export const Style = ({
 	clientId: string,
 	declarations: string,
 }): MixedElement => {
+	if (!declarations) {
+		return <></>;
+	}
+
 	return <style id={clientId}>{declarations}</style>;
 };

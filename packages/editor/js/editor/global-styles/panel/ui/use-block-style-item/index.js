@@ -551,6 +551,11 @@ export const useBlockStyleItem = ({
 
 		const defaultValue =
 			prepareBlockeraDefaultAttributesValues(_defaultStyles);
+		// This is temporary action for indicate this changeset arrived from save customizations.
+		// We will use this action to avoid unnecessary re-renders.
+		// This is a temporary solution and will be removed in the future.
+		// TODO: Refactor with global state management and Remove the action property from defaultValue because it is not a valid attribute cross block types.
+		defaultValue.action = 'blockera-save-customizations';
 
 		handleOnChangeAttributes('className', `is-style-${currentStyle.name}`, {
 			effectiveItems: defaultValue,
@@ -567,7 +572,10 @@ export const useBlockStyleItem = ({
 
 		const selectedBlock = getSelectedBlock();
 
-		const className = generateUniqueClassName(selectedBlock.clientId);
+		const className = generateUniqueClassName(
+			selectedBlock.clientId,
+			selectedBlock?.attributes?.className || ''
+		);
 
 		const newAttributes = mergeObject(
 			mergeObject(

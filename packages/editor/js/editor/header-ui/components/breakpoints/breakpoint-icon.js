@@ -42,38 +42,48 @@ export function BreakpointIcon({
 	...props
 }: {
 	context: 'admin' | 'canvas',
-	breakpoints: BreakpointTypes,
+	breakpoints?: { [key: TBreakpoint | string]: BreakpointTypes },
 	isDefault?: boolean,
 	settings?: {
 		min: string,
 		max: string,
+		iconType: 'library' | 'custom',
 		icon: {
 			icon: string,
 			library: string,
 			uploadSVG: string,
 		},
-		picked: boolean,
+		picked?: boolean,
 	} | null,
 	name: TBreakpoint | string,
 	className?: string,
 	tooltip?: boolean,
 	onClick?: (event: MouseEvent) => void,
 }): MixedElement {
-	if ('canvas' === context) {
+	let _breakpoints: { [key: TBreakpoint | string]: BreakpointTypes } = {};
+	if ('undefined' !== typeof breakpoints) {
+		_breakpoints = breakpoints;
+	} else if ('canvas' === context) {
 		const { getBreakpoints } = select('blockera/editor');
-		breakpoints = getBreakpoints();
+		_breakpoints = getBreakpoints();
 	}
 
-	if (isUndefined(breakpoints[name])) {
+	if ('undefined' === typeof _breakpoints) {
+		return <></>;
+	}
+
+	if ('undefined' === typeof _breakpoints[name]) {
 		return <></>;
 	}
 
 	if (isUndefined(settings)) {
-		settings = breakpoints[name]?.settings;
+		// $FlowFixMe
+		settings = _breakpoints[name]?.settings;
 	}
 
 	if (isUndefined(isDefault)) {
-		isDefault = breakpoints[name]?.isDefault || false;
+		// $FlowFixMe
+		isDefault = _breakpoints[name]?.isDefault || false;
 	}
 
 	return (
@@ -85,7 +95,7 @@ export function BreakpointIcon({
 					style={{ '--tooltip-padding': '16px' }}
 					text={
 						<>
-							<h5>{breakpoints[name].label}</h5>
+							<h5>{_breakpoints[name].label}</h5>
 
 							{isBaseBreakpoint(name) ? (
 								<Flex
@@ -161,7 +171,7 @@ export function BreakpointIcon({
 						(settings ? settings.icon.icon : `device-${name}`),
 					className
 				)}
-				aria-label={breakpoints[name].label}
+				aria-label={_breakpoints[name].label}
 				onClick={onClick}
 				{...props}
 			>

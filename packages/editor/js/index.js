@@ -8,6 +8,7 @@ export {
 	getBaseBreakpoint,
 	BreakpointsSettings,
 	setupCanvasSettings,
+	registerBlockeraEditorInternalPlugins,
 	unstableBootstrapServerSideBreakpointDefinitions,
 } from './editor';
 
