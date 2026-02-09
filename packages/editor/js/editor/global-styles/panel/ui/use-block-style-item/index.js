@@ -41,7 +41,6 @@ export const useBlockStyleItem = ({
 	styles,
 	blockName,
 	setStyles,
-	userConfig,
 	blockStyles,
 	cachedStyle,
 	defaultStyles,
@@ -55,7 +54,6 @@ export const useBlockStyleItem = ({
 }: {
 	styles: Object,
 	blockName: string,
-	userConfig: Object,
 	cachedStyle: Object,
 	defaultStyles: Object,
 	blockStyles: Array<Object>,
@@ -269,7 +267,7 @@ export const useBlockStyleItem = ({
 			setBlockeraGlobalStylesMetaData(blockeraMetaData);
 
 			setGlobalStyles(
-				mergeObject(userConfig.styles, {
+				mergeObject(globalStyles, {
 					blockeraMetaData,
 					blocks: {
 						[blockName]: {
