@@ -26,15 +26,23 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.positionExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId } = blockDetail;
+			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
+
 			if (blockId === 'core/group') {
 				attributes = positionFromWPCompatibility({
 					attributes,
+					insideBlockInspector,
+					runSelectedBlockEvent,
 				});
 			}
 
@@ -67,11 +75,17 @@ export const bootstrap = (): void => {
 			getAttributes: () => Object,
 			blockDetail: BlockDetail
 		): Object => {
-			const { blockId } = blockDetail;
+			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
 
 			if (featureId === 'blockeraPosition' && blockId === 'core/group') {
 				return mergeObject(
@@ -79,6 +93,8 @@ export const bootstrap = (): void => {
 					positionToWPCompatibility({
 						newValue,
 						ref,
+						insideBlockInspector,
+						runSelectedBlockEvent,
 					})
 				);
 			}

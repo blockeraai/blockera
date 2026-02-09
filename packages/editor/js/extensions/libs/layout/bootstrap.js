@@ -51,11 +51,17 @@ export const bootstrap = (): void => {
 				blockAttributes,
 				activeBlockVariation,
 				insideBlockInspector,
+				editorSelectedBlockEvent,
 			} = blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
 
 			//
 			// Display compatibility
@@ -105,6 +111,7 @@ export const bootstrap = (): void => {
 			attributes = gapFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			//
@@ -113,6 +120,7 @@ export const bootstrap = (): void => {
 			attributes = spacingFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -149,11 +157,17 @@ export const bootstrap = (): void => {
 				blockAttributes,
 				activeBlockVariation,
 				insideBlockInspector,
+				editorSelectedBlockEvent,
 			} = blockDetail;
 
 			if (isInvalidCompatibilityRun(blockDetail, ref)) {
 				return nextState;
 			}
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
 
 			switch (featureId) {
 				case 'blockeraSpacing':
@@ -163,6 +177,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -207,6 +222,7 @@ export const bootstrap = (): void => {
 							defaultValue: blockAttributes?.blockeraGap?.default,
 							blockId,
 							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 			}

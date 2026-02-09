@@ -9,10 +9,12 @@ import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 export function minHeightFromWPCompatibility({
 	attributes,
 	blockId,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId?: string,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	if (attributes?.blockeraMinHeight?.value !== '') {
@@ -24,6 +26,7 @@ export function minHeightFromWPCompatibility({
 		// Block inspector: separated minHeight and minHeightUnit
 		if (
 			insideBlockInspector &&
+			runSelectedBlockEvent &&
 			attributes?.minHeight !== undefined &&
 			attributes?.minHeightUnit !== undefined
 		) {
@@ -50,18 +53,20 @@ export function minHeightToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: string,
 	ref?: Object,
 	blockId: string,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		// input and unit are separated
 		case 'core/cover':
 			if ('reset' === ref?.current?.action) {
-				return insideBlockInspector
+				return insideBlockInspector && runSelectedBlockEvent
 					? {
 							minHeight: undefined,
 							minHeightUnit: undefined,
@@ -79,7 +84,7 @@ export function minHeightToWPCompatibility({
 				isSpecialUnit(newValue) ||
 				!isString(newValue)
 			) {
-				return insideBlockInspector
+				return insideBlockInspector && runSelectedBlockEvent
 					? {
 							minHeight: undefined,
 							minHeightUnit: undefined,
@@ -91,7 +96,7 @@ export function minHeightToWPCompatibility({
 						};
 			}
 
-			if (insideBlockInspector) {
+			if (insideBlockInspector && runSelectedBlockEvent) {
 				// Block inspector: separated minHeight and minHeightUnit
 				const extractedValue = extractNumberAndUnit(newValue);
 

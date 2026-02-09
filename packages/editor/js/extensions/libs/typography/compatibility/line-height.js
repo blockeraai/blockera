@@ -3,14 +3,17 @@
 export function lineHeightFromWPCompatibility({
 	attributes,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object | false {
 	// Check block-level style (insideBlockInspector) or global style context
-	const lineHeight = insideBlockInspector
-		? attributes?.style?.typography?.lineHeight
-		: attributes?.typography?.lineHeight;
+	const lineHeight =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.lineHeight
+			: attributes?.typography?.lineHeight;
 
 	if (
 		attributes?.blockeraLineHeight?.value === '' &&
@@ -28,13 +31,15 @@ export function lineHeightToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -54,7 +59,7 @@ export function lineHeightToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					typography: {

@@ -8,10 +8,12 @@ import { getFontSizeVAFromVarString } from '@blockera/data';
 
 export function fontSizeFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if (attributes?.blockeraFontSize?.value === '') {
 		// fontSize attribute in root always is variable
@@ -19,7 +21,7 @@ export function fontSizeFromWPCompatibility({
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.fontSize || attributes?.typography?.fontSize) {
 			const fontSizeVar = getFontSizeVAFromVarString(
-				insideBlockInspector
+				insideBlockInspector && runSelectedBlockEvent
 					? `var:preset|font-size|${attributes?.fontSize}`
 					: attributes?.typography?.fontSize
 			);
@@ -34,9 +36,10 @@ export function fontSizeFromWPCompatibility({
 		}
 
 		// Check block-level style (insideBlockInspector) or global style context
-		const fontSize = insideBlockInspector
-			? attributes?.style?.typography?.fontSize
-			: attributes?.typography?.fontSize;
+		const fontSize =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.typography?.fontSize
+				: attributes?.typography?.fontSize;
 
 		if (fontSize) {
 			attributes.blockeraFontSize = {
@@ -54,13 +57,15 @@ export function fontSizeToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					fontSize: undefined,
 					style: {
@@ -78,7 +83,7 @@ export function fontSizeToWPCompatibility({
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					fontSize: newValue?.settings?.id,
 					style: {
@@ -99,7 +104,7 @@ export function fontSizeToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				fontSize: undefined,
 				style: {

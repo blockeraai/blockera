@@ -14,17 +14,20 @@ import { isSpecialUnit } from '@blockera/controls';
 
 export function spacingFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.spacing.*
 	// Global styles: attributes.spacing.*
-	const spacing = insideBlockInspector
-		? attributes?.style?.spacing
-		: attributes?.spacing;
+	const spacing =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.spacing
+			: attributes?.spacing;
 
 	if (
 		// WP have spacing value
@@ -119,10 +122,12 @@ export function convertFromValue(spacing: string | Object): string {
 export function spacingToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	if (
@@ -136,7 +141,7 @@ export function spacingToWPCompatibility({
 			},
 		};
 
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: spacingData,
 				}
@@ -217,7 +222,7 @@ export function spacingToWPCompatibility({
 		newSpacing.padding = undefined;
 	}
 
-	if (insideBlockInspector) {
+	if (insideBlockInspector && runSelectedBlockEvent) {
 		return {
 			style: {
 				spacing: newSpacing,

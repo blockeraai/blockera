@@ -32,16 +32,18 @@ function isColorsEqual(
 export function fontColorFromWPCompatibility({
 	attributes,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if (attributes?.blockeraFontColor?.value === '') {
 		// textColor attribute in root always is variable
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.textColor || attributes?.color?.text) {
 			const color = getColorVAFromVarString(
-				insideBlockInspector
+				insideBlockInspector && runSelectedBlockEvent
 					? `var:preset|color|${attributes?.textColor}`
 					: attributes?.color?.text
 			);
@@ -56,9 +58,10 @@ export function fontColorFromWPCompatibility({
 		}
 
 		// Check block-level style (insideBlockInspector) or global style context
-		const textColor = insideBlockInspector
-			? attributes?.style?.color?.text
-			: attributes?.color?.text;
+		const textColor =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.color?.text
+				: attributes?.color?.text;
 
 		// font color is not variable
 		if (textColor) {
@@ -78,23 +81,27 @@ export function fontColorToWPCompatibility({
 	getAttributes,
 	blockDetail,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	getAttributes: () => Object,
 	blockDetail: BlockDetail,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	const attributes = getAttributes();
 
 	if ('reset' === ref?.current?.action || newValue === '') {
 		// Check block-level style (insideBlockInspector) or global style context
-		const currentTextColor = insideBlockInspector
-			? attributes?.style?.color?.text
-			: attributes?.color?.text;
-		const linkTextColor = insideBlockInspector
-			? attributes?.style?.elements?.link?.color?.text
-			: attributes?.elements?.link?.color?.text;
+		const currentTextColor =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.color?.text
+				: attributes?.color?.text;
+		const linkTextColor =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.elements?.link?.color?.text
+				: attributes?.elements?.link?.color?.text;
 
 		// link and font color are equal
 		if (
@@ -134,7 +141,7 @@ export function fontColorToWPCompatibility({
 				});
 			}
 
-			if (insideBlockInspector) {
+			if (insideBlockInspector && runSelectedBlockEvent) {
 				return {
 					...advancedAttrCleanup,
 					textColor: undefined,
@@ -169,7 +176,7 @@ export function fontColorToWPCompatibility({
 			};
 		}
 
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					textColor: undefined,
 					style: {
@@ -187,12 +194,13 @@ export function fontColorToWPCompatibility({
 
 	// is valid font-color variable
 	if (isValid(newValue)) {
-		const linkTextColor = insideBlockInspector
-			? attributes?.style?.elements?.link?.color?.text
-			: attributes?.elements?.link?.color?.text;
+		const linkTextColor =
+			insideBlockInspector && runSelectedBlockEvent
+				? attributes?.style?.elements?.link?.color?.text
+				: attributes?.elements?.link?.color?.text;
 
 		if (isColorsEqual(attributes?.textColor, linkTextColor)) {
-			return insideBlockInspector
+			return insideBlockInspector && runSelectedBlockEvent
 				? {
 						textColor: newValue?.settings?.id,
 						style: {
@@ -223,7 +231,7 @@ export function fontColorToWPCompatibility({
 					};
 		}
 
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					textColor: newValue?.settings?.id,
 					style: {
@@ -240,15 +248,17 @@ export function fontColorToWPCompatibility({
 	}
 
 	// Check if link and font color are equal
-	const currentTextColor = insideBlockInspector
-		? attributes?.style?.color?.text
-		: attributes?.color?.text;
-	const linkTextColor = insideBlockInspector
-		? attributes?.style?.elements?.link?.color?.text
-		: attributes?.elements?.link?.color?.text;
+	const currentTextColor =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.color?.text
+			: attributes?.color?.text;
+	const linkTextColor =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.elements?.link?.color?.text
+			: attributes?.elements?.link?.color?.text;
 
 	if (currentTextColor === linkTextColor) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					textColor: undefined,
 					style: {
@@ -279,7 +289,7 @@ export function fontColorToWPCompatibility({
 	}
 
 	// simple color
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				textColor: undefined,
 				style: {

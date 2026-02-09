@@ -228,6 +228,7 @@ export const BlockBase: ComponentType<any> = (
 		getBlockExtensionBy,
 		currentInnerBlockState,
 		getDeviceType,
+		editorSelectedBlockEvent,
 		supports,
 		selectors,
 		blockVariations,
@@ -259,7 +260,8 @@ export const BlockBase: ComponentType<any> = (
 			attributes: availableAttributes,
 		} = getBlockType(name);
 
-		const { getDeviceType } = select('blockera/editor');
+		const { getDeviceType, getEditorSelectedBlockEvent } =
+			select('blockera/editor');
 
 		return {
 			getDeviceType,
@@ -272,6 +274,7 @@ export const BlockBase: ComponentType<any> = (
 			selectors,
 			availableAttributes,
 			getActiveBlockVariation,
+			editorSelectedBlockEvent: getEditorSelectedBlockEvent(),
 			activeBlockVariation: getActiveBlockVariation(
 				name,
 				getBlockAttributes(clientId) || {}
@@ -316,6 +319,7 @@ export const BlockBase: ComponentType<any> = (
 			blockId: name,
 			blockClientId: clientId,
 			insideBlockInspector,
+			editorSelectedBlockEvent,
 			isMasterNormalState: masterIsNormalState(),
 			isNormalState: isNormalState(),
 			isMasterBlock: !isInnerBlock(currentBlock),
@@ -345,6 +349,7 @@ export const BlockBase: ComponentType<any> = (
 			currentInnerBlockState,
 			getActiveBlockVariation,
 			originDefaultAttributes,
+			editorSelectedBlockEvent,
 			additional?.blockeraInnerBlocks,
 		]
 	);
@@ -507,16 +512,27 @@ export const BlockBase: ComponentType<any> = (
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
 	useEffect(() => {
+		let resetEventTimeoutId;
+		if (editorSelectedBlockEvent) {
+			resetEventTimeoutId = setTimeout(() => {
+				dispatch('blockera/editor').setEditorSelectedBlockEvent(
+					undefined
+				);
+			}, 2000); // after 2 seconds, reset the editor selected block event.
+		}
 		// Skip the effect if the block is not a blockera block and not has metadata.
 		if (
 			!attributes?.blockeraPropsId &&
 			!attributes.hasOwnProperty('metadata') &&
-			// This is temporary action for indicate this changeset arrived from save customizations.
-			// We will use this action to avoid unnecessary re-renders.
-			// This is a temporary solution and will be removed in the future.
-			'blockera-save-customizations' !== attributes?.action
+			!['save-customizations', 'detach-style'].includes(
+				editorSelectedBlockEvent
+			)
 		) {
-			return;
+			return () => {
+				if (resetEventTimeoutId) {
+					clearTimeout(resetEventTimeoutId);
+				}
+			};
 		}
 
 		// Remove the action invalid attribute from the attributes.
@@ -542,7 +558,11 @@ export const BlockBase: ComponentType<any> = (
 				compatibleAttributesRef.current = cleanupAttributes;
 			}
 
-			return;
+			return () => {
+				if (resetEventTimeoutId) {
+					clearTimeout(resetEventTimeoutId);
+				}
+			};
 		}
 
 		const timeoutId = setTimeout(() => {
@@ -556,7 +576,14 @@ export const BlockBase: ComponentType<any> = (
 			}
 		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
-		return () => clearTimeout(timeoutId);
+		return () => {
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
+			if (resetEventTimeoutId) {
+				clearTimeout(resetEventTimeoutId);
+			}
+		};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [attributes]);
 

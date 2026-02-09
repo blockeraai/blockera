@@ -425,3 +425,18 @@ export const getStyleVariationBlocks = (
 ): Object => {
 	return globalStyles.styleVariationBlocks[variationName] || [];
 };
+
+/**
+ * Get editor selected block event.
+ *
+ * @param {{editorEvents: Object}} state the editor events.
+ *
+ * @return {string | null} the editor selected block event.
+ */
+export const getEditorSelectedBlockEvent = ({
+	editorEvents,
+}: {
+	editorEvents: Object,
+}): string | null => {
+	return editorEvents?.selectedBlockEvent || null;
+};

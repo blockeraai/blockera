@@ -2,15 +2,18 @@
 
 export function textTransformFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const textTransform = insideBlockInspector
-		? attributes?.style?.typography?.textTransform
-		: attributes?.typography?.textTransform;
+	const textTransform =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.textTransform
+			: attributes?.typography?.textTransform;
 
 	if (
 		attributes?.blockeraTextTransform?.value === '' &&
@@ -28,13 +31,15 @@ export function textTransformToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -49,7 +54,7 @@ export function textTransformToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					typography: {

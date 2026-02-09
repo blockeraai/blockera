@@ -30,22 +30,34 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.backgroundExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { blockId, blockAttributes } = blockDetail;
+			const {
+				blockId,
+				blockAttributes,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
+			} = blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
 			}
 
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
+
 			attributes = backgroundFromWPCompatibility({
 				attributes,
 				blockId,
-				insideBlockInspector: blockDetail.insideBlockInspector,
+				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			attributes = backgroundColorFromWPCompatibility({
 				attributes,
 				blockAttributes,
-				insideBlockInspector: blockDetail.insideBlockInspector,
+				insideBlockInspector,
+				runSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -81,6 +93,14 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
+			const { insideBlockInspector, editorSelectedBlockEvent } =
+				blockDetail;
+
+			const runSelectedBlockEvent = [
+				'save-customizations',
+				'detach-style',
+			].includes(editorSelectedBlockEvent);
+
 			switch (featureId) {
 				case 'blockeraBackground':
 					return mergeObject(
@@ -88,8 +108,8 @@ export const bootstrap = (): void => {
 						backgroundToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector:
-								blockDetail.insideBlockInspector,
+							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 
@@ -99,8 +119,8 @@ export const bootstrap = (): void => {
 						backgroundColorToWPCompatibility({
 							newValue,
 							ref,
-							insideBlockInspector:
-								blockDetail.insideBlockInspector,
+							insideBlockInspector,
+							runSelectedBlockEvent,
 						})
 					);
 			}

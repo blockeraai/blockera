@@ -3,14 +3,17 @@
 export function fontStyleFromWPCompatibility({
 	attributes,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const fontStyle = insideBlockInspector
-		? attributes?.style?.typography?.fontStyle
-		: attributes?.typography?.fontStyle;
+	const fontStyle =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.fontStyle
+			: attributes?.typography?.fontStyle;
 
 	if (
 		attributes?.blockeraFontStyle?.value === '' &&
@@ -28,17 +31,19 @@ export function fontStyleToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if (
 		newValue === '' ||
 		'reset' === ref?.current?.action ||
 		['normal', 'italic'].indexOf(newValue) === -1
 	) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -53,7 +58,7 @@ export function fontStyleToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					typography: {

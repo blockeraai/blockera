@@ -303,9 +303,22 @@ export const globalStyles = (state: Object = {}, action: Object): Object => {
 	return state;
 };
 
+export const editorEvents = (state: Object = {}, action: Object): Object => {
+	switch (action.type) {
+		case 'SET_EDITOR_SELECTED_BLOCK_EVENT':
+			return {
+				...state,
+				selectedBlockEvent: action.event,
+			};
+	}
+
+	return state;
+};
+
 export default (combineReducers({
 	breakpoints,
 	blockStates,
+	editorEvents,
 	globalStyles,
 	innerBlockStates,
 	blockAppSettings,

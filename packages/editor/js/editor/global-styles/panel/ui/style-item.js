@@ -50,7 +50,6 @@ export const StyleItem = ({
 	inGlobalStylesPanel = false,
 }: T_STYLE_ITEM_PROPS): MixedElement => {
 	const {
-		userConfig,
 		defaultStyles,
 		getStyle = () => ({}),
 		getStyleVariationBlocks,
@@ -126,7 +125,6 @@ export const StyleItem = ({
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		blockName,
-		userConfig,
 		blockStyles,
 		cachedStyle,
 		defaultStyles,

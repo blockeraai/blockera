@@ -137,17 +137,20 @@ export function convertToValue(
 
 export function gapFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.spacing.blockGap
 	// Global styles: attributes.spacing.blockGap
-	const blockGap = insideBlockInspector
-		? attributes?.style?.spacing?.blockGap
-		: attributes?.spacing?.blockGap;
+	const blockGap =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.spacing?.blockGap
+			: attributes?.spacing?.blockGap;
 
 	if (isEquals(attributes?.blockeraGap?.value, defaultGap) && blockGap) {
 		attributes.blockeraGap = {
@@ -163,12 +166,14 @@ export function gapToWPCompatibility({
 	ref,
 	defaultValue,
 	blockId,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	defaultValue: Object,
 	blockId: string,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
@@ -178,7 +183,7 @@ export function gapToWPCompatibility({
 			},
 		};
 
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: gapData,
 				}
@@ -196,7 +201,7 @@ export function gapToWPCompatibility({
 			},
 		};
 
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: gapData,
 				}

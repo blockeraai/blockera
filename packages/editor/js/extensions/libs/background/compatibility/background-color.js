@@ -10,10 +10,12 @@ import { getColorVAFromVarString } from '@blockera/data';
 export function backgroundColorFromWPCompatibility({
 	attributes,
 	blockAttributes,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockAttributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if (
@@ -36,7 +38,11 @@ export function backgroundColorFromWPCompatibility({
 	}
 
 	// style.color.background is not variable
-	else if (insideBlockInspector && attributes?.style?.color?.background) {
+	else if (
+		insideBlockInspector &&
+		runSelectedBlockEvent &&
+		attributes?.style?.color?.background
+	) {
 		attributes.blockeraBackgroundColor = {
 			value: attributes?.style?.color?.background,
 		};
@@ -55,14 +61,16 @@ export function backgroundColorFromWPCompatibility({
 export function backgroundColorToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					backgroundColor: undefined,
 					style: {
@@ -80,7 +88,7 @@ export function backgroundColorToWPCompatibility({
 
 	// is valid background color variable
 	if (isValid(newValue)) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					backgroundColor: newValue?.settings?.id,
 					style: {
@@ -96,7 +104,7 @@ export function backgroundColorToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				backgroundColor: undefined,
 				style: {

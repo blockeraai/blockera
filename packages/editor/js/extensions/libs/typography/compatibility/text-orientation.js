@@ -2,15 +2,18 @@
 
 export function textOrientationFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const writingMode = insideBlockInspector
-		? attributes?.style?.typography?.writingMode
-		: attributes?.typography?.writingMode;
+	const writingMode =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.typography?.writingMode
+			: attributes?.typography?.writingMode;
 
 	if (
 		attributes?.blockeraTextOrientation?.value === '' &&
@@ -34,13 +37,15 @@ export function textOrientationToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
+	runSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
+	runSelectedBlockEvent: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -65,7 +70,7 @@ export function textOrientationToWPCompatibility({
 	}
 
 	if (writingModeValue === undefined) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						typography: {
@@ -80,7 +85,7 @@ export function textOrientationToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					typography: {

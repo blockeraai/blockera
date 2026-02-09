@@ -253,9 +253,11 @@ function shadowToCSS(shadowItem: Object): string {
  */
 export function shadowFromWPCompatibility({
 	attributes,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	// Check if blockeraBoxShadow already has a value
@@ -267,9 +269,10 @@ export function shadowFromWPCompatibility({
 	}
 
 	// Read shadow from appropriate location based on context
-	const shadowValue = insideBlockInspector
-		? attributes?.style?.shadow
-		: attributes?.shadow;
+	const shadowValue =
+		insideBlockInspector && runSelectedBlockEvent
+			? attributes?.style?.shadow
+			: attributes?.shadow;
 
 	if (!shadowValue) {
 		return attributes;
@@ -350,15 +353,17 @@ export function shadowFromWPCompatibility({
 export function shadowToWPCompatibility({
 	newValue,
 	ref,
+	runSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
+	runSelectedBlockEvent: boolean,
 	insideBlockInspector: boolean,
 }): Object {
 	// Handle reset case
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						shadow: undefined,
@@ -373,7 +378,7 @@ export function shadowToWPCompatibility({
 	const sortedShadows = getSortedRepeater(newValue);
 
 	if (!sortedShadows || sortedShadows.length === 0) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						shadow: undefined,
@@ -390,7 +395,7 @@ export function shadowToWPCompatibility({
 	);
 
 	if (!firstVisibleShadow) {
-		return insideBlockInspector
+		return insideBlockInspector && runSelectedBlockEvent
 			? {
 					style: {
 						shadow: undefined,
@@ -449,7 +454,7 @@ export function shadowToWPCompatibility({
 		shadowValue = shadowToCSS(shadowItem);
 	}
 
-	return insideBlockInspector
+	return insideBlockInspector && runSelectedBlockEvent
 		? {
 				style: {
 					shadow: shadowValue,
