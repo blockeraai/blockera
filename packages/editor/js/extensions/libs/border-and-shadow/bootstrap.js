@@ -41,27 +41,22 @@ export const bootstrap = (): void => {
 			const { insideBlockInspector, editorSelectedBlockEvent } =
 				blockDetail;
 
-			const runSelectedBlockEvent = [
-				'save-customizations',
-				'detach-style',
-			].includes(editorSelectedBlockEvent);
-
 			attributes = borderFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
-				runSelectedBlockEvent,
+				editorSelectedBlockEvent,
 			});
 
 			attributes = borderRadiusFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
-				runSelectedBlockEvent,
+				editorSelectedBlockEvent,
 			});
 
 			attributes = shadowFromWPCompatibility({
 				attributes,
 				insideBlockInspector,
-				runSelectedBlockEvent,
+				editorSelectedBlockEvent,
 			});
 
 			return attributes;
@@ -100,11 +95,6 @@ export const bootstrap = (): void => {
 			const { insideBlockInspector, editorSelectedBlockEvent } =
 				blockDetail;
 
-			const runSelectedBlockEvent = [
-				'save-customizations',
-				'detach-style',
-			].includes(editorSelectedBlockEvent);
-
 			switch (featureId) {
 				case 'blockeraBorder':
 					return mergeObject(
@@ -113,7 +103,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
-							runSelectedBlockEvent,
+							editorSelectedBlockEvent,
 						})
 					);
 
@@ -124,7 +114,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
-							runSelectedBlockEvent,
+							editorSelectedBlockEvent,
 						})
 					);
 
@@ -135,7 +125,7 @@ export const bootstrap = (): void => {
 							newValue,
 							ref,
 							insideBlockInspector,
-							runSelectedBlockEvent,
+							editorSelectedBlockEvent,
 						})
 					);
 			}

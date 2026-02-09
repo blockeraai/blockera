@@ -6,20 +6,27 @@
 import { isBorderRadiusEmpty } from '@blockera/controls';
 import { isObject, isString } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function borderRadiusFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderRadiusEmpty(attributes?.blockeraBorderRadius?.value)) {
-		const borderRadius =
-			insideBlockInspector && runSelectedBlockEvent
-				? attributes?.style?.border?.radius
-				: attributes?.border?.radius;
+		const borderRadius = runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? attributes?.style?.border?.radius
+			: attributes?.border?.radius;
 
 		if (borderRadius) {
 			if (isString(borderRadius)) {
@@ -74,16 +81,21 @@ export function borderRadiusFromWPCompatibility({
 export function borderRadiusToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		if (!insideBlockInspector || !runSelectedBlockEvent) {
+		if (
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
 			return {
 				border: {
 					radius: undefined,
@@ -102,7 +114,12 @@ export function borderRadiusToWPCompatibility({
 
 	if (newValue.type === 'all') {
 		if (!newValue?.all.endsWith('func')) {
-			if (!insideBlockInspector || !runSelectedBlockEvent) {
+			if (
+				!runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
+			) {
 				return {
 					border: {
 						radius: newValue?.all,
@@ -119,7 +136,12 @@ export function borderRadiusToWPCompatibility({
 			};
 		}
 
-		if (!insideBlockInspector || !runSelectedBlockEvent) {
+		if (
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
 			return {
 				border: {
 					radius: undefined,
@@ -142,7 +164,12 @@ export function borderRadiusToWPCompatibility({
 			newValue?.bottomLeft === '' &&
 			newValue?.bottomRight === ''
 		) {
-			if (!insideBlockInspector || !runSelectedBlockEvent) {
+			if (
+				!runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
+			) {
 				return {
 					border: {
 						radius: undefined,
@@ -207,7 +234,12 @@ export function borderRadiusToWPCompatibility({
 			}
 		}
 
-		if (!insideBlockInspector || !runSelectedBlockEvent) {
+		if (
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
 			return {
 				border: {
 					radius: corners,

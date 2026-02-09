@@ -251,13 +251,18 @@ function shadowToCSS(shadowItem: Object): string {
  * @param {boolean} params.insideBlockInspector - Whether we're in block inspector context
  * @return {Object} Updated attributes
  */
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function shadowFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	// Check if blockeraBoxShadow already has a value
@@ -269,10 +274,12 @@ export function shadowFromWPCompatibility({
 	}
 
 	// Read shadow from appropriate location based on context
-	const shadowValue =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.shadow
-			: attributes?.shadow;
+	const shadowValue = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.shadow
+		: attributes?.shadow;
 
 	if (!shadowValue) {
 		return attributes;
@@ -353,17 +360,20 @@ export function shadowFromWPCompatibility({
 export function shadowToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	// Handle reset case
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						shadow: undefined,
@@ -378,7 +388,10 @@ export function shadowToWPCompatibility({
 	const sortedShadows = getSortedRepeater(newValue);
 
 	if (!sortedShadows || sortedShadows.length === 0) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						shadow: undefined,
@@ -395,7 +408,10 @@ export function shadowToWPCompatibility({
 	);
 
 	if (!firstVisibleShadow) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						shadow: undefined,
@@ -454,7 +470,10 @@ export function shadowToWPCompatibility({
 		shadowValue = shadowToCSS(shadowItem);
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				style: {
 					shadow: shadowValue,

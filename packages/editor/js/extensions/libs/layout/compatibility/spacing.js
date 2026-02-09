@@ -12,22 +12,29 @@ import { boxSpacingControlDefaultValue } from '@blockera/controls/js/libs/box-sp
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 import { isSpecialUnit } from '@blockera/controls';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function spacingFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.spacing.*
 	// Global styles: attributes.spacing.*
-	const spacing =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.spacing
-			: attributes?.spacing;
+	const spacing = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.spacing
+		: attributes?.spacing;
 
 	if (
 		// WP have spacing value
@@ -122,12 +129,12 @@ export function convertFromValue(spacing: string | Object): string {
 export function spacingToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	if (
@@ -141,7 +148,10 @@ export function spacingToWPCompatibility({
 			},
 		};
 
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: spacingData,
 				}
@@ -222,7 +232,9 @@ export function spacingToWPCompatibility({
 		newSpacing.padding = undefined;
 	}
 
-	if (insideBlockInspector && runSelectedBlockEvent) {
+	if (
+		runInsideBlockInspector(insideBlockInspector, editorSelectedBlockEvent)
+	) {
 		return {
 			style: {
 				spacing: newSpacing,

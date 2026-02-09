@@ -33,16 +33,11 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			const runSelectedBlockEvent = [
-				'save-customizations',
-				'detach-style',
-			].includes(editorSelectedBlockEvent);
-
 			if (blockId === 'core/group') {
 				attributes = positionFromWPCompatibility({
 					attributes,
 					insideBlockInspector,
-					runSelectedBlockEvent,
+					editorSelectedBlockEvent,
 				});
 			}
 
@@ -82,11 +77,6 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			const runSelectedBlockEvent = [
-				'save-customizations',
-				'detach-style',
-			].includes(editorSelectedBlockEvent);
-
 			if (featureId === 'blockeraPosition' && blockId === 'core/group') {
 				return mergeObject(
 					nextState,
@@ -94,7 +84,7 @@ export const bootstrap = (): void => {
 						newValue,
 						ref,
 						insideBlockInspector,
-						runSelectedBlockEvent,
+						editorSelectedBlockEvent,
 					})
 				);
 			}

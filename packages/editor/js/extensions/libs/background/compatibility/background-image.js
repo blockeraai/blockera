@@ -6,14 +6,19 @@ import { isValid, type ValueAddon } from '@blockera/controls';
 import { getGradientType, getGradientVAFromVarString } from '@blockera/data';
 import { isEmpty, isString, isEmptyObject, mergeObject } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function backgroundFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockId?: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if (!isEmptyObject(attributes?.blockeraBackground?.value)) {
@@ -25,10 +30,12 @@ export function backgroundFromWPCompatibility({
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.background.backgroundImage.*
 	// Global styles: attributes.background.backgroundImage.*
-	const bgImageSource =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.background
-			: attributes?.background;
+	const bgImageSource = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.background
+		: attributes?.background;
 
 	if (bgImageSource?.backgroundImage?.url !== undefined) {
 		const bgImage = {
@@ -100,7 +107,12 @@ export function backgroundFromWPCompatibility({
 		attributes?.gradient !== undefined ||
 		attributes?.color?.gradient !== undefined
 	) {
-		if (insideBlockInspector && runSelectedBlockEvent) {
+		if (
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
 			gradient = getGradientVAFromVarString(
 				`var:preset|gradient|${attributes?.gradient}`
 			);
@@ -112,8 +124,10 @@ export function backgroundFromWPCompatibility({
 	}
 	// style.color.background is not variable
 	else if (
-		insideBlockInspector &&
-		runSelectedBlockEvent &&
+		runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		) &&
 		attributes?.style?.color?.gradient !== undefined
 	) {
 		gradient = attributes?.style?.color?.gradient;
@@ -174,16 +188,21 @@ export function backgroundFromWPCompatibility({
 export function backgroundToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
-		if (insideBlockInspector && runSelectedBlockEvent) {
+		if (
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
 			return {
 				style: {
 					background: {
@@ -274,7 +293,10 @@ export function backgroundToWPCompatibility({
 
 				result = mergeObject(
 					result,
-					insideBlockInspector && runSelectedBlockEvent
+					runInsideBlockInspector(
+						insideBlockInspector,
+						editorSelectedBlockEvent
+					)
 						? {
 								style: bgImageData,
 							}
@@ -296,7 +318,12 @@ export function backgroundToWPCompatibility({
 					gradient = item[item?.type]?.settings?.id;
 
 					if (gradient !== undefined) {
-						if (insideBlockInspector && runSelectedBlockEvent) {
+						if (
+							runInsideBlockInspector(
+								insideBlockInspector,
+								editorSelectedBlockEvent
+							)
+						) {
 							result = mergeObject(result, {
 								gradient,
 							});
@@ -331,7 +358,10 @@ export function backgroundToWPCompatibility({
 
 					result = mergeObject(
 						result,
-						insideBlockInspector && runSelectedBlockEvent
+						runInsideBlockInspector(
+							insideBlockInspector,
+							editorSelectedBlockEvent
+						)
 							? {
 									style: gradientData,
 								}

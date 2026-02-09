@@ -6,14 +6,19 @@
 import { isValid } from '@blockera/controls';
 import { getFontSizeVAFromVarString } from '@blockera/data';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function fontSizeFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if (attributes?.blockeraFontSize?.value === '') {
 		// fontSize attribute in root always is variable
@@ -21,7 +26,10 @@ export function fontSizeFromWPCompatibility({
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.fontSize || attributes?.typography?.fontSize) {
 			const fontSizeVar = getFontSizeVAFromVarString(
-				insideBlockInspector && runSelectedBlockEvent
+				runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? `var:preset|font-size|${attributes?.fontSize}`
 					: attributes?.typography?.fontSize
 			);
@@ -36,10 +44,12 @@ export function fontSizeFromWPCompatibility({
 		}
 
 		// Check block-level style (insideBlockInspector) or global style context
-		const fontSize =
-			insideBlockInspector && runSelectedBlockEvent
-				? attributes?.style?.typography?.fontSize
-				: attributes?.typography?.fontSize;
+		const fontSize = runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? attributes?.style?.typography?.fontSize
+			: attributes?.typography?.fontSize;
 
 		if (fontSize) {
 			attributes.blockeraFontSize = {
@@ -57,15 +67,18 @@ export function fontSizeToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					fontSize: undefined,
 					style: {
@@ -83,7 +96,10 @@ export function fontSizeToWPCompatibility({
 
 	// is valid font-size variable
 	if (isValid(newValue)) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					fontSize: newValue?.settings?.id,
 					style: {
@@ -104,7 +120,10 @@ export function fontSizeToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				fontSize: undefined,
 				style: {

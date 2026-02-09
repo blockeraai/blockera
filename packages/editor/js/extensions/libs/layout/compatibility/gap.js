@@ -9,6 +9,11 @@ import {
 	generateAttributeVarStringFromVA,
 } from '@blockera/data';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 const defaultGap = {
 	lock: true,
 	gap: '',
@@ -137,20 +142,22 @@ export function convertToValue(
 
 export function gapFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.spacing.blockGap
 	// Global styles: attributes.spacing.blockGap
-	const blockGap =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.spacing?.blockGap
-			: attributes?.spacing?.blockGap;
+	const blockGap = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.spacing?.blockGap
+		: attributes?.spacing?.blockGap;
 
 	if (isEquals(attributes?.blockeraGap?.value, defaultGap) && blockGap) {
 		attributes.blockeraGap = {
@@ -166,14 +173,14 @@ export function gapToWPCompatibility({
 	ref,
 	defaultValue,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	defaultValue: Object,
 	blockId: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || isEquals(newValue, defaultValue)) {
@@ -183,7 +190,10 @@ export function gapToWPCompatibility({
 			},
 		};
 
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: gapData,
 				}
@@ -201,7 +211,10 @@ export function gapToWPCompatibility({
 			},
 		};
 
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: gapData,
 				}

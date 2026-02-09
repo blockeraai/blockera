@@ -1,14 +1,19 @@
 // @flow
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function textAlignFromWPCompatibility({
 	attributes,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	let wpAlignAttrId = 'textAlign';
@@ -17,10 +22,12 @@ export function textAlignFromWPCompatibility({
 	}
 
 	// Check block-level style (insideBlockInspector) or global style context
-	const textAlign =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes[wpAlignAttrId]
-			: attributes?.typography?.textAlign;
+	const textAlign = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes[wpAlignAttrId]
+		: attributes?.typography?.textAlign;
 
 	// For detecting the text align changer from block editor controls
 	// we have to validate and make sure the value is correct and should be updated
@@ -42,14 +49,14 @@ export function textAlignToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	blockId: string,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	// use correct id for WP data attribute
 	let wpAlignAttrId = 'textAlign';
@@ -62,7 +69,10 @@ export function textAlignToWPCompatibility({
 		'reset' === ref?.current?.action ||
 		['left', 'center', 'right'].indexOf(newValue) === -1
 	) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					[wpAlignAttrId]: undefined,
 				}
@@ -73,7 +83,10 @@ export function textAlignToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				[wpAlignAttrId]: newValue,
 			}

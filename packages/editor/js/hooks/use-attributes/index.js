@@ -56,7 +56,10 @@ export const getAttributesWithIds = (
 export const useAttributes = (
 	setAttributes: (
 		attributes: Object,
-		shouldUpdateClassName?: boolean
+		{
+			ref: Object,
+			shouldUpdateClassName?: boolean,
+		}
 	) => void,
 	{
 		blockId,
@@ -123,10 +126,13 @@ export const useAttributes = (
 					newValue = undefined;
 				}
 
-				return setAttributes({
-					..._attributes,
-					metadata: { name: newValue },
-				});
+				return setAttributes(
+					{
+						..._attributes,
+						metadata: { name: newValue },
+					},
+					{ ref }
+				);
 			}
 
 			// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component, if we supported them.
@@ -240,7 +246,8 @@ export const useAttributes = (
 					reducer(
 						_attributes,
 						reset('reset_all_states' === ref.current.action)
-					)
+					),
+					{ ref }
 				);
 			}
 
@@ -252,7 +259,7 @@ export const useAttributes = (
 				setChangesets(true);
 				return setAttributes(
 					reducer(_attributes, updateNormalState()),
-					shouldUpdateClassName
+					{ shouldUpdateClassName, ref }
 				);
 			}
 
@@ -265,14 +272,16 @@ export const useAttributes = (
 						reducer(
 							_attributes,
 							updateInnerBlockInsideParentState()
-						)
+						),
+						{ ref }
 					);
 				}
 				// Assume current block isn't in normal state and attributeId isn't "blockeraBlockStates" for prevent cyclic object error!
 				// action = UPDATE_INNER_BLOCK_STATES
 				if (!isNormalState() && !attributeIsBlockStates) {
 					return setAttributes(
-						reducer(_attributes, updateInnerBlockStates())
+						reducer(_attributes, updateInnerBlockStates()),
+						{ ref }
 					);
 				}
 			}
@@ -280,12 +289,15 @@ export const useAttributes = (
 			// Assume block state is normal and attributeId is equals with "blockeraBlockStates".
 			// action = UPDATE_NORMAL_STATE
 			if (attributeIsBlockStates || isNormalState()) {
-				return setAttributes(reducer(_attributes, updateNormalState()));
+				return setAttributes(
+					reducer(_attributes, updateNormalState()),
+					{ ref }
+				);
 			}
 
 			// handle update attributes in activated state and breakpoint for master block.
 			// action = UPDATE_BLOCK_STATES
-			setAttributes(reducer(_attributes, updateBlockStates()));
+			setAttributes(reducer(_attributes, updateBlockStates()), { ref });
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[

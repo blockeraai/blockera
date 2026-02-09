@@ -1,19 +1,26 @@
 // @flow
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function fontFamilyFromWPCompatibility({
 	attributes,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object | false {
 	// Check block-level style (insideBlockInspector) or global style context
-	const fontFamily =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.fontFamily
-			: attributes?.typography?.fontFamily;
+	const fontFamily = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.fontFamily
+		: attributes?.typography?.fontFamily;
 
 	if (
 		attributes?.blockeraFontFamily?.value === '' &&
@@ -31,15 +38,18 @@ export function fontFamilyToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					fontFamily: undefined,
 				}
@@ -50,7 +60,10 @@ export function fontFamilyToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				fontFamily: newValue,
 			}

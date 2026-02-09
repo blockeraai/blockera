@@ -5,6 +5,11 @@
  */
 import { isUndefined } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export const coreWPAspectRatioValues = [
 	'1',
 	'4/3',
@@ -18,12 +23,12 @@ export const coreWPAspectRatioValues = [
 export function ratioFromWPCompatibility({
 	attributes,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId?: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	// Backward Compatibility to support blockeraRatio value structure.
@@ -55,10 +60,12 @@ export function ratioFromWPCompatibility({
 
 		case 'core/cover':
 			// Check block-level style (insideBlockInspector) or global style context
-			const aspectRatio =
-				insideBlockInspector && runSelectedBlockEvent
-					? attributes?.style?.dimensions?.aspectRatio
-					: attributes?.dimensions?.aspectRatio;
+			const aspectRatio = runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+				? attributes?.style?.dimensions?.aspectRatio
+				: attributes?.dimensions?.aspectRatio;
 
 			if (!isUndefined(aspectRatio)) {
 				const _ratio = detectWPAspectRatioValue(aspectRatio);
@@ -80,19 +87,22 @@ export function ratioToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	blockId: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		case 'core/cover':
 			if ('reset' === ref?.current?.action) {
-				return insideBlockInspector && runSelectedBlockEvent
+				return runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							style: { dimensions: { aspectRatio: undefined } },
 						}
@@ -108,7 +118,10 @@ export function ratioToWPCompatibility({
 				(newValue?.hasOwnProperty('value') && newValue?.value === '') ||
 				newValue?.val === ''
 			) {
-				return insideBlockInspector && runSelectedBlockEvent
+				return runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							style: { dimensions: { aspectRatio: undefined } },
 						}
@@ -120,7 +133,10 @@ export function ratioToWPCompatibility({
 			const _convertedRatio = convertAspectRatioValueToWP(newValue);
 
 			if (!_convertedRatio) {
-				return insideBlockInspector && runSelectedBlockEvent
+				return runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							style: { dimensions: { aspectRatio: undefined } },
 						}
@@ -129,7 +145,10 @@ export function ratioToWPCompatibility({
 						};
 			}
 
-			return insideBlockInspector && runSelectedBlockEvent
+			return runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
 				? {
 						style: { dimensions: { aspectRatio: _convertedRatio } },
 					}

@@ -7,15 +7,20 @@ import { isEquals } from '@blockera/utils';
 import { isValid } from '@blockera/controls';
 import { getColorVAFromVarString } from '@blockera/data';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function backgroundColorFromWPCompatibility({
 	attributes,
 	blockAttributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
 	blockAttributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if (
@@ -39,8 +44,10 @@ export function backgroundColorFromWPCompatibility({
 
 	// style.color.background is not variable
 	else if (
-		insideBlockInspector &&
-		runSelectedBlockEvent &&
+		runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		) &&
 		attributes?.style?.color?.background
 	) {
 		attributes.blockeraBackgroundColor = {
@@ -61,16 +68,19 @@ export function backgroundColorFromWPCompatibility({
 export function backgroundColorToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					backgroundColor: undefined,
 					style: {
@@ -88,7 +98,10 @@ export function backgroundColorToWPCompatibility({
 
 	// is valid background color variable
 	if (isValid(newValue)) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					backgroundColor: newValue?.settings?.id,
 					style: {
@@ -104,7 +117,10 @@ export function backgroundColorToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				backgroundColor: undefined,
 				style: {

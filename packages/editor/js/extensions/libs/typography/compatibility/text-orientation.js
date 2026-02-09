@@ -1,19 +1,26 @@
 // @flow
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function textOrientationFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const writingMode =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.typography?.writingMode
-			: attributes?.typography?.writingMode;
+	const writingMode = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.typography?.writingMode
+		: attributes?.typography?.writingMode;
 
 	if (
 		attributes?.blockeraTextOrientation?.value === '' &&
@@ -37,15 +44,18 @@ export function textOrientationToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						typography: {
@@ -70,7 +80,10 @@ export function textOrientationToWPCompatibility({
 	}
 
 	if (writingModeValue === undefined) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						typography: {
@@ -85,7 +98,10 @@ export function textOrientationToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				style: {
 					typography: {

@@ -7,20 +7,27 @@ import { getColorVAFromVarString } from '@blockera/data';
 import { isValid, isBorderEmpty } from '@blockera/controls';
 import { isEquals } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function borderFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if (isBorderEmpty(attributes?.blockeraBorder?.value)) {
-		const border =
-			insideBlockInspector && runSelectedBlockEvent
-				? attributes?.style?.border
-				: attributes?.border;
+		const border = runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
+			? attributes?.style?.border
+			: attributes?.border;
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor) {
@@ -111,12 +118,12 @@ export function borderFromWPCompatibility({
 export function borderToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector: boolean,
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
@@ -131,7 +138,10 @@ export function borderToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector && runSelectedBlockEvent
+			...(runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
 				? {
 						borderColor: undefined,
 						style: {
@@ -155,7 +165,10 @@ export function borderToWPCompatibility({
 			};
 
 			return {
-				...(insideBlockInspector && runSelectedBlockEvent
+				...(runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							borderColor: newValue?.all?.color?.settings?.id,
 							style: {
@@ -196,7 +209,10 @@ export function borderToWPCompatibility({
 				left: undefined,
 			};
 			const newBorder: Object = {
-				...(insideBlockInspector && runSelectedBlockEvent
+				...(runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							borderColor: undefined,
 							style: {
@@ -209,7 +225,12 @@ export function borderToWPCompatibility({
 			return newBorder;
 		}
 
-		if (!insideBlockInspector || !runSelectedBlockEvent) {
+		if (
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
+		) {
 			return {
 				border: {
 					color: newValue?.all?.color,
@@ -284,7 +305,12 @@ export function borderToWPCompatibility({
 				},
 			};
 
-			if (!insideBlockInspector) {
+			if (
+				!runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
+			) {
 				newBorder = {
 					border: {
 						color: undefined,
@@ -328,7 +354,10 @@ export function borderToWPCompatibility({
 		};
 
 		const border: Object = {
-			...(insideBlockInspector && runSelectedBlockEvent
+			...(runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
 				? {
 						style: {
 							border: borderData,
@@ -338,15 +367,20 @@ export function borderToWPCompatibility({
 		};
 
 		if (
-			insideBlockInspector &&
-			runSelectedBlockEvent &&
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.style.border.top.color)
 		) {
 			border.style.border.top.color =
 				'var:preset|color|' +
 				border.style.border.top.color?.settings?.id;
 		} else if (
-			(!insideBlockInspector || !runSelectedBlockEvent) &&
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.border.top.color)
 		) {
 			border.border.top.color =
@@ -354,15 +388,20 @@ export function borderToWPCompatibility({
 		}
 
 		if (
-			insideBlockInspector &&
-			runSelectedBlockEvent &&
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.style.border.right.color)
 		) {
 			border.style.border.right.color =
 				'var:preset|color|' +
 				border.style.border.right.color?.settings?.id;
 		} else if (
-			(!insideBlockInspector || !runSelectedBlockEvent) &&
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.border.right.color)
 		) {
 			border.border.right.color =
@@ -370,15 +409,20 @@ export function borderToWPCompatibility({
 		}
 
 		if (
-			insideBlockInspector &&
-			runSelectedBlockEvent &&
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.style.border.bottom.color)
 		) {
 			border.style.border.bottom.color =
 				'var:preset|color|' +
 				border.style.border.bottom.color?.settings?.id;
 		} else if (
-			(!insideBlockInspector || !runSelectedBlockEvent) &&
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.border.bottom.color)
 		) {
 			border.border.bottom.color =
@@ -386,15 +430,20 @@ export function borderToWPCompatibility({
 		}
 
 		if (
-			insideBlockInspector &&
-			runSelectedBlockEvent &&
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.style.border.left.color)
 		) {
 			border.style.border.left.color =
 				'var:preset|color|' +
 				border.style.border.left.color?.settings?.id;
 		} else if (
-			(!insideBlockInspector || !runSelectedBlockEvent) &&
+			!runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			isValid(border.border.left.color)
 		) {
 			border.border.left.color =

@@ -148,3 +148,24 @@ export function isInvalidCompatibilityRun(
 
 	return isBlockNotOriginalState(blockInfo);
 }
+
+/**
+ * Decide to run inside block inspector or not!
+ *
+ * @param {boolean} insideBlockInspector the flag to indicate app run inside block inspector.
+ * @param {'save-customizations' | 'detach-style'| undefined} event the selected block occurred event.
+ *
+ * @return {boolean} true on success, false otherwise.
+ */
+export const runInsideBlockInspector = (
+	insideBlockInspector: boolean,
+	event?: 'save-customizations' | 'detach-style'
+): boolean => {
+	switch (event) {
+		case 'save-customizations':
+		case 'detach-style':
+			return false;
+		default:
+			return insideBlockInspector;
+	}
+};

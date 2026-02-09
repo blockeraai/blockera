@@ -49,11 +49,6 @@ export const bootstrap = (): void => {
 				return attributes;
 			}
 
-			const runSelectedBlockEvent = [
-				'save-customizations',
-				'detach-style',
-			].includes(editorSelectedBlockEvent);
-
 			attributes = widthFromWPCompatibility({
 				attributes,
 				blockId,
@@ -68,14 +63,14 @@ export const bootstrap = (): void => {
 				attributes,
 				blockId,
 				insideBlockInspector,
-				runSelectedBlockEvent,
+				editorSelectedBlockEvent,
 			});
 
 			attributes = ratioFromWPCompatibility({
 				attributes,
 				blockId,
 				insideBlockInspector,
-				runSelectedBlockEvent,
+				editorSelectedBlockEvent,
 			});
 
 			attributes = fitFromWPCompatibility({
@@ -119,12 +114,6 @@ export const bootstrap = (): void => {
 				return nextState;
 			}
 
-			// eslint-disable-next-line @wordpress/no-unused-vars-before-return
-			const runSelectedBlockEvent = [
-				'save-customizations',
-				'detach-style',
-			].includes(editorSelectedBlockEvent);
-
 			switch (featureId) {
 				case 'blockeraWidth':
 					return mergeObject(
@@ -154,7 +143,7 @@ export const bootstrap = (): void => {
 							ref,
 							blockId,
 							insideBlockInspector,
-							runSelectedBlockEvent,
+							editorSelectedBlockEvent,
 						})
 					);
 
@@ -166,7 +155,7 @@ export const bootstrap = (): void => {
 							ref,
 							blockId,
 							insideBlockInspector,
-							runSelectedBlockEvent,
+							editorSelectedBlockEvent,
 						})
 					);
 

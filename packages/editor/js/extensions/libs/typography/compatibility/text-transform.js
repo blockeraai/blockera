@@ -1,19 +1,26 @@
 // @flow
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function textTransformFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const textTransform =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.typography?.textTransform
-			: attributes?.typography?.textTransform;
+	const textTransform = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.typography?.textTransform
+		: attributes?.typography?.textTransform;
 
 	if (
 		attributes?.blockeraTextTransform?.value === '' &&
@@ -31,15 +38,18 @@ export function textTransformToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						typography: {
@@ -54,7 +64,10 @@ export function textTransformToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				style: {
 					typography: {

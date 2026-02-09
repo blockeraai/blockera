@@ -5,20 +5,27 @@
  */
 import { isSpecialUnit } from '@blockera/controls';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function letterSpacingFromWPCompatibility({
 	attributes,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const letterSpacing =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.typography?.letterSpacing
-			: attributes?.typography?.letterSpacing;
+	const letterSpacing = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.typography?.letterSpacing
+		: attributes?.typography?.letterSpacing;
 
 	if (
 		attributes?.blockeraLetterSpacing?.value === '' &&
@@ -36,15 +43,18 @@ export function letterSpacingToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector = true,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if ('reset' === ref?.current?.action || newValue === '') {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						typography: {
@@ -64,7 +74,10 @@ export function letterSpacingToWPCompatibility({
 		newValue = undefined;
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				style: {
 					typography: {

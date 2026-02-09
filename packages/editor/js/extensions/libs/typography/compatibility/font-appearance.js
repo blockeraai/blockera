@@ -4,24 +4,33 @@
  */
 import { isEquals } from '@blockera/utils';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function fontAppearanceFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
-	const fontWeight =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.typography?.fontWeight
-			: attributes?.typography?.fontWeight;
-	const fontStyle =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.typography?.fontStyle
-			: attributes?.typography?.fontStyle;
+	const fontWeight = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.typography?.fontWeight
+		: attributes?.typography?.fontWeight;
+	const fontStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.typography?.fontStyle
+		: attributes?.typography?.fontStyle;
 
 	if (
 		isEquals(attributes?.blockeraFontAppearance?.value, {
@@ -44,13 +53,13 @@ export function fontAppearanceFromWPCompatibility({
 export function fontAppearanceToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector?: boolean,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if (
 		isEquals(newValue, {
@@ -59,7 +68,10 @@ export function fontAppearanceToWPCompatibility({
 		}) ||
 		'reset' === ref?.current?.action
 	) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						typography: {
@@ -76,7 +88,10 @@ export function fontAppearanceToWPCompatibility({
 				};
 	}
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				style: {
 					typography: {

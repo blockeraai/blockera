@@ -10,22 +10,29 @@ import {
 } from '@blockera/data';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function positionFromWPCompatibility({
 	attributes,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	// Check block-level style (insideBlockInspector) or global style context
 	// Block inspector: attributes.style.position.*
 	// Global styles: attributes.position.*
-	const positionData =
-		insideBlockInspector && runSelectedBlockEvent
-			? attributes?.style?.position
-			: attributes?.position;
+	const positionData = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
+		? attributes?.style?.position
+		: attributes?.position;
 
 	if (
 		// Blockera don't have position
@@ -72,12 +79,12 @@ export function positionFromWPCompatibility({
 export function positionToWPCompatibility({
 	newValue,
 	ref,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: Object,
 	ref?: Object,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	if (
@@ -86,7 +93,10 @@ export function positionToWPCompatibility({
 		isUndefined(newValue) ||
 		newValue.type === 'static'
 	) {
-		return insideBlockInspector && runSelectedBlockEvent
+		return runInsideBlockInspector(
+			insideBlockInspector,
+			editorSelectedBlockEvent
+		)
 			? {
 					style: {
 						position: undefined,
@@ -141,7 +151,10 @@ export function positionToWPCompatibility({
 		left,
 	};
 
-	return insideBlockInspector && runSelectedBlockEvent
+	return runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	)
 		? {
 				style: {
 					position: positionData,

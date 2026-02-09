@@ -39,7 +39,7 @@ export type BlockDetail = {
 	isMasterBlock: boolean,
 	isBaseBreakpoint: boolean,
 	insideBlockInspector: boolean,
-	editorSelectedBlockEvent: string,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	currentBlock: 'master' | string,
 	currentState: TStates,
 	blockAttributes: Object,

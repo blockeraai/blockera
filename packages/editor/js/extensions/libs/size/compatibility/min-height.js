@@ -6,15 +6,20 @@
 import { isString, isUndefined } from '@blockera/utils';
 import { extractNumberAndUnit, isSpecialUnit } from '@blockera/controls';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../utils';
+
 export function minHeightFromWPCompatibility({
 	attributes,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	attributes: Object,
 	blockId?: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	if (attributes?.blockeraMinHeight?.value !== '') {
@@ -25,8 +30,10 @@ export function minHeightFromWPCompatibility({
 		// Check block-level style (insideBlockInspector) or global style context
 		// Block inspector: separated minHeight and minHeightUnit
 		if (
-			insideBlockInspector &&
-			runSelectedBlockEvent &&
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			) &&
 			attributes?.minHeight !== undefined &&
 			attributes?.minHeightUnit !== undefined
 		) {
@@ -53,20 +60,23 @@ export function minHeightToWPCompatibility({
 	newValue,
 	ref,
 	blockId,
-	runSelectedBlockEvent,
+	editorSelectedBlockEvent,
 	insideBlockInspector = true,
 }: {
 	newValue: string,
 	ref?: Object,
 	blockId: string,
-	runSelectedBlockEvent: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	insideBlockInspector?: boolean,
 }): Object {
 	switch (blockId) {
 		// input and unit are separated
 		case 'core/cover':
 			if ('reset' === ref?.current?.action) {
-				return insideBlockInspector && runSelectedBlockEvent
+				return runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							minHeight: undefined,
 							minHeightUnit: undefined,
@@ -84,7 +94,10 @@ export function minHeightToWPCompatibility({
 				isSpecialUnit(newValue) ||
 				!isString(newValue)
 			) {
-				return insideBlockInspector && runSelectedBlockEvent
+				return runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
 					? {
 							minHeight: undefined,
 							minHeightUnit: undefined,
@@ -96,7 +109,12 @@ export function minHeightToWPCompatibility({
 						};
 			}
 
-			if (insideBlockInspector && runSelectedBlockEvent) {
+			if (
+				runInsideBlockInspector(
+					insideBlockInspector,
+					editorSelectedBlockEvent
+				)
+			) {
 				// Block inspector: separated minHeight and minHeightUnit
 				const extractedValue = extractNumberAndUnit(newValue);
 
