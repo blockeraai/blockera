@@ -41,4 +41,8 @@ export type TTabMenuProps = {
 	 * Callback when a tab is clicked
 	 */
 	onTabClick: (tabName: string) => void,
+	/**
+	 * Design variant: 'clean' | 'modern'. When 'modern', uses JS-driven dynamic indicator.
+	 */
+	design?: string,
 };

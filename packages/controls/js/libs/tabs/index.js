@@ -76,6 +76,7 @@ export function Tabs({
 				injectMenuEnd={injectMenuEnd}
 				heading={heading}
 				onTabClick={handleTabClick}
+				design={design}
 			/>
 			{selectedTab && (
 				<div
