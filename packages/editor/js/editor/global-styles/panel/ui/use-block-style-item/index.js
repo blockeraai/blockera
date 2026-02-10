@@ -77,7 +77,10 @@ export const useBlockStyleItem = ({
 		currentStyle: Object
 	) => void,
 	handleOnDelete: (currentStyleName: string) => void,
-	handleOnDuplicate: (currentStyle: Object) => void,
+	handleOnDuplicate: (
+		currentStyle: Object,
+		customValues?: { label: string, name: string }
+	) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
 	handleOnUsageForMultipleBlocks: (currentStyle: Object) => void,
 	handleOnSaveCustomizations: (
@@ -237,13 +240,25 @@ export const useBlockStyleItem = ({
 	);
 
 	const handleOnDuplicate = useCallback(
-		(currentStyle) => {
-			const duplicateStyle = getCalculatedNewStyle({
-				styles,
-				blockStyles,
-				currentStyle,
-				action: 'duplicate',
-			});
+		(
+			currentStyle: Object,
+			customValues?: { label: string, name: string }
+		) => {
+			const duplicateStyle = customValues
+				? {
+						name: customValues.name,
+						label: customValues.label,
+						icon: {
+							name: 'blockera',
+							library: 'blockera',
+						},
+					}
+				: getCalculatedNewStyle({
+						styles,
+						blockStyles,
+						currentStyle,
+						action: 'duplicate',
+					});
 
 			// Register the new block style
 			registerBlockStyle(blockName, duplicateStyle);

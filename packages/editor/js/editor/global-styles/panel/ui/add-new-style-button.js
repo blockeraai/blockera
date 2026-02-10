@@ -5,28 +5,20 @@
  */
 import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { select } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
-import { useEntityProp } from '@wordpress/core-data';
-import { registerBlockStyle } from '@wordpress/blocks';
-import { useState, useCallback } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { mergeObject } from '@blockera/utils';
 import { Button, Flex, PromotionPopover } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
-import {
-	getBlockeraGlobalStylesMetaData,
-	setBlockeraGlobalStylesMetaData,
-} from '../../helpers';
-import { generateUniqueStyleVariationHash } from './utils';
+import { AddNewStyleModal } from './add-new-style-modal';
 
 const PromoteGlobalStylesPremiumFeature = ({
 	items,
@@ -90,20 +82,10 @@ export const AddNewStyleButton = ({
 		2
 	);
 
-	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
-	const [globalStyles, setGlobalStyles] = useEntityProp(
-		'root',
-		'globalStyles',
-		'styles',
-		postId
-	);
-
 	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
-	const addNew = useCallback(() => {
-		const newCounter = counter + 1;
-		counterMap[blockName] = newCounter;
-		setCounter(newCounter);
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
+	const handleClick = () => {
 		// Validate limitation for adding new style variation.
 		if (
 			-1 !== MAX_ITEMS_FOR_PROMOTION &&
@@ -112,94 +94,8 @@ export const AddNewStyleButton = ({
 			return setIsPromotionPopoverOpen(true);
 		}
 
-		// Find first available number by checking existing style names
-		let number = blockStyles.length + 1;
-
-		const existingNumbers = blockStyles
-			.map((style) => {
-				const match = style.name.match(/^style-(\d+)$/);
-				return match ? parseInt(match[1]) : null;
-			})
-			.filter((num) => num !== null);
-
-		// reset number if there are no existing numbers.
-		if (!existingNumbers.length) {
-			number = 1;
-		} else {
-			// Sort existing numbers and get the highest number
-			// $FlowFixMe
-			const maxNumber = Math.max(...existingNumbers);
-			number = maxNumber + 1;
-		}
-
-		// Find first gap in sequence or use next number
-		while (existingNumbers.includes(number)) {
-			number++;
-		}
-
-		// Generate unique Id for new style variation name.
-		const name = `style-${generateUniqueStyleVariationHash()}`;
-		const styleLabel = __('Style', 'blockera') + ' ' + number;
-		const newStyle = {
-			name,
-			label: styleLabel,
-			icon: {
-				name: 'blockera',
-				library: 'blockera',
-			},
-		};
-
-		setBlockStyles([...blockStyles, newStyle]);
-
-		if (styles && 'function' === typeof setStyles) {
-			setStyles({
-				...styles,
-				variations: {
-					...(styles.variations || {}),
-					[newStyle.name]: {},
-				},
-			});
-		}
-
-		registerBlockStyle(blockName, newStyle);
-
-		setCurrentBlockStyleVariation(newStyle);
-
-		setCurrentActiveStyle(newStyle);
-
-		const newGlobalStyles = mergeObject(
-			{
-				...globalStyles,
-				...(!globalStyles?.blockeraMetaData
-					? {
-							blockeraMetaData: getBlockeraGlobalStylesMetaData(),
-						}
-					: {}),
-			},
-			{
-				blockeraMetaData: {
-					blocks: {
-						[blockName]: {
-							variations: {
-								[newStyle.name]: newStyle,
-							},
-						},
-					},
-				},
-				blocks: {
-					[blockName]: {
-						variations: {
-							[newStyle.name]: newStyle,
-						},
-					},
-				},
-			}
-		);
-
-		setGlobalStyles(newGlobalStyles);
-		setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [blockStyles]);
+		setIsModalOpen(true);
+	};
 
 	return (
 		<Flex justifyContent={'space-between'} style={style}>
@@ -216,7 +112,7 @@ export const AddNewStyleButton = ({
 			<Button
 				size="extra-small"
 				className={controlInnerClassNames('btn-add')} // blockera-is-not-active
-				onClick={addNew}
+				onClick={handleClick}
 				style={
 					'no-label' === design
 						? {
@@ -247,6 +143,25 @@ export const AddNewStyleButton = ({
 					/>
 				)}
 			</Button>
+
+			{isModalOpen && (
+				<AddNewStyleModal
+					blockStyles={blockStyles}
+					blockName={blockName}
+					styles={styles}
+					setStyles={setStyles}
+					setBlockStyles={setBlockStyles}
+					setCurrentBlockStyleVariation={
+						setCurrentBlockStyleVariation
+					}
+					setCurrentActiveStyle={setCurrentActiveStyle}
+					isOpen={isModalOpen}
+					setIsOpen={setIsModalOpen}
+					counter={counter}
+					setCounter={setCounter}
+					counterMap={counterMap}
+				/>
+			)}
 		</Flex>
 	);
 };

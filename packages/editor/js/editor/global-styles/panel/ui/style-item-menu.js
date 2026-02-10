@@ -26,6 +26,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import { RenameModal } from './rename-modal';
 import { DeleteModal } from './delete-modal';
+import { DuplicateModal } from './duplicate-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 
 export const StyleItemMenu = ({
@@ -36,8 +37,10 @@ export const StyleItemMenu = ({
 	cachedStyle,
 	isOpenRenameModal,
 	isOpenDeleteModal,
+	isOpenDuplicateModal,
 	setIsOpenDeleteModal,
 	setIsOpenRenameModal,
+	setIsOpenDuplicateModal,
 	isOpenContextMenu,
 	setIsOpenContextMenu,
 	style,
@@ -53,6 +56,7 @@ export const StyleItemMenu = ({
 	handleOnDelete,
 	isConfirmedChangeID,
 	setIsConfirmedChangeID,
+	blockStyles,
 }: {
 	blockName: string,
 	blockTitle: string,
@@ -60,7 +64,10 @@ export const StyleItemMenu = ({
 	setCounter: (counter: number) => void,
 	cachedStyle: Object,
 	setCurrentBlockStyleVariation: (style: Object) => void,
-	handleOnDuplicate: (style: Object) => void,
+	handleOnDuplicate: (
+		style: Object,
+		customValues?: { label: string, name: string }
+	) => void,
 	handleOnClearAllCustomizations: (style: Object) => void,
 	handleOnEnable: (value: boolean, style: Object) => void,
 	handleOnDelete: (style: Object) => void,
@@ -70,8 +77,10 @@ export const StyleItemMenu = ({
 	) => void,
 	isOpenRenameModal: boolean,
 	isOpenDeleteModal: boolean,
+	isOpenDuplicateModal: boolean,
 	setIsOpenDeleteModal: (isOpen: boolean) => void,
 	setIsOpenRenameModal: (isOpen: boolean) => void,
+	setIsOpenDuplicateModal: (isOpen: boolean) => void,
 	isOpenContextMenu: boolean,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
@@ -81,6 +90,7 @@ export const StyleItemMenu = ({
 	handleOnRename: (style: Object) => void,
 	isConfirmedChangeID: boolean,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
+	blockStyles: Array<Object>,
 }): MixedElement => {
 	return (
 		<>
@@ -102,6 +112,17 @@ export const StyleItemMenu = ({
 					setCounter={setCounter}
 					counter={counter}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
+				/>
+			)}
+			{isOpenDuplicateModal && (
+				<DuplicateModal
+					style={style}
+					buttonText={buttonText}
+					handleOnDuplicate={handleOnDuplicate}
+					isConfirmedChangeID={isConfirmedChangeID}
+					setIsOpenDuplicateModal={setIsOpenDuplicateModal}
+					setIsConfirmedChangeID={setIsConfirmedChangeID}
+					blockStyles={blockStyles}
 				/>
 			)}
 			{isOpenUsageForMultipleBlocks && (
@@ -135,7 +156,9 @@ export const StyleItemMenu = ({
 							variant="link"
 							contentAlign="left"
 							className={controlInnerClassNames('menu-item')}
-							onClick={() => handleOnDuplicate(style)}
+							onClick={() => {
+								setIsOpenDuplicateModal(true);
+							}}
 						>
 							<Icon icon="duplicate" iconSize="24" />
 							{__('Duplicate', 'blockera')}
