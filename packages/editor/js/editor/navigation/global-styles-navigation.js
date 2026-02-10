@@ -19,7 +19,11 @@ import {
 	extensionInnerClassNames,
 } from '@blockera/classnames';
 
-export const GlobalStylesNavigation = (): MixedElement => {
+export const GlobalStylesNavigation = ({
+	className,
+}: {
+	className: string,
+}): MixedElement => {
 	return (
 		<NavigationMenu
 			title={
@@ -44,9 +48,12 @@ export const GlobalStylesNavigation = (): MixedElement => {
 			<NavigationItem
 				item="blocks"
 				data-test="block-style-variations"
-				onClick={() =>
-					document.querySelector('button[id="/blocks"]')?.click()
-				}
+				onClick={() => {
+					document.body?.classList?.add(className);
+					document.body?.setAttribute('data-test', className);
+
+					document.querySelector('button[id="/blocks"]')?.click();
+				}}
 				className={extensionClassNames('navigation-item')}
 				navigateToMenu="blocks"
 				title={__('Block Style Variations', 'blockera')}

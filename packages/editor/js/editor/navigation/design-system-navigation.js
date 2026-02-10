@@ -29,6 +29,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 		>
 			<NavigationItem
 				item="typography"
+				id="typography-panel"
 				onClick={() =>
 					document.querySelector('button[id="/typography"]')?.click()
 				}
@@ -39,6 +40,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			/>
 			<NavigationItem
 				item="colors"
+				id="colors-panel"
 				onClick={() =>
 					document.querySelector('button[id="/colors"]')?.click()
 				}
@@ -49,6 +51,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			/>
 			<NavigationItem
 				item="background"
+				id="background-panel"
 				onClick={() =>
 					document.querySelector('button[id="/background"]')?.click()
 				}
@@ -59,6 +62,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			/>
 			<NavigationItem
 				item="shadows"
+				id="shadows-panel"
 				onClick={() =>
 					document.querySelector('button[id="/shadows"]')?.click()
 				}

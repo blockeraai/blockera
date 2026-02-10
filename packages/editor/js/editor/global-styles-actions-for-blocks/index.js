@@ -22,7 +22,11 @@ import { IntersectionObserverRenderer } from '../global-styles/intersection-obse
  *
  * @param {string} screen - CSS selector for the screen element
  */
-export default function GlobalStylesActionsForBlocks(): MixedElement {
+export default function GlobalStylesActionsForBlocks({
+	className,
+}: {
+	className: string,
+}): MixedElement {
 	const blockTypes = getBlockTypes();
 	const {
 		setSelectedBlockRef,
@@ -39,7 +43,6 @@ export default function GlobalStylesActionsForBlocks(): MixedElement {
 	useEffect(() => {
 		// Cache select function once to avoid repeated lookups
 		const { getBlockStyles } = select('core/blocks');
-		const className = 'activated-blockera-global-styles-panel';
 
 		new IntersectionObserverRenderer(globalStylesPanel.screen, null, {
 			callback: () => {
@@ -94,10 +97,7 @@ export default function GlobalStylesActionsForBlocks(): MixedElement {
 					if (blockElement) {
 						blockElement.addEventListener('click', () => {
 							document.body?.classList?.add(className);
-							document.body?.setAttribute(
-								'data-test',
-								'activated-blockera-global-styles-panel'
-							);
+							document.body?.setAttribute('data-test', className);
 							sharedListenerCallback(blockType.name);
 						});
 					}

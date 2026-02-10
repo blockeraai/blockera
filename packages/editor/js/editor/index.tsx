@@ -79,6 +79,8 @@ const needToShowCanvasEditor = ({
 	return hasAllowedUser && hasAllowedPostType;
 };
 
+const bodyAdditionalClassnameForGlobalStyles = 'has-blockera-global-styles-ui';
+
 /**
  * Plugin configurations for the editor package.
  * Add new plugin configurations here as the package grows.
@@ -106,17 +108,27 @@ const editorPlugins = [
 	},
 	{
 		name: 'blockera-global-styles-navigation',
-		render: GlobalStylesNavigation,
+		render: () => (
+			<GlobalStylesNavigation
+				className={bodyAdditionalClassnameForGlobalStyles}
+			/>
+		),
 		icon: null,
 	},
 	{
 		name: 'blockera-global-styles-panel',
-		render: GlobalStyles,
+		render: () => (
+			<GlobalStyles className={bodyAdditionalClassnameForGlobalStyles} />
+		),
 		icon: null,
 	},
 	{
 		name: 'blockera-global-styles-actions-for-blocks',
-		render: GlobalStylesActionsForBlock,
+		render: () => (
+			<GlobalStylesActionsForBlock
+				className={bodyAdditionalClassnameForGlobalStyles}
+			/>
+		),
 		icon: null,
 	},
 	{

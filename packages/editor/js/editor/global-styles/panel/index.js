@@ -20,8 +20,10 @@ import { subscribeToBlockSelection } from './subscribe-unsubscribe';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
+	bodySupportingClassname,
 }: {
 	screen: string,
+	bodySupportingClassname: string,
 }): MixedElement => {
 	const className = 'blockera-extensions-wrapper';
 	const { getBlocks, getSelectedBlock } = select(blockEditorStore);
@@ -47,6 +49,7 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockRef,
 		setSelectedBlockStyle,
 		setSelectedBlockStyleVariation,
+		className: bodySupportingClassname,
 	});
 
 	// Subscribe to block selection changes when panel is open

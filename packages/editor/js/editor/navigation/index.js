@@ -16,7 +16,11 @@ import { IntersectionObserverRenderer } from '../global-styles/intersection-obse
  * Plugin: Blockera Global Styles Navigation
  * Renders navigation component for global styles screen using intersection observer.
  */
-export default function GlobalStylesNavigation(): MixedElement {
+export default function GlobalStylesNavigation({
+	className,
+}: {
+	className: string,
+}): MixedElement {
 	useEffect(() => {
 		new IntersectionObserverRenderer(
 			'.edit-site-global-styles-screen-root__active-style-tile',
@@ -31,7 +35,7 @@ export default function GlobalStylesNavigation(): MixedElement {
 				}
 
 				return createPortal(
-					<BlockeraGlobalStylesNavigation />,
+					<BlockeraGlobalStylesNavigation className={className} />,
 					targetElement.parentElement
 				);
 			},

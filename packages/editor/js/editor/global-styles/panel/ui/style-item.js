@@ -99,6 +99,7 @@ export const StyleItem = ({
 	const [isOpenContextMenu, setIsOpenContextMenu] = useState(false);
 	const [isOpenRenameModal, setIsOpenRenameModal] = useState(false);
 	const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+	const [isOpenDuplicateModal, setIsOpenDuplicateModal] = useState(false);
 	const [isOpenUsageForMultipleBlocks, setIsOpenUsageForMultipleBlocks] =
 		useState(false);
 	const [isOpenBlockCardContextMenu, setIsOpenBlockCardContextMenu] =
@@ -106,6 +107,8 @@ export const StyleItem = ({
 	const [isOpenBlockCardRenameModal, setIsOpenBlockCardRenameModal] =
 		useState(false);
 	const [isOpenBlockCardDeleteModal, setIsOpenBlockCardDeleteModal] =
+		useState(false);
+	const [isOpenBlockCardDuplicateModal, setIsOpenBlockCardDuplicateModal] =
 		useState(false);
 	const [
 		isOpenBlockCardUsageForMultipleBlocks,
@@ -431,6 +434,8 @@ export const StyleItem = ({
 					counter={counter}
 					isOpenDeleteModal={isOpenDeleteModal}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
+					isOpenDuplicateModal={isOpenDuplicateModal}
+					setIsOpenDuplicateModal={setIsOpenDuplicateModal}
 					blockName={blockName}
 					setCounter={setCounter}
 					buttonText={buttonText}
@@ -458,6 +463,7 @@ export const StyleItem = ({
 					setCurrentBlockStyleVariation={
 						setCurrentBlockStyleVariation
 					}
+					blockStyles={blockStyles}
 				/>
 			</div>
 
@@ -590,6 +596,10 @@ export const StyleItem = ({
 							blockTitle={getBlockType(blockName).title}
 							isOpenDeleteModal={isOpenBlockCardDeleteModal}
 							setIsOpenDeleteModal={setIsOpenBlockCardDeleteModal}
+							isOpenDuplicateModal={isOpenBlockCardDuplicateModal}
+							setIsOpenDuplicateModal={
+								setIsOpenBlockCardDuplicateModal
+							}
 							blockName={blockName}
 							setCounter={setCounter}
 							buttonText={buttonText}
@@ -614,6 +624,7 @@ export const StyleItem = ({
 							cachedStyle={cachedStyle}
 							isOpenRenameModal={isOpenBlockCardRenameModal}
 							setIsOpenRenameModal={setIsOpenBlockCardRenameModal}
+							blockStyles={blockStyles}
 							isOpenContextMenu={isOpenBlockCardContextMenu}
 							setIsOpenContextMenu={setIsOpenBlockCardContextMenu}
 							setCurrentBlockStyleVariation={

@@ -25,7 +25,11 @@ import { GeneralNavigation } from './general-navigation';
 import { GlobalStylesNavigation } from './global-styles-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
 
-export const BlockeraGlobalStylesNavigation = (): MixedElement => {
+export const BlockeraGlobalStylesNavigation = ({
+	className,
+}: {
+	className: string,
+}): MixedElement => {
 	const [backButton, setBackButton] = useState(null);
 	const [isOpenCustomCss, setIsOpenCustomCss] = useState(false);
 	const openCallback = (action: 'open-custom-css-panel') => {
@@ -85,7 +89,7 @@ export const BlockeraGlobalStylesNavigation = (): MixedElement => {
 
 				<GeneralNavigation />
 
-				<GlobalStylesNavigation />
+				<GlobalStylesNavigation className={className} />
 
 				<OtherNavigation
 					openCallback={openCallback}

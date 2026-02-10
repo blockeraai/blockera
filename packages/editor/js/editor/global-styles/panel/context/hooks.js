@@ -18,11 +18,13 @@ import { useGlobalStylesContext } from './global-styles-provider';
 import { getValueFromObjectPath, getValueFromVariable } from '../utils';
 
 export const useBackButton = ({
+	className,
 	selectedBlockStyle,
 	setSelectedBlockRef,
 	setSelectedBlockStyle,
 	setSelectedBlockStyleVariation,
 }: {
+	className: string,
 	selectedBlockStyle: string,
 	setSelectedBlockRef: (blockRef: string | void) => void,
 	setSelectedBlockStyle: (blockName: string | void) => void,
@@ -49,6 +51,15 @@ export const useBackButton = ({
 		backElement?.parentElement?.parentElement
 			?.querySelector('button')
 			?.addEventListener('click', () => {
+				document.body?.classList?.remove(className);
+				const dataTest = document.body?.getAttribute('data-test');
+				if (dataTest) {
+					document.body?.setAttribute(
+						'data-test',
+						dataTest.replace('has-blockera-global-styles-ui', '')
+					);
+				}
+
 				setSelectedBlockRef(undefined);
 				setSelectedBlockStyle(undefined);
 				setSelectedBlockStyleVariation(undefined);
