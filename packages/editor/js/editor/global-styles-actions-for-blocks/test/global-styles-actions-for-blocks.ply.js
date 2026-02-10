@@ -3,7 +3,6 @@
  * Playwright e2e test
  */
 const {
-	savePage,
 	openSiteEditor,
 	closeWelcomeGuide,
 } = require('@blockera/dev-playwright/js/utils/helpers');
@@ -93,9 +92,7 @@ test.describe('Global Styles Actions For Blocks Plugin → Functionality', () =>
 
 			// Verify activated data-test attribute is added to body
 			await expect(
-				page.locator(
-					'body[data-test="activated-blockera-global-styles-panel"]'
-				)
+				page.locator('body[data-test="has-blockera-global-styles-ui"]')
 			).toBeVisible({ timeout: 5000 });
 
 			// Verify block type is selected
