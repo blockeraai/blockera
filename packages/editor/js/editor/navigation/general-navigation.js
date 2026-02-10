@@ -29,6 +29,7 @@ export const GeneralNavigation = (): MixedElement => {
 		>
 			<NavigationItem
 				item="layout"
+				id="layout-panel"
 				onClick={() =>
 					document.querySelector('button[id="/layout"]')?.click()
 				}
