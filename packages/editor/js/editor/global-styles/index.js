@@ -23,7 +23,11 @@ import { IntersectionObserverRenderer } from './intersection-observer-renderer';
  * @param {string} globalStylesScreen - CSS selector for global styles screen
  * @param {string} blockScreenListItem - CSS selector for block screen list item
  */
-export default function GlobalStyles(): MixedElement {
+export default function GlobalStyles({
+	className,
+}: {
+	className: string,
+}): MixedElement {
 	const { getEntity } = select('blockera/data') || {};
 	const { version } = getEntity('wp');
 	const {
@@ -37,7 +41,12 @@ export default function GlobalStyles(): MixedElement {
 	useEffect(() => {
 		new IntersectionObserverRenderer(
 			screen,
-			() => <BlockGlobalStylesPanelScreen screen={screen} />,
+			() => (
+				<BlockGlobalStylesPanelScreen
+					screen={screen}
+					bodySupportingClassname={className}
+				/>
+			),
 			{
 				targetElementIsRoot: true,
 				whileNotExistSelectors: [
@@ -45,6 +54,7 @@ export default function GlobalStyles(): MixedElement {
 					globalStylesScreen,
 					blockScreenListItem,
 				],
+				whenBodyHasClassname: className,
 				componentSelector: '.blockera-extensions-wrapper',
 			}
 		);
