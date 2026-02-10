@@ -22,10 +22,16 @@ export const useBackButton = ({
 	selectedBlockStyle,
 	setSelectedBlockRef,
 	setSelectedBlockStyle,
+	resetBlockStateToNormal,
 	setSelectedBlockStyleVariation,
+	statesManagerHandleOnChangeRef,
 }: {
 	className: string,
 	selectedBlockStyle: string,
+	resetBlockStateToNormal: () => void,
+	statesManagerHandleOnChangeRef?: {
+		current: ((value: Object) => void) | null,
+	},
 	setSelectedBlockRef: (blockRef: string | void) => void,
 	setSelectedBlockStyle: (blockName: string | void) => void,
 	setSelectedBlockStyleVariation: (blockName: string | void) => void,
@@ -51,6 +57,11 @@ export const useBackButton = ({
 		backElement?.parentElement?.parentElement
 			?.querySelector('button')
 			?.addEventListener('click', () => {
+				// Reset block state to normal if statesManagerHandleOnChangeRef is provided
+				if (statesManagerHandleOnChangeRef?.current) {
+					resetBlockStateToNormal();
+				}
+
 				document.body?.classList?.remove(className);
 				const dataTest = document.body?.getAttribute('data-test');
 				if (dataTest) {

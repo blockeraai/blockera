@@ -157,6 +157,9 @@ export const GlobalStylesPanelContext: Object = createContext({
 	setStyleVariationBlocks: () => {},
 	setStyles: () => {},
 	styles: {},
+	statesManagerHandleOnChangeRef: {
+		current: null,
+	},
 });
 
 export const GlobalStylesPanelContextConsumer = ({
@@ -177,6 +180,7 @@ export const GlobalStylesPanelContextProvider = ({
 		blockType: { name, attributes },
 		selectedBlockClientId: clientId,
 		className,
+		statesManagerHandleOnChangeRef,
 	} = value;
 
 	const { blockExtension, blockeraOverrideBlockAttributes } = useMemo(
@@ -345,6 +349,10 @@ export const GlobalStylesPanelContextProvider = ({
 				currentBlockStyleVariation,
 				setCurrentBlockStyleVariation,
 				handleOnChangeStyleInLocalState,
+				statesManagerHandleOnChangeRef:
+					statesManagerHandleOnChangeRef || {
+						current: null,
+					},
 			}}
 		>
 			{children}
@@ -385,6 +393,9 @@ type UseGlobalStylesPanelContextReturnType = {
 	defaultStyles: Object,
 	handleOnChangeStyleInLocalState: (newStyle: Object) => void,
 	getNormalizedStyle: (newStyle: Object, defaultStyles: Object) => Object,
+	statesManagerHandleOnChangeRef: {
+		current: ((value: Object) => void) | null,
+	},
 };
 
 export const useGlobalStylesPanelContext =

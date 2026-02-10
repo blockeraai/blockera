@@ -5,7 +5,7 @@
  */
 import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
-import { useCallback } from '@wordpress/element';
+import { useCallback, useEffect } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -37,6 +37,7 @@ export const Preview = ({
 
 	// States Manager props.
 	blockStatesProps,
+	onStatesManagerReady,
 
 	// Inner Blocks props.
 	innerBlocksProps,
@@ -128,6 +129,13 @@ export const Preview = ({
 		handleOnChange,
 		currentInnerBlockState,
 	]);
+
+	// Expose handleOnChange to parent component if callback is provided
+	useEffect(() => {
+		if (onStatesManagerReady) {
+			onStatesManagerReady(handleOnChange);
+		}
+	}, [onStatesManagerReady, handleOnChange]);
 
 	return (
 		<StatesManager

@@ -10,11 +10,11 @@ import { Slot } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import {
-	useRef,
 	useState,
 	useMemo,
 	useEffect,
 	useCallback,
+	useRef,
 } from '@wordpress/element';
 
 /**
@@ -43,6 +43,8 @@ import {
 	setBlockeraGlobalStylesMetaData,
 } from '../../../../editor/global-styles/helpers';
 import BlockPreviewPanel from '../../../../editor/global-styles/panel/block-preview-panel';
+import { useResetBlockStateToNormal } from '../block-states/hooks';
+import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
 
 const DEBOUNCE_DELAY = 1000;
 
@@ -68,6 +70,7 @@ export function StyleVariationBlockCard({
 	setCurrentBlockStyleVariation,
 }: TStyleVariationBlockCardProps): MixedElement {
 	const { onToggle } = useBlockSection('innerBlocksConfig');
+	const { statesManagerHandleOnChangeRef } = useGlobalStylesPanelContext();
 	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
@@ -93,6 +96,11 @@ export function StyleVariationBlockCard({
 			currentBlockStyleVariation?.name
 		]?.refId || currentBlockStyleVariation?.name
 	);
+	const resetBlockStateToNormal = useResetBlockStateToNormal({
+		clientId,
+		blockName,
+		statesManagerHandleOnChangeRef,
+	});
 	const [title, setTitle] = useState(initializeTitle);
 	const [hasUserEdited, setHasUserEdited] = useState(false);
 
@@ -239,6 +247,8 @@ export function StyleVariationBlockCard({
 	};
 
 	const handleClose = () => {
+		// Reset block state to normal using the reusable hook
+		resetBlockStateToNormal();
 		onToggle(true, 'switch-to-parent');
 		handleOnClick('current-block-style-variation', undefined);
 	};
@@ -382,6 +392,10 @@ export function StyleVariationBlockCard({
 						blockConfig={additional}
 						blockStatesProps={{
 							attributes: currentStateAttributes,
+						}}
+						onStatesManagerReady={(handleOnChange) => {
+							statesManagerHandleOnChangeRef.current =
+								handleOnChange;
 						}}
 					/>
 				)}

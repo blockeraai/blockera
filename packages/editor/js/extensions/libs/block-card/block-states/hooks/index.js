@@ -486,3 +486,5 @@ export const useBlockStates = ({
 		getDynamicDefaultRepeaterItem,
 	};
 };
+
+export { useResetBlockStateToNormal } from './use-reset-block-state-to-normal';

@@ -22,6 +22,7 @@ export type TPreviewProps = {
 
 	// States Manager props.
 	blockStatesProps: Object,
+	onStatesManagerReady?: (handleOnChange: (value: Object) => void) => void,
 
 	// Inner Blocks props.
 	innerBlocksProps?: Object,

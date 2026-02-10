@@ -7,7 +7,13 @@ import type { MixedElement } from 'react';
 import { getBlockType } from '@wordpress/blocks';
 import { select, dispatch } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
-import { useState, useMemo, useEffect, createPortal } from '@wordpress/element';
+import {
+	useRef,
+	useMemo,
+	useState,
+	useEffect,
+	createPortal,
+} from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -17,6 +23,7 @@ import { useBackButton } from './context/hooks';
 import { STORE_NAME } from '../../../store/constants';
 import bootstrapScripts from '../../../extensions/scripts';
 import { subscribeToBlockSelection } from './subscribe-unsubscribe';
+import { useResetBlockStateToNormal } from '../../../extensions/libs/block-card/block-states/hooks';
 
 export const BlockGlobalStylesPanelScreen = ({
 	screen,
@@ -33,7 +40,9 @@ export const BlockGlobalStylesPanelScreen = ({
 		setSelectedBlockStyle,
 		setSelectedBlockStyleVariation,
 	} = dispatch(STORE_NAME);
-
+	const statesManagerHandleOnChangeRef = useRef<
+		((value: Object) => void) | null,
+	>(null);
 	const blocks = getBlocks();
 	const selectedBlock = getSelectedBlock();
 	const selectedBlockRef = getSelectedBlockRef();
@@ -43,22 +52,6 @@ export const BlockGlobalStylesPanelScreen = ({
 	);
 	const screenElement = document.querySelector(screen);
 	const hasBlockeraExtensions = blockType?.attributes?.blockeraPropsId;
-
-	useBackButton({
-		selectedBlockStyle,
-		setSelectedBlockRef,
-		setSelectedBlockStyle,
-		setSelectedBlockStyleVariation,
-		className: bodySupportingClassname,
-	});
-
-	// Subscribe to block selection changes when panel is open
-	// This enables automatic panel switching when clicking blocks in the editor
-	useEffect(() => {
-		const unsubscribe = subscribeToBlockSelection();
-		// Cleanup subscription on unmount
-		return unsubscribe;
-	}, []);
 
 	const memoizedSelectedBlock = useMemo(() => {
 		// Prevent of expensive calculation if selected block is already set.
@@ -96,6 +89,31 @@ export const BlockGlobalStylesPanelScreen = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, selectedBlock, blocks]);
+
+	const resetBlockStateToNormal = useResetBlockStateToNormal({
+		clientId: (selectedBlock || memoizedSelectedBlock)?.clientId || '',
+		blockName: selectedBlockStyle || '',
+		statesManagerHandleOnChangeRef,
+	});
+
+	useBackButton({
+		selectedBlockStyle,
+		setSelectedBlockRef,
+		setSelectedBlockStyle,
+		resetBlockStateToNormal,
+		setSelectedBlockStyleVariation,
+		statesManagerHandleOnChangeRef,
+		className: bodySupportingClassname,
+	});
+
+	// Subscribe to block selection changes when panel is open
+	// This enables automatic panel switching when clicking blocks in the editor
+	useEffect(() => {
+		const unsubscribe = subscribeToBlockSelection();
+		// Cleanup subscription on unmount
+		return unsubscribe;
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [selectedBlockStyle, selectedBlock]);
 
 	useEffect(() => {
 		if ('edit-site/global-styles' === selectedBlockRef) {
@@ -152,6 +170,7 @@ export const BlockGlobalStylesPanelScreen = ({
 					}.clientId
 				}
 				blockType={blockType}
+				statesManagerHandleOnChangeRef={statesManagerHandleOnChangeRef}
 			/>
 		</div>,
 		screenElement

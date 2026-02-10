@@ -26,8 +26,9 @@ import { isShowField } from '../../../api/utils';
 import { generateExtensionId } from '../../utils';
 import { EditorFeatureWrapper } from '../../../..';
 import { ExtensionSettings } from '../../settings';
-import { useEditorStore } from '../../../../hooks';
 import { useBlockSection } from '../../../components';
+import { useEditorStore } from '../../../../hooks/use-editor-store';
+import { useFeatureSearch } from '../../../components/feature-search-context';
 
 export const StateOptionsExtension: ComponentType<TStatesProps> = ({
 	block,
@@ -40,6 +41,7 @@ export const StateOptionsExtension: ComponentType<TStatesProps> = ({
 	currentState,
 	currentBlock,
 }: TStatesProps): MixedElement => {
+	const { activeSearchMode } = useFeatureSearch();
 	const { initialOpen, onToggle } = useBlockSection('statesConfig');
 	const { getState, getInnerState } = useEditorStore();
 	const isShowContent = isShowField(
