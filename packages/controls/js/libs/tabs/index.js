@@ -25,6 +25,7 @@ export function Tabs({
 	tabs,
 	getPanel,
 	design = 'clean',
+	fitWidthTabs = true,
 	orientation = 'horizontal',
 	setCurrentTab,
 	className,
@@ -63,6 +64,7 @@ export function Tabs({
 			className={componentClassNames(
 				'tabs',
 				'design-' + design,
+				fitWidthTabs && 'fit-width-tabs',
 				className
 			)}
 		>

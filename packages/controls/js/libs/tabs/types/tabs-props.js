@@ -47,4 +47,8 @@ export type TTabsProps = {
 	 * Heading for navigation
 	 */
 	heading?: string,
+	/**
+	 * Fit width of the tabs to the container with or keep the tabs original width.
+	 */
+	fitWidthTabs?: boolean,
 };
