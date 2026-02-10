@@ -39,7 +39,6 @@ export default function GlobalStylesActionsForBlocks(): MixedElement {
 	useEffect(() => {
 		// Cache select function once to avoid repeated lookups
 		const { getBlockStyles } = select('core/blocks');
-		const className = 'activated-blockera-global-styles-panel';
 
 		new IntersectionObserverRenderer(globalStylesPanel.screen, null, {
 			callback: () => {
@@ -92,14 +91,9 @@ export default function GlobalStylesActionsForBlocks(): MixedElement {
 					);
 
 					if (blockElement) {
-						blockElement.addEventListener('click', () => {
-							document.body?.classList?.add(className);
-							document.body?.setAttribute(
-								'data-test',
-								'activated-blockera-global-styles-panel'
-							);
-							sharedListenerCallback(blockType.name);
-						});
+						blockElement.addEventListener('click', () =>
+							sharedListenerCallback(blockType.name)
+						);
 					}
 				});
 			},
