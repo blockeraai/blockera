@@ -10,6 +10,7 @@ export class IntersectionObserverRenderer {
 	observer: MutationObserver;
 	targetSelector: string;
 	whileNotExistSelectors: string[];
+	whenBodyHasClassname: string;
 	componentSelector: string;
 	Component: null | ComponentType<any>;
 	targetElementIsRoot: boolean;
@@ -27,6 +28,7 @@ export class IntersectionObserverRenderer {
 		Component: ComponentType<any> | null,
 		{
 			whileNotExistSelectors = [],
+			whenBodyHasClassname = '',
 			componentSelector = '',
 			callback = null,
 			targetElementIsRoot = false,
@@ -35,6 +37,7 @@ export class IntersectionObserverRenderer {
 		}: {
 			callback?: Function,
 			root?: string,
+			whenBodyHasClassname?: string,
 			componentSelector?: string,
 			whileNotExistSelectors?: string[],
 			targetElementIsRoot?: boolean,
@@ -43,6 +46,7 @@ export class IntersectionObserverRenderer {
 		} = {}
 	) {
 		this.whileNotExistSelectors = whileNotExistSelectors;
+		this.whenBodyHasClassname = whenBodyHasClassname;
 		this.componentSelector = componentSelector;
 		this.targetSelector = targetSelector;
 		this.Component = Component;
@@ -147,7 +151,12 @@ export class IntersectionObserverRenderer {
 					(selector) => !document.querySelector(selector)
 				);
 
-				if (!shouldRender) {
+				if (
+					!shouldRender ||
+					!document.body?.classList?.contains(
+						this.whenBodyHasClassname
+					)
+				) {
 					return;
 				}
 			}
