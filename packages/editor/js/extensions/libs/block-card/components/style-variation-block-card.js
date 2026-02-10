@@ -90,8 +90,8 @@ export function StyleVariationBlockCard({
 
 	const refId = useRef(
 		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
-			currentBlockStyleVariation.name
-		]?.refId || currentBlockStyleVariation.name
+			currentBlockStyleVariation?.name
+		]?.refId || currentBlockStyleVariation?.name
 	);
 	const [title, setTitle] = useState(initializeTitle);
 	const [hasUserEdited, setHasUserEdited] = useState(false);
@@ -105,12 +105,14 @@ export function StyleVariationBlockCard({
 			const { blockeraMetaData = blockeraGlobalStylesMetaData } =
 				globalStyles;
 
+			const isDefaultProp: Object = currentBlockStyleVariation?.isDefault
+				? { isDefault: true }
+				: {};
+
 			const editedStyle = {
 				...currentBlockStyleVariation,
 				label: newTitle,
-				...(currentBlockStyleVariation.isDefault
-					? { isDefault: true }
-					: {}),
+				...isDefaultProp,
 			};
 
 			const getUpdatedMetaData = (newStyle: Object): Object => {
@@ -118,7 +120,8 @@ export function StyleVariationBlockCard({
 					blocks: {
 						[blockName]: {
 							variations: {
-								[currentBlockStyleVariation.name]: {
+								// $FlowFixMe
+								[currentBlockStyleVariation?.name]: {
 									...newStyle,
 									refId: refId.current,
 								},
@@ -147,7 +150,7 @@ export function StyleVariationBlockCard({
 								[editedStyle.name]:
 									globalStyles?.blocks?.[blockName]
 										?.variations?.[
-										currentBlockStyleVariation.name
+										currentBlockStyleVariation?.name
 									],
 							},
 						},
@@ -161,7 +164,7 @@ export function StyleVariationBlockCard({
 
 				unregisterBlockStyle(
 					blockName,
-					currentBlockStyleVariation.name
+					currentBlockStyleVariation?.name
 				);
 				registerBlockStyle(blockName, editedStyle);
 			} else {
@@ -182,15 +185,15 @@ export function StyleVariationBlockCard({
 		[
 			globalStyles,
 			blockName,
-			currentBlockStyleVariation.name,
+			currentBlockStyleVariation?.name,
 			setGlobalStyles,
 			hasUserEdited,
 		]
 	);
 
 	useEffect(() => {
-		refId.current = currentBlockStyleVariation.name;
-	}, [currentBlockStyleVariation.name]);
+		refId.current = currentBlockStyleVariation?.name;
+	}, [currentBlockStyleVariation?.name]);
 
 	useEffect(() => {
 		if (hasUserEdited) {
