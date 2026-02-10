@@ -124,7 +124,11 @@ const editorPlugins = [
 	},
 	{
 		name: 'blockera-global-styles-actions-for-blocks',
-		render: GlobalStylesActionsForBlock,
+		render: () => (
+			<GlobalStylesActionsForBlock
+				className={bodyAdditionalClassnameForGlobalStyles}
+			/>
+		),
 		icon: null,
 	},
 	{
