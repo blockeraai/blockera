@@ -477,8 +477,10 @@ export const BlockBase: ComponentType<any> = (
 			ref,
 			shouldUpdateClassName = true,
 		}: {
-			ref: Object,
-			shouldUpdateClassName: boolean,
+			ref?: Object,
+			shouldUpdateClassName?: boolean,
+		} = {
+			shouldUpdateClassName: true,
 		}
 	) => {
 		const match = regexPattern.exec(value.className);
@@ -593,7 +595,7 @@ export const BlockBase: ComponentType<any> = (
 				!isEquals(attributes, compatibleAttributesRef.current)) ||
 			!compatibleAttributesRef.current
 		) {
-			setAttributes(compatibleAttributes, true);
+			setAttributes(compatibleAttributes);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [compatibleAttributes]);
