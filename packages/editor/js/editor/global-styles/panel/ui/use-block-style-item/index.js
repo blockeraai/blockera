@@ -274,6 +274,7 @@ export const useBlockStyleItem = ({
 					blocks: {
 						[blockName]: {
 							variations: {
+								// $FlowFixMe
 								[duplicateStyle.name]: duplicateStyle,
 							},
 						},
@@ -289,6 +290,7 @@ export const useBlockStyleItem = ({
 					blocks: {
 						[blockName]: {
 							variations: {
+								// $FlowFixMe
 								[duplicateStyle.name]: getNormalizedStyle(
 									styles,
 									defaultStyles
