@@ -106,29 +106,24 @@ export const BlockGlobalStylesPanelScreen = ({
 		className: bodySupportingClassname,
 	});
 
-	// Subscribe to block selection changes when panel is open
-	// This enables automatic panel switching when clicking blocks in the editor
 	useEffect(() => {
-		const unsubscribe = subscribeToBlockSelection();
+		if ('edit-site/global-styles' !== selectedBlockRef) {
+			if (
+				(!selectedBlockStyle && selectedBlock) ||
+				(selectedBlockStyle &&
+					selectedBlock &&
+					selectedBlock?.name !== selectedBlockStyle)
+			) {
+				setBlockType(getBlockType(selectedBlock?.name));
+				setSelectedBlockStyle(selectedBlock?.name);
+			}
+		}
+
+		// Subscribe to block selection changes when panel is open
+		// This enables automatic panel switching when clicking blocks in the editor
+		const unsubscribe = subscribeToBlockSelection(bodySupportingClassname);
 		// Cleanup subscription on unmount
 		return unsubscribe;
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [selectedBlockStyle, selectedBlock]);
-
-	useEffect(() => {
-		if ('edit-site/global-styles' === selectedBlockRef) {
-			return;
-		}
-
-		if (
-			(!selectedBlockStyle && selectedBlock) ||
-			(selectedBlockStyle &&
-				selectedBlock &&
-				selectedBlock?.name !== selectedBlockStyle)
-		) {
-			setBlockType(getBlockType(selectedBlock?.name));
-			setSelectedBlockStyle(selectedBlock?.name);
-		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockRef, selectedBlock, selectedBlockStyle]);
 

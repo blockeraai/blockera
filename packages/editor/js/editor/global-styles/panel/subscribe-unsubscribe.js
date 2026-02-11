@@ -22,8 +22,13 @@ let previousPanelRef: ?string = null;
  *
  * @return {Function} Unsubscribe function to clean up the subscription
  */
-export const subscribeToBlockSelection = (): (() => void) => {
+export const subscribeToBlockSelection = (className: string): (() => void) => {
 	return subscribe(() => {
+		// Add the className to the body if it's not already there
+		if (!document.body?.classList?.contains(className)) {
+			document.body?.classList?.add(className);
+		}
+
 		const blockEditorSelect = select('core/block-editor');
 		const blockeraSelect = select(blockeraEditorStore);
 		const blockeraDispatch = dispatch(blockeraEditorStore);
@@ -58,8 +63,12 @@ export const subscribeToBlockSelection = (): (() => void) => {
 			// Update the previously selected block ID
 			previouslySelectedBlockClientId = selectedBlock.clientId;
 
-			// Switch to the newly selected block's panel
+			// Reset the selected block style variation to undefined.
+			blockeraDispatch.setSelectedBlockStyleVariation(undefined);
+			// Set the selected block style to the newly selected block's style.
+			// Switch to the newly selected block's panel.
 			blockeraDispatch.setSelectedBlockStyle(selectedBlock.name);
+			// Set the selected block ref to the global styles panel if it's not already set.
 			blockeraDispatch.setSelectedBlockRef('edit-site/global-styles');
 		}
 	});
