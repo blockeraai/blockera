@@ -8,7 +8,9 @@ import { select, dispatch, subscribe } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { isInnerBlock } from '../../../extensions/components/utils';
 import { STORE_NAME as blockeraEditorStore } from '../../../store/constants';
+import { STORE_NAME as blockeraExtensionsStore } from '../../../extensions/store/constants';
 
 // Keep track of the previously selected block and panel state
 let previouslySelectedBlockClientId: ?string = null;
@@ -31,7 +33,9 @@ export const subscribeToBlockSelection = (className: string): (() => void) => {
 
 		const blockEditorSelect = select('core/block-editor');
 		const blockeraSelect = select(blockeraEditorStore);
+		const blockeraExtensionsSelect = select(blockeraExtensionsStore);
 		const blockeraDispatch = dispatch(blockeraEditorStore);
+		const blockeraExtensionsDispatch = dispatch(blockeraExtensionsStore);
 
 		// Get the currently selected block
 		const selectedBlock = blockEditorSelect.getSelectedBlock();
@@ -62,6 +66,16 @@ export const subscribeToBlockSelection = (className: string): (() => void) => {
 		) {
 			// Update the previously selected block ID
 			previouslySelectedBlockClientId = selectedBlock.clientId;
+			// If the current block is an inner block, change the current block to the master block.
+			if (
+				isInnerBlock(
+					blockeraExtensionsSelect.getExtensionCurrentBlock()
+				)
+			) {
+				blockeraExtensionsDispatch.changeExtensionCurrentBlock(
+					'master'
+				);
+			}
 			// Reset the selected block style variation to undefined.
 			blockeraDispatch.setSelectedBlockStyleVariation(undefined);
 			// Set the selected block style to the newly selected block's style.
