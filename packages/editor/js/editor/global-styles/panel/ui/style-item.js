@@ -134,6 +134,8 @@ export const StyleItem = ({
 		setBlockStyles,
 		setCachedStyle,
 		styles: getStyle(),
+		inGlobalStylesPanel,
+		onSelectStylePreview,
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setStyles: setStyleData,

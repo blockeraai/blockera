@@ -46,6 +46,8 @@ export const useBlockStyleItem = ({
 	defaultStyles,
 	setBlockStyles,
 	setCachedStyle,
+	inGlobalStylesPanel,
+	onSelectStylePreview,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
 	deleteStyleVariationBlocks,
@@ -57,9 +59,11 @@ export const useBlockStyleItem = ({
 	cachedStyle: Object,
 	defaultStyles: Object,
 	blockStyles: Array<Object>,
+	inGlobalStylesPanel: boolean,
 	currentBlockStyleVariation: Object,
 	setStyles: (styles: Object) => void,
 	setCachedStyle: (style: Object) => void,
+	onSelectStylePreview: (style: Object) => void,
 	setCurrentActiveStyle: T_SET_CURRENT_ACTIVE_STYLE,
 	setIsOpenContextMenu: (isOpen: boolean) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
@@ -421,9 +425,11 @@ export const useBlockStyleItem = ({
 			blockeraMetaData,
 		});
 
-		setBlockStyles(
-			blockStyles.filter((style) => style.name !== currentStyleName)
+		const newBlockStyles = blockStyles.filter(
+			(style) => style.name !== currentStyleName
 		);
+
+		setBlockStyles(newBlockStyles);
 
 		unregisterBlockStyle(blockName, currentStyleName);
 
@@ -442,6 +448,13 @@ export const useBlockStyleItem = ({
 		});
 
 		setCurrentBlockStyleVariation(undefined);
+		// If is not in global styles panel, set the default style as active style.
+		if (!inGlobalStylesPanel) {
+			const defaultStyle = getDefaultStyle(newBlockStyles);
+
+			setCurrentActiveStyle(defaultStyle, 'click');
+			onSelectStylePreview(defaultStyle);
+		}
 	};
 
 	/**
