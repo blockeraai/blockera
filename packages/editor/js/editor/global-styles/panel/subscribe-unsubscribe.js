@@ -62,11 +62,9 @@ export const subscribeToBlockSelection = (className: string): (() => void) => {
 		) {
 			// Update the previously selected block ID
 			previouslySelectedBlockClientId = selectedBlock.clientId;
-
 			// Reset the selected block style variation to undefined.
 			blockeraDispatch.setSelectedBlockStyleVariation(undefined);
 			// Set the selected block style to the newly selected block's style.
-			// Switch to the newly selected block's panel.
 			blockeraDispatch.setSelectedBlockStyle(selectedBlock.name);
 			// Set the selected block ref to the global styles panel if it's not already set.
 			blockeraDispatch.setSelectedBlockRef('edit-site/global-styles');
