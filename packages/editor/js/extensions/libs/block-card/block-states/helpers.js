@@ -65,13 +65,19 @@ export function onChangeBlockStates(
 		getBlockStates,
 		setCurrentBlock,
 		isMasterBlockStates,
+		currentBlockStyleVariation,
 	} = params;
 
 	const { getSelectedBlock } = select('core/block-editor');
-	const { name, clientId } = getSelectedBlock() || {
-		name: block?.blockName,
-		clientId: block?.clientId,
-	};
+	const { name, clientId } = currentBlockStyleVariation?.name
+		? {
+				name: block?.blockName,
+				clientId: block?.clientId,
+			}
+		: getSelectedBlock() || {
+				name: block?.blockName,
+				clientId: block?.clientId,
+			};
 
 	const {
 		setBlockClientStates,
