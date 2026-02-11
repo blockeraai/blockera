@@ -66,8 +66,12 @@ export const useBlockStates = ({
 	} = dispatch('blockera/extensions') || {};
 	const { getBlockStates, getActiveMasterState, getActiveInnerState } =
 		select('blockera/extensions');
-	const { getStates, getBreakpoints, getInnerStates } =
-		select('blockera/editor');
+	const {
+		getStates,
+		getBreakpoints,
+		getInnerStates,
+		getSelectedBlockStyleVariation,
+	} = select('blockera/editor');
 	const savedBlockStates = getBlockStates(
 		block?.clientId,
 		!isMasterBlockStates(id) ? currentBlock : block?.blockName
@@ -439,6 +443,8 @@ export const useBlockStates = ({
 					getBlockStates,
 					setCurrentBlock,
 					currentInnerBlockState,
+					currentBlockStyleVariation:
+						getSelectedBlockStyleVariation(),
 					isMasterBlockStates: isMasterBlockStates(id),
 				},
 				preparedStates
