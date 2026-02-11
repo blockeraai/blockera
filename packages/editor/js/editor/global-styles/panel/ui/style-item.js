@@ -546,7 +546,7 @@ export const StyleItem = ({
 								}
 							)}
 							variant="tertiary"
-							onClick={() => handleOnDuplicate(style)}
+							onClick={() => setIsOpenDuplicateModal(true)}
 							size="input"
 							data-test={'save-customizations'}
 							style={{
