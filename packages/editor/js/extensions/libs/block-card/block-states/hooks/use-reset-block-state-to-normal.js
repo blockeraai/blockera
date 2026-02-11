@@ -43,9 +43,11 @@ export const useResetBlockStateToNormal = ({
 		// Get all state keys from current states
 		const stateKeys = Object.keys(currentStates);
 
+		// Get the current breakpoint
+		const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
+
 		// If we have states, reset them with normal selected
 		if (stateKeys.length > 0) {
-			const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 			stateKeys.forEach((stateKey) => {
 				const state = currentStates[stateKey] || {};
 				statesToReset[stateKey] = {
@@ -58,7 +60,6 @@ export const useResetBlockStateToNormal = ({
 			});
 		} else {
 			// If no states exist, create a minimal normal state
-			const currentBreakpoint = getExtensionCurrentBlockStateBreakpoint();
 			statesToReset.normal = {
 				isSelected: true,
 				breakpoints: {
