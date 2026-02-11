@@ -234,54 +234,62 @@ export const BlockBase: ComponentType<any> = (
 		availableAttributes,
 		activeBlockVariation,
 		getActiveBlockVariation,
-	} = useSelect((select) => {
-		const {
-			getBlockExtensionBy,
-			getActiveInnerState,
-			getActiveMasterState,
-			getExtensionCurrentBlock,
-			getExtensionCurrentBlockStateBreakpoint,
-		} = select('blockera/extensions');
+	} = useSelect(
+		(select) => {
+			const {
+				getBlockExtensionBy,
+				getActiveInnerState,
+				getActiveMasterState,
+				getExtensionCurrentBlock,
+				getExtensionCurrentBlockStateBreakpoint,
+			} = select('blockera/extensions');
 
-		const currentBlock = getExtensionCurrentBlock();
+			const currentBlock = getExtensionCurrentBlock();
 
-		////
+			////
 
-		const { getActiveBlockVariation: _getActiveBlockVariation } = select(
-			'blockera/extensions'
-		);
-		const { getBlockType, getActiveBlockVariation, getBlockVariations } =
-			select('core/blocks');
-		const { getBlockAttributes } = select('core/block-editor');
-		const {
-			supports,
-			selectors,
-			attributes: availableAttributes,
-		} = getBlockType(name);
+			const { getActiveBlockVariation: _getActiveBlockVariation } =
+				select('blockera/extensions');
+			const {
+				getBlockType,
+				getActiveBlockVariation,
+				getBlockVariations,
+			} = select('core/blocks');
+			const { getBlockAttributes } = select('core/block-editor');
+			const {
+				supports,
+				selectors,
+				attributes: availableAttributes,
+			} = getBlockType(name);
 
-		const { getDeviceType, getEditorSelectedBlockEvent } =
-			select('blockera/editor');
+			const { getDeviceType, getEditorSelectedBlockEvent } =
+				select('blockera/editor');
 
-		return {
-			getDeviceType,
-			currentBlock,
-			getBlockExtensionBy,
-			currentState: getActiveMasterState(clientId, name),
-			currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
-			currentInnerBlockState: getActiveInnerState(clientId, currentBlock),
-			supports,
-			selectors,
-			availableAttributes,
-			getActiveBlockVariation,
-			editorSelectedBlockEvent: getEditorSelectedBlockEvent(),
-			activeBlockVariation: getActiveBlockVariation(
-				name,
-				getBlockAttributes(clientId) || {}
-			),
-			blockVariations: name && getBlockVariations(name, 'transform'),
-			activeVariation: _getActiveBlockVariation(),
-		};
-	});
+			return {
+				getDeviceType,
+				currentBlock,
+				getBlockExtensionBy,
+				currentState: getActiveMasterState(clientId, name),
+				currentBreakpoint: getExtensionCurrentBlockStateBreakpoint(),
+				currentInnerBlockState: getActiveInnerState(
+					clientId,
+					currentBlock
+				),
+				supports,
+				selectors,
+				availableAttributes,
+				getActiveBlockVariation,
+				editorSelectedBlockEvent: getEditorSelectedBlockEvent(),
+				activeBlockVariation: getActiveBlockVariation(
+					name,
+					getBlockAttributes(clientId) || {}
+				),
+				blockVariations: name && getBlockVariations(name, 'transform'),
+				activeVariation: _getActiveBlockVariation(),
+			};
+		},
+		[clientId, name]
+	);
 
 	const [isActive, setActive] = useState(true);
 
