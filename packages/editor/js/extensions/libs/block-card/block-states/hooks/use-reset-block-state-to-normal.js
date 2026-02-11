@@ -3,8 +3,13 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
+import { select, dispatch } from '@wordpress/data';
+
+/**
+ * Internal dependencies
+ */
+import { isInnerBlock } from '../../../../components/utils';
 
 /**
  * Hook to reset block state to normal.
@@ -34,11 +39,21 @@ export const useResetBlockStateToNormal = ({
 		}
 
 		// Get current block states from the store
-		const blockeraExtensionsStore = select('blockera/extensions');
-		const { getBlockStates, getExtensionCurrentBlockStateBreakpoint } =
-			blockeraExtensionsStore;
+		const blockeraExtensionsSelect = select('blockera/extensions');
+		const {
+			getBlockStates,
+			getExtensionCurrentBlockStateBreakpoint,
+			getExtensionCurrentBlock,
+		} = blockeraExtensionsSelect;
 		const currentStates = getBlockStates(clientId, blockName) || {};
 		const statesToReset: Object = {};
+
+		// Change the extension current block to master to reset the block state to normal.
+		const { changeExtensionCurrentBlock } = dispatch('blockera/extensions');
+		// If the current block is an inner block, change the current block to the master block.
+		if (isInnerBlock(getExtensionCurrentBlock())) {
+			changeExtensionCurrentBlock('master');
+		}
 
 		// Get all state keys from current states
 		const stateKeys = Object.keys(currentStates);

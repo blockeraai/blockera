@@ -177,9 +177,10 @@ export const GlobalStylesPanelContextProvider = ({
 	value,
 }: Object): MixedElement => {
 	const {
+		className,
+		resetBlockStateToNormal,
 		blockType: { name, attributes },
 		selectedBlockClientId: clientId,
-		className,
 		statesManagerHandleOnChangeRef,
 	} = value;
 
@@ -344,6 +345,7 @@ export const GlobalStylesPanelContextProvider = ({
 				getNormalizedStyle,
 				memoizedBlockBaseProps,
 				getStyleVariationBlocks,
+				resetBlockStateToNormal,
 				setStyleVariationBlocks,
 				deleteStyleVariationBlocks,
 				currentBlockStyleVariation,
@@ -376,6 +378,7 @@ type UseGlobalStylesPanelContextReturnType = {
 		label: string,
 		isDefault?: boolean,
 	},
+	resetBlockStateToNormal: () => void,
 	getStyleVariationBlocks: (style: string) => Object,
 	setStyleVariationBlocks: (style: string, blocks: Array<string>) => void,
 	deleteStyleVariationBlocks: (

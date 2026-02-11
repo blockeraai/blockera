@@ -53,6 +53,7 @@ export const StyleItem = ({
 		defaultStyles,
 		getStyle = () => ({}),
 		getStyleVariationBlocks,
+		resetBlockStateToNormal,
 		deleteStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
@@ -245,6 +246,7 @@ export const StyleItem = ({
 
 					if (inGlobalStylesPanel) {
 						// Navigate to the block style variation customization panel when clicked in global styles context.
+						resetBlockStateToNormal();
 
 						const { setSelectedBlockStyleVariation } =
 							dispatch('blockera/editor');

@@ -165,6 +165,7 @@ export const BlockGlobalStylesPanelScreen = ({
 					}.clientId
 				}
 				blockType={blockType}
+				resetBlockStateToNormal={resetBlockStateToNormal}
 				statesManagerHandleOnChangeRef={statesManagerHandleOnChangeRef}
 			/>
 		</div>,
