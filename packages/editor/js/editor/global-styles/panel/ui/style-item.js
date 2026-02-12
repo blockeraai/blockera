@@ -55,6 +55,7 @@ export const StyleItem = ({
 		getStyleVariationBlocks,
 		resetBlockStateToNormal,
 		deleteStyleVariationBlocks,
+		setStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 		setStyle: setStyleData = () => {},
@@ -141,6 +142,8 @@ export const StyleItem = ({
 		setCurrentActiveStyle,
 		setStyles: setStyleData,
 		deleteStyleVariationBlocks,
+		setStyleVariationBlocks,
+		getStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 	});

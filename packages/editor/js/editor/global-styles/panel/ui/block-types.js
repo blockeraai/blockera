@@ -146,7 +146,8 @@ export const BlockTypes = ({
 				| 'enable-all'
 				| 'single-enable'
 				| 'single-disable',
-			blockType: string
+			blockType: string,
+			selectedItems: Array<string>
 		) => {
 			let disabledIn: Array<string> = [];
 			let enabledIn: Array<string> = [];
@@ -241,9 +242,13 @@ export const BlockTypes = ({
 						]?.disabledIn?.filter((type) => type !== blockType) ||
 						[];
 				}
-				enabledIn = validItems
-					.filter((block) => !disabledIn.includes(block.name))
-					.map((block) => block.name);
+				if (!disabledIn.length) {
+					enabledIn = selectedItems;
+				} else {
+					enabledIn = validItems
+						.filter((block) => !disabledIn.includes(block.name))
+						.map((block) => block.name);
+				}
 				blocks = {
 					...(state?.newGlobalStyles?.blocks || {}),
 					[blockType]: {
@@ -286,6 +291,11 @@ export const BlockTypes = ({
 						]?.enabledIn?.filter((type) => type !== blockType) ||
 						[];
 				}
+
+				if (!enabledIn.length) {
+					enabledIn = selectedItems;
+				}
+
 				disabledIn = validItems
 					.filter((block) => !enabledIn.includes(block.name))
 					.map((block) => block.name);
@@ -336,6 +346,7 @@ export const BlockTypes = ({
 			setState,
 			setAction,
 			validItems,
+			blocksState,
 			globalStyles,
 			defaultStyles,
 			currentStyleValue,
@@ -651,19 +662,23 @@ const BlockType = ({
 							labelType={'self'}
 							label={' '}
 							onChange={(newValue: boolean) => {
+								const items = blocksState.items.includes(name)
+									? blocksState.items.filter(
+											(item) => item !== name
+										)
+									: [...blocksState.items, name];
+
 								setBlocksState({
 									...blocksState,
-									items: blocksState.items.includes(name)
-										? blocksState.items.filter(
-												(item) => item !== name
-											)
-										: [...blocksState.items, name],
+									items,
 								});
+
 								setGlobalData(
 									newValue
 										? 'single-enable'
 										: 'single-disable',
-									name
+									name,
+									items
 								);
 							}}
 						/>

@@ -51,6 +51,8 @@ export const useBlockStyleItem = ({
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
 	deleteStyleVariationBlocks,
+	setStyleVariationBlocks,
+	getStyleVariationBlocks,
 	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
 }: {
@@ -73,6 +75,12 @@ export const useBlockStyleItem = ({
 		single: boolean,
 		blockName?: string
 	) => void,
+	setStyleVariationBlocks: (
+		style: string,
+		blocks: Array<string>,
+		type?: 'auto' | 'manual'
+	) => void,
+	getStyleVariationBlocks: (style: string) => Array<string>,
 }): ({
 	isConfirmedChangeID: boolean,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
@@ -264,13 +272,56 @@ export const useBlockStyleItem = ({
 						action: 'duplicate',
 					});
 
-			// Register the new block style
-			registerBlockStyle(blockName, duplicateStyle);
+			// Get block types that have the current style (supports multiple blocks)
+			const enabledBlockTypes =
+				(getStyleVariationBlocks &&
+					getStyleVariationBlocks(currentStyle.name)) ||
+				[];
+
+			const blockTypesToRegister =
+				Array.isArray(enabledBlockTypes) && enabledBlockTypes.length > 0
+					? enabledBlockTypes
+					: [blockName];
+
+			// Register the new block style for all enabled block types
+			blockTypesToRegister.forEach((blockType) => {
+				registerBlockStyle(blockType, duplicateStyle);
+			});
+
+			// Update style variation blocks in store (supports multiple blocks)
+			if (setStyleVariationBlocks) {
+				setStyleVariationBlocks(
+					duplicateStyle.name,
+					blockTypesToRegister,
+					'manual'
+				);
+			}
 
 			setCurrentBlockStyleVariation(duplicateStyle);
 			setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
+
+			const normalizedStyle = getNormalizedStyle(styles, defaultStyles);
+
+			// Build blocks object for all enabled block types
+			const blocksUpdate = blockTypesToRegister.reduce(
+				(acc, blockType) => {
+					const blockKey = blockType;
+					const styleKey = duplicateStyle.name;
+					return {
+						...acc,
+						// $FlowFixMe - computed property for dynamic block type
+						[blockKey]: {
+							variations: {
+								// $FlowFixMe - computed property for dynamic style name
+								[styleKey]: normalizedStyle,
+							},
+						},
+					};
+				},
+				{}
+			);
 
 			const blockeraMetaData = mergeObject(
 				getBlockeraGlobalStylesMetaData(),
@@ -283,6 +334,14 @@ export const useBlockStyleItem = ({
 							},
 						},
 					},
+					variations: {
+						// $FlowFixMe - computed property for dynamic style name
+						[duplicateStyle.name]: {
+							...duplicateStyle,
+							enabledIn: blockTypesToRegister,
+							disabledIn: [],
+						},
+					},
 				}
 			);
 
@@ -291,24 +350,14 @@ export const useBlockStyleItem = ({
 			setGlobalStyles(
 				mergeObject(globalStyles, {
 					blockeraMetaData,
-					blocks: {
-						[blockName]: {
-							variations: {
-								// $FlowFixMe
-								[duplicateStyle.name]: getNormalizedStyle(
-									styles,
-									defaultStyles
-								),
-							},
-						},
-					},
+					blocks: blocksUpdate,
 				})
 			);
 
 			setIsOpenContextMenu(false);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[styles, blockStyles]
+		[styles, blockStyles, getStyleVariationBlocks, setStyleVariationBlocks]
 	);
 
 	const handleOnClearAllCustomizations = (currentStyle: Object) => {
