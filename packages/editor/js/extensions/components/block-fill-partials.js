@@ -49,8 +49,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 	updateBlockEditorSettings,
 	blockStyleVariationsProps,
 }): Element<any> => {
-	const { currentBlockStyleVariation, setCurrentBlockStyleVariation } =
-		useGlobalStylesPanelContext();
+	const {
+		fallbackClientId,
+		currentBlockStyleVariation,
+		setCurrentBlockStyleVariation,
+	} = useGlobalStylesPanelContext();
 
 	const [searchQuery, setSearchQuery] = useState('');
 
@@ -108,7 +111,8 @@ export const BlockFillPartials: ComponentType<any> = ({
 				{!insideBlockInspector && (
 					<StateContainer
 						name={blockProps.name}
-						clientId={clientId}
+						fixedColor={true}
+						clientId={fallbackClientId}
 						isGlobalStylesCardWrapper={!insideBlockInspector}
 						blockeraUnsavedData={
 							blockProps.attributes?.blockeraUnsavedData
@@ -161,7 +165,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 								clientId={clientId}
 								blockName={blockProps.name}
 								handleOnClick={updateBlockEditorSettings}
-								currentBlock={currentBlock}
+								currentBlock={'master'}
 								currentState={currentState}
 								availableStates={availableInnerStates}
 								currentBreakpoint={currentBreakpoint}
