@@ -87,6 +87,8 @@ export const BlockGlobalStylesPanelScreen = ({
 		if (matchingBlock && !selectedBlock) {
 			return matchingBlock;
 		}
+
+		return {};
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedBlockStyle, selectedBlock, blocks]);
 

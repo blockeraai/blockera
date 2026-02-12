@@ -178,9 +178,9 @@ export const GlobalStylesPanelContextProvider = ({
 }: Object): MixedElement => {
 	const {
 		className,
+		selectedBlockClientId,
 		resetBlockStateToNormal,
 		blockType: { name, attributes },
-		selectedBlockClientId: clientId,
 		statesManagerHandleOnChangeRef,
 	} = value;
 
@@ -209,6 +209,11 @@ export const GlobalStylesPanelContextProvider = ({
 
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
 		useState(getSelectedBlockStyleVariation());
+
+	const fallbackClientId = name.replace('/', '-');
+	const clientId = currentBlockStyleVariation?.name
+		? `${currentBlockStyleVariation?.name}-${fallbackClientId}`
+		: fallbackClientId;
 
 	const defaultStylesValue = useMemo(
 		() =>
@@ -251,21 +256,21 @@ export const GlobalStylesPanelContextProvider = ({
 						{...{
 							...props,
 							name,
-							clientId: name.replace('/', '-'),
+							clientId,
 						}}
 					/>
 				),
 				AdvancedLabelControl: (props: Object) => (
 					<EditorAdvancedLabelControl
 						getAttributesRef={getStyle}
-						clientId={name.replace('/', '-')}
+						clientId={clientId}
 						{...props}
 					/>
 				),
 			},
 		}),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[name]
+		[name, clientId]
 	);
 
 	const childrenComponent = useMemo(
@@ -311,7 +316,7 @@ export const GlobalStylesPanelContextProvider = ({
 	const memoizedBlockBaseProps = useMemo(
 		() => ({
 			name,
-			clientId: name.replace('/', '-'),
+			clientId,
 			setAttributes: handleOnChangeStyle,
 			defaultAttributes: defaultStyles,
 			additional: blockExtension,
@@ -323,6 +328,7 @@ export const GlobalStylesPanelContextProvider = ({
 		[
 			name,
 			style,
+			clientId,
 			className,
 			defaultStyles,
 			blockExtension,
@@ -341,8 +347,10 @@ export const GlobalStylesPanelContextProvider = ({
 				userConfig,
 				defaultStyles,
 				baseContextValue,
+				fallbackClientId,
 				childrenComponent,
 				getNormalizedStyle,
+				selectedBlockClientId,
 				memoizedBlockBaseProps,
 				getStyleVariationBlocks,
 				resetBlockStateToNormal,
@@ -373,6 +381,7 @@ type UseGlobalStylesPanelContextReturnType = {
 	memoizedBlockBaseProps: Object,
 	baseContextValue: Object,
 	getStyle: () => Object,
+	fallbackClientId: string,
 	currentBlockStyleVariation: {
 		name: string,
 		label: string,
