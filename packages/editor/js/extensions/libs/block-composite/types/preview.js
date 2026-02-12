@@ -9,6 +9,7 @@ export type TPreviewProps = {
 	block: {
 		...TBlockProps,
 		attributes?: Object,
+		selectedBlockClientId?: string,
 	},
 	blockConfig: Object,
 	onChange: THandleOnChangeAttributes,
