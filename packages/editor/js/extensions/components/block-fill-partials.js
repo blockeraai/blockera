@@ -111,7 +111,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 				{!insideBlockInspector && (
 					<StateContainer
 						name={blockProps.name}
-						fixedColor={true}
+						isGlobalStylesPanelRoot={true}
 						clientId={fallbackClientId}
 						isGlobalStylesCardWrapper={!insideBlockInspector}
 						blockeraUnsavedData={
