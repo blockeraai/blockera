@@ -70,7 +70,8 @@ export function StyleVariationBlockCard({
 	setCurrentBlockStyleVariation,
 }: TStyleVariationBlockCardProps): MixedElement {
 	const { onToggle } = useBlockSection('innerBlocksConfig');
-	const { statesManagerHandleOnChangeRef } = useGlobalStylesPanelContext();
+	const { selectedBlockClientId, statesManagerHandleOnChangeRef } =
+		useGlobalStylesPanelContext();
 	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
@@ -308,8 +309,7 @@ export function StyleVariationBlockCard({
 
 						<Breadcrumb
 							clientId={clientId}
-							blockName={currentBlockStyleVariation?.name}
-							activeBlock={blockName}
+							blockName={blockName}
 							availableStates={availableStates}
 							blockeraUnsavedData={
 								currentStateAttributes?.blockeraUnsavedData
@@ -358,8 +358,8 @@ export function StyleVariationBlockCard({
 					name={blockName}
 					clientId={clientId}
 					isGlobalStylesCard={true}
-					insideBlockInspector={insideBlockInspector}
 					availableStates={availableStates}
+					insideBlockInspector={insideBlockInspector}
 					blockeraUnsavedData={
 						currentStateAttributes?.blockeraUnsavedData
 					}
@@ -376,10 +376,11 @@ export function StyleVariationBlockCard({
 				{isActive && (
 					<BlockCompositePreview
 						block={{
-							clientId,
 							supports,
+							clientId,
 							blockName,
 							setAttributes,
+							selectedBlockClientId,
 							currentBlockStyleVariation,
 						}}
 						insideBlockInspector={false}
