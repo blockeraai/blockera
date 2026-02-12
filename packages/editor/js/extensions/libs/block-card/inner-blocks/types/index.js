@@ -63,12 +63,14 @@ export type InnerBlocksProps = {
 
 export type MemoizedInnerBlocks = {
 	clientId: string,
-	getBlockExtensionBy: (field: string, name: string) => Object,
-	setBlockClientInners: ({ clientId: string, inners: InnerBlocks }) => void,
+	blockName: string,
 	controlValue: InnerBlocks,
+	selectedBlockClientId?: string,
 	insideBlockInspector?: boolean,
 	reservedInnerBlocks: InnerBlocks,
 	getBlockInners: (clientId: string) => InnerBlocks,
+	getBlockExtensionBy: (field: string, name: string) => Object,
+	setBlockClientInners: ({ clientId: string, inners: InnerBlocks }) => void,
 };
 
 export type AvailableItems = {

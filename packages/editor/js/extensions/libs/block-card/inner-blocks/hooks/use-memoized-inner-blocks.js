@@ -20,11 +20,13 @@ import { getSortedObject } from '@blockera/utils/js/object';
 
 export const useMemoizedInnerBlocks = ({
 	clientId,
+	blockName,
 	controlValue,
 	getBlockInners,
 	getBlockExtensionBy,
 	reservedInnerBlocks,
 	setBlockClientInners,
+	selectedBlockClientId,
 	insideBlockInspector = true,
 }: MemoizedInnerBlocks): InnerBlocks => {
 	// External selectors. to access registered block types on WordPress blocks store api.
@@ -61,14 +63,15 @@ export const useMemoizedInnerBlocks = ({
 		}
 
 		// Previous inner blocks stack.
-		const inners = getBlockInners(clientId);
+		// Selected block client id is used to get the dynamic available inner blocks for customization of the selected block inside global styles panel.
+		const inners = getBlockInners(selectedBlockClientId || clientId);
 		let fallbackInners = {};
 
 		// If not running inside block inspector we should create fallback inner blocks object.
 		if (!Object.keys(inners).length && !insideBlockInspector) {
 			fallbackInners = getBlockExtensionBy(
 				'targetBlock',
-				clientId.replace('core-', 'core/')
+				blockName
 			)?.blockeraInnerBlocks;
 		}
 

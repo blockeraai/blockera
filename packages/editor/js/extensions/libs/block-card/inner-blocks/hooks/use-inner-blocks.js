@@ -69,7 +69,9 @@ export const useInnerBlocks = ({
 		setBlockClientInners,
 		controlValue: values,
 		clientId: block?.clientId,
+		blockName: block?.blockName,
 		reservedInnerBlocks: innerBlocks,
+		selectedBlockClientId: block?.selectedBlockClientId,
 	});
 
 	// Calculation: to categorized in two category (elements and blocks) from available inner blocks on current WordPress selected block.
