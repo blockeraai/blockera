@@ -133,7 +133,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 							}
 							setCurrentTab={blockProps.setCurrentTab}
 							insideBlockInspector={insideBlockInspector}
-							clientId={clientId}
+							clientId={fallbackClientId}
 							blockName={blockProps.name}
 							innerBlocks={blockeraInnerBlocks}
 							currentInnerBlock={currentInnerBlock}
