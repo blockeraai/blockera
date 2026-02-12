@@ -16,6 +16,7 @@ export default function StateContainer({
 	clientId,
 	children,
 	availableStates,
+	fixedColor = false,
 	blockeraUnsavedData,
 	isGlobalStylesCardWrapper = false,
 	insideBlockInspector = true,
@@ -39,11 +40,13 @@ export default function StateContainer({
 			: fallbackState?.settings?.color;
 
 		if (
+			!fixedColor &&
 			isInnerBlock(currentBlock) &&
 			isNormalState(currentInnerBlockState)
 		) {
 			color = '#cc0000';
 		} else if (
+			!fixedColor &&
 			(!insideBlockInspector || isGlobalStylesCardWrapper) &&
 			isNormalState(currentState)
 		) {
