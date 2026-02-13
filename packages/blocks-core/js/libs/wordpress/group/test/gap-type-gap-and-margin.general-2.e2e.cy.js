@@ -206,7 +206,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Flex Layout').within(() => {
-				cy.getByAriaLabel('Row').click();
+				cy.getByAriaLabel('flex-direction: row').click();
 			});
 
 			cy.getByDataTest('matrix-top-left-normal').click();
@@ -296,7 +296,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Flex Layout').within(() => {
-				cy.getByAriaLabel('Row').click();
+				cy.getByAriaLabel('flex-direction: row').click();
 			});
 
 			cy.getByDataTest('matrix-top-left-normal').click();
@@ -404,7 +404,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Flex Layout').within(() => {
-				cy.getByAriaLabel('Row').click();
+				cy.getByAriaLabel('flex-direction: row').click();
 			});
 
 			cy.getByDataTest('matrix-top-left-normal').click();
@@ -453,7 +453,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Flex Layout').within(() => {
-				cy.getByAriaLabel('Row').click();
+				cy.getByAriaLabel('flex-direction: row').click();
 			});
 
 			cy.getByDataTest('matrix-top-right-normal').click();
@@ -572,7 +572,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Flex Layout').within(() => {
-				cy.getByAriaLabel('Column').click();
+				cy.getByAriaLabel('flex-direction: column').click();
 			});
 
 			cy.getByDataTest('matrix-top-left-normal').click();
@@ -663,7 +663,7 @@ describe('Gap → Functionality (Type: gap-and-margin)', () => {
 			});
 
 			cy.getParentContainer('Flex Layout').within(() => {
-				cy.getByAriaLabel('Column').click();
+				cy.getByAriaLabel('flex-direction: column').click();
 			});
 
 			cy.getByDataTest('matrix-top-left-normal').click();

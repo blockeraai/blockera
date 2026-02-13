@@ -129,7 +129,7 @@ describe('Block Sections Manager Testing', () => {
 		// Check for opened Spacing section
 		setBoxSpacingSide('margin-top', 10);
 		// Check for opened Typography section
-		cy.getParentContainer('Family').should('exist');
+		cy.getParentContainer('Font Family').should('exist');
 	});
 
 	it('should applied collapse all of block sections', () => {
@@ -153,12 +153,10 @@ describe('Block Sections Manager Testing', () => {
 		cy.get(`[aria-label="Position"]`).should('not.exist');
 		// Check for opened Size section
 		cy.get(`[aria-label="Width"]`).should('not.exist');
-		// Check for opened Spacing section
-		cy.get(
-			`[data-cy="box-spacing-margin-top"] [data-cy="label-control"]`
-		).should('not.exist');
+		// Check for opened Spacing section (box-spacing uses AdvancedLabelControl, so use margin-lock button)
+		cy.get(`button[data-test="margin-lock"]`).should('not.exist');
 		// Check for opened Typography section
-		cy.get(`[aria-label="Family"]`).should('not.exist');
+		cy.get(`[aria-label="Font Family"]`).should('not.exist');
 	});
 
 	it('should applied focus mode of block sections', () => {
@@ -168,16 +166,13 @@ describe('Block Sections Manager Testing', () => {
 
 		cy.get('button[aria-label="Block Settings"]').click();
 
-		// Check for opened Spacing section by default!
-		cy.get(
-			`[data-cy="box-spacing-margin-top"] [data-cy="label-control"]`
-		).should('exist');
+		// Open Layout section (Spacing/box-spacing is inside Layout) and verify box-spacing controls
+		cy.get('.components-panel__body').contains('Layout').click();
+		cy.get(`button[data-test="margin-lock"]`).should('exist');
 
 		// Check for opened background and closed spacing.
 		cy.get('.components-panel__body').contains('Background').click();
-		cy.get(
-			`[data-cy="box-spacing-margin-top"] [data-cy="label-control"]`
-		).should('not.exist');
+		cy.get(`button[data-test="margin-lock"]`).should('not.exist');
 		// Check for opened border section
 		cy.get('.components-panel__body').contains('Border And Shadow').click();
 		cy.getByAriaLabel('Add New Background').should('not.exist');
