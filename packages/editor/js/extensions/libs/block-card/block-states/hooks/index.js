@@ -46,12 +46,14 @@ export const useBlockStates = ({
 	setCurrentBlock,
 	deleteCacheData,
 	availableStates,
-	currentBreakpoint,
+	// currentBreakpoint,
 	currentInnerBlockState,
 }: StatesManagerHookProps): Object => {
 	const { getAttributes } = useBlockContext();
 	const blockAttributes = getAttributes();
-	let states = { ...(attributes?.blockeraBlockStates || {}) };
+	let states = useMemo(() => {
+		return { ...(attributes?.blockeraBlockStates || {}) };
+	}, [attributes?.blockeraBlockStates]);
 
 	if (isInnerBlock(currentBlock)) {
 		states = {
@@ -210,8 +212,19 @@ export const useBlockStates = ({
 		}
 
 		return forcedStates;
-		// eslint-disable-next-line
-	}, [currentBlock, states, currentBreakpoint]);
+	}, [
+		id,
+		block,
+		states,
+		currentBlock,
+		currentState,
+		preparedStates,
+		setCurrentState,
+		setInnerBlockState,
+		getActiveInnerState,
+		getActiveMasterState,
+		currentInnerBlockState,
+	]);
 
 	const defaultRepeaterItemValue = {
 		deletable: true,
