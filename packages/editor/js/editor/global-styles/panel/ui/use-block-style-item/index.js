@@ -30,7 +30,7 @@ import { isBaseBreakpoint } from '../../../../header-ui/components';
 import { getAttributesWithIds } from '../../../../../hooks/use-attributes';
 import { useBlockContext } from '../../../../../extensions/components/block-context';
 import { blockeraExtensionsBootstrap } from '../../../../../extensions/libs/bootstrap';
-import { generateUniqueClassName } from '../../../../../extensions/components/block-base';
+import { generateUniqueClassName } from '../../../../../extensions/components/registered-classnames';
 import { isNormalStateOnBaseBreakpoint } from '../../../../../extensions/libs/block-card/block-states/helpers';
 import {
 	isInnerBlock,

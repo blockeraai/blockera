@@ -21,12 +21,7 @@ import {
  * Blockera dependencies
  */
 import { useBlockFeatures } from '@blockera/features-core';
-import {
-	isEquals,
-	cloneObject,
-	mergeObject,
-	getSmallHash,
-} from '@blockera/utils';
+import { isEquals, cloneObject, mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 import { generalBlockFeatures } from '@blockera/blocks-core/js/libs/general-block-features';
 
@@ -63,137 +58,18 @@ import {
 import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
+import {
+	registerClassName,
+	isClassNameDuplicate,
+	generateUniqueClassName,
+	unregisterClassName,
+	hasRegisteredClassName,
+	removeRegisteredClassName,
+	BLOCKERA_BLOCK_REGEX,
+} from './registered-classnames';
 
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;
-
-// Map to store registered class names by clientId.
-// Structure: Map<clientId, Set<classNames>>
-const REGISTERED_CLASSNAMES = new Map<string, Set<string>>();
-
-/**
- * Register a class name to be used in the block.
- *
- * @param {string} clientId - The client ID of the block.
- * @param {string} className - The class name to register.
- */
-export const registerClassName = (
-	clientId: string,
-	className: string
-): void => {
-	if (!REGISTERED_CLASSNAMES.has(clientId)) {
-		REGISTERED_CLASSNAMES.set(clientId, new Set());
-	}
-	REGISTERED_CLASSNAMES.get(clientId)?.add(className);
-};
-
-/**
- * Check if a class name is already registered for a different clientId.
- *
- * @param {string} clientId - The client ID of the block.
- * @param {string} className - The class name to check.
- * @return {boolean} True if the class name is registered for a different clientId.
- */
-export const isClassNameDuplicate = (
-	clientId: string,
-	className: string
-): boolean => {
-	for (const [
-		registeredClientId,
-		classNames,
-	] of REGISTERED_CLASSNAMES.entries()) {
-		if (registeredClientId !== clientId && classNames.has(className)) {
-			return true;
-		}
-	}
-	return false;
-};
-
-/**
- * Get all registered class names for a specific clientId.
- *
- * @param {string} clientId - The client ID of the block.
- * @return {Set<string>} Set of registered class names for the clientId.
- */
-export const getRegisteredClassNames = (clientId: string): Set<string> => {
-	return REGISTERED_CLASSNAMES.get(clientId) || new Set();
-};
-
-/**
- * Generate a unique class name for a block instance.
- * Handles collisions by detecting existing numbered classnames and appending
- * a counter based on the highest number found.
- *
- * @param {string} clientId - The client ID to generate the unique class name from.
- * @param {string} className - The default class name for block.
- *
- * @return {string} A unique class name that hasn't been registered yet.
- */
-export const generateUniqueClassName = (
-	clientId: string,
-	className: string
-): string => {
-	let _className = '';
-	const matchBaseClass = className?.match(regexPattern);
-	if (matchBaseClass) {
-		_className = matchBaseClass[0];
-	}
-	const baseHash = _className
-		? _className.match(/blockera-block-(\w+)/)?.[1] ||
-			getSmallHash(clientId)
-		: getSmallHash(clientId);
-	const baseClassName = _className
-		? _className
-		: `blockera-block-${baseHash}`;
-
-	// Check if base classname is available (no counter needed).
-	if (!isClassNameDuplicate(clientId, baseClassName)) {
-		registerClassName(clientId, baseClassName);
-		return baseClassName;
-	}
-
-	// Base classname exists, find the highest counter number used.
-	// Pattern: blockera-block-{baseHash}-{number}
-	const pattern = new RegExp(
-		`^blockera-block-${baseHash.replace(
-			/[.*+?^${}()|[\]\\]/g,
-			'\\$&'
-		)}-(\\d+)$`
-	);
-	let maxCounter = 0;
-
-	// Scan all registered classnames to find the highest counter for this baseHash.
-	REGISTERED_CLASSNAMES.forEach((registeredClassNames) => {
-		registeredClassNames.forEach((registeredClassName) => {
-			// $FlowFixMe
-			const match = registeredClassName.match(pattern);
-			if (match) {
-				const counter = parseInt(match[1], 10);
-				if (counter > maxCounter) {
-					maxCounter = counter;
-				}
-			}
-		});
-	});
-
-	// Generate unique classname with counter starting from maxCounter + 1.
-	let counter = maxCounter + 1;
-	let uniqueClassName = `blockera-block-${baseHash}-${counter}`;
-
-	// Double-check for collisions (shouldn't happen, but safety check).
-	while (REGISTERED_CLASSNAMES.has(uniqueClassName)) {
-		counter++;
-		uniqueClassName = `blockera-block-${baseHash}-${counter}`;
-	}
-
-	// Register the class name to prevent future collisions.
-	registerClassName(clientId, uniqueClassName);
-
-	return uniqueClassName;
-};
-
-// blockera block classname pattern.
-const regexPattern = /blockera-block-[\w-]+/i;
 
 export const BlockBase: ComponentType<any> = (
 	_props: Object
@@ -385,7 +261,7 @@ export const BlockBase: ComponentType<any> = (
 	useEffect(() => {
 		return () => {
 			if (uniqueClassName) {
-				REGISTERED_CLASSNAMES.delete(uniqueClassName);
+				unregisterClassName(clientId, uniqueClassName);
 			}
 		};
 	}, [clientId, uniqueClassName]);
@@ -413,10 +289,10 @@ export const BlockBase: ComponentType<any> = (
 			let generatedClassname = '';
 
 			classNameParts.forEach((part) => {
-				if (regexPattern.test(part)) {
-					if (REGISTERED_CLASSNAMES.has(part)) {
+				if (BLOCKERA_BLOCK_REGEX.test(part)) {
+					if (hasRegisteredClassName(part)) {
 						// Only unregister if it's not the unique classname for this block.
-						REGISTERED_CLASSNAMES.delete(part);
+						removeRegisteredClassName(part);
 						generatedClassname += !generatedClassname
 							? uniqueClassName
 							: ` ${uniqueClassName}`;
@@ -452,7 +328,7 @@ export const BlockBase: ComponentType<any> = (
 						? `blockera-block ${generatedClassname}`
 						: generatedClassname,
 			};
-		} else if (!classNameStr.match(regexPattern)?.[0]) {
+		} else if (!classNameStr.match(BLOCKERA_BLOCK_REGEX)?.[0]) {
 			return {
 				...compatibleAttributes,
 				className: classNameStr
@@ -494,7 +370,7 @@ export const BlockBase: ComponentType<any> = (
 			shouldUpdateClassName: true,
 		}
 	) => {
-		const match = regexPattern.exec(value.className);
+		const match = BLOCKERA_BLOCK_REGEX.exec(value.className);
 
 		// We should update classname with unique generate classname while customizing style variation.
 		if (
@@ -513,7 +389,7 @@ export const BlockBase: ComponentType<any> = (
 			isClassNameDuplicate(clientId, match[0])
 		) {
 			const prevClassName = value.className
-				.replace(regexPattern, '')
+				.replace(BLOCKERA_BLOCK_REGEX, '')
 				.replace(/\bblockera-block\b/gi, '');
 			value.className = classNames(prevClassName.trim(), {
 				'blockera-block': true,

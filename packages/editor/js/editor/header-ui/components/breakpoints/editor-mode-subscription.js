@@ -10,6 +10,7 @@ import { select, dispatch } from '@wordpress/data';
  */
 import { getBaseBreakpoint } from './helpers';
 import { STORE_NAME as blockeraEditorStore } from '../../../../store/constants';
+import { clearRegisteredClassNames } from '../../../../extensions/components/registered-classnames';
 
 let savedDeviceType = null;
 let previousEditorMode = null;
@@ -33,6 +34,9 @@ export const subscribeToEditorModeChanges = (editorMode: string) => {
 
 			// Force to base breakpoint in text mode
 			setDeviceType(getBaseBreakpoint());
+
+			// Clear registered class names since blocks are not rendered in text mode
+			clearRegisteredClassNames();
 		}
 
 		// When switching back to visual mode
