@@ -3,10 +3,10 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { useMemo } from '@wordpress/element';
 import { Fragment, type MixedElement } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Slot, SlotFillProvider } from '@wordpress/components';
-import { useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -41,7 +41,7 @@ import { ClickAnimationExtension } from '../click-animation';
 // import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { useBlockSection } from '../../components';
-import { getParentFlexBlockInfo } from './utils';
+import { useParentFlexBlockInfo } from './utils';
 import { generateExtensionId } from '../utils';
 import { useFeatureSearch } from '../../components/feature-search-context';
 import { filterSettingsBySearch } from '../base/utils/search-features';
@@ -52,13 +52,14 @@ export const MappedExtensions = ({
 	settings,
 	attributes,
 	additional,
-	currentStateAttributes,
-	handleOnChangeSettings,
-	handleOnChangeAttributes,
 	currentBlock,
 	currentState,
 	activeSearchMode,
+	currentBreakpoint,
+	currentStateAttributes,
 	currentInnerBlockState,
+	handleOnChangeSettings,
+	handleOnChangeAttributes,
 	isReportingErrorCompleted,
 	setIsReportingErrorCompleted,
 }: {
@@ -67,13 +68,14 @@ export const MappedExtensions = ({
 	settings: Object,
 	attributes: Object,
 	additional: Object,
+	currentBlock: string,
+	currentState: string,
+	currentBreakpoint: string,
+	activeSearchMode: boolean,
+	currentInnerBlockState: string,
 	currentStateAttributes: Object,
 	handleOnChangeSettings: Function,
 	handleOnChangeAttributes: Function,
-	currentBlock: string,
-	currentState: string,
-	activeSearchMode: boolean,
-	currentInnerBlockState: string,
 	isReportingErrorCompleted: boolean,
 	setIsReportingErrorCompleted: Function,
 }): Array<MixedElement> => {
@@ -119,13 +121,15 @@ export const MappedExtensions = ({
 	/**
 	 * Get the parent flex block information
 	 * to show the flex child extension.
+	 * Uses ref-based hook to correctly recalculate when currentBreakpoint changes.
 	 */
-	const { isParentFlexBlock, parentFlexDirection } = getParentFlexBlockInfo({
+	const { isParentFlexBlock, parentFlexDirection } = useParentFlexBlockInfo({
 		clientId: block.clientId,
 		blockName: block.blockName,
 		currentBlock: block.currentBlock,
 		currentState,
 		currentInnerBlockState,
+		currentBreakpoint: currentBreakpoint || block.currentBreakpoint || '',
 	});
 
 	switch (tab.name) {

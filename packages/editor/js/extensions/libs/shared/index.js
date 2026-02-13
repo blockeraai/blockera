@@ -365,6 +365,7 @@ export const SharedBlockExtension: ComponentType<Props> = ({
 			handleOnChangeAttributes={handleOnChangeAttributes}
 			currentBlock={currentBlock}
 			currentState={currentState}
+			currentBreakpoint={currentBreakpoint}
 			currentInnerBlockState={currentInnerBlockState}
 			isReportingErrorCompleted={isReportingErrorCompleted}
 			setIsReportingErrorCompleted={setIsReportingErrorCompleted}
