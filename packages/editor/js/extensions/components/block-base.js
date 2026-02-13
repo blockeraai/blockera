@@ -198,8 +198,11 @@ const regexPattern = /blockera-block-[\w-]+/i;
 export const BlockBase: ComponentType<any> = (
 	_props: Object
 ): Element<any> | null => {
-	const { setCurrentBlockStyleVariation, handleOnChangeStyleInLocalState } =
-		useGlobalStylesPanelContext();
+	const {
+		currentBlockStyleVariation,
+		setCurrentBlockStyleVariation,
+		handleOnChangeStyleInLocalState,
+	} = useGlobalStylesPanelContext();
 	const {
 		additional,
 		children,
@@ -592,16 +595,35 @@ export const BlockBase: ComponentType<any> = (
 			return;
 		}
 
+		// If the current block style variation is not set, don't update the attributes,
+		// When block rendering outside of the block inspector.
+		if (
+			false === insideBlockInspector &&
+			!currentBlockStyleVariation?.name
+		) {
+			return;
+		}
+
+		const isNotSyncedWithLocalState = !isEquals(
+			attributes,
+			compatibleAttributes
+		);
+		const isNotSyncedWithRef = !isEquals(
+			compatibleAttributesRef.current,
+			compatibleAttributes
+		);
+		const isNotSyncedLocalStateWithRef = !isEquals(
+			attributes,
+			compatibleAttributesRef.current
+		);
+		const isNotSetRef = !compatibleAttributesRef.current;
+
 		// Compare the compatible attributes with the attributes and the attributes ref.
 		// If they are not equal, set the attributes to the compatible attributes.
 		if (
-			(!isEquals(attributes, compatibleAttributes) &&
-				!isEquals(
-					compatibleAttributesRef.current,
-					compatibleAttributes
-				) &&
-				!isEquals(attributes, compatibleAttributesRef.current)) ||
-			!compatibleAttributesRef.current
+			(isNotSyncedWithLocalState && isNotSyncedWithRef) ||
+			isNotSetRef ||
+			(isNotSyncedLocalStateWithRef && isNotSyncedWithLocalState)
 		) {
 			setAttributes(compatibleAttributes);
 		}
