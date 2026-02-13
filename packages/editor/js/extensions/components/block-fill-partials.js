@@ -167,13 +167,11 @@ export const BlockFillPartials: ComponentType<any> = ({
 								handleOnClick={updateBlockEditorSettings}
 								currentBlock={'master'}
 								currentState={currentState}
-								availableStates={availableInnerStates}
+								availableStates={availableStates}
 								currentBreakpoint={currentBreakpoint}
 								currentInnerBlock={currentInnerBlock}
 								currentInnerBlockState={currentInnerBlockState}
-								currentStateAttributes={
-									blockProps.currentStateAttributes
-								}
+								currentStateAttributes={blockProps.attributes}
 								additional={blockProps.additional}
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
