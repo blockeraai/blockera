@@ -55,7 +55,7 @@ describe('Spacer Block', () => {
 		//
 		cy.getBlock('core/spacer').should('have.css', 'min-width', '0px');
 
-		cy.getParentContainer('Min').within(() => {
+		cy.getParentContainer('Min Width').within(() => {
 			cy.get('input').type(10);
 		});
 
