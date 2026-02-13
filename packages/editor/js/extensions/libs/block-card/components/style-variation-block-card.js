@@ -61,6 +61,7 @@ export function StyleVariationBlockCard({
 	availableStates,
 	additional,
 	currentInnerBlock,
+	blockeraInnerBlocks,
 	insideBlockInspector,
 	currentStateAttributes,
 	currentInnerBlockState,
@@ -390,6 +391,10 @@ export function StyleVariationBlockCard({
 						blockConfig={additional}
 						blockStatesProps={{
 							attributes: currentStateAttributes,
+						}}
+						innerBlocksProps={{
+							values: currentStateAttributes.blockeraInnerBlocks,
+							innerBlocks: blockeraInnerBlocks,
 						}}
 						onStatesManagerReady={(handleOnChange) => {
 							statesManagerHandleOnChangeRef.current =

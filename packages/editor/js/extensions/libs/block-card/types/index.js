@@ -12,8 +12,8 @@ import type {
 	THandleOnChangeAttributes,
 	UpdateBlockEditorSettings,
 } from '../../types';
-import type { InnerBlockType } from '../inner-blocks/types';
 import type { TBreakpoint, TStates } from '../block-states/types';
+import type { InnerBlockType, InnerBlocks } from '../inner-blocks/types';
 
 export type PropTypes = {
 	supports: Object,
@@ -34,6 +34,7 @@ export type TStyleVariationBlockCardProps = {
 	availableStates: Object,
 	children?: MixedElement,
 	currentInnerBlock: 'master' | InnerBlockType | string,
+	blockeraInnerBlocks: InnerBlocks,
 	currentBlockStyleVariation?: {
 		name: string,
 		label: string,
