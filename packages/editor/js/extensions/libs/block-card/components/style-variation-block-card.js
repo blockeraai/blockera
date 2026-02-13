@@ -33,7 +33,6 @@ import { Tooltip, Flex } from '@blockera/controls';
  */
 import { Breadcrumb } from './breadcrumb';
 import { default as BlockIcon } from './block-icon';
-import { useBlockSection } from '../../../components';
 import { EditableBlockName } from './editable-block-name';
 import type { TStyleVariationBlockCardProps } from '../types';
 import StateContainer from '../../../components/state-container';
@@ -69,7 +68,6 @@ export function StyleVariationBlockCard({
 	currentBlockStyleVariation,
 	setCurrentBlockStyleVariation,
 }: TStyleVariationBlockCardProps): MixedElement {
-	const { onToggle } = useBlockSection('innerBlocksConfig');
 	const { selectedBlockClientId, statesManagerHandleOnChangeRef } =
 		useGlobalStylesPanelContext();
 	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
@@ -250,7 +248,6 @@ export function StyleVariationBlockCard({
 	const handleClose = () => {
 		// Reset block state to normal using the reusable hook
 		resetBlockStateToNormal();
-		onToggle(true, 'switch-to-parent');
 		handleOnClick('current-block-style-variation', undefined);
 	};
 
