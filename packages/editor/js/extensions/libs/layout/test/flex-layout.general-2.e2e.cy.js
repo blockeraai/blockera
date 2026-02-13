@@ -23,7 +23,7 @@ describe('Flex Layout → Functionality', () => {
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
-				cy.getByAriaLabel('Row').click();
+				cy.getByAriaLabel('flex-direction: row').click();
 			});
 
 		cy.getBlock('core/paragraph').should(
@@ -41,7 +41,7 @@ describe('Flex Layout → Functionality', () => {
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
-				cy.getByAriaLabel('Column').click();
+				cy.getByAriaLabel('flex-direction: column').click();
 			});
 
 		cy.getBlock('core/paragraph').should(
@@ -69,7 +69,7 @@ describe('Flex Layout → Functionality', () => {
 	});
 
 	describe('Flex Align Items & Justify Content', () => {
-		['Row', 'Column'].forEach((type) => {
+		['flex-direction: row', 'flex-direction: column'].forEach((type) => {
 			describe(type + ' Direction', () => {
 				it('Top - Left', () => {
 					cy.getParentContainer('Flex Layout').within(() => {
@@ -130,13 +130,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-start' : 'center'
+						type === 'flex-direction: row' ? 'flex-start' : 'center'
 					);
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'center' : 'flex-start'
+						type === 'flex-direction: row' ? 'center' : 'flex-start'
 					);
 
 					getWPDataObject().then((data) => {
@@ -159,13 +159,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-start' : 'center'
+						type === 'flex-direction: row' ? 'flex-start' : 'center'
 					);
 
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'center' : 'flex-start'
+						type === 'flex-direction: row' ? 'center' : 'flex-start'
 					);
 				});
 
@@ -179,13 +179,17 @@ describe('Flex Layout → Functionality', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-start' : 'flex-end'
+						type === 'flex-direction: row'
+							? 'flex-start'
+							: 'flex-end'
 					);
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-end' : 'flex-start'
+						type === 'flex-direction: row'
+							? 'flex-end'
+							: 'flex-start'
 					);
 
 					getWPDataObject().then((data) => {
@@ -208,13 +212,17 @@ describe('Flex Layout → Functionality', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-start' : 'flex-end'
+						type === 'flex-direction: row'
+							? 'flex-start'
+							: 'flex-end'
 					);
 
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-end' : 'flex-start'
+						type === 'flex-direction: row'
+							? 'flex-end'
+							: 'flex-start'
 					);
 				});
 
@@ -228,13 +236,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'center' : 'flex-start'
+						type === 'flex-direction: row' ? 'center' : 'flex-start'
 					);
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-start' : 'center'
+						type === 'flex-direction: row' ? 'flex-start' : 'center'
 					);
 
 					getWPDataObject().then((data) => {
@@ -257,13 +265,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'center' : 'flex-start'
+						type === 'flex-direction: row' ? 'center' : 'flex-start'
 					);
 
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-start' : 'center'
+						type === 'flex-direction: row' ? 'flex-start' : 'center'
 					);
 				});
 
@@ -326,13 +334,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'center' : 'flex-end'
+						type === 'flex-direction: row' ? 'center' : 'flex-end'
 					);
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-end' : 'center'
+						type === 'flex-direction: row' ? 'flex-end' : 'center'
 					);
 
 					getWPDataObject().then((data) => {
@@ -355,13 +363,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'center' : 'flex-end'
+						type === 'flex-direction: row' ? 'center' : 'flex-end'
 					);
 
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-end' : 'center'
+						type === 'flex-direction: row' ? 'flex-end' : 'center'
 					);
 				});
 
@@ -375,13 +383,17 @@ describe('Flex Layout → Functionality', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-end' : 'flex-start'
+						type === 'flex-direction: row'
+							? 'flex-end'
+							: 'flex-start'
 					);
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-start' : 'flex-end'
+						type === 'flex-direction: row'
+							? 'flex-start'
+							: 'flex-end'
 					);
 
 					getWPDataObject().then((data) => {
@@ -404,13 +416,17 @@ describe('Flex Layout → Functionality', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-end' : 'flex-start'
+						type === 'flex-direction: row'
+							? 'flex-end'
+							: 'flex-start'
 					);
 
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'flex-start' : 'flex-end'
+						type === 'flex-direction: row'
+							? 'flex-start'
+							: 'flex-end'
 					);
 				});
 
@@ -424,13 +440,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-end' : 'center'
+						type === 'flex-direction: row' ? 'flex-end' : 'center'
 					);
 
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'center' : 'flex-end'
+						type === 'flex-direction: row' ? 'center' : 'flex-end'
 					);
 
 					getWPDataObject().then((data) => {
@@ -453,13 +469,13 @@ describe('Flex Layout → Functionality', () => {
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'align-items',
-						type === 'Row' ? 'flex-end' : 'center'
+						type === 'flex-direction: row' ? 'flex-end' : 'center'
 					);
 
 					cy.get('p.blockera-block').should(
 						'have.css',
 						'justify-content',
-						type === 'Row' ? 'center' : 'flex-end'
+						type === 'flex-direction: row' ? 'center' : 'flex-end'
 					);
 				});
 
@@ -516,186 +532,188 @@ describe('Flex Layout → Functionality', () => {
 		});
 
 		describe('Special units, Same for row and column', () => {
-			['Row', 'Column'].forEach((type) => {
-				describe(type + ' Direction', () => {
-					it('Top - Space Around', () => {
-						// change direction
-						cy.getParentContainer('Flex Layout').within(() => {
-							cy.getByAriaLabel(type).click();
-						});
+			['flex-direction: row', 'flex-direction: column'].forEach(
+				(type) => {
+					describe(type + ' Direction', () => {
+						it('Top - Space Around', () => {
+							// change direction
+							cy.getParentContainer('Flex Layout').within(() => {
+								cy.getByAriaLabel(type).click();
+							});
 
-						cy.getByDataTest('matrix-top-left-normal').click();
+							cy.getByDataTest('matrix-top-left-normal').click();
 
-						cy.getParentContainer('Flex Layout').within(() => {
-							cy.get('button[aria-haspopup="listbox"]')
-								.eq(1)
-								.click();
-							cy.get('div[aria-selected="false"] span')
-								.contains('Space Around')
-								.click();
-						});
+							cy.getParentContainer('Flex Layout').within(() => {
+								cy.get('button[aria-haspopup="listbox"]')
+									.eq(1)
+									.click();
+								cy.get('div[aria-selected="false"] span')
+									.contains('Space Around')
+									.click();
+							});
 
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'align-items',
-							'flex-start'
-						);
-
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'justify-content',
-							'space-around'
-						);
-
-						getWPDataObject().then((data) => {
-							expect('flex-start').to.be.deep.equal(
-								getSelectedBlock(data, 'blockeraFlexLayout')
-									?.alignItems
+							cy.getBlock('core/paragraph').should(
+								'have.css',
+								'align-items',
+								'flex-start'
 							);
 
-							expect('space-around').to.be.deep.equal(
-								getSelectedBlock(data, 'blockeraFlexLayout')
-									?.justifyContent
+							cy.getBlock('core/paragraph').should(
+								'have.css',
+								'justify-content',
+								'space-around'
+							);
+
+							getWPDataObject().then((data) => {
+								expect('flex-start').to.be.deep.equal(
+									getSelectedBlock(data, 'blockeraFlexLayout')
+										?.alignItems
+								);
+
+								expect('space-around').to.be.deep.equal(
+									getSelectedBlock(data, 'blockeraFlexLayout')
+										?.justifyContent
+								);
+							});
+
+							//Check frontend
+							savePage();
+
+							redirectToFrontPage();
+
+							cy.get('p.blockera-block').should(
+								'have.css',
+								'align-items',
+								'flex-start'
+							);
+
+							cy.get('p.blockera-block').should(
+								'have.css',
+								'justify-content',
+								'space-around'
 							);
 						});
 
-						//Check frontend
-						savePage();
+						it('Top - Space Between', () => {
+							// change direction
+							cy.getParentContainer('Flex Layout').within(() => {
+								cy.getByAriaLabel(type).click();
+							});
 
-						redirectToFrontPage();
+							cy.getByDataTest('matrix-top-left-normal').click();
 
-						cy.get('p.blockera-block').should(
-							'have.css',
-							'align-items',
-							'flex-start'
-						);
+							cy.getParentContainer('Flex Layout').within(() => {
+								cy.get('button[aria-haspopup="listbox"]')
+									.eq(1)
+									.click();
+								cy.get('div[aria-selected="false"] span')
+									.contains('Space Between')
+									.click();
+							});
 
-						cy.get('p.blockera-block').should(
-							'have.css',
-							'justify-content',
-							'space-around'
-						);
+							cy.getBlock('core/paragraph').should(
+								'have.css',
+								'align-items',
+								'flex-start'
+							);
+
+							cy.getBlock('core/paragraph').should(
+								'have.css',
+								'justify-content',
+								'space-between'
+							);
+
+							getWPDataObject().then((data) => {
+								expect('flex-start').to.be.deep.equal(
+									getSelectedBlock(data, 'blockeraFlexLayout')
+										?.alignItems
+								);
+
+								expect('space-between').to.be.deep.equal(
+									getSelectedBlock(data, 'blockeraFlexLayout')
+										?.justifyContent
+								);
+							});
+
+							//Check frontend
+							savePage();
+
+							redirectToFrontPage();
+
+							cy.get('p.blockera-block').should(
+								'have.css',
+								'align-items',
+								'flex-start'
+							);
+
+							cy.get('p.blockera-block').should(
+								'have.css',
+								'justify-content',
+								'space-between'
+							);
+						});
+
+						it('Stretch - Left', () => {
+							// change direction
+							cy.getParentContainer('Flex Layout').within(() => {
+								cy.getByAriaLabel(type).click();
+							});
+
+							cy.getByDataTest('matrix-top-left-normal').click();
+
+							cy.getParentContainer('Flex Layout').within(() => {
+								cy.get('button[aria-haspopup="listbox"]')
+									.eq(0)
+									.click();
+								cy.get('div[aria-selected="false"] span')
+									.contains('Stretch')
+									.click();
+							});
+
+							cy.getBlock('core/paragraph').should(
+								'have.css',
+								'align-items',
+								'stretch'
+							);
+
+							cy.getBlock('core/paragraph').should(
+								'have.css',
+								'justify-content',
+								'flex-start'
+							);
+
+							getWPDataObject().then((data) => {
+								expect('stretch').to.be.deep.equal(
+									getSelectedBlock(data, 'blockeraFlexLayout')
+										?.alignItems
+								);
+
+								expect('flex-start').to.be.deep.equal(
+									getSelectedBlock(data, 'blockeraFlexLayout')
+										?.justifyContent
+								);
+							});
+
+							//Check frontend
+							savePage();
+
+							redirectToFrontPage();
+
+							cy.get('p.blockera-block').should(
+								'have.css',
+								'align-items',
+								'stretch'
+							);
+
+							cy.get('p.blockera-block').should(
+								'have.css',
+								'justify-content',
+								'flex-start'
+							);
+						});
 					});
-
-					it('Top - Space Between', () => {
-						// change direction
-						cy.getParentContainer('Flex Layout').within(() => {
-							cy.getByAriaLabel(type).click();
-						});
-
-						cy.getByDataTest('matrix-top-left-normal').click();
-
-						cy.getParentContainer('Flex Layout').within(() => {
-							cy.get('button[aria-haspopup="listbox"]')
-								.eq(1)
-								.click();
-							cy.get('div[aria-selected="false"] span')
-								.contains('Space Between')
-								.click();
-						});
-
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'align-items',
-							'flex-start'
-						);
-
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'justify-content',
-							'space-between'
-						);
-
-						getWPDataObject().then((data) => {
-							expect('flex-start').to.be.deep.equal(
-								getSelectedBlock(data, 'blockeraFlexLayout')
-									?.alignItems
-							);
-
-							expect('space-between').to.be.deep.equal(
-								getSelectedBlock(data, 'blockeraFlexLayout')
-									?.justifyContent
-							);
-						});
-
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('p.blockera-block').should(
-							'have.css',
-							'align-items',
-							'flex-start'
-						);
-
-						cy.get('p.blockera-block').should(
-							'have.css',
-							'justify-content',
-							'space-between'
-						);
-					});
-
-					it('Stretch - Left', () => {
-						// change direction
-						cy.getParentContainer('Flex Layout').within(() => {
-							cy.getByAriaLabel(type).click();
-						});
-
-						cy.getByDataTest('matrix-top-left-normal').click();
-
-						cy.getParentContainer('Flex Layout').within(() => {
-							cy.get('button[aria-haspopup="listbox"]')
-								.eq(0)
-								.click();
-							cy.get('div[aria-selected="false"] span')
-								.contains('Stretch')
-								.click();
-						});
-
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'align-items',
-							'stretch'
-						);
-
-						cy.getBlock('core/paragraph').should(
-							'have.css',
-							'justify-content',
-							'flex-start'
-						);
-
-						getWPDataObject().then((data) => {
-							expect('stretch').to.be.deep.equal(
-								getSelectedBlock(data, 'blockeraFlexLayout')
-									?.alignItems
-							);
-
-							expect('flex-start').to.be.deep.equal(
-								getSelectedBlock(data, 'blockeraFlexLayout')
-									?.justifyContent
-							);
-						});
-
-						//Check frontend
-						savePage();
-
-						redirectToFrontPage();
-
-						cy.get('p.blockera-block').should(
-							'have.css',
-							'align-items',
-							'stretch'
-						);
-
-						cy.get('p.blockera-block').should(
-							'have.css',
-							'justify-content',
-							'flex-start'
-						);
-					});
-				});
-			});
+				}
+			);
 		});
 	});
 });
