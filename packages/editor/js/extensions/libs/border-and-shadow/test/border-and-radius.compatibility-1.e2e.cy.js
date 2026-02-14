@@ -27,7 +27,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('border');
+				cy.getParentContainer('Border').as('border');
 				cy.getParentContainer('Radius').as('radius');
 
 				cy.addNewTransition();
@@ -175,7 +175,7 @@ describe('Border & Border Radius Together → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('border');
+				cy.getParentContainer('Border').as('border');
 				cy.getParentContainer('Radius').as('radius');
 
 				cy.addNewTransition();
