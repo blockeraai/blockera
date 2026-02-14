@@ -322,7 +322,7 @@ export function getSortedBreakpoints(
 		onClick?: (breakpoint: TBreakpoint | string) => void,
 		setActiveBreakpoint?: (breakpoint: TBreakpoint | string) => void,
 	}
-): Array<ComponentType<any>> {
+): Array<ComponentType<any>> | Object {
 	const newBreakpointsList: Array<any> | Object = [];
 
 	// Helper function to extract numeric value from px string

@@ -110,7 +110,7 @@ export const GeneralPanel = (): MixedElement => {
 		});
 
 		newValue = Object.fromEntries(
-			Object.entries(newValue).map(
+			Object.entries((newValue: Object)).map(
 				([key, breakpoint]: [string, BreakpointTypes | Object]) => {
 					return [
 						key,
