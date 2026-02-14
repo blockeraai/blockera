@@ -117,7 +117,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
-				cy.getByAriaLabel('Row')
+				cy.getByAriaLabel('flex-direction: row')
 					.invoke('attr', 'aria-checked')
 					.should('eq', 'true');
 			});
@@ -173,7 +173,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		cy.getParentContainer('Flex Layout')
 			.first()
 			.within(() => {
-				cy.getByAriaLabel('Column')
+				cy.getByAriaLabel('flex-direction: column')
 					.invoke('attr', 'aria-checked')
 					.should('eq', 'true');
 			});
@@ -325,7 +325,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		});
 
 		cy.getParentContainer('Flex Layout').within(() => {
-			cy.getByAriaLabel('Row').click();
+			cy.getByAriaLabel('flex-direction: row').click();
 		});
 
 		// assert current variation
@@ -356,7 +356,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 
 		cy.getParentContainer('Flex Layout').within(() => {
-			cy.getByAriaLabel('Column').click();
+			cy.getByAriaLabel('flex-direction: column').click();
 		});
 
 		cy.checkActiveBlockVariation('group-stack');
@@ -386,7 +386,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 
 		cy.getParentContainer('Flex Layout').within(() => {
-			cy.getByAriaLabel('Row').click();
+			cy.getByAriaLabel('flex-direction: row').click();
 		});
 
 		cy.checkActiveBlockVariation('group-row');
@@ -561,7 +561,7 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 				if (item === 'Flex') {
 					cy.getParentContainer('Flex Layout').within(() => {
-						cy.getByAriaLabel('Row').click();
+						cy.getByAriaLabel('flex-direction: row').click();
 					});
 				}
 
