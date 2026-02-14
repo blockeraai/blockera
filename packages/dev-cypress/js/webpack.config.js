@@ -11,6 +11,14 @@ module.exports = {
 	devtool: true,
 	module: {
 		rules: [
+			// Fix for webpack 5 fullySpecified: resolve issues with @wordpress/block-editor
+			// (diff/lib/diff/character) and @wordpress/sync (fast-deep-equal/es6)
+			{
+				test: /\.m?js/,
+				resolve: {
+					fullySpecified: false,
+				},
+			},
 			{
 				test: /\.(css|scss)$/i,
 				use: [
