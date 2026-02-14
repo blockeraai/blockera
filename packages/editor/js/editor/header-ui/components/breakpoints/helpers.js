@@ -317,13 +317,13 @@ export function getSortedBreakpoints(
 		currentActiveBreakpoint,
 	}: {
 		output: 'icons' | 'objects',
-		BreakpointIcon: ComponentType<any>,
-		currentActiveBreakpoint: TBreakpoint,
-		onClick: (breakpoint: TBreakpoint | string) => void,
-		setActiveBreakpoint: (breakpoint: TBreakpoint | string) => void,
+		BreakpointIcon?: ComponentType<any>,
+		currentActiveBreakpoint?: TBreakpoint,
+		onClick?: (breakpoint: TBreakpoint | string) => void,
+		setActiveBreakpoint?: (breakpoint: TBreakpoint | string) => void,
 	}
 ): Array<ComponentType<any>> {
-	const newBreakpointsList: Array<any> = [];
+	const newBreakpointsList: Array<any> | Object = [];
 
 	// Helper function to extract numeric value from px string
 	const extractNumericValue = (value: string): number => {
@@ -401,7 +401,7 @@ export function getSortedBreakpoints(
 
 	// Create breakpoint components in sorted order
 	sortedBreakpoints.forEach(({ itemId, item }, index: number) => {
-		if (output === 'icons') {
+		if (output === 'icons' && BreakpointIcon) {
 			newBreakpointsList.push(
 				<BreakpointIcon
 					key={`${itemId}-${index}`}
@@ -422,13 +422,15 @@ export function getSortedBreakpoints(
 
 						if (itemId !== currentActiveBreakpoint) {
 							onClick(itemId);
-							setActiveBreakpoint(itemId);
+							if (setActiveBreakpoint) {
+								setActiveBreakpoint(itemId);
+							}
 						}
 					}}
 				/>
 			);
 		} else {
-			newBreakpointsList.push(item);
+			(newBreakpointsList: Object)[itemId] = item;
 		}
 	});
 

@@ -95,7 +95,7 @@ export const GeneralPanel = (): MixedElement => {
 	// Memoize the sorted breakpoints to prevent re-creation on every render.
 	const sortedBreakpoints = useMemo(() => {
 		return getSortedBreakpoints(generalSettings.breakpoints, {
-			output: 'object',
+			output: 'objects',
 		});
 	}, [generalSettings.breakpoints]);
 
@@ -106,7 +106,7 @@ export const GeneralPanel = (): MixedElement => {
 
 	const memoizedCallback = useCallback((newValue: Object) => {
 		newValue = getSortedBreakpoints(newValue, {
-			output: 'object',
+			output: 'objects',
 		});
 
 		newValue = Object.fromEntries(

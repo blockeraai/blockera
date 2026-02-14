@@ -39,6 +39,7 @@ return [
 			'native' => true,
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 1,
 		],
 		'xl-desktop'       => [
 			'type'       => 'xl-desktop',
@@ -62,6 +63,7 @@ return [
 			'native' => true,
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 2,
 		],
 		'l-desktop'        => [
 			'type'       => 'l-desktop',
@@ -85,6 +87,7 @@ return [
 			'native' => true,
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 3,
 		],
 		'desktop'          => [
 			'type'       => 'desktop',
@@ -108,6 +111,7 @@ return [
 			'attributes' => [],
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 4,
 		],
 		'tablet'           => [
 			'type'       => 'tablet',
@@ -131,6 +135,7 @@ return [
 			'attributes' => [],
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 5,
 		],
 		'mobile-landscape' => [
 			'type'       => 'mobile-landscape',
@@ -154,6 +159,7 @@ return [
 			'native' => true,
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 6,
 		],
 		'mobile'           => [
 			'type'       => 'mobile',
@@ -177,6 +183,7 @@ return [
 			'attributes' => [],
 			'deletable' => false,
 			'isDefault' => true,
+			'order' => 7,
 		],
 	],
 ];
