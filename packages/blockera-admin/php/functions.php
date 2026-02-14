@@ -109,20 +109,37 @@ if (! function_exists('blockera_update_breakpoints')) {
      */
     function blockera_update_breakpoints( array $settings, array $breakpoints): array {
 
+		$new_breakpoints = [];
+
         foreach ($breakpoints as $key => $value) {
 
+			if (! isset($value['type'])) {
+				continue;
+			}
+
             // Skip not native breakpoints.
-            if (in_array($key, [ 'desktop', 'tablet', 'mobile' ], true)) {
+            if (in_array($value['type'], [ 'desktop', 'tablet', 'mobile' ], true)) {
+				$new_breakpoints[ $key ] = $value;
                 continue;
             }
 
-            $breakpoints[ $key ]['native'] = true;
-            $breakpoints[ $key ]['status'] = false;
+			$new_breakpoints[ $key ] = array_merge(
+                $value,
+                [
+					'native' => true,
+					'status' => false,
+				]
+            );
         }
 
-        if (! isset($settings['general']['breakpoints']) || $settings['general']['breakpoints'] === $breakpoints) {
+		// If no new breakpoints are found, return the original breakpoints.
+		if (empty($new_breakpoints)) {
+			return $new_breakpoints;
+		}
 
-            return $breakpoints;
+        if (! isset($settings['general']['breakpoints']) || $settings['general']['breakpoints'] === $new_breakpoints) {
+
+            return $new_breakpoints;
         }
 
         update_option(
@@ -131,12 +148,12 @@ if (! function_exists('blockera_update_breakpoints')) {
                 $settings,
                 [
                     'general' => [
-                        'breakpoints' => $breakpoints,
+                        'breakpoints' => $new_breakpoints,
                     ],
                 ]
             )
         );
 
-        return $breakpoints;
+        return $new_breakpoints;
     }
 }
