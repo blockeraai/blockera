@@ -347,7 +347,11 @@ export const BlockBase: ComponentType<any> = (
 		originDefaultAttributes,
 	]);
 
-	const [attributes, setState] = useState(compatibleAttributes);
+	// Single source of truth: compatibleAttributes (derived from blockAttributes).
+	// pendingAttributes is only set during user edits; cleared when derived value updates.
+	const [pendingAttributes, setPendingAttributes] =
+		useState(compatibleAttributes);
+	const attributes = pendingAttributes ?? compatibleAttributes;
 	const { className } = attributes;
 
 	/**
@@ -370,15 +374,16 @@ export const BlockBase: ComponentType<any> = (
 			shouldUpdateClassName: true,
 		}
 	) => {
-		const match = BLOCKERA_BLOCK_REGEX.exec(value.className);
+		const valueToStore = cloneObject(value);
+		const match = BLOCKERA_BLOCK_REGEX.exec(valueToStore.className);
 
 		// We should update classname with unique generate classname while customizing style variation.
 		if (
 			shouldUpdateClassName &&
-			/^is-style-.*/g.test(value?.className) &&
-			!/\s/g.test(value?.className || '')
+			/^is-style-.*/g.test(valueToStore?.className) &&
+			!/\s/g.test(valueToStore?.className || '')
 		) {
-			value.className = classNames(value.className, {
+			valueToStore.className = classNames(valueToStore.className, {
 				'blockera-block': true,
 				[uniqueClassName]: true,
 			});
@@ -388,10 +393,10 @@ export const BlockBase: ComponentType<any> = (
 			match &&
 			isClassNameDuplicate(clientId, match[0])
 		) {
-			const prevClassName = value.className
+			const prevClassName = valueToStore.className
 				.replace(BLOCKERA_BLOCK_REGEX, '')
 				.replace(/\bblockera-block\b/gi, '');
-			value.className = classNames(prevClassName.trim(), {
+			valueToStore.className = classNames(prevClassName.trim(), {
 				'blockera-block': true,
 				[uniqueClassName]: true,
 			});
@@ -411,9 +416,9 @@ export const BlockBase: ComponentType<any> = (
 		}
 
 		// Sync with the new value for attributes state.
-		compatibleAttributesRef.current = value;
+		compatibleAttributesRef.current = valueToStore;
 
-		setState(value);
+		setPendingAttributes(valueToStore);
 	};
 
 	// Debounce updates to parent state to avoid unnecessary re-renders.
@@ -429,13 +434,19 @@ export const BlockBase: ComponentType<any> = (
 			return;
 		}
 
+		// TODO: In the future, review all custom hooks and child components used in this block
+		// to determine which ones might alter the original `attributes` object reference directly.
+		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
+		// are properly managed or avoided (consider use of cloneObject as needed).
+		const clonedAttributes = cloneObject(attributes);
+
 		if (
 			'function' === typeof handleOnChangeStyleInLocalState &&
 			!isEquals(compatibleAttributes, attributes) &&
 			false === insideBlockInspector
 		) {
 			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
-			handleOnChangeStyleInLocalState(attributes);
+			handleOnChangeStyleInLocalState(clonedAttributes);
 		}
 
 		// If inside the block inspector, update the parent state immediately.
@@ -443,7 +454,7 @@ export const BlockBase: ComponentType<any> = (
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
 			if (!isEquals(compatibleAttributes, attributes)) {
-				setBlockAttributes(attributes);
+				setBlockAttributes(clonedAttributes);
 			}
 
 			return;
@@ -453,7 +464,7 @@ export const BlockBase: ComponentType<any> = (
 			// Compare the block attributes with the attributes and the attributes ref.
 			// If they are not equal, set the attributes to the block attributes.
 			if (!isEquals(compatibleAttributes, attributes)) {
-				setBlockAttributes(attributes);
+				setBlockAttributes(clonedAttributes);
 			}
 		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
 
@@ -461,49 +472,32 @@ export const BlockBase: ComponentType<any> = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [attributes]);
 
+	// When derived value (compatibleAttributes) changes, clear pending overlay.
+	// This adopts the single source of truth and prevents bidirectional sync.
 	useEffect(() => {
-		// If the current block is an inner block, don't update the attributes.
-		// Because the inner block attributes are updated by the parent block.
 		if (isInnerBlock(currentBlock)) {
 			return;
 		}
-
-		// If the current block style variation is not set, don't update the attributes,
-		// When block rendering outside of the block inspector.
 		if (
 			false === insideBlockInspector &&
 			!currentBlockStyleVariation?.name
 		) {
 			return;
 		}
-
-		const isNotSyncedWithLocalState = !isEquals(
-			attributes,
-			compatibleAttributes
-		);
-		const isNotSyncedWithRef = !isEquals(
-			compatibleAttributesRef.current,
-			compatibleAttributes
-		);
-		const isNotSyncedLocalStateWithRef = !isEquals(
-			attributes,
-			compatibleAttributesRef.current
-		);
-		const isNotSetRef = !compatibleAttributesRef.current;
-
-		// Compare the compatible attributes with the attributes and the attributes ref.
-		// If they are not equal, set the attributes to the compatible attributes.
 		if (
-			(isNotSyncedWithLocalState && isNotSyncedWithRef) ||
-			isNotSetRef ||
-			(isNotSyncedLocalStateWithRef && isNotSyncedWithLocalState)
+			pendingAttributes !== null &&
+			isEquals(pendingAttributes, compatibleAttributes)
 		) {
-			setAttributes(compatibleAttributes);
+			setPendingAttributes(null);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [compatibleAttributes]);
 
 	const sanitizedAttributes = useMemo(
+		// TODO: In the future, review all custom hooks and child components used in this block
+		// to determine which ones might alter the original `attributes` object reference directly.
+		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
+		// are properly managed or avoided (consider use of cloneObject as needed).
 		() => sanitizeBlockAttributes(cloneObject(attributes)),
 		[attributes]
 	);
@@ -531,7 +525,11 @@ export const BlockBase: ComponentType<any> = (
 	const blockStyleVariationsProps = useBlockStyleVariations({
 		clientId,
 		blockName: name,
-		storedAttributes: attributes,
+		// TODO: In the future, review all custom hooks and child components used in this block
+		// to determine which ones might alter the original `attributes` object reference directly.
+		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
+		// are properly managed or avoided (consider use of cloneObject as needed).
+		storedAttributes: cloneObject(attributes),
 		defaultAttributes: availableAttributes,
 	});
 
@@ -551,7 +549,11 @@ export const BlockBase: ComponentType<any> = (
 		activeBlockVariation,
 		currentInnerBlockState,
 		getActiveBlockVariation,
-		getAttributes: () => attributes,
+		// TODO: In the future, review all custom hooks and child components used in this block
+		// to determine which ones might alter the original `attributes` object reference directly.
+		// This helps ensure that updates to `attributes` remain predictable, and mutation side-effects
+		// are properly managed or avoided (consider use of cloneObject as needed).
+		getAttributes: () => cloneObject(attributes),
 		innerBlocks: additional?.blockeraInnerBlocks,
 		setChangesets: blockStyleVariationsProps.setChangesets,
 	});
