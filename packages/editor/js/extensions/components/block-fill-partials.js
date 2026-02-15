@@ -173,6 +173,7 @@ export const BlockFillPartials: ComponentType<any> = ({
 								currentInnerBlockState={currentInnerBlockState}
 								currentStateAttributes={blockProps.attributes}
 								additional={blockProps.additional}
+								blockeraInnerBlocks={blockeraInnerBlocks}
 								supports={blockProps.supports}
 								setAttributes={blockProps.setAttributes}
 								handleOnChangeAttributes={
