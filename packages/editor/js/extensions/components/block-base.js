@@ -71,72 +71,6 @@ import {
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;
 
-/**
- * Syncs local attributes to block store. Extracted to module level to avoid
- * function allocation on every setAttributes call.
- */
-const syncAttributesToBlock = (
-	attrs: Object,
-	ctx: {
-		compatibleAttributes: Object,
-		insideBlockInspector: boolean,
-		editorSelectedBlockEvent: string,
-		handleOnChangeStyleInLocalState: ?(Object) => void,
-		setBlockAttributes: (Object) => void,
-		syncTimeoutRef: { current: ?TimeoutID },
-		compatibleAttributesRef: { current: ?Object },
-		delay: number,
-	}
-): void => {
-	const {
-		compatibleAttributes,
-		insideBlockInspector,
-		editorSelectedBlockEvent,
-		handleOnChangeStyleInLocalState,
-		setBlockAttributes,
-		syncTimeoutRef,
-		compatibleAttributesRef,
-		delay,
-	} = ctx;
-
-	if (
-		!attrs?.blockeraPropsId &&
-		!('metadata' in attrs) &&
-		!['save-customizations', 'detach-style'].includes(
-			editorSelectedBlockEvent
-		)
-	) {
-		return;
-	}
-
-	if (
-		typeof handleOnChangeStyleInLocalState === 'function' &&
-		!isEquals(compatibleAttributes, attrs) &&
-		!insideBlockInspector
-	) {
-		handleOnChangeStyleInLocalState(attrs);
-	}
-
-	if (insideBlockInspector) {
-		if (!isEquals(compatibleAttributes, attrs)) {
-			setBlockAttributes(attrs);
-			compatibleAttributesRef.current = attrs;
-		}
-		return;
-	}
-
-	if (syncTimeoutRef.current) {
-		clearTimeout(syncTimeoutRef.current);
-	}
-	syncTimeoutRef.current = setTimeout(() => {
-		syncTimeoutRef.current = null;
-		if (!isEquals(compatibleAttributes, attrs)) {
-			setBlockAttributes(attrs);
-			compatibleAttributesRef.current = attrs;
-		}
-	}, delay);
-};
-
 export const BlockBase: ComponentType<any> = (
 	_props: Object
 ): Element<any> | null => {
@@ -316,7 +250,6 @@ export const BlockBase: ComponentType<any> = (
 	const isFirstCalculationRef = useRef(true);
 	const previousClientIdRef = useRef(clientId);
 	const compatibleAttributesRef = useRef(null);
-	const syncToBlockTimeoutRef = useRef(null);
 
 	// Reset first calculation flag when clientId changes (e.g., block copied)
 	if (previousClientIdRef.current !== clientId) {
@@ -324,15 +257,11 @@ export const BlockBase: ComponentType<any> = (
 		previousClientIdRef.current = clientId;
 	}
 
-	// Cleanup: unregister classname and clear sync debounce timeout on unmount.
+	// Cleanup: unregister the classname when component unmounts.
 	useEffect(() => {
 		return () => {
 			if (uniqueClassName) {
 				unregisterClassName(clientId, uniqueClassName);
-			}
-			if (syncToBlockTimeoutRef.current) {
-				clearTimeout(syncToBlockTimeoutRef.current);
-				syncToBlockTimeoutRef.current = null;
 			}
 		};
 	}, [clientId, uniqueClassName]);
@@ -429,86 +358,108 @@ export const BlockBase: ComponentType<any> = (
 	 *
 	 * @return {void}
 	 */
-	const setAttributes = useCallback(
-		(
-			value: any,
-			{
-				ref,
-				shouldUpdateClassName = true,
-			}: {
-				ref?: Object,
-				shouldUpdateClassName?: boolean,
-			} = {
-				shouldUpdateClassName: true,
-			}
-		) => {
-			const match = BLOCKERA_BLOCK_REGEX.exec(value.className);
+	const setAttributes = (
+		value: any,
+		{
+			ref,
+			shouldUpdateClassName = true,
+		}: {
+			ref?: Object,
+			shouldUpdateClassName?: boolean,
+		} = {
+			shouldUpdateClassName: true,
+		}
+	) => {
+		const match = BLOCKERA_BLOCK_REGEX.exec(value.className);
 
-			// We should update classname with unique generate classname while customizing style variation.
-			if (
-				shouldUpdateClassName &&
-				/^is-style-.*/g.test(value?.className) &&
-				!/\s/g.test(value?.className || '')
-			) {
-				value.className = classNames(value.className, {
-					'blockera-block': true,
-					[uniqueClassName]: true,
-				});
-				registerClassName(clientId, uniqueClassName);
-			} else if (
-				shouldUpdateClassName &&
-				match &&
-				isClassNameDuplicate(clientId, match[0])
-			) {
-				const prevClassName = value.className
-					.replace(BLOCKERA_BLOCK_REGEX, '')
-					.replace(/\bblockera-block\b/gi, '');
-				value.className = classNames(prevClassName.trim(), {
-					'blockera-block': true,
-					[uniqueClassName]: true,
-				});
-
-				registerClassName(clientId, uniqueClassName);
-			} else if (match && shouldUpdateClassName) {
-				registerClassName(clientId, match[0]);
-			}
-
-			if (
-				!['save-customizations', 'detach-style'].includes(
-					ref?.current?.action
-				)
-			) {
-				// Reset the editor selected block event to undefined.
-				dispatch('blockera/editor').setEditorSelectedBlockEvent(
-					undefined
-				);
-			}
-
-			setState(() => {
-				syncAttributesToBlock(value, {
-					compatibleAttributes,
-					insideBlockInspector,
-					editorSelectedBlockEvent,
-					handleOnChangeStyleInLocalState,
-					setBlockAttributes,
-					syncTimeoutRef: syncToBlockTimeoutRef,
-					compatibleAttributesRef,
-					delay: BLOCKERA_DELAY_EXPECTED_TIME,
-				});
-
-				return value;
+		// We should update classname with unique generate classname while customizing style variation.
+		if (
+			shouldUpdateClassName &&
+			/^is-style-.*/g.test(value?.className) &&
+			!/\s/g.test(value?.className || '')
+		) {
+			value.className = classNames(value.className, {
+				'blockera-block': true,
+				[uniqueClassName]: true,
 			});
-		},
-		[
-			clientId,
-			uniqueClassName,
-			compatibleAttributes,
-			insideBlockInspector,
-			editorSelectedBlockEvent,
-			handleOnChangeStyleInLocalState,
-			setBlockAttributes,
-		]
-	);
+			registerClassName(clientId, uniqueClassName);
+		} else if (
+			shouldUpdateClassName &&
+			match &&
+			isClassNameDuplicate(clientId, match[0])
+		) {
+			const prevClassName = value.className
+				.replace(BLOCKERA_BLOCK_REGEX, '')
+				.replace(/\bblockera-block\b/gi, '');
+			value.className = classNames(prevClassName.trim(), {
+				'blockera-block': true,
+				[uniqueClassName]: true,
+			});
+
+			registerClassName(clientId, uniqueClassName);
+		} else if (match && shouldUpdateClassName) {
+			registerClassName(clientId, match[0]);
+		}
+
+		if (
+			!['save-customizations', 'detach-style'].includes(
+				ref?.current?.action
+			)
+		) {
+			// Reset the editor selected block event to undefined.
+			dispatch('blockera/editor').setEditorSelectedBlockEvent(undefined);
+		}
+
+		// Sync with the new value for attributes state.
+		compatibleAttributesRef.current = value;
+
+		setState(value);
+	};
+
+	// Debounce updates to parent state to avoid unnecessary re-renders.
+	useEffect(() => {
+		// Skip the effect if the block is not a blockera block and not has metadata.
+		if (
+			!attributes?.blockeraPropsId &&
+			!attributes.hasOwnProperty('metadata') &&
+			!['save-customizations', 'detach-style'].includes(
+				editorSelectedBlockEvent
+			)
+		) {
+			return;
+		}
+
+		if (
+			'function' === typeof handleOnChangeStyleInLocalState &&
+			!isEquals(compatibleAttributes, attributes) &&
+			false === insideBlockInspector
+		) {
+			// It just will be called if outside of the block inspector. (See: canvas-editor/components/block-global-styles-panel-screen/context.js)
+			handleOnChangeStyleInLocalState(attributes);
+		}
+
+		// If inside the block inspector, update the parent state immediately.
+		if (insideBlockInspector) {
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
+			}
+
+			return;
+		}
+
+		const timeoutId = setTimeout(() => {
+			// Compare the block attributes with the attributes and the attributes ref.
+			// If they are not equal, set the attributes to the block attributes.
+			if (!isEquals(compatibleAttributes, attributes)) {
+				setBlockAttributes(attributes);
+			}
+		}, BLOCKERA_DELAY_EXPECTED_TIME); // Update the parent state after BLOCKERA_DELAY_EXPECTED_TIME to avoid unnecessary re-renders.
+
+		return () => clearTimeout(timeoutId);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [attributes]);
 
 	useEffect(() => {
 		// If the current block is an inner block, don't update the attributes.
