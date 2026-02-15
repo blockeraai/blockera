@@ -17,6 +17,7 @@ import {
 	ControlContextProvider,
 } from '@blockera/controls';
 import { Icon } from '@blockera/icons';
+import { classNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -37,7 +38,11 @@ export const SearchBlockTypes = ({
 
 	return (
 		<SlotFillProvider>
-			<Flex direction={'column'} gap={'20px'}>
+			<Flex
+				direction={'column'}
+				gap={'20px'}
+				className={classNames('search-block-types')}
+			>
 				<p style={{ margin: '0', color: '#707070' }}>
 					{__(
 						'Select the blocks that should use this style variation.',
