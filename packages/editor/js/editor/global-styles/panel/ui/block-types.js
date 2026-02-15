@@ -118,8 +118,9 @@ export const BlockTypes = ({
 				return bHasStyle - aHasStyle; // Sort enabled items first
 			}),
 		}),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[]
+		// items is source of validItems/enabledItems; when items changes (e.g. search), recompute
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- validItems/enabledItems derived from items
+		[items, savedEnabledItems, globalStyles, style]
 	);
 	const [blocksState, setBlocksState] = useState(initBlocksState);
 	const [state, setState] = useState({
@@ -130,14 +131,15 @@ export const BlockTypes = ({
 	});
 	const [isModified, setIsModified] = useState(false);
 
+	// Sync blocksState when items change (e.g. search completes) or initBlocksState updates
 	useEffect(() => {
 		if (isEquals(blocksState, initBlocksState)) {
 			return;
 		}
 
 		setBlocksState(initBlocksState);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [items]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps -- blocksState intentionally excluded to avoid overwriting user toggles
+	}, [items, initBlocksState]);
 
 	const setGlobalData = useCallback(
 		(
@@ -346,7 +348,6 @@ export const BlockTypes = ({
 			setState,
 			setAction,
 			validItems,
-			blocksState,
 			globalStyles,
 			defaultStyles,
 			currentStyleValue,
