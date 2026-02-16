@@ -5,9 +5,10 @@
  */
 import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
-import { useEntityProp } from '@wordpress/core-data';
+import { useEntityProp, store as coreStore } from '@wordpress/core-data';
 import { useCallback, useState } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { store as editorStore } from '@wordpress/editor';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 
 /**
@@ -510,6 +511,7 @@ export const useBlockStyleItem = ({
 	 * Save all user customization into the current selected block style variation.
 	 * It's working on selected block settings to assign this settings,
 	 * as a global style for this block based on selected style variation.
+	 * Triggers save of all dirty entities (global styles, current post, etc.) to persist to database.
 	 *
 	 * @param {Object} currentStyle the current style variation as object includes name, label, icon, ...
 	 *
@@ -644,6 +646,10 @@ export const useBlockStyleItem = ({
 		});
 
 		setCurrentActiveStyle(currentStyle, 'save-customizations');
+
+		setTimeout(async () => {
+			await saveAllDirtyEntities();
+		}, 1000);
 	};
 
 	const handleOnDetachStyle = (currentStyle: Object) => {
@@ -698,4 +704,46 @@ export const useBlockStyleItem = ({
 		handleOnUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	};
+};
+
+/**
+ * Save all dirty entities (global styles, current post, etc.) to persist to database.
+ * Uses saveEditedEntityRecord - works in both site editor and post editor.
+ * Uses savePost - works in post editor.
+ * Saves in sequence, so the post is saved after all other entities are saved.
+ *
+ * @return {Promise<void>}
+ */
+const saveAllDirtyEntities = async (): Promise<void> => {
+	// Save all dirty entities (global styles, current post, etc.) to persist to database.
+	try {
+		const { savePost } = dispatch(editorStore);
+		const { saveEditedEntityRecord } = dispatch(coreStore);
+		const dirtyRecords =
+			select(coreStore).__experimentalGetDirtyEntityRecords?.() || [];
+
+		const entitiesToSave = dirtyRecords.filter(
+			(record) => !(record.kind === 'root' && record.name === 'site')
+		);
+
+		if (entitiesToSave.length > 0) {
+			await Promise.all(
+				entitiesToSave.map((record, index): Promise<void> => {
+					let promiseResponse = saveEditedEntityRecord(
+						record.kind,
+						record.name,
+						record.key
+					);
+
+					if (index === entitiesToSave.length - 1) {
+						promiseResponse = savePost();
+					}
+
+					return promiseResponse;
+				})
+			);
+		}
+	} catch {
+		// Error saving - WordPress will show error notification
+	}
 };
