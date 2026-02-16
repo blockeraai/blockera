@@ -51,36 +51,53 @@ export const useBlockStyleItem = ({
 	onSelectStylePreview,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
-	deleteStyleVariationBlocks,
 	setStyleVariationBlocks,
 	getStyleVariationBlocks,
 	currentBlockStyleVariation,
+	deleteStyleVariationBlocks,
 	setCurrentBlockStyleVariation,
 }: {
+	// The main state in global styles panel. for outside of the global styles panel, it's the empty object always.
 	styles: Object,
+	// The current selected block name.
 	blockName: string,
+	// The blockeraGlobalStylesMetaData state.
 	cachedStyle: Object,
+	// The default styles object for the current selected block.
 	defaultStyles: Object,
+	// The block styles array the main of state for the current selected block.
 	blockStyles: Array<Object>,
+	// Whether the current block customizing in the global styles panel.
 	inGlobalStylesPanel: boolean,
+	// The current selected block style variation.
 	currentBlockStyleVariation: Object,
+	// The function to set the main state in global styles panel.
 	setStyles: (styles: Object) => void,
+	// The function to set the cached style. (the blockeraGlobalStylesMetaData global state)
 	setCachedStyle: (style: Object) => void,
+	// The function to select the style preview.
 	onSelectStylePreview: (style: Object) => void,
+	// The function to set the current selected style as an active style for block level to add related css classes to that.
 	setCurrentActiveStyle: T_SET_CURRENT_ACTIVE_STYLE,
+	// The function to set the is open context menu.
 	setIsOpenContextMenu: (isOpen: boolean) => void,
+	// The function to set the block styles array. (update the BlockStyles component state)
 	setBlockStyles: (styles: Array<Object>) => void,
+	// The function to set the current selected style variation. (update the Blockera global state)
 	setCurrentBlockStyleVariation: (style: Object) => void,
+	// The function to delete the style variation blocks. (delete from the Blockera global state)
 	deleteStyleVariationBlocks: (
 		style: string,
 		single: boolean,
 		blockName?: string
 	) => void,
+	// The function to set the style variation blocks. (update the Blockera global state)
 	setStyleVariationBlocks: (
 		style: string,
 		blocks: Array<string>,
 		type?: 'auto' | 'manual'
 	) => void,
+	// The function to get the style variation blocks by name. (get from the Blockera global state)
 	getStyleVariationBlocks: (style: string) => Array<string>,
 }): ({
 	isConfirmedChangeID: boolean,
@@ -629,6 +646,12 @@ export const useBlockStyleItem = ({
 		}
 
 		setGlobalStyles(_globalStyles);
+		setGlobalBlockStyles(
+			blockName,
+			currentBlockStyleVariation?.name || 'default',
+			currentStyleValue
+		);
+
 		const defaultValue =
 			prepareBlockeraDefaultAttributesValues(_defaultStyles);
 
