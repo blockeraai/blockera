@@ -690,10 +690,32 @@ export const getCompatibleBlockCssSelector = ({
 							false
 						);
 					}
-					return getSelectorWithRootBody(
-						`${generatedSelector}.is-style-${styleVariationName}`,
-						false
+					const blockType =
+						select('core/blocks')?.getBlockType(blockName);
+					const selectorConstant = getBlockCSSSelector(
+						blockType,
+						'root',
+						{ fallback: true }
 					);
+
+					let selectorWithStyle = generatedSelector;
+					// Handle case when selector contains child combinator.
+					if (
+						selectorConstant &&
+						generatedSelector.includes(' ') &&
+						generatedSelector.includes(selectorConstant)
+					) {
+						selectorWithStyle = generatedSelector.replace(
+							selectorConstant,
+							`${selectorConstant}.is-style-${styleVariationName}`
+						);
+					}
+					// Handle case when selector does not contain child combinator.
+					else {
+						selectorWithStyle = `${generatedSelector}.is-style-${styleVariationName}`;
+					}
+
+					return getSelectorWithRootBody(selectorWithStyle, false);
 				},
 			});
 		} else if (isGlobalStylesWrapper) {
