@@ -493,6 +493,19 @@ export const BlockBase: ComponentType<any> = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [compatibleAttributes]);
 
+	// When the current block style variation changes,
+	// clear the pending attributes just when outside of the block inspector.
+	useEffect(() => {
+		if (
+			null !== pendingAttributes &&
+			false === insideBlockInspector &&
+			currentBlockStyleVariation?.hasOwnProperty('name')
+		) {
+			setPendingAttributes(null);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentBlockStyleVariation]);
+
 	const sanitizedAttributes = useMemo(
 		// TODO: In the future, review all custom hooks and child components used in this block
 		// to determine which ones might alter the original `attributes` object reference directly.
