@@ -463,6 +463,15 @@ export const useBlockStyleItem = ({
 		if (false === status) {
 			setCurrentBlockStyleVariation(undefined);
 			setCurrentActiveStyle(getDefaultStyle(blockStyles));
+
+			handleOnChangeAttributes('className', `is-style-default`, {
+				shouldUpdateClassName: false,
+				ref: {
+					current: {
+						action: 'disable-style',
+					},
+				},
+			});
 		}
 	};
 

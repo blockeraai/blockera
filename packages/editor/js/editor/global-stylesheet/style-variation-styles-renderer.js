@@ -12,6 +12,7 @@ import { useMemo, memo } from '@wordpress/element';
 import {
 	isDefaultStylesSettings,
 	generateStableBlockeraPropsId,
+	isVariationDisabled,
 } from './utils';
 import { omitWithPattern, mergeObject, isEquals } from '@blockera/utils';
 
@@ -21,6 +22,7 @@ import { omitWithPattern, mergeObject, isEquals } from '@blockera/utils';
 import { staticKeys, defaultBlockStates } from './constants';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 import { GlobalStylesRenderer } from '../../extensions/components/global-styles-renderer';
+import { getBlockeraGlobalStylesMetaData } from '../global-styles/helpers';
 
 /**
  * Renders global styles for a single block style variation.
@@ -31,12 +33,18 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 		blockType,
 		variationName,
 		variationGlobalStyles,
+		blockeraMetaData,
 	}: {
 		blockType: Object,
 		variationName: string,
 		variationGlobalStyles: Object,
+		blockeraMetaData?: Object,
 	}) => {
 		const { name } = blockType;
+
+		// Early return for disabled styles (like style-item.js)
+		const metaData =
+			blockeraMetaData ?? getBlockeraGlobalStylesMetaData() ?? {};
 
 		// Merge base and user variation styles
 		const mergedVariationStyles = useMemo(() => {
@@ -68,6 +76,10 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 				blockeraPropsId: stablePropsId,
 			});
 		}, [validBlockGlobalStyles, stablePropsId]);
+
+		if (isVariationDisabled(metaData, name, variationName)) {
+			return null;
+		}
 
 		// Early return if no styles to render
 		if (
@@ -114,6 +126,7 @@ export const StyleVariationStylesRenderer: ComponentType<Object> = memo(
 				prevProps.variationGlobalStyles,
 				nextProps.variationGlobalStyles
 			) &&
+			isEquals(prevProps.blockeraMetaData, nextProps.blockeraMetaData) &&
 			isEquals(
 				prevProps.baseVariationStyles,
 				nextProps.baseVariationStyles

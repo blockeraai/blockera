@@ -427,7 +427,7 @@ export const BlockBase: ComponentType<any> = (
 		if (
 			!attributes?.blockeraPropsId &&
 			!attributes.hasOwnProperty('metadata') &&
-			!['save-customizations', 'detach-style'].includes(
+			!['save-customizations', 'detach-style', 'disable-style'].includes(
 				editorSelectedBlockEvent
 			)
 		) {

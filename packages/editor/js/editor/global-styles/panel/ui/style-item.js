@@ -150,6 +150,16 @@ export const StyleItem = ({
 
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
 
+	// When not in global styles panel,
+	// skip rendering if style is disabled.
+	if (
+		!inGlobalStylesPanel &&
+		cachedStyle?.hasOwnProperty('status') &&
+		!cachedStyle.status
+	) {
+		return <></>;
+	}
+
 	const isActive: boolean = activeStyle.name === style.name;
 
 	const defaultStyle = getDefaultStyle(blockStyles);

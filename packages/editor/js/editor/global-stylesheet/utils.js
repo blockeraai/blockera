@@ -59,6 +59,37 @@ export const generateStableBlockeraPropsId = (blockName: string): string => {
 };
 
 /**
+ * Check if a style variation is disabled (early return like style-item.js).
+ *
+ * @param {Object} blockeraMetaData The blockera global styles metadata.
+ * @param {string} blockName The block name.
+ * @param {string} variationName The variation name.
+ * @return {boolean} True if the variation is disabled, false otherwise.
+ */
+export const isVariationDisabled = (
+	blockeraMetaData: Object,
+	blockName: string,
+	variationName: string
+): boolean => {
+	const variations = blockeraMetaData?.blocks?.[blockName]?.variations || {};
+
+	// Check by direct key match
+	let variationMetadata = variations[variationName];
+
+	// Check by refId (for renamed styles)
+	if (!variationMetadata) {
+		variationMetadata = Object.values(variations).find(
+			(v) => v?.refId === variationName
+		);
+	}
+
+	return 'undefined' !== typeof variationMetadata
+		? variationMetadata.hasOwnProperty('status') &&
+				!variationMetadata?.status
+		: false;
+};
+
+/**
  * Checks if the styles settings are default.
  * Validates:
  * - Only one state is defined

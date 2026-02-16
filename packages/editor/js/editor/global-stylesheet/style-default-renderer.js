@@ -17,6 +17,7 @@ import { omitWithPattern, mergeObject, isEquals } from '@blockera/utils';
 import {
 	isDefaultStylesSettings,
 	generateStableBlockeraPropsId,
+	isVariationDisabled,
 } from './utils';
 import { staticKeys, defaultBlockStates } from './constants';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
@@ -32,9 +33,11 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 	({
 		styles: blockGlobalStyles,
 		blockType,
+		blockeraMetaData = {},
 	}: {
 		styles: Object,
 		blockType: Object,
+		blockeraMetaData?: Object,
 	}) => {
 		const { name } = blockType;
 
@@ -64,15 +67,17 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 			});
 		}, [validBlockGlobalStyles, stablePropsId]);
 
-		// Memoize variation entries to prevent re-renders
+		// Memoize variation entries, filtering out disabled styles (early return like style-item.js)
 		const variations = useMemo(() => {
 			return blockGlobalStyles?.variations || {};
 		}, [blockGlobalStyles]);
 
-		const variationEntries = useMemo(
-			() => Object.entries(variations),
-			[variations]
-		);
+		const variationEntries = useMemo(() => {
+			return Object.entries(variations).filter(
+				([variationName]) =>
+					!isVariationDisabled(blockeraMetaData, name, variationName)
+			);
+		}, [variations, blockeraMetaData, name]);
 
 		// Early return if no styles to render
 		const hasSanitizedStyles =
@@ -111,6 +116,7 @@ export const StyleDefaultRenderer: ComponentType<Object> = memo(
 						{...{
 							blockType,
 							variationName,
+							blockeraMetaData,
 							variationGlobalStyles:
 								variations[variationName] || {},
 						}}

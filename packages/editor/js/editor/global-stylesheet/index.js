@@ -9,11 +9,17 @@ import type { MixedElement, ComponentType } from 'react';
 import { useEffect, memo, useMemo } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { mergeObject } from '@blockera/utils';
+
+/**
  * Internal dependencies
  */
 import { mergeBlockGlobalStyles } from './utils';
 import { StyleDefaultRenderer } from './style-default-renderer';
 import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
+import { getBlockeraGlobalStylesMetaData } from '../global-styles/helpers';
 
 export const GlobalStyles: ComponentType<any> = memo((): MixedElement => {
 	const blockTypes = getBlockTypes();
@@ -27,11 +33,17 @@ export const GlobalStyles: ComponentType<any> = memo((): MixedElement => {
 		return base?.styles?.blocks || {};
 	}, []);
 
-	// Select user global styles from blockera/editor store
-	const userGlobalStyles = useSelect((select) => {
+	// Select user global styles and blockera metadata; merge blockeraGlobalStylesMetaData from window before use
+	const { userGlobalStyles, blockeraMetaData } = useSelect((select) => {
 		const { getGlobalStyles } = select('blockera/editor');
+		const userStyles = getGlobalStyles()?.userStyles || {};
+		const storeMetaData = userStyles?.blockeraMetaData || {};
+		const windowMetaData = getBlockeraGlobalStylesMetaData() || {};
 
-		return getGlobalStyles()?.userStyles?.styles?.blocks || {};
+		return {
+			userGlobalStyles: userStyles?.styles?.blocks || {},
+			blockeraMetaData: mergeObject(storeMetaData, windowMetaData),
+		};
 	}, []);
 
 	// Merge base and user styles following Gutenberg patterns
@@ -46,6 +58,7 @@ export const GlobalStyles: ComponentType<any> = memo((): MixedElement => {
 					blockType={blockType}
 					key={blockType.name}
 					styles={globalStyles?.[blockType.name] || {}}
+					blockeraMetaData={blockeraMetaData}
 				/>
 			))}
 		</>
