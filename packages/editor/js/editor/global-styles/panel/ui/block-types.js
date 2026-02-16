@@ -4,13 +4,15 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
 import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import {
 	Fill,
 	Animate,
 	Icon as WordPressIconComponent,
+	ToggleControl as WPToggleControl,
 } from '@wordpress/components';
 import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
@@ -20,15 +22,12 @@ import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
  */
 import { Icon } from '@blockera/icons';
 import { isString, mergeObject, isEquals, cloneObject } from '@blockera/utils';
-import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import {
-	Flex,
-	Grid,
-	Button,
-	Tooltip,
-	ToggleControl,
-	ControlContextProvider,
-} from '@blockera/controls';
+	classNames,
+	controlInnerClassNames,
+	controlClassNames,
+} from '@blockera/classnames';
+import { Flex, Grid, Button, Tooltip } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -40,9 +39,12 @@ import {
 import { blockHasStyle } from './use-block-style-item/helpers';
 import { getNormalizedStyle, useGlobalStylesPanelContext } from '../context';
 
+const UPGRADE_PRO_URL = 'https://blockera.ai/products/site-builder/pricing/';
+
 export const BlockTypes = ({
 	items,
 	style,
+	blockName,
 	handleOnUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
 }: {
@@ -62,6 +64,7 @@ export const BlockTypes = ({
 		currentBlockStyleVariation,
 	} = useGlobalStylesPanelContext();
 	const { getSelectedBlockStyle } = select('blockera/editor');
+	const [isShowPromotion, setIsShowPromotion] = useState(false);
 	const selectedBlockStyle = getSelectedBlockStyle();
 	const itemsCount = Array.isArray(items)
 		? items.length
@@ -449,6 +452,16 @@ export const BlockTypes = ({
 		return <></>;
 	}
 
+	// Free: 2 blocks max (1 locked currentBlock + 1 user selection). Pro: -1 = unlimited.
+	const maxSelectableBlocks = applyFilters(
+		'blockera.globalStyles.usageForMultipleBlocks.maxBlocks',
+		2
+	);
+	const remainingBlocks =
+		maxSelectableBlocks !== -1
+			? Math.max(0, maxSelectableBlocks - blocksState.items.length)
+			: null;
+
 	return (
 		<>
 			<Fill name="usage-for-multiple-blocks-save-cancel-actions">
@@ -524,12 +537,18 @@ export const BlockTypes = ({
 				>
 					{__('Disable all', 'blockera')}
 				</Button>
-
 				<Button
 					variant="secondary"
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
+						if (
+							-1 !== maxSelectableBlocks &&
+							validItems.length > maxSelectableBlocks
+						) {
+							setIsShowPromotion(true);
+							return;
+						}
 						setBlocksState({
 							items: validItems.map((item) => item.name),
 							primitiveItems: blocksState.primitiveItems,
@@ -539,6 +558,34 @@ export const BlockTypes = ({
 				>
 					{__('Enable all', 'blockera')}
 				</Button>
+				<Flex>
+					{remainingBlocks !== null && (
+						<span>
+							{sprintf(
+								/* translators: %d: number of remaining blocks user can select (Free: 1 = current block + 1 slot, 0 = limit reached) */
+								_n(
+									'%d remaining block in Free',
+									'%d remaining blocks in Free',
+									remainingBlocks,
+									'blockera'
+								),
+								remainingBlocks
+							)}
+						</span>
+					)}
+					{isShowPromotion && (
+						<>
+							{' - '}
+							<a
+								href={UPGRADE_PRO_URL}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								{__('Upgrade to PRO', 'blockera')}
+							</a>
+						</>
+					)}
+				</Flex>
 			</Fill>
 			<Flex
 				direction={'column'}
@@ -556,11 +603,13 @@ export const BlockTypes = ({
 					{blocksState.primitiveItems.map((item, index) => (
 						<BlockType
 							item={item}
-							style={style}
+							blockName={blockName}
 							blocksState={blocksState}
 							setGlobalData={setGlobalData}
 							key={index + '-' + item.name}
 							setBlocksState={setBlocksState}
+							maxSelectableBlocks={maxSelectableBlocks}
+							setIsShowPromotion={setIsShowPromotion}
 						/>
 					))}
 				</Grid>
@@ -571,10 +620,12 @@ export const BlockTypes = ({
 
 const BlockType = ({
 	item,
-	style,
+	blockName,
 	blocksState,
 	setGlobalData,
 	setBlocksState,
+	maxSelectableBlocks,
+	setIsShowPromotion,
 }: Object): MixedElement => {
 	const {
 		name,
@@ -652,39 +703,51 @@ const BlockType = ({
 					{title}
 				</div>
 
-				<ControlContextProvider
-					value={{
-						name: `${name}-${style.name}-toggle`,
-						value: blocksState.items.includes(name),
-					}}
-				>
-					<div>
-						<ToggleControl
-							labelType={'self'}
-							label={' '}
-							onChange={(newValue: boolean) => {
-								const items = blocksState.items.includes(name)
-									? blocksState.items.filter(
-											(item) => item !== name
-										)
-									: [...blocksState.items, name];
+				<div>
+					<WPToggleControl
+						label={' '}
+						checked={blocksState.items.includes(name)}
+						disabled={
+							// Current block is locked (always enabled)
+							name === blockName
+						}
+						className={controlClassNames('toggle', 'size-normal')}
+						onChange={(newValue: boolean) => {
+							// Current block cannot be disabled
+							if (name === blockName && !newValue) {
+								return;
+							}
+							if (newValue) {
+								// Free: limit to 2 blocks (currentBlock + 1 secondary)
+								if (
+									-1 !== maxSelectableBlocks &&
+									blocksState.items.length >=
+										maxSelectableBlocks
+								) {
+									setIsShowPromotion(true);
+									return;
+								}
+							} else {
+								setIsShowPromotion(false);
+							}
 
-								setBlocksState({
-									...blocksState,
-									items,
-								});
+							// Use functional update to avoid stale state on rapid toggles
+							let nextItems;
+							setBlocksState((prev) => {
+								nextItems = prev.items.includes(name)
+									? prev.items.filter((item) => item !== name)
+									: [...prev.items, name];
+								return { ...prev, items: nextItems };
+							});
 
-								setGlobalData(
-									newValue
-										? 'single-enable'
-										: 'single-disable',
-									name,
-									items
-								);
-							}}
-						/>
-					</div>
-				</ControlContextProvider>
+							setGlobalData(
+								newValue ? 'single-enable' : 'single-disable',
+								name,
+								nextItems
+							);
+						}}
+					/>
+				</div>
 			</Flex>
 		</Tooltip>
 	);
