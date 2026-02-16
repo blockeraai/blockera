@@ -49,7 +49,6 @@ export const StyleItemMenu = ({
 	handleOnDuplicate,
 	handleOnClearAllCustomizations,
 	handleOnUsageForMultipleBlocks,
-	setCurrentBlockStyleVariation,
 	setIsOpenUsageForMultipleBlocks,
 	isOpenUsageForMultipleBlocks,
 	handleOnEnable,
@@ -182,8 +181,6 @@ export const StyleItemMenu = ({
 								contentAlign="left"
 								className={controlInnerClassNames('menu-item')}
 								onClick={() => {
-									setCurrentBlockStyleVariation(style);
-
 									if (isOpenRenameModal) {
 										return setIsOpenRenameModal(false);
 									}
