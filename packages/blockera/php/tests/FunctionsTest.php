@@ -189,6 +189,7 @@ class FunctionsTest extends \Blockera\Dev\PHPUnit\AppTestCase {
 					'attributes' => [],
 					'deletable' => false,
 					'isDefault' => true,
+					'order' => 4,
 				],
 			],
 			[
