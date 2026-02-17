@@ -50,6 +50,7 @@ export const PromotionPopover = ({
 	buttonTarget?: string,
 	isOpen?: boolean,
 	offset?: number,
+	'data-test'?: string,
 	placement?: PopoverPlacement,
 }): MixedElement => {
 	const [isOpen, setOpen] = useState(_isOpen);
