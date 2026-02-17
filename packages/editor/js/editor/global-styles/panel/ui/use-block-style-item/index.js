@@ -40,8 +40,11 @@ import {
 
 export const useBlockStyleItem = ({
 	styles,
+	counter,
 	blockName,
 	setStyles,
+	counterMap,
+	setCounter,
 	blockStyles,
 	cachedStyle,
 	defaultStyles,
@@ -59,8 +62,12 @@ export const useBlockStyleItem = ({
 }: {
 	// The main state in global styles panel. for outside of the global styles panel, it's the empty object always.
 	styles: Object,
+	// The current counter state.
+	counter: number,
 	// The current selected block name.
 	blockName: string,
+	// The object to mapping blocks style variations count.
+	counterMap: Object,
 	// The blockeraGlobalStylesMetaData state.
 	cachedStyle: Object,
 	// The default styles object for the current selected block.
@@ -73,6 +80,8 @@ export const useBlockStyleItem = ({
 	currentBlockStyleVariation: Object,
 	// The function to set the main state in global styles panel.
 	setStyles: (styles: Object) => void,
+	// The function to set the counter next state.
+	setCounter: (counter: number) => void,
 	// The function to set the cached style. (the blockeraGlobalStylesMetaData global state)
 	setCachedStyle: (style: Object) => void,
 	// The function to select the style preview.
@@ -274,6 +283,10 @@ export const useBlockStyleItem = ({
 			currentStyle: Object,
 			customValues?: { label: string, name: string }
 		) => {
+			const newCounter = counter + 1;
+			counterMap[blockName] = newCounter;
+			setCounter(newCounter);
+
 			const duplicateStyle = customValues
 				? {
 						name: customValues.name,
@@ -464,7 +477,7 @@ export const useBlockStyleItem = ({
 			setCurrentBlockStyleVariation(undefined);
 			setCurrentActiveStyle(getDefaultStyle(blockStyles));
 
-			handleOnChangeAttributes('className', `is-style-default`, {
+			handleOnChangeAttributes('className', '', {
 				shouldUpdateClassName: false,
 				ref: {
 					current: {
@@ -476,30 +489,24 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnDelete = (currentStyleName: string) => {
-		const blockeraMetaData = mergeObject(
-			getBlockeraGlobalStylesMetaData(),
-			{
-				blocks: {
-					[blockName]: {
-						variations: {
-							[currentStyleName]: {
-								isDeleted: true,
-								...(blockStyles.filter(
-									(style) => style.name === currentStyleName
-								)?.[0] ?? {}),
+		setGlobalStyles(
+			mergeObject(
+				globalStyles,
+				{
+					blocks: {
+						[blockName]: {
+							variations: {
+								[currentStyleName]: undefined,
 							},
 						},
 					},
 				},
-			}
+				{
+					forceUpdated: [currentStyleName],
+					deletedProps: [currentStyleName],
+				}
+			)
 		);
-
-		setBlockeraGlobalStylesMetaData(blockeraMetaData);
-
-		setGlobalStyles({
-			...globalStyles,
-			blockeraMetaData,
-		});
 
 		const newBlockStyles = blockStyles.filter(
 			(style) => style.name !== currentStyleName
@@ -523,6 +530,10 @@ export const useBlockStyleItem = ({
 				: {}),
 		});
 
+		const newCounter = counter - 1;
+		counterMap[blockName] = newCounter;
+		setCounter(newCounter);
+
 		setCurrentBlockStyleVariation(undefined);
 		// If is not in global styles panel, set the default style as active style.
 		if (!inGlobalStylesPanel) {
@@ -530,6 +541,15 @@ export const useBlockStyleItem = ({
 
 			setCurrentActiveStyle(defaultStyle, 'click');
 			onSelectStylePreview(defaultStyle);
+
+			handleOnChangeAttributes('className', '', {
+				shouldUpdateClassName: false,
+				ref: {
+					current: {
+						action: 'delete-style',
+					},
+				},
+			});
 		}
 	};
 

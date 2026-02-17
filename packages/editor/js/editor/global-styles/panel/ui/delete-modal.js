@@ -24,16 +24,12 @@ import { componentInnerClassNames } from '@blockera/classnames';
 
 export const DeleteModal = ({
 	style,
-	counter,
 	buttonText,
-	setCounter,
 	handleOnDelete,
 	setIsOpenDeleteModal,
 }: {
 	style: Object,
-	counter: number,
 	buttonText: string,
-	setCounter: (counter: number) => void,
 	handleOnDelete: (style: Object) => void,
 	setIsOpenDeleteModal: (isOpen: boolean) => void,
 }): MixedElement => {
@@ -124,7 +120,6 @@ export const DeleteModal = ({
 						onClick={() => {
 							setIsOpenDeleteModal(false);
 							setIsConfirmedDelete(false);
-							setCounter(counter - 1);
 						}}
 					>
 						{__('Cancel', 'blockera')}
