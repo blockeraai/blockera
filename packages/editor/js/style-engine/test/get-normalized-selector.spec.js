@@ -1,5 +1,12 @@
 import { getNormalizedSelector } from '../get-compatible-block-css-selector';
 
+// Mock extensions/components/utils to avoid loading editor/header-ui chain
+// (which pulls in @wordpress/rich-text and causes combineReducers issues).
+jest.mock('../../extensions/components/utils', () => ({
+	isInnerBlock: (block) => block !== 'master',
+	isNormalState: (state) => state === 'normal',
+}));
+
 // Mock getState for getNormalizedSelector's internal use
 jest.mock('@wordpress/data', () => {
 	return {

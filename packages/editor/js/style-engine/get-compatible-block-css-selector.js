@@ -236,9 +236,12 @@ export const getNormalizedSelector = (
 		if (selector.trim().startsWith('&&')) {
 			isProcessedSelector = true;
 			// Extract the first part of the root selector (everything before the first space)
-			const rootFirstPart = getSelectorWithRootBody(
-				getExtractedSelectorFromRootBody(rootSelector).split(' ')[0]
-			);
+			const extractedFirstPart =
+				getExtractedSelectorFromRootBody(rootSelector).split(' ')[0];
+			// Only wrap with html:root body :where() when rootSelector uses that format
+			const rootFirstPart = /^html:root body :where\(/.test(rootSelector)
+				? getSelectorWithRootBody(extractedFirstPart)
+				: extractedFirstPart;
 
 			return `${rootFirstPart}${selector.trim().substring(2)}`;
 		}
