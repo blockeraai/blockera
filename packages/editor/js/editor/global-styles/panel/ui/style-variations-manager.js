@@ -61,6 +61,7 @@ export const StyleVariationsManager = ({
 		() =>
 			blockStyles.map((style) => (
 				<StyleItem
+					handlePromotionPopover={handlePromotionPopover}
 					counter={counter}
 					counterMap={counterMap}
 					setCounter={setCounter}
