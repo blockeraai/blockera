@@ -35,7 +35,7 @@ export const StyleItem = ({
 	style,
 	counter,
 	blockName,
-	// counterMap,
+	counterMap,
 	setCounter,
 	activeStyle,
 	blockStyles,
@@ -45,6 +45,7 @@ export const StyleItem = ({
 	styleItemHandler,
 	onSelectStylePreview,
 	setCurrentActiveStyle,
+	handlePromotionPopover,
 	setCurrentPreviewStyle,
 	originDefaultAttributes,
 	inGlobalStylesPanel = false,
@@ -129,7 +130,10 @@ export const StyleItem = ({
 		handleOnUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
+		counter,
 		blockName,
+		counterMap,
+		setCounter,
 		blockStyles,
 		cachedStyle,
 		defaultStyles,
@@ -141,9 +145,9 @@ export const StyleItem = ({
 		setIsOpenContextMenu,
 		setCurrentActiveStyle,
 		setStyles: setStyleData,
-		deleteStyleVariationBlocks,
 		setStyleVariationBlocks,
 		getStyleVariationBlocks,
+		deleteStyleVariationBlocks,
 		currentBlockStyleVariation,
 		setCurrentBlockStyleVariation,
 	});
@@ -449,6 +453,7 @@ export const StyleItem = ({
 					blockTitle={getBlockType(blockName).title}
 					style={style}
 					counter={counter}
+					handlePromotionPopover={handlePromotionPopover}
 					isOpenDeleteModal={isOpenDeleteModal}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
 					isOpenDuplicateModal={isOpenDuplicateModal}
@@ -563,9 +568,16 @@ export const StyleItem = ({
 								}
 							)}
 							variant="tertiary"
-							onClick={() => setIsOpenDuplicateModal(true)}
+							onClick={() => {
+								const canDuplicateItem =
+									handlePromotionPopover();
+
+								if (canDuplicateItem) {
+									setIsOpenDuplicateModal(true);
+								}
+							}}
 							size="input"
-							data-test={'save-customizations'}
+							data-test={'duplicate-item'}
 							style={{
 								gap: '2px',
 								padding: '2px 0',
@@ -610,6 +622,7 @@ export const StyleItem = ({
 						<StyleItemMenu
 							style={style}
 							counter={counter}
+							handlePromotionPopover={handlePromotionPopover}
 							blockTitle={getBlockType(blockName).title}
 							isOpenDeleteModal={isOpenBlockCardDeleteModal}
 							setIsOpenDeleteModal={setIsOpenBlockCardDeleteModal}

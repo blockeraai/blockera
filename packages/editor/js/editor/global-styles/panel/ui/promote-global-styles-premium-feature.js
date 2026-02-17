@@ -1,0 +1,40 @@
+// @flow
+
+/**
+ * External dependencies
+ */
+import { type MixedElement } from 'react';
+import { __ } from '@wordpress/i18n';
+
+/**
+ * Blockera dependencies
+ */
+import { PromotionPopover } from '@blockera/controls';
+
+export const PromoteGlobalStylesPremiumFeature = ({
+	items,
+	onClose = () => {},
+	isOpen = false,
+}: {
+	items: Array<Object>,
+	onClose: () => void,
+	isOpen: boolean,
+}): MixedElement | null => {
+	if (items.length < 2) {
+		return null;
+	}
+
+	return (
+		<PromotionPopover
+			heading={__('Advanced Global Styles', 'blockera')}
+			featuresList={[
+				__('Multiple styles', 'blockera'),
+				__('All styles', 'blockera'),
+				__('Advanced features', 'blockera'),
+				__('Premium styles', 'blockera'),
+			]}
+			isOpen={isOpen}
+			onClose={onClose}
+		/>
+	);
+};

@@ -31,6 +31,7 @@ export const StyleVariationsManager = ({
 	counter,
 	counterMap,
 	setCounter,
+	handlePromotionPopover,
 	setCurrentBlockStyleVariation,
 	setCurrentActiveStyle,
 	setBlockStyles,
@@ -54,6 +55,7 @@ export const StyleVariationsManager = ({
 	onSelectStylePreview: (style: Object) => void,
 	setCurrentPreviewStyle: (style: Object) => void,
 	styleItemHandler: (style: Object) => void,
+	handlePromotionPopover: () => boolean,
 }): MixedElement => {
 	const memoizedStyles = useMemo(
 		() =>
@@ -98,6 +100,7 @@ export const StyleVariationsManager = ({
 
 					<AddNewStyleButton
 						counter={counter}
+						handlePromotionPopover={handlePromotionPopover}
 						counterMap={counterMap}
 						setCounter={setCounter}
 						design="no-label"
@@ -142,6 +145,7 @@ export const StyleVariationsManager = ({
 				<AddNewStyleButton
 					counter={counter}
 					counterMap={counterMap}
+					handlePromotionPopover={handlePromotionPopover}
 					setCounter={setCounter}
 					design="with-label"
 					label={__('Add New', 'blockera')}

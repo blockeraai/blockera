@@ -32,8 +32,6 @@ import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
 export const StyleItemMenu = ({
 	blockName,
 	blockTitle,
-	counter,
-	setCounter,
 	cachedStyle,
 	isOpenRenameModal,
 	isOpenDeleteModal,
@@ -56,6 +54,7 @@ export const StyleItemMenu = ({
 	isConfirmedChangeID,
 	setIsConfirmedChangeID,
 	blockStyles,
+	handlePromotionPopover,
 }: {
 	blockName: string,
 	blockTitle: string,
@@ -90,6 +89,7 @@ export const StyleItemMenu = ({
 	isConfirmedChangeID: boolean,
 	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
 	blockStyles: Array<Object>,
+	handlePromotionPopover: () => boolean,
 }): MixedElement => {
 	return (
 		<>
@@ -108,8 +108,6 @@ export const StyleItemMenu = ({
 					style={style}
 					buttonText={buttonText}
 					handleOnDelete={handleOnDelete}
-					setCounter={setCounter}
-					counter={counter}
 					setIsOpenDeleteModal={setIsOpenDeleteModal}
 				/>
 			)}
@@ -156,7 +154,12 @@ export const StyleItemMenu = ({
 							contentAlign="left"
 							className={controlInnerClassNames('menu-item')}
 							onClick={() => {
-								setIsOpenDuplicateModal(true);
+								const canDuplicateItem =
+									handlePromotionPopover();
+
+								if (canDuplicateItem) {
+									setIsOpenDuplicateModal(true);
+								}
 							}}
 						>
 							<Icon icon="duplicate" iconSize="24" />

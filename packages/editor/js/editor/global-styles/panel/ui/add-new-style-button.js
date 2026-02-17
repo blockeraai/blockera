@@ -3,50 +3,20 @@
 /**
  * External dependencies
  */
-import { __ } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { applyFilters } from '@wordpress/hooks';
 import { useState } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import { Button, Flex, PromotionPopover } from '@blockera/controls';
+import { Button, Flex } from '@blockera/controls';
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
  */
 import { AddNewStyleModal } from './add-new-style-modal';
-
-const PromoteGlobalStylesPremiumFeature = ({
-	items,
-	onClose = () => {},
-	isOpen = false,
-}: {
-	items: Array<Object>,
-	onClose: () => void,
-	isOpen: boolean,
-}): MixedElement | null => {
-	if (items.length < 2) {
-		return null;
-	}
-
-	return (
-		<PromotionPopover
-			heading={__('Advanced Global Styles', 'blockera')}
-			featuresList={[
-				__('Multiple styles', 'blockera'),
-				__('All styles', 'blockera'),
-				__('Advanced features', 'blockera'),
-				__('Premium styles', 'blockera'),
-			]}
-			isOpen={isOpen}
-			onClose={onClose}
-		/>
-	);
-};
 
 export const AddNewStyleButton = ({
 	label,
@@ -56,47 +26,30 @@ export const AddNewStyleButton = ({
 	blockName,
 	setCounter,
 	counterMap,
+	style = {},
 	blockStyles,
 	setBlockStyles,
 	design = 'no-label',
 	setCurrentActiveStyle,
+	handlePromotionPopover,
 	setCurrentBlockStyleVariation,
-	style = {},
 }: {
 	label?: string,
 	counter: number,
 	styles?: Object,
 	blockName: string,
 	counterMap: Object,
-	design?: 'no-label' | 'with-label',
 	blockStyles: Array<Object>,
+	design?: 'no-label' | 'with-label',
 	setStyles?: (styles: Object) => void,
+	handlePromotionPopover: () => boolean,
 	setCounter: (counter: number) => void,
 	setCurrentActiveStyle: (style: Object) => void,
 	setBlockStyles: (styles: Array<Object>) => void,
 	setCurrentBlockStyleVariation: (style: Object) => void,
 	style?: Object,
 }): MixedElement => {
-	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
-		'blockera.block.style.variations.globalStylesMaxItems',
-		2
-	);
-
-	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-
-	const handleClick = () => {
-		// Validate limitation for adding new style variation.
-		if (
-			-1 !== MAX_ITEMS_FOR_PROMOTION &&
-			counter >= MAX_ITEMS_FOR_PROMOTION
-		) {
-			return setIsPromotionPopoverOpen(true);
-		}
-
-		setIsModalOpen(true);
-	};
-
 	return (
 		<Flex justifyContent={'space-between'} style={style}>
 			{'no-label' === design &&
@@ -112,7 +65,12 @@ export const AddNewStyleButton = ({
 			<Button
 				size="extra-small"
 				className={controlInnerClassNames('btn-add')} // blockera-is-not-active
-				onClick={handleClick}
+				onClick={() => {
+					const canAddNewStyle = handlePromotionPopover();
+					if (canAddNewStyle) {
+						setIsModalOpen(true);
+					}
+				}}
 				style={
 					'no-label' === design
 						? {
@@ -134,14 +92,6 @@ export const AddNewStyleButton = ({
 					'undefined' !== typeof label &&
 					label?.length > 0 &&
 					label}
-
-				{isPromotionPopoverOpen && (
-					<PromoteGlobalStylesPremiumFeature
-						items={blockStyles}
-						onClose={() => setIsPromotionPopoverOpen(false)}
-						isOpen={isPromotionPopoverOpen}
-					/>
-				)}
 			</Button>
 
 			{isModalOpen && (

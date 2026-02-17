@@ -15,6 +15,7 @@ export type T_STYLE_ITEM_PROPS = {
 	blockStyles: Array<Object>,
 	originDefaultAttributes?: Object,
 	inGlobalStylesPanel: boolean,
+	handlePromotionPopover: () => boolean,
 	setCounter: (counter: number) => void,
 	styleItemHandler: (style: Object) => void,
 	onSelectStylePreview: (style: Object) => void,

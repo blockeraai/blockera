@@ -2,15 +2,16 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
-import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
-import { useViewportMatch } from '@wordpress/compose';
 import {
 	Slot,
 	SlotFillProvider,
 	Popover as WPPopover,
 } from '@wordpress/components';
 import type { MixedElement } from 'react';
+import { __, sprintf } from '@wordpress/i18n';
+import { applyFilters } from '@wordpress/hooks';
+import { useViewportMatch } from '@wordpress/compose';
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -42,6 +43,7 @@ import { useBlockStylesCounter } from './use-block-styles-counter';
 import { useBlockContext } from '../../../../extensions/components';
 import { StyleVariationsManager } from './style-variations-manager';
 import { default as BlockStylesPreviewPanel } from './preview-panel';
+import { PromoteGlobalStylesPremiumFeature } from './promote-global-styles-premium-feature';
 
 // Mapped block dynamic style variations counter for limitation reasons.
 const blockDynamicStylesCount: Object = {};
@@ -56,6 +58,8 @@ function BlockStyles({
 	originDefaultAttributes,
 	context = 'inspector-controls',
 }: T_BLOCK_STYLES_PROPS): MixedElement | null {
+	const [isPromotionPopoverOpen, setIsPromotionPopoverOpen] = useState(false);
+
 	const {
 		userConfig,
 		baseConfig,
@@ -171,6 +175,29 @@ function BlockStyles({
 		return null;
 	}
 
+	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
+		'blockera.block.style.variations.globalStylesMaxItems',
+		2
+	);
+
+	const handlePromotionPopover = (): boolean => {
+		let canDoAction = true;
+
+		// Validate limitation for adding new style variation.
+		if (
+			-1 !== MAX_ITEMS_FOR_PROMOTION &&
+			counter >= MAX_ITEMS_FOR_PROMOTION
+		) {
+			canDoAction = false;
+
+			setIsPromotionPopoverOpen(!canDoAction);
+
+			return canDoAction;
+		}
+
+		return canDoAction;
+	};
+
 	// Handle search
 	const handleSearch = (newValue: string) => {
 		setSearchTerm(newValue);
@@ -191,23 +218,35 @@ function BlockStyles({
 
 	if ('global-styles-panel' === context) {
 		return (
-			<StyleVariationsManager
-				counter={counter}
-				setCounter={setCounter}
-				counterMap={blockDynamicStylesCount}
-				activeStyle={activeStyle}
-				blockName={blockName}
-				blockStyles={blockStyles}
-				setCurrentBlockStyleVariation={setCurrentBlockStyleVariation}
-				setCurrentActiveStyle={setCurrentActiveStyle}
-				setBlockStyles={setBlockStyles}
-				onSelectStylePreview={onSelectStylePreview}
-				setCurrentPreviewStyle={setCurrentPreviewStyle}
-				styleItemHandler={styleItemHandler}
-				editorStyles={editorStyles}
-				setStyles={setStyles}
-				isNotActive={isNotActive}
-			/>
+			<>
+				<StyleVariationsManager
+					counter={counter}
+					setCounter={setCounter}
+					handlePromotionPopover={handlePromotionPopover}
+					counterMap={blockDynamicStylesCount}
+					activeStyle={activeStyle}
+					blockName={blockName}
+					blockStyles={blockStyles}
+					setCurrentBlockStyleVariation={
+						setCurrentBlockStyleVariation
+					}
+					setCurrentActiveStyle={setCurrentActiveStyle}
+					setBlockStyles={setBlockStyles}
+					onSelectStylePreview={onSelectStylePreview}
+					setCurrentPreviewStyle={setCurrentPreviewStyle}
+					styleItemHandler={styleItemHandler}
+					editorStyles={editorStyles}
+					setStyles={setStyles}
+					isNotActive={isNotActive}
+				/>
+				{isPromotionPopoverOpen && (
+					<PromoteGlobalStylesPremiumFeature
+						items={blockStyles}
+						onClose={() => setIsPromotionPopoverOpen(false)}
+						isOpen={isPromotionPopoverOpen}
+					/>
+				)}
+			</>
 		);
 	}
 
@@ -260,6 +299,9 @@ function BlockStyles({
 						<>
 							<Flex direction="column" gap="10px">
 								<AddNewStyleButton
+									handlePromotionPopover={
+										handlePromotionPopover
+									}
 									counter={counter}
 									counterMap={blockDynamicStylesCount}
 									setCounter={setCounter}
@@ -274,6 +316,15 @@ function BlockStyles({
 										setCurrentActiveStyle
 									}
 								/>
+								{isPromotionPopoverOpen && (
+									<PromoteGlobalStylesPremiumFeature
+										items={blockStyles}
+										onClose={() =>
+											setIsPromotionPopoverOpen(false)
+										}
+										isOpen={isPromotionPopoverOpen}
+									/>
+								)}
 
 								<div
 									className={componentInnerClassNames(
@@ -287,6 +338,9 @@ function BlockStyles({
 											setCounter={setCounter}
 											key={style.name}
 											style={style}
+											handlePromotionPopover={
+												handlePromotionPopover
+											}
 											originDefaultAttributes={
 												originDefaultAttributes
 											}
