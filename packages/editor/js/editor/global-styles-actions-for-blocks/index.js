@@ -28,11 +28,8 @@ export default function GlobalStylesActionsForBlocks({
 	className: string,
 }): MixedElement {
 	const blockTypes = getBlockTypes();
-	const {
-		setSelectedBlockRef,
-		setSelectedBlockStyle,
-		setStyleVariationBlocks,
-	} = dispatch('blockera/editor');
+	const { setSelectedBlockRef, setSelectedBlockStyle } =
+		dispatch('blockera/editor');
 	const { changeExtensionCurrentBlock } = dispatch('blockera/extensions');
 
 	const { getEntity } = select('blockera/data') || {};
@@ -41,9 +38,6 @@ export default function GlobalStylesActionsForBlocks({
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	useEffect(() => {
-		// Cache select function once to avoid repeated lookups
-		const { getBlockStyles } = select('core/blocks');
-
 		new IntersectionObserverRenderer(globalStylesPanel.screen, null, {
 			callback: () => {
 				// Safety guard: ensure button exists before adding listener
@@ -73,21 +67,6 @@ export default function GlobalStylesActionsForBlocks({
 					if (!blockType) {
 						return;
 					}
-
-					// Use cached select function instead of calling select() repeatedly
-					const blockStyles = getBlockStyles(blockType.name) || [];
-
-					// Register style variations for this block type
-					blockStyles.forEach((blockStyle) => {
-						// Safety guard: ensure blockStyle exists
-						if (!blockStyle) {
-							return;
-						}
-
-						setStyleVariationBlocks(blockStyle.name, [
-							blockType.name,
-						]);
-					});
 
 					// Set up click listener for block element
 					const blockElement = document.querySelector(

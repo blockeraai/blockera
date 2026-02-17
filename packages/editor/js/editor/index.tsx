@@ -3,6 +3,7 @@
  */
 import { applyFilters } from '@wordpress/hooks';
 import { registerPlugin } from '@wordpress/plugins';
+import { dispatch, select } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -15,7 +16,7 @@ import GlobalStylesNavigation from './navigation';
 import GlobalStylesheet from './global-stylesheet';
 import PrimarySidebarController from './primary-sidebar';
 import SecondarySidebarInjector from './secondary-sidebar';
-import GlobalStylesActionsForBlock from './global-styles-actions-for-blocks';
+import GlobalStylesActionsForBlocks from './global-styles-actions-for-blocks';
 import AdditionalCssContextmenuObserver from './additional-css-contextmenu-observer';
 import GlobalStyles, {
 	registration as globalStylesRegistration,
@@ -125,7 +126,7 @@ const editorPlugins = [
 	{
 		name: 'blockera-global-styles-actions-for-blocks',
 		render: () => (
-			<GlobalStylesActionsForBlock
+			<GlobalStylesActionsForBlocks
 				className={bodyAdditionalClassnameForGlobalStyles}
 			/>
 		),
@@ -168,6 +169,45 @@ export const registerBlockeraEditorInternalPlugins = () => {
 		registerPlugin(plugin.name, {
 			render: plugin.render,
 			icon: plugin.icon,
+		});
+	});
+};
+
+export const registerBlockeraStyleVariationBlocks = () => {
+	const setStyleVariationBlocks = (dispatch('blockera/editor') as { setStyleVariationBlocks: (styleName: string, blockNames: string[]) => void }).setStyleVariationBlocks;
+	const getStyleVariationBlocks = (select('blockera/editor') as { getStyleVariationBlocks: (styleName: string) => string[] }).getStyleVariationBlocks;
+	const { getBlockTypes, getBlockStyles } = select('core/blocks') as {
+		getBlockTypes: () => Array<{ name: string }>,
+		getBlockStyles: (blockName: string) => Array<{ name: string }>
+	};
+
+	// All Registered blocks.
+	const blockTypes = getBlockTypes();
+
+	// Set up listeners for each block type
+	blockTypes.forEach((blockType) => {
+		// Safety guard: ensure blockType exists
+		if (!blockType) {
+		}
+
+		// Use cached select function instead of calling select() repeatedly
+		const blockStyles = getBlockStyles(blockType.name) || [];
+
+		// Register style variations for this block type
+		blockStyles.forEach((blockStyle) => {
+			// Safety guard: ensure blockStyle exists
+			if (
+				!blockStyle ||
+				getStyleVariationBlocks(blockStyle.name).includes(
+					blockType.name
+				)
+			) {
+				return;
+			}
+
+			setStyleVariationBlocks(blockStyle.name, [
+				blockType.name,
+			]);
 		});
 	});
 };
