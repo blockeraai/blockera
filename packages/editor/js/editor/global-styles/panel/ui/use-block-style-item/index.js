@@ -333,7 +333,26 @@ export const useBlockStyleItem = ({
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 
-			const normalizedStyle = getNormalizedStyle(styles, defaultStyles);
+			const duplicateStyleValues = mergeObject(
+				isRootStyle(currentStyle)
+					? base?.styles?.blocks?.[blockName] || {}
+					: base?.styles?.blocks?.[blockName]?.variations?.[
+							currentStyle.name
+						] || {},
+				isRootStyle(currentStyle)
+					? globalStyles?.blocks?.[blockName] || {}
+					: globalStyles?.blocks?.[blockName]?.variations?.[
+							currentStyle.name
+						] || {}
+			);
+
+			const normalizedStyle = getNormalizedStyle(
+				{
+					...styles,
+					...duplicateStyleValues,
+				},
+				defaultStyles
+			);
 
 			// Build blocks object for all enabled block types
 			const blocksUpdate = blockTypesToRegister.reduce(
@@ -529,6 +548,8 @@ export const useBlockStyleItem = ({
 					}
 				: {}),
 		});
+
+		deleteStyleVariationBlocks(currentStyleName, true, blockName);
 
 		const newCounter = counter - 1;
 		counterMap[blockName] = newCounter;

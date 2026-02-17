@@ -4,8 +4,8 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
 import type { MixedElement } from 'react';
+import { select, dispatch } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import { registerBlockStyle } from '@wordpress/blocks';
 import { useState, useEffect, useCallback } from '@wordpress/element';
@@ -61,6 +61,7 @@ export const AddNewStyleModal = ({
 	setCounter: (counter: number) => void,
 	counterMap: Object,
 }): MixedElement => {
+	const { setStyleVariationBlocks } = dispatch('blockera/editor');
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
 		'root',
@@ -254,10 +255,9 @@ export const AddNewStyleModal = ({
 			});
 		}
 
+		setStyleVariationBlocks(newStyle, blockName, 'manual');
 		registerBlockStyle(blockName, newStyle);
-
 		setCurrentBlockStyleVariation(newStyle);
-
 		setCurrentActiveStyle(newStyle);
 
 		const newGlobalStyles = mergeObject(
