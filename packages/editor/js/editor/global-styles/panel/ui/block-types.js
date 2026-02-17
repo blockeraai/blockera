@@ -104,14 +104,17 @@ export const BlockTypes = ({
 				Array.isArray(savedEnabledItems) &&
 				savedEnabledItems.length > 0
 					? [
-							...enabledItems,
-							...(savedEnabledItems?.filter((blockType) => {
-								const disabledIn =
-									globalStyles?.blockeraMetaData
-										?.variations?.[style.name]?.disabledIn;
+							...new Set([
+								...enabledItems,
+								...(savedEnabledItems?.filter((blockType) => {
+									const disabledIn =
+										globalStyles?.blockeraMetaData
+											?.variations?.[style.name]
+											?.disabledIn;
 
-								return !disabledIn?.includes(blockType);
-							}) || []),
+									return !disabledIn?.includes(blockType);
+								}) || []),
+							]),
 						]
 					: enabledItems,
 			primitiveItems: validItems.sort((a, b) => {
