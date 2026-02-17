@@ -27,6 +27,7 @@ export const PromoteGlobalStylesPremiumFeature = ({
 	return (
 		<PromotionPopover
 			heading={__('Advanced Global Styles', 'blockera')}
+			data-test={'promote-global-styles-premium-feature'}
 			featuresList={[
 				__('Multiple styles', 'blockera'),
 				__('All styles', 'blockera'),

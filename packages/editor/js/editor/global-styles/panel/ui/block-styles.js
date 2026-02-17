@@ -11,7 +11,13 @@ import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
 import { useViewportMatch } from '@wordpress/compose';
-import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
+import {
+	useState,
+	useRef,
+	useEffect,
+	useCallback,
+	useMemo,
+} from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -37,7 +43,10 @@ import { isString } from '@blockera/utils';
  */
 import { StyleItem } from './style-item';
 import { type T_BLOCK_STYLES_PROPS } from './types';
-import { useGlobalStylesPanelContext } from '../context';
+import {
+	useGlobalStylesPanelContext,
+	BlockStylesPickerContextProvider,
+} from '../context';
 import { AddNewStyleButton } from './add-new-style-button';
 import { useBlockStylesCounter } from './use-block-styles-counter';
 import { useBlockContext } from '../../../../extensions/components';
@@ -66,6 +75,7 @@ function BlockStyles({
 		style: editorStyles,
 		setStyle: setStyles,
 		setCurrentBlockStyleVariation,
+		currentBlockStyleVariation,
 	} = useGlobalStylesPanelContext();
 	const { isNormalState } = useBlockContext();
 	const [searchTerm, setSearchTerm] = useState('');
@@ -82,18 +92,53 @@ function BlockStyles({
 	const hasShownPreviewRef = useRef(false);
 	const isMobileViewport = useViewportMatch('medium', '<');
 
+	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
+		'blockera.block.style.variations.globalStylesMaxItems',
+		2
+	);
+
+	const handlePromotionPopover = useCallback((): boolean => {
+		let canDoAction = true;
+
+		// Validate limitation for adding new style variation.
+		if (
+			-1 !== MAX_ITEMS_FOR_PROMOTION &&
+			counter >= MAX_ITEMS_FOR_PROMOTION
+		) {
+			canDoAction = false;
+
+			setIsPromotionPopoverOpen(!canDoAction);
+
+			return canDoAction;
+		}
+
+		return canDoAction;
+	}, [counter, MAX_ITEMS_FOR_PROMOTION, setIsPromotionPopoverOpen]);
+
 	const {
 		onSelect,
 		setIsOpen,
-		activeStyle,
+		activeStyle: stylesActiveStyle,
 		popoverAnchor,
 		isDeletedStyle,
 		stylesToRender,
 		previewClassName,
 		genericPreviewBlock,
-		setCurrentActiveStyle,
+		setCurrentActiveStyle: stylesSetCurrentActiveStyle,
 		setCurrentPreviewStyle,
 	} = styles;
+
+	// In global-styles-panel, use context values when styles prop doesn't provide them
+	const activeStyle =
+		'global-styles-panel' === context
+			? (currentBlockStyleVariation ?? stylesActiveStyle)
+			: stylesActiveStyle;
+	const fallbackSetCurrentActiveStyle =
+		stylesSetCurrentActiveStyle ?? (() => {});
+	const setCurrentActiveStyle =
+		'global-styles-panel' === context
+			? setCurrentBlockStyleVariation
+			: fallbackSetCurrentActiveStyle;
 
 	// Update ref whenever hoveredStyle changes
 	useEffect(() => {
@@ -171,32 +216,54 @@ function BlockStyles({
 		]
 	);
 
+	const blockStylesPickerValue = useMemo(
+		() => ({
+			blockName,
+			counter,
+			counterMap: blockDynamicStylesCount,
+			setCounter,
+			blockStyles,
+			setBlockStyles,
+			activeStyle,
+			setCurrentActiveStyle,
+			setCurrentBlockStyleVariation,
+			handlePromotionPopover,
+			onSelectStylePreview,
+			setCurrentPreviewStyle,
+			styleItemHandler,
+			editorStyles: 'global-styles-panel' === context ? editorStyles : {},
+			setStyles: 'global-styles-panel' === context ? setStyles : () => {},
+			originDefaultAttributes: originDefaultAttributes ?? {},
+			hasChangesets: hasChangesets ?? false,
+			setChangesets: setChangesets ?? (() => {}),
+			isNotActive: isNotActive ?? false,
+		}),
+		[
+			blockName,
+			counter,
+			blockStyles,
+			activeStyle,
+			setCounter,
+			setBlockStyles,
+			setCurrentActiveStyle,
+			setCurrentBlockStyleVariation,
+			handlePromotionPopover,
+			onSelectStylePreview,
+			setCurrentPreviewStyle,
+			styleItemHandler,
+			context,
+			editorStyles,
+			setStyles,
+			originDefaultAttributes,
+			hasChangesets,
+			setChangesets,
+			isNotActive,
+		]
+	);
+
 	if (!stylesToRender || stylesToRender.length === 0) {
 		return null;
 	}
-
-	const MAX_ITEMS_FOR_PROMOTION = applyFilters(
-		'blockera.block.style.variations.globalStylesMaxItems',
-		2
-	);
-
-	const handlePromotionPopover = (): boolean => {
-		let canDoAction = true;
-
-		// Validate limitation for adding new style variation.
-		if (
-			-1 !== MAX_ITEMS_FOR_PROMOTION &&
-			counter >= MAX_ITEMS_FOR_PROMOTION
-		) {
-			canDoAction = false;
-
-			setIsPromotionPopoverOpen(!canDoAction);
-
-			return canDoAction;
-		}
-
-		return canDoAction;
-	};
 
 	// Handle search
 	const handleSearch = (newValue: string) => {
@@ -218,27 +285,8 @@ function BlockStyles({
 
 	if ('global-styles-panel' === context) {
 		return (
-			<>
-				<StyleVariationsManager
-					counter={counter}
-					setCounter={setCounter}
-					handlePromotionPopover={handlePromotionPopover}
-					counterMap={blockDynamicStylesCount}
-					activeStyle={activeStyle}
-					blockName={blockName}
-					blockStyles={blockStyles}
-					setCurrentBlockStyleVariation={
-						setCurrentBlockStyleVariation
-					}
-					setCurrentActiveStyle={setCurrentActiveStyle}
-					setBlockStyles={setBlockStyles}
-					onSelectStylePreview={onSelectStylePreview}
-					setCurrentPreviewStyle={setCurrentPreviewStyle}
-					styleItemHandler={styleItemHandler}
-					editorStyles={editorStyles}
-					setStyles={setStyles}
-					isNotActive={isNotActive}
-				/>
+			<BlockStylesPickerContextProvider value={blockStylesPickerValue}>
+				<StyleVariationsManager />
 				{isPromotionPopoverOpen && (
 					<PromoteGlobalStylesPremiumFeature
 						items={blockStyles}
@@ -246,216 +294,188 @@ function BlockStyles({
 						isOpen={isPromotionPopoverOpen}
 					/>
 				)}
-			</>
+			</BlockStylesPickerContextProvider>
 		);
 	}
 
 	return (
-		<SlotFillProvider>
-			<Popover
-				title={''}
-				offset={10}
-				placement="bottom-start"
-				className="variations-picker-popover"
-				onClose={() => {
-					setIsOpen(false);
-					setCurrentPreviewStyle(null);
-				}}
-				anchor={popoverAnchor}
-			>
-				<Flex
-					className={componentClassNames('block-styles')}
-					direction="column"
-					gap="20px"
+		<BlockStylesPickerContextProvider value={blockStylesPickerValue}>
+			<SlotFillProvider>
+				<Popover
+					title={''}
+					offset={10}
+					placement="bottom-start"
+					className="variations-picker-popover"
+					onClose={() => {
+						setIsOpen(false);
+						setCurrentPreviewStyle(null);
+					}}
+					anchor={popoverAnchor}
 				>
-					<ControlContextProvider
-						value={{
-							name: 'search-styles',
-							value: searchTerm,
-						}}
+					<Flex
+						className={componentClassNames('block-styles')}
+						direction="column"
+						gap="20px"
 					>
-						<SearchControl
-							onChange={handleSearch}
-							placeholder={__('Search styles…', 'blockera')}
-						/>
-					</ControlContextProvider>
-
-					{blockStyles.length === 0 ? (
-						<Flex
-							alignItems="center"
-							direction="column"
-							justifyContent="space-between"
-							gap="0"
-							style={{ padding: '40px 0' }}
+						<ControlContextProvider
+							value={{
+								name: 'search-styles',
+								value: searchTerm,
+							}}
 						>
-							<Icon
-								icon="block-default"
-								library="wp"
-								style={{ fill: '#949494' }}
+							<SearchControl
+								onChange={handleSearch}
+								placeholder={__('Search styles…', 'blockera')}
 							/>
-							<p>{__('No styles found.', 'blockera')}</p>
-						</Flex>
-					) : (
-						<>
-							<Flex direction="column" gap="10px">
-								<AddNewStyleButton
-									handlePromotionPopover={
-										handlePromotionPopover
-									}
-									counter={counter}
-									counterMap={blockDynamicStylesCount}
-									setCounter={setCounter}
-									blockName={blockName}
-									label={__('Style Variations', 'blockera')}
-									blockStyles={blockStyles}
-									setBlockStyles={setBlockStyles}
-									setCurrentBlockStyleVariation={
-										setCurrentBlockStyleVariation
-									}
-									setCurrentActiveStyle={
-										setCurrentActiveStyle
-									}
+						</ControlContextProvider>
+
+						{blockStyles.length === 0 ? (
+							<Flex
+								alignItems="center"
+								direction="column"
+								justifyContent="space-between"
+								gap="0"
+								style={{ padding: '40px 0' }}
+							>
+								<Icon
+									icon="block-default"
+									library="wp"
+									style={{ fill: '#949494' }}
 								/>
-								{isPromotionPopoverOpen && (
-									<PromoteGlobalStylesPremiumFeature
-										items={blockStyles}
-										onClose={() =>
-											setIsPromotionPopoverOpen(false)
-										}
-										isOpen={isPromotionPopoverOpen}
-									/>
-								)}
-
-								<div
-									className={componentInnerClassNames(
-										'block-styles__variants'
-									)}
-								>
-									{blockStyles.map((style) => (
-										<StyleItem
-											counter={counter}
-											counterMap={blockDynamicStylesCount}
-											setCounter={setCounter}
-											key={style.name}
-											style={style}
-											handlePromotionPopover={
-												handlePromotionPopover
-											}
-											originDefaultAttributes={
-												originDefaultAttributes
-											}
-											setChangesets={setChangesets}
-											hasChangesets={hasChangesets}
-											activeStyle={activeStyle}
-											setCurrentActiveStyle={
-												setCurrentActiveStyle
-											}
-											inGlobalStylesPanel={false}
-											onSelectStylePreview={
-												onSelectStylePreview
-											}
-											setCurrentPreviewStyle={
-												setCurrentPreviewStyle
-											}
-											styleItemHandler={styleItemHandler}
-											blockName={blockName}
-											blockStyles={blockStyles}
-											setBlockStyles={setBlockStyles}
-										/>
-									))}
-
-									{hoveredStyle &&
-										!isMobileViewport &&
-										showPreview && (
-											<WPPopover
-												placement="left-start"
-												offset={40}
-												focusOnMount={false}
-												animate={false}
-											>
-												<div
-													className="block-editor-block-styles__preview-panel"
-													onMouseLeave={() =>
-														styleItemHandler(null)
-													}
-												>
-													<BlockStylesPreviewPanel
-														activeStyle={
-															activeStyle
-														}
-														className={
-															previewClassName
-														}
-														genericPreviewBlock={
-															genericPreviewBlock
-														}
-														style={hoveredStyle}
-													/>
-												</div>
-											</WPPopover>
+								<p>{__('No styles found.', 'blockera')}</p>
+							</Flex>
+						) : (
+							<>
+								<Flex direction="column" gap="10px">
+									<AddNewStyleButton
+										label={__(
+											'Style Variations',
+											'blockera'
 										)}
-								</div>
-							</Flex>
-
-							<Flex direction="column" gap="8px">
-								<h2
-									className={classNames(
-										'blockera-block-styles-category'
+									/>
+									{isPromotionPopoverOpen && (
+										<PromoteGlobalStylesPremiumFeature
+											items={blockStyles}
+											onClose={() =>
+												setIsPromotionPopoverOpen(false)
+											}
+											isOpen={isPromotionPopoverOpen}
+										/>
 									)}
-								>
-									{__('Actions', 'blockera')}
-								</h2>
 
-								<Slot name="block-inspector-style-actions" />
-							</Flex>
-						</>
-					)}
+									<div
+										className={componentInnerClassNames(
+											'block-styles__variants'
+										)}
+									>
+										{blockStyles.map((style) => (
+											<StyleItem
+												key={style.name}
+												style={style}
+												inGlobalStylesPanel={false}
+											/>
+										))}
 
-					{isString(isDeletedStyle) && (
-						<NoticeControl type="error">
-							<p>
-								<DynamicHtmlFormatter
-									text={sprintf(
-										/* translators: %s: The name of the missing style variation */
-										__(
-											'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
-											'blockera'
-										),
-										'{style}'
-									)}
-									replacements={{
-										style: (
-											<strong>{isDeletedStyle}</strong>
-										),
-									}}
-								/>
-							</p>
+										{hoveredStyle &&
+											!isMobileViewport &&
+											showPreview && (
+												<WPPopover
+													placement="left-start"
+													offset={40}
+													focusOnMount={false}
+													animate={false}
+												>
+													<div
+														className="block-editor-block-styles__preview-panel"
+														onMouseLeave={() =>
+															styleItemHandler(
+																null
+															)
+														}
+													>
+														<BlockStylesPreviewPanel
+															activeStyle={
+																activeStyle
+															}
+															className={
+																previewClassName
+															}
+															genericPreviewBlock={
+																genericPreviewBlock
+															}
+															style={hoveredStyle}
+														/>
+													</div>
+												</WPPopover>
+											)}
+									</div>
+								</Flex>
 
-							<p>
-								<DynamicHtmlFormatter
-									text={sprintf(
-										/* translators: %s: The name of the currently active style */
-										__(
-											'This block is currently using the “%s” style instead.',
-											'blockera'
-										),
-										'{style}'
-									)}
-									replacements={{
-										style: (
-											<strong>
-												{activeStyle?.name ||
-													__('Default', 'blockera')}
-											</strong>
-										),
-									}}
-								/>
-							</p>
-						</NoticeControl>
-					)}
-				</Flex>
-			</Popover>
-		</SlotFillProvider>
+								<Flex direction="column" gap="8px">
+									<h2
+										className={classNames(
+											'blockera-block-styles-category'
+										)}
+									>
+										{__('Actions', 'blockera')}
+									</h2>
+
+									<Slot name="block-inspector-style-actions" />
+								</Flex>
+							</>
+						)}
+
+						{isString(isDeletedStyle) && (
+							<NoticeControl type="error">
+								<p>
+									<DynamicHtmlFormatter
+										text={sprintf(
+											/* translators: %s: The name of the missing style variation */
+											__(
+												'The “%s” style variation is missing. It might have been deleted or belong to a theme or plugin that’s currently inactive.',
+												'blockera'
+											),
+											'{style}'
+										)}
+										replacements={{
+											style: (
+												<strong>
+													{isDeletedStyle}
+												</strong>
+											),
+										}}
+									/>
+								</p>
+
+								<p>
+									<DynamicHtmlFormatter
+										text={sprintf(
+											/* translators: %s: The name of the currently active style */
+											__(
+												'This block is currently using the “%s” style instead.',
+												'blockera'
+											),
+											'{style}'
+										)}
+										replacements={{
+											style: (
+												<strong>
+													{activeStyle?.name ||
+														__(
+															'Default',
+															'blockera'
+														)}
+												</strong>
+											),
+										}}
+									/>
+								</p>
+							</NoticeControl>
+						)}
+					</Flex>
+				</Popover>
+			</SlotFillProvider>
+		</BlockStylesPickerContextProvider>
 	);
 }
 

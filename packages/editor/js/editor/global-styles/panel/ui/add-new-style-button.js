@@ -17,38 +17,30 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { AddNewStyleModal } from './add-new-style-modal';
+import { useBlockStylesPickerContext } from '../context';
 
 export const AddNewStyleButton = ({
 	label,
-	styles,
-	counter,
-	setStyles,
-	blockName,
-	setCounter,
-	counterMap,
-	style = {},
-	blockStyles,
-	setBlockStyles,
 	design = 'no-label',
-	setCurrentActiveStyle,
-	handlePromotionPopover,
-	setCurrentBlockStyleVariation,
+	style = {},
 }: {
 	label?: string,
-	counter: number,
-	styles?: Object,
-	blockName: string,
-	counterMap: Object,
-	blockStyles: Array<Object>,
 	design?: 'no-label' | 'with-label',
-	setStyles?: (styles: Object) => void,
-	handlePromotionPopover: () => boolean,
-	setCounter: (counter: number) => void,
-	setCurrentActiveStyle: (style: Object) => void,
-	setBlockStyles: (styles: Array<Object>) => void,
-	setCurrentBlockStyleVariation: (style: Object) => void,
 	style?: Object,
 }): MixedElement => {
+	const {
+		counter,
+		setCounter,
+		counterMap,
+		blockName,
+		blockStyles,
+		setBlockStyles,
+		editorStyles: styles,
+		setStyles,
+		setCurrentActiveStyle,
+		handlePromotionPopover,
+		setCurrentBlockStyleVariation,
+	} = useBlockStylesPickerContext();
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	return (
 		<Flex justifyContent={'space-between'} style={style}>

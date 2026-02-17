@@ -28,69 +28,37 @@ import { RenameModal } from './rename-modal';
 import { DeleteModal } from './delete-modal';
 import { DuplicateModal } from './duplicate-modal';
 import { UsageForMultipleBlocksModal } from './usage-for-multiple-blocks';
+import { useStyleItemMenuContext } from '../context';
 
-export const StyleItemMenu = ({
-	blockName,
-	blockTitle,
-	cachedStyle,
-	isOpenRenameModal,
-	isOpenDeleteModal,
-	isOpenDuplicateModal,
-	setIsOpenDeleteModal,
-	setIsOpenRenameModal,
-	setIsOpenDuplicateModal,
-	isOpenContextMenu,
-	setIsOpenContextMenu,
-	style,
-	buttonText,
-	handleOnRename,
-	handleOnDuplicate,
-	handleOnClearAllCustomizations,
-	handleOnUsageForMultipleBlocks,
-	setIsOpenUsageForMultipleBlocks,
-	isOpenUsageForMultipleBlocks,
-	handleOnEnable,
-	handleOnDelete,
-	isConfirmedChangeID,
-	setIsConfirmedChangeID,
-	blockStyles,
-	handlePromotionPopover,
-}: {
-	blockName: string,
-	blockTitle: string,
-	counter: number,
-	setCounter: (counter: number) => void,
-	cachedStyle: Object,
-	setCurrentBlockStyleVariation: (style: Object) => void,
-	handleOnDuplicate: (
-		style: Object,
-		customValues?: { label: string, name: string }
-	) => void,
-	handleOnClearAllCustomizations: (style: Object) => void,
-	handleOnEnable: (value: boolean, style: Object) => void,
-	handleOnDelete: (style: Object) => void,
-	handleOnUsageForMultipleBlocks: (
-		style: Object,
-		action: 'add' | 'delete'
-	) => void,
-	isOpenRenameModal: boolean,
-	isOpenDeleteModal: boolean,
-	isOpenDuplicateModal: boolean,
-	setIsOpenDeleteModal: (isOpen: boolean) => void,
-	setIsOpenRenameModal: (isOpen: boolean) => void,
-	setIsOpenDuplicateModal: (isOpen: boolean) => void,
-	isOpenContextMenu: boolean,
-	setIsOpenContextMenu: (isOpen: boolean) => void,
-	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
-	isOpenUsageForMultipleBlocks: boolean,
-	style: Object,
-	buttonText: string,
-	handleOnRename: (style: Object) => void,
-	isConfirmedChangeID: boolean,
-	setIsConfirmedChangeID: (isConfirmed: boolean) => void,
-	blockStyles: Array<Object>,
-	handlePromotionPopover: () => boolean,
-}): MixedElement => {
+export const StyleItemMenu = (): MixedElement => {
+	const {
+		blockName,
+		blockTitle,
+		cachedStyle,
+		isOpenRenameModal,
+		isOpenDeleteModal,
+		isOpenDuplicateModal,
+		setIsOpenDeleteModal,
+		setIsOpenRenameModal,
+		setIsOpenDuplicateModal,
+		isOpenContextMenu,
+		setIsOpenContextMenu,
+		style,
+		buttonText,
+		handleOnRename,
+		handleOnDuplicate,
+		handleOnClearAllCustomizations,
+		handleOnUsageForMultipleBlocks,
+		setIsOpenUsageForMultipleBlocks,
+		isOpenUsageForMultipleBlocks,
+		handleOnEnable,
+		handleOnDelete,
+		isConfirmedChangeID,
+		setIsConfirmedChangeID,
+		blockStyles,
+		handlePromotionPopover,
+	} = useStyleItemMenuContext();
+
 	return (
 		<>
 			{isOpenRenameModal && !style?.isDefault && (

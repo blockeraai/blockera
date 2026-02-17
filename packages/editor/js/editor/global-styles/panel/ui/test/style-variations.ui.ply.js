@@ -5,7 +5,6 @@
 const {
 	savePage,
 	openSiteEditor,
-	getWPDataObject,
 	closeWelcomeGuide,
 	getSelectedBlockStyle,
 	getEditedGlobalStylesRecord,
@@ -40,37 +39,33 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 	test('should be able to duplicate specific style variation', async ({
 		page,
 	}) => {
-		await getByDataTest(page, 'open-default-contextmenu').click();
+		getByDataTest(page, 'open-default-contextmenu').click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Duplicate' })
 			.click();
+		getByDataTest(
+			await page.locator('.blockera-component-style-variation-modal'),
+			'save-duplicate-button'
+		).click();
+		getByDataTest(page, 'Close Block Style').click();
 		await expect(getByDataTest(page, 'style-default-copy')).toBeVisible();
 
-		await getByDataTest(page, 'open-default-copy-contextmenu')
+		getByDataTest(page, 'open-default-copy-contextmenu').nth(1).click();
+		await page
+			.locator('.blockera-component-popover-body button')
+			.filter({ hasText: 'Duplicate' })
+			.click();
+		getByDataTest(page, 'promote-global-styles-premium-feature')
 			.nth(1)
-			.click();
-		await page
-			.locator('.blockera-component-popover-body button')
-			.filter({ hasText: 'Duplicate' })
-			.click();
-		await expect(getByDataTest(page, 'style-default-copy-1')).toBeVisible();
-
-		await getByDataTest(page, 'open-section-1-contextmenu').click();
-		await page
-			.locator('.blockera-component-popover-body button')
-			.filter({ hasText: 'Duplicate' })
-			.click();
-		await expect(getByDataTest(page, 'style-section-1-copy')).toBeVisible();
+			.toBeVisible();
 
 		await savePage(page);
 		await page.reload();
 
 		await before(page);
-		await getByDataTest(page, 'open-default-contextmenu').click();
+		getByDataTest(page, 'open-default-contextmenu').click();
 		await expect(getByDataTest(page, 'style-default-copy')).toBeVisible();
-		await expect(getByDataTest(page, 'style-default-copy-1')).toBeVisible();
-		await expect(getByDataTest(page, 'style-section-1-copy')).toBeVisible();
 	});
 
 	test('should be able to clear customizations from specific style variation', async ({

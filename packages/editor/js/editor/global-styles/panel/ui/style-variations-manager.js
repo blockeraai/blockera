@@ -21,76 +21,21 @@ import { PanelBodyControl } from '@blockera/controls';
  */
 import { StyleItem } from './style-item';
 import { AddNewStyleButton } from './add-new-style-button';
+import { useBlockStylesPickerContext } from '../context';
 
-export const StyleVariationsManager = ({
-	isNotActive,
-	blockStyles,
-	editorStyles,
-	setStyles,
-	blockName,
-	counter,
-	counterMap,
-	setCounter,
-	handlePromotionPopover,
-	setCurrentBlockStyleVariation,
-	setCurrentActiveStyle,
-	setBlockStyles,
-	activeStyle,
-	onSelectStylePreview,
-	setCurrentPreviewStyle,
-	styleItemHandler,
-}: {
-	counter: number,
-	counterMap: Object,
-	setCounter: (counter: number) => void,
-	isNotActive?: boolean,
-	blockStyles: Array<Object>,
-	editorStyles: Array<Object>,
-	setStyles: (styles: Array<Object>) => void,
-	blockName: string,
-	setCurrentBlockStyleVariation: (style: Object) => void,
-	setCurrentActiveStyle: (style: Object) => void,
-	setBlockStyles: (styles: Array<Object>) => void,
-	activeStyle: Object,
-	onSelectStylePreview: (style: Object) => void,
-	setCurrentPreviewStyle: (style: Object) => void,
-	styleItemHandler: (style: Object) => void,
-	handlePromotionPopover: () => boolean,
-}): MixedElement => {
+export const StyleVariationsManager = (): MixedElement => {
+	const { blockStyles, isNotActive } = useBlockStylesPickerContext();
+
 	const memoizedStyles = useMemo(
 		() =>
 			blockStyles.map((style) => (
 				<StyleItem
-					handlePromotionPopover={handlePromotionPopover}
-					counter={counter}
-					counterMap={counterMap}
-					setCounter={setCounter}
 					key={style.name}
 					style={style}
-					blockName={blockName}
-					blockStyles={blockStyles}
-					setBlockStyles={setBlockStyles}
-					activeStyle={activeStyle}
-					setCurrentActiveStyle={setCurrentActiveStyle}
 					inGlobalStylesPanel={true}
-					onSelectStylePreview={onSelectStylePreview}
-					setCurrentPreviewStyle={setCurrentPreviewStyle}
-					styleItemHandler={styleItemHandler}
 				/>
 			)),
-		[
-			counter,
-			counterMap,
-			blockName,
-			setCounter,
-			blockStyles,
-			activeStyle,
-			setBlockStyles,
-			styleItemHandler,
-			onSelectStylePreview,
-			setCurrentActiveStyle,
-			setCurrentPreviewStyle,
-		]
+		[blockStyles]
 	);
 
 	return (
@@ -100,21 +45,7 @@ export const StyleVariationsManager = ({
 					{__('Style Variations', 'blockera')}
 
 					<AddNewStyleButton
-						counter={counter}
-						handlePromotionPopover={handlePromotionPopover}
-						counterMap={counterMap}
-						setCounter={setCounter}
 						design="no-label"
-						// label={__('Add New Style Variation', 'blockera')}
-						styles={editorStyles}
-						setStyles={setStyles}
-						blockName={blockName}
-						blockStyles={blockStyles}
-						setCurrentBlockStyleVariation={
-							setCurrentBlockStyleVariation
-						}
-						setCurrentActiveStyle={setCurrentActiveStyle}
-						setBlockStyles={setBlockStyles}
 						style={{ marginLeft: 'auto' }}
 					/>
 				</>
@@ -144,21 +75,8 @@ export const StyleVariationsManager = ({
 				</p>
 
 				<AddNewStyleButton
-					counter={counter}
-					counterMap={counterMap}
-					handlePromotionPopover={handlePromotionPopover}
-					setCounter={setCounter}
 					design="with-label"
 					label={__('Add New', 'blockera')}
-					styles={editorStyles}
-					setStyles={setStyles}
-					blockName={blockName}
-					blockStyles={blockStyles}
-					setCurrentBlockStyleVariation={
-						setCurrentBlockStyleVariation
-					}
-					setCurrentActiveStyle={setCurrentActiveStyle}
-					setBlockStyles={setBlockStyles}
 				/>
 			</div>
 		</PanelBodyControl>

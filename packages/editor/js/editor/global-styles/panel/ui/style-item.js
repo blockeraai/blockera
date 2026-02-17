@@ -29,27 +29,34 @@ import { type T_STYLE_ITEM_PROPS } from './types';
 import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useUserCan } from '../../../../hooks/use-user-can';
-import { useGlobalStylesPanelContext } from '../context';
+import {
+	useGlobalStylesPanelContext,
+	useBlockStylesPickerContext,
+	StyleItemMenuContextProvider,
+} from '../context';
 
 export const StyleItem = ({
 	style,
-	counter,
-	blockName,
-	counterMap,
-	setCounter,
-	activeStyle,
-	blockStyles,
-	setChangesets,
-	hasChangesets,
-	setBlockStyles,
-	styleItemHandler,
-	onSelectStylePreview,
-	setCurrentActiveStyle,
-	handlePromotionPopover,
-	setCurrentPreviewStyle,
-	originDefaultAttributes,
 	inGlobalStylesPanel = false,
-}: T_STYLE_ITEM_PROPS): MixedElement => {
+}: $Shape<T_STYLE_ITEM_PROPS>): MixedElement => {
+	const pickerContext = useBlockStylesPickerContext();
+	const {
+		blockName,
+		counter,
+		counterMap,
+		setCounter,
+		activeStyle,
+		blockStyles,
+		setBlockStyles,
+		setCurrentActiveStyle,
+		handlePromotionPopover,
+		onSelectStylePreview,
+		setCurrentPreviewStyle,
+		styleItemHandler,
+		originDefaultAttributes,
+		hasChangesets,
+		setChangesets,
+	} = pickerContext;
 	const {
 		defaultStyles,
 		getStyle = () => ({}),
@@ -449,44 +456,40 @@ export const StyleItem = ({
 					</Flex>
 				</Flex>
 
-				<StyleItemMenu
-					blockTitle={getBlockType(blockName).title}
-					style={style}
-					counter={counter}
-					handlePromotionPopover={handlePromotionPopover}
-					isOpenDeleteModal={isOpenDeleteModal}
-					setIsOpenDeleteModal={setIsOpenDeleteModal}
-					isOpenDuplicateModal={isOpenDuplicateModal}
-					setIsOpenDuplicateModal={setIsOpenDuplicateModal}
-					blockName={blockName}
-					setCounter={setCounter}
-					buttonText={buttonText}
-					handleOnRename={handleOnRename}
-					handleOnDuplicate={handleOnDuplicate}
-					handleOnClearAllCustomizations={
-						handleOnClearAllCustomizations
-					}
-					handleOnEnable={handleOnEnable}
-					handleOnDelete={handleOnDelete}
-					handleOnUsageForMultipleBlocks={
-						handleOnUsageForMultipleBlocks
-					}
-					isConfirmedChangeID={isConfirmedChangeID}
-					setIsOpenUsageForMultipleBlocks={
-						setIsOpenUsageForMultipleBlocks
-					}
-					isOpenUsageForMultipleBlocks={isOpenUsageForMultipleBlocks}
-					setIsConfirmedChangeID={setIsConfirmedChangeID}
-					cachedStyle={cachedStyle}
-					isOpenRenameModal={isOpenRenameModal}
-					setIsOpenRenameModal={setIsOpenRenameModal}
-					isOpenContextMenu={isOpenContextMenu}
-					setIsOpenContextMenu={setIsOpenContextMenu}
-					setCurrentBlockStyleVariation={
-						setCurrentBlockStyleVariation
-					}
-					blockStyles={blockStyles}
-				/>
+				<StyleItemMenuContextProvider
+					value={{
+						blockTitle: getBlockType(blockName).title,
+						style,
+						counter,
+						handlePromotionPopover,
+						isOpenDeleteModal,
+						setIsOpenDeleteModal,
+						isOpenDuplicateModal,
+						setIsOpenDuplicateModal,
+						blockName,
+						setCounter,
+						buttonText,
+						handleOnRename,
+						handleOnDuplicate,
+						handleOnClearAllCustomizations,
+						handleOnEnable,
+						handleOnDelete,
+						handleOnUsageForMultipleBlocks,
+						isConfirmedChangeID,
+						setIsOpenUsageForMultipleBlocks,
+						isOpenUsageForMultipleBlocks,
+						setIsConfirmedChangeID,
+						cachedStyle,
+						isOpenRenameModal,
+						setIsOpenRenameModal,
+						isOpenContextMenu,
+						setIsOpenContextMenu,
+						setCurrentBlockStyleVariation,
+						blockStyles,
+					}}
+				>
+					<StyleItemMenu />
+				</StyleItemMenuContextProvider>
 			</div>
 
 			{isActive && (
@@ -619,48 +622,47 @@ export const StyleItem = ({
 							/>
 						</span>
 
-						<StyleItemMenu
-							style={style}
-							counter={counter}
-							handlePromotionPopover={handlePromotionPopover}
-							blockTitle={getBlockType(blockName).title}
-							isOpenDeleteModal={isOpenBlockCardDeleteModal}
-							setIsOpenDeleteModal={setIsOpenBlockCardDeleteModal}
-							isOpenDuplicateModal={isOpenBlockCardDuplicateModal}
-							setIsOpenDuplicateModal={
-								setIsOpenBlockCardDuplicateModal
-							}
-							blockName={blockName}
-							setCounter={setCounter}
-							buttonText={buttonText}
-							handleOnRename={handleOnRename}
-							handleOnDuplicate={handleOnDuplicate}
-							handleOnClearAllCustomizations={
-								handleOnClearAllCustomizations
-							}
-							handleOnEnable={handleOnEnable}
-							handleOnDelete={handleOnDelete}
-							handleOnUsageForMultipleBlocks={
-								handleOnUsageForMultipleBlocks
-							}
-							isConfirmedChangeID={isConfirmedChangeID}
-							setIsOpenUsageForMultipleBlocks={
-								setIsOpenBlockCardUsageForMultipleBlocks
-							}
-							isOpenUsageForMultipleBlocks={
-								isOpenBlockCardUsageForMultipleBlocks
-							}
-							setIsConfirmedChangeID={setIsConfirmedChangeID}
-							cachedStyle={cachedStyle}
-							isOpenRenameModal={isOpenBlockCardRenameModal}
-							setIsOpenRenameModal={setIsOpenBlockCardRenameModal}
-							blockStyles={blockStyles}
-							isOpenContextMenu={isOpenBlockCardContextMenu}
-							setIsOpenContextMenu={setIsOpenBlockCardContextMenu}
-							setCurrentBlockStyleVariation={
-								setCurrentBlockStyleVariation
-							}
-						/>
+						<StyleItemMenuContextProvider
+							value={{
+								blockTitle: getBlockType(blockName).title,
+								style,
+								counter,
+								handlePromotionPopover,
+								isOpenDeleteModal: isOpenBlockCardDeleteModal,
+								setIsOpenDeleteModal:
+									setIsOpenBlockCardDeleteModal,
+								isOpenDuplicateModal:
+									isOpenBlockCardDuplicateModal,
+								setIsOpenDuplicateModal:
+									setIsOpenBlockCardDuplicateModal,
+								blockName,
+								setCounter,
+								buttonText,
+								handleOnRename,
+								handleOnDuplicate,
+								handleOnClearAllCustomizations,
+								handleOnEnable,
+								handleOnDelete,
+								handleOnUsageForMultipleBlocks,
+								isConfirmedChangeID,
+								setIsOpenUsageForMultipleBlocks:
+									setIsOpenBlockCardUsageForMultipleBlocks,
+								isOpenUsageForMultipleBlocks:
+									isOpenBlockCardUsageForMultipleBlocks,
+								setIsConfirmedChangeID,
+								cachedStyle,
+								isOpenRenameModal: isOpenBlockCardRenameModal,
+								setIsOpenRenameModal:
+									setIsOpenBlockCardRenameModal,
+								isOpenContextMenu: isOpenBlockCardContextMenu,
+								setIsOpenContextMenu:
+									setIsOpenBlockCardContextMenu,
+								setCurrentBlockStyleVariation,
+								blockStyles,
+							}}
+						>
+							<StyleItemMenu />
+						</StyleItemMenuContextProvider>
 					</Flex>
 				)}
 			</Fill>

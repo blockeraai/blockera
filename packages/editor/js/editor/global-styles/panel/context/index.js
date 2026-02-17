@@ -410,6 +410,17 @@ type UseGlobalStylesPanelContextReturnType = {
 	},
 };
 
+export {
+	BlockStylesPickerContext,
+	BlockStylesPickerContextProvider,
+	useBlockStylesPickerContext,
+} from './block-styles-picker-context';
+export {
+	StyleItemMenuContext,
+	StyleItemMenuContextProvider,
+	useStyleItemMenuContext,
+} from './style-item-menu-context';
+
 export const useGlobalStylesPanelContext =
 	(): UseGlobalStylesPanelContextReturnType => {
 		const contextReceivedValue = useContext(GlobalStylesPanelContext);
