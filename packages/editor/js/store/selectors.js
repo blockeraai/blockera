@@ -423,7 +423,7 @@ export const getStyleVariationBlocks = (
 	},
 	variationName: string
 ): Object => {
-	return globalStyles.styleVariationBlocks[variationName] || [];
+	return globalStyles?.styleVariationBlocks?.[variationName] || [];
 };
 
 /**
