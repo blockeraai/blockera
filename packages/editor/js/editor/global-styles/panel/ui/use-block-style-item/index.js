@@ -306,7 +306,7 @@ export const useBlockStyleItem = ({
 			const blockTypesToRegister = getBlockTypesForStyle(
 				blockName,
 				getStyleVariationBlocks,
-				currentStyle.name
+				duplicateStyle.name
 			);
 
 			blockTypesToRegister.forEach((blockType) => {
