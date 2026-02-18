@@ -276,19 +276,62 @@ async function getBlock(page, blockName, blockTag = '', index = 0) {
 
 	// Site/Template editor: canvas iframe (block editor uses [data-type] on block wrapper elements)
 	if (hasIframe) {
-		const frame = page.frameLocator(iframeSelector);
+		const frameLoc = page.frameLocator(iframeSelector);
 		if (isDefault) {
-			await addDefaultBlock(frame);
+			await addDefaultBlock(frameLoc);
 			blockName = 'core/paragraph';
 		}
-		// Block editor canvas: blocks have [data-type="blockName"] on the block wrapper
-		const selector = blockTag
+		// Exclude blocks inside template parts (Header, Footer) - they intercept clicks and are not the main content
+		const frame = page.frame({ name: 'editor-canvas' });
+		if (frame) {
+			const blockHandle = await frame.evaluateHandle(
+				({ name, idx }) => {
+					const all = document.querySelectorAll(
+						`[data-type="${name}"]`
+					);
+					const filtered = Array.from(all).filter((el) => {
+						let parent = el.parentElement;
+						while (parent && parent !== document.body) {
+							if (parent.dataset?.type === 'core/template-part') {
+								return false;
+							}
+							parent = parent.parentElement;
+						}
+						return true;
+					});
+					return filtered[idx] || null;
+				},
+				{ name: blockName, idx: index }
+			);
+			if (blockHandle.asElement()) {
+				const element = blockHandle.asElement();
+				const selector = await element.evaluate((el) => {
+					if (el.id) {
+						return `#${el.id}`;
+					}
+					if (el.dataset.block) {
+						return `[data-block="${el.dataset.block}"]`;
+					}
+					return null;
+				});
+				blockHandle.dispose();
+				if (selector) {
+					const locator = frameLoc.locator(selector);
+					await locator.waitFor({ state: 'visible', timeout: 5000 });
+					return locator;
+				}
+			} else {
+				blockHandle.dispose();
+			}
+		}
+		// Fallback: use selector without template-part exclusion
+		const selectorFallback = blockTag
 			? `${blockTag}[data-type="${blockName}"]`
 			: `[data-type="${blockName}"]`;
-		const blocksLocator = frame.locator(selector);
-		const block = blocksLocator.nth(index);
-		await block.waitFor({ state: 'visible', timeout: 5000 });
-		return block;
+		const blocksLocator = frameLoc.locator(selectorFallback);
+		const blockLocator = blocksLocator.nth(index);
+		await blockLocator.waitFor({ state: 'visible', timeout: 5000 });
+		return blockLocator;
 	}
 
 	// Block/Post editor (no iframe): try [data-type] in main document, then fallbacks

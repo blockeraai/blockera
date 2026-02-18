@@ -622,6 +622,80 @@ async function setBlockStyle(page, style) {
 }
 
 /**
+ * Select block by type using the block editor API.
+ * Reliable for Site Editor where DOM selectors may match blocks inside template parts (Header, Footer).
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} blockName - Block name (e.g., 'core/group', 'core/paragraph').
+ * @param {number} index - Zero-based index when multiple blocks of same type exist (default: 0).
+ * @param {boolean} excludeTemplateParts - Exclude blocks nested inside template parts (default: true for Site Editor).
+ * @return {Promise<void>}
+ */
+async function selectBlockByType(
+	page,
+	blockName,
+	index = 0,
+	excludeTemplateParts = true
+) {
+	await page.evaluate(
+		({ name, idx, excludeParts }) => {
+			const dataObj = window.wp?.data;
+			if (!dataObj) {
+				throw new Error('wp.data not available');
+			}
+			const blockEditor = dataObj.select('core/block-editor');
+			const blocks = blockEditor.getBlocks();
+
+			function collectByType(
+				blockList,
+				targetName,
+				insideTemplatePart,
+				out
+			) {
+				for (const block of blockList) {
+					const wasInTemplatePart = insideTemplatePart;
+					if (block.name === 'core/template-part') {
+						insideTemplatePart = true;
+					}
+					if (
+						block.name === targetName &&
+						(!excludeParts || !insideTemplatePart)
+					) {
+						out.push(block.clientId);
+					}
+					if (block.innerBlocks?.length) {
+						collectByType(
+							block.innerBlocks,
+							targetName,
+							insideTemplatePart,
+							out
+						);
+					}
+					if (block.name === 'core/template-part') {
+						insideTemplatePart = wasInTemplatePart;
+					}
+				}
+			}
+
+			const clientIds = [];
+			collectByType(blocks, name, false, clientIds);
+
+			if (clientIds.length <= idx) {
+				throw new Error(
+					`Block "${name}" index ${idx} not found (${clientIds.length} blocks of this type)`
+				);
+			}
+			dataObj.dispatch('core/block-editor').selectBlock(clientIds[idx]);
+		},
+		{
+			name: blockName,
+			idx: index,
+			excludeParts: excludeTemplateParts,
+		}
+	);
+}
+
+/**
  * Select block using block navigator.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
@@ -997,6 +1071,7 @@ module.exports = {
 	closeBlockNavigator,
 	setBlockStyle,
 	selectBlock,
+	selectBlockByType,
 	openSettingsPanel,
 	openHeadingToolbarAndSelect,
 	openMoreFeaturesControl,
