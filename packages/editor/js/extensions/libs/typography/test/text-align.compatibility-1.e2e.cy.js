@@ -106,6 +106,8 @@ describe('Text Align → WP Compatibility', () => {
 			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
 
+			cy.addNewTransition();
+
 			//
 			// assert values
 			//
@@ -259,6 +261,8 @@ describe('Text Align → WP Compatibility', () => {
 			//
 			cy.get('button[aria-label="Align text"]').click();
 			cy.get('div[aria-label="Align text"] button').eq(0).click();
+
+			cy.addNewTransition();
 
 			//
 			// assert values
