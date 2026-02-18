@@ -407,16 +407,18 @@ export const useBlockStyleItem = ({
 
 		if (false === status) {
 			setCurrentBlockStyleVariation(undefined);
-			setCurrentActiveStyle(getDefaultStyle(blockStyles));
 
-			handleOnChangeAttributes('className', '', {
-				shouldUpdateClassName: false,
-				ref: {
-					current: {
-						action: 'disable-style',
+			if (!inGlobalStylesPanel) {
+				setCurrentActiveStyle(getDefaultStyle(blockStyles));
+				handleOnChangeAttributes('className', '', {
+					shouldUpdateClassName: false,
+					ref: {
+						current: {
+							action: 'disable-style',
+						},
 					},
-				},
-			});
+				});
+			}
 		}
 	};
 
