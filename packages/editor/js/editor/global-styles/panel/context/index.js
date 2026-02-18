@@ -201,11 +201,7 @@ export const GlobalStylesPanelContextProvider = ({
 
 	const { getSelectedBlockStyleVariation } = select(EDITOR_STORE_NAME);
 	const { getStyleVariationBlocks } = select(EDITOR_STORE_NAME);
-	const {
-		setBlockStyles,
-		setStyleVariationBlocks,
-		deleteStyleVariationBlocks,
-	} = dispatch(EDITOR_STORE_NAME);
+	const { setBlockStyles } = dispatch(EDITOR_STORE_NAME);
 
 	const [currentBlockStyleVariation, setCurrentBlockStyleVariation] =
 		useState(getSelectedBlockStyleVariation());
@@ -354,8 +350,6 @@ export const GlobalStylesPanelContextProvider = ({
 				memoizedBlockBaseProps,
 				getStyleVariationBlocks,
 				resetBlockStateToNormal,
-				setStyleVariationBlocks,
-				deleteStyleVariationBlocks,
 				currentBlockStyleVariation,
 				setCurrentBlockStyleVariation,
 				handleOnChangeStyleInLocalState,
@@ -427,10 +421,14 @@ export const useGlobalStylesPanelContext =
 
 		const { getEditorSettings } = select(editorStore);
 		const { updateEditorSettings } = dispatch(editorStore);
+		const { setStyleVariationBlocks, deleteStyleVariationBlocks } =
+			dispatch(EDITOR_STORE_NAME);
 
 		return {
 			...contextReceivedValue,
-			updateEditorSettings,
 			getEditorSettings,
+			updateEditorSettings,
+			setStyleVariationBlocks,
+			deleteStyleVariationBlocks,
 		};
 	};
