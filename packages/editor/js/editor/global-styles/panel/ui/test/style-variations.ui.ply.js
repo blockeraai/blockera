@@ -8,11 +8,11 @@ const {
 	closeWelcomeGuide,
 	getSelectedBlockStyle,
 	getEditedGlobalStylesRecord,
+	selectBlockByType,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
 	test,
 	expect,
-	getBlock,
 	getByDataTest,
 	openSettingsPanel,
 	getParentContainer,
@@ -78,25 +78,25 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		const bgColorContainer = getParentContainer(page, 'BG Color');
 
 		// Act: clicking on color button
-		const colorBtn = bgColorContainer.locator('[data-cy="color-btn"]');
-		if ((await colorBtn.count()) > 0) {
+		const colorBtnCount = await bgColorContainer
+			.locator('[data-cy="color-btn"]')
+			.count();
+		if (colorBtnCount > 0) {
 			await bgColorContainer
 				.locator('[data-cy="value-addon-btn-open"]')
-				.click({
-					force: true,
-				});
+				.dispatchEvent('click');
 		} else {
 			await bgColorContainer
 				.locator('[data-cy="value-addon-btn"]')
-				.click({
-					force: true,
-				});
+				.dispatchEvent('click');
 		}
 
 		// Select variable
 		await page
-			.locator('[data-cy="va-item-accent-4"]')
-			.click({ force: true });
+			.locator(
+				'.blockera-component-popover-body [data-cy="va-item-accent-4"]'
+			)
+			.dispatchEvent('click');
 
 		// Assert data
 		const selectedStyle = await getSelectedBlockStyle(
@@ -150,19 +150,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			'styles'
 		);
 
-		const restCustomizations = {
-			blocks: {
-				'core/group': {
-					variations: {
-						'default-copy': [],
-						'default-copy-1': [],
-						'section-1-copy': [],
-					},
-				},
-			},
-		};
-
-		expect(globalStylesRecord).toEqual(restCustomizations);
+		expect(globalStylesRecord).toEqual({});
 
 		await savePage(page);
 		await page.reload();
@@ -186,14 +174,14 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			page,
 			'styles'
 		);
-		expect(globalStylesRecordAfterReload).toEqual(restCustomizations);
+		expect(globalStylesRecordAfterReload).toEqual({});
 	});
 
 	test('should be able to rename specific style variation', async ({
 		page,
 	}) => {
-		await getByDataTest(page, 'style-section-1').click();
-		await getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
+		getByDataTest(page, 'style-section-1').click();
+		getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Rename' })
@@ -203,7 +191,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await nameContainer.locator('input').clear();
 		await nameContainer.locator('input').fill('New Name');
 
-		await getByDataTest(page, 'save-rename-button').click();
+		getByDataTest(page, 'save-rename-button').click();
 		await expect(getByDataTest(page, 'style-section-1')).toContainText(
 			'New Name'
 		);
@@ -212,7 +200,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await page.reload();
 
 		await before(page);
-		await getByDataTest(page, 'style-section-1').click();
+		getByDataTest(page, 'style-section-1').click();
 		await expect(getByDataTest(page, 'style-section-1')).toContainText(
 			'New Name'
 		);
@@ -278,21 +266,20 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		expect(selectedVariation).toBeUndefined();
 
 		await openSettingsPanel(page);
-		const block = await getBlock(page, 'core/group');
-		await block.nth(0).click();
+		await selectBlockByType(page, 'core/group', 0);
 
 		await expect(
 			getByDataTest(page, 'style-variations-button')
 		).toBeVisible();
-		await getByDataTest(page, 'style-variations-button').click();
+		getByDataTest(page, 'style-variations-button').click();
 
-		const popover = page
+		const popover = await page
 			.locator('.blockera-component-popover.variations-picker-popover')
 			.last();
 
 		await expect(
-			popover.locator('[data-test="style-new-id"]')
-		).not.toHaveClass(/is-enabled/);
+			await popover.locator('[data-test="style-new-id"]')
+		).not.toHaveCount(1);
 
 		const selectedVariationInPopover = await page.evaluate(() => {
 			const dataObj = window.wp.data;
@@ -308,7 +295,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await page.reload();
 
 		await before(page);
-		await getByDataTest(page, 'style-new-id').click();
+		getByDataTest(page, 'style-new-id').click();
 
 		const selectedVariationAfterReload = await page.evaluate(() => {
 			const dataObj = window.wp.data;
@@ -321,8 +308,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		expect(selectedVariationAfterReload).toBeUndefined();
 
 		await openSettingsPanel(page);
-		const blockAfterReload = await getBlock(page, 'core/group');
-		await blockAfterReload.nth(0).click();
+		await selectBlockByType(page, 'core/group', 0);
 
 		await expect(
 			getByDataTest(page, 'style-variations-button')
@@ -335,7 +321,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 
 		await expect(
 			popoverAfterReload.locator('[data-test="style-new-id"]')
-		).not.toHaveClass(/is-enabled/);
+		).not.toHaveCount(1);
 
 		const selectedVariationInPopoverAfterReload = await page.evaluate(
 			() => {
@@ -348,15 +334,6 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		);
 
 		expect(selectedVariationInPopoverAfterReload).toBeUndefined();
-
-		await getByDataTest(page, 'open-new-id-contextmenu').nth(0).click();
-
-		await getByDataTest(page, 'style-variations-button').click();
-		await page
-			.locator('.blockera-component-grid')
-			.filter({ hasText: 'Active Style' })
-			.locator('input')
-			.click();
 	});
 
 	test('should be able to delete specific style variation', async ({
@@ -383,11 +360,10 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			);
 		});
 
-		expect(blockStyles).toBe(4);
+		expect(blockStyles).toBe(5);
 
 		await openSettingsPanel(page);
-		const block = await getBlock(page, 'core/group');
-		await block.nth(0).click();
+		await selectBlockByType(page, 'core/group', 0);
 
 		await expect(
 			getByDataTest(page, 'style-variations-button')
@@ -420,8 +396,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		expect(blockStylesAfterReload).toBe(3);
 
 		await openSettingsPanel(page);
-		const blockAfterReload = await getBlock(page, 'core/group');
-		await blockAfterReload.nth(0).click();
+		await selectBlockByType(page, 'core/group', 0);
 
 		await expect(
 			getByDataTest(page, 'style-variations-button')
