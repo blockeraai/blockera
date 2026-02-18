@@ -20,7 +20,16 @@ import { omit, mergeObject, kebabCase, cloneObject } from '@blockera/utils';
  * Internal dependencies
  */
 import { getDefaultStyle } from '../utils';
-import { getCalculatedNewStyle, isRootStyle } from './helpers';
+import {
+	getCalculatedNewStyle,
+	isRootStyle,
+	getStyleValuesFromSources,
+	getBlockTypesForStyle,
+	buildBlocksUpdateForStyle,
+	buildDuplicateStyleMetaData,
+	removeStyleVariationFromGlobalStyles,
+	buildVariationMetaDataUpdate,
+} from './helpers';
 import {
 	getBlockeraGlobalStylesMetaData,
 	setBlockeraGlobalStylesMetaData,
@@ -160,25 +169,16 @@ export const useBlockStyleItem = ({
 				...newValue,
 			};
 
-			const getUpdatedMetaData = (newStyle: Object): Object => {
-				const updatedMetaData = mergeObject(blockeraMetaData, {
-					blocks: {
-						[blockName]: {
-							variations: {
-								[currentStyle.name]: {
-									...newStyle,
-									refId: newStyle.name,
-									hasNewID:
-										currentBlockStyleVariation?.name !==
-										newStyle?.name,
-								},
-							},
-						},
-					},
-				});
-
-				return updatedMetaData;
-			};
+			const getUpdatedMetaData = (newStyle: Object): Object =>
+				mergeObject(
+					blockeraMetaData,
+					buildVariationMetaDataUpdate(blockName, currentStyle.name, {
+						...newStyle,
+						refId: newStyle.name,
+						hasNewID:
+							currentBlockStyleVariation?.name !== newStyle?.name,
+					})
+				);
 
 			let updatedMetaData;
 
@@ -303,23 +303,16 @@ export const useBlockStyleItem = ({
 						action: 'duplicate',
 					});
 
-			// Get block types that have the current style (supports multiple blocks)
-			const enabledBlockTypes =
-				(getStyleVariationBlocks &&
-					getStyleVariationBlocks(currentStyle.name)) ||
-				[];
+			const blockTypesToRegister = getBlockTypesForStyle(
+				blockName,
+				getStyleVariationBlocks,
+				currentStyle.name
+			);
 
-			const blockTypesToRegister =
-				Array.isArray(enabledBlockTypes) && enabledBlockTypes.length > 0
-					? enabledBlockTypes
-					: [blockName];
-
-			// Register the new block style for all enabled block types
 			blockTypesToRegister.forEach((blockType) => {
 				registerBlockStyle(blockType, duplicateStyle);
 			});
 
-			// Update style variation blocks in store (supports multiple blocks)
 			if (setStyleVariationBlocks) {
 				setStyleVariationBlocks(
 					duplicateStyle.name,
@@ -333,66 +326,30 @@ export const useBlockStyleItem = ({
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 
-			const duplicateStyleValues = mergeObject(
-				isRootStyle(currentStyle)
-					? base?.styles?.blocks?.[blockName] || {}
-					: base?.styles?.blocks?.[blockName]?.variations?.[
-							currentStyle.name
-						] || {},
-				isRootStyle(currentStyle)
-					? globalStyles?.blocks?.[blockName] || {}
-					: globalStyles?.blocks?.[blockName]?.variations?.[
-							currentStyle.name
-						] || {}
+			const { baseValues, userValues } = getStyleValuesFromSources(
+				base,
+				globalStyles,
+				blockName,
+				currentStyle
 			);
+			const duplicateStyleValues = mergeObject(baseValues, userValues);
 
 			const normalizedStyle = getNormalizedStyle(
-				{
-					...styles,
-					...duplicateStyleValues,
-				},
+				{ ...styles, ...duplicateStyleValues },
 				defaultStyles
 			);
 
-			// Build blocks object for all enabled block types
-			const blocksUpdate = blockTypesToRegister.reduce(
-				(acc, blockType) => {
-					const blockKey = blockType;
-					const styleKey = duplicateStyle.name;
-					return {
-						...acc,
-						// $FlowFixMe - computed property for dynamic block type
-						[blockKey]: {
-							variations: {
-								// $FlowFixMe - computed property for dynamic style name
-								[styleKey]: normalizedStyle,
-							},
-						},
-					};
-				},
-				{}
+			const blocksUpdate = buildBlocksUpdateForStyle(
+				blockTypesToRegister,
+				duplicateStyle.name,
+				normalizedStyle
 			);
 
-			const blockeraMetaData = mergeObject(
+			const blockeraMetaData = buildDuplicateStyleMetaData(
 				getBlockeraGlobalStylesMetaData(),
-				{
-					blocks: {
-						[blockName]: {
-							variations: {
-								// $FlowFixMe
-								[duplicateStyle.name]: duplicateStyle,
-							},
-						},
-					},
-					variations: {
-						// $FlowFixMe - computed property for dynamic style name
-						[duplicateStyle.name]: {
-							...duplicateStyle,
-							enabledIn: blockTypesToRegister,
-							disabledIn: [],
-						},
-					},
-				}
+				blockName,
+				duplicateStyle,
+				blockTypesToRegister
 			);
 
 			setBlockeraGlobalStylesMetaData(blockeraMetaData);
@@ -411,75 +368,31 @@ export const useBlockStyleItem = ({
 	);
 
 	const handleOnClearAllCustomizations = (currentStyle: Object) => {
-		const newGlobalStyles = cloneObject(globalStyles);
-
-		if (!isRootStyle(currentStyle)) {
-			if (
-				newGlobalStyles?.blocks?.[blockName]?.variations?.[
-					currentStyle.name
-				]
-			) {
-				if (
-					1 ===
-					Object.keys(
-						newGlobalStyles?.blocks?.[blockName]?.variations
-					).length
-				) {
-					delete newGlobalStyles?.blocks?.[blockName]?.variations;
-					if (
-						!Object.keys(newGlobalStyles?.blocks?.[blockName])
-							.length
-					) {
-						delete newGlobalStyles?.blocks?.[blockName];
-						if (!Object.keys(newGlobalStyles?.blocks).length) {
-							delete newGlobalStyles?.blocks;
-						}
-					}
-				} else {
-					delete newGlobalStyles?.blocks?.[blockName]?.variations?.[
-						currentStyle.name
-					];
-				}
-			}
-		} else if (
-			Object.keys(newGlobalStyles?.blocks?.[blockName]?.variations).length
-		) {
-			newGlobalStyles.blocks[blockName] = {
-				variations: newGlobalStyles?.blocks?.[blockName]?.variations,
-			};
-		} else {
-			delete newGlobalStyles?.blocks?.[blockName];
-			if (!Object.keys(newGlobalStyles?.blocks).length) {
-				delete newGlobalStyles?.blocks;
-			}
-		}
+		const newGlobalStyles = removeStyleVariationFromGlobalStyles(
+			globalStyles,
+			blockName,
+			currentStyle
+		);
 
 		setGlobalStyles(newGlobalStyles);
-
 		setGlobalBlockStyles(
 			blockName,
 			currentBlockStyleVariation?.name || 'default',
 			{}
 		);
-
 		setIsOpenContextMenu(false);
 	};
 
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
 		const { blockeraMetaData = getBlockeraGlobalStylesMetaData() } =
 			globalStyles;
-		const updatedMetaData = mergeObject(blockeraMetaData, {
-			blocks: {
-				[blockName]: {
-					variations: {
-						[currentStyle.name]: {
-							status,
-							...currentStyle,
-						},
-					},
-				},
-			},
-		});
+		const updatedMetaData = mergeObject(
+			blockeraMetaData,
+			buildVariationMetaDataUpdate(blockName, currentStyle.name, {
+				status,
+				...currentStyle,
+			})
+		);
 
 		setGlobalStyles({
 			...globalStyles,
@@ -729,7 +642,6 @@ export const useBlockStyleItem = ({
 		setCurrentActiveStyle(getDefaultStyle(blockStyles), 'detach');
 
 		const { getSelectedBlock } = select(blockEditorStore);
-
 		const selectedBlock = getSelectedBlock();
 
 		const className = generateUniqueClassName(
@@ -737,20 +649,15 @@ export const useBlockStyleItem = ({
 			selectedBlock?.attributes?.className || ''
 		);
 
+		const { baseValues, userValues } = getStyleValuesFromSources(
+			base,
+			globalStyles,
+			blockName,
+			currentStyle
+		);
 		const newAttributes = mergeObject(
-			mergeObject(
-				selectedBlock.attributes,
-				isRootStyle(currentStyle)
-					? base?.styles?.blocks?.[blockName] || {}
-					: base?.styles?.blocks?.[blockName]?.variations?.[
-							currentStyle.name
-						] || {}
-			),
-			isRootStyle(currentStyle)
-				? globalStyles?.blocks?.[blockName] || {}
-				: globalStyles?.blocks?.[blockName]?.variations?.[
-						currentStyle.name
-					] || {}
+			mergeObject(selectedBlock.attributes, baseValues),
+			userValues
 		);
 
 		// Set the editor selected block event to detach style.
