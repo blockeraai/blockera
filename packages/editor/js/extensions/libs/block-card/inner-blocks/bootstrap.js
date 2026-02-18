@@ -37,7 +37,11 @@ export const bootstrap = (): void => {
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.sizeExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			const { innerBlocks } = blockDetail;
+			const {
+				innerBlocks,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
+			} = blockDetail;
 
 			if (isBlockNotOriginalState(blockDetail)) {
 				return attributes;
@@ -85,8 +89,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector:
-									blockDetail.insideBlockInspector,
+								insideBlockInspector,
+								editorSelectedBlockEvent,
 							});
 
 						if (newAttributes) {
@@ -114,8 +118,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector:
-									blockDetail.insideBlockInspector,
+								insideBlockInspector,
+								editorSelectedBlockEvent,
 							});
 
 						if (newAttributes) {
@@ -147,8 +151,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector:
-									blockDetail.insideBlockInspector,
+								insideBlockInspector,
+								editorSelectedBlockEvent,
 							});
 
 						if (bgAttributes) {
@@ -176,8 +180,8 @@ export const bootstrap = (): void => {
 								innerBlock,
 								attributes,
 								dataCompatibilityElement,
-								insideBlockInspector:
-									blockDetail.insideBlockInspector,
+								insideBlockInspector,
+								editorSelectedBlockEvent,
 							});
 
 						if (bgAttributes) {
@@ -223,6 +227,8 @@ export const bootstrap = (): void => {
 				currentBlock,
 				innerBlocks,
 				isMasterNormalState,
+				insideBlockInspector,
+				editorSelectedBlockEvent,
 			} = blockDetail;
 
 			if (
@@ -264,7 +270,8 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
-						insideBlockInspector: blockDetail.insideBlockInspector,
+						insideBlockInspector,
+						editorSelectedBlockEvent,
 					})
 				);
 			}
@@ -285,7 +292,8 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
-						insideBlockInspector: blockDetail.insideBlockInspector,
+						insideBlockInspector,
+						editorSelectedBlockEvent,
 					})
 				);
 			}
@@ -307,7 +315,8 @@ export const bootstrap = (): void => {
 						newValue,
 						ref,
 						getAttributes,
-						insideBlockInspector: blockDetail.insideBlockInspector,
+						insideBlockInspector,
+						editorSelectedBlockEvent,
 					})
 				);
 			}
@@ -338,7 +347,8 @@ export const bootstrap = (): void => {
 						element,
 						newValue,
 						ref,
-						insideBlockInspector: blockDetail.insideBlockInspector,
+						insideBlockInspector,
+						editorSelectedBlockEvent,
 					})
 				);
 			}

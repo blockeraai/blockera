@@ -6,16 +6,23 @@ import { isValid, type ValueAddon } from '@blockera/controls';
 import { isEmpty, isString, mergeObject } from '@blockera/utils';
 import { getGradientVAFromVarString, getGradientType } from '@blockera/data';
 
+/**
+ * Internal dependencies
+ */
+import { runInsideBlockInspector } from '../../../utils';
+
 export function elementNormalBackgroundFromWPCompatibility({
 	innerBlock,
 	attributes,
 	dataCompatibilityElement,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	dataCompatibilityElement: string,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if (
 		!attributes?.style?.elements?.[dataCompatibilityElement]?.color
@@ -31,6 +38,11 @@ export function elementNormalBackgroundFromWPCompatibility({
 	let gradient: ValueAddon | boolean | string = false;
 	let gradientType: string = '';
 
+	const useStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+
 	if (
 		attributes?.style?.elements[
 			dataCompatibilityElement
@@ -40,7 +52,7 @@ export function elementNormalBackgroundFromWPCompatibility({
 		]?.color?.gradient.startsWith('var(')
 	) {
 		gradient = getGradientVAFromVarString(
-			insideBlockInspector
+			useStyle
 				? attributes.style.elements[dataCompatibilityElement]?.color
 						?.gradient
 				: attributes.elements[dataCompatibilityElement]?.color?.gradient
@@ -50,13 +62,13 @@ export function elementNormalBackgroundFromWPCompatibility({
 			gradientType = getGradientType(gradient);
 		}
 	} else {
-		gradient = insideBlockInspector
+		gradient = useStyle
 			? attributes.style.elements[dataCompatibilityElement]?.color
 					?.gradient
 			: attributes.elements[dataCompatibilityElement]?.color?.gradient
 					?.gradient;
 		gradientType = getGradientType(
-			insideBlockInspector
+			useStyle
 				? attributes.style.elements[dataCompatibilityElement]?.color
 						?.gradient
 				: attributes.elements[dataCompatibilityElement]?.color?.gradient
@@ -135,12 +147,19 @@ export function elementNormalBackgroundToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
+	const useStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+
 	if ('reset' === ref?.current?.action || isEmpty(newValue)) {
 		const elements = {
 			elements: {
@@ -152,7 +171,7 @@ export function elementNormalBackgroundToWPCompatibility({
 			},
 		};
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -200,7 +219,7 @@ export function elementNormalBackgroundToWPCompatibility({
 						};
 
 						result = mergeObject(result, {
-							...(insideBlockInspector
+							...(useStyle
 								? {
 										style: {
 											elements,
@@ -235,7 +254,7 @@ export function elementNormalBackgroundToWPCompatibility({
 					};
 
 					result = mergeObject(result, {
-						...(insideBlockInspector
+						...(useStyle
 							? {
 									style: {
 										elements,

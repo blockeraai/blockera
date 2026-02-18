@@ -10,6 +10,7 @@ import { isEmpty, isUndefined, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { runInsideBlockInspector } from '../../../utils';
 import { elementNormalBackgroundToWPCompatibility } from './element-bg';
 
 export function elementNormalBackgroundColorFromWPCompatibility({
@@ -17,11 +18,13 @@ export function elementNormalBackgroundColorFromWPCompatibility({
 	attributes,
 	dataCompatibilityElement,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	dataCompatibilityElement: string,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
 	if (
 		attributes?.style?.elements?.[dataCompatibilityElement]?.color
@@ -29,7 +32,10 @@ export function elementNormalBackgroundColorFromWPCompatibility({
 		attributes?.elements?.[dataCompatibilityElement]?.color?.background
 	) {
 		const color = getColorVAFromVarString(
-			insideBlockInspector
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
 				? attributes.style.elements[dataCompatibilityElement].color
 						.background
 				: attributes.elements[dataCompatibilityElement].color.background
@@ -59,13 +65,20 @@ export function elementNormalBackgroundColorToWPCompatibility({
 	ref,
 	getAttributes,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
 	getAttributes: () => Object,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
+	const useStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
@@ -90,7 +103,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 
 			return mergeObject(
 				{
-					...(insideBlockInspector
+					...(useStyle
 						? {
 								style: {
 									elements,
@@ -105,6 +118,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 							?.blockeraBackground,
 					ref: {},
 					insideBlockInspector,
+					editorSelectedBlockEvent,
 				})
 			);
 		}
@@ -120,7 +134,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -144,7 +158,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -165,7 +179,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 	};
 
 	return {
-		...(insideBlockInspector
+		...(useStyle
 			? {
 					style: {
 						elements,

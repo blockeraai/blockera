@@ -10,17 +10,20 @@ import { getColorVAFromVarString } from '@blockera/data';
 /**
  * Internal dependencies
  */
+import { runInsideBlockInspector } from '../../../utils';
 import { getBaseBreakpoint } from '../../../../../editor/header-ui';
 
 export function elementNormalFontColorFromWPCompatibility({
 	innerBlock,
 	attributes,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 	dataCompatibilityElement,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	dataCompatibilityElement: string,
 }): Object {
 	if (
@@ -28,7 +31,10 @@ export function elementNormalFontColorFromWPCompatibility({
 		attributes?.elements?.[dataCompatibilityElement]?.color?.text
 	) {
 		const color = getColorVAFromVarString(
-			insideBlockInspector
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
 				? attributes?.style?.elements?.[dataCompatibilityElement]?.color
 						?.text
 				: attributes?.elements?.[dataCompatibilityElement]?.color?.text
@@ -56,11 +62,13 @@ export function elementHoverFontColorFromWPCompatibility({
 	innerBlock,
 	attributes,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 	dataCompatibilityElement,
 }: {
 	innerBlock: string,
 	attributes: Object,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 	dataCompatibilityElement: string,
 }): Object {
 	if (
@@ -70,7 +78,10 @@ export function elementHoverFontColorFromWPCompatibility({
 			?.text
 	) {
 		const color = getColorVAFromVarString(
-			insideBlockInspector
+			runInsideBlockInspector(
+				insideBlockInspector,
+				editorSelectedBlockEvent
+			)
 				? attributes.style.elements[dataCompatibilityElement][':hover']
 						.color.text
 				: attributes.elements[dataCompatibilityElement][':hover'].color
@@ -112,12 +123,19 @@ export function elementNormalFontColorToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
+	const useStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
@@ -134,7 +152,7 @@ export function elementNormalFontColorToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -157,7 +175,7 @@ export function elementNormalFontColorToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -178,7 +196,7 @@ export function elementNormalFontColorToWPCompatibility({
 	};
 
 	return {
-		...(insideBlockInspector
+		...(useStyle
 			? {
 					style: {
 						elements,
@@ -193,12 +211,19 @@ export function elementHoverFontColorToWPCompatibility({
 	newValue,
 	ref,
 	insideBlockInspector,
+	editorSelectedBlockEvent,
 }: {
 	element: string,
 	newValue: Object,
 	ref?: Object,
 	insideBlockInspector: boolean,
+	editorSelectedBlockEvent?: 'save-customizations' | 'detach-style',
 }): Object {
+	const useStyle = runInsideBlockInspector(
+		insideBlockInspector,
+		editorSelectedBlockEvent
+	);
+
 	if (
 		'reset' === ref?.current?.action ||
 		isEmpty(newValue) ||
@@ -217,7 +242,7 @@ export function elementHoverFontColorToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -242,7 +267,7 @@ export function elementHoverFontColorToWPCompatibility({
 		};
 
 		return {
-			...(insideBlockInspector
+			...(useStyle
 				? {
 						style: {
 							elements,
@@ -265,7 +290,7 @@ export function elementHoverFontColorToWPCompatibility({
 	};
 
 	return {
-		...(insideBlockInspector
+		...(useStyle
 			? {
 					style: {
 						elements,
