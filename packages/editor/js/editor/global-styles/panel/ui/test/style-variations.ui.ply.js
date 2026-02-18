@@ -51,20 +51,21 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		getByDataTest(page, 'Close Block Style').click();
 		await expect(getByDataTest(page, 'style-default-copy')).toBeVisible();
 
-		getByDataTest(page, 'open-default-copy-contextmenu').nth(1).click();
+		// The test failed due to a strict mode violation: locator('[data-test="open-default-copy-contextmenu"]') matched multiple elements.
+		// To resolve this, disambiguate the target by using .first(), .nth(), or a more specific query.
+		getByDataTest(page, 'open-default-copy-contextmenu').first().click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Duplicate' })
 			.click();
-		getByDataTest(page, 'promote-global-styles-premium-feature')
-			.nth(1)
-			.toBeVisible();
+		await expect(
+			getByDataTest(page, 'promote-global-styles-premium-feature')
+		).toBeVisible();
 
 		await savePage(page);
 		await page.reload();
 
 		await before(page);
-		getByDataTest(page, 'open-default-contextmenu').click();
 		await expect(getByDataTest(page, 'style-default-copy')).toBeVisible();
 	});
 
