@@ -75,10 +75,16 @@ export const StyleItem = ({
 
 		if (Object.keys(variations).length > 0) {
 			for (const variation in variations) {
+				// Skip not registered style variations in the block.
+				if (
+					!inGlobalStylesPanel &&
+					variations[variation]?.hasOwnProperty('refId')
+				) {
+					continue;
+				}
 				if (variations[variation]?.refId === style.name) {
 					return variations[variation];
 				}
-
 				if (variation === style.name) {
 					return variations[variation];
 				}
@@ -86,7 +92,7 @@ export const StyleItem = ({
 		}
 
 		return {};
-	}, [blockeraGlobalStylesMetaData, blockName, style]);
+	}, [blockeraGlobalStylesMetaData, blockName, style, inGlobalStylesPanel]);
 
 	const [cachedStyle, setCachedStyle] = useState(initializedCachedStyle);
 
