@@ -61,6 +61,29 @@ test.describe('Block Unique Classname → Functionality', () => {
 
 		await doBlockToolbarContextMenuOption(page, 'Duplicate');
 
+		// Act: clicking on color button
+		// Add alias to the feature container
+		const bgColorContainer1 = getParentContainer(page, 'BG Color');
+		const colorBtn1 = bgColorContainer1.locator('[data-cy="color-btn"]');
+		if ((await colorBtn1.count()) > 0) {
+			await bgColorContainer1
+				.locator('[data-cy="value-addon-btn-open"]')
+				.click({
+					force: true,
+				});
+		} else {
+			await bgColorContainer1
+				.locator('[data-cy="value-addon-btn"]')
+				.click({
+					force: true,
+				});
+		}
+
+		// Select variable
+		await page
+			.locator('[data-cy="va-item-accent-5"]')
+			.click({ force: true });
+
 		const duplicatedBlockClassname = await getSelectedBlock(
 			page,
 			'className'

@@ -65,6 +65,7 @@ import {
 	unregisterClassName,
 	hasRegisteredClassName,
 	removeRegisteredClassName,
+	getBlocksClassNamesFromStore,
 	BLOCKERA_BLOCK_REGEX,
 } from './registered-classnames';
 
@@ -170,6 +171,17 @@ export const BlockBase: ComponentType<any> = (
 		[clientId, name]
 	);
 
+	// Stable getter for blockera class names from all blocks' attributes (for duplicate detection).
+	// Uses select() on demand instead of useSelect to avoid subscribing to block-editor store
+	// and triggering re-renders on every block change.
+	const getBlocksClassNames = useCallback(() => {
+		const blockEditor = select('core/block-editor');
+		return getBlocksClassNamesFromStore(
+			() => blockEditor.getBlocks(),
+			(id) => blockEditor.getBlockAttributes(id) || {}
+		);
+	}, []);
+
 	const [isActive, setActive] = useState(true);
 
 	const {
@@ -243,8 +255,13 @@ export const BlockBase: ComponentType<any> = (
 	// Store the unique classname for this block instance.
 	// Generate it once on mount using useMemo (runs during render, memoized by clientId).
 	const uniqueClassName = useMemo(() => {
-		return generateUniqueClassName(clientId, blockAttributes?.className);
-	}, [clientId, blockAttributes?.className]);
+		const blocksClassNames = getBlocksClassNames();
+		return generateUniqueClassName(
+			clientId,
+			blockAttributes?.className,
+			blocksClassNames
+		);
+	}, [clientId, blockAttributes?.className, getBlocksClassNames]);
 
 	// Track if this is the first calculation to ensure unique classname on mount
 	const isFirstCalculationRef = useRef(true);
@@ -375,15 +392,16 @@ export const BlockBase: ComponentType<any> = (
 		}
 	) => {
 		const valueToStore = cloneObject(value);
-		const match = BLOCKERA_BLOCK_REGEX.exec(valueToStore.className);
+		const classNameStr = valueToStore.className ?? '';
+		const match = BLOCKERA_BLOCK_REGEX.exec(classNameStr);
 
 		// We should update classname with unique generate classname while customizing style variation.
 		if (
 			shouldUpdateClassName &&
-			/^is-style-.*/g.test(valueToStore?.className) &&
-			!/\s/g.test(valueToStore?.className || '')
+			/^is-style-.*/g.test(classNameStr) &&
+			!/\s/g.test(classNameStr)
 		) {
-			valueToStore.className = classNames(valueToStore.className, {
+			valueToStore.className = classNames(classNameStr, {
 				'blockera-block': true,
 				[uniqueClassName]: true,
 			});
@@ -391,9 +409,9 @@ export const BlockBase: ComponentType<any> = (
 		} else if (
 			shouldUpdateClassName &&
 			match &&
-			isClassNameDuplicate(clientId, match[0])
+			isClassNameDuplicate(clientId, match[0], getBlocksClassNames())
 		) {
-			const prevClassName = valueToStore.className
+			const prevClassName = classNameStr
 				.replace(BLOCKERA_BLOCK_REGEX, '')
 				.replace(/\bblockera-block\b/gi, '');
 			valueToStore.className = classNames(prevClassName.trim(), {
