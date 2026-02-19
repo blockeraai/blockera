@@ -9,7 +9,11 @@ import { useEntityProp, store as coreStore } from '@wordpress/core-data';
 import { useCallback, useState } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import { store as editorStore } from '@wordpress/editor';
-import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
+import {
+	unregisterBlockStyle,
+	registerBlockStyle,
+	getBlockType,
+} from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -23,12 +27,17 @@ import { getDefaultStyle } from '../utils';
 import {
 	getCalculatedNewStyle,
 	isRootStyle,
-	getStyleValuesFromSources,
-	getBlockTypesForStyle,
 	buildBlocksUpdateForStyle,
 	buildDuplicateStyleMetaDataUpdate,
+	getMergedNormalizedStyleFromSources,
+	getStyleValuesFromSources,
+	getBlockTypesForStyleFromStore,
+	registerStyleForBlockTypes,
+	unregisterStyleFromBlockTypes,
+	setStyleVariationBlocksInStore,
+	clearStyleVariationBlocksInStore,
 	removeStyleVariationFromGlobalStyles,
-	isBlockeraCreatedStyle,
+	markStyleAsDeletedInMetaData,
 } from './helpers';
 import { getNormalizedStyle } from '../../context';
 import { type T_SET_CURRENT_ACTIVE_STYLE } from '../types';
@@ -41,6 +50,7 @@ import { isNormalStateOnBaseBreakpoint } from '../../../../../extensions/libs/bl
 import {
 	isInnerBlock,
 	prepareBlockeraDefaultAttributesValues,
+	getIgnoredAttributesForSchema,
 } from '../../../../../extensions/components/utils';
 
 export const useBlockStyleItem = ({
@@ -60,7 +70,9 @@ export const useBlockStyleItem = ({
 	onSelectStylePreview,
 	setIsOpenContextMenu,
 	setCurrentActiveStyle,
+	// eslint-disable-next-line no-unused-vars -- Used via store for correct behavior outside panel
 	setStyleVariationBlocks,
+	// eslint-disable-next-line no-unused-vars -- Used via store for correct behavior outside panel
 	getStyleVariationBlocks,
 	currentBlockStyleVariation,
 	deleteStyleVariationBlocks,
@@ -106,7 +118,8 @@ export const useBlockStyleItem = ({
 	deleteStyleVariationBlocks: (
 		style: string,
 		single: boolean,
-		blockName?: string
+		blockName?: string,
+		disabledIn?: Array<string>
 	) => void,
 	// The function to set the style variation blocks. (update the Blockera global state)
 	setStyleVariationBlocks: (
@@ -129,7 +142,20 @@ export const useBlockStyleItem = ({
 		customValues?: { label: string, name: string }
 	) => void,
 	handleOnDetachStyle: (currentStyle: Object) => void,
-	handleOnUsageForMultipleBlocks: (currentStyle: Object) => void,
+	handleOnUsageForMultipleBlocks: (
+		currentStyle: Object,
+		action: 'add' | 'delete'
+	) => void,
+	handleOnSaveUsageForMultipleBlocks: (params: {
+		style: Object,
+		action: string,
+		enabledIn: Array<string>,
+		disabledIn: Array<string>,
+		blockType: ?string,
+		newGlobalStyles: Object,
+		validItems: Array<Object>,
+		selectedBlockStyle: string,
+	}) => void,
 	handleOnSaveCustomizations: (
 		currentStyle: Object,
 		defaultStyles?: Object
@@ -160,6 +186,7 @@ export const useBlockStyleItem = ({
 	const blockContextValue = useBlockContext();
 	const { handleOnChangeAttributes, getAttributes } = blockContextValue;
 
+	/** @see ./handleOnRename.md for Cursor IDE instructions */
 	const handleOnRename = useCallback(
 		(
 			newValue: { label: string, name: string },
@@ -173,7 +200,7 @@ export const useBlockStyleItem = ({
 			};
 
 			// Only include fields we're updating - do NOT spread full style to avoid
-			// overwriting status/enabledIn/disabledIn when style object lacks them.
+			// overwriting other fields when style object lacks them.
 			const getVariationUpdate = (newStyle: Object): Object => ({
 				label: newStyle.label,
 				name: newStyle.name,
@@ -191,37 +218,53 @@ export const useBlockStyleItem = ({
 					library: 'blockera',
 				};
 
-				const editedGlobalStyles = mergeObject(globalStyles, {
-					blocks: {
-						[blockName]: {
-							variations: {
-								[editedStyle.name]:
-									globalStyles?.blocks?.[blockName]
-										?.variations?.[currentStyle.name],
-							},
+				// Rule 1.1: Create clone from merged config (baseConfig + userConfig)
+				const normalizedStyle = getMergedNormalizedStyleFromSources(
+					base,
+					globalStyles,
+					blockName,
+					currentStyle,
+					styles,
+					defaultStyles,
+					getNormalizedStyle
+				);
+
+				// Rule 1.2 & 1.3: Build blocks update (new style) and remove old variation
+				const blockTypesToRegister = getBlockTypesForStyleFromStore(
+					blockName,
+					currentStyle.name
+				);
+				const blocksUpdate = buildBlocksUpdateForStyle(
+					blockTypesToRegister,
+					editedStyle.name,
+					normalizedStyle
+				);
+				// Augment each block type to remove old variation key
+				blockTypesToRegister.forEach((blockType) => {
+					const blockVariations =
+						blocksUpdate[blockType]?.variations || {};
+					blocksUpdate[blockType] = {
+						variations: {
+							...blockVariations,
+							[currentStyle.name]: undefined,
 						},
-					},
+					};
 				});
 
-				const foundedStyle = blockStyles.find(
-					(style) => style.name === currentStyle?.name
+				// Rule 1.4: Mark previous style as deleted in metadata
+				const metaDataWithDeleted = markStyleAsDeletedInMetaData(
+					blockeraMetaData,
+					blockName,
+					currentStyle.name,
+					currentStyle,
+					base || {}
 				);
-				const index = blockStyles.indexOf(foundedStyle);
 
-				setBlockStyles([
-					...blockStyles.filter(
-						(style) => style.name !== currentStyle?.name
-					),
-					editedStyle,
-				]);
-
-				// Build full metadata: remove old variation, add new with merged data
+				// Add new variation to metadata (preserve status; use blockTypesToRegister for enabledIn)
 				const existingVariation =
 					blockeraMetaData?.blocks?.[blockName]?.variations?.[
 						currentStyle?.name
 					] || {};
-				// Omit status/enabledIn/disabledIn from editedStyle to avoid overwriting
-				// when style object lacks them - preserves enabled state after rename.
 				const {
 					status: _s,
 					enabledIn: _e,
@@ -230,45 +273,58 @@ export const useBlockStyleItem = ({
 				} = editedStyle;
 				const mergedVariation = mergeObject(existingVariation, {
 					...styleForMerge,
-					index,
+					index: blockStyles.findIndex(
+						(s) => s.name === currentStyle?.name
+					),
 					...getVariationUpdate(editedStyle),
+					enabledIn: blockTypesToRegister,
+					disabledIn: [],
 				});
-				// Explicitly preserve metadata fields - editedStyle may have overwritten.
 				if (existingVariation.hasOwnProperty('status')) {
 					mergedVariation.status = existingVariation.status;
 				}
-				if (existingVariation.hasOwnProperty('enabledIn')) {
-					mergedVariation.enabledIn = existingVariation.enabledIn;
-				}
-				if (existingVariation.hasOwnProperty('disabledIn')) {
-					mergedVariation.disabledIn = existingVariation.disabledIn;
-				}
-				const existingVariations =
-					blockeraMetaData?.blocks?.[blockName]?.variations || {};
-				const { [currentStyle?.name]: _removed, ...restVariations } =
-					existingVariations;
-				updatedMetaData = mergeObject(blockeraMetaData, {
+				updatedMetaData = mergeObject(metaDataWithDeleted, {
 					blocks: {
 						[blockName]: {
 							variations: {
-								...restVariations,
 								[editedStyle.name]: mergedVariation,
 							},
 						},
 					},
 				});
 
+				setBlockStyles([
+					...blockStyles.filter((s) => s.name !== currentStyle?.name),
+					editedStyle,
+				]);
+
 				setBlockeraGlobalStylesMetaData(updatedMetaData);
 
-				setGlobalStyles({
-					...editedGlobalStyles,
-					blockeraMetaData: updatedMetaData,
-				});
+				setGlobalStyles(
+					mergeObject(
+						globalStyles,
+						{
+							blocks: blocksUpdate,
+							blockeraMetaData: updatedMetaData,
+						},
+						{
+							forceUpdated: [currentStyle.name],
+							deletedProps: [currentStyle.name],
+						}
+					)
+				);
 
-				unregisterBlockStyle(blockName, currentStyle?.name);
-				registerBlockStyle(blockName, editedStyle);
+				unregisterStyleFromBlockTypes(
+					blockTypesToRegister,
+					currentStyle.name
+				);
+				registerStyleForBlockTypes(blockTypesToRegister, editedStyle);
 
-				deleteStyleVariationBlocks(currentStyle.name, true, blockName);
+				clearStyleVariationBlocksInStore(currentStyle.name);
+				setStyleVariationBlocksInStore(
+					editedStyle.name,
+					blockTypesToRegister
+				);
 			} else {
 				// Only update variation fields - merge with existing, don't override other customizations
 				updateBlockeraGlobalStylesMetaData(
@@ -285,19 +341,22 @@ export const useBlockStyleItem = ({
 			}
 		},
 		[
+			base,
+			styles,
 			blockName,
 			blockStyles,
 			globalStyles,
+			defaultStyles,
 			setBlockStyles,
 			setGlobalStyles,
 			isConfirmedChangeID,
-			deleteStyleVariationBlocks,
 			setBlockeraGlobalStylesMetaData,
 			getBlockeraGlobalStylesMetaData,
 			updateBlockeraGlobalStylesMetaData,
 		]
 	);
 
+	/** @see ./handleOnUsageForMultipleBlocks.md for Cursor IDE instructions */
 	const handleOnUsageForMultipleBlocks = useCallback(
 		(currentStyle: Object, action: 'add' | 'delete') => {
 			if ('add' === action && !blockStyles.includes(currentStyle)) {
@@ -316,6 +375,122 @@ export const useBlockStyleItem = ({
 		[blockStyles, setBlockStyles]
 	);
 
+	/** @see ./handleOnUsageForMultipleBlocks.md for Cursor IDE instructions */
+	const handleOnSaveUsageForMultipleBlocks = useCallback(
+		(params: {
+			style: Object,
+			action: string,
+			enabledIn: Array<string>,
+			disabledIn: Array<string>,
+			blockType: ?string,
+			newGlobalStyles: Object,
+			validItems: Array<Object>,
+			selectedBlockStyle: string,
+		}) => {
+			const {
+				style: styleParam,
+				action: actionParam,
+				enabledIn,
+				disabledIn,
+				blockType: blockTypeParam,
+				newGlobalStyles,
+				validItems,
+				selectedBlockStyle,
+			} = params;
+
+			setBlockeraGlobalStylesMetaData(newGlobalStyles.blockeraMetaData);
+
+			if ('disable-all' === actionParam) {
+				deleteStyleVariationBlocks(styleParam.name, false);
+				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
+				disabledIn.forEach((block: string) => {
+					unregisterBlockStyle(block, styleParam.name);
+					if (selectedBlockStyle === block) {
+						handleOnUsageForMultipleBlocks(styleParam, 'delete');
+					}
+				});
+				setGlobalStyles(newGlobalStyles);
+				return;
+			}
+
+			if ('enable-all' === actionParam) {
+				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
+				enabledIn.forEach((block: string) => {
+					registerBlockStyle(block, styleParam);
+					if (selectedBlockStyle === block) {
+						handleOnUsageForMultipleBlocks(styleParam, 'add');
+					}
+				});
+				validItems
+					.filter((item) => !enabledIn.includes(item.name))
+					.forEach((item) => {
+						unregisterBlockStyle(item.name, styleParam.name);
+						if (selectedBlockStyle === item.name) {
+							handleOnUsageForMultipleBlocks(
+								styleParam,
+								'delete'
+							);
+						}
+					});
+				setGlobalStyles(newGlobalStyles);
+				return;
+			}
+
+			if ('single-enable' === actionParam) {
+				setStyleVariationBlocks(styleParam.name, enabledIn, 'manual');
+				if (disabledIn?.length && blockTypeParam) {
+					setTimeout(() => {
+						deleteStyleVariationBlocks(
+							styleParam.name,
+							false,
+							blockTypeParam,
+							disabledIn
+						);
+					}, 5);
+				}
+			} else if ('single-disable' === actionParam && blockTypeParam) {
+				deleteStyleVariationBlocks(
+					styleParam.name,
+					true,
+					blockTypeParam
+				);
+				if (enabledIn?.length) {
+					setTimeout(() => {
+						setStyleVariationBlocks(
+							styleParam.name,
+							enabledIn,
+							'manual'
+						);
+					}, 5);
+				}
+			}
+
+			enabledIn.forEach((block: string) => {
+				if (selectedBlockStyle === block) {
+					handleOnUsageForMultipleBlocks(styleParam, 'add');
+				}
+				registerBlockStyle(block, styleParam);
+			});
+
+			disabledIn.forEach((block: string) => {
+				if (selectedBlockStyle === block) {
+					handleOnUsageForMultipleBlocks(styleParam, 'delete');
+				}
+				unregisterBlockStyle(block, styleParam.name);
+			});
+
+			setGlobalStyles(newGlobalStyles);
+		},
+		[
+			setBlockeraGlobalStylesMetaData,
+			setGlobalStyles,
+			setStyleVariationBlocks,
+			deleteStyleVariationBlocks,
+			handleOnUsageForMultipleBlocks,
+		]
+	);
+
+	/** @see ./handleOnDuplicate.md for Cursor IDE instructions */
 	const handleOnDuplicate = useCallback(
 		(
 			currentStyle: Object,
@@ -327,7 +502,7 @@ export const useBlockStyleItem = ({
 
 			const duplicateStyle = customValues
 				? {
-						name: customValues.name,
+						name: kebabCase(customValues.name),
 						label: customValues.label,
 						icon: {
 							name: 'blockera',
@@ -341,40 +516,30 @@ export const useBlockStyleItem = ({
 						action: 'duplicate',
 					});
 
-			const blockTypesToRegister = getBlockTypesForStyle(
+			const blockTypesToRegister = getBlockTypesForStyleFromStore(
 				blockName,
-				getStyleVariationBlocks,
-				duplicateStyle.name
+				currentStyle.name
 			);
 
-			blockTypesToRegister.forEach((blockType) => {
-				registerBlockStyle(blockType, duplicateStyle);
-			});
-
-			if (setStyleVariationBlocks) {
-				setStyleVariationBlocks(
-					duplicateStyle.name,
-					blockTypesToRegister,
-					'manual'
-				);
-			}
+			registerStyleForBlockTypes(blockTypesToRegister, duplicateStyle);
+			setStyleVariationBlocksInStore(
+				duplicateStyle.name,
+				blockTypesToRegister
+			);
 
 			setCurrentBlockStyleVariation(duplicateStyle);
 			setCurrentActiveStyle(duplicateStyle);
 
 			setBlockStyles([...blockStyles, duplicateStyle]);
 
-			const { baseValues, userValues } = getStyleValuesFromSources(
+			const normalizedStyle = getMergedNormalizedStyleFromSources(
 				base,
 				globalStyles,
 				blockName,
-				currentStyle
-			);
-			const duplicateStyleValues = mergeObject(baseValues, userValues);
-
-			const normalizedStyle = getNormalizedStyle(
-				{ ...styles, ...duplicateStyleValues },
-				defaultStyles
+				currentStyle,
+				styles,
+				defaultStyles,
+				getNormalizedStyle
 			);
 
 			const blocksUpdate = buildBlocksUpdateForStyle(
@@ -403,9 +568,10 @@ export const useBlockStyleItem = ({
 			setIsOpenContextMenu(false);
 		},
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[styles, blockStyles, getStyleVariationBlocks, setStyleVariationBlocks]
+		[styles, blockStyles]
 	);
 
+	/** @see ./handleOnClearAllCustomizations.md for Cursor IDE instructions */
 	const handleOnClearAllCustomizations = (currentStyle: Object) => {
 		const newGlobalStyles = removeStyleVariationFromGlobalStyles(
 			globalStyles,
@@ -422,6 +588,7 @@ export const useBlockStyleItem = ({
 		setIsOpenContextMenu(false);
 	};
 
+	/** @see ./handleOnEnable.md for Cursor IDE instructions */
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
 		const blockeraMetaData = getBlockeraGlobalStylesMetaData();
 		const existingVariation =
@@ -474,62 +641,19 @@ export const useBlockStyleItem = ({
 		}
 	};
 
+	/** @see ./handleOnDelete.md for Cursor IDE instructions */
 	const handleOnDelete = (currentStyleName: string) => {
 		const currentStyle = blockStyles.find(
 			(s) => s.name === currentStyleName
 		);
-		const isBlockeraStyle = isBlockeraCreatedStyle(
-			currentStyle || { name: currentStyleName },
-			base || {},
-			blockName
-		);
-
 		const blockeraMetaData = getBlockeraGlobalStylesMetaData();
-		let updatedMetaData = cloneObject(blockeraMetaData);
-
-		if (
-			isBlockeraStyle &&
-			updatedMetaData?.blocks?.[blockName]?.variations?.[currentStyleName]
-		) {
-			// Blockera-created: remove entirely to avoid redundant data
-			delete updatedMetaData.blocks[blockName].variations[
-				currentStyleName
-			];
-			const blockVariations =
-				updatedMetaData.blocks[blockName].variations;
-			if (Object.keys(blockVariations).length === 0) {
-				delete updatedMetaData.blocks[blockName].variations;
-				const blockKeys = Object.keys(
-					updatedMetaData.blocks[blockName] || {}
-				);
-				if (blockKeys.length === 0) {
-					delete updatedMetaData.blocks[blockName];
-				}
-			}
-			if (updatedMetaData.variations?.[currentStyleName]) {
-				delete updatedMetaData.variations[currentStyleName];
-			}
-		} else if (
-			updatedMetaData?.blocks?.[blockName]?.variations?.[currentStyleName]
-		) {
-			// From block/theme/core: keep with isDeleted for reference
-			updatedMetaData.blocks[blockName].variations[
-				currentStyleName
-			].isDeleted = true;
-		} else {
-			updatedMetaData = {
-				blocks: {
-					[blockName]: {
-						variations: {
-							[currentStyleName]: {
-								...style,
-								isDeleted: true,
-							},
-						},
-					},
-				},
-			};
-		}
+		const updatedMetaData = markStyleAsDeletedInMetaData(
+			blockeraMetaData,
+			blockName,
+			currentStyleName,
+			currentStyle || style,
+			base || {}
+		);
 
 		setBlockeraGlobalStylesMetaData(updatedMetaData);
 
@@ -600,16 +724,7 @@ export const useBlockStyleItem = ({
 		}
 	};
 
-	/**
-	 * Save all user customization into the current selected block style variation.
-	 * It's working on selected block settings to assign this settings,
-	 * as a global style for this block based on selected style variation.
-	 * Triggers save of all dirty entities (global styles, current post, etc.) to persist to database.
-	 *
-	 * @param {Object} currentStyle the current style variation as object includes name, label, icon, ...
-	 *
-	 * @return {void}
-	 */
+	/** @see ./handleOnSaveCustomizations.md for Cursor IDE instructions */
 	const handleOnSaveCustomizations = (
 		currentStyle: Object,
 		_defaultStyles: Object
@@ -751,6 +866,7 @@ export const useBlockStyleItem = ({
 		}, 1000);
 	};
 
+	/** @see ./handleOnDetachStyle.md for Cursor IDE instructions */
 	const handleOnDetachStyle = (currentStyle: Object) => {
 		setCurrentActiveStyle(getDefaultStyle(blockStyles), 'detach');
 
@@ -768,10 +884,14 @@ export const useBlockStyleItem = ({
 			blockName,
 			currentStyle
 		);
-		const newAttributes = mergeObject(
+		const mergedAttributes = mergeObject(
 			mergeObject(selectedBlock.attributes, baseValues),
 			userValues
 		);
+		const attributesSchema = getBlockType(blockName)?.attributes || {};
+		const ignoredAttributes =
+			getIgnoredAttributesForSchema(attributesSchema);
+		const newAttributes = omit(mergedAttributes, ignoredAttributes);
 
 		// Set the editor selected block event to detach style.
 		setEditorSelectedBlockEvent('detach-style');
@@ -795,6 +915,7 @@ export const useBlockStyleItem = ({
 		setIsConfirmedChangeID,
 		handleOnSaveCustomizations,
 		handleOnUsageForMultipleBlocks,
+		handleOnSaveUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	};
 };

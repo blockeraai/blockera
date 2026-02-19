@@ -148,6 +148,7 @@ export const StyleItem = ({
 		setIsConfirmedChangeID,
 		handleOnSaveCustomizations,
 		handleOnUsageForMultipleBlocks,
+		handleOnSaveUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
 		style,
@@ -489,6 +490,7 @@ export const StyleItem = ({
 						handleOnEnable,
 						handleOnDelete,
 						handleOnUsageForMultipleBlocks,
+						handleOnSaveUsageForMultipleBlocks,
 						isConfirmedChangeID,
 						setIsOpenUsageForMultipleBlocks,
 						isOpenUsageForMultipleBlocks,
@@ -658,6 +660,7 @@ export const StyleItem = ({
 								handleOnEnable,
 								handleOnDelete,
 								handleOnUsageForMultipleBlocks,
+								handleOnSaveUsageForMultipleBlocks,
 								isConfirmedChangeID,
 								setIsOpenUsageForMultipleBlocks:
 									setIsOpenBlockCardUsageForMultipleBlocks,

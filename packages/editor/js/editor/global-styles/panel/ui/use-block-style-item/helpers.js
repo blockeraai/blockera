@@ -4,8 +4,118 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
+import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { mergeObject, cloneObject } from '@blockera/utils';
+
+const EDITOR_STORE = 'blockera/editor';
+
+/**
+ * Get block types for a style from the editor store.
+ * Works outside global styles panel (context may return [] when not in panel).
+ * Shared by handleOnRename and handleOnDuplicate.
+ *
+ * @param {string} blockName - Primary block name.
+ * @param {string} styleName - Style variation name.
+ * @return {Array<string>} - Block types that have this style.
+ */
+export const getBlockTypesForStyleFromStore = (
+	blockName: string,
+	styleName: string
+): Array<string> =>
+	getBlockTypesForStyle(
+		blockName,
+		select(EDITOR_STORE).getStyleVariationBlocks,
+		styleName
+	);
+
+/**
+ * Register a style for each block type. Shared by handleOnRename and handleOnDuplicate.
+ *
+ * @param {Array<string>} blockTypes - Block types to register.
+ * @param {Object} styleObject - Style object (name, label, icon, ...).
+ */
+export const registerStyleForBlockTypes = (
+	blockTypes: Array<string>,
+	styleObject: Object
+): void => {
+	blockTypes.forEach((blockType) =>
+		registerBlockStyle(blockType, styleObject)
+	);
+};
+
+/**
+ * Unregister a style from each block type. Used by handleOnRename.
+ *
+ * @param {Array<string>} blockTypes - Block types to unregister.
+ * @param {string} styleName - Style variation name.
+ */
+export const unregisterStyleFromBlockTypes = (
+	blockTypes: Array<string>,
+	styleName: string
+): void => {
+	blockTypes.forEach((blockType) =>
+		unregisterBlockStyle(blockType, styleName)
+	);
+};
+
+/**
+ * Set style variation blocks in the editor store.
+ * Works outside global styles panel. Shared by handleOnRename and handleOnDuplicate.
+ *
+ * @param {string} styleName - Style variation name.
+ * @param {Array<string>} blockTypes - Block types for this style.
+ */
+export const setStyleVariationBlocksInStore = (
+	styleName: string,
+	blockTypes: Array<string>
+): void => {
+	const fn = dispatch(EDITOR_STORE).setStyleVariationBlocks;
+	if (fn) {
+		fn(styleName, blockTypes, 'manual');
+	}
+};
+
+/**
+ * Clear style variation blocks for a style in the editor store. Used by handleOnRename.
+ *
+ * @param {string} styleName - Style variation name.
+ */
+export const clearStyleVariationBlocksInStore = (styleName: string): void => {
+	setStyleVariationBlocksInStore(styleName, []);
+};
+
+/**
+ * Get merged and normalized style values from base + user config for a given style.
+ * Shared by handleOnRename, handleOnDuplicate, and similar flows.
+ *
+ * @param {Object} base - Base theme global styles.
+ * @param {Object} globalStyles - User global styles.
+ * @param {string} blockName - Block type name.
+ * @param {Object} currentStyle - Style object (with name) to get values for.
+ * @param {Object} styles - Panel styles object (merged with values).
+ * @param {Object} defaultStyles - Default styles for normalization.
+ * @param {Function} getNormalizedStyle - Normalizer (newStyle, defaultStyles) => Object.
+ * @return {Object} - Normalized style values ready for globalStyles storage.
+ */
+export const getMergedNormalizedStyleFromSources = (
+	base: Object,
+	globalStyles: Object,
+	blockName: string,
+	currentStyle: Object,
+	styles: Object,
+	defaultStyles: Object,
+	getNormalizedStyle: (Object, Object) => Object
+): Object => {
+	const { baseValues, userValues } = getStyleValuesFromSources(
+		base,
+		globalStyles,
+		blockName,
+		currentStyle
+	);
+	const mergedValues = mergeObject(baseValues, userValues);
+	return getNormalizedStyle({ ...styles, ...mergedValues }, defaultStyles);
+};
 
 /**
  * Get style values from base theme and user global styles for a given block/style.
@@ -317,6 +427,72 @@ export const isRootStyle = (currentStyle: Object): boolean => {
 };
 
 /**
+ * Mark a style variation as deleted in blockera metadata.
+ * Shared logic for handleOnDelete and handleOnRename.
+ *
+ * - Blockera-created: remove variation entirely from metadata.
+ * - From block/theme/core: set isDeleted: true for rendering requirements.
+ *
+ * @param {Object} blockeraMetaData - Current blockera metadata.
+ * @param {string} blockName - Block type name.
+ * @param {string} styleName - Style variation name to mark as deleted.
+ * @param {Object} styleFallback - Fallback style object when creating new metadata entry.
+ * @param {Object} baseConfig - Base theme global styles (for isBlockeraCreatedStyle).
+ * @return {Object} - Updated blockera metadata (cloned, not mutated).
+ */
+export const markStyleAsDeletedInMetaData = (
+	blockeraMetaData: Object,
+	blockName: string,
+	styleName: string,
+	styleFallback: Object,
+	baseConfig: Object
+): Object => {
+	const updatedMetaData = cloneObject(blockeraMetaData);
+	const isBlockeraStyle = isBlockeraCreatedStyle(
+		styleFallback || { name: styleName },
+		baseConfig || {},
+		blockName
+	);
+
+	if (
+		isBlockeraStyle &&
+		updatedMetaData?.blocks?.[blockName]?.variations?.[styleName]
+	) {
+		delete updatedMetaData.blocks[blockName].variations[styleName];
+		const blockVariations = updatedMetaData.blocks[blockName].variations;
+		if (Object.keys(blockVariations).length === 0) {
+			delete updatedMetaData.blocks[blockName].variations;
+			const blockKeys = Object.keys(
+				updatedMetaData.blocks[blockName] || {}
+			);
+			if (blockKeys.length === 0) {
+				delete updatedMetaData.blocks[blockName];
+			}
+		}
+		if (updatedMetaData.variations?.[styleName]) {
+			delete updatedMetaData.variations[styleName];
+		}
+	} else if (updatedMetaData?.blocks?.[blockName]?.variations?.[styleName]) {
+		updatedMetaData.blocks[blockName].variations[styleName].isDeleted =
+			true;
+	} else {
+		return mergeObject(updatedMetaData, {
+			blocks: {
+				[blockName]: {
+					variations: {
+						[styleName]: {
+							...styleFallback,
+							isDeleted: true,
+						},
+					},
+				},
+			},
+		});
+	}
+	return updatedMetaData;
+};
+
+/**
  * Detect if a style variation was created by Blockera (user-created) vs from
  * block definition, theme.json, or WP core theme.json.
  *
@@ -339,8 +515,7 @@ export const isBlockeraCreatedStyle = (
 
 	// Blockera-created styles have blockera icon
 	const hasBlockeraIcon =
-		style?.icon?.name === 'blockera' &&
-		style?.icon?.library === 'blockera';
+		style?.icon?.name === 'blockera' && style?.icon?.library === 'blockera';
 
 	// Style from theme.json or block definition exists in base
 	const isInBaseTheme =

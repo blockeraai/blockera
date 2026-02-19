@@ -24,6 +24,7 @@ export const UsageForMultipleBlocksModal = ({
 	blockName,
 	blockTitle,
 	handleOnUsageForMultipleBlocks,
+	handleOnSaveUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
 }: {
 	style: Object,
@@ -33,6 +34,7 @@ export const UsageForMultipleBlocksModal = ({
 		style: Object,
 		action: 'add' | 'delete'
 	) => void,
+	handleOnSaveUsageForMultipleBlocks: (params: Object) => void,
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
 }): MixedElement => {
 	const blocks = getBlockTypes();
@@ -59,6 +61,9 @@ export const UsageForMultipleBlocksModal = ({
 					setIsOpenUsageForMultipleBlocks
 				}
 				handleOnUsageForMultipleBlocks={handleOnUsageForMultipleBlocks}
+				handleOnSaveUsageForMultipleBlocks={
+					handleOnSaveUsageForMultipleBlocks
+				}
 			/>
 		</Modal>
 	);

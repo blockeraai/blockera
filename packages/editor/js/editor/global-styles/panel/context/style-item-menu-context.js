@@ -30,6 +30,7 @@ export const StyleItemMenuContext: Object = createContext({
 	handleOnEnable: () => {},
 	handleOnDelete: () => {},
 	handleOnUsageForMultipleBlocks: () => {},
+	handleOnSaveUsageForMultipleBlocks: () => {},
 	isConfirmedChangeID: '',
 	setIsOpenUsageForMultipleBlocks: () => {},
 	isOpenUsageForMultipleBlocks: false,

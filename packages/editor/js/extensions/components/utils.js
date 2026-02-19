@@ -22,6 +22,33 @@ export const propsAreEqual = (perv: Object, next: Object): boolean => {
 };
 
 /**
+ * Get attribute names that should be omitted when applying attributes cross-block.
+ * Rich-text and source attributes can cause critical errors in WordPress blocks.
+ * Shared by handleOnDetachStyle and block-settings Edit component.
+ *
+ * @param {Object} attributesSchema - Block attribute schema (e.g. from getBlockType or overrideAttributes).
+ * @return {Array<string>} - Attribute names to omit.
+ */
+export const getIgnoredAttributesForSchema = (
+	attributesSchema: Object
+): Array<string> => {
+	const ignored: Array<string> = [];
+	if (!attributesSchema) {
+		return ignored;
+	}
+	for (const attribute in attributesSchema) {
+		const attr = attributesSchema[attribute];
+		if (
+			attr?.type === 'rich-text' ||
+			(attr?.source !== undefined && attr?.source !== null)
+		) {
+			ignored.push(attribute);
+		}
+	}
+	return ignored;
+};
+
+/**
  * is current block is inner block?
  *
  * @param {'master' | InnerBlockType | string} currentBlock The current block type.

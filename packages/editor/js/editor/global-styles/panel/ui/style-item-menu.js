@@ -49,6 +49,7 @@ export const StyleItemMenu = (): MixedElement => {
 		handleOnDuplicate,
 		handleOnClearAllCustomizations,
 		handleOnUsageForMultipleBlocks,
+		handleOnSaveUsageForMultipleBlocks,
 		setIsOpenUsageForMultipleBlocks,
 		isOpenUsageForMultipleBlocks,
 		handleOnEnable,
@@ -97,6 +98,9 @@ export const StyleItemMenu = (): MixedElement => {
 					blockTitle={blockTitle}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
+					}
+					handleOnSaveUsageForMultipleBlocks={
+						handleOnSaveUsageForMultipleBlocks
 					}
 					setIsOpenUsageForMultipleBlocks={
 						setIsOpenUsageForMultipleBlocks

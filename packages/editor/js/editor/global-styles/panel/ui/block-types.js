@@ -6,7 +6,7 @@
 import type { MixedElement } from 'react';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
-import { select, dispatch } from '@wordpress/data';
+import { select } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import {
 	Fill,
@@ -14,7 +14,6 @@ import {
 	Icon as WordPressIconComponent,
 	ToggleControl as WPToggleControl,
 } from '@wordpress/components';
-import { registerBlockStyle, unregisterBlockStyle } from '@wordpress/blocks';
 import { useState, useCallback, useEffect, useMemo } from '@wordpress/element';
 
 /**
@@ -32,10 +31,7 @@ import { Flex, Grid, Button, Tooltip } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import {
-	getBlockeraGlobalStylesMetaData,
-	setBlockeraGlobalStylesMetaData,
-} from '../../helpers';
+import { getBlockeraGlobalStylesMetaData } from '../../helpers';
 import { blockHasStyle } from './use-block-style-item/helpers';
 import { getNormalizedStyle, useGlobalStylesPanelContext } from '../context';
 
@@ -45,7 +41,9 @@ export const BlockTypes = ({
 	items,
 	style,
 	blockName,
+	// eslint-disable-next-line no-unused-vars -- Passed by parent, used by handleOnSaveUsageForMultipleBlocks
 	handleOnUsageForMultipleBlocks,
+	handleOnSaveUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
 }: {
 	items: Object,
@@ -56,6 +54,7 @@ export const BlockTypes = ({
 		style: Object,
 		action: 'add' | 'delete'
 	) => void,
+	handleOnSaveUsageForMultipleBlocks: (params: Object) => void,
 	setIsOpenUsageForMultipleBlocks: (isOpen: boolean) => void,
 }): MixedElement => {
 	const {
@@ -82,10 +81,8 @@ export const BlockTypes = ({
 	const enabledItems = validItems
 		.filter((item) => blockHasStyle(item.name, style.name))
 		.map((item) => item.name);
-	const { setStyleVariationBlocks, deleteStyleVariationBlocks } =
-		dispatch('blockera/editor');
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
-	const [globalStyles, setGlobalStyles] = useEntityProp(
+	const [globalStyles] = useEntityProp(
 		'root',
 		'globalStyles',
 		'styles',
@@ -197,11 +194,11 @@ export const BlockTypes = ({
 			};
 
 			if ('disable-all' === action) {
-				disabledIn = allBlockTypes;
-				enabledIn = [];
+				const blockToKeep = selectedItems?.[0] || blockName;
+				disabledIn = allBlockTypes.filter((b) => b !== blockToKeep);
+				enabledIn = blockToKeep ? [blockToKeep] : [];
 				setAction('disable-all');
 
-				// Cleanup global styles final object.
 				if (!Object.keys(blocks).length) {
 					for (const key in copyGlobalStyles?.blocks || {}) {
 						copyGlobalStyles = cleanupGlobalStyles(
@@ -212,10 +209,12 @@ export const BlockTypes = ({
 				}
 			} else if ('enable-all' === action) {
 				disabledIn = [];
-				enabledIn = allBlockTypes;
+				const enableAllBlocks =
+					selectedItems?.length > 0 ? selectedItems : allBlockTypes;
+				enabledIn = enableAllBlocks;
 				blocks = {
 					...Object.fromEntries(
-						allBlockTypes.map((block: string) => [
+						enableAllBlocks.map((block: string) => [
 							block,
 							{
 								variations: {
@@ -387,104 +386,34 @@ export const BlockTypes = ({
 			defaultStyles,
 			currentStyleValue,
 			currentBlockStyleVariation,
+			blockName,
 		]
 	);
 
 	const handleOnSave = useCallback(() => {
-		setBlockeraGlobalStylesMetaData(state.newGlobalStyles.blockeraMetaData);
-
-		if ('disable-all' === action) {
-			deleteStyleVariationBlocks(style.name, false);
-			validItems.map((item) => {
-				// Compatible with WordPress core/blocks store api.
-				unregisterBlockStyle(item.name, style.name);
-
-				if (selectedBlockStyle === item.name) {
-					handleOnUsageForMultipleBlocks(style, 'delete');
-				}
-
-				return item.name;
-			});
-
-			setGlobalStyles(state.newGlobalStyles);
-
-			return;
-		} else if ('enable-all' === action) {
-			setStyleVariationBlocks(
-				style.name,
-				validItems.map((item) => {
-					// Compatible with WordPress core/blocks store api.
-					registerBlockStyle(item.name, style);
-
-					if (selectedBlockStyle === item.name) {
-						handleOnUsageForMultipleBlocks(style, 'add');
-					}
-
-					return item.name;
-				}),
-				'manual'
-			);
-
-			setGlobalStyles(state.newGlobalStyles);
-
-			return;
-		} else if ('single-enable' === action) {
-			setStyleVariationBlocks(style.name, state.enabledIn, 'manual');
-			setTimeout(() => {
-				if (state?.disabledIn?.length) {
-					deleteStyleVariationBlocks(
-						style.name,
-						false,
-						state.blockType,
-						state.disabledIn
-					);
-				}
-			}, 5);
-		} else if ('single-disable' === action) {
-			deleteStyleVariationBlocks(style.name, true, state.blockType);
-			setTimeout(() => {
-				if (state?.enabledIn?.length) {
-					setStyleVariationBlocks(
-						style.name,
-						state.enabledIn,
-						'manual'
-					);
-				}
-			}, 5);
-		}
-
-		state.enabledIn.forEach((block: string): void => {
-			if (selectedBlockStyle === block) {
-				handleOnUsageForMultipleBlocks(style, 'add');
-			}
-			registerBlockStyle(block, style);
+		handleOnSaveUsageForMultipleBlocks({
+			style,
+			action,
+			enabledIn: state.enabledIn,
+			disabledIn: state.disabledIn,
+			blockType: state.blockType,
+			newGlobalStyles: state.newGlobalStyles,
+			validItems,
+			selectedBlockStyle,
 		});
-
-		state.disabledIn.forEach((block: string): void => {
-			if (selectedBlockStyle === block) {
-				handleOnUsageForMultipleBlocks(style, 'delete');
-			}
-			unregisterBlockStyle(block, style.name);
-		});
-
-		setGlobalStyles(state.newGlobalStyles);
 	}, [
 		state,
 		style,
 		action,
 		validItems,
-		setGlobalStyles,
 		selectedBlockStyle,
-		setStyleVariationBlocks,
-		deleteStyleVariationBlocks,
-		handleOnUsageForMultipleBlocks,
+		handleOnSaveUsageForMultipleBlocks,
 	]);
 
 	if (!items || !itemsCount) {
 		return <></>;
 	}
 
-	// Free: 2 blocks max (1 locked currentBlock + 1 user selection). Pro: -1 = unlimited.
 	const maxSelectableBlocks = applyFilters(
 		'blockera.globalStyles.usageForMultipleBlocks.maxBlocks',
 		2
@@ -560,11 +489,13 @@ export const BlockTypes = ({
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
+						const blockToKeep = selectedBlockStyle || blockName;
+						const keepItems = blockToKeep ? [blockToKeep] : [];
 						setBlocksState({
-							items: [],
+							items: keepItems,
 							primitiveItems: blocksState.primitiveItems,
 						});
-						setGlobalData('disable-all');
+						setGlobalData('disable-all', '', keepItems);
 					}}
 				>
 					{__('Disable all', 'blockera')}
@@ -574,18 +505,37 @@ export const BlockTypes = ({
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
+						let enableItems;
 						if (
 							-1 !== maxSelectableBlocks &&
-							validItems.length > maxSelectableBlocks
+							blocksState.items.length >= maxSelectableBlocks
 						) {
 							setIsShowPromotion(true);
 							return;
 						}
+						if (maxSelectableBlocks === -1) {
+							enableItems = validItems.map((item) => item.name);
+						} else {
+							const toAdd = validItems.filter(
+								(v) => !blocksState.items.includes(v.name)
+							);
+							const addCount = Math.min(
+								remainingBlocks ?? 0,
+								toAdd.length
+							);
+							enableItems = [
+								...blocksState.items,
+								...toAdd.slice(0, addCount).map((v) => v.name),
+							];
+						}
+						if (enableItems.length === 0) {
+							return;
+						}
 						setBlocksState({
-							items: validItems.map((item) => item.name),
+							items: enableItems,
 							primitiveItems: blocksState.primitiveItems,
 						});
-						setGlobalData('enable-all');
+						setGlobalData('enable-all', '', enableItems);
 					}}
 				>
 					{__('Enable all', 'blockera')}
@@ -594,10 +544,10 @@ export const BlockTypes = ({
 					{remainingBlocks !== null && (
 						<span>
 							{sprintf(
-								/* translators: %d: number of remaining blocks user can select (Free: 1 = current block + 1 slot, 0 = limit reached) */
+								/* translators: %d: number of remaining blocks user can select */
 								_n(
-									'%d remaining block in Free',
-									'%d remaining blocks in Free',
+									'%d remaining block',
+									'%d remaining blocks',
 									remainingBlocks,
 									'blockera'
 								),
@@ -739,18 +689,13 @@ const BlockType = ({
 					<WPToggleControl
 						label={' '}
 						checked={blocksState.items.includes(name)}
-						disabled={
-							// Current block is locked (always enabled)
-							name === blockName
-						}
+						disabled={name === blockName}
 						className={controlClassNames('toggle', 'size-normal')}
 						onChange={(newValue: boolean) => {
-							// Current block cannot be disabled
 							if (name === blockName && !newValue) {
 								return;
 							}
 							if (newValue) {
-								// Free: limit to 2 blocks (currentBlock + 1 secondary)
 								if (
 									-1 !== maxSelectableBlocks &&
 									blocksState.items.length >=

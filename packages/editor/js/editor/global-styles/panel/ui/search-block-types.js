@@ -31,6 +31,7 @@ export const SearchBlockTypes = ({
 	blockTitle,
 	blocks: _blocks,
 	handleOnUsageForMultipleBlocks,
+	handleOnSaveUsageForMultipleBlocks,
 	setIsOpenUsageForMultipleBlocks,
 }: Object): MixedElement => {
 	const [blocks, setBlocks] = useState(_blocks);
@@ -143,6 +144,9 @@ export const SearchBlockTypes = ({
 					blockTitle={blockTitle}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
+					}
+					handleOnSaveUsageForMultipleBlocks={
+						handleOnSaveUsageForMultipleBlocks
 					}
 					setIsOpenUsageForMultipleBlocks={
 						setIsOpenUsageForMultipleBlocks
