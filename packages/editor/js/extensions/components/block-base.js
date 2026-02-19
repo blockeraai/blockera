@@ -562,6 +562,7 @@ export const BlockBase: ComponentType<any> = (
 		// are properly managed or avoided (consider use of cloneObject as needed).
 		storedAttributes: cloneObject(attributes),
 		defaultAttributes: availableAttributes,
+		inGlobalStylesPanel: !insideBlockInspector,
 	});
 
 	const { handleOnChangeAttributes } = useAttributes(setAttributes, {

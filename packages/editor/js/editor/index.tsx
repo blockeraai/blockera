@@ -8,6 +8,7 @@ import { dispatch, select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import { store } from '../store';
 import './store-persistence';
 import BlocksUI from './blocks-ui';
 import HeaderUI from './header-ui';
@@ -174,11 +175,22 @@ export const registerBlockeraEditorInternalPlugins = () => {
 };
 
 export const registerBlockeraStyleVariationBlocks = () => {
-	const setStyleVariationBlocks = (dispatch('blockera/editor') as { setStyleVariationBlocks: (styleName: string, blockNames: string[]) => void }).setStyleVariationBlocks;
-	const getStyleVariationBlocks = (select('blockera/editor') as { getStyleVariationBlocks: (styleName: string) => string[] }).getStyleVariationBlocks;
+	const setStyleVariationBlocks = (
+		dispatch('blockera/editor') as {
+			setStyleVariationBlocks: (
+				styleName: string,
+				blockNames: string[]
+			) => void;
+		}
+	).setStyleVariationBlocks;
+	const getStyleVariationBlocks = (
+		select('blockera/editor') as {
+			getStyleVariationBlocks: (styleName: string) => string[];
+		}
+	).getStyleVariationBlocks;
 	const { getBlockTypes, getBlockStyles } = select('core/blocks') as {
-		getBlockTypes: () => Array<{ name: string }>,
-		getBlockStyles: (blockName: string) => Array<{ name: string }>
+		getBlockTypes: () => Array<{ name: string }>;
+		getBlockStyles: (blockName: string) => Array<{ name: string }>;
 	};
 
 	// All Registered blocks.
@@ -205,11 +217,28 @@ export const registerBlockeraStyleVariationBlocks = () => {
 				return;
 			}
 
-			setStyleVariationBlocks(blockStyle.name, [
-				blockType.name,
-			]);
+			setStyleVariationBlocks(blockStyle.name, [blockType.name]);
 		});
 	});
+};
+
+/**
+ * Registration API for initializing blockera global styles metadata.
+ * Call this during editor bootstrap to sync metadata from PHP (e.g. from window or passed directly).
+ * When metaData is omitted, reads from window.blockeraGlobalStylesMetaData as fallback for backward compatibility.
+ *
+ * @param {Object} [metaData] - The blockera global styles metadata. If omitted, reads from window.
+ */
+export const registerBlockeraGlobalStylesMetaData = (
+	metaData?: Record<string, unknown>
+): void => {
+	const data =
+		metaData ??
+		(typeof window !== 'undefined' &&
+		typeof (window as any).blockeraGlobalStylesMetaData === 'object'
+			? (window as any).blockeraGlobalStylesMetaData
+			: {});
+	(dispatch(store.name) as any).setBlockeraGlobalStylesMetaData(data);
 };
 
 // Export bootstrap function

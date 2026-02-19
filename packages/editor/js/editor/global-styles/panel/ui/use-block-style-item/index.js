@@ -26,14 +26,10 @@ import {
 	getStyleValuesFromSources,
 	getBlockTypesForStyle,
 	buildBlocksUpdateForStyle,
-	buildDuplicateStyleMetaData,
+	buildDuplicateStyleMetaDataUpdate,
 	removeStyleVariationFromGlobalStyles,
-	buildVariationMetaDataUpdate,
+	isBlockeraCreatedStyle,
 } from './helpers';
-import {
-	getBlockeraGlobalStylesMetaData,
-	setBlockeraGlobalStylesMetaData,
-} from '../../../helpers';
 import { getNormalizedStyle } from '../../context';
 import { type T_SET_CURRENT_ACTIVE_STYLE } from '../types';
 import { isBaseBreakpoint } from '../../../../header-ui/components';
@@ -48,6 +44,7 @@ import {
 } from '../../../../../extensions/components/utils';
 
 export const useBlockStyleItem = ({
+	style,
 	styles,
 	counter,
 	blockName,
@@ -69,6 +66,8 @@ export const useBlockStyleItem = ({
 	deleteStyleVariationBlocks,
 	setCurrentBlockStyleVariation,
 }: {
+	// The current style for creating block style handlers.
+	style: Object,
 	// The main state in global styles panel. for outside of the global styles panel, it's the empty object always.
 	styles: Object,
 	// The current counter state.
@@ -141,7 +140,12 @@ export const useBlockStyleItem = ({
 	const {
 		setBlockStyles: setGlobalBlockStyles,
 		setEditorSelectedBlockEvent,
+		updateBlockeraGlobalStylesMetaData,
+		mergeBlockeraGlobalStylesMetaData,
+		setBlockeraGlobalStylesMetaData,
 	} = dispatch('blockera/editor');
+	const getBlockeraGlobalStylesMetaData =
+		select('blockera/editor').getBlockeraGlobalStylesMetaData;
 	const base = select('core').__experimentalGetCurrentThemeBaseGlobalStyles();
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(
@@ -161,30 +165,31 @@ export const useBlockStyleItem = ({
 			newValue: { label: string, name: string },
 			currentStyle: Object
 		): void => {
-			const { blockeraMetaData = getBlockeraGlobalStylesMetaData() } =
-				globalStyles;
+			const blockeraMetaData = getBlockeraGlobalStylesMetaData();
 
 			const editedStyle = {
 				...currentStyle,
 				...newValue,
 			};
 
-			const getUpdatedMetaData = (newStyle: Object): Object =>
-				mergeObject(
-					blockeraMetaData,
-					buildVariationMetaDataUpdate(blockName, currentStyle.name, {
-						...newStyle,
-						refId: newStyle.name,
-						hasNewID:
-							currentBlockStyleVariation?.name !== newStyle?.name,
-					})
-				);
+			// Only include fields we're updating - do NOT spread full style to avoid
+			// overwriting status/enabledIn/disabledIn when style object lacks them.
+			const getVariationUpdate = (newStyle: Object): Object => ({
+				label: newStyle.label,
+				name: newStyle.name,
+				refId: newStyle.name,
+				hasNewID: currentStyle?.name !== newStyle?.name,
+			});
 
 			let updatedMetaData;
 
 			// Is user confirmed the change style name?
 			if (isConfirmedChangeID) {
 				editedStyle.name = kebabCase(newValue.name);
+				editedStyle.icon = {
+					name: 'blockera',
+					library: 'blockera',
+				};
 
 				const editedGlobalStyles = mergeObject(globalStyles, {
 					blocks: {
@@ -192,30 +197,65 @@ export const useBlockStyleItem = ({
 							variations: {
 								[editedStyle.name]:
 									globalStyles?.blocks?.[blockName]
-										?.variations?.[
-										currentBlockStyleVariation.name
-									],
+										?.variations?.[currentStyle.name],
 							},
 						},
 					},
 				});
 
 				const foundedStyle = blockStyles.find(
-					(style) => style.name === currentBlockStyleVariation?.name
+					(style) => style.name === currentStyle?.name
 				);
 				const index = blockStyles.indexOf(foundedStyle);
 
 				setBlockStyles([
 					...blockStyles.filter(
-						(style) =>
-							style.name !== currentBlockStyleVariation?.name
+						(style) => style.name !== currentStyle?.name
 					),
 					editedStyle,
 				]);
 
-				updatedMetaData = getUpdatedMetaData({
-					...editedStyle,
+				// Build full metadata: remove old variation, add new with merged data
+				const existingVariation =
+					blockeraMetaData?.blocks?.[blockName]?.variations?.[
+						currentStyle?.name
+					] || {};
+				// Omit status/enabledIn/disabledIn from editedStyle to avoid overwriting
+				// when style object lacks them - preserves enabled state after rename.
+				const {
+					status: _s,
+					enabledIn: _e,
+					disabledIn: _d,
+					...styleForMerge
+				} = editedStyle;
+				const mergedVariation = mergeObject(existingVariation, {
+					...styleForMerge,
 					index,
+					...getVariationUpdate(editedStyle),
+				});
+				// Explicitly preserve metadata fields - editedStyle may have overwritten.
+				if (existingVariation.hasOwnProperty('status')) {
+					mergedVariation.status = existingVariation.status;
+				}
+				if (existingVariation.hasOwnProperty('enabledIn')) {
+					mergedVariation.enabledIn = existingVariation.enabledIn;
+				}
+				if (existingVariation.hasOwnProperty('disabledIn')) {
+					mergedVariation.disabledIn = existingVariation.disabledIn;
+				}
+				const existingVariations =
+					blockeraMetaData?.blocks?.[blockName]?.variations || {};
+				const { [currentStyle?.name]: _removed, ...restVariations } =
+					existingVariations;
+				updatedMetaData = mergeObject(blockeraMetaData, {
+					blocks: {
+						[blockName]: {
+							variations: {
+								...restVariations,
+								[editedStyle.name]: mergedVariation,
+							},
+						},
+					},
 				});
 
 				setBlockeraGlobalStylesMetaData(updatedMetaData);
@@ -225,27 +265,24 @@ export const useBlockStyleItem = ({
 					blockeraMetaData: updatedMetaData,
 				});
 
-				unregisterBlockStyle(
-					blockName,
-					currentBlockStyleVariation.name
-				);
+				unregisterBlockStyle(blockName, currentStyle?.name);
 				registerBlockStyle(blockName, editedStyle);
 
 				deleteStyleVariationBlocks(currentStyle.name, true, blockName);
 			} else {
-				updatedMetaData = getUpdatedMetaData(editedStyle);
-
-				setBlockeraGlobalStylesMetaData(updatedMetaData);
+				// Only update variation fields - merge with existing, don't override other customizations
+				updateBlockeraGlobalStylesMetaData(
+					blockName,
+					currentStyle.name,
+					getVariationUpdate(editedStyle)
+				);
+				updatedMetaData = getBlockeraGlobalStylesMetaData();
 
 				setGlobalStyles({
 					...globalStyles,
 					blockeraMetaData: updatedMetaData,
 				});
 			}
-
-			setCurrentBlockStyleVariation(editedStyle);
-
-			window.blockeraGlobalStylesMetaData = updatedMetaData;
 		},
 		[
 			blockName,
@@ -254,9 +291,10 @@ export const useBlockStyleItem = ({
 			setBlockStyles,
 			setGlobalStyles,
 			isConfirmedChangeID,
-			currentBlockStyleVariation,
 			deleteStyleVariationBlocks,
-			setCurrentBlockStyleVariation,
+			setBlockeraGlobalStylesMetaData,
+			getBlockeraGlobalStylesMetaData,
+			updateBlockeraGlobalStylesMetaData,
 		]
 	);
 
@@ -345,14 +383,15 @@ export const useBlockStyleItem = ({
 				normalizedStyle
 			);
 
-			const blockeraMetaData = buildDuplicateStyleMetaData(
-				getBlockeraGlobalStylesMetaData(),
+			const metaDataUpdate = buildDuplicateStyleMetaDataUpdate(
 				blockName,
 				duplicateStyle,
 				blockTypesToRegister
 			);
 
-			setBlockeraGlobalStylesMetaData(blockeraMetaData);
+			mergeBlockeraGlobalStylesMetaData(metaDataUpdate);
+
+			const blockeraMetaData = getBlockeraGlobalStylesMetaData();
 
 			setGlobalStyles(
 				mergeObject(globalStyles, {
@@ -384,21 +423,34 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnEnable = (status: boolean, currentStyle: Object) => {
-		const { blockeraMetaData = getBlockeraGlobalStylesMetaData() } =
-			globalStyles;
-		const updatedMetaData = mergeObject(
-			blockeraMetaData,
-			buildVariationMetaDataUpdate(blockName, currentStyle.name, {
-				status,
-				...currentStyle,
-			})
+		const blockeraMetaData = getBlockeraGlobalStylesMetaData();
+		const existingVariation =
+			blockeraMetaData?.blocks?.[blockName]?.variations?.[
+				currentStyle.name
+			];
+
+		// When variation doesn't exist in metadata, include currentStyle details
+		// to avoid storing incomplete { variationName: { status } } only
+		const variationData =
+			existingVariation && Object.keys(existingVariation).length > 0
+				? { status }
+				: {
+						...currentStyle,
+						status,
+					};
+
+		updateBlockeraGlobalStylesMetaData(
+			blockName,
+			currentStyle.name,
+			variationData
 		);
+
+		const updatedMetaData = getBlockeraGlobalStylesMetaData();
 
 		setGlobalStyles({
 			...globalStyles,
 			blockeraMetaData: updatedMetaData,
 		});
-		setBlockeraGlobalStylesMetaData(updatedMetaData);
 
 		setCachedStyle({
 			...cachedStyle,
@@ -423,6 +475,64 @@ export const useBlockStyleItem = ({
 	};
 
 	const handleOnDelete = (currentStyleName: string) => {
+		const currentStyle = blockStyles.find(
+			(s) => s.name === currentStyleName
+		);
+		const isBlockeraStyle = isBlockeraCreatedStyle(
+			currentStyle || { name: currentStyleName },
+			base || {},
+			blockName
+		);
+
+		const blockeraMetaData = getBlockeraGlobalStylesMetaData();
+		let updatedMetaData = cloneObject(blockeraMetaData);
+
+		if (
+			isBlockeraStyle &&
+			updatedMetaData?.blocks?.[blockName]?.variations?.[currentStyleName]
+		) {
+			// Blockera-created: remove entirely to avoid redundant data
+			delete updatedMetaData.blocks[blockName].variations[
+				currentStyleName
+			];
+			const blockVariations =
+				updatedMetaData.blocks[blockName].variations;
+			if (Object.keys(blockVariations).length === 0) {
+				delete updatedMetaData.blocks[blockName].variations;
+				const blockKeys = Object.keys(
+					updatedMetaData.blocks[blockName] || {}
+				);
+				if (blockKeys.length === 0) {
+					delete updatedMetaData.blocks[blockName];
+				}
+			}
+			if (updatedMetaData.variations?.[currentStyleName]) {
+				delete updatedMetaData.variations[currentStyleName];
+			}
+		} else if (
+			updatedMetaData?.blocks?.[blockName]?.variations?.[currentStyleName]
+		) {
+			// From block/theme/core: keep with isDeleted for reference
+			updatedMetaData.blocks[blockName].variations[
+				currentStyleName
+			].isDeleted = true;
+		} else {
+			updatedMetaData = {
+				blocks: {
+					[blockName]: {
+						variations: {
+							[currentStyleName]: {
+								...style,
+								isDeleted: true,
+							},
+						},
+					},
+				},
+			};
+		}
+
+		setBlockeraGlobalStylesMetaData(updatedMetaData);
+
 		setGlobalStyles(
 			mergeObject(
 				globalStyles,
@@ -434,6 +544,7 @@ export const useBlockStyleItem = ({
 							},
 						},
 					},
+					blockeraMetaData: updatedMetaData,
 				},
 				{
 					forceUpdated: [currentStyleName],

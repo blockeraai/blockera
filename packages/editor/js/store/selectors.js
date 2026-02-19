@@ -440,3 +440,43 @@ export const getEditorSelectedBlockEvent = ({
 }): string | null => {
 	return editorEvents?.selectedBlockEvent || null;
 };
+
+/**
+ * Get blockera global styles meta data.
+ *
+ * @param {{blockeraGlobalStylesMetaData: Object}} state the blockera global styles meta data.
+ *
+ * @return {Object} the blockera global styles meta data.
+ */
+export const getBlockeraGlobalStylesMetaData = ({
+	blockeraGlobalStylesMetaData,
+}: {
+	blockeraGlobalStylesMetaData: Object,
+}): Object => {
+	return blockeraGlobalStylesMetaData || {};
+};
+
+/**
+ * Get blockera global styles meta data for a specific block variation.
+ *
+ * @param {{blockeraGlobalStylesMetaData: Object}} state the blockera global styles meta data.
+ * @param {string} blockName the block name.
+ * @param {string} styleName the style variation name.
+ *
+ * @return {Object} the variation meta data.
+ */
+export const getBlockeraGlobalStylesVariationMetaData = (
+	{
+		blockeraGlobalStylesMetaData,
+	}: {
+		blockeraGlobalStylesMetaData: Object,
+	},
+	blockName: string,
+	styleName: string
+): Object => {
+	return (
+		blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations?.[
+			styleName
+		] || {}
+	);
+};

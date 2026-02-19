@@ -315,7 +315,45 @@ export const editorEvents = (state: Object = {}, action: Object): Object => {
 	return state;
 };
 
+export const blockeraGlobalStylesMetaData = (
+	state: Object = {},
+	action: Object
+): Object => {
+	switch (action.type) {
+		case 'SET_BLOCKERA_GLOBAL_STYLES_META_DATA':
+			return action.metaData;
+		case 'MERGE_BLOCKERA_GLOBAL_STYLES_META_DATA':
+			return mergeObject(state, action.metaDataUpdate);
+		case 'UPDATE_BLOCKERA_GLOBAL_STYLES_META_DATA_VARIATION': {
+			const { blockName, styleName, variationData } = action;
+			const existingVariation =
+				state?.blocks?.[blockName]?.variations?.[styleName] || {};
+			const mergedVariation = mergeObject(
+				existingVariation,
+				variationData
+			);
+
+			return {
+				...state,
+				blocks: {
+					...(state?.blocks || {}),
+					[blockName]: {
+						...(state?.blocks?.[blockName] || {}),
+						variations: {
+							...(state?.blocks?.[blockName]?.variations || {}),
+							[styleName]: mergedVariation,
+						},
+					},
+				},
+			};
+		}
+	}
+
+	return state;
+};
+
 export default (combineReducers({
+	blockeraGlobalStylesMetaData,
 	breakpoints,
 	blockStates,
 	editorEvents,

@@ -318,6 +318,28 @@ export const BlockTypes = ({
 				setAction('single-disable');
 			}
 
+			const blocksMetaDataForSelected = (selectedItems || []).reduce(
+				(acc: { [key: string]: any }, blockTypeName: string) => {
+					const hasVariation =
+						copyGlobalStyles?.blockeraMetaData?.blocks?.[
+							blockTypeName
+						]?.variations?.[style.name] ||
+						blockeraGlobalStylesMetaData?.blocks?.[blockTypeName]
+							?.variations?.[style.name];
+					if (hasVariation) {
+						acc[blockTypeName] = {
+							variations: {
+								[style.name]: {
+									isDeleted: undefined,
+								},
+							},
+						};
+					}
+					return acc;
+				},
+				({}: { [key: string]: any })
+			);
+
 			const newGlobalStyles = mergeObject(
 				{
 					...copyGlobalStyles,
@@ -334,8 +356,15 @@ export const BlockTypes = ({
 								disabledIn,
 							},
 						},
+						...(Object.keys(blocksMetaDataForSelected).length
+							? { blocks: blocksMetaDataForSelected }
+							: {}),
 					},
 					...(Object.keys(blocks).length ? { blocks } : {}),
+				},
+				{
+					forceUpdated: ['isDeleted'],
+					deletedProps: ['isDeleted'],
 				}
 			);
 

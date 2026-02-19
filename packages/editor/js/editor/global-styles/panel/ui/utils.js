@@ -89,11 +89,17 @@ export function replaceActiveStyle(
  * The function checks a style collection for a default style. If none is found, it adds one to
  * act as a fallback for when there is no active style applied to a block. The default item also serves
  * as a switch on the frontend to deactivate non-default styles.
+ *
+ * @param {Array} styles - The styles array.
+ * @param {Array} baseVariations - Base theme variations.
+ * @param {string} blockName - The block type name.
+ * @param {boolean} [inGlobalStylesPanel=false] - When true, includes disabled items (for panel). When false, filters out disabled items (for block inspector).
  */
 export function getRenderedStyles(
 	styles: Array<any>,
 	baseVariations: Array<Object>,
-	blockName: string
+	blockName: string,
+	inGlobalStylesPanel: boolean = false
 ): Array<Object> {
 	const defaultGlobalStyle = {
 		name: 'default',
@@ -115,6 +121,15 @@ export function getRenderedStyles(
 	styles = styles
 		.map((style) => {
 			if (variations[style.name]?.isDeleted) {
+				return null;
+			}
+
+			// Outside global styles panel: do not render disabled items
+			if (
+				!inGlobalStylesPanel &&
+				variations[style.name]?.hasOwnProperty('status') &&
+				!variations[style.name].status
+			) {
 				return null;
 			}
 
@@ -186,17 +201,21 @@ export function getDefaultStyle(styles: Array<Object>): Object {
 
 /**
  * It's a clone of '@wordpress/block-editor/js/components/block-styles/use-styles-for-block'
+ *
+ * @param {boolean} [inGlobalStylesPanel=false] - When true, includes disabled items (for panel). When false, filters out disabled items (for block inspector).
  */
 export function useStylesForBlocks({
 	event,
 	clientId,
 	onSwitch,
 	blockName,
+	inGlobalStylesPanel = false,
 }: {
 	clientId: string,
 	blockName: string,
 	onSwitch: () => void,
 	event: 'click' | 'detach',
+	inGlobalStylesPanel?: boolean,
 }): Object {
 	const selector = (select: any) => {
 		const { getBlock } = select(blockEditorStore);
@@ -232,9 +251,10 @@ export function useStylesForBlocks({
 			getRenderedStyles(
 				styles,
 				prepare(`styles.blocks.${blockName}.variations`, base) || {},
-				blockName
+				blockName,
+				inGlobalStylesPanel
 			),
-		[styles, blockName, base]
+		[base, styles, blockName, inGlobalStylesPanel]
 	);
 	const activeStyle = useMemo(
 		() => getActiveStyle(stylesToRender, className),

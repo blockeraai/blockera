@@ -27,11 +27,13 @@ export const useBlockStyleVariations = ({
 	blockName,
 	storedAttributes,
 	defaultAttributes,
+	inGlobalStylesPanel = false,
 }: {
 	clientId: string,
 	blockName: string,
 	storedAttributes: Object,
 	defaultAttributes: Object,
+	inGlobalStylesPanel?: boolean,
 }): Object => {
 	const { currentBlockStyleVariation } = useGlobalStylesPanelContext();
 	const [popoverAnchor, setPopoverAnchor] = useState(null);
@@ -52,6 +54,7 @@ export const useBlockStyleVariations = ({
 		clientId,
 		blockName,
 		onSwitch,
+		inGlobalStylesPanel,
 	});
 
 	const [currentActiveStyle, _setCurrentActiveStyle] = useState(activeStyle);

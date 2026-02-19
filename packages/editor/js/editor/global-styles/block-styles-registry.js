@@ -55,8 +55,8 @@ export const registerBlockStylesFromMetaData = (
 				registerBlockStyle(blockName, variation);
 			}
 
-			// Handle deleted variations
-			if (variation.deleted) {
+			// Handle isDeleted variations
+			if (variation.isDeleted) {
 				unregisterBlockStyle(blockName, variationName);
 			}
 		});

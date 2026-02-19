@@ -9,6 +9,7 @@ import { useState, useEffect } from '@wordpress/element';
  * Internal dependencies
  */
 import { getBlockeraGlobalStylesMetaData } from '../../../helpers';
+import { isBlockeraCreatedStyle } from '../use-block-style-item/helpers';
 
 export const useBlockStylesCounter = ({
 	blockName,
@@ -22,8 +23,11 @@ export const useBlockStylesCounter = ({
 	blockDynamicStylesCount: Object,
 }): Array<any> => {
 	const metaData = getBlockeraGlobalStylesMetaData();
-	const metaDataBlockVariationsCount = Object.keys(
-		metaData?.blocks?.[blockName]?.variations || {}
+	const variations = metaData?.blocks?.[blockName]?.variations || {};
+	const metaDataBlockVariationsCount = Object.values(variations).filter(
+		(variation) =>
+			!variation?.isDeleted &&
+			isBlockeraCreatedStyle(variation, baseConfig, blockName)
 	).length;
 
 	const userVariationsCount = Object.keys(

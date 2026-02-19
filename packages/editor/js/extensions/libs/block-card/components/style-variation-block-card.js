@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import type { MixedElement } from 'react';
 import { Slot } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
@@ -37,10 +37,7 @@ import { EditableBlockName } from './editable-block-name';
 import type { TStyleVariationBlockCardProps } from '../types';
 import StateContainer from '../../../components/state-container';
 import { Preview as BlockCompositePreview } from '../../block-composite';
-import {
-	getBlockeraGlobalStylesMetaData,
-	setBlockeraGlobalStylesMetaData,
-} from '../../../../editor/global-styles/helpers';
+import { setBlockeraGlobalStylesMetaData } from '../../../../editor/global-styles/helpers';
 import BlockPreviewPanel from '../../../../editor/global-styles/panel/block-preview-panel';
 import { useResetBlockStateToNormal } from '../block-states/hooks';
 import { useGlobalStylesPanelContext } from '../../../../editor/global-styles/panel/context';
@@ -71,7 +68,11 @@ export function StyleVariationBlockCard({
 }: TStyleVariationBlockCardProps): MixedElement {
 	const { selectedBlockClientId, statesManagerHandleOnChangeRef } =
 		useGlobalStylesPanelContext();
-	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
+	const blockeraGlobalStylesMetaData = useSelect(
+		(select) =>
+			select('blockera/editor')?.getBlockeraGlobalStylesMetaData?.() || {},
+		[]
+	);
 
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles, setGlobalStyles] = useEntityProp(

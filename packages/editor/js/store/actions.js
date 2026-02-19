@@ -238,3 +238,32 @@ export const setEditorSelectedBlockEvent = (event: string): Object => {
 		type: 'SET_EDITOR_SELECTED_BLOCK_EVENT',
 	};
 };
+
+export const setBlockeraGlobalStylesMetaData = (metaData: Object): Object => {
+	return {
+		metaData,
+		type: 'SET_BLOCKERA_GLOBAL_STYLES_META_DATA',
+	};
+};
+
+export const mergeBlockeraGlobalStylesMetaData = (
+	metaDataUpdate: Object
+): Object => {
+	return {
+		metaDataUpdate,
+		type: 'MERGE_BLOCKERA_GLOBAL_STYLES_META_DATA',
+	};
+};
+
+export const updateBlockeraGlobalStylesMetaData = (
+	blockName: string,
+	styleName: string,
+	variationData: Object
+): Object => {
+	return {
+		blockName,
+		styleName,
+		variationData,
+		type: 'UPDATE_BLOCKERA_GLOBAL_STYLES_META_DATA_VARIATION',
+	};
+};

@@ -99,7 +99,7 @@ function BlockStyles({
 
 	const handlePromotionPopover = useCallback((): boolean => {
 		let canDoAction = true;
-
+		console.log(counter, MAX_ITEMS_FOR_PROMOTION);
 		// Validate limitation for adding new style variation.
 		if (
 			-1 !== MAX_ITEMS_FOR_PROMOTION &&

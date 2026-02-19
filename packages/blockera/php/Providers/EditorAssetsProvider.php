@@ -171,6 +171,7 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			' . $features_object . '?.unstableBootstrapServerSideFeatures(' . wp_json_encode( $requested_features ) . ');
 			' . $features_object . '?.featuresApplyHooks();
 			window.onload = () => {
+				' . $editor_object . '.editor.registerBlockeraGlobalStylesMetaData(window.blockeraGlobalStylesMetaData);
 				' . $editor_object . '.editor.unstableBootstrapServerSideBreakpointDefinitions(' . wp_json_encode( $breakpoints ) . ');
 				' . $editor_object . '.registerBlockeraStyleVariationBlocks();
 				' . $editor_object . '.registerBlockeraEditorInternalPlugins();

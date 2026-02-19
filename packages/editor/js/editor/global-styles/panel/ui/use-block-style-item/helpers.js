@@ -35,25 +35,35 @@ export const getStyleValuesFromSources = (
 
 /**
  * Build the blockera meta data update object for a single variation.
+ * Merges variationData with existing variation - does NOT override other handlers' customizations.
+ * Only the provided fields in variationData are updated; existing fields are preserved.
  *
  * @param {string} blockName - Block type name.
  * @param {string} styleName - Style variation name.
- * @param {Object} variationData - Data to merge for the variation.
- * @return {Object} - The blockera meta data update object.
+ * @param {Object} variationData - Data to merge for the variation (only these fields are updated).
+ * @param {Object} existingMetaData - Existing blockera meta data to merge with.
+ * @return {Object} - The blockera meta data update object with merged variation.
  */
 export const buildVariationMetaDataUpdate = (
 	blockName: string,
 	styleName: string,
-	variationData: Object
-): Object => ({
-	blocks: {
-		[blockName]: {
-			variations: {
-				[styleName]: variationData,
+	variationData: Object,
+	existingMetaData: Object = {}
+): Object => {
+	const existingVariation =
+		existingMetaData?.blocks?.[blockName]?.variations?.[styleName] || {};
+	const mergedVariation = mergeObject(existingVariation, variationData);
+
+	return {
+		blocks: {
+			[blockName]: {
+				variations: {
+					[styleName]: mergedVariation,
+				},
 			},
 		},
-	},
-});
+	};
+};
 
 /**
  * Get block types that should have a style registered (supports multiple blocks).
@@ -155,13 +165,48 @@ export const removeStyleVariationFromGlobalStyles = (
 };
 
 /**
+ * Build blockera meta data update for duplicate style (blocks + variations).
+ * Returns only the update object to merge - does NOT override other customizations.
+ *
+ * @param {string} blockName - Block type name.
+ * @param {Object} duplicateStyle - New style object.
+ * @param {Array<string>} blockTypesToRegister - Block types for the style.
+ * @return {Object} - The blockera meta data update object to merge.
+ */
+export const buildDuplicateStyleMetaDataUpdate = (
+	blockName: string,
+	duplicateStyle: Object,
+	blockTypesToRegister: Array<string>
+): Object => ({
+	blocks: {
+		[blockName]: {
+			variations: {
+				[duplicateStyle.name]: {
+					...duplicateStyle,
+					enabledIn: blockTypesToRegister,
+					disabledIn: [],
+				},
+			},
+		},
+	},
+	variations: {
+		[duplicateStyle.name]: {
+			...duplicateStyle,
+			enabledIn: blockTypesToRegister,
+			disabledIn: [],
+		},
+	},
+});
+
+/**
  * Build blockera meta data for duplicate style (blocks + variations).
+ * Merges with existing - does NOT override other customizations.
  *
  * @param {Object} existingMetaData - Existing blockera meta data.
  * @param {string} blockName - Block type name.
  * @param {Object} duplicateStyle - New style object.
  * @param {Array<string>} blockTypesToRegister - Block types for the style.
- * @return {Object} - The blockera meta data update object.
+ * @return {Object} - The full merged blockera meta data.
  */
 export const buildDuplicateStyleMetaData = (
 	existingMetaData: Object,
@@ -169,22 +214,14 @@ export const buildDuplicateStyleMetaData = (
 	duplicateStyle: Object,
 	blockTypesToRegister: Array<string>
 ): Object =>
-	mergeObject(existingMetaData, {
-		blocks: {
-			[blockName]: {
-				variations: {
-					[duplicateStyle.name]: duplicateStyle,
-				},
-			},
-		},
-		variations: {
-			[duplicateStyle.name]: {
-				...duplicateStyle,
-				enabledIn: blockTypesToRegister,
-				disabledIn: [],
-			},
-		},
-	});
+	mergeObject(
+		existingMetaData,
+		buildDuplicateStyleMetaDataUpdate(
+			blockName,
+			duplicateStyle,
+			blockTypesToRegister
+		)
+	);
 
 export const getCalculatedNewStyle = ({
 	action,
@@ -277,4 +314,43 @@ export const isRootStyle = (currentStyle: Object): boolean => {
 		('default' === currentStyle.name &&
 			'wordpress' === currentStyle?.icon?.name)
 	);
+};
+
+/**
+ * Detect if a style variation was created by Blockera (user-created) vs from
+ * block definition, theme.json, or WP core theme.json.
+ *
+ * Blockera-created styles have blockera icon. Styles from block/theme/core
+ * exist in base theme or have wordpress icon.
+ *
+ * @param {Object} style - Style object with name, icon, etc.
+ * @param {Object} baseConfig - Base theme global styles (from core store).
+ * @param {string} blockName - Block type name.
+ * @return {boolean} True if Blockera-created (remove from metadata when deleted).
+ */
+export const isBlockeraCreatedStyle = (
+	style: Object,
+	baseConfig: Object,
+	blockName: string
+): boolean => {
+	if (!style?.name) {
+		return false;
+	}
+
+	// Blockera-created styles have blockera icon
+	const hasBlockeraIcon =
+		style?.icon?.name === 'blockera' &&
+		style?.icon?.library === 'blockera';
+
+	// Style from theme.json or block definition exists in base
+	const isInBaseTheme =
+		baseConfig?.styles?.blocks?.[blockName]?.variations?.[style.name];
+
+	// Blockera-created: has blockera icon AND not in base theme
+	if (hasBlockeraIcon && !isInBaseTheme) {
+		return true;
+	}
+
+	// From block/theme/core: in base or default style
+	return false;
 };

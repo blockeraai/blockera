@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { dispatch } from '@wordpress/data';
+import { dispatch, useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { useState, useMemo, useEffect } from '@wordpress/element';
 import {
@@ -68,31 +68,38 @@ export const StyleItem = ({
 		setCurrentBlockStyleVariation,
 		setStyle: setStyleData = () => {},
 	} = useGlobalStylesPanelContext();
-	const { blockeraGlobalStylesMetaData } = window;
-	const initializedCachedStyle = useMemo(() => {
-		const variations =
-			blockeraGlobalStylesMetaData?.blocks?.[blockName]?.variations || {};
+	const initializedCachedStyle = useSelect(
+		(select) => {
+			const storeSelect = select('blockera/editor');
+			if (!storeSelect) {
+				return {};
+			}
 
-		if (Object.keys(variations).length > 0) {
-			for (const variation in variations) {
-				// Skip not registered style variations in the block.
-				if (
-					!inGlobalStylesPanel &&
-					variations[variation]?.hasOwnProperty('refId')
-				) {
-					continue;
-				}
-				if (variations[variation]?.refId === style.name) {
-					return variations[variation];
-				}
-				if (variation === style.name) {
-					return variations[variation];
+			const metaData =
+				storeSelect.getBlockeraGlobalStylesMetaData?.() ?? {};
+			const variations = metaData?.blocks?.[blockName]?.variations || {};
+
+			if (Object.keys(variations).length > 0) {
+				for (const variation in variations) {
+					if (variations[variation]?.refId === style.name) {
+						return variations[variation];
+					}
+					if (variation === style.name) {
+						return variations[variation];
+					}
 				}
 			}
-		}
 
-		return {};
-	}, [blockeraGlobalStylesMetaData, blockName, style, inGlobalStylesPanel]);
+			// Outside panel: style is in list only if enabled (getRenderedStyles filters).
+			// When metadata lookup fails, assume enabled so we don't hide it.
+			if (!inGlobalStylesPanel) {
+				return { status: true };
+			}
+
+			return {};
+		},
+		[blockName, style.name, inGlobalStylesPanel]
+	);
 
 	const [cachedStyle, setCachedStyle] = useState(initializedCachedStyle);
 
@@ -143,6 +150,7 @@ export const StyleItem = ({
 		handleOnUsageForMultipleBlocks,
 		handleOnClearAllCustomizations,
 	} = useBlockStyleItem({
+		style,
 		counter,
 		blockName,
 		counterMap,

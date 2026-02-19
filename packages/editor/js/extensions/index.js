@@ -12,6 +12,7 @@ import {
 	setupCanvasSettings,
 	store as editorStore,
 	unstableBootstrapServerSideBreakpointDefinitions,
+	registerBlockeraGlobalStylesMetaData,
 } from '../';
 
 /**
@@ -50,6 +51,7 @@ export const defineGlobalProps = (outsideDefinitions?: () => void): void => {
 		...(window[packageName]?.editor || {}),
 		init: outsideDefinitions,
 		select: select(editorStore?.name),
+		registerBlockeraGlobalStylesMetaData,
 		unstableBootstrapServerSideBreakpointDefinitions,
 		unstableBootstrapBlockStatesDefinitions,
 	};
