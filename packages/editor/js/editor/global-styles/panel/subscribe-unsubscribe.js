@@ -22,13 +22,8 @@ let previousPanelRef: ?string = null;
  *
  * @return {Function} Unsubscribe function to clean up the subscription
  */
-export const subscribeToBlockSelection = (className: string): (() => void) => {
+export const subscribeToBlockSelection = (): (() => void) => {
 	return subscribe(() => {
-		// Add the className to the body if it's not already there
-		if (!document.body?.classList?.contains(className)) {
-			document.body?.classList?.add(className);
-		}
-
 		const blockEditorSelect = select('core/block-editor');
 		const blockeraSelect = select(blockeraEditorStore);
 		const blockeraDispatch = dispatch(blockeraEditorStore);

@@ -123,7 +123,7 @@ export const BlockGlobalStylesPanelScreen = ({
 
 		// Subscribe to block selection changes when panel is open
 		// This enables automatic panel switching when clicking blocks in the editor
-		const unsubscribe = subscribeToBlockSelection(bodySupportingClassname);
+		const unsubscribe = subscribeToBlockSelection();
 		// Cleanup subscription on unmount
 		return unsubscribe;
 		// eslint-disable-next-line react-hooks/exhaustive-deps
