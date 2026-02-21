@@ -27,17 +27,13 @@ import {
 	shadowToWPCompatibility,
 } from './compatibilities/shadow';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
 		'blockera.blockEdit.attributes',
 		'blockera.blockEdit.typographyExtension.bootstrap',
 		(attributes: Object, blockDetail: BlockDetail) => {
-			if (isBlockNotOriginalState(blockDetail)) {
-				return attributes;
-			}
-
 			const { insideBlockInspector, editorSelectedBlockEvent } =
 				blockDetail;
 

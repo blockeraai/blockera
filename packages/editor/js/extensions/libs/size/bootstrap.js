@@ -35,7 +35,7 @@ import {
 	fitToWPCompatibility,
 } from './compatibility/fit';
 import type { BlockDetail } from '../block-card/block-states/types';
-import { isBlockNotOriginalState, isInvalidCompatibilityRun } from '../utils';
+import { isInvalidCompatibilityRun } from '../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -44,10 +44,6 @@ export const bootstrap = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId, insideBlockInspector, editorSelectedBlockEvent } =
 				blockDetail;
-
-			if (isBlockNotOriginalState(blockDetail)) {
-				return attributes;
-			}
 
 			attributes = widthFromWPCompatibility({
 				attributes,

@@ -9,7 +9,6 @@ import { addFilter } from '@wordpress/hooks';
  * Blockera dependencies
  */
 import { mergeObject } from '@blockera/utils';
-import { isBlockNotOriginalState } from '@blockera/editor/js/extensions/libs/utils';
 import type { BlockDetail } from '@blockera/editor/js/extensions/libs/block-card/block-states/types';
 import type { ControlContextRef } from '@blockera/controls';
 
@@ -33,10 +32,7 @@ export const bootstrapOutermostIconBlock = (): void => {
 		(attributes: Object, blockDetail: BlockDetail) => {
 			const { blockId } = blockDetail;
 
-			if (
-				blockId !== 'outermost/icon-block' ||
-				isBlockNotOriginalState(blockDetail)
-			) {
+			if (blockId !== 'outermost/icon-block') {
 				return attributes;
 			}
 

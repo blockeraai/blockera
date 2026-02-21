@@ -30,7 +30,7 @@ import {
 	elementNormalBackgroundToWPCompatibility,
 } from './compatibility/element-bg';
 import { getBaseBreakpoint } from '../../../../editor/header-ui';
-import { isBlockNotOriginalState, isResetRef } from '../../utils';
+import { isResetRef } from '../../utils';
 
 export const bootstrap = (): void => {
 	addFilter(
@@ -42,10 +42,6 @@ export const bootstrap = (): void => {
 				insideBlockInspector,
 				editorSelectedBlockEvent,
 			} = blockDetail;
-
-			if (isBlockNotOriginalState(blockDetail)) {
-				return attributes;
-			}
 
 			if (
 				(isUndefined(attributes?.style?.elements) &&
