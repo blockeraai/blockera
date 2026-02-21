@@ -440,6 +440,66 @@ export const isRootStyle = (currentStyle: Object): boolean => {
  * @param {Object} baseConfig - Base theme global styles (for isBlockeraCreatedStyle).
  * @return {Object} - Updated blockera metadata (cloned, not mutated).
  */
+/**
+ * Build metadata updates to assign old style's blockeraMetaData to new style name.
+ * Used when renaming with isConfirmedChangeID: copy blocks.*.variations and variations.
+ *
+ * @param {Object} blockeraMetaData - Current blockera metadata.
+ * @param {string} blockName - Primary block name.
+ * @param {string} oldStyleName - Previous style variation name.
+ * @param {string} newStyleName - New style variation name.
+ * @param {Array<string>} blockTypesToRegister - Block types that use this style.
+ * @param {Object} mergedVariation - Merged variation for primary block.
+ * @return {Object} - { blocks: {...}, variations: {...} } to merge into metadata.
+ */
+export const buildMetadataTransferForRenamedStyle = (
+	blockeraMetaData: Object,
+	blockName: string,
+	oldStyleName: string,
+	newStyleName: string,
+	blockTypesToRegister: Array<string>,
+	mergedVariation: Object
+): Object => {
+	const blocksUpdate: { [string]: Object } = {};
+	const oldGlobalVariation =
+		blockeraMetaData?.variations?.[oldStyleName] || {};
+	const identityUpdate = {
+		name: newStyleName,
+		label: mergedVariation?.label,
+	};
+
+	blockTypesToRegister.forEach((blockType) => {
+		const oldBlockVariation =
+			blockeraMetaData?.blocks?.[blockType]?.variations?.[oldStyleName];
+		if (oldBlockVariation && !oldBlockVariation.isDeleted) {
+			const base = { ...oldBlockVariation };
+			delete base.isDeleted;
+			blocksUpdate[blockType] = {
+				variations: {
+					[newStyleName]:
+						blockType === blockName
+							? mergedVariation
+							: mergeObject(base, identityUpdate),
+				},
+			};
+		}
+	});
+
+	const result: Object = {};
+	if (Object.keys(blocksUpdate).length > 0) {
+		result.blocks = blocksUpdate;
+	}
+	if (Object.keys(oldGlobalVariation).length > 0) {
+		result.variations = {
+			[newStyleName]: mergeObject(
+				{ ...oldGlobalVariation },
+				identityUpdate
+			),
+		};
+	}
+	return result;
+};
+
 export const markStyleAsDeletedInMetaData = (
 	blockeraMetaData: Object,
 	blockName: string,

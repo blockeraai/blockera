@@ -291,10 +291,19 @@ When renaming a block style variation — regardless of origin (wp core theme.js
    - Use `mergeObject(globalStyles, { blocks: { [blockName]: { variations: { [currentStyle.name]: undefined } } } }, { forceUpdated: [currentStyle.name], deletedProps: [currentStyle.name] })` — same pattern as `handleOnDelete` — to ensure the old variation is deleted from the global styles object.
 
 4. **Mark the previous style as deleted in global styles metadata**:
-   - Follow the same logic as `handleOnDelete` for metadata:
+   - Use `markStyleAsDeletedInMetaData(blockeraMetaData, blockName, currentStyle.name, currentStyle, base)`.
+   - Follows same logic as `handleOnDelete`:
      - If **Blockera-created** (`isBlockeraCreatedStyle`): remove the variation from `blockeraMetaData.blocks[blockName].variations` entirely (and from `blockeraMetaData.variations` if present).
      - If **from block/theme/core**: set `blockeraMetaData.blocks[blockName].variations[currentStyle.name].isDeleted = true` (or create the entry with `isDeleted: true` if it doesn't exist).
    - This is required for future rendering requirements (e.g. to know the old style was "deleted" and should not be rendered).
+
+5. **Assign old style's metadata to new style**:
+   - Use `buildMetadataTransferForRenamedStyle(blockeraMetaData, blockName, currentStyle.name, editedStyle.name, blockTypesToRegister, mergedVariation)`.
+   - Copies all blockera metadata for the old style to the new style name:
+     - **blocks**: For each block in `blockTypesToRegister`, copy `blocks[blockType].variations[oldStyleName]` → `variations[newStyleName]` (primary block uses `mergedVariation`; other blocks use old data with `name`/`label` updated).
+     - **variations**: Copy `variations[oldStyleName]` (enabledIn, disabledIn for "Use for multiple blocks") → `variations[newStyleName]` with `name`/`label` updated.
+   - Merge the transfer result into `metaDataWithDeleted` to produce final `updatedMetaData`.
+   - Ensures "Use for multiple blocks" settings (enabledIn, disabledIn) and per-block variation data (status, index) are preserved after rename.
 
 #### Rule 2: Extract duplicate logic into standalone helpers
 
@@ -318,11 +327,11 @@ If you detect duplicate code between `handleOnRename` and other handlers (`handl
 ### Key Invariants (DO NOT break when editing)
 
 - When `isConfirmedChangeID` is true: name MUST be kebab-cased via `kebabCase(newValue.name)`.
-- Preserve `status`, `enabledIn`, `disabledIn` from existing variation when merging (`editedStyle` may lack these; omit them before merge to avoid overwriting).
+- Preserve `status`, `enabledIn`, `disabledIn` from existing variation — use `buildMetadataTransferForRenamedStyle` to copy old style's metadata (blocks + variations) to new style name.
 - `globalStyles.blocks[blockName].variations`: remove old key (`currentStyle.name`), add new key (`editedStyle.name`) with cloned merged style values.
-- `blockeraMetaData.blocks[blockName].variations`: mark old style as deleted (see Rule 1.4); add new variation with merged metadata.
-- Unregister/register for **all** block types: `blockTypesToRegister.forEach(blockType => { unregisterBlockStyle(blockType, ...); registerBlockStyle(blockType, ...); })`.
-- Update style variation blocks via store: clear old with `setStyleVariationBlocks(currentStyle.name, [], 'manual')`, add new with `setStyleVariationBlocks(editedStyle.name, blockTypesToRegister, 'manual')`.
+- `blockeraMetaData.blocks[blockName].variations`: mark old style as deleted (Rule 1.4); assign old metadata to new style via `buildMetadataTransferForRenamedStyle` (Rule 1.5).
+- Unregister/register for **all** block types: `unregisterStyleFromBlockTypes`, `registerStyleForBlockTypes` with `blockTypesToRegister`.
+- Update style variation blocks via store: `clearStyleVariationBlocksInStore(currentStyle.name)`, `setStyleVariationBlocksInStore(editedStyle.name, blockTypesToRegister)`.
 
 ### Helpers Reference
 
@@ -335,6 +344,8 @@ If you detect duplicate code between `handleOnRename` and other handlers (`handl
 | `setStyleVariationBlocksInStore` | Set style variation blocks in store.                                  |
 | `clearStyleVariationBlocksInStore` | Clear style variation blocks in store.                               |
 | `buildBlocksUpdateForStyle`    | Build blocks update object for globalStyles.                            |
+| `markStyleAsDeletedInMetaData` | Mark old style as deleted (remove or isDeleted) per origin.             |
+| `buildMetadataTransferForRenamedStyle` | Copy old style's metadata (blocks.*.variations + variations) to new style name. Preserves enabledIn, disabledIn, status, per-block data. |
 | `getBlockTypesForStyle`        | Get block types to register for a style.                                |
 | `getNormalizedStyle`           | Normalize style values for storage.                                     |
 | `isBlockeraCreatedStyle`       | Detect if style is Blockera-created vs block/theme/core.                |
@@ -343,7 +354,7 @@ If you detect duplicate code between `handleOnRename` and other handlers (`handl
 
 ### Dependencies (useCallback)
 
-`blockName`, `blockStyles`, `globalStyles`, `setBlockStyles`, `setGlobalStyles`, `isConfirmedChangeID`, `deleteStyleVariationBlocks`, `setBlockeraGlobalStylesMetaData`, `getBlockeraGlobalStylesMetaData`, `updateBlockeraGlobalStylesMetaData`, `base`, `styles`, `defaultStyles`.
+`blockName`, `blockStyles`, `globalStyles`, `setBlockStyles`, `setGlobalStyles`, `isConfirmedChangeID`, `setBlockeraGlobalStylesMetaData`, `getBlockeraGlobalStylesMetaData`, `updateBlockeraGlobalStylesMetaData`, `base`, `styles`, `defaultStyles`.
 
 ### Related
 

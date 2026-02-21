@@ -38,6 +38,7 @@ import {
 	clearStyleVariationBlocksInStore,
 	removeStyleVariationFromGlobalStyles,
 	markStyleAsDeletedInMetaData,
+	buildMetadataTransferForRenamedStyle,
 } from './helpers';
 import { getNormalizedStyle } from '../../context';
 import { isBaseBreakpoint } from '../../../../header-ui/components';
@@ -169,6 +170,22 @@ export const useBlockStyleItem = ({
 					};
 				});
 
+				// Add new variation to metadata (preserve status; use blockTypesToRegister for enabledIn)
+				const existingVariation =
+					blockeraMetaData?.blocks?.[blockName]?.variations?.[
+						currentStyle?.name
+					] || {};
+				const mergedVariation = mergeObject(existingVariation, {
+					...editedStyle,
+					index: blockStyles.findIndex(
+						(s) => s.name === currentStyle?.name
+					),
+					...getVariationUpdate(editedStyle),
+				});
+				if (existingVariation.hasOwnProperty('status')) {
+					mergedVariation.status = existingVariation.status;
+				}
+
 				// Rule 1.4: Mark previous style as deleted in metadata
 				const metaDataWithDeleted = markStyleAsDeletedInMetaData(
 					blockeraMetaData,
@@ -178,38 +195,19 @@ export const useBlockStyleItem = ({
 					base || {}
 				);
 
-				// Add new variation to metadata (preserve status; use blockTypesToRegister for enabledIn)
-				const existingVariation =
-					blockeraMetaData?.blocks?.[blockName]?.variations?.[
-						currentStyle?.name
-					] || {};
-				const {
-					status: _s,
-					enabledIn: _e,
-					disabledIn: _d,
-					...styleForMerge
-				} = editedStyle;
-				const mergedVariation = mergeObject(existingVariation, {
-					...styleForMerge,
-					index: blockStyles.findIndex(
-						(s) => s.name === currentStyle?.name
-					),
-					...getVariationUpdate(editedStyle),
-					enabledIn: blockTypesToRegister,
-					disabledIn: [],
-				});
-				if (existingVariation.hasOwnProperty('status')) {
-					mergedVariation.status = existingVariation.status;
-				}
-				updatedMetaData = mergeObject(metaDataWithDeleted, {
-					blocks: {
-						[blockName]: {
-							variations: {
-								[editedStyle.name]: mergedVariation,
-							},
-						},
-					},
-				});
+				// Assign old style's metadata to new style (blocks + variations enabledIn/disabledIn)
+				const metadataTransfer = buildMetadataTransferForRenamedStyle(
+					blockeraMetaData,
+					blockName,
+					currentStyle.name,
+					editedStyle.name,
+					blockTypesToRegister,
+					mergedVariation
+				);
+				updatedMetaData = mergeObject(
+					metaDataWithDeleted,
+					metadataTransfer
+				);
 
 				setBlockStyles([
 					...blockStyles.filter((s) => s.name !== currentStyle?.name),
