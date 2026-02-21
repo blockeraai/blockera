@@ -5,7 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, useMemo } from '@wordpress/element';
 import { Slot, SlotFillProvider } from '@wordpress/components';
 
 /**
@@ -23,6 +23,7 @@ import { classNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { BlockTypes } from './block-types';
+import { blockHasStyle } from './use-block-style-item/helpers';
 import { search } from '../../../../extensions/libs/block-composite/search-items';
 
 export const SearchBlockTypes = ({
@@ -36,6 +37,14 @@ export const SearchBlockTypes = ({
 }: Object): MixedElement => {
 	const [blocks, setBlocks] = useState(_blocks);
 	const [searchTerm, setSearchTerm] = useState('');
+
+	const enabledItems = useMemo(
+		() =>
+			_blocks
+				.filter((item) => blockHasStyle(item.name, style.name))
+				.map((item) => item.name),
+		[_blocks, style.name]
+	);
 
 	return (
 		<SlotFillProvider>
@@ -142,6 +151,7 @@ export const SearchBlockTypes = ({
 					items={blocks}
 					blockName={blockName}
 					blockTitle={blockTitle}
+					enabledItems={enabledItems}
 					handleOnUsageForMultipleBlocks={
 						handleOnUsageForMultipleBlocks
 					}

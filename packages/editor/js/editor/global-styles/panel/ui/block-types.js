@@ -41,6 +41,7 @@ export const BlockTypes = ({
 	items,
 	style,
 	blockName,
+	enabledItems,
 	// eslint-disable-next-line no-unused-vars -- Passed by parent, used by handleOnSaveUsageForMultipleBlocks
 	handleOnUsageForMultipleBlocks,
 	handleOnSaveUsageForMultipleBlocks,
@@ -50,6 +51,7 @@ export const BlockTypes = ({
 	style: Object,
 	blockName: string,
 	blockTitle: string,
+	enabledItems: Array<string>,
 	handleOnUsageForMultipleBlocks: (
 		style: Object,
 		action: 'add' | 'delete'
@@ -78,9 +80,6 @@ export const BlockTypes = ({
 					item.attributes.hasOwnProperty('blockeraPropsId')
 			)
 		: items;
-	const enabledItems = validItems
-		.filter((item) => blockHasStyle(item.name, style.name))
-		.map((item) => item.name);
 	const postId = select('core').__experimentalGetCurrentGlobalStylesId();
 	const [globalStyles] = useEntityProp(
 		'root',
