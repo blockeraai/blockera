@@ -6,7 +6,7 @@
 import type { MixedElement } from 'react';
 import { dispatch, useSelect } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useMemo, useEffect } from '@wordpress/element';
+import { useState, useMemo, useEffect, useRef } from '@wordpress/element';
 import {
 	Fill,
 	__experimentalTruncate as Truncate,
@@ -34,6 +34,21 @@ import {
 	useBlockStylesPickerContext,
 	StyleItemMenuContextProvider,
 } from '../context';
+
+const STYLE_ITEM_POPOVER_OFFSET = 50;
+const SIDEBAR_WIDTH = 280;
+const POPOVER_WIDTH = 260;
+const BLOCK_CARD_PADDING = 16;
+const BLOCK_CARD_SETTINGS_RIGHT = 12;
+const BLOCK_CARD_ICON_WIDTH = 20;
+const BLOCK_CARD_POPOVER_OFFSET = Math.max(
+	8,
+	SIDEBAR_WIDTH -
+		BLOCK_CARD_PADDING * 2 -
+		BLOCK_CARD_SETTINGS_RIGHT -
+		BLOCK_CARD_ICON_WIDTH -
+		POPOVER_WIDTH
+);
 
 export const StyleItem = ({
 	style,
@@ -137,6 +152,9 @@ export const StyleItem = ({
 		isOpenBlockCardUsageForMultipleBlocks,
 		setIsOpenBlockCardUsageForMultipleBlocks,
 	] = useState(false);
+
+	const styleItemContextMenuAnchorRef = useRef(null);
+	const blockCardContextMenuAnchorRef = useRef(null);
 
 	const {
 		handleOnEnable,
@@ -456,13 +474,18 @@ export const StyleItem = ({
 						)}
 
 						<span
-							className="context-menu-trigger"
+							ref={styleItemContextMenuAnchorRef}
+							className="context-menu-trigger style-item-context-menu-anchor"
 							data-test={`open-${style.name}-contextmenu`}
+							data-anchor="style-item-context-menu"
 						>
 							<Icon
 								icon="more-vertical"
 								iconSize="20"
-								onClick={() => setIsOpenContextMenu(true)}
+								onClick={() => {
+									setIsOpenBlockCardContextMenu(false);
+									setIsOpenContextMenu(true);
+								}}
 								style={{
 									opacity: '0.4',
 								}}
@@ -473,6 +496,8 @@ export const StyleItem = ({
 
 				<StyleItemMenuContextProvider
 					value={{
+						anchorRef: styleItemContextMenuAnchorRef,
+						popoverOffset: STYLE_ITEM_POPOVER_OFFSET,
 						blockTitle: getBlockType(blockName).title,
 						style,
 						counter,
@@ -628,18 +653,25 @@ export const StyleItem = ({
 						)}
 
 						<span
-							className="context-menu-trigger"
-							data-test={`open-${style.name}-contextmenu`}
+							ref={blockCardContextMenuAnchorRef}
+							className="context-menu-trigger block-card-context-menu-anchor"
+							data-test={`open-${style.name}-block-card-contextmenu`}
+							data-anchor="block-card-context-menu"
 						>
 							<Icon
 								iconSize="20"
 								icon="more-vertical"
-								onClick={() => setIsOpenContextMenu(true)}
+								onClick={() => {
+									setIsOpenContextMenu(false);
+									setIsOpenBlockCardContextMenu(true);
+								}}
 							/>
 						</span>
 
 						<StyleItemMenuContextProvider
 							value={{
+								anchorRef: blockCardContextMenuAnchorRef,
+								popoverOffset: BLOCK_CARD_POPOVER_OFFSET,
 								blockTitle: getBlockType(blockName).title,
 								style,
 								counter,
