@@ -23,10 +23,6 @@ import { isEmpty, isEquals, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import {
-	EditorFeatureWrapper,
-	EditorAdvancedLabelControl,
-} from '../../../../components';
 import { useGlobalStyle } from './hooks';
 import { BlockPortals } from '../../../../extensions/components';
 import { STORE_NAME } from '../../../../extensions/store/constants';
@@ -244,31 +240,6 @@ export const GlobalStylesPanelContextProvider = ({
 		[rootStyle, defaultStylesValue]
 	);
 
-	const baseContextValue = useMemo(
-		() => ({
-			components: {
-				FeatureWrapper: (props: Object) => (
-					<EditorFeatureWrapper
-						{...{
-							...props,
-							name,
-							clientId,
-						}}
-					/>
-				),
-				AdvancedLabelControl: (props: Object) => (
-					<EditorAdvancedLabelControl
-						getAttributesRef={getStyle}
-						clientId={clientId}
-						{...props}
-					/>
-				),
-			},
-		}),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[name, clientId]
-	);
-
 	const childrenComponent = useMemo(
 		() => (
 			<SlotFillProvider>
@@ -342,7 +313,6 @@ export const GlobalStylesPanelContextProvider = ({
 				baseConfig,
 				userConfig,
 				defaultStyles,
-				baseContextValue,
 				fallbackClientId,
 				childrenComponent,
 				getNormalizedStyle,
@@ -373,7 +343,6 @@ type UseGlobalStylesPanelContextReturnType = {
 	baseConfig: Object,
 	children: MixedElement,
 	memoizedBlockBaseProps: Object,
-	baseContextValue: Object,
 	getStyle: () => Object,
 	fallbackClientId: string,
 	currentBlockStyleVariation: {

@@ -38,6 +38,7 @@ export const getStatesGraph = ({
 	path,
 	attributesRef,
 	isRepeaterItem,
+	inGlobalStylesPanel = false,
 }: {
 	controlId: string,
 	blockName: string,
@@ -45,8 +46,11 @@ export const getStatesGraph = ({
 	path: null | string,
 	attributesRef?: Object,
 	isRepeaterItem: Boolean,
+	inGlobalStylesPanel: boolean,
 }): Array<LabelStates> => {
-	const blockStates = controlId ? getStatesGraphNodes(attributesRef) : [];
+	const blockStates = controlId
+		? getStatesGraphNodes(attributesRef, inGlobalStylesPanel)
+		: [];
 
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const { getAttributes = () => {}, currentBlock } = useBlockContext();

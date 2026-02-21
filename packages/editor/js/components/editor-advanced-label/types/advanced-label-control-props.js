@@ -11,5 +11,6 @@ export type AdvancedLabelControlProps = {
 	clientId?: string,
 	attribute?: string,
 	offset?: number,
+	inGlobalStylesPanel?: boolean,
 	getAttributesRef?: () => Object,
 };

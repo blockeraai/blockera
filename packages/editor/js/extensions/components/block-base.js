@@ -9,17 +9,21 @@ import type { Element, ComponentType, MixedElement } from 'react';
 import { select, useSelect, dispatch } from '@wordpress/data';
 import { InspectorControls } from '@wordpress/block-editor';
 import {
+	createContext,
+	useContext,
 	useRef,
 	useMemo,
 	useState,
 	useEffect,
 	useCallback,
+	memo,
 	// StrictMode,
 } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
+import { BaseControlContext } from '@blockera/controls';
 import { useBlockFeatures } from '@blockera/features-core';
 import { isEquals, cloneObject, mergeObject } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
@@ -59,6 +63,10 @@ import { getCompatibleAttributes } from './get-compatible-attributes';
 import { getBlockCSSSelector } from '../../style-engine/get-block-css-selector';
 import { useGlobalStylesPanelContext } from '../../editor/global-styles/panel/context';
 import {
+	EditorFeatureWrapper,
+	EditorAdvancedLabelControl,
+} from '../../components';
+import {
 	registerClassName,
 	isClassNameDuplicate,
 	generateUniqueClassName,
@@ -71,6 +79,38 @@ import {
 
 const BLOCKERA_DELAY_EXPECTED_TIME =
 	process.env.APP_MODE === 'development' ? 100 : 1000;
+
+const GlobalStylesPanelBaseControlConfigContext: Object = createContext({
+	name: '',
+	clientId: '',
+	getAttributes: () => ({}),
+});
+
+const GlobalStylesFeatureWrapper = memo((props: Object): MixedElement => {
+	const { name, clientId } = useContext(
+		GlobalStylesPanelBaseControlConfigContext
+	);
+	return <EditorFeatureWrapper {...props} name={name} clientId={clientId} />;
+});
+
+const GlobalStylesAdvancedLabelControl = memo((props: Object): MixedElement => {
+	const { getAttributesRef, clientId } = useContext(
+		GlobalStylesPanelBaseControlConfigContext
+	);
+	return (
+		<EditorAdvancedLabelControl
+			{...props}
+			inGlobalStylesPanel={true}
+			getAttributesRef={getAttributesRef}
+			clientId={clientId}
+		/>
+	);
+});
+
+const GLOBAL_STYLES_BASE_CONTROL_COMPONENTS = {
+	FeatureWrapper: GlobalStylesFeatureWrapper,
+	AdvancedLabelControl: GlobalStylesAdvancedLabelControl,
+};
 
 export const BlockBase: ComponentType<any> = (
 	_props: Object
@@ -791,54 +831,69 @@ export const BlockBase: ComponentType<any> = (
 			)}
 
 			{!insideBlockInspector && (
-				<SlotFillProvider>
-					<BlockPartials clientId={clientId} />
-					<BlockFillPartials
-						{...{
-							notice,
-							clientId,
-							isActive,
-							setActive,
-							currentState,
-							currentBlock,
-							availableStates,
-							currentInnerBlock,
-							currentBreakpoint,
-							BlockEditComponent,
-							blockeraInnerBlocks,
-							availableInnerStates,
-							insideBlockInspector,
-							currentInnerBlockState,
-							updateBlockEditorSettings,
-							blockStyleVariationsProps,
-							blockProps: {
-								// Sending props like exactly "edit" function props of WordPress Block.
-								// Because needs total block props in outside overriding component like "blockera" in overriding process.
-								name,
-								activeBlockVariation:
-									activeBlockVariation?.name || '',
-								clientId,
-								supports,
-								className,
-								attributes: sanitizedAttributes,
-								setAttributes,
-								defaultAttributes,
-								currentAttributes,
-								currentTab,
-								currentBlock,
-								currentState,
-								setCurrentTab,
-								currentBreakpoint,
-								blockeraInnerBlocks,
-								currentInnerBlockState,
-								handleOnChangeAttributes,
-								additional,
-								currentStateAttributes: currentAttributes,
-								...props,
-							},
+				<GlobalStylesPanelBaseControlConfigContext.Provider
+					value={{
+						name,
+						clientId,
+						getAttributesRef: getAttributes,
+					}}
+				>
+					<BaseControlContext.Provider
+						value={{
+							components: GLOBAL_STYLES_BASE_CONTROL_COMPONENTS,
 						}}
-					/>
-				</SlotFillProvider>
+					>
+						<SlotFillProvider>
+							<BlockPartials clientId={clientId} />
+							<BlockFillPartials
+								{...{
+									notice,
+									clientId,
+									isActive,
+									setActive,
+									currentState,
+									currentBlock,
+									availableStates,
+									currentInnerBlock,
+									currentBreakpoint,
+									BlockEditComponent,
+									blockeraInnerBlocks,
+									availableInnerStates,
+									insideBlockInspector,
+									currentInnerBlockState,
+									updateBlockEditorSettings,
+									blockStyleVariationsProps,
+									blockProps: {
+										// Sending props like exactly "edit" function props of WordPress Block.
+										// Because needs total block props in outside overriding component like "blockera" in overriding process.
+										name,
+										activeBlockVariation:
+											activeBlockVariation?.name || '',
+										clientId,
+										supports,
+										className,
+										attributes: sanitizedAttributes,
+										setAttributes,
+										defaultAttributes,
+										currentAttributes,
+										currentTab,
+										currentBlock,
+										currentState,
+										setCurrentTab,
+										currentBreakpoint,
+										blockeraInnerBlocks,
+										currentInnerBlockState,
+										handleOnChangeAttributes,
+										additional,
+										currentStateAttributes:
+											currentAttributes,
+										...props,
+									},
+								}}
+							/>
+						</SlotFillProvider>
+					</BaseControlContext.Provider>
+				</GlobalStylesPanelBaseControlConfigContext.Provider>
 			)}
 
 			{insideBlockInspector && (

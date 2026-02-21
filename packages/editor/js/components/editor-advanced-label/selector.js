@@ -50,11 +50,16 @@ export type StateGraph = {
 };
 
 export const getStatesGraphNodes = (
-	attributesRef?: Object
+	attributesRef?: Object,
+	inGlobalStylesPanel: boolean = false
 ): Array<StateGraph> => {
 	const { getSelectedBlock } = select('core/block-editor');
 
-	const block = getSelectedBlock() || { attributes: attributesRef };
+	const block = !inGlobalStylesPanel
+		? getSelectedBlock() || {}
+		: {
+				attributes: attributesRef,
+			};
 
 	if (!block) {
 		return [];

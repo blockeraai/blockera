@@ -31,6 +31,7 @@ export const StatesGraph = ({
 	path,
 	isRepeaterItem,
 	attributesRef,
+	inGlobalStylesPanel = false,
 }: {
 	attributesRef?: Object,
 	controlId: string,
@@ -38,6 +39,7 @@ export const StatesGraph = ({
 	defaultValue: any,
 	onClick: (state: TStates, device: TBreakpoint) => void,
 	path: null | string,
+	inGlobalStylesPanel: boolean,
 	isRepeaterItem: Boolean,
 }): null | MixedElement => {
 	if (!controlId) {
@@ -53,6 +55,7 @@ export const StatesGraph = ({
 		path,
 		attributesRef,
 		isRepeaterItem,
+		inGlobalStylesPanel,
 	});
 
 	if (statesGraph.length === 0) {
@@ -99,7 +102,10 @@ export const StatesGraph = ({
 										'states-changes-breakpoint-title'
 									)}
 								>
-									<BreakpointIcon name={state.graph.type} />
+									<BreakpointIcon
+										context="canvas"
+										name={state.graph.type}
+									/>
 									{state.graph.label}
 								</div>
 							)}

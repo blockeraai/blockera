@@ -39,6 +39,7 @@ export const EditorAdvancedLabelControl = ({
 	label,
 	value,
 	getAttributesRef,
+	inGlobalStylesPanel = false,
 	className,
 	ariaLabel,
 	attribute = '',
@@ -65,7 +66,14 @@ export const EditorAdvancedLabelControl = ({
 		currentInnerBlockState,
 	} = useBlockContext();
 	const { getSelectedBlock } = select('core/block-editor') || {};
-	let { attributes } = getSelectedBlock() || { attributes: getAttributesRef };
+	let { attributes } = !inGlobalStylesPanel
+		? getSelectedBlock() || {}
+		: {
+				attributes:
+					'function' === typeof getAttributesRef
+						? getAttributesRef()
+						: {},
+			};
 	attributes = sanitizeBlockAttributes(attributes);
 
 	const { onChange, valueCleanup } = useContext(RepeaterContext) || {};
@@ -74,9 +82,9 @@ export const EditorAdvancedLabelControl = ({
 		isChanged,
 		isInnerBlock,
 		isChangedOnOtherStates,
-		isChangedNormalStateOnBaseBreakpoint,
 		isChangedOnCurrentState,
 		isChangedOnCurrentBreakpointNormal,
+		isChangedNormalStateOnBaseBreakpoint,
 	} = useAdvancedLabelProps(
 		{
 			path,
@@ -233,6 +241,7 @@ export const EditorAdvancedLabelControl = ({
 								onClick={switchBlockState}
 								defaultValue={defaultValue}
 								path={path}
+								inGlobalStylesPanel={inGlobalStylesPanel}
 								attributesRef={
 									'undefined' !== typeof getAttributesRef
 										? getAttributesRef()
