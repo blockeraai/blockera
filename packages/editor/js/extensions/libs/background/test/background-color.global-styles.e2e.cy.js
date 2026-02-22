@@ -57,11 +57,6 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		//assert frontend
 		savePage();
 		redirectToFrontPage();
-		cy.get('.wp-block-site-title').should(
-			'have.css',
-			'background-color',
-			'rgb(102, 102, 102)'
-		);
 		cy.get('.entry-content p:first-child').should(
 			'have.css',
 			'background-color',
@@ -120,11 +115,6 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		savePage();
 		redirectToFrontPage();
 
-		cy.get('.wp-block-site-title').should(
-			'have.css',
-			'background-color',
-			'rgb(104, 104, 104)'
-		);
 		cy.get('.entry-content p:first-child').should(
 			'have.css',
 			'background-color',

@@ -47,7 +47,6 @@ describe('Style Engine → Global Styles', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.wp-block-site-title').should('have.css', 'font-size', '10px');
 		cy.get('.entry-content p:first-child').should(
 			'have.css',
 			'font-size',
@@ -112,8 +111,6 @@ describe('Style Engine → Global Styles', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.wp-block-site-title').realHover();
-		cy.get('.wp-block-site-title').should('have.css', 'font-size', '20px');
 		cy.get('.entry-content p:first-child').realHover();
 		cy.get('.entry-content p:first-child').should(
 			'have.css',

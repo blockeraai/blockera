@@ -49,7 +49,7 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 	it('should show the block type empowered icon global styles on searching results', () => {
 		cy.getByDataTest('block-style-variations').eq(1).click();
 
-		cy.get('input[type="search"]').type('heading');
+		cy.get('input[type="search"]').eq(0).type('heading');
 
 		getWPDataObject().then((data) => {
 			data.select('core/blocks')
@@ -87,8 +87,8 @@ describe('Block Type Empowered Blocker Global Styles', () => {
 				});
 		});
 
-		cy.get('input[type="search"]').type('text for no results');
-		cy.get('input[type="search"]').clear();
+		cy.get('input[type="search"]').eq(0).type('text for no results');
+		cy.get('input[type="search"]').eq(0).clear();
 
 		getWPDataObject().then((data) => {
 			data.select('core/blocks')
