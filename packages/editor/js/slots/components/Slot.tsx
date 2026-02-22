@@ -26,6 +26,7 @@ export default function GenericSlot({
 	onSlotCreated,
 }: SlotProps): ReactNode {
 	const [container, setContainer] = useState<HTMLElement | null>(null);
+	const [retryKey, setRetryKey] = useState(0);
 	const containerFoundRef = useRef(false);
 	// Use ref for callback to avoid stale closures and unnecessary effect dependencies
 	const onSlotCreatedRef = useRef(onSlotCreated);
@@ -51,6 +52,28 @@ export default function GenericSlot({
 	useEffect(() => {
 		onSlotCreatedRef.current = onSlotCreated;
 	}, [onSlotCreated]);
+
+	// When container becomes detached from DOM (e.g. site editor remounts when switching views),
+	// reset state so trySetup can run again on next effect
+	useEffect(() => {
+		if (!container) {
+			return;
+		}
+
+		const checkAttached = () => {
+			if (!document.contains(container)) {
+				setContainer(null);
+				containerFoundRef.current = false;
+				onSlotCreatedRef.current?.(false);
+				setRetryKey((k) => k + 1);
+			}
+		};
+
+		checkAttached();
+		const observer = new MutationObserver(checkAttached);
+		observer.observe(document.body, { childList: true, subtree: true });
+		return () => observer.disconnect();
+	}, [container]);
 
 	useEffect(() => {
 		// If slot is not active, don't setup container
@@ -261,7 +284,7 @@ export default function GenericSlot({
 			clearTimeout(timeoutId);
 			observer.disconnect();
 		};
-	}, [slotId, className, isActive, slotConfig]);
+	}, [slotId, className, isActive, slotConfig, retryKey]);
 
 	// Don't render if slot is not active or container is not available
 	if (!isActive || !container) {
