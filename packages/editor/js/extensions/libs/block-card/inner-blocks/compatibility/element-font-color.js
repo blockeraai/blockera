@@ -155,7 +155,7 @@ export function elementNormalFontColorToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -178,7 +178,7 @@ export function elementNormalFontColorToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -199,7 +199,7 @@ export function elementNormalFontColorToWPCompatibility({
 		...(useStyle
 			? {
 					style: {
-						elements,
+						elements: elements.elements,
 					},
 				}
 			: elements),
@@ -245,7 +245,7 @@ export function elementHoverFontColorToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -270,7 +270,7 @@ export function elementHoverFontColorToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -293,7 +293,7 @@ export function elementHoverFontColorToWPCompatibility({
 		...(useStyle
 			? {
 					style: {
-						elements,
+						elements: elements.elements,
 					},
 				}
 			: elements),
