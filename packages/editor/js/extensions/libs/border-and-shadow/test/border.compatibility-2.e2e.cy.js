@@ -28,7 +28,7 @@ describe('Border → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('container');
+				cy.getParentContainer('Border').as('container');
 
 				cy.addNewTransition();
 
@@ -177,7 +177,7 @@ describe('Border → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('container');
+				cy.getParentContainer('Border').as('container');
 
 				cy.addNewTransition();
 
@@ -415,7 +415,7 @@ describe('Border → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('container');
+				cy.getParentContainer('Border').as('container');
 
 				cy.addNewTransition();
 
@@ -561,7 +561,7 @@ describe('Border → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('container');
+				cy.getParentContainer('Border').as('container');
 
 				cy.addNewTransition();
 
@@ -718,7 +718,7 @@ describe('Border → WP Compatibility', () => {
 				cy.getBlock('core/button').click();
 
 				// add alias to the feature container
-				cy.getParentContainer('Border Line').as('container');
+				cy.getParentContainer('Border').as('container');
 
 				cy.addNewTransition();
 
@@ -1137,7 +1137,7 @@ describe('Border → WP Compatibility', () => {
 
 				cy.addNewTransition();
 
-				cy.getParentContainer('Border Line').as('container');
+				cy.getParentContainer('Border').as('container');
 
 				//
 				// Test 1.1: WP data to Blockera
@@ -1341,7 +1341,7 @@ describe('Border → WP Compatibility', () => {
 				//
 				// Test 2.2: Check interface for showing deleted value addon
 				//
-				cy.getParentContainer('Border Line').within(() => {
+				cy.getParentContainer('Border').within(() => {
 					cy.get('[data-test="value-addon-deleted"]')
 						.should('exist')
 						.eq(3);
