@@ -24,7 +24,7 @@ describe('Style Engine → Global Styles', () => {
 	it('should generate css for all paragraphs cross website pages', () => {
 		cy.getByDataTest('style-default').click();
 
-		cy.getParentContainer('Size').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
 				force: true,
@@ -67,7 +67,7 @@ describe('Style Engine → Global Styles', () => {
 	it('should generate css for normal and hover states of all paragraphs cross website pages', () => {
 		cy.getByDataTest('style-default').click();
 
-		cy.getParentContainer('Size').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
 				force: true,
@@ -87,7 +87,7 @@ describe('Style Engine → Global Styles', () => {
 
 		setBlockState('Hover');
 
-		cy.getParentContainer('Size').within(() => {
+		cy.getParentContainer('Font Size').within(() => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(20, {
 				force: true,
