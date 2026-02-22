@@ -174,7 +174,7 @@ export function elementNormalBackgroundToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -222,7 +222,7 @@ export function elementNormalBackgroundToWPCompatibility({
 							...(useStyle
 								? {
 										style: {
-											elements,
+											elements: elements.elements,
 										},
 									}
 								: elements),
@@ -257,7 +257,7 @@ export function elementNormalBackgroundToWPCompatibility({
 						...(useStyle
 							? {
 									style: {
-										elements,
+										elements: elements.elements,
 									},
 								}
 							: elements),

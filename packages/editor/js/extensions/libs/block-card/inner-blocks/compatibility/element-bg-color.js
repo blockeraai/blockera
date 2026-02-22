@@ -106,7 +106,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 					...(useStyle
 						? {
 								style: {
-									elements,
+									elements: elements.elements,
 								},
 							}
 						: elements),
@@ -137,7 +137,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -161,7 +161,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 			...(useStyle
 				? {
 						style: {
-							elements,
+							elements: elements.elements,
 						},
 					}
 				: elements),
@@ -182,7 +182,7 @@ export function elementNormalBackgroundColorToWPCompatibility({
 		...(useStyle
 			? {
 					style: {
-						elements,
+						elements: elements.elements,
 					},
 				}
 			: elements),
