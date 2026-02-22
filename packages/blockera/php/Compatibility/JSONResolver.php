@@ -532,7 +532,12 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 	public static function get_block_data() {
 		$registry = \WP_Block_Type_Registry::get_instance();
 		$blocks   = $registry->get_all_registered();
-		$hash     = md5(serialize($blocks));
+		try {
+			$hash = md5( serialize( $blocks ) );
+		} catch ( \Throwable $e ) {
+			// Fallback when blocks contain non-serializable data (e.g. closures in WooCommerce render callbacks).
+			$hash = md5( implode( ',', array_keys( $blocks ) ) );
+		}
 
 		$transient_key = 'blockera_resolver_get_block_data_' . $hash;
 		$transient     = get_transient( $transient_key );
