@@ -66,7 +66,7 @@ describe('Flex Layout → WP Data Compatibility', () => {
 		//
 
 		cy.getParentContainer('Flex Layout').within(() => {
-			cy.getByAriaLabel('Row').click();
+			cy.getByAriaLabel('flex-direction: row').click();
 		});
 
 		getWPDataObject().then((data) => {
