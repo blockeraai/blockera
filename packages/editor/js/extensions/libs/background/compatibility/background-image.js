@@ -285,6 +285,8 @@ export function backgroundToWPCompatibility({
 
 				if (item['image-repeat'] === 'no-repeat') {
 					bgImageObj.backgroundRepeat = 'no-repeat';
+				} else {
+					bgImageObj.backgroundRepeat = undefined;
 				}
 
 				const bgImageData = {
