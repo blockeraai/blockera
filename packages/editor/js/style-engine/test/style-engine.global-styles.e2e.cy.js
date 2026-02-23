@@ -57,8 +57,8 @@ describe('Style Engine → Global Styles', () => {
 			.invoke('text')
 			.should(
 				'include',
-				`:root :where(p) {
- font-size: 10px !important; 
+				`:root body :where(p) {
+ font-size: 10px; 
 }`
 			);
 	});
@@ -70,6 +70,7 @@ describe('Style Engine → Global Styles', () => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(10, {
 				force: true,
+				delay: 0,
 			});
 		});
 
@@ -90,12 +91,17 @@ describe('Style Engine → Global Styles', () => {
 			cy.get('input[type="text"]').clear();
 			cy.get('input[type="text"]').type(20, {
 				force: true,
+				delay: 0,
 			});
 		});
 
 		//Check block
-		cy.getBlock('core/paragraph').realHover();
-		cy.getBlock('core/paragraph').should('have.css', 'font-size', '20px');
+		cy.getBlock('core/paragraph')
+			.contains('Sorry, but nothing was found.')
+			.realHover();
+		cy.getBlock('core/paragraph')
+			.contains('Sorry, but nothing was found.')
+			.should('have.css', 'font-size', '20px');
 
 		//Check store
 		getWPDataObject().then((data) => {
@@ -122,8 +128,8 @@ describe('Style Engine → Global Styles', () => {
 			.invoke('text')
 			.should(
 				'include',
-				`:root :where(p) {
- font-size: 10px !important; 
+				`:root body :where(p) {
+ font-size: 10px; 
 }`
 			);
 
@@ -131,8 +137,8 @@ describe('Style Engine → Global Styles', () => {
 			.invoke('text')
 			.should(
 				'include',
-				`:root :where(p:hover) {
- font-size: 20px !important; 
+				`:root body :where(p):hover {
+ font-size: 20px; 
 }`
 			);
 	});
