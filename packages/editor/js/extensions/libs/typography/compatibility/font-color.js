@@ -288,6 +288,16 @@ export function fontColorToWPCompatibility({
 		: attributes?.elements?.link?.color?.text;
 
 	if (currentTextColor === linkTextColor) {
+		const blockeraInnerBlocks = {
+			value: {
+				'elements/link': {
+					attributes: {
+						blockeraFontColor: newValue,
+					},
+				},
+			},
+		};
+
 		return runInsideBlockInspector(
 			insideBlockInspector,
 			editorSelectedBlockEvent
@@ -306,6 +316,7 @@ export function fontColorToWPCompatibility({
 							},
 						},
 					},
+					blockeraInnerBlocks,
 				}
 			: {
 					color: {
@@ -318,6 +329,7 @@ export function fontColorToWPCompatibility({
 							},
 						},
 					},
+					blockeraInnerBlocks,
 				};
 	}
 
