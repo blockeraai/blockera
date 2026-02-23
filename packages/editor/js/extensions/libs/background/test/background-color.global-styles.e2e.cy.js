@@ -36,7 +36,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 		cy.get('.components-popover').each(() => {
 			cy.get('.components-popover input').as('hexColorInput');
 			cy.get('@hexColorInput').clear();
-			cy.get('@hexColorInput').type('666666');
+			cy.get('@hexColorInput').type('666666', { delay: 0 });
 		});
 
 		//assert data
@@ -107,7 +107,7 @@ describe('Background Color Inside Style Variations → Functionality', () => {
 				.invoke('text')
 				.should(
 					'include',
-					'background-color: var(--wp--preset--color--accent-4)'
+					'background-color: var(--wp--preset--color--accent-4, #686868) !important;'
 				);
 		});
 
