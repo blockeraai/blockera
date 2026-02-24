@@ -177,7 +177,7 @@ jobs:
                   # Run Playwright tests with actual file paths
                   test_exit_code=0
                   # Pass all files at once to Playwright
-                  if ! npx playwright test --config playwright.config.js "${test_files[@]}"; then
+                  if ! WP_BASE_URL=http://localhost:8888 npx playwright test --config playwright.config.js "${test_files[@]}"; then
                     test_exit_code=1
                   fi
 
