@@ -95,6 +95,10 @@ jobs:
               run: |
                   echo "Running category: ${{ matrix.category }}"
 
+            - name: Ensure mu-plugins directory exists for Playwright tests
+              run: |
+                  npx wp-env run cli -- wp eval 'if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); }'
+
             - name: Run Playwright E2E Tests
               run: |
                   # Determine test pattern based on category
