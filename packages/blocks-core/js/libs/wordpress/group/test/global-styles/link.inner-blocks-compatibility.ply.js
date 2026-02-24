@@ -17,6 +17,7 @@ const {
 	setColorControlValue,
 	clearColorControlValue,
 	clickValueAddonButton,
+	openGlobalStylesPanel,
 	selectValueAddonItem,
 	removeValueAddon,
 	addNewTransition,
