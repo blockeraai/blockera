@@ -105,7 +105,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 			const linkElement = root?.elements?.link;
 
 			// WP data should come to Blockera
-			const blockeraInnerBlocks = root?.blockeraInnerBlocks;
+			const blockeraInnerBlocks = root?.blockeraInnerBlocks?.value;
 			const linkInnerBlock = blockeraInnerBlocks?.['elements/link'];
 
 			expect('#ffbaba').toEqual(linkElement?.color?.text);
@@ -157,7 +157,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			const root2 = globalStylesRecord2?.['core/group'];
 			const linkElement2 = root2?.elements?.link;
-			const blockeraInnerBlocks2 = root2?.blockeraInnerBlocks;
+			const blockeraInnerBlocks2 = root2?.blockeraInnerBlocks?.value;
 			const linkInnerBlock2 = blockeraInnerBlocks2?.['elements/link'];
 
 			expect({
@@ -207,7 +207,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			const root3 = globalStylesRecord3?.['core/group'];
 			const linkElement3 = root3?.elements?.link;
-			const blockeraInnerBlocks3 = root3?.blockeraInnerBlocks;
+			const blockeraInnerBlocks3 = root3?.blockeraInnerBlocks?.value;
 			const linkInnerBlock3 = blockeraInnerBlocks3?.['elements/link'];
 
 			expect({
@@ -250,7 +250,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 			const linkElement = root?.elements?.link;
 
 			// WP data should come to Blockera
-			const blockeraInnerBlocks = root?.blockeraInnerBlocks;
+			const blockeraInnerBlocks = root?.blockeraInnerBlocks?.value;
 			const linkInnerBlock = blockeraInnerBlocks?.['elements/link'];
 
 			// WordPress stores preset colors as var:preset|color|{slug} format
@@ -346,7 +346,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			const root2 = globalStylesRecord2?.['core/group'];
 			const linkElement2 = root2?.elements?.link;
-			const blockeraInnerBlocks2 = root2?.blockeraInnerBlocks;
+			const blockeraInnerBlocks2 = root2?.blockeraInnerBlocks?.value;
 			const linkInnerBlock2 = blockeraInnerBlocks2?.['elements/link'];
 
 			expect({
@@ -438,7 +438,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			const root3 = globalStylesRecord3?.['core/group'];
 			const linkElement3 = root3?.elements?.link;
-			const blockeraInnerBlocks3 = root3?.blockeraInnerBlocks;
+			const blockeraInnerBlocks3 = root3?.blockeraInnerBlocks?.value;
 			const linkInnerBlock3 = blockeraInnerBlocks3?.['elements/link'];
 
 			expect({
