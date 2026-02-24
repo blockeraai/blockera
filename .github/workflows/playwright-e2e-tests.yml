@@ -99,6 +99,24 @@ jobs:
               run: |
                   npx wp-env run cli -- wp eval 'if (!file_exists(WPMU_PLUGIN_DIR)) { wp_mkdir_p(WPMU_PLUGIN_DIR); }'
 
+            - name: Verify mu-plugin fixture paths for compatibility tests
+              run: |
+                  # Test that mu-plugin files exist and can be copied (required for tests with activateMuPlugin in beforeEach)
+                  npx wp-env run cli -- wp eval 'foreach (["packages/editor/js/extensions/libs/background/test/global-styles/fixtures/background-color-setup-1.php","packages/blocks-core/js/libs/wordpress/group/test/global-styles/fixtures/link-inner-blocks-simple-color.php"] as $f) { $p = ABSPATH . "wp-content/plugins/blockera/" . $f; if (!file_exists($p)) { echo "Missing: " . $p; exit(1); } } echo "Mu-plugin fixtures OK";'
+
+            - name: Wait for WordPress to be ready
+              run: |
+                  echo "Waiting for WordPress at http://localhost:8888..."
+                  for i in $(seq 1 36); do
+                    if curl -sf -o /dev/null http://localhost:8888; then
+                      echo "WordPress is ready"
+                      break
+                    fi
+                    echo "Attempt $i/36 - WordPress not ready yet, waiting 5s..."
+                    sleep 5
+                  done
+                  curl -sf -o /dev/null http://localhost:8888 || (echo "WordPress failed to become ready" && exit 1)
+
             - name: Run Playwright E2E Tests
               run: |
                   # Determine test pattern based on category

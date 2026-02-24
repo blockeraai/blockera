@@ -762,9 +762,13 @@ async function wpCli(
 		? command
 		: command.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 
+	// Use plugin root as cwd so wp-env finds .wp-env.json (critical for CI)
+	const pluginRoot = path.resolve(__dirname, '../../../../');
+
 	try {
 		const result = await execAsync(
-			`npm --silent run env run cli -- ${escapedCommand}`
+			`npm --silent run env run cli -- ${escapedCommand}`,
+			{ cwd: pluginRoot }
 		);
 		return { stdout: result.stdout, stderr: result.stderr, code: 0 };
 	} catch (error) {

@@ -949,12 +949,61 @@ async function activateMuPlugin(
 
 	// Execute PHP code directly using wp eval
 	// Use ignoreFailures=true to prevent test failure if file doesn't exist
-	return await wpCli(
+	await wpCli(
 		page,
 		`wp eval '${escapedPhpCode}'`,
 		true, // ignoreFailures = true - don't fail if file doesn't exist
 		true // skipEscaping = true - we've already escaped
 	);
+
+	// Verify mu-plugin was successfully installed
+	return await verifyMuPluginInstalled(page, muPluginPath);
+}
+
+/**
+ * Verify mu-plugin is installed in wp-content/mu-plugins/ directory.
+ * Use after activateMuPlugin to assert the mu-plugin was successfully copied.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} muPluginPath - Full path to the mu-plugin.php file (relative to plugin root).
+ * @param {string} [targetName] - Optional target filename. If not provided, generates from path (must match activateMuPlugin).
+ * @param {string} [pluginName='blockera'] - Plugin name to use in paths. Defaults to 'blockera'.
+ * @return {Promise<{stdout: string, stderr: string, code: number}>} The result of the wpCli command.
+ * @throws {Error} If mu-plugin file is not found in mu-plugins directory.
+ */
+async function verifyMuPluginInstalled(
+	page,
+	muPluginPath,
+	targetName = null,
+	pluginName = 'blockera'
+) {
+	const { wpCli } = require('../support/commands');
+
+	const pathParts = muPluginPath.split('/');
+	if (!targetName) {
+		const folderName = pathParts[pathParts.length - 2] || 'mu-plugin';
+		targetName = `${pluginName}-test-${folderName}.php`;
+	}
+
+	const phpCode = `$targetFile = WPMU_PLUGIN_DIR . '/${targetName}'; echo file_exists($targetFile) ? 'installed' : 'not_installed';`;
+
+	const escapedPhpCode = phpCode.replace(/'/g, "'\\''");
+
+	const result = await wpCli(
+		page,
+		`wp eval '${escapedPhpCode}'`,
+		false,
+		true
+	);
+
+	const output = (result.stdout || '').trim();
+	if (output !== 'installed') {
+		throw new Error(
+			`Mu-plugin not installed: expected file at wp-content/mu-plugins/${targetName} (source: ${muPluginPath})`
+		);
+	}
+
+	return result;
 }
 
 /**
@@ -1082,5 +1131,6 @@ module.exports = {
 	getBlockeraStylesWrapper,
 	activateMuPlugin,
 	deactivateMuPlugin,
+	verifyMuPluginInstalled,
 	waitForAssertValue,
 };
