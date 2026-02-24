@@ -4,34 +4,26 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useSelect } from '@wordpress/data';
-import { useMemo } from '@wordpress/element';
 import { store as blocksStore } from '@wordpress/blocks';
+import { useSelect, useDispatch } from '@wordpress/data';
+import { useMemo } from '@wordpress/element';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
-import { hasContentRoleAttribute } from './utils';
-import { useBlockContext } from '../../../components/block-context';
-import { getAttributesWithIds } from '../../../../hooks/use-attributes';
 import { default as VariationsDropdown } from './components/variation-drop-down';
 import { default as VariationsToggleSelectControl } from './components/variation-toggle-select';
+import { hasContentRoleAttribute } from './utils';
 
 export default function BlockVariationTransforms({
 	blockClientId,
 }: {
 	blockClientId: string,
 }): MixedElement {
-	const { handleOnChangeAttributes } = useBlockContext();
+	const { updateBlockAttributes } = useDispatch(blockEditorStore);
 
-	const {
-		name,
-		attributes,
-		activeBlockVariation,
-		variations,
-		isContentOnly,
-	} = useSelect(
+	const { name, activeBlockVariation, variations, isContentOnly } = useSelect(
 		(select) => {
 			const { getActiveBlockVariation, getBlockVariations } =
 				select(blocksStore);
@@ -45,7 +37,6 @@ export default function BlockVariationTransforms({
 
 			return {
 				name,
-				attributes: getBlockAttributes(blockClientId),
 				activeBlockVariation: getActiveBlockVariation(
 					name,
 					getBlockAttributes(blockClientId)
@@ -80,16 +71,9 @@ export default function BlockVariationTransforms({
 	}, [variations]);
 
 	const onSelectVariation = (variationName: string) => {
-		handleOnChangeAttributes(
-			'blockeraPropsId',
-			getAttributesWithIds(attributes, 'blockeraPropsId', true)
-				?.blockeraPropsId,
-			{
-				effectiveItems: variations.find(
-					({ name }) => name === variationName
-				).attributes,
-			}
-		);
+		updateBlockAttributes(blockClientId, {
+			...variations.find(({ name }) => name === variationName).attributes,
+		});
 	};
 
 	if (!variations?.length || isContentOnly) {

@@ -84,6 +84,10 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.setBlockVariation('group-row');
 
+		cy.getByDataTest('style-tab').click();
+		cy.editTransition(201, 2001);
+		cy.getByDataTest('settings-tab').click();
+
 		getWPDataObject().then((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
@@ -139,6 +143,10 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 
 		cy.setBlockVariation('group-stack');
+
+		cy.getByDataTest('style-tab').click();
+		cy.editTransition(202, 2002);
+		cy.getByDataTest('settings-tab').click();
 
 		getWPDataObject().then((data) => {
 			expect('flex').to.be.equal(getSelectedBlock(data, 'layout')?.type);
@@ -196,6 +204,10 @@ describe('Group Block → Variation Switch Compatibility', () => {
 
 		cy.setBlockVariation('group-grid');
 
+		cy.getByDataTest('style-tab').click();
+		cy.editTransition(203, 2003);
+		cy.getByDataTest('settings-tab').click();
+
 		getWPDataObject().then((data) => {
 			expect('grid').to.be.equal(getSelectedBlock(data, 'layout')?.type);
 
@@ -244,6 +256,10 @@ describe('Group Block → Variation Switch Compatibility', () => {
 		//
 
 		cy.setBlockVariation('group');
+
+		cy.getByDataTest('style-tab').click();
+		cy.editTransition(200, 2000);
+		cy.getByDataTest('settings-tab').click();
 
 		getWPDataObject().then((data) => {
 			expect('constrained').to.be.equal(

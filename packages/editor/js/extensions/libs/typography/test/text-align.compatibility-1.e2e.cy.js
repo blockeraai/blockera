@@ -8,33 +8,6 @@ import {
 	getSelectedBlock,
 } from '@blockera/dev-cypress/js/helpers';
 
-Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
-	cy.getParentContainer('Transitions').as('transition');
-	cy.get('@transition').within(() => {
-		cy.getByDataCy('group-control-header').click();
-	});
-
-	cy.get('.components-popover')
-		.last()
-		.within(() => {
-			cy.getByDataTest('transition-input-duration').clear();
-			cy.getByDataTest('transition-input-duration').type(duration, delay);
-
-			cy.getParentContainer('Timing').within(() => {
-				// check disabled options
-				cy.get('select').within(() => {
-					cy.get('[value="ease-in-quad"]').should('be.disabled');
-					cy.get('[value="ease-in-cubic"]').should('be.disabled');
-				});
-
-				cy.get('select').select('ease-in-out');
-			});
-
-			cy.getByDataTest('transition-input-delay').clear();
-			cy.getByDataTest('transition-input-delay').type(2000);
-		});
-});
-
 describe('Text Align → WP Compatibility', () => {
 	beforeEach(() => {
 		createPost();

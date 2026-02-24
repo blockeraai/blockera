@@ -263,11 +263,11 @@ export const registerCommands = () => {
 					.parent()
 					.next()
 					.within(() => {
-						if (force)
+						if (force) {
 							cy.get('input').type(`{selectall}${value}`, {
 								force: true,
 							});
-						else {
+						} else {
 							cy.get('input').type(`{selectall}${value}`);
 						}
 					});
@@ -350,7 +350,7 @@ export const registerCommands = () => {
 					.within(() => {
 						cy.getByAriaLabel(label).click({ force: true });
 					});
-			} else
+			} else {
 				cy.get('h2')
 					.contains(content)
 					.parent()
@@ -358,6 +358,7 @@ export const registerCommands = () => {
 					.within(() => {
 						cy.getByAriaLabel(label).click({ force: true });
 					});
+			}
 
 			cy.checkStateGraphPopover(changes);
 		}
@@ -578,7 +579,7 @@ export const registerCommands = () => {
 					.within(() => {
 						cy.getByAriaLabel(label).click({ force: true });
 					});
-			} else
+			} else {
 				cy.get('h2')
 					.contains(content)
 					.parent()
@@ -586,6 +587,7 @@ export const registerCommands = () => {
 					.within(() => {
 						cy.getByAriaLabel(label).first().click({ force: true });
 					});
+			}
 
 			cy.getByDataTest('popover-body')
 				.last()
@@ -887,6 +889,36 @@ export const registerCommands = () => {
 		cy.get('@transition').within(() => {
 			cy.getByAriaLabel('Add New Transition').click();
 		});
+	});
+
+	Cypress.Commands.add('editTransition', (duration = 200, delay = 2000) => {
+		cy.getParentContainer('Transitions').as('transition');
+		cy.get('@transition').within(() => {
+			cy.getByDataCy('group-control-header').click();
+		});
+
+		cy.get('.components-popover')
+			.last()
+			.within(() => {
+				cy.getByDataTest('transition-input-duration').clear();
+				cy.getByDataTest('transition-input-duration').type(
+					duration,
+					delay
+				);
+
+				cy.getParentContainer('Timing').within(() => {
+					// check disabled options
+					cy.get('select').within(() => {
+						cy.get('[value="ease-in-quad"]').should('be.disabled');
+						cy.get('[value="ease-in-cubic"]').should('be.disabled');
+					});
+
+					cy.get('select').select('ease-in-out');
+				});
+
+				cy.getByDataTest('transition-input-delay').clear();
+				cy.getByDataTest('transition-input-delay').type(2000);
+			});
 	});
 
 	Cypress.Commands.add('prepareEditorForScreenshot', (reset = false) => {
