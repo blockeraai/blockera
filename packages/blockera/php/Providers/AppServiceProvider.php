@@ -37,6 +37,13 @@ use Blockera\Editor\EditorPersistenceStore;
  */
 class AppServiceProvider extends ServiceProvider {
 
+	/**
+	 * Flag to check if the blockera css has been outputted.
+	 *
+	 * @var bool $has_output_blockera_css The flag to check if the blockera css has been outputted.
+	 */
+	protected $has_output_blockera_css = false;
+
     /**
      * Registering services classes.
      *
@@ -314,22 +321,20 @@ class AppServiceProvider extends ServiceProvider {
 			2
 		);
 
-		// wp_head - CSS output (now inside context guard).
+		// Output CSS in wp_head if possible, else fallback to wp_footer if head never runs.
 		add_action(
 			'wp_head',
-			function() use ( $render_instance): void {
-				$css = $render_instance->getGeneratedCSS();
+			function() use ( $render_instance ): void {
+				// Mark that we've outputted in head.
+				$this->printBlockeraCssForBlocks($render_instance);
+			}
+		);
 
-				// For development purposes, sort the CSS by block number.
-                if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT) {
-                    $css = blockera_sort_css_by_block_number($css);
-                }
-
-				blockera_add_inline_css(implode(PHP_EOL, $css));
-
-				$render_instance->resetGeneratedCSS();
-				$render_instance->resetProcessedHTML();
-				$render_instance->clearClassnamesRegistry();
+		// If wp_head didn't run our print, print in wp_footer as a fallback.
+		add_action(
+			'wp_footer',
+			function() use ( $render_instance ): void {
+				$this->printBlockeraCssForBlocks($render_instance);
 			}
 		);
 
@@ -353,6 +358,41 @@ class AppServiceProvider extends ServiceProvider {
             },
             9999
 		);
+	}
+
+	/**
+	 * Print the generated css for the blocks.
+	 *
+	 * @param Render $render_instance The render instance.
+	 *
+	 * @return void
+	 */
+	protected function printBlockeraCssForBlocks( Render $render_instance): void {
+		$current_action = current_action();
+
+		if ('wp_footer' === $current_action && ! $this->has_output_blockera_css) {
+			return;
+		}
+
+		$css = $render_instance->getGeneratedCSS();
+
+		// For development purposes, sort the CSS by block number.
+        if (defined('BLOCKERA_DEVELOPMENT') && BLOCKERA_DEVELOPMENT && ! empty($css)) {
+            $css = blockera_sort_css_by_block_number($css);
+        }
+
+		if (empty($css) && 'wp_head' === $current_action) {
+			// Turn on the flag to attempt to print the css in wp_footer.
+			$this->has_output_blockera_css = true;
+
+			return;
+		}
+
+		blockera_add_inline_css(implode(PHP_EOL, $css));
+
+		$render_instance->resetGeneratedCSS();
+		$render_instance->resetProcessedHTML();
+		$render_instance->clearClassnamesRegistry();
 	}
 
 	/**
