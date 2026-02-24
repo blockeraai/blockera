@@ -70,7 +70,8 @@ export function StyleVariationBlockCard({
 		useGlobalStylesPanelContext();
 	const blockeraGlobalStylesMetaData = useSelect(
 		(select) =>
-			select('blockera/editor')?.getBlockeraGlobalStylesMetaData?.() || {},
+			select('blockera/editor')?.getBlockeraGlobalStylesMetaData?.() ||
+			{},
 		[]
 	);
 
