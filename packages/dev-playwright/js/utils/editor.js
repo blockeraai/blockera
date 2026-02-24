@@ -136,6 +136,8 @@ async function getSelectedBlockStyle(page, name, variation = 'default') {
  * @return {Promise<any>} The global styles record or property.
  */
 async function getEditedGlobalStylesRecord(page, prop, innerField) {
+	await page.waitForTimeout(500);
+
 	return await page.evaluate(
 		async ({ propName, innerFieldName }) => {
 			const dataObj = window.wp.data;
