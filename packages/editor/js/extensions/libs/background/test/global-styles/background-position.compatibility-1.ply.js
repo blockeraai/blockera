@@ -5,6 +5,7 @@
 const {
 	openSiteEditor,
 	closeWelcomeGuide,
+	getEditedWPGlobalStylesRecord,
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
 	deactivateMuPlugin,
@@ -130,22 +131,27 @@ test.describe('Background Position → WP Compatibility (Global Styles)', () => 
 				const popover = page.locator('.components-popover').last();
 				await popover.locator('[data-test="position-button"]').click();
 
-				// change position
+				// change position - FIX: resolve strict mode by selecting correct input
 				const positionPopover = page
 					.locator('.components-popover')
 					.last();
-				const topContainer = getParentContainer(positionPopover, 'Top');
-				await topContainer.locator('input[type="text"]').fill('40%');
-				await topContainer.locator('input[type="text"]').press('Enter');
 
-				const leftContainer = getParentContainer(
-					positionPopover,
-					'Left'
-				);
-				await leftContainer.locator('input[type="text"]').fill('60%');
-				await leftContainer
-					.locator('input[type="text"]')
-					.press('Enter');
+				// Use more specific selectors by filtering based on aria-label.
+				const topInput = positionPopover
+					.locator(
+						'[data-cy="base-control"]:has([aria-label="Top"]) >> input[type="text"]'
+					)
+					.first();
+				await topInput.fill('40%');
+				await topInput.press('Enter');
+
+				const leftInput = positionPopover
+					.locator(
+						'[data-cy="base-control"]:nth-child(2):has([aria-label="Left"]) >> input[type="text"]'
+					)
+					.first();
+				await leftInput.fill('60%');
+				await leftInput.press('Enter');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -172,7 +178,7 @@ test.describe('Background Position → WP Compatibility (Global Styles)', () => 
 				});
 
 				// WP data should be removed too
-				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
+				const globalStylesRecord3 = await getEditedWPGlobalStylesRecord(
 					page,
 					'styles',
 					'blocks'
