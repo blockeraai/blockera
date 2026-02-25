@@ -35,7 +35,7 @@ describe('Blocksy → Post Template Block → Block support', () => {
 <!-- /wp:blocksy/query -->
 		`);
 
-		cy.getBlock('blocksy/post-template').click();
+		cy.getBlock('blocksy/post-template').click({ force: true });
 
 		cy.get('.blockera-extension-block-card').should('be.visible');
 
