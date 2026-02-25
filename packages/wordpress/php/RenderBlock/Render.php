@@ -2,7 +2,6 @@
 
 namespace Blockera\WordPress\RenderBlock;
 
-use Blockera\Editor\StyleEngine;
 use Blockera\Bootstrap\Application;
 use Blockera\Exceptions\BaseException;
 use Blockera\Features\Core\FeaturesManager;
