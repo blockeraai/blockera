@@ -103,3 +103,6 @@ Scratch
 source-code-block-editor/
 source-code-wordpress/
 wordpress-develop
+
+# playwright environment variables
+playwright-env.json

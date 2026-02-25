@@ -235,7 +235,7 @@
 		"test:e2e:debug": "npx cypress open --e2e",
 		"test:e2e:headed": "npm run test:e2e --headed",
 		"test:e2e:record": "npx cypress run --browser chrome",
-		"test:e2e:base": "WP_BASE_URL=http://localhost:8888 wp-scripts test-playwright --config playwright.config.js",
+		"test:e2e:base": "wp-scripts test-playwright --config playwright.config.js",
 		"test:e2e:base:ui": "npm run test:e2e:base -- --ui",
 		"test:js": "wp-scripts test-unit-js --config packages/dev-jest/js/jest.config.js",
 		"test:js:watch": "wp-scripts test-unit-js --config packages/dev-jest/js/jest.config.js --watch",

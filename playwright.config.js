@@ -1,26 +1,29 @@
 /**
  * External dependencies
  */
+const fs = require('fs');
+const path = require('path');
 const { defineConfig } = require('@playwright/test');
-
-/**
- * WordPress dependencies
- */
 const baseConfig = require('@wordpress/scripts/config/playwright.config.js');
 
-// wp-env uses port 8888 by default; ensure baseURL is set for CI and when WP_BASE_URL is provided
-const baseURL =
-	process.env.WP_BASE_URL ||
-	(process.env.CI ? 'http://localhost:8888' : undefined);
+/**
+ * Internal dependencies
+ */
+const envPath = path.resolve(__dirname, './playwright.env.json');
+
+// If env file exists, load it into process.env.
+if (fs.existsSync(envPath)) {
+	const playwrightEnv = require(envPath);
+	process.env = {
+		...process.env,
+		...playwrightEnv,
+	};
+}
 
 const config = defineConfig({
 	...baseConfig,
 	testDir: './',
 	testMatch: '**/*.ply.js',
-	use: {
-		...(baseConfig.use || {}),
-		...(baseURL && { baseURL }),
-	},
 	reporter: process.env.CI
 		? [
 				['list'], // Shows test names and progress in real-time
