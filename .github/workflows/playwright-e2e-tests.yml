@@ -73,6 +73,15 @@ jobs:
                   cp "$WP_ENV_CONFIG" .wp-env.json
                   cat .wp-env.json
 
+                  # Create playwright.env.json file in valid JSON format
+                  cat > playwright.env.json <<EOF
+                  {
+                    "APP_MODE": "production",
+                    "WP_BASE_URL": "http://localhost:8888"
+                  }
+                  EOF
+                  cat playwright.env.json
+
                   # Create .env file
                   touch .env
                   echo APP_MODE=production >> .env
