@@ -77,8 +77,7 @@ import {
 	BLOCKERA_BLOCK_REGEX,
 } from './registered-classnames';
 
-const BLOCKERA_DELAY_EXPECTED_TIME =
-	process.env.APP_MODE === 'development' ? 100 : 1000;
+const BLOCKERA_DELAY_EXPECTED_TIME = 1000;
 
 const GlobalStylesPanelBaseControlConfigContext: Object = createContext({
 	name: '',

@@ -46,8 +46,7 @@ test.afterEach(async ({ requestUtils }) => {
 /**
  * Blockera delay expected time constant.
  */
-const BLOCKERA_DELAY_EXPECTED_TIME =
-	process.env.APP_MODE === 'development' ? 100 : 2000;
+const BLOCKERA_DELAY_EXPECTED_TIME = 1000;
 
 /**
  * Wait for assert value (helper function).

@@ -140,16 +140,75 @@ async function getEditedGlobalStylesRecord(page, prop, innerField) {
 
 	return await page.evaluate(
 		async ({ propName, innerFieldName }) => {
+			function isObject(value) {
+				return typeof value === 'object' && value !== null;
+			}
+			/**
+			 * Deep merge two objects.
+			 *
+			 * @param {Object} target the target object.
+			 * @param {Object} source the new source to merge with target object.
+			 * @param {Object} args the extra arguments to merge process.
+			 */
+			function mergeObject(target, source, args) {
+				if (!isObject(source)) {
+					return { ...target };
+				}
+
+				const { forceUpdated = [], deletedProps = [] } = args || {};
+
+				const result = { ...target }; // Create a clone of the target object
+
+				Object.keys(source).forEach((key) => {
+					if (
+						forceUpdated.includes(key) &&
+						source[key] &&
+						isObject(source[key])
+					) {
+						result[key] = { ...source[key] }; // Clone to prevent reference mutation
+					} else if (isObject(source[key])) {
+						if (!result[key] || !isObject(result[key])) {
+							result[key] = {};
+						}
+						result[key] = mergeObject(
+							result[key],
+							source[key],
+							args
+						); // Merge recursively
+					} else {
+						if (
+							undefined === source[key] &&
+							deletedProps.includes(key)
+						) {
+							delete result[key];
+
+							return;
+						}
+
+						result[key] = source[key];
+					}
+				});
+
+				return result;
+			}
+
 			const dataObj = window.wp.data;
 			const { __experimentalGetCurrentGlobalStylesId } =
 				dataObj.select('core');
 			const { getEditedEntityRecord } = dataObj.select('core');
+			const { getGlobalStyles } = dataObj.select('blockera/editor');
 
-			const record = getEditedEntityRecord(
+			let record = getEditedEntityRecord(
 				'root',
 				'globalStyles',
 				__experimentalGetCurrentGlobalStylesId()
 			);
+
+			if ('styles' === propName) {
+				record = mergeObject(record, {
+					[propName]: getGlobalStyles()?.userStyles?.styles || {},
+				});
+			}
 
 			if (propName) {
 				if (innerFieldName) {
