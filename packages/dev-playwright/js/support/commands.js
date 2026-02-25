@@ -32,17 +32,6 @@ test.beforeEach(async ({ page }) => {
 	}
 });
 
-test.afterEach(async ({ requestUtils }) => {
-	// Clear WordPress database after each test for isolation
-	if (requestUtils) {
-		await Promise.all([
-			requestUtils.deleteAllPosts(),
-			requestUtils.deleteAllBlocks(),
-			requestUtils.resetPreferences(),
-		]);
-	}
-});
-
 /**
  * Blockera delay expected time constant.
  */

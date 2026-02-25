@@ -128,18 +128,36 @@ async function getSelectedBlockStyle(page, name, variation = 'default') {
 }
 
 /**
+ * Get the edited WordPress globalStyles entity record.
+ *
+ * @param {import('@playwright/test').Page} page - Playwright page object.
+ * @param {string} prop - Property name (e.g., 'style', 'settings').
+ * @param {string} innerField - Inner property name.
+ * @return {Promise<any>} The global styles record.
+ */
+async function getEditedWPGlobalStylesRecord(page, prop, innerField) {
+	return await getEditedGlobalStylesRecord(page, prop, innerField, 'core');
+}
+
+/**
  * Get the WordPress globalStyles entity record.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} prop - Property name (e.g., 'style', 'settings').
  * @param {string} innerField - Inner property name.
+ * @param {string} type - Type of record to get (merged, original).
  * @return {Promise<any>} The global styles record or property.
  */
-async function getEditedGlobalStylesRecord(page, prop, innerField) {
+async function getEditedGlobalStylesRecord(
+	page,
+	prop,
+	innerField,
+	type = 'merged'
+) {
 	await waitForAssertValue(page);
 
 	return await page.evaluate(
-		async ({ propName, innerFieldName }) => {
+		async ({ propName, innerFieldName, type }) => {
 			function isObject(value) {
 				return typeof value === 'object' && value !== null;
 			}
@@ -204,7 +222,7 @@ async function getEditedGlobalStylesRecord(page, prop, innerField) {
 				__experimentalGetCurrentGlobalStylesId()
 			);
 
-			if ('styles' === propName) {
+			if ('styles' === propName && 'merged' === type) {
 				record = mergeObject(record, {
 					[propName]: getGlobalStyles()?.userStyles?.styles || {},
 				});
@@ -219,7 +237,7 @@ async function getEditedGlobalStylesRecord(page, prop, innerField) {
 
 			return record;
 		},
-		{ propName: prop, innerFieldName: innerField }
+		{ propName: prop, innerFieldName: innerField, type }
 	);
 }
 
@@ -1161,6 +1179,7 @@ module.exports = {
 	doBlockToolbarContextMenuOption,
 	getSelectedBlock,
 	getSelectedBlockStyle,
+	getEditedWPGlobalStylesRecord,
 	getEditedGlobalStylesRecord,
 	getEditorContent,
 	getBlockeraEntity,

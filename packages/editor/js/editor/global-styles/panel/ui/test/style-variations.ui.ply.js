@@ -7,7 +7,7 @@ const {
 	openSiteEditor,
 	closeWelcomeGuide,
 	getSelectedBlockStyle,
-	getEditedGlobalStylesRecord,
+	getEditedWPGlobalStylesRecord,
 	selectBlockByType,
 } = require('@blockera/dev-playwright/js/utils/helpers');
 const {
@@ -84,11 +84,11 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		if (colorBtnCount > 0) {
 			await bgColorContainer
 				.locator('[data-cy="value-addon-btn-open"]')
-				.dispatchEvent('click');
+				.click();
 		} else {
 			await bgColorContainer
 				.locator('[data-cy="value-addon-btn"]')
-				.dispatchEvent('click');
+				.click();
 		}
 
 		// Select variable
@@ -96,7 +96,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			.locator(
 				'.blockera-component-popover-body [data-cy="va-item-accent-4"]'
 			)
-			.dispatchEvent('click');
+			.click();
 
 		// Assert data
 		const selectedStyle = await getSelectedBlockStyle(
@@ -127,7 +127,10 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 
 		await before(page);
 		await getByDataTest(page, 'style-section-1').click();
-		await getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
+		await getByDataTest(
+			page,
+			'open-section-1-block-card-contextmenu'
+		).click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Clear all customizations' })
@@ -145,7 +148,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		).toBeUndefined();
 
 		// Assert WordPress data
-		const globalStylesRecord = await getEditedGlobalStylesRecord(
+		const globalStylesRecord = await getEditedWPGlobalStylesRecord(
 			page,
 			'styles'
 		);
@@ -170,10 +173,8 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		).toBeUndefined();
 
 		// Assert WordPress data
-		const globalStylesRecordAfterReload = await getEditedGlobalStylesRecord(
-			page,
-			'styles'
-		);
+		const globalStylesRecordAfterReload =
+			await getEditedWPGlobalStylesRecord(page, 'styles');
 		expect(globalStylesRecordAfterReload).toEqual({});
 	});
 
@@ -181,7 +182,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		page,
 	}) => {
 		getByDataTest(page, 'style-section-1').click();
-		getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
+		getByDataTest(page, 'open-section-1-block-card-contextmenu').click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Rename' })
@@ -210,7 +211,10 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		page,
 	}) => {
 		await getByDataTest(page, 'style-section-1').click();
-		await getByDataTest(page, 'open-section-1-contextmenu').nth(1).click();
+		await getByDataTest(
+			page,
+			'open-section-1-block-card-contextmenu'
+		).click();
 		await page
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Rename' })
