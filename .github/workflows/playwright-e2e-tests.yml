@@ -232,19 +232,19 @@ jobs:
             - name: Stop WordPress Environment
               run: npm run env:stop
 
-    merge-artifacts:
-        name: Merge Artifacts
-        if: ${{ !cancelled() }}
-        needs: [playwright_e2e_tests]
-        runs-on: ubuntu-latest
-        permissions: {}
-        steps:
-            - name: Merge failures artifacts
-              uses: actions/upload-artifact/merge@v4
-              # Don't fail the job if there aren't any artifacts to merge.
-              continue-on-error: true
-              with:
-                  name: playwright-artifacts
-                  # Retain the merged artifacts in case of a rerun.
-                  pattern: playwright-artifacts*
-                  delete-merged: true
+    # merge-artifacts:
+    #     name: Merge Artifacts
+    #     if: ${{ !cancelled() }}
+    #     needs: [playwright_e2e_tests]
+    #     runs-on: ubuntu-latest
+    #     permissions: {}
+    #     steps:
+    #         - name: Merge failures artifacts
+    #           uses: actions/upload-artifact/merge@v4
+    #           # Don't fail the job if there aren't any artifacts to merge.
+    #           continue-on-error: true
+    #           with:
+    #               name: playwright-artifacts
+    #               # Retain the merged artifacts in case of a rerun.
+    #               pattern: playwright-artifacts*
+    #               delete-merged: true
