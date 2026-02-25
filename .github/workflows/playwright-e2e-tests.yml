@@ -223,9 +223,6 @@ jobs:
                   path: |
                       artifacts/test-results
                       playwright-report
-                      **/__snapshots__
-                  exclude-paths: |
-                      **/node_modules/**
                   if-no-files-found: ignore
                   retention-days: 7
 
