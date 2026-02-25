@@ -594,7 +594,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				const blockeraBackground3 = root3?.blockeraBackground;
 
 				expect(undefined).toEqual(backgroundImage3);
-				expect({}).toEqual(blockeraBackground3);
+				expect(undefined).toEqual(blockeraBackground3);
 			});
 		});
 	});
