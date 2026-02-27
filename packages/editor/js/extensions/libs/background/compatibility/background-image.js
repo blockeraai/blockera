@@ -283,11 +283,10 @@ export function backgroundToWPCompatibility({
 						break;
 				}
 
-				if (item['image-repeat'] === 'no-repeat') {
-					bgImageObj.backgroundRepeat = 'no-repeat';
-				} else {
-					bgImageObj.backgroundRepeat = undefined;
-				}
+				bgImageObj.backgroundRepeat =
+					'no-repeat' === item['image-repeat']
+						? item['image-repeat']
+						: undefined;
 
 				const bgImageData = {
 					background: bgImageObj,
