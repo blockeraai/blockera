@@ -65,7 +65,16 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 		}
 
 		if (!/^blockera/.test(key)) {
+			// Exclude the Block original core attributes is object and contains all values are undefined.
+			if (
+				'object' === typeof styles[key] &&
+				!Object.values(styles[key]).some((value) => value !== undefined)
+			) {
+				continue;
+			}
+
 			cleanStyles[key] = styles[key];
+
 			continue;
 		}
 
