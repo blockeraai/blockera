@@ -3,7 +3,6 @@
  */
 const {
 	openSiteEditor,
-	getSelectedBlock,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
