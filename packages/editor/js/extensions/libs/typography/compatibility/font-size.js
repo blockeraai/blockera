@@ -4,7 +4,10 @@
  * Blockera dependencies
  */
 import { isValid } from '@blockera/controls';
-import { getFontSizeVAFromVarString } from '@blockera/data';
+import {
+	getFontSizeVAFromVarString,
+	getFontSizeVAStringFromId,
+} from '@blockera/data';
 
 /**
  * Internal dependencies
@@ -110,7 +113,9 @@ export function fontSizeToWPCompatibility({
 				}
 			: {
 					typography: {
-						fontSize: undefined,
+						fontSize: getFontSizeVAStringFromId(
+							newValue?.settings?.id
+						),
 					},
 				};
 	}

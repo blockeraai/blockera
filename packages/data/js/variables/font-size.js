@@ -134,3 +134,13 @@ export const getFontSizeVAFromVarString: (
 
 	return value;
 });
+
+export const getFontSizeVAStringFromId = (id: string): ?string => {
+	const variableObject = getFontSize(id);
+
+	if (!variableObject) {
+		return undefined;
+	}
+
+	return `var:preset|font-size|${id}`;
+};

@@ -31,6 +31,7 @@ export {
 	getFontSizes,
 	getFontSizeBy,
 	getFontSize,
+	getFontSizeVAStringFromId,
 	getFontSizeVAFromIdString,
 	getFontSizeVAFromVarString,
 } from './font-size';
