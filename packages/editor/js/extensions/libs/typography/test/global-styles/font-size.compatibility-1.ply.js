@@ -130,7 +130,7 @@ test.describe('Font Size → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear font size
-				await fontSizeContainer.locator('input').clear();
+				await fontSizeContainer.locator('input').first().clear();
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
