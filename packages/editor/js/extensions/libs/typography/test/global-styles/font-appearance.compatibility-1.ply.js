@@ -113,6 +113,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				);
 				await appearanceContainer
 					.locator('select')
+					.nth(1)
 					.selectOption('200-normal');
 
 				// Blockera value should be moved to WP data
@@ -134,7 +135,10 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear font appearance
-				await appearanceContainer.locator('select').selectOption('');
+				await appearanceContainer
+					.locator('select')
+					.nth(1)
+					.selectOption('');
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
@@ -193,6 +197,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				);
 				await appearanceContainer
 					.locator('select')
+					.nth(1)
 					.selectOption('400-normal');
 
 				await page.waitForTimeout(500);
@@ -251,6 +256,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				);
 				await appearanceContainer
 					.locator('select')
+					.nth(1)
 					.selectOption('300-normal');
 
 				await page.waitForTimeout(500);
