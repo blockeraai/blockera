@@ -455,19 +455,16 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		//Check block
-		cy.get('link[id="blockera-blocks-core-column-style-css"]')
+		cy.get('style[id="blockera-block-buttons-inline-css"]')
 			.should('exist')
-			.then(($link) => {
-				// Fetch the CSS file content
-				cy.request($link.attr('href')).then((response) => {
-					const styleContent = response.body;
+			.then(($style) => {
+				const styleContent = $style.text();
 
-					cy.normalizeCSSContent(styleContent).then(
-						(normalizedContent) => {
-							expect(normalizedContent).to.include(expectedCSS);
-						}
-					);
-				});
+				cy.normalizeCSSContent(styleContent).then(
+					(normalizedContent) => {
+						expect(normalizedContent).to.include(expectedCSS);
+					}
+				);
 			});
 	});
 });
