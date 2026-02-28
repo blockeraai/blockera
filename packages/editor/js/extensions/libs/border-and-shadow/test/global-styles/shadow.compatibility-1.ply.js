@@ -164,10 +164,8 @@ test.describe('Shadow → WP Compatibility', () => {
 				const root2 = globalStylesRecord2?.['core/button'];
 				const shadow2 = root2?.shadow;
 
-				// WP shadow should be updated
-				expect(shadow2).toContain('15px');
-				expect(shadow2).toContain('25px');
-				expect(shadow2).toContain('10px');
+				// WP shadow should be removed because adjusted box shadow not registered inside shadow presets list.
+				expect(shadow2).toBeUndefined();
 
 				//
 				// Test 3: Clear Blockera value and check WP data
@@ -193,7 +191,7 @@ test.describe('Shadow → WP Compatibility', () => {
 				const blockeraBoxShadow3 = root3?.blockeraBoxShadow;
 
 				// After modification, shadow should still exist
-				expect(blockeraBoxShadow3).not.toBeUndefined();
+				expect(blockeraBoxShadow3).toBeUndefined();
 			});
 
 			test('Shadow preset reference', async ({ page }) => {
@@ -270,8 +268,8 @@ test.describe('Shadow → WP Compatibility', () => {
 				const root2 = globalStylesRecord2?.['core/button'];
 				const shadow2 = root2?.shadow;
 
-				// WP shadow should be updated (might be CSS value now instead of preset)
-				expect(shadow2).toBeDefined();
+				// WP shadow should be removed from root of core/button because current adjusted box shadow not registered in shadow presets list.
+				expect(shadow2).toBeUndefined();
 			});
 		});
 	});
