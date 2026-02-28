@@ -104,9 +104,7 @@ test.describe('Min Height → WP Compatibility (Global Styles)', () => {
 				);
 
 				// set min height
-				await minHeightContainer.locator('input').first().fill('400px');
-
-				await page.waitForTimeout(500);
+				await minHeightContainer.locator('input').nth(1).fill('400px');
 
 				// Blockera value should be moved to WP data
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -125,9 +123,7 @@ test.describe('Min Height → WP Compatibility (Global Styles)', () => {
 				//
 
 				// clear min height
-				await minHeightContainer.locator('input').first().clear();
-
-				await page.waitForTimeout(500);
+				await minHeightContainer.locator('input').nth(1).clear();
 
 				// WP data should be removed too
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(
