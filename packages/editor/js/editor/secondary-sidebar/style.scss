@@ -149,7 +149,6 @@
 	flex-direction: column;
 	width: var(--sidebar-width-raw);
 	background: #ffffff;
-	border-bottom: 1px solid #dddddd;
 }
 
 .blockera-combined-sidebar__inserter .editor-inserter-sidebar__content {
@@ -187,33 +186,14 @@
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-}
 
-.blockera-tabbed-sidebar__header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 8px 12px;
-	border-bottom: 1px solid #dddddd;
-	flex-shrink: 0;
-	background: var(--blockera-panel-tabs-bg-color);
-}
-
-.blockera-tabbed-sidebar__tabs {
-	display: flex;
-	gap: 4px;
-	flex: 1;
-}
-
-.blockera-tabbed-sidebar__tab {
-	flex: 1;
-}
-
-.blockera-tabbed-sidebar__content {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	overflow: auto;
+	/* Panel content area rendered by the Tabs component */
+	.blockera-component-tabs__list__item__content {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		overflow: auto;
+	}
 }
 
 /* Mobile responsive adjustments */
@@ -266,6 +246,11 @@
 .blockera-list-view-controls {
 	display: flex;
 	gap: 8px;
+	height: var(--blockera-panel-tabs-height);
+	margin-left: auto;
+	align-items: center;
+	margin-top: -1px;
+	padding-right: 5px;
 
 	.components-button {
 		color: var(--blockera-controls-border-color) !important;

@@ -23,6 +23,11 @@ import { Button, __experimentalText as Text } from '@wordpress/components';
 import { useCallback, useRef, useState, useEffect } from '@wordpress/element';
 
 /**
+ * Blockera dependencies
+ */
+import { Tabs } from '@blockera/controls';
+
+/**
  * Expand all icon SVG component.
  */
 const ExpandAllIcon = () => (
@@ -133,7 +138,6 @@ export default function ListViewPanel() {
 	const [tab, setTab] = useState('list-view');
 
 	const sidebarRef = useRef<HTMLDivElement>(null);
-	const tabsRef = useRef<HTMLDivElement>(null);
 	const listViewRef = useRef<HTMLDivElement>(null);
 	const listViewContentRef = useRef<HTMLDivElement>(null);
 
@@ -159,7 +163,9 @@ export default function ListViewPanel() {
 	);
 
 	function handleSidebarFocus(currentTab: string) {
-		const tabPanelFocus = focus.tabbable.find(tabsRef.current || null)[0];
+		const tabPanelFocus = focus.tabbable.find(
+			sidebarRef.current || null
+		)[0];
 		if (currentTab === 'list-view') {
 			const listViewApplicationFocus = focus.tabbable.find(
 				listViewRef.current || null
@@ -372,30 +378,24 @@ export default function ListViewPanel() {
 			onKeyDown={closeListViewOnEscape as any}
 			ref={sidebarRef}
 		>
-			<div className="blockera-tabbed-sidebar">
-				<div className="blockera-tabbed-sidebar__header">
-					<div className="blockera-tabbed-sidebar__tabs">
-						<Button
-							isPressed={tab === 'list-view'}
-							onClick={() => setTab('list-view')}
-							variant={
-								tab === 'list-view' ? 'primary' : 'tertiary'
-							}
-							className="blockera-tabbed-sidebar__tab"
-						>
-							{_x('List View', 'Post overview', 'blockera')}
-						</Button>
-						<Button
-							isPressed={tab === 'outline'}
-							onClick={() => setTab('outline')}
-							variant={tab === 'outline' ? 'primary' : 'tertiary'}
-							className="blockera-tabbed-sidebar__tab"
-						>
-							{_x('Outline', 'Post overview', 'blockera')}
-						</Button>
-					</div>
-
-					{tab === 'list-view' && (
+			<Tabs
+				className="blockera-tabbed-sidebar"
+				activeTab="list-view"
+				design="modern"
+				fitWidthTabs={false}
+				tabs={[
+					{
+						name: 'list-view',
+						title: _x('List View', 'Post overview', 'blockera'),
+					},
+					{
+						name: 'outline',
+						title: _x('Outline', 'Post overview', 'blockera'),
+					},
+				]}
+				setCurrentTab={setTab}
+				injectMenuEnd={
+					tab === 'list-view' ? (
 						<div className="blockera-list-view-controls">
 							<Button
 								variant="tertiary"
@@ -437,31 +437,38 @@ export default function ListViewPanel() {
 								}
 							/>
 						</div>
-					)}
-				</div>
-
-				<div className="blockera-tabbed-sidebar__content">
-					{tab === 'list-view' && (
-						<div
-							className="editor-list-view-sidebar__list-view-container"
-							ref={listViewContainerRef}
-						>
+					) : undefined
+				}
+				getPanel={(selectedTab: any) => {
+					if (selectedTab.name === 'list-view') {
+						return (
 							<div
-								className="editor-list-view-sidebar__list-view-panel-content"
-								ref={listViewContentRef}
+								className="editor-list-view-sidebar__list-view-container"
+								ref={listViewContainerRef}
 							>
-								<ListView dropZoneElement={dropZoneElement} />
+								<div
+									className="editor-list-view-sidebar__list-view-panel-content"
+									ref={listViewContentRef}
+								>
+									<ListView
+										dropZoneElement={dropZoneElement}
+									/>
+								</div>
 							</div>
-						</div>
-					)}
+						);
+					}
 
-					{tab === 'outline' && (
-						<div className="editor-list-view-sidebar__list-view-container">
-							<ListViewOutline />
-						</div>
-					)}
-				</div>
-			</div>
+					if (selectedTab.name === 'outline') {
+						return (
+							<div className="editor-list-view-sidebar__list-view-container">
+								<ListViewOutline />
+							</div>
+						);
+					}
+
+					return null;
+				}}
+			/>
 		</div>
 	);
 }
