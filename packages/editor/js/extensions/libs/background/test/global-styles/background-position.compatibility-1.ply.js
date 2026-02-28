@@ -145,6 +145,8 @@ test.describe('Background Position → WP Compatibility (Global Styles)', () => 
 				await topInput.fill('40%');
 				await topInput.press('Enter');
 
+				await page.waitForTimeout(1000);
+
 				const leftInput = positionPopover
 					.locator(
 						'[data-cy="base-control"]:nth-child(2):has([aria-label="Left"]) >> input[type="text"]'

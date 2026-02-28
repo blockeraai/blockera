@@ -154,7 +154,7 @@ async function getEditedGlobalStylesRecord(
 	innerField,
 	type = 'merged'
 ) {
-	await waitForAssertValue(page);
+	await waitForAssertValue(1000);
 
 	return await page.evaluate(
 		async ({ propName, innerFieldName, type }) => {
