@@ -35,21 +35,6 @@ import {
 	StyleItemMenuContextProvider,
 } from '../context';
 
-const STYLE_ITEM_POPOVER_OFFSET = 50;
-const SIDEBAR_WIDTH = 280;
-const POPOVER_WIDTH = 260;
-const BLOCK_CARD_PADDING = 16;
-const BLOCK_CARD_SETTINGS_RIGHT = 12;
-const BLOCK_CARD_ICON_WIDTH = 20;
-const BLOCK_CARD_POPOVER_OFFSET = Math.max(
-	8,
-	SIDEBAR_WIDTH -
-		BLOCK_CARD_PADDING * 2 -
-		BLOCK_CARD_SETTINGS_RIGHT -
-		BLOCK_CARD_ICON_WIDTH -
-		POPOVER_WIDTH
-);
-
 export const StyleItem = ({
 	style,
 	inGlobalStylesPanel = false,
@@ -193,6 +178,16 @@ export const StyleItem = ({
 	});
 
 	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
+
+	const primarySidebarWidth = useSelect((select) => {
+		return (
+			Number(
+				select('blockera/editor-persistence')
+					.getPrimarySidebarWidth()
+					.replace('px', '')
+			) - 50
+		);
+	}, []);
 
 	// When not in global styles panel,
 	// skip rendering if style is disabled.
@@ -497,7 +492,7 @@ export const StyleItem = ({
 				<StyleItemMenuContextProvider
 					value={{
 						anchorRef: styleItemContextMenuAnchorRef,
-						popoverOffset: STYLE_ITEM_POPOVER_OFFSET,
+						popoverOffset: 50,
 						blockTitle: getBlockType(blockName).title,
 						style,
 						counter,
@@ -671,7 +666,7 @@ export const StyleItem = ({
 						<StyleItemMenuContextProvider
 							value={{
 								anchorRef: blockCardContextMenuAnchorRef,
-								popoverOffset: BLOCK_CARD_POPOVER_OFFSET,
+								popoverOffset: primarySidebarWidth,
 								blockTitle: getBlockType(blockName).title,
 								style,
 								counter,
