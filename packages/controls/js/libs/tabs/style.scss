@@ -83,7 +83,7 @@ body {
 		justify-content: space-between;
 		gap: 0;
 		box-shadow:
-			inset 0 2px 0 0 var(--blockera-panel-tabs-tab-border-color),
+			inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
 			inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
 		border: none;
 		height: calc(var(--blockera-panel-tabs-height) + 1px);
@@ -147,6 +147,9 @@ body {
 
 	&:not(.fit-width-tabs) {
 		.blockera-component-tabs__list {
+			padding-top: 0;
+			height: var(--blockera-panel-tabs-height);
+
 			.blockera-component-tabs__list__item {
 				padding: 10px 16px;
 
@@ -155,6 +158,10 @@ body {
 						var(--blockera-panel-tabs-tab-border-color);
 				}
 			}
+		}
+
+		.blockera-component-tabs__list__indicator {
+			top: 0;
 		}
 	}
 
