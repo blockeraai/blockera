@@ -17,6 +17,8 @@ const {
 	openGlobalStylesPanel,
 } = require('@blockera/dev-playwright/js/support/commands');
 
+const actionOptions = { force: true, delay: 0 };
+
 test.describe('Border & Border Radius Together → WP Compatibility', () => {
 	// Mu-plugin paths configuration: map test titles to their mu-plugin paths
 	// Mu-plugin paths are relative to plugin root
@@ -308,8 +310,6 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				//
 				// Test 2: Blockera value to WP data
 				//
-
-				const actionOptions = { force: true, delay: 0 };
 
 				const borderInputs = borderContainer.locator('input');
 				await borderInputs.nth(0).clear(actionOptions);
