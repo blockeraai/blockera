@@ -3,7 +3,6 @@
  */
 const {
 	openSiteEditor,
-	getSelectedBlock,
 	closeWelcomeGuide,
 	getEditedGlobalStylesRecord,
 	activateMuPlugin,
@@ -181,6 +180,7 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				// clear all
 				await borderContainer.locator('input').first().clear({
 					force: true,
+					delay: 0,
 				});
 
 				const colorBtn = borderContainer.locator(
@@ -191,7 +191,7 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				const popover = page.locator('.components-popover').last();
 				await popover
 					.locator('[aria-label="Reset Color (Clear)"]')
-					.click({ force: true });
+					.click(actionOptions);
 
 				await radiusContainer.locator('input').first().clear({
 					force: true,
@@ -309,31 +309,33 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				// Test 2: Blockera value to WP data
 				//
 
+				const actionOptions = { force: true, delay: 0 };
+
 				const borderInputs = borderContainer.locator('input');
-				await borderInputs.nth(0).clear({ force: true });
-				await borderInputs.nth(0).fill('10', { force: true });
+				await borderInputs.nth(0).clear(actionOptions);
+				await borderInputs.nth(0).fill('10', actionOptions);
 
-				await borderInputs.nth(1).clear({ force: true });
-				await borderInputs.nth(1).fill('20', { force: true });
+				await borderInputs.nth(1).clear(actionOptions);
+				await borderInputs.nth(1).fill('20', actionOptions);
 
-				await borderInputs.nth(2).clear({ force: true });
-				await borderInputs.nth(2).fill('30', { force: true });
+				await borderInputs.nth(2).clear(actionOptions);
+				await borderInputs.nth(2).fill('30', actionOptions);
 
-				await borderInputs.nth(3).clear({ force: true });
-				await borderInputs.nth(3).fill('40', { force: true });
+				await borderInputs.nth(3).clear(actionOptions);
+				await borderInputs.nth(3).fill('40', actionOptions);
 
 				const radiusInputs = radiusContainer.locator('input');
-				await radiusInputs.nth(0).clear({ force: true });
-				await radiusInputs.nth(0).fill('50', { force: true });
+				await radiusInputs.nth(0).clear(actionOptions);
+				await radiusInputs.nth(0).fill('50', actionOptions);
 
-				await radiusInputs.nth(1).clear({ force: true });
-				await radiusInputs.nth(1).fill('60', { force: true });
+				await radiusInputs.nth(1).clear(actionOptions);
+				await radiusInputs.nth(1).fill('60', actionOptions);
 
-				await radiusInputs.nth(2).clear({ force: true });
-				await radiusInputs.nth(2).fill('70', { force: true });
+				await radiusInputs.nth(2).clear(actionOptions);
+				await radiusInputs.nth(2).fill('70', actionOptions);
 
-				await radiusInputs.nth(3).clear({ force: true });
-				await radiusInputs.nth(3).fill('80', { force: true });
+				await radiusInputs.nth(3).clear(actionOptions);
+				await radiusInputs.nth(3).fill('80', actionOptions);
 
 				// WP data should come to Blockera
 				const globalStylesRecord2 = await getEditedGlobalStylesRecord(
@@ -419,10 +421,10 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				// Test 3: Clear Blockera value and check WP data
 				//
 
-				await borderInputs.nth(0).clear({ force: true });
-				await borderInputs.nth(1).clear({ force: true });
-				await borderInputs.nth(2).clear({ force: true });
-				await borderInputs.nth(3).clear({ force: true });
+				await borderInputs.nth(0).clear(actionOptions);
+				await borderInputs.nth(1).clear(actionOptions);
+				await borderInputs.nth(2).clear(actionOptions);
+				await borderInputs.nth(3).clear(actionOptions);
 
 				const colorButtons = borderContainer.locator(
 					'[data-test="border-control-color"]'
@@ -436,10 +438,10 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 						.click({ force: true });
 				}
 
-				await radiusInputs.nth(0).clear({ force: true });
-				await radiusInputs.nth(1).clear({ force: true });
-				await radiusInputs.nth(2).clear({ force: true });
-				await radiusInputs.nth(3).clear({ force: true });
+				await radiusInputs.nth(0).clear(actionOptions);
+				await radiusInputs.nth(1).clear(actionOptions);
+				await radiusInputs.nth(2).clear(actionOptions);
+				await radiusInputs.nth(3).clear(actionOptions);
 
 				// WP data should come to Blockera
 				const globalStylesRecord3 = await getEditedGlobalStylesRecord(

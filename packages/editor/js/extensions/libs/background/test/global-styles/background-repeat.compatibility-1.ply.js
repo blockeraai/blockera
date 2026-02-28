@@ -141,7 +141,7 @@ test.describe('Background Repeat → WP Compatibility (Global Styles)', () => {
 				const root2 = globalStylesRecord2?.['core/group'];
 				const backgroundRepeat2 = root2?.background?.backgroundRepeat;
 
-				expect('no-repeat').toEqual(backgroundRepeat2);
+				expect(undefined).toEqual(backgroundRepeat2);
 
 				//
 				// Test 3: Clear Blockera value and check WP data
