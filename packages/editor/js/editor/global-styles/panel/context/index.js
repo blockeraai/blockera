@@ -28,6 +28,7 @@ import { BlockPortals } from '../../../../extensions/components';
 import { STORE_NAME } from '../../../../extensions/store/constants';
 import { STORE_NAME as EDITOR_STORE_NAME } from '../../../../store/constants';
 import { sanitizeDefaultAttributes } from '../../../../extensions/hooks/utils';
+import { ignoreBlockeraAttributeKeysRegExp } from '../../../../extensions/libs';
 import { prepareBlockeraDefaultAttributesValues } from '../../../../extensions/components/utils';
 
 // Helper functions
@@ -64,7 +65,7 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 			continue;
 		}
 
-		if (!/^blockera/.test(key)) {
+		if (!ignoreBlockeraAttributeKeysRegExp().test(key)) {
 			// Exclude the Block original core attributes is object and contains all values are undefined.
 			if (
 				'object' === typeof styles[key] &&

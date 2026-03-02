@@ -10,7 +10,10 @@ import { isEquals, omit } from '@blockera/utils';
  */
 import type { TStates } from '../libs/block-card/block-states/types';
 import type { InnerBlockType } from '../libs/block-card/inner-blocks/types';
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs/utils';
+import {
+	ignoreBlockeraAttributeKeysRegExp,
+	ignoreDefaultBlockAttributeKeysRegExp,
+} from '../libs/utils';
 
 export const propsAreEqual = (perv: Object, next: Object): boolean => {
 	const excludeKeys = ['content', 'text'];
@@ -90,7 +93,7 @@ export const prepareBlockeraDefaultAttributesValues = (
 		const isGlobalStylesPanel =
 			'global-styles-panel' === context &&
 			!['blockeraPropsId', 'blockeraCompatId'].includes(key) &&
-			/^blockera/i.test(key);
+			ignoreBlockeraAttributeKeysRegExp().test(key);
 
 		if (rootAttributes[key].default !== undefined) {
 			if (isGlobalStylesPanel) {
