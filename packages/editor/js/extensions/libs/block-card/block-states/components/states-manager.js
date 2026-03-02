@@ -9,14 +9,13 @@ import type { Element, ComponentType, MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
-// import { omit, isEquals } from '@blockera/utils';
-import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
 	PromotionPopover,
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
 } from '@blockera/controls';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -36,6 +35,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 	contextValue,
 	overrideItem,
 	defaultStates,
+	className = '',
 	handleOnChange,
 	InserterComponent,
 	defaultRepeaterItemValue,
@@ -51,7 +51,9 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 			storeName={'blockera/controls/repeater'}
 		>
 			<div
-				className={'blockera-block-state-container'}
+				className={classNames('blockera-block-state-container', {
+					[className]: true,
+				})}
 				data-test={'blockera-block-state-container'}
 				aria-label={__('Blockera Block State Container', 'blockera')}
 			>

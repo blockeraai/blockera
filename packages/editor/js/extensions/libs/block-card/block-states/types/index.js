@@ -86,6 +86,7 @@ export type StatesManagerProps = {
 	// id: string,
 	children: any,
 	maxItems: number,
+	className: string,
 	contextValue: Object,
 	deleteCacheData: Object,
 	defaultRepeaterItemValue: Object,
