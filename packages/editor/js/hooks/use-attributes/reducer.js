@@ -5,6 +5,7 @@
  */
 import { select } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
+import { getBlockType } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -130,38 +131,61 @@ const reducer = (state: Object = {}, action: Object): Object => {
 					);
 				}
 
-				return applyFilters(
-					'blockera.blockEdit.setAttributes',
-					mergeObject(
-						state,
-						{
-							blockeraInnerBlocks: {
-								value: {
-									[currentBlock]: {
-										attributes: {
-											...effectiveItems,
-											...(mergedCssClasses
-												? {
-														className:
-															mergedCssClasses,
-													}
-												: {}),
-											[attributeId]: isEqualsWithDefault
-												? undefined
-												: newValue,
-										},
+				const attributesReadyToFilter = mergeObject(
+					state,
+					{
+						blockeraInnerBlocks: {
+							value: {
+								[currentBlock]: {
+									attributes: {
+										...effectiveItems,
+										...(mergedCssClasses
+											? {
+													className: mergedCssClasses,
+												}
+											: {}),
+										[attributeId]: isEqualsWithDefault
+											? undefined
+											: newValue,
 									},
 								},
 							},
 						},
-						{
-							deletedProps: [attributeId],
-							forceUpdated:
-								!isEqualsWithDefault && isObject(newValue)
-									? [attributeId]
-									: [],
-						}
-					),
+					},
+					{
+						deletedProps: [attributeId],
+						forceUpdated:
+							!isEqualsWithDefault && isObject(newValue)
+								? [attributeId]
+								: [],
+					}
+				);
+
+				// Run filtering when current block is global style for block type,
+				// and it is contains `blocks` property from theme or core settings.
+				// We should run all `to wp compatibilities` for each blocks provided by external sources.
+				if (
+					attributesReadyToFilter.hasOwnProperty('blocks') &&
+					Object.keys(attributesReadyToFilter.blocks).length &&
+					attributesReadyToFilter.blocks.hasOwnProperty(currentBlock)
+				) {
+					const blockTypeObj = getBlockType(currentBlock);
+					const _hookParams = hookParams;
+
+					_hookParams[4].isMasterBlock = true;
+					_hookParams[4].blockId = currentBlock;
+					_hookParams[4].defaultAttributes = blockTypeObj.attributes;
+
+					attributesReadyToFilter.blocks[currentBlock] = applyFilters(
+						'blockera.blockEdit.setAttributes',
+						attributesReadyToFilter.blocks[currentBlock],
+						..._hookParams
+					);
+				}
+
+				return applyFilters(
+					'blockera.blockEdit.setAttributes',
+					attributesReadyToFilter,
 					...hookParams
 				);
 			}

@@ -4,6 +4,7 @@
  * External dependencies
  */
 import { applyFilters } from '@wordpress/hooks';
+import { getBlockType } from '@wordpress/blocks';
 
 /**
  * Blockera dependencies
@@ -14,8 +15,11 @@ import { isEquals, omitWithPattern, mergeObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import {
+	ignoreBlockeraAttributeKeysRegExp,
+	ignoreDefaultBlockAttributeKeysRegExp,
+} from '../libs';
 import { prepareBlockeraDefaultAttributesValues } from './utils';
-import { ignoreDefaultBlockAttributeKeysRegExp } from '../libs';
 
 export const getCompatibleAttributes = ({
 	args,
@@ -51,6 +55,74 @@ export const getCompatibleAttributes = ({
 			: { ...attributes },
 		args
 	);
+
+	// Run filtering when current block is global style for block type,
+	// and it is contains `blocks` property from theme or core settings.
+	// We should run all `from wp compatibilities` for each blocks provided by external sources.
+	if (
+		filteredAttributes.hasOwnProperty('blocks') &&
+		Object.keys(filteredAttributes?.blocks || {}).length
+	) {
+		for (const blockType in filteredAttributes.blocks) {
+			const blockTypeObj = getBlockType(blockType);
+
+			if (!blockType) {
+				continue;
+			}
+
+			const currentBlockAttributes = filteredAttributes.blocks[blockType];
+
+			const { blocks, blockeraInnerBlocks, ...latestFilteredAttributes } =
+				applyFilters(
+					'blockera.blockEdit.attributes',
+					// Migrate to blockera attributes for some blocks where includes attributes migrations in original core Block Edit component,
+					// if we supported them.
+					'undefined' ===
+						typeof currentBlockAttributes?.blockeraPropsId &&
+						blockTypeObj.attributes?.blockeraPropsId
+						? mergeObject(
+								{ ...currentBlockAttributes },
+								prepareBlockeraDefaultAttributesValues(
+									blockTypeObj.attributes
+								)
+							)
+						: { ...currentBlockAttributes },
+					args
+				);
+
+			if (Object.keys(blockeraInnerBlocks).length) {
+				filteredAttributes = mergeObject(filteredAttributes, {
+					blockeraInnerBlocks: {
+						value: {
+							[blockType]: {
+								attributes: {
+									...Object.fromEntries(
+										Object.entries(latestFilteredAttributes)
+											.filter(([, val]) =>
+												val.hasOwnProperty('value')
+											)
+											.map(([index, val]) => {
+												return [index, val?.value];
+											})
+									),
+									blockeraInnerBlocks,
+								},
+							},
+						},
+					},
+				});
+			}
+
+			filteredAttributes = mergeObject(filteredAttributes, {
+				blocks: {
+					[blockType]: omitWithPattern(
+						latestFilteredAttributes,
+						ignoreBlockeraAttributeKeysRegExp()
+					),
+				},
+			});
+		}
+	}
 
 	const hasPropsId = attributes?.blockeraPropsId;
 	const hasCompatId = attributes?.blockeraCompatId;
