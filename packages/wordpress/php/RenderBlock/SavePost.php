@@ -64,7 +64,10 @@ class SavePost {
 			return;
 		}
 
-		update_post_meta($postId, 'blockeraGlobalStylesMetaData', $post_content['styles']['blockeraMetaData']);
+		$cache = $this->app->make('CacheSystem');
+		$key   = 'blockeraGlobalStylesMetaData';
+
+		$cache->setMetaCache($postId, $key, $post_content['styles']['blockeraMetaData']);
 		
 		unset($post_content['styles']['blockeraMetaData']);
 		$post_content = json_encode($post_content);

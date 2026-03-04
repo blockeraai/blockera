@@ -539,8 +539,10 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 			$hash = md5( implode( ',', array_keys( $blocks ) ) );
 		}
 
-		$transient_key = 'blockera_resolver_get_block_data_' . $hash;
-		$transient     = get_transient( $transient_key );
+		$cache = blockera_get_cache();
+
+		$transient_key = 'resolver_get_block_data_' . $hash;
+		$transient     = $cache->getTransientCache($transient_key);
 
 		$has_same_registered_blocks = static::has_same_registered_blocks( 'blocks' );
 
@@ -594,7 +596,7 @@ class JSONResolver extends \WP_Theme_JSON_Resolver {
 		static::$blocks = new JSON( apply_filters( 'blockera_theme_json_data_blocks', $config ), 'blocks' );
 
 		// Cache the blocks data in a transient for performance.
-		set_transient( $transient_key, static::$blocks, HOUR_IN_SECONDS );
+		$cache->setTransientCache( $transient_key, static::$blocks, HOUR_IN_SECONDS );
 
 		return static::$blocks;
 	}

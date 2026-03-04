@@ -438,11 +438,16 @@ if (! function_exists('blockera_editor_inline_script')) {
 	 * @return string The inline script.
 	 */
 	function blockera_editor_inline_script(): string {
+		// Get the global styles post id.
 		$active_global_styles_id = JSONResolver::get_user_global_styles_post_id();
-		$blockera_meta_data      = get_post_meta( $active_global_styles_id, 'blockeraGlobalStylesMetaData', true );
-		
+		// Get the cache instance.
+		$cache = blockera_get_cache();
+		// Get the blockera meta data for global styles.
+		$blockera_meta_data = $cache->getMetaCache( $active_global_styles_id, 'blockeraGlobalStylesMetaData' );
+		// Encoded the meta data.
 		$data = wp_json_encode( is_array($blockera_meta_data) ? $blockera_meta_data : [] );
 
+		// Return generated inline script.
 		return 'blockeraGlobalStylesMetaData = ' . $data . ';';
 	}
 }
