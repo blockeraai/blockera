@@ -148,6 +148,8 @@ add_action('init', 'blockera_init', 10);
 
 function blockera_init(): void {
 
+	blockera_load('bootstrap.init', __DIR__);
+
     /**
      * This hook for extendable setup process from internal or third-party developers.
      *
