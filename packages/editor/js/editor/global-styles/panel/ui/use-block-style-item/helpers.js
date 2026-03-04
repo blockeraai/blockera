@@ -427,27 +427,13 @@ export const isRootStyle = (currentStyle: Object): boolean => {
 };
 
 /**
- * Mark a style variation as deleted in blockera metadata.
- * Shared logic for handleOnDelete and handleOnRename.
- *
- * - Blockera-created: remove variation entirely from metadata.
- * - From block/theme/core: set isDeleted: true for rendering requirements.
- *
- * @param {Object} blockeraMetaData - Current blockera metadata.
- * @param {string} blockName - Block type name.
- * @param {string} styleName - Style variation name to mark as deleted.
- * @param {Object} styleFallback - Fallback style object when creating new metadata entry.
- * @param {Object} baseConfig - Base theme global styles (for isBlockeraCreatedStyle).
- * @return {Object} - Updated blockera metadata (cloned, not mutated).
- */
-/**
  * Build metadata updates to assign old style's blockeraMetaData to new style name.
  * Used when renaming with isConfirmedChangeID: copy blocks.*.variations and variations.
  *
  * @param {Object} blockeraMetaData - Current blockera metadata.
  * @param {string} blockName - Primary block name.
- * @param {string} oldStyleName - Previous style variation name.
- * @param {string} newStyleName - New style variation name.
+ * @param {Object} oldStyle - Previous style variation object.
+ * @param {Object} newStyle - New style variation object.
  * @param {Array<string>} blockTypesToRegister - Block types that use this style.
  * @param {Object} mergedVariation - Merged variation for primary block.
  * @return {Object} - { blocks: {...}, variations: {...} } to merge into metadata.
@@ -455,11 +441,13 @@ export const isRootStyle = (currentStyle: Object): boolean => {
 export const buildMetadataTransferForRenamedStyle = (
 	blockeraMetaData: Object,
 	blockName: string,
-	oldStyleName: string,
-	newStyleName: string,
+	oldStyle: Object,
+	newStyle: Object,
 	blockTypesToRegister: Array<string>,
 	mergedVariation: Object
 ): Object => {
+	const { name: oldStyleName } = oldStyle;
+	const { name: newStyleName } = newStyle;
 	const blocksUpdate: { [string]: Object } = {};
 	const oldGlobalVariation =
 		blockeraMetaData?.variations?.[oldStyleName] || {};
@@ -488,6 +476,14 @@ export const buildMetadataTransferForRenamedStyle = (
 	const result: Object = {};
 	if (Object.keys(blocksUpdate).length > 0) {
 		result.blocks = blocksUpdate;
+	} else if (oldStyleName !== newStyleName) {
+		result.blocks = {
+			[blockName]: {
+				variations: {
+					[newStyleName]: mergedVariation,
+				},
+			},
+		};
 	}
 	if (Object.keys(oldGlobalVariation).length > 0) {
 		result.variations = {
@@ -496,10 +492,40 @@ export const buildMetadataTransferForRenamedStyle = (
 				identityUpdate
 			),
 		};
+	} else if (oldStyleName !== newStyleName) {
+		result.variations = {
+			[newStyleName]: {
+				...mergedVariation,
+				enabledIn: blockTypesToRegister,
+				disabledIn: [],
+			},
+			[oldStyleName]: {
+				name: oldStyleName,
+				enabledIn: blockTypesToRegister.filter(
+					(name) => name !== blockName
+				),
+				disabledIn: [blockName],
+			},
+		};
 	}
+
 	return result;
 };
 
+/**
+ * Mark a style variation as deleted in blockera metadata.
+ * Shared logic for handleOnDelete and handleOnRename.
+ *
+ * - Blockera-created: remove variation entirely from metadata.
+ * - From block/theme/core: set isDeleted: true for rendering requirements.
+ *
+ * @param {Object} blockeraMetaData - Current blockera metadata.
+ * @param {string} blockName - Block type name.
+ * @param {string} styleName - Style variation name to mark as deleted.
+ * @param {Object} styleFallback - Fallback style object when creating new metadata entry.
+ * @param {Object} baseConfig - Base theme global styles (for isBlockeraCreatedStyle).
+ * @return {Object} - Updated blockera metadata (cloned, not mutated).
+ */
 export const markStyleAsDeletedInMetaData = (
 	blockeraMetaData: Object,
 	blockName: string,

@@ -35,7 +35,6 @@ import {
 	registerStyleForBlockTypes,
 	unregisterStyleFromBlockTypes,
 	setStyleVariationBlocksInStore,
-	clearStyleVariationBlocksInStore,
 	removeStyleVariationFromGlobalStyles,
 	markStyleAsDeletedInMetaData,
 	buildMetadataTransferForRenamedStyle,
@@ -199,8 +198,8 @@ export const useBlockStyleItem = ({
 				const metadataTransfer = buildMetadataTransferForRenamedStyle(
 					blockeraMetaData,
 					blockName,
-					currentStyle.name,
-					editedStyle.name,
+					currentStyle,
+					editedStyle,
 					blockTypesToRegister,
 					mergedVariation
 				);
@@ -230,17 +229,26 @@ export const useBlockStyleItem = ({
 					)
 				);
 
-				unregisterStyleFromBlockTypes(
-					blockTypesToRegister,
-					currentStyle.name
-				);
+				// Register new style name in block references in pervious style name.
 				registerStyleForBlockTypes(blockTypesToRegister, editedStyle);
-
-				clearStyleVariationBlocksInStore(currentStyle.name);
 				setStyleVariationBlocksInStore(
 					editedStyle.name,
 					blockTypesToRegister
 				);
+
+				setTimeout(() => {
+					// Unregister previous style name of current block.
+					unregisterStyleFromBlockTypes(
+						[blockName],
+						currentStyle.name
+					);
+					setStyleVariationBlocksInStore(
+						currentStyle.name,
+						blockTypesToRegister.filter(
+							(blockType) => blockType !== blockName
+						)
+					);
+				}, 1);
 			} else {
 				// Only update variation fields - merge with existing, don't override other customizations
 				updateBlockeraGlobalStylesMetaData(
