@@ -91,11 +91,8 @@ const initializeGlobalStyles = (): void => {
  * @param {string} config.globalStylesScreen - CSS selector for global styles screen
  */
 export const registration = (): void => {
-	// Get dispatch function for updating style variation blocks in store
-	const { setStyleVariationBlocks } = dispatch('blockera/editor');
-
-	// Register block styles from metadata (handles reregistration, registration, and unregistration)
-	registerBlockStylesFromMetaData(setStyleVariationBlocks);
+	// Register block styles from metadata (handles reregistration, registration, and deregistration)
+	registerBlockStylesFromMetaData();
 
 	// Initialize global styles (handles async data loading)
 	initializeGlobalStyles();

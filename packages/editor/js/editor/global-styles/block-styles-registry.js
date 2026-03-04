@@ -3,7 +3,7 @@
 /**
  * External dependencies
  */
-import { select } from '@wordpress/data';
+import { select, dispatch } from '@wordpress/data';
 import {
 	getBlockTypes,
 	registerBlockStyle,
@@ -16,29 +16,34 @@ import {
 import { getBlockeraGlobalStylesMetaData } from './helpers';
 
 /**
- * Handles registration and unregistration of block styles based on
+ * Handles registration and deregistration of block styles based on
  * blockeraGlobalStylesMetaData. This module centralizes all operations
  * related to block style variations management.
  *
- * @param {Function} setStyleVariationBlocks - Dispatch function to update style variation blocks in store
  */
-export const registerBlockStylesFromMetaData = (
-	setStyleVariationBlocks: Function
-): void => {
+export const registerBlockStylesFromMetaData = (): void => {
 	const blockeraGlobalStylesMetaData = getBlockeraGlobalStylesMetaData();
 
 	// Safety guard: ensure metadata exists
-	if (!blockeraGlobalStylesMetaData) {
+	if (
+		!blockeraGlobalStylesMetaData ||
+		!Object.keys(blockeraGlobalStylesMetaData).length
+	) {
 		return;
 	}
 
+	// Get dispatch function for updating style variation blocks in store
+	const { setStyleVariationBlocks, deleteStyleVariationBlocks } =
+		dispatch('blockera/editor');
+
+	// Get all registered block types from wp store api.
 	const blockTypes = getBlockTypes();
 
 	// Reregister block styles where renamed by identifier or deleted
 	const blocks = blockeraGlobalStylesMetaData.blocks || {};
 	Object.entries(blocks).forEach(([blockName, blockData]) => {
 		// Safety guard: ensure blockData exists
-		if (!blockData) {
+		if (!blockData || !Object.keys(blockData).length) {
 			return;
 		}
 
@@ -53,6 +58,8 @@ export const registerBlockStylesFromMetaData = (
 			if (variation.hasNewID) {
 				unregisterBlockStyle(blockName, variationName);
 				registerBlockStyle(blockName, variation);
+
+				return;
 			}
 
 			// Handle isDeleted variations
@@ -67,17 +74,17 @@ export const registerBlockStylesFromMetaData = (
 	// Cache select function to avoid repeated lookups
 	const { getBlockStyles } = select('core/blocks');
 
-	Object.entries(variations).forEach(([, variation]) => {
+	Object.entries(variations).forEach(([variationName, variation]) => {
 		// Safety guard: ensure variation exists and has enabledIn array
-		if (!variation || !Array.isArray(variation.enabledIn)) {
+		if (!variation || !Object.keys(variation).length) {
 			return;
 		}
 
 		// Exclude disabledIn from registration payload once per variation
-		const { disabledIn, ...rest } = variation;
+		const { disabledIn = [], enabledIn = [], ...rest } = variation;
 
 		// Register style for each enabled block type
-		variation.enabledIn.forEach((blockType) => {
+		enabledIn.forEach((blockType) => {
 			registerBlockStyle(blockType, rest);
 		});
 
@@ -85,14 +92,15 @@ export const registerBlockStylesFromMetaData = (
 		const wpEnabledBlocks = blockTypes
 			.map((blockType) => {
 				// Safety guard: ensure blockType exists
-				if (!blockType) {
+				if (!blockType || !Object.keys(blockType).length) {
 					return null;
 				}
 
 				// Skip blocks without blockeraPropsId attribute
 				if (
 					!blockType?.attributes?.hasOwnProperty('blockeraPropsId') ||
-					variation.disabledIn?.includes(blockType.name)
+					disabledIn?.includes(blockType.name) ||
+					!enabledIn?.includes(blockType.name)
 				) {
 					return null;
 				}
@@ -116,18 +124,21 @@ export const registerBlockStylesFromMetaData = (
 		setStyleVariationBlocks(variation.name, [
 			...new Set([...variation.enabledIn, ...wpEnabledBlocks]),
 		]);
-	});
 
-	// Unregister block styles for saved block types
-	Object.entries(variations).forEach(([variationName, variation]) => {
-		// Safety guard: ensure variation exists
-		if (!variation) {
-			return;
+		if (disabledIn.length) {
+			setTimeout(() => {
+				deleteStyleVariationBlocks(
+					variationName,
+					false,
+					'',
+					disabledIn
+				);
+			}, 5);
 		}
 
 		// Unregister from disabled block types
-		const disabledIn = variation.disabledIn || [];
 		disabledIn.forEach((blockType) => {
+			// Update WordPress store
 			unregisterBlockStyle(blockType, variationName);
 		});
 	});
