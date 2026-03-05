@@ -7,6 +7,7 @@ import {
 	appendBlocks,
 	setParentBlock,
 	setInnerBlock,
+	closeBlockInserter,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -398,6 +399,8 @@ describe('Column Block', () => {
 <!-- /wp:column --></div>
 <!-- /wp:columns -->`);
 
+		closeBlockInserter();
+
 		// Select target block
 		cy.getBlock('core/paragraph').first().click();
 
@@ -425,7 +428,7 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		const expectedCSS =
-			'.blockera-block.wp-block-column[style*=flex-basis]{flex-grow:0';
+			'.blockera-block.wp-block-column[style*="flex-basis"]{flex-grow:0';
 
 		//Check block
 		cy.get('link[id^="@blockera/blocks-core-styles-"]')
@@ -455,7 +458,7 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		//Check block
-		cy.get('style[id="blockera-block-buttons-inline-css"]')
+		cy.get('style[id="blockera-block-column-inline-css"]')
 			.should('exist')
 			.then(($style) => {
 				const styleContent = $style.text();
