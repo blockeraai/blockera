@@ -8,11 +8,6 @@ import type { MixedElement } from 'react';
 import { useCallback, useEffect } from '@wordpress/element';
 
 /**
- * Blockera dependencies
- */
-import { classNames } from '@blockera/classnames';
-
-/**
  * Internal dependencies
  */
 import {
@@ -144,13 +139,6 @@ export const Preview = ({
 
 	return (
 		<StatesManager
-			className={classNames({
-				'fixed-height':
-					Object.keys(states || {}).length +
-						Object.keys(innerBlocksContextValue?.value || {})
-							.length >
-					4,
-			})}
 			states={states}
 			onReset={onReset}
 			onDelete={onDelete}
