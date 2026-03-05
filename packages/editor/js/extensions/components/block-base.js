@@ -733,6 +733,8 @@ export const BlockBase: ComponentType<any> = (
 	return (
 		<BlockEditContextProvider
 			{...{
+				args,
+				isActive,
 				block: {
 					blockName: name,
 					clientId,
@@ -752,6 +754,7 @@ export const BlockBase: ComponentType<any> = (
 				currentBreakpoint,
 				defaultAttributes,
 				currentInnerBlock,
+				availableAttributes,
 				masterIsNormalState,
 				blockeraInnerBlocks,
 				activeBlockVariation,

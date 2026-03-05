@@ -55,6 +55,7 @@ import {
 	type TUseBlockStyleItemProps,
 	type TUseBlockStyleItemReturn,
 } from './types';
+import { getCompatibleAttributes } from '../../../../../extensions/components/get-compatible-attributes';
 
 export const useBlockStyleItem = ({
 	style,
@@ -102,7 +103,13 @@ export const useBlockStyleItem = ({
 	const [isConfirmedChangeID, setIsConfirmedChangeID] = useState(false);
 
 	const blockContextValue = useBlockContext();
-	const { handleOnChangeAttributes, getAttributes } = blockContextValue;
+	const {
+		args,
+		isActive,
+		getAttributes,
+		availableAttributes,
+		handleOnChangeAttributes,
+	} = blockContextValue;
 
 	/** @see ./handleOnRename.md for Cursor IDE instructions */
 	const handleOnRename = useCallback(
@@ -794,6 +801,9 @@ export const useBlockStyleItem = ({
 	const handleOnDetachStyle = (currentStyle: Object) => {
 		setCurrentActiveStyle(getDefaultStyle(blockStyles), 'detach');
 
+		// Run wp compatibility.
+		blockeraExtensionsBootstrap();
+
 		const { getSelectedBlock } = select(blockEditorStore);
 		const selectedBlock = getSelectedBlock();
 
@@ -820,9 +830,20 @@ export const useBlockStyleItem = ({
 		// Set the editor selected block event to detach style.
 		setEditorSelectedBlockEvent('detach-style');
 
+		const compatibleAttributes = getCompatibleAttributes({
+			args: {
+				...args,
+				insideBlockInspector: false,
+			},
+			isActive,
+			availableAttributes,
+			attributes: cloneObject(newAttributes),
+			defaultAttributes: getBlockType(blockName).attributes,
+		});
+
 		handleOnChangeAttributes('className', `blockera-block ${className}`, {
 			effectiveItems: getAttributesWithIds(
-				newAttributes,
+				compatibleAttributes,
 				'blockeraPropsId',
 				true
 			),
