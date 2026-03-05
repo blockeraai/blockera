@@ -1,12 +1,6 @@
 .blockera-block-state-container {
 	clear: both;
 	margin-bottom: -6px;
-	
-	&.fixed-height {
-		max-height: 80px;
-    	overflow: scroll;
-    	box-shadow: inset 0 -25px 10px -10px rgba(0, 0, 0, 0.1), 10px 10px 10px -15px rgba(0, 0, 0, 0.1);
-	}
 }
 
 .blockera-control.blockera-control-block-states-repeater {
