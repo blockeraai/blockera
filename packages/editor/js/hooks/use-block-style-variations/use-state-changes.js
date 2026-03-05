@@ -4,7 +4,7 @@
  * External dependencies
  */
 import { detailedDiff } from 'deep-object-diff';
-import { useMemo, useState } from '@wordpress/element';
+import { useMemo, useState, useEffect } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -91,6 +91,13 @@ export const useStateChanges = ({
 		).length > 0;
 
 	const [hasChangesets, setChangesets] = useState(initializedValue);
+
+	useEffect(() => {
+		if (initializedValue === hasChangesets) {
+			return;
+		}
+		setChangesets(initializedValue);
+	}, [initializedValue, hasChangesets]);
 
 	return {
 		hasChangesets,
