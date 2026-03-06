@@ -8,6 +8,7 @@ import {
 	openInserter,
 	setInnerBlock,
 	setParentBlock,
+	openBlockInserter,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -29,6 +30,7 @@ describe(
 		});
 
 		it('Block should be supported + switch to parent should work', () => {
+			openBlockInserter();
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -36,12 +38,14 @@ describe(
 			// Make sure the tree is visible (Ajax call done)
 			cy.get('.block-editor-list-view-tree').should('be.visible');
 
-			cy.get('.block-editor-list-view-tree').within(() => {
-				// Open blocks menu
-				cy.get('[aria-label="Add block"]')
-					.first()
-					.click({ force: true });
-			});
+			cy.get('.block-editor-list-view-tree')
+				.last()
+				.within(() => {
+					// Open blocks menu
+					cy.get('[aria-label="Add block"]')
+						.first()
+						.click({ force: true });
+				});
 
 			// click on add block button
 			cy.get('.components-popover')
@@ -147,10 +151,12 @@ describe(
 
 			cy.get('.block-editor-list-view-tree').should('be.visible');
 
-			cy.get('.block-editor-list-view-tree').within(() => {
-				// Open blocks menu
-				cy.get('[aria-label="Add block"]').first().click();
-			});
+			cy.get('.block-editor-list-view-tree')
+				.last()
+				.within(() => {
+					// Open blocks menu
+					cy.get('[aria-label="Add block"]').first().click();
+				});
 
 			// click on add block button
 			cy.get('.components-popover')
