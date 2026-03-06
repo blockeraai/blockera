@@ -728,15 +728,27 @@ async function closeSpotlightPopover(page) {
  * @return {string} Normalized CSS content.
  */
 function normalizeCSSContent(cssContent) {
-	return cssContent
-		.replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments
-		.replace(/[\t\n\r]+/g, ' ') // Replace tabs and newlines with space
-		.replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
-		.replace(/\s*{\s*/g, '{') // Remove spaces around opening braces
-		.replace(/\s*}\s*/g, '}') // Remove spaces around closing braces
-		.replace(/\s*:\s*/g, ':') // Remove spaces around colons
-		.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
-		.trim(); // Remove leading/trailing whitespace
+	return (
+		cssContent
+			.replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments
+			.replace(/[\t\n\r]+/g, ' ') // Replace tabs and newlines with space
+			.replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
+			.replace(/\s*{\s*/g, '{') // Remove spaces around opening braces
+			.replace(/\s*}\s*/g, '}') // Remove spaces around closing braces
+			.replace(/\s*:\s*/g, ':') // Remove spaces around colons
+			.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
+
+			// Normalize attribute selectors to use double quotes
+			.replace(
+				/\[([^\]\s~|^$*!=]+)\s*([~|^$*]?=)\s*(?:"([^"]*)"|'([^']*)'|([^\]\s]+))\]/g,
+				(_, attr, operator, v1, v2, v3) => {
+					const value = v1 ?? v2 ?? v3 ?? '';
+					return `[${attr}${operator}"${value}"]`;
+				}
+			)
+
+			.trim()
+	); // Remove leading/trailing whitespace
 }
 
 /**
