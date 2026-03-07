@@ -424,6 +424,23 @@ class AppServiceProvider extends ServiceProvider {
 				continue;
 			}
 			if (! blockera_contains_blockera_block($post->post_content)) {
+				$parsed_blocks = parse_blocks($post->post_content);
+
+				foreach ($parsed_blocks as $block) {
+					$ref = $block['attrs']['ref'] ?? null;
+
+					if (! $ref) {
+						continue;
+					}
+
+					// Get post object by ref id.
+					$post_ref = get_post($ref);
+
+					if (blockera_contains_blockera_block($post_ref->post_content)) {
+						$posts_to_process[ $index ] = $post_ref;
+						$post_ids[]                 = $ref;
+					}
+				}
 				continue;
 			}
 			$posts_to_process[ $index ] = $post;
