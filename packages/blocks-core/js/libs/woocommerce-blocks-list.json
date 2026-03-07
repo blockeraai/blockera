@@ -1,10 +1,10 @@
 {
 	"$schema": "./schemas/blocks.schema.json",
 	"data": {
-		"total": 179,
+		"total": 182,
 		"supported": 91,
 		"soft-supported": 103,
-		"not-supported": 76,
+		"not-supported": 79,
 		"no-need-to-support": 12
 	},
 	"supported": [
@@ -807,6 +807,18 @@
 		{
 			"name": "woocommerce/add-to-cart-with-options-variation-description",
 			"title": "Variation Description"
+		},
+		{
+			"name": "woocommerce/category-title",
+			"title": "Displays the current category title and lets permitted users edit it."
+		},
+		{
+			"name": "woocommerce/category-description",
+			"title": "Displays the current category description."
+		},
+		{
+			"name": "woocommerce/coupon-code",
+			"title": "Include a coupon code to entice customers to make a purchase."
 		}
 	]
 }
