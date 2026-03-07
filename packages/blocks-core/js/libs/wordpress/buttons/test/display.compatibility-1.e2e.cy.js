@@ -26,7 +26,10 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 		`);
 
 		// Select target block
-		cy.getBlock('core/buttons').first().click();
+		cy.getBlock('core/button').first().click();
+		cy.getByAriaLabel('Select Buttons').click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera
@@ -95,7 +98,10 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 		`);
 
 		// Select target block
-		cy.getBlock('core/buttons').first().click();
+		cy.getBlock('core/button').first().click();
+		cy.getByAriaLabel('Select Buttons').click();
+
+		cy.addNewTransition();
 
 		//
 		// Test 1: WP data to Blockera
@@ -162,7 +168,8 @@ describe('Buttons Block → Display → WP Data Compatibility', () => {
 		`);
 
 		// Select target block
-		cy.getBlock('core/buttons').first().click();
+		cy.getBlock('core/button').first().click();
+		cy.getByAriaLabel('Select Buttons').click();
 
 		cy.addNewTransition();
 
