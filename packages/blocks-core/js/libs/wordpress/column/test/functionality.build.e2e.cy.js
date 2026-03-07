@@ -419,7 +419,7 @@ describe('Column Block', () => {
 			.should('not.have.css', 'width', '30%');
 
 		const expectedCSS =
-			'.blockera-block.wp-block-column[style*="flex-basis"]{flex-grow:0;';
+			'.blockera-block.wp-block-column[style*="flex-basis"]{flex-grow:0';
 
 		//Check block
 		cy.get('link[id^="@blockera/blocks-core-styles-"]')
