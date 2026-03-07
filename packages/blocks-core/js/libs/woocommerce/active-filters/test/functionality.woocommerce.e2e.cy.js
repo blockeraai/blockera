@@ -52,6 +52,8 @@ describe('Active Filters Block', () => {
 			cy.customSelect('Clip to Padding');
 		});
 
+		cy.wait(500);
+
 		cy.getBlock('woocommerce/active-filters').should(
 			'have.css',
 			'background-clip',
