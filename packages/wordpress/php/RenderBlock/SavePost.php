@@ -124,167 +124,85 @@ class SavePost {
 			return null;
 		}
 
-		// Find all block comments using a pattern that matches the block name.
-		// We'll extract JSON manually to handle nested structures.
-		// Block names can contain: letters, numbers, underscores, hyphens, and slashes (for namespace/block-name format).
-		$pattern = '#<!--\s*wp:([\w\/-]+)(\s+.*?)?(/)?-->#s';
-		
-		$processed_content = $post_content;
+		$blocks = parse_blocks($post_content);
 
-		// Find all block comments.
-		preg_match_all($pattern, $processed_content, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
-
-		if (empty($matches)) {
+		if (empty($blocks)) {
 			return null;
 		}
 
-		// Process matches in reverse order to preserve offsets when replacing.
-		$matches = array_reverse($matches);
+		$this->processBlocksRecursively($blocks);
 
-		foreach ($matches as $match) {
-			$block_name   = $match[1][0];
-			$full_match   = $match[0][0];
-			$match_offset = $match[0][1];
-			
-			// Determine if self-closing.
-			$is_self_closing = ! empty($match[3][0]);
-			
-			// Extract JSON attributes manually to handle nested structures.
-			// Find the position after block name.
-			$block_name_end   = $match_offset + strlen('<!-- wp:' . $block_name);
-			$after_block_name = substr($processed_content, $block_name_end);
-			
-			// Skip whitespace.
-			$json_start_pos = strspn($after_block_name, " \t\f\r\n");
-			$json_start     = $block_name_end + $json_start_pos;
-			
-			// Check if JSON starts with '{'.
-			if ($json_start >= strlen($processed_content) || '{' !== $processed_content[ $json_start ]) {
-				continue; // No JSON attributes.
-			}
-			
-			// Find matching closing brace by counting braces.
-			$brace_count = 0;
-			$json_end    = $json_start;
-			$in_string   = false;
-			$escape_next = false;
-			
-			for ($i = $json_start; $i < strlen($processed_content); $i++) {
-				$char = $processed_content[ $i ];
-				
-				if ($escape_next) {
-					$escape_next = false;
-					continue;
-				}
-				
-				if ('\\' === $char) {
-					$escape_next = true;
-					continue;
-				}
-				
-				if ('"' === $char && ! $escape_next) {
-					$in_string = ! $in_string;
-					continue;
-				}
-				
-				if (! $in_string) {
-					if ('{' === $char) {
-						$brace_count++;
-					} elseif ('}' === $char) {
-						$brace_count--;
-						if (0 === $brace_count) {
-							$json_end = $i + 1;
-							break;
-						}
-					}
-				}
-			}
-			
-			// Extract JSON string.
-			$attributes_json = substr($processed_content, $json_start, $json_end - $json_start);
+		$processed_content = '';
 
-			// Skip if attributes JSON is empty.
-			if (empty(trim($attributes_json)) || '{}' === $attributes_json) {
+		foreach ($blocks as $block) {
+			$processed_content .= serialize_block($block);
+		}
+
+		return [
+			'content' => $processed_content,
+		];
+	}
+
+	private function processBlocksRecursively( array &$blocks): void	{
+		foreach ($blocks as &$block) {
+
+			if (empty($block['blockName'])) {
 				continue;
 			}
 
-			// Parse JSON attributes.
-			$attributes = json_decode($attributes_json, true);
-			
-			// Skip if JSON parsing failed.
-			if (JSON_ERROR_NONE !== json_last_error() || ! is_array($attributes)) {
-				continue;
-			}
+			$blockName  = $block['blockName'];
+			$attributes = $block['attrs'] ?? [];
 
-			// Create block array structure.
-			$block = [
-				// WordPress by default uses 'core/' namespace for self blocks, and while we extracting it from post content we don't have the namespace, so we add it here.
-				// It should be contains the namespace to preparing block from \WP_Block_Registry::$registered_block_types stack.
-				'blockName' => ! str_contains($block_name, '/') ? 'core/' . $block_name : $block_name,
+			$blockData = [
+				'blockName' => $blockName,
 				'attrs' => $attributes,
 			];
 
-			// Check if block is supported by Blockera.
-			if (! blockera_is_supported_block($block)) {
+			if (! blockera_is_supported_block($blockData) || ! empty($attributes['blockeraComputedCss'])) {
 				continue;
 			}
 
-			// Generate unique classname and selector (simple base classname, no computeFinalCSS).
-			$base_unique_class_name = $attributes['className'];
-			
-			$unique_class_name = $base_unique_class_name;
-			$unique_selector   = blockera_get_normalized_selector($unique_class_name);
+			$base_unique_class_name = $attributes['className'] ?? null;
 
-			// Create StyleEngine instance.
+			if (! $base_unique_class_name) {
+				continue;
+			}
+
+			$unique_selector = blockera_get_normalized_selector($base_unique_class_name);
+
 			$styleEngine = $this->app->make(
 				StyleEngine::class,
 				[
-					'block' => $block,
+					'block' => $blockData,
 					'fallbackSelector' => $unique_selector,
 				]
 			);
+
 			$styleEngine->setSupports($this->app->getBlockSupports());
+
 			$computed_css_rules = $styleEngine->getStylesheet();
 
-			// Add blockeraCustomCSS if present.
 			if (! empty($attributes['blockeraCustomCSS']['value'])) {
-				// Replace placeholders with the unique selector.
-				$custom_css = preg_replace([ '/(\.|#)block/i', '/&/i' ], $unique_selector, $attributes['blockeraCustomCSS']['value']);
+
+				$custom_css = preg_replace(
+					[ '/(\.|#)block/i', '/&/i' ],
+					$unique_selector,
+					$attributes['blockeraCustomCSS']['value']
+				);
+
 				if (! empty($custom_css)) {
 					$computed_css_rules .= PHP_EOL . $custom_css;
 				}
 			}
 
-			// Base64 encode the CSS to prevent issues with special characters and newlines in JSON.
-			// Add blockeraComputedCss to block attrs (regenerate even if exists).
 			$attributes['blockeraComputedCss'] = base64_encode($computed_css_rules);
 
-			// Reconstruct block comment preserving original format.
-			$new_attributes_json = wp_json_encode($attributes, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-			
-			if ($is_self_closing) {
-				$new_block_comment = '<!-- wp:' . $block_name . ' ' . $new_attributes_json . ' /-->';
-			} else {
-				$new_block_comment = '<!-- wp:' . $block_name . ' ' . $new_attributes_json . ' -->';
+			$block['attrs'] = $attributes;
+
+			// process inner blocks.
+			if (! empty($block['innerBlocks'])) {
+				$this->processBlocksRecursively($block['innerBlocks']);
 			}
-
-			// Replace original comment in post_content.
-			$processed_content = substr_replace($processed_content, $new_block_comment, $match_offset, strlen($full_match));
 		}
-
-		/**
-		 * Cleanup HTML by removing inline styles.
-		 * 
-		 * This inline styles are added by block editor but Blockera adds them.
-		 * By removing it we reduce the later clean process and also reduce the CSS size.
-		 * 
-		 * @see ContentCleanup::cleanupBlockeraBlocksInlineStyles()
-		 */
-		$content_cleanup   = $this->app->make(ContentCleanup::class);
-		$processed_content = $content_cleanup->cleanupBlockeraBlocksInlineStyles($processed_content);
-
-		return [
-			'content' => $processed_content,
-		];
 	}
 }
