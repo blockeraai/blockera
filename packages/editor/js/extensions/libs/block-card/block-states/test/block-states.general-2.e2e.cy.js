@@ -29,13 +29,13 @@ describe('Block State E2E Test', () => {
 		cy.viewport(1440, 1025);
 
 		createPost();
-
-		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
-			cy.getByAriaLabel('Hide secondary sidebar').click();
-		}
 	});
 
 	const initialSetting = () => {
+		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
+			cy.getByAriaLabel('Hide secondary sidebar').click();
+		}
+
 		appendBlocks(
 			`<!-- wp:paragraph -->
 			<p>Test</p>

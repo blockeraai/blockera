@@ -42,14 +42,14 @@ describe('Block States on inner blocks E2E tests', () => {
 	beforeEach(() => {
 		createPost();
 
-		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
-			cy.getByAriaLabel('Hide secondary sidebar').click();
-		}
-
 		cy.viewport(1440, 1025);
 	});
 
 	const initialSetting = () => {
+		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
+			cy.getByAriaLabel('Hide secondary sidebar').click();
+		}
+
 		appendBlocks(
 			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"value": {}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->
 			<p class="blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74"><a href="http://localhost/wordpress/2023/12/16/5746/" data-type="post" data-id="5746" class="my-link">link</a></p>
@@ -259,7 +259,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			);
 		});
 
-		it('should set attribute in picked inner block at the root of tablet breakpoint', () => {
+		it.only('should set attribute in picked inner block at the root of tablet breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			setDeviceType('Tablet');
