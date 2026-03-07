@@ -47,11 +47,7 @@ describe('Style Engine → Global Styles', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.entry-content p:first-child').should(
-			'have.css',
-			'font-size',
-			'10px'
-		);
+		cy.get('p:first-child').should('have.css', 'font-size', '10px');
 
 		cy.get('#global-styles-inline-css')
 			.invoke('text')
@@ -117,12 +113,8 @@ describe('Style Engine → Global Styles', () => {
 
 		redirectToFrontPage();
 
-		cy.get('.entry-content p:first-child').realHover();
-		cy.get('.entry-content p:first-child').should(
-			'have.css',
-			'font-size',
-			'20px'
-		);
+		cy.get('p:first-child').realHover();
+		cy.get('p:first-child').should('have.css', 'font-size', '20px');
 
 		cy.get('#global-styles-inline-css')
 			.invoke('text')
