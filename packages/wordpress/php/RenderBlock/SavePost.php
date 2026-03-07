@@ -143,7 +143,14 @@ class SavePost {
 		];
 	}
 
-	private function processBlocksRecursively( array &$blocks): void	{
+	/**
+	 * Process blocks from recursively way.
+	 *
+	 * @param array $blocks The stack of blocks exists in the content of current post in processing.
+	 * 
+	 * @return void
+	 */
+	private function processBlocksRecursively( array &$blocks): void {
 		foreach ($blocks as &$block) {
 
 			if (empty($block['blockName'])) {
@@ -159,6 +166,10 @@ class SavePost {
 			];
 
 			if (! blockera_is_supported_block($blockData) || ! empty($attributes['blockeraComputedCss'])) {
+				// process inner blocks when parent block has not customizations by blockera editor.
+				if (! empty($block['innerBlocks'])) {
+					$this->processBlocksRecursively($block['innerBlocks']);
+				}
 				continue;
 			}
 
