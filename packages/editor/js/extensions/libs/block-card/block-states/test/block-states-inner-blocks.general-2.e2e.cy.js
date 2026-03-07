@@ -41,6 +41,11 @@ import {
 describe('Block States on inner blocks E2E tests', () => {
 	beforeEach(() => {
 		createPost();
+
+		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
+			cy.getByAriaLabel('Hide secondary sidebar').click();
+		}
+
 		cy.viewport(1440, 1025);
 	});
 
