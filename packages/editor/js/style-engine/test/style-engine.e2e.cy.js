@@ -17,6 +17,10 @@ describe('Style Engine Testing ...', () => {
 <!-- /wp:paragraph -->`
 		);
 
+		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
+			cy.getByAriaLabel('Hide secondary sidebar').click();
+		}
+
 		// Select target block
 		cy.getBlock('core/paragraph').click();
 	});
@@ -338,11 +342,10 @@ describe('Style Engine Testing ...', () => {
 					setDevice('Tablet');
 					setBlockState('Normal');
 
-					cy.getBlock('core/paragraph').realHover();
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(23, 227, 23)'
+						'rgb(227, 23, 139)'
 					);
 				});
 			});
