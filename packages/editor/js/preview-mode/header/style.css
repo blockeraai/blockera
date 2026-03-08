@@ -7,23 +7,23 @@
  */
 
 :root {
-	--blockera-preview-header-height: 42px;
+	--blockera-canvas-header-height: 42px;
 }
 
 /* Zoom mode body padding (injected into iframe) */
 body.blockera-zoom-active {
-	padding-top: var(--blockera-preview-header-height) !important;
+	padding-top: var(--blockera-canvas-header-height) !important;
 }
 
 /* Header bar with URL info and action buttons */
-.blockera-preview-header {
+.blockera-canvas-header {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
 	gap: 20px;
 	align-items: center;
-	height: var(--blockera-preview-header-height);
-	padding: 0 12px;
+	height: var(--blockera-canvas-header-height);
+	padding: 0 8px;
 	background: #f0f0f0;
 	z-index: 999999;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
@@ -31,7 +31,7 @@ body.blockera-zoom-active {
 }
 
 /* Iframe-specific styles (for zoom mode) */
-.blockera-preview-header[data-blockera-zoom-header] {
+.blockera-canvas-header[data-blockera-zoom-header] {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -40,12 +40,11 @@ body.blockera-zoom-active {
 	padding: 0 16px;
 }
 
-.blockera-preview-header.breakpoint-small {
+.blockera-canvas-header.breakpoint-small {
 	gap: 8px;
 }
 
-/* Browser close icons (macOS-style traffic lights) */
-.blockera-preview-header__browser-icons {
+.blockera-canvas-header__start {
 	display: flex;
 	flex-direction: row;
 	gap: 8px;
@@ -53,72 +52,23 @@ body.blockera-zoom-active {
 	width: 100px;
 }
 
-.blockera-preview-header__browser-icons button,
-.blockera-preview-header__browser-icons span {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 10px;
-	height: 10px;
-	border-radius: 50%;
-	background: #b8b8b8;
-	opacity: 1;
-}
-
-/* Hidden gem: First dot acts as close button on hover */
-.blockera-preview-header__close-dot {
-	cursor: default;
-	transition: var(--blockera-controls-transition, 0.15s ease);
-	position: relative;
-	border: none;
-	padding: 0;
-}
-
-/* Draw × using two crossing lines */
-.blockera-preview-header__close-dot::before,
-.blockera-preview-header__close-dot::after {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 8px;
-	height: 2px;
-	background: transparent;
-	border-radius: 1px;
-	transition: background 0.15s ease;
-}
-
-.blockera-preview-header__close-dot::before {
-	transform: translate(-50%, -50%) rotate(45deg);
-}
-
-.blockera-preview-header__close-dot::after {
-	transform: translate(-50%, -50%) rotate(-45deg);
-}
-
-.blockera-preview-header__close-dot:hover {
-	background: #ff5f57;
-	opacity: 1;
-	cursor: pointer;
-}
-
-.blockera-preview-header__close-dot:hover::before,
-.blockera-preview-header__close-dot:hover::after {
-	background: #813030;
-}
-
-.blockera-preview-header__close-dot:active {
-	transform: scale(0.9);
-}
-
-/* URL bar: content-sized by default, shrinks with ellipsis on small screens */
-.blockera-preview-header__url-bar {
+.blockera-canvas-header__center {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	justify-content: center;
 	flex: 0 1 auto;
 	min-width: 0;
 	max-width: 70%;
+}
+
+/* URL bar: content-sized by default, shrinks with ellipsis on small screens */
+.blockera-canvas-header__url-bar {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	flex-grow: 1;
+	width: 100%;
 	margin: 0;
 	justify-content: center;
 	gap: 60px;
@@ -129,16 +79,25 @@ body.blockera-zoom-active {
 	overflow: hidden;
 	box-sizing: border-box;
 	transition: var(--blockera-controls-transition, 0.15s ease);
-	font-family: -apple-system, "system-ui", Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+	font-family:
+		-apple-system,
+		"system-ui",
+		Segoe UI,
+		Roboto,
+		Oxygen-Sans,
+		Ubuntu,
+		Cantarell,
+		Helvetica Neue,
+		sans-serif;
 }
 
-body.blockera-zoom-active .blockera-preview-header__url-bar {
+body.blockera-zoom-active .blockera-canvas-header__url-bar {
 	padding: 0 16px;
 	background: transparent;
 }
 
 /* URL bar content (used in zoom mode) */
-.blockera-preview-header__url-bar-content {
+.blockera-canvas-header__url-bar-content {
 	display: flex;
 	align-items: center;
 	gap: 8px;
@@ -149,18 +108,19 @@ body.blockera-zoom-active .blockera-preview-header__url-bar {
 	white-space: nowrap;
 }
 
-.blockera-preview-header__url-bar-content strong {
+.blockera-canvas-header__url-bar-content strong {
 	font-weight: 600;
 	opacity: 1;
 }
 
 /* When in small breakpoint, url bar fills available space with smaller gap */
-.blockera-preview-overlay__iframe-container.breakpoint-small .blockera-preview-header__url-bar {
+.blockera-preview-overlay__iframe-container.breakpoint-small
+	.blockera-canvas-header__url-bar {
 	gap: 8px;
 }
 
 /* Actions container */
-.blockera-preview-header__actions {
+.blockera-canvas-header__end {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
@@ -170,7 +130,7 @@ body.blockera-zoom-active .blockera-preview-header__url-bar {
 	width: 100px;
 }
 
-.blockera-preview-header__actions .components-button {
+.blockera-canvas-header__end .components-button {
 	opacity: 0.6;
 	transition: var(--blockera-controls-transition, 0.15s ease);
 	color: #1d2327;
@@ -179,34 +139,49 @@ body.blockera-zoom-active .blockera-preview-header__url-bar {
 	min-width: 24px;
 	outline: none;
 	box-shadow: none;
-	font-family: -apple-system, "system-ui", Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+	font-family:
+		-apple-system,
+		"system-ui",
+		Segoe UI,
+		Roboto,
+		Oxygen-Sans,
+		Ubuntu,
+		Cantarell,
+		Helvetica Neue,
+		sans-serif;
 	font-weight: 500;
 	font-size: 13px;
 }
 
-.blockera-preview-header__actions .components-button:hover {
+.blockera-canvas-header__end .components-button:hover {
 	opacity: 1;
 	color: #1d2327;
 }
 
-.blockera-preview-header__actions .blockera-preview-header__action-btn:first-child:focus {
-	opacity: 1;
-	color: #1d2327;
-	outline: none;
-	box-shadow: none;
-}
-
-.blockera-preview-header__actions .blockera-preview-header__action-btn:last-child:focus {
+.blockera-canvas-header__end
+	.blockera-canvas-header__action-btn:first-child:focus {
 	opacity: 1;
 	color: #1d2327;
 	outline: none;
 	box-shadow: none;
 }
 
-.blockera-preview-header__actions .blockera-preview-header__action-btn--close {
+.blockera-canvas-header__end
+	.blockera-canvas-header__action-btn:last-child:focus {
+	opacity: 1;
+	color: #1d2327;
+	outline: none;
+	box-shadow: none;
+}
+
+.blockera-canvas-header__end .blockera-canvas-header__action-btn--close {
 	opacity: 0.6;
 }
 
-.blockera-preview-header__actions .blockera-preview-header__action-btn--close:hover {
+.blockera-canvas-header__end .blockera-canvas-header__action-btn--close:hover {
 	opacity: 1;
+}
+
+.blockera-canvas-header__close-button.components-button.blockera-component-button.is-tertiary.no-border:hover {
+	background: transparent !important;
 }

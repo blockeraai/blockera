@@ -116,7 +116,9 @@
 @media not (prefers-reduced-motion) {
 	.blockera-preview-overlay .blockera-preview-overlay__iframe-container {
 		--transition-duration: 0.4s;
-		transition: width 0.3s ease, transform var(--transition-duration) ease;
+		transition:
+			width 0.3s ease,
+			transform var(--transition-duration) ease;
 	}
 }
 
@@ -219,6 +221,7 @@
 	opacity: 1;
 	color: #1d2327;
 	cursor: pointer;
+	background: transparent !important;
 }
 
 .blockera-preview-overlay .blockera-preview-overlay__external-link:focus {
@@ -228,6 +231,17 @@
 	border-radius: 3px;
 	box-shadow: none;
 	outline-offset: 1px;
+}
+
+.blockera-preview-overlay
+	.blockera-preview-overlay__action-btn.action-btn-reload {
+	padding: 0 !important;
+	min-width: 30px !important;
+}
+
+.blockera-preview-overlay
+	.blockera-preview-overlay__action-btn.action-btn-reload.no-border:hover {
+	background: transparent !important;
 }
 
 /* Reload button spinning animation */

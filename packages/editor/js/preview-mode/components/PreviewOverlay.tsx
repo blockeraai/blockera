@@ -10,10 +10,16 @@ import {
 	createPortal,
 } from '@wordpress/element';
 // eslint-disable-next-line import/named
-import { ProgressBar, Button, Tooltip } from '@wordpress/components';
+import { ProgressBar } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Icon, lock, link, unlock } from '@wordpress/icons';
 import type { ReactNode, CSSProperties } from 'react';
+
+/**
+ * Blockera dependencies
+ */
+import { Button } from '@blockera/controls';
+import { classNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -852,59 +858,64 @@ export default function PreviewOverlay({
 					className={`blockera-preview-overlay__header ${
 						breakpointType === 'small' ? 'breakpoint-small' : ''
 					}`}
-					urlBarContent={
+					content={
 						<>
-							{/* Lock icon: green for https, red for http */}
-							<span
-								className={`blockera-preview-overlay__lock-icon ${
-									isSecure ? 'is-secure' : 'is-insecure'
-								}`}
-							>
-								<Icon icon={isSecure ? lock : unlock} />
-							</span>
+							<div className="blockera-canvas-header__url-bar">
+								{/* Lock icon: green for https, red for http */}
+								<span
+									className={`blockera-preview-overlay__lock-icon ${
+										isSecure ? 'is-secure' : 'is-insecure'
+									}`}
+								>
+									<Icon
+										icon={isSecure ? 'lock' : 'unlock'}
+										iconLibrary="wp"
+									/>
+								</span>
 
-							{/* URL display with ellipsis overflow */}
-							<a
-								href={url}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="blockera-preview-overlay__url"
-								data-protocol={isSecure ? 'https' : 'http'}
-								dangerouslySetInnerHTML={{
-									__html: processedUrl,
-								}}
-							/>
+								{/* URL display with ellipsis overflow */}
+								<a
+									href={url}
+									target="_blank"
+									rel="noopener noreferrer"
+									className="blockera-preview-overlay__url"
+									data-protocol={isSecure ? 'https' : 'http'}
+									dangerouslySetInnerHTML={{
+										__html: processedUrl,
+									}}
+								/>
 
-							{/* External link button to open URL in new tab */}
-							<Tooltip text={__('Open in new tab', 'blockera')}>
+								{/* External link button to open URL in new tab */}
 								<Button
-									icon={link}
+									icon={<Icon icon="link" iconLibrary="wp" />}
 									className="blockera-preview-overlay__external-link"
 									onClick={handleOpenInNewTab}
 									aria-label={__(
 										'Open in new tab',
 										'blockera'
 									)}
+									showTooltip={true}
+									noBorder={true}
 								/>
-							</Tooltip>
+							</div>
 						</>
 					}
-					actions={
+					start={
 						<>
-							<Tooltip text={__('Reload', 'blockera')}>
-								<Button
-									ref={reloadBtnRef}
-									icon={reloadIcon}
-									onClick={handleReload}
-									className={`blockera-preview-overlay__action-btn action-btn-reload${
-										isReloading ? ' is-spinning' : ''
-									}`}
-									aria-label={__(
-										'Reload preview',
-										'blockera'
-									)}
-								/>
-							</Tooltip>
+							<Button
+								ref={reloadBtnRef}
+								icon={reloadIcon}
+								onClick={handleReload}
+								className={classNames(
+									'blockera-preview-overlay__action-btn',
+									'action-btn-reload',
+									isReloading ? ' is-spinning' : ''
+								)}
+								aria-label={__('Reload preview', 'blockera')}
+								showTooltip={true}
+								size="small"
+								noBorder={true}
+							/>
 						</>
 					}
 					onClose={handleClose}
