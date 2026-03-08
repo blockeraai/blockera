@@ -54,12 +54,18 @@ describe(
 					cy.get('button').contains('Add block').click();
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			// open block inserter
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
 					cy.get('button').contains('Browse all').click();
 				});
+
+			// wait to open popover
+			cy.wait(100);
 
 			// switch to target block
 			cy.get('.block-editor-block-types-list__list-item')
@@ -161,6 +167,9 @@ describe(
 					cy.get('[aria-label="Add block"]').first().click();
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			// click on add block button
 			cy.get('.components-popover')
 				.last()
@@ -175,6 +184,9 @@ describe(
 				.within(() => {
 					cy.get('button').contains('Browse all').click();
 				});
+
+			// wait to open popover
+			cy.wait(100);
 
 			// switch to target block
 			cy.get('.block-editor-block-types-list__list-item')
