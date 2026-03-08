@@ -317,7 +317,7 @@ class AppServiceProvider extends ServiceProvider {
 
 				return $render_instance->render($html, $block, $blockera->getBlockSupports());
 			},
-			10,
+			9e2,
 			2
 		);
 
