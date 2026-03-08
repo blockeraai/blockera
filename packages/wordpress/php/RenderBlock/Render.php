@@ -157,8 +157,8 @@ class Render {
 			$base_unique_class_name = 'blockera-block blockera-block-' . blockera_get_small_random_hash();
 		}
 
-		// Hard coded for blocksy/post-template to be more compatible with that.
-		if ('blocksy/post-template' === $block['blockName']) {
+		// Hard coded for blocksy/post-template, blocksy/tax-template blocks to be more compatible with them.
+		if ('blocksy/post-template' === $block['blockName'] || 'blocksy/tax-template' === $block['blockName']) {
 			$html = preg_replace('/ct-query-template(-|)/', $base_unique_class_name . ' ct-query-template', $html);
 		}
 
