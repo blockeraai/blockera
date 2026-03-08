@@ -132,14 +132,8 @@ class SavePost {
 
 		$this->processBlocksRecursively($blocks);
 
-		$processed_content = '';
-
-		foreach ($blocks as $block) {
-			$processed_content .= serialize_block($block);
-		}
-
 		return [
-			'content' => $processed_content,
+			'content' => serialize_blocks($blocks),
 		];
 	}
 
