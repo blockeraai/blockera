@@ -157,6 +157,11 @@ class Render {
 			$base_unique_class_name = 'blockera-block blockera-block-' . blockera_get_small_random_hash();
 		}
 
+		// Hard coded for blocksy/post-template to be more compatible with that.
+		if ('blocksy/post-template' === $block['blockName']) {
+			$html = preg_replace('/ct-query-template(-|)/', $base_unique_class_name . ' ct-query-template', $html);
+		}
+
 		// Ensure the classname is unique across all blocks if not inside query loop.
 		if (! QueryLoopContext::isInside()) {
 			[
