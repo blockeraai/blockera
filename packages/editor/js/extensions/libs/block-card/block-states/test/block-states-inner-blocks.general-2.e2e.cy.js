@@ -46,9 +46,11 @@ describe('Block States on inner blocks E2E tests', () => {
 	});
 
 	const initialSetting = () => {
-		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
-			cy.getByAriaLabel('Hide secondary sidebar').click();
-		}
+		cy.get('body').then(($body) => {
+			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
+				cy.getByAriaLabel('Hide secondary sidebar').click();
+			}
+		});
 
 		appendBlocks(
 			`<!-- wp:paragraph {"className":"blockera-block blockera-block-10bb7854-c3bc-45cd-8202-b6b7c36c6b74","blockeraBlockStates":{"value": {}},"blockeraPropsId":"224185412280","blockeraCompatId":"224185412280"} -->

@@ -11,15 +11,17 @@ describe('Style Engine Testing ...', () => {
 	beforeEach(() => {
 		createPost();
 
+		cy.get('body').then(($body) => {
+			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
+				cy.getByAriaLabel('Hide secondary sidebar').click();
+			}
+		});
+
 		appendBlocks(
 			`<!-- wp:paragraph -->
 <p>Test paragraph WordPress core block with includes <a href="#">Link</a> element</p>
 <!-- /wp:paragraph -->`
 		);
-
-		if (Cypress.$('button[aria-label="Hide secondary sidebar"]').length) {
-			cy.getByAriaLabel('Hide secondary sidebar').click();
-		}
 
 		// Select target block
 		cy.getBlock('core/paragraph').click();
