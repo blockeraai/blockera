@@ -47,6 +47,9 @@ describe(
 						.click({ force: true });
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
