@@ -154,6 +154,9 @@ describe(
 			cy.get('.block-editor-list-view-tree')
 				.last()
 				.within(() => {
+					cy.get('[aria-label="Add block"]')
+						.first()
+						.should('be.visible');
 					// Open blocks menu
 					cy.get('[aria-label="Add block"]').first().click();
 				});
@@ -162,6 +165,7 @@ describe(
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
+					cy.get('button').contains('Add block').should('be.visible');
 					cy.get('button').contains('Add block').click();
 				});
 
@@ -178,24 +182,32 @@ describe(
 				.click();
 
 			// enter link value
+			cy.get('input[type="text"]:focus').should('be.visible');
 			cy.get('input[type="text"]:focus').type('#submenu-parent{enter}');
 
 			// add submenu items
+			cy.getBlock('core/navigation-submenu').last().should('be.visible');
 			cy.getBlock('core/navigation-submenu')
 				.last()
 				.within(() => {
+					cy.get('.block-editor-button-block-appender').should(
+						'be.visible'
+					);
 					cy.get('.block-editor-button-block-appender').click();
 				});
 
 			// enter link value
+			cy.get('input[type="text"]:focus').should('be.visible');
 			cy.get('input[type="text"]:focus').type(
 				'#submenu-child-item{enter}'
 			);
 
 			// Switch back to submenu block
+			cy.getBlock('core/navigation-submenu').last().should('be.visible');
 			cy.getBlock('core/navigation-submenu')
 				.last()
 				.click({ force: true });
+			cy.getByAriaLabel('Select Submenu').should('be.visible');
 			cy.getByAriaLabel('Select Submenu').click();
 
 			//

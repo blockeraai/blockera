@@ -2,6 +2,7 @@ import { getSelectedBlock } from './editor';
 import { openInserter } from './block-states';
 
 export function setParentBlock() {
+	cy.get('.blockera-extension-block-card__close').should('be.visible');
 	cy.get('.blockera-extension-block-card__close').click();
 }
 
