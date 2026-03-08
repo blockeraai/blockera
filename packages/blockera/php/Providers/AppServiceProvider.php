@@ -404,8 +404,25 @@ class AppServiceProvider extends ServiceProvider {
 	 * @return array The posts.
 	 */
 	public function handleThePosts( array $posts, \WP_Query $query ): array {
-		// Skip non-main queries (widgets, sidebars, custom queries).
-		if ( ! $query->is_main_query() || empty( $posts ) ) {
+		if ( empty( $posts ) ) {
+			return $posts;
+		}
+
+		$template_post_types = [ 'wp_template', 'wp_template_part' ];
+
+		// Process main query or FSE template queries (wp_template, wp_template_part).
+		// Template queries are not main query but must be processed for block styles.
+		$post_type         = $query->get( 'post_type' );
+		$is_template_query = in_array( $post_type, $template_post_types, true )
+			|| ( is_array( $post_type ) && ! empty( array_intersect( $template_post_types, $post_type ) ) );
+
+		// Fallback: check posts when query vars may not expose post_type (e.g. ID-based lookup).
+		if ( ! $is_template_query ) {
+			$first_post        = reset( $posts );
+			$is_template_query = $first_post && in_array( $first_post->post_type, $template_post_types, true );
+		}
+
+		if ( ! $query->is_main_query() && ! $is_template_query ) {
 			return $posts;
 		}
 
