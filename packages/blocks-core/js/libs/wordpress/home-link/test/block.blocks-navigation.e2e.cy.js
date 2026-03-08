@@ -53,12 +53,18 @@ describe(
 					cy.get('button').contains('Add block').click();
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			// open block inserter
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
 					cy.get('button').contains('Browse all').click();
 				});
+
+			// wait to open popover
+			cy.wait(100);
 
 			// switch to target block
 			// cy.getBlock('core/home-link').last().click({ force: true });
