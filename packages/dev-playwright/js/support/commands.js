@@ -596,7 +596,7 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
  * @return {Promise<void>}
  */
 async function setColorControlValue(page, label, value) {
-	const container = getParentContainer(page, label);
+	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
@@ -617,7 +617,7 @@ async function setColorControlValue(page, label, value) {
  * @return {Promise<void>}
  */
 async function clearColorControlValue(page, label) {
-	const container = getParentContainer(page, label);
+	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
@@ -706,7 +706,7 @@ async function checkActiveBlockVariation(page, variation) {
  * @return {Promise<void>}
  */
 async function openRepeaterItem(page, parentContainer, contains) {
-	const container = getParentContainer(page, parentContainer);
+	const container = await getParentContainer(page, parentContainer);
 	await container
 		.locator('[data-cy="group-control-header"]')
 		.filter({ hasText: contains })
