@@ -1,24 +1,14 @@
 /**
  * External dependencies
  */
-const {
-	Admin,
-	Editor,
-	RequestUtils,
-} = require('@wordpress/e2e-test-utils-playwright');
-const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 const path = require('path');
-const fs = require('fs');
+const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 
 /**
  * Internal dependencies
  */
-
-const { hexStringToByte } = require('../utils/other');
+const { getIframeBody } = require('../utils/editor');
 const { loginToSite, goTo } = require('../utils/site-navigation');
-const { openBoxSpacingSide } = require('../utils/controls-box-spacing');
-const { openBoxPositionSide } = require('../utils/controls-box-position');
-const { getIframeBody, getBlockeraStylesWrapper } = require('../utils/editor');
 
 test.beforeEach(async ({ page }) => {
 	// Run these tests as if in a desktop browser with a 720p monitor
@@ -240,7 +230,7 @@ function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
 	// This approach finds the parent container directly without needing async/await
 	return page
 		.locator(
-			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"]):last-child`
+			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"]):last-child, [data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`
 		)
 		.first();
 }
