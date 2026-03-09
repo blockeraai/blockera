@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const dotenv = require('dotenv');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 const { join, resolve } = require('path');
 
 /**
@@ -112,6 +113,25 @@ module.exports = (env, argv) => {
 		},
 		plugins: [
 			new DependencyExtractionWebpackPlugin({ injectPolyfill: true }),
+			new CopyPlugin({
+				patterns: [
+					{
+						// __dirname is packages/dev-tools/js/webpack; go up 3 levels to packages, then into editor
+						from: resolve(
+							__dirname,
+							'..',
+							'..',
+							'..',
+							'editor',
+							'js',
+							'preview-mode',
+							'header',
+							'style.css'
+						),
+						to: 'dist/editor/preview-header.css',
+					},
+				],
+			}),
 			new MiniCssExtractPlugin({
 				filename: isProduction
 					? './dist/[name]/style.min.css'

@@ -2,19 +2,28 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { createElement } from 'react';
+import { createRoot } from 'react-dom/client';
 
 import { IFRAME_SELECTOR } from './constants';
+import ZoomHeader from '../components/ZoomHeader';
 
 // Import header styles as raw text for iframe injection
 // Note: The ?raw suffix tells webpack to import this as a raw string
 import headerStylesRaw from '../../preview-mode/header/style.css?raw';
 /* eslint-enable import/no-unresolved, import/no-duplicates */
 
-// Store the imported styles (webpack will bundle this as a string)
-// asset/source type returns the file content directly as a string
-const headerStyles: string =
-	(typeof headerStylesRaw === 'string' ? headerStylesRaw : '') || '';
+// Extract string from raw import (handles both direct string and module.default)
+const headerStyles: string = (() => {
+	if (typeof headerStylesRaw === 'string' && headerStylesRaw.trim()) {
+		return headerStylesRaw;
+	}
+	const mod = headerStylesRaw as { default?: string } | undefined;
+	if (mod?.default && typeof mod.default === 'string' && mod.default.trim()) {
+		return mod.default;
+	}
+	return '';
+})();
 
 /**
  * Get the editor canvas iframe element.
@@ -352,34 +361,68 @@ export function injectZoomHeaderStyles(iframeDoc: Document): void {
 		return;
 	}
 
-	// Create style element with zoom header styles
-	// Uses PreviewHeader component structure for consistency
-	// Styles are imported from package/js/preview-mode/header/style.css
-	const style = iframeDoc.createElement('style');
-	style.setAttribute('data-blockera-zoom-header-styles', 'true');
-
-	// Use imported styles, or fallback to empty string if import failed
+	// Use CSS from preview-mode/header/style.css only (single source of truth)
+	const MIN_VALID_CSS_LENGTH = 200;
+	const rawLen =
+		typeof headerStyles === 'string' ? headerStyles.trim().length : 0;
 	const stylesContent =
-		typeof headerStyles === 'string' && headerStyles.trim()
-			? headerStyles
-			: '';
+		rawLen >= MIN_VALID_CSS_LENGTH ? headerStyles.trim() : '';
 
-	if (!stylesContent) {
-		// @debug-ignore
-		// eslint-disable-next-line no-console
-		console.warn(
-			'Blockera Zoom: Header styles not loaded. CSS import may have failed.',
-			{
-				headerStylesType: typeof headerStyles,
-				headerStylesLength: headerStyles?.length || 0,
+	const url =
+		typeof window !== 'undefined' &&
+		(
+			window as Window & {
+				blockeraPluginData?: { previewHeaderStyleUrl?: string };
 			}
-		);
-		// Don't return - inject empty styles to avoid breaking the header structure
-		// The header will still render but without custom styles
+		)?.blockeraPluginData?.previewHeaderStyleUrl;
+
+	if (stylesContent) {
+		const style = iframeDoc.createElement('style');
+		style.setAttribute('data-blockera-zoom-header-styles', 'true');
+		style.textContent = stylesContent;
+		iframeDoc.head.appendChild(style);
+		return;
 	}
 
-	style.textContent = stylesContent;
-	iframeDoc.head.appendChild(style);
+	// Bundled CSS invalid: load from file URL (single source of truth)
+	if (url) {
+		fetch(url)
+			.then((r) =>
+				r.ok ? r.text() : Promise.reject(new Error('Fetch failed'))
+			)
+			.then((css) => {
+				const hasHead = !!iframeDoc.head;
+				const existing = !!iframeDoc.querySelector(
+					'style[data-blockera-zoom-header-styles]'
+				);
+				// Only inject if response looks like header CSS (contains zoom header selector); avoid injecting wrong file (e.g. full editor bundle)
+				const isHeaderCss =
+					css.includes('.blockera-canvas-header') &&
+					css.includes('blockera-zoom-active');
+				if (!hasHead || existing) {
+					return;
+				}
+				if (!isHeaderCss) {
+					// @debug-ignore
+					// eslint-disable-next-line no-console
+					console.warn(
+						'Blockera Zoom: Fetched CSS is not preview-header (missing .blockera-canvas-header). Run build so dist/editor/preview-header.css exists.'
+					);
+					return;
+				}
+				const style = iframeDoc.createElement('style');
+				style.setAttribute('data-blockera-zoom-header-styles', 'true');
+				style.textContent = css;
+				iframeDoc.head.appendChild(style);
+			})
+			.catch(() => {
+				// @debug-ignore
+				// eslint-disable-next-line no-console
+				console.warn(
+					'Blockera Zoom: Failed to load header styles from file.'
+				);
+			});
+	}
 }
 
 /**
@@ -400,8 +443,27 @@ export function removeZoomHeaderStyles(iframeDoc: Document): void {
 	}
 }
 
+/** Store React root and container per iframe document for zoom header */
+const zoomHeaderMap = new WeakMap<
+	Document,
+	{ root: ReturnType<typeof createRoot>; container: HTMLDivElement }
+>();
+
 /**
- * Inject zoom header element into iframe body.
+ * Post message to parent window to reset zoom.
+ * Used by ZoomHeader when user clicks reset (traffic light or Reset Zoom button).
+ */
+function postZoomReset(iframeDoc: Document): void {
+	if (iframeDoc.defaultView?.parent) {
+		iframeDoc.defaultView.parent.postMessage(
+			{ type: 'BLOCKERA_ZOOM_RESET' },
+			'*'
+		);
+	}
+}
+
+/**
+ * Inject zoom header into iframe body using React and PreviewHeader.
  * Creates a fixed header bar at the top showing zoom percentage and reset button.
  *
  * @param iframeDoc - The iframe document to inject header into.
@@ -415,103 +477,47 @@ export function injectZoomHeader(
 		return;
 	}
 
-	// Check if header already exists to avoid duplicate injection
-	const existingHeader = iframeDoc.querySelector(
-		'.blockera-canvas-header[data-blockera-zoom-header]'
-	);
-	if (existingHeader) {
-		// Update zoom percentage if header already exists
-		const zoomElement = existingHeader.querySelector(
-			'.blockera-canvas-header__url-bar-content strong'
+	const existing = zoomHeaderMap.get(iframeDoc);
+	if (existing) {
+		// Header already mounted: re-render with updated zoom percentage
+		existing.root.render(
+			createElement(ZoomHeader, {
+				zoomPercent,
+				onReset: () => postZoomReset(iframeDoc),
+			})
 		);
-		if (zoomElement) {
-			zoomElement.textContent = `${zoomPercent}%`;
-		}
 		return;
 	}
 
 	// Inject styles first
 	injectZoomHeaderStyles(iframeDoc);
 
-	// Create header element matching PreviewHeader structure
-	const header = iframeDoc.createElement('div');
-	header.className = 'blockera-canvas-header';
-	header.setAttribute('data-blockera-zoom-header', 'true');
+	// Create container for React root
+	const container = iframeDoc.createElement('div');
+	container.setAttribute('data-blockera-zoom-header-root', 'true');
 
-	// Create browser icons (macOS-style traffic lights)
-	const browserIcons = iframeDoc.createElement('div');
-	browserIcons.className = 'blockera-canvas-header__start';
-
-	const closeDot = iframeDoc.createElement('button');
-	closeDot.className = 'blockera-canvas-header__close-dot';
-	closeDot.setAttribute('type', 'button');
-	closeDot.setAttribute('aria-label', 'Reset zoom to 100%');
-	closeDot.addEventListener('click', () => {
-		if (iframeDoc.defaultView && iframeDoc.defaultView.parent) {
-			iframeDoc.defaultView.parent.postMessage(
-				{ type: 'BLOCKERA_ZOOM_RESET' },
-				'*'
-			);
-		}
-	});
-
-	const dot2 = iframeDoc.createElement('span');
-	const dot3 = iframeDoc.createElement('span');
-
-	browserIcons.appendChild(closeDot);
-	browserIcons.appendChild(dot2);
-	browserIcons.appendChild(dot3);
-
-	// Create URL bar with zoom percentage
-	const urlBar = iframeDoc.createElement('div');
-	urlBar.className = 'blockera-canvas-header__url-bar';
-
-	const urlBarContent = iframeDoc.createElement('div');
-	urlBarContent.className = 'blockera-canvas-header__url-bar-content';
-	urlBarContent.innerHTML =
-		__('Zoom View', 'blockera') +
-		`<span>·</span><strong>${zoomPercent}%</strong>`;
-
-	urlBar.appendChild(urlBarContent);
-
-	// Create actions container
-	const actions = iframeDoc.createElement('div');
-	actions.className = 'blockera-canvas-header__end';
-
-	const closeButton = iframeDoc.createElement('span');
-	closeButton.className =
-		'components-button blockera-canvas-header__action-btn blockera-canvas-header__action-btn--close has-icon';
-	closeButton.innerHTML = __('Reset Zoom', 'blockera');
-	closeButton.setAttribute(
-		'aria-label',
-		__('Reset zoom to 100%', 'blockera')
-	);
-
-	closeButton.addEventListener('click', () => {
-		if (iframeDoc.defaultView && iframeDoc.defaultView.parent) {
-			iframeDoc.defaultView.parent.postMessage(
-				{ type: 'BLOCKERA_ZOOM_RESET' },
-				'*'
-			);
-		}
-	});
-
-	actions.appendChild(closeButton);
-
-	header.appendChild(browserIcons);
-	header.appendChild(urlBar);
-	header.appendChild(actions);
-
-	// Insert header at the beginning of body
-	iframeDoc.body.insertBefore(header, iframeDoc.body.firstChild);
+	// Insert at the beginning of body
+	iframeDoc.body.insertBefore(container, iframeDoc.body.firstChild);
 
 	// Add class to body to apply padding
 	iframeDoc.body.classList.add('blockera-zoom-active');
 	iframeDoc.documentElement.classList.add('blockera-zoom-active');
+
+	// Create React root and render ZoomHeader (uses PreviewHeader)
+	const root = createRoot(container);
+	root.render(
+		createElement(ZoomHeader, {
+			zoomPercent,
+			onReset: () => postZoomReset(iframeDoc),
+		})
+	);
+
+	zoomHeaderMap.set(iframeDoc, { root, container });
 }
 
 /**
- * Remove zoom header element from iframe body.
+ * Remove zoom header from iframe body.
+ * Unmounts React root and removes container.
  *
  * @param iframeDoc - The iframe document to remove header from.
  */
@@ -520,18 +526,14 @@ export function removeZoomHeader(iframeDoc: Document): void {
 		return;
 	}
 
-	// Remove header element
-	const header = iframeDoc.querySelector(
-		'.blockera-canvas-header[data-blockera-zoom-header]'
-	);
-	if (header) {
-		header.remove();
+	const existing = zoomHeaderMap.get(iframeDoc);
+	if (existing) {
+		existing.root.unmount();
+		existing.container.remove();
+		zoomHeaderMap.delete(iframeDoc);
 	}
 
 	// Remove body class
 	iframeDoc.body.classList.remove('blockera-zoom-active');
 	iframeDoc.documentElement.classList.remove('blockera-zoom-active');
-
-	// Remove styles (optional - can keep for performance)
-	// removeZoomHeaderStyles(iframeDoc);
 }

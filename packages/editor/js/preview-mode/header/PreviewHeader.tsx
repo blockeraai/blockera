@@ -24,6 +24,8 @@ export interface PreviewHeaderProps {
 	onClose: () => void;
 	/** Optional className for the header container */
 	className?: string;
+	/** When true, adds data-blockera-zoom-header for zoom mode styling (fixed position) */
+	dataBlockeraZoomHeader?: boolean;
 }
 
 /**
@@ -39,9 +41,29 @@ export default function PreviewHeader({
 	end,
 	onClose,
 	className = '',
+	dataBlockeraZoomHeader = false,
 }: PreviewHeaderProps): ReactNode {
+	const endContent =
+		end !== undefined ? (
+			end
+		) : (
+			<Button
+				className="blockera-canvas-header__close-button"
+				icon={<Icon icon="close" iconLibrary="wp" iconSize={18} />}
+				onClick={onClose}
+				aria-label={__('Close', 'blockera')}
+				showTooltip={true}
+				noBorder={true}
+			/>
+		);
+
 	return (
-		<div className={`blockera-canvas-header ${className}`}>
+		<div
+			className={`blockera-canvas-header ${className}`}
+			data-blockera-zoom-header={
+				dataBlockeraZoomHeader ? 'true' : undefined
+			}
+		>
 			{/* Start section */}
 			<div className="blockera-canvas-header__start">{start}</div>
 
@@ -51,18 +73,7 @@ export default function PreviewHeader({
 			</div>
 
 			{/* End section */}
-			<div className="blockera-canvas-header__end">
-				{end}
-
-				<Button
-					className="blockera-canvas-header__close-button"
-					icon={<Icon icon="close" iconLibrary="wp" iconSize={18} />}
-					onClick={onClose}
-					aria-label={__('Close', 'blockera')}
-					showTooltip={true}
-					noBorder={true}
-				/>
-			</div>
+			<div className="blockera-canvas-header__end">{endContent}</div>
 		</div>
 	);
 }
