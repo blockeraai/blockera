@@ -240,7 +240,7 @@ function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
 	// This approach finds the parent container directly without needing async/await
 	return page
 		.locator(
-			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`
+			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"]):last-child`
 		)
 		.first();
 }
