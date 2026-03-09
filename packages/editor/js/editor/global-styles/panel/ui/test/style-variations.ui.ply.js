@@ -75,7 +75,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 		await getByDataTest(page, 'style-section-1').click();
 
 		// Add alias to the feature container
-		const bgColorContainer = getParentContainer(page, 'BG Color');
+		const bgColorContainer = await getParentContainer(page, 'BG Color');
 
 		// Act: clicking on color button
 		const colorBtnCount = await bgColorContainer
@@ -188,7 +188,7 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			.filter({ hasText: 'Rename' })
 			.click();
 
-		const nameContainer = getParentContainer(page, 'Name');
+		const nameContainer = await getParentContainer(page, 'Name');
 		await nameContainer.locator('input').clear();
 		await nameContainer.locator('input').fill('New Name');
 
@@ -219,11 +219,11 @@ test.describe('Style Variations Inside Global Styles Panel → Functionality', (
 			.locator('.blockera-component-popover-body button')
 			.filter({ hasText: 'Rename' })
 			.click();
-		const nameContainer = getParentContainer(page, 'Name');
+		const nameContainer = await getParentContainer(page, 'Name');
 		await nameContainer.locator('input').clear();
 		await nameContainer.locator('input').fill('New Name');
 
-		const idContainer = getParentContainer(page, 'ID');
+		const idContainer = await getParentContainer(page, 'ID');
 		await idContainer.locator('input').clear();
 		await idContainer.locator('input').fill('new id');
 

@@ -88,7 +88,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const bgContainer = getParentContainer(
+				const bgContainer = await getParentContainer(
 					page,
 					'Image & Gradient'
 				);
@@ -136,7 +136,10 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 
 				// change angle
 				const popover = page.locator('.components-popover').last();
-				const angleContainer = getParentContainer(popover, 'Angle');
+				const angleContainer = await getParentContainer(
+					popover,
+					'Angle'
+				);
 				await angleContainer.locator('input[type="number"]').clear({
 					force: true,
 				});
@@ -191,7 +194,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const bgContainer = getParentContainer(
+				const bgContainer = await getParentContainer(
 					page,
 					'Image & Gradient'
 				);
@@ -316,7 +319,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const bgContainer = getParentContainer(
+				const bgContainer = await getParentContainer(
 					page,
 					'Image & Gradient'
 				);
@@ -401,7 +404,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const bgContainer = getParentContainer(
+				const bgContainer = await getParentContainer(
 					page,
 					'Image & Gradient'
 				);
@@ -502,7 +505,7 @@ test.describe('Background Image & Gradient → WP Compatibility', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const bgContainer = getParentContainer(
+				const bgContainer = await getParentContainer(
 					page,
 					'Image & Gradient'
 				);

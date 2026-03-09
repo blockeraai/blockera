@@ -103,7 +103,7 @@ test.describe('Aspect Ratio → WP Compatibility (Global Styles)', () => {
 				//
 
 				// Get aspect ratio container
-				const aspectRatioContainer = getParentContainer(
+				const aspectRatioContainer = await getParentContainer(
 					page,
 					'Aspect Ratio'
 				);

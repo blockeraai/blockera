@@ -217,22 +217,34 @@ async function cssVar(page, cssVarName, selector = null) {
 
 /**
  * Get parent container element.
- * Finds the closest ancestor element with the specified data-cy attribute.
- * This is equivalent to Cypress's .closest() method.
+ * Returns the first [data-cy] container that has a descendant with the given aria-label.
+ * Tries :last-child selector first; falls back to base selector when no match.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} ariaLabel - Aria label.
  * @param {string} parentsDataCy - Parent data-cy value (default: 'base-control').
- * @return {import('@playwright/test').Locator} Parent container locator.
+ * @param {Object} options - Optional options.
+ * @param {boolean} options.useLastChild - When true, try :last-child first, fallback to base selector. Default: true. Pass false to skip and use base selector only.
+ * @return {Promise<import('@playwright/test').Locator>} Parent container locator (first match).
  */
-function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
-	// Build a CSS selector that finds the data-cy container that has an aria-label descendant
-	// This approach finds the parent container directly without needing async/await
-	return page
-		.locator(
-			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"]):last-child, [data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`
-		)
-		.first();
+async function getParentContainer(
+	page,
+	ariaLabel,
+	parentsDataCy = 'base-control',
+	options = {}
+) {
+	const baseSelector = `[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`;
+
+	if (options.useLastChild === false) {
+		return page.locator(baseSelector).first();
+	}
+
+	const lastChildLocator = page.locator(`${baseSelector}:last-child`);
+	if ((await lastChildLocator.count()) > 0) {
+		return lastChildLocator.first();
+	}
+
+	return page.locator(baseSelector).first();
 }
 
 /**

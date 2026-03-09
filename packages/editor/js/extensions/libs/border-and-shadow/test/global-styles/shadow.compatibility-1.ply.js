@@ -79,7 +79,10 @@ test.describe('Shadow → WP Compatibility', () => {
 				await getByDataTest(page, 'style-fill').click();
 
 				// Get feature container
-				const shadowContainer = getParentContainer(page, 'Box Shadows');
+				const shadowContainer = await getParentContainer(
+					page,
+					'Box Shadows'
+				);
 
 				await addNewTransition(page);
 
@@ -198,7 +201,10 @@ test.describe('Shadow → WP Compatibility', () => {
 				await getByDataTest(page, 'style-fill').click();
 
 				// Get feature container
-				const shadowContainer = getParentContainer(page, 'Box Shadows');
+				const shadowContainer = await getParentContainer(
+					page,
+					'Box Shadows'
+				);
 
 				await addNewTransition(page);
 

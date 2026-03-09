@@ -34,7 +34,7 @@ test.describe('Block Unique Classname → Functionality', () => {
 		page,
 	}) => {
 		// Add alias to the feature container
-		const bgColorContainer = getParentContainer(page, 'BG Color');
+		const bgColorContainer = await getParentContainer(page, 'BG Color');
 
 		// Act: clicking on color button
 		const colorBtn = bgColorContainer.locator('[data-cy="color-btn"]');
@@ -63,7 +63,7 @@ test.describe('Block Unique Classname → Functionality', () => {
 
 		// Act: clicking on color button
 		// Add alias to the feature container
-		const bgColorContainer1 = getParentContainer(page, 'BG Color');
+		const bgColorContainer1 = await getParentContainer(page, 'BG Color');
 		const colorBtn1 = bgColorContainer1.locator('[data-cy="color-btn"]');
 		if ((await colorBtn1.count()) > 0) {
 			await bgColorContainer1

@@ -80,8 +80,14 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				await getByDataTest(page, 'style-fill').click();
 
 				// Get feature containers
-				const borderContainer = getParentContainer(page, 'Border');
-				const radiusContainer = getParentContainer(page, 'Radius');
+				const borderContainer = await getParentContainer(
+					page,
+					'Border'
+				);
+				const radiusContainer = await getParentContainer(
+					page,
+					'Radius'
+				);
 
 				await addNewTransition(page);
 
@@ -218,8 +224,14 @@ test.describe('Border & Border Radius Together → WP Compatibility', () => {
 				await getByDataTest(page, 'style-fill').click();
 
 				// Get feature containers
-				const borderContainer = getParentContainer(page, 'Border');
-				const radiusContainer = getParentContainer(page, 'Radius');
+				const borderContainer = await getParentContainer(
+					page,
+					'Border'
+				);
+				const radiusContainer = await getParentContainer(
+					page,
+					'Radius'
+				);
 
 				await addNewTransition(page);
 

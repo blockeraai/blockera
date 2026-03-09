@@ -112,7 +112,10 @@ test.describe('Spacing → WP Compatibility (Global Styles)', () => {
 				//
 
 				// Get layout container
-				const paddingContainer = getParentContainer(page, 'Padding');
+				const paddingContainer = await getParentContainer(
+					page,
+					'Padding'
+				);
 
 				const paddingTopInput = await paddingContainer.locator(
 					'[data-test="padding-top"]'
