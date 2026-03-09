@@ -903,7 +903,7 @@ async function checkBlockSections(page, expectedSections, check = 'exist') {
 async function openGlobalStylesPanel(page) {
 	await page
 		.locator('button[aria-controls="edit-site:global-styles"]')
-		.click({ force: true });
+		.dispatchEvent('click');
 }
 
 /**
@@ -915,7 +915,7 @@ async function openGlobalStylesPanel(page) {
 async function openSettingsPanel(page) {
 	await page
 		.locator('button[aria-controls="edit-post:document"]')
-		.click({ force: true });
+		.dispatchEvent('click');
 }
 
 /**
