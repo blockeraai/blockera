@@ -5,6 +5,10 @@
  * @package Blockera/bootstrap
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 use Blockera\Setup\Compatibility\JSONResolver;
 
 add_filter('wp_theme_json_get_style_nodes', 'blockera_filter_theme_json_get_style_nodes');

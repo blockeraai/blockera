@@ -417,12 +417,12 @@ export function injectZoomHeader(
 
 	// Check if header already exists to avoid duplicate injection
 	const existingHeader = iframeDoc.querySelector(
-		'.blockera-preview-header[data-blockera-zoom-header]'
+		'.blockera-canvas-header[data-blockera-zoom-header]'
 	);
 	if (existingHeader) {
 		// Update zoom percentage if header already exists
 		const zoomElement = existingHeader.querySelector(
-			'.blockera-preview-header__url-bar-content strong'
+			'.blockera-canvas-header__url-bar-content strong'
 		);
 		if (zoomElement) {
 			zoomElement.textContent = `${zoomPercent}%`;
@@ -435,15 +435,15 @@ export function injectZoomHeader(
 
 	// Create header element matching PreviewHeader structure
 	const header = iframeDoc.createElement('div');
-	header.className = 'blockera-preview-header';
+	header.className = 'blockera-canvas-header';
 	header.setAttribute('data-blockera-zoom-header', 'true');
 
 	// Create browser icons (macOS-style traffic lights)
 	const browserIcons = iframeDoc.createElement('div');
-	browserIcons.className = 'blockera-preview-header__browser-icons';
+	browserIcons.className = 'blockera-canvas-header__start';
 
 	const closeDot = iframeDoc.createElement('button');
-	closeDot.className = 'blockera-preview-header__close-dot';
+	closeDot.className = 'blockera-canvas-header__close-dot';
 	closeDot.setAttribute('type', 'button');
 	closeDot.setAttribute('aria-label', 'Reset zoom to 100%');
 	closeDot.addEventListener('click', () => {
@@ -464,10 +464,10 @@ export function injectZoomHeader(
 
 	// Create URL bar with zoom percentage
 	const urlBar = iframeDoc.createElement('div');
-	urlBar.className = 'blockera-preview-header__url-bar';
+	urlBar.className = 'blockera-canvas-header__url-bar';
 
 	const urlBarContent = iframeDoc.createElement('div');
-	urlBarContent.className = 'blockera-preview-header__url-bar-content';
+	urlBarContent.className = 'blockera-canvas-header__url-bar-content';
 	urlBarContent.innerHTML =
 		__('Zoom View', 'blockera') +
 		`<span>·</span><strong>${zoomPercent}%</strong>`;
@@ -476,11 +476,11 @@ export function injectZoomHeader(
 
 	// Create actions container
 	const actions = iframeDoc.createElement('div');
-	actions.className = 'blockera-preview-header__actions';
+	actions.className = 'blockera-canvas-header__end';
 
 	const closeButton = iframeDoc.createElement('span');
 	closeButton.className =
-		'components-button blockera-preview-header__action-btn blockera-preview-header__action-btn--close has-icon';
+		'components-button blockera-canvas-header__action-btn blockera-canvas-header__action-btn--close has-icon';
 	closeButton.innerHTML = __('Reset Zoom', 'blockera');
 	closeButton.setAttribute(
 		'aria-label',
@@ -522,7 +522,7 @@ export function removeZoomHeader(iframeDoc: Document): void {
 
 	// Remove header element
 	const header = iframeDoc.querySelector(
-		'.blockera-preview-header[data-blockera-zoom-header]'
+		'.blockera-canvas-header[data-blockera-zoom-header]'
 	);
 	if (header) {
 		header.remove();

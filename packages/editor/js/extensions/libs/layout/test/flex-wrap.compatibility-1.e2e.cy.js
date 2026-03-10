@@ -53,6 +53,9 @@ describe('Flex Wrap → WP Data Compatibility', () => {
 			cy.getByAriaLabel('Flex').click();
 		});
 
+		cy.openFeatureMoreSettings('more-layout-settings');
+		cy.selectFeature('Flex Children Wrap');
+
 		cy.getParentContainer('Flex Wrap').within(() => {
 			cy.getByAriaLabel('Wrap').click();
 		});

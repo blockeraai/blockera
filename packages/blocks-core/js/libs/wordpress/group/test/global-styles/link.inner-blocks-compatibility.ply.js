@@ -319,7 +319,10 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			await setBlockState(page, 'Normal');
 
-			const textColorContainer = getParentContainer(page, 'Text Color');
+			const textColorContainer = await getParentContainer(
+				page,
+				'Text Color'
+			);
 			await clickValueAddonButton(page, textColorContainer);
 
 			await selectValueAddonItem(page, 'contrast');
@@ -330,7 +333,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			await setBlockState(page, 'Hover');
 
-			const textColorContainerHover = getParentContainer(
+			const textColorContainerHover = await getParentContainer(
 				page,
 				'Text Color'
 			);
@@ -412,7 +415,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			await setBlockState(page, 'Normal');
 
-			const textColorContainerNormal = getParentContainer(
+			const textColorContainerNormal = await getParentContainer(
 				page,
 				'Text Color'
 			);
@@ -424,7 +427,7 @@ test.describe('Group Block → Link Inner Block → WP Data Compatibility', () =
 
 			await setBlockState(page, 'Hover');
 
-			const textColorContainerHover2 = getParentContainer(
+			const textColorContainerHover2 = await getParentContainer(
 				page,
 				'Text Color'
 			);

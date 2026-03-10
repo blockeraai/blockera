@@ -120,15 +120,16 @@ export const BlockBase: ComponentType<any> = (
 		handleOnChangeStyleInLocalState,
 	} = useGlobalStylesPanelContext();
 	const {
-		additional,
-		children,
 		name,
 		clientId,
-		attributes: blockAttributes,
-		setAttributes: setBlockAttributes,
+		children,
+		isSelected,
+		additional,
 		defaultAttributes,
 		originDefaultAttributes,
+		attributes: blockAttributes,
 		insideBlockInspector = true,
+		setAttributes: setBlockAttributes,
 		...props
 	} = _props;
 
@@ -626,7 +627,9 @@ export const BlockBase: ComponentType<any> = (
 		// are properly managed or avoided (consider use of cloneObject as needed).
 		getAttributes: () => cloneObject(attributes),
 		innerBlocks: additional?.blockeraInnerBlocks,
-		setChangesets: blockStyleVariationsProps.setChangesets,
+		setChangesets: isSelected
+			? blockStyleVariationsProps.setChangesets
+			: () => {},
 	});
 
 	const updateBlockEditorSettings: UpdateBlockEditorSettings = useCallback(
@@ -730,6 +733,8 @@ export const BlockBase: ComponentType<any> = (
 	return (
 		<BlockEditContextProvider
 			{...{
+				args,
+				isActive,
 				block: {
 					blockName: name,
 					clientId,
@@ -749,6 +754,7 @@ export const BlockBase: ComponentType<any> = (
 				currentBreakpoint,
 				defaultAttributes,
 				currentInnerBlock,
+				availableAttributes,
 				masterIsNormalState,
 				blockeraInnerBlocks,
 				activeBlockVariation,
@@ -796,7 +802,9 @@ export const BlockBase: ComponentType<any> = (
 								availableInnerStates,
 								insideBlockInspector,
 								currentInnerBlockState,
-								blockStyleVariationsProps,
+								blockStyleVariationsProps: isSelected
+									? blockStyleVariationsProps
+									: {},
 								updateBlockEditorSettings,
 								blockProps: {
 									// Sending props like exactly "edit" function props of WordPress Block.

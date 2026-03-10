@@ -118,11 +118,11 @@ test.describe('List Block → Icon Feature', () => {
 		await page.waitForTimeout(1000);
 
 		// set gap
-		const gapContainer = getParentContainer(page, 'Gap');
+		const gapContainer = await getParentContainer(page, 'Gap');
 		await gapContainer.locator('input').fill('30');
 
 		// set size
-		const sizeContainer = getParentContainer(page, 'Size');
+		const sizeContainer = await getParentContainer(page, 'Size');
 		await sizeContainer.locator('input').fill('30');
 
 		// set color

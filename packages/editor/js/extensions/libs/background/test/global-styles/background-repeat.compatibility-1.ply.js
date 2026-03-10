@@ -77,7 +77,7 @@ test.describe('Background Repeat → WP Compatibility (Global Styles)', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const bgContainer = getParentContainer(
+				const bgContainer = await getParentContainer(
 					page,
 					'Image & Gradient'
 				);

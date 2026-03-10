@@ -69,7 +69,9 @@ const cleanupStylesHelper = (styles: Object, defaultStyles: Object): Object => {
 			// Exclude the Block original core attributes is object and contains all values are undefined.
 			if (
 				'object' === typeof styles[key] &&
-				!Object.values(styles[key]).some((value) => value !== undefined)
+				!Object.values(styles[key] || {}).some(
+					(value) => value !== undefined
+				)
 			) {
 				continue;
 			}

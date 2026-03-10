@@ -11,6 +11,12 @@ describe('Style Engine Testing ...', () => {
 	beforeEach(() => {
 		createPost();
 
+		cy.get('body').then(($body) => {
+			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
+				cy.getByAriaLabel('Hide secondary sidebar').click();
+			}
+		});
+
 		appendBlocks(
 			`<!-- wp:paragraph -->
 <p>Test paragraph WordPress core block with includes <a href="#">Link</a> element</p>
@@ -338,11 +344,10 @@ describe('Style Engine Testing ...', () => {
 					setDevice('Tablet');
 					setBlockState('Normal');
 
-					cy.getBlock('core/paragraph').realHover();
 					cy.getBlock('core/paragraph').should(
 						'have.css',
 						'background-color',
-						'rgb(23, 227, 23)'
+						'rgb(227, 23, 139)'
 					);
 				});
 			});

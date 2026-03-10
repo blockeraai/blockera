@@ -193,14 +193,19 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 				// Use the block name as the key for cached CSS data. Otherwise, use a hash of the metadata.
 				$cache_node_key = $metadata['name'] ?? md5(wp_json_encode($metadata));
 
-				if (isset($cached['blocks'][ $cache_node_key ])) {
-					$block_css = $cached['blocks'][ $cache_node_key ];
+				if (isset($cached['wp']['blocks'][ $cache_node_key ])) {
+					// Get the css styles for blocks from WordPress cached.
+					$block_css = $cached['wp']['blocks'][ $cache_node_key ];
 				} else {
-					$block_css                          .= $tree->get_styles_for_block($metadata);
-					$cached['blocks'][ $cache_node_key ] = $block_css;
-					$update_cache                        = true;
+					// Get the WordPress styles for current block.
+					$block_css .= $tree->get_styles_for_block($metadata);
+					// Cache the WordPress styles for the block.
+					$cached['wp']['blocks'][ $cache_node_key ] = $block_css;
+					// Update the cache.
+					$update_cache = true;
 				}
 			} else {
+				// Get the WordPress styles for current block.
 				$block_css .= $tree->get_styles_for_block($metadata);
 			}
 
@@ -254,14 +259,19 @@ if (! function_exists('blockera_add_global_styles_for_blocks')) {
 				// Use the block name as the key for cached CSS data. Otherwise, use a hash of the metadata.
 				$cache_node_key = $metadata['name'] ?? md5(wp_json_encode($metadata));
 
-				if (isset($cached['blocks'][ $cache_node_key ])) {
-					$block_css = $cached['blocks'][ $cache_node_key ];
+				if (isset($cached['blockera']['blocks'][ $cache_node_key ])) {
+					// Get the Blockera styles for blocks from cache.
+					$block_css = $cached['blockera']['blocks'][ $cache_node_key ];
 				} else {
-					$block_css                          .= $tree->get_blockera_styles_for_block($metadata);
-					$cached['blocks'][ $cache_node_key ] = $block_css;
-					$update_cache                        = true;
+					// Get the Blockera styles for current block.
+					$block_css .= $tree->get_blockera_styles_for_block($metadata);
+					// Cache the Blockera styles for the block.
+					$cached['blockera']['blocks'][ $cache_node_key ] = $block_css;
+					// Update the cache.
+					$update_cache = true;
 				}
 			} else {
+				// Get the Blockera styles for current block.
 				$block_css .= $tree->get_blockera_styles_for_block($metadata);
 			}
 

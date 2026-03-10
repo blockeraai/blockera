@@ -137,7 +137,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 
 		await getByDataTest(page, 'style-tab').click();
 
-		const widthContainer = getParentContainer(page, 'Width');
+		const widthContainer = await getParentContainer(page, 'Width');
 		await widthContainer.locator('input').clear({ force: true });
 		await widthContainer.locator('input').fill('150');
 		await page.waitForTimeout(1000);
@@ -172,7 +172,7 @@ test.describe('Icon Block → Functionality + Visual Test', () => {
 		await setBoxSpacingSide(page, 'padding-left', 50);
 		await setBoxSpacingSide(page, 'padding-bottom', 50);
 
-		const radiusContainer = getParentContainer(page, 'Radius');
+		const radiusContainer = await getParentContainer(page, 'Radius');
 		await radiusContainer
 			.locator('input[type="text"]')
 			.clear({ force: true });

@@ -1,24 +1,14 @@
 /**
  * External dependencies
  */
-const {
-	Admin,
-	Editor,
-	RequestUtils,
-} = require('@wordpress/e2e-test-utils-playwright');
-const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 const path = require('path');
-const fs = require('fs');
+const { test, expect } = require('@wordpress/e2e-test-utils-playwright');
 
 /**
  * Internal dependencies
  */
-
-const { hexStringToByte } = require('../utils/other');
+const { getIframeBody } = require('../utils/editor');
 const { loginToSite, goTo } = require('../utils/site-navigation');
-const { openBoxSpacingSide } = require('../utils/controls-box-spacing');
-const { openBoxPositionSide } = require('../utils/controls-box-position');
-const { getIframeBody, getBlockeraStylesWrapper } = require('../utils/editor');
 
 test.beforeEach(async ({ page }) => {
 	// Run these tests as if in a desktop browser with a 720p monitor
@@ -227,22 +217,34 @@ async function cssVar(page, cssVarName, selector = null) {
 
 /**
  * Get parent container element.
- * Finds the closest ancestor element with the specified data-cy attribute.
- * This is equivalent to Cypress's .closest() method.
+ * Returns the first [data-cy] container that has a descendant with the given aria-label.
+ * Tries :last-child selector first; falls back to base selector when no match.
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @param {string} ariaLabel - Aria label.
  * @param {string} parentsDataCy - Parent data-cy value (default: 'base-control').
- * @return {import('@playwright/test').Locator} Parent container locator.
+ * @param {Object} options - Optional options.
+ * @param {boolean} options.useLastChild - When true, try :last-child first, fallback to base selector. Default: true. Pass false to skip and use base selector only.
+ * @return {Promise<import('@playwright/test').Locator>} Parent container locator (first match).
  */
-function getParentContainer(page, ariaLabel, parentsDataCy = 'base-control') {
-	// Build a CSS selector that finds the data-cy container that has an aria-label descendant
-	// This approach finds the parent container directly without needing async/await
-	return page
-		.locator(
-			`[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`
-		)
-		.first();
+async function getParentContainer(
+	page,
+	ariaLabel,
+	parentsDataCy = 'base-control',
+	options = {}
+) {
+	const baseSelector = `[data-cy="${parentsDataCy}"]:has([aria-label="${ariaLabel}"])`;
+
+	if (options.useLastChild === false) {
+		return page.locator(baseSelector).first();
+	}
+
+	const lastChildLocator = page.locator(`${baseSelector}:last-child`);
+	if ((await lastChildLocator.count()) > 0) {
+		return lastChildLocator.first();
+	}
+
+	return page.locator(baseSelector).first();
 }
 
 /**
@@ -594,7 +596,7 @@ async function checkInputFieldValue(page, fieldLabel, groupLabel, value) {
  * @return {Promise<void>}
  */
 async function setColorControlValue(page, label, value) {
-	const container = getParentContainer(page, label);
+	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
@@ -615,7 +617,7 @@ async function setColorControlValue(page, label, value) {
  * @return {Promise<void>}
  */
 async function clearColorControlValue(page, label) {
-	const container = getParentContainer(page, label);
+	const container = await getParentContainer(page, label);
 	await container.locator('[data-cy="color-btn"]').click();
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
@@ -704,7 +706,7 @@ async function checkActiveBlockVariation(page, variation) {
  * @return {Promise<void>}
  */
 async function openRepeaterItem(page, parentContainer, contains) {
-	const container = getParentContainer(page, parentContainer);
+	const container = await getParentContainer(page, parentContainer);
 	await container
 		.locator('[data-cy="group-control-header"]')
 		.filter({ hasText: contains })
@@ -728,15 +730,27 @@ async function closeSpotlightPopover(page) {
  * @return {string} Normalized CSS content.
  */
 function normalizeCSSContent(cssContent) {
-	return cssContent
-		.replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments
-		.replace(/[\t\n\r]+/g, ' ') // Replace tabs and newlines with space
-		.replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
-		.replace(/\s*{\s*/g, '{') // Remove spaces around opening braces
-		.replace(/\s*}\s*/g, '}') // Remove spaces around closing braces
-		.replace(/\s*:\s*/g, ':') // Remove spaces around colons
-		.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
-		.trim(); // Remove leading/trailing whitespace
+	return (
+		cssContent
+			.replace(/\/\*[\s\S]*?\*\//g, '') // Remove CSS comments
+			.replace(/[\t\n\r]+/g, ' ') // Replace tabs and newlines with space
+			.replace(/\s{2,}/g, ' ') // Replace multiple spaces with single space
+			.replace(/\s*{\s*/g, '{') // Remove spaces around opening braces
+			.replace(/\s*}\s*/g, '}') // Remove spaces around closing braces
+			.replace(/\s*:\s*/g, ':') // Remove spaces around colons
+			.replace(/\s*;\s*/g, ';') // Remove spaces around semicolons
+
+			// Normalize attribute selectors to use double quotes
+			.replace(
+				/\[([^\]\s~|^$*!=]+)\s*([~|^$*]?=)\s*(?:"([^"]*)"|'([^']*)'|([^\]\s]+))\]/g,
+				(_, attr, operator, v1, v2, v3) => {
+					const value = v1 ?? v2 ?? v3 ?? '';
+					return `[${attr}${operator}"${value}"]`;
+				}
+			)
+
+			.trim()
+	); // Remove leading/trailing whitespace
 }
 
 /**
@@ -885,25 +899,63 @@ async function checkBlockSections(page, expectedSections, check = 'exist') {
 /**
  * Open global styles panel.
  *
+ * Waits for the editor to be ready and the button to be visible before clicking.
+ * Uses proper Playwright click (not dispatchEvent) for actionability checks.
+ * Idempotent: skips click if panel is already open.
+ *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
  */
 async function openGlobalStylesPanel(page) {
-	await page
-		.locator('button[aria-controls="edit-site:global-styles"]')
-		.click({ force: true });
+	const button = page
+		.locator(
+			'.interface-interface-skeleton button[aria-controls="edit-site:global-styles"]'
+		)
+		.first();
+
+	await button.waitFor({ state: 'visible', timeout: 10000 });
+
+	const isPressed = await button.getAttribute('aria-pressed');
+	if (isPressed === 'true') {
+		return;
+	}
+
+	await button.click();
+
+	await expect(button).toHaveAttribute('aria-pressed', 'true', {
+		timeout: 5000,
+	});
 }
 
 /**
  * Open settings panel.
  *
+ * Waits for the editor to be ready and the button to be visible before clicking.
+ * Uses proper Playwright click (not dispatchEvent) for actionability checks.
+ * Idempotent: skips click if panel is already open.
+ *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
  */
 async function openSettingsPanel(page) {
-	await page
-		.locator('button[aria-controls="edit-post:document"]')
-		.click({ force: true });
+	const button = page
+		.locator(
+			'.interface-interface-skeleton button[aria-controls="edit-post:document"]'
+		)
+		.first();
+
+	await button.waitFor({ state: 'visible', timeout: 10000 });
+
+	const isPressed = await button.getAttribute('aria-pressed');
+	if (isPressed === 'true') {
+		return;
+	}
+
+	await button.click();
+
+	await expect(button).toHaveAttribute('aria-pressed', 'true', {
+		timeout: 5000,
+	});
 }
 
 /**

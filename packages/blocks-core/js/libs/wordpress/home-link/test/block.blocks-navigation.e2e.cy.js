@@ -7,6 +7,7 @@ import {
 	appendBlocks,
 	openInserter,
 	setInnerBlock,
+	openBlockInserter,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -28,6 +29,7 @@ describe(
 		});
 
 		it('Functionality + Inner blocks', () => {
+			openBlockInserter();
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -35,12 +37,14 @@ describe(
 			// Make sure the tree is visible (Ajax call done)
 			cy.get('.block-editor-list-view-tree').should('be.visible');
 
-			cy.get('.block-editor-list-view-tree').within(() => {
-				// Open blocks menu
-				cy.get('[aria-label="Add block"]')
-					.first()
-					.click({ force: true });
-			});
+			cy.get('.block-editor-list-view-tree')
+				.last()
+				.within(() => {
+					// Open blocks menu
+					cy.get('[aria-label="Add block"]')
+						.first()
+						.click({ force: true });
+				});
 
 			// click on add block button
 			cy.get('.components-popover')
@@ -49,12 +53,18 @@ describe(
 					cy.get('button').contains('Add block').click();
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			// open block inserter
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
 					cy.get('button').contains('Browse all').click();
 				});
+
+			// wait to open popover
+			cy.wait(100);
 
 			// switch to target block
 			// cy.getBlock('core/home-link').last().click({ force: true });

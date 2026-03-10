@@ -8,6 +8,7 @@ import {
 	openInserter,
 	setInnerBlock,
 	setParentBlock,
+	openBlockInserter,
 	redirectToFrontPage,
 } from '@blockera/dev-cypress/js/helpers';
 
@@ -29,6 +30,7 @@ describe(
 		});
 
 		it('Block should be supported + switch to parent should work', () => {
+			openBlockInserter();
 			appendBlocks('<!-- wp:navigation /-->');
 
 			cy.getBlock('core/navigation').click();
@@ -36,12 +38,14 @@ describe(
 			// Make sure the tree is visible (Ajax call done)
 			cy.get('.block-editor-list-view-tree').should('be.visible');
 
-			cy.get('.block-editor-list-view-tree').within(() => {
-				// Open blocks menu
-				cy.get('[aria-label="Add block"]')
-					.first()
-					.click({ force: true });
-			});
+			cy.get('.block-editor-list-view-tree')
+				.last()
+				.within(() => {
+					// Open blocks menu
+					cy.get('[aria-label="Add block"]')
+						.first()
+						.click({ force: true });
+				});
 
 			// click on add block button
 			cy.get('.components-popover')
@@ -50,12 +54,18 @@ describe(
 					cy.get('button').contains('Add block').click();
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			// open block inserter
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
 					cy.get('button').contains('Browse all').click();
 				});
+
+			// wait to open popover
+			cy.wait(100);
 
 			// switch to target block
 			cy.get('.block-editor-block-types-list__list-item')
@@ -147,15 +157,24 @@ describe(
 
 			cy.get('.block-editor-list-view-tree').should('be.visible');
 
-			cy.get('.block-editor-list-view-tree').within(() => {
-				// Open blocks menu
-				cy.get('[aria-label="Add block"]').first().click();
-			});
+			cy.get('.block-editor-list-view-tree')
+				.last()
+				.within(() => {
+					cy.get('[aria-label="Add block"]')
+						.first()
+						.should('be.visible');
+					// Open blocks menu
+					cy.get('[aria-label="Add block"]').first().click();
+				});
+
+			// wait to open popover
+			cy.wait(100);
 
 			// click on add block button
 			cy.get('.components-popover')
 				.last()
 				.within(() => {
+					cy.get('button').contains('Add block').should('be.visible');
 					cy.get('button').contains('Add block').click();
 				});
 
@@ -166,30 +185,41 @@ describe(
 					cy.get('button').contains('Browse all').click();
 				});
 
+			// wait to open popover
+			cy.wait(100);
+
 			// switch to target block
 			cy.get('.block-editor-block-types-list__list-item')
 				.contains('Submenu')
 				.click();
 
 			// enter link value
+			cy.get('input[type="text"]:focus').should('be.visible');
 			cy.get('input[type="text"]:focus').type('#submenu-parent{enter}');
 
 			// add submenu items
+			cy.getBlock('core/navigation-submenu').last().should('be.visible');
 			cy.getBlock('core/navigation-submenu')
 				.last()
 				.within(() => {
+					cy.get('.block-editor-button-block-appender').should(
+						'be.visible'
+					);
 					cy.get('.block-editor-button-block-appender').click();
 				});
 
 			// enter link value
+			cy.get('input[type="text"]:focus').should('be.visible');
 			cy.get('input[type="text"]:focus').type(
 				'#submenu-child-item{enter}'
 			);
 
 			// Switch back to submenu block
+			cy.getBlock('core/navigation-submenu').last().should('be.visible');
 			cy.getBlock('core/navigation-submenu')
 				.last()
 				.click({ force: true });
+			cy.getByAriaLabel('Select Submenu').should('be.visible');
 			cy.getByAriaLabel('Select Submenu').click();
 
 			//

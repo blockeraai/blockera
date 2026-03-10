@@ -32,6 +32,12 @@ describe('Block State E2E Test', () => {
 	});
 
 	const initialSetting = () => {
+		cy.get('body').then(($body) => {
+			if ($body.find('[aria-label="Hide secondary sidebar"]').length) {
+				cy.getByAriaLabel('Hide secondary sidebar').click();
+			}
+		});
+
 		appendBlocks(
 			`<!-- wp:paragraph -->
 			<p>Test</p>
@@ -533,6 +539,8 @@ describe('Block State E2E Test', () => {
 
 					// Assert block css when state is "Normal" and breakpoint is "Desktop".
 					getWPDataObject().then((data) => {
+						// Move mouse away to ensure we're not in hover state (flaky in headless)
+						cy.get('body').realMouseMove(0, 0);
 						cy.getIframeBody()
 							.find(`#block-${getBlockClientId(data)}`)
 							.should(
@@ -591,6 +599,8 @@ describe('Block State E2E Test', () => {
 
 					// Set l-desktop viewport
 					cy.viewport(1025, 1200);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
@@ -609,7 +619,8 @@ describe('Block State E2E Test', () => {
 
 					// Set xl-desktop viewport
 					cy.viewport(1441, 1920);
-
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'border',
@@ -689,6 +700,8 @@ describe('Block State E2E Test', () => {
 					setBlockState('Normal');
 					// Assert block css
 					getWPDataObject().then((data) => {
+						// Move mouse away to ensure we're not in hover state (flaky in headless)
+						cy.get('body').realMouseMove(0, 0);
 						cy.getIframeBody()
 							.find(`#block-${getBlockClientId(data)}`)
 							.should(
@@ -821,6 +834,8 @@ describe('Block State E2E Test', () => {
 
 					// Assert in l-desktop viewport
 					cy.viewport(1025, 1440);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-image',
@@ -839,6 +854,8 @@ describe('Block State E2E Test', () => {
 
 					// Set desktop viewport
 					cy.viewport(1441, 1920);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-image',
@@ -857,6 +874,8 @@ describe('Block State E2E Test', () => {
 
 					// set mobile viewport
 					cy.viewport(380, 470);
+					// Move mouse away to ensure normal state (flaky in headless)
+					cy.get('body').realMouseMove(0, 0);
 					cy.get('.blockera-block').should(
 						'have.css',
 						'background-image',

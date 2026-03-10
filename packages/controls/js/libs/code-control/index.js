@@ -599,8 +599,14 @@ const CodeControl = ({
 					}}
 					onMount={(editor: any) => {
 						editorRef.current = editor;
+						const currentValue = editor.getValue();
 
-						if (value !== editor.getValue()) {
+						if (
+							value !== currentValue &&
+							['& {\n    \n}\n', '.block {\n    \n}\n'].includes(
+								currentValue
+							)
+						) {
 							editor.setValue(value);
 						}
 

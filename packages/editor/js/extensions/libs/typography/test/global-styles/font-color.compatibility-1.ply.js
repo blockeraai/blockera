@@ -148,7 +148,7 @@ test.describe('Font Color → WP Compatibility (Global Styles)', () => {
 				await getByDataTest(page, 'style-default').click();
 
 				// Get feature container
-				const textColorContainer = getParentContainer(
+				const textColorContainer = await getParentContainer(
 					page,
 					'Text Color'
 				);

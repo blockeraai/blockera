@@ -148,7 +148,7 @@ test.describe('Background Color → WP Compatibility', () => {
 			await getByDataTest(page, 'style-default').click();
 
 			// Get feature container
-			const bgColorContainer = getParentContainer(page, 'BG Color');
+			const bgColorContainer = await getParentContainer(page, 'BG Color');
 
 			await addNewTransition(page);
 
@@ -245,7 +245,7 @@ test.describe('Background Color → WP Compatibility', () => {
 
 			await addNewTransition(page);
 
-			const bgColorContainer = getParentContainer(page, 'BG Color');
+			const bgColorContainer = await getParentContainer(page, 'BG Color');
 
 			//
 			// Test 1: WP data to Blockera

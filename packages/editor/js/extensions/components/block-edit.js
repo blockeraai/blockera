@@ -79,11 +79,12 @@ export const Edit: ComponentType<any> = memo(
 					<BlockApp>
 						<BlockBase
 							{...{
-								attributes: props.attributes,
 								additional,
 								name: props.name,
 								clientId: props.clientId,
 								className: props?.className,
+								attributes: props.attributes,
+								isSelected: props.isSelected,
 								setAttributes: props.setAttributes,
 								originDefaultAttributes: defaultAttributes,
 								defaultAttributes: sanitizeDefaultAttributes(

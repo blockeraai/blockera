@@ -107,7 +107,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				//
 
 				// set font appearance
-				const appearanceContainer = getParentContainer(
+				const appearanceContainer = await getParentContainer(
 					page,
 					'Appearance'
 				);
@@ -191,7 +191,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				//
 
 				// set font appearance
-				const appearanceContainer = getParentContainer(
+				const appearanceContainer = await getParentContainer(
 					page,
 					'Appearance'
 				);
@@ -250,7 +250,7 @@ test.describe('Font Appearance → WP Compatibility (Global Styles)', () => {
 				//
 
 				// set font appearance
-				const appearanceContainer = getParentContainer(
+				const appearanceContainer = await getParentContainer(
 					page,
 					'Appearance'
 				);
