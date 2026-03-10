@@ -8,7 +8,7 @@
 export const MIN_ZOOM = 10;
 
 /**
- * Maximum zoom percentage (200%).
+ * Maximum zoom percentage (250%).
  */
 export const MAX_ZOOM = 250;
 
