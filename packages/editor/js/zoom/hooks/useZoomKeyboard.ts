@@ -28,6 +28,7 @@ import type { UseZoomKeyboardOptions } from '../types';
  * - Cmd/Ctrl + Plus: Zoom in (+10%)
  * - Cmd/Ctrl + Minus: Zoom out (-10%)
  * - Cmd/Ctrl + 0: Reset to 100%
+ * - Cmd/Ctrl + Shift + 1: Zoom to fit
  *
  * @param options - Hook options.
  */
@@ -101,7 +102,7 @@ export function useZoomKeyboard({
 			category: 'blockera',
 			description: __('Zoom to fit.', 'blockera'),
 			keyCombination: {
-				modifier: 'shift',
+				modifier: 'primaryShift',
 				character: '1',
 			},
 		});
@@ -132,17 +133,14 @@ export function useZoomKeyboard({
 			const isShift = event.shiftKey;
 			const isAlt = event.altKey;
 
-			// Check for zoom to fit: Shift + 1 (without Cmd/Ctrl/Alt)
-			// Handle this before checking for other modifier keys
-			// Check both key and code to handle different keyboard layouts
+			// Check for zoom to fit: Ctrl/Cmd + Shift + 1 (avoids browser conflict with Shift+1)
 			const isOne =
 				event.key === '1' ||
 				event.key === 'Digit1' ||
 				event.code === 'Digit1' ||
 				event.code === 'Numpad1';
 
-			// Shift+1 should work without Cmd/Ctrl/Alt
-			if (isShift && isOne && !isMod && !isAlt) {
+			if (isMod && isShift && isOne && !isAlt) {
 				event.preventDefault();
 				event.stopPropagation();
 				if (onZoomToFitRef.current) {
@@ -200,10 +198,7 @@ export function useZoomKeyboard({
 		};
 	}, [enabled]);
 
-	// Register shortcut handler for Shift+1 using WordPress shortcuts API
-	// Note: WordPress shortcuts API may not handle Shift-only modifiers well,
-	// so we rely on the direct event listener above for actual handling
-	// This registration is mainly for display in the shortcuts help modal
+	// Register shortcut handler for Ctrl+Shift+1 using WordPress shortcuts API
 	useShortcut(
 		'blockera/zoom/zoom-to-fit',
 		(event) => {
