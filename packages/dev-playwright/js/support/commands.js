@@ -899,25 +899,63 @@ async function checkBlockSections(page, expectedSections, check = 'exist') {
 /**
  * Open global styles panel.
  *
+ * Waits for the editor to be ready and the button to be visible before clicking.
+ * Uses proper Playwright click (not dispatchEvent) for actionability checks.
+ * Idempotent: skips click if panel is already open.
+ *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
  */
 async function openGlobalStylesPanel(page) {
-	await page
-		.locator('button[aria-controls="edit-site:global-styles"]')
-		.dispatchEvent('click');
+	const button = page
+		.locator(
+			'.interface-interface-skeleton button[aria-controls="edit-site:global-styles"]'
+		)
+		.first();
+
+	await button.waitFor({ state: 'visible', timeout: 10000 });
+
+	const isPressed = await button.getAttribute('aria-pressed');
+	if (isPressed === 'true') {
+		return;
+	}
+
+	await button.click();
+
+	await expect(button).toHaveAttribute('aria-pressed', 'true', {
+		timeout: 5000,
+	});
 }
 
 /**
  * Open settings panel.
  *
+ * Waits for the editor to be ready and the button to be visible before clicking.
+ * Uses proper Playwright click (not dispatchEvent) for actionability checks.
+ * Idempotent: skips click if panel is already open.
+ *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
  */
 async function openSettingsPanel(page) {
-	await page
-		.locator('button[aria-controls="edit-post:document"]')
-		.dispatchEvent('click');
+	const button = page
+		.locator(
+			'.interface-interface-skeleton button[aria-controls="edit-post:document"]'
+		)
+		.first();
+
+	await button.waitFor({ state: 'visible', timeout: 10000 });
+
+	const isPressed = await button.getAttribute('aria-pressed');
+	if (isPressed === 'true') {
+		return;
+	}
+
+	await button.click();
+
+	await expect(button).toHaveAttribute('aria-pressed', 'true', {
+		timeout: 5000,
+	});
 }
 
 /**
