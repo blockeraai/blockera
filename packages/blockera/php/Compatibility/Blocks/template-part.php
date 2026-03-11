@@ -12,7 +12,7 @@ if (! function_exists('blockera_register_block_core_template_part')) {
 		register_block_type_from_metadata(
 			ABSPATH . WPINC . '/blocks/template-part',
 			array(
-				'render_callback'    => 'blockera-render_block_core_template_part',
+				'render_callback'    => 'blockera_render_block_core_template_part',
 				'variation_callback' => 'build_template_part_block_variations',
 			)
 		);
