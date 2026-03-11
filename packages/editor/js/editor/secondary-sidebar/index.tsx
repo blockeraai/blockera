@@ -3,6 +3,11 @@
  */
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+import {
+	useShortcut,
+	store as keyboardShortcutsStore,
+} from '@wordpress/keyboard-shortcuts';
 import { store as editorStore } from '@wordpress/editor';
 import { Fill } from '@wordpress/components';
 
@@ -24,10 +29,27 @@ export default function SecondarySidebarInjector() {
 	) as any;
 	const { toggleSecondarySidebar, setSecondarySidebarWidth } = useDispatch(
 		blockeraEditorStore
-	) as {
+	) as unknown as {
 		toggleSecondarySidebar: () => void;
 		setSecondarySidebarWidth: (width: string) => void;
 	};
+	const { registerShortcut } = useDispatch(keyboardShortcutsStore);
+
+	// Register Cmd+Shift+, (Ctrl+Shift+, on Windows) for our secondary sidebar toggle.
+	// Core's main sidebar shortcut is unregistered and re-bound to Cmd+Shift+. in primary-sidebar.
+	useEffect(() => {
+		registerShortcut({
+			name: 'blockera/secondary-sidebar/toggle',
+			category: 'blockera',
+			description: __('Show or hide the Settings panel.', 'blockera'),
+			keyCombination: {
+				modifier: 'primaryShift',
+				character: ',',
+			},
+		});
+	}, [registerShortcut]);
+
+	useShortcut('blockera/secondary-sidebar/toggle', toggleSecondarySidebar);
 
 	// Cache DOM element references to avoid repeated queries
 	const sidebarContentRef = useRef<HTMLDivElement | null>(null);

@@ -3,7 +3,9 @@
  */
 import { useEffect, useRef } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { store as interfaceStore } from '@wordpress/interface';
+import { store as keyboardShortcutsStore } from '@wordpress/keyboard-shortcuts';
 
 /**
  * Internal dependencies
@@ -14,8 +16,39 @@ import { ResizeHandle } from '../shared/ResizeHandle';
 /**
  * Component that watches the primary sidebar (right panel) state and sets CSS variable
  * to hide it when opened. Handles both edit-post (document sidebar) and edit-site (global-styles sidebar).
+ * Also owns the main (WordPress) sidebar keyboard shortcut: unregisters core's Cmd+Shift+, and
+ * re-registers it as Cmd+Shift+. so the secondary sidebar can use Cmd+Shift+,.
  */
 export default function PrimarySidebarController() {
+	const { registerShortcut, unregisterShortcut } = useDispatch(
+		keyboardShortcutsStore
+	);
+
+	// Unregister core's main sidebar shortcut (Cmd+Shift+,) and re-register as Cmd+Shift+.
+	// so Blockera can use Cmd+Shift+, for the secondary sidebar. Core's useShortcut
+	// for 'core/editor/toggle-sidebar' will then respond to Cmd+Shift+. instead.
+	useEffect(() => {
+		unregisterShortcut('core/editor/toggle-sidebar');
+		registerShortcut({
+			name: 'core/editor/toggle-sidebar',
+			category: 'core',
+			description: __('Show or hide the Settings panel.', 'blockera'),
+			keyCombination: {
+				modifier: 'primaryShift',
+				character: '.',
+			},
+		});
+		registerShortcut({
+			name: 'blockera/primary-sidebar/toggle-sidebar',
+			category: 'blockera',
+			description: __('Show or hide the Settings panel.', 'blockera'),
+			keyCombination: {
+				modifier: 'primaryShift',
+				character: '.',
+			},
+		});
+	}, [registerShortcut, unregisterShortcut]);
+
 	// Cache DOM element reference to avoid repeated queries
 	const sidebarContainerRef = useRef<HTMLElement | null>(null);
 	// Track if this is the initial mount
