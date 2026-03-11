@@ -332,7 +332,10 @@ export default function ZoomControl({
 										zoomToFit();
 										onClose();
 									}}
-									shortcut={formatShortcut('shift', '1')}
+									shortcut={formatShortcut(
+										'primaryShift',
+										'1'
+									)}
 								>
 									{__('Zoom to fit', 'blockera')}
 								</MenuItem>

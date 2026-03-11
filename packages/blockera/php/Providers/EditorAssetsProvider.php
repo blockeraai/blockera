@@ -290,7 +290,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 			'wp-blocks',
 			'var blockeraPluginData = ' . wp_json_encode(
 				[
-					'pluginURI' => blockera_core_config( 'app.root_url' ),
+					'pluginURI'              => blockera_core_config( 'app.root_url' ),
+					'previewHeaderStyleUrl'  => blockera_core_config( 'app.dist_url' ) . 'editor/preview-header.css?ver=' . blockera_core_config( 'app.version' ),
 				]
 			)
 		);
