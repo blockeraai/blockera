@@ -18,6 +18,7 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { NavItemScreen } from './nav-item-screen';
 import { OtherNavigation } from './other-navigation';
 import { GeneralNavigation } from './general-navigation';
 import { GlobalStylesNavigation } from './global-styles-navigation';
@@ -58,6 +59,16 @@ function PathSync() {
 		} else {
 			root.classList.remove(blockeraNavPanelClassname);
 		}
+
+		const navPanelClassname = '.blockera-navigation-panel';
+
+		if (document?.querySelector(navPanelClassname)) {
+			setTimeout(() => {
+				// $FlowFixMe
+				document.querySelector(navPanelClassname).style.display =
+					'block';
+			}, 10);
+		}
 	}, [path]);
 
 	return null;
@@ -85,13 +96,13 @@ export const BlockeraGlobalStylesNavigation = ({
 			>
 				<PathSync />
 
-				<Navigator.Screen
+				<NavItemScreen
 					path={initPath}
 					className={extensionClassNames('navigation-categories')}
 				>
 					<div className={extensionClassNames('navigation-category')}>
 						<Navigator.Button
-							path="/variations"
+							path={`${initPath}variations`}
 							onClick={() =>
 								document
 									.querySelector('button[id="/variations"]')
@@ -114,7 +125,7 @@ export const BlockeraGlobalStylesNavigation = ({
 					<GeneralNavigation />
 					<GlobalStylesNavigation className={className} />
 					<OtherNavigation />
-				</Navigator.Screen>
+				</NavItemScreen>
 
 				<DesignSystemNavigation.Screens closeCallback={closeCallback} />
 				<OtherNavigation.Screens closeCallback={closeCallback} />

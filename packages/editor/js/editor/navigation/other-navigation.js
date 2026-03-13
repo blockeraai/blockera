@@ -6,7 +6,6 @@
 import { select } from '@wordpress/data';
 import { type MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { Navigator } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 
 /**
@@ -25,8 +24,10 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { NavItemWrapper } from './nav-item-wrapper';
+import { NavItemButton } from './nav-item-button';
+import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
+import { NavItemBackButton } from './nav-item-back-button';
 import { initPath } from './blockera-global-styles-navigation';
 
 export const OtherNavigation = (): MixedElement => {
@@ -38,44 +39,31 @@ export const OtherNavigation = (): MixedElement => {
 					{__('Other', 'blockera')}
 				</Flex>
 			</h2>
-			<NavItemWrapper
+			<NavItemButton
 				className={navItemClassName({
 					'custom-css-button': true,
 				})}
-			>
-				<Navigator.Button
-					path={`${initPath}css`}
-					icon={<Icon icon="custom-css" iconSize={20} />}
-				>
-					{__('Custom CSS', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper
+				id={'custom-css-button'}
+				path={'css'}
+				icon={<Icon icon="custom-css" iconSize={20} />}
+				label={__('Custom CSS', 'blockera')}
+			/>
+			<NavItemButton
 				className={navItemClassName({ 'coming-soon': true })}
-			>
-				<Navigator.Button
-					path={`${initPath}html-js-codes`}
-					icon={<Icon icon="javascript-codes" iconSize={20} />}
-				>
-					<span>{__('HTML & JS Codes', 'blockera')}</span>
-					<span className="coming-soon">
-						{__('Soon', 'blockera')}
-					</span>
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper
+				id={'html-js-codes-button'}
+				path={'html-js-codes'}
+				icon={<Icon icon="javascript-codes" iconSize={20} />}
+				label={__('HTML & JS Codes', 'blockera')}
+				isComingSoon={true}
+			/>
+			<NavItemButton
 				className={navItemClassName({ 'coming-soon': true })}
-			>
-				<Navigator.Button
-					path={`${initPath}back-to-top`}
-					icon={<Icon icon="back-to-top" iconSize={20} />}
-				>
-					<span>{__('Back To Top Button', 'blockera')}</span>
-					<span className="coming-soon">
-						{__('Soon', 'blockera')}
-					</span>
-				</Navigator.Button>
-			</NavItemWrapper>
+				id={'back-to-top-button'}
+				path={'back-to-top'}
+				icon={<Icon icon="back-to-top" iconSize={20} />}
+				label={__('Back To Top Button', 'blockera')}
+				isComingSoon={true}
+			/>
 		</div>
 	);
 };
@@ -95,13 +83,12 @@ const Screens = ({
 	);
 
 	return (
-		<Navigator.Screen path={`${initPath}css`}>
+		<NavItemScreen path={`${initPath}css`}>
 			<div className="blockera-navigation-panel">
-				<div className={extensionClassNames('back-navigation')}>
-					<Navigator.BackButton onClick={closeCallback}>
-						{__('Custom CSS', 'blockera')}
-					</Navigator.BackButton>
-				</div>
+				<NavItemBackButton
+					backLabel={__('Other', 'blockera')}
+					closeCallback={closeCallback}
+				/>
 			</div>
 			<p className="edit-site-global-styles-header__description">
 				{__(
@@ -199,7 +186,7 @@ const Screens = ({
 					}
 				/>
 			</ControlContextProvider>
-		</Navigator.Screen>
+		</NavItemScreen>
 	);
 };
 

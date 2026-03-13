@@ -5,7 +5,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import { Navigator } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -24,7 +23,8 @@ import { Transforms } from './transforms';
 import { Transitions } from './transitions';
 import { TextShadows } from './text-shadows';
 import { BorderRadius } from './border-radius';
-import { NavItemWrapper } from './nav-item-wrapper';
+import { NavItemButton } from './nav-item-button';
+import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
 
@@ -39,135 +39,103 @@ export const DesignSystemNavigation = (): MixedElement => {
 					{__('Design system', 'blockera')}
 				</Flex>
 			</h2>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="typography-panel"
-					path={`${initPath}typography`}
-					onClick={() =>
-						document
-							.querySelector('button[id="/typography"]')
-							?.click()
-					}
-				>
-					<Icon icon="wp-typography" iconSize={20} />
-					{__('Typography', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="colors-panel"
-					path={`${initPath}colors`}
-					onClick={() =>
-						document.querySelector('button[id="/colors"]')?.click()
-					}
-				>
-					<Icon icon="wp-colors" iconSize={20} />
-					{__('Colors', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="spacing-panel"
-					path={`${initPath}spacing`}
-				>
-					<Icon icon="maximize" iconSize={20} />
-					{__('Spacing', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="background-panel"
-					path={`${initPath}background`}
-					onClick={() =>
-						document
-							.querySelector('button[id="/background"]')
-							?.click()
-					}
-				>
-					<Icon icon="wp-background" iconSize={20} />
-					{__('Background', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="shadows-panel"
-					path={`${initPath}shadows`}
-					onClick={() =>
-						document.querySelector('button[id="/shadows"]')?.click()
-					}
-				>
-					<Icon icon="wp-shadows" iconSize={20} />
-					{__('Shadows', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="borders-panel"
-					path={`${initPath}borders`}
-					icon={<Icon icon="border" iconSize={20} />}
-				>
-					{__('Borders', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="border-radius-panel"
-					path={`${initPath}border-radius`}
-					icon={<Icon icon="border-radius" iconSize={20} />}
-				>
-					{__('Border Radius', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="text-shadows-panel"
-					path={`${initPath}text-shadows`}
-					icon={<Icon icon="wp-shadows" iconSize={20} />}
-				>
-					{__('Text Shadows', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="transforms-panel"
-					path={`${initPath}transforms`}
-					icon={<Icon icon="transform-move" iconSize={20} />}
-				>
-					{__('2D & 3D Transforms', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="transitions-panel"
-					path={`${initPath}transitions`}
-					icon={<Icon icon="transition" iconSize={20} />}
-				>
-					{__('Transitions', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button
-					id="filters-panel"
-					path={`${initPath}filters`}
-					icon={<Icon icon="extension-effects" iconSize={20} />}
-				>
-					{__('Filters', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
-			<NavItemWrapper
+			<NavItemButton
+				className={navItemClassName()}
+				onClick={() =>
+					document.querySelector('button[id="/typography"]')?.click()
+				}
+				id="typography-panel"
+				path="typography"
+				label={__('Typography', 'blockera')}
+				icon={<Icon icon="wp-typography" iconSize={20} />}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				path={'colors'}
+				id="colors-panel"
+				onClick={() =>
+					document.querySelector('button[id="/colors"]')?.click()
+				}
+				icon={<Icon icon="wp-colors" iconSize={20} />}
+				label={__('Colors', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="spacing-panel"
+				path={'spacing'}
+				icon={<Icon icon="maximize" iconSize={20} />}
+				label={__('Spacing', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="background-panel"
+				path={`background`}
+				onClick={() =>
+					document.querySelector('button[id="/background"]')?.click()
+				}
+				icon={<Icon icon="wp-background" iconSize={20} />}
+				label={__('Background', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="shadows-panel"
+				path={'shadows'}
+				onClick={() =>
+					document.querySelector('button[id="/shadows"]')?.click()
+				}
+				icon={<Icon icon="wp-shadows" iconSize={20} />}
+				label={__('Shadows', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="borders-panel"
+				path={'borders'}
+				icon={<Icon icon="border" iconSize={20} />}
+				label={__('Borders', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="border-radius-panel"
+				path={'border-radius'}
+				icon={<Icon icon="border-radius" iconSize={20} />}
+				label={__('Border Radius', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="text-shadows-panel"
+				path={'text-shadows'}
+				icon={<Icon icon="wp-shadows" iconSize={20} />}
+				label={__('Text Shadows', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="transforms-panel"
+				path={'transforms'}
+				icon={<Icon icon="transform-move" iconSize={20} />}
+				label={__('2D & 3D Transforms', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="transitions-panel"
+				path={'transitions'}
+				icon={<Icon icon="transition" iconSize={20} />}
+				label={__('Transitions', 'blockera')}
+			/>
+			<NavItemButton
+				className={navItemClassName()}
+				id="filters-panel"
+				path={'filters'}
+				icon={<Icon icon="extension-effects" iconSize={20} />}
+				label={__('Filters', 'blockera')}
+			/>
+			<NavItemButton
 				className={navItemClassName({ 'coming-soon': true })}
-			>
-				<Navigator.Button
-					id="animations-panel"
-					path={`${initPath}animations`}
-				>
-					<Icon icon="animations" iconSize={20} />
-					<span>{__('Animations', 'blockera')}</span>
-					<span className="coming-soon">
-						{__('Soon', 'blockera')}
-					</span>
-				</Navigator.Button>
-			</NavItemWrapper>
+				id="animations-panel"
+				path={'animations'}
+				label={__('Animations', 'blockera')}
+				icon={<Icon icon="animations" iconSize={20} />}
+				isComingSoon={true}
+			/>
 		</div>
 	);
 };
@@ -178,47 +146,47 @@ DesignSystemNavigation.Screens = ({
 	closeCallback: () => void,
 }): MixedElement => (
 	<>
-		<Navigator.Screen path={`${initPath}spacing`}>
+		<NavItemScreen path={`${initPath}spacing`}>
 			<Spacing
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
-		<Navigator.Screen path={`${initPath}borders`}>
+		</NavItemScreen>
+		<NavItemScreen path={`${initPath}borders`}>
 			<Borders
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
-		<Navigator.Screen path={`${initPath}border-radius`}>
+		</NavItemScreen>
+		<NavItemScreen path={`${initPath}border-radius`}>
 			<BorderRadius
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
-		<Navigator.Screen path={`${initPath}text-shadows`}>
+		</NavItemScreen>
+		<NavItemScreen path={`${initPath}text-shadows`}>
 			<TextShadows
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
-		<Navigator.Screen path={`${initPath}transforms`}>
+		</NavItemScreen>
+		<NavItemScreen path={`${initPath}transforms`}>
 			<Transforms
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
-		<Navigator.Screen path={`${initPath}transitions`}>
+		</NavItemScreen>
+		<NavItemScreen path={`${initPath}transitions`}>
 			<Transitions
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
-		<Navigator.Screen path={`${initPath}filters`}>
+		</NavItemScreen>
+		<NavItemScreen path={`${initPath}filters`}>
 			<Filters
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
-		</Navigator.Screen>
+		</NavItemScreen>
 	</>
 );

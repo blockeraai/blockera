@@ -5,7 +5,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import { Navigator } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -17,9 +16,8 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { NavItemWrapper } from './nav-item-wrapper';
+import { NavItemButton } from './nav-item-button';
 import { navItemClassName } from './nav-item-classname';
-import { initPath } from './blockera-global-styles-navigation';
 
 export const GeneralNavigation = (): MixedElement => {
 	return (
@@ -30,20 +28,16 @@ export const GeneralNavigation = (): MixedElement => {
 					{__('General', 'blockera')}
 				</Flex>
 			</h2>
-			<NavItemWrapper
+			<NavItemButton
 				className={navItemClassName({ 'navigation-item': true })}
-			>
-				<Navigator.Button
-					id="layout-panel"
-					path={`${initPath}layout`}
-					onClick={() =>
-						document.querySelector('button[id="/layout"]')?.click()
-					}
-					icon={<Icon icon="wp-layout" iconSize={20} />}
-				>
-					{__('Layout', 'blockera')}
-				</Navigator.Button>
-			</NavItemWrapper>
+				id="layout-panel"
+				path={'layout'}
+				onClick={() =>
+					document.querySelector('button[id="/layout"]')?.click()
+				}
+				icon={<Icon icon="wp-layout" iconSize={20} />}
+				label={__('Layout', 'blockera')}
+			/>
 		</div>
 	);
 };

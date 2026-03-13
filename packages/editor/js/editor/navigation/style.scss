@@ -46,6 +46,10 @@
 		  .components-spacer {
 			display: none;
 		  }
+
+		.blockera-navigation-panel {
+			display: block;
+		}
 	}
 
 	&.is-open-blockera-navigation-panel {
@@ -59,7 +63,11 @@
 	.components-item-group,
 	 p.components-spacer {
 		display: none;
-	 }
+	}
+
+	.blockera-navigation-panel {
+		display: none;
+	}
 
 	hr[role="separator"] {
 		display: none;

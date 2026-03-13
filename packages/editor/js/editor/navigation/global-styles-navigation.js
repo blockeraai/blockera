@@ -5,7 +5,6 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import { Navigator } from '@wordpress/components';
 import { useCallback, useEffect, useRef } from '@wordpress/element';
 
 /**
@@ -22,9 +21,8 @@ import { Flex } from '@blockera/controls';
 /**
  * Internal dependencies
  */
-import { NavItemWrapper } from './nav-item-wrapper';
+import { NavItemButton } from './nav-item-button';
 import { navItemClassName } from './nav-item-classname';
-import { initPath } from './blockera-global-styles-navigation';
 
 const BACK_BUTTON_SELECTOR = '.components-heading';
 const BLOCKS_BUTTON_SELECTOR = 'button[id="/blocks"]';
@@ -121,16 +119,14 @@ export const GlobalStylesNavigation = ({
 				)}
 			</p>
 
-			<NavItemWrapper
+			<NavItemButton
 				className={navItemClassName({ 'navigation-item': true })}
-			>
-				<Navigator.Button
-					id="block-style-variations"
-					path={`${initPath}block-style-variations`}
-					data-test="block-style-variations"
-					onClick={handleBlocksClick}
-					icon={<Icon icon="style-variations" iconSize={20} />}
-				>
+				id="block-style-variations"
+				path={'block-style-variations'}
+				data-test="block-style-variations"
+				onClick={handleBlocksClick}
+				icon={<Icon icon="style-variations" iconSize={20} />}
+				label={
 					<Flex
 						alignItems="center"
 						justifyContent="space-between"
@@ -139,8 +135,8 @@ export const GlobalStylesNavigation = ({
 						{__('Block Style Variations', 'blockera')}
 						<Icon icon="chevron-right" library="wp" />
 					</Flex>
-				</Navigator.Button>
-			</NavItemWrapper>
+				}
+			/>
 		</div>
 	);
 };
