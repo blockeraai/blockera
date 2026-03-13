@@ -40,28 +40,26 @@
 	}
 
 	&.is-open-blockera-navigation-override {
-		.edit-site-global-styles-screen-root__active-style-tile {
-			display: none;
-		}
 
-		.blockera-extension-navigation-category-description,
-		.components-spacer {
+		.edit-site-global-styles-screen-root__active-style-tile,
+		 .blockera-extension-navigation-category-description,
+		  .components-spacer {
 			display: none;
-		}
+		  }
 	}
 
 	&.is-open-blockera-navigation-panel {
 		.edit-site-global-styles-screen-root__active-style-tile,
 		 .blockera-extension-navigation-category-description,
-			.components-spacer {
+		  .components-spacer {
 			display: none;
-		}
+		  }
 	}
 
 	.components-item-group,
-	p.components-spacer {
+	 p.components-spacer {
 		display: none;
-	}
+	 }
 
 	hr[role="separator"] {
 		display: none;
