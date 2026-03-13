@@ -27,6 +27,7 @@ import { extensionClassNames } from '@blockera/classnames';
  */
 import { NavItemWrapper } from './nav-item-wrapper';
 import { navItemClassName } from './nav-item-classname';
+import { initPath } from './blockera-global-styles-navigation';
 
 export const OtherNavigation = (): MixedElement => {
 	return (
@@ -43,7 +44,7 @@ export const OtherNavigation = (): MixedElement => {
 				})}
 			>
 				<Navigator.Button
-					path="/css"
+					path={`${initPath}css`}
 					icon={<Icon icon="custom-css" iconSize={20} />}
 				>
 					{__('Custom CSS', 'blockera')}
@@ -53,7 +54,7 @@ export const OtherNavigation = (): MixedElement => {
 				className={navItemClassName({ 'coming-soon': true })}
 			>
 				<Navigator.Button
-					path="/html-js-codes"
+					path={`${initPath}html-js-codes`}
 					icon={<Icon icon="javascript-codes" iconSize={20} />}
 				>
 					<span>{__('HTML & JS Codes', 'blockera')}</span>
@@ -66,7 +67,7 @@ export const OtherNavigation = (): MixedElement => {
 				className={navItemClassName({ 'coming-soon': true })}
 			>
 				<Navigator.Button
-					path="/back-to-top"
+					path={`${initPath}back-to-top`}
 					icon={<Icon icon="back-to-top" iconSize={20} />}
 				>
 					<span>{__('Back To Top Button', 'blockera')}</span>
@@ -94,7 +95,7 @@ const Screens = ({
 	);
 
 	return (
-		<Navigator.Screen path="/css">
+		<Navigator.Screen path={`${initPath}css`}>
 			<div className="blockera-navigation-panel">
 				<div className={extensionClassNames('back-navigation')}>
 					<Navigator.BackButton onClick={closeCallback}>

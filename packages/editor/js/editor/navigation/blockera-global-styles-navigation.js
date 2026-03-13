@@ -23,6 +23,7 @@ import { GeneralNavigation } from './general-navigation';
 import { GlobalStylesNavigation } from './global-styles-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
 
+export const initPath = '/';
 const wpRootClassname = '.edit-site-global-styles-screen-root';
 const overrideClassname = 'is-open-blockera-navigation-override';
 const blockeraNavPanelClassname = 'is-open-blockera-navigation-panel';
@@ -79,13 +80,13 @@ export const BlockeraGlobalStylesNavigation = ({
 	return (
 		<div className="blockera-block-inspector-controls-wrapper">
 			<Navigator
-				initialPath="/"
+				initialPath={initPath}
 				className={extensionClassNames('navigation')}
 			>
 				<PathSync />
 
 				<Navigator.Screen
-					path="/"
+					path={initPath}
 					className={extensionClassNames('navigation-categories')}
 				>
 					<div className={extensionClassNames('navigation-category')}>

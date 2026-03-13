@@ -26,6 +26,7 @@ import { TextShadows } from './text-shadows';
 import { BorderRadius } from './border-radius';
 import { NavItemWrapper } from './nav-item-wrapper';
 import { navItemClassName } from './nav-item-classname';
+import { initPath } from './blockera-global-styles-navigation';
 
 const designSystemBackLabel = __('Design System', 'blockera');
 
@@ -41,7 +42,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="typography-panel"
-					path="/typography"
+					path={`${initPath}typography`}
 					onClick={() =>
 						document
 							.querySelector('button[id="/typography"]')
@@ -55,7 +56,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="colors-panel"
-					path="/colors"
+					path={`${initPath}colors`}
 					onClick={() =>
 						document.querySelector('button[id="/colors"]')?.click()
 					}
@@ -65,7 +66,10 @@ export const DesignSystemNavigation = (): MixedElement => {
 				</Navigator.Button>
 			</NavItemWrapper>
 			<NavItemWrapper className={navItemClassName()}>
-				<Navigator.Button id="spacing-panel" path="/spacing">
+				<Navigator.Button
+					id="spacing-panel"
+					path={`${initPath}spacing`}
+				>
 					<Icon icon="maximize" iconSize={20} />
 					{__('Spacing', 'blockera')}
 				</Navigator.Button>
@@ -73,7 +77,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="background-panel"
-					path="/background"
+					path={`${initPath}background`}
 					onClick={() =>
 						document
 							.querySelector('button[id="/background"]')
@@ -87,7 +91,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="shadows-panel"
-					path="/shadows"
+					path={`${initPath}shadows`}
 					onClick={() =>
 						document.querySelector('button[id="/shadows"]')?.click()
 					}
@@ -99,7 +103,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="borders-panel"
-					path="/borders"
+					path={`${initPath}borders`}
 					icon={<Icon icon="border" iconSize={20} />}
 				>
 					{__('Borders', 'blockera')}
@@ -108,7 +112,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="border-radius-panel"
-					path="/border-radius"
+					path={`${initPath}border-radius`}
 					icon={<Icon icon="border-radius" iconSize={20} />}
 				>
 					{__('Border Radius', 'blockera')}
@@ -117,7 +121,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="text-shadows-panel"
-					path="/text-shadows"
+					path={`${initPath}text-shadows`}
 					icon={<Icon icon="wp-shadows" iconSize={20} />}
 				>
 					{__('Text Shadows', 'blockera')}
@@ -126,7 +130,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="transforms-panel"
-					path="/transforms"
+					path={`${initPath}transforms`}
 					icon={<Icon icon="transform-move" iconSize={20} />}
 				>
 					{__('2D & 3D Transforms', 'blockera')}
@@ -135,7 +139,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="transitions-panel"
-					path="/transitions"
+					path={`${initPath}transitions`}
 					icon={<Icon icon="transition" iconSize={20} />}
 				>
 					{__('Transitions', 'blockera')}
@@ -144,7 +148,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper className={navItemClassName()}>
 				<Navigator.Button
 					id="filters-panel"
-					path="/filters"
+					path={`${initPath}filters`}
 					icon={<Icon icon="extension-effects" iconSize={20} />}
 				>
 					{__('Filters', 'blockera')}
@@ -153,7 +157,10 @@ export const DesignSystemNavigation = (): MixedElement => {
 			<NavItemWrapper
 				className={navItemClassName({ 'coming-soon': true })}
 			>
-				<Navigator.Button id="animations-panel" path="/animations">
+				<Navigator.Button
+					id="animations-panel"
+					path={`${initPath}animations`}
+				>
 					<Icon icon="animations" iconSize={20} />
 					<span>{__('Animations', 'blockera')}</span>
 					<span className="coming-soon">
@@ -171,43 +178,43 @@ DesignSystemNavigation.Screens = ({
 	closeCallback: () => void,
 }): MixedElement => (
 	<>
-		<Navigator.Screen path="/spacing">
+		<Navigator.Screen path={`${initPath}spacing`}>
 			<Spacing
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
 		</Navigator.Screen>
-		<Navigator.Screen path="/borders">
+		<Navigator.Screen path={`${initPath}borders`}>
 			<Borders
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
 		</Navigator.Screen>
-		<Navigator.Screen path="/border-radius">
+		<Navigator.Screen path={`${initPath}border-radius`}>
 			<BorderRadius
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
 		</Navigator.Screen>
-		<Navigator.Screen path="/text-shadows">
+		<Navigator.Screen path={`${initPath}text-shadows`}>
 			<TextShadows
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
 		</Navigator.Screen>
-		<Navigator.Screen path="/transforms">
+		<Navigator.Screen path={`${initPath}transforms`}>
 			<Transforms
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
 		</Navigator.Screen>
-		<Navigator.Screen path="/transitions">
+		<Navigator.Screen path={`${initPath}transitions`}>
 			<Transitions
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}
 			/>
 		</Navigator.Screen>
-		<Navigator.Screen path="/filters">
+		<Navigator.Screen path={`${initPath}filters`}>
 			<Filters
 				backLabel={designSystemBackLabel}
 				closeCallback={closeCallback}

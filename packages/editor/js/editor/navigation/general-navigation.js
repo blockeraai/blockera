@@ -19,6 +19,7 @@ import { extensionClassNames } from '@blockera/classnames';
  */
 import { NavItemWrapper } from './nav-item-wrapper';
 import { navItemClassName } from './nav-item-classname';
+import { initPath } from './blockera-global-styles-navigation';
 
 export const GeneralNavigation = (): MixedElement => {
 	return (
@@ -34,7 +35,7 @@ export const GeneralNavigation = (): MixedElement => {
 			>
 				<Navigator.Button
 					id="layout-panel"
-					path="/layout"
+					path={`${initPath}layout`}
 					onClick={() =>
 						document.querySelector('button[id="/layout"]')?.click()
 					}

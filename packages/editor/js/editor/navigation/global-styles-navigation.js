@@ -24,6 +24,7 @@ import { Flex } from '@blockera/controls';
  */
 import { NavItemWrapper } from './nav-item-wrapper';
 import { navItemClassName } from './nav-item-classname';
+import { initPath } from './blockera-global-styles-navigation';
 
 const BACK_BUTTON_SELECTOR = '.components-heading';
 const BLOCKS_BUTTON_SELECTOR = 'button[id="/blocks"]';
@@ -125,7 +126,7 @@ export const GlobalStylesNavigation = ({
 			>
 				<Navigator.Button
 					id="block-style-variations"
-					path="/block-style-variations"
+					path={`${initPath}block-style-variations`}
 					data-test="block-style-variations"
 					onClick={handleBlocksClick}
 					icon={<Icon icon="style-variations" iconSize={20} />}
