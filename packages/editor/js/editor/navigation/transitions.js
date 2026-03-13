@@ -4,7 +4,7 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { __experimentalNavigationMenu as NavigationMenu } from '@wordpress/components';
+import { Navigator } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -13,17 +13,18 @@ import { classNames, extensionClassNames } from '@blockera/classnames';
 
 export const Transitions = ({
 	backLabel,
+	closeCallback,
 }: {
 	backLabel: string,
+	closeCallback?: () => void,
 }): MixedElement => {
 	return (
 		<div className={classNames('blockera-navigation-panel')}>
-			<NavigationMenu
-				menu="transitions"
-				parentMenu="root"
-				className={extensionClassNames('back-navigation')}
-				backButtonLabel={backLabel}
-			/>
+			<div className={extensionClassNames('back-navigation')}>
+				<Navigator.BackButton onClick={closeCallback}>
+					{backLabel}
+				</Navigator.BackButton>
+			</div>
 		</div>
 	);
 };

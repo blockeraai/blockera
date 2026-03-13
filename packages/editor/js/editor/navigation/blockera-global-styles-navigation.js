@@ -5,16 +5,14 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import {
-	__experimentalNavigation as Navigation,
-	__experimentalNavigationItem as NavigationItem,
-	__experimentalNavigationMenu as NavigationMenu,
-} from '@wordpress/components';
-import { useEffect, useState, useCallback } from '@wordpress/element';
+import { useEffect, useCallback } from '@wordpress/element';
+import { Navigator, useNavigator } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
+import { Icon } from '@blockera/icons';
+import { Flex } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -29,36 +27,46 @@ const wpRootClassname = '.edit-site-global-styles-screen-root';
 const overrideClassname = 'is-open-blockera-navigation-override';
 const blockeraNavPanelClassname = 'is-open-blockera-navigation-panel';
 
+function PathSync() {
+	const { location } = useNavigator();
+	const path = location?.path ?? '/';
+
+	useEffect(() => {
+		const root = document.querySelector(wpRootClassname);
+		if (!root) {
+			return;
+		}
+
+		if (path === '/css') {
+			root.classList.add(overrideClassname);
+		} else {
+			root.classList.remove(overrideClassname);
+		}
+
+		const panelPaths = [
+			'/spacing',
+			'/borders',
+			'/border-radius',
+			'/text-shadows',
+			'/transforms',
+			'/transitions',
+			'/filters',
+		];
+		if (panelPaths.includes(path)) {
+			root.classList.add(blockeraNavPanelClassname);
+		} else {
+			root.classList.remove(blockeraNavPanelClassname);
+		}
+	}, [path]);
+
+	return null;
+}
+
 export const BlockeraGlobalStylesNavigation = ({
 	className,
 }: {
 	className: string,
 }): MixedElement => {
-	const [backButton, setBackButton] = useState(null);
-	const [isOpenCustomCss, setIsOpenCustomCss] = useState(false);
-	const openCallback = (
-		action: 'open-custom-css-panel' | 'default' = 'default'
-	) => {
-		setTimeout(() => {
-			setBackButton(
-				document.querySelector('.blockera-extension-back-navigation')
-			);
-		}, 100);
-
-		switch (action) {
-			case 'open-custom-css-panel':
-				document
-					.querySelector(wpRootClassname)
-					?.classList?.add(overrideClassname);
-				setIsOpenCustomCss(true);
-				break;
-			default:
-				document
-					.querySelector(wpRootClassname)
-					?.classList.add(blockeraNavPanelClassname);
-				break;
-		}
-	};
 	const closeCallback = useCallback(() => {
 		document
 			.querySelector(wpRootClassname)
@@ -66,48 +74,50 @@ export const BlockeraGlobalStylesNavigation = ({
 		document
 			.querySelector(wpRootClassname)
 			?.classList?.remove(blockeraNavPanelClassname);
-
-		if (isOpenCustomCss) {
-			setIsOpenCustomCss(false);
-		}
-	}, [isOpenCustomCss]);
-
-	useEffect(() => {
-		if (backButton) {
-			backButton.addEventListener('click', closeCallback);
-		}
-	}, [backButton, closeCallback]);
+	}, []);
 
 	return (
 		<div className="blockera-block-inspector-controls-wrapper">
-			<Navigation className={extensionClassNames('navigation')}>
-				<NavigationMenu
-					className={extensionClassNames('navigation-category')}
+			<Navigator
+				initialPath="/"
+				className={extensionClassNames('navigation')}
+			>
+				<PathSync />
+
+				<Navigator.Screen
+					path="/"
+					className={extensionClassNames('navigation-categories')}
 				>
-					<NavigationItem
-						item="variations"
-						onClick={() =>
-							document
-								.querySelector('button[id="/variations"]')
-								?.click()
-						}
-						className={extensionClassNames('navigation-item')}
-						navigateToMenu="variations"
-						title={__('Browse styles', 'blockera')}
-					/>
-				</NavigationMenu>
+					<div className={extensionClassNames('navigation-category')}>
+						<Navigator.Button
+							path="/variations"
+							onClick={() =>
+								document
+									.querySelector('button[id="/variations"]')
+									?.click()
+							}
+						>
+							<Flex
+								alignItems="center"
+								justifyContent="space-between"
+								className={extensionClassNames(
+									'navigation-item'
+								)}
+							>
+								{__('Browse styles', 'blockera')}
+								<Icon icon="chevron-right" library="wp" />
+							</Flex>
+						</Navigator.Button>
+					</div>
+					<DesignSystemNavigation />
+					<GeneralNavigation />
+					<GlobalStylesNavigation className={className} />
+					<OtherNavigation />
+				</Navigator.Screen>
 
-				<DesignSystemNavigation openCallback={openCallback} />
-
-				<GeneralNavigation />
-
-				<GlobalStylesNavigation className={className} />
-
-				<OtherNavigation
-					openCallback={openCallback}
-					isOpenCustomCss={isOpenCustomCss}
-				/>
-			</Navigation>
+				<DesignSystemNavigation.Screens closeCallback={closeCallback} />
+				<OtherNavigation.Screens closeCallback={closeCallback} />
+			</Navigator>
 		</div>
 	);
 };

@@ -122,8 +122,14 @@ button[id^="/blocks/"] {
 		flex: 1 1 auto;
 		flex-direction: column;
 
+		.blockera-extension-navigation-categories {
+			margin: 0;
+			width: 100%;
+		}
+
 		.blockera-extension-navigation-category {
 			margin: 0;
+			width: 100%;
 			padding: var(--padding-size);
 			border-bottom: 1px solid #e8e8e8;
 
@@ -154,7 +160,8 @@ button[id^="/blocks/"] {
 				opacity: 1;
 				gap: 10px;
 				font-size: 13px;
-				justify-content: space-between;
+				width: 100%;
+				justify-content: flex-start;
 
 				span {
 					font-weight: 400;
@@ -170,6 +177,10 @@ button[id^="/blocks/"] {
 					button {
 						> svg:last-child {
 							display: none;
+						}
+
+						> svg[class^="blockera-svg-"] {
+							display: inline-flex;
 						}
 					}
 				}
@@ -190,6 +201,8 @@ button[id^="/blocks/"] {
 	}
 
 	.blockera-extension-navigation-item {
+		width: 100%;
+
 		&.coming-soon {
 			pointer-events: none;
 			cursor: none;

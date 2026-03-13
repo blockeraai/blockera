@@ -5,15 +5,13 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import {
-	__experimentalNavigationMenu as NavigationMenu,
-	__experimentalNavigationItem as NavigationItem,
-} from '@wordpress/components';
+import { Navigator } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import { Flex } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
 
 /**
@@ -26,216 +24,194 @@ import { Transforms } from './transforms';
 import { Transitions } from './transitions';
 import { TextShadows } from './text-shadows';
 import { BorderRadius } from './border-radius';
+import { NavItemWrapper } from './nav-item-wrapper';
+import { navItemClassName } from './nav-item-classname';
 
 const designSystemBackLabel = __('Design System', 'blockera');
 
-export const DesignSystemNavigation = ({
-	openCallback,
-}: {
-	openCallback: () => void,
-}): MixedElement => {
+export const DesignSystemNavigation = (): MixedElement => {
 	return (
-		<>
-			<NavigationMenu
-				title={
-					<>
-						<Icon icon="extension-typography" iconSize={20} />
-						{__('Design system', 'blockera')}
-					</>
-				}
-				className={extensionClassNames('navigation-category')}
-			>
-				<NavigationItem
-					item="typography"
+		<div className={extensionClassNames('navigation-category')}>
+			<h2>
+				<Flex alignItems="center" justifyContent="flex-start">
+					<Icon icon="extension-typography" iconSize={20} />
+					{__('Design system', 'blockera')}
+				</Flex>
+			</h2>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="typography-panel"
+					path="/typography"
 					onClick={() =>
 						document
 							.querySelector('button[id="/typography"]')
 							?.click()
 					}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="typography"
-					title={__('Typography', 'blockera')}
-					icon={<Icon icon="wp-typography" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="colors"
+				>
+					<Icon icon="wp-typography" iconSize={20} />
+					{__('Typography', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="colors-panel"
+					path="/colors"
 					onClick={() =>
 						document.querySelector('button[id="/colors"]')?.click()
 					}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="colors"
-					title={__('Colors', 'blockera')}
-					icon={<Icon icon="wp-colors" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="spacing"
-					id="spacing-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="spacing"
-					title={__('Spacing', 'blockera')}
-					icon={<Icon icon="maximize" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="background"
+				>
+					<Icon icon="wp-colors" iconSize={20} />
+					{__('Colors', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button id="spacing-panel" path="/spacing">
+					<Icon icon="maximize" iconSize={20} />
+					{__('Spacing', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="background-panel"
+					path="/background"
 					onClick={() =>
 						document
 							.querySelector('button[id="/background"]')
 							?.click()
 					}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="background"
-					title={__('Background', 'blockera')}
-					icon={<Icon icon="wp-background" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="shadows"
+				>
+					<Icon icon="wp-background" iconSize={20} />
+					{__('Background', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="shadows-panel"
+					path="/shadows"
 					onClick={() =>
 						document.querySelector('button[id="/shadows"]')?.click()
 					}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="shadows"
-					title={__('Shadows', 'blockera')}
-					icon={<Icon icon="wp-shadows" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="borders"
+				>
+					<Icon icon="wp-shadows" iconSize={20} />
+					{__('Shadows', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="borders-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="borders"
-					title={__('Borders', 'blockera')}
+					path="/borders"
 					icon={<Icon icon="border" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="border-radius"
+				>
+					{__('Borders', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="border-radius-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="border-radius"
-					title={__('Border Radius', 'blockera')}
+					path="/border-radius"
 					icon={<Icon icon="border-radius" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="text-shadows"
+				>
+					{__('Border Radius', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="text-shadows-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="text-shadows"
-					title={__('Text Shadows', 'blockera')}
+					path="/text-shadows"
 					icon={<Icon icon="wp-shadows" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="transforms"
+				>
+					{__('Text Shadows', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="transforms-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="transforms"
-					title={__('2D & 3D Transforms', 'blockera')}
+					path="/transforms"
 					icon={<Icon icon="transform-move" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="transitions"
+				>
+					{__('2D & 3D Transforms', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="transitions-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="transitions"
-					title={__('Transitions', 'blockera')}
+					path="/transitions"
 					icon={<Icon icon="transition" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="filters"
+				>
+					{__('Transitions', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper className={navItemClassName()}>
+				<Navigator.Button
 					id="filters-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret'
-					)}
-					navigateToMenu="filters"
-					title={__('Filters', 'blockera')}
+					path="/filters"
 					icon={<Icon icon="extension-effects" iconSize={20} />}
-				/>
-				<NavigationItem
-					item="animations"
-					id="animations-panel"
-					onClick={() => {
-						openCallback();
-					}}
-					className={extensionClassNames(
-						'navigation-item',
-						'hide-caret',
-						{
-							'coming-soon': true,
-						}
-					)}
-					navigateToMenu="animations"
-					title={
-						<>
-							<span>{__('Animations', 'blockera')}</span>
-							<span className="coming-soon">
-								{__('Soon', 'blockera')}
-							</span>
-						</>
-					}
-					icon={<Icon icon="animations" iconSize={20} />}
-				/>
-			</NavigationMenu>
-
-			<Spacing backLabel={designSystemBackLabel} />
-			<Borders backLabel={designSystemBackLabel} />
-			<Filters backLabel={designSystemBackLabel} />
-			<Transforms backLabel={designSystemBackLabel} />
-			<Transitions backLabel={designSystemBackLabel} />
-			<TextShadows backLabel={designSystemBackLabel} />
-			<BorderRadius backLabel={designSystemBackLabel} />
-		</>
+				>
+					{__('Filters', 'blockera')}
+				</Navigator.Button>
+			</NavItemWrapper>
+			<NavItemWrapper
+				className={navItemClassName({ 'coming-soon': true })}
+			>
+				<Navigator.Button id="animations-panel" path="/animations">
+					<Icon icon="animations" iconSize={20} />
+					<span>{__('Animations', 'blockera')}</span>
+					<span className="coming-soon">
+						{__('Soon', 'blockera')}
+					</span>
+				</Navigator.Button>
+			</NavItemWrapper>
+		</div>
 	);
 };
+
+DesignSystemNavigation.Screens = ({
+	closeCallback,
+}: {
+	closeCallback: () => void,
+}): MixedElement => (
+	<>
+		<Navigator.Screen path="/spacing">
+			<Spacing
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+		<Navigator.Screen path="/borders">
+			<Borders
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+		<Navigator.Screen path="/border-radius">
+			<BorderRadius
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+		<Navigator.Screen path="/text-shadows">
+			<TextShadows
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+		<Navigator.Screen path="/transforms">
+			<Transforms
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+		<Navigator.Screen path="/transitions">
+			<Transitions
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+		<Navigator.Screen path="/filters">
+			<Filters
+				backLabel={designSystemBackLabel}
+				closeCallback={closeCallback}
+			/>
+		</Navigator.Screen>
+	</>
+);
