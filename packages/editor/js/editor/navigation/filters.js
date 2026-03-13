@@ -4,12 +4,16 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { Navigator } from '@wordpress/components';
 
 /**
  * Blockera dependencies
  */
-import { classNames, extensionClassNames } from '@blockera/classnames';
+import { classNames } from '@blockera/classnames';
+
+/**
+ * Internal dependencies
+ */
+import { NavItemBackButton } from './nav-item-back-button';
 
 export const Filters = ({
 	backLabel,
@@ -20,11 +24,10 @@ export const Filters = ({
 }): MixedElement => {
 	return (
 		<div className={classNames('blockera-navigation-panel')}>
-			<div className={extensionClassNames('back-navigation')}>
-				<Navigator.BackButton onClick={closeCallback}>
-					{backLabel}
-				</Navigator.BackButton>
-			</div>
+			<NavItemBackButton
+				backLabel={backLabel}
+				closeCallback={closeCallback}
+			/>
 		</div>
 	);
 };
