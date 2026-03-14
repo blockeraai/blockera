@@ -5,8 +5,8 @@
  */
 import { __ } from '@wordpress/i18n';
 import { type MixedElement } from 'react';
-import { useEffect, useCallback } from '@wordpress/element';
 import { Navigator, useNavigator } from '@wordpress/components';
+import { useLayoutEffect, useCallback } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -25,16 +25,19 @@ import { GlobalStylesNavigation } from './global-styles-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
 
 export const initPath = '/';
-const wpRootClassname = '.edit-site-global-styles-screen-root';
-const overrideClassname = 'is-open-blockera-navigation-override';
-const blockeraNavPanelClassname = 'is-open-blockera-navigation-panel';
+export const wpSidebarSelector =
+	'.edit-site-global-styles-sidebar__navigator-screen';
+export const wpRootSelector = '.edit-site-global-styles-screen-root';
+export const overrideClassname = 'is-open-blockera-navigation-override';
+export const blockeraAdditionalPanelClassname = 'blockera-customized-panel';
+export const blockeraNavPanelClassname = 'is-open-blockera-navigation-panel';
 
 function PathSync() {
 	const { location } = useNavigator();
 	const path = location?.path ?? '/';
 
-	useEffect(() => {
-		const root = document.querySelector(wpRootClassname);
+	useLayoutEffect(() => {
+		const root = document.querySelector(wpRootSelector);
 		if (!root) {
 			return;
 		}
@@ -81,10 +84,10 @@ export const BlockeraGlobalStylesNavigation = ({
 }): MixedElement => {
 	const closeCallback = useCallback(() => {
 		document
-			.querySelector(wpRootClassname)
+			.querySelector(wpRootSelector)
 			?.classList?.remove(overrideClassname);
 		document
-			.querySelector(wpRootClassname)
+			.querySelector(wpRootSelector)
 			?.classList?.remove(blockeraNavPanelClassname);
 	}, []);
 
