@@ -9,8 +9,8 @@ import { useEffect, createPortal } from '@wordpress/element';
 /**
  * Internal dependencies
  */
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 import { BlockeraGlobalStylesNavigation } from './blockera-global-styles-navigation';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Global Styles Navigation

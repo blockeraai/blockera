@@ -14,7 +14,7 @@ import { select, dispatch } from '@wordpress/data';
 import { getTargets } from '../header-ui/helpers';
 import { getBlockTypeSelector } from './side-bar-listener';
 import { sharedListenerCallback } from './listener-callback';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Global Styles Panel Activator Observer

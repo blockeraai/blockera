@@ -11,7 +11,7 @@ import { getBlockTypes } from '@wordpress/blocks';
  * Internal dependencies
  */
 import { styleBookListener, styleBookSelector } from './style-book-listener';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Style Book Example Listeners

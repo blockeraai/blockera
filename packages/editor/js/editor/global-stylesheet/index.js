@@ -18,8 +18,8 @@ import { mergeObject } from '@blockera/utils';
  */
 import { mergeBlockGlobalStyles } from './utils';
 import { StyleDefaultRenderer } from './style-default-renderer';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
 import { getBlockeraGlobalStylesMetaData } from '../global-styles/helpers';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 export const GlobalStyles: ComponentType<any> = memo((): MixedElement => {
 	const blockTypes = getBlockTypes();

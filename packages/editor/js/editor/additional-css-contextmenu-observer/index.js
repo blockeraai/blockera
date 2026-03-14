@@ -11,7 +11,7 @@ import { useEffect } from '@wordpress/element';
  * Internal dependencies
  */
 import { getTargets } from '../header-ui/helpers';
-import { IntersectionObserverRenderer } from '../global-styles/intersection-observer-renderer';
+import { IntersectionObserverRenderer } from '../intersection-observer-renderer';
 
 /**
  * Plugin: Blockera Additional CSS Context Menu Observer
