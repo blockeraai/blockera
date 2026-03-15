@@ -103,28 +103,14 @@ export function useGlobalSetting(
 			);
 		}
 
-		let result = {};
-		// FIXME
-		const VALID_SETTINGS: Array<any> = [];
-		VALID_SETTINGS.forEach((setting) => {
-			const value =
-				getValueFromObjectPath(
-					configToUse,
-					`settings${appendedBlockPath}.${setting}`
-				) ?? getValueFromObjectPath(configToUse, `settings.${setting}`);
-			if (value !== undefined) {
-				result = setImmutably(result, setting.split('.'), value);
-			}
-		});
-		return result;
-	}, [
-		configs,
-		sourceKey,
-		globalPath,
-		propertyPath,
-		contextualPath,
-		appendedBlockPath,
-	]);
+		// Block-editor filters settings while performing the set action,
+		// so we return the full settings object without validation.
+		return (
+			getValueFromObjectPath(configToUse, contextualPath) ??
+			getValueFromObjectPath(configToUse, 'settings') ??
+			{}
+		);
+	}, [configs, sourceKey, globalPath, propertyPath, contextualPath]);
 
 	const setSetting = (newValue: Object): void => {
 		setUserConfig((currentConfig) =>
@@ -150,7 +136,10 @@ export function useGlobalStyle(
 	{
 		shouldDecodeEncode = true,
 		defaultStylesValue = {},
-	}: { shouldDecodeEncode: boolean, defaultStylesValue: Object }
+	}: { shouldDecodeEncode: boolean, defaultStylesValue: Object } = {
+		shouldDecodeEncode: true,
+		defaultStylesValue: {},
+	}
 ): [any, any, (newValue: any) => void, Object, Object] {
 	const {
 		merged: mergedConfig,
