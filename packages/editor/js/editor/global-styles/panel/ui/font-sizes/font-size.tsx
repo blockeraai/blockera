@@ -263,7 +263,7 @@ function FontSizeComponent({
 						)}
 
 						{isCustomFluid && (
-							<Flex gap={20} direction="column">
+							<Flex gap={20} direction="row">
 								<ControlContextProvider
 									value={{
 										name: `font-size-min-${slug}`,
@@ -278,13 +278,11 @@ function FontSizeComponent({
 									<InputControl
 										controlAddonTypes={[]}
 										label={__('Min Size:', 'blockera')}
-										columns="1fr 2.5fr"
 										unitType="essential"
 										min={0}
 										onChange={(
 											newValue: string | undefined
 										) => handleMinChange(newValue)}
-										className="control-first label-center small-gap"
 										style={{ margin: '0px' }}
 									/>
 								</ControlContextProvider>
@@ -303,14 +301,12 @@ function FontSizeComponent({
 										label={__('Max Size:', 'blockera')}
 									>
 										<InputControl
-											columns="1fr 2.5fr"
 											unitType="essential"
 											min={0}
 											onChange={(
 												newValue: string | undefined
 											) => handleMaxChange(newValue)}
 											controlAddonTypes={[]}
-											className="control-first label-center small-gap"
 											style={{ margin: '0px' }}
 										/>
 									</BaseControl>

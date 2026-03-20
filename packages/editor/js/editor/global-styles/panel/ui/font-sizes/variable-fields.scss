@@ -1,17 +1,4 @@
 // -----------------------------------------------------------------------------
-// Min Size / Max Size columns (typography-like layout)
-// -----------------------------------------------------------------------------
-.blockera-font-size-min-max-columns {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 20px;
-
-	> * {
-		min-width: 0;
-	}
-}
-
-// -----------------------------------------------------------------------------
 // Font size typography preview (matches WordPress default design)
 // -----------------------------------------------------------------------------
 .global-styles-ui-typography-preview {
