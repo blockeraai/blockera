@@ -1,0 +1,16 @@
+.blockera-font-size-presets-count-active {
+	margin: 0 !important;
+
+	> div > * {
+		display: none !important;
+
+		&:last-child {
+			display: flex !important;
+			animation: blockera-navigator-slide-in 0.22s cubic-bezier(0, 0, 0.2, 1);
+		}
+	}
+
+	.global-styles-ui-header {
+		margin-bottom: 0 !important;
+	}
+}
