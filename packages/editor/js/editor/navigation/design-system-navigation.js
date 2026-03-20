@@ -27,6 +27,7 @@ import { NavItemButton } from './nav-item-button';
 import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
+import { typographyPanelHandler } from '../global-styles/panel/ui/font-sizes/typography-panel-handler.tsx';
 
 const designSystemBackLabel = __('Design System', 'blockera');
 
@@ -41,9 +42,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 			</h2>
 			<NavItemButton
 				className={navItemClassName()}
-				onClick={() =>
-					document.querySelector('button[id="/typography"]')?.click()
-				}
+				onClick={typographyPanelHandler}
 				id="typography-panel"
 				path="typography"
 				label={__('Typography', 'blockera')}

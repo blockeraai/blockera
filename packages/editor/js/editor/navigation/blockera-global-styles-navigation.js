@@ -25,8 +25,6 @@ import { GlobalStylesNavigation } from './global-styles-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
 
 export const initPath = '/';
-export const wpSidebarSelector =
-	'.edit-site-global-styles-sidebar__navigator-screen';
 export const wpRootSelector = '.edit-site-global-styles-screen-root';
 export const overrideClassname = 'is-open-blockera-navigation-override';
 export const blockeraAdditionalPanelClassname = 'blockera-customized-panel';
