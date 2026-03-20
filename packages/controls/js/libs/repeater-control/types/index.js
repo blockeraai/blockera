@@ -28,6 +28,12 @@ export type RepeaterControlProps = {
 	 */
 	id: string,
 	/**
+	 * Can repeater add new item?
+	 *
+	 * @default true
+	 */
+	canAddNewItem?: boolean,
+	/**
 	 * Repeater children.
 	 */
 	children: MixedElement,
@@ -80,7 +86,7 @@ export type RepeaterControlProps = {
 	/**
 	 * Specifies the popover title if `mode` was `popover`. by default the repeater label will be shown as popover title.
 	 */
-	popoverTitle?: string | MixedElement,
+	popoverTitle?: string,
 	/**
 	 * Specifies the popover title right buttons if `mode` was `popover`.
 	 */

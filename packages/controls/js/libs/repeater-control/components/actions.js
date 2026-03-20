@@ -4,7 +4,7 @@
  */
 import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useContext } from '@wordpress/element';
+import { useState, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -15,11 +15,12 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
-import { Button, Tooltip, Flex, MenuItem } from '../../';
 import { RepeaterContext } from '../context';
 import { useControlContext } from '../../../context';
+import { Button, Tooltip, Flex, MenuItem } from '../../';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
+import ConfirmDeleteDialog from './confirm-delete-dialog';
 import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 
 export default function RepeaterItemActions({
@@ -45,12 +46,18 @@ export default function RepeaterItemActions({
 		itemIdGenerator,
 		actionButtonClone,
 		actionButtonReset,
+		actionButtonsType,
 		actionButtonDelete,
 		disableRegenerateId,
 		setDisableAddNewItem,
 		actionButtonVisibility,
-		actionButtonsType,
+		shouldConfirmDeleteDialog,
 	} = useContext(RepeaterContext);
+
+	const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
+		useState(false);
+	const toggleConfirmDeleteDialog = () =>
+		setIsConfirmDeleteDialogOpen(!isConfirmDeleteDialogOpen);
 
 	const itemsCount = Object.keys(repeaterItems).length;
 
@@ -107,7 +114,17 @@ export default function RepeaterItemActions({
 	}
 
 	function deleteFunction(event: MouseEvent) {
-		event.stopPropagation();
+		// Try to open the confirm delete dialog if it is not open and shouldConfirmDeleteDialog is true
+		if (!isConfirmDeleteDialogOpen && shouldConfirmDeleteDialog) {
+			toggleConfirmDeleteDialog();
+			return;
+		} else if (isConfirmDeleteDialogOpen) {
+			toggleConfirmDeleteDialog();
+		}
+
+		if (event && event?.hasOwnProperty('stopPropagation')) {
+			event.stopPropagation();
+		}
 		closeMenu(event);
 
 		if (
@@ -233,6 +250,14 @@ export default function RepeaterItemActions({
 
 	return (
 		<>
+			{shouldConfirmDeleteDialog && (
+				<ConfirmDeleteDialog
+					item={item}
+					handleRemoveItem={deleteFunction}
+					isOpen={isConfirmDeleteDialogOpen}
+					toggleOpen={toggleConfirmDeleteDialog}
+				/>
+			)}
 			{showVisibility && (
 				<>
 					{actionButtonsType === 'menu' ? (
