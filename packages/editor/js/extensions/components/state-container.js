@@ -11,6 +11,27 @@ import { useMemo } from '@wordpress/element';
 import { isInnerBlock, isNormalState } from './utils';
 import { useEditorStore, useExtensionsStore } from '../../hooks';
 
+export const Container = ({
+	activeColor,
+	children,
+}: {
+	activeColor: string,
+	children: Element<any>,
+}): Element<any> => {
+	return (
+		<div
+			className="blockera-state-colors-container"
+			style={{
+				color: 'inherit',
+				'--blockera-controls-primary-color': activeColor,
+				'--blockera-tab-panel-active-color': activeColor,
+			}}
+		>
+			{children}
+		</div>
+	);
+};
+
 export default function StateContainer({
 	name,
 	clientId,
@@ -63,16 +84,5 @@ export default function StateContainer({
 		currentInnerBlockState,
 	]);
 
-	return (
-		<div
-			className="blockera-state-colors-container"
-			style={{
-				color: 'inherit',
-				'--blockera-controls-primary-color': activeColor,
-				'--blockera-tab-panel-active-color': activeColor,
-			}}
-		>
-			{children}
-		</div>
-	);
+	return <Container activeColor={activeColor}>{children}</Container>;
 }
