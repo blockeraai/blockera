@@ -3,6 +3,7 @@ export * from './image';
 export * from './avatar';
 export * from './feature-wrapper';
 export { Switch } from './switch';
+export * from './item-group/index.tsx';
 export { default as Flex } from './flex';
 export { PromotionPopover, Promoter } from './promotion-popover';
 export { default as Tabs, TabPanel } from './tabs';
