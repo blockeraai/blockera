@@ -79,7 +79,7 @@ body {
 
 .blockera-component-tabs.design-modern {
 	.blockera-component-tabs__list {
-		background-color: #f8f9fc;
+		background-color: var(--blockera-panel-tabs-bg-color);
 		justify-content: space-between;
 		gap: 0;
 		box-shadow:

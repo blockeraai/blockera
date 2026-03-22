@@ -1,4 +1,7 @@
-
+/* Tabs: theme `os-theme-dark blockera-tabs` — tune OS variables (see overlayscrollbars.css). */
 .os-theme-dark.blockera-tabs {
-	--os-size: 8px;
+	/* Track height; 8px was too thin vs panel tab row. */
+	--os-size: 10px;
+	/* Min thumb width along the track (library default 33px). */
+	--os-handle-min-size: 48px;
 }

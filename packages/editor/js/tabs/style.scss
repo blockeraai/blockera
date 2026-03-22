@@ -56,7 +56,9 @@
 }
 
 /* Inside shadow for the right side while having scrollbar */
-.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+.blockera-tabs-bar:has(
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
+	)
 	+ .blockera-tabs-bar-settings {
 	box-shadow: -1px 0 0 var(--blockera-panel-tabs-tab-border-color),
 		0 0 10px #0000001f;
@@ -64,10 +66,10 @@
 
 /* Inside shadow for the left side while having scrollbar */
 .blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
 	):not(:has(.blockera-tabs-bar-tabs__pinned-tabs))::before,
 .blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
 			.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
@@ -85,7 +87,7 @@
 }
 
 .blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
 			.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
@@ -94,7 +96,9 @@
 }
 
 /* Hide the actions add button when the scrollbar is hidden */
-.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXHidden"]
+.blockera-tabs-bar:has(
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXHidden"]
+	)
 	+ .blockera-tabs-bar-settings
 	> .blockera-tabs-bar-actions {
 	display: none;
@@ -117,6 +121,7 @@
 
 .blockera-tabs-bar-tabs {
 	display: flex;
+	flex: 1;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	gap: 0;
