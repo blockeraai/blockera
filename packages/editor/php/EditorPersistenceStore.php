@@ -32,7 +32,7 @@ class EditorPersistenceStore {
 		return array(
 			'secondarySidebarVisible' => true,
 			'primarySidebarWidth'     => '300px',
-			'secondarySidebarWidth'   => '350px',
+			'secondarySidebarWidth'   => '320px',
 			// Add more default values here as needed.
 		);
 	}

@@ -23,6 +23,19 @@ export function toggleSecondarySidebar() {
 }
 
 /**
+ * Action to set whether the primary (settings) sidebar is open (Blockera mirror; session-only).
+ *
+ * @param {boolean} open Whether the primary sidebar should be considered open.
+ * @return {Object} Action object.
+ */
+export function setPrimarySidebarOpen(open: boolean) {
+	return {
+		type: 'SET_PRIMARY_SIDEBAR_OPEN',
+		open,
+	};
+}
+
+/**
  * Action to set the primary sidebar width.
  *
  * @param {string} width The width value (e.g., '300px').

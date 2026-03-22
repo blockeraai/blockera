@@ -18,12 +18,34 @@ import { store as blockeraEditorStore } from '../store-persistence';
 import { ResizeHandle } from '../shared/ResizeHandle';
 import SecondarySidebar from './components/SecondarySidebar';
 import ToggleButton from './components/ToggleButton';
+import { useIsCanvasEditMode } from './hooks/useIsCanvasEditMode';
+
+/**
+ * Renders toggle + sidebar only when in Site Editor canvas edit mode (or outside Site Editor).
+ */
+function SecondarySidebarContent() {
+	const isCanvasEdit = useIsCanvasEditMode();
+
+	if (!isCanvasEdit) {
+		return null;
+	}
+
+	return <SecondarySidebarContentUI />;
+}
 
 /**
  * Component that injects the combined sidebar into the editor interface using slots.
  * Uses the slot system to render the sidebar content and controls visibility through CSS.
  */
 export default function SecondarySidebarInjector() {
+	return <SecondarySidebarContent />;
+}
+
+/**
+ * UI implementation: all sidebar state, effects, and slot fills.
+ * Only mounted when isCanvasEdit is true (or forceShowSidebar).
+ */
+function SecondarySidebarContentUI() {
 	const { setIsInserterOpened, setIsListViewOpened } = useDispatch(
 		editorStore
 	) as any;
@@ -39,9 +61,12 @@ export default function SecondarySidebarInjector() {
 	// Core's main sidebar shortcut is unregistered and re-bound to Cmd+Shift+. in primary-sidebar.
 	useEffect(() => {
 		registerShortcut({
-			name: 'blockera/secondary-sidebar/toggle',
+			name: 'blockera/sidebars/toggle-secondary-sidebar',
 			category: 'blockera',
-			description: __('Show or hide the Settings panel.', 'blockera'),
+			description: __(
+				'Show or hide the secondary sidebar (left side).',
+				'blockera'
+			),
 			keyCombination: {
 				modifier: 'primaryShift',
 				character: ',',
@@ -49,7 +74,10 @@ export default function SecondarySidebarInjector() {
 		});
 	}, [registerShortcut]);
 
-	useShortcut('blockera/secondary-sidebar/toggle', toggleSecondarySidebar);
+	useShortcut(
+		'blockera/sidebars/toggle-secondary-sidebar',
+		toggleSecondarySidebar
+	);
 
 	// Cache DOM element references to avoid repeated queries
 	const sidebarContentRef = useRef<HTMLDivElement | null>(null);

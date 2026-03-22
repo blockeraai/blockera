@@ -11,6 +11,29 @@ export function isSecondarySidebarVisible(state: {
 }
 
 /**
+ * Whether the primary (settings) sidebar is open (Blockera session mirror).
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Whether the primary sidebar is open.
+ */
+export function isPrimarySidebarOpen(state: { primarySidebarOpen: boolean }) {
+	return state.primarySidebarOpen;
+}
+
+/**
+ * True when both Blockera secondary and primary sidebars are closed.
+ *
+ * @param {Object} state Store state.
+ * @return {boolean} Whether both are closed.
+ */
+export function areBothSidebarsClosed(state: {
+	secondarySidebarVisible: boolean;
+	primarySidebarOpen: boolean;
+}) {
+	return !state.secondarySidebarVisible && !state.primarySidebarOpen;
+}
+
+/**
  * Selector to get the primary sidebar width.
  *
  * @param {Object} state Store state.

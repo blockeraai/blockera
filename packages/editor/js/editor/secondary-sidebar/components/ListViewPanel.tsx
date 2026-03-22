@@ -684,7 +684,7 @@ export default function ListViewPanel() {
 	useEffect(() => {
 		// Expand all: Option (Alt) + Command (Ctrl) + ]
 		registerShortcut({
-			name: 'blockera/secondary-sidebar/list-view/expand-all',
+			name: 'blockera/list-view/expand-all',
 			category: 'blockera',
 			description: __('Expand all blocks in the list view.', 'blockera'),
 			keyCombination: {
@@ -695,7 +695,7 @@ export default function ListViewPanel() {
 
 		// Collapse all: Option (Alt) + Command (Ctrl) + [
 		registerShortcut({
-			name: 'blockera/secondary-sidebar/list-view/collapse-all',
+			name: 'blockera/list-view/collapse-all',
 			category: 'blockera',
 			description: __(
 				'Collapse all blocks in the list view.',
@@ -709,7 +709,7 @@ export default function ListViewPanel() {
 
 		// Collapse all others: Alt + L
 		registerShortcut({
-			name: 'blockera/secondary-sidebar/list-view/collapse-all-others',
+			name: 'blockera/list-view/collapse-all-others',
 			category: 'blockera',
 			description: __(
 				'Collapse all other blocks in the list view.',
