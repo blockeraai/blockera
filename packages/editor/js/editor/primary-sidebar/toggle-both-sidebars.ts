@@ -39,14 +39,14 @@ export function toggleBothSidebars(): void {
 		areBothSidebarsClosed: () => boolean;
 	};
 	const storeDispatch = dispatch(store) as {
-		setSecondarySidebarVisible: (visible: boolean) => void;
+		setSecondarySidebarOpen: (open: boolean) => void;
 	};
 
 	if (storeSelect.areBothSidebarsClosed()) {
-		storeDispatch.setSecondarySidebarVisible(true);
+		storeDispatch.setSecondarySidebarOpen(true);
 		applyPrimarySidebarToEditorShell(true);
 	} else {
-		storeDispatch.setSecondarySidebarVisible(false);
+		storeDispatch.setSecondarySidebarOpen(false);
 		applyPrimarySidebarToEditorShell(false);
 	}
 	// `primarySidebarOpen` is updated from the real complementary area in PrimarySidebarController.

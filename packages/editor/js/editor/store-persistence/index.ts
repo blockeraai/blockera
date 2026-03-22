@@ -71,9 +71,9 @@ async function initializePersistence() {
 	// Set the initial state FIRST (before enabling persistence)
 	// This way, the initial state setting won't trigger a save
 	// Always update state with merged values (persisted values override defaults)
-	if (typeof mergedState.secondarySidebarVisible === 'boolean') {
-		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarVisible(
-			mergedState.secondarySidebarVisible
+	if (typeof mergedState.secondarySidebarOpen === 'boolean') {
+		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarOpen(
+			mergedState.secondarySidebarOpen
 		);
 	}
 	if (typeof mergedState.primarySidebarWidth === 'string') {

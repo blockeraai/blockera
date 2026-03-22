@@ -1,13 +1,14 @@
 /**
  * Internal dependencies
  */
+import editorPersistenceDefaultsJson from '../../../php/data/editor-persistence-defaults.json';
 import type { PersistenceLayer } from './persistence';
 
 /**
  * Type definition for store state.
  */
 export type StoreState = {
-	secondarySidebarVisible: boolean;
+	secondarySidebarOpen: boolean;
 	/** Session UI only (not persisted): mirrors WP complementary area for primary/settings sidebar. */
 	primarySidebarOpen: boolean;
 	primarySidebarWidth: string;
@@ -16,16 +17,13 @@ export type StoreState = {
 };
 
 /**
- * Get default values from PHP.
- * Defaults are injected by PHP via window.blockeraEditorPersistenceDefaults.
+ * Shared defaults file: packages/editor/php/data/editor-persistence-defaults.json
+ * (loaded at build time here; PHP reads the same file for window.blockeraEditorPersistenceDefaults).
  */
 export function getDefaults(): StoreState {
 	const base: StoreState = {
-		secondarySidebarVisible: true,
+		...editorPersistenceDefaultsJson,
 		primarySidebarOpen: false,
-		primarySidebarWidth: '300px',
-		secondarySidebarWidth: '320px',
-		listViewHeight: '50%',
 	};
 	const fromPhp = (window as any).blockeraEditorPersistenceDefaults as
 		| Partial<StoreState>
@@ -118,8 +116,8 @@ const initialState: StoreState = getInitialState();
  * Type definition for store actions.
  */
 type StoreAction =
-	| { type: 'SET_SECONDARY_SIDEBAR_VISIBLE'; visible?: boolean }
-	| { type: 'TOGGLE_SECONDARY_SIDEBAR' }
+	| { type: 'SET_SECONDARY_SIDEBAR_OPEN'; open?: boolean }
+	| { type: 'TOGGLE_SECONDARY_SIDEBAR_OPEN' }
 	| { type: 'SET_PRIMARY_SIDEBAR_OPEN'; open: boolean }
 	| { type: 'SET_PRIMARY_SIDEBAR_WIDTH'; width: string }
 	| { type: 'SET_SECONDARY_SIDEBAR_WIDTH'; width: string }
@@ -142,16 +140,16 @@ function baseReducer(
 	action: StoreAction
 ): StoreState {
 	switch (action.type) {
-		case 'SET_SECONDARY_SIDEBAR_VISIBLE':
+		case 'SET_SECONDARY_SIDEBAR_OPEN':
 			return {
 				...state,
-				secondarySidebarVisible:
-					action.visible !== undefined ? action.visible : true,
+				secondarySidebarOpen:
+					action.open !== undefined ? action.open : true,
 			};
-		case 'TOGGLE_SECONDARY_SIDEBAR':
+		case 'TOGGLE_SECONDARY_SIDEBAR_OPEN':
 			return {
 				...state,
-				secondarySidebarVisible: !state.secondarySidebarVisible,
+				secondarySidebarOpen: !state.secondarySidebarOpen,
 			};
 		case 'SET_PRIMARY_SIDEBAR_OPEN':
 			return {
@@ -232,8 +230,8 @@ function withPersistenceLayer(
 		// primarySidebarOpen is session-only and must not be written to user meta.
 		if (
 			currentPersistenceLayer &&
-			(action.type === 'SET_SECONDARY_SIDEBAR_VISIBLE' ||
-				action.type === 'TOGGLE_SECONDARY_SIDEBAR' ||
+			(action.type === 'SET_SECONDARY_SIDEBAR_OPEN' ||
+				action.type === 'TOGGLE_SECONDARY_SIDEBAR_OPEN' ||
 				action.type === 'SET_PRIMARY_SIDEBAR_WIDTH' ||
 				action.type === 'SET_SECONDARY_SIDEBAR_WIDTH' ||
 				action.type === 'SET_LIST_VIEW_HEIGHT')
