@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
@@ -15,6 +15,7 @@ import { Fill } from '@wordpress/components';
  * Internal dependencies
  */
 import { store as blockeraEditorStore } from '../store-persistence';
+import { getDefaults } from '../store-persistence/reducer';
 import { ResizeHandle } from '../shared/ResizeHandle';
 import SecondarySidebar from './components/SecondarySidebar';
 import ToggleButton from './components/ToggleButton';
@@ -99,6 +100,11 @@ function SecondarySidebarContentUI() {
 		const storeSelect = select(blockeraEditorStore) as any;
 		return storeSelect.getSecondarySidebarWidth();
 	}, []);
+
+	const defaultSecondarySidebarWidth = useMemo(
+		() => getDefaults().secondarySidebarWidth,
+		[]
+	);
 
 	// Track initial sidebar state (for determining if we should animate on first open)
 	const initialSidebarVisibleRef = useRef<boolean | null>(null);
@@ -338,7 +344,7 @@ function SecondarySidebarContentUI() {
 								isVisible={isSidebarVisible}
 								minWidth={280}
 								maxWidth={600}
-								defaultValue="350px"
+								defaultValue={defaultSecondarySidebarWidth}
 								onResize={handleResize}
 							/>
 						)}

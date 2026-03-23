@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useMemo, useRef } from '@wordpress/element';
 import { useSelect, useDispatch, subscribe } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
@@ -14,6 +14,7 @@ import { store as interfaceStore } from '@wordpress/interface';
  * Internal dependencies
  */
 import { store as blockeraEditorStore } from '../store-persistence';
+import { getDefaults } from '../store-persistence/reducer';
 import { ResizeHandle } from '../shared/ResizeHandle';
 import {
 	applyBlockeraPrimarySidebarShortcutSwap,
@@ -101,6 +102,11 @@ export default function PrimarySidebarController() {
 		const storeSelect = select(blockeraEditorStore) as any;
 		return storeSelect.getPrimarySidebarWidth();
 	}, []);
+
+	const defaultPrimarySidebarWidth = useMemo(
+		() => getDefaults().primarySidebarWidth,
+		[]
+	);
 
 	const blockeraPrimarySidebarOpen = useSelect((select) => {
 		return (select(blockeraEditorStore) as any).isPrimarySidebarOpen();
@@ -339,7 +345,7 @@ export default function PrimarySidebarController() {
 					isVisible={isPrimarySidebarOpen}
 					minWidth={280}
 					maxWidth={600}
-					defaultValue="300px"
+					defaultValue={defaultPrimarySidebarWidth}
 					onResize={handleResize}
 				/>
 			)}
