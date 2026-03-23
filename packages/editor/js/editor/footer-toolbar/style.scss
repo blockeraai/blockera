@@ -22,6 +22,8 @@
 	color: var(--blockera-controls-color);
 	text-decoration: none;
 	font-weight: 500;
+	padding: 0 2px;
+	border-radius: var(--blockera-controls-border-radius);
 
 	.blockera-footer-toolbar-logo-icon {
 		flex-shrink: 0;
