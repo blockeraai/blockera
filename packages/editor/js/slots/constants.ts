@@ -39,6 +39,13 @@ export const SLOTS_CONFIG: SlotConfig[] = [
 			);
 		},
 	},
+	{
+		id: 'blockera/slots/editor-footer-toolbar',
+		selectors: [
+			'.admin-ui-navigable-region.interface-interface-skeleton__footer',
+		],
+		placement: 'end',
+	},
 ];
 
 /**

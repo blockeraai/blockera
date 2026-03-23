@@ -1,0 +1,45 @@
+/* Slot root (see slotIdToClassName in packages/editor/js/slots/constants.ts) */
+.blockera-elements-editor-footer-toolbar:not(:empty) {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-left: auto;
+}
+
+.blockera-footer-toolbar-items {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 0 16px;
+}
+
+.blockera-footer-toolbar-brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	line-height: 1;
+	color: var(--blockera-controls-color);
+	text-decoration: none;
+	font-weight: 500;
+
+	.blockera-footer-toolbar-logo-icon {
+		flex-shrink: 0;
+		display: block;
+	}
+
+	.blockera-footer-toolbar-version {
+		font-size: 11px;
+		letter-spacing: 0.01em;
+	}
+
+	&:hover,
+	&:focus {
+		color: var(--blockera-controls-primary-color);
+		text-decoration: underline;
+
+		svg {
+			fill: currentColor;
+		}
+	}
+}
