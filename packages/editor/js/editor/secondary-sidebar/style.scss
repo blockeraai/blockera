@@ -397,7 +397,13 @@
 	padding-right: 5px;
 
 	.components-button {
-		color: var(--blockera-controls-border-color) !important;
+		color: #1e1e1e !important;
+		padding: 0 !important;
+		min-width: 24px !important;
+
+		&:hover {
+			background-color: transparent !important;
+		}
 	}
 
 	.components-button[disabled] {

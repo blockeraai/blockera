@@ -110,7 +110,6 @@ body {
 			&:focus {
 				outline: none;
 				box-shadow: none;
-				color: var(--blockera-controls-primary-color);
 			}
 
 			&:focus:not(.is-active-tab) {

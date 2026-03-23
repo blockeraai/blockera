@@ -19,7 +19,6 @@ import {
 	useShortcut,
 	store as keyboardShortcutsStore,
 } from '@wordpress/keyboard-shortcuts';
-import { Button } from '@wordpress/components';
 import {
 	useCallback,
 	useRef,
@@ -34,7 +33,7 @@ import { create, getTextContent } from '@wordpress/rich-text';
 /**
  * Blockera dependencies
  */
-import { Tabs } from '@blockera/controls';
+import { Tabs, Button } from '@blockera/controls';
 
 /**
  * Expand all icon SVG component.
@@ -765,7 +764,8 @@ export default function ListViewPanel() {
 						<div className="blockera-list-view-controls">
 							<Button
 								variant="tertiary"
-								size="small"
+								size="extra-small"
+								noBorder={true}
 								onClick={handleCollapseAllOthers}
 								icon={CollapseAllOthersIcon}
 								label={
@@ -781,7 +781,8 @@ export default function ListViewPanel() {
 
 							<Button
 								variant="tertiary"
-								size="small"
+								size="extra-small"
+								noBorder={true}
 								onClick={handleCollapseAll}
 								icon={CollapseAllIcon}
 								label={
@@ -793,7 +794,8 @@ export default function ListViewPanel() {
 
 							<Button
 								variant="tertiary"
-								size="small"
+								size="extra-small"
+								noBorder={true}
 								onClick={handleExpandAll}
 								icon={ExpandAllIcon}
 								label={
