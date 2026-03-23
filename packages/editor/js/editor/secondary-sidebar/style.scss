@@ -407,7 +407,7 @@
 	}
 
 	.components-button[disabled] {
-		opacity: 0.4;
+		opacity: 0.3 !important;
 	}
 
 	.components-button:hover:not([disabled]) {
@@ -422,4 +422,17 @@
 		width: 22px;
 		height: 22px;
 	}
+}
+
+/**
+* Fix the focus outline on the first tab button
+*/
+.block-editor-tabbed-sidebar__tablist-and-close-button
+	button[role="tab"][data-focus-visible="true"]:first-child {
+	color: var(--wp-components-color-foreground, #1e1e1e);
+}
+
+.block-editor-tabbed-sidebar__tablist-and-close-button
+	button[role="tab"][data-focus-visible="true"]:first-child::after {
+	outline: none !important;
 }
