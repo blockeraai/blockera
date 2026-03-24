@@ -259,6 +259,49 @@ const TabsBar = memo(function TabsBar({
 	);
 
 	/**
+	 * Ensure active tab stays visible inside horizontal viewport.
+	 * Works with both native overflow and OverlayScrollbars viewport.
+	 */
+	const ensureActiveTabVisible = useCallback(() => {
+		if (!activeTabKey) {
+			return;
+		}
+
+		const container = tabsContainerRef.current;
+		if (!container) {
+			return;
+		}
+
+		const activeTabElement = container.querySelector(
+			`.blockera-tabs-tab.is-active[data-tab-key="${activeTabKey}"]`
+		) as HTMLElement | null;
+
+		if (!activeTabElement) {
+			return;
+		}
+
+		const tabsBarElement = tabsBarRef.current;
+		const scrollContainer = tabsBarElement || container;
+
+		const viewportRect = scrollContainer.getBoundingClientRect();
+		const activeTabRect = activeTabElement.getBoundingClientRect();
+		const isLeftOverflow = activeTabRect.left < viewportRect.left;
+		const isRightOverflow = activeTabRect.right > viewportRect.right;
+
+		// Scroll only when active tab is outside visible horizontal bounds.
+		if (isLeftOverflow) {
+			scrollContainer.scrollLeft -=
+				viewportRect.left - activeTabRect.left;
+			return;
+		}
+
+		if (isRightOverflow) {
+			scrollContainer.scrollLeft +=
+				activeTabRect.right - viewportRect.right;
+		}
+	}, [activeTabKey]);
+
+	/**
 	 * Animates the indicator from old tab position to new tab position
 	 *
 	 * How it works:
@@ -699,6 +742,22 @@ const TabsBar = memo(function TabsBar({
 			window.removeEventListener('resize', handleScrollOrResize);
 		};
 	}, [activeTabKey, calculateTabPosition]);
+
+	/**
+	 * Keep active tab in view after initial render and active tab/order changes.
+	 * Double RAF allows DOM and custom scrollbar viewport to settle first.
+	 */
+	useEffect(() => {
+		if (!activeTabKey) {
+			return;
+		}
+
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				ensureActiveTabVisible();
+			});
+		});
+	}, [activeTabKey, sortedTabs, ensureActiveTabVisible]);
 
 	// Memoize tab IDs for sortable contexts to prevent unnecessary re-renders
 	// Only recreate when tab keys or order actually changes
