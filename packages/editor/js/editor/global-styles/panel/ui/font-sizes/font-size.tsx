@@ -35,23 +35,9 @@ import FontSizePreview from './font-size-preview';
 import { VariableNameEditor } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
-
-function getAllFontSizeSlugs(
-	fontSizes:
-		| Record<string, Array<VariableType & DefaultPresetValue>>
-		| undefined
-): string[] {
-	if (!fontSizes) {
-		return [];
-	}
-
-	return Object.values(fontSizes).flatMap((arr) =>
-		(arr || []).map((s) => s.slug).filter((s): s is string => !!s)
-	);
-}
+import { getAllVariableSlugs as getAllFontSizeSlugs } from '../components/utils';
 
 function FontSizeComponent({
-	sizes,
 	origin,
 	fontSize,
 	presetId,
@@ -59,7 +45,6 @@ function FontSizeComponent({
 	origin: string | string[];
 	presetId: string | number;
 	fontSize: VariableType & DefaultPresetValue;
-	sizes: Record<string, Array<VariableType & DefaultPresetValue>> | undefined;
 }) {
 	const { slug } = fontSize;
 
@@ -79,13 +64,19 @@ function FontSizeComponent({
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-	const { onChange, repeaterId, valueCleanup } = useContext(
-		RepeaterContext
-	) as {
+	const {
+		onChange,
+		repeaterId,
+		valueCleanup,
+		repeaterItems: sizes,
+	} = useContext(RepeaterContext) as {
 		disableRegenerateId?: boolean;
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
 		repeaterId: string | null | undefined;
+		repeaterItems:
+			| Record<string, Array<VariableType & DefaultPresetValue>>
+			| undefined;
 		itemIdGenerator?: (itemId: string | number) => string;
 	};
 

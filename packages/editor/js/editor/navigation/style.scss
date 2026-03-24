@@ -229,13 +229,3 @@
 		padding: 0 16px;
 	}
 }
-
-.is-open-blockera-navigation-override {
-
-	.edit-site-global-styles-screen > div {
-
-		& > *:nth-last-child(2) {
-			display: none;
-		}
-	}
-}

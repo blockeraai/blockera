@@ -27,6 +27,7 @@ import { NavItemButton } from './nav-item-button';
 import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
+import { colorsPanelHandler } from '../global-styles/panel/ui/colors/colors-panel-handler.tsx';
 import { typographyPanelHandler } from '../global-styles/panel/ui/font-sizes/typography-panel-handler.tsx';
 
 const designSystemBackLabel = __('Design System', 'blockera');
@@ -52,9 +53,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				className={navItemClassName()}
 				path={'colors'}
 				id="colors-panel"
-				onClick={() =>
-					document.querySelector('button[id="/colors"]')?.click()
-				}
+				onClick={colorsPanelHandler}
 				icon={<Icon icon="wp-colors" iconSize={20} />}
 				label={__('Colors', 'blockera')}
 			/>

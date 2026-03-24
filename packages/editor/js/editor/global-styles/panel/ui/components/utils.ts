@@ -10,6 +10,38 @@ import type { GlobalStylesConfig } from '@wordpress/global-styles-engine';
 import { kebabCase } from '@blockera/utils';
 
 /**
+ * Internal dependencies
+ */
+import { type VariableType } from './types';
+
+/**
+ *
+ */
+export function getAllVariableSlugs(
+	variables: Record<string, Array<VariableType & any>> | undefined
+): string[] {
+	if (!variables) {
+		return [];
+	}
+
+	return Object.values(variables).flatMap((arr: VariableType & any) => {
+		if (!Array.isArray(arr)) {
+			if (
+				typeof arr === 'object' &&
+				'slug' in arr &&
+				typeof arr.slug === 'string'
+			) {
+				return [arr.slug];
+			}
+
+			return [];
+		}
+
+		return arr.map((s) => s && s.slug).filter((s): s is string => !!s);
+	});
+}
+
+/**
  * Compares global style variations according to their styles and settings properties.
  *
  * @param original  A global styles object.

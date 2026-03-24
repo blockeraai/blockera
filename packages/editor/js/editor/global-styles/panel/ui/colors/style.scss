@@ -1,0 +1,16 @@
+.is-open-blockera-colors-navigation-override {
+
+	.edit-site-global-styles-screen > div {
+
+		& > *:nth-child(2) {
+			display: none;
+		}
+	}
+
+	.blockera-colors-preset-inspector-active {
+
+		> *:not(.blockera-block-inspector-controls-wrapper) {
+			display: none;
+		}
+	}
+}

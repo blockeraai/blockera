@@ -12,6 +12,7 @@ import {
 } from '@wordpress/components';
 import { isRTL, __ } from '@wordpress/i18n';
 import { chevronRight, chevronLeft } from '@wordpress/icons';
+import { memo } from '@wordpress/element';
 
 interface ScreenHeaderProps {
 	title: string | React.ReactNode;
@@ -19,7 +20,7 @@ interface ScreenHeaderProps {
 	onBack?: () => void;
 }
 
-export function ScreenHeader({
+function ScreenHeaderComponent({
 	title,
 	description,
 	onBack,
@@ -57,3 +58,5 @@ export function ScreenHeader({
 		</VStack>
 	);
 }
+
+export const ScreenHeader = memo(ScreenHeaderComponent);

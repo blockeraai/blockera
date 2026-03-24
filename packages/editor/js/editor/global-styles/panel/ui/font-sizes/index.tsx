@@ -8,7 +8,13 @@ import {
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 } from '@wordpress/components';
-import { createPortal, useState, useCallback } from '@wordpress/element';
+import {
+	createPortal,
+	useState,
+	useCallback,
+	useMemo,
+	memo,
+} from '@wordpress/element';
 import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 
 /**
@@ -24,14 +30,28 @@ import {
 	ScreenHeader,
 	getNewIndexFromPresets,
 	type PresetGroupPropsType,
+	type PresetFieldsPropsResolver,
 } from '../components';
 import { FontSize } from './font-size';
 import FontSizesScreen from './font-sizes-screen';
+import { areFontSizePresetListsEqual } from './utils';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
 import { FontSizePresetOpener } from './font-size-preset-opener';
 import { NavItemScreen } from '../../../../navigation/nav-item-screen';
 import ConfirmResetFontSizesDialog from './confirm-reset-font-sizes-dialog';
+
+const onBackFontSizes = () => {
+	const parent = document.querySelector(
+		'.blockera-font-size-presets-count-active'
+	);
+	if (parent && parent instanceof HTMLElement) {
+		parent.classList.remove('blockera-font-size-presets-count-active');
+		(parent.previousElementSibling as HTMLElement).style.removeProperty(
+			'display'
+		);
+	}
+};
 
 interface FontSizeGroupProps {
 	label: string;
@@ -55,7 +75,39 @@ type FontSizePresetGroup = {
 
 type FontSizePresetGroupProps = PresetGroupPropsType & FontSizePresetGroup;
 
-function FontSizeGroup({
+const fontSizePresetFieldsPropsResolver: PresetFieldsPropsResolver = (
+	item,
+	itemId,
+	origin,
+	variables
+) => ({
+	sizes: variables,
+	fontSize: item,
+	origin,
+	presetId: itemId,
+});
+
+function FontSizePresetGroup(props: FontSizePresetGroupProps) {
+	return <PresetGroup {...props} />;
+}
+
+function fontSizeGroupPropsAreEqual(
+	prev: FontSizeGroupProps,
+	next: FontSizeGroupProps
+): boolean {
+	if (prev.origin !== next.origin) {
+		return false;
+	}
+	if (prev.handleUpdateSizes !== next.handleUpdateSizes) {
+		return false;
+	}
+	if (prev.handleResetFontSizes !== next.handleResetFontSizes) {
+		return false;
+	}
+	return areFontSizePresetListsEqual(prev.sizes, next.sizes);
+}
+
+function FontSizeGroupComponent({
 	sizes,
 	origin,
 	handleUpdateSizes,
@@ -76,17 +128,36 @@ function FontSizeGroup({
 					'blockera'
 				);
 
-	const index = getNewIndexFromPresets(sizes, 'custom-');
-	const defaultPresetValue: DefaultPresetValue & VariableType = {
-		size: '16px',
-		fluid: false,
-		slug: `font-size-${index}`,
-		deletable: !!('custom' === origin),
-		cloneable: !!('custom' === origin),
-		visibilitySupport: !!('custom' === origin),
-		/* translators: %d: font size index */
-		name: sprintf(__('Font Size %d', 'blockera'), index) as string,
-	};
+	const index = useMemo(
+		() => getNewIndexFromPresets(sizes, 'custom-'),
+		[sizes]
+	);
+
+	const defaultPresetValue = useMemo((): DefaultPresetValue &
+		VariableType => {
+		return {
+			size: '16px',
+			fluid: false,
+			slug: `font-size-${index}`,
+			deletable: !!('custom' === origin),
+			cloneable: !!('custom' === origin),
+			visibilitySupport: !!('custom' === origin),
+			/* translators: %d: font size index */
+			name: sprintf(__('Font Size %d', 'blockera'), index) as string,
+		};
+	}, [origin, index]);
+
+	const controlName = `font-size-presets-${origin}`;
+
+	const handleChange = useCallback(
+		(newValue: Object) => {
+			if (!handleUpdateSizes) {
+				return;
+			}
+			handleUpdateSizes(newValue);
+		},
+		[handleUpdateSizes]
+	);
 
 	return (
 		<>
@@ -105,13 +176,8 @@ function FontSizeGroup({
 			)}
 			<FontSizePresetGroup
 				repeaterItemHeader={FontSizePresetOpener}
-				onChange={(newValue: Object) => {
-					if (!handleUpdateSizes) {
-						return;
-					}
-					handleUpdateSizes(newValue);
-				}}
-				controlName="font-size-presets"
+				onChange={handleChange}
+				controlName={controlName}
 				defaultPresetValue={defaultPresetValue}
 				origin={origin}
 				variables={sizes}
@@ -122,22 +188,30 @@ function FontSizeGroup({
 					__('%s Variables', 'blockera'),
 					pascalCase(origin)
 				)}
+				presetFieldsPropsResolver={fontSizePresetFieldsPropsResolver}
 			/>
 		</>
 	);
 }
 
-function FontSizePresetGroup(props: FontSizePresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+const FontSizeGroup = memo(FontSizeGroupComponent, fontSizeGroupPropsAreEqual);
 
-function FontSizes({ screenSelector }: { screenSelector: string }) {
+/**
+ * Owns all global font-size subscriptions.
+ *
+ * Like color presets, `useGlobalSetting` ties into global-styles context, so this
+ * tree re-renders when merged settings change. `FontSizeGroup` is memoized with
+ * `areFontSizePresetListsEqual` so sibling groups skip work when their sizes
+ * list is unchanged. Repeater `controlName` is unique per origin.
+ */
+function FontSizesPresetContent() {
 	const [themeFontSizes, setThemeFontSizes] = useGlobalSetting(
 		'typography.fontSizes.theme'
 	);
 
 	const [baseThemeFontSizes] = useGlobalSetting(
 		'typography.fontSizes.theme',
+		'',
 		'base'
 	);
 	const [defaultFontSizes, setDefaultFontSizes] = useGlobalSetting(
@@ -146,6 +220,7 @@ function FontSizes({ screenSelector }: { screenSelector: string }) {
 
 	const [baseDefaultFontSizes] = useGlobalSetting(
 		'typography.fontSizes.default',
+		'',
 		'base'
 	);
 
@@ -159,7 +234,12 @@ function FontSizes({ screenSelector }: { screenSelector: string }) {
 
 	const convertRepeaterValueToArray = useCallback(
 		(newValue: Object): FontSizeType[] =>
-			Object.values(newValue).map((value) => ({
+			Object.values(
+				newValue as Record<
+					string,
+					FontSizeType & Record<string, unknown>
+				>
+			).map((value) => ({
 				slug: value.slug,
 				name: value.name,
 				size: value.size,
@@ -189,104 +269,107 @@ function FontSizes({ screenSelector }: { screenSelector: string }) {
 		[convertRepeaterValueToArray, setDefaultFontSizes]
 	);
 
-	const hasSameSizeValues = (
-		arr1: FontSizeType[],
-		arr2: FontSizeType[]
-	): boolean =>
-		arr1.map((item) => item.size).join('') ===
-		arr2.map((item) => item.size).join('');
+	const resetThemeToBase = useCallback(() => {
+		setThemeFontSizes(baseThemeFontSizes);
+	}, [setThemeFontSizes, baseThemeFontSizes]);
 
+	const resetDefaultToBase = useCallback(() => {
+		setDefaultFontSizes(baseDefaultFontSizes);
+	}, [setDefaultFontSizes, baseDefaultFontSizes]);
+
+	const clearCustomSizes = useCallback(() => {
+		setCustomFontSizes([]);
+	}, [setCustomFontSizes]);
+
+	const themeResetHandler = useMemo(() => {
+		if (!themeFontSizes?.length) {
+			return undefined;
+		}
+		const base = baseThemeFontSizes ?? [];
+		if (areFontSizePresetListsEqual(themeFontSizes, base)) {
+			return undefined;
+		}
+		return resetThemeToBase;
+	}, [themeFontSizes, baseThemeFontSizes, resetThemeToBase]);
+
+	const defaultResetHandler = useMemo(() => {
+		if (!defaultFontSizes?.length) {
+			return undefined;
+		}
+		const base = baseDefaultFontSizes ?? [];
+		if (areFontSizePresetListsEqual(defaultFontSizes, base)) {
+			return undefined;
+		}
+		return resetDefaultToBase;
+	}, [defaultFontSizes, baseDefaultFontSizes, resetDefaultToBase]);
+
+	const customResetHandler = useMemo(
+		() => (customFontSizes.length > 0 ? clearCustomSizes : undefined),
+		[customFontSizes.length, clearCustomSizes]
+	);
+
+	return (
+		<VStack spacing={8}>
+			{!!themeFontSizes?.length && (
+				<FontSizeGroup
+					origin="theme"
+					label={__('Theme', 'blockera')}
+					sizes={themeFontSizes}
+					handleUpdateSizes={handleUpdateThemeSizes}
+					handleResetFontSizes={themeResetHandler}
+				/>
+			)}
+
+			{defaultFontSizesEnabled && !!defaultFontSizes?.length && (
+				<FontSizeGroup
+					origin="default"
+					label={__('Default', 'blockera')}
+					sizes={defaultFontSizes}
+					handleUpdateSizes={handleUpdateDefaultSizes}
+					handleResetFontSizes={defaultResetHandler}
+				/>
+			)}
+
+			<FontSizeGroup
+				origin="custom"
+				label={__('Custom', 'blockera')}
+				sizes={customFontSizes}
+				handleUpdateSizes={handleUpdateCustomSizes}
+				handleResetFontSizes={customResetHandler}
+			/>
+		</VStack>
+	);
+}
+
+function FontSizesEditorScreenShell() {
+	return (
+		<VStack spacing={2} className="blockera-font-size-presets">
+			<ScreenHeader
+				onBack={onBackFontSizes}
+				title={__('Font size presets', 'blockera')}
+				description={__(
+					'Create and edit the presets used for font sizes across the site.',
+					'blockera'
+				)}
+			/>
+
+			<View>
+				<Spacer paddingX={4}>
+					<FontSizesPresetContent />
+				</Spacer>
+			</View>
+		</VStack>
+	);
+}
+
+function FontSizes({ screenSelector }: { screenSelector: string }) {
 	return createPortal(
 		<Navigator initialPath="/">
 			<NavItemScreen path="/">
 				<FontSizesScreen />
 			</NavItemScreen>
 			<NavItemScreen path="/typography/font-sizes">
-				<VStack spacing={2} className="blockera-font-size-presets">
-					<ScreenHeader
-						onBack={() => {
-							const parent = document.querySelector(
-								'.blockera-font-size-presets-count-active'
-							);
-							if (parent && parent instanceof HTMLElement) {
-								parent.classList.remove(
-									'blockera-font-size-presets-count-active'
-								);
-								(
-									parent.previousElementSibling as HTMLElement
-								).style.removeProperty('display');
-							}
-						}}
-						title={__('Font size presets', 'blockera')}
-						description={__(
-							'Create and edit the presets used for font sizes across the site.',
-							'blockera'
-						)}
-					/>
-
-					<View>
-						<Spacer paddingX={4}>
-							<VStack spacing={8}>
-								{!!themeFontSizes?.length && (
-									<FontSizeGroup
-										origin="theme"
-										label={__('Theme', 'blockera')}
-										sizes={themeFontSizes}
-										handleUpdateSizes={
-											handleUpdateThemeSizes
-										}
-										handleResetFontSizes={
-											hasSameSizeValues(
-												themeFontSizes,
-												baseThemeFontSizes
-											)
-												? undefined
-												: () =>
-														setThemeFontSizes(
-															baseThemeFontSizes
-														)
-										}
-									/>
-								)}
-
-								{defaultFontSizesEnabled &&
-									!!defaultFontSizes?.length && (
-										<FontSizeGroup
-											origin="default"
-											label={__('Default', 'blockera')}
-											sizes={defaultFontSizes}
-											handleUpdateSizes={
-												handleUpdateDefaultSizes
-											}
-											handleResetFontSizes={
-												hasSameSizeValues(
-													defaultFontSizes,
-													baseDefaultFontSizes
-												)
-													? undefined
-													: () =>
-															setDefaultFontSizes(
-																baseDefaultFontSizes
-															)
-											}
-										/>
-									)}
-
-								<FontSizeGroup
-									origin="custom"
-									label={__('Custom', 'blockera')}
-									sizes={customFontSizes}
-									handleUpdateSizes={handleUpdateCustomSizes}
-									handleResetFontSizes={
-										customFontSizes.length > 0
-											? () => setCustomFontSizes([])
-											: undefined
-									}
-								/>
-							</VStack>
-						</Spacer>
-					</View>
-				</VStack>
+				<FontSizesEditorScreenShell />
 			</NavItemScreen>
 		</Navigator>,
 		document.querySelector(screenSelector)
