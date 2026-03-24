@@ -23,18 +23,39 @@ class EditorPersistenceStore {
 	private $meta_key;
 
 	/**
-	 * Default values for editor persistence store.
-	 * Add or modify default values here - they will be automatically passed to JavaScript.
+	 * Cached defaults decoded from the shared JSON file (per request).
 	 *
-	 * @return array Default values for the store.
+	 * @var array|null
+	 */
+	private static $defaults_from_file;
+
+	/**
+	 * Default values for editor persistence store.
+	 * Loaded from packages/editor/php/data/editor-persistence-defaults.json (single source of truth; also bundled in JS).
+	 *
+	 * @return array<string, mixed> Default values for the store.
 	 */
 	public function get_defaults() {
-		return array(
-			'secondarySidebarVisible' => true,
-			'primarySidebarWidth'     => '300px',
-			'secondarySidebarWidth'   => '350px',
-			// Add more default values here as needed.
-		);
+		if ( null !== self::$defaults_from_file ) {
+			return self::$defaults_from_file;
+		}
+
+		$path = __DIR__ . '/data/editor-persistence-defaults.json';
+		if ( ! is_readable( $path ) ) {
+			self::$defaults_from_file = array();
+			return self::$defaults_from_file;
+		}
+
+		$json = file_get_contents( $path );
+		if ( false === $json ) {
+			self::$defaults_from_file = array();
+			return self::$defaults_from_file;
+		}
+
+		$decoded                  = json_decode( $json, true );
+		self::$defaults_from_file = is_array( $decoded ) ? $decoded : array();
+
+		return self::$defaults_from_file;
 	}
 
 	/**
@@ -210,7 +231,7 @@ class EditorPersistenceStore {
 		foreach ( $data as $key => $value ) {
 			// Sanitize key: preserve camelCase for JavaScript compatibility.
 			// Only allow alphanumeric characters and underscores (no spaces, special chars).
-			// This preserves camelCase like "secondarySidebarVisible" instead of converting to lowercase.
+			// This preserves camelCase like "secondarySidebarOpen" instead of converting to lowercase.
 			$sanitized_key = preg_replace( '/[^a-zA-Z0-9_]/', '', $key );
 
 			// Sanitize value based on type.

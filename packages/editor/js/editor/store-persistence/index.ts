@@ -6,7 +6,7 @@ import { createReduxStore, register, dispatch } from '@wordpress/data';
 /**
  * Internal dependencies
  */
-import reducer from './reducer';
+import reducer, { getDefaults } from './reducer';
 import * as selectors from './selectors';
 import * as actions from './actions';
 import { STORE_NAME } from './constants';
@@ -28,26 +28,6 @@ register(store);
 
 // Note: The reducer now uses preloaded data for initial state automatically,
 // so no synchronous dispatch is needed here. The store will start with the correct state.
-
-/**
- * Get default values from PHP.
- * Defaults are injected by PHP via window.blockeraEditorPersistenceDefaults.
- */
-function getDefaults(): StoreState {
-	const defaults = (window as any).blockeraEditorPersistenceDefaults as
-		| StoreState
-		| undefined;
-
-	// Use PHP defaults if available, otherwise fallback to hardcoded defaults
-	return (
-		defaults || {
-			secondarySidebarVisible: true,
-			primarySidebarWidth: '300px',
-			secondarySidebarWidth: '350px',
-			listViewHeight: '50%',
-		}
-	);
-}
 
 /**
  * Initialize persistence layer for the store.
@@ -85,14 +65,15 @@ async function initializePersistence() {
 	const mergedState: StoreState = {
 		...defaults,
 		...persistedStateData,
+		primarySidebarOpen: false,
 	};
 
 	// Set the initial state FIRST (before enabling persistence)
 	// This way, the initial state setting won't trigger a save
 	// Always update state with merged values (persisted values override defaults)
-	if (typeof mergedState.secondarySidebarVisible === 'boolean') {
-		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarVisible(
-			mergedState.secondarySidebarVisible
+	if (typeof mergedState.secondarySidebarOpen === 'boolean') {
+		(dispatch(STORE_NAME) as typeof actions).setSecondarySidebarOpen(
+			mergedState.secondarySidebarOpen
 		);
 	}
 	if (typeof mergedState.primarySidebarWidth === 'string') {

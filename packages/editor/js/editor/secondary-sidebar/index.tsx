@@ -1,8 +1,13 @@
 /**
  * WordPress dependencies
  */
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+import {
+	useShortcut,
+	store as keyboardShortcutsStore,
+} from '@wordpress/keyboard-shortcuts';
 import { store as editorStore } from '@wordpress/editor';
 import { Fill } from '@wordpress/components';
 
@@ -10,24 +15,70 @@ import { Fill } from '@wordpress/components';
  * Internal dependencies
  */
 import { store as blockeraEditorStore } from '../store-persistence';
+import { getDefaults } from '../store-persistence/reducer';
 import { ResizeHandle } from '../shared/ResizeHandle';
 import SecondarySidebar from './components/SecondarySidebar';
 import ToggleButton from './components/ToggleButton';
+import { useIsCanvasEditMode } from './hooks/useIsCanvasEditMode';
+
+/**
+ * Renders toggle + sidebar only when in Site Editor canvas edit mode (or outside Site Editor).
+ */
+function SecondarySidebarContent() {
+	const isCanvasEdit = useIsCanvasEditMode();
+
+	if (!isCanvasEdit) {
+		return null;
+	}
+
+	return <SecondarySidebarContentUI />;
+}
 
 /**
  * Component that injects the combined sidebar into the editor interface using slots.
  * Uses the slot system to render the sidebar content and controls visibility through CSS.
  */
 export default function SecondarySidebarInjector() {
+	return <SecondarySidebarContent />;
+}
+
+/**
+ * UI implementation: all sidebar state, effects, and slot fills.
+ * Only mounted when isCanvasEdit is true (or forceShowSidebar).
+ */
+function SecondarySidebarContentUI() {
 	const { setIsInserterOpened, setIsListViewOpened } = useDispatch(
 		editorStore
 	) as any;
 	const { toggleSecondarySidebar, setSecondarySidebarWidth } = useDispatch(
 		blockeraEditorStore
-	) as {
+	) as unknown as {
 		toggleSecondarySidebar: () => void;
 		setSecondarySidebarWidth: (width: string) => void;
 	};
+	const { registerShortcut } = useDispatch(keyboardShortcutsStore);
+
+	// Register Cmd+Shift+, (Ctrl+Shift+, on Windows) for our secondary sidebar toggle.
+	// Core's main sidebar shortcut is unregistered and re-bound to Cmd+Shift+. in primary-sidebar.
+	useEffect(() => {
+		registerShortcut({
+			name: 'blockera/sidebars/toggle-secondary-sidebar',
+			category: 'blockera',
+			description: __(
+				'Show or hide the secondary sidebar (left side).',
+				'blockera'
+			),
+			keyCombination: {
+				modifier: 'primaryShift',
+				character: ',',
+			},
+		});
+	}, [registerShortcut]);
+
+	useShortcut(
+		'blockera/sidebars/toggle-secondary-sidebar',
+		toggleSecondarySidebar
+	);
 
 	// Cache DOM element references to avoid repeated queries
 	const sidebarContentRef = useRef<HTMLDivElement | null>(null);
@@ -41,7 +92,7 @@ export default function SecondarySidebarInjector() {
 	// Get sidebar visibility state from store
 	const isSidebarVisible = useSelect((select) => {
 		const storeSelect = select(blockeraEditorStore) as any;
-		return storeSelect.isSecondarySidebarVisible();
+		return storeSelect.isSecondarySidebarOpen();
 	}, []);
 
 	// Get secondary sidebar width from store
@@ -49,6 +100,11 @@ export default function SecondarySidebarInjector() {
 		const storeSelect = select(blockeraEditorStore) as any;
 		return storeSelect.getSecondarySidebarWidth();
 	}, []);
+
+	const defaultSecondarySidebarWidth = useMemo(
+		() => getDefaults().secondarySidebarWidth,
+		[]
+	);
 
 	// Track initial sidebar state (for determining if we should animate on first open)
 	const initialSidebarVisibleRef = useRef<boolean | null>(null);
@@ -288,7 +344,7 @@ export default function SecondarySidebarInjector() {
 								isVisible={isSidebarVisible}
 								minWidth={280}
 								maxWidth={600}
-								defaultValue="350px"
+								defaultValue={defaultSecondarySidebarWidth}
 								onResize={handleResize}
 							/>
 						)}

@@ -3,6 +3,7 @@
  */
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { displayShortcut } from '@wordpress/keycodes';
 
 /**
  * SVG icon for the secondary sidebar toggle button.
@@ -39,21 +40,18 @@ export default function ToggleButton({
 	isVisible,
 	onToggle,
 }: ToggleButtonProps) {
+	const label =
+		__('Secondary sidebar', 'blockera') +
+		' ' +
+		displayShortcut.primaryShift(',');
+
 	return (
 		<Button
 			icon={<SecondarySidebarIcon />}
 			onClick={onToggle}
 			isPressed={isVisible}
-			label={
-				isVisible
-					? __('Hide secondary sidebar', 'blockera')
-					: __('Show secondary sidebar', 'blockera')
-			}
-			aria-label={
-				isVisible
-					? __('Hide secondary sidebar', 'blockera')
-					: __('Show secondary sidebar', 'blockera')
-			}
+			label={label}
+			aria-label={label}
 			className="blockera-secondary-sidebar-toggle"
 			size="compact"
 		/>

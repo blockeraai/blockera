@@ -44,7 +44,8 @@
 	background: #f6f6f6;
 	display: grid;
 	grid-template-columns: auto auto;
-	box-shadow: inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+	box-shadow:
+		inset 0 1px 0 0 var(--blockera-panel-tabs-tab-border-color),
 		inset 0 -1px 0 0 var(--blockera-panel-tabs-tab-border-color) !important;
 	height: var(--blockera-panel-tabs-height);
 	overflow: hidden;
@@ -56,18 +57,21 @@
 }
 
 /* Inside shadow for the right side while having scrollbar */
-.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+.blockera-tabs-bar:has(
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
+	)
 	+ .blockera-tabs-bar-settings {
-	box-shadow: -1px 0 0 var(--blockera-panel-tabs-tab-border-color),
+	box-shadow:
+		-1px 0 0 var(--blockera-panel-tabs-tab-border-color),
 		0 0 10px #0000001f;
 }
 
 /* Inside shadow for the left side while having scrollbar */
 .blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
 	):not(:has(.blockera-tabs-bar-tabs__pinned-tabs))::before,
 .blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
 			.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
@@ -85,7 +89,7 @@
 }
 
 .blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
 			.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
@@ -94,7 +98,9 @@
 }
 
 /* Hide the actions add button when the scrollbar is hidden */
-.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXHidden"]
+.blockera-tabs-bar:has(
+		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXHidden"]
+	)
 	+ .blockera-tabs-bar-settings
 	> .blockera-tabs-bar-actions {
 	display: none;
@@ -117,6 +123,7 @@
 
 .blockera-tabs-bar-tabs {
 	display: flex;
+	flex: 1;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	gap: 0;
@@ -405,7 +412,7 @@
 	flex-shrink: 0;
 	transition: transform 0.2s ease-out;
 	position: relative; /* Overridden by .is-dragging */
-	background-color: #f0f0f0;
+	background-color: var(--blockera-panel-tabs-tab-bg-color);
 	height: calc(var(--blockera-panel-tabs-height) - 2px);
 	margin-top: 1px;
 	cursor: pointer;
@@ -1022,7 +1029,9 @@ body:not(.blockera-tabs-add-tab-mode)
 	border: 2px dashed var(--blockera-controls-primary-color);
 	margin: 1px 0;
 	flex-shrink: 0;
-	transition: opacity 0.2s ease, border-color 0.2s ease;
+	transition:
+		opacity 0.2s ease,
+		border-color 0.2s ease;
 	border-radius: 2px;
 	box-sizing: border-box;
 	min-width: 100px;

@@ -1,24 +1,37 @@
 /**
- * Action to set the secondary sidebar visibility.
+ * Action to set whether the secondary sidebar is open.
  *
- * @param {boolean} visible Whether the sidebar should be visible.
+ * @param {boolean} open Whether the sidebar should be open.
  * @return {Object} Action object.
  */
-export function setSecondarySidebarVisible(visible: boolean) {
+export function setSecondarySidebarOpen(open: boolean) {
 	return {
-		type: 'SET_SECONDARY_SIDEBAR_VISIBLE',
-		visible,
+		type: 'SET_SECONDARY_SIDEBAR_OPEN',
+		open,
 	};
 }
 
 /**
- * Action to toggle the secondary sidebar visibility.
+ * Action to toggle the secondary sidebar open state.
  *
  * @return {Object} Action object.
  */
 export function toggleSecondarySidebar() {
 	return {
-		type: 'TOGGLE_SECONDARY_SIDEBAR',
+		type: 'TOGGLE_SECONDARY_SIDEBAR_OPEN',
+	};
+}
+
+/**
+ * Action to set whether the primary (settings) sidebar is open (Blockera mirror; session-only).
+ *
+ * @param {boolean} open Whether the primary sidebar should be considered open.
+ * @return {Object} Action object.
+ */
+export function setPrimarySidebarOpen(open: boolean) {
+	return {
+		type: 'SET_PRIMARY_SIDEBAR_OPEN',
+		open,
 	};
 }
 

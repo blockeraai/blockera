@@ -12,6 +12,7 @@ export const subCategoryLabels: Record<string, string> = {
 	tabs: __('Tabs shortcuts', 'blockera'),
 	'preview-mode': __('Preview mode shortcuts', 'blockera'),
 	zoom: __('Zoom shortcuts', 'blockera'),
+	sidebars: __('Sidebar shortcuts', 'blockera'),
 	'list-view': __('List view shortcuts', 'blockera'),
 };
 
@@ -23,6 +24,8 @@ export const subCategoryLabels: Record<string, string> = {
 export const subCategorySortOrder: string[] = [
 	'general',
 	'tabs',
+	'sidebars',
+	'list-view',
 	'zoom',
 	'preview-mode',
 ];

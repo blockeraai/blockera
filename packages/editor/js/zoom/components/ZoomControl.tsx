@@ -12,9 +12,17 @@ import {
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { displayShortcutList } from '@wordpress/keycodes';
-import type { ReactNode, ChangeEvent, KeyboardEvent, MouseEvent } from 'react';
+import type { ReactNode } from 'react';
 import { chevronDown } from '@wordpress/icons';
 
+/**
+ * Blockera dependencies
+ */
+import { ControlContextProvider, InputControl } from '@blockera/controls';
+
+/**
+ * Internal dependencies
+ */
 import { useZoom } from '../hooks/useZoom';
 import { useZoomKeyboard } from '../hooks/useZoomKeyboard';
 import { useIframeObserver } from '../hooks/useIframeObserver';
@@ -187,54 +195,23 @@ export default function ZoomControl({
 		onSetInitialHeight: handleSetInitialHeight,
 	});
 
-	// State for manual zoom input
-	const [manualZoomValue, setManualZoomValue] = useState<string>(
-		String(Math.round(zoomPercent))
-	);
-	const inputRef = useRef<HTMLInputElement>(null);
-
-	// Update manual zoom value when zoomPercent changes externally
-	useEffect(() => {
-		setManualZoomValue(String(Math.round(zoomPercent)));
-	}, [zoomPercent]);
-
 	// Format shortcut for display in MenuItem
 	const formatShortcut = (modifier: string, character: string): string => {
 		const shortcut = displayShortcutList[modifier](character);
 		return Array.isArray(shortcut) ? shortcut.join('') : shortcut;
 	};
 
-	// Handle manual zoom input change
-	const handleManualZoomChange = useCallback(
-		(event: ChangeEvent<HTMLInputElement>): void => {
-			setManualZoomValue(event.target.value);
-		},
-		[]
-	);
-
-	// Handle manual zoom input submit
-	const handleManualZoomSubmit = useCallback(
-		(event?: KeyboardEvent<HTMLInputElement> | MouseEvent): void => {
-			if (event) {
-				event.preventDefault();
-				event.stopPropagation();
-			}
-
-			const value = parseInt(manualZoomValue, 10);
-			if (!isNaN(value) && value >= MIN_ZOOM && value <= MAX_ZOOM) {
-				setZoomPercent(value);
-			} else {
-				// Reset to current zoom if invalid
-				setManualZoomValue(String(Math.round(zoomPercent)));
+	// Parse value from InputControl (e.g. "75%") and apply zoom
+	const handleZoomInputChange = useCallback(
+		(newValue: string | number): void => {
+			const str = String(newValue).replace(/%$/, '');
+			const num = parseInt(str, 10);
+			if (!isNaN(num) && num >= MIN_ZOOM && num <= MAX_ZOOM) {
+				setZoomPercent(num);
 			}
 		},
-		[manualZoomValue, setZoomPercent, zoomPercent]
+		[setZoomPercent]
 	);
-
-	// Handle blur on input - apply zoom if valid
-	const handleManualZoomBlur = useCallback((): void => {
-		handleManualZoomSubmit();
-	}, [handleManualZoomSubmit]);
 
 	return (
 		<Fill name="blockera/slots/editor-header-settings">
@@ -263,48 +240,32 @@ export default function ZoomControl({
 					{({ onClose }) => (
 						<>
 							<MenuGroup>
-								{/* Manual zoom input */}
-								<div style={{ padding: '8px' }}>
-									<label
-										htmlFor="blockera-zoom-manual-input"
-										style={{
-											display: 'block',
-											marginBottom: '4px',
-											fontSize: '12px',
-											color: 'var(--wp-components-color-foreground, #1e1e1e)',
+								{/* Zoom level input: Blockera InputControl with % unit only */}
+								<div style={{ padding: '0 8px 8px 8px' }}>
+									<ControlContextProvider
+										value={{
+											name: 'blockera-zoom-level',
+											value: `${Math.round(zoomPercent)}%`,
 										}}
 									>
-										{__('Zoom level', 'blockera')}
-									</label>
-									<input
-										ref={inputRef}
-										id="blockera-zoom-manual-input"
-										type="number"
-										min={MIN_ZOOM}
-										max={MAX_ZOOM}
-										value={manualZoomValue}
-										onChange={handleManualZoomChange}
-										onKeyDown={(e) => {
-											if (e.key === 'Enter') {
-												handleManualZoomSubmit(e);
-												onClose();
-											} else if (e.key === 'Escape') {
-												setManualZoomValue(
-													String(
-														Math.round(zoomPercent)
-													)
-												);
-												onClose();
-											}
-										}}
-										onBlur={handleManualZoomBlur}
-										style={{
-											width: '100%',
-											padding: '4px 8px',
-											borderRadius: '2px',
-											fontSize: '13px',
-										}}
-									/>
+										<InputControl
+											label={__('Zoom level', 'blockera')}
+											unitType="percent"
+											units={[
+												{
+													value: '%',
+													label: '%',
+													format: 'number',
+												},
+											]}
+											min={MIN_ZOOM}
+											max={MAX_ZOOM}
+											size="small"
+											drag={false}
+											arrows={true}
+											onChange={handleZoomInputChange}
+										/>
+									</ControlContextProvider>
 								</div>
 							</MenuGroup>
 

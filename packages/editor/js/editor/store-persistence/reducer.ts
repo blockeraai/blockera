@@ -1,36 +1,44 @@
 /**
  * Internal dependencies
  */
+import editorPersistenceDefaultsJson from '../../../php/data/editor-persistence-defaults.json';
 import type { PersistenceLayer } from './persistence';
 
 /**
  * Type definition for store state.
  */
 export type StoreState = {
-	secondarySidebarVisible: boolean;
+	secondarySidebarOpen: boolean;
+	/** Session UI only (not persisted): mirrors WP complementary area for primary/settings sidebar. */
+	primarySidebarOpen: boolean;
 	primarySidebarWidth: string;
 	secondarySidebarWidth: string;
 	listViewHeight: string;
 };
 
 /**
- * Get default values from PHP.
- * Defaults are injected by PHP via window.blockeraEditorPersistenceDefaults.
+ * Shared defaults file: packages/editor/php/data/editor-persistence-defaults.json
+ * (loaded at build time here; PHP reads the same file for window.blockeraEditorPersistenceDefaults).
  */
-function getDefaults(): StoreState {
-	const defaults = (window as any).blockeraEditorPersistenceDefaults as
-		| StoreState
+export function getDefaults(): StoreState {
+	const base: StoreState = {
+		...editorPersistenceDefaultsJson,
+		primarySidebarOpen: false,
+	};
+	const fromPhp = (window as any).blockeraEditorPersistenceDefaults as
+		| Partial<StoreState>
 		| undefined;
 
-	// Use PHP defaults if available, otherwise fallback to hardcoded defaults
-	return (
-		defaults || {
-			secondarySidebarVisible: true,
-			primarySidebarWidth: '300px',
-			secondarySidebarWidth: '350px',
-			listViewHeight: '50%',
-		}
-	);
+	if (!fromPhp) {
+		return base;
+	}
+
+	return {
+		...base,
+		...fromPhp,
+		// Never restore from PHP/meta; session mirror only.
+		primarySidebarOpen: false,
+	};
 }
 
 /**
@@ -90,6 +98,7 @@ function getInitialState(): StoreState {
 		return {
 			...defaults,
 			...cleanState,
+			primarySidebarOpen: false,
 		} as StoreState;
 	}
 
@@ -107,8 +116,9 @@ const initialState: StoreState = getInitialState();
  * Type definition for store actions.
  */
 type StoreAction =
-	| { type: 'SET_SECONDARY_SIDEBAR_VISIBLE'; visible?: boolean }
-	| { type: 'TOGGLE_SECONDARY_SIDEBAR' }
+	| { type: 'SET_SECONDARY_SIDEBAR_OPEN'; open?: boolean }
+	| { type: 'TOGGLE_SECONDARY_SIDEBAR_OPEN' }
+	| { type: 'SET_PRIMARY_SIDEBAR_OPEN'; open: boolean }
 	| { type: 'SET_PRIMARY_SIDEBAR_WIDTH'; width: string }
 	| { type: 'SET_SECONDARY_SIDEBAR_WIDTH'; width: string }
 	| { type: 'SET_LIST_VIEW_HEIGHT'; height: string }
@@ -130,16 +140,21 @@ function baseReducer(
 	action: StoreAction
 ): StoreState {
 	switch (action.type) {
-		case 'SET_SECONDARY_SIDEBAR_VISIBLE':
+		case 'SET_SECONDARY_SIDEBAR_OPEN':
 			return {
 				...state,
-				secondarySidebarVisible:
-					action.visible !== undefined ? action.visible : true,
+				secondarySidebarOpen:
+					action.open !== undefined ? action.open : true,
 			};
-		case 'TOGGLE_SECONDARY_SIDEBAR':
+		case 'TOGGLE_SECONDARY_SIDEBAR_OPEN':
 			return {
 				...state,
-				secondarySidebarVisible: !state.secondarySidebarVisible,
+				secondarySidebarOpen: !state.secondarySidebarOpen,
+			};
+		case 'SET_PRIMARY_SIDEBAR_OPEN':
+			return {
+				...state,
+				primarySidebarOpen: action.open,
 			};
 		case 'SET_PRIMARY_SIDEBAR_WIDTH':
 			return {
@@ -212,15 +227,17 @@ function withPersistenceLayer(
 		// Save to persistence layer when state changes (except for persistence layer setup)
 		// Use module-level variable, not closure variable
 		// No need to check initialization flag - persistence is enabled AFTER initial state is set
+		// primarySidebarOpen is session-only and must not be written to user meta.
 		if (
 			currentPersistenceLayer &&
-			(action.type === 'SET_SECONDARY_SIDEBAR_VISIBLE' ||
-				action.type === 'TOGGLE_SECONDARY_SIDEBAR' ||
+			(action.type === 'SET_SECONDARY_SIDEBAR_OPEN' ||
+				action.type === 'TOGGLE_SECONDARY_SIDEBAR_OPEN' ||
 				action.type === 'SET_PRIMARY_SIDEBAR_WIDTH' ||
 				action.type === 'SET_SECONDARY_SIDEBAR_WIDTH' ||
 				action.type === 'SET_LIST_VIEW_HEIGHT')
 		) {
-			currentPersistenceLayer.set(nextState);
+			const { primarySidebarOpen: _omit, ...persistable } = nextState;
+			currentPersistenceLayer.set(persistable as StoreState);
 		}
 
 		return nextState;

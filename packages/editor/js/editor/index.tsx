@@ -17,6 +17,7 @@ import GlobalStylesNavigation from './navigation';
 import GlobalStylesheet from './global-stylesheet';
 import PrimarySidebarController from './primary-sidebar';
 import SecondarySidebarInjector from './secondary-sidebar';
+import FooterToolbarInjector from './footer-toolbar';
 import GlobalStylesActionsForBlocks from './global-styles-actions-for-blocks';
 import AdditionalCssContextmenuObserver from './additional-css-contextmenu-observer';
 import GlobalStyles, {
@@ -91,6 +92,11 @@ const editorPlugins = [
 	{
 		name: 'blockera-combined-sidebar',
 		render: SecondarySidebarInjector,
+		icon: null,
+	},
+	{
+		name: 'blockera-footer-toolbar',
+		render: FooterToolbarInjector,
 		icon: null,
 	},
 	{

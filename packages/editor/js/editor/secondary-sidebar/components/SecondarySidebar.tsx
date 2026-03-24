@@ -25,7 +25,7 @@ export default function SecondarySidebar() {
 	// Get sidebar visibility state from store
 	const isSidebarVisible = useSelect((select) => {
 		const storeSelect = select(blockeraEditorStore) as any;
-		return storeSelect.isSecondarySidebarVisible();
+		return storeSelect.isSecondarySidebarOpen();
 	}, []);
 
 	// Get dispatch function for updating list view height
