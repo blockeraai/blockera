@@ -196,14 +196,6 @@ function FontSizeGroupComponent({
 
 const FontSizeGroup = memo(FontSizeGroupComponent, fontSizeGroupPropsAreEqual);
 
-/**
- * Owns all global font-size subscriptions.
- *
- * Like color presets, `useGlobalSetting` ties into global-styles context, so this
- * tree re-renders when merged settings change. `FontSizeGroup` is memoized with
- * `areFontSizePresetListsEqual` so sibling groups skip work when their sizes
- * list is unchanged. Repeater `controlName` is unique per origin.
- */
 function FontSizesPresetContent() {
 	const [themeFontSizes, setThemeFontSizes] = useGlobalSetting(
 		'typography.fontSizes.theme'

@@ -57,11 +57,6 @@ interface ColorsProps {
 	screenSelector: string;
 }
 
-/**
- * Root component with no data subscriptions - only passes stable callbacks.
- * Each screen calls its own hooks internally to avoid re-rendering all
- * components when any single data source changes.
- */
 function Colors({ screenSelector }: ColorsProps) {
 	return prependPortal(
 		<Navigator initialPath="/">
