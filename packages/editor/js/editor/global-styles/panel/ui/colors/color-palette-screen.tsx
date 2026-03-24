@@ -112,32 +112,38 @@ function ColorGroupComponent({
 		[colors]
 	);
 
-	const defaultPresetValue = {
-		color: '#000000',
-		type: 'color',
-		slug: `custom-${index}`,
-		deletable: origin === 'custom',
-		cloneable: origin === 'custom',
-		visibilitySupport: origin === 'custom',
-		name: sprintf(
-			/* translators: %d: color index */
-			__('Color %d', 'blockera'),
-			index
-		) as string,
-	};
+	const defaultPresetValue = useMemo(
+		() => ({
+			color: '#000000',
+			type: 'color',
+			slug: `custom-${index}`,
+			deletable: origin === 'custom',
+			cloneable: origin === 'custom',
+			visibilitySupport: origin === 'custom',
+			name: sprintf(
+				/* translators: %d: color index */
+				__('Color %d', 'blockera'),
+				index
+			) as string,
+		}),
+		[index, origin]
+	);
 
-	const addVariableModalConfig = {
-		headerTitle: __('Add Color', 'blockera'),
-		description: __(
-			'Name your new color preset. The ID will be generated from the name and used in your styles.',
-			'blockera'
-		),
-		duplicateSlugMessage: __(
-			'This ID is already used by another color preset.',
-			'blockera'
-		),
-		controlNamePrefix: 'add-color',
-	};
+	const addVariableModalConfig = useMemo(
+		() => ({
+			headerTitle: __('Add Color', 'blockera'),
+			description: __(
+				'Name your new color preset. The ID will be generated from the name and used in your styles.',
+				'blockera'
+			),
+			duplicateSlugMessage: __(
+				'This ID is already used by another color preset.',
+				'blockera'
+			),
+			controlNamePrefix: 'add-color',
+		}),
+		[]
+	);
 
 	const controlName = `color-presets-${origin}`;
 
