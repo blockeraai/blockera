@@ -1,17 +1,18 @@
 /**
  * External dependencies
  */
-import { __experimentalVStack as VStack } from '@wordpress/components';
 import type { Gradient } from '@wordpress/global-styles-engine';
+import { __experimentalVStack as VStack } from '@wordpress/components';
+
+/**
+ * Blockera dependencies
+ */
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
-import {
-	areGradientPresetListsEqual,
-	filterLinearGradients,
-	filterRadialGradients,
-} from './utils';
+import { filterLinearGradients, filterRadialGradients } from './utils';
 import {
 	GradientPresetGroup,
 	type GradientPresetVariant,
@@ -70,7 +71,7 @@ export function GradientPresetGroupsContent({
 					setDefaultGradients={setDefaultGradients}
 					setCustomGradients={setCustomGradients}
 					handleResetGradients={
-						areGradientPresetListsEqual(kindTheme, baseKindTheme)
+						isEquals(kindTheme, baseKindTheme)
 							? undefined
 							: () =>
 									setThemeGradients(
@@ -104,10 +105,7 @@ export function GradientPresetGroupsContent({
 					setDefaultGradients={setDefaultGradients}
 					setCustomGradients={setCustomGradients}
 					handleResetGradients={
-						areGradientPresetListsEqual(
-							kindDefault,
-							baseKindDefault
-						)
+						isEquals(kindDefault, baseKindDefault)
 							? undefined
 							: () =>
 									setDefaultGradients(

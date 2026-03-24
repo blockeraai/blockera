@@ -20,7 +20,7 @@ import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 /**
  * Blockera dependencies
  */
-import { pascalCase } from '@blockera/utils';
+import { isEquals, pascalCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -34,7 +34,6 @@ import {
 } from '../components';
 import { FontSize } from './font-size';
 import FontSizesScreen from './font-sizes-screen';
-import { areFontSizePresetListsEqual } from './utils';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
 import { FontSizePresetOpener } from './font-size-preset-opener';
@@ -89,22 +88,6 @@ const fontSizePresetFieldsPropsResolver: PresetFieldsPropsResolver = (
 
 function FontSizePresetGroup(props: FontSizePresetGroupProps) {
 	return <PresetGroup {...props} />;
-}
-
-function fontSizeGroupPropsAreEqual(
-	prev: FontSizeGroupProps,
-	next: FontSizeGroupProps
-): boolean {
-	if (prev.origin !== next.origin) {
-		return false;
-	}
-	if (prev.handleUpdateSizes !== next.handleUpdateSizes) {
-		return false;
-	}
-	if (prev.handleResetFontSizes !== next.handleResetFontSizes) {
-		return false;
-	}
-	return areFontSizePresetListsEqual(prev.sizes, next.sizes);
 }
 
 function FontSizeGroupComponent({
@@ -194,7 +177,7 @@ function FontSizeGroupComponent({
 	);
 }
 
-const FontSizeGroup = memo(FontSizeGroupComponent, fontSizeGroupPropsAreEqual);
+const FontSizeGroup = memo(FontSizeGroupComponent);
 
 function FontSizesPresetContent() {
 	const [themeFontSizes, setThemeFontSizes] = useGlobalSetting(
@@ -278,7 +261,7 @@ function FontSizesPresetContent() {
 			return undefined;
 		}
 		const base = baseThemeFontSizes ?? [];
-		if (areFontSizePresetListsEqual(themeFontSizes, base)) {
+		if (isEquals(themeFontSizes, base)) {
 			return undefined;
 		}
 		return resetThemeToBase;
@@ -289,7 +272,7 @@ function FontSizesPresetContent() {
 			return undefined;
 		}
 		const base = baseDefaultFontSizes ?? [];
-		if (areFontSizePresetListsEqual(defaultFontSizes, base)) {
+		if (isEquals(defaultFontSizes, base)) {
 			return undefined;
 		}
 		return resetDefaultToBase;

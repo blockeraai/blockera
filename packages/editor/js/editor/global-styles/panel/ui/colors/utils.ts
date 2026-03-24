@@ -23,31 +23,6 @@ export function convertRepeaterValueToColors(newValue: object): Color[] {
 	}));
 }
 
-function gradientPresetFingerprint(g: Gradient) {
-	return { slug: g.slug, name: g.name, gradient: g.gradient };
-}
-
-export function areGradientPresetListsEqual(
-	a: Gradient[],
-	b: Gradient[]
-): boolean {
-	return (
-		JSON.stringify(a.map(gradientPresetFingerprint)) ===
-		JSON.stringify(b.map(gradientPresetFingerprint))
-	);
-}
-
-function colorPresetFingerprint(c: Color) {
-	return { slug: c.slug, name: c.name, color: c.color };
-}
-
-export function areColorPresetListsEqual(a: Color[], b: Color[]): boolean {
-	return (
-		JSON.stringify(a.map(colorPresetFingerprint)) ===
-		JSON.stringify(b.map(colorPresetFingerprint))
-	);
-}
-
 export function filterLinearGradients(
 	gradients: Gradient[] | undefined
 ): Gradient[] {

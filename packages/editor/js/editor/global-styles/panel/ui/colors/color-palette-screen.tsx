@@ -13,7 +13,7 @@ import { useState, useCallback, useMemo, memo } from '@wordpress/element';
 /**
  * Blockera dependencies
  */
-import { pascalCase } from '@blockera/utils';
+import { pascalCase, isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -28,10 +28,7 @@ import { ColorPresetFields } from './color-preset-fields';
 import type { VariableType, VariablesType } from '../components/types';
 import ConfirmResetColorsDialog from './confirm-reset-colors-dialog';
 import { useGetColors } from './use-get-colors';
-import {
-	areColorPresetListsEqual,
-	convertRepeaterValueToColors,
-} from './utils';
+import { convertRepeaterValueToColors } from './utils';
 
 interface ColorPaletteScreenProps {
 	onBackHandler: () => void;
@@ -65,22 +62,6 @@ const colorPresetFieldsPropsResolver = (
 	colors: variables,
 	presetId: itemId,
 });
-
-function colorGroupPropsAreEqual(
-	prev: ColorGroupProps,
-	next: ColorGroupProps
-): boolean {
-	if (prev.origin !== next.origin) {
-		return false;
-	}
-	if (prev.handleUpdateColors !== next.handleUpdateColors) {
-		return false;
-	}
-	if (prev.handleResetColors !== next.handleResetColors) {
-		return false;
-	}
-	return areColorPresetListsEqual(prev.colors, next.colors);
-}
 
 function ColorGroupComponent({
 	colors,
@@ -195,19 +176,8 @@ function ColorGroupComponent({
 	);
 }
 
-const ColorGroup = memo(ColorGroupComponent, colorGroupPropsAreEqual);
+const ColorGroup = memo(ColorGroupComponent);
 
-/**
- * Subscribes to global color palette settings.
- *
- * Why you still see re-renders while debugging:
- * - `useGlobalSetting` reads `useGlobalStylesContext()`. Any global-styles edit
- *   produces a new merged `user` config, so this component re-renders.
- * - `ColorGroup` is memoized with a deep equality check on `colors`, so sibling
- *   groups (theme vs custom) can skip React work when their palette data is
- *   unchanged. PresetGroup also uses stable Inserter/Promo callbacks and a memoized
- *   repeater context value to avoid churn inside RepeaterControl.
- */
 function ColorPalettePresetContent() {
 	const {
 		themeColors,
@@ -281,14 +251,14 @@ function ColorPalettePresetContent() {
 	}, [setCustomColors]);
 
 	const themeResetHandler = useMemo(() => {
-		if (!areColorPresetListsEqual(safeThemeColors, baseTheme)) {
+		if (!isEquals(safeThemeColors, baseTheme)) {
 			return resetThemeToBase;
 		}
 		return undefined;
 	}, [safeThemeColors, baseTheme, resetThemeToBase]);
 
 	const defaultResetHandler = useMemo(() => {
-		if (!areColorPresetListsEqual(safeDefaultColors, baseDefault)) {
+		if (!isEquals(safeDefaultColors, baseDefault)) {
 			return resetDefaultToBase;
 		}
 		return undefined;
