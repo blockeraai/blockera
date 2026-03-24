@@ -158,6 +158,7 @@ const TabsBar = memo(function TabsBar({
 	onReorderTabs,
 }: TabsBarProps): React.ReactElement {
 	const tabsContainerRef = useRef<HTMLDivElement>(null);
+	const tabsBarRef = useRef<HTMLDivElement>(null);
 
 	/**
 	 * Indicator position tracking refs:
@@ -185,12 +186,6 @@ const TabsBar = memo(function TabsBar({
 		return [...pinnedTabs, ...unpinnedTabs];
 	}, [pinnedTabs, unpinnedTabs]);
 
-	/** When keys/order change, OverlayScrollbars must remeasure (see useScrollbar deps). */
-	const tabsScrollbarDeps = useMemo(
-		() => sortedTabs.map((t) => t.key).join('\0'),
-		[sortedTabs]
-	);
-
 	// Memoize scrollbar options to prevent recreation on every render
 	const scrollbarOptions = useMemo(
 		() => ({
@@ -207,8 +202,8 @@ const TabsBar = memo(function TabsBar({
 		[]
 	);
 
-	// Apply OverlayScrollbars to the same node that scrolls (scrollLeft / indicator math use this ref).
-	useScrollbar(tabsContainerRef, scrollbarOptions, [tabsScrollbarDeps]);
+	// Apply OverlayScrollbars to tabs container
+	useScrollbar(tabsBarRef, scrollbarOptions);
 
 	// Check if a tab can be dragged (needs 2+ tabs in its group)
 	const canDragTab = useCallback(
@@ -712,7 +707,7 @@ const TabsBar = memo(function TabsBar({
 
 	return (
 		<>
-			<div className="blockera-tabs-bar">
+			<div className="blockera-tabs-bar" ref={tabsBarRef}>
 				<DndContext
 					sensors={sensors}
 					collisionDetection={closestCenter}
