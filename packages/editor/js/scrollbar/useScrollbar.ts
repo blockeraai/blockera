@@ -1,7 +1,16 @@
 /**
  * WordPress dependencies
  */
-import { useEffect, useRef, type RefObject } from '@wordpress/element';
+import {
+	useLayoutEffect,
+	useEffect,
+	useRef,
+	type RefObject,
+} from '@wordpress/element';
+
+// Module-level cache so re-mounts skip the async import entirely
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let cachedOSClass: any = null;
 
 /**
  * OverlayScrollbars instance type.
@@ -74,24 +83,18 @@ export type OverlayScrollbarsOptions = {
 /**
  * Hook to apply OverlayScrollbars to a React element ref.
  *
- * Automatically initializes OverlayScrollbars when the element is mounted
- * and cleans up when unmounted. The instance is returned for programmatic control.
+ * Uses useLayoutEffect with a module-level cache so that on component
+ * re-mounts (e.g. portal container changes) the instance is created
+ * synchronously before the browser paints, eliminating visual flashes.
+ * The first mount uses an async import that resolves after paint.
+ *
+ * Temporarily hides overflow-toggled siblings during measurement to
+ * break CSS feedback loops where sibling width affects overflow detection.
  *
  * @param ref - React ref to the element that should have custom scrollbars
  * @param options - OverlayScrollbars configuration options
  * @param deps - Optional dependency array to trigger scrollbar recalculation when content changes
  * @return The OverlayScrollbars instance, or null if not initialized
- *
- * @example
- * ```tsx
- * const containerRef = useRef<HTMLDivElement>(null);
- * const osInstance = useScrollbar(containerRef, {
- *   scrollbars: {
- *     theme: 'os-theme-dark',
- *     autoHide: 'move'
- *   }
- * }, [tabs.length]); // Recalculate when tabs change
- * ```
  */
 export function useScrollbar<T extends HTMLElement>(
 	ref: RefObject<T>,
@@ -99,81 +102,147 @@ export function useScrollbar<T extends HTMLElement>(
 	deps?: React.DependencyList
 ): OverlayScrollbarsComponent | null {
 	const instanceRef = useRef<OverlayScrollbarsComponent | null>(null);
+	const observersCleanupRef = useRef<(() => void) | null>(null);
+	const updateScrollbarRef = useRef<(() => void) | null>(null);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		const element = ref.current;
 		if (!element) {
 			return;
 		}
 
-		// Dynamically import OverlayScrollbars to avoid SSR issues
-		// and to ensure it's only loaded when needed
-		let OverlayScrollbarsClass:
-			| ((
-					element: HTMLElement,
-					options?: unknown
-			  ) => OverlayScrollbarsComponent)
-			| null = null;
+		let cancelled = false;
+		let lastOverflowX: 'hidden' | 'scroll' | null = null;
 
-		const initialize = async (): Promise<void> => {
-			try {
-				// Import the library dynamically
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const overlayScrollbarsModule =
-					await import('overlayscrollbars');
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
-				OverlayScrollbarsClass =
-					overlayScrollbarsModule.OverlayScrollbars as any;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const setup = (OSClass: any): void => {
+			if (cancelled || ref.current !== element || instanceRef.current) {
+				return;
+			}
 
-				// Initialize if element still exists and not already initialized
-				if (element && OverlayScrollbarsClass && !instanceRef.current) {
-					// Use viewport option to prevent OverlayScrollbars from wrapping the element
-					// This avoids React DOM conflicts since the element structure remains unchanged
-					// eslint-disable-next-line @typescript-eslint/no-explicit-any
-					const instance = OverlayScrollbarsClass(
-						{
-							target: element,
-							elements: {
-								viewport: element,
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const instance = OSClass(
+				{
+					target: element,
+					elements: { viewport: element },
+				} as any,
+				options || {}
+			);
+
+			instanceRef.current = instance;
+			const wrapper = element.closest('.blockera-tabs-wrapper');
+
+			const updateScrollbar = (): void => {
+				try {
+					const tabsContent = element.querySelector(
+						'.blockera-tabs-bar-tabs'
+					) as HTMLElement | null;
+					const hasTabsOverflow = tabsContent
+						? tabsContent.scrollWidth > tabsContent.clientWidth
+						: element.scrollWidth > element.clientWidth;
+					const overflowX: 'hidden' | 'scroll' = hasTabsOverflow
+						? 'scroll'
+						: 'hidden';
+
+					if (overflowX !== lastOverflowX) {
+						instance.options({
+							overflow: {
+								x: overflowX,
+								y: 'hidden',
 							},
-						} as any,
-						options || {}
-					);
+						});
+						lastOverflowX = overflowX;
+					}
+					instance.update(true);
 
-					instanceRef.current = instance;
+					if (wrapper) {
+						wrapper.classList.toggle(
+							'blockera-tabs-has-overflow',
+							hasTabsOverflow
+						);
+					}
 
-					// Force multiple updates after initialization to ensure scrollbar size is correct
-					// React may not have finished rendering children yet, so we update after delays
-					// This is especially important for horizontal scrolling where content width changes
-					const updateScrollbar = (): void => {
-						try {
-							instance.update();
-						} catch {
-							// Ignore update errors
-						}
-					};
+					const maxScroll = element.scrollWidth - element.clientWidth;
+					if (element.scrollLeft > maxScroll) {
+						element.scrollLeft = Math.max(0, maxScroll);
+					}
+				} catch {
+					// Ignore update errors
+				}
+			};
+			updateScrollbarRef.current = updateScrollbar;
 
-					// Update immediately after current frame
+			requestAnimationFrame(() => {
+				updateScrollbar();
+				requestAnimationFrame(() => {
+					updateScrollbar();
+				});
+			});
+
+			const resizeObserver = new ResizeObserver(() => {
+				requestAnimationFrame(() => {
+					updateScrollbar();
+				});
+			});
+
+			const mutationObserver = new MutationObserver(() => {
+				requestAnimationFrame(() => {
+					updateScrollbar();
 					requestAnimationFrame(() => {
 						updateScrollbar();
-						// Update again after a short delay to catch any delayed renders
-						setTimeout(() => {
-							updateScrollbar();
-							// One more update after content has fully settled
-							setTimeout(updateScrollbar, 50);
-						}, 100);
+					});
+				});
+			});
+
+			resizeObserver.observe(element);
+			mutationObserver.observe(element, {
+				childList: true,
+				subtree: true,
+			});
+
+			try {
+				const els = instance.elements();
+				if (els.content) {
+					resizeObserver.observe(els.content);
+					mutationObserver.observe(els.content, {
+						childList: true,
+						subtree: true,
 					});
 				}
 			} catch {
-				// Silently fail - package is optional
-				// All import errors are silently ignored
+				// Ignore if elements() is not available
 			}
+
+			observersCleanupRef.current = () => {
+				resizeObserver.disconnect();
+				mutationObserver.disconnect();
+			};
 		};
 
-		initialize();
+		if (cachedOSClass) {
+			setup(cachedOSClass);
+		} else {
+			const initAsync = async (): Promise<void> => {
+				try {
+					const mod = await import('overlayscrollbars');
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+					cachedOSClass = mod.OverlayScrollbars as any;
+					setup(cachedOSClass);
+				} catch {
+					// Silently fail — package is optional
+				}
+			};
+			void initAsync();
+		}
 
-		// Cleanup function
 		return () => {
+			cancelled = true;
+			observersCleanupRef.current?.();
+			observersCleanupRef.current = null;
+			updateScrollbarRef.current = null;
+			ref.current
+				?.closest('.blockera-tabs-wrapper')
+				?.classList.remove('blockera-tabs-has-overflow');
 			if (instanceRef.current) {
 				try {
 					instanceRef.current.destroy();
@@ -187,11 +256,14 @@ export function useScrollbar<T extends HTMLElement>(
 
 	// Update scrollbar when content changes (deps change)
 	useEffect(() => {
-		if (instanceRef.current && deps) {
-			// Use requestAnimationFrame to ensure DOM has updated
+		if ((instanceRef.current || updateScrollbarRef.current) && deps) {
 			requestAnimationFrame(() => {
 				try {
-					instanceRef.current?.update();
+					if (updateScrollbarRef.current) {
+						updateScrollbarRef.current();
+					} else {
+						instanceRef.current?.update(true);
+					}
 				} catch {
 					// Ignore update errors
 				}
@@ -199,68 +271,6 @@ export function useScrollbar<T extends HTMLElement>(
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, deps);
-
-	// Use ResizeObserver and MutationObserver to automatically update scrollbar when content changes
-	useEffect(() => {
-		const element = ref.current;
-		const instance = instanceRef.current;
-		if (!element || !instance) {
-			return;
-		}
-
-		// Create ResizeObserver to watch for content size changes
-		const resizeObserver = new ResizeObserver(() => {
-			// Debounce updates to avoid excessive recalculations
-			requestAnimationFrame(() => {
-				try {
-					instance.update();
-				} catch {
-					// Ignore update errors
-				}
-			});
-		});
-
-		// Create MutationObserver to watch for DOM changes (tabs added/removed)
-		const mutationObserver = new MutationObserver(() => {
-			// Update scrollbar when content structure changes
-			requestAnimationFrame(() => {
-				try {
-					instance.update();
-				} catch {
-					// Ignore update errors
-				}
-			});
-		});
-
-		// Observe the element for size changes
-		resizeObserver.observe(element);
-
-		// Observe the element for DOM changes (childList changes)
-		mutationObserver.observe(element, {
-			childList: true,
-			subtree: false, // Only watch direct children for performance
-		});
-
-		// Also observe the content element if available (for horizontal scroll, content width changes)
-		try {
-			const elements = instance.elements();
-			if (elements.content) {
-				resizeObserver.observe(elements.content);
-				// Also watch content for DOM changes
-				mutationObserver.observe(elements.content, {
-					childList: true,
-					subtree: false,
-				});
-			}
-		} catch {
-			// Ignore if elements() is not available
-		}
-
-		return () => {
-			resizeObserver.disconnect();
-			mutationObserver.disconnect();
-		};
-	}, [ref]);
 
 	return instanceRef.current;
 }

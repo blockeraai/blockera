@@ -57,20 +57,20 @@
 }
 
 /* Inside shadow for the right side while having scrollbar */
-.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
-	+ .blockera-tabs-bar-settings {
+.blockera-tabs-wrapper.blockera-tabs-has-overflow .blockera-tabs-bar-settings {
 	box-shadow:
 		-1px 0 0 var(--blockera-panel-tabs-tab-border-color),
 		0 0 10px #0000001f;
 }
 
-/* Inside shadow for the left side while having scrollbar */
-.blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
-	):not(:has(.blockera-tabs-bar-tabs__pinned-tabs))::before,
-.blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
-			.blockera-tabs-bar-tabs__pinned-tabs
+/* Inside shadow for the left side while having scrollbar.
+ * Uses JS-driven .blockera-tabs-has-overflow class instead of :has()
+ * for reliable updates when OverlayScrollbars changes attributes via JS. */
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:not(
+		:has(.blockera-tabs-bar-tabs__pinned-tabs)
+	)::before,
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:has(
+		.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
 	box-shadow: 4px 0 10px #0000004f;
@@ -86,18 +86,17 @@
 	pointer-events: none;
 }
 
-.blockera-tabs-wrapper:has(
-		.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
-			.blockera-tabs-bar-tabs__pinned-tabs
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:has(
+		.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
 	left: initial;
 	right: 0;
 }
 
-/* Hide the actions add button when the scrollbar is hidden */
-.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXHidden"]
-	+ .blockera-tabs-bar-settings
+/* Hide the actions add button when there is no tabs overflow */
+.blockera-tabs-wrapper:not(.blockera-tabs-has-overflow)
+	.blockera-tabs-bar-settings
 	> .blockera-tabs-bar-actions {
 	display: none;
 }

@@ -2,3 +2,24 @@
 .os-theme-dark.blockera-tabs {
 	--os-size: 8px;
 }
+
+// OverlayScrollbars viewport overflow override.
+// The library sets data-overlayscrollbars-viewport with overflow directives,
+// but project CSS (e.g. .blockera-tabs-bar { overflow-x: hidden }) has equal
+// specificity and wins the cascade. Using !important here ensures OS controls
+// the overflow when it is active on an element.
+[data-overlayscrollbars-viewport~="overflowXScroll"] {
+	overflow-x: scroll !important;
+}
+
+[data-overlayscrollbars-viewport~="overflowYHidden"] {
+	overflow-y: hidden !important;
+}
+
+[data-overlayscrollbars-viewport~="overflowXHidden"] {
+	overflow-x: hidden !important;
+}
+
+[data-overlayscrollbars-viewport~="overflowYScroll"] {
+	overflow-y: scroll !important;
+}

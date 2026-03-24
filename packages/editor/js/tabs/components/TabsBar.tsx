@@ -202,8 +202,14 @@ const TabsBar = memo(function TabsBar({
 		[]
 	);
 
-	// Apply OverlayScrollbars to tabs container
-	useScrollbar(tabsBarRef, scrollbarOptions);
+	// Apply OverlayScrollbars to tabs container and force recalculation
+	// on tab structure/selection changes for immediate visual sync.
+	useScrollbar(tabsBarRef, scrollbarOptions, [
+		sortedTabs.length,
+		pinnedCount,
+		unpinnedCount,
+		activeTabKey,
+	]);
 
 	// Check if a tab can be dragged (needs 2+ tabs in its group)
 	const canDragTab = useCallback(

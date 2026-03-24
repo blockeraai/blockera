@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import 'overlayscrollbars/styles/overlayscrollbars.css';
+
+/**
  * WordPress dependencies
  */
 import { registerPlugin } from '@wordpress/plugins';
