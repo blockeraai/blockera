@@ -384,6 +384,13 @@
 	max-width: 100%; /* Prevent wrapper from exceeding container */
 }
 
+/* Add extra padding to the last tab button to prevent it from being cut off */
+.blockera-tabs-bar-tabs
+	> div:not(.blockera-tabs-bar-tabs__pinned-tabs)
+	> div[role="button"]:last-child {
+	padding-right: 30px;
+}
+
 /* Ensure dragged wrapper appears above other tabs */
 .blockera-tabs-sortable-wrapper-dragging {
 	z-index: 1 !important;
