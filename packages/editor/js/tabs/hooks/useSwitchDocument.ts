@@ -29,13 +29,19 @@ interface EditorSettings {
  * Hook to get the document switching function
  *
  * Detects when navigation crosses editor boundaries (post editor ↔ site editor)
- * and uses window.location.href for cross-boundary navigation, while using
- * onNavigateToEntityRecord for same-context navigation.
+ * and uses window.location.assign for cross-boundary navigation when required,
+ * while using onNavigateToEntityRecord for in-app navigation where core supports it.
  *
  * IMPORTANT: When switching to a different post type, this hook ensures the post type
  * configuration is resolved first. This prevents the editor from unmounting and remounting,
  * which happens when getDefaultRenderingMode returns undefined (while waiting for post type
  * resolution).
+ *
+ * Site editor: `onNavigateToEntityRecord` navigates to `/{postType}/{postId}`. Core did not
+ * register `/post/:postId` (only `/page/:postId`), which caused a blank canvas; Blockera
+ * registers the missing `post-item` route (see SiteEditorPostItemRouteRegistration and
+ * `../site-editor-post-item-route.md`). While still inside the site editor, do not
+ * `pushState` to post.php — that desyncs the router from the loaded app.
  *
  * @return Function to switch to a document: (postType, postId) => void
  */
@@ -107,8 +113,12 @@ export function useSwitchDocument(): (
 			// because getDefaultRenderingMode won't return undefined while waiting for resolution
 			await ensurePostTypeResolved(postType);
 		}
+
+		const targetContext = getEditorContextForPostType(postType);
+		const currentContext = getCurrentEditorContext();
+
 		// Always prefer onNavigateToEntityRecord if available - it handles navigation
-		// without page reload in both post editor (state-based) and site editor (router-based)
+		// without page reload in same-context navigation.
 		if (onNavigateToEntityRecord) {
 			try {
 				onNavigateToEntityRecord({ postId, postType });
@@ -116,13 +126,15 @@ export function useSwitchDocument(): (
 				// Update browser URL to match the current document
 				// Always update for site editor types
 				// Also update for post types when coming from a different editor context
-				const targetContext = getEditorContextForPostType(postType);
-				const currentContext = getCurrentEditorContext();
 				const isSiteEditorType = targetContext === 'site';
 				const isContextChange =
 					currentContext !== null && currentContext !== targetContext;
 
 				if (isSiteEditorType || isContextChange) {
+					// Keep site editor on `?p=/post|page/...` URLs; pushing post.php breaks the app.
+					if (currentContext === 'site' && targetContext === 'post') {
+						return;
+					}
 					const editorUrl = getEditorUrl(postType, postId);
 					window.history.pushState(null, '', editorUrl);
 				} else {
@@ -189,7 +201,6 @@ export function useSwitchDocument(): (
 
 		// Fallback: Cross-boundary navigation or when onNavigateToEntityRecord is not available
 		// Use window.location.assign() to update URL and add to browser history
-		const editorUrl = getEditorUrl(postType, postId);
-		window.location.assign(editorUrl);
+		window.location.assign(getEditorUrl(postType, postId));
 	};
 }
