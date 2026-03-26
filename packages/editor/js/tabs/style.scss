@@ -391,6 +391,12 @@
 	padding-right: 30px;
 }
 
+/* Higher z-index for pinned tabs to make sure it's over not pinned tabs */
+.blockera-tabs-bar-tabs > div.blockera-tabs-bar-tabs__pinned-tabs {
+	z-index: 10;
+	background-color: #dddddd;
+}
+
 /* Ensure dragged wrapper appears above other tabs */
 .blockera-tabs-sortable-wrapper-dragging {
 	z-index: 1 !important;
