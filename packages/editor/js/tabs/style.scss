@@ -385,7 +385,8 @@
 }
 
 /* Add extra padding to the last tab button to prevent it from being cut off */
-.blockera-tabs-bar-tabs
+.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+	> .blockera-tabs-bar-tabs
 	> div:not(.blockera-tabs-bar-tabs__pinned-tabs)
 	> div[role="button"]:last-child {
 	padding-right: 30px;
