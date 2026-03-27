@@ -41,7 +41,7 @@ import { displayShortcut } from '@wordpress/keycodes';
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
 import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
-import { PromotionPopover } from '@blockera/controls';
+import { UpgradePrompt } from '@blockera/controls';
 import type {
 	Tab as TabType,
 	LockUser,
@@ -942,14 +942,16 @@ const TabsBar = memo(function TabsBar({
 					</Tooltip>
 
 					{limitPromotionContent && (
-						<PromotionPopover
+						<UpgradePrompt
 							heading={limitPromotionContent.heading}
 							featuresList={limitPromotionContent.featuresList}
 							isOpen={!!limitExceededType}
 							onClose={onCloseLimitPromotion}
+							type="modal"
 							placement="bottom-end"
 							offset={12}
 							anchor={addTabButtonAnchorRef.current ?? undefined}
+							disableHintsText={false}
 						/>
 					)}
 				</div>

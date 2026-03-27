@@ -40,7 +40,7 @@ describe('General Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background').click();
 			cy.getByAriaLabel('Add New Background').click();
 
-			cy.get('.blockera-component-promotion-popover').should('not.exist');
+			cy.get('.blockera-component-upgrade-prompt').should('not.exist');
 		});
 	});
 
@@ -71,7 +71,7 @@ describe('General Settings Testing ...', () => {
 			cy.getByAriaLabel('Add New Background').click();
 			cy.getByAriaLabel('Add New Background').click();
 
-			cy.get('.blockera-component-promotion-popover').should('exist');
+			cy.get('.blockera-component-upgrade-prompt').should('exist');
 		});
 	});
 });

@@ -14,7 +14,7 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { PromotionPopover } from '../';
+import { UpgradePrompt } from '../';
 import RepeaterItemHeader from './components/header';
 import RepeaterControl from '../repeater-control';
 import Fields from './components/fields';
@@ -168,7 +168,7 @@ export default function BackgroundControl({
 				}
 
 				return (
-					<PromotionPopover
+					<UpgradePrompt
 						heading={__('Multiple Backgrounds', 'blockera')}
 						featuresList={[
 							__('Multiple backgrounds', 'blockera'),

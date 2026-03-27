@@ -240,7 +240,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
+			cy.get('.blockera-component-upgrade-prompt').should('exist');
 		});
 	});
 
@@ -420,7 +420,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
+			cy.get('.blockera-component-upgrade-prompt').should('exist');
 		});
 	});
 
@@ -573,7 +573,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
+			cy.get('.blockera-component-upgrade-prompt').should('exist');
 		});
 	});
 
@@ -698,7 +698,7 @@ describe('Background Image → Functionality', () => {
 			});
 
 			// promotion popover should not appear.
-			cy.get('.blockera-component-promotion-popover').should('exist');
+			cy.get('.blockera-component-upgrade-prompt').should('exist');
 		});
 	});
 });

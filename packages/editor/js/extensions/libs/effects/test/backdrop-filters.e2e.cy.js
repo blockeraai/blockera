@@ -79,7 +79,7 @@ describe('Backdrop Filters → Functionality', () => {
 		});
 
 		// promotion popover should not appear
-		cy.get('.blockera-component-promotion-popover').should('exist');
+		cy.get('.blockera-component-upgrade-prompt').should('exist');
 
 		// Check frontend
 		savePage();

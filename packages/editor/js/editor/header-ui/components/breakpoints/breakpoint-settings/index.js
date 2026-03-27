@@ -19,7 +19,7 @@ import {
 import {
 	BaseControl,
 	RepeaterControl,
-	PromotionPopover,
+	UpgradePrompt,
 	cleanupRepeaterItem,
 	ControlContextProvider,
 } from '@blockera/controls';
@@ -154,7 +154,7 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 								isOpen = false,
 							}): MixedElement | null => {
 								return (
-									<PromotionPopover
+									<UpgradePrompt
 										heading={__(
 											'Advanced Breakpoints',
 											'blockera'
@@ -179,6 +179,7 @@ const BreakpointsSettings: ComponentType<BreakpointSettingsComponentProps> =
 										]}
 										isOpen={isOpen}
 										onClose={onClose}
+										type="modal"
 									/>
 								);
 							}}
