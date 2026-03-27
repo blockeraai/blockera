@@ -41,7 +41,13 @@ import { displayShortcut } from '@wordpress/keycodes';
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
 import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
-import type { Tab as TabType, LockUser, RecentlyClosedTab } from '../types';
+import { PromotionPopover } from '@blockera/controls';
+import type {
+	Tab as TabType,
+	LockUser,
+	RecentlyClosedTab,
+	TabsLimitExceededType,
+} from '../types';
 
 /**
  * Tabs bar props.
@@ -116,6 +122,10 @@ export interface TabsBarProps {
 	onRemoveClosedTab: (tabKey: string) => void;
 	/** Handler for reordering tabs. Receives new pinned and unpinned arrays. */
 	onReorderTabs: (pinnedTabs: TabType[], unpinnedTabs: TabType[]) => void;
+	/** Which tab limit is currently exceeded. */
+	limitExceededType: TabsLimitExceededType;
+	/** Handler for closing promotion popover. */
+	onCloseLimitPromotion: () => void;
 }
 
 /**
@@ -156,9 +166,12 @@ const TabsBar = memo(function TabsBar({
 	onUpdateClosedTab,
 	onRemoveClosedTab,
 	onReorderTabs,
+	limitExceededType,
+	onCloseLimitPromotion,
 }: TabsBarProps): React.ReactElement {
 	const tabsContainerRef = useRef<HTMLDivElement>(null);
 	const tabsBarRef = useRef<HTMLDivElement>(null);
+	const addTabButtonAnchorRef = useRef<HTMLDivElement>(null);
 
 	/**
 	 * Indicator position tracking refs:
@@ -770,6 +783,32 @@ const TabsBar = memo(function TabsBar({
 		[unpinnedTabs]
 	);
 
+	const limitPromotionContent = useMemo(() => {
+		if (limitExceededType === 'pinned') {
+			return {
+				heading: __('More pinned tabs in Pro', 'blockera'),
+				featuresList: [
+					__('Unlimited pinned tabs', 'blockera'),
+					__('Faster access to key documents', 'blockera'),
+					__('Power-user tab workflows', 'blockera'),
+				],
+			};
+		}
+
+		if (limitExceededType === 'regular') {
+			return {
+				heading: __('More open tabs in Pro', 'blockera'),
+				featuresList: [
+					__('Unlimited regular tabs', 'blockera'),
+					__('Keep larger editing sessions open', 'blockera'),
+					__('Boost multi-document productivity', 'blockera'),
+				],
+			};
+		}
+
+		return null;
+	}, [limitExceededType]);
+
 	return (
 		<>
 			<div className="blockera-tabs-bar" ref={tabsBarRef}>
@@ -891,14 +930,28 @@ const TabsBar = memo(function TabsBar({
 						text={__('Add new tab', 'blockera')}
 						shortcut={displayShortcut.ctrl('t')}
 					>
-						<Button
-							icon={plus}
-							onClick={onAddClick}
-							variant="tertiary"
-							size="compact"
-							aria-label={__('Add new tab', 'blockera')}
-						/>
+						<div ref={addTabButtonAnchorRef}>
+							<Button
+								icon={plus}
+								onClick={onAddClick}
+								variant="tertiary"
+								size="compact"
+								aria-label={__('Add new tab', 'blockera')}
+							/>
+						</div>
 					</Tooltip>
+
+					{limitPromotionContent && (
+						<PromotionPopover
+							heading={limitPromotionContent.heading}
+							featuresList={limitPromotionContent.featuresList}
+							isOpen={!!limitExceededType}
+							onClose={onCloseLimitPromotion}
+							placement="bottom-end"
+							offset={12}
+							anchor={addTabButtonAnchorRef.current ?? undefined}
+						/>
+					)}
 				</div>
 			</div>
 

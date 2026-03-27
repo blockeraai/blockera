@@ -10,17 +10,22 @@ import {
 } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
+import { flushSync } from 'react-dom';
 
 /**
  * Internal dependencies
  */
 import { TABS_STORAGE_KEY } from '../utils/storageKeys';
+import { hasReachedLimit, resolveTabsConfig } from '../utils';
 import type {
 	Tab,
+	AddTabOptions,
 	UseTabsOptions,
 	UseTabsReturn,
 	WorkspaceTabs,
 	TabsStorage,
+	TabsLimitsConfig,
+	TabsLimitExceededType,
 } from '../types';
 
 /**
@@ -34,7 +39,35 @@ export const MAIN_WORKSPACE_ID = 'main';
  *
  * @return WorkspaceTabs object with pinned and unpinned tabs
  */
-function loadTabsFromStorage(): WorkspaceTabs {
+function enforceWorkspaceLimits(
+	workspaceTabs: WorkspaceTabs,
+	limits: TabsLimitsConfig
+): WorkspaceTabs {
+	let pinnedTabs: Tab[];
+	if (hasReachedLimit(0, limits.pinned)) {
+		pinnedTabs = [];
+	} else if (Number.isFinite(limits.pinned)) {
+		pinnedTabs = workspaceTabs['pinned-tabs'].slice(0, limits.pinned);
+	} else {
+		pinnedTabs = workspaceTabs['pinned-tabs'];
+	}
+
+	let regularTabs: Tab[];
+	if (hasReachedLimit(0, limits.regular)) {
+		regularTabs = [];
+	} else if (Number.isFinite(limits.regular)) {
+		regularTabs = workspaceTabs.tabs.slice(0, limits.regular);
+	} else {
+		regularTabs = workspaceTabs.tabs;
+	}
+
+	return {
+		'pinned-tabs': pinnedTabs,
+		tabs: regularTabs,
+	};
+}
+
+function loadTabsFromStorage(limits: TabsLimitsConfig): WorkspaceTabs {
 	try {
 		const stored = localStorage.getItem(TABS_STORAGE_KEY);
 		if (stored) {
@@ -51,16 +84,19 @@ function loadTabsFromStorage(): WorkspaceTabs {
 						MAIN_WORKSPACE_ID
 					] as WorkspaceTabs;
 					// Ensure arrays exist
-					return {
-						'pinned-tabs': Array.isArray(
-							workspaceTabs['pinned-tabs']
-						)
-							? workspaceTabs['pinned-tabs']
-							: [],
-						tabs: Array.isArray(workspaceTabs.tabs)
-							? workspaceTabs.tabs
-							: [],
-					};
+					return enforceWorkspaceLimits(
+						{
+							'pinned-tabs': Array.isArray(
+								workspaceTabs['pinned-tabs']
+							)
+								? workspaceTabs['pinned-tabs']
+								: [],
+							tabs: Array.isArray(workspaceTabs.tabs)
+								? workspaceTabs.tabs
+								: [],
+						},
+						limits
+					);
 				}
 			}
 		}
@@ -128,10 +164,18 @@ export function getWorkspaceTabs(workspaceTabs: WorkspaceTabs): WorkspaceTabs {
 export function useTabs({
 	persistenceEnabled = true,
 }: UseTabsOptions = {}): UseTabsReturn {
+	const tabsConfig = useMemo(() => resolveTabsConfig(), []);
+	const tabsLimits = tabsConfig.limits;
+
 	// Initialize from localStorage on mount - use new structure internally
 	const [workspaceTabs, setWorkspaceTabs] = useState<WorkspaceTabs>(() => {
-		return loadTabsFromStorage();
+		return loadTabsFromStorage(tabsLimits);
 	});
+	const [limitExceededType, setLimitExceededType] =
+		useState<TabsLimitExceededType>(null);
+
+	const workspaceTabsRef = useRef(workspaceTabs);
+	workspaceTabsRef.current = workspaceTabs;
 
 	// Track persistence state in a ref for use in callbacks
 	const persistenceEnabledRef = useRef(persistenceEnabled);
@@ -240,8 +284,9 @@ export function useTabs({
 			postId: string | number,
 			title: string | null = null,
 			slug: string | null = null,
-			status: string | null = null
-		): Promise<void> => {
+			status: string | null = null,
+			options?: AddTabOptions
+		): Promise<boolean> => {
 			const key = `${postType}-${postId}`;
 
 			// Fetch title if not provided - try to get from entity record
@@ -272,33 +317,81 @@ export function useTabs({
 				isPinned: false, // New tabs are unpinned by default
 			};
 
-			// Check if tab already exists using functional update to avoid stale closure
-			setWorkspaceTabs((prev) => {
-				// Check if tab exists in either array
-				if (
-					prev['pinned-tabs'].find((tab) => tab.key === key) ||
-					prev.tabs.find((tab) => tab.key === key)
-				) {
-					return prev; // Tab already exists, return unchanged
-				}
-				// Add to unpinned tabs
-				const updatedTabs = [...prev.tabs, newTab];
-				// Save to localStorage immediately (before React effect runs)
-				// This ensures tabs are saved even if page redirects quickly
-				// Only save if persistence is enabled
-				if (persistenceEnabledRef.current) {
-					saveTabsToStorage({
+			let outcome: 'existed' | 'added' | 'blocked' = 'existed';
+			let evictedUnpinnedTab: Tab | undefined;
+
+			flushSync(() => {
+				setWorkspaceTabs((prev) => {
+					if (
+						prev['pinned-tabs'].find((tab) => tab.key === key) ||
+						prev.tabs.find((tab) => tab.key === key)
+					) {
+						outcome = 'existed';
+						return prev;
+					}
+
+					if (hasReachedLimit(prev.tabs.length, tabsLimits.regular)) {
+						if (
+							options?.evictLastUnpinnedIfAtLimit &&
+							prev.tabs.length > 0
+						) {
+							evictedUnpinnedTab =
+								prev.tabs[prev.tabs.length - 1];
+							const updatedTabs = [
+								...prev.tabs.slice(0, -1),
+								newTab,
+							];
+							outcome = 'added';
+							if (persistenceEnabledRef.current) {
+								saveTabsToStorage({
+									'pinned-tabs': prev['pinned-tabs'],
+									tabs: updatedTabs,
+								});
+							}
+							const next: WorkspaceTabs = {
+								'pinned-tabs': prev['pinned-tabs'],
+								tabs: updatedTabs,
+							};
+							workspaceTabsRef.current = next;
+							return next;
+						}
+						outcome = 'blocked';
+						return prev;
+					}
+
+					outcome = 'added';
+					const updatedTabs = [...prev.tabs, newTab];
+					if (persistenceEnabledRef.current) {
+						saveTabsToStorage({
+							'pinned-tabs': prev['pinned-tabs'],
+							tabs: updatedTabs,
+						});
+					}
+					const next: WorkspaceTabs = {
 						'pinned-tabs': prev['pinned-tabs'],
 						tabs: updatedTabs,
-					});
-				}
-				return {
-					'pinned-tabs': prev['pinned-tabs'],
-					tabs: updatedTabs,
-				};
+					};
+					workspaceTabsRef.current = next;
+					return next;
+				});
 			});
+
+			if (evictedUnpinnedTab && options?.onEvictedUnpinned) {
+				options.onEvictedUnpinned(evictedUnpinnedTab);
+			}
+
+			if (outcome === 'blocked') {
+				setLimitExceededType('regular');
+				return false;
+			}
+
+			if (outcome === 'added') {
+				setLimitExceededType(null);
+			}
+
+			return true;
 		},
-		[getTabTitleFromRecord, getTabSlug, getTabStatus]
+		[getTabTitleFromRecord, getTabSlug, getTabStatus, tabsLimits.regular]
 	);
 
 	/**
@@ -337,23 +430,38 @@ export function useTabs({
 	 * Pin a tab
 	 * Moves the tab from unpinned to pinned array (at the end)
 	 */
-	const pinTab = useCallback((key: string): void => {
-		setWorkspaceTabs((prev) => {
-			// Find tab in unpinned array
-			const tabToPin = prev.tabs.find((tab) => tab.key === key);
-			if (!tabToPin) {
-				return prev; // Tab not found or already pinned
-			}
+	const pinTab = useCallback(
+		(key: string): void => {
+			setWorkspaceTabs((prev) => {
+				// Find tab in unpinned array
+				const tabToPin = prev.tabs.find((tab) => tab.key === key);
+				if (!tabToPin) {
+					return prev; // Tab not found or already pinned
+				}
 
-			return {
-				'pinned-tabs': [
-					...prev['pinned-tabs'],
-					{ ...tabToPin, isPinned: true },
-				],
-				tabs: prev.tabs.filter((tab) => tab.key !== key),
-			};
-		});
-	}, []);
+				if (
+					hasReachedLimit(
+						prev['pinned-tabs'].length,
+						tabsLimits.pinned
+					)
+				) {
+					setLimitExceededType('pinned');
+					return prev;
+				}
+
+				setLimitExceededType(null);
+
+				return {
+					'pinned-tabs': [
+						...prev['pinned-tabs'],
+						{ ...tabToPin, isPinned: true },
+					],
+					tabs: prev.tabs.filter((tab) => tab.key !== key),
+				};
+			});
+		},
+		[tabsLimits.pinned]
+	);
 
 	/**
 	 * Unpin a tab
@@ -381,38 +489,53 @@ export function useTabs({
 	/**
 	 * Toggle pin state of a tab
 	 */
-	const togglePinTab = useCallback((key: string): void => {
-		setWorkspaceTabs((prev) => {
-			// Check if tab is in pinned array
-			const pinnedTab = prev['pinned-tabs'].find(
-				(tab) => tab.key === key
-			);
-			if (pinnedTab) {
-				// Unpin: move from pinned to unpinned (at the beginning)
-				return {
-					'pinned-tabs': prev['pinned-tabs'].filter(
-						(tab) => tab.key !== key
-					),
-					tabs: [{ ...pinnedTab, isPinned: false }, ...prev.tabs],
-				};
-			}
+	const togglePinTab = useCallback(
+		(key: string): void => {
+			setWorkspaceTabs((prev) => {
+				// Check if tab is in pinned array
+				const pinnedTab = prev['pinned-tabs'].find(
+					(tab) => tab.key === key
+				);
+				if (pinnedTab) {
+					// Unpin: move from pinned to unpinned (at the beginning)
+					return {
+						'pinned-tabs': prev['pinned-tabs'].filter(
+							(tab) => tab.key !== key
+						),
+						tabs: [{ ...pinnedTab, isPinned: false }, ...prev.tabs],
+					};
+				}
 
-			// Check if tab is in unpinned array
-			const unpinnedTab = prev.tabs.find((tab) => tab.key === key);
-			if (unpinnedTab) {
-				// Pin: move from unpinned to pinned
-				return {
-					'pinned-tabs': [
-						...prev['pinned-tabs'],
-						{ ...unpinnedTab, isPinned: true },
-					],
-					tabs: prev.tabs.filter((tab) => tab.key !== key),
-				};
-			}
+				// Check if tab is in unpinned array
+				const unpinnedTab = prev.tabs.find((tab) => tab.key === key);
+				if (unpinnedTab) {
+					if (
+						hasReachedLimit(
+							prev['pinned-tabs'].length,
+							tabsLimits.pinned
+						)
+					) {
+						setLimitExceededType('pinned');
+						return prev;
+					}
 
-			return prev; // Tab not found
-		});
-	}, []);
+					setLimitExceededType(null);
+
+					// Pin: move from unpinned to pinned
+					return {
+						'pinned-tabs': [
+							...prev['pinned-tabs'],
+							{ ...unpinnedTab, isPinned: true },
+						],
+						tabs: prev.tabs.filter((tab) => tab.key !== key),
+					};
+				}
+
+				return prev; // Tab not found
+			});
+		},
+		[tabsLimits.pinned]
+	);
 
 	/**
 	 * Set tabs directly (for bulk operations)
@@ -441,13 +564,16 @@ export function useTabs({
 					}
 				}
 
-				return {
-					'pinned-tabs': pinned,
-					tabs: unpinned,
-				};
+				return enforceWorkspaceLimits(
+					{
+						'pinned-tabs': pinned,
+						tabs: unpinned,
+					},
+					tabsLimits
+				);
 			});
 		},
-		[]
+		[tabsLimits]
 	);
 
 	/**
@@ -491,13 +617,22 @@ export function useTabs({
 	 */
 	const reorderTabs = useCallback(
 		(pinnedTabs: Tab[], unpinnedTabs: Tab[]): void => {
-			setWorkspaceTabs({
-				'pinned-tabs': pinnedTabs,
-				tabs: unpinnedTabs,
-			});
+			setWorkspaceTabs(
+				enforceWorkspaceLimits(
+					{
+						'pinned-tabs': pinnedTabs,
+						tabs: unpinnedTabs,
+					},
+					tabsLimits
+				)
+			);
 		},
-		[]
+		[tabsLimits]
 	);
+
+	const clearLimitExceeded = useCallback((): void => {
+		setLimitExceededType(null);
+	}, []);
 
 	return {
 		tabs, // Combined array for backward compatibility
@@ -513,5 +648,7 @@ export function useTabs({
 		setTabs: setTabsDirect,
 		setTabCustomTitle,
 		reorderTabs,
+		limitExceededType,
+		clearLimitExceeded,
 	};
 }

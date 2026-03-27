@@ -84,7 +84,6 @@ export default function TabsManager(): React.ReactElement | null {
 	const {
 		recentlyClosedTabs,
 		addClosedTab,
-		reopenTab,
 		removeClosedTab,
 		updateClosedTab,
 	} = useRecentlyClosedTabs({
@@ -101,6 +100,8 @@ export default function TabsManager(): React.ReactElement | null {
 		setTabs,
 		setTabCustomTitle,
 		reorderTabs,
+		limitExceededType,
+		clearLimitExceeded,
 	} = useTabs({
 		persistenceEnabled: isPersistenceEnabled,
 	});
@@ -425,10 +426,31 @@ export default function TabsManager(): React.ReactElement | null {
 	// Store the previous tab key during manual switches so we can update it in the useEffect
 	const pendingPreviousTabKeyRef = useRef<string | null>(null);
 
+	// Snapshot tab list + active key each render for document-sync (before editor postId and tab state align)
+	const tabsSnapshotForDocumentSyncRef = useRef(tabs);
+	tabsSnapshotForDocumentSyncRef.current = tabs;
+	const activeTabKeySnapshotForDocumentSyncRef = useRef(activeTabKey);
+	activeTabKeySnapshotForDocumentSyncRef.current = activeTabKey;
+
 	// Update active tab and add current document to tabs when document changes
 	useEffect(() => {
 		if (postId && postType) {
 			const key = `${postType}-${postId}`;
+
+			const runLockCheckForCurrentKey = (): void => {
+				void checkSingleLock(postId).then((lockInfo) => {
+					if (lockInfo?.isLocked) {
+						setLockState(key, lockInfo);
+						if (tabs.length > 1) {
+							updatePostLock({ isLocked: false });
+							setLockedTabKey(key);
+							setShowLockedModal(true);
+						}
+					} else {
+						void takeoverLock(postId);
+					}
+				});
+			};
 
 			// If we're in the middle of a manual tab switch, batch both setPreviousTabKey and setActiveTabKey
 			// together to minimize renders. React 18 automatically batches state updates in effects, so we don't
@@ -444,19 +466,10 @@ export default function TabsManager(): React.ReactElement | null {
 				if (activeTabKey !== key) {
 					setActiveTabKey(key);
 				}
-				// Still add to tabs and handle other side effects
-				void addTab(postType, postId);
-				removeClosedTab(key);
-				void checkSingleLock(postId).then((lockInfo) => {
-					if (lockInfo?.isLocked) {
-						setLockState(key, lockInfo);
-						if (tabs.length > 1) {
-							updatePostLock({ isLocked: false });
-							setLockedTabKey(key);
-							setShowLockedModal(true);
-						}
-					} else {
-						void takeoverLock(postId);
+				void addTab(postType, postId).then((ok) => {
+					if (ok) {
+						removeClosedTab(key);
+						runLockCheckForCurrentKey();
 					}
 				});
 				// Reset the flag after a brief delay to allow the switch to complete
@@ -466,30 +479,41 @@ export default function TabsManager(): React.ReactElement | null {
 				return;
 			}
 
-			// Track previous tab before switching (only if not manual switch)
-			if (activeTabKey && activeTabKey !== key) {
-				setPreviousTabKey(activeTabKey);
-			}
-			setActiveTabKey(key);
+			const priorTabs = tabsSnapshotForDocumentSyncRef.current;
+			const priorActiveKey =
+				activeTabKeySnapshotForDocumentSyncRef.current;
+			const revertTab = priorActiveKey
+				? priorTabs.find((t) => t.key === priorActiveKey)
+				: undefined;
+			const tabExists = priorTabs.some((t) => t.key === key);
 
-			// Add to tabs if not already present
-			void addTab(postType, postId);
-
-			// Remove from recently closed if it was there
-			removeClosedTab(key);
-
-			// Check lock state for the newly added/switched tab
-			void checkSingleLock(postId).then((lockInfo) => {
-				if (lockInfo?.isLocked) {
-					setLockState(key, lockInfo);
-
-					if (tabs.length > 1) {
-						updatePostLock({ isLocked: false });
-						setLockedTabKey(key);
-						setShowLockedModal(true);
+			if (tabExists) {
+				if (activeTabKey && activeTabKey !== key) {
+					setPreviousTabKey(activeTabKey);
+				}
+				setActiveTabKey(key);
+				void addTab(postType, postId).then((ok) => {
+					if (ok) {
+						removeClosedTab(key);
+						runLockCheckForCurrentKey();
 					}
-				} else {
-					void takeoverLock(postId);
+				});
+				return;
+			}
+
+			void addTab(postType, postId, null, null, null, {
+				evictLastUnpinnedIfAtLimit: true,
+				onEvictedUnpinned: addClosedTab,
+			}).then((ok) => {
+				if (ok) {
+					if (activeTabKey && activeTabKey !== key) {
+						setPreviousTabKey(activeTabKey);
+					}
+					setActiveTabKey(key);
+					removeClosedTab(key);
+					runLockCheckForCurrentKey();
+				} else if (revertTab) {
+					void switchDocument(revertTab.type, revertTab.id);
 				}
 			});
 		}
@@ -940,30 +964,35 @@ export default function TabsManager(): React.ReactElement | null {
 	// Handler for reopening a recently closed tab
 	const handleReopenTab = useCallback(
 		async (tabKey: string): Promise<void> => {
-			const tab = reopenTab(tabKey);
-			if (tab) {
-				try {
-					// Prefetch entity data before switching for instant tab switch
-					await prefetchEntity(tab.type, tab.id);
-
-					// Add tab (handles duplicate check internally)
-					await addTab(
-						tab.type,
-						tab.id,
-						tab.title,
-						tab.slug,
-						tab.status
-					);
-
-					// Switch to the reopened tab
-					switchDocument(tab.type, tab.id);
-					setActiveTabKey(tab.key);
-				} catch (error) {
-					throw error;
-				}
+			const tab = recentlyClosedTabs.find((t) => t.key === tabKey);
+			if (!tab) {
+				return;
 			}
+			// Prefetch entity data before switching for instant tab switch
+			await prefetchEntity(tab.type, tab.id);
+
+			const added = await addTab(
+				tab.type,
+				tab.id,
+				tab.title,
+				tab.slug,
+				tab.status
+			);
+			if (!added) {
+				return;
+			}
+
+			removeClosedTab(tab.key);
+			switchDocument(tab.type, tab.id);
+			setActiveTabKey(tab.key);
 		},
-		[reopenTab, addTab, switchDocument, prefetchEntity]
+		[
+			recentlyClosedTabs,
+			addTab,
+			switchDocument,
+			prefetchEntity,
+			removeClosedTab,
+		]
 	);
 
 	// Handler for locked modal - Take Over
@@ -1257,6 +1286,8 @@ export default function TabsManager(): React.ReactElement | null {
 								onUpdateClosedTab={updateClosedTab}
 								onRemoveClosedTab={removeClosedTab}
 								onReorderTabs={handleReorderTabs}
+								limitExceededType={limitExceededType}
+								onCloseLimitPromotion={clearLimitExceeded}
 							/>
 
 							<CloseTabConfirmDialog

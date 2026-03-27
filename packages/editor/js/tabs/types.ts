@@ -96,6 +96,22 @@ export interface UseTabsOptions {
 	persistenceEnabled?: boolean;
 }
 
+export type TabsLimitExceededType = 'regular' | 'pinned' | null;
+
+/**
+ * Optional behavior when adding a tab (e.g. URL navigation vs in-app "new tab").
+ */
+export interface AddTabOptions {
+	/**
+	 * When true and the unpinned tab limit is reached, remove the last unpinned tab
+	 * and add the new one (document opened via URL while at free-tier cap).
+	 * Ignored when the limit is unlimited (e.g. Pro).
+	 */
+	evictLastUnpinnedIfAtLimit?: boolean;
+	/** Called with the evicted unpinned tab (e.g. push to recently closed). */
+	onEvictedUnpinned?: (tab: Tab) => void;
+}
+
 /**
  * Return type for useTabs hook.
  */
@@ -106,14 +122,15 @@ export interface UseTabsReturn {
 	pinnedTabs: Tab[];
 	/** Array of unpinned tabs. */
 	unpinnedTabs: Tab[];
-	/** Add a new tab. */
+	/** Add a new tab. Returns false when blocked by free-tier limits (popover is set in hook). */
 	addTab: (
 		postType: string,
 		postId: string | number,
 		title?: string | null,
 		slug?: string | null,
-		status?: string | null
-	) => Promise<void>;
+		status?: string | null,
+		options?: AddTabOptions
+	) => Promise<boolean>;
 	/** Remove a tab by key. */
 	removeTab: (key: string) => void;
 	/** Update tab title. */
@@ -132,6 +149,10 @@ export interface UseTabsReturn {
 	setTabCustomTitle: (key: string, customTitle: string | null) => void;
 	/** Reorder tabs within a group (pinned or unpinned). */
 	reorderTabs: (pinnedTabs: Tab[], unpinnedTabs: Tab[]) => void;
+	/** Which tabs limit was exceeded, if any. */
+	limitExceededType: TabsLimitExceededType;
+	/** Clear current limit exceeded state. */
+	clearLimitExceeded: () => void;
 }
 
 /**
