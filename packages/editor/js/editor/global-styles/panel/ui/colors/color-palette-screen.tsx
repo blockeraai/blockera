@@ -39,7 +39,9 @@ interface ColorGroupProps {
 	origin: string;
 	colors: Color[];
 	handleResetColors?: () => void;
-	handleUpdateColors?: (newValue: Object) => void;
+	setThemeColors?: (colors: Color[]) => void;
+	setDefaultColors?: (colors: Color[]) => void;
+	setCustomColors?: (colors: Color[]) => void;
 }
 
 export type DefaultColorPresetValue = {
@@ -64,12 +66,32 @@ const colorPresetFieldsPropsResolver = (
 function ColorGroupComponent({
 	colors,
 	origin,
-	handleUpdateColors,
+	setThemeColors,
+	setCustomColors,
+	setDefaultColors,
 	handleResetColors,
 }: ColorGroupProps) {
 	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
 
 	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
+
+	const convertAndSetThemeColors = useCallback(
+		(newValue: Object) =>
+			setThemeColors(convertRepeaterValueToColors(newValue)),
+		[setThemeColors]
+	);
+
+	const convertAndSetDefaultColors = useCallback(
+		(newValue: Object) =>
+			setDefaultColors(convertRepeaterValueToColors(newValue)),
+		[setDefaultColors]
+	);
+
+	const convertAndSetCustomColors = useCallback(
+		(newValue: Object) =>
+			setCustomColors(convertRepeaterValueToColors(newValue)),
+		[setCustomColors]
+	);
 
 	const resetDialogText =
 		origin === 'custom'
@@ -127,11 +149,15 @@ function ColorGroupComponent({
 
 	const onChange = useCallback(
 		(newValue: Object) => {
-			if (handleUpdateColors) {
-				handleUpdateColors(newValue);
+			if ('theme' === origin) {
+				convertAndSetThemeColors(newValue);
+			} else if ('default' === origin) {
+				convertAndSetDefaultColors(newValue);
+			} else if ('custom' === origin) {
+				convertAndSetCustomColors(newValue);
 			}
 		},
-		[handleUpdateColors]
+		[setThemeColors, setDefaultColors, setCustomColors]
 	);
 
 	return (
@@ -196,42 +222,6 @@ function ColorPalettePresetContent() {
 		[defaultColors]
 	);
 
-	const convertAndSetThemeColors = useCallback(
-		(newValue: Object) => {
-			const colors = convertRepeaterValueToColors(newValue);
-			setThemeColors(colors);
-		},
-		[setThemeColors]
-	);
-
-	const convertAndSetDefaultColors = useCallback(
-		(newValue: Object) => {
-			const colors = convertRepeaterValueToColors(newValue);
-			setDefaultColors(colors);
-		},
-		[setDefaultColors]
-	);
-
-	const convertAndSetCustomColors = useCallback(
-		(newValue: Object) => {
-			const items = Object.values(newValue as Record<string, any>);
-			const colors: Color[] = items
-				.filter(
-					(v) =>
-						v.type === 'color' ||
-						!v.type ||
-						(v.color && /^#|^rgb|^rgba/.test(String(v.color)))
-				)
-				.map((v) => ({
-					slug: v.slug,
-					name: v.name,
-					color: v.color || '',
-				}));
-			setCustomColors(colors);
-		},
-		[setCustomColors]
-	);
-
 	const resetThemeToBase = useCallback(() => {
 		setThemeColors(baseTheme);
 	}, [setThemeColors, baseTheme]);
@@ -263,15 +253,6 @@ function ColorPalettePresetContent() {
 		[customColors.length, clearCustomColors]
 	);
 
-	const customColorsForRepeater = useMemo(
-		() =>
-			customColors.map((c) => ({
-				...c,
-				type: 'color' as const,
-			})),
-		[customColors]
-	);
-
 	return (
 		<VStack spacing={8} className="global-styles-ui-color-palette-panel">
 			{!!safeThemeColors.length && (
@@ -279,7 +260,7 @@ function ColorPalettePresetContent() {
 					origin="theme"
 					label={__('Theme', 'blockera')}
 					colors={safeThemeColors}
-					handleUpdateColors={convertAndSetThemeColors}
+					setThemeColors={setThemeColors}
 					handleResetColors={themeResetHandler}
 				/>
 			)}
@@ -289,7 +270,7 @@ function ColorPalettePresetContent() {
 					origin="default"
 					label={__('Default', 'blockera')}
 					colors={safeDefaultColors}
-					handleUpdateColors={convertAndSetDefaultColors}
+					setDefaultColors={setDefaultColors}
 					handleResetColors={defaultResetHandler}
 				/>
 			)}
@@ -297,8 +278,8 @@ function ColorPalettePresetContent() {
 			<ColorGroup
 				origin="custom"
 				label={__('Custom', 'blockera')}
-				colors={customColorsForRepeater}
-				handleUpdateColors={convertAndSetCustomColors}
+				colors={customColors}
+				setCustomColors={setCustomColors}
 				handleResetColors={customResetHandler}
 			/>
 		</VStack>
