@@ -10,7 +10,6 @@ import {
 } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
-import { flushSync } from 'react-dom';
 
 /**
  * Internal dependencies
@@ -319,62 +318,46 @@ export function useTabs({
 
 			let outcome: 'existed' | 'added' | 'blocked' = 'existed';
 			let evictedUnpinnedTab: Tab | undefined;
+			const current = workspaceTabsRef.current;
+			let next = current;
 
-			flushSync(() => {
-				setWorkspaceTabs((prev) => {
-					if (
-						prev['pinned-tabs'].find((tab) => tab.key === key) ||
-						prev.tabs.find((tab) => tab.key === key)
-					) {
-						outcome = 'existed';
-						return prev;
-					}
-
-					if (hasReachedLimit(prev.tabs.length, tabsLimits.regular)) {
-						if (
-							options?.evictLastUnpinnedIfAtLimit &&
-							prev.tabs.length > 0
-						) {
-							evictedUnpinnedTab =
-								prev.tabs[prev.tabs.length - 1];
-							const updatedTabs = [
-								...prev.tabs.slice(0, -1),
-								newTab,
-							];
-							outcome = 'added';
-							if (persistenceEnabledRef.current) {
-								saveTabsToStorage({
-									'pinned-tabs': prev['pinned-tabs'],
-									tabs: updatedTabs,
-								});
-							}
-							const next: WorkspaceTabs = {
-								'pinned-tabs': prev['pinned-tabs'],
-								tabs: updatedTabs,
-							};
-							workspaceTabsRef.current = next;
-							return next;
-						}
-						outcome = 'blocked';
-						return prev;
-					}
-
+			if (
+				current['pinned-tabs'].find((tab) => tab.key === key) ||
+				current.tabs.find((tab) => tab.key === key)
+			) {
+				outcome = 'existed';
+			} else if (
+				hasReachedLimit(current.tabs.length, tabsLimits.regular)
+			) {
+				if (
+					options?.evictLastUnpinnedIfAtLimit &&
+					current.tabs.length > 0
+				) {
+					evictedUnpinnedTab = current.tabs[current.tabs.length - 1];
+					const updatedTabs = [...current.tabs.slice(0, -1), newTab];
 					outcome = 'added';
-					const updatedTabs = [...prev.tabs, newTab];
-					if (persistenceEnabledRef.current) {
-						saveTabsToStorage({
-							'pinned-tabs': prev['pinned-tabs'],
-							tabs: updatedTabs,
-						});
-					}
-					const next: WorkspaceTabs = {
-						'pinned-tabs': prev['pinned-tabs'],
+					next = {
+						'pinned-tabs': current['pinned-tabs'],
 						tabs: updatedTabs,
 					};
-					workspaceTabsRef.current = next;
-					return next;
-				});
-			});
+				} else {
+					outcome = 'blocked';
+				}
+			} else {
+				outcome = 'added';
+				next = {
+					'pinned-tabs': current['pinned-tabs'],
+					tabs: [...current.tabs, newTab],
+				};
+			}
+
+			if (next !== current) {
+				workspaceTabsRef.current = next;
+				setWorkspaceTabs(next);
+				if (persistenceEnabledRef.current) {
+					saveTabsToStorage(next);
+				}
+			}
 
 			if (evictedUnpinnedTab && options?.onEvictedUnpinned) {
 				options.onEvictedUnpinned(evictedUnpinnedTab);

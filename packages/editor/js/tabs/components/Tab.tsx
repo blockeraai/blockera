@@ -181,13 +181,20 @@ const Tab = memo(
 		// Use forwarded ref if provided, otherwise use internal ref
 		const elementRef = ref || tabRef;
 
-		// Use unified entity hook for all entity data
-		const entity = useEntity(tab.type, tab.id);
+		// Subscribe to entity stores only when context menu is open.
+		// During regular tab rendering we rely on cached tab values to avoid
+		// high-frequency editor store subscriptions that can stall tab switching.
+		const shouldSubscribeToEntity = contextMenuOpen;
+		const entity = useEntity(
+			shouldSubscribeToEntity ? tab.type : null,
+			shouldSubscribeToEntity ? tab.id : null
+		);
 
 		// Display priority: customTitle -> entity.title -> tab.title
 		const displayTitle = tab.customTitle || entity.title || tab.title;
 		const status = entity.status || tab.status;
-		const { editorUrl, viewUrl } = entity;
+		const editorUrl = shouldSubscribeToEntity ? entity.editorUrl : null;
+		const viewUrl = shouldSubscribeToEntity ? entity.viewUrl : null;
 		// Check if tab has a custom title (is renamed)
 		const isRenamed = Boolean(
 			tab.customTitle && tab.customTitle.trim() !== ''

@@ -221,7 +221,6 @@ const TabsBar = memo(function TabsBar({
 		sortedTabs.length,
 		pinnedCount,
 		unpinnedCount,
-		activeTabKey,
 	]);
 
 	// Check if a tab can be dragged (needs 2+ tabs in its group)
