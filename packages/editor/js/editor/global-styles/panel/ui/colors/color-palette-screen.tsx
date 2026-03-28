@@ -293,7 +293,7 @@ function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 				onBack={onBackHandler}
 				title={__('Color palette', 'blockera')}
 				description={__(
-					'The combination of colors used across the site and in color pickers. Preserves the default WordPress palette.',
+					'Manage and create color variables for use across the site.',
 					'blockera'
 				)}
 			/>
