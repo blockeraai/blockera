@@ -83,7 +83,7 @@ describe('Filters → Functionality', () => {
 		});
 
 		// promotion popover should appear
-		cy.get('.blockera-component-promotion-popover').should('exist');
+		cy.get('.blockera-component-upgrade-prompt').should('exist');
 
 		//Check frontend
 		savePage();

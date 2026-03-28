@@ -3,7 +3,9 @@
 		height: auto;
 
 		.components-modal__header-heading {
-			flex-direction: column;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
 			gap: 10px;
 		}
 

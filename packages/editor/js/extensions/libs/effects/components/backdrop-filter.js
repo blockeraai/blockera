@@ -9,7 +9,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
-	PromotionPopover,
+	UpgradePrompt,
 	BaseControl,
 	FilterControl,
 	ControlContextProvider,
@@ -99,7 +99,7 @@ export const BackdropFilter = ({
 						}
 
 						return (
-							<PromotionPopover
+							<UpgradePrompt
 								heading={__(
 									'Multiple Backdrop Filters',
 									'blockera'

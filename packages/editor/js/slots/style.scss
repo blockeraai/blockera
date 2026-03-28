@@ -1,23 +1,44 @@
 /* General editor design tweaks */
-.blockera-elements-editor-header-toolbar .components-button:not(.is-pressed):not(:focus),
-.editor-header__settings .components-button.editor-zoom-out-toggle:not(.is-pressed):not(:focus),
-.interface-pinned-items .components-button[aria-controls="edit-site:global-styles"]:not(.is-pressed):not(:focus),
-.interface-pinned-items .components-button[aria-controls="edit-post:block"]:not(.is-pressed):not(:focus),
-.interface-pinned-items .components-button[aria-controls="edit-post:document"]:not(.is-pressed):not(:focus),
-.interface-pinned-items .components-button[aria-controls="cbt-plugin-sidebar:create-block-theme-sidebar"]:not(.is-pressed):not(:focus) {
+.blockera-elements-editor-header-toolbar
+	.components-button:not(.is-pressed):not(:focus),
+.editor-header__settings
+	.components-button.editor-zoom-out-toggle:not(.is-pressed):not(:focus),
+.interface-pinned-items
+	.components-button[aria-controls="edit-site:global-styles"]:not(
+		.is-pressed
+	):not(:focus),
+.interface-pinned-items
+	.components-button[aria-controls="edit-post:block"]:not(.is-pressed):not(
+		:focus
+	),
+.interface-pinned-items
+	.components-button[aria-controls="edit-post:document"]:not(.is-pressed):not(
+		:focus
+	),
+.interface-pinned-items
+	.components-button[aria-controls="cbt-plugin-sidebar:create-block-theme-sidebar"]:not(
+		.is-pressed
+	):not(:focus) {
 	border: 1px solid var(--blockera-controls-border-color-soft);
 }
 
 /* Hide View Page button */
 .editor-header__settings > a[aria-label="View Page"],
 .editor-header__settings > a[target="_blank"]:first-child,
+.editor-header__settings:has(
+		.blockera-elements-editor-header-settings
+			+ a[target="_blank"]
+			+ .editor-preview-dropdown
+	)
+	> a[target="_blank"],
 .editor-header__settings > .editor-preview-dropdown {
 	display: none;
 }
 
-
 /* Editor settings dropdown button */
-.editor-header__settings .components-dropdown.components-dropdown-menu:last-child .components-button.components-dropdown-menu__toggle {
+.editor-header__settings
+	.components-dropdown.components-dropdown-menu:last-child
+	.components-button.components-dropdown-menu__toggle {
 	border: 1px solid var(--blockera-controls-border-color-soft);
 }
 
@@ -38,7 +59,8 @@
 	align-items: center;
 }
 
-.blockera-elements-editor-header-settings .components-button:not(:focus):not(:disabled):not(.is-pressed) {
+.blockera-elements-editor-header-settings
+	.components-button:not(:focus):not(:disabled):not(.is-pressed) {
 	border: 1px solid var(--blockera-controls-border-color-soft);
 }
 
@@ -47,7 +69,6 @@
 	color: #ffffff;
 	border-color: var(--blockera-controls-primary-color);
 }
-
 
 /* Order of elements in the blockera editor header settings */
 

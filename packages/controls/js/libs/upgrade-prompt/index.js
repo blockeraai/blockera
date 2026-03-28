@@ -1,4 +1,4 @@
 // @flow
 
 export * from './components/promoter';
-export * from './components/promotion-popover';
+export * from './components/upgrade-prompt';

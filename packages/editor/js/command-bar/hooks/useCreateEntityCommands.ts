@@ -33,7 +33,7 @@ interface CreateEntityTabActions {
 		postType: string,
 		postId: number,
 		title?: string | null
-	) => Promise<void>;
+	) => Promise<boolean>;
 	switchDocument: (postType: string, postId: number) => void;
 	prefetchEntity: (postType: string, postId: number) => Promise<unknown>;
 }
@@ -126,22 +126,24 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPost?.id) {
-								await tabActions.addTab(
-									'post',
-									newPost.id as number,
-									__('New post', 'blockera')
-								);
 								await tabActions.prefetchEntity(
 									'post',
 									newPost.id as number
 								);
-								tabActions.switchDocument(
+								const added = await tabActions.addTab(
 									'post',
-									newPost.id as number
+									newPost.id as number,
+									__('New post', 'blockera')
 								);
+								if (added) {
+									tabActions.switchDocument(
+										'post',
+										newPost.id as number
+									);
 
-								// Focus on the title and move cursor to end
-								await focusPostTitle();
+									// Focus on the title and move cursor to end
+									await focusPostTitle();
+								}
 							}
 
 							close?.();
@@ -185,22 +187,24 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPage?.id) {
-								await tabActions.addTab(
-									'page',
-									newPage.id as number,
-									__('New page', 'blockera')
-								);
 								await tabActions.prefetchEntity(
 									'page',
 									newPage.id as number
 								);
-								tabActions.switchDocument(
+								const added = await tabActions.addTab(
 									'page',
-									newPage.id as number
+									newPage.id as number,
+									__('New page', 'blockera')
 								);
+								if (added) {
+									tabActions.switchDocument(
+										'page',
+										newPage.id as number
+									);
 
-								// Focus on the title and move cursor to end
-								await focusPostTitle();
+									// Focus on the title and move cursor to end
+									await focusPostTitle();
+								}
 							}
 
 							close?.();
@@ -233,7 +237,7 @@ export interface UseCreateEntityCommandsParams {
 		postType: string,
 		postId: number,
 		title?: string | null
-	) => Promise<void>;
+	) => Promise<boolean>;
 	/** Function to switch to a document. */
 	switchDocument: (postType: string, postId: number) => void;
 	/** Function to prefetch entity before switching. */

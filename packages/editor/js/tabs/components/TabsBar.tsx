@@ -41,7 +41,13 @@ import { displayShortcut } from '@wordpress/keycodes';
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
 import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
-import type { Tab as TabType, LockUser, RecentlyClosedTab } from '../types';
+import { UpgradePrompt } from '@blockera/controls';
+import type {
+	Tab as TabType,
+	LockUser,
+	RecentlyClosedTab,
+	TabsLimitExceededType,
+} from '../types';
 
 /**
  * Tabs bar props.
@@ -116,6 +122,10 @@ export interface TabsBarProps {
 	onRemoveClosedTab: (tabKey: string) => void;
 	/** Handler for reordering tabs. Receives new pinned and unpinned arrays. */
 	onReorderTabs: (pinnedTabs: TabType[], unpinnedTabs: TabType[]) => void;
+	/** Which tab limit is currently exceeded. */
+	limitExceededType: TabsLimitExceededType;
+	/** Handler for closing promotion popover. */
+	onCloseLimitPromotion: () => void;
 }
 
 /**
@@ -156,8 +166,12 @@ const TabsBar = memo(function TabsBar({
 	onUpdateClosedTab,
 	onRemoveClosedTab,
 	onReorderTabs,
+	limitExceededType,
+	onCloseLimitPromotion,
 }: TabsBarProps): React.ReactElement {
 	const tabsContainerRef = useRef<HTMLDivElement>(null);
+	const tabsBarRef = useRef<HTMLDivElement>(null);
+	const addTabButtonAnchorRef = useRef<HTMLDivElement>(null);
 
 	/**
 	 * Indicator position tracking refs:
@@ -185,12 +199,6 @@ const TabsBar = memo(function TabsBar({
 		return [...pinnedTabs, ...unpinnedTabs];
 	}, [pinnedTabs, unpinnedTabs]);
 
-	/** When keys/order change, OverlayScrollbars must remeasure (see useScrollbar deps). */
-	const tabsScrollbarDeps = useMemo(
-		() => sortedTabs.map((t) => t.key).join('\0'),
-		[sortedTabs]
-	);
-
 	// Memoize scrollbar options to prevent recreation on every render
 	const scrollbarOptions = useMemo(
 		() => ({
@@ -207,8 +215,14 @@ const TabsBar = memo(function TabsBar({
 		[]
 	);
 
-	// Apply OverlayScrollbars to the same node that scrolls (scrollLeft / indicator math use this ref).
-	useScrollbar(tabsContainerRef, scrollbarOptions, [tabsScrollbarDeps]);
+	// Apply OverlayScrollbars to tabs container and force recalculation
+	// on tab structure/selection changes for immediate visual sync.
+	useScrollbar(tabsBarRef, scrollbarOptions, [
+		sortedTabs.length,
+		pinnedCount,
+		unpinnedCount,
+		activeTabKey,
+	]);
 
 	// Check if a tab can be dragged (needs 2+ tabs in its group)
 	const canDragTab = useCallback(
@@ -256,6 +270,49 @@ const TabsBar = memo(function TabsBar({
 		},
 		[]
 	);
+
+	/**
+	 * Ensure active tab stays visible inside horizontal viewport.
+	 * Works with both native overflow and OverlayScrollbars viewport.
+	 */
+	const ensureActiveTabVisible = useCallback(() => {
+		if (!activeTabKey) {
+			return;
+		}
+
+		const container = tabsContainerRef.current;
+		if (!container) {
+			return;
+		}
+
+		const activeTabElement = container.querySelector(
+			`.blockera-tabs-tab.is-active[data-tab-key="${activeTabKey}"]`
+		) as HTMLElement | null;
+
+		if (!activeTabElement) {
+			return;
+		}
+
+		const tabsBarElement = tabsBarRef.current;
+		const scrollContainer = tabsBarElement || container;
+
+		const viewportRect = scrollContainer.getBoundingClientRect();
+		const activeTabRect = activeTabElement.getBoundingClientRect();
+		const isLeftOverflow = activeTabRect.left < viewportRect.left;
+		const isRightOverflow = activeTabRect.right > viewportRect.right;
+
+		// Scroll only when active tab is outside visible horizontal bounds.
+		if (isLeftOverflow) {
+			scrollContainer.scrollLeft -=
+				viewportRect.left - activeTabRect.left;
+			return;
+		}
+
+		if (isRightOverflow) {
+			scrollContainer.scrollLeft +=
+				activeTabRect.right - viewportRect.right;
+		}
+	}, [activeTabKey]);
 
 	/**
 	 * Animates the indicator from old tab position to new tab position
@@ -699,6 +756,22 @@ const TabsBar = memo(function TabsBar({
 		};
 	}, [activeTabKey, calculateTabPosition]);
 
+	/**
+	 * Keep active tab in view after initial render and active tab/order changes.
+	 * Double RAF allows DOM and custom scrollbar viewport to settle first.
+	 */
+	useEffect(() => {
+		if (!activeTabKey) {
+			return;
+		}
+
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				ensureActiveTabVisible();
+			});
+		});
+	}, [activeTabKey, sortedTabs, ensureActiveTabVisible]);
+
 	// Memoize tab IDs for sortable contexts to prevent unnecessary re-renders
 	// Only recreate when tab keys or order actually changes
 	const pinnedTabIds = useMemo(
@@ -710,9 +783,35 @@ const TabsBar = memo(function TabsBar({
 		[unpinnedTabs]
 	);
 
+	const limitPromotionContent = useMemo(() => {
+		if (limitExceededType === 'pinned') {
+			return {
+				heading: __('More pinned tabs in Pro', 'blockera'),
+				featuresList: [
+					__('Unlimited pinned tabs', 'blockera'),
+					__('Faster access to key documents', 'blockera'),
+					__('Power-user tab workflows', 'blockera'),
+				],
+			};
+		}
+
+		if (limitExceededType === 'regular') {
+			return {
+				heading: __('More open tabs in Pro', 'blockera'),
+				featuresList: [
+					__('Unlimited regular tabs', 'blockera'),
+					__('Keep larger editing sessions open', 'blockera'),
+					__('Boost multi-document productivity', 'blockera'),
+				],
+			};
+		}
+
+		return null;
+	}, [limitExceededType]);
+
 	return (
 		<>
-			<div className="blockera-tabs-bar">
+			<div className="blockera-tabs-bar" ref={tabsBarRef}>
 				<DndContext
 					sensors={sensors}
 					collisionDetection={closestCenter}
@@ -831,14 +930,30 @@ const TabsBar = memo(function TabsBar({
 						text={__('Add new tab', 'blockera')}
 						shortcut={displayShortcut.ctrl('t')}
 					>
-						<Button
-							icon={plus}
-							onClick={onAddClick}
-							variant="tertiary"
-							size="compact"
-							aria-label={__('Add new tab', 'blockera')}
-						/>
+						<div ref={addTabButtonAnchorRef}>
+							<Button
+								icon={plus}
+								onClick={onAddClick}
+								variant="tertiary"
+								size="compact"
+								aria-label={__('Add new tab', 'blockera')}
+							/>
+						</div>
 					</Tooltip>
+
+					{limitPromotionContent && (
+						<UpgradePrompt
+							heading={limitPromotionContent.heading}
+							featuresList={limitPromotionContent.featuresList}
+							isOpen={!!limitExceededType}
+							onClose={onCloseLimitPromotion}
+							type="modal"
+							placement="bottom-end"
+							offset={12}
+							anchor={addTabButtonAnchorRef.current ?? undefined}
+							disableHintsText={false}
+						/>
+					)}
 				</div>
 			</div>
 

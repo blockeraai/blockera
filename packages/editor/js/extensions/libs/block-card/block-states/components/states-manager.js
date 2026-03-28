@@ -13,7 +13,7 @@ import type { Element, ComponentType, MixedElement } from 'react';
 import { controlInnerClassNames } from '@blockera/classnames';
 import {
 	RepeaterControl,
-	PromotionPopover,
+	UpgradePrompt,
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
 } from '@blockera/controls';
@@ -105,7 +105,7 @@ const StatesManager: ComponentType<StatesManagerProps> = ({
 						}
 
 						return (
-							<PromotionPopover
+							<UpgradePrompt
 								heading={__(
 									'Advanced Block States',
 									'blockera'

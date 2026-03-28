@@ -57,22 +57,20 @@
 }
 
 /* Inside shadow for the right side while having scrollbar */
-.blockera-tabs-bar:has(
-		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
-	)
-	+ .blockera-tabs-bar-settings {
+.blockera-tabs-wrapper.blockera-tabs-has-overflow .blockera-tabs-bar-settings {
 	box-shadow:
 		-1px 0 0 var(--blockera-panel-tabs-tab-border-color),
 		0 0 10px #0000001f;
 }
 
-/* Inside shadow for the left side while having scrollbar */
-.blockera-tabs-wrapper:has(
-		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
-	):not(:has(.blockera-tabs-bar-tabs__pinned-tabs))::before,
-.blockera-tabs-wrapper:has(
-		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
-			.blockera-tabs-bar-tabs__pinned-tabs
+/* Inside shadow for the left side while having scrollbar.
+ * Uses JS-driven .blockera-tabs-has-overflow class instead of :has()
+ * for reliable updates when OverlayScrollbars changes attributes via JS. */
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:not(
+		:has(.blockera-tabs-bar-tabs__pinned-tabs)
+	)::before,
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:has(
+		.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
 	box-shadow: 4px 0 10px #0000004f;
@@ -88,20 +86,17 @@
 	pointer-events: none;
 }
 
-.blockera-tabs-wrapper:has(
-		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXScroll"]
-			.blockera-tabs-bar-tabs__pinned-tabs
+.blockera-tabs-wrapper.blockera-tabs-has-overflow:has(
+		.blockera-tabs-bar-tabs__pinned-tabs
 	)
 	.blockera-tabs-bar-tabs__pinned-tabs::before {
 	left: initial;
 	right: 0;
 }
 
-/* Hide the actions add button when the scrollbar is hidden */
-.blockera-tabs-bar:has(
-		.blockera-tabs-bar-tabs[data-overlayscrollbars-viewport~="overflowXHidden"]
-	)
-	+ .blockera-tabs-bar-settings
+/* Hide the actions add button when there is no tabs overflow */
+.blockera-tabs-wrapper:not(.blockera-tabs-has-overflow)
+	.blockera-tabs-bar-settings
 	> .blockera-tabs-bar-actions {
 	display: none;
 }
@@ -123,7 +118,6 @@
 
 .blockera-tabs-bar-tabs {
 	display: flex;
-	flex: 1;
 	flex-direction: row;
 	flex-wrap: nowrap;
 	gap: 0;
@@ -388,6 +382,20 @@
 	width: fit-content; /* Constrain wrapper to tab's natural width */
 	min-width: 0; /* Allow tab to control its own min-width */
 	max-width: 100%; /* Prevent wrapper from exceeding container */
+}
+
+/* Add extra padding to the last tab button to prevent it from being cut off */
+.blockera-tabs-bar[data-overlayscrollbars-viewport~="overflowXScroll"]
+	> .blockera-tabs-bar-tabs
+	> div:not(.blockera-tabs-bar-tabs__pinned-tabs)
+	> div[role="button"]:last-child {
+	padding-right: 30px;
+}
+
+/* Higher z-index for pinned tabs to make sure it's over not pinned tabs */
+.blockera-tabs-bar-tabs > div.blockera-tabs-bar-tabs__pinned-tabs {
+	z-index: 10;
+	background-color: #dddddd;
 }
 
 /* Ensure dragged wrapper appears above other tabs */

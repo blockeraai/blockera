@@ -1,7 +1,25 @@
-/* Tabs: theme `os-theme-dark blockera-tabs` — tune OS variables (see overlayscrollbars.css). */
+
 .os-theme-dark.blockera-tabs {
-	/* Track height; 8px was too thin vs panel tab row. */
-	--os-size: 10px;
-	/* Min thumb width along the track (library default 33px). */
-	--os-handle-min-size: 48px;
+	--os-size: 8px;
+}
+
+// OverlayScrollbars viewport overflow override.
+// The library sets data-overlayscrollbars-viewport with overflow directives,
+// but project CSS (e.g. .blockera-tabs-bar { overflow-x: hidden }) has equal
+// specificity and wins the cascade. Using !important here ensures OS controls
+// the overflow when it is active on an element.
+[data-overlayscrollbars-viewport~="overflowXScroll"] {
+	overflow-x: scroll !important;
+}
+
+[data-overlayscrollbars-viewport~="overflowYHidden"] {
+	overflow-y: hidden !important;
+}
+
+[data-overlayscrollbars-viewport~="overflowXHidden"] {
+	overflow-x: hidden !important;
+}
+
+[data-overlayscrollbars-viewport~="overflowYScroll"] {
+	overflow-y: scroll !important;
 }

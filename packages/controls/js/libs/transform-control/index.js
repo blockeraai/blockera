@@ -17,7 +17,7 @@ import {
 /**
  * Internal dependencies
  */
-import { PromotionPopover } from '../';
+import { UpgradePrompt } from '../';
 import Fields from './components/fields';
 import RepeaterControl from '../repeater-control';
 import RepeaterItemHeader from './components/header';
@@ -108,7 +108,7 @@ export default function TransformControl({
 				}
 
 				return (
-					<PromotionPopover
+					<UpgradePrompt
 						heading={__('Multiple 2D & 3D Transforms', 'blockera')}
 						featuresList={[
 							__('Multiple transforms', 'blockera'),
