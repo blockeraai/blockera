@@ -196,8 +196,8 @@ const Presets = ({
 	canAddNewItem,
 	defaultPresetValue,
 	addVariableModalConfig,
-	repeaterItemHeader: RepeaterItemHeader,
 	presetFieldsPropsResolver,
+	repeaterItemHeader: RepeaterItemHeader,
 	...props
 }: PresetsProps) => {
 	const renderInserter = useCallback(
@@ -269,7 +269,7 @@ const Presets = ({
 				presetFieldsPropsResolver={presetFieldsPropsResolver}
 			/>
 		),
-		[origin, presetFieldsPropsResolver, PresetFields]
+		[origin, PresetFields]
 	);
 
 	return (
