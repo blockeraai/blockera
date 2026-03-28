@@ -77,12 +77,10 @@ type FontSizePresetGroupProps = PresetGroupPropsType & FontSizePresetGroup;
 const fontSizePresetFieldsPropsResolver: PresetFieldsPropsResolver = (
 	item,
 	itemId,
-	origin,
-	variables
+	origin
 ) => ({
-	sizes: variables,
-	fontSize: item,
 	origin,
+	fontSize: item,
 	presetId: itemId,
 });
 

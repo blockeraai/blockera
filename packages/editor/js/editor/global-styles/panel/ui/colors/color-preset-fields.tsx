@@ -33,10 +33,9 @@ import {
 import { type VariableType } from '../components/types';
 
 interface ColorPresetFieldsProps {
-	colors: (VariableType & { color?: string; type?: string })[];
-	colorItem: VariableType & { color?: string; type?: string };
 	origin: string | string[];
 	presetId: string | number;
+	colorItem: VariableType & { color?: string; type?: string };
 }
 
 const COLOR_GRADIENT_TYPES = [
@@ -73,10 +72,9 @@ function getColorType(
 }
 
 function ColorPresetFieldsComponent({
-	colors,
-	colorItem,
 	origin,
 	presetId,
+	colorItem,
 }: ColorPresetFieldsProps) {
 	const { slug } = colorItem;
 	const type =
@@ -88,9 +86,16 @@ function ColorPresetFieldsComponent({
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-	const { onChange, repeaterId, valueCleanup, getControlId } = useContext(
-		RepeaterContext
-	) as {
+	const {
+		onChange,
+		repeaterId,
+		valueCleanup,
+		getControlId,
+		repeaterItems: colors,
+	} = useContext(RepeaterContext) as {
+		repeaterItems:
+			| Record<string, Array<{ color?: string; type?: string }>>
+			| undefined;
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
 		repeaterId: string | null | undefined;
@@ -173,7 +178,7 @@ function ColorPresetFieldsComponent({
 								variable={colorItem}
 								name={colorItem.name}
 								slug={colorItem.slug}
-								allSlugs={getAllColorSlugs(colors as any)}
+								allSlugs={getAllColorSlugs(colors)}
 							/>
 						) : (
 							<>

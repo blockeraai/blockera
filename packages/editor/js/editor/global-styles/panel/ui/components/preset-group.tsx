@@ -3,7 +3,7 @@
  */
 import React, { ElementType } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback, useMemo, useRef } from '@wordpress/element';
+import { useState, useCallback, useMemo, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -11,6 +11,7 @@ import { useState, useCallback, useMemo, useRef } from '@wordpress/element';
 import {
 	BaseControl,
 	RepeaterControl,
+	RepeaterContext,
 	PromotionPopover,
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
@@ -21,7 +22,7 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { AddVariableModal } from '.';
+import { AddVariableModal, getAllVariableSlugs } from '.';
 import type { VariablesType, VariableType } from './types.ts';
 import { Container } from '../../../../../extensions/components';
 
@@ -35,8 +36,7 @@ export type AddVariableModalConfig = {
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
 	itemId: string | number,
-	origin: string | string[],
-	variables: VariablesType
+	origin: string | string[]
 ) => Record<string, any>;
 
 export type PresetGroupPropsType = {
@@ -59,18 +59,6 @@ export type PresetGroupPropsType = {
 	addVariableModalConfig?: AddVariableModalConfig;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
 };
-
-const defaultPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin,
-	variables
-) => ({
-	sizes: variables,
-	fontSize: item,
-	origin,
-	presetId: itemId,
-});
 
 type PresetsProps = {
 	label: string;
@@ -117,15 +105,18 @@ const DEFAULT_ADD_VARIABLE_MODAL_CONFIG: AddVariableModalConfig = {
 const InserterComponent = ({
 	callback,
 	maxItems,
-	variables,
 	insertArgs,
 	PlusButton,
 	defaultPresetValue,
 	addVariableModalConfig = DEFAULT_ADD_VARIABLE_MODAL_CONFIG,
 }: InserterComponentProps) => {
 	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+	const { repeaterItems } = useContext(RepeaterContext) as {
+		repeaterItems: Record<string | number, any>;
+	};
 
-	const existingSlugs = variables.map((s) => s.slug).filter(Boolean);
+	const existingSlugs = getAllVariableSlugs(repeaterItems);
+
 	const config = {
 		...DEFAULT_ADD_VARIABLE_MODAL_CONFIG,
 		...addVariableModalConfig,
@@ -167,6 +158,31 @@ const InserterComponent = ({
 	);
 };
 
+const PresetFieldsComponent = ({
+	item,
+	itemId,
+	origin,
+	PresetFields,
+	presetFieldsPropsResolver,
+}: {
+	item: VariableType;
+	itemId: string | number;
+	origin: string | string[];
+	PresetFields: React.ElementType;
+	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
+}) => {
+	const _props = useMemo(
+		() => presetFieldsPropsResolver?.(item, itemId, origin) || {},
+		[item, itemId, origin, presetFieldsPropsResolver]
+	);
+
+	return (
+		<Container activeColor="#1ca120">
+			<PresetFields {..._props} />
+		</Container>
+	);
+};
+
 const Presets = ({
 	label,
 	title,
@@ -184,53 +200,16 @@ const Presets = ({
 	presetFieldsPropsResolver,
 	...props
 }: PresetsProps) => {
-	// `variables` updates on every field edit; listing it in useCallback deps forces a new
-	// repeaterItemChildren / renderInserter each time and can remount repeater rows (focus loss).
-	// Refs keep callback identities stable while always reading the latest values when invoked.
-	const variablesRef = useRef(variables);
-	variablesRef.current = variables;
-
-	const originRef = useRef(origin);
-	originRef.current = origin;
-
-	const defaultPresetValueRef = useRef(defaultPresetValue);
-	defaultPresetValueRef.current = defaultPresetValue;
-
-	const addVariableModalConfigRef = useRef(addVariableModalConfig);
-	addVariableModalConfigRef.current = addVariableModalConfig;
-
-	const presetFieldsPropsResolverRef = useRef<PresetFieldsPropsResolver>(
-		presetFieldsPropsResolver ?? defaultPresetFieldsPropsResolver
-	);
-	presetFieldsPropsResolverRef.current =
-		presetFieldsPropsResolver ?? defaultPresetFieldsPropsResolver;
-
-	const repeaterItemChildren = useCallback(
-		({ item, itemId }: { item: VariableType; itemId: string | number }) => (
-			<Container activeColor="#1ca120">
-				<PresetFields
-					{...presetFieldsPropsResolverRef.current(
-						item,
-						itemId,
-						originRef.current,
-						variablesRef.current
-					)}
-				/>
-			</Container>
-		),
-		[PresetFields]
-	);
-
 	const renderInserter = useCallback(
 		(_props: InserterComponentProps) => (
 			<InserterComponent
 				{..._props}
-				variables={variablesRef.current}
-				defaultPresetValue={defaultPresetValueRef.current}
-				addVariableModalConfig={addVariableModalConfigRef.current}
+				variables={variables}
+				defaultPresetValue={defaultPresetValue}
+				addVariableModalConfig={addVariableModalConfig}
 			/>
 		),
-		[]
+		[addVariableModalConfig]
 	);
 
 	const renderPromo = useCallback(
@@ -280,6 +259,19 @@ const Presets = ({
 		[title]
 	);
 
+	const FieldsComponent = useCallback(
+		({ item, itemId }: { item: VariableType; itemId: string | number }) => (
+			<PresetFieldsComponent
+				item={item}
+				itemId={itemId}
+				origin={origin}
+				PresetFields={PresetFields}
+				presetFieldsPropsResolver={presetFieldsPropsResolver}
+			/>
+		),
+		[origin, presetFieldsPropsResolver, PresetFields]
+	);
+
 	return (
 		<RepeaterControl
 			label={label}
@@ -296,8 +288,8 @@ const Presets = ({
 			)}
 			shouldConfirmDeleteDialog={true}
 			InserterComponent={renderInserter}
+			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}
-			repeaterItemChildren={repeaterItemChildren}
 			defaultRepeaterItemValue={defaultPresetValue}
 			className={controlClassNames('preset-group', controlName)}
 			{...props}

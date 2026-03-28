@@ -1,12 +1,12 @@
 /**
  * External dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
 import {
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 	__experimentalView as View,
 } from '@wordpress/components';
+import { __, sprintf } from '@wordpress/i18n';
 import type { Color } from '@wordpress/global-styles-engine';
 import { useState, useCallback, useMemo, memo } from '@wordpress/element';
 
@@ -23,12 +23,12 @@ import {
 	ScreenHeader,
 	getNewIndexFromPresets,
 } from '../components';
-import { ColorPresetOpener } from './color-preset-opener';
-import { ColorPresetFields } from './color-preset-fields';
-import type { VariableType, VariablesType } from '../components/types';
-import ConfirmResetColorsDialog from './confirm-reset-colors-dialog';
 import { useGetColors } from './use-get-colors';
 import { convertRepeaterValueToColors } from './utils';
+import { type VariableType } from '../components/types';
+import { ColorPresetOpener } from './color-preset-opener';
+import { ColorPresetFields } from './color-preset-fields';
+import ConfirmResetColorsDialog from './confirm-reset-colors-dialog';
 
 interface ColorPaletteScreenProps {
 	onBackHandler: () => void;
@@ -54,12 +54,10 @@ export type DefaultColorPresetValue = {
 const colorPresetFieldsPropsResolver = (
 	item: VariableType & { color?: string; type?: string },
 	itemId: string | number,
-	origin: string | string[],
-	variables: VariablesType
+	origin: string | string[]
 ) => ({
 	origin,
 	colorItem: item,
-	colors: variables,
 	presetId: itemId,
 });
 
@@ -96,7 +94,6 @@ function ColorGroupComponent({
 	const defaultPresetValue = useMemo(
 		() => ({
 			color: '#000000',
-			type: 'color',
 			slug: `custom-${index}`,
 			deletable: origin === 'custom',
 			cloneable: origin === 'custom',
@@ -158,10 +155,7 @@ function ColorGroupComponent({
 				controlName={controlName}
 				defaultPresetValue={defaultPresetValue}
 				origin={origin}
-				variables={colors.map((c) => ({
-					...c,
-					type: (c as { type?: string }).type || 'color',
-				}))}
+				variables={colors}
 				PresetFields={ColorPresetFields}
 				title={__('Color', 'blockera')}
 				label={sprintf(

@@ -13,8 +13,7 @@ import { pascalCase } from '@blockera/utils';
 /**
  * Internal dependencies
  */
-import { PresetGroup, getNewIndexFromPresets } from '../components';
-import type { VariableType, VariablesType } from '../components/types';
+import type { VariableType } from '../components/types';
 import { GradientPresetOpener } from './gradient-preset-opener';
 import { GradientPresetFields } from './gradient-preset-fields';
 import {
@@ -22,6 +21,7 @@ import {
 	filterLinearGradients,
 	filterRadialGradients,
 } from './utils';
+import { PresetGroup, getNewIndexFromPresets } from '../components';
 import ConfirmResetColorsDialog from './confirm-reset-colors-dialog';
 
 export type GradientPresetVariant = 'linear' | 'radial';
@@ -165,10 +165,8 @@ export function GradientPresetGroup({
 	const presetFieldsPropsResolver = (
 		item: VariableType,
 		itemId: string | number,
-		originArg: string | string[],
-		variables: VariablesType
+		originArg: string | string[]
 	) => ({
-		gradients: variables,
 		gradientItem: item,
 		origin: originArg,
 		presetId: itemId,

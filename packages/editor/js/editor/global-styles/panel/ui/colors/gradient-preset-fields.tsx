@@ -28,19 +28,17 @@ import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllGradientSlugs } from '../components/utils';
 
 interface GradientPresetFieldsProps {
-	gradients: (VariableType & { gradient?: string })[];
-	gradientItem: VariableType & { gradient?: string };
 	origin: string | string[];
 	presetId: string | number;
+	gradientItem: VariableType & { gradient?: string };
 	gradientType: 'linear-gradient' | 'radial-gradient';
 }
 
 function GradientPresetFieldsComponent({
-	gradients,
-	gradientItem,
 	origin,
 	presetId,
 	gradientType,
+	gradientItem,
 }: GradientPresetFieldsProps) {
 	const { slug } = gradientItem;
 
@@ -48,12 +46,16 @@ function GradientPresetFieldsComponent({
 		controlInfo: { name: controlId },
 		dispatch: { changeRepeaterItem },
 	} = useControlContext();
-	const { onChange, repeaterId, valueCleanup } = useContext(
-		RepeaterContext
-	) as {
+	const {
+		onChange,
+		repeaterId,
+		valueCleanup,
+		repeaterItems: gradients,
+	} = useContext(RepeaterContext) as {
 		onChange: (newValue: any) => void;
 		valueCleanup: (value: any) => any;
 		repeaterId: string | null | undefined;
+		repeaterItems: (VariableType & { gradient?: string })[];
 		getControlId?: (itemId: string | number, key: string) => string;
 	};
 
