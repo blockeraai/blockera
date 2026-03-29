@@ -16,6 +16,28 @@ import {
 } from '../utils/editorContext';
 
 /**
+ * Resolve the destination entity in core-data before navigation so the editor is not
+ * briefly out of sync with the REST record when switching tabs.
+ */
+async function ensureTargetEntityRecordLoaded(
+	postType: string,
+	postId: string | number
+): Promise<void> {
+	try {
+		const resolved = resolveSelect(coreStore) as {
+			getEditedEntityRecord: (
+				kind: string,
+				name: string,
+				id: string | number
+			) => Promise<unknown>;
+		};
+		await resolved.getEditedEntityRecord('postType', postType, postId);
+	} catch {
+		// Navigation may still proceed (missing entity, permissions, etc.).
+	}
+}
+
+/**
  * Editor settings with navigation callback.
  */
 interface EditorSettings {
@@ -113,6 +135,8 @@ export function useSwitchDocument(): (
 			// because getDefaultRenderingMode won't return undefined while waiting for resolution
 			await ensurePostTypeResolved(postType);
 		}
+
+		await ensureTargetEntityRecordLoaded(postType, postId);
 
 		const targetContext = getEditorContextForPostType(postType);
 		const currentContext = getCurrentEditorContext();

@@ -3,6 +3,7 @@
  */
 import {
 	useEffect,
+	useLayoutEffect,
 	useState,
 	useCallback,
 	createPortal,
@@ -14,6 +15,7 @@ import fastDeepEqual from 'fast-deep-equal/es6';
 import { store as coreStore } from '@wordpress/core-data';
 import { store as editorStore } from '@wordpress/editor';
 import { store as noticesStore } from '@wordpress/notices';
+import { store as preferencesStore } from '@wordpress/preferences';
 
 /**
  * Internal dependencies
@@ -108,6 +110,19 @@ export default function TabsManager(): React.ReactElement | null {
 	});
 
 	const switchDocument = useSwitchDocument();
+
+	const { set: setPreference } = useDispatch(preferencesStore);
+
+	/*
+	 * Permanently disable core "Choose a pattern" for pages/posts (`StartPageOptions`)
+	 * while Blockera tabs are active — avoids flashes and wrong-document modals when
+	 * switching tabs. Re-enable via Editor → Preferences if needed (Blockera sets this
+	 * again on the next editor load while tabs are shown).
+	 */
+	useLayoutEffect(() => {
+		setPreference('core', 'enableChoosePatternModal', false);
+	}, [setPreference]);
+
 	const [showRenameModal, setShowRenameModal] = useState(false);
 	const [renameTabKey, setRenameTabKey] = useState<string | null>(null);
 	const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
