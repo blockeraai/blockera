@@ -188,6 +188,11 @@
 	padding-left: 5px;
 }
 
+.blockera-tabs-bar .blockera-tabs-bar-actions div[tabindex="0"] {
+	display: flex;
+	justify-content: center;
+}
+
 .blockera-tabs-bar-actions .components-button {
 	color: var(--wp-components-color-foreground, #1e1e1e) !important;
 	background-color: transparent !important;
