@@ -39,7 +39,7 @@
 	padding: 40px;
 	border-top: 1px solid #c3c3c3;
 	background-color: var(--wp-editor-canvas-background);
-	overflow: auto;
+	overflow: hidden auto;
 
 	/* Entrance: fade in background */
 	animation: blockera-overlay-fade-in var(--animation-duration) ease-out both;
