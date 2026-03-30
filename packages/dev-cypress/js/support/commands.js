@@ -1120,6 +1120,27 @@ export const registerCommands = () => {
 	});
 
 	/**
+	 * Stub `window.open` for tab context menu "View" (assert with `@tabsWindowOpen`).
+	 */
+	Cypress.Commands.add('tabsStubWindowOpen', () => {
+		cy.window().then((win) => {
+			cy.stub(win, 'open').as('tabsWindowOpen');
+		});
+	});
+
+	/**
+	 * Stub `navigator.clipboard.writeText` for "Copy view link" / "Copy editor link"
+	 * (assert with `@tabsClipboardWrite`).
+	 */
+	Cypress.Commands.add('tabsStubClipboardWrite', () => {
+		cy.window().then((win) => {
+			cy.stub(win.navigator.clipboard, 'writeText')
+				.resolves()
+				.as('tabsClipboardWrite');
+		});
+	});
+
+	/**
 	 * Asserts whether the unsaved-change dot is present on an unpinned tab (by index).
 	 * @param {number} index Zero-based index in the unpinned strip (left to right).
 	 * @param {boolean} [shouldExist=true] When false, expects the indicator to be absent.
