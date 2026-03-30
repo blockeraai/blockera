@@ -14,6 +14,7 @@ import {
 	openBoxSpacingSide,
 	openBoxPositionSide,
 } from '../helpers';
+import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 
 export const registerCommands = () => {
 	//This registers the cy.compareSnapshot() custom command provided by the plugin
@@ -1020,5 +1021,64 @@ export const registerCommands = () => {
 			.within(() => {
 				cy.get('button').contains(featureLabel).click();
 			});
+	});
+
+	/** Opens the add-tab flow (command palette in “add tab” mode). */
+	Cypress.Commands.add('tabsOpenAddPalette', () => {
+		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.add}"]`)
+			.first()
+			.should('be.visible')
+			.click();
+	});
+
+	/**
+	 * Opens add tab palette and runs “Add new post” (creates a draft post via REST).
+	 */
+	Cypress.Commands.add('tabsAddNewPost', () => {
+		cy.tabsOpenAddPalette();
+		cy.get('.commands-command-menu [cmdk-input]', { timeout: 20000 })
+			.should('be.visible')
+			.type('{selectall}{backspace}Add new post{enter}');
+	});
+
+	const unpinnedTabRoots =
+		'.blockera-tabs-bar-tabs__normal-tabs [test-id^="blockera-workspace-tab--"]';
+
+	/**
+	 * Asserts the number of unpinned workspace tabs.
+	 * @param {number} count Expected tab count.
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 60000 }` while a new tab loads.
+	 */
+	Cypress.Commands.add('tabsExpectUnpinnedCount', (count, options = {}) => {
+		cy.get(unpinnedTabRoots, options).should('have.length', count);
+	});
+
+	/** Activates an unpinned tab by zero-based index (left to right). */
+	Cypress.Commands.add('tabsClickUnpinnedByIndex', (index) => {
+		cy.get(unpinnedTabRoots)
+			.eq(index)
+			.find('.blockera-tabs-tab-button')
+			.first()
+			.should('be.visible')
+			.click();
+	});
+
+	/**
+	 * Closes an unpinned tab by index via its close control.
+	 * (Pinned tabs have no close button in this UI.)
+	 */
+	Cypress.Commands.add('tabsCloseUnpinnedByIndex', (index) => {
+		cy.get(unpinnedTabRoots)
+			.eq(index)
+			.find('[test-id^="blockera-workspace-tabs-close--"]')
+			.should('be.visible')
+			.click();
+	});
+
+	/** The visible title element for the currently active workspace tab. */
+	Cypress.Commands.add('tabsGetActiveTitle', () => {
+		return cy
+			.get('.blockera-tabs-tab.is-active')
+			.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`);
 	});
 };

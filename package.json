@@ -76,6 +76,7 @@
 		"@babel/preset-env": "^7.24.7",
 		"@babel/preset-flow": "^7.21.4",
 		"@babel/preset-react": "^7.22.5",
+		"@babel/preset-typescript": "^7.25.7",
 		"@blockera/dev-cypress": "file:packages/dev-cypress",
 		"@blockera/dev-jest": "file:packages/dev-jest",
 		"@blockera/dev-playwright": "file:packages/dev-playwright",
