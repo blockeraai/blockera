@@ -277,6 +277,51 @@ export default function PreviewOverlay({
 		};
 	}, []);
 
+	// When preview is open but focus is not inside the preview iframe, browser refresh shortcuts
+	// (F5, Cmd/Ctrl+R) would reload the whole editor tab. Intercept and reload the preview iframe only.
+	// When focus is inside the iframe, ownerDocument.activeElement is the iframe element and the iframe's
+	// own keydown handler (see iframeKeydownDispatchRef) already handles reload.
+	useEffect(() => {
+		const handleDocumentRefreshShortcut = (event: KeyboardEvent): void => {
+			const iframe = iframeRef.current;
+			if (!iframe) {
+				return;
+			}
+
+			if (iframe.ownerDocument.activeElement === iframe) {
+				return;
+			}
+
+			const isF5 = event.key === 'F5';
+			const isModifierR =
+				(event.metaKey || event.ctrlKey) &&
+				(event.key === 'r' || event.key === 'R');
+
+			if (!isF5 && !isModifierR) {
+				return;
+			}
+
+			event.preventDefault();
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+			handleReload();
+		};
+
+		document.addEventListener(
+			'keydown',
+			handleDocumentRefreshShortcut,
+			true
+		);
+
+		return () => {
+			document.removeEventListener(
+				'keydown',
+				handleDocumentRefreshShortcut,
+				true
+			);
+		};
+	}, [handleReload]);
+
 	// Simulate loading progress while iframe is loading
 	// Progress goes from 0 to ~90% gradually, then jumps to 100% when iframe loads
 	useEffect(() => {
