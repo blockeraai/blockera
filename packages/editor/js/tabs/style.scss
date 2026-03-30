@@ -1000,17 +1000,15 @@ body.blockera-tabs-add-tab-mode
 }
 
 /**
- * Hide "Create new post/page" commands when NOT in add tab mode
- * These commands are registered with entity-edit context so they show by default
- * We hide them with CSS when not in add-tab mode
- * Using *= (contains) selector since data-value includes the ⌘TAB marker
+ * Hide "Add new post/page" commands when NOT in add tab mode
+ * Stable command `id` (from @wordpress/commands) — avoids English-only data-value matching.
  */
 body:not(.blockera-tabs-add-tab-mode)
 	.commands-command-menu
-	[cmdk-item][data-value*="Create new post"],
+	[cmdk-item][id="blockera-tabs/create-new-post"],
 body:not(.blockera-tabs-add-tab-mode)
 	.commands-command-menu
-	[cmdk-item][data-value*="Create new page"] {
+	[cmdk-item][id="blockera-tabs/create-new-page"] {
 	display: none !important;
 }
 

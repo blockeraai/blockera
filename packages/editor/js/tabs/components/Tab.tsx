@@ -25,6 +25,7 @@ import {
  * Internal dependencies
  */
 import { useEntity } from '../../hooks';
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import { getTabIcon } from '../utils/getTabIcon';
 import TabContextMenu from './TabContextMenu';
 import type { Tab as TabType, LockUser } from '../types';
@@ -181,10 +182,10 @@ const Tab = memo(
 		// Use forwarded ref if provided, otherwise use internal ref
 		const elementRef = ref || tabRef;
 
-		// Subscribe to entity stores only when context menu is open.
-		// During regular tab rendering we rely on cached tab values to avoid
-		// high-frequency editor store subscriptions that can stall tab switching.
-		const shouldSubscribeToEntity = contextMenuOpen;
+		// Subscribe to entity stores when the context menu is open (URLs, status, etc.)
+		// or for the active tab so the tab title stays in sync with edited document title.
+		// Inactive tabs still use cached tab.* to avoid per-tab store subscriptions.
+		const shouldSubscribeToEntity = contextMenuOpen || isActive;
 		const entity = useEntity(
 			shouldSubscribeToEntity ? tab.type : null,
 			shouldSubscribeToEntity ? tab.id : null
@@ -319,6 +320,9 @@ const Tab = memo(
 				<div
 					ref={elementRef as React.RefObject<HTMLDivElement>}
 					data-tab-key={tab.key}
+					{...({
+						'test-id': WORKSPACE_TABS_TEST_ID.tabRoot(tab.key),
+					} as Record<string, string>)}
 					className={`blockera-tabs-tab ${
 						isActive ? 'is-active' : ''
 					} ${isPinned ? 'is-pinned' : ''} ${
@@ -400,7 +404,12 @@ const Tab = memo(
 
 						{/* Hide title when icon-only mode is enabled for pinned tabs */}
 						{!isIconOnly && (
-							<span className="blockera-tabs-tab-title">
+							<span
+								className="blockera-tabs-tab-title"
+								{...({
+									'test-id': WORKSPACE_TABS_TEST_ID.tabTitle,
+								} as Record<string, string>)}
+							>
 								{displayTitle}
 							</span>
 						)}
@@ -429,6 +438,11 @@ const Tab = memo(
 							size="small"
 							variant="tertiary"
 							tabIndex={0}
+							{...({
+								'test-id': WORKSPACE_TABS_TEST_ID.close(
+									tab.key
+								),
+							} as Record<string, string>)}
 						/>
 					)}
 				</div>

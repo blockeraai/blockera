@@ -40,6 +40,7 @@ import { displayShortcut } from '@wordpress/keycodes';
  */
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
 import { UpgradePrompt } from '@blockera/controls';
 import type {
@@ -936,6 +937,9 @@ const TabsBar = memo(function TabsBar({
 								variant="tertiary"
 								size="compact"
 								aria-label={__('Add new tab', 'blockera')}
+								{...({
+									'test-id': WORKSPACE_TABS_TEST_ID.add,
+								} as Record<string, string>)}
 							/>
 						</div>
 					</Tooltip>

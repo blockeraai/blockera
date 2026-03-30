@@ -98,13 +98,16 @@ function getCreateEntityCommandsLoader(
 
 			// Add "New post" command if user has permission
 			if (canCreatePost !== false) {
+				const addNewPostLabel = __('Add new post', 'blockera');
 				result.push({
 					name: 'blockera-tabs/create-new-post',
-					label: __('Add new post', 'blockera'),
-					searchLabel:
-						__('Create new post', 'blockera') +
-						' ' +
-						TAB_COMMAND_MARKER,
+					label: addNewPostLabel,
+					// Must match visible label: cmdk filters on `value` (searchLabel), not label.
+					searchLabel: `${addNewPostLabel} ${TAB_COMMAND_MARKER}`,
+					keywords: [
+						__('Create new post', 'blockera'),
+						__('New post', 'blockera'),
+					],
 					icon: post,
 					callback: async ({ close }) => {
 						if (!isEditorPage()) {
@@ -159,13 +162,15 @@ function getCreateEntityCommandsLoader(
 
 			// Add "New page" command if user has permission
 			if (canCreatePage !== false) {
+				const addNewPageLabel = __('Add new page', 'blockera');
 				result.push({
 					name: 'blockera-tabs/create-new-page',
-					label: __('Add new page', 'blockera'),
-					searchLabel:
-						__('Create new page', 'blockera') +
-						' ' +
-						TAB_COMMAND_MARKER,
+					label: addNewPageLabel,
+					searchLabel: `${addNewPageLabel} ${TAB_COMMAND_MARKER}`,
+					keywords: [
+						__('Create new page', 'blockera'),
+						__('New page', 'blockera'),
+					],
 					icon: page,
 					callback: async ({ close }) => {
 						if (!isEditorPage()) {
