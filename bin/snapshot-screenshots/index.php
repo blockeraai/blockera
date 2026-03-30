@@ -1,10 +1,12 @@
 <?php
 /**
  * Snapshot Screenshots Comparison Tool
- * 
- * Browser-accessible development tool for comparing test snapshot images.
+ *
+ * Browser-accessible development tool for comparing Playwright visual snapshot images.
+ * Images are read from tests/__snapshots__/ (Playwright snapshotPathTemplate).
+ *
  * Access via: http://yoursite.local/wp-content/plugins/blockera/bin/snapshot-screenshots/
- * 
+ *
  * Only works in development mode.
  */
 
@@ -13,7 +15,7 @@ header('Cache-Control: no-cache, no-store, must-revalidate, max-age=0');
 header('Pragma: no-cache');
 header('Expires: 0');
 
- include_once '../../../../../wp-load.php';
+include_once '../../../../../wp-load.php';
 
 // Only allow in development
 if (!defined('WP_DEBUG') || !WP_DEBUG) {
@@ -50,60 +52,89 @@ if (!defined('WP_DEBUG') || !WP_DEBUG) {
     }
 }
 
-// Get plugin directory
+// Get plugin directory (blockera root)
 $plugin_dir = dirname(dirname(__DIR__));
-$fixtures_dir = $plugin_dir . '/tests/fixtures';
 
-// Scan fixtures directory
-$tests = [];
-if (is_dir($fixtures_dir)) {
-    $fixture_folders = array_filter(glob($fixtures_dir . '/*'), 'is_dir');
-    
-    foreach ($fixture_folders as $fixture_folder) {
-        $test_id = basename($fixture_folder);
-        $snapshot_dir = $fixture_folder . '/snapshot';
-        
-        if (!is_dir($snapshot_dir)) {
-            continue;
-        }
-        
-        // Expected image patterns
-        $image_types = [
-            'editor-desktop' => "test-{$test_id}-editor-desktop.png",
-            'editor-mobile' => "test-{$test_id}-editor-mobile.png",
-            'frontend-desktop' => "test-{$test_id}-frontend-desktop.png",
-            'frontend-mobile' => "test-{$test_id}-frontend-mobile.png",
-        ];
-        
-        $test_data = [
-            'id' => $test_id,
-            'images' => [],
-        ];
-        
-        // Check each image file
-        foreach ($image_types as $key => $filename) {
-            $file_path = $snapshot_dir . '/' . $filename;
-            $exists = file_exists($file_path);
-            
-            // Convert to web-accessible URL
-            $relative_path = str_replace($plugin_dir, '', $file_path);
-            $url = content_url('/plugins/blockera' . $relative_path);
-            
-            // Alternative: use site_url if content_url doesn't work
-            if (!function_exists('content_url')) {
-                $url = str_replace(ABSPATH, site_url('/'), $file_path);
+// Playwright stores screenshots under tests/__snapshots__/ (see @wordpress/scripts
+// snapshotPathTemplate: {testDir}/{testFileDir}/__snapshots__/{arg}-{projectName}{ext})
+// Example: test-block-accordion-editor-desktop-chromium.png
+$snapshots_dir = $plugin_dir . '/tests/__snapshots__';
+
+// Single map: UI/script keys => filename tail after fixture id (Playwright project is chromium).
+$chromium_snapshot_variants = [
+    'editor-desktop' => '-editor-desktop-chromium.png',
+    'editor-mobile' => '-editor-mobile-chromium.png',
+    'frontend-desktop' => '-frontend-desktop-chromium.png',
+    'frontend-mobile' => '-frontend-mobile-chromium.png',
+];
+
+$grouped = [];
+if (is_dir($snapshots_dir)) {
+    $png_files = glob($snapshots_dir . '/*.png');
+    if ($png_files !== false) {
+        foreach ($png_files as $file_path) {
+            $basename = basename($file_path);
+            if (strncmp($basename, 'test-', 5) !== 0) {
+                continue;
             }
-            
-            $test_data['images'][$key] = [
-                'exists' => $exists,
-                'path' => $file_path,
-                'url' => $url,
-                'filename' => $filename,
-            ];
+            foreach ($chromium_snapshot_variants as $key => $suffix) {
+                $suffix_len = strlen($suffix);
+                $prefix_len = 5; // strlen('test-')
+                // Need at least one character for fixture id between prefix and suffix.
+                if (strlen($basename) <= $prefix_len + $suffix_len) {
+                    continue;
+                }
+                if (substr($basename, -$suffix_len) !== $suffix) {
+                    continue;
+                }
+                // Middle segment is the fixture folder name (e.g. block-accordion, complex-1).
+                $test_id = substr($basename, $prefix_len, -$suffix_len);
+                if ($test_id === '' || $test_id === false) {
+                    break;
+                }
+                if (!isset($grouped[$test_id])) {
+                    $grouped[$test_id] = [];
+                }
+                $grouped[$test_id][$key] = $file_path;
+                break;
+            }
         }
-        
-        $tests[] = $test_data;
     }
+}
+
+$tests = [];
+foreach ($grouped as $test_id => $paths_by_key) {
+    $test_data = [
+        'id' => $test_id,
+        'images' => [],
+    ];
+    foreach ($chromium_snapshot_variants as $key => $suffix) {
+        $filename = 'test-' . $test_id . $suffix;
+        if (isset($paths_by_key[$key])) {
+            $file_path = $paths_by_key[$key];
+            $exists = true;
+            $filename = basename($file_path);
+        } else {
+            $file_path = $snapshots_dir . '/' . $filename;
+            $exists = false;
+        }
+
+        $relative_path = str_replace($plugin_dir, '', $file_path);
+        $url = content_url('/plugins/blockera' . $relative_path);
+
+        if (!function_exists('content_url')) {
+            $url = str_replace(ABSPATH, site_url('/'), $file_path);
+        }
+
+        $test_data['images'][$key] = [
+            'exists' => $exists,
+            'path' => $file_path,
+            'url' => $url,
+            'filename' => $filename,
+        ];
+    }
+
+    $tests[] = $test_data;
 }
 
 // Sort tests by ID
