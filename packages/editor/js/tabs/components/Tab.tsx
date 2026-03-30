@@ -182,20 +182,16 @@ const Tab = memo(
 		// Use forwarded ref if provided, otherwise use internal ref
 		const elementRef = ref || tabRef;
 
-		// Subscribe to entity stores when the context menu is open (URLs, status, etc.)
-		// or for the active tab so the tab title stays in sync with edited document title.
-		// Inactive tabs still use cached tab.* to avoid per-tab store subscriptions.
-		const shouldSubscribeToEntity = contextMenuOpen || isActive;
-		const entity = useEntity(
-			shouldSubscribeToEntity ? tab.type : null,
-			shouldSubscribeToEntity ? tab.id : null
-		);
+		// Always subscribe to core-data/editor state for this tab's entity so the label
+		// matches saved + unsaved titles (getEditedEntityRecord) even when the tab is
+		// inactive. Skipping subscription left inactive tabs stuck on stale tab.title.
+		const entity = useEntity(tab.type, tab.id);
 
 		// Display priority: customTitle -> entity.title -> tab.title
 		const displayTitle = tab.customTitle || entity.title || tab.title;
 		const status = entity.status || tab.status;
-		const editorUrl = shouldSubscribeToEntity ? entity.editorUrl : null;
-		const viewUrl = shouldSubscribeToEntity ? entity.viewUrl : null;
+		const editorUrl = entity.editorUrl;
+		const viewUrl = entity.viewUrl;
 		// Check if tab has a custom title (is renamed)
 		const isRenamed = Boolean(
 			tab.customTitle && tab.customTitle.trim() !== ''
