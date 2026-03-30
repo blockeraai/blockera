@@ -84,4 +84,89 @@ describe('Blockera workspace tabs', () => {
 			cy.tabsExpectUnpinnedCount(1);
 		});
 	});
+
+	describe('tab rename', () => {
+		const unpinnedTabRoots =
+			'.blockera-tabs-bar-tabs__normal-tabs [test-id^="blockera-workspace-tab--"]';
+
+		/**
+		 * Fill Rename Tab modal and save.
+		 *
+		 * @param {string} customTitle
+		 */
+		const saveRenameModal = (customTitle) => {
+			cy.get('.blockera-tabs-rename-modal').should('be.visible');
+			cy.get('.blockera-tabs-rename-modal')
+				.find('.components-text-control__input')
+				.clear()
+				.type(customTitle, { delay: 0 });
+			cy.get('.blockera-tabs-rename-modal')
+				.contains('button', 'Save')
+				.click();
+		};
+
+		/**
+		 * Custom title must stay visible on an inactive tab; rename can be cleared from
+		 * the context menu; double-click opens the same modal as “Rename tab”.
+		 *
+		 * @see packages/editor/js/tabs/components/Tab.tsx — double-click → onRename
+		 */
+		it('should show custom title on inactive tab, clear rename, and support double-click rename', () => {
+			const titleA = `TabA-${Date.now()}`;
+			const titleB = `TabB-${Date.now()}`;
+			const customTabLabel = `Custom-${Date.now()}`;
+			const dblClickLabel = `Dbl-${Date.now()}`;
+
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+
+			setPostTitleInCanvas(titleA);
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(2, { timeout: 60000 });
+
+			setPostTitleInCanvas(titleB);
+			cy.tabsGetActiveTitle().should('contain.text', titleB);
+
+			// Rename first tab via context menu while the second tab is active.
+			cy.get(unpinnedTabRoots).eq(0).rightclick();
+			cy.contains('[role="menuitem"]', 'Rename tab').click();
+			saveRenameModal(customTabLabel);
+
+			cy.tabsClickUnpinnedByIndex(1);
+			cy.tabsGetActiveTitle().should('contain.text', titleB);
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', customTabLabel);
+
+			// Clear rename from context menu; label falls back to post title.
+			cy.tabsClickUnpinnedByIndex(0);
+			cy.get(unpinnedTabRoots).eq(0).rightclick();
+			cy.contains('[role="menuitem"]', 'Clear tab rename').click();
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', titleA);
+
+			cy.get(unpinnedTabRoots).eq(0).dblclick();
+			saveRenameModal(dblClickLabel);
+
+			cy.tabsClickUnpinnedByIndex(1);
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', dblClickLabel);
+
+			cy.tabsClickUnpinnedByIndex(0);
+			cy.get(unpinnedTabRoots).eq(0).dblclick();
+			cy.get('.blockera-tabs-rename-modal')
+				.contains('button', 'Remove rename')
+				.click();
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', titleA);
+		});
+	});
 });
