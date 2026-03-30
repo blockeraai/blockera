@@ -6,7 +6,7 @@ import { __ } from '@wordpress/i18n';
 import { useMemo } from '@wordpress/element';
 import { Fragment, type MixedElement } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Slot, SlotFillProvider } from '@wordpress/components';
+import { Button, Slot, SlotFillProvider } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -16,6 +16,7 @@ import {
 	type TTabProps,
 	SearchControl,
 	ControlContextProvider,
+	NoticeControl,
 } from '@blockera/controls';
 import { ExtensionSlotFill } from '@blockera/features-core';
 
@@ -44,7 +45,23 @@ import { useBlockSection } from '../../components';
 import { useParentFlexBlockInfo } from './utils';
 import { generateExtensionId } from '../utils';
 import { useFeatureSearch } from '../../components/feature-search-context';
-import { filterSettingsBySearch } from '../base/utils/search-features';
+import {
+	configHasFeatureEntries,
+	filterSettingsBySearch,
+} from '../base/utils/search-features';
+
+/** Settings keys for the Style tab (MappedExtensions case 'style'). */
+const STYLE_TAB_CONFIG_KEYS: Array<string> = [
+	'statesConfig',
+	'layoutConfig',
+	'typographyConfig',
+	'backgroundConfig',
+	'borderAndShadowConfig',
+	'sizeConfig',
+	'positionConfig',
+	'effectsConfig',
+	'customStyleConfig',
+];
 
 export const MappedExtensions = ({
 	tab,
@@ -131,6 +148,27 @@ export const MappedExtensions = ({
 		currentInnerBlockState,
 		currentBreakpoint: currentBreakpoint || block.currentBreakpoint || '',
 	});
+
+	// Must stay in sync with extension configs rendered under case 'style' (plus flex child when shown).
+	const styleTabHasSearchMatches = useMemo(() => {
+		const q = searchQuery?.trim();
+		if (!q || tab.name !== 'style') {
+			return true;
+		}
+		const keysLen = STYLE_TAB_CONFIG_KEYS.length;
+		for (let i = 0; i < keysLen; i++) {
+			if (configHasFeatureEntries(settings[STYLE_TAB_CONFIG_KEYS[i]])) {
+				return true;
+			}
+		}
+		if (
+			isParentFlexBlock &&
+			configHasFeatureEntries(settings.flexChildConfig)
+		) {
+			return true;
+		}
+		return false;
+	}, [searchQuery, tab.name, settings, isParentFlexBlock]);
 
 	switch (tab.name) {
 		case 'settings':
@@ -309,6 +347,47 @@ export const MappedExtensions = ({
 								onChange={setSearchQuery}
 								placeholder={__('Search Features…', 'blockera')}
 							/>
+							{searchQuery?.trim() &&
+							!styleTabHasSearchMatches ? (
+								// role/aria on wrapper: NoticeControl props are not typed for a11y attrs in Flow.
+								<div
+									className="blockera-search-features-empty"
+									role="status"
+									aria-live="polite"
+									style={{ marginTop: '20px' }}
+								>
+									<NoticeControl
+										type="information"
+										field="blockera-feature-search-empty"
+									>
+										<p>
+											<strong>
+												{__(
+													'No features match your search.',
+													'blockera'
+												)}
+											</strong>
+										</p>
+										<p>
+											{__(
+												'Try a different word or check the spelling.',
+												'blockera'
+											)}
+										</p>
+										<Button
+											variant="link"
+											onClick={() => setSearchQuery('')}
+											style={{
+												padding: 0,
+												height: 'auto',
+												fontSize: '12px',
+											}}
+										>
+											{__('Clear search', 'blockera')}
+										</Button>
+									</NoticeControl>
+								</div>
+							) : null}
 						</div>
 					</ControlContextProvider>
 
