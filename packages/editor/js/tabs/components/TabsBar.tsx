@@ -955,6 +955,10 @@ const TabsBar = memo(function TabsBar({
 							offset={12}
 							anchor={addTabButtonAnchorRef.current ?? undefined}
 							disableHintsText={false}
+							{...({
+								'data-test':
+									WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
+							} as Record<string, string>)}
 						/>
 					)}
 				</div>

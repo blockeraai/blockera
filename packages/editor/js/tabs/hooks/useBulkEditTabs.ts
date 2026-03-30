@@ -33,9 +33,13 @@ export function useBulkEditTabs(
 		}
 
 		// Get bulk_edit_ids from sessionStorage (captured before editor initialized)
-		// Fallback to URL parameters, then to global variable
+		// Fallback to URL parameters, then to global variable.
+		// Do not clear sessionStorage until we know targetPostType — the first effect
+		// run can happen before useCurrentEntity() has resolved postType; clearing early
+		// would drop bulk ids and set hasProcessed, so bulk never runs.
 		let bulkEditIds: string | null = null;
 		let storedPostType: string | null = null;
+		let bulkIdsFromSessionStorage = false;
 
 		// Try sessionStorage first (captured by inline script before editor loads)
 		if (typeof Storage !== 'undefined') {
@@ -46,13 +50,7 @@ export function useBulkEditTabs(
 				storedPostType = sessionStorage.getItem(
 					'blockera_tabs_bulk_edit_post_type'
 				);
-				// Clear from sessionStorage after reading
-				if (bulkEditIds) {
-					sessionStorage.removeItem('blockera_tabs_bulk_edit_ids');
-					sessionStorage.removeItem(
-						'blockera_tabs_bulk_edit_post_type'
-					);
-				}
+				bulkIdsFromSessionStorage = !!bulkEditIds;
 			} catch {
 				// sessionStorage might be disabled
 			}
@@ -62,9 +60,6 @@ export function useBulkEditTabs(
 		if (!bulkEditIds && window.blockeraTabsBulkEditIds) {
 			bulkEditIds = window.blockeraTabsBulkEditIds;
 			storedPostType = window.blockeraTabsBulkEditPostType ?? null;
-			// Clear global variables
-			delete window.blockeraTabsBulkEditIds;
-			delete window.blockeraTabsBulkEditPostType;
 		}
 
 		// Final fallback to URL parameters (in case storage didn't work)
@@ -76,10 +71,30 @@ export function useBulkEditTabs(
 		// Use stored post type if available, otherwise use current postType
 		const targetPostType = storedPostType ?? postType;
 
-		// If no bulk edit IDs, nothing to do
-		if (!bulkEditIds || !targetPostType) {
+		// No bulk request — nothing to do (safe to mark processed).
+		if (!bulkEditIds) {
 			hasProcessed.current = true;
 			return;
+		}
+
+		// Have bulk ids but entity type not ready yet — wait for a later effect
+		// when postType is available (do not set hasProcessed).
+		if (!targetPostType) {
+			return;
+		}
+
+		// Consume sessionStorage / globals now that we will process.
+		if (bulkIdsFromSessionStorage && typeof Storage !== 'undefined') {
+			try {
+				sessionStorage.removeItem('blockera_tabs_bulk_edit_ids');
+				sessionStorage.removeItem('blockera_tabs_bulk_edit_post_type');
+			} catch {
+				// sessionStorage might be disabled
+			}
+		}
+		if (window.blockeraTabsBulkEditIds) {
+			delete window.blockeraTabsBulkEditIds;
+			delete window.blockeraTabsBulkEditPostType;
 		}
 
 		// Parse comma-separated post IDs

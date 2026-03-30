@@ -1080,6 +1080,96 @@ export const registerCommands = () => {
 			.type('{selectall}{backspace}Add new post{enter}');
 	});
 
+	/**
+	 * Joins Cypress `testURL` with a path (same rules as `goTo` in site-navigation).
+	 * @param {string} path Path starting with `/` e.g. `/wp-admin/post.php`
+	 */
+	const joinTestUrl = (path) => {
+		const testURL = Cypress.env('testURL');
+
+		if (
+			(testURL.endsWith('/') && !path.startsWith('/')) ||
+			(!testURL.endsWith('/') && path.startsWith('/'))
+		) {
+			return `${testURL}${path}`;
+		}
+
+		if (!testURL.endsWith('/') && !path.startsWith('/')) {
+			return `${testURL}/${path}`;
+		}
+
+		if (testURL.endsWith('/') && path.startsWith('/')) {
+			return `${testURL.slice(0, -1)}${path}`;
+		}
+
+		return `${testURL}${path}`;
+	};
+
+	/**
+	 * Creates draft posts via REST while the block editor is loaded (`wp.apiFetch`).
+	 * @param {number} count How many drafts to create.
+	 * @returns {Cypress.Chainable<number[]>} Numeric post IDs.
+	 */
+	Cypress.Commands.add('tabsCreateDraftPostsViaRest', (count) => {
+		return cy.window().then((win) => {
+			const apiFetch = win.wp?.apiFetch;
+
+			if (!apiFetch) {
+				throw new Error(
+					'wp.apiFetch is required (open the block editor first).'
+				);
+			}
+
+			const base = `${Date.now()}`;
+			const requests = Array.from({ length: count }, (_, i) =>
+				apiFetch({
+					path: '/wp/v2/posts',
+					method: 'POST',
+					data: {
+						title: `e2e-tabs-${base}-${i}`,
+						status: 'draft',
+					},
+				}).then((r) => r.id)
+			);
+
+			return Promise.all(requests);
+		});
+	});
+
+	/**
+	 * Visits the post editor and seeds `sessionStorage` so `useBulkEditTabs` opens
+	 * `bulkIds` as extra tabs (adds without `evictLastUnpinnedIfAtLimit`).
+	 * @param {number|string} postId Current document post ID.
+	 * @param {number[]|string[]} bulkIds Additional post IDs to open as tabs.
+	 */
+	Cypress.Commands.add(
+		'tabsVisitEditorWithBulkEditIds',
+		(postId, bulkIds) => {
+			const list = Array.isArray(bulkIds)
+				? bulkIds.join(',')
+				: String(bulkIds);
+			// Query string is a fallback if sessionStorage is unavailable; useBulkEditTabs
+			// reads sessionStorage first, then URL (`bulk_edit_ids`).
+			const path = `/wp-admin/post.php?post=${postId}&action=edit&bulk_edit_ids=${encodeURIComponent(
+				list
+			)}`;
+			const url = joinTestUrl(path);
+
+			return cy.visit(url, {
+				onBeforeLoad(win) {
+					win.sessionStorage.setItem(
+						'blockera_tabs_bulk_edit_ids',
+						list
+					);
+					win.sessionStorage.setItem(
+						'blockera_tabs_bulk_edit_post_type',
+						'post'
+					);
+				},
+			});
+		}
+	);
+
 	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 	const pinnedTabRoots = `.blockera-tabs-bar-tabs__pinned-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
@@ -1185,4 +1275,15 @@ export const registerCommands = () => {
 				.should(shouldExist ? 'exist' : 'not.exist');
 		}
 	);
+
+	/**
+	 * Asserts the workspace tab limit upgrade prompt is visible (free tier; Pro removes limits).
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 20000 }`.
+	 */
+	Cypress.Commands.add('tabsExpectLimitUpgradePrompt', (options = {}) => {
+		cy.getByTestId(
+			WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
+			options
+		).should('be.visible');
+	});
 };

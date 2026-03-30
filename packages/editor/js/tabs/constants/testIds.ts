@@ -64,4 +64,7 @@ export const WORKSPACE_TABS_TEST_ID = {
 	renameModalRemoveRename:
 		'blockera-workspace-tabs-rename-modal-remove-rename',
 	renameModalCancel: 'blockera-workspace-tabs-rename-modal-cancel',
+
+	/** Upgrade modal when workspace tab limits are exceeded (free tier). */
+	tabsLimitUpgradePrompt: 'blockera-workspace-tabs-limit-upgrade-prompt',
 } as const;
