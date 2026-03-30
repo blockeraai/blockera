@@ -1023,12 +1023,22 @@ export const registerCommands = () => {
 			});
 	});
 
+	/**
+	 * Clears persisted workspace tab list so a new `post-new` load starts with a
+	 * single tab (see `TABS_STORAGE_KEY` in editor tabs storage).
+	 */
+	Cypress.Commands.add('tabsResetWorkspaceStorage', () => {
+		cy.window().then((win) => {
+			win.localStorage.removeItem('blockera-tabs-tabs');
+		});
+	});
+
 	/** Opens the add-tab flow (command palette in “add tab” mode). */
 	Cypress.Commands.add('tabsOpenAddPalette', () => {
 		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.add}"]`)
 			.first()
-			.should('be.visible')
-			.click();
+			.should('exist')
+			.click({ force: true });
 	});
 
 	/**

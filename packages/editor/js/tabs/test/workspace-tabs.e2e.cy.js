@@ -4,7 +4,7 @@
  * Selectors: `test-id` values from `packages/editor/js/tabs/constants/testIds.ts`
  * (Cypress: `cy.getByTestId`, `cy.tabs*` — e.g. `tabsExpectUnpinnedCount`,
  * `tabsExpectPinnedCount`, `tabsClickUnpinnedByIndex`, `tabsClickPinnedByIndex`,
- * `tabsExpectUnpinnedUnsavedIndicator`).
+ * `tabsExpectUnpinnedUnsavedIndicator`, `tabsResetWorkspaceStorage`).
  *
  * Blockera dependencies
  */
@@ -35,6 +35,8 @@ describe('Blockera workspace tabs', () => {
 	};
 
 	describe('Tab title', () => {
+		const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+
 		/**
 		 * Tab labels must track each document’s title (including unsaved edits via
 		 * core-data). With two tabs, switching documents should show each post’s
@@ -84,6 +86,93 @@ describe('Blockera workspace tabs', () => {
 
 			cy.tabsCloseUnpinnedByIndex(1);
 			cy.tabsExpectUnpinnedCount(1);
+		});
+
+		/**
+		 * Context menu: Close, Close to the right, Close others.
+		 * Default unpinned tab limit is 3 (`resolveTabsConfig`), so each action is
+		 * exercised in the same `it` with a fresh three-tab setup (createPost + two adds).
+		 *
+		 * @see packages/editor/js/tabs/utils/tabsConfig.ts
+		 * @see packages/editor/js/tabs/utils/tabActions.ts — closeTab / closeToRight / closeOthers
+		 * @see packages/editor/js/tabs/components/TabContextMenu.tsx
+		 */
+		it('should apply Close, Close to the right, and Close others from the tab context menu', () => {
+			/**
+			 * Save each document so bulk close actions do not open the unsaved
+			 * confirmation (see TabsManager `findTabsToClose` for toRight/others).
+			 */
+			const saveAllUnpinnedTabs = () => {
+				cy.tabsClickUnpinnedByIndex(0);
+				savePage();
+				cy.tabsClickUnpinnedByIndex(1);
+				savePage();
+				cy.tabsClickUnpinnedByIndex(2);
+				savePage();
+			};
+
+			const openThreeUnpinnedTabs = (prefix) => {
+				const t0 = `${prefix}0-${Date.now()}`;
+				const t1 = `${prefix}1-${Date.now()}`;
+				const t2 = `${prefix}2-${Date.now()}`;
+
+				cy.tabsResetWorkspaceStorage();
+				createPost({ postType: 'post' });
+				cy.tabsExpectUnpinnedCount(1);
+				setPostTitleInCanvas(t0);
+
+				cy.tabsAddNewPost();
+				cy.tabsExpectUnpinnedCount(2, { timeout: 60000 });
+				setPostTitleInCanvas(t1);
+
+				cy.tabsAddNewPost();
+				cy.tabsExpectUnpinnedCount(3, { timeout: 60000 });
+				setPostTitleInCanvas(t2);
+
+				saveAllUnpinnedTabs();
+
+				return { t0, t1, t2 };
+			};
+
+			// 1) Close — remove the middle tab (t1).
+			const closeTitles = openThreeUnpinnedTabs('Close');
+			cy.get(unpinnedTabRoots).eq(1).rightclick();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuClose).click();
+			cy.tabsExpectUnpinnedCount(2);
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', closeTitles.t0);
+			cy.get(unpinnedTabRoots)
+				.eq(1)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', closeTitles.t2);
+
+			// 2) Close to the right — from the first tab, remove unpinned tabs to its right.
+			const toRightTitles = openThreeUnpinnedTabs('Right');
+			cy.get(unpinnedTabRoots).eq(0).rightclick();
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.contextMenuCloseToRight
+			).click();
+			cy.tabsExpectUnpinnedCount(1);
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', toRightTitles.t0);
+			cy.tabsGetActiveTitle().should('contain.text', toRightTitles.t0);
+
+			// 3) Close others — keep the middle tab; remove the other unpinned tabs.
+			const othersTitles = openThreeUnpinnedTabs('Others');
+			cy.get(unpinnedTabRoots).eq(1).rightclick();
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.contextMenuCloseOthers
+			).click();
+			cy.tabsExpectUnpinnedCount(1);
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', othersTitles.t1);
+			cy.tabsGetActiveTitle().should('contain.text', othersTitles.t1);
 		});
 
 		/**
