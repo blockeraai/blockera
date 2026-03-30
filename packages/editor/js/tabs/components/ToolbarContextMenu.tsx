@@ -9,6 +9,7 @@ import { memo, useRef, useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import type { RecentlyClosedTab } from '../types';
 import { getTabIcon } from '../utils/getTabIcon';
 import { useEntity } from '../../hooks';
@@ -325,6 +326,11 @@ export default function ToolbarContextMenu({
 			icon={<Icon icon={moreVertical} size={24} />}
 			label={__('Tabs options', 'blockera')}
 			className="blockera-tabs-toolbar-menu"
+			toggleProps={
+				{
+					'test-id': WORKSPACE_TABS_TEST_ID.toolbarMenuTrigger,
+				} as Record<string, string>
+			}
 			popoverProps={{
 				className: 'blockera-tabs-toolbar-menu-popover',
 				placement: 'bottom-end',
@@ -403,6 +409,10 @@ export default function ToolbarContextMenu({
 									? 'is-active-item'
 									: ''
 							}
+							{...({
+								'test-id':
+									WORKSPACE_TABS_TEST_ID.toolbarIconOnlyPinnedTabs,
+							} as Record<string, string>)}
 						>
 							{__('Icon-only pinned tabs', 'blockera')}
 						</MenuItem>

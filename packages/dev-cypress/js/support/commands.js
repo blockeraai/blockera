@@ -1041,8 +1041,25 @@ export const registerCommands = () => {
 			.type('{selectall}{backspace}Add new post{enter}');
 	});
 
-	const unpinnedTabRoots =
-		'.blockera-tabs-bar-tabs__normal-tabs [test-id^="blockera-workspace-tab--"]';
+	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+
+	const pinnedTabRoots = `.blockera-tabs-bar-tabs__pinned-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+
+	/**
+	 * Asserts the number of pinned workspace tabs.
+	 * When count is 0, the pinned strip is not rendered.
+	 * @param {number} count Expected pinned tab count.
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 60000 }`.
+	 */
+	Cypress.Commands.add('tabsExpectPinnedCount', (count, options = {}) => {
+		if (count === 0) {
+			cy.get('.blockera-tabs-bar-tabs__pinned-tabs', options).should(
+				'not.exist'
+			);
+		} else {
+			cy.get(pinnedTabRoots, options).should('have.length', count);
+		}
+	});
 
 	/**
 	 * Asserts the number of unpinned workspace tabs.
@@ -1056,6 +1073,16 @@ export const registerCommands = () => {
 	/** Activates an unpinned tab by zero-based index (left to right). */
 	Cypress.Commands.add('tabsClickUnpinnedByIndex', (index) => {
 		cy.get(unpinnedTabRoots)
+			.eq(index)
+			.find('.blockera-tabs-tab-button')
+			.first()
+			.should('be.visible')
+			.click();
+	});
+
+	/** Activates a pinned tab by zero-based index (left to right within the pinned strip). */
+	Cypress.Commands.add('tabsClickPinnedByIndex', (index) => {
+		cy.get(pinnedTabRoots)
 			.eq(index)
 			.find('.blockera-tabs-tab-button')
 			.first()

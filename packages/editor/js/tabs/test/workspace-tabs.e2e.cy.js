@@ -2,7 +2,8 @@
  * End-to-end tests for Blockera workspace tabs (multi-document tab bar).
  *
  * Selectors: `test-id` values from `packages/editor/js/tabs/constants/testIds.ts`
- * (Cypress: `cy.getByTestId`, `cy.tabs*` workspace tab commands).
+ * (Cypress: `cy.getByTestId`, `cy.tabs*` — e.g. `tabsExpectUnpinnedCount`,
+ * `tabsExpectPinnedCount`, `tabsClickUnpinnedByIndex`, `tabsClickPinnedByIndex`).
  *
  * Blockera dependencies
  */
@@ -60,7 +61,7 @@ describe('Blockera workspace tabs', () => {
 
 			// First tab is inactive but must still show A’s live title (core-data), not stale tab.title.
 			cy.get(
-				'.blockera-tabs-bar-tabs__normal-tabs [test-id^="blockera-workspace-tab--"]'
+				`.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`
 			)
 				.eq(0)
 				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
@@ -86,8 +87,7 @@ describe('Blockera workspace tabs', () => {
 	});
 
 	describe('tab rename', () => {
-		const unpinnedTabRoots =
-			'.blockera-tabs-bar-tabs__normal-tabs [test-id^="blockera-workspace-tab--"]';
+		const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 		/**
 		 * Fill Rename Tab modal and save.
@@ -95,14 +95,13 @@ describe('Blockera workspace tabs', () => {
 		 * @param {string} customTitle
 		 */
 		const saveRenameModal = (customTitle) => {
-			cy.get('.blockera-tabs-rename-modal').should('be.visible');
-			cy.get('.blockera-tabs-rename-modal')
-				.find('.components-text-control__input')
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.renameModal).should(
+				'be.visible'
+			);
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.renameModalInput)
 				.clear()
 				.type(customTitle, { delay: 0 });
-			cy.get('.blockera-tabs-rename-modal')
-				.contains('button', 'Save')
-				.click();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.renameModalSave).click();
 		};
 
 		/**
@@ -130,7 +129,7 @@ describe('Blockera workspace tabs', () => {
 
 			// Rename first tab via context menu while the second tab is active.
 			cy.get(unpinnedTabRoots).eq(0).rightclick();
-			cy.contains('[role="menuitem"]', 'Rename tab').click();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuRenameTab).click();
 			saveRenameModal(customTabLabel);
 
 			cy.tabsClickUnpinnedByIndex(1);
@@ -143,7 +142,9 @@ describe('Blockera workspace tabs', () => {
 			// Clear rename from context menu; label falls back to post title.
 			cy.tabsClickUnpinnedByIndex(0);
 			cy.get(unpinnedTabRoots).eq(0).rightclick();
-			cy.contains('[role="menuitem"]', 'Clear tab rename').click();
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.contextMenuClearTabRename
+			).click();
 			cy.get(unpinnedTabRoots)
 				.eq(0)
 				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
@@ -160,13 +161,132 @@ describe('Blockera workspace tabs', () => {
 
 			cy.tabsClickUnpinnedByIndex(0);
 			cy.get(unpinnedTabRoots).eq(0).dblclick();
-			cy.get('.blockera-tabs-rename-modal')
-				.contains('button', 'Remove rename')
-				.click();
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.renameModalRemoveRename
+			).click();
 			cy.get(unpinnedTabRoots)
 				.eq(0)
 				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
 				.should('contain.text', titleA);
+		});
+	});
+
+	describe('pin and unpin', () => {
+		const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+		const pinnedTabRoots = `.blockera-tabs-bar-tabs__pinned-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+
+		/**
+		 * Pinned strip renders first; pinning the middle tab moves it left of the
+		 * remaining unpinned tabs. Toolbar offers “Icon-only pinned tabs”; tab menu
+		 * uses Pin/Unpin and disables Close while pinned.
+		 *
+		 * @see packages/editor/js/tabs/hooks/useTabs.ts — pinTab / unpinTab
+		 * @see packages/editor/js/tabs/components/TabContextMenu.tsx
+		 * @see packages/editor/js/tabs/components/ToolbarContextMenu.tsx
+		 */
+		it('should pin the second of three tabs to the pinned strip, cover pin-related UI, then unpin', () => {
+			const title0 = `Pin0-${Date.now()}`;
+			const title1 = `Pin1-${Date.now()}`;
+			const title2 = `Pin2-${Date.now()}`;
+
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+			cy.tabsExpectPinnedCount(0);
+
+			setPostTitleInCanvas(title0);
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(2, { timeout: 60000 });
+			setPostTitleInCanvas(title1);
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(3, { timeout: 60000 });
+			setPostTitleInCanvas(title2);
+
+			// Pin the second tab (index 1) while the third tab is active.
+			cy.get(unpinnedTabRoots).eq(1).rightclick();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuPin).click();
+
+			cy.tabsExpectPinnedCount(1);
+			cy.tabsExpectUnpinnedCount(2);
+
+			cy.get(pinnedTabRoots)
+				.first()
+				.should('have.class', 'is-pinned')
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title1);
+
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title0);
+			cy.get(unpinnedTabRoots)
+				.eq(1)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title2);
+
+			// Pinned tabs cannot be closed from the tab menu.
+			cy.get(pinnedTabRoots).first().rightclick();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuClose).should(
+				($el) => {
+					expect(
+						$el.is(':disabled') ||
+							$el.attr('aria-disabled') === 'true',
+						'Close must be disabled while tab is pinned'
+					).to.be.true;
+				}
+			);
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuUnpin).should(
+				'be.visible'
+			);
+			cy.get('body').type('{esc}', { force: true });
+
+			// Toolbar: Icon-only pinned tabs (hide title, show icon on pinned strip).
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.toolbarMenuTrigger)
+				.filter(':visible')
+				.first()
+				.click({ force: true });
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.toolbarIconOnlyPinnedTabs
+			).click();
+			cy.get(pinnedTabRoots)
+				.first()
+				.should('have.class', 'is-icon-only')
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('not.exist');
+
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.toolbarMenuTrigger)
+				.filter(':visible')
+				.first()
+				.click({ force: true });
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.toolbarIconOnlyPinnedTabs
+			).click();
+			cy.get(pinnedTabRoots)
+				.first()
+				.should('not.have.class', 'is-icon-only')
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title1);
+
+			cy.get(pinnedTabRoots).first().rightclick();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.contextMenuUnpin).click();
+
+			cy.tabsExpectPinnedCount(0);
+			cy.tabsExpectUnpinnedCount(3);
+
+			// Unpinned tab is prepended after unpin (middle tab becomes first).
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title1);
+			cy.get(unpinnedTabRoots)
+				.eq(1)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title0);
+			cy.get(unpinnedTabRoots)
+				.eq(2)
+				.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`)
+				.should('contain.text', title2);
 		});
 	});
 });

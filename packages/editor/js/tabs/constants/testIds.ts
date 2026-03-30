@@ -6,6 +6,11 @@
 export const WORKSPACE_TABS_TEST_ID = {
 	/** Primary "Add tab" control in the main tabs bar. */
 	add: 'blockera-workspace-tabs-add',
+	/**
+	 * Prefix for tab root `test-id` values (`blockera-workspace-tab--{key}`).
+	 * Use: `[test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`.
+	 */
+	tabRootPrefix: 'blockera-workspace-tab--',
 	/** Root wrapper for a single tab (includes `post-123` style keys). */
 	tabRoot: (tabKey: string): string => `blockera-workspace-tab--${tabKey}`,
 	/** Visible title label inside a tab. */
@@ -13,4 +18,38 @@ export const WORKSPACE_TABS_TEST_ID = {
 	/** Close control for an unpinned tab. */
 	close: (tabKey: string): string =>
 		`blockera-workspace-tabs-close--${tabKey}`,
+
+	/** Tab right-click context menu (popover). */
+	tabContextMenu: 'blockera-workspace-tabs-tab-context-menu',
+	contextMenuClose: 'blockera-workspace-tabs-context-menu-close',
+	contextMenuCloseOthers: 'blockera-workspace-tabs-context-menu-close-others',
+	contextMenuCloseToRight:
+		'blockera-workspace-tabs-context-menu-close-to-right',
+	contextMenuCloseSaved: 'blockera-workspace-tabs-context-menu-close-saved',
+	contextMenuView: 'blockera-workspace-tabs-context-menu-view',
+	contextMenuCopyViewLink:
+		'blockera-workspace-tabs-context-menu-copy-view-link',
+	contextMenuCopyEditorLink:
+		'blockera-workspace-tabs-context-menu-copy-editor-link',
+	contextMenuRenameTab: 'blockera-workspace-tabs-context-menu-rename-tab',
+	contextMenuClearTabRename:
+		'blockera-workspace-tabs-context-menu-clear-tab-rename',
+	/** Shown when the tab is unpinned; use Pin from the menu. */
+	contextMenuPin: 'blockera-workspace-tabs-context-menu-pin',
+	/** Shown when the tab is pinned; use Unpin from the menu. */
+	contextMenuUnpin: 'blockera-workspace-tabs-context-menu-unpin',
+
+	/** Tabs bar “⋯” toolbar menu trigger. */
+	toolbarMenuTrigger: 'blockera-workspace-tabs-toolbar-menu-trigger',
+	/** Toolbar → display: icon-only mode for pinned tabs. */
+	toolbarIconOnlyPinnedTabs:
+		'blockera-workspace-tabs-toolbar-icon-only-pinned-tabs',
+
+	/** Rename tab modal (inner content wrapper). */
+	renameModal: 'blockera-workspace-tabs-rename-modal-root',
+	renameModalInput: 'blockera-workspace-tabs-rename-modal-input',
+	renameModalSave: 'blockera-workspace-tabs-rename-modal-save',
+	renameModalRemoveRename:
+		'blockera-workspace-tabs-rename-modal-remove-rename',
+	renameModalCancel: 'blockera-workspace-tabs-rename-modal-cancel',
 } as const;

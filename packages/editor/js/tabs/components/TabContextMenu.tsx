@@ -7,8 +7,13 @@ import { external, link, pin, pencil } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import { sortTabsByPinned } from '../utils/tabActions';
 import type { Tab as TabType } from '../types';
+
+const testIdAttrs = (id: string): Record<string, string> => ({
+	'test-id': id,
+});
 
 /**
  * Context menu position.
@@ -276,6 +281,7 @@ export default function TabContextMenu({
 			anchor={anchor}
 			offset={8}
 			className="blockera-tabs-context-menu"
+			{...testIdAttrs(WORKSPACE_TABS_TEST_ID.tabContextMenu)}
 		>
 			<MenuGroup>
 				<MenuItem
@@ -283,6 +289,7 @@ export default function TabContextMenu({
 					disabled={!canClose}
 					shortcut={!canClose && isPinned ? 'Pinned' : undefined}
 					tabIndex={canClose ? undefined : -1}
+					{...testIdAttrs(WORKSPACE_TABS_TEST_ID.contextMenuClose)}
 				>
 					Close
 				</MenuItem>
@@ -290,6 +297,9 @@ export default function TabContextMenu({
 					onClick={handleCloseOthers}
 					disabled={!hasOtherTabs}
 					tabIndex={hasOtherTabs ? undefined : -1}
+					{...testIdAttrs(
+						WORKSPACE_TABS_TEST_ID.contextMenuCloseOthers
+					)}
 				>
 					Close others
 				</MenuItem>
@@ -297,6 +307,9 @@ export default function TabContextMenu({
 					onClick={handleCloseToRight}
 					disabled={!hasTabsToRight}
 					tabIndex={hasTabsToRight ? undefined : -1}
+					{...testIdAttrs(
+						WORKSPACE_TABS_TEST_ID.contextMenuCloseToRight
+					)}
 				>
 					Close to the right
 				</MenuItem>
@@ -304,6 +317,9 @@ export default function TabContextMenu({
 					onClick={handleCloseSaved}
 					disabled={!hasDirtyTabs}
 					tabIndex={hasDirtyTabs ? undefined : -1}
+					{...testIdAttrs(
+						WORKSPACE_TABS_TEST_ID.contextMenuCloseSaved
+					)}
 				>
 					Close saved
 				</MenuItem>
@@ -314,6 +330,7 @@ export default function TabContextMenu({
 					disabled={!viewUrl}
 					icon={external}
 					tabIndex={viewUrl ? undefined : -1}
+					{...testIdAttrs(WORKSPACE_TABS_TEST_ID.contextMenuView)}
 				>
 					View
 				</MenuItem>
@@ -322,6 +339,9 @@ export default function TabContextMenu({
 					disabled={!viewUrl}
 					icon={link}
 					tabIndex={viewUrl ? undefined : -1}
+					{...testIdAttrs(
+						WORKSPACE_TABS_TEST_ID.contextMenuCopyViewLink
+					)}
 				>
 					Copy view link
 				</MenuItem>
@@ -330,18 +350,30 @@ export default function TabContextMenu({
 					disabled={!editorUrl}
 					icon={link}
 					tabIndex={editorUrl ? undefined : -1}
+					{...testIdAttrs(
+						WORKSPACE_TABS_TEST_ID.contextMenuCopyEditorLink
+					)}
 				>
 					Copy editor link
 				</MenuItem>
 			</MenuGroup>
 			<MenuGroup>
-				<MenuItem onClick={handleRename} icon={pencil}>
+				<MenuItem
+					onClick={handleRename}
+					icon={pencil}
+					{...testIdAttrs(
+						WORKSPACE_TABS_TEST_ID.contextMenuRenameTab
+					)}
+				>
 					Rename tab
 				</MenuItem>
 				{isRenamed && (
 					<MenuItem
 						onClick={handleClearRename}
 						style={{ color: '#cc1818' }}
+						{...testIdAttrs(
+							WORKSPACE_TABS_TEST_ID.contextMenuClearTabRename
+						)}
 					>
 						Clear tab rename
 					</MenuItem>
@@ -352,6 +384,11 @@ export default function TabContextMenu({
 					onClick={handleTogglePin}
 					icon={pin}
 					style={isPinned ? { color: '#cc1818' } : undefined}
+					{...testIdAttrs(
+						isPinned
+							? WORKSPACE_TABS_TEST_ID.contextMenuUnpin
+							: WORKSPACE_TABS_TEST_ID.contextMenuPin
+					)}
 				>
 					{isPinned ? 'Unpin' : 'Pin'}
 				</MenuItem>
