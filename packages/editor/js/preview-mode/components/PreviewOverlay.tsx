@@ -27,7 +27,11 @@ import { Icon } from '@blockera/icons';
 import { PreviewHeader } from '../header';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import { HIDE_ADMIN_BAR_ARG } from '../../hooks/constants';
-import { loadZoomFromStorage } from '../../zoom/utils/storage';
+import {
+	loadZoomFromStorage,
+	saveZoomToStorage,
+} from '../../zoom/utils/storage';
+import { handleZoomKeyboardEvent } from '../../zoom/utils/zoomKeyboard';
 import {
 	ZOOM_CSS_VAR,
 	ZOOMED_OUT_CLASS,
@@ -110,9 +114,16 @@ export default function PreviewOverlay({
 		((event: BeforeUnloadEvent) => void) | null
 	>(null);
 
-	// Store reference to keyboard handler for attaching to iframe on each load
-	const keyboardHandlerRef = useRef<((event: KeyboardEvent) => void) | null>(
-		null
+	// Stable iframe keydown listener delegates to latest logic (zoom + reload); parent window
+	// does not receive key events when focus is inside the preview iframe.
+	const iframeKeydownDispatchRef = useRef<(event: KeyboardEvent) => void>(
+		() => {}
+	);
+	const stableIframeKeydownListener = useMemo(
+		() => (event: KeyboardEvent) => {
+			iframeKeydownDispatchRef.current(event);
+		},
+		[]
 	);
 
 	// Track preview iframe height for scrollbar management
@@ -265,28 +276,6 @@ export default function PreviewOverlay({
 			document.removeEventListener('keydown', handleCommandK, true);
 		};
 	}, []);
-
-	// Cmd/Ctrl+R handler - only attached to iframe document
-	// This ensures reload shortcut only works when focus is inside the iframe
-	useEffect(() => {
-		const handleReloadShortcut = (event: KeyboardEvent): void => {
-			const isReloadShortcut =
-				event.key === 'r' && (event.metaKey || event.ctrlKey);
-
-			if (isReloadShortcut) {
-				event.preventDefault();
-				event.stopPropagation();
-				handleReload();
-			}
-		};
-
-		// Store handler ref for attaching to iframe on each load
-		keyboardHandlerRef.current = handleReloadShortcut;
-
-		return () => {
-			keyboardHandlerRef.current = null;
-		};
-	}, [handleReload]);
 
 	// Simulate loading progress while iframe is loading
 	// Progress goes from 0 to ~90% gradually, then jumps to 100% when iframe loads
@@ -452,14 +441,13 @@ export default function PreviewOverlay({
 				// This script will post messages with content height
 				injectHeightMonitoringScript(iframeDoc);
 
-				// Attach keyboard handler to iframe to capture Cmd/Ctrl+R when iframe has focus
-				if (keyboardHandlerRef.current) {
-					iframeDoc.addEventListener(
-						'keydown',
-						keyboardHandlerRef.current,
-						true
-					);
-				}
+				// Capture zoom + reload while focus is inside the preview iframe (parent window
+				// does not receive these keydown events).
+				iframeDoc.addEventListener(
+					'keydown',
+					stableIframeKeydownListener,
+					true
+				);
 
 				// Block navigation
 				blockIframeLinks(iframeDoc);
@@ -478,7 +466,12 @@ export default function PreviewOverlay({
 				'Blockera Preview: Unable to block navigation in cross-origin iframe'
 			);
 		}
-	}, [blockIframeLinks, blockIframeForms, blockIframeNavigation]);
+	}, [
+		blockIframeLinks,
+		blockIframeForms,
+		blockIframeNavigation,
+		stableIframeKeydownListener,
+	]);
 
 	/**
 	 * Apply zoom transform to preview iframe container.
@@ -521,6 +514,41 @@ export default function PreviewOverlay({
 			}
 		});
 	}, []);
+
+	// Iframe keydown: Blockera zoom shortcuts, then Cmd/Ctrl+R reload (must run after applyPreviewZoom exists).
+	useEffect(() => {
+		iframeKeydownDispatchRef.current = (event: KeyboardEvent): void => {
+			const zoomHandled = handleZoomKeyboardEvent(event, {
+				getZoomPercent: () => zoomPercentRef.current,
+				onZoomChange: (next): void => {
+					saveZoomToStorage(next);
+					setZoomPercent(next);
+					applyPreviewZoom(next);
+					window.dispatchEvent(
+						new CustomEvent('blockera-editor-zoom-sync', {
+							detail: { zoom: next },
+						})
+					);
+				},
+				onZoomToFit: (): void => {
+					window.dispatchEvent(
+						new CustomEvent('blockera-editor-zoom-to-fit-request')
+					);
+				},
+			});
+			if (zoomHandled) {
+				return;
+			}
+
+			const isReloadShortcut =
+				event.key === 'r' && (event.metaKey || event.ctrlKey);
+			if (isReloadShortcut) {
+				event.preventDefault();
+				event.stopPropagation();
+				handleReload();
+			}
+		};
+	}, [applyPreviewZoom, handleReload]);
 
 	// Keep zoom ref in sync with state
 	useEffect(() => {

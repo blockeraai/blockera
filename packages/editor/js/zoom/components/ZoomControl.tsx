@@ -139,6 +139,35 @@ export default function ZoomControl({
 		zoomPercentRef.current = zoomPercent;
 	}, [zoomPercent]);
 
+	// Sync React state when zoom changes from preview iframe (same-tab localStorage has no storage event)
+	useEffect(() => {
+		const onSync = (e: Event): void => {
+			const detail = (e as CustomEvent<{ zoom: number }>).detail;
+			if (
+				detail &&
+				typeof detail.zoom === 'number' &&
+				!Number.isNaN(detail.zoom)
+			) {
+				setZoomPercent(detail.zoom);
+			}
+		};
+		const onFitRequest = (): void => {
+			zoomToFit();
+		};
+		window.addEventListener('blockera-editor-zoom-sync', onSync);
+		window.addEventListener(
+			'blockera-editor-zoom-to-fit-request',
+			onFitRequest
+		);
+		return () => {
+			window.removeEventListener('blockera-editor-zoom-sync', onSync);
+			window.removeEventListener(
+				'blockera-editor-zoom-to-fit-request',
+				onFitRequest
+			);
+		};
+	}, [setZoomPercent, zoomToFit]);
+
 	// Update initial height when zoom hook provides it
 	useEffect(() => {
 		setCurrentInitialHeight(
