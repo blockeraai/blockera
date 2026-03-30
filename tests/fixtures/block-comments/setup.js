@@ -207,7 +207,7 @@ async function setup(page, sectionContent) {
 /* eslint-disable jsdoc/valid-types */
 /**
  * Frontend setup function for block-comments test
- * Navigates to page 2 of comments pagination
+ * Navigates to page 3 of comments pagination (`cpage=3`)
  *
  * @param {import('@playwright/test').Page} page - Playwright page object.
  * @return {Promise<void>}
@@ -240,8 +240,9 @@ async function frontendSetup(page) {
 	// Add cpage=3 query parameter for comments pagination
 	postUrlObj.searchParams.set('cpage', '3');
 
-	// Navigate to the post URL with comments page 3
-	await page.goto(postUrlObj.toString(), { waitUntil: 'networkidle' });
+	// Avoid `networkidle` (often never settles on WP) and `load` (can hang if a
+	// subresource never finishes). `domcontentloaded` is enough for server-rendered HTML.
+	await page.goto(postUrlObj.toString(), { waitUntil: 'domcontentloaded' });
 
 	// Wait a bit for comments to load
 	await page.waitForTimeout(500);
