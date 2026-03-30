@@ -560,9 +560,17 @@ export default function PreviewOverlay({
 		});
 	}, []);
 
-	// Iframe keydown: Blockera zoom shortcuts, then Cmd/Ctrl+R reload (must run after applyPreviewZoom exists).
+	// Iframe keydown: Escape closes overlay (parent document does not see keys when focus is in iframe),
+	// then Blockera zoom shortcuts, then Cmd/Ctrl+R reload (must run after applyPreviewZoom exists).
 	useEffect(() => {
 		iframeKeydownDispatchRef.current = (event: KeyboardEvent): void => {
+			if (event.key === 'Escape') {
+				event.preventDefault();
+				event.stopPropagation();
+				handleClose();
+				return;
+			}
+
 			const zoomHandled = handleZoomKeyboardEvent(event, {
 				getZoomPercent: () => zoomPercentRef.current,
 				onZoomChange: (next): void => {
@@ -593,7 +601,7 @@ export default function PreviewOverlay({
 				handleReload();
 			}
 		};
-	}, [applyPreviewZoom, handleReload]);
+	}, [applyPreviewZoom, handleClose, handleReload]);
 
 	// Keep zoom ref in sync with state
 	useEffect(() => {
