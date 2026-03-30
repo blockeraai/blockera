@@ -3,11 +3,12 @@
  *
  * Selectors: `test-id` values from `packages/editor/js/tabs/constants/testIds.ts`
  * (Cypress: `cy.getByTestId`, `cy.tabs*` — e.g. `tabsExpectUnpinnedCount`,
- * `tabsExpectPinnedCount`, `tabsClickUnpinnedByIndex`, `tabsClickPinnedByIndex`).
+ * `tabsExpectPinnedCount`, `tabsClickUnpinnedByIndex`, `tabsClickPinnedByIndex`,
+ * `tabsExpectUnpinnedUnsavedIndicator`).
  *
  * Blockera dependencies
  */
-import { createPost } from '@blockera/dev-cypress/js/helpers';
+import { createPost, savePage } from '@blockera/dev-cypress/js/helpers';
 import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 
 describe('Blockera workspace tabs', () => {
@@ -33,7 +34,7 @@ describe('Blockera workspace tabs', () => {
 			});
 	};
 
-	describe('document title sync', () => {
+	describe('Tab title', () => {
 		/**
 		 * Tab labels must track each document’s title (including unsaved edits via
 		 * core-data). With two tabs, switching documents should show each post’s
@@ -84,9 +85,53 @@ describe('Blockera workspace tabs', () => {
 			cy.tabsCloseUnpinnedByIndex(1);
 			cy.tabsExpectUnpinnedCount(1);
 		});
+
+		/**
+		 * Unsaved dot next to the tab title (hasUnsavedChanges); clears after save.
+		 *
+		 * @see packages/editor/js/tabs/components/Tab.tsx — blockera-tabs-unsaved-indicator
+		 */
+		it('should show an unsaved indicator on the tab title after edits and remove it after save', () => {
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, false);
+
+			setPostTitleInCanvas(`Unsaved-${Date.now()}`);
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, true);
+
+			savePage();
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, false);
+		});
+
+		it('should show the unsaved indicator on an inactive tab until save', () => {
+			const titleA = `IndA-${Date.now()}`;
+			const titleB = `IndB-${Date.now()}`;
+			const titleAEdited = `${titleA}-edit`;
+
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+
+			setPostTitleInCanvas(titleA);
+			savePage();
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(2, { timeout: 60000 });
+			setPostTitleInCanvas(titleB);
+
+			cy.tabsClickUnpinnedByIndex(0);
+			setPostTitleInCanvas(titleAEdited);
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, true);
+
+			cy.tabsClickUnpinnedByIndex(1);
+			cy.tabsGetActiveTitle().should('contain.text', titleB);
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, true);
+
+			savePage();
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, false);
+		});
 	});
 
-	describe('tab rename', () => {
+	describe('Tab rename', () => {
 		const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 		/**
@@ -171,7 +216,7 @@ describe('Blockera workspace tabs', () => {
 		});
 	});
 
-	describe('pin and unpin', () => {
+	describe('Pin and unpin', () => {
 		const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 		const pinnedTabRoots = `.blockera-tabs-bar-tabs__pinned-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 

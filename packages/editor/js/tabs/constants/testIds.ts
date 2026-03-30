@@ -15,6 +15,8 @@ export const WORKSPACE_TABS_TEST_ID = {
 	tabRoot: (tabKey: string): string => `blockera-workspace-tab--${tabKey}`,
 	/** Visible title label inside a tab. */
 	tabTitle: 'blockera-workspace-tabs-tab-title',
+	/** Dot shown in the tab when the document has unsaved edits. */
+	tabUnsavedIndicator: 'blockera-workspace-tabs-tab-unsaved-indicator',
 	/** Close control for an unpinned tab. */
 	close: (tabKey: string): string =>
 		`blockera-workspace-tabs-close--${tabKey}`,

@@ -411,7 +411,13 @@ const Tab = memo(
 						)}
 
 						{hasUnsavedChanges && (
-							<span className="blockera-tabs-unsaved-indicator" />
+							<span
+								className="blockera-tabs-unsaved-indicator"
+								{...({
+									'test-id':
+										WORKSPACE_TABS_TEST_ID.tabUnsavedIndicator,
+								} as Record<string, string>)}
+							/>
 						)}
 					</Button>
 

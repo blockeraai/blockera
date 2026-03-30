@@ -1108,4 +1108,21 @@ export const registerCommands = () => {
 			.get('.blockera-tabs-tab.is-active')
 			.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`);
 	});
+
+	/**
+	 * Asserts whether the unsaved-change dot is present on an unpinned tab (by index).
+	 * @param {number} index Zero-based index in the unpinned strip (left to right).
+	 * @param {boolean} [shouldExist=true] When false, expects the indicator to be absent.
+	 */
+	Cypress.Commands.add(
+		'tabsExpectUnpinnedUnsavedIndicator',
+		(index, shouldExist = true) => {
+			cy.get(unpinnedTabRoots)
+				.eq(index)
+				.find(
+					`[test-id="${WORKSPACE_TABS_TEST_ID.tabUnsavedIndicator}"]`
+				)
+				.should(shouldExist ? 'exist' : 'not.exist');
+		}
+	);
 };
