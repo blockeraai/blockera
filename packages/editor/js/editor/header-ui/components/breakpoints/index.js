@@ -28,6 +28,42 @@ import type {
 	BreakpointTypes,
 } from '../../../../extensions/libs/block-card/block-states/types';
 
+const BREAKPOINT_CLASS_PREFIX = 'blockera-breakpoint-';
+const IN_BREAKPOINT_CLASS = 'blockera-in-breakpoint';
+const NOT_IN_BREAKPOINT_CLASS = 'blockera-not-in-breakpoint';
+
+function syncCanvasIframeBreakpointClasses(
+	iframe: ?HTMLElement,
+	breakpointId: string
+): void {
+	if (!iframe || !iframe.classList) {
+		return;
+	}
+
+	// Remove previous breakpoint id class(es).
+	// We intentionally scan classList once to avoid keeping external state and to stay resilient
+	// if other code adds/removes classes.
+	for (const cls of Array.from(iframe.classList)) {
+		if (cls && cls.startsWith(BREAKPOINT_CLASS_PREFIX)) {
+			iframe.classList.remove(cls);
+		}
+	}
+
+	// Add current breakpoint id helper class.
+	if (breakpointId) {
+		iframe.classList.add(`${BREAKPOINT_CLASS_PREFIX}${breakpointId}`);
+	}
+
+	// Toggle "in breakpoint" state helpers.
+	if (isBaseBreakpoint(breakpointId)) {
+		iframe.classList.remove(IN_BREAKPOINT_CLASS);
+		iframe.classList.add(NOT_IN_BREAKPOINT_CLASS);
+	} else {
+		iframe.classList.remove(NOT_IN_BREAKPOINT_CLASS);
+		iframe.classList.add(IN_BREAKPOINT_CLASS);
+	}
+}
+
 export const BreakpointsUI = ({
 	className,
 	editorMode,
@@ -55,6 +91,10 @@ export const BreakpointsUI = ({
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			const iframe = getIframe();
+
+			// Add responsive breakpoint helper classes to the canvas iframe tag.
+			// This enables breakpoint-specific styling from the outside (parent document).
+			syncCanvasIframeBreakpointClasses(iframe, deviceType);
 
 			// Get the editor wrapper (body element of the editor iframe).
 			let editorWrapper = document.querySelector(
