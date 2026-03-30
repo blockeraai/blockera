@@ -51,9 +51,8 @@ export default function ZoomHeader({
 
 	const content = (
 		<div className="blockera-canvas-header__url-bar-content">
-			{__('Zoom View', 'blockera')}
-			<span>·</span>
-			<strong>{zoomPercent}%</strong>
+			{__('Zoomed', 'blockera')}
+			<strong>({zoomPercent}%)</strong>
 		</div>
 	);
 

@@ -43,6 +43,7 @@ iframe[name="editor-canvas"] {
 	display: block;
 	border: 0;
 	margin: 0 auto;
+	transform-origin: top center !important;
 }
 
 /* Smooth transition for zoom changes (respects reduced motion preference) */

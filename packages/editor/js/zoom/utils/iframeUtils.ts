@@ -4,9 +4,11 @@
  */
 import { createElement } from 'react';
 import { createRoot } from 'react-dom/client';
+import { select } from '@wordpress/data';
 
 import { IFRAME_SELECTOR } from './constants';
-import ZoomHeader from '../components/ZoomHeader';
+import CanvasHeader from '../components/CanvasHeader';
+import { loadZoomFromStorage } from './storage';
 
 // Import header styles as raw text for iframe injection
 // Note: The ?raw suffix tells webpack to import this as a raw string
@@ -443,8 +445,8 @@ export function removeZoomHeaderStyles(iframeDoc: Document): void {
 	}
 }
 
-/** Store React root and container per iframe document for zoom header */
-const zoomHeaderMap = new WeakMap<
+/** Store React root and container per iframe document for canvas header */
+const canvasHeaderMap = new WeakMap<
 	Document,
 	{ root: ReturnType<typeof createRoot>; container: HTMLDivElement }
 >();
@@ -462,28 +464,36 @@ function postZoomReset(iframeDoc: Document): void {
 	}
 }
 
+function postBreakpointResetToBase(iframeDoc: Document): void {
+	if (iframeDoc.defaultView?.parent) {
+		iframeDoc.defaultView.parent.postMessage(
+			{ type: 'BLOCKERA_BREAKPOINT_RESET_TO_BASE' },
+			'*'
+		);
+	}
+}
+
 /**
- * Inject zoom header into iframe body using React and PreviewHeader.
- * Creates a fixed header bar at the top showing zoom percentage and reset button.
+ * Inject canvas header into iframe body using React and PreviewHeader.
+ * Creates a fixed header bar at the top showing breakpoint info and, when zoomed, zoom controls.
  *
  * @param iframeDoc - The iframe document to inject header into.
- * @param zoomPercent - Current zoom percentage to display.
+ * @param zoomPercent - Current zoom percentage (used for combined view when zoomed).
  */
-export function injectZoomHeader(
-	iframeDoc: Document,
-	zoomPercent: number
-): void {
+function injectCanvasHeader(iframeDoc: Document, zoomPercent: number): void {
 	if (!iframeDoc || !iframeDoc.body) {
 		return;
 	}
 
-	const existing = zoomHeaderMap.get(iframeDoc);
+	const existing = canvasHeaderMap.get(iframeDoc);
 	if (existing) {
 		// Header already mounted: re-render with updated zoom percentage
 		existing.root.render(
-			createElement(ZoomHeader, {
+			createElement(CanvasHeader, {
 				zoomPercent,
-				onReset: () => postZoomReset(iframeDoc),
+				onResetZoom: () => postZoomReset(iframeDoc),
+				onResetBreakpointToBase: () =>
+					postBreakpointResetToBase(iframeDoc),
 			})
 		);
 		return;
@@ -494,7 +504,7 @@ export function injectZoomHeader(
 
 	// Create container for React root
 	const container = iframeDoc.createElement('div');
-	container.setAttribute('data-blockera-zoom-header-root', 'true');
+	container.setAttribute('data-blockera-canvas-header-root', 'true');
 
 	// Insert at the beginning of body
 	iframeDoc.body.insertBefore(container, iframeDoc.body.firstChild);
@@ -503,37 +513,99 @@ export function injectZoomHeader(
 	iframeDoc.body.classList.add('blockera-zoom-active');
 	iframeDoc.documentElement.classList.add('blockera-zoom-active');
 
-	// Create React root and render ZoomHeader (uses PreviewHeader)
+	// Create React root and render CanvasHeader (uses PreviewHeader)
 	const root = createRoot(container);
 	root.render(
-		createElement(ZoomHeader, {
+		createElement(CanvasHeader, {
 			zoomPercent,
-			onReset: () => postZoomReset(iframeDoc),
+			onResetZoom: () => postZoomReset(iframeDoc),
+			onResetBreakpointToBase: () => postBreakpointResetToBase(iframeDoc),
 		})
 	);
 
-	zoomHeaderMap.set(iframeDoc, { root, container });
+	canvasHeaderMap.set(iframeDoc, { root, container });
 }
 
 /**
- * Remove zoom header from iframe body.
+ * Remove canvas header from iframe body.
  * Unmounts React root and removes container.
  *
  * @param iframeDoc - The iframe document to remove header from.
  */
-export function removeZoomHeader(iframeDoc: Document): void {
+function removeCanvasHeader(iframeDoc: Document): void {
 	if (!iframeDoc || !iframeDoc.body) {
 		return;
 	}
 
-	const existing = zoomHeaderMap.get(iframeDoc);
+	const existing = canvasHeaderMap.get(iframeDoc);
 	if (existing) {
 		existing.root.unmount();
 		existing.container.remove();
-		zoomHeaderMap.delete(iframeDoc);
+		canvasHeaderMap.delete(iframeDoc);
 	}
 
 	// Remove body class
 	iframeDoc.body.classList.remove('blockera-zoom-active');
 	iframeDoc.documentElement.classList.remove('blockera-zoom-active');
+}
+
+type BreakpointInfo = {
+	base?: boolean;
+};
+
+type BlockeraExtensionsSelect = {
+	getExtensionCurrentBlockStateBreakpoint?: () => string;
+};
+
+type BlockeraEditorSelect = {
+	getBreakpoints?: () => Record<string, BreakpointInfo>;
+};
+
+/**
+ * Ensure the in-iframe canvas header is mounted/unmounted based on:
+ * - non-base breakpoint (responsive frame active)
+ * - zoomed canvas (zoom != 100)
+ *
+ * When `zoomPercent` is omitted, reads from `loadZoomFromStorage()` so the value
+ * stays in sync with `setZoomPercent` (which persists synchronously). Callers
+ * that have an authoritative zoom value (e.g. `applyZoom`) may pass it explicitly.
+ *
+ * Safe to call often; uses WeakMap + cheap store reads.
+ */
+export function syncCanvasHeader(zoomPercent?: number): void {
+	const iframe = getEditorCanvasIframe();
+	if (!iframe) {
+		return;
+	}
+
+	const iframeDoc = getIframeDocument(iframe);
+	if (!iframeDoc) {
+		return;
+	}
+
+	const z =
+		typeof zoomPercent === 'number' && !Number.isNaN(zoomPercent)
+			? zoomPercent
+			: loadZoomFromStorage();
+	const isZoomed = z !== 100;
+
+	const extensionsSelect = select('blockera/extensions') as
+		| BlockeraExtensionsSelect
+		| undefined;
+	const editorSelect = select('blockera/editor') as
+		| BlockeraEditorSelect
+		| undefined;
+
+	const breakpointId =
+		extensionsSelect?.getExtensionCurrentBlockStateBreakpoint?.() ??
+		'desktop';
+	const breakpoints = editorSelect?.getBreakpoints?.() ?? {};
+	const info = breakpoints[breakpointId] ?? {};
+	const isBase = info.base === true;
+
+	if (isZoomed || !isBase) {
+		injectCanvasHeader(iframeDoc, z);
+	} else {
+		removeCanvasHeader(iframeDoc);
+	}
 }

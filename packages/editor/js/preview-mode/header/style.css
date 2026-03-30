@@ -27,6 +27,7 @@ body.blockera-zoom-active {
 	background: #f0f0f0;
 	z-index: 999999;
 	border-bottom: 1px solid #ccc;
+	box-sizing: border-box;
 }
 
 /* Iframe-specific styles (for zoom mode) */

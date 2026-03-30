@@ -4,8 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useEffect, useState } from '@wordpress/element';
-import { dispatch, useSelect, useDispatch } from '@wordpress/data';
+import { useEffect, useState, useCallback } from '@wordpress/element';
+import { dispatch, useSelect, useDispatch, select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -203,29 +203,69 @@ export const BreakpointsUI = ({
 
 	const selectedBlock = getSelectedBlock();
 
-	const updateSelectedBlock = (device: string) => {
-		// Check if a block is selected.
-		if (selectedBlock) {
-			// Update the block attributes.
-			const updatedAttributes = {
-				blockeraCurrentDevice: device,
-			};
+	const updateSelectedBlock = useCallback(
+		(device: string) => {
+			// Check if a block is selected.
+			if (selectedBlock) {
+				// Update the block attributes.
+				const updatedAttributes = {
+					blockeraCurrentDevice: device,
+				};
 
-			// Dispatch an action to update the selected block.
-			updateBlockAttributes(selectedBlock.clientId, updatedAttributes);
-		}
-	};
+				// Dispatch an action to update the selected block.
+				updateBlockAttributes(
+					selectedBlock.clientId,
+					updatedAttributes
+				);
+			}
+		},
+		[selectedBlock, updateBlockAttributes]
+	);
 
-	const handleOnClick = (device: string): void => {
-		// Updating the device type by WordPress Core api.
-		updateDeviceType(device);
+	const handleOnClick = useCallback(
+		(device: string): void => {
+			// Updating the device type by WordPress Core api.
+			updateDeviceType(device);
 
-		// Updating the extension current block state breakpoint global state.
-		changeExtensionCurrentBlockStateBreakpoint(device);
+			// Updating the extension current block state breakpoint global state.
+			changeExtensionCurrentBlockStateBreakpoint(device);
 
-		// Updating the selected block blockeraCurrentDevice attribute.
-		updateSelectedBlock(device);
-	};
+			// Updating the selected block blockeraCurrentDevice attribute.
+			updateSelectedBlock(device);
+		},
+		[
+			updateDeviceType,
+			changeExtensionCurrentBlockStateBreakpoint,
+			updateSelectedBlock,
+		]
+	);
+
+	useEffect(() => {
+		const handleMessage = (event: MessageEvent): void => {
+			const data = event.data;
+			if (!data || data.type !== 'BLOCKERA_BREAKPOINT_RESET_TO_BASE') {
+				return;
+			}
+			const base = getBaseBreakpoint();
+
+			// Use the same switching path as a real icon click:
+			// - update global device type + extension state + selected block
+			handleOnClick(base);
+
+			// - also update the picked-breakpoints local state via the registered updaters,
+			//   so the active icon/indicator immediately reflects the new breakpoint.
+			const editorSelect = (select('blockera/editor'): any);
+			if (editorSelect?.updateDeviceIndicator) {
+				editorSelect.updateDeviceIndicator(base);
+			}
+			if (editorSelect?.updatePickedDeviceType) {
+				editorSelect.updatePickedDeviceType(base);
+			}
+		};
+
+		window.addEventListener('message', handleMessage);
+		return () => window.removeEventListener('message', handleMessage);
+	}, [handleOnClick]);
 
 	const baseBreakpoint = getBaseBreakpoint();
 	let breakpoints = getBreakpoints();
