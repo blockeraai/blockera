@@ -46,6 +46,16 @@ export const WORKSPACE_TABS_TEST_ID = {
 	/** Toolbar → display: icon-only mode for pinned tabs. */
 	toolbarIconOnlyPinnedTabs:
 		'blockera-workspace-tabs-toolbar-icon-only-pinned-tabs',
+	/** Toolbar → “Remember recently closed tabs” toggle (Tabs History Settings). */
+	toolbarRememberRecentlyClosed:
+		'blockera-workspace-tabs-toolbar-remember-recently-closed',
+	/**
+	 * Recently closed row in the toolbar menu (key is the tab key, e.g. `post-12`).
+	 */
+	recentlyClosedItem: (tabKey: string): string =>
+		`blockera-workspace-tabs-recently-closed-item--${tabKey}`,
+	/** Shown when the recently closed list is empty. */
+	recentlyClosedEmpty: 'blockera-workspace-tabs-recently-closed-empty',
 
 	/** Rename tab modal (inner content wrapper). */
 	renameModal: 'blockera-workspace-tabs-rename-modal-root',

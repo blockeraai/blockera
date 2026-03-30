@@ -220,6 +220,9 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 			className={`blockera-tabs-toolbar-menu-item__closed-tab ${
 				status ? 'status-' + status : ''
 			}`}
+			{...({
+				'test-id': WORKSPACE_TABS_TEST_ID.recentlyClosedItem(tab.key),
+			} as Record<string, string>)}
 			suffix={
 				tab.closedAt ? (
 					<span className="blockera-tabs-closed-time">
@@ -372,6 +375,10 @@ export default function ToolbarContextMenu({
 									? 'is-active-item'
 									: ''
 							}
+							{...({
+								'test-id':
+									WORKSPACE_TABS_TEST_ID.toolbarRememberRecentlyClosed,
+							} as Record<string, string>)}
 						>
 							{__('Remember recently closed tabs', 'blockera')}
 						</MenuItem>
@@ -423,7 +430,13 @@ export default function ToolbarContextMenu({
 						className="blockera-tabs-toolbar-menu-group__closed-tabs"
 					>
 						{recentlyClosedTabs.length === 0 ? (
-							<MenuItem disabled>
+							<MenuItem
+								disabled
+								{...({
+									'test-id':
+										WORKSPACE_TABS_TEST_ID.recentlyClosedEmpty,
+								} as Record<string, string>)}
+							>
 								{__('No recently closed tabs', 'blockera')}
 							</MenuItem>
 						) : (

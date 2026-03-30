@@ -1033,6 +1033,35 @@ export const registerCommands = () => {
 		});
 	});
 
+	/**
+	 * Clears open-tab list + recently closed list + “remember recently closed”
+	 * preference so tests start from defaults (tabs persisted, recently closed on).
+	 */
+	Cypress.Commands.add('tabsResetTabsRelatedStorage', () => {
+		cy.window().then((win) => {
+			win.localStorage.removeItem('blockera-tabs-tabs');
+			win.localStorage.removeItem('blockera-tabs-recently-closed');
+			win.localStorage.removeItem(
+				'blockera-tabs-recently-closed-persistence'
+			);
+		});
+	});
+
+	/** Opens the tabs bar “⋯” toolbar menu (Recently Closed, settings). */
+	Cypress.Commands.add('tabsOpenToolbarMenu', () => {
+		cy.get('.blockera-tabs-bar', { timeout: 60000 }).should('be.visible');
+		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.toolbarMenuTrigger}"]`)
+			.filter(':visible')
+			.first()
+			.scrollIntoView()
+			.should('be.visible')
+			.click({ force: true });
+		// Wait on test-id (locale-safe; do not match translated menu strings).
+		cy.getByTestId(WORKSPACE_TABS_TEST_ID.toolbarRememberRecentlyClosed, {
+			timeout: 20000,
+		}).should('exist');
+	});
+
 	/** Opens the add-tab flow (command palette in “add tab” mode). */
 	Cypress.Commands.add('tabsOpenAddPalette', () => {
 		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.add}"]`)
