@@ -160,7 +160,7 @@ test.describe('Sections Visual Snapshots', () => {
 				}
 
 				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(1000);
+				await page.waitForTimeout(4000);
 
 				// Editor Desktop Snapshot
 				const iframeBody = await getIframeBody(page);
