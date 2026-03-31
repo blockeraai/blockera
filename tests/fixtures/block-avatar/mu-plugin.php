@@ -39,6 +39,13 @@ function blockera_test_avatar_resolve_email( $id_or_email ) {
 		if ( isset( $id_or_email->user_email ) && is_string( $id_or_email->user_email ) ) {
 			return $id_or_email->user_email;
 		}
+		// WP_Comment: core get_avatar_data() uses user_id before comment_author_email; comments
+		// created with only user_id (e.g. Playwright setup.js) have empty comment_author_email.
+		if ( isset( $id_or_email->user_id ) && (int) $id_or_email->user_id > 0 ) {
+			$user = get_user_by( 'id', (int) $id_or_email->user_id );
+
+			return $user ? (string) $user->user_email : '';
+		}
 		if ( isset( $id_or_email->comment_author_email ) && is_string( $id_or_email->comment_author_email ) ) {
 			return $id_or_email->comment_author_email;
 		}
