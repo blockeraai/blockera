@@ -1309,4 +1309,15 @@ export const registerCommands = () => {
 			options
 		).should('be.visible');
 	});
+
+	/**
+	 * Opens the Blockera header zoom dropdown (Post/Site editor).
+	 */
+	Cypress.Commands.add('zoomOpenDropdown', () => {
+		cy.getByDataTest('blockera-zoom-control', { timeout: 30000 })
+			.should('be.visible')
+			.find('button[aria-haspopup="true"]')
+			.first()
+			.click({ force: true });
+	});
 };

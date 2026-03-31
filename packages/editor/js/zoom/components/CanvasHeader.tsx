@@ -105,6 +105,7 @@ export default function CanvasHeader({
 
 	const start = isZoomed ? (
 		<Button
+			data-test="blockera-zoom-header-reset"
 			variant="tertiary"
 			className="blockera-canvas-header__action-btn blockera-canvas-header__action-btn--reset"
 			onClick={onResetZoom}

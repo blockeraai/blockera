@@ -38,6 +38,7 @@ export default function ZoomHeader({
 }: ZoomHeaderProps): JSX.Element {
 	const start = (
 		<Button
+			data-test="blockera-zoom-header-reset"
 			variant="tertiary"
 			className="blockera-canvas-header__action-btn blockera-canvas-header__action-btn--reset"
 			onClick={onReset}
