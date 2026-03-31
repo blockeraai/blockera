@@ -17,6 +17,10 @@ module.exports = {
 				__dirname,
 				'../../editor/js/tabs/constants/testIds.ts'
 			),
+			'blockera-editor-preview-test-ids': path.resolve(
+				__dirname,
+				'../../editor/js/preview-mode/constants/testIds.ts'
+			),
 		},
 	},
 	module: {

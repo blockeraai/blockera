@@ -15,6 +15,7 @@ import {
 	openBoxPositionSide,
 } from '../helpers';
 import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
+import { PREVIEW_MODE_TEST_ID } from 'blockera-editor-preview-test-ids';
 
 export const registerCommands = () => {
 	//This registers the cy.compareSnapshot() custom command provided by the plugin
@@ -1319,5 +1320,40 @@ export const registerCommands = () => {
 			.find('button[aria-haspopup="true"]')
 			.first()
 			.click({ force: true });
+	});
+
+	/**
+	 * Stub `window.open` for Blockera preview mode (modifier+click, header “open in new tab”, shortcuts).
+	 * Assert with `@previewWindowOpen`.
+	 */
+	Cypress.Commands.add('previewStubWindowOpen', () => {
+		cy.window().then((win) => {
+			cy.stub(win, 'open').as('previewWindowOpen');
+		});
+	});
+
+	/** Clicks the header “Live frontend preview” control (`PREVIEW_MODE_TEST_ID.toggleButton`). */
+	Cypress.Commands.add('previewClickToggle', () => {
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.toggleButton, {
+			timeout: 30000,
+		})
+			.should('be.visible')
+			.click();
+	});
+
+	/** Waits for the preview overlay dialog (iframe preview). */
+	Cypress.Commands.add('previewExpectOverlayOpen', () => {
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay, { timeout: 30000 }).should(
+			'be.visible'
+		);
+		cy.get('body').should('have.class', 'blockera-preview-mode-open');
+		// Iframe can be clipped by fixed/overflow ancestors; `exist` matches user-visible preview.
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.iframe).should('exist');
+	});
+
+	/** Asserts preview overlay is closed and body class removed. */
+	Cypress.Commands.add('previewExpectOverlayClosed', () => {
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay).should('not.exist');
+		cy.get('body').should('not.have.class', 'blockera-preview-mode-open');
 	});
 };

@@ -24,6 +24,7 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies
  */
+import { PREVIEW_MODE_TEST_ID } from '../constants/testIds';
 import { PreviewHeader } from '../header';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import { HIDE_ADMIN_BAR_ARG } from '../../hooks/constants';
@@ -923,6 +924,9 @@ export default function PreviewOverlay({
 
 	return createPortal(
 		<div
+			{...({
+				'test-id': PREVIEW_MODE_TEST_ID.overlay,
+			} as Record<string, string>)}
 			className={overlayClassName}
 			role="dialog"
 			aria-modal="true"
@@ -939,6 +943,7 @@ export default function PreviewOverlay({
 					className={`blockera-preview-overlay__header ${
 						breakpointType === 'small' ? 'breakpoint-small' : ''
 					}`}
+					closeButtonTestId={PREVIEW_MODE_TEST_ID.close}
 					content={
 						<>
 							<div className="blockera-canvas-header__url-bar">
@@ -977,6 +982,10 @@ export default function PreviewOverlay({
 									)}
 									showTooltip={true}
 									noBorder={true}
+									{...({
+										'test-id':
+											PREVIEW_MODE_TEST_ID.openInNewTab,
+									} as Record<string, string>)}
 								/>
 							</div>
 						</>
@@ -996,6 +1005,9 @@ export default function PreviewOverlay({
 								showTooltip={true}
 								size="small"
 								noBorder={true}
+								{...({
+									'test-id': PREVIEW_MODE_TEST_ID.reload,
+								} as Record<string, string>)}
 							/>
 						</>
 					}
@@ -1011,6 +1023,9 @@ export default function PreviewOverlay({
 				</div>
 
 				<iframe
+					{...({
+						'test-id': PREVIEW_MODE_TEST_ID.iframe,
+					} as Record<string, string>)}
 					ref={(el) => {
 						if (el && !iframeRef.current) {
 							// Set initial height immediately when iframe is mounted
