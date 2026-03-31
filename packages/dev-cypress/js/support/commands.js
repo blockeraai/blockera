@@ -1170,6 +1170,29 @@ export const registerCommands = () => {
 		}
 	);
 
+	/**
+	 * Posts list (`edit.php`): check rows by post ID, run Blockera bulk action
+	 * “Edit All in Editor”, Apply. Redirects to `post.php` with `bulk_edit_ids`
+	 * (same as `BulkActions::build_editor_url()`).
+	 *
+	 * @param {(number|string)[]} postIds Post IDs to select (same post type; Posts screen).
+	 * @see packages/editor/php/BulkActions.php — ACTION_SLUG, handle_bulk_action
+	 */
+	Cypress.Commands.add('tabsBulkEditAllInEditorFromPostsList', (postIds) => {
+		cy.visit(joinTestUrl('/wp-admin/edit.php'));
+		cy.get('#posts-filter .wp-list-table, .wp-list-table', {
+			timeout: 60000,
+		}).should('exist');
+		cy.wrap(postIds).each((id) => {
+			cy.get(`input[name="post[]"][value="${id}"]`, { timeout: 20000 })
+				.scrollIntoView()
+				.check({ force: true });
+		});
+		// Value must match `BulkActions::ACTION_SLUG` (`blockera_edit_all`).
+		cy.get('#bulk-action-selector-top').select('blockera_edit_all');
+		cy.get('#doaction').click();
+	});
+
 	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 	const pinnedTabRoots = `.blockera-tabs-bar-tabs__pinned-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
