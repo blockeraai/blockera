@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** Relative path from the Blockera plugin root to the avatar JPEG fixture. */
 function blockera_test_avatar_fixture_rel_path() {
-	return 'packages/dev-cypress/js/fixtures/bg-extension-test.jpeg';
+	return 'packages/dev-cypress/js/fixtures/bg-extension-test.png';
 }
 
 /**
