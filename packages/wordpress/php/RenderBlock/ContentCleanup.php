@@ -267,7 +267,7 @@ class ContentCleanup {
 					// Remove existing class attribute, normalize whitespace, and add new class in optimized sequence.
 					$updated_tag = preg_replace( '/\s*\bclass\s*=\s*["\'][^"\']*["\']/', '', $updated_tag );
 					$updated_tag = trim( preg_replace( '/\s+/', ' ', $updated_tag ) );
-					$updated_tag = $this->insertClassAttribute( $updated_tag, $all_classes );
+					$updated_tag = preg_replace( '/\s*>/', ' class="' . esc_attr( $all_classes ) . '">', $updated_tag, 1 );
 				} else {
 					// No original class - just add new class.
 					$updated_tag = $this->addClassToTag( $updated_tag, $selector_data['new_class'] );
@@ -896,44 +896,11 @@ class ContentCleanup {
 			$new_classes      = trim( $existing_classes . ' ' . $new_class );
 			$tag              = preg_replace( '/(\bclass\s*=\s*["\'])([^"\']+)(["\'])/', '$1' . $new_classes . '$3', $tag, 1 );
 		} else {
-			$tag = $this->insertClassAttribute( $tag, $new_class );
+			// Add new class attribute before closing >, consuming any leading whitespace.
+			$tag = preg_replace( '/\s*>/', ' class="' . esc_attr( $new_class ) . '">', $tag, 1 );
 		}
 
 		return $tag;
-	}
-
-	/**
-	 * Insert (or rebuild) class attribute before the tag closer.
-	 *
-	 * Must handle both normal tags (`>`) and self-closing tags (`/>` or `/ >`)
-	 * without producing invalid output like `/ class="..."`.
-	 *
-	 * @param string $tag The full tag string (opening tag only).
-	 * @param string $class_value The class value to set.
-	 *
-	 * @return string The updated tag with `class="..."` inserted before close.
-	 */
-	protected function insertClassAttribute( string $tag, string $class_value ): string {
-
-		$class_attr = 'class="' . esc_attr( $class_value ) . '"';
-
-		// Replace the first tag closer. Keep self-closing slash at the end.
-		// Examples:
-		// - `<img ... />`  -> `<img ... class="x" />`
-		// - `<img .../ >`  -> `<img ... class="x" />`
-		// - `<div ...>`    -> `<div ... class="x">`.
-		$updated = preg_replace_callback(
-			'/\s*(\/?)\s*>/i',
-			static function ( array $m ) use ( $class_attr ): string {
-				return ( isset( $m[1] ) && '/' === $m[1] )
-					? ' ' . $class_attr . ' />'
-					: ' ' . $class_attr . '>';
-			},
-			$tag,
-			1
-		);
-
-		return is_string( $updated ) && '' !== $updated ? $updated : $tag;
 	}
 
 	/**
