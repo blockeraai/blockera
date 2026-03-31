@@ -200,6 +200,9 @@ const Tab = memo(
 		// Check if this pinned tab should be icon-only (hide title, show only icon)
 		const isIconOnly = isPinned && isIconOnlyPinnedTabsEnabled;
 
+		// Prevent closing the last remaining tab (keep the workspace stable).
+		const isOnlyTab = tabs.length <= 1;
+
 		// Handle context menu (right-click)
 		const handleContextMenu = (e: React.MouseEvent): void => {
 			e.preventDefault();
@@ -424,8 +427,12 @@ const Tab = memo(
 					{!isPinned && (
 						<Button
 							icon={closeSmall}
+							disabled={isOnlyTab}
 							onClick={(e) => {
 								e.stopPropagation();
+								if (isOnlyTab) {
+									return;
+								}
 								onClose();
 							}}
 							onKeyDown={(e) => {
@@ -433,6 +440,9 @@ const Tab = memo(
 								if (e.key === 'Enter' || e.key === ' ') {
 									e.preventDefault();
 									e.stopPropagation(); // Prevent parent's handleKeyDown from firing
+									if (isOnlyTab) {
+										return;
+									}
 									onClose();
 								}
 							}}

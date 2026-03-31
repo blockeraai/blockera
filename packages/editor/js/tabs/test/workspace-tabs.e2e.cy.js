@@ -94,6 +94,17 @@ describe('Blockera workspace tabs', () => {
 			cy.tabsExpectUnpinnedCount(1);
 		});
 
+		it('should disable the close control when there is only one tab', () => {
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+
+			// The single unpinned tab should not be closable.
+			cy.get(unpinnedTabRoots)
+				.eq(0)
+				.find(`[test-id^="blockera-workspace-tabs-close--"]`)
+				.should('be.disabled');
+		});
+
 		/**
 		 * Context menu: Close, Close to the right, Close others.
 		 * Default unpinned tab limit is 3 (`resolveTabsConfig`), so each action is
