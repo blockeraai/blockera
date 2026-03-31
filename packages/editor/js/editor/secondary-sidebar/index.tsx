@@ -302,6 +302,7 @@ function SecondarySidebarContentUI() {
 				{/* On toggle open: render with is-hidden first, then effect changes to is-visible to trigger animation */}
 				{shouldRenderContent && (
 					<div
+						data-test="blockera-secondary-sidebar-content"
 						ref={(el) => {
 							sidebarContentRef.current = el;
 

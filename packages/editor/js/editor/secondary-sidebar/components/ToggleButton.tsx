@@ -47,6 +47,7 @@ export default function ToggleButton({
 
 	return (
 		<Button
+			data-test="blockera-secondary-sidebar-toggle"
 			icon={<SecondarySidebarIcon />}
 			onClick={onToggle}
 			isPressed={isVisible}

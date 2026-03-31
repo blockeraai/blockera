@@ -102,6 +102,30 @@ export const registerCommands = () => {
 		return cy.get(`[aria-label="${selector}"]`, ...args);
 	});
 
+	/**
+	 * Dispatch `primaryShift` + physical key (matches @wordpress/keycodes `isKeyboardEvent`).
+	 * WordPress listens on `document` for `keydown` (see @wordpress/keyboard-shortcuts context).
+	 *
+	 * @param {string} key KeyboardEvent.key
+	 * @param {string} code KeyboardEvent.code
+	 */
+	Cypress.Commands.add('pressPrimaryShiftKey', (key, code) => {
+		const isMac = Cypress.platform === 'darwin';
+		cy.window().then((win) => {
+			win.document.dispatchEvent(
+				new win.KeyboardEvent('keydown', {
+					key,
+					code,
+					bubbles: true,
+					cancelable: true,
+					shiftKey: true,
+					metaKey: isMac,
+					ctrlKey: !isMac,
+				})
+			);
+		});
+	});
+
 	Cypress.Commands.add('cssVar', (cssVarName, selector) => {
 		if (selector) {
 			return cy.document().then((doc) => {

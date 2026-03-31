@@ -541,6 +541,7 @@ export const ResizeHandle = ({
 			className={`blockera-sidebar-resize-handle blockera-sidebar-resize-handle--${side} ${
 				showHandle || isDragging ? 'is-visible' : ''
 			} ${isAtLimit ? 'is-at-limit' : ''}`}
+			data-test={`blockera-sidebar-resize-handle--${side}`}
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			onMouseDown={handleMouseDown}
