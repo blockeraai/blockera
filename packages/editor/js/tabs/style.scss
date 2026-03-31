@@ -1103,3 +1103,10 @@ body:not(.blockera-tabs-add-tab-mode)
 .blockera-tabs-locked-modal__buttons .components-button {
 	min-height: 36px;
 }
+
+/**
+ * Toolbar offset for text editor when tabs are visible.
+ */
+.blockera-tabs-wrapper ~ .editor-text-editor .editor-text-editor__toolbar {
+	top: var(--blockera-panel-tabs-height);
+}
