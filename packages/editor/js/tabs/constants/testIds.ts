@@ -65,6 +65,17 @@ export const WORKSPACE_TABS_TEST_ID = {
 		'blockera-workspace-tabs-rename-modal-remove-rename',
 	renameModalCancel: 'blockera-workspace-tabs-rename-modal-cancel',
 
+	/** Close confirmation modal shown when closing tabs with unsaved changes. */
+	closeConfirmModalRoot: 'blockera-workspace-tabs-close-confirm-modal-root',
+	closeConfirmTabsList: 'blockera-workspace-tabs-close-confirm-tabs-list',
+	closeConfirmSaveAndClose:
+		'blockera-workspace-tabs-close-confirm-save-and-close',
+	closeConfirmCloseWithoutSaving:
+		'blockera-workspace-tabs-close-confirm-close-without-saving',
+	closeConfirmCancel: 'blockera-workspace-tabs-close-confirm-cancel',
+	closeConfirmReviewTab: (tabKey: string): string =>
+		`blockera-workspace-tabs-close-confirm-review-tab--${tabKey}`,
+
 	/** Upgrade modal when workspace tab limits are exceeded (free tier). */
 	tabsLimitUpgradePrompt: 'blockera-workspace-tabs-limit-upgrade-prompt',
 } as const;

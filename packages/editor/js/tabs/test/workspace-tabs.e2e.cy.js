@@ -235,6 +235,83 @@ describe('Blockera workspace tabs', () => {
 			savePage();
 			cy.tabsExpectUnpinnedUnsavedIndicator(0, false);
 		});
+
+		it('should open the close confirmation modal when closing a single tab with unsaved changes (and cancel keeps the tab)', () => {
+			const titleA = `DirtyA-${Date.now()}`;
+			const titleB = `DirtyB-${Date.now()}`;
+
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(2, { timeout: 60000 });
+			setPostTitleInCanvas(titleB);
+			savePage();
+
+			// Make the second tab (active) dirty, then close it -> should prompt.
+			setPostTitleInCanvas(titleA);
+			cy.tabsExpectUnpinnedUnsavedIndicator(1, true);
+			cy.tabsCloseUnpinnedByIndex(1);
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.closeConfirmModalRoot).should(
+				'be.visible'
+			);
+
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.closeConfirmCancel).click();
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.closeConfirmModalRoot).should(
+				'not.exist'
+			);
+			cy.tabsExpectUnpinnedCount(2);
+			cy.tabsExpectUnpinnedUnsavedIndicator(1, true);
+		});
+
+		it('should open the close confirmation modal when closing multiple tabs with unsaved changes (close all without saving)', () => {
+			const title0 = `Multi0-${Date.now()}`;
+			const title1 = `Multi1-${Date.now()}`;
+			const title2 = `Multi2-${Date.now()}`;
+
+			cy.tabsResetWorkspaceStorage();
+			createPost({ postType: 'post' });
+			cy.tabsExpectUnpinnedCount(1);
+
+			setPostTitleInCanvas(title0);
+			savePage();
+			cy.tabsExpectUnpinnedUnsavedIndicator(0, false);
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(2, { timeout: 60000 });
+			setPostTitleInCanvas(title1);
+			cy.tabsExpectUnpinnedUnsavedIndicator(1, true);
+
+			cy.tabsAddNewPost();
+			cy.tabsExpectUnpinnedCount(3, { timeout: 60000 });
+			setPostTitleInCanvas(title2);
+			cy.tabsExpectUnpinnedUnsavedIndicator(2, true);
+
+			// From first tab: close to the right -> targets 2 dirty tabs.
+			cy.tabsClickUnpinnedByIndex(0);
+			cy.get(unpinnedTabRoots).eq(0).rightclick();
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.contextMenuCloseToRight
+			).click();
+
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.closeConfirmModalRoot).should(
+				'be.visible'
+			);
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.closeConfirmTabsList)
+				.should('be.visible')
+				.find('.blockera-tabs-close-confirm-tab-item')
+				.should('have.length', 2);
+
+			cy.getByTestId(
+				WORKSPACE_TABS_TEST_ID.closeConfirmCloseWithoutSaving
+			).click();
+
+			cy.getByTestId(WORKSPACE_TABS_TEST_ID.closeConfirmModalRoot).should(
+				'not.exist'
+			);
+			cy.tabsExpectUnpinnedCount(1);
+			cy.tabsGetActiveTitle().should('contain.text', title0);
+		});
 	});
 
 	describe('Tab rename', () => {
