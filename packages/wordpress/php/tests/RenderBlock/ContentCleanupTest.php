@@ -244,6 +244,28 @@ class ContentCleanupTest extends \WP_UnitTestCase {
 		$this->assertStringContainsString( '.blockera-block-parent :where(.blockera-block-parent-child-1)', $result['style'] );
 	}
 
+	/**
+	 * Prevent regression: self-closing tags must not end up with `/ class="..."`.
+	 *
+	 * This covers the real-world case where Blockera generates a counter-based child class
+	 * for a styled `<img />` inside a blockera wrapper.
+	 */
+	public function testProcessSelfClosingImgDoesNotInjectClassAfterSlash(): void {
+
+		$html = '<figure class="wp-block-image blockera-block-parent"><img decoding="async" src="https://example.com/x.png" alt="x" style="border: 1px solid red;" /></figure>';
+
+		$result = $this->cleanup->process( $html );
+
+		$this->assertStringNotContainsString( 'style=', $result['content'] );
+		$this->assertStringContainsString( 'blockera-block-parent-child-1', $result['content'] );
+
+		// The bug we saw in snapshots: `/ class="..."` (invalid HTML).
+		$this->assertStringNotContainsString( '/ class="', $result['content'] );
+
+		// Ensure the class is inserted before the tag closer for self-closing tags.
+		$this->assertMatchesRegularExpression( '/<img[^>]*\bclass="[^"]*blockera-block-parent-child-1[^"]*"[^>]*\/>/i', $result['content'] );
+	}
+
 	public function testProcessMultipleElements(): void {
 
 		$html = '<div class="blockera-block-1" style="padding: 20px;">
