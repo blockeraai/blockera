@@ -9,7 +9,7 @@
 	margin-bottom: 64px;
 }
 
-.blockera-block.blockera-block-1.wp-block-image :is(img, svg) {
+html:root body :where(.blockera-block.blockera-block-1).wp-block-image :is(img, svg) {
 	border: 3px solid #ff1515;
 }
 
@@ -73,7 +73,7 @@
 	aspect-ratio: 1;
 }
 
-.blockera-block.blockera-block-2:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-2):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 	color: #ff3737;
 }
 
@@ -99,7 +99,7 @@
 	margin-bottom: 24px;
 }
 
-.blockera-block.blockera-block-3:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-3):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 	color: #ff0101;
 	background-color: #fae6e6;
 	text-align: center;
@@ -115,7 +115,7 @@
 		aspect-ratio: 1;
 	}
 
-	.blockera-block.blockera-block-3:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+	html:root body :where(.blockera-block.blockera-block-3):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 		order: 100;
 	};
 }

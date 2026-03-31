@@ -5,7 +5,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 :where(p) {
+html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	font-size: 24px;
 	font-weight: 700;
 	font-style: normal;
@@ -14,7 +14,7 @@
 	border-radius: 60px;
 }
 
-.blockera-block.blockera-block-1 cite {
+html:root body :where(.blockera-block.blockera-block-1) cite {
 	font-size: 18px;
 	font-weight: 700;
 	font-style: normal;
@@ -36,13 +36,13 @@
 	font-size: 20px;
 }
 
-.blockera-block.blockera-block-2 :where(p) {
+html:root body :where(.blockera-block.blockera-block-2) :where(p) {
 	background-color: #6acb6a;
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 0;
 }
 
-.blockera-block.blockera-block-2 cite {
+html:root body :where(.blockera-block.blockera-block-2) cite {
 	background-color: #4fb54f;
 	display: flex !important;
 	flex-direction: row;
@@ -52,7 +52,7 @@
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-2 cite::before {
+html:root body :where(.blockera-block.blockera-block-2) cite::before {
 	border-radius: 10px;
 	content: "Before";
 	padding: 5px 10px 5px 10px;
@@ -60,7 +60,7 @@
 	background-color: #00000029;
 }
 
-.blockera-block.blockera-block-2 cite::after {
+html:root body :where(.blockera-block.blockera-block-2) cite::after {
 	background-color: #0000003b;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -68,7 +68,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-2 :where(p)::before {
+html:root body :where(.blockera-block.blockera-block-2) :where(p)::before {
 	border-radius: 10px;
 	content: "Before";
 	padding: 5px 10px 5px 10px;
@@ -76,7 +76,7 @@
 	background-color: #00000036;
 }
 
-.blockera-block.blockera-block-2 :where(p)::after {
+html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 	border-radius: 10px;
 	content: "After";
 	background-color: #00000030;
@@ -92,7 +92,7 @@
 		border-radius: 20px;
 	}
 
-	.blockera-block.blockera-block-2 cite {
+	html:root body :where(.blockera-block.blockera-block-2) cite {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
@@ -100,7 +100,7 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-2 :where(p) {
+	html:root body :where(.blockera-block.blockera-block-2) :where(p) {
 		display: flex !important;
 		flex-direction: column;
 		gap: 20px;
@@ -109,7 +109,7 @@
 		margin-bottom: 10px;
 	}
 
-	.blockera-block.blockera-block-2 cite::before {
+	html:root body :where(.blockera-block.blockera-block-2) cite::before {
 		width: 100%;
 		width: -moz-available;
 		width: -webkit-fill-available;
@@ -117,7 +117,7 @@
 		content: "Before";
 	}
 
-	.blockera-block.blockera-block-2 cite::after {
+	html:root body :where(.blockera-block.blockera-block-2) cite::after {
 		width: 100%;
 		width: -moz-available;
 		width: -webkit-fill-available;

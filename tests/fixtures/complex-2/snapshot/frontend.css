@@ -98,7 +98,7 @@ p.blockera-block.blockera-block-4 {
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
@@ -110,7 +110,7 @@ p.blockera-block.blockera-block-9 {
 	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
-.blockera-block.blockera-block-9 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-9) a:not(.wp-element-button) {
 	color: #ffffff;
 }
 
@@ -158,7 +158,7 @@ p.blockera-block.blockera-block-12 {
 	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
-.blockera-block.blockera-block-12 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-button) {
 	color: #fcfcfc;
 }
 
@@ -225,7 +225,7 @@ p.blockera-block.blockera-block-12 {
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-16 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-16) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
@@ -237,6 +237,6 @@ p.blockera-block.blockera-block-17 {
 	font-size: var(--wp--preset--font-size--medium, 1rem);
 }
 
-.blockera-block.blockera-block-17 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-17) a:not(.wp-element-button) {
 	color: #ffffff;
 }

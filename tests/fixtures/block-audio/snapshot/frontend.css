@@ -126,7 +126,7 @@
 	flex: 1 1 0%;
 }
 
-.blockera-block.blockera-block-3 figcaption {
+html:root body :where(.blockera-block.blockera-block-3) figcaption {
 	background-color: #dee4e6;
 	color: #520000;
 	font-weight: 700;
@@ -152,7 +152,7 @@
 	flex: 1 1 0%;
 }
 
-.blockera-block.blockera-block-4 figcaption {
+html:root body :where(.blockera-block.blockera-block-4) figcaption {
 	background-color: #48baa7;
 	color: #ffffff;
 	font-weight: 700;
@@ -184,7 +184,7 @@
 	box-shadow: 10px 10px 0 0 #47baa7;
 }
 
-.blockera-block.blockera-block-4:hover figcaption {
+html:root body :where(.blockera-block.blockera-block-4):hover figcaption {
 	background-color: #1a9480;
 }
 

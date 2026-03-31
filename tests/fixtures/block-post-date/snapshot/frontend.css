@@ -8,7 +8,7 @@
 	color: #980000;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	color: #980000;
 }
 
@@ -30,7 +30,7 @@
 	font-size: 20px;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 	background-color: #00b4ba;
 	padding: 5px 15px 5px 15px;
@@ -38,7 +38,7 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-2:hover :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-2):hover :where(a:not(.wp-element-button)) {
 	background-color: #006568;
 }
 
@@ -56,7 +56,7 @@
 	font-size: 16px;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::before {
 	color: #ffffff;
 	content: "Before Link";
 	padding: 10px 10px 10px 10px;
@@ -64,7 +64,7 @@
 	border-radius: 5px;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::after {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::after {
 	border-radius: 5px;
 	content: "After Link";
 	background-color: #00000054;
@@ -72,7 +72,7 @@
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 	background-color: #00000038;
 	padding: 10px 10px 10px 10px;
 	border-radius: 5px;
@@ -91,14 +91,14 @@
 		align-items: flex-start !important;
 	}
 
-	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+	html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
 		align-self: stretch;
 	}
 
-	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
+	html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::before {
 		width: 100%;
 		width: -moz-available;
 		width: -webkit-fill-available;

@@ -9,7 +9,7 @@
 	margin-left: 0 !important;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment {
 	background-color: #bfefb4;
 	padding: 20px 20px 20px 20px;
 	border-radius: 20px;
@@ -17,14 +17,14 @@
 	transition: all 500ms ease 0ms;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-avatar {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-avatar {
 	border-radius: 5px;
 	border: 2px solid #0000004d;
 	width: 40px;
 	height: 40px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-author {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-author {
 	background-color: #fca53f;
 	display: flex !important;
 	flex-direction: row;
@@ -33,7 +33,7 @@
 	gap: 20px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-link {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-link {
 	background-color: #3cf3ed;
 	display: flex !important;
 	gap: 10px;
@@ -42,7 +42,7 @@
 	justify-content: flex-start !important;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-date {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-date {
 	background-color: #a9cdff;
 	display: flex !important;
 	flex-direction: row;
@@ -52,7 +52,7 @@
 	margin-top: 20px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-excerpt {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-excerpt {
 	background-color: #f36bff;
 	display: flex !important;
 	flex-direction: row;
@@ -62,51 +62,51 @@
 	margin-top: 20px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-author::before {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-author::before {
 	padding: 5px 5px 5px 5px;
 	content: "before";
 	background-color: #d97a0d;
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-author::after {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-author::after {
 	border-radius: 10px;
 	content: "After";
 	background-color: #c36f0e;
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-link::before {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-link::before {
 	background-color: #05d2cb;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-link::after {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-link::after {
 	background-color: #00a39d;
 	content: "After";
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-date::before {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-date::before {
 	background-color: #5da3ff;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-date::after {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-date::after {
 	background-color: #5da3ff;
 	content: "After";
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-excerpt::before {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-excerpt::before {
 	background-color: #c10bd2;
 	content: "Before";
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-excerpt::after {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-excerpt::after {
 	background-color: #ab00ba;
 	content: "After";
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment::before {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment::before {
 	border-radius: 10px;
 	content: "before";
 	background-color: #0000003b;
@@ -116,7 +116,7 @@
 	margin-bottom: 10px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-latest-comments__comment::after {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment::after {
 	border-radius: 10px;
 	content: "After";
 	background-color: #0000003b;
@@ -127,21 +127,21 @@
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-excerpt {
+	html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-excerpt {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 10px;
 	}
 
-	.blockera-block.blockera-block-1 .wp-block-latest-comments__comment-date {
+	html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment-date {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 10px;
 	}
 
-	.blockera-block.blockera-block-1 .wp-block-latest-comments__comment::after {
+	html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment::after {
 		display: inline-block !important;
 		content: "After";
 	};
@@ -151,7 +151,7 @@
 	background-color: #fabbbb;
 }
 
-.blockera-block.blockera-block-1:hover .wp-block-latest-comments__comment {
+html:root body :where(.blockera-block.blockera-block-1):hover .wp-block-latest-comments__comment {
 	background-color: #80e869;
 	border: 2px solid #60af4e;
 }

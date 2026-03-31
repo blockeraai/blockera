@@ -10,7 +10,7 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 	background-color: #ff0404;
 	padding-right: 10px;
@@ -41,7 +41,7 @@
 	font-size: 18px;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 	background-color: #00000073;
 	padding: 5px 5px 5px 5px;
 	border-radius: 5px;
@@ -53,7 +53,7 @@
 	justify-content: space-between !important;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::before {
 	padding: 5px 5px 5px 5px;
 	content: "Before";
 	background-color: #0000003b;
@@ -61,7 +61,7 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::after {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::after {
 	padding: 5px 5px 5px 5px;
 	content: "After";
 	background-color: #0000004d;
@@ -69,7 +69,7 @@
 	border-radius: 5px;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)):hover {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)):hover {
 	background-color: #00000099;
 }
 
@@ -83,7 +83,7 @@
 		gap: 20px;
 	}
 
-	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+	html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 		align-self: stretch;
 		flex-direction: column;
 		justify-content: center !important;
@@ -92,13 +92,13 @@
 		padding: 10px 10px 10px 10px;
 	}
 
-	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::after {
+	html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::after {
 		border-radius: 35px;
 		content: "After";
 		align-self: stretch;
 	}
 
-	.blockera-block.blockera-block-3 :where(a:not(.wp-element-button))::before {
+	html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button))::before {
 		border-radius: 55px;
 		content: "Before";
 		align-self: flex-end;

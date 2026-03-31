@@ -3,11 +3,11 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-1 figure.wp-block-image figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-1) figure.wp-block-image.wp-block-image figcaption.wp-element-caption {
 	background-color: #00fc43;
 	background-size: auto;
 	background-position: 0 0;
@@ -17,7 +17,7 @@
 	border-radius: 30px;
 }
 
-.blockera-block.blockera-block-1 > figcaption {
+html:root body :where(.blockera-block.blockera-block-1) > figcaption {
 	background-color: #56ebff;
 	padding: 10px 10px 10px 10px;
 	font-weight: 700;
@@ -34,16 +34,16 @@
 	gap: 30px;
 }
 
-.blockera-block.blockera-block-1 .wp-block-image {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-image {
 	overflow: hidden;
 	transition: all 500ms ease 0ms;
 }
 
-.blockera-block.blockera-block-1 .wp-block-image :is(img:not([src=""]), svg:not(:empty)):hover {
+html:root body :where(.blockera-block.blockera-block-1) .wp-block-image :is(img:not([src=""]), svg:not(:empty)):hover {
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 > figcaption::before {
+html:root body :where(.blockera-block.blockera-block-1) > figcaption::before {
 	border-radius: 40px;
 	content: "Before";
 	padding: 3px 15px 3px 15px;
@@ -51,7 +51,7 @@
 	background-color: #17bed4;
 }
 
-.blockera-block.blockera-block-1 > figcaption::after {
+html:root body :where(.blockera-block.blockera-block-1) > figcaption::after {
 	border-radius: 30px;
 	content: "After";
 	background-color: #17bed4;
@@ -60,7 +60,7 @@
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1 > figcaption {
+	html:root body :where(.blockera-block.blockera-block-1) > figcaption {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
@@ -95,7 +95,7 @@
 	gap: 15px;
 }
 
-.blockera-block.blockera-block-2:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-2):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 	background-size: auto;
 	background-position: 0 0;
 	background-repeat: no-repeat;
@@ -106,7 +106,7 @@
 	order: -1;
 }
 
-.blockera-block.blockera-block-2:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption:hover {
+html:root body :where(.blockera-block.blockera-block-2):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption:hover {
 	opacity: 100%;
 }
 
@@ -115,12 +115,12 @@
 	gap: 70px;
 }
 
-.blockera-block.blockera-block-3 > figcaption {
+html:root body :where(.blockera-block.blockera-block-3) > figcaption {
 	background-color: #00000024;
 	order: -1;
 }
 
-.blockera-block.blockera-block-3 figure.wp-block-image figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-3) figure.wp-block-image.wp-block-image figcaption.wp-element-caption {
 	order: -1;
 }
 
@@ -128,12 +128,12 @@
 	order: 100;
 }
 
-.blockera-block.blockera-block-4:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-4):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 	background-color: #ff0000;
 	order: -1;
 }
 
-.blockera-block.blockera-block-4.wp-block-image :is(img, svg) {
+html:root body :where(.blockera-block.blockera-block-4).wp-block-image :is(img, svg) {
 	order: 100;
 }
 
@@ -145,7 +145,7 @@
 	gap: 40px;
 }
 
-.blockera-block.blockera-block-5 > figcaption {
+html:root body :where(.blockera-block.blockera-block-5) > figcaption {
 	font-weight: 700;
 	font-style: normal;
 }
@@ -167,24 +167,24 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-6 .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+html:root body :where(.blockera-block.blockera-block-6) .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	box-shadow: 7px 7px 0 0 #0000003b;
 	filter: blur(2px);
 }
 
-.blockera-block.blockera-block-6 > figcaption {
+html:root body :where(.blockera-block.blockera-block-6) > figcaption {
 	padding: 5px 5px 5px 5px;
 	margin-top: 20px;
 	flex: 0 1 auto;
 	align-self: center;
 }
 
-.blockera-block.blockera-block-6 > figcaption:hover {
+html:root body :where(.blockera-block.blockera-block-6) > figcaption:hover {
 	background-color: #00000026;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-6 > figcaption {
+	html:root body :where(.blockera-block.blockera-block-6) > figcaption {
 		flex: 1 1 0%;
 	};
 }
@@ -193,7 +193,7 @@
 	background-color: #7dacd4;
 }
 
-.blockera-block.blockera-block-6:hover .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
+html:root body :where(.blockera-block.blockera-block-6):hover .wp-block-image :is(img:not([src=""]), svg:not(:empty)) {
 	border-radius: 20px;
 }
 

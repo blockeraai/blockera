@@ -9,7 +9,7 @@
 	line-height: 2;
 }
 
-.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link {
+html:root body :where(.blockera-block.blockera-block-1) a.wp-block-post-excerpt__more-link {
 	font-weight: 700;
 	font-style: normal;
 	color: #ffffff;
@@ -20,40 +20,40 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-1 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-1) :is(strong, b) {
 	background-color: #ff0000;
 }
 
-.blockera-block.blockera-block-1 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-1) :is(em, i) {
 	background-color: #48e400;
 }
 
-.blockera-block.blockera-block-1 kbd {
+html:root body :where(.blockera-block.blockera-block-1) kbd {
 	background-color: #00ffee;
 }
 
-.blockera-block.blockera-block-1 code {
+html:root body :where(.blockera-block.blockera-block-1) code {
 	background-color: #9496ff;
 }
 
-.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-1) span:not([data-rich-text-placeholder]) {
 	background-color: #ff9d00;
 }
 
-.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	background-color: #bbff00;
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button, .wp-block-post-excerpt__more-link) {
+html:root body :where(.blockera-block.blockera-block-1) a:not(.wp-element-button, .wp-block-post-excerpt__more-link) {
 	background-color: #dd00ff;
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link:hover {
+html:root body :where(.blockera-block.blockera-block-1) a.wp-block-post-excerpt__more-link:hover {
 	background-color: #ff0101;
 }
 
-.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::before {
+html:root body :where(.blockera-block.blockera-block-1) a.wp-block-post-excerpt__more-link::before {
 	font-size: 14px;
 	content: "Before";
 	display: inline-block !important;
@@ -62,7 +62,7 @@
 	border-radius: 5px;
 }
 
-.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link::after {
+html:root body :where(.blockera-block.blockera-block-1) a.wp-block-post-excerpt__more-link::after {
 	font-size: 14px;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -78,7 +78,7 @@
 		gap: 20px;
 	}
 
-	.blockera-block.blockera-block-1 a.wp-block-post-excerpt__more-link {
+	html:root body :where(.blockera-block.blockera-block-1) a.wp-block-post-excerpt__more-link {
 		display: flex !important;
 		flex-direction: row;
 		align-items: center !important;
@@ -141,7 +141,7 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-2 a.wp-block-post-excerpt__more-link {
+html:root body :where(.blockera-block.blockera-block-2) a.wp-block-post-excerpt__more-link {
 	font-weight: 700;
 	font-style: normal;
 	color: #ffffff;
@@ -153,16 +153,16 @@
 	transition: all 200ms ease 0ms;
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button, .wp-block-post-excerpt__more-link) {
+html:root body :where(.blockera-block.blockera-block-2) a:not(.wp-element-button, .wp-block-post-excerpt__more-link) {
 	background-color: #ff0000;
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-2 a.wp-block-post-excerpt__more-link:hover {
+html:root body :where(.blockera-block.blockera-block-2) a.wp-block-post-excerpt__more-link:hover {
 	background-color: #ff0101;
 }
 
-.blockera-block.blockera-block-2:hover a.wp-block-post-excerpt__more-link {
+html:root body :where(.blockera-block.blockera-block-2):hover a.wp-block-post-excerpt__more-link {
 	background-color: #2840fa;
 	transform: scale3d(105%, 105%, 50%);
 	box-shadow: 0 5px 5px 0 #000000ab;
@@ -179,11 +179,11 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-3 a:not(.wp-element-button, .wp-block-post-excerpt__more-link) {
+html:root body :where(.blockera-block.blockera-block-3) a:not(.wp-element-button, .wp-block-post-excerpt__more-link) {
 	display: none !important;
 }
 
-.blockera-block.blockera-block-3 a.wp-block-post-excerpt__more-link {
+html:root body :where(.blockera-block.blockera-block-3) a.wp-block-post-excerpt__more-link {
 	display: none !important;
 }
 

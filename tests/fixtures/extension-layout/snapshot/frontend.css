@@ -17,7 +17,7 @@
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-1 :where(p) {
+html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	background-color: #0000001a;
 }
 
@@ -54,7 +54,7 @@
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-2 :where(p) {
+html:root body :where(.blockera-block.blockera-block-2) :where(p) {
 	background-color: #0000001a;
 }
 
@@ -79,7 +79,7 @@
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-3 :where(p) {
+html:root body :where(.blockera-block.blockera-block-3) :where(p) {
 	background-color: #0000001a;
 }
 
@@ -108,7 +108,7 @@ p.blockera-block.blockera-block-4-1 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-4 :where(p) {
+html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 	background-color: #0000001a;
 }
 
@@ -144,7 +144,7 @@ p.blockera-block.blockera-block-5-3 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-5 :where(p) {
+html:root body :where(.blockera-block.blockera-block-5) :where(p) {
 	background-color: #0000001a;
 }
 
@@ -168,7 +168,7 @@ p.blockera-block.blockera-block-5-3 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-6 :where(p) {
+html:root body :where(.blockera-block.blockera-block-6) :where(p) {
 	background-color: #0000001a;
 }
 

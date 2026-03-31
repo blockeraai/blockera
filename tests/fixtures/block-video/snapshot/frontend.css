@@ -10,7 +10,7 @@
 	aspect-ratio: 1;
 }
 
-.blockera-block.blockera-block-1 figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-1) figcaption.wp-element-caption {
 	background-color: #ff3131;
 	padding: 6px 10px 6px 10px;
 	margin-top: 20px;
@@ -31,7 +31,7 @@
 		padding: 20px 20px 20px 20px;
 	}
 
-	.blockera-block.blockera-block-1 figcaption.wp-element-caption {
+	html:root body :where(.blockera-block.blockera-block-1) figcaption.wp-element-caption {
 		padding: 6px 10px 6px 10px;
 		margin-top: 0;
 		margin-bottom: 0;
@@ -44,7 +44,7 @@
 	border: 2px solid #70cc4b;
 }
 
-.blockera-block.blockera-block-1:hover figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-1):hover figcaption.wp-element-caption {
 	background-color: #007bff;
 }
 

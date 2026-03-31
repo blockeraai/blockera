@@ -27,7 +27,7 @@
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-2 :where(p) {
+html:root body :where(.blockera-block.blockera-block-2) :where(p) {
 	text-transform: lowercase;
 	font-weight: 800;
 	font-style: normal;
@@ -122,7 +122,7 @@ p.blockera-block.blockera-block-9 {
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-9 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-9) a:not(.wp-element-button) {
 	color: #ffffff;
 }
 
@@ -144,7 +144,7 @@ p.blockera-block.blockera-block-11 {
 	text-decoration: line-through;
 }
 
-.blockera-block.blockera-block-11 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-11) a:not(.wp-element-button) {
 	color: #ffffff;
 }
 
@@ -167,7 +167,7 @@ p.blockera-block.blockera-block-13 {
 	word-spacing: 20px;
 }
 
-.blockera-block.blockera-block-13 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-13) a:not(.wp-element-button) {
 	color: #ffffff;
 }
 
@@ -190,7 +190,7 @@ p.blockera-block.blockera-block-13 {
 	letter-spacing: 10px;
 }
 
-.blockera-block.blockera-block-14 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-14) :where(a:not(.wp-element-button)) {
 	color: #2ed445;
 }
 
@@ -200,7 +200,7 @@ p.blockera-block.blockera-block-15 {
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-15 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-15) a:not(.wp-element-button) {
 	color: #ffffff;
 }
 
@@ -216,7 +216,7 @@ p.blockera-block.blockera-block-15 {
 	margin-block-start: 30px !important;
 }
 
-.blockera-block.blockera-block-16 :where(p) {
+html:root body :where(.blockera-block.blockera-block-16) :where(p) {
 	background-color: #213fbe;
 	font-size: 26px;
 	font-weight: 700;
@@ -231,7 +231,7 @@ p.blockera-block.blockera-block-15 {
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-16 :where(p) {
+	html:root body :where(.blockera-block.blockera-block-16) :where(p) {
 		width: 100%;
 		width: -moz-available;
 		width: -webkit-fill-available;
@@ -260,7 +260,7 @@ p.blockera-block.blockera-block-17 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-18 :where(p) {
+html:root body :where(.blockera-block.blockera-block-18) :where(p) {
 	margin-top: 20px;
 	margin-bottom: 20px;
 }

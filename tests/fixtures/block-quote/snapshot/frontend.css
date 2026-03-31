@@ -13,7 +13,7 @@
 	margin-block-start: 50px !important;
 }
 
-.blockera-block.blockera-block-1 cite {
+html:root body :where(.blockera-block.blockera-block-1) cite {
 	background-color: #f8d573;
 	padding: 5px 5px 5px 5px;
 	border-radius: 40px;
@@ -22,35 +22,35 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-1 :where(p) {
+html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	background-color: #e8d192;
 }
 
-.blockera-block.blockera-block-1 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-1) :is(strong, b) {
 	background-color: #ffbb00;
 }
 
-.blockera-block.blockera-block-1 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-1) :is(em, i) {
 	background-color: #ff5151;
 }
 
-.blockera-block.blockera-block-1 kbd {
+html:root body :where(.blockera-block.blockera-block-1) kbd {
 	background-color: #2eff0a;
 }
 
-.blockera-block.blockera-block-1 code {
+html:root body :where(.blockera-block.blockera-block-1) code {
 	background-color: #25f4ff;
 }
 
-.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-1) span:not([data-rich-text-placeholder]) {
 	background-color: #757eff;
 }
 
-.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	background-color: #ff25ed;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	background-color: #00acff;
 }
 
@@ -62,17 +62,17 @@
 	background-color: #ffdcdc;
 }
 
-.blockera-block.blockera-block-2 :where(p) {
+html:root body :where(.blockera-block.blockera-block-2) :where(p) {
 	background-color: #ffb2b2;
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)) {
+html:root body :where(.blockera-block.blockera-block-2) :where(h2).wp-block-heading {
 	background-color: #5dff5d;
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-2 cite {
+html:root body :where(.blockera-block.blockera-block-2) cite {
 	padding: 10px 10px 10px 10px;
 	background-color: #e88081;
 	font-size: 16px;
@@ -80,7 +80,7 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-2 :where(p)::before {
+html:root body :where(.blockera-block.blockera-block-2) :where(p)::before {
 	border-radius: 10px;
 	content: "Before";
 	background-color: #ff6868;
@@ -88,7 +88,7 @@
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-2 :where(p)::after {
+html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 	border-radius: 10px;
 	content: "After";
 	background-color: #d43a3a;
@@ -96,7 +96,7 @@
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading))::before {
+html:root body :where(.blockera-block.blockera-block-2) :where(h2).wp-block-heading::before {
 	border-radius: 10px;
 	content: "Before";
 	background-color: #00c503;
@@ -104,7 +104,7 @@
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading))::after {
+html:root body :where(.blockera-block.blockera-block-2) :where(h2).wp-block-heading::after {
 	border-radius: 10px;
 	content: "After";
 	background-color: #00c503;
@@ -112,7 +112,7 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-2 cite::before {
+html:root body :where(.blockera-block.blockera-block-2) cite::before {
 	display: inline-block !important;
 	content: "Before";
 	padding: 5px 5px 5px 5px;
@@ -120,7 +120,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-2 cite::after {
+html:root body :where(.blockera-block.blockera-block-2) cite::after {
 	display: inline-block !important;
 	content: "After";
 	padding: 5px 5px 5px 5px;
@@ -135,13 +135,13 @@
 		padding-top: 30px;
 	}
 
-	.blockera-block.blockera-block-2 :where(p)::after {
+	html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 		flex-direction: column;
 		content: "After";
 		display: flex !important;
 	}
 
-	.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)) {
+	html:root body :where(.blockera-block.blockera-block-2) :where(h2).wp-block-heading {
 		display: flex !important;
 		flex-direction: column;
 		padding: 20px 20px 20px 20px;
@@ -149,7 +149,7 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-2 cite {
+	html:root body :where(.blockera-block.blockera-block-2) cite {
 		display: flex !important;
 		flex-direction: column;
 		justify-content: center !important;
@@ -159,22 +159,22 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-2 :where(p) {
+	html:root body :where(.blockera-block.blockera-block-2) :where(p) {
 		display: flex !important;
 		flex-direction: column;
 		gap: 10px;
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-2 cite.is-layout-constrained > * + * {
+	html:root body :where(.blockera-block.blockera-block-2) cite.is-layout-constrained > * + * {
 		margin-block-start: 0 !important;
 	}
 
-	.blockera-block.blockera-block-2 :where(p).is-layout-constrained > * + * {
+	html:root body :where(.blockera-block.blockera-block-2) :where(p).is-layout-constrained > * + * {
 		margin-block-start: 0 !important;
 	}
 
-	.blockera-block.blockera-block-2 :where(h2:is(h2.wp-block-heading)).is-layout-constrained > * + * {
+	html:root body :where(.blockera-block.blockera-block-2) :where(h2).wp-block-heading.is-layout-constrained > * + * {
 		margin-block-start: 0 !important;
 	};
 }

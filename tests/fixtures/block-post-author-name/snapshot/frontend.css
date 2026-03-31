@@ -5,7 +5,7 @@
 	color: #ff2e2e;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	color: #ff2e2e;
 }
 
@@ -31,7 +31,7 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)) {
 	color: #f8f4f4;
 	display: flex !important;
 	padding: 5px 5px 5px 5px;
@@ -47,12 +47,12 @@
 	gap: 10px;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)):hover {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)):hover {
 	font-size: 18px;
 	text-decoration: underline;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::before {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::before {
 	flex: 1 1 0%;
 	content: "Before";
 	padding: 5px 10px 5px 10px;
@@ -61,7 +61,7 @@
 	border-radius: 5px;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::after {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::after {
 	flex: 1 1 0%;
 	content: "After";
 	font-size: 14px;
@@ -79,18 +79,18 @@
 		background-color: #e6c66f;
 	}
 
-	.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
+	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)) {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
 	}
 
-	.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::after {
+	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::after {
 		align-self: flex-end;
 		content: "After";
 	}
 
-	.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::before {
+	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::before {
 		align-self: stretch;
 		content: "Before";
 	};

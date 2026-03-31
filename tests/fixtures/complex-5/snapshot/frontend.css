@@ -64,7 +64,7 @@
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-5 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-5) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
@@ -102,19 +102,19 @@ p.blockera-block.blockera-block-8 {
 	margin-block-start: 0 !important;
 }
 
-.blockera-block.blockera-block-9 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-9 .wp-block-group {
+html:root body :where(.blockera-block.blockera-block-9) .wp-block-group {
 	background-color: #0d2285;
 }
 
-.blockera-block.blockera-block-9 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
+html:root body :where(.blockera-block.blockera-block-9) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 	background-color: #051563;
 }
 
-.blockera-block.blockera-block-9 :where(p) {
+html:root body :where(.blockera-block.blockera-block-9) :where(p) {
 	background-color: #051563;
 }
 
@@ -128,11 +128,11 @@ p.blockera-block.blockera-block-8 {
 		height: 550px;
 	}
 
-	.blockera-block.blockera-block-9 .wp-block-group.is-layout-constrained > * + * {
+	html:root body :where(.blockera-block.blockera-block-9) .wp-block-group.is-layout-constrained > * + * {
 		margin-block-start: 0 !important;
 	}
 
-	.blockera-block.blockera-block-9 .wp-block-group {
+	html:root body :where(.blockera-block.blockera-block-9) .wp-block-group {
 		gap: 30px;
 		padding: 25px 15px 25px 15px;
 		display: flex !important;
@@ -141,7 +141,7 @@ p.blockera-block.blockera-block-8 {
 		justify-content: flex-start !important;
 	}
 
-	.blockera-block.blockera-block-9 :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
+	html:root body :where(.blockera-block.blockera-block-9) :where(:is(h1, h2, h3, h4, h5, h6).wp-block-heading) {
 		align-self: stretch;
 		width: 100%;
 		width: -moz-available;

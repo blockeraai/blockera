@@ -56,29 +56,29 @@
 	color: #004cff;
 }
 
-.blockera-block.blockera-block-4 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-4) :is(strong, b) {
 	color: #ff9d00;
 	font-weight: 1000;
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-4 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-4) :is(em, i) {
 	color: #17ae00;
 }
 
-.blockera-block.blockera-block-4 kbd {
+html:root body :where(.blockera-block.blockera-block-4) kbd {
 	color: #00d6b9;
 }
 
-.blockera-block.blockera-block-4 code code {
+html:root body :where(.blockera-block.blockera-block-4) code code {
 	color: #f800aa;
 }
 
-.blockera-block.blockera-block-4 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-4) span:not([data-rich-text-placeholder]) {
 	color: #00d41d;
 }
 
-.blockera-block.blockera-block-4 :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-4) :is(mark, mark[class]) {
 	color: #00b0e0;
 }
 
