@@ -8,39 +8,39 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 li.wp-block-social-link {
+html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link {
 	box-shadow: 6px 6px 0 0 #00000026;
 	transition: all 500ms ease 0ms;
 }
 
-.blockera-block.blockera-block-1 :where(svg) {
+html:root body :where(.blockera-block.blockera-block-1) :where(svg) {
 	background-color: #0340ff;
 	border-radius: 30px;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-social-link .wp-block-social-link-label) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-social-link .wp-block-social-link-label) {
 	background-color: #0340ff;
 	padding-right: 4px;
 	padding-left: 4px;
 	border-radius: 25px;
 }
 
-.blockera-block.blockera-block-1 li.wp-block-social-link:hover {
+html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link:hover {
 	transform: translate3d(5px, -5px, 0);
 	box-shadow: -6px -6px 0 0 #00000026;
 }
 
-.blockera-block.blockera-block-1 li.wp-block-social-link .wp-block-social-link-anchor {
+html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link .wp-block-social-link-anchor {
 	display: flex !important;
 	gap: 10px;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1 li.wp-block-social-link .wp-block-social-link-anchor {
+	html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link .wp-block-social-link-anchor {
 		gap: 30px;
 	}
 
-	.blockera-block.blockera-block-1 :where(.wp-block-social-link .wp-block-social-link-label) {
+	html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-social-link .wp-block-social-link-label) {
 		flex: 1 1 0%;
 		padding-right: 4px;
 		padding-left: 4px;
@@ -49,11 +49,11 @@
 		border-radius: 5px;
 	}
 
-	.blockera-block.blockera-block-1 :where(svg) {
+	html:root body :where(.blockera-block.blockera-block-1) :where(svg) {
 		border-radius: 5px;
 	}
 
-	.blockera-block.blockera-block-1 li.wp-block-social-link {
+	html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link {
 		flex: 1 1 0%;
 		margin-right: 0 !important;
 		margin-left: 0 !important;
@@ -119,15 +119,15 @@
 	padding-left: 20px;
 }
 
-.blockera-block.blockera-block-2 :where(svg) {
+html:root body :where(.blockera-block.blockera-block-2) :where(svg) {
 	display: none !important;
 }
 
-.blockera-block.blockera-block-2 li.wp-block-social-link {
+html:root body :where(.blockera-block.blockera-block-2) li.wp-block-social-link {
 	background-color: #000000;
 }
 
-.blockera-block.blockera-block-2 :where(.wp-block-social-link .wp-block-social-link-label) {
+html:root body :where(.blockera-block.blockera-block-2) :where(.wp-block-social-link .wp-block-social-link-label) {
 	background-color: #ffffff;
 	color: #1e1b1b;
 	padding-right: 9px;
@@ -140,7 +140,7 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-2 li.wp-block-social-link:hover {
+html:root body :where(.blockera-block.blockera-block-2) li.wp-block-social-link:hover {
 	background-color: #ff0000;
 }
 
@@ -159,8 +159,7 @@
 :where(.blockera-block.blockera-block-2 li.wp-social-link.wp-social-link-whatsapp) {
 	background-color: #000000;
 }
-
-.blockera-block.blockera-block-3 svg {
+html:root body :where(.blockera-block.blockera-block-3) svg {
 	display: block !important;
 	background-color: #b11a1a;
 	background-size: auto;
@@ -171,7 +170,7 @@
 	border-radius: 8px;
 }
 
-.blockera-block.blockera-block-3 .wp-block-social-link-label {
+html:root body :where(.blockera-block.blockera-block-3) .wp-block-social-link-label {
 	background-color: #ff1212;
 	color: #06ff51;
 	margin-left: 20px !important;
@@ -183,11 +182,11 @@
 	};
 }
 
-.blockera-block.blockera-block-3:hover .wp-block-social-link-label {
+html:root body :where(.blockera-block.blockera-block-3):hover .wp-block-social-link-label {
 	background-color: #ffffff;
 }
 
-:where(.blockera-block.blockera-block-3) {
+.blockera-block-3 {
 	background-color: #000000;
 }
 
@@ -203,13 +202,13 @@
 	gap: 50px;
 }
 
-.blockera-block.blockera-block-rgl6bq .wp-block-social-link-label {
+html:root body :where(.blockera-block.blockera-block-rgl6bq) .wp-block-social-link-label {
 	background-color: #00c020;
 	margin-right: 0 !important;
 	margin-left: 0 !important;
 	flex: 1 1 0%;
 }
 
-.blockera-block.blockera-block-rgl6bq svg {
+html:root body :where(.blockera-block.blockera-block-rgl6bq) svg {
 	background-color: #00c020;
 }

@@ -64,14 +64,14 @@
 	text-align: center;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)) {
 	background-color: #ffadad;
 	padding: 10px 10px 10px 10px;
 	border-radius: 50px;
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::before {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::before {
 	padding: 5px 10px 5px 10px;
 	content: "Before";
 	background-color: #0000003d;
@@ -79,7 +79,7 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::after {
+html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::after {
 	display: inline-block !important;
 	content: "After";
 	background-color: #00000033;
@@ -95,7 +95,7 @@
 		gap: 10px;
 	}
 
-	.blockera-block.blockera-block-2 :where(a:not(.wp-element-button)) {
+	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button)) {
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: row;
@@ -104,13 +104,13 @@
 		gap: 10px;
 	}
 
-	.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::before {
+	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::before {
 		border-radius: 10px;
 		content: "Before";
 		flex: 1 1 0%;
 	}
 
-	.blockera-block.blockera-block-2 :where(a:not(.wp-element-button))::after {
+	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::after {
 		flex: 1 1 0%;
 		content: "After";
 		border-radius: 10px;
@@ -466,7 +466,7 @@
 	font-size: var(--wp--preset--font-size--small, 0.875rem);
 }
 
-.blockera-block.blockera-block-8 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element-button)) {
 	color: #ffffff;
 }
 
@@ -532,7 +532,7 @@
 	font-size: 18px;
 }
 
-.blockera-block.blockera-block-9 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element-button)) {
 	text-decoration: initial;
 }
 
@@ -650,7 +650,7 @@
 	font-size: var(--wp--preset--font-size--small, 0.875rem);
 }
 
-.blockera-block.blockera-block-12 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-element-button)) {
 	text-decoration: initial;
 	text-transform: uppercase;
 }
@@ -715,17 +715,17 @@
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-13 .wp-block-comments-pagination-next {
+html:root body :where(.blockera-block.blockera-block-13) .wp-block-comments-pagination-next {
 	background-color: #ffa9a9;
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-13 .wp-block-comments-pagination-numbers {
+html:root body :where(.blockera-block.blockera-block-13) .wp-block-comments-pagination-numbers {
 	background-color: #ffb8b8;
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-13 .wp-block-comments-pagination-previous {
+html:root body :where(.blockera-block.blockera-block-13) .wp-block-comments-pagination-previous {
 	padding: 5px 5px 5px 5px;
 	background-color: #ffbdbd;
 }
@@ -745,7 +745,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-14.wp-block-comments-pagination-previous .wp-block-comments-pagination-previous-arrow {
+html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagination-previous) .wp-block-comments-pagination-previous-arrow {
 	background-color: #0000005c;
 	display: inline-block !important;
 	padding: 5px 10px 5px 10px;
@@ -763,7 +763,7 @@
 		flex: 1 1 0%;
 	}
 
-	.blockera-block.blockera-block-14.wp-block-comments-pagination-previous .wp-block-comments-pagination-previous-arrow {
+	html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagination-previous) .wp-block-comments-pagination-previous-arrow {
 		border-radius: 10px;
 	};
 }
@@ -814,7 +814,7 @@
 	font-size: 16px;
 }
 
-.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers:not(.dots) {
+html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers:not(.dots) {
 	width: 30px;
 	height: 30px;
 	display: flex !important;
@@ -828,11 +828,11 @@
 	transition: all 500ms ease 0ms;
 }
 
-.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers.current.current {
+html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers.current.current {
 	background-color: #d7ffc4;
 }
 
-.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers.dots {
+html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers.dots {
 	width: 30px;
 	height: 30px;
 	display: flex !important;
@@ -844,11 +844,11 @@
 	color: #e6cece;
 }
 
-.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers.current.current:hover {
+html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers.current.current:hover {
 	background-color: #ffffff;
 }
 
-.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers:not(.dots):hover {
+html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers:not(.dots):hover {
 	background-color: #87e260;
 }
 
@@ -858,11 +858,11 @@
 		flex: 1 1 0%;
 	}
 
-	.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers:not(.dots) {
+	html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers:not(.dots) {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers .page-numbers.dots {
+	html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers.dots {
 		border-radius: 10px;
 	};
 }
@@ -911,13 +911,13 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-17 .comment-form {
+html:root body :where(.blockera-block.blockera-block-17) .comment-form {
 	background-color: #bce2fa;
 	padding: 20px 20px 20px 20px;
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 .comment-reply-title {
+html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title {
 	padding: 10px 10px 10px 10px;
 	margin-bottom: 20px;
 	background-color: #a9ddff;
@@ -929,13 +929,13 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as) {
+html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as) {
 	background-color: #79b3d9;
 	border-radius: 50px;
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label {
+html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label {
 	background-color: #5aa6d9;
 	border-radius: 50px;
 	padding: 5px 10px 5px 10px;
@@ -951,7 +951,7 @@
 	gap: 20px;
 }
 
-.blockera-block.blockera-block-17 input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"]) {
+html:root body :where(.blockera-block.blockera-block-17) input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"]) {
 	background-color: #2f92d4;
 	width: 100%;
 	width: -moz-available;
@@ -960,18 +960,18 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 textarea {
+html:root body :where(.blockera-block.blockera-block-17) textarea {
 	background-color: #2e9be4;
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 .comment-form-cookies-consent {
+html:root body :where(.blockera-block.blockera-block-17) .comment-form-cookies-consent {
 	background-color: #1789d6;
 	border-radius: 50px;
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-17 :is(.wp-block-button > .wp-element-button, button[type="submit"]) {
+html:root body :where(.blockera-block.blockera-block-17) :is(.wp-block-button > .wp-element-button, button[type="submit"]) {
 	background-color: #04609d;
 	border-radius: 20px;
 	padding: 10px 10px 10px 10px;
@@ -979,11 +979,11 @@
 	width: 100%;
 }
 
-.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as):hover {
+html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as):hover {
 	background-color: #81ccff;
 }
 
-.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as)::before {
+html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as)::before {
 	border-radius: 50px;
 	content: "Before";
 	padding: 05px 10px 05px 10px;
@@ -991,7 +991,7 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as)::after {
+html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as)::after {
 	display: inline-block !important;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -999,11 +999,11 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label:hover {
+html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label:hover {
 	background-color: #54ade8;
 }
 
-.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label::before {
+html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label::before {
 	display: inline-block !important;
 	content: "Before";
 	padding: 5px 10px 5px 10px;
@@ -1011,7 +1011,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label::after {
+html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label::after {
 	display: inline-block !important;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -1019,32 +1019,32 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"])::placeholder {
+html:root body :where(.blockera-block.blockera-block-17) input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"])::placeholder {
 	background-color: #3091d2;
 	color: #9cd7ff;
 }
 
-.blockera-block.blockera-block-17 input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"]):hover {
+html:root body :where(.blockera-block.blockera-block-17) input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"]):hover {
 	background-color: #42b4ff;
 }
 
-.blockera-block.blockera-block-17 textarea::placeholder {
+html:root body :where(.blockera-block.blockera-block-17) textarea::placeholder {
 	color: #fea2a2;
 }
 
-.blockera-block.blockera-block-17 textarea:hover {
+html:root body :where(.blockera-block.blockera-block-17) textarea:hover {
 	background-color: #2f9ce4;
 }
 
-.blockera-block.blockera-block-17 .comment-form-cookies-consent:hover {
+html:root body :where(.blockera-block.blockera-block-17) .comment-form-cookies-consent:hover {
 	background-color: #049bff;
 }
 
-.blockera-block.blockera-block-17 .comment-form:hover {
+html:root body :where(.blockera-block.blockera-block-17) .comment-form:hover {
 	background-color: #9fddff;
 }
 
-.blockera-block.blockera-block-17 .comment-form::before {
+html:root body :where(.blockera-block.blockera-block-17) .comment-form::before {
 	display: inline-block !important;
 	content: "Before";
 	background-color: #00000047;
@@ -1052,7 +1052,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 .comment-form::after {
+html:root body :where(.blockera-block.blockera-block-17) .comment-form::after {
 	display: inline-block !important;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -1060,16 +1060,16 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 :is(.wp-block-button > .wp-element-button, button[type="submit"]):hover {
+html:root body :where(.blockera-block.blockera-block-17) :is(.wp-block-button > .wp-element-button, button[type="submit"]):hover {
 	border-radius: 50px;
 	background-color: #0083db;
 }
 
-.blockera-block.blockera-block-17 .comment-reply-title:hover {
+html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title:hover {
 	background-color: #80ccff;
 }
 
-.blockera-block.blockera-block-17 .comment-reply-title::before {
+html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::before {
 	display: inline-block !important;
 	content: "Before";
 	background-color: #00000038;
@@ -1077,7 +1077,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-17 .comment-reply-title::after {
+html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::after {
 	display: inline-block !important;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -1090,24 +1090,11 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-17 .comment-form {
+	html:root body :where(.blockera-block.blockera-block-17) .comment-form {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-17 .comment-reply-title {
-		border-radius: 10px;
-		display: flex !important;
-		flex-direction: row;
-		align-items: center !important;
-		justify-content: center !important;
-		gap: 10px;
-	}
-
-	.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as) {
-		border-radius: 10px;
-	}
-
-	.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label {
+	html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title {
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: row;
@@ -1116,58 +1103,71 @@
 		gap: 10px;
 	}
 
-	.blockera-block.blockera-block-17 input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"]) {
+	html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as) {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-17 textarea {
+	html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label {
+		border-radius: 10px;
+		display: flex !important;
+		flex-direction: row;
+		align-items: center !important;
+		justify-content: center !important;
+		gap: 10px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-17) input:is([type="text"], [type="url"], [type="email"], [name="url"], [name="email"]) {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-17 .comment-form-cookies-consent {
+	html:root body :where(.blockera-block.blockera-block-17) textarea {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-17 :is(.wp-block-button > .wp-element-button, button[type="submit"]) {
+	html:root body :where(.blockera-block.blockera-block-17) .comment-form-cookies-consent {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-17 .comment-form::before {
+	html:root body :where(.blockera-block.blockera-block-17) :is(.wp-block-button > .wp-element-button, button[type="submit"]) {
+		border-radius: 10px;
+	}
+
+	html:root body :where(.blockera-block.blockera-block-17) .comment-form::before {
 		border-radius: 10px;
 		content: "Before";
 	}
 
-	.blockera-block.blockera-block-17 .comment-form::after {
+	html:root body :where(.blockera-block.blockera-block-17) .comment-form::after {
 		border-radius: 10px;
 		content: "After";
 	}
 
-	.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as)::before {
+	html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as)::before {
 		border-radius: 10px;
 		content: "Before";
 	}
 
-	.blockera-block.blockera-block-17 :is(.comment-notes, p.logged-in-as)::after {
+	html:root body :where(.blockera-block.blockera-block-17) :is(.comment-notes, p.logged-in-as)::after {
 		border-radius: 10px;
 		content: "After";
 	}
 
-	.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label::before {
+	html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label::before {
 		border-radius: 10px;
 		content: "Before";
 	}
 
-	.blockera-block.blockera-block-17 p:not(.comment-form-cookies-consent) label::after {
+	html:root body :where(.blockera-block.blockera-block-17) p:not(.comment-form-cookies-consent) label::after {
 		border-radius: 10px;
 		content: "After";
 	}
 
-	.blockera-block.blockera-block-17 .comment-reply-title::before {
+	html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::before {
 		border-radius: 10px;
 		content: "Before";
 	}
 
-	.blockera-block.blockera-block-17 .comment-reply-title::after {
+	html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::after {
 		border-radius: 10px;
 		content: "After";
 	};

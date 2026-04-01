@@ -638,15 +638,3 @@ h6{
 .has-fira-code-font-family{
 	font-family: var(--wp--preset--font-family--fira-code) !important;
 }
-
-:root :where(.wp-block-navigation){
-	font-size: var(--wp--preset--font-size--medium);
-}
-
-:root :where(.wp-block-navigation a:where(:not(.wp-element-button))){
-	text-decoration: none;
-}
-
-:root :where(.wp-block-navigation a:where(:not(.wp-element-button)):hover){
-	text-decoration: underline;
-}
