@@ -614,6 +614,21 @@ class BlockeraTest extends AppTestCase {
 			
 			$class = $element->getAttribute('class');
 			$has_blockera_block = strpos($class, 'blockera-block') !== false;
+			$has_root_like_wp_block = false;
+			if (!$has_blockera_block && $class !== '') {
+				// Mirror `ContentCleanup::determineSelector()` Priority 2:
+				// If the element itself has a `wp-(block|element|elements)-*` class WITHOUT underscore and
+				// WITHOUT a blockera-block-* class, it is treated as standalone and is skipped (no parent lookup).
+				foreach (preg_split('/\s+/', trim($class)) as $cls) {
+					if ($cls === '') {
+						continue;
+					}
+					if (preg_match('/^wp-(block|element|elements)-/i', $cls) && strpos($cls, '_') === false) {
+						$has_root_like_wp_block = true;
+						break;
+					}
+				}
+			}
 
 			// Child inline-style skip list (mirrors `ContentCleanup::$excluded_child_classes` behavior):
 			// Some core blocks intentionally emit inline styles on specific inner elements that we do not
@@ -625,6 +640,12 @@ class BlockeraTest extends AppTestCase {
 						continue 2;
 					}
 				}
+			}
+
+			// Standalone wp-block-* (no underscore) elements are skipped regardless of nesting.
+			// This keeps the PHPUnit rule aligned with `ContentCleanup` behavior.
+			if ($has_root_like_wp_block) {
+				continue;
 			}
 			
 			// Condition 1: If tag has inline style and has blockera-block, fail
