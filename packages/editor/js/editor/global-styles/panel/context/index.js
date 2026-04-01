@@ -141,6 +141,12 @@ export const getNormalizedStyle = (
 	newStyle: Object,
 	defaultStyles: Object
 ): Object => {
+	// Some callsites can pass `null`/`undefined` (e.g. intermediate onChange payloads).
+	// Treat non-objects as "no style changes" to avoid runtime crashes.
+	if (!newStyle || 'object' !== typeof newStyle) {
+		return {};
+	}
+
 	if (!Object.keys(newStyle).length) {
 		return newStyle;
 	}
