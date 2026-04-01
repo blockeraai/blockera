@@ -26,7 +26,7 @@
 	}
 }
 
-.circle-multiple-blocks {
+.blockera-style-item-multiple-blocks__item {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -48,16 +48,15 @@
 		fill: #000000 !important;
 		color: #000000 !important;
 	}
+}
 
-	&:hover {
-		z-index: 999;
-		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+.blockera-style-item-multiple-blocks:hover .blockera-style-item-multiple-blocks__item {
+	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+	color: var(--blockera-controls-primary-color) !important;
+
+	svg {
+		fill: var(--blockera-controls-primary-color) !important;
 		color: var(--blockera-controls-primary-color) !important;
-
-		svg {
-			fill: var(--blockera-controls-primary-color) !important;
-			color: var(--blockera-controls-primary-color) !important;
-		}
 	}
 }
 

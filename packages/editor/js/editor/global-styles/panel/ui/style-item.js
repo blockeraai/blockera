@@ -205,6 +205,19 @@ export const StyleItem = ({
 
 	const activeInBlocks = getStyleVariationBlocks(style.name);
 
+	const openUsageForMultipleBlocksModal = (event: any) => {
+		// Prevent selecting the style item when clicking on usage icons.
+		if (event?.preventDefault) {
+			event.preventDefault();
+		}
+		if (event?.stopPropagation) {
+			event.stopPropagation();
+		}
+
+		setIsOpenContextMenu(false);
+		setIsOpenUsageForMultipleBlocks(true);
+	};
+
 	return (
 		<>
 			<div
@@ -395,49 +408,60 @@ export const StyleItem = ({
 						)}
 
 						{!style?.isDefault && activeInBlocks.length > 1 && (
-							<Flex
-								gap={0}
-								direction="row"
+							<div
+								className="blockera-style-item-multiple-blocks"
+								role="button"
+								tabIndex={0}
 								style={{ position: 'relative' }}
+								onClick={openUsageForMultipleBlocksModal}
+								onKeyDown={(event: any) => {
+									if (event.key !== 'Enter') {
+										return;
+									}
+									openUsageForMultipleBlocksModal(event);
+								}}
 							>
-								{activeInBlocks
-									.slice(0, 3)
-									.map((block, index) => {
-										const { icon = null, title } =
-											getBlockType(block);
+								<Flex gap={0} direction="row">
+									{activeInBlocks
+										.slice(0, 3)
+										.map((block, index) => {
+											const { icon = null, title } =
+												getBlockType(block);
 
-										return (
-											<Tooltip
-												key={`${block}-${index}`}
-												text={sprintf(
-													/* translators: %1$s: The block title. */
-													__(
-														'This style variation is used in the "%1$s" block',
-														'blockera'
-													),
-													title
-												)}
-												style={{
-													'--tooltip-bg': !isActive
-														? '#e20b0b'
-														: '#000000',
-												}}
-											>
-												<div
-													className="circle-multiple-blocks"
+											return (
+												<Tooltip
+													key={`${block}-${index}`}
+													text={sprintf(
+														/* translators: %1$s: The block title. */
+														__(
+															'This style variation is used in the "%1$s" block',
+															'blockera'
+														),
+														title
+													)}
 													style={{
-														marginRight: '4px',
+														'--tooltip-bg':
+															!isActive
+																? '#e20b0b'
+																: '#000000',
 													}}
 												>
-													{icon.src}
-												</div>
-											</Tooltip>
-										);
-									})}
-								<div className="circle-multiple-blocks">
-									{activeInBlocks.length}
-								</div>
-							</Flex>
+													<div
+														className="blockera-style-item-multiple-blocks__item"
+														style={{
+															marginRight: '4px',
+														}}
+													>
+														{icon.src}
+													</div>
+												</Tooltip>
+											);
+										})}
+									<div className="blockera-style-item-multiple-blocks__item">
+										{activeInBlocks.length}
+									</div>
+								</Flex>
+							</div>
 						)}
 
 						{style.icon && (
