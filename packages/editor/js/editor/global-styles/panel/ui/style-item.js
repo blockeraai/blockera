@@ -326,6 +326,12 @@ export const StyleItem = ({
 			event.stopPropagation();
 		}
 
+		// User doesn't have access to manage customizations,
+		// so "used in multiple blocks" details should not be interactive.
+		if (!isUserCanSaveCustomizations) {
+			return;
+		}
+
 		setIsOpenContextMenu(false);
 		setIsOpenUsageForMultipleBlocks(true);
 	};
@@ -524,10 +530,22 @@ export const StyleItem = ({
 								<div
 									className="blockera-style-item-multiple-blocks"
 									role="button"
-									tabIndex={0}
-									style={{ position: 'relative' }}
+									aria-disabled={!isUserCanSaveCustomizations}
+									tabIndex={
+										isUserCanSaveCustomizations ? 0 : -1
+									}
+									style={{
+										position: 'relative',
+										pointerEvents:
+											isUserCanSaveCustomizations
+												? undefined
+												: 'none',
+									}}
 									onClick={openUsageForMultipleBlocksModal}
 									onKeyDown={(event: any) => {
+										if (!isUserCanSaveCustomizations) {
+											return;
+										}
 										if (event.key !== 'Enter') {
 											return;
 										}
@@ -581,7 +599,10 @@ export const StyleItem = ({
 									iconSize="16"
 									style={{
 										opacity: '0.4',
-										'margin-right': '-4px',
+										'margin-right':
+											isUserCanSaveCustomizations
+												? '-4px'
+												: '6px',
 										position: 'relative',
 										'z-index': '10',
 									}}
@@ -589,24 +610,26 @@ export const StyleItem = ({
 							</Tooltip>
 						)}
 
-						<span
-							ref={styleItemContextMenuAnchorRef}
-							className="context-menu-trigger style-item-context-menu-anchor"
-							data-test={`open-${style.name}-contextmenu`}
-							data-anchor="style-item-context-menu"
-						>
-							<Icon
-								icon="more-vertical"
-								iconSize="20"
-								onClick={() => {
-									setIsOpenBlockCardContextMenu(false);
-									setIsOpenContextMenu(true);
-								}}
-								style={{
-									opacity: '0.4',
-								}}
-							/>
-						</span>
+						{isUserCanSaveCustomizations && (
+							<span
+								ref={styleItemContextMenuAnchorRef}
+								className="context-menu-trigger style-item-context-menu-anchor"
+								data-test={`open-${style.name}-contextmenu`}
+								data-anchor="style-item-context-menu"
+							>
+								<Icon
+									icon="more-vertical"
+									iconSize="20"
+									onClick={() => {
+										setIsOpenBlockCardContextMenu(false);
+										setIsOpenContextMenu(true);
+									}}
+									style={{
+										opacity: '0.4',
+									}}
+								/>
+							</span>
+						)}
 					</Flex>
 				</Flex>
 
