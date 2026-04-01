@@ -189,7 +189,23 @@ export const StyleItem = ({
 		);
 	}, []);
 
-	const activeInBlocks = getStyleVariationBlocks(style.name);
+	// Outside GlobalStylesPanelContextProvider the context `getStyleVariationBlocks`
+	// defaults to `() => []`. In that case, read from the editor store so the
+	// "used in multiple blocks" indicator works consistently.
+	const activeInBlocks = useSelect(
+		(select) => {
+			// Prefer store outside global styles panel.
+			if (!inGlobalStylesPanel) {
+				const fn = select('blockera/editor')?.getStyleVariationBlocks;
+				const fromStore = fn ? fn(style.name) : null;
+				return Array.isArray(fromStore) ? fromStore : [];
+			}
+
+			const fromContext = getStyleVariationBlocks(style.name);
+			return Array.isArray(fromContext) ? fromContext : [];
+		},
+		[style.name, inGlobalStylesPanel, getStyleVariationBlocks]
+	);
 
 	const usageForMultipleBlocksTooltipText = useMemo(() => {
 		const count = activeInBlocks?.length || 0;
