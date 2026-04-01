@@ -50,8 +50,8 @@
 	}
 }
 
-.blockera-style-item-multiple-blocks:hover .blockera-style-item-multiple-blocks__item {
-	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+.blockera-style-item-multiple-blocks:hover
+	.blockera-style-item-multiple-blocks__item {
 	color: var(--blockera-controls-primary-color) !important;
 
 	svg {

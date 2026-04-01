@@ -5,7 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { dispatch, useSelect } from '@wordpress/data';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import { useState, useMemo, useEffect, useRef } from '@wordpress/element';
 import {
 	Fill,
@@ -189,6 +189,105 @@ export const StyleItem = ({
 		);
 	}, []);
 
+	const activeInBlocks = getStyleVariationBlocks(style.name);
+
+	const usageForMultipleBlocksTooltipText = useMemo(() => {
+		const count = activeInBlocks?.length || 0;
+		if (count < 2) {
+			return null;
+		}
+
+		const maxTitles = 6;
+		const titles = [];
+
+		for (let i = 0; i < count && titles.length < maxTitles; i++) {
+			const blockName = activeInBlocks[i];
+			const blockType = getBlockType(blockName);
+			const title = blockType?.title || blockName;
+
+			if (title) {
+				titles.push(title);
+			}
+		}
+
+		const formatBlockTitlesList = (items: Array<string>): string => {
+			const n = items.length;
+			if (n <= 0) {
+				return '';
+			}
+			if (n === 1) {
+				return items[0];
+			}
+			if (n === 2) {
+				return sprintf(
+					/* translators: %1$s: first item, %2$s: second item */
+					__('%1$s and %2$s', 'blockera'),
+					items[0],
+					items[1]
+				);
+			}
+
+			let out = '';
+			for (let i = 0; i < n; i++) {
+				if (i === 0) {
+					out = items[0];
+					continue;
+				}
+
+				if (i === n - 1) {
+					out += sprintf(
+						/* translators: %1$s: list, %2$s: last item */
+						__(', and %2$s', 'blockera'),
+						out,
+						items[i]
+					);
+				} else {
+					out += ', ' + items[i];
+				}
+			}
+
+			return out;
+		};
+
+		let blocksListItems = titles;
+
+		if (count > maxTitles) {
+			const remaining = count - maxTitles;
+			const moreLabel = sprintf(
+				/* translators: %d: number of remaining blocks */
+				_n('%d more', '%d more', remaining, 'blockera'),
+				remaining
+			);
+			blocksListItems = [...titles, moreLabel];
+		}
+
+		const blocksList = formatBlockTitlesList(blocksListItems);
+
+		return (
+			<>
+				<div>
+					{sprintf(
+						/* translators: %d: number of blocks */
+						_n(
+							'This style variation is used for %d block.',
+							'This style variation is used for %d blocks.',
+							count,
+							'blockera'
+						),
+						count
+					)}
+				</div>
+				<div>
+					{sprintf(
+						/* translators: %s: comma-separated block titles */
+						__('Blocks: %s', 'blockera'),
+						blocksList
+					)}
+				</div>
+			</>
+		);
+	}, [activeInBlocks]);
+
 	// When not in global styles panel,
 	// skip rendering if style is disabled.
 	if (
@@ -200,10 +299,7 @@ export const StyleItem = ({
 	}
 
 	const isActive: boolean = activeStyle.name === style.name;
-
 	const defaultStyle = getDefaultStyle(blockStyles);
-
-	const activeInBlocks = getStyleVariationBlocks(style.name);
 
 	const openUsageForMultipleBlocksModal = (event: any) => {
 		// Prevent selecting the style item when clicking on usage icons.
@@ -408,60 +504,45 @@ export const StyleItem = ({
 						)}
 
 						{!style?.isDefault && activeInBlocks.length > 1 && (
-							<div
-								className="blockera-style-item-multiple-blocks"
-								role="button"
-								tabIndex={0}
-								style={{ position: 'relative' }}
-								onClick={openUsageForMultipleBlocksModal}
-								onKeyDown={(event: any) => {
-									if (event.key !== 'Enter') {
-										return;
-									}
-									openUsageForMultipleBlocksModal(event);
-								}}
-							>
-								<Flex gap={0} direction="row">
-									{activeInBlocks
-										.slice(0, 3)
-										.map((block, index) => {
-											const { icon = null, title } =
-												getBlockType(block);
+							<Tooltip text={usageForMultipleBlocksTooltipText}>
+								<div
+									className="blockera-style-item-multiple-blocks"
+									role="button"
+									tabIndex={0}
+									style={{ position: 'relative' }}
+									onClick={openUsageForMultipleBlocksModal}
+									onKeyDown={(event: any) => {
+										if (event.key !== 'Enter') {
+											return;
+										}
+										openUsageForMultipleBlocksModal(event);
+									}}
+								>
+									<Flex gap={0} direction="row">
+										{activeInBlocks
+											.slice(0, 3)
+											.map((block, index) => {
+												const { icon = null } =
+													getBlockType(block);
 
-											return (
-												<Tooltip
-													key={`${block}-${index}`}
-													text={sprintf(
-														/* translators: %1$s: The block title. */
-														__(
-															'This style variation is used in the "%1$s" block',
-															'blockera'
-														),
-														title
-													)}
-													style={{
-														'--tooltip-bg':
-															!isActive
-																? '#e20b0b'
-																: '#000000',
-													}}
-												>
+												return (
 													<div
+														key={`${block}-${index}`}
 														className="blockera-style-item-multiple-blocks__item"
 														style={{
 															marginRight: '4px',
 														}}
 													>
-														{icon.src}
+														{icon?.src}
 													</div>
-												</Tooltip>
-											);
-										})}
-									<div className="blockera-style-item-multiple-blocks__item">
-										{activeInBlocks.length}
-									</div>
-								</Flex>
-							</div>
+												);
+											})}
+										<div className="blockera-style-item-multiple-blocks__item">
+											{activeInBlocks.length}
+										</div>
+									</Flex>
+								</div>
+							</Tooltip>
 						)}
 
 						{style.icon && (
