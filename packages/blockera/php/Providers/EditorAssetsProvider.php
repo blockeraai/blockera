@@ -16,6 +16,34 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 
 	/**
+	 * Enqueue Blockera canvas-only CSS into the editor iframe.
+	 *
+	 * Uses the core enqueue pipeline (enqueue_block_assets) so styles are loaded
+	 * where WordPress expects (including the editor-canvas iframe), instead of
+	 * injecting CSS via editor settings.
+	 *
+	 * @return void
+	 */
+	public function enqueueCanvasIframeStyles(): void {
+
+		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen || ( method_exists( $screen, 'is_block_editor' ) && ! $screen->is_block_editor() ) ) {
+			return;
+		}
+
+		$handle  = 'blockera-editor-canvas';
+		$src     = blockera_core_config( 'app.root_url' ) . 'packages/editor/js/editor/editor-canvas-style.css';
+		$version = blockera_core_config( 'app.version' );
+
+		wp_register_style( $handle, $src, [], $version );
+		wp_enqueue_style( $handle );
+	}
+
+	/**
 	 * Store the loader identifier.
 	 *
 	 * @return string the loader identifier.
@@ -81,6 +109,8 @@ class EditorAssetsProvider extends \Blockera\Bootstrap\AssetsProvider {
 				blockera_enqueue_features_editor_styles($base_path, $base_url, $version);
 			} 
         );
+		
+		add_action( 'enqueue_block_assets', [ $this, 'enqueueCanvasIframeStyles' ], 20 );
 	}
 
 	/**
