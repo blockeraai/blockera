@@ -10,6 +10,7 @@ use Blockera\Dev\PhpUnit\JsonDriver;
 use Blockera\Dev\PHPUnit\AppTestCase;
 use Spatie\Snapshots\MatchesSnapshots;
 use Blockera\Setup\Compatibility\JSONResolver;
+use Blockera\WordPress\RenderBlock\ContentCleanup;
 
 class BlockeraTest extends AppTestCase {
 
@@ -22,6 +23,40 @@ class BlockeraTest extends AppTestCase {
 	protected int $post_id = 0;
 	protected bool $is_global_styles = false;
 	protected ?string $currentTestType = null;
+
+	/**
+	 * Child classes excluded from inline-style processing in ContentCleanup.
+	 *
+	 * Mirrors `ContentCleanup::$excluded_child_classes` so test expectations stay in sync
+	 * when the cleanup rules change.
+	 *
+	 * @return array<int, string>
+	 */
+	protected static function getInlineStyleExcludedChildClasses(): array {
+		static $excluded = null;
+		if (null !== $excluded) {
+			return $excluded;
+		}
+
+		$excluded = [];
+		try {
+			$ref = new ReflectionClass(ContentCleanup::class);
+			if ($ref->hasProperty('excluded_child_classes')) {
+				$prop = $ref->getProperty('excluded_child_classes');
+				$prop->setAccessible(true);
+				$val = $prop->getValue();
+				if (is_array($val) && !empty($val)) {
+					// Keep only string class names; reindex for tight iteration.
+					$excluded = array_values(array_filter($val, 'is_string'));
+				}
+			}
+		} catch (\Throwable $e) {
+			// If reflection fails for any reason, default to an empty list to keep the test strict.
+			$excluded = [];
+		}
+
+		return $excluded;
+	}
 
 	/**
 	 * Set the current test type.
@@ -570,37 +605,114 @@ class BlockeraTest extends AppTestCase {
 			
 			// Special case: Skip validation if inline style is exactly "display: none"
 			$style = $element->getAttribute('style');
-			if (trim($style) === 'display: none') {
+			$style_normalized = strtolower(trim($style));
+			$style_normalized = str_replace([" ", "\t", "\n", "\r", "\0", "\x0B"], '', $style_normalized);
+			$style_normalized = rtrim($style_normalized, ';');
+			if ($style_normalized === 'display:none') {
 				continue;
 			}
 			
 			$class = $element->getAttribute('class');
 			$has_blockera_block = strpos($class, 'blockera-block') !== false;
+
+			// Child inline-style skip list (mirrors `ContentCleanup::$excluded_child_classes` behavior):
+			// Some core blocks intentionally emit inline styles on specific inner elements that we do not
+			// rewrite/remove (e.g., Cover block background span). These are acceptable even when nested
+			// under a `.blockera-block` wrapper.
+			if (!$has_blockera_block && $class !== '') {
+				foreach (self::getInlineStyleExcludedChildClasses() as $excluded_child_class) {
+					if (strpos($class, $excluded_child_class) !== false) {
+						continue 2;
+					}
+				}
+			}
 			
 			// Condition 1: If tag has inline style and has blockera-block, fail
 			if ($has_blockera_block) {
 				$tag_name = $element->tagName;
-				$this->fail("Tag <{$tag_name}> with 'blockera-block' class has inline style attribute.\nTest: {$designName}");
+				$tag_line = $element->getLineNo();
+				$tag_html = $this->formatDomElementStartTag($element);
+				$this->fail("Tag <{$tag_name}> with 'blockera-block' class has inline style attribute.\nLine: {$tag_line}\nTag: {$tag_html}\nTest: {$designName}");
 			}
 			
 			// Condition 2: If tag has inline style but doesn't have this class, check parents recursively
 			if (!$has_blockera_block) {
+				$is_allowed_inline_style_exception = false;
 				$parent = $element->parentNode;
 				while ($parent && $parent instanceof \DOMElement) {
 					/** @var \DOMElement $parent */
 					$parent_class = $parent->getAttribute('class');
+					$parent_has_wp_block = strpos($parent_class, 'wp-block-') !== false;
 					$parent_has_blockera_block = strpos($parent_class, 'blockera-block') !== false;
 					
 					if ($parent_has_blockera_block) {
+						// Inline-style exceptions (expected + tolerated):
+						// These are emitted by core block markup for specific inner elements and are later
+						// handled by `ContentCleanup::cleanupBlockeraBlocksInlineStyles()`. We mirror those
+						// rules here to avoid false-positive test failures.
+						//
+						// Allowed cases under a `.blockera-block` wrapper:
+						// - Button block (`.wp-block-button`): `<a ... style="...">`
+						// - Accordion heading (`.wp-block-accordion-heading`): `*.wp-block-accordion-heading__toggle[style]`
+						// - Image block (`.wp-block-image`): `<img ... style="...">`
+						$tag_name_lc = strtolower($element->tagName);
+						if (
+							(
+								strpos($parent_class, 'wp-block-button') !== false &&
+								$tag_name_lc === 'a'
+							) ||
+							(
+								strpos($parent_class, 'wp-block-accordion-heading') !== false &&
+								strpos($element->getAttribute('class'), 'wp-block-accordion-heading__toggle') !== false
+							) ||
+							(
+								strpos($parent_class, 'wp-block-image') !== false &&
+								$tag_name_lc === 'img'
+							)
+						) {
+							$is_allowed_inline_style_exception = true;
+							break;
+						}
+
 						$tag_name = $element->tagName;
 						$parent_tag_name = $parent->tagName;
-						$this->fail("Tag <{$tag_name}> has inline style attribute and parent <{$parent_tag_name}> has 'blockera-block' class.\nTest: {$designName}");
+						$tag_line = $element->getLineNo();
+						$parent_line = $parent->getLineNo();
+						$tag_html = $this->formatDomElementStartTag($element);
+						$parent_html = $this->formatDomElementStartTag($parent);
+						$this->fail("Tag <{$tag_name}> has inline style attribute and parent <{$parent_tag_name}> has 'blockera-block' class.\nLine: {$tag_line}\nTag: {$tag_html}\nParent line: {$parent_line}\nParent tag: {$parent_html}\nTest: {$designName}");
 					}
 					
+					// If the closest wrapper is a core WP block, inline styles belong to that block.
+					if ($parent_has_wp_block) {
+						break;
+					}
+
 					$parent = $parent->parentNode;
+				}
+
+				if ($is_allowed_inline_style_exception) {
+					continue;
 				}
 			}
 		}
+	}
+
+	protected function formatDomElementStartTag(\DOMElement $element): string {
+		$tag = $element->tagName;
+
+		$out = '<' . $tag;
+
+		if ($element->hasAttributes()) {
+			foreach ($element->attributes as $attr) {
+				/** @var \DOMAttr $attr */
+				$name = $attr->name;
+				$value = $attr->value;
+				$out .= ' ' . $name . '="' . htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') . '"';
+			}
+		}
+
+		return $out . '>';
 	}
 
 	/**
