@@ -2,8 +2,14 @@
  * WordPress dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-import { Modal, TextControl, Button } from '@wordpress/components';
+import { TextControl, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * Blockera dependencies
+ */
+import { Modal } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
@@ -78,7 +84,12 @@ export default function RenameTabModal({
 
 	return (
 		<Modal
-			title={__('Rename Tab', 'blockera')}
+			headerTitle={
+				<>
+					<Icon icon="pencil" library="wp" />
+					{__('Rename Tab', 'blockera')}
+				</>
+			}
 			onRequestClose={handleClose}
 			className="blockera-tabs-rename-modal"
 		>
@@ -92,7 +103,7 @@ export default function RenameTabModal({
 					onChange={setCustomTitle}
 					placeholder={actualTitle}
 					help={__(
-						'Leave empty to use the actual post title.',
+						'Leave empty to use the post title. This only changes the tab label and the post/page title won’t be changed.',
 						'blockera'
 					)}
 					{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
