@@ -30,21 +30,25 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	border-radius: 50%;
 	border: solid 1px #c4c4c4;
 	line-height: 1.5;
 	position: relative;
-	margin-left: -12px;
+	margin-left: -9px;
 	z-index: calc(100 - var(--i));
 	background-color: #ffffff;
 	transition: z-index 0.3s ease-in-out;
 	color: #000000 !important;
+	box-sizing: border-box;
+	outline: 2px solid #ffffff;
+	font-size: 10px;
+	font-weight: 600;
 
 	svg {
-		min-width: 16px;
-		max-width: 16px;
+		min-width: 14px;
+		max-width: 14px;
 		fill: #000000 !important;
 		color: #000000 !important;
 	}
