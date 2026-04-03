@@ -32,14 +32,16 @@
 	justify-content: center;
 	width: 18px;
 	height: 18px;
-	border-radius: 50%;
+	border-radius: 3px;
 	border: solid 1px #c4c4c4;
 	line-height: 1.5;
 	position: relative;
-	margin-left: -9px;
+	margin-left: -11px;
 	z-index: calc(100 - var(--i));
 	background-color: #ffffff;
-	transition: z-index 0.3s ease-in-out;
+	transition:
+		all 0.3s ease-in-out,
+		margin 0.2s ease-in-out;
 	color: #000000 !important;
 	box-sizing: border-box;
 	outline: 2px solid #ffffff;
@@ -61,6 +63,7 @@
 
 .blockera-style-item-multiple-blocks:hover
 	.blockera-style-item-multiple-blocks__item {
+	margin-left: -8px;
 	color: var(--blockera-controls-primary-color) !important;
 
 	svg {
