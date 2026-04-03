@@ -6,7 +6,7 @@
 import type { MixedElement } from 'react';
 import { __, _n, sprintf } from '@wordpress/i18n';
 import { applyFilters } from '@wordpress/hooks';
-import { select } from '@wordpress/data';
+import { select, useSelect } from '@wordpress/data';
 import { useEntityProp } from '@wordpress/core-data';
 import {
 	Fill,
@@ -142,6 +142,67 @@ export const BlockTypes = ({
 		setBlocksState(initBlocksState);
 		// eslint-disable-next-line react-hooks/exhaustive-deps -- blocksState intentionally excluded to avoid overwriting user toggles
 	}, [items, initBlocksState]);
+
+	// Inserter category list from core/blocks (order matches block library). Some
+	// stacks return an array; others a keyed object — normalize once for stable mapping.
+	const blockCategories = useSelect((dataSelect) => {
+		const raw = dataSelect('core/blocks').getCategories();
+
+		if (!raw) {
+			return [];
+		}
+
+		return Array.isArray(raw) ? raw : Object.values(raw);
+	}, []);
+
+	// Memoized so we only rebuild section structure when the visible block list or
+	// registered categories change, not on every toggle/save UI update.
+	const categorySections = useMemo(() => {
+		const buckets: { [string]: Array<Object> } = {};
+
+		for (const item of blocksState.primitiveItems) {
+			const slug = item?.category || 'uncategorized';
+
+			if (!buckets[slug]) {
+				buckets[slug] = [];
+			}
+
+			buckets[slug].push(item);
+		}
+
+		const ordered: Array<{
+			slug: string,
+			title: string,
+			items: Array<Object>,
+		}> = [];
+		const seen = new Set<string>();
+
+		for (const cat of blockCategories) {
+			const slug = cat.slug;
+			const sectionItems = buckets[slug];
+
+			if (sectionItems?.length) {
+				ordered.push({ slug, title: cat.title, items: sectionItems });
+				seen.add(slug);
+			}
+		}
+
+		// Custom / unknown category slugs and synthetic "uncategorized" (no core row).
+		for (const slug of Object.keys(buckets)) {
+			if (seen.has(slug)) {
+				continue;
+			}
+
+			const title =
+				slug === 'uncategorized'
+					? __('Uncategorized', 'blockera')
+					: slug;
+
+			ordered.push({ slug, title, items: buckets[slug] });
+		}
+
+		return ordered;
+	}, [blocksState.primitiveItems, blockCategories]);
 
 	const setGlobalData = useCallback(
 		(
@@ -574,26 +635,46 @@ export const BlockTypes = ({
 					'blockera-block-inserter',
 					`blockera-block-inserter-types`
 				)}
-				gap="10px"
+				gap="20px"
 			>
-				<Grid
-					gridTemplateColumns={'repeat(3, 1fr)'}
-					gap={'8px'}
-					className={`blockera-features-types blockera-feature-wrapper`}
-				>
-					{blocksState.primitiveItems.map((item, index) => (
-						<BlockType
-							item={item}
-							blockName={blockName}
-							blocksState={blocksState}
-							setGlobalData={setGlobalData}
-							key={index + '-' + item.name}
-							setBlocksState={setBlocksState}
-							maxSelectableBlocks={maxSelectableBlocks}
-							setIsShowPromotion={setIsShowPromotion}
-						/>
-					))}
-				</Grid>
+				{categorySections.map(
+					({ slug, title, items: sectionItems }) => (
+						<Flex
+							key={slug}
+							direction="column"
+							gap="8px"
+							className="blockera-search-block-types-category-group"
+						>
+							<h2
+								className={classNames(
+									'blockera-block-styles-category'
+								)}
+							>
+								{title}
+							</h2>
+							<Grid
+								gridTemplateColumns={'repeat(3, 1fr)'}
+								gap={'8px'}
+								className={`blockera-features-types blockera-feature-wrapper`}
+							>
+								{sectionItems.map((item) => (
+									<BlockType
+										item={item}
+										blockName={blockName}
+										blocksState={blocksState}
+										setGlobalData={setGlobalData}
+										key={`${slug}-${item.name}`}
+										setBlocksState={setBlocksState}
+										maxSelectableBlocks={
+											maxSelectableBlocks
+										}
+										setIsShowPromotion={setIsShowPromotion}
+									/>
+								))}
+							</Grid>
+						</Flex>
+					)
+				)}
 			</Flex>
 		</>
 	);
@@ -667,7 +748,6 @@ const BlockType = ({
 				data-test={id}
 				aria-label={name}
 				alignItems="center"
-				justifyContent="space-between"
 				className={classNames('blockera-feature-type', 'is-item')}
 			>
 				{icon && (
@@ -684,7 +764,7 @@ const BlockType = ({
 					{title}
 				</div>
 
-				<div>
+				<div style={{ marginLeft: 'auto' }}>
 					<WPToggleControl
 						label={' '}
 						checked={blocksState.items.includes(name)}
