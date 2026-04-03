@@ -4,6 +4,7 @@
 	--search-control-icon-size: 22px;
 	border-radius: 2px !important;
 	--wp-admin-theme-color: var(--blockera-controls-primary-color);
+	flex-grow: 1;
 
 	.components-input-control__input {
 		height: var(--search-control-height) !important;
