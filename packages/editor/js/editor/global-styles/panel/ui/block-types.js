@@ -689,25 +689,91 @@ const BlockType = ({
 	maxSelectableBlocks,
 	setIsShowPromotion,
 }: Object): MixedElement => {
-	const {
-		name,
-		title,
-		icon: { src: icon },
-	} = item || {
-		name: '',
-		title: '',
-		description: '',
-		icon: { src: '' },
-	};
+	// Stable primitive for hooks; avoids recreating callbacks when parent passes a new `item` reference.
+	const typeName = item?.name ?? '';
 
-	const id = name;
+	const handleToggleChange = useCallback(
+		(newValue: boolean) => {
+			if (!typeName) {
+				return;
+			}
+			const name = typeName;
+			// Active block must stay enabled for this style (toggle is disabled; guard for programmatic calls).
+			if (name === blockName && !newValue) {
+				return;
+			}
+			if (newValue) {
+				if (
+					-1 !== maxSelectableBlocks &&
+					blocksState.items.length >= maxSelectableBlocks
+				) {
+					setIsShowPromotion(true);
+					return;
+				}
+			} else {
+				setIsShowPromotion(false);
+			}
 
-	const nameSplitted = name ? name.split('/') : [];
+			let nextItems;
+			// Functional update avoids stale `items` when toggling quickly.
+			setBlocksState((prev) => {
+				nextItems = prev.items.includes(name)
+					? prev.items.filter((i) => i !== name)
+					: [...prev.items, name];
+				return { ...prev, items: nextItems };
+			});
+
+			setGlobalData(
+				newValue ? 'single-enable' : 'single-disable',
+				name,
+				nextItems
+			);
+		},
+		[
+			typeName,
+			blockName,
+			maxSelectableBlocks,
+			blocksState.items,
+			setBlocksState,
+			setGlobalData,
+			setIsShowPromotion,
+		]
+	);
+
+	const handleRowClick = useCallback(
+		(event: MouseEvent) => {
+			if (!typeName) {
+				return;
+			}
+			// Let the switch handle its own click; row handler would double-toggle without this.
+			if (event.target instanceof Element) {
+				if (event.target.closest('.blockera-block-type-toggle')) {
+					return;
+				}
+			}
+			if (typeName === blockName) {
+				return;
+			}
+			const isChecked = blocksState.items.includes(typeName);
+			handleToggleChange(!isChecked);
+		},
+		[typeName, blockName, blocksState.items, handleToggleChange]
+	);
 
 	// Check if item is null or undefined.
 	if (!item) {
 		return <></>;
 	}
+
+	const {
+		name,
+		title,
+		icon: { src: icon },
+	} = item;
+
+	const id = name;
+
+	const nameSplitted = name ? name.split('/') : [];
 
 	return (
 		<Tooltip
@@ -748,7 +814,12 @@ const BlockType = ({
 				data-test={id}
 				aria-label={name}
 				alignItems="center"
-				className={classNames('blockera-feature-type', 'is-item')}
+				className={classNames(
+					'blockera-feature-type',
+					'is-item',
+					name !== blockName && 'is-row-clickable'
+				)}
+				onClick={handleRowClick}
 			>
 				{icon && (
 					<div className={classNames('blockera-feature-icon')}>
@@ -764,44 +835,19 @@ const BlockType = ({
 					{title}
 				</div>
 
-				<div style={{ marginLeft: 'auto' }}>
+				<div
+					className="blockera-block-type-toggle"
+					style={{ marginLeft: 'auto' }}
+					onClick={(e: MouseEvent) => e.stopPropagation()}
+					onKeyDown={(e: KeyboardEvent) => e.stopPropagation()}
+					role="presentation"
+				>
 					<WPToggleControl
 						label={' '}
 						checked={blocksState.items.includes(name)}
 						disabled={name === blockName}
 						className={controlClassNames('toggle', 'size-normal')}
-						onChange={(newValue: boolean) => {
-							if (name === blockName && !newValue) {
-								return;
-							}
-							if (newValue) {
-								if (
-									-1 !== maxSelectableBlocks &&
-									blocksState.items.length >=
-										maxSelectableBlocks
-								) {
-									setIsShowPromotion(true);
-									return;
-								}
-							} else {
-								setIsShowPromotion(false);
-							}
-
-							// Use functional update to avoid stale state on rapid toggles
-							let nextItems;
-							setBlocksState((prev) => {
-								nextItems = prev.items.includes(name)
-									? prev.items.filter((item) => item !== name)
-									: [...prev.items, name];
-								return { ...prev, items: nextItems };
-							});
-
-							setGlobalData(
-								newValue ? 'single-enable' : 'single-disable',
-								name,
-								nextItems
-							);
-						}}
+						onChange={handleToggleChange}
 					/>
 				</div>
 			</Flex>
