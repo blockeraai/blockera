@@ -596,7 +596,7 @@ export const StyleItem = ({
 								<Icon
 									icon={style.icon.name}
 									library={style.icon.library}
-									iconSize="16"
+									iconSize="18"
 									style={{
 										opacity: '0.4',
 										'margin-right':

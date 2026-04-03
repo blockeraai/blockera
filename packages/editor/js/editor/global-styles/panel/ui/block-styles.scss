@@ -54,6 +54,11 @@
 	}
 }
 
+.block-editor-block-styles__item__button.is-active
+	.blockera-style-item-multiple-blocks__item {
+	outline: 1px solid var(--blockera-controls-primary-color);
+}
+
 .blockera-style-item-multiple-blocks:hover
 	.blockera-style-item-multiple-blocks__item {
 	color: var(--blockera-controls-primary-color) !important;
