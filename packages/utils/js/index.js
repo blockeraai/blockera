@@ -4,6 +4,7 @@ export * from './get';
 export * from './memo';
 export * from './array';
 export * from './color';
+export * from './css-length';
 export * from './angle';
 export * from './editor';
 export * from './portal';
