@@ -2,7 +2,9 @@
  * WordPress dependencies
  */
 import { useMemo } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 import { useCommandLoader } from '@wordpress/commands';
+import { store as coreStore } from '@wordpress/core-data';
 
 /**
  * Internal dependencies
@@ -45,6 +47,58 @@ function getOpenTabsCommandsLoader(
 	tabActions: OpenTabsTabActions
 ): () => CommandLoaderResult {
 	return function useOpenTabsCommandsLoader(): CommandLoaderResult {
+		// Resolve labels from core-data when possible: persisted tab titles can lag behind
+		// entity titles (e.g. after "Add new page" used a static label). Command palette
+		// search uses these strings, so they must match the real document title.
+		//
+		// @wordpress/data useSelect shallow-compares the returned array: if each string
+		// equals the previous render, subscribers do not re-render (new [] is OK).
+		const tabCommandLabels = useSelect(
+			(select) => {
+				const { getEntityRecord } = select(coreStore) as {
+					getEntityRecord: (
+						kind: string,
+						name: string,
+						id: string | number
+					) => { title?: string | { rendered?: string } } | undefined;
+				};
+
+				return tabs.map((tab) => {
+					// Explicit user override (including "") — do not replace with entity title.
+					if (
+						tab.customTitle !== undefined &&
+						tab.customTitle !== null
+					) {
+						return tab.customTitle;
+					}
+					try {
+						const record = getEntityRecord(
+							'postType',
+							tab.type,
+							tab.id
+						);
+						if (
+							record?.title !== undefined &&
+							record?.title !== null
+						) {
+							const t = record.title;
+							const resolved =
+								typeof t === 'string' ? t : (t.rendered ?? '');
+							if (resolved) {
+								return resolved;
+							}
+						}
+					} catch {
+						// Record not in store yet — getEntityRecord can throw before resolution.
+					}
+					return tab.title;
+				});
+			},
+			// tabs comes from getOpenTabsCommandsLoader(tabs) closure; list must update when workspace tabs change.
+			// eslint-disable-next-line react-hooks/exhaustive-deps -- not component props; factory-injected
+			[tabs]
+		);
+
 		// Build commands array for all open tabs
 		// Note: Visibility is controlled by context + CSS based on add-tab mode
 		// Include tabActions in dependencies to ensure callbacks always use latest functions
@@ -53,14 +107,14 @@ function getOpenTabsCommandsLoader(
 				return [];
 			}
 
-			return tabs.map((tab) => {
+			return tabs.map((tab, index) => {
 				const icon = getTabIcon({
 					postType: tab.type,
 					slug: tab.slug,
 				});
 
-				// Use custom title if available, otherwise use regular title
-				const displayTitle = tab.customTitle ?? tab.title;
+				const displayTitle =
+					tabCommandLabels[index] ?? tab.customTitle ?? tab.title;
 
 				return {
 					name: `blockera-tabs/switch-to-tab-${tab.key}`,
@@ -90,7 +144,9 @@ function getOpenTabsCommandsLoader(
 					},
 				};
 			});
-		}, [tabs, tabActions]);
+			// tabs/tabActions are factory closure values; include them so callbacks and rows match current workspace.
+			// eslint-disable-next-line react-hooks/exhaustive-deps -- not component props; factory-injected
+		}, [tabs, tabActions, tabCommandLabels]);
 
 		return {
 			commands,

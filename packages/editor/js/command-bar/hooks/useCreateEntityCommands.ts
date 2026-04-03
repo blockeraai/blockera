@@ -26,6 +26,26 @@ import { focusPostTitle } from '../../utils/focusPostTitle';
 const ENTITY_EDIT_CONTEXT = 'entity-edit';
 
 /**
+ * Title string from a freshly saved core-data post record.
+ *
+ * @param record - Entity returned by saveEntityRecord
+ * @param fallback - When title is missing or empty
+ */
+function getSavedRecordTitle(
+	record: Post | undefined,
+	fallback: string
+): string {
+	const raw = record?.title;
+	if (raw === undefined || raw === null) {
+		return fallback;
+	}
+	if (typeof raw === 'string') {
+		return raw || fallback;
+	}
+	return raw.rendered || fallback;
+}
+
+/**
  * Tab actions interface for creating entities.
  */
 interface CreateEntityTabActions {
@@ -129,6 +149,11 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPost?.id) {
+								// Match tab label to saveEntityRecord title (not a generic "New post" string).
+								const tabTitle = getSavedRecordTitle(
+									newPost,
+									__('Draft Post', 'blockera')
+								);
 								await tabActions.prefetchEntity(
 									'post',
 									newPost.id as number
@@ -136,7 +161,7 @@ function getCreateEntityCommandsLoader(
 								const added = await tabActions.addTab(
 									'post',
 									newPost.id as number,
-									__('New post', 'blockera')
+									tabTitle
 								);
 								if (added) {
 									tabActions.switchDocument(
@@ -192,6 +217,11 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPage?.id) {
+								// Match tab label to saveEntityRecord title (not a generic "New page" string).
+								const tabTitle = getSavedRecordTitle(
+									newPage,
+									__('Draft Page', 'blockera')
+								);
 								await tabActions.prefetchEntity(
 									'page',
 									newPage.id as number
@@ -199,7 +229,7 @@ function getCreateEntityCommandsLoader(
 								const added = await tabActions.addTab(
 									'page',
 									newPage.id as number,
-									__('New page', 'blockera')
+									tabTitle
 								);
 								if (added) {
 									tabActions.switchDocument(
