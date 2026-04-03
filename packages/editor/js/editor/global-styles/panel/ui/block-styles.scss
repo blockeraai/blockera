@@ -72,7 +72,7 @@
 .blockera-component-block-styles {
 	.blockera-block-styles-category {
 		color: var(--blockera-controls-primary-color);
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 500;
 		margin: 0;
 		text-transform: capitalize;
@@ -240,10 +240,13 @@
 		width: 470px;
 
 		.blockera-block-inserter-types {
-			height: 325px;
+			height: 50vh;
 			overflow-y: scroll;
 			box-shadow: inset 0 -25px 10px -10px rgba(0, 0, 0, 0.1);
-			padding: 0 10px 20px 0;
+			background: rgba(0, 0, 0, 0.0392156863);
+			padding: 22px;
+			border-radius: var(--blockera-controls-border-radius);
+			border: 1px solid var(--blockera-controls-border-color-soft);
 
 			.blockera-block-styles-category {
 				color: var(--blockera-controls-primary-color);
@@ -259,6 +262,16 @@
 
 			.blockera-feature-type {
 				--item-height: 36px !important;
+				background-color: #ffffff;
+
+				// Row click toggles selection in block-types.js; current block row omits this class.
+				&.is-row-clickable {
+					cursor: pointer;
+				}
+
+				&:not(.is-row-clickable) {
+					cursor: default;
+				}
 			}
 		}
 	}
