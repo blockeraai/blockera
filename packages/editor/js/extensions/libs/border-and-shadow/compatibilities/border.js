@@ -5,7 +5,7 @@
  */
 import { getColorVAFromVarString } from '@blockera/data';
 import { isValid, isBorderEmpty } from '@blockera/controls';
-import { isEquals } from '@blockera/utils';
+import { isEquals, normalizeCssLengthValue } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -20,7 +20,7 @@ import { runInsideBlockInspector } from '../../utils';
  * Returns null for a single token, empty string, or values containing `(` (calc/var/min, etc.)
  * where naive splitting would be wrong.
  *
- * Bare `0` tokens are normalized to `0px` so per-side widths stay explicit lengths for the UI/CSS pipeline.
+ * Each shorthand token is passed through `normalizeCssLengthValue` so bare `0` becomes `0px`.
  */
 export function expandFlatBorderWidthToSides(
 	width: string
@@ -35,7 +35,7 @@ export function expandFlatBorderWidthToSides(
 	const parts = trimmed
 		.split(/\s+/)
 		.filter(Boolean)
-		.map((part) => (part === '0' ? '0px' : part));
+		.map((part) => normalizeCssLengthValue(part));
 	if (parts.length < 2) {
 		return null;
 	}
@@ -78,6 +78,7 @@ export function borderFromWPCompatibility({
 			? attributes?.style?.border
 			: attributes?.border;
 
+		// Core may store border widths as bare `0` or number `0`; normalize to `0px` for Blockera UI/CSS output.
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor) {
@@ -90,7 +91,9 @@ export function borderFromWPCompatibility({
 					value: {
 						type: 'all',
 						all: {
-							width: attributes?.style?.border?.width ?? '',
+							width: normalizeCssLengthValue(
+								attributes?.style?.border?.width ?? ''
+							),
 							color: colorVar,
 							style: attributes?.style?.border?.style ?? 'solid',
 						},
@@ -108,22 +111,22 @@ export function borderFromWPCompatibility({
 					color: '',
 				},
 				top: {
-					width: border?.top?.width ?? '',
+					width: normalizeCssLengthValue(border?.top?.width ?? ''),
 					color: border?.top?.color ?? '',
 					style: border?.top?.style ?? 'solid',
 				},
 				right: {
-					width: border?.right?.width ?? '',
+					width: normalizeCssLengthValue(border?.right?.width ?? ''),
 					color: border?.right?.color ?? '',
 					style: border?.right?.style ?? 'solid',
 				},
 				bottom: {
-					width: border?.bottom?.width ?? '',
+					width: normalizeCssLengthValue(border?.bottom?.width ?? ''),
 					color: border?.bottom?.color ?? '',
 					style: border?.bottom?.style ?? 'solid',
 				},
 				left: {
-					width: border?.left?.width ?? '',
+					width: normalizeCssLengthValue(border?.left?.width ?? ''),
 					color: border?.left?.color ?? '',
 					style: border?.left?.style ?? 'solid',
 				},
@@ -150,7 +153,7 @@ export function borderFromWPCompatibility({
 		// Flat `border` object from core (no `top`/`right`/…): one width + style + color.
 		else if (border?.width || border?.style || border?.color) {
 			const widthSides = expandFlatBorderWidthToSides(
-				border?.width ?? ''
+				normalizeCssLengthValue(border?.width ?? '')
 			);
 			// Special case: width is CSS shorthand (e.g. `{ width: "0 0 0 2px", style: "solid", color: "currentColor" }`).
 			// Must become per-side `type: 'custom'` — `type: 'all'` would output invalid `border: 0 0 0 2px solid …`.
@@ -206,7 +209,7 @@ export function borderFromWPCompatibility({
 					value: {
 						type: 'all',
 						all: {
-							width: border?.width ?? '',
+							width: normalizeCssLengthValue(border?.width ?? ''),
 							style: border?.style ?? 'solid',
 							color: border?.color ?? '',
 						},
