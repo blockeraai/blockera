@@ -12,6 +12,55 @@ import { isEquals } from '@blockera/utils';
  */
 import { runInsideBlockInspector } from '../../utils';
 
+/**
+ * When WordPress stores `border.width` as a CSS shorthand (2–4 lengths, e.g. `0 0 0 2px`),
+ * it must map to `type: 'custom'` per-side widths. Using `type: 'all'` would emit invalid CSS
+ * (`border: 0 0 0 2px solid color`) from the box-border generator.
+ *
+ * Returns null for a single token, empty string, or values containing `(` (calc/var/min, etc.)
+ * where naive splitting would be wrong.
+ *
+ * Bare `0` tokens are normalized to `0px` so per-side widths stay explicit lengths for the UI/CSS pipeline.
+ */
+export function expandFlatBorderWidthToSides(
+	width: string
+): ?{| top: string, right: string, bottom: string, left: string |} {
+	if (typeof width !== 'string') {
+		return null;
+	}
+	const trimmed = width.trim();
+	if (!trimmed || trimmed.includes('(')) {
+		return null;
+	}
+	const parts = trimmed
+		.split(/\s+/)
+		.filter(Boolean)
+		.map((part) => (part === '0' ? '0px' : part));
+	if (parts.length < 2) {
+		return null;
+	}
+	let top: string;
+	let right: string;
+	let bottom: string;
+	let left: string;
+	if (parts.length === 2) {
+		top = bottom = parts[0];
+		right = left = parts[1];
+	} else if (parts.length === 3) {
+		top = parts[0];
+		right = left = parts[1];
+		bottom = parts[2];
+	} else if (parts.length === 4) {
+		top = parts[0];
+		right = parts[1];
+		bottom = parts[2];
+		left = parts[3];
+	} else {
+		return null;
+	}
+	return { top, right, bottom, left };
+}
+
 export function borderFromWPCompatibility({
 	attributes,
 	editorSelectedBlockEvent,
@@ -28,6 +77,7 @@ export function borderFromWPCompatibility({
 		)
 			? attributes?.style?.border
 			: attributes?.border;
+
 		// borderColor in root always is variable and means border type is all
 		// it should be changed to a Value Addon (variable)
 		if (attributes?.borderColor) {
@@ -97,18 +147,72 @@ export function borderFromWPCompatibility({
 				value: borderData,
 			};
 		}
-		// is all and does not use var color
+		// Flat `border` object from core (no `top`/`right`/…): one width + style + color.
 		else if (border?.width || border?.style || border?.color) {
-			attributes.blockeraBorder = {
-				value: {
-					type: 'all',
+			const widthSides = expandFlatBorderWidthToSides(
+				border?.width ?? ''
+			);
+			// Special case: width is CSS shorthand (e.g. `{ width: "0 0 0 2px", style: "solid", color: "currentColor" }`).
+			// Must become per-side `type: 'custom'` — `type: 'all'` would output invalid `border: 0 0 0 2px solid …`.
+			if (widthSides) {
+				const sharedStyle = border?.style ?? 'solid';
+				const borderData = {
+					type: 'custom',
 					all: {
-						width: border?.width ?? '',
-						style: border?.style ?? 'solid',
-						color: border?.color ?? '',
+						width: '',
+						style: '',
+						color: '',
 					},
-				},
-			};
+					top: {
+						width: widthSides.top,
+						color: border?.color ?? '',
+						style: sharedStyle,
+					},
+					right: {
+						width: widthSides.right,
+						color: border?.color ?? '',
+						style: sharedStyle,
+					},
+					bottom: {
+						width: widthSides.bottom,
+						color: border?.color ?? '',
+						style: sharedStyle,
+					},
+					left: {
+						width: widthSides.left,
+						color: border?.color ?? '',
+						style: sharedStyle,
+					},
+				};
+
+				borderData.top.color = getColorVAFromVarString(
+					borderData.top.color
+				);
+				borderData.right.color = getColorVAFromVarString(
+					borderData.right.color
+				);
+				borderData.bottom.color = getColorVAFromVarString(
+					borderData.bottom.color
+				);
+				borderData.left.color = getColorVAFromVarString(
+					borderData.left.color
+				);
+				attributes.blockeraBorder = {
+					value: borderData,
+				};
+			} else {
+				// One width token (or calc/var — we do not split): safe for `border:` shorthand as `type: 'all'`.
+				attributes.blockeraBorder = {
+					value: {
+						type: 'all',
+						all: {
+							width: border?.width ?? '',
+							style: border?.style ?? 'solid',
+							color: border?.color ?? '',
+						},
+					},
+				};
+			}
 		}
 	}
 
