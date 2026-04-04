@@ -5,7 +5,7 @@
  */
 import { __, sprintf } from '@wordpress/i18n';
 import type { MixedElement } from 'react';
-import { useState, useRef } from '@wordpress/element';
+import { useState, useRef, useCallback } from '@wordpress/element';
 import { Editor } from '@monaco-editor/react';
 import memoize from 'fast-memoize';
 
@@ -30,7 +30,7 @@ import {
  * Internal dependencies
  */
 import BaseControl from '../base-control';
-import { DynamicHtmlFormatter, TextLoading } from '../';
+import { Button, DynamicHtmlFormatter, TextLoading } from '../';
 import { useControlContext } from '../../context';
 import type { CodeControlProps } from './types';
 
@@ -242,6 +242,33 @@ const CodeControl = ({
 	const [showPlaceholder, setShowPlaceholder] = useState(false);
 	const editorRef = useRef(null);
 	const timeoutRef = useRef(null);
+
+	// Monaco applies built-in CSS formatting; we sync the formatted buffer into
+	// control state and cancel the pending debounced onChange so we do not
+	// overwrite with a stale value on the next tick.
+	const handlePrettify = useCallback(() => {
+		const editor = editorRef.current;
+
+		if (!editor) {
+			return;
+		}
+
+		const action = editor.getAction('editor.action.formatDocument');
+
+		if (!action || !action.isSupported()) {
+			return;
+		}
+
+		void action.run().then(() => {
+			const next = editor.getValue();
+
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+
+			setValue(next);
+		});
+	}, [setValue]);
 
 	const labelProps = {
 		value,
@@ -644,7 +671,38 @@ const CodeControl = ({
 							'code-control__description'
 						)}
 					>
-						{description}
+						{/* CSS: helper text on the left, Prettify on the right (same row). */}
+						{lang === 'css' ? (
+							<div
+								className={controlInnerClassNames(
+									'code-control__description-row'
+								)}
+							>
+								<div
+									className={controlInnerClassNames(
+										'code-control__description-body'
+									)}
+								>
+									{description}
+								</div>
+								<div
+									className={controlInnerClassNames(
+										'code-control__description-actions'
+									)}
+								>
+									<Button
+										variant={'tertiary'}
+										size={'extra-small'}
+										text={__('Prettify', 'blockera')}
+										onClick={handlePrettify}
+										disabled={!editable}
+										data-cy="code-control-prettify"
+									/>
+								</div>
+							</div>
+						) : (
+							description
+						)}
 					</div>
 				)}
 			</div>

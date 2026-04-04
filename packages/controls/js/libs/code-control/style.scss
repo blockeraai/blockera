@@ -30,6 +30,24 @@
 		}
 	}
 
+	// Description + Prettify: text wraps in the main column; action stays top-right.
+	.blockera-control-code-control__description-row {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 12px;
+	}
+
+	.blockera-control-code-control__description-body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	.blockera-control-code-control__description-actions {
+		flex-shrink: 0;
+		padding-top: 1px;
+	}
+
 	.blockera-control-code-control__placeholder {
 		position: absolute;
 		top: 10px;
@@ -40,7 +58,9 @@
 		font-weight: 400;
 		font-style: italic;
 		font-size: 13px;
-		font-feature-settings: "liga" 0, "calt" 0;
+		font-feature-settings:
+			"liga" 0,
+			"calt" 0;
 		font-variation-settings: normal;
 		line-height: 20px;
 		letter-spacing: 0;
