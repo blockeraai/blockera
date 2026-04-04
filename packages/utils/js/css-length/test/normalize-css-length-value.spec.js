@@ -35,6 +35,14 @@ describe('normalizeCssLengthValue', () => {
 		expect(normalizeCssLengthValue('0 0 0 2px')).toBe('0 0 0 2px');
 	});
 
+	test('strips trailing !important', () => {
+		expect(normalizeCssLengthValue('2px !important')).toBe('2px');
+		expect(normalizeCssLengthValue('2px!important')).toBe('2px');
+		expect(normalizeCssLengthValue('2px ! important')).toBe('2px');
+		expect(normalizeCssLengthValue('0 !IMPORTANT')).toBe('0px');
+		expect(normalizeCssLengthValue('  -.5 !important  ')).toBe('-0.5px');
+	});
+
 	test('shorthand leading decimal → explicit zero before dot', () => {
 		expect(normalizeCssLengthValue('-.5px')).toBe('-0.5px');
 		expect(normalizeCssLengthValue('-.5')).toBe('-0.5px');

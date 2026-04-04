@@ -6,7 +6,7 @@
  *
  * @param {*} value Raw width/length from block attributes or parsed tokens.
  * @param {string} [defaultUnit='px'] Suffix for bare zero and unitless shorthand decimals (`''` keeps a number-only token).
- * @return {string} Bare `0` → `0` + defaultUnit; shorthand decimals normalized; bare shorthand numbers get defaultUnit; otherwise the original string form (empty stays empty).
+ * @return {string} Bare `0` → `0` + defaultUnit; shorthand decimals normalized; bare shorthand numbers get defaultUnit; trailing `!important` removed; otherwise the original string form (empty stays empty).
  */
 export function normalizeCssLengthValue(
 	value: mixed,
@@ -19,7 +19,12 @@ export function normalizeCssLengthValue(
 		return value === 0 ? `0${defaultUnit}` : String(value);
 	}
 	const s = String(value);
-	const t = s.trim();
+	let t = s.trim();
+	const importantRe = /\s*!\s*important\s*$/i;
+	const hadTrailingImportant = importantRe.test(t);
+	if (hadTrailingImportant) {
+		t = t.replace(importantRe, '').trim();
+	}
 	if (t === '0') {
 		return `0${defaultUnit}`;
 	}
@@ -32,5 +37,5 @@ export function normalizeCssLengthValue(
 		}
 		return out;
 	}
-	return s;
+	return hadTrailingImportant ? t : s;
 }
