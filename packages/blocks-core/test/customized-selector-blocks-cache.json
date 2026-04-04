@@ -62,6 +62,9 @@
 			"root": ".wp-block-button .wp-block-button__link"
 		}
 	},
+	"core/calendar": {
+		"root": ".wp-block-calendar[data-block]"
+	},
 	"core/cover": {
 		"filter": {
 			"duotone": ".wp-block-cover > .wp-block-cover__image-background, .wp-block-cover > .wp-block-cover__video-background"
@@ -76,6 +79,12 @@
 	},
 	"core/file": {
 		"layout": " .wp-block-file__content-wrapper"
+	},
+	"core/latest-comments": {
+		"root": ".wp-block-latest-comments[data-block]"
+	},
+	"core/rss": {
+		"root": ".wp-block-rss[data-block]"
 	},
 	"core/social-link": {
 		"layout": ".wp-block-social-link .wp-block-social-link-anchor",
