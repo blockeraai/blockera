@@ -279,7 +279,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				setInnerBlock('elements/text');
 				setBlockState('Hover');
 
-				cy.setColorControlValue('Text Color', '666666');
+				cy.setColorControlValue('Text Color', '#666666');
 
 				//
 				// Check
@@ -509,7 +509,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				//
 				setInnerBlock('elements/icons');
 
-				cy.setColorControlValue('Text Color', '666666');
+				cy.setColorControlValue('Text Color', '#666666');
 
 				//
 				// Check
@@ -726,7 +726,7 @@ describe('Blocksy → About Me Block → WP Compatibility', () => {
 				setInnerBlock('elements/icons');
 				setBlockState('Hover');
 
-				cy.setColorControlValue('Text Color', '666666');
+				cy.setColorControlValue('Text Color', '#666666');
 
 				//
 				// Check
