@@ -600,8 +600,10 @@ async function setColorControlValue(page, label, value) {
 	await container.locator('[data-cy="color-btn"]').click();
 
 	const popover = page.locator('[data-wp-component="Popover"]').last();
-	await popover.locator('input[maxlength="9"]').clear();
-	await popover.locator('input[maxlength="9"]').fill(value + ' ');
+	await popover.locator('[data-cy="color-picker-css-value"]').clear();
+	await popover
+		.locator('[data-cy="color-picker-css-value"]')
+		.fill(value + ' ');
 
 	const closeButton = popover.locator('[aria-label="Close"]');
 	if ((await closeButton.count()) > 0) {

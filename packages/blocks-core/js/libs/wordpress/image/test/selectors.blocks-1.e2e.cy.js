@@ -119,8 +119,12 @@ describe('Image Block → Selectors test', () => {
 		cy.getByDataTest('popover-body')
 			.first()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
+					delay: 0,
+				});
 			});
 
 		cy.get('@borderContainer').within(() => {
@@ -194,8 +198,12 @@ describe('Image Block → Selectors test', () => {
 		cy.getByDataTest('popover-body')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('c5eef0ab', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('c5eef0ab', {
+					delay: 0,
+				});
 			});
 		cy.getBlock('core/image')
 			.first()
@@ -236,8 +244,12 @@ describe('Image Block → Selectors test', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('cccccc', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('cccccc', {
+					delay: 0,
+				});
 			});
 
 		cy.getBlock('core/image')

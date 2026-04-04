@@ -1,6 +1,7 @@
 ## Unreleased
 
 ### Improvements
+- Color picker: added a color value field for hex, rgb(), named colors, and CSS variables, with a more compact saturation area in the sketch panel.
 - Enhance the design of the image uploader control.
 - Enhance the design of the icon control.
 - Box spacing control improved to detect lock for horizontal or vertical based on value for blocks.
@@ -12,6 +13,7 @@
 - Tabs Control: improved performance when switching between tabs for a smoother experience.
 
 ### Bug Fixes
+- Color picker: fixed hex input being rewritten while typing (for example six-digit colors turning into the wrong value).
 - Fixed an issue where icons weren't updating properly when changed.
 - Fixed variable picker design issue while variable names were too long.
 - Fixed extra horizontal scrollbar while opening variable picker.

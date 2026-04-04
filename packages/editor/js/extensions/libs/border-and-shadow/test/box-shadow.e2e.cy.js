@@ -44,8 +44,12 @@ describe('Box Shadow → Functionality', () => {
 		cy.getByDataTest('popover-body')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('c5eef0ab', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('c5eef0ab', {
+					delay: 0,
+				});
 			});
 
 		//Check block

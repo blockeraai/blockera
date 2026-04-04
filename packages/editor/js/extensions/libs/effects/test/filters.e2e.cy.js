@@ -46,8 +46,12 @@ describe('Filters → Functionality', () => {
 		cy.get('.components-popover')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('cccccc', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('cccccc', {
+					delay: 0,
+				});
 			});
 
 		//Check block

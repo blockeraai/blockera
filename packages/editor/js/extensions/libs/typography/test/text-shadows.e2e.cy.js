@@ -54,8 +54,12 @@ describe('Text Shadows → Functionality', () => {
 		cy.getByDataTest('popover-body')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('70ca9e', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('70ca9e', {
+					delay: 0,
+				});
 			});
 
 		//Check block

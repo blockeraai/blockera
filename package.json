@@ -62,9 +62,11 @@
 		"fuse.js": "^6.6.2",
 		"is-plain-object": "^5.0.0",
 		"overlayscrollbars": "^2.0.0",
+		"react-color": "^2.19.3",
 		"react-error-boundary": "^5.0.0",
 		"react-window": "^1.8.11",
 		"rememo": "^4.0.2",
+		"tinycolor2": "^1.6.0",
 		"use-draggable": "^2.0.0"
 	},
 	"devDependencies": {
