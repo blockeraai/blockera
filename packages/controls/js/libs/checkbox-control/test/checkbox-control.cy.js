@@ -121,21 +121,20 @@ describe('checkbox control', () => {
 			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
 		});
 
-		// 2.
-		it('calculated defaultValue must be value, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+		// 2. Stored value wins over defaultValue when both are set (including boolean false).
+		it('calculated data must be value, when defaultValue(ok) && id(!ok) && value(false)', () => {
 			cy.withDataProvider({
 				component: (
 					<CheckboxControl
 						checkboxLabel={checkboxLabel}
 						defaultValue={true}
-						id="x.y"
 					/>
 				),
 				value: false,
 			});
 
 			cy.get('input[type=checkbox]').as('checkbox');
-			cy.get('@checkbox').should('have.attr', 'aria-checked', 'true');
+			cy.get('@checkbox').should('have.attr', 'aria-checked', 'false');
 		});
 
 		// 3.
