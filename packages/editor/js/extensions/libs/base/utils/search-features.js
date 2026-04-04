@@ -268,3 +268,23 @@ export const matchesSearchQuery = (
 	}
 	return matchesNormalizedQuery(config, searchQuery.toLowerCase().trim());
 };
+
+/**
+ * True if a filtered extension config still has at least one feature entry
+ * (keys other than status/initialOpen). Used for empty-search UI.
+ *
+ * @param {Object|void} configObj - Config from filterConfigBySearch
+ * @return {boolean} True when the config includes at least one feature key besides status/initialOpen.
+ */
+export const configHasFeatureEntries = (configObj: Object | void): boolean => {
+	if (!configObj || typeof configObj !== 'object') {
+		return false;
+	}
+	for (const key in configObj) {
+		if (key === 'status' || key === 'initialOpen') {
+			continue;
+		}
+		return true;
+	}
+	return false;
+};

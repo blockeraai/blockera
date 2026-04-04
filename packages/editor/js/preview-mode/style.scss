@@ -39,7 +39,7 @@
 	padding: 40px;
 	border-top: 1px solid #c3c3c3;
 	background-color: var(--wp-editor-canvas-background);
-	overflow: auto;
+	overflow: hidden auto;
 
 	/* Entrance: fade in background */
 	animation: blockera-overlay-fade-in var(--animation-duration) ease-out both;
@@ -55,10 +55,9 @@
 		gap: 0;
 		box-sizing: content-box;
 		overflow: auto;
-		border-radius: 8px;
+		border-radius: 5px;
 		transition: width 0.3s ease;
 		position: relative;
-		box-shadow: 0 10px 20px 0 #0000003d;
 		border: 1px solid #c3c3c3;
 	}
 

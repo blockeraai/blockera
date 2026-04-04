@@ -115,7 +115,7 @@ n .blockera-block.blockera-block-4.wp-block-image {
 	width: 100px;
 }
 
-.blockera-block.blockera-block-4:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-4):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 	color: #0c58f1;
 	background-color: #c4d1ff;
 	padding: 10px 5px 10px 5px;
@@ -123,12 +123,12 @@ n .blockera-block.blockera-block-4.wp-block-image {
 	margin-bottom: 0;
 }
 
-.blockera-block.blockera-block-4:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption:hover {
+html:root body :where(.blockera-block.blockera-block-4):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption:hover {
 	color: #00308f;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-4:is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
+	html:root body :where(.blockera-block.blockera-block-4):is(.has-custom-border, :not(.has-custom-border)):is(figure) figcaption.wp-element-caption {
 		padding: 10px 5px 10px 5px;
 		margin-top: 10px;
 		margin-bottom: 0;

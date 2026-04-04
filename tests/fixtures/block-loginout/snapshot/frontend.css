@@ -4,12 +4,12 @@
 	padding: 30px 30px 30px 30px;
 }
 
-.blockera-block.blockera-block-1 form {
+html:root body :where(.blockera-block.blockera-block-1) form {
 	background-color: #bea4a4;
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-1 :is(.login-password, .login-username) label {
+html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) label {
 	color: #ac2626;
 	background-color: #00000029;
 	padding: 5px 5px 5px 5px;
@@ -22,7 +22,7 @@
 	border-radius: 8px;
 }
 
-.blockera-block.blockera-block-1 :is(.login-password, .login-username) input {
+html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) input {
 	color: #e20404;
 	display: inline-block !important;
 	border: 1px solid #b50000;
@@ -34,7 +34,7 @@
 	width: stretch;
 }
 
-.blockera-block.blockera-block-1 .login-remember label {
+html:root body :where(.blockera-block.blockera-block-1) .login-remember label {
 	color: #a62626;
 	background-color: #00000030;
 	display: block !important;
@@ -42,7 +42,7 @@
 	padding: 5px 10px 5px 10px;
 }
 
-.blockera-block.blockera-block-1 .login-submit .button.button-primary {
+html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary {
 	color: #4d0000;
 	display: block !important;
 	width: 100%;
@@ -56,7 +56,7 @@
 	transition: all 500ms ease 0ms;
 }
 
-.blockera-block.blockera-block-1 :is(.login-password, .login-username) {
+html:root body :where(.blockera-block.blockera-block-1) :is(.login-password, .login-username) {
 	display: flex !important;
 	flex-direction: row;
 	align-items: center !important;
@@ -64,7 +64,7 @@
 	gap: 10px;
 }
 
-.blockera-block.blockera-block-1 form::before {
+html:root body :where(.blockera-block.blockera-block-1) form::before {
 	border-radius: 5px;
 	content: "Container Before";
 	background-color: #00000030;
@@ -72,7 +72,7 @@
 	display: block !important;
 }
 
-.blockera-block.blockera-block-1 form::after {
+html:root body :where(.blockera-block.blockera-block-1) form::after {
 	display: block !important;
 	content: "Container After";
 	padding: 5px 10px 5px 10px;
@@ -80,7 +80,7 @@
 	background-color: #00000036;
 }
 
-.blockera-block.blockera-block-1 .login-submit .button.button-primary:hover {
+html:root body :where(.blockera-block.blockera-block-1) .login-submit .button.button-primary:hover {
 	border-radius: 15px;
 	background-color: #c92222;
 }

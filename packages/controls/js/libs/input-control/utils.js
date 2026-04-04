@@ -23,6 +23,7 @@ const specialUnits = [
 	'content',
 	'none',
 	'func',
+	'normal',
 ];
 
 // Helper function to recursively search for a unit value in nested options
@@ -309,6 +310,11 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 				{
 					label: 'Special Values',
 					options: [
+						{
+							value: 'normal',
+							label: 'Normal',
+							format: 'text',
+						},
 						{
 							value: 'inherit',
 							label: 'Inherit',

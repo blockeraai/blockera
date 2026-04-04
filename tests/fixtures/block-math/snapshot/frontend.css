@@ -6,27 +6,27 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 mi {
+html:root body :where(.blockera-block.blockera-block-1) mi {
 	color: #d60000;
 }
 
-.blockera-block.blockera-block-1 mn {
+html:root body :where(.blockera-block.blockera-block-1) mn {
 	color: #00aa4f;
 }
 
-.blockera-block.blockera-block-1 mo {
+html:root body :where(.blockera-block.blockera-block-1) mo {
 	color: #00a0b8;
 }
 
-.blockera-block.blockera-block-1 mfrac {
+html:root body :where(.blockera-block.blockera-block-1) mfrac {
 	color: #0300b1;
 }
 
-.blockera-block.blockera-block-1 msup {
+html:root body :where(.blockera-block.blockera-block-1) msup {
 	color: #b500a0;
 }
 
-.blockera-block.blockera-block-1 msub {
+html:root body :where(.blockera-block.blockera-block-1) msub {
 	color: #ba9b00;
 }
 
@@ -35,27 +35,27 @@
 	border: 2px solid #630000;
 }
 
-.blockera-block.blockera-block-1:hover mi {
+html:root body :where(.blockera-block.blockera-block-1):hover mi {
 	color: #e20000;
 }
 
-.blockera-block.blockera-block-1:hover mn {
+html:root body :where(.blockera-block.blockera-block-1):hover mn {
 	color: #00d765;
 }
 
-.blockera-block.blockera-block-1:hover mo {
+html:root body :where(.blockera-block.blockera-block-1):hover mo {
 	color: #00c6e4;
 }
 
-.blockera-block.blockera-block-1:hover mfrac {
+html:root body :where(.blockera-block.blockera-block-1):hover mfrac {
 	color: #0400fa;
 }
 
-.blockera-block.blockera-block-1:hover msup {
+html:root body :where(.blockera-block.blockera-block-1):hover msup {
 	color: #ff00e1;
 }
 
-.blockera-block.blockera-block-1:hover msub {
+html:root body :where(.blockera-block.blockera-block-1):hover msub {
 	color: #ffd500;
 }
 

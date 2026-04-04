@@ -38,7 +38,7 @@ describe('Background Image → Functionality', () => {
 			cy.get('#menu-item-upload').click();
 
 			cy.get('input[type="file"]').selectFile(
-				'packages/dev-cypress/js/fixtures/bg-extension-test.jpeg',
+				'packages/dev-cypress/js/fixtures/bg-extension-test.png',
 				{
 					force: true,
 				}

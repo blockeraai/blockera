@@ -14,6 +14,8 @@ import {
 	openBoxSpacingSide,
 	openBoxPositionSide,
 } from '../helpers';
+import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
+import { PREVIEW_MODE_TEST_ID } from 'blockera-editor-preview-test-ids';
 
 export const registerCommands = () => {
 	//This registers the cy.compareSnapshot() custom command provided by the plugin
@@ -98,6 +100,30 @@ export const registerCommands = () => {
 		}
 
 		return cy.get(`[aria-label="${selector}"]`, ...args);
+	});
+
+	/**
+	 * Dispatch `primaryShift` + physical key (matches @wordpress/keycodes `isKeyboardEvent`).
+	 * WordPress listens on `document` for `keydown` (see @wordpress/keyboard-shortcuts context).
+	 *
+	 * @param {string} key KeyboardEvent.key
+	 * @param {string} code KeyboardEvent.code
+	 */
+	Cypress.Commands.add('pressPrimaryShiftKey', (key, code) => {
+		const isMac = Cypress.platform === 'darwin';
+		cy.window().then((win) => {
+			win.document.dispatchEvent(
+				new win.KeyboardEvent('keydown', {
+					key,
+					code,
+					bubbles: true,
+					cancelable: true,
+					shiftKey: true,
+					metaKey: isMac,
+					ctrlKey: !isMac,
+				})
+			);
+		});
 	});
 
 	Cypress.Commands.add('cssVar', (cssVarName, selector) => {
@@ -540,8 +566,10 @@ export const registerCommands = () => {
 		cy.get('[data-wp-component="Popover"]')
 			.last()
 			.within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]')
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]')
 					.type(value + ' ', { delay: 0 })
 					.then(() => {
 						if (Cypress.$(`[aria-label="Close"]`).length) {
@@ -1020,5 +1048,338 @@ export const registerCommands = () => {
 			.within(() => {
 				cy.get('button').contains(featureLabel).click();
 			});
+	});
+
+	/**
+	 * Clears persisted workspace tab list so a new `post-new` load starts with a
+	 * single tab (see `TABS_STORAGE_KEY` in editor tabs storage).
+	 */
+	Cypress.Commands.add('tabsResetWorkspaceStorage', () => {
+		cy.window().then((win) => {
+			win.localStorage.removeItem('blockera-tabs-tabs');
+		});
+	});
+
+	/**
+	 * Clears open-tab list + recently closed list + “remember recently closed”
+	 * preference so tests start from defaults (tabs persisted, recently closed on).
+	 */
+	Cypress.Commands.add('tabsResetTabsRelatedStorage', () => {
+		cy.window().then((win) => {
+			win.localStorage.removeItem('blockera-tabs-tabs');
+			win.localStorage.removeItem('blockera-tabs-recently-closed');
+			win.localStorage.removeItem(
+				'blockera-tabs-recently-closed-persistence'
+			);
+		});
+	});
+
+	/** Opens the tabs bar “⋯” toolbar menu (Recently Closed, settings). */
+	Cypress.Commands.add('tabsOpenToolbarMenu', () => {
+		cy.get('.blockera-tabs-bar', { timeout: 60000 }).should('be.visible');
+		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.toolbarMenuTrigger}"]`)
+			.filter(':visible')
+			.first()
+			.scrollIntoView()
+			.should('be.visible')
+			.click({ force: true });
+		// Wait on test-id (locale-safe; do not match translated menu strings).
+		cy.getByTestId(WORKSPACE_TABS_TEST_ID.toolbarRememberRecentlyClosed, {
+			timeout: 20000,
+		}).should('exist');
+	});
+
+	/** Opens the add-tab flow (command palette in “add tab” mode). */
+	Cypress.Commands.add('tabsOpenAddPalette', () => {
+		cy.get(`[test-id="${WORKSPACE_TABS_TEST_ID.add}"]`)
+			.first()
+			.should('exist')
+			.click({ force: true });
+	});
+
+	/**
+	 * Opens add tab palette and runs “Add new post” (creates a draft post via REST).
+	 */
+	Cypress.Commands.add('tabsAddNewPost', () => {
+		cy.tabsOpenAddPalette();
+		cy.get('.commands-command-menu [cmdk-input]', { timeout: 20000 })
+			.should('be.visible')
+			.type('{selectall}{backspace}Add new post{enter}');
+	});
+
+	/**
+	 * Joins Cypress `testURL` with a path (same rules as `goTo` in site-navigation).
+	 * @param {string} path Path starting with `/` e.g. `/wp-admin/post.php`
+	 */
+	const joinTestUrl = (path) => {
+		const testURL = Cypress.env('testURL');
+
+		if (
+			(testURL.endsWith('/') && !path.startsWith('/')) ||
+			(!testURL.endsWith('/') && path.startsWith('/'))
+		) {
+			return `${testURL}${path}`;
+		}
+
+		if (!testURL.endsWith('/') && !path.startsWith('/')) {
+			return `${testURL}/${path}`;
+		}
+
+		if (testURL.endsWith('/') && path.startsWith('/')) {
+			return `${testURL.slice(0, -1)}${path}`;
+		}
+
+		return `${testURL}${path}`;
+	};
+
+	/**
+	 * Creates draft posts via REST while the block editor is loaded (`wp.apiFetch`).
+	 * @param {number} count How many drafts to create.
+	 * @returns {Cypress.Chainable<number[]>} Numeric post IDs.
+	 */
+	Cypress.Commands.add('tabsCreateDraftPostsViaRest', (count) => {
+		return cy.window().then((win) => {
+			const apiFetch = win.wp?.apiFetch;
+
+			if (!apiFetch) {
+				throw new Error(
+					'wp.apiFetch is required (open the block editor first).'
+				);
+			}
+
+			const base = `${Date.now()}`;
+			const requests = Array.from({ length: count }, (_, i) =>
+				apiFetch({
+					path: '/wp/v2/posts',
+					method: 'POST',
+					data: {
+						title: `e2e-tabs-${base}-${i}`,
+						status: 'draft',
+					},
+				}).then((r) => r.id)
+			);
+
+			return Promise.all(requests);
+		});
+	});
+
+	/**
+	 * Visits the post editor and seeds `sessionStorage` so `useBulkEditTabs` opens
+	 * `bulkIds` as extra tabs (adds without `evictLastUnpinnedIfAtLimit`).
+	 * @param {number|string} postId Current document post ID.
+	 * @param {number[]|string[]} bulkIds Additional post IDs to open as tabs.
+	 */
+	Cypress.Commands.add(
+		'tabsVisitEditorWithBulkEditIds',
+		(postId, bulkIds) => {
+			const list = Array.isArray(bulkIds)
+				? bulkIds.join(',')
+				: String(bulkIds);
+			// Query string is a fallback if sessionStorage is unavailable; useBulkEditTabs
+			// reads sessionStorage first, then URL (`bulk_edit_ids`).
+			const path = `/wp-admin/post.php?post=${postId}&action=edit&bulk_edit_ids=${encodeURIComponent(
+				list
+			)}`;
+			const url = joinTestUrl(path);
+
+			return cy.visit(url, {
+				onBeforeLoad(win) {
+					win.sessionStorage.setItem(
+						'blockera_tabs_bulk_edit_ids',
+						list
+					);
+					win.sessionStorage.setItem(
+						'blockera_tabs_bulk_edit_post_type',
+						'post'
+					);
+				},
+			});
+		}
+	);
+
+	/**
+	 * Posts list (`edit.php`): check rows by post ID, run Blockera bulk action
+	 * “Edit All in Editor”, Apply. Redirects to `post.php` with `bulk_edit_ids`
+	 * (same as `BulkActions::build_editor_url()`).
+	 *
+	 * @param {(number|string)[]} postIds Post IDs to select (same post type; Posts screen).
+	 * @see packages/editor/php/BulkActions.php — ACTION_SLUG, handle_bulk_action
+	 */
+	Cypress.Commands.add('tabsBulkEditAllInEditorFromPostsList', (postIds) => {
+		cy.visit(joinTestUrl('/wp-admin/edit.php'));
+		cy.get('#posts-filter .wp-list-table, .wp-list-table', {
+			timeout: 60000,
+		}).should('exist');
+		cy.wrap(postIds).each((id) => {
+			cy.get(`input[name="post[]"][value="${id}"]`, { timeout: 20000 })
+				.scrollIntoView()
+				.check({ force: true });
+		});
+		// Value must match `BulkActions::ACTION_SLUG` (`blockera_edit_all`).
+		cy.get('#bulk-action-selector-top').select('blockera_edit_all');
+		cy.get('#doaction').click();
+	});
+
+	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+
+	const pinnedTabRoots = `.blockera-tabs-bar-tabs__pinned-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
+
+	/**
+	 * Asserts the number of pinned workspace tabs.
+	 * When count is 0, the pinned strip is not rendered.
+	 * @param {number} count Expected pinned tab count.
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 60000 }`.
+	 */
+	Cypress.Commands.add('tabsExpectPinnedCount', (count, options = {}) => {
+		if (count === 0) {
+			cy.get('.blockera-tabs-bar-tabs__pinned-tabs', options).should(
+				'not.exist'
+			);
+		} else {
+			cy.get(pinnedTabRoots, options).should('have.length', count);
+		}
+	});
+
+	/**
+	 * Asserts the number of unpinned workspace tabs.
+	 * @param {number} count Expected tab count.
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 60000 }` while a new tab loads.
+	 */
+	Cypress.Commands.add('tabsExpectUnpinnedCount', (count, options = {}) => {
+		cy.get(unpinnedTabRoots, options).should('have.length', count);
+	});
+
+	/** Activates an unpinned tab by zero-based index (left to right). */
+	Cypress.Commands.add('tabsClickUnpinnedByIndex', (index) => {
+		cy.get(unpinnedTabRoots)
+			.eq(index)
+			.find('.blockera-tabs-tab-button')
+			.first()
+			.should('be.visible')
+			.click();
+	});
+
+	/** Activates a pinned tab by zero-based index (left to right within the pinned strip). */
+	Cypress.Commands.add('tabsClickPinnedByIndex', (index) => {
+		cy.get(pinnedTabRoots)
+			.eq(index)
+			.find('.blockera-tabs-tab-button')
+			.first()
+			.should('be.visible')
+			.click();
+	});
+
+	/**
+	 * Closes an unpinned tab by index via its close control.
+	 * (Pinned tabs have no close button in this UI.)
+	 */
+	Cypress.Commands.add('tabsCloseUnpinnedByIndex', (index) => {
+		cy.get(unpinnedTabRoots)
+			.eq(index)
+			.find('[test-id^="blockera-workspace-tabs-close--"]')
+			.should('be.visible')
+			.click();
+	});
+
+	/** The visible title element for the currently active workspace tab. */
+	Cypress.Commands.add('tabsGetActiveTitle', () => {
+		return cy
+			.get('.blockera-tabs-tab.is-active')
+			.find(`[test-id="${WORKSPACE_TABS_TEST_ID.tabTitle}"]`);
+	});
+
+	/**
+	 * Stub `window.open` for tab context menu "View" (assert with `@tabsWindowOpen`).
+	 */
+	Cypress.Commands.add('tabsStubWindowOpen', () => {
+		cy.window().then((win) => {
+			cy.stub(win, 'open').as('tabsWindowOpen');
+		});
+	});
+
+	/**
+	 * Stub `navigator.clipboard.writeText` for "Copy view link" / "Copy editor link"
+	 * (assert with `@tabsClipboardWrite`).
+	 */
+	Cypress.Commands.add('tabsStubClipboardWrite', () => {
+		cy.window().then((win) => {
+			cy.stub(win.navigator.clipboard, 'writeText')
+				.resolves()
+				.as('tabsClipboardWrite');
+		});
+	});
+
+	/**
+	 * Asserts whether the unsaved-change dot is present on an unpinned tab (by index).
+	 * @param {number} index Zero-based index in the unpinned strip (left to right).
+	 * @param {boolean} [shouldExist=true] When false, expects the indicator to be absent.
+	 */
+	Cypress.Commands.add(
+		'tabsExpectUnpinnedUnsavedIndicator',
+		(index, shouldExist = true) => {
+			cy.get(unpinnedTabRoots)
+				.eq(index)
+				.find(
+					`[test-id="${WORKSPACE_TABS_TEST_ID.tabUnsavedIndicator}"]`
+				)
+				.should(shouldExist ? 'exist' : 'not.exist');
+		}
+	);
+
+	/**
+	 * Asserts the workspace tab limit upgrade prompt is visible (free tier; Pro removes limits).
+	 * @param {Cypress.Timeoutable} [options] e.g. `{ timeout: 20000 }`.
+	 */
+	Cypress.Commands.add('tabsExpectLimitUpgradePrompt', (options = {}) => {
+		cy.getByTestId(
+			WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
+			options
+		).should('be.visible');
+	});
+
+	/**
+	 * Opens the Blockera header zoom dropdown (Post/Site editor).
+	 */
+	Cypress.Commands.add('zoomOpenDropdown', () => {
+		cy.getByDataTest('blockera-zoom-control', { timeout: 30000 })
+			.should('be.visible')
+			.find('button[aria-haspopup="true"]')
+			.first()
+			.click({ force: true });
+	});
+
+	/**
+	 * Stub `window.open` for Blockera preview mode (modifier+click, header “open in new tab”, shortcuts).
+	 * Assert with `@previewWindowOpen`.
+	 */
+	Cypress.Commands.add('previewStubWindowOpen', () => {
+		cy.window().then((win) => {
+			cy.stub(win, 'open').as('previewWindowOpen');
+		});
+	});
+
+	/** Clicks the header “Live frontend preview” control (`PREVIEW_MODE_TEST_ID.toggleButton`). */
+	Cypress.Commands.add('previewClickToggle', () => {
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.toggleButton, {
+			timeout: 30000,
+		})
+			.should('be.visible')
+			.click();
+	});
+
+	/** Waits for the preview overlay dialog (iframe preview). */
+	Cypress.Commands.add('previewExpectOverlayOpen', () => {
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay, { timeout: 30000 }).should(
+			'be.visible'
+		);
+		cy.get('body').should('have.class', 'blockera-preview-mode-open');
+		// Iframe can be clipped by fixed/overflow ancestors; `exist` matches user-visible preview.
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.iframe).should('exist');
+	});
+
+	/** Asserts preview overlay is closed and body class removed. */
+	Cypress.Commands.add('previewExpectOverlayClosed', () => {
+		cy.getByTestId(PREVIEW_MODE_TEST_ID.overlay).should('not.exist');
+		cy.get('body').should('not.have.class', 'blockera-preview-mode-open');
 	});
 };

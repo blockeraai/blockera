@@ -1,8 +1,20 @@
-:root :where(.is-style-text-annotation--1 a:where(:not(.wp-element-button))){
+:root :where(p.is-style-akbar--1){
+	background-color: #eeeeee;
+	font-size: clamp(14px, 0.875rem + ((1vw - 3.2px) * 0.588), 20px);
+	line-height: 1.2;
+}
+
+:root body :where(p.is-style-akbar--1) {
+	line-height: 1.2;
+	font-size: 20px;
+	background-color: #eeeeee;
+}
+
+:root :where(.is-style-text-annotation--2 a:where(:not(.wp-element-button))){
 	text-decoration: none;
 }
 
-:root :where(p.is-style-text-annotation--1){
+:root :where(p.is-style-text-annotation--2){
 	border-radius: 16px;
 	border-color: currentColor;
 	border-width: 1px;
@@ -16,6 +28,6 @@
 	padding-left: 0.6rem;
 }
 
-:root :where(p.is-style-text-annotation--1){
+:root :where(p.is-style-text-annotation--2){
 	width: fit-content;
 }

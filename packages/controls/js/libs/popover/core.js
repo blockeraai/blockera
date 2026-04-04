@@ -49,6 +49,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 				titleButtonsLeft = '',
 				headerRef,
 				anchor,
+				focusOutsideSuppressionRef,
 				...props
 			}: TPopoverCoreProps,
 			ref
@@ -64,6 +65,10 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 			}, [ref]);
 
 			function popoverOnFocusOutside(e: MouseEvent) {
+				if (focusOutsideSuppressionRef?.current) {
+					return;
+				}
+
 				const excludeClasses = [
 					'btn-choose-image',
 					'btn-media-library',
@@ -78,7 +83,7 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 						)
 					).length !== 0
 				) {
-					return false;
+					return;
 				}
 
 				// Check if the target is the anchor element
@@ -88,7 +93,14 @@ export const PopoverCore: React$AbstractComponent<TPopoverCoreProps, mixed> =
 						popoverRef.current?.ownerDocument?.activeElement
 					)
 				) {
-					return false;
+					return;
+				}
+
+				// Focus moved to another node still inside this popover (e.g. color pallet wrapper).
+				const related = ((e: any): FocusEvent).relatedTarget;
+				const root = popoverRef.current;
+				if (related && root && root.contains(related)) {
+					return;
 				}
 
 				onClose();

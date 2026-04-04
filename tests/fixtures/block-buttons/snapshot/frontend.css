@@ -6,14 +6,14 @@
 	text-transform: uppercase;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-button > .wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-button > .wp-element-button) {
 	padding: 10px 30px 10px 30px;
 	background-color: #95aaff;
 	color: #0023b1;
 	border: 2px solid var(--wp--preset--color--accent-1, #FFEE58);
 }
 
-.blockera-block.blockera-block-1 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-1) :is(strong, b) {
 	font-weight: 700;
 	font-style: normal;
 	background-color: #00000036;
@@ -22,7 +22,7 @@
 	padding-left: 6px;
 }
 
-.blockera-block.blockera-block-1 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-1) :is(em, i) {
 	background-color: #0000003b;
 	font-weight: 800;
 	font-style: italic;
@@ -33,7 +33,7 @@
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-button > .wp-element-button):hover {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-button > .wp-element-button):hover {
 	color: var(--wp--preset--color--accent-3, #503AA8);
 	background-color: var(--wp--preset--color--accent-1, #FFEE58);
 }
@@ -46,51 +46,51 @@
 	background-color: #9f9f9f;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) :is(strong, b) {
 	background-color: #ffa200;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) :is(em, i) {
 	background-color: #87e100;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link kbd {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) kbd {
 	background-color: #00e870;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link code {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) code {
 	background-color: #004cff;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) span:not([data-rich-text-placeholder]) {
 	background-color: #cf00fe;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) :is(mark, mark[class]) {
 	background-color: #ff0090;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(strong, b):hover {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) :is(strong, b):hover {
 	background-color: #ae6e00;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(em, i):hover {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) :is(em, i):hover {
 	background-color: #568f00;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link kbd:hover {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) kbd:hover {
 	background-color: #009b4b;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link code:hover {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) code:hover {
 	background-color: #0031a3;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link span:not([data-rich-text-placeholder]):hover {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) span:not([data-rich-text-placeholder]):hover {
 	background-color: #9100b1;
 }
 
-.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link :is(mark, mark[class]):hover {
+html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block-button__link) :is(mark, mark[class]):hover {
 	background-color: #9d0059;
 }
 
@@ -162,7 +162,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-4 :where(.wp-block-button > .wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button > .wp-element-button) {
 	padding: 10px 20px 10px 20px;
 	font-size: 16px;
 	font-weight: 900;
@@ -174,15 +174,15 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-4 :where(.wp-block-button > .wp-element-button):hover {
+html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button > .wp-element-button):hover {
 	background-color: #338edf;
 }
 
-.blockera-block.blockera-block-4 :where(.wp-block-button > .wp-element-button):focus {
+html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button > .wp-element-button):focus {
 	background-color: #1b79cb;
 }
 
-.blockera-block.blockera-block-4 :where(.wp-block-button > .wp-element-button):active {
+html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button > .wp-element-button):active {
 	background-color: #015cac;
 }
 
@@ -195,7 +195,7 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-4 :where(.wp-block-button > .wp-element-button) {
+	html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button > .wp-element-button) {
 		border-radius: 10px;
 	};
 }
@@ -204,7 +204,7 @@
 	background-color: #9ae1ff;
 }
 
-.blockera-block.blockera-block-5 :where(.wp-block-button > .wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-5) :where(.wp-block-button > .wp-element-button) {
 	background-color: #70ae6b;
 	font-size: 18px;
 	font-weight: 800;
@@ -215,7 +215,7 @@
 	transition: all 200ms ease 0ms;
 }
 
-.blockera-block.blockera-block-5 :where(.wp-block-button > .wp-element-button):hover {
+html:root body :where(.blockera-block.blockera-block-5) :where(.wp-block-button > .wp-element-button):hover {
 	box-shadow: 6px 6px 0 0 #468943, 12px 12px 0 0 #3a7936;
 	transform: translate3d(-3px, -3px, 0);
 }

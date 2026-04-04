@@ -6,25 +6,25 @@
 	font-size: 16px;
 }
 
-.blockera-block.blockera-block-1 a.tag-cloud-link {
+html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link {
 	background-color: #dd854a;
 	padding: 3px 6px 3px 10px;
 	border-radius: 40px;
 	text-decoration: initial;
 }
 
-.blockera-block.blockera-block-1 .tag-link-count {
+html:root body :where(.blockera-block.blockera-block-1) .tag-link-count {
 	background-color: #00000038;
 	border-radius: 50px;
 	font-size: 60%;
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-1 a.tag-cloud-link:hover {
+html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link:hover {
 	background-color: #eb660d;
 }
 
-.blockera-block.blockera-block-1 a.tag-cloud-link::before {
+html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::before {
 	font-size: 70%;
 	content: "→";
 	padding: 3px 3px 3px 3px;
@@ -32,7 +32,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-1 a.tag-cloud-link::after {
+html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::after {
 	font-size: 70%;
 	content: "←";
 	padding: 3px 3px 3px 3px;
@@ -48,7 +48,7 @@
 		border-radius: 30px;
 	}
 
-	.blockera-block.blockera-block-1 a.tag-cloud-link {
+	html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link {
 		border-radius: 5px;
 		display: flex !important;
 		flex-direction: row;
@@ -56,13 +56,13 @@
 		justify-content: flex-start !important;
 	}
 
-	.blockera-block.blockera-block-1 .tag-link-count {
+	html:root body :where(.blockera-block.blockera-block-1) .tag-link-count {
 		border-radius: 5px;
 		padding: 5px 5px 5px 5px;
 		margin-left: auto !important;
 	}
 
-	.blockera-block.blockera-block-1 a.tag-cloud-link::after {
+	html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::after {
 		border-radius: 5px;
 		content: "←";
 	};
@@ -109,14 +109,14 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-2 .tag-link-count {
+html:root body :where(.blockera-block.blockera-block-2) .tag-link-count {
 	background-color: #94e160;
 	padding-right: 6px;
 	padding-left: 5px;
 	margin-left: 7px !important;
 }
 
-.blockera-block.blockera-block-2 a.tag-cloud-link {
+html:root body :where(.blockera-block.blockera-block-2) a.tag-cloud-link {
 	background-color: #d4fabb;
 	border-radius: 30px;
 	overflow: hidden;

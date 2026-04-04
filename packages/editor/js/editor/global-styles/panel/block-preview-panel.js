@@ -6,7 +6,6 @@
 import { useMemo, useRef } from '@wordpress/element';
 import { BlockPreview } from '@wordpress/block-editor';
 import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
-import { __experimentalSpacer as Spacer } from '@wordpress/components';
 
 /**
  * Blockera dependencies
@@ -144,22 +143,20 @@ const BlockPreviewPanel = ({
 	}
 
 	return (
-		<Spacer marginX={4}>
-			<div
-				className="edit-site-global-styles__block-preview-panel"
-				style={{
-					maxHeight: PREVIEW_HEIGHT,
-					boxSizing: 'initial',
-				}}
-			>
-				<BlockPreview
-					blocks={blocks}
-					viewportWidth={viewportWidth}
-					minHeight={PREVIEW_HEIGHT}
-					additionalStyles={additionalStyles}
-				/>
-			</div>
-		</Spacer>
+		<div
+			className="edit-site-global-styles__block-preview-panel blockera-block-preview-panel"
+			style={{
+				maxHeight: PREVIEW_HEIGHT,
+				boxSizing: 'initial',
+			}}
+		>
+			<BlockPreview
+				blocks={blocks}
+				viewportWidth={viewportWidth}
+				minHeight={PREVIEW_HEIGHT}
+				additionalStyles={additionalStyles}
+			/>
+		</div>
 	);
 };
 

@@ -32,14 +32,14 @@ p.blockera-block.blockera-block-3 {
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-3 span:not([data-rich-text-placeholder])::before {
+html:root body :where(.blockera-block.blockera-block-3) span:not([data-rich-text-placeholder])::before {
 	display: inline-block !important;
 	content: attr(data-before);
 	padding: 5px 10px 5px 10px;
 	background-color: #0000001f;
 }
 
-.blockera-block.blockera-block-3 span:not([data-rich-text-placeholder])::after {
+html:root body :where(.blockera-block.blockera-block-3) span:not([data-rich-text-placeholder])::after {
 	display: inline-block !important;
 	content: attr(data-after);
 	padding: 5px 10px 5px 10px;
@@ -56,14 +56,14 @@ p.blockera-block.blockera-block-4 {
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-4 span:not([data-rich-text-placeholder])::before {
+html:root body :where(.blockera-block.blockera-block-4) span:not([data-rich-text-placeholder])::before {
 	display: inline-block !important;
 	content: "Custom "attr(data-before)"";
 	padding: 5px 10px 5px 10px;
 	background-color: #00000024;
 }
 
-.blockera-block.blockera-block-4 span:not([data-rich-text-placeholder])::after {
+html:root body :where(.blockera-block.blockera-block-4) span:not([data-rich-text-placeholder])::after {
 	display: inline-block !important;
 	content: "Custom "attr(data-after)"";
 	background-color: #00000024;
@@ -75,7 +75,7 @@ p.blockera-block.blockera-block-4 {
 	padding: 20px 19px 20px 19px;
 }
 
-.blockera-block.blockera-block-5 :where(p)::before {
+html:root body :where(.blockera-block.blockera-block-5) :where(p)::before {
 	padding-right: 15px;
 	padding-left: 15px;
 	margin-right: 10px !important;

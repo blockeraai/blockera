@@ -11,30 +11,36 @@ Your #1 goal is **maximum compatibility with WordPress core + Gutenberg**, with 
 We keep two local source trees because WordPress bundles compiled editor assets:
 
 ## Source directories (must be used)
+
 - **Uncompiled Block Editor (Gutenberg) source**
-  - `./source-code-block-editor/`
-  - Contains the real React/JS/TS/CSS sources (preferred for editor features).
+    - `./blockera/source-code-block-editor/`
+    - Contains the real React/JS/TS/CSS sources (preferred for editor features).
 
 - **WordPress core source**
-  - `./source-code-wordpress/`
-  - Contains PHP core and server-side behavior; also includes compiled editor artifacts that MUST NOT be used as the primary reference for editor internals.
+    - `./blockera/source-code-wordpress/`
+    - Contains PHP core and server-side behavior; also includes compiled editor artifacts that MUST NOT be used as the primary reference for editor internals.
 
 ---
 
 ## The routing rule (never break this)
+
 When researching or implementing:
 
-### A) If the task is Block Editor / Gutenberg front-end related → use `source-code-block-editor/` FIRST
+### A) If the task is Block Editor / Gutenberg front-end related → use `blockera/source-code-block-editor/` FIRST
+
 Includes anything involving:
+
 - React components, hooks, SlotFill, commands/command palette, keyboard shortcuts
 - `@wordpress/*` packages, data stores, entities, editor UI, iframe/canvas
-- Block rendering pipeline *in the editor*, block controls, inserter, inspector
+- Block rendering pipeline _in the editor_, block controls, inserter, inspector
 - JS/TS/CSS that affects editor behavior or layout
 
 **Do NOT** use compiled WP editor bundles as your reference when the uncompiled source exists.
 
-### B) If the task is PHP / WordPress core behavior / server-side rendering → use `source-code-wordpress/` FIRST
+### B) If the task is PHP / WordPress core behavior / server-side rendering → use `blockera/source-code-wordpress/` FIRST
+
 Includes anything involving:
+
 - PHP hooks/filters, block rendering on the server, REST API endpoints
 - Theme.json, global styles resolver, templates, query loop rendering
 - Admin screens, capability checks, rewrite rules, database queries
@@ -45,29 +51,38 @@ If you must bridge editor ↔ server behavior, consult **both** directories.
 ---
 
 ## Required workflow for every request
+
 ### 1) Classify + route
+
 Start by stating which bucket the task is in:
-- “Editor JS/React (Gutenberg)” → search `source-code-block-editor/`
-- “Core PHP/server-side” → search `source-code-wordpress/`
+
+- “Editor JS/React (Gutenberg)” → search `blockera/source-code-block-editor/`
+- “Core PHP/server-side” → search `blockera/source-code-wordpress/`
 - “Mixed/bridge” → search both, starting with the most relevant one
 
 ### 2) Search locally before writing code
+
 You MUST search the correct directory before proposing APIs or architecture.
 Use ripgrep-style thinking:
+
 - Look for the closest existing implementation in core
 - Identify the real function/component/store names from source
 - Confirm the current patterns used in core (do not guess)
 
 ### 3) Cite what you found
+
 In your answer, always include:
+
 - The file paths you opened (relative to the repo)
 - The key symbols used (function/class/component/store name)
 
 Example:
-- `source-code-block-editor/packages/editor/src/components/...`
-- `source-code-wordpress/wp-includes/blocks.php`
+
+- `blockera/source-code-block-editor/packages/editor/src/components/...`
+- `blockera/source-code-wordpress/wp-includes/blocks.php`
 
 ### 4) Prefer extension points, minimize patching
+
 - Prefer public extension points and documented APIs first.
 - Avoid monkey-patching/minifying core internals unless absolutely necessary.
 - If you must use an internal/private API, isolate it behind a small adapter and add feature detection.
@@ -75,16 +90,18 @@ Example:
 ---
 
 ## Rules about compiled editor code inside WordPress
+
 - Treat WordPress’s bundled editor JS as **compiled output**.
 - Only consult it when:
-  1) You cannot find the behavior in `source-code-block-editor/`, OR
-  2) You are verifying packaging/integration details (handles, script loading, dependencies).
+    1. You cannot find the behavior in `blockera/source-code-block-editor/`, OR
+    2. You are verifying packaging/integration details (handles, script loading, dependencies).
 
-Never base a design on minified/compiled bundles if the source exists in `source-code-block-editor/`.
+Never base a design on minified/compiled bundles if the source exists in `blockera/source-code-block-editor/`.
 
 ---
 
 ## Performance + React safety guardrails
+
 - Avoid direct DOM mutation of React-owned nodes (causes reconciliation errors).
 - Prefer SlotFill, data stores, or controlled wrappers.
 - If you must observe DOM (MutationObserver), scope tightly and disconnect ASAP.
@@ -94,7 +111,9 @@ Never base a design on minified/compiled bundles if the source exists in `source
 ---
 
 ## Output expectations (how you should respond)
+
 When implementing or proposing a solution:
+
 - Start with the routing choice (A/B/Mixed).
 - List the local files you consulted.
 - Provide the implementation plan and the code.

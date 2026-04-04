@@ -2,7 +2,7 @@ p.blockera-block.blockera-block-1 {
 	color: var(--wp--preset--color--not-found-1, #503AA8);
 }
 
-.blockera-block.blockera-block-1 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-1) a:not(.wp-element-button) {
 	color: var(--wp--preset--color--not-found-1);
 }
 
@@ -10,7 +10,7 @@ p.blockera-block.blockera-block-2 {
 	color: var(--wp--preset--color--not-found-2);
 }
 
-.blockera-block.blockera-block-2 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-2) a:not(.wp-element-button) {
 	color: var(--wp--preset--color--not-found-2);
 }
 
@@ -18,7 +18,7 @@ p.blockera-block.blockera-block-3 {
 	color: var(--wp--preset--color--akbar);
 }
 
-.blockera-block.blockera-block-3 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-3) a:not(.wp-element-button) {
 	color: var(--wp--preset--color--akbar);
 }
 
@@ -26,7 +26,7 @@ p.blockera-block.blockera-block-4 {
 	color: var(--wp--preset--color--akbar, #ff0000);
 }
 
-.blockera-block.blockera-block-4 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-4) a:not(.wp-element-button) {
 	color: var(--wp--preset--color--akbar);
 }
 

@@ -25,7 +25,7 @@ p.blockera-block.blockera-block-5 {
 	color: var(--wp--preset--color--base, #FFFFFF);
 }
 
-.blockera-block.blockera-block-5 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-5) a:not(.wp-element-button) {
 	color: var(--wp--preset--color--base, #FFFFFF);
 }
 
@@ -34,7 +34,7 @@ p.blockera-block.blockera-block-6 {
 	color: var(--wp--preset--color--base, #FFFFFF);
 }
 
-.blockera-block.blockera-block-6 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-6) a:not(.wp-element-button) {
 	color: var(--wp--preset--color--base, #FFFFFF);
 }
 
@@ -59,7 +59,7 @@ p.blockera-block.blockera-block-11 {
 	color: #ff8989;
 }
 
-.blockera-block.blockera-block-11 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-11) a:not(.wp-element-button) {
 	color: #f62525;
 	text-transform: uppercase;
 }
@@ -72,7 +72,7 @@ p.blockera-block.blockera-block-12 {
 	text-align: center;
 }
 
-.blockera-block.blockera-block-12 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-button) {
 	color: #3b14fe;
 }
 
@@ -107,27 +107,27 @@ p.blockera-block.blockera-block-13 {
 	-webkit-background-clip: padding-box;
 }
 
-.blockera-block.blockera-block-13 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-13) a:not(.wp-element-button) {
 	background-color: #cccccc;
 }
 
-.blockera-block.blockera-block-13 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-13) :is(strong, b) {
 	color: #ff6c6c;
 }
 
-.blockera-block.blockera-block-13 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-13) :is(em, i) {
 	color: #6cff6c;
 }
 
-.blockera-block.blockera-block-13 kbd {
+html:root body :where(.blockera-block.blockera-block-13) kbd {
 	color: #6c6cff;
 }
 
-.blockera-block.blockera-block-13 code {
+html:root body :where(.blockera-block.blockera-block-13) code {
 	color: #ff6cff;
 }
 
-.blockera-block.blockera-block-13 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-13) span:not([data-rich-text-placeholder]) {
 	color: #6cff6c;
 }
 

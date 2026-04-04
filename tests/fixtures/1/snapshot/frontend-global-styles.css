@@ -638,9 +638,3 @@ h6{
 .has-fira-code-font-family{
 	font-family: var(--wp--preset--font-family--fira-code) !important;
 }
-
-:root :where(p.is-style-akbar) {
-	line-height: 1.2;
-	font-size: 20px;
-	background-color: #eeeeee;
-}

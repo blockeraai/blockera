@@ -42,7 +42,7 @@ export function goTo(path = '/wp-admin', login = false) {
 		return login
 			? cy.window().then((win) => {
 					return win;
-			  })
+				})
 			: getWPDataObject();
 	});
 }
@@ -75,6 +75,62 @@ export function createPost({ postType = 'post', postTitle = '' } = {}) {
 				.type(postTitle);
 		}
 	});
+}
+
+/**
+ * Same as {@link createPost} but clears Blockera zoom persistence (`blockeraEditorZoomPercent`)
+ * before the document loads so the editor starts at 100% zoom (stable e2e assertions).
+ *
+ * @param {{ postType?: string, postTitle?: string }} [options] Same shape as `createPost`.
+ */
+export function createPostClearingZoomStorage({
+	postType = 'post',
+	postTitle = '',
+} = {}) {
+	const testURL = Cypress.env('testURL');
+	let path = '/wp-admin/post-new.php?post_type=' + postType;
+
+	if (
+		(testURL.endsWith('/') && !path.startsWith('/')) ||
+		(!testURL.endsWith('/') && path.startsWith('/'))
+	) {
+		path = `${testURL}${path}`;
+	} else if (!testURL.endsWith('/') && !path.startsWith('/')) {
+		path = `${testURL}/${path}`;
+	} else if (testURL.endsWith('/') && path.startsWith('/')) {
+		path = `${testURL.slice(0, -1)}${path}`;
+	} else {
+		path = `${testURL}${path}`;
+	}
+
+	return cy
+		.visit(path, {
+			onBeforeLoad(win) {
+				win.localStorage.removeItem('blockeraEditorZoomPercent');
+			},
+		})
+		.then(() => {
+			// eslint-disable-next-line
+			cy.wait(2000);
+
+			closeWelcomeGuide();
+
+			if (['post', 'page'].includes(postType)) {
+				disableGutenbergFeatures();
+				setAbsoluteBlockToolbar();
+			}
+
+			if (postTitle) {
+				cy.getIframeBody()
+					.find(
+						'h1.wp-block.wp-block-post-title, textarea[placeholder="Add title"]'
+					)
+					.click()
+					.type(postTitle);
+			}
+
+			return getWPDataObject();
+		});
 }
 
 export function openSiteEditor() {

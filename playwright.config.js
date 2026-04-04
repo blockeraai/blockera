@@ -22,6 +22,9 @@ if (fs.existsSync(envPath)) {
 
 const config = defineConfig({
 	...baseConfig,
+	// Always write/regenerate Playwright screenshot baselines (toHaveScreenshot).
+	// CLI can still override (e.g. --update-snapshots=none).
+	updateSnapshots: 'all',
 	testDir: './',
 	testMatch: '**/*.ply.js',
 	reporter: process.env.CI

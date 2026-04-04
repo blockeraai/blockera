@@ -18,6 +18,7 @@ import { classNames, controlInnerClassNames } from '@blockera/classnames';
  */
 import { AddNewStyleModal } from './add-new-style-modal';
 import { useBlockStylesPickerContext } from '../context';
+import { useUserCan } from '../../../../hooks/use-user-can';
 
 export const AddNewStyleButton = ({
 	label,
@@ -42,6 +43,7 @@ export const AddNewStyleButton = ({
 		setCurrentBlockStyleVariation,
 	} = useBlockStylesPickerContext();
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const isUserCanSaveCustomizations = useUserCan('root', 'globalStyles');
 	return (
 		<Flex justifyContent={'space-between'} style={style}>
 			{'no-label' === design &&
@@ -54,37 +56,39 @@ export const AddNewStyleButton = ({
 					</h2>
 				)}
 
-			<Button
-				size="extra-small"
-				className={controlInnerClassNames('btn-add')} // blockera-is-not-active
-				onClick={() => {
-					const canAddNewStyle = handlePromotionPopover();
-					if (canAddNewStyle) {
-						setIsModalOpen(true);
+			{isUserCanSaveCustomizations && (
+				<Button
+					size="extra-small"
+					className={controlInnerClassNames('btn-add')} // blockera-is-not-active
+					onClick={() => {
+						const canAddNewStyle = handlePromotionPopover();
+						if (canAddNewStyle) {
+							setIsModalOpen(true);
+						}
+					}}
+					style={
+						'no-label' === design
+							? {
+									width: '24px',
+									height: '24px',
+									padding: 0,
+									marginLeft: 'auto',
+								}
+							: {
+									padding: '0px 10px 0 4px',
+									gap: '2px',
+								}
 					}
-				}}
-				style={
-					'no-label' === design
-						? {
-								width: '24px',
-								height: '24px',
-								padding: 0,
-								marginLeft: 'auto',
-							}
-						: {
-								padding: '0px 10px 0 4px',
-								gap: '2px',
-							}
-				}
-				data-test={'add-new-block-style-variation'}
-			>
-				<Icon icon="plus" iconSize="20" />
+					data-test={'add-new-block-style-variation'}
+				>
+					<Icon icon="plus" iconSize="20" />
 
-				{'with-label' === design &&
-					'undefined' !== typeof label &&
-					label?.length > 0 &&
-					label}
-			</Button>
+					{'with-label' === design &&
+						'undefined' !== typeof label &&
+						label?.length > 0 &&
+						label}
+				</Button>
+			)}
 
 			{isModalOpen && (
 				<AddNewStyleModal

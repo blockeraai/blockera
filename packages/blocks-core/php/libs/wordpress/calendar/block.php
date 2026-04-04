@@ -28,22 +28,22 @@ return array_merge(
 					'root' => '&& caption',
 				],
 				'blockera/elements/thead' => [
-					'root' => '&& table thead',
+					'root' => '&& table.wp-calendar-table thead',
 				],
 				'blockera/elements/thead-cells' => [
-					'root' => '&& table thead th',
+					'root' => '&& table.wp-calendar-table thead th',
 				],
 				'blockera/elements/tbody' => [
-					'root' => '&& table tbody',
+					'root' => '&& table.wp-calendar-table tbody',
 				],
 				'blockera/elements/tbody-link-cells' => [
-					'root' => '&& table tbody td:has(a)',
+					'root' => '&& table.wp-calendar-table tbody td:has(a)',
 				],
 				'blockera/elements/tbody-cells' => [
-					'root' => '&& table tbody td',
+					'root' => '&& table.wp-calendar-table tbody td',
 				],
 				'blockera/elements/tbody-empty-cells' => [
-					'root' => '&& table tbody td:is(.pad,[colspan])',
+					'root' => '&& table.wp-calendar-table tbody td:is(.pad,[colspan])',
 				],
 				'blockera/elements/navigation-item' => [
 					'root' => '&& .wp-calendar-nav a',

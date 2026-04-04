@@ -2,13 +2,20 @@
  * WordPress dependencies
  */
 import { useState, useEffect } from '@wordpress/element';
-import { Modal, TextControl, Button } from '@wordpress/components';
+import { TextControl, Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+
+/**
+ * Blockera dependencies
+ */
+import { Modal } from '@blockera/controls';
+import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
 import { useEntity } from '../../hooks';
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import type { Tab } from '../types';
 
 /**
@@ -71,22 +78,35 @@ export default function RenameTabModal({
 	// Get the actual post title for display
 	const actualTitle = entityTitle || tab.title || __('Untitled', 'blockera');
 
+	const testId = (id: string): Record<string, string> => ({
+		'test-id': id,
+	});
+
 	return (
 		<Modal
-			title={__('Rename Tab', 'blockera')}
+			headerTitle={
+				<>
+					<Icon icon="pencil" library="wp" />
+					{__('Rename Tab', 'blockera')}
+				</>
+			}
 			onRequestClose={handleClose}
 			className="blockera-tabs-rename-modal"
 		>
-			<div className="blockera-tabs-rename-modal-content">
+			<div
+				className="blockera-tabs-rename-modal-content"
+				{...testId(WORKSPACE_TABS_TEST_ID.renameModal)}
+			>
 				<TextControl
 					label={__('Custom Tab Name', 'blockera')}
 					value={customTitle}
 					onChange={setCustomTitle}
 					placeholder={actualTitle}
 					help={__(
-						'Leave empty to use the actual post title.',
+						'Leave empty to use the post title. This only changes the tab label and the post/page title won’t be changed.',
 						'blockera'
 					)}
+					{...testId(WORKSPACE_TABS_TEST_ID.renameModalInput)}
 				/>
 			</div>
 
@@ -97,16 +117,27 @@ export default function RenameTabModal({
 						isDestructive
 						onClick={handleRemoveRename}
 						style={{ marginRight: 'auto' }}
+						{...testId(
+							WORKSPACE_TABS_TEST_ID.renameModalRemoveRename
+						)}
 					>
 						{__('Remove rename', 'blockera')}
 					</Button>
 				)}
 
 				<div className="blockera-tabs-rename-modal-actions-right">
-					<Button variant="secondary" onClick={handleClose}>
+					<Button
+						variant="secondary"
+						onClick={handleClose}
+						{...testId(WORKSPACE_TABS_TEST_ID.renameModalCancel)}
+					>
 						{__('Cancel', 'blockera')}
 					</Button>
-					<Button variant="primary" onClick={handleSave}>
+					<Button
+						variant="primary"
+						onClick={handleSave}
+						{...testId(WORKSPACE_TABS_TEST_ID.renameModalSave)}
+					>
 						{__('Save', 'blockera')}
 					</Button>
 				</div>

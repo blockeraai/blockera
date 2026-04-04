@@ -26,51 +26,51 @@
 	padding-top: 50px;
 }
 
-.blockera-block.blockera-block-2.wp-block-table .wp-element-caption {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption {
 	background-color: #FFC7C7;
 	padding: 5px 10px 5px 10px;
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table thead th {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) thead th {
 	background-color: #484848;
 	color: #ffffff;
 	border: 1px solid #ff0000;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table tbody td {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) tbody td {
 	background-color: #909090;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table tfoot td {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) tfoot td {
 	background-color: #a0a0a0;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) :is(strong, b) {
 	background-color: #ff0000;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) :is(em, i) {
 	background-color: #ff8800;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table kbd {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) kbd {
 	background-color: #4ed739;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table code {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) code {
 	background-color: #00c8ff;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) span:not([data-rich-text-placeholder]) {
 	background-color: #6f00ff;
 }
 
-.blockera-block.blockera-block-2.wp-block-table > table :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table > table) :is(mark, mark[class]) {
 	background-color: #0022ff;
 }
 
-.blockera-block.blockera-block-2.wp-block-table .wp-element-caption::before {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::before {
 	padding: 5px 10px 5px 10px;
 	content: "Before caption";
 	display: inline-block !important;
@@ -78,7 +78,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-2.wp-block-table .wp-element-caption::after {
+html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::after {
 	display: inline-block !important;
 	content: "After Caption";
 	padding: 5px 10px 5px 10px;
@@ -87,7 +87,7 @@
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-2.wp-block-table .wp-element-caption {
+	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption {
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: column;
@@ -98,12 +98,12 @@
 		margin-top: 20px;
 	}
 
-	.blockera-block.blockera-block-2.wp-block-table .wp-element-caption::before {
+	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::before {
 		border-radius: 10px;
 		content: "Before caption";
 	}
 
-	.blockera-block.blockera-block-2.wp-block-table .wp-element-caption::after {
+	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::after {
 		border-radius: 10px;
 		content: "After Caption";
 	};

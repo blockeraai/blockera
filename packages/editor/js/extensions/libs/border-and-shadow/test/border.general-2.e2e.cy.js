@@ -28,8 +28,12 @@ describe('Border → Functionality', () => {
 			});
 
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
+					delay: 0,
+				});
 			});
 
 			cy.get('@container').within(() => {
@@ -79,8 +83,12 @@ describe('Border → Functionality', () => {
 			});
 
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('37e6d4', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('37e6d4', {
+					delay: 0,
+				});
 			});
 
 			//Check block
@@ -137,8 +145,12 @@ describe('Border → Functionality', () => {
 
 			// color
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('73ddab', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('73ddab', {
+					delay: 0,
+				});
 			});
 
 			//Check block
@@ -189,8 +201,12 @@ describe('Border → Functionality', () => {
 
 			// color
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('9958e3', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('9958e3', {
+					delay: 0,
+				});
 			});
 
 			//Check block
@@ -245,8 +261,10 @@ describe('Border → Functionality', () => {
 
 			// color
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('eba492', {
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('eba492', {
 					delay: 0,
 				});
 			});
@@ -307,8 +325,12 @@ describe('Border → Functionality', () => {
 
 			// color
 			cy.getByDataTest('popover-body').within(() => {
-				cy.get('input[maxlength="9"]').clear({ force: true });
-				cy.get('input[maxlength="9"]').type('1893da', { delay: 0 });
+				cy.get('[data-cy="color-picker-css-value"]').clear({
+					force: true,
+				});
+				cy.get('[data-cy="color-picker-css-value"]').type('1893da', {
+					delay: 0,
+				});
 			});
 
 			//Check block

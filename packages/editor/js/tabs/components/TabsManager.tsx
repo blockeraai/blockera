@@ -3,6 +3,7 @@
  */
 import {
 	useEffect,
+	useLayoutEffect,
 	useState,
 	useCallback,
 	createPortal,
@@ -14,6 +15,7 @@ import fastDeepEqual from 'fast-deep-equal/es6';
 import { store as coreStore } from '@wordpress/core-data';
 import { store as editorStore } from '@wordpress/editor';
 import { store as noticesStore } from '@wordpress/notices';
+import { store as preferencesStore } from '@wordpress/preferences';
 
 /**
  * Internal dependencies
@@ -47,6 +49,7 @@ import type { Tab, RecentlyClosedTab } from '../types';
  * Close action type.
  */
 type CloseAction = 'single' | 'others' | 'toRight' | null;
+const ENABLE_IMMEDIATE_LOCK_CHECK_ON_SWITCH = false;
 
 /**
  * Main Tabs Manager component
@@ -107,6 +110,19 @@ export default function TabsManager(): React.ReactElement | null {
 	});
 
 	const switchDocument = useSwitchDocument();
+
+	const { set: setPreference } = useDispatch(preferencesStore);
+
+	/*
+	 * Permanently disable core "Choose a pattern" for pages/posts (`StartPageOptions`)
+	 * while Blockera tabs are active — avoids flashes and wrong-document modals when
+	 * switching tabs. Re-enable via Editor → Preferences if needed (Blockera sets this
+	 * again on the next editor load while tabs are shown).
+	 */
+	useLayoutEffect(() => {
+		setPreference('core', 'enableChoosePatternModal', false);
+	}, [setPreference]);
+
 	const [showRenameModal, setShowRenameModal] = useState(false);
 	const [renameTabKey, setRenameTabKey] = useState<string | null>(null);
 	const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
@@ -437,7 +453,22 @@ export default function TabsManager(): React.ReactElement | null {
 		if (postId && postType) {
 			const key = `${postType}-${postId}`;
 
+			const scheduleLockCheckForCurrentKey = (
+				callback: () => void
+			): void => {
+				if (typeof requestIdleCallback !== 'undefined') {
+					requestIdleCallback(() => callback(), { timeout: 800 });
+					return;
+				}
+				requestAnimationFrame(() => callback());
+			};
+
 			const runLockCheckForCurrentKey = (): void => {
+				if (!ENABLE_IMMEDIATE_LOCK_CHECK_ON_SWITCH) {
+					// Keep lock ownership refreshed without blocking switch UX.
+					void takeoverLock(postId);
+					return;
+				}
 				void checkSingleLock(postId).then((lockInfo) => {
 					if (lockInfo?.isLocked) {
 						setLockState(key, lockInfo);
@@ -469,7 +500,9 @@ export default function TabsManager(): React.ReactElement | null {
 				void addTab(postType, postId).then((ok) => {
 					if (ok) {
 						removeClosedTab(key);
-						runLockCheckForCurrentKey();
+						scheduleLockCheckForCurrentKey(() => {
+							runLockCheckForCurrentKey();
+						});
 					}
 				});
 				// Reset the flag after a brief delay to allow the switch to complete
@@ -495,7 +528,9 @@ export default function TabsManager(): React.ReactElement | null {
 				void addTab(postType, postId).then((ok) => {
 					if (ok) {
 						removeClosedTab(key);
-						runLockCheckForCurrentKey();
+						scheduleLockCheckForCurrentKey(() => {
+							runLockCheckForCurrentKey();
+						});
 					}
 				});
 				return;
@@ -511,7 +546,9 @@ export default function TabsManager(): React.ReactElement | null {
 					}
 					setActiveTabKey(key);
 					removeClosedTab(key);
-					runLockCheckForCurrentKey();
+					scheduleLockCheckForCurrentKey(() => {
+						runLockCheckForCurrentKey();
+					});
 				} else if (revertTab) {
 					void switchDocument(revertTab.type, revertTab.id);
 				}
@@ -560,11 +597,7 @@ export default function TabsManager(): React.ReactElement | null {
 				// Store the previous tab key in a ref so the useEffect can batch it with setActiveTabKey
 				pendingPreviousTabKeyRef.current = currentActiveTabKey;
 
-				// Call switchDocument - this will update the editor store asynchronously
-				// The useEffect will handle both setPreviousTabKey and setActiveTabKey together when postId/postType change
 				void switchDocumentRef.current(tab.type, tab.id).then(() => {
-					// Reset the flag after switchDocument completes
-					// The useEffect has already handled both setPreviousTabKey and setActiveTabKey, so we can reset now
 					isManualTabSwitchRef.current = false;
 				});
 

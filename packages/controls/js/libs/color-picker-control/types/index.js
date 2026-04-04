@@ -47,11 +47,15 @@ export type ColorPalletProps = {
 	 */
 	enableAlpha?: boolean,
 	/**
+	 * When true, the sketch UI is non-interactive (e.g. var(), hsl(), transparent).
+	 */
+	disabled?: boolean,
+	/**
 	 * Color of the color picker
 	 */
 	color: string,
 	/**
-	 * event that will be fired on color change
+	 * Fired when the visual picker changes the color (normalized hex / hexa string).
 	 */
-	onChangeComplete: (color: string) => void,
+	onChangeComplete: (storedColor: string) => void,
 };

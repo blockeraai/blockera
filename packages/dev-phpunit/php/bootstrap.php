@@ -41,6 +41,33 @@ if (! file_exists($_tests_dir . '/includes/functions.php')) {
 // Give access to tests_add_filter() function.
 require_once $_tests_dir . '/includes/functions.php';
 
+// Snapshot tests copy fixture MU-plugins into wp-content/mu-plugins.
+// If a previous run crashed early, stale MU-plugin files can remain and fatally redeclare helpers
+// before the test harness has a chance to update them. Clean them up before WP bootstraps.
+if ( 'tests-mysql' === getenv( 'WORDPRESS_DB_HOST' ) ) {
+	$mu_plugin_dirs = [];
+
+	$env_mu_dir = getenv( 'WPMU_PLUGIN_DIR' );
+	if ( is_string( $env_mu_dir ) && '' !== $env_mu_dir ) {
+		$mu_plugin_dirs[] = rtrim( $env_mu_dir, "/\\\n\r\t " );
+	}
+
+	// Default wp-env location.
+	$mu_plugin_dirs[] = '/var/www/html/wp-content/mu-plugins';
+
+	foreach ( $mu_plugin_dirs as $dir ) {
+		if ( ! is_dir( $dir ) ) {
+			continue;
+		}
+
+		foreach ( glob( $dir . '/blockera-test-*.php', GLOB_NOSORT ) ?: [] as $file ) {
+			if ( is_file( $file ) ) {
+				@unlink( $file );
+			}
+		}
+	}
+}
+
 tests_add_filter('muplugins_loaded', function () use ($root_dir) {
 
 	define( '__PACKAGES_DIR__', dirname( __DIR__, 2 ) );

@@ -9,6 +9,11 @@ import { external } from '@wordpress/icons';
 import type { MouseEvent, ReactNode } from 'react';
 
 /**
+ * Internal dependencies
+ */
+import { PREVIEW_MODE_TEST_ID } from '../constants/testIds';
+
+/**
  * Props for PreviewButton component.
  */
 export interface PreviewButtonProps {
@@ -120,6 +125,9 @@ export default function PreviewButton({
 				>
 					<a
 						href={href}
+						{...({
+							'test-id': PREVIEW_MODE_TEST_ID.toggleButton,
+						} as Record<string, string>)}
 						className={`components-button is-compact ${
 							isActive ? 'is-pressed' : ''
 						}`}

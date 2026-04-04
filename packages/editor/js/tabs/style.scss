@@ -188,6 +188,11 @@
 	padding-left: 5px;
 }
 
+.blockera-tabs-bar .blockera-tabs-bar-actions div[tabindex="0"] {
+	display: flex;
+	justify-content: center;
+}
+
 .blockera-tabs-bar-actions .components-button {
 	color: var(--wp-components-color-foreground, #1e1e1e) !important;
 	background-color: transparent !important;
@@ -619,19 +624,23 @@
 	margin-right: -2px;
 }
 
+.blockera-tabs-tab-close[disabled] {
+	opacity: 0.5;
+}
+
 .components-button.blockera-tabs-tab-close svg {
 	fill: currentColor;
 	width: 22px;
 	height: 22px;
 }
 
-.components-button.blockera-tabs-tab-close:hover {
+.components-button.blockera-tabs-tab-close:hover:not([disabled]) {
 	background-color: transparent !important;
 	--blockera-controls-primary-color: var(--blockera-notice-error-primary);
 	color: var(--blockera-controls-primary-color) !important;
 }
 
-.blockera-tabs-tab-close[data-focus-visible="true"] {
+.blockera-tabs-tab-close[data-focus-visible="true"]:not([disabled]) {
 	--blockera-controls-primary-color: var(--blockera-notice-error-primary);
 	color: var(--blockera-controls-primary-color) !important;
 	outline-offset: 0 !important;
@@ -995,17 +1004,15 @@ body.blockera-tabs-add-tab-mode
 }
 
 /**
- * Hide "Create new post/page" commands when NOT in add tab mode
- * These commands are registered with entity-edit context so they show by default
- * We hide them with CSS when not in add-tab mode
- * Using *= (contains) selector since data-value includes the ⌘TAB marker
+ * Hide "Add new post/page" commands when NOT in add tab mode
+ * Stable command `id` (from @wordpress/commands) — avoids English-only data-value matching.
  */
 body:not(.blockera-tabs-add-tab-mode)
 	.commands-command-menu
-	[cmdk-item][data-value*="Create new post"],
+	[cmdk-item][id="blockera-tabs/create-new-post"],
 body:not(.blockera-tabs-add-tab-mode)
 	.commands-command-menu
-	[cmdk-item][data-value*="Create new page"] {
+	[cmdk-item][id="blockera-tabs/create-new-page"] {
 	display: none !important;
 }
 
@@ -1095,4 +1102,11 @@ body:not(.blockera-tabs-add-tab-mode)
 
 .blockera-tabs-locked-modal__buttons .components-button {
 	min-height: 36px;
+}
+
+/**
+ * Toolbar offset for text editor when tabs are visible.
+ */
+.blockera-tabs-wrapper ~ .editor-text-editor .editor-text-editor__toolbar {
+	top: var(--blockera-panel-tabs-height);
 }

@@ -10,40 +10,40 @@
 	font-size: 16px;
 }
 
-.blockera-block.blockera-block-1 li.cat-item {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item {
 	background-color: #ffcece;
 	padding: 10px 10px 10px 10px;
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-1 li.cat-item > a::before {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::before {
 	border-radius: 50px;
 	content: "Link Before";
 	background-color: #0000002e;
 	padding: 5px 10px 5px 10px;
 }
 
-.blockera-block.blockera-block-1 li.cat-item > a::after {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::after {
 	border-radius: 50px;
 	content: "Link After";
 	padding: 5px 10px 5px 10px;
 	background-color: #00000030;
 }
 
-.blockera-block.blockera-block-1 li.cat-item > a {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a {
 	text-decoration: initial;
 }
 
-.blockera-block.blockera-block-1 li.cat-item:hover {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item:hover {
 	background-color: #ff8f8f;
 }
 
-.blockera-block.blockera-block-1 li.cat-item::marker {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item::marker {
 	color: #ff0c0c;
 	background-color: #c4ffe3;
 }
 
-.blockera-block.blockera-block-1 li.cat-item::before {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item::before {
 	display: inline-block !important;
 	content: "Before";
 	padding: 5px 10px 5px 10px;
@@ -51,7 +51,7 @@
 	border-radius: 50px;
 }
 
-.blockera-block.blockera-block-1 li.cat-item::after {
+html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	display: inline-block !important;
 	content: "After";
 	padding: 5px 10px 5px 10px;
@@ -65,13 +65,13 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item::after {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 		align-self: flex-end;
 		content: "After";
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item::before {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item::before {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
@@ -79,30 +79,30 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item:hover {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item:hover {
 		gap: 20px;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item > a::after {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::after {
 		border-radius: 10px;
 		content: "Link After";
 		align-self: flex-start;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item > a::before {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a::before {
 		border-radius: 10px;
 		content: "Link Before";
 		align-self: stretch;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item {
 		border-radius: 10px;
 		display: flex !important;
 		flex-direction: column;
 		gap: 20px;
 	}
 
-	.blockera-block.blockera-block-1 li.cat-item > a {
+	html:root body :where(.blockera-block.blockera-block-1) li.cat-item > a {
 		display: flex !important;
 		flex-direction: column;
 		justify-content: center !important;
@@ -152,13 +152,13 @@
 	font-size: 18px;
 }
 
-.blockera-block.blockera-block-2 li.cat-item {
+html:root body :where(.blockera-block.blockera-block-2) li.cat-item {
 	background-color: #ffc6c6;
 	border-radius: 27px;
 	padding: 5px 10px 5px 10px;
 }
 
-.blockera-block.blockera-block-2 li.cat-item > a {
+html:root body :where(.blockera-block.blockera-block-2) li.cat-item > a {
 	text-decoration: initial;
 }
 
@@ -177,13 +177,13 @@
 	font-size: 18px;
 }
 
-.blockera-block.blockera-block-3 li.cat-item {
+html:root body :where(.blockera-block.blockera-block-3) li.cat-item {
 	background-color: #dbecff;
 	border-radius: 27px;
 	padding: 5px 10px 5px 10px;
 }
 
-.blockera-block.blockera-block-3 li.cat-item > a {
+html:root body :where(.blockera-block.blockera-block-3) li.cat-item > a {
 	text-decoration: initial;
 }
 

@@ -14,12 +14,17 @@
 	&.gradient-none,
 	&.color-none {
 		background-color: #ffffff;
-		background-image: linear-gradient(45deg, #cccccc 25%, transparent 25%),
+		background-image:
+			linear-gradient(45deg, #cccccc 25%, transparent 25%),
 			linear-gradient(-45deg, #cccccc 25%, transparent 25%),
 			linear-gradient(45deg, transparent 75%, #cccccc 75%),
 			linear-gradient(-45deg, transparent 75%, #cccccc 75%);
 		background-size: 8px 8px;
-		background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+		background-position:
+			0 0,
+			0 4px,
+			4px -4px,
+			-4px 0;
 		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.3);
 
 		&::after {
@@ -34,6 +39,33 @@
 			transform: rotate(310deg);
 			background-color: #ff3e3e;
 			margin-top: -1px;
+		}
+	}
+
+	// CSS-wide keywords (currentColor, inherit, …): hatched fill + monogram (not a fixed color preview).
+	&.color-contextual-keyword {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background-color: #ececec;
+		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.22);
+
+		.blockera-component-color-indicator__keyword-badge {
+			position: relative;
+			z-index: 1;
+			line-height: 1;
+			font-weight: 900;
+			font-size: 8px;
+			letter-spacing: -0.05em;
+			color: #1e1e1e;
+			font-family:
+				system-ui,
+				-apple-system,
+				BlinkMacSystemFont,
+				sans-serif;
+			-webkit-user-select: none;
+			user-select: none;
+			pointer-events: none;
 		}
 	}
 
@@ -60,6 +92,8 @@
 	}
 
 	.blockera-component-color-indicator {
-		box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 0 2px #ffffff;
+		box-shadow:
+			inset 0 0 0 1px rgba(0, 0, 0, 0.25),
+			0 0 0 2px #ffffff;
 	}
 }

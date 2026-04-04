@@ -9,6 +9,20 @@ module.exports = {
 		path: './packages/dev-cypress/js/dist',
 	},
 	devtool: true,
+	resolve: {
+		extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+		// Absolute path so Cypress can resolve imports from support/commands.js reliably.
+		alias: {
+			'blockera-editor-tabs-test-ids': path.resolve(
+				__dirname,
+				'../../editor/js/tabs/constants/testIds.ts'
+			),
+			'blockera-editor-preview-test-ids': path.resolve(
+				__dirname,
+				'../../editor/js/preview-mode/constants/testIds.ts'
+			),
+		},
+	},
 	module: {
 		rules: [
 			// Fix for webpack 5 fullySpecified: resolve issues with @wordpress/block-editor
@@ -47,6 +61,19 @@ module.exports = {
 							'@babel/preset-env',
 							'@babel/preset-react',
 							'@babel/preset-flow',
+						],
+					},
+				},
+			},
+			{
+				test: /\.tsx?$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: [
+							'@babel/preset-env',
+							'@babel/preset-typescript',
 						],
 					},
 				},

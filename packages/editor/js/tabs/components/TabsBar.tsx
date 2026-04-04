@@ -40,6 +40,7 @@ import { displayShortcut } from '@wordpress/keycodes';
  */
 import SortableTab from './SortableTab';
 import ToolbarContextMenu from './ToolbarContextMenu';
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 import { useScrollbar, defaultScrollbarOptions } from '../../scrollbar';
 import { UpgradePrompt } from '@blockera/controls';
 import type {
@@ -221,7 +222,6 @@ const TabsBar = memo(function TabsBar({
 		sortedTabs.length,
 		pinnedCount,
 		unpinnedCount,
-		activeTabKey,
 	]);
 
 	// Check if a tab can be dragged (needs 2+ tabs in its group)
@@ -937,6 +937,9 @@ const TabsBar = memo(function TabsBar({
 								variant="tertiary"
 								size="compact"
 								aria-label={__('Add new tab', 'blockera')}
+								{...({
+									'test-id': WORKSPACE_TABS_TEST_ID.add,
+								} as Record<string, string>)}
 							/>
 						</div>
 					</Tooltip>
@@ -952,6 +955,10 @@ const TabsBar = memo(function TabsBar({
 							offset={12}
 							anchor={addTabButtonAnchorRef.current ?? undefined}
 							disableHintsText={false}
+							{...({
+								'data-test':
+									WORKSPACE_TABS_TEST_ID.tabsLimitUpgradePrompt,
+							} as Record<string, string>)}
 						/>
 					)}
 				</div>

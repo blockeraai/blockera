@@ -4,15 +4,15 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 summary {
+html:root body :where(.blockera-block.blockera-block-1) summary {
 	background-color: #b7ffa3;
 }
 
-.blockera-block.blockera-block-1 summary::marker {
+html:root body :where(.blockera-block.blockera-block-1) summary::marker {
 	color: #5d4bff;
 }
 
-.blockera-block.blockera-block-1 p {
+html:root body :where(.blockera-block.blockera-block-1) p {
 	background-color: #72ddf2;
 }
 
@@ -26,15 +26,15 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-2 summary {
+html:root body :where(.blockera-block.blockera-block-2) summary {
 	background-color: #b7ffa3;
 }
 
-.blockera-block.blockera-block-2 summary::marker {
+html:root body :where(.blockera-block.blockera-block-2) summary::marker {
 	color: #5d4bff;
 }
 
-.blockera-block.blockera-block-2 p {
+html:root body :where(.blockera-block.blockera-block-2) p {
 	background-color: #72ddf2;
 }
 
@@ -42,11 +42,11 @@
 	background-color: #71a9b1;
 }
 
-.blockera-block.blockera-block-2:open summary {
+html:root body :where(.blockera-block.blockera-block-2):open summary {
 	background-color: #75d25b;
 }
 
-.blockera-block.blockera-block-2:open summary::marker {
+html:root body :where(.blockera-block.blockera-block-2):open summary::marker {
 	color: #f9f9ff;
 }
 
@@ -56,15 +56,15 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-3 summary {
+html:root body :where(.blockera-block.blockera-block-3) summary {
 	background-color: #b7ffa3;
 }
 
-.blockera-block.blockera-block-3 summary::marker {
+html:root body :where(.blockera-block.blockera-block-3) summary::marker {
 	color: #5d4bff;
 }
 
-.blockera-block.blockera-block-3 p {
+html:root body :where(.blockera-block.blockera-block-3) p {
 	background-color: #72ddf2;
 }
 
@@ -72,11 +72,11 @@
 	background-color: #71a9b1;
 }
 
-.blockera-block.blockera-block-3:open summary {
+html:root body :where(.blockera-block.blockera-block-3):open summary {
 	background-color: #75d25b;
 }
 
-.blockera-block.blockera-block-3:open summary::marker {
+html:root body :where(.blockera-block.blockera-block-3):open summary::marker {
 	color: #f9f9ff;
 }
 

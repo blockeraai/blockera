@@ -5,24 +5,24 @@
 	--blockera--icon--color: #1e4bff;
 }
 
-.blockera-block.blockera-block-1 :where(li) {
+html:root body :where(.blockera-block.blockera-block-1) :where(li) {
 	background-color: #d8e0ff;
 	padding: 5px 10px 5px 10px;
 	border-radius: 20px;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1 :where(li) {
+	html:root body :where(.blockera-block.blockera-block-1) :where(li) {
 		border-radius: 5px;
 	};
 }
 
-.wp-block-list > li.blockera-block.blockera-block-2 .wp-block-list {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-2) .wp-block-list {
 	margin-right: 5px !important;
 	margin-bottom: 5px;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-2 :where(li) {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-2) :where(li) {
 	background-color: #00000029;
 	border-radius: 5px;
 }
@@ -42,7 +42,7 @@
 	color: #ffffff;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-4 a:not(.wp-element-button) {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-4) a:not(.wp-element-button) {
 	color: #ffffff;
 }
 
@@ -69,7 +69,7 @@
 	color: #c73535;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-5 a:not(.wp-element-button) {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-5) a:not(.wp-element-button) {
 	color: #c73535;
 }
 
@@ -86,7 +86,7 @@
 	border-radius: 10px;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-6 .wp-block-list {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-6) .wp-block-list {
 	background-color: #d2daff;
 	padding: 10px 10px 10px 35px;
 	margin-top: 10px;
@@ -96,11 +96,11 @@
 	color: #003de4;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-6 a:not(.wp-element-button) {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-6) a:not(.wp-element-button) {
 	color: #900000;
 }
 
-.wp-block-list > li.blockera-block.blockera-block-6 ul {
+html:root body :where(.wp-block-list > li.blockera-block.blockera-block-6) ul {
 	border-radius: 20px;
 }
 
@@ -121,7 +121,7 @@ ul.blockera-block.blockera-block-8 {
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-8 :where(li)::before {
+html:root body :where(.blockera-block.blockera-block-8) :where(li)::before {
 	display: inline-block !important;
 	content: "Before";
 	background-color: #00000026;
@@ -129,7 +129,7 @@ ul.blockera-block.blockera-block-8 {
 	font-size: 16px;
 }
 
-.blockera-block.blockera-block-8 :where(li)::after {
+html:root body :where(.blockera-block.blockera-block-8) :where(li)::after {
 	display: inline-block !important;
 	content: "After";
 	background-color: #00000021;

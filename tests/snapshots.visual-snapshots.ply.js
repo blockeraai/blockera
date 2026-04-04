@@ -13,6 +13,7 @@ const {
 	redirectToFrontPage,
 	getIframeBody,
 } = require('@blockera/dev-playwright/js/utils/helpers');
+const { expect } = require('@playwright/test');
 const {
 	test,
 	prepareFrontendForScreenshot,
@@ -22,6 +23,12 @@ const {
 const {
 	setDeviceType,
 } = require('@blockera/dev-playwright/js/utils/responsive');
+
+/**
+ * Optionally limit runs to one fixture folder under tests/fixtures (e.g. '1').
+ * Set to `null` to run all fixtures.
+ */
+const VISUAL_ONLY_SECTION = null;
 
 /**
  * Load all test fixtures from tests/fixtures directory
@@ -40,6 +47,9 @@ function loadFixtures() {
 		.map((dirent) => dirent.name);
 
 	for (const sectionId of fixtureFolders) {
+		if (VISUAL_ONLY_SECTION && sectionId !== VISUAL_ONLY_SECTION) {
+			continue;
+		}
 		const sectionDir = path.join(fixturesDir, sectionId);
 		const inputHtmlPath = path.join(sectionDir, 'input.html');
 
@@ -150,7 +160,7 @@ test.describe('Sections Visual Snapshots', () => {
 				}
 
 				// wait to make sure images loaded and content is ready
-				await page.waitForTimeout(1000);
+				await page.waitForTimeout(4000);
 
 				// Editor Desktop Snapshot
 				const iframeBody = await getIframeBody(page);

@@ -1,0 +1,19 @@
+[
+	"wp-block-post-comments-count-inline-css",
+	"wp-block-post-comments-link-inline-css",
+	"wp-block-avatar-inline-css",
+	"wp-block-comment-author-name-inline-css",
+	"wp-block-comment-date-inline-css",
+	"wp-block-group-inline-css",
+	"wp-block-comment-content-inline-css",
+	"wp-block-comment-reply-link-inline-css",
+	"wp-block-columns-inline-css",
+	"wp-block-comment-template-inline-css",
+	"wp-block-comments-pagination-inline-css",
+	"wp-block-post-comments-form-inline-css",
+	"wp-block-buttons-inline-css",
+	"wp-block-button-inline-css",
+	"blockera-block-post-comments-form-inline-css",
+	"wp-block-comments-inline-css",
+	"wp-block-library-inline-css"
+]

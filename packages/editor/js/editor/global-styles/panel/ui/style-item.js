@@ -5,7 +5,7 @@
  */
 import type { MixedElement } from 'react';
 import { dispatch, useSelect } from '@wordpress/data';
-import { __, sprintf } from '@wordpress/i18n';
+import { __, _n, sprintf } from '@wordpress/i18n';
 import { useState, useMemo, useEffect, useRef } from '@wordpress/element';
 import {
 	Fill,
@@ -189,6 +189,121 @@ export const StyleItem = ({
 		);
 	}, []);
 
+	// Outside GlobalStylesPanelContextProvider the context `getStyleVariationBlocks`
+	// defaults to `() => []`. In that case, read from the editor store so the
+	// "used in multiple blocks" indicator works consistently.
+	const activeInBlocks = useSelect(
+		(select) => {
+			// Prefer store outside global styles panel.
+			if (!inGlobalStylesPanel) {
+				const fn = select('blockera/editor')?.getStyleVariationBlocks;
+				const fromStore = fn ? fn(style.name) : null;
+				return Array.isArray(fromStore) ? fromStore : [];
+			}
+
+			const fromContext = getStyleVariationBlocks(style.name);
+			return Array.isArray(fromContext) ? fromContext : [];
+		},
+		[style.name, inGlobalStylesPanel, getStyleVariationBlocks]
+	);
+
+	const usageForMultipleBlocksTooltipText = useMemo(() => {
+		const count = activeInBlocks?.length || 0;
+		if (count < 2) {
+			return null;
+		}
+
+		const maxTitles = 6;
+		const titles = [];
+
+		for (let i = 0; i < count && titles.length < maxTitles; i++) {
+			const blockName = activeInBlocks[i];
+			const blockType = getBlockType(blockName);
+			const title = blockType?.title || blockName;
+
+			if (title) {
+				titles.push(title);
+			}
+		}
+
+		const formatBlockTitlesList = (items: Array<string>): string => {
+			const n = items.length;
+			if (n <= 0) {
+				return '';
+			}
+			if (n === 1) {
+				return items[0];
+			}
+			if (n === 2) {
+				return sprintf(
+					/* translators: %1$s: first item, %2$s: second item */
+					__('%1$s and %2$s', 'blockera'),
+					items[0],
+					items[1]
+				);
+			}
+
+			let out = '';
+			for (let i = 0; i < n; i++) {
+				if (i === 0) {
+					out = items[0];
+					continue;
+				}
+
+				if (i === n - 1) {
+					out += sprintf(
+						/* translators: %1$s: list, %2$s: last item */
+						__(', and %2$s', 'blockera'),
+						out,
+						items[i]
+					);
+				} else {
+					out += ', ' + items[i];
+				}
+			}
+
+			return out;
+		};
+
+		let blocksListItems = titles;
+
+		if (count > maxTitles) {
+			const remaining = count - maxTitles;
+			const moreLabel = sprintf(
+				/* translators: %d: number of remaining blocks */
+				_n('%d more', '%d more', remaining, 'blockera'),
+				remaining
+			);
+			blocksListItems = [...titles, moreLabel];
+		}
+
+		const blocksList = formatBlockTitlesList(blocksListItems);
+
+		return (
+			<>
+				<div>
+					{sprintf(
+						/* translators: %d: number of blocks */
+						_n(
+							'This style variation is used for %d block.',
+							'This style variation is used for %d blocks.',
+							count,
+							'blockera'
+						),
+						count
+					)}
+				</div>
+				<div>
+					{sprintf(
+						/* translators: %s: comma-separated block titles */
+						__('Blocks: %s', 'blockera'),
+						blocksList
+					)}
+				</div>
+			</>
+		);
+	}, [activeInBlocks]);
+
 	// When not in global styles panel,
 	// skip rendering if style is disabled.
 	if (
@@ -200,10 +315,26 @@ export const StyleItem = ({
 	}
 
 	const isActive: boolean = activeStyle.name === style.name;
-
 	const defaultStyle = getDefaultStyle(blockStyles);
 
-	const activeInBlocks = getStyleVariationBlocks(style.name);
+	const openUsageForMultipleBlocksModal = (event: any) => {
+		// Prevent selecting the style item when clicking on usage icons.
+		if (event?.preventDefault) {
+			event.preventDefault();
+		}
+		if (event?.stopPropagation) {
+			event.stopPropagation();
+		}
+
+		// User doesn't have access to manage customizations,
+		// so "used in multiple blocks" details should not be interactive.
+		if (!isUserCanSaveCustomizations) {
+			return;
+		}
+
+		setIsOpenContextMenu(false);
+		setIsOpenUsageForMultipleBlocks(true);
+	};
 
 	return (
 		<>
@@ -288,6 +419,17 @@ export const StyleItem = ({
 						return;
 					}
 
+					// Modals/menus render via portals: the DOM target is outside this row, but
+					// React still bubbles the click here. Do not treat those as row clicks (the
+					// innerText check below is not enough because modal titles include style.label).
+					if (
+						event.currentTarget &&
+						event.target instanceof Node &&
+						!event.currentTarget.contains(event.target)
+					) {
+						return;
+					}
+
 					// Skip click on actions opener element.
 					if (
 						!event.target.innerText ||
@@ -313,6 +455,15 @@ export const StyleItem = ({
 				onKeyDown={(event) => {
 					// Handle Enter key press
 					if (event.key !== 'Enter') {
+						return;
+					}
+
+					// Same as onClick: ignore Enter bubbling from portaled modals/menus.
+					if (
+						event.currentTarget &&
+						event.target instanceof Node &&
+						!event.currentTarget.contains(event.target)
+					) {
 						return;
 					}
 
@@ -395,49 +546,57 @@ export const StyleItem = ({
 						)}
 
 						{!style?.isDefault && activeInBlocks.length > 1 && (
-							<Flex
-								gap={0}
-								direction="row"
-								style={{ position: 'relative' }}
-							>
-								{activeInBlocks
-									.slice(0, 3)
-									.map((block, index) => {
-										const { icon = null, title } =
-											getBlockType(block);
+							<Tooltip text={usageForMultipleBlocksTooltipText}>
+								<div
+									className="blockera-style-item-multiple-blocks"
+									role="button"
+									aria-disabled={!isUserCanSaveCustomizations}
+									tabIndex={
+										isUserCanSaveCustomizations ? 0 : -1
+									}
+									style={{
+										position: 'relative',
+										pointerEvents:
+											isUserCanSaveCustomizations
+												? undefined
+												: 'none',
+									}}
+									onClick={openUsageForMultipleBlocksModal}
+									onKeyDown={(event: any) => {
+										if (!isUserCanSaveCustomizations) {
+											return;
+										}
+										if (event.key !== 'Enter') {
+											return;
+										}
+										openUsageForMultipleBlocksModal(event);
+									}}
+								>
+									<Flex gap={0} direction="row">
+										{activeInBlocks
+											.slice(0, 3)
+											.map((block, index) => {
+												const { icon = null } =
+													getBlockType(block);
 
-										return (
-											<Tooltip
-												key={`${block}-${index}`}
-												text={sprintf(
-													/* translators: %1$s: The block title. */
-													__(
-														'This style variation is used in the "%1$s" block',
-														'blockera'
-													),
-													title
-												)}
-												style={{
-													'--tooltip-bg': !isActive
-														? '#e20b0b'
-														: '#000000',
-												}}
-											>
-												<div
-													className="circle-multiple-blocks"
-													style={{
-														marginRight: '4px',
-													}}
-												>
-													{icon.src}
-												</div>
-											</Tooltip>
-										);
-									})}
-								<div className="circle-multiple-blocks">
-									{activeInBlocks.length}
+												return (
+													<div
+														key={`${block}-${index}`}
+														className="blockera-style-item-multiple-blocks__item"
+														style={{
+															marginRight: '4px',
+														}}
+													>
+														{icon?.src}
+													</div>
+												);
+											})}
+										<div className="blockera-style-item-multiple-blocks__item">
+											{activeInBlocks.length}
+										</div>
+									</Flex>
 								</div>
-							</Flex>
+							</Tooltip>
 						)}
 
 						{style.icon && (
@@ -457,10 +616,13 @@ export const StyleItem = ({
 								<Icon
 									icon={style.icon.name}
 									library={style.icon.library}
-									iconSize="16"
+									iconSize="18"
 									style={{
 										opacity: '0.4',
-										'margin-right': '-4px',
+										'margin-right':
+											isUserCanSaveCustomizations
+												? '-4px'
+												: '6px',
 										position: 'relative',
 										'z-index': '10',
 									}}
@@ -468,24 +630,26 @@ export const StyleItem = ({
 							</Tooltip>
 						)}
 
-						<span
-							ref={styleItemContextMenuAnchorRef}
-							className="context-menu-trigger style-item-context-menu-anchor"
-							data-test={`open-${style.name}-contextmenu`}
-							data-anchor="style-item-context-menu"
-						>
-							<Icon
-								icon="more-vertical"
-								iconSize="20"
-								onClick={() => {
-									setIsOpenBlockCardContextMenu(false);
-									setIsOpenContextMenu(true);
-								}}
-								style={{
-									opacity: '0.4',
-								}}
-							/>
-						</span>
+						{isUserCanSaveCustomizations && (
+							<span
+								ref={styleItemContextMenuAnchorRef}
+								className="context-menu-trigger style-item-context-menu-anchor"
+								data-test={`open-${style.name}-contextmenu`}
+								data-anchor="style-item-context-menu"
+							>
+								<Icon
+									icon="more-vertical"
+									iconSize="20"
+									onClick={() => {
+										setIsOpenBlockCardContextMenu(false);
+										setIsOpenContextMenu(true);
+									}}
+									style={{
+										opacity: '0.4',
+									}}
+								/>
+							</span>
+						)}
 					</Flex>
 				</Flex>
 

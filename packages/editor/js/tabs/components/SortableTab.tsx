@@ -8,7 +8,6 @@ import { memo } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { useEntity } from '../../hooks';
 import Tab, { type TabComponentProps } from './Tab';
 
 /**
@@ -53,10 +52,9 @@ const SortableTab = memo(function SortableTab({
 		disabled: !canDrag,
 	});
 
-	// Calculate hasUnsavedChanges using useEntity hook
-	const entity = useEntity(tab.type, tab.id);
-	const hasUnsavedChanges =
-		entity.dirty || (getIsDirty ? getIsDirty(tab.type, tab.id) : false);
+	// Avoid duplicate entity-store subscriptions in both SortableTab and Tab.
+	// Tab already uses useEntity for reactive data; here we only need dirty state.
+	const hasUnsavedChanges = getIsDirty ? getIsDirty(tab.type, tab.id) : false;
 
 	// Wrapper style - applies transform to wrapper, not the tab itself
 	// This preserves the tab's natural width/height

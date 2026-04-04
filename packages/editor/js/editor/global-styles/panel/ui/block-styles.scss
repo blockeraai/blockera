@@ -26,45 +26,56 @@
 	}
 }
 
-.circle-multiple-blocks {
+.blockera-style-item-multiple-blocks__item {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 20px;
-	height: 20px;
-	border-radius: 50%;
+	width: 18px;
+	height: 18px;
+	border-radius: 3px;
 	border: solid 1px #c4c4c4;
 	line-height: 1.5;
 	position: relative;
-	margin-left: -12px;
+	margin-left: -11px;
 	z-index: calc(100 - var(--i));
 	background-color: #ffffff;
-	transition: z-index 0.3s ease-in-out;
+	transition:
+		all 0.3s ease-in-out,
+		margin 0.2s ease-in-out;
 	color: #000000 !important;
+	box-sizing: border-box;
+	outline: 2px solid #ffffff;
+	font-size: 10px;
+	font-weight: 600;
 
 	svg {
-		min-width: 16px;
-		max-width: 16px;
+		min-width: 14px;
+		max-width: 14px;
 		fill: #000000 !important;
 		color: #000000 !important;
 	}
+}
 
-	&:hover {
-		z-index: 999;
-		box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+.block-editor-block-styles__item__button.is-active
+	.blockera-style-item-multiple-blocks__item {
+	outline: 1px solid var(--blockera-controls-primary-color);
+}
+
+.blockera-style-item-multiple-blocks:hover
+	.blockera-style-item-multiple-blocks__item {
+	margin-left: -8px;
+	color: var(--blockera-controls-primary-color) !important;
+
+	svg {
+		fill: var(--blockera-controls-primary-color) !important;
 		color: var(--blockera-controls-primary-color) !important;
-
-		svg {
-			fill: var(--blockera-controls-primary-color) !important;
-			color: var(--blockera-controls-primary-color) !important;
-		}
 	}
 }
 
 .blockera-component-block-styles {
 	.blockera-block-styles-category {
 		color: var(--blockera-controls-primary-color);
-		font-size: 12px;
+		font-size: 14px;
 		font-weight: 500;
 		margin: 0;
 		text-transform: capitalize;
@@ -232,9 +243,39 @@
 		width: 470px;
 
 		.blockera-block-inserter-types {
-			height: 265px;
+			height: 50vh;
 			overflow-y: scroll;
 			box-shadow: inset 0 -25px 10px -10px rgba(0, 0, 0, 0.1);
+			background: rgba(0, 0, 0, 0.0392156863);
+			padding: 22px;
+			border-radius: var(--blockera-controls-border-radius);
+			border: 1px solid var(--blockera-controls-border-color-soft);
+
+			.blockera-block-styles-category {
+				color: var(--blockera-controls-primary-color);
+				font-size: 12px;
+				font-weight: 600;
+				margin: 0;
+				text-transform: capitalize;
+			}
+
+			.blockera-feature-label {
+				max-width: 100% !important;
+			}
+
+			.blockera-feature-type {
+				--item-height: 36px !important;
+				background-color: #ffffff;
+
+				// Row click toggles selection in block-types.js; current block row omits this class.
+				&.is-row-clickable {
+					cursor: pointer;
+				}
+
+				&:not(.is-row-clickable) {
+					cursor: default;
+				}
+			}
 		}
 	}
 

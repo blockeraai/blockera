@@ -83,7 +83,7 @@
 	font-size: 18px;
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 	text-decoration: initial;
 }
 

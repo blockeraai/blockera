@@ -7,31 +7,31 @@
 	font-size: 18px;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	background-color: #ff1212;
 }
 
-.blockera-block.blockera-block-1 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-1) :is(strong, b) {
 	background-color: #ffd500;
 }
 
-.blockera-block.blockera-block-1 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-1) :is(em, i) {
 	background-color: #47eb22;
 }
 
-.blockera-block.blockera-block-1 kbd {
+html:root body :where(.blockera-block.blockera-block-1) kbd {
 	background-color: #00e5ff;
 }
 
-.blockera-block.blockera-block-1 code {
+html:root body :where(.blockera-block.blockera-block-1) code {
 	background-color: #ad9aff;
 }
 
-.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-1) span:not([data-rich-text-placeholder]) {
 	background-color: #d500ff;
 }
 
-.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	background-color: #acff05;
 }
 

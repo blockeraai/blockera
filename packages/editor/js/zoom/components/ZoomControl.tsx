@@ -139,6 +139,35 @@ export default function ZoomControl({
 		zoomPercentRef.current = zoomPercent;
 	}, [zoomPercent]);
 
+	// Sync React state when zoom changes from preview iframe (same-tab localStorage has no storage event)
+	useEffect(() => {
+		const onSync = (e: Event): void => {
+			const detail = (e as CustomEvent<{ zoom: number }>).detail;
+			if (
+				detail &&
+				typeof detail.zoom === 'number' &&
+				!Number.isNaN(detail.zoom)
+			) {
+				setZoomPercent(detail.zoom);
+			}
+		};
+		const onFitRequest = (): void => {
+			zoomToFit();
+		};
+		window.addEventListener('blockera-editor-zoom-sync', onSync);
+		window.addEventListener(
+			'blockera-editor-zoom-to-fit-request',
+			onFitRequest
+		);
+		return () => {
+			window.removeEventListener('blockera-editor-zoom-sync', onSync);
+			window.removeEventListener(
+				'blockera-editor-zoom-to-fit-request',
+				onFitRequest
+			);
+		};
+	}, [setZoomPercent, zoomToFit]);
+
 	// Update initial height when zoom hook provides it
 	useEffect(() => {
 		setCurrentInitialHeight(
@@ -215,7 +244,10 @@ export default function ZoomControl({
 
 	return (
 		<Fill name="blockera/slots/editor-header-settings">
-			<div className="blockera-zoom-control-wrapper">
+			<div
+				className="blockera-zoom-control-wrapper"
+				data-test="blockera-zoom-control"
+			>
 				<DropdownMenu
 					icon={null}
 					label={__('Zoom', 'blockera')}
@@ -241,7 +273,10 @@ export default function ZoomControl({
 						<>
 							<MenuGroup>
 								{/* Zoom level input: Blockera InputControl with % unit only */}
-								<div style={{ padding: '0 8px 8px 8px' }}>
+								<div
+									data-test="blockera-zoom-level-input"
+									style={{ padding: '0 8px 8px 8px' }}
+								>
 									<ControlContextProvider
 										value={{
 											name: 'blockera-zoom-level',
@@ -271,6 +306,7 @@ export default function ZoomControl({
 
 							<MenuGroup>
 								<MenuItem
+									data-test="blockera-zoom-menu-zoom-in"
 									onClick={() => {
 										zoomIn();
 										onClose();
@@ -280,6 +316,7 @@ export default function ZoomControl({
 									{__('Zoom in', 'blockera')}
 								</MenuItem>
 								<MenuItem
+									data-test="blockera-zoom-menu-zoom-out"
 									onClick={() => {
 										zoomOut();
 										onClose();
@@ -289,6 +326,7 @@ export default function ZoomControl({
 									{__('Zoom out', 'blockera')}
 								</MenuItem>
 								<MenuItem
+									data-test="blockera-zoom-menu-zoom-to-fit"
 									onClick={() => {
 										zoomToFit();
 										onClose();
@@ -301,6 +339,7 @@ export default function ZoomControl({
 									{__('Zoom to fit', 'blockera')}
 								</MenuItem>
 								<MenuItem
+									data-test="blockera-zoom-menu-zoom-to-50"
 									onClick={() => {
 										zoomTo50();
 										onClose();
@@ -309,6 +348,7 @@ export default function ZoomControl({
 									{__('Zoom to 50%', 'blockera')}
 								</MenuItem>
 								<MenuItem
+									data-test="blockera-zoom-menu-zoom-to-100"
 									onClick={() => {
 										resetZoom();
 										onClose();

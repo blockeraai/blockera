@@ -5,7 +5,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	background-color: #16d409;
 	padding: 5px 9px 5px 9px;
 	border-radius: 5px;
@@ -14,7 +14,7 @@
 	font-size: 14px;
 }
 
-.blockera-block.blockera-block-1 .wp-element-button {
+html:root body :where(.blockera-block.blockera-block-1) .wp-element-button {
 	background-color: #ff4747;
 	padding: 8px 10px 8px 10px;
 	border-radius: 5px;
@@ -22,27 +22,27 @@
 	box-shadow: 6px 6px 0 0 #002ceaab;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)):hover {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)):hover {
 	background-color: #10b704;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)):focus {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)):focus {
 	background-color: #0d9203;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)):active {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)):active {
 	background-color: #076a00;
 }
 
-.blockera-block.blockera-block-1 .wp-element-button:hover {
+html:root body :where(.blockera-block.blockera-block-1) .wp-element-button:hover {
 	background-color: #b88888;
 }
 
-.blockera-block.blockera-block-1 .wp-element-button:focus {
+html:root body :where(.blockera-block.blockera-block-1) .wp-element-button:focus {
 	background-color: #af0000;
 }
 
-.blockera-block.blockera-block-1 .wp-element-button:active {
+html:root body :where(.blockera-block.blockera-block-1) .wp-element-button:active {
 	background-color: #680000;
 }
 
@@ -50,7 +50,7 @@
 	background-color: #fff0f0;
 }
 
-.blockera-block.blockera-block-2 .wp-element-button {
+html:root body :where(.blockera-block.blockera-block-2) .wp-element-button {
 	padding: 5px 10px 5px 10px;
 	margin-left: 100px !important;
 }
@@ -105,7 +105,7 @@
 	font-size: var(--wp--preset--font-size--small, 0.875rem);
 }
 
-.blockera-block.blockera-block-3 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element-button)) {
 	background-color: #efc675;
 	font-size: 16px;
 	font-weight: 1000;
@@ -115,22 +115,22 @@
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-3 .wp-element-button {
+html:root body :where(.blockera-block.blockera-block-3) .wp-element-button {
 	padding: 5px 40px 5px 40px;
 	margin-left: 40px !important;
 	border-radius: 0;
 	background-color: #bc8b2a;
 }
 
-.blockera-block.blockera-block-3 .wp-element-button:hover {
+html:root body :where(.blockera-block.blockera-block-3) .wp-element-button:hover {
 	background-color: #ba800c;
 }
 
-.blockera-block.blockera-block-3 .wp-element-button:focus {
+html:root body :where(.blockera-block.blockera-block-3) .wp-element-button:focus {
 	background-color: #996c10;
 }
 
-.blockera-block.blockera-block-3 .wp-element-button:active {
+html:root body :where(.blockera-block.blockera-block-3) .wp-element-button:active {
 	background-color: #805603;
 }
 
@@ -143,7 +143,7 @@
 		text-align: center;
 	}
 
-	.blockera-block.blockera-block-3 .wp-element-button {
+	html:root body :where(.blockera-block.blockera-block-3) .wp-element-button {
 		padding: 5px 40px 5px 40px;
 		margin-left: 0 !important;
 		text-align: center;
@@ -179,7 +179,7 @@
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-4 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-4) :where(a:not(.wp-element-button)) {
 	background-color: #c9c9ff;
 	flex: 1 1 0%;
 	font-size: 16px;
@@ -193,7 +193,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-4 .wp-element-button {
+html:root body :where(.blockera-block.blockera-block-4) .wp-element-button {
 	background-color: #4b4eff;
 	padding: 10px 30px 10px 30px;
 	border-radius: 10px;
@@ -207,11 +207,11 @@
 		gap: 0;
 	}
 
-	.blockera-block.blockera-block-4 .wp-block-button {
+	html:root body :where(.blockera-block.blockera-block-4) .wp-block-button {
 		flex: 1 1 0%;
 	}
 
-	.blockera-block.blockera-block-4 :where(a:not(.wp-element-button)) {
+	html:root body :where(.blockera-block.blockera-block-4) :where(a:not(.wp-element-button)) {
 		padding: 10px 20px 10px 20px;
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
@@ -219,7 +219,7 @@
 		border-bottom-left-radius: 0;
 	}
 
-	.blockera-block.blockera-block-4 .wp-element-button {
+	html:root body :where(.blockera-block.blockera-block-4) .wp-element-button {
 		flex-direction: row;
 		align-items: center !important;
 		justify-content: center !important;

@@ -4,7 +4,7 @@
 	border-radius: 10px;
 }
 
-.blockera-block.blockera-block-1 figcaption {
+html:root body :where(.blockera-block.blockera-block-1) figcaption {
 	background-color: #68ffe1;
 	padding: 10px 20px 10px 20px;
 	margin-top: 19px;
@@ -29,7 +29,7 @@
 	padding-left: 60px;
 }
 
-.blockera-block.blockera-block-2 figcaption {
+html:root body :where(.blockera-block.blockera-block-2) figcaption {
 	text-align: center;
 	color: #2cc210;
 	font-weight: 600;
@@ -45,7 +45,7 @@
 		gap: 50px;
 	}
 
-	.blockera-block.blockera-block-2 figcaption {
+	html:root body :where(.blockera-block.blockera-block-2) figcaption {
 		height: 50px;
 		display: flex !important;
 		flex-direction: row;
@@ -74,7 +74,7 @@
 	position: relative;
 }
 
-.blockera-block.blockera-block-3 figcaption {
+html:root body :where(.blockera-block.blockera-block-3) figcaption {
 	background-color: #68ffe1;
 	padding: 10px 20px 10px 20px;
 	margin-top: 19px;

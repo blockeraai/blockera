@@ -7,7 +7,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 	display: flex !important;
 	background-color: #ffa7a7;
 	border-radius: 5px;
@@ -22,7 +22,7 @@
 	padding: 5px 5px 5px 5px;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::before {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button))::before {
 	box-sizing: border-box;
 	content: "Before";
 	background-color: #ce8e0d;
@@ -40,7 +40,7 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::after {
+html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button))::after {
 	box-sizing: border-box;
 	content: "After";
 	font-size: 14px;
@@ -59,7 +59,7 @@
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::after {
+	html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button))::after {
 		padding: 10px 5px 10px 5px;
 		content: "After";
 		flex-direction: column;
@@ -68,7 +68,7 @@
 		text-align: center;
 	}
 
-	.blockera-block.blockera-block-1 :where(a:not(.wp-element-button))::before {
+	html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button))::before {
 		padding: 10px 5px 10px 5px;
 		content: "Before";
 		background-color: #ce8e0d;
@@ -76,7 +76,7 @@
 		text-align: center;
 	}
 
-	.blockera-block.blockera-block-1 :where(a:not(.wp-element-button)) {
+	html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element-button)) {
 		flex-direction: column;
 		align-items: center !important;
 		justify-content: space-between !important;
@@ -85,11 +85,11 @@
 	};
 }
 
-.blockera-block.blockera-block-1:hover :where(a:not(.wp-element-button)) {
+html:root body :where(.blockera-block.blockera-block-1):hover :where(a:not(.wp-element-button)) {
 	background-color: #ff7b7b;
 }
 
-.blockera-block.blockera-block-1:hover :where(a:not(.wp-element-button)):hover {
+html:root body :where(.blockera-block.blockera-block-1):hover :where(a:not(.wp-element-button)):hover {
 	background-color: #f64f4f;
 }
 

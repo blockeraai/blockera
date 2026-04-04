@@ -189,6 +189,15 @@ export function useRecentlyClosedTabs({
 		}
 	}, [recentlyClosedTabs, persistenceEnabled, recentlyClosedLimit]);
 
+	// Sync in-memory list when the user toggles “Remember recently closed tabs”.
+	useEffect(() => {
+		if (!persistenceEnabled) {
+			setRecentlyClosedTabs([]);
+		} else {
+			setRecentlyClosedTabs(loadFromStorage(recentlyClosedLimit));
+		}
+	}, [persistenceEnabled, recentlyClosedLimit]);
+
 	/**
 	 * Add a closed tab to the list
 	 * Prepends to the beginning (most recent first)
@@ -202,6 +211,10 @@ export function useRecentlyClosedTabs({
 	const addClosedTab = useCallback(
 		(tab: Tab): void => {
 			if (!tab?.key) {
+				return;
+			}
+
+			if (!persistenceEnabledRef.current) {
 				return;
 			}
 

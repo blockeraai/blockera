@@ -61,7 +61,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-10 :is(.wp-block-paragraph, p) {
+html:root body :where(.blockera-block.blockera-block-10) :is(.wp-block-paragraph, p) {
 	background-color: #ff7a7a;
 }
 
@@ -110,7 +110,7 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-11 .wp-block-heading {
+html:root body :where(.blockera-block.blockera-block-11) .wp-block-heading {
 	background-color: #fe4444;
 	padding: 10px 10px 10px 10px;
 	text-align: center;
@@ -137,7 +137,7 @@
 	padding: 10px 10px 10px 10px;
 }
 
-.blockera-block.blockera-block-14 .wp-block-post-time-to-read {
+html:root body :where(.blockera-block.blockera-block-14) .wp-block-post-time-to-read {
 	background-color: #ffb672;
 	padding: 10px 10px 10px 10px;
 	border-radius: 10px;

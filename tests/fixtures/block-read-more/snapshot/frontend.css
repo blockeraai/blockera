@@ -9,27 +9,27 @@
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-1 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-1) :is(strong, b) {
 	background-color: #ff2424;
 }
 
-.blockera-block.blockera-block-1 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-1) :is(em, i) {
 	background-color: #ffbb00;
 }
 
-.blockera-block.blockera-block-1 kbd {
+html:root body :where(.blockera-block.blockera-block-1) kbd {
 	background-color: #00ff0d;
 }
 
-.blockera-block.blockera-block-1 code {
+html:root body :where(.blockera-block.blockera-block-1) code {
 	background-color: #00d0ff;
 }
 
-.blockera-block.blockera-block-1 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-1) span:not([data-rich-text-placeholder]) {
 	background-color: #1900ff;
 }
 
-.blockera-block.blockera-block-1 :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 	background-color: #ff00ff;
 }
 

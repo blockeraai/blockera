@@ -230,8 +230,12 @@ describe('box-border-control component testing', () => {
 
 			cy.getByDataCy('color-btn').eq(1).as('right-color-button');
 			cy.get('@right-color-button').click();
-			cy.get('input[maxlength="9"]').clear({ force: true });
-			cy.get('input[maxlength="9"]').type('b0da3b', { delay: 0 });
+			cy.get('[data-cy="color-picker-css-value"]').clear({
+				force: true,
+			});
+			cy.get('[data-cy="color-picker-css-value"]').type('b0da3b', {
+				delay: 0,
+			});
 
 			cy.get('@right-color-button')
 				.should('have.attr', 'style')

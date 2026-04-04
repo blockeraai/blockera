@@ -8,6 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
  * Internal dependencies
  */
 import type { Tab } from '../types';
+import { WORKSPACE_TABS_TEST_ID } from '../constants/testIds';
 
 /**
  * Close tab confirm dialog props.
@@ -74,86 +75,116 @@ export default function CloseTabConfirmDialog({
 			onRequestClose={onClose}
 			className="blockera-tabs-close-confirm-dialog"
 		>
-			<div className="blockera-tabs-close-confirm-content">
-				<p>
-					{isMultiple
-						? sprintf(
-								/* translators: %d: number of tabs */
-								__(
-									'%d tabs have unsaved changes. Save before closing?',
+			<div
+				{...({
+					'test-id': WORKSPACE_TABS_TEST_ID.closeConfirmModalRoot,
+				} as Record<string, string>)}
+			>
+				<div className="blockera-tabs-close-confirm-content">
+					<p>
+						{isMultiple
+							? sprintf(
+									/* translators: %d: number of tabs */
+									__(
+										'%d tabs have unsaved changes. Save before closing?',
+										'blockera'
+									),
+									tabCount
+								)
+							: __(
+									'This tab has unsaved changes. Save before closing?',
 									'blockera'
-								),
-								tabCount
-							)
-						: __(
-								'This tab has unsaved changes. Save before closing?',
-								'blockera'
-							)}
-				</p>
+								)}
+					</p>
 
-				{showTabsList && tabs.length > 0 && (
-					<div className="blockera-tabs-close-confirm-tabs-list">
-						{tabs.map((tab) => {
-							const title = getTabTitle
-								? getTabTitle(tab)
-								: tab.title || __('Untitled', 'blockera');
-							return (
-								<div
-									key={tab.key}
-									className="blockera-tabs-close-confirm-tab-item"
-								>
-									<strong className="blockera-tabs-close-confirm-tab-title">
-										{title}
-									</strong>
+					{showTabsList && tabs.length > 0 && (
+						<div
+							className="blockera-tabs-close-confirm-tabs-list"
+							{...({
+								'test-id':
+									WORKSPACE_TABS_TEST_ID.closeConfirmTabsList,
+							} as Record<string, string>)}
+						>
+							{tabs.map((tab) => {
+								const title = getTabTitle
+									? getTabTitle(tab)
+									: tab.title || __('Untitled', 'blockera');
+								return (
+									<div
+										key={tab.key}
+										className="blockera-tabs-close-confirm-tab-item"
+									>
+										<strong className="blockera-tabs-close-confirm-tab-title">
+											{title}
+										</strong>
 
-									{onReviewTab && (
-										<Button
-											variant="secondary"
-											size="small"
-											onClick={() => onReviewTab(tab)}
-											disabled={isSaving}
-											className="blockera-tabs-close-confirm-review-button"
-										>
-											{__('Review tab', 'blockera')}
-										</Button>
-									)}
-								</div>
-							);
-						})}
-					</div>
-				)}
-			</div>
+										{onReviewTab && (
+											<Button
+												{...({
+													'test-id':
+														WORKSPACE_TABS_TEST_ID.closeConfirmReviewTab(
+															tab.key
+														),
+												} as Record<string, string>)}
+												variant="secondary"
+												size="small"
+												onClick={() => onReviewTab(tab)}
+												disabled={isSaving}
+												className="blockera-tabs-close-confirm-review-button"
+											>
+												{__('Review tab', 'blockera')}
+											</Button>
+										)}
+									</div>
+								);
+							})}
+						</div>
+					)}
+				</div>
 
-			<div className="blockera-tabs-close-confirm-actions">
-				<Button
-					variant="primary"
-					onClick={onSaveAndClose}
-					isBusy={isSaving}
-					disabled={isSaving}
-				>
-					{isMultiple
-						? __('Save All & Close', 'blockera')
-						: __('Save & Close', 'blockera')}
-				</Button>
+				<div className="blockera-tabs-close-confirm-actions">
+					<Button
+						{...({
+							'test-id':
+								WORKSPACE_TABS_TEST_ID.closeConfirmSaveAndClose,
+						} as Record<string, string>)}
+						variant="primary"
+						onClick={onSaveAndClose}
+						isBusy={isSaving}
+						disabled={isSaving}
+					>
+						{isMultiple
+							? __('Save All & Close', 'blockera')
+							: __('Save & Close', 'blockera')}
+					</Button>
 
-				<Button
-					variant="secondary"
-					isDestructive
-					onClick={onCloseWithoutSaving}
-					disabled={isSaving}
-				>
-					{isMultiple
-						? __('Close All Without Saving', 'blockera')
-						: __('Close Without Saving', 'blockera')}
-				</Button>
+					<Button
+						{...({
+							'test-id':
+								WORKSPACE_TABS_TEST_ID.closeConfirmCloseWithoutSaving,
+						} as Record<string, string>)}
+						variant="secondary"
+						isDestructive
+						onClick={onCloseWithoutSaving}
+						disabled={isSaving}
+					>
+						{isMultiple
+							? __('Close All Without Saving', 'blockera')
+							: __('Close Without Saving', 'blockera')}
+					</Button>
 
-				<Button
-					variant="secondary"
-					onClick={onClose}
-					disabled={isSaving}
-				>
-					{__('Cancel', 'blockera')}
-				</Button>
+					<Button
+						{...({
+							'test-id':
+								WORKSPACE_TABS_TEST_ID.closeConfirmCancel,
+						} as Record<string, string>)}
+						variant="secondary"
+						onClick={onClose}
+						disabled={isSaving}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+				</div>
 			</div>
 		</Modal>
 	);

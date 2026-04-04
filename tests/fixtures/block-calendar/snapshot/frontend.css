@@ -5,7 +5,7 @@
 	color: #009602;
 }
 
-.blockera-block.blockera-block-1 caption {
+html:root body :where(.blockera-block.blockera-block-1) caption {
 	background-color: #cecaff;
 	padding: 10px 10px 10px 10px;
 	border-top-left-radius: 50px;
@@ -15,7 +15,7 @@
 	color: #3826f6;
 }
 
-.blockera-block.blockera-block-1 table thead th {
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table thead th {
 	background-color: #c1baff;
 	border: 2px solid #1702ff;
 	color: #ffffff;
@@ -23,40 +23,40 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-1 table tbody td {
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody td {
 	border: 2px solid #1702ff;
 	background-color: #ffffff;
 	color: #1702ff;
 }
 
-.blockera-block.blockera-block-1 table tbody {
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody {
 	background-color: #ff9393;
 }
 
-.blockera-block.blockera-block-1 table tbody td:is(.pad, [colspan]) {
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody td:is(.pad, [colspan]) {
 	background-color: #c1baff;
 }
 
-.blockera-block.blockera-block-1 table tbody td:has(a) {
+html:root body :where(.blockera-block.blockera-block-1) table.wp-calendar-table tbody td:has(a) {
 	background-color: #9589ff;
 }
 
-.blockera-block.blockera-block-1 .wp-calendar-nav a {
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a {
 	color: #faf1f1;
 	background-color: #000bdb;
 	margin-top: 10px;
 	display: inline-block !important;
 }
 
-.blockera-block.blockera-block-1 .wp-calendar-nav a:hover {
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:hover {
 	background-color: #0000c7;
 }
 
-.blockera-block.blockera-block-1 .wp-calendar-nav a:focus {
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:focus {
 	background-color: #0000af;
 }
 
-.blockera-block.blockera-block-1 .wp-calendar-nav a:active {
+html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:active {
 	background-color: #00067c;
 }
 
@@ -65,7 +65,7 @@
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-1 caption {
+	html:root body :where(.blockera-block.blockera-block-1) caption {
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
 	};

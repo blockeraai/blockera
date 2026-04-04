@@ -1,10 +1,10 @@
-.blockera-block.blockera-block-1 :where(.wp-block-accordion-item) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-item) {
 	border: 1px solid #0000003b;
 	background-color: #e8e8e8;
 	border-radius: 30px;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-accordion-heading) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-heading) {
 	padding: 5px 10px 5px 20px;
 	font-size: 18px;
 	font-weight: 700;
@@ -14,7 +14,7 @@
 	overflow: visible;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-accordion-panel) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-panel) {
 	padding-right: 20px;
 	padding-bottom: 20px;
 	padding-left: 20px;
@@ -25,7 +25,7 @@
 	font-style: normal;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-accordion-heading__toggle-icon) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-heading__toggle-icon) {
 	background-color: #ff3535;
 	border-radius: 50px;
 	color: #ffffff;
@@ -35,33 +35,33 @@
 	border: 1px solid #0000003b;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-accordion-item.is-open) {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-item.is-open) {
 	background-color: #ffe7e7;
 }
 
-.blockera-block.blockera-block-1 :where(.wp-block-accordion-item):hover {
+html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-item):hover {
 	background-color: #ff1515;
 }
 
 @media screen and (max-width: 478px) {
-	.blockera-block.blockera-block-1 :where(.wp-block-accordion-item) {
+	html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-item) {
 		border-radius: 10px;
 	}
 
-	.blockera-block.blockera-block-1 :where(.wp-block-accordion-heading__toggle-icon) {
+	html:root body :where(.blockera-block.blockera-block-1) :where(.wp-block-accordion-heading__toggle-icon) {
 		border-radius: 5px;
 	};
 }
 
-.blockera-block.blockera-block-3 .wp-block-accordion-heading {
+html:root body :where(.blockera-block.blockera-block-3) .wp-block-accordion-heading {
 	color: #259d00;
 }
 
-.blockera-block.blockera-block-3 .wp-block-accordion-heading__toggle-icon {
+html:root body :where(.blockera-block.blockera-block-3) .wp-block-accordion-heading__toggle-icon {
 	background-color: #259d00;
 }
 
-.blockera-block.blockera-block-3 .wp-block-accordion-panel {
+html:root body :where(.blockera-block.blockera-block-3) .wp-block-accordion-panel {
 	color: #259d00;
 }
 
@@ -73,15 +73,15 @@
 	background-color: #a9d99c;
 }
 
-.blockera-block.blockera-block-4 .wp-block-accordion-heading {
+html:root body :where(.blockera-block.blockera-block-4) .wp-block-accordion-heading {
 	color: #259d00;
 }
 
-.blockera-block.blockera-block-4 .wp-block-accordion-heading__toggle-icon {
+html:root body :where(.blockera-block.blockera-block-4) .wp-block-accordion-heading__toggle-icon {
 	background-color: #259d00;
 }
 
-.blockera-block.blockera-block-4 .wp-block-accordion-panel {
+html:root body :where(.blockera-block.blockera-block-4) .wp-block-accordion-panel {
 	color: #259d00;
 }
 
@@ -93,15 +93,15 @@
 	background-color: #72c25a;
 }
 
-.blockera-block.blockera-block-5 .wp-block-accordion-heading {
+html:root body :where(.blockera-block.blockera-block-5) .wp-block-accordion-heading {
 	color: #259d00;
 }
 
-.blockera-block.blockera-block-5 .wp-block-accordion-heading__toggle-icon {
+html:root body :where(.blockera-block.blockera-block-5) .wp-block-accordion-heading__toggle-icon {
 	background-color: #259d00;
 }
 
-.blockera-block.blockera-block-5 .wp-block-accordion-panel {
+html:root body :where(.blockera-block.blockera-block-5) .wp-block-accordion-panel {
 	color: #259d00;
 }
 
@@ -117,7 +117,7 @@
 	color: #7500ff;
 }
 
-.blockera-block.blockera-block-6 .wp-block-accordion-heading__toggle-icon {
+html:root body :where(.blockera-block.blockera-block-6) .wp-block-accordion-heading__toggle-icon {
 	background-color: #7500ff;
 }
 
@@ -125,7 +125,7 @@ p.blockera-block.blockera-block-7 {
 	color: #7500ff;
 }
 
-.blockera-block.blockera-block-7 a:not(.wp-element-button) {
+html:root body :where(.blockera-block.blockera-block-7) a:not(.wp-element-button) {
 	color: #7500ff;
 }
 
@@ -140,7 +140,7 @@ p.blockera-block.blockera-block-7 {
 	overflow: hidden;
 }
 
-.blockera-block.blockera-block-9 .wp-block-accordion-heading__toggle-icon {
+html:root body :where(.blockera-block.blockera-block-9) .wp-block-accordion-heading__toggle-icon {
 	color: #ff0202;
 }
 
@@ -175,34 +175,34 @@ p.blockera-block.blockera-block-7 {
 	padding: 20px 20px 20px 20px;
 }
 
-.blockera-block.blockera-block-16 p {
+html:root body :where(.blockera-block.blockera-block-16) p {
 	background-color: #ffd7d7;
 	font-size: 20px;
 }
 
-.blockera-block.blockera-block-16 :is(strong, b) {
+html:root body :where(.blockera-block.blockera-block-16) :is(strong, b) {
 	background-color: #f1c513;
 }
 
-.blockera-block.blockera-block-16 :is(em, i) {
+html:root body :where(.blockera-block.blockera-block-16) :is(em, i) {
 	background-color: #20db1a;
 }
 
-.blockera-block.blockera-block-16 kbd {
+html:root body :where(.blockera-block.blockera-block-16) kbd {
 	background-color: #1de1b6;
 }
 
-.blockera-block.blockera-block-16 code {
+html:root body :where(.blockera-block.blockera-block-16) code {
 	background-color: #301dff;
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-16 span:not([data-rich-text-placeholder]) {
+html:root body :where(.blockera-block.blockera-block-16) span:not([data-rich-text-placeholder]) {
 	background-color: #a600ff;
 	color: #ffffff;
 }
 
-.blockera-block.blockera-block-16 :is(mark, mark[class]) {
+html:root body :where(.blockera-block.blockera-block-16) :is(mark, mark[class]) {
 	background-color: #ff0000;
 }
 

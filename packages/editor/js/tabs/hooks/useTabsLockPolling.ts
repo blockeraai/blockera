@@ -17,6 +17,7 @@ import type { LockInfo } from './useTabsLockState';
  * This matches WordPress's Heartbeat behavior.
  */
 const POLL_INTERVAL = 30000;
+const SINGLE_LOCK_CACHE_TTL_MS = 30000;
 
 /**
  * Server response for lock refresh.
@@ -91,6 +92,12 @@ export function useTabsLockPolling({
 	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 	const isPollingRef = useRef(false);
 	const isVisibleRef = useRef(!document.hidden);
+	const singleLockCacheRef = useRef<
+		Map<string, { lockInfo: LockInfo | null; timestamp: number }>
+	>(new Map());
+	const singleLockInflightRef = useRef<Map<string, Promise<LockInfo | null>>>(
+		new Map()
+	);
 
 	// Store latest values in refs to access in callbacks without recreating them
 	const tabsRef = useRef(tabs);
@@ -159,7 +166,6 @@ export function useTabsLockPolling({
 				credentials: 'same-origin',
 				body: formData,
 			});
-
 			const result = (await response.json()) as LockRefreshResponse;
 
 			if (result.success && result.data?.locks) {
@@ -357,46 +363,70 @@ export function useTabsLockPolling({
 	 */
 	const checkSingleLock = useCallback(
 		async (postId: string | number): Promise<LockInfo | null> => {
+			const cacheKey = String(postId);
+			const now = Date.now();
+			const cached = singleLockCacheRef.current.get(cacheKey);
+			if (cached && now - cached.timestamp < SINGLE_LOCK_CACHE_TTL_MS) {
+				return cached.lockInfo;
+			}
+
+			const inflight = singleLockInflightRef.current.get(cacheKey);
+			if (inflight) {
+				return inflight;
+			}
 			if (typeof window.blockeraTabsLock === 'undefined') {
 				return null;
 			}
 
 			const { ajaxUrl, checkNonce } = window.blockeraTabsLock;
 
-			try {
-				const formData = new FormData();
-				formData.append('action', 'blockera_tabs_check_post_locks');
-				formData.append('nonce', checkNonce);
-				formData.append('postIds[]', String(postId));
+			const requestPromise = (async (): Promise<LockInfo | null> => {
+				try {
+					const formData = new FormData();
+					formData.append('action', 'blockera_tabs_check_post_locks');
+					formData.append('nonce', checkNonce);
+					formData.append('postIds[]', String(postId));
 
-				const response = await fetch(ajaxUrl, {
-					method: 'POST',
-					credentials: 'same-origin',
-					body: formData,
-				});
+					const response = await fetch(ajaxUrl, {
+						method: 'POST',
+						credentials: 'same-origin',
+						body: formData,
+					});
+					const result =
+						(await response.json()) as LockRefreshResponse;
 
-				const result = (await response.json()) as LockRefreshResponse;
-
-				if (result.success && result.data?.locks) {
-					// Use the postId as-is (can be string or number)
-					const lockInfo = result.data.locks[postId];
-					if (lockInfo) {
-						return lockInfo;
+					if (result.success && result.data?.locks) {
+						const lockInfo = result.data.locks[postId];
+						if (lockInfo) {
+							singleLockCacheRef.current.set(cacheKey, {
+								lockInfo,
+								timestamp: Date.now(),
+							});
+							return lockInfo;
+						}
 					}
-				}
 
-				return null;
-			} catch (error) {
-				if (process.env.NODE_ENV === 'development') {
-					// @debug-ignore
-					// eslint-disable-next-line no-console
-					console.error(
-						'Blockera Tabs: Failed to check single post lock',
-						error
-					);
+					singleLockCacheRef.current.set(cacheKey, {
+						lockInfo: null,
+						timestamp: Date.now(),
+					});
+					return null;
+				} catch (error) {
+					if (process.env.NODE_ENV === 'development') {
+						// @debug-ignore
+						// eslint-disable-next-line no-console
+						console.error(
+							'Blockera Tabs: Failed to check single post lock',
+							error
+						);
+					}
+					return null;
+				} finally {
+					singleLockInflightRef.current.delete(cacheKey);
 				}
-				return null;
-			}
+			})();
+			singleLockInflightRef.current.set(cacheKey, requestPromise);
+			return requestPromise;
 		},
 		[]
 	);

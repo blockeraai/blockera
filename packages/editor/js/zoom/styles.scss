@@ -4,7 +4,9 @@
  */
 
 /* Zoom control button in header settings */
-.blockera-elements-editor-header-settings .blockera-zoom-control-wrapper .components-button {
+.blockera-elements-editor-header-settings
+	.blockera-zoom-control-wrapper
+	.components-button {
 	padding: 0 2px 0 8px;
 	font-size: 12px;
 	font-weight: 500;
@@ -27,8 +29,12 @@
 	}
 }
 
-.blockera-elements-editor-header-settings .blockera-zoom-control-wrapper .components-button:hover,
-.blockera-elements-editor-header-settings .blockera-zoom-control-wrapper .components-button.is-zoomed {
+.blockera-elements-editor-header-settings
+	.blockera-zoom-control-wrapper
+	.components-button:hover,
+.blockera-elements-editor-header-settings
+	.blockera-zoom-control-wrapper
+	.components-button.is-zoomed {
 	color: var(--blockera-controls-primary-color);
 }
 
@@ -37,6 +43,7 @@ iframe[name="editor-canvas"] {
 	display: block;
 	border: 0;
 	margin: 0 auto;
+	transform-origin: top center !important;
 }
 
 /* Smooth transition for zoom changes (respects reduced motion preference) */
@@ -52,9 +59,8 @@ iframe[name="editor-canvas"].is-zoomed-out {
 	margin: 50px auto 0 !important;
 	overflow: hidden;
 	transform: scale(var(--blockera-block-editor-iframe-zoom, 1));
-	border-radius: 8px;
+	border-radius: 5px;
 	padding: 0;
 	transform-origin: top center !important;
-	box-shadow: 0 10px 20px 0 #0000003d;
 	border: 1px solid #c3c3c3 !important;
 }

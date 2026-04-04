@@ -36,12 +36,12 @@ export const BlockStyle = ({
 	}
 
 	const config = getExtensionConfig(props.blockName, currentBlock);
+	const shouldPrintCustomCss =
+		typeof customCss === 'string' && customCss.trim().length > 0;
 
 	return (
 		<>
-			{'undefined' !== typeof customCss &&
-			customCss.length &&
-			/#block*(?:-.*)\n\s+\}/gm.test(customCss) ? (
+			{shouldPrintCustomCss ? (
 				<style id={props.clientId}>{customCss}</style>
 			) : (
 				<></>

@@ -26,8 +26,8 @@ body.blockera-zoom-active {
 	padding: 0 8px;
 	background: #f0f0f0;
 	z-index: 999999;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 	border-bottom: 1px solid #ccc;
+	box-sizing: border-box;
 }
 
 /* Iframe-specific styles (for zoom mode) */
@@ -91,7 +91,7 @@ body.blockera-zoom-active {
 	justify-content: center;
 	gap: 60px;
 	background: #dadada;
-	border-radius: 6px;
+	border-radius: 4px;
 	padding: 0;
 	height: 26px;
 	overflow: hidden;

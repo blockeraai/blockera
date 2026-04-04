@@ -26,6 +26,26 @@ import { focusPostTitle } from '../../utils/focusPostTitle';
 const ENTITY_EDIT_CONTEXT = 'entity-edit';
 
 /**
+ * Title string from a freshly saved core-data post record.
+ *
+ * @param record - Entity returned by saveEntityRecord
+ * @param fallback - When title is missing or empty
+ */
+function getSavedRecordTitle(
+	record: Post | undefined,
+	fallback: string
+): string {
+	const raw = record?.title;
+	if (raw === undefined || raw === null) {
+		return fallback;
+	}
+	if (typeof raw === 'string') {
+		return raw || fallback;
+	}
+	return raw.rendered || fallback;
+}
+
+/**
  * Tab actions interface for creating entities.
  */
 interface CreateEntityTabActions {
@@ -98,13 +118,16 @@ function getCreateEntityCommandsLoader(
 
 			// Add "New post" command if user has permission
 			if (canCreatePost !== false) {
+				const addNewPostLabel = __('Add new post', 'blockera');
 				result.push({
 					name: 'blockera-tabs/create-new-post',
-					label: __('Add new post', 'blockera'),
-					searchLabel:
-						__('Create new post', 'blockera') +
-						' ' +
-						TAB_COMMAND_MARKER,
+					label: addNewPostLabel,
+					// Must match visible label: cmdk filters on `value` (searchLabel), not label.
+					searchLabel: `${addNewPostLabel} ${TAB_COMMAND_MARKER}`,
+					keywords: [
+						__('Create new post', 'blockera'),
+						__('New post', 'blockera'),
+					],
 					icon: post,
 					callback: async ({ close }) => {
 						if (!isEditorPage()) {
@@ -126,6 +149,11 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPost?.id) {
+								// Match tab label to saveEntityRecord title (not a generic "New post" string).
+								const tabTitle = getSavedRecordTitle(
+									newPost,
+									__('Draft Post', 'blockera')
+								);
 								await tabActions.prefetchEntity(
 									'post',
 									newPost.id as number
@@ -133,7 +161,7 @@ function getCreateEntityCommandsLoader(
 								const added = await tabActions.addTab(
 									'post',
 									newPost.id as number,
-									__('New post', 'blockera')
+									tabTitle
 								);
 								if (added) {
 									tabActions.switchDocument(
@@ -159,13 +187,15 @@ function getCreateEntityCommandsLoader(
 
 			// Add "New page" command if user has permission
 			if (canCreatePage !== false) {
+				const addNewPageLabel = __('Add new page', 'blockera');
 				result.push({
 					name: 'blockera-tabs/create-new-page',
-					label: __('Add new page', 'blockera'),
-					searchLabel:
-						__('Create new page', 'blockera') +
-						' ' +
-						TAB_COMMAND_MARKER,
+					label: addNewPageLabel,
+					searchLabel: `${addNewPageLabel} ${TAB_COMMAND_MARKER}`,
+					keywords: [
+						__('Create new page', 'blockera'),
+						__('New page', 'blockera'),
+					],
 					icon: page,
 					callback: async ({ close }) => {
 						if (!isEditorPage()) {
@@ -187,6 +217,11 @@ function getCreateEntityCommandsLoader(
 							);
 
 							if (newPage?.id) {
+								// Match tab label to saveEntityRecord title (not a generic "New page" string).
+								const tabTitle = getSavedRecordTitle(
+									newPage,
+									__('Draft Page', 'blockera')
+								);
 								await tabActions.prefetchEntity(
 									'page',
 									newPage.id as number
@@ -194,7 +229,7 @@ function getCreateEntityCommandsLoader(
 								const added = await tabActions.addTab(
 									'page',
 									newPage.id as number,
-									__('New page', 'blockera')
+									tabTitle
 								);
 								if (added) {
 									tabActions.switchDocument(

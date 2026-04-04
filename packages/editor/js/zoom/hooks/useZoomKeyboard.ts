@@ -18,7 +18,7 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { ZOOM_STEP, DEFAULT_ZOOM } from '../utils/constants';
+import { handleZoomKeyboardEvent } from '../utils/zoomKeyboard';
 import type { UseZoomKeyboardOptions } from '../types';
 
 /**
@@ -118,76 +118,17 @@ export function useZoomKeyboard({
 		}
 
 		const handleKeyDown = (event: KeyboardEvent): void => {
-			// Ignore if user is typing in an input field
-			const target = event.target;
-			if (
-				target instanceof HTMLInputElement ||
-				target instanceof HTMLTextAreaElement ||
-				(target instanceof HTMLElement && target.isContentEditable)
-			) {
-				return;
-			}
-
-			// Check for modifier keys
-			const isMod = event.metaKey || event.ctrlKey;
-			const isShift = event.shiftKey;
-			const isAlt = event.altKey;
-
-			// Check for zoom to fit: Ctrl/Cmd + Shift + 1 (avoids browser conflict with Shift+1)
-			const isOne =
-				event.key === '1' ||
-				event.key === 'Digit1' ||
-				event.code === 'Digit1' ||
-				event.code === 'Numpad1';
-
-			if (isMod && isShift && isOne && !isAlt) {
-				event.preventDefault();
-				event.stopPropagation();
-				if (onZoomToFitRef.current) {
-					onZoomToFitRef.current();
-				}
-				return;
-			}
-
-			// For other shortcuts, require modifier key
-			if (!isMod) {
-				return;
-			}
-
-			// Check for zoom in: +
-			// When pressing Cmd/Ctrl + Shift + =, browsers may produce '+' directly OR '=' with shiftKey
-			// However, shiftKey may not be reported correctly when combined with Cmd/Ctrl
-			// So we detect Cmd/Ctrl + = as zoom-in (browsers treat this as zoom like Cmd/Ctrl + Shift + =)
-			// When pressing Cmd/Ctrl + Numpad +, event.key is '+' or event.code is 'NumpadAdd'
-			const isPlus =
-				event.key === '+' ||
-				(event.key === '=' && isMod) || // Cmd/Ctrl + = should zoom in (like browser zoom)
-				(event.key === '=' && event.shiftKey) ||
-				event.code === 'NumpadAdd' ||
-				(event.code === 'Equal' && isMod); // Cmd/Ctrl + Equal key should zoom in
-
-			// Check for zoom out: -
-			const isMinus =
-				event.key === '-' ||
-				event.code === 'Minus' ||
-				event.code === 'NumpadSubtract';
-
-			// Check for reset: 0
-			const isZero = event.key === '0' || event.key === 'Digit0';
-
-			if (isPlus) {
-				event.preventDefault();
-				event.stopPropagation();
-				onZoomChangeRef.current(zoomPercentRef.current + ZOOM_STEP);
-			} else if (isMinus) {
-				event.preventDefault();
-				event.stopPropagation();
-				onZoomChangeRef.current(zoomPercentRef.current - ZOOM_STEP);
-			} else if (isZero) {
-				event.preventDefault();
-				event.stopPropagation();
-				onZoomChangeRef.current(DEFAULT_ZOOM);
-			}
+			handleZoomKeyboardEvent(event, {
+				getZoomPercent: () => zoomPercentRef.current,
+				onZoomChange: (next) => {
+					onZoomChangeRef.current(next);
+				},
+				onZoomToFit: onZoomToFitRef.current
+					? () => {
+							onZoomToFitRef.current?.();
+						}
+					: undefined,
+			});
 		};
 
 		// Use capture phase to catch events before WordPress shortcuts API

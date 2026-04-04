@@ -4,8 +4,8 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { useEffect, useState } from '@wordpress/element';
-import { dispatch, useSelect, useDispatch } from '@wordpress/data';
+import { useEffect, useState, useCallback } from '@wordpress/element';
+import { dispatch, useSelect, useDispatch, select } from '@wordpress/data';
 
 /**
  * Blockera dependencies
@@ -27,6 +27,42 @@ import type {
 	TBreakpoint,
 	BreakpointTypes,
 } from '../../../../extensions/libs/block-card/block-states/types';
+
+const BREAKPOINT_CLASS_PREFIX = 'blockera-breakpoint-';
+const IN_BREAKPOINT_CLASS = 'blockera-in-breakpoint';
+const NOT_IN_BREAKPOINT_CLASS = 'blockera-not-in-breakpoint';
+
+function syncCanvasIframeBreakpointClasses(
+	iframe: ?HTMLElement,
+	breakpointId: string
+): void {
+	if (!iframe || !iframe.classList) {
+		return;
+	}
+
+	// Remove previous breakpoint id class(es).
+	// We intentionally scan classList once to avoid keeping external state and to stay resilient
+	// if other code adds/removes classes.
+	for (const cls of Array.from(iframe.classList)) {
+		if (cls && cls.startsWith(BREAKPOINT_CLASS_PREFIX)) {
+			iframe.classList.remove(cls);
+		}
+	}
+
+	// Add current breakpoint id helper class.
+	if (breakpointId) {
+		iframe.classList.add(`${BREAKPOINT_CLASS_PREFIX}${breakpointId}`);
+	}
+
+	// Toggle "in breakpoint" state helpers.
+	if (isBaseBreakpoint(breakpointId)) {
+		iframe.classList.remove(IN_BREAKPOINT_CLASS);
+		iframe.classList.add(NOT_IN_BREAKPOINT_CLASS);
+	} else {
+		iframe.classList.remove(NOT_IN_BREAKPOINT_CLASS);
+		iframe.classList.add(IN_BREAKPOINT_CLASS);
+	}
+}
 
 export const BreakpointsUI = ({
 	className,
@@ -55,6 +91,10 @@ export const BreakpointsUI = ({
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			const iframe = getIframe();
+
+			// Add responsive breakpoint helper classes to the canvas iframe tag.
+			// This enables breakpoint-specific styling from the outside (parent document).
+			syncCanvasIframeBreakpointClasses(iframe, deviceType);
 
 			// Get the editor wrapper (body element of the editor iframe).
 			let editorWrapper = document.querySelector(
@@ -163,29 +203,69 @@ export const BreakpointsUI = ({
 
 	const selectedBlock = getSelectedBlock();
 
-	const updateSelectedBlock = (device: string) => {
-		// Check if a block is selected.
-		if (selectedBlock) {
-			// Update the block attributes.
-			const updatedAttributes = {
-				blockeraCurrentDevice: device,
-			};
+	const updateSelectedBlock = useCallback(
+		(device: string) => {
+			// Check if a block is selected.
+			if (selectedBlock) {
+				// Update the block attributes.
+				const updatedAttributes = {
+					blockeraCurrentDevice: device,
+				};
 
-			// Dispatch an action to update the selected block.
-			updateBlockAttributes(selectedBlock.clientId, updatedAttributes);
-		}
-	};
+				// Dispatch an action to update the selected block.
+				updateBlockAttributes(
+					selectedBlock.clientId,
+					updatedAttributes
+				);
+			}
+		},
+		[selectedBlock, updateBlockAttributes]
+	);
 
-	const handleOnClick = (device: string): void => {
-		// Updating the device type by WordPress Core api.
-		updateDeviceType(device);
+	const handleOnClick = useCallback(
+		(device: string): void => {
+			// Updating the device type by WordPress Core api.
+			updateDeviceType(device);
 
-		// Updating the extension current block state breakpoint global state.
-		changeExtensionCurrentBlockStateBreakpoint(device);
+			// Updating the extension current block state breakpoint global state.
+			changeExtensionCurrentBlockStateBreakpoint(device);
 
-		// Updating the selected block blockeraCurrentDevice attribute.
-		updateSelectedBlock(device);
-	};
+			// Updating the selected block blockeraCurrentDevice attribute.
+			updateSelectedBlock(device);
+		},
+		[
+			updateDeviceType,
+			changeExtensionCurrentBlockStateBreakpoint,
+			updateSelectedBlock,
+		]
+	);
+
+	useEffect(() => {
+		const handleMessage = (event: MessageEvent): void => {
+			const data = event.data;
+			if (!data || data.type !== 'BLOCKERA_BREAKPOINT_RESET_TO_BASE') {
+				return;
+			}
+			const base = getBaseBreakpoint();
+
+			// Use the same switching path as a real icon click:
+			// - update global device type + extension state + selected block
+			handleOnClick(base);
+
+			// - also update the picked-breakpoints local state via the registered updaters,
+			//   so the active icon/indicator immediately reflects the new breakpoint.
+			const editorSelect = (select('blockera/editor'): any);
+			if (editorSelect?.updateDeviceIndicator) {
+				editorSelect.updateDeviceIndicator(base);
+			}
+			if (editorSelect?.updatePickedDeviceType) {
+				editorSelect.updatePickedDeviceType(base);
+			}
+		};
+
+		window.addEventListener('message', handleMessage);
+		return () => window.removeEventListener('message', handleMessage);
+	}, [handleOnClick]);
 
 	const baseBreakpoint = getBaseBreakpoint();
 	let breakpoints = getBreakpoints();
