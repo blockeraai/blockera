@@ -26,6 +26,7 @@
 - Text Orientation Feature: improve label for options.
 
 ### Bug Fixes
+- Border radius from WordPress core: bare zero values (for example `0`) are now normalized to explicit lengths like `0px` when syncing into Blockera, so corner radius controls and generated CSS stay consistent with how border widths are handled.
 - Cursor feature: Fix pointer option icon and improve auto icon.
 
 ### Automated Tests
