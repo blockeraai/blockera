@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isEmpty, isUndefined } from '@blockera/utils';
+import { isEmpty, isUndefined, normalizeCssLengthValue } from '@blockera/utils';
 import {
 	getSpacingVAFromVarString,
 	generateAttributeVarStringFromVA,
@@ -14,6 +14,22 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
  * Internal dependencies
  */
 import { runInsideBlockInspector } from '../../utils';
+
+function mapPositionInsetFromWP(raw: mixed): ValueAddon | string {
+	let asString: string;
+	if (typeof raw === 'number') {
+		asString = `${raw}px`;
+	} else if (typeof raw === 'string') {
+		asString = raw;
+	} else {
+		asString = String(raw);
+	}
+	const converted = getSpacingVAFromVarString(asString);
+	if (converted && typeof converted === 'object' && converted.isValueAddon) {
+		return converted;
+	}
+	return normalizeCssLengthValue(converted);
+}
 
 export function positionFromWPCompatibility({
 	attributes,
@@ -42,22 +58,22 @@ export function positionFromWPCompatibility({
 	) {
 		let top: ValueAddon | string = '';
 		if (positionData?.top) {
-			top = getSpacingVAFromVarString(positionData?.top);
+			top = mapPositionInsetFromWP(positionData.top);
 		}
 
 		let right: ValueAddon | string = '';
 		if (positionData?.right) {
-			right = getSpacingVAFromVarString(positionData?.right);
+			right = mapPositionInsetFromWP(positionData.right);
 		}
 
 		let bottom: ValueAddon | string = '';
 		if (positionData?.bottom) {
-			bottom = getSpacingVAFromVarString(positionData?.bottom);
+			bottom = mapPositionInsetFromWP(positionData.bottom);
 		}
 
 		let left: ValueAddon | string = '';
 		if (positionData?.left) {
-			left = getSpacingVAFromVarString(positionData?.left);
+			left = mapPositionInsetFromWP(positionData.left);
 		}
 
 		attributes.blockeraPosition = {
