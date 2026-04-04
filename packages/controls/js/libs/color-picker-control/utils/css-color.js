@@ -202,7 +202,10 @@ export function valueCleanupColorString(value: string): string {
 		hexBody.length !== 6 &&
 		hexBody.length !== 8
 	) {
-		return '#' + hexBody.toLowerCase();
+		const lower = hexBody.toLowerCase();
+		// Do not prepend "#" unless the user typed it: a lone "c" is the start of
+		// "currentColor", not "#c" hex.
+		return trimmed.startsWith('#') ? '#' + lower : lower;
 	}
 	const hexTc = tinycolor(hexNorm);
 	if (hexTc.isValid()) {

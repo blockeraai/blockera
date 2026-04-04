@@ -13,6 +13,7 @@
 - Tabs Control: improved performance when switching between tabs for a smoother experience.
 
 ### Bug Fixes
+- Color picker: fixed a stray "#" being added when typing CSS keywords such as `currentColor` (incomplete hex-like prefixes no longer force a hash unless you type one).
 - Color picker: fixed hex input being rewritten while typing (for example six-digit colors turning into the wrong value).
 - Fixed an issue where icons weren't updating properly when changed.
 - Fixed variable picker design issue while variable names were too long.
