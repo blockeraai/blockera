@@ -385,8 +385,10 @@ describe('Column Block', () => {
 	});
 
 	it('Make sure that the column uses flex-basis for width', () => {
-		appendBlocks(`<!-- wp:columns -->
-<div class="wp-block-columns"><!-- wp:column -->
+		// Avoid core's max-width:781px stack rule (flex-basis:100%), which breaks
+		// in CI when the editor canvas is narrower than the medium breakpoint.
+		appendBlocks(`<!-- wp:columns {"isStackedOnMobile":false} -->
+<div class="wp-block-columns is-not-stacked-on-mobile"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:paragraph -->
 <p>Paragraph in column 1</p>
 <!-- /wp:paragraph --></div>
