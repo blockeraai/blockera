@@ -586,7 +586,7 @@ export const StyleItem = ({
 													</div>
 												);
 											})}
-										<div className="blockera-style-item-multiple-blocks__item">
+										<div className="blockera-style-item-multiple-blocks__item item-count">
 											{activeInBlocks.length}
 										</div>
 									</Flex>
