@@ -17,7 +17,7 @@ describe('Breakpoints Functionalities', () => {
 	it('should can not add new or delete breakpoint', () => {
 		cy.getByDataTest('add-new-breakpoint').click();
 
-		cy.get('.components-popover')
+		cy.get('.blockera-component-upgrade-prompt')
 			.eq(0)
 			.within(() => {
 				cy.get('a').contains('Upgrade to PRO').should('be.visible');
