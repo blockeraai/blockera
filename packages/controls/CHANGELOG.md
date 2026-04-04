@@ -1,6 +1,7 @@
 ## Unreleased
 
 ### Improvements
+- Color indicator: contextual CSS color keywords (such as transparent, currentColor, and inherit) now use a striped swatch with a short badge instead of a misleading solid fill.
 - Color picker: added a color value field for hex, rgb(), named colors, and CSS variables, with a more compact saturation area in the sketch panel.
 - Enhance the design of the image uploader control.
 - Enhance the design of the icon control.

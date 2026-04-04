@@ -63,6 +63,22 @@ export const Color = {
 					<ColorIndicator size="30" value="" />
 				</Flex>
 			</Flex>
+
+			<Flex direction="column" gap="15px">
+				<h2 className="story-heading">
+					Color → Contextual keywords (stripes + badge)
+				</h2>
+				<Flex direction="row" gap="16px" style={{ flexWrap: 'wrap' }}>
+					<ColorIndicator value="transparent" />
+					<ColorIndicator value="currentColor" />
+					<ColorIndicator value="inherit" />
+					<ColorIndicator value="unset" />
+					<ColorIndicator value="initial" />
+					<ColorIndicator value="revert" />
+					<ColorIndicator value="revert-layer" />
+					<ColorIndicator value="currentColor" size={24} />
+				</Flex>
+			</Flex>
 		</Flex>
 	),
 	decorators: [WithInspectorStyles, ...SharedDecorators],
