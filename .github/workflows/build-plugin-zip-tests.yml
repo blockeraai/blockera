@@ -72,6 +72,12 @@ jobs:
                   cp -r ./node_modules ./build/blockera
                   cp ./cypress.config.js ./build/blockera
                   cp -r ./packages/dev-cypress ./build/blockera/packages
+                  # Cypress webpack aliases resolve to packages/editor/.../testIds.ts; the zip
+                  # extract does not include source packages, so mirror the minimal files.
+                  mkdir -p ./build/blockera/packages/editor/js/tabs/constants
+                  mkdir -p ./build/blockera/packages/editor/js/preview-mode/constants
+                  cp ./packages/editor/js/tabs/constants/testIds.ts ./build/blockera/packages/editor/js/tabs/constants/
+                  cp ./packages/editor/js/preview-mode/constants/testIds.ts ./build/blockera/packages/editor/js/preview-mode/constants/
                   find ./packages/ -type f \( -name "*.build.e2e.cy.js" \) -exec cp {} ./build/blockera/packages/blockera/tests \;
 
             - name: Setup and Run E2E tests on Blockera build
