@@ -29,6 +29,7 @@ import { type T_STYLE_ITEM_PROPS } from './types';
 import { StyleItemMenu } from './style-item-menu';
 import { useBlockStyleItem } from './use-block-style-item';
 import { useUserCan } from '../../../../hooks/use-user-can';
+import { STORE_NAME as BLOCKERA_EDITOR_STORE } from '../../../../store/constants';
 import {
 	useGlobalStylesPanelContext,
 	useBlockStylesPickerContext,
@@ -70,7 +71,7 @@ export const StyleItem = ({
 	} = useGlobalStylesPanelContext();
 	const initializedCachedStyle = useSelect(
 		(select) => {
-			const storeSelect = select('blockera/editor');
+			const storeSelect = select(BLOCKERA_EDITOR_STORE);
 			if (!storeSelect) {
 				return {};
 			}
@@ -189,22 +190,16 @@ export const StyleItem = ({
 		);
 	}, []);
 
-	// Outside GlobalStylesPanelContextProvider the context `getStyleVariationBlocks`
-	// defaults to `() => []`. In that case, read from the editor store so the
-	// "used in multiple blocks" indicator works consistently.
+	// Must read via the `select` argument so useSelect subscribes to the store.
+	// Calling context's getStyleVariationBlocks here (global styles path) bypasses
+	// registry.__unstableMarkListeningStores, so the row would not re-render after save.
 	const activeInBlocks = useSelect(
 		(select) => {
-			// Prefer store outside global styles panel.
-			if (!inGlobalStylesPanel) {
-				const fn = select('blockera/editor')?.getStyleVariationBlocks;
-				const fromStore = fn ? fn(style.name) : null;
-				return Array.isArray(fromStore) ? fromStore : [];
-			}
-
-			const fromContext = getStyleVariationBlocks(style.name);
-			return Array.isArray(fromContext) ? fromContext : [];
+			const fn = select(BLOCKERA_EDITOR_STORE)?.getStyleVariationBlocks;
+			const fromStore = fn ? fn(style.name) : null;
+			return Array.isArray(fromStore) ? fromStore : [];
 		},
-		[style.name, inGlobalStylesPanel, getStyleVariationBlocks]
+		[style.name]
 	);
 
 	const usageForMultipleBlocksTooltipText = useMemo(() => {
