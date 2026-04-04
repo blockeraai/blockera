@@ -89,6 +89,31 @@ describe('testing control context provider and related hooks', () => {
 		expect(result.current.value).toBe(10);
 	});
 
+	it('should retrieve scalar saved value when id path does not apply (e.g. root color + legacy id)', () => {
+		const wrapper = ({ children }) => (
+			<ControlContextProvider
+				value={{
+					name: getControlId(),
+					value: '#eeeeee',
+				}}
+			>
+				{children}
+			</ControlContextProvider>
+		);
+		const { result } = renderHook(
+			() =>
+				useControlContext({
+					id: 'x.y',
+					defaultValue: '#283f8a',
+				}),
+			{
+				wrapper,
+			}
+		);
+
+		expect(result.current.value).toBe('#eeeeee');
+	});
+
 	it('should retrieve defaultValue when id is valid, value is undefined, and defaultValue is defined', () => {
 		const wrapper = ({ children }) => (
 			<ControlContextProvider

@@ -315,6 +315,17 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			return prep;
 		}
 
+		// `prepare` only traverses objects/arrays. Scalar saved values (e.g. a root-level
+		// color string) must not be replaced by defaultValue when `id` does not apply.
+		const scalarType = typeof currentValue;
+		if (
+			scalarType === 'string' ||
+			scalarType === 'number' ||
+			scalarType === 'boolean'
+		) {
+			return currentValue;
+		}
+
 		return defaultValue;
 	}
 
@@ -454,7 +465,14 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		setValue: (value, _ref = undefined) => {
 			setValue(value, _ref || ref);
 
-			modifyValue(value);
+			// Keep store in sync with what onChange receives (valueCleanup output). Nested
+			// controls (e.g. ColorPicker inside ColorControl) otherwise overwrite a cleaned
+			// value with the raw input on the second modifyValue call.
+			const storeValue =
+				typeof valueCleanup === 'function'
+					? valueCleanup(value)
+					: value;
+			modifyValue(storeValue);
 
 			resetRef();
 		},
