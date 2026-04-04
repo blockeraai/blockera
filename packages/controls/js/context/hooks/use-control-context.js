@@ -315,13 +315,18 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 			return prep;
 		}
 
-		// `prepare` only traverses objects/arrays. Scalar saved values (e.g. a root-level
-		// color string) must not be replaced by defaultValue when `id` does not apply.
+		// `prepare` only traverses objects/arrays. When it cannot resolve `id`, a scalar
+		// saved value may still be the control's whole value (flat shape). If `id` looks
+		// nested, that scalar cannot live at that path — use defaultValue instead.
 		const scalarType = typeof currentValue;
+		const idLooksNested =
+			typeof id === 'string' &&
+			(id.indexOf('.') !== -1 || id.indexOf('[') !== -1);
 		if (
-			scalarType === 'string' ||
-			scalarType === 'number' ||
-			scalarType === 'boolean'
+			!idLooksNested &&
+			(scalarType === 'string' ||
+				scalarType === 'number' ||
+				scalarType === 'boolean')
 		) {
 			return currentValue;
 		}

@@ -52,7 +52,13 @@ export default function ToggleSelectControl({
 	});
 
 	function valueCleanup(value: any) {
-		return isUndefined(value) ? '' : value;
+		// Keep undefined in the store when deselecting so consumers/tests can tell
+		// "no option" apart from empty string (see isDeselectable).
+		if (isUndefined(value)) {
+			return isDeselectable ? undefined : '';
+		}
+
+		return value;
 	}
 
 	const handleKeyDown = useCallback(
