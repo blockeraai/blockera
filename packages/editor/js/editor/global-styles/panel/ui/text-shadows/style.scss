@@ -1,0 +1,7 @@
+// Inline swatch: text-shadow paints outside the tile; repeater header needs room.
+.blockera-control-repeater-group-header.blockera-text-shadow-preset-opener-header {
+	height: auto;
+	min-height: calc(var(--repeater-item-height, 30px) - 2px);
+	overflow: visible;
+	align-items: center;
+}

@@ -20,7 +20,7 @@ import { Borders } from '../global-styles/panel/ui/borders/index.tsx';
 import { Filters } from './filters';
 import { Transforms } from './transforms';
 import { Transitions } from './transitions';
-import { TextShadows } from './text-shadows';
+import { TextShadows } from '../global-styles/panel/ui/text-shadows/index.tsx';
 import { BorderRadius } from './border-radius';
 import { NavItemButton } from './nav-item-button';
 import { NavItemScreen } from './nav-item-screen';
