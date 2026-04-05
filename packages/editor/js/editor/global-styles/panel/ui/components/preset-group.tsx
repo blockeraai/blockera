@@ -12,7 +12,7 @@ import {
 	BaseControl,
 	RepeaterControl,
 	RepeaterContext,
-	PromotionPopover,
+	UpgradePrompt,
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
 } from '@blockera/controls';
@@ -227,7 +227,7 @@ const Presets = ({
 			}
 
 			return (
-				<PromotionPopover
+				<UpgradePrompt
 					heading={sprintf(
 						/* translators: %s: Preset group title (e.g. Font Sizes, Spacing) */
 						__('Multiple %s', 'blockera'),
