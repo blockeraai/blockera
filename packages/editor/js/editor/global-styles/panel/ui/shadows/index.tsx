@@ -35,8 +35,6 @@ import {
 import { sanitizeShadowPresets, type WpShadowPreset } from './utils';
 import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
 
-import './style.scss';
-
 type ShadowPresetGroup = {
 	defaultPresetValue: ShadowDefaultPresetValue & {
 		slug: string;
