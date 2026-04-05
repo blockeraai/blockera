@@ -6,6 +6,11 @@
 import { isString, isUndefined } from '@blockera/utils';
 import { isSpecialUnit } from '@blockera/controls';
 
+/**
+ * Internal dependencies
+ */
+import { resolveDimensionValueFromWP } from './dimension-variable-from-wp';
+
 export function heightFromWPCompatibility({
 	attributes,
 	blockId,
@@ -23,7 +28,7 @@ export function heightFromWPCompatibility({
 			// Check block-level attribute
 			if (attributes?.height !== undefined) {
 				attributes.blockeraHeight = {
-					value: attributes?.height,
+					value: resolveDimensionValueFromWP(attributes.height),
 				};
 			}
 
@@ -33,7 +38,7 @@ export function heightFromWPCompatibility({
 		case 'core/post-featured-image':
 			if (attributes?.height !== undefined) {
 				attributes.blockeraHeight = {
-					value: attributes?.height,
+					value: resolveDimensionValueFromWP(attributes.height),
 				};
 			}
 
