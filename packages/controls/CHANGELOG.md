@@ -12,6 +12,7 @@
 - Features Labels: design improved.
 - Flex Layout Control: improve design and tooltips to show corresponding CSS values on hover.
 - Tabs Control: improved performance when switching between tabs for a smoother experience.
+- Code Control: Add Prettify button to code control to reformat CSS codes.
 
 ### Bug Fixes
 - Color picker: fixed a stray "#" being added when typing CSS keywords such as `currentColor` (incomplete hex-like prefixes no longer force a hash unless you type one).

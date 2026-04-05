@@ -261,7 +261,7 @@ describe('Block States on inner blocks E2E tests', () => {
 			);
 		});
 
-		it.only('should set attribute in picked inner block at the root of tablet breakpoint', () => {
+		it('should set attribute in picked inner block at the root of tablet breakpoint', () => {
 			initialSetting();
 			setInnerBlock('elements/link');
 			setDeviceType('Tablet');

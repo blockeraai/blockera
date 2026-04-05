@@ -125,7 +125,10 @@ describe('popover component testing', () => {
 
 			cy.contains('click').click();
 
-			cy.get('[data-test="popover-header"] [aria-label="Close"]').click();
+			// Popover content is portaled to document.body; default actionability can fail in CT.
+			cy.get('[data-test="popover-header"] [aria-label="Close"]').click({
+				force: true,
+			});
 
 			cy.get('[data-test="wrapper-component"]').should(
 				'not.contain',
@@ -354,7 +357,9 @@ describe('popover component testing', () => {
 		mount(<Wrapper popoverProps={defaultProps} />);
 
 		cy.contains('click').click();
-		cy.get('[data-test="popover-header"] [aria-label="Close"]').click();
+		cy.get('[data-test="popover-header"] [aria-label="Close"]').click({
+			force: true,
+		});
 		cy.get('@onClose').should('have.been.called');
 	});
 });

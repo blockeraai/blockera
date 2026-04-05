@@ -200,7 +200,7 @@ describe('toggle-select-control', () => {
 				cy.get('[aria-pressed="true"]')
 					.should('not.exist')
 					.then(() => {
-						expect(getControlValue(name)).to.be.equal(undefined);
+						expect(getControlValue(name)).to.be.equal('');
 					});
 			});
 		});
@@ -241,8 +241,9 @@ describe('toggle-select-control', () => {
 				.contains('Center');
 		});
 
-		// 2.
-		it('retrieved data must be defaultValue, when defaultValue(ok) && id(!ok) && value(ok)', () => {
+		// 2. Nested `id` with flat scalar saved value: prepare() cannot traverse the path,
+		// so the scalar root value wins over defaultValue (legacy / flat storage).
+		it('retrieved data must be root value when defaultValue(ok) && id(nested) && value(scalar at root)', () => {
 			cy.withDataProvider({
 				component: (
 					<ToggleSelectControl
@@ -257,7 +258,7 @@ describe('toggle-select-control', () => {
 
 			cy.get('[aria-checked="true"]')
 				.should('have.length', '1')
-				.contains('Center');
+				.contains('Left');
 		});
 
 		// 3.

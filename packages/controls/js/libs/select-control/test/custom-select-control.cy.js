@@ -68,6 +68,9 @@ const defaultProps = {
 
 const getSelectButton = () => cy.get('[aria-haspopup="listbox"]');
 
+/** WP CustomSelectControl (Ariakit) renders a listbox popover as a div, not ul/li. */
+const getOpenListbox = () => cy.get('[role="listbox"][data-open]');
+
 describe('custom select control component testing', () => {
 	beforeEach(() => {
 		cy.viewport(1280, 720);
@@ -89,7 +92,7 @@ describe('custom select control component testing', () => {
 			});
 
 			getSelectButton().click();
-			cy.get('ul').get('li').contains('Border').click();
+			getOpenListbox().find('[role="option"]').contains('Border').click();
 
 			getSelectButton().contains('Border');
 
@@ -108,11 +111,11 @@ describe('custom select control component testing', () => {
 			});
 
 			getSelectButton().click();
-			cy.get('ul')
-				.get('li')
-				.contains('Filter (Disabled)')
-				.should('have.css', 'pointer-events')
-				.should('contain', 'none');
+			// Match the option row, not the inner .item-label span (contains() alone targets descendants).
+			getOpenListbox()
+				.contains('[role="option"]', 'Filter (Disabled)')
+				.should('have.class', 'disabled')
+				.and('have.css', 'pointer-events', 'none');
 
 			//Check data provider value
 			getSelectButton().then(() => {
@@ -391,7 +394,7 @@ describe('custom select control component testing', () => {
 			});
 
 			getSelectButton().click();
-			cy.get('ul').get('li').contains('Border').click();
+			getOpenListbox().find('[role="option"]').contains('Border').click();
 
 			cy.get('@onChange').should('have.been.called');
 		});

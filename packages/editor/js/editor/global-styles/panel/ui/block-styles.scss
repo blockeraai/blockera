@@ -54,6 +54,12 @@
 		fill: #000000 !important;
 		color: #000000 !important;
 	}
+
+	&.item-count {
+		padding: 0 3px;
+		min-width: 18px;
+		width: auto;
+	}
 }
 
 .block-editor-block-styles__item__button.is-active
@@ -265,6 +271,7 @@
 
 			.blockera-feature-type {
 				--item-height: 36px !important;
+				--icon-size: 18px;
 				background-color: #ffffff;
 
 				// Row click toggles selection in block-types.js; current block row omits this class.

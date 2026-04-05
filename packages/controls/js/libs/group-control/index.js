@@ -130,7 +130,9 @@ export default function GroupControl({
 				data-cy="group-control-header"
 				onClick={handleOnClick}
 			>
-				{(injectHeaderButtonsStart || injectHeaderButtonsEnd) && (
+				{(injectHeaderButtonsStart ||
+					injectHeaderButtonsEnd ||
+					(headerOpenButton && actionButtonsType === 'inline')) && (
 					<div
 						className={controlInnerClassNames(
 							'action-buttons',

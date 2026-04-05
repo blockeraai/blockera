@@ -3,7 +3,7 @@
 /**
  * Blockera dependencies
  */
-import { isArray, isEmpty } from '@blockera/utils';
+import { isEmpty } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -29,9 +29,7 @@ export function linkControlValueCleaner(value: LinkControlValue): Object {
 		delete newValue.label;
 	}
 
-	if (isArray(newValue.attributes) && newValue.attributes.length === 0) {
-		delete newValue.attributes;
-	} else {
+	if (isEmpty(newValue.attributes)) {
 		delete newValue.attributes;
 	}
 
