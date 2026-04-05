@@ -7,7 +7,7 @@ import { __, sprintf } from '@wordpress/i18n';
 /**
  * Blockera dependencies
  */
-import { controlInnerClassNames } from '@blockera/classnames';
+import { classNames, controlInnerClassNames } from '@blockera/classnames';
 import { Flex } from '@blockera/controls';
 
 /**
@@ -15,51 +15,33 @@ import { Flex } from '@blockera/controls';
  */
 import type { VariableType } from '../components/types.ts';
 import type { WpShadowPreset } from './utils';
-import {
-	getShadowPresetAccessibilityDescription,
-	truncateShadowCssForHeader,
-} from './utils';
+import { getShadowPresetAccessibilityDescription } from './utils';
+import ShadowPresetPreview from './shadow-preset-preview';
 
 function ShadowPresetOpenerValue({
 	preset,
 }: {
 	preset: WpShadowPreset | undefined;
 }) {
-	const css = String(preset?.shadow ?? '').trim();
-	if (!css) {
-		return <span>{__('EMPTY', 'blockera')}</span>;
-	}
-
 	return (
 		<Flex
 			alignItems="center"
-			gap={8}
 			justifyContent="flex-end"
-			style={{ minWidth: 0, maxWidth: '100%', overflow: 'hidden' }}
+			style={{
+				width: 'fit-content',
+				maxWidth: '100%',
+				minWidth: 0,
+				flexShrink: 0,
+				overflow: 'visible',
+			}}
 		>
-			<div
-				aria-hidden
-				style={{
-					width: 22,
-					height: 22,
-					borderRadius: 4,
-					flexShrink: 0,
-					background: 'var(--wp-admin-theme-color, #3858e9)',
-					boxShadow: css,
-				}}
+			<ShadowPresetPreview
+				shadow={preset?.shadow ?? ''}
+				inline
+				width={12}
+				height={12}
+				borderRadius={0}
 			/>
-			<span
-				style={{
-					fontSize: 11,
-					fontVariantNumeric: 'tabular-nums',
-					overflow: 'hidden',
-					textOverflow: 'ellipsis',
-					whiteSpace: 'nowrap',
-					minWidth: 0,
-				}}
-			>
-				{truncateShadowCssForHeader(css, 44)}
-			</span>
 		</Flex>
 	);
 }
@@ -85,7 +67,10 @@ export function ShadowPresetOpener({
 
 	return (
 		<div
-			className={controlInnerClassNames('repeater-group-header')}
+			className={classNames(
+				controlInnerClassNames('repeater-group-header'),
+				'blockera-shadow-preset-opener-header'
+			)}
 			onClick={(event: React.MouseEvent) =>
 				isOpenPopoverEvent(event) && setOpen(!isOpen)
 			}
@@ -112,7 +97,8 @@ export function ShadowPresetOpener({
 					alignItems: 'center',
 					minWidth: 0,
 					maxWidth: '100%',
-					overflow: 'hidden',
+					// box-shadow draws outside the tile; hidden clips the preview in the opener.
+					overflow: 'visible',
 				}}
 				title={a11y || undefined}
 			>
