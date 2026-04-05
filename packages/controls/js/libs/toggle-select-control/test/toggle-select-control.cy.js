@@ -200,7 +200,7 @@ describe('toggle-select-control', () => {
 				cy.get('[aria-pressed="true"]')
 					.should('not.exist')
 					.then(() => {
-						expect(getControlValue(name)).to.be.equal(undefined);
+						expect(getControlValue(name)).to.be.equal('');
 					});
 			});
 		});
