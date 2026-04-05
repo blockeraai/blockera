@@ -311,6 +311,94 @@ function stringifyBoxShadow(shadowItem: Object): string {
 }
 
 /**
+ * Parse theme.json / CSS box-shadow string into Blockera repeater object shape
+ * (keys like outer-0, inner-1 — same as block blockeraBoxShadow.value).
+ *
+ * @param {string} shadowValue - CSS box-shadow (may include var:preset|shadow|…)
+ * @return {Object} Repeater items map for BoxShadowControl store
+ */
+export function parseCssBoxShadowToRepeaterValue(shadowValue: string): Object {
+	const parsed = parseBoxShadowList(shadowValue || '');
+	const result: { [string]: Object } = {};
+	const typeCounts = { outer: 0, inner: 0 };
+
+	parsed.forEach((p, orderIndex) => {
+		const t = p.type === 'inner' ? 'inner' : 'outer';
+		const idx = typeCounts[t]++;
+		const key = `${t}-${idx}`;
+		result[key] = {
+			type: t,
+			x: p.x,
+			y: p.y,
+			blur: p.blur,
+			spread: p.spread,
+			color: p.color,
+			isVisible: true,
+			order: orderIndex,
+		};
+	});
+
+	return result;
+}
+
+/**
+ * @deprecated Use parseCssBoxShadowToRepeaterValue — BoxShadowControl expects an object map, not an array.
+ */
+export function parseCssBoxShadowToControlItems(
+	shadowValue: string
+): Array<Object> {
+	return Object.values(parseCssBoxShadowToRepeaterValue(shadowValue));
+}
+
+/**
+ * Serialize BoxShadowControl repeater state to a CSS box-shadow string for theme.json.
+ *
+ * @param {?Object|Array<Object>} raw - Repeater items map (or legacy array)
+ * @return {string} Combined CSS value
+ */
+export function formatControlItemsToCssBoxShadow(
+	raw: ?(Object | Array<Object>)
+): string {
+	if (!raw) {
+		return '';
+	}
+
+	if (Array.isArray(raw)) {
+		const visible = raw.filter((item) => item && item.isVisible !== false);
+		if (!visible.length) {
+			return '';
+		}
+		return visible.map((item) => stringifyBoxShadow(item)).join(', ');
+	}
+
+	if (typeof raw !== 'object') {
+		return '';
+	}
+
+	// Block attribute shape: { value: { 'outer-0': … } }
+	let repeaterItems: Object = raw;
+	if (
+		raw.value &&
+		typeof raw.value === 'object' &&
+		!Array.isArray(raw.value)
+	) {
+		const innerKeys = Object.keys(raw.value);
+		if (innerKeys.some((k) => /^(outer|inner)-\d+$/.test(k))) {
+			repeaterItems = raw.value;
+		}
+	}
+
+	const sorted = getSortedRepeater(repeaterItems);
+	const visible = sorted.filter(
+		([, item]) => item && item.isVisible !== false
+	);
+	if (!visible.length) {
+		return '';
+	}
+	return visible.map(([, item]) => stringifyBoxShadow(item)).join(', ');
+}
+
+/**
  * Get all WordPress shadow presets
  *
  * @return {Array<{slug: string, shadow: string}>} Array of preset objects
