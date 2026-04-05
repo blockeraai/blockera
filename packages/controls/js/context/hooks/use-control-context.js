@@ -316,17 +316,13 @@ export const useControlContext = (args?: ControlContextHookProps): Object => {
 		}
 
 		// `prepare` only traverses objects/arrays. When it cannot resolve `id`, a scalar
-		// saved value may still be the control's whole value (flat shape). If `id` looks
-		// nested, that scalar cannot live at that path — use defaultValue instead.
+		// saved value may still be the control's whole value (flat / legacy storage while
+		// the control still declares a nested `id`). Prefer that scalar over defaultValue.
 		const scalarType = typeof currentValue;
-		const idLooksNested =
-			typeof id === 'string' &&
-			(id.indexOf('.') !== -1 || id.indexOf('[') !== -1);
 		if (
-			!idLooksNested &&
-			(scalarType === 'string' ||
-				scalarType === 'number' ||
-				scalarType === 'boolean')
+			scalarType === 'string' ||
+			scalarType === 'number' ||
+			scalarType === 'boolean'
 		) {
 			return currentValue;
 		}
