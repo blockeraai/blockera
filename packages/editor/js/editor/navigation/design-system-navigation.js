@@ -29,6 +29,7 @@ import { initPath } from './blockera-global-styles-navigation';
 import { Spacing } from '../global-styles/panel/ui/spacing/index.tsx';
 import { colorsPanelHandler } from '../global-styles/panel/ui/colors/colors-panel-handler.tsx';
 import { typographyPanelHandler } from '../global-styles/panel/ui/font-sizes/typography-panel-handler.tsx';
+import { shadowsPanelHandler } from '../global-styles/panel/ui/shadows/shadows-panel-handler.tsx';
 
 const designSystemBackLabel = __('Design System', 'blockera');
 
@@ -78,9 +79,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 				className={navItemClassName()}
 				id="shadows-panel"
 				path={'shadows'}
-				onClick={() =>
-					document.querySelector('button[id="/shadows"]')?.click()
-				}
+				onClick={shadowsPanelHandler}
 				icon={<Icon icon="wp-shadows" iconSize={20} />}
 				label={__('Shadows', 'blockera')}
 			/>

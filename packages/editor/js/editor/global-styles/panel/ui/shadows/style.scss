@@ -1,0 +1,9 @@
+.is-open-blockera-shadows-navigation-override {
+
+	.edit-site-global-styles-screen > div {
+
+		& > *:not(.blockera-shadows-presets-navigation) {
+			display: none;
+		}
+	}
+}

@@ -48,6 +48,7 @@ function PathSync() {
 
 		const panelPaths = [
 			'/spacing',
+			'/shadows',
 			'/borders',
 			'/border-radius',
 			'/text-shadows',
