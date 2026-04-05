@@ -16,7 +16,6 @@ import { classNames } from '@blockera/classnames';
  */
 import {
 	PresetGroup,
-	Subtitle,
 	getNewIndexFromPresets,
 	type PresetGroupPropsType,
 	type PresetFieldsPropsResolver,
@@ -329,7 +328,6 @@ export function Spacing({
 					gap="8px"
 					style={{ padding: '12px 16px', width: '100%' }}
 				>
-					<Subtitle level={3}>{__('Spacing', 'blockera')}</Subtitle>
 					<p className="global-styles-ui-header__description">
 						{__(
 							'Create and edit spacing scale presets used for margin, padding, and gap (theme.json spacing.spacingSizes).',
