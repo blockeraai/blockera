@@ -22,53 +22,52 @@ import {
 } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
-import { BorderPresetOpener } from './border-preset-opener';
+import { BorderRadiusPresetOpener } from './border-radius-preset-opener';
 import {
-	BorderPresetSize,
-	type BorderBoxDefaultPresetValue,
-} from './border-preset-size';
+	BorderRadiusSize,
+	type BorderRadiusDefaultPresetValue,
+} from './border-radius-size';
 import { NavItemBackButton } from '../../../../navigation/nav-item-back-button';
 import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
-import {
-	sanitizeBorderBoxPresets,
-	getDefaultBoxBorderValue,
-	type BorderBoxPreset,
-} from './utils';
+import { sanitizeRadiusSizes, type BorderRadiusSizePreset } from './utils';
 
-type BorderBoxPresetGroup = {
-	defaultPresetValue: BorderBoxDefaultPresetValue;
+export type { BorderRadiusDefaultPresetValue };
+
+type BorderRadiusPresetGroup = {
+	defaultPresetValue: BorderRadiusDefaultPresetValue;
 };
 
-type BorderBoxPresetGroupProps = PresetGroupPropsType & BorderBoxPresetGroup;
+type BorderRadiusPresetGroupProps = PresetGroupPropsType &
+	BorderRadiusPresetGroup;
 
-const borderPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
+const borderRadiusPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
 	item,
 	itemId,
 	origin
 ) => ({
 	origin,
-	borderPreset: item,
+	borderRadiusSize: item,
 	presetId: itemId,
 });
 
-const BORDER_PRESET_ADD_MODAL_CONFIG = {
-	headerTitle: __('Add Border Preset', 'blockera'),
+const BORDER_RADIUS_ADD_MODAL_CONFIG = {
+	headerTitle: __('Add Border Radius', 'blockera'),
 	description: __(
-		'Name your new border preset. The ID will be generated from the name and used in your styles.',
+		'Name your new border radius preset. The ID will be generated from the name and used in your styles.',
 		'blockera'
 	),
 	duplicateSlugMessage: __(
-		'This ID is already used by another border preset.',
+		'This ID is already used by another border radius preset.',
 		'blockera'
 	),
-	controlNamePrefix: 'add-border-preset',
+	controlNamePrefix: 'add-border-radius',
 };
 
-function BorderBoxPresetGroupComponent(props: BorderBoxPresetGroupProps) {
+function BorderRadiusPresetGroupComponent(props: BorderRadiusPresetGroupProps) {
 	return <PresetGroup {...props} />;
 }
 
-function BorderPresetGroupComponent({
+function BorderRadiusSizeGroupComponent({
 	sizes,
 	origin,
 	handleUpdateSizes,
@@ -76,7 +75,7 @@ function BorderPresetGroupComponent({
 }: {
 	label: string;
 	origin: string;
-	sizes: BorderBoxPreset[];
+	sizes: BorderRadiusSizePreset[];
 	handleUpdateSizes?: (newValue: Object) => void;
 	handleResetPresets?: () => void;
 }) {
@@ -87,11 +86,11 @@ function BorderPresetGroupComponent({
 	const resetDialogText =
 		origin === 'custom'
 			? __(
-					'Are you sure you want to remove all custom border presets?',
+					'Are you sure you want to remove all custom border radius presets?',
 					'blockera'
 				)
 			: __(
-					'Are you sure you want to reset all border presets to their default values?',
+					'Are you sure you want to reset all border radius presets to their default values?',
 					'blockera'
 				);
 
@@ -100,20 +99,20 @@ function BorderPresetGroupComponent({
 		[sizes]
 	);
 
-	const defaultPresetValue = useMemo((): BorderBoxDefaultPresetValue &
+	const defaultPresetValue = useMemo((): BorderRadiusDefaultPresetValue &
 		VariableType => {
 		return {
-			border: getDefaultBoxBorderValue(),
-			slug: `border-${index}`,
+			size: '4px',
+			slug: `border-radius-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
 			visibilitySupport: !!('custom' === origin),
-			/* translators: %d: border preset index */
-			name: sprintf(__('Border %d', 'blockera'), index) as string,
+			/* translators: %d: border radius preset index */
+			name: sprintf(__('Border radius %d', 'blockera'), index) as string,
 		};
 	}, [origin, index]);
 
-	const controlName = `border-preset-presets-${origin}`;
+	const controlName = `border-radius-presets-${origin}`;
 
 	const handleChange = useCallback(
 		(newValue: Object) => {
@@ -140,78 +139,80 @@ function BorderPresetGroupComponent({
 					onConfirm={handleResetPresets}
 				/>
 			)}
-			<BorderBoxPresetGroupComponent
-				repeaterItemHeader={BorderPresetOpener}
+			<BorderRadiusPresetGroupComponent
+				repeaterItemHeader={BorderRadiusPresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
 				defaultPresetValue={defaultPresetValue}
 				origin={origin}
 				variables={sizes}
-				PresetFields={BorderPresetSize}
-				title={__('Border', 'blockera')}
+				PresetFields={BorderRadiusSize}
+				title={__('Border radius', 'blockera')}
 				label={sprintf(
 					/* translators: %s: Origin name (Theme, Default, or Custom) */
 					__('%s Variables', 'blockera'),
 					pascalCase(origin)
 				)}
-				addVariableModalConfig={BORDER_PRESET_ADD_MODAL_CONFIG}
-				presetFieldsPropsResolver={borderPresetFieldsPropsResolver}
+				addVariableModalConfig={BORDER_RADIUS_ADD_MODAL_CONFIG}
+				presetFieldsPropsResolver={
+					borderRadiusPresetFieldsPropsResolver
+				}
 			/>
 		</>
 	);
 }
 
-const BorderPresetGroup = memo(BorderPresetGroupComponent);
+const BorderRadiusSizeGroup = memo(BorderRadiusSizeGroupComponent);
 
-function BordersPresetContent() {
-	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.theme'
+function BorderRadiusPresetContent() {
+	const [rawThemeRadiusSizes, setThemeRadiusSizes] = useGlobalSetting(
+		'border.radiusSizes.theme'
 	);
 
-	const [baseThemePresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.theme',
+	const [baseThemeRadiusSizes] = useGlobalSetting(
+		'border.radiusSizes.theme',
 		'',
 		'base'
 	);
-	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.default'
+	const [rawDefaultRadiusSizes, setDefaultRadiusSizes] = useGlobalSetting(
+		'border.radiusSizes.default'
 	);
 
-	const [baseDefaultPresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.default',
+	const [baseDefaultRadiusSizes] = useGlobalSetting(
+		'border.radiusSizes.default',
 		'',
 		'base'
 	);
 
-	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.custom'
+	const [rawCustomRadiusSizes = [], setCustomRadiusSizes] = useGlobalSetting(
+		'border.radiusSizes.custom'
 	);
 
-	const themePresets = useMemo(
-		() => sanitizeBorderBoxPresets(rawThemePresets),
-		[rawThemePresets]
+	const themeRadiusSizes = useMemo(
+		() => sanitizeRadiusSizes(rawThemeRadiusSizes),
+		[rawThemeRadiusSizes]
 	);
-	const defaultPresets = useMemo(
-		() => sanitizeBorderBoxPresets(rawDefaultPresets),
-		[rawDefaultPresets]
+	const defaultRadiusSizes = useMemo(
+		() => sanitizeRadiusSizes(rawDefaultRadiusSizes),
+		[rawDefaultRadiusSizes]
 	);
-	const customPresets = useMemo(
-		() => sanitizeBorderBoxPresets(rawCustomPresets),
-		[rawCustomPresets]
+	const customRadiusSizes = useMemo(
+		() => sanitizeRadiusSizes(rawCustomRadiusSizes),
+		[rawCustomRadiusSizes]
 	);
 
 	const convertRepeaterValueToArray = useCallback(
-		(newValue: Object): BorderBoxPreset[] =>
-			sanitizeBorderBoxPresets(
+		(newValue: Object): BorderRadiusSizePreset[] =>
+			sanitizeRadiusSizes(
 				Object.values(
 					newValue as Record<
 						string,
-						BorderBoxPreset & Record<string, unknown>
+						BorderRadiusSizePreset & Record<string, unknown>
 					>
 				).map((value) => ({
 					slug: value.slug,
 					name: value.name,
-					border: value.border,
+					size: value.size,
 				}))
 			),
 		[]
@@ -219,90 +220,90 @@ function BordersPresetContent() {
 
 	const handleUpdateCustomSizes = useCallback(
 		(newValue: Object) => {
-			setCustomPresets(convertRepeaterValueToArray(newValue));
+			setCustomRadiusSizes(convertRepeaterValueToArray(newValue));
 		},
-		[convertRepeaterValueToArray, setCustomPresets]
+		[convertRepeaterValueToArray, setCustomRadiusSizes]
 	);
 
 	const handleUpdateThemeSizes = useCallback(
 		(newValue: Object) => {
-			setThemePresets(convertRepeaterValueToArray(newValue));
+			setThemeRadiusSizes(convertRepeaterValueToArray(newValue));
 		},
-		[convertRepeaterValueToArray, setThemePresets]
+		[convertRepeaterValueToArray, setThemeRadiusSizes]
 	);
 
 	const handleUpdateDefaultSizes = useCallback(
 		(newValue: Object) => {
-			setDefaultPresets(convertRepeaterValueToArray(newValue));
+			setDefaultRadiusSizes(convertRepeaterValueToArray(newValue));
 		},
-		[convertRepeaterValueToArray, setDefaultPresets]
+		[convertRepeaterValueToArray, setDefaultRadiusSizes]
 	);
 
 	const resetThemeToBase = useCallback(() => {
-		setThemePresets(sanitizeBorderBoxPresets(baseThemePresets));
-	}, [setThemePresets, baseThemePresets]);
+		setThemeRadiusSizes(sanitizeRadiusSizes(baseThemeRadiusSizes));
+	}, [setThemeRadiusSizes, baseThemeRadiusSizes]);
 
 	const resetDefaultToBase = useCallback(() => {
-		setDefaultPresets(sanitizeBorderBoxPresets(baseDefaultPresets));
-	}, [setDefaultPresets, baseDefaultPresets]);
+		setDefaultRadiusSizes(sanitizeRadiusSizes(baseDefaultRadiusSizes));
+	}, [setDefaultRadiusSizes, baseDefaultRadiusSizes]);
 
 	const clearCustomSizes = useCallback(() => {
-		setCustomPresets([]);
-	}, [setCustomPresets]);
+		setCustomRadiusSizes([]);
+	}, [setCustomRadiusSizes]);
 
 	const themeResetHandler = useMemo(() => {
-		if (!themePresets?.length) {
+		if (!themeRadiusSizes?.length) {
 			return undefined;
 		}
-		const base = sanitizeBorderBoxPresets(baseThemePresets ?? []);
-		if (isEquals(themePresets, base)) {
+		const base = sanitizeRadiusSizes(baseThemeRadiusSizes ?? []);
+		if (isEquals(themeRadiusSizes, base)) {
 			return undefined;
 		}
 		return resetThemeToBase;
-	}, [themePresets, baseThemePresets, resetThemeToBase]);
+	}, [themeRadiusSizes, baseThemeRadiusSizes, resetThemeToBase]);
 
 	const defaultResetHandler = useMemo(() => {
-		if (!defaultPresets?.length) {
+		if (!defaultRadiusSizes?.length) {
 			return undefined;
 		}
-		const base = sanitizeBorderBoxPresets(baseDefaultPresets ?? []);
-		if (isEquals(defaultPresets, base)) {
+		const base = sanitizeRadiusSizes(baseDefaultRadiusSizes ?? []);
+		if (isEquals(defaultRadiusSizes, base)) {
 			return undefined;
 		}
 		return resetDefaultToBase;
-	}, [defaultPresets, baseDefaultPresets, resetDefaultToBase]);
+	}, [defaultRadiusSizes, baseDefaultRadiusSizes, resetDefaultToBase]);
 
 	const customResetHandler = useMemo(
-		() => (customPresets.length > 0 ? clearCustomSizes : undefined),
-		[customPresets.length, clearCustomSizes]
+		() => (customRadiusSizes.length > 0 ? clearCustomSizes : undefined),
+		[customRadiusSizes.length, clearCustomSizes]
 	);
 
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
-				<BorderPresetGroup
+			{!!themeRadiusSizes?.length && (
+				<BorderRadiusSizeGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
-					sizes={themePresets}
+					sizes={themeRadiusSizes}
 					handleUpdateSizes={handleUpdateThemeSizes}
 					handleResetPresets={themeResetHandler}
 				/>
 			)}
 
-			{!!defaultPresets?.length && (
-				<BorderPresetGroup
+			{!!defaultRadiusSizes?.length && (
+				<BorderRadiusSizeGroup
 					origin="default"
 					label={__('Default', 'blockera')}
-					sizes={defaultPresets}
+					sizes={defaultRadiusSizes}
 					handleUpdateSizes={handleUpdateDefaultSizes}
 					handleResetPresets={defaultResetHandler}
 				/>
 			)}
 
-			<BorderPresetGroup
+			<BorderRadiusSizeGroup
 				origin="custom"
 				label={__('Custom', 'blockera')}
-				sizes={customPresets}
+				sizes={customRadiusSizes}
 				handleUpdateSizes={handleUpdateCustomSizes}
 				handleResetPresets={customResetHandler}
 			/>
@@ -310,7 +311,7 @@ function BordersPresetContent() {
 	);
 }
 
-export function Borders({
+export function BorderRadius({
 	backLabel,
 	closeCallback,
 }: {
@@ -321,7 +322,7 @@ export function Borders({
 		<div
 			className={classNames(
 				'blockera-navigation-panel',
-				'blockera-borders-presets-navigation'
+				'blockera-border-radius-presets-navigation'
 			)}
 		>
 			<NavItemBackButton
@@ -331,7 +332,7 @@ export function Borders({
 			<Flex
 				direction="column"
 				gap="8px"
-				className="blockera-borders-presets"
+				className="blockera-border-radius-presets"
 				style={{ width: '100%' }}
 			>
 				<Flex
@@ -341,7 +342,7 @@ export function Borders({
 				>
 					<p className="global-styles-ui-header__description">
 						{__(
-							'Create and edit reusable border presets for the site (settings.custom.blockera.borderPresets).',
+							'Create and edit border radius presets used in the editor (theme.json border.radiusSizes).',
 							'blockera'
 						)}
 					</p>
@@ -351,11 +352,11 @@ export function Borders({
 					direction="column"
 					style={{ padding: '0 16px', width: '100%' }}
 				>
-					<BordersPresetContent />
+					<BorderRadiusPresetContent />
 				</Flex>
 			</Flex>
 		</div>
 	);
 }
 
-export default Borders;
+export default BorderRadius;
