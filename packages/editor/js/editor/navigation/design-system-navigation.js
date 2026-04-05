@@ -16,7 +16,6 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Spacing } from './spacing';
 import { Borders } from './borders';
 import { Filters } from './filters';
 import { Transforms } from './transforms';
@@ -27,6 +26,7 @@ import { NavItemButton } from './nav-item-button';
 import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
+import { Spacing } from '../global-styles/panel/ui/spacing/index.tsx';
 import { colorsPanelHandler } from '../global-styles/panel/ui/colors/colors-panel-handler.tsx';
 import { typographyPanelHandler } from '../global-styles/panel/ui/font-sizes/typography-panel-handler.tsx';
 

@@ -55,6 +55,7 @@ function PathSync() {
 			'/transitions',
 			'/filters',
 		];
+
 		if (panelPaths.includes(path)) {
 			root.classList.add(blockeraNavPanelClassname);
 		} else {
