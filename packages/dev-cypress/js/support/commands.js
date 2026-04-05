@@ -1106,6 +1106,77 @@ export const registerCommands = () => {
 	});
 
 	/**
+	 * Add-tab palette: type a search string and activate the first visible command result.
+	 * Use for opening templates / pages from the palette (locale-safe search depends on the string).
+	 *
+	 * @param {string} searchText Palette filter text (e.g. template slug from REST).
+	 */
+	Cypress.Commands.add('tabsAddTabFromPaletteSearch', (searchText) => {
+		cy.tabsOpenAddPalette();
+		cy.get('.commands-command-menu [cmdk-input]', { timeout: 20000 })
+			.should('be.visible')
+			.type('{selectall}{backspace}' + searchText, { delay: 40 });
+		cy.get('.commands-command-menu [cmdk-item]', { timeout: 20000 })
+			.filter(':visible')
+			.not('[aria-disabled="true"]')
+			.first()
+			.click({ force: true });
+	});
+
+	/**
+	 * Fetches `wp_template` records via REST (editor must be loaded). Yields `{ id, slug, title }`.
+	 * Requires a block theme.
+	 */
+	Cypress.Commands.add('tabsRestGetSampleTemplate', () => {
+		return cy.window().then((win) => {
+			const apiFetch = win.wp?.apiFetch;
+
+			if (!apiFetch) {
+				throw new Error(
+					'wp.apiFetch is required (open the block editor first).'
+				);
+			}
+
+			return apiFetch({
+				path: '/wp/v2/templates?context=edit&per_page=40',
+			}).then((items) => {
+				if (!Array.isArray(items) || items.length === 0) {
+					throw new Error(
+						'No templates from GET /wp/v2/templates (block theme required).'
+					);
+				}
+
+				const preferSlugs = ['index', 'page', 'archive', 'single'];
+				let chosen = null;
+
+				for (const s of preferSlugs) {
+					chosen = items.find((t) => t.slug === s);
+
+					if (chosen) {
+						break;
+					}
+				}
+
+				if (!chosen) {
+					chosen = items[0];
+				}
+
+				const rawTitle = chosen.title;
+				const title =
+					typeof rawTitle === 'string'
+						? rawTitle
+						: rawTitle?.rendered?.replace(/<[^>]+>/g, '') || '';
+
+				return {
+					id: chosen.id,
+					slug: chosen.slug,
+					title: title.trim(),
+				};
+			});
+		});
+	});
+
+	/**
 	 * Joins Cypress `testURL` with a path (same rules as `goTo` in site-navigation).
 	 * @param {string} path Path starting with `/` e.g. `/wp-admin/post.php`
 	 */
@@ -1255,6 +1326,30 @@ export const registerCommands = () => {
 			.first()
 			.should('be.visible')
 			.click();
+	});
+
+	/**
+	 * Activates an unpinned tab whose `test-id` contains `fragment`
+	 * (e.g. `tab--post-`, `tab--wp_template` — matches `blockera-workspace-tab--post-123`).
+	 */
+	Cypress.Commands.add('tabsClickUnpinnedTabMatchingTestId', (fragment) => {
+		cy.get(unpinnedTabRoots, { timeout: 20000 }).then(($els) => {
+			const ids = [...$els].map((el) => el.getAttribute('test-id') || '');
+			const idx = ids.findIndex((id) => id.includes(fragment));
+			expect(idx, `unpinned tab matching "${fragment}"`).to.be.at.least(
+				0
+			);
+			cy.tabsClickUnpinnedByIndex(idx);
+		});
+	});
+
+	/** Asserts `core/editor`’s current post type (retries until it matches). */
+	Cypress.Commands.add('expectCoreEditorPostType', (expected) => {
+		cy.window().should((win) => {
+			const select = win.wp?.data?.select?.('core/editor');
+			const pt = select?.getCurrentPostType?.();
+			expect(pt).to.eq(expected);
+		});
 	});
 
 	/** Activates a pinned tab by zero-based index (left to right within the pinned strip). */
