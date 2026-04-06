@@ -8,6 +8,8 @@ export { default as Animations } from './animations.svg';
 export { default as AriaLabel } from './aria-label.svg';
 export { default as ArrowNewTab } from './arrow-new-tab.svg';
 export { default as Asterisk } from './asterisk.svg';
+export { default as AxisX } from './axis-x.svg';
+export { default as AxisY } from './axis-y.svg';
 export { default as BackgroundImage } from './background-image.svg';
 export { default as BackgroundLinearGradient } from './background-linear-gradient';
 export { default as BackgroundMeshGradient } from './background-mesh-gradient';
