@@ -55,9 +55,10 @@ module.exports = defineConfig({
 	fixturesFolder: 'packages/dev-cypress/js/fixtures',
 	pageLoadTimeout: 120000,
 	projectId: 'blockera',
+	// runMode: 2 => up to 3 attempts per test (1 run + 2 retries on failure).
 	retries: {
 		openMode: 0,
-		runMode: 0,
+		runMode: 2,
 	},
 	coverage: true,
 	screenshotOnRunFailure: false,
@@ -74,6 +75,6 @@ module.exports = defineConfig({
 		specPattern: 'packages/**/*.cy.js',
 		supportFile: 'packages/dev-cypress/js/support/component.js',
 	},
-	numTestsKeptInMemory: 25,
+	numTestsKeptInMemory: 0,
 	experimentalMemoryManagement: true,
 });

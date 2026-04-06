@@ -10,6 +10,7 @@ import { isString } from '@blockera/utils';
  * Internal dependencies
  */
 import {
+	closeWelcomeGuide,
 	hexStringToByte,
 	openBoxSpacingSide,
 	openBoxPositionSide,
@@ -1041,10 +1042,26 @@ export const registerCommands = () => {
 	});
 
 	Cypress.Commands.add('selectFeature', (featureLabel) => {
-		cy.get('.blockera-component-popover-body')
-			.last()
+		// Extension settings popover always uses this class (see ExtensionSettings).
+		cy.get('.extension-settings [data-test="popover-body"]', {
+			timeout: 20000,
+		})
+			.should('be.visible')
 			.within(() => {
-				cy.get('button').contains(featureLabel).click();
+				cy.contains('button', featureLabel).then(($btn) => {
+					// Optional features toggle on each click. We must skip when already
+					// active, or we turn the feature off and the control disappears.
+					//
+					// Do not use SupportItem's `active-item` class: componentClassNames(
+					// 'support-item', { 'active-item': show }) is broken — the object is
+					// not merged (prepareClassName only processes array index 0), so that
+					// class never hits the DOM and would make us always click.
+					const aria = ($btn.attr('aria-label') || '').toLowerCase();
+					if (aria.includes('deactivate')) {
+						return;
+					}
+					cy.wrap($btn).click();
+				});
 			});
 	});
 
@@ -1106,6 +1123,77 @@ export const registerCommands = () => {
 	});
 
 	/**
+	 * Add-tab palette: type a search string and activate the first visible command result.
+	 * Use for opening templates / pages from the palette (locale-safe search depends on the string).
+	 *
+	 * @param {string} searchText Palette filter text (e.g. template slug from REST).
+	 */
+	Cypress.Commands.add('tabsAddTabFromPaletteSearch', (searchText) => {
+		cy.tabsOpenAddPalette();
+		cy.get('.commands-command-menu [cmdk-input]', { timeout: 20000 })
+			.should('be.visible')
+			.type('{selectall}{backspace}' + searchText, { delay: 40 });
+		cy.get('.commands-command-menu [cmdk-item]', { timeout: 20000 })
+			.filter(':visible')
+			.not('[aria-disabled="true"]')
+			.first()
+			.click({ force: true });
+	});
+
+	/**
+	 * Fetches `wp_template` records via REST (editor must be loaded). Yields `{ id, slug, title }`.
+	 * Requires a block theme.
+	 */
+	Cypress.Commands.add('tabsRestGetSampleTemplate', () => {
+		return cy.window().then((win) => {
+			const apiFetch = win.wp?.apiFetch;
+
+			if (!apiFetch) {
+				throw new Error(
+					'wp.apiFetch is required (open the block editor first).'
+				);
+			}
+
+			return apiFetch({
+				path: '/wp/v2/templates?context=edit&per_page=40',
+			}).then((items) => {
+				if (!Array.isArray(items) || items.length === 0) {
+					throw new Error(
+						'No templates from GET /wp/v2/templates (block theme required).'
+					);
+				}
+
+				const preferSlugs = ['index', 'page', 'archive', 'single'];
+				let chosen = null;
+
+				for (const s of preferSlugs) {
+					chosen = items.find((t) => t.slug === s);
+
+					if (chosen) {
+						break;
+					}
+				}
+
+				if (!chosen) {
+					chosen = items[0];
+				}
+
+				const rawTitle = chosen.title;
+				const title =
+					typeof rawTitle === 'string'
+						? rawTitle
+						: rawTitle?.rendered?.replace(/<[^>]+>/g, '') || '';
+
+				return {
+					id: chosen.id,
+					slug: chosen.slug,
+					title: title.trim(),
+				};
+			});
+		});
+	});
+
+	/**
 	 * Joins Cypress `testURL` with a path (same rules as `goTo` in site-navigation).
 	 * @param {string} path Path starting with `/` e.g. `/wp-admin/post.php`
 	 */
@@ -1158,6 +1246,56 @@ export const registerCommands = () => {
 			);
 
 			return Promise.all(requests);
+		});
+	});
+
+	/**
+	 * Permanently deletes a `post` type tab target via REST (`DELETE ...?force=true`).
+	 * Tab key must be `post-{numericId}` (see workspace tab `test-id` suffix).
+	 *
+	 * @param {string} tabKey e.g. `post-42`
+	 */
+	Cypress.Commands.add('tabsTrashPostByTabKey', (tabKey) => {
+		const m = /^post-(\d+)$/.exec(String(tabKey));
+
+		if (!m) {
+			throw new Error(
+				`tabsTrashPostByTabKey: expected tab key "post-{id}", got "${tabKey}"`
+			);
+		}
+
+		const id = m[1];
+		const numericId = Number(id);
+
+		return cy.window().then((win) => {
+			const apiFetch = win.wp?.apiFetch;
+
+			if (!apiFetch) {
+				throw new Error(
+					'wp.apiFetch is required (open the block editor first).'
+				);
+			}
+
+			return apiFetch({
+				path: `/wp/v2/posts/${id}?force=true`,
+				method: 'DELETE',
+			}).then(() => {
+				// Drop cached `getEntityRecord` so tab switch runs a fresh resolve (matches trash in another tab).
+				const dispatch = win.wp?.data?.dispatch('core');
+
+				if (dispatch?.invalidateResolution) {
+					dispatch.invalidateResolution('getEntityRecord', [
+						'postType',
+						'post',
+						numericId,
+					]);
+					dispatch.invalidateResolution('getEntityRecord', [
+						'postType',
+						'post',
+						id,
+					]);
+				}
+			});
 		});
 	});
 
@@ -1249,12 +1387,38 @@ export const registerCommands = () => {
 
 	/** Activates an unpinned tab by zero-based index (left to right). */
 	Cypress.Commands.add('tabsClickUnpinnedByIndex', (index) => {
+		// Post ↔ site-editor switches can surface Core welcome/modals that cover the tab bar.
+		closeWelcomeGuide();
 		cy.get(unpinnedTabRoots)
 			.eq(index)
 			.find('.blockera-tabs-tab-button')
 			.first()
 			.should('be.visible')
 			.click();
+	});
+
+	/**
+	 * Activates an unpinned tab whose `test-id` contains `fragment`
+	 * (e.g. `tab--post-`, `tab--wp_template` — matches `blockera-workspace-tab--post-123`).
+	 */
+	Cypress.Commands.add('tabsClickUnpinnedTabMatchingTestId', (fragment) => {
+		cy.get(unpinnedTabRoots, { timeout: 20000 }).then(($els) => {
+			const ids = [...$els].map((el) => el.getAttribute('test-id') || '');
+			const idx = ids.findIndex((id) => id.includes(fragment));
+			expect(idx, `unpinned tab matching "${fragment}"`).to.be.at.least(
+				0
+			);
+			cy.tabsClickUnpinnedByIndex(idx);
+		});
+	});
+
+	/** Asserts `core/editor`’s current post type (retries until it matches). */
+	Cypress.Commands.add('expectCoreEditorPostType', (expected) => {
+		cy.window().should((win) => {
+			const select = win.wp?.data?.select?.('core/editor');
+			const pt = select?.getCurrentPostType?.();
+			expect(pt).to.eq(expected);
+		});
 	});
 
 	/** Activates a pinned tab by zero-based index (left to right within the pinned strip). */

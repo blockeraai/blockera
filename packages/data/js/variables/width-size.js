@@ -9,7 +9,8 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isUndefined } from '@blockera/utils';
+import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
+import { isString, isUndefined, isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -17,6 +18,7 @@ import { isUndefined } from '@blockera/utils';
 import { STORE_NAME } from '../store';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
+import { generateVariableString, parseVarString } from './utils';
 
 export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
 	function (): Array<VariableItem> | [] {
@@ -75,3 +77,67 @@ export const getWidthSizeBy: (field: string, value: any) => ?VariableItem =
 	memoize(function (field: string, value: any): ?VariableItem {
 		return getWidthSizes().find((item) => item[field] === value);
 	});
+
+export const getWidthSizeVAFromIdString: (
+	value: string
+) => ValueAddon | string = memoize(function (
+	value: string
+): ValueAddon | string {
+	const widthSizeVar = getWidthSize(value);
+
+	if (widthSizeVar) {
+		return {
+			settings: {
+				...widthSizeVar,
+				type: 'width-size',
+				var: generateVariableString({
+					reference: widthSizeVar?.reference || {
+						type: '',
+					},
+					type: 'width-size',
+					id: widthSizeVar?.id || '',
+				}),
+			},
+			name: widthSizeVar?.name || '',
+			isValueAddon: true,
+			valueType: 'variable',
+		};
+	}
+
+	return value;
+});
+
+export const getWidthSizeVAFromVarString: (
+	value: string
+) => ValueAddon | string = memoize(function (
+	value: string
+): ValueAddon | string {
+	if (isString(value)) {
+		const { id, varString } = parseVarString(value, 'width-size');
+
+		if (id) {
+			const widthSizeVA = getWidthSizeVAFromIdString(id);
+
+			if (isObject(widthSizeVA)) {
+				return widthSizeVA;
+			}
+
+			if (widthSizeVA === id && varString) {
+				return {
+					settings: {
+						name: id,
+						id: value,
+						value: `var(${varString})`,
+						type: 'width-size',
+						var: varString,
+					},
+					name: id,
+					isValueAddon: true,
+					valueType: 'variable',
+				};
+			}
+		}
+	}
+
+	return value;
+});

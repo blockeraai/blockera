@@ -369,7 +369,8 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											? 'value'
 											: 'val'
 									}
-									columns="1fr 1.87fr"
+									className="blockera-flex-wrap"
+									columns="1fr 2.5fr"
 									label={__('Flex Wrap', 'blockera')}
 									labelDescription={
 										<>
@@ -484,47 +485,47 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 									}}
 									isDeselectable={true}
 									{...extensionProps.blockeraFlexWrap}
-								/>
-
-								<Button
-									showTooltip={true}
-									tooltipPosition="top"
-									label={__(
-										'Reverse Flex Children Wrapping',
-										'blockera'
-									)}
-									size="extra-small"
-									style={{
-										padding: '6px',
-										width: 'var(--blockera-controls-input-height)',
-										height: 'var(--blockera-controls-input-height)',
-									}}
-									className={
-										values.blockeraFlexWrap?.reverse
-											? 'is-toggle-btn is-toggled'
-											: 'is-toggle-btn'
-									}
-									disabled={
-										values.blockeraFlexWrap.val ===
-											'nowrap' || ''
-									}
-									onClick={() => {
-										handleOnChangeAttributes(
-											'blockeraFlexWrap',
-											{
-												...values.blockeraFlexWrap,
-												reverse:
-													!values.blockeraFlexWrap
-														.reverse,
-											},
-											{
-												ref: undefined,
-											}
-										);
-									}}
 								>
-									<Icon icon="reverse-horizontal" />
-								</Button>
+									<Button
+										showTooltip={true}
+										tooltipPosition="top"
+										label={__(
+											'Reverse Flex Children Wrapping',
+											'blockera'
+										)}
+										size="extra-small"
+										style={{
+											padding: '6px',
+											width: 'var(--blockera-controls-input-height)',
+											height: 'var(--blockera-controls-input-height)',
+										}}
+										className={
+											values.blockeraFlexWrap?.reverse
+												? 'is-toggle-btn is-toggled'
+												: 'is-toggle-btn'
+										}
+										disabled={
+											values.blockeraFlexWrap.val ===
+												'nowrap' || ''
+										}
+										onClick={() => {
+											handleOnChangeAttributes(
+												'blockeraFlexWrap',
+												{
+													...values.blockeraFlexWrap,
+													reverse:
+														!values.blockeraFlexWrap
+															.reverse,
+												},
+												{
+													ref: undefined,
+												}
+											);
+										}}
+									>
+										<Icon icon="reverse-horizontal" />
+									</Button>
+								</ToggleSelectControl>
 							</Flex>
 						</BaseControl>
 					</ControlContextProvider>
@@ -543,6 +544,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 						>
 							<ToggleSelectControl
 								label={__('Align Content', 'blockera')}
+								className="blockera-flex-align-content"
 								labelDescription={
 									<>
 										<p>

@@ -19,6 +19,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { EditorFeatureWrapper } from '../../../../';
+import { DIMENSION_VARIABLE_TYPES } from '../compatibility/dimension-variable-from-wp';
 import { generateExtensionId } from '../../utils';
 import { WidthFill } from './width-fill';
 import type { THandleOnChangeAttributes } from '../../types';
@@ -95,7 +96,7 @@ export const Width: ComponentType<TWidthProps> = ({
 						});
 					}}
 					controlAddonTypes={['variable']}
-					variableTypes={['width-size', 'spacing']}
+					variableTypes={DIMENSION_VARIABLE_TYPES}
 					className={controlInnerClassNames('width-input', className)}
 					{...extensionProps.blockeraWidth}
 				>

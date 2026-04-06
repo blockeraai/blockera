@@ -20,7 +20,10 @@ export interface OpenOrFocusTabParams {
 		status?: string | null
 	) => Promise<boolean>;
 	/** Function to switch documents. */
-	switchDocument: (postType: string, postId: string | number) => void;
+	switchDocument: (
+		postType: string,
+		postId: string | number
+	) => Promise<boolean>;
 	/** Function to prefetch entity before switching. */
 	prefetchEntity: (
 		postType: string | null | undefined,
@@ -28,13 +31,23 @@ export interface OpenOrFocusTabParams {
 	) => Promise<unknown>;
 	/** Current tabs array to check for existing tab. */
 	tabs?: Tab[];
+	/**
+	 * Called when the document cannot be loaded (optional).
+	 * Receives a minimal tab descriptor for labeling; parent may purge workspace state.
+	 */
+	onDocumentInaccessible?: (info: {
+		key: string;
+		type: string;
+		id: string | number;
+		title: string;
+	}) => void;
 }
 
 /**
  * Utility function to open or focus a tab in Blockera Tabs
  *
  * @param params - Parameters object
- * @return Promise that resolves when tab is opened and activated
+ * @return True if the document is now active; false if it could not be opened.
  */
 export async function openOrFocusTab({
 	postType,
@@ -43,28 +56,50 @@ export async function openOrFocusTab({
 	switchDocument,
 	prefetchEntity,
 	tabs = [],
-}: OpenOrFocusTabParams): Promise<void> {
+	onDocumentInaccessible,
+}: OpenOrFocusTabParams): Promise<boolean> {
 	const key = `${postType}-${postId}`;
+
+	const notifyInaccessible = (title: string): void => {
+		onDocumentInaccessible?.({
+			key,
+			type: postType,
+			id: postId,
+			title,
+		});
+	};
 
 	// Check if tab already exists
 	const existingTab = tabs.find((tab) => tab.key === key);
 
 	if (existingTab) {
-		// Tab exists, just activate it
-		switchDocument(postType, postId);
-		return;
+		const displayTitle =
+			typeof existingTab.customTitle === 'string' &&
+			existingTab.customTitle !== ''
+				? existingTab.customTitle
+				: existingTab.title;
+		const ok = await switchDocument(postType, postId);
+		if (!ok) {
+			notifyInaccessible(displayTitle);
+		}
+		return ok;
 	}
 
 	// Tab doesn't exist, create it and activate
-	// Prefetch entity data before switching for instant tab switch
-	await prefetchEntity(postType, postId);
-
-	// Add tab (handles duplicate check internally). Do not navigate if limit blocks add.
-	const added = await addTab(postType, postId);
-	if (!added) {
-		return;
+	const record = await prefetchEntity(postType, postId);
+	if (!record) {
+		notifyInaccessible(`${postType} #${String(postId)}`);
+		return false;
 	}
 
-	// Switch to the new tab
-	switchDocument(postType, postId);
+	const added = await addTab(postType, postId);
+	if (!added) {
+		return false;
+	}
+
+	const ok = await switchDocument(postType, postId);
+	if (!ok) {
+		notifyInaccessible(`${postType} #${String(postId)}`);
+	}
+	return ok;
 }

@@ -543,14 +543,19 @@ describe('Flex Layout → Functionality', () => {
 
 							cy.getByDataTest('matrix-top-left-normal').click();
 
+							// Horizontal = justify-content (index 0), Vertical = align-items (index 1)
 							cy.getParentContainer('Flex Layout').within(() => {
 								cy.get('button[aria-haspopup="listbox"]')
-									.eq(1)
-									.click();
-								cy.get('div[aria-selected="false"] span')
-									.contains('Space Around')
-									.click();
+									.eq(0)
+									.click({ force: true });
 							});
+							cy.get('[role="listbox"]:visible')
+								.last()
+								.within(() => {
+									cy.contains('Space Around').click({
+										force: true,
+									});
+								});
 
 							cy.getBlock('core/paragraph').should(
 								'have.css',
@@ -604,12 +609,16 @@ describe('Flex Layout → Functionality', () => {
 
 							cy.getParentContainer('Flex Layout').within(() => {
 								cy.get('button[aria-haspopup="listbox"]')
-									.eq(1)
-									.click();
-								cy.get('div[aria-selected="false"] span')
-									.contains('Space Between')
-									.click();
+									.eq(0)
+									.click({ force: true });
 							});
+							cy.get('[role="listbox"]:visible')
+								.last()
+								.within(() => {
+									cy.contains('Space Between').click({
+										force: true,
+									});
+								});
 
 							cy.getBlock('core/paragraph').should(
 								'have.css',
@@ -663,12 +672,16 @@ describe('Flex Layout → Functionality', () => {
 
 							cy.getParentContainer('Flex Layout').within(() => {
 								cy.get('button[aria-haspopup="listbox"]')
-									.eq(0)
-									.click();
-								cy.get('div[aria-selected="false"] span')
-									.contains('Stretch')
-									.click();
+									.eq(1)
+									.click({ force: true });
 							});
+							cy.get('[role="listbox"]:visible')
+								.last()
+								.within(() => {
+									cy.contains('Stretch').click({
+										force: true,
+									});
+								});
 
 							cy.getBlock('core/paragraph').should(
 								'have.css',

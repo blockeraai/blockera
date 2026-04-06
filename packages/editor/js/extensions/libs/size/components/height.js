@@ -14,6 +14,7 @@ import { InputControl, ControlContextProvider } from '@blockera/controls';
  * Internal dependencies
  */
 import { EditorFeatureWrapper } from '../../../../';
+import { DIMENSION_VARIABLE_TYPES } from '../compatibility/dimension-variable-from-wp';
 import { generateExtensionId } from '../../utils';
 import type { THandleOnChangeAttributes } from '../../types';
 
@@ -88,7 +89,7 @@ export const Height: ComponentType<THeightProps> = ({
 						});
 					}}
 					controlAddonTypes={['variable']}
-					variableTypes={['width-size', 'spacing']}
+					variableTypes={DIMENSION_VARIABLE_TYPES}
 					className={className}
 					{...extensionProps.blockeraHeight}
 				>

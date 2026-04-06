@@ -3,7 +3,9 @@
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { useMemo, useRef } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { BlockPreview } from '@wordpress/block-editor';
 import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
 
@@ -26,10 +28,12 @@ const SIDEBAR_WIDTH = 235;
 const BlockPreviewPanel = ({
 	name,
 	variation = '',
+	children,
 }: {
 	name: string,
 	variation: string,
-}): Object => {
+	children?: MixedElement,
+}): MixedElement => {
 	const { getAttributes } = useBlockContext();
 
 	// Memoize attributes with deep comparison to prevent unnecessary re-renders
@@ -137,9 +141,22 @@ const BlockPreviewPanel = ({
 		return styles;
 	}, [baseCssStyles, blockPreviewCssStyles]);
 
-	// Early return if no example - avoid rendering work
+	// Same as Gutenberg `inserter/preview-panel` when `example` is absent.
 	if (!blockExample) {
-		return null;
+		return (
+			<div
+				className="edit-site-global-styles__block-preview-panel blockera-block-preview-panel"
+				style={{
+					maxHeight: PREVIEW_HEIGHT,
+					boxSizing: 'initial',
+				}}
+			>
+				<div className="block-editor-inserter__preview-content-missing">
+					{__('No preview available.', 'blockera')}
+				</div>
+				{children}
+			</div>
+		);
 	}
 
 	return (
@@ -156,6 +173,7 @@ const BlockPreviewPanel = ({
 				minHeight={PREVIEW_HEIGHT}
 				additionalStyles={additionalStyles}
 			/>
+			{children}
 		</div>
 	);
 };
