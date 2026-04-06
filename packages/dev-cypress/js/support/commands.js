@@ -1250,6 +1250,56 @@ export const registerCommands = () => {
 	});
 
 	/**
+	 * Permanently deletes a `post` type tab target via REST (`DELETE ...?force=true`).
+	 * Tab key must be `post-{numericId}` (see workspace tab `test-id` suffix).
+	 *
+	 * @param {string} tabKey e.g. `post-42`
+	 */
+	Cypress.Commands.add('tabsTrashPostByTabKey', (tabKey) => {
+		const m = /^post-(\d+)$/.exec(String(tabKey));
+
+		if (!m) {
+			throw new Error(
+				`tabsTrashPostByTabKey: expected tab key "post-{id}", got "${tabKey}"`
+			);
+		}
+
+		const id = m[1];
+		const numericId = Number(id);
+
+		return cy.window().then((win) => {
+			const apiFetch = win.wp?.apiFetch;
+
+			if (!apiFetch) {
+				throw new Error(
+					'wp.apiFetch is required (open the block editor first).'
+				);
+			}
+
+			return apiFetch({
+				path: `/wp/v2/posts/${id}?force=true`,
+				method: 'DELETE',
+			}).then(() => {
+				// Drop cached `getEntityRecord` so tab switch runs a fresh resolve (matches trash in another tab).
+				const dispatch = win.wp?.data?.dispatch('core');
+
+				if (dispatch?.invalidateResolution) {
+					dispatch.invalidateResolution('getEntityRecord', [
+						'postType',
+						'post',
+						numericId,
+					]);
+					dispatch.invalidateResolution('getEntityRecord', [
+						'postType',
+						'post',
+						id,
+					]);
+				}
+			});
+		});
+	});
+
+	/**
 	 * Visits the post editor and seeds `sessionStorage` so `useBulkEditTabs` opens
 	 * `bulkIds` as extra tabs (adds without `evictLastUnpinnedIfAtLimit`).
 	 * @param {number|string} postId Current document post ID.
