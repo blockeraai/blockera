@@ -1,0 +1,7 @@
+// Transition preset header: preview chip can be wider than a single line of text.
+.blockera-control-repeater-group-header.blockera-transition-preset-opener-header {
+	height: auto;
+	min-height: calc(var(--repeater-item-height, 30px) - 2px);
+	overflow: visible;
+	align-items: center;
+}
