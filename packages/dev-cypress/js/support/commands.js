@@ -1042,10 +1042,26 @@ export const registerCommands = () => {
 	});
 
 	Cypress.Commands.add('selectFeature', (featureLabel) => {
-		cy.get('.blockera-component-popover-body')
-			.last()
+		// Extension settings popover always uses this class (see ExtensionSettings).
+		cy.get('.extension-settings [data-test="popover-body"]', {
+			timeout: 20000,
+		})
+			.should('be.visible')
 			.within(() => {
-				cy.get('button').contains(featureLabel).click();
+				cy.contains('button', featureLabel).then(($btn) => {
+					// Optional features toggle on each click. We must skip when already
+					// active, or we turn the feature off and the control disappears.
+					//
+					// Do not use SupportItem's `active-item` class: componentClassNames(
+					// 'support-item', { 'active-item': show }) is broken — the object is
+					// not merged (prepareClassName only processes array index 0), so that
+					// class never hits the DOM and would make us always click.
+					const aria = ($btn.attr('aria-label') || '').toLowerCase();
+					if (aria.includes('deactivate')) {
+						return;
+					}
+					cy.wrap($btn).click();
+				});
 			});
 	});
 
