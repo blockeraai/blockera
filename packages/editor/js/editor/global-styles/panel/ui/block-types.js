@@ -571,7 +571,7 @@ export const BlockTypes = ({
 			</Fill>
 			<Fill name="usage-for-multiple-blocks-actions">
 				<Button
-					variant="secondary"
+					variant="tertiary"
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
@@ -587,7 +587,7 @@ export const BlockTypes = ({
 					{__('Disable all', 'blockera')}
 				</Button>
 				<Button
-					variant="secondary"
+					variant="tertiary"
 					contentAlign="left"
 					className={controlInnerClassNames('action-button')}
 					onClick={() => {
