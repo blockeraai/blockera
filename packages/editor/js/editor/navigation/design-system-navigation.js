@@ -18,7 +18,6 @@ import { extensionClassNames } from '@blockera/classnames';
  */
 import { Borders } from '../global-styles/panel/ui/borders/index.tsx';
 import { Filters } from './filters';
-import { Transforms } from './transforms';
 import { Transitions } from './transitions';
 import { TextShadows } from '../global-styles/panel/ui/text-shadows/index.tsx';
 import { BorderRadius } from './border-radius';
@@ -27,6 +26,7 @@ import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
 import { Spacing } from '../global-styles/panel/ui/spacing/index.tsx';
+import { Transforms } from '../global-styles/panel/ui/transforms/index.tsx';
 import { colorsPanelHandler } from '../global-styles/panel/ui/colors/colors-panel-handler.tsx';
 import { typographyPanelHandler } from '../global-styles/panel/ui/font-sizes/typography-panel-handler.tsx';
 import { shadowsPanelHandler } from '../global-styles/panel/ui/shadows/shadows-panel-handler.tsx';
