@@ -2,13 +2,13 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback, useMemo, memo } from '@wordpress/element';
+import { useCallback, useMemo, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
-import { isEquals, pascalCase } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -17,8 +17,13 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	type PresetGroupPropsType,
-	type PresetFieldsPropsResolver,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	GlobalStylesPanelDescription,
+	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
@@ -28,46 +33,18 @@ import {
 	type TransitionDefaultPresetValue,
 } from './transition-preset-size';
 import { sanitizeTransitionPresets, type WpTransitionPreset } from './utils';
-import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
 import { NavItemBackButton } from '../../../../navigation/nav-item-back-button';
 
 import './style.scss';
 
-type TransitionPresetGroup = {
-	defaultPresetValue: TransitionDefaultPresetValue & {
-		slug: string;
-		name: string;
-	};
-};
+const transitionPresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('transitionPreset');
 
-type TransitionPresetGroupProps = PresetGroupPropsType & TransitionPresetGroup;
-
-const transitionPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin
-) => ({
-	origin,
-	transitionPreset: item,
-	presetId: itemId,
-});
-
-const TRANSITION_PRESET_ADD_MODAL_CONFIG = {
+const TRANSITION_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
 	headerTitle: __('Add Transition Preset', 'blockera'),
-	description: __(
-		'Name your new transition preset. The ID will be generated from the name and used in your styles.',
-		'blockera'
-	),
-	duplicateSlugMessage: __(
-		'This ID is already used by another transition preset.',
-		'blockera'
-	),
+	newPresetTypeLabel: __('transition', 'blockera'),
 	controlNamePrefix: 'add-transition-preset',
-};
-
-function TransitionBoxPresetGroupComponent(props: TransitionPresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+});
 
 function TransitionPresetGroupComponent({
 	sizes,
@@ -81,28 +58,14 @@ function TransitionPresetGroupComponent({
 	handleUpdateSizes?: (newValue: Object) => void;
 	handleResetPresets?: () => void;
 }) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const toggleResetDialog = useCallback(() => {
-		setIsResetDialogOpen((open) => !open);
-	}, []);
-
-	const resetDialogText = useMemo(
-		() =>
-			origin === 'custom'
-				? __(
-						'Are you sure you want to remove all custom transition presets?',
-						'blockera'
-					)
-				: __(
-						'Are you sure you want to reset all transition presets to their default values?',
-						'blockera'
-					),
-		[origin]
-	);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('transition', 'blockera'));
 
 	const index = useMemo(
-		() => getNewIndexFromPresets(sizes, 'custom-'),
+		() => getNewIndexFromPresets(sizes, 'transition-'),
 		[sizes]
 	);
 
@@ -141,19 +104,15 @@ function TransitionPresetGroupComponent({
 	return (
 		<>
 			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetFontSizesDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetPresets}
 				/>
 			)}
-			<TransitionBoxPresetGroupComponent
+			<PresetGroup
 				repeaterItemHeader={TransitionPresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
@@ -162,11 +121,7 @@ function TransitionPresetGroupComponent({
 				variables={sizes}
 				PresetFields={TransitionPresetSize}
 				title={__('Transition', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={TRANSITION_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={transitionPresetFieldsPropsResolver}
 			/>
@@ -359,18 +314,12 @@ export function Transitions({
 				className="blockera-transitions-presets"
 				style={{ width: '100%' }}
 			>
-				<Flex
-					direction="column"
-					gap="8px"
-					style={{ padding: '12px 16px', width: '100%' }}
-				>
-					<p className="global-styles-ui-header__description">
-						{__(
-							'Create and edit transition presets used in transition controls (theme.json settings.transition.presets: slug, name, and items with type, duration, timing, delay per row).',
-							'blockera'
-						)}
-					</p>
-				</Flex>
+				<GlobalStylesPanelDescription>
+					{__(
+						'Create and edit transition presets used for duration, timing, and delay on property changes.',
+						'blockera'
+					)}
+				</GlobalStylesPanelDescription>
 
 				<Flex
 					direction="column"

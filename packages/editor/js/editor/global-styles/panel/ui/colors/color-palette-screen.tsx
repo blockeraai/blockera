@@ -8,12 +8,12 @@ import {
 } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import type { Color } from '@wordpress/global-styles-engine';
-import { useState, useCallback, useMemo, memo } from '@wordpress/element';
+import { useCallback, useMemo, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
-import { pascalCase, isEquals } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -22,13 +22,17 @@ import {
 	PresetGroup,
 	ScreenHeader,
 	getNewIndexFromPresets,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	usePresetResetDialogState,
 } from '../components';
 import { useGetColors } from './use-get-colors';
 import { convertRepeaterValueToColors } from './utils';
-import { type VariableType } from '../components/types';
 import { ColorPresetOpener } from './color-preset-opener';
 import { ColorPresetFields } from './color-preset-fields';
-import ConfirmResetColorsDialog from './confirm-reset-colors-dialog';
 
 interface ColorPaletteScreenProps {
 	onBackHandler: () => void;
@@ -53,15 +57,8 @@ export type DefaultColorPresetValue = {
 	type?: string;
 };
 
-const colorPresetFieldsPropsResolver = (
-	item: VariableType & { color?: string; type?: string },
-	itemId: string | number,
-	origin: string | string[]
-) => ({
-	origin,
-	colorItem: item,
-	presetId: itemId,
-});
+const colorPresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('colorItem');
 
 function ColorGroupComponent({
 	colors,
@@ -71,9 +68,8 @@ function ColorGroupComponent({
 	setDefaultColors,
 	handleResetColors,
 }: ColorGroupProps) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
-
-	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
 	const convertAndSetThemeColors = useCallback(
 		(newValue: Object) =>
@@ -93,16 +89,8 @@ function ColorGroupComponent({
 		[setCustomColors]
 	);
 
-	const resetDialogText =
-		origin === 'custom'
-			? __(
-					'Are you sure you want to remove all custom color presets?',
-					'blockera'
-				)
-			: __(
-					'Are you sure you want to reset all color presets to their default values?',
-					'blockera'
-				);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('color', 'blockera'));
 
 	const index = useMemo(
 		() =>
@@ -130,18 +118,12 @@ function ColorGroupComponent({
 	);
 
 	const addVariableModalConfig = useMemo(
-		() => ({
-			headerTitle: __('Add Color', 'blockera'),
-			description: __(
-				'Name your new color preset. The ID will be generated from the name and used in your styles.',
-				'blockera'
-			),
-			duplicateSlugMessage: __(
-				'This ID is already used by another color preset.',
-				'blockera'
-			),
-			controlNamePrefix: 'add-color',
-		}),
+		() =>
+			buildPresetAddModalConfig({
+				headerTitle: __('Add Color', 'blockera'),
+				newPresetTypeLabel: __('color', 'blockera'),
+				controlNamePrefix: 'add-color',
+			}),
 		[]
 	);
 
@@ -157,19 +139,20 @@ function ColorGroupComponent({
 				convertAndSetCustomColors(newValue);
 			}
 		},
-		[setThemeColors, setDefaultColors, setCustomColors]
+		[
+			origin,
+			convertAndSetThemeColors,
+			convertAndSetDefaultColors,
+			convertAndSetCustomColors,
+		]
 	);
 
 	return (
 		<>
 			{handleResetColors && isResetDialogOpen && (
-				<ConfirmResetColorsDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetColors}
@@ -184,11 +167,7 @@ function ColorGroupComponent({
 				variables={colors}
 				PresetFields={ColorPresetFields}
 				title={__('Color', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={addVariableModalConfig}
 				presetFieldsPropsResolver={colorPresetFieldsPropsResolver}
 			/>
@@ -293,7 +272,7 @@ function ColorPaletteScreen({ onBackHandler }: ColorPaletteScreenProps) {
 				onBack={onBackHandler}
 				title={__('Color palette', 'blockera')}
 				description={__(
-					'Manage and create color variables for use across the site.',
+					'Create and edit palette color presets used for text, backgrounds, and borders.',
 					'blockera'
 				)}
 			/>

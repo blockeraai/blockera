@@ -32,7 +32,7 @@ function LinearGradientsScreen({ onBackHandler }: LinearGradientsScreenProps) {
 				onBack={onBackHandler}
 				title={__('Linear gradient variables', 'blockera')}
 				description={__(
-					'Manage and create linear gradient variables for use across the site.',
+					'Create and edit linear gradient presets used for fills and backgrounds.',
 					'blockera'
 				)}
 			/>

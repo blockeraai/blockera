@@ -8,19 +8,13 @@ import {
 	__experimentalVStack as VStack,
 	__experimentalSpacer as Spacer,
 } from '@wordpress/components';
-import {
-	createPortal,
-	useState,
-	useCallback,
-	useMemo,
-	memo,
-} from '@wordpress/element';
+import { createPortal, useCallback, useMemo, memo } from '@wordpress/element';
 import type { FontSize as FontSizeType } from '@wordpress/global-styles-engine';
 
 /**
  * Blockera dependencies
  */
-import { isEquals, pascalCase } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -29,8 +23,12 @@ import {
 	PresetGroup,
 	ScreenHeader,
 	getNewIndexFromPresets,
-	type PresetGroupPropsType,
-	type PresetFieldsPropsResolver,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	usePresetResetDialogState,
 } from '../components';
 import { FontSize } from './font-size';
 import FontSizesScreen from './font-sizes-screen';
@@ -38,7 +36,6 @@ import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
 import { FontSizePresetOpener } from './font-size-preset-opener';
 import { NavItemScreen } from '../../../../navigation/nav-item-screen';
-import ConfirmResetFontSizesDialog from './confirm-reset-font-sizes-dialog';
 
 const onBackFontSizes = () => {
 	const parent = document.querySelector(
@@ -68,25 +65,14 @@ export type DefaultPresetValue = {
 	fluid: boolean | { min: string; max: string };
 };
 
-type FontSizePresetGroup = {
-	defaultPresetValue: DefaultPresetValue;
-};
-
-type FontSizePresetGroupProps = PresetGroupPropsType & FontSizePresetGroup;
-
-const fontSizePresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin
-) => ({
-	origin,
-	fontSize: item,
-	presetId: itemId,
+const FONT_SIZE_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
+	headerTitle: __('Add Font Size', 'blockera'),
+	newPresetTypeLabel: __('font size', 'blockera'),
+	controlNamePrefix: 'add-font-size',
 });
 
-function FontSizePresetGroup(props: FontSizePresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+const fontSizePresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('fontSize');
 
 function FontSizeGroupComponent({
 	sizes,
@@ -94,23 +80,14 @@ function FontSizeGroupComponent({
 	handleUpdateSizes,
 	handleResetFontSizes,
 }: FontSizeGroupProps) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
-
-	const resetDialogText =
-		origin === 'custom'
-			? __(
-					'Are you sure you want to remove all custom font size presets?',
-					'blockera'
-				)
-			: __(
-					'Are you sure you want to reset all font size presets to their default values?',
-					'blockera'
-				);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('font size', 'blockera'));
 
 	const index = useMemo(
-		() => getNewIndexFromPresets(sizes, 'custom-'),
+		() => getNewIndexFromPresets(sizes, 'font-size-'),
 		[sizes]
 	);
 
@@ -143,19 +120,15 @@ function FontSizeGroupComponent({
 	return (
 		<>
 			{handleResetFontSizes && isResetDialogOpen && (
-				<ConfirmResetFontSizesDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetFontSizes}
 				/>
 			)}
-			<FontSizePresetGroup
+			<PresetGroup
 				repeaterItemHeader={FontSizePresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
@@ -164,11 +137,8 @@ function FontSizeGroupComponent({
 				variables={sizes}
 				PresetFields={FontSize}
 				title={__('Font Size', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
+				addVariableModalConfig={FONT_SIZE_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={fontSizePresetFieldsPropsResolver}
 			/>
 		</>
@@ -321,7 +291,7 @@ function FontSizesEditorScreenShell() {
 				onBack={onBackFontSizes}
 				title={__('Font size presets', 'blockera')}
 				description={__(
-					'Create and edit the presets used for font sizes across the site.',
+					'Create and edit font size presets used for typography across the site.',
 					'blockera'
 				)}
 			/>

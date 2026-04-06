@@ -1,3 +1,10 @@
+export type AddVariableModalConfig = {
+	headerTitle: string;
+	description?: string;
+	duplicateSlugMessage?: string;
+	controlNamePrefix?: string;
+};
+
 export interface VariableType {
 	/**
 	 * The variable slug value.

@@ -23,15 +23,15 @@ import { controlClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { AddVariableModal, getAllVariableSlugs } from '.';
-import type { VariablesType, VariableType } from './types.ts';
+import type {
+	VariablesType,
+	VariableType,
+	AddVariableModalConfig,
+} from './types.ts';
+import { buildPresetAddModalConfig } from './preset-add-modal-config';
 import { Container } from '../../../../../extensions/components';
 
-export type AddVariableModalConfig = {
-	headerTitle: string;
-	description?: string;
-	duplicateSlugMessage?: string;
-	controlNamePrefix?: string;
-};
+export type { AddVariableModalConfig } from './types';
 
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
@@ -89,18 +89,12 @@ type InserterComponentProps = {
 	addVariableModalConfig?: AddVariableModalConfig;
 };
 
-const DEFAULT_ADD_VARIABLE_MODAL_CONFIG: AddVariableModalConfig = {
-	headerTitle: __('Add Font Size', 'blockera'),
-	description: __(
-		'Name your new font size preset. The ID will be generated from the name and used in your styles.',
-		'blockera'
-	),
-	duplicateSlugMessage: __(
-		'This ID is already used by another font size preset.',
-		'blockera'
-	),
-	controlNamePrefix: 'add-font-size',
-};
+const DEFAULT_ADD_VARIABLE_MODAL_CONFIG: AddVariableModalConfig =
+	buildPresetAddModalConfig({
+		headerTitle: __('Add Font Size', 'blockera'),
+		newPresetTypeLabel: __('font size', 'blockera'),
+		controlNamePrefix: 'add-font-size',
+	});
 
 const InserterComponent = ({
 	callback,
@@ -200,6 +194,7 @@ const Presets = ({
 	repeaterItemHeader: RepeaterItemHeader,
 	...props
 }: PresetsProps) => {
+	// Must list variables + defaultPresetValue so the add modal gets fresh name/slug when presets change.
 	const renderInserter = useCallback(
 		(_props: InserterComponentProps) => (
 			<InserterComponent
@@ -209,7 +204,7 @@ const Presets = ({
 				addVariableModalConfig={addVariableModalConfig}
 			/>
 		),
-		[addVariableModalConfig]
+		[addVariableModalConfig, variables, defaultPresetValue]
 	);
 
 	const renderPromo = useCallback(
@@ -269,7 +264,7 @@ const Presets = ({
 				presetFieldsPropsResolver={presetFieldsPropsResolver}
 			/>
 		),
-		[origin, PresetFields]
+		[origin, PresetFields, presetFieldsPropsResolver]
 	);
 
 	return (

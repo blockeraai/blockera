@@ -2,13 +2,13 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback, useMemo, memo } from '@wordpress/element';
+import { useCallback, useMemo, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
-import { isEquals, pascalCase } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -17,8 +17,13 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	type PresetGroupPropsType,
-	type PresetFieldsPropsResolver,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	GlobalStylesPanelDescription,
+	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
@@ -28,45 +33,20 @@ import {
 	type BorderBoxDefaultPresetValue,
 } from './border-preset-size';
 import { NavItemBackButton } from '../../../../navigation/nav-item-back-button';
-import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
 import {
 	sanitizeBorderBoxPresets,
 	getDefaultBoxBorderValue,
 	type BorderBoxPreset,
 } from './utils';
 
-type BorderBoxPresetGroup = {
-	defaultPresetValue: BorderBoxDefaultPresetValue;
-};
+const borderPresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('borderPreset');
 
-type BorderBoxPresetGroupProps = PresetGroupPropsType & BorderBoxPresetGroup;
-
-const borderPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin
-) => ({
-	origin,
-	borderPreset: item,
-	presetId: itemId,
-});
-
-const BORDER_PRESET_ADD_MODAL_CONFIG = {
+const BORDER_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
 	headerTitle: __('Add Border Preset', 'blockera'),
-	description: __(
-		'Name your new border preset. The ID will be generated from the name and used in your styles.',
-		'blockera'
-	),
-	duplicateSlugMessage: __(
-		'This ID is already used by another border preset.',
-		'blockera'
-	),
+	newPresetTypeLabel: __('border', 'blockera'),
 	controlNamePrefix: 'add-border-preset',
-};
-
-function BorderBoxPresetGroupComponent(props: BorderBoxPresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+});
 
 function BorderPresetGroupComponent({
 	sizes,
@@ -80,23 +60,14 @@ function BorderPresetGroupComponent({
 	handleUpdateSizes?: (newValue: Object) => void;
 	handleResetPresets?: () => void;
 }) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
-
-	const resetDialogText =
-		origin === 'custom'
-			? __(
-					'Are you sure you want to remove all custom border presets?',
-					'blockera'
-				)
-			: __(
-					'Are you sure you want to reset all border presets to their default values?',
-					'blockera'
-				);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('border', 'blockera'));
 
 	const index = useMemo(
-		() => getNewIndexFromPresets(sizes, 'custom-'),
+		() => getNewIndexFromPresets(sizes, 'border-'),
 		[sizes]
 	);
 
@@ -128,19 +99,15 @@ function BorderPresetGroupComponent({
 	return (
 		<>
 			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetFontSizesDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetPresets}
 				/>
 			)}
-			<BorderBoxPresetGroupComponent
+			<PresetGroup
 				repeaterItemHeader={BorderPresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
@@ -149,11 +116,7 @@ function BorderPresetGroupComponent({
 				variables={sizes}
 				PresetFields={BorderPresetSize}
 				title={__('Border', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={BORDER_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={borderPresetFieldsPropsResolver}
 			/>
@@ -334,18 +297,12 @@ export function Borders({
 				className="blockera-borders-presets"
 				style={{ width: '100%' }}
 			>
-				<Flex
-					direction="column"
-					gap="8px"
-					style={{ padding: '12px 16px', width: '100%' }}
-				>
-					<p className="global-styles-ui-header__description">
-						{__(
-							'Create and edit reusable border presets for the site (settings.custom.blockera.borderPresets).',
-							'blockera'
-						)}
-					</p>
-				</Flex>
+				<GlobalStylesPanelDescription>
+					{__(
+						'Create and edit border presets used for width, style, and color on boxes.',
+						'blockera'
+					)}
+				</GlobalStylesPanelDescription>
 
 				<Flex
 					direction="column"

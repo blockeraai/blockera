@@ -1,20 +1,14 @@
 /**
  * External dependencies
  */
-import {
-	createPortal,
-	useState,
-	useCallback,
-	useMemo,
-	memo,
-} from '@wordpress/element';
+import { createPortal, useCallback, useMemo, memo } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
-import { isEquals, pascalCase } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -22,8 +16,13 @@ import { isEquals, pascalCase } from '@blockera/utils';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	type PresetGroupPropsType,
-	type PresetFieldsPropsResolver,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	GlobalStylesPanelDescription,
+	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
@@ -33,43 +32,15 @@ import {
 	type ShadowDefaultPresetValue,
 } from './shadow-preset-size';
 import { sanitizeShadowPresets, type WpShadowPreset } from './utils';
-import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
 
-type ShadowPresetGroup = {
-	defaultPresetValue: ShadowDefaultPresetValue & {
-		slug: string;
-		name: string;
-	};
-};
+const shadowPresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('shadowPreset');
 
-type ShadowPresetGroupProps = PresetGroupPropsType & ShadowPresetGroup;
-
-const shadowPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin
-) => ({
-	origin,
-	shadowPreset: item,
-	presetId: itemId,
-});
-
-const SHADOW_PRESET_ADD_MODAL_CONFIG = {
+const SHADOW_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
 	headerTitle: __('Add Shadow Preset', 'blockera'),
-	description: __(
-		'Name your new shadow preset. The ID will be generated from the name and used in your styles.',
-		'blockera'
-	),
-	duplicateSlugMessage: __(
-		'This ID is already used by another shadow preset.',
-		'blockera'
-	),
+	newPresetTypeLabel: __('shadow', 'blockera'),
 	controlNamePrefix: 'add-shadow-preset',
-};
-
-function ShadowBoxPresetGroupComponent(props: ShadowPresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+});
 
 function ShadowPresetGroupComponent({
 	sizes,
@@ -83,23 +54,14 @@ function ShadowPresetGroupComponent({
 	handleUpdateSizes?: (newValue: Object) => void;
 	handleResetPresets?: () => void;
 }) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
-
-	const resetDialogText =
-		origin === 'custom'
-			? __(
-					'Are you sure you want to remove all custom shadow presets?',
-					'blockera'
-				)
-			: __(
-					'Are you sure you want to reset all shadow presets to their default values?',
-					'blockera'
-				);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('shadow', 'blockera'));
 
 	const index = useMemo(
-		() => getNewIndexFromPresets(sizes, 'custom-'),
+		() => getNewIndexFromPresets(sizes, 'shadow-'),
 		[sizes]
 	);
 
@@ -131,19 +93,15 @@ function ShadowPresetGroupComponent({
 	return (
 		<>
 			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetFontSizesDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetPresets}
 				/>
 			)}
-			<ShadowBoxPresetGroupComponent
+			<PresetGroup
 				repeaterItemHeader={ShadowPresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
@@ -152,11 +110,7 @@ function ShadowPresetGroupComponent({
 				variables={sizes}
 				PresetFields={ShadowPresetSize}
 				title={__('Shadow', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={SHADOW_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={shadowPresetFieldsPropsResolver}
 			/>
@@ -332,7 +286,18 @@ function Shadows({ screenSelector }: ShadowsProps) {
 
 	return createPortal(
 		<div className="blockera-shadows-presets-navigation">
-			<ShadowsPresetContent />
+			<GlobalStylesPanelDescription>
+				{__(
+					'Create and edit box shadow presets used for elevation and depth.',
+					'blockera'
+				)}
+			</GlobalStylesPanelDescription>
+			<Flex
+				direction="column"
+				style={{ padding: '0 16px', width: '100%' }}
+			>
+				<ShadowsPresetContent />
+			</Flex>
 		</div>,
 		target
 	);

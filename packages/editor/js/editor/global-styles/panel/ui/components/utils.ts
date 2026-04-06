@@ -332,16 +332,6 @@ export function getFamilyPreviewStyle(family: any): React.CSSProperties {
 }
 
 /**
- * Iterates through the presets array and searches for slugs that start with the specified
- * slugPrefix followed by a numerical suffix. It identifies the highest numerical suffix found
- * and returns one greater than the highest found suffix, ensuring that the new index is unique.
- *
- * @param presets    The array of preset objects, each potentially containing a slug property.
- * @param slugPrefix The prefix to look for in the preset slugs.
- *
- * @return The next available index for a preset with the specified slug prefix, or 1 if no matching slugs are found.
- */
-/**
  * Gets the variation class name for a block style variation.
  *
  * @param variation The variation name.
@@ -354,11 +344,19 @@ export function getVariationClassName(variation: string): string {
 	return `is-style-${variation}`;
 }
 
+/**
+ * Finds slugs matching `slugPrefix` + digits, takes the max numeric suffix, returns next index.
+ * `slugPrefix` is escaped for RegExp (safe for keys like `font-size-`).
+ *
+ * @param presets    Preset objects that may include `slug`.
+ * @param slugPrefix Literal prefix before the numeric suffix (e.g. `spacing-`, `custom-linear-`).
+ */
 export function getNewIndexFromPresets(
 	presets: any[],
 	slugPrefix: string
 ): number {
-	const nameRegex = new RegExp(`^${slugPrefix}([\\d]+)$`);
+	const escapedPrefix = slugPrefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const nameRegex = new RegExp(`^${escapedPrefix}([\\d]+)$`);
 	const highestPresetValue = presets.reduce((currentHighest, preset) => {
 		if (typeof preset?.slug === 'string') {
 			const matches = preset?.slug.match(nameRegex);

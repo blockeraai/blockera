@@ -2,13 +2,13 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback, useMemo, memo } from '@wordpress/element';
+import { useCallback, useMemo, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
-import { isEquals, pascalCase } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -17,8 +17,13 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	type PresetGroupPropsType,
-	type PresetFieldsPropsResolver,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	GlobalStylesPanelDescription,
+	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
@@ -29,43 +34,15 @@ import {
 } from './transform-preset-size';
 import { sanitizeTransformPresets, type WpTransformPreset } from './utils';
 import { NavItemBackButton } from '../../../../navigation/nav-item-back-button';
-import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
 
-type TransformPresetGroup = {
-	defaultPresetValue: TransformDefaultPresetValue & {
-		slug: string;
-		name: string;
-	};
-};
+const transformPresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('transformPreset');
 
-type TransformPresetGroupProps = PresetGroupPropsType & TransformPresetGroup;
-
-const transformPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin
-) => ({
-	origin,
-	transformPreset: item,
-	presetId: itemId,
-});
-
-const TRANSFORM_PRESET_ADD_MODAL_CONFIG = {
+const TRANSFORM_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
 	headerTitle: __('Add Transform Preset', 'blockera'),
-	description: __(
-		'Name your new transform preset. The ID will be generated from the name and used in your styles.',
-		'blockera'
-	),
-	duplicateSlugMessage: __(
-		'This ID is already used by another transform preset.',
-		'blockera'
-	),
+	newPresetTypeLabel: __('transform', 'blockera'),
 	controlNamePrefix: 'add-transform-preset',
-};
-
-function TransformBoxPresetGroupComponent(props: TransformPresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+});
 
 function TransformPresetGroupComponent({
 	sizes,
@@ -79,28 +56,14 @@ function TransformPresetGroupComponent({
 	handleUpdateSizes?: (newValue: Object) => void;
 	handleResetPresets?: () => void;
 }) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const toggleResetDialog = useCallback(() => {
-		setIsResetDialogOpen((open) => !open);
-	}, []);
-
-	const resetDialogText = useMemo(
-		() =>
-			origin === 'custom'
-				? __(
-						'Are you sure you want to remove all custom transform presets?',
-						'blockera'
-					)
-				: __(
-						'Are you sure you want to reset all transform presets to their default values?',
-						'blockera'
-					),
-		[origin]
-	);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('transform', 'blockera'));
 
 	const index = useMemo(
-		() => getNewIndexFromPresets(sizes, 'custom-'),
+		() => getNewIndexFromPresets(sizes, 'transform-'),
 		[sizes]
 	);
 
@@ -139,19 +102,15 @@ function TransformPresetGroupComponent({
 	return (
 		<>
 			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetFontSizesDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetPresets}
 				/>
 			)}
-			<TransformBoxPresetGroupComponent
+			<PresetGroup
 				repeaterItemHeader={TransformPresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
@@ -160,11 +119,7 @@ function TransformPresetGroupComponent({
 				variables={sizes}
 				PresetFields={TransformPresetSize}
 				title={__('2D & 3D Transforms', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={TRANSFORM_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={transformPresetFieldsPropsResolver}
 			/>
@@ -358,18 +313,12 @@ export function Transforms({
 				className="blockera-transforms-presets"
 				style={{ width: '100%' }}
 			>
-				<Flex
-					direction="column"
-					gap="8px"
-					style={{ padding: '12px 16px', width: '100%' }}
-				>
-					<p className="global-styles-ui-header__description">
-						{__(
-							'Create and edit transform presets used in transform controls (theme.json settings.transform.presets: slug, name, and items with move, scale, rotate, and skew rows).',
-							'blockera'
-						)}
-					</p>
-				</Flex>
+				<GlobalStylesPanelDescription>
+					{__(
+						'Create and edit transform presets used for move, scale, rotate, and skew.',
+						'blockera'
+					)}
+				</GlobalStylesPanelDescription>
 
 				<Flex
 					direction="column"

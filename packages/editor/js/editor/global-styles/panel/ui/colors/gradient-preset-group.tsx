@@ -2,13 +2,8 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
 import type { Gradient } from '@wordpress/global-styles-engine';
-
-/**
- * Blockera dependencies
- */
-import { pascalCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -21,8 +16,15 @@ import {
 	filterLinearGradients,
 	filterRadialGradients,
 } from './utils';
-import { PresetGroup, getNewIndexFromPresets } from '../components';
-import ConfirmResetColorsDialog from './confirm-reset-colors-dialog';
+import {
+	PresetGroup,
+	getNewIndexFromPresets,
+	buildPresetAddModalConfig,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	usePresetResetDialogState,
+} from '../components';
 
 export type GradientPresetVariant = 'linear' | 'radial';
 
@@ -85,29 +87,15 @@ export function GradientPresetGroup({
 	const gradientType = isLinear ? 'linear-gradient' : 'radial-gradient';
 	const slugKind = isLinear ? 'linear' : 'radial';
 
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
-	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const dialogForReset = isLinear
-		? __(
-				'Are you sure you want to reset all linear gradient presets to their default values?',
-				'blockera'
-			)
-		: __(
-				'Are you sure you want to reset all radial gradient presets to their default values?',
-				'blockera'
-			);
-	const dialogForRemove = isLinear
-		? __(
-				'Are you sure you want to remove all custom linear gradient presets?',
-				'blockera'
-			)
-		: __(
-				'Are you sure you want to remove all custom radial gradient presets?',
-				'blockera'
-			);
-	const resetDialogText =
-		origin === 'custom' ? dialogForRemove : dialogForReset;
+	const gradientKindPhrase = isLinear
+		? __('linear gradient', 'blockera')
+		: __('radial gradient', 'blockera');
+
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, gradientKindPhrase);
 
 	const index = getNewIndexFromPresets(
 		gradients.map((g) => ({ slug: g.slug })),
@@ -135,32 +123,17 @@ export function GradientPresetGroup({
 				)) as string,
 	};
 
-	const addVariableModalConfig = {
+	const addVariableModalConfig = buildPresetAddModalConfig({
 		headerTitle: isLinear
 			? __('Add Linear Gradient', 'blockera')
 			: __('Add Radial Gradient', 'blockera'),
-		description: isLinear
-			? __(
-					'Name your new linear gradient preset. The ID will be generated from the name and used in your styles.',
-					'blockera'
-				)
-			: __(
-					'Name your new radial gradient preset. The ID will be generated from the name and used in your styles.',
-					'blockera'
-				),
-		duplicateSlugMessage: isLinear
-			? __(
-					'This ID is already used by another linear gradient preset.',
-					'blockera'
-				)
-			: __(
-					'This ID is already used by another radial gradient preset.',
-					'blockera'
-				),
+		newPresetTypeLabel: isLinear
+			? __('linear gradient', 'blockera')
+			: __('radial gradient', 'blockera'),
 		controlNamePrefix: isLinear
 			? 'add-linear-gradient'
 			: 'add-radial-gradient',
-	};
+	});
 
 	const presetFieldsPropsResolver = (
 		item: VariableType,
@@ -203,13 +176,9 @@ export function GradientPresetGroup({
 	return (
 		<>
 			{handleResetGradients && isResetDialogOpen && (
-				<ConfirmResetColorsDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetGradients}
@@ -228,11 +197,7 @@ export function GradientPresetGroup({
 						? __('Linear Gradient', 'blockera')
 						: __('Radial Gradient', 'blockera')
 				}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={addVariableModalConfig}
 				presetFieldsPropsResolver={presetFieldsPropsResolver}
 			/>

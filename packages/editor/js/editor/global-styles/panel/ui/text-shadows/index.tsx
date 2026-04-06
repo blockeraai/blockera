@@ -2,13 +2,13 @@
  * External dependencies
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback, useMemo, memo } from '@wordpress/element';
+import { useCallback, useMemo, memo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import { Flex } from '@blockera/controls';
-import { isEquals, pascalCase } from '@blockera/utils';
+import { isEquals } from '@blockera/utils';
 import { classNames } from '@blockera/classnames';
 
 /**
@@ -17,8 +17,13 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	type PresetGroupPropsType,
-	type PresetFieldsPropsResolver,
+	buildPresetAddModalConfig,
+	createPresetFieldsPropsResolver,
+	ConfirmResetPresetDialog,
+	getOriginResetDialogCopy,
+	getOriginVariablesLabel,
+	GlobalStylesPanelDescription,
+	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../../context/hooks';
 import { type VariableType } from '../components/types';
@@ -28,46 +33,18 @@ import {
 	type TextShadowDefaultPresetValue,
 } from './text-shadow-preset-size';
 import { sanitizeTextShadowPresets, type WpTextShadowPreset } from './utils';
-import ConfirmResetFontSizesDialog from '../font-sizes/confirm-reset-font-sizes-dialog';
 import { NavItemBackButton } from '../../../../navigation/nav-item-back-button';
 
 import './style.scss';
 
-type TextShadowPresetGroup = {
-	defaultPresetValue: TextShadowDefaultPresetValue & {
-		slug: string;
-		name: string;
-	};
-};
+const textShadowPresetFieldsPropsResolver =
+	createPresetFieldsPropsResolver('textShadowPreset');
 
-type TextShadowPresetGroupProps = PresetGroupPropsType & TextShadowPresetGroup;
-
-const textShadowPresetFieldsPropsResolver: PresetFieldsPropsResolver = (
-	item,
-	itemId,
-	origin
-) => ({
-	origin,
-	textShadowPreset: item,
-	presetId: itemId,
-});
-
-const TEXT_SHADOW_PRESET_ADD_MODAL_CONFIG = {
+const TEXT_SHADOW_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
 	headerTitle: __('Add Text Shadow Preset', 'blockera'),
-	description: __(
-		'Name your new text shadow preset. The ID will be generated from the name and used in your styles.',
-		'blockera'
-	),
-	duplicateSlugMessage: __(
-		'This ID is already used by another text shadow preset.',
-		'blockera'
-	),
+	newPresetTypeLabel: __('text shadow', 'blockera'),
 	controlNamePrefix: 'add-text-shadow-preset',
-};
-
-function TextShadowBoxPresetGroupComponent(props: TextShadowPresetGroupProps) {
-	return <PresetGroup {...props} />;
-}
+});
 
 function TextShadowPresetGroupComponent({
 	sizes,
@@ -81,23 +58,14 @@ function TextShadowPresetGroupComponent({
 	handleUpdateSizes?: (newValue: Object) => void;
 	handleResetPresets?: () => void;
 }) {
-	const [isResetDialogOpen, setIsResetDialogOpen] = useState(false);
+	const { isResetDialogOpen, toggleResetDialog } =
+		usePresetResetDialogState();
 
-	const toggleResetDialog = () => setIsResetDialogOpen(!isResetDialogOpen);
-
-	const resetDialogText =
-		origin === 'custom'
-			? __(
-					'Are you sure you want to remove all custom text shadow presets?',
-					'blockera'
-				)
-			: __(
-					'Are you sure you want to reset all text shadow presets to their default values?',
-					'blockera'
-				);
+	const { dialogText: resetDialogText, confirmButtonText } =
+		getOriginResetDialogCopy(origin, __('text shadow', 'blockera'));
 
 	const index = useMemo(
-		() => getNewIndexFromPresets(sizes, 'custom-'),
+		() => getNewIndexFromPresets(sizes, 'text-shadow-'),
 		[sizes]
 	);
 
@@ -129,19 +97,15 @@ function TextShadowPresetGroupComponent({
 	return (
 		<>
 			{handleResetPresets && isResetDialogOpen && (
-				<ConfirmResetFontSizesDialog
+				<ConfirmResetPresetDialog
 					text={resetDialogText}
-					confirmButtonText={
-						origin === 'custom'
-							? __('Remove', 'blockera')
-							: __('Reset', 'blockera')
-					}
+					confirmButtonText={confirmButtonText}
 					isOpen={isResetDialogOpen}
 					toggleOpen={toggleResetDialog}
 					onConfirm={handleResetPresets}
 				/>
 			)}
-			<TextShadowBoxPresetGroupComponent
+			<PresetGroup
 				repeaterItemHeader={TextShadowPresetOpener}
 				onChange={handleChange}
 				controlName={controlName}
@@ -150,11 +114,7 @@ function TextShadowPresetGroupComponent({
 				variables={sizes}
 				PresetFields={TextShadowPresetSize}
 				title={__('Text shadow', 'blockera')}
-				label={sprintf(
-					/* translators: %s: Origin name (Theme, Default, or Custom) */
-					__('%s Variables', 'blockera'),
-					pascalCase(origin)
-				)}
+				label={getOriginVariablesLabel(origin)}
 				addVariableModalConfig={TEXT_SHADOW_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={textShadowPresetFieldsPropsResolver}
 			/>
@@ -347,18 +307,12 @@ export function TextShadows({
 				className="blockera-text-shadows-presets"
 				style={{ width: '100%' }}
 			>
-				<Flex
-					direction="column"
-					gap="8px"
-					style={{ padding: '12px 16px', width: '100%' }}
-				>
-					<p className="global-styles-ui-header__description">
-						{__(
-							'Create and edit text shadow presets used in typography controls (theme.json settings.textShadow.presets, same shape as shadow presets: slug, name, shadow).',
-							'blockera'
-						)}
-					</p>
-				</Flex>
+				<GlobalStylesPanelDescription>
+					{__(
+						'Create and edit text shadow presets used for typography depth and glow.',
+						'blockera'
+					)}
+				</GlobalStylesPanelDescription>
 
 				<Flex
 					direction="column"
