@@ -2,17 +2,27 @@
  * External dependencies
  */
 import {
-	__experimentalHStack as HStack,
-	__experimentalVStack as VStack,
-	__experimentalSpacer as Spacer,
 	__experimentalHeading as Heading,
-	__experimentalView as View,
 	__experimentalText as Text,
 	Navigator,
 } from '@wordpress/components';
 import { isRTL, __ } from '@wordpress/i18n';
 import { chevronRight, chevronLeft } from '@wordpress/icons';
 import { memo } from '@wordpress/element';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/controls';
+
+/** Matches previous `Spacer` paddingX={4} paddingY={3} (16px / 12px). */
+const HEADER_PADDING_STYLE = { padding: '12px 16px' } as const;
+
+/**
+ * Lets the title column absorb remaining row width; `minWidth: 0` allows long
+ * titles to shrink instead of overflowing the flex row.
+ */
+const TITLE_CELL_STYLE = { minWidth: 0 } as const;
 
 interface ScreenHeaderProps {
 	title: string | React.ReactNode;
@@ -26,36 +36,36 @@ function ScreenHeaderComponent({
 	onBack,
 }: ScreenHeaderProps) {
 	return (
-		<VStack spacing={0}>
-			<View>
-				<Spacer marginBottom={0} paddingX={4} paddingY={3}>
-					<VStack spacing={2}>
-						<HStack spacing={2}>
-							<Navigator.BackButton
-								icon={isRTL() ? chevronRight : chevronLeft}
-								size="small"
-								label={__('Back', 'blockera')}
-								onClick={onBack}
-							/>
-							<Spacer>
-								<Heading
-									className="global-styles-ui-header"
-									level={2}
-									size={13}
-								>
-									{title}
-								</Heading>
-							</Spacer>
-						</HStack>
-						{description && (
-							<Text className="global-styles-ui-header__description">
-								{description}
-							</Text>
-						)}
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+		<Flex direction="column" gap="8px" style={HEADER_PADDING_STYLE}>
+			<Flex gap="8px" alignItems="stretch">
+				<Navigator.BackButton
+					icon={
+						(isRTL()
+							? chevronRight
+							: chevronLeft) as React.ComponentProps<
+							typeof Navigator.BackButton
+						>['icon']
+					}
+					size="small"
+					label={__('Back', 'blockera')}
+					onClick={onBack}
+				/>
+				<Flex grow={1} style={TITLE_CELL_STYLE}>
+					<Heading
+						className="global-styles-ui-header"
+						level={2}
+						size={13}
+					>
+						{title}
+					</Heading>
+				</Flex>
+			</Flex>
+			{description && (
+				<Text className="global-styles-ui-header__description">
+					{description}
+				</Text>
+			)}
+		</Flex>
 	);
 }
 
