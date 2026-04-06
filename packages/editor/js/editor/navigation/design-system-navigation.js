@@ -17,7 +17,7 @@ import { extensionClassNames } from '@blockera/classnames';
  * Internal dependencies
  */
 import { Borders } from '../global-styles/panel/ui/borders/index.tsx';
-import { Filters } from './filters';
+import { Filters } from '../global-styles/panel/ui/filters/index.tsx';
 import { Transitions } from './transitions';
 import { TextShadows } from '../global-styles/panel/ui/text-shadows/index.tsx';
 import { BorderRadius } from './border-radius';
