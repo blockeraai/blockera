@@ -27,11 +27,12 @@
 }
 
 .blockera-style-item-multiple-blocks__item {
+	--mb-icon-size: 18px;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 18px;
-	height: 18px;
+	width: var(--mb-icon-size);
+	height: var(--mb-icon-size);
 	border-radius: 3px;
 	border: solid 1px #c4c4c4;
 	line-height: 1.5;
@@ -49,15 +50,15 @@
 	font-weight: 600;
 
 	svg {
-		min-width: 14px;
-		max-width: 14px;
+		min-width: calc(var(--mb-icon-size) - 4px);
+		max-width: calc(var(--mb-icon-size) - 4px);
 		fill: #000000 !important;
 		color: #000000 !important;
 	}
 
 	&.item-count {
 		padding: 0 3px;
-		min-width: 18px;
+		min-width: var(--mb-icon-size);
 		width: auto;
 	}
 }
@@ -81,9 +82,28 @@
 .blockera-style-item-multiple-blocks--block-card-row {
 	position: absolute;
 	right: 16px;
-	top: 46px;
+	top: 44px;
 	z-index: 100;
 	cursor: pointer;
+
+	.blockera-style-item-multiple-blocks__item {
+		--mb-icon-size: 22px;
+	}
+}
+
+// Category shortcut uses the same `__item` chip as the multi-block indicator; this wrapper
+// only collapses it in the list row until hover/focus-within.
+.block-editor-block-styles__item__button
+	.blockera-style-item-usage-category-trigger--list-row {
+	opacity: 0;
+	transition: var(--blockera-controls-transition);
+}
+
+.block-editor-block-styles__item__button:hover
+	.blockera-style-item-usage-category-trigger--list-row,
+.block-editor-block-styles__item__button:focus-within
+	.blockera-style-item-usage-category-trigger--list-row {
+	opacity: 1;
 }
 
 .blockera-component-block-styles {
