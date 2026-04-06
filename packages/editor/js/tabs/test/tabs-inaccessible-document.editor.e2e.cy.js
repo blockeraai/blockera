@@ -12,7 +12,7 @@ import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 
 import { setPostTitleInCanvas } from './workspace-e2e-helpers';
 
-describe('Blockera workspace tabs (inaccessible document)', () => {
+describe('Workspace tabs: Inaccessible document', () => {
 	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 	const readTabKeyFromUnpinnedIndex = (index) => {

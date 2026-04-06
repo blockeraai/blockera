@@ -1,5 +1,5 @@
 /**
- * Shared helpers for `workspace-1` / `workspace-2` editor e2e specs (CI stability).
+ * Shared helpers for tabs/workspace editor e2e specs (CI stability).
  */
 
 /**

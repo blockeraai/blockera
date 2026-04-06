@@ -15,7 +15,7 @@
 import { createPost } from '@blockera/dev-cypress/js/helpers';
 import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 
-describe('Blockera workspace tabs (cross-boundary URL)', () => {
+describe('Workspace tabs: Cross-boundary URL', () => {
 	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 	it('should align site-editor URL and editor entity when switching post ↔ template tabs', () => {

@@ -9,7 +9,7 @@ import { WORKSPACE_TABS_TEST_ID } from 'blockera-editor-tabs-test-ids';
 
 import { setPostTitleInCanvas } from './workspace-e2e-helpers';
 
-describe('Blockera workspace tabs — Pro limits (free tier)', () => {
+describe('Workspace tabs: Recently closed limit (free tier)', () => {
 	const unpinnedTabRoots = `.blockera-tabs-bar-tabs__normal-tabs [test-id^="${WORKSPACE_TABS_TEST_ID.tabRootPrefix}"]`;
 
 	/**
