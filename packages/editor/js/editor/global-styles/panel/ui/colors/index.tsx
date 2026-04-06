@@ -18,6 +18,7 @@ import RadialGradientsScreen from './radial-gradients-screen';
 import { NavItemScreen } from '../../../../navigation/nav-item-screen';
 
 const onBack = () => {
+	document.body.classList.remove('blockera-cleanup-screen-styles');
 	const parent = document.querySelector(
 		'.blockera-colors-preset-inspector-active'
 	);
@@ -32,6 +33,7 @@ const onBack = () => {
 };
 
 const onClick = (event: Event) => {
+	document.body.classList.add('blockera-cleanup-screen-styles');
 	const inspectorWrapper = (event.target as HTMLElement)?.closest(
 		'.blockera-block-inspector-controls-wrapper'
 	);

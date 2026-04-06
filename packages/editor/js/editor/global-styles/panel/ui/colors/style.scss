@@ -1,5 +1,12 @@
 .is-open-blockera-colors-navigation-override {
 
+	&.blockera-cleanup-screen-styles {
+
+		.edit-site-global-styles-screen {
+			margin: 0 !important;
+		}
+	}
+
 	.edit-site-global-styles-screen > div {
 
 		& > *:nth-child(2) {
