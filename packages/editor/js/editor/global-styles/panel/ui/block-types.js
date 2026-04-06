@@ -345,14 +345,15 @@ export const BlockTypes = ({
 
 				setAction('single-enable');
 			} else if ('single-disable' === action) {
-				// `selectedItems` matches the modal toggles (`nextItems`). Metadata-derived
-				// lists can be stale and omit the current block type, which would wrongly put
-				// it in `disabledIn` and strip the variation from the selected block.
+				// `selectedItems` is the post-toggle enabled list (`nextItems`). Only the block
+				// toggled off (`blockType`) belongs in `disabledIn`; marking every other block
+				// type as disabled caused unregisterBlockStyle to run for the whole list.
 				enabledIn = Array.isArray(selectedItems) ? selectedItems : [];
 
-				disabledIn = validItems
-					.filter((block) => !enabledIn.includes(block.name))
-					.map((block) => block.name);
+				disabledIn =
+					blockType && !enabledIn.includes(blockType)
+						? [blockType]
+						: [];
 
 				// Cleanup global styles final object.
 				if (!Object.keys(blocks).length) {
