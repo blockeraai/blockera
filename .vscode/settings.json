@@ -16,7 +16,14 @@
 	"stylelint.configFile": ".stylelintrc.js",
 	"stylelint.snippet": ["css", "scss", "less"],
 	"files.associations": {
-		"*.scss": "scss"
+		"*.scss": "scss",
+		"*.svg": "html"
+	},
+	"xml.validation.enabled": false,
+	"xml.fileAssociations": [],
+	"files.languageDetection": true,
+	"workbench.editorAssociations": {
+		"*.svg": "default"
 	},
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -39,9 +46,10 @@
 	"prettier.configPath": ".prettierrc.js",
 	"prettier.requireConfig": true,
 	"prettier.documentSelectors": [
-		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml}"
+		"**/*.{js,jsx,ts,tsx,json,jsonc,css,scss,less,yaml,yml,svg,xml}"
 	],
 	"prettier.useEditorConfig": false,
+	"prettier.ignorePath": ".prettierignore",
 	"[php]": {
 		"editor.formatOnSave": true,
 		"editor.defaultFormatter": "valeryanm.vscode-phpsab",
@@ -78,7 +86,8 @@
 	"phpstan.errorFormatter": "table",
 	"phpstan.fullMessage": true,
 	"[html]": {
-		"editor.defaultFormatter": "vscode.html-language-features"
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true
 	},
 	"eslint.enable": true,
 	"eslint.validate": [
@@ -136,5 +145,11 @@
 	"[yml]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true
+	},
+	"[svg]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+		"editor.formatOnPaste": false,
+		"editor.formatOnType": false
 	}
 }
