@@ -14,7 +14,9 @@
 		justify-content: center;
 		align-content: center;
 		justify-items: center;
-		transition: all 0.15s linear 0s, color 0.1s linear 0s;
+		transition:
+			all 0.15s linear 0s,
+			color 0.1s linear 0s;
 
 		&:focus-within {
 			border-color: var(--blockera-controls-primary-color) !important;
@@ -98,7 +100,7 @@
 	.blockera-control-select.custom {
 		[role="listbox"] {
 			width: 150px;
-			right: 120px;
+			right: 90px;
 			left: initial;
 
 			li:first-child {
@@ -106,18 +108,18 @@
 			}
 		}
 
-		button {
-			padding: 2px 4px !important;
-			height: var(--blockera-controls-input-height);
-			width: var(--blockera-controls-input-height);
-			justify-content: center;
-		}
+		// button {
+		// 	padding: 2px 4px !important;
+		// 	height: var(--blockera-controls-input-height);
+		// 	width: var(--blockera-controls-input-height);
+		// 	justify-content: center;
+		// }
 
-		&:not(.selected-item-empty) {
-			button {
-				color: var(--blockera-controls-primary-color);
-			}
-		}
+		// &:not(.selected-item-empty) {
+		// 	button {
+		// 		color: var(--blockera-controls-primary-color);
+		// 	}
+		// }
 	}
 
 	&.layout-matrix__align-items-:not(.layout-matrix__justify-content-) {

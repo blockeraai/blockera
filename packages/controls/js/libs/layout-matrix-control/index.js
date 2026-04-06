@@ -168,8 +168,34 @@ export default function LayoutMatrixControl({
 			{...labelProps}
 		>
 			<Flex gap="10px" direction="column">
+				{isDirectionActive && (
+					<ToggleSelectControl
+						id="direction"
+						label=""
+						options={[
+							{
+								label: __('Row', 'blockera'),
+								'aria-label': 'flex-direction: row',
+								value: 'row',
+							},
+							{
+								label: __('Column', 'blockera'),
+								'aria-label': 'flex-direction: column',
+								value: 'column',
+							},
+						]}
+						defaultValue={direction}
+						onChange={(newValue) =>
+							setValue({
+								...value,
+								direction: newValue,
+							})
+						}
+					/>
+				)}
+
 				<Flex
-					gap="10px"
+					gap="12px"
 					direction="row"
 					justifyContent="space-between"
 					className={controlClassNames(
@@ -1187,250 +1213,250 @@ export default function LayoutMatrixControl({
 						)}
 						grow={1}
 					>
-						{isDirectionActive && (
-							<ToggleSelectControl
-								id="direction"
-								label=""
-								options={[
-									{
-										label: __('Row', 'blockera'),
-										'aria-label': 'flex-direction: row',
-										value: 'row',
-									},
-									{
-										label: __('Column', 'blockera'),
-										'aria-label': 'flex-direction: column',
-										value: 'column',
-									},
-								]}
-								defaultValue={direction}
-								onChange={(newValue) =>
-									setValue({
-										...value,
-										direction: newValue,
-									})
-								}
-							/>
-						)}
-
-						<Flex direction="row" justifyContent="flex-start">
-							<Tooltip
-								text={(() => {
-									let label = '';
-									if (matrixType === 'normal') {
-										if (direction === 'row') {
-											label = 'align-items';
-										} else {
-											label = 'justify-content';
-										}
+						<Tooltip
+							text={(() => {
+								let label = '';
+								if (matrixType === 'normal') {
+									if (direction === 'row') {
+										label = 'justify-content';
 									} else {
 										label = 'align-items';
 									}
+								} else {
+									label = 'justify-content';
+								}
 
-									if (value.alignItems) {
-										return label + ': ' + value.alignItems;
-									}
+								if (value.justifyContent) {
+									return label + ': ' + value.justifyContent;
+								}
 
-									return label;
-								})()}
-							>
-								<SelectControl
-									id="alignItems"
-									label=""
-									options={[
-										{
-											label: __('Empty', 'blockera'),
-											value: '',
-											icon: (
-												<Icon
-													icon="flex-align-empty"
-													iconSize="20"
-													data-test="layout-matrix-align-empty"
-												/>
-											),
-										},
-										{
-											label: __('Start', 'blockera'),
-											value: 'flex-start',
-											icon: (
-												<Icon
-													icon="flex-align-start"
-													iconSize="20"
-													data-test="layout-matrix-align-start"
-												/>
-											),
-										},
-										{
-											label: __('Center', 'blockera'),
-											value: 'center',
-											icon: (
-												<Icon
-													icon="flex-align-center"
-													iconSize="20"
-													data-test="layout-matrix-align-center"
-												/>
-											),
-										},
-										{
-											label: __('End', 'blockera'),
-											value: 'flex-end',
-											icon: (
-												<Icon
-													icon="flex-align-end"
-													iconSize="20"
-													data-test="layout-matrix-align-end"
-												/>
-											),
-										},
-										{
-											label: __('Stretch', 'blockera'),
-											value: 'stretch',
-											icon: (
-												<Icon
-													icon="flex-align-stretch"
-													iconSize="20"
-													data-test="layout-matrix-align-stretch"
-												/>
-											),
-										},
-									]}
-									onChange={(newValue) =>
-										setValue({
-											...value,
-											alignItems: newValue,
-										})
-									}
-									type="custom"
-									defaultValue={defaultValue.alignItems}
-									className={classNames(
-										'input-hide-label',
-										'input-hide-caret',
-										'layout-matrix__align-items',
-										'selected-item-' +
-											(value.alignItems || 'empty')
-									)}
-								/>
-							</Tooltip>
+								return label;
+							})()}
+						>
+							<SelectControl
+								id="justifyContent"
+								label={
+									<Icon
+										icon="axis-x"
+										style={{ fill: 'currentColor' }}
+									/>
+								}
+								labelPopoverTitle={__('Horizontal', 'blockera')}
+								labelDescription={
+									<>
+										<p>
+											{__(
+												'Control horizontal spacing and positioning from left to right',
+												'blockera'
+											)}
+										</p>
+									</>
+								}
+								columns="30px 1fr"
+								style={{
+									'--gap': '0',
+								}}
+								options={[
+									{
+										label: __('Empty', 'blockera'),
+										value: '',
+										icon: (
+											<Icon
+												icon="justify-content-empty"
+												iconSize="20"
+												data-test="layout-matrix-justify-empty"
+											/>
+										),
+									},
+									{
+										label: __('Start', 'blockera'),
+										value: 'flex-start',
+										icon: (
+											<Icon
+												icon="justify-content-start"
+												iconSize="20"
+												className="blockera-flex-justify-content-flex-start"
+												data-test="layout-matrix-justify-start"
+											/>
+										),
+									},
+									{
+										label: __('Center', 'blockera'),
+										value: 'center',
+										icon: (
+											<Icon
+												icon="justify-content-center"
+												iconSize="20"
+												data-test="layout-matrix-justify-center"
+											/>
+										),
+									},
+									{
+										label: __('End', 'blockera'),
+										value: 'flex-end',
+										icon: (
+											<Icon
+												icon="justify-content-end"
+												iconSize="20"
+												className="blockera-flex-justify-content-flex-end"
+												data-test="layout-matrix-justify-end"
+											/>
+										),
+									},
+									{
+										label: __('Space Around', 'blockera'),
+										value: 'space-around',
+										icon: (
+											<Icon
+												icon="justify-content-space-around"
+												iconSize="20"
+												data-test="layout-matrix-justify-around"
+											/>
+										),
+									},
+									{
+										label: __('Space Between', 'blockera'),
+										value: 'space-between',
+										icon: (
+											<Icon
+												icon="justify-content-space-between"
+												iconSize="20"
+												data-test="layout-matrix-justify-between"
+											/>
+										),
+									},
+								]}
+								onChange={(newValue) =>
+									setValue({
+										...value,
+										justifyContent: newValue,
+									})
+								}
+								type="custom"
+								defaultValue={defaultValue.justifyContent}
+								className={classNames(
+									'input-hide-label',
+									'layout-matrix__justify-content',
+									'selected-item-' +
+										(value.justifyContent || 'empty')
+								)}
+							/>
+						</Tooltip>
 
-							<Tooltip
-								text={(() => {
-									let label = '';
-									if (matrixType === 'normal') {
-										if (direction === 'row') {
-											label = 'justify-content';
-										} else {
-											label = 'align-items';
-										}
+						<Tooltip
+							text={(() => {
+								let label = '';
+								if (matrixType === 'normal') {
+									if (direction === 'row') {
+										label = 'align-items';
 									} else {
 										label = 'justify-content';
 									}
+								} else {
+									label = 'align-items';
+								}
 
-									if (value.justifyContent) {
-										return (
-											label + ': ' + value.justifyContent
-										);
-									}
+								if (value.alignItems) {
+									return label + ': ' + value.alignItems;
+								}
 
-									return label;
-								})()}
-							>
-								<SelectControl
-									id="justifyContent"
-									label=""
-									options={[
-										{
-											label: __('Empty', 'blockera'),
-											value: '',
-											icon: (
-												<Icon
-													icon="justify-content-empty"
-													iconSize="20"
-													data-test="layout-matrix-justify-empty"
-												/>
-											),
-										},
-										{
-											label: __('Start', 'blockera'),
-											value: 'flex-start',
-											icon: (
-												<Icon
-													icon="justify-content-start"
-													iconSize="20"
-													className="blockera-flex-justify-content-flex-start"
-													data-test="layout-matrix-justify-start"
-												/>
-											),
-										},
-										{
-											label: __('Center', 'blockera'),
-											value: 'center',
-											icon: (
-												<Icon
-													icon="justify-content-center"
-													iconSize="20"
-													data-test="layout-matrix-justify-center"
-												/>
-											),
-										},
-										{
-											label: __('End', 'blockera'),
-											value: 'flex-end',
-											icon: (
-												<Icon
-													icon="justify-content-end"
-													iconSize="20"
-													className="blockera-flex-justify-content-flex-end"
-													data-test="layout-matrix-justify-end"
-												/>
-											),
-										},
-										{
-											label: __(
-												'Space Around',
-												'blockera'
-											),
-											value: 'space-around',
-											icon: (
-												<Icon
-													icon="justify-content-space-around"
-													iconSize="20"
-													data-test="layout-matrix-justify-around"
-												/>
-											),
-										},
-										{
-											label: __(
-												'Space Between',
-												'blockera'
-											),
-											value: 'space-between',
-											icon: (
-												<Icon
-													icon="justify-content-space-between"
-													iconSize="20"
-													data-test="layout-matrix-justify-between"
-												/>
-											),
-										},
-									]}
-									onChange={(newValue) =>
-										setValue({
-											...value,
-											justifyContent: newValue,
-										})
-									}
-									type="custom"
-									defaultValue={defaultValue.justifyContent}
-									className={classNames(
-										'input-hide-label',
-										'input-hide-caret',
-										'layout-matrix__justify-content',
-										'selected-item-' +
-											(value.justifyContent || 'empty')
-									)}
-								/>
-							</Tooltip>
-						</Flex>
+								return label;
+							})()}
+						>
+							<SelectControl
+								id="alignItems"
+								label={
+									<Icon
+										icon="axis-y"
+										style={{ fill: 'currentColor' }}
+									/>
+								}
+								labelPopoverTitle={__('Vertical', 'blockera')}
+								labelDescription={
+									<p>
+										{__(
+											'Control vertical spacing and positioning from top to bottom',
+											'blockera'
+										)}
+									</p>
+								}
+								columns="30px 1fr"
+								style={{
+									'--gap': '0',
+								}}
+								options={[
+									{
+										label: __('Empty', 'blockera'),
+										value: '',
+										icon: (
+											<Icon
+												icon="flex-align-empty"
+												iconSize="20"
+												data-test="layout-matrix-align-empty"
+											/>
+										),
+									},
+									{
+										label: __('Start', 'blockera'),
+										value: 'flex-start',
+										icon: (
+											<Icon
+												icon="flex-align-start"
+												iconSize="20"
+												data-test="layout-matrix-align-start"
+											/>
+										),
+									},
+									{
+										label: __('Center', 'blockera'),
+										value: 'center',
+										icon: (
+											<Icon
+												icon="flex-align-center"
+												iconSize="20"
+												data-test="layout-matrix-align-center"
+											/>
+										),
+									},
+									{
+										label: __('End', 'blockera'),
+										value: 'flex-end',
+										icon: (
+											<Icon
+												icon="flex-align-end"
+												iconSize="20"
+												data-test="layout-matrix-align-end"
+											/>
+										),
+									},
+									{
+										label: __('Stretch', 'blockera'),
+										value: 'stretch',
+										icon: (
+											<Icon
+												icon="flex-align-stretch"
+												iconSize="20"
+												data-test="layout-matrix-align-stretch"
+											/>
+										),
+									},
+								]}
+								onChange={(newValue) =>
+									setValue({
+										...value,
+										alignItems: newValue,
+									})
+								}
+								type="custom"
+								defaultValue={defaultValue.alignItems}
+								className={classNames(
+									'input-hide-label',
+									'layout-matrix__align-items',
+									'selected-item-' +
+										(value.alignItems || 'empty')
+								)}
+							/>
+						</Tooltip>
 					</Flex>
 				</Flex>
 
