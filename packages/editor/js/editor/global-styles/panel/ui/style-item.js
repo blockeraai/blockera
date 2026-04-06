@@ -331,6 +331,91 @@ export const StyleItem = ({
 		setIsOpenUsageForMultipleBlocks(true);
 	};
 
+	const openBlockCardUsageForMultipleBlocksModal = (event: any) => {
+		if (event?.preventDefault) {
+			event.preventDefault();
+		}
+		if (event?.stopPropagation) {
+			event.stopPropagation();
+		}
+
+		if (!isUserCanSaveCustomizations) {
+			return;
+		}
+
+		setIsOpenBlockCardContextMenu(false);
+		setIsOpenBlockCardUsageForMultipleBlocks(true);
+	};
+
+	const renderUsageForMultipleBlocksIndicator = (
+		openModal: (event: any) => void
+	): MixedElement | null => {
+		if (style?.isDefault || activeInBlocks.length <= 1) {
+			return null;
+		}
+
+		return (
+			<Tooltip text={usageForMultipleBlocksTooltipText}>
+				<div
+					className="blockera-style-item-multiple-blocks"
+					role="button"
+					aria-disabled={!isUserCanSaveCustomizations}
+					tabIndex={isUserCanSaveCustomizations ? 0 : -1}
+					style={{
+						position: 'relative',
+						pointerEvents: isUserCanSaveCustomizations
+							? undefined
+							: 'none',
+					}}
+					onClick={openModal}
+					onKeyDown={(event: any) => {
+						if (!isUserCanSaveCustomizations) {
+							return;
+						}
+						if (event.key !== 'Enter') {
+							return;
+						}
+						openModal(event);
+					}}
+				>
+					<Flex gap={0} direction="row">
+						{activeInBlocks.slice(0, 3).map((block, index) => {
+							const { icon = null } = getBlockType(block);
+
+							return (
+								<div
+									key={`${block}-${index}`}
+									className="blockera-style-item-multiple-blocks__item"
+									style={{
+										marginRight: '4px',
+									}}
+								>
+									{icon?.src}
+								</div>
+							);
+						})}
+						<div className="blockera-style-item-multiple-blocks__item item-count">
+							{activeInBlocks.length}
+						</div>
+					</Flex>
+				</div>
+			</Tooltip>
+		);
+	};
+
+	let blockCardAfterPreviewMultipleBlocks: MixedElement | null = null;
+	const blockCardMultipleBlocksIndicator =
+		renderUsageForMultipleBlocksIndicator(
+			openBlockCardUsageForMultipleBlocksModal
+		);
+	if (blockCardMultipleBlocksIndicator) {
+		blockCardAfterPreviewMultipleBlocks = (
+			<div className="blockera-style-item-multiple-blocks--block-card-row">
+				{blockCardMultipleBlocksIndicator}
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<div
@@ -540,58 +625,8 @@ export const StyleItem = ({
 							</Tooltip>
 						)}
 
-						{!style?.isDefault && activeInBlocks.length > 1 && (
-							<Tooltip text={usageForMultipleBlocksTooltipText}>
-								<div
-									className="blockera-style-item-multiple-blocks"
-									role="button"
-									aria-disabled={!isUserCanSaveCustomizations}
-									tabIndex={
-										isUserCanSaveCustomizations ? 0 : -1
-									}
-									style={{
-										position: 'relative',
-										pointerEvents:
-											isUserCanSaveCustomizations
-												? undefined
-												: 'none',
-									}}
-									onClick={openUsageForMultipleBlocksModal}
-									onKeyDown={(event: any) => {
-										if (!isUserCanSaveCustomizations) {
-											return;
-										}
-										if (event.key !== 'Enter') {
-											return;
-										}
-										openUsageForMultipleBlocksModal(event);
-									}}
-								>
-									<Flex gap={0} direction="row">
-										{activeInBlocks
-											.slice(0, 3)
-											.map((block, index) => {
-												const { icon = null } =
-													getBlockType(block);
-
-												return (
-													<div
-														key={`${block}-${index}`}
-														className="blockera-style-item-multiple-blocks__item"
-														style={{
-															marginRight: '4px',
-														}}
-													>
-														{icon?.src}
-													</div>
-												);
-											})}
-										<div className="blockera-style-item-multiple-blocks__item item-count">
-											{activeInBlocks.length}
-										</div>
-									</Flex>
-								</div>
-							</Tooltip>
+						{renderUsageForMultipleBlocksIndicator(
+							openUsageForMultipleBlocksModal
 						)}
 
 						{style.icon && (
@@ -868,6 +903,12 @@ export const StyleItem = ({
 						</StyleItemMenuContextProvider>
 					</Flex>
 				)}
+			</Fill>
+
+			<Fill
+				name={`blockera-style-variation-block-card-after-preview-${style.name}`}
+			>
+				{blockCardAfterPreviewMultipleBlocks}
 			</Fill>
 		</>
 	);

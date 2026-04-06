@@ -347,6 +347,10 @@ export function StyleVariationBlockCard({
 				variation={currentBlockStyleVariation?.name}
 			/>
 
+			<Slot
+				name={`blockera-style-variation-block-card-after-preview-${currentBlockStyleVariation?.name}`}
+			/>
+
 			<Flex
 				gap={10}
 				direction="column"

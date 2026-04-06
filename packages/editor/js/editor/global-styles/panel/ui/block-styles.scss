@@ -78,6 +78,14 @@
 	}
 }
 
+.blockera-style-item-multiple-blocks--block-card-row {
+	position: absolute;
+	right: 16px;
+	top: 46px;
+	z-index: 100;
+	cursor: pointer;
+}
+
 .blockera-component-block-styles {
 	.blockera-block-styles-category {
 		color: var(--blockera-controls-primary-color);
