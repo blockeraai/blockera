@@ -75,6 +75,6 @@ module.exports = defineConfig({
 		specPattern: 'packages/**/*.cy.js',
 		supportFile: 'packages/dev-cypress/js/support/component.js',
 	},
-	numTestsKeptInMemory: 25,
+	numTestsKeptInMemory: 0,
 	experimentalMemoryManagement: true,
 });
