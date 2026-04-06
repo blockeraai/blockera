@@ -101,7 +101,7 @@ export const BlockTypes = ({
 				savedEnabledItems.length > 0
 					? [
 							...new Set([
-								...enabledItems,
+								blockName,
 								...(savedEnabledItems?.filter((blockType) => {
 									const disabledIn =
 										globalStyles?.blockeraMetaData
@@ -122,7 +122,7 @@ export const BlockTypes = ({
 		}),
 		// items is source of validItems/enabledItems; when items changes (e.g. search), recompute
 		// eslint-disable-next-line react-hooks/exhaustive-deps -- validItems/enabledItems derived from items
-		[items, savedEnabledItems, globalStyles, style]
+		[blockName, items, savedEnabledItems, globalStyles, style]
 	);
 	const [blocksState, setBlocksState] = useState(initBlocksState);
 	const [state, setState] = useState({
@@ -296,26 +296,23 @@ export const BlockTypes = ({
 				};
 				setAction('enable-all');
 			} else if ('single-enable' === action) {
-				if (state.newGlobalStyles?.blockeraMetaData) {
-					disabledIn =
-						state.newGlobalStyles?.blockeraMetaData?.variations?.[
-							style.name
-						]?.disabledIn?.filter((type) => type !== blockType) ||
-						[];
-				} else {
-					disabledIn =
-						copyGlobalStyles?.blockeraMetaData?.variations?.[
-							style.name
-						]?.disabledIn?.filter((type) => type !== blockType) ||
-						[];
-				}
-				if (!disabledIn.length) {
-					enabledIn = selectedItems;
-				} else {
-					enabledIn = validItems
-						.filter((block) => !disabledIn.includes(block.name))
-						.map((block) => block.name);
-				}
+				const prevDisabledRaw =
+					state.newGlobalStyles?.blockeraMetaData?.variations?.[
+						style.name
+					]?.disabledIn ||
+					copyGlobalStyles?.blockeraMetaData?.variations?.[style.name]
+						?.disabledIn ||
+					[];
+
+				disabledIn = Array.isArray(prevDisabledRaw)
+					? prevDisabledRaw.filter((type) => type !== blockType)
+					: [];
+
+				// Modal toggles (`selectedItems` / `nextItems`) are authoritative. Deriving
+				// `enabledIn` from `validItems` minus `disabledIn` marks every block type as
+				// enabled whenever `disabledIn` is incomplete (e.g. after narrowing disables
+				// to a single block) or stale.
+				enabledIn = Array.isArray(selectedItems) ? selectedItems : [];
 				blocks = {
 					...(state?.newGlobalStyles?.blocks || {}),
 					[blockType]: {
