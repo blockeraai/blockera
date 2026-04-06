@@ -27,11 +27,20 @@ const ENTITY_EDIT_CONTEXT = 'entity-edit';
  * Tab actions interface for switching to open tabs.
  */
 interface OpenTabsTabActions {
-	switchDocument: (postType: string, postId: string | number) => void;
+	switchDocument: (
+		postType: string,
+		postId: string | number
+	) => Promise<boolean>;
 	prefetchEntity: (
 		postType: string | null | undefined,
 		postId: string | number | null | undefined
 	) => Promise<unknown>;
+	onDocumentInaccessible?: (info: {
+		key: string;
+		type: string;
+		id: string | number;
+		title: string;
+	}) => void;
 }
 
 /**
@@ -128,9 +137,40 @@ function getOpenTabsCommandsLoader(
 						}
 
 						try {
-							// Prefetch entity data before switching for instant tab switch
-							await tabActions.prefetchEntity(tab.type, tab.id);
-							tabActions.switchDocument(tab.type, tab.id);
+							const record = await tabActions.prefetchEntity(
+								tab.type,
+								tab.id
+							);
+							if (!record) {
+								tabActions.onDocumentInaccessible?.({
+									key: tab.key,
+									type: tab.type,
+									id: tab.id,
+									title:
+										typeof tab.customTitle === 'string' &&
+										tab.customTitle !== ''
+											? tab.customTitle
+											: tab.title,
+								});
+								close?.();
+								return;
+							}
+							const ok = await tabActions.switchDocument(
+								tab.type,
+								tab.id
+							);
+							if (!ok) {
+								tabActions.onDocumentInaccessible?.({
+									key: tab.key,
+									type: tab.type,
+									id: tab.id,
+									title:
+										typeof tab.customTitle === 'string' &&
+										tab.customTitle !== ''
+											? tab.customTitle
+											: tab.title,
+								});
+							}
 							close?.();
 						} catch (error) {
 							// @debug-ignore
@@ -162,12 +202,22 @@ export interface UseOpenTabsCommandsParams {
 	/** Array of open tabs. */
 	tabs: Tab[];
 	/** Function to switch to a document. */
-	switchDocument: (postType: string, postId: string | number) => void;
+	switchDocument: (
+		postType: string,
+		postId: string | number
+	) => Promise<boolean>;
 	/** Function to prefetch entity before switching. */
 	prefetchEntity: (
 		postType: string | null | undefined,
 		postId: string | number | null | undefined
 	) => Promise<unknown>;
+	/** Optional handler when the tab target cannot be loaded. */
+	onDocumentInaccessible?: (info: {
+		key: string;
+		type: string;
+		id: string | number;
+		title: string;
+	}) => void;
 }
 
 /**
@@ -180,14 +230,16 @@ export function useOpenTabsCommands({
 	tabs,
 	switchDocument,
 	prefetchEntity,
+	onDocumentInaccessible,
 }: UseOpenTabsCommandsParams): void {
 	// Create a stable reference to tab actions
 	const tabActions = useMemo(
 		(): OpenTabsTabActions => ({
 			switchDocument,
 			prefetchEntity,
+			onDocumentInaccessible,
 		}),
-		[switchDocument, prefetchEntity]
+		[switchDocument, prefetchEntity, onDocumentInaccessible]
 	);
 
 	// Create the loader hook with current tabs

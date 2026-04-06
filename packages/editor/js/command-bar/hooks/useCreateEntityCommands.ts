@@ -54,7 +54,7 @@ interface CreateEntityTabActions {
 		postId: number,
 		title?: string | null
 	) => Promise<boolean>;
-	switchDocument: (postType: string, postId: number) => void;
+	switchDocument: (postType: string, postId: number) => Promise<boolean>;
 	prefetchEntity: (postType: string, postId: number) => Promise<unknown>;
 }
 
@@ -164,7 +164,7 @@ function getCreateEntityCommandsLoader(
 									tabTitle
 								);
 								if (added) {
-									tabActions.switchDocument(
+									await tabActions.switchDocument(
 										'post',
 										newPost.id as number
 									);
@@ -232,7 +232,7 @@ function getCreateEntityCommandsLoader(
 									tabTitle
 								);
 								if (added) {
-									tabActions.switchDocument(
+									await tabActions.switchDocument(
 										'page',
 										newPage.id as number
 									);
@@ -274,7 +274,7 @@ export interface UseCreateEntityCommandsParams {
 		title?: string | null
 	) => Promise<boolean>;
 	/** Function to switch to a document. */
-	switchDocument: (postType: string, postId: number) => void;
+	switchDocument: (postType: string, postId: number) => Promise<boolean>;
 	/** Function to prefetch entity before switching. */
 	prefetchEntity: (postType: string, postId: number) => Promise<unknown>;
 }

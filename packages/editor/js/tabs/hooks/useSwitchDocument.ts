@@ -14,6 +14,7 @@ import {
 	getEditorContextForPostType,
 	getCurrentEditorContext,
 } from '../utils/editorContext';
+import { ensurePostEntityAccessible } from '../utils/ensurePostEntityAccessible';
 
 /**
  * While switching from post.php to a site-editor document, core may call
@@ -77,28 +78,6 @@ function clearPostToSiteReplaceGuard(): void {
 }
 
 /**
- * Resolve the destination entity in core-data before navigation so the editor is not
- * briefly out of sync with the REST record when switching tabs.
- */
-async function ensureTargetEntityRecordLoaded(
-	postType: string,
-	postId: string | number
-): Promise<void> {
-	try {
-		const resolved = resolveSelect(coreStore) as {
-			getEditedEntityRecord: (
-				kind: string,
-				name: string,
-				id: string | number
-			) => Promise<unknown>;
-		};
-		await resolved.getEditedEntityRecord('postType', postType, postId);
-	} catch {
-		// Navigation may still proceed (missing entity, permissions, etc.).
-	}
-}
-
-/**
  * Editor settings with navigation callback.
  */
 interface EditorSettings {
@@ -131,12 +110,13 @@ interface EditorSettings {
  * `../site-editor-post-item-route.md`). While still inside the site editor, do not
  * `pushState` to post.php — that desyncs the router from the loaded app.
  *
- * @return Function to switch to a document: (postType, postId) => void
+ * @return Function to switch to a document. Resolves true if navigation ran, false if
+ *         the entity cannot be loaded (missing, deleted, or not allowed to edit).
  */
 export function useSwitchDocument(): (
 	postType: string,
 	postId: string | number
-) => Promise<void> {
+) => Promise<boolean> {
 	const onNavigateToEntityRecord = useSelect((select) => {
 		const editorSettings = (
 			select(editorStore) as { getEditorSettings: () => EditorSettings }
@@ -193,7 +173,10 @@ export function useSwitchDocument(): (
 		[hasPostTypeResolved]
 	);
 
-	return async (postType: string, postId: string | number): Promise<void> => {
+	return async (
+		postType: string,
+		postId: string | number
+	): Promise<boolean> => {
 		clearPostToSiteReplaceGuard();
 		// If switching to a different post type, ensure post type config is resolved first
 		if (currentPostType && currentPostType !== postType) {
@@ -203,7 +186,10 @@ export function useSwitchDocument(): (
 			await ensurePostTypeResolved(postType);
 		}
 
-		await ensureTargetEntityRecordLoaded(postType, postId);
+		const entityOk = await ensurePostEntityAccessible(postType, postId);
+		if (!entityOk) {
+			return false;
+		}
 
 		const targetContext = getEditorContextForPostType(postType);
 		const currentContext = getCurrentEditorContext();
@@ -224,7 +210,7 @@ export function useSwitchDocument(): (
 				if (isSiteEditorType || isContextChange) {
 					// Keep site editor on `?p=/post|page/...` URLs; pushing post.php breaks the app.
 					if (currentContext === 'site' && targetContext === 'post') {
-						return;
+						return true;
 					}
 					const editorUrl = getEditorUrl(postType, postId);
 					if (currentContext === 'post' && targetContext === 'site') {
@@ -286,7 +272,7 @@ export function useSwitchDocument(): (
 						}, 200);
 					}
 				}
-				return;
+				return true;
 			} catch {
 				// If navigation fails (e.g., cross-boundary issue), fall back to full page navigation
 				// Silently fall back - the error indicates onNavigateToEntityRecord can't handle this navigation
@@ -296,5 +282,6 @@ export function useSwitchDocument(): (
 		// Fallback: Cross-boundary navigation or when onNavigateToEntityRecord is not available
 		// Use window.location.assign() to update URL and add to browser history
 		window.location.assign(getEditorUrl(postType, postId));
+		return true;
 	};
 }

@@ -33,7 +33,10 @@ export interface CommandBarIntegrationProps {
 		status?: string | null
 	) => Promise<boolean>;
 	/** Function to switch documents. */
-	switchDocument: (postType: string, postId: string | number) => void;
+	switchDocument: (
+		postType: string,
+		postId: string | number
+	) => Promise<boolean>;
 	/** Function to prefetch entity data. */
 	prefetchEntity: (
 		postType: string | null | undefined,
@@ -41,6 +44,15 @@ export interface CommandBarIntegrationProps {
 	) => Promise<unknown>;
 	/** Current tabs array. */
 	tabs: Tab[];
+	/**
+	 * When a tab target cannot be loaded (deleted, private, no cap), after workspace cleanup.
+	 */
+	onDocumentInaccessible?: (info: {
+		key: string;
+		type: string;
+		id: string | number;
+		title: string;
+	}) => void;
 	/** Render prop that receives openAddTabCommandBar. */
 	children: (props: { openAddTabCommandBar: () => void }) => ReactNode;
 }
@@ -56,6 +68,7 @@ export default function CommandBarIntegration({
 	switchDocument,
 	prefetchEntity,
 	tabs,
+	onDocumentInaccessible,
 	children,
 }: CommandBarIntegrationProps): ReactNode {
 	// Intercept command bar entity navigation commands and open as tabs
@@ -64,6 +77,7 @@ export default function CommandBarIntegration({
 		switchDocument,
 		prefetchEntity,
 		tabs,
+		onDocumentInaccessible,
 	});
 
 	// Hook for opening command bar in "add tab mode" (navigation commands only)
@@ -79,7 +93,7 @@ export default function CommandBarIntegration({
 		switchDocument: switchDocument as (
 			postType: string,
 			postId: number
-		) => void,
+		) => Promise<boolean>,
 		prefetchEntity: prefetchEntity as (
 			postType: string,
 			postId: number
@@ -91,6 +105,7 @@ export default function CommandBarIntegration({
 		tabs,
 		switchDocument,
 		prefetchEntity,
+		onDocumentInaccessible,
 	});
 
 	// Render children with openAddTabCommandBar function
