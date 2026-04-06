@@ -3,6 +3,7 @@
 /**
  * External dependencies
  */
+import type { MixedElement } from 'react';
 import { useMemo, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { BlockPreview } from '@wordpress/block-editor';
@@ -27,10 +28,12 @@ const SIDEBAR_WIDTH = 235;
 const BlockPreviewPanel = ({
 	name,
 	variation = '',
+	children,
 }: {
 	name: string,
 	variation: string,
-}): Object => {
+	children?: MixedElement,
+}): MixedElement => {
 	const { getAttributes } = useBlockContext();
 
 	// Memoize attributes with deep comparison to prevent unnecessary re-renders
@@ -151,6 +154,7 @@ const BlockPreviewPanel = ({
 				<div className="block-editor-inserter__preview-content-missing">
 					{__('No preview available.', 'blockera')}
 				</div>
+				{children}
 			</div>
 		);
 	}
@@ -169,6 +173,7 @@ const BlockPreviewPanel = ({
 				minHeight={PREVIEW_HEIGHT}
 				additionalStyles={additionalStyles}
 			/>
+			{children}
 		</div>
 	);
 };

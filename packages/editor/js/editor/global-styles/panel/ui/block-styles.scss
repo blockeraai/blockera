@@ -79,10 +79,11 @@
 	}
 }
 
+// Anchored to `.blockera-block-preview-panel` (Slot renders inside preview panel).
 .blockera-style-item-multiple-blocks--block-card-row {
 	position: absolute;
-	right: 16px;
-	top: 44px;
+	right: 10px;
+	top: 10px;
 	z-index: 100;
 	cursor: pointer;
 
