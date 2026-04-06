@@ -10,6 +10,7 @@ import { isString } from '@blockera/utils';
  * Internal dependencies
  */
 import {
+	closeWelcomeGuide,
 	hexStringToByte,
 	openBoxSpacingSide,
 	openBoxPositionSide,
@@ -1320,6 +1321,8 @@ export const registerCommands = () => {
 
 	/** Activates an unpinned tab by zero-based index (left to right). */
 	Cypress.Commands.add('tabsClickUnpinnedByIndex', (index) => {
+		// Post ↔ site-editor switches can surface Core welcome/modals that cover the tab bar.
+		closeWelcomeGuide();
 		cy.get(unpinnedTabRoots)
 			.eq(index)
 			.find('.blockera-tabs-tab-button')

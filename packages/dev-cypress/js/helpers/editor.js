@@ -617,38 +617,44 @@ export const reSelectBlock = (blockType = 'core/paragraph') => {
  * Close welcome guide if it exists
  */
 export function closeWelcomeGuide() {
+	// Return inner cy chains from `.then` so Cypress runs clicks *before* the overlay
+	// assertion below (nested cy.* without return can enqueue after the sibling).
 	cy.get('body').then(($body) => {
-		if (
+		const hasClose =
 			$body.find(
 				'.components-modal__screen-overlay button[aria-label="Close"]'
-			).length > 0
-		) {
-			cy.get('.components-modal__screen-overlay [aria-label="Close"]')
+			).length > 0;
+		const hasFinish =
+			$body.find(
+				'.components-modal__screen-overlay button.components-guide__finish-button'
+			).length > 0;
+
+		if (hasClose) {
+			return cy
+				.get('.components-modal__screen-overlay [aria-label="Close"]')
 				.last()
 				.click();
 		}
 
-		// Check for either button and click the first one found
-		if (
-			$body.find(
-				'.components-modal__screen-overlay button.components-guide__finish-button'
-			).length > 0
-		) {
-			cy.get(
-				'.components-modal__screen-overlay button.components-guide__finish-button'
-			).click();
+		if (hasFinish) {
+			return cy
+				.get(
+					'.components-modal__screen-overlay button.components-guide__finish-button'
+				)
+				.click();
 		}
 	});
 
-	cy.wait(10);
-
-	cy.get('body').then(($body) => {
-		// Check and remove screen overlay if it exists
-		if ($body.find('.components-modal__screen-overlay').length > 0) {
-			cy.get('.components-modal__screen-overlay').invoke('remove', {
-				force: true,
-			});
-		}
+	// Wait until no modal overlay remains (dismiss animation after Close/Finish).
+	// Do not use `invoke('remove', { force: true })` — Cypress passes the second
+	// argument to jQuery `.remove(selector)`, so the overlay may never detach.
+	// Avoid native `el.remove()` here: that can desync React on post-new.
+	cy.get('body', { timeout: 20000 }).should(($b) => {
+		expect($b.find('.components-modal__screen-overlay')).to.have.length(0);
+		// Overlay can unmount before modal chrome; :visible avoids counting hidden shells.
+		expect(
+			$b.find('.components-modal__header-heading-container:visible')
+		).to.have.length(0);
 	});
 }
 
