@@ -345,23 +345,10 @@ export const BlockTypes = ({
 
 				setAction('single-enable');
 			} else if ('single-disable' === action) {
-				if (state.newGlobalStyles?.blockeraMetaData) {
-					enabledIn =
-						state.newGlobalStyles?.blockeraMetaData?.variations?.[
-							style.name
-						]?.enabledIn?.filter((type) => type !== blockType) ||
-						[];
-				} else {
-					enabledIn =
-						copyGlobalStyles?.blockeraMetaData?.variations?.[
-							style.name
-						]?.enabledIn?.filter((type) => type !== blockType) ||
-						[];
-				}
-
-				if (!enabledIn.length) {
-					enabledIn = selectedItems;
-				}
+				// `selectedItems` matches the modal toggles (`nextItems`). Metadata-derived
+				// lists can be stale and omit the current block type, which would wrongly put
+				// it in `disabledIn` and strip the variation from the selected block.
+				enabledIn = Array.isArray(selectedItems) ? selectedItems : [];
 
 				disabledIn = validItems
 					.filter((block) => !enabledIn.includes(block.name))
