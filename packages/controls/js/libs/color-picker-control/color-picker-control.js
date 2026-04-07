@@ -200,7 +200,7 @@ export default function ColorPickerControl({
 				autoComplete="off"
 				spellCheck={false}
 				placeholder={__(
-					'e.g. #fff, rgb(), currentColor, var(--token)',
+					'#fff, rgb(), currentColor, var(--token)',
 					'blockera'
 				)}
 			/>

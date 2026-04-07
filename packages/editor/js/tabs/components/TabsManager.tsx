@@ -24,6 +24,7 @@ import TabsBar from './TabsBar';
 import CloseTabConfirmDialog from './CloseTabConfirmDialog';
 import RenameTabModal from './RenameTabModal';
 import TabLockedModal from './TabLockedModal';
+import TabUnavailableModal from './TabUnavailableModal';
 import TabKeyboardShortcuts from './TabKeyboardShortcuts';
 import { useCurrentEntity, usePrefetchEntity } from '../../hooks';
 import { useTabs } from '../hooks/useTabs';
@@ -43,6 +44,7 @@ import {
 	sortTabsByPinned,
 } from '../utils/tabActions';
 import { hasLocalAutosave } from '../utils/hasLocalAutosave';
+import { buildTabSwitchCandidates } from '../utils/buildTabSwitchCandidates';
 import type { Tab, RecentlyClosedTab } from '../types';
 
 /**
@@ -143,6 +145,10 @@ export default function TabsManager(): React.ReactElement | null {
 	 */
 	const [showLockedModal, setShowLockedModal] = useState(false);
 	const [lockedTabKey, setLockedTabKey] = useState<string | null>(null);
+
+	const [unavailableDocumentTitle, setUnavailableDocumentTitle] = useState<
+		string | null
+	>(null);
 
 	/*
 	 * Autosave Backup Detection State
@@ -437,6 +443,19 @@ export default function TabsManager(): React.ReactElement | null {
 		};
 	}, [tabs, postId, hasAutosaveRestoreNotice]);
 
+	/**
+	 * Ref to the latest “inaccessible document” handler so `handleTabClick` can stay
+	 * dependency-free (empty `[]`) while still calling current cleanup + modal logic.
+	 */
+	const handleDocumentInaccessibleRef = useRef<
+		(info: {
+			key: string;
+			type: string;
+			id: string | number;
+			title: string;
+		}) => void
+	>(() => {});
+
 	// Track if we're in the middle of a manual tab switch to prevent duplicate state updates
 	const isManualTabSwitchRef = useRef(false);
 	// Store the previous tab key during manual switches so we can update it in the useEffect
@@ -550,7 +569,18 @@ export default function TabsManager(): React.ReactElement | null {
 						runLockCheckForCurrentKey();
 					});
 				} else if (revertTab) {
-					void switchDocument(revertTab.type, revertTab.id);
+					void switchDocument(revertTab.type, revertTab.id).then(
+						(revertedOk) => {
+							if (!revertedOk) {
+								handleDocumentInaccessibleRef.current({
+									key: revertTab.key,
+									type: revertTab.type,
+									id: revertTab.id,
+									title: revertTab.title,
+								});
+							}
+						}
+					);
 				}
 			});
 		}
@@ -597,8 +627,21 @@ export default function TabsManager(): React.ReactElement | null {
 				// Store the previous tab key in a ref so the useEffect can batch it with setActiveTabKey
 				pendingPreviousTabKeyRef.current = currentActiveTabKey;
 
-				void switchDocumentRef.current(tab.type, tab.id).then(() => {
+				void switchDocumentRef.current(tab.type, tab.id).then((ok) => {
 					isManualTabSwitchRef.current = false;
+					if (!ok) {
+						const title =
+							typeof tab.customTitle === 'string' &&
+							tab.customTitle !== ''
+								? tab.customTitle
+								: tab.title;
+						handleDocumentInaccessibleRef.current({
+							key: tab.key,
+							type: tab.type,
+							id: tab.id,
+							title,
+						});
+					}
 				});
 
 				if (isTabLockedRef.current(key) && currentTabs.length > 1) {
@@ -655,6 +698,55 @@ export default function TabsManager(): React.ReactElement | null {
 		[getEditedEntityRecord, getRawEntityRecord, editEntityRecord]
 	);
 
+	const handleDocumentInaccessible = useCallback(
+		(info: {
+			key: string;
+			type: string;
+			id: string | number;
+			title: string;
+		}) => {
+			removeTab(info.key);
+			removeClosedTab(info.key);
+			clearLockState(info.key);
+			clearEntityEdits(info.type, info.id);
+			setUnavailableDocumentTitle(info.title);
+		},
+		[removeTab, removeClosedTab, clearLockState, clearEntityEdits]
+	);
+
+	// Sync ref every render — intentional; avoids stale closures in tab-click shortcut path.
+	handleDocumentInaccessibleRef.current = handleDocumentInaccessible;
+
+	/**
+	 * After closing the active tab (or when the intended target cannot load), try
+	 * candidates in order; purge each tab that still points at an unreachable entity.
+	 * Sequential awaits are acceptable here (cold path, small N).
+	 */
+	const activateFirstAccessibleFromCandidates = useCallback(
+		async (candidates: Tab[]): Promise<boolean> => {
+			for (const nextTab of candidates) {
+				const ok = await switchDocument(nextTab.type, nextTab.id);
+				if (ok) {
+					setActiveTabKey(nextTab.key);
+					setPreviousTabKey(null);
+					return true;
+				}
+				removeTab(nextTab.key);
+				removeClosedTab(nextTab.key);
+				clearLockState(nextTab.key);
+				clearEntityEdits(nextTab.type, nextTab.id);
+			}
+			return false;
+		},
+		[
+			switchDocument,
+			removeTab,
+			removeClosedTab,
+			clearLockState,
+			clearEntityEdits,
+		]
+	);
+
 	// Internal function to actually close the tab
 	const performTabClose = useCallback(
 		(key: string): void => {
@@ -676,32 +768,14 @@ export default function TabsManager(): React.ReactElement | null {
 				removeTab(key);
 
 				if (key === activeTabKey) {
-					// Get sorted tabs to determine left/right position
-					// Match the display order: pinned tabs first, then unpinned tabs
 					const sortedTabs = [...pinnedTabs, ...unpinnedTabs];
-					const closedTabIndex = sortedTabs.findIndex(
-						(t) => t.key === key
-					);
-					const remainingTabs = sortedTabs.filter(
-						(t) => t.key !== key
+					const candidates = buildTabSwitchCandidates(
+						sortedTabs,
+						key
 					);
 
-					if (remainingTabs.length > 0) {
-						let nextTab: Tab | undefined;
-
-						// If there's a tab to the left, activate that one
-						if (closedTabIndex > 0) {
-							nextTab = remainingTabs[closedTabIndex - 1];
-						} else {
-							// Otherwise, activate the next tab to the right (which is now at index 0)
-							nextTab = remainingTabs[0];
-						}
-
-						if (nextTab) {
-							void switchDocument(nextTab.type, nextTab.id);
-							setActiveTabKey(nextTab.key);
-							setPreviousTabKey(null);
-						}
+					if (candidates.length > 0) {
+						void activateFirstAccessibleFromCandidates(candidates);
 					}
 				}
 			}
@@ -712,10 +786,10 @@ export default function TabsManager(): React.ReactElement | null {
 			unpinnedTabs,
 			activeTabKey,
 			removeTab,
-			switchDocument,
 			clearEntityEdits,
 			clearLockState,
 			addClosedTab,
+			activateFirstAccessibleFromCandidates,
 		]
 	);
 
@@ -812,8 +886,24 @@ export default function TabsManager(): React.ReactElement | null {
 			if (wasActiveClosed) {
 				const targetTab = updatedTabs.find((t) => t.key === targetKey);
 				if (targetTab) {
-					void switchDocument(targetTab.type, targetTab.id);
-					setActiveTabKey(targetKey);
+					void (async (): Promise<void> => {
+						const ok = await switchDocument(
+							targetTab.type,
+							targetTab.id
+						);
+						if (ok) {
+							setActiveTabKey(targetKey);
+							return;
+						}
+						removeTab(targetTab.key);
+						removeClosedTab(targetTab.key);
+						clearLockState(targetTab.key);
+						clearEntityEdits(targetTab.type, targetTab.id);
+						const rest = sortTabsByPinned(
+							updatedTabs.filter((t) => t.key !== targetKey)
+						);
+						await activateFirstAccessibleFromCandidates(rest);
+					})();
 				}
 			}
 		},
@@ -825,6 +915,9 @@ export default function TabsManager(): React.ReactElement | null {
 			clearEntityEdits,
 			clearLockState,
 			addClosedTab,
+			removeTab,
+			removeClosedTab,
+			activateFirstAccessibleFromCandidates,
 		]
 	);
 
@@ -873,8 +966,24 @@ export default function TabsManager(): React.ReactElement | null {
 			if (wasActiveClosed) {
 				const targetTab = updatedTabs.find((t) => t.key === targetKey);
 				if (targetTab) {
-					void switchDocument(targetTab.type, targetTab.id);
-					setActiveTabKey(targetKey);
+					void (async (): Promise<void> => {
+						const ok = await switchDocument(
+							targetTab.type,
+							targetTab.id
+						);
+						if (ok) {
+							setActiveTabKey(targetKey);
+							return;
+						}
+						removeTab(targetTab.key);
+						removeClosedTab(targetTab.key);
+						clearLockState(targetTab.key);
+						clearEntityEdits(targetTab.type, targetTab.id);
+						const rest = sortTabsByPinned(
+							updatedTabs.filter((t) => t.key !== targetKey)
+						);
+						await activateFirstAccessibleFromCandidates(rest);
+					})();
 				}
 			}
 		},
@@ -886,6 +995,9 @@ export default function TabsManager(): React.ReactElement | null {
 			clearEntityEdits,
 			clearLockState,
 			addClosedTab,
+			removeTab,
+			removeClosedTab,
+			activateFirstAccessibleFromCandidates,
 		]
 	);
 
@@ -924,18 +1036,19 @@ export default function TabsManager(): React.ReactElement | null {
 			(t) => t.key === activeTabKey
 		);
 		if (wasActiveClosed && updatedTabs.length > 0) {
-			const nextTab = updatedTabs[0];
-			void switchDocument(nextTab.type, nextTab.id);
-			setActiveTabKey(nextTab.key);
+			void (async (): Promise<void> => {
+				const sorted = sortTabsByPinned(updatedTabs);
+				await activateFirstAccessibleFromCandidates(sorted);
+			})();
 		}
 	}, [
 		tabs,
 		activeTabKey,
 		setTabs,
-		switchDocument,
 		getIsDirty,
 		clearLockState,
 		addClosedTab,
+		activateFirstAccessibleFromCandidates,
 	]);
 
 	// Handler for view action (no-op, handled in Tab component)
@@ -1001,8 +1114,13 @@ export default function TabsManager(): React.ReactElement | null {
 			if (!tab) {
 				return;
 			}
-			// Prefetch entity data before switching for instant tab switch
-			await prefetchEntity(tab.type, tab.id);
+
+			const record = await prefetchEntity(tab.type, tab.id);
+			if (!record) {
+				removeClosedTab(tab.key);
+				setUnavailableDocumentTitle(getTabTitle(tab));
+				return;
+			}
 
 			const added = await addTab(
 				tab.type,
@@ -1015,8 +1133,18 @@ export default function TabsManager(): React.ReactElement | null {
 				return;
 			}
 
+			const ok = await switchDocument(tab.type, tab.id);
+			if (!ok) {
+				handleDocumentInaccessible({
+					key: tab.key,
+					type: tab.type,
+					id: tab.id,
+					title: getTabTitle(tab),
+				});
+				return;
+			}
+
 			removeClosedTab(tab.key);
-			switchDocument(tab.type, tab.id);
 			setActiveTabKey(tab.key);
 		},
 		[
@@ -1025,6 +1153,8 @@ export default function TabsManager(): React.ReactElement | null {
 			switchDocument,
 			prefetchEntity,
 			removeClosedTab,
+			getTabTitle,
+			handleDocumentInaccessible,
 		]
 	);
 
@@ -1064,23 +1194,22 @@ export default function TabsManager(): React.ReactElement | null {
 
 			const remainingTabs = tabs.filter((t) => t.key !== lockedTabKey);
 			if (remainingTabs.length > 0) {
-				let nextTab: Tab | undefined;
-				if (
-					previousTabKey &&
-					remainingTabs.find((t) => t.key === previousTabKey)
-				) {
-					nextTab = remainingTabs.find(
+				const sortedRemaining = sortTabsByPinned(remainingTabs);
+				const candidates: Tab[] = [];
+				if (previousTabKey) {
+					const prev = sortedRemaining.find(
 						(t) => t.key === previousTabKey
 					);
-				} else {
-					nextTab = remainingTabs[remainingTabs.length - 1];
+					if (prev) {
+						candidates.push(prev);
+					}
 				}
-
-				if (nextTab) {
-					void switchDocument(nextTab.type, nextTab.id);
-					setActiveTabKey(nextTab.key);
-					setPreviousTabKey(null);
+				for (const t of sortedRemaining) {
+					if (!candidates.some((c) => c.key === t.key)) {
+						candidates.push(t);
+					}
 				}
+				void activateFirstAccessibleFromCandidates(candidates);
 			}
 		}
 
@@ -1092,7 +1221,7 @@ export default function TabsManager(): React.ReactElement | null {
 		clearLockState,
 		removeTab,
 		previousTabKey,
-		switchDocument,
+		activateFirstAccessibleFromCandidates,
 	]);
 
 	// Handler for Save & Close action
@@ -1180,14 +1309,27 @@ export default function TabsManager(): React.ReactElement | null {
 	// Handler for Review tab action
 	const handleReviewTab = useCallback(
 		(tab: Tab): void => {
-			void switchDocument(tab.type, tab.id);
-			setActiveTabKey(tab.key);
-
-			setPendingCloseTabs([]);
-			setCloseAction(null);
-			setCloseActionTargetKey(null);
+			void switchDocument(tab.type, tab.id).then((ok) => {
+				if (ok) {
+					setActiveTabKey(tab.key);
+					setPendingCloseTabs([]);
+					setCloseAction(null);
+					setCloseActionTargetKey(null);
+					return;
+				}
+				handleDocumentInaccessible({
+					key: tab.key,
+					type: tab.type,
+					id: tab.id,
+					title:
+						typeof tab.customTitle === 'string' &&
+						tab.customTitle !== ''
+							? tab.customTitle
+							: tab.title,
+				});
+			});
 		},
-		[switchDocument]
+		[switchDocument, handleDocumentInaccessible]
 	);
 
 	// Find insertion point for tabs bar
@@ -1264,6 +1406,7 @@ export default function TabsManager(): React.ReactElement | null {
 			switchDocument={switchDocument}
 			prefetchEntity={prefetchEntity}
 			tabs={tabs}
+			onDocumentInaccessible={handleDocumentInaccessible}
 		>
 			{({ openAddTabCommandBar }) => (
 				<>
@@ -1358,6 +1501,14 @@ export default function TabsManager(): React.ReactElement | null {
 								}
 								onTakeOver={handleLockTakeOver}
 								onCloseTab={handleLockCloseTab}
+							/>
+
+							<TabUnavailableModal
+								isOpen={unavailableDocumentTitle !== null}
+								documentLabel={unavailableDocumentTitle ?? ''}
+								onConfirm={() => {
+									setUnavailableDocumentTitle(null);
+								}}
 							/>
 						</>,
 						container

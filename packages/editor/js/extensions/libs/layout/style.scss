@@ -8,6 +8,12 @@
 	}
 }
 
+.blockera-flex-wrap {
+	.blockera-field-control {
+		flex-direction: row !important;
+	}
+}
+
 .blockera-flex-align-content.reverse {
 	svg.align-content-flex-end,
 	svg.align-content-flex-start {

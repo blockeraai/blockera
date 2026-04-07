@@ -308,6 +308,8 @@ final class StyleEngine {
 
 			} elseif (! empty($settings)) {
 
+				$normal_breakpoints = $this->settings['blockeraBlockStates']['value']['normal']['breakpoints'] ?? [];
+
 				$this->pseudo_classes['normal'] = [
 					'breakpoints' => blockera_get_array_deep_merge(
 						[
@@ -315,7 +317,7 @@ final class StyleEngine {
 								'attributes' => $settings,
 							],
 						],
-						$this->settings['blockeraBlockStates']['value']['normal']['breakpoints'],
+						$normal_breakpoints,
 					),
 					'isVisible' => true,
 				];
@@ -330,7 +332,9 @@ final class StyleEngine {
                         function( array $stateSettings, string $state): array {
 							$this->pseudo_state = $state;
 
-							if (empty($stateSettings['breakpoints']) && ! empty($stateSettings['content'])) {
+							$state_breakpoints = $stateSettings['breakpoints'] ?? [];
+
+							if (empty($state_breakpoints) && ! empty($stateSettings['content'])) {
 								return [
 									$this->prepareBreakpointStyles(
                                         $this->breakpoint,
@@ -341,7 +345,11 @@ final class StyleEngine {
 								];
 							}
 
-							$breakpoints = $this->prepareBreakpointsSettings($stateSettings['breakpoints']);
+							if (empty($state_breakpoints)) {
+								return [];
+							}
+
+							$breakpoints = $this->prepareBreakpointsSettings($state_breakpoints);
 
 							return array_map(
                                 function ( $breakpointSettings, string $breakpoint) use ( $stateSettings): string  {

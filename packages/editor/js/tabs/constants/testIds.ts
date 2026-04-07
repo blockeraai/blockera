@@ -78,4 +78,9 @@ export const WORKSPACE_TABS_TEST_ID = {
 
 	/** Upgrade modal when workspace tab limits are exceeded (free tier). */
 	tabsLimitUpgradePrompt: 'blockera-workspace-tabs-limit-upgrade-prompt',
+
+	/** Modal when a tab targets a missing or inaccessible document. */
+	unavailableModalRoot: 'blockera-workspace-tabs-unavailable-modal-root',
+	unavailableModalConfirm:
+		'blockera-workspace-tabs-unavailable-modal-confirm',
 } as const;

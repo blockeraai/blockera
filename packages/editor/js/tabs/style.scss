@@ -1105,6 +1105,39 @@ body:not(.blockera-tabs-add-tab-mode)
 }
 
 /**
+ * Tab unavailable (missing / inaccessible document) modal
+ */
+.blockera-tabs-unavailable-modal .components-modal__content {
+	padding: 24px;
+}
+
+.blockera-tabs-unavailable-modal__content p {
+	margin: 0 0 12px 0;
+	font-size: 14px;
+	line-height: 1.5;
+	color: #1e1e1e;
+}
+
+.blockera-tabs-unavailable-modal__label {
+	margin-bottom: 16px;
+	word-break: break-word;
+}
+
+.blockera-tabs-unavailable-modal__content p:last-of-type {
+	margin-bottom: 20px;
+	color: #50575e;
+	font-size: 13px;
+}
+
+.blockera-tabs-unavailable-modal__buttons {
+	margin-top: 8px;
+}
+
+.blockera-tabs-unavailable-modal__buttons .components-button {
+	min-height: 36px;
+}
+
+/**
  * Toolbar offset for text editor when tabs are visible.
  */
 .blockera-tabs-wrapper ~ .editor-text-editor .editor-text-editor__toolbar {

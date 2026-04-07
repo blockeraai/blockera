@@ -331,6 +331,135 @@ export const StyleItem = ({
 		setIsOpenUsageForMultipleBlocks(true);
 	};
 
+	const openBlockCardUsageForMultipleBlocksModal = (event: any) => {
+		if (event?.preventDefault) {
+			event.preventDefault();
+		}
+		if (event?.stopPropagation) {
+			event.stopPropagation();
+		}
+
+		if (!isUserCanSaveCustomizations) {
+			return;
+		}
+
+		setIsOpenBlockCardContextMenu(false);
+		setIsOpenBlockCardUsageForMultipleBlocks(true);
+	};
+
+	const renderUsageAcrossBlocksControl = (
+		openModal: (event: any) => void,
+		variant: 'list-row' | 'block-card'
+	): MixedElement | null => {
+		if (style?.isDefault) {
+			return null;
+		}
+
+		const interactiveProps = {
+			role: 'button',
+			'aria-disabled': !isUserCanSaveCustomizations,
+			tabIndex: isUserCanSaveCustomizations ? 0 : -1,
+			style: {
+				position: 'relative',
+				pointerEvents: isUserCanSaveCustomizations ? undefined : 'none',
+			},
+			onClick: openModal,
+			onKeyDown: (event: any) => {
+				if (!isUserCanSaveCustomizations) {
+					return;
+				}
+				if (event.key !== 'Enter') {
+					return;
+				}
+				openModal(event);
+			},
+		};
+
+		if (activeInBlocks.length > 1) {
+			return (
+				<Tooltip text={usageForMultipleBlocksTooltipText}>
+					<div
+						className="blockera-style-item-multiple-blocks"
+						{...interactiveProps}
+					>
+						<Flex gap={0} direction="row">
+							{activeInBlocks.slice(0, 3).map((block, index) => {
+								const { icon = null } = getBlockType(block);
+
+								return (
+									<div
+										key={`${block}-${index}`}
+										className="blockera-style-item-multiple-blocks__item"
+										style={{
+											marginRight: '4px',
+										}}
+									>
+										{icon?.src}
+									</div>
+								);
+							})}
+							<div className="blockera-style-item-multiple-blocks__item item-count">
+								{activeInBlocks.length}
+							</div>
+						</Flex>
+					</div>
+				</Tooltip>
+			);
+		}
+
+		// Category shortcut to "Use for multiple blocks" — only for users who can manage it.
+		if (!isUserCanSaveCustomizations) {
+			return null;
+		}
+
+		const useForBlocksLabel = __('Use for multiple blocks', 'blockera');
+		// Match `.blockera-style-item-multiple-blocks__item` svg rules: mb-icon-size − 4px.
+		const categoryIconSize = variant === 'block-card' ? '18' : '14';
+
+		const categoryInner = (
+			<div
+				className="blockera-style-item-multiple-blocks"
+				data-test={`${style.name}-usage-for-blocks-trigger`}
+				{...interactiveProps}
+			>
+				<Flex gap={0} direction="row">
+					<div className="blockera-style-item-multiple-blocks__item">
+						<Icon
+							icon="category"
+							library="wp"
+							iconSize={categoryIconSize}
+						/>
+					</div>
+				</Flex>
+			</div>
+		);
+
+		return (
+			<Tooltip text={useForBlocksLabel}>
+				{variant === 'list-row' ? (
+					<div className="blockera-style-item-usage-category-trigger--list-row">
+						{categoryInner}
+					</div>
+				) : (
+					categoryInner
+				)}
+			</Tooltip>
+		);
+	};
+
+	let blockCardAfterPreviewMultipleBlocks: MixedElement | null = null;
+	const blockCardUsageControl = renderUsageAcrossBlocksControl(
+		openBlockCardUsageForMultipleBlocksModal,
+		'block-card'
+	);
+	if (blockCardUsageControl) {
+		blockCardAfterPreviewMultipleBlocks = (
+			<div className="blockera-style-item-multiple-blocks--block-card-row">
+				{blockCardUsageControl}
+			</div>
+		);
+	}
+
 	return (
 		<>
 			<div
@@ -540,58 +669,9 @@ export const StyleItem = ({
 							</Tooltip>
 						)}
 
-						{!style?.isDefault && activeInBlocks.length > 1 && (
-							<Tooltip text={usageForMultipleBlocksTooltipText}>
-								<div
-									className="blockera-style-item-multiple-blocks"
-									role="button"
-									aria-disabled={!isUserCanSaveCustomizations}
-									tabIndex={
-										isUserCanSaveCustomizations ? 0 : -1
-									}
-									style={{
-										position: 'relative',
-										pointerEvents:
-											isUserCanSaveCustomizations
-												? undefined
-												: 'none',
-									}}
-									onClick={openUsageForMultipleBlocksModal}
-									onKeyDown={(event: any) => {
-										if (!isUserCanSaveCustomizations) {
-											return;
-										}
-										if (event.key !== 'Enter') {
-											return;
-										}
-										openUsageForMultipleBlocksModal(event);
-									}}
-								>
-									<Flex gap={0} direction="row">
-										{activeInBlocks
-											.slice(0, 3)
-											.map((block, index) => {
-												const { icon = null } =
-													getBlockType(block);
-
-												return (
-													<div
-														key={`${block}-${index}`}
-														className="blockera-style-item-multiple-blocks__item"
-														style={{
-															marginRight: '4px',
-														}}
-													>
-														{icon?.src}
-													</div>
-												);
-											})}
-										<div className="blockera-style-item-multiple-blocks__item item-count">
-											{activeInBlocks.length}
-										</div>
-									</Flex>
-								</div>
-							</Tooltip>
+						{renderUsageAcrossBlocksControl(
+							openUsageForMultipleBlocksModal,
+							'list-row'
 						)}
 
 						{style.icon && (
@@ -868,6 +948,12 @@ export const StyleItem = ({
 						</StyleItemMenuContextProvider>
 					</Flex>
 				)}
+			</Fill>
+
+			<Fill
+				name={`blockera-style-variation-block-card-after-preview-${style.name}`}
+			>
+				{blockCardAfterPreviewMultipleBlocks}
 			</Fill>
 		</>
 	);

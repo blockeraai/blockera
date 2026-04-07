@@ -53,7 +53,10 @@ export interface UseCommandBarIntegrationParams {
 		status?: string | null
 	) => Promise<boolean>;
 	/** Function to switch documents. */
-	switchDocument: (postType: string, postId: string | number) => void;
+	switchDocument: (
+		postType: string,
+		postId: string | number
+	) => Promise<boolean>;
 	/** Function to prefetch entity before switching. */
 	prefetchEntity: (
 		postType: string | null | undefined,
@@ -61,6 +64,13 @@ export interface UseCommandBarIntegrationParams {
 	) => Promise<unknown>;
 	/** Current tabs array. */
 	tabs: Tab[];
+	/** Optional handler when a document cannot be opened from the command bar. */
+	onDocumentInaccessible?: (info: {
+		key: string;
+		type: string;
+		id: string | number;
+		title: string;
+	}) => void;
 }
 
 /**
@@ -75,6 +85,7 @@ export function useCommandBarIntegration({
 	switchDocument,
 	prefetchEntity,
 	tabs,
+	onDocumentInaccessible,
 }: UseCommandBarIntegrationParams): void {
 	const { registerCommandLoader, unregisterCommandLoader } = useDispatch(
 		commandsStore
@@ -96,6 +107,7 @@ export function useCommandBarIntegration({
 				addTab,
 				switchDocument,
 				prefetchEntity,
+				onDocumentInaccessible,
 			}),
 	};
 

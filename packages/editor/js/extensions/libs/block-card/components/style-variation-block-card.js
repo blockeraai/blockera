@@ -345,7 +345,11 @@ export function StyleVariationBlockCard({
 			<BlockPreviewPanel
 				name={blockName}
 				variation={currentBlockStyleVariation?.name}
-			/>
+			>
+				<Slot
+					name={`blockera-style-variation-block-card-after-preview-${currentBlockStyleVariation?.name}`}
+				/>
+			</BlockPreviewPanel>
 
 			<Flex
 				gap={10}

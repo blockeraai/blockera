@@ -278,8 +278,21 @@ export const memoizedBlockStates: (
 			)
 		);
 
-		const breakpoints =
-			blockStates[receivedState || currentState]?.breakpoints;
+		const stateKey = receivedState || currentState;
+
+		// getBlockStates() returns only `{ normal }` when `blockExtensions[clientId]` is
+		// missing (e.g. global styles / style variation). Stored attributes can still
+		// include other states (hover, marker, …); read breakpoints from there.
+		let breakpoints = blockStates[stateKey]?.breakpoints;
+		if (!breakpoints) {
+			breakpoints =
+				currentBlockAttributes?.blockeraBlockStates?.value?.[stateKey]
+					?.breakpoints ?? {};
+		}
+
+		const currentBreakpointState: BreakpointTypes = breakpoints[
+			currentBreakpoint
+		] ?? { attributes: {} };
 
 		const moreProps: Object =
 			(receivedState || currentState) === 'custom-class'
@@ -298,7 +311,7 @@ export const memoizedBlockStates: (
 					[receivedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
-								breakpoints[currentBreakpoint],
+								currentBreakpointState,
 								action,
 								insideInnerBlock,
 								args
@@ -326,7 +339,7 @@ export const memoizedBlockStates: (
 					[receivedState || currentState]: {
 						breakpoints: {
 							[currentBreakpoint]: memoizedRootBreakpoints(
-								breakpoints[currentBreakpoint],
+								currentBreakpointState,
 								action,
 								insideInnerBlock,
 								ref

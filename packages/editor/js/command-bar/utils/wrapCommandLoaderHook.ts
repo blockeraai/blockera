@@ -54,7 +54,7 @@ export interface TabActions {
 		postType: string;
 		postId: string | number;
 		tabs: Tab[];
-	}) => Promise<void>;
+	}) => Promise<boolean>;
 }
 
 /**

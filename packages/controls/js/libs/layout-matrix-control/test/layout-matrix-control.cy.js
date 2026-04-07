@@ -162,6 +162,7 @@ describe('Layout Matrix Control component testing', () => {
 		});
 
 		describe('Justify Content & Align Items', () => {
+			// Layout renders justify-content (Horizontal) first, align-items (Vertical) second.
 			const setCustomSelectOption = (index, option) => {
 				cy.get('button[aria-haspopup="listbox"]')
 					.eq(index)
@@ -183,7 +184,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(0, 'Start');
+				setCustomSelectOption(1, 'Start');
 
 				// Check control
 				cy.getByDataTest('matrix-top-center-selected').should('exist');
@@ -204,7 +205,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(0, 'Center');
+				setCustomSelectOption(1, 'Center');
 
 				// Check control
 				cy.getByDataTest('matrix-center-center-selected').should(
@@ -227,7 +228,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(0, 'End');
+				setCustomSelectOption(1, 'End');
 
 				// Check control
 				cy.getByDataTest('matrix-bottom-center-selected').should(
@@ -250,7 +251,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(0, 'Stretch');
+				setCustomSelectOption(1, 'Stretch');
 
 				// Check control
 				cy.getByDataTest('matrix-center-selected').should('exist');
@@ -272,7 +273,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(1, 'Start');
+				setCustomSelectOption(0, 'Start');
 
 				// Check control
 				cy.getByDataTest('matrix-center-left-selected').should('exist');
@@ -293,7 +294,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(1, 'Center');
+				setCustomSelectOption(0, 'Center');
 
 				// Check control
 				cy.getByDataTest('matrix-center-center-selected').should(
@@ -316,7 +317,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(1, 'End');
+				setCustomSelectOption(0, 'End');
 
 				// Check control
 				cy.getByDataTest('matrix-center-right-selected').should(
@@ -339,7 +340,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(1, 'Space Around');
+				setCustomSelectOption(0, 'Space Around');
 
 				// Check control
 				cy.getByDataTest('matrix-space-around-center-fill-row').should(
@@ -362,7 +363,7 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(1, 'Space Between');
+				setCustomSelectOption(0, 'Space Between');
 
 				// Check control
 				cy.getByDataTest('matrix-space-between-center-fill-row').should(
@@ -385,8 +386,8 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(0, 'Stretch');
-				setCustomSelectOption(1, 'Space Between');
+				setCustomSelectOption(1, 'Stretch');
+				setCustomSelectOption(0, 'Space Between');
 
 				// Check control
 				cy.getByDataTest('matrix-stretch-space-between-row').should(
@@ -411,8 +412,8 @@ describe('Layout Matrix Control component testing', () => {
 					name,
 				});
 
-				setCustomSelectOption(0, 'Stretch');
-				setCustomSelectOption(1, 'Space Around');
+				setCustomSelectOption(1, 'Stretch');
+				setCustomSelectOption(0, 'Space Around');
 
 				// Check control
 				cy.getByDataTest('matrix-stretch-space-around-row').should(
@@ -453,8 +454,8 @@ describe('Layout Matrix Control component testing', () => {
 				cy.getByDataTest('matrix-top-left-normal').should('not.exist');
 				cy.getByDataTest('matrix-top-left-selected').should('exist');
 				//
-				checkSelectOption(0, 'layout-matrix-align-start');
-				checkSelectOption(1, 'layout-matrix-justify-start');
+				checkSelectOption(0, 'layout-matrix-justify-start');
+				checkSelectOption(1, 'layout-matrix-align-start');
 
 				// Check data provider (dense omitted from store when isDenseActive is false)
 				cy.get('body').then(() => {
@@ -482,8 +483,8 @@ describe('Layout Matrix Control component testing', () => {
 					'exist'
 				);
 				//
-				checkSelectOption(0, 'layout-matrix-align-start');
-				checkSelectOption(1, 'layout-matrix-justify-between');
+				checkSelectOption(0, 'layout-matrix-justify-between');
+				checkSelectOption(1, 'layout-matrix-align-start');
 
 				// Check data provider (dense omitted from store when isDenseActive is false)
 				cy.get('body').then(() => {
@@ -510,8 +511,8 @@ describe('Layout Matrix Control component testing', () => {
 					'exist'
 				);
 				//
-				checkSelectOption(0, 'layout-matrix-align-center');
-				checkSelectOption(1, 'layout-matrix-justify-around');
+				checkSelectOption(0, 'layout-matrix-justify-around');
+				checkSelectOption(1, 'layout-matrix-align-center');
 
 				// Check data provider (dense omitted from store when isDenseActive is false)
 				cy.get('body').then(() => {
@@ -538,8 +539,8 @@ describe('Layout Matrix Control component testing', () => {
 					cy.getByDataTest('matrix-stretch-row').should('exist');
 				});
 				//
-				checkSelectOption(0, 'layout-matrix-align-stretch');
-				checkSelectOption(1, 'layout-matrix-justify-center');
+				checkSelectOption(0, 'layout-matrix-justify-center');
+				checkSelectOption(1, 'layout-matrix-align-stretch');
 
 				// Check data provider (dense omitted from store when isDenseActive is false)
 				cy.get('body').then(() => {
@@ -566,8 +567,8 @@ describe('Layout Matrix Control component testing', () => {
 					'exist'
 				);
 				//
-				checkSelectOption(0, 'layout-matrix-align-center');
-				checkSelectOption(1, 'layout-matrix-justify-center');
+				checkSelectOption(0, 'layout-matrix-justify-center');
+				checkSelectOption(1, 'layout-matrix-align-center');
 
 				// Check data provider (dense omitted from store when isDenseActive is false)
 				cy.get('body').then(() => {

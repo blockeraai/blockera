@@ -542,6 +542,42 @@ describe('Width → WP Compatibility', () => {
 			});
 		});
 
+		it('Spacing preset variable (WP → Blockera)', () => {
+			appendBlocks(
+				'<!-- wp:image {"id":60,"width":"var(--wp--preset--spacing--30, 20px)","sizeSlug":"full","linkDestination":"none"} -->\n' +
+					'<figure class="wp-block-image size-full is-resized"><img src="https://placehold.co/600x400" alt="" class="wp-image-60" style="width:var(--wp--preset--spacing--30, 20px)"/></figure>\n' +
+					'<!-- /wp:image --> '
+			);
+
+			cy.getBlock('core/image').click();
+
+			cy.getParentContainer('Width');
+
+			cy.addNewTransition();
+
+			getWPDataObject().then((data) => {
+				const widthVA = getSelectedBlock(data, 'blockeraWidth');
+
+				expect(widthVA).to.deep.include({
+					isValueAddon: true,
+					valueType: 'variable',
+				});
+				expect(widthVA.settings).to.deep.include({
+					id: '30',
+					type: 'spacing',
+					var: '--wp--preset--spacing--30',
+					value: '20px',
+				});
+			});
+
+			getWPDataObject().then((data) => {
+				const wpWidth = getSelectedBlock(data, 'width');
+
+				expect(wpWidth).to.be.a('string');
+				expect(String(wpWidth)).to.include('--wp--preset--spacing--30');
+			});
+		});
+
 		it('Use WP not supported value', () => {
 			appendBlocks(
 				'<!-- wp:image {"id":60,"sizeSlug":"full","linkDestination":"none","className":"is-resized"} -->\n' +
