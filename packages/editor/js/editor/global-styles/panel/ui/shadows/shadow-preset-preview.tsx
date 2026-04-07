@@ -4,6 +4,7 @@
 import React from 'react';
 
 type Props = {
+	/** Combined CSS `box-shadow` (layers joined with ", ") */
 	shadow: string;
 	width?: number;
 	height?: number;

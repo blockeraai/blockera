@@ -15,7 +15,10 @@ import { Flex } from '@blockera/controls';
  */
 import type { VariableType } from '../components/types.ts';
 import type { WpShadowPreset } from './utils';
-import { getShadowPresetAccessibilityDescription } from './utils';
+import {
+	getShadowPresetAccessibilityDescription,
+	shadowPresetItemsToCss,
+} from './utils';
 import ShadowPresetPreview from './shadow-preset-preview';
 
 function ShadowPresetOpenerValue({
@@ -36,7 +39,7 @@ function ShadowPresetOpenerValue({
 			}}
 		>
 			<ShadowPresetPreview
-				shadow={preset?.shadow ?? ''}
+				shadow={shadowPresetItemsToCss(preset?.items ?? [])}
 				inline
 				width={12}
 				height={12}

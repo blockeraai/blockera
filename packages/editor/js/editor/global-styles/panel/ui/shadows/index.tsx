@@ -68,7 +68,18 @@ function ShadowPresetGroupComponent({
 	const defaultPresetValue = useMemo((): ShadowDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
-			shadow: '0px 1px 2px rgba(0, 0, 0, 0.15)',
+			items: [
+				{
+					type: 'outer',
+					x: '10px',
+					y: '10px',
+					blur: '10px',
+					spread: '0px',
+					color: '#000000ab',
+					isVisible: true,
+				},
+			],
+			isVisible: true,
 			slug: `shadow-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
@@ -120,6 +131,10 @@ function ShadowPresetGroupComponent({
 
 const ShadowPresetGroup = memo(ShadowPresetGroupComponent);
 
+/**
+ * Reads/writes `settings.shadow` in user theme.json — presets per origin with each preset’s `items`
+ * array storing box-shadow layers (strings), aligned with transition presets and Transition.php variable JSON.
+ */
 function ShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'shadow.presets.theme'
@@ -165,15 +180,8 @@ function ShadowsPresetContent() {
 		(newValue: Object): WpShadowPreset[] =>
 			sanitizeShadowPresets(
 				Object.values(
-					newValue as Record<
-						string,
-						WpShadowPreset & Record<string, unknown>
-					>
-				).map((value) => ({
-					slug: value.slug,
-					name: value.name,
-					shadow: value.shadow,
-				}))
+					newValue as Record<string, Record<string, unknown>>
+				)
 			),
 		[]
 	);

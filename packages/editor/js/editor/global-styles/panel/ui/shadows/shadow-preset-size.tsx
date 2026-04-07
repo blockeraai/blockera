@@ -28,14 +28,17 @@ import ShadowPresetPreview from './shadow-preset-preview';
 import { VariableNameEditor } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllShadowSlugs } from '../components/utils';
-import type { WpShadowPreset } from './utils';
 import {
-	parseCssBoxShadowToRepeaterValue,
-	formatControlItemsToCssBoxShadow,
-} from '../../../../../extensions/libs/border-and-shadow/compatibilities/shadow.js';
+	repeaterRecordToShadowItems,
+	shadowItemsToRepeaterRecord,
+	shadowPresetItemsToCss,
+	type ShadowPresetItem,
+	type WpShadowPreset,
+} from './utils';
 
 export type ShadowDefaultPresetValue = {
-	shadow: string;
+	items: ShadowPresetItem[];
+	isVisible: boolean;
 	deletable: boolean;
 	cloneable: boolean;
 	visibilitySupport: boolean;
@@ -78,13 +81,13 @@ function ShadowPresetSizeComponent({
 	};
 
 	const repeaterItems = useMemo(
-		() => parseCssBoxShadowToRepeaterValue(shadowPreset.shadow || ''),
-		[shadowPreset.shadow]
+		() => shadowItemsToRepeaterRecord(shadowPreset.items || []),
+		[shadowPreset.items]
 	);
 
 	const handleBoxShadowChange = useCallback(
-		(newValue: Object | Array<Record<string, unknown>>) => {
-			const css = formatControlItemsToCssBoxShadow(newValue);
+		(newValue: Record<string, Record<string, unknown>>) => {
+			const items = repeaterRecordToShadowItems(newValue);
 			// Defer: BoxShadow onChange runs synchronously from the inner repeater reducer;
 			// updating the preset list in the same tick hits Redux error #3 (getState during reducer).
 			queueMicrotask(() => {
@@ -94,7 +97,7 @@ function ShadowPresetSizeComponent({
 					controlId,
 					repeaterId,
 					itemId: presetId,
-					value: { ...shadowPreset, shadow: css },
+					value: { ...shadowPreset, items },
 				});
 			});
 		},
@@ -119,7 +122,11 @@ function ShadowPresetSizeComponent({
 				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
 					<VStack spacing={4}>
 						<FlexItem>
-							<ShadowPresetPreview shadow={shadowPreset.shadow} />
+							<ShadowPresetPreview
+								shadow={shadowPresetItemsToCss(
+									shadowPreset.items
+								)}
+							/>
 						</FlexItem>
 
 						{'custom' === origin && (
@@ -149,6 +156,15 @@ function ShadowPresetSizeComponent({
 									key={slug}
 									PromoComponent={null}
 									id={`shadow-preset-box-${slug}`}
+									defaultRepeaterItemValue={{
+										type: 'outer',
+										x: '10px',
+										y: '10px',
+										blur: '10px',
+										spread: '0px',
+										color: '#000000ab',
+										isVisible: true,
+									}}
 									label={__('Box shadow', 'blockera')}
 									labelDescription={
 										<>
@@ -160,7 +176,7 @@ function ShadowPresetSizeComponent({
 											</p>
 											<p>
 												{__(
-													'Stored in theme.json as settings.shadow.presets (CSS box-shadow value).',
+													'Stored in theme.json as settings.shadow.presets (items array per preset).',
 													'blockera'
 												)}
 											</p>
