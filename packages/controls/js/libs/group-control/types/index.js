@@ -67,6 +67,12 @@ export type GroupControlProps = {
 	 * @default 'inline'
 	 */
 	actionButtonsType?: 'inline' | 'menu',
+	/**
+	 * The label for action menu button.
+	 *
+	 * @default ''
+	 */
+	actionMenuButtonLabel?: string,
 	//
 	children?: string | MixedElement,
 	//
