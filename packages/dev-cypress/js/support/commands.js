@@ -1279,7 +1279,7 @@ export const registerCommands = () => {
 			return apiFetch({
 				path: `/wp/v2/posts/${id}?force=true`,
 				method: 'DELETE',
-			}).then(() => {
+			}).then(async () => {
 				// Drop cached `getEntityRecord` so tab switch runs a fresh resolve (matches trash in another tab).
 				const dispatch = win.wp?.data?.dispatch('core');
 
@@ -1294,6 +1294,21 @@ export const registerCommands = () => {
 						'post',
 						id,
 					]);
+				}
+
+				// Wait until core-data finishes re-resolving (success or fail) so UI/tests do not race
+				// the recently-closed row's `getEntityRecord` resolver (numeric ID matches store normalization).
+				const resolveSelect = win.wp?.data?.resolveSelect?.('core');
+				if (resolveSelect?.getEntityRecord) {
+					try {
+						await resolveSelect.getEntityRecord(
+							'postType',
+							'post',
+							numericId
+						);
+					} catch {
+						// Expected after permanent delete (failResolution / REST error).
+					}
 				}
 			});
 		});
