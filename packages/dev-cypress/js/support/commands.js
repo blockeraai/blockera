@@ -247,6 +247,34 @@ export const registerCommands = () => {
 		}
 	);
 
+	/**
+	 * Sets a React-controlled `<input type="text">` value in one shot.
+	 *
+	 * Use when `cy.type()` is unsafe: e.g. parent `onChange` runs every keystroke and remounts
+	 * the node or commits invalid partial state (hex colors, mesh gradients, etc.).
+	 * Dispatches `input` then `change` so typical React handlers run once with the final string.
+	 */
+	Cypress.Commands.add(
+		'setControlledInputValue',
+		{ prevSubject: 'element' },
+		(subject, value) => {
+			const el = subject[0];
+			const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+				window.HTMLInputElement.prototype,
+				'value'
+			)?.set;
+
+			if (nativeInputValueSetter) {
+				nativeInputValueSetter.call(el, value);
+			} else {
+				el.value = value;
+			}
+			el.dispatchEvent(new Event('input', { bubbles: true }));
+			el.dispatchEvent(new Event('change', { bubbles: true }));
+			return cy.wrap(subject);
+		}
+	);
+
 	// simulate paste event
 	Cypress.Commands.add(
 		'pasteText',
