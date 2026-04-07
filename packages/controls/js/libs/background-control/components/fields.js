@@ -65,8 +65,11 @@ const Fields: FieldItem = memo<FieldItem>(
 			select('core/block-editor') || {};
 
 		let { name = '' } = getSelectedBlock() || {};
-		const { getSelectedBlockStyle } = select('blockera/editor');
-		const { getActiveComplementaryArea } = select('core/interface');
+		// Component tests (and some editor bootstraps) may not register these stores.
+		const { getSelectedBlockStyle = () => '' } =
+			select('blockera/editor') || {};
+		const { getActiveComplementaryArea = () => undefined } =
+			select('core/interface') || {};
 
 		const activeComplementaryArea =
 			getActiveComplementaryArea('core/edit-site');
@@ -1272,6 +1275,7 @@ const Fields: FieldItem = memo<FieldItem>(
 							<Button
 								size="extra-small"
 								variant="tertiary"
+								data-test="mesh-gradient-regenerate"
 								onClick={() => {
 									changeRepeaterItem({
 										onChange,
