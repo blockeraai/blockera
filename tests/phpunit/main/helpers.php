@@ -553,7 +553,8 @@ function blockera_test_normalize_css( string $css): string {
 	$css = preg_replace('/;(?![^(]*\))/', ";\n", $css);
 	
 	// Add semicolon to declarations that don't have one before closing brace.
-	$css = preg_replace('/([^\s\{;])\s*\}/', "$1;\n}", $css);
+	// Exclude `}` from the lead char so we never match `}\s*}` (closing brace + inner block end).
+	$css = preg_replace('/([^\s\{;\}])\s*\}/', "$1;\n}", $css);
 	
 	// Split into lines for processing.
 	$lines = explode("\n", $css);
@@ -592,8 +593,9 @@ function blockera_test_normalize_css( string $css): string {
 	// Clean up any trailing whitespace.
 	$css = trim($css);
 
-	// replace u002d with -
+	// Repair JSON unicode escapes if they appear literally in captured CSS.
 	$css = str_replace('u002d', '-', $css);
-	
+	$css = str_replace('u0026', '&', $css);
+
 	return $css;
 }
