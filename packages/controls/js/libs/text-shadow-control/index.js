@@ -66,6 +66,8 @@ export default function TextShadowControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			label={label}
 			labelDescription={labelDescription}
+			controlAddonTypes={['variable']}
+			variableTypes={['text-shadow']}
 			PromoComponent={({
 				items,
 				onClose = () => {},
