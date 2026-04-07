@@ -105,6 +105,8 @@ class JSON extends \WP_Theme_JSON {
         $schema_styles_blocks   = array();
         $schema_settings_blocks = array();
 
+        $settings_schema = static::extend_valid_settings_schema(static::VALID_SETTINGS);
+
         /*
          * Generate a schema for blocks.
          * - Block styles can contain `elements` & `variations` definitions.
@@ -116,7 +118,7 @@ class JSON extends \WP_Theme_JSON {
          * inner `blocks`, the overall schema will be generated in multiple passes.
          */
         foreach ($valid_block_names as $block) {
-            $schema_settings_blocks[ $block ]           = static::VALID_SETTINGS;
+            $schema_settings_blocks[ $block ]           = $settings_schema;
             $schema_styles_blocks[ $block ]             = $styles_non_top_level;
             $schema_styles_blocks[ $block ]['elements'] = $schema_styles_elements;
         }
@@ -154,7 +156,7 @@ class JSON extends \WP_Theme_JSON {
         $schema['styles']                                 = $styles_non_top_level;
         $schema['styles']['blocks']                       = $schema_styles_blocks;
         $schema['styles']['elements']                     = $schema_styles_elements;
-        $schema['settings']                               = static::VALID_SETTINGS;
+        $schema['settings']                               = $settings_schema;
         $schema['settings']['blocks']                     = $schema_settings_blocks;
         $schema['settings']['typography']['fontFamilies'] = static::schema_in_root_and_per_origin(static::FONT_FAMILY_SCHEMA);
 
@@ -178,7 +180,156 @@ class JSON extends \WP_Theme_JSON {
             }
         }
 
+        if (
+            isset($output['settings']['border']['presets']) &&
+            is_array($output['settings']['border']['presets'])
+        ) {
+            $output['settings']['border']['presets'] = static::sanitize_blockera_border_presets(
+                $output['settings']['border']['presets']
+            );
+        }
+
         return $output;
+    }
+
+    /**
+     * Adds Blockera-only keys to the core {@see \WP_Theme_JSON::VALID_SETTINGS} schema (e.g. box border presets).
+     *
+     * @param array $settings_schema Core valid settings tree.
+     * @return array
+     */
+    protected static function extend_valid_settings_schema( array $settings_schema ): array {
+        if (isset($settings_schema['border']) && is_array($settings_schema['border'])) {
+            $settings_schema['border'] = array_merge(
+                $settings_schema['border'],
+                array(
+                    'presets' => null,
+                )
+            );
+        }
+
+        return $settings_schema;
+    }
+
+    /**
+     * Keeps settings.border.presets aligned with the editor shape (slug, name, border box).
+     *
+     * @param array $presets Presets tree with theme, default, and custom origins.
+     * @return array Sanitized presets.
+     */
+    protected static function sanitize_blockera_border_presets( array $presets ): array {
+        $out = array();
+
+        foreach (array( 'theme', 'default', 'custom' ) as $origin) {
+            if (! isset($presets[ $origin ]) || ! is_array($presets[ $origin ])) {
+                continue;
+            }
+            $out[ $origin ] = array();
+            foreach ($presets[ $origin ] as $item) {
+                $clean = static::sanitize_border_preset_item($item);
+                if (null !== $clean) {
+                    $out[ $origin ][] = $clean;
+                }
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param mixed $item Single preset entry.
+     * @return array|null Preset array or null if invalid.
+     */
+    protected static function sanitize_border_preset_item( $item ): ?array {
+        if (! is_array($item)) {
+            return null;
+        }
+        if (
+            ! isset($item['slug'], $item['name']) ||
+            ! is_string($item['slug']) ||
+            ! is_string($item['name'])
+        ) {
+            return null;
+        }
+
+        return array(
+            'slug'   => $item['slug'],
+            'name'   => $item['name'],
+            'border' => static::sanitize_box_border_value($item['border'] ?? null),
+        );
+    }
+
+    /**
+     * @param mixed $border Border value from theme.json / editor.
+     * @return array Normalized box border (matches JS sanitizeBorderBoxPresets).
+     */
+    protected static function sanitize_box_border_value( $border ): array {
+        if (! is_array($border)) {
+            return static::get_default_box_border_value();
+        }
+
+        $type = isset($border['type']) && in_array($border['type'], array( 'all', 'custom' ), true)
+            ? $border['type']
+            : 'all';
+
+        if ('all' === $type) {
+            $all = isset($border['all']) && is_array($border['all'])
+                ? static::normalize_border_side($border['all'])
+                : static::empty_border_side();
+
+            return array(
+                'type' => 'all',
+                'all'  => $all,
+            );
+        }
+
+        $out = array( 'type' => 'custom' );
+
+        foreach (array( 'top', 'right', 'bottom', 'left' ) as $edge) {
+            if (isset($border[ $edge ]) && is_array($border[ $edge ])) {
+                $out[ $edge ] = static::normalize_border_side($border[ $edge ]);
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return array{width: string, style: string, color: string|array}
+     */
+    protected static function empty_border_side(): array {
+        return array(
+            'width' => '',
+            'style' => '',
+            'color' => '',
+        );
+    }
+
+    /**
+     * @return array{type: string, all: array, ...}
+     */
+    protected static function get_default_box_border_value(): array {
+        return array(
+            'type' => 'all',
+            'all'  => static::empty_border_side(),
+        );
+    }
+
+    /**
+     * @param array $side Raw side object.
+     * @return array{width: string, style: string, color: string|array}
+     */
+    protected static function normalize_border_side( array $side ): array {
+        $width  = isset($side['width']) && is_string($side['width']) ? $side['width'] : '';
+        $style  = isset($side['style']) && is_string($side['style']) ? $side['style'] : '';
+        $color  = $side['color'] ?? '';
+        $colorN = is_string($color) || is_array($color) ? $color : '';
+
+        return array(
+            'width' => $width,
+            'style' => $style,
+            'color' => $colorN,
+        );
     }
 
 	/**

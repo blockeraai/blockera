@@ -128,26 +128,26 @@ const BorderPresetGroup = memo(BorderPresetGroupComponent);
 
 function BordersPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.theme'
+		'border.presets.theme'
 	);
 
 	const [baseThemePresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.theme',
+		'border.presets.theme',
 		'',
 		'base'
 	);
 	const [rawDefaultPresets, setDefaultPresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.default'
+		'border.presets.default'
 	);
 
 	const [baseDefaultPresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.default',
+		'border.presets.default',
 		'',
 		'base'
 	);
 
 	const [rawCustomPresets = [], setCustomPresets] = useGlobalSetting(
-		'custom.blockera.borderPresets.custom'
+		'border.presets.custom'
 	);
 
 	const themePresets = useMemo(

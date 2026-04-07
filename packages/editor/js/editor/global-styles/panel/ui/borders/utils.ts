@@ -42,9 +42,9 @@ export type BorderBoxPreset = {
 };
 
 /**
- * Only `settings.custom.blockera` keys we persist (unknown keys ignored elsewhere).
+ * Border box presets: `settings.border.presets.{theme|default|custom}`.
+ * `settings.custom` is reserved for CSS custom properties in theme.json — do not store presets there.
  */
-export const BLOCKERA_CUSTOM_BORDER_KEY = 'borderPresets' as const;
 
 function emptySide() {
 	return { width: '', style: '', color: '' };

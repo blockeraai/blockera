@@ -140,7 +140,7 @@ function BorderPresetSizeComponent({
 									<>
 										<p>
 											{__(
-												'Defines this named border preset for use across the site (stored under settings.custom.blockera.borderPresets).',
+												'Defines this named border preset for use across the site.',
 												'blockera'
 											)}
 										</p>
