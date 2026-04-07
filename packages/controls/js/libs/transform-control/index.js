@@ -98,6 +98,8 @@ export default function TransformControl({
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			valueCleanup={valueCleanup}
 			id={'transform'}
+			controlAddonTypes={['variable']}
+			variableTypes={['transform']}
 			PromoComponent={({
 				items,
 				onClose = () => {},
