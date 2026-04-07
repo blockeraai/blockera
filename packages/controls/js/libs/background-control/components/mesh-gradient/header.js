@@ -29,9 +29,14 @@ const RepeaterItemHeader: MeshGradientHeaderItem = memo<MeshGradientHeaderItem>(
 		return (
 			<div
 				className={controlInnerClassNames('repeater-group-header')}
-				onClick={(event) =>
-					isOpenPopoverEvent(event) && setOpen(!isOpen)
-				}
+				onClick={(event) => {
+					// Avoid bubbling to GroupControl's group-header, which would also run
+					// onClickCallback and can fight this header's toggle (nested popovers).
+					event.stopPropagation();
+					if (isOpenPopoverEvent(event)) {
+						setOpen(!isOpen);
+					}
+				}}
 			>
 				<span className={controlInnerClassNames('header-icon')}>
 					<ColorIndicator value={item.color} />
