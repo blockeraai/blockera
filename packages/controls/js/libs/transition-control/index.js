@@ -53,6 +53,8 @@ export default function TransitionControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			id={'transition'}
+			controlAddonTypes={['variable']}
+			variableTypes={['transition']}
 			getTransitionTypeOptions={getTransitionTypeOptions}
 			getTransitionTimingOptions={getTransitionTimingOptions}
 			PromoComponent={({
