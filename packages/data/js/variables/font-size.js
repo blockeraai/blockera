@@ -15,6 +15,7 @@ import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
+import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
 import { generateVariableString, getBlockEditorSettings } from './index';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
@@ -60,6 +61,12 @@ export const getFontSize: (id: string) => ?VariableItem = memoize(function (
 		const { getVariableGroupItems } = select(STORE_NAME);
 
 		fontSize = getVariableGroupItems('', 'font-size').find(
+			(item) => item.id === id
+		);
+	}
+
+	if (isUndefined(fontSize?.value)) {
+		fontSize = getCustomGlobalStylePresetVariables('font-size').find(
 			(item) => item.id === id
 		);
 	}
