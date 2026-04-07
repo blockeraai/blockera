@@ -13,11 +13,11 @@ import { getBlockType, getBlockFromExample } from '@wordpress/blocks';
  * Blockera dependencies
  */
 import { isEquals } from '@blockera/utils';
+import { getVariationClassName } from '@blockera/global-styles-ui';
 
 /**
  * Internal dependencies
  */
-import { getVariationClassName } from './utils';
 import { useBlockContext } from '../../../extensions/components/block-context';
 import { useBlockPreviewStyles } from '../../../hooks/use-block-preview-styles';
 

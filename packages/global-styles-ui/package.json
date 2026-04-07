@@ -1,0 +1,25 @@
+{
+	"name": "@blockera/global-styles-ui",
+	"version": "1.0.0",
+	"description": "Blockera global styles preset UI (theme.json presets) for the Site Editor.",
+	"author": "The Blockera Contributors",
+	"license": "ISC",
+	"keywords": [
+		"blockera",
+		"gutenberg",
+		"global-styles"
+	],
+	"homepage": "https://github.com/blockeraai/blockera",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/blockeraai/blockera",
+		"directory": "packages/global-styles-ui"
+	},
+	"bugs": {
+		"url": "https://github.com/blockeraai/blockera/issues"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"main": "js/index.ts"
+}

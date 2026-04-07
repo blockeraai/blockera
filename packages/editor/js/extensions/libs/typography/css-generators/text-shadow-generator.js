@@ -1,13 +1,16 @@
 /**
  * Blockera dependencies
  */
-import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
+import {
+	getSortedRepeater,
+	getValueAddonRealValue,
+	parseCssTextShadowToRepeaterValue,
+} from '@blockera/controls';
 
 /**
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
-import { parseCssTextShadowToRepeaterValue } from '../../border-and-shadow/compatibilities/text-shadow-css';
 
 export function TextShadowGenerator(id, props, options) {
 	const { attributes } = props;

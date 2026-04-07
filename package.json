@@ -38,6 +38,7 @@
 		"@blockera/editor": "file:packages/editor",
 		"@blockera/env": "file:packages/env",
 		"@blockera/feature-icon": "file:packages/features-library/icon",
+		"@blockera/global-styles-ui": "file:packages/global-styles-ui",
 		"@blockera/features-core": "file:packages/features-core",
 		"@blockera/icons": "file:packages/icons",
 		"@blockera/plugin-compatibility": "file:packages/plugin-compatibility",

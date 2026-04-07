@@ -1,3 +1,3 @@
 // @flow
 
-export { BorderRadius } from '../global-styles/panel/ui/border-radius/index.tsx';
+export { BorderRadius } from '@blockera/global-styles-ui';

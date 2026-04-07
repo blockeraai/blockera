@@ -9,6 +9,16 @@ import { type MixedElement } from 'react';
 /**
  * Blockera dependencies
  */
+import {
+	Borders,
+	Filters,
+	TextShadows,
+	Spacing,
+	Transforms,
+	colorsPanelHandler,
+	shadowsPanelHandler,
+	typographyPanelHandler,
+} from '@blockera/global-styles-ui';
 import { Icon } from '@blockera/icons';
 import { Flex } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
@@ -16,20 +26,12 @@ import { extensionClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { Borders } from '../global-styles/panel/ui/borders/index.tsx';
-import { Filters } from '../global-styles/panel/ui/filters/index.tsx';
 import { Transitions } from './transitions';
-import { TextShadows } from '../global-styles/panel/ui/text-shadows/index.tsx';
 import { BorderRadius } from './border-radius';
 import { NavItemButton } from './nav-item-button';
 import { NavItemScreen } from './nav-item-screen';
 import { navItemClassName } from './nav-item-classname';
 import { initPath } from './blockera-global-styles-navigation';
-import { Spacing } from '../global-styles/panel/ui/spacing/index.tsx';
-import { Transforms } from '../global-styles/panel/ui/transforms/index.tsx';
-import { colorsPanelHandler } from '../global-styles/panel/ui/colors/colors-panel-handler.tsx';
-import { typographyPanelHandler } from '../global-styles/panel/ui/font-sizes/typography-panel-handler.tsx';
-import { shadowsPanelHandler } from '../global-styles/panel/ui/shadows/shadows-panel-handler.tsx';
 
 const designSystemBackLabel = __('Design System', 'blockera');
 

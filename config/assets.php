@@ -23,6 +23,8 @@ return [
 			'telemetry',
 			'feature-icon',
 			'features-core',
+			'global-styles-ui',
+			'global-styles-ui-styles',
 			'editor',
 			'block-icon',
 			'blocks-core',

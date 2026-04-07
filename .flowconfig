@@ -14,6 +14,7 @@
 
 [options]
 react.runtime=automatic
+module.name_mapper='^@blockera/global-styles-ui$' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper.extension='ts' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 module.name_mapper.extension='tsx' -> '<PROJECT_ROOT>/flow/TypeScriptModule.js.flow'
 

@@ -9,7 +9,7 @@ import { dispatch, select, subscribe } from '@wordpress/data';
  * Internal dependencies
  */
 import { registerBlockStylesFromMetaData } from './block-styles-registry';
-import { mergeBaseAndUserConfigs } from './panel/context/global-styles-provider';
+import { mergeBaseAndUserConfigs } from '@blockera/global-styles-ui';
 
 /**
  * Initializes global styles once the data is available.

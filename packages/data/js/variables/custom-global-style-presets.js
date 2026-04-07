@@ -1,7 +1,7 @@
 // @flow
 /**
  * Presets from theme.json / Site Editor via block editor `__experimentalFeatures`.
- * Maps the same paths as `packages/editor/js/editor/global-styles/panel/ui/*` screens.
+ * Maps the same paths as `packages/global-styles-ui/js/*` preset screens.
  */
 import { select } from '@wordpress/data';
 
