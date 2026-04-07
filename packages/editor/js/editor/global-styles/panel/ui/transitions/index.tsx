@@ -72,9 +72,11 @@ function TransitionPresetGroupComponent({
 	const defaultPresetValue = useMemo((): TransitionDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
+			isVisible: true,
 			items: [
 				{
 					type: 'all',
+					isVisible: true,
 					duration: '500ms',
 					timing: 'ease',
 					delay: '0ms',

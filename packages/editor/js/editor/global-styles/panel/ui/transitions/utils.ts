@@ -10,6 +10,7 @@ export type TransitionPresetItem = {
 	duration: string;
 	timing: string;
 	delay: string;
+	isVisible: boolean;
 };
 
 export type WpTransitionPreset = {
@@ -23,10 +24,12 @@ const DEFAULT_ITEM: TransitionPresetItem = {
 	duration: '500ms',
 	timing: 'ease',
 	delay: '0ms',
+	isVisible: true,
 };
 
 function sanitizeItem(raw: Record<string, unknown>): TransitionPresetItem {
 	return {
+		isVisible: Boolean(raw.isVisible ?? true),
 		type: String(raw.type ?? DEFAULT_ITEM.type).trim() || DEFAULT_ITEM.type,
 		duration: String(raw.duration ?? DEFAULT_ITEM.duration).trim(),
 		timing: String(raw.timing ?? DEFAULT_ITEM.timing).trim(),

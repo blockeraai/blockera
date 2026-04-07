@@ -39,6 +39,7 @@ export type TransitionDefaultPresetValue = {
 	items: TransitionPresetItem[];
 	deletable: boolean;
 	cloneable: boolean;
+	isVisible: boolean;
 	visibilitySupport: boolean;
 };
 

@@ -16,7 +16,17 @@ export function TransitionGenerator(id, props, options) {
 		return '';
 	}
 
-	const value = getSortedRepeater(attributes?.blockeraTransition)
+	let transitionValue = attributes?.blockeraTransition;
+
+	if ('variable' === transitionValue?.valueType) {
+		transitionValue =
+			JSON.parse(transitionValue?.settings?.value)?.items || [];
+		transitionValue = transitionValue.map((t, i) => [`${t.type}-${i}`, t]);
+	} else {
+		transitionValue = getSortedRepeater(transitionValue);
+	}
+
+	const value = transitionValue
 		?.map(([, item]) => {
 			if (!item.isVisible) {
 				return null;

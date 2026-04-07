@@ -50,7 +50,16 @@ class Transition extends BaseStyleDefinition implements Repeater {
 			return [];
 		}
 
-		$sortedTransitions   = blockera_get_sorted_repeater( $setting[ $cssProperty ] );
+		$value = $setting[ $cssProperty ];
+
+		if (! isset($value['valueType'])) {
+			$sortedTransitions = blockera_get_sorted_repeater($value);
+		} elseif ('variable' === $value['valueType'] ?? '' && isset($value['settings']['value'])) {
+			$sortedTransitions = blockera_get_sorted_repeater(json_decode($value['settings']['value'], true)['items'] ?? []);
+		} else {
+			$sortedTransitions = [];
+		}
+
 		$filteredTransitions = [];
 
 		foreach ( $sortedTransitions as $transition ) {
