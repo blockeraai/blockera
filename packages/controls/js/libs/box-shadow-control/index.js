@@ -46,6 +46,8 @@ export default function BoxShadowControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			defaultValue={defaultValue}
+			controlAddonTypes={['variable']}
+			variableTypes={['shadow']}
 			PromoComponent={({
 				items,
 				onClose = () => {},
