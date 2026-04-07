@@ -171,11 +171,17 @@ function resolveTextShadowPreset(presetReference: string): ?string {
 		if (textShadowFeatures?.presets) {
 			const themePresets = textShadowFeatures.presets.theme || [];
 			const defaultPresets = textShadowFeatures.presets.default || [];
-			const allPresets = [...themePresets, ...defaultPresets];
+			const customPresets = textShadowFeatures.presets.custom || [];
+			const allPresets = [
+				...themePresets,
+				...defaultPresets,
+				...customPresets,
+			];
 
 			const preset = allPresets.find((p: Object) => p.slug === slug);
-			if (preset && preset.shadow) {
-				return preset.shadow;
+			const css = preset ? getTextShadowPresetCssValue(preset) : '';
+			if (css) {
+				return css;
 			}
 		}
 
@@ -186,8 +192,9 @@ function resolveTextShadowPreset(presetReference: string): ?string {
 			const preset = textShadowFeatures.presets.find(
 				(p: Object) => p.slug === slug
 			);
-			if (preset && preset.shadow) {
-				return preset.shadow;
+			const css = preset ? getTextShadowPresetCssValue(preset) : '';
+			if (css) {
+				return css;
 			}
 		}
 	} catch (error) {
@@ -321,4 +328,35 @@ export function formatRepeaterItemsToCssTextShadow(
 		return '';
 	}
 	return visible.map(([, item]) => stringifyTextShadowLayer(item)).join(', ');
+}
+
+/**
+ * Resolved CSS `text-shadow` for a theme.json preset (`items` row objects, legacy string layers, or `shadow`).
+ *
+ * @param {Object} preset - Preset from __experimentalFeatures.textShadow.presets
+ * @return {string} Combined CSS or empty
+ */
+function getTextShadowPresetCssValue(preset: Object): string {
+	if (!preset || typeof preset !== 'object') {
+		return '';
+	}
+	if (Array.isArray(preset.items) && preset.items.length) {
+		const first = preset.items[0];
+		if (first && typeof first === 'object' && !Array.isArray(first)) {
+			const css = formatRepeaterItemsToCssTextShadow(preset.items);
+			if (css) {
+				return css;
+			}
+		}
+		const layers = preset.items
+			.filter((s) => typeof s === 'string' && String(s).trim())
+			.map((s) => String(s).trim());
+		if (layers.length) {
+			return layers.join(', ');
+		}
+	}
+	if (preset.shadow && typeof preset.shadow === 'string') {
+		return String(preset.shadow).trim();
+	}
+	return '';
 }
