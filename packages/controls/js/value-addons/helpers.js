@@ -20,6 +20,7 @@ import {
 	getColors,
 	getFontSizes,
 	getLinearGradients,
+	getMergedGlobalStylePresetVariables,
 	getRadialGradients,
 	getSpacings,
 	getVariable,
@@ -170,9 +171,7 @@ export function setValueAddon(
 	setState(newValue);
 }
 
-export function getValueAddonRealValue(
-	value: ValueAddon | string | undefined
-): any {
+export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 	if (value === undefined) {
 		return '';
 	}
@@ -273,6 +272,15 @@ export function getVariableIcon({
 
 		case 'width-size':
 			return <Icon icon="variable-width-size" iconSize="20" />;
+
+		case 'shadow':
+		case 'text-shadow':
+		case 'border-radius':
+		case 'border':
+		case 'transition':
+		case 'transform':
+		case 'filter':
+			return <Icon icon="variable-spacing" iconSize="20" />;
 	}
 
 	return <></>;
@@ -322,6 +330,55 @@ export function getVariableCategory(
 				label: __('Color Variables', 'blockera'),
 				items: getColors(),
 				type: 'color',
+			};
+
+		case 'shadow':
+			return {
+				label: __('Shadow variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('shadow'),
+				type: 'shadow',
+			};
+
+		case 'text-shadow':
+			return {
+				label: __('Text shadow variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('text-shadow'),
+				type: 'text-shadow',
+			};
+
+		case 'border-radius':
+			return {
+				label: __('Border radius variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('border-radius'),
+				type: 'border-radius',
+			};
+
+		case 'border':
+			return {
+				label: __('Border variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('border'),
+				type: 'border',
+			};
+
+		case 'transition':
+			return {
+				label: __('Transition variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('transition'),
+				type: 'transition',
+			};
+
+		case 'transform':
+			return {
+				label: __('Transform variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('transform'),
+				type: 'transform',
+			};
+
+		case 'filter':
+			return {
+				label: __('Filter variables', 'blockera'),
+				items: getMergedGlobalStylePresetVariables('filter'),
+				type: 'filter',
 			};
 	}
 
