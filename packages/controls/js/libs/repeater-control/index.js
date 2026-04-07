@@ -21,9 +21,10 @@ import { Icon } from '@blockera/icons';
 /**
  * Internal dependencies.
  */
-import { Button, Grid } from '../';
+import { BaseControl, Button, Grid } from '../';
 import { LabelControl } from '../label-control';
 import { useControlContext } from '../../context';
+import { setValueAddon, useValueAddon } from '../../';
 import { RepeaterContextProvider } from './context';
 import MappedItems from './components/mapped-items';
 import { repeaterOnChange } from './store/reducers/utils';
@@ -71,6 +72,13 @@ export default function RepeaterControl(
 		//
 		label,
 		children,
+		columns = '',
+		singularId,
+		repeaterItem,
+		labelProps: propsForLabelControl = {},
+		controlAddonTypes,
+		variableTypes,
+		dynamicValueTypes,
 		onRoot = true,
 		labelPopoverTitle,
 		labelDescription,
@@ -120,6 +128,7 @@ export default function RepeaterControl(
 
 	const {
 		value: repeaterItems,
+		setValue,
 		dispatch: { addRepeaterItem, modifyControlValue },
 		controlInfo: { name: controlId, attribute, blockName },
 		getControlPath,
@@ -139,6 +148,64 @@ export default function RepeaterControl(
 	const [count, setCount] = useState(0);
 
 	const [disableAddNewItem, setDisableAddNewItem] = useState(false);
+
+	const {
+		valueAddonClassNames,
+		isSetValueAddon,
+		ValueAddonControl,
+		ValueAddonPointer,
+	} = useValueAddon({
+		types: controlAddonTypes,
+		value: repeaterItems,
+		setValue: (newValue: any): void =>
+			setValueAddon(newValue, setValue, defaultValue),
+		variableTypes,
+		dynamicValueTypes,
+		onChange: setValue,
+		size: 'extra-small',
+	});
+
+	const valueAddonLabelProps = {
+		value: repeaterItems,
+		singularId,
+		attribute,
+		blockName,
+		label,
+		labelDescription,
+		labelPopoverTitle,
+		repeaterItem,
+		defaultValue: isFunction(valueCleanup)
+			? valueCleanup(defaultValue)
+			: defaultValue,
+		resetToDefault,
+		mode: 'advanced',
+		path: getControlPath(attribute, repeaterId),
+		isRepeater: true,
+		...propsForLabelControl,
+	};
+
+	if (isSetValueAddon()) {
+		return (
+			<BaseControl
+				columns={columns}
+				controlName="repeater"
+				className={className}
+				{...valueAddonLabelProps}
+			>
+				<div
+					className={controlClassNames(
+						'repeater',
+						'repeater-value-addon',
+						className,
+						valueAddonClassNames
+					)}
+					data-cy="blockera-repeater-control-value-addon"
+				>
+					<ValueAddonControl />
+				</div>
+			</BaseControl>
+		);
+	}
 
 	const defaultRepeaterState: TRepeaterDefaultStateProps = {
 		design,
@@ -313,35 +380,56 @@ export default function RepeaterControl(
 		!maxItems ||
 		(maxItems !== -1 && Object.keys(repeaterItems)?.length >= maxItems);
 
+	const renderAddItemButtonWithValueAddon = (
+		button: MixedElement
+	): MixedElement => {
+		if (!valueAddonClassNames) {
+			return button;
+		}
+
+		return (
+			<span
+				className={controlClassNames(
+					'repeater-add-item-trigger',
+					valueAddonClassNames
+				)}
+			>
+				<ValueAddonPointer />
+				{button}
+			</span>
+		);
+	};
+
 	const LargeNativeInserter = ({
 		onClick,
 		...props
 	}: {
 		onClick?: (callback: () => void) => void,
 		props?: Object,
-	}) => (
-		<Button
-			data-test={
-				addNewButtonDataTest ||
-				addNewButtonLabel ||
-				__('Add New', 'blockera')
-			}
-			size="extra-small"
-			className={controlInnerClassNames('btn-add', {
-				'is-deactivate': disableProHints && disableAddNewItem,
-			})}
-			disabled={disabledAddNewItem}
-			onClick={() =>
-				'function' === typeof onClick
-					? onClick(addNewButtonOnClick)
-					: addNewButtonOnClick()
-			}
-			{...props}
-		>
-			<Icon icon="plus" iconSize="20" />
-			{addNewButtonLabel || __('Add New', 'blockera')}
-		</Button>
-	);
+	}) =>
+		renderAddItemButtonWithValueAddon(
+			<Button
+				data-test={
+					addNewButtonDataTest ||
+					addNewButtonLabel ||
+					__('Add New', 'blockera')
+				}
+				size="extra-small"
+				className={controlInnerClassNames('btn-add', {
+					'is-deactivate': disableProHints && disableAddNewItem,
+				})}
+				disabled={disabledAddNewItem}
+				onClick={() =>
+					'function' === typeof onClick
+						? onClick(addNewButtonOnClick)
+						: addNewButtonOnClick()
+				}
+				{...props}
+			>
+				<Icon icon="plus" iconSize="20" />
+				{addNewButtonLabel || __('Add New', 'blockera')}
+			</Button>
+		);
 
 	const SmallNativeInserter = ({
 		onClick,
@@ -350,7 +438,7 @@ export default function RepeaterControl(
 		onClick?: (callback: () => void) => void,
 		props?: Object,
 	}) => {
-		return (
+		return renderAddItemButtonWithValueAddon(
 			<Button
 				data-test={
 					addNewButtonDataTest ||

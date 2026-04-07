@@ -7,7 +7,10 @@ import type { MixedElement } from 'react';
 /**
  * Internal dependencies
  */
-import type { ControlGeneralTypes } from '../../../types';
+import type {
+	ControlGeneralTypes,
+	ControlValueAddonTypes,
+} from '../../../types';
 import type { GroupControlMode } from '../../group-control/types';
 import type { TPopoverProps } from '../../popover/types';
 
@@ -23,6 +26,7 @@ type ID = string | number;
 export type RepeaterControlProps = {
 	...Object,
 	...ControlGeneralTypes,
+	...ControlValueAddonTypes,
 	/**
 	 * Repeater identifier.
 	 */
