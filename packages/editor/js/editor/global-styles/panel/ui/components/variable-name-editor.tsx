@@ -3,11 +3,11 @@
  */
 import { __ } from '@wordpress/i18n';
 import {
-	useContext,
+	memo,
 	useState,
 	useEffect,
+	useContext,
 	useCallback,
-	memo,
 } from '@wordpress/element';
 
 /**
@@ -314,7 +314,7 @@ function VariableNameEditorComponent<T extends VariableType>({
 			)}
 
 			{canSaveNameSlug && (
-				<div className="blockera-preset-naming-save-actions">
+				<Flex className="blockera-preset-naming-save-actions">
 					<Button
 						variant="tertiary"
 						size="small"
@@ -332,7 +332,7 @@ function VariableNameEditorComponent<T extends VariableType>({
 					>
 						{__('Save', 'blockera')}
 					</Button>
-				</div>
+				</Flex>
 			)}
 		</Flex>
 	);
