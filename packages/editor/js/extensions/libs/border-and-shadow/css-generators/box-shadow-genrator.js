@@ -7,6 +7,7 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
+import { parseCssBoxShadowToRepeaterValue } from '../compatibilities/shadow';
 
 export function BoxShadowGenerator(id, props, options) {
 	const { attributes } = props;
@@ -19,8 +20,26 @@ export function BoxShadowGenerator(id, props, options) {
 		'box-shadow': [],
 	};
 
+	let boxShadowValue = attributes?.blockeraBoxShadow;
+
+	if ('variable' === boxShadowValue?.valueType) {
+		boxShadowValue =
+			JSON.parse(boxShadowValue?.settings?.value)?.items ||
+			attributes?.blockeraBoxShadow;
+
+		if (!Array.isArray(boxShadowValue)) {
+			boxShadowValue = Object.values(
+				parseCssBoxShadowToRepeaterValue(boxShadowValue)
+			);
+		}
+
+		boxShadowValue = boxShadowValue.map((s, i) => [`${s.type}-${i}`, s]);
+	} else {
+		boxShadowValue = getSortedRepeater(boxShadowValue);
+	}
+
 	// Collect all properties
-	getSortedRepeater(attributes?.blockeraBoxShadow)?.map(([, item]) => {
+	boxShadowValue?.map(([, item]) => {
 		if (!item.isVisible) {
 			return undefined;
 		}

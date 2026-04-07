@@ -12,6 +12,37 @@ import { getSortedRepeater, getValueAddonRealValue } from '@blockera/controls';
 import { getColorVAFromVarString } from '@blockera/data';
 
 /**
+ * Resolved CSS `box-shadow` for a theme.json preset (`items` array or legacy `shadow` string).
+ *
+ * @param {Object} preset - Preset from __experimentalFeatures.shadow.presets
+ * @return {string} Combined CSS or empty
+ */
+function getShadowPresetCssValue(preset: Object): string {
+	if (!preset || typeof preset !== 'object') {
+		return '';
+	}
+	if (Array.isArray(preset.items) && preset.items.length) {
+		const first = preset.items[0];
+		if (first && typeof first === 'object' && !Array.isArray(first)) {
+			const css = formatControlItemsToCssBoxShadow(preset.items);
+			if (css) {
+				return css;
+			}
+		}
+		const layers = preset.items
+			.filter((s) => typeof s === 'string' && String(s).trim())
+			.map((s) => String(s).trim());
+		if (layers.length) {
+			return layers.join(', ');
+		}
+	}
+	if (preset.shadow && typeof preset.shadow === 'string') {
+		return String(preset.shadow).trim();
+	}
+	return '';
+}
+
+/**
  * Resolve WordPress shadow preset to actual CSS box-shadow value
  *
  * @param {string} presetReference - WordPress preset reference (e.g., "var:preset|shadow|slug")
@@ -51,15 +82,21 @@ function resolveShadowPreset(presetReference: string): ?string {
 		// They may be in theme or default arrays
 		const shadowFeatures = settings?.__experimentalFeatures?.shadow;
 		if (shadowFeatures?.presets) {
-			// Check theme presets first, then default presets
+			// Check theme presets first, then default presets, then custom (Site Editor).
 			const themePresets = shadowFeatures.presets.theme || [];
 			const defaultPresets = shadowFeatures.presets.default || [];
-			const allPresets = [...themePresets, ...defaultPresets];
+			const customPresets = shadowFeatures.presets.custom || [];
+			const allPresets = [
+				...themePresets,
+				...defaultPresets,
+				...customPresets,
+			];
 
 			// Find the preset by slug
 			const preset = allPresets.find((p: Object) => p.slug === slug);
-			if (preset && preset.shadow) {
-				return preset.shadow;
+			const css = preset ? getShadowPresetCssValue(preset) : '';
+			if (css) {
+				return css;
 			}
 		}
 
@@ -68,8 +105,9 @@ function resolveShadowPreset(presetReference: string): ?string {
 			const preset = shadowFeatures.presets.find(
 				(p: Object) => p.slug === slug
 			);
-			if (preset && preset.shadow) {
-				return preset.shadow;
+			const css = preset ? getShadowPresetCssValue(preset) : '';
+			if (css) {
+				return css;
 			}
 		}
 	} catch (error) {
@@ -87,7 +125,7 @@ function resolveShadowPreset(presetReference: string): ?string {
  * @param {string} cssValue - CSS box-shadow value (may contain multiple shadows)
  * @return {Array<string>} Array of individual shadow strings
  */
-function splitBoxShadowList(cssValue: string): Array<string> {
+export function splitBoxShadowList(cssValue: string): Array<string> {
 	const result = [];
 	let current = '';
 	let depth = 0;
@@ -420,8 +458,11 @@ function getAllShadowPresets(): Array<{ slug: string, shadow: string }> {
 		const allPresets = [...themePresets, ...defaultPresets];
 
 		return allPresets
-			.filter((p: Object) => p.slug && p.shadow)
-			.map((p: Object) => ({ slug: p.slug, shadow: p.shadow }));
+			.map((p: Object) => ({
+				slug: p.slug,
+				shadow: getShadowPresetCssValue(p),
+			}))
+			.filter((p: Object) => p.slug && p.shadow);
 	} catch (error) {
 		return [];
 	}
