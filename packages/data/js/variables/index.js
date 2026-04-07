@@ -56,6 +56,11 @@ export {
 	getColorVAFromIdString,
 	getColorVAFromVarString,
 } from './color';
+export {
+	getCustomGlobalStylePresetVariables,
+	getMergedGlobalStylePresetVariables,
+	getGlobalStylePresetVariableById,
+} from './custom-global-style-presets';
 export { getVariable } from './get-variable';
 export {
 	generateVariableString,
