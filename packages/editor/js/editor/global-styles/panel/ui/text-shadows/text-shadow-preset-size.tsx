@@ -28,14 +28,16 @@ import TextShadowPresetPreview from './text-shadow-preset-preview';
 import { VariableNameEditor } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllTextShadowSlugs } from '../components/utils';
-import type { WpTextShadowPreset } from './utils';
 import {
-	parseCssTextShadowToRepeaterValue,
-	formatRepeaterItemsToCssTextShadow,
-} from '../../../../../extensions/libs/border-and-shadow/compatibilities/text-shadow-css.js';
+	repeaterRecordToTextShadowItems,
+	textShadowItemsToRepeaterRecord,
+	textShadowPresetItemsToCss,
+	type TextShadowPresetItem,
+	type WpTextShadowPreset,
+} from './utils';
 
 export type TextShadowDefaultPresetValue = {
-	shadow: string;
+	items: TextShadowPresetItem[];
 	deletable: boolean;
 	cloneable: boolean;
 	visibilitySupport: boolean;
@@ -82,15 +84,13 @@ function TextShadowPresetSizeComponent({
 	};
 
 	const repeaterItems = useMemo(
-		() => parseCssTextShadowToRepeaterValue(textShadowPreset.shadow || ''),
-		[textShadowPreset.shadow]
+		() => textShadowItemsToRepeaterRecord(textShadowPreset.items || []),
+		[textShadowPreset.items]
 	);
 
 	const handleTextShadowChange = useCallback(
-		(newValue: Object | Array<Record<string, unknown>>) => {
-			const css = formatRepeaterItemsToCssTextShadow(newValue);
-			// Defer: TextShadowControl onChange runs synchronously from the inner repeater reducer;
-			// updating the preset list in the same tick hits Redux error #3 (getState during reducer).
+		(newValue: Record<string, Record<string, unknown>>) => {
+			const items = repeaterRecordToTextShadowItems(newValue);
 			queueMicrotask(() => {
 				changeRepeaterItem({
 					onChange,
@@ -98,7 +98,7 @@ function TextShadowPresetSizeComponent({
 					controlId,
 					repeaterId,
 					itemId: presetId,
-					value: { ...textShadowPreset, shadow: css },
+					value: { ...textShadowPreset, items },
 				});
 			});
 		},
@@ -124,7 +124,9 @@ function TextShadowPresetSizeComponent({
 					<VStack spacing={4}>
 						<FlexItem>
 							<TextShadowPresetPreview
-								shadow={textShadowPreset.shadow}
+								shadow={textShadowPresetItemsToCss(
+									textShadowPreset.items
+								)}
 							/>
 						</FlexItem>
 
@@ -155,6 +157,13 @@ function TextShadowPresetSizeComponent({
 									key={slug}
 									PromoComponent={null}
 									id={`text-shadow-preset-${slug}`}
+									defaultRepeaterItemValue={{
+										x: '1px',
+										y: '1px',
+										blur: '1px',
+										color: '#000000ab',
+										isVisible: true,
+									}}
 									label={__('Text shadow', 'blockera')}
 									labelDescription={
 										<>
@@ -166,7 +175,7 @@ function TextShadowPresetSizeComponent({
 											</p>
 											<p>
 												{__(
-													'Stored in theme.json as settings.textShadow.presets (CSS text-shadow value).',
+													'Stored in theme.json as settings.textShadow.presets (items array per preset).',
 													'blockera'
 												)}
 											</p>

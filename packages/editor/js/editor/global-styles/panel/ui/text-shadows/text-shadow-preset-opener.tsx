@@ -15,7 +15,10 @@ import { Flex } from '@blockera/controls';
  */
 import type { VariableType } from '../components/types.ts';
 import type { WpTextShadowPreset } from './utils';
-import { getTextShadowPresetAccessibilityDescription } from './utils';
+import {
+	getTextShadowPresetAccessibilityDescription,
+	textShadowPresetItemsToCss,
+} from './utils';
 import TextShadowPresetPreview from './text-shadow-preset-preview';
 
 function TextShadowPresetOpenerValue({
@@ -36,7 +39,7 @@ function TextShadowPresetOpenerValue({
 			}}
 		>
 			<TextShadowPresetPreview
-				shadow={preset?.shadow ?? ''}
+				shadow={textShadowPresetItemsToCss(preset?.items ?? [])}
 				inline
 				width={12}
 				height={12}

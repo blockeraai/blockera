@@ -72,7 +72,15 @@ function TextShadowPresetGroupComponent({
 	const defaultPresetValue = useMemo((): TextShadowDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
-			shadow: '1px 1px 2px rgba(0, 0, 0, 0.25)',
+			items: [
+				{
+					x: '1px',
+					y: '1px',
+					blur: '1px',
+					color: '#000000ab',
+					isVisible: true,
+				},
+			],
 			slug: `text-shadow-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),
@@ -125,9 +133,9 @@ function TextShadowPresetGroupComponent({
 const TextShadowPresetGroup = memo(TextShadowPresetGroupComponent);
 
 /**
- * Reads/writes `settings.textShadow` in user theme.json — same layout as box `settings.shadow`
- * (presets.theme | default | custom, optional defaultPresets), with each preset’s `shadow`
- * field storing a CSS `text-shadow` value.
+ * Reads/writes `settings.textShadow` in user theme.json — same layout as `settings.shadow`
+ * (presets per origin, optional defaultPresets), with each preset’s `items` array storing
+ * text-shadow rows (x, y, blur, color) like TextShadowControl.
  */
 function TextShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
@@ -174,15 +182,8 @@ function TextShadowsPresetContent() {
 		(newValue: Object): WpTextShadowPreset[] =>
 			sanitizeTextShadowPresets(
 				Object.values(
-					newValue as Record<
-						string,
-						WpTextShadowPreset & Record<string, unknown>
-					>
-				).map((value) => ({
-					slug: value.slug,
-					name: value.name,
-					shadow: value.shadow,
-				}))
+					newValue as Record<string, Record<string, unknown>>
+				)
 			),
 		[]
 	);
