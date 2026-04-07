@@ -193,7 +193,8 @@ class JSON extends \WP_Theme_JSON {
     }
 
     /**
-     * Adds Blockera-only keys to the core {@see \WP_Theme_JSON::VALID_SETTINGS} schema (e.g. box border presets).
+     * Adds Blockera-only keys to the core {@see \WP_Theme_JSON::VALID_SETTINGS} schema (e.g. box border presets,
+     * transition / transform / filter / text-shadow preset groups aligned with global styles UI).
      *
      * @param array $settings_schema Core valid settings tree.
      * @return array
@@ -206,6 +207,37 @@ class JSON extends \WP_Theme_JSON {
                     'presets' => null,
                 )
             );
+        }
+
+        /*
+         * Same shape as core `settings.shadow`: presets (per-origin arrays) + defaultPresets flag.
+         * Keys match editor `useGlobalSetting()` paths (camelCase for textShadow).
+         */
+        $blockera_preset_setting_groups = array(
+            'transition' => array(
+                'presets'        => null,
+                'defaultPresets' => null,
+            ),
+            'transform'  => array(
+                'presets'        => null,
+                'defaultPresets' => null,
+            ),
+            'filter'     => array(
+                'presets'        => null,
+                'defaultPresets' => null,
+            ),
+            'textShadow' => array(
+                'presets'        => null,
+                'defaultPresets' => null,
+            ),
+        );
+
+        foreach ($blockera_preset_setting_groups as $key => $shape) {
+            if (isset($settings_schema[ $key ]) && is_array($settings_schema[ $key ])) {
+                $settings_schema[ $key ] = array_merge($settings_schema[ $key ], $shape);
+            } else {
+                $settings_schema[ $key ] = $shape;
+            }
         }
 
         return $settings_schema;
