@@ -65,7 +65,8 @@ html:root body :where(.blockera-block.blockera-block-1) > figcaption::after {
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 5px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-gallery::before {
@@ -155,7 +156,8 @@ html:root body :where(.blockera-block.blockera-block-5) > figcaption {
 		flex-direction: row;
 		align-items: center !important;
 		justify-content: center !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-6.wp-block-gallery {
@@ -186,7 +188,8 @@ html:root body :where(.blockera-block.blockera-block-6) > figcaption:hover {
 @media screen and (max-width: 478px) {
 	html:root body :where(.blockera-block.blockera-block-6) > figcaption {
 		flex: 1 1 0%;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-6.wp-block-gallery:hover {

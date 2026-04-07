@@ -58,7 +58,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 		margin-right: 0 !important;
 		margin-left: 0 !important;
 		border-radius: 5px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-social-links:hover {
@@ -77,7 +78,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 	.blockera-block.blockera-block-1.wp-block-social-links::before {
 		border-radius: 5px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-social-links::after {
@@ -93,7 +95,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.wp-block-social-link 
 		border-radius: 5px;
 		flex: 1 1 0%;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-1) {
@@ -179,7 +182,8 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-social-link-la
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-social-link {
 		order: -1;
-	};
+	}
+
 }
 
 html:root body :where(.blockera-block.blockera-block-3):hover .wp-block-social-link-label {

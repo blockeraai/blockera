@@ -49,7 +49,8 @@
 
 	.blockera-block.blockera-block-4.wp-block-group {
 		gap: var(--wp--preset--spacing--60, clamp(30px, 7vw, 70px));
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-5.wp-block-group {
@@ -147,7 +148,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(p) {
 		width: -moz-available;
 		width: -webkit-fill-available;
 		width: stretch;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-10.wp-block-group.is-layout-constrained > * + * {

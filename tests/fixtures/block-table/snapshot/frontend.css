@@ -106,7 +106,8 @@ html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-eleme
 	html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-element-caption::after {
 		border-radius: 10px;
 		content: "After Caption";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-table:hover {
@@ -125,7 +126,8 @@ html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-eleme
 	.blockera-block.blockera-block-2.wp-block-table::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-table::after {
@@ -140,7 +142,8 @@ html:root body :where(.blockera-block.blockera-block-2.wp-block-table) .wp-eleme
 	.blockera-block.blockera-block-2.wp-block-table::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-2 :where(.blockera-block-2-child-1) {

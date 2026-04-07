@@ -91,12 +91,12 @@ html:root body :where(.blockera-block.blockera-block-5) :where(p)::before {
 	border-radius: 30px;
 }
 
-u0026 {
+& {
 	n counter-reset: item;
 	n;
 }
 
-nnu0026 p {
+nn& p {
 	n counter-increment: item;
 	n;
 }

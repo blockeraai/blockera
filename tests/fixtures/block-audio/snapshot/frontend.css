@@ -30,7 +30,8 @@
 	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure,
 	.blockera-block.blockera-block-1.wp-block-audio audio {
 		border-radius: 50px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover {
@@ -47,7 +48,8 @@
 	.blockera-block.blockera-block-1.wp-block-audio audio::-webkit-media-controls-enclosure:hover,
 	.blockera-block.blockera-block-1.wp-block-audio audio:hover {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure {
@@ -86,7 +88,8 @@
 	.blockera-block.blockera-block-2.wp-block-audio audio::-webkit-media-controls-enclosure,
 	.blockera-block.blockera-block-2.wp-block-audio audio {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-audio::before {
@@ -103,7 +106,8 @@
 		align-self: flex-end;
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-audio::after {
@@ -119,7 +123,8 @@
 	.blockera-block.blockera-block-2.wp-block-audio::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-audio {
@@ -177,7 +182,8 @@ html:root body :where(.blockera-block.blockera-block-4) figcaption {
 
 	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure {
 		background-color: #52f1d6;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-audio audio:hover {
@@ -191,7 +197,8 @@ html:root body :where(.blockera-block.blockera-block-4):hover figcaption {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-4.wp-block-audio audio::-webkit-media-controls-enclosure:hover {
 		background-color: #5adfc9;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-wrapper.wp-block-group {

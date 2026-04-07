@@ -144,7 +144,8 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comment
 	html:root body :where(.blockera-block.blockera-block-1) .wp-block-latest-comments__comment::after {
 		display: inline-block !important;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-latest-comments:hover {
@@ -172,7 +173,8 @@ html:root body :where(.blockera-block.blockera-block-1):hover .wp-block-latest-c
 	.blockera-block.blockera-block-1.wp-block-latest-comments::after {
 		display: inline-block !important;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-latest-comments::before {
@@ -192,7 +194,8 @@ html:root body :where(.blockera-block.blockera-block-1):hover .wp-block-latest-c
 		margin-left: 80px !important;
 		display: inline-block !important;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block-1 {

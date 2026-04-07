@@ -79,7 +79,8 @@ html:root body :where(.blockera-block.blockera-block-12) a:not(.wp-element-butto
 @media screen and (max-width: 478px) {
 	p.blockera-block.blockera-block-12 {
 		font-size: 15px;
-	};
+	}
+
 }
 
 p.blockera-block.blockera-block-12::before {

@@ -118,7 +118,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(li)::after {
 		align-self: stretch;
 		content: "After";
 		flex: 1 1 0%;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1 :where(li)::marker {

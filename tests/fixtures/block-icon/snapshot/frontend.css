@@ -53,7 +53,8 @@
 		align-items: stretch !important;
 		justify-content: center !important;
 		gap: 20px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-image::before {
@@ -75,7 +76,8 @@
 		align-items: center !important;
 		justify-content: center !important;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-image::after {
@@ -96,10 +98,11 @@
 		align-items: flex-end !important;
 		justify-content: center !important;
 		content: "After";
-	};
+	}
+
 }
 
-u0026 {
+& {
 	n width: fit-content;
 	n;
 }
@@ -133,7 +136,8 @@ html:root body :where(.blockera-block.blockera-block-4):is(.has-custom-border, :
 		margin-top: 10px;
 		margin-bottom: 0;
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-5.wp-block-image {
@@ -159,7 +163,7 @@ html:root body :where(.blockera-block.blockera-block-4):is(.has-custom-border, :
 	content: "At Symbol";
 }
 
-u0026 {
+& {
 	n border-radius: 10px;
 	n;
 }

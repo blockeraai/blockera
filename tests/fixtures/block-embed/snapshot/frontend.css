@@ -52,7 +52,8 @@ html:root body :where(.blockera-block.blockera-block-2) figcaption {
 		align-items: center !important;
 		justify-content: center !important;
 		border-radius: 80px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-embed__wrapper:hover {

@@ -39,7 +39,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-post-title {
 		text-align: center;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-post-title:hover {
@@ -71,7 +72,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		align-items: center !important;
 		gap: 10px;
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-post-title::before {
@@ -92,7 +94,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		margin-bottom: 0;
 		text-align: center;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-post-title::after {
@@ -113,7 +116,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		margin-top: 0;
 		text-align: center;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-3 :where(.blockera-block-3-child-1) {
