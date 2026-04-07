@@ -62,7 +62,8 @@ p.blockera-block.blockera-block-4 {
 	p.blockera-block.blockera-block-4 {
 		min-width: fit-content;
 		font-size: 1em;
-	};
+	}
+
 }
 
 p.blockera-block.blockera-block-5 {
@@ -106,7 +107,8 @@ p.blockera-block.blockera-block-5 {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-8.wp-block-group {
@@ -236,7 +238,8 @@ html:root body :where(.blockera-block.blockera-block-16) :where(p) {
 		width: -moz-available;
 		width: -webkit-fill-available;
 		width: stretch;
-	};
+	}
+
 }
 
 p.blockera-block.blockera-block-17 {
@@ -270,7 +273,8 @@ html:root body :where(.blockera-block.blockera-block-18) :where(p) {
 		flex-direction: column;
 		justify-content: center !important;
 		align-items: center !important;
-	};
+	}
+
 }
 
 p.blockera-block.blockera-block-19 {

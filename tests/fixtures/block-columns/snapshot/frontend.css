@@ -121,7 +121,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-column {
 		order: -1;
-	};
+	}
+
 }
 
 p.blockera-block.blockera-block-4 {
@@ -194,7 +195,8 @@ html:root body :where(.blockera-block.blockera-block-8) :is(mark, mark[class]) {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-8.wp-block-column {
 		order: -1;
-	};
+	}
+
 }
 
 p.blockera-block.blockera-block-9 {
@@ -285,7 +287,8 @@ html:root body :where(.blockera-block.blockera-block-15) .wp-block-column {
 
 	.blockera-block.blockera-block-15.wp-block-columns> * {
 		margin-block-start: 0 !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-16.wp-block-columns {
@@ -304,7 +307,8 @@ html:root body :where(.blockera-block.blockera-block-16) .wp-block-column {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-17.wp-block-column {
 		flex-grow: 0;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-18.wp-block-column {

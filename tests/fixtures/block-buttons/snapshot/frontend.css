@@ -137,7 +137,8 @@ html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-4-1.wp-block-button {
 		align-self: stretch;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4-2.wp-block-button {
@@ -148,7 +149,8 @@ html:root body :where(.blockera-block.blockera-block-3.wp-block-button .wp-block
 	.blockera-block.blockera-block-4-2.wp-block-button {
 		align-self: flex-start;
 		flex: 1 1 0%;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-buttons {
@@ -197,7 +199,8 @@ html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button 
 
 	html:root body :where(.blockera-block.blockera-block-4) :where(.wp-block-button > .wp-element-button) {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-buttons:hover {

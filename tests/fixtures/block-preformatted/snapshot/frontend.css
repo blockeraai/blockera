@@ -52,7 +52,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-preformatted {
 		text-align: right;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-preformatted {
@@ -74,7 +75,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		gap: 30px;
 		border-radius: 140px;
 		padding: 40px 60px 40px 60px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-preformatted::before {
@@ -92,7 +94,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		align-self: stretch;
 		text-align: center;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-preformatted::after {
@@ -110,7 +113,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		align-self: stretch;
 		text-align: center;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-wrapper.wp-block-group {

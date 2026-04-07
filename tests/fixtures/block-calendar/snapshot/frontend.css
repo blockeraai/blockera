@@ -68,7 +68,8 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:activ
 	html:root body :where(.blockera-block.blockera-block-1) caption {
 		border-top-left-radius: 10px;
 		border-top-right-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-calendar::before {
@@ -85,7 +86,8 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:activ
 	.blockera-block.blockera-block-1.wp-block-calendar::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-calendar::after {
@@ -102,5 +104,6 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-calendar-nav a:activ
 	.blockera-block.blockera-block-1.wp-block-calendar::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }

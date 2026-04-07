@@ -28,7 +28,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 
 	html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 		flex: 1 1 0%;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-group::before {
@@ -42,7 +43,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	.blockera-block.blockera-block-1.wp-block-group::before {
 		margin-bottom: 0;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-group::after {
@@ -56,7 +58,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 	.blockera-block.blockera-block-1.wp-block-group::after {
 		margin-top: 0;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-group {
@@ -227,7 +230,8 @@ html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 		justify-content: flex-start !important;
 		align-items: flex-end !important;
 		height: 300px;
-	};
+	}
+
 }
 
 @media screen and (max-width: 478px) {
@@ -242,7 +246,8 @@ html:root body :where(.blockera-block.blockera-block-4) :where(p) {
 		flex-direction: row;
 		align-items: flex-start !important;
 		justify-content: center !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-group::before {

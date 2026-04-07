@@ -104,7 +104,8 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 		width: -webkit-fill-available;
 		width: stretch;
 		content: "Before Link";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-post-date::before {
@@ -118,7 +119,8 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 	.blockera-block.blockera-block-3.wp-block-post-date::before {
 		align-self: stretch;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-post-date::after {
@@ -135,7 +137,8 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 		width: -webkit-fill-available;
 		width: stretch;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-3 {

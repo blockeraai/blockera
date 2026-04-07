@@ -102,7 +102,8 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 		border-radius: 55px;
 		content: "Before";
 		align-self: flex-end;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-site-title::before {
@@ -116,7 +117,8 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 	.blockera-block.blockera-block-3.wp-block-site-title::before {
 		align-self: stretch;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-site-title::after {
@@ -130,7 +132,8 @@ html:root body :where(.blockera-block.blockera-block-3) :where(a:not(.wp-element
 	.blockera-block.blockera-block-3.wp-block-site-title::after {
 		align-self: flex-end;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-3 {
