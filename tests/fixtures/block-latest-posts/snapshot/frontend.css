@@ -82,7 +82,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(a:not(.wp-element
 		justify-content: space-between !important;
 		background-color: #b6d2bc;
 		gap: 10px;
-	};
+	}
+
 }
 
 html:root body :where(.blockera-block.blockera-block-1):hover :where(a:not(.wp-element-button)) {
@@ -119,7 +120,8 @@ html:root body :where(.blockera-block.blockera-block-1):hover :where(a:not(.wp-e
 		align-self: stretch;
 		text-align: center;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-1 {

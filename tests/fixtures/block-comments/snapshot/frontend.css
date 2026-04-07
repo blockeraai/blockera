@@ -13,7 +13,8 @@
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-post-comments-count {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-post-comments-count::before {
@@ -27,7 +28,8 @@
 	.blockera-block.blockera-block-1.wp-block-post-comments-count::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-post-comments-count::after {
@@ -41,7 +43,8 @@
 	.blockera-block.blockera-block-1.wp-block-post-comments-count::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-post-comments-count:hover {
@@ -114,7 +117,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		flex: 1 1 0%;
 		content: "After";
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-post-comments-link:hover {
@@ -134,7 +138,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		border-radius: 10px;
 		align-self: flex-end;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-post-comments-link::after {
@@ -150,7 +155,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		border-radius: 10px;
 		align-self: center;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-2) {
@@ -171,7 +177,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-comments {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-comments::before {
@@ -189,7 +196,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	.blockera-block.blockera-block-3.wp-block-comments::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-comments::after {
@@ -211,7 +219,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	.blockera-block.blockera-block-3.wp-block-comments::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-3) {
@@ -272,7 +281,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	.blockera-block.blockera-block-3.wp-block-comments::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-comments-title {
@@ -290,7 +300,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-comments-title:hover {
@@ -309,7 +320,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	.blockera-block.blockera-block-4.wp-block-comments-title::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-4.wp-block-comments-title::after {
@@ -324,7 +336,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	.blockera-block.blockera-block-4.wp-block-comments-title::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-4) {
@@ -346,7 +359,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-5.wp-block-comment-template {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-5.wp-block-comment-template::before {
@@ -414,7 +428,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		flex-direction: row;
 		align-items: center !important;
 		justify-content: center !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-6.wp-block-columns {
@@ -428,7 +443,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-6.wp-block-columns {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-6) {
@@ -476,7 +492,8 @@ html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element
 		gap: 10px;
 		display: flex !important;
 		flex-direction: column;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-8.wp-block-comment-author-name::before {
@@ -492,7 +509,8 @@ html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element
 		border-radius: 10px;
 		align-self: flex-end;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-8.wp-block-comment-author-name::after {
@@ -508,7 +526,8 @@ html:root body :where(.blockera-block.blockera-block-8) :where(a:not(.wp-element
 		border-radius: 10px;
 		align-self: flex-start;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-8) {
@@ -543,7 +562,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 		flex-direction: column;
 		gap: 10px;
 		flex: 1 1 0%;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-9.wp-block-comment-date::before {
@@ -558,7 +578,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	.blockera-block.blockera-block-9.wp-block-comment-date::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-9.wp-block-comment-date::after {
@@ -573,7 +594,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	.blockera-block.blockera-block-9.wp-block-comment-date::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-9) {
@@ -598,7 +620,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-11.wp-block-comment-content {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-11.wp-block-comment-content::before {
@@ -613,7 +636,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	.blockera-block.blockera-block-11.wp-block-comment-content::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-11.wp-block-comment-content::after {
@@ -628,7 +652,8 @@ html:root body :where(.blockera-block.blockera-block-9) :where(a:not(.wp-element
 	.blockera-block.blockera-block-11.wp-block-comment-content::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-11) {
@@ -663,7 +688,8 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-12.wp-block-comment-reply-link::before {
@@ -679,7 +705,8 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 		align-self: flex-start;
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-12.wp-block-comment-reply-link::after {
@@ -695,7 +722,8 @@ html:root body :where(.blockera-block.blockera-block-12) :where(a:not(.wp-elemen
 		align-self: stretch;
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-12) {
@@ -733,7 +761,8 @@ html:root body :where(.blockera-block.blockera-block-13) .wp-block-comments-pagi
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-13.wp-block-comments-pagination {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-13) {
@@ -765,7 +794,8 @@ html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagina
 
 	html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagination-previous) .wp-block-comments-pagination-previous-arrow {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-14.wp-block-comments-pagination-previous::before {
@@ -780,7 +810,8 @@ html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagina
 	.blockera-block.blockera-block-14.wp-block-comments-pagination-previous::before {
 		border-radius: 10px;
 		content: "→";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-14.wp-block-comments-pagination-previous::after {
@@ -795,7 +826,8 @@ html:root body :where(.blockera-block.blockera-block-14.wp-block-comments-pagina
 	.blockera-block.blockera-block-14.wp-block-comments-pagination-previous::after {
 		border-radius: 10px;
 		content: "←";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-14) {
@@ -864,7 +896,8 @@ html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagina
 
 	html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers) .page-numbers.dots {
 		border-radius: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-15.wp-block-comments-pagination-numbers::before {
@@ -879,7 +912,8 @@ html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagina
 	.blockera-block.blockera-block-15.wp-block-comments-pagination-numbers::before {
 		border-radius: 10px;
 		content: "→";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-15.wp-block-comments-pagination-numbers::after {
@@ -895,7 +929,8 @@ html:root body :where(.blockera-block.blockera-block-15.wp-block-comments-pagina
 		border-radius: 10px;
 		flex: 1 1 0%;
 		content: "←";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-15) {
@@ -1170,7 +1205,8 @@ html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::a
 	html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-17.wp-block-post-comments-form::before {
@@ -1185,7 +1221,8 @@ html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::a
 	.blockera-block.blockera-block-17.wp-block-post-comments-form::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-17.wp-block-post-comments-form::after {
@@ -1200,7 +1237,8 @@ html:root body :where(.blockera-block.blockera-block-17) .comment-reply-title::a
 	.blockera-block.blockera-block-17.wp-block-post-comments-form::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 :where(.blockera-block.blockera-block-17) {

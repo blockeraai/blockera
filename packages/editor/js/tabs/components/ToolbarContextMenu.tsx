@@ -2,6 +2,8 @@
  * WordPress dependencies
  */
 import { DropdownMenu, MenuGroup, MenuItem, Icon } from '@wordpress/components';
+import { store as coreStore } from '@wordpress/core-data';
+import { useSelect } from '@wordpress/data';
 import { moreVertical, check } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
 import { memo, useRef, useEffect } from '@wordpress/element';
@@ -94,9 +96,58 @@ const RecentlyClosedTabItem = memo(function RecentlyClosedTabItem({
 	// Falls back to stored values if entity isn't loaded
 	const entity = useEntity(tab.type, tab.id);
 
-	// Check if entity has been permanently deleted
-	// hasResolved means the fetch completed, and if record is null, the entity doesn't exist
-	const isDeleted = entity.hasResolved && !entity.record;
+	/*
+	 * Deletion detection is a second `useSelect` on purpose: `useEntity` merges edited
+	 * records and does not surface `hasResolutionFailed`, so we cannot rely on it here.
+	 *
+	 * Server-backed record only — `getEditedEntityRecord` can linger after REST delete.
+	 * After a refetch fails (404), core-data sets `failResolution` but may still expose
+	 * the previous `getEntityRecord` value; treat failed resolution as deleted so the
+	 * row clears and storage is pruned. Cost: two store subscriptions while this menu
+	 * row is mounted; acceptable (small recently-closed list, menu not always open).
+	 */
+	const isDeleted = useSelect(
+		(select) => {
+			const postType = tab.type;
+			const postId = tab.id;
+			if (
+				!postType ||
+				postId === '' ||
+				postId === null ||
+				postId === undefined
+			) {
+				return false;
+			}
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const coreSelect = select(coreStore) as any;
+			const selectorArgs = ['postType', postType, postId] as const;
+			if (
+				typeof coreSelect.hasResolutionFailed === 'function' &&
+				coreSelect.hasResolutionFailed('getEntityRecord', selectorArgs)
+			) {
+				return true;
+			}
+			if (
+				!coreSelect.hasFinishedResolution(
+					'getEntityRecord',
+					selectorArgs
+				)
+			) {
+				return false;
+			}
+			try {
+				const saved = coreSelect.getEntityRecord(
+					'postType',
+					postType,
+					postId
+				) as unknown;
+				return saved === undefined || saved === null;
+			} catch {
+				return true;
+			}
+		},
+		[tab.type, tab.id]
+	);
 
 	// Use current entity title if available, otherwise use stored title
 	const title = entity.title || tab.title || tab.key;

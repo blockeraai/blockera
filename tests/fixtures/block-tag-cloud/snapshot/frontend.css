@@ -65,7 +65,8 @@ html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::after 
 	html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::after {
 		border-radius: 5px;
 		content: "←";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-tag-cloud::before {
@@ -81,7 +82,8 @@ html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::after 
 		margin-bottom: 0;
 		border-radius: 5px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-tag-cloud::after {
@@ -97,7 +99,8 @@ html:root body :where(.blockera-block.blockera-block-1) a.tag-cloud-link::after 
 		margin-top: 0;
 		border-radius: 5px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-tag-cloud:hover {

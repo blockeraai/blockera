@@ -36,7 +36,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-1.wp-block-verse {
 		border-radius: 5px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-verse:hover {
@@ -60,7 +61,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		margin-bottom: 10px;
 		border-radius: 5px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-verse::after {
@@ -80,7 +82,8 @@ html:root body :where(.blockera-block.blockera-block-1) :is(mark, mark[class]) {
 		width: stretch;
 		border-radius: 5px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-1 :where(.blockera-block-1-child-1) {

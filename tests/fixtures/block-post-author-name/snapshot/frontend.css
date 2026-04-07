@@ -93,7 +93,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 	html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element-button))::before {
 		align-self: stretch;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-post-author-name:hover {
@@ -118,7 +119,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		width: stretch;
 		box-sizing: border-box;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-post-author-name::after {
@@ -134,7 +136,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 		box-sizing: border-box;
 		width: 50%;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-2 {

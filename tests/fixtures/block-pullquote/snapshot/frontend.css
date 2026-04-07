@@ -123,7 +123,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 		width: -webkit-fill-available;
 		width: stretch;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-pullquote::before {
@@ -142,7 +143,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 		width: -webkit-fill-available;
 		width: stretch;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-pullquote::after {
@@ -161,10 +163,11 @@ html:root body :where(.blockera-block.blockera-block-2) :where(p)::after {
 		width: -webkit-fill-available;
 		width: stretch;
 		content: "After";
-	};
+	}
+
 }
 
-u0026 blockquote {
+& blockquote {
 	ntwidth: -moz-available;
 	ntwidth: -webkit-fill-available;
 	ntwidth: stretch;

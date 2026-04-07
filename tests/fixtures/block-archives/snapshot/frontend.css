@@ -139,7 +139,8 @@ html:root body :where(.blockera-block.blockera-block-2) a::after {
 		align-self: stretch;
 		content: "After";
 		border-radius: 10px;
-	};
+	}
+
 }
 
 html:root body :where(.blockera-block.blockera-block-2):hover li::marker {
@@ -157,7 +158,8 @@ html:root body :where(.blockera-block.blockera-block-2):hover li::marker {
 	.blockera-block.blockera-block-2.wp-block-archives::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-archives::after {
@@ -172,7 +174,8 @@ html:root body :where(.blockera-block.blockera-block-2):hover li::marker {
 	.blockera-block.blockera-block-2.wp-block-archives::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-archives {
@@ -190,7 +193,8 @@ html:root body :where(.blockera-block.blockera-block-3) a {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-archives {
 		background-color: #c3dbff;
-	};
+	}
+
 }
 
 .blockera-block-3 {

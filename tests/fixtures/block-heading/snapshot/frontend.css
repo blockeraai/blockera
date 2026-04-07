@@ -18,7 +18,8 @@
 		gap: 20px;
 		border-radius: 10px;
 		padding: 30px 30px 30px 30px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-heading::before {
@@ -35,7 +36,8 @@
 		border-radius: 5px;
 		margin-right: 0 !important;
 		content: "Before:";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-heading::after {
@@ -53,7 +55,8 @@
 		padding-left: 30px;
 		margin-left: 0 !important;
 		content: ":after";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-heading {
@@ -136,7 +139,8 @@ html:root body :where(.blockera-block.blockera-block-2) :where(a:not(.wp-element
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-2.wp-block-heading {
 		border-radius: 5px;
-	};
+	}
+
 }
 
 .blockera-block-2 :where(.blockera-block-2-child-1) {

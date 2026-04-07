@@ -130,7 +130,8 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-search__button
 		border: 1px solid #a109af;
 		color: #7f008b;
 		border-radius: 50px;
-	};
+	}
+
 }
 
 html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-search__label {
@@ -154,7 +155,8 @@ html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-search__
 
 	html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-search__label {
 		order: 100;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-search {
@@ -227,7 +229,8 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label:
 	html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label {
 		gap: 10px;
 		text-align: center;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-search::before {
@@ -242,7 +245,8 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label:
 	.blockera-block.blockera-block-3.wp-block-search::before {
 		align-self: flex-end;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-search::after {
@@ -257,7 +261,8 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-search__label:
 	.blockera-block.blockera-block-3.wp-block-search::after {
 		align-self: center;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-search:hover,

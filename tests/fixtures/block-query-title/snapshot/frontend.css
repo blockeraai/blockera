@@ -33,7 +33,8 @@
 		align-items: center !important;
 		gap: 20px;
 		padding: 35px 35px 35px 35px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-query-title::before {
@@ -51,7 +52,8 @@
 	.blockera-block.blockera-block-2.wp-block-query-title::before {
 		align-self: stretch;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-query-title::after {
@@ -69,7 +71,8 @@
 	.blockera-block.blockera-block-2.wp-block-query-title::after {
 		align-self: stretch;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block-2 {

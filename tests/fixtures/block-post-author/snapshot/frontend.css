@@ -44,7 +44,8 @@ html:root body :where(.blockera-block.blockera-block-1) .wp-block-post-author__n
 @media screen and (max-width: 478px) {
 	html:root body :where(.blockera-block.blockera-block-1) .wp-block-post-author__avatar {
 		order: 100;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-post-author:hover {
@@ -178,7 +179,8 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-post-author__n
 	html:root body :where(.blockera-block.blockera-block-2) .wp-block-post-author__bio {
 		padding: 10px 10px 10px 10px;
 		margin-bottom: 0;
-	};
+	}
+
 }
 
 html:root body :where(.blockera-block.blockera-block-2):hover .wp-block-post-author__avatar > img {
@@ -237,7 +239,8 @@ html:root body :where(.blockera-block.blockera-block-3) .wp-block-post-author__a
 	html:root body :where(.blockera-block.blockera-block-3) .wp-block-post-author__avatar > img {
 		border-radius: 50px;
 		width: 60px;
-	};
+	}
+
 }
 
 .blockera-block-3 {

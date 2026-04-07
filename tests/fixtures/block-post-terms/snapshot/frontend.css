@@ -62,7 +62,8 @@ html:root body :where(.blockera-block.blockera-block-1) a:hover {
 		flex-direction: row;
 		align-items: center !important;
 		justify-content: center !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-post-terms {
@@ -101,7 +102,8 @@ html:root body :where(.blockera-block.blockera-block-2) .wp-block-post-terms__se
 
 	html:root body :where(.blockera-block.blockera-block-2) a {
 		align-self: stretch;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-3.wp-block-post-terms {
@@ -176,7 +178,8 @@ html:root body :where(.blockera-block.blockera-block-3) a::after {
 @media screen and (max-width: 478px) {
 	.blockera-block.blockera-block-3.wp-block-post-terms {
 		flex-direction: column;
-	};
+	}
+
 }
 
 html:root body :where(.blockera-block.blockera-block-3):hover .wp-block-post-terms__prefix {

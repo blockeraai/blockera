@@ -32,7 +32,8 @@ html:root body :where(.blockera-block.blockera-block-1) :where(p) {
 
 	.blockera-block.blockera-block-1.wp-block-group.is-layout-constrained > * + * {
 		margin-block-start: 0 !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-group {
@@ -212,7 +213,8 @@ p.blockera-block.blockera-block-14 {
 @media screen and (max-width: 478px) {
 	p.blockera-block.blockera-block-14 {
 		display: block !important;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-wrapper.wp-block-group {

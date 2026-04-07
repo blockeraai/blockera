@@ -108,7 +108,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 		justify-content: center !important;
 		align-items: center !important;
 		gap: 10px;
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-categories::before {
@@ -122,7 +123,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	.blockera-block.blockera-block-1.wp-block-categories::before {
 		border-radius: 10px;
 		content: "Before";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-1.wp-block-categories::after {
@@ -138,7 +140,8 @@ html:root body :where(.blockera-block.blockera-block-1) li.cat-item::after {
 	.blockera-block.blockera-block-1.wp-block-categories::after {
 		border-radius: 10px;
 		content: "After";
-	};
+	}
+
 }
 
 .blockera-block.blockera-block-2.wp-block-categories {
