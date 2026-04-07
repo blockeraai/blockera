@@ -15,6 +15,7 @@ import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
  * Internal dependencies
  */
 import { STORE_NAME } from '../store';
+import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
 import { generateVariableString, getBlockEditorSettings } from './index';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
@@ -105,6 +106,12 @@ export const getColor: (id: string) => ?VariableItem = memoize(function (
 		const { getVariableGroupItems } = select(STORE_NAME);
 
 		color = getVariableGroupItems('', 'color').find(
+			(item) => item.id === id
+		);
+	}
+
+	if (isUndefined(color?.value)) {
+		color = getCustomGlobalStylePresetVariables('color').find(
 			(item) => item.id === id
 		);
 	}
