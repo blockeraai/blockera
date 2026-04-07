@@ -9,12 +9,14 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
+import { isBlockTheme, isString, isObject, isUndefined } from '@blockera/utils';
 import type { ValueAddon } from '@blockera/controls/js/value-addons/types';
 
 /**
  * Internal dependencies
  */
+import { STORE_NAME } from '../store';
+import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
 import { generateVariableString, getBlockEditorSettings } from './index';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
@@ -75,7 +77,23 @@ export const getSpacings: () => Array<VariableItem> = memoize(
 export const getSpacing: (id: string) => ?VariableItem = memoize(function (
 	id: string
 ): ?VariableItem {
-	return getSpacings().find((item) => item.id === id);
+	let spacing = getSpacings().find((item) => item.id === id);
+
+	if (isUndefined(spacing?.value)) {
+		const { getVariableGroupItems } = select(STORE_NAME);
+
+		spacing = getVariableGroupItems('', 'spacing').find(
+			(item) => item.id === id
+		);
+	}
+
+	if (isUndefined(spacing?.value)) {
+		spacing = getCustomGlobalStylePresetVariables('spacing').find(
+			(item) => item.id === id
+		);
+	}
+
+	return spacing;
 });
 
 export const getSpacingBy: (field: string, value: any) => ?VariableItem =
