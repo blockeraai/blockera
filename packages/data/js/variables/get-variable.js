@@ -13,6 +13,7 @@ import { getLinearGradient } from './linear-gradient';
 import { getRadialGradient } from './radial-gradient';
 import { getColor } from './color';
 import { getSpacing } from './spacing';
+import { getGlobalStylePresetVariableById } from './custom-global-style-presets';
 import type { VariableItem } from './types';
 
 export const getVariable: (type: string, id: string) => ?VariableItem = memoize(
@@ -35,6 +36,15 @@ export const getVariable: (type: string, id: string) => ?VariableItem = memoize(
 
 			case 'color':
 				return getColor(id);
+
+			case 'shadow':
+			case 'text-shadow':
+			case 'border-radius':
+			case 'border':
+			case 'transition':
+			case 'transform':
+			case 'filter':
+				return getGlobalStylePresetVariableById(type, id);
 		}
 
 		return null;
