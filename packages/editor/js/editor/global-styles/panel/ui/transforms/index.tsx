@@ -70,9 +70,11 @@ function TransformPresetGroupComponent({
 	const defaultPresetValue = useMemo((): TransformDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
+			isVisible: true,
 			items: [
 				{
 					type: 'move',
+					isVisible: true,
 					'move-x': '0px',
 					'move-y': '0px',
 					'move-z': '0px',

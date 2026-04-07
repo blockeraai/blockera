@@ -15,6 +15,7 @@ export type TransformPresetItem = {
 	'rotate-z'?: string;
 	'skew-x'?: string;
 	'skew-y'?: string;
+	isVisible: boolean;
 };
 
 export type WpTransformPreset = {
@@ -28,6 +29,7 @@ const DEFAULT_ITEM: TransformPresetItem = {
 	'move-x': '0px',
 	'move-y': '0px',
 	'move-z': '0px',
+	isVisible: true,
 };
 
 /**
@@ -36,6 +38,7 @@ const DEFAULT_ITEM: TransformPresetItem = {
  */
 function sanitizeItem(raw: Record<string, unknown>): TransformPresetItem {
 	const typeRaw = String(raw.type ?? DEFAULT_ITEM.type).trim();
+	const isVisible = Boolean(raw.isVisible ?? true);
 	const type =
 		typeRaw === 'scale' || typeRaw === 'rotate' || typeRaw === 'skew'
 			? typeRaw
@@ -43,6 +46,7 @@ function sanitizeItem(raw: Record<string, unknown>): TransformPresetItem {
 
 	if (type === 'move') {
 		return {
+			isVisible,
 			type: 'move',
 			'move-x': String(raw['move-x'] ?? DEFAULT_ITEM['move-x']).trim(),
 			'move-y': String(raw['move-y'] ?? DEFAULT_ITEM['move-y']).trim(),
@@ -52,6 +56,7 @@ function sanitizeItem(raw: Record<string, unknown>): TransformPresetItem {
 
 	if (type === 'scale') {
 		return {
+			isVisible,
 			type: 'scale',
 			scale: String(raw.scale ?? '100%').trim(),
 		};
@@ -59,6 +64,7 @@ function sanitizeItem(raw: Record<string, unknown>): TransformPresetItem {
 
 	if (type === 'rotate') {
 		return {
+			isVisible,
 			type: 'rotate',
 			'rotate-x': String(raw['rotate-x'] ?? '0deg').trim(),
 			'rotate-y': String(raw['rotate-y'] ?? '0deg').trim(),
@@ -67,6 +73,7 @@ function sanitizeItem(raw: Record<string, unknown>): TransformPresetItem {
 	}
 
 	return {
+		isVisible,
 		type: 'skew',
 		'skew-x': String(raw['skew-x'] ?? '0deg').trim(),
 		'skew-y': String(raw['skew-y'] ?? '0deg').trim(),

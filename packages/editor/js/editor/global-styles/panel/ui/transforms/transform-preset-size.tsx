@@ -39,6 +39,7 @@ export type TransformDefaultPresetValue = {
 	items: TransformPresetItem[];
 	deletable: boolean;
 	cloneable: boolean;
+	isVisible: boolean;
 	visibilitySupport: boolean;
 };
 
