@@ -39,6 +39,7 @@ export type FilterDefaultPresetValue = {
 	items: FilterPresetItem[];
 	deletable: boolean;
 	cloneable: boolean;
+	isVisible: boolean;
 	visibilitySupport: boolean;
 };
 

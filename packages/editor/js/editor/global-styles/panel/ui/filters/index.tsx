@@ -70,8 +70,10 @@ function FilterPresetGroupComponent({
 	const defaultPresetValue = useMemo((): FilterDefaultPresetValue &
 		VariableType & { slug: string; name: string } => {
 		return {
+			isVisible: true,
 			items: [
 				{
+					isVisible: true,
 					type: 'blur',
 					blur: '3px',
 				},

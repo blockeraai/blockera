@@ -20,6 +20,7 @@ export type FilterType =
 /** Minimal row shape per type; extra keys are stripped in sanitizeItem. */
 export type FilterPresetItem = {
 	type: FilterType;
+	isVisible: boolean;
 	blur?: string;
 	brightness?: string;
 	contrast?: string;
@@ -43,6 +44,7 @@ export type WpFilterPreset = {
 const DEFAULT_ITEM: FilterPresetItem = {
 	type: 'blur',
 	blur: '3px',
+	isVisible: true,
 };
 
 const VALID_TYPES: FilterType[] = [
@@ -69,6 +71,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'blur',
 			blur: String(raw.blur ?? DEFAULT_ITEM.blur).trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -81,6 +84,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 				raw['drop-shadow-blur'] ?? '10px'
 			).trim(),
 			'drop-shadow-color': String(raw['drop-shadow-color'] ?? '').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -88,6 +92,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'brightness',
 			brightness: String(raw.brightness ?? '200%').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -95,6 +100,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'contrast',
 			contrast: String(raw.contrast ?? '200%').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -102,6 +108,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'hue-rotate',
 			'hue-rotate': String(raw['hue-rotate'] ?? '45deg').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -109,6 +116,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'saturate',
 			saturate: String(raw.saturate ?? '200%').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -116,6 +124,7 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'grayscale',
 			grayscale: String(raw.grayscale ?? '100%').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
@@ -123,12 +132,14 @@ function sanitizeItem(raw: Record<string, unknown>): FilterPresetItem {
 		return {
 			type: 'invert',
 			invert: String(raw.invert ?? '100%').trim(),
+			isVisible: Boolean(raw.isVisible ?? true),
 		};
 	}
 
 	return {
 		type: 'sepia',
 		sepia: String(raw.sepia ?? '100%').trim(),
+		isVisible: Boolean(raw.isVisible ?? true),
 	};
 }
 
