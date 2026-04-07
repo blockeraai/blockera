@@ -155,6 +155,8 @@ export default function FilterControl({
 					/>
 				)
 			}
+			controlAddonTypes={['variable']}
+			variableTypes={['filter']}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
