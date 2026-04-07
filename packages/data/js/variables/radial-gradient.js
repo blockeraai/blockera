@@ -13,6 +13,7 @@ import { isBlockTheme, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
 import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 
@@ -82,7 +83,15 @@ export const getRadialGradients: () => Array<VariableItem> = memoize(
 
 export const getRadialGradient: (id: string) => ?VariableItem = memoize(
 	function (id: string): ?VariableItem {
-		return getRadialGradients().find((item) => item.id === id);
+		let gradient = getRadialGradients().find((item) => item.id === id);
+
+		if (isUndefined(gradient?.value)) {
+			gradient = getCustomGlobalStylePresetVariables(
+				'radial-gradient'
+			).find((item) => item.id === id);
+		}
+
+		return gradient;
 	}
 );
 
