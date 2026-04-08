@@ -40,12 +40,11 @@
 	}
 
 	&.is-open-blockera-navigation-override {
-
 		.edit-site-global-styles-screen-root__active-style-tile,
-		 .blockera-extension-navigation-category-description,
-		  .components-spacer {
+		.blockera-extension-navigation-category-description,
+		.components-spacer {
 			display: none;
-		  }
+		}
 
 		.blockera-navigation-panel {
 			display: block;
@@ -54,14 +53,14 @@
 
 	&.is-open-blockera-navigation-panel {
 		.edit-site-global-styles-screen-root__active-style-tile,
-		 .blockera-extension-navigation-category-description,
-		  .components-spacer {
+		.blockera-extension-navigation-category-description,
+		.components-spacer {
 			display: none;
-		  }
+		}
 	}
 
 	.components-item-group,
-	 p.components-spacer {
+	p.components-spacer {
 		display: none;
 	}
 
@@ -120,7 +119,7 @@
 			button {
 				padding: 8px 12px;
 				opacity: 1;
-				gap: 10px;
+				gap: 8px;
 				font-size: 13px;
 				width: 100%;
 				justify-content: flex-start;
