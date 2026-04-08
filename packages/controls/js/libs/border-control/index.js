@@ -9,10 +9,7 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
-import {
-	controlClassNames,
-	controlInnerClassNames,
-} from '@blockera/classnames';
+import { controlClassNames } from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -21,13 +18,7 @@ import BaseControl from '../base-control';
 import { useControlContext } from '../../context';
 import type { BorderControlProps } from './types';
 import { setValueAddon, useValueAddon } from '../../';
-import {
-	InputControl,
-	ColorControl,
-	LabelControl,
-	SelectControl,
-	LabelControlContainer,
-} from '../index';
+import { InputControl, ColorControl, SelectControl } from '../index';
 
 export default function BorderControl({
 	linesDirection = 'horizontal',
@@ -113,31 +104,13 @@ export default function BorderControl({
 			>
 				<div
 					className={controlClassNames('border', className)}
-					style={style}
+					style={{
+						...style,
+						display: 'block',
+					}}
 					data-test="border-control-component"
 				>
-					<div className={controlInnerClassNames('border-header')}>
-						{label && (
-							<LabelControlContainer
-								style={{
-									marginRight: 'auto',
-								}}
-							>
-								<LabelControl {...labelProps} />
-							</LabelControlContainer>
-						)}
-						{label ? (
-							<ValueAddonControl />
-						) : (
-							<div
-								style={{
-									gridColumn: '1 / -1',
-								}}
-							>
-								<ValueAddonControl />
-							</div>
-						)}
-					</div>
+					<ValueAddonControl />
 				</div>
 			</BaseControl>
 		);
