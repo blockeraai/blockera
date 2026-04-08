@@ -13,7 +13,7 @@ import { select } from '@wordpress/data';
 /**
  * Blockera dependencies
  */
-import { getSortedRepeater, getValueAddonRealValue } from '@blockera/controls';
+import { getSortedRepeater, getValueAddonRealValue } from '../';
 
 /**
  * Split a CSS text-shadow list (commas outside of parentheses).
