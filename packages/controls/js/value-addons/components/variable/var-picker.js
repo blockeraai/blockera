@@ -11,7 +11,6 @@ import { select } from '@wordpress/data';
  */
 import {
 	STORE_NAME,
-	generateVariableString,
 	getCustomGlobalStylePresetVariables,
 	type DynamicVariableGroup,
 } from '@blockera/data';
@@ -21,16 +20,13 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import {
-	getVariableIcon,
-	canUnlinkVariable,
-	getVariableCategory,
-} from '../../helpers';
+import { canUnlinkVariable, getVariableCategory } from '../../helpers';
 import { isValid } from '../../utils';
 import type { VariableCategoryDetail } from '../../types';
-import { PickerValueItem, PickerCategory } from '../index';
+import { PickerCategory } from '../index';
 import type { ValueAddonControlProps } from '../control/types';
-import { Button, Flex, Grid, Popover, ConditionalWrapper } from '../../../';
+import { Button, Flex, Popover } from '../../../';
+import { VariableManager } from './variable-manager';
 
 export default function ({
 	controlProps,
@@ -47,88 +43,6 @@ export default function ({
 		...Object.keys(getVariableGroups()),
 		...controlProps.variableTypes,
 	];
-
-	const renderVariableItemList = (
-		data: DynamicVariableGroup | VariableCategoryDetail,
-		typeKey: string,
-		keySuffix: string = 'value-type'
-	): Element<any> => {
-		const showTwoColumns = [
-			'color',
-			'linear-gradient',
-			'radial-gradient',
-			'spacing',
-		].includes(data.type || typeKey);
-
-		return (
-			<ConditionalWrapper
-				condition={showTwoColumns}
-				wrapper={(children) => (
-					<Grid gridTemplateColumns="1fr 1fr" gap="10px">
-						{children}
-					</Grid>
-				)}
-				elseWrapper={(children) => (
-					<Flex gap="10px" direction="column">
-						{children}
-					</Flex>
-				)}
-			>
-				{(!Array.isArray(data.items)
-					? Object.values(data.items || {})
-					: data.items || []
-				).map((variable, _index) => {
-					const itemData = {
-						...variable,
-						type: data?.type || typeKey,
-						var:
-							variable?.var ||
-							generateVariableString({
-								reference: variable.reference,
-								type: data?.type || typeKey,
-								id: variable.id,
-							}),
-					};
-					const displayName = variable.name || variable.id;
-
-					return (
-						<PickerValueItem
-							showValue={
-								displayName.length < 4 || !showTwoColumns
-							}
-							value={controlProps.value}
-							data={itemData}
-							onClick={controlProps.handleOnClickVar}
-							key={`${data?.type || typeKey}-${_index}-${keySuffix}`}
-							name={displayName}
-							type={data?.type || typeKey}
-							valueType="variable"
-							isCurrent={
-								isValid(controlProps.value) &&
-								controlProps.value.settings.type ===
-									(data?.type || typeKey) &&
-								controlProps.value.settings.id === itemData.id
-							}
-							icon={getVariableIcon({
-								type: data?.type || typeKey,
-								value: variable.value,
-							})}
-							status="active"
-							style={{
-								...(showTwoColumns
-									? {
-											gap: '5px',
-											padding: '0px 4px 0px 6px',
-											maxWidth: '118px',
-										}
-									: {}),
-							}}
-						/>
-					);
-				})}
-			</ConditionalWrapper>
-		);
-	};
 
 	const CustomVariables = (): ?Element<any> => {
 		const sections = controlProps.variableTypes
@@ -185,15 +99,16 @@ export default function ({
 							direction="column"
 							gap="10px"
 						>
-							{renderVariableItemList(
-								{
+							<VariableManager
+								controlProps={controlProps}
+								data={{
 									label: section.label,
 									items: section.items,
 									type: section.type,
-								},
-								section.type,
-								'custom-preset'
-							)}
+								}}
+								typeKey={section.type}
+								keySuffix="custom-preset"
+							/>
 						</Flex>
 					))}
 				</Flex>
@@ -237,7 +152,11 @@ export default function ({
 					key={`type-${type}-${index}`}
 					title={data.label}
 				>
-					{renderVariableItemList(data, type, 'value-type')}
+					<VariableManager
+						controlProps={controlProps}
+						data={data}
+						typeKey={type}
+					/>
 				</PickerCategory>
 			);
 		});
