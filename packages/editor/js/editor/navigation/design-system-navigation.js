@@ -40,7 +40,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 		<div className={extensionClassNames('navigation-category')}>
 			<h2>
 				<Flex alignItems="center" justifyContent="flex-start">
-					<Icon icon="extension-typography" iconSize={20} />
+					<Icon icon="extension-typography" iconSize={22} />
 					{__('Design system', 'blockera')}
 				</Flex>
 			</h2>
@@ -50,21 +50,45 @@ export const DesignSystemNavigation = (): MixedElement => {
 				id="typography-panel"
 				path="typography"
 				label={__('Typography', 'blockera')}
-				icon={<Icon icon="wp-typography" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="wp-typography" iconSize={22} />
+					</Flex>
+				}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				path={'colors'}
 				id="colors-panel"
 				onClick={colorsPanelHandler}
-				icon={<Icon icon="wp-colors" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="wp-colors" iconSize={22} />
+					</Flex>
+				}
 				label={__('Colors', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="spacing-panel"
 				path={'spacing'}
-				icon={<Icon icon="maximize" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="maximize" iconSize={22} />
+					</Flex>
+				}
 				label={__('Spacing', 'blockera')}
 			/>
 			<NavItemButton
@@ -74,7 +98,15 @@ export const DesignSystemNavigation = (): MixedElement => {
 				onClick={() =>
 					document.querySelector('button[id="/background"]')?.click()
 				}
-				icon={<Icon icon="wp-background" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="wp-background" iconSize={22} />
+					</Flex>
+				}
 				label={__('Background', 'blockera')}
 			/>
 			<NavItemButton
@@ -82,49 +114,105 @@ export const DesignSystemNavigation = (): MixedElement => {
 				id="shadows-panel"
 				path={'shadows'}
 				onClick={shadowsPanelHandler}
-				icon={<Icon icon="wp-shadows" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="wp-shadows" iconSize={22} />
+					</Flex>
+				}
 				label={__('Shadows', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="borders-panel"
 				path={'borders'}
-				icon={<Icon icon="border" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="border" iconSize={14} />
+					</Flex>
+				}
 				label={__('Borders', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="border-radius-panel"
 				path={'border-radius'}
-				icon={<Icon icon="border-radius" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="border-radius" iconSize={14} />
+					</Flex>
+				}
 				label={__('Border Radius', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="text-shadows-panel"
 				path={'text-shadows'}
-				icon={<Icon icon="wp-shadows" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="text-shadow" iconSize={22} />
+					</Flex>
+				}
 				label={__('Text Shadows', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="transforms-panel"
 				path={'transforms'}
-				icon={<Icon icon="transform-move" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="transform-move" iconSize={18} />
+					</Flex>
+				}
 				label={__('2D & 3D Transforms', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="transitions-panel"
 				path={'transitions'}
-				icon={<Icon icon="transition" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="transition" iconSize={18} />
+					</Flex>
+				}
 				label={__('Transitions', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName()}
 				id="filters-panel"
 				path={'filters'}
-				icon={<Icon icon="extension-effects" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="extension-effects" iconSize={20} />
+					</Flex>
+				}
 				label={__('Filters', 'blockera')}
 			/>
 			<NavItemButton
@@ -132,7 +220,15 @@ export const DesignSystemNavigation = (): MixedElement => {
 				id="animations-panel"
 				path={'animations'}
 				label={__('Animations', 'blockera')}
-				icon={<Icon icon="animations" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="animations" iconSize={18} />
+					</Flex>
+				}
 				isComingSoon={true}
 			/>
 		</div>
