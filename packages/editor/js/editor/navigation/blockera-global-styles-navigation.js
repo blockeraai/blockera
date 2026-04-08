@@ -21,7 +21,6 @@ import { extensionClassNames } from '@blockera/classnames';
 import { NavItemScreen } from './nav-item-screen';
 import { OtherNavigation } from './other-navigation';
 import { GeneralNavigation } from './general-navigation';
-import { GlobalStylesNavigation } from './global-styles-navigation';
 import { DesignSystemNavigation } from './design-system-navigation';
 
 export const initPath = '/';
@@ -124,9 +123,8 @@ export const BlockeraGlobalStylesNavigation = ({
 							</Flex>
 						</Navigator.Button>
 					</div>
+					<GeneralNavigation className={className} />
 					<DesignSystemNavigation />
-					<GeneralNavigation />
-					<GlobalStylesNavigation className={className} />
 					<OtherNavigation />
 				</NavItemScreen>
 
