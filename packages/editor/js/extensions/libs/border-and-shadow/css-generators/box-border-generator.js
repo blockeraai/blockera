@@ -16,43 +16,68 @@ export function BoxBorderGenerator(id, props, options) {
 	}
 
 	const properties = {};
+	const borderValue = attributes.blockeraBorder;
 
-	if (attributes?.blockeraBorder?.type === 'all') {
-		const borderAllWidth = attributes.blockeraBorder?.all?.width;
+	if (borderValue?.type === 'all') {
+		let borderSides = borderValue?.all;
+		if ('variable' === borderSides?.valueType) {
+			borderSides = JSON.parse(borderSides?.settings?.value);
+			borderSides = borderSides.all;
+		}
+
+		const borderAllWidth = borderSides?.width;
 		if (borderAllWidth) {
 			properties.border = `${borderAllWidth} ${
-				attributes.blockeraBorder.all.style || 'solid'
-			} ${getValueAddonRealValue(attributes.blockeraBorder.all.color)}`;
+				borderSides.style || 'solid'
+			} ${getValueAddonRealValue(borderSides.color)}`;
 		}
 	} else {
-		const borderTopWidth = attributes.blockeraBorder?.top?.width;
+		let borderTSide = borderValue?.top;
+		if ('variable' === borderTSide?.valueType) {
+			borderTSide = JSON.parse(borderTSide?.settings?.value);
+			borderTSide = borderTSide.all;
+		}
+		const borderTopWidth = borderTSide?.width;
 		if (borderTopWidth) {
 			properties['border-top'] = `${borderTopWidth} ${
-				attributes.blockeraBorder.top.style || 'solid'
-			} ${getValueAddonRealValue(attributes.blockeraBorder.top.color)}`;
+				borderTSide.style || 'solid'
+			} ${getValueAddonRealValue(borderTSide.color)}`;
 		}
 
-		const borderRightWidth = attributes.blockeraBorder?.right?.width;
+		let borderRSide = borderValue?.right;
+		if ('variable' === borderRSide?.valueType) {
+			borderRSide = JSON.parse(borderRSide?.settings?.value);
+			borderRSide = borderRSide.all;
+		}
+		const borderRightWidth = borderRSide?.width;
 		if (borderRightWidth) {
 			properties['border-right'] = `${borderRightWidth} ${
-				attributes.blockeraBorder.right.style || 'solid'
-			} ${getValueAddonRealValue(attributes.blockeraBorder.right.color)}`;
+				borderRSide.style || 'solid'
+			} ${getValueAddonRealValue(borderRSide.color)}`;
 		}
 
-		const borderBottomWidth = attributes.blockeraBorder?.bottom?.width;
+		let borderBSide = borderValue?.bottom;
+		if ('variable' === borderBSide?.valueType) {
+			borderBSide = JSON.parse(borderBSide?.settings?.value);
+			borderBSide = borderBSide.all;
+		}
+		const borderBottomWidth = borderBSide?.width;
 		if (borderBottomWidth) {
 			properties['border-bottom'] = `${borderBottomWidth} ${
-				attributes.blockeraBorder.bottom.style || 'solid'
-			} ${getValueAddonRealValue(
-				attributes.blockeraBorder.bottom.color
-			)}`;
+				borderBSide.style || 'solid'
+			} ${getValueAddonRealValue(borderBSide.color)}`;
 		}
 
-		const borderLeftWidth = attributes.blockeraBorder?.left?.width;
+		let borderLSide = borderValue?.left;
+		if ('variable' === borderLSide?.valueType) {
+			borderLSide = JSON.parse(borderLSide?.settings?.value);
+			borderLSide = borderLSide.all;
+		}
+		const borderLeftWidth = borderLSide?.width;
 		if (borderLeftWidth) {
 			properties['border-left'] = `${borderLeftWidth} ${
-				attributes.blockeraBorder.left.style || 'solid'
-			} ${getValueAddonRealValue(attributes.blockeraBorder.left.color)}`;
+				borderLSide.style || 'solid'
+			} ${getValueAddonRealValue(borderLSide.color)}`;
 		}
 	}
 

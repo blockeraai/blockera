@@ -72,6 +72,8 @@ export default function BoxBorderControl({
 	field = 'box-border',
 	//
 	className,
+	controlAddonTypes,
+	variableTypes,
 }: BoxBorderControlProps): MixedElement {
 	const {
 		value,
@@ -91,7 +93,12 @@ export default function BoxBorderControl({
 	});
 
 	// value clean up for removing extra values to prevent saving extra data!
-	function valueCleanup(value: TValueTypes) {
+	function valueCleanup(value: TValueTypes | any) {
+		// Whole-control border may be stored as a variable value addon.
+		if (isValid((value: any))) {
+			return value;
+		}
+
 		if (value.type === 'all') {
 			delete value?.top;
 			delete value?.right;
@@ -171,6 +178,8 @@ export default function BoxBorderControl({
 										value: { ...value, all: newValue },
 									});
 								}}
+								controlAddonTypes={controlAddonTypes}
+								variableTypes={variableTypes}
 								defaultValue={defaultValue?.all}
 							/>
 						) : (
@@ -260,6 +269,8 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
+							controlAddonTypes={controlAddonTypes}
+							variableTypes={variableTypes}
 							defaultValue={defaultValue.top}
 						/>
 						<BorderControl
@@ -283,6 +294,8 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
+							controlAddonTypes={controlAddonTypes}
+							variableTypes={variableTypes}
 							defaultValue={defaultValue.right}
 						/>
 						<BorderControl
@@ -305,6 +318,8 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
+							controlAddonTypes={controlAddonTypes}
+							variableTypes={variableTypes}
 							defaultValue={defaultValue.bottom}
 						/>
 						<BorderControl
@@ -328,6 +343,8 @@ export default function BoxBorderControl({
 									},
 								});
 							}}
+							controlAddonTypes={controlAddonTypes}
+							variableTypes={variableTypes}
 							defaultValue={defaultValue.left}
 						/>
 						<div

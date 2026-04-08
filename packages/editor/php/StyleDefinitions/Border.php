@@ -39,6 +39,26 @@ class Border extends BaseStyleDefinition {
 
 		$value = $setting['border'];
 
+		if (isset($value['type']) && 'all' === $value['type']) {
+			if (isset($value['all']['valueType']) && 'variable' === $value['all']['valueType']) {
+				$value['all'] = json_decode($value['all']['settings']['value'], true)['all'] ?? [
+					'width' => '',
+					'style' => '',
+					'color' => '',
+				];
+			}
+		} else {
+			foreach (self::$sides as $side) {
+				if (isset($value[ $side ]['valueType']) && 'variable' === $value[ $side ]['valueType']) {
+					$value[ $side ] = json_decode($value[ $side ]['settings']['value'], true)['all'] ?? [
+						'width' => '',
+						'style' => '',
+						'color' => '',
+					];
+				}
+			}
+		}
+
 		if ( ! isset( $value['type'] ) ) {
 			return [];
 		}
