@@ -130,7 +130,10 @@ export function borderRadiusToWPCompatibility({
 	}
 
 	if (newValue.type === 'all') {
-		if (!newValue?.all.endsWith('func')) {
+		if (
+			'string' === typeof newValue?.all &&
+			!newValue?.all.endsWith('func')
+		) {
 			if (
 				!runInsideBlockInspector(
 					insideBlockInspector,
@@ -217,7 +220,10 @@ export function borderRadiusToWPCompatibility({
 
 		if (newValue.topLeft !== '') {
 			// Advanced css functions not supported by core.
-			if (!newValue.topLeft.endsWith('func')) {
+			if (
+				'string' === typeof newValue?.topLeft &&
+				!newValue?.topLeft.endsWith('func')
+			) {
 				corners.topLeft = newValue.topLeft;
 			} else {
 				corners.topLeft = undefined;
@@ -226,7 +232,10 @@ export function borderRadiusToWPCompatibility({
 
 		if (newValue.topRight !== '') {
 			// Advanced css functions not supported by core.
-			if (!newValue.topRight.endsWith('func')) {
+			if (
+				'string' === typeof newValue?.topRight &&
+				!newValue?.topRight.endsWith('func')
+			) {
 				corners.topRight = newValue.topRight;
 			} else {
 				corners.topRight = undefined;
@@ -235,7 +244,10 @@ export function borderRadiusToWPCompatibility({
 
 		if (newValue.bottomLeft !== '') {
 			// Advanced css functions not supported by core.
-			if (!newValue.bottomLeft.endsWith('func')) {
+			if (
+				'string' === typeof newValue?.bottomLeft &&
+				!newValue?.bottomLeft.endsWith('func')
+			) {
 				corners.bottomLeft = newValue.bottomLeft;
 			} else {
 				corners.bottomLeft = undefined;
@@ -244,7 +256,10 @@ export function borderRadiusToWPCompatibility({
 
 		if (newValue.bottomRight !== '') {
 			// Advanced css functions not supported by core.
-			if (!newValue.bottomRight.endsWith('func')) {
+			if (
+				'string' === typeof newValue?.bottomRight &&
+				!newValue?.bottomRight.endsWith('func')
+			) {
 				corners.bottomRight = newValue.bottomRight;
 			} else {
 				corners.bottomRight = undefined;
