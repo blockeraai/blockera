@@ -35,7 +35,7 @@ export const OtherNavigation = (): MixedElement => {
 		<div className={extensionClassNames('navigation-category')}>
 			<h2>
 				<Flex alignItems="center" justifyContent="flex-start">
-					<Icon icon="extension-advanced" iconSize={20} />
+					<Icon icon="extension-advanced" iconSize={22} />
 					{__('Other', 'blockera')}
 				</Flex>
 			</h2>
@@ -45,14 +45,30 @@ export const OtherNavigation = (): MixedElement => {
 				})}
 				id={'custom-css-button'}
 				path={'css'}
-				icon={<Icon icon="custom-css" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="custom-css" iconSize={22} />
+					</Flex>
+				}
 				label={__('Custom CSS', 'blockera')}
 			/>
 			<NavItemButton
 				className={navItemClassName({ 'coming-soon': true })}
 				id={'html-js-codes-button'}
 				path={'html-js-codes'}
-				icon={<Icon icon="javascript-codes" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="javascript-codes" iconSize={22} />
+					</Flex>
+				}
 				label={__('HTML & JS Codes', 'blockera')}
 				isComingSoon={true}
 			/>
@@ -60,7 +76,15 @@ export const OtherNavigation = (): MixedElement => {
 				className={navItemClassName({ 'coming-soon': true })}
 				id={'back-to-top-button'}
 				path={'back-to-top'}
-				icon={<Icon icon="back-to-top" iconSize={20} />}
+				icon={
+					<Flex
+						alignItems="center"
+						justifyContent="center"
+						style={{ width: '22px', height: '22px' }}
+					>
+						<Icon icon="back-to-top" iconSize={22} />
+					</Flex>
+				}
 				label={__('Back To Top Button', 'blockera')}
 				isComingSoon={true}
 			/>
