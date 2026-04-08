@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -39,12 +38,6 @@ import './style.scss';
 
 const textShadowPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('textShadowPreset');
-
-const TEXT_SHADOW_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Text Shadow Preset', 'blockera'),
-	newPresetTypeLabel: __('text shadow', 'blockera'),
-	controlNamePrefix: 'add-text-shadow-preset',
-});
 
 function TextShadowPresetGroupComponent({
 	sizes,
@@ -123,7 +116,6 @@ function TextShadowPresetGroupComponent({
 				PresetFields={TextShadowPresetSize}
 				title={__('Text shadow', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={TEXT_SHADOW_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={textShadowPresetFieldsPropsResolver}
 			/>
 		</>

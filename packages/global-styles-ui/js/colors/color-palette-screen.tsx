@@ -22,7 +22,6 @@ import {
 	PresetGroup,
 	ScreenHeader,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -117,16 +116,6 @@ function ColorGroupComponent({
 		[index, origin]
 	);
 
-	const addVariableModalConfig = useMemo(
-		() =>
-			buildPresetAddModalConfig({
-				headerTitle: __('Add Color', 'blockera'),
-				newPresetTypeLabel: __('color', 'blockera'),
-				controlNamePrefix: 'add-color',
-			}),
-		[]
-	);
-
 	const controlName = `color-presets-${origin}`;
 
 	const onChange = useCallback(
@@ -168,7 +157,6 @@ function ColorGroupComponent({
 				PresetFields={ColorPresetFields}
 				title={__('Color', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={addVariableModalConfig}
 				presetFieldsPropsResolver={colorPresetFieldsPropsResolver}
 			/>
 		</>

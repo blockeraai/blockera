@@ -16,7 +16,6 @@ import { isEquals } from '@blockera/utils';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -35,12 +34,6 @@ import { sanitizeShadowPresets, type WpShadowPreset } from './utils';
 
 const shadowPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('shadowPreset');
-
-const SHADOW_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Shadow Preset', 'blockera'),
-	newPresetTypeLabel: __('shadow', 'blockera'),
-	controlNamePrefix: 'add-shadow-preset',
-});
 
 function ShadowPresetGroupComponent({
 	sizes,
@@ -122,7 +115,6 @@ function ShadowPresetGroupComponent({
 				PresetFields={ShadowPresetSize}
 				title={__('Shadow', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={SHADOW_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={shadowPresetFieldsPropsResolver}
 			/>
 		</>

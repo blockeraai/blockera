@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -39,12 +38,6 @@ import './style.scss';
 
 const transitionPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('transitionPreset');
-
-const TRANSITION_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Transition Preset', 'blockera'),
-	newPresetTypeLabel: __('transition', 'blockera'),
-	controlNamePrefix: 'add-transition-preset',
-});
 
 function TransitionPresetGroupComponent({
 	sizes,
@@ -124,7 +117,6 @@ function TransitionPresetGroupComponent({
 				PresetFields={TransitionPresetSize}
 				title={__('Transition', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={TRANSITION_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={transitionPresetFieldsPropsResolver}
 			/>
 		</>

@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -41,12 +40,6 @@ type SpacingSizePreset = {
 
 const spacingPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('spacingSize');
-
-const SPACING_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Spacing Size', 'blockera'),
-	newPresetTypeLabel: __('spacing size', 'blockera'),
-	controlNamePrefix: 'add-spacing-size',
-});
 
 function SpacingSizeGroupComponent({
 	sizes,
@@ -117,7 +110,6 @@ function SpacingSizeGroupComponent({
 				PresetFields={SpacingSize}
 				title={__('Spacing Size', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={SPACING_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={spacingPresetFieldsPropsResolver}
 			/>
 		</>

@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -39,12 +38,6 @@ export type { BorderRadiusDefaultPresetValue };
 
 const borderRadiusPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('borderRadiusSize');
-
-const BORDER_RADIUS_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Border Radius', 'blockera'),
-	newPresetTypeLabel: __('border radius', 'blockera'),
-	controlNamePrefix: 'add-border-radius',
-});
 
 function BorderRadiusSizeGroupComponent({
 	sizes,
@@ -115,7 +108,6 @@ function BorderRadiusSizeGroupComponent({
 				PresetFields={BorderRadiusSize}
 				title={__('Border radius', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={BORDER_RADIUS_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={
 					borderRadiusPresetFieldsPropsResolver
 				}

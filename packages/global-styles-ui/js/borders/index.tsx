@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -41,12 +40,6 @@ import {
 
 const borderPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('borderPreset');
-
-const BORDER_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Border Preset', 'blockera'),
-	newPresetTypeLabel: __('border', 'blockera'),
-	controlNamePrefix: 'add-border-preset',
-});
 
 function BorderPresetGroupComponent({
 	sizes,
@@ -117,7 +110,6 @@ function BorderPresetGroupComponent({
 				PresetFields={BorderPresetSize}
 				title={__('Border', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={BORDER_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={borderPresetFieldsPropsResolver}
 			/>
 		</>

@@ -19,7 +19,6 @@ import {
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
@@ -123,18 +122,6 @@ export function GradientPresetGroup({
 				)) as string,
 	};
 
-	const addVariableModalConfig = buildPresetAddModalConfig({
-		headerTitle: isLinear
-			? __('Add Linear Gradient', 'blockera')
-			: __('Add Radial Gradient', 'blockera'),
-		newPresetTypeLabel: isLinear
-			? __('linear gradient', 'blockera')
-			: __('radial gradient', 'blockera'),
-		controlNamePrefix: isLinear
-			? 'add-linear-gradient'
-			: 'add-radial-gradient',
-	});
-
 	const presetFieldsPropsResolver = (
 		item: VariableType,
 		itemId: string | number,
@@ -198,7 +185,6 @@ export function GradientPresetGroup({
 						: __('Radial Gradient', 'blockera')
 				}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={addVariableModalConfig}
 				presetFieldsPropsResolver={presetFieldsPropsResolver}
 			/>
 		</>

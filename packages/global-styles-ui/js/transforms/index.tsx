@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -37,12 +36,6 @@ import { NavItemBackButton } from '../navigation/nav-item-back-button';
 
 const transformPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('transformPreset');
-
-const TRANSFORM_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Transform Preset', 'blockera'),
-	newPresetTypeLabel: __('transform', 'blockera'),
-	controlNamePrefix: 'add-transform-preset',
-});
 
 function TransformPresetGroupComponent({
 	sizes,
@@ -122,7 +115,6 @@ function TransformPresetGroupComponent({
 				PresetFields={TransformPresetSize}
 				title={__('2D & 3D Transforms', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={TRANSFORM_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={transformPresetFieldsPropsResolver}
 			/>
 		</>

@@ -17,7 +17,6 @@ import { classNames } from '@blockera/classnames';
 import {
 	PresetGroup,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -37,12 +36,6 @@ import { NavItemBackButton } from '../navigation/nav-item-back-button';
 
 const filterPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('filterPreset');
-
-const FILTER_PRESET_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Filter Preset', 'blockera'),
-	newPresetTypeLabel: __('filter', 'blockera'),
-	controlNamePrefix: 'add-filter-preset',
-});
 
 function FilterPresetGroupComponent({
 	sizes,
@@ -120,7 +113,6 @@ function FilterPresetGroupComponent({
 				PresetFields={FilterPresetSize}
 				title={__('Filters', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={FILTER_PRESET_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={filterPresetFieldsPropsResolver}
 			/>
 		</>

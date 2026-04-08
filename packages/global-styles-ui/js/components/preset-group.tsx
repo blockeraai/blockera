@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
-import React, { ElementType } from 'react';
+import React from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useState, useCallback, useMemo, useContext } from '@wordpress/element';
+import { useCallback, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
@@ -11,7 +11,6 @@ import { useState, useCallback, useMemo, useContext } from '@wordpress/element';
 import {
 	BaseControl,
 	RepeaterControl,
-	RepeaterContext,
 	UpgradePrompt,
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
@@ -22,16 +21,8 @@ import { controlClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
-import { AddVariableModal, getAllVariableSlugs } from '.';
-import type {
-	VariablesType,
-	VariableType,
-	AddVariableModalConfig,
-} from './types.ts';
-import { buildPresetAddModalConfig } from './preset-add-modal-config';
+import type { VariablesType, VariableType } from './types.ts';
 import { PresetStateContainer } from './preset-state-container';
-
-export type { AddVariableModalConfig } from './types';
 
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
@@ -56,7 +47,6 @@ export type PresetGroupPropsType = {
 	}>;
 	onChange: (newValue: Object) => void;
 	defaultPresetValue: VariableType | any;
-	addVariableModalConfig?: AddVariableModalConfig;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
 };
 
@@ -73,83 +63,7 @@ type PresetsProps = {
 	repeaterItemHeader: PresetGroupPropsType['repeaterItemHeader'];
 	onChange: (variables: VariablesType) => void;
 	popoverTitle: string | ((itemId: string, item: VariableType) => string);
-	addVariableModalConfig?: AddVariableModalConfig;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
-};
-
-type InserterComponentProps = {
-	maxItems: number;
-	callback: () => void;
-	PlusButton: ElementType;
-	variables: VariablesType;
-	insertArgs: {
-		repeaterItems: object;
-	};
-	defaultPresetValue: VariableType | any;
-	addVariableModalConfig?: AddVariableModalConfig;
-};
-
-const DEFAULT_ADD_VARIABLE_MODAL_CONFIG: AddVariableModalConfig =
-	buildPresetAddModalConfig({
-		headerTitle: __('Add Font Size', 'blockera'),
-		newPresetTypeLabel: __('font size', 'blockera'),
-		controlNamePrefix: 'add-font-size',
-	});
-
-const InserterComponent = ({
-	callback,
-	maxItems,
-	insertArgs,
-	PlusButton,
-	defaultPresetValue,
-	addVariableModalConfig = DEFAULT_ADD_VARIABLE_MODAL_CONFIG,
-}: InserterComponentProps) => {
-	const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-	const { repeaterItems } = useContext(RepeaterContext) as {
-		repeaterItems: Record<string | number, any>;
-	};
-
-	const existingSlugs = getAllVariableSlugs(repeaterItems);
-
-	const config = {
-		...DEFAULT_ADD_VARIABLE_MODAL_CONFIG,
-		...addVariableModalConfig,
-	};
-
-	return (
-		<div>
-			<PlusButton
-				onClick={() => {
-					if (
-						Object.keys(insertArgs?.repeaterItems).length >=
-						maxItems
-					) {
-						return;
-					}
-
-					setIsAddModalOpen(!isAddModalOpen);
-				}}
-				disabled={
-					Object.keys(insertArgs?.repeaterItems).length >= maxItems
-				}
-				isFocus={isAddModalOpen}
-			/>
-
-			{isAddModalOpen && (
-				<AddVariableModal
-					headerTitle={config.headerTitle}
-					description={config.description}
-					defaultName={defaultPresetValue.name}
-					defaultSlug={defaultPresetValue.slug}
-					existingSlugs={existingSlugs}
-					onSave={callback}
-					onClose={() => setIsAddModalOpen(false)}
-					duplicateSlugMessage={config.duplicateSlugMessage}
-					controlNamePrefix={config.controlNamePrefix}
-				/>
-			)}
-		</div>
-	);
 };
 
 const PresetFieldsComponent = ({
@@ -189,24 +103,10 @@ const Presets = ({
 	PresetFields,
 	canAddNewItem,
 	defaultPresetValue,
-	addVariableModalConfig,
 	presetFieldsPropsResolver,
 	repeaterItemHeader: RepeaterItemHeader,
 	...props
 }: PresetsProps) => {
-	// Must list variables + defaultPresetValue so the add modal gets fresh name/slug when presets change.
-	const renderInserter = useCallback(
-		(_props: InserterComponentProps) => (
-			<InserterComponent
-				{..._props}
-				variables={variables}
-				defaultPresetValue={defaultPresetValue}
-				addVariableModalConfig={addVariableModalConfig}
-			/>
-		),
-		[addVariableModalConfig, variables, defaultPresetValue]
-	);
-
 	const renderPromo = useCallback(
 		({
 			items,
@@ -272,7 +172,6 @@ const Presets = ({
 			label={label}
 			id={controlName}
 			onChange={onChange}
-			isSupportInserter={true}
 			popoverTitle={popoverTitle}
 			PromoComponent={renderPromo}
 			canAddNewItem={canAddNewItem}
@@ -282,7 +181,6 @@ const Presets = ({
 				title
 			)}
 			shouldConfirmDeleteDialog={true}
-			InserterComponent={renderInserter}
 			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}
 			defaultRepeaterItemValue={defaultPresetValue}
@@ -302,7 +200,6 @@ export const PresetGroup = ({
 	PresetFields,
 	repeaterItemHeader,
 	defaultPresetValue,
-	addVariableModalConfig,
 	presetFieldsPropsResolver,
 }: PresetGroupPropsType) => {
 	const getPopoverTitle = useCallback(
@@ -344,7 +241,6 @@ export const PresetGroup = ({
 						canAddNewItem={'custom' === origin}
 						repeaterItemHeader={repeaterItemHeader}
 						defaultPresetValue={defaultPresetValue}
-						addVariableModalConfig={addVariableModalConfig}
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
 					/>
 				</BaseControl>

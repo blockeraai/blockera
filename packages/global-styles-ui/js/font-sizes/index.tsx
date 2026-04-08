@@ -23,7 +23,6 @@ import {
 	PresetGroup,
 	ScreenHeader,
 	getNewIndexFromPresets,
-	buildPresetAddModalConfig,
 	createPresetFieldsPropsResolver,
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
@@ -64,12 +63,6 @@ export type DefaultPresetValue = {
 	visibilitySupport: boolean;
 	fluid: boolean | { min: string; max: string };
 };
-
-const FONT_SIZE_ADD_MODAL_CONFIG = buildPresetAddModalConfig({
-	headerTitle: __('Add Font Size', 'blockera'),
-	newPresetTypeLabel: __('font size', 'blockera'),
-	controlNamePrefix: 'add-font-size',
-});
 
 const fontSizePresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('fontSize');
@@ -138,7 +131,6 @@ function FontSizeGroupComponent({
 				PresetFields={FontSize}
 				title={__('Font Size', 'blockera')}
 				label={getOriginVariablesLabel(origin)}
-				addVariableModalConfig={FONT_SIZE_ADD_MODAL_CONFIG}
 				presetFieldsPropsResolver={fontSizePresetFieldsPropsResolver}
 			/>
 		</>
