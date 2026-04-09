@@ -133,6 +133,7 @@ function BorderRadiusSizeComponent({
 			}}
 		>
 			<BorderRadiusControl
+				withoutValueAddons
 				label={__('Radius', 'blockera')}
 				labelDescription={
 					<>

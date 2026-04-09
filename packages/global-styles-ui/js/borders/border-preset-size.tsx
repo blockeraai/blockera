@@ -117,6 +117,7 @@ function BorderPresetSizeComponent({
 		>
 			<BoxBorderControl
 				columns="columns-1"
+				withoutValueAddons
 				label={__('Border', 'blockera')}
 				labelDescription={
 					<>
