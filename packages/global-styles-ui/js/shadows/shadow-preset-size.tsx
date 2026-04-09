@@ -132,7 +132,7 @@ function ShadowPresetSizeComponent({
 			>
 				<BoxShadowControl
 					key={slug}
-					PromoComponent={null}
+					withoutValueAddons
 					id={`shadow-preset-box-${slug}`}
 					defaultRepeaterItemValue={{
 						type: 'outer',

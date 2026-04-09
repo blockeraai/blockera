@@ -43,9 +43,6 @@ export type FilterDefaultPresetValue = {
 	visibilitySupport: boolean;
 };
 
-/** Block editor preset UI must allow multiple filter rows; FilterControl’s default shows UpgradePrompt when count > 0. */
-const noopFilterPromo = (): null => null;
-
 const FILTER_PRESET_REPEATER_DEFAULT = {
 	type: 'blur' as const,
 	blur: '3px',
@@ -151,8 +148,8 @@ function FilterPresetSizeComponent({
 			>
 				<FilterControl
 					key={slug}
-					PromoComponent={noopFilterPromo}
 					id={`filter-preset-${slug}`}
+					withoutValueAddons
 					label={__('Filters', 'blockera')}
 					labelDescription={
 						<>

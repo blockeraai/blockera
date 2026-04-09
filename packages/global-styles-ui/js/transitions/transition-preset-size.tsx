@@ -135,7 +135,7 @@ function TransitionPresetSizeComponent({
 			>
 				<TransitionControl
 					key={slug}
-					PromoComponent={null}
+					withoutValueAddons
 					id={`transition-preset-${slug}`}
 					label={__('Transitions', 'blockera')}
 					labelDescription={

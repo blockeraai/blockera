@@ -43,9 +43,6 @@ export type TransformDefaultPresetValue = {
 	visibilitySupport: boolean;
 };
 
-/** Stable reference: avoids a new function each render and needless child updates. */
-const noopTransformPromo = (): null => null;
-
 /** Matches TransformControl’s default row shape; defined once to avoid new object identity on each render. */
 const TRANSFORM_PRESET_REPEATER_DEFAULT = {
 	type: 'move' as const,
@@ -153,7 +150,7 @@ function TransformPresetSizeComponent({
 			>
 				<TransformControl
 					key={slug}
-					PromoComponent={noopTransformPromo}
+					withoutValueAddons
 					id={`transform-preset-${slug}`}
 					label={__('2D & 3D Transforms', 'blockera')}
 					labelDescription={

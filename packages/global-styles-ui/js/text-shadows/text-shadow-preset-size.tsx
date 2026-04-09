@@ -133,7 +133,7 @@ function TextShadowPresetSizeComponent({
 			>
 				<TextShadowControl
 					key={slug}
-					PromoComponent={null}
+					withoutValueAddons
 					id={`text-shadow-preset-${slug}`}
 					defaultRepeaterItemValue={{
 						x: '1px',
