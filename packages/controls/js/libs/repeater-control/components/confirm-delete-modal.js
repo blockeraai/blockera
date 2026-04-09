@@ -26,7 +26,7 @@ import {
 } from '../../';
 import { ControlContextProvider } from '../../../context';
 
-type ConfirmDeleteDialogProps = {
+type ConfirmDeleteModalProps = {
 	item: Object,
 	handleRemoveItem: (item: Object) => void,
 	onClose: () => void,
@@ -38,12 +38,12 @@ const DEFAULT_DELETE_WARNING = __(
 	'blockera'
 );
 
-function ConfirmDeleteDialog({
+function ConfirmDeleteModal({
 	item,
 	handleRemoveItem,
 	onClose,
 	deleteConfirmWarningText,
-}: ConfirmDeleteDialogProps): MixedElement {
+}: ConfirmDeleteModalProps): MixedElement {
 	const [isConfirmedDelete, setIsConfirmedDelete] = useState(false);
 
 	const itemLabel = item?.label || item?.name || '';
@@ -118,7 +118,7 @@ function ConfirmDeleteDialog({
 
 				<Flex justifyContent="space-between">
 					<Button
-						data-test="confirm-delete-repeater-button"
+						data-test="confirm-delete-modal-delete-button"
 						disabled={!isConfirmedDelete}
 						variant="primary"
 						onClick={() => {
@@ -129,7 +129,7 @@ function ConfirmDeleteDialog({
 					</Button>
 
 					<Button
-						data-test="cancel-delete-repeater-button"
+						data-test="confirm-delete-modal-cancel-button"
 						variant="tertiary"
 						onClick={() => {
 							setIsConfirmedDelete(false);
@@ -144,4 +144,4 @@ function ConfirmDeleteDialog({
 	);
 }
 
-export default ConfirmDeleteDialog;
+export default ConfirmDeleteModal;

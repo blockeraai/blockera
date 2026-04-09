@@ -194,7 +194,7 @@ const Presets = ({
 				__('Add New %s', 'blockera'),
 				title
 			)}
-			shouldConfirmDeleteDialog={true}
+			shouldConfirmDeleteModal={true}
 			deleteConfirmWarningText={deleteConfirmWarningText}
 			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}

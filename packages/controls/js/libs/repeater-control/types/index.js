@@ -158,8 +158,14 @@ export type RepeaterControlProps = {
 	 */
 	actionButtonReset?: boolean,
 	/**
-	 * When `shouldConfirmDeleteDialog` is true, extra warning copy shown above the confirmation checkbox.
-	 * If omitted, the dialog uses a generic fallback string.
+	 * When true, removing a repeater item opens ConfirmDeleteModal before deletion runs.
+	 *
+	 * @default false
+	 */
+	shouldConfirmDeleteModal?: boolean,
+	/**
+	 * When `shouldConfirmDeleteModal` is true, extra warning copy shown above the confirmation checkbox.
+	 * If omitted, the modal uses a generic fallback string.
 	 */
 	deleteConfirmWarningText?: string,
 	/**

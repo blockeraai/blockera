@@ -20,7 +20,7 @@ import { useControlContext } from '../../../context';
 import { Button, Tooltip, Flex, MenuItem } from '../../';
 import type { RepeaterItemActionsProps } from '../types';
 import { repeaterOnChange } from '../store/reducers/utils';
-import ConfirmDeleteDialog from './confirm-delete-dialog';
+import ConfirmDeleteModal from './confirm-delete-modal';
 import { getArialLabelSuffix, isEnabledPromote } from '../utils';
 
 export default function RepeaterItemActions({
@@ -51,14 +51,14 @@ export default function RepeaterItemActions({
 		disableRegenerateId,
 		setDisableAddNewItem,
 		actionButtonVisibility,
-		shouldConfirmDeleteDialog,
+		shouldConfirmDeleteModal,
 		deleteConfirmWarningText,
 	} = useContext(RepeaterContext);
 
-	const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
+	const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
 		useState(false);
-	const toggleConfirmDeleteDialog = () =>
-		setIsConfirmDeleteDialogOpen(!isConfirmDeleteDialogOpen);
+	const toggleConfirmDeleteModal = () =>
+		setIsConfirmDeleteModalOpen(!isConfirmDeleteModalOpen);
 
 	const itemsCount = Object.keys(repeaterItems).length;
 
@@ -115,12 +115,12 @@ export default function RepeaterItemActions({
 	}
 
 	function deleteFunction(event: MouseEvent) {
-		// Try to open the confirm delete dialog if it is not open and shouldConfirmDeleteDialog is true
-		if (!isConfirmDeleteDialogOpen && shouldConfirmDeleteDialog) {
-			toggleConfirmDeleteDialog();
+		// Try to open the confirm delete modal if it is not open and shouldConfirmDeleteModal is true
+		if (!isConfirmDeleteModalOpen && shouldConfirmDeleteModal) {
+			toggleConfirmDeleteModal();
 			return;
-		} else if (isConfirmDeleteDialogOpen) {
-			toggleConfirmDeleteDialog();
+		} else if (isConfirmDeleteModalOpen) {
+			toggleConfirmDeleteModal();
 		}
 
 		if (event && event?.hasOwnProperty('stopPropagation')) {
@@ -251,11 +251,11 @@ export default function RepeaterItemActions({
 
 	return (
 		<>
-			{shouldConfirmDeleteDialog && isConfirmDeleteDialogOpen && (
-				<ConfirmDeleteDialog
+			{shouldConfirmDeleteModal && isConfirmDeleteModalOpen && (
+				<ConfirmDeleteModal
 					item={item}
 					handleRemoveItem={deleteFunction}
-					onClose={() => setIsConfirmDeleteDialogOpen(false)}
+					onClose={() => setIsConfirmDeleteModalOpen(false)}
 					deleteConfirmWarningText={deleteConfirmWarningText}
 				/>
 			)}
