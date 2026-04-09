@@ -1288,7 +1288,7 @@ const Fields: FieldItem = memo<FieldItem>(
 								}}
 								style={{
 									width: 'max-content',
-									padding: '0 10px',
+									padding: '0 5px',
 									gap: '4px',
 								}}
 							>
