@@ -8,3 +8,32 @@
 		opacity: 1;
 	}
 }
+
+// ID field: gray while locked (creating or click-to-edit) or disabled; normal when editing.
+.blockera-preset-id-field {
+	position: relative;
+
+	&.is-id-readonly-muted {
+		.blockera-control-input input.blockera-control-input-tag:disabled,
+		.blockera-control-input .blockera-control-input-tag:disabled,
+		.blockera-control-input input.blockera-control-input-tag:read-only,
+		.blockera-control-input .blockera-control-input-tag:read-only {
+			background-color: #f0f0f0;
+			border-color: #dcdcde;
+			color: #1e1e1e;
+			opacity: 1;
+			-webkit-text-fill-color: #1e1e1e;
+		}
+
+		// Post–creating: click / focus opens edit mode.
+		.blockera-control-input input.blockera-control-input-tag:read-only,
+		.blockera-control-input .blockera-control-input-tag:read-only {
+			cursor: pointer;
+		}
+
+		.blockera-control-input input.blockera-control-input-tag:disabled,
+		.blockera-control-input .blockera-control-input-tag:disabled {
+			cursor: not-allowed;
+		}
+	}
+}

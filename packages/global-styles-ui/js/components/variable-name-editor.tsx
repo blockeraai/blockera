@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import type { KeyboardEvent } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	memo,
@@ -14,6 +15,7 @@ import {
  * Blockera dependencies
  */
 import { Icon } from '@blockera/icons';
+import { classNames } from '@blockera/classnames';
 import { kebabCase } from '@blockera/utils';
 import {
 	Flex,
@@ -49,30 +51,44 @@ function VariableNameEditorComponent<T extends VariableType>({
 	variable,
 	allSlugs,
 }: VariableNameEditorProps<T>) {
-	// ID field: locked by default, Edit to unlock. Only variableSlug when editable.
+	const isCreating = variable.creatingStep === true;
+
+	// ID field: locked while creating or until user clicks/focuses ID (then editable buffer).
 	const [variableSlug, setVariableSlug] = useState(slug);
 	const [isIdEditable, setIsIdEditable] = useState(false);
 	const [isConfirmedSlugChange, setIsConfirmedSlugChange] = useState(false);
 	const [hasUserEditedSinceUnlock, setHasUserEditedSinceUnlock] =
 		useState(false);
 
-	// Sync when preset changes (e.g. navigation).
+	// Sync when preset changes (e.g. navigation) or after first close (creatingStep → false).
 	useEffect(() => {
 		setVariableSlug(slug);
 		setIsIdEditable(false);
 		setHasUserEditedSinceUnlock(false);
-	}, [name, slug]);
+		setIsConfirmedSlugChange(false);
+	}, [name, slug, variable.creatingStep]);
 
 	// Auto-lock when user edits ID back to saved slug.
 	useEffect(() => {
-		if (isIdEditable && hasUserEditedSinceUnlock && variableSlug === slug) {
+		if (
+			!isCreating &&
+			isIdEditable &&
+			hasUserEditedSinceUnlock &&
+			variableSlug === slug
+		) {
 			setIsIdEditable(false);
 			setHasUserEditedSinceUnlock(false);
 		}
-	}, [isIdEditable, hasUserEditedSinceUnlock, variableSlug, slug]);
+	}, [
+		isCreating,
+		isIdEditable,
+		hasUserEditedSinceUnlock,
+		variableSlug,
+		slug,
+	]);
 
-	// ID display: when locked always show saved slug; when editable show local variableSlug.
-	const displayedSlug = isIdEditable ? variableSlug : slug;
+	// ID display: while creating, slug is driven by name; else locked vs edit buffer.
+	const displayedSlug = isIdEditable && !isCreating ? variableSlug : slug;
 
 	const {
 		controlInfo: { name: controlId },
@@ -87,9 +103,13 @@ function VariableNameEditorComponent<T extends VariableType>({
 		valueCleanup: (value: any) => any;
 	};
 
-	const slugChanged = isIdEditable && variableSlug !== slug;
+	const slugChanged = !isCreating && isIdEditable && variableSlug !== slug;
 	const slugIsValid = isSlugValid(displayedSlug, allSlugs, slug);
-	const showUndo = isIdEditable && variableSlug !== slug;
+	const showUndo = !isCreating && isIdEditable && variableSlug !== slug;
+	const idFieldLocked = isCreating || !isIdEditable;
+	const showMutedIdStyle = idFieldLocked;
+	// After creatingStep: locked ID uses read-only (not disabled) so click/focus can unlock; while creating, disabled blocks edits.
+	const idClickToEdit = !isCreating && !isIdEditable;
 	const slugError =
 		displayedSlug && !slugIsValid
 			? (() => {
@@ -110,11 +130,21 @@ function VariableNameEditorComponent<T extends VariableType>({
 			: null;
 	const canSaveNameSlug = slugChanged && isConfirmedSlugChange && slugIsValid;
 
-	const handleIdEditClick = () => {
+	const unlockIdField = useCallback(() => {
 		setVariableSlug(slug);
 		setHasUserEditedSinceUnlock(false);
 		setIsIdEditable(true);
-	};
+	}, [slug]);
+
+	const handleLockedIdKeyDown = useCallback(
+		(event: KeyboardEvent<HTMLInputElement>) => {
+			if (event.key === 'Enter' || event.key === ' ') {
+				event.preventDefault();
+				unlockIdField();
+			}
+		},
+		[unlockIdField]
+	);
 
 	const handleIdUndoClick = () => setVariableSlug(slug);
 
@@ -149,6 +179,23 @@ function VariableNameEditorComponent<T extends VariableType>({
 
 	const handleNameChange = useCallback(
 		(newValue: string) => {
+			if (variable.creatingStep) {
+				const derivedSlug = kebabCase(newValue.toLowerCase().trim());
+				changeRepeaterItem({
+					onChange,
+					valueCleanup,
+					controlId,
+					repeaterId,
+					itemId,
+					value: {
+						...variable,
+						name: newValue,
+						slug: derivedSlug || variable.slug,
+					},
+				});
+				return;
+			}
+
 			changeRepeaterItem({
 				onChange,
 				valueCleanup,
@@ -181,6 +228,19 @@ function VariableNameEditorComponent<T extends VariableType>({
 		setIsConfirmedSlugChange(newValue);
 	}, []);
 
+	let idFieldHint = __('Use a–z, 0–9, and hyphens only.', 'blockera');
+	if (isCreating) {
+		idFieldHint = __(
+			'The ID matches the name until you close this preset.',
+			'blockera'
+		);
+	} else if (idClickToEdit) {
+		idFieldHint = __(
+			'Click the ID to edit. Use a–z, 0–9, and hyphens only.',
+			'blockera'
+		);
+	}
+
 	return (
 		<Flex direction="column" gap={20}>
 			<Flex direction="column" gap={20}>
@@ -205,13 +265,27 @@ function VariableNameEditorComponent<T extends VariableType>({
 					}}
 				>
 					<div
-						className={`blockera-preset-id-field${!isIdEditable ? ' is-locked' : ''}`}
+						className={classNames('blockera-preset-id-field', {
+							'is-id-readonly-muted': showMutedIdStyle,
+						})}
 					>
 						<InputControl
 							label={__('ID:', 'blockera')}
 							controlAddonTypes={[]}
-							disabled={!isIdEditable}
-							onChange={isIdEditable ? handleIdChange : () => {}}
+							disabled={isCreating}
+							readOnly={idClickToEdit}
+							onClick={idClickToEdit ? unlockIdField : undefined}
+							onFocus={idClickToEdit ? unlockIdField : undefined}
+							onKeyDown={
+								idClickToEdit
+									? handleLockedIdKeyDown
+									: undefined
+							}
+							onChange={
+								!isCreating && isIdEditable
+									? handleIdChange
+									: () => {}
+							}
 							columns="1fr 3fr"
 							style={{
 								position: 'relative',
@@ -225,17 +299,14 @@ function VariableNameEditorComponent<T extends VariableType>({
 									fontSize: '13px',
 								}}
 							>
-								{__(
-									'Use a–z, 0–9, and hyphens only.',
-									'blockera'
-								)}
+								{idFieldHint}
 							</p>
 
-							{!isIdEditable ? (
+							{showUndo && (
 								<Button
-									onClick={handleIdEditClick}
+									onClick={handleIdUndoClick}
 									variant="tertiary"
-									icon={<Icon icon="pen" iconSize="16" />}
+									icon={<Icon icon="undo" iconSize="16" />}
 									size="input"
 									style={{
 										position: 'absolute',
@@ -250,33 +321,8 @@ function VariableNameEditorComponent<T extends VariableType>({
 										fontWeight: '500',
 									}}
 								>
-									{__('Edit', 'blockera')}
+									{__('Undo', 'blockera')}
 								</Button>
-							) : (
-								showUndo && (
-									<Button
-										onClick={handleIdUndoClick}
-										variant="tertiary"
-										icon={
-											<Icon icon="undo" iconSize="16" />
-										}
-										size="input"
-										style={{
-											position: 'absolute',
-											right: '4px',
-											top: '4px',
-											padding: '2px 6px 2px 4px',
-											'--blockera-controls-input-height':
-												'22px',
-											gap: '2px',
-											fontSize: '11px',
-											textTransform: 'uppercase',
-											fontWeight: '500',
-										}}
-									>
-										{__('Undo', 'blockera')}
-									</Button>
-								)
 							)}
 						</InputControl>
 					</div>
