@@ -73,6 +73,7 @@ export default function FilterControl({
 			/>
 		);
 	},
+	withoutValueAddons = false,
 	...props
 }: FilterControlProps): MixedElement {
 	function valueCleanup(item: Object) {
@@ -155,8 +156,9 @@ export default function FilterControl({
 					/>
 				)
 			}
-			controlAddonTypes={['variable']}
-			variableTypes={['filter']}
+			{...(!withoutValueAddons
+				? { controlAddonTypes: ['variable'], variableTypes: ['filter'] }
+				: {})}
 			repeaterItemHeader={RepeaterItemHeader}
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}

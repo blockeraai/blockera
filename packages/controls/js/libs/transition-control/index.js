@@ -37,6 +37,7 @@ export default function TransitionControl({
 	label,
 	labelDescription,
 	className,
+	withoutValueAddons = false,
 	...props
 }: TTransitionControlProps): MixedElement {
 	return (
@@ -53,8 +54,12 @@ export default function TransitionControl({
 			repeaterItemChildren={Fields}
 			defaultRepeaterItemValue={defaultRepeaterItemValue}
 			id={'transition'}
-			controlAddonTypes={['variable']}
-			variableTypes={['transition']}
+			{...(!withoutValueAddons
+				? {
+						controlAddonTypes: ['variable'],
+						variableTypes: ['transition'],
+					}
+				: {})}
 			getTransitionTypeOptions={getTransitionTypeOptions}
 			getTransitionTimingOptions={getTransitionTimingOptions}
 			PromoComponent={({
