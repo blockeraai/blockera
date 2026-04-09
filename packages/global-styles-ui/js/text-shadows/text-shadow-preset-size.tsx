@@ -25,7 +25,7 @@ import {
  * Internal dependencies
  */
 import TextShadowPresetPreview from './text-shadow-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllTextShadowSlugs } from '../components/utils';
 import {
@@ -117,6 +117,55 @@ function TextShadowPresetSizeComponent({
 		return null;
 	}
 
+	const textShadowPresetValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `text-shadow-preset-${slug}`,
+				value: repeaterItems,
+				attribute: 'blockeraTextShadowPreset',
+				blockName: 'global-styles-text-shadows',
+			}}
+			storeName="blockera/controls/repeater"
+		>
+			<BaseControl
+				controlName={`text-shadow-preset-${slug}`}
+				columns="columns-1"
+			>
+				<TextShadowControl
+					key={slug}
+					PromoComponent={null}
+					id={`text-shadow-preset-${slug}`}
+					defaultRepeaterItemValue={{
+						x: '1px',
+						y: '1px',
+						blur: '1px',
+						color: '#000000ab',
+						isVisible: true,
+					}}
+					label={__('Text shadow', 'blockera')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Defines the text shadow preset used in typography text shadow controls across the site.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'Stored in theme.json as settings.textShadow.presets (items array per preset).',
+									'blockera'
+								)}
+							</p>
+						</>
+					}
+					defaultValue={repeaterItems}
+					onChange={handleTextShadowChange}
+				/>
+			</BaseControl>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -130,62 +179,19 @@ function TextShadowPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={textShadowPreset}
 								name={textShadowPreset.name}
 								slug={textShadowPreset.slug}
 								allSlugs={getAllTextShadowSlugs(presets)}
-							/>
-						)}
-
-						<ControlContextProvider
-							value={{
-								name: `text-shadow-preset-${slug}`,
-								value: repeaterItems,
-								attribute: 'blockeraTextShadowPreset',
-								blockName: 'global-styles-text-shadows',
-							}}
-							storeName="blockera/controls/repeater"
-						>
-							<BaseControl
-								controlName={`text-shadow-preset-${slug}`}
-								columns="columns-1"
 							>
-								<TextShadowControl
-									key={slug}
-									PromoComponent={null}
-									id={`text-shadow-preset-${slug}`}
-									defaultRepeaterItemValue={{
-										x: '1px',
-										y: '1px',
-										blur: '1px',
-										color: '#000000ab',
-										isVisible: true,
-									}}
-									label={__('Text shadow', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the text shadow preset used in typography text shadow controls across the site.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Stored in theme.json as settings.textShadow.presets (items array per preset).',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									defaultValue={repeaterItems}
-									onChange={handleTextShadowChange}
-								/>
-							</BaseControl>
-						</ControlContextProvider>
+								{textShadowPresetValueControls}
+							</SharedPresetControls>
+						) : (
+							textShadowPresetValueControls
+						)}
 					</VStack>
 				</Spacer>
 			</View>

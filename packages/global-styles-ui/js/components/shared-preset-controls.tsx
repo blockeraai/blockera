@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import type { KeyboardEvent } from 'react';
+import type { KeyboardEvent, ReactNode } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	memo,
@@ -34,7 +34,7 @@ import {
 import { isSlugValid } from './utils';
 import type { VariableType } from './types';
 
-export interface VariableNameEditorProps<
+export interface SharedPresetControlsProps<
 	T extends VariableType = VariableType,
 > {
 	name: string;
@@ -42,15 +42,17 @@ export interface VariableNameEditorProps<
 	itemId: string | number;
 	variable: T;
 	allSlugs: Array<string>;
+	children?: ReactNode;
 }
 
-function VariableNameEditorComponent<T extends VariableType>({
+function SharedPresetControlsComponent<T extends VariableType>({
 	name,
 	slug,
 	itemId,
 	variable,
 	allSlugs,
-}: VariableNameEditorProps<T>) {
+	children,
+}: SharedPresetControlsProps<T>) {
 	const isCreating = variable.creatingStep === true;
 
 	// ID field: locked while creating or until user clicks/focuses ID (then editable buffer).
@@ -329,6 +331,12 @@ function VariableNameEditorComponent<T extends VariableType>({
 				</ControlContextProvider>
 			</Flex>
 
+			{children ? (
+				<Flex direction="column" gap={16}>
+					{children}
+				</Flex>
+			) : null}
+
 			{slugError && (
 				<NoticeControl type="error">{slugError}</NoticeControl>
 			)}
@@ -337,7 +345,7 @@ function VariableNameEditorComponent<T extends VariableType>({
 				<Flex gap={15} direction="column">
 					<NoticeControl type="warning">
 						{__(
-							'Changing the font size preset ID will break existing connections. Blocks using the old ID will lose their font size unless updated manually.',
+							'Changing the preset ID will break existing connections. Blocks using the old ID will lose their preset unless updated manually.',
 							'blockera'
 						)}
 					</NoticeControl>
@@ -349,7 +357,7 @@ function VariableNameEditorComponent<T extends VariableType>({
 					>
 						<CheckboxControl
 							checkboxLabel={__(
-								'I accept that blocks using the old ID will lose their font size.',
+								'I accept that blocks using the old ID will lose their preset.',
 								'blockera'
 							)}
 							onChange={handleConfirmSlugChange}
@@ -359,22 +367,23 @@ function VariableNameEditorComponent<T extends VariableType>({
 				</Flex>
 			)}
 
-			{canSaveNameSlug && (
+			{slugChanged && (
 				<Flex className="blockera-preset-naming-save-actions">
 					<Button
-						variant="tertiary"
 						size="small"
-						className="blockera-preset-save-actions__discard"
+						variant="tertiary"
 						onClick={handleDiscardChanges}
+						className="blockera-preset-save-actions__discard"
 					>
 						{__('Discard', 'blockera')}
 					</Button>
 					<Button
-						variant="primary"
 						size="small"
-						className="blockera-preset-save-actions__save"
-						icon={<Icon icon="check" iconSize="16" />}
+						variant="primary"
 						onClick={handleSaveNameAndSlug}
+						disabled={!canSaveNameSlug}
+						className="blockera-preset-save-actions__save"
+						icon={<Icon icon="save" iconSize="16" library="wp" />}
 					>
 						{__('Save', 'blockera')}
 					</Button>
@@ -384,4 +393,4 @@ function VariableNameEditorComponent<T extends VariableType>({
 	);
 }
 
-export const VariableNameEditor = memo(VariableNameEditorComponent);
+export const SharedPresetControls = memo(SharedPresetControlsComponent);

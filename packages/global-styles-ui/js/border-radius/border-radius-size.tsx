@@ -24,7 +24,7 @@ import {
  * Internal dependencies
  */
 import BorderRadiusPresetPreview from './border-radius-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllBorderRadiusSlugs } from '../components/utils';
 import {
@@ -123,6 +123,41 @@ function BorderRadiusSizeComponent({
 			? borderRadiusSize.size
 			: (borderRadiusSize.size ?? '');
 
+	const borderRadiusValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `border-radius-size-${slug}`,
+				value: radiusControlValue,
+				attribute: 'blockeraBorderRadiusSize',
+				blockName: 'global-styles',
+			}}
+		>
+			<BorderRadiusControl
+				label={__('Radius', 'blockera')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'Sets the border radius preset value used in border controls across the site.',
+								'blockera'
+							)}
+						</p>
+						<p>
+							{__(
+								'Stored in theme.json as border.radiusSizes (size field). Four values are saved as a CSS shorthand list.',
+								'blockera'
+							)}
+						</p>
+					</>
+				}
+				onChange={(newValue: BorderRadiusControlValue) =>
+					handleRadiusChange(newValue)
+				}
+				defaultValue={radiusControlValue}
+			/>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -132,48 +167,19 @@ function BorderRadiusSizeComponent({
 							<BorderRadiusPresetPreview size={sizeForPreview} />
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={borderRadiusSize}
 								name={borderRadiusSize.name}
 								slug={borderRadiusSize.slug}
 								allSlugs={getAllBorderRadiusSlugs(sizes)}
-							/>
+							>
+								{borderRadiusValueControls}
+							</SharedPresetControls>
+						) : (
+							borderRadiusValueControls
 						)}
-
-						<ControlContextProvider
-							value={{
-								name: `border-radius-size-${slug}`,
-								value: radiusControlValue,
-								attribute: 'blockeraBorderRadiusSize',
-								blockName: 'global-styles',
-							}}
-						>
-							<BorderRadiusControl
-								label={__('Radius', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Sets the border radius preset value used in border controls across the site.',
-												'blockera'
-											)}
-										</p>
-										<p>
-											{__(
-												'Stored in theme.json as border.radiusSizes (size field). Four values are saved as a CSS shorthand list.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								onChange={(
-									newValue: BorderRadiusControlValue
-								) => handleRadiusChange(newValue)}
-								defaultValue={radiusControlValue}
-							/>
-						</ControlContextProvider>
 					</VStack>
 				</Spacer>
 			</View>

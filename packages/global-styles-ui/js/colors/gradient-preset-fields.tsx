@@ -23,7 +23,7 @@ import {
 /**
  * Internal dependencies
  */
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllGradientSlugs } from '../components/utils';
 
@@ -97,19 +97,40 @@ function GradientPresetFieldsComponent({
 			? __('Linear Gradient', 'blockera')
 			: __('Radial Gradient', 'blockera');
 
+	const gradientValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `gradient-value-${slug}`,
+				value: gradientItem.gradient,
+				attribute: 'blockeraGradient',
+				blockName: 'global-styles',
+			}}
+		>
+			<GradientBarControl
+				label={label}
+				field="gradient-bar"
+				height={40}
+				columns="columns-2"
+				onChange={handleGradientChange}
+			/>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
 				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
 					<VStack spacing={4}>
 						{'custom' === origin ? (
-							<VariableNameEditor
+							<SharedPresetControls
 								itemId={presetId}
 								variable={gradientItem}
 								name={gradientItem.name}
 								slug={gradientItem.slug}
 								allSlugs={getAllGradientSlugs(gradients as any)}
-							/>
+							>
+								{gradientValueControls}
+							</SharedPresetControls>
 						) : (
 							<>
 								<ControlContextProvider
@@ -140,25 +161,9 @@ function GradientPresetFieldsComponent({
 										disabled
 									/>
 								</ControlContextProvider>
+								{gradientValueControls}
 							</>
 						)}
-
-						<ControlContextProvider
-							value={{
-								name: `gradient-value-${slug}`,
-								value: gradientItem.gradient,
-								attribute: 'blockeraGradient',
-								blockName: 'global-styles',
-							}}
-						>
-							<GradientBarControl
-								label={label}
-								field="gradient-bar"
-								height={40}
-								columns="columns-2"
-								onChange={handleGradientChange}
-							/>
-						</ControlContextProvider>
 					</VStack>
 				</Spacer>
 			</View>

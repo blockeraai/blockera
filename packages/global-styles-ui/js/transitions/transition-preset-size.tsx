@@ -25,7 +25,7 @@ import {
  * Internal dependencies
  */
 import TransitionPresetPreview from './transition-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllTransitionSlugs } from '../components/utils';
 import {
@@ -119,6 +119,55 @@ function TransitionPresetSizeComponent({
 		return null;
 	}
 
+	const transitionPresetValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `transition-preset-${slug}`,
+				value: repeaterItems,
+				attribute: 'blockeraTransitionPreset',
+				blockName: 'global-styles-transitions',
+			}}
+			storeName="blockera/controls/repeater"
+		>
+			<BaseControl
+				controlName={`transition-preset-${slug}`}
+				columns="columns-1"
+			>
+				<TransitionControl
+					key={slug}
+					PromoComponent={null}
+					id={`transition-preset-${slug}`}
+					label={__('Transitions', 'blockera')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Defines the transition preset used in effects transition controls across the site.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'Stored in theme.json as settings.transition.presets (items array per preset).',
+									'blockera'
+								)}
+							</p>
+						</>
+					}
+					defaultRepeaterItemValue={{
+						type: 'all',
+						duration: '500ms',
+						timing: 'ease',
+						delay: '0ms',
+						isVisible: true,
+					}}
+					defaultValue={repeaterItems}
+					onChange={handleTransitionChange}
+				/>
+			</BaseControl>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -130,62 +179,19 @@ function TransitionPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={transitionPreset}
 								name={transitionPreset.name}
 								slug={transitionPreset.slug}
 								allSlugs={getAllTransitionSlugs(presets)}
-							/>
-						)}
-
-						<ControlContextProvider
-							value={{
-								name: `transition-preset-${slug}`,
-								value: repeaterItems,
-								attribute: 'blockeraTransitionPreset',
-								blockName: 'global-styles-transitions',
-							}}
-							storeName="blockera/controls/repeater"
-						>
-							<BaseControl
-								controlName={`transition-preset-${slug}`}
-								columns="columns-1"
 							>
-								<TransitionControl
-									key={slug}
-									PromoComponent={null}
-									id={`transition-preset-${slug}`}
-									label={__('Transitions', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the transition preset used in effects transition controls across the site.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Stored in theme.json as settings.transition.presets (items array per preset).',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									defaultRepeaterItemValue={{
-										type: 'all',
-										duration: '500ms',
-										timing: 'ease',
-										delay: '0ms',
-										isVisible: true,
-									}}
-									defaultValue={repeaterItems}
-									onChange={handleTransitionChange}
-								/>
-							</BaseControl>
-						</ControlContextProvider>
+								{transitionPresetValueControls}
+							</SharedPresetControls>
+						) : (
+							transitionPresetValueControls
+						)}
 					</VStack>
 				</Spacer>
 			</View>

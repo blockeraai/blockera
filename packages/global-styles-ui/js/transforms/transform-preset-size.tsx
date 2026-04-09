@@ -25,7 +25,7 @@ import {
  * Internal dependencies
  */
 import TransformPresetPreview from './transform-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllTransformSlugs } from '../components/utils';
 import {
@@ -137,6 +137,49 @@ function TransformPresetSizeComponent({
 		return null;
 	}
 
+	const transformPresetValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `transform-preset-${slug}`,
+				value: repeaterItems,
+				attribute: 'blockeraTransformPreset',
+				blockName: 'global-styles-transforms',
+			}}
+			storeName="blockera/controls/repeater"
+		>
+			<BaseControl
+				controlName={`transform-preset-${slug}`}
+				columns="columns-1"
+			>
+				<TransformControl
+					key={slug}
+					PromoComponent={noopTransformPromo}
+					id={`transform-preset-${slug}`}
+					label={__('2D & 3D Transforms', 'blockera')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Defines the transform preset used in effects transform controls across the site.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'Stored in theme.json as settings.transform.presets (items array per preset).',
+									'blockera'
+								)}
+							</p>
+						</>
+					}
+					defaultRepeaterItemValue={TRANSFORM_PRESET_REPEATER_DEFAULT}
+					defaultValue={repeaterItems}
+					onChange={handleTransformChange}
+				/>
+			</BaseControl>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -148,58 +191,19 @@ function TransformPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={transformPreset}
 								name={transformPreset.name}
 								slug={transformPreset.slug}
 								allSlugs={getAllTransformSlugs(presets)}
-							/>
-						)}
-
-						<ControlContextProvider
-							value={{
-								name: `transform-preset-${slug}`,
-								value: repeaterItems,
-								attribute: 'blockeraTransformPreset',
-								blockName: 'global-styles-transforms',
-							}}
-							storeName="blockera/controls/repeater"
-						>
-							<BaseControl
-								controlName={`transform-preset-${slug}`}
-								columns="columns-1"
 							>
-								<TransformControl
-									key={slug}
-									PromoComponent={noopTransformPromo}
-									id={`transform-preset-${slug}`}
-									label={__('2D & 3D Transforms', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the transform preset used in effects transform controls across the site.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Stored in theme.json as settings.transform.presets (items array per preset).',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									defaultRepeaterItemValue={
-										TRANSFORM_PRESET_REPEATER_DEFAULT
-									}
-									defaultValue={repeaterItems}
-									onChange={handleTransformChange}
-								/>
-							</BaseControl>
-						</ControlContextProvider>
+								{transformPresetValueControls}
+							</SharedPresetControls>
+						) : (
+							transformPresetValueControls
+						)}
 					</VStack>
 				</Spacer>
 			</View>

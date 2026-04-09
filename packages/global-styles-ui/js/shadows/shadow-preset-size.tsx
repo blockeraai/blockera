@@ -25,7 +25,7 @@ import {
  * Internal dependencies
  */
 import ShadowPresetPreview from './shadow-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllShadowSlugs } from '../components/utils';
 import {
@@ -116,6 +116,57 @@ function ShadowPresetSizeComponent({
 		return null;
 	}
 
+	const shadowPresetValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `shadow-preset-${slug}`,
+				value: repeaterItems,
+				attribute: 'blockeraShadowPreset',
+				blockName: 'global-styles-shadows',
+			}}
+			storeName="blockera/controls/repeater"
+		>
+			<BaseControl
+				controlName={`shadow-preset-box-${slug}`}
+				columns="columns-1"
+			>
+				<BoxShadowControl
+					key={slug}
+					PromoComponent={null}
+					id={`shadow-preset-box-${slug}`}
+					defaultRepeaterItemValue={{
+						type: 'outer',
+						x: '10px',
+						y: '10px',
+						blur: '10px',
+						spread: '0px',
+						color: '#000000ab',
+						isVisible: true,
+					}}
+					label={__('Box shadow', 'blockera')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Defines the shadow preset used in box shadow controls across the site.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'Stored in theme.json as settings.shadow.presets (items array per preset).',
+									'blockera'
+								)}
+							</p>
+						</>
+					}
+					defaultValue={repeaterItems}
+					onChange={handleBoxShadowChange}
+				/>
+			</BaseControl>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -129,64 +180,19 @@ function ShadowPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={shadowPreset}
 								name={shadowPreset.name}
 								slug={shadowPreset.slug}
 								allSlugs={getAllShadowSlugs(presets)}
-							/>
-						)}
-
-						<ControlContextProvider
-							value={{
-								name: `shadow-preset-${slug}`,
-								value: repeaterItems,
-								attribute: 'blockeraShadowPreset',
-								blockName: 'global-styles-shadows',
-							}}
-							storeName="blockera/controls/repeater"
-						>
-							<BaseControl
-								controlName={`shadow-preset-box-${slug}`}
-								columns="columns-1"
 							>
-								<BoxShadowControl
-									key={slug}
-									PromoComponent={null}
-									id={`shadow-preset-box-${slug}`}
-									defaultRepeaterItemValue={{
-										type: 'outer',
-										x: '10px',
-										y: '10px',
-										blur: '10px',
-										spread: '0px',
-										color: '#000000ab',
-										isVisible: true,
-									}}
-									label={__('Box shadow', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the shadow preset used in box shadow controls across the site.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Stored in theme.json as settings.shadow.presets (items array per preset).',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									defaultValue={repeaterItems}
-									onChange={handleBoxShadowChange}
-								/>
-							</BaseControl>
-						</ControlContextProvider>
+								{shadowPresetValueControls}
+							</SharedPresetControls>
+						) : (
+							shadowPresetValueControls
+						)}
 					</VStack>
 				</Spacer>
 			</View>

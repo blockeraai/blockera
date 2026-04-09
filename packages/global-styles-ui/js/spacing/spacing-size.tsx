@@ -18,7 +18,7 @@ import {
 /**
  * Internal dependencies
  */
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllSpacingSlugs } from '../components/utils';
 
@@ -93,57 +93,63 @@ function SpacingSizeComponent({
 		return null;
 	}
 
+	const spacingSizeValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `spacing-size-${slug}`,
+				value: spacingSize.size,
+				attribute: 'blockeraSpacingSize',
+				blockName: 'global-styles',
+			}}
+		>
+			<InputControl
+				label={__('Size', 'blockera')}
+				controlAddonTypes={[]}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'Sets the spacing preset value used for margin, padding, and gap controls across the site.',
+								'blockera'
+							)}
+						</p>
+						<p>
+							{__(
+								'You can use fixed lengths (px, rem), percentages, viewport units, or fluid values such as clamp().',
+								'blockera'
+							)}
+						</p>
+					</>
+				}
+				columns="columns-2"
+				unitType="general"
+				min={0}
+				onChange={(newValue: string | undefined) =>
+					handleSizeChange(newValue)
+				}
+			/>
+		</ControlContextProvider>
+	);
+
 	return (
 		<Flex
 			direction="column"
 			gap="16px"
 			style={{ width: '100%', padding: '0 16px 24px' }}
 		>
-			{'custom' === origin && (
-				<VariableNameEditor
+			{'custom' === origin ? (
+				<SharedPresetControls
 					itemId={presetId}
 					variable={spacingSize}
 					name={spacingSize.name}
 					slug={spacingSize.slug}
 					allSlugs={getAllSpacingSlugs(sizes)}
-				/>
+				>
+					{spacingSizeValueControls}
+				</SharedPresetControls>
+			) : (
+				spacingSizeValueControls
 			)}
-
-			<ControlContextProvider
-				value={{
-					name: `spacing-size-${slug}`,
-					value: spacingSize.size,
-					attribute: 'blockeraSpacingSize',
-					blockName: 'global-styles',
-				}}
-			>
-				<InputControl
-					label={__('Size', 'blockera')}
-					controlAddonTypes={[]}
-					labelDescription={
-						<>
-							<p>
-								{__(
-									'Sets the spacing preset value used for margin, padding, and gap controls across the site.',
-									'blockera'
-								)}
-							</p>
-							<p>
-								{__(
-									'You can use fixed lengths (px, rem), percentages, viewport units, or fluid values such as clamp().',
-									'blockera'
-								)}
-							</p>
-						</>
-					}
-					columns="columns-2"
-					unitType="general"
-					min={0}
-					onChange={(newValue: string | undefined) =>
-						handleSizeChange(newValue)
-					}
-				/>
-			</ControlContextProvider>
 		</Flex>
 	);
 }

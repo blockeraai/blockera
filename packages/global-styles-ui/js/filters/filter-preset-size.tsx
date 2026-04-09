@@ -25,7 +25,7 @@ import {
  * Internal dependencies
  */
 import FilterPresetPreview from './filter-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllFilterSlugs } from '../components/utils';
 import {
@@ -135,6 +135,49 @@ function FilterPresetSizeComponent({
 		return null;
 	}
 
+	const filterPresetValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `filter-preset-${slug}`,
+				value: repeaterItems,
+				attribute: 'blockeraFilterPreset',
+				blockName: 'global-styles-filters',
+			}}
+			storeName="blockera/controls/repeater"
+		>
+			<BaseControl
+				controlName={`filter-preset-${slug}`}
+				columns="columns-1"
+			>
+				<FilterControl
+					key={slug}
+					PromoComponent={noopFilterPromo}
+					id={`filter-preset-${slug}`}
+					label={__('Filters', 'blockera')}
+					labelDescription={
+						<>
+							<p>
+								{__(
+									'Defines the filter preset used in effects filter controls across the site.',
+									'blockera'
+								)}
+							</p>
+							<p>
+								{__(
+									'Stored in theme.json as settings.filter.presets (items array per preset).',
+									'blockera'
+								)}
+							</p>
+						</>
+					}
+					defaultRepeaterItemValue={FILTER_PRESET_REPEATER_DEFAULT}
+					defaultValue={repeaterItems}
+					onChange={handleFilterChange}
+				/>
+			</BaseControl>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -144,58 +187,19 @@ function FilterPresetSizeComponent({
 							<FilterPresetPreview items={filterPreset.items} />
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={filterPreset}
 								name={filterPreset.name}
 								slug={filterPreset.slug}
 								allSlugs={getAllFilterSlugs(presets)}
-							/>
-						)}
-
-						<ControlContextProvider
-							value={{
-								name: `filter-preset-${slug}`,
-								value: repeaterItems,
-								attribute: 'blockeraFilterPreset',
-								blockName: 'global-styles-filters',
-							}}
-							storeName="blockera/controls/repeater"
-						>
-							<BaseControl
-								controlName={`filter-preset-${slug}`}
-								columns="columns-1"
 							>
-								<FilterControl
-									key={slug}
-									PromoComponent={noopFilterPromo}
-									id={`filter-preset-${slug}`}
-									label={__('Filters', 'blockera')}
-									labelDescription={
-										<>
-											<p>
-												{__(
-													'Defines the filter preset used in effects filter controls across the site.',
-													'blockera'
-												)}
-											</p>
-											<p>
-												{__(
-													'Stored in theme.json as settings.filter.presets (items array per preset).',
-													'blockera'
-												)}
-											</p>
-										</>
-									}
-									defaultRepeaterItemValue={
-										FILTER_PRESET_REPEATER_DEFAULT
-									}
-									defaultValue={repeaterItems}
-									onChange={handleFilterChange}
-								/>
-							</BaseControl>
-						</ControlContextProvider>
+								{filterPresetValueControls}
+							</SharedPresetControls>
+						) : (
+							filterPresetValueControls
+						)}
 					</VStack>
 				</Spacer>
 			</View>

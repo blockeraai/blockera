@@ -24,7 +24,7 @@ import {
  * Internal dependencies
  */
 import BorderPresetPreview from './border-preset-preview';
-import { VariableNameEditor } from '../components';
+import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllBorderPresetSlugs } from '../components/utils';
 import type { BoxBorderValue } from './utils';
@@ -106,6 +106,34 @@ function BorderPresetSizeComponent({
 			? borderPreset.border
 			: getDefaultBoxBorderValue();
 
+	const borderPresetValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `border-preset-box-${slug}`,
+				value: borderValue,
+				attribute: 'blockeraBorderPreset',
+				blockName: 'global-styles',
+			}}
+		>
+			<BoxBorderControl
+				columns="columns-1"
+				label={__('Border', 'blockera')}
+				labelDescription={
+					<>
+						<p>
+							{__(
+								'Defines this named border preset for use across the site.',
+								'blockera'
+							)}
+						</p>
+					</>
+				}
+				onChange={(newValue: Object) => handleBorderChange(newValue)}
+				defaultValue={getDefaultBoxBorderValue()}
+			/>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
@@ -115,43 +143,19 @@ function BorderPresetSizeComponent({
 							<BorderPresetPreview border={borderValue} />
 						</FlexItem>
 
-						{'custom' === origin && (
-							<VariableNameEditor
+						{'custom' === origin ? (
+							<SharedPresetControls
 								itemId={presetId}
 								variable={borderPreset}
 								name={borderPreset.name}
 								slug={borderPreset.slug}
 								allSlugs={getAllBorderPresetSlugs(presets)}
-							/>
+							>
+								{borderPresetValueControls}
+							</SharedPresetControls>
+						) : (
+							borderPresetValueControls
 						)}
-
-						<ControlContextProvider
-							value={{
-								name: `border-preset-box-${slug}`,
-								value: borderValue,
-								attribute: 'blockeraBorderPreset',
-								blockName: 'global-styles',
-							}}
-						>
-							<BoxBorderControl
-								columns="columns-1"
-								label={__('Border', 'blockera')}
-								labelDescription={
-									<>
-										<p>
-											{__(
-												'Defines this named border preset for use across the site.',
-												'blockera'
-											)}
-										</p>
-									</>
-								}
-								onChange={(newValue: Object) =>
-									handleBorderChange(newValue)
-								}
-								defaultValue={getDefaultBoxBorderValue()}
-							/>
-						</ControlContextProvider>
 					</VStack>
 				</Spacer>
 			</View>

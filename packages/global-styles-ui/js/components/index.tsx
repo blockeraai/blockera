@@ -4,7 +4,7 @@ export * from './preset-group';
 export * from './screen-header';
 export * from './navigation-button';
 export * from './preset-origin-utils';
-export * from './variable-name-editor';
+export * from './shared-preset-controls';
 export * from './preset-add-modal-config';
 export * from './icon-with-current-color';
 export * from './global-styles-panel-description';

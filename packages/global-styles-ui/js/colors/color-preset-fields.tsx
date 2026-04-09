@@ -24,7 +24,7 @@ import {
  * Internal dependencies
  */
 import {
-	VariableNameEditor,
+	SharedPresetControls,
 	getAllVariableSlugs as getAllColorSlugs,
 } from '../components';
 import { type VariableType } from '../components/types';
@@ -94,19 +94,39 @@ function ColorPresetFieldsComponent({
 		return null;
 	}
 
+	const colorValueControls = (
+		<ControlContextProvider
+			value={{
+				name: `color-value-${slug}`,
+				value: colorItem.color,
+				attribute: 'blockeraColor',
+				blockName: 'global-styles',
+			}}
+		>
+			<ColorControl
+				label={__('Color', 'blockera')}
+				field="color"
+				columns="columns-2"
+				onChange={handleValueChange}
+			/>
+		</ControlContextProvider>
+	);
+
 	return (
 		<VStack spacing={4}>
 			<View>
 				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
 					<VStack spacing={4}>
 						{'custom' === origin ? (
-							<VariableNameEditor
+							<SharedPresetControls
 								itemId={presetId}
 								variable={colorItem}
 								name={colorItem.name}
 								slug={colorItem.slug}
 								allSlugs={getAllColorSlugs(colors)}
-							/>
+							>
+								{colorValueControls}
+							</SharedPresetControls>
 						) : (
 							<>
 								<ControlContextProvider
@@ -137,24 +157,9 @@ function ColorPresetFieldsComponent({
 										disabled
 									/>
 								</ControlContextProvider>
+								{colorValueControls}
 							</>
 						)}
-
-						<ControlContextProvider
-							value={{
-								name: `color-value-${slug}`,
-								value: colorItem.color,
-								attribute: 'blockeraColor',
-								blockName: 'global-styles',
-							}}
-						>
-							<ColorControl
-								label={__('Color', 'blockera')}
-								field="color"
-								columns="columns-2"
-								onChange={handleValueChange}
-							/>
-						</ControlContextProvider>
 					</VStack>
 				</Spacer>
 			</View>
