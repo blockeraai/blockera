@@ -13,11 +13,15 @@ import {
 	controlClassNames,
 	controlInnerClassNames,
 } from '@blockera/classnames';
+import type { VariableCategory } from '@blockera/data';
 import { Icon } from '@blockera/icons';
 
 /**
  * Internal dependencies
  */
+import { getValueAddonRealValue, isValid } from '../../';
+import { useControlContext } from '../../context';
+import type { AddonTypes } from '../../value-addons/types';
 import {
 	Grid,
 	Button,
@@ -25,8 +29,6 @@ import {
 	LabelControl,
 	LabelControlContainer,
 } from '../index';
-import { getValueAddonRealValue, isValid } from '../../';
-import { useControlContext } from '../../context';
 import type { BorderRadiusControlProps, BorderRadiusValue } from './types';
 
 export type * from './types';
@@ -50,11 +52,16 @@ export default function BorderRadiusControl({
 	onChange,
 	//
 	className,
+	withoutValueAddons = false,
 	controlAddonTypes,
 	variableTypes,
 }: BorderRadiusControlProps): MixedElement {
-	const resolvedControlAddonTypes = controlAddonTypes ?? ['variable'];
-	const resolvedVariableTypes = variableTypes ?? ['border-radius'];
+	const resolvedControlAddonTypes: AddonTypes = withoutValueAddons
+		? ([]: AddonTypes)
+		: (controlAddonTypes ?? ['variable']);
+	const resolvedVariableTypes: Array<VariableCategory> = withoutValueAddons
+		? ([]: Array<VariableCategory>)
+		: (variableTypes ?? ['border-radius']);
 	const {
 		value,
 		setValue,
