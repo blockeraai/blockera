@@ -102,6 +102,7 @@ export default function RepeaterControl(
 		//
 		className,
 		canAddNewItem = true,
+		enableCreatingStep = false,
 		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
@@ -251,6 +252,7 @@ export default function RepeaterControl(
 		repeaterItemChildren,
 		//
 		defaultRepeaterItemValue,
+		enableCreatingStep,
 		repeaterItems, // value
 		//
 		customProps,
@@ -269,9 +271,13 @@ export default function RepeaterControl(
 			...defaultItemValue,
 			...defaultRepeaterItemValue,
 			selectable,
+			...(enableCreatingStep ? { creatingStep: true } : {}),
 		};
 
 		const itemsCount = Object.keys(repeaterItems || {}).length;
+
+		const newItemWithCreatingStep = (value) =>
+			enableCreatingStep ? { ...value, creatingStep: true } : value;
 
 		const callback = (value?: Object): void => {
 			if (!defaultRepeaterItemValue?.selectable) {
@@ -320,10 +326,12 @@ export default function RepeaterControl(
 			);
 
 			if (value?.selectable) {
-				return callback({
-					...value,
-					isSelected: true,
-				});
+				return callback(
+					newItemWithCreatingStep({
+						...value,
+						isSelected: true,
+					})
+				);
 			}
 
 			addRepeaterItem({
@@ -331,10 +339,7 @@ export default function RepeaterControl(
 				controlId,
 				repeaterId,
 				valueCleanup,
-				value: getDynamicDefaultRepeaterItem(
-					repeaterItems?.length,
-					defaultRepeaterItemValue
-				),
+				value: newItemWithCreatingStep(value),
 			});
 
 			return;

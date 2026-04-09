@@ -182,6 +182,12 @@ export type RepeaterControlProps = {
 	 */
 	defaultValue?: Array<Object> | [],
 	/**
+	 * When true, new items from "Add new" include `creatingStep: true` until the item is closed once.
+	 *
+	 * @default false
+	 */
+	enableCreatingStep?: boolean,
+	/**
 	 * It sets the default of each repeater item.
 	 */
 	defaultRepeaterItemValue?: Object,
