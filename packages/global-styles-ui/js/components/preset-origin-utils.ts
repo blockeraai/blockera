@@ -57,6 +57,47 @@ export function getOriginResetDialogCopy(
 }
 
 /**
+ * Extra warning shown in the repeater single-item delete confirmation (checkbox + confirm).
+ * Wording reflects WordPress global styles origins (theme.json layers).
+ */
+export function getPresetDeleteConfirmWarningText(
+	origin: string | string[],
+	presetTitle: string
+): string {
+	const layer = Array.isArray(origin) ? (origin[0] ?? '') : origin;
+
+	if (layer === 'custom') {
+		return sprintf(
+			/* translators: %s: Preset group title, e.g. “Font Size” or “Spacing”. */
+			__(
+				'This removes the %s preset from your site’s custom global styles. Saved content that still references it may look different after you save.',
+				'blockera'
+			),
+			presetTitle.toLowerCase()
+		);
+	}
+
+	if (layer === 'theme') {
+		return __(
+			'This preset is supplied by your theme. Deleting it changes your theme’s style definitions and may affect your site’s appearance.',
+			'blockera'
+		);
+	}
+
+	if (layer === 'default') {
+		return __(
+			'This preset is part of the default WordPress set. Deleting it may affect your site’s appearance.',
+			'blockera'
+		);
+	}
+
+	return __(
+		'This action cannot be undone. Make sure you want to remove this item.',
+		'blockera'
+	);
+}
+
+/**
  * Open/close state for the shared reset / remove-all dialog.
  */
 export function usePresetResetDialogState(): {

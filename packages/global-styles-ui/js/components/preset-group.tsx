@@ -23,6 +23,7 @@ import { controlClassNames } from '@blockera/classnames';
  */
 import type { VariablesType, VariableType } from './types.ts';
 import { PresetStateContainer } from './preset-state-container';
+import { getPresetDeleteConfirmWarningText } from './preset-origin-utils';
 
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
@@ -175,6 +176,11 @@ const Presets = ({
 		[origin, PresetFields, presetFieldsPropsResolver]
 	);
 
+	const deleteConfirmWarningText = useMemo(
+		() => getPresetDeleteConfirmWarningText(origin, title),
+		[origin, title]
+	);
+
 	return (
 		<RepeaterControl
 			label={label}
@@ -189,6 +195,7 @@ const Presets = ({
 				title
 			)}
 			shouldConfirmDeleteDialog={true}
+			deleteConfirmWarningText={deleteConfirmWarningText}
 			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}
 			defaultRepeaterItemValue={defaultPresetValue}
