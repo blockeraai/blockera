@@ -48,6 +48,12 @@ export type PresetGroupPropsType = {
 	onChange: (newValue: Object) => void;
 	defaultPresetValue: VariableType | any;
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
+	/**
+	 * When true, new presets get `creatingStep` until the repeater row is closed once.
+	 *
+	 * @default true
+	 */
+	enableCreatingStep?: boolean;
 };
 
 type PresetsProps = {
@@ -64,6 +70,7 @@ type PresetsProps = {
 	onChange: (variables: VariablesType) => void;
 	popoverTitle: string | ((itemId: string, item: VariableType) => string);
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
+	enableCreatingStep?: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -104,6 +111,7 @@ const Presets = ({
 	canAddNewItem,
 	defaultPresetValue,
 	presetFieldsPropsResolver,
+	enableCreatingStep = true,
 	repeaterItemHeader: RepeaterItemHeader,
 	...props
 }: PresetsProps) => {
@@ -184,6 +192,7 @@ const Presets = ({
 			repeaterItemChildren={FieldsComponent}
 			repeaterItemHeader={RepeaterItemHeader}
 			defaultRepeaterItemValue={defaultPresetValue}
+			enableCreatingStep={enableCreatingStep}
 			className={controlClassNames('preset-group', controlName)}
 			{...props}
 		/>
@@ -201,6 +210,7 @@ export const PresetGroup = ({
 	repeaterItemHeader,
 	defaultPresetValue,
 	presetFieldsPropsResolver,
+	enableCreatingStep = true,
 }: PresetGroupPropsType) => {
 	const getPopoverTitle = useCallback(
 		(itemId: string, item: VariableType): string => {
@@ -217,6 +227,7 @@ export const PresetGroup = ({
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}`,
 			value: variables,
+			needUpdate: () => false,
 		}),
 		[origin, title, variables]
 	);
@@ -242,6 +253,7 @@ export const PresetGroup = ({
 						repeaterItemHeader={repeaterItemHeader}
 						defaultPresetValue={defaultPresetValue}
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
+						enableCreatingStep={enableCreatingStep}
 					/>
 				</BaseControl>
 			</ControlContextProvider>

@@ -18,6 +18,10 @@ export interface VariableType {
 	 * @default empty
 	 */
 	name: string;
+	/**
+	 * While true (new preset, before first close), name and ID stay linked in the editor.
+	 */
+	creatingStep?: boolean;
 }
 
 export type VariablesType = Array<VariableType>;
