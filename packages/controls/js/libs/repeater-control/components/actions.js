@@ -251,12 +251,11 @@ export default function RepeaterItemActions({
 
 	return (
 		<>
-			{shouldConfirmDeleteDialog && (
+			{shouldConfirmDeleteDialog && isConfirmDeleteDialogOpen && (
 				<ConfirmDeleteDialog
 					item={item}
 					handleRemoveItem={deleteFunction}
-					isOpen={isConfirmDeleteDialogOpen}
-					toggleOpen={toggleConfirmDeleteDialog}
+					onClose={() => setIsConfirmDeleteDialogOpen(false)}
 					deleteConfirmWarningText={deleteConfirmWarningText}
 				/>
 			)}

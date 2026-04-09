@@ -5,19 +5,33 @@
  */
 import type { MixedElement } from 'react';
 import { __, sprintf } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
-import {
-	__experimentalConfirmDialog as ConfirmDialog,
-	CheckboxControl,
-} from '@wordpress/components';
+import { useState } from '@wordpress/element';
 
-interface ConfirmDeleteProps {
-	isOpen: boolean;
-	item: Object;
-	toggleOpen: () => void;
-	handleRemoveItem: (item: Object) => void;
-	deleteConfirmWarningText?: string;
-}
+/**
+ * Blockera dependencies
+ */
+import { componentInnerClassNames } from '@blockera/classnames';
+import { Icon } from '@blockera/icons';
+
+/**
+ * Internal dependencies
+ */
+import {
+	Modal,
+	Flex,
+	Button,
+	NoticeControl,
+	CheckboxControl,
+	DynamicHtmlFormatter,
+} from '../../';
+import { ControlContextProvider } from '../../../context';
+
+type ConfirmDeleteDialogProps = {
+	item: Object,
+	handleRemoveItem: (item: Object) => void,
+	onClose: () => void,
+	deleteConfirmWarningText?: string,
+};
 
 const DEFAULT_DELETE_WARNING = __(
 	'This action cannot be undone. Make sure you want to remove this item.',
@@ -26,68 +40,107 @@ const DEFAULT_DELETE_WARNING = __(
 
 function ConfirmDeleteDialog({
 	item,
-	isOpen,
-	toggleOpen,
 	handleRemoveItem,
+	onClose,
 	deleteConfirmWarningText,
-}: ConfirmDeleteProps): MixedElement {
-	const [hasAcknowledged, setHasAcknowledged] = useState(false);
+}: ConfirmDeleteDialogProps): MixedElement {
+	const [isConfirmedDelete, setIsConfirmedDelete] = useState(false);
 
-	useEffect(() => {
-		if (!isOpen) {
-			setHasAcknowledged(false);
-		}
-	}, [isOpen]);
-
-	const handleConfirm = async () => {
-		if (!hasAcknowledged) {
-			return;
-		}
-
-		handleRemoveItem(item);
-	};
-
-	const handleCancel = () => {
-		setHasAcknowledged(false);
-		toggleOpen();
-	};
-
+	const itemLabel = item?.label || item?.name || '';
 	const warningText = deleteConfirmWarningText ?? DEFAULT_DELETE_WARNING;
 
+	const handleRequestClose = () => {
+		setIsConfirmedDelete(false);
+		onClose();
+	};
+
 	return (
-		<ConfirmDialog
-			isOpen={isOpen}
-			cancelButtonText={__('Cancel', 'blockera')}
-			confirmButtonText={__('Delete', 'blockera')}
-			onCancel={handleCancel}
-			onConfirm={handleConfirm}
-			size="medium"
+		<Modal
+			className={componentInnerClassNames('style-variation-modal')}
+			headerIcon={<Icon icon="trash" iconSize="34" />}
+			headerTitle={__('Delete item', 'blockera')}
+			isDismissible={true}
+			onRequestClose={handleRequestClose}
 		>
-			{item && (
-				<>
-					<p style={{ margin: '0 0 8px' }}>
-						{sprintf(
-							/* translators: %s: Name of the item. */
-							__(
-								'Are you sure you want to delete "%s"?',
-								'blockera'
-							),
-							item?.label || item?.name
-						)}
+			<Flex direction="column" gap={40}>
+				<Flex direction="column" gap={15}>
+					<p style={{ margin: '0', color: '#1e1e1e' }}>
+						<DynamicHtmlFormatter
+							text={sprintf(
+								/* translators: %s: Item label placeholder wrapped by formatter. */
+								__(
+									'Are you sure you want to delete %s?',
+									'blockera'
+								),
+								'{item}'
+							)}
+							replacements={{
+								item: <strong>{itemLabel}</strong>,
+							}}
+						/>
 					</p>
-					<p style={{ margin: '0 0 12px' }}>{warningText}</p>
-					<CheckboxControl
-						__nextHasNoMarginBottom={true}
-						label={__(
-							'I understand and want to delete this item',
+
+					<p style={{ margin: '0', color: '#707070' }}>
+						{warningText}
+					</p>
+				</Flex>
+
+				<Flex
+					gap={15}
+					className={componentInnerClassNames('consent-wrapper')}
+					direction="column"
+				>
+					<NoticeControl type={'error'}>
+						{__(
+							'Deleting this item cannot be undone. Related settings or content that still reference it may be affected.',
 							'blockera'
 						)}
-						checked={hasAcknowledged}
-						onChange={setHasAcknowledged}
-					/>
-				</>
-			)}
-		</ConfirmDialog>
+					</NoticeControl>
+
+					<ControlContextProvider
+						value={{
+							name: 'confirm-delete-repeater-item',
+							value: isConfirmedDelete,
+						}}
+					>
+						<CheckboxControl
+							checkboxLabel={__(
+								'I understand and want to delete this item.',
+								'blockera'
+							)}
+							onChange={(newValue: boolean) =>
+								setIsConfirmedDelete(newValue)
+							}
+							isBold={true}
+						/>
+					</ControlContextProvider>
+				</Flex>
+
+				<Flex justifyContent="space-between">
+					<Button
+						data-test="confirm-delete-repeater-button"
+						disabled={!isConfirmedDelete}
+						variant="primary"
+						onClick={() => {
+							handleRemoveItem(item);
+						}}
+					>
+						{__('Delete', 'blockera')}
+					</Button>
+
+					<Button
+						data-test="cancel-delete-repeater-button"
+						variant="tertiary"
+						onClick={() => {
+							setIsConfirmedDelete(false);
+							onClose();
+						}}
+					>
+						{__('Cancel', 'blockera')}
+					</Button>
+				</Flex>
+			</Flex>
+		</Modal>
 	);
 }
 
