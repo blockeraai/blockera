@@ -158,6 +158,11 @@ export type RepeaterControlProps = {
 	 */
 	actionButtonReset?: boolean,
 	/**
+	 * When `shouldConfirmDeleteDialog` is true, extra warning copy shown above the confirmation checkbox.
+	 * If omitted, the dialog uses a generic fallback string.
+	 */
+	deleteConfirmWarningText?: string,
+	/**
 	 * A placeholder that you can use inject items at the beginning of header buttons.
 	 */
 	injectHeaderButtonsStart?: MixedElement | null | string,

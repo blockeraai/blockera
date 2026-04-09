@@ -52,6 +52,7 @@ export default function RepeaterItemActions({
 		setDisableAddNewItem,
 		actionButtonVisibility,
 		shouldConfirmDeleteDialog,
+		deleteConfirmWarningText,
 	} = useContext(RepeaterContext);
 
 	const [isConfirmDeleteDialogOpen, setIsConfirmDeleteDialogOpen] =
@@ -256,6 +257,7 @@ export default function RepeaterItemActions({
 					handleRemoveItem={deleteFunction}
 					isOpen={isConfirmDeleteDialogOpen}
 					toggleOpen={toggleConfirmDeleteDialog}
+					deleteConfirmWarningText={deleteConfirmWarningText}
 				/>
 			)}
 			{showVisibility && (

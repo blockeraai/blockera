@@ -69,6 +69,7 @@ export default function RepeaterControl(
 		isSupportInserter = false,
 		disableRegenerateId = true,
 		shouldConfirmDeleteDialog = false,
+		deleteConfirmWarningText,
 		//
 		label,
 		children,
@@ -236,6 +237,7 @@ export default function RepeaterControl(
 		actionButtonReset,
 		disableRegenerateId,
 		shouldConfirmDeleteDialog,
+		deleteConfirmWarningText,
 		//
 		onChange,
 		onDelete,
