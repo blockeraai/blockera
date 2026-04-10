@@ -14,7 +14,6 @@ import { useCallback, memo, useContext } from '@wordpress/element';
  */
 import {
 	ColorControl,
-	InputControl,
 	ControlContextProvider,
 	useControlContext,
 	RepeaterContext,
@@ -117,49 +116,15 @@ function ColorPresetFieldsComponent({
 			<View>
 				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
 					<VStack spacing={4}>
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={colorItem}
-								name={colorItem.name}
-								slug={colorItem.slug}
-								allSlugs={getAllColorSlugs(colors)}
-							>
-								{colorValueControls}
-							</SharedPresetControls>
-						) : (
-							<>
-								<ControlContextProvider
-									value={{
-										name: `color-name-${slug}`,
-										value: colorItem.name,
-										attribute: 'blockeraColor',
-										blockName: 'global-styles',
-									}}
-								>
-									<InputControl
-										label={__('Name:', 'blockera')}
-										columns="1fr 3fr"
-										disabled
-									/>
-								</ControlContextProvider>
-								<ControlContextProvider
-									value={{
-										name: `color-slug-${slug}`,
-										value: colorItem.slug,
-										attribute: 'blockeraColor',
-										blockName: 'global-styles',
-									}}
-								>
-									<InputControl
-										label={__('ID:', 'blockera')}
-										columns="1fr 3fr"
-										disabled
-									/>
-								</ControlContextProvider>
-								{colorValueControls}
-							</>
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={colorItem}
+							name={colorItem.name}
+							slug={colorItem.slug}
+							allSlugs={getAllColorSlugs(colors)}
+						>
+							{colorValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

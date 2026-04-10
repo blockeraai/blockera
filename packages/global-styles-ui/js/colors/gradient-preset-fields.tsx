@@ -13,7 +13,6 @@ import { useCallback, memo, useContext } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
-	InputControl,
 	RepeaterContext,
 	useControlContext,
 	GradientBarControl,
@@ -121,49 +120,15 @@ function GradientPresetFieldsComponent({
 			<View>
 				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
 					<VStack spacing={4}>
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={gradientItem}
-								name={gradientItem.name}
-								slug={gradientItem.slug}
-								allSlugs={getAllGradientSlugs(gradients as any)}
-							>
-								{gradientValueControls}
-							</SharedPresetControls>
-						) : (
-							<>
-								<ControlContextProvider
-									value={{
-										name: `gradient-name-${slug}`,
-										value: gradientItem.name,
-										attribute: 'blockeraGradient',
-										blockName: 'global-styles',
-									}}
-								>
-									<InputControl
-										label={__('Name:', 'blockera')}
-										columns="1fr 3fr"
-										disabled
-									/>
-								</ControlContextProvider>
-								<ControlContextProvider
-									value={{
-										name: `gradient-slug-${slug}`,
-										value: gradientItem.slug,
-										attribute: 'blockeraGradient',
-										blockName: 'global-styles',
-									}}
-								>
-									<InputControl
-										label={__('ID:', 'blockera')}
-										columns="1fr 3fr"
-										disabled
-									/>
-								</ControlContextProvider>
-								{gradientValueControls}
-							</>
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={gradientItem}
+							name={gradientItem.name}
+							slug={gradientItem.slug}
+							allSlugs={getAllGradientSlugs(gradients as any)}
+						>
+							{gradientValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

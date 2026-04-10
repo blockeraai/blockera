@@ -184,19 +184,15 @@ function FilterPresetSizeComponent({
 							<FilterPresetPreview items={filterPreset.items} />
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={filterPreset}
-								name={filterPreset.name}
-								slug={filterPreset.slug}
-								allSlugs={getAllFilterSlugs(presets)}
-							>
-								{filterPresetValueControls}
-							</SharedPresetControls>
-						) : (
-							filterPresetValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={filterPreset}
+							name={filterPreset.name}
+							slug={filterPreset.slug}
+							allSlugs={getAllFilterSlugs(presets)}
+						>
+							{filterPresetValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

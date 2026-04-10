@@ -179,19 +179,15 @@ function TextShadowPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={textShadowPreset}
-								name={textShadowPreset.name}
-								slug={textShadowPreset.slug}
-								allSlugs={getAllTextShadowSlugs(presets)}
-							>
-								{textShadowPresetValueControls}
-							</SharedPresetControls>
-						) : (
-							textShadowPresetValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={textShadowPreset}
+							name={textShadowPreset.name}
+							slug={textShadowPreset.slug}
+							allSlugs={getAllTextShadowSlugs(presets)}
+						>
+							{textShadowPresetValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

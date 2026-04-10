@@ -179,19 +179,15 @@ function TransitionPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={transitionPreset}
-								name={transitionPreset.name}
-								slug={transitionPreset.slug}
-								allSlugs={getAllTransitionSlugs(presets)}
-							>
-								{transitionPresetValueControls}
-							</SharedPresetControls>
-						) : (
-							transitionPresetValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={transitionPreset}
+							name={transitionPreset.name}
+							slug={transitionPreset.slug}
+							allSlugs={getAllTransitionSlugs(presets)}
+						>
+							{transitionPresetValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

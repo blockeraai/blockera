@@ -292,19 +292,15 @@ function FontSizeComponent({
 							<FontSizePreview fontSize={fontSize} />
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={fontSize}
-								name={fontSize.name}
-								slug={fontSize.slug}
-								allSlugs={getAllFontSizeSlugs(sizes)}
-							>
-								{fontSizeValueControls}
-							</SharedPresetControls>
-						) : (
-							fontSizeValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={fontSize}
+							name={fontSize.name}
+							slug={fontSize.slug}
+							allSlugs={getAllFontSizeSlugs(sizes)}
+						>
+							{fontSizeValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

@@ -188,19 +188,15 @@ function TransformPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={transformPreset}
-								name={transformPreset.name}
-								slug={transformPreset.slug}
-								allSlugs={getAllTransformSlugs(presets)}
-							>
-								{transformPresetValueControls}
-							</SharedPresetControls>
-						) : (
-							transformPresetValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={transformPreset}
+							name={transformPreset.name}
+							slug={transformPreset.slug}
+							allSlugs={getAllTransformSlugs(presets)}
+						>
+							{transformPresetValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

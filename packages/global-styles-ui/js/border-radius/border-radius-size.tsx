@@ -168,19 +168,15 @@ function BorderRadiusSizeComponent({
 							<BorderRadiusPresetPreview size={sizeForPreview} />
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={borderRadiusSize}
-								name={borderRadiusSize.name}
-								slug={borderRadiusSize.slug}
-								allSlugs={getAllBorderRadiusSlugs(sizes)}
-							>
-								{borderRadiusValueControls}
-							</SharedPresetControls>
-						) : (
-							borderRadiusValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={borderRadiusSize}
+							name={borderRadiusSize.name}
+							slug={borderRadiusSize.slug}
+							allSlugs={getAllBorderRadiusSlugs(sizes)}
+						>
+							{borderRadiusValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

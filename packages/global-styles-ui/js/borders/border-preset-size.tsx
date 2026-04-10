@@ -144,19 +144,15 @@ function BorderPresetSizeComponent({
 							<BorderPresetPreview border={borderValue} />
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={borderPreset}
-								name={borderPreset.name}
-								slug={borderPreset.slug}
-								allSlugs={getAllBorderPresetSlugs(presets)}
-							>
-								{borderPresetValueControls}
-							</SharedPresetControls>
-						) : (
-							borderPresetValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={borderPreset}
+							name={borderPreset.name}
+							slug={borderPreset.slug}
+							allSlugs={getAllBorderPresetSlugs(presets)}
+						>
+							{borderPresetValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

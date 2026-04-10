@@ -180,19 +180,15 @@ function ShadowPresetSizeComponent({
 							/>
 						</FlexItem>
 
-						{'custom' === origin ? (
-							<SharedPresetControls
-								itemId={presetId}
-								variable={shadowPreset}
-								name={shadowPreset.name}
-								slug={shadowPreset.slug}
-								allSlugs={getAllShadowSlugs(presets)}
-							>
-								{shadowPresetValueControls}
-							</SharedPresetControls>
-						) : (
-							shadowPresetValueControls
-						)}
+						<SharedPresetControls
+							itemId={presetId}
+							variable={shadowPreset}
+							name={shadowPreset.name}
+							slug={shadowPreset.slug}
+							allSlugs={getAllShadowSlugs(presets)}
+						>
+							{shadowPresetValueControls}
+						</SharedPresetControls>
 					</VStack>
 				</Spacer>
 			</View>

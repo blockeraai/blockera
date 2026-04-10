@@ -137,19 +137,15 @@ function SpacingSizeComponent({
 			gap="16px"
 			style={{ width: '100%', padding: '0 16px 24px' }}
 		>
-			{'custom' === origin ? (
-				<SharedPresetControls
-					itemId={presetId}
-					variable={spacingSize}
-					name={spacingSize.name}
-					slug={spacingSize.slug}
-					allSlugs={getAllSpacingSlugs(sizes)}
-				>
-					{spacingSizeValueControls}
-				</SharedPresetControls>
-			) : (
-				spacingSizeValueControls
-			)}
+			<SharedPresetControls
+				itemId={presetId}
+				variable={spacingSize}
+				name={spacingSize.name}
+				slug={spacingSize.slug}
+				allSlugs={getAllSpacingSlugs(sizes)}
+			>
+				{spacingSizeValueControls}
+			</SharedPresetControls>
 		</Flex>
 	);
 }
