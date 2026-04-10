@@ -2,8 +2,6 @@
 
 namespace Blockera\Data\Cache;
 
-use Blockera\Bootstrap\Application;
-
 /**
  * Cache class for managing post meta, options, and transient caching.
  * 
@@ -310,10 +308,16 @@ class Cache {
 	public function clearMetaCache(): bool {
 		global $wpdb;
 
+		$prefix_like       = $wpdb->esc_like( $this->cache_prefix ) . '%';
+		$manifest_meta_key = $this->getCacheKey( 'blockeraGlobalStylesMetaData' );
+		$slice_like        = $wpdb->esc_like( $this->getCacheKey( 'blockera_gs_slice_' ) ) . '%';
+
 		$result = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s",
-				$wpdb->esc_like( $this->cache_prefix ) . '%'
+				"DELETE FROM $wpdb->postmeta WHERE meta_key LIKE %s AND meta_key != %s AND meta_key NOT LIKE %s",
+				$prefix_like,
+				$manifest_meta_key,
+				$slice_like
 			)
 		);
 
