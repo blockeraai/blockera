@@ -46,6 +46,8 @@ export type TLayoutProps = {
 		blockeraFlexWrap: { val: string, reverse: boolean },
 		blockeraAlignContent: string,
 		blockeraSpacing: TSpacingDefaultProps,
+		blockeraGridMinimumColumnWidth: { value: string },
+		blockeraGridColumnCount: { value: number | string },
 	},
 	extensionConfig: {
 		blockeraDisplay: FeatureConfig,
@@ -54,6 +56,8 @@ export type TLayoutProps = {
 		blockeraFlexWrap: FeatureConfig,
 		blockeraAlignContent: FeatureConfig,
 		blockeraSpacing: FeatureConfig,
+		blockeraGridMinimumColumnWidth: FeatureConfig,
+		blockeraGridColumnCount: FeatureConfig,
 	},
 	extensionProps: {
 		blockeraDisplay: Object,
@@ -62,5 +66,7 @@ export type TLayoutProps = {
 		blockeraFlexWrap: Object,
 		blockeraAlignContent: Object,
 		blockeraSpacing: Object,
+		blockeraGridMinimumColumnWidth: Object,
+		blockeraGridColumnCount: Object,
 	},
 };

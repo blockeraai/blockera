@@ -59,6 +59,22 @@ const blockeraSpacing: FeatureConfig = {
 	],
 };
 
+const blockeraGridMinimumColumnWidth: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Min. column width', 'blockera'),
+	keywords: ['grid', 'columns', 'width', 'minimum', 'layout'],
+};
+
+const blockeraGridColumnCount: FeatureConfig = {
+	show: true,
+	force: true,
+	status: true,
+	label: __('Columns', 'blockera'),
+	keywords: ['grid', 'columns', 'count', 'layout'],
+};
+
 export const layoutConfig = {
 	status: true,
 	initialOpen: true,
@@ -67,4 +83,6 @@ export const layoutConfig = {
 	blockeraGap,
 	blockeraFlexWrap,
 	blockeraSpacing,
+	blockeraGridMinimumColumnWidth,
+	blockeraGridColumnCount,
 };

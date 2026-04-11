@@ -456,6 +456,8 @@ export const MappedExtensions = ({
 								blockeraGap: {},
 								blockeraFlexWrap: {},
 								blockeraSpacing: {},
+								blockeraGridMinimumColumnWidth: {},
+								blockeraGridColumnCount: {},
 							}}
 							values={{
 								blockeraDisplay:
@@ -469,6 +471,10 @@ export const MappedExtensions = ({
 									currentStateAttributes.blockeraAlignContent,
 								blockeraSpacing:
 									currentStateAttributes.blockeraSpacing,
+								blockeraGridMinimumColumnWidth:
+									currentStateAttributes.blockeraGridMinimumColumnWidth,
+								blockeraGridColumnCount:
+									currentStateAttributes.blockeraGridColumnCount,
 							}}
 							attributes={{
 								blockeraDisplay: attributes.blockeraDisplay,
@@ -479,6 +485,10 @@ export const MappedExtensions = ({
 								blockeraAlignContent:
 									attributes.blockeraAlignContent,
 								blockeraSpacing: attributes.blockeraSpacing,
+								blockeraGridMinimumColumnWidth:
+									attributes.blockeraGridMinimumColumnWidth,
+								blockeraGridColumnCount:
+									attributes.blockeraGridColumnCount,
 							}}
 							handleOnChangeAttributes={handleOnChangeAttributes}
 							setSettings={handleOnChangeSettings}

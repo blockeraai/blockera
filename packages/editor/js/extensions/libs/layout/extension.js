@@ -18,6 +18,7 @@ import {
 	NoticeControl,
 	LayoutMatrixControl,
 	BoxSpacingControl,
+	InputControl,
 } from '@blockera/controls';
 import { extensionClassNames } from '@blockera/classnames';
 import { Icon } from '@blockera/icons';
@@ -76,6 +77,16 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 		values?.blockeraSpacing,
 		attributes.blockeraSpacing.default
 	);
+	const isShowGridMinimumColumnWidth = isShowField(
+		extensionConfig.blockeraGridMinimumColumnWidth,
+		values?.blockeraGridMinimumColumnWidth,
+		attributes.blockeraGridMinimumColumnWidth.default
+	);
+	const isShowGridColumnCount = isShowField(
+		extensionConfig.blockeraGridColumnCount,
+		values?.blockeraGridColumnCount,
+		attributes.blockeraGridColumnCount.default
+	);
 
 	if (
 		!isShowDisplay &&
@@ -83,7 +94,9 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 		!isShowFlexLayout &&
 		!isShowGap &&
 		!isShowFlexWrap &&
-		!isShowSpacing
+		!isShowSpacing &&
+		!isShowGridMinimumColumnWidth &&
+		!isShowGridColumnCount
 	) {
 		return <></>;
 	}
@@ -344,6 +357,133 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 					</ControlContextProvider>
 				</EditorFeatureWrapper>
 			)}
+
+			{values.blockeraDisplay === 'grid' &&
+				(isShowGridMinimumColumnWidth || isShowGridColumnCount) && (
+					<>
+						<BaseControl
+							columns="1fr 2.5fr"
+							label={__('Grid', 'blockera')}
+						>
+							<Flex direction="column" gap="10px">
+								<EditorFeatureWrapper
+									isActive={isShowGridColumnCount}
+									config={
+										extensionConfig.blockeraGridColumnCount
+									}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'grid-column-count'
+											),
+											value: values.blockeraGridColumnCount,
+											attribute:
+												'blockeraGridColumnCount',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											data-test="layout-grid-column-count"
+											id="value"
+											columns="2.5fr 2fr"
+											label={__(
+												'Max. Columns',
+												'blockera'
+											)}
+											labelDescription={
+												<p>
+													{__(
+														'Maximum number of columns when using a fixed column count, or combined with minimum width for responsive grids.',
+														'blockera'
+													)}
+												</p>
+											}
+											type="number"
+											range={false}
+											drag={false}
+											float={false}
+											arrows={true}
+											min={1}
+											max={16}
+											defaultValue={
+												attributes
+													.blockeraGridColumnCount
+													.default
+											}
+											onChange={(newValue, ref) =>
+												handleOnChangeAttributes(
+													'blockeraGridColumnCount',
+													newValue,
+													{ ref }
+												)
+											}
+											{...extensionProps.blockeraGridColumnCount}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+
+								<EditorFeatureWrapper
+									isActive={isShowGridMinimumColumnWidth}
+									config={
+										extensionConfig.blockeraGridMinimumColumnWidth
+									}
+								>
+									<ControlContextProvider
+										value={{
+											name: generateExtensionId(
+												block,
+												'grid-min-width'
+											),
+											value: values.blockeraGridMinimumColumnWidth,
+											attribute:
+												'blockeraGridMinimumColumnWidth',
+											blockName: block.blockName,
+										}}
+									>
+										<InputControl
+											data-test="layout-grid-minimum-column-width"
+											id="value"
+											columns="2.5fr 2fr"
+											label={__(
+												'Min. Col Width',
+												'blockera'
+											)}
+											labelDescription={
+												<>
+													<p>
+														{__(
+															'Columns will wrap to fewer per row when they can no longer maintain the minimum width.',
+															'blockera'
+														)}
+													</p>
+												</>
+											}
+											unitType="grid-min-width"
+											range={false}
+											drag={false}
+											min={0}
+											defaultValue={
+												attributes
+													.blockeraGridMinimumColumnWidth
+													.default
+											}
+											onChange={(newValue, ref) =>
+												handleOnChangeAttributes(
+													'blockeraGridMinimumColumnWidth',
+													newValue,
+													{ ref }
+												)
+											}
+											{...extensionProps.blockeraGridMinimumColumnWidth}
+										/>
+									</ControlContextProvider>
+								</EditorFeatureWrapper>
+							</Flex>
+						</BaseControl>
+					</>
+				)}
 
 			{values.blockeraDisplay === 'flex' && (
 				<EditorFeatureWrapper

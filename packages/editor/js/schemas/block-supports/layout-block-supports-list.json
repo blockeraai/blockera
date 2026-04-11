@@ -42,6 +42,22 @@
 			"fallback": ["flex-direction", "flex", "layout"],
 			"description": "Support for \"blockeraFlexLayout\" value."
 		},
+		"blockeraGridMinimumColumnWidth": {
+			"status": true,
+			"id": "blockeraGridMinimumColumnWidth",
+			"definition": "GridLayout",
+			"css-property": "grid-minimum-column-width",
+			"fallback": ["layout", "grid", "display"],
+			"description": "CSS grid minimum column width (mirrors WordPress layout.minimumColumnWidth)."
+		},
+		"blockeraGridColumnCount": {
+			"status": true,
+			"id": "blockeraGridColumnCount",
+			"definition": "GridLayout",
+			"css-property": "grid-column-count",
+			"fallback": ["layout", "grid", "display"],
+			"description": "CSS grid column count (mirrors WordPress layout.columnCount)."
+		},
 		"blockeraFlexChildAlign": {
 			"status": true,
 			"id": "blockeraFlexChildAlign",
