@@ -81,6 +81,22 @@
 			"css-property": "order",
 			"fallback": ["order", "flex-child", "flex", "layout"],
 			"description": "Support for \"blockeraFlexChildOrder\" value, this is mirror for WordPress block core \"order\" support"
+		},
+		"blockeraGridChildColumnSpan": {
+			"status": true,
+			"id": "blockeraGridChildColumnSpan",
+			"definition": "GridChildColumnSpan",
+			"css-property": "grid-column",
+			"fallback": ["grid-column", "grid-child", "grid", "layout"],
+			"description": "Grid child column span (mirrors core style.layout.columnSpan → grid-column: span n)."
+		},
+		"blockeraGridChildRowSpan": {
+			"status": true,
+			"id": "blockeraGridChildRowSpan",
+			"definition": "GridChildRowSpan",
+			"css-property": "grid-row",
+			"fallback": ["grid-row", "grid-child", "grid", "layout"],
+			"description": "Grid child row span (mirrors core style.layout.rowSpan → grid-row: span n)."
 		}
 	}
 }
