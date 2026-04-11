@@ -41,6 +41,27 @@ function unwrapRadiusVariableField(field) {
 	return field;
 }
 
+function getBorderRadiusFieldCss(field) {
+	if (!field || typeof field !== 'object') {
+		return getValueAddonRealValue(field);
+	}
+	if (field.valueType === 'variable' && field.settings?.var) {
+		const unwrapped = unwrapRadiusVariableField(field);
+		if (unwrapped === field) {
+			return getValueAddonRealValue(field);
+		}
+		const fallback =
+			typeof unwrapped === 'string'
+				? unwrapped
+				: getValueAddonRealValue(unwrapped);
+		if (fallback !== '' && fallback !== undefined && fallback !== null) {
+			return `var(${field.settings.var}, ${fallback})`;
+		}
+		return `var(${field.settings.var})`;
+	}
+	return getValueAddonRealValue(unwrapRadiusVariableField(field));
+}
+
 export function BorderRadiusGenerator(id, props, options) {
 	const { attributes, supports, blockeraStyleEngineConfig } = props;
 
@@ -84,7 +105,7 @@ export function BorderRadiusGenerator(id, props, options) {
 				props.currentBlock,
 				'border-radius'
 			)
-		] = getValueAddonRealValue(unwrapRadiusVariableField(radius.all));
+		] = getBorderRadiusFieldCss(radius.all);
 	} else {
 		properties[
 			getBlockSupportStyleEngineConfig(
@@ -94,7 +115,7 @@ export function BorderRadiusGenerator(id, props, options) {
 				props.currentBlock,
 				'border-top-left-radius'
 			)
-		] = getValueAddonRealValue(unwrapRadiusVariableField(radius.topLeft));
+		] = getBorderRadiusFieldCss(radius.topLeft);
 
 		properties[
 			getBlockSupportStyleEngineConfig(
@@ -104,7 +125,7 @@ export function BorderRadiusGenerator(id, props, options) {
 				props.currentBlock,
 				'border-top-right-radius'
 			)
-		] = getValueAddonRealValue(unwrapRadiusVariableField(radius.topRight));
+		] = getBorderRadiusFieldCss(radius.topRight);
 
 		properties[
 			getBlockSupportStyleEngineConfig(
@@ -114,9 +135,7 @@ export function BorderRadiusGenerator(id, props, options) {
 				props.currentBlock,
 				'border-bottom-left-radius'
 			)
-		] = getValueAddonRealValue(
-			unwrapRadiusVariableField(radius.bottomLeft)
-		);
+		] = getBorderRadiusFieldCss(radius.bottomLeft);
 
 		properties[
 			getBlockSupportStyleEngineConfig(
@@ -126,9 +145,7 @@ export function BorderRadiusGenerator(id, props, options) {
 				props.currentBlock,
 				'border-bottom-right-radius'
 			)
-		] = getValueAddonRealValue(
-			unwrapRadiusVariableField(radius.bottomRight)
-		);
+		] = getBorderRadiusFieldCss(radius.bottomRight);
 	}
 
 	for (const key of Object.keys(properties)) {
