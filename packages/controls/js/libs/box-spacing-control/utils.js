@@ -2,11 +2,12 @@
 /**
  * Blockera Dependencies
  */
-import { isEquals, isEmpty, cloneObject } from '@blockera/utils';
+import { isEquals, isEmpty, isObject, cloneObject } from '@blockera/utils';
 
 /**
- * Internal Dependencies
+ * Internal dependencies
  */
+import { getValueAddonRealValue } from '../../value-addons/helpers';
 import type { TDefaultValue } from './types';
 
 export const boxSpacingControlDefaultValue: TDefaultValue = {
@@ -53,6 +54,40 @@ export function boxSpacingValueCleanup(value: Object): Object {
 	}
 
 	return updatedValue;
+}
+
+/**
+ * Compact string for padding/margin changeset graph preview (top/right/bottom/left box).
+ */
+export function formatBoxSpacingSidesForChangesetPreview(
+	sideBox: mixed
+): string {
+	if (!isObject(sideBox) || sideBox === null) {
+		return '';
+	}
+
+	const t = String(getValueAddonRealValue(sideBox.top) ?? '').trim();
+	const r = String(getValueAddonRealValue(sideBox.right) ?? '').trim();
+	const b = String(getValueAddonRealValue(sideBox.bottom) ?? '').trim();
+	const l = String(getValueAddonRealValue(sideBox.left) ?? '').trim();
+
+	if (!t && !r && !b && !l) {
+		return '';
+	}
+
+	if (t && t === r && t === b && t === l) {
+		return t;
+	}
+
+	if (t === b && l === r && (t || l)) {
+		if (t === l) {
+			return t || l;
+		}
+
+		return `${t || '0'} / ${l || '-'}`;
+	}
+
+	return [t, r, b, l].filter(Boolean).join(' · ');
 }
 
 // get smart lock for padding and margin

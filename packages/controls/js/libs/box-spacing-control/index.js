@@ -23,6 +23,7 @@ import type { BoxSpacingControlProps, BoxSpacingLock } from './types';
 import {
 	boxSpacingControlDefaultValue,
 	boxSpacingValueCleanup,
+	formatBoxSpacingSidesForChangesetPreview,
 	getSmartLock,
 } from './utils';
 import {
@@ -89,6 +90,9 @@ export default function BoxSpacingControl({
 		defaultValue: defaultValue?.padding,
 		path: getControlPath(attribute, 'padding'),
 		...propsForLabelControl,
+		changesetGraphPreviewRender:
+			propsForLabelControl.changesetGraphPreviewRender ??
+			formatBoxSpacingSidesForChangesetPreview,
 	};
 
 	const marginLabelProps = {
@@ -119,6 +123,9 @@ export default function BoxSpacingControl({
 		defaultValue: defaultValue?.margin,
 		path: getControlPath(attribute, 'margin'),
 		...propsForLabelControl,
+		changesetGraphPreviewRender:
+			propsForLabelControl.changesetGraphPreviewRender ??
+			formatBoxSpacingSidesForChangesetPreview,
 	};
 
 	return (
@@ -169,6 +176,11 @@ export default function BoxSpacingControl({
 													)}
 												</p>
 											}
+											labelProps={{
+												changesetGraphPreview: {
+													type: 'string',
+												},
+											}}
 											id="padding.top"
 											unitType={'padding'}
 											range={false}
@@ -220,6 +232,11 @@ export default function BoxSpacingControl({
 													)}
 												</p>
 											}
+											labelProps={{
+												changesetGraphPreview: {
+													type: 'string',
+												},
+											}}
 											id="padding.left"
 											defaultValue={prepare(
 												'padding.left',
@@ -500,6 +517,11 @@ export default function BoxSpacingControl({
 													)}
 												</p>
 											}
+											labelProps={{
+												changesetGraphPreview: {
+													type: 'string',
+												},
+											}}
 											id="margin.top"
 											defaultValue={prepare(
 												'margin.top',
@@ -547,6 +569,11 @@ export default function BoxSpacingControl({
 													)}
 												</p>
 											}
+											labelProps={{
+												changesetGraphPreview: {
+													type: 'string',
+												},
+											}}
 											id="margin.left"
 											defaultValue={prepare(
 												'margin.left',

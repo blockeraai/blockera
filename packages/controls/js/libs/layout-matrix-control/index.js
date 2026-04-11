@@ -1252,6 +1252,11 @@ export default function LayoutMatrixControl({
 										</p>
 									</>
 								}
+								labelProps={{
+									changesetGraphPreview: {
+										type: 'string',
+									},
+								}}
 								columns="30px 1fr"
 								style={{
 									'--gap': '0',
@@ -1380,6 +1385,11 @@ export default function LayoutMatrixControl({
 										)}
 									</p>
 								}
+								labelProps={{
+									changesetGraphPreview: {
+										type: 'string',
+									},
+								}}
 								columns="30px 1fr"
 								style={{
 									'--gap': '0',
