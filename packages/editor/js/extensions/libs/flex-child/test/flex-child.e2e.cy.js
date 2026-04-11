@@ -48,10 +48,16 @@ describe('Flex Child', () => {
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('not.exist');
 
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			// Paragraph block should have the flex child block section
 			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('exist');
+
+			// Wait for the block to be updated
+			cy.wait(200);
 
 			// Switch to tablet device
 			setDeviceType('Mobile Portrait');
@@ -59,13 +65,28 @@ describe('Flex Child', () => {
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Block').click();
 			});
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('not.exist');
 
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			// Flex child should exist on desktop device
 			setDeviceType('Desktop');
+
+			// Switch blocks multiple times to make sure the flex child block section is not lost
 			cy.getBlock('core/group').click();
+			cy.getBlock('core/paragraph').click();
+			cy.getBlock('core/group').click();
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Flex Child').should('exist');
