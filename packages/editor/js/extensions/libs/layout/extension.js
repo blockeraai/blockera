@@ -36,6 +36,61 @@ import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
 import { useFeatureSearch } from '../../components/feature-search-context';
 
+/**
+ * Changeset graph label for flex-wrap: plain string or value-addon object with `val`/`reverse`.
+ */
+function formatBlockeraFlexWrapChangesetPreview(resolved: mixed): string {
+	if (resolved === null || resolved === undefined) {
+		return '';
+	}
+
+	if (typeof resolved === 'string') {
+		if (resolved === 'nowrap') {
+			return __('No Wrap', 'blockera');
+		}
+		if (resolved === 'wrap') {
+			return __('Wrap', 'blockera');
+		}
+
+		return resolved ? String(resolved) : '';
+	}
+
+	if (typeof resolved !== 'object') {
+		return String(resolved);
+	}
+
+	const obj: Object = resolved;
+	const inner: Object =
+		obj.value &&
+		typeof obj.value === 'object' &&
+		Object.prototype.hasOwnProperty.call(obj.value, 'val')
+			? obj.value
+			: obj;
+
+	const val = Object.prototype.hasOwnProperty.call(inner, 'val')
+		? inner.val
+		: inner.value;
+
+	let label = '';
+	if (val === 'nowrap') {
+		label = __('No Wrap', 'blockera');
+	} else if (val === 'wrap') {
+		label = __('Wrap', 'blockera');
+	} else if (val !== undefined && val !== null && val !== '') {
+		label = String(val);
+	}
+
+	if (!label) {
+		return '';
+	}
+
+	if (inner.reverse) {
+		return `${label} (${__('reverse', 'blockera')})`;
+	}
+
+	return label;
+}
+
 export const LayoutExtension: ComponentType<TLayoutProps> = ({
 	block,
 	values,
@@ -569,6 +624,18 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											</p>
 										</>
 									}
+									labelProps={{
+										path: 'blockeraFlexWrap',
+										value: values.blockeraFlexWrap,
+										defaultValue:
+											attributes.blockeraFlexWrap
+												?.default,
+										changesetGraphPreviewRender:
+											extensionProps.blockeraFlexWrap
+												?.labelProps
+												?.changesetGraphPreviewRender ??
+											formatBlockeraFlexWrapChangesetPreview,
+									}}
 									options={[
 										{
 											label: __('No Wrap', 'blockera'),
