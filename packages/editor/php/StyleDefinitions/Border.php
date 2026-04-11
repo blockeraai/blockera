@@ -39,72 +39,35 @@ class Border extends BaseStyleDefinition {
 
 		$value = $setting['border'];
 
-		if (isset($value['type']) && 'all' === $value['type']) {
-			if (isset($value['all']['valueType']) && 'variable' === $value['all']['valueType']) {
-				$value['all'] = json_decode($value['all']['settings']['value'], true)['all'] ?? [
-					'width' => '',
-					'style' => '',
-					'color' => '',
-				];
-			}
-		} else {
-			foreach (self::$sides as $side) {
-				if (isset($value[ $side ]['valueType']) && 'variable' === $value[ $side ]['valueType']) {
-					$value[ $side ] = json_decode($value[ $side ]['settings']['value'], true)['all'] ?? [
-						'width' => '',
-						'style' => '',
-						'color' => '',
-					];
-				}
-			}
+		if ( ! isset( $value['type'] ) ) {
+			return [];
 		}
 
-		if ( ! isset( $value['type'] ) ) {
+		if ( ! empty( $setting['_blockeraDeclarationOnly'] ) && ! empty( $setting['_blockeraGlobalPreset'] ) ) {
+			$this->declarations['border'] = self::preset_box_to_shorthand( $value );
+
 			return [];
 		}
 
 		$declaration = [];
 
 		if ( 'all' === $value['type'] ) {
-			$all   = &$value['all'];
-			$width = $all['width'] ?? '';
-
-			if ( '' === $width ) {
-				$this->setCss( $declaration );
-				return $this->css;
+			if (isset($value['all']['valueType']) && 'variable' === $value['all']['valueType']) {
+				$value['all']['settings']['value'] = $this->getSideValue($value['all']);
+				$declaration['border']             = blockera_get_value_addon_real_value($value['all']);
+			} else {
+				$declaration['border'] = $this->getSideValue($value['all']);
 			}
-
-			$style = ( '' !== $all['style'] ) ? $all['style'] : 'solid';
-
-			$color = '';
-			if ( isset( $all['color'] ) && '' !== $all['color'] ) {
-				$color = blockera_get_value_addon_real_value( $all['color'] );
-			}
-
-			$declaration['border'] = $width . ' ' . $style . ( '' !== $color ? ' ' . $color : '' );
 		} else {
 			for ( $i = 0; $i < 4; ++$i ) {
 				$side = self::$sides[ $i ];
 
-				if ( ! isset( $value[ $side ]['width'] ) ) {
-					continue;
+				if (isset($value[ $side ]['valueType']) && 'variable' === $value[ $side ]['valueType']) {
+					$value[ $side ]['settings']['value']  = $this->getSideValue($value[ $side ]);
+					$declaration[ self::$prefixes[ $i ] ] = blockera_get_value_addon_real_value($value[ $side ]);
+				} else {
+					$declaration[ self::$prefixes[ $i ] ] = $this->getSideValue($value[ $side ]);
 				}
-
-				$sideData = &$value[ $side ];
-				$width    = $sideData['width'];
-
-				if ( '' === $width ) {
-					continue;
-				}
-
-				$style = ( '' !== $sideData['style'] ) ? $sideData['style'] : 'solid';
-
-				$color = '';
-				if ( isset( $sideData['color'] ) && '' !== $sideData['color'] ) {
-					$color = blockera_get_value_addon_real_value( $sideData['color'] );
-				}
-
-				$declaration[ self::$prefixes[ $i ] ] = $width . ' ' . $style . ( '' !== $color ? ' ' . $color : '' );
 			}
 		}
 
@@ -113,4 +76,69 @@ class Border extends BaseStyleDefinition {
 		return $this->css;
 	}
 
+	/**
+	 * Get the value of a side.
+	 *
+	 * @param array $value The value of the side.
+	 *
+	 * @return string The value of the side.
+	 */
+	protected function getSideValue( array $value ): string {
+		if (isset($value['valueType']) && 'variable' === $value['valueType']) {
+			$value = json_decode($value['settings']['value'], true)['all'] ?? [
+				'width' => '',
+				'style' => '',
+				'color' => '',
+			];
+		}
+
+		return self::side_to_css_shorthand( $value );
+	}
+
+	/**
+	 * Border shorthand for one side (`width style color`), after variable refs are resolved to plain width/style/color.
+	 *
+	 * @param array{width?:string,style?:string,color?:string|array} $side Side data.
+	 */
+	public static function side_to_css_shorthand( array $side ): string {
+		$width = isset( $side['width'] ) && is_string( $side['width'] ) ? $side['width'] : '';
+		if ( '' === $width ) {
+			return '';
+		}
+		$style = ( isset( $side['style'] ) && '' !== $side['style'] ) ? $side['style'] : 'solid';
+		$color = '';
+		if ( isset( $side['color'] ) && '' !== $side['color'] ) {
+			$color = blockera_get_value_addon_real_value( $side['color'] );
+		}
+
+		return $width . ' ' . $style . ( '' !== $color ? ' ' . $color : '' );
+	}
+
+	/**
+	 * Single preset CSS string for theme.json border box (all | custom sides).
+	 *
+	 * @param array $border Normalized border box (e.g. from theme.json sanitization).
+	 */
+	private static function preset_box_to_shorthand( array $border ): string {
+		if ( 'all' === ( $border['type'] ?? '' ) && isset( $border['all'] ) && is_array( $border['all'] ) ) {
+			return self::side_to_css_shorthand( $border['all'] );
+		}
+
+		if ( 'custom' !== ( $border['type'] ?? '' ) ) {
+			return '';
+		}
+
+		$sides = array( 'top', 'right', 'bottom', 'left' );
+		$out   = array();
+
+		foreach ( $sides as $edge ) {
+			if ( empty( $border[ $edge ] ) || ! is_array( $border[ $edge ] ) ) {
+				$out[] = '';
+				continue;
+			}
+			$out[] = self::side_to_css_shorthand( $border[ $edge ] );
+		}
+
+		return implode( ' ', $out );
+	}
 }
