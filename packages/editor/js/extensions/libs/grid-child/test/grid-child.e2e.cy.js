@@ -85,21 +85,42 @@ describe('Grid Child', () => {
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Grid Child').should('not.exist');
 
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Grid Child').should('exist');
+
+			// Wait for the block to be updated
+			cy.wait(200);
 
 			setDeviceType('Mobile Portrait');
 			cy.getBlock('core/group').click();
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Block').click();
 			});
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Grid Child').should('not.exist');
 
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			setDeviceType('Desktop');
+
+			// Switch blocks multiple times to make sure the grid child block section is not lost
 			cy.getBlock('core/group').click();
+			cy.getBlock('core/paragraph').click();
+			cy.getBlock('core/group').click();
+
+			// Wait for the block to be updated
+			cy.wait(200);
+
 			cy.getBlock('core/paragraph').click();
 			cy.getByDataTest('style-tab').click();
 			cy.contains('Grid Child').should('exist');
@@ -120,6 +141,9 @@ describe('Grid Child', () => {
 			cy.getParentContainer('Display').within(() => {
 				cy.getByAriaLabel('Block').click();
 			});
+
+			// Wait for the block to be updated
+			cy.wait(200);
 
 			setInnerBlock('elements/bold');
 			cy.getByDataTest('style-tab').click();
