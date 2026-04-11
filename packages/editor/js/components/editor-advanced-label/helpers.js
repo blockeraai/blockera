@@ -31,6 +31,43 @@ import { isInnerBlock, useBlockContext } from '../../extensions';
 import type { LabelStates, LabelChangedStates } from './types';
 import { sanitizeBlockAttributes } from '../../extensions/hooks/utils';
 
+/**
+ * Resolve control path for state graph rows. Base "normal" nodes use
+ * sanitizeBlockAttributes(), so `blockeraFoo` may be a primitive while
+ * `path` is still `blockeraFoo.value` — plain prepare() returns undefined.
+ */
+const resolveGraphPathValue = (
+	path: null | string,
+	controlId: string,
+	attrs: Object
+): any => {
+	if (!path) {
+		return attrs[controlId];
+	}
+
+	const pathUnderControl =
+		path.indexOf(controlId + '.') === 0
+			? path.slice(controlId.length + 1)
+			: null;
+
+	let resolved = prepare(path, attrs);
+	if ('undefined' === typeof resolved) {
+		resolved = prepare(path, attrs[controlId]);
+	}
+	if ('undefined' === typeof resolved && pathUnderControl) {
+		resolved = prepare(pathUnderControl, attrs[controlId]);
+	}
+	if (
+		'undefined' === typeof resolved &&
+		pathUnderControl === 'value' &&
+		!isObject(attrs[controlId])
+	) {
+		resolved = attrs[controlId];
+	}
+
+	return resolved;
+};
+
 export const getStatesGraph = ({
 	controlId,
 	blockName,
@@ -105,24 +142,11 @@ export const getStatesGraph = ({
 									return null;
 								}
 
-								let value;
-
-								if (path) {
-									const preparedValueWithPath = prepare(
-										path,
-										state.attributes
-									);
-									value =
-										'undefined' ===
-										typeof preparedValueWithPath
-											? prepare(
-													path,
-													state.attributes[controlId]
-												)
-											: preparedValueWithPath;
-								} else {
-									value = state.attributes[controlId];
-								}
+								const value = resolveGraphPathValue(
+									path,
+									controlId,
+									state.attributes
+								);
 
 								if (isUndefined(value) && isRepeaterItem) {
 									return null;
@@ -151,15 +175,11 @@ export const getStatesGraph = ({
 									}
 								}
 
-								const preparedValueFromRoot = prepare(
+								const rootValue = resolveGraphPathValue(
 									path,
+									controlId,
 									attributes
 								);
-
-								const rootValue =
-									'undefined' === typeof preparedValueFromRoot
-										? prepare(path, attributes[controlId])
-										: preparedValueFromRoot;
 
 								if (
 									('normal' !== state.type ||
