@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -129,7 +131,7 @@ const TextShadowPresetGroup = memo(TextShadowPresetGroupComponent);
  * (presets per origin, optional defaultPresets), with each preset’s `items` array storing
  * text-shadow rows (x, y, blur, color) like TextShadowControl.
  */
-function TextShadowsPresetContent() {
+export function TextShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'textShadow.presets.theme'
 	);
@@ -240,12 +242,21 @@ function TextShadowsPresetContent() {
 		[customPresets.length, clearCustomSizes]
 	);
 
-	const showDefaultGroup =
-		defaultTextShadowPresetsEnabled !== false && !!defaultPresets?.length;
+	const defaultLayerOn = defaultTextShadowPresetsEnabled !== false;
+	const showDefaultGroup = shouldShowDefaultPresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
 
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
+			{showThemeOriginGroup && (
 				<TextShadowPresetGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}

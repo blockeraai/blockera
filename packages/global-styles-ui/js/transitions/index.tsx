@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -130,7 +132,7 @@ const TransitionPresetGroup = memo(TransitionPresetGroupComponent);
  * (presets.theme | default | custom, optional defaultPresets), with each preset’s `items`
  * array storing transition rows (type, duration, timing, delay).
  */
-function TransitionsPresetContent() {
+export function TransitionsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'transition.presets.theme'
 	);
@@ -248,12 +250,21 @@ function TransitionsPresetContent() {
 		[customPresets.length, clearCustomSizes]
 	);
 
-	const showDefaultGroup =
-		defaultTransitionPresetsEnabled !== false && !!defaultPresets?.length;
+	const defaultLayerOn = defaultTransitionPresetsEnabled !== false;
+	const showDefaultGroup = shouldShowDefaultPresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
 
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
+			{showThemeOriginGroup && (
 				<TransitionPresetGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}

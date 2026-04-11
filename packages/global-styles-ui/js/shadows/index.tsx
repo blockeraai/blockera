@@ -21,6 +21,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -127,7 +129,7 @@ const ShadowPresetGroup = memo(ShadowPresetGroupComponent);
  * Reads/writes `settings.shadow` in user theme.json — presets per origin with each preset’s `items`
  * array storing box-shadow layers (strings), aligned with transition presets and Transition.php variable JSON.
  */
-function ShadowsPresetContent() {
+export function ShadowsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'shadow.presets.theme'
 	);
@@ -238,12 +240,21 @@ function ShadowsPresetContent() {
 		[customPresets.length, clearCustomSizes]
 	);
 
-	const showDefaultGroup =
-		defaultShadowPresetsEnabled !== false && !!defaultPresets?.length;
+	const defaultLayerOn = defaultShadowPresetsEnabled !== false;
+	const showDefaultGroup = shouldShowDefaultPresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
 
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
+			{showThemeOriginGroup && (
 				<ShadowPresetGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}

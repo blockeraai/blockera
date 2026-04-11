@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -129,7 +131,7 @@ const TransformPresetGroup = memo(TransformPresetGroupComponent);
  * (presets.theme | default | custom, optional defaultPresets), with each preset’s `items`
  * array storing transform rows (move, scale, rotate, skew fields per row).
  */
-function TransformsPresetContent() {
+export function TransformsPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'transform.presets.theme'
 	);
@@ -247,12 +249,21 @@ function TransformsPresetContent() {
 		[customPresets.length, clearCustomSizes]
 	);
 
-	const showDefaultGroup =
-		defaultTransformPresetsEnabled !== false && !!defaultPresets?.length;
+	const defaultLayerOn = defaultTransformPresetsEnabled !== false;
+	const showDefaultGroup = shouldShowDefaultPresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
 
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
+			{showThemeOriginGroup && (
 				<TransformPresetGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}

@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -127,7 +129,7 @@ const FilterPresetGroup = memo(FilterPresetGroupComponent);
  * (presets.theme | default | custom, optional defaultPresets), with each preset’s `items`
  * array storing filter rows (blur, drop-shadow, color adjustments, etc.).
  */
-function FiltersPresetContent() {
+export function FiltersPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'filter.presets.theme'
 	);
@@ -245,12 +247,21 @@ function FiltersPresetContent() {
 		[customPresets.length, clearCustomSizes]
 	);
 
-	const showDefaultGroup =
-		defaultFilterPresetsEnabled !== false && !!defaultPresets?.length;
+	const defaultLayerOn = defaultFilterPresetsEnabled !== false;
+	const showDefaultGroup = shouldShowDefaultPresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultLayerOn,
+		themePresets.length,
+		defaultPresets.length
+	);
 
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
+			{showThemeOriginGroup && (
 				<FilterPresetGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
