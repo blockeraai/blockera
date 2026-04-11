@@ -5,6 +5,7 @@
 import type { Element } from 'react';
 import { __ } from '@wordpress/i18n';
 import { select } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Blockera dependencies
@@ -28,6 +29,10 @@ import type { ValueAddonControlProps } from '../control/types';
 import { Button, Flex, Popover } from '../../../';
 import { VariableManager } from './variable-manager';
 
+/** @see packages/editor/js/editor/register-var-picker-global-styles-panels.js */
+export const VAR_PICKER_PRESET_PANEL_FILTER =
+	'blockera.controls.var-picker.resolve-preset-panel';
+
 export default function ({
 	controlProps,
 	onClose,
@@ -47,6 +52,10 @@ export default function ({
 	const CustomVariables = (): ?Element<any> => {
 		const sections = controlProps.variableTypes
 			.map((type) => {
+				if (applyFilters(VAR_PICKER_PRESET_PANEL_FILTER, null, type)) {
+					return null;
+				}
+
 				const cat = getVariableCategory(type);
 
 				if (cat.notFound) {
@@ -132,6 +141,35 @@ export default function ({
 				) {
 					return <></>;
 				}
+			}
+
+			const presetType = data?.type || type;
+			const PresetPanel = applyFilters(
+				VAR_PICKER_PRESET_PANEL_FILTER,
+				null,
+				presetType
+			);
+
+			if (PresetPanel) {
+				return (
+					<PickerCategory
+						key={`type-${type}-${index}`}
+						title={data.label}
+					>
+						<div
+							className={controlInnerClassNames(
+								'var-picker-preset-panel'
+							)}
+							style={{
+								maxHeight: 'min(70vh, 520px)',
+								overflow: 'auto',
+								width: '100%',
+							}}
+						>
+							<PresetPanel />
+						</div>
+					</PickerCategory>
+				);
 			}
 
 			if (data.items?.length === 0) {

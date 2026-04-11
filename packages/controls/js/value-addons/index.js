@@ -253,3 +253,4 @@ export const useValueAddon = ({
 
 export * from './utils';
 export * from './helpers';
+export { VAR_PICKER_PRESET_PANEL_FILTER } from './components';
