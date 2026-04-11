@@ -25,61 +25,6 @@ export type ParentLayoutContext = {
 	flexDirection: 'row' | 'column' | '',
 };
 
-/**
- * Extracts display value from blockeraDisplay attribute (handles { value: "flex" } format).
- */
-function getDisplayValue(blockeraDisplay: any): string {
-	if (!blockeraDisplay) {
-		return '';
-	}
-	if (
-		typeof blockeraDisplay === 'object' &&
-		blockeraDisplay.value !== undefined
-	) {
-		return String(blockeraDisplay.value);
-	}
-	return String(blockeraDisplay);
-}
-
-/**
- * Parent layout (flex vs grid) from block attributes — breakpoint-aware, no DOM.
- */
-export function getParentLayoutContextFromAttributes(
-	parentAttributes: ?Object,
-	currentBreakpoint: string
-): ParentLayoutContext {
-	if (!parentAttributes) {
-		return { layout: 'none', flexDirection: '' };
-	}
-	const breakpointAttrs =
-		parentAttributes?.blockeraBlockStates?.value?.normal?.breakpoints?.[
-			currentBreakpoint
-		]?.attributes;
-	const display =
-		getDisplayValue(breakpointAttrs?.blockeraDisplay) ||
-		getDisplayValue(parentAttributes.blockeraDisplay);
-
-	if (display === 'flex' || display === 'inline-flex') {
-		const flexLayout =
-			breakpointAttrs?.blockeraFlexLayout ??
-			parentAttributes.blockeraFlexLayout;
-		const direction =
-			(typeof flexLayout === 'object' && flexLayout?.value?.direction) ||
-			(typeof flexLayout === 'object' && flexLayout?.direction) ||
-			'';
-		const flexDirection = ['row', 'column'].includes(direction)
-			? direction
-			: 'row';
-		return { layout: 'flex', flexDirection };
-	}
-
-	if (display === 'grid' || display === 'inline-grid') {
-		return { layout: 'grid', flexDirection: '' };
-	}
-
-	return { layout: 'none', flexDirection: '' };
-}
-
 function resolveParentElement(block: {
 	clientId: string,
 	blockName: string,
@@ -217,32 +162,12 @@ export function getParentFlexBlockInfo(block: {
 	};
 }
 
-function selectLayoutParentAttributes(
-	sel: Function,
-	clientId: string,
-	currentBlock: string
-) {
-	try {
-		const blockEditor = sel('core/block-editor');
-		if (isInnerBlock(currentBlock)) {
-			const block = blockEditor.getBlock(clientId);
-			return block?.attributes ?? null;
-		}
-		const parentIds = blockEditor.getBlockParents(clientId);
-		const parentId =
-			parentIds.length > 0 ? parentIds[parentIds.length - 1] : null;
-		if (!parentId) {
-			return null;
-		}
-		const block = blockEditor.getBlock(parentId);
-		return block?.attributes ?? null;
-	} catch {
-		return null;
-	}
-}
-
 /**
- * Hook: parent is flex or grid (breakpoint-aware attrs + DOM fallback).
+ * Hook: parent flex/grid from computed DOM styles.
+ * Subscribes to block-editor attributes (parent or inner-host) to re-render when layout-related
+ * store data changes. `currentBreakpoint` is included in that subscription so responsive preview
+ * switches always re-run detection (computed styles follow media queries after paint).
+ * Detection uses getComputedStyle; double rAF defers read until styles apply.
  */
 export function useParentLayoutContext(params: {
 	clientId: string,
@@ -267,42 +192,47 @@ export function useParentLayoutContext(params: {
 	});
 	const [, setForceUpdate] = useState({});
 
-	const layoutParentAttributesFromStore = useSelect(
-		(sel) => selectLayoutParentAttributes(sel, clientId, currentBlock),
-		[clientId, currentBlock]
+	const layoutContextStoreTick = useSelect(
+		(sel) => {
+			try {
+				const blockEditor = sel('core/block-editor');
+				if (isInnerBlock(currentBlock)) {
+					const block = blockEditor.getBlock(clientId);
+					return block?.attributes ?? null;
+				}
+				const parentIds = blockEditor.getBlockParents(clientId);
+				const parentId =
+					parentIds.length > 0
+						? parentIds[parentIds.length - 1]
+						: null;
+				if (!parentId) {
+					return null;
+				}
+				const block = blockEditor.getBlock(parentId);
+				return block?.attributes ?? null;
+			} catch {
+				return null;
+			}
+		},
+		[clientId, currentBlock, currentBreakpoint]
 	);
 
-	const computeInfo = (): ParentLayoutContext => {
-		const fromAttrs = getParentLayoutContextFromAttributes(
-			layoutParentAttributesFromStore,
-			currentBreakpoint
-		);
-		if (layoutParentAttributesFromStore !== null) {
-			return fromAttrs;
-		}
-		const currentBlockElement =
-			getEditorDocumentElement()?.querySelector(`#block-${clientId}`) ??
-			null;
-		return getParentLayoutContext({
-			clientId,
-			blockName,
-			currentBlock,
-			currentState,
-			currentInnerBlockState,
-			currentBlockElement,
-		});
-	};
-
-	infoRef.current = computeInfo();
+	const currentBlockElement =
+		getEditorDocumentElement()?.querySelector(`#block-${clientId}`) ?? null;
+	infoRef.current = getParentLayoutContext({
+		clientId,
+		blockName,
+		currentBlock,
+		currentState,
+		currentInnerBlockState,
+		currentBlockElement,
+	});
 
 	useEffect(() => {
-		if (layoutParentAttributesFromStore !== null) {
-			return;
-		}
 		let rafId2;
 		const rafId1 = requestAnimationFrame(() => {
 			rafId2 = requestAnimationFrame(() => {
-				const currentBlockElement =
+				const el =
 					getEditorDocumentElement()?.querySelector(
 						`#block-${clientId}`
 					) ?? null;
@@ -312,7 +242,7 @@ export function useParentLayoutContext(params: {
 					currentBlock,
 					currentState,
 					currentInnerBlockState,
-					currentBlockElement,
+					currentBlockElement: el,
 				});
 				setForceUpdate({});
 			});
@@ -330,7 +260,7 @@ export function useParentLayoutContext(params: {
 		currentState,
 		currentInnerBlockState,
 		currentBreakpoint,
-		layoutParentAttributesFromStore,
+		layoutContextStoreTick,
 	]);
 
 	return infoRef.current;
