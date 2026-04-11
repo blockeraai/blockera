@@ -8,6 +8,7 @@ import { bootstrap as bootstrapBorderAndShadowExtension } from './border-and-sha
 import { bootstrap as bootstrapTypographyExtension } from './typography/bootstrap';
 import { bootstrap as bootstrapInnerBlocksExtension } from './block-card/inner-blocks/bootstrap';
 import { bootstrap as bootstrapLayoutExtension } from './layout/bootstrap';
+import { bootstrap as bootstrapGridChildExtension } from './grid-child/bootstrap';
 import { bootstrap as bootstrapCustomStyleExtension } from './custom-style/bootstrap';
 
 export function blockeraExtensionsBootstrap() {
@@ -18,5 +19,6 @@ export function blockeraExtensionsBootstrap() {
 	bootstrapTypographyExtension();
 	bootstrapInnerBlocksExtension();
 	bootstrapLayoutExtension();
+	bootstrapGridChildExtension();
 	bootstrapCustomStyleExtension();
 }
