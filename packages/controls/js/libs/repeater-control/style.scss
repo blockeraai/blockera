@@ -241,6 +241,18 @@
 		}
 	}
 
+	.blockera-control-repeater__no-items {
+		box-sizing: border-box;
+		width: 100%;
+		padding: 12px 14px;
+		border-radius: var(--blockera-controls-border-radius);
+		background: #e8e8e8;
+		color: #757575;
+		font-size: 12px;
+		line-height: 1.4;
+		text-align: center;
+	}
+
 	&.design-large {
 		background: #f6f6f6;
 		padding: 15px 20px;

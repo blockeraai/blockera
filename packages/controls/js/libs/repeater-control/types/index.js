@@ -128,6 +128,16 @@ export type RepeaterControlProps = {
 	 */
 	minItems?: number,
 	/**
+	 * When true and the repeater has no items, shows a muted empty-state message.
+	 *
+	 * @default false
+	 */
+	showNoItemsMessage?: boolean,
+	/**
+	 * Custom content for the empty state. Ignored when `showNoItemsMessage` is false.
+	 */
+	noItemsMessage?: string | MixedElement,
+	/**
 	 * Specifies the add button should be shown for repeater items.
 	 *
 	 * @default true

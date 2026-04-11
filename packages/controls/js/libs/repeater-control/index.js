@@ -104,6 +104,8 @@ export default function RepeaterControl(
 		className,
 		canAddNewItem = true,
 		enableCreatingStep = false,
+		showNoItemsMessage = false,
+		noItemsMessage,
 		...customProps
 	} = applyFilters(`blockera.controls.${props.id}.props`, props);
 
@@ -361,7 +363,9 @@ export default function RepeaterControl(
 		});
 	};
 
-	const items = Object.keys(repeaterItems).length > 0 && (
+	const hasRepeaterItems = Object.keys(repeaterItems || {}).length > 0;
+
+	const items = hasRepeaterItems && (
 		<>
 			{itemColumns > 1 ? (
 				<Grid
@@ -382,6 +386,19 @@ export default function RepeaterControl(
 			)}
 		</>
 	);
+
+	const repeaterItemsContent = hasRepeaterItems
+		? items
+		: showNoItemsMessage && (
+				<div
+					className={controlInnerClassNames('repeater__no-items')}
+					data-cy="blockera-repeater-no-items"
+				>
+					{noItemsMessage !== undefined && noItemsMessage !== null
+						? noItemsMessage
+						: __('No items.', 'blockera')}
+				</div>
+			);
 
 	const disabledAddNewItem =
 		!maxItems ||
@@ -517,7 +534,7 @@ export default function RepeaterControl(
 							</LabelControlContainer>
 						)}
 
-						{items}
+						{repeaterItemsContent}
 
 						{description && (
 							<div
@@ -653,7 +670,7 @@ export default function RepeaterControl(
 							</div>
 						)}
 
-						{items}
+						{repeaterItemsContent}
 					</>
 				)}
 			</div>
