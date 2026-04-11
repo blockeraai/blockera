@@ -10,6 +10,43 @@ import { useCallback, useState } from '@wordpress/element';
 import { pascalCase } from '@blockera/utils';
 
 /**
+ * Theme vs default preset panels (`theme.json` / Site Editor origins)
+ *
+ * Both helpers use the same three inputs: whether the default *layer* is allowed
+ * (e.g. `settings.typography.defaultFontSizes`), and preset counts per origin.
+ * Custom origin is always shown elsewhere; these only gate theme and default repeaters.
+ *
+ * Typical outcomes:
+ * - Both origins empty, default layer on → show **theme** only (one empty state).
+ * - Theme empty, default layer on, default has items → show **default** only (skip empty theme).
+ * - Theme has items → always show **theme**; default row follows `shouldShowDefaultPresetGroup`.
+ *
+ * Call sites pass identical arguments to both functions so the UI stays consistent.
+ * Pure functions: safe to run every render; no memoization required unless profiling says otherwise.
+ */
+export function shouldShowDefaultPresetGroup(
+	defaultLayerEnabled: boolean,
+	themeItemCount: number,
+	defaultItemCount: number
+): boolean {
+	return (
+		defaultLayerEnabled && !(themeItemCount === 0 && defaultItemCount === 0)
+	);
+}
+
+export function shouldShowThemePresetGroup(
+	defaultLayerEnabled: boolean,
+	themeItemCount: number,
+	defaultItemCount: number
+): boolean {
+	return !(
+		themeItemCount === 0 &&
+		defaultLayerEnabled &&
+		defaultItemCount > 0
+	);
+}
+
+/**
  * Repeater section label: "Theme Variables", "Custom Variables", etc.
  */
 export function getOriginVariablesLabel(origin: string): string {
