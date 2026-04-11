@@ -965,6 +965,20 @@
 		"tags": ["extension", "flex", "child", "flexbox", "layout", "container"]
 	},
 	{
+		"iconName": "extension-grid-child",
+		"title": "Extension Grid Child",
+		"library": "ui",
+		"tags": [
+			"extension",
+			"grid",
+			"child",
+			"span",
+			"layout",
+			"columns",
+			"rows"
+		]
+	},
+	{
 		"iconName": "extension-icon",
 		"title": "Extension Icon",
 		"library": "ui",

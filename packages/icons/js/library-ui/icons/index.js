@@ -177,6 +177,7 @@ export { default as ExtensionCustomStyle } from './extension-custom-style.svg';
 export { default as ExtensionEffects } from './extension-effects.svg';
 export { default as ExtensionEntranceAnimation } from './extension-entrance-animation.svg';
 export { default as ExtensionFlexChild } from './extension-flex-child.svg';
+export { default as ExtensionGridChild } from './extension-grid-child.svg';
 export { default as ExtensionGeneral } from './extension-general.svg';
 export { default as ExtensionIcon } from './extension-icon.svg';
 export { default as ExtensionLayout } from './extension-layout.svg';
