@@ -16,6 +16,8 @@ if (! function_exists('blockera_get_global_stylesheet')) {
 	 *                     If empty, it'll load the following:
 	 *                     - for themes without theme.json: 'variables', 'presets', 'base-layout-styles'.
 	 *                     - for themes with theme.json: 'variables', 'presets', 'styles'.
+	 *                     Blockera global-styles-ui preset groups (transition, transform, filter, textShadow, border)
+	 *                     are included in variables/presets the same way as core presets via {@see \Blockera\Setup\Compatibility\JSON}.
 	 * @return string Stylesheet.
 	 */
 	function blockera_get_global_stylesheet( $types = array() ) {
