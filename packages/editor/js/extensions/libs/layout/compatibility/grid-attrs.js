@@ -70,7 +70,7 @@ function mergeLayoutPatch(
  * setAttributes filter passes the raw control value (string/number), while some
  * call sites use { value }. Support both shapes for WP layout sync.
  */
-function getBlockeraAttrPayloadValue(newValue: mixed): mixed {
+export function getBlockeraAttrPayloadValue(newValue: mixed): mixed {
 	if (newValue && typeof newValue === 'object' && 'value' in newValue) {
 		return newValue.value;
 	}
