@@ -19,7 +19,7 @@ interface LinearGradientsScreenProps {
 	onBackHandler: () => void;
 }
 
-function LinearGradientsPresetContent() {
+export function LinearGradientsPresetContent() {
 	const { linearGradients: _, ...groupsState } = useGetLinearGradients();
 
 	return <GradientPresetGroupsContent variant="linear" {...groupsState} />;

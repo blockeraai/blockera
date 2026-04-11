@@ -19,7 +19,7 @@ interface RadialGradientsScreenProps {
 	onBackHandler: () => void;
 }
 
-function RadialGradientsPresetContent() {
+export function RadialGradientsPresetContent() {
 	const { radialGradients: _, ...groupsState } = useGetRadialGradients();
 
 	return <GradientPresetGroupsContent variant="radial" {...groupsState} />;
