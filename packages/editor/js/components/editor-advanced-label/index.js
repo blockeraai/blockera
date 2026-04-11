@@ -46,6 +46,7 @@ export const EditorAdvancedLabelControl = ({
 	blockName = '',
 	isRepeater,
 	singularId,
+	controlFieldId,
 	labelDescription,
 	defaultValue,
 	labelPopoverTitle,
@@ -54,6 +55,8 @@ export const EditorAdvancedLabelControl = ({
 	onClick,
 	offset = 35,
 	iconPosition = 'end',
+	changesetGraphPreview,
+	changesetGraphPreviewRender,
 	...props
 }: AdvancedLabelControlProps): MixedElement => {
 	const [isOpenModal, setOpenModal] = useState(false);
@@ -105,6 +108,8 @@ export const EditorAdvancedLabelControl = ({
 		(isChanged && isChangedOnCurrentState) ||
 		isChangedNormalStateOnBaseBreakpoint ||
 		isChangedOnOtherStates;
+
+	const previewObjectPickKey = singularId || controlFieldId;
 
 	return (
 		<>
@@ -248,6 +253,11 @@ export const EditorAdvancedLabelControl = ({
 										: {}
 								}
 								isRepeaterItem={!isUndefined(repeaterItem)}
+								changesetGraphPreview={changesetGraphPreview}
+								previewObjectPickKey={previewObjectPickKey}
+								changesetGraphPreviewRender={
+									changesetGraphPreviewRender
+								}
 							/>
 
 							{isFunction(resetToDefault) && (

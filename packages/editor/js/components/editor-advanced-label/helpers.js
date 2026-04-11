@@ -202,6 +202,7 @@ export const getStatesGraph = ({
 								return {
 									...state,
 									id: _index,
+									resolvedControlValue: value,
 								};
 							}
 						)
