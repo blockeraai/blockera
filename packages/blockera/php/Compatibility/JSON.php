@@ -4,6 +4,7 @@ namespace Blockera\Setup\Compatibility;
 
 use Blockera\Setup\Blockera;
 use Blockera\Editor\StyleDefinitions\Border;
+use Blockera\Editor\StyleDefinitions\BoxShadow;
 use Blockera\Editor\StyleDefinitions\Filter;
 use Blockera\Editor\StyleDefinitions\TextShadow;
 use Blockera\Editor\StyleDefinitions\Transform;
@@ -248,6 +249,15 @@ class JSON extends \WP_Theme_JSON {
 				},
 			),
 			array(
+				'path'              => array( 'shadow', 'presets' ),
+				'prevent_override'  => array( 'shadow', 'defaultPresets' ),
+				'use_default_names' => false,
+				'css_vars'          => '--wp--preset--shadow--$slug',
+				'value_func'        => static function ( $preset, $settings ) {
+					return static::compute_blockera_box_shadow_preset_css_value( $preset );
+				},
+			),
+			array(
 				'path'              => array( 'border', 'presets' ),
 				'prevent_override'  => false,
 				'use_default_names' => false,
@@ -337,6 +347,30 @@ class JSON extends \WP_Theme_JSON {
 				'_blockeraGlobalPreset'  => true,
 			),
 			'text-shadow'
+		);
+	}
+
+	/**
+	 * Preset CSS for `--wp--preset--shadow--*`. Runs at global stylesheet build (cached).
+	 *
+	 * Blockera global-styles shadow presets use `items` (repeater). Core presets use the `shadow` string only;
+	 * those are already emitted by {@see \WP_Theme_JSON::compute_preset_vars}; this returns '' for shadow-only presets
+	 * to avoid duplicate custom properties.
+	 *
+	 * @param array $preset Preset from theme.json (slug, name, items).
+	 */
+	public static function compute_blockera_box_shadow_preset_css_value( $preset ): string {
+		if ( ! is_array( $preset ) || empty( $preset['items'] ) || ! is_array( $preset['items'] ) ) {
+			return '';
+		}
+
+		return ( new BoxShadow( [] ) )->get_preset_css_declaration_value(
+			array(
+				'type'                   => 'box-shadow',
+				'box-shadow'             => $preset['items'],
+				'_blockeraGlobalPreset'  => true,
+			),
+			'box-shadow'
 		);
 	}
 
@@ -496,6 +530,7 @@ class JSON extends \WP_Theme_JSON {
     /**
      * Adds Blockera-only keys to the core {@see \WP_Theme_JSON::VALID_SETTINGS} schema (e.g. box border presets,
      * transition / transform / filter / text-shadow preset groups aligned with global styles UI).
+     * `settings.shadow` is already defined by core; Blockera appends `items`-based preset CSS via {@see static::get_blockera_presets_metadata()}.
      *
      * @param array $settings_schema Core valid settings tree.
      * @return array

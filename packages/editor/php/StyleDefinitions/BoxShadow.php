@@ -50,58 +50,239 @@ class BoxShadow extends BaseStyleDefinition {
 			return [];
 		}
 
-		$boxShadowData = $setting[ $cssProperty ];
+		$declaration_only = ! empty( $setting['_blockeraDeclarationOnly'] );
+		$preset_mode      = ! empty( $setting['_blockeraGlobalPreset'] );
 
-		if ( ! isset( $boxShadowData['valueType'] ) ) {
-			$sortedShadows = blockera_get_sorted_repeater( $boxShadowData );
-		} elseif ( 'variable' === ( $boxShadowData['valueType'] ?? '' ) && isset( $boxShadowData['settings']['value'] ) ) {
-			$decoded = json_decode( $boxShadowData['settings']['value'], true );
-			$items   = is_array( $decoded ) ? ( $decoded['items'] ?? null ) : null;
-
-			if ( is_string( $items ) ) {
-				$items = static::parseCssBoxShadowToRepeaterValue( $items );
-			}
-
-			if ( ! is_array( $items ) ) {
-				$sortedShadows = [];
-			} else {
-				$sortedShadows = blockera_get_sorted_repeater( $items );
-			}
-		} else {
-			$sortedShadows = [];
-		}
-
-		$filteredBoxShadows = [];
-		$count              = count( $sortedShadows );
-
-		for ( $i = 0; $i < $count; ++$i ) {
-			$item = $sortedShadows[ $i ];
-
-			if ( isset( $item['type'] ) && '' !== $item['type'] ) {
-
-				$type = $item['type'];
-
-				if ( ( 'inner' === $type || 'outer' === $type ) && isset( $item['isVisible'] ) && $item['isVisible'] ) {
-					$filteredBoxShadows[] = $item;
+		// Reference: variable payloads may replace `settings.value` with plain CSS inside get_sorted_box_shadow_rows_from_value().
+		$boxShadowData     = &$setting[ $cssProperty ];
+		$resolved_from_var = null;
+		$self              = $this;
+		$sortedShadows     = self::get_sorted_box_shadow_rows_from_value(
+			$boxShadowData,
+			static function ( array $sorted ) use ( $self, $preset_mode ): string {
+				$filtered = array();
+				foreach ( $sorted as $item ) {
+					if ( ! is_array( $item ) ) {
+						continue;
+					}
+					if ( ! isset( $item['type'] ) || '' === $item['type'] ) {
+						continue;
+					}
+					$type = $item['type'];
+					if ( 'inner' !== $type && 'outer' !== $type ) {
+						continue;
+					}
+					if ( $preset_mode ) {
+						if ( ! ( $item['isVisible'] ?? true ) ) {
+							continue;
+						}
+					} elseif ( ! isset( $item['isVisible'] ) || ! $item['isVisible'] ) {
+						continue;
+					}
+					$filtered[] = $item;
 				}
-			}
-		}
+				if ( array() === $filtered ) {
+					return '';
+				}
+				$values = array();
+				foreach ( $filtered as $row ) {
+					$values[] = $self->getBoxShadow( $row );
+				}
 
-		if ( 0 === count( $filteredBoxShadows ) ) {
+				return implode( ', ', $values );
+			},
+			$resolved_from_var
+		);
+
+		if ( ! is_array( $sortedShadows ) ) {
 			return [];
 		}
 
-		$boxShadowValues = [];
-		$shadowCount     = count( $filteredBoxShadows );
+		// Preset (theme.json / global styles): missing isVisible counts as visible. Block rows: isVisible must be set and true.
+		if ( null !== $resolved_from_var && '' !== $resolved_from_var ) {
+			$this->setDeclaration( $cssProperty, $resolved_from_var );
+		} elseif ( $preset_mode ) {
+			$filteredBoxShadows = array();
+			$count              = count( $sortedShadows );
 
-		for ( $i = 0; $i < $shadowCount; ++$i ) {
-			$boxShadowValues[] = $this->getBoxShadow( $filteredBoxShadows[ $i ] );
+			for ( $i = 0; $i < $count; ++$i ) {
+				$item = $sortedShadows[ $i ];
+
+				if ( ! is_array( $item ) || ! isset( $item['type'] ) || '' === $item['type'] ) {
+					continue;
+				}
+				$type = $item['type'];
+				if ( ( 'inner' === $type || 'outer' === $type ) && ( $item['isVisible'] ?? true ) ) {
+					$filteredBoxShadows[] = $item;
+				}
+			}
+
+			if ( 0 === count( $filteredBoxShadows ) ) {
+				return [];
+			}
+
+			$boxShadowValues = array();
+			$shadowCount     = count( $filteredBoxShadows );
+
+			for ( $i = 0; $i < $shadowCount; ++$i ) {
+				$boxShadowValues[] = $this->getBoxShadow( $filteredBoxShadows[ $i ] );
+			}
+
+			$this->setDeclaration( $cssProperty, implode( ', ', $boxShadowValues ) );
+		} else {
+			$filteredBoxShadows = array();
+			$count              = count( $sortedShadows );
+
+			for ( $i = 0; $i < $count; ++$i ) {
+				$item = $sortedShadows[ $i ];
+
+				if ( isset( $item['type'] ) && '' !== $item['type'] ) {
+
+					$type = $item['type'];
+
+					if ( ( 'inner' === $type || 'outer' === $type ) && isset( $item['isVisible'] ) && $item['isVisible'] ) {
+						$filteredBoxShadows[] = $item;
+					}
+				}
+			}
+
+			if ( 0 === count( $filteredBoxShadows ) ) {
+				return [];
+			}
+
+			$boxShadowValues = array();
+			$shadowCount     = count( $filteredBoxShadows );
+
+			for ( $i = 0; $i < $shadowCount; ++$i ) {
+				$boxShadowValues[] = $this->getBoxShadow( $filteredBoxShadows[ $i ] );
+			}
+
+			$this->setDeclaration( $cssProperty, implode( ', ', $boxShadowValues ) );
 		}
 
-		$this->setDeclaration( $cssProperty, implode( ', ', $boxShadowValues ) );
+		if ( ! isset( $this->declarations[ $cssProperty ] ) || '' === $this->declarations[ $cssProperty ] ) {
+			return [];
+		}
+
+		if ( $declaration_only ) {
+			return [];
+		}
+
 		$this->setCss( $this->declarations );
 
 		return $this->css;
+	}
+
+	/**
+	 * Sorted box-shadow rows (raw repeater, variable JSON with `declaration`, CSS-string `items`, or row `items`).
+	 *
+	 * @param array         $value                  Content of $setting['box-shadow']; updated for variable payloads.
+	 * @param callable|null $build_declaration      Builds CSS from sorted row arrays when `items` is a list of rows.
+	 * @param string|null   $resolved_from_variable Output when variable resolves to final `box-shadow` value.
+	 * @return array<int, array<string, mixed>>
+	 */
+	protected static function get_sorted_box_shadow_rows_from_value( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
+		$resolved_from_variable = null;
+
+		if ( ! isset( $value['valueType'] ) ) {
+			return blockera_get_sorted_repeater( $value );
+		}
+		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings']['value'] ) ) {
+			return array();
+		}
+		$raw = $value['settings']['value'];
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return array();
+		}
+		$decoded = json_decode( $raw, true );
+		if ( ! is_array( $decoded ) ) {
+			return array();
+		}
+
+		$declaration_string = '';
+
+		if ( array_key_exists( 'declaration', $decoded ) && '' !== $decoded['declaration'] && null !== $decoded['declaration'] ) {
+			$resolved_decl      = blockera_get_value_addon_real_value( $decoded['declaration'] );
+			$declaration_string = is_scalar( $resolved_decl ) ? (string) $resolved_decl : '';
+		}
+
+		$items = $decoded['items'] ?? null;
+
+		if ( '' === $declaration_string && is_string( $items ) ) {
+			$from_items         = blockera_get_value_addon_real_value( $items );
+			$declaration_string = trim( is_scalar( $from_items ) ? (string) $from_items : '' );
+		}
+
+		if ( '' === $declaration_string && is_array( $items ) && null !== $build_declaration ) {
+			$repeater = array();
+			foreach ( $items as $idx => $row ) {
+				if ( ! is_array( $row ) ) {
+					continue;
+				}
+				$repeater[ (string) $idx ] = array_merge(
+					$row,
+					array(
+						'order'     => isset( $row['order'] ) ? (int) $row['order'] : (int) $idx,
+						'isVisible' => $row['isVisible'] ?? true,
+					)
+				);
+			}
+			$sorted             = blockera_get_sorted_repeater( $repeater );
+			$declaration_string = $build_declaration( $sorted );
+		}
+
+		if ( '' !== $declaration_string ) {
+			$value['settings']['value'] = $declaration_string;
+			$resolved_raw               = blockera_get_value_addon_real_value( $value );
+			$final                      = is_scalar( $resolved_raw ) ? (string) $resolved_raw : '';
+
+			if ( '' !== $final ) {
+				$resolved_from_variable = $final;
+
+				return array();
+			}
+
+			// Var resolution returned empty: restore JSON so row-by-row fallback still works.
+			$value['settings']['value'] = $raw;
+		}
+
+		if ( is_string( $items ) ) {
+			$parsed   = static::parseCssBoxShadowToRepeaterValue( $items );
+			$repeater = array();
+			foreach ( $parsed as $idx => $row ) {
+				if ( ! is_array( $row ) ) {
+					continue;
+				}
+				$repeater[ (string) $idx ] = array_merge(
+					$row,
+					array(
+						'order'     => isset( $row['order'] ) ? (int) $row['order'] : (int) $idx,
+						'isVisible' => $row['isVisible'] ?? true,
+					)
+				);
+			}
+
+			return blockera_get_sorted_repeater( $repeater );
+		}
+		if ( is_array( $items ) ) {
+			$repeater = array();
+			foreach ( $items as $idx => $row ) {
+				if ( ! is_array( $row ) ) {
+					continue;
+				}
+				$repeater[ (string) $idx ] = array_merge(
+					$row,
+					array(
+						'order'     => isset( $row['order'] ) ? (int) $row['order'] : (int) $idx,
+						'isVisible' => $row['isVisible'] ?? true,
+					)
+				);
+			}
+
+			return blockera_get_sorted_repeater( $repeater );
+		}
+
+		return array();
 	}
 
 	/**
