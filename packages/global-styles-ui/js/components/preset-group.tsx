@@ -15,7 +15,7 @@ import {
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
 } from '@blockera/controls';
-import { noop } from '@blockera/utils';
+import { noop, pascalCase } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
@@ -186,6 +186,12 @@ const Presets = ({
 			label={label}
 			id={controlName}
 			onChange={onChange}
+			showNoItemsMessage={true}
+			noItemsMessage={sprintf(
+				/* translators: %s: Preset group origin (e.g. theme, default, custom) */
+				__('No %s variable.', 'blockera'),
+				pascalCase(origin)
+			)}
 			popoverTitle={popoverTitle}
 			PromoComponent={renderPromo}
 			canAddNewItem={canAddNewItem}
