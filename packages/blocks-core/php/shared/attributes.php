@@ -235,6 +235,19 @@ return [
 			'value' => '',
 		],
 	],
+	// Grid Child.
+	'blockeraGridChildColumnSpan'       => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
+	'blockeraGridChildRowSpan'          => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
 	// Icon.
 	'blockeraIcon'                      => [
 		'type'    => 'object',
