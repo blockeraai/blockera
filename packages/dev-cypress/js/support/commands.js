@@ -60,6 +60,25 @@ export const registerCommands = () => {
 		return cy.get(`[data-test="${selector}"]`, ...args);
 	});
 
+	/**
+	 * Types into a Blockera input that exposes `data-test` on the native input (e.g. layout grid controls).
+	 * Replaces the current value via select-all to work with number and unit fields.
+	 */
+	Cypress.Commands.add(
+		'typeInInputByDataTest',
+		(dataTest, text, options = {}) => {
+			const merged = { delay: 0, force: true, ...options };
+			const value =
+				text === '' ? '{selectall}{backspace}' : '{selectall}' + text;
+
+			cy.getByDataTest(dataTest)
+				.should('be.visible')
+				.click({ force: true })
+				.type(value, merged)
+				.blur();
+		}
+	);
+
 	Cypress.Commands.add('getByDataId', (selector, ...args) => {
 		return cy.get(`[data-id="${selector}"]`, ...args);
 	});
