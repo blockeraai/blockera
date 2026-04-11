@@ -12,6 +12,18 @@ import {
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
+function wrapCssVarIfVariable(field, cssValue) {
+	if (
+		'variable' === field?.valueType &&
+		field?.settings?.var &&
+		cssValue !== '' &&
+		cssValue !== undefined
+	) {
+		return `var(${field.settings.var}, ${cssValue})`;
+	}
+	return cssValue;
+}
+
 export function TextShadowGenerator(id, props, options) {
 	const { attributes } = props;
 
@@ -21,7 +33,8 @@ export function TextShadowGenerator(id, props, options) {
 
 	const shadows = [];
 
-	let textShadowValue = attributes?.blockeraTextShadow;
+	const textShadowAttr = attributes?.blockeraTextShadow;
+	let textShadowValue = textShadowAttr;
 
 	if ('variable' === textShadowValue?.valueType) {
 		let rawItems = null;
@@ -47,7 +60,7 @@ export function TextShadowGenerator(id, props, options) {
 			{ ...item, order: item.order ?? i },
 		]);
 	} else {
-		textShadowValue = getSortedRepeater(attributes?.blockeraTextShadow);
+		textShadowValue = getSortedRepeater(textShadowAttr);
 	}
 
 	textShadowValue?.map(([, item]) => {
@@ -66,8 +79,13 @@ export function TextShadowGenerator(id, props, options) {
 		return undefined;
 	});
 
+	const textShadowCss = wrapCssVarIfVariable(
+		textShadowAttr,
+		shadows.join(',')
+	);
+
 	return createCssDeclarations({
 		options,
-		properties: { 'text-shadow': shadows.join(',') },
+		properties: { 'text-shadow': textShadowCss },
 	});
 }
