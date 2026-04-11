@@ -27,6 +27,8 @@ import {
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { FontSize } from './font-size';
@@ -139,7 +141,7 @@ function FontSizeGroupComponent({
 
 const FontSizeGroup = memo(FontSizeGroupComponent);
 
-function FontSizesPresetContent() {
+export function FontSizesPresetContent() {
 	const [themeFontSizes, setThemeFontSizes] = useGlobalSetting(
 		'typography.fontSizes.theme'
 	);
@@ -243,23 +245,36 @@ function FontSizesPresetContent() {
 		[customFontSizes.length, clearCustomSizes]
 	);
 
+	const themeSizes = (themeFontSizes ?? []) as FontSizeType[];
+	const defaultSizes = (defaultFontSizes ?? []) as FontSizeType[];
+	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
+		!!defaultFontSizesEnabled,
+		themeSizes.length,
+		defaultSizes.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		!!defaultFontSizesEnabled,
+		themeSizes.length,
+		defaultSizes.length
+	);
+
 	return (
 		<VStack spacing={8}>
-			{!!themeFontSizes?.length && (
+			{showThemeOriginGroup && (
 				<FontSizeGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
-					sizes={themeFontSizes}
+					sizes={themeSizes}
 					handleUpdateSizes={handleUpdateThemeSizes}
 					handleResetFontSizes={themeResetHandler}
 				/>
 			)}
 
-			{defaultFontSizesEnabled && !!defaultFontSizes?.length && (
+			{showDefaultOriginGroup && (
 				<FontSizeGroup
 					origin="default"
 					label={__('Default', 'blockera')}
-					sizes={defaultFontSizes}
+					sizes={defaultSizes}
 					handleUpdateSizes={handleUpdateDefaultSizes}
 					handleResetFontSizes={defaultResetHandler}
 				/>
@@ -268,7 +283,7 @@ function FontSizesPresetContent() {
 			<FontSizeGroup
 				origin="custom"
 				label={__('Custom', 'blockera')}
-				sizes={customFontSizes}
+				sizes={customFontSizes as FontSizeType[]}
 				handleUpdateSizes={handleUpdateCustomSizes}
 				handleResetFontSizes={customResetHandler}
 			/>

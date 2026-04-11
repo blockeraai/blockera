@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -118,7 +120,7 @@ function SpacingSizeGroupComponent({
 
 const SpacingSizeGroup = memo(SpacingSizeGroupComponent);
 
-function SpacingPresetContent() {
+export function SpacingPresetContent() {
 	const [themeSpacingSizes, setThemeSpacingSizes] = useGlobalSetting(
 		'spacing.spacingSizes.theme'
 	);
@@ -221,23 +223,36 @@ function SpacingPresetContent() {
 		[customSpacingSizes.length, clearCustomSizes]
 	);
 
+	const themeSizes = (themeSpacingSizes ?? []) as SpacingSizePreset[];
+	const defaultSizes = (defaultSpacingSizes ?? []) as SpacingSizePreset[];
+	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
+		!!defaultSpacingSizesEnabled,
+		themeSizes.length,
+		defaultSizes.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		!!defaultSpacingSizesEnabled,
+		themeSizes.length,
+		defaultSizes.length
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themeSpacingSizes?.length && (
+			{showThemeOriginGroup && (
 				<SpacingSizeGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
-					sizes={themeSpacingSizes}
+					sizes={themeSizes}
 					handleUpdateSizes={handleUpdateThemeSizes}
 					handleResetSpacingSizes={themeResetHandler}
 				/>
 			)}
 
-			{defaultSpacingSizesEnabled && !!defaultSpacingSizes?.length && (
+			{showDefaultOriginGroup && (
 				<SpacingSizeGroup
 					origin="default"
 					label={__('Default', 'blockera')}
-					sizes={defaultSpacingSizes}
+					sizes={defaultSizes}
 					handleUpdateSizes={handleUpdateDefaultSizes}
 					handleResetSpacingSizes={defaultResetHandler}
 				/>
@@ -246,7 +261,7 @@ function SpacingPresetContent() {
 			<SpacingSizeGroup
 				origin="custom"
 				label={__('Custom', 'blockera')}
-				sizes={customSpacingSizes}
+				sizes={customSpacingSizes as SpacingSizePreset[]}
 				handleUpdateSizes={handleUpdateCustomSizes}
 				handleResetSpacingSizes={customResetHandler}
 			/>
