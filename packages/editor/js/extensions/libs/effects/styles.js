@@ -31,6 +31,21 @@ import { getBlockSupportCategory, getBlockSupportFallback } from '../../utils';
 
 const supports = getBlockSupportCategory('effects');
 
+function wrapCompoundCssVarIfVariable(
+	field: any,
+	cssValue: string | void
+): string | void {
+	if (
+		field?.valueType === 'variable' &&
+		field?.settings?.var &&
+		cssValue !== '' &&
+		cssValue !== undefined
+	) {
+		return `var(${field.settings.var}, ${cssValue})`;
+	}
+	return cssValue;
+}
+
 export const EffectsStyles = ({
 	state,
 	config,
@@ -129,7 +144,8 @@ export const EffectsStyles = ({
 				transformSelfPerspective: '',
 			};
 
-			let transformValue = blockProps.attributes.blockeraTransform;
+			const transformAttr = blockProps.attributes.blockeraTransform;
+			let transformValue = transformAttr;
 
 			if ('variable' === transformValue?.valueType) {
 				transformValue =
@@ -197,9 +213,11 @@ export const EffectsStyles = ({
 			}
 
 			if (properties.transform.length > 0) {
-				transformProperties.transform =
+				transformProperties.transform = wrapCompoundCssVarIfVariable(
+					transformAttr,
 					properties.transformSelfPerspective +
-					properties.transform.join(' ');
+						properties.transform.join(' ')
+				);
 			}
 		}
 

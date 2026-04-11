@@ -9,6 +9,18 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 
+function wrapCssVarIfVariable(field, cssValue) {
+	if (
+		'variable' === field?.valueType &&
+		field?.settings?.var &&
+		cssValue !== '' &&
+		cssValue !== undefined
+	) {
+		return `var(${field.settings.var}, ${cssValue})`;
+	}
+	return cssValue;
+}
+
 export function TransitionGenerator(id, props, options) {
 	const { attributes } = props;
 
@@ -16,7 +28,8 @@ export function TransitionGenerator(id, props, options) {
 		return '';
 	}
 
-	let transitionValue = attributes?.blockeraTransition;
+	const transitionAttr = attributes?.blockeraTransition;
+	let transitionValue = transitionAttr;
 
 	if ('variable' === transitionValue?.valueType) {
 		transitionValue =
@@ -40,10 +53,15 @@ export function TransitionGenerator(id, props, options) {
 		})
 		?.filter((item) => null !== item);
 
+	const transitionCss = wrapCssVarIfVariable(
+		transitionAttr,
+		value?.join(', ')
+	);
+
 	return createCssDeclarations({
 		options,
 		properties: {
-			transition: value?.join(', '),
+			transition: transitionCss,
 		},
 	});
 }
