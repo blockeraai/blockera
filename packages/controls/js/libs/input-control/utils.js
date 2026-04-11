@@ -758,23 +758,35 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 			];
 			break;
 
-		case 'grid-min-width': {
-			const mw = getCSSUnits('min-width');
-			if (!mw || !mw.length || !mw[0]?.options) {
-				cssUnits = mw || [];
-				break;
-			}
-			const cloned: Array<any> = JSON.parse(JSON.stringify(mw));
-			const common = cloned[0];
-			const opts = common.options;
-			const remIndex = opts.findIndex((o) => o.value === 'rem');
-			if (remIndex > 0) {
-				const [remOpt] = opts.splice(remIndex, 1);
-				opts.unshift(remOpt);
-			}
-			cssUnits = cloned;
+		case 'grid-min-width':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'rem',
+							label: 'REM',
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							format: 'number',
+						},
+					],
+				},
+			];
 			break;
-		}
 
 		case 'max-width':
 		case 'max-height':
