@@ -345,6 +345,18 @@ return [
 			'value' => '',
 		],
 	],
+	'blockeraGridMinimumColumnWidth'    => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
+	'blockeraGridColumnCount'           => [
+		'type'    => 'object',
+		'default' => [
+			'value' => '',
+		],
+	],
 	// Mouse.
 	'blockeraCursor'                    => [
 		'type'    => 'object',
