@@ -26,6 +26,8 @@ import {
 	ConfirmResetPresetDialog,
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGetColors } from './use-get-colors';
@@ -165,7 +167,7 @@ function ColorGroupComponent({
 
 const ColorGroup = memo(ColorGroupComponent);
 
-function ColorPalettePresetContent() {
+export function ColorPalettePresetContent() {
 	const {
 		themeColors,
 		customColors,
@@ -220,9 +222,21 @@ function ColorPalettePresetContent() {
 		[customColors.length, clearCustomColors]
 	);
 
+	const defaultLayerOn = !!defaultPaletteEnabled;
+	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
+		defaultLayerOn,
+		safeThemeColors.length,
+		safeDefaultColors.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultLayerOn,
+		safeThemeColors.length,
+		safeDefaultColors.length
+	);
+
 	return (
 		<VStack spacing={8} className="global-styles-ui-color-palette-panel">
-			{!!safeThemeColors.length && (
+			{showThemeOriginGroup && (
 				<ColorGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
@@ -232,7 +246,7 @@ function ColorPalettePresetContent() {
 				/>
 			)}
 
-			{!!safeDefaultColors.length && !!defaultPaletteEnabled && (
+			{showDefaultOriginGroup && (
 				<ColorGroup
 					origin="default"
 					label={__('Default', 'blockera')}

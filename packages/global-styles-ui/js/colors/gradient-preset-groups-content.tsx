@@ -12,6 +12,10 @@ import { isEquals } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import {
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
+} from '../components';
 import { filterLinearGradients, filterRadialGradients } from './utils';
 import {
 	GradientPresetGroup,
@@ -57,9 +61,20 @@ export function GradientPresetGroupsContent({
 	const baseKindTheme = filterKind(baseThemeGradients);
 	const baseKindDefault = filterKind(baseDefaultGradients);
 
+	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
+		defaultGradientsEnabled,
+		kindTheme.length,
+		kindDefault.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		defaultGradientsEnabled,
+		kindTheme.length,
+		kindDefault.length
+	);
+
 	return (
 		<VStack spacing={8} className="global-styles-ui-gradient-palette-panel">
-			{!!kindTheme.length && (
+			{showThemeOriginGroup && (
 				<GradientPresetGroup
 					variant={variant}
 					origin="theme"
@@ -93,7 +108,7 @@ export function GradientPresetGroupsContent({
 				/>
 			)}
 
-			{!!kindDefault.length && !!defaultGradientsEnabled && (
+			{showDefaultOriginGroup && (
 				<GradientPresetGroup
 					variant={variant}
 					origin="default"
