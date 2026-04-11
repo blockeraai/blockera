@@ -758,6 +758,24 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 			];
 			break;
 
+		case 'grid-min-width': {
+			const mw = getCSSUnits('min-width');
+			if (!mw || !mw.length || !mw[0]?.options) {
+				cssUnits = mw || [];
+				break;
+			}
+			const cloned: Array<any> = JSON.parse(JSON.stringify(mw));
+			const common = cloned[0];
+			const opts = common.options;
+			const remIndex = opts.findIndex((o) => o.value === 'rem');
+			if (remIndex > 0) {
+				const [remOpt] = opts.splice(remIndex, 1);
+				opts.unshift(remOpt);
+			}
+			cssUnits = cloned;
+			break;
+		}
+
 		case 'max-width':
 		case 'max-height':
 			cssUnits = [

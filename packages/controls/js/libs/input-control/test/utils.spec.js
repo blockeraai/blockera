@@ -778,6 +778,24 @@ describe('Util functions', () => {
 			]);
 		});
 
+		test('grid-min-width', () => {
+			const gridMw = getCSSUnits('grid-min-width');
+			const minMw = getCSSUnits('min-width');
+
+			expect(gridMw).toHaveLength(minMw.length);
+			expect(gridMw[0].options[0].value).toBe('rem');
+			expect(gridMw[0].options.map((o) => o.value)).toEqual([
+				'rem',
+				'px',
+				'%',
+				'em',
+			]);
+
+			for (let i = 1; i < gridMw.length; i++) {
+				expect(gridMw[i]).toStrictEqual(minMw[i]);
+			}
+		});
+
 		test('min-height', () => {
 			expect(getCSSUnits('min-height')).toStrictEqual([
 				{
