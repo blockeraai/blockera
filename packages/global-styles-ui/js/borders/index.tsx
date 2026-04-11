@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -118,7 +120,7 @@ function BorderPresetGroupComponent({
 
 const BorderPresetGroup = memo(BorderPresetGroupComponent);
 
-function BordersPresetContent() {
+export function BordersPresetContent() {
 	const [rawThemePresets, setThemePresets] = useGlobalSetting(
 		'border.presets.theme'
 	);
@@ -232,9 +234,20 @@ function BordersPresetContent() {
 		[customPresets.length, clearCustomSizes]
 	);
 
+	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
+		true,
+		themePresets.length,
+		defaultPresets.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		true,
+		themePresets.length,
+		defaultPresets.length
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themePresets?.length && (
+			{showThemeOriginGroup && (
 				<BorderPresetGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
@@ -244,7 +257,7 @@ function BordersPresetContent() {
 				/>
 			)}
 
-			{!!defaultPresets?.length && (
+			{showDefaultOriginGroup && (
 				<BorderPresetGroup
 					origin="default"
 					label={__('Default', 'blockera')}

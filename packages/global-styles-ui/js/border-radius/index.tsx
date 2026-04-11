@@ -22,6 +22,8 @@ import {
 	getOriginResetDialogCopy,
 	getOriginVariablesLabel,
 	GlobalStylesPanelDescription,
+	shouldShowDefaultPresetGroup,
+	shouldShowThemePresetGroup,
 	usePresetResetDialogState,
 } from '../components';
 import { useGlobalSetting } from '../context/global-style-hooks';
@@ -118,7 +120,7 @@ function BorderRadiusSizeGroupComponent({
 
 const BorderRadiusSizeGroup = memo(BorderRadiusSizeGroupComponent);
 
-function BorderRadiusPresetContent() {
+export function BorderRadiusPresetContent() {
 	const [rawThemeRadiusSizes, setThemeRadiusSizes] = useGlobalSetting(
 		'border.radiusSizes.theme'
 	);
@@ -232,9 +234,20 @@ function BorderRadiusPresetContent() {
 		[customRadiusSizes.length, clearCustomSizes]
 	);
 
+	const showDefaultOriginGroup = shouldShowDefaultPresetGroup(
+		true,
+		themeRadiusSizes.length,
+		defaultRadiusSizes.length
+	);
+	const showThemeOriginGroup = shouldShowThemePresetGroup(
+		true,
+		themeRadiusSizes.length,
+		defaultRadiusSizes.length
+	);
+
 	return (
 		<Flex direction="column" gap="32px" style={{ width: '100%' }}>
-			{!!themeRadiusSizes?.length && (
+			{showThemeOriginGroup && (
 				<BorderRadiusSizeGroup
 					origin="theme"
 					label={__('Theme', 'blockera')}
@@ -244,7 +257,7 @@ function BorderRadiusPresetContent() {
 				/>
 			)}
 
-			{!!defaultRadiusSizes?.length && (
+			{showDefaultOriginGroup && (
 				<BorderRadiusSizeGroup
 					origin="default"
 					label={__('Default', 'blockera')}
