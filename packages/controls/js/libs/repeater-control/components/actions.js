@@ -28,6 +28,8 @@ export default function RepeaterItemActions({
 	itemId,
 	isVisible,
 	setVisibility,
+	onOpenItemSettings,
+	showItemEditButton = false,
 }: RepeaterItemActionsProps): MixedElement | null {
 	const {
 		count,
@@ -244,8 +246,17 @@ export default function RepeaterItemActions({
 
 	const showReset = actionButtonReset;
 
+	const showEditItemButton =
+		showItemEditButton && 'function' === typeof onOpenItemSettings;
+
 	// If no buttons are shown, return null to avoid rendering empty container
-	if (!showVisibility && !showClone && !showDelete && !showReset) {
+	if (
+		!showVisibility &&
+		!showClone &&
+		!showDelete &&
+		!showReset &&
+		!showEditItemButton
+	) {
 		return null;
 	}
 
@@ -336,6 +347,33 @@ export default function RepeaterItemActions({
 						</Tooltip>
 					)}
 				</>
+			)}
+
+			{showEditItemButton && (
+				<Tooltip
+					text={__('Edit', 'blockera')}
+					style={{
+						'--tooltip-bg':
+							'var(--blockera-controls-primary-color)',
+					}}
+					delay={300}
+				>
+					<Button
+						className={controlInnerClassNames('btn-edit-item')}
+						noBorder={true}
+						icon={<Icon icon="pen" iconSize={20} />}
+						onClick={(event: MouseEvent) => {
+							event.stopPropagation();
+							// $FlowFixMe
+							onOpenItemSettings();
+						}}
+						aria-label={sprintf(
+							// translators: %s is the repeater item id.
+							__('Edit %s', 'blockera'),
+							getArialLabelSuffix(itemId)
+						)}
+					/>
+				</Tooltip>
 			)}
 
 			{showClone && (

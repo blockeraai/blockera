@@ -68,6 +68,8 @@ const RepeaterItem = ({
 		popoverTitleButtonsRight: PopoverTitleButtonsRight,
 		actionButtonsType,
 		actionMenuButtonLabel,
+		onSelectableItemActivate,
+		showItemEditButton,
 	} = useContext(RepeaterContext);
 
 	const repeaterItemActionsProps = {
@@ -253,6 +255,8 @@ const RepeaterItem = ({
 							setVisibility={
 								repeaterItemActionsProps.setVisibility
 							}
+							onOpenItemSettings={() => setOpen(true)}
+							showItemEditButton={showItemEditButton}
 						/>
 					}
 					children={<RepeaterItemChildren {...{ item, itemId }} />}
@@ -311,11 +315,27 @@ const RepeaterItem = ({
 								}
 							);
 
-							return onChange({
+							modifyControlValue({
+								controlId,
+								value: newItems,
+							});
+
+							onChange({
 								modifyControlValue,
 								controlId,
 								value: newItems,
 							});
+
+							if (
+								'function' === typeof onSelectableItemActivate
+							) {
+								onSelectableItemActivate(
+									itemId,
+									newItems[itemId]
+								);
+							}
+
+							return;
 						}
 
 						return true;

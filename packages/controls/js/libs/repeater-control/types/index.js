@@ -19,6 +19,8 @@ export type RepeaterItemActionsProps = {
 	itemId: string,
 	isVisible: boolean,
 	setVisibility: (state: boolean) => void,
+	onOpenItemSettings?: () => void,
+	showItemEditButton?: boolean,
 };
 
 type ID = string | number;
@@ -75,6 +77,14 @@ export type RepeaterControlProps = {
 	 * Flag for support selectable repeater items or not.
 	 */
 	selectable?: boolean,
+	/**
+	 * After a selectable row is activated, called with the resolved item snapshot.
+	 */
+	onSelectableItemActivate?: (itemId: string, item: Object) => void,
+	/**
+	 * When true, selectable rows show an edit control to open item settings (e.g. popover).
+	 */
+	showItemEditButton?: boolean,
 	/**
 	 * Is support external inserter component?
 	 */
