@@ -28,6 +28,7 @@ import { prepare } from '@blockera/data-editor';
  * Internal dependencies
  */
 import { Gap } from './components';
+import { formatBlockeraFlexWrapChangesetPreview } from './changeset-preview-flex-wrap';
 import { isShowField, isActiveExtension } from '../../api/utils';
 import { EditorFeatureWrapper } from '../../../';
 import type { TLayoutProps } from './types/layout-props';
@@ -35,61 +36,6 @@ import { generateExtensionId } from '../utils';
 import { ExtensionSettings } from '../settings';
 import { useBlockSection } from '../../components';
 import { useFeatureSearch } from '../../components/feature-search-context';
-
-/**
- * Changeset graph label for flex-wrap: plain string or value-addon object with `val`/`reverse`.
- */
-function formatBlockeraFlexWrapChangesetPreview(resolved: mixed): string {
-	if (resolved === null || resolved === undefined) {
-		return '';
-	}
-
-	if (typeof resolved === 'string') {
-		if (resolved === 'nowrap') {
-			return __('No Wrap', 'blockera');
-		}
-		if (resolved === 'wrap') {
-			return __('Wrap', 'blockera');
-		}
-
-		return resolved ? String(resolved) : '';
-	}
-
-	if (typeof resolved !== 'object') {
-		return String(resolved);
-	}
-
-	const obj: Object = resolved;
-	const inner: Object =
-		obj.value &&
-		typeof obj.value === 'object' &&
-		Object.prototype.hasOwnProperty.call(obj.value, 'val')
-			? obj.value
-			: obj;
-
-	const val = Object.prototype.hasOwnProperty.call(inner, 'val')
-		? inner.val
-		: inner.value;
-
-	let label = '';
-	if (val === 'nowrap') {
-		label = __('No Wrap', 'blockera');
-	} else if (val === 'wrap') {
-		label = __('Wrap', 'blockera');
-	} else if (val !== undefined && val !== null && val !== '') {
-		label = String(val);
-	}
-
-	if (!label) {
-		return '';
-	}
-
-	if (inner.reverse) {
-		return `${label} (${__('reverse', 'blockera')})`;
-	}
-
-	return label;
-}
 
 export const LayoutExtension: ComponentType<TLayoutProps> = ({
 	block,
@@ -186,6 +132,11 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 			showGapFeature = ['flex', 'grid'].includes(values.blockeraDisplay);
 		}
 	}
+
+	const flexWrapChangesetGraphPreviewRender =
+		extensionProps.blockeraFlexWrap?.labelProps
+			?.changesetGraphPreviewRender ??
+		formatBlockeraFlexWrapChangesetPreview;
 
 	return (
 		<PanelBodyControl
@@ -341,7 +292,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 							},
 						]}
 						isDeselectable={true}
-						//
 						defaultValue={attributes.blockeraDisplay.default}
 						onChange={(newValue, ref) =>
 							handleOnChangeAttributes(
@@ -631,10 +581,7 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											attributes.blockeraFlexWrap
 												?.default,
 										changesetGraphPreviewRender:
-											extensionProps.blockeraFlexWrap
-												?.labelProps
-												?.changesetGraphPreviewRender ??
-											formatBlockeraFlexWrapChangesetPreview,
+											flexWrapChangesetGraphPreviewRender,
 									}}
 									options={[
 										{
@@ -658,7 +605,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 											),
 										},
 									]}
-									//
 									defaultValue={
 										attributes.blockeraFlexWrap.default.val
 									}
@@ -910,7 +856,6 @@ export const LayoutExtension: ComponentType<TLayoutProps> = ({
 									},
 								]}
 								isDeselectable={true}
-								//
 								defaultValue={
 									attributes.blockeraAlignContent.default
 								}
