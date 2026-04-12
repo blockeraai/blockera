@@ -61,6 +61,11 @@ export {
 	getMergedGlobalStylePresetVariables,
 	getGlobalStylePresetVariableById,
 } from './custom-global-style-presets';
+export {
+	referenceFromPresetOrigin,
+	buildPresetVariablePickerPayload,
+	serializeGlobalStylePresetItemValue,
+} from './preset-variable-picker-payload';
 export { getVariable } from './get-variable';
 export {
 	generateVariableString,

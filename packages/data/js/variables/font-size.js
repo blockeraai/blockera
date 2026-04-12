@@ -2,7 +2,6 @@
 /**
  * External dependencies
  */
-import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
@@ -14,46 +13,94 @@ import { isBlockTheme, isUndefined, isString, isObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import type { ValueAddonReference } from '../types';
 import { STORE_NAME } from '../store';
 import { getCustomGlobalStylePresetVariables } from './custom-global-style-presets';
+import {
+	CUSTOM_ORIGIN_REFERENCE,
+	PRESET_ORIGIN_REFERENCE,
+	getThemeVariableReference,
+	mergeVariableItemsBySlug,
+} from './merge-global-style-simple-presets';
 import { generateVariableString, getBlockEditorSettings } from './index';
 import { parseVarString } from './utils';
 import type { VariableItem } from './types';
 
-export const getFontSizes: () => Array<VariableItem> = memoize(
-	function (): Array<VariableItem> {
-		let reference = {
-			type: 'preset',
-		};
+export const getFontSizes = (): Array<VariableItem> => {
+	if (isBlockTheme()) {
+		const fontSizesRoot =
+			getBlockEditorSettings()?.__experimentalFeatures?.typography
+				?.fontSizes;
 
-		if (isBlockTheme()) {
-			const { getCurrentTheme } = select('blockera/data');
+		if (!isUndefined(fontSizesRoot)) {
+			const themeRef = getThemeVariableReference();
 
-			const {
-				name: { rendered: themeName },
-			} = getCurrentTheme();
+			return mergeVariableItemsBySlug(
+				[
+					{
+						items: fontSizesRoot?.default,
+						reference: PRESET_ORIGIN_REFERENCE,
+					},
+					{ items: fontSizesRoot?.theme, reference: themeRef },
+					{
+						items: fontSizesRoot?.custom,
+						reference: CUSTOM_ORIGIN_REFERENCE,
+					},
+				],
+				(item, reference) => {
+					if (
+						!item ||
+						item.slug === undefined ||
+						item.slug === null
+					) {
+						return null;
+					}
 
-			reference = {
-				type: 'theme',
-				theme: themeName,
-			};
+					const id = String(item.slug);
+
+					if (!id) {
+						return null;
+					}
+
+					const row: VariableItem = {
+						name: item?.name || id,
+						id,
+						value: item.size,
+						reference,
+					};
+
+					if (item?.fluid) {
+						row.fluid = item.fluid;
+					}
+
+					return row;
+				}
+			);
 		}
-
-		return getBlockEditorSettings().fontSizes.map((item) => {
-			return {
-				name: item?.name || item.slug,
-				id: item.slug,
-				value: item.size,
-				fluid: item?.fluid || null,
-				reference,
-			};
-		});
 	}
-);
 
-export const getFontSize: (id: string) => ?VariableItem = memoize(function (
-	id: string
-): ?VariableItem {
+	let reference: ValueAddonReference = PRESET_ORIGIN_REFERENCE;
+
+	if (isBlockTheme()) {
+		reference = getThemeVariableReference();
+	}
+
+	const list = getBlockEditorSettings()?.fontSizes;
+
+	if (!Array.isArray(list)) {
+		return [];
+	}
+
+	return list.map((item) => ({
+		name: item?.name || item.slug,
+		id: item.slug,
+		value: item.size,
+		fluid: item?.fluid || null,
+		reference,
+	}));
+};
+
+export const getFontSize = (id: string): ?VariableItem => {
 	let fontSize = getFontSizes().find((item) => item.id === id);
 
 	// If not, check if the font size is in the custom font sizes
@@ -72,44 +119,41 @@ export const getFontSize: (id: string) => ?VariableItem = memoize(function (
 	}
 
 	return fontSize;
-});
+};
 
-export const getFontSizeBy: (field: string, value: any) => ?VariableItem =
-	memoize(function (field: string, value: any): ?VariableItem {
-		return getFontSizes().find((item) => item[field] === value);
-	});
+export const getFontSizeBy = (field: string, value: any): ?VariableItem =>
+	getFontSizes().find((item) => item[field] === value);
 
-export const getFontSizeVAFromIdString: (value: string) => ValueAddon | string =
-	memoize(function (value: string): ValueAddon | string {
-		const fontSizeVar = getFontSize(value);
+export const getFontSizeVAFromIdString = (
+	value: string
+): ValueAddon | string => {
+	const fontSizeVar = getFontSize(value);
 
-		if (fontSizeVar) {
-			return {
-				settings: {
-					...fontSizeVar,
+	if (fontSizeVar) {
+		return {
+			settings: {
+				...fontSizeVar,
+				type: 'font-size',
+				var: generateVariableString({
+					reference: fontSizeVar?.reference || {
+						type: '',
+					},
 					type: 'font-size',
-					var: generateVariableString({
-						reference: fontSizeVar?.reference || {
-							type: '',
-						},
-						type: 'font-size',
-						id: fontSizeVar?.id || '',
-					}),
-				},
-				name: fontSizeVar?.name || '',
-				isValueAddon: true,
-				valueType: 'variable',
-			};
-		}
+					id: fontSizeVar?.id || '',
+				}),
+			},
+			name: fontSizeVar?.name || '',
+			isValueAddon: true,
+			valueType: 'variable',
+		};
+	}
 
-		return value;
-	});
+	return value;
+};
 
-export const getFontSizeVAFromVarString: (
+export const getFontSizeVAFromVarString = (
 	value: string
-) => ValueAddon | string = memoize(function (
-	value: string
-): ValueAddon | string {
+): ValueAddon | string => {
 	if (isString(value)) {
 		const { id, varString } = parseVarString(value, 'font-size');
 
@@ -140,7 +184,7 @@ export const getFontSizeVAFromVarString: (
 	}
 
 	return value;
-});
+};
 
 export const getFontSizeVAStringFromId = (id: string): ?string => {
 	const variableObject = getFontSize(id);

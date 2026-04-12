@@ -8,7 +8,9 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies
  */
+import type { ValueAddonReference } from '../types';
 import type { VariableItem } from './types';
+import { resolveCurrentThemeDisplayName } from './resolve-current-theme-name';
 
 const getBlockEditorSettings = (): Object => {
 	const { getSettings } = select('core/block-editor');
@@ -16,12 +18,32 @@ const getBlockEditorSettings = (): Object => {
 	return getSettings();
 };
 
-const presetRef = {
+const defaultOriginPresetRef: ValueAddonReference = {
 	type: 'preset',
 };
 
+const customOriginRef: ValueAddonReference = {
+	type: 'custom',
+};
+
+function getGlobalStylePresetLayerRefs(): {
+	defaultRef: ValueAddonReference,
+	themeRef: ValueAddonReference,
+	customRef: ValueAddonReference,
+} {
+	return {
+		defaultRef: defaultOriginPresetRef,
+		themeRef: {
+			type: 'theme',
+			theme: resolveCurrentThemeDisplayName(),
+		},
+		customRef: customOriginRef,
+	};
+}
+
 function mapPaletteCustom(
-	items: void | Array<{ slug?: string, name?: string, color?: string }>
+	items: void | Array<{ slug?: string, name?: string, color?: string }>,
+	reference: ValueAddonReference = customOriginRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -31,12 +53,13 @@ function mapPaletteCustom(
 		name: item?.name || item.slug || '',
 		id: item.slug || '',
 		value: item.color || '',
-		reference: presetRef,
+		reference,
 	}));
 }
 
 function mapSpacingCustom(
-	items: void | Array<{ slug?: string, name?: string, size?: string }>
+	items: void | Array<{ slug?: string, name?: string, size?: string }>,
+	reference: ValueAddonReference = customOriginRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -46,7 +69,7 @@ function mapSpacingCustom(
 		name: item?.name || item.slug || '',
 		id: item.slug || '',
 		value: item.size || '',
-		reference: presetRef,
+		reference,
 	}));
 }
 
@@ -56,7 +79,8 @@ function mapFontSizesCustom(
 		name?: string,
 		size?: string,
 		fluid?: { min?: string, max?: string },
-	}>
+	}>,
+	reference: ValueAddonReference = customOriginRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -67,13 +91,14 @@ function mapFontSizesCustom(
 		id: item.slug || '',
 		value: item.size || '',
 		...(item?.fluid ? { fluid: item.fluid } : {}),
-		reference: presetRef,
+		reference,
 	}));
 }
 
 function mapGradientsCustom(
 	items: void | Array<{ slug?: string, name?: string, gradient?: string }>,
-	predicate: (gradient: string) => boolean
+	predicate: (gradient: string) => boolean,
+	reference: ValueAddonReference = customOriginRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -85,7 +110,7 @@ function mapGradientsCustom(
 			name: item?.name || item.slug || '',
 			id: item.slug || '',
 			value: item.gradient || '',
-			reference: presetRef,
+			reference,
 		}));
 }
 
@@ -94,7 +119,9 @@ function mapBorderRadiusPresets(
 		slug?: string,
 		name?: string,
 		size?: string | number,
-	}>
+	}>,
+	_unusedKey?: string,
+	reference: ValueAddonReference = defaultOriginPresetRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -106,7 +133,7 @@ function mapBorderRadiusPresets(
 			name: String(p.name ?? p.slug).trim(),
 			id: String(p.slug).trim(),
 			value: String(p.size ?? '').trim(),
-			reference: presetRef,
+			reference,
 		}))
 		.filter((p) => p.name && p.value !== '');
 }
@@ -116,7 +143,9 @@ function mapBorderBoxPresets(
 		slug?: string,
 		name?: string,
 		border?: mixed,
-	}>
+	}>,
+	_unusedKey?: string,
+	reference: ValueAddonReference = defaultOriginPresetRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -143,7 +172,7 @@ function mapBorderBoxPresets(
 			name,
 			id: String(p.slug).trim(),
 			value: serialized === undefined ? '{}' : serialized,
-			reference: presetRef,
+			reference,
 		});
 	}
 
@@ -155,8 +184,10 @@ function mapItemsArrayPresets(
 		slug?: string,
 		name?: string,
 		items?: Array<mixed>,
+		shadow?: Array<mixed>,
 	}>,
-	key?: string
+	key?: string,
+	reference: ValueAddonReference = defaultOriginPresetRef
 ): Array<VariableItem> {
 	if (!Array.isArray(items)) {
 		return [];
@@ -175,16 +206,19 @@ function mapItemsArrayPresets(
 			continue;
 		}
 
+		const rowItems =
+			'undefined' !== typeof key
+				? // $FlowFixMe[incompatible-use]
+					p?.[key] || p.items || []
+				: p.items || [];
+
 		out.push({
 			name,
 			id: String(p.slug).trim(),
 			value: JSON.stringify({
-				items:
-					'undefined' !== typeof key
-						? p?.[key] || p.items || []
-						: p.items || [],
+				items: rowItems,
 			}),
-			reference: presetRef,
+			reference,
 		});
 	}
 
@@ -192,39 +226,53 @@ function mapItemsArrayPresets(
 }
 
 function mergePresetLayers(
-	mapFn: (void | Array<any>, void | string) => Array<VariableItem>,
-	theme: void | Array<any>,
+	mapFn: (
+		void | Array<any>,
+		void | string,
+		ValueAddonReference
+	) => Array<VariableItem>,
 	defaultPresets: void | Array<any>,
+	theme: void | Array<any>,
 	custom: void | Array<any>,
-	key?: string
+	key: void | string,
+	refs: {
+		defaultRef: ValueAddonReference,
+		themeRef: ValueAddonReference,
+		customRef: ValueAddonReference,
+	}
 ): Array<VariableItem> {
 	const byId: { [string]: VariableItem } = {};
-	for (const item of mapFn(theme, key)) {
+
+	for (const item of mapFn(defaultPresets, key, refs.defaultRef)) {
 		if (item.id) {
 			byId[item.id] = item;
 		}
 	}
-	for (const item of mapFn(defaultPresets, key)) {
+
+	for (const item of mapFn(theme, key, refs.themeRef)) {
 		if (item.id) {
 			byId[item.id] = item;
 		}
 	}
-	for (const item of mapFn(custom, key)) {
+
+	for (const item of mapFn(custom, key, refs.customRef)) {
 		if (item.id) {
 			byId[item.id] = item;
 		}
 	}
+
 	return Object.values(byId);
 }
 
 /**
- * All origins merged (theme → default → custom) for Blockera global-style preset groups.
+ * All origins merged (default → theme → custom; later wins) for Blockera global-style preset groups.
  * Used by variable category labels and `getVariable` resolution.
  */
 export function getMergedGlobalStylePresetVariables(
 	type: string
 ): Array<VariableItem> {
 	const features = getBlockEditorSettings()?.__experimentalFeatures;
+	const refs = getGlobalStylePresetLayerRefs();
 
 	switch (type) {
 		case 'shadow': {
@@ -232,10 +280,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
-				presets?.theme,
 				presets?.default,
+				presets?.theme,
 				presets?.custom,
-				type
+				type,
+				refs
 			);
 		}
 
@@ -244,10 +293,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
-				presets?.theme,
 				presets?.default,
+				presets?.theme,
 				presets?.custom,
-				'shadow'
+				'shadow',
+				refs
 			);
 		}
 
@@ -256,9 +306,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapBorderRadiusPresets,
-				radiusSizes?.theme,
 				radiusSizes?.default,
-				radiusSizes?.custom
+				radiusSizes?.theme,
+				radiusSizes?.custom,
+				undefined,
+				refs
 			);
 		}
 
@@ -267,9 +319,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapBorderBoxPresets,
-				presets?.theme,
 				presets?.default,
-				presets?.custom
+				presets?.theme,
+				presets?.custom,
+				undefined,
+				refs
 			);
 		}
 
@@ -278,10 +332,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
-				presets?.theme,
 				presets?.default,
+				presets?.theme,
 				presets?.custom,
-				type
+				type,
+				refs
 			);
 		}
 
@@ -290,10 +345,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
-				presets?.theme,
 				presets?.default,
+				presets?.theme,
 				presets?.custom,
-				type
+				type,
+				refs
 			);
 		}
 
@@ -302,10 +358,11 @@ export function getMergedGlobalStylePresetVariables(
 
 			return mergePresetLayers(
 				mapItemsArrayPresets,
-				presets?.theme,
 				presets?.default,
+				presets?.theme,
 				presets?.custom,
-				type
+				type,
+				refs
 			);
 		}
 
@@ -343,30 +400,53 @@ export const getCustomGlobalStylePresetVariables: (
 			);
 
 		case 'shadow':
-			return mapItemsArrayPresets(features?.shadow?.presets?.custom);
+			return mapItemsArrayPresets(
+				features?.shadow?.presets?.custom,
+				undefined,
+				customOriginRef
+			);
 
 		case 'text-shadow':
 			return mapItemsArrayPresets(
 				features?.textShadow?.presets?.custom,
-				'shadow'
+				'shadow',
+				customOriginRef
 			);
 
 		case 'border-radius':
 			return mapBorderRadiusPresets(
-				features?.border?.radiusSizes?.custom
+				features?.border?.radiusSizes?.custom,
+				undefined,
+				customOriginRef
 			);
 
 		case 'border':
-			return mapBorderBoxPresets(features?.border?.presets?.custom);
+			return mapBorderBoxPresets(
+				features?.border?.presets?.custom,
+				undefined,
+				customOriginRef
+			);
 
 		case 'transition':
-			return mapItemsArrayPresets(features?.transition?.presets?.custom);
+			return mapItemsArrayPresets(
+				features?.transition?.presets?.custom,
+				undefined,
+				customOriginRef
+			);
 
 		case 'transform':
-			return mapItemsArrayPresets(features?.transform?.presets?.custom);
+			return mapItemsArrayPresets(
+				features?.transform?.presets?.custom,
+				undefined,
+				customOriginRef
+			);
 
 		case 'filter':
-			return mapItemsArrayPresets(features?.filter?.presets?.custom);
+			return mapItemsArrayPresets(
+				features?.filter?.presets?.custom,
+				undefined,
+				customOriginRef
+			);
 
 		default:
 			return [];

@@ -3,7 +3,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { default as memoize } from 'fast-memoize';
 import { select } from '@wordpress/data';
 
 /**
@@ -20,45 +19,41 @@ import { getBlockEditorSettings } from './index';
 import type { VariableItem } from './types';
 import { generateVariableString, parseVarString } from './utils';
 
-export const getWidthSizes: () => Array<VariableItem> | [] = memoize(
-	function (): Array<VariableItem> | [] {
-		const reference = {
-			type: 'preset',
-		};
+export const getWidthSizes = (): Array<VariableItem> | [] => {
+	const reference = {
+		type: 'preset',
+	};
 
-		const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
+	const layout = getBlockEditorSettings()?.__experimentalFeatures?.layout;
 
-		if (isUndefined(layout)) {
-			return [];
-		}
-
-		const items = [];
-
-		if (!isUndefined(layout?.contentSize)) {
-			items.push({
-				name: __('Content Width', 'blockera'),
-				id: 'contentSize',
-				value: layout?.contentSize,
-				reference,
-			});
-		}
-
-		if (!isUndefined(layout?.wideSize)) {
-			items.push({
-				name: __('Site Wide Width', 'blockera'),
-				id: 'wideSize',
-				value: layout?.wideSize,
-				reference,
-			});
-		}
-
-		return items;
+	if (isUndefined(layout)) {
+		return [];
 	}
-);
 
-export const getWidthSize: (id: string) => ?VariableItem = memoize(function (
-	id: string
-): ?VariableItem {
+	const items = [];
+
+	if (!isUndefined(layout?.contentSize)) {
+		items.push({
+			name: __('Content Width', 'blockera'),
+			id: 'contentSize',
+			value: layout?.contentSize,
+			reference,
+		});
+	}
+
+	if (!isUndefined(layout?.wideSize)) {
+		items.push({
+			name: __('Site Wide Width', 'blockera'),
+			id: 'wideSize',
+			value: layout?.wideSize,
+			reference,
+		});
+	}
+
+	return items;
+};
+
+export const getWidthSize = (id: string): ?VariableItem => {
 	let widthSize = getWidthSizes().find((item) => item.id === id);
 
 	// If not, check if the color is in the custom colors
@@ -71,18 +66,14 @@ export const getWidthSize: (id: string) => ?VariableItem = memoize(function (
 	}
 
 	return widthSize;
-});
+};
 
-export const getWidthSizeBy: (field: string, value: any) => ?VariableItem =
-	memoize(function (field: string, value: any): ?VariableItem {
-		return getWidthSizes().find((item) => item[field] === value);
-	});
+export const getWidthSizeBy = (field: string, value: any): ?VariableItem =>
+	getWidthSizes().find((item) => item[field] === value);
 
-export const getWidthSizeVAFromIdString: (
+export const getWidthSizeVAFromIdString = (
 	value: string
-) => ValueAddon | string = memoize(function (
-	value: string
-): ValueAddon | string {
+): ValueAddon | string => {
 	const widthSizeVar = getWidthSize(value);
 
 	if (widthSizeVar) {
@@ -105,13 +96,11 @@ export const getWidthSizeVAFromIdString: (
 	}
 
 	return value;
-});
+};
 
-export const getWidthSizeVAFromVarString: (
+export const getWidthSizeVAFromVarString = (
 	value: string
-) => ValueAddon | string = memoize(function (
-	value: string
-): ValueAddon | string {
+): ValueAddon | string => {
 	if (isString(value)) {
 		const { id, varString } = parseVarString(value, 'width-size');
 
@@ -140,4 +129,4 @@ export const getWidthSizeVAFromVarString: (
 	}
 
 	return value;
-});
+};

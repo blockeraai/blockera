@@ -45,14 +45,11 @@ export function generateVariableString({
 	}
 
 	switch (_reference) {
-		case 'custom':
-			_reference = 'blockera';
-			break;
-
 		case 'theme':
 		case 'plugin':
 		case 'core':
 		case 'core-pro':
+		case 'custom':
 			_reference = 'preset';
 			break;
 
@@ -87,14 +84,11 @@ export function generateAttributeVarStringFromVA(
 		let _reference: string = valueAddon?.settings?.reference?.type;
 
 		switch (_reference) {
-			case 'custom':
-				_reference = 'blockera';
-				break;
-
 			case 'theme':
 			case 'plugin':
 			case 'core':
 			case 'core-pro':
+			case 'custom':
 			default:
 				_reference = 'preset';
 				break;
