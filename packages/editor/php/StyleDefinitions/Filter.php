@@ -20,7 +20,7 @@ class Filter extends BaseStyleDefinition implements Repeater {
 
 		$value             = &$setting[ $cssProperty ];
 		$resolved_from_var = null;
-		$sortedFilters     = static::get_sorted_repeater_rows_from_value(
+		$sortedFilters     = static::getSortedRepeaterRowsFromValue(
 			$value,
 			static function ( array $sorted ): string {
 				$parts = array();
@@ -28,7 +28,7 @@ class Filter extends BaseStyleDefinition implements Repeater {
 					if ( ! is_array( $row ) || empty( $row['type'] ) || ! ( $row['isVisible'] ?? true ) ) {
 						continue;
 					}
-					$chunk = self::filter_row_to_css_value( $row );
+					$chunk = self::filterRowToCssValue( $row );
 					if ( '' !== $chunk ) {
 						$parts[] = $chunk;
 					}
@@ -55,7 +55,7 @@ class Filter extends BaseStyleDefinition implements Repeater {
 					continue;
 				}
 
-				$filter = self::filter_row_to_css_value( $filterSetting );
+				$filter = self::filterRowToCssValue( $filterSetting );
 				if ( '' === $filter ) {
 					continue;
 				}
@@ -85,7 +85,7 @@ class Filter extends BaseStyleDefinition implements Repeater {
 	/**
 	 * @param array $row Single filter repeater row (`type` must be set).
 	 */
-	protected static function filter_row_to_css_value( array $row ): string {
+	protected static function filterRowToCssValue( array $row ): string {
 		$filter_type = $row['type'];
 		$chunk       = '';
 

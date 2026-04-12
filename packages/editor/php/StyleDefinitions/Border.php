@@ -44,7 +44,7 @@ class Border extends BaseStyleDefinition {
 		}
 
 		if ( ! empty( $setting['_blockeraDeclarationOnly'] ) && ! empty( $setting['_blockeraGlobalPreset'] ) ) {
-			$this->declarations['border'] = self::preset_box_to_shorthand( $value );
+			$this->declarations['border'] = self::presetBoxToShorthand( $value );
 
 			return [];
 		}
@@ -84,15 +84,31 @@ class Border extends BaseStyleDefinition {
 	 * @return string The value of the side.
 	 */
 	protected function getSideValue( array $value ): string {
-		if (isset($value['valueType']) && 'variable' === $value['valueType']) {
-			$value = json_decode($value['settings']['value'], true)['all'] ?? [
-				'width' => '',
-				'style' => '',
-				'color' => '',
-			];
+		if ( isset( $value['valueType'] ) && 'variable' === $value['valueType'] ) {
+			$settings = $value['settings'] ?? array();
+			$box      = null;
+
+			if ( isset( $settings['border'] ) && is_array( $settings['border'] ) ) {
+				$box = $settings['border'];
+			} elseif ( isset( $settings['value'] ) && is_array( $settings['value'] ) ) {
+				$box = $settings['value'];
+			} elseif ( isset( $settings['value'] ) && is_string( $settings['value'] ) && '' !== $settings['value'] ) {
+				$decoded = json_decode( $settings['value'], true );
+				$box     = is_array( $decoded ) ? $decoded : null;
+			}
+
+			if ( is_array( $box ) && isset( $box['all'] ) && is_array( $box['all'] ) ) {
+				$value = $box['all'];
+			} else {
+				$value = array(
+					'width' => '',
+					'style' => '',
+					'color' => '',
+				);
+			}
 		}
 
-		return self::side_to_css_shorthand( $value );
+		return self::sideToCssShorthand( $value );
 	}
 
 	/**
@@ -100,7 +116,7 @@ class Border extends BaseStyleDefinition {
 	 *
 	 * @param array{width?:string,style?:string,color?:string|array} $side Side data.
 	 */
-	public static function side_to_css_shorthand( array $side ): string {
+	public static function sideToCssShorthand( array $side ): string {
 		$width = isset( $side['width'] ) && is_string( $side['width'] ) ? $side['width'] : '';
 		if ( '' === $width ) {
 			return '';
@@ -119,9 +135,9 @@ class Border extends BaseStyleDefinition {
 	 *
 	 * @param array $border Normalized border box (e.g. from theme.json sanitization).
 	 */
-	private static function preset_box_to_shorthand( array $border ): string {
+	private static function presetBoxToShorthand( array $border ): string {
 		if ( 'all' === ( $border['type'] ?? '' ) && isset( $border['all'] ) && is_array( $border['all'] ) ) {
-			return self::side_to_css_shorthand( $border['all'] );
+			return self::sideToCssShorthand( $border['all'] );
 		}
 
 		if ( 'custom' !== ( $border['type'] ?? '' ) ) {
@@ -136,7 +152,7 @@ class Border extends BaseStyleDefinition {
 				$out[] = '';
 				continue;
 			}
-			$out[] = self::side_to_css_shorthand( $border[ $edge ] );
+			$out[] = self::sideToCssShorthand( $border[ $edge ] );
 		}
 
 		return implode( ' ', $out );

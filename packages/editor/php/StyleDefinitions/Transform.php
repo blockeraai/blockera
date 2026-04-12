@@ -28,7 +28,7 @@ class Transform extends BaseStyleDefinition implements Repeater {
 		$value             = &$setting[ $cssProperty ];
 		$resolved_from_var = null;
 		$self              = $this;
-		$sortedTransforms  = static::get_sorted_repeater_rows_from_value(
+		$sortedTransforms  = static::getSortedRepeaterRowsFromValue(
 			$value,
 			static function ( array $sorted ) use ( $preset_mode, $self ): string {
 				$parts = array();
@@ -43,7 +43,7 @@ class Transform extends BaseStyleDefinition implements Repeater {
 					} elseif ( ! $self->isValidSetting( $item ) ) {
 						continue;
 					}
-					$one = self::transform_row_to_css_value( $item );
+					$one = self::transformRowToCssValue( $item );
 					if ( '' !== $one ) {
 						$parts[] = $one;
 					}
@@ -61,7 +61,7 @@ class Transform extends BaseStyleDefinition implements Repeater {
 				if ( ! is_array( $item ) || ! ( $item['isVisible'] ?? true ) ) {
 					continue;
 				}
-				$one = self::transform_row_to_css_value( $item );
+				$one = self::transformRowToCssValue( $item );
 				if ( '' === $one ) {
 					continue;
 				}
@@ -113,7 +113,7 @@ class Transform extends BaseStyleDefinition implements Repeater {
 	/**
 	 * @param array $row Single transform repeater row.
 	 */
-	protected static function transform_row_to_css_value( array $row ): string {
+	protected static function transformRowToCssValue( array $row ): string {
 		$type = isset( $row['type'] ) ? (string) $row['type'] : '';
 		$one  = '';
 
@@ -176,7 +176,7 @@ class Transform extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setTransform( array $setting ): void {
 
-		$transform = self::transform_row_to_css_value( $setting );
+		$transform = self::transformRowToCssValue( $setting );
 
 		if ( '' !== $transform ) {
 			$existingTransform = $this->declarations['transform'] ?? '';

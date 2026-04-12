@@ -23,7 +23,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 		$text_shadow_data    = &$setting[ $css_property ];
 		$resolved_from_var   = null;
 		$self                = $this;
-		$sorted_text_shadows = self::get_sorted_text_shadow_rows_from_value(
+		$sorted_text_shadows = self::getSortedTextShadowRowsFromValue(
 			$text_shadow_data,
 			static function ( array $sorted ) use ( $preset_mode, $self ): string {
 				$parts = array();
@@ -38,7 +38,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 					} elseif ( ! $self->isValidSetting( $row ) ) {
 						continue;
 					}
-					$layer = trim( self::text_shadow_row_to_css_value( $row ) );
+					$layer = trim( self::textShadowRowToCssValue( $row ) );
 					if ( '' !== $layer ) {
 						$parts[] = $layer;
 					}
@@ -60,7 +60,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 				if ( ! is_array( $row ) || ! ( $row['isVisible'] ?? true ) ) {
 					continue;
 				}
-				$layer = trim( self::text_shadow_row_to_css_value( $row ) );
+				$layer = trim( self::textShadowRowToCssValue( $row ) );
 				if ( '' === $layer ) {
 					continue;
 				}
@@ -99,22 +99,24 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 * @param string|null   $resolved_from_variable Output when variable resolves to final `text-shadow` value.
 	 * @return array<int, array<string, mixed>>
 	 */
-	protected static function get_sorted_text_shadow_rows_from_value( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
+	protected static function getSortedTextShadowRowsFromValue( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
 		$resolved_from_variable = null;
 
 		if ( ! isset( $value['valueType'] ) ) {
 			return blockera_get_sorted_repeater( $value );
 		}
-		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings']['value'] ) ) {
+		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings'] ) || ! is_array( $value['settings'] ) ) {
 			return [];
 		}
-		$raw = $value['settings']['value'];
-		if ( ! is_string( $raw ) || '' === $raw ) {
+		$decoded = static::decodeVariableRepeaterSettings( $value['settings'] );
+		if ( null === $decoded ) {
 			return [];
 		}
-		$decoded = json_decode( $raw, true );
-		if ( ! is_array( $decoded ) ) {
-			return [];
+		$raw_restore = '';
+		if ( isset( $value['settings']['value'] ) && is_string( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
+			$raw_restore = wp_json_encode( array( 'items' => $decoded['items'] ) );
 		}
 
 		$declaration_string = '';
@@ -160,11 +162,11 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 				return [];
 			}
 
-			$value['settings']['value'] = $raw;
+			$value['settings']['value'] = $raw_restore;
 		}
 
 		if ( is_string( $items ) ) {
-			return static::parse_css_text_shadow_to_items( $items );
+			return static::parseCssTextShadowToItems( $items );
 		}
 		if ( is_array( $items ) ) {
 			$repeater = array();
@@ -190,7 +192,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	/**
 	 * @param array $setting One text-shadow layer (repeater row).
 	 */
-	protected static function text_shadow_row_to_css_value( array $setting ): string {
+	protected static function textShadowRowToCssValue( array $setting ): string {
 		$x     = isset( $setting['x'] ) && '' !== $setting['x'] ? blockera_get_value_addon_real_value( $setting['x'] ) : '';
 		$y     = isset( $setting['y'] ) && '' !== $setting['y'] ? blockera_get_value_addon_real_value( $setting['y'] ) : '';
 		$blur  = isset( $setting['blur'] ) && '' !== $setting['blur'] ? blockera_get_value_addon_real_value( $setting['blur'] ) : '';
@@ -215,7 +217,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 		$previous_value = $this->declarations['text-shadow'] ?? '';
 		$has_previous   = '' !== $previous_value;
 
-		$text_shadow_value = ( $has_previous ? $previous_value . ', ' : '' ) . self::text_shadow_row_to_css_value( $setting );
+		$text_shadow_value = ( $has_previous ? $previous_value . ', ' : '' ) . self::textShadowRowToCssValue( $setting );
 
 		$this->setDeclaration( 'text-shadow', $text_shadow_value );
 	}
@@ -226,7 +228,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 * @param string $css Full text-shadow value.
 	 * @return string[] Non-empty layers.
 	 */
-	public static function split_text_shadow_list( string $css ): array {
+	public static function splitTextShadowList( string $css ): array {
 		$css = trim( $css );
 		if ( '' === $css ) {
 			return [];
@@ -250,7 +252,7 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 * @param string $layer Single layer.
 	 * @return array{x?:string,y?:string,blur?:string,color?:string,isVisible:bool,order?:int}|null
 	 */
-	public static function parse_single_text_shadow_layer( string $layer ): ?array {
+	public static function parseSingleTextShadowLayer( string $layer ): ?array {
 		$trimmed = trim( $layer );
 		if ( '' === $trimmed ) {
 			return null;
@@ -296,12 +298,12 @@ class TextShadow extends BaseStyleDefinition implements Repeater {
 	 * @param string $css CSS text-shadow.
 	 * @return array<int, array<string, mixed>>
 	 */
-	public static function parse_css_text_shadow_to_items( string $css ): array {
-		$layers = static::split_text_shadow_list( $css );
+	public static function parseCssTextShadowToItems( string $css ): array {
+		$layers = static::splitTextShadowList( $css );
 		$out    = [];
 		$i      = 0;
 		foreach ( $layers as $layer ) {
-			$parsed = static::parse_single_text_shadow_layer( $layer );
+			$parsed = static::parseSingleTextShadowLayer( $layer );
 			if ( null !== $parsed ) {
 				$parsed['order'] = $i++;
 				$out[]           = $parsed;

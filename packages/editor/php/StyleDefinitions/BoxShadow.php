@@ -53,11 +53,11 @@ class BoxShadow extends BaseStyleDefinition {
 		$declaration_only = ! empty( $setting['_blockeraDeclarationOnly'] );
 		$preset_mode      = ! empty( $setting['_blockeraGlobalPreset'] );
 
-		// Reference: variable payloads may replace `settings.value` with plain CSS inside get_sorted_box_shadow_rows_from_value().
+		// Reference: variable payloads may replace `settings.value` with plain CSS inside getSortedBoxShadowRowsFromValue().
 		$boxShadowData     = &$setting[ $cssProperty ];
 		$resolved_from_var = null;
 		$self              = $this;
-		$sortedShadows     = self::get_sorted_box_shadow_rows_from_value(
+		$sortedShadows     = self::getSortedBoxShadowRowsFromValue(
 			$boxShadowData,
 			static function ( array $sorted ) use ( $self, $preset_mode ): string {
 				$filtered = array();
@@ -181,22 +181,24 @@ class BoxShadow extends BaseStyleDefinition {
 	 * @param string|null   $resolved_from_variable Output when variable resolves to final `box-shadow` value.
 	 * @return array<int, array<string, mixed>>
 	 */
-	protected static function get_sorted_box_shadow_rows_from_value( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
+	protected static function getSortedBoxShadowRowsFromValue( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
 		$resolved_from_variable = null;
 
 		if ( ! isset( $value['valueType'] ) ) {
 			return blockera_get_sorted_repeater( $value );
 		}
-		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings']['value'] ) ) {
+		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings'] ) || ! is_array( $value['settings'] ) ) {
 			return array();
 		}
-		$raw = $value['settings']['value'];
-		if ( ! is_string( $raw ) || '' === $raw ) {
+		$decoded = static::decodeVariableRepeaterSettings( $value['settings'] );
+		if ( null === $decoded ) {
 			return array();
 		}
-		$decoded = json_decode( $raw, true );
-		if ( ! is_array( $decoded ) ) {
-			return array();
+		$raw_restore = '';
+		if ( isset( $value['settings']['value'] ) && is_string( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
+			$raw_restore = wp_json_encode( array( 'items' => $decoded['items'] ) );
 		}
 
 		$declaration_string = '';
@@ -243,7 +245,7 @@ class BoxShadow extends BaseStyleDefinition {
 			}
 
 			// Var resolution returned empty: restore JSON so row-by-row fallback still works.
-			$value['settings']['value'] = $raw;
+			$value['settings']['value'] = $raw_restore;
 		}
 
 		if ( is_string( $items ) ) {

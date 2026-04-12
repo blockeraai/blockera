@@ -50,14 +50,14 @@ class Transition extends BaseStyleDefinition implements Repeater {
 			return [];
 		}
 
-		// Reference: variable payloads may replace `settings.value` with plain CSS inside get_sorted_repeater_rows_from_value().
+		// Reference: variable payloads may replace `settings.value` with plain CSS inside getSortedRepeaterRowsFromValue().
 		$value             = &$setting[ $cssProperty ];
 		$declaration_only  = ! empty( $setting['_blockeraDeclarationOnly'] );
 		$preset_mode       = ! empty( $setting['_blockeraGlobalPreset'] );
 		$resolved_from_var = null;
 		$self              = $this;
 		// Variable + declaration/items: one shot via value-addon; otherwise sorted repeater rows (preset vs block rules in callback / loops below).
-		$sortedTransitions = static::get_sorted_repeater_rows_from_value(
+		$sortedTransitions = static::getSortedRepeaterRowsFromValue(
 			$value,
 			static function ( array $sorted ) use ( $preset_mode, $self ): string {
 				$parts = array();
@@ -69,12 +69,12 @@ class Transition extends BaseStyleDefinition implements Repeater {
 						if ( ! ( $row['isVisible'] ?? true ) ) {
 							continue;
 						}
-						$chunk = self::transition_row_to_css_value( $row, true );
+						$chunk = self::transitionRowToCssValue( $row, true );
 					} else {
 						if ( ! $self->isValidSetting( $row ) ) {
 							continue;
 						}
-						$chunk = self::transition_row_to_css_value( $row, false );
+						$chunk = self::transitionRowToCssValue( $row, false );
 					}
 					if ( '' !== $chunk ) {
 						$parts[] = $chunk;
@@ -93,7 +93,7 @@ class Transition extends BaseStyleDefinition implements Repeater {
 				if ( ! is_array( $transition ) || ! ( $transition['isVisible'] ?? true ) ) {
 					continue;
 				}
-				$chunk = self::transition_row_to_css_value( $transition, true );
+				$chunk = self::transitionRowToCssValue( $transition, true );
 				if ( '' === $chunk ) {
 					continue;
 				}
@@ -133,7 +133,7 @@ class Transition extends BaseStyleDefinition implements Repeater {
 	 * @param array $row Repeater row.
 	 * @param bool  $default_type_all When true, missing/empty `type` becomes `all` (presets); when false, empty type yields ''.
 	 */
-	protected static function transition_row_to_css_value( array $row, bool $default_type_all = false ): string {
+	protected static function transitionRowToCssValue( array $row, bool $default_type_all = false ): string {
 		$type = $row['type'] ?? '';
 		if ( ! is_string( $type ) || '' === $type ) {
 			if ( ! $default_type_all ) {
@@ -176,7 +176,7 @@ class Transition extends BaseStyleDefinition implements Repeater {
 	 */
 	protected function setTransition( array $setting): void {
 
-		$transition = self::transition_row_to_css_value( $setting, false );
+		$transition = self::transitionRowToCssValue( $setting, false );
 		if ( '' === $transition ) {
 			return;
 		}

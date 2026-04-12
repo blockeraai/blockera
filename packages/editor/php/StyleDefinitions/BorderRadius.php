@@ -13,23 +13,26 @@ class BorderRadius extends BaseStyleDefinition {
 	 * @param mixed $field Raw field value from block attributes.
 	 * @return mixed
 	 */
-	private static function unwrap_radius_variable_field( $field ) {
+	private static function unwrapRadiusVariableField( $field ) {
 		if ( ! is_array( $field ) || ! isset( $field['valueType'] ) || 'variable' !== $field['valueType'] ) {
 			return $field;
 		}
 
-		$raw = $field['settings']['value'] ?? '';
-		if ( ! is_string( $raw ) || '' === $raw ) {
-			return $field;
-		}
+		$settings = $field['settings'] ?? array();
+		$raw      = $settings['value'] ?? null;
 
-		$trim = ltrim( $raw );
-		if ( '' === $trim || '{' !== $trim[0] ) {
-			return $field;
-		}
-
-		$decoded = json_decode( $raw, true );
-		if ( ! is_array( $decoded ) ) {
+		if ( is_array( $raw ) ) {
+			$decoded = $raw;
+		} elseif ( is_string( $raw ) && '' !== $raw ) {
+			$trim = ltrim( $raw );
+			if ( '' === $trim || '{' !== $trim[0] ) {
+				return $field;
+			}
+			$decoded = json_decode( $raw, true );
+			if ( ! is_array( $decoded ) ) {
+				return $field;
+			}
+		} else {
 			return $field;
 		}
 
@@ -72,7 +75,7 @@ class BorderRadius extends BaseStyleDefinition {
 		if ( 'all' === $value_type ) {
 			$config_all                 = $border_radius_config['all'];
 			$all_value                  = $value['all'] ?? null;
-			$resolved                   = self::unwrap_radius_variable_field( $all_value );
+			$resolved                   = self::unwrapRadiusVariableField( $all_value );
 			$declaration[ $config_all ] = ! empty( $resolved )
 				? blockera_get_value_addon_real_value( $resolved )
 				: '';
@@ -83,25 +86,25 @@ class BorderRadius extends BaseStyleDefinition {
 			$config_bottom_left  = $border_radius_config['bottomLeft'];
 
 			$top_left_value                  = $value['topLeft'] ?? null;
-			$resolved_tl                     = self::unwrap_radius_variable_field( $top_left_value );
+			$resolved_tl                     = self::unwrapRadiusVariableField( $top_left_value );
 			$declaration[ $config_top_left ] = ! empty( $resolved_tl )
 				? blockera_get_value_addon_real_value( $resolved_tl )
 				: '';
 
 			$top_right_value                  = $value['topRight'] ?? null;
-			$resolved_tr                      = self::unwrap_radius_variable_field( $top_right_value );
+			$resolved_tr                      = self::unwrapRadiusVariableField( $top_right_value );
 			$declaration[ $config_top_right ] = ! empty( $resolved_tr )
 				? blockera_get_value_addon_real_value( $resolved_tr )
 				: '';
 
 			$bottom_right_value                  = $value['bottomRight'] ?? null;
-			$resolved_br                         = self::unwrap_radius_variable_field( $bottom_right_value );
+			$resolved_br                         = self::unwrapRadiusVariableField( $bottom_right_value );
 			$declaration[ $config_bottom_right ] = ! empty( $resolved_br )
 				? blockera_get_value_addon_real_value( $resolved_br )
 				: '';
 
 			$bottom_left_value                  = $value['bottomLeft'] ?? null;
-			$resolved_bl                        = self::unwrap_radius_variable_field( $bottom_left_value );
+			$resolved_bl                        = self::unwrapRadiusVariableField( $bottom_left_value );
 			$declaration[ $config_bottom_left ] = ! empty( $resolved_bl )
 				? blockera_get_value_addon_real_value( $resolved_bl )
 				: '';

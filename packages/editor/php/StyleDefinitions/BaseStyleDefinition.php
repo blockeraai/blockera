@@ -485,7 +485,7 @@ abstract class BaseStyleDefinition {
 	 * @param array $setting Same shape as the inner `css( array $setting )` entry point.
 	 * @return array Map of selector → CSS declarations, as returned by `css()`.
 	 */
-	public function compute_css_declarations( array $setting ): array {
+	public function computeCssDeclarations( array $setting ): array {
 		$this->css          = array();
 		$this->declarations = array();
 
@@ -714,7 +714,7 @@ abstract class BaseStyleDefinition {
 	 * @param array  $setting         Block-shaped setting; set `_blockeraGlobalPreset` for preset repeater row rules.
 	 * @param string $declaration_key Declaration key to read (e.g. transition, transform, filter, text-shadow, border).
 	 */
-	public function get_preset_css_declaration_value( array $setting, string $declaration_key ): string {
+	public function getPresetCssDeclarationValue( array $setting, string $declaration_key ): string {
 		$this->declarations                  = [];
 		$this->css                           = [];
 		$setting['_blockeraDeclarationOnly'] = true;
@@ -724,9 +724,34 @@ abstract class BaseStyleDefinition {
 	}
 
 	/**
+	 * Decode value-addon variable settings for repeater-style CSS (transition, transform, filter).
+	 * Supports top-level `items` (global preset var picker), JSON string or array in `value`.
+	 *
+	 * @param array $settings Variable payload `settings` array.
+	 * @return array<string, mixed>|null Shape with optional `declaration` and `items`.
+	 */
+	protected static function decodeVariableRepeaterSettings( array $settings ): ?array {
+		if ( isset( $settings['items'] ) && is_array( $settings['items'] ) ) {
+			return array( 'items' => $settings['items'] );
+		}
+		$raw = $settings['value'] ?? null;
+		if ( is_array( $raw ) ) {
+			return $raw;
+		}
+		if ( ! is_string( $raw ) || '' === $raw ) {
+			return null;
+		}
+		$decoded = json_decode( $raw, true );
+
+		return is_array( $decoded ) ? $decoded : null;
+	}
+
+	/**
 	 * Sorted repeater rows from stored value (raw map or `valueType: variable` + JSON).
 	 *
-	 * Variable branch: JSON may include `declaration` or `items`. The computed CSS string is written to
+	 * Variable branch: `settings.value` may be a JSON string or array; global preset variables from the
+	 * picker may use `settings.items` instead. Payload may include `declaration` or `items`. The computed
+	 * CSS string is written to
 	 * `$value['settings']['value']`, then `blockera_get_value_addon_real_value( $value )` runs for the final
 	 * `var(--token, fallback)` value. When that succeeds, `$resolved_from_variable` is set and `[]` is returned.
 	 *
@@ -735,22 +760,26 @@ abstract class BaseStyleDefinition {
 	 * @param string|null   $resolved_from_variable Output: final declaration string when variable path resolves.
 	 * @return array<int, mixed>
 	 */
-	protected static function get_sorted_repeater_rows_from_value( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
+	protected static function getSortedRepeaterRowsFromValue( array &$value, ?callable $build_declaration = null, ?string &$resolved_from_variable = null ): array {
 		$resolved_from_variable = null;
 
 		if ( ! isset( $value['valueType'] ) ) {
 			return blockera_get_sorted_repeater( $value );
 		}
-		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings']['value'] ) ) {
+		if ( 'variable' !== ( $value['valueType'] ?? '' ) || ! isset( $value['settings'] ) || ! is_array( $value['settings'] ) ) {
 			return [];
 		}
-		$raw = $value['settings']['value'];
-		if ( ! is_string( $raw ) || '' === $raw ) {
+
+		$decoded = static::decodeVariableRepeaterSettings( $value['settings'] );
+		if ( null === $decoded ) {
 			return [];
 		}
-		$decoded = json_decode( $raw, true );
-		if ( ! is_array( $decoded ) ) {
-			return [];
+
+		$raw_restore = '';
+		if ( isset( $value['settings']['value'] ) && is_string( $value['settings']['value'] ) ) {
+			$raw_restore = $value['settings']['value'];
+		} elseif ( isset( $decoded['items'] ) && is_array( $decoded['items'] ) ) {
+			$raw_restore = wp_json_encode( array( 'items' => $decoded['items'] ) );
 		}
 
 		$declaration_string = '';
@@ -794,7 +823,7 @@ abstract class BaseStyleDefinition {
 		}
 
 		// Var resolution returned empty (e.g. missing token): put JSON back so callers can still expand `items` row-by-row.
-		$value['settings']['value'] = $raw;
+		$value['settings']['value'] = $raw_restore;
 		$items                      = $decoded['items'] ?? [];
 		if ( ! is_array( $items ) ) {
 			return [];
