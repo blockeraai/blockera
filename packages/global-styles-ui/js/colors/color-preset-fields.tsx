@@ -2,11 +2,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-} from '@wordpress/components';
 import { useCallback, memo, useContext } from '@wordpress/element';
 
 /**
@@ -105,30 +100,22 @@ function ColorPresetFieldsComponent({
 			<ColorControl
 				label={__('Color', 'blockera')}
 				field="color"
-				columns="columns-2"
+				columns="1fr 3fr"
 				onChange={handleValueChange}
 			/>
 		</ControlContextProvider>
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<SharedPresetControls
-							itemId={presetId}
-							variable={colorItem}
-							name={colorItem.name}
-							slug={colorItem.slug}
-							allSlugs={getAllColorSlugs(colors)}
-						>
-							{colorValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+		<SharedPresetControls
+			itemId={presetId}
+			variable={colorItem}
+			name={colorItem.name}
+			slug={colorItem.slug}
+			allSlugs={getAllColorSlugs(colors)}
+		>
+			{colorValueControls}
+		</SharedPresetControls>
 	);
 }
 

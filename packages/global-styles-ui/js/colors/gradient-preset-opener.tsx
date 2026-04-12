@@ -64,10 +64,10 @@ export function GradientPresetOpener({
 					<ColorIndicator
 						type="gradient"
 						value={variable.gradient}
-						size={20}
+						size={18}
 					/>
 				) : (
-					__('EMPTY', 'blockera')
+					<ColorIndicator type="color" value="none" size={18} />
 				)}
 			</span>
 

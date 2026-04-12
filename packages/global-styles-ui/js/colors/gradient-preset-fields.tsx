@@ -2,11 +2,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-} from '@wordpress/components';
 import { useCallback, memo, useContext } from '@wordpress/element';
 
 /**
@@ -109,30 +104,22 @@ function GradientPresetFieldsComponent({
 				label={label}
 				field="gradient-bar"
 				height={40}
-				columns="columns-2"
+				columns="1fr 3fr"
 				onChange={handleGradientChange}
 			/>
 		</ControlContextProvider>
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<SharedPresetControls
-							itemId={presetId}
-							variable={gradientItem}
-							name={gradientItem.name}
-							slug={gradientItem.slug}
-							allSlugs={getAllGradientSlugs(gradients as any)}
-						>
-							{gradientValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+		<SharedPresetControls
+			itemId={presetId}
+			variable={gradientItem}
+			name={gradientItem.name}
+			slug={gradientItem.slug}
+			allSlugs={getAllGradientSlugs(gradients as any)}
+		>
+			{gradientValueControls}
+		</SharedPresetControls>
 	);
 }
 

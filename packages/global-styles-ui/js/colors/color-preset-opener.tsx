@@ -69,10 +69,10 @@ export function ColorPresetOpener({
 								: 'color'
 						}
 						value={variable.color}
-						size={20}
+						size={18}
 					/>
 				) : (
-					__('EMPTY', 'blockera')
+					<ColorIndicator type="color" value="none" size={18} />
 				)}
 			</span>
 
