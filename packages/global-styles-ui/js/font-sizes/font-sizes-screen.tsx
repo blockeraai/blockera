@@ -4,11 +4,15 @@
 import { __, isRTL } from '@wordpress/i18n';
 import {
 	FlexItem,
-	__experimentalVStack as VStack,
 	__experimentalHStack as HStack,
 	__experimentalItemGroup as ItemGroup,
 } from '@wordpress/components';
 import { Icon, chevronLeft, chevronRight } from '@wordpress/icons';
+
+/**
+ * Blockera dependencies
+ */
+import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -34,10 +38,13 @@ function FontSizesScreen() {
 	};
 
 	return (
-		<VStack spacing={2} className="blockera-font-size-presets-count">
-			<HStack justify="space-between">
-				<Subtitle level={3}>{__('Font Sizes', 'blockera')}</Subtitle>
-			</HStack>
+		<Flex
+			direction="column"
+			gap={'12px'}
+			className="blockera-font-size-presets-count"
+		>
+			<Subtitle level={3}>{__('Font Sizes', 'blockera')}</Subtitle>
+
 			<ItemGroup isBordered isSeparated>
 				<NavigationButtonAsItem
 					path="/typography/font-sizes"
@@ -51,7 +58,7 @@ function FontSizesScreen() {
 					</HStack>
 				</NavigationButtonAsItem>
 			</ItemGroup>
-		</VStack>
+		</Flex>
 	);
 }
 
