@@ -217,7 +217,7 @@ function AllSidesValue({ all }: { all: NonNullable<BoxBorderValue['all']> }) {
 	const hasAny = w || st || c;
 
 	if (!hasAny) {
-		return <span>{__('EMPTY', 'blockera')}</span>;
+		return <></>;
 	}
 
 	return (

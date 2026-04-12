@@ -2,18 +2,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
 import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
+	Flex,
 	BorderRadiusControl,
 	RepeaterContext,
 	useControlContext,
@@ -160,27 +155,19 @@ function BorderRadiusSizeComponent({
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<BorderRadiusPresetPreview size={sizeForPreview} />
-						</FlexItem>
+		<Flex direction="column" gap="15px">
+			<BorderRadiusPresetPreview size={sizeForPreview} />
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={borderRadiusSize}
-							name={borderRadiusSize.name}
-							slug={borderRadiusSize.slug}
-							allSlugs={getAllBorderRadiusSlugs(sizes)}
-						>
-							{borderRadiusValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={borderRadiusSize}
+				name={borderRadiusSize.name}
+				slug={borderRadiusSize.slug}
+				allSlugs={getAllBorderRadiusSlugs(sizes)}
+			>
+				{borderRadiusValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 

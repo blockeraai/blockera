@@ -2,18 +2,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
 import { useCallback, memo, useContext } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
+	Flex,
 	BoxBorderControl,
 	RepeaterContext,
 	useControlContext,
@@ -136,27 +131,19 @@ function BorderPresetSizeComponent({
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<BorderPresetPreview border={borderValue} />
-						</FlexItem>
+		<Flex direction="column" gap="15px">
+			<BorderPresetPreview border={borderValue} />
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={borderPreset}
-							name={borderPreset.name}
-							slug={borderPreset.slug}
-							allSlugs={getAllBorderPresetSlugs(presets)}
-						>
-							{borderPresetValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={borderPreset}
+				name={borderPreset.name}
+				slug={borderPreset.slug}
+				allSlugs={getAllBorderPresetSlugs(presets)}
+			>
+				{borderPresetValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 
