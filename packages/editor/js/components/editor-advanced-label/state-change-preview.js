@@ -10,8 +10,9 @@ import type { MixedElement } from 'react';
  * Blockera dependencies
  */
 import {
+	CHANGESET_PREVIEW_VALUE_ADDON_CLASS,
 	ColorIndicator,
-	getValueAddonRealValue,
+	ValueAddonDisplay,
 	isValid as isValidValueAddon,
 } from '@blockera/controls';
 import { isObject } from '@blockera/utils';
@@ -49,8 +50,9 @@ const formatStringPreview = (raw: mixed): string => {
 		return '';
 	}
 
+	// $FlowFixMe[incompatible-call] mixed may be a value addon object
 	if (isObject(raw) && isValidValueAddon(raw)) {
-		return formatStringPreview(getValueAddonRealValue(raw));
+		return '';
 	}
 
 	if (
@@ -66,6 +68,25 @@ const formatStringPreview = (raw: mixed): string => {
 	}
 
 	return String(raw);
+};
+
+/** Top-level value addon or `{ value: <addon> }` wrapper from control slices. */
+const getPreviewValueAddon = (resolved: mixed): null | mixed => {
+	// $FlowFixMe[incompatible-call] mixed attribute slice may be a value addon
+	if (isObject(resolved) && isValidValueAddon(resolved)) {
+		return resolved;
+	}
+
+	if (isObject(resolved)) {
+		// $FlowFixMe[incompatible-cast] object-shaped control value slice
+		const inner = (resolved: any).value;
+		// $FlowFixMe[incompatible-call]
+		if (typeof inner !== 'undefined' && isValidValueAddon(inner)) {
+			return inner;
+		}
+	}
+
+	return null;
 };
 
 type Props = {
@@ -99,7 +120,19 @@ export default function StateChangePreview({
 			!(typeof custom === 'number' && Number.isNaN(custom))
 		) {
 			if (isValidElement(custom)) {
+				// $FlowFixMe[incompatible-return] preview hook returns mixed
 				return custom;
+			}
+
+			// $FlowFixMe[incompatible-call] mixed may be a value addon object
+			if (isObject(custom) && isValidValueAddon(custom)) {
+				return (
+					<ValueAddonDisplay
+						// $FlowFixMe[incompatible-type] preview hook returns mixed
+						value={custom}
+						className={CHANGESET_PREVIEW_VALUE_ADDON_CLASS}
+					/>
+				);
 			}
 
 			const text =
@@ -126,6 +159,18 @@ export default function StateChangePreview({
 
 	switch (previewConfig.type) {
 		case 'color': {
+			const addonValue = getPreviewValueAddon(resolvedValue);
+
+			if (addonValue !== null) {
+				return (
+					<ValueAddonDisplay
+						// $FlowFixMe[incompatible-type] attribute slice is mixed
+						value={addonValue}
+						className={CHANGESET_PREVIEW_VALUE_ADDON_CLASS}
+					/>
+				);
+			}
+
 			const indicatorType = previewConfig.indicatorType ?? 'color';
 
 			return (
@@ -139,6 +184,18 @@ export default function StateChangePreview({
 		}
 
 		case 'string': {
+			const addonValue = getPreviewValueAddon(resolvedValue);
+
+			if (addonValue !== null) {
+				return (
+					<ValueAddonDisplay
+						// $FlowFixMe[incompatible-type] attribute slice is mixed
+						value={addonValue}
+						className={CHANGESET_PREVIEW_VALUE_ADDON_CLASS}
+					/>
+				);
+			}
+
 			const text = formatStringPreview(resolvedValue);
 
 			if (text === '') {

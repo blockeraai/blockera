@@ -460,6 +460,11 @@
 				color: inherit;
 			}
 
+			.blockera-control-states-changes-item__preview-value-addon {
+				max-width: 140px;
+				min-width: 0;
+			}
+
 			&::after {
 				content: "";
 				width: calc(var(--item-padding) - 12px);
