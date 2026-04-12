@@ -2,18 +2,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
 import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	TransformControl,
 	RepeaterContext,
@@ -178,29 +173,19 @@ function TransformPresetSizeComponent({
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<TransformPresetPreview
-								items={transformPreset.items}
-							/>
-						</FlexItem>
+		<Flex direction="column" gap="15px">
+			<TransformPresetPreview items={transformPreset.items} />
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={transformPreset}
-							name={transformPreset.name}
-							slug={transformPreset.slug}
-							allSlugs={getAllTransformSlugs(presets)}
-						>
-							{transformPresetValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={transformPreset}
+				name={transformPreset.name}
+				slug={transformPreset.slug}
+				allSlugs={getAllTransformSlugs(presets)}
+			>
+				{transformPresetValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 

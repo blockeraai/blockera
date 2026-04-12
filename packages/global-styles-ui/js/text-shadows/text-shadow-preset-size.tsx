@@ -2,18 +2,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
 import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	TextShadowControl,
 	RepeaterContext,
@@ -167,31 +162,21 @@ function TextShadowPresetSizeComponent({
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<TextShadowPresetPreview
-								shadow={textShadowPresetItemsToCss(
-									textShadowPreset.items
-								)}
-							/>
-						</FlexItem>
+		<Flex direction="column" gap="15px">
+			<TextShadowPresetPreview
+				shadow={textShadowPresetItemsToCss(textShadowPreset.items)}
+			/>
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={textShadowPreset}
-							name={textShadowPreset.name}
-							slug={textShadowPreset.slug}
-							allSlugs={getAllTextShadowSlugs(presets)}
-						>
-							{textShadowPresetValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={textShadowPreset}
+				name={textShadowPreset.name}
+				slug={textShadowPreset.slug}
+				allSlugs={getAllTextShadowSlugs(presets)}
+			>
+				{textShadowPresetValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 

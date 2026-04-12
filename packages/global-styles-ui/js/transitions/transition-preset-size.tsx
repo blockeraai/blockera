@@ -2,18 +2,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
 import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	TransitionControl,
 	RepeaterContext,
@@ -169,29 +164,19 @@ function TransitionPresetSizeComponent({
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<TransitionPresetPreview
-								items={transitionPreset.items}
-							/>
-						</FlexItem>
+		<Flex direction="column" gap="15px">
+			<TransitionPresetPreview items={transitionPreset.items} />
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={transitionPreset}
-							name={transitionPreset.name}
-							slug={transitionPreset.slug}
-							allSlugs={getAllTransitionSlugs(presets)}
-						>
-							{transitionPresetValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={transitionPreset}
+				name={transitionPreset.name}
+				slug={transitionPreset.slug}
+				allSlugs={getAllTransitionSlugs(presets)}
+			>
+				{transitionPresetValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 

@@ -2,18 +2,13 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
 import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
 
 /**
  * Blockera dependencies
  */
 import {
+	Flex,
 	BaseControl,
 	FilterControl,
 	RepeaterContext,
@@ -176,27 +171,19 @@ function FilterPresetSizeComponent({
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<FilterPresetPreview items={filterPreset.items} />
-						</FlexItem>
+		<Flex direction="column" gap="15px">
+			<FilterPresetPreview items={filterPreset.items} />
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={filterPreset}
-							name={filterPreset.name}
-							slug={filterPreset.slug}
-							allSlugs={getAllFilterSlugs(presets)}
-						>
-							{filterPresetValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={filterPreset}
+				name={filterPreset.name}
+				slug={filterPreset.slug}
+				allSlugs={getAllFilterSlugs(presets)}
+			>
+				{filterPresetValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 
