@@ -409,7 +409,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 				<Flex gap={15} direction="column">
 					<NoticeControl type="warning">
 						{__(
-							'Changing the preset ID will break existing connections. Blocks using the old ID will lose their preset unless updated manually.',
+							'Changing the variable ID will break existing connections. Blocks using the old ID will lose their variable unless updated manually.',
 							'blockera'
 						)}
 					</NoticeControl>
@@ -421,7 +421,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 					>
 						<CheckboxControl
 							checkboxLabel={__(
-								'I accept that blocks using the old ID will lose their preset.',
+								'I accept that blocks using the old ID will lose their variables.',
 								'blockera'
 							)}
 							onChange={handleConfirmSlugChange}
