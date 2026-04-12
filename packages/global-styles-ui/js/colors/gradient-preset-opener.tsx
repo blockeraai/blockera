@@ -13,6 +13,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
 /**
  * Internal dependencies
  */
+import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types';
 
 export type GradientPresetOpenerProps = {
@@ -35,9 +36,12 @@ export function GradientPresetOpener({
 	return (
 		<div
 			className={controlInnerClassNames('repeater-group-header')}
-			onClick={(event: React.MouseEvent) =>
-				isOpenPopoverEvent(event) && setOpen(!isOpen)
-			}
+			onClick={getPresetRepeaterHeaderOnClick({
+				item: variable,
+				isOpen,
+				setOpen,
+				isOpenPopoverEvent,
+			})}
 			aria-label={sprintf(
 				/* translators: %d: The item number (1-based index) */
 				__('Gradient preset %d', 'blockera'),

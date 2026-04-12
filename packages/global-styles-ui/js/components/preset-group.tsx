@@ -14,8 +14,10 @@ import {
 	UpgradePrompt,
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
+	cleanupRepeater,
+	useVarPickerPresetContext,
 } from '@blockera/controls';
-import { noop, pascalCase } from '@blockera/utils';
+import { noop, pascalCase, isObject } from '@blockera/utils';
 import { controlClassNames } from '@blockera/classnames';
 
 /**
@@ -24,6 +26,10 @@ import { controlClassNames } from '@blockera/classnames';
 import type { VariablesType, VariableType } from './types.ts';
 import { PresetStateContainer } from './preset-state-container';
 import { getPresetDeleteConfirmWarningText } from './preset-origin-utils';
+import {
+	buildPresetVariablePickerPayload,
+	stripIsSelectedFromRepeaterItems,
+} from './variable-picker-preset-utils';
 
 export type PresetFieldsPropsResolver = (
 	item: VariableType | any,
@@ -72,6 +78,10 @@ type PresetsProps = {
 	popoverTitle: string | ((itemId: string, item: VariableType) => string);
 	presetFieldsPropsResolver?: PresetFieldsPropsResolver;
 	enableCreatingStep?: boolean;
+	selectable?: boolean;
+	valueCleanup?: (items: Object) => Object;
+	onSelectableItemActivate?: (itemId: string, item: Object) => void;
+	showItemEditButton?: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -114,6 +124,10 @@ const Presets = ({
 	presetFieldsPropsResolver,
 	enableCreatingStep = true,
 	repeaterItemHeader: RepeaterItemHeader,
+	selectable = false,
+	valueCleanup: repeaterValueCleanup,
+	onSelectableItemActivate,
+	showItemEditButton = false,
 	...props
 }: PresetsProps) => {
 	const renderPromo = useCallback(
@@ -207,6 +221,10 @@ const Presets = ({
 			defaultRepeaterItemValue={defaultPresetValue}
 			enableCreatingStep={enableCreatingStep}
 			className={controlClassNames('preset-group', controlName)}
+			selectable={selectable}
+			valueCleanup={repeaterValueCleanup}
+			onSelectableItemActivate={onSelectableItemActivate}
+			showItemEditButton={showItemEditButton}
 			{...props}
 		/>
 	);
@@ -225,6 +243,65 @@ export const PresetGroup = ({
 	presetFieldsPropsResolver,
 	enableCreatingStep = true,
 }: PresetGroupPropsType) => {
+	const pickerCtx = useVarPickerPresetContext();
+	const isVariablePicker =
+		pickerCtx.active === true && typeof pickerCtx.variableType === 'string';
+
+	const cleanRepeaterForPersist = useCallback(
+		(raw: Object) => {
+			const cleaned = cleanupRepeater(raw as Record<string, unknown>);
+			if (!isVariablePicker) {
+				return cleaned;
+			}
+			return stripIsSelectedFromRepeaterItems(
+				cleaned as Record<string, unknown>
+			);
+		},
+		[isVariablePicker]
+	);
+
+	const handleRepeaterOnChange = useCallback(
+		(newValue: Object) => {
+			if (
+				isObject(newValue) &&
+				Object.prototype.hasOwnProperty.call(
+					newValue,
+					'modifyControlValue'
+				) &&
+				(newValue as { value?: Object }).value !== undefined &&
+				(newValue as { value?: Object }).value !== null
+			) {
+				onChange(
+					cleanRepeaterForPersist(
+						(newValue as { value: Object }).value
+					)
+				);
+				return;
+			}
+			onChange(newValue);
+		},
+		[onChange, cleanRepeaterForPersist]
+	);
+
+	const handleSelectableItemActivate = useCallback(
+		(_itemId: string, item: Object) => {
+			if (
+				!isVariablePicker ||
+				!pickerCtx.controlProps?.handleOnClickVar ||
+				!pickerCtx.variableType
+			) {
+				return;
+			}
+			const payload = buildPresetVariablePickerPayload(
+				item as Record<string, unknown>,
+				origin,
+				pickerCtx.variableType
+			);
+			pickerCtx.controlProps.handleOnClickVar(payload as never);
+		},
+		[isVariablePicker, pickerCtx, origin]
+	);
+
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}`,
@@ -246,7 +323,7 @@ export const PresetGroup = ({
 						label={label}
 						onClose={noop}
 						origin={origin}
-						onChange={onChange}
+						onChange={handleRepeaterOnChange}
 						variables={variables}
 						controlName={controlName}
 						PresetFields={PresetFields}
@@ -256,6 +333,18 @@ export const PresetGroup = ({
 						defaultPresetValue={defaultPresetValue}
 						presetFieldsPropsResolver={presetFieldsPropsResolver}
 						enableCreatingStep={enableCreatingStep}
+						selectable={isVariablePicker}
+						valueCleanup={
+							isVariablePicker
+								? cleanRepeaterForPersist
+								: undefined
+						}
+						onSelectableItemActivate={
+							isVariablePicker
+								? handleSelectableItemActivate
+								: undefined
+						}
+						showItemEditButton={isVariablePicker}
 					/>
 				</BaseControl>
 			</ControlContextProvider>

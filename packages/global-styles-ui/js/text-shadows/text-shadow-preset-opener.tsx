@@ -13,6 +13,7 @@ import { Flex } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTextShadowPreset } from './utils';
 import {
@@ -74,9 +75,12 @@ export function TextShadowPresetOpener({
 				controlInnerClassNames('repeater-group-header'),
 				'blockera-text-shadow-preset-opener-header'
 			)}
-			onClick={(event: React.MouseEvent) =>
-				isOpenPopoverEvent(event) && setOpen(!isOpen)
-			}
+			onClick={getPresetRepeaterHeaderOnClick({
+				item: variable,
+				isOpen,
+				setOpen,
+				isOpenPopoverEvent,
+			})}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Text shadow preset %d', 'blockera'),

@@ -13,6 +13,7 @@ import { Flex, getTypeLabel } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTransitionPreset } from './utils';
 import { getTransitionPresetAccessibilityDescription } from './utils';
@@ -68,9 +69,12 @@ export function TransitionPresetOpener({
 				controlInnerClassNames('repeater-group-header'),
 				'blockera-transition-preset-opener-header'
 			)}
-			onClick={(event: React.MouseEvent) =>
-				isOpenPopoverEvent(event) && setOpen(!isOpen)
-			}
+			onClick={getPresetRepeaterHeaderOnClick({
+				item: variable,
+				isOpen,
+				setOpen,
+				isOpenPopoverEvent,
+			})}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Transition preset %d', 'blockera'),

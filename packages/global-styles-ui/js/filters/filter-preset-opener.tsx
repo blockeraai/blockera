@@ -13,6 +13,7 @@ import { Flex } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpFilterPreset } from './utils';
 import { getFilterPresetAccessibilityDescription } from './utils';
@@ -65,9 +66,12 @@ export function FilterPresetOpener({
 				controlInnerClassNames('repeater-group-header'),
 				'blockera-filter-preset-opener-header'
 			)}
-			onClick={(event: React.MouseEvent) =>
-				isOpenPopoverEvent(event) && setOpen(!isOpen)
-			}
+			onClick={getPresetRepeaterHeaderOnClick({
+				item: variable,
+				isOpen,
+				setOpen,
+				isOpenPopoverEvent,
+			})}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Filter preset %d', 'blockera'),

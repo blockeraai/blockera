@@ -13,6 +13,7 @@ import { Flex } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTransformPreset } from './utils';
 import { getTransformPresetAccessibilityDescription } from './utils';
@@ -66,9 +67,12 @@ export function TransformPresetOpener({
 				controlInnerClassNames('repeater-group-header'),
 				'blockera-transform-preset-opener-header'
 			)}
-			onClick={(event: React.MouseEvent) =>
-				isOpenPopoverEvent(event) && setOpen(!isOpen)
-			}
+			onClick={getPresetRepeaterHeaderOnClick({
+				item: variable,
+				isOpen,
+				setOpen,
+				isOpenPopoverEvent,
+			})}
 			aria-label={sprintf(
 				// translators: %d: The item number (1-based index)
 				__('Transform preset %d', 'blockera'),

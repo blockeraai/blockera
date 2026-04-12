@@ -22,6 +22,10 @@ export interface VariableType {
 	 * While true (new preset, before first close), name and ID stay linked in the editor.
 	 */
 	creatingStep?: boolean;
+	/**
+	 * Set by the repeater when the preset list is selectable (e.g. variable picker).
+	 */
+	selectable?: boolean;
 }
 
 export type VariablesType = Array<VariableType>;
