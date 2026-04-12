@@ -8,6 +8,7 @@ export { sizeConfig } from './size';
 export { layoutConfig } from './layout';
 export { customStyleConfig } from './custom-style';
 export { flexChildConfig } from './flex-child';
+export { gridChildConfig } from './grid-child';
 export { mouseConfig } from './mouse';
 export { entranceAnimationConfig } from './entrance-animation';
 export { scrollAnimationConfig } from './scroll-animation';

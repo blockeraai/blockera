@@ -211,18 +211,18 @@ export function NumberInput({
 				{...getDragEvent()}
 			/>
 
-			{arrows && (
-				<InputArrows
-					value={value}
-					setValue={setValue}
-					disabled={disabled}
-					min={min}
-					max={max}
-					size={size}
-				/>
-			)}
-
 			<div className={controlInnerClassNames('input-actions')}>
+				{arrows && (
+					<InputArrows
+						value={value}
+						setValue={setValue}
+						disabled={disabled}
+						min={min}
+						max={max}
+						size={size}
+					/>
+				)}
+
 				{actions}
 			</div>
 

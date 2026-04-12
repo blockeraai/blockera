@@ -33,6 +33,7 @@ import { PositionExtension } from '../position';
 import { SizeExtension } from '../size';
 import { LayoutExtension } from '../layout';
 import { FlexChildExtension } from '../flex-child';
+import { GridChildExtension } from '../grid-child';
 import { CustomStyleExtension } from '../custom-style';
 import { MouseExtension } from '../mouse';
 import { StateOptionsExtension } from '../block-card/block-states/extension';
@@ -42,13 +43,14 @@ import { ClickAnimationExtension } from '../click-animation';
 // import { ConditionsExtension } from '../conditions';
 import { AdvancedSettingsExtension } from '../advanced-settings';
 import { useBlockSection } from '../../components';
-import { useParentFlexBlockInfo } from './utils';
+import { useParentLayoutContext } from './utils';
 import { generateExtensionId } from '../utils';
 import { useFeatureSearch } from '../../components/feature-search-context';
 import {
 	configHasFeatureEntries,
 	filterSettingsBySearch,
 } from '../base/utils/search-features';
+import { gridChildConfig as defaultGridChildConfig } from '../base/config/grid-child';
 
 /** Settings keys for the Style tab (MappedExtensions case 'style'). */
 const STYLE_TAB_CONFIG_KEYS: Array<string> = [
@@ -124,6 +126,7 @@ export const MappedExtensions = ({
 		effectsConfig,
 		positionConfig,
 		flexChildConfig,
+		gridChildConfig: gridChildConfigSetting,
 		backgroundConfig,
 		typographyConfig,
 		customStyleConfig,
@@ -136,11 +139,9 @@ export const MappedExtensions = ({
 	} = settings;
 
 	/**
-	 * Get the parent flex block information
-	 * to show the flex child extension.
-	 * Uses ref-based hook to correctly recalculate when currentBreakpoint changes.
+	 * Parent display context (flex / grid) for flex-child and grid-child extensions.
 	 */
-	const { isParentFlexBlock, parentFlexDirection } = useParentFlexBlockInfo({
+	const parentLayout = useParentLayoutContext({
 		clientId: block.clientId,
 		blockName: block.blockName,
 		currentBlock: block.currentBlock,
@@ -148,8 +149,11 @@ export const MappedExtensions = ({
 		currentInnerBlockState,
 		currentBreakpoint: currentBreakpoint || block.currentBreakpoint || '',
 	});
+	const isParentFlexBlock = parentLayout.layout === 'flex';
+	const parentFlexDirection = parentLayout.flexDirection;
+	const gridChildConfig = gridChildConfigSetting ?? defaultGridChildConfig;
 
-	// Must stay in sync with extension configs rendered under case 'style' (plus flex child when shown).
+	// Must stay in sync with extension configs rendered under case 'style' (plus flex/grid child when shown).
 	const styleTabHasSearchMatches = useMemo(() => {
 		const q = searchQuery?.trim();
 		if (!q || tab.name !== 'style') {
@@ -162,13 +166,19 @@ export const MappedExtensions = ({
 			}
 		}
 		if (
-			isParentFlexBlock &&
+			parentLayout.layout === 'flex' &&
 			configHasFeatureEntries(settings.flexChildConfig)
 		) {
 			return true;
 		}
+		if (
+			parentLayout.layout === 'grid' &&
+			configHasFeatureEntries(gridChildConfig)
+		) {
+			return true;
+		}
 		return false;
-	}, [searchQuery, tab.name, settings, isParentFlexBlock]);
+	}, [searchQuery, tab.name, settings, parentLayout.layout, gridChildConfig]);
 
 	switch (tab.name) {
 		case 'settings':
@@ -429,62 +439,6 @@ export const MappedExtensions = ({
 						/>
 					</ErrorBoundary>
 
-					<ErrorBoundary
-						fallbackRender={({ error }) => (
-							<ErrorBoundaryFallback
-								isReportingErrorCompleted={
-									isReportingErrorCompleted
-								}
-								clientId={block.clientId}
-								setIsReportingErrorCompleted={
-									setIsReportingErrorCompleted
-								}
-								from={'extension'}
-								error={error}
-								configId={'layoutConfig'}
-								title={__('Layout', 'blockera')}
-								icon={<Icon icon="extension-layout" />}
-							/>
-						)}
-					>
-						<LayoutExtension
-							block={block}
-							extensionConfig={layoutConfig}
-							extensionProps={{
-								blockeraDisplay: {},
-								blockeraFlexLayout: {},
-								blockeraGap: {},
-								blockeraFlexWrap: {},
-								blockeraSpacing: {},
-							}}
-							values={{
-								blockeraDisplay:
-									currentStateAttributes.blockeraDisplay,
-								blockeraFlexLayout:
-									currentStateAttributes.blockeraFlexLayout,
-								blockeraGap: currentStateAttributes.blockeraGap,
-								blockeraFlexWrap:
-									currentStateAttributes.blockeraFlexWrap,
-								blockeraAlignContent:
-									currentStateAttributes.blockeraAlignContent,
-								blockeraSpacing:
-									currentStateAttributes.blockeraSpacing,
-							}}
-							attributes={{
-								blockeraDisplay: attributes.blockeraDisplay,
-								blockeraFlexLayout:
-									attributes.blockeraFlexLayout,
-								blockeraGap: attributes.blockeraGap,
-								blockeraFlexWrap: attributes.blockeraFlexWrap,
-								blockeraAlignContent:
-									attributes.blockeraAlignContent,
-								blockeraSpacing: attributes.blockeraSpacing,
-							}}
-							handleOnChangeAttributes={handleOnChangeAttributes}
-							setSettings={handleOnChangeSettings}
-						/>
-					</ErrorBoundary>
-
 					{isParentFlexBlock && (
 						<ErrorBoundary
 							fallbackRender={({ error }) => (
@@ -555,6 +509,117 @@ export const MappedExtensions = ({
 							/>
 						</ErrorBoundary>
 					)}
+
+					{parentLayout.layout === 'grid' && (
+						<ErrorBoundary
+							fallbackRender={({ error }) => (
+								<ErrorBoundaryFallback
+									isReportingErrorCompleted={
+										isReportingErrorCompleted
+									}
+									setIsReportingErrorCompleted={
+										setIsReportingErrorCompleted
+									}
+									from={'extension'}
+									error={error}
+									configId={'gridChildConfig'}
+									title={__('Grid Child', 'blockera')}
+									icon={<Icon icon="extension-grid-child" />}
+								/>
+							)}
+						>
+							<GridChildExtension
+								block={block}
+								extensionConfig={gridChildConfig}
+								values={{
+									blockeraGridChildColumnSpan:
+										currentStateAttributes.blockeraGridChildColumnSpan,
+									blockeraGridChildRowSpan:
+										currentStateAttributes.blockeraGridChildRowSpan,
+								}}
+								attributes={{
+									blockeraGridChildColumnSpan:
+										attributes.blockeraGridChildColumnSpan,
+									blockeraGridChildRowSpan:
+										attributes.blockeraGridChildRowSpan,
+								}}
+								extensionProps={{
+									blockeraGridChildColumnSpan: {},
+									blockeraGridChildRowSpan: {},
+								}}
+								handleOnChangeAttributes={
+									handleOnChangeAttributes
+								}
+								setSettings={handleOnChangeSettings}
+							/>
+						</ErrorBoundary>
+					)}
+
+					<ErrorBoundary
+						fallbackRender={({ error }) => (
+							<ErrorBoundaryFallback
+								isReportingErrorCompleted={
+									isReportingErrorCompleted
+								}
+								clientId={block.clientId}
+								setIsReportingErrorCompleted={
+									setIsReportingErrorCompleted
+								}
+								from={'extension'}
+								error={error}
+								configId={'layoutConfig'}
+								title={__('Layout', 'blockera')}
+								icon={<Icon icon="extension-layout" />}
+							/>
+						)}
+					>
+						<LayoutExtension
+							block={block}
+							extensionConfig={layoutConfig}
+							extensionProps={{
+								blockeraDisplay: {},
+								blockeraFlexLayout: {},
+								blockeraGap: {},
+								blockeraFlexWrap: {},
+								blockeraSpacing: {},
+								blockeraGridMinimumColumnWidth: {},
+								blockeraGridColumnCount: {},
+							}}
+							values={{
+								blockeraDisplay:
+									currentStateAttributes.blockeraDisplay,
+								blockeraFlexLayout:
+									currentStateAttributes.blockeraFlexLayout,
+								blockeraGap: currentStateAttributes.blockeraGap,
+								blockeraFlexWrap:
+									currentStateAttributes.blockeraFlexWrap,
+								blockeraAlignContent:
+									currentStateAttributes.blockeraAlignContent,
+								blockeraSpacing:
+									currentStateAttributes.blockeraSpacing,
+								blockeraGridMinimumColumnWidth:
+									currentStateAttributes.blockeraGridMinimumColumnWidth,
+								blockeraGridColumnCount:
+									currentStateAttributes.blockeraGridColumnCount,
+							}}
+							attributes={{
+								blockeraDisplay: attributes.blockeraDisplay,
+								blockeraFlexLayout:
+									attributes.blockeraFlexLayout,
+								blockeraGap: attributes.blockeraGap,
+								blockeraFlexWrap: attributes.blockeraFlexWrap,
+								blockeraAlignContent:
+									attributes.blockeraAlignContent,
+								blockeraSpacing: attributes.blockeraSpacing,
+								blockeraGridMinimumColumnWidth:
+									attributes.blockeraGridMinimumColumnWidth,
+								blockeraGridColumnCount:
+									attributes.blockeraGridColumnCount,
+							}}
+							handleOnChangeAttributes={handleOnChangeAttributes}
+							setSettings={handleOnChangeSettings}
+						/>
+					</ErrorBoundary>
 
 					<ErrorBoundary
 						fallbackRender={({ error }) => (

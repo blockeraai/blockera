@@ -49,6 +49,9 @@ class StyleDefinitionsProvider extends ServiceProvider {
 				'FontSize' => \Blockera\Editor\StyleDefinitions\FontSize::class,
 				'FontWeight' => \Blockera\Editor\StyleDefinitions\FontWeight::class,
 				'Gap' => \Blockera\Editor\StyleDefinitions\Gap::class,
+				'GridChildColumnSpan' => \Blockera\Editor\StyleDefinitions\GridChildColumnSpan::class,
+				'GridChildRowSpan' => \Blockera\Editor\StyleDefinitions\GridChildRowSpan::class,
+				'GridLayout' => \Blockera\Editor\StyleDefinitions\GridLayout::class,
 				'Height' => \Blockera\Editor\StyleDefinitions\Height::class,
 				'LetterSpacing' => \Blockera\Editor\StyleDefinitions\LetterSpacing::class,
 				'LineHeight' => \Blockera\Editor\StyleDefinitions\LineHeight::class,
@@ -94,6 +97,7 @@ class StyleDefinitionsProvider extends ServiceProvider {
         for ($i = 0; $i < $definitions_count; ++$i) {
             $key        = $keys[ $i ];
             $definition = $styleDefinitions[ $key ];
+
             $this->app->singleton(
                 $key,
                 static function ( Application $app, array $args) use ( $definition) {

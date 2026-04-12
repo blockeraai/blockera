@@ -758,6 +758,36 @@ export function getCSSUnits(unitType: InputUnitTypes): Array<any> {
 			];
 			break;
 
+		case 'grid-min-width':
+			cssUnits = [
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'rem',
+							label: 'REM',
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							format: 'number',
+						},
+					],
+				},
+			];
+			break;
+
 		case 'max-width':
 		case 'max-height':
 			cssUnits = [

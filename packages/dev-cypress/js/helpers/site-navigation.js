@@ -54,7 +54,7 @@ export function goTo(path = '/wp-admin', login = false) {
  * @param {postTitle} string WP post title
  */
 export function createPost({ postType = 'post', postTitle = '' } = {}) {
-	goTo('/wp-admin/post-new.php?post_type=' + postType).then(() => {
+	return goTo('/wp-admin/post-new.php?post_type=' + postType).then(() => {
 		// eslint-disable-next-line
 		cy.wait(2000);
 

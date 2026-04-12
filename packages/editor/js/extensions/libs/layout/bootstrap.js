@@ -37,6 +37,11 @@ import {
 	spacingFromWPCompatibility,
 	spacingToWPCompatibility,
 } from './compatibility/spacing';
+import {
+	gridAttrsFromWPCompatibility,
+	gridMinimumColumnWidthToWPCompatibility,
+	gridColumnCountToWPCompatibility,
+} from './compatibility/grid-attrs';
 
 import type { BlockDetail } from '../block-card/block-states/types';
 import { isInvalidCompatibilityRun } from '../utils';
@@ -63,6 +68,10 @@ export const bootstrap = (): void => {
 				defaultValue: blockAttributes.blockeraDisplay.default,
 				//$FlowFixMe
 				activeVariation: activeBlockVariation?.name,
+			});
+
+			attributes = gridAttrsFromWPCompatibility({
+				attributes,
 			});
 
 			//
@@ -176,7 +185,30 @@ export const bootstrap = (): void => {
 							blockId,
 							//$FlowFixMe
 							activeVariation: activeBlockVariation?.name,
+							getAttributes,
 						})
+					);
+
+				case 'blockeraGridMinimumColumnWidth':
+					return mergeObject(
+						nextState,
+						gridMinimumColumnWidthToWPCompatibility({
+							newValue,
+							blockId,
+							getAttributes,
+						}) ?? {},
+						{ forceUpdated: ['layout'] }
+					);
+
+				case 'blockeraGridColumnCount':
+					return mergeObject(
+						nextState,
+						gridColumnCountToWPCompatibility({
+							newValue,
+							blockId,
+							getAttributes,
+						}) ?? {},
+						{ forceUpdated: ['layout'] }
 					);
 
 				case 'blockeraFlexWrap':

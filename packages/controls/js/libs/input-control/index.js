@@ -115,6 +115,7 @@ export default function InputControl({
 		mode: 'advanced',
 		path: getControlPath(attribute, id),
 		...propsForLabelControl,
+		controlFieldId: propsForLabelControl.controlFieldId ?? id,
 	};
 
 	const extractedValue = extractNumberAndUnit(value);

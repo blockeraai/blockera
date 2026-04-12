@@ -1,6 +1,7 @@
 ## Unreleased
 
 ### New Features
+- Added Grid Settings: The grid columns count and columns min width setting while support in breakpoints. 
 - Added support for WordPress block theme developers to include Blockera features in their theme.json files, making it easier to customize and configure themes with Blockera's capabilities.
 - Added search functionality for block features: You can now quickly find any feature by typing in the search box. Simply type what you're looking for, and the list will automatically filter to show matching features, making it much easier to find the settings you need.
 

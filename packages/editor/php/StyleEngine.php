@@ -427,7 +427,7 @@ final class StyleEngine {
 		$this->breakpoint = $breakpoint;
 
 		// We should just prepare normal state styles because not exists any other states.
-		$state_css_rules = $this->prepareStateStyles($settings);
+		$state_css_rules = $this->prepareStateStyles( $settings );
 
 		// Exclude empty css rules.
 		if ( empty( $state_css_rules ) ) {
@@ -439,7 +439,7 @@ final class StyleEngine {
 			PHP_EOL,
 			array_unique(
 				array_filter(
-					is_array(current($state_css_rules)) ? blockera_array_flat($state_css_rules) : $state_css_rules,
+					is_array( current( $state_css_rules ) ) ? blockera_array_flat( $state_css_rules ) : $state_css_rules,
 					'blockera_get_filter_empty_array_item'
 				)
 			)
@@ -710,7 +710,22 @@ final class StyleEngine {
 	 */
 	protected function generateBlockCss( array $settings, string $id, array $previous_css_rules = []): array {
 
-		if ( empty( $settings['value'] ) || empty($id) ) {
+		if ( empty( $id ) ) {
+
+			return [];
+		}
+
+		// Grid layout CSS is derived from block attrs + display; values may be empty while display is grid (core default track).
+		$allow_empty_style_value = in_array(
+			$id,
+			[
+				'blockeraGridMinimumColumnWidth',
+				'blockeraGridColumnCount',
+			],
+			true
+		);
+
+		if ( empty( $settings['value'] ) && ! $allow_empty_style_value ) {
 
 			return [];
 		}

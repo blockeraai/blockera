@@ -778,6 +778,36 @@ describe('Util functions', () => {
 			]);
 		});
 
+		test('grid-min-width', () => {
+			expect(getCSSUnits('grid-min-width')).toStrictEqual([
+				{
+					label: 'Common Values',
+					options: [
+						{
+							value: 'rem',
+							label: 'REM',
+							format: 'number',
+						},
+						{
+							value: 'px',
+							label: 'PX',
+							format: 'number',
+						},
+						{
+							value: '%',
+							label: '%',
+							format: 'number',
+						},
+						{
+							value: 'em',
+							label: 'EM',
+							format: 'number',
+						},
+					],
+				},
+			]);
+		});
+
 		test('min-height', () => {
 			expect(getCSSUnits('min-height')).toStrictEqual([
 				{
