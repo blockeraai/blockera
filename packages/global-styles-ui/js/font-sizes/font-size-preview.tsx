@@ -6,13 +6,9 @@ import type { FontSize } from '@wordpress/global-styles-engine';
 import { getComputedFluidTypographyValue } from '@wordpress/block-editor';
 
 /**
- * Blockera dependencies
- */
-import { classNames } from '@blockera/classnames';
-
-/**
  * Internal dependencies
  */
+import { VariablePreview } from '../components/variable-preview';
 import { useGlobalStyle } from '../context/global-style-hooks';
 
 interface FontSizePreviewProps {
@@ -20,7 +16,11 @@ interface FontSizePreviewProps {
 }
 
 function FontSizePreview({ fontSize }: FontSizePreviewProps) {
-	const [font] = useGlobalStyle<{ fontFamily?: string }>('typography');
+	const [typographyStyle] = useGlobalStyle('typography', '');
+	const fontFamily =
+		typeof typographyStyle.fontFamily === 'string'
+			? typographyStyle.fontFamily
+			: undefined;
 
 	const input =
 		typeof fontSize?.fluid === 'object' &&
@@ -34,20 +34,17 @@ function FontSizePreview({ fontSize }: FontSizePreviewProps) {
 					fontSize: fontSize.size,
 				};
 
-	const computedFontSize = getComputedFluidTypographyValue(input);
+	const computedFontSize = String(
+		getComputedFluidTypographyValue(input) ?? ''
+	);
+
 	return (
-		<div
-			className={classNames(
-				'global-styles-ui-preset-preview',
-				'global-styles-ui-typography-preview'
-			)}
-			style={{
-				fontSize: computedFontSize,
-				fontFamily: font?.fontFamily ?? 'serif',
-			}}
+		<VariablePreview
+			type="font-size"
+			style={{ fontSize: computedFontSize, fontFamily }}
 		>
 			{__('Aa', 'blockera')}
-		</div>
+		</VariablePreview>
 	);
 }
 

@@ -2,7 +2,6 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { FlexItem } from '@wordpress/components';
 import type {
 	FluidTypographySettings,
 	FluidTypographyConfig,
@@ -273,9 +272,7 @@ function FontSizeComponent({
 
 	return (
 		<Flex direction="column" gap={15}>
-			<FlexItem>
-				<FontSizePreview fontSize={fontSize} />
-			</FlexItem>
+			<FontSizePreview fontSize={fontSize} />
 
 			<SharedPresetControls
 				itemId={presetId}
