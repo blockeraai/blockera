@@ -247,13 +247,17 @@ export function getValueAddonRealValue(value: ValueAddon | string | void): any {
 export function getVariableIcon({
 	type,
 	value,
+	iconSize = '20',
+	colorIndicatorSize = 16,
 }: {
 	type: string,
 	value?: string,
+	iconSize?: string,
+	colorIndicatorSize?: number,
 }): MixedElement {
 	switch (type) {
 		case 'font-size':
-			return <Icon icon="variable-font-size" iconSize="20" />;
+			return <Icon icon="variable-font-size" iconSize={iconSize} />;
 
 		case 'radial-gradient':
 		case 'linear-gradient':
@@ -261,17 +265,24 @@ export function getVariableIcon({
 				<ColorIndicator
 					type="gradient"
 					value={value !== '' ? value : ''}
+					size={colorIndicatorSize}
 				/>
 			);
 
 		case 'color':
-			return <ColorIndicator type="color" value={value} />;
+			return (
+				<ColorIndicator
+					type="color"
+					value={value}
+					size={colorIndicatorSize}
+				/>
+			);
 
 		case 'spacing':
-			return <Icon icon="variable-spacing" iconSize="20" />;
+			return <Icon icon="variable-spacing" iconSize={iconSize} />;
 
 		case 'width-size':
-			return <Icon icon="variable-width-size" iconSize="20" />;
+			return <Icon icon="variable-width-size" iconSize={iconSize} />;
 
 		case 'shadow':
 		case 'text-shadow':
@@ -280,7 +291,7 @@ export function getVariableIcon({
 		case 'transition':
 		case 'transform':
 		case 'filter':
-			return <Icon icon="variable-spacing" iconSize="20" />;
+			return <Icon icon="variable-spacing" iconSize={iconSize} />;
 	}
 
 	return <></>;
