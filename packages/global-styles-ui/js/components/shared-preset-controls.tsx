@@ -376,7 +376,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 												position: 'absolute',
 												right: '4px',
 												top: '4px',
-												padding: '2px 6px 2px 4px',
+												padding: '2px',
 												'--blockera-controls-input-height':
 													'22px',
 												gap: '2px',
@@ -384,10 +384,9 @@ function SharedPresetControlsComponent<T extends VariableType>({
 												textTransform: 'uppercase',
 												fontWeight: '500',
 												backgroundColor: '#ffffff',
+												minWidth: '24px',
 											}}
-										>
-											{__('Edit', 'blockera')}
-										</Button>
+										></Button>
 									)}
 								</InputControl>
 							</div>
