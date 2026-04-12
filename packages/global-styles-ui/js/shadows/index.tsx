@@ -33,6 +33,7 @@ import {
 	type ShadowDefaultPresetValue,
 } from './shadow-preset-size';
 import { sanitizeShadowPresets, type WpShadowPreset } from './utils';
+import { BlockeraBranding } from '../components/blockera-branding';
 
 const shadowPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('shadowPreset');
@@ -297,12 +298,18 @@ function Shadows({ screenSelector }: ShadowsProps) {
 
 	return createPortal(
 		<div className="blockera-shadows-presets-navigation">
+			{/* We do not have access to the back button here, so we need to add the branding manually. */}
+			<BlockeraBranding
+				style={{ position: 'absolute', right: '14px', top: '15px' }}
+			/>
+
 			<GlobalStylesPanelDescription>
 				{__(
 					'Create and edit box shadow presets used for elevation and depth.',
 					'blockera'
 				)}
 			</GlobalStylesPanelDescription>
+
 			<Flex
 				direction="column"
 				style={{ padding: '0 16px', width: '100%' }}
