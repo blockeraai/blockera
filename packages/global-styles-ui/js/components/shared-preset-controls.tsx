@@ -284,7 +284,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 								<InputControl
 									label={
 										<>
-											{__('ID:', 'blockera')}
+											{__('ID', 'blockera')}
 
 											<Tooltip
 												text={idFieldHint}
