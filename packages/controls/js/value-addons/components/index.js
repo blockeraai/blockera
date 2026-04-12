@@ -12,5 +12,9 @@ export {
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
 } from './variable';
-export { ValueAddonControl, ValueAddonPointer } from './control';
+export {
+	ValueAddonControl,
+	ValueAddonDisplay,
+	ValueAddonPointer,
+} from './control';
 export { PickerCategory, PickerValueItem } from './picker';

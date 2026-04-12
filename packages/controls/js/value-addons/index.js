@@ -302,7 +302,12 @@ export const useValueAddon = ({
 export * from './utils';
 export * from './helpers';
 export {
+	renderChangesetPreviewPart,
+	CHANGESET_PREVIEW_VALUE_ADDON_CLASS,
+} from './render-changeset-preview-part';
+export {
 	VAR_PICKER_PRESET_PANEL_FILTER,
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
+	ValueAddonDisplay,
 } from './components';
