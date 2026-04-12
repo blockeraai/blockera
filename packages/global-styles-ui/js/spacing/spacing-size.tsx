@@ -121,7 +121,7 @@ function SpacingSizeComponent({
 						</p>
 					</>
 				}
-				columns="1fr 2.5fr"
+				columns="1fr 3fr"
 				unitType="general"
 				min={0}
 				onChange={(newValue: string | undefined) =>
