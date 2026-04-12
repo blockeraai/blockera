@@ -225,17 +225,6 @@ export const PresetGroup = ({
 	presetFieldsPropsResolver,
 	enableCreatingStep = true,
 }: PresetGroupPropsType) => {
-	const getPopoverTitle = useCallback(
-		(itemId: string, item: VariableType): string => {
-			return sprintf(
-				/* translators: %s: Preset item name */
-				__('Edit %s Preset', 'blockera'),
-				item.name
-			);
-		},
-		[]
-	);
-
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}`,
@@ -261,7 +250,7 @@ export const PresetGroup = ({
 						variables={variables}
 						controlName={controlName}
 						PresetFields={PresetFields}
-						popoverTitle={getPopoverTitle}
+						popoverTitle={__('Edit Variable', 'blockera')}
 						canAddNewItem={'custom' === origin}
 						repeaterItemHeader={repeaterItemHeader}
 						defaultPresetValue={defaultPresetValue}
