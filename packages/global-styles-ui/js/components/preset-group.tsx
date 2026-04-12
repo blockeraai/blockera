@@ -18,7 +18,10 @@ import {
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 import { noop, pascalCase, isObject } from '@blockera/utils';
-import { controlClassNames } from '@blockera/classnames';
+import {
+	controlClassNames,
+	componentInnerClassNames,
+} from '@blockera/classnames';
 
 /**
  * Internal dependencies
@@ -206,6 +209,7 @@ const Presets = ({
 				__('No %s variable.', 'blockera'),
 				pascalCase(origin)
 			)}
+			popoverClassName={componentInnerClassNames('popover-variables')}
 			popoverTitle={popoverTitle}
 			PromoComponent={renderPromo}
 			canAddNewItem={canAddNewItem}
