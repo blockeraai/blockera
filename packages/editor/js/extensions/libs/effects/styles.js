@@ -23,6 +23,7 @@ import {
 	getCompatibleBlockCssSelector,
 	computedCssDeclarations,
 } from '../../../style-engine';
+import { getVariableRepeaterItemsFromSettings } from '../value-addon-variable-payload';
 import {
 	AfterDividerGenerator,
 	BeforeDividerGenerator,
@@ -148,12 +149,10 @@ export const EffectsStyles = ({
 			let transformValue = transformAttr;
 
 			if ('variable' === transformValue?.valueType) {
-				transformValue =
-					JSON.parse(transformValue?.settings?.value)?.items || [];
-				transformValue = transformValue.map((t, i) => [
-					`${t.type}-${i}`,
-					t,
-				]);
+				const items = getVariableRepeaterItemsFromSettings(
+					transformValue?.settings
+				);
+				transformValue = items.map((t, i) => [`${t.type}-${i}`, t]);
 			} else {
 				transformValue = getSortedRepeater(transformValue);
 			}

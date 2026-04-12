@@ -11,6 +11,7 @@ import {
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
+import { getVariableRepeaterItemsFromSettings } from '../../value-addon-variable-payload';
 
 function wrapCssVarIfVariable(field, cssValue) {
 	if (
@@ -37,16 +38,11 @@ export function TextShadowGenerator(id, props, options) {
 	let textShadowValue = textShadowAttr;
 
 	if ('variable' === textShadowValue?.valueType) {
-		let rawItems = null;
-		try {
-			rawItems = JSON.parse(
-				textShadowValue?.settings?.value || '{}'
-			)?.items;
-		} catch (e) {
-			rawItems = null;
-		}
+		const rawItems = getVariableRepeaterItemsFromSettings(
+			textShadowValue?.settings
+		);
 
-		if (rawItems === null || rawItems === undefined) {
+		if (!rawItems.length) {
 			return '';
 		}
 

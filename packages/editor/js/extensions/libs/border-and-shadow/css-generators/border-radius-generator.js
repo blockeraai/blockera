@@ -22,6 +22,11 @@ function unwrapRadiusVariableField(field) {
 		return field;
 	}
 	const raw = field.settings?.value;
+	if (raw && typeof raw === 'object' && typeof raw.all === 'string') {
+		if (!raw.type || raw.type === 'all') {
+			return raw.all;
+		}
+	}
 	if (typeof raw !== 'string' || !raw.trim().startsWith('{')) {
 		return field;
 	}

@@ -8,6 +8,7 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  */
 import { createCssDeclarations } from '../../../../style-engine';
 import { parseCssBoxShadowToRepeaterValue } from '../compatibilities/shadow';
+import { getVariableRepeaterItemsFromSettings } from '../../value-addon-variable-payload';
 
 function wrapCssVarIfVariable(field, cssValue) {
 	if (
@@ -36,9 +37,15 @@ export function BoxShadowGenerator(id, props, options) {
 	let boxShadowValue = boxShadowAttr;
 
 	if ('variable' === boxShadowValue?.valueType) {
-		boxShadowValue =
-			JSON.parse(boxShadowValue?.settings?.value)?.items ||
-			attributes?.blockeraBoxShadow;
+		const rows = getVariableRepeaterItemsFromSettings(
+			boxShadowValue?.settings
+		);
+
+		if (!rows.length) {
+			boxShadowValue = attributes?.blockeraBoxShadow;
+		} else {
+			boxShadowValue = rows;
+		}
 
 		if (!Array.isArray(boxShadowValue)) {
 			boxShadowValue = Object.values(

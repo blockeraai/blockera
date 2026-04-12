@@ -8,6 +8,7 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
+import { getVariableRepeaterItemsFromSettings } from '../../value-addon-variable-payload';
 
 function wrapCssVarIfVariable(field, cssValue) {
 	if (
@@ -38,7 +39,9 @@ export function FilterGenerator(id, props, options) {
 	let filterValue = filterAttr;
 
 	if ('variable' === filterValue?.valueType) {
-		filterValue = JSON.parse(filterValue?.settings?.value)?.items || [];
+		filterValue = getVariableRepeaterItemsFromSettings(
+			filterValue?.settings
+		);
 		filterValue = filterValue.map((f, i) => [`${f.type}-${i}`, f]);
 	} else {
 		filterValue = getSortedRepeater(filterValue);

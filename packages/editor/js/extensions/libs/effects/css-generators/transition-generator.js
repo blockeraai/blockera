@@ -8,6 +8,7 @@ import { getValueAddonRealValue, getSortedRepeater } from '@blockera/controls';
  * Internal dependencies
  */
 import { createCssDeclarations } from '../../../../style-engine';
+import { getVariableRepeaterItemsFromSettings } from '../../value-addon-variable-payload';
 
 function wrapCssVarIfVariable(field, cssValue) {
 	if (
@@ -32,9 +33,10 @@ export function TransitionGenerator(id, props, options) {
 	let transitionValue = transitionAttr;
 
 	if ('variable' === transitionValue?.valueType) {
-		transitionValue =
-			JSON.parse(transitionValue?.settings?.value)?.items || [];
-		transitionValue = transitionValue.map((t, i) => [`${t.type}-${i}`, t]);
+		const items = getVariableRepeaterItemsFromSettings(
+			transitionValue?.settings
+		);
+		transitionValue = items.map((t, i) => [`${t.type}-${i}`, t]);
 	} else {
 		transitionValue = getSortedRepeater(transitionValue);
 	}
