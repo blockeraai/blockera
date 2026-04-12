@@ -485,7 +485,7 @@ describe('Helper Functions', () => {
 					type: 'color',
 					id: 'base-1',
 				})
-			).toBe('--wp--blockera--color--base-1');
+			).toBe('--wp--preset--color--base-1');
 		});
 
 		test('contentSize', () => {

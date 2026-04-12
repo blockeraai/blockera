@@ -1,0 +1,107 @@
+// @flow
+/**
+ * External dependencies
+ */
+import { select } from '@wordpress/data';
+import { applyFilters } from '@wordpress/hooks';
+
+/**
+ * Blockera dependencies
+ */
+import {
+	STORE_NAME,
+	getCustomGlobalStylePresetVariables,
+	type DynamicVariableGroup,
+	type VariableItem,
+} from '@blockera/data';
+
+/**
+ * Internal dependencies
+ */
+import { getVariableCategory } from '../../helpers';
+import type { VariableCategoryDetail } from '../../types';
+import type { ValueAddonControlProps } from '../control/types';
+import { VAR_PICKER_PRESET_PANEL_FILTER } from './var-picker-constants';
+
+export type ResolvedVariablePickerRow = {|
+	data: DynamicVariableGroup | VariableCategoryDetail,
+	effectiveType: string,
+|};
+
+/**
+ * Resolve store / category data for one variable type in the picker list.
+ */
+export function resolveVariablePickerRow(
+	type: string,
+	controlVariableTypes: Array<string>
+): ResolvedVariablePickerRow | null {
+	let data: DynamicVariableGroup | VariableCategoryDetail =
+		getVariableCategory(type);
+
+	if (data?.label === '') {
+		const { getVariableGroup } = select(STORE_NAME);
+		data = getVariableGroup(type);
+		if (!data?.type || !controlVariableTypes.includes(data.type)) {
+			return null;
+		}
+	}
+
+	return {
+		data,
+		effectiveType: data?.type || type,
+	};
+}
+
+export type SupplementalCustomSection = {|
+	type: string,
+	label?: string,
+	items: Array<VariableItem>,
+|};
+
+/**
+ * Custom global-style presets not already listed in the merged catalog (per type),
+ * only for types that do not use a registered preset panel.
+ */
+export function getSupplementalCustomVariableSections(
+	controlProps: ValueAddonControlProps
+): Array<SupplementalCustomSection> {
+	const sections: Array<SupplementalCustomSection> = [];
+
+	for (const type of controlProps.variableTypes) {
+		if (applyFilters(VAR_PICKER_PRESET_PANEL_FILTER, null, type)) {
+			continue;
+		}
+
+		const cat = getVariableCategory(type);
+
+		if (cat.notFound) {
+			continue;
+		}
+
+		const mainItems = !Array.isArray(cat.items)
+			? Object.values(cat.items || {})
+			: cat.items || [];
+
+		const mainIds = new Set(mainItems.map((i) => i.id).filter(Boolean));
+
+		const customItems = getCustomGlobalStylePresetVariables(type).filter(
+			(i) =>
+				i.id &&
+				!mainIds.has(i.id) &&
+				i.value !== undefined &&
+				i.value !== ''
+		);
+
+		if (!customItems.length) {
+			continue;
+		}
+
+		sections.push({
+			type,
+			label: cat.label || type,
+			items: customItems,
+		});
+	}
+
+	return sections;
+}
