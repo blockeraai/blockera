@@ -246,11 +246,16 @@
 		width: 100%;
 		padding: 12px 14px;
 		border-radius: var(--blockera-controls-border-radius);
-		background: #e8e8e8;
-		color: #757575;
+		background: var(--blockera-controls-fill-color);
+		color: #1e1e1e;
 		font-size: 12px;
 		line-height: 1.4;
 		text-align: center;
+		text-transform: lowercase;
+
+		&::first-letter {
+			text-transform: uppercase;
+		}
 	}
 
 	&.design-large {
