@@ -57,3 +57,30 @@
 	user-select: none;
 }
 
+.blockera-global-styles-subtitle {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 0;
+}
+
+// Shared trigger link for BlockeraBranding (subtitle and other screens).
+.blockera-branding__link {
+	display: flex;
+	align-items: center;
+	color: #cac9c9;
+	transition: var(--blockera-controls-transition);
+
+	&:hover {
+		color: #0051e7;
+	}
+
+	svg {
+		fill: currentColor;
+		transition: var(--blockera-controls-transition);
+	}
+}
+
+.blockera-global-styles-subtitle .blockera-branding__link {
+	margin-left: auto;
+}
