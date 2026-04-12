@@ -121,7 +121,7 @@ function SpacingSizeComponent({
 						</p>
 					</>
 				}
-				columns="columns-2"
+				columns="1fr 2.5fr"
 				unitType="general"
 				min={0}
 				onChange={(newValue: string | undefined) =>
@@ -132,11 +132,7 @@ function SpacingSizeComponent({
 	);
 
 	return (
-		<Flex
-			direction="column"
-			gap="16px"
-			style={{ width: '100%', padding: '0 16px 24px' }}
-		>
+		<Flex direction="column" gap="15px">
 			<SharedPresetControls
 				itemId={presetId}
 				variable={spacingSize}
