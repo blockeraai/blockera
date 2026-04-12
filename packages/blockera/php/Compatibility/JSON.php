@@ -281,7 +281,7 @@ class JSON extends \WP_Theme_JSON {
 			return '';
 		}
 
-		return ( new Transition( [] ) )->get_preset_css_declaration_value(
+		return ( new Transition( [] ) )->getPresetCssDeclarationValue(
 			array(
 				'type'                   => 'transition',
 				'transition'             => $preset['items'],
@@ -301,7 +301,7 @@ class JSON extends \WP_Theme_JSON {
 			return '';
 		}
 
-		return ( new Transform( [] ) )->get_preset_css_declaration_value(
+		return ( new Transform( [] ) )->getPresetCssDeclarationValue(
 			array(
 				'type'                   => 'transform',
 				'transform'              => $preset['items'],
@@ -321,7 +321,7 @@ class JSON extends \WP_Theme_JSON {
 			return '';
 		}
 
-		return ( new Filter( [] ) )->get_preset_css_declaration_value(
+		return ( new Filter( [] ) )->getPresetCssDeclarationValue(
 			array(
 				'type'    => 'filter',
 				'filter'  => $preset['items'],
@@ -340,7 +340,7 @@ class JSON extends \WP_Theme_JSON {
 			return '';
 		}
 
-		return ( new TextShadow( [] ) )->get_preset_css_declaration_value(
+		return ( new TextShadow( [] ) )->getPresetCssDeclarationValue(
 			array(
 				'type'                   => 'text-shadow',
 				'text-shadow'            => $preset['items'],
@@ -364,7 +364,7 @@ class JSON extends \WP_Theme_JSON {
 			return '';
 		}
 
-		return ( new BoxShadow( [] ) )->get_preset_css_declaration_value(
+		return ( new BoxShadow( [] ) )->getPresetCssDeclarationValue(
 			array(
 				'type'                   => 'box-shadow',
 				'box-shadow'             => $preset['items'],
@@ -384,7 +384,7 @@ class JSON extends \WP_Theme_JSON {
 			return '';
 		}
 
-		return ( new Border( [] ) )->get_preset_css_declaration_value(
+		return ( new Border( [] ) )->getPresetCssDeclarationValue(
 			array(
 				'type'                   => 'border',
 				'border'                 => static::sanitize_box_border_value( $preset['border'] ),
