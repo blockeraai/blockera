@@ -15,12 +15,15 @@ export interface BlockeraBrandingProps {
 	iconSize?: number | string;
 	/** Pixel size for the icon in the tooltip “Powered by” row. */
 	tooltipBrandIconSize?: number | string;
+	/** Style for the branding. */
+	style?: React.CSSProperties;
 }
 
 /**
  * “Powered by Blockera” tooltip + product link. Reusable next to headings or other UI.
  */
 export function BlockeraBranding({
+	style = {},
 	linkClassName = '',
 	iconSize = 16,
 	tooltipBrandIconSize = 18,
@@ -57,7 +60,7 @@ export function BlockeraBranding({
 		.join(' ');
 
 	return (
-		<span className="blockera-branding">
+		<span className="blockera-branding" style={style}>
 			<Tooltip
 				text={
 					<Flex direction="row" alignItems="center" gap="8px">
@@ -73,6 +76,7 @@ export function BlockeraBranding({
 					href="https://blockera.ai/products/site-builder/"
 					target="_blank"
 					rel="noopener noreferrer"
+					tabIndex={-1}
 					className={linkClasses}
 				>
 					<Icon
