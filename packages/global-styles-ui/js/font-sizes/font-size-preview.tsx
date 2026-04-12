@@ -41,7 +41,11 @@ function FontSizePreview({ fontSize }: FontSizePreviewProps) {
 	return (
 		<VariablePreview
 			type="font-size"
-			style={{ fontSize: computedFontSize, fontFamily }}
+			style={{
+				fontSize: computedFontSize,
+				fontFamily,
+				color: 'var(--blockera-controls-primary-color)',
+			}}
 		>
 			{__('Aa', 'blockera')}
 		</VariablePreview>
