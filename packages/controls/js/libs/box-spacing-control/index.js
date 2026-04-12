@@ -20,10 +20,10 @@ import { Icon } from '@blockera/icons';
  * Internal dependencies
  */
 import type { BoxSpacingControlProps, BoxSpacingLock } from './types';
+import { formatBoxSpacingSidesForChangesetPreview } from './box-spacing-changeset-preview';
 import {
 	boxSpacingControlDefaultValue,
 	boxSpacingValueCleanup,
-	formatBoxSpacingSidesForChangesetPreview,
 	getSmartLock,
 } from './utils';
 import {
