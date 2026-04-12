@@ -27,12 +27,11 @@ function SpacingWidthMeasure() {
 				display: 'flex',
 				alignItems: 'center',
 				width: '100%',
-				marginTop: 6,
 				height: MEASURE_ROW_HEIGHT_PX,
 				boxSizing: 'border-box',
 				position: 'absolute',
-				left: 0,
 				bottom: '-15px',
+				transition: 'var(--blockera-controls-transition)',
 			}}
 			aria-hidden
 		>
@@ -45,6 +44,8 @@ function SpacingWidthMeasure() {
 					borderBottom: `${half}px solid transparent`,
 					borderRight: `${ARROW_TIP_PX}px solid ${measureColor}`,
 					flexShrink: 0,
+					position: 'absolute',
+					left: '-2px',
 				}}
 			/>
 			{/* Dashed span between arrowheads */}
@@ -65,6 +66,8 @@ function SpacingWidthMeasure() {
 					borderBottom: `${half}px solid transparent`,
 					borderLeft: `${ARROW_TIP_PX}px solid ${measureColor}`,
 					flexShrink: 0,
+					position: 'absolute',
+					right: '-2px',
 				}}
 			/>
 		</div>
