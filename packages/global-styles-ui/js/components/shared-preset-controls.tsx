@@ -7,8 +7,10 @@ import {
 	memo,
 	useState,
 	useEffect,
+	useLayoutEffect,
 	useContext,
 	useCallback,
+	useRef,
 } from '@wordpress/element';
 
 /**
@@ -26,6 +28,7 @@ import {
 	RepeaterContext,
 	useControlContext,
 	ControlContextProvider,
+	Tooltip,
 } from '@blockera/controls';
 
 /**
@@ -61,6 +64,20 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const [isConfirmedSlugChange, setIsConfirmedSlugChange] = useState(false);
 	const [hasUserEditedSinceUnlock, setHasUserEditedSinceUnlock] =
 		useState(false);
+	const presetIdFieldContainerRef = useRef<HTMLDivElement>(null);
+	const focusIdInputAfterUnlockRef = useRef(false);
+
+	// After explicit unlock only: move focus into the ID input (e.g. Edit button keeps focus on the button).
+	useLayoutEffect(() => {
+		if (!focusIdInputAfterUnlockRef.current || !isIdEditable) {
+			return;
+		}
+		focusIdInputAfterUnlockRef.current = false;
+		const input = presetIdFieldContainerRef.current?.querySelector(
+			'input'
+		) as HTMLInputElement | null | undefined;
+		input?.focus();
+	}, [isIdEditable]);
 
 	// Sync when preset changes (e.g. navigation) or after first close (creatingStep → false).
 	useEffect(() => {
@@ -72,25 +89,14 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	// Auto-lock when user edits ID back to saved slug.
 	useEffect(() => {
-		if (
-			!isCreating &&
-			isIdEditable &&
-			hasUserEditedSinceUnlock &&
-			variableSlug === slug
-		) {
+		if (isIdEditable && hasUserEditedSinceUnlock && variableSlug === slug) {
 			setIsIdEditable(false);
 			setHasUserEditedSinceUnlock(false);
 		}
-	}, [
-		isCreating,
-		isIdEditable,
-		hasUserEditedSinceUnlock,
-		variableSlug,
-		slug,
-	]);
+	}, [isIdEditable, hasUserEditedSinceUnlock, variableSlug, slug]);
 
 	// ID display: while creating, slug is driven by name; else locked vs edit buffer.
-	const displayedSlug = isIdEditable && !isCreating ? variableSlug : slug;
+	const displayedSlug = isIdEditable ? variableSlug : slug;
 
 	const {
 		controlInfo: { name: controlId },
@@ -107,11 +113,11 @@ function SharedPresetControlsComponent<T extends VariableType>({
 
 	const slugChanged = !isCreating && isIdEditable && variableSlug !== slug;
 	const slugIsValid = isSlugValid(displayedSlug, allSlugs, slug);
-	const showUndo = !isCreating && isIdEditable && variableSlug !== slug;
-	const idFieldLocked = isCreating || !isIdEditable;
+	const showUndo = isIdEditable && variableSlug !== slug;
+	const idFieldLocked = !isIdEditable;
 	const showMutedIdStyle = idFieldLocked;
 	// After creatingStep: locked ID uses read-only (not disabled) so click/focus can unlock; while creating, disabled blocks edits.
-	const idClickToEdit = !isCreating && !isIdEditable;
+	const idClickToEdit = !isIdEditable;
 	const slugError =
 		displayedSlug && !slugIsValid
 			? (() => {
@@ -133,6 +139,7 @@ function SharedPresetControlsComponent<T extends VariableType>({
 	const canSaveNameSlug = slugChanged && isConfirmedSlugChange && slugIsValid;
 
 	const unlockIdField = useCallback(() => {
+		focusIdInputAfterUnlockRef.current = true;
 		setVariableSlug(slug);
 		setHasUserEditedSinceUnlock(false);
 		setIsIdEditable(true);
@@ -257,77 +264,135 @@ function SharedPresetControlsComponent<T extends VariableType>({
 						label={__('Name:', 'blockera')}
 						onChange={handleNameChange}
 						columns="1fr 3fr"
-					/>
-				</ControlContextProvider>
-
-				<ControlContextProvider
-					value={{
-						name: `font-size-slug-${slug}`,
-						value: displayedSlug,
-					}}
-				>
-					<div
-						className={classNames('blockera-preset-id-field', {
-							'is-id-readonly-muted': showMutedIdStyle,
-						})}
 					>
-						<InputControl
-							label={__('ID:', 'blockera')}
-							controlAddonTypes={[]}
-							disabled={isCreating}
-							readOnly={idClickToEdit}
-							onClick={idClickToEdit ? unlockIdField : undefined}
-							onFocus={idClickToEdit ? unlockIdField : undefined}
-							onKeyDown={
-								idClickToEdit
-									? handleLockedIdKeyDown
-									: undefined
-							}
-							onChange={
-								!isCreating && isIdEditable
-									? handleIdChange
-									: () => {}
-							}
-							columns="1fr 3fr"
-							style={{
-								position: 'relative',
+						<ControlContextProvider
+							value={{
+								name: `font-size-slug-${slug}`,
+								value: displayedSlug,
 							}}
 						>
-							<p
-								style={{
-									margin: '5px 0 0',
-									color: '#707070',
-									fontStyle: 'italic',
-									fontSize: '13px',
-								}}
+							<div
+								ref={presetIdFieldContainerRef}
+								className={classNames(
+									'blockera-preset-id-field',
+									{
+										'is-id-readonly-muted':
+											showMutedIdStyle,
+									}
+								)}
 							>
-								{idFieldHint}
-							</p>
+								<InputControl
+									label={
+										<>
+											{__('ID:', 'blockera')}
 
-							{showUndo && (
-								<Button
-									onClick={handleIdUndoClick}
-									variant="tertiary"
-									icon={<Icon icon="undo" iconSize="16" />}
-									size="input"
+											<Tooltip
+												text={idFieldHint}
+												delay={0}
+											>
+												<span
+													style={{
+														cursor: 'pointer',
+														display: 'flex',
+														alignItems: 'center',
+													}}
+												>
+													<Icon
+														icon="information"
+														iconSize="16"
+														style={{
+															fill: 'var(--blockera-controls-border-color-soft)',
+														}}
+													/>
+												</span>
+											</Tooltip>
+										</>
+									}
+									controlAddonTypes={[]}
+									readOnly={idClickToEdit}
+									onClick={
+										idClickToEdit
+											? unlockIdField
+											: undefined
+									}
+									onFocus={
+										idClickToEdit
+											? unlockIdField
+											: undefined
+									}
+									onKeyDown={
+										idClickToEdit
+											? handleLockedIdKeyDown
+											: undefined
+									}
+									onChange={
+										isIdEditable ? handleIdChange : () => {}
+									}
+									columns="1fr 4fr"
 									style={{
-										position: 'absolute',
-										right: '4px',
-										top: '4px',
-										padding: '2px 6px 2px 4px',
-										'--blockera-controls-input-height':
-											'22px',
-										gap: '2px',
-										fontSize: '11px',
-										textTransform: 'uppercase',
-										fontWeight: '500',
+										position: 'relative',
 									}}
 								>
-									{__('Undo', 'blockera')}
-								</Button>
-							)}
-						</InputControl>
-					</div>
+									{showUndo && (
+										<Button
+											onClick={handleIdUndoClick}
+											variant="tertiary"
+											icon={
+												<Icon
+													icon="undo"
+													iconSize="16"
+												/>
+											}
+											size="input"
+											style={{
+												position: 'absolute',
+												right: '4px',
+												top: '4px',
+												padding: '2px 6px 2px 4px',
+												'--blockera-controls-input-height':
+													'22px',
+												gap: '2px',
+												fontSize: '11px',
+												textTransform: 'uppercase',
+												fontWeight: '500',
+											}}
+										>
+											{__('Undo', 'blockera')}
+										</Button>
+									)}
+
+									{idClickToEdit && (
+										<Button
+											onClick={unlockIdField}
+											variant="tertiary"
+											icon={
+												<Icon
+													icon="pen"
+													iconSize="16"
+												/>
+											}
+											size="input"
+											style={{
+												position: 'absolute',
+												right: '4px',
+												top: '4px',
+												padding: '2px 6px 2px 4px',
+												'--blockera-controls-input-height':
+													'22px',
+												gap: '2px',
+												fontSize: '11px',
+												textTransform: 'uppercase',
+												fontWeight: '500',
+												backgroundColor: '#ffffff',
+											}}
+										>
+											{__('Edit', 'blockera')}
+										</Button>
+									)}
+								</InputControl>
+							</div>
+						</ControlContextProvider>
+					</InputControl>
 				</ControlContextProvider>
 			</Flex>
 
