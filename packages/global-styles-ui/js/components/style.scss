@@ -41,3 +41,19 @@
 .blockera-component-popover.blockera-component-popover-variables {
 	--popover-height: auto;
 }
+
+// Variable preview
+.global-styles-variable-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 100px;
+	border-radius: 2px;
+	overflow: hidden;
+	border: 1px solid var(--blockera-controls-border-color-extra-soft);
+	background: #ffffff;
+	margin-bottom: 10px;
+	pointer-events: none;
+	user-select: none;
+}
+
