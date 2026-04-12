@@ -18,6 +18,7 @@ import {
 /**
  * Internal dependencies
  */
+import SpacingSizePreview from './spacing-size-preview';
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllSpacingSlugs } from '../components/utils';
@@ -133,6 +134,8 @@ function SpacingSizeComponent({
 
 	return (
 		<Flex direction="column" gap="15px">
+			<SpacingSizePreview size={spacingSize.size} />
+
 			<SharedPresetControls
 				itemId={presetId}
 				variable={spacingSize}
