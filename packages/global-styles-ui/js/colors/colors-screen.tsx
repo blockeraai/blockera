@@ -3,7 +3,6 @@
  */
 import {
 	FlexItem,
-	__experimentalVStack as VStack,
 	__experimentalHStack as HStack,
 	__experimentalItemGroup as ItemGroup,
 } from '@wordpress/components';
@@ -13,7 +12,7 @@ import { Icon, chevronLeft, chevronRight } from '@wordpress/icons';
 /**
  * Blockera dependencies
  */
-import { ColorIndicatorStack } from '@blockera/controls';
+import { ColorIndicatorStack, Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -92,15 +91,14 @@ function ColorsNavigationPreviews({ onClick }: ColorsScreenProps) {
 
 function ColorsScreen({ onClick }: ColorsScreenProps) {
 	return (
-		<VStack
-			spacing={2}
+		<Flex
+			direction="column"
+			gap={'12px'}
 			className="blockera-colors-presets-navigation blockera-colors-presets-count"
 		>
-			<HStack justify="space-between">
-				<Subtitle level={3}>{__('Colors', 'blockera')}</Subtitle>
-			</HStack>
+			<Subtitle level={3}>{__('Colors', 'blockera')}</Subtitle>
 			<ColorsNavigationPreviews onClick={onClick} />
-		</VStack>
+		</Flex>
 	);
 }
 
