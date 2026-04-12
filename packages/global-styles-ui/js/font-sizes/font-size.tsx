@@ -2,12 +2,7 @@
  * External dependencies
  */
 import { __ } from '@wordpress/i18n';
-import {
-	__experimentalView as View,
-	__experimentalSpacer as Spacer,
-	__experimentalVStack as VStack,
-	FlexItem,
-} from '@wordpress/components';
+import { FlexItem } from '@wordpress/components';
 import type {
 	FluidTypographySettings,
 	FluidTypographyConfig,
@@ -19,7 +14,6 @@ import { useCallback, memo, useContext } from '@wordpress/element';
  */
 import {
 	Flex,
-	BaseControl,
 	InputControl,
 	ToggleControl,
 	RepeaterContext,
@@ -163,7 +157,7 @@ function FontSizeComponent({
 				}}
 			>
 				<InputControl
-					label={__('Font Size:', 'blockera')}
+					label={__('Font Size', 'blockera')}
 					controlAddonTypes={[]}
 					labelDescription={
 						<>
@@ -181,130 +175,118 @@ function FontSizeComponent({
 							</p>
 						</>
 					}
-					columns="columns-2"
+					columns="1fr 3fr"
 					unitType="essential"
 					min={0}
 					onChange={(newValue: string | undefined) =>
 						handleFontSizeChange(newValue)
 					}
 					disabled={isCustomFluid}
-				/>
-			</ControlContextProvider>
-
-			<ControlContextProvider
-				value={{
-					name: `font-size-is-fluid-${slug}`,
-					value: isFluid,
-					attribute: 'blockeraFontSizeIsFluid',
-					blockName: 'global-styles',
-				}}
-			>
-				<BaseControl
-					class="columns-2"
-					label={__('Fluid Typography:', 'blockera')}
 				>
-					<ToggleControl
-						columns="1fr 2.5fr"
-						onChange={handleFluidChange}
-					/>
-				</BaseControl>
-			</ControlContextProvider>
-
-			{isFluid && (
-				<ControlContextProvider
-					value={{
-						name: `font-size-${slug}-custom-fluid`,
-						value: isCustomFluid,
-						attribute: 'blockeraFontSizeCustomFluid',
-						blockName: 'global-styles',
-					}}
-				>
-					<BaseControl
-						class="columns-2"
-						label={__('Custom Fluid Values:', 'blockera')}
+					<ControlContextProvider
+						value={{
+							name: `font-size-is-fluid-${slug}`,
+							value: isFluid,
+							attribute: 'blockeraFontSizeIsFluid',
+							blockName: 'global-styles',
+						}}
 					>
 						<ToggleControl
-							columns="1fr 2.5fr"
-							onChange={handleCustomFluidValues}
+							label={__('Fluid', 'blockera')}
+							columns="2fr 2fr"
+							onChange={handleFluidChange}
 						/>
-					</BaseControl>
-				</ControlContextProvider>
-			)}
+					</ControlContextProvider>
 
-			{isCustomFluid && (
-				<Flex gap={20} direction="row">
-					<ControlContextProvider
-						value={{
-							name: `font-size-min-${slug}`,
-							value:
-								typeof fontSize?.fluid === 'object'
-									? fontSize.fluid?.min
-									: undefined,
-							attribute: 'blockeraFontSize',
-							blockName: 'global-styles',
-						}}
-					>
-						<InputControl
-							controlAddonTypes={[]}
-							label={__('Min Size:', 'blockera')}
-							unitType="essential"
-							min={0}
-							onChange={(newValue: string | undefined) =>
-								handleMinChange(newValue)
-							}
-							style={{ margin: '0px' }}
-						/>
-					</ControlContextProvider>
-					<ControlContextProvider
-						value={{
-							name: `font-size-max-${slug}`,
-							value:
-								typeof fontSize?.fluid === 'object'
-									? fontSize.fluid?.max
-									: undefined,
-							attribute: 'blockeraFontSize',
-							blockName: 'global-styles',
-						}}
-					>
-						<BaseControl label={__('Max Size:', 'blockera')}>
-							<InputControl
-								unitType="essential"
-								min={0}
-								onChange={(newValue: string | undefined) =>
-									handleMaxChange(newValue)
-								}
-								controlAddonTypes={[]}
-								style={{ margin: '0px' }}
+					{isFluid && (
+						<ControlContextProvider
+							value={{
+								name: `font-size-${slug}-custom-fluid`,
+								value: isCustomFluid,
+								attribute: 'blockeraFontSizeCustomFluid',
+								blockName: 'global-styles',
+							}}
+						>
+							<ToggleControl
+								label={__('Custom Fluid', 'blockera')}
+								columns="2fr 2fr"
+								onChange={handleCustomFluidValues}
 							/>
-						</BaseControl>
-					</ControlContextProvider>
-				</Flex>
-			)}
+						</ControlContextProvider>
+					)}
+
+					{isCustomFluid && (
+						<>
+							<ControlContextProvider
+								value={{
+									name: `font-size-min-${slug}`,
+									value:
+										typeof fontSize?.fluid === 'object'
+											? fontSize.fluid?.min
+											: undefined,
+									attribute: 'blockeraFontSize',
+									blockName: 'global-styles',
+								}}
+							>
+								<InputControl
+									label={__('Min Size', 'blockera')}
+									columns="2fr 2fr"
+									controlAddonTypes={[]}
+									unitType="essential"
+									min={0}
+									onChange={(newValue: string | undefined) =>
+										handleMinChange(newValue)
+									}
+									style={{ margin: '0px' }}
+								/>
+							</ControlContextProvider>
+
+							<ControlContextProvider
+								value={{
+									name: `font-size-max-${slug}`,
+									value:
+										typeof fontSize?.fluid === 'object'
+											? fontSize.fluid?.max
+											: undefined,
+									attribute: 'blockeraFontSize',
+									blockName: 'global-styles',
+								}}
+							>
+								<InputControl
+									label={__('Max Size', 'blockera')}
+									columns="2fr 2fr"
+									unitType="essential"
+									min={0}
+									onChange={(newValue: string | undefined) =>
+										handleMaxChange(newValue)
+									}
+									controlAddonTypes={[]}
+									style={{ margin: '0px' }}
+								/>
+							</ControlContextProvider>
+						</>
+					)}
+				</InputControl>
+			</ControlContextProvider>
 		</>
 	);
 
 	return (
-		<VStack spacing={4}>
-			<View>
-				<Spacer paddingX={4} marginBottom={0} paddingBottom={6}>
-					<VStack spacing={4}>
-						<FlexItem>
-							<FontSizePreview fontSize={fontSize} />
-						</FlexItem>
+		<Flex direction="column" gap={15}>
+			<FlexItem>
+				<FontSizePreview fontSize={fontSize} />
+			</FlexItem>
 
-						<SharedPresetControls
-							itemId={presetId}
-							variable={fontSize}
-							name={fontSize.name}
-							slug={fontSize.slug}
-							allSlugs={getAllFontSizeSlugs(sizes)}
-						>
-							{fontSizeValueControls}
-						</SharedPresetControls>
-					</VStack>
-				</Spacer>
-			</View>
-		</VStack>
+			<SharedPresetControls
+				itemId={presetId}
+				variable={fontSize}
+				name={fontSize.name}
+				slug={fontSize.slug}
+				allSlugs={getAllFontSizeSlugs(sizes)}
+			>
+				{fontSizeValueControls}
+			</SharedPresetControls>
+		</Flex>
 	);
 }
 
