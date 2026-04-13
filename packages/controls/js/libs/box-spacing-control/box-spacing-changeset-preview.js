@@ -3,7 +3,6 @@
  * External dependencies
  */
 import type { MixedElement } from 'react';
-import { createElement, Fragment } from '@wordpress/element';
 
 /**
  * Blockera Dependencies
@@ -13,6 +12,7 @@ import { isEquals, isObject } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import Flex from '../flex';
 import { renderChangesetPreviewPart } from '../../value-addons/render-changeset-preview-part';
 
 const isEmptyPreviewPart = (part: string | MixedElement): boolean =>
@@ -67,7 +67,13 @@ export function formatBoxSpacingSidesForChangesetPreview(
 		const leftPart = !isEmptyPreviewPart(l) ? l : '-';
 		const topPart = !isEmptyPreviewPart(t) ? t : '0';
 
-		return createElement(Fragment, null, topPart, ' / ', leftPart);
+		return (
+			<Flex gap="2px" alignItems="center">
+				{topPart}
+				{' / '}
+				{leftPart}
+			</Flex>
+		);
 	}
 
 	const parts = [t, r, b, l].filter((p) => !isEmptyPreviewPart(p));
@@ -78,5 +84,5 @@ export function formatBoxSpacingSidesForChangesetPreview(
 
 	const interleaved = parts.flatMap((p, i) => (i === 0 ? [p] : [' · ', p]));
 
-	return createElement(Fragment, null, ...interleaved);
+	return <>{interleaved}</>;
 }
