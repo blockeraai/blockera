@@ -1,125 +1,85 @@
 /**
  * External dependencies
  */
-import React from 'react';
-
-/**
- * Blockera dependencies
- */
-import { classNames } from '@blockera/classnames';
+import type { CSSProperties } from 'react';
 
 /**
  * Internal dependencies
  */
+import { VariablePreview } from '../components/variable-preview';
 import type { BorderPresetStoredSide } from './utils';
 import { coerceBorderPresetSide, resolveBorderColorString } from './utils';
 
-const PREVIEW_SIZE = 28;
+const PREVIEW_SIZE = 50;
 
-const PREVIEW_GRADIENT =
-	'linear-gradient(145deg, rgba(56, 88, 233, 0.22), rgba(56, 88, 233, 0.08))';
-
-const EMPTY_PREVIEW_STYLE: React.CSSProperties = {
+const INNER_BASE: CSSProperties = {
 	display: 'inline-block',
 	width: PREVIEW_SIZE,
 	height: PREVIEW_SIZE,
 	boxSizing: 'border-box',
-	borderRadius: 0,
-	border: '1px dashed rgba(120, 120, 120, 0.45)',
-	background: 'rgba(120, 120, 120, 0.06)',
 	flexShrink: 0,
 	verticalAlign: 'middle',
 };
 
-/** Keeps thick theme borders from dominating the mini preview. */
-const MAX_EDGE_PX = 5;
-
-function clampBorderWidthForPreview(width: string): string {
-	const raw = String(width ?? '').trim();
-	if (!raw) {
-		return '1px';
-	}
-	const m = raw.match(/^([\d.]+)(\s*)(px)$/i);
-	if (!m) {
-		return raw;
-	}
-	const n = parseFloat(m[1]);
-	if (Number.isNaN(n)) {
-		return raw;
-	}
-	const clamped = Math.min(MAX_EDGE_PX, Math.max(0.5, n));
-	return `${clamped}px`;
-}
-
-const PREVIEW_CENTER_WRAP: React.CSSProperties = {
-	display: 'flex',
-	justifyContent: 'center',
-	alignItems: 'center',
-	width: '100%',
-	boxSizing: 'border-box',
-	padding: '10px 12px',
+const EMPTY_PREVIEW_STYLE: CSSProperties = {
+	...INNER_BASE,
+	borderRadius: 0,
+	background:
+		'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, transparent)',
+	border: '1px solid var(--blockera-controls-primary-color)',
 };
 
 export type BorderPresetPreviewProps = {
 	border: BorderPresetStoredSide | undefined;
 };
 
+/** True when the preset has nothing to draw (width, style, and resolved color are all empty). */
+function isStoredSideVisuallyEmpty(side: BorderPresetStoredSide): boolean {
+	const w = String(side.width ?? '').trim();
+	const st = String(side.style ?? '').trim();
+	const colorResolved = resolveBorderColorString(
+		side.color as string | Record<string, unknown> | undefined
+	);
+	return w === '' && st === '' && colorResolved === '';
+}
+
 export default function BorderPresetPreview({
 	border,
 }: BorderPresetPreviewProps) {
-	const wrap = (inner: React.ReactNode) => (
-		<div
-			className={classNames(
-				'global-styles-ui-preset-preview',
-				'global-styles-ui-border-preset-preview'
-			)}
-			style={PREVIEW_CENTER_WRAP}
-		>
-			{inner}
-		</div>
-	);
+	// One coercion: invalid / missing input becomes empty defaults (same as theme.json sanitize path).
+	const side = coerceBorderPresetSide(border);
 
-	if (!border) {
-		return wrap(<span style={EMPTY_PREVIEW_STYLE} />);
+	if (isStoredSideVisuallyEmpty(side)) {
+		return (
+			<VariablePreview type="border">
+				<span aria-hidden style={EMPTY_PREVIEW_STYLE} />
+			</VariablePreview>
+		);
 	}
 
-	const side = coerceBorderPresetSide(border);
 	const w = String(side.width ?? '').trim();
 	const st = String(side.style ?? '').trim();
-	const hasAny =
-		w !== '' ||
-		st !== '' ||
-		resolveBorderColorString(
-			side.color as string | Record<string, unknown> | undefined
-		) !== '';
-
-	if (!hasAny) {
-		return wrap(<span style={EMPTY_PREVIEW_STYLE} />);
-	}
-
-	const bw = clampBorderWidthForPreview(w || '1px');
+	const bw = w || '1px';
 	const bs = st || 'solid';
 	const bc =
 		resolveBorderColorString(
 			side.color as string | Record<string, unknown> | undefined
-		) || 'rgba(56, 88, 233, 0.45)';
+		) || 'var(--blockera-controls-primary-color)';
 
-	return wrap(
-		<span
-			aria-hidden
-			style={{
-				display: 'inline-block',
-				width: PREVIEW_SIZE,
-				height: PREVIEW_SIZE,
-				boxSizing: 'border-box',
-				borderRadius: 6,
-				background: PREVIEW_GRADIENT,
-				borderWidth: bw,
-				borderStyle: bs,
-				borderColor: bc,
-				flexShrink: 0,
-				verticalAlign: 'middle',
-			}}
-		/>
+	return (
+		<VariablePreview type="border">
+			<span
+				aria-hidden
+				style={{
+					...INNER_BASE,
+					borderRadius: 6,
+					background:
+						'color-mix(in srgb, var(--blockera-controls-primary-color) 20%, transparent)',
+					borderWidth: bw,
+					borderStyle: bs,
+					borderColor: bc,
+				}}
+			/>
+		</VariablePreview>
 	);
 }
