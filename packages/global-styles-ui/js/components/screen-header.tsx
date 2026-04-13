@@ -56,7 +56,7 @@ function ScreenHeaderComponent({
 						justifyContent="space-between"
 						gap="8px"
 						grow={1}
-						style={{ fontSize: '13px' }}
+						style={{ fontSize: '13px', fontWeight: '500' }}
 					>
 						{title}
 
