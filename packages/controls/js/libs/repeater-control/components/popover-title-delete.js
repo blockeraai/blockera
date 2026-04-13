@@ -152,7 +152,7 @@ export default function RepeaterPopoverTitleDelete({
 				tooltipPosition="top"
 				showTooltip={true}
 			>
-				<Icon icon="trash" iconSize="16" />
+				<Icon icon="trash" iconSize="18" />
 			</Button>
 		</>
 	);
