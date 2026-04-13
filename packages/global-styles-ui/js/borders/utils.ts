@@ -4,7 +4,7 @@
 import { getValueAddonRealValue, isValid } from '@blockera/controls';
 
 /**
- * Box border preset value shape (Blockera `BoxBorderControl`).
+ * Box border value shape for `BoxBorderControl` (in-memory only).
  */
 export type BoxBorderValue = {
 	type: 'all' | 'custom';
@@ -35,10 +35,19 @@ export type BoxBorderValue = {
 	};
 };
 
+/**
+ * Persisted `border` on each repeater item / theme.json preset: width, style, color only.
+ */
+export type BorderPresetStoredSide = {
+	width: string;
+	style: string;
+	color: string | Record<string, unknown>;
+};
+
 export type BorderBoxPreset = {
 	slug: string;
 	name: string;
-	border: BoxBorderValue;
+	border: BorderPresetStoredSide;
 };
 
 /**
@@ -61,48 +70,105 @@ export function getDefaultBoxBorderValue(): BoxBorderValue {
 	};
 }
 
-function isBoxSide(
-	o: unknown
-): o is { width: string; style: string; color: string } {
-	if (!o || typeof o !== 'object') {
-		return false;
-	}
-	const x = o as Record<string, unknown>;
-	return (
-		typeof x.width === 'string' &&
-		typeof x.style === 'string' &&
-		typeof x.color === 'string'
-	);
+export function getDefaultStoredBorderSide(): BorderPresetStoredSide {
+	return { width: '', style: '', color: '' };
 }
 
-function normalizeBorderValue(raw: unknown): BoxBorderValue {
-	if (isValidBoxBorderValue(raw)) {
-		return raw;
-	}
-	return getDefaultBoxBorderValue();
-}
-
-function isValidBoxBorderValue(val: unknown): val is BoxBorderValue {
-	if (!val || typeof val !== 'object') {
-		return false;
-	}
-	const b = val as Record<string, unknown>;
-	if (b.type !== 'all' && b.type !== 'custom') {
-		return false;
-	}
-	if (b.type === 'all') {
-		return !b.all || isBoxSide(b.all);
-	}
+function isValidStoredColorField(c: unknown): boolean {
 	return (
-		(!b.top || isBoxSide(b.top)) &&
-		(!b.right || isBoxSide(b.right)) &&
-		(!b.bottom || isBoxSide(b.bottom)) &&
-		(!b.left || isBoxSide(b.left))
+		typeof c === 'string' ||
+		(c !== null && typeof c === 'object' && !Array.isArray(c))
 	);
 }
 
 /**
- * Keep border box presets: requires slug and name; border is normalized or defaulted.
+ * True when `border` matches the persisted `{ width, style, color }` shape.
+ */
+export function isStoredBorderSide(o: unknown): o is BorderPresetStoredSide {
+	if (!o || typeof o !== 'object' || Array.isArray(o)) {
+		return false;
+	}
+	const x = o as Record<string, unknown>;
+	if (x.type === 'all' || x.type === 'custom') {
+		return false;
+	}
+	if (typeof x.width !== 'string' || typeof x.style !== 'string') {
+		return false;
+	}
+	if (!('color' in x)) {
+		return true;
+	}
+	return isValidStoredColorField(x.color);
+}
+
+function normalizeStoredSide(
+	raw: BorderPresetStoredSide | Record<string, unknown>
+): BorderPresetStoredSide {
+	const x = raw as Record<string, unknown>;
+	let color: string | Record<string, unknown> = '';
+	const c = x.color;
+	if (c !== undefined && c !== null && isValidStoredColorField(c)) {
+		color = c as string | Record<string, unknown>;
+	}
+	return {
+		width: String(x.width ?? ''),
+		style: String(x.style ?? ''),
+		color,
+	};
+}
+
+/**
+ * Coerce unknown input to a stored border triple (default when invalid).
+ */
+export function coerceBorderPresetSide(raw: unknown): BorderPresetStoredSide {
+	if (isStoredBorderSide(raw)) {
+		return normalizeStoredSide(raw);
+	}
+	return getDefaultStoredBorderSide();
+}
+
+/**
+ * Maps `BoxBorderControl` onChange output to persisted repeater / theme.json shape.
+ */
+export function boxBorderControlValueToStoredSide(
+	value: BoxBorderValue | Record<string, unknown>
+): BorderPresetStoredSide {
+	const b = value as BoxBorderValue;
+	if (b?.type === 'all' && b.all) {
+		return normalizeStoredSide({
+			width: String(b.all.width ?? ''),
+			style: String(b.all.style ?? ''),
+			color: (b.all.color ?? '') as string | Record<string, unknown>,
+		});
+	}
+	return getDefaultStoredBorderSide();
+}
+
+/**
+ * Persisted side → value for `BoxBorderControl` (linked-all UI).
+ */
+export function storedSideToBoxBorderValue(raw: unknown): BoxBorderValue {
+	if (!isStoredBorderSide(raw)) {
+		return getDefaultBoxBorderValue();
+	}
+	const side = normalizeStoredSide(raw);
+	const empty = emptySide();
+	return {
+		type: 'all',
+		all: {
+			width: side.width,
+			style: side.style,
+			color: side.color,
+		},
+		top: { ...empty },
+		right: { ...empty },
+		bottom: { ...empty },
+		left: { ...empty },
+	} as BoxBorderValue;
+}
+
+/**
+ * Keep border box presets: requires slug and name; border must be the flat triple or defaults.
  */
 export function sanitizeBorderBoxPresets(presets: unknown): BorderBoxPreset[] {
 	if (!Array.isArray(presets)) {
@@ -120,7 +186,7 @@ export function sanitizeBorderBoxPresets(presets: unknown): BorderBoxPreset[] {
 		out.push({
 			slug: o.slug,
 			name: o.name,
-			border: normalizeBorderValue(o.border),
+			border: coerceBorderPresetSide(o.border),
 		});
 	}
 	return out;
@@ -144,121 +210,30 @@ export function resolveBorderColorString(
 	return '';
 }
 
-/** T / R / B / L — compact per-side cues for border opener (no arrow glyphs). */
-export const BORDER_SIDE_LABELS_SHORT = ['T', 'R', 'B', 'L'] as const;
-
-function sideDataEqual(
-	a: BoxBorderValue['top'],
-	b: BoxBorderValue['top']
-): boolean {
-	if (!a || !b) {
-		return false;
-	}
-	return (
-		String(a.width ?? '').trim() === String(b.width ?? '').trim() &&
-		String(a.style ?? '').trim() === String(b.style ?? '').trim() &&
-		resolveBorderColorString(
-			a.color as string | Record<string, unknown> | undefined
-		) ===
-			resolveBorderColorString(
-				b.color as string | Record<string, unknown> | undefined
-			)
-	);
-}
-
 /**
  * Plain-language summary for `title` / tooltips (includes full color text).
  */
 export function getBorderPresetAccessibilityDescription(
-	border: BoxBorderValue | undefined
+	border: BorderPresetStoredSide | undefined
 ): string {
 	if (!border) {
 		return '';
 	}
-
-	if (border.type === 'all' && border.all) {
-		const { width, style, color } = border.all;
-		const parts: string[] = [];
-		const w = String(width ?? '').trim();
-		const st = String(style ?? '').trim();
-		const c = resolveBorderColorString(
-			color as string | Record<string, unknown> | undefined
-		);
-		if (w) {
-			parts.push(w);
-		}
-		if (st) {
-			parts.push(st);
-		}
-		if (c) {
-			parts.push(c);
-		}
-		return parts.join(' · ');
+	const side = coerceBorderPresetSide(border);
+	const w = String(side.width ?? '').trim();
+	const st = String(side.style ?? '').trim();
+	const c = resolveBorderColorString(
+		side.color as string | Record<string, unknown> | undefined
+	);
+	const parts: string[] = [];
+	if (w) {
+		parts.push(w);
 	}
-
-	if (border.type === 'custom') {
-		const keys = ['top', 'right', 'bottom', 'left'] as const;
-		const labels = ['top', 'right', 'bottom', 'left'];
-		const parts: string[] = [];
-		for (let i = 0; i < keys.length; i++) {
-			const side = border[keys[i]];
-			if (!side) {
-				continue;
-			}
-			const w = String(side.width ?? '').trim();
-			const st = String(side.style ?? '').trim();
-			const c = resolveBorderColorString(
-				side.color as string | Record<string, unknown> | undefined
-			);
-			const bits: string[] = [];
-			if (w) {
-				bits.push(w);
-			}
-			if (st) {
-				bits.push(st);
-			}
-			if (c) {
-				bits.push(c);
-			}
-			if (bits.length) {
-				parts.push(`${labels[i]}: ${bits.join(' ')}`);
-			}
-		}
-		return parts.join('; ');
+	if (st) {
+		parts.push(st);
 	}
-
-	return '';
-}
-
-export function areAllFourCustomSidesEqual(border: BoxBorderValue): boolean {
-	if (border.type !== 'custom') {
-		return false;
+	if (c) {
+		parts.push(c);
 	}
-	const t = border.top;
-	const r = border.right;
-	const b = border.bottom;
-	const l = border.left;
-	if (!t || !r || !b || !l) {
-		return false;
-	}
-	return sideDataEqual(t, r) && sideDataEqual(r, b) && sideDataEqual(b, l);
-}
-
-export function areCustomSidesTbLrPairs(
-	border: BoxBorderValue
-): [BoxBorderValue['top'], BoxBorderValue['left']] | null {
-	if (border.type !== 'custom') {
-		return null;
-	}
-	const t = border.top;
-	const r = border.right;
-	const b = border.bottom;
-	const l = border.left;
-	if (!t || !r || !b || !l) {
-		return null;
-	}
-	if (sideDataEqual(t, b) && sideDataEqual(l, r) && !sideDataEqual(t, l)) {
-		return [t, l];
-	}
-	return null;
+	return parts.join(' · ');
 }

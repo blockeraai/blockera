@@ -629,37 +629,53 @@ class JSON extends \WP_Theme_JSON {
 
     /**
      * @param mixed $border Border value from theme.json / editor.
-     * @return array Normalized box border (matches JS sanitizeBorderBoxPresets).
+     * @return array{width: string, style: string, color: string|array} Flat triple (BorderPresetStoredSide / coerceBorderPresetSide).
      */
     protected static function sanitize_box_border_value( $border ): array {
         if (! is_array($border)) {
-            return static::get_default_box_border_value();
+            return static::empty_border_side();
         }
 
-        $type = isset($border['type']) && in_array($border['type'], array( 'all', 'custom' ), true)
-            ? $border['type']
-            : 'all';
+        $has_legacy_type = isset($border['type']) && in_array($border['type'], array( 'all', 'custom' ), true);
 
-        if ('all' === $type) {
-            $all = isset($border['all']) && is_array($border['all'])
-                ? static::normalize_border_side($border['all'])
-                : static::empty_border_side();
-
-            return array(
-                'type' => 'all',
-                'all'  => $all,
-            );
+        if (! $has_legacy_type && static::is_flat_stored_border_side_candidate($border)) {
+            return static::normalize_border_side($border);
         }
 
-        $out = array( 'type' => 'custom' );
-
-        foreach (array( 'top', 'right', 'bottom', 'left' ) as $edge) {
-            if (isset($border[ $edge ]) && is_array($border[ $edge ])) {
-                $out[ $edge ] = static::normalize_border_side($border[ $edge ]);
+        if (isset($border['type']) && 'all' === $border['type']) {
+            if (isset($border['all']) && is_array($border['all'])) {
+                return static::normalize_border_side($border['all']);
             }
+
+            return static::empty_border_side();
         }
 
-        return $out;
+        if (isset($border['type']) && 'custom' === $border['type']) {
+            foreach (array( 'top', 'right', 'bottom', 'left' ) as $edge) {
+                if (empty($border[ $edge ]) || ! is_array($border[ $edge ])) {
+                    continue;
+                }
+                $side = static::normalize_border_side($border[ $edge ]);
+                if ('' !== $side['width']) {
+                    return $side;
+                }
+            }
+
+            return static::empty_border_side();
+        }
+
+        return static::empty_border_side();
+    }
+
+    /**
+     * True when $border looks like persisted `{ width, style, color? }` (no legacy `type`: all|custom).
+     *
+     * @param array $border Raw border array.
+     */
+    protected static function is_flat_stored_border_side_candidate( array $border ): bool {
+        return isset($border['width'], $border['style'])
+            && is_string($border['width'])
+            && is_string($border['style']);
     }
 
     /**
@@ -670,16 +686,6 @@ class JSON extends \WP_Theme_JSON {
             'width' => '',
             'style' => '',
             'color' => '',
-        );
-    }
-
-    /**
-     * @return array{type: string, all: array, ...}
-     */
-    protected static function get_default_box_border_value(): array {
-        return array(
-            'type' => 'all',
-            'all'  => static::empty_border_side(),
         );
     }
 

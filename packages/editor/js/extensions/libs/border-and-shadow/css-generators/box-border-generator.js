@@ -23,6 +23,35 @@ function borderSideShorthand(side, varName) {
 	return shorthand;
 }
 
+/**
+ * Border variable payload: flat `{ width, style, color }` (global-styles presets) or legacy `{ type, all }`.
+ */
+function sideFromBorderVariablePayload(payload) {
+	if (!payload || typeof payload !== 'object') {
+		return null;
+	}
+	if (payload.type === 'all' || payload.type === 'custom') {
+		if (
+			payload.type === 'all' &&
+			payload.all &&
+			typeof payload.all === 'object'
+		) {
+			return payload.all;
+		}
+		return null;
+	}
+	if (
+		typeof payload.width === 'string' &&
+		typeof payload.style === 'string'
+	) {
+		return payload;
+	}
+	if (payload.all && typeof payload.all === 'object') {
+		return payload.all;
+	}
+	return null;
+}
+
 export function BoxBorderGenerator(id, props, options) {
 	const { attributes } = props;
 
@@ -31,17 +60,27 @@ export function BoxBorderGenerator(id, props, options) {
 	}
 
 	const properties = {};
-	const borderValue = attributes.blockeraBorder;
+	const borderValue =
+		attributes.blockeraBorder?.value ?? attributes.blockeraBorder;
 
-	if (borderValue?.type === 'all') {
+	if (
+		!borderValue?.type &&
+		typeof borderValue?.width === 'string' &&
+		typeof borderValue?.style === 'string'
+	) {
+		const shorthand = borderSideShorthand(borderValue, null);
+		if (shorthand) {
+			properties.border = shorthand;
+		}
+	} else if (borderValue?.type === 'all') {
 		let borderSides = borderValue?.all;
 		let sideVar = null;
 		if ('variable' === borderSides?.valueType) {
 			sideVar = borderSides?.settings?.var;
-			borderSides = parseBorderVariablePayloadFromSettings(
+			const payload = parseBorderVariablePayloadFromSettings(
 				borderSides?.settings
 			);
-			borderSides = borderSides?.all;
+			borderSides = sideFromBorderVariablePayload(payload);
 		}
 
 		const borderAllWidth = borderSides?.width;
@@ -53,10 +92,9 @@ export function BoxBorderGenerator(id, props, options) {
 		let topVar = null;
 		if ('variable' === borderTSide?.valueType) {
 			topVar = borderTSide?.settings?.var;
-			borderTSide = parseBorderVariablePayloadFromSettings(
-				borderTSide?.settings
+			borderTSide = sideFromBorderVariablePayload(
+				parseBorderVariablePayloadFromSettings(borderTSide?.settings)
 			);
-			borderTSide = borderTSide?.all;
 		}
 		const borderTopCss = borderSideShorthand(borderTSide, topVar);
 		if (borderTopCss) {
@@ -67,10 +105,9 @@ export function BoxBorderGenerator(id, props, options) {
 		let rightVar = null;
 		if ('variable' === borderRSide?.valueType) {
 			rightVar = borderRSide?.settings?.var;
-			borderRSide = parseBorderVariablePayloadFromSettings(
-				borderRSide?.settings
+			borderRSide = sideFromBorderVariablePayload(
+				parseBorderVariablePayloadFromSettings(borderRSide?.settings)
 			);
-			borderRSide = borderRSide?.all;
 		}
 		const borderRightCss = borderSideShorthand(borderRSide, rightVar);
 		if (borderRightCss) {
@@ -81,10 +118,9 @@ export function BoxBorderGenerator(id, props, options) {
 		let bottomVar = null;
 		if ('variable' === borderBSide?.valueType) {
 			bottomVar = borderBSide?.settings?.var;
-			borderBSide = parseBorderVariablePayloadFromSettings(
-				borderBSide?.settings
+			borderBSide = sideFromBorderVariablePayload(
+				parseBorderVariablePayloadFromSettings(borderBSide?.settings)
 			);
-			borderBSide = borderBSide?.all;
 		}
 		const borderBottomCss = borderSideShorthand(borderBSide, bottomVar);
 		if (borderBottomCss) {
@@ -95,10 +131,9 @@ export function BoxBorderGenerator(id, props, options) {
 		let leftVar = null;
 		if ('variable' === borderLSide?.valueType) {
 			leftVar = borderLSide?.settings?.var;
-			borderLSide = parseBorderVariablePayloadFromSettings(
-				borderLSide?.settings
+			borderLSide = sideFromBorderVariablePayload(
+				parseBorderVariablePayloadFromSettings(borderLSide?.settings)
 			);
-			borderLSide = borderLSide?.all;
 		}
 		const borderLeftCss = borderSideShorthand(borderLSide, leftVar);
 		if (borderLeftCss) {

@@ -36,7 +36,7 @@ import {
 import { NavItemBackButton } from '../navigation/nav-item-back-button';
 import {
 	sanitizeBorderBoxPresets,
-	getDefaultBoxBorderValue,
+	getDefaultStoredBorderSide,
 	type BorderBoxPreset,
 } from './utils';
 
@@ -69,7 +69,7 @@ function BorderPresetGroupComponent({
 	const defaultPresetValue = useMemo((): BorderBoxDefaultPresetValue &
 		VariableType => {
 		return {
-			border: getDefaultBoxBorderValue(),
+			border: getDefaultStoredBorderSide(),
 			slug: `border-${index}`,
 			deletable: !!('custom' === origin),
 			cloneable: !!('custom' === origin),

@@ -22,11 +22,15 @@ import BorderPresetPreview from './border-preset-preview';
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllBorderPresetSlugs } from '../components/utils';
-import type { BoxBorderValue } from './utils';
-import { getDefaultBoxBorderValue } from './utils';
+import type { BorderPresetStoredSide, BoxBorderValue } from './utils';
+import {
+	boxBorderControlValueToStoredSide,
+	getDefaultBoxBorderValue,
+	storedSideToBoxBorderValue,
+} from './utils';
 
 export type BorderBoxDefaultPresetValue = VariableType & {
-	border: BoxBorderValue;
+	border: BorderPresetStoredSide;
 	deletable: boolean;
 	cloneable: boolean;
 	visibilitySupport: boolean;
@@ -87,7 +91,10 @@ function BorderPresetSizeComponent({
 
 	const handleBorderChange = useCallback(
 		(newValue: Object) => {
-			updatePresetViaRepeater('border', newValue);
+			updatePresetViaRepeater(
+				'border',
+				boxBorderControlValueToStoredSide(newValue as BoxBorderValue)
+			);
 		},
 		[updatePresetViaRepeater]
 	);
@@ -96,10 +103,7 @@ function BorderPresetSizeComponent({
 		return null;
 	}
 
-	const borderValue =
-		borderPreset.border && typeof borderPreset.border === 'object'
-			? borderPreset.border
-			: getDefaultBoxBorderValue();
+	const borderValue = storedSideToBoxBorderValue(borderPreset.border);
 
 	const borderPresetValueControls = (
 		<ControlContextProvider

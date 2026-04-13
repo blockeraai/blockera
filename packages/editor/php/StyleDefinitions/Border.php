@@ -39,13 +39,19 @@ class Border extends BaseStyleDefinition {
 
 		$value = $setting['border'];
 
-		if ( ! isset( $value['type'] ) ) {
+		if ( ! empty( $setting['_blockeraDeclarationOnly'] ) && ! empty( $setting['_blockeraGlobalPreset'] ) ) {
+			if ( self::isFlatPresetBorderSide( $value ) ) {
+				$this->declarations['border'] = self::sideToCssShorthand( $value );
+
+				return [];
+			}
+
+			$this->declarations['border'] = self::presetBoxToShorthand( $value );
+
 			return [];
 		}
 
-		if ( ! empty( $setting['_blockeraDeclarationOnly'] ) && ! empty( $setting['_blockeraGlobalPreset'] ) ) {
-			$this->declarations['border'] = self::presetBoxToShorthand( $value );
-
+		if ( ! isset( $value['type'] ) ) {
 			return [];
 		}
 
@@ -96,7 +102,9 @@ class Border extends BaseStyleDefinition {
 				$box = static::tryDecodeLegacyVariableJsonObject( $settings['value'] );
 			}
 
-			if ( is_array( $box ) && isset( $box['all'] ) && is_array( $box['all'] ) ) {
+			if ( is_array( $box ) && self::isFlatPresetBorderSide( $box ) ) {
+				$value = $box;
+			} elseif ( is_array( $box ) && isset( $box['all'] ) && is_array( $box['all'] ) ) {
 				$value = $box['all'];
 			} else {
 				$value = array(
@@ -127,6 +135,21 @@ class Border extends BaseStyleDefinition {
 		}
 
 		return $width . ' ' . $style . ( '' !== $color ? ' ' . $color : '' );
+	}
+
+	/**
+	 * Theme.json / global-styles flat border: { width, style, color } without `type`.
+	 *
+	 * @param array $border Candidate border payload.
+	 */
+	private static function isFlatPresetBorderSide( array $border ): bool {
+		if ( isset( $border['type'] ) ) {
+			return false;
+		}
+
+		return isset( $border['width'], $border['style'] )
+			&& is_string( $border['width'] )
+			&& is_string( $border['style'] );
 	}
 
 	/**
