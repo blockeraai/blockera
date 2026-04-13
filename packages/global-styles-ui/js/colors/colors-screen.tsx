@@ -1,11 +1,7 @@
 /**
  * External dependencies
  */
-import {
-	FlexItem,
-	__experimentalHStack as HStack,
-	__experimentalItemGroup as ItemGroup,
-} from '@wordpress/components';
+import { __experimentalItemGroup as ItemGroup } from '@wordpress/components';
 import { __, isRTL } from '@wordpress/i18n';
 import { Icon, chevronLeft, chevronRight } from '@wordpress/icons';
 
@@ -26,6 +22,38 @@ interface ColorsScreenProps {
 	onClick: (event: Event) => void;
 }
 
+const PREVIEW_STACK_SIZE = 4;
+
+function buildColorPreviewStack(colors: string[]): string[] {
+	if (colors.length > PREVIEW_STACK_SIZE) {
+		return colors;
+	}
+	const padded = [...colors];
+	while (padded.length < PREVIEW_STACK_SIZE) {
+		padded.push('none');
+	}
+	return padded;
+}
+
+type GradientPreviewItem = { value: string; type: 'gradient' };
+
+function buildGradientPreviewStack(
+	gradients: Array<{ gradient: string }>
+): GradientPreviewItem[] {
+	const mapped: GradientPreviewItem[] = gradients.map((g) => ({
+		value: g.gradient,
+		type: 'gradient',
+	}));
+	if (mapped.length > PREVIEW_STACK_SIZE) {
+		return mapped;
+	}
+	const padded = [...mapped];
+	while (padded.length < PREVIEW_STACK_SIZE) {
+		padded.push({ value: 'none', type: 'gradient' });
+	}
+	return padded;
+}
+
 /**
  * Subscribes to palette and gradient previews for the nav list. The parent
  * `ColorsScreen` does not use global-styles context, so the subtitle row does
@@ -39,51 +67,72 @@ function ColorsNavigationPreviews({ onClick }: ColorsScreenProps) {
 	return (
 		<ItemGroup isBordered isSeparated>
 			<NavigationButtonAsItem path="/colors/palette" onClick={onClick}>
-				<HStack direction="row">
-					{colors.length > 0 && (
-						<ColorIndicatorStack value={colors} />
-					)}
-					<FlexItem>{__('Color variables', 'blockera')}</FlexItem>
+				<Flex
+					direction="row"
+					alignItems="center"
+					justifyContent="start"
+					gap="8px"
+				>
+					<ColorIndicatorStack
+						maxItems={PREVIEW_STACK_SIZE}
+						value={buildColorPreviewStack(colors)}
+						size={18}
+					/>
+
+					<div style={{ flexGrow: 1 }}>
+						{__('Colors', 'blockera')}
+					</div>
+
 					<Icon icon={isRTL() ? chevronLeft : chevronRight} />
-				</HStack>
+				</Flex>
 			</NavigationButtonAsItem>
+
 			<NavigationButtonAsItem
 				path="/colors/linear-gradients"
 				onClick={onClick}
 			>
-				<HStack direction="row">
-					{linearGradients.length > 0 && (
-						<ColorIndicatorStack
-							value={linearGradients.map((g) => ({
-								value: g.gradient,
-								type: 'gradient',
-							}))}
-						/>
-					)}
-					<FlexItem>
-						{__('Linear gradient variables', 'blockera')}
-					</FlexItem>
+				<Flex
+					direction="row"
+					alignItems="center"
+					justifyContent="start"
+					gap="8px"
+				>
+					<ColorIndicatorStack
+						maxItems={PREVIEW_STACK_SIZE}
+						value={buildGradientPreviewStack(linearGradients)}
+						size={18}
+					/>
+
+					<div style={{ flexGrow: 1 }}>
+						{__('Linear gradients', 'blockera')}
+					</div>
+
 					<Icon icon={isRTL() ? chevronLeft : chevronRight} />
-				</HStack>
+				</Flex>
 			</NavigationButtonAsItem>
+
 			<NavigationButtonAsItem
 				path="/colors/radial-gradients"
 				onClick={onClick}
 			>
-				<HStack direction="row">
-					{radialGradients.length > 0 && (
-						<ColorIndicatorStack
-							value={radialGradients.map((g) => ({
-								value: g.gradient,
-								type: 'gradient',
-							}))}
-						/>
-					)}
-					<FlexItem>
-						{__('Radial gradient variables', 'blockera')}
-					</FlexItem>
+				<Flex
+					direction="row"
+					alignItems="center"
+					justifyContent="start"
+					gap="8px"
+				>
+					<ColorIndicatorStack
+						maxItems={PREVIEW_STACK_SIZE}
+						value={buildGradientPreviewStack(radialGradients)}
+						size={18}
+					/>
+
+					<div style={{ flexGrow: 1 }}>
+						{__('Radial gradients', 'blockera')}
+					</div>
+
 					<Icon icon={isRTL() ? chevronLeft : chevronRight} />
-				</HStack>
+				</Flex>
 			</NavigationButtonAsItem>
 		</ItemGroup>
 	);
