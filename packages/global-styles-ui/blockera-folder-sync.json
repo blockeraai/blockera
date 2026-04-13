@@ -1,6 +1,6 @@
 {
-	"name": "blockera/editor",
-	"path": "packages/editor",
+	"name": "blockera/global-styles-ui",
+	"path": "packages/global-styles-ui",
 	"dependent": {
 		"repositories": [
 			"https://github.com/blockeraai/blockera.git",
