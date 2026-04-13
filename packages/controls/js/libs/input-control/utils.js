@@ -7,6 +7,7 @@ import { isString, isArray, isObject, isUndefined } from '@blockera/utils';
 /**
  * Internal dependencies
  */
+import { getSelectedSelectOption } from '../select-control/utils';
 import type { InputUnitTypes } from './types';
 
 const specialUnits = [
@@ -26,33 +27,6 @@ const specialUnits = [
 	'normal',
 ];
 
-// Helper function to recursively search for a unit value in nested options
-const findUnitInOptions = (
-	value: string,
-	options: Array<any>
-): Object | null => {
-	if (!isArray(options)) {
-		return null;
-	}
-
-	for (const option of options) {
-		// Check if this option matches the value
-		if (option.value === value) {
-			return option;
-		}
-
-		// Recursively search in nested options
-		if (option.options && Array.isArray(option.options)) {
-			const found = findUnitInOptions(value, option.options);
-			if (found) {
-				return found;
-			}
-		}
-	}
-
-	return null;
-};
-
 // Function to get a unit object based on a specific value
 export const getUnitByValue = (value: string, units: Array<any>): Object => {
 	if (isUndefined(value)) {
@@ -60,19 +34,10 @@ export const getUnitByValue = (value: string, units: Array<any>): Object => {
 	}
 
 	if (isArray(units)) {
-		// Check each unit for a matching value
-		for (const unit of units) {
-			if (unit.value === value) {
-				return unit; // Return the unit if the value matches
-			}
+		const found = getSelectedSelectOption(value, units);
 
-			// Check if the unit has options and search within them recursively
-			if (unit.options && Array.isArray(unit.options)) {
-				const foundUnit = findUnitInOptions(value, unit.options);
-				if (foundUnit) {
-					return foundUnit; // Return the found unit
-				}
-			}
+		if (found) {
+			return found;
 		}
 	}
 

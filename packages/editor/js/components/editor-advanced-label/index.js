@@ -476,3 +476,6 @@ export const EditorAdvancedLabelControl = ({
 		</>
 	);
 };
+
+export { renderSelectOptionChangesetPreview } from './changeset-graph/render-select-option-changeset-preview';
+export type { RenderSelectOptionChangesetPreviewArgs } from './changeset-graph/render-select-option-changeset-preview';
