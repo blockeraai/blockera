@@ -130,7 +130,11 @@ export default function ({
 		}
 
 		return (
-			<PickerCategory key={`type-${type}-${index}`} title={data.label}>
+			<PickerCategory
+				key={`type-${type}-${index}`}
+				title={data.label}
+				showTitle={!globalStylesPanel}
+			>
 				<div
 					className={controlInnerClassNames(
 						'var-picker-preset-panel'

@@ -14,7 +14,7 @@ import {
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 import type { VariableItem } from '@blockera/data';
-import { noop } from '@blockera/utils';
+import { noop, pascalCase } from '@blockera/utils';
 
 /**
  * Internal dependencies
@@ -22,7 +22,6 @@ import { noop } from '@blockera/utils';
 import { FallbackPresetFields } from './fallback-preset-fields';
 import { FallbackPresetOpener } from './fallback-preset-opener';
 import {
-	getOriginVariablesLabel,
 	shouldShowDefaultPresetGroup,
 	shouldShowThemePresetGroup,
 } from './preset-origin-utils';
@@ -91,7 +90,11 @@ function VarPickerFallbackReadOnlyProvider({
 
 	return (
 		<VarPickerPresetContext.Provider
-			value={{ ...ctx, disablePresetRowEdit: true }}
+			value={{
+				...ctx,
+				disablePresetRowEdit: true,
+				omitRepeaterSectionLabel: true,
+			}}
 		>
 			{children}
 		</VarPickerPresetContext.Provider>
@@ -108,7 +111,6 @@ export function FallbackPresetContent() {
 		controlProps,
 		variableType,
 		catalogItems = [],
-		catalogLabel,
 	} = useVarPickerPresetContext();
 
 	const effectiveType = variableType ?? '';
@@ -154,10 +156,7 @@ export function FallbackPresetContent() {
 		defaultItems.length
 	);
 
-	const title =
-		catalogLabel && String(catalogLabel).trim() !== ''
-			? catalogLabel
-			: variableType;
+	const title = pascalCase(effectiveType);
 
 	return (
 		<VarPickerFallbackReadOnlyProvider>
@@ -175,7 +174,7 @@ export function FallbackPresetContent() {
 						variables={themeVariables as never}
 						PresetFields={FallbackPresetFields}
 						title={title}
-						label={getOriginVariablesLabel('theme')}
+						label=""
 						enableCreatingStep={false}
 					/>
 				)}
@@ -189,7 +188,7 @@ export function FallbackPresetContent() {
 						variables={defaultVariables as never}
 						PresetFields={FallbackPresetFields}
 						title={title}
-						label={getOriginVariablesLabel('default')}
+						label=""
 						enableCreatingStep={false}
 					/>
 				)}

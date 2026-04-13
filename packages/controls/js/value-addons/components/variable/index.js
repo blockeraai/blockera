@@ -9,3 +9,4 @@ export {
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
 } from './var-picker-preset-context';
+export { resolveVariablePickerPresetGroupLabel } from './var-picker-preset-origin-label';

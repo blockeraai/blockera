@@ -15,12 +15,14 @@ import {
 	ControlContextProvider,
 	getRepeaterActiveItemsCount,
 	cleanupRepeater,
+	resolveVariablePickerPresetGroupLabel,
 	useVarPickerPresetContext,
 } from '@blockera/controls';
 import { noop, pascalCase, isObject } from '@blockera/utils';
 import {
 	controlClassNames,
 	componentInnerClassNames,
+	controlInnerClassNames,
 } from '@blockera/classnames';
 
 /**
@@ -67,7 +69,7 @@ export type PresetGroupPropsType = {
 };
 
 type PresetsProps = {
-	label: string;
+	label: string | React.ReactNode;
 	title: string;
 	controlName: string;
 	onClose: () => void;
@@ -315,6 +317,51 @@ export const PresetGroup = ({
 		[origin, title, variables]
 	);
 
+	const labelForVariablePicker = useMemo(() => {
+		if (pickerCtx.omitRepeaterSectionLabel) {
+			return '';
+		}
+		if (
+			!isVariablePicker ||
+			typeof pickerCtx.variableType !== 'string' ||
+			!pickerCtx.variableType
+		) {
+			return label;
+		}
+		return resolveVariablePickerPresetGroupLabel(
+			pickerCtx.variableType,
+			origin,
+			label
+		);
+	}, [
+		isVariablePicker,
+		label,
+		origin,
+		pickerCtx.omitRepeaterSectionLabel,
+		pickerCtx.variableType,
+	]);
+
+	const repeaterLabel = useMemo(() => {
+		if (pickerCtx.omitRepeaterSectionLabel) {
+			return '';
+		}
+		if (isVariablePicker) {
+			return (
+				<span
+					className={controlInnerClassNames('picker-category-header')}
+				>
+					{labelForVariablePicker}
+				</span>
+			);
+		}
+		return label;
+	}, [
+		isVariablePicker,
+		label,
+		labelForVariablePicker,
+		pickerCtx.omitRepeaterSectionLabel,
+	]);
+
 	return (
 		<PresetStateContainer activeColor="#1ca120">
 			<ControlContextProvider
@@ -324,7 +371,7 @@ export const PresetGroup = ({
 				<BaseControl controlName={controlName} columns="columns-1">
 					<Presets
 						title={title}
-						label={label}
+						label={repeaterLabel}
 						onClose={noop}
 						origin={origin}
 						onChange={handleRepeaterOnChange}
@@ -350,6 +397,9 @@ export const PresetGroup = ({
 						}
 						showItemEditButton={
 							isVariablePicker && !pickerCtx.disablePresetRowEdit
+						}
+						actionButtonAdd={
+							pickerCtx.omitRepeaterSectionLabel ? false : true
 						}
 					/>
 				</BaseControl>
