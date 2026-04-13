@@ -50,15 +50,8 @@ export function GradientPresetOpener({
 			data-cy="gradient-repeater-item-header"
 		>
 			<span
-				className={controlInnerClassNames('header-label')}
-				data-cy="header-label"
-			>
-				{variable?.name}
-			</span>
-
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
+				className={controlInnerClassNames('header-icon')}
+				data-cy="header-icon"
 			>
 				{variable?.gradient ? (
 					<ColorIndicator
@@ -70,6 +63,18 @@ export function GradientPresetOpener({
 					<ColorIndicator type="color" value="none" size={18} />
 				)}
 			</span>
+
+			<span
+				className={controlInnerClassNames('header-label')}
+				data-cy="header-label"
+			>
+				{variable?.name}
+			</span>
+
+			<span
+				className={controlInnerClassNames('header-values')}
+				data-cy="header-values"
+			></span>
 
 			{children}
 		</div>
