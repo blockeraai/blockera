@@ -42,9 +42,7 @@ function TextShadowPresetOpenerValue({
 			<TextShadowPresetPreview
 				shadow={textShadowPresetItemsToCss(preset?.items ?? [])}
 				inline
-				width={12}
-				height={12}
-				borderRadius={0}
+				size={12}
 			/>
 		</Flex>
 	);
