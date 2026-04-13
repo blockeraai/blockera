@@ -321,24 +321,16 @@ export const PresetGroup = ({
 		if (pickerCtx.omitRepeaterSectionLabel) {
 			return '';
 		}
-		if (
-			!isVariablePicker ||
-			typeof pickerCtx.variableType !== 'string' ||
-			!pickerCtx.variableType
-		) {
+		if (!isVariablePicker) {
 			return label;
 		}
-		return resolveVariablePickerPresetGroupLabel(
-			pickerCtx.variableType,
-			origin,
-			label
-		);
+		return resolveVariablePickerPresetGroupLabel(title, origin, label);
 	}, [
 		isVariablePicker,
 		label,
 		origin,
 		pickerCtx.omitRepeaterSectionLabel,
-		pickerCtx.variableType,
+		title,
 	]);
 
 	const repeaterLabel = useMemo(() => {

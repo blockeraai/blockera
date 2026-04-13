@@ -111,6 +111,7 @@ export function FallbackPresetContent() {
 		controlProps,
 		variableType,
 		catalogItems = [],
+		catalogLabel,
 	} = useVarPickerPresetContext();
 
 	const effectiveType = variableType ?? '';
@@ -156,7 +157,10 @@ export function FallbackPresetContent() {
 		defaultItems.length
 	);
 
-	const title = pascalCase(effectiveType);
+	const title =
+		catalogLabel && String(catalogLabel).trim() !== ''
+			? catalogLabel
+			: pascalCase(effectiveType);
 
 	return (
 		<VarPickerFallbackReadOnlyProvider>
