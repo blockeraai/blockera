@@ -36,8 +36,6 @@ import {
 import { sanitizeTransitionPresets, type WpTransitionPreset } from './utils';
 import { NavItemBackButton } from '../navigation/nav-item-back-button';
 
-import './style.scss';
-
 const transitionPresetFieldsPropsResolver =
 	createPresetFieldsPropsResolver('transitionPreset');
 

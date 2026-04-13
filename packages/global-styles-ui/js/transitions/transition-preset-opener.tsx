@@ -8,7 +8,6 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-import { Flex, getTypeLabel } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -16,30 +15,6 @@ import { Flex, getTypeLabel } from '@blockera/controls';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTransitionPreset } from './utils';
-import { getTransitionPresetAccessibilityDescription } from './utils';
-import TransitionPresetPreview from './transition-preset-preview';
-
-function TransitionPresetOpenerValue({
-	preset,
-}: {
-	preset: WpTransitionPreset | undefined;
-}) {
-	return (
-		<Flex
-			alignItems="center"
-			justifyContent="flex-end"
-			style={{
-				width: 'fit-content',
-				maxWidth: '100%',
-				minWidth: 0,
-				flexShrink: 0,
-				overflow: 'visible',
-			}}
-		>
-			<TransitionPresetPreview items={preset?.items ?? []} inline />
-		</Flex>
-	);
-}
 
 export type TransitionPresetOpenerProps = {
 	itemId: string;
@@ -58,11 +33,6 @@ export function TransitionPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: TransitionPresetOpenerProps) {
-	const a11y = getTransitionPresetAccessibilityDescription(
-		variable,
-		getTypeLabel
-	);
-
 	return (
 		<div
 			className={classNames(
@@ -87,22 +57,6 @@ export function TransitionPresetOpener({
 				data-cy="header-label"
 			>
 				{variable?.name}
-			</span>
-
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
-				style={{
-					display: 'flex',
-					justifyContent: 'flex-end',
-					alignItems: 'center',
-					minWidth: 0,
-					maxWidth: '100%',
-					overflow: 'visible',
-				}}
-				title={a11y || undefined}
-			>
-				<TransitionPresetOpenerValue preset={variable} />
 			</span>
 
 			{children}

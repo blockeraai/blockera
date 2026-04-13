@@ -104,33 +104,3 @@ export function repeaterRecordToItems(
 		delay: String(row?.delay ?? DEFAULT_ITEM.delay),
 	}));
 }
-
-export function getTransitionPresetAccessibilityDescription(
-	preset: WpTransitionPreset | undefined,
-	getTypeLabel: (type: string) => string
-): string {
-	if (!preset) {
-		return '';
-	}
-	const parts: string[] = [];
-	if (preset.name) {
-		parts.push(preset.name);
-	}
-	const summary = formatPresetItemsSummary(preset.items, getTypeLabel);
-	if (summary) {
-		parts.push(summary);
-	}
-	return parts.join(' — ');
-}
-
-export function formatPresetItemsSummary(
-	items: TransitionPresetItem[] | undefined,
-	getTypeLabel: (type: string) => string
-): string {
-	if (!items?.length) {
-		return '';
-	}
-	const first = items[0];
-	const rest = items.length > 1 ? ` (+${items.length - 1})` : '';
-	return `${getTypeLabel(first.type)} · ${first.duration} · ${first.timing} · ${first.delay}${rest}`;
-}
