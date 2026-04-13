@@ -59,7 +59,18 @@ export function SpacingPresetOpener({
 				className={controlInnerClassNames('header-values')}
 				data-cy="header-values"
 			>
-				{variable?.size || __('EMPTY', 'blockera')}
+				<span
+					style={{
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						maxWidth: '110px',
+						textTransform: 'lowercase',
+						opacity: 0.5,
+					}}
+				>
+					{variable?.size}
+				</span>
 			</span>
 
 			{children}
