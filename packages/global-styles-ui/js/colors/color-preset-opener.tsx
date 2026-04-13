@@ -50,15 +50,8 @@ export function ColorPresetOpener({
 			data-cy="color-repeater-item-header"
 		>
 			<span
-				className={controlInnerClassNames('header-label')}
-				data-cy="header-label"
-			>
-				{variable?.name}
-			</span>
-
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
+				className={controlInnerClassNames('header-icon')}
+				data-cy="header-icon"
 			>
 				{variable?.color ? (
 					<ColorIndicator
@@ -74,6 +67,31 @@ export function ColorPresetOpener({
 				) : (
 					<ColorIndicator type="color" value="none" size={18} />
 				)}
+			</span>
+
+			<span
+				className={controlInnerClassNames('header-label')}
+				data-cy="header-label"
+			>
+				{variable?.name}
+			</span>
+
+			<span
+				className={controlInnerClassNames('header-values')}
+				data-cy="header-values"
+			>
+				<span
+					style={{
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						maxWidth: '110px',
+						textTransform: 'lowercase',
+						opacity: 0.5,
+					}}
+				>
+					{variable?.color}
+				</span>
 			</span>
 
 			{children}
