@@ -10,7 +10,7 @@ import type { Color } from '@wordpress/global-styles-engine';
 import { useGlobalSetting } from '../context/global-style-hooks';
 
 export interface UseGetColorsParams {
-	colors: Color[] | undefined;
+	colors: string[];
 	defaultPaletteEnabled: boolean;
 	themeColors: Color[] | undefined;
 	defaultColors: Color[] | undefined;
