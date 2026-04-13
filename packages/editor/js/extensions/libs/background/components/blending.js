@@ -13,6 +13,7 @@ import { SelectControl, ControlContextProvider } from '@blockera/controls';
 /**
  * Internal dependencies
  */
+import { renderSelectOptionChangesetPreview } from '../../../../components';
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
 import { generateExtensionId } from '../../utils';
 import { blendModeFieldOptions } from '../utils';
@@ -22,12 +23,14 @@ export const Blending = ({
 	block,
 	handleOnChangeAttributes,
 	defaultValue,
+	labelProps: labelPropsFromExtension,
 	...props
 }: {
 	blendMode: string | void,
 	block: TBlockProps,
 	handleOnChangeAttributes: THandleOnChangeAttributes,
 	defaultValue: string,
+	labelProps?: Object,
 }): MixedElement => {
 	return (
 		<ControlContextProvider
@@ -187,6 +190,19 @@ export const Blending = ({
 				customMenuPosition="top"
 				defaultValue={defaultValue}
 				{...props}
+				labelProps={{
+					...labelPropsFromExtension,
+					changesetGraphPreviewRender: (resolved: mixed) =>
+						renderSelectOptionChangesetPreview({
+							value: resolved,
+							getOptions: () => blendModeFieldOptions(),
+							showIcon: false,
+							showLabel: true,
+							iconSize: 16,
+							emptyValueMeansNoPreview: false,
+							showUnmatchedValue: true,
+						}),
+				}}
 			/>
 		</ControlContextProvider>
 	);
