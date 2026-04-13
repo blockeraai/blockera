@@ -13,6 +13,7 @@ export {
 	VAR_PICKER_FALLBACK_PRESET_PANEL_FILTER,
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
+	resolveVariablePickerPresetGroupLabel,
 } from './variable';
 export {
 	ValueAddonControl,

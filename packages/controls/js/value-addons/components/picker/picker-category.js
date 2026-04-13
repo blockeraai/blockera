@@ -17,10 +17,16 @@ import { Flex } from '../../../';
 export default function ({
 	children,
 	title,
+	showTitle = true,
 	...props
 }: {
 	children: Element<any>,
 	title: Element<any>,
+	/**
+	 * When false, the category header is omitted (e.g. global-styles preset panels
+	 * that bring their own section labels).
+	 */
+	showTitle?: boolean,
 }): Element<any> {
 	return (
 		<Flex
@@ -29,9 +35,13 @@ export default function ({
 			gap={'10px'}
 			{...props}
 		>
-			<div className={controlInnerClassNames('picker-category-header')}>
-				{title}
-			</div>
+			{showTitle ? (
+				<div
+					className={controlInnerClassNames('picker-category-header')}
+				>
+					{title}
+				</div>
+			) : null}
 			{children}
 		</Flex>
 	);

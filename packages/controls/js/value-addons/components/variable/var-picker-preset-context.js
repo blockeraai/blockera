@@ -24,6 +24,10 @@ export type VarPickerPresetContextValue = {
 	 * When true, catalog fallback repeaters hide edit affordances (no preset popover / pen).
 	 */
 	disablePresetRowEdit?: boolean,
+	/**
+	 * When true, preset-group repeaters omit the header label (fallback catalog UI).
+	 */
+	omitRepeaterSectionLabel?: boolean,
 };
 
 export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> =
@@ -34,6 +38,7 @@ export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> 
 		catalogItems: undefined,
 		catalogLabel: undefined,
 		disablePresetRowEdit: undefined,
+		omitRepeaterSectionLabel: undefined,
 	});
 
 export function useVarPickerPresetContext(): VarPickerPresetContextValue {
