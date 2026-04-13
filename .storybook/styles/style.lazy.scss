@@ -1,7 +1,7 @@
 // WordPress block inspector styles (build-style for package version compatibility)
-@use "~@wordpress/components/build-style/style";
-@use "~@wordpress/block-editor/build-style/style";
+@import "~@wordpress/components/build-style/style";
+@import "~@wordpress/block-editor/build-style/style";
 
-@use "~@blockera/dev-storybook/js/playground-styles/style.lazy";
-@use "../../packages/editor/js/extensions/style";
-@use "./components-style.scss";
+@import "~@blockera/dev-storybook/js/playground-styles/style.lazy";
+@import "../../packages/editor/js/extensions/style";
+@import "./components-style.scss";
