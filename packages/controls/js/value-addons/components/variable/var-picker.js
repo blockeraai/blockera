@@ -50,7 +50,7 @@ export default function ({
 	onClose?: () => void,
 	popoverOffset?: number,
 }): Element<any> {
-	const variableTypes = [...new Set(controlProps.variableTypes || [])].sort();
+	const variableTypes = controlProps.variableTypes || [];
 	const supplementalSections =
 		getSupplementalCustomVariableSections(controlProps);
 
