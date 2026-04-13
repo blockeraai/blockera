@@ -57,6 +57,11 @@
 	user-select: none;
 }
 
+// Box-shadow draws outside the tile; base preview uses overflow:hidden which would clip it.
+.global-styles-variable-preview.global-styles-shadow-preview {
+	overflow: visible;
+}
+
 .blockera-global-styles-subtitle {
 	display: flex;
 	align-items: center;

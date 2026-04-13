@@ -42,8 +42,8 @@ function ShadowPresetOpenerValue({
 			<ShadowPresetPreview
 				shadow={shadowPresetItemsToCss(preset?.items ?? [])}
 				inline
-				width={12}
-				height={12}
+				width={10}
+				height={10}
 				borderRadius={0}
 			/>
 		</Flex>
