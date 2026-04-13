@@ -145,3 +145,46 @@ export function getSupplementalCustomVariableSections(
 
 	return sections;
 }
+
+/**
+ * Normalizes the variable picker search string for case-insensitive matching.
+ */
+export function normalizeVariablePickerSearchQuery(query: mixed): string {
+	if (query === null || query === undefined) {
+		return '';
+	}
+	return String(query).trim().toLowerCase();
+}
+
+const VARIABLE_PICKER_SEARCH_KEYS = ['name', 'slug', 'title', 'label', 'id'];
+
+/**
+ * Whether a catalog row or repeater preset row matches the normalized search query.
+ */
+export function variablePickerItemMatchesSearch(
+	item: Object,
+	normalizedQuery: string
+): boolean {
+	if (!normalizedQuery) {
+		return true;
+	}
+	if (!item || typeof item !== 'object') {
+		return false;
+	}
+	for (const key of VARIABLE_PICKER_SEARCH_KEYS) {
+		if (!(key in item)) {
+			continue;
+		}
+		// $FlowFixMe[prop-missing] dynamic key on catalog / repeater row objects
+		const value = item[key];
+		if (value === null || value === undefined) {
+			continue;
+		}
+		if (typeof value === 'string' || typeof value === 'number') {
+			if (String(value).toLowerCase().includes(normalizedQuery)) {
+				return true;
+			}
+		}
+	}
+	return false;
+}

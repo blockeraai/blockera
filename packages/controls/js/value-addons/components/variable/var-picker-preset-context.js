@@ -21,6 +21,10 @@ export type VarPickerPresetContextValue = {
 	catalogItems?: Array<VariableItem>,
 	catalogLabel?: string,
 	/**
+	 * Shared search query for catalog lists and preset repeater rows in the variable picker.
+	 */
+	searchQuery?: string,
+	/**
 	 * When true, catalog fallback repeaters hide edit affordances (no preset popover / pen).
 	 */
 	disablePresetRowEdit?: boolean,
@@ -37,6 +41,7 @@ export const VarPickerPresetContext: React$Context<VarPickerPresetContextValue> 
 		controlProps: null,
 		catalogItems: undefined,
 		catalogLabel: undefined,
+		searchQuery: '',
 		disablePresetRowEdit: undefined,
 		omitRepeaterSectionLabel: undefined,
 	});

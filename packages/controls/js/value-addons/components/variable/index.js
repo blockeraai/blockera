@@ -10,3 +10,7 @@ export {
 	useVarPickerPresetContext,
 } from './var-picker-preset-context';
 export { resolveVariablePickerPresetGroupLabel } from './var-picker-preset-origin-label';
+export {
+	normalizeVariablePickerSearchQuery,
+	variablePickerItemMatchesSearch,
+} from './var-picker-helpers';

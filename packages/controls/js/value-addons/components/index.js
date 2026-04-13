@@ -14,6 +14,8 @@ export {
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
 	resolveVariablePickerPresetGroupLabel,
+	normalizeVariablePickerSearchQuery,
+	variablePickerItemMatchesSearch,
 } from './variable';
 export {
 	ValueAddonControl,

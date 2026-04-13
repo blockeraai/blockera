@@ -312,5 +312,7 @@ export {
 	VarPickerPresetContext,
 	useVarPickerPresetContext,
 	resolveVariablePickerPresetGroupLabel,
+	normalizeVariablePickerSearchQuery,
+	variablePickerItemMatchesSearch,
 	ValueAddonDisplay,
 } from './components';
