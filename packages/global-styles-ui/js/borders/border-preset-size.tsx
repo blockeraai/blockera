@@ -9,7 +9,7 @@ import { useCallback, memo, useContext } from '@wordpress/element';
  */
 import {
 	Flex,
-	BoxBorderControl,
+	BorderControl,
 	RepeaterContext,
 	useControlContext,
 	ControlContextProvider,
@@ -22,12 +22,8 @@ import BorderPresetPreview from './border-preset-preview';
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllBorderPresetSlugs } from '../components/utils';
-import type { BorderPresetStoredSide, BoxBorderValue } from './utils';
-import {
-	boxBorderControlValueToStoredSide,
-	getDefaultBoxBorderValue,
-	storedSideToBoxBorderValue,
-} from './utils';
+import type { BorderPresetStoredSide } from './utils';
+import { coerceBorderPresetSide, getDefaultStoredBorderSide } from './utils';
 
 export type BorderBoxDefaultPresetValue = VariableType & {
 	border: BorderPresetStoredSide;
@@ -90,11 +86,8 @@ function BorderPresetSizeComponent({
 	);
 
 	const handleBorderChange = useCallback(
-		(newValue: Object) => {
-			updatePresetViaRepeater(
-				'border',
-				boxBorderControlValueToStoredSide(newValue as BoxBorderValue)
-			);
+		(newValue: BorderPresetStoredSide) => {
+			updatePresetViaRepeater('border', newValue);
 		},
 		[updatePresetViaRepeater]
 	);
@@ -103,21 +96,21 @@ function BorderPresetSizeComponent({
 		return null;
 	}
 
-	const borderValue = storedSideToBoxBorderValue(borderPreset.border);
+	const borderControlValue = coerceBorderPresetSide(borderPreset.border);
 
 	const borderPresetValueControls = (
 		<ControlContextProvider
 			value={{
-				name: `border-preset-box-${slug}`,
-				value: borderValue,
+				name: `border-preset-${slug}`,
+				value: borderControlValue,
 				attribute: 'blockeraBorderPreset',
 				blockName: 'global-styles',
 			}}
 		>
-			<BoxBorderControl
-				columns="columns-1"
-				withoutValueAddons
-				showLinkedSidesToggle={false}
+			<BorderControl
+				columns="1fr 3fr"
+				controlAddonTypes={[]}
+				variableTypes={[]}
 				label={__('Border', 'blockera')}
 				labelDescription={
 					<>
@@ -129,15 +122,15 @@ function BorderPresetSizeComponent({
 						</p>
 					</>
 				}
-				onChange={(newValue: Object) => handleBorderChange(newValue)}
-				defaultValue={getDefaultBoxBorderValue()}
+				onChange={handleBorderChange}
+				defaultValue={getDefaultStoredBorderSide()}
 			/>
 		</ControlContextProvider>
 	);
 
 	return (
 		<Flex direction="column" gap="15px">
-			<BorderPresetPreview border={borderValue} />
+			<BorderPresetPreview border={borderPreset.border} />
 
 			<SharedPresetControls
 				itemId={presetId}
