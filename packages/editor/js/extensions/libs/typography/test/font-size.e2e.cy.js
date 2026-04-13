@@ -64,7 +64,7 @@ describe('Font Size → Functionality', () => {
 					name: 'Small',
 					id: 'small',
 					value: '0.875rem',
-					fluid: null,
+					fluid: false,
 					reference: {
 						type: 'theme',
 						theme: 'Twenty Twenty-Five',

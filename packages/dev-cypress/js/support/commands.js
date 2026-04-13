@@ -226,11 +226,22 @@ export const registerCommands = () => {
 		});
 	});
 
-	// Select Value Addon Popover
+	// Select a variable row in the variable picker (catalog `va-item-*` or preset repeater `data-variable-slug`).
 	Cypress.Commands.add('selectValueAddonItem', (itemID) => {
-		cy.getByDataCy('va-item-' + itemID).click({
-			force: true,
-		});
+		cy.get(
+			'[data-cy="variable-picker-popover"], .blockera-control-popover-variables',
+			{ timeout: 15000 }
+		)
+			.filter(':visible')
+			.first()
+			.should('exist')
+			.within(() => {
+				cy.get(
+					`[data-variable-slug="${itemID}"], [data-cy="va-item-${itemID}"]`
+				)
+					.first()
+					.click({ force: true });
+			});
 	});
 
 	// for testing
