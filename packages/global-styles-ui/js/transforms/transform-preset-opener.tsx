@@ -8,7 +8,6 @@ import { __, sprintf } from '@wordpress/i18n';
  * Blockera dependencies
  */
 import { classNames, controlInnerClassNames } from '@blockera/classnames';
-import { Flex } from '@blockera/controls';
 
 /**
  * Internal dependencies
@@ -16,31 +15,6 @@ import { Flex } from '@blockera/controls';
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
 import type { WpTransformPreset } from './utils';
-import { getTransformPresetAccessibilityDescription } from './utils';
-import TransformPresetPreview from './transform-preset-preview';
-
-/** Inline preview in the repeater header (mirrors transition preset opener layout). */
-function TransformPresetOpenerValue({
-	preset,
-}: {
-	preset: WpTransformPreset | undefined;
-}) {
-	return (
-		<Flex
-			alignItems="center"
-			justifyContent="flex-end"
-			style={{
-				width: 'fit-content',
-				maxWidth: '100%',
-				minWidth: 0,
-				flexShrink: 0,
-				overflow: 'visible',
-			}}
-		>
-			<TransformPresetPreview items={preset?.items ?? []} inline />
-		</Flex>
-	);
-}
 
 export type TransformPresetOpenerProps = {
 	itemId: string;
@@ -59,8 +33,6 @@ export function TransformPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: TransformPresetOpenerProps) {
-	const a11y = getTransformPresetAccessibilityDescription(variable);
-
 	return (
 		<div
 			className={classNames(
@@ -85,22 +57,6 @@ export function TransformPresetOpener({
 				data-cy="header-label"
 			>
 				{variable?.name}
-			</span>
-
-			<span
-				className={controlInnerClassNames('header-values')}
-				data-cy="header-values"
-				style={{
-					display: 'flex',
-					justifyContent: 'flex-end',
-					alignItems: 'center',
-					minWidth: 0,
-					maxWidth: '100%',
-					overflow: 'visible',
-				}}
-				title={a11y || undefined}
-			>
-				<TransformPresetOpenerValue preset={variable} />
 			</span>
 
 			{children}

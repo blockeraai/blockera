@@ -8,7 +8,6 @@ import { useCallback, memo, useContext, useMemo } from '@wordpress/element';
  * Blockera dependencies
  */
 import {
-	Flex,
 	BaseControl,
 	TransformControl,
 	RepeaterContext,
@@ -19,7 +18,6 @@ import {
 /**
  * Internal dependencies
  */
-import TransformPresetPreview from './transform-preset-preview';
 import { SharedPresetControls } from '../components';
 import { type VariableType } from '../components/types';
 import { getAllVariableSlugs as getAllTransformSlugs } from '../components/utils';
@@ -173,19 +171,15 @@ function TransformPresetSizeComponent({
 	);
 
 	return (
-		<Flex direction="column" gap="15px">
-			<TransformPresetPreview items={transformPreset.items} />
-
-			<SharedPresetControls
-				itemId={presetId}
-				variable={transformPreset}
-				name={transformPreset.name}
-				slug={transformPreset.slug}
-				allSlugs={getAllTransformSlugs(presets)}
-			>
-				{transformPresetValueControls}
-			</SharedPresetControls>
-		</Flex>
+		<SharedPresetControls
+			itemId={presetId}
+			variable={transformPreset}
+			name={transformPreset.name}
+			slug={transformPreset.slug}
+			allSlugs={getAllTransformSlugs(presets)}
+		>
+			{transformPresetValueControls}
+		</SharedPresetControls>
 	);
 }
 
