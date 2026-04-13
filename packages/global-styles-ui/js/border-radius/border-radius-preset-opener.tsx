@@ -14,7 +14,7 @@ import { controlInnerClassNames } from '@blockera/classnames';
  */
 import { getPresetRepeaterHeaderOnClick } from '../components/preset-repeater-header-click';
 import type { VariableType } from '../components/types.ts';
-import { formatRadiusPresetHeaderValue } from './utils';
+import { radiusPresetSizeToString } from './utils';
 
 export type BorderRadiusPresetOpenerProps = {
 	itemId: string;
@@ -33,12 +33,7 @@ export function BorderRadiusPresetOpener({
 	item: variable,
 	isOpenPopoverEvent,
 }: BorderRadiusPresetOpenerProps) {
-	const displaySize =
-		variable?.size === 0 || variable?.size === '0'
-			? String(variable.size)
-			: (variable?.size ?? '');
-
-	const summary = formatRadiusPresetHeaderValue(displaySize);
+	const summary = radiusPresetSizeToString(variable?.size);
 	const display = summary || __('EMPTY', 'blockera');
 
 	return (
@@ -67,18 +62,20 @@ export function BorderRadiusPresetOpener({
 			<span
 				className={controlInnerClassNames('header-values')}
 				data-cy="header-values"
-				style={{
-					display: 'block',
-					minWidth: 0,
-					overflow: 'hidden',
-					textOverflow: 'ellipsis',
-					whiteSpace: 'nowrap',
-					textAlign: 'right',
-					fontVariantNumeric: 'tabular-nums',
-				}}
-				title={summary || undefined}
 			>
-				{display}
+				<span
+					style={{
+						overflow: 'hidden',
+						textOverflow: 'ellipsis',
+						whiteSpace: 'nowrap',
+						maxWidth: '110px',
+						textTransform: 'lowercase',
+						opacity: 0.5,
+					}}
+					title={summary || undefined}
+				>
+					{display}
+				</span>
 			</span>
 
 			{children}
