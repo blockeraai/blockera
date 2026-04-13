@@ -84,3 +84,54 @@
 .blockera-global-styles-subtitle .blockera-branding__link {
 	margin-left: auto;
 }
+
+// Preset repeater + variable picker: selected row (`is-selected-item` on group).
+.blockera-global-styles-preset-repeater.blockera-control-repeater
+	.blockera-control-repeater-item {
+	.blockera-control-group.blockera-control-repeater-item-group.is-selected-item {
+		position: relative;
+		border-color: var(--blockera-controls-primary-color);
+
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			background: var(--blockera-controls-primary-color);
+			opacity: 0.09;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		& > .blockera-control-group-header {
+			position: relative;
+			z-index: 1;
+		}
+
+		.blockera-control-repeater-group-header .blockera-control-header-label {
+			color: var(--blockera-controls-primary-color);
+			font-weight: 600;
+		}
+
+		&.mode-popover.is-open {
+			box-shadow:
+				inset 3px 0 0 var(--blockera-controls-primary-color),
+				0 0 0 1px var(--blockera-controls-primary-color);
+		}
+
+		.blockera-control-action-buttons {
+			background: transparent !important;
+
+			button {
+
+				&.components-button.blockera-component-button.is-tertiary.no-border:hover {
+					background: transparent !important;
+				}
+			}
+
+			&:hover {
+				background: transparent !important;
+			}
+		}
+	}
+}
