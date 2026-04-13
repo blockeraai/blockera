@@ -1,7 +1,7 @@
 /**
- * External dependencies
+ * Blockera dependencies
  */
-import { __, sprintf } from '@wordpress/i18n';
+import { getValueAddonRealValue } from '@blockera/controls';
 
 /**
  * `settings.border` keys allowed by WordPress core theme.json schema.
@@ -50,96 +50,19 @@ function isValidRadiusSizePreset(
 }
 
 /**
- * Value shape for `BorderRadiusControl` (matches @blockera/controls).
+ * Resolved preset `size` for UI (repeater header, empty preview check).
+ * Unwraps value-addon objects so we never treat them as empty via `String(object)`.
  */
-export type BorderRadiusControlValue = {
-	type: 'all' | 'custom';
-	all?: string;
-	topLeft?: string;
-	topRight?: string;
-	bottomLeft?: string;
-	bottomRight?: string;
-};
-
-/**
- * Map theme.json `size` to `BorderRadiusControl` state. Four whitespace-separated
- * lengths map to per-corner mode (compatible with CSS border-radius shorthand order).
- */
-export function parseRadiusSizeToControlValue(
-	size: string | number
-): BorderRadiusControlValue {
-	const s = String(size ?? '').trim();
-	if (!s) {
-		return { type: 'all', all: '' };
-	}
-	const parts = s.split(/\s+/).filter(Boolean);
-	if (parts.length === 4) {
-		return {
-			type: 'custom',
-			topLeft: parts[0],
-			topRight: parts[1],
-			bottomRight: parts[2],
-			bottomLeft: parts[3],
-		};
-	}
-	return { type: 'all', all: s };
-}
-
-/**
- * Persist control state to `border.radiusSizes[].size` (valid CSS for presets).
- */
-export function serializeControlValueToRadiusSize(
-	value: BorderRadiusControlValue
-): string | number {
-	if (value.type === 'all') {
-		return value.all ?? '';
-	}
-	const tl = value.topLeft ?? '';
-	const tr = value.topRight ?? '';
-	const br = value.bottomRight ?? '';
-	const bl = value.bottomLeft ?? '';
-	return [tl, tr, br, bl].map((x) => x || '0').join(' ');
-}
-
-/**
- * CSS `border-radius` value for preview (matches saved `size` semantics).
- */
-export function radiusSizeToPreviewCss(size: string | number): string {
-	const parsed = parseRadiusSizeToControlValue(size);
-	if (parsed.type === 'all') {
-		return (parsed.all ?? '').trim() || '0';
-	}
-	const tl = parsed.topLeft ?? '0';
-	const tr = parsed.topRight ?? '0';
-	const br = parsed.bottomRight ?? '0';
-	const bl = parsed.bottomLeft ?? '0';
-	return [tl, tr, br, bl].map((x) => String(x).trim() || '0').join(' ');
-}
-
-/**
- * One-line label for repeater header (middle-dot separators for corners).
- */
-export function formatRadiusPresetHeaderValue(
+export function radiusPresetSizeToString(
 	size: string | number | undefined
 ): string {
-	const raw = String(size ?? '').trim();
-	if (!raw) {
-		return '';
-	}
-	const parsed = parseRadiusSizeToControlValue(size);
-	if (parsed.type === 'all') {
-		return (parsed.all ?? '').trim();
-	}
-	const tl = String(parsed.topLeft ?? '0').trim();
-	const tr = String(parsed.topRight ?? '0').trim();
-	const br = String(parsed.bottomRight ?? '0').trim();
-	const bl = String(parsed.bottomLeft ?? '0').trim();
-	return sprintf(
-		/* translators: %1$s: top-left corner radius. %2$s: top-right. %3$s: bottom-right. %4$s: bottom-left. */
-		__('%1$s · %2$s · %3$s · %4$s', 'blockera'),
-		tl,
-		tr,
-		br,
-		bl
-	);
+	const v = getValueAddonRealValue(size);
+	return (typeof v === 'number' ? String(v) : String(v ?? '')).trim();
+}
+
+/**
+ * CSS `border-radius` for preview from the stored preset `size`.
+ */
+export function radiusSizeToPreviewCss(size: string | number): string {
+	return radiusPresetSizeToString(size) || '0';
 }
