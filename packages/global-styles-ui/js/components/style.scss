@@ -124,12 +124,6 @@
 			font-weight: 600;
 		}
 
-		&.mode-popover.is-open {
-			box-shadow:
-				inset 3px 0 0 var(--blockera-controls-primary-color),
-				0 0 0 1px var(--blockera-controls-primary-color);
-		}
-
 		.blockera-control-action-buttons {
 			background: transparent !important;
 
