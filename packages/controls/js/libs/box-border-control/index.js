@@ -75,6 +75,7 @@ export default function BoxBorderControl({
 	//
 	className,
 	withoutValueAddons = false,
+	showLinkedSidesToggle = true,
 	controlAddonTypes,
 	variableTypes,
 }: BoxBorderControlProps): MixedElement {
@@ -172,88 +173,96 @@ export default function BoxBorderControl({
 						</LabelControlContainer>
 					)}
 
-					<Grid
-						gridTemplateColumns="1fr 30px"
-						gap="8px"
-						justifyItems="end"
-						justifyContent="end"
-					>
-						{value.type === 'all' ? (
-							<BorderControl
-								id="all"
-								onChange={(newValue) => {
-									setValue({ ...value, all: newValue });
-									modifyControlValue({
-										controlId,
-										value: { ...value, all: newValue },
-									});
-								}}
-								controlAddonTypes={resolvedControlAddonTypes}
-								variableTypes={resolvedVariableTypes}
-								defaultValue={defaultValue?.all}
-							/>
-						) : (
-							<span></span>
-						)}
-
-						<Button
-							showTooltip={true}
-							tooltipPosition="top"
-							label={__('Custom Box Border', 'blockera')}
-							size="extra-small"
-							style={{
-								padding: '4px',
-								width: 'var(--blockera-controls-input-height)',
-								height: 'var(--blockera-controls-input-height)',
-							}}
-							className={
-								value.type === 'custom'
-									? 'is-toggle-btn is-toggled'
-									: 'is-toggle-btn'
+					{(value.type === 'all' || showLinkedSidesToggle) && (
+						<Grid
+							gridTemplateColumns={
+								showLinkedSidesToggle ? '1fr 30px' : '1fr'
 							}
-							onClick={() => {
-								if (value.type === 'all') {
-									setValue({
-										...value,
-										type: 'custom',
-										top: value.all,
-										right: value.all,
-										bottom: value.all,
-										left: value.all,
-									});
-									modifyControlValue({
-										controlId,
-										value: {
-											...value,
-											type: 'custom',
-											top: value.all,
-											right: value.all,
-											bottom: value.all,
-											left: value.all,
-										},
-									});
-								} else {
-									setValue({
-										...value,
-										type: 'all',
-									});
-									modifyControlValue({
-										controlId,
-										value: {
-											...value,
-											type: 'all',
-										},
-									});
-								}
-							}}
+							gap="8px"
+							justifyItems="end"
+							justifyContent="end"
 						>
 							{value.type === 'all' ? (
-								<Icon icon="lock" iconSize="24" />
+								<BorderControl
+									id="all"
+									onChange={(newValue) => {
+										setValue({ ...value, all: newValue });
+										modifyControlValue({
+											controlId,
+											value: { ...value, all: newValue },
+										});
+									}}
+									controlAddonTypes={
+										resolvedControlAddonTypes
+									}
+									variableTypes={resolvedVariableTypes}
+									defaultValue={defaultValue?.all}
+								/>
 							) : (
-								<Icon icon="unlock" iconSize="24" />
+								<span></span>
 							)}
-						</Button>
-					</Grid>
+
+							{showLinkedSidesToggle && (
+								<Button
+									showTooltip={true}
+									tooltipPosition="top"
+									label={__('Custom Box Border', 'blockera')}
+									size="extra-small"
+									style={{
+										padding: '4px',
+										width: 'var(--blockera-controls-input-height)',
+										height: 'var(--blockera-controls-input-height)',
+									}}
+									className={
+										value.type === 'custom'
+											? 'is-toggle-btn is-toggled'
+											: 'is-toggle-btn'
+									}
+									onClick={() => {
+										if (value.type === 'all') {
+											setValue({
+												...value,
+												type: 'custom',
+												top: value.all,
+												right: value.all,
+												bottom: value.all,
+												left: value.all,
+											});
+											modifyControlValue({
+												controlId,
+												value: {
+													...value,
+													type: 'custom',
+													top: value.all,
+													right: value.all,
+													bottom: value.all,
+													left: value.all,
+												},
+											});
+										} else {
+											setValue({
+												...value,
+												type: 'all',
+											});
+											modifyControlValue({
+												controlId,
+												value: {
+													...value,
+													type: 'all',
+												},
+											});
+										}
+									}}
+								>
+									{value.type === 'all' ? (
+										<Icon icon="lock" iconSize="24" />
+									) : (
+										<Icon icon="unlock" iconSize="24" />
+									)}
+								</Button>
+							)}
+						</Grid>
+					)}
 				</div>
 
 				{value.type === 'custom' && (

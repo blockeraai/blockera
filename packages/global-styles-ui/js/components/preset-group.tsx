@@ -20,6 +20,7 @@ import {
 } from '@blockera/controls';
 import { noop, pascalCase, isObject } from '@blockera/utils';
 import {
+	classNames,
 	controlClassNames,
 	componentInnerClassNames,
 	controlInnerClassNames,
@@ -32,6 +33,7 @@ import type { VariablesType, VariableType } from './types.ts';
 import { PresetStateContainer } from './preset-state-container';
 import { getPresetDeleteConfirmWarningText } from './preset-origin-utils';
 import {
+	applyVariablePickerRepeaterSelection,
 	buildPresetVariablePickerPayload,
 	stripIsSelectedFromRepeaterItems,
 } from './variable-picker-preset-utils';
@@ -87,6 +89,7 @@ type PresetsProps = {
 	valueCleanup?: (items: Object) => Object;
 	onSelectableItemActivate?: (itemId: string, item: Object) => void;
 	showItemEditButton?: boolean;
+	actionButtonAdd?: boolean;
 };
 
 const PresetFieldsComponent = ({
@@ -226,7 +229,10 @@ const Presets = ({
 			repeaterItemHeader={RepeaterItemHeader}
 			defaultRepeaterItemValue={defaultPresetValue}
 			enableCreatingStep={enableCreatingStep}
-			className={controlClassNames('preset-group', controlName)}
+			className={classNames(
+				controlClassNames('preset-group', controlName),
+				'blockera-global-styles-preset-repeater'
+			)}
 			selectable={selectable}
 			valueCleanup={repeaterValueCleanup}
 			onSelectableItemActivate={onSelectableItemActivate}
@@ -309,13 +315,33 @@ export const PresetGroup = ({
 		[isVariablePicker, pickerCtx, origin]
 	);
 
+	const pickerValue = pickerCtx.controlProps?.value;
+
+	const variablesForRepeater = useMemo(() => {
+		if (!isVariablePicker || typeof pickerCtx.variableType !== 'string') {
+			return variables;
+		}
+		return applyVariablePickerRepeaterSelection(variables, {
+			variableType: pickerCtx.variableType,
+			origin,
+			pickerValue,
+		}) as typeof variables;
+	}, [
+		isVariablePicker,
+		variables,
+		pickerCtx.variableType,
+		origin,
+		pickerValue,
+	]);
+
 	const repeaterContextValue = useMemo(
 		() => ({
 			name: `${origin}-${title.replace(/\s/g, '-').toLowerCase()}`,
-			value: variables,
-			needUpdate: () => false,
+			value: variablesForRepeater,
+			// Variable picker: push `isSelected` / `selectable` into repeater store when the bound value changes.
+			needUpdate: () => isVariablePicker,
 		}),
-		[origin, title, variables]
+		[origin, title, variablesForRepeater, isVariablePicker]
 	);
 
 	const labelForVariablePicker = useMemo(() => {
@@ -368,7 +394,7 @@ export const PresetGroup = ({
 						onClose={noop}
 						origin={origin}
 						onChange={handleRepeaterOnChange}
-						variables={variables}
+						variables={variablesForRepeater}
 						controlName={controlName}
 						PresetFields={PresetFields}
 						popoverTitle={__('Edit Variable', 'blockera')}

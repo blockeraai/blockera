@@ -53,6 +53,7 @@ export default function BorderRadiusControl({
 	//
 	className,
 	withoutValueAddons = false,
+	showLinkedSidesToggle = true,
 	controlAddonTypes,
 	variableTypes,
 }: BorderRadiusControlProps): MixedElement {
@@ -131,72 +132,77 @@ export default function BorderRadiusControl({
 					</LabelControlContainer>
 				)}
 
-				<Grid
-					gridTemplateColumns="1fr 30px"
-					gap="8px"
-					justifyItems="end"
-					justifyContent="end"
-				>
-					{value.type === 'all' ? (
-						<InputControl
-							id="all"
-							min={0}
-							unitType="essential"
-							controlAddonTypes={resolvedControlAddonTypes}
-							variableTypes={resolvedVariableTypes}
-							onChange={(newValue) => {
-								setValue({ ...value, all: newValue });
-							}}
-							defaultValue={defaultValue?.all ?? ''}
-							placeholder="0"
-							size="small"
-							data-test="border-radius-input-all"
-						/>
-					) : (
-						<span></span>
-					)}
-
-					<Button
-						showTooltip={true}
-						tooltipPosition="top"
-						label={__('Custom Border Radius', 'blockera')}
-						size="extra-small"
-						style={{
-							padding: '4px',
-							width: 'var(--blockera-controls-input-height)',
-							height: 'var(--blockera-controls-input-height)',
-						}}
-						className={
-							value.type === 'custom'
-								? 'is-toggle-btn is-toggled'
-								: 'is-toggle-btn'
+				{(value.type === 'all' || showLinkedSidesToggle) && (
+					<Grid
+						gridTemplateColumns={
+							showLinkedSidesToggle ? '1fr 30px' : '1fr'
 						}
-						onClick={() => {
-							// old type
-							if (value.type === 'all') {
-								setValue({
-									...value,
-									type: 'custom',
-									topLeft: value.all,
-									topRight: value.all,
-									bottomLeft: value.all,
-									bottomRight: value.all,
-								});
-							} else {
-								setValue({
-									...value,
-									type: 'all',
-								});
-							}
-						}}
+						gap="8px"
+						justifyItems="end"
+						justifyContent="end"
 					>
 						{value.type === 'all' ? (
-							<Icon icon="lock" iconSize="24" />
+							<InputControl
+								id="all"
+								min={0}
+								unitType="essential"
+								controlAddonTypes={resolvedControlAddonTypes}
+								variableTypes={resolvedVariableTypes}
+								onChange={(newValue) => {
+									setValue({ ...value, all: newValue });
+								}}
+								defaultValue={defaultValue?.all ?? ''}
+								placeholder="0"
+								size="small"
+								data-test="border-radius-input-all"
+							/>
 						) : (
-							<Icon icon="unlock" iconSize="24" />
+							<span></span>
 						)}
-					</Button>
-				</Grid>
+
+						{showLinkedSidesToggle && (
+							<Button
+								showTooltip={true}
+								tooltipPosition="top"
+								label={__('Custom Border Radius', 'blockera')}
+								size="extra-small"
+								style={{
+									padding: '4px',
+									width: 'var(--blockera-controls-input-height)',
+									height: 'var(--blockera-controls-input-height)',
+								}}
+								className={
+									value.type === 'custom'
+										? 'is-toggle-btn is-toggled'
+										: 'is-toggle-btn'
+								}
+								onClick={() => {
+									if (value.type === 'all') {
+										setValue({
+											...value,
+											type: 'custom',
+											topLeft: value.all,
+											topRight: value.all,
+											bottomLeft: value.all,
+											bottomRight: value.all,
+										});
+									} else {
+										setValue({
+											...value,
+											type: 'all',
+										});
+									}
+								}}
+							>
+								{value.type === 'all' ? (
+									<Icon icon="lock" iconSize="24" />
+								) : (
+									<Icon icon="unlock" iconSize="24" />
+								)}
+							</Button>
+						)}
+					</Grid>
+				)}
 			</div>
 
 			{value.type === 'custom' && (

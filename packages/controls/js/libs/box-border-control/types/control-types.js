@@ -17,6 +17,13 @@ export type BoxBorderControlProps = {
 	 */
 	withoutValueAddons?: boolean,
 	/**
+	 * When false, hides the lock / unlock control that switches between linked
+	 * (`all`) and per-side (`custom`) borders (e.g. global style presets).
+	 *
+	 * @default true
+	 */
+	showLinkedSidesToggle?: boolean,
+	/**
 	 * It sets the control default value if the value not provided. By using it the control will not fire onChange event for this default value on control first render,
 	 */
 	defaultValue?: TValueTypes,
