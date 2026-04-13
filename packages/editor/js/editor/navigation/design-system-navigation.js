@@ -84,7 +84,7 @@ export const DesignSystemNavigation = (): MixedElement => {
 						justifyContent="center"
 						style={{ width: '22px', height: '22px' }}
 					>
-						<Icon icon="maximize" iconSize={22} />
+						<Icon icon="spacing" iconSize={18} />
 					</Flex>
 				}
 				label={__('Spacing', 'blockera')}
