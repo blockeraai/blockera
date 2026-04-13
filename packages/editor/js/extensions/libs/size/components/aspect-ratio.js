@@ -11,15 +11,109 @@ import type { MixedElement, ComponentType } from 'react';
 import {
 	Flex,
 	BaseControl,
+	getSelectedSelectOption,
 	InputControl,
 	SelectControl,
 	useControlContext,
 } from '@blockera/controls';
+import { isObject } from '@blockera/utils';
 
 /**
  * Internal dependencies
  */
 import type { TBlockProps, THandleOnChangeAttributes } from '../../types';
+
+function getAspectRatioSelectOptions(): any {
+	return [
+		{
+			label: __('Original', 'blockera'),
+			value: '',
+		},
+		{
+			label: __('Square 1:1', 'blockera'),
+			value: '1',
+		},
+		{
+			label: __('Standard 4:3', 'blockera'),
+			value: '4/3',
+		},
+		{
+			label: __('Portrait 3:4', 'blockera'),
+			value: '3/4',
+		},
+		{
+			label: __('Landscape 3:2', 'blockera'),
+			value: '3/2',
+		},
+		{
+			label: __('Classic Portrait 2:3', 'blockera'),
+			value: '2/3',
+		},
+		{
+			label: __('Widescreen 16:9', 'blockera'),
+			value: '16/9',
+		},
+		{
+			label: __('Tall 9:16', 'blockera'),
+			value: '9/16',
+		},
+		{
+			label: __('Custom', 'blockera'),
+			value: 'custom',
+		},
+	];
+}
+
+/**
+ * Normalize blockeraRatio from state graph / attributes (may be `{ value: { … } }` or flat).
+ */
+function unwrapAspectRatio(raw: mixed): {
+	val: string,
+	width: string,
+	height: string,
+} {
+	if (!isObject(raw)) {
+		return { val: '', width: '', height: '' };
+	}
+
+	const anyRaw: any = raw;
+	const inner = isObject(anyRaw.value) ? anyRaw.value : anyRaw;
+	const o: any = inner;
+
+	let val = '';
+	if (o.val !== undefined && o.val !== null && o.val !== '') {
+		val = String(o.val);
+	} else if (typeof o.value === 'string' || typeof o.value === 'number') {
+		val = String(o.value);
+	}
+
+	return {
+		val,
+		width: o.width !== undefined && o.width !== null ? String(o.width) : '',
+		height:
+			o.height !== undefined && o.height !== null ? String(o.height) : '',
+	};
+}
+
+/**
+ * State-graph / changeset row preview: predefined → option label; custom → "width / height".
+ */
+function renderAspectRatioChangesetPreview(resolved: mixed): string {
+	const { val, width, height } = unwrapAspectRatio(resolved);
+
+	if (val === 'custom') {
+		return `${width.trim()} / ${height.trim()}`;
+	}
+
+	const options = getAspectRatioSelectOptions();
+	const selected = getSelectedSelectOption(val, options);
+
+	if (selected) {
+		return selected.label;
+	}
+
+	return val !== '' ? val : '';
+}
 
 export const AspectRatio: ComponentType<any> = ({
 	block,
@@ -61,6 +155,7 @@ export const AspectRatio: ComponentType<any> = ({
 		resetToDefault,
 		mode: 'advanced',
 		path: attribute,
+		changesetGraphPreviewRender: renderAspectRatioChangesetPreview,
 	};
 
 	return (
@@ -103,44 +198,7 @@ export const AspectRatio: ComponentType<any> = ({
 				// Backward Compatibility to support blockeraRatio value structure.
 				singularId={ratio?.hasOwnProperty('value') ? '' : 'val'}
 				aria-label={__('Ratio', 'blockera')}
-				options={[
-					{
-						label: __('Original', 'blockera'),
-						value: '',
-					},
-					{
-						label: __('Square 1:1', 'blockera'),
-						value: '1',
-					},
-					{
-						label: __('Standard 4:3', 'blockera'),
-						value: '4/3',
-					},
-					{
-						label: __('Portrait 3:4', 'blockera'),
-						value: '3/4',
-					},
-					{
-						label: __('Landscape 3:2', 'blockera'),
-						value: '3/2',
-					},
-					{
-						label: __('Classic Portrait 2:3', 'blockera'),
-						value: '2/3',
-					},
-					{
-						label: __('Widescreen 16:9', 'blockera'),
-						value: '16/9',
-					},
-					{
-						label: __('Tall 9:16', 'blockera'),
-						value: '9/16',
-					},
-					{
-						label: __('Custom', 'blockera'),
-						value: 'custom',
-					},
-				]}
+				options={getAspectRatioSelectOptions()}
 				type="native"
 				defaultValue={defaultValue.val}
 				onChange={(newValue, ref) => {
